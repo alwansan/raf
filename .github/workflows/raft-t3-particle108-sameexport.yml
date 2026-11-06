@@ -211,6 +211,7 @@ jobs:
           d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle-safe-export-result.json").read_text())
           assert d["status"] in (
             "SAME_INSTANCE_SOURCE_PARTICLE108_5M_3T_10_TEXTURE_PPTR_EXACT",
+            "SAME_INSTANCE_SOURCE_PARTICLE108_NONEXPORTABLE_CONTAINER_POINTER_PARITY",
             "SAME_INSTANCE_SOURCE_PARTICLE108_SCOPED_EXPORT_MISMATCH_OR_INCOMPLETE")
           assert d["same_export_instance_W1_B02_authenticated"] is True
           assert d["original_source_materials"]==5
@@ -218,7 +219,15 @@ jobs:
           assert d["original_source_material_texture_slots"]==10
           assert d["selected_texture2d28_missing_export_trace"]==1
           assert d["selected_missing_texture_reason_unclassified"]==0
-          assert d["selected_missing_texture_skipped_nonexportable_collection"]+d["selected_missing_texture_absent_all_export_collections"]==1
+          assert d["selected_missing_texture_skipped_nonexportable_collection"]==1
+          assert d["selected_missing_texture_absent_all_export_collections"]==0
+          assert d["selected_nonexportable_original_texture_source_pointer_captured"]+d["selected_nonexportable_original_texture_source_pointer_unavailable"]==1
+          assert d["selected_nonexportable_material_pointer_matches"]+d["selected_nonexportable_material_pointer_mismatches"]+d["selected_nonexportable_material_pointer_unavailable"]==1
+          assert d["selected_exact_material_texenv_pointer_matches"]==9
+          assert d["selected_uv_scale_offset_matches"]==10
+          assert d["selected_source_nonnull_texture_to_null"]==0
+          assert d["selected_source_texture_to_other_exported_target"]==0
+          print("RAFT_T3_NONEXPORTABLE_TEXTURE_CONTAINER_PPTR_ASSESSED=true source_only=true")
           assert d["private_original_export_shader_material_texture_labels_guids_disclosed"] is False
           assert d["compiled_Unity_ShaderLab_or_Android_pixels_verified"] is False
           print("RAFT_T3_ACTUAL_SAME_INSTANCE_PARTICLE108_EXPORT_COMPARISON_COMPLETED=true")
