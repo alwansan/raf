@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2044Z-T5-chat-delivery-member-safety-7c18",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "base_sha": "5dc63f1e55e1a69be562e89f491afa47a8314080",
+  "updated_at": "2026-11-06T20:45:04.688Z",
+  "resumed_from_sessions": [
+    "20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f",
+    "20261106T1950Z-T5-scheduled-zip-prefix-6f2a",
+    "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7"
+  ],
+  "taken_over_from": [
+    "T5 CRC-green duplicate packaging guard ccf88df86c6f274a63d4dc787bcfbba9d218f942",
+    "T5 scheduled APK/OBB ancestor validator 791751b42764ae89087376caf1adb9bca4db013a, separate files"
+  ],
+  "intended_files": [
+    "scripts/package_android_delivery.py",
+    "tests/test_android_delivery_package.py",
+    "prompt/coordination/work/DELIVERY-013/20261106T2044Z-T5-chat-delivery-member-safety-7c18.json",
+    "prompt/coordination/clients/T5/sessions/20261106T2044Z-T5-chat-delivery-member-safety-7c18.md",
+    "prompt/coordination/experiments/T5/20261106T2044Z-T5-chat-delivery-member-safety-7c18.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T2044Z-T5-chat-delivery-member-safety-7c18.json"
+  ],
+  "hypothesis": "Recovery packaging accepts CRC-valid APK/OBB with unsafe ZIP path components, Unix symlink member, or a regular file colliding with a descendant member's required directory; this can yield a delivery/installer ambiguity even though native structural verifier rejects some of them separately. Reject before payload copy/output creation and preserve existing valid ZIP64 signed bytes.",
+  "experiment_key": "T5-DELIVERY-013-recovery-package-crc-green-unsafe-name-prefix-symlink-v1",
+  "resource_key": "T5-source-only-A3-delivery-CI; no Unity/native build",
+  "coordination": "Distinct files from T5 scheduled verifier scripts/t5_verify_apk_obb_pair.py and tests. No T1 FFT, T2 water, T3 shader, T4 local input, original resources, .meta/GUID, or live native runs touched. No 5/5 vote and no new build.",
+  "action": "reserve_before_edit"
+}
