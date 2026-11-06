@@ -1,0 +1,36 @@
+{
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "abb6c9ada4245c2844ac3914c778ca2002d97386",
+  "experiment_key": "SHAOriginalFoam-PrivateShaderLabEmbeddedHLSL4StageCompile-v1",
+  "track": "shaderlab-private-original-embedded-pass-compilation",
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_owner_bytes": 115978112,
+    "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "foam_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "approach": "After reconstructing exact private 2-pass ShaderLab from original B20 program-stage packet and two B25 render states and source-authored properties, extract actual HLSLPROGRAM bodies from the fully assembled private .shader and independently compile vertex/fragment each with glslangValidator+spirv-val Vulkan 1.1. Guard against extra/malformed/mis-scoped programs and private leaks. Run SHA-original isolated CI; this does not verify Unity import/CB0 runtime/Adreno.",
+  "hypothesis": "Fully composed original ShaderLab preserves exactly two usable HLSLPROGRAM pass bodies that independently compile into four Vulkan1.1 SPIR-V stages, not just standalone original pass HLSL sources.",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42125847863",
+    "https://github.com/alwansan/raf/actions/runs/42121817207",
+    "https://github.com/alwansan/raf/actions/runs/42021183522"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_candidate_embedded_validation.py",
+    "tests/test_t2_foam_candidate_embedded_validation.py",
+    "scripts/t2_foam_private_shaderlab_candidate.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.json",
+    "prompt/coordination/clients/T2/sessions/20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.md",
+    "prompt/coordination/experiments/T2/T2-20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7-result.json"
+  ],
+  "run_urls": [],
+  "next_step": "New private candidate embedded full-program extraction validation with negative controls, source-authentic workflow on exact ZIP2 provider; do not modify game shader/metadata or run native Unity.",
+  "last_verified": "Source-authentic CI42125847863 successful authentic private 2-pass ShaderLab candidate 9731B and four source-derived Shader Model tokens; 17 synthetic tests. Prior CI42121817207 validated pair HLSL before ShaderLab embedding. CB0 and actual Unity import/Android pixels still open."
+}
