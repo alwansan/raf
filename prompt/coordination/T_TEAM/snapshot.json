@@ -1957,8 +1957,8 @@
         "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
         "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
         "reconstruction": "ORIGINAL_FOAM_PRIVATE_2PASS_9731B_SHADERLAB_4STAGES_VULKAN11_COMPILED_AND_VALIDATED_NUMERIC_VS_FS_VARYINGS_MATCH_BOTH_PASSES",
-        "binding": "ORIGINAL_VS_FS_SPIRV_NUMERIC_LOCATION_TYPE_ARRAY_P0_3_OF_3_P1_2_OF_2;_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_NOT_VERIFIED",
-        "integration": "CI42146401691_SUCCESS_ALL_41_SYNTHETIC_TESTS;_UNITY_SHADERLAB_IMPORT_NOT_RUN",
+        "binding": "AUTHENTIC_VULKAN_STAGE_IO_PASS0_3_OF_3_PASS1_2_OF_2;_FOUR_NUMERIC_DESCRIPTOR_CLASS_COLLISIONS_AS_COMPILED_2_EACH_PASS;_CB0_UPLOAD_MATERIAL_TEXTURE_UNVERIFIED",
+        "integration": "CI42149571827_SUCCESS_55_CONTROLS_4_ORIGINAL_SPIRV_STAGES;_UNITY_IMPORT_AND_RUNTIME_DESCRIPTOR_REMAP_UNVERIFIED",
         "device": "NOT_TESTED"
       },
       "observed": {
@@ -1983,16 +1983,24 @@
         "numeric_varying_abi_pass1_total": 2,
         "numeric_varying_location_or_type_mismatches": 0,
         "source_original_VS_FS_numeric_varying_compatibility_proven": true,
-        "source_original_semantics_or_interpolation_verified": false
+        "source_original_semantics_or_interpolation_verified": false,
+        "cross_stage_numeric_descriptor_type_conflicts": 4,
+        "numeric_descriptor_conflicts_pass0": 2,
+        "numeric_descriptor_conflicts_pass1": 2,
+        "shared_UBO_block_size_differences": 2,
+        "cross_stage_unmodified_Vulkan_layout_compatible": false,
+        "synthetic_tests_passed": 55,
+        "original_Unity_descriptor_remapping_verified": false
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42125000030",
         "https://github.com/alwansan/raf/actions/runs/42125847863",
         "https://github.com/alwansan/raf/actions/runs/42143981891",
         "https://github.com/alwansan/raf/actions/runs/42144036981",
-        "https://github.com/alwansan/raf/actions/runs/42146401691"
+        "https://github.com/alwansan/raf/actions/runs/42146401691",
+        "https://github.com/alwansan/raf/actions/runs/42149571827"
       ],
-      "next_step": "Original numeric two-pass cross-stage VS/FS varyings match 3/3 and 2/2; still require exact Unity 2021 ShaderLab importer/CB0 dynamic Material.SetTexture upload and Adreno water testing.",
+      "next_step": "Four real compiled per-pass Vulkan descriptor-type collisions established, 2 in each pass; unmodified stage SPIR-V cannot share one binding layout as-is. Source-bounded experiment to remap Fragment DescriptorSet decoration only in private SPIR-V, preserving non-decoration bytecode, then explicit runtime binding/Unity importer remains mandatory; WATER-001 OPEN.",
       "_record_path": "../B_TEAM/resources/T2-foam-original-private-two-pass-ShaderLab-candidate.json"
     },
     {
@@ -6722,6 +6730,20 @@
       "_record_path": "../B_TEAM/events/T2/20261106T0145Z-T2-chat-foam-stage-io-9c4a-result.json"
     },
     {
+      "id": "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8-result",
+      "owner": "T2",
+      "session_id": "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8",
+      "origin": "chat",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T02:24:36Z",
+      "summary": "Original SHA-proven full Foam private 2-pass ShaderLab actual four SPIR-V Vulkan stages: numeric VS-FS varying locations match, BUT per-pass Vulkan descriptor set binding classes collide 2+2=4 times (3 UBO-vs-Sampler, 1 UBO-vs-SampledImage); two CB extent differences. CI42149571827 SUCCESS, 55 synthetic tests. This is a compiled-source candidate limitation, not Unity/Adreno proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42149571827"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -8449,7 +8471,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "e393feb50f441c759d8bbdcda8634cece0f94454e603d12262b6cecc94bdb76e",
+  "source_input_sha256": "2dbf32c11fab0bd7e3a7e17caaf075cd1461e40fdc1ec0210738b58752378fb7",
   "generation": "T-2026-11-05",
-  "input_sha256": "6f18f89bbb7ce46416d0b92403e80b7644244cb72b2b1b12e5433a8e393c3b64"
+  "input_sha256": "57c8495ce78eea638eb0367a104a1e8770a1c63a6b9ebfe2c9fd4ea4e91ac216"
 }
