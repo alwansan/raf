@@ -5,7 +5,7 @@
   "issue": "WATER-001",
   "baseline_sha": "9b267bad42fe5e4be07b603d871564d86f5c214a",
   "experiment_key": "water001-invocation-trace-cli-contract-k7m2",
-  "hypothesis": "Existing trace comparator CLI invokes legacy coordinate histogram only, not invocation-keyed comparison; independent wrapper makes paired capture gating executable without modifying shared comparator.",
+  "hypothesis": "Legacy CLI only compares histograms; new wrapper exposes invocation-keyed mismatch gate.",
   "files": [
     "scripts/t1_fft_invocation_trace_cli.py",
     "tests/test_t1_fft_invocation_trace_cli.py",
@@ -13,5 +13,13 @@
   ],
   "shared_resource": "none; no CI dispatched",
   "taken_over_from": "T1 20261106T1408Z paired-capture readiness",
-  "status": "in_progress"
+  "status": "source_added_unverified",
+  "commits": [
+    "60b7643aec7fb461c1538d2e6df840eb884a799f",
+    "bb02811fcbd22bf66de22db0d15151fe4fd5a46c",
+    "d796b40a4e01f2ad05cb98881c453e53fade44aa",
+    "54e01cd29b7dc3d9fcd1714e41360869a8aa2aef"
+  ],
+  "verification": "not_run_local_dns_unavailable",
+  "next_step": "Run five unittest cases on checkout; only compare SHA-pinned same-input original and candidate capture after identity gate."
 }
