@@ -109,6 +109,24 @@ def apply(project, backup, write=False):
         finally:
             if stage.exists():
                 shutil.rmtree(stage)
+        # The backup can be byte-perfect and still refer to a now-stale
+        # original if another Unity/source stage writes after the promotion.
+        # Do not overwrite that writer's C# or GUID metadata, and do not run
+        # rollback: there has been NO mutation by us at this point.
+        still_original = (
+            not path.is_symlink() and not meta.is_symlink()
+            and path.is_file() and meta.is_file()
+            and path.stat().st_nlink == 1 and meta.stat().st_nlink == 1
+            and path.read_bytes() == raw and meta.read_bytes() == metadata
+        )
+        if not still_original:
+            # This backup was created exclusively by our stage.rename above.
+            # Cleanup of the owned backup keeps retry possible. Never follow
+            # a redirected backup directory or remove an earlier user's copy.
+            if backup.is_symlink() or not backup.is_dir():
+                raise ValueError('Original save backup redirected; retained')
+            shutil.rmtree(backup)
+            raise ValueError('Original SaveAndLoad source or meta changed after backup staging')
         encoded = result.encode('utf-8')
         if raw.startswith(b'\xef\xbb\xbf'):
             encoded = b'\xef\xbb\xbf' + encoded
