@@ -29,18 +29,24 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42266868340",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42266760305",
-    "https://github.com/alwansan/raf/actions/runs/42266868340"
+    "https://github.com/alwansan/raf/actions/runs/42266868340",
+    "https://github.com/alwansan/raf/actions/runs/42266867777",
+    "https://github.com/alwansan/raf/actions/runs/42266867856",
+    "https://github.com/alwansan/raf/actions/runs/42266868238",
+    "https://github.com/alwansan/raf/actions/runs/42266868066"
   ],
   "budget": "Existing B13 source-free transaction CI automatic trigger; no heavy Unity/Android APK/OBB or originals.",
-  "status": "waiting_ci",
-  "observed_result": "RED original source at test-only f8d4233c: CI42266760305 completed FAILURE, exactly two new tests failed: test_hardlinked_original_csharp_cannot_rewrite_external_source_inode and test_hardlinked_original_csharp_meta_cannot_alias_external_guid_inode, both AssertionError: ValueError not raised; 21 cases total with other 19 green. Production guard e88c54fa checks st_nlink==1 on each original .cs and optional .meta before read/backup/write. GREEN CI42266868340 pending.",
+  "status": "completed",
+  "observed_result": "RED CI42266760305 expected source-only failure at two new hardlinked C# and GUID meta tests (AssertionError ValueError not raised), existing 19/19 controls unaffected. Production e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7 checks st_nlink==1 source + optional meta before backup/write. B13 run42266868340 fault-injection job128060948927 SUCCESS 21/21; downstream auto summary job128061025208 FAILED on unrelated inherited event T3 20261106T1625Z nativeRDEF missing record identity. Overall B13 run remains FAILURE, no false green. Same-source B14 path CI42266867777, B07 coroutine CI42266867856, original Android local startup CI42266868238 and reconstruction preflight CI42266868066 each COMPLETED SUCCESS. Synthetic only, no original game source emitted.",
   "rejected_hypotheses": [
     "No evidence current game's staging is actually using hardlinks or that ZIP2 has already been corrupted.",
     "This regression is source-stage preservation, not an Android runtime world save fix."
   ],
   "limitations": [
-    "Hardlink check is a managed filesystem precheck and does not protect against a malicious concurrent inode swap.",
-    "Only a source-free synthetic Linux filesystem fixture, not ZIP2/Unity/Android device validation."
+    "Linux synthetic inode/source/GUID test; no source corruption observed in owner's real ZIP2/Unity staging or Android install.",
+    "B13 overall workflow remains failed from independent existing T3 event schema error; don't fix other owner's event without coordination.",
+    "Preflight cannot prevent a malicious concurrent hardlink swap after check.",
+    "This is source preservation for offline original import, not a direct .rgd or native world-host fix."
   ],
   "integration_commit": "e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7",
   "trial_vote": {
@@ -49,5 +55,5 @@
     "reason": "Earlier substantial hardware mouse integration; this source-stage safety patch alone is not a new trial reason.",
     "unchanged": true
   },
-  "next_step": "Verify green B13 and genuine original local startup after guard, finalize report/event/T5 handoff; keep current T4 vote and game readiness unchanged."
+  "next_step": "T5 original native source import can keep new guard; if a source is hardlinked, first copy independent physical source and preserve original/meta, then re-stage. T3/T5 separately own legacy event identity error in summary regeneration. T4 vote needs remains due substantive mouse View/epoch, no new APK rationale. LOCAL-005 and INPUT-005 OPEN."
 }
