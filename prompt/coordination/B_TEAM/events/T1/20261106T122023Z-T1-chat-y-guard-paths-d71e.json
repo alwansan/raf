@@ -1,0 +1,14 @@
+{
+  "id": "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+  "owner": "T1",
+  "session_id": "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T12:30:42.282Z",
+  "summary": "Authenticated original FFT slot0 butterfly1 Y structural CFG path analysis: five static writes (3 whole vector, one sint32-bit-pattern-to-float, one float32 constant), but at target Y fetch only float32_constant is possible last writer in bounded path model. One abstract path state; encountered predicate producer family OpINotEqual. No same-path bitcarrier+float, unknown writes or escapes observed. Source-authentic CI 42217830589 PASS 15/15 tests after correcting omitted empty predicate map. No dynamic predicate feasibility, Vulkan↔Unity numeric parity or Android water fix proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42217597416",
+    "https://github.com/alwansan/raf/actions/runs/42217830589",
+    "https://github.com/alwansan/raf/commit/c04278edeb3429738259ca7ef28300bfae00d91b"
+  ]
+}
