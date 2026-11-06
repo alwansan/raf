@@ -4,9 +4,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "session_id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
-  "status": "active",
+  "status": "completed",
   "base_sha": "42cffcc8e06fc4b86ee5cdb90e9f6a639214f0e5",
-  "updated_at": "2026-11-06T13:07:29.297Z",
+  "updated_at": "2026-11-06T13:14:48.001Z",
   "resumed_from_sessions": [
     "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
     "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
@@ -30,7 +30,9 @@
   "other_active_runs": [
     42221700354
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build source-free strict gate and adversarial tests, run independent short Actions workflow once; keep original source authentic Vulkan run 42221700354 unaffected."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42223419922"
+  ],
+  "result": "Independent 4-minute source-only CI 42223419922 SUCCESS: 20/20 new strict pair gate tests + 11/11 coordinate comparator tests + 9/9 invocation trace tests; schema/trace digest, inode independence, same declared input/dispatch, nonempty full three-site coverage, empty-both JSON rejection confirmed. Synthetic-only proof, no real independent original or Unity data, manifest unsigned. WATER-001 stays OPEN.",
+  "next_step": "Release source-only resource. Next T1 source-authentic experiment should classify translated butterfly1 X float32 OpPhi SSA incoming types/producer ops/predecessor branches. Feed a real paired invocation capture into strict gate only with separately attested source/dispatch provenance."
 }
