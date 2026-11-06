@@ -6,9 +6,9 @@
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
   "track": "Original FFT Unity OpenGLCore precision context differentiation",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "4085da0987f754fdf5de1cebde40406358c640ad",
-  "updated_at": "2026-11-06T19:05:00Z",
+  "updated_at": "2026-11-06T19:07:40Z",
   "resumed_from_sessions": [
     "20261106T1850Z-T1-chat-gpu-input-join-b71c",
     "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
@@ -35,8 +35,34 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42276235955"
   ],
-  "result": null,
-  "next_step": "Inspect Unity GPU step terminal (logs: RAFT_T1_CARRIER_CONTEXT_GATE), repair only verified fixture/test issue if fail; do not rerun unchanged heavy job; record bounded metrics or blocked reason, cleanup and handoff.",
+  "result": {
+    "workflow_commit": "4928f866d0f035797e776ee004cc9e476aa1d49d",
+    "ci_run": 42276235955,
+    "ci_job": 128093156740,
+    "ci_status": "completed_success",
+    "source_only_preflights": "3+14+4 passed",
+    "actual_unity2021_openglcore_test_passed": true,
+    "actual_gpu_invocations": 64,
+    "actual_gpu_words": 640,
+    "observed_mismatch_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sourcefree_synthetic_fixture": true,
+    "original_raft_shader_or_runtime_mapping_proven": false,
+    "device_water_proven": false,
+    "private_log_cleanup_success": true,
+    "trial_vote": "لا يحتاج"
+  },
+  "next_step": "Real Unity ten-category carrier context passes entirely, contrasting prior 42129683073 computed-address/precise static-global 63/64 drift; next isolate original address provenance or perform SHA-authentic Unity keyed FFT trace with exact matched source/butterfly input and dispatch. No game shader patch or APK yet.",
   "waiting_ci": {
     "run_id": 42276235955,
     "job_id": 128093156740,
