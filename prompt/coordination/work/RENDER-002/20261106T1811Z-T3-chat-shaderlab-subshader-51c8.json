@@ -1,0 +1,31 @@
+{
+  "session_id": "20261106T1811Z-T3-chat-shaderlab-subshader-51c8",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ce9044546d19948c7c3e64c4ae811229c403955f",
+  "updated_at": "2026-11-06T18:06:12.079Z",
+  "scope": "Fix false custom-pass mismatch for genuine two-alternative one-Pass SubShaders in T3 SHA-original Particle108 same-export ShaderLab quality classifier; reject any alternative with empty/unprogrammed Pass; preserve no runtime subshader selection proof. Does NOT touch B49 shared lexical parser or scheduled DXBC-SPIRV crosscontract.",
+  "experiment_key": "T3-SHADERLAB-ALT-SUBSHADER-1PASS-EACH-STRUCTURAL-NOT-RUNTIME-PROOF-v1",
+  "resource_key": "synthetic same-export W1+B02 Shader48 traces and local .shader fixtures only",
+  "resumed_from_sessions": [
+    "20261106T1756Z-T3-chat-cb-uniqueness-4f1a",
+    "20261106T1734Z-T3-scheduled-crosscontract-a71c"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_shaderlab_export_quality.py",
+    "tests/test_t3_particle108_shaderlab_export_quality.py",
+    ".github/workflows/raft-t3-particle108-shaderlab-quality-source-only.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1811Z-T3-chat-shaderlab-subshader-51c8.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1811Z-T3-chat-shaderlab-subshader-51c8.md",
+    "prompt/coordination/experiments/T3/20261106T1811Z-T3-chat-shaderlab-subshader-51c8.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1811Z-T3-chat-shaderlab-subshader-51c8.json"
+  ],
+  "hypothesis": "A source shader with original one normal Pass can have multiple exported alternative SubShaders each containing one executable Pass; the current exporter validator's aggregate count!=1 wrongly rejects this structural case, while it must reject a real two-pass single SubShader and unprogrammed alternatives.",
+  "trial_policy": "prompt/coordination/T_TEAM/TRIAL_BUILD_POLICY_AR.md",
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "scope_limits": "No native APK request, no original game bytes/assets, no Unity compile or Android pixel acceptance; source-only fixture and CI. Scheduled T3 SPIRV join untouched.",
+  "next_step": "Add subshader-aware counters and strict source-only synthetic validations; CI run; checkpoint safely."
+}
