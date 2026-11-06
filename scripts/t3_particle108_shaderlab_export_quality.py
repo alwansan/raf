@@ -33,7 +33,8 @@ LIMIT_ITEMS=150000
 LIMIT_SHADER=8_000_000
 
 
-def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path,\n             *,private_authored_properties:str|None=None)->dict:
+def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path,
+             *,private_authored_properties:str|None=None)->dict:
     """Pure source-owned identity join, never text-name-based identity lookup."""
     if (type(shader_key) is not tuple or len(shader_key)!=2
         or shader_key[0] not in source.SHADER_OWNERS_SELECTED
