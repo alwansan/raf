@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1930Z-T4-real-owner-world-save-log-p6n2",
+  "owner": "T4",
+  "session_id": "20261106T1918Z-T4-chat-owner-log-lifecycle-p6n2",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Genuine pinned 5-Nov owner phone raft-logs: 3 strict complete UTC-monotonic sessions, 7 original SaveGame/SaveWorld/SaveUser pairs, 14 nonzero Save snapshots, 7 Load<T> and 7 nonzero Load snapshots, 2 RestoreRGDGame/RestoreUser and 4 original world-ready assignments; 0 observed Load.caughtException and 0 queue_overflow. Three immutable CL Git blobs authenticated. Synthetic source negative control proved same-size impostor could previously be accepted; final SHA-pinned CI 8/8 controls and genuine CL read SUCCESS. Does not prove process restart, same-world identity, durable RGD or new APK/OBB runtime.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/cba461ecd1aebeb3a2e1bb67547ffa573c40d505",
+    "https://github.com/alwansan/raf/actions/runs/42280021182",
+    "https://github.com/alwansan/raf/actions/runs/42279906350",
+    "https://github.com/alwansan/raf/actions/runs/42279653393",
+    "https://github.com/alwansan/CL/commit/520c4cf409aa20a4db54ff80ed87d8807d9cba57"
+  ],
+  "at": "2026-11-06T19:30:00Z"
+}
