@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
+  "owner": "T3",
+  "session_id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Genuine ZIP2 original Particle108 four paired DXBC VS/FS stages: 2/48 original user registers absent by numeric source SPIR-V Location, both from Fragment Shader INPUT (14/16), not Vertex INPUT (12/12), Vertex OUTPUT (16/16) or Fragment OUTPUT (4/4); 12 synthetic controls pass; source identity and Android pixels not proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42199952229",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1002Z-T3-chat-stage-role-misses-7e13.json"
+  ],
+  "at": "2026-11-06T10:06:00Z"
+}
