@@ -12,6 +12,11 @@ STAGES = {"vertex", "fragment", "compute"}
 def _key(item):
     return (item["stage"], item["family"], item["register"])
 
+def _nonnegative_int(value):
+    """Resource coordinates are integer indices, never booleans or floats."""
+    return type(value) is int and value >= 0
+
+
 def check_contract(dx_resources, spv_resources, provenance):
     """Return sorted diagnostic codes; empty means declared contract is consistent.
 
@@ -32,8 +37,13 @@ def check_contract(dx_resources, spv_resources, provenance):
         for item in group:
             if item["stage"] not in STAGES or item["family"] not in FAMILIES:
                 errors.append("unknown_stage_or_family")
-            if not isinstance(item["count"], int) or item["count"] <= 0:
+            if type(item["count"]) is not int or item["count"] <= 0:
                 errors.append("invalid_count")
+            coordinates = ("register",) if "register" in item else ("set", "binding")
+            if "set" in item and "register" in item:
+                coordinates = ("register", "set", "binding")
+            if any(not _nonnegative_int(item[field]) for field in coordinates):
+                errors.append("invalid_coordinate")
     dx = {_key(x): x for x in dx_resources}
     spv = {(x["stage"], x["family"], x["set"], x["binding"]): x for x in spv_resources}
     mapping = {_key(x): x for x in provenance}
