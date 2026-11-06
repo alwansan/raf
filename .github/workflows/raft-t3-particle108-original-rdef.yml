@@ -1,6 +1,11 @@
 name: T3 RENDER-002 authentic original Particle108 D3D11 DXBC RDEF register contract
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - prompt/coordination/requests/t3-rdef-eightstage-20261106-9f28.trigger
 permissions:
   contents: read
 concurrency:
@@ -89,21 +94,32 @@ jobs:
           import json,os
           from pathlib import Path
           d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-particle108-rdef-safe.json").read_text())
-          assert d["status"]=="T3_SHA_ORIGINAL_PARTICLE108_FOUR_PAIR_DXBC_RDEF_CLASSIFIED"
+          full="T3_SHA_ORIGINAL_PARTICLE108_FOUR_PAIR_DXBC_RDEF_CLASSIFIED"
+          presence="T3_SHA_ORIGINAL_PARTICLE108_EIGHT_STAGE_RDEF_PRESENCE_ONLY"
+          assert d["status"] in (full,presence)
           assert d["source_original_six_scenes_SHA_authenticated"] is True
           assert d["source_original_four_owner_SHA_authenticated"] is True
           assert d["source_particle_renderer_material_slots"]==108
           assert d["source_shader_authored_properties"]==13
           assert d["source_shader_authored_texture_properties"]==2
           assert d["source_original_keyword_pairs"]==4
-          assert d["counts"]["original_DXBC_stages_parsed"]==8
-          assert d["counts"]["source_original_vertex_fragment_keyword_pairs_parsed"]==4
+          if d["status"]==full:
+              assert d["counts"]["original_DXBC_stages_parsed"]==8
+              assert d["counts"]["source_original_vertex_fragment_keyword_pairs_parsed"]==4
+              print("T3_SOURCE_ORIGINAL_PARTICLE108_ALL_EIGHT_RDEF_REGISTER_CONTRACTS_VERIFIED=true")
+          else:
+              c=d["counts"]
+              assert c["original_DXBC_stages_examined"]==8
+              assert (c["original_RDEF_unique_stages"]+c["original_RDEF_absent_stages"]+
+                      c["original_RDEF_multiple_stages"])==8
+              assert c["original_RDEF_absent_stages"]+c["original_RDEF_multiple_stages"]>0
+              assert d["original_RDEF_register_layout_proven"] is False
+              print("T3_SOURCE_ORIGINAL_PARTICLE108_EIGHT_STAGE_RDEF_PRESENCE_ONLY=true")
           assert d["original_DXBC_RDEF_register_numbers_names_types_or_bytecode_published"] is False
           assert d["original_shader_program_Unity_compile_or_pixel_equivalence_proven"] is False
           assert d["SPIRV_descriptor_set_mapping_proven"] is False
-          print("T3_SOURCE_ORIGINAL_PARTICLE108_FOUR_RDEF_REGISTER_CONTRACTS_VERIFIED=true")
           PY
-      - name: Publish safe aggregate register-family counts only
+      - name: Publish only privacy-safe eight-stage RDEF presence or register-family aggregate
         if: always()
         uses: actions/upload-artifact@v4
         with:
