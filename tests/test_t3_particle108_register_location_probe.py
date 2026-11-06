@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Source-free regression fixtures for private original DXBC->SPIR-V hypothesis."""
 import unittest
-from scripts.t3_particle108_register_location_probe import classify_stage,_type
+from scripts.t3_particle108_register_location_probe import classify_stage,classify_stage_roles,_type
 
 def row(reg=0,mask=15,kind=3,system=0):
     return {"register":reg,"mask":mask,"type":kind,"system_value":system}
@@ -60,6 +60,22 @@ class OriginalRegisterLocationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             classify_stage({"input":[],"output":[]},
                            {"inputs":[{"location":True,"type":"vec4"}],"outputs":[]})
+
+    def test_stage_side_split_finds_only_output_missing_register(self):
+        result=classify_stage_roles(
+            {'input':[row(reg=0)],'output':[row(reg=3)]},
+            {'inputs':[{'location':0,'type':'vec4'}],'outputs':[]})
+        self.assertEqual(result['inputs']['missing_numeric_register_locations'],0)
+        self.assertEqual(result['outputs']['missing_numeric_register_locations'],1)
+        self.assertEqual(result['inputs']['numerically_matching_register_records'],1)
+        self.assertEqual(result['outputs']['numerically_matching_register_records'],0)
+
+    def test_source_systemvalue_and_empty_output_do_not_fabricate_missing(self):
+        result=classify_stage_roles(
+            {'input':[row(reg=0xffffffff,system=1)],'output':[]},
+            {'inputs':[],'outputs':[]})
+        self.assertEqual(result['inputs']['original_user_records'],0)
+        self.assertEqual(result['outputs']['missing_numeric_register_locations'],0)
 
     def test_unknown_reflection_type_or_spoofed_register_rejected(self):
         with self.assertRaises(ValueError):
