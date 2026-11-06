@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1731Z-T4-chat-log-pair-linear-w6q2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "world_save_device_log_evidence",
+  "status": "active",
+  "base_sha": "697787bd3f9e582deda2f5dbe09ffe2b0456bd31",
+  "experiment_key": "T4-LOCAL005-device-jsonl-many-logger-sessions-n2-evidence-pairs-quadratic-to-linear-200-counted-datetime-v1",
+  "resource_key": null,
+  "hypothesis": "Source-free device save/reopen evidence verifier builds all O(n^2) session pairs even though output is a Boolean existence result. One-pass earliest eligible prior save end preserves strict chronologic, sequence and overflow gates.",
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py"
+  ],
+  "related_work": [
+    "docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1719Z-T4-chat-first-unity-error-recovery-b5q7.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1637Z-T4-scheduled-v8m2.md"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261106T1731Z-T4-chat-log-pair-linear-w6q2.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Prove old quadratic comparisons via deterministic comparison counter then source-free linear scan with same gate; maintain existing tests, avoid private phone/source or native build.",
+  "updated_at": "2026-11-06T17:31:00Z"
+}
