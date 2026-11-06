@@ -153,13 +153,33 @@ def apply(project, backup, write=False):
         encoded = result.encode('utf-8')
         if raw.startswith(b'\xef\xbb\xbf'):
             encoded = b'\xef\xbb\xbf' + encoded
+        source_write_completed = False
         try:
             path.write_bytes(encoded)
+            source_write_completed = True
             if meta.read_bytes() != metadata or path.read_bytes() != encoded:
                 raise ValueError('Installed source or original meta changed')
-        except Exception:
+        except Exception as write_failure:
+            # A completed write and a later foreign C# or GUID update belong
+            # to a new source epoch. Never roll that later edit back to our
+            # stale raw snapshot; preserve the complete original backup for
+            # explicit inspection instead. This is not an atomic source lock.
+            if source_write_completed:
+                still_owned = (
+                    not path.is_symlink() and not meta.is_symlink()
+                    and path.is_file() and meta.is_file()
+                    and path.stat().st_nlink == 1 and meta.stat().st_nlink == 1
+                    and path.read_bytes() == encoded and meta.read_bytes() == metadata
+                )
+                if not still_owned:
+                    raise ValueError(
+                        'Original SaveAndLoad source or meta changed after successful write; '
+                        'refuse rollback and retain original backup'
+                    ) from write_failure
             # Keep the complete original backup if rollback cannot be verified;
             # delete only our own new backup after full rollback succeeds.
+            # A write that raised while incomplete retains the older torn-write
+            # best-effort rollback behavior, protected by the staged backup.
             rolled_back = False
             try:
                 path.write_bytes(raw)
