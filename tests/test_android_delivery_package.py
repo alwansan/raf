@@ -133,6 +133,38 @@ class DeliveryTests(unittest.TestCase):
             package(apk,obb,meta,out)
             with self.assertRaises(ValueError):package(apk,obb,meta,out)
 
+    def test_crc_green_duplicate_apk_or_obb_name_rejected_before_output(self):
+        import warnings
+        for container in ('apk', 'obb'):
+            for empty_first in (False, True):
+                with self.subTest(container=container, empty_first=empty_first):
+                    with tempfile.TemporaryDirectory() as tmp:
+                        root = Path(tmp)
+                        apk, obb, meta = self.inputs(root)
+                        target = apk if container == 'apk' else obb
+                        member = ('classes.dex' if container == 'apk'
+                                  else 'assets/bin/Data/data.unity3d')
+                        with zipfile.ZipFile(target) as archive:
+                            original = archive.read(member)
+                        # Two valid central-directory entries with the exact
+                        # same path; CRC alone remains green in both orders.
+                        with warnings.catch_warnings():
+                            warnings.simplefilter('ignore', UserWarning)
+                            with zipfile.ZipFile(target, 'w') as archive:
+                                if empty_first:
+                                    archive.writestr(member, b'')
+                                    archive.writestr(member, original)
+                                else:
+                                    archive.writestr(member, original)
+                                    archive.writestr(member, b'')
+                        with zipfile.ZipFile(target) as archive:
+                            self.assertIsNone(archive.testzip())
+                            self.assertEqual(len(archive.infolist()), 2)
+                        out = root/'delivery'
+                        with self.assertRaisesRegex(ValueError, 'duplicate member'):
+                            package(apk, obb, meta, out)
+                        self.assertFalse(out.exists())
+
     def test_member_crc_corruption_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);apk,obb,meta=self.inputs(root)

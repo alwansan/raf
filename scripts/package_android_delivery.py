@@ -109,6 +109,15 @@ def package(apk, obb, metadata, output, *, part_bytes=DEFAULT_PART, asset_limit=
     for p in inputs:
         try:
             with zipfile.ZipFile(p) as archive:
+                # CRC verifies every entry's bytes but NOT that the name is
+                # unambiguous. A ZIP may contain two identical names with valid
+                # CRCs, and Android/Unity lookups can resolve the wrong one.
+                # Recovery packaging must not bypass the primary APK/OBB audit.
+                names = set()
+                for item in archive.infolist():
+                    if item.filename in names:
+                        raise ValueError('Native ZIP duplicate member name')
+                    names.add(item.filename)
                 if archive.testzip() is not None: raise ValueError('Native ZIP CRC mismatch')
         except (zipfile.BadZipFile, RuntimeError, OSError, EOFError):
             raise ValueError('Native ZIP integrity failure') from None
