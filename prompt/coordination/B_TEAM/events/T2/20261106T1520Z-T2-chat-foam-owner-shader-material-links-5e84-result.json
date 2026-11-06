@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84",
+  "type": "result",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T15:31:00Z",
+  "summary": "Genuine ZIP2 SHA-original sharedassets0 owner and Foam PathID2420 census CI42243327311 SUCCESS (16 Python+typed Cecil). 58 Shader,351 Material objects; zero unparsed names/pointers; ZERO Material local fileID0/pathID2420 Foam links; seven external Shader PPtrs not yet resolved; exact original Shader.Find requested name matches ZERO other Shader names within this owner, complementing previous negative against Foam m_Name. Only one asset owner surveyed; no original Foam runtime Material/CB0/Adreno proof. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42243327311",
+    "docs/T2_FOAM_ORIGINAL_OWNER_SHADER_MATERIAL_LINKS_2026-11-06.md"
+  ],
+  "limits": "No game source/private shader names/digests/raw PPtrs leaked; zero local refs is not proof across all original game assets, seven external targets unresolved; no .meta/GUID shader edits.",
+  "next_step": "Resolve external PPtrs and other original asset owners by immutable PathID/GUID, not any indirect shared CB0-name overlap."
+}
