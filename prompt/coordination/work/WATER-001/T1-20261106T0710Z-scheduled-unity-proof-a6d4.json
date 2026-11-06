@@ -1,0 +1,15 @@
+{
+  "session_id": "20261106T0710Z-T1-scheduled-a6d4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "base_sha": "443f72ea6e391315b2cc0d93f25fb5dcc99b6044",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/clients/T1/sessions/20261106T0710Z-T1-scheduled-a6d4.md",
+    "prompt/coordination/work/WATER-001/T1-20261106T0710Z-scheduled-unity-proof-a6d4.json"
+  ],
+  "experiment_key": "audit-actual-unity-fft-42167120994-42167116490-vs-gate-6b6b016",
+  "resource_key": null,
+  "hypothesis": "Latest green Unity FFT workflows may validate a proof gate but not numerical Vulkan parity; inspect actual jobs/artifacts and distinguish exact proven stages.",
+  "updated_at": "2026-11-06T07:10:00Z"
+}
