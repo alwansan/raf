@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "T5-trial-20261106-r1-head99658d34-independent-five-vote-no-native-consensus",
+  "status": "completed_no_build",
+  "source_commit": "095d776d280457741f15922566d693ab6ec6ff24",
+  "hypothesis": "Independent worker votes and substantive merge evidence do not justify a fresh trial build yet; T5 monitors but does not start native without five current YES.",
+  "round_id": "trial-20261106-r1",
+  "actual_votes": {
+    "T1": "لا يحتاج",
+    "T2": "لا يحتاج",
+    "T3": "لا يحتاج",
+    "T4": "يحتاج",
+    "T5": "لا يحتاج"
+  },
+  "observed_result": {
+    "all_five_need": false,
+    "yes_count": 1,
+    "no_count": 4,
+    "build_dispatched": false,
+    "latest_native_source": "e9c358eda01785b65e4eb14f18723da426635628",
+    "old_recovered_artifact_id": 13454900880,
+    "old_artifact_expired": false,
+    "old_artifact_expiry": "2026-11-08T21:12:40Z"
+  },
+  "commands": [
+    "Read full live T_TEAM trial build policy and all five rows",
+    "Inspect current HEAD and GitHub Actions incl full native older source and separate retained artifact",
+    "Preserve T1–T4 row bytes and update only T5 row and T5 build decision section with blob SHA"
+  ],
+  "negative_controls": [
+    "No new native request on diagnostic/source-only fixes",
+    "No assertion that old signed APK includes current HEAD changes",
+    "No owner-vote forgery or readiness 3/3 override"
+  ],
+  "workflow_path": null,
+  "run_url": null,
+  "limitations": [
+    "This is a decision audit, not a test of current Android graphics or a new native candidate",
+    "No automation or background monitor started"
+  ],
+  "next_step": "Review after substantive integrated water, graphics or game changes, then apply five independently justified recent YES and all actual native dispatch safeguards."
+}
