@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
+  "owner": "T5",
+  "session_id": "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Reserved independent RENDER-002 scope then implemented inode+content ownership guard for built-in ShaderLab include cleanup on failure, with synthetic same-inode external edit and new-inode replacement fixtures. Source commit 67e659e3; B13/A15/authentic builtin-source CI pending at initial checkpoint; no device shader claims.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/67e659e3ea67c43a66e43d65e53afb168645305c",
+    "https://github.com/alwansan/raf/actions/runs/42276738043",
+    "https://github.com/alwansan/raf/actions/runs/42276737999",
+    "https://github.com/alwansan/raf/actions/runs/42276738013"
+  ],
+  "at": "2026-11-06T19:07:00Z",
+  "limits": [
+    "synthetic post-addition rollback race; no real phone visual change",
+    "no Unity Editor/native build or trial vote 5/5"
+  ]
+}
