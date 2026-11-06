@@ -2,7 +2,7 @@
   "session_id": "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
   "origin": "scheduled",
   "issue_id": "PERF-007",
-  "status": "active",
+  "status": "waiting_ci",
   "intended_files": [
     "scripts/t5_cl_pid_epoch_audit.py",
     "tests/test_t5_cl_pid_epoch_audit.py"
@@ -10,8 +10,14 @@
   "hypothesis": "game_not_running between verified identical numeric PID is a process lifetime boundary; current audit combines them",
   "experiment_key": "t5-pid-epoch-stop-restart-same-pid-fixture-v1",
   "resource_key": null,
-  "updated_at": "2026-11-06T17:51:00Z",
+  "updated_at": "2026-11-06T17:55:00Z",
   "base_reference": "feature/android-native-port",
   "taken_over_from": "T5 prior commits 858e7f1 and 2890644; existing analyzer integration",
-  "scope_note": "No Unity/CI dispatch or device attribution; independent regression only"
+  "scope_note": "No Unity/CI dispatch or device attribution; independent regression only",
+  "result": "Source patch and two tests committed; CI test result unverified",
+  "commits": [
+    "a5f2172f7433e8e0a6c4a6a178029a56a82d8cc9",
+    "da7fdeadd7f95a6273dca22d71aee4bce6736416"
+  ],
+  "next_step": "Inspect CI and run unittest discovery; do not claim pass until runner evidence"
 }
