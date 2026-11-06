@@ -6,9 +6,9 @@
   "session_id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
   "issue_id": "WATER-001",
   "track": "Independent original-free Unity2021 OpenGLCore float-bitcarrier sampled-image address discriminator",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "7c04928db1f45f4e66a656286bacc9e055bfea10",
-  "updated_at": "2026-11-06T17:25:31.259Z",
+  "updated_at": "2026-11-06T17:27:09Z",
   "resumed_from_sessions": [
     "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
     "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4",
@@ -38,7 +38,27 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42261467757"
   ],
-  "result": null,
-  "next_step": "Poll 42261467757 exact final job/steps; read RAFT_T1_BITCARRIER_TEXTURE_COUNTS + RAFT_T1_BITCARRIER_NUNIT safe markers. If metrics fail inspect direct-vs-carried site category; if never reached investigate Unity compile stage. No raw GameCI logs, no another equivalent CI.",
+  "result": {
+    "run_id": 42261467757,
+    "job_id": 128042200390,
+    "conclusion": "success",
+    "unity2021_openglcore_gpu_readback_verified": true,
+    "synthetic_texture_reads_total": 320,
+    "mismatch_counts": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "direct_read_classes": 3,
+    "bitcarrier_read_classes": 2,
+    "source_only_tests_passed": 7,
+    "nunit_passed": 1,
+    "original_shader_tested": false,
+    "android_water_proven": false,
+    "cleanup_succeeded": true
+  },
+  "next_step": "OpenGLCore basic float-bitcarrier Texture2D fetch matches; test nested Phi/CFG merge with bit-carried coordinates or actual source-authentic Unity keyed trace; WATER-001 OPEN.",
   "source_commit": "2373a9310c659520e46479a0373d2b44f0d26134"
 }
