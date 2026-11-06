@@ -110,6 +110,11 @@ jobs:
           assert sum(v['original_user_records'] for v in roles.values())==48
           assert sum(v['spirv_located_rows'] for v in roles.values())==46
           assert sum(v['missing_numeric_register_locations'] for v in roles.values())==2
+          readmask=d['missing_fragment_usedmask_aggregate']
+          assert readmask['missing_fragment_numeric_location_records']==2
+          assert readmask['missing_fragment_original_used_mask_zero'] + readmask['missing_fragment_original_used_mask_nonzero']==2
+          assert readmask['missing_fragment_original_vertex_semantic_mask_type_join']==2
+          print('T3_ORIGINAL_FRAGMENT_MISSING_DXBC_USED_MASK_SAFE='+json.dumps(readmask,sort_keys=True))
           assert sum(v['numerically_matching_register_records'] for v in roles.values())==46
           assert all(v['type_class_mismatches']==0 for v in roles.values())
           print('T3_ORIGINAL_MISSING_BY_STAGE_ROLE_SAFE='+json.dumps(roles,sort_keys=True))
