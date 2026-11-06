@@ -1,0 +1,124 @@
+name: T3 RENDER-002 original Particle108 D3D11 DCL operand register placement
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - prompt/coordination/requests/t3-dxbc-operands-20261106-6e2a.trigger
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-original-dcl-operands-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-DXBC-eight-stage-operands:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free tokenized DCL operand index and fail-closed tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_dxbc_operand_bindings.py tests/test_t3_particle108_original_dxbc_operand_bindings.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_operand_bindings.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Restore only four original SHA-pinned shader owner data files
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate exactly six original Renderer scenes and four asset owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path("zip2-source")
+          out=Path(os.environ["RUNNER_TEMP"])/"t3-original-private-DXBC-OPERANDS"
+          pins={"Raft_Data/"+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED}
+          result=stage(source,out,pins)
+          assert len(result["owners"])==4 and result["verified_bytes"]==269007288 and not result["lfs_used"]
+          for name,pin in PIN.items():
+              file=source/"Raft/Raft_Data"/name
+              verify_source(file,pin)
+              dest=out/"Raft_Data"/name
+              with file.open("rb") as src,dest.open("xb") as dst:
+                  while buf:=src.read(1024*1024):dst.write(buf)
+              verify_source(dest,pin)
+          print("T3_ORIGINAL_DXBC_RDEF_SIX_SCENES_FOUR_OWNERS_SHA=true")
+          PY
+      - name: Read original tokenized SHDR SHEX DCL operand register forms across eight stages
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          timeout 540s python3 -m scripts.t3_particle108_original_dxbc_operand_bindings \
+            --original "$RUNNER_TEMP/t3-original-private-DXBC-OPERANDS" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-particle108-operands-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-particle108-operands-safe.json").read_text())
+          assert d["status"]=="T3_SHA_ORIGINAL_PARTICLE108_DXBC_DECLARATION_OPERANDS"
+          assert d["source_original_six_scenes_SHA_authenticated"] is True
+          assert d["source_original_four_owner_SHA_authenticated"] is True
+          assert d["source_particle_renderer_material_slots"]==108
+          assert d["source_original_keyword_pairs"]==4
+          c=d["counts"]
+          assert c["original_DXBC_stage_operand_layouts_parsed"]==8
+          assert c["original_original_keyword_vsps_pairs"]==4
+          # The previous SHA-pinned true source declared 24 cb, 10 srv, 10 sampler, 0 uav.
+          assert c["original_stage_declaration_operand_records"]==44
+          assert c["original_dcl_cbuffer_operand_records"]==24
+          assert c["original_dcl_srv_operand_records"]==10
+          assert c["original_dcl_sampler_operand_records"]==10
+          assert c["original_dcl_uav_operand_records"]==0
+          assert d["original_private_dxbc_register_numbers_array_values_or_shader_bytes_published"] is False
+          assert d["original_shader_program_Unity_compile_or_pixel_equivalence_proven"] is False
+          assert d["SPIRV_Vulkan_register_binding_equivalence_proven"] is False
+          assert d["register_array_span_or_cbuffer_byte_offsets_proven"] is False
+          print("T3_ORIGINAL_PARTICLE108_EIGHT_STAGE_DCL_OPERANDS_CLASSIFIED=true")
+          PY
+      - name: Publish only privacy-safe original DCL operand counts and variant stability flags
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle108-DXBC-OPERANDS-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-particle108-operands-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
