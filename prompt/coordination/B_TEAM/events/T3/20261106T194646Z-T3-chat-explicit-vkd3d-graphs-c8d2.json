@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "event_id": "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
+  "session_id": "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "verified_source_only_engineering",
+  "updated_at": "2026-11-06T20:00:51.434Z",
+  "summary": "Ported B18's proven VKD3D shader public C ABI explicit mapping approach to VS/FS CBV, SRV, sampler, UAV candidate stage compilation with two independent private A/B target resource layouts. Added fail-closed private packets, native C parser/compiler, and strict source-variable-SPIRV instruction identity verifier excluding descriptor literals. CI42284214002 SUCCESS: 61/61 synthetic Python tests, Ubuntu24.04 public vkd3d-shader 1.2-15build1 gcc C ABI compile+link and synthetic map accept/reject. No genuine original Shader48 DXBC compiled under new profiles yet; original SPV binding to Unity material color/fire/smoke not proven. RENDER-002 OPEN NOT_READY; T3 trial لا يحتاج.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42284214002",
+    "https://github.com/alwansan/raf/actions/runs/42283609567",
+    "https://github.com/alwansan/raf/commit/73ecbbcca3deccbde74c23e1273795291a12448d",
+    "https://github.com/alwansan/raf/commit/aac6c0b85e01f2f679c5d69f57c141d4ec8cb49a",
+    "prompt/coordination/clients/T3/sessions/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.md",
+    "prompt/coordination/experiments/T3/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json"
+  ],
+  "limits": [
+    "Only source-free synthetic SPIR-V and C ABI packet tests",
+    "No original 4 keyword VS/FS DXBC compilation under explicit target profiles, no source-authentic binding provenance",
+    "No Unity ShaderLab implementation, game material/scene assets, native delivery or Android pixels modified/verified",
+    "Other agents' Actions, including native 42281310905, not cancelled or interfered"
+  ]
+}
