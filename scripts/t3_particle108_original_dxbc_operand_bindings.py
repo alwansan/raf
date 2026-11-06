@@ -138,6 +138,50 @@ def classify_four_pairs(pairs):
         "SPIRV_Vulkan_register_binding_equivalence_proven":False,
         "register_array_span_or_cbuffer_byte_offsets_proven":False}
 
+def classify_primary_index_profiles(pairs):
+    """Safely distinguish first register index from 2D secondary DCL metadata.
+
+    Signatures containing original numeric index words stay within the private
+    process. Public output is count-only; a second cbuffer index is NOT claimed
+    to be array size, byte offset or distinct register identity.
+    """
+    if (type(pairs) is not list or len(pairs)!=4 or
+        any(type(p) is not tuple or len(p)!=2 for p in pairs)):
+        raise ValueError("ORIGINAL_FOUR_DXBC_PAIRS_REQUIRED")
+    profiles={1:{"full":[],"opcode_primary":[],"family_primary":[]},
+              0:{"full":[],"opcode_primary":[],"family_primary":[]}}
+    by_family={st:{family:[] for family in ("cbuffer","srv","sampler","uav")}
+               for st in (1,0)}
+    c=Counter()
+    for vertex,pixel in pairs:
+        for st,blob in ((1,vertex),(0,pixel)):
+            layout=_private_stage_layout(blob,st)
+            profiles[st]["full"].append(tuple(sorted(layout)))
+            profiles[st]["opcode_primary"].append(
+                tuple(sorted((f,op,indices[0]) for f,op,indices in layout)))
+            profiles[st]["family_primary"].append(
+                tuple(sorted((f,indices[0]) for f,op,indices in layout)))
+            c["original_private_primary_family_collisions"]+=(
+                len(layout)-len(set((f,indices[0]) for f,op,indices in layout)))
+            for family in by_family[st]:
+                by_family[st][family].append(tuple(sorted(
+                    idx[0] for f,_,idx in layout if f==family)))
+            c["original_stage_primary_profiles_scanned"]+=1
+    for stage,name in ((1,"vertex"),(0,"fragment")):
+        for key in ("full","opcode_primary","family_primary"):
+            distinct=len(set(profiles[stage][key]))
+            c["original_"+name+"_"+key+"_profiles_distinct"]=distinct
+            c["original_"+name+"_"+key+"_profiles_stable_all_four"]=int(distinct==1)
+        for family,values in by_family[stage].items():
+            c["original_"+name+"_"+family+"_first_register_profile_distinct"]=len(set(values))
+    if c["original_stage_primary_profiles_scanned"]!=8:
+        raise ValueError("DXBC_BIND_STAGE_COUNT")
+    return {"schema_version":1,"counts":dict(sorted(c.items())),
+        "original_first_register_indexes_or_second_index_values_published":False,
+        "original_2d_secondary_index_size_semantics_proven":False,
+        "shader_binding_or_device_color_fixed":False}
+
+
 def probe(root,manifest):
     import UnityPy
     selected={}
@@ -165,6 +209,7 @@ def probe(root,manifest):
         raise ValueError("original_paired_DXBC_shader_structure_changed")
     pairs=native.stage.exact_four_pairs(tree["m_ParsedForm"],platforms[0])
     report=classify_four_pairs(pairs)
+    report["primary_index_analysis"]=classify_primary_index_profiles(pairs)
     report["source_original_six_scenes_SHA_authenticated"]=True
     report["source_original_four_owner_SHA_authenticated"]=True
     report["source_particle_renderer_material_slots"]=108
