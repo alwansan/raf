@@ -154,17 +154,17 @@ class PerformanceHudContract(unittest.TestCase):
         perf = perf.split("private static void ReportPriorExits()", 1)[0]
         update = source.split("private void Update()", 1)[1]
         update = update.split("private void OnGUI()", 1)[0]
-        active = source.split("private void ActiveSceneChanged(Scene before, Scene after)", 1)[1]
+        active = source.split("private static void ActiveSceneChanged(Scene before, Scene after)", 1)[1]
         active = active.split("private void OnApplicationPause(bool paused)", 1)[0]
         loaded = source.split("private void SceneLoaded(Scene scene, LoadSceneMode mode)", 1)[1]
         loaded = loaded.split("private static string OriginalQualityStateSnapshot()", 1)[0]
         unloaded = source.split("private static void SceneUnloaded(Scene scene)", 1)[1]
-        unloaded = unloaded.split("private void ActiveSceneChanged(", 1)[0]
+        unloaded = unloaded.split("private static void ActiveSceneChanged(", 1)[0]
         paused = source.split("private void OnApplicationPause(bool paused)", 1)[1]
         paused = paused.split("private void OnApplicationFocus(", 1)[0]
 
         self.assertIn("SceneManager.activeSceneChanged += ActiveSceneChanged;", source)
-        self.assertIn("if (intervalFrames > 0) activeSceneTransitionsInWindow++;", active)
+        self.assertIn("activeSceneRevision++;", active)
         self.assertNotIn("intervalFrames = ", active)
         self.assertNotIn("sampleCount = ", active)
         self.assertNotIn("skipNextFrame", active)
@@ -177,6 +177,7 @@ class PerformanceHudContract(unittest.TestCase):
         self.assertLess(update.index("frameWindowStartScene = SceneManager.GetActiveScene().name;"),
                         update.index("intervalFrames++; intervalSeconds += delta;"))
         self.assertIn("frameWindowStartSceneRevision = sceneContentRevision;", update)
+        self.assertIn("frameWindowStartActiveSceneRevision = activeSceneRevision;", update)
         self.assertIn("FrameTimingManager.CaptureFrameTimings();", update)
         self.assertIn("frame_window_start_scene=", perf)
         self.assertIn("frame_window_end_scene=", perf)
@@ -186,9 +187,10 @@ class PerformanceHudContract(unittest.TestCase):
         self.assertIn("frame_window_content_stable=", perf)
         self.assertIn("string.Equals(frameWindowStartScene, endScene, StringComparison.Ordinal)", perf)
         self.assertIn("sceneContentEvents == 0", perf)
+        self.assertIn("activeSceneRevision - frameWindowStartActiveSceneRevision", perf)
         # Preserve the existing performance interval schema and sample budget.
         self.assertIn('"; scene=" + endScene;', perf)
         self.assertIn("intervalFrames = sampleCount = 0; intervalSeconds = 0;", perf)
         self.assertIn("frameWindowStartScene = \"\";", paused)
-        self.assertIn("activeSceneTransitionsInWindow = 0;", paused)
+        self.assertIn("frameWindowStartActiveSceneRevision = activeSceneRevision;", paused)
         self.assertIn("skipNextFrame = true;", paused)
