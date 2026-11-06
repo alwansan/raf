@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1808Z-T2-chat-monohead-script-links-42a7-source-opaque-monoscript-base-header-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1808Z-T2-chat-monohead-script-links-42a7",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Genuine original ZIP2 source CI42268585593 SUCCESS, SHA-authenticated 40 scene levels and sharedassets0 owner (349216084 bytes); 19/19 tests. All previously opaque 55328 scene components are MonoBehaviour; 55328/55328 original classDB base headers parsed with valid m_Script references; 0 sharedassets0 script links and 55328 other external script owner links, 0 invalid/null. 128 full-tree crosschecks passed. Missing custom fields/actual external source MonoScript types and original Foam runtime shader still UNKNOWN. T2 trial r1 stays NO; no Android build.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42268585593",
+    "docs/T2_ORIGINAL_OPAQUE_MONOSCRIPT_HEAD_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1808Z-T2-chat-monohead-script-links-42a7.json"
+  ],
+  "limitations": [
+    "Built-in base header only; no custom field reconstruction or source original runtime Foam host proof",
+    "All 55328 m_Script refs point to other external owner(s) not sharedassets0; typed targets not yet validated",
+    "Source file name alone not independently Unity GUID",
+    "Source-only evidence no Android/Adreno water pixels; trial NO"
+  ],
+  "at": "2026-11-06T18:15:30.695Z"
+}
