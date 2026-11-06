@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 
 // Original authenticated mouse-axis/cursor assignments are rewritten into
@@ -16,3 +17,4 @@ internal static class UnityEditorBridgeUsage
             + RaftAndroid.Platform.AndroidPhysicalMouseCapture.GetAxisRaw("Mouse Y");
     }
 }
+#endif
