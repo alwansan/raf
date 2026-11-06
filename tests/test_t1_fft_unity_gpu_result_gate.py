@@ -3,9 +3,9 @@ import unittest
 from scripts.t1_fft_unity_gpu_result_gate import classify,KNOWN
 
 
-def xml(names=None,*,result="Passed",failed=0,passed=2):
+def xml(names=None,*,result="Passed",failed=0,passed=2, contradictory_failure=False):
     names=sorted(KNOWN) if names is None else names
-    cases="".join('<test-case fullname="%s" result="%s"><failure><message>PRIVATE SOURCE CONTENT</message></failure></test-case>'%(n,result) for n in names)
+    cases="".join('<test-case fullname="%s" result="%s">%s</test-case>'%(n,result, '<failure><message>PRIVATE SOURCE CONTENT</message></failure>' if contradictory_failure or result=="Failed" else "") for n in names)
     return ('<test-run testcasecount="%d" total="%d" passed="%d" failed="%d" skipped="0" inconclusive="0" result="%s">%s</test-run>'%(len(names),len(names),passed,failed,result,cases)).encode()
 
 
@@ -17,6 +17,12 @@ class GPUReportControls(unittest.TestCase):
         self.assertFalse(v["numeric_original_pixel_parity_proven"])
         self.assertFalse(v["android_adreno_water_pixels_proven"])
         self.assertFalse(v["original_author_kernel_names_or_runtime_mapping_proven"])
+
+    def test_passed_case_with_private_failure_payload_is_not_success(self):
+        record=classify(xml(contradictory_failure=True),0)
+        self.assertFalse(record["all_private_unity_tests_passed"])
+        self.assertFalse(record["fft_derived_two_pass_gpu_dispatch_with_observed_writes"])
+        self.assertNotIn("PRIVATE SOURCE CONTENT",str(record))
 
     def test_nonzero_process_fails(self):
         self.assertFalse(classify(xml(),3)["all_private_unity_tests_passed"])
