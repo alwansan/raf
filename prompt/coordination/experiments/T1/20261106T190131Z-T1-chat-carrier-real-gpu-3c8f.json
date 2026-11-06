@@ -28,19 +28,48 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42276235955",
   "artifact_urls": [],
   "budget": "25m licensed sourcefree GPU CI shared raft-native-engine mutex; no original game/assets, APK or release",
-  "status": "waiting_ci",
+  "status": "completed",
   "observed_result": {
-    "source_preflight": "success",
-    "pinned_gameci_download": "success",
-    "unity_gpu_step": "in_progress at 2026-11-06T19:04Z",
     "run_id": 42276235955,
-    "job_id": 128093156740
+    "job_id": 128093156740,
+    "source_sha": "4928f866d0f035797e776ee004cc9e476aa1d49d",
+    "run_status": "completed",
+    "run_conclusion": "success",
+    "preflight_source_tests": "3/3",
+    "preflight_gate_tests": "14/14",
+    "preflight_fixture_tests": "4/4",
+    "unity_engine": "2021.3.45f2",
+    "unity_gpu_backend": "OpenGLCore asserted inside exact NUnit",
+    "nunit_case": "T1FftCarrierContextTests.SameDispatchDistinguishesRawBitCarrierFromTextureFetchContexts",
+    "nunit_exact_case_passed": true,
+    "synthetic_gpu_invocations": 64,
+    "synthetic_gpu_words": 640,
+    "synthetic_category_mismatch_counts": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "classification": "no_synthetic_context_difference",
+    "positive_controls_passed": true,
+    "private_unity_project_and_logs_erased": true,
+    "original_raft_shader_compared": false,
+    "android_water_proven": false
   },
-  "rejected_hypotheses": [],
+  "rejected_hypotheses": [
+    "This particular materialization, multiplication-by-one, private-static carrier and five Texture2D.Load synthetic context causes observable Unity OpenGLCore mismatch for 64 chosen inputs: REJECTED on exact test fixture.",
+    "Previously observed original FFT butterfly drift can be fully attributed to basic asfloat/asint conversion in all contexts: not supported."
+  ],
   "limitations": [
     "Even a successful synthetic 640-word GPU result does not authenticate Raft FFT, authored Unity runtime kernel, Android Adreno or water visuals.",
     "A nonzero diagnostic category narrows synthetic OpenGLCore carrier behavior, not necessarily Raft's actual shader root cause."
   ],
   "integration_commit": "4928f866d0f035797e776ee004cc9e476aa1d49d",
-  "next_step": "Inspect terminal job marker RAFT_T1_CARRIER_CONTEXT_GATE, categorize 10 counts; if Unity fails identify first actual failing step and do not rerun blindly. Keep T1 trial vote لا يحتاج."
+  "next_step": "Compare earlier synthetic dispatch canary 42129683073 (computed shift-add-mask address, precise float, static global) against current structured-coordinate carrier; isolate address provenance, precise semantics, and original FFT Phi/CFG in matched Unity contexts. Independently recover source-authentic Unity keyed trace before changing original shader or requesting APK."
 }
