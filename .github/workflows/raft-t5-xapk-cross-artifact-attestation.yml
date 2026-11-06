@@ -1,0 +1,33 @@
+name: T5 DELIVERY-013 split XAPK nested APK OBB digest parity (no Unity)
+
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t5_verify_xapk_cross_delivery.py
+      - tests/test_t5_verify_xapk_cross_delivery.py
+      - .github/workflows/raft-t5-xapk-cross-artifact-attestation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-xapk-cross-delivery-${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-cross-artifact:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify split XAPK actual APK and OBB byte-equivalence without reassembly
+        run: |
+          set -euo pipefail
+          python3 -W error -m unittest discover -s tests -p test_t5_verify_xapk_cross_delivery.py -v
+      - name: Disclose source-only confidence boundary
+        if: always()
+        run: |
+          echo 'Synthetic ZIP fixture attestation only; no original APK, OBB, device, or Unity proof.'
