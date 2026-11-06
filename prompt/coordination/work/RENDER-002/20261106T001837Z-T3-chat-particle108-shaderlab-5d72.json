@@ -5,12 +5,12 @@
   "origin": "chat",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "28ada994d32a403cd5f6663f1aed81c5e84928a5",
-  "updated_at": "2026-11-06T00:30:45.390Z",
+  "updated_at": "2026-11-06T00:32:04.959Z",
   "hypothesis": "The exact original 108-use Particle Shader48 is source-linked in the same pinned AssetRipper W1 export but its exported ShaderLab may be dummy or missing an actual program/pass. A metadata-only type/name match is insufficient for Android particle rendering.",
   "experiment_key": "T3-original-ZIP2-15964-108-ParticleShader48-5Material-3Texture-same-export-ShaderLab-actual-file-dummy-marker-pass-program-v1",
-  "resource_key": "T3-isolated-12owner-one-stream-original-AssetRipper-Shader48-dummy-50min",
+  "resource_key": null,
   "resumed_from_sessions": [
     "20261106T000407Z-T3-chat-nonexportable-pointer-b42f.md",
     "20261105T2334Z-T3-scheduled-extent-nesting-c4a7.md"
@@ -29,6 +29,11 @@
     "prompt/coordination/B_TEAM/issues/RENDER-002.json",
     ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
-  "run_urls": [],
-  "next_step": "Terminal CI42136474867 SUCCESS confirms real original top108 Particle Shader48 exact same-export .shader contains explicit //DummyShaderTextExporter despite one Pass. Append OPEN issue evidence and source resource, canonical T team evidence-index CI, then release scope. Android full postvendor/shipped program still unproven."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42136474867",
+    "https://github.com/alwansan/raf/actions/runs/42137425716"
+  ],
+  "next_step": "Investigate full native post-vendor Unity project and signed APK/OBB for the exact original ParticleShader48 source→same-instance GUID, identify actual fire/smoke emitter. If dummy survives, recover original genuine one-pass DXBC vertex/fragment permutations and compile authentic ShaderLab with original ColorMask RGB, Alpha Blend, ZWrite OFF. Preserve proven 10/10 Texture links; no dummy replacement/phone-ready claim.",
+  "integration_commit": "2aa84a40bff9ac0b69277552e4a071e1a59299d4",
+  "result": "Actual SHA-original six-scene selected one-Pass source ParticleShader48 108 Renderer Material slots/54 Renderers, five authentic Material21, 3 original Texture2D28/10 exact same-export Material Texture PPtrs and 10 UV: the EXACT same-instance W1-traced custom `.shader` file contains explicit //DummyShaderTextExporter despite balanced one-pass CGPROGRAM. CI42136474867 completed SUCCESS with 113/113 tests + actual pinned AssetRipper. Source-only bounded raw export defect, not proof of post-vendor/native Android same Shader or phone fire/smoke emitter; RENDER-002 stays OPEN. Canonical T3 ledger CI42137425716 SUCCESS."
 }
