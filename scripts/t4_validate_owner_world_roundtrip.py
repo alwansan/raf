@@ -24,6 +24,8 @@ FIELDS = frozenset({
     "original_private_Save_audit_category", "original_private_Save_invoked",
     "original_private_Save_output_created", "original_private_Save_output_nonzero",
     "original_private_Save_generated_LoadT_matching_root",
+    "original_private_Save_private_wire_compared",
+    "original_private_Save_private_wire_identical",
     "original_private_Save_isolated_temp_removed",
     "original_private_Save_result_category",
     "original_isolated_owner_world_roundtrip_verified",
@@ -76,6 +78,8 @@ SAVE_BOOLEANS = (
     "original_private_Save_IL_guard_passed", "original_private_Save_invoked",
     "original_private_Save_output_created", "original_private_Save_output_nonzero",
     "original_private_Save_generated_LoadT_matching_root",
+    "original_private_Save_private_wire_compared",
+    "original_private_Save_private_wire_identical",
     "original_private_Save_isolated_temp_removed",
     "original_isolated_owner_world_roundtrip_verified",
 )
@@ -117,6 +121,8 @@ def validate(document: dict) -> dict:
     created = document["original_private_Save_output_created"]
     nonzero = document["original_private_Save_output_nonzero"]
     matched = document["original_private_Save_generated_LoadT_matching_root"]
+    wire_compared = document["original_private_Save_private_wire_compared"]
+    wire_identical = document["original_private_Save_private_wire_identical"]
     cleaned = document["original_private_Save_isolated_temp_removed"]
     isolated = document["original_isolated_owner_world_roundtrip_verified"]
     if (guard and audit != "NONE") or (not guard and audit == "NONE"):
@@ -125,8 +131,12 @@ def validate(document: dict) -> dict:
             nonzero and not created or matched and not nonzero or
             isolated != matched):
         raise ValueError("impossible_original_save_event")
-    if not guard and any((invoked, created, nonzero, matched, cleaned, isolated)):
+    if not guard and any((invoked, created, nonzero, matched, cleaned, isolated,
+                          wire_compared, wire_identical)):
         raise ValueError("original_method_invoked_without_preflight")
+    if (wire_compared and not nonzero or wire_identical and not wire_compared or
+            matched and not wire_compared):
+        raise ValueError("impossible_original_wire_comparison")
     if category == "NONE" and not all((guard, invoked, created, nonzero, matched, cleaned)):
         raise ValueError("fabricated_complete_roundtrip")
     if all((guard, invoked, created, nonzero, matched, cleaned)) and category != "NONE":
@@ -138,6 +148,8 @@ def validate(document: dict) -> dict:
         "original_private_Save_invoked": invoked,
         "original_temp_file_nonzero": nonzero,
         "original_generated_LoadT_matching": matched,
+        "original_wire_compared": wire_compared,
+        "original_wire_identical": wire_identical,
         "original_temporary_files_removed": cleaned,
         "Save_audit_category": audit,
         "Save_result_category": category,
