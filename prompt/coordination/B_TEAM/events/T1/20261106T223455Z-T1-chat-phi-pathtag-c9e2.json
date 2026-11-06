@@ -1,0 +1,21 @@
+{
+  "id": "20261106T223455Z-T1-chat-phi-pathtag-c9e2",
+  "session_id": "20261106T223455Z-T1-chat-phi-pathtag-c9e2",
+  "owner": "T1",
+  "origin": "chat",
+  "type": "result",
+  "status": "completed",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T22:55:03.805Z",
+  "summary": "Authenticated original ZIP2 Raft FFT compiled slots0/1 tested with private HLSL50-derived third Butterfly Y Phi path counters in actual Mesa CPU Vulkan. CI42307656709 success, 34/34 source-free controls, 64/64 physical invocations enter Phi once and each traverse its loop backedge exactly FOUR times (entry64/loop256 total). Two independent identical seed19 1024x32 source/butterfly captures, original controls and tagged-vs-untagged candidate pass0 64 / pass1 32 written pixels bitwise identical. Shader not shipped; original vs Unity numeric parity, actual selected Site2 Phi value, authored kernel mapping and Android Adreno water unproven.",
+  "evidence_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42306367304",
+    "https://github.com/alwansan/raf/actions/runs/42307267780",
+    "https://github.com/alwansan/raf/actions/runs/42307363513",
+    "https://github.com/alwansan/raf/actions/runs/42307656709"
+  ],
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "vote": "لا يحتاج",
+  "no_private_shader_pixels_hashes_or_counter_buffers_exported": true,
+  "android_water_proven": false
+}
