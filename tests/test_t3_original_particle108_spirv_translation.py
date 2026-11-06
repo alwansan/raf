@@ -103,7 +103,9 @@ class Particle108SPIRVSourceOnly(unittest.TestCase):
                     "original_stage_reflections","roundtrip_stage_reflections",
                     "stage_original_roundtrip_reflection_pairs_compared",
                     "stage_original_roundtrip_io_equal",
-                    "stage_original_roundtrip_resource_slot_shapes_equal"):
+                    "stage_original_roundtrip_resource_slot_shapes_equal",
+                    "stage_original_roundtrip_io_drift_classified",
+                    "io_drift_inputs_identical","io_drift_outputs_identical"):
             self.assertEqual(c[key],8,key)
         for key in ("source_vs_fs_interfaces_compared","source_vs_fs_interfaces_compatible",
                     "roundtrip_vs_fs_interfaces_compared","roundtrip_vs_fs_interfaces_compatible",
@@ -156,6 +158,43 @@ class Particle108SPIRVSourceOnly(unittest.TestCase):
         self.assertEqual(r["counts"]["roundtrip_vs_fs_interfaces_compared"],4)
         self.assertEqual(r["counts"]["roundtrip_vs_fs_interfaces_compatible"],0)
         self.assertEqual(r["counts"]["source_vs_fs_interfaces_compatible"],4)
+        self.assertEqual(r["counts"]["io_drift_outputs_location_only_remap_candidate"],4)
+        self.assertEqual(r["counts"]["io_drift_outputs_type_multiset_equal"],8)
+        self.assertEqual(r["counts"]["io_drift_outputs_same_location_type_changes"],0)
+
+    def test_original_to_roundtrip_type_change_is_not_location_only(self):
+        def bad_type(path):
+            row=reflect(path)
+            if "roundtrip" in path.name and row["outputs"]:
+                row["outputs"]=[{"location":0,"type":"vec3"}]
+            return row
+        with tempfile.TemporaryDirectory() as d:
+            r=t3.evaluate(t3.exact_four_pairs(parsed(),table(),linker=fake_link),
+                          Path(d),translator=translate,reflector=bad_type)
+        self.assertEqual(r["counts"]["io_drift_outputs_same_location_type_changes"],4)
+        self.assertEqual(r["counts"]["io_drift_outputs_location_only_remap_candidate"],0)
+        self.assertEqual(r["counts"]["io_drift_outputs_type_multiset_equal"],4)
+        self.assertEqual(r["counts"]["source_vs_fs_interfaces_compatible"],4)
+        self.assertEqual(r["counts"]["roundtrip_vs_fs_interfaces_compatible"],0)
+
+    def test_private_io_classifier_must_only_emit_bounded_numeric_counts(self):
+        def bad_classifier(_a,_b):
+            return {"inputs_identical":1,"PRIVATE_STAGE_LABEL":"sensitive"}
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaisesRegex(ValueError,"classifier_shape"):
+                t3.evaluate(t3.exact_four_pairs(parsed(),table(),linker=fake_link),
+                            Path(d),translator=translate,reflector=reflect,
+                            io_classifier=bad_classifier)
+        def negative_classifier(a,b):
+            from scripts.t3_stage_io_drift import classify_stage_io
+            result=classify_stage_io(a,b)
+            result["outputs_removed_locations"]=-1
+            return result
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaisesRegex(ValueError,"numeric_count"):
+                t3.evaluate(t3.exact_four_pairs(parsed(),table(),linker=fake_link),
+                            Path(d),translator=translate,reflector=reflect,
+                            io_classifier=negative_classifier)
 
     def test_invalid_reflection_private_identity_cannot_escape(self):
         def bad(_path):
