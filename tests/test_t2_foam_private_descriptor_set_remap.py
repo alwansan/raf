@@ -80,11 +80,23 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
         cases=[]
         x=old();x["separate_samplers"][0]["binding"]=8;cases.append(x)
         x=old();x["separate_samplers"][0]["id"]=10;cases.append(x)
-        x=old();x["separate_samplers"][0].pop("id");cases.append(x)
         x=old();x["separate_samplers"][0]["set"]=1;cases.append(x)
         for x in cases:
             with self.subTest(case=x),self.assertRaises(ValueError):
                 relocate_fragment_sets(binary(),x,1)
+
+    def test_missing_optional_reflection_ids_uses_binary_numeric_coordinates(self):
+        src=old()
+        src["separate_samplers"][0].pop("id")
+        src["ubos"][0].pop("id")
+        patched,safe=relocate_fragment_sets(binary(),src,1)
+        self.assertTrue(safe["descriptor_set_decorations_only_changed"])
+        self.assertTrue(compare_before_after_reflection(src,{
+            "entryPoints":[{"name":"main","mode":"frag"}],
+            "separate_samplers":[{"set":1,"binding":1}],
+            "ubos":[{"set":1,"binding":0,"block_size":128}]
+        },1))
+        self.assertNotEqual(binary(),patched)
 
     def test_invalid_SPIRV_magic_header_opcode_and_decorations(self):
         for patched in (

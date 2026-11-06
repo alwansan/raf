@@ -35,6 +35,9 @@ SAFE_FAILURE_CODES = frozenset((
     "no_unique_reflected_SPIRV_descriptor_id",
     "reflected_SPIRV_descriptor_cardinality_mismatch",
     "SPIRV_resource_id_register_map_invalid",
+    "ambiguous_SPIRV_decorated_descriptor_coordinates",
+    "SPIRV_numeric_reflection_decoration_mismatch",
+    "optional_resource_id_conflicts_with_decorations",
     "invalid_unique_stage_descriptor_set",
     "private_binary_descriptor_reflection_id_drift",
     "original_Foam_fragment_descriptor_set_missing",
@@ -112,23 +115,32 @@ def scan_binary_decorations(blob):
     return words, bindings, sets, set_sites
 
 
-def reflected_ids(reflection, *, mode):
-    """Verify stage identity and no ambiguity between reflection and SPIR-V."""
+def reflected_ids(reflection, bindings, sets, *, mode):
+    """Authenticate SPIR-V variable IDs by unique numeric decorations.
+
+    Reflection's id field is optional. A one-to-one numeric set/binding map
+    with the SPIR-V OpDecorate variables is sufficient; supplied IDs must
+    match, but neither symbol names nor declaration order are authoritative.
+    """
     private = reflected_descriptor_map(reflection, mode=mode)
-    ids = {}
+    if set(bindings) != set(sets):
+        raise ValueError("incomplete_descriptor_decoration_pair")
+    by_coord = {}
+    for identifier in bindings:
+        coord = (sets[identifier], bindings[identifier])
+        if coord in by_coord:
+            raise ValueError("ambiguous_SPIRV_decorated_descriptor_coordinates")
+        by_coord[coord] = identifier
+    if len(by_coord) != len(private) or set(by_coord) != set(private):
+        raise ValueError("SPIRV_numeric_reflection_decoration_mismatch")
     for category in CATEGORIES:
         for descriptor in reflection.get(category, []):
-            target = descriptor.get("id")
-            if (type(target) is not int or target <= 0
-                    or target in ids):
-                raise ValueError("no_unique_reflected_SPIRV_descriptor_id")
-            ids[target] = (descriptor["set"], descriptor["binding"])
-    if len(ids) != len(private):
-        raise ValueError("reflected_SPIRV_descriptor_cardinality_mismatch")
-    if set(ids.values()) != set(private):
-        raise ValueError("SPIRV_resource_id_register_map_invalid")
-    return ids
-
+            identity = descriptor.get("id")
+            if identity is not None:
+                coord = (descriptor["set"], descriptor["binding"])
+                if type(identity) is not int or identity != by_coord[coord]:
+                    raise ValueError("optional_resource_id_conflicts_with_decorations")
+    return {identifier: coord for coord, identifier in by_coord.items()}
 
 def relocate_fragment_sets(blob, reflection, new_set):
     """Modify only the DescriptorSet OpDecorate literal of each fragment ID.
@@ -139,8 +151,8 @@ def relocate_fragment_sets(blob, reflection, new_set):
     """
     if type(new_set) is not int or not 1 <= new_set <= 15:
         raise ValueError("invalid_unique_stage_descriptor_set")
-    ids = reflected_ids(reflection, mode="frag")
     words, bindings, sets, positions = scan_binary_decorations(blob)
+    ids = reflected_ids(reflection, bindings, sets, mode="frag")
     if set(ids) != set(bindings):
         raise ValueError("private_binary_descriptor_reflection_id_drift")
     if not ids:
@@ -192,11 +204,13 @@ def compare_before_after_reflection(before, after, target_set):
             raise ValueError("source_stage_resource_class_or_binding_drift")
     if set(s for s, _ in revised) != {target_set}:
         raise ValueError("post_relocation_extra_set_or_missing_binding")
-    old_ids = reflected_ids(before, mode="frag")
-    new_ids = reflected_ids(after, mode="frag")
-    if (set(old_ids) != set(new_ids)
-            or any(new_ids[i] != (target_set, old_ids[i][1]) for i in old_ids)):
-        raise ValueError("post_relocation_original_resource_id_drift")
+    # Reflection IDs may be absent; instruction-word identity already
+    # guarantees binary variable IDs never changed. Validate optional IDs.
+    for category in CATEGORIES:
+        old_ids = {r["binding"]: r.get("id") for r in before.get(category, [])}
+        new_ids = {r["binding"]: r.get("id") for r in after.get(category, [])}
+        if old_ids != new_ids:
+            raise ValueError("post_relocation_original_resource_id_drift")
     return True
 
 
