@@ -20,7 +20,7 @@ MAX_STEPS = 12
 SAFE_REJECTION_REASONS = {
     "Unexpected original FFT fetch count",
     "Unexpected FFT descriptor source identity",
-    "Unexpected scalar Phi lane type",
+    "Unsupported Phi selected lane/type",
     "Malformed Phi incoming value/predecessor list",
     "Phi incoming path bound exceeded",
     "Unresolvable translated Phi Function owner",
@@ -107,8 +107,11 @@ def analyze(text, *, original_source_layout=False):
                 "private_values_exported": False,
                 "runtime_branch_truth_proven": False}
     kind, width = value_shape(result, values, types)
-    if width != 1 or lane != 0 or kind not in ("float32", "sint32", "uint32"):
-        raise ValueError("Unexpected scalar Phi lane type")
+    if (width not in (1, 2, 3, 4) or not 0 <= lane < width
+            or kind not in ("float32", "sint32", "uint32")):
+        raise ValueError("Unsupported Phi selected lane/type")
+    lane_kind = "x" if lane == 0 else "y" if lane == 1 else "other"
+    phi_kind = kind + ("_scalar" if width == 1 else "_vector")
     op, _, operands = values[result]
     if op != "OpPhi" or len(operands) < 4 or len(operands) % 2:
         raise ValueError("Malformed Phi incoming value/predecessor list")
@@ -131,7 +134,7 @@ def analyze(text, *, original_source_layout=False):
         # symbolic stop causes. No coordinates or original shader ids.
         immediate = values.get(source_value, ("", None, []))[0]
         incoming.append({
-            "value_type": value_kind + "_scalar",
+            "value_type": phi_kind,
             "immediate_producer_opcode": safe_op(immediate),
             "predecessor": predecessor,
             "bounded_component_chain": upstream,
@@ -139,7 +142,8 @@ def analyze(text, *, original_source_layout=False):
     return {
         "status": "source_safe_phi_incoming_census",
         "site": 1, "role": "butterfly", "coordinate": "x",
-        "phi_result_kind": kind + "_scalar",
+        "phi_result_kind": phi_kind,
+        "selected_phi_component": lane_kind,
         "incoming_count": len(incoming),
         "incoming_sources": incoming,
         "private_values_exported": False,
