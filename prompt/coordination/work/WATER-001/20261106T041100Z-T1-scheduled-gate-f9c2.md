@@ -2,7 +2,7 @@
 origin: scheduled
 issue_id: WATER-001
 base_sha: cd7fc78fab939ccd7c281e3c52d3e8416b1e5cf7
-status: active
+status: completed_source_only_tests_pending
 intended_files: scripts/t1_fft_unity_gpu_result_gate.py, tests/test_t1_fft_unity_gpu_result_gate.py, this work file, clients/T1/sessions/20261106T041100Z-T1-scheduled-gate-f9c2.md
 experiment_key: unity-gate-failure-classification-42152295025-source-4ed17012
 resource_key: none (source-only diagnostic)
@@ -10,3 +10,7 @@ hypothesis: existing NUnit gate may obscure whether GameCI failed before produci
 resumed_from_sessions: 20261106T031501Z-T1-scheduled-unity-failure-m8q4.md, 20261106T024340Z-T1-chat-84f0c6.md
 Phone baseline: 42058825739 world/save/reopen confirmed; water errors 23884/3850 and 39132/6026. Kernel slot 6 not proven identity.
 CI: 42152295025 failed step 13; 42152199100 failed step 12; no duplicate CI.
+
+result_commits: 4517d10280b63309b57c8ba5c565d02e66b6b1f7; c3ffbfa5a59d87ef8d57f074c109cf87d433d596
+session_commit: 7b261b70827e86a18029cf7c8570a1e72602f77f
+next: run unit test and retrieve redacted private GameCI failure classification before rerun; no GPU evidence.
