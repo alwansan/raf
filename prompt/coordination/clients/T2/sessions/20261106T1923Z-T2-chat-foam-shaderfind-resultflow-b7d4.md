@@ -1,0 +1,11 @@
+# T2 — SHA-original Foam Shader.Find return consumer
+
+- session_id: `20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4`; origin: `chat`; status: `active`; issue_id: `WATER-001`.
+- Resumed from completed chat `20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a`, scheduled reconcile `20261106T1921Z-T2-scheduled-shaderfind-ci-reconcile-c6e4`, and completed true scene script join `20261106T1900Z-T2-chat-scene-script-typed-6f9a`.
+- Baseline `d00887f1f03f964ec7bf9c19bbabdc1f48c27bc3`; reserved scope `prompt/coordination/work/WATER-001/T2-20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4.json` at `63994936f9c476642abd6494893f937705962266`. Own-only files; other team workers and Actions preserved.
+- Prior SHA-pinned `CI42278043015` succeeded: 19,118 original IL method bodies / 491,490 IL instructions, one exact original Foam source name literal passed directly to one typed `Shader.Find(System.String)` call. No same-method `newobj Material(Shader)`. The scheduled job reviewed green but did not inspect numeric artifact, which prior chat did via safe raw CI logs.
+- Parallel completed `CI42276583082` source scan: of 473 truly scene-referenced typed MonoScripts, 427 unique exact original managed TypeDef match, 1 ambiguous, 45 other assemblies, zero missing; no component custom fields or graphics runtime acceptance.
+- New question: what **consumes returned Shader object** from the one original `Shader.Find` call? Distinguish typed field/local/call/ret from unknown, and if field, count actual same-symbol IL reads and related method-level material constructor cooccurrence; no private method/field names, GUIDs, raw IL, shader identifier or hashes published.
+- Private source ZIP2 pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. SHA authentication original Foam Shader object provider 115,978,112 B + original managed DLL 3,211,776 B. All input scratch private and purged, upload safe aggregate JSON only.
+- No native build, Unity gameplay source edits, .meta/GUID changes, original game assets, audio, Settings, controller/touch alterations. Trial r1 T2 `لا يحتاج`; WATER-001 OPEN, game NOT_READY.
+- Next: implement isolated Cecil return-dataflow negative controls/workflow; source original CI; preserve safe counted evidence and decide whether actual material field link needs further work.
