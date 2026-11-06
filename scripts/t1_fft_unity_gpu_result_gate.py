@@ -38,7 +38,9 @@ def classify(blob: bytes, code: int):
     positive=(code==0 and unique and fields=={
         "total":2,"testcasecount":2,"passed":2,"failed":0,"skipped":0,"inconclusive":0
     } and root.attrib.get("result")=="Passed"
-        and all(c.attrib.get("result")=="Passed" and c.find("failure") is None and c.find("reason") is None for c in cases))
+        and all(c.attrib.get("result")=="Passed" for c in cases)
+        and not any(node.tag in ("failure","reason") for node in root.iter())
+        and all(suite.attrib.get("result")=="Passed" for suite in root.iter("test-suite")))
     return {
         "actual_unity_editor_test_cases":len(cases),
         "expected_authentic_original_derived_tests_present":unique,
