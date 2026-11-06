@@ -1,0 +1,16 @@
+{
+  "id": "20261106T164001Z-T3-chat-rdef-fixture-6d0abc",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T164001Z-T3-chat-rdef-fixture-6d0abc",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Repaired malformed synthetic duplicate-RDEF DXBC header (64 ASCII zero escape bytes instead of 16 binary NUL); isolated source-only CI 42254748522 PASS (14/14 including exact duplicate-chunk negative), no original shader/Unity/device proof. RENDER-002 remains OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e3695147b4894fdc453d1134ef2a9516f8625b0a",
+    "https://github.com/alwansan/raf/commit/33e2b538e524185917ffba92cfef52d35f99f28f",
+    "https://github.com/alwansan/raf/actions/runs/42254748522",
+    "prompt/coordination/clients/T3/sessions/20261106T164001Z-T3-chat-rdef-fixture-6d0abc.md"
+  ],
+  "at": "2026-11-06T16:42:00Z"
+}
