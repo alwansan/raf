@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "source_commit": "905285215e6cbc5d72f480fa478bdbfc762cc775",
+  "hypothesis": "T5 runtime helper refactor preserved all compile source units but moved two T4 native/managed staging literal pairs onto separate lines; restore adjacent source literals without changing T4 runtime/tests and verify both source-only T4 jobs and original managed offline CI.",
+  "experiment_key": "T5-managed-runtime-copy-dictionary-T4-exact-two-file-lexical-pair-guards-source-v2",
+  "tool_versions": {
+    "python": "ubuntu-24.04 runner",
+    "dotnet": "10.0.x for original managed integration; T4 own workflow original managed ABI"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_offline_runtime_support_deps.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_android_immersive_system_bars.py -v",
+    "dotnet build $RUNNER_TEMP/original/Candidate.csproj --configuration Release --nologo -v:q"
+  ],
+  "negative_controls": [
+    "missing companion is rejected before copy",
+    "symlink companion is rejected",
+    "T4 original adjacent mouse filenames string asserted",
+    "T4 original adjacent immersive filenames string asserted"
+  ],
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42259133117",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42258089066",
+    "https://github.com/alwansan/raf/actions/runs/42258089028",
+    "https://github.com/alwansan/raf/actions/runs/42259099674",
+    "https://github.com/alwansan/raf/actions/runs/42259099680",
+    "https://github.com/alwansan/raf/actions/runs/42259133117"
+  ],
+  "observed_result": {
+    "t4_mouse": "PASS on 8b4ef8f; previous failed due exact literal assertion",
+    "t4_immersive": "PASS on 8b4ef8f; previous failed due exact literal assertion",
+    "t5_own_tests": "5/5 PASS on 9052852",
+    "original_private_source_count": 14,
+    "offline_original_compile": {
+      "exit_code": 0,
+      "error_codes": {},
+      "affected_files": []
+    },
+    "local_rpc_identity": "PASS",
+    "all_green": true
+  },
+  "limitations": [
+    "Only source and managed ABI CI, no Unity ARM64 build or phone validation",
+    "Some tests intentionally rely on source literal adjacency; manifest now protected by own regression test",
+    "No proof about Android installed OBB Unity engine reads or renderer pixels"
+  ],
+  "integration_commit": "905285215e6cbc5d72f480fa478bdbfc762cc775",
+  "next_step": "Do not refactor manifest copy list without running T4 source-only contract tests; P0 original water/shader/material integration and real signed Android device logs still outstanding."
+}
