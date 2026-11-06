@@ -15,7 +15,8 @@ SOURCE=(
 def op(code,*payload):
     return [(len(payload)+1)<<16 | code,*payload]
 
-def synthetic_stage(packet,stage,*,swap=False,drop=False,add_name=False,alias=False):
+def synthetic_stage(packet,stage,*,swap=False,drop=False,add_name=False,alias=False,
+                    graphics_interface=False,invalid_interface_decoration=False):
     rows=[line.split() for line in packet.splitlines()[1:]]
     destinations=[(int(x[2]),int(x[3])) for x in rows]
     if swap:
@@ -32,6 +33,18 @@ def synthetic_stage(packet,stage,*,swap=False,drop=False,add_name=False,alias=Fa
         words+=op(71,vid,34,destinations[i][0])
         if not drop or i!=1:
             words+=op(71,vid,33,destinations[i][1])
+    if graphics_interface:
+        # Real SPIR-V VS/FS modules contain Input and Output OpVariables in
+        # addition to uniform/image/sampler descriptors. These variables must
+        # remain undecorated with DescriptorSet/Binding, and not affect mapping.
+        words+=op(30,11)
+        words+=op(32,21,1,11)
+        words+=op(32,22,3,11)
+        words+=op(59,21,40,1)
+        words+=op(59,22,41,3)
+        if invalid_interface_decoration:
+            words+=op(71,40,34,4)
+            words+=op(71,40,33,33)
     if add_name:
         words+=op(5,30,0x00306263)
     return struct.pack("<"+"I"*len(words),*words)
@@ -56,6 +69,20 @@ class DualExplicitVkd3dPairTests(unittest.TestCase):
         self.assertFalse(result["source_register_numbers_spirv_IDS_descriptor_coordinates_published"])
         for secret in ("cb2","t3","s1","T3MAP1",'"30"','"37"'):
             self.assertNotIn(secret,json.dumps(result))
+
+    def test_real_graphics_input_and_output_variables_are_not_descriptors(self):
+        a=synthetic_stage(self.packets["A"],1,graphics_interface=True)
+        b=synthetic_stage(self.packets["B"],1,graphics_interface=True)
+        result=self.check(a=a,b=b)
+        self.assertEqual(result["source_registers_mapped_under_both_profiles"],3)
+        self.assertTrue(result["whole_spirv_program_identical_except_descriptor_literals"])
+
+    def test_forged_descriptor_on_graphics_input_variable_is_rejected(self):
+        a=synthetic_stage(self.packets["A"],1,graphics_interface=True)
+        b=synthetic_stage(self.packets["B"],1,graphics_interface=True,
+                          invalid_interface_decoration=True)
+        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_EXPLICIT_SPV_BINDING_COVERAGE"):
+            self.check(a=a,b=b)
 
     def test_swapped_same_class_source_binding_fails_even_with_correct_multiset(self):
         with self.assertRaisesRegex(ValueError,"T3_PRIVATE_EXPLICIT_SAME_SOURCE_VARIABLE_CHANGED"):
