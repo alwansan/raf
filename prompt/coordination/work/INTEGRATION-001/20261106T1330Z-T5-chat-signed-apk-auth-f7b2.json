@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "4401387ed6da0e0b5892fab2be28a6b3104d3e8e",
+  "updated_at": "2026-11-06T13:31:39.362Z",
+  "resumed_from_sessions": [
+    "20261106T1316Z-T5-chat-nested-zip-c53a.md",
+    "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
+    "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
+  ],
+  "experiment_key": "T5-42058825739-checkpoint13441766832-original-signed-APK-672853870-HTTP206-full-SHA256-vs-authentic-delivery-json-aapt-apksigner-v1",
+  "resource_key": "owner existing original signed checkpoint APK only (672853870B); isolated GitHub-hosted ubuntu-24.04 1GB capped transfer and temporary 1GB disk; no Unity build",
+  "hypothesis": "Download ONLY exact signed APK stored member of SHA-pinned original CI checkpoint via strict ranged HTTP 206, compare complete inner bytes to original delivery.json SHA declared in separate archived real delivery, and independently verify APK cryptographic signing (apksigner) and AndroidManifest package/versionCode (aapt). This may reveal a signature/version or hash mismatch unobservable in 25KB structural probe.",
+  "intended_files": [
+    "scripts/t5_verify_real_signed_apk.py",
+    "tests/test_t5_verify_real_signed_apk.py",
+    ".github/workflows/raft-t5-real-signed-apk-attestation.yml",
+    "docs/T5_REAL_SIGNED_APK_AUTH_2026-11-06.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.md",
+    "prompt/coordination/experiments/T5/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.json"
+  ],
+  "constraints": [
+    "Only feature/android-native-port written, new T5 isolated files, no T1–T4 source and no Unity build.",
+    "Pin immutable original run 42058825739, source e9c358e, artifact 13441766832 and delivery 13441227298, sizes and provider metadata.",
+    "One 673MB inner APK stream, 700 MiB total remote payload cap + 4MiB metadata, disk & timeout bounded. Never fetch 2.3GB OBB in this cycle.",
+    "Temporary private signed APK deleted always; no upload or raw asset output, no signed redirect URL/token printed.",
+    "Never equate manifest SHA match with publisher authenticity; require independently verified apksigner & actual AndroidManifest.",
+    "If HTTPS 206 unavailable, stop; do not full-download 2.97GB envelope."
+  ],
+  "coordination": "T5 scheduled checkpoint focuses source-metadata; no active T5 scheduled run on last check, T2 active shader source-only, no overlap. Phone/gfx readiness remains NOT_READY 0/3.",
+  "next_step": "Build fail-closed streaming original signed APK verifier with tiny original delivery.json read and certified aapt/apksigner report, synthetic tests, run dedicated Actions CI and record whether full SHA / sign / version succeeded."
+}
