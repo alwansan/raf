@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1721Z-T3-chat-dxbc-operands-6e2a",
+  "issue_id": "RENDER-002",
+  "track": "Original SHDR/SHEX DCL source operand register-index decoding and stability",
+  "status": "active",
+  "base_sha": "e766defb7b3f788d846537538ec5d425b11350d5",
+  "resumed_from_sessions": [
+    "20261106T1710Z-T3-chat-shdr-declarations-3c7e",
+    "20261106T1701Z-T3-chat-rdef-eightstage-9f28"
+  ],
+  "hypothesis": "Eight authenticated original Particle108 D3D11 DXBC token streams contain resource DCL operands; strict opcode/operand type and index validation can classify private per-stage register placement and variant consistency, avoiding fabricated RDEF values.",
+  "experiment_key": "T3-PARTICLE108-SHA15964-4VSFS-8SHDR-DCL-operand-register-parse-v1",
+  "resource_key": "zip2-15964-particle108-4owner-6scenes-cpu-private-staging",
+  "intended_files": [
+    "scripts/t3_particle108_original_dxbc_operand_bindings.py",
+    "tests/test_t3_particle108_original_dxbc_operand_bindings.py",
+    ".github/workflows/raft-t3-particle108-operands-source-only.yml",
+    ".github/workflows/raft-t3-particle108-original-operands.yml",
+    "prompt/coordination/clients/T3/sessions/20261106T1721Z-T3-chat-dxbc-operands-6e2a.md",
+    "prompt/coordination/work/RENDER-002/20261106T1721Z-T3-chat-dxbc-operands-6e2a.json",
+    "prompt/coordination/experiments/T3/20261106T1721Z-T3-chat-dxbc-operands-6e2a.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1721Z-T3-chat-dxbc-operands-6e2a.json"
+  ],
+  "taken_over_from": [
+    "T3 source original SHDR-SHEX CI42259943968: 24 CB +10 SRV +10 sampler declaration instructions across eight; no RDEF in any at CI42258686807"
+  ],
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/20261106T1710Z-T3-chat-shdr-declarations-3c7e.json"
+  ],
+  "limits": "Input only pinned ZIP2 original privately staged; report aggregate/stability flags only. Unsupported relative/64-bit index/extended declarations fail closed; no shader reconstruction, source dumping, bytecode/name or register values published; no Unity/APK/OBB.",
+  "run_urls": [],
+  "next_step": "Implement independent token operand decoder and synthetic negative controls; verify source-only workflow; coordinate one fresh original-source run and preserve status of authentic failures.",
+  "updated_at": "2026-11-06T17:20:36.629Z"
+}
