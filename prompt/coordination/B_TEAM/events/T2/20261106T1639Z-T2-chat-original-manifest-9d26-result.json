@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1639Z-T2-chat-original-manifest-9d26-original-pptr-manifest-result",
+  "owner": "T2",
+  "session_id": "20261106T1639Z-T2-chat-original-manifest-9d26",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original ZIP2 manifest resolved both previously unknown sharedassets0 Material Shader external pointers to one 758412-byte SHA-staged source file containing two typed Shader target PathIDs. Final CI42256633561 success with 18 synthetic tests; no Unity GUID/runtime Foam or Android pixel proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42256633561",
+    "https://github.com/alwansan/raf/actions/runs/42256271654",
+    "docs/T2_FOAM_EXTERNAL_MANIFEST_PPTR_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1639Z-T2-chat-original-manifest-9d26.json"
+  ],
+  "at": "2026-11-06T16:57:18.714Z",
+  "limitations": [
+    "Typed Shader PathID candidates are not proven Unity external GUID identity nor Foam host CB0 upload.",
+    "Original 366-row manifest declared total does not mean all 7.79GB raw data SHA verified.",
+    "Owner device 42058825739 unrelated to this result; WATER-001 remains OPEN."
+  ]
+}
