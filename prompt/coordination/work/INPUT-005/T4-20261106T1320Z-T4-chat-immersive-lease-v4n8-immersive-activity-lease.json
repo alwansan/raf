@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "315a3ed65fc6794b0848bd87af50a6a6cfd8f697",
+  "track": "immersive-activity",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidImmersiveSystemBars.cs",
+    "android-port/Runtime/Platform/AndroidSystemBarPolicy.cs",
+    "android-port/Tests/ImmersiveBars/Program.cs",
+    "tests/test_t4_android_immersive_system_bars.py",
+    "prompt/coordination/work/INPUT-005/T4-20261106T1320Z-T4-chat-immersive-lease-v4n8-immersive-activity-lease.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1320Z-T4-chat-immersive-lease-v4n8.md"
+  ],
+  "hypothesis": "A queued UI-thread system bar hide can use a different currentActivity after recreation because callback re-fetches it without original Activity ownership or epoch check.",
+  "approach": "Guard Activity identity and queued generation; preserve OS swipe gestures, original resolution, input/touch.",
+  "experiment_key": "T4-INPUT005-immersive-bars-Activity-owner-lease-epoch-UI-runnable-original-Unity2021-v1",
+  "resource_key": "T4-immersive-source-only-ABI-workflow",
+  "related_work": [],
+  "taken_over_from": [
+    "20261106T1304Z-T4-chat-null-activity-p7h2",
+    "20261105T2241Z-T4-chat-immersive-bars-h8q2"
+  ],
+  "nonoverlap": "Other T4 genuine RGD cross-process suite active; T1 FFT and T5 signed APK ZIP experiments separate. Only immersive policy files.",
+  "last_verified_result": "20261106T1304Z T4 mouse source CI42222687053 passed, device unverified. Existing immersive CI source ABI tested, not this race.",
+  "next_step": "Implement callback lease/identity and test existing T4 immersive CI, record exact results.",
+  "updated_at": "2026-11-06T13:19:27.519Z"
+}
