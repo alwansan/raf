@@ -2,9 +2,9 @@
   "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bdddc28635ac5a19dc4cd0ab2872498bbb259abb",
-  "updated_at": "2026-11-06T11:19:00Z",
+  "updated_at": "2026-11-06T11:28:00Z",
   "resumed_from_experiment": "prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.json",
   "experiment_key": "original-zip2-CB0-5-vector-3-managed-literal-candidates-verified-IL-stack-firstformal-v1",
   "resource_key": "T2-foam-original-managed-same-SHA-typed-operand-trace",
@@ -20,5 +20,28 @@
   "baseline_real_CI": "https://github.com/alwansan/raf/actions/runs/42208958212",
   "previous_scoped_work_completed": true,
   "game_shader_meta_guids_or_other_workers_untouched": true,
-  "next_step": "Implement Cecil straightline IL evaluation of exact first formal for matched original CB0 vector literal, positive/negative public synthetic fixture, original SHA-private CI; keep false when unknown."
+  "next_step": "Conservative original managed Cecil trace of second formal Vector4 value and Material receiver, then original CB0 serialized member-to-upload range proof; coordinate with T1/T5; WATER-001 OPEN.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42209967318",
+    "https://github.com/alwansan/raf/actions/runs/42210166957"
+  ],
+  "run_conclusion": "success",
+  "exact_typed_setter_family": {
+    "material_vector": 1
+  },
+  "typed_direct_original_source_name_first_formal_count": 1,
+  "exact_source_distinct_cb0_vector_names": 5,
+  "first_formal_proven_names": 1,
+  "original_dll_sha_verified": true,
+  "sourcefree_test_count": 11,
+  "cecil_positive_negative_selftests_passed": true,
+  "report": "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_FIRST_OPERAND_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json",
+  "limitations": [
+    "No original managed call execution",
+    "Second value Vector4 and receiver material Foam identity not proven",
+    "CB0 full upload bytes and larger pass0 Fragment/pass1 Vertex capacities unproven",
+    "No Unity import/Adreno accepted"
+  ]
 }
