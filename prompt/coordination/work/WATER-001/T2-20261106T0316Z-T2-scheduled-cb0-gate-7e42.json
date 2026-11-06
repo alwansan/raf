@@ -1,0 +1,11 @@
+{
+  "session_id":"20261106T0316Z-T2-scheduled-cb0-gate-7e42","origin":"scheduled","issue_id":"WATER-001","status":"blocked",
+  "baseline_sha":"37ffdbcad73e094b863884dd783fd47d65dadd4a",
+  "intended_files":["prompt/coordination/work/WATER-001/T2-20261106T0316Z-T2-scheduled-cb0-gate-7e42.json","prompt/coordination/clients/T2/sessions/20261106T0316Z-T2-scheduled-cb0-gate-7e42.md"],
+  "experiment_key":"foam_original_zip2_15964ea8_cb0_cross_stage_extent_mismatch_after_selective_descriptor_remap",
+  "resource_key":"none; existing private original CI42153150468 read-only",
+  "hypothesis":"The selective descriptor remap resolves resource-class collisions, not the two CB0 byte-extent mismatches; do not integrate as working ShaderLab until original member/upload semantics are proven.",
+  "result":"Original CI42153150468 reports 4 to 0 collisions after four selective decoration edits and retains one compatible CB0 descriptor coordinate per pass, but two CB byte-extent mismatches remain. Existing test evidence already resolves the collision question; rerunning without changed inputs would duplicate work.",
+  "next_step":"Inspect original private per-member CB0 offsets/types and Unity upload semantics in a separately coordinated experiment; add an integration gate for byte extent/member compatibility, then controlled Unity import.",
+  "updated_at":"2026-11-06T03:16:30Z"
+}
