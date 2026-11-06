@@ -34,11 +34,16 @@
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42303756960",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42303756960/artifacts/13544799516"
+  ],
   "budget": "20-minute source-original CPU Mono.Cecil; no Unity game build",
-  "status": "waiting_ci",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Original SHA private CI42303756960 SUCCESS: 61 Python strict report controls, 6 original-name tests, Cecil synthetic selftest. Of 2 exact original Foam Material→Graphics.Blit(Texture,RenderTexture,Material,int) calls, 1 directly pushes literal pass 0 and 1 directly pushes literal pass 1; no other literal or unknown producer. Bounded static managed IL only, not on-device execution.",
+  "rejected_hypotheses": [
+    "Both source-original typed Foam Blit calls use the same explicit pass literal",
+    "Original Foam Blit pass selectors are dynamic/indirect at the two exact typed Material consuming sites"
+  ],
   "limitations": [
     "Public int pass source literal is static IL, not actual Android execution",
     "No exact original private shader function, materials, GUIDs, original bytecode or IL exported",
@@ -46,5 +51,6 @@
     "No UnityShaderLab or on-device water pixel validation"
   ],
   "integration_commit": "a36bf27c60959abf1e4128abb31c21b31b2bd133",
-  "next_step": "Check CI42303756960 success and exact public literal 0/1/other/dynamic/mixed counts; fix source-only synthetic failure if present, do not assume source-original until SHA verified. Report only safe literal classes."
+  "next_step": "Next independent source-only task: trace original Blit Texture source and RenderTexture destination ownership/producer (without leaking private identity), then T5 compare actual Unity two-pass import and material/CB0 binding; no APK build from this source-only result.",
+  "artifact_digest": "sha256:9526055bb841044323b458c270d0f927115cd7c5f46e17b28d4822b7e57ed34d"
 }
