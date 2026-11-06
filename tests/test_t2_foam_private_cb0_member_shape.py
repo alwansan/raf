@@ -125,6 +125,34 @@ class PrivateCB0MemberGeometryTests(unittest.TestCase):
                 compare_private_cb0_geometry(stage("vert", [row]),
                                              stage("frag"))
 
+    def test_reflected_array_final_element_must_start_inside_ubo_block(self):
+        # Cross-stage UBO geometry is not credible if an array's last
+        # declared element cannot even *start* within the reflected block.
+        for row, block in (
+            (member(array=[5], stride=16), 64),
+            (member(offset=16, array=[4], stride=16), 64),
+            (member(array=[3, 2], stride=32), 64),
+        ):
+            with self.subTest(block=block, row=row), self.assertRaisesRegex(
+                ValueError, "private_array_starts_beyond_reflected_block"
+            ):
+                compare_private_cb0_geometry(stage("vert", [row], block), stage("frag"))
+
+    def test_reflected_array_requires_explicit_stride_but_scalar_does_not(self):
+        with self.assertRaisesRegex(ValueError, "private_array_stride_missing"):
+            compare_private_cb0_geometry(
+                stage("vert", [member(array=[4], stride=None)]), stage("frag"))
+        # A non-array member has no array stride requirement.
+        a = stage("vert", [member(array=None, stride=None)])
+        b = stage("frag", [member(array=None, stride=None)])
+        self.assertEqual(compare_private_cb0_geometry(a, b)
+                         ["same_offset_exact_reflected_geometry_count"], 1)
+
+    def test_array_terminal_start_bound_accepts_exact_last_vector_slot(self):
+        good = stage("vert", [member(array=[4], stride=16)], block=64)
+        self.assertEqual(compare_private_cb0_geometry(good, stage("frag"))
+                         ["same_offset_exact_reflected_geometry_count"], 1)
+
     def test_same_block_duplicate_offset_and_oversize_count_rejected(self):
         with self.assertRaises(ValueError):
             compare_private_cb0_geometry(

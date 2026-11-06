@@ -77,6 +77,16 @@ def _member_geometry(reflection, ubo):
         row_major = row.get("row_major", False)
         if type(row_major) is not bool:
             raise ValueError("invalid_private_member_major")
+        # SPIRV-Cross may report an array length while omitting its stride,
+        # or a final element whose start is already beyond block_size.
+        # Such reflection cannot support a safe CB0 geometry comparison.
+        # This is a lower-bound check only; no final-element byte width,
+        # nested-array packing or runtime upload is inferred here.
+        if arr:
+            if array_stride is None:
+                raise ValueError("private_array_stride_missing")
+            if off + (arr[0] - 1) * array_stride >= block:
+                raise ValueError("private_array_starts_beyond_reflected_block")
         # Reflected names, type labels, and offsets are private; no serialization.
         if off in result:
             raise ValueError("overlapping_private_member_start")
