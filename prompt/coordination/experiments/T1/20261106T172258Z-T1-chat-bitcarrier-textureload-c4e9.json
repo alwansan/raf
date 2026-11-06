@@ -28,12 +28,29 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42261467757",
   "artifact_urls": [],
   "budget": "25min Ubuntu2021 GameCI; no original source; shared Unity CI mutex",
-  "status": "waiting_ci",
+  "status": "completed_actual_unity2021_synthetic_backend_primitive_positive",
   "observed_result": {
+    "run_id": 42261467757,
     "job_id": 128042200390,
-    "preflight_synthetic_success": true,
-    "pinned_cli_success": true,
-    "unity_gpu_in_progress": true
+    "conclusion": "success",
+    "real_unity2021_editor_test": true,
+    "real_openglcore_gpu_dispatch": true,
+    "synthetic_texture2d_reads_checked": 320,
+    "exact_nunit_passed": 1,
+    "exact_nunit_total": 1,
+    "source_only_python_passed": 7,
+    "source_only_python_total": 7,
+    "category_mismatches": {
+      "source_direct": 0,
+      "butterfly1_direct": 0,
+      "butterfly1_float_carrier": 0,
+      "butterfly2_direct": 0,
+      "butterfly2_swizzled_carrier": 0
+    },
+    "original_game_shader_compared": false,
+    "original_unity_runtime_mapping_proven": false,
+    "android_adreno_water_proven": false,
+    "cleanup_succeeded": true
   },
   "rejected_hypotheses": [],
   "limitations": [
@@ -42,5 +59,32 @@
     "OpenGLCore base runner is distinct from Android ARM64 GPU"
   ],
   "integration_commit": "2373a9310c659520e46479a0373d2b44f0d26134",
-  "next_step": "Inspect terminal CI safe five-category aggregate counts and exact NUnit result; discriminate primitive vs original control-flow-specific divergence."
+  "next_step": "Sourcefree OpenGLCore float-bitcarrier sampled-image primitive is correct for 64x32 fixture; isolate real FFT butterfly nested Phi/CFG/lane/arithmetic or actual Unity source-authenticated kernel and binding. Preserve prior negative actual Unity FFT evidence; no speculative shader rewriting.",
+  "updated_at": "2026-11-06T17:27:09Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42261467757"
+  ],
+  "result": {
+    "run_id": 42261467757,
+    "job_id": 128042200390,
+    "conclusion": "success",
+    "real_unity2021_editor_test": true,
+    "real_openglcore_gpu_dispatch": true,
+    "synthetic_texture2d_reads_checked": 320,
+    "exact_nunit_passed": 1,
+    "exact_nunit_total": 1,
+    "source_only_python_passed": 7,
+    "source_only_python_total": 7,
+    "category_mismatches": {
+      "source_direct": 0,
+      "butterfly1_direct": 0,
+      "butterfly1_float_carrier": 0,
+      "butterfly2_direct": 0,
+      "butterfly2_swizzled_carrier": 0
+    },
+    "original_game_shader_compared": false,
+    "original_unity_runtime_mapping_proven": false,
+    "android_adreno_water_proven": false,
+    "cleanup_succeeded": true
+  }
 }
