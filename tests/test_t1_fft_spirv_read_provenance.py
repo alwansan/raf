@@ -67,3 +67,23 @@ class SpirvReadProvenanceTests(unittest.TestCase):
         site = report["coordinate_sites"][0]
         self.assertEqual(site["typed_coordinate_bitcasts"], {"float32_to_sint32:Function": 1})
         self.assertEqual(site["producer_opcodes"], {"OpBitcast": 1, "OpLoad": 1})
+
+    def test_coordinate_lanes_follow_insert_and_shuffle_separately(self):
+        report = analyze("""
+        %20 = OpTypeFloat 32
+        %21 = OpTypeInt 32 1
+        %22 = OpTypeVector %20 2
+        %23 = OpTypeVector %21 2
+        %2 = OpConstant %21 7
+        %3 = OpBitcast %20 %2
+        %4 = OpLoad %22 %100
+        %5 = OpCompositeInsert %22 %3 %4 0
+        %6 = OpVectorShuffle %22 %5 %4 1 0
+        %7 = OpBitcast %23 %6
+        %8 = OpImageFetch %22 %1 %7
+        """, coordinates=True)
+        self.assertEqual(report["coordinate_sites"][0]["coordinate_lanes"], {
+            "x": {"typed_bitcasts": ["float32_to_sint32:nonload"], "boundary": "load"},
+            "y": {"typed_bitcasts": ["float32_to_sint32:nonload", "sint32_to_float32:nonload"],
+                  "boundary": "constant"},
+        })
