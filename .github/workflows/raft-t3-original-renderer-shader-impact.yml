@@ -27,12 +27,13 @@ jobs:
       - name: Source-free exact original Renderer and class48 join controls
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle108_dxbc_feasibility.py scripts/t3_original_particle108_spirv_translation.py scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py scripts/t3_original_particle_stream_provider.py
+          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle108_dxbc_feasibility.py scripts/t3_original_particle108_spirv_translation.py scripts/t3_particle108_reflected_name_bridge.py scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py scripts/t3_original_particle_stream_provider.py
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle108_dxbc_feasibility.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle108_spirv_translation.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_stage_io_drift.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_reflected_name_bridge.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_stream_provider.py' -v
@@ -257,6 +258,30 @@ jobs:
           assert d["source_game_assets_modified"] is False
           print("RAFT_T3_REAL_PARTICLE108_ALL_FOUR_DXBC_KEYWORD_PAIRS_SPIRV_CPU_CLASSIFIED=true android_gpu_pixels=false")
           PY
+      - name: Inspect genuine original Particle108 eight-stage compiler-reflected name and location bridge privately
+        run: |
+          set -euo pipefail
+          timeout 500s python3 -m scripts.t3_particle108_reflected_name_bridge \
+            --original "$RUNNER_TEMP/t3-original-six-scene" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-particle108-reflected-names-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t3-original-particle108-reflected-names-safe.json"
+          d=json.loads(p.read_text())
+          assert d["status"]=="T3_SOURCE_PARTICLE108_FOUR_PAIR_REFLECTED_NAME_LOCATION_BRIDGE_CLASSIFIED"
+          assert d["source_original_keyword_variant_pairs"]==4
+          assert d["original_source_particle108_use_slots"]==108
+          assert d["six_source_original_scenes_SHA_verified"] is True
+          assert d["four_source_original_shader_owners_SHA_verified"] is True
+          assert d["counts"]["stage_translation_attempts"]==8
+          assert d["source_shader_bytecode_names_hashes_guids_and_paths_published"] is False
+          assert d["compiler_reflected_names_are_original_DXBC_semantics_verified"] is False
+          assert d["compiler_reflected_names_sufficient_for_automatic_location_patch_verified"] is False
+          assert d["native_Unity_Android_Adreno_pixels_verified"] is False
+          print("RAFT_T3_PARTICLE108_REAL_COMPILER_REFLECTED_NAME_BRIDGE_CLASSIFIED=true autolocationpatch=false")
+          PY
       - name: Verify genuine source 108-slot Particle Shader48 original Material TexEnv pointer scope
         run: |
           set -euo pipefail
@@ -345,6 +370,7 @@ jobs:
             ${{ runner.temp }}/t3-original-108particle-pass-state-safe.json
             ${{ runner.temp }}/t3-particle108-actual-dxbc-stage-links-safe.json
             ${{ runner.temp }}/t3-particle108-fourpair-spirv-aggregate-safe.json
+            ${{ runner.temp }}/t3-original-particle108-reflected-names-safe.json
             ${{ runner.temp }}/t3-original-particle108-material-texenv-safe.json
             ${{ runner.temp }}/t3-original-particle108-texture2d28-stream-safe.json
             ${{ runner.temp }}/t3-particle108-stream-provider-verified-safe.json
