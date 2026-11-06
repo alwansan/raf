@@ -290,6 +290,51 @@ class Program
                 l.Contains("SyntheticStackTrace_T4")) == 2);
             foreach (string line in Lines(recoveredLogs))
                 using (JsonDocument.Parse(line)) { }
+            // The real Android operation tracer calls Begin/EndOperation
+            // around original SaveGame/Load. A diagnostic transport exception
+            // must not escape back into those original game operations.
+            // Synthetic reflection fault never touches real game files.
+            string logFailureRoot = Path.Combine(root, "operation-logger-fault");
+            UnityEngine.Application.persistentDataPath = logFailureRoot;
+            AndroidRuntimeLog.Initialize();
+            Require(AndroidRuntimeLog.Status == "ready");
+            var binding = System.Reflection.BindingFlags.Static |
+                          System.Reflection.BindingFlags.Instance |
+                          System.Reflection.BindingFlags.NonPublic;
+            var sinkField = typeof(AndroidRuntimeLog).GetField("sink", binding);
+            var actualSink = (PersistentDiagnosticLog)sinkField.GetValue(null);
+            var lifecycleField = typeof(PersistentDiagnosticLog).GetField(
+                "lifecycleGate", binding);
+            object savedLifecycleGate = lifecycleField.GetValue(actualSink);
+            string firstRecoveredStack = "Original synthetic SaveGame error\\nT4 save stack";
+            try
+            {
+                // Null out only the sink's lifecycle monitor via reflection:
+                // PersistentDiagnosticLog.Write then throws before enqueue,
+                // simulating an unexpected transport failure. The background
+                // writer uses a different ioGate and is not disrupted.
+                lifecycleField.SetValue(actualSink, null);
+                AndroidRuntimeLog.Write("save", "SaveGame.enter", "", true);
+                long started = AndroidRuntimeLog.BeginOperation("save", "SaveGame", "");
+                AndroidRuntimeLog.EndOperation("save", "SaveGame", started, false);
+                Require(AndroidRuntimeLog.UnityMessage("Error", firstRecoveredStack, true));
+                Require(AndroidRuntimeLog.Status == "diagnostic_write_ArgumentNullException");
+                Require(!AndroidRuntimeLog.Status.Contains("SaveGame"));
+            }
+            finally
+            {
+                lifecycleField.SetValue(actualSink, savedLifecycleGate);
+            }
+            // The failed first Unity stack was never enqueued, so the next
+            // occurrence on recovered storage must not be deduplicated away.
+            Require(AndroidRuntimeLog.UnityMessage("Error", firstRecoveredStack, true));
+            Require(!AndroidRuntimeLog.UnityMessage("Error", firstRecoveredStack, true));
+            Require(AndroidRuntimeLog.Status == "ready");
+            AndroidRuntimeLog.Shutdown();
+            string faultRecoveredLogs = Path.Combine(logFailureRoot, "raft-logs");
+            Require(Lines(faultRecoveredLogs).Count(l =>
+                l.Contains("\\\"operation\\\":\\\"Error\\\"") &&
+                l.Contains("T4 save stack")) == 1);
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
         finally { Directory.Delete(root, true); }
