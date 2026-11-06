@@ -1,0 +1,20 @@
+{
+  "id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+  "issue_id": "RENDER-002",
+  "type": "source_export_result",
+  "at": "2026-11-06T00:30:11.054Z",
+  "summary": "Authentic original 108-use ParticleRenderer Shader48 source→same AssetRipper W1 GUID trace shows ACTUAL exported custom .shader/.meta has one balanced Pass and one CG/HLSL program block BUT exact //DummyShaderTextExporter marker. Genuine CI42136474867 SUCCESS 113/113 synthetic controls. 10/10 original Material textures faithful in same export; actual full native/Android pixels/emitter still untested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42136474867",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+  ],
+  "limitations": [
+    "bounded raw AssetRipper output, post-vendor Unity state unknown",
+    "real fire/smoke emitter not linked to selected source shader",
+    "no Android pixel proof"
+  ]
+}
