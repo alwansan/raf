@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T103645Z-T1-chat-storewriters-b4a7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "FFT SPIR-V butterfly coordinate dataflow",
+  "approach": "Source-authenticated private SPIR-V direct local pointer writer candidate census at butterfly image-fetch coordinate leaves, explicit no-dominance/no-rewrite status. Synthetic fail-closed regression then distinct original Vulkan CI audit.",
+  "status": "active",
+  "base_sha": "13e03d803b7820d3fabe31cd502abadf20c97be2",
+  "intended_files": [
+    "scripts/t1_fft_spirv_read_provenance.py",
+    "tests/test_t1_fft_spirv_read_provenance.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T103645Z-T1-chat-storewriters-b4a7.md",
+    "prompt/coordination/experiments/T1/20261106T103645Z-T1-chat-storewriters-b4a7.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T103645Z-T1-chat-storewriters-b4a7.json"
+  ],
+  "experiment_key": "water001-t1-original-fft-slot0-spv-local-store-writer-census-base-13e03d8-distinct-from-42196835754-42198180194",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu-24.04-no-shared-unity",
+  "updated_at": "2026-11-06T10:36:45Z",
+  "hypothesis": "Some butterfly coordinate lane stops at a Function OpLoad; direct pointer OpStore producer census can identify candidate opcode/type or multiple writes without falsely proving reaching definition, potentially separating float carrier from integer provenance before any shader mutation.",
+  "related_work": [
+    "20261106T101340Z-T1-chat-2f6a",
+    "20261106T1009Z-T1-scheduled-k7m2"
+  ],
+  "taken_over_from": [],
+  "resumed_from_sessions": [
+    "20261106T101340Z-T1-chat-2f6a",
+    "20261106T1009Z-T1-scheduled-k7m2"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded typed direct-store candidate summary, run synthetic tests, execute original private Vulkan non-Unity workflow once, compare actual site1 X/site2 Y store shapes; no authored kernel/phone claim."
+}
