@@ -1,0 +1,79 @@
+name: T5 DISPLAY-003 original Resolution Dropdown parameter metadata (source-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Experiments/T5/ResolutionParameterProbe/**
+      - scripts/t5_validate_original_resolution_parameter.py
+      - tests/test_t5_validate_original_resolution_parameter.py
+      - .github/workflows/raft-t5-original-resolution-parameter.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-display-original-resolution-param-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-original-parameter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout bounded oracle and public synthetic cases only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T5/ResolutionParameterProbe/*
+            /scripts/t5_validate_original_resolution_parameter.py
+            /tests/test_t5_validate_original_resolution_parameter.py
+      - name: Check fail-closed original parameter report without original game assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_validate_original_resolution_parameter.py -v
+          python3 -m py_compile scripts/t5_validate_original_resolution_parameter.py
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile bounded Cecil type category inspector and test synthetic types
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T5/ResolutionParameterProbe/ResolutionParameterProbe.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t5-resolution-parameter" \
+            > "$RUNNER_TEMP/t5-param-build.log" 2>&1 || {
+              tail -35 "$RUNNER_TEMP/t5-param-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t5-resolution-parameter/ResolutionParameterProbe.dll" --self-test
+      - name: Checkout only original immutable managed DLL from ZIP2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: SHA authenticate original and classify actual compiled caller argument
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c %s zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          dotnet "$RUNNER_TEMP/t5-resolution-parameter/ResolutionParameterProbe.dll" \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t5-original-resolution-parameter-safe.json"
+          python3 -m scripts.t5_validate_original_resolution_parameter \
+            --report "$RUNNER_TEMP/t5-original-resolution-parameter-safe.json"
+          echo 'T5_RESOLUTION_PARAMETER source_authenticated=true original_symbol_names_private=true serialized_ui_binding_proven=false android_device_tested=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: Never upload original DLL, method identifiers, raw IL or reconstructed assets
+        if: always()
+        run: echo 'Only public type categories and aggregated IL call counts, not device or Unity runtime proof.'
