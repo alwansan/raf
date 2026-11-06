@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Original Android gameplay mouse-site rewrite requires AndroidPhysicalMouseCapture static symbols to exist when Unity Editor compiles Android-target source, not only on device player UNITY_ANDROID && !UNITY_EDITOR.",
+  "source_commit": "f554e8b6757e46aa037603ed592a04acc2bf7a61",
+  "input_hashes": [
+    "pinned original ZIP2 Assembly-CSharp.dll 3211776 bytes SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "exact original Unity 2021 managed Core and InputLegacy reference files from immutable zip2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "tool_versions": {
+    "dotnet": "GitHub-hosted .NET8 + .NET10",
+    "ilspycmd": "11.2.0.10050",
+    "unity": "original Unity2021 managed ABI; full Editor not run"
+  },
+  "commands": [
+    "dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=<pinned original Unity managed>",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj -c Release -p:OriginalManagedDir=<pinned original Unity managed>",
+    "dotnet run --project android-port/Tests/PhysicalMouse/PhysicalMouse.csproj -c Release",
+    "python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v"
+  ],
+  "negative_controls": [
+    "Owner-direct native42281310905 source d6924001 Unity2021 reconstruct compile failed CS0234 x10 due missing AndroidPhysicalMouseCapture",
+    "CI42286642808 preliminary wrong fixture inclusion failed before editor compile; corrected 6d26a1d0",
+    "CI42286855872 actual Unity2021 original-managed editor-symbol fixture RED: CS0103 x6 due missing entire namespace/type; existing Android ABI and physical mouse 48 controls green"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42287041110",
+  "artifact_urls": [],
+  "budget": "source-only 15-minute ABI CI. No Unity native import, packaging, signing or device capture.",
+  "status": "completed",
+  "observed_result": "Production f554e8b6 adds UNITY_5_3_OR_NEWER noncapturing exact-signature editor/non-Android shim; UNITY_ANDROID&&!UNITY_EDITOR capture unchanged. GREEN CI42287041110 completes original Unity2021 ABI editor and Android compile, actual original DLL and decompiled mouse callsite patch 4+4+2, 48 mouse delta checks; independent platform CI42287041051 green including netstandard2.1 compile.",
+  "rejected_hypotheses": [
+    "A class present only under UNITY_ANDROID && !UNITY_EDITOR is visible during Unity Editor C# compile even when selected build target Android.",
+    "CS0234 after native42281310905 necessarily indicates original game's mouse source is missing rather than an Editor-only preprocessor guard mismatch."
+  ],
+  "limitations": [
+    "No subsequent full Unity Editor import or IL2CPP native APK after f554e8b6",
+    "No device mouse capture acceptance, no world or water shader evidence",
+    "Editor mode synthetic static site symbols only, no original game scenes imported"
+  ],
+  "integration_commit": "f554e8b6757e46aa037603ed592a04acc2bf7a61",
+  "next_step": "T5 own authorized native rerun on newer SHA including this compile bridge, after reviewing all other team source and water gates; inspect next actual Unity compilation errors. T4 scope released."
+}
