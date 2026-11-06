@@ -1,0 +1,42 @@
+name: T5 INTEGRATION-001 installed OBB Unity first-byte source probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'android-port/Runtime/Platform/AndroidExpansionArchiveProbe.cs'
+      - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
+      - 'android-port/Tests/ExpansionArchiveProbe/**'
+      - '.github/workflows/raft-t5-installed-obb-read-probe.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-installed-obb-read-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: false
+
+jobs:
+  source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            android-port/Runtime/Platform
+            android-port/Tests/ExpansionArchiveProbe
+          sparse-checkout-cone-mode: true
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile actual pure production probe and run adversarial ZIP fixtures
+        run: dotnet run --project android-port/Tests/ExpansionArchiveProbe/ExpansionArchiveProbe.csproj -c Release
+      - name: Compile platform managed project (Unity Android-only implementation excluded)
+        run: dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj -c Release
+      - name: Report source-only boundary
+        run: echo 'T5: source-only compile and synthetic ZIP read proof. No phone OBB mount or Unity engine resource acceptance.'
