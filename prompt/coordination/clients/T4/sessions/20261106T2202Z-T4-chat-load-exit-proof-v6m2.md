@@ -1,0 +1,10 @@
+# T4 chat — original Load<T> error exit must not appear as a clean file load
+
+- **session_id:** `20261106T2202Z-T4-chat-load-exit-proof-v6m2`; **origin:** chat; **status:** active; **issue:** LOCAL-005.
+- **base_sha:** `889e0afd021ff8f4b27ef4a65c45b8a6ff156f4e`; reservation commit `fa3ecebebf44f3c15defe788fd96186d279e52e6` before implementation. Branch `feature/android-native-port` only.
+- **resumed_from_sessions:** `20261106T2147Z-T4-chat-postinstall-owner-drift-k4r8` (source adapter safe rollback 19/19, CI42300166577), `20261106T2138Z-T4-scheduled-native-retry-q4n7` (separate native observation); earlier `20261106T2008Z-T4-chat-save-exception-proof-m5r8` establishes original save exit guard.
+- **owned source/test:** `scripts/t4_owner5nov_jsonl_lifecycle.py`, `tests/test_t4_owner5nov_jsonl_lifecycle.py`; prior T4 work on these finished. Work `prompt/coordination/work/LOCAL-005/T4-20261106T2202Z-T4-chat-load-exit-proof-v6m2-exceptionescaped-load-exit.json` registered before edits.
+- **new actual trace-contract gap:** original Android `wrap` instruments `Load<T>.exit` as `exceptionEscaped=True|False; elapsed_ms=F3`. The immutable CL 5-Nov interpreter only parses that field for SaveGame/SaveWorld/SaveUser/Save, not for original `Load<T>`. As a result, nonzero file snapshot and an escaped exception can count as fully traced. Add synthetic RED exceptions and require clean exact original exit; classify explicit `Load<T>.exception` as disqualifying.
+- **experiment:** pinned CL commit `520c4cf409aa20a4db54ff80ed87d8807d9cba57` 3 original user November 5 JSONLs, original SHA checks in `.github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml`. Never copy raw logs, credentials, save files or user names into outputs.
+- **no overlap:** owner native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) uses immutable older `a1737bd7`, separate T5; don't cancel, repeat, rewrite request, or edit Unity/audio/Settings/touch.
+- **limits:** exact original log interpretation is not deserializer object proof, same-world success, durable save or device acceptance. Record RED and GREEN evidence and next step here.
