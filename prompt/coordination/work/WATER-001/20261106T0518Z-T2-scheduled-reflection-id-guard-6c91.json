@@ -4,7 +4,7 @@
   "origin": "scheduled",
   "owner": "T2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_unverified",
   "base_sha": "79191296a7396fa1e8c2ebb62218f202f364f943",
   "resumed_from_sessions": [
     "20261106T0420Z-T2-scheduled-opdecorate-91af",
@@ -19,6 +19,11 @@
   "hypothesis": "binding-only identity comparison can hide a reflection ID swap when distinct descriptor sets share binding numbers; preserve full coordinate identity",
   "source_pin": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "shared_ci": "T1 run 42167120994 pending; no duplicate CI",
-  "updated_at": "2026-11-06T05:18:00Z",
-  "limitations": "source-free guard only; CB0 extent mismatch remains; no Unity/device claim"
+  "updated_at": "2026-11-06T05:23:00Z",
+  "limitations": "source-free guard only; CB0 extent mismatch remains; no Unity/device claim",
+  "source_commit": "13a908ff0f0f1c682593d40e819193eafd62a94a",
+  "test_commit": "081642ae15dc198fe18b9fc57695c01f2eab4299",
+  "result": "Full (set,binding,id) tuples replace lossy binding-only ID comparison; regression fixture intentionally makes old dict comparison pass despite swapped IDs.",
+  "validation": "Local conceptual adversarial check only; repository unittest not executed because no GitHub checkout network in container. No CI dispatched.",
+  "next_step": "Run python -m unittest tests.test_t2_foam_private_descriptor_set_remap at SHA >=081642ae; if green, investigate original CB0 member layout and Unity upload; do not merge ShaderLab yet."
 }
