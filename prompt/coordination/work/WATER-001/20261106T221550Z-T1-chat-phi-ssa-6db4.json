@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "1b868a64fc1ffdb8e9ba0ceb5e4ba1dcb4f307aa",
+  "resumed_from_sessions": [
+    "20261106T220645Z-T1-chat-site2y-phi-9b61"
+  ],
+  "experiment_key": "ZIP2-15964ea8-FFT-slot0-HLSL50-site2Y-Phi-SSA-component-recurrence-v1",
+  "resource_key": "CPU-only SHA-verified ZIP2 staged privately; no Unity/native",
+  "hypothesis": "Backedge into Phi does not itself prove its selected-component input data depends on same Phi; test bounded SSA arithmetic flow and uncertainty.",
+  "intended_files": [
+    "scripts/t1_fft_site2_y_phi_recurrence.py",
+    "tests/test_t1_fft_site2_y_phi_recurrence.py",
+    "scripts/t1_fft_site2_y_hlsl_pair.py",
+    ".github/workflows/raft-t1-fft-site2y-hlsl-pair.yml",
+    "prompt/coordination/work/WATER-001/20261106T221550Z-T1-chat-phi-ssa-6db4.json",
+    "prompt/coordination/clients/T1/sessions/20261106T221550Z-T1-chat-phi-ssa-6db4.md",
+    "prompt/coordination/experiments/T1/20261106T221550Z-T1-chat-phi-ssa-6db4.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T221550Z-T1-chat-phi-ssa-6db4.json"
+  ],
+  "collision_check": "T1 CI 42302489519 success completed; only native 42296450023 in progress, no additional Unity/native dispatch. Other T2/T3/T4/T5 files untouched.",
+  "trial_vote": "لا يحتاج",
+  "updated_at": "2026-11-06T22:17:28.528Z"
+}
