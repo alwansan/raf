@@ -5,10 +5,10 @@
   "origin": "chat",
   "session_id": "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "track": "real Unity-export Foam Shader GUID and Material PPtr read-only fail-closed preflight; source-authentic private 2-pass candidate checked against synthetic same-GUID Material link",
   "base_sha": "d41cd1c646a4f1c1c8ce43b5eb08c9b175a08424",
-  "updated_at": "2026-11-06T20:19:37.098Z",
+  "updated_at": "2026-11-06T20:33:45.575Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.json",
     "prompt/coordination/clients/T2/sessions/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.md",
@@ -19,7 +19,8 @@
     "docs/T2_FOAM_EXPORT_GUID_MATERIAL_PREFLIGHT_2026-11-06.md",
     "prompt/coordination/experiments/T2/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.json",
     "prompt/coordination/B_TEAM/events/T2/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-result.json",
-    "prompt/coordination/discussions/WATER-001/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-to-T5.md"
+    "prompt/coordination/discussions/WATER-001/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-to-T5.md",
+    ".github/workflows/raft-t2-foam-export-material-guid-sourceonly.yml"
   ],
   "experiment_key": "FoamExportGuidMaterial-before-after-2pass-private-ShaderLab-attested-source+synthetic-YAML-Material-4800000-GUID-integrity-v1",
   "resource_key": "isolated T2 sourcefree controls and existing pinned ZIP2 original private Foam ShaderLab workflow, no Unity native job",
@@ -33,5 +34,39 @@
     "prompt/coordination/work/WATER-001/T2-20261106T2000Z-T2-chat-foam-private-installer-a4c7.json"
   ],
   "trial_vote": "لا يحتاج",
-  "next_step": "Build new read-only export Foam identity/Material PPtr probe and negative controls; exercise authentic private ShaderLab install preserving synthetic serialized Material pointer; handoff to T5 without altering shared native build workflow."
+  "next_step": "T5 authorized future full native export stage: run T2 preflight on actual generated AssetRipper ExportedProject; privately install source SHA-authentic two-pass Foam only if exact unique target/GUID passes, compare Material target counts/unchanged metadata, then Unity importer/device checks. Preserve T4 current Editor compile fix ownership.",
+  "actual_files_changed": [
+    "scripts/t2_foam_export_binding_probe.py",
+    "tests/test_t2_foam_export_binding_probe.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    ".github/workflows/raft-t2-foam-export-material-guid-sourceonly.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.md",
+    "docs/T2_FOAM_EXPORT_GUID_MATERIAL_PREFLIGHT_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-result.json",
+    "prompt/coordination/discussions/WATER-001/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-to-T5.md"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42288126476",
+    "https://github.com/alwansan/raf/actions/runs/42288126264"
+  ],
+  "result": {
+    "source_commit": "0d0a9790b78953c6f7c7b6be1324a15dfd862bf2",
+    "source_only_CI": "42288126476",
+    "source_only_tests": 16,
+    "preexisting_installer_tests_in_same_CI": 17,
+    "source_original_CI": "42288126264",
+    "source_original_Foam_owner_SHA_authenticated": true,
+    "original_private_ShaderLab_bytes": 9731,
+    "original_authored_passes": 2,
+    "synthetic_export_passes_before": 1,
+    "synthetic_export_passes_after": 2,
+    "synthetic_export_material_link_preserved": true,
+    "synthetic_export_meta_bytes_preserved": true,
+    "real_AssetRipper_export_guid_link_validated": false,
+    "Unity2021_import_or_Android_pixels_verified": false,
+    "source_original_safe_artifact_id": 13538108468,
+    "scheduled_T2_collision_guard_already_fixed": "014d48fafbfd93b0bf0f2bff46c3c82ad2940ef3; CI42287347419 SUCCESS"
+  }
 }

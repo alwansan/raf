@@ -1,0 +1,17 @@
+{
+  "id": "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-source-verified-synthetic-material-pptr-stable",
+  "owner": "T2",
+  "session_id": "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e",
+  "issue_id": "WATER-001",
+  "type": "source_original_binding_preflight",
+  "summary": "Added fail-closed original Foam exported shader GUID + serialized Material PPtr diagnostic (16 synthetic tests PASS) and verified 9731B SHA-original two-pass private candidate replacement preserves one synthetic Material GUID pointer and .meta bytes while changing only ShaderLab from 1 to 2 passes in original CI42288126264. Actual Raft exported Foam still 1 pass and not yet patched in real Unity; Android pixels UNKNOWN. T5 has exclusive shared native workflow handoff.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0d0a9790b78953c6f7c7b6be1324a15dfd862bf2",
+    "https://github.com/alwansan/raf/actions/runs/42288126476",
+    "https://github.com/alwansan/raf/actions/runs/42288126264",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_EXPORT_GUID_MATERIAL_PREFLIGHT_2026-11-06.md"
+  ],
+  "at": "2026-11-06T20:33:45.575Z",
+  "status": "SOURCE_AUTHENTIC_CANDIDATE_SYNTHETIC_EXPORT_ONLY",
+  "trial_vote": "لا يحتاج"
+}

@@ -1,0 +1,79 @@
+{
+  "owner": "T2",
+  "session_id": "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "integration_commit": "0d0a9790b78953c6f7c7b6be1324a15dfd862bf2",
+  "hypothesis": "After authentically staging original Foam 2pass ShaderLab, exact exported Foam Shader GUID and one synthetic Material PPtr survive source-only install unchanged; malformed/duplicate exported GUID or wrong fileID/type are blocked.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42288126476",
+    "https://github.com/alwansan/raf/actions/runs/42288126264"
+  ],
+  "workflow_paths": [
+    ".github/workflows/raft-t2-foam-export-material-guid-sourceonly.yml",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "source": "ZIP2 immutable"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_export_binding_probe.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_private_installer.py' -v",
+    "private SHA-original Foam stage under existing isolated authentic workflow with new synthetic exported Material PPtr continuity step"
+  ],
+  "negative_controls": [
+    "duplicate .meta GUID any Asset",
+    "malformed or null metadata GUID",
+    "multiple ShaderLab target names",
+    "fake shader field in non-Material YAML",
+    "wrong fileID/type",
+    "duplicate/malformed Material m_Shader",
+    "symlinks and nonyaml",
+    "empty serialized Foam Material link not fake runtime failure"
+  ],
+  "status": "completed_source_authenticated_synthetic_export_pointer_stability",
+  "result": {
+    "sourceonly_CI_42288126476": "SUCCESS",
+    "synthetic_new_tests": 16,
+    "synthetic_installer_regressions": 17,
+    "source_original_CI_42288126264": "SUCCESS",
+    "source_original_owner_bytes_SHA_verified": 115978112,
+    "private_candidate_bytes": 9731,
+    "pre_passes": [
+      1
+    ],
+    "post_passes": [
+      2
+    ],
+    "synthetic_material_docs": 1,
+    "exact_material_refs_before_after": 1,
+    "meta_bytes_unchanged": true,
+    "material_bytes_unchanged": true,
+    "actual_game_export_guid_join_verified": false,
+    "original_authored_Unity_ShaderLab_recovered": false,
+    "unity2021_import_verified": false,
+    "Android_Foam_pixels_verified": false
+  },
+  "safe_artifact": {
+    "id": 13538108468,
+    "size_bytes": 4823,
+    "zip_sha256": "35d8735f54cb474ab111a4ce0908cd2e698d6b4b918eba727e91bc0ecf76b458"
+  },
+  "related_native_run": {
+    "id": 42281310905,
+    "source": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
+    "actual_Foam_source_pass_count": 1,
+    "required_by_device_log": 2,
+    "original_meta_present": true,
+    "final": "FAILED Unity Editor physical mouse CS0234"
+  },
+  "limitations": [
+    "source original 9731B program not yet installed in actual Raft Unity export or tested on Adreno",
+    "previous source original proof of Shader.Find material creation does not prove runtime Shader registration or CB0/texture uploads",
+    "No new native build and no modifications to shared native workflow",
+    "T2 scheduled concurrent GUID collision guard separate and completed CI42287347419"
+  ],
+  "next_step": "T5 native future authorized stage: exact exported Foam preflight, SHA original private 2pass install with original GUID, postprobe and explicit water limitation recomputation, Unity import and phone checks."
+}
