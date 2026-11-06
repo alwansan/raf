@@ -6,9 +6,9 @@
   "session_id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
   "issue_id": "COORD-001",
   "track": "team evidence ledger integration",
-  "status": "active",
+  "status": "completed_source_ci_verified",
   "base_sha": "c79b22a201db40df84f502ff8eca827773569175",
-  "updated_at": "2026-11-06T10:18:24.372Z",
+  "updated_at": "2026-11-06T10:22:53.399Z",
   "resumed_from_sessions": [
     "20261106T0950Z-T5-chat-focus-frame-a7c3.md",
     "20261106T0946Z-T5-scheduled-apk-zip-signature-n8c.md"
@@ -35,5 +35,20 @@
     "T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json has event_id, no id"
   ],
   "coordination": "No edits to T4/T2 authored events or T2 workflow. T1 FFT and T3 shader workflows distinct. T5 separate own ledger workflow includes inexpensive source-only tests + safe refresh, no Unity Actions.",
-  "next_step": "Add explicit event_id compatibility with alias conflict / duplicate negative controls, run T5 isolated source CI and canonical full-ledger regeneration, retain NOT_READY for phone."
+  "next_step": "Keep owner T2/T4 event files untouched; future events with event_id parse fail-closed. Continue P0 water/renderer/Android delivery integration; await true phone proof.",
+  "source_commit": "94b8e83e06064ec29e714dda413247cd909811cf",
+  "test_commit": "bfa53c3f88f16d0b34dd8e20cd60a6bc8a0abd9f",
+  "workflow_commit": "8a6f3ab61ca9a68f3cc755a5b18599fb3141f9de",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42201831309"
+  ],
+  "result": {
+    "conclusion": "success",
+    "run_id": 42201831309,
+    "source_tests": "14/14",
+    "canonical_live_event_count": 350,
+    "summary_refreshed": true,
+    "source_only": true,
+    "device_proven": false
+  }
 }
