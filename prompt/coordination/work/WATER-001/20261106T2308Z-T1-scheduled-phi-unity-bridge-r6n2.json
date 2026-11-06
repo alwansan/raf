@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T2308Z-T1-scheduled-phi-unity-bridge-r6n2",
+  "origin": "scheduled",
+  "owner": "T1",
+  "issue": "WATER-001",
+  "status": "waiting_gpu_evidence",
+  "baseline_sha": "e301bced24dd3b91c5128dfd2d65710fe48811b6",
+  "scope": "Evidence audit of SHA-authentic Phi path counters vs outstanding Unity/OpenGLCore coordinate divergence; no shader or T2-T5 edits",
+  "files": [
+    "prompt/coordination/work/WATER-001/20261106T2308Z-T1-scheduled-phi-unity-bridge-r6n2.json",
+    "prompt/coordination/clients/T1/sessions/20261106T2308Z-T1-scheduled-phi-unity-bridge-r6n2.md"
+  ],
+  "hypothesis": "Identical per-invocation predecessor visitation is insufficient to infer equal Phi value or image fetch coordinates; paired numeric captures are necessary.",
+  "experiment_key": "T1-site2-y-phi-unity-keyed-pair-seed19-1024x32",
+  "shared_resource": "No GPU/Unity allocation or Actions dispatch; read-only inspection",
+  "taken_over_from": [
+    "CI42307656709",
+    "CI42302489519",
+    "CI42290211798"
+  ],
+  "next": "Acquire same-input same-dispatch authenticated original Vulkan and licensed Unity OpenGLCore keyed site2 Y Phi and ImageFetch coordinates, verify FindKernel and resource binding; do not infer from counter histogram."
+}
