@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1316Z-T5-chat-nested-zip-c53a",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "4491e8d1a4904ab4c5189e687174acbc7d33cc50",
+  "updated_at": "2026-11-06T13:08:34.202Z",
+  "resumed_from_sessions": [
+    "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
+    "20261106T1243Z-T5-chat-zip-local-headers-9e2a.md",
+    "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
+  ],
+  "experiment_key": "T5-real-signed-42058825739-artifact13441766832-ZIP-STORED-nested-APK-OBB-central-HTTP206-v1",
+  "resource_key": "Original signed checkpoint archive 13441766832, low-bandwidth ZIP_STORED nested byte-range inspection, max 16MiB aggregate",
+  "hypothesis": "Original signed checkpoint ZIP contains STORED APK and OBB members, permitting direct random-range access to their real nested ZIP central directories; inspect native ARM64/Unity asset membership and sampled header without 3GB download and without claiming hash, signature or phone mount.",
+  "intended_files": [
+    "scripts/t5_probe_signed_nested_zip_range.py",
+    "tests/test_t5_probe_signed_nested_zip_range.py",
+    ".github/workflows/raft-t5-real-signed-nested-zip-range.yml",
+    "docs/T5_REAL_SIGNED_NESTED_ZIP_2026-11-06.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1316Z-T5-chat-nested-zip-c53a.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1316Z-T5-chat-nested-zip-c53a.md",
+    "prompt/coordination/experiments/T5/20261106T1316Z-T5-chat-nested-zip-c53a.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1316Z-T5-chat-nested-zip-c53a.json"
+  ],
+  "checks": [
+    "Pin source run/commit, artifact ID, ZIP envelope bytes/digest, match manifest declared signed inner file sizes",
+    "Only ZIP_STORED outer; deflated outer => safe BLOCKED, no content fallback",
+    "HTTP Range 206 total 16MiB at most; no full inner APK/OBB content download",
+    "Safe categorical ZIP member counts, native required name presence, sampled central/local header of selected resources; no proprietary filenames output",
+    "Reject symlinks/traversal/duplicates, compressed inner bombs, mismatched payload offsets and ZIP structures",
+    "Actual SHA/checksum of inner signed APK/OBB and certificate still unproven, no phone"
+  ],
+  "coordination": "T5 scheduled signed artifact envelope metadata; this is new nonoverlapping deep probe; last Actions all completed; other clients P0 water/renderer source untouched, no Unity build.",
+  "next_step": "Implement nested range seekable ZIP reader and synthetic sparse 3GB test, run actual HTTP 206 source-only CI, preserve safe report."
+}
