@@ -46,6 +46,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_site1_y_inequal_source.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site1_x_writer_lineage.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_hlsl_phi_input_origins.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_hlsl_nested_phi_lineage.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v
           # disjoint-synthetic-bitcarrier-fixture-20261106: verify checked-out corrected SPIR-V result IDs
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
@@ -115,6 +116,7 @@ jobs:
           # PHI-FAILURE-SAFE-DIAGNOSTIC: only fixed-category private validation failures may appear in logs.
           # PHI-VECTOR-LANE-20261106: the original-derived float32 Phi may be a vector; audit selected component.
           python3 -m scripts.t1_fft_hlsl_phi_input_origins "$TMPDIR/coordinate.spv"
+          python3 -m scripts.t1_fft_hlsl_nested_phi_lineage "$TMPDIR/coordinate.spv"
           python3 -m scripts.t1_fft_pass0_trace_variant "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
           # The trace runner validates capacity for the observed 384 reads.
