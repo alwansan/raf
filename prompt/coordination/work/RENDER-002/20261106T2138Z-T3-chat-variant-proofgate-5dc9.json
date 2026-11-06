@@ -4,7 +4,7 @@
   "origin": "chat",
   "username": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f2716a0e8e20413416ac8375086f96006e6fe9fb",
   "resumed_from_sessions": [
     "20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f",
@@ -24,5 +24,12 @@
     "42296450023 native in_progress on a1737bd7, do not cancel/duplicate"
   ],
   "test_plan": "Add missing/false roundtrip and missing/boolean stage negative regression; existing positive 4x2 roundtrip pass must remain; trigger existing isolated T3 workflow once on push, inspect synthetic job first.",
-  "updated_at": "2026-11-06T21:38:00Z"
+  "updated_at": "2026-11-06T21:40:16Z",
+  "completed_at": "2026-11-06T21:40:16Z",
+  "implementation_sha": "e2cbadb6acc4d927ec2e61e4b7e012e049235146",
+  "test_run_url": "https://github.com/alwansan/raf/actions/runs/42298502781",
+  "test_job_id": 128169873851,
+  "outcome": "PASS: 14/14 synthetic guard controls, 4 source-authentic owners + 6 scenes authenticated, 4 candidate ShaderLab variants and 8/8 roundtrip stages; no Unity editor/device.",
+  "next_step": "Small isolated actual Unity import of 4 private candidates when appropriate and no conflicting native action, otherwise investigate provenance/resource bindings with T1/T2; don't alter game GUID before runtime evidence.",
+  "intended_files_released": true
 }
