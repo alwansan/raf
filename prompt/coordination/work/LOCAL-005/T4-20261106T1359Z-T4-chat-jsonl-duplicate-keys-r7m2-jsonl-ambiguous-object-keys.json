@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "af440fa5c42be5c62aeec502accb020272bbbd15",
+  "resumed_from_sessions": [
+    "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+    "20261106T1343Z-T4-scheduled-n8p4"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2-snapshot-token-whitespace-followup.json"
+  ],
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py",
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2-jsonl-ambiguous-object-keys.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2.md",
+    "prompt/coordination/experiments/T4/20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2.json",
+    "prompt/coordination/discussions/LOCAL-005/20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2-to-T5.md"
+  ],
+  "experiment_key": "T4-LOCAL005-JSONL-duplicate-object-members-and-nonfinite-JSON-ambiguous-evidence-sourcefree-original-logger-v1",
+  "resource_key": "T4-jsonl-evidence-source-only-no-device-no-Unity",
+  "hypothesis": "Python json.loads silently keeps the final value for duplicate JSON object keys, even if earlier area/operation/detail indicates a different event; a malformed copied JSONL line could forge or erase a save/reopen hint while passing sequence/time checks. json.loads also accepts non-standard NaN tokens.",
+  "approach": "Fail closed on any duplicate object members (including nested) and non-finite literal JSON constants; sanitize error category; preserve legitimate rotated identical-event dedupe and valid-world snapshot flags.",
+  "nonoverlap": "Previous T4 JSONL whitespace source fixed and CI42228168580 passed, prior scope completed. T4 1221Z genuine owner cross-process RGD remains active but uses other exact files. T1/T2/T3 water/render, T5 signing and native build untouched. No actual phone logs or RGD content.",
+  "evidence_baseline": [
+    "https://github.com/alwansan/raf/actions/runs/42228168580",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "next_step": "Source-only parser change + 3 synthetic positive/negative JSONL tests; run existing T4 JSONL workflow, record result on exact SHA and independent event; do not claim world saved.",
+  "updated_at": "2026-11-06T13:59:24.123Z"
+}
