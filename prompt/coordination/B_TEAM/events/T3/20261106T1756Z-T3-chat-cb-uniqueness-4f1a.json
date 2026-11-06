@@ -1,0 +1,18 @@
+{
+  "id": "20261106T1756Z-T3-chat-cb-uniqueness-4f1a",
+  "session_id": "20261106T1756Z-T3-chat-cb-uniqueness-4f1a",
+  "origin": "chat",
+  "owner": "T3",
+  "type": "result",
+  "issue_id": "RENDER-002",
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "summary": "Source-only T3 SM4 CB parser safety fix: early fail-closed SM5.1 3-index CB range version gate and duplicate first-register CB DCL within same stage rejected before keyword size profile classification. 14/14 synthetic CI 42266534555 SUCCESS, no new source ZIP2 run, shader asset, APK, or Android device proof. Scheduled T3 DXBC-SPIRV crosscontract independent and untouched. RENDER-002 OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42266534555",
+    "https://github.com/alwansan/raf/commit/c9d78fdce79f437948adf81e17be452ba6c4d8b4",
+    "https://github.com/alwansan/raf/commit/2aca6214475f3f042754dcecbc84cbfb7acd6922",
+    "prompt/coordination/clients/T3/sessions/20261106T1756Z-T3-chat-cb-uniqueness-4f1a.md"
+  ],
+  "at": "2026-11-06T18:00:32.054Z"
+}
