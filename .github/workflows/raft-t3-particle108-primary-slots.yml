@@ -1,11 +1,6 @@
 name: T3 RENDER-002 original Particle108 primary register versus secondary index
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - prompt/coordination/requests/t3-primary-slots-20261106-4d8c.trigger
 permissions:
   contents: read
 concurrency:
