@@ -34,16 +34,22 @@
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42302222142",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42302222142/artifacts/13545245167"
+  ],
   "budget": "20-minute SHA-original source-only workflow, no Unity editor, no APK",
-  "status": "waiting_ci",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Original SHA authenticated CI 42302222142 SUCCESS: 56 safe-report tests +6 source synthetic name tests + Mono.Cecil synthetic selftest pass. Exact 13 Foam Material field reads; 2 source-typed Graphics Material parameter calls, both public Graphics.Blit and 0 DrawMesh/Other/Mixed. No runtime execution proven.",
+  "rejected_hypotheses": [
+    "The two authenticated typed Graphics Material consuming sites use Graphics.DrawMesh rather than Graphics.Blit"
+  ],
   "limitations": [
     "No original game class/method names or HLSL published; report aggregate only",
     "Static typed IL does not prove Unity/Android runtime execution",
     "No Foam CB0 upload, actual render-texture binding, Unity ShaderLab or Adreno pixel acceptance"
   ],
   "integration_commit": "3bbb7b040b7a626e61f68e5572d402ee49a93a4d",
-  "next_step": "Inspect CI42302222142 for Python 56+ aggregate tests, Mono.Cecil synthetic test, original source-private Unity Graphics categorical partition. If FAIL, diagnose exact failure and patch safely; if PASS record categorical counts and limitations. Do not claim native/game water without phone."
+  "next_step": "Classify exact public Graphics.Blit overload signatures and optional pass selection from two original typed Material sites using separate source-only T2 session; trace RenderTexture ownership; T5 retains actual Unity integration.",
+  "artifact_digest": "sha256:2e77b9a496468746a77183a9a88e39daca248862af5433ad2b8d724acc1e637b",
+  "integrated_evidence_report": "docs/T2_ORIGINAL_FOAM_TYPED_GRAPHICS_ROUTE_2026-11-06.md"
 }
