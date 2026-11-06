@@ -1,0 +1,24 @@
+{
+  "session_id": "20261106T0035Z-T4-scheduled-k9m2",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "0dc71121565dca82c53366ac3fd3320b2496aa8b",
+  "updated_at": "2026-11-06T00:35:00Z",
+  "resumed_from_sessions": [
+    "20261105T2339Z-T4-scheduled-f3n7",
+    "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8"
+  ],
+  "hypothesis": "Input.mousePresent may be false while InputSystem Mouse.all contains an added nonvirtual physical mouse; legacy AND gate prevents capture.",
+  "experiment_key": "T4-Unity2021-Android-physicalMousePresent-legacyFalse-InputSystemPhysicalTrue-virtualTouchExcluded-v1",
+  "resource_key": null,
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_physical_mouse_presence_policy.py",
+    "prompt/coordination/clients/T4/sessions/20261106T0035Z-T4-scheduled-k9m2.md"
+  ],
+  "shared_resource": "none; no Unity build",
+  "acceptance": "Physical InputSystem mouse accepted regardless legacy flag; virtual RaftAndroidTouchLeft excluded; null/unadded excluded; original keyboard/touch unchanged; static test not device proof",
+  "next_step": "Implement narrowly scoped policy and test after checking head and overlapping T4 changes."
+}
