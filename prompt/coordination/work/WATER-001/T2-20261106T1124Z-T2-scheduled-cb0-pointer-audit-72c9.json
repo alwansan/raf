@@ -2,7 +2,7 @@
   "session_id": "20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5944e6fa217dab94c87441cde2fd56a4439bd796",
   "intended_files": [
     "scripts/t2_foam_private_cb0_index_access.py",
@@ -16,5 +16,11 @@
   "taken_over_from": [
     "20261106T103459Z-T2-chat-cb0-index-48bd"
   ],
-  "updated_at": "2026-11-06T11:24:00Z"
+  "updated_at": "2026-11-06T11:27:00Z",
+  "source_commit": "50cda520b5768bb730fafcca61eb41c10bf18d7d",
+  "test_commit": "74fe4f77ce9d47f08edc93a191989a6bff04b34e",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42209039138"
+  ],
+  "next_step": "Inspect current in-progress run 42209039138; if failure inspect job logs and repair, if success retain source-only result and return to CB0 host upload investigation. No duplicate dispatch."
 }
