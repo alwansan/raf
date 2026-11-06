@@ -6936,6 +6936,24 @@
       "_record_path": "../B_TEAM/events/T2/20261106T102054Z-T2-chat-cb0-member-shape-3f9e-result.json"
     },
     {
+      "id": "20261106T103459Z-T2-chat-cb0-index-48bd-result",
+      "owner": "T2",
+      "session_id": "20261106T103459Z-T2-chat-cb0-index-48bd",
+      "origin": "chat",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T10:50:00Z",
+      "summary": "T2 original SHA-pinned private Foam compiled index-path CI42204938466 SUCCESS (100 source-free tests, 4 original stages). Pass0 Fragment reflected CB0 array larger; 6 compiled static Fragment load paths outside Vertex capacity and 0 outside own. Pass1 Vertex larger; 2 compiled static Vertex load paths outside Fragment capacity and 0 outside own. No dynamic/unresolved paths observed; compiled reads do not prove actual Unity upload, branch reachability or Adreno pixels. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42204938466",
+        "docs/T2_FOAM_ORIGINAL_CB0_COMPILED_LOAD_INDEX_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/5de93677334a5273ed185424be10d7f0dddc64ce"
+      ],
+      "limits": "Original source HLSL/DXBC/SPV remains private, source->CB0 upload semantics unknown, no ShaderLab installation, no device water acceptance.",
+      "next_step": "Authenticate real per-pass Unity host CB0 value producer and buffer extent across larger compiled per-stage accesses; coordinate T1/T5 before Unity/Adreno test.",
+      "_record_path": "../B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -9037,7 +9055,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "46ed72082980c035e2f116638a06603f1575554273aa6ccbe8d97e748d7ee930",
+  "source_input_sha256": "3a848cff2afd62ada4f4b456ccbebb4d483f08fbad4067f29152de2c7adcf482",
   "generation": "T-2026-11-05",
-  "input_sha256": "f5b068c60ca45f110f73460fc635566a86b1b6f48696bcc33eb00fd04d54a5b1"
+  "input_sha256": "503e628c32add5b5f12588034bb3dce9a97f3e4ab5b29c8df6f71113dc405566"
 }
