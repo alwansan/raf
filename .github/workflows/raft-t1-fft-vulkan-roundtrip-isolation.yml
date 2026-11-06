@@ -88,6 +88,8 @@ jobs:
             --original-data "$RUNNER_TEMP/t1-original-verified/Raft_Data" \
             --project "$TMPDIR/candidates" --keep-first-pair-spirv
           python3 -m scripts.t1_fft_pass0_load_inventory --project "$TMPDIR/candidates"
+          # Verify exact original SPIR-V keyed ImageFetch/dispatch/binding prerequisites, no instrumentation yet.
+          python3 -m scripts.t1_fft_original_keyed_preflight "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           echo "RAFT_T1_COORDINATE_PROFILE original_slot0 typed_bitcasts=true"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           python3 -m scripts.t1_fft_local_store_writers "$TMPDIR/candidates/_private_vulkan/slot0.spv"
