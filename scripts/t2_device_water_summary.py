@@ -11,7 +11,7 @@ MAX_BYTES = 128 * 1024
 
 
 def classify(summary):
-    if not isinstance(summary, dict) or summary.get("schema") != 1:
+    if not isinstance(summary, dict) or type(summary.get("schema")) is not int or summary["schema"] != 1:
         raise ValueError("unsupported_session_schema")
     session = summary.get("session")
     if not isinstance(session, str) or not session.startswith("20261105-") or len(session) > 64:
@@ -55,11 +55,15 @@ def _reject_duplicate_keys(pairs):
     return result
 
 
+def _reject_nonfinite(value):
+    raise ValueError("nonfinite_json_number")
+
+
 def read(path):
     path = Path(path)
     if not path.is_file() or path.is_symlink() or path.stat().st_size > MAX_BYTES:
         raise ValueError("invalid_summary_file")
-    return classify(json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys))
+    return classify(json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys, parse_constant=_reject_nonfinite))
 
 
 def main():
