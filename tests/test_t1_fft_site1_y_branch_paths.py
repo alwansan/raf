@@ -134,8 +134,9 @@ class ButterflyYGuardPathsTests(unittest.TestCase):
             "%p = OpAccessChain %ptrscalar %local %idx2\n"
             "OpStore %p %frombits\n")
         a = audit(body)
-        self.assertTrue(a["unknown_final_writer_path_possible"] or
-                        "sint32_bits_to_float32" in a["final_writer_categories_possible"])
+        self.assertTrue(a["pointer_escape_seen_on_any_cfg_path"])
+        self.assertEqual(a["final_writer_categories_possible"],
+                         ["sint32_bits_to_float32"])
         self.assertFalse(a["full_execution_path_proven"])
 
     def test_select_pointer_writer_is_conservative_unknown(self):
