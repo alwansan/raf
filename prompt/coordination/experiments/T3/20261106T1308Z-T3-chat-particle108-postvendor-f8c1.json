@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+  "issue_id": "RENDER-002",
+  "status": "waiting_ci",
+  "experiment_key": "T3-SHAZIP2-15964-6scenes-12owners-AssetRipper036098-W1B02-sameexport-ParticleShader48-108-before-after-vendor-TMPPostFXVolumetric-v1",
+  "resource_key": "T3-bounded-12-owner-original-export-38min-no-native",
+  "original_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "asset_ripper_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "original_source_proven_last_run": "https://github.com/alwansan/raf/actions/runs/42136474867",
+  "prior_postvendor_evidence": "https://github.com/alwansan/raf/actions/runs/42044249541",
+  "unit_test_run": "https://github.com/alwansan/raf/actions/runs/42222939320",
+  "unit_test_conclusion": "success",
+  "genuine_source_run": "https://github.com/alwansan/raf/actions/runs/42223071341",
+  "genuine_source_run_sha": "90149d3f7ec3f89a40dcaad976f8102737370693",
+  "genuine_source_conclusion": null,
+  "evaluated_scope": "SHA-original unique 108 Particle Renderer material slots and same W1/B02 original Shader48 traced custom GUID before/after official vendor-only shader restorers",
+  "touched_game_assets": false,
+  "proprietary_shader_dump": false,
+  "android_pixels_verified": false,
+  "unity_compile_verified": false,
+  "artifacts_expected": [
+    "t3-particle108-prevendor-safe.json",
+    "t3-particle108-postvendor-safe.json",
+    "t3-particle108-vendor-delta-safe.json"
+  ],
+  "classification_pending": true,
+  "next_step": "Read 42223071341 terminal step status and three count-only safe reports, update this experiment and T3 session; do not duplicate original export or claim Android smoke repair."
+}
