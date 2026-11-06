@@ -214,7 +214,36 @@ jobs:
             spirv-as --target-env vulkan1.1 "$scratch/integer.spvasm" -o "$scratch/integer.spv" > "$scratch/as.log" 2>&1
             spirv-val --target-env vulkan1.1 "$scratch/integer.spv" > "$scratch/val.log" 2>&1
             spirv-cross "$scratch/integer.spv" --hlsl --shader-model 50 --output "$scratch/integer.hlsl" > "$scratch/cross.log" 2>&1
-            { printf '#pragma kernel main\n'; cat "$scratch/integer.hlsl"; } > "$root/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
+            python3 - "$root" "$scratch/integer.hlsl" <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import sys
+          from scripts.t1_stage_original_fft_compute_candidates import (
+              sanitize_translated_compute, validate_import_candidate_manifest,
+          )
+
+          root, generated = map(Path, sys.argv[1:])
+          directory = root / "Assets/T1OriginalDerived"
+          manifest_path = directory / "PrivateCandidates.json"
+          manifest = json.loads(manifest_path.read_text())
+          validate_import_candidate_manifest(manifest, root)
+          row = manifest["rows"][0]
+          baseline_sha = row["candidate_sha256"]
+          variant = sanitize_translated_compute(generated.read_bytes(), row["expected_group_x"])
+          variant_sha = hashlib.sha256(variant).hexdigest()
+          if variant_sha == baseline_sha:
+              raise SystemExit("Expected a distinct source-coordinate variant")
+          (root / row["compute_asset"]).write_bytes(variant)
+          row["candidate_sha256"] = variant_sha
+          validate_import_candidate_manifest(manifest, root)
+          manifest_path.write_text(json.dumps(manifest, sort_keys=True), encoding="utf-8")
+          (directory / "PrivateIntegerSourceVariant.json").write_text(json.dumps({
+              "baseline_candidate_sha256": baseline_sha,
+              "diagnostic_variant_sha256": variant_sha,
+              "compiled_slot": 0,
+          }, sort_keys=True), encoding="utf-8")
+          PY
             echo 'RAFT_T1_SOURCE_INTEGER_COORDINATES unity_candidate=true untouched_vulkan_reference=true'
           fi
           python3 - <<'PY'
