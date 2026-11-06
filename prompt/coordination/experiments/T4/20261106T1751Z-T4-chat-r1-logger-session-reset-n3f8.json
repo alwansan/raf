@@ -27,8 +27,8 @@
   ],
   "artifact_urls": [],
   "budget": "Existing source-only .NET8 diagnostics (no game assets/LFS) and independently triggered offline adapter/real original startup CI; no Unity native APK/OBB build.",
-  "status": "waiting_ci",
-  "observed_result": "RED CI42264862203 expected FAILURE at exact test-only SHA1ad6f6a, C# compiled actual AndroidRuntimeLog; Program.cs:284 check298. Production fix 12d80d12a8 replaces static readonly dedup with per-session object set before publishing fresh sink. Green diagnostics CI42265007972 and original startup/platform smoke are running.",
+  "status": "completed",
+  "observed_result": "RED CI42264862203 completed failure expected, exact test-only SHA1ad6f6a after actual AndroidRuntimeLog C# compile, Program.cs:284 check298: old-session grouped Error suppressed in new same-process logger session. Production 12d80d12a85dc8e2d62a3b035abaf25d6012cc8f creates new RepeatedDiagnosticMessages with each successfully constructed PersistentDiagnosticLog before publishing sink, preserves within-session first/duplicate and HUD behavior. GREEN CI42265007972 completed SUCCESS: RAFT_PERSISTENT_LOG_TEST checks=302 passed=true actualAndroidStorageVerified=false. SAME-SHA original Android local startup CI42265007954 SUCCESS and offline platform CI42265008306 SUCCESS. No Unity IL2CPP/Android physical device test.",
   "rejected_hypotheses": [
     "No actual owner-phone process-relative logger restart is inferred from source fixture.",
     "This is isolated diagnostic fidelity, not a new qualifying APK trial improvement."
@@ -45,5 +45,5 @@
     "basis": "Significant earlier physical mouse source fix; not this test",
     "unchanged": true
   },
-  "next_step": "Confirm exact green CI; document and hand off. Preserve current T4 vote row without churn; do not touch T1/T2/T3/T5 rows."
+  "next_step": "T5 future one source-attested signed APK/OBB trial if and only if 5 current fresh 'يحتاج' votes + true major ready changes; this tiny synthetic logger fix is NOT a new vote reason. On a test candidate, verify physical mouse capture and original .rgd world save+reopen; T4 trial-20261106-r1 vote already 'يحتاج' based on older substantive mouse work. Keep LOCAL-005/INPUT-005 OPEN."
 }
