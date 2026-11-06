@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T2213Z-T3-chat-keyword-name-table-c9a2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "201e14caf01c4cbc47a798055830235eebbcbdb8",
+  "created_at": "2026-11-06T22:13:34Z",
+  "updated_at": "2026-11-06T22:13:34Z",
+  "resumed_from_sessions": [
+    "20261106T2158Z-T3-chat-keyword-lattice-e6d4",
+    "20261106T2150Z-T3-chat-stagewrapper-19e4",
+    "20261106T2133Z-T3-scheduled-contract-schema-9a2f"
+  ],
+  "scope": "Examine original SHA-authenticated Shader48 m_ParsedForm m_KeywordNames/m_KeywordFlags existence and whether both anonymous keyword switch indices are in-range and map to distinct sane authored-name entries. Do not publish original identifiers or assume 2021.2 keyword table exists in older PC game. No Unity compile.",
+  "intended_files": [
+    "scripts/t3_particle108_original_keyword_names.py",
+    "tests/test_t3_particle108_original_keyword_names.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml"
+  ],
+  "resource_key": "T3 existing private original SHA6 scenes 4 owners ZIP2 15964 run; no native Unity",
+  "experiment_key": "SHA15964-T3-Shader48-Particle108-4VSFS-2bit-keyword-index-to-ParsedForm-name-flag-table-private-existence-v1",
+  "planning_run": "42301977939 verified original two-switch lattice regardless hardware tier; native 42296450023 ongoing pinned a1737bd, don't cancel or duplicate",
+  "acceptance": "Source-only 12+ synthetic guard tests plus original private truth: absent/present malformed/mapped; safe counts/state only, no names/indices; no Android pixels or material runtime claim."
+}
