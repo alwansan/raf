@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261106T005610Z-T1-chat-6d2b91",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6ad65acbeef9d99ec7990c354c16fca9d86cee63",
   "intended_files": [
     "scripts/t1_fft_spirv_read_provenance.py",
@@ -11,5 +11,11 @@
     ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
   ],
   "experiment_key": "fft-slot0-lane-sensitive-coordinate-carrier",
-  "updated_at": "2026-11-06T00:56:10Z"
+  "updated_at": "2026-11-06T00:56:10Z",
+  "source_commit": "aab0f530bb7805049f6d0e270a04d20546ba82c0",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42140443482"
+  ],
+  "result": "Promoted authentic slot 0 source Load X and Y independently traverse sint32-to-float32 then float32-to-sint32 through vector operations, ending upstream at integer loads. Both butterfly X lanes still end at float loads after a single observed cast. Unmodified original and roundtrip output parity passed on Mesa Vulkan. No private rewrite or Unity/Android validation yet.",
+  "next_step": "Prototype a source-Load-only integer carrier rewrite in scratch, preserving both lane shuffles, then compare against original Vulkan and Unity address traces. Keep butterfly lanes separate until their reaching writes are resolved."
 }
