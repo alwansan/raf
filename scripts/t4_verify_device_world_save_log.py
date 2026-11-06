@@ -172,6 +172,17 @@ def summarize(paths):
                 # Startup and rotated segment files may contain exactly the
                 # same event. Duplicate sequence is accepted only if identical.
                 if record.get("area") == "logging" and record.get("operation") == "queue_overflow":
+                    # PersistentDiagnosticLog.Drain emits a *different*,
+                    # intentionally session-free record for dropped events:
+                    # {"area":"logging","operation":"queue_overflow","dropped":N}.
+                    # Validate its entire shape before letting this untrusted
+                    # line suppress cross-session world/save evidence hints.
+                    # The producer uses a signed Int64 counter; bool is not a
+                    # valid integer despite Python's bool subclassing int.
+                    lost = record.get("dropped")
+                    if (set(record) != {"area", "operation", "dropped"}
+                            or type(lost) is not int or not (1 <= lost < 2**63)):
+                        raise EvidenceInputError("invalid_overflow_record")
                     invalid_truncation = True
                     continue
                 session = record.get("session")
