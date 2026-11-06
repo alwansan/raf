@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c",
+  "owner": "T5",
+  "session_id": "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "type": "integration",
+  "at": "2026-11-06T17:36:00Z",
+  "summary": "Source-only LogRaft SurfaceFlinger epoch guard prevents false mixed Raft-process FPS medians. True pinned CL data CI42263013004 SUCCESS 30/30 tests; original 190 samples 57 vs 2 fresh, 57 vs 0 post-error; NOT_COMPARABLE. No game FPS speedup or device build proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42263013004",
+    "docs/T5_REAL_CL_PERFORMANCE_COHORT_2026-11-06.md",
+    "prompt/coordination/experiments/T5/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json"
+  ],
+  "limits": [
+    "source-only",
+    "not Unity performance or GPU validation",
+    "NOT_READY 0/3"
+  ]
+}
