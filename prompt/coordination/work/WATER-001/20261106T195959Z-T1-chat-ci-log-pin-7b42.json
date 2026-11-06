@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T195959Z-T1-chat-ci-log-pin-7b42",
+  "issue_id": "WATER-001",
+  "track": "Historical original FFT/Unity evidence CI source-log authentication",
+  "status": "active",
+  "base_sha": "a0a86b07e093ea404982a078159d53a257e20c02",
+  "updated_at": "2026-11-06T19:59:59Z",
+  "resumed_from_sessions": [
+    "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
+    "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+    "20261106T1907Z-T1-scheduled-report-shape-n8v2"
+  ],
+  "experiment_key": "source-only-verify-pinned-success-run-job-metadata-and-unique-live-fft-ci-logs-for-original-signed-input-vs-candidate-phi-and-unity-zero63-v1",
+  "resource_key": "none: source-only on GitHub Actions, no Unity/mutex/native build",
+  "hypothesis": "Manually transcribed safe original/Input vs translated Phi and Unity zero63 sourcefree markers can be checked against live GitHub Actions pinned historical run SHA, successful job IDs and unique marker payloads, without disclosing raw logs or original files; runtime FFT mapping still unproven.",
+  "intended_files": [
+    "scripts/t1_fft_historical_ci_log_verify.py",
+    "tests/test_t1_fft_historical_ci_log_verify.py",
+    ".github/workflows/raft-t1-fft-original-phi-bridge.yml",
+    "prompt/coordination/work/WATER-001/20261106T195959Z-T1-chat-ci-log-pin-7b42.json",
+    "prompt/coordination/experiments/T1/20261106T195959Z-T1-chat-ci-log-pin-7b42.json",
+    "prompt/coordination/clients/T1/sessions/20261106T195959Z-T1-chat-ci-log-pin-7b42.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T195959Z-T1-chat-ci-log-pin-7b42.json"
+  ],
+  "evidence_runs": [
+    42220554705,
+    42228497335,
+    42279949574
+  ],
+  "native_run_not_touched": 42281310905,
+  "trial_vote": "لا يحتاج",
+  "next_step": "Verify three immutable run/job success metadata and unique historical safe marker values, then publish source-only CI proof; never publish raw logs/shaders."
+}
