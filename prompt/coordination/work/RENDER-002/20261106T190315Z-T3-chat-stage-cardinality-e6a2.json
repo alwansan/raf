@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T190315Z-T3-chat-stage-cardinality-e6a2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "track": "colors-shaders",
+  "status": "active",
+  "updated_at": "2026-11-06T19:03:15.893Z",
+  "base_sha": "322908960532923deb0f16c359885fc9c423bdb2",
+  "resumed_from_sessions": [
+    "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
+    "20261106T1828Z-T3-scheduled-contract-fixture-b6e1"
+  ],
+  "hypothesis": "The eight-stage original DCL 24/10/10 global equality can conceal per-stage or per-keyword resource-family count drift after VKD3D translation; detect exact stage-local cardinality before attempting register provenance join.",
+  "approach": "Extend existing authenticated DCL↔SPIRV family census with count-only exact per-stage/keyword family cardinality mismatches (including combined image-samplers), strong fail-closed synthetic cross-stage offset control, run one original SHA-pinned workflow with manually re-armed one-shot trigger and return it manual-only. No game assets touched.",
+  "resource_key": "zip2-15964-Particle108-4-owner-6-scenes-DXBC-SPV-only",
+  "experiment_key": "T3-SHA15964-fourpair-eight-stage-DCL-SPV-per-stage-cardinality-20261106-e6a2",
+  "intended_files": [
+    "scripts/t3_particle108_dcl_spv_family_census.py",
+    "tests/test_t3_particle108_dcl_spv_family_census.py",
+    ".github/workflows/raft-t3-particle108-dcl-spv-family-census.yml",
+    "prompt/coordination/requests/t3-dcl-spv-stage-cardinality-e6a2.trigger",
+    "prompt/coordination/experiments/T3/20261106T190315Z-T3-chat-stage-cardinality-e6a2.json",
+    "prompt/coordination/clients/T3/sessions/20261106T190315Z-T3-chat-stage-cardinality-e6a2.md",
+    "prompt/coordination/B_TEAM/events/T3/20261106T190315Z-T3-chat-stage-cardinality-e6a2.json"
+  ],
+  "related_work": [
+    "T3 scheduled 20261106T1828Z-T3-scheduled-contract-fixture-b6e1: owns scripts/t3_dxbc_spirv_contract_join.py; do not edit it"
+  ],
+  "constraints": [
+    "Source numbers and per-stage descriptors stay inside ephemeral CI",
+    "Do not infer register identity from equality of counts",
+    "No native build, .meta, GUID, APK or game source changes",
+    "T3 trial vote remains لا يحتاج until original genuine ShaderLab program integrated"
+  ],
+  "result": null,
+  "next_step": "Implement unit tests for offsetting per-stage drift; original staged workflow returns anonymized totals and per-stage mismatch counters; decide exact semantic provenance next."
+}
