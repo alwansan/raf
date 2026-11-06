@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "status": "active",
-  "updated_at": "2026-11-06T00:04:07.413Z",
+  "updated_at": "2026-11-06T00:13:50.057Z",
   "base_sha": "a5fb5ee852df285590dff7643ebbbeb58c436b94",
   "track": "Authentic one missing Particle108 Texture2D nonexportable container export pointer against same-export Material YAML",
   "hypothesis": "The third source Texture2D28 class28, present in collection.Exportable=false and omitted from B02 exportable trace, may have a valid container.CreateExportPointer matching the tenth nonnull exported Material TexEnv PPtr, distinguishing an engine/builtin alias from a real mismatch.",
@@ -28,9 +28,11 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T000407Z-T3-chat-nonexportable-pointer-b42f.json",
     "docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md",
     "prompt/coordination/discussions/RENDER-002/20261106T000407Z-T3-chat-nonexportable-pointer-b42f-to-T5.md",
-    "prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+    "prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json",
+    "prompt/coordination/B_TEAM/issues/RENDER-002.json",
+    ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
   "status_note": "No active queued CI observed at scope registration; work only on isolated T3 source and dedicated workflow.",
   "run_urls": [],
-  "next_step": "Add private exact C# container export pointer for nonexportable class28 to temp B02 trace, safe Python compare against actual 10th Material TexEnv YAML and synthetic fail-closed tests; rerun isolated one real pinned 12-owner+one resS AssetRipper CI. No Android device success claim."
+  "next_step": "CI42134436841 SUCCESS source/export 10/10 including exact nonexportable container pointer; attach evidence to RENDER-002 OPEN, refresh T team canonical index and close scoped work. Remaining APK/OBB actual device pixels unverified."
 }
