@@ -1,0 +1,31 @@
+{
+  "session_id": "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "c2f399ebe1fa749c93f68fb21c2ebd729f01c601",
+  "resumed_from_sessions": [
+    "20261106T0943Z-T4-scheduled-q7n4",
+    "20261106T0843Z-T4-scheduled-r6v2",
+    "20261106T0740Z-T4-scheduled-p4k8"
+  ],
+  "intended_files": [
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    "prompt/coordination/work/INPUT-005/T4-20261106T0946Z-T4-chat-pointer-view-ci-q4r8-source-regression-coverage.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.md",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.json",
+    "prompt/coordination/experiments/T4/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.json"
+  ],
+  "experiment_key": "T4-input005-post-446bc1f0-view-identity-static-python-ci-coverage-original-mouse-workflow-v1",
+  "resource_key": "T4-isolated-python-source-ci-no-unity",
+  "hypothesis": "The dedicated T4 mouse capture workflow does not include the post-446bc1f0 pointer View identity regression file in its sparse checkout, triggers, or unittest run. Integrating it should execute deterministic source-only checks and prevent future View-identity regressions without touching Android production code.",
+  "updated_at": "2026-11-06T09:46:00Z",
+  "excluded_scopes": [
+    "AndroidPhysicalMouseCapture.cs production logic",
+    "T4 scheduled q7n4 release-target gap",
+    "T5 APK/OBB delivery",
+    "T1 FFT and T2 Foam",
+    "touch UI/layout"
+  ],
+  "next_step": "Add the source-only Python regression to the existing T4 mouse workflow path filters, sparse checkout and isolated Python unittest; verify actual Actions run commit SHA; retain device-unknown boundary."
+}
