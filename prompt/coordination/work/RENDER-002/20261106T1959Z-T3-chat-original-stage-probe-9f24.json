@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "colors-materials",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a34b0137e06d5c4a5d6e90cc2fb60945ad2ffa16",
-  "updated_at": "2026-11-06T19:59:00Z",
+  "updated_at": "2026-11-06T20:02:00Z",
   "approach": "Run a single bounded source-original ZIP2 SHA-pinned eight-stage SPIRV family count and typed debug-candidate probe using an isolated one-shot push-only workflow and private staging. Preserve existing manual-only workflow. Read actual terminal safe counters; remove one-shot push trigger after queue. No native build, no game assets, no unredacted source.",
   "hypothesis": "Original total resource family count match can hide per-stage drift, while actual VKD3D translated SPIRV may contain zero usable typed OpName debug label candidates; decide both empirically before explicit mapping is integrated.",
   "experiment_key": "T3-PARTICLE108-ZIP2-15964ea8-SHA8STAGE-DCL-SPV-per-stage-typed-OpName-once-9f24",
@@ -34,5 +34,16 @@
     "Restore/remove one-shot trigger after it queues; do not touch native requests or trial vote",
     "Result proves only stage counts/typed debug candidates, never ShaderLab/Android rendering"
   ],
-  "next_step": "Create one-shot workflow identical to manual source-only SHA-pinned pipeline with minimal exact marker push paths, no duplicate, then verify CI status/terminal counts and record experiment evidence."
+  "next_step": "Use active T3 VKD3D explicit per-stage mapping as trustworthy source D3D register to SPV set/binding provenance; then original four keyword VS/FS ShaderLab and Unity+Adreno device. RENDER-002 stays OPEN/NOT_READY, trial T3 stays لا يحتاج.",
+  "result": "CI42284607990 success source-original ZIP2 four shader owners six scenes SHA pinned. 8/8 original keyword stages four resource-family counts exact equality, no per-stage missing family; SPV OpName typed candidates 20/44 matching but 24 uncovered and 0/8 fully named. Debug metadata nonauthoritative and no DX→VK set/binding equivalence proven. Temporary push trigger disarmed then workflow+marker deleted after terminal success. No native build, shader restoration or phone graphics.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42284607990"
+  ],
+  "source_sha": "0f29d6d729ead27f2c21479c76a492a89426a2be",
+  "source_original_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "artifact_id": 13536662902,
+  "cleaned_one_shot_files": [
+    ".github/workflows/raft-t3-particle108-original-once-9f24.yml",
+    "prompt/coordination/trigger/T3/20261106T1959Z-T3-chat-original-stage-probe-9f24.txt"
+  ]
 }
