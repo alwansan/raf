@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
   "issue_id": "INTEGRATION-001",
-  "status": "completed_actual_signed_apk_full_SHA_binary_manifest_and_apksigner_verified",
+  "status": "completed_signed_apk_SHA_aapt_apksigner_and_404_event_team_index_verified",
   "base_sha": "4401387ed6da0e0b5892fab2be28a6b3104d3e8e",
-  "updated_at": "2026-11-06T13:51:45.476Z",
+  "updated_at": "2026-11-06T13:53:50.182Z",
   "resumed_from_sessions": [
     "20261106T1316Z-T5-chat-nested-zip-c53a.md",
     "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
@@ -76,5 +76,15 @@
     "certificate_digest_metadata_available": false,
     "full_main_OBB_SHA_verified": false,
     "Android_phone_tested_this_cycle": false
+  },
+  "index": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42228975098",
+    "job_id": 127929642087,
+    "conclusion": "success",
+    "canonical_live_events": 404,
+    "bteam_tests": 11,
+    "tteam_tests": 3,
+    "fast_forward_only": true,
+    "no_force": true
   }
 }
