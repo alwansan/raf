@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "1b868a64fc1ffdb8e9ba0ceb5e4ba1dcb4f307aa",
   "resumed_from_sessions": [
     "20261106T220645Z-T1-chat-site2y-phi-9b61"
@@ -24,5 +24,38 @@
   ],
   "collision_check": "T1 CI 42302489519 success completed; only native 42296450023 in progress, no additional Unity/native dispatch. Other T2/T3/T4/T5 files untouched.",
   "trial_vote": "لا يحتاج",
-  "updated_at": "2026-11-06T22:17:28.528Z"
+  "updated_at": "2026-11-06T22:23:31.126Z",
+  "result": {
+    "source_commit": "17b043b4e729a3e0493467d8aa7d0577af7a2727",
+    "test_commit": "a581f1c89223bf31e83ead45e51883d560fbc582",
+    "pair_integration_commit": "0c7ebc3b4f1170df7edd847a7f4ac2a6b3e2184d",
+    "workflow_commit": "08f04692ff23e85499d6c7d8036837a6c12fc77b",
+    "first_original_ci": {
+      "run": 42304068126,
+      "source_only_job": 128188854863,
+      "private_original_job": 128188915314,
+      "result": "success",
+      "observed_true_self_ssa_recurrence_on_backedge": true,
+      "entry_path_no_self_ssa_recurrence": true,
+      "states": [
+        2,
+        7
+      ]
+    },
+    "second_ci": {
+      "run": 42304106607,
+      "source_job": 128189156035,
+      "source_tests_passed": 35,
+      "private_original_job": 128189212633,
+      "private_status": "in_progress_at_checkpoint"
+    },
+    "source_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "limitations": [
+      "Structural SSA syntactic self-dependence only",
+      "Actual runtime Phi edge choice unobserved",
+      "Original authored Unity kernel mapping not established",
+      "No device water pixels/numeric parity"
+    ]
+  },
+  "next_step": "Check run 42304106607 private-original-cpu (job128189212633) result; if failed, classify first real failure and fix without duplicate Unity native build. If success, mark completed and design keyed GPU per-invocation branch selection/invariance proof without publishing private Phi constants/coordinates."
 }
