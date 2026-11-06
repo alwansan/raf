@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name",
+  "owner": "T2",
+  "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
+  "origin": "chat",
+  "type": "result",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T13:56:00Z",
+  "summary": "Critical SHA-original Foam Shader find-name NEGATIVE: CI42229056366 SUCCESS, 12 source-free and Cecil literal first-formal controls. The exact Shader.Find string whose return is stored into a Shader field then passed to new Material(Shader), and whose material gets one original Foam CB0-named SetVector, differs from source-authentic original Foam Shader.m_Name (0 exact / 1 mismatch / 0 unknown). This compiled material path is not proven to load original Foam shader despite shared CB0 property name. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42229056366",
+    "docs/T2_FOAM_ORIGINAL_SHADER_FIND_NAME_MATCH_2026-11-06.md"
+  ],
+  "limits": "Only original name inequality; no conclusion whether requested name is another original Shader asset, an alias or fallback; no runtime asset or CB0 upload, no private names/digests/IL disclosed.",
+  "next_step": "T2/T5: downgrade any original Foam-specific claim from this Material.SetVector chain. Compare source original Shader references/Material links by Shader asset identity, then validate original CB0 upload and Adreno output."
+}
