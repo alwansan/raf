@@ -1,0 +1,14 @@
+{
+  "id": "20261106T161112Z-T1-chat-original-keyed-recorder-7be2",
+  "owner": "T1",
+  "session_id": "20261106T161112Z-T1-chat-original-keyed-recorder-7be2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T16:29:59.215Z",
+  "summary": "SHA-original ZIP2 SPIR-V slot0 directly instrumented with signed3 GlobalInvocationId and StorageBuffer set0 binding3, 3 ImageFetch sites; source-authentic Vulkan CI 42252268973 SUCCESS after SPIR-V 1.3 interface fix. 384 real keyed records [64,256,64], 0 duplicates, original instrumented vs unmodified same-host GPU output invariant over 64 written pixels, private assembly/source/trace cleaned. Source-only 42252142102 PASS 127/127. Previous HLSL candidate produced independent 384 keyed records but actual same-input original-vs-candidate numerical pair NOT YET compared. WATER-001 OPEN, Adreno water not proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42252142102",
+    "https://github.com/alwansan/raf/actions/runs/42252268973",
+    "https://github.com/alwansan/raf/commit/e9ef2627d8bc09e007c5d2d59da1385136e5778b"
+  ]
+}
