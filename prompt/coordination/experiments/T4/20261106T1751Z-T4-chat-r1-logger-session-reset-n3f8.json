@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-LOCAL005-reinitialize-same-process-fresh-logger-dedup-first-Unity-error-synthetic-AndroidRuntimeLog-dotnet8-v1",
+  "hypothesis": "RepeatedDiagnosticMessages is static readonly, and SummarizeRepeated does not clear entries; first full original Error after Shutdown and re-Initialize same process is suppressed from new sink even when no prior error in that session.",
+  "source_commit": "12d80d12a85dc8e2d62a3b035abaf25d6012cc8f",
+  "test_only_sha": "1ad6f6a7392ef94cadbfba7c5008f6444658ea71",
+  "commands": [
+    "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo"
+  ],
+  "test_setup": "Real conditionally compiled AndroidRuntimeLog.cs under UNITY_ANDROID .NET8 with test-only UnityEngineStubs; first synthetic blocked directory path is restored, first saved Error recorded and Shutdown called; same persistentDataPath in same process then Initialize and identical Error to require newly durable first record; each session independent and JSONL strict.",
+  "negative_controls": [
+    "Before fix, real-source CI42264862203 failed check298 at Program.cs:284 on first Error after new Initialize.",
+    "Within each session, a second identical error remains deduplicated; across distinct real JSONL sessions exactly two original operation=Error stack records persist.",
+    "First startup, failover, queue overflow, rotation, same-process idempotent Initialize, repeated summaries and source-only Android smoke remain."
+  ],
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42265007972",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42264862203",
+    "https://github.com/alwansan/raf/actions/runs/42265007972",
+    "https://github.com/alwansan/raf/actions/runs/42265007954",
+    "https://github.com/alwansan/raf/actions/runs/42265008306"
+  ],
+  "artifact_urls": [],
+  "budget": "Existing source-only .NET8 diagnostics (no game assets/LFS) and independently triggered offline adapter/real original startup CI; no Unity native APK/OBB build.",
+  "status": "waiting_ci",
+  "observed_result": "RED CI42264862203 expected FAILURE at exact test-only SHA1ad6f6a, C# compiled actual AndroidRuntimeLog; Program.cs:284 check298. Production fix 12d80d12a8 replaces static readonly dedup with per-session object set before publishing fresh sink. Green diagnostics CI42265007972 and original startup/platform smoke are running.",
+  "rejected_hypotheses": [
+    "No actual owner-phone process-relative logger restart is inferred from source fixture.",
+    "This is isolated diagnostic fidelity, not a new qualifying APK trial improvement."
+  ],
+  "limitations": [
+    "Synthetic .NET8 Unity API only; not Unity/IL2CPP physical device.",
+    "Original .rgd, gameplay, shader/FFT, mouse, OBB, audio and Settings unaffected."
+  ],
+  "integration_commit": "12d80d12a85dc8e2d62a3b035abaf25d6012cc8f",
+  "trial_vote": {
+    "round": "trial-20261106-r1",
+    "owner": "T4",
+    "decision": "يحتاج",
+    "basis": "Significant earlier physical mouse source fix; not this test",
+    "unchanged": true
+  },
+  "next_step": "Confirm exact green CI; document and hand off. Preserve current T4 vote row without churn; do not touch T1/T2/T3/T5 rows."
+}
