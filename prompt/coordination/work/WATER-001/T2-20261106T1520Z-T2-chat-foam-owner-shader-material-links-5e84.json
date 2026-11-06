@@ -2,9 +2,9 @@
   "session_id": "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "71212a9a6f8c710b8a5064f5a3b48f0f190f1326",
-  "updated_at": "2026-11-06T15:20:00Z",
+  "updated_at": "2026-11-06T15:32:00Z",
   "resumed_from_sessions": [
     "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
     "20261106T1423Z-T2-scheduled-cecil-diagnostics-f6c1"
@@ -27,9 +27,27 @@
     "prompt/coordination/clients/T2/sessions/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84.md",
     "docs/T2_FOAM_ORIGINAL_OWNER_SHADER_MATERIAL_LINKS_2026-11-06.md",
     "prompt/coordination/experiments/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result.json",
+    "prompt/coordination/discussions/WATER-001/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-handoff.md"
   ],
   "active_actions_at_registration": "No in-progress branch Actions; T5 attestation latest success, T3 shader material source test had separate failure. No overlapping T2 Cecil work.",
   "safe_bounds": "Original 115978112B owner from SHA pinned ZIP2, UnityPy typed Shader/Material census, private Shader names only in RUNNER_TEMP, no raw game names/digests published. Require PPtr fileID0 + pathID2420 for direct same-file material links, no aliases or name guesses. Tests synthetic mocks.",
-  "ready_gate": "Not a Unity CB0 upload or mobile GPU test; WATER-001 OPEN."
+  "ready_gate": "Not a Unity CB0 upload or mobile GPU test; WATER-001 OPEN.",
+  "run_id": 42243327311,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42243327311",
+  "job_id": 127978991083,
+  "run_conclusion": "success",
+  "final_source_sha": "29b23e72522addc748560db7ca5b8f948d8aa7e1",
+  "sourcefree_tests_passed": 16,
+  "original_owner_and_managed_SHA_verified": true,
+  "result": "Original sharedassets0 owner contains 58 Shader and 351 Material objects, zero names or pointers unread; 0 local fileID=0/pathID=2420 Foam Material refs, 7 external Material shader PPtrs unresolved; exact compiled Shader.Find request name matched 0 other Shader names in same owner. Scope is one owner only; full original Material/Foam shader identity and 160B CB0 GPU upload unknown.",
+  "report": "docs/T2_FOAM_ORIGINAL_OWNER_SHADER_MATERIAL_LINKS_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result.json",
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-handoff.md",
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ],
+  "next_step": "Widen to other original Shader/Material owner asset files by exact SHA and resolve external m_Shader PPtr file tables, then bind Foam object/Material identity before any CB0 or Adreno fix. WATER-001 OPEN."
 }
