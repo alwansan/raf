@@ -6461,6 +6461,20 @@
       "_record_path": "../B_TEAM/events/T1/20261106T123411Z-T1-chat-y-inequal-branch-f52a.json"
     },
     {
+      "id": "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+      "owner": "T1",
+      "session_id": "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T12:51:46.047Z",
+      "summary": "Private original FFT slot0 butterfly1 X exact last whole-vector writer has selected scalar SSA chain OpVectorShuffle→OpBitcast(sint32_bits_to_float32)→OpVectorShuffle→OpLoad Input signed 32-bit vector. Three static X-affecting whole-vector writes, only one last writer possible at actual read in bounded CFG. No unknown alias/escape path observed. Source-authentic isolated Vulkan CI 42220554705 SUCCESS 16/16 synthetic controls and original SHA recovery. Original↔Unity 252/256 coordinate mismatch, authored binding and Adreno water remain unproven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42220554705",
+        "https://github.com/alwansan/raf/commit/00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -7129,6 +7143,24 @@
       "limitations": "Only one actual managed setter first-string formal and scalar IL opcode origins proven, not all original five CB0 vector members; no private names/data/IL printed; no game/Unity/GPU edit.",
       "next_step": "Investigate original field values' producer and receiving Material identity; coordinate Unity import with T1/T5 once ready.",
       "_record_path": "../B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json"
+    },
+    {
+      "id": "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e",
+      "type": "result",
+      "issue_id": "WATER-001",
+      "at": "2026-11-06T12:52:00Z",
+      "summary": "Original ZIP2 Foam CB0 SHA-authentic managed Cecil CI42220621927 SUCCESS: one source-authentic Material.SetVector first-formal has unique four-float ctor with 3 distinct original System.Single field inputs, one declaring class, 3 matching stfld IL sites in one original method. Receiver stack immediately before original name is guarded adjacent typed UnityEngine.Material instance-field load. Original runtime field values, Material.shader==Foam, full CB0 upload and Android water remain unproven; WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42220621927",
+        "docs/T2_FOAM_ORIGINAL_CB0_FIELD_WRITERS_RECEIVER_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/710ffd83b38554f45e602dba85d01027d7f8b4aa"
+      ],
+      "limitations": "No original source symbols/values/IL private binary published; no game ShaderLab or .meta/GUID/content/native workflow edits; static stfld sites do not prove runtime writes or original Foam Shader binding.",
+      "next_step": "Authentically tie loaded Material field to its producer and actual Foam shader; verify 3 field value writers and all original CB0 upload ranges before integration.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -9412,7 +9444,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2355b1645c3a51c415a3d9e899f57061ad30a2d763a89e3651d18ae02dd3fb1f",
+  "source_input_sha256": "c4642c74667c555eb69e88f1210ead66cf36a6a8989cd5cc06b3babb169849ef",
   "generation": "T-2026-11-05",
-  "input_sha256": "9a2af70fb5b1ea233d173b32ec9fe6aa08b6c52535e2cf7dcccd224864daff15"
+  "input_sha256": "d42e47833f52e707ff0e494e9027aa0c2fc9f5bce5fcd21ea9eee45b0c1bfda5"
 }
