@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1835Z-T4-chat-backup-byte-verify-z7n4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "original-offline-source-transaction",
+  "approach": "Fail closed on silent byte-inaccurate original C# or .cs.meta backup before mutating source, with two synthetic fault-injection tests",
+  "status": "active",
+  "base_sha": "f86e1ac9d651440bbb2aa98736dd01477ac65be9",
+  "intended_files": [
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_android_offline_startup.py"
+  ],
+  "hypothesis": "Unlike other original-source adapters, offline startup copies original C# and optional GUID meta but never validates backup payload before source overwrite; silent copy corruption makes rollback irrecoverable.",
+  "experiment_key": "T4-offline-original-backup-bytes-corrupt-copy2-PINS-synthetic-20261106",
+  "resource_key": "local-offline-source-only-no-native",
+  "related_work": [
+    "T4-20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3-offline-source-hardlink-guard"
+  ],
+  "taken_over_from": [
+    "B13 original offline source transaction safety"
+  ],
+  "experiment_ids": [
+    "20261106T1835Z-T4-chat-backup-byte-verify-z7n4"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add synthetic copy2 silent corruption negative controls, then byte-equivalence guard before any original write, confirm relevant source CI.",
+  "updated_at": "2026-11-06T18:35:10Z"
+}
