@@ -1,0 +1,18 @@
+{
+  "session_id": "20261106T093342Z-T1-chat-d82f",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "base_sha": "87fb84944bdff8b352f6d9a17eb53457a1b91722",
+  "status": "active",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-gate-regression.yml",
+    "prompt/coordination/work/WATER-001/20261106T093342Z-T1-chat-d82f.json",
+    "prompt/coordination/clients/T1/sessions/20261106T093342Z-T1-chat-d82f.md",
+    "prompt/coordination/experiments/T1/20261106T093342Z-T1-chat-d82f.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T093342Z-T1-chat-d82f.json"
+  ],
+  "experiment_key": "t1-source-free-sanitized-evidence-gate-exact-unittest-python3-ubuntu24-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-06T09:33:42Z",
+  "hypothesis": "The standing proof CI does not exercise either scheduled sanitized JSON guard; add existing tests to cheap push CI and validate exact HEAD."
+}
