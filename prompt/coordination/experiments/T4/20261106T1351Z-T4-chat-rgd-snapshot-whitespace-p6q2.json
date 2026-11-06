@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "In scheduled T4 duplicate-key guard, r'(?:^|;\\\\s*)' regex matches literal backslash-s, so even a legitimate length_class preceded by '; ' is ignored; prior valid snapshot records become contradictory.",
+  "experiment_key": "T4-LOCAL005-JSONL-snapshot-count-fields-whitespace-correction-regression-r42227641309-v1",
+  "source_commit": "66b45b86d7723ef80221da5087967bbb4b8c9936",
+  "workflow_path": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42228168580",
+  "inputs": [
+    "source-only JSONL synthetics; no user world/rgd files"
+  ],
+  "negative_controls": [
+    "duplicate exists flag with space/tab -> contradictory",
+    "duplicate length flag with space/tab -> contradictory",
+    "legitimate exists+length class with optional diagnostic tokens remains nonzero",
+    "cross-session nonzero hints only when events unambiguous; no same-world, process-exit, durability inference"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t4_verify_device_world_save_log.py' -v",
+    "python3 -m unittest scripts.test_t4_overflow_gate -v"
+  ],
+  "run_result": "Exact final CI42228168580 COMPLETED SUCCESS on source 66b45b86: 23/23 real Python parser control cases (including previous three failures and two new positive/negative whitespace duplicates), 2/2 overflow controls = 25/25 source-free. Earlier CI42227641309 failed three tests; original whitespace escaping error corrected. No original game data, Android player or phone data tested.",
+  "status": "completed_source_free_ci_verified_device_unverified",
+  "original_input_used": false,
+  "device_verified": false,
+  "limitations": [
+    "Source-free log parser tests do not prove that the Android game wrote a durable world .rgd, restarted, or actually played.",
+    "Owner-confirmed playable/save/reopen only belongs to earlier artifact42058825739, not later mobile candidate.",
+    "Other agent original managed seven-owner-world CLR tests not used here."
+  ],
+  "next_step": "Use new matched signed Raft APK/OBB SHA/versionCode on owner POCO F5 Pro, collect private post-source JSONL + real world save/force-stop/reopen and actual hardware mouse focus/menu; source-only hints do NOT prove same-world durability. T4 1221Z original CLR fresh-process RGD scope remains independent.",
+  "updated_at": "2026-11-06T13:47:55.647Z"
+}
