@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-LOCAL005-JSONL-duplicate-object-members-and-nonfinite-JSON-ambiguous-evidence-sourcefree-original-logger-v1",
+  "hypothesis": "Python json.loads silently accepts duplicate object members with last-member winning and nonstandard NaN/Infinity, allowing untrusted JSONL to be interpreted as alternate save events.",
+  "source_commit": "74607f816ab4bd6dd35686f928fe3d81bbb60494",
+  "workflow_path": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42230233069",
+  "test_commands": [
+    "python3 -m unittest discover -s tests -p test_t4_verify_device_world_save_log.py -v",
+    "python3 -m unittest scripts.test_t4_overflow_gate -v"
+  ],
+  "controls": [
+    "three varied duplicate top-level session/operation/detail records rejected without private values",
+    "duplicate nested optional object members rejected",
+    "NaN,Infinity,-Infinity tokens rejected",
+    "valid unique nested optional fields plus identical rotated startup/segment replay accepted",
+    "prior snapshot whitespace/nonzero/false-hint negatives must continue passing"
+  ],
+  "status": "waiting_ci",
+  "observed_result": "Source-only previous exact commit 9b44be1d CI42230129397 SUCCESS; final source+new regression commit 74607f8 run42230233069 queued at last check.",
+  "privacy": "No phone logs, original .rgd or native game assets loaded; synthetic strings only; exceptions emit fixed category.",
+  "limitations": [
+    "Parser success never proves same world or full process restart.",
+    "Original owner artifact42058825739 was older, no post-fix device.",
+    "No Android APK/OBB produced; hardware mouse and water missing remain open."
+  ],
+  "next_step": "Read exact 42230233069 conclusion and job log; if success close source-only scope, publish T5 handoff; if failing fix only exact CIs.",
+  "updated_at": "2026-11-06T14:02:15.604Z"
+}
