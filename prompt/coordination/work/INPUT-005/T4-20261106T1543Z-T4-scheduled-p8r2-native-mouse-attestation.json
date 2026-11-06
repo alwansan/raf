@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1543Z-T4-scheduled-p8r2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-06T15:43:00Z",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1543Z-T4-scheduled-p8r2-native-mouse-attestation.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1543Z-T4-scheduled-p8r2.md"
+  ],
+  "experiment_key": "mouse-attestation-owner-42058825739-vs-current-source-20261106",
+  "resource_key": null,
+  "hypothesis": "Existing owner phone capture predates current pointer-capture telemetry; source checks alone cannot attest on-device pointer behavior. T5 new OBB marker absence must not be misclassified as corrupt main OBB.",
+  "resumed_from": [
+    "20261106T1440Z-T4-scheduled-c9q2",
+    "20261106T0130Z-T4-chat-touchpad-device-source-q4m7"
+  ],
+  "taken_over_from": [
+    "B07",
+    "B14",
+    "B19",
+    "B37",
+    "B50"
+  ]
+}
