@@ -12,9 +12,10 @@ def raw_named(outputs):
     return {"outputs":[{"location":loc,"type":typ,"name":name} for loc,typ,name in outputs]}
 
 class HLSLVertexWidthOriginTests(unittest.TestCase):
-    def check(self,source,roundtrip,fields,raw=None):
+    def check(self,source,roundtrip,fields,raw=None,raw_roundtrip=None):
         return classify(source_stage(source),source_stage(roundtrip),
-                        raw_named([] if raw is None else raw),fields)
+                        raw_named([] if raw is None else raw),fields,
+                        raw_roundtrip=None if raw_roundtrip is None else raw_named(raw_roundtrip))
 
     def test_generated_output_struct_fields_and_builtins(self):
         hlsl=("struct SPIRV_Cross_Output {\n"
@@ -115,6 +116,39 @@ class HLSLVertexWidthOriginTests(unittest.TestCase):
         self.assertNotIn(private_name,str(d))
         self.assertNotIn("TEXCOORD379",str(d))
         self.assertEqual(d["source_to_hlsl_exact_name_type_equal"],1)
+
+    def test_roundtrip_same_output_name_same_type_but_relocated(self):
+        fields=extract_output_struct("struct SPIRV_Cross_Output { float4 name1 : TEXCOORD0; };")
+        d=self.check([(0,"vec4")],[(4,"vec4")],fields,
+                     [(0,"vec4","name1")],[(4,"vec4","name1")])
+        self.assertEqual(d["roundtrip_named_output_records"],1)
+        self.assertEqual(d["source_to_roundtrip_exact_name_matches"],1)
+        self.assertEqual(d["source_to_roundtrip_exact_name_type_equal"],1)
+        self.assertEqual(d["source_to_roundtrip_exact_name_location_changed"],1)
+        self.assertEqual(d["hlsl_to_roundtrip_exact_name_type_equal"],1)
+
+    def test_roundtrip_name_not_preserved_does_not_guess_location(self):
+        fields=extract_output_struct("struct SPIRV_Cross_Output { float4 original1 : TEXCOORD0; };")
+        d=self.check([(0,"vec4")],[(0,"vec4")],fields,
+                     [(0,"vec4","original1")],[(0,"vec4","rebuilt1")])
+        self.assertEqual(d["roundtrip_named_output_records"],1)
+        self.assertEqual(d["source_to_roundtrip_exact_name_matches"],0)
+        self.assertEqual(d["source_to_roundtrip_exact_name_location_same"],0)
+        self.assertEqual(d["hlsl_to_roundtrip_exact_name_matches"],0)
+
+    def test_roundtrip_reflection_forged_location_type_rejected(self):
+        fields=extract_output_struct("struct SPIRV_Cross_Output { float4 v : TEXCOORD0; };")
+        with self.assertRaisesRegex(ValueError,"unverified_named_roundtrip_location_type"):
+            self.check([(0,"vec4")],[(0,"vec4")],fields,
+                       [(0,"vec4","v")],[(0,"vec2","v")])
+
+    def test_roundtrip_output_same_name_changed_type_class_is_not_identity(self):
+        fields=extract_output_struct("struct SPIRV_Cross_Output { float4 name1 : TEXCOORD0; };")
+        d=self.check([(0,"vec4")],[(0,"ivec4")],fields,
+                     [(0,"vec4","name1")],[(0,"ivec4","name1")])
+        self.assertEqual(d["source_to_roundtrip_exact_name_matches"],1)
+        self.assertEqual(d["source_to_roundtrip_exact_name_type_equal"],0)
+        self.assertEqual(d["hlsl_to_roundtrip_exact_name_type_equal"],0)
 
     def test_size_limit_fails_closed(self):
         with self.assertRaisesRegex(ValueError,"invalid_private_generated_hlsl_scope"):
