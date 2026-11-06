@@ -7,7 +7,7 @@
   "issue_id": "LOCAL-005",
   "track": "real-owner-5nov-world-save-jsonl-evidence",
   "base_sha": "63994936f9c476642abd6494893f937705962266",
-  "status": "active",
+  "status": "completed",
   "approach": "Analyze actual immutable 5-Nov CL owner Android raft-logs (three session JSONL files) in ephemeral GitHub Actions, verifying original SaveGame/SaveWorld/SaveUser/Load/Restore/ready event sequence and conservative evidence classifier. Publish only privacy-safe per-session event counts and caveats, no device IDs, paths or original RGD.",
   "intended_files": [
     "scripts/t4_owner5nov_jsonl_lifecycle.py",
@@ -24,8 +24,12 @@
   "taken_over_from": [
     "T4 prior synthetic real-log classifier, owner report docs/DEVICE_FEEDBACK_42058825739_AR.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-06T19:18:00Z",
-  "next_step": "Implement safe bounded runner-only JSONL original lifecycle aggregation and synthetic negative controls, run pinned CL immutable SHA CI; verify third session rather than inferring phone acceptance from first two logs."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42279653393",
+    "https://github.com/alwansan/raf/actions/runs/42279906350",
+    "https://github.com/alwansan/raf/actions/runs/42280021182"
+  ],
+  "result": "Actual 3-session owner CL520c4c immutable phone JSONL source-only read: strict real Git blob SHA validation and 8 synthetic tests GREEN CI42280021182 on cba461ecd1. Original game world completed 4 times; 7 paired SaveGame/SaveWorld/SaveUser, 14 nonzero Save.argumentFileSnapshot, 7 Load<T> plus nonzero Load snapshots, 2 RestoreRGDGame/RestoreUser, zero Load.caughtException and observed queue_overflow. Source-only negative test on ee94a751 CI42279906350 expected failure for equal-size impostor, fixed via per-blob SHA. Does NOT prove new APK/OBB phone readiness, actual same-world or process relaunch.",
+  "updated_at": "2026-11-06T19:31:00Z",
+  "next_step": "Source files released; next scheduled/chat T4 avoid duplicate CI. Use exact signed candidate and owner private log/RGD for real same-world save/force-stop/reopen and physical mouse, or distinct original-world source defect. Preserve no5/5 trial vote, no native build."
 }
