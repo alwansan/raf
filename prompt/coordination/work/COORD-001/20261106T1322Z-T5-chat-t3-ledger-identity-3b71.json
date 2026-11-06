@@ -6,12 +6,12 @@
   "issue_id": "COORD-001",
   "status": "active",
   "base_sha": "8094f937da92aa5357604f7dc3a2f3f57a1195e2",
-  "updated_at": "2026-11-06T13:21:01.009Z",
+  "updated_at": "2026-11-06T13:24:10.822Z",
   "resumed_from_sessions": [
     "20261106T1316Z-T5-chat-nested-zip-c53a.md",
     "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md"
   ],
-  "experiment_key": "T5-canonical-live-ledger-T3-20261106T1308-missing-explicit-id-CI42224618618-v1",
+  "experiment_key": "T5-canonical-live-ledger-T3-1308+1311-two-records-unique-explicit-identity-CI42224979906-v2",
   "resource_key": "Single existing T3 postvendor source-only event JSON; immutable session_id, no changes to T3 source work or workflow",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42224618618"
@@ -23,8 +23,10 @@
     "prompt/coordination/clients/T5/sessions/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.md",
     "prompt/coordination/experiments/T5/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json",
     "prompt/coordination/B_TEAM/events/T5/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json",
-    ".github/workflows/raft-t5-ledger-refresh.yml"
+    ".github/workflows/raft-t5-ledger-refresh.yml",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1.json"
   ],
   "coordination": "T3 latest 1311Z event exists and no T3 active CI at scope; add only canonical id to 1308Z T3 event equal to authored session_id; CAS blob and preserve all authored fields. T2 jobs unrelated, no touch.",
-  "next_step": "Surgical explicit id field then strict ledger index refresh; avoid parser heuristic or dropping events."
+  "next_step": "CAS update only id in 13:11 event to distinct 20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1, preserving original session. Rerun strict full ledger after two-record original event sanity check.",
+  "additional_observation": "All 17 T3 event files from 2026-11-06 were enumerated: after fixing 13:08, exactly 13:11 remains malformed. The 13:11 confirmation record has SAME session_id as 13:08. Assign a distinct explicit id equal to its unique event-file identity instead, preserve same session_id and all 28 original keys, prevent parser-inferred ID and duplicate collision."
 }
