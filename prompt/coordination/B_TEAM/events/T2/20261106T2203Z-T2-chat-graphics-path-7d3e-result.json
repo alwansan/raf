@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2203Z-T2-chat-graphics-path-7d3e-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2203Z-T2-chat-graphics-path-7d3e",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "summary": "SHA-original typed Mono.Cecil IL proves both 2/2 exact Foam Material→UnityEngine.Graphics consumer sites use Graphics.Blit, not DrawMesh; 13 original Material field loads, 56+6 Python and C# selftests pass. No Unity/device runtime claim.",
+  "at": "2026-11-06T22:10:30.652Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42302222142",
+    "https://github.com/alwansan/raf/commit/3bbb7b040b7a626e61f68e5572d402ee49a93a4d",
+    "docs/T2_ORIGINAL_FOAM_TYPED_GRAPHICS_ROUTE_2026-11-06.md"
+  ]
+}
