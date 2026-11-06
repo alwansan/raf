@@ -1,0 +1,21 @@
+{
+  "id": "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T18:12:36.994Z",
+  "summary": "Added exact source-free Unity carrier-context evidence gate and 14 adversarial Python unit tests; 14/14 PASS locally and GitHub blob SHAs match tested source bytes. Real Unity sourcefree 10-category test still blocked (workflow not published). No original FFT, APK or Adreno result; T1 trial vote لا يحتاج unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/41e016403a179d885fd13c13b6a9eebcaeaa902a",
+    "https://github.com/alwansan/raf/commit/204944ec664c4e994d60b87f5fe40e3255fb7126",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261106T181000Z-T1-chat-carrier-report-gate-4c7d.md"
+  ],
+  "limitations": [
+    "local Python tests not Unity GPU",
+    "new Unity workflow missing due safety tool check",
+    "WATER-001 OPEN",
+    "T1 vote لا يحتاج"
+  ]
+}
