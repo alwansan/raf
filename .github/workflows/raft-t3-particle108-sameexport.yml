@@ -1,10 +1,6 @@
 name: T3 RENDER-002 original 108 Particle Shader48 exact five Materials three Textures same-export proof
 on:
   workflow_dispatch:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - '.github/workflows/raft-t3-particle108-sameexport.yml'
 permissions:
   contents: read
 concurrency:
