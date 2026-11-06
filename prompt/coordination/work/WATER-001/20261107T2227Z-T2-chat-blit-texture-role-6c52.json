@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261107T2227Z-T2-chat-blit-texture-role-6c52",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "ebc78f1c3f561433666d6355c45cc90edaad03fb",
-  "updated_at": "2026-11-06T22:33:50.966Z",
+  "updated_at": "2026-11-06T22:35:50.847Z",
   "resumed_from_sessions": [
     "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
     "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3"
@@ -34,9 +34,28 @@
     "https://github.com/alwansan/raf/actions/runs/42303074180"
   ],
   "native_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Inspect 42305522855: safe Python and Cecil selftest, exact original authenticated texture source and render target direct IL producer categories; if PASS document observed counts and limitations, if FAIL patch without weakening. Continue T5 native independently.",
+  "next_step": "Correlate exact direct Texture/RenderTexture source and destination producer categories with original Blit pass literal 0 vs 1 (per-site), without publishing original names/IL. Then investigate unknown producer privately; T5 authorised Unity runtime only.",
   "code_commit": "681c239c29959e420829b48ba24c4ab203ce9ca5",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42305522855"
-  ]
+  ],
+  "result": {
+    "original_SHA_pinned": true,
+    "source_only_CI": "SUCCESS",
+    "synthetic_report_tests": 63,
+    "synthetic_name_tests": 6,
+    "cecil_synthetic": "PASS",
+    "original_blit_sites": 2,
+    "original_pass0_literal": 1,
+    "original_pass1_literal": 1,
+    "source_typed_Texture": 0,
+    "source_typed_RenderTexture": 1,
+    "source_unknown": 1,
+    "destination_typed_RenderTexture": 1,
+    "destination_null": 0,
+    "destination_unknown": 1,
+    "correlation_per_pass_verified": false,
+    "android_water_pixels_verified": false,
+    "original_CB0_upload_verified": false
+  }
 }
