@@ -4,7 +4,7 @@
 - **origin:** `chat`; owner: `T3`; issue: **RENDER-002 OPEN / NOT_READY**
 - **resumed_from_sessions:** `20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd` (prior name/type only), `20261106T1828Z-T3-scheduled-contract-fixture-b6e1` (independent DXBC/SPIR-V explicit provenance work), `20261106T1756Z-T3-chat-cb-uniqueness-4f1a`
 - **base_sha:** `f86e1ac9d651440bbb2aa98736dd01477ac65be9`
-- **scope reserved first:** [work/20261106T1835Z-T3-chat-property-defaults-c42d.json](../../work/RENDER-002/20261106T1835Z-T3-chat-property-defaults-c42d.json), commit [36f23730](https://github.com/alwansan/raf/commit/36f23730cdc85d029b3c5c72ee477634f4e6e9e5)
+- **scope reserved first:** [work/20261106T1835Z-T3-chat-property-defaults-c42d.json](../../../work/RENDER-002/20261106T1835Z-T3-chat-property-defaults-c42d.json), commit [36f23730](https://github.com/alwansan/raf/commit/36f23730cdc85d029b3c5c72ee477634f4e6e9e5)
 - **origin and experiment key:** `T3-PARTICLE108-SAMEEXPORT-SHADER48-PROPERTY-DEFAULT-SEMANTICS-c42d`; source-only, no native build or shared Unity resource.
 - **trial vote:** T3 **لا يحتاج** in `trial-20261106-r1`; T4 alone had `يحتاج` in last table. No 5/5 consensus, no native request.
 
