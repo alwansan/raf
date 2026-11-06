@@ -1,0 +1,18 @@
+{
+  "session_id": "20261106T0527Z-T3-scheduled-identity-6e29",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "baseline_sha": "0583fb3df8b4e656868e747a101da7aa24031ef8",
+  "intended_files": [
+    "scripts/t3_shader_identity_gate.py",
+    "tests/test_t3_shader_identity_gate.py",
+    "prompt/coordination/clients/T3/sessions/20261106T0527Z-T3-scheduled-identity-6e29.md",
+    "prompt/coordination/work/RENDER-002/20261106T0527Z-T3-scheduled-identity-6e29.json"
+  ],
+  "experiment_key": "T3-postrestore-original-shader-guid-join-v1-sourcepin-required-no-export-run",
+  "resource_key": null,
+  "hypothesis": "Fail-closed explicit original-to-export ShaderImporter GUID linkage prevents aggregate material audit from being misread as original Shader48 identity proof.",
+  "taken_over_from": "T3 20261106T0431Z postrestore gate; prior T3 42136474867",
+  "updated_at": "2026-11-06T05:27:00Z"
+}
