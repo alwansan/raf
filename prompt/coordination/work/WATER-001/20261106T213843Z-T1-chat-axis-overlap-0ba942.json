@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T213843Z-T1-chat-axis-overlap-0ba942",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "1d608192634db991e246b812f84ead1ec422810c",
+  "resumed_from_sessions": [
+    "20261106T2114Z-T1-scheduled-axis-coverage-p7m2",
+    "20261106T2052Z-T1-chat-actual-variant-comparator-e28c"
+  ],
+  "experiment_key": "t1-fft-real-gpu-vulkan-unity-42289238865-42290211798-keyed-axis-frechet-overlap-source-only-v1",
+  "resource_key": "none: source-only counts; no Unity/ZIP2 GPU job",
+  "hypothesis": "Because site2 Y-zero collapse equals all 64 coordinate mismatches, site2 X/Y zero-collapse intersection is bounded exactly at 63/64; validate mathematically from real aggregate-only evidence and reject malformed or unverifiable counts without asserting pixel parity.",
+  "intended_files": [
+    "scripts/t1_fft_coordinate_axis_overlap_gate.py",
+    "tests/test_t1_fft_coordinate_axis_overlap_gate.py",
+    "prompt/coordination/work/WATER-001/20261106T213843Z-T1-chat-axis-overlap-0ba942.json",
+    "prompt/coordination/clients/T1/sessions/20261106T213843Z-T1-chat-axis-overlap-0ba942.md",
+    "prompt/coordination/experiments/T1/20261106T213843Z-T1-chat-axis-overlap-0ba942.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T213843Z-T1-chat-axis-overlap-0ba942.json"
+  ],
+  "collision_check": "T1 scheduled 21:14 axis coverage completed (source commits 824afdf,3d4a285; CI42295226507 success). This independent new file reads validated profile; no modification of scheduled classifier/tests. Native42296450023 in_progress; no Unity/native experiment or XAPK dispatch.",
+  "trial_vote": "لا يحتاج",
+  "taken_over_from": [
+    "20261106T2052Z-T1-chat-actual-variant-comparator-e28c"
+  ],
+  "execution_plan": "Implement a sound x/y overlap interval derived from per-site coordinate mismatch and zero-collapse aggregate counts after existing strict source-only marker validation; adversarial tests, no raw private logs committed.",
+  "updated_at": "2026-11-06T21:38:43Z"
+}
