@@ -26,6 +26,20 @@ SOURCE_STATUS=particle.STATUS
 MATCH="T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MATCH"
 MISMATCH="T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MISMATCH"
 EXPECTED_MATERIALS=5
+DOCUMENT_REASONS=frozenset((
+    "SOURCE_POINTER_INVALID", "EXPORT_ASSETS_INVALID",
+    "EXPORT_ASSETS_UNSAFE", "SELECTED_DOCUMENT_DUPLICATE",
+    "SELECTED_DOCUMENT_PARSE", "SELECTED_SAVEDPROPERTIES_ABSENT",
+    "SELECTED_COLOR_FIELD_ABSENT", "SELECTED_RGBA_SCHEMA",
+    "SELECTED_SCALAR_SCHEMA", "SELECTED_DOCUMENTS_MISSING",
+))
+class PrivateDocumentError(ValueError):
+    """Only an allowlisted category; no proprietary YAML payload is exposed."""
+    def __init__(self,code):
+        if code not in DOCUMENT_REASONS:
+            raise ValueError("unknown_private_material_document_category")
+        self.code=code
+        super().__init__("private_selected_material_document_"+code)
 SAFE_PHASES=frozenset((
     "SOURCE_SELECTED_GRAPH","ORIGINAL_RGBA_VALUES","ORIGINAL_SCALAR_VALUES",
     "SAME_EXPORT_W1_B02","EXPORTED_RGBA_YAML","EXPORTED_SCALAR_YAML",
@@ -54,14 +68,14 @@ def exported_selected_values(project, wanted):
                type(key[0]) is not int or key[0]<=0 or
                type(key[1]) is not str or len(key[1])!=32
                for key in wanted)):
-        raise ValueError("invalid_source_selected_export_Material_pointer_scope")
+        raise PrivateDocumentError("SOURCE_POINTER_INVALID")
     assets=project/"Assets"
     if (not assets.is_dir() or assets.is_symlink() or
         any(p.is_symlink() for p in (project,*project.parents))):
-        raise ValueError("unsafe_exported_original_Material_scope")
+        raise PrivateDocumentError("EXPORT_ASSETS_INVALID")
     entries=sorted(assets.rglob("*"))
     if len(entries)>150000 or any(p.is_symlink() for p in entries):
-        raise ValueError("unsafe_or_unbounded_exported_Material_inventory")
+        raise PrivateDocumentError("EXPORT_ASSETS_UNSAFE")
     guid_set={guid for _,guid in wanted}
     class StrictLoader(yaml.SafeLoader):
         def construct_mapping(self,node,deep=False):
@@ -103,23 +117,29 @@ def exported_selected_values(project, wanted):
             if key not in wanted:
                 continue
             if key in c or key in s:
-                raise ValueError("duplicate_source_selected_export_Material_document")
+                raise PrivateDocumentError("SELECTED_DOCUMENT_DUPLICATE")
             block=content[header.end():headers[idx+1].start()
                           if idx+1<len(headers) else len(content)]
             try:
                 data=yaml.load(block,Loader=StrictLoader)
             except (ValueError,TypeError,yaml.YAMLError):
-                raise ValueError("malformed_source_selected_exported_Material_YAML") from None
+                raise PrivateDocumentError("SELECTED_DOCUMENT_PARSE") from None
             if (type(data) is not dict or type(data.get("Material")) is not dict
                 or type(data["Material"].get("m_SavedProperties")) is not dict):
-                raise ValueError("source_selected_export_Material_saved_properties_missing")
+                raise PrivateDocumentError("SELECTED_SAVEDPROPERTIES_ABSENT")
             saved=data["Material"]["m_SavedProperties"]
             if "m_Colors" not in saved:
-                raise ValueError("source_selected_export_Material_color_field_missing")
-            c[key]=colors.normalize_colors(saved["m_Colors"],exported=True)
-            s[key]=scalars.normalize(saved,exported=True)
+                raise PrivateDocumentError("SELECTED_COLOR_FIELD_ABSENT")
+            try:
+                c[key]=colors.normalize_colors(saved["m_Colors"],exported=True)
+            except (ValueError,TypeError,KeyError,IndexError):
+                raise PrivateDocumentError("SELECTED_RGBA_SCHEMA") from None
+            try:
+                s[key]=scalars.normalize(saved,exported=True)
+            except (ValueError,TypeError,KeyError,IndexError):
+                raise PrivateDocumentError("SELECTED_SCALAR_SCHEMA") from None
     if set(c)!=wanted or set(s)!=wanted:
-        raise ValueError("original_five_selected_export_Material_documents_incomplete")
+        raise PrivateDocumentError("SELECTED_DOCUMENTS_MISSING")
     return c,s
 
 def assess(source_colors,source_scalars,w1,actual_colors,actual_scalars):
@@ -260,7 +280,7 @@ def run(original,manifest,project,w1_trace,b02_trace):
             raise ValueError("missing_or_colliding_selected_Material_export_ptr")
         exported_color,exported_scalar=exported_selected_values(project,pointers)
     except (ValueError,KeyError,TypeError) as exc:
-        raise PrivatePhaseError("EXPORTED_RGBA_YAML") from None
+        raise PrivatePhaseError("EXPORTED_RGBA_YAML") from exc
     try:
         result=assess(source_colors,source_scalars,w1,exported_color,exported_scalar)
     except PrivatePhaseError:
@@ -284,9 +304,15 @@ def main(argv=None):
     try:
         report=run(a.original,a.manifest,a.project,a.w1_trace,a.b02_trace)
     except Exception as exc:
+        reason = None
+        if isinstance(exc,PrivateDocumentError):
+            reason=exc.code
+        elif isinstance(exc,PrivatePhaseError) and isinstance(exc.__cause__,PrivateDocumentError):
+            reason=exc.__cause__.code
         report={"schema_version":1,"status":"INCONCLUSIVE",
                 "failure_type":type(exc).__name__,
                 "safe_phase":(exc.phase if isinstance(exc,PrivatePhaseError) else "UNCLASSIFIED"),
+                "safe_document_reason":reason,
                 "actual_Unity_import_GPU_color_or_phone_emitter_verified":False,
                 "private_Material_names_value_bytes_IDs_Guids_published":False}
     a.out.parent.mkdir(parents=True,exist_ok=True)
