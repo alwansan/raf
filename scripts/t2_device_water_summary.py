@@ -46,11 +46,20 @@ def classify(summary):
             "source": "pinned_CL_session_summary_final_game_UID"}
 
 
+def _reject_duplicate_keys(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate_json_key")
+        result[key] = value
+    return result
+
+
 def read(path):
     path = Path(path)
     if not path.is_file() or path.is_symlink() or path.stat().st_size > MAX_BYTES:
         raise ValueError("invalid_summary_file")
-    return classify(json.loads(path.read_text(encoding="utf-8")))
+    return classify(json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicate_keys))
 
 
 def main():
