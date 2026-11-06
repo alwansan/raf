@@ -1,0 +1,19 @@
+{
+  "id": "20261106T1815Z-T4-original-save-operation-trace-hardlink-s9m4",
+  "owner": "T4",
+  "session_id": "20261106T1810Z-T4-chat-save-trace-hardlink-s9m4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "source_fixed",
+  "summary": "T4 completed failclosed original SaveAndLoad/Raft_Network operation tracer hardlink alias guard for both C# and optional .cs.meta under SHA-pinned source staging. Red CI42268654636 test-only 9e9b7efe: exactly two new inode-alias tests fail, older 15 pass. Production 8e8e9e8d requires st_nlink==1 before backup or in-place mutation. Green CI42268781552 17/17 plus original adapted C# save diagnostics PASS; B22 CI42268781586, B50 CI42268781987, true original startup CI42268781607 and original world callback/coroutine/load/preflight runs completed success at same SHA. No original save schema or actual game source changed, no owner phone/Unity native, no new APK. T4 trial-20261106-r1 'يحتاج' unchanged for earlier substantial physical mouse integration, no 5/5 consensus.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42268654636",
+    "https://github.com/alwansan/raf/commit/8e8e9e8dba123d1ee0b185e45745b03a06c88add",
+    "https://github.com/alwansan/raf/actions/runs/42268781552",
+    "https://github.com/alwansan/raf/actions/runs/42268781586",
+    "https://github.com/alwansan/raf/actions/runs/42268781987",
+    "https://github.com/alwansan/raf/actions/runs/42268781607",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_SAVE_TRACE_ORIGINAL_SOURCE_INODE_GUARD_2026-11-06.md"
+  ],
+  "at": "2026-11-06T18:15:00Z"
+}
