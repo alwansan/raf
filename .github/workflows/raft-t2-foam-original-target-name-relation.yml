@@ -97,8 +97,8 @@ jobs:
           assert r['Android_Adreno_water_pixels_verified'] is False
           assert r['private_shader_names_or_digests_published'] is False
           assert all(type(v) in (str,int,bool) for v in r.values())
-          assert not any(x in raw for x in ('private_shader_name','original_external_paths',
-                                            'm_PathID','m_FileID','private_raw'))
+          assert not any(x in r for x in ('private_shader_name','original_external_paths',
+                                          'm_PathID','m_FileID','private_raw'))
           print('T2_FOAM_TARGET_NAME_RELATION_SAFE_ASSERTIONS pass')
           PY
       - name: Remove original data and all temporary target assets before publication
