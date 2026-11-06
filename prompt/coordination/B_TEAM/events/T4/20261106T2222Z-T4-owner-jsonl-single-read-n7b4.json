@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "session_id": "20261106T2215Z-T4-chat-immutable-log-snapshot-n7b4",
+  "origin": "chat",
+  "event": "original-owner-JSONL-provenance-sealed",
+  "timestamp": "2026-11-06T22:21:46.229Z",
+  "status": "completed_source_evidence",
+  "source_commit": "d7fcf317a9d6cfff7bb7e6313619eb8af2dfc8af",
+  "source_only_ci": "https://github.com/alwansan/raf/actions/runs/42303935027",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42303698497",
+  "experiment": "prompt/coordination/experiments/T4/20261106T2215Z-immutable-log-snapshot-n7b4.json",
+  "result": "Same-size concurrent path replacement no longer lets pinned original owner log parse events from unverified second read. 20/20 synthetic and pinned exact three original CL log SHA identities pass; 7 SaveGame plus 7 Load<T> fully traced markers retained.",
+  "boundaries": "Source log interpretation only, no Unity/IL2CPP, original RGD restart, phone world acceptance, signed package SHA or game readiness; native 42296450023 belongs T5 and remains independent.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "readiness": "NOT_READY 0/3",
+  "vote": "T4 trial-20261106-r1 unchanged needs physical mouse testing"
+}
