@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
   "issue_id": "COORD-001",
-  "status": "one_field_identity_repaired_canonical_index_pending",
+  "status": "completed_two_T3_event_ids_repaired_and_full_ledger_index_verified",
   "experiment_key": "T5-canonical-live-ledger-T3-20261106T1308-missing-explicit-id-CI42224618618-v1",
   "failure_run_url": "https://github.com/alwansan/raf/actions/runs/42224618618",
   "failure_reason": "strict canonical B_TEAM read_records ValueError: Missing record identity, exact T3 event 20261106T1308Z...",
@@ -16,5 +16,20 @@
   "android_device_tested": false,
   "original_game_modified": false,
   "next_step": "Trigger own strict canonical T5 index and verify source-only ledger includes T3 and new original signed APK/OBB evidence. No schema relaxation.",
-  "updated_at": "2026-11-06T13:21:58.767Z"
+  "updated_at": "2026-11-06T13:26:31.476Z",
+  "second_t3_event_path": "prompt/coordination/B_TEAM/events/T3/20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1.json",
+  "second_t3_fix_commit": "94b83de8542db51ab49349d867ee9ab8b7744049",
+  "second_t3_id": "20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1",
+  "shared_original_t3_session_id_preserved": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+  "second_t3_original_fields_unchanged": 28,
+  "first_t3_original_fields_unchanged": 16,
+  "index_url": "https://github.com/alwansan/raf/actions/runs/42225352448",
+  "final_index": {
+    "conclusion": "success",
+    "job_id": 127917317768,
+    "events": 395,
+    "Bteam_tests": 11,
+    "Tteam_tests": 3,
+    "source_only": true
+  }
 }
