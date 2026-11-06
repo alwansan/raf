@@ -68,6 +68,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_result_gate.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_private_unity_paired_capture.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_unity_trace_producer_gate.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_private_unity_input_join.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_original_direct_keyed_recorder.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_trace_variant.py -v
@@ -343,6 +344,12 @@ jobs:
             --unity-input-dir t1-original-derived-unity/T1UnityCapture \
             --unity-shader t1-original-derived-unity/Assets/T1TracePass0.compute \
             --manifest t1-original-derived-unity/T1PrivateActualPair.json
+          # Extra independent stage provenance: C# NUnit completion marker,
+          # physically SHA-matched original-derived candidate0/1 and injected
+          # trace shader/output. This is NOT Unity compiler attestation.
+          python3 -m scripts.t1_fft_unity_trace_producer_gate \
+            --project t1-original-derived-unity \
+            --pair-manifest t1-original-derived-unity/T1PrivateActualPair.json
           python3 - <<'PY'
           import json
           from pathlib import Path
