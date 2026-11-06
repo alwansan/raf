@@ -5,7 +5,9 @@ from copy import deepcopy
 from unittest.mock import patch
 
 from scripts.b24_original_foam_stage_translation import TARGET
-from scripts.t2_foam_private_cb0_managed_targets import _name, build_private_target_set
+from scripts.t2_foam_private_cb0_managed_targets import (
+    _name, build_private_target_set, _owner_catalog_from_rows,
+)
 
 
 def fixture():
@@ -61,6 +63,44 @@ class OriginalCb0NameTargetTests(unittest.TestCase):
             hashlib.sha256(TARGET.encode("utf8")).hexdigest())
         self.assertNotIn(TARGET, str(data))
         self.assertEqual(len(data["original_Foam_Shader_mName_SHA256_private"]), 64)
+
+    def test_owner_census_original_material_ref_requires_same_file(self):
+        result = _owner_catalog_from_rows(
+            [(2420, "PRIVATE_FOAM_NAME"), (3000, "PRIVATE_TARGET_SHADER"),
+             (3001, "PRIVATE_TARGET_SHADER")],
+            [(0, 2420), (1, 2420), (0, 3000), None],
+            "PRIVATE_FOAM_NAME", 2420)
+        self.assertEqual(result["original_owner_material_local_Foam_Shader_ref_count"], 1)
+        self.assertEqual(result["original_owner_material_external_Shader_ref_count"], 1)
+        self.assertEqual(result["original_owner_material_source_pointer_unparsed_count"], 1)
+        self.assertEqual(result["original_owner_other_shader_names_count"], 2)
+        self.assertEqual(result["original_owner_other_Shader_names_SHA256_private"], {
+            hashlib.sha256(b"PRIVATE_TARGET_SHADER").hexdigest(): 2,
+        })
+        self.assertNotIn("PRIVATE_TARGET_SHADER", str(result))
+        self.assertNotIn("PRIVATE_FOAM_NAME", str(result))
+        self.assertTrue(result["original_owner_material_Foam_PathID_other_fileID_not_counted"])
+        self.assertFalse(result["original_owner_material_ref_is_runtime_bound_verified"])
+
+    def test_owner_census_rejects_duplicate_and_wrong_original_identity(self):
+        for shaders in (
+            [(2420, "WRONG_FOAM")],
+            [(2420, "PRIVATE_FOAM"), (2420, "PRIVATE_FOAM")],
+            [(3000, "PRIVATE_OTHER")],
+            [(2420, "PRIVATE_FOAM"), (3000, "has\\x00invalid")],
+        ):
+            with self.subTest(shaders=shaders), self.assertRaises(ValueError):
+                _owner_catalog_from_rows(shaders, [], "PRIVATE_FOAM", 2420)
+
+    def test_owner_census_malformed_material_pointer_is_not_a_local_match(self):
+        result = _owner_catalog_from_rows(
+            [(2420, "PRIVATE_FOAM")],
+            [(0, 2420), (True, 2420), (0, "2420"), (0, -1),
+             (2, 2420), (0, 42)],
+            "PRIVATE_FOAM", 2420)
+        self.assertEqual(result["original_owner_material_local_Foam_Shader_ref_count"], 1)
+        self.assertEqual(result["original_owner_material_source_pointer_unparsed_count"], 3)
+        self.assertEqual(result["original_owner_material_external_Shader_ref_count"], 1)
 
     def test_incomplete_original_name_reference_is_not_invented(self):
         data = fixture()
