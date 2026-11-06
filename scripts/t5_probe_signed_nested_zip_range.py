@@ -14,6 +14,8 @@ import struct
 import sys
 import zipfile
 
+from scripts.t5_verify_apk_obb_pair import _verify_local_zip_headers
+
 from scripts.t5_probe_github_artifact_zip_range import (
     ARTIFACTS, MAX_MEMBERS, LimitedRangeIO, ProbeError, _github_request,
     _http_range_fetcher, _kind, _safe_member,
@@ -199,6 +201,7 @@ def scan_signed_checkpoint(parent: LimitedRangeIO, *, expected_apk_bytes=6728538
 
             with zipfile.ZipFile(MemberSliceIO(parent, apk_start, info["apk"].file_size),
                                  "r", allowZip64=True) as apk:
+                _verify_local_zip_headers(apk, apk.infolist())
                 apk_report = _guard_inner(apk, apk=True)
                 android_manifest = _read_small_prefix(apk, "AndroidManifest.xml", 8)
                 dex = _read_small_prefix(apk, "classes.dex", 8)
@@ -217,10 +220,12 @@ def scan_signed_checkpoint(parent: LimitedRangeIO, *, expected_apk_bytes=6728538
                     raise ProbeError("signed_apk_core_binary_magic_missing")
             with zipfile.ZipFile(MemberSliceIO(parent, obb_start, info["obb"].file_size),
                                  "r", allowZip64=True) as obb:
+                _verify_local_zip_headers(obb, obb.infolist())
                 obb_report = _guard_inner(obb, apk=False)
 
             return {
                 "actual_signed_checkpoint_nested_apk_zip_central_inspected": True,
+                "all_nested_local_zip_headers_match_central_directory": True,
                 "actual_signed_checkpoint_nested_obb_zip_central_inspected": True,
                 "original_checkpoint_apk_bytes": info["apk"].file_size,
                 "original_checkpoint_obb_bytes": info["obb"].file_size,
