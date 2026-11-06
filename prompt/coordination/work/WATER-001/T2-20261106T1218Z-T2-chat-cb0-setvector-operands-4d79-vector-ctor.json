@@ -4,7 +4,7 @@
   "issue_id": "WATER-001",
   "status": "completed",
   "base_sha": "11ee735c87eac69b5be6d1c03f6492608ae9b214",
-  "updated_at": "2026-11-06T12:36:30Z",
+  "updated_at": "2026-11-06T12:37:00Z",
   "resumed_from_experiment": "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.json",
   "experiment_key": "ZIP2-original-Foam-CB0-exact-SetVector-second-newobj-unique-UnityEngine.Vector4-ctor-formals-scalar-IL-provenance-v1",
   "resource_key": "T2-original-private-Foam-Cecil-composition-no-Unity",
@@ -17,7 +17,8 @@
     "prompt/coordination/clients/T2/sessions/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.md",
     "docs/T2_FOAM_ORIGINAL_CB0_VECTOR_CTOR_FORMALS_2026-11-06.md",
     "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json",
+    "prompt/coordination/discussions/WATER-001/20261106T112800Z-T2-CB0-MaterialSetVector-proof-T1T5.md"
   ],
   "negative_controls": [
     "second formal construction from 4 numeric literals",
@@ -50,5 +51,10 @@
   "report": "docs/T2_FOAM_ORIGINAL_CB0_VECTOR_CTOR_FORMALS_2026-11-06.md",
   "experiment_record": "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json",
   "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json",
-  "next_step": "Authenticate exact three original instance field producers and pre-ldstr material receiver/Shader Foam identity. Do not assert original 160 byte CB0 upload or device water. Preserve team assets and source only scope."
+  "next_step": "Authenticate exact three original instance field producers and pre-ldstr material receiver/Shader Foam identity. Do not assert original 160 byte CB0 upload or device water. Preserve team assets and source only scope.",
+  "handoff_target": [
+    "T1",
+    "T5"
+  ],
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T112800Z-T2-CB0-MaterialSetVector-proof-T1T5.md"
 }
