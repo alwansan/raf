@@ -76,3 +76,4 @@ jobs:
 # T5 DISPLAY-003 resolved original same-type delegate graph CI42208532103 session 20261106T1104Z-T5-chat-resolution-delegate-6a2f
 # T5 DISPLAY-003 authentic GraphicsSettingsBox 3 distinct Apply call owners CI42210936332 event 20261106T1130Z-T5-chat-applycallers-c6e1
 # T5 source evidence indexed after CI 42217714507
+# T5 canonical event id correction verified CI refresh 20261106T1234Z
