@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T0145Z-T5-chat-unity-surface-bridge-f4c2",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "experiment_key": "t5-realCL-520c4c-20261105-surface-stale-window-game-side-frame-same-utc-join-v1",
+  "source_commit": "eed7322565944a1d7fccda62fc5f7662f88b5e7e",
+  "pinned_CL_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+  "input_blob_shas": {
+    "unity_A": "413932e92fc24cd50b1fae1cbb25120f392e8158",
+    "unity_B": "60674be571e4979e329924e5e2679f43e40ec41a",
+    "sf_A": "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8",
+    "sf_B": "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+  },
+  "status": "completed_verified",
+  "failed_predecessor": "https://github.com/alwansan/raf/actions/runs/42146299959",
+  "failed_predecessor_cause": "direct Python script invoked without project root module path; source-free tests and CL SHA preflight succeeded",
+  "verified_run": "https://github.com/alwansan/raf/actions/runs/42146496632",
+  "verified_job": 127659125692,
+  "tests": "15/15 source-free controls passed",
+  "actual_results": {
+    "session_A": {
+      "unity_performance": 39,
+      "qualified_unity": 36,
+      "stale_sf": 6,
+      "unity_in_stale": 0
+    },
+    "session_B": {
+      "unity_performance": 123,
+      "qualified_unity": 116,
+      "stale_sf": 105,
+      "unity_in_stale": 62,
+      "scenes_in_stale": {
+        "MainScene": {
+          "intervals": 35,
+          "fps_median": 17.99,
+          "median_of_per_interval_p95_ms": 82.83
+        },
+        "MainMenuScene": {
+          "intervals": 27,
+          "fps_median": 22.77,
+          "median_of_per_interval_p95_ms": 66.25
+        }
+      }
+    }
+  },
+  "conclusion": "Source-matched Unity performance intervals existed during stale SF samples; does not prove actually presented frames or gaming-fps cross-session improvement.",
+  "limitations": [
+    "sampled Unity unscaled-delta and SurfaceFlinger are distinct sources",
+    "scene identity does not prove same viewpoint/world/quality or GPU load",
+    "per-interval p95 medians not pooled frame p95",
+    "no new native build or phone installation",
+    "no verified full game readiness"
+  ],
+  "next_step": "For new APK test, collect same-scene/settings/ABI+OBB SHA with Unity FrameTiming and external presentation crosschecks; T1-T3 fix shader FFT; investigate why SurfaceFlinger data stale independently without treating it as game failure."
+}
