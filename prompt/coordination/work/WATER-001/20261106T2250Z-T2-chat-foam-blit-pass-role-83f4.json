@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2250Z-T2-chat-foam-blit-pass-role-83f4",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
-  "updated_at": "2026-11-06T22:52:40.660Z",
+  "updated_at": "2026-11-06T23:00:57.041Z",
   "resumed_from_sessions": [
     "20261107T2227Z-T2-chat-blit-texture-role-6c52",
     "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3"
@@ -35,6 +35,33 @@
     "https://github.com/alwansan/raf/actions/runs/42303756960"
   ],
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Await exact code SHA Actions trigger from T2 original Foam Shader.Find typed IL workflow; inspect Python/Cecil synthetic and original authenticated 2x Blit pass source/destination per-role category. If no trigger, inspect on.push.paths and dispatch only permitted separate source-only workflow; do not run native.",
-  "code_commit": "dd92034aaef9b61ad2170c768142398795eff154"
+  "next_step": "Trace source-original Pass1 indirect Texture/RenderTexture producer under bounded safe IL with no identity leaks; T5 authentic Unity importer/runtime and original CB0 host upload needed before phone pixels. No new native request while 42296450023 runs.",
+  "code_commit": "dd92034aaef9b61ad2170c768142398795eff154",
+  "code_commits": [
+    "dd92034aaef9b61ad2170c768142398795eff154",
+    "2f040df362955827860ecae1715d0d06dd83b3fe",
+    "540194812e66e3dd8128a53686826b1fe9cd5784",
+    "a9029e2ef6dfcef0f34f4c73e0384745aba84c30",
+    "4e5f4d24e0049518928b0fe47db8adfa3b853db7"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42308583977"
+  ],
+  "result": {
+    "original_sha_authenticated": true,
+    "source_only_CI": "SUCCESS",
+    "safe_report_tests": 65,
+    "source_name_tests": 6,
+    "mono_cecil_synthetic": "PASS",
+    "pass0_sites": 1,
+    "pass1_sites": 1,
+    "pass0_source_rendertexture": 1,
+    "pass0_destination_rendertexture": 1,
+    "pass1_source_unknown": 1,
+    "pass1_destination_unknown": 1,
+    "source_dest_roles_correlated_per_pass": true,
+    "actual_rendertexture_object_verified": false,
+    "source_owner_or_upload_verified": false,
+    "android_water_pixels_verified": false
+  }
 }
