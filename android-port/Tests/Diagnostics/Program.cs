@@ -218,6 +218,34 @@ class Program
             overlapping.Summarize((area, operation, detail) => combined = detail);
             Require(combined != null && combined.Contains("repeated=2;"));
             overlapping.Summarize((area, operation, detail) => throw new Exception("Duplicate overlap summary"));
+            // PERF-007: original water/FFT shader errors can repeat thousands
+            // of times per session. The first full stack must survive, but
+            // grouping the SAME operation/detail must not allocate another
+            // complete 4-KiB combined dictionary key on every occurrence.
+            var lowAllocation = new RepeatedDiagnosticMessages();
+            string repeatedRenderStack = "Synthetic render pass error\\n" + new string('w', 4096);
+            Require(lowAllocation.First("Error", repeatedRenderStack, now));
+            for (int i = 0; i < 64; i++)
+                RequireFalse(lowAllocation.First("Error", repeatedRenderStack, now));
+            long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            bool allSuppressed = true;
+            for (int i = 0; i < 2048; i++)
+                if (lowAllocation.First("Error", repeatedRenderStack, now))
+                    allSuppressed = false;
+            long repeatedAllocations = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+            Require(allSuppressed);
+            // A true composite-key lookup holds the existing references and
+            // should use close to zero per-hit heap bytes. The legacy key
+            // concatenation allocates more than 8 MiB here.
+            Require(repeatedAllocations < 128 * 1024);
+            string aggregateRenderStack = null;
+            lowAllocation.Summarize((area, operation, detail) => aggregateRenderStack = detail);
+            Require(aggregateRenderStack != null &&
+                    aggregateRenderStack.Contains("repeated=2112;") &&
+                    aggregateRenderStack.Contains(repeatedRenderStack));
+            lowAllocation.Summarize((area, operation, detail) =>
+                throw new Exception("Duplicated low-allocation summary"));
+
             // DIAG-010: the two pairs below serialize to the same old key,
             // but their first full error stacks must remain independent.
             var collision = new RepeatedDiagnosticMessages();
