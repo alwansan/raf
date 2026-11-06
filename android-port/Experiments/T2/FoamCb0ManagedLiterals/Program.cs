@@ -107,7 +107,44 @@ internal static class Program
             return "immediate_typed_Material_static_field_load";
         if (before.OpCode.Code == Code.Ldnull)
             return "immediate_null_literal";
+        if (context?.HasBody == true)
+        {
+            string name=before.OpCode.Name;
+            if (name.StartsWith("ldloc",StringComparison.Ordinal) &&
+                !name.StartsWith("ldloca",StringComparison.Ordinal))
+            {
+                int? ix = before.Operand is VariableDefinition variable
+                    ? variable.Index : NumericOpcodeSuffix(name);
+                if (ix is >= 0 && ix.Value < context.Body.Variables.Count &&
+                    context.Body.Variables[ix.Value].VariableType.FullName ==
+                        "UnityEngine.Material")
+                    return "immediate_typed_Material_local_load";
+            }
+            if (name.StartsWith("ldarg",StringComparison.Ordinal) &&
+                !name.StartsWith("ldarga",StringComparison.Ordinal))
+            {
+                int? ix=before.Operand is ParameterDefinition parameter
+                    ? parameter.Index + (context.HasThis ? 1 : 0)
+                    : NumericOpcodeSuffix(name);
+                if (ix is >= 0)
+                {
+                    int formal=ix.Value-(context.HasThis ? 1 : 0);
+                    if (formal >= 0 && formal < context.Parameters.Count &&
+                        context.Parameters[formal].ParameterType.FullName ==
+                            "UnityEngine.Material")
+                        return "immediate_typed_Material_parameter_load";
+                }
+            }
+        }
         return "immediate_value_source_unproven";
+    }
+
+    private static int? NumericOpcodeSuffix(string opcode)
+    {
+        for (int i=0;i<=3;i++)
+            if (opcode.EndsWith("."+i.ToString(),StringComparison.Ordinal))
+                return i;
+        return null;
     }
 
     private static IEnumerable<TypeDefinition> Walk(IEnumerable<TypeDefinition> types)
@@ -561,6 +598,32 @@ internal static class Program
             if (MaterialFieldStoreImmediateProducer(unknown,3)!=
                 "immediate_value_source_unproven")
                 throw new InvalidOperationException("Unknown immediate source not guessed");
+            var context = new MethodDefinition("PublicWriter",
+                Mono.Cecil.MethodAttributes.Public, module.TypeSystem.Void);
+            context.Body=new Mono.Cecil.Cil.MethodBody(context);
+            context.Body.Variables.Add(new VariableDefinition(materialType));
+            context.Body.Variables.Add(new VariableDefinition(module.TypeSystem.Object));
+            var localMaterial = new List<Instruction>(valid);
+            localMaterial[2] = Instruction.Create(OpCodes.Ldloc_0);
+            if (MaterialFieldStoreImmediateProducer(localMaterial,3,context)!=
+                "immediate_typed_Material_local_load")
+                throw new InvalidOperationException("Material local source typed proof");
+            var wrongLocal = new List<Instruction>(valid);
+            wrongLocal[2] = Instruction.Create(OpCodes.Ldloc_1);
+            if (MaterialFieldStoreImmediateProducer(wrongLocal,3,context)!=
+                "immediate_value_source_unproven")
+                throw new InvalidOperationException("Wrong local type is unknown");
+            context.Parameters.Add(new ParameterDefinition(materialType));
+            var paramMaterial = new List<Instruction>(valid);
+            paramMaterial[2] = Instruction.Create(OpCodes.Ldarg_1);
+            if (MaterialFieldStoreImmediateProducer(paramMaterial,3,context)!=
+                "immediate_typed_Material_parameter_load")
+                throw new InvalidOperationException("Material parameter typed source");
+            var badArgument = new List<Instruction>(valid);
+            badArgument[2] = Instruction.Create(OpCodes.Ldarg_0);
+            if (MaterialFieldStoreImmediateProducer(badArgument,3,context)!=
+                "immediate_value_source_unproven")
+                throw new InvalidOperationException("Owner argument must not be mistaken for Material");
         }
         Console.WriteLine("T2_CB0_MANAGED_CECIL_SELFTEST pass");
     }
