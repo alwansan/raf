@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1959Z-T4-chat-save-snapshot-cardinality-k8p4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Each original Save() nested inside a traced SaveGame must produce precisely one nonzero argument-file snapshot; equal stage counts alone hide duplicated or missing per-call snapshots.",
+  "source_commit": "4f7e8d4c084d60580def38cb0d74431d82be8230",
+  "input_hashes": [
+    "pinned CL@520c4cf409aa20a4db54ff80ed87d8807d9cba57, three separately authenticated file Git blob SHA1 stored in interpreter (not emitted publicly)"
+  ],
+  "tool_versions": {
+    "python": "GitHub hosted Python3 unittest",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t4_owner5nov_jsonl_lifecycle.py' -v",
+    "python3 -m scripts.t4_owner5nov_jsonl_lifecycle --root <private ephemeral immutable owner 5-Nov log folder> --pinned"
+  ],
+  "negative_controls": [
+    "RED test-only d4eced57992c4e82d012b7c28e483a7e75351672 CI42284566838: two subcases incorrectly accepted by prior code; 15 other unittest methods passed"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42284677227",
+  "artifact_urls": [],
+  "budget": "source-only 7m workflow, no native build",
+  "status": "completed",
+  "observed_result": "GREEN run42284677227 job128122303358 success: 16/16 synthetic unittest methods; real immutable owner original 5-Nov JSONL 3+1+3=7/7 per-Save exact-single-snapshot ordered SaveGame nested cycles and 7/7 traced LoadT, zero ambiguous. No new APK.",
+  "rejected_hypotheses": [
+    "One nonzero Save.argumentFileSnapshot anywhere in each SaveWorld/SaveUser phase proves every nested Save() call was individually observed."
+  ],
+  "limitations": [
+    "Historical immutable CL owner logs only: not post-fix phone",
+    "No original game files/.rgd examined and no source game changes",
+    "No proof of actual RGD deserialization, same world or device installed binary identity"
+  ],
+  "integration_commit": "4f7e8d4c084d60580def38cb0d74431d82be8230",
+  "next_step": "Await user installed signed candidate; correlate immutable native candidate and actual device save/load logs with same-world .rgd private readback. Avoid duplicate green run."
+}
