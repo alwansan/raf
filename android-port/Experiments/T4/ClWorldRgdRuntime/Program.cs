@@ -18,12 +18,25 @@ internal static class Program
     // Only exact Git blob objects from CL@5394407b5cd0a0ca1848ff0902f8d2133bf6ea29
     // may enter the historical BinaryFormatter (never arbitrary .rgd input).
     // Distinct byte lengths make the immutable source selection unambiguous.
-    private static readonly IReadOnlyDictionary<long, string> ClWorldGitObjects =
-        new Dictionary<long, string>
+    private static readonly IReadOnlyDictionary<long, string[]> ClWorldGitObjects =
+        new Dictionary<long, string[]>
         {
-            [11255] = "8d250dec17e0ff5688fb760948ced35db7808580",
-            [310140] = "64f5cbfb35ab12a986d007cfbbb89d298ca5b46f",
-            [309863] = "65b5b93d98c3e17c679e74d1568ef99ff52e1145",
+            [11255] = new[] { "8d250dec17e0ff5688fb760948ced35db7808580" },
+            [310140] = new[] { "64f5cbfb35ab12a986d007cfbbb89d298ca5b46f" },
+            [309863] = new[] { "65b5b93d98c3e17c679e74d1568ef99ff52e1145" },
+            // Pinned 5 Nov owner-phone world saves. Two genuinely distinct
+        // Git objects have equal size 319239: authenticate exact blob SHA.
+        // Never identify worlds by filename, label or user identifier.
+        // All blobs are read-only CL@520c4cf409aa and private to CI.
+            [309519] = new[] { "458e0c2bb46f26084cbb2aacaa33913c8ac52daa" },
+            [319239] = new[] {
+                "8564720a2f72a47091d30c9eae05ebd527be50ac",
+                "7e8be5203dd47ea6469e43abacb901b4089bb246"
+            },
+            [331887] = new[] { "f30fc3f416899cca5b2fb955e437fc716bfcafff" },
+            [330281] = new[] { "65280828d55f133854fc4c16474c4e3f0bfeac30" },
+            [311063] = new[] { "a091dd94d84047e68eb8d9715987948b57178aa6" },
+            [318536] = new[] { "7fad8e552e737cc73985a6906c7ce753d45a41a5" },
         };
 
     private static bool OriginalFile(string path, long length, string digest)
@@ -39,7 +52,7 @@ internal static class Program
     {
         var info = new FileInfo(path);
         if (!info.Exists || info.LinkTarget is not null ||
-            !ClWorldGitObjects.TryGetValue(info.Length, out string? expected))
+            !ClWorldGitObjects.TryGetValue(info.Length, out string[]? expected))
             return false;
         using var input = info.OpenRead();
         using var sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA1);
@@ -48,7 +61,8 @@ internal static class Program
         int read;
         while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
             sha.AppendData(buffer, 0, read);
-        return Convert.ToHexString(sha.GetHashAndReset()).ToLowerInvariant() == expected;
+        return expected.Contains(Convert.ToHexString(sha.GetHashAndReset()).ToLowerInvariant(),
+            StringComparer.Ordinal);
     }
 
     private static string FailureCategory(Exception e)
