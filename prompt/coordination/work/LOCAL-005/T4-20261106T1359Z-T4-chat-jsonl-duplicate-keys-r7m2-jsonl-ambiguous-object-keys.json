@@ -4,7 +4,7 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "af440fa5c42be5c62aeec502accb020272bbbd15",
   "resumed_from_sessions": [
     "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
@@ -31,6 +31,11 @@
     "https://github.com/alwansan/raf/actions/runs/42228168580",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "next_step": "Source-only parser change + 3 synthetic positive/negative JSONL tests; run existing T4 JSONL workflow, record result on exact SHA and independent event; do not claim world saved.",
-  "updated_at": "2026-11-06T13:59:24.123Z"
+  "next_step": "Read exact 42230233069 conclusion and job log; if success close source-only scope, publish T5 handoff; if failing fix only exact CIs.",
+  "updated_at": "2026-11-06T14:02:18.574Z",
+  "source_commit": "74607f816ab4bd6dd35686f928fe3d81bbb60494",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42230233069",
+    "https://github.com/alwansan/raf/actions/runs/42230129397"
+  ]
 }
