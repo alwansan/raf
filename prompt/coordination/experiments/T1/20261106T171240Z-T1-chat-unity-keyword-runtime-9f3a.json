@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
+  "issue_id": "WATER-001",
+  "hypothesis": "Unity2021 ComputeShader local keyword activation must be executed with real GPU output checks, because the source-only 11/11 tests cannot prove imported variant selection.",
+  "source_commit": "b958990243523d18a6d44d888e6328e17fe07ddf",
+  "input_hashes": [],
+  "tool_versions": {
+    "unity": "2021.3.45f2",
+    "gameci": "v0.1.72 SHA 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_keyword_variant_fixture.py -v",
+    "python3 -m scripts.t1_sourcefree_unity_fixture --project t1-keyword-unity",
+    "game-ci test --docker --dockerShmSize=1025m --engine=unity t1-keyword-unity --testPlatforms=editmode --engineVersion=2021.3.45f2"
+  ],
+  "negative_controls": [
+    "Undeclared keyword EnableKeyword must leave IsKeywordEnabled false",
+    "Declared local keyword must be enabled then disabled",
+    "GPU output verifies all 64 uint words for default 7+x, activated 29+x and restored default 7+x",
+    "Strict NUnit gate requires two exact test case identities; fails on missing/extra/incorrect or skipped tests"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-keyword-runtime.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42259968584",
+  "artifact_urls": [],
+  "budget": "25min; sourcefree synthetic, shared engine mutex no overlap, no game files, CI runner scratch only",
+  "status": "waiting_ci",
+  "observed_result": {
+    "preflight_and_source_only_tests": true,
+    "pinned_cli_download_verified": true,
+    "unity_editmode_step": "in_progress",
+    "android_water_proven": false
+  },
+  "rejected_hypotheses": [],
+  "limitations": [
+    "No private original shader, numeric Unity-vs-original source parity, authored FFT kernel mapping or Adreno proof"
+  ],
+  "integration_commit": "b958990243523d18a6d44d888e6328e17fe07ddf",
+  "next_step": "Wait for actual Unity editmode NUnit terminal verdict, inspect bounded marker and correct only confirmed failing stage."
+}
