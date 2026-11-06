@@ -1,0 +1,25 @@
+{
+  "session_id": "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
+  "origin": "scheduled",
+  "owner": "T1",
+  "issue": "WATER-001",
+  "status": "in_progress",
+  "baseline_sha": "b89242e9d984eb1f43fd1eb7426a1c2ecb101040",
+  "experiment_key": "fft-real-unity-binding-after-native-import-failure",
+  "scope_files": [
+    "prompt/coordination/work/WATER-001/20261106T2015Z-T1-scheduled-native-fft-gate-x4q9.json",
+    "prompt/coordination/clients/T1/sessions/20261106T2015Z-T1-scheduled-native-fft-gate-x4q9.md"
+  ],
+  "hypothesis": "Original FFT source-safe parity checks do not establish actual Unity FindKernel/Dispatch; owner-direct native reconstruct failed at Unity import, preventing runtime evidence.",
+  "shared_resource": "none; no Unity workflow launched",
+  "taken_over_from": [
+    "20261106T195959Z-T1-chat-ci-log-pin-7b42",
+    "20261106T1907Z-T1-scheduled-report-shape-n8v2"
+  ],
+  "evidence_runs": [
+    42285338050,
+    42285401655,
+    42281310905
+  ],
+  "next_step": "Inspect reconstruct failure compile log with T4/T5; when fixed, capture immutable original Unity shader resource/kernel IDs and invocation-keyed FFT reads; do not repeat source-only synthetic test."
+}
