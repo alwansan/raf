@@ -116,6 +116,8 @@ jobs:
           assert c['source_stages_with_two_explicit_profiles_verified']==8
           assert c['verified_vertex_stages']==4 and c['verified_fragment_stages']==4
           assert c['private_compiler_invocations']==16 and c['private_spirv_val_invocations']==16
+          assert c['private_unmapped_baseline_compiler_invocations']==8
+          assert c['private_unmapped_baseline_spirv_val_invocations']==8
           assert c['verified_original_register_rows']==44
           assert r['original_six_renderer_scenes_SHA_authenticated'] is True
           assert r['original_four_shader_owners_SHA_authenticated'] is True
