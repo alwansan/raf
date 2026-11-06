@@ -289,6 +289,54 @@ class AndroidOfflineStartupTests(unittest.TestCase):
             self.assertEqual((backup / 'Settings.cs.meta').read_text(), 'guid: synthetic-settings')
 
 
+    def test_hardlinked_original_csharp_cannot_rewrite_external_source_inode(self):
+        original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / 'project/Assets/Assembly-CSharp/Settings.cs'
+            source.parent.mkdir(parents=True)
+            outside = root / 'original-source-outside-project.cs'
+            outside.write_text(original)
+            try:
+                source.hardlink_to(outside)
+            except (OSError, NotImplementedError):
+                self.skipTest('Hardlinks unavailable in synthetic runner filesystem')
+            meta = source.with_suffix('.cs.meta')
+            meta.write_text('guid: synthetic-hardened-source')
+            backup = root / 'backup'
+            with patch.dict('scripts.adapt_android_offline_startup.PINS',
+                            {'Settings': fingerprint(original)}, clear=True):
+                with self.assertRaisesRegex(ValueError, 'hardlinked'):
+                    apply(root / 'project', backup, write=True)
+            self.assertEqual(source.read_text(), original)
+            self.assertEqual(outside.read_text(), original)
+            self.assertEqual(meta.read_text(), 'guid: synthetic-hardened-source')
+            self.assertFalse(backup.exists())
+
+    def test_hardlinked_original_csharp_meta_cannot_alias_external_guid_inode(self):
+        original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / 'project/Assets/Assembly-CSharp/Settings.cs'
+            source.parent.mkdir(parents=True)
+            source.write_text(original)
+            outside_meta = root / 'original-meta-outside-project'
+            outside_meta.write_text('guid: synthetic-original-preserved')
+            meta = source.with_suffix('.cs.meta')
+            try:
+                meta.hardlink_to(outside_meta)
+            except (OSError, NotImplementedError):
+                self.skipTest('Hardlinks unavailable in synthetic runner filesystem')
+            backup = root / 'backup'
+            with patch.dict('scripts.adapt_android_offline_startup.PINS',
+                            {'Settings': fingerprint(original)}, clear=True):
+                with self.assertRaisesRegex(ValueError, 'hardlinked'):
+                    apply(root / 'project', backup, write=True)
+            self.assertEqual(source.read_text(), original)
+            self.assertEqual(meta.read_text(), 'guid: synthetic-original-preserved')
+            self.assertEqual(outside_meta.read_text(), 'guid: synthetic-original-preserved')
+            self.assertFalse(backup.exists())
+
     def test_linked_project_root_is_rejected_for_original_offline_adapter(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
