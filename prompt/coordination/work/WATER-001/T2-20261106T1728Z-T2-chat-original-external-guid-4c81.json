@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "Foam original external Material Shader FileIdentifier GUID and reciprocal source graph",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "9d55f5dbe65c05b031e7261658a23f8ff90cbe57",
   "approach": "On immutable ZIP2 SHA-original sharedassets0 and one independently SHA-original 758412-byte candidate target file, inspect the two material external fileID->FileIdentifier GUID/type references and target's reciprocal FileIdentifier table in private runner. Validate GUID structure/identity consistency without publishing GUID, file path/name, raw shader asset or claiming runtime binding.",
   "hypothesis": "Two verified external Shader references may share a stable original FileIdentifier GUID/type/target path, or carry empty/inconsistent GUIDs. Observing exact source GUID shape and independently staged target external table will determine whether GUID identity can be asserted from compiled game artifacts.",
@@ -32,8 +32,10 @@
   "experiment_ids": [
     "20261106T1728Z-T2-chat-original-external-guid-4c81"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42262404131"
+  ],
   "result": null,
-  "updated_at": "2026-11-06T17:28:01.316Z",
-  "next_step": "Write source-free controls for external GUID shape/duplicate target identity; reuse original SHA-stage while testing real UnityPy FileIdentifier bytes/type and target reverse file table. Dispatch one isolated source-original CI, keep GUID and source data private; record unknown when independent target GUID is not present."
+  "updated_at": "2026-11-06T17:31:58.385Z",
+  "next_step": "CI42262404131 running on SHA 5f5ba445. Read source-free and pinned ZIP2 original FileIdentifier GUID categorical result; if CI fails, inspect safe step and fix evidence-backed issue only. No Unity GUID runtime assertion or duplicate heavy run."
 }
