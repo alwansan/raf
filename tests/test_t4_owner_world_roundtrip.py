@@ -88,9 +88,9 @@ class OriginalOwnerRoundtripContract(unittest.TestCase):
         ):
             p[key] = False
         p["original_private_Save_audit_category"] = (
-            "OWNER_WORLD_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT")
+            "OWNER_WORLD_ROOT_NOT_ASSIGNABLE_TO_ORIGINAL_RGD_SAVE_ARGUMENT")
         p["original_private_Save_result_category"] = (
-            "OWNER_WORLD_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT")
+            "OWNER_WORLD_ROOT_NOT_ASSIGNABLE_TO_ORIGINAL_RGD_SAVE_ARGUMENT")
         q = validate(p)
         self.assertFalse(q["original_private_Save_invoked"])
 
@@ -205,6 +205,12 @@ class OriginalOwnerRoundtripContract(unittest.TestCase):
 
     def test_il_uses_exact_type_identity_and_bounded_allowlist(self):
         source = ORIGINAL.read_text()
+        self.assertIn("originalArg.IsAssignableFrom(originalRootType)", source)
+        self.assertIn("originalArg.Assembly == originalRootType.Assembly", source)
+        self.assertIn('sourceArg.Name != "RGD"', source)
+        self.assertIn("method[0].GetParameters()[1].ParameterType.IsAssignableFrom(", source)
+        self.assertNotIn("m.Parameters[1].ParameterType.Name == originalRootType.Name", source)
+        self.assertNotIn("ParameterType != originalRootType", source)
         self.assertIn("AuditOriginalPrivateSave(", source)
         self.assertIn("ORIGINAL_SAVE_FIELD_OR_INDIRECT_ACCESS", source)
         self.assertIn("UNKNOWN_ORIGINAL_SAVE_SUCCESS_CALLEE", source)
