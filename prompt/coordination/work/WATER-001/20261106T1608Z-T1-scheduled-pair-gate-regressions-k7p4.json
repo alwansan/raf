@@ -12,5 +12,10 @@
   "hypothesis": "Existing paired trace admission gate must reject malformed provenance and nonindependent captures before numeric comparison; synthetic tests can validate without proprietary captures.",
   "shared_resource": "none; CPU-only synthetic test, no Unity/Actions",
   "taken_over_from": "T1 20261106T1408Z paired capture readiness; no modification to live comparator",
-  "status": "planned"
+  "status": "committed_unexecuted",
+  "test_commit": "55f6e242416fa1b723aad1ec7c77d28276540325",
+  "session_commit": "aa7bdc4dc05ff50eda0ec81b153de526ae2498e9",
+  "test_command": "python -m unittest discover -s tests -p 'test_t1_fft_pair_gate_synthetic_k7p4.py' -v",
+  "limitations": "Not executed; no paired authentic captures; no Unity/device proof",
+  "next_step": "Execute ten tests on actual repo; obtain SHA-bound original and candidate same-input/same-dispatch captures; first numeric divergence then FindKernel/Dispatch"
 }
