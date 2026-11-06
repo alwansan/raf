@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "T5 trial build voting coordination and source-integrated delivery review",
+  "status": "active",
+  "base_sha": "99658d34f59ce64a8f961e942c641882c0750110",
+  "resumed_from_sessions": [
+    "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c",
+    "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
+    "20261106T1645Z-T5-chat-installed-obb-read-e7c4"
+  ],
+  "updated_at": "2026-11-06T17:45:00Z",
+  "intended_files": [
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "prompt/coordination/clients/T5/sessions/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.md",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.json",
+    "prompt/coordination/experiments/T5/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.json"
+  ],
+  "experiment_key": "T5-trial-20261106-r1-head99658d34-votes-four-documented-one-owner-vote-no-native-unless-five-validated",
+  "resource_key": "T_TEAM/TRIAL_BUILD_READINESS.md T5 row only, T5 decision section only",
+  "hypothesis": "Current 4 independently recorded workers T1–T3 no, T4 yes; T5 source-only integration and on-device diagnostics do not amount to new major integrated gameplay change requiring trial APK alone. Vote NO; T5 manually validates no consensus/current native request and no new build, preserves other four votes byte-for-byte and records reason/evidence.",
+  "coordination": "T5 vote row and own build-review section only with fresh expected blob; do not modify T1–T4 rows or older round, do not dispatch Unity or cancel queued jobs; other T clients and scheduled T5 may amend their own rows concurrently; retry by refetch and line-local replace.",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42263013004",
+    "https://github.com/alwansan/raf/actions/runs/42260528639",
+    "https://github.com/alwansan/raf/actions/runs/42257103707",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "next_step": "Review live prior signed artifacts/release outcome and consensus; update T5 row NO in round r1 and own decision; checkpoint; continue non-overlapping high-value engineering as team progresses."
+}
