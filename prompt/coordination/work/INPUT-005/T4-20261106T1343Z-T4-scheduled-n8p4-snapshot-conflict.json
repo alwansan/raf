@@ -2,8 +2,8 @@
   "session_id": "20261106T1343Z-T4-scheduled-n8p4",
   "origin": "scheduled",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-06T13:43:00Z",
+  "status": "completed_source_change_unverified_ci",
+  "updated_at": "2026-11-06T13:48:00Z",
   "intended_files": [
     "scripts/t4_verify_device_world_save_log.py",
     "tests/test_t4_verify_device_world_save_log.py"
@@ -12,5 +12,12 @@
   "experiment_key": "T4-LOCAL005-snapshot-duplicate-keys-negative-control-20261106",
   "resource_key": null,
   "base_evidence": "owner artifact 42058825739, source parser blob 3d175289e8e3310db35b0cc428d458da99af563c",
-  "coordination": "Isolated source-free parser guard; no native CI, no T5 package or Android capture files."
+  "coordination": "Isolated source-free parser guard; no native CI, no T5 package or Android capture files.",
+  "commits": [
+    "b6d7e18406d6c25253cbac64fb33b59c5e5f9383",
+    "ebe4a898ae441f24d9e4b5a9127d64319942b355",
+    "289f59176586ebdc3eb7be758dc2be9be5416597"
+  ],
+  "result": "Duplicate snapshot fields now classify contradictory rather than nonzero, preventing a false cross-session durability hint. Regression test added; CI and device validation pending.",
+  "next_step": "Check next relevant cheap CI for 289f5917 or later; no duplicate run; validate private signed device log and retain owner-confirmed world save evidence."
 }
