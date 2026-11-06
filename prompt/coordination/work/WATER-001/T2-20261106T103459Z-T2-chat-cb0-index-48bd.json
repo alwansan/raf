@@ -2,9 +2,9 @@
   "session_id": "20261106T103459Z-T2-chat-cb0-index-48bd",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "7fc6df9b93aef285cb4a262fd6147ba14cedb9d9",
-  "updated_at": "2026-11-06T10:34:59Z",
+  "updated_at": "2026-11-06T10:47:00Z",
   "resumed_from_sessions": [
     "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
     "20261106T101538Z-T2-scheduled-uploadtrace-6c8f"
@@ -28,5 +28,17 @@
   "evidence_baseline": "https://github.com/alwansan/raf/actions/runs/42201778065",
   "test_plan": "Source-free adversarial integer signedness, malformed chains, unrelated resource, static/dynamic index, compiled four original stages via private staged source and bounded numeric-only output; preserve original SHA and scratch cleanup",
   "current_queued_running_at_plan": 0,
-  "notes": "No game .shader/.meta/GUID/Materials or native build; no duplicate of previously verified member shape-only experiment. Does not verify upload or on-device pixels."
+  "notes": "No game .shader/.meta/GUID/Materials or native build; no duplicate of previously verified member shape-only experiment. Does not verify upload or on-device pixels.",
+  "run_id": 42204938466,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42204938466",
+  "source_commit": "8b7ed629f4b539d3f6487081cd8f244d1d612b45",
+  "tests_commit": "e3bcb3b0c4e4299c81f2bf84160f030014fc8817",
+  "workflow_commit": "24d5bfcf870cdb18aea8ed3969f6b80d63781ac8",
+  "entrypoint_fix_commits": [
+    "c36e80c9f9048c9ff5bc0af8dc7834b694b4fd55",
+    "5de93677334a5273ed185424be10d7f0dddc64ce"
+  ],
+  "first_failed_run": "https://github.com/alwansan/raf/actions/runs/42204456139",
+  "first_failure_kind": "source-free test had no OpEntryPoint, resolved by real execution model guard and synthetic entrypoint",
+  "next_step": "Read run 42204938466 and safe two-pass original SPIR-V load access; fix only evidence-backed failures, preserve private assets and no Unity proof."
 }
