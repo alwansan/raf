@@ -2,9 +2,9 @@
   "session_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f9a71c33d502f9155cb79ad8f1cb677ac059bff4",
-  "updated_at": "2026-11-06T11:27:07.776Z",
+  "updated_at": "2026-11-06T11:30:00Z",
   "resumed_from_sessions": [
     "20261106T1106Z-T4-chat-release-outcome-s8k4",
     "20261106T1042Z-T4-scheduled-f6n3",
@@ -28,5 +28,19 @@
   ],
   "nonoverlap": "T4 scheduled 1042Z reviewed release-target runtime code; T4 chat 1106Z completed it. Here do not touch mouse runtime, native build, world/game files, T5 packaging, T1/T2/T3 source, shared workflows, touch, audio or Settings. Existing dedicated source-free workflow path trigger.",
   "safety": "Allowlist eight known outcome labels, reject claimed native_release_confirmed=true/unknown extras as unparseable, expose only aggregate counts; no raw JSONL values, IDs, paths, coordinates, exceptions, or hashes; preserve dedup/truncation rules and 0/3 readiness.",
-  "next_step": "Patch parser and tests via atomic two-file Git tree at current HEAD, verify bounded existing T4 JSONL CI, session/experiment/event and T5 device handoff."
+  "next_step": "T5 one signed paired APK+OBB with source SHA and hardware mouse/focus/camera + same world full stop and reopen. Report only aggregate local parsed logs; don't equate release_call_returned to OS success.",
+  "source_commit": "4d18a096707d4c7fc134e967e7f807aeee8a5c0e",
+  "ci_runs": [
+    {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42210561898",
+      "conclusion": "success",
+      "head_sha": "4d18a096707d4c7fc134e967e7f807aeee8a5c0e",
+      "job_id": 127867883932,
+      "parser_tests": 20,
+      "overflow_tests": 2,
+      "total": 22
+    }
+  ],
+  "result": "Source-free future phone JSONL now classifies eight bounded mouse release outcomes, six relevant input markers; strict forged-status/extra private field rejection; no OS/device assertion; 22/22 CI pass.",
+  "scope_released": true
 }
