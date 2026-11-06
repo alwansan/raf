@@ -11,6 +11,7 @@ on:
       - 'scripts/t4_adapt_original_mouse_axes.py'
       - 'tests/test_t4_adapt_original_mouse_axes.py'
       - 'tests/test_t4_android_pointer_capture_policy.py'
+      - 'tests/test_t4_physical_mouse_presence_policy.py'
       - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
       - 'scripts/verify_android_offline_candidate.py'
       - '.github/workflows/raft-unity-editor-android-import.yml'
@@ -39,6 +40,7 @@ jobs:
             /tests/test_t4_original_mouse_routing.py
             /tests/test_t4_adapt_original_mouse_axes.py
             /tests/test_t4_android_pointer_capture_policy.py
+            /tests/test_t4_physical_mouse_presence_policy.py
             /.github/workflows/raft-unity-editor-android-import.yml
             /scripts/verify_android_offline_candidate.py
             /android-port/Runtime/Platform/AndroidTestDiagnostics.cs
@@ -57,6 +59,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v
           python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v
           python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v
+          python3 -m unittest discover -s tests -p test_t4_physical_mouse_presence_policy.py -v
           test ! -d Raft
       - uses: actions/setup-dotnet@v4
         with:
