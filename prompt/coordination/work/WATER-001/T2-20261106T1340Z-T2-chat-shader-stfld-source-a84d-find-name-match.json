@@ -2,9 +2,9 @@
   "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "462c4c6e93b580bdcc1ea68b00c0920c570a0511",
-  "updated_at": "2026-11-06T13:49:00Z",
+  "updated_at": "2026-11-06T13:56:30Z",
   "resumed_from_experiment": "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d.json",
   "experiment_key": "ZIP2-original-SHA-Foam-source-ShadermName-exact-MaterialShader-field-stfld-ShaderFind-first-string-argument-equality-v1",
   "resource_key": "T2-private-original-shader-name-comparison",
@@ -19,7 +19,8 @@
     "prompt/coordination/clients/T2/sessions/20261106T1340Z-T2-chat-shader-stfld-source-a84d.md",
     "docs/T2_FOAM_ORIGINAL_SHADER_FIND_NAME_MATCH_2026-11-06.md",
     "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json",
+    "prompt/coordination/discussions/WATER-001/20261106T1340Z-T2-chat-shader-stfld-source-a84d-handoff.md"
   ],
   "baseline_ci": "https://github.com/alwansan/raf/actions/runs/42228032544",
   "no_original_shader_name_or_hash_logged": true,
@@ -27,5 +28,20 @@
     "zip2": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "managed": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
   },
-  "limitations": "Compiled Shader.Find requested name string may differ from actual asset; Unity Shader.Find result runtime not established, no Shader asset/GUID/Material field load checked on phone."
+  "limitations": "Compiled Shader.Find requested name string may differ from actual asset; Unity Shader.Find result runtime not established, no Shader asset/GUID/Material field load checked on phone.",
+  "run_id": 42229056366,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42229056366",
+  "source_commit": "50c7616ff5099f82d23279f7a0ec8c5ba5e598ba",
+  "run_conclusion": "success",
+  "sourcefree_tests_passed": 12,
+  "original_source_owners_and_managed_SHA_verified": true,
+  "exact_Shader_Find_name_to_original_Foam_mName_match_count": 0,
+  "exact_Shader_Find_name_to_original_Foam_mName_mismatch_count": 1,
+  "unknown_count": 0,
+  "result": "Compiled original Shader.Find string whose return flows into the source-name-linked Material requests DIFFERENT name than original Foam Shader serialized m_Name. Do not use as a Foam Material or CB0 upload identity proof.",
+  "report": "docs/T2_FOAM_ORIGINAL_SHADER_FIND_NAME_MATCH_2026-11-06.md",
+  "experiment": "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json",
+  "handoff_path": "prompt/coordination/discussions/WATER-001/20261106T1340Z-T2-chat-shader-stfld-source-a84d-handoff.md",
+  "next_step": "Investigate original Shader asset source identity through authenticated name vs other Shader assets or original Material references/PathID; do not leak raw names or claim runtime device water."
 }
