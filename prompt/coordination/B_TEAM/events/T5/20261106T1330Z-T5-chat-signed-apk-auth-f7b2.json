@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T13:50:39.608Z",
+  "summary": "Original signed owner-tested APK 672853870 bytes from run42058825739 fully hashed SHA256 MATCH actual original delivery.json; Android binary manifest aapt versionCode89 and package com.alwansan.raft.androidtest MATCH; genuine Android apksigner cryptographic verification succeeds v1/v2, v3/v4 false, reports 1 signer. Source-only 12/12 synthetic and full real file CI42228262902 success. Certificate SHA print format unavailable, no certificate identity claim. OBB SHA/GUID and new phone GPU/water proof remain OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42228262902",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_APK_AUTH_2026-11-06.md"
+  ],
+  "limits": "Previous tested signed APK source only; no full OBB integrity or current source Android phone/pixel readiness.",
+  "next_step": "Full original main OBB 2301256312-byte digest with resource coordination and independent Unity GUID/device test."
+}
