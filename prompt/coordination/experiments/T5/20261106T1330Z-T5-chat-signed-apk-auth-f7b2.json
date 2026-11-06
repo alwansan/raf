@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed_real_signed_APK_full_SHA_and_apksigner_v1_v2_success",
+  "experiment_key": "T5-42058825739-checkpoint13441766832-original-signed-APK-672853870-HTTP206-full-SHA256-vs-authentic-delivery-json-aapt-apksigner-v1",
+  "original": {
+    "source_run": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "delivery_artifact_id": 13441227298,
+    "signed_checkpoint_artifact_id": 13441766832,
+    "real_signed_apk_bytes": 672853870
+  },
+  "source_commit": "7e5d69ce00e5c22183915205f164b67101694d8c",
+  "workflow": ".github/workflows/raft-t5-real-signed-apk-attestation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42228262902",
+  "job_id": 127927198011,
+  "conclusion": "success",
+  "synthetic_tests": "12/12",
+  "android_build_tools": "37.0.0",
+  "transfer_bound_bytes": 734003200,
+  "verified": {
+    "entire_signed_APK_SHA256_matches_real_delivery_json": true,
+    "actual_apk_digest_prefix_12": "d200b212ca8c",
+    "actual_android_manifest_package": "com.alwansan.raft.androidtest",
+    "actual_android_manifest_version_code": "89",
+    "apksigner_crypto_verified": true,
+    "apksigner_v1": true,
+    "apksigner_v2": true,
+    "apksigner_v3": false,
+    "apksigner_v4": false,
+    "apksigner_reported_signers": 1,
+    "cert_SHA256_metadata_available": false,
+    "full_main_OBB_SHA256_verified": false,
+    "unity_OBB_GUID_verified": false,
+    "current_branch_android_device_tested": false
+  },
+  "prior_failures": [
+    {
+      "id": 42226874653,
+      "type": "synthetic_lambda_parameter_syntax_before_download"
+    },
+    {
+      "id": 42226998096,
+      "type": "synthetic_badging_operator_precedence_before_download"
+    },
+    {
+      "id": 42227170402,
+      "type": "after_full_apk_SHA_aapt_apksigner_passes_original_cert_stdout_parser_too_strict"
+    },
+    {
+      "id": 42228036640,
+      "type": "stale_synthetic_reporter_fixture_before_download"
+    },
+    {
+      "id": 42228145311,
+      "type": "incorrect_fixture_signer_count_expectation_before_download"
+    }
+  ],
+  "limits": [
+    "Source delivery SHA is an untrusted manifest reference until independent publisher attestation",
+    "No certificate SHA fingerprint parsed; do not invent an identity",
+    "APK from previous owner-tested build, no Unity game source current-branch build",
+    "No 2.3GB OBB full digest, Unity GUID, phone pixels, water or shader validation"
+  ],
+  "report": "docs/T5_REAL_SIGNED_APK_AUTH_2026-11-06.md",
+  "next_step": "Isolated real original main OBB full SHA verification against same pinned delivery manifest, with large byte-budget and no game asset publication.",
+  "updated_at": "2026-11-06T13:50:39.608Z"
+}
