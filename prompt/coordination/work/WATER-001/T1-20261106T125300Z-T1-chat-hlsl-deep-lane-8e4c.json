@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "fb17194e8658ac3b2f3fa2fdfdffd991bd730484",
+  "updated_at": "2026-11-06T12:53:00.525Z",
+  "track": "Original vs HLSL-roundtrip butterfly X coordinate provenance depth budget and scheduled coordinate parser tests",
+  "resumed_from_sessions": [
+    "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2",
+    "20261106T123411Z-T1-chat-y-inequal-branch-f52a"
+  ],
+  "hypothesis": "HLSL glslang coordinate X depth_limit at default 4 may be a bounded tracer artifact; using supported depth 12 on same source pin may resolve to OpLoad or arithmetic and show typed coordinate bitcast changes. Scheduled comparator's overflow/sample bounds need actual CI confirmation on checked out source.",
+  "approach": "Change only isolated T1 CI to pass --coordinate-depth 12 for HLSL-roundtrip coordinate provenance and execute existing scheduled coordinate probe comparator tests. Record safe aggregate markers and test result; no heavy Unity/native build or private input artifacts.",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c.md",
+    "prompt/coordination/experiments/T1/20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c.json"
+  ],
+  "experiment_key": "water001-slot0-hlsl-translation-coordinate-depth4-vs12-sourcepin15964ea8-plus-scheduled-coordinate-compare-unit-ci",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Use one existing non-Unity original-source workflow. Check T1 job first, then compare HLSL typed-coordinate lane boundary depth4 vs depth12; preserve mismatch/no parity conclusion."
+}
