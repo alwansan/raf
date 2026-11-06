@@ -15,3 +15,8 @@
 - source pins: ZIP2 commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, sharedassets0 115978112B SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, Foam Shader PathID2420 raw SHA256 `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
 - phone acceptance boundary: device artifact [42058825739](https://github.com/alwansan/raf/actions/runs/42058825739) world entered/saved/reopened; water/FFT/visual effects remain unresolved; no new device proof.
 - next_step: produce privacy-safe source-original manifest resolution with fail-closed unit tests and independent SHA-pinned CI, then record counts and limits. Do not modify game's ShaderLab/assets/Unity or change audio, Settings, touch, other jobs.
+
+## Checkpoint — isolated original-data CI started
+- Implemented original immutable 366-row manifest resolver with bounded targeted original Shader PathID verification in `scripts/t2_foam_original_manifest_pptr.py`; source-free negative controls `tests/test_t2_foam_original_manifest_pptr.py`; independent workflow `.github/workflows/raft-t2-foam-original-manifest-pptr.yml` at commit `fbf2a03a4345674349d2b4b7d96dfe4e32fdacf4`.
+- CI [42255582427](https://github.com/alwansan/raf/actions/runs/42255582427) currently running; synthetic controls finished SUCCESS and pinned ZIP2 checkout begun. Original two-reference result NOT YET established. No independent repeat launched. Artifacts intended are count-only; original owner/target scratch deleted before upload.
+- work_status: `waiting_ci`; next_step: inspect job/JSON safely and update experiment/event and session with real original proof or exact failure; no device/Unity acceptance inferred.
