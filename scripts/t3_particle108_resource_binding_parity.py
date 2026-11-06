@@ -33,6 +33,8 @@ SAFE_FAILURE_CATEGORIES=frozenset((
     "SOURCE_AUTHENTICATION", "ORIGINAL_SHADER_PROPERTY_SCHEMA",
     "ORIGINAL_COMPILED_KEYWORD_PAIRS", "SOURCE_STAGE_TRANSLATION",
     "STAGE_SPIRV_REFLECTION", "DESCRIPTOR_SET_OR_BINDING_UNLOCATED",
+    "DESCRIPTOR_ALIAS_OR_DUPLICATE", "RESOURCE_CATEGORY_UNSUPPORTED",
+    "STAGE_SPIRV_IO_INCOMPATIBLE", "STAGE_REFLECTION_SCHEMA_REJECTED",
     "STAGE_DESCRIPTOR_SCHEMA_OTHER",
 ))
 class PrivateReasonError(ValueError):
@@ -173,9 +175,19 @@ def evaluate(pairs,temporary,*,translator=translate,reflector=reflection):
     try:
         return classify_stages(stages)
     except (ValueError,RuntimeError,OSError,TypeError,KeyError) as error:
-        if str(error)=="unlocated_or_malformed_private_resource_descriptor":
-            raise PrivateReasonError("DESCRIPTOR_SET_OR_BINDING_UNLOCATED") from None
-        raise PrivateReasonError("STAGE_DESCRIPTOR_SCHEMA_OTHER") from None
+        allowlist={
+            "unlocated_or_malformed_private_resource_descriptor":"DESCRIPTOR_SET_OR_BINDING_UNLOCATED",
+            "duplicate_private_stage_resource_binding":"DESCRIPTOR_ALIAS_OR_DUPLICATE",
+            "unhandled_private_SPIRV_resource_category":"RESOURCE_CATEGORY_UNSUPPORTED",
+            "original_source_SPIRV_stage_IO_not_compatible":"STAGE_SPIRV_IO_INCOMPATIBLE",
+            "invalid_private_stage_SPIRV_reflection_schema":"STAGE_REFLECTION_SCHEMA_REJECTED",
+            "invalid_private_stage_SPIRV_IO_record":"STAGE_REFLECTION_SCHEMA_REJECTED",
+            "duplicate_private_SPIRV_IO_location":"STAGE_REFLECTION_SCHEMA_REJECTED",
+            "invalid_private_SPIRV_resource_binding_shape":"STAGE_REFLECTION_SCHEMA_REJECTED",
+            "unbounded_private_stage_SPIRV_reflection":"STAGE_REFLECTION_SCHEMA_REJECTED",
+        }
+        raise PrivateReasonError(
+            allowlist.get(str(error),"STAGE_DESCRIPTOR_SCHEMA_OTHER")) from None
 
 
 def probe(original_root,manifest):
