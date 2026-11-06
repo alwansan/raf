@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "track": "Unity2021-Editor-original-mouse-bridge-symbol-cs0234",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6341b40cb59e6770914a0c918a2abb82602585ca",
   "approach": "Owner-direct native CI42281310905 first fatal compile reports missing RaftAndroid.Platform.AndroidPhysicalMouseCapture (CS0234 x10), because platform bridge entire type compiled only UNITY_ANDROID && !UNITY_EDITOR but patched original C# references shim in Unity Editor. Build original Unity2021 ABI editor-symbol negative fixture (RED) and add platform-inert fallback class for Editor/non-Android targets (GREEN), preserving actual Android View capture class unchanged. Do not touch native workflow or dispatch full Unity build.",
   "intended_files": [
@@ -23,8 +23,14 @@
   ],
   "concurrent_work": "No active overlapping T4/T5 file scope seen; T5 owns native build. Owner-directed run42281310905 completed FAILURE at Unity Editor first fatal CS0234; T1–T3 other tests untouched.",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42281310905"
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/actions/runs/42286642808",
+    "https://github.com/alwansan/raf/actions/runs/42286855872",
+    "https://github.com/alwansan/raf/actions/runs/42287041110",
+    "https://github.com/alwansan/raf/actions/runs/42287041051"
   ],
-  "updated_at": "2026-11-06T20:14:00Z",
-  "next_step": "First publish pinned Unity2021 Editor symbol fixture workflow, capture expected CS0234 RED. Then implement conditional no-op fallback and obtain GREEN actual original Unity2021 refs compile and existing Android bridge compile. T5 later decides whether to rerun native after source recovery and independent gates."
+  "updated_at": "2026-11-06T20:20:00Z",
+  "next_step": "Release owned files. T5 may include editor fallback in next owner-approved native source SHA; T5 alone manages full Unity build; don't repeat red/green source run. If Unity still fails, triage actual new first compiler error.",
+  "integration_commit": "f554e8b6757e46aa037603ed592a04acc2bf7a61",
+  "result": "Demonstrated owner native Unity2021 Editor CS0234 x10 due missing AndroidPhysicalMouseCapture under UNITY_EDITOR, RED original ABI synthetic editor compilation 42286855872 CS0103 x6 after fixing premature fixture inclusion, GREEN after f554e8b6 original Unity2021 managed ABI Android and Editor source compile 42287041110, 48 C# physical mouse checks, original 4+4 axes+2 lock sites; independent netstandard platform workflow 42287041051 green. No new APK or device proof."
 }
