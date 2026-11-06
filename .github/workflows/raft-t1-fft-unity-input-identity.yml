@@ -1,4 +1,5 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
+# T1 controlled one-shot integer_source variant versus immutable baseline: 20261106T2038Z-T1-chat-integer-source-a47c
 
 # T1 opt-in real original-SPIRV-vs-Unity paired replay: 20261106T2031Z-T1-chat-real-unity-pair-6d9a
 # One attempt; same SHA-pinned ZIP2 fixture, no native build request or cancellations.
