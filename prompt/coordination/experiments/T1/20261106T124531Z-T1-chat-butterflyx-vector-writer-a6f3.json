@@ -1,0 +1,87 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+  "issue_id": "WATER-001",
+  "hypothesis": "The original butterfly1 X single last whole-vector OpVectorShuffle writer has a specific bounded SSA component source; tracing that actual selected component past the Function-local load can discriminate signed integer bit carrier versus arithmetic/texture origin.",
+  "source_commit": "00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f",
+  "input_hashes": [
+    "ZIP2 immutable original pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385; FFT original slot0 private object verified in existing source-authentic workflow"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "spirv-tools installed by workflow; exact package version not asserted"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_site1_x_writer_lineage.py -v",
+    "python3 -m scripts.t1_fft_site1_x_writer_lineage \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "Shuffle selects first and second vector inputs without publishing literal component index",
+    "Signed vector integer bits to float32 distinguished from numeric conversion",
+    "Function-local OpLoad and arithmetic OpFAdd treated as boundaries, never as a proven actual coordinate",
+    "Conditional, loop, sequential overwrite and unreachable writer path candidates preserved/excluded correctly",
+    "Other physical lane write does not shadow X; same-lane write does",
+    "Dynamic indexed alias and escaped pointer retain warnings after direct stores",
+    "Wrong original descriptor mapping and malformed terminator fail closed",
+    "No original IDs, shader literal values, pixel output or game assets exported"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42220554705",
+  "artifact_urls": [],
+  "budget": "Single existing isolated Ubuntu-24.04 Vulkan roundtrip 20-minute runner, no Unity/Android",
+  "status": "completed_scoped_original_x_ssa_lineage",
+  "observed_result": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42220554705",
+    "job_id": 127901229510,
+    "conclusion": "success",
+    "synthetic": "16/16 PASS",
+    "original_recovery": "SHA-pinned ZIP2 pass",
+    "source_private_vulkan": "pass",
+    "private_cleanup": "pass",
+    "role": "butterfly",
+    "site": 1,
+    "coordinate": "x",
+    "physical_source_lane": "x",
+    "static_affecting_store_count": 3,
+    "reachable_last_writer_count": 1,
+    "sole_reaching_writer_form": "whole",
+    "immediate_store_value_opcode": "OpVectorShuffle",
+    "selected_input_sequence": [
+      "second",
+      "first"
+    ],
+    "ssa_component_chain": [
+      "OpVectorShuffle",
+      "OpBitcast",
+      "OpVectorShuffle",
+      "OpLoad"
+    ],
+    "type_change": [
+      "sint32_bits_to_float32"
+    ],
+    "boundary": {
+      "status": "memory_load_boundary",
+      "numeric_kind": "sint32_vector",
+      "storage_class": "Input"
+    },
+    "uninitialized_path_possible": false,
+    "unknown_alias_write_possible": false,
+    "pointer_escape_possible": false,
+    "signed_integer_coordinate_semantics_proven": false,
+    "actual_image_fetch_numeric_parity_proven": false,
+    "original_Unity_kernel_identity_proven": false,
+    "Android_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "The original butterfly1 X component is sourced directly from float arithmetic or constant: the exact original path traces through signed 32-bit Input vector load and OpBitcast into float bits before whole vector store.",
+    "The original butterfly1 X source can be inferred from the sole direct OpStore without component analysis: actual source has two OpVectorShuffle stages and one bitcast; a direct writer opcode alone obscures its signed-int Input source."
+  ],
+  "limitations": [
+    "The signed bits from shader Input storage are not a dynamic readback nor numeric proof of their value",
+    "The SSA chain cannot by itself prove HLSL roundtrip or Unity runtime preserves the exact 32-bit pattern; original-vs-translated 252/256 mismatches remain",
+    "No source authored Unity ComputeShader identity, Adreno acceptance or water restoration"
+  ],
+  "integration_commit": "00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f",
+  "next_step": "Audit HLSL-roundtrip compiled slot0 X input path with same 12-step lane-depth and signed bitcarrier boundary; collect same-input original vs translated coordinate trace keyed by input to confirm first divergence before changing shaders."
+}
