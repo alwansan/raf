@@ -12,3 +12,10 @@
 - **Result:** original source control path confirmed; no evidence yet that user selection maps to persistent Android render scaling, or that delegate/serialized UnityEvent callbacks drive that mode. Zero direct AddListener or PlayerPrefs **does not prove absence of custom delegate/serialization/persistence**. No speculative Settings code changes.
 - **Artifacts:** public safe [technical report](../../../../../docs/T5_ORIGINAL_SETTINGS_IL_2026-11-06.md); `prompt/coordination/experiments/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json`; `prompt/coordination/B_TEAM/events/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json`. No proprietary raw output artifact.
 - **Next independent work:** privately inspect the two original delegate target methods and callsites, then confirm Unity serialized option-selection/persistence graph before integrating an Android selector. Distinguish panel Hz, screen pixel size, app surface, rendered buffer factor and actual FPS; repeat on phone only after a legitimately signed test. WATER-001/RENDER-002 P0 OPEN, overall **NOT_READY 0/3**.
+
+## Final canonical index checkpoint
+
+- [T5 one-shot team evidence refresh 42205178791](https://github.com/alwansan/raf/actions/runs/42205178791) completed **SUCCESS** on committed source `55cad712829e243155cc2e29ccad14282300127e`, job `127849888247`.
+- CI log verified **11/11 B-team + 3/3 T-team** schema regressions and loaded **359** live committed event rows, including this cycle's authenticated DISPLAY-003 evidence. Canonical T_TEAM summary/snapshot regenerated and pushed using fast-forward, never force.
+- `prompt/coordination/work/DISPLAY-003/20261106T1030Z-T5-chat-resolution-il-4b9e.json` status now `completed_original_il_source_verified_indexed`; does **not** mark the actual Settings callback, persisted user-selected render scale, Android resolution behavior or game restoration complete.
+- Next independent engineering task: inspect bounded IL delegate target/selection callback linkage or serialized Unity UI ownership, with source fingerprints and fail-closed tests. Preserve T1–T4 changes and all original game resources.
