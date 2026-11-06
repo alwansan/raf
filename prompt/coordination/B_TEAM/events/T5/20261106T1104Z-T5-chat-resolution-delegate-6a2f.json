@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1104Z-T5-chat-resolution-delegate-6a2f",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1104Z-T5-chat-resolution-delegate-6a2f",
+  "issue_id": "DISPLAY-003",
+  "type": "result",
+  "at": "2026-11-06T11:13:00Z",
+  "summary": "Authentic SHA-pinned ZIP2 original compiled GraphicsSettingsBox: 2 same-type delegate IL sites resolve to 1 unique target, 0 target reach ApplyCurrentResolution/Screen.SetResolution, 0 option-population same-type delegate sites or paths, 22 resolved internal edges; 9 Python+5 compiled Cecil controls and actual original gate passed CI42208532103. No serialized UI, persistence, Android game or device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42208532103",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_RESOLUTION_DELEGATE_IL_2026-11-06.md"
+  ],
+  "limits": "Direct original same-type method-call graph only; cannot infer complete Settings callback/persistence or phone acceptance; all P0 graphics issues remain open.",
+  "next_step": "Inspect UI serialized callback owner and three original Apply callsites using authenticated typed metadata."
+}
