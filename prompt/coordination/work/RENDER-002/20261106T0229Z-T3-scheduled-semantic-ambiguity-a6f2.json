@@ -4,7 +4,7 @@
   "origin": "scheduled",
   "issue": "RENDER-002",
   "baseline_sha": "e50abe7c36759117a0c5092ab90ba90500dff653",
-  "status": "in_progress",
+  "status": "completed_source_only",
   "experiment_key": "T3-sourcefree-semantic-location-unique-bipartite-proof-v1",
   "hypothesis": "An interface candidate mapping must be rejected if multiple bijections satisfy semantic lane/type constraints, even when all four original DXBC VSFS pairs match.",
   "files": [
@@ -17,5 +17,13 @@
     "prompt/coordination/clients/T3/sessions/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.md",
     "prompt/coordination/clients/T3/sessions/20261106T0131Z-T3-scheduled-io-order-6d9a.md"
   ],
-  "no_CI_dispatch": true
+  "no_CI_dispatch": true,
+  "result": "7 local unittest PASS; independent uniqueness guard committed; not integrated into authentic DXBC-to-SPIRV mapper",
+  "commits": [
+    "1df5b025b5e6a312a777874406653d606eebdafe",
+    "dd90874df6f2944026a9c57813164b986deb0911",
+    "d793c81c898c01d0089dfc4250e7026ae144511c",
+    "445f37cc075ff2eb4dfe0b05529fe2184c4c002b"
+  ],
+  "next_step": "derive independently verified authored semantic candidate edges for each original four pairs, then unique-match gate; no automatic patch by compiler names"
 }
