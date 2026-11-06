@@ -20,10 +20,30 @@ The authenticated Vulkan-vs-Unity trace comparison 42196835754 and promoted-only
 
 Add bounded direct Function OpStore candidate census at leaf OpLoad coordinate lanes of original FFT slot-0 SPIR-V. No raw SPIR-V IDs, constants, traces, shader bytes, or values in public result. Counts are static, not proof of reaching definitions or authored Unity kernel identity. Source-free adversarial tests and one isolated original Vulkan roundtrip workflow run; no Unity build, mouse/buttons/Settings/audio changes.
 
-## Result
+## Result — authenticated original-source experiment completed
 
-Pending implementation and exact-source validation.
+- Scope code commits: b785211e4d7d5dfcb1bdd69058f81d46f630c951 (private-safe tool), 1136071197449b6e51bc31fc58cd2e7f1c56450c (eight synthetic regression cases), ac6c8c4fb5e7cd2651baabe4d4900f3c6ef93440 (workflow integration).
+- Original-authentic CI: https://github.com/alwansan/raf/actions/runs/42204760126 — completed **SUCCESS** at ac6c8c4; job 127848498727. Ubuntu-24.04; bounded private slot0 SPIR-V; ZIP2 recovery and original-layout guard passed. All eight exact-source synthetic tests PASS in Actions; separate local 8/8 PASS.
+- No source, SPIR-V identifiers, constants, private shader or raw pixels published. The new public marker reports static opcode/type aggregates only.
+
+| Fetch site | Input role | Direct Function-local OpStore candidates (X and Y) | Stored value types | Immediate producer operation counts |
+| --- | --- | --- | --- | --- |
+| 0 | source | 3 each | float32 | OpVectorShuffle ×3 |
+| 1 | butterfly | 3 each | float32 | OpVectorShuffle ×3 |
+| 2 | butterfly | 8 each | float32 | OpVectorShuffle ×7; OpImageFetch ×1 |
+
+- The six observed lane traversals show float32→sint32 bitcast. Each count is **static candidates**, not dominance/reaching-store proof, and X/Y sharing a vector load does not imply identical component provenance.
+- Original comparisons https://github.com/alwansan/raf/actions/runs/42196835754 and https://github.com/alwansan/raf/actions/runs/42198180194 found matching butterfly divergences regardless of source-coordinate rewrite. This new evidence rejects a naive assumption of one unambiguous Function-local butterfly writer and directs investigation to control-flow and OpVectorShuffle producers.
+- No original authored ComputeShader/kernel identity recovered, no Vulkan↔Unity numerical parity proven, and **no Android/Adreno water fix or new APK**. WATER-001 remains OPEN; no other client's files or Actions touched. Owner world/save/reopen evidence from 42058825739 preserved, with water still malfunctioning.
+
+## Checkpoint links and status
+
+- origin: chat; status: completed (scoped provenance census only)
+- experiment: prompt/coordination/experiments/T1/20261106T103645Z-T1-chat-storewriters-b4a7.json
+- canonical result event: prompt/coordination/B_TEAM/events/T1/20261106T103645Z-T1-chat-storewriters-b4a7.json
+- run_urls: https://github.com/alwansan/raf/actions/runs/42204760126
+- branch: feature/android-native-port; no force/no cancellation.
 
 ## Next step
 
-Implement audit + tests, check original private workflow output, record bounded site-1 X/site-2 X/Y candidate writer outcomes, do not mutate butterfly coordinate operands without valid evidence.
+Add a bounded *flow-sensitive* def-use check on original private slot0 SPIR-V for the 3 writers of butterfly site1 X and 8 writers of site2 X/Y. Discriminate OpVectorShuffle lane origins and branch/loop reachability before proposing any rewrite. If exact original integer origin can be proved, run a distinct same-input paired Unity/Vulkan numerical control; coordinate Adreno integration with T5. Leave audio, Settings, deferred touch, T4 mouse and T5 UI work untouched.
