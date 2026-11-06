@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
   "issue_id": "COORD-001",
-  "status": "active",
+  "status": "completed_one_field_T1_event_identity_and_409_event_index_verified",
   "base_sha": "a2ac927c20fbc88dde6ab5e89635340e9dce762d",
-  "updated_at": "2026-11-06T14:13:45.420Z",
+  "updated_at": "2026-11-06T14:16:42.343Z",
   "resumed_from_sessions": [
     "20261106T1358Z-T5-chat-obb-fullsha-7e39.md",
     "20261106T1322Z-T5-chat-t3-ledger-identity-3b71.md"
@@ -23,5 +23,16 @@
     ".github/workflows/raft-t5-ledger-refresh.yml"
   ],
   "coordination": "No T1 active Actions. Add only explicit id matching original session_id. Preserve all existing T1 keys and values. Never change T1 source, FFT tests or results. No parser heuristic.",
-  "next_step": "CAS repair one id, strict canonical index re-run."
+  "next_step": "CAS repair one id, strict canonical index re-run.",
+  "canonical_team_index": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42232342733",
+    "job_id": 127941092867,
+    "conclusion": "success",
+    "committed_event_rows": 409,
+    "bteam_unit_tests": 11,
+    "tteam_unit_tests": 3,
+    "fast_forward_only": true,
+    "force": false
+  },
+  "fix_commit": "9dd0316b5713b894929d2fd6f61428d0150aba50"
 }
