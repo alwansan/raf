@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "completed_authentic_original_managed_Save_Load_roundtrip_device_unverified",
+  "title": "Seven authenticated 5 Nov owner world RGDs: original private Save(string,RGD) guarded CLR serialization plus genuine original Load<T>",
+  "hypothesis": "The CLR root of owner world RGD differs from the exact original Save argument type but may be an authenticated derived RGD assignable to the original Save(string,RGD) base parameter.",
+  "source_provenance": {
+    "owner_cl": {
+      "repository": "alwansan/CL",
+      "immutable_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+      "world_rgds": 7,
+      "git_objects_exact": 7,
+      "size_bytes_min": 309519,
+      "size_bytes_max": 331887,
+      "two_distinct_equal_size_git_blobs": true
+    },
+    "original_rafter": {
+      "repository": "alwansan/raf",
+      "immutable_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "assembly_size": 3211776,
+      "assembly_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+      "managed_sibling_commit": "02e9fba7fb42b83579595885391be636ee3b56e8",
+      "managed_sibling_count": 151
+    }
+  },
+  "source_integrations": [
+    {
+      "path": "android-port/Experiments/T4/OwnerWorldRgdRoundtrip/Program.cs",
+      "commit": "7403c8c1cbcf042895fb37352832a342c53b9bfc",
+      "effect": "Copied existing authentic IL-audited private original Save probe. Pins exactly seven CL Git blobs, checks RGD original CLR base-type assignability, checks guarded Mono.Cecil source signature before Save, writes disposable temp, original LoadT type check, cleans temp."
+    },
+    {
+      "path": "android-port/Experiments/T4/OwnerWorldRgdRoundtrip/OwnerWorldRgdRoundtrip.csproj",
+      "commit": "1530d4efb3fe3f9d76d13423c81a9c09f8e3c341",
+      "effect": "Dotnet8 original managed loaded with pinned Mono.Cecil 0.11.5"
+    },
+    {
+      "path": "scripts/t4_validate_owner_world_roundtrip.py",
+      "commit": "931c1455db9d69f9314a43c9ae29d206490ff7c6",
+      "effect": "Whitelisted source/boolean report contract and mutually consistent Save/Load/cleanup flags, reject secret fields and fake Android success"
+    },
+    {
+      "path": "tests/test_t4_owner_world_roundtrip.py",
+      "commit": "5c1d78117640b174d571a5a2a592b8388fb662ed",
+      "effect": "24 synthetic fail-closed controls; include authentic CLR inheritance requirement."
+    },
+    {
+      "path": ".github/workflows/raft-t4-owner-world-save-roundtrip.yml",
+      "commit": "7f0db3d7bd4f9114779766a2d41ebb3ffa86b11e",
+      "effect": "Isolated source-only .NET8 test with authenticated exact original game+151 dependencies and 7 immutable world blobs, no uploads"
+    }
+  ],
+  "workflow": ".github/workflows/raft-t4-owner-world-save-roundtrip.yml",
+  "final_verified_run_url": "https://github.com/alwansan/raf/actions/runs/42153533612",
+  "final_run_id": 42153533612,
+  "final_job_id": 127682216732,
+  "final_commit": "5c1d78117640b174d571a5a2a592b8388fb662ed",
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "dotnet": "8.0.x",
+    "mono_cecil": "0.11.5",
+    "binaryformatter": "Historical .NET8 compatibility switch only",
+    "github_checkout": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_stage_owner5nov_world_rgds.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_owner_world_roundtrip.py -v",
+    "dotnet publish android-port/Experiments/T4/OwnerWorldRgdRoundtrip/OwnerWorldRgdRoundtrip.csproj -c Release",
+    "immutable exact-original SHA check, authentic CL snapshot and exact Git object source stage",
+    "dotnet OwnerWorldRgdRoundtrip.dll --assembly ORIGINAL_DLL --seed VERIFIED_EACH_OWNER_WORLD --output PRIVATE_REPORT --original-save-roundtrip for each of 7",
+    "strict scripts.t4_validate_owner_world_roundtrip.validate on each private report; output only aggregate categories and numeric flags",
+    "single-byte tamper must fail source authentication before original formatter and create no report"
+  ],
+  "observed_result": {
+    "run_status": "COMPLETED_SUCCESS",
+    "python_stage_tests": {
+      "passed": 12,
+      "total": 12
+    },
+    "python_guard_and_report_tests": {
+      "passed": 24,
+      "total": 24
+    },
+    "owner_real_files_authenticated": 7,
+    "real_original_CLR_world_deserialized": 7,
+    "real_original_original_base_RGD_assignability_verified": 7,
+    "original_private_Save_IL_allowlist_verified": 7,
+    "original_private_Save_invoked": 7,
+    "original_Save_file_nonzero": 7,
+    "original_compiled_SaveAndLoad_LoadT_returned_matching_original_type_on_saved_output": 7,
+    "isolated_temporary_output_removed": 7,
+    "save_result_categories": {
+      "NONE": 7
+    },
+    "audit_categories": {
+      "NONE": 7
+    },
+    "single_byte_alteration_rejected": true,
+    "original_game_RGD_serializer_source_modified": false,
+    "android_unity_player_built": false,
+    "on_device_world_save_exit_reopen_verified_by_this_run": false,
+    "owner_prior_device_world_save_reopen_bounded_to_42058825739": true
+  },
+  "decisive_refinement": [
+    "The first source-authentic CI42153104453 used a too strict exact concrete root type equality and safely refused all seven; not a save incompatibility result.",
+    "Previous T4 original IL audits (CI42062124798, CI42068520588) established SaveWorld uses an RGD-derived local/factory result, motivating CLR inheritance-aware preflight.",
+    "New preflight requires actual CLR declaring assembly identity plus argument Source RGD and IsAssignableFrom(owner-world derived type), and rechecks the reflected real original method parameter assignability immediately before invocation.",
+    "With those guards, original private Save and original generic LoadT actually succeed 7 of 7; this corrects the earlier over-restrictive type test, not a rewrite of the game."
+  ],
+  "transient_runs": [
+    {
+      "run": 42152893220,
+      "category": "missing previous read-only source fixture in sparse checkout; CI didn't reach CLR"
+    },
+    {
+      "run": 42152966250,
+      "category": "source verifier rejected old shipped-seed category text; no private data logged"
+    },
+    {
+      "run": 42153104453,
+      "category": "exact-type-only guard safely refused 7/7 despite CLR load; no Save invocation"
+    },
+    {
+      "run": 42153485700,
+      "category": "genuine original private Save and original LoadT 7/7 success before upgraded source guard tests"
+    },
+    {
+      "run": 42153533612,
+      "category": "final 12+24 controls, authentic original 7/7 Save/Load and tamper rejection, success"
+    }
+  ],
+  "negative_controls": [
+    "Original DLL exact size and SHA, CL immutable commit and seven exact Git SHA1 blobs before legacy formatter.",
+    "Two equal-size but different owner RGD sources accepted only by their exact Git blob hashes.",
+    "Symbolic links/unknown/changed/missing/duplicate saves and output-inside-source rejected.",
+    "Only original assembly RGD base type assignable from actual world root permitted; same-name untrusted assembly disallowed.",
+    "Unique original nonpublic Save(string, RGD) method inspected with bounded Mono.Cecil, no unexpected field/calli/game/Unity success-path calls, FileManager.CreateFile and BinaryFormatter.Serialize both required.",
+    "Private Save output created only in disposable isolated directory, nonzero output and matching original LoadT result both checked, then cleanup required for success category.",
+    "Source-free report whitelist refuses arbitrary private type/path fields, fake Android/world success, malformed/inconsistent guard/Save/Load/cleanup categories.",
+    "Tampered original owner-world source refused before deserialization and report creation."
+  ],
+  "limits": [
+    "Actual original CLR Save->Load in isolated .NET8, not original Unity/IL2CPP Android or process lifecycle.",
+    "No original gameplay SaveGame event, local-host callback, world progress field values, or persistence across actual phone process exits verified.",
+    "Original saved output matching original CLR root type does not establish bytewise or semantic field-level equality of world content.",
+    "Owner prior phone world/save/exit/reopen evidence applies only to signed source e9c358eda01785b65e4eb14f18723da426635628 and not this new candidate.",
+    "No new native APK/OBB/XAPK produced or phone run requested; original game source/assets/.meta/GUID/.rgd untouched."
+  ],
+  "next_step": "T5 coordinates one immutable signed APK+matching OBB/manifest to validate playable offline new-world, genuine SaveGame and world/player progress, full process quit/reopen exact same world and save state; correlate Save.argumentFileSnapshot, Load.argumentFileSnapshot, Load.caughtException and original GameManager/WorldHasBeenLoaded markers. Optional future bounded field-level semantic parity of original managed roundtrip, not required for device trial."
+}
