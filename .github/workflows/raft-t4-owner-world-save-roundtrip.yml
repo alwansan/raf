@@ -29,6 +29,7 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /android-port/Experiments/T4/OwnerWorldRgdRoundtrip/
+            /android-port/Experiments/T4/ClWorldRgdRuntime/Program.cs
             /scripts/t4_stage_owner5nov_world_rgds.py
             /scripts/t4_validate_owner_world_roundtrip.py
             /tests/test_t4_owner_world_roundtrip.py
