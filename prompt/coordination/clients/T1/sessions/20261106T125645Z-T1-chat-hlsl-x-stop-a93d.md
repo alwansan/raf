@@ -3,7 +3,7 @@
 - session_id: 20261106T125645Z-T1-chat-hlsl-x-stop-a93d
 - origin: chat
 - issue_id: WATER-001
-- status: waiting_ci
+- status: completed (scoped Phi stop-opcode investigation)
 - base_sha: 18b47bc7fffc66699f8f0556cd8b478f02dc01fe
 - resumed_from_sessions: 20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c; 20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3; 20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2
 - work: prompt/coordination/work/WATER-001/T1-20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json
@@ -31,3 +31,13 @@ Next: inspect terminal status and safe `RAFT_T1_PASS0_SPIRV_PROVENANCE` marker f
 ## Next step
 
 If tests fail, correct minimum diagnostic without weakening privacy. If success, determine whether translated X lane stops at OpPhi or OpIAdd or another operation and plan safe operand-provenance tracing or bitcast correctness proof on the exact original source.
+
+## Verified final CI result (follow-up)
+
+[GitHub Actions run 42221700354](https://github.com/alwansan/raf/actions/runs/42221700354) job 127905081188 **COMPLETED SUCCESS**. Initial apt dependency installation was slow but ultimately completed; source-free tests, ZIP2 immutable source recovery, original-and-translated Vulkan stages, private scratch cleanup all passed. Source pin remains `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
+
+The first butterfly read's translated **X** is specifically `boundary=unresolved, stop_opcode=OpPhi, stop_numeric_kind=float32`, at coordinate-depth 12. The second butterfly X and Y also stop at `OpPhi float32`. Source image X and Y reach `OpLoad`. The OpIAdd in the whole slice cannot be attributed to X by the original generic opcode census; the new direct-lane stop establishes Phi, not a numeric root cause.
+
+No original SSA IDs, private original shader assets, numerical constant bits or GPU pixel data were published. A Phi merge alone does not prove incorrect HLSL conversion; original-vs-translated same-input invocation trace and authored Unity/Adreno runtime evidence remain absent. WATER-001 **OPEN / NOT_READY**.
+
+Work and experiment status updated to completed; canonical event promoted to result. The distinct source-only paired-evidence gate is developed by a separate T1 chat session `20261106T130729Z-T1-chat-pair-gate-6c2e` with CI 42223419922. Next investigation should classify typed Phi inputs/predecessors before any speculative shader rewrite.
