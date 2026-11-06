@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "authentic-owner-5nov-original-savegame-nested-cycle-provenance",
+  "status": "active",
+  "base_sha": "fb21f2a1b49c8569eba38743c8aa52d3bcb010b2",
+  "approach": "Upgrade existing exact CL blob-authenticated phone JSONL experiment with per-SaveGame deterministic nested SaveWorld -> SaveUser original boundary sequence, requiring nonzero file snapshot during both phases; reject malformed/reordered equal-count cycles as completion evidence without claiming payload durability or game acceptance.",
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "hypothesis": "Original count-only SaveGame/SaveWorld/SaveUser enter/exit parity can overstate successful authored save chains if exit events appear before entry or SaveUser precedes SaveWorld, while the genuine CL@520c4c sessions likely have nested ordered original operation events.",
+  "experiment_key": "T4-owner5nov-CL520c4c-original-nested-savegame-world-user-snapshots-source-negative-v2",
+  "resource_key": "T4-owner-CL520c4c-readonly-small-sparse-CI",
+  "related_work": [
+    "20261106T1918Z-T4-chat-owner-log-lifecycle-p6n2 (three real logger sessions 8 synthetic tests and immutable hashes CI42280021182)"
+  ],
+  "taken_over_from": [
+    "T4 prior phone logger per-operation static counts, completed previous own scope"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-06T19:36:00Z",
+  "next_step": "Introduce red source-only controls for equal-count impossible original ordering and no phase snapshots; upgrade cycle evidence to true nested sequence while reusing exact pinned CL3 CI. Record both red and green, no native build."
+}
