@@ -1,0 +1,19 @@
+{
+  "id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+  "issue_id": "WATER-001",
+  "type": "progress",
+  "at": "2026-11-06T17:46:59.348Z",
+  "summary": "T1 adopted owner trial-build policy and voted 'لا يحتاج' (sourcefree FFT controls, no original integrated water fix). Launched isolated Unity2021 OpenGLCore 5-site/320-value branch/nested/dynamic-loop Phi address test.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42264618337",
+    "https://github.com/alwansan/raf/commit/d5330515a091e4503187040361cad226a01fb35b"
+  ],
+  "limitations": [
+    "No new trial APK needed in T1's current scope",
+    "Actual Unity Phi run pending, not proven",
+    "WATER-001 OPEN"
+  ]
+}
