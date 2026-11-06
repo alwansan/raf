@@ -5,7 +5,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "world_save_device_log_evidence",
-  "status": "active",
+  "status": "completed",
   "base_sha": "697787bd3f9e582deda2f5dbe09ffe2b0456bd31",
   "experiment_key": "T4-LOCAL005-device-jsonl-many-logger-sessions-n2-evidence-pairs-quadratic-to-linear-200-counted-datetime-v1",
   "resource_key": null,
@@ -22,8 +22,18 @@
   "experiment_ids": [
     "prompt/coordination/experiments/T4/20261106T1731Z-T4-chat-log-pair-linear-w6q2.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Prove old quadratic comparisons via deterministic comparison counter then source-free linear scan with same gate; maintain existing tests, avoid private phone/source or native build.",
-  "updated_at": "2026-11-06T17:31:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42262198164",
+    "https://github.com/alwansan/raf/actions/runs/42262364475"
+  ],
+  "result": {
+    "red_ci": "42262198164 completed FAILURE expected: 20499 datetime comparisons not less than 2000 on 200 synthetic logger sessions; original other 27 tests pass",
+    "source_fix": "2e1417246a327e0a047d0817e328fd9d422b7c4c",
+    "green_ci": "42262364475 completed SUCCESS: 28 parser + 2 overflow tests; controlled pair matching <2000 comparisons",
+    "actual_android_or_rgd_verified": false,
+    "private_inputs_used": false,
+    "source_game_files_changed": false
+  },
+  "next_step": "T5 next signed APK+OBB plus owner device log and world save/reopen acceptance. Apply same fail-closed analyzer to private JSONL; no source-game world acceptance from synthetic log hints. LOCAL-005 remains OPEN.",
+  "updated_at": "2026-11-06T17:33:00Z"
 }
