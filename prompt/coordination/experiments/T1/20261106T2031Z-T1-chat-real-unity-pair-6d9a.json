@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "session_id": "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "hypothesis": "Actual original SHA-pinned ZIP2 directly instrumented SPIR-V and generated HLSL imported by Unity2021 OpenGLCore have a reproducible first FFT butterfly invocation site1 coordinate/pixel difference on byte-identical seed19 buffers when measured in separate real GPU runtimes.",
+  "source_sha": "177a57342dc6197e2f5dceee940c9bb0bec34c6f",
+  "source_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "tool_versions": {
+    "Unity": "2021.3.45f2 (test in progress; no claim run)",
+    "GameCI CLI": "v0.1.72 SHA256 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a",
+    "host": "ubuntu-24.04"
+  },
+  "commands": [
+    "GitHub Actions push exact workflow path with one-shot commit marker [t1-paired-replay] (no native request)",
+    "CI python3 -m unittest ... source-only contract tests",
+    "GameCI unity-cli isolated source-free test -> exact original ZIP2 SHA stage -> original-SPIRV Vulkan keyed recorder -> Unity candidate -> SHA/copy-input/producer-stage pair join"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42289238865",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42289104961",
+    "https://github.com/alwansan/raf/actions/runs/42289238865"
+  ],
+  "budget": "one 65-minute capped original-derived Unity replay, ubuntu-24.04 with shared raft-native-engine mutex; no cancellation",
+  "negative_controls": [
+    "SHA-pinned ZIP2 authentic source and GameCI CLI",
+    "source-free synthetic Unity preflight before original data acquisition",
+    "vulkan direct original-SPIRV not HLSL reference",
+    "paired input bytes and 3 site keyed census 64/256/64",
+    "original-derived candidate SHA, exact NUnit stage and Unity CopyInput identity",
+    "reject missing/duplicate/untrusted/mismatched files and output privacy"
+  ],
+  "observed_result": {
+    "first_run": {
+      "id": 42289104961,
+      "conclusion": "failure",
+      "failure": "4 workflow source contract test FileNotFoundError because missing sparse-checkout .github/workflows path; not Unity original failure"
+    },
+    "fixed_by_commit": "177a57342dc6197e2f5dceee940c9bb0bec34c6f",
+    "retry": {
+      "id": 42289238865,
+      "job_id": 128138000484,
+      "status": "in_progress",
+      "passed_steps": [
+        "license and disk budget",
+        "checkout + all source-only guards",
+        "GameCI CLI pinned SHA"
+      ]
+    },
+    "unity_real_original_comparison_completed": false
+  },
+  "rejected_hypotheses": [
+    "First failure was shader or Unity numeric error: false; failed earlier in sparse checkout contract validation."
+  ],
+  "limitations": [
+    "No original game FFT Unity numeric result yet; do not claim water restored.",
+    "Do not print proprietary trace or shader bytes.",
+    "External workflow status may advance after this checkpoint; scheduled T1 must verify from fresh GitHub evidence."
+  ],
+  "integration_commit": "177a57342dc6197e2f5dceee940c9bb0bec34c6f",
+  "next_step": "Check exact 42289238865 full run/jobjob. If failed locate first stage and repair without blind rerun, if successful read safe numeric site signatures and compare with original. No native XAPK."
+}
