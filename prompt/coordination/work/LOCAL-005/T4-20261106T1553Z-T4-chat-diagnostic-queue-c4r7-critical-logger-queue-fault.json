@@ -4,9 +4,9 @@
   "session_id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "waiting_ci",
+  "status": "completed_managed_source_ci_success_device_unverified",
   "base_sha": "0538a6a2f310bb9f01391c50bdd73af4655ec19c",
-  "updated_at": "2026-11-06T16:00:21.278Z",
+  "updated_at": "2026-11-06T16:02:33.842Z",
   "resumed_from_sessions": [
     "20261106T1543Z-T4-scheduled-p8r2",
     "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9"
@@ -31,11 +31,12 @@
   "safety": "Fault injection only in .NET8 synthetic test via reflection on test-private startup FileStream, lock ioGate to prevent race; no real original RGD or Android device; critical barrier on healthy storage must remain. Preserve original logs, format, startup/retention and Unity behavior.",
   "plan": "Add failing deterministic C# regression with queueLimit=1, managed startup file disposal and alternating noncritical drop/critical; correct critical enqueue to recheck capacity after failed Flush. Dedicated existing diagnostics workflow on source/test push, no full Unity build.",
   "acceptance": "Original tests and new red/green negative controls, managed .NET8 on exact source SHA, queue count stays <= limit and fresh healthy critical logs are actually flushed, no phone claim.",
-  "next_step": "Inspect exact final CI42248102165. On success record event/T5 handoff; on failure revise only bounded diagnostic logger and tests.",
-  "result": "Original bound-only synthetic test 42247352569 passed and falsified original immediate queue growth hypothesis. Revised stronger negative CI42247880072 FAILED at Program.cs:148 overflowRetained>0: lost messages marker wrongly discarded on failed storage Append. Production fix now uses retryable TryPeek + restored dropped counter + cap after failed Flush; exact CI42248102165 pending.",
-  "source_commit": "73cfdc1878607bdb185ab40cc527807c4e09f71f",
+  "next_step": "T5: include exact production commit 73cfdc1878607bdb185ab40cc527807c4e09f71f or later in one signed APK+matching OBB, track manifest/package/versionCode/source SHA and exact downloaded bytes. On owner phone stress log I/O while monitoring memory; confirm private first crash/first Save/Load event, startup/rotated segments and queue_overflow recovery without claiming absolute durability under power loss; separately test original real world save/force-stop/reopen and physical mouse. No new native build T4.",
+  "result": "Exact final source f674025abb39242ec34ea978d0f17fd6da5d2627 CI42248437096 COMPLETED SUCCESS, job 127996721173: RAFT_PERSISTENT_LOG_TEST checks=285 passed=true actualAndroidStorageVerified=false. Synthetic startup FileStream disposal (only test sink) + one queued seed + 24 alternating ordinary drops and critical attempts; original pending event and dropped count survive failed Append; after recovery flush writes both original event and queue_overflow JSONL; queueLimit 1 still respected. Existing Unicode JSONL/rotation/startup/shutdown/repetition tests also green. Earlier focused negative CI42247880072 failed at Program.cs:148 because overflow lost count was reset; CI42247352569 initial queue-cap-only test succeeded (initial unbounded-memory conjecture not proven). No Unity/Android/real RGD tested.",
+  "source_commit": "f674025abb39242ec34ea978d0f17fd6da5d2627",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42247880072",
-    "https://github.com/alwansan/raf/actions/runs/42248102165"
+    "https://github.com/alwansan/raf/actions/runs/42248102165",
+    "https://github.com/alwansan/raf/actions/runs/42248437096"
   ]
 }
