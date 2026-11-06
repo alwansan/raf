@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1714Z-T2-chat-target-foam-name-63f0-original-Foam-Shaders-name-negative",
+  "owner": "T2",
+  "session_id": "20261106T1714Z-T2-chat-target-foam-name-63f0",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Genuine immutable ZIP2 original source owner (115978112B SHA checked) and one 758412B external target owner authenticated in GitHub Actions 42260338766: two actual typed Shader PathIDs, both original parsed names readable; exact original Foam Shader parsed-name matches 0/2 and raw Foam object matches 0/2. Synthetic controls 21/21; no Unity external GUID/runtime/CB0 or phone pixel proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42260338766",
+    "https://github.com/alwansan/raf/actions/runs/42260145863",
+    "docs/T2_FOAM_ORIGINAL_EXTERNAL_SHADER_NAME_RELATION_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1714Z-T2-chat-target-foam-name-63f0.json"
+  ],
+  "at": "2026-11-06T17:20:23.709Z",
+  "limitations": [
+    "External target name mismatch does not prove original Foam Shader has no runtime references elsewhere.",
+    "Unity FileIdentifier GUID identity, original Foam Material/CB0 host upload and Android water pixels remain UNKNOWN.",
+    "WATER-001 stays OPEN, no material/.meta/GUID/Unity/Android game code or original private bytes altered."
+  ]
+}
