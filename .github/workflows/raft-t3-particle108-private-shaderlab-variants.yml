@@ -12,6 +12,8 @@ on:
       - 'tests/test_t3_particle108_original_keyword_lattice.py'
       - 'scripts/t3_particle108_original_keyword_names.py'
       - 'tests/test_t3_particle108_original_keyword_names.py'
+      - 'scripts/t3_particle108_private_keyword_routed_shaderlab.py'
+      - 'tests/test_t3_particle108_private_keyword_routed_shaderlab.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -44,6 +46,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_lattice.py' -v
           python3 -m py_compile scripts/t3_particle108_original_keyword_names.py tests/test_t3_particle108_original_keyword_names.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_names.py' -v
+          python3 -m py_compile scripts/t3_particle108_private_keyword_routed_shaderlab.py tests/test_t3_particle108_private_keyword_routed_shaderlab.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_private_keyword_routed_shaderlab.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -180,7 +184,7 @@ jobs:
           timeout 180s python3 -m scripts.t3_particle108_original_keyword_names \
             --original "$RUNNER_TEMP/t3-private-variant-original" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
-            --out "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json"
+            --out "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json" "$RUNNER_TEMP/t3-private-provisional-routed-safe.json"
           python3 - <<'PY'
           import json,os
           from pathlib import Path
@@ -195,6 +199,31 @@ jobs:
           assert data["Unity_Editor_compile_or_Android_GPU_pixels_proven"] is False
           assert data["source_keyword_names_indices_flags_shader_text_or_paths_published"] is False
           print("T3_PRIVATE_KEYWORD_NAME_TABLE_CLASSIFIED="+data["table_category"])
+          PY
+      - name: Test one PROVISIONAL four-keyword-variant ShaderLab; 8 original glslang Vulkan1.1 stage branches
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_private_keyword_routed_shaderlab \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/t3-private-provisional-routed-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,json
+          report=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-private-provisional-routed-safe.json").read_text())
+          assert report["status"]=="T3_PRIVATE_SHADER48_PROVISIONAL_TWO_KEYWORD_SINGLE_SHADERLAB_VALID"
+          assert report["source_original_keyword_name_indices_mapped"] is True
+          assert report["original_keyword_pair_routes"]==4
+          assert report["provisional_one_ShaderLab_four_pairs"] is True
+          assert report["private_combination_stage_compiles_attempted"]==8
+          assert report["private_combination_stage_Vulkan11_SPIRV_valid"]==8
+          for key in ("original_keyword_flags_pragma_scope_proven",
+                      "Unity_ShaderLab_import_or_actual_variant_selection_proven",
+                      "original_Material_binding_proven","Android_pixels_proven",
+                      "original_keyword_names_indices_shader_code_or_errors_published"):
+              assert report[key] is False
+          print("T3_PRIVATE_PROVISIONAL_ONE_SHADERLAB=4_pair_routes_8_glslang_vulkan11_valid; Unity_Material_Android_UNPROVEN")
           PY
       - name: Erase private staged sources and candidates from runner
         if: always()
