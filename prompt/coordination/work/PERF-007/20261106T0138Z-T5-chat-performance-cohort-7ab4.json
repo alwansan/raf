@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T0138Z-T5-chat-performance-cohort-7ab4",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "status": "active",
+  "base_sha": "6421459579fa5e0c006a088cb30ecf76f023e129",
+  "intended_files": [
+    "prompt/coordination/work/PERF-007/20261106T0138Z-T5-chat-performance-cohort-7ab4.json",
+    "prompt/coordination/clients/T5/sessions/20261106T0138Z-T5-chat-performance-cohort-7ab4.md",
+    "scripts/t5_cl_fps_cohort_gate.py",
+    "tests/test_t5_cl_fps_cohort_gate.py",
+    ".github/workflows/raft-t5-cl-real-fps-cohort.yml",
+    "docs/T5_REAL_CL_PERFORMANCE_COHORT_2026-11-06.md",
+    "prompt/coordination/experiments/T5/20261106T0138Z-T5-chat-performance-cohort-7ab4.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T0138Z-T5-chat-performance-cohort-7ab4.json"
+  ],
+  "experiment_key": "t5-CL520c4c-20261105-version89-two-sessions-performance-fresh-surface-same-rendererror-cohort-v1",
+  "resource_key": "CL-pinned-readonly-2-metrics-jsonl-small-no-game-data",
+  "hypothesis": "120.77-120.78 SurfaceFlinger FPS in second phone session comes before first render-error event and is followed by 105 stale samples, so it cannot support a comparison with 57 actively erroring FPS samples in the first session.",
+  "taken_over_from": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "prompt/coordination/clients/T5/sessions/20261105T2208Z-T5-chat-obb-guid-3d7a.md",
+    "prompt/coordination/clients/T5/sessions/20261106T0047Z-T5-scheduled-c4e8.md",
+    "docs/A4_PERF_GPU_SCENE_DIAGNOSTICS_2026-11-04.md"
+  ],
+  "source_inputs": {
+    "CL_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "samples": [
+      {
+        "name": "220911-559",
+        "blob_sha": "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8"
+      },
+      {
+        "name": "230108-327",
+        "blob_sha": "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+      }
+    ]
+  },
+  "ci_urls": [],
+  "next_step": "Implement strict source-free telemetry cohort gate and unit fixtures; pin and check real CL blobs in CPU-only GitHub Actions; report only safe aggregates; no Unity/build/game/Runtime changes.",
+  "updated_at": "2026-11-06T01:35:55.872Z"
+}
