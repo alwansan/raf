@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T223455Z-T1-chat-phi-pathtag-c9e2",
+  "owner": "T1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "updated_at": "2026-11-06T22:54:50.465Z",
+  "experiment_key": "sha15964ea8-original-FFT-slot0-site2Y-Phi-entry-loop-tagger-mesa-cpu-vulkan-1024x32-seed19-v1",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "original_owner_bytes": 115978112,
+  "compiled_slots_verified": [
+    0,
+    1
+  ],
+  "source_stage": {
+    "run": 42306367304,
+    "status": "success",
+    "tests": 51,
+    "private_spirv_assembled_validated": true
+  },
+  "negative_stage": {
+    "run": 42307267780,
+    "status": "failure_before_original",
+    "fault": "synthetic_output_symlink_guard_missing",
+    "repair_sha": "0346399e628e0303cf68b3f514c383a05d749b8c"
+  },
+  "first_positive_run": {
+    "run": 42307363513,
+    "status": "success",
+    "tests": 33
+  },
+  "final_run": {
+    "run": 42307656709,
+    "status": "success",
+    "tests": 34,
+    "software_cpu_vulkan_dispatched": true,
+    "source_and_butterfly_inputs_byte_identical": true,
+    "original_controls_byte_identical": true,
+    "tagged_vs_untagged_pass0_pass1_byte_identical": true,
+    "pass0_pixels_compared": 64,
+    "pass1_pixels_compared": 32,
+    "invocations": 64,
+    "threads_with_entry_once": 64,
+    "threads_with_four_loop_backedges": 64,
+    "total_entry": 64,
+    "total_loop": 256,
+    "counter_buffer_words": 128,
+    "descriptor_set": 0,
+    "descriptor_binding": 3
+  },
+  "limits": [
+    "Output byte parity only tagged/untagged derived candidate on Mesa CPU Vulkan, not original vs Unity",
+    "No numeric Phi selected branch value at third fetch",
+    "No Unity authored runtime kernel mapping or Android Adreno water restoration",
+    "Private original shaders, HLSL/SPIR-V, invocation counters, raw inputs and pixels never uploaded"
+  ],
+  "next_step": "SHA-auth original Vulkan vs Unity2021 OpenGLCore physical-input keyed Site2/Y numeric path capture; do not ship shader or rebuild native until divergence is proved."
+}
