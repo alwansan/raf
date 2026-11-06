@@ -1,0 +1,32 @@
+name: T1 WATER-001 source-free Unity FFT proof gate regression
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-gate-regression.yml
+      - scripts/t1_fft_unity_gpu_result_gate.py
+      - scripts/test_t1_fft_unity_gpu_result_gate_contract.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-gate-regression-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-free-gate-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts/t1_fft_unity_gpu_result_gate.py
+            scripts/test_t1_fft_unity_gpu_result_gate_contract.py
+      - name: Verify exact repository gate and seven adversarial contract tests
+        run: python3 -m unittest discover -s scripts -p 'test_t1_fft_unity_gpu_result_gate_contract.py' -v
