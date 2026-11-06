@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2002Z-T4-save-percall-snapshot-cardinality-k8p4",
+  "owner": "T4",
+  "session_id": "20261106T1959Z-T4-chat-save-snapshot-cardinality-k8p4",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Original owner 5-Nov SaveGame log verifier now requires exactly one nonzero file snapshot per nested Save() call, not only once per SaveWorld/User stage; 2 RED false positive subcases then 16/16 GREEN, immutable owner original phone traces still 7/7. Source-only evidence, not a native device fix.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/d4eced57992c4e82d012b7c28e483a7e75351672",
+    "https://github.com/alwansan/raf/actions/runs/42284566838",
+    "https://github.com/alwansan/raf/commit/4f7e8d4c084d60580def38cb0d74431d82be8230",
+    "https://github.com/alwansan/raf/actions/runs/42284677227"
+  ],
+  "at": "2026-11-06T20:02:00Z"
+}
