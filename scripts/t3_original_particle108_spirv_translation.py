@@ -163,7 +163,9 @@ def evaluate(pairs:list, temporary:Path, *, translator=translate,
                 x,y=reflections["original"],reflections["roundtrip"]
                 counts["stage_original_roundtrip_reflection_pairs_compared"]+=1
                 counts["stage_original_roundtrip_io_equal"]+=(
-                    x["inputs"]==y["inputs"] and x["outputs"]==y["outputs"])
+                    all(sorted(x[side], key=lambda row: row["location"]) ==
+                        sorted(y[side], key=lambda row: row["location"])
+                        for side in ("inputs", "outputs")))
                 counts["stage_original_roundtrip_resource_slot_shapes_equal"]+=(
                     x["resource_slots"]==y["resource_slots"])
                 # Use only the previously validated, anonymous stage I/O

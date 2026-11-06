@@ -121,6 +121,24 @@ class Particle108SPIRVSourceOnly(unittest.TestCase):
                         "synthetic-original-private-DXBC"):
             self.assertNotIn(private,public)
 
+    def test_reflection_io_order_does_not_create_false_drift(self):
+        """Reflection list order must not change a location/type comparison."""
+        def reordered(path):
+            stage=int(path.parent.name.rsplit("-stage-",1)[1])
+            rows=[{"location":0,"type":"vec4"},{"location":1,"type":"vec2"}]
+            if path.name=="roundtrip.spv":
+                rows.reverse()
+            return {"inputs":rows if stage==0 else [],
+                    "outputs":rows if stage==1 else [],
+                    "resource_slots":{}}
+        with tempfile.TemporaryDirectory() as d:
+            result=t3.evaluate(t3.exact_four_pairs(parsed(),table(),linker=fake_link),
+                               Path(d),translator=translate,reflector=reordered)
+        counts=result["counts"]
+        self.assertEqual(counts["stage_original_roundtrip_io_equal"],8)
+        self.assertEqual(counts["io_drift_inputs_identical"],8)
+        self.assertEqual(counts["io_drift_outputs_identical"],8)
+
     def test_failed_fragment_translation_does_not_claim_pair_success(self):
         def partial(code,stage,path):
             return {"stage":stage,"vulkan11_valid":stage==1,
