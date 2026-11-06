@@ -105,6 +105,14 @@ jobs:
           assert d['original_six_scene_SHA_verified'] and d['original_four_owner_SHA_verified']
           assert d['counts']['original_DXBC_to_SPIRV_stages']==8
           assert d['counts']['original_four_VSFS_keyword_pairs']==4
+          roles=d['stage_role_aggregate_counts']
+          assert set(roles)=={'vertex_inputs','vertex_outputs','fragment_inputs','fragment_outputs'}
+          assert sum(v['original_user_records'] for v in roles.values())==48
+          assert sum(v['spirv_located_rows'] for v in roles.values())==46
+          assert sum(v['missing_numeric_register_locations'] for v in roles.values())==2
+          assert sum(v['numerically_matching_register_records'] for v in roles.values())==46
+          assert all(v['type_class_mismatches']==0 for v in roles.values())
+          print('T3_ORIGINAL_MISSING_BY_STAGE_ROLE_SAFE='+json.dumps(roles,sort_keys=True))
           assert d['source_SPIRV_Location_equals_DXBC_register_semantic_identity_proven'] is False
           assert d['authored_semantic_to_HLSL_variable_mapping_proven'] is False
           assert d['auto_location_patch_authorized'] is False
