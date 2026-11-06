@@ -148,6 +148,11 @@ def aggregate_source_counts(owner_rows, component_count, full_parse_count,
             or summed["opaque_MonoBehaviour_script_to_external_typed_MonoScript"] >
             summed["opaque_MonoBehaviour_script_to_external_owner"]):
         raise ValueError("opaque_source_coverage_incomplete")
+    # Source IDs can repeat in different scenes. Summing distinct-per-scene
+    # is not the distinct global source script object count.
+    summed["sum_per_scene_distinct_external_typed_script_targets"] = summed.pop(
+        "opaque_MonoBehaviour_distinct_external_typed_script_targets"
+    )
     return {
         "status": "source_original_MonoBehaviour_base_header_script_PPtr_census",
         "original_zip2_SHA_authenticated": True,
