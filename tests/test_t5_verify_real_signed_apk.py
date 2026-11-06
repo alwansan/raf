@@ -65,7 +65,7 @@ class SignedApkAuthenticityTests(unittest.TestCase):
             p = Path(d) / "x.apk"
             for kwargs in ({"expected_length": 673}, {"max_bytes": 100}):
                 with self.subTest(kwargs=kwargs), self.assertRaisesRegex(ProbeError, "size_cap"):
-                    stream_bounded_apk(lambda _, _: b"a", 0, 672853870,
+                    stream_bounded_apk(lambda _offset, _size: b"a", 0, 672853870,
                                        p, "0" * 64, **kwargs)
                 self.assertFalse(p.exists())
         self.assertLess(672853870, MAX_PAYLOAD_BYTES)
