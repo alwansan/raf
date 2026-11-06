@@ -34,8 +34,7 @@ def check_contract(dx_resources, spv_resources, provenance):
         not isinstance(item, dict) or not required.issubset(item)
         for item in group) for group, required in schemas):
         return ["invalid_schema"]
-    errors = []
-    dx_keys = [_key(x) for x in dx_resources]
+    # Reflection JSON may contain arrays/objects instead of scalar stage/family.\n    # Validate before constructing hash keys or Counter dictionaries.\n    if any(type(item["stage"]) is not str or type(item["family"]) is not str\n           for group in (dx_resources, spv_resources, provenance) for item in group):\n        return ["invalid_schema"]\n    errors = []\n    dx_keys = [_key(x) for x in dx_resources]
     spv_keys = [(x["stage"], x["family"], x["set"], x["binding"]) for x in spv_resources]
     map_keys = [_key(x) for x in provenance]
     targets = [(x["stage"], x["family"], x["set"], x["binding"]) for x in provenance]
