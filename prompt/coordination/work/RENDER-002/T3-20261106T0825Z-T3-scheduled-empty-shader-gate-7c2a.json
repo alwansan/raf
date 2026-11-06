@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T0825Z-T3-scheduled-empty-shader-gate-7c2a",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "baseline_sha": "d3f4fdba1ba04c67b6c88b73b09c201170dade8f",
+  "hypothesis": "Current structural identity gate accepts empty or comment-only .shader as successful link, creating false-positive restoration evidence.",
+  "files": [
+    "scripts/t3_shader_identity_gate.py",
+    "scripts/test_t3_shader_identity_gate_syntax.py",
+    "prompt/coordination/work/RENDER-002/T3-20261106T0825Z-T3-scheduled-empty-shader-gate-7c2a.json",
+    "prompt/coordination/clients/T3/sessions/20261106T0825Z-T3-scheduled-empty-shader-gate-7c2a.md"
+  ],
+  "experiment_key": "T3-shader-declaration-synthetic-20261106",
+  "shared_resource": "none; no CI/Unity",
+  "taken_over_from": "T3 scheduled 20261106T0732Z-T3-scheduled-gate-syntax-b91e; original renderer/shader evidence inherited from B_TEAM",
+  "status": "planned"
+}
