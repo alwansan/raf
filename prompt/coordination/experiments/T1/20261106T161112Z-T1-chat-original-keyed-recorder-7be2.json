@@ -1,0 +1,110 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T161112Z-T1-chat-original-keyed-recorder-7be2",
+  "issue_id": "WATER-001",
+  "hypothesis": "Using original signed3 GlobalInvocationId and free set0 binding3, a directly instrumented original ZIP2/SPIR-V slot0 can write true invocation-keyed 12-word ImageFetch records without HLSL retranslation or altering original FFT output.",
+  "source_commit": "e9ef2627d8bc09e007c5d2d59da1385136e5778b",
+  "original_sha_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42252268973",
+  "status": "completed_source_authentic_direct_original_spirv_gpu_keyed_capture",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_original_direct_keyed_recorder.py -v",
+    "python3 -m scripts.t1_fft_original_trace_vulkan --project \"$TMPDIR/candidates\" --export-private-trace \"$TMPDIR/original-keyed-trace.bin\"",
+    "spirv-as --target-env vulkan1.1 private original record assembly",
+    "spirv-val --target-env vulkan1.1 private original record module"
+  ],
+  "negative_controls": [
+    "Original GlobalInvocationId already signed32-vector3 in Input and listed in compute entry interface; no double builtin injection",
+    "Exactly 3 original ImageFetch sites source/butterfly/butterfly with sint32-vector2 coords and float32-vector4 results",
+    "Preserve signed original FFT coordinates; only record key uses unsigned bit cast",
+    "Three per-site per-invocation occurrence Function-local counters",
+    "Atomic unique global record index, 512 capacity clamp and detected overflow",
+    "SPIR-V 1.3 OpEntryPoint Input/Output-only interface: no StorageBuffer variable in entrypoint",
+    "Original traced vs unmodified original same-host Vulkan image outputs compared, no raw data exported",
+    "Buffer readback requires 384 records, [64,256,64], distinct (dispatch,occurrence) keys"
+  ],
+  "observed_result": {
+    "first_runner": {
+      "id": 42250952529,
+      "conclusion": "failure",
+      "stage": "original private runner before typed stage diagnostics"
+    },
+    "stage_runner": {
+      "id": 42251375883,
+      "conclusion": "failure",
+      "stage": "spirv_validate after instrument/spirv-as passed"
+    },
+    "validator_classifier": {
+      "id": 42251789167,
+      "conclusion": "failure",
+      "fixed_categories": [
+        "OpEntryPoint",
+        "OpVariable",
+        "StorageBuffer"
+      ]
+    },
+    "fixed_sourceonly": {
+      "id": 42252142102,
+      "conclusion": "success",
+      "test_counts": [
+        20,
+        11,
+        9,
+        14,
+        7,
+        5,
+        8,
+        12,
+        16,
+        9,
+        16
+      ],
+      "total": 127
+    },
+    "fixed_real_original": {
+      "id": 42252268973,
+      "job_id": 128010174020,
+      "conclusion": "success",
+      "original_SHA_verified": true,
+      "private_spirv_assembled_and_validated": true,
+      "Vulkan_dispatch_completed": true,
+      "record_count": 384,
+      "records_by_site": [
+        64,
+        256,
+        64
+      ],
+      "duplicate_invocation_occurrence_keys": 0,
+      "capacity": 512,
+      "source_shader_directly_instrumented": true,
+      "output_invariance_original_traced_vs_untraced": true,
+      "written_pixels_compared": 64,
+      "private_cleanup_passed": true,
+      "raw_trace_artifacts_published": false
+    },
+    "candidate_previous": {
+      "id": 42242127723,
+      "conclusion": "success",
+      "independent_hlsl_compiled_keyed_read_count": 384,
+      "site_counts": [
+        64,
+        256,
+        64
+      ]
+    },
+    "paired_two_trace_numeric_comparison_performed": false,
+    "android_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Direct original SPIR-V ImageFetch cannot be instrumented for independent keyed GPU capture: source-authentic Vulkan execution now succeeded with 384 reads",
+    "SSBO variable should be appended to SPIR-V 1.3 OpEntryPoint interface: validator correctly rejected; SPIR-V 1.3 interfaces only Input and Output"
+  ],
+  "limitations": [
+    "Original and HLSL candidate captures were produced in different private host process invocations, not yet an authenticated same-input SHA-bound paired trace report",
+    "Output invariance is original patched vs unpatched original pass0 only, not original vs HLSL per-invocation numeric equality",
+    "Native Unity authored kernel identity and Android/Adreno water device acceptance not proven"
+  ],
+  "next_step": "New independent scope must run original and translated candidate traces under same immutable fixture, compare SHA256 of actual source/butterfly input readback bytes and dispatch args privately, then validate two distinct input-bound trace files using scripts/t1_fft_invocation_pair_gate.py. Publish ONLY aggregate coordinate/value mismatch counts and optional sanitized first divergence; avoid raw private shader/trace artifacts. Only then attribute FFT numerical mismatch and plan HLSL fix."
+}
