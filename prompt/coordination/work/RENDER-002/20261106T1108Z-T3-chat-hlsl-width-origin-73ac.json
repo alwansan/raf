@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "generation": "T-2026-11-05",
+  "base_sha": "ec6714b57ab1f56ed97cac1019c3cbce8dc6bd74",
+  "resumed_from_sessions": [
+    "20261106T1034Z-T3-chat-consumed-width-0c6e",
+    "20261106T1026Z-T3-scheduled-91ac"
+  ],
+  "track": "Locate true cause of Particle108 2 consumed HLSL VS output vector narrowing at source-SPIRV-to-HLSL-emission or HLSL-to-SPIRV-recompile boundary",
+  "intended_files": [
+    "scripts/t3_particle108_hlsl_output_width_origin.py",
+    "tests/test_t3_particle108_hlsl_output_width_origin.py",
+    ".github/workflows/raft-t3-particle108-hlsl-width-origin.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.md",
+    "prompt/coordination/experiments/T3/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json"
+  ],
+  "hypothesis": "Compare source SPIRV reflected Vertex output type multiset, safely parsed SPIRV-Cross generated HLSL Vertex struct user output field types, and roundtrip SPIRV type multiset, without guessing per-variable semantic identity. Attempt direct field-name identity with strict exact unique matching as separate evidence.",
+  "experiment_key": "T3-Particle108-fourSHA-original-VS-HLSL-user-output-struct-width-multiset-triangle-v1",
+  "resource_key": "T3-private-Particle108-fourowners-HLSL-probe",
+  "approach": "Independent script workflow based on source-authentic established original four-pair probe, no shared game edits or heavy Unity. Count-only reports; strict synthetic tests, HLSL private; not semantic proof.",
+  "updated_at": "2026-11-06T11:06:41.674Z"
+}
