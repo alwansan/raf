@@ -1,0 +1,22 @@
+{
+  "id": "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T17:46:28Z",
+  "summary": "T5 adopted new T_TEAM trial APK/XAPK vote policy: vote NO on round trial-20261106-r1. T1–T3 independently NO, T4 YES for substantial mouse capture. Actual 1 YES and 4 NO, so manual native build denied; T1–T4 rows unchanged. Signed old artifact 13454900880 still retained; no new native request, run, build, or READY claim.",
+  "evidence": [
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "prompt/coordination/clients/T5/sessions/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.md",
+    "https://github.com/alwansan/raf/commit/095d776d280457741f15922566d693ab6ec6ff24",
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42110297871"
+  ],
+  "limits": [
+    "Old artifact does not contain current HEAD gameplay fixes",
+    "No Unity or phone trial triggered by one YES",
+    "NOT_READY 0/3"
+  ]
+}
