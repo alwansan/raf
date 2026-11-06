@@ -44,3 +44,52 @@ Status: PERF-007 diagnostic scope pending CI; original full game readiness NOT_R
 - This is a **diagnostic refusal of an unsupported comparison**, not proof the game froze or got faster. In fact, contemporaneous Unity internal persistent JSONL data also exist and must be independently linked/qualified; SurfaceFlinger unavailability is NOT Unity frame unavailability.
 
 Next independent T5 work should analyze actual `raft-logs` game-side interval measurements with scene identity and startup/frame window gates; do not infer comparative FPS from their simple averages either.
+
+## T5 follow-up — real process-epoch enforcement (2026-11-06 17:35 UTC)
+
+Previous analysis required individual sample PID verification but could still blend
+**multiple verified PID lifetimes** into a single SurfaceFlinger median. T5 scheduled
+session `20261106T1649Z-T5-scheduled-runtime-attribution-c82f` authored a PID
+epoch auditor; T5 chat session `20261106T1728Z-T5-chat-pid-cohort-enforce-b72c`
+integrated it into the existing `analyze()` and `compare()` paths.
+
+- Source changes: `scripts/t5_cl_fps_cohort_gate.py`, `scripts/t5_cl_pid_epoch_audit.py`,
+  `tests/test_t5_cl_pid_cohort_integration.py`, and the original
+  `.github/workflows/raft-t5-cl-real-fps-cohort.yml` CPU-only path.
+- A verified change of Raft PID or an unknown running PID interval now causes
+  `safe_to_aggregate_entire_session=false`. No single-session FPS medians
+  or post-render-error FPS distribution are emitted in such a file. The
+  compare decision is `NOT_COMPARABLE_unverified_or_mixed_process_epoch`
+  instead of a potentially false speed comparison. Only the count of
+  withheld samples and process epoch count are published, not actual PIDs.
+- First CI [42262250870](https://github.com/alwansan/raf/actions/runs/42262250870)
+  failed in a genuine T5 scheduled audit test: an unverified running PID
+  interval was incorrectly joined with the subsequent verified PID epoch.
+  Corrected the source splitter, rather than weakening the test.
+- Second CI [42262695277](https://github.com/alwansan/raf/actions/runs/42262695277)
+  passed all 29 then-current unit tests and downloaded both pinned CL blobs,
+  but failed because direct `python3 scripts/t5_cl_fps_cohort_gate.py` execution
+  lacked the repository import root. Fixed the direct CLI entrypoint and
+  added a source-free subprocess integration test.
+- **Final [CI42263013004](https://github.com/alwansan/raf/actions/runs/42263013004),
+  source `145fefb5bc3f2cbd94617051fa6588d1e62d35af`, SUCCESS:** 18
+  historical controls + 4 inherited PID-epoch controls + 8 new integration
+  controls = **30/30 PASS**; both original CL blobs verified as Git identities,
+  size 374,587 + 646,527 bytes; actual 71 + 119 LogRaft telemetry rows
+  inspected, with precisely one verified Raft PID process epoch per session.
+  Existing valid fresh SurfaceFlinger sample counts remained 57 vs 2,
+  6 vs 105 stale, 57 vs 0 post-render-error, with outcome
+  `NOT_COMPARABLE_inadequate_fresh_post_render_error_samples`.
+- This change **does not improve the game's framerate** or repair water,
+  shaders, GPU or driver; it prevents false assertions. The process-epoch
+  signal uses the LogRaft-reported PID identity. A PID reused after a stop
+  without an intermediate verified change might still need independent
+  process-start evidence; it must not be treated as a cryptographically
+  unique process generation. A zero SurfaceFlinger sample window is not
+  proof of game freeze. Original phone-ready graphics remain OPEN.
+
+No original APK/OBB, proprietary game assets or raw device logs were
+modified or published. The T5 scheduled author's test and source remain
+attributed to the scheduled session; this chat's differential contribution
+was the integration, observed failures, splitter repair and direct CLI
+regression. Full candidate readiness remains NOT_READY 0/3.
