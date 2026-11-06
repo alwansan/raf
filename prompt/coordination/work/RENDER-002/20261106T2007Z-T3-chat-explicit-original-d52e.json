@@ -8,14 +8,14 @@
   "track": "colors-materials",
   "status": "active",
   "base_sha": "47df6c4b344a688928219596cae66ef865108050",
-  "updated_at": "2026-11-06T20:07:00Z",
+  "updated_at": "2026-11-06T20:15:30Z",
   "resumed_from_sessions": [
     "20261106T1959Z-T3-chat-original-stage-probe-9f24",
     "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
     "20261106T1934Z-T3-scheduled-contract-validation-8c4e"
   ],
   "hypothesis": "Current dual-profile verifier treats all SPIR-V OpVariable including Input/Output as descriptors, so real graphics VS/PS may spuriously fail a valid explicit source DXBC→VK binding mapping despite correct source-to-variable identity. Prove and correct fail-closed separation; then test authenticated original 8 stages under two explicit VKD3D graphics profiles.",
-  "approach": "Correct existing verifier to recognize only descriptor storage classes, add synthetic interface and unknown-resource safeguards, build new SHA-original 8-stage private run adapter with strict source/manifest authentication and C helper two-profile output + SPIRV validator, one-shot bounded CI; report failures without leaking original values. No Unity APK.",
+  "approach": "Correct existing verifier to recognize only descriptor storage classes, add synthetic interface and unknown-resource safeguards, build new SHA-original 8-stage private run adapter with strict source/manifest authentication and C helper two-profile output + SPIRV validator, one-shot bounded CI; report failures without leaking original values. No Unity APK. Terminal authenticated original CI42286681868 isolated C vkd3d exit44 (vkd3d_shader_compile=-4 INVALID_SHADER). Add explicit no-binding baseline C ABI control to distinguish source parse/target compatibility from mapping failure before editing semantics; no private diagnostics.",
   "experiment_key": "T3-original-Shader48-eightstage-explicit-vkd3d-AB-dual-profile-SPIRV-verified-15964-d52e",
   "resource_key": "SHA-original ZIP2 four shader owners six scenes; no-Unity; independent from native 42281310905",
   "intended_files": [
@@ -28,7 +28,8 @@
     "prompt/coordination/clients/T3/sessions/20261106T2007Z-T3-chat-explicit-original-d52e.md",
     "prompt/coordination/experiments/T3/20261106T2007Z-T3-chat-explicit-original-d52e.json",
     "prompt/coordination/B_TEAM/events/T3/20261106T2007Z-T3-chat-explicit-original-d52e.json",
-    "prompt/coordination/work/RENDER-002/20261106T2007Z-T3-chat-explicit-original-d52e.json"
+    "prompt/coordination/work/RENDER-002/20261106T2007Z-T3-chat-explicit-original-d52e.json",
+    "scripts/t3_particle108_vkd3d_explicit_graphics.c"
   ],
   "constraints": [
     "Do not overwrite scheduled T3 strict contract, T1/T2/T4/T5 work; only feature/android-native-port",
@@ -36,5 +37,9 @@
     "Private original DXBC, names, register values, shader resource identities, SPV binary only runner temp; logs only aggregate flags and safe failure codes",
     "No ShaderLab or phone fidelity assumed from dual-profile structural equality; trial vote remains لا يحتاج until material integrated renderer fix"
   ],
-  "next_step": "Fix verifier real graphics interface input/output false positive with tests, then authenticate original eight stages and compile A/B through bounded GitHub source-only action. Publish safe report and close work."
+  "next_step": "Fix verifier real graphics interface input/output false positive with tests, then authenticate original eight stages and compile A/B through bounded GitHub source-only action. Publish safe report and close work.",
+  "related_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42286299737",
+    "https://github.com/alwansan/raf/actions/runs/42286681868"
+  ]
 }
