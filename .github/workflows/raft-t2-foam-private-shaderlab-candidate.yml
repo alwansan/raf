@@ -7,6 +7,8 @@ on:
       - tests/test_t2_foam_private_shaderlab_candidate.py
       - scripts/t2_foam_candidate_embedded_validation.py
       - tests/test_t2_foam_candidate_embedded_validation.py
+      - scripts/t2_foam_embedded_stage_io.py
+      - tests/test_t2_foam_embedded_stage_io.py
       - .github/workflows/raft-t2-foam-private-shaderlab-candidate.yml
   workflow_dispatch:
 permissions:
@@ -32,6 +34,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t2_foam_private_shaderlab_candidate.py' -v
           python3 -m py_compile scripts/t2_foam_candidate_embedded_validation.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_candidate_embedded_validation.py' -v
+          python3 -m py_compile scripts/t2_foam_embedded_stage_io.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_embedded_stage_io.py' -v
       - name: Check scratch disk
         run: python3 -c 'import shutil; assert shutil.disk_usage(".").free>3*1024**3'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -120,6 +124,30 @@ jobs:
           assert data["original_gpu_or_android_pixels_verified"] is False
           assert data["private_source_published"] is False
           PY
+      - name: Compare authentic per-pass Vulkan Vertex outputs to Fragment inputs from completed private ShaderLab
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.t2_foam_embedded_stage_io \
+            --candidate "$RUNNER_TEMP/t2-authentic-foam-private.shader" \
+            --scratch "$RUNNER_TEMP" \
+            --out "$RUNNER_TEMP/t2-foam-io-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-foam-io-safe.json").read_text())
+          assert r["status"] in ("source_original_embedded_two_pass_numeric_varyings_compatible",
+                                 "source_original_embedded_pass_varying_abi_mismatch")
+          assert r["source_derived_embedded_shaders"]==2
+          assert r["compiled_stage_variants"]==4
+          assert len(r["per_pass_user_varying_counts"])==2
+          assert all(type(x["numerical_location_type_interface_compatible"]) is bool
+                     for x in r["per_pass_user_varying_counts"])
+          assert r["unity_shaderlab_actual_import_verified"] is False
+          assert r["runtime_cb0_texture_sampler_or_material_upload_verified"] is False
+          assert r["actual_adreno_or_device_pixels_verified"] is False
+          assert r["private_source_published"] is False
+          # Do not equate a source-backed ABI mismatch with pixel acceptance.
+          PY
       - name: Erase original and private ShaderLab/HLSL, even on error
         if: always()
         run: |
@@ -136,5 +164,6 @@ jobs:
           path: |
             ${{ runner.temp }}/t2-foam-candidate-safe.json
             ${{ runner.temp }}/t2-foam-embedded-safe.json
+            ${{ runner.temp }}/t2-foam-io-safe.json
           if-no-files-found: ignore
           retention-days: 7
