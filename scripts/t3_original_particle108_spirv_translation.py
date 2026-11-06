@@ -24,6 +24,7 @@ from scripts.w1_recover_graphics_programs import decoded_platforms, records, tra
 from scripts.w1_recover_depth_passes import (
     linked_program, stage_variants, variant_key, reflection, interfaces_match,
 )
+from scripts.t3_stage_io_drift import classify_stage_io
 
 STATUS = "SHA_ORIGINAL_PARTICLE108_FOUR_KEYWORD_PAIRS_VULKAN_SPIRV_CPU_CLASSIFIED"
 TOOLS = ("vkd3d-compiler", "spirv-val", "spirv-cross", "glslangValidator")
@@ -32,6 +33,10 @@ STAGES = 2
 SHADER_TABLE_RECORDS = 16
 MAX_PRIVATE_STAGE_BYTES = 8 * 1024 * 1024
 MAX_STAGE_REFLECTION_SLOTS = 256
+IO_KEYS = ("identical","original_slots","roundtrip_slots","removed_locations",
+           "added_locations","same_location_type_changes",
+           "type_multiset_equal","location_only_remap_candidate")
+IO_BOOLEAN = frozenset(("identical","type_multiset_equal","location_only_remap_candidate"))
 
 
 def exact_four_pairs(parsed:dict, table:list, *, linker=linked_program):
@@ -113,7 +118,8 @@ def _validate_reflection(data:dict):
 
 
 def evaluate(pairs:list, temporary:Path, *, translator=translate,
-             reflector=reflection, pair_checker=interfaces_match):
+             reflector=reflection, pair_checker=interfaces_match,
+             io_classifier=classify_stage_io):
     """Safe aggregate from eight private compilers; failed stage ≠ device fix."""
     if (type(pairs) is not list or len(pairs)!=PAIRS or
         not isinstance(temporary,Path) or not temporary.is_dir() or
@@ -160,6 +166,21 @@ def evaluate(pairs:list, temporary:Path, *, translator=translate,
                     x["inputs"]==y["inputs"] and x["outputs"]==y["outputs"])
                 counts["stage_original_roundtrip_resource_slot_shapes_equal"]+=(
                     x["resource_slots"]==y["resource_slots"])
+                # Use only the previously validated, anonymous stage I/O
+                # classifier. No original/translated semantics, names or
+                # per-stage private locations leave the temporary runner.
+                classified=io_classifier(x,y)
+                expected={side+"_"+key for side in ("inputs","outputs")
+                          for key in IO_KEYS}
+                if type(classified) is not dict or set(classified)!=expected:
+                    raise ValueError("untrusted_private_stage_IO_drift_classifier_shape")
+                counts["stage_original_roundtrip_io_drift_classified"]+=1
+                for field,amount in classified.items():
+                    suffix=field.split("_",1)[1]
+                    cap=1 if suffix in IO_BOOLEAN else 256
+                    if type(amount) is not int or not 0<=amount<=cap:
+                        raise ValueError("untrusted_private_stage_IO_drift_numeric_count")
+                    counts["io_drift_"+field]+=amount
             stages[stage]={"flags":t,"reflections":reflections}
         v,f=stages[1],stages[0]
         for field,name in (("original","source"),("roundtrip","roundtrip")):
@@ -179,11 +200,16 @@ def evaluate(pairs:list, temporary:Path, *, translator=translate,
         "roundtrip_stage_reflections","roundtrip_stage_reflection_failures",
         "stage_original_roundtrip_reflection_pairs_compared",
         "stage_original_roundtrip_io_equal",
+        "stage_original_roundtrip_io_drift_classified",
         "stage_original_roundtrip_resource_slot_shapes_equal",
         "source_vs_fs_interfaces_compared","source_vs_fs_interfaces_compatible",
         "roundtrip_vs_fs_interfaces_compared","roundtrip_vs_fs_interfaces_compatible",
         "pairs_with_both_source_stages_spirv_vulkan11_valid",
         "pairs_with_both_roundtrip_stages_spirv_vulkan11_valid")
+    # Source/roundtrip I/O summaries are public count-only; no reflected
+    # per-program interface values are returned.
+    safe_keys += tuple("io_drift_"+side+"_"+key for side in ("inputs","outputs")
+                       for key in IO_KEYS)
     if counts["stage_translation_attempts"]!=PAIRS*STAGES:
         raise ValueError("incomplete_fourpair_private_translation_attempts")
     return {"schema_version":1,"status":STATUS,
