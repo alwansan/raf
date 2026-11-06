@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "original-saveandload-path-portability-stale-post-backup-source",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "70922d3736c55c716a7d4f7151fe7661c798912a",
   "intended_files": [
     "scripts/adapt_original_save_paths.py",
@@ -25,8 +25,9 @@
     "https://github.com/alwansan/raf/actions/runs/42292236717",
     "https://github.com/alwansan/raf/actions/runs/42292421337"
   ],
-  "updated_at": "2026-11-06T20:56:00Z",
-  "next_step": "Await exact-SHA 42292421337 ZIP2 private source stage; close files only if GREEN. No native request.",
+  "updated_at": "2026-11-06T20:57:00Z",
+  "next_step": "This source scope is completed and released. No repeat CI, no native request. T4 resume original world/save device SHA-evidence or distinct independent blocker; T5 native owns signed APK+OBB only under authorization.",
   "negative_control_commit": "1e6d4133acdd8f864095494883a0ad9596063cab",
-  "integration_commit": "5d3743920eaead00ac40d6ad863f53c638629a76"
+  "integration_commit": "5d3743920eaead00ac40d6ad863f53c638629a76",
+  "result": "RED test-only CI42292236717 fails 2 injected post-backup source/GUID changes; existing 15 tests pass. GREEN final CI42292421337 on production SHA5d374392 job128148967760 passed all 16/16 synthetic source tests, private authenticated original ZIP2 SaveAndLoad ILSpy adaptation, original 16 path expressions and .NET Unix+Windows 14 checks. Source/meta changes detected before original write, fresh own backup removed, clean retry succeeds; original game .rgd/.meta not changed. Source guard does not establish device saving or solve hostile concurrent write-after-check window."
 }
