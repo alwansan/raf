@@ -87,13 +87,28 @@ def _digest_values(rows):
 def analyze(rows, session_label):
     if not isinstance(session_label, str) or not session_label or len(session_label) > 64:
         raise ValueError("Invalid session label")
+    # T5 scheduled PID-epoch auditor is the sole process-lifetime source of
+    # truth. Import at call-time because that auditor imports the existing
+    # _fresh_fps predicate from this module. This protects both direct analyze()
+    # consumers and the CLI: no medians may span verified PID changes or
+    # unverified running-process intervals.
+    from scripts.t5_cl_pid_epoch_audit import audit
+    process = audit(rows)
+    process_safe = process["safe_to_aggregate_entire_session"]
     onset = next((r for r in rows if _error_observed(r)), None)
     onset_sample = onset["sample"] if onset else None
     onset_time = onset["timestamp_unix_ms"] if onset else None
-    fresh = [r for r in rows if _fresh_fps(r)]
+    # Never take medians of otherwise fresh SurfaceFlinger rows when they may
+    # refer to a different Raft process lifetime. Retain counts separately.
+    all_fresh = [r for r in rows if _fresh_fps(r)]
+    fresh = all_fresh if process_safe else []
     before = [r for r in fresh if onset_time is None or r["timestamp_unix_ms"] < onset_time]
     after = [r for r in fresh if onset_time is not None and r["timestamp_unix_ms"] >= onset_time]
     return {
+        "process_epoch_count": process["process_epoch_count"],
+        "safe_to_aggregate_entire_session": process_safe,
+        "fps_rows_withheld_unverified_process_epoch": 0 if process_safe else len(all_fresh),
+        "process_epoch_diagnostic": "verified_one_process" if process_safe else "unsafe_mixed_or_unverified_process_epoch",
         "session": session_label,
         "total_samples": len(rows),
         "game_running_samples": sum(r.get("state") == "game_running" for r in rows),
@@ -114,7 +129,10 @@ def compare(first, second):
     b = second["fresh_fps_during_or_after_render_error"]
     na = a["samples"] if a else 0
     nb = b["samples"] if b else 0
-    if min(na, nb) < MIN_PHASE_SAMPLES:
+    if (first.get("safe_to_aggregate_entire_session") is not True
+            or second.get("safe_to_aggregate_entire_session") is not True):
+        outcome = "NOT_COMPARABLE_unverified_or_mixed_process_epoch"
+    elif min(na, nb) < MIN_PHASE_SAMPLES:
         outcome = "NOT_COMPARABLE_inadequate_fresh_post_render_error_samples"
     else:
         outcome = "NOT_COMPARABLE_missing_same_scene_settings_and_binary_identity"
