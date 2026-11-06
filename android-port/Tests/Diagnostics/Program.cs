@@ -232,6 +232,32 @@ class Program
             Require(collisionSummaries.Any(s => s.Contains("operation_length=10;")));
             Require(collisionSummaries.Any(s => s.Contains("operation_length=5;")));
             collision.Summarize((area, operation, detail) => throw new Exception("Duplicate colliding summary"));
+            // Compile and execute the *real* Android-only Unity logger source
+            // against test-only UnityEngine stubs. A temporary path that is an
+            // ordinary file simulates an unavailable app sandbox at startup.
+            // After fixing the sandbox path, explicit Initialize must recover.
+            string androidRetry = Path.Combine(root, "android-init-retry");
+            Directory.CreateDirectory(androidRetry);
+            string blockedAppRoot = Path.Combine(androidRetry, "blocked-as-file");
+            File.WriteAllText(blockedAppRoot, "synthetic storage fault");
+            UnityEngine.Application.persistentDataPath = blockedAppRoot;
+            AndroidRuntimeLog.Initialize();
+            Require(AndroidRuntimeLog.StorageError != null);
+            Require(AndroidRuntimeLog.Status == AndroidRuntimeLog.StorageError);
+            File.Delete(blockedAppRoot);
+            Directory.CreateDirectory(blockedAppRoot);
+            AndroidRuntimeLog.Initialize();
+            Require(AndroidRuntimeLog.StorageError == null);
+            Require(AndroidRuntimeLog.Status == "ready");
+            // A third Initialize must leave the same working sink in place.
+            AndroidRuntimeLog.Initialize();
+            AndroidRuntimeLog.Flush();
+            AndroidRuntimeLog.Shutdown();
+            string recoveredLogs = Path.Combine(blockedAppRoot, "raft-logs");
+            Require(Directory.GetFiles(recoveredLogs, "raft-*.jsonl").Length == 1);
+            Require(Lines(recoveredLogs).Any(l => l.Contains("\\"operation\\":\\"logger.ready\\"")));
+            foreach (string line in Lines(recoveredLogs))
+                using (JsonDocument.Parse(line)) { }
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
         finally { Directory.Delete(root, true); }
