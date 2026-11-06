@@ -1,0 +1,12 @@
+{
+  "id": "20261106T094845Z-T1-chat-p6f2",
+  "owner": "T1",
+  "session_id": "20261106T094845Z-T1-chat-p6f2",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Launched the promoted-only FFT candidate as a control for the prior source integer rewrite.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42198180194"
+  ],
+  "at": "2026-11-06T09:52:22.682Z"
+}
