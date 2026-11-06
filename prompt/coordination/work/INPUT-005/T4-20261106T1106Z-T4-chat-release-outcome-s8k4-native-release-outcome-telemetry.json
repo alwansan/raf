@@ -2,9 +2,9 @@
   "session_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active_ci_legacy_lexical_test_adjustment",
+  "status": "completed",
   "base_sha": "c40742978308ce801054649b48383751f58858a4",
-  "updated_at": "2026-11-06T11:06:00Z",
+  "updated_at": "2026-11-06T11:19:00Z",
   "resumed_from_sessions": [
     "20261106T1042Z-T4-scheduled-f6n3",
     "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
@@ -29,5 +29,32 @@
   ],
   "nonoverlap": "T4 scheduled 1042Z is source read-only and explicitly avoids duplicate ownership repair; T5 owns APK/OBB and UI, T1/T2 water and T3 graphics. No actions running at initial head check. No changes to capture selection, world save, audio, Settings, touch, original code, scenes or assets.",
   "safety": "Classified static status strings only; no view identity/hash, user/device paths, JNI exception text, or pointer coordinates. Logger failures must not affect game. No claim that release_invoked proves OS release completion. Bounded one outcome per ReleaseCapture callback; no per-frame logs.",
-  "next_step": "Patch telemetry helper and UI callback with fail-soft outcome categories and static regression tests; trigger only existing scoped T4 mouse CI and verify original managed ABI compile; persist exact pass/fail."
+  "next_step": "No duplicate CI. T5 exact signed APK+matching OBB; owner hardware mouse focus/cursor/camera and same-world full-process save/reopen; record native release outcome vs OS state, do not infer readiness.",
+  "source_implementation_commit": "8f0b51a4ad710928937797b5352efc5893832f56",
+  "final_source_and_test_commit": "e06566a7e72f6128252e2a974e66af46ca57bac3",
+  "ci_runs": [
+    {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42208627456",
+      "sha": "8f0b51a4ad710928937797b5352efc5893832f56",
+      "conclusion": "failure",
+      "reason": "2 old lexical-only inline-return assertions"
+    },
+    {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42208882663",
+      "sha": "e06566a7e72f6128252e2a974e66af46ca57bac3",
+      "conclusion": "success",
+      "job_id": 127862302416,
+      "python_passed": 47,
+      "python_total": 47,
+      "original_unity_managed_abi_compile": "success"
+    },
+    {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42208627329",
+      "sha": "8f0b51a4ad710928937797b5352efc5893832f56",
+      "conclusion": "success",
+      "scope": "Android offline platform source CI"
+    }
+  ],
+  "result": "Truthfully distinguish native release invoked from eight bounded skipped/error statuses without user identities or capture state changes. Source+managed ABI CI passed; Android device unverified.",
+  "scope_released": true
 }
