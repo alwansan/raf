@@ -1,5 +1,0 @@
-# T3 private original shader provenance sample — one-time CI trigger
-session_id=20261106T1959Z-T3-chat-original-stage-probe-9f24
-source_zip2_sha=15964ea8f246b6e076ce26b60931ee2e1a9a2385
-scope=source-only eight VS/FS stage DXBC-DCL vs SPIRV per-stage cardinality plus nonauthoritative typed OpName candidate counts
-no_game_assets_no_native_request=true
