@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T0214Z-T5-chat-scene-window-attribution-8d91",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "experiment_key": "t5-original-42058825739-CLscene-interval-join-retain-loading-stutters-tracked-scene-boundary-v1",
+  "resource_key": "AndroidTestDiagnostics.cs-perf-window-provenance-only",
+  "status": "completed_source_and_pinned_log_evidence",
+  "baseline_source": "e41ee753de4342aff8e1359f258a03c05fab584a",
+  "production_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_android_diagnostics_policy.py",
+    "scripts/t5_cl_unity_surface_bridge.py",
+    "tests/test_t5_cl_unity_surface_bridge.py"
+  ],
+  "original_phone_source": {
+    "CL_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "Unity_blobs": [
+      "413932e92fc24cd50b1fae1cbb25120f392e8158",
+      "60674be571e4979e329924e5e2679f43e40ec41a"
+    ],
+    "source_example_one": "19:10:34.360 prior Menu perf; 19:10:39.991 active change to MainScene; 19:10:41.532 96-frame performance sample labeled MainScene only",
+    "source_example_two": "20:04:02.855 Menu perf; 20:04:05.078 active change; 20:04:08.285 12-frame performance sample labeled MainScene only"
+  },
+  "observed_result": {
+    "production_frame_samples_dropped_or_reset_in_scene_callbacks": false,
+    "scene_content_revision_counts_additive_loads": true,
+    "original_static_active_scene_callback_preserved": true,
+    "new_keys": [
+      "frame_window_start_scene",
+      "frame_window_end_scene",
+      "frame_window_active_scene_changes",
+      "frame_window_content_scene_events",
+      "frame_window_active_scene_stable",
+      "frame_window_content_stable"
+    ],
+    "backward_compatible_original_scene_key": true,
+    "legacy_original_intervals_not_assumed_stable": [
+      36,
+      116
+    ],
+    "reader_rejects_invalid_or_partial_flags": true,
+    "ci_final": {
+      "android_platform": {
+        "run": 42150116695,
+        "conclusion": "success",
+        "policy_tests": "11/11"
+      },
+      "b12": {
+        "run": 42150086078,
+        "conclusion": "success",
+        "synthetic_tests": "15/15"
+      },
+      "unity_sf_source_pinned": {
+        "run": 42150565706,
+        "conclusion": "success",
+        "synthetic_tests": "23/23",
+        "real_CL_blobs_sha_validated": 4,
+        "legacy_unlabeled_first": 36,
+        "legacy_unlabeled_second": 116
+      }
+    }
+  },
+  "negative_control": "First code iteration changed static callback and failed B12 on run42149741343; final static counter restored, no B12 test weakened. Intermediate platform run42150085999 failed because test assertion expected previous instance signature, final fixed 42150116695.",
+  "source_commits": [
+    "089f451abf91cf79d717027ed737d6426bb57637",
+    "78c5c36aed8e32e9bc1f9164b32645c7f7220897",
+    "6284b099eefbd36c6ab6bd0fe7c8b374b1416e69",
+    "9e1cc2ecaa96e90530b9ca7d0aeb4eaf262f7f2d",
+    "e50abe7c36759117a0c5092ab90ba90500dff653",
+    "1b57ba06bbde77121654ec74d4adabc9d1659341"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42150116695",
+    "https://github.com/alwansan/raf/actions/runs/42150086078",
+    "https://github.com/alwansan/raf/actions/runs/42150565706",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_SCENE_INTERVAL_ATTRIBUTION_2026-11-06.md"
+  ],
+  "limitations": [
+    "No actual Unity Editor Android build/compiler for changed script",
+    "No post-patch phone trial; original game binaries predate new provenance fields",
+    "Tag stable_content is not a same-camera/world/settings or graphics-fidelity benchmark",
+    "No known renderer/FFT/performance improvement by this telemetry fix"
+  ],
+  "next_step": "On next coordinated native signed test verify actual six telemetry keys, a MainMenu->MainScene interval and additive content loads, retained FPS/p95 and no dropped frames; filter mixed windows in benchmark while retaining for loading-stall analysis; fix P0 WATER-001/RENDER-002 separately."
+}
