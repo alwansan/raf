@@ -191,7 +191,8 @@ internal static class Program
     private sealed record FieldApiTrace(
         int Inspected, int Boundary, int MaterialReceiver,
         int TypedMaterialArgument, int GraphicsArgument,
-        int CommandBufferArgument, int RendererArgument, int OtherArgument);
+        int CommandBufferArgument, int RendererArgument, int OtherArgument,
+        int GraphicsBlit, int GraphicsDrawMesh, int GraphicsOther, int GraphicsMixed);
 
     private static FieldApiTrace TraceExactMaterialFieldRead(MethodDefinition method, int sourceIndex)
     {
@@ -204,6 +205,7 @@ internal static class Program
         var stack=new List<bool>{true};
         var locals=new Dictionary<int,bool>();
         int inspected=0,boundary=0,receiver=0,arg=0,graphics=0,command=0,renderer=0,other=0;
+        int graphicsBlit=0,graphicsDrawMesh=0,graphicsOther=0;
         bool Pop()
         {
             if(stack.Count==0)return false;
@@ -242,7 +244,13 @@ internal static class Program
                     arg++;
                     switch(callee.DeclaringType.FullName)
                     {
-                        case "UnityEngine.Graphics": graphics++;break;
+                        case "UnityEngine.Graphics":
+                            graphics++;
+                            // Only public Unity method families enter the safe report.
+                            if(!callee.HasThis && callee.Name=="Blit")graphicsBlit++;
+                            else if(!callee.HasThis && callee.Name=="DrawMesh")graphicsDrawMesh++;
+                            else graphicsOther++;
+                            break;
                         case "UnityEngine.Rendering.CommandBuffer": command++;break;
                         case "UnityEngine.Renderer": renderer++;break;
                         default: other++;break;
@@ -276,7 +284,14 @@ internal static class Program
             if(!stack.Any(v=>v) && !locals.Values.Any(v=>v))break;
         }
         if(inspected>=32)boundary=1;
-        return new(inspected,boundary,receiver,arg,graphics,command,renderer,other);
+        // Per field-read site these public API categories are exclusive.
+        int families=(graphicsBlit>0?1:0)+(graphicsDrawMesh>0?1:0)
+                     +(graphicsOther>0?1:0);
+        return new(inspected,boundary,receiver,arg,graphics,command,renderer,other,
+            graphics>0 && families==1 && graphicsBlit>0 ? 1 : 0,
+            graphics>0 && families==1 && graphicsDrawMesh>0 ? 1 : 0,
+            graphics>0 && families==1 && graphicsOther>0 ? 1 : 0,
+            graphics>0 && families>1 ? 1 : 0);
     }
 
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
@@ -634,7 +649,9 @@ internal static class Program
 
         int fieldApiSites=0,fieldApiInstructions=0,fieldApiBoundaries=0,
             fieldApiReceiver=0,fieldApiMaterialArgs=0,fieldApiGraphics=0,
-            fieldApiCommand=0,fieldApiRenderer=0,fieldApiOther=0;
+            fieldApiCommand=0,fieldApiRenderer=0,fieldApiOther=0,
+            fieldApiGraphicsBlit=0,fieldApiGraphicsDrawMesh=0,
+            fieldApiGraphicsOther=0,fieldApiGraphicsMixed=0;
         if(trace.OriginalMaterialField is not null)
             foreach(var method in methods)
             {
@@ -652,6 +669,10 @@ internal static class Program
                         fieldApiCommand+=api.CommandBufferArgument>0?1:0;
                         fieldApiRenderer+=api.RendererArgument>0?1:0;
                         fieldApiOther+=api.OtherArgument>0?1:0;
+                        fieldApiGraphicsBlit+=api.GraphicsBlit;
+                        fieldApiGraphicsDrawMesh+=api.GraphicsDrawMesh;
+                        fieldApiGraphicsOther+=api.GraphicsOther;
+                        fieldApiGraphicsMixed+=api.GraphicsMixed;
                     }
             }
         if(fieldApiSites!=linearFieldReads)
@@ -714,6 +735,10 @@ internal static class Program
             ["field_api_straightline_sites_with_typed_Material_receiver"]=fieldApiReceiver,
             ["field_api_straightline_sites_with_typed_Material_parameter"]=fieldApiMaterialArgs,
             ["field_api_straightline_sites_with_Graphics_Material_parameter"]=fieldApiGraphics,
+            ["field_api_Graphics_material_sites_Blit"]=fieldApiGraphicsBlit,
+            ["field_api_Graphics_material_sites_DrawMesh"]=fieldApiGraphicsDrawMesh,
+            ["field_api_Graphics_material_sites_Other"]=fieldApiGraphicsOther,
+            ["field_api_Graphics_material_sites_Mixed"]=fieldApiGraphicsMixed,
             ["field_api_straightline_sites_with_CommandBuffer_Material_parameter"]=fieldApiCommand,
             ["field_api_straightline_sites_with_Renderer_Material_parameter"]=fieldApiRenderer,
             ["field_api_straightline_sites_with_other_typed_Material_parameter"]=fieldApiOther,
@@ -846,6 +871,7 @@ internal static class Program
         traceMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
         var exact=TraceExactMaterialFieldRead(traceMethod,0);
         if(exact.TypedMaterialArgument!=1 || exact.GraphicsArgument!=1 ||
+           exact.GraphicsOther!=1 || exact.GraphicsBlit!=0 ||
            exact.RendererArgument!=0 || exact.Boundary!=0)
             throw new InvalidOperationException("typed_Graphics_argument_stack_identity");
         var localForTrace=new VariableDefinition(material);
@@ -854,12 +880,43 @@ internal static class Program
         traceMethod.Body.Instructions.Insert(2,Instruction.Create(OpCodes.Ldloc,localForTrace));
         exact=TraceExactMaterialFieldRead(traceMethod,0);
         if(exact.GraphicsArgument!=1 || exact.TypedMaterialArgument!=1 ||
-           exact.Inspected<4)throw new InvalidOperationException("nonadjacent_original_field_local_alias");
+           exact.GraphicsOther!=1 || exact.Inspected<4)
+            throw new InvalidOperationException("nonadjacent_original_field_local_alias");
+        draw.Name="Blit";
+        exact=TraceExactMaterialFieldRead(traceMethod,0);
+        if(exact.GraphicsBlit!=1 || exact.GraphicsDrawMesh!=0 || exact.GraphicsOther!=0)
+            throw new InvalidOperationException("Graphics_Blit_public_typed_route");
+        draw.Name="DrawMesh";
+        exact=TraceExactMaterialFieldRead(traceMethod,0);
+        if(exact.GraphicsDrawMesh!=1 || exact.GraphicsBlit!=0 || exact.GraphicsOther!=0)
+            throw new InvalidOperationException("Graphics_DrawMesh_public_typed_route");
+        draw.Name="DrawSynthetic";
+        var blit=new MethodReference("Blit",mod.TypeSystem.Void,gfx){HasThis=false};
+        blit.Parameters.Add(new ParameterDefinition(material));
+        blit.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Object));
+        var mixedMethod=new MethodDefinition("SyntheticTwoGraphicsFamilies",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(mixedMethod);
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,matField));
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Dup));
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ldnull));
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Call,draw));
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ldnull));
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit));
+        mixedMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        exact=TraceExactMaterialFieldRead(mixedMethod,0);
+        if(exact.GraphicsArgument!=2 || exact.GraphicsMixed!=1 ||
+           exact.GraphicsBlit!=0 || exact.GraphicsOther!=0)
+            throw new InvalidOperationException("Graphics_mixed_exclusive_route");
         var fake=new MethodReference("DrawSynthetic",mod.TypeSystem.Void,gfx){HasThis=false};
         fake.Parameters.Add(new ParameterDefinition(shader));
         fake.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Object));
         traceMethod.Body.Instructions[4]=Instruction.Create(OpCodes.Call,fake);
-        if(TraceExactMaterialFieldRead(traceMethod,0).TypedMaterialArgument!=0)
+        exact=TraceExactMaterialFieldRead(traceMethod,0);
+        if(exact.TypedMaterialArgument!=0 || exact.GraphicsBlit!=0 ||
+           exact.GraphicsDrawMesh!=0 || exact.GraphicsOther!=0 ||
+           exact.GraphicsMixed!=0)
             throw new InvalidOperationException("reject_untyped_fake_material_argument");
         traceMethod.Body.Instructions[4]=Instruction.Create(OpCodes.Call,draw);
         traceMethod.Body.Instructions[3]=Instruction.Create(OpCodes.Br_S,traceMethod.Body.Instructions[4]);

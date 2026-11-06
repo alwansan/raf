@@ -230,7 +230,39 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r["field_api_straightline_total_following_IL_instructions_scanned"]=27
         r["field_api_straightline_sites_with_typed_Material_parameter"]=1
         r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+        r["field_api_Graphics_material_sites_Other"]=1
         self.assertTrue(validate(r))
+
+    def test_graphics_method_family_categories_are_exclusive(self):
+        for kind in ("Blit", "DrawMesh", "Other", "Mixed"):
+            r=baseline()
+            r["material_linear_original_material_field_stores"]=1
+            r["material_linear_original_material_unique_field_definition_resolved"]=1
+            r["material_linear_original_material_field_read_instructions"]=1
+            r["field_api_exact_original_material_field_sites_scanned"]=1
+            r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+            r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+            r["field_api_Graphics_material_sites_"+kind]=1
+            with self.subTest(kind=kind): self.assertTrue(validate(r))
+            r["field_api_Graphics_material_sites_"+kind]=0
+            with self.subTest(kind=kind, missing=True): self.rejects(r)
+
+    def test_graphics_method_family_double_count_rejected(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=1
+        r["field_api_exact_original_material_field_sites_scanned"]=1
+        r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+        r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+        r["field_api_Graphics_material_sites_Blit"]=1
+        r["field_api_Graphics_material_sites_DrawMesh"]=1
+        self.rejects(r)
+
+    def test_graphics_method_name_only_cannot_invent_material_lineage(self):
+        r=baseline()
+        r["field_api_Graphics_material_sites_Blit"]=1
+        self.rejects(r)
 
     def test_source_true_typed_material_receiver(self):
         r=baseline()

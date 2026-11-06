@@ -81,6 +81,10 @@ MATERIAL_NUMERIC = (
     "field_api_straightline_sites_with_typed_Material_receiver",
     "field_api_straightline_sites_with_typed_Material_parameter",
     "field_api_straightline_sites_with_Graphics_Material_parameter",
+    "field_api_Graphics_material_sites_Blit",
+    "field_api_Graphics_material_sites_DrawMesh",
+    "field_api_Graphics_material_sites_Other",
+    "field_api_Graphics_material_sites_Mixed",
     "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
     "field_api_straightline_sites_with_Renderer_Material_parameter",
     "field_api_straightline_sites_with_other_typed_Material_parameter",
@@ -256,6 +260,15 @@ def validate(report):
     ):
         if report[key]>sites:
             raise ValueError("source_exact_field_API_site_partition_overflow")
+    graphics_categories=(
+    "field_api_Graphics_material_sites_Blit",
+    "field_api_Graphics_material_sites_DrawMesh",
+    "field_api_Graphics_material_sites_Other",
+    "field_api_Graphics_material_sites_Mixed",
+    )
+    if sum(report[k] for k in graphics_categories) != report[
+            "field_api_straightline_sites_with_Graphics_Material_parameter"]:
+        raise ValueError("Graphics_method_family_partition_inconsistent")
     categories=(
         "field_api_straightline_sites_with_Graphics_Material_parameter",
         "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
