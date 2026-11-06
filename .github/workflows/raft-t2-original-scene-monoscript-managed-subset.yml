@@ -1,0 +1,98 @@
+name: T2 WATER-001 original 473 scene MonoScript managed TypeDef subset
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_scene_managed_subset.py
+      - tests/test_t2_original_scene_managed_subset.py
+      - .github/workflows/raft-t2-original-scene-monoscript-managed-subset.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-473-scene-monotype-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  genuine-original-scene-mono-managed-subset:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Sourcefree original scene script subset and malformed pointer controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_scene_managed_subset.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_scene_managed_subset.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 2*1024**3
+          print("T2_ORIGINAL_SCENE_MONO_MANAGED_BUDGET_SAFE")
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-scene-class-source
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Private source-authentic 40-scene exact script and managed TypeDef join
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0 -q
+          install -d -m 0700 -- "$RUNNER_TEMP/t2-original-scene-type-stage"
+          timeout 1150s python3 -m scripts.t2_original_scene_managed_subset \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-scene-class-source" \
+            --scratch "$RUNNER_TEMP/t2-original-scene-type-stage" \
+            --out "$RUNNER_TEMP/t2-original-scene-type-safe.json"
+      - name: Validate only 473 real scene scripts and prevent runtime overclaims
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-original-scene-type-safe.json").read_text())
+          assert r["status"]=="source_original_473_scene_MonoScript_managed_TypeDef_subset"
+          assert r["original_immutable_zip2_SHA_authenticated"] is True
+          assert r["original_scene_SHA_file_count"]==40
+          assert r["original_scene_SHA_bytes"]==233237972
+          assert r["original_MonoScript_owner_SHA_bytes"]==758412
+          assert r["original_managed_Assembly_SHA_bytes"]==3211776
+          assert r["original_combined_SHA_bytes"]==237208160
+          assert r["original_opaque_scene_m_Script_references"]==55328
+          assert r["original_distinct_scene_referenced_MonoScripts"]==473
+          assert r["original_typed_MonoScript_objects_total"]==473
+          assert r["original_full_MonoScript_owner_typed_objects"]==3827
+          assert r["original_MonoScript_class_metadata_unreadable"]+r["original_MonoScript_other_assembly"]+r["original_MonoScript_Assembly_CSharp_candidate"]==473
+          assert r["original_MonoScript_Assembly_CSharp_unique_TypeDef"]+r["original_MonoScript_Assembly_CSharp_ambiguous_TypeDef"]+r["original_MonoScript_Assembly_CSharp_missing_TypeDef"]==r["original_MonoScript_Assembly_CSharp_candidate"]
+          for key in ("original_custom_MonoBehaviour_fields_reconstructed","original_Foam_material_Shader_or_CB0_bound","original_Unity_GUID_runtime_identity_verified","Android_water_pixels_verified","private_original_names_IDs_or_raw_bytes_exported"):
+              assert r[key] is False
+          assert all(type(v) in (int,bool,str) for v in r.values())
+          assert len(r)<=35
+          print("T2_ORIGINAL_473_SCENE_SUBSET_SAFE_ASSERTIONS_PASS")
+          PY
+      - name: Purge original source before public artifact
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-scene-type-stage" \
+            "$GITHUB_WORKSPACE/t2-original-scene-class-source"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-473-scene-mono-managed-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-original-scene-type-safe.json
+          if-no-files-found: error
+          retention-days: 7
