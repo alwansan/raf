@@ -9,6 +9,8 @@ on:
       - scripts/t3_particle108_explicit_map_packet.py
       - scripts/t3_particle108_vkd3d_explicit_graphics.c
       - tests/test_t3_particle108_explicit_map_packet.py
+      - scripts/t3_particle108_spirv_explicit_pair.py
+      - tests/test_t3_particle108_spirv_explicit_pair.py
       - scripts/t3_dxbc_spirv_contract_join.py
       - tests/test_t3_dxbc_spirv_contract_join.py
       - .github/workflows/raft-t3-particle108-spv-named-original-manual.yml
@@ -51,6 +53,11 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t3_particle108_explicit_map_packet.py tests/test_t3_particle108_explicit_map_packet.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_explicit_map_packet.py' -v
+      - name: Verify two independent explicit SPIRV binding layouts preserve source-variable and entire shader graph
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_spirv_explicit_pair.py tests/test_t3_particle108_spirv_explicit_pair.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_spirv_explicit_pair.py' -v
       - name: Compile real public VKD3D 1.2 graphics CBV SRV sampler compiler API and reject invalid private maps
         env:
           DEBIAN_FRONTEND: noninteractive
