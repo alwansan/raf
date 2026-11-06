@@ -479,7 +479,9 @@
         "https://github.com/alwansan/raf/actions/runs/42146385054",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md",
         "https://github.com/alwansan/raf/actions/runs/42226905270",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-private-original-propstate.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-private-original-propstate.json",
+        "https://github.com/alwansan/raf/actions/runs/42243130856",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-five-material-rgba-scalar-parity.json"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -537,7 +539,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T13:41:38.556Z",
+      "updated_at": "2026-11-06T15:33:25.001Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -2705,6 +2707,59 @@
       "updated_by": "T3",
       "updated_at": "2026-11-06T01:53:35.041Z",
       "_record_path": "../B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+    },
+    {
+      "id": "T3-ORIGINAL-PARTICLE108-FIVE-MATERIAL-RGBA-SCALAR-PARITY",
+      "title": "Five source Particle108 Shader48 Materials retain 15 RGBA property slots and 145 float32 scalars exactly in same genuine AssetRipper export",
+      "kind": "authentic-same-export-material-property-values-not-shader-runtime",
+      "owner": "T3",
+      "issue_id": "RENDER-002",
+      "source": {
+        "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "selected_particle_renderer_material_slots": 108,
+        "distinct_selected_materials": 5,
+        "six_original_scenes_SHA_verified": true,
+        "four_shader_Material_owners_SHA_verified": true
+      },
+      "stages": {
+        "acquisition": "SHA_ORIGINAL_6SCENES_4OWNERS_AND_ONE_RESS_PROVEN",
+        "extraction": "SHA_AUTHENTIC_UNIQUE_PARTICLE108_Shader48_FIVE_MATERIAL21",
+        "reconstruction": "PRIVATE_RGBA_15_FLOAT32_145_EXACT_SAVEDVALUES_VERIFIED",
+        "binding": "ONE_TRUE_W1_MATERIAL_B02_TEXTURE_SAME_EXPORT_SOURCE_MAPPED",
+        "integration": "SHADER48_STILL_DUMMY_NOT_REPLACED",
+        "device": "NOT_TESTED"
+      },
+      "counts": {
+        "original_Materials": 5,
+        "RGBA_slots": 15,
+        "Float32_slots": 145,
+        "Int32_slots": 0,
+        "changed_RGBA_values": 0,
+        "changed_float32_values": 0,
+        "changed_int32_values": 0,
+        "missing_or_extra_RGBA_or_scalar_properties": 0,
+        "mismatched_Materials": 0,
+        "source_materials_with_nonidentity_color": 5,
+        "all_source_export_values_preserved": true,
+        "exported_scalar_dicts_normalized_losslessly": 10,
+        "original_TexEnv_UV_slots": 10,
+        "exact_traced_original_texture_links": 9,
+        "additional_source_nonexportable_pointer_parity_proven": 1
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42243130856",
+        "https://github.com/alwansan/raf/actions/runs/42243009945",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T3/sessions/20261106T1515Z-T3-chat-5mat-yamlphase-e73b.md"
+      ],
+      "remaining": [
+        "The 108-source-slot Shader48 remains a DummyShaderTextExporter in this same export. Material value parity does not repair missing executable shader VS/FS code.",
+        "Source shader has 13 authored shader Properties + one Pass with RGB ColorMask, alpha Blend, depth write OFF. Four original keyword VS/FS pairs need source-authentic semantic+resource binding and Unity compile.",
+        "No installed APK/Unity/Adreno image test, no proof actual square smoke emitter identity, no whole game status; RENDER-002 OPEN."
+      ],
+      "published_original_private_names_GUID_shader_bytes_or_values": false,
+      "updated_by": "T3",
+      "updated_at": "2026-11-06T15:33:10.501Z",
+      "_record_path": "../B_TEAM/resources/T3-original-particle108-five-material-rgba-scalar-parity.json"
     },
     {
       "id": "T3-ORIGINAL-PARTICLE108-IMAGE-STREAM-FULLSHA",
@@ -6619,6 +6674,36 @@
       "_record_path": "../B_TEAM/events/T1/20261106T1408Z-T1-scheduled-pair-input-readiness-v3.json"
     },
     {
+      "id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+      "owner": "T1",
+      "session_id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T15:34:24.494Z",
+      "summary": "Authenticated ZIP2-original-derived HLSL Vulkan pass-zero candidate invocation-keyed trace executed successfully on Mesa/Lavapipe in CI 42242127723. 384 recorded reads: Source 64, Butterfly1 256, Butterfly2 64; duplicate invocation keys 0; out-of-bounds 0. Same-fixture pass outputs compared 64 and 32 written pixels internally with tolerance match. Source-only CI 42242015941 SUCCESS 74/74 tests, including 5 scheduled invocation CLI and 8 new candidate audit tests. Original independent SPIR-V keyed read capture does NOT exist, source-vs-translation paired numeric parity and Android water remain unproven. No raw samples/shaders exported, scratch cleanup passed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42242015941",
+        "https://github.com/alwansan/raf/actions/runs/42242127723",
+        "https://github.com/alwansan/raf/commit/9505df9a085bbf800c303d6dfa5ee750012eba32"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T151730Z-T1-chat-keyed-candidate-3a7f.json"
+    },
+    {
+      "id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+      "owner": "T1",
+      "session_id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T15:33:03.821Z",
+      "summary": "Source-only original SPIR-V direct invocation-key capture prerequisites detector added. It verifies 3 original ImageFetch role/type patterns, direct/struct-member GlobalInvocationId, descriptor set binding 3 collision and privacy; corrected CI 42243693907 SUCCESS 86/86 synthetic tests, including 12 new checks. Actual authentic original SPIR-V NOT yet audited or instrumented, original-side invocation read buffer absent, Vulkan↔Unity numerical parity and Android water not proven. Separate candidate-only real Vulkan trace CI 42242127723 remains in progress and is not cancelled.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42243651596",
+        "https://github.com/alwansan/raf/actions/runs/42243693907",
+        "https://github.com/alwansan/raf/commit/a64b0f89b0b7b52ba24b322fde71b8fd35e7511d"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T152810Z-T1-chat-original-key-preflight-c41b.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -8373,6 +8458,35 @@
       "_record_path": "../B_TEAM/events/T3/20261106T1337Z-T3-chat-particle108-propstate-62fb.json"
     },
     {
+      "schema_version": 1,
+      "id": "T3-20261106T1515Z-particle108-5mat-rgba-float-parity",
+      "actor": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1515Z-T3-chat-5mat-yamlphase-e73b",
+      "issue_id": "RENDER-002",
+      "event_type": "authenticated-original-particle108-5-material-rgba-scalar-export-parity",
+      "status": "completed_real_original_CPU_not_runtime",
+      "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "real_run_url": "https://github.com/alwansan/raf/actions/runs/42243130856",
+      "real_run_conclusion": "success",
+      "source_free_run_url": "https://github.com/alwansan/raf/actions/runs/42243009945",
+      "selected_original_particle_material_uses": 108,
+      "selected_original_materials": 5,
+      "original_export_RGBA_slots_matched": 15,
+      "original_export_Float32_slots_matched": 145,
+      "original_export_Int32_slots_checked": 0,
+      "RGBA_or_numeric_changed_fields": 0,
+      "missing_or_extra_RGBA_or_scalar_fields": 0,
+      "scalar_yaml_dict_to_pair_parser_fixed": true,
+      "source_original_Shader48_still_dummy": true,
+      "android_gpu_pixels_verified": false,
+      "source_code_or_private_material_values_published": false,
+      "work_session": "prompt/coordination/clients/T3/sessions/20261106T1515Z-T3-chat-5mat-yamlphase-e73b.md",
+      "experiment": "prompt/coordination/experiments/T3/20261106T1515Z-T3-chat-5mat-yamlphase-e73b.json",
+      "next_step": "Restore true 4-keyword original Particle108 VS/FS shader variant programs and fixed state, verify source identity, Unity compilation and device emitter; keep RENDER-002 OPEN.",
+      "_record_path": "../B_TEAM/events/T3/20261106T1515Z-T3-chat-5mat-yamlphase-e73b.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -9987,16 +10101,16 @@
       "origin": "chat",
       "issue_id": "INTEGRATION-001",
       "type": "result",
-      "at": "2026-11-06T15:30:40.042Z",
-      "summary": "Actual owner-tested run42058825739 source authenticated signed APK+OBB Unity marker probe: APK 31 members DOES contain assets/unity_obb_guid, main OBB 39 members has NO exact marker; status apk_only_identity_unavailable (NOT a mismatched two-sided GUID nor engine/mount failure proof). CI42243273146 SUCCESS 13/13 synthetic + 11447 real HTTP206 bytes /156 requests, 70 local headers verified. Old CL CI42119428667 independently showed 3 optional unshipped patch.89 GUID warnings, 0 main warnings. APK/OBB full SHA from previous CI remains sound. No Unity runtime/game changes.",
+      "at": "2026-11-06T15:33:33.091Z",
+      "summary": "Final real source CI42243852483 PASS 13 synthetic and genuine signed source original APK/OBB nested markers: APK 31 entries HAS assets/unity_obb_guid, main OBB 39 entries has NO corresponding entry, so cross-archive marker identity unavailable; no engine/device mount/mismatch claim. 70 ZIP local entries checked, 11447 HTTP206 bytes/156 requests. Original owner tested old source 42058825739; previous CL six-blob source CI42119428667 shows three optional patch.89 GUID warnings, zero MAIN warnings. Original complete APK/OBB hashes separately verified. No game source modification.",
       "evidence": [
-        "https://github.com/alwansan/raf/actions/runs/42243273146",
+        "https://github.com/alwansan/raf/actions/runs/42243852483",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_UNITY_OBB_GUID_2026-11-06.md",
-        "https://github.com/alwansan/raf/actions/runs/42119428667",
-        "https://github.com/alwansan/raf/actions/runs/42230326050"
+        "https://github.com/alwansan/raf/actions/runs/42119428667"
       ],
       "limitations": "One-sided marker only means cross-archive marker identity cannot be compared, does not prove Unity engine runtime GUID, actual phone OBB mount, loaded scene/FX or current branch source acceptance.",
       "next_step": "Verify installed main OBB SHA and device Unity main asset read path; no invented optional patch OBB, no fabricated GUID.",
+      "updated_at": "2026-11-06T15:33:33.092Z",
       "_record_path": "../B_TEAM/events/T5/20261106T1520Z-T5-chat-real-unity-guid-2b61.json"
     },
     {
@@ -10028,7 +10142,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "91949ee0d4b5839257d365570da71f289583a7a29d9e76a245104577ebfdcf11",
+  "source_input_sha256": "31bf2cde49e1fc77c6cbf0d3eaeccffc928e8bb1ae5d7b1d482fdea38c940780",
   "generation": "T-2026-11-05",
-  "input_sha256": "b65e3df151cfccacb840ce4a8ee49e0cdb7287b6d0f78b71ba8829d6a319a758"
+  "input_sha256": "abff4dfbb3e51ce105d4370e6643f54a46c1f5fdd3d27b752e9dd56a3d13f369"
 }
