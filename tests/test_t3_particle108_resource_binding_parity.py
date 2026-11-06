@@ -125,6 +125,13 @@ class OriginalResourceTests(unittest.TestCase):
         self.assertNotIn("PRIVATE_HLSL",str(e))
         with self.assertRaises(ValueError):
             PrivateReasonError("PRIVATE_HLSL_VERTEX_SOURCE")
+    def test_safe_real_descriptor_duplicate_reason_is_public_enum(self):
+        from scripts.t3_particle108_resource_binding_parity import PrivateReasonError
+        e=PrivateReasonError("DESCRIPTOR_ALIAS_OR_DUPLICATE")
+        self.assertEqual(e.reason,"DESCRIPTOR_ALIAS_OR_DUPLICATE")
+        self.assertNotIn("resources.assets",str(e))
+        with self.assertRaises(ValueError):
+            PrivateReasonError("source-private-CB_register_b0")
     def test_actual_original_program_not_inferred_from_clean_resource_report(self):
         r=t3.classify_stages(fixtures())
         self.assertTrue(r["roundtrip_layout_parity_is_NOT_program_numeric_equivalence"])
