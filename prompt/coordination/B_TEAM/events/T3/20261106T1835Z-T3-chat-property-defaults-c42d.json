@@ -1,0 +1,19 @@
+{
+  "event_id": "20261106T1835Z-T3-chat-property-defaults-c42d",
+  "session_id": "20261106T1835Z-T3-chat-property-defaults-c42d",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Added same-export original-authored Shader48 property default-value semantics (Color/Vector/Float/Range bounds, Texture fallback) to source-only fidelity gate. Name/type-identical but altered defaults now produce AUTHORED_PROPERTY_DEFAULT_MISMATCH instead of false structural accept; no private property values published. 19/19 unit tests CI42272706523 and 16/16 integration tests CI42272760367 PASS. Synthetic only; no private original source/export run, ShaderLab restoration, Unity/Android pixels. Trial vote remains لا يحتاج; RENDER-002 OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42272706523",
+    "https://github.com/alwansan/raf/actions/runs/42272760367",
+    "https://github.com/alwansan/raf/commit/59b9e9f4c0e1c6f0cd68f7658612141dd63b6bf6",
+    "https://github.com/alwansan/raf/commit/70b45cf448724c50a93f216bf421223abe758d6f",
+    "https://github.com/alwansan/raf/commit/2653e5f6c836ce13d1d3ed31a6c348ced506dfd2",
+    "https://github.com/alwansan/raf/commit/9aeebcd42d427080257a348e38ab6d249692c743",
+    "prompt/coordination/clients/T3/sessions/20261106T1835Z-T3-chat-property-defaults-c42d.md"
+  ],
+  "utc": "2026-11-06T18:41:14Z"
+}
