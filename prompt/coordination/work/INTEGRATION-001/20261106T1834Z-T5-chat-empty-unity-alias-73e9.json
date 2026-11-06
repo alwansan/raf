@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "OBB Unity ZIP central-directory duplicate empty alias detection",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f86e1ac9d651440bbb2aa98736dd01477ac65be9",
-  "updated_at": "2026-11-06T18:34:42Z",
+  "updated_at": "2026-11-06T18:37:00Z",
   "resumed_from_sessions": [
     "20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c",
     "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
@@ -27,5 +27,19 @@
   "resource_key": "T5 own .NET8 installed OBB source-only probe workflow no heavy Unity",
   "hypothesis": "Unity data duplicate same exact ZIP FullName with one zero-length entry bypasses duplicate check because name is registered only if entry.Length>0; diagnostic falsely accepts ambiguous ZIP on Android jar file loader. Require duplicate name rejection independently of entry length and file order, with no private entry paths logged.",
   "coordination": "T5 last OBB scope completed; scheduled same T5 PID helper waiting_ci untouched; T1/T2/T3/T4 files disjoint; NO native build request without 5/5 votes.",
-  "next_step": "Patch read-only probe + two ordered synthetic cases, validate workflow existing source only, persist session/experiment/event and close work. No phone claim."
+  "next_step": "Completed source-only diagnostic, two files released. No phone/Unity engine evidence or trial consensus; no further run required for same source.",
+  "source_sha": "4b78710027607801a1620af29c65f04b45b45fa1",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42272184563"
+  ],
+  "result": {
+    "status": "SUCCESS",
+    "source_sha": "4b78710027607801a1620af29c65f04b45b45fa1",
+    "run_id": 42272184563,
+    "synthetic_checks_passed": 35,
+    "unity_source_copy_test": "PASS",
+    "platform_compile_errors": 0,
+    "existing_unrelated_warnings": 6,
+    "device_verified": false
+  }
 }
