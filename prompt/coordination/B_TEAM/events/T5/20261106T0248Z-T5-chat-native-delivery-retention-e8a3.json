@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261106-native-retention-3day-release-token",
+  "owner": "T5",
+  "session_id": "20261106T0248Z-T5-chat-native-delivery-retention-e8a3",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T02:54:49.603Z",
+  "summary": "After genuine native source42058825739 build succeeded but release create failed HTTP403, source patched future native delivery retention from 1d to 3d, signed/audited 2d to 3d, optional RAFT_RELEASE_TOKEN fallback to github.token. Strict release denial still fails delivery job. CI42153075428 SUCCESS 9/9 tests. No actual Release created; old artifact expiry unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42153075428",
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_NATIVE_DELIVERY_FALLBACK_2026-11-06.md"
+  ]
+}
