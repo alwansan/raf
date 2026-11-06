@@ -7,9 +7,9 @@
   "issue_id": "WATER-001",
   "track": "FFT site1 Y vector component writer bitcarrier provenance",
   "approach": "Classify original SPIR-V may-reaching scalar OpBitcast writer's numeric input/output type and distinguish exact bit reinterpretation from conversion/constant without exposing source constants or requiring source mutation. Use original fixed source pin, branch-aware writer set, 10+ synthetic controls, existing isolated Vulkan workflow.",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "2d69ccfcc0b36e7cf6490848899f00955d61bffa",
-  "updated_at": "2026-11-06T11:37:07.748Z",
+  "updated_at": "2026-11-06T11:41:26.951Z",
   "intended_files": [
     "scripts/t1_fft_spirv_scalar_writer_carrier.py",
     "tests/test_t1_fft_spirv_scalar_writer_carrier.py",
@@ -29,7 +29,10 @@
   "related_work": [
     "T1-20261106T113001Z-T1-chat-lane-alias-f73c"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Trace typed SSA OpBitcast producers to source kind in a privacy-safe reporter, preserve ambiguous branches; run one original source CI; no Unity/Android changes until numeric parity proof."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42211872487",
+    "https://github.com/alwansan/raf/actions/runs/42212055131"
+  ],
+  "result": "First source-only synthetic test stage failed 3/13 due duplicate synthetic SPIR-V result ID %b in new tests, before original recovery. Replaced 3 synthetic IDs only (08483339) and reran via distinct workflow SHA a9fe62d. Second CI step 3 synthetic tests completed success; original private stage pending.",
+  "next_step": "Read 42212055131 exact original marker RAFT_T1_FFT_SCALAR_WRITER_CARRIERS only after status completed; if successful record actual Bitcast source type and numeric/device limitations."
 }
