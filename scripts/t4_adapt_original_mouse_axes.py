@@ -25,7 +25,7 @@ SHIM = "RaftAndroid.Platform.AndroidPhysicalMouseCapture"
 EXPECTED = {"mouse_x": 4, "mouse_y": 4, "cursor_lock": 2}
 
 
-def replacement_plan(root: Path, *, project_assets=False):
+def replacement_plan(root: Path, *, project_assets=False, captured_originals=None):
     if root.is_symlink() or not root.is_dir():
         raise ValueError("Regular source directory required")
     files = sorted(root.rglob("*.cs"))
@@ -41,7 +41,8 @@ def replacement_plan(root: Path, *, project_assets=False):
         if file.stat().st_size > 2 * 1024 * 1024:
             raise ValueError("Oversized original source refused")
         # Byte-decoding here preserves original CRLF/LF in the generated patch.
-        data = file.read_bytes().decode("utf-8-sig")
+        raw = file.read_bytes()
+        data = raw.decode("utf-8-sig")
         visible = without_comments(data)
         if len(visible) != len(data):
             raise ValueError("Lexical comments must preserve source positions")
@@ -72,6 +73,10 @@ def replacement_plan(root: Path, *, project_assets=False):
         for start, end, replacement in reversed(matches):
             result = result[:start] + replacement + result[end:]
         changed[file] = result
+        if captured_originals is not None:
+            # Preserve the exact bytes that produced this lexical plan. The
+            # original C# may be rewritten by another stage before apply.
+            captured_originals[file] = raw
     if counts != EXPECTED:
         raise ValueError("Original mouse-call cardinality drift")
     if not changed:
@@ -81,7 +86,11 @@ def replacement_plan(root: Path, *, project_assets=False):
 
 def patch(source_root: Path, original_dll: Path, *, apply=False, project_assets=False, backup=None):
     assert_original(original_dll)
-    sources, counts = replacement_plan(source_root, project_assets=project_assets)
+    planned_originals = {} if apply else None
+    sources, counts = replacement_plan(
+        source_root, project_assets=project_assets,
+        captured_originals=planned_originals,
+    )
     if apply:
         if backup is None or any(node.is_symlink() for node in (backup, *backup.parents)) or backup.exists():
             raise ValueError("New, nonlinked private backup directory is required")
@@ -92,6 +101,11 @@ def patch(source_root: Path, original_dll: Path, *, apply=False, project_assets=
         # decompiler's original BOM if present. Original .meta/GUIDs are never
         # edited. This is an integrity check, not atomic cross-process locking.
         originals = {file: file.read_bytes() for file in sources}
+        if any(originals[file] != planned_originals[file] for file in sources):
+            # Backing up the newly modified source is not enough: installed
+            # output was calculated from the older lexical plan. Refuse to
+            # overwrite another writer before creating even a backup dir.
+            raise ValueError("Original mouse source changed after source plan")
         installed = {
             file: (b"\xef\xbb\xbf" if raw.startswith(b"\xef\xbb\xbf") else b"")
                   + sources[file].encode("utf-8")
