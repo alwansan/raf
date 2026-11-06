@@ -35,22 +35,35 @@ namespace RaftAndroid.Platform
                 return ReadWhenWriterCloses(path);
 
             string generated = Guid.NewGuid().ToString("N");
+            // Only the exclusive CreateNew *open* is a concurrent-creator
+            // collision. A later WriteLine/Flush failure must reach the caller:
+            // catching it merely because our newly created file exists would
+            // falsely advertise a profile that may not survive a restart.
+            FileStream output;
             try
             {
-                // CreateNew is an atomic exclusive claim on the final path.
-                // File.Move(temp, path) can race another creator's existence check
-                // on Unix, replacing an identity already returned to a caller.
-                using (var output = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
-                using (var writer = new StreamWriter(output))
-                {
-                    writer.WriteLine(generated);
-                }
+                // The first creator claims the final path without replacing
+                // a prior identity (and thus without orphaning saved worlds).
+                output = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None);
             }
             catch (IOException) when (File.Exists(path))
             {
-                // Another process or thread claimed the path. Never replace it.
+                // Another process or thread already claimed the identity.
+                // Wait for its writer; never create or replace an ID here.
+                return ReadWhenWriterCloses(path);
             }
 
+            using (output)
+            using (var writer = new StreamWriter(output))
+            {
+                writer.WriteLine(generated);
+                writer.Flush();
+                // Request the OS to persist the canonical identity before
+                // returning it for a player's first world/save. This is only
+                // a best-effort single-file durability barrier; it is not
+                // an atomic directory fsync or a power-loss guarantee.
+                output.Flush(flushToDisk: true);
+            }
             return ReadWhenWriterCloses(path);
         }
 
