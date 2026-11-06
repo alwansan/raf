@@ -1,0 +1,16 @@
+{
+  "id": "T4-20261106T2202Z-original-loadt-escaped-exit-v6m2",
+  "owner": "T4",
+  "session_id": "20261106T2202Z-T4-chat-load-exit-proof-v6m2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "verification",
+  "summary": "Original Android operation trace Load<T>.exit carries exceptionEscaped Boolean and F3 elapsed_ms; prior actual CL 5-Nov interpreter accepted nonzero file snapshot + exit without checking that field, producing false-positive clean load proof. Synthetic RED CI42301170684 6 failing negative cases (5 malformed/escaped exit shapes, plus explicit Load<T>.exception), while prior methods pass. Fix 39ff084d requires exact exceptionEscaped=False parsed original exit and disqualifies direct escaped exception. GREEN CI42301269067 19/19 synthetic tests and SHA-verified original owner CL@520c4cf three JSONLs: 7/7 authentic well-traced Load<T> 3+4, 7/7 fully traced SaveGame 3+1+3, no incomplete. These are source- and log-level trace contracts only, not same-world nor .rgd deserialize proof; no game data touched.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42301170684",
+    "https://github.com/alwansan/raf/commit/39ff084dfd1343e4311d77a040680d049ec6c872",
+    "https://github.com/alwansan/raf/actions/runs/42301269067",
+    "https://github.com/alwansan/raf/actions/runs/42296450023"
+  ],
+  "at": "2026-11-06T22:02:00Z"
+}
