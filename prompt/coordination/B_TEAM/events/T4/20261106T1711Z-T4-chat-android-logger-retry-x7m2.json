@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1711Z-T4-chat-android-logger-retry-x7m2",
+  "owner": "T4",
+  "session_id": "20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Actual AndroidRuntimeLog.cs .NET8-compiled transient filesystem failure/recovery test: old source permanently skipped second Initialize (red CI42258727771 check288), source fix cdfa4bd8 permits explicit recovery and clears prior StorageError only on initialized sink, green CI42259053551 292/292; original startup, B06 FFT logger, offline platform CI all green. Real Android storage outage/Unity device test not claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42258727771",
+    "https://github.com/alwansan/raf/commit/cdfa4bd855651d9c0f7642875b5eb08f25157908",
+    "https://github.com/alwansan/raf/actions/runs/42259053551",
+    "https://github.com/alwansan/raf/actions/runs/42259053531",
+    "https://github.com/alwansan/raf/actions/runs/42259053586",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_RUNTIME_LOG_STARTUP_RECOVERY_2026-11-06.md"
+  ],
+  "at": "2026-11-06T17:11:00Z"
+}
