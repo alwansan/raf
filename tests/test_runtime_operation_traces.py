@@ -298,3 +298,56 @@ class OperationTraceTests(unittest.TestCase):
                 self.assertEqual((backup / path.name).read_bytes(), source)
                 self.assertEqual((backup / meta.name).read_bytes(), original_meta)
 
+
+    def test_runtime_trace_postinstall_foreign_source_or_meta_is_never_rolled_back(self):
+        # The adapter has successfully written its instrumented C# when a
+        # second writer replaces either that source or its Unity GUID meta.
+        # The old unconditional rollback clobbered a foreign C# update.
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from scripts.instrument_android_runtime_operations import apply
+
+        source = b'class Demo { void Start() { OriginalMethod(); } }'
+        metadata = b'guid: original-synthetic-GUID\\n'
+        manifest = {'sources': {'Demo': {
+            'sha256': hashlib.sha256(source).hexdigest(),
+            'area': 'startup', 'methods': [{'signature': 'void Start()'}],
+        }}}
+        for target_name in ('source', 'meta'):
+            with self.subTest(target_name=target_name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                path = root / 'project/Assets/Assembly-CSharp/Demo.cs'
+                path.parent.mkdir(parents=True)
+                path.write_bytes(source)
+                meta = path.with_suffix('.cs.meta')
+                meta.write_bytes(metadata)
+                backup = root / 'backup'
+                foreign_source = b'// foreign writer owns this new source'
+                foreign_meta = b'guid: foreign-synthetic-GUID\\n'
+                real_write = Path.write_bytes
+                installed = []
+
+                def edit_after_successful_install(receiver, data):
+                    result = real_write(receiver, data)
+                    if receiver == path and data != source and not installed:
+                        installed.append(data)
+                        if target_name == 'source':
+                            real_write(path, foreign_source)
+                        else:
+                            real_write(meta, foreign_meta)
+                    return result
+
+                with patch.object(Path, 'write_bytes', autospec=True,
+                                  side_effect=edit_after_successful_install):
+                    with self.assertRaisesRegex(
+                            ValueError, 'postinstall foreign change; backups retained'):
+                        apply(root / 'project', backup, manifest, write=True)
+                self.assertEqual(len(installed), 1)
+                self.assertEqual(path.read_bytes(),
+                                 foreign_source if target_name == 'source' else installed[0])
+                self.assertEqual(meta.read_bytes(),
+                                 foreign_meta if target_name == 'meta' else metadata)
+                self.assertEqual((backup / path.name).read_bytes(), source)
+                self.assertEqual((backup / meta.name).read_bytes(), metadata)
+
