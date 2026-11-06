@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
+  "owner": "T5",
+  "session_id": "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "type": "failure",
+  "at": "2026-11-06T18:01:25Z",
+  "summary": "CI42266849601 intentionally RED on 3 PID startup-prefix source regression cases: original LogRaft prefix 1 or 6 unknown rows is overcounted as epochs 2/7 instead of 1/1; after real stop yields 4 instead of 3. All earlier 18/18, scheduled 6/6 and existing chat 8/8 controls passed; stop/same-PID negative controls still pass. T5 scheduled source owner notified with verified source and exact assertions; no scheduled source edit or Android build/phone claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42266849601",
+    "https://github.com/alwansan/raf/commit/26c4473030dd6e0b3dd2b34ffdbec6cd3f926ee1",
+    "prompt/coordination/discussions/PERF-007/20261106T1759Z-T5-chat-pid-prefix-regression-4ca1-ci-red-to-scheduled.md"
+  ],
+  "limits": [
+    "Synthetic source red only; original pinned real CL download stage not reached in this run",
+    "Sole owner of production fix remains scheduled T5",
+    "Current trial r1 T5 no, 1/5 yes, NOT_READY 0/3"
+  ]
+}
