@@ -1,0 +1,71 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+  "issue_id": "WATER-001",
+  "hypothesis": "The existing translated HLSL FFT pass-zero tracer has a source-free tested --invocation-keys mode but was never executed on original SHA-pinned Raft fixture. Exact-source runtime validation can prove or refute candidate-side key capture and expose safe site counts; it is NOT independent original vs candidate parity.",
+  "source_commit": "9505df9a085bbf800c303d6dfa5ee750012eba32",
+  "input_hashes": [
+    "ZIP2 immutable original source SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385; private FFT source SPIR-V staged only inside isolated job"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "glslangValidator": "runner apt glslang-tools",
+    "Vulkan": "Lavapipe/Mesa original-pinned workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_invocation_trace_cli.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_candidate_keyed_trace_audit.py -v",
+    "python3 -m scripts.t1_fft_pass0_vulkan_trace --project \"$TMPDIR/candidates\" --invocation-keys --export-private-trace \"$TMPDIR/translated-keyed-trace.bin\"",
+    "python3 -m scripts.t1_fft_candidate_keyed_trace_audit \"$TMPDIR/translated-keyed-trace.bin\""
+  ],
+  "negative_controls": [
+    "Invalid/missing original and candidate trace site",
+    "Duplicate invocation keys and occurrence IDs",
+    "Truncated/oversized capture bytes",
+    "Mixed semantic values hidden from public aggregate report",
+    "Reordered invocation records retain valid keys",
+    "Scheduled CLI confirms 0=match,1=mismatch,2=invalid data and duplicate rejection",
+    "Full source-only gate validates 74 source-free tests"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42242127723",
+  "artifact_urls": [],
+  "budget": "Existing 20-minute source-authentic Ubuntu-24.04 T1 Vulkan job, not Unity; one added actual candidate capture in private scratch; source-only 4-minute 74-test job",
+  "status": "waiting_private_vulkan_candidate_keyed_execution",
+  "observed_result": {
+    "source_only": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42242015941",
+      "conclusion": "success",
+      "test_counts": [
+        20,
+        11,
+        9,
+        14,
+        7,
+        5,
+        8
+      ],
+      "total_passed": 74
+    },
+    "first_scheduled_cli_validation": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42241766200",
+      "conclusion": "success"
+    },
+    "private_vulkan_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42242127723",
+      "status": "in_progress",
+      "candidate_keyed_marker": null
+    },
+    "original_invocation_keyed_capture_present": false,
+    "paired_original_vs_translated_numeric_parity_proven": false,
+    "android_water_proven": false
+  },
+  "limitations": [
+    "Original source driver and compiled HLSL candidate in same-Vulkan fixture, but only candidate read-capture instrumentation is added; a complete original instrumented trace is still missing",
+    "The existing original source can validate shader readback parity but cannot be treated as same-invocation key comparison",
+    "Raw private trace never exported as artifact and no shader source leaks"
+  ],
+  "integration_commit": "9505df9a085bbf800c303d6dfa5ee750012eba32",
+  "next_step": "If private run passes, verify safe RAFT_T1_HLSL_KEYED_CANDIDATE_TRACE marker and record real candidate site counts. Then implement independently instrumented original SPIR-V captured with the same input, dispatch and manifest, compare strict pair. If fails, diagnose and fix keyed instrumentation minimal before new private run."
+}
