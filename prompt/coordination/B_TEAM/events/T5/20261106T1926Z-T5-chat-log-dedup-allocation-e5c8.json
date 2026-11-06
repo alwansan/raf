@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
+  "owner": "T5",
+  "session_id": "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "type": "integration",
+  "summary": "Runtime Unity diagnostic repeated-stack grouping avoids per-repeat allocation of full combined key by using exact ordinal composite MessageKey, retaining original message/time/count behavior. Dedicated real .NET8 source regression RED CI42279780260 at allocation threshold; source fix 4e909cac; green CI42279975562 pending. No phone FPS or water shader claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42279780260",
+    "https://github.com/alwansan/raf/commit/4e909cac516b021b23e06e55e2a1d72cc3777e67",
+    "https://github.com/alwansan/raf/actions/runs/42279975562",
+    "prompt/coordination/clients/T5/sessions/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.md"
+  ],
+  "at": "2026-11-06T19:29:00Z",
+  "limits": [
+    "source/CI, not original shader or device graphics",
+    "no native build due trial 1/5"
+  ]
+}
