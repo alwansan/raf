@@ -2,7 +2,8 @@
 import unittest
 
 from scripts.t3_particle108_hlsl_output_width_origin import (
-    COUNTERS, classify, extract_output_struct,
+    COUNTERS, classify, extract_output_struct, extract_input_struct,
+    classify_generated_hlsl_stage_link,
 )
 
 def source_stage(outputs):
@@ -149,6 +150,49 @@ class HLSLVertexWidthOriginTests(unittest.TestCase):
         self.assertEqual(d["source_to_roundtrip_exact_name_matches"],1)
         self.assertEqual(d["source_to_roundtrip_exact_name_type_equal"],0)
         self.assertEqual(d["hlsl_to_roundtrip_exact_name_type_equal"],0)
+
+    def test_generated_hlsl_vertex_fragment_semantics_link(self):
+        v=extract_output_struct("struct SPIRV_Cross_Output { float4 x : TEXCOORD0; float2 uv : TEXCOORD2; float4 pos : SV_Position; };")
+        f=extract_input_struct("struct SPIRV_Cross_Input { float2 uv_in : TEXCOORD2; float4 col_in : TEXCOORD0; float4 pos : SV_Position; };")
+        c=classify_generated_hlsl_stage_link(v,f)
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_parsed"],1)
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_compatible"],1)
+        self.assertEqual(c["hlsl_vsfs_semantic_fragment_user_inputs"],2)
+        self.assertEqual(c["hlsl_vsfs_semantic_vertex_user_outputs"],2)
+        self.assertEqual(c["hlsl_vsfs_semantic_fragment_type_mismatch"],0)
+
+    def test_generated_hlsl_fragment_semantic_type_mismatch(self):
+        v=extract_output_struct("struct SPIRV_Cross_Output { float4 x : TEXCOORD0; };")
+        f=extract_input_struct("struct SPIRV_Cross_Input { float2 y : TEXCOORD0; };")
+        c=classify_generated_hlsl_stage_link(v,f)
+        self.assertEqual(c["hlsl_vsfs_semantic_fragment_type_mismatch"],1)
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_compatible"],0)
+
+    def test_generated_hlsl_fragment_missing_semantic(self):
+        v=extract_output_struct("struct SPIRV_Cross_Output { float4 x : TEXCOORD0; };")
+        f=extract_input_struct("struct SPIRV_Cross_Input { float4 y : TEXCOORD1; };")
+        c=classify_generated_hlsl_stage_link(v,f)
+        self.assertEqual(c["hlsl_vsfs_semantic_fragment_missing_output"],1)
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_compatible"],0)
+
+    def test_generated_hlsl_ambiguous_semantic_rejected(self):
+        v=extract_output_struct("struct SPIRV_Cross_Output { float4 a : TEXCOORD0; float4 b : TEXCOORD0; };")
+        f=extract_input_struct("struct SPIRV_Cross_Input { float4 y : TEXCOORD0; };")
+        with self.assertRaisesRegex(ValueError,"duplicate_generated_HLSL_stage_semantic"):
+            classify_generated_hlsl_stage_link(v,f)
+
+    def test_generated_hlsl_unparsed_field_is_not_compatible(self):
+        v=extract_output_struct("struct SPIRV_Cross_Output { float4 value[2] : TEXCOORD0; };")
+        f=extract_input_struct("struct SPIRV_Cross_Input { float4 y : TEXCOORD0; };")
+        c=classify_generated_hlsl_stage_link(v,f)
+        self.assertEqual(c["hlsl_vsfs_semantic_unparsed_or_unsupported_fields"],1)
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_compatible"],0)
+
+    def test_generated_hlsl_absent_input_struct_is_not_treated_compatible(self):
+        v=extract_output_struct("struct SPIRV_Cross_Output { float4 x : TEXCOORD0; };")
+        c=classify_generated_hlsl_stage_link(v,extract_input_struct("float4 main() : SV_Target { return 0; }"))
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_parsed"],0)
+        self.assertEqual(c["hlsl_vsfs_semantic_pairs_compatible"],0)
 
     def test_size_limit_fails_closed(self):
         with self.assertRaisesRegex(ValueError,"invalid_private_generated_hlsl_scope"):
