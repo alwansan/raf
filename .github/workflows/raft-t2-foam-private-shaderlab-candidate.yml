@@ -11,6 +11,8 @@ on:
       - tests/test_t2_foam_embedded_stage_io.py
       - scripts/t2_foam_embedded_descriptor_layout.py
       - tests/test_t2_foam_embedded_descriptor_layout.py
+      - scripts/t2_foam_private_descriptor_set_remap.py
+      - tests/test_t2_foam_private_descriptor_set_remap.py
       - .github/workflows/raft-t2-foam-private-shaderlab-candidate.yml
   workflow_dispatch:
 permissions:
@@ -40,6 +42,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t2_foam_embedded_stage_io.py' -v
           python3 -m py_compile scripts/t2_foam_embedded_descriptor_layout.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_embedded_descriptor_layout.py' -v
+          python3 -m py_compile scripts/t2_foam_private_descriptor_set_remap.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_private_descriptor_set_remap.py' -v
       - name: Check scratch disk
         run: python3 -c 'import shutil; assert shutil.disk_usage(".").free>3*1024**3'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -178,6 +182,29 @@ jobs:
           assert r["original_GPU_or_Adreno_frame_verified"] is False
           assert r["private_source_published"] is False
           PY
+      - name: Remap private original Fragment DescriptorSet-only words and revalidate Vulkan1.1
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.t2_foam_private_descriptor_set_remap \
+            --candidate "$RUNNER_TEMP/t2-authentic-foam-private.shader" \
+            --scratch "$RUNNER_TEMP" \
+            --out "$RUNNER_TEMP/t2-foam-set-remap-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-foam-set-remap-safe.json").read_text())
+          assert r["status"]=="source_original_foam_private_decorations_only_remap_valid"
+          assert r["source_original_passes"]==2
+          assert r["original_compiled_and_validated_stage_variants"]==4
+          assert r["privately_relocated_fragment_variants_validated"]==2
+          assert r["original_compiled_descriptor_type_conflicts"]>0
+          assert r["private_descriptor_type_conflicts_after_relocation"]==0
+          assert r["all_original_non_descriptor_SPIRV_words_unchanged"] is True
+          assert r["real_Unity_ShaderLab_import_or_descriptor_upload_verified"] is False
+          assert r["original_CB0_and_material_texture_sampler_delivery_verified"] is False
+          assert r["original_Adreno_water_pixels_verified"] is False
+          assert r["private_binary_or_original_shader_source_published"] is False
+          PY
       - name: Erase original and private ShaderLab/HLSL, even on error
         if: always()
         run: |
@@ -196,5 +223,6 @@ jobs:
             ${{ runner.temp }}/t2-foam-embedded-safe.json
             ${{ runner.temp }}/t2-foam-io-safe.json
             ${{ runner.temp }}/t2-foam-layout-safe.json
+            ${{ runner.temp }}/t2-foam-set-remap-safe.json
           if-no-files-found: ignore
           retention-days: 7
