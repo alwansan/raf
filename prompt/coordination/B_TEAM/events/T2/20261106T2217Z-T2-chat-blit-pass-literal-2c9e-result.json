@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2217Z-T2-chat-blit-pass-literal-2c9e-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "at": "2026-11-06T22:21:33.475Z",
+  "summary": "Direct SHA-original IL proves the two exact Foam Material-consuming Graphics.Blit(Texture,RenderTexture,Material,int) calls have literal pass selectors 0 and 1 respectively (1 each). CI42303756960 passed 61+6 Python and C# selftest; source-only; no Unity/Android acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42303756960",
+    "https://github.com/alwansan/raf/commit/a36bf27c60959abf1e4128abb31c21b31b2bd133",
+    "docs/T2_ORIGINAL_FOAM_TYPED_GRAPHICS_ROUTE_2026-11-06.md"
+  ]
+}
