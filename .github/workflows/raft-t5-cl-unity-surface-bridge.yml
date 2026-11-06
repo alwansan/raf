@@ -4,7 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
-    paths: [.github/workflows/raft-t5-cl-unity-surface-bridge.yml]
+    paths:
+      - .github/workflows/raft-t5-cl-unity-surface-bridge.yml
+      - scripts/t5_cl_unity_surface_bridge.py
+      - tests/test_t5_cl_unity_surface_bridge.py
 
 permissions:
   contents: read
@@ -81,6 +84,13 @@ jobs:
           assert b["qualified_unity_intervals_during_sf_stale"]==62
           assert b["unity_during_sf_stale_by_scene"]["MainScene"]["intervals"]==35
           assert b["unity_during_sf_stale_by_scene"]["MainMenuScene"]["intervals"]==27
+          # The original APK86/89 era logs predate our new scene
+          # provenance fields. Never relabel them as verified-stable.
+          assert a["unity_qualified_scene_window_provenance"]=={
+              "legacy_unlabeled":36,"tagged_stable_content":0,"tagged_mixed_loading":0}
+          assert b["unity_qualified_scene_window_provenance"]=={
+              "legacy_unlabeled":116,"tagged_stable_content":0,"tagged_mixed_loading":0}
+          assert b["tagged_stable_scene_does_not_prove_same_world_or_camera"] is True
           assert b["sf_stale_does_not_prove_game_freeze"] is True
           assert r["cross_session_gameplay_fps_gain_proven"] is False
           print(data)
