@@ -5,7 +5,7 @@
   "session_id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "315a3ed65fc6794b0848bd87af50a6a6cfd8f697",
   "track": "immersive-activity",
   "intended_files": [
@@ -27,6 +27,10 @@
   ],
   "nonoverlap": "Other T4 genuine RGD cross-process suite active; T1 FFT and T5 signed APK ZIP experiments separate. Only immersive policy files.",
   "last_verified_result": "20261106T1304Z T4 mouse source CI42222687053 passed, device unverified. Existing immersive CI source ABI tested, not this race.",
-  "next_step": "Implement callback lease/identity and test existing T4 immersive CI, record exact results.",
-  "updated_at": "2026-11-06T13:19:27.519Z"
+  "next_step": "Read exact source CI42225179203 and job logs; if pass, hand off signed APK+matching OBB device focus/home and gesture regressions to T5; if failure fix exact step.",
+  "updated_at": "2026-11-06T13:25:12.588Z",
+  "source_commit": "f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42225179203"
+  ]
 }
