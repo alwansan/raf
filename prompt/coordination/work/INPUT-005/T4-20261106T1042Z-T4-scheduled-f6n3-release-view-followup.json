@@ -1,0 +1,16 @@
+{
+  "session_id": "20261106T1042Z-T4-scheduled-f6n3",
+  "origin": "scheduled",
+  "issue": "INPUT-005",
+  "status": "evidence_review",
+  "base_sha": "1136071197449b6e51bc31fc58cd2e7f1c56450c",
+  "scope_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1042Z-T4-scheduled-f6n3-release-view-followup.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1042Z-T4-scheduled-f6n3.md"
+  ],
+  "hypothesis": "Earlier 0943Z release View ownership gap may already be resolved by concurrent T4 chat; verify source and CI before any duplicate change.",
+  "experiment_key": "T4-20261106-release-view-current-head-ci-disambiguation",
+  "shared_resource": "none",
+  "taken_over_from": "20261106T0943Z-T4-scheduled-q7n4",
+  "expected_behavior": "No runtime edit if already protected; preserve keyboard, .rgd, touch and T5 UI scope."
+}
