@@ -113,6 +113,7 @@ jobs:
           # HLSL-X-STOP-TYPE: emit only allowlisted unresolved-lane opcode and numeric-kind metadata.
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates --coordinate-depth 12 "$TMPDIR/coordinate.spv"
           # PHI-FAILURE-SAFE-DIAGNOSTIC: only fixed-category private validation failures may appear in logs.
+          # PHI-VECTOR-LANE-20261106: the original-derived float32 Phi may be a vector; audit selected component.
           python3 -m scripts.t1_fft_hlsl_phi_input_origins "$TMPDIR/coordinate.spv"
           python3 -m scripts.t1_fft_pass0_trace_variant "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
