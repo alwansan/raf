@@ -62,7 +62,7 @@ internal static class MaterialStoreValueTrace
             return Unknown;
         // A known local value must have its reaching definition *in this same
         // block*. A local type alone does not prove actual newobj/value source.
-        return locals.GetValueOrDefault(idx.Value,new Value(Unknown)).Origin;
+        return locals.TryGetValue(idx.Value,out Value provenLocal) ? provenLocal.Origin : Unknown;
     }
 
     internal static Evidence Trace(IList<Instruction> instructions,
@@ -91,7 +91,7 @@ internal static class MaterialStoreValueTrace
         {
             if (i.Operand is Instruction branch) targets.Add(branch);
             if (i.Operand is Instruction[] switches)
-                foreach (var branch in switches) targets.Add(branch);
+                foreach (var switchTarget in switches) targets.Add(switchTarget);
         }
         foreach (var handler in context.Body.ExceptionHandlers)
         {
