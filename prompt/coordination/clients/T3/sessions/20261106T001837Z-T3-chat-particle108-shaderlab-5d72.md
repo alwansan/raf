@@ -22,3 +22,9 @@ Two early CI attempts [42136195978](https://github.com/alwansan/raf/actions/runs
 Detailed report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md
 Updated source/export resource: https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json
 Next: Determine whether the exact 108-use source ParticleShader48 dummy output survives T5's post-vendor/native Unity project; then recover original genuine D3D11 one-pass VS/FS/keyword permutations with W1 pinned graph and preserve original ColorMask RGB / Alpha Blend / ZWrite OFF; correlate installed Android smoke/fire emitter GUID and actual GPU pixels. Do not replace source images (10/10 PPtr parity) or claim phone fix.
+
+## Canonical team evidence refresh
+
+- Appended new authenticated real CI42136474867 and report to still-OPEN `prompt/coordination/B_TEAM/issues/RENDER-002.json`, and updated `T3-particle108-source-sameexport-material-texture-parity.json` with `exact_original_particle_shader_exported_as_marked_dummy=1` while 10/10 source→export Material TexEnv PPtrs stay proven and device stage remains NOT_TESTED.
+- [Canonical T3 ledger refresh CI42137425716](https://github.com/alwansan/raf/actions/runs/42137425716) **COMPLETED SUCCESS** at commit `501d7c185bde905de0d9136878e3965c968abbab`; asserts source-linked exact dummy exporter evidence without changing issue readiness.
+- No active T3 scope or native builds should remain after the work record is closed.
