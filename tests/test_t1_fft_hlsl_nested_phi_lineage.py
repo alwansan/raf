@@ -64,6 +64,7 @@ class NestedPhiSourceTests(unittest.TestCase):
         a=result()
         self.assertEqual(a["status"], "bounded_nested_phi_component_provenance")
         self.assertEqual(a["phi_expansions"], 2)
+        self.assertEqual(a["structural_phi_backedges"], 0)
         self.assertEqual(a["top_phi_kind"], "float32_vector")
         self.assertEqual(a["top_selected_component"], "x")
         self.assertEqual(a["chain"]["incoming_count"], 2)
@@ -128,6 +129,9 @@ OpBranch %loop
         a=result(flow=flow)
         self.assertEqual(a["phi_expansions"], 1)
         self.assertEqual(a["cycle_boundaries"], 1)
+        self.assertEqual(a["structural_phi_backedges"], 1)
+        self.assertFalse(a["chain"]["incoming"][0]["predecessor_in_structural_cfg_cycle"])
+        self.assertTrue(a["chain"]["incoming"][1]["predecessor_in_structural_cfg_cycle"])
         self.assertEqual(a["chain"]["incoming"][1]["source"]["status"],
                          "loop_carried_or_cyclic_phi")
         self.assertFalse(a["actual_original_vs_unity_numeric_parity_proven"])
@@ -165,6 +169,14 @@ OpBranch %loop
         with self.assertRaises(ValueError):
             result(head=HEAD.replace("OpDecorate %butter Binding 1",
                                      "OpDecorate %butter Binding 8"))
+
+    def test_backedge_is_not_inferred_from_branch_terminator_alone(self):
+        a = result()
+        for incoming in a["chain"]["incoming"]:
+            self.assertFalse(incoming["predecessor_in_structural_cfg_cycle"])
+        nested = a["chain"]["incoming"][1]["source"]
+        for incoming in nested["incoming"]:
+            self.assertFalse(incoming["predecessor_in_structural_cfg_cycle"])
 
     def test_privacy_output_never_contains_source_ids_or_literals(self):
         a=result()
