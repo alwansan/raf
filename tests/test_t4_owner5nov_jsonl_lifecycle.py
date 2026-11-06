@@ -327,6 +327,62 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(EvidenceInputError, "unverified_pinned_owner_log_git_blob"):
                 analyze(paths, pinned=True)
 
+    def test_pinned_git_blob_cannot_be_followed_by_unverified_second_read(self):
+        # A file is mutable even after its Git blob SHA has been checked.
+        # Simulate the source changing AFTER the base verifier parsed it and
+        # BEFORE the detailed original Load<T> chronology reopens it.
+        import hashlib
+        from unittest.mock import patch
+        from scripts import t4_owner5nov_jsonl_lifecycle as owner
+
+        operations = ("Load<T>.enter", "Load.argumentFileSnapshot", "Load<T>.exit")
+        original = [
+            row("original-synthetic", i, "save", operation,
+                "2026-11-05T13:00:%02dZ" % i,
+                ("exists_at_filename_argument=True; length_class=nonzero; "
+                 "readback_and_deserialization_unverified=true")
+                if operation == "Load.argumentFileSnapshot"
+                else ("exceptionEscaped=False; elapsed_ms=0.000"
+                      if operation == "Load<T>.exit" else ""))
+            for i, operation in enumerate(operations, 1)
+        ]
+        changed = [dict(item) for item in original]
+        changed[0]["operation"] = "Load<T>.exit"  # exactly same source byte count
+        files = [self.put("a.jsonl", original)]
+        files.extend([
+            self.put("b.jsonl", [row("other1", 1, "startup", "logger.ready",
+                                     "2026-11-05T14:00:00Z")]),
+            self.put("c.jsonl", [row("other2", 1, "startup", "logger.ready",
+                                     "2026-11-05T15:00:00Z")]),
+        ])
+        payloads = [p.read_bytes() for p in files]
+        blob = lambda data: hashlib.sha1(
+            b"blob " + str(len(data)).encode("ascii") + b"\\0" + data
+        ).hexdigest()
+        base_summarize = owner.summarize
+
+        def rewrite_after_base_read(inputs):
+            result = base_summarize(inputs)
+            files[0].write_text("".join(json.dumps(r) + "\\n" for r in changed),
+                                encoding="utf-8")
+            self.assertEqual(files[0].stat().st_size, len(payloads[0]))
+            return result
+
+        with (patch.object(owner, "PINNED_BYTES", tuple(map(len, payloads))),
+              patch.object(owner, "PINNED_GIT_BLOBS",
+                           tuple(blob(data) for data in payloads)),
+              patch.object(owner, "summarize", side_effect=rewrite_after_base_read)):
+            evidence = analyze(files, pinned=True)
+        self.assertEqual(evidence["source_pin"], "CL_520c4cf_2026_11_05")
+        # The parsed evidence must correspond to the SAME authenticated
+        # bytes, not the mutated path content. No raw record is returned.
+        original_session = next(x for x in evidence["sessions"]
+                                if x["original_operation_counts"].get("load_enter"))
+        self.assertEqual(original_session["fully_traced_original_loadt_calls"], 1)
+        self.assertEqual(original_session["original_operation_counts"]["load_enter"], 1)
+        self.assertEqual(original_session["original_operation_counts"]["load_exit"], 1)
+        self.assertFalse(evidence["original_rgd_deserialization_success_proven"])
+
     def test_wrong_immutable_three_log_provenance_refused(self):
         path = self.put("first.jsonl", [
             row("x", 1, "startup", "logger.ready", "2026-11-05T10:00:00Z")])
