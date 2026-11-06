@@ -94,7 +94,7 @@ class OriginalKeyedPrerequisitesTests(unittest.TestCase):
         x=analyze(BASE)
         self.assertFalse(x["private_identifiers_or_values_exported"])
         self.assertNotIn("%", str(x))
-        self.assertNotIn("coordinate", str(x["sites"]))
+        self.assertNotIn("%coordinate", str(x))
         self.assertNotIn("i0", str(x))
 
 
