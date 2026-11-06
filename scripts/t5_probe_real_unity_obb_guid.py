@@ -65,23 +65,27 @@ def compare_unity_obb_guid(apk: zipfile.ZipFile, obb: zipfile.ZipFile):
     a = _marker(apk)
     o = _marker(obb)
     a_present, o_present = a is not None, o is not None
-    if a_present != o_present:
-        raise ProbeError("unity_guid_marker_one_sided")
-    if a_present and a != o:
+    if a_present and o_present and a != o:
         raise ProbeError("unity_guid_marker_mismatch")
+    if a_present and o_present:
+        status = "both_present_byte_identical"
+    elif not a_present and not o_present:
+        status = "both_absent_identity_unavailable"
+    elif a_present:
+        status = "apk_only_identity_unavailable"
+    else:
+        status = "obb_only_identity_unavailable"
     return {
         "real_nested_apk_zip_member_count": len(apk.infolist()),
         "real_nested_obb_zip_member_count": len(obb.infolist()),
         "all_original_APK_OBB_local_headers_match_central": True,
         "apk_unity_obb_guid_marker_present": a_present,
         "obb_unity_obb_guid_marker_present": o_present,
-        "unity_obb_guid_marker_identity": (
-            "both_present_byte_identical" if a_present else
-            "both_absent_identity_unavailable"
-        ),
-        "marker_exact_bytes_compared": len(a) if a_present else 0,
+        "unity_obb_guid_marker_identity": status,
+        "marker_exact_bytes_compared": len(a) if a_present and o_present else 0,
         "unity_obb_guid_embedded_value_revealed": False,
-        "unity_internal_engine_guid_verified": bool(a_present),
+        "apk_obb_shared_guid_marker_comparison_proven": bool(a_present and o_present),
+        "unity_internal_engine_guid_verified": False,
         "actual_installed_phone_obb_mount_verified": False,
         "optional_patch_89_probe_caused_main_corruption": False,
     }
