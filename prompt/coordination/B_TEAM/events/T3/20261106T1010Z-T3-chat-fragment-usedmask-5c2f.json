@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+  "owner": "T3",
+  "session_id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Authentic original Particle108 4 VS/FS pairs/8 source DXBC stages: 2 original Fragment inputs absent by numeric source vkd3d SPIRV Location both have original compiled DXBC input used_mask=0 (0 nonzero), both originally connect to VS output semantic mask/type, 16 source-free tests passed; supports possible benign compiler elimination, not semantic identity or Android GPU proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42200663399",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json"
+  ],
+  "at": "2026-11-06T10:12:00Z"
+}
