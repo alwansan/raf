@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261107T2227Z-T2-chat-blit-texture-role-6c52",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "ebc78f1c3f561433666d6355c45cc90edaad03fb",
+  "updated_at": "2026-11-06T22:27:17.820Z",
+  "resumed_from_sessions": [
+    "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
+    "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3"
+  ],
+  "hypothesis": "For original Foam's two authenticated Material→Graphics.Blit(Texture,RenderTexture,Material,int pass) sites, the immediate straight-line IL producer of source Texture and destination RenderTexture may be a local, field or null; reconstruct only direct two-operand expressions and fail closed on indirect producers, no private symbol emission.",
+  "experiment_key": "T2-ZIP2SHA-original-Foam-Blit0-1-immediate-srcdst-direct-expression-v1",
+  "resource_key": "T2 SHA-authentic original Mono.Cecil source-only workflow; no Unity native runner",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "prompt/coordination/work/WATER-001/20261107T2227Z-T2-chat-blit-texture-role-6c52.json",
+    "prompt/coordination/clients/T2/sessions/20261107T2227Z-T2-chat-blit-texture-role-6c52.md",
+    "prompt/coordination/experiments/T2/20261107T2227Z-T2-chat-blit-texture-role-6c52.json",
+    "prompt/coordination/B_TEAM/events/T2/20261107T2227Z-T2-chat-blit-texture-role-6c52-result.json"
+  ],
+  "do_not_touch": [
+    "T1 FFT/T3 effects/T4 local/T5 build files",
+    "game assets, ShaderLab, .meta and GUIDs",
+    "native requests and workflow, Releases"
+  ],
+  "source_evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42303756960",
+    "https://github.com/alwansan/raf/actions/runs/42303074180"
+  ],
+  "native_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Implement strict no-branch direct IL operand producer classification for source and destination of exact authentic Foam Blit pass sites; source-free synthetic negative/positive tests, original pinned managed DLL workflow. Preserve unknown when not direct, no Unity/pixel claims."
+}
