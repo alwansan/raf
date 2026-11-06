@@ -104,7 +104,16 @@ namespace RaftAndroid.Diagnostics
         {
             lock (ioGate)
             {
-                try { Drain(); writer.Flush(); stream.Flush(true); startup.Flush(true); }
+                try
+                {
+                    Drain();
+                    writer.Flush();
+                    stream.Flush(true);
+                    startup.Flush(true);
+                    // A transient I/O fault is no longer current after both
+                    // files have successfully flushed to storage.
+                    LastError = null;
+                }
                 catch (Exception ex) { LastError = ex.GetType().Name + ": " + ex.Message; }
             }
         }
