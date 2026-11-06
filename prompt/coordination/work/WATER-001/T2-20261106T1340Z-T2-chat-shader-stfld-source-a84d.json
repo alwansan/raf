@@ -2,9 +2,9 @@
   "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ed1ac040e8a361ba253b8088d89c23ba87c06959",
-  "updated_at": "2026-11-06T13:40:00Z",
+  "updated_at": "2026-11-06T13:48:30Z",
   "resumed_from_sessions": [
     "20261106T1326Z-T2-chat-source-Shader-field-51d2",
     "20261106T1322Z-T2-scheduled-ci-isolation-b83e"
@@ -31,5 +31,15 @@
     "T5 INTEGRATION-001 42227170402"
   ],
   "collision_policy": "Only T2 source-authentic Cecil and isolated CI; no T1/T5 workflows or native Unity builds, no changing original game assets, GUID/meta, audio, save, Settings, input.",
-  "acceptance": "source-only original owner and managed DLL SHA gating; synthetic Cecil positive/negative controls; classify exact Shader field stfld value by typed source, no claim actual Foam asset identity or runtime upload."
+  "acceptance": "source-only original owner and managed DLL SHA gating; synthetic Cecil positive/negative controls; classify exact Shader field stfld value by typed source, no claim actual Foam asset identity or runtime upload.",
+  "run_id": 42228032544,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42228032544",
+  "run_conclusion": "success",
+  "original_source_verified": true,
+  "source_commit": "cd2b4d3123ced1bd5cc835d70c8cabbbdd5d9914",
+  "result": "Exactly one authentic original Shader field writer's stfld value is typed Shader.Find(string) result, 3 same-basic-block IL instructions. Shader.Find string identity and Unity live asset unresolved.",
+  "report": "docs/T2_FOAM_ORIGINAL_SHADER_STFLD_STACK_2026-11-06.md",
+  "experiment": "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-result.json",
+  "next_step": "Separate original source SHA Shader.Find first literal name vs original Foam m_Name comparison; no shader asset identity/runtime upload claimed."
 }
