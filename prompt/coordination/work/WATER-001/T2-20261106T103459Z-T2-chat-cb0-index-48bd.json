@@ -2,9 +2,9 @@
   "session_id": "20261106T103459Z-T2-chat-cb0-index-48bd",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "7fc6df9b93aef285cb4a262fd6147ba14cedb9d9",
-  "updated_at": "2026-11-06T10:47:00Z",
+  "updated_at": "2026-11-06T10:50:30Z",
   "resumed_from_sessions": [
     "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
     "20261106T101538Z-T2-scheduled-uploadtrace-6c8f"
@@ -40,5 +40,17 @@
   ],
   "first_failed_run": "https://github.com/alwansan/raf/actions/runs/42204456139",
   "first_failure_kind": "source-free test had no OpEntryPoint, resolved by real execution model guard and synthetic entrypoint",
-  "next_step": "Read run 42204938466 and safe two-pass original SPIR-V load access; fix only evidence-backed failures, preserve private assets and no Unity proof."
+  "next_step": "Correlate original 160-byte serialized CB0 layout / real Unity CBuffer host producer with larger stage capacity for both passes; do not assume common smaller array safe; coordinate Unity/Adreno with T1/T5.",
+  "job_id": 127849093092,
+  "run_conclusion": "success",
+  "source_free_tests_passed": 100,
+  "original_passes_compiled": 2,
+  "original_stages_compiled": 4,
+  "source_sha": "5de93677334a5273ed185424be10d7f0dddc64ce",
+  "result_note": "Pass0 Fragment larger: 6 static compiled Fragment CB0 loads outside Vertex reflected capacity; Pass1 Vertex larger: 2 static compiled Vertex CB0 loads outside Fragment reflected capacity; zero known out-of-own, zero observed dynamic/unsupported per stage; runtime CB0 upload remains UNKNOWN.",
+  "result_report": "docs/T2_FOAM_ORIGINAL_CB0_COMPILED_LOAD_INDEX_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T103459Z-T2-chat-cb0-index-48bd.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json",
+  "source_private_cleanup_verified": true,
+  "not_ready": true
 }
