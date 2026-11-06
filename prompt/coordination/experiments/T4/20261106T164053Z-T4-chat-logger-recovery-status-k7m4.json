@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T164053Z-T4-chat-logger-recovery-status-k7m4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Previously failed startup/segment I/O leaves PersistentDiagnosticLog.LastError stale even after a complete durable successful Flush; clear only when success is verified.",
+  "experiment_key": "T4-LOCAL005-PersistentDiagnosticLog-LastError-stale-after-durable-IO-recovery-source-net8-queue1-285checks-v1",
+  "source_commit": "4b10629cfb16d3b8b963ce160a548b998443c374",
+  "input_hashes": [],
+  "tool_versions": {
+    "dotnet": "8.0.427",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "Before recovery, synthetic disposed startup FileStream makes LastError nonnull, original seed remains queued, and overflowing queue retains dropped count.",
+    "Old source+new recovered-state assertion fails at Program.cs line 145 / check 51 in CI42254862695 (expected red).",
+    "After restored startup stream and forced Flush, seed+queue_overflow persist and LastError must become null."
+  ],
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42255132103",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42254862695",
+    "https://github.com/alwansan/raf/actions/runs/42255132103"
+  ],
+  "artifact_urls": [],
+  "budget": "Single existing 10-minute .NET8 source-only workflow per red and green source change; no Unity/native/OBB/REAs or private assets.",
+  "status": "completed",
+  "observed_result": "RED CI42254862695 completed failure on source 7c7b63dae280b3462cf479b6f1bb286ff26ee270, Program.cs:145 check 51 after recovered Flush. GREEN CI42255132103 completed SUCCESS source 4b10629cfb16d3b8b963ce160a548b998443c374: RAFT_PERSISTENT_LOG_TEST checks=286 passed=true actualAndroidStorageVerified=false. Production LastError resets after full drain+writer+stream+startup durable Flush, errors on any failed step remain visible.",
+  "rejected_hypotheses": [
+    "This does not establish that actual owner device storage ever failed; synthetic fault is source regression only."
+  ],
+  "limitations": [
+    "AndroidRuntimeLog.Status not proven on device",
+    "Worker's ordinary non-durable Flush does not clear LastError until a successful explicit full Flush",
+    "LOCAL-005 remains OPEN; old owner phone build 42058825739 is the only owner-confirmed world-save-reopen candidate for that scenario."
+  ],
+  "integration_commit": "4b10629cfb16d3b8b963ce160a548b998443c374",
+  "next_step": "Preserve for T5's next signed APK+matching OBB device regression; test under actual package version with captured first crash and world-save telemetry; do not infer phone acceptance from .NET8."
+}
