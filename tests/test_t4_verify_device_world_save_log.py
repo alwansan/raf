@@ -21,6 +21,94 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         p.write_text("".join(json.dumps(e) + "\n" for e in events), encoding="utf-8")
         return p
 
+    def test_mouse_release_outcomes_are_static_and_never_prove_android_os_state(self):
+        outcomes = (
+            "superseded_generation", "unbound_request_view",
+            "focus_view_unavailable", "focused_view_changed",
+            "target_not_captured", "release_call_returned",
+            "jni_exception", "ui_dispatch_exception",
+        )
+        events = [
+            row("test-s1", 1, "input", "physical_mouse_capture_requested"),
+            row("test-s1", 2, "input", "physical_mouse_capture_released"),
+        ]
+        events += [
+            row("test-s1", i + 3, "input",
+                "physical_mouse_capture_release_outcome",
+                "result=" + status + "; native_release_confirmed=false")
+            for i, status in enumerate(outcomes)
+        ]
+        self.put("mouse.jsonl", events)
+        result = summarize(_paths(self.root))
+        entry = result["sessions"][0]
+        self.assertEqual(entry["marker_counts"]["mouse_release_requested"], 1)
+        self.assertEqual(entry["marker_counts"]["mouse_capture_requested"], 1)
+        self.assertEqual(entry["marker_counts"]["mouse_release_outcome"], 8)
+        self.assertEqual(entry["mouse_release_outcome_classes"],
+                         {name: 1 for name in outcomes})
+        self.assertTrue(entry["native_release_call_returned_observed"])
+        self.assertFalse(entry["native_mouse_release_by_os_proven"])
+        self.assertTrue(result["mouse_release_call_returned_observed"])
+        self.assertFalse(result["native_mouse_release_by_os_proven"])
+        self.assertFalse(result["hardware_mouse_360_camera_proven"])
+        self.assertFalse(result["local005_device_confirmed"])
+
+    def test_mouse_view_loss_relative_counts_cannot_claim_camera(self):
+        self.put("mouse.jsonl", [
+            row("s1", 1, "input", "physical_mouse_capture_view_changed"),
+            row("s1", 2, "input", "physical_mouse_capture_lost"),
+            row("s1", 3, "input", "physical_mouse_relative"),
+        ])
+        report = summarize(_paths(self.root))
+        counts = report["sessions"][0]["marker_counts"]
+        for label in ("mouse_view_changed", "mouse_capture_lost", "mouse_relative"):
+            self.assertEqual(counts[label], 1)
+        self.assertFalse(report["mouse_release_call_returned_observed"])
+        self.assertFalse(report["hardware_mouse_360_camera_proven"])
+
+    def test_forged_or_extra_mouse_release_detail_never_echoed_or_trusted(self):
+        secret = "/storage/emulated/0/PrivateWorldOwner.rgd"
+        details = [
+            "result=release_call_returned; native_release_confirmed=true",
+            "result=release_call_returned; native_release_confirmed=false; " + secret,
+            "result=unknown_input; native_release_confirmed=false",
+            "result=release_call_returned",
+        ]
+        self.put("mouse.jsonl", [
+            row("SENSITIVE_SESSION_ID", i + 1, "input",
+                "physical_mouse_capture_release_outcome", detail)
+            for i, detail in enumerate(details)
+        ])
+        report = summarize(_paths(self.root))
+        entry = report["sessions"][0]
+        self.assertEqual(entry["mouse_release_outcome_classes"], {"unparseable": 4})
+        self.assertIn("unparseable_mouse_release_outcome", entry["anomalies"])
+        self.assertFalse(entry["native_release_call_returned_observed"])
+        self.assertFalse(report["native_mouse_release_by_os_proven"])
+        rendered = json.dumps(report)
+        self.assertNotIn(secret, rendered)
+        self.assertNotIn("SENSITIVE_SESSION_ID", rendered)
+        self.assertNotIn("native_release_confirmed=true", rendered)
+
+    def test_non_string_mouse_release_detail_is_rejected_not_partly_accepted(self):
+        self.put("mouse.jsonl", [
+            row("s1", 1, "input", "physical_mouse_capture_release_outcome",
+                {"result": "release_call_returned"}),
+        ])
+        with self.assertRaisesRegex(EvidenceInputError, "invalid_mouse_release_detail_type"):
+            summarize(_paths(self.root))
+
+    def test_duplicate_source_log_does_not_double_count_release_outcome(self):
+        events = [row("test-s1", 1, "input",
+                      "physical_mouse_capture_release_outcome",
+                      "result=target_not_captured; native_release_confirmed=false")]
+        self.put("startup/startup-first.jsonl", events)
+        self.put("raft-first.jsonl", events)
+        result = summarize(_paths(self.root))
+        self.assertEqual(result["sessions"][0]["deduplicated_replay_lines"], 1)
+        self.assertEqual(result["sessions"][0]["mouse_release_outcome_classes"],
+                         {"target_not_captured": 1})
+
     def test_single_session_never_claims_acceptance(self):
         self.put("raft-one.jsonl", [
             row("s1", 1, "startup", "logger.ready"),

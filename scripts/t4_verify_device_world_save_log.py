@@ -35,10 +35,35 @@ MARKERS = {
     ("save", "Load<T>.enter"): "load_entry",
     ("save", "Load<T>.exit"): "load_exit",
     ("logging", "queue_overflow"): "queue_overflow",
+    ("input", "physical_mouse_capture_requested"): "mouse_capture_requested",
+    ("input", "physical_mouse_capture_released"): "mouse_release_requested",
+    ("input", "physical_mouse_capture_release_outcome"): "mouse_release_outcome",
+    ("input", "physical_mouse_capture_view_changed"): "mouse_view_changed",
+    ("input", "physical_mouse_capture_lost"): "mouse_capture_lost",
+    ("input", "physical_mouse_relative"): "mouse_relative",
 }
 SNAPSHOT_DETAIL = re.compile(
     r"(?:^|;\s*)exists_at_filename_argument=(True|False)"
     r";\s*length_class=(zero|nonzero|not_checked)(?:;|$)"
+)
+
+# The Java-side release result is deliberately distinct from Unity's older
+# release-request marker. All allowed strings are static source labels; never
+# output a free-form detail, filename, View identity, or exception message.
+# release_call_returned means JNI call returned, NOT OS capture was revoked.
+MOUSE_RELEASE_RESULTS = (
+    "superseded_generation",
+    "unbound_request_view",
+    "focus_view_unavailable",
+    "focused_view_changed",
+    "target_not_captured",
+    "release_call_returned",
+    "jni_exception",
+    "ui_dispatch_exception",
+)
+MOUSE_RELEASE_DETAIL = re.compile(
+    r"result=(" + "|".join(map(re.escape, MOUSE_RELEASE_RESULTS)) +
+    r"); native_release_confirmed=false"
 )
 
 
@@ -74,6 +99,15 @@ def _parse_detail(text):
     if exists == "True" and size in ("zero", "nonzero"):
         return size
     return "contradictory"
+
+
+def _parse_mouse_release_outcome(text):
+    if not isinstance(text, str):
+        raise EvidenceInputError("invalid_mouse_release_detail_type")
+    match = MOUSE_RELEASE_DETAIL.fullmatch(text)
+    # Reject contradictory success claims and unknown extra fields. No raw
+    # detail is echoed even when a malformed status contains private data.
+    return match.group(1) if match else "unparseable"
 
 
 def _parse_utc(text):
@@ -140,11 +174,13 @@ def summarize(paths):
                 group["last"] = max(group["last"], stamp)
                 marker = MARKERS.get((area, operation))
                 if marker:
-                    classification = (
-                        _parse_detail(record.get("detail", ""))
-                        if marker in ("save_snapshot", "load_snapshot")
-                        else None
-                    )
+                    if marker in ("save_snapshot", "load_snapshot"):
+                        classification = _parse_detail(record.get("detail", ""))
+                    elif marker == "mouse_release_outcome":
+                        classification = _parse_mouse_release_outcome(
+                            record.get("detail", ""))
+                    else:
+                        classification = None
                     group["events"].append((seq, marker, classification))
     if not sessions:
         raise EvidenceInputError("no_session_records")
@@ -159,6 +195,8 @@ def summarize(paths):
         counts = Counter(event for _, event, _ in entries)
         save_states = Counter(value for _, event, value in entries if event == "save_snapshot")
         load_states = Counter(value for _, event, value in entries if event == "load_snapshot")
+        mouse_release_states = Counter(
+            value for _, event, value in entries if event == "mouse_release_outcome")
         anomalies = []
         sequence_map = {event: min(seq for seq, m, _ in entries if m == event)
                         for event in counts}
@@ -173,6 +211,8 @@ def summarize(paths):
             anomalies.append("utc_reverses_sequence")
         if any(x in ("contradictory", "unparseable") for x in (*save_states, *load_states)):
             anomalies.append("unparseable_snapshot")
+        if mouse_release_states.get("unparseable"):
+            anomalies.append("unparseable_mouse_release_outcome")
         out.append({
             "session_index": index,
             "sequence_complete": sequence_complete,
@@ -181,6 +221,10 @@ def summarize(paths):
             "marker_counts": dict(sorted(counts.items())),
             "save_argument_file_classes": dict(sorted(save_states.items())),
             "load_argument_file_classes": dict(sorted(load_states.items())),
+            "mouse_release_outcome_classes": dict(sorted(mouse_release_states.items())),
+            "native_release_call_returned_observed":
+                bool(mouse_release_states.get("release_call_returned")),
+            "native_mouse_release_by_os_proven": False,
             "anomalies": anomalies,
         })
     valid_pairs = [(i, j) for i in range(len(out)) for j in range(i + 1, len(out))
@@ -206,6 +250,10 @@ def summarize(paths):
         "real_rgd_durability_or_reopen_proven": False,
         "candidate_apk_source_sha_attested_by_logs": False,
         "logging_queue_overflow_observed": invalid_truncation,
+        "mouse_release_call_returned_observed":
+            any(row["native_release_call_returned_observed"] for row in out),
+        "native_mouse_release_by_os_proven": False,
+        "hardware_mouse_360_camera_proven": False,
         "local005_device_confirmed": False,
         "readiness_review_count": 0,
         "limitations": [
@@ -215,6 +263,7 @@ def summarize(paths):
             "session_sequence_gaps_or_dropped_events_prevent_negative_inference",
             "queue_overflow_suppresses_cross_session_positive_hints",
             "owner_verified_playable_create_save_reopen_required",
+            "mouse_release_call_returned_does_not_prove_os_pointer_release",
         ],
     }
 
