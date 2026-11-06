@@ -1,0 +1,21 @@
+{
+  "session_id": "20261106T0542Z-T4-scheduled-c8v5",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "9cbf1550e1421be1d9b2d1026c0632ddad3b63b5",
+  "updated_at": "2026-11-06T05:42:50Z",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T0542Z-scheduled-c8v5-ci-result-check.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0542Z-T4-scheduled-c8v5.md",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0542Z-T4-scheduled-c8v5.json"
+  ],
+  "experiment_key": "T4-pointer-view-mismatch-source-CI-42163839014-platform-42163838785-sha-f97dda279dad10425db3ec5d859a00c32b666560",
+  "resource_key": null,
+  "hypothesis": "Previous view-mismatch fallback changes pass actual existing source/platform CI; no redundant run or device claim",
+  "resumed_from_sessions": [
+    "20261106T0440Z-T4-scheduled-v2q8",
+    "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8"
+  ],
+  "taken_over_from": "Prior T4 source f97dda27, tests 57b1f472; owner artifact 42058825739."
+}
