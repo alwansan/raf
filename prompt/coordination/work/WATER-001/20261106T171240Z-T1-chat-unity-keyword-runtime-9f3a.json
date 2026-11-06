@@ -5,9 +5,9 @@
   "origin": "chat",
   "session_id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "b6c03cc3f4c7d40444eca623e058bd67377b5d0b",
-  "updated_at": "2026-11-06T17:12:40Z",
+  "updated_at": "2026-11-06T17:15:30Z",
   "resumed_from_sessions": [
     "20261106T170532Z-T1-chat-variant-declarations-7c4e",
     "20261106T163310Z-T1-chat-real-fft-pair-d91e",
@@ -33,7 +33,9 @@
   ],
   "concurrent_scope": "No nonterminal current branch runs on initial 60-list; no overlap with T1 private Vulkan original pair runner (completed 42254539826). T2/T3/T4/T5 source files unchanged.",
   "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42259968584"
+  ],
   "result": null,
-  "next_step": "Publish source-only synthetic control + GameCI isolated workflow, inspect actual NUnit case identity and GPU output, record any failure before claiming Unity variant activation."
+  "next_step": "Inspect CI 42259968584 job 128037003200 terminal GPU NUnit strict two-case result; private logs cleaned, if failed investigate stage but no repeat without change."
 }
