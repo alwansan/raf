@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
+  "issue_id": "RENDER-002",
+  "track": "Original Particle108 missing DXBC register vs SPIRV Location source stage roles",
+  "status": "active",
+  "base_sha": "841d3ae2ffc3bb9400f3c4cafcce020a0d48d202",
+  "intended_files": [
+    "scripts/t3_particle108_register_location_probe.py",
+    "tests/test_t3_particle108_register_location_probe.py",
+    ".github/workflows/raft-t3-particle108-register-location.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1002Z-T3-chat-stage-role-misses-7e13.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1002Z-T3-chat-stage-role-misses-7e13.md",
+    "prompt/coordination/experiments/T3/20261106T1002Z-T3-chat-stage-role-misses-7e13.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1002Z-T3-chat-stage-role-misses-7e13.json"
+  ],
+  "hypothesis": "The two source DXBC user register numbers lacking same-number SPIR-V Locations can be localized to VS_input, VS_output, FS_input or FS_output in privacy-safe aggregates without releasing per-variant values.",
+  "experiment_key": "T3-Particle108-original-4pair-48reg-46located-sha15964ea8-stage-role-counts-v2",
+  "resource_key": "T3-original-Particle108-4owners-private-20min-runner",
+  "related_work": [
+    "20261106T0950Z-T3-chat-dxbc-spv-location-27af"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T0950Z-T3-chat-dxbc-spv-location-27af.md"
+  ],
+  "approach": "Preserve SHA-pinned source and current numeric gate; partition only aggregate stage/side counters across all 4 keyword variants, test synthetic negatives, re-run changed hypothesis once. No shader/program artifact or per-pair values published.",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement stage-role private aggregation and 2 negative fixtures; run source-free tests then authentic isolated CI; keep semantics→HLSL identity unverified.",
+  "updated_at": "2026-11-06T10:02:00Z"
+}
