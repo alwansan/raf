@@ -1,0 +1,30 @@
+{
+  "id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue",
+  "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "source_original_typed_local_parameter_negative_checked",
+  "experiment_key": "ZIP2-Foam-original-exact-Material-Field-stfld-immediate-typed-local-or-parameter-resolution-v1",
+  "run_id": 42222884964,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42222884964",
+  "job_id": 127908996775,
+  "run_conclusion": "success",
+  "source_commit": "dda547a8980ee6bf4737e9a2296451210c4c401b",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "sourcefree_tests_passed": 11,
+  "Cecil_typed_local_parameter_false_positive_controls_passed": true,
+  "original_Material_field_stfld_count": 1,
+  "after_typed_local_parameter_check_immediate_source": {
+    "immediate_value_source_unproven": 1
+  },
+  "Material_ctor_same_method_count": 1,
+  "local_parameter_confirmed_as_store_value": false,
+  "Material_ctor_proven_as_store_value": false,
+  "original_Foam_shader_binding_verified": false,
+  "runtime_CB0_upload_verified": false,
+  "adreno_water_verified": false,
+  "original_private_method_or_IL_disclosed": false,
+  "report": "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md",
+  "next_step": "Full bounded original stfld stack ownership/reaching definitions, not same-method/adjacent typed guesses."
+}
