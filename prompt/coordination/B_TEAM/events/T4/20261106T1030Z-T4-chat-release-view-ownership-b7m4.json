@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+  "event_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+  "session_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "type": "physical_mouse_release_focus_view_ownership_guard",
+  "timestamp": "2026-11-06T10:41:00Z",
+  "at": "2026-11-06T10:41:00Z",
+  "summary": "T4 prevents ReleaseCapture from revoking pointer capture of a different currently focused Android View by comparing nonzero original requested View identity under preserved release epoch guard. Final source/test commit cb86cdcd; dedicated CI42204448436 SUCCESS with 46/46 Python tests including 6 View-identity tests and original Unity2021 managed ABI compile, Android platform source CI42204354877 success. Intermediate lexical test failures fixed; no Android phone/runtime or local save regression tested. INPUT-005 OPEN, NOT_READY 0/3.",
+  "source_commit": "cb86cdcd8baf462f35c4217758a0a9e19fd56d4e",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42204448436",
+  "links": [
+    "prompt/coordination/clients/T4/sessions/20261106T1030Z-T4-chat-release-view-ownership-b7m4.md",
+    "prompt/coordination/experiments/T4/20261106T1030Z-T4-chat-release-view-ownership-b7m4.json"
+  ],
+  "device": "NOT_TESTED",
+  "original_data_published": false
+}
