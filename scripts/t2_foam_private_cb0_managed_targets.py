@@ -82,8 +82,17 @@ def build_private_target_set(parsed):
     targets = {role: sorted(hashlib.sha256(v.encode("utf8")).hexdigest()
                             for v in values)
                for role, values in names.items()}
+    # This digest is private CI scratch-only, derived from the exact
+    # serialized source Shader.m_Name. Never log or upload it: even a digest
+    # of a predictable shader name can disclose the original name.
+    shader_name = parsed["m_Name"]
+    if (not isinstance(shader_name, str) or not shader_name
+            or len(shader_name) > 256 or "\\x00" in shader_name):
+        raise ValueError("invalid_original_Foam_shader_name")
+    original_shader_digest = hashlib.sha256(shader_name.encode("utf8")).hexdigest()
     return {"schema": 1, "source_kind": "SHA_original_Foam_CB0_source_name_registry",
             "categories_sha256": targets, **counts,
+            "original_Foam_Shader_mName_SHA256_private": original_shader_digest,
             "distinct_target_names": len(all_values),
             "actual_Unity_upload_proven": False}
 
