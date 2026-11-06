@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Exact five SHA-original Particle108 Material21 RGBA + scalar same-export values.
 
+One-shot original 5-Material phase diagnosis; source and values never logged.
+
 The 108-use Particle Shader48's five Material identities are selected by
 six original scene Renderer→Material→Shader PPtrs, not names. Private W1+B02
 same-instance exporter lineage binds each to real Unity exported YAML.
