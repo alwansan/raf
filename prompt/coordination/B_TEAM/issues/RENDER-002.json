@@ -154,7 +154,9 @@
     "https://github.com/alwansan/raf/actions/runs/42141506120",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
     "https://github.com/alwansan/raf/actions/runs/42144978122",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
+    "https://github.com/alwansan/raf/actions/runs/42146385054",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -212,5 +214,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-06T01:42:05.771Z"
+  "updated_at": "2026-11-06T01:55:25.194Z"
 }
