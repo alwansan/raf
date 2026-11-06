@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T2237Z-T4-scheduled-native-sha-boundary-k8v3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "waiting_ci",
+  "baseline_sha": "f1854b8f85830bc153c00fb606dd0cf1442ebef3",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T2237Z-T4-scheduled-native-sha-boundary-k8v3.json",
+    "prompt/coordination/clients/T4/sessions/20261106T2237Z-T4-scheduled-native-sha-boundary-k8v3.md"
+  ],
+  "experiment_key": "native-42296450023-a1737bd7-reconstruct-provenance-vs-current-head-f1854b8f",
+  "resource_key": "existing-native-build-42296450023-read-only",
+  "hypothesis": "Source-only fixes after a1737bd7 cannot be attributed to the currently building binary; device acceptance requires immutable built SHA and signed pair",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "taken_over_from": [
+    "20261106T2138Z-T4-scheduled-native-retry-q4n7",
+    "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2"
+  ],
+  "updated_at": "2026-11-06T22:37:00Z"
+}
