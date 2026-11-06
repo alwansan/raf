@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 
 from scripts.t1_fft_site2_y_cfg import analyze as site2y
+from scripts.t1_fft_site2_y_phi_inputs import analyze as phi_census
 from scripts.probe_authentic_fft_dxbc_translation import (
     OWNER, PATH_ID, ORIGINAL_OBJECT_SHA256, EXPECTED_CONTAINERS)
 from scripts.probe_original_compute_containers import scan_blob
@@ -133,6 +134,10 @@ def inspect(original_data):
                 raise ValueError("Disassembled private shader outside bound")
             outputs.append(run.stdout)
         comparison = pair(*outputs)
+        phi_inputs = phi_census(outputs[1], require_original=True)
+        if phi_inputs.get("status") != "verified_translated_site2_y_phi_incoming_cfg":
+            raise ValueError("Translated third-Y Phi input paths remain unverified")
+        comparison["derived_site2_y_phi_inputs"] = phi_inputs
     return {
         "original_owner_and_serialized_compute_sha_verified": True,
         "original_compiled_slots_verified": 20,
