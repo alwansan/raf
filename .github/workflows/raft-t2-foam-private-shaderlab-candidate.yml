@@ -119,6 +119,51 @@ jobs:
           assert r["original_numeric_or_device_pixels_verified"] is False
           assert r["private_shaderlab_published"] is False
           PY
+      - name: T2 prove private source-authentic Foam can replace a synthetic exported Shader without mutating GUID
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,shutil
+          from pathlib import Path
+          from scripts.b24_original_foam_stage_translation import TARGET
+          from scripts.t2_foam_private_installer import install
+          temp=Path(os.environ["RUNNER_TEMP"])
+          candidate=temp/"t2-authentic-foam-private.shader"
+          report=json.loads((temp/"t2-foam-candidate-safe.json").read_text())
+          scratch=temp/"t2-foam-original-candidate-export-transaction-probe"
+          project=scratch/"UnityProject"
+          target=project/"Assets"/"SyntheticExport"/"OriginalFoam.shader"
+          target.parent.mkdir(parents=True,exist_ok=False)
+          original=('Shader "'+TARGET+'" { SubShader { Pass { } } }\n').encode()
+          metadata=b'fileFormatVersion: 2\nguid: '+b'a'*32+b'\n'
+          target.write_bytes(original)
+          Path(str(target)+".meta").write_bytes(metadata)
+          try:
+              # Original source pin/owner SHA, original pass states and four stage
+              # DXBC model hashes are authenticated by the preceding steps.
+              content=candidate.read_bytes()
+              assert report["private_candidate_bytes"]==len(content)
+              actual=install(project,candidate,scratch/"recovery",
+                             hashlib.sha256(content).hexdigest(),report)
+              assert actual["unique_original_foam_exported_target_installed"]==1
+              assert actual["original_export_meta_bytes_unchanged"] is True
+              assert actual["external_recovery_backup_complete"] is True
+              assert actual["private_shaderlab_published"] is False
+              assert actual["Unity_2021_import_verified"] is False
+              assert actual["Android_water_pixels_verified"] is False
+              assert target.read_bytes()==content
+              assert Path(str(target)+".meta").read_bytes()==metadata
+              assert (scratch/"recovery"/"original.shader").read_bytes()==original
+              safe=dict(actual)
+              safe.update(original_private_candidate_used=True,
+                          exported_unity_target_was_synthetic=True,
+                          original_exported_guid_validated=False,
+                          original_Source_Sha_verified_by_prior_staging=True)
+              (temp/"t2-foam-install-safe.json").write_text(json.dumps(safe,sort_keys=True)+"\n")
+              print("T2_FOAM_PRIVATE_SOURCE_TO_SYNTH_EXPORT_INSTALL "+json.dumps(safe,sort_keys=True))
+          finally:
+              shutil.rmtree(scratch,ignore_errors=True)
+          PY
       - name: Recompile actual HLSLPROGRAM bodies extracted from complete private ShaderLab
         run: |
           set -euo pipefail
@@ -283,6 +328,7 @@ jobs:
           name: t2-foam-private-shaderlab-safe-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/t2-foam-candidate-safe.json
+            ${{ runner.temp }}/t2-foam-install-safe.json
             ${{ runner.temp }}/t2-foam-embedded-safe.json
             ${{ runner.temp }}/t2-foam-io-safe.json
             ${{ runner.temp }}/t2-foam-layout-safe.json
