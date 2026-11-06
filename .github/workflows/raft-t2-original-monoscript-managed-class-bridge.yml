@@ -1,0 +1,96 @@
+name: T2 WATER-001 original MonoScript managed class TypeDef identity bridge
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_monoscript_managed_class_bridge.py
+      - tests/test_t2_original_monoscript_managed_class_bridge.py
+      - .github/workflows/raft-t2-original-monoscript-managed-class-bridge.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-mono-managed-source-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-managed-mono-class-join:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Source-free exact-class join and tamper controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_monoscript_managed_class_bridge.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_monoscript_managed_class_bridge.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 1024**3
+          print("T2_MANAGED_BRIDGE_SAFE_DISK_BUDGET")
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-source-managed
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Verify two small immutable original SHA providers and classify only names in private memory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0 -q
+          timeout 800s python3 -m scripts.t2_original_monoscript_managed_class_bridge \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-source-managed" \
+            --scratch "$RUNNER_TEMP/t2-original-class-bridge-stage" \
+            --out "$RUNNER_TEMP/t2-original-class-bridge-safe.json"
+      - name: Assert source SHA and finite safe provenance, no claims of Android gameplay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t2-original-class-bridge-safe.json"
+          r=json.loads(p.read_text())
+          assert r["status"]=="original_MonoScript_to_SHA_managed_TypeDef_census"
+          assert r["immutable_original_zip2_SHA_verified"] is True
+          assert r["original_manifest_rows_metadata_verified"]==366
+          assert r["original_unique_MonoScript_owner_size_candidate"] is True
+          assert r["original_unique_managed_DLL_size_candidate"] is True
+          assert r["original_typed_MonoScript_owner_SHA_verified_bytes"]==758412
+          assert r["original_managed_Assembly_CSharp_SHA_verified_bytes"]==3211776
+          assert r["original_typed_MonoScript_objects_total"]>=473
+          assert r["original_managed_TypeDef_rows"]>=1
+          assert r["original_MonoScript_class_metadata_unreadable"]+r["original_MonoScript_other_assembly"]+r["original_MonoScript_Assembly_CSharp_candidate"]==r["original_typed_MonoScript_objects_total"]
+          assert r["original_MonoScript_Assembly_CSharp_unique_TypeDef"]+r["original_MonoScript_Assembly_CSharp_ambiguous_TypeDef"]+r["original_MonoScript_Assembly_CSharp_missing_TypeDef"]==r["original_MonoScript_Assembly_CSharp_candidate"]
+          for k in ("original_scripts_current_scene_473_references_rechecked","original_MonoScript_custom_fields_reconstructed","source_Unity_GUID_identity_proven","original_Foam_runtime_Material_or_Shader_bound","Android_water_pixels_verified","private_original_class_names_or_assembly_strings_exported"):
+              assert r[k] is False
+          assert all(type(v) in (int,bool,str) for v in r.values())
+          assert not any(k in r for k in ("m_ClassName","m_Namespace","m_AssemblyName","private_PathID","original_managed_type_name"))
+          print("T2_ORIGINAL_MONOSCRIPT_MANAGED_CLASS_SAFE_ASSERTIONS_PASS")
+          PY
+      - name: Purge all private original source and checkout before artifact
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-class-bridge-stage" \
+            "$GITHUB_WORKSPACE/t2-original-source-managed"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-managed-class-bridge-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-original-class-bridge-safe.json
+          if-no-files-found: error
+          retention-days: 7
