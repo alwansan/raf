@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "experiment_key": "T5-INTEGRATION-001-real-42281310905-inflight-native-source-gate-epoch-vs-postrestorer-B46-numeric-step-drift-v1",
+  "original_source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+  "inflight_native_run_sha": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
+  "source_commit": "a34b0137e06d5c4a5d6e90cc2fb60945ad2ffa16",
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_native_milestone_gate"
+  ],
+  "test_scope": "source-only immutable GitHub REST metadata, no raw Raft assets or Android Unity invocation",
+  "observed_result": {
+    "source_red_shift_run": 42283308928,
+    "source_green_shift_run": 42283496150,
+    "source_red_duplicate_action_run": 42284082563,
+    "source_green_final_run": 42284178211,
+    "source_green_final_job": 128120608894,
+    "total_final_tests": 27,
+    "actual_native_workflow_run": 42281310905,
+    "actual_native_sha": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
+    "actual_native_run_status_at_checkpoint": "in_progress",
+    "actual_native_export_40_scenes_completed": true,
+    "actual_native_linear_srgb_and_builtin_restoration_steps_completed": true,
+    "actual_native_unity_editor_import_completed": false,
+    "actual_native_package_delivery_verified": false,
+    "owner_direct_request_recorded": true,
+    "trial_vote_counts": {
+      "yes": 1,
+      "no": 4
+    }
+  },
+  "negative_controls": [
+    "missing required milestone rejected",
+    "repeated critical Unity step rejected",
+    "out-of-order critical milestone rejected",
+    "duplicate or nonpositive step number rejected",
+    "legacy historical stage-number fixture preserved",
+    "arbitrary unrelated action label repeats allowed only with positive chronological positions",
+    "success without retention rejected",
+    "signed artifact filename never proves actual APK signature"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42283308928",
+    "https://github.com/alwansan/raf/actions/runs/42283496150",
+    "https://github.com/alwansan/raf/actions/runs/42284082563",
+    "https://github.com/alwansan/raf/actions/runs/42284178211",
+    "https://github.com/alwansan/raf/actions/runs/42281310905"
+  ],
+  "limitations": [
+    "Source parser and metadata only; real full-game native build remains in_progress on old SHA",
+    "Does not certify .apk/.obb/.xapk bytes, Unity GPU, water FFT or device performance",
+    "Owner direct one-shot request is separate from optional 5/5 team consensus",
+    "No new Unity Editor build dispatched by T5"
+  ],
+  "next_step": "At next user-visible session inspect terminal native run42281310905 and its immutable artifacts/signatures; no polling outside session and no blind duplicate native dispatch."
+}

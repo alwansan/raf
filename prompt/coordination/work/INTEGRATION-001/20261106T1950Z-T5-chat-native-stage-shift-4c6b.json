@@ -5,8 +5,8 @@
   "session_id": "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
-  "updated_at": "2026-11-06T19:55:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T19:59:00Z",
   "resumed_from_sessions": [
     "20261106T1938Z-T5-chat-export-texture-gate-58c1",
     "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
@@ -34,7 +34,23 @@
   },
   "trial_context": "Owner direct one-shot build request recorded, not T5 trial r1 vote change. T1/T2/T3/T5 NO, T4 YES; no second build.",
   "coordination": "T1 FFT, T2 Foam, T3 Shader48, T4 local world and scheduled T5 PID untouched. Only T5 owned classifier and isolated tests; native in-flight immutable SHA not canceled or modified. Owner-direct native run exists despite T_TEAM r1 no consensus; append a separate owner-direct exception checkpoint to shared trial file, without changing any T1-T5 vote or 1/5 round state, and without requesting another build.",
-  "result": null,
-  "next_step": "Add fail-first shifting fixture with actual snapshot; capture RED source CI, fix name+relative-order while preserving exact metadata and historical fixture, capture GREEN; close scope.",
-  "base_sha": "3699074104512a7278b6c9712b18c1c2663632a3"
+  "result": {
+    "status": "SOURCE_ONLY_RED_GREEN_SUCCESS",
+    "source_fix": "a34b0137e06d5c4a5d6e90cc2fb60945ad2ffa16",
+    "final_ci": 42284178211,
+    "final_tests_passed": 27,
+    "native_job_42281310905": "in_progress_old_sha",
+    "native_owner_direct_request": true,
+    "team_votes_consent": "1/5_not_consent",
+    "no_duplicate_native": true
+  },
+  "next_step": "Scope released; source CI 27/27 green; future natural session inspect owner native 422813 immutable artifacts before attributing device completion.",
+  "base_sha": "3699074104512a7278b6c9712b18c1c2663632a3",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42283308928",
+    "https://github.com/alwansan/raf/actions/runs/42283496150",
+    "https://github.com/alwansan/raf/actions/runs/42284082563",
+    "https://github.com/alwansan/raf/actions/runs/42284178211",
+    "https://github.com/alwansan/raf/actions/runs/42281310905"
+  ]
 }

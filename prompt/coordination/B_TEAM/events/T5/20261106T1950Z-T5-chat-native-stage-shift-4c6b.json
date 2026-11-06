@@ -1,0 +1,23 @@
+{
+  "id": "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
+  "owner": "T5",
+  "actor": "T5",
+  "session_id": "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "event_type": "integration",
+  "type": "integration",
+  "summary": "T5 corrected old absolute-index based native milestone snapshot classifier to accept additional postrestorer diagnostics and repeated generic action labels seen in real owner native run42281310905. RED→GREEN CI42283308928→42283496150, and RED→GREEN CI42284082563→42284178211 final 27/27 at a34b0137. Verified direct owner native build in_progress on immutable older SHA d692, 40-scene export and original builtin shader restore PASS but Unity Editor/APK pending. Recorded separate owner-direct exception without modifying r1 votes (1 YES, 4 NO). No duplicate build/cancellation or phone claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a34b0137e06d5c4a5d6e90cc2fb60945ad2ffa16",
+    "https://github.com/alwansan/raf/actions/runs/42284178211",
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/commit/6392200e4baf7b2ea5b8a8d610d9da9108372504"
+  ],
+  "at": "2026-11-06T19:59:00Z",
+  "limits": [
+    "Source-only classifier CI; actual native reconstruct still in_progress",
+    "No signed XAPK, original GPU render or device acceptance",
+    "Round trial-20261106-r1 remains 1/5; direct owner request separate"
+  ]
+}
