@@ -175,31 +175,21 @@ def stage_and_check_targets(zip2, destination, targets, manifest, checkpoint=lam
                 consumed + size > _MAX_STAGED_BYTES):
             status["budget_skipped_target_files"] += 1
             continue
-        # git sparse-checkout uses patterns; no path is shell-expanded.
+        # In non-cone mode, Git supports --no-cone with "set", not "add".
+        # Keep the already authenticated owner plus exactly this target.
         patterns = ["/Raft/" + name]
         if info["kind"] == "split":
             patterns.append("/Raft/" + name + "/*")
-        checkpoint("candidate_sparse_checkout")
+        checkpoint("candidate_sparse_checkout_set")
         process = subprocess.run(
-            ["git", "-C", str(zip2), "sparse-checkout", "add", "--no-cone",
-             *patterns],
+            ["git", "-C", str(zip2), "sparse-checkout", "set", "--no-cone",
+             "/RAFT_FILE_MANIFEST.tsv",
+             "/Raft/Raft_Data/sharedassets0.assets/*", *patterns],
             text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             timeout=180, check=False,
         )
         if process.returncode != 0:
-            # Git installations differ in how sparse-checkout add interprets
-            # negative-cone patterns. Reset the same immutable input patterns
-            # explicitly, preserving the already authenticated Foam owner.
-            checkpoint("candidate_sparse_set_fallback")
-            fallback = subprocess.run(
-                ["git", "-C", str(zip2), "sparse-checkout", "set",
-                 "--no-cone", "/RAFT_FILE_MANIFEST.tsv",
-                 "/Raft/Raft_Data/sharedassets0.assets/*", *patterns],
-                text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                timeout=180, check=False,
-            )
-            if fallback.returncode != 0:
-                raise ValueError("private_source_sparse_checkout_unavailable")
+            raise ValueError("private_source_sparse_checkout_unavailable")
         target_dest = destination / name
         # stage() checks manifest exact row, full size, SHA and ordered parts.
         checkpoint("candidate_bytes_sha_stage")
@@ -258,7 +248,7 @@ def run(zip2, source, destination, checkpoint=lambda _: None):
     return {
         "status": "source_original_external_PPtr_manifest_verified",
         "original_zip2_commit_authenticated": True,
-        "original_manifest_366_rows_bytes_authenticated": True,
+        "original_manifest_366_rows_metadata_validated": True,
         "original_sharedassets0_SHA_authenticated": True,
         "original_Foam_Shader_object_SHA_authenticated": True,
         "original_material_count": len(pointers),
