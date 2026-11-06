@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1753Z-T2-chat-original-levels-component-671a-original-40-scene-Foam-PPtr-coverage-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1753Z-T2-chat-original-levels-component-671a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-original immutable SHA 40 Unity level scenes (233237972B) CI42266263645 SUCCESS: 21/21 synthetic PPtr regressions; 240961 component objects, 185633 parsed, 55328 opaque; 1277371 structural PPtrs scanned; 0 PPtr candidates to sharedassets0 Foam Shader PathID2420 in parsed graph. 24660 PPtrs to other source-owner PathIDs, 15 same local PathIDs in different files. No universal Foam absence because 55328 opaque components and runtime dynamic material association remain. T2 trial-r1 NO unchanged, no Android build.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42266263645",
+    "docs/T2_FOAM_ORIGINAL_40_LEVEL_SCENE_COMPONENTS_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1753Z-T2-chat-original-levels-component-671a.json"
+  ],
+  "limitations": [
+    "original 40 levels covered, but 55328 opaque or unsupported scene typetrees",
+    "source PPtr candidates via owner basename are not runtime Unity GUID proof",
+    "no actual ShaderLab/CB0 or phone pixels tested",
+    "trial vote unchanged; source diagnosis is not build reason"
+  ],
+  "at": "2026-11-06T17:59:23.975Z"
+}
