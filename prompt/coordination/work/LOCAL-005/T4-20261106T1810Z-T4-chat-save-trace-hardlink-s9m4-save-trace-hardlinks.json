@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1810Z-T4-chat-save-trace-hardlink-s9m4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "667e98849029ead2bac08439224fd163e274e8e0",
+  "track": "genuine original SaveAndLoad Android operation-trace source import guard",
+  "resource_key": null,
+  "experiment_key": "T4-LOCAL005-original-save-operation-trace-apply-hardlinked-csharp-meta-synthetic-src-preservation-linux-redgreen-v1",
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8.md"
+  ],
+  "related_evidence": [
+    "e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7",
+    "https://github.com/alwansan/raf/actions/runs/42266867777",
+    "https://github.com/alwansan/raf/actions/runs/42266868238"
+  ],
+  "hypothesis": "Original runtime-operation trace instrumenter modifies SHA-authenticated SaveAndLoad and Raft_Network sources after only symbolic-link checks. Hardlinked original source or .meta are regular files and can alias outside originals; in-place path.write_bytes mutates external source. The first stage adapter now rejects hardlinks but independent instrumentation path still lacks equivalent guard.",
+  "planned_test": "Two synthetic apply()-level tests with manifest/valid SHA SaveAndLoad operation source; externally hardlinked source and separately hardlinked metadata must reject before backup or writing. Confirm outside bytes and GUID unchanged. Source-only CI initial red and green original offline compile and B50 regression.",
+  "run_urls": [],
+  "result": null,
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "يحتاج",
+    "unchanged": true,
+    "reason": "Prior material post-device physical mouse source improvements; this trace staging guard is minor"
+  },
+  "updated_at": "2026-11-06T18:10:00Z",
+  "next_step": "Run read→red→green with original runtime-operation source compiler evidence; no original game bytes published and no native build."
+}
