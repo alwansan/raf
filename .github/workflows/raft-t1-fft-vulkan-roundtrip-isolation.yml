@@ -50,6 +50,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_candidate_keyed_trace_audit.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_original_global_id_inject.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_original_existing_gid_audit.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_original_direct_keyed_recorder.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v
           # disjoint-synthetic-bitcarrier-fixture-20261106: verify checked-out corrected SPIR-V result IDs
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
@@ -94,6 +95,10 @@ jobs:
           python3 -m scripts.t1_fft_original_keyed_preflight "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           # Existing original GlobalInvocationId was detected; audit its real interface/type without duplicate injection.
           python3 -m scripts.t1_fft_original_existing_gid_audit "$TMPDIR/candidates/_private_vulkan/slot0.spv"
+          # First actual original SPIR-V ImageFetch keyed trace, not an HLSL surrogate.
+          python3 -m scripts.t1_fft_original_trace_vulkan --project "$TMPDIR/candidates" \
+            --export-private-trace "$TMPDIR/original-keyed-trace.bin"
+          python3 -m scripts.t1_fft_candidate_keyed_trace_audit "$TMPDIR/original-keyed-trace.bin"
           echo "RAFT_T1_ORIGINAL_GID_REUSE_AUDIT classification_only=true original_invocation_capture=false"
           echo "RAFT_T1_COORDINATE_PROFILE original_slot0 typed_bitcasts=true"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates "$TMPDIR/candidates/_private_vulkan/slot0.spv"
