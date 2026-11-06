@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "actor": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+  "issue_id": "RENDER-002",
+  "event_type": "original-particle-shader-vendor-delta-probe-started",
+  "recorded_at": "2026-11-06T13:10:51.454Z",
+  "source_evidence_url": "https://github.com/alwansan/raf/actions/runs/42136474867",
+  "new_source_free_ci": "https://github.com/alwansan/raf/actions/runs/42222939320",
+  "new_original_source_run_url": "https://github.com/alwansan/raf/actions/runs/42223071341",
+  "new_original_source_run_status": "in_progress_at_last_check",
+  "stage": "authentic original postvendor proof pending, no shipped game fix",
+  "affected_files": [
+    "scripts/t3_particle108_postvendor_delta.py",
+    "tests/test_t3_particle108_postvendor_delta.py",
+    ".github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml",
+    ".github/workflows/raft-t3-particle108-postvendor-delta-tests.yml"
+  ],
+  "not_ready": true,
+  "android_pixels_verified": false,
+  "next_step": "Check terminal run, inspect only aggregate classification, update own experiment/session/work and handoff to T-team."
+}
