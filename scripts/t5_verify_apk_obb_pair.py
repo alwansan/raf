@@ -61,6 +61,60 @@ def _safe_zip_name(name: str) -> bool:
     return all(segment not in ("", ".", "..") for segment in segments)
 
 
+
+def _verify_local_zip_headers(archive: zipfile.ZipFile, entries: list[zipfile.ZipInfo]) -> None:
+    """Check every ZIP local header without decompressing multi-GB APK/OBB assets.
+
+    The central directory alone may look valid even if non-core members cannot
+    be opened. Compare local names/flags/methods and enforce compressed-data
+    bounds and non-overlap. ZIP64 sizes and data descriptors use central sizes.
+    """
+    stream = archive.fp
+    if stream is None:
+        raise ValueError("ZIP local member header unavailable")
+    regions = []
+    for member in entries:
+        offset = member.header_offset
+        if offset < 0 or offset + 30 > archive.start_dir:
+            raise ValueError("ZIP local member header offset invalid")
+        stream.seek(offset)
+        raw = stream.read(30)
+        if len(raw) != 30:
+            raise ValueError("ZIP local member header truncated")
+        signature, _version, flags, method, _time, _date, crc, compressed, size, name_len, extra_len = (
+            struct.unpack("<IHHHHHIIIHH", raw))
+        if (signature != 0x04034B50 or flags != member.flag_bits
+                or method != member.compress_type):
+            raise ValueError("ZIP local member header disagrees with central directory")
+        # Ordinary Unity/APK paths do not require enormous local filenames. The
+        # cap also bounds per-member metadata reads from untrusted ZIP input.
+        if name_len > 4096:
+            raise ValueError("ZIP local member header name exceeds safety bound")
+        try:
+            name = member.filename.encode("utf-8" if flags & 0x800 else "cp437")
+        except UnicodeEncodeError as exc:
+            raise ValueError("ZIP local member header encoding invalid") from exc
+        if name_len != len(name) or stream.read(name_len) != name:
+            raise ValueError("ZIP local member header name disagrees with central directory")
+        if not flags & 0x8:
+            # When a data descriptor is used, local CRC/sizes may be zero.
+            # Without it, local and central values must agree; 0xffffffff is
+            # the legitimate ZIP64 placeholder for sizes.
+            if (crc != member.CRC or
+                    (compressed != 0xFFFFFFFF and compressed != member.compress_size) or
+                    (size != 0xFFFFFFFF and size != member.file_size)):
+                raise ValueError("ZIP local member header CRC/size disagrees with central directory")
+        data_start = offset + 30 + name_len + extra_len
+        data_end = data_start + member.compress_size
+        if data_start > archive.start_dir or data_end > archive.start_dir:
+            raise ValueError("ZIP compressed member region exceeds local payload bounds")
+        regions.append((offset, data_end))
+    regions.sort()
+    for (_, end), (next_offset, _) in zip(regions, regions[1:]):
+        if end > next_offset:
+            raise ValueError("ZIP compressed member regions overlap")
+
+
 def _zip_structure(path: Path, apk: bool) -> int:
     try:
         with zipfile.ZipFile(path) as archive:
@@ -83,6 +137,7 @@ def _zip_structure(path: Path, apk: bool) -> int:
                 if not info.is_dir() and info.file_size > 0:
                     has_asset |= info.filename.startswith(
                         "assets/bin/Data/" if apk else "assets/")
+            _verify_local_zip_headers(archive, entries)
             if not has_asset:
                 raise ValueError("No populated Unity APK/OBB asset entry")
             if apk:
