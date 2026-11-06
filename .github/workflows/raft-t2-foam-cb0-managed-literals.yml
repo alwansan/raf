@@ -118,6 +118,18 @@ jobs:
             assert all(type(x) is int and 0<=x<=128000 for x in rows.values())
           assert 0 <= r['private_source_names_with_unresolved_name_index_count'] <= 512
           assert r['source_target_count_by_role']['buffer']>=1
+          assert r['original_source_name_exact_first_formal_typed_setter_API_categories']=={'material_vector':1}
+          origins=r['original_source_name_exact_first_formal_second_value_IL_origin_buckets']
+          receivers=r['original_source_name_exact_first_formal_Material_receiver_IL_origin_buckets']
+          allowed={'method_argument_load','numeric_literal','instance_field_load',
+                   'static_field_load','call_return','new_object','null_literal',
+                   'other_string_literal','pre_literal_unknown','unproven_or_unsupported'}
+          assert set(origins)<=allowed and set(receivers)<=allowed
+          assert all(type(x) is int and x>=0 for x in origins.values())
+          assert all(type(x) is int and x>=0 for x in receivers.values())
+          assert sum(origins.values())==sum(receivers.values())==1
+          assert r['exact_original_Vector4_value_dataflow_to_CB0_verified'] is False
+          assert r['original_Material_receiver_Shader_is_Foam_verified'] is False
           assert r['original_Ldstr_is_exact_setter_argument_proven'] is False
           assert r['runtime_Unity_CB0_value_upload_verified'] is False
           assert r['actual_Adreno_water_pixels_verified'] is False
