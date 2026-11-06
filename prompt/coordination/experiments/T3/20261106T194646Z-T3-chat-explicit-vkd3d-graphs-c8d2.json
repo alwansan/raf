@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "sourcefree_vkd3d_public_abi_verified_original_unrun",
+  "time_utc": "2026-11-06T19:59:35.231Z",
+  "base_sha": "bfe5c21618494a87033ad34521d51f2873756b68",
+  "resumed_from_sessions": [
+    "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
+    "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
+    "20261106T191751Z-T3-chat-spv-opname-b71e"
+  ],
+  "experiment_key": "T3-VKD3D-public-1.2-explicit-source-D3D-register-to-VK-binding-packet-VSFS-no-original-v1",
+  "hypothesis": "Reusing B18 source-authentic explicit VKD3D shader interface for VS/FS CBV, SRV, samplers and UAVs can provide trustworthy *chosen target* register binding contracts where OpName names or matching aggregate descriptor totals alone cannot. Two synthetic chosen sets require same-source variable identity and program-instruction parity.",
+  "new_code": [
+    "scripts/t3_particle108_explicit_map_packet.py",
+    "scripts/t3_particle108_vkd3d_explicit_graphics.c",
+    "scripts/t3_particle108_spirv_explicit_pair.py"
+  ],
+  "tests": [
+    "tests/test_t3_particle108_explicit_map_packet.py",
+    "tests/test_t3_particle108_spirv_explicit_pair.py"
+  ],
+  "ci_workflow": ".github/workflows/raft-t3-shader-candidate-source-only.yml",
+  "commits": [
+    "2a01d9863868288be3ab17041346ce8fb79136ff",
+    "adfa30dcf3de70c642d2c81a95f86dbb7a042461",
+    "73ecbbcca3deccbde74c23e1273795291a12448d",
+    "3699074104512a7278b6c9712b18c1c2663632a3",
+    "7692fa241eb760f26f0158efcce85917b24e7bff",
+    "09096caca052e006f7d6ee2a3f8e3834677689e1",
+    "f5a2bc3b0b14b9387f5bb67f905d75491c3a67c0",
+    "23dc1d85fa06c20b01165a6bea432928b29f7d2a",
+    "aac6c0b85e01f2f679c5d69f57c141d4ec8cb49a",
+    "ac7b420bcf4a3ce4319ee8f8ffda5b3f629d02dd",
+    "11dab2bb25596797cdc407ee3bb36125c57cd458"
+  ],
+  "latest_ci": {
+    "url": "https://github.com/alwansan/raf/actions/runs/42284214002",
+    "head_sha": "11dab2bb25596797cdc407ee3bb36125c57cd458",
+    "conclusion": "success",
+    "job": 128120732534,
+    "tests": [
+      {
+        "name": "Particle108 SPV candidates+stage-family",
+        "passed": 29
+      },
+      {
+        "name": "Scheduled DXBC to SPV register contract",
+        "passed": 12
+      },
+      {
+        "name": "T3 private two-profile map packets",
+        "passed": 11
+      },
+      {
+        "name": "T3 SPV whole shader dual-profile graph",
+        "passed": 9
+      }
+    ],
+    "sum_tests_passed": 61,
+    "actual_c_api_compiled": true,
+    "vkd3d_shader_package": "1.2-15build1",
+    "C_map_acceptance_controls": "both public synthetic profile A/B accepted; wrong profile and duplicate binding and trailing tokens rejected",
+    "C_program_translation_on_real_dxbc": false
+  },
+  "historical_red_runs": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42283259924",
+      "reason": "C compiler header search path missing, 52 Python tests passed"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42283402634",
+      "reason": "workflow YAML temporarily malformed by string replacement, no CI steps executed"
+    }
+  ],
+  "source_privacy": "No authentic game DXBC/SPV/HLSL, original registers, private names or GUIDs printed, uploaded, or placed in source. Generated private map packets only live in temporary directory when used.",
+  "source_original_shader_test_run": null,
+  "source_original_shader_program_replaced": false,
+  "shaderlab_unity_android_pixels_verified": false,
+  "native_build_untouched": true,
+  "trial_vote": "لا يحتاج",
+  "trial_round": "trial-20261106-r1",
+  "limitations": [
+    "Real original Shader48 four keyword VSFS programs not compiled under explicit interface yet",
+    "Public chosen target sets/bindings do not prove original Unity material runtime binding semantics",
+    "Structural SPIR-V equality after decorating literals does not guarantee numeric pixel equivalence",
+    "Source-only tests and public VKD3D C linkage do not repair DummyShaderTextExporter nor device white surfaces/smoke/fire",
+    "Native build 42281310905 in_progress at cycle checks but not launched/cancelled by T3"
+  ],
+  "next_step": "Extend the existing SHA-original manually dispatched workflow with a runner-private eight-stage B18-style explicit A/B graphics compile and dual-profile normalized SPIR-V structural verification, using original DXBC DCL from 4 authentic source pairs. Do not dispatch while equivalent original source stage job or native Unity build is active; do not infer Unity/phone acceptance.",
+  "updated_at": "2026-11-06T19:59:35.231Z"
+}
