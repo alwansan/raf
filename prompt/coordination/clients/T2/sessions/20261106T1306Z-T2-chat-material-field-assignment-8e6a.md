@@ -1,6 +1,6 @@
 # T2 — Chat: original Foam Material receiver field assignment provenance
 
-- session_id: `20261106T1306Z-T2-chat-material-field-assignment-8e6a`, origin: `chat`, status: `active`
+- session_id: `20261106T1306Z-T2-chat-material-field-assignment-8e6a`, origin: `chat`, status: `completed_original_material_field_writer_and_typed_source_probe`
 - base_sha: `33c72f721c5aab7fd2b6cfafaabdbf224f96f2ef`
 - reservation: [work](../../../work/WATER-001/T2-20261106T1306Z-T2-chat-material-field-assignment-8e6a.json), commit `5779263f385b1c37117281b51b643a6af2e4873f`.
 - resumed_from_sessions: `20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e`; `20261106T122027Z-T2-scheduled-ci-reconcile-a7c2`.
@@ -10,3 +10,15 @@
 - intended files: T2-owned `android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs`, isolated T2 workflow, this session, scoped work, aggregate-only report/experiment/event.
 - status: no source patches or new CI result claimed at initial checkpoint.
 - next_step: implement and run source-authentic safe typed Material field assignment/producer census; stop at honest unknown if original managed reflection lacks a definitive shader association.
+
+## Verified original-shader-and-managed evidence
+
+- Added strictly T2-owned source checker/runner changes at `android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs` and `.github/workflows/raft-t2-foam-cb0-managed-literals.yml`; source-authentic changes `9e5fb617` and `cf5a01b3149128c8ca6ee995537896baf2df524b`. No game ShaderLab, scene, .meta/GUID, world/save, Settings/audio, touch or Android native build edits.
+- Verified [GitHub Actions 42222313603](https://github.com/alwansan/raf/actions/runs/42222313603) **SUCCESS**, job `127907105758`, 11/11 original-name negative tests and Cecil branch/typed Material constructor/field selftests; exact original ZIP2 Shader and 3,211,776-byte managed DLL SHA pins passed.
+- **NEW** one original source-authenticated `Material.SetVector(string,Vector4)` receiver FieldReference typed `UnityEngine.Material`; the identical private field has **exactly one** original compiled `stfld` site in **one** method. Writer method includes a typed `Material::.ctor`, zero `Shader.Find` calls, zero `Renderer.get_material` or `get_sharedMaterial` calls. **Immediate `stfld` value producer cannot be classified as directly typed**; same-method constructor co-occurrence is an investigation lead, **not** proof of assignment.
+- Distinct follow-up scope `prompt/coordination/work/WATER-001/T2-20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue.json`: added synthetic typed IL `ldloc`/`ldarg` material local/parameter matching and wrong-type/instance-this safeguards, keeping source original compiled receiver field identity. Final [GitHub Actions 42222884964](https://github.com/alwansan/raf/actions/runs/42222884964), job `127908996775` **SUCCESS** on `dda547a8980ee6bf4737e9a2296451210c4c401b`, 11/11 Python and Cecil selftests. Original result remains `immediate_value_source_unproven:1`, even with typed local/parameter checks; no false elevation.
+- Report: [original material writer/producer evidence](../../../../../docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md); source-backed experiment `prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a.json`; secondary `prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue.json`; both result events under `prompt/coordination/B_TEAM/events/T2/`. Both work scopes completed.
+- Sent [T2 source evidence to T1/T5](../../../discussions/WATER-001/20261106T1309Z-T2-Foam-Material-receiver-field-assignment-T1T5.md) as Git-backed discussion; did not modify/cancel T1 FFT or T5 build files.
+- A competing T1 FFT CI ran independently during this work. GitHub 409 response occurred while adding a discussion pointer because the shared branch advanced; T2 re-fetched HEAD and the own work file and retried with non-force normal commit; no other agent file overwritten.
+- **Unproven:** original receiver field's exact assigned value, whether its constructor (in same method) supplies that value, Shader association with original Foam, all five original CB0 vector property values, exact 160B Vulkan/Unity upload, GPU/Adreno water, phone visual acceptance. No original private names/method IDs/field symbols/source/binaries or scalar literals were published.
+- **Next step:** separate source-authentic bounded IL operand-stack and reaching-def trace for the exact `Material` `stfld` value and the same-method `Material` ctor's `Shader` input. Block on branches/ambiguous aliases; do not infer runtime draw or original Foam Shader without actual asset identity. WATER-001 OPEN / NOT_READY.
