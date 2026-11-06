@@ -4,7 +4,7 @@
   "origin": "scheduled",
   "session_id": "20261106T2114Z-T1-scheduled-axis-coverage-p7m2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_unverified_tests",
   "base_sha": "8a2ee0fbfaebd99b05645416685efa3be2f4b8a3",
   "experiment_key": "t1-real-gpu-variant-axis-coverage-negative-control-v1",
   "resource_key": "none; source-only no Unity",
@@ -19,5 +19,15 @@
   "taken_over_from": [
     "20261106T2052Z-T1-chat-actual-variant-comparator-e28c"
   ],
-  "trial_vote": "لا يحتاج"
+  "trial_vote": "لا يحتاج",
+  "result": {
+    "source_commit": "824afdf13cf1e23fef9f4e32a42b94fef0697230",
+    "tests_commit": "3d4a285a9ad231b6d6700d6e7af1fffcead34888",
+    "session_commit": "e835685b8beeade88f424b1f44898a09c97bdfe0",
+    "new_tests": 2,
+    "execution": "not run; local GitHub DNS resolution unavailable",
+    "native_or_gpu_job_launched": false,
+    "water_device_proven": false
+  },
+  "next_step": "Execute 15-test suite in accessible CI/checkout, then original-authenticated butterfly site1/site2 integer-coordinate reaching-store experiment; keep original authored kernel/dispatch unverified."
 }
