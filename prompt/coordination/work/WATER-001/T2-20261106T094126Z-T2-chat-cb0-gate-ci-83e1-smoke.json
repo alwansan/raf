@@ -2,9 +2,9 @@
   "session_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "38c857f64a069e61fa5d50a170342d7d31385996",
-  "updated_at": "2026-11-06T09:41:26Z",
+  "updated_at": "2026-11-06T09:44:00Z",
   "resumed_from_sessions": [
     "20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e",
     "20261106T0820Z-T2-scheduled-cb0-pass-coverage-8f3a",
@@ -25,5 +25,19 @@
   "hypothesis": "The last two scheduled CB0 gate/coverage patches are unexecuted. An isolated fast SHA-pinned path-filtered GitHub Actions smoke will independently check strict two-pass identity/extent verdicts without retriggering original asset extraction, Unity, native builds, or changing shared agent work.",
   "expected_result": "Compile original source-only CB0 guard and run all 10 source-free unittest methods, recording real CI result; keep WATER-001 open due authentic two CB0 extent mismatches and missing Unity member/upload proof.",
   "latest_authenticated_original_run": "https://github.com/alwansan/raf/actions/runs/42153150468",
-  "current_active_ci_at_plan": 0
+  "current_active_ci_at_plan": 0,
+  "workflow_commit": "88f1c258362061b54703285863e51f1eaa682bbd",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42197159968",
+  "run_id": 42197159968,
+  "job_id": 127823183108,
+  "result": "success_10_of_10_source_only_unittest_methods_plus_strict_synthetic_extent_verdict",
+  "original_source_extraction": false,
+  "unity_build": false,
+  "remaining_blockers": [
+    "2 SHA-authenticated original Foam CB0 byte extent mismatches",
+    "CB0 member offset/type ABI unknown",
+    "Unity runtime CB0 upload unknown",
+    "Unity/Adreno original water pixel acceptance unknown"
+  ],
+  "next_step": "Source-authenticate Foam CB0 member and Unity constant upload per both passes; coordinate T1+T5 prior to any private ShaderLab integration."
 }
