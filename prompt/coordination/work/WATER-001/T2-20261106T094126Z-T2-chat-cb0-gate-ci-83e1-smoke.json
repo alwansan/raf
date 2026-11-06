@@ -1,0 +1,29 @@
+{
+  "session_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "38c857f64a069e61fa5d50a170342d7d31385996",
+  "updated_at": "2026-11-06T09:41:26Z",
+  "resumed_from_sessions": [
+    "20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e",
+    "20261106T0820Z-T2-scheduled-cb0-pass-coverage-8f3a",
+    "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e.md"
+  ],
+  "experiment_key": "foam-sourcefree-cb0-extent-two-pass-identity-unexecuted-regression-fast-ubuntu24.04-v1",
+  "resource_key": null,
+  "intended_files": [
+    ".github/workflows/raft-t2-foam-cb0-gate-smoke.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T094126Z-T2-chat-cb0-gate-ci-83e1-smoke.json",
+    "prompt/coordination/clients/T2/sessions/20261106T094126Z-T2-chat-cb0-gate-ci-83e1.md",
+    "prompt/coordination/experiments/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result.json"
+  ],
+  "hypothesis": "The last two scheduled CB0 gate/coverage patches are unexecuted. An isolated fast SHA-pinned path-filtered GitHub Actions smoke will independently check strict two-pass identity/extent verdicts without retriggering original asset extraction, Unity, native builds, or changing shared agent work.",
+  "expected_result": "Compile original source-only CB0 guard and run all 10 source-free unittest methods, recording real CI result; keep WATER-001 open due authentic two CB0 extent mismatches and missing Unity member/upload proof.",
+  "latest_authenticated_original_run": "https://github.com/alwansan/raf/actions/runs/42153150468",
+  "current_active_ci_at_plan": 0
+}
