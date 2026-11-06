@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2203Z-T2-chat-graphics-path-7d3e",
+  "issue_id": "WATER-001",
+  "hypothesis": "The two typed UnityEngine.Graphics Material-parameter consumers of SHA-original Foam managed Material field can be classified into safe public categories Blit, DrawMesh, other, mixed without publishing private names, and exclusive partitioning reveals whether Foam is consumed as a screen-space or mesh draw material.",
+  "source_commit": "3bbb7b040b7a626e61f68e5572d402ee49a93a4d",
+  "input_hashes": [
+    "source-pinned ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original Shader owner 115978112B, managed DLL 3211776B (existing workflow SHA verification)"
+  ],
+  "tool_versions": {
+    "dotnet": "9.0.x",
+    "MonoCecil": "locked through FoamShaderFindResultFlow project",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_shaderfind_return_report.py' -v",
+    "dotnet publish android-port/Experiments/T2/FoamShaderFindResultFlow/FoamShaderFindResultFlow.csproj -c Release",
+    "dotnet FoamShaderFindResultFlow.dll --selftest",
+    "dotnet FoamShaderFindResultFlow.dll <SHA-original-Assembly-CSharp.dll> <private-original-Shader-name-file> <private-safe-json>",
+    "python3 -m scripts.t2_foam_shaderfind_return_report <private-safe-json>"
+  ],
+  "negative_controls": [
+    "Typed Graphics name without Material parameter rejected",
+    "Double-counted public method categories refused by Python report validator",
+    "Missing category for typed Graphics material parameter refused",
+    "Mixed graphics families count as one source field-read site"
+  ],
+  "positive_controls": [
+    "Public Blit and DrawMesh typed Material parameters individually accepted",
+    "Other public Graphics typed Material parameter accepted",
+    "All original 13 field reads independently scanned"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42302222142",
+  "artifact_urls": [],
+  "budget": "20-minute SHA-original source-only workflow, no Unity editor, no APK",
+  "status": "waiting_ci",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "No original game class/method names or HLSL published; report aggregate only",
+    "Static typed IL does not prove Unity/Android runtime execution",
+    "No Foam CB0 upload, actual render-texture binding, Unity ShaderLab or Adreno pixel acceptance"
+  ],
+  "integration_commit": "3bbb7b040b7a626e61f68e5572d402ee49a93a4d",
+  "next_step": "Inspect CI42302222142 for Python 56+ aggregate tests, Mono.Cecil synthetic test, original source-private Unity Graphics categorical partition. If FAIL, diagnose exact failure and patch safely; if PASS record categorical counts and limitations. Do not claim native/game water without phone."
+}
