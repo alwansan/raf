@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T214945Z-T1-chat-site2y-cfg-73af",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "41dd30d045bb4fff3b739b7e7610ebff8f1deb50",
+  "resumed_from_sessions": [
+    "20261106T213843Z-T1-chat-axis-overlap-0ba942",
+    "20261106T2114Z-T1-scheduled-axis-coverage-p7m2"
+  ],
+  "experiment_key": "t1-sha15964ea8-fft2456-original-slot0-site2-y-physical-load-last-writer-cfg-reuse-v1",
+  "resource_key": "original FFT sharedassets0 SHA0498f738; minimal ~116MB staged only if no concurrent native conflict",
+  "hypothesis": "For actual original FFT compiled slot0 the third ImageFetch butterfly Y is either a Function-local vector lane with bounded CFG last-writer categories or an explicitly unresolved nonlocal boundary; do not conflate X/Y zero-collapse with independent errors.",
+  "intended_files": [
+    "scripts/t1_fft_site2_y_cfg.py",
+    "tests/test_t1_fft_site2_y_cfg.py",
+    "scripts/t1_fft_site2_y_original_probe.py",
+    ".github/workflows/raft-t1-fft-site2-y-cfg.yml",
+    "prompt/coordination/work/WATER-001/20261106T214945Z-T1-chat-site2y-cfg-73af.json",
+    "prompt/coordination/clients/T1/sessions/20261106T214945Z-T1-chat-site2y-cfg-73af.md",
+    "prompt/coordination/experiments/T1/20261106T214945Z-T1-chat-site2y-cfg-73af.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T214945Z-T1-chat-site2y-cfg-73af.json"
+  ],
+  "taken_over_from": [
+    "20261106T213843Z-T1-chat-axis-overlap-0ba942",
+    "scripts/t1_fft_site1_y_branch_paths.py"
+  ],
+  "collision_check": "Latest T1 scheduled site1/axis controls and prior T1 aggregate completed; new isolated site2-Y tool+tests; native 42296450023 reconstruct Unity Editor in_progress, do not rerun Unity/native or fetch original 116MB concurrently. T2/T3/T4/T5 files unchanged.",
+  "trial_vote": "لا يحتاج",
+  "next_step": "Build and run source-only bounded site2-Y CFG tests. Stage private-original SHA-pinned probe workflow for manual execution only once heavy native is no longer running; store exact dispatch continuation for next T1 cycle.",
+  "updated_at": "2026-11-06T21:49:45.169Z"
+}
