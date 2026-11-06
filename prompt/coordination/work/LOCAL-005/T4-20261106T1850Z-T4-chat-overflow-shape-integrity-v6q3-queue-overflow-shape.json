@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1850Z-T4-chat-overflow-shape-integrity-v6q3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "world-save-device-evidence-parse",
+  "approach": "Validate actual JSONL queue_overflow no-session diagnostic record shape and positive dropped count before suppressing cross-session file hints",
+  "status": "active",
+  "base_sha": "ede9325a74f41d6d0a14eacaebfcafb037242fd7",
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py"
+  ],
+  "hypothesis": "The verifier currently treats any object with area=logging and operation=queue_overflow as genuine loss, even with missing/invalid dropped and forged fields, silently disabling later world-save evidence hints rather than rejecting malformed input.",
+  "experiment_key": "T4-jsonl-queue-overflow-shape-positive-dropped-sourcefree-20261106",
+  "resource_key": "T4-jsonl-evidence-verifier-only",
+  "taken_over_from": [
+    "T4-20261106T1731Z-T4-chat-log-pair-linear-w6q2-linear-log-pairs"
+  ],
+  "related_work": [
+    "20261106T1840Z-T4-scheduled-h8k3 (distinct mouse scope)"
+  ],
+  "experiment_ids": [
+    "20261106T1850Z-T4-chat-overflow-shape-integrity-v6q3"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add valid production-shape and malformed queue overflow synthetic negative controls first, run existing verifier source-only workflow if auto triggered; guard pre-session skip and preserve legitimate overflow suppression.",
+  "updated_at": "2026-11-06T18:50:50Z"
+}
