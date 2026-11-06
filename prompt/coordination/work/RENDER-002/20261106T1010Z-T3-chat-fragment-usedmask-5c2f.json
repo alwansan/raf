@@ -5,7 +5,7 @@
   "session_id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
   "issue_id": "RENDER-002",
   "track": "Particle108 original missing fragment input DXBC used_mask",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "6e9d9151fea887c508aa3044d828facd6aee1b6a",
   "intended_files": [
     "scripts/t3_particle108_register_location_probe.py",
@@ -29,8 +29,16 @@
   "experiment_ids": [
     "20261106T1010Z-T3-chat-fragment-usedmask-5c2f"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement and synthetically validate strict private DXBC used-mask classifier, run new original gated CI, document safe aggregate and distinguish source metadata from runtime proof.",
-  "updated_at": "2026-11-06T10:10:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42200663399"
+  ],
+  "result": {
+    "status": "pending",
+    "expected_source_sha": "f8abf47204fa33b4d5a9f67a4bfa23dc6ac7156f",
+    "expected_missing_fragment_inputs": 2,
+    "safe_used_mask_zero_count": null,
+    "safe_used_mask_nonzero_count": null
+  },
+  "next_step": "Inspect CI42200663399 terminal; must verify 2 original missing inputs and their private used_mask zero/nonzero aggregate; do not infer loss or patch without semantics/Android pixels.",
+  "updated_at": "2026-11-06T10:12:00Z"
 }
