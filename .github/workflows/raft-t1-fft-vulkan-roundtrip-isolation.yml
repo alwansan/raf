@@ -39,6 +39,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_read_provenance.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_local_store_writers.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_reaching_stores.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_spirv_alias_origins.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_sourcefree_bitcarrier_contract.py -v
       - name: Install Vulkan and DXBC translation tools
@@ -82,6 +83,7 @@ jobs:
           python3 -m scripts.t1_fft_local_store_writers "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           # Re-run original slot0 with typed, fail-closed alias-path reason categories.
           python3 -m scripts.t1_fft_spirv_reaching_stores "$TMPDIR/candidates/_private_vulkan/slot0.spv"
+          python3 -m scripts.t1_fft_spirv_alias_origins "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           tail -n +2 "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute" > "$TMPDIR/coordinate.hlsl"
           glslangValidator -V -D -S comp -e main -o "$TMPDIR/coordinate.spv" "$TMPDIR/coordinate.hlsl" > "$TMPDIR/coordinate-compile.log" 2>&1
           spirv-val --target-env vulkan1.1 "$TMPDIR/coordinate.spv" > "$TMPDIR/coordinate-validation.log" 2>&1
