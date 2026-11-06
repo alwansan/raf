@@ -1,0 +1,10 @@
+# T2 — scheduled Foam CB0 pass identity guard
+
+- session_id: `20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e`; origin: `scheduled`; issue: WATER-001 OPEN.
+- resumed_from: `20261106T0820Z-T2-scheduled-cb0-pass-coverage-8f3a` and latest T2 chat evidence; initial HEAD `e6e60329362a23798e42b76e0ffe61dec3fe6313`.
+- Owner phone baseline: `docs/DEVICE_FEEDBACK_42058825739_AR.md`, original run 42058825739, source `e9c358eda01785b65e4eb14f18723da426635628`; world entry/save/reentry succeeded on owner phone via Artifact, publication failed. CL pinned `520c4cf409aa20a4db54ff80ed87d8807d9cba57`; water errors remain. Do not replace this with APK86 history.
+- Scope registered before edits: `prompt/coordination/work/WATER-001/20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e.json` at commit `2597df4d303cfa632e7dcfa044a41c963ab5b442`. Experiment key `foam-cb0-two-pass-identity-uniqueness-source-gate-v1`. No shared Unity resource used.
+- Found: `expected_pass_count=2` alone previously allowed duplicate same-pass CB0 evidence to pass as two original passes. Fixed by requiring each expected pass row to include a unique strict integer `pass_index` in `[0,n)`, blocking duplicates and out-of-range/boolean identities; legacy calls without expected count remain unchanged.
+- Source commit: `941153deb7c28ad767444d42f61b5bd7f812a81e`; regression commit: `feb49143a75d6fae7256ff4de3707c67a4c18437`.
+- Validation: tests committed but **not executed** in this cycle; container DNS cannot reach GitHub and connector has no test-execution action. No new Unity/CI/GPU/phone test. Existing original Foam experiment 42153150468 still has two CB0 byte-extent mismatches; source-only guard does not establish member ABI, upload, ShaderLab correctness or water pixels.
+- Next: run `python -m unittest tests.test_t2_foam_cb0_extent_gate` on current branch; feed independently authenticated pass indices to real integration producer, then prove CB0 member layout and Unity upload before ShaderLab integration. Coordinate T1 FFT and T3 FX; do not change audio/Settings, touch, physical mouse or Resolution scopes of T4/T5.
