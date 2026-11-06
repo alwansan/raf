@@ -275,6 +275,21 @@ class Program
                 l.Contains("SyntheticStackTrace_T4")));
             foreach (string line in Lines(recoveredLogs))
                 using (JsonDocument.Parse(line)) { }
+
+            // A new native logger start in the same managed process is a new
+            // evidence session. The old error's repeat-group dictionary must
+            // not suppress the first full stack of this new session.
+            AndroidRuntimeLog.Initialize();
+            Require(AndroidRuntimeLog.Status == "ready");
+            Require(AndroidRuntimeLog.UnityMessage("Error", initialError, true));
+            Require(!AndroidRuntimeLog.UnityMessage("Error", initialError, true));
+            AndroidRuntimeLog.Shutdown();
+            Require(Directory.GetFiles(recoveredLogs, "raft-*.jsonl").Length == 2);
+            Require(Lines(recoveredLogs).Count(l =>
+                l.Contains("\"operation\":\"Error\"") &&
+                l.Contains("SyntheticStackTrace_T4")) == 2);
+            foreach (string line in Lines(recoveredLogs))
+                using (JsonDocument.Parse(line)) { }
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
         finally { Directory.Delete(root, true); }
