@@ -37,6 +37,11 @@ def _quiet_run(argv,*,run=subprocess.run,code):
     except (OSError,subprocess.TimeoutExpired):
         raise ValueError(code) from None
     if proc.returncode!=0:
+        # Public helper process exit integer (not stderr/stdout, DXBC, paths,
+        # register values or SPIR-V content) is needed to separate a parser
+        # contract fault from a real vkd3d shader-compiler rejection.
+        if code=="T3_PRIVATE_COMPILER_NONZERO" and 1<=proc.returncode<=127:
+            raise ValueError(code+"_EXIT_"+str(proc.returncode)) from None
         raise ValueError(code) from None
 
 def classify(pairs,temporary,compiler,*,layout=original.dx._private_stage_layout,
@@ -165,7 +170,14 @@ def main(argv=None):
     try:
         result=probe(a.original,a.manifest,a.compiler)
     except Exception as exc:
-        reason=str(exc) if type(exc) is ValueError and str(exc) in FAILURE_CODES else "T3_PRIVATE_UNCLASSIFIED_FAILURE"
+        literal=str(exc) if type(exc) is ValueError else ""
+        # The C helper's return code is bounded and source-independent.
+        # All other exception messages are discarded to protect game data.
+        compiler_exit=(literal.startswith("T3_PRIVATE_COMPILER_NONZERO_EXIT_") and
+            literal.removeprefix("T3_PRIVATE_COMPILER_NONZERO_EXIT_").isascii() and
+            literal.removeprefix("T3_PRIVATE_COMPILER_NONZERO_EXIT_").isdecimal() and
+            1<=int(literal.removeprefix("T3_PRIVATE_COMPILER_NONZERO_EXIT_"))<=127)
+        reason=literal if literal in FAILURE_CODES or compiler_exit else "T3_PRIVATE_UNCLASSIFIED_FAILURE"
         result={
             "schema_version":1,"status":"INCONCLUSIVE",
             "failure_code":reason,
