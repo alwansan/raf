@@ -174,6 +174,43 @@ jobs:
           python3 -m scripts.stage_export_managed_providers \
             --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
             --destination "$RUNNER_TEMP/input/Raft_Data/Managed"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: T5 compile real Unity2021 Editor and Android mouse ABI before original ZIP2 acquisition
+        shell: bash
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          # Reuse the already byte-verified managed provider stage, not a new
+          # Unity Editor or LFS checkout. The previous full build reached
+          # compiler CS0234 only after expensive reconstruction.
+          managed="$RUNNER_TEMP/input/Raft_Data/Managed"
+          for module in Assembly-CSharp.dll UnityEngine.CoreModule.dll UnityEngine.InputLegacyModule.dll UnityEngine.AndroidJNIModule.dll Unity.InputSystem.dll; do
+            test -s "$managed/$module"
+            test ! -L "$managed/$module"
+          done
+          # A compiler-only ABI check must never silently accept a different
+          # original Raft managed assembly than the T4 proven source.
+          test "$(stat -c '%s' "$managed/Assembly-CSharp.dll")" = 3211776
+          echo '0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  '"$managed/Assembly-CSharp.dll" | sha256sum -c --status
+          for mode in UnityEditorBridgeCompile UnityBridgeCompile; do
+            report="$RUNNER_TEMP/t5-native-early-abi-$mode.private.log"
+            if ! timeout 150s dotnet build "android-port/Tests/PhysicalMouse/$mode.csproj" -c Release -p:OriginalManagedDir="$managed" > "$report" 2>&1; then
+              # No original DLL path, gameplay CSharp source, Unity compile
+              # log or proprietary file names are printed/uploaded.
+              python3 - "$report" <<'PY'
+          import collections,re,sys
+          from pathlib import Path
+          raw=Path(sys.argv[1]).read_text(errors='replace')
+          codes=collections.Counter(re.findall(r'\berror\s+(CS[0-9]{4}|NETSDK[0-9]{4}|NU[0-9]{4})\b',raw))
+          print('T5_NATIVE_EARLY_MOUSE_ABI status=FAIL code_counts='+str(dict(sorted(codes.items()))))
+          PY
+              exit 1
+            fi
+          done
+          echo 'T5_NATIVE_EARLY_MOUSE_ABI editorAndroidSource=true playerAndroidSource=true originalUnity2021ABI=true fullUnityBuild=false deviceVerified=false'
       - name: Reuse authenticated ZIP2 shader-owner cache before acquisition
         uses: actions/cache@v4
         with:

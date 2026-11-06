@@ -6,6 +6,10 @@ on:
     paths:
       - scripts/t5_validate_runtime_staging_parity.py
       - tests/test_t5_runtime_staging_parity.py
+      - tests/test_t5_native_early_editor_abi.py
+      - android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs
+      - android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj
+      - android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj
       - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-t5-native-runtime-byte-parity.yml
 permissions:
@@ -29,6 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -W error -m unittest -v tests.test_t5_runtime_staging_parity
+          python3 -W error -m unittest -v tests.test_t5_native_early_editor_abi
           python3 -m scripts.t5_validate_runtime_staging_parity
       - name: State source-only limit
         if: always()
