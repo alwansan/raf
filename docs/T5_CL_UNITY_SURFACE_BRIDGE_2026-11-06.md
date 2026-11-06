@@ -41,3 +41,18 @@ Source-pinned, CPU-only `.github/workflows/raft-t5-cl-unity-surface-bridge.yml` 
 A later performance comparison still requires matched **APK/OBB SHA, same world/viewpoint, same in-game graphics settings/render scale, same scene phase and reproducible frame windows**. GPU busy from KGSL is system-wide. `FrameTimingManager` latest GPU frame numbers can be unavailable/unreliable; do not interpolate or infer work distribution. An exact joined time span indicates game simulation timing output existed while the independent SF probe lacked fresh presentation timestamps; it does not prove human-visible frames or a root cause of performance.
 
 Open P0 water/FFT and graphics issues remain with T1–T3; T4 mouse and T5 scheduled Resolution work untouched. Do not disable shader errors to improve metrics. This evidence task does **not** itself improve FPS or justify READY (0/3).
+
+## Verified integration, exact live CI
+
+The first [run42146299959](https://github.com/alwansan/raf/actions/runs/42146299959) **FAILED** only when directly invoking a script that used `from scripts...`; checkout, all 15 source-free tests, and 4 Git blob auth preflight passed. Diagnosed `ModuleNotFoundError: No module named 'scripts'`, not a failure in original telemetry. The surgical fix changes only the workflow invocation to `python3 -m scripts.t5_cl_unity_surface_bridge` in commit `eed7322565944a1d7fccda62fc5f7662f88b5e7e`, retaining all assertions and source pins.
+
+**Final verified result:** [CI42146496632](https://github.com/alwansan/raf/actions/runs/42146496632), job `127659125692`, **COMPLETED SUCCESS** on source `eed7322565944a1d7fccda62fc5f7662f88b5e7e`:
+
+- All **15/15** synthetic time alignment, scene, missing/unsafe input and stale telemetry controls passed. `py_compile` passed.
+- All **four actual immutable CL Git blob SHA1s verified**; bytes read 499,456 (Unity A), 1,443,270 (Unity B), 374,587 (SF A), 646,527 (SF B). Only bounded aggregate numeric report printed, no raw private game data archived.
+- 220911 Unity performance records **39**, qualified **36**, scene split MainScene 15 / MainMenuScene 21; SF stale samples **6**, no qualified Unity intervals inside the bounded stale window.
+- 230108 Unity performance records **123**, qualified **116**, scene split MainScene **80** / MainMenuScene **36**; SF stale samples **105**, while **62** qualified Unity intervals were written in the same bounded stale span. Of those 62, **35 MainScene** and **27 MainMenuScene**.
+- During 230108 stale SF window, scene-specific Unity interval FPS medians: **17.99 MainScene** and **22.77 MainMenuScene**. The medians of *per-interval* frame-p95 metrics are **82.83 ms MainScene** and **66.25 ms MainMenuScene**. These are **not pooled per-frame percentiles**. Their evidence shows nontrivial game frame processing during the independent SF metric gap, not reliable on-screen present timestamps.
+- Full 230108 MainScene qualified Unity interval median FPS **18.89**, and median-of-interval-p95 **74.57 ms**; first session MainScene **21.20 FPS**, median-of-interval-p95 **66.17 ms**. The sessions are different world/thermal/motion/settings contexts. **No cross-session performance improvement/regression claim is justified**.
+
+**Consequence:** The repeated 120Hz SurfaceFlinger startup readings in 230108 should not be used as gameplay FPS; external SF telemetry stale for 105 samples does not prove Unity stopped executing or that the game was visually healthy. Prefer the separately instrumented Unity `performance.sample` for diagnosis with its own provenance/scene/interval caveats. No runtime/profile code changed and no new APK device acceptance claimed. PERF-007 remains open, overall NOT_READY 0/3.
