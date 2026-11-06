@@ -1,0 +1,33 @@
+{
+  "session_id": "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "a04368f3b4b5197bfb2b9a34969f8921e42c5dc5",
+  "updated_at": "2026-11-06T10:20:54Z",
+  "resumed_from_sessions": [
+    "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
+    "20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e",
+    "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
+  ],
+  "experiment_key": "source-zip2-foam-2pass-original-four-stage-active-shared-CB0-member-reflection-shape-extent-v1",
+  "resource_key": "t2-original-foam-private-zip2-CB0-member-reflect",
+  "intended_files": [
+    "scripts/t2_foam_private_cb0_member_shape.py",
+    "tests/test_t2_foam_private_cb0_member_shape.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T102054Z-T2-chat-cb0-member-shape-3f9e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T102054Z-T2-chat-cb0-member-shape-3f9e.md",
+    "prompt/coordination/experiments/T2/20261106T102054Z-T2-chat-cb0-member-shape-3f9e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T102054Z-T2-chat-cb0-member-shape-3f9e-result.json"
+  ],
+  "hypothesis": "SHA-original two Foam shared cross-stage CB0 coordinates show unequal block extents. Determine whether reflected per-member offset/type/array/stride geometry is identical or differs, using actual private 4-stage HLSL from original ZIP2 through glslang SPIR-V and spirv-cross, with synthetic adversarial guards and safe aggregate-only report.",
+  "expected_test": "Single isolated existing T2 original-private CI reuses staged owner/states and emits 2 per-pass bounded member-shape comparison records, no raw original fields; no game shader or native edits.",
+  "baseline_run": "https://github.com/alwansan/raf/actions/runs/42153150468",
+  "prior_smoke": "https://github.com/alwansan/raf/actions/runs/42197159968",
+  "current_running_actions_at_plan": 0,
+  "limitations": [
+    "Member geometry alone cannot establish source declared CB member semantics or Unity upload/Adreno pixels",
+    "No aliases, dummy shader, GUID/meta, native workflow, touch/audio/Settings edits"
+  ]
+}
