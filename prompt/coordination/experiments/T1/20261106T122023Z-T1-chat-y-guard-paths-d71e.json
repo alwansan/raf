@@ -1,0 +1,93 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+  "issue_id": "WATER-001",
+  "hypothesis": "The two static may-reaching butterfly1 Y writer categories (sint32 bit reinterpretation and float32 constant) may have distinct CFG path reachability; identify possible last writer before its read and encountered branch predicate opcode families.",
+  "source_commit": "c04278edeb3429738259ca7ef28300bfae00d91b",
+  "input_hashes": [
+    "Original SHA-pinned ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385; private original FFT slot0 SPIR-V SHA verified by CI, binary not exported"
+  ],
+  "tool_versions": {
+    "host": "GitHub ubuntu-24.04",
+    "spirv-dis": "SPIRV-Tools installed via isolated workflow; version not otherwise asserted"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_site1_y_branch_paths.py -v",
+    "python3 -m scripts.t1_fft_site1_y_branch_paths \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "Two exclusive branches preserve separate possible final writers but cannot visit both categories on same path",
+    "Sequential bitcarrier/constant has only constant as possible last writer",
+    "Sequential reverse chooses bitcarrier as final writer",
+    "Loop backedge may visit both and preserve multiple final possibilities",
+    "Uninitialized branch path surfaced explicitly",
+    "Dynamic indexed pointer writes unknown; escaped pointer flag sticky after later direct write",
+    "OpSwitch, OpIEqual predicate names exposed as safe opcode families only",
+    "Unreachable synthetic stores excluded; original descriptor layout fails closed",
+    "No private IDs, literal values, pixel data or raw original shader output"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42217830589",
+  "artifact_urls": [],
+  "budget": "Existing Ubuntu 24.04 20-minute no-Unity source-authentic workflow; no original binary artifacts",
+  "status": "completed_scoped_cfg_provenance",
+  "observed_result": {
+    "initial_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42217597416",
+      "conclusion": "failure before source recovery",
+      "cause": "Synthetic expectation of writer key with empty predicate list did not match omitted empty map. 14/15 synthetic cases passed."
+    },
+    "fix_commit": "d00f2de69e9d3d143e6191fc81badf82e5186d18",
+    "final_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42217830589",
+      "job_id": 127892163524,
+      "conclusion": "success",
+      "synthetic": "15/15 PASS",
+      "original_source_recovery": "success",
+      "original_private_vulkan": "success",
+      "cleanup": "success"
+    },
+    "original_site": 1,
+    "role": "butterfly",
+    "coordinate_lane": "y",
+    "physical_lane_is_outside_xy": true,
+    "static_writer_categories": {
+      "float32_constant": 1,
+      "sint32_bits_to_float32": 1,
+      "whole_vector": 3
+    },
+    "final_writer_categories_possible": [
+      "float32_constant"
+    ],
+    "abstract_states_at_load": 1,
+    "conditional_predicate_producers_seen_on_paths_by_final_writer": {
+      "float32_constant": [
+        "OpINotEqual"
+      ]
+    },
+    "may_visit_bitcarrier_and_float_constant_on_same_cfg_path": false,
+    "backward_cfg_edge_seen_by_final_writer": {
+      "float32_constant": false
+    },
+    "uninitialized_final_path_possible": false,
+    "unknown_final_writer_path_possible": false,
+    "pointer_escape_seen_on_any_cfg_path": false,
+    "control_flow_model_has_no_proof_of_dynamic_branch_feasibility": true,
+    "original_integer_numeric_semantics_proven": false,
+    "authored_Unity_FindKernel_mapping_proven": false,
+    "Vulkan_Unity_numeric_parity_proven": false,
+    "Adreno_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Both signed-bitcarrier and float constant can be the final writer at the original site1 Y fetch under exact bounded structural CFG: source-backed path witness permits only float32_constant as last writer.",
+    "The previous 2-wide per-component may-reaching set fully discriminates CFG path order: path-state witness is more precise and excludes the bitcarrier at this particular read."
+  ],
+  "limitations": [
+    "Path explorer over-approximates branch truth values and does not prove a GPU invocation or actual shader input selects a particular branch",
+    "Static memory model only proven for bounded exact Function vector and direct/constant indexed scalar aliases, unknown escapes fail closed",
+    "No original Unity runtime resource binding, pixel-level parity, native Android/Adreno water acceptance"
+  ],
+  "integration_commit": "c04278edeb3429738259ca7ef28300bfae00d91b",
+  "next_step": "Classify the original site1 Y OpINotEqual predicate source operand numeric types/producers and branch successor semantics, then set up SHA-paired same-input Vulkan vs Unity coordinate trace that can confirm numerical decision before shader rewrite."
+}
