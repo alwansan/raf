@@ -4,15 +4,17 @@
   "session_id": "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
   "origin": "chat",
   "issue_id": "PERF-007",
-  "type": "integration",
-  "summary": "Runtime Unity diagnostic repeated-stack grouping avoids per-repeat allocation of full combined key by using exact ordinal composite MessageKey, retaining original message/time/count behavior. Dedicated real .NET8 source regression RED CI42279780260 at allocation threshold; source fix 4e909cac; green CI42279975562 pending. No phone FPS or water shader claim.",
+  "type": "closure",
+  "summary": "T5 PERF-007: real owner phone CL contains 23,884 water-pass and 3,850 FFT invalid-kernel root errors (not actual number of managed duplicate calls). Removed per-repeat concatenated full diagnostic stack key allocation with ordinal exact pair-key, preserved first stack/count/time/capacity. REAL RED CI42279780260 failed new 4KiB×2048 allocation bound, production fix 4e909cac, REAL GREEN CI42279975562 314/314 plus Android platform CI42279975538 and local startup CI42279975514 SUCCESS. No phone FPS or root graphics fix.",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42279780260",
     "https://github.com/alwansan/raf/commit/4e909cac516b021b23e06e55e2a1d72cc3777e67",
     "https://github.com/alwansan/raf/actions/runs/42279975562",
-    "prompt/coordination/clients/T5/sessions/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.md"
+    "prompt/coordination/clients/T5/sessions/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.md",
+    "https://github.com/alwansan/raf/actions/runs/42279975538",
+    "https://github.com/alwansan/raf/actions/runs/42279975514"
   ],
-  "at": "2026-11-06T19:29:00Z",
+  "at": "2026-11-06T19:30:00Z",
   "limits": [
     "source/CI, not original shader or device graphics",
     "no native build due trial 1/5"
