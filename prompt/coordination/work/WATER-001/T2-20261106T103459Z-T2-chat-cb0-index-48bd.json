@@ -1,0 +1,32 @@
+{
+  "session_id": "20261106T103459Z-T2-chat-cb0-index-48bd",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "7fc6df9b93aef285cb4a262fd6147ba14cedb9d9",
+  "updated_at": "2026-11-06T10:34:59Z",
+  "resumed_from_sessions": [
+    "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
+    "20261106T101538Z-T2-scheduled-uploadtrace-6c8f"
+  ],
+  "hypothesis": "For each of the two SHA-authentic Foam VS/FS CB0 array geometries, inspect actual compiled SPIR-V OpLoad pointer access chain indices to distinguish static/dynamic/whole-array reads and relation to the other stage's reflected array capacity. Preserve distinction between compiled load paths and runtime observed accesses; do not equate to Unity buffer upload.",
+  "experiment_key": "zip2-15964ea8-foam-2pass-private-4stage-CB0-OpLoad-chain-index-v1",
+  "resource_key": "T2-original-foam-private-4stage-probe",
+  "intended_files": [
+    "scripts/t2_foam_private_cb0_index_access.py",
+    "tests/test_t2_foam_private_cb0_index_access.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T103459Z-T2-chat-cb0-index-48bd.json",
+    "prompt/coordination/clients/T2/sessions/20261106T103459Z-T2-chat-cb0-index-48bd.md",
+    "prompt/coordination/experiments/T2/20261106T103459Z-T2-chat-cb0-index-48bd.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T102054Z-T2-chat-cb0-member-shape-3f9e.md",
+    "prompt/coordination/clients/T2/sessions/20261106T101538Z-T2-scheduled-uploadtrace-6c8f.md"
+  ],
+  "evidence_baseline": "https://github.com/alwansan/raf/actions/runs/42201778065",
+  "test_plan": "Source-free adversarial integer signedness, malformed chains, unrelated resource, static/dynamic index, compiled four original stages via private staged source and bounded numeric-only output; preserve original SHA and scratch cleanup",
+  "current_queued_running_at_plan": 0,
+  "notes": "No game .shader/.meta/GUID/Materials or native build; no duplicate of previously verified member shape-only experiment. Does not verify upload or on-device pixels."
+}
