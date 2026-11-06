@@ -2,8 +2,8 @@
   "session_id": "20261106T110837Z-T1-scheduled-fft-first-divergence",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-06T11:08:37Z",
+  "status": "completed_source_only",
+  "updated_at": "2026-11-06T11:23:00Z",
   "intended_files": [
     "scripts/t1_fft_first_divergence.py",
     "tests/test_t1_fft_first_divergence.py",
@@ -13,5 +13,11 @@
   "resource_key": null,
   "hypothesis": "The first numeric mismatch can be isolated by coordinate keyed comparisons without confusing missing samples, signed zeros, NaNs or differing pass order.",
   "base_reference": "owner run 42058825739; Vulkan 42141540903; Unity 42160755558",
-  "scope": "Independent offline comparison tool; no Unity/Actions dispatch; no game assets"
+  "scope": "Independent offline comparison tool; no Unity/Actions dispatch; no game assets",
+  "result_commits": [
+    "53235a66d972daeb60154c96432745d30a2adf8e",
+    "18aae1bfd1f9936ab27f3c9128344d26d9fc173e",
+    "4c4bb530e71b6e7d143e3ab620ef257994e4d8a6"
+  ],
+  "next_step": "Run repository tests and collect pinned sanitized Vulkan/Unity coordinate probes; FindKernel/Dispatch binding remains unproven"
 }
