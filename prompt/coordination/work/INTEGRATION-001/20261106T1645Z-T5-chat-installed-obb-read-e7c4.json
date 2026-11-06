@@ -17,12 +17,14 @@
     "android-port/Tests/ExpansionArchiveProbe/Program.cs",
     ".github/workflows/raft-t5-installed-obb-read-probe.yml",
     "prompt/coordination/clients/T5/sessions/20261106T1645Z-T5-chat-installed-obb-read-e7c4.md",
-    "prompt/coordination/work/INTEGRATION-001/20261106T1645Z-T5-chat-installed-obb-read-e7c4.json"
+    "prompt/coordination/work/INTEGRATION-001/20261106T1645Z-T5-chat-installed-obb-read-e7c4.json",
+    ".github/workflows/raft-unity-editor-android-import.yml"
   ],
   "experiment_key": "T5-installed-exact-main-version-package-OBB-zip-central-directory-real-Unity-entry-first-byte-source-test-v1",
   "resource_key": "T5-independent-source-only-installed-obb-evidence",
-  "updated_at": "2026-11-06T16:44:21.214Z",
+  "updated_at": "2026-11-06T16:55:54.316Z",
   "hypothesis": "Installed same-version main OBB may be absent/inaccessible or Unity assets unreadable even though old signed archive digest and FMOD/Haptics paths are correct. Diagnostic only; no assertions of phone success until a new device log.",
-  "ci_run_url": null,
-  "next_step": "Create fail-open, safe read-only diagnostic and controlled .NET fixtures; run isolated CI; no Unity build or source assets."
+  "ci_run_url": "https://github.com/alwansan/raf/actions/runs/42256468606",
+  "next_step": "Append new pure C# helper to actual Unity import copy list and assert workflow selection in isolated T5 CI; no native Unity build.",
+  "proven_finding": "CI42256468606 succeeded 24 synthetic checks and .NET platform build, but native Unity import workflow explicit file-copy list omits new AndroidExpansionArchiveProbe.cs, causing potential missing type when AndroidTestDiagnostics compiles. Fix scoped one-word copy list and regression check."
 }
