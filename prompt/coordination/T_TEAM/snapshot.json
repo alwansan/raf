@@ -9415,6 +9415,27 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9.json"
     },
     {
+      "id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
+      "owner": "T4",
+      "session_id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "at": "2026-11-06T16:03:21.858Z",
+      "summary": "Corrected PersistentDiagnosticLog transient startup I/O fault handling: failed Append retains pending original full event and overflow lost-count; critical writes refuse queue over-capacity. Final source f674025 CI42248437096 SUCCESS 285 managed synthetic checks, red old source CI42247880072 lost dropped marker. No Android phone or Unity acceptance.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/f674025abb39242ec34ea978d0f17fd6da5d2627",
+        "https://github.com/alwansan/raf/commit/73cfdc1878607bdb185ab40cc527807c4e09f71f",
+        "https://github.com/alwansan/raf/actions/runs/42247880072",
+        "https://github.com/alwansan/raf/actions/runs/42248437096"
+      ],
+      "source_scope_completed": true,
+      "device_confirmed": false,
+      "gameplay_world_persistence_confirmed": false,
+      "updated_at": "2026-11-06T16:03:21.858Z",
+      "_record_path": "../B_TEAM/events/T4/20261106T1553Z-T4-chat-diagnostic-queue-c4r7.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -10147,6 +10168,23 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1520Z-T5-chat-real-unity-guid-2b61.json"
     },
     {
+      "id": "20261106T1541Z-T5-chat-obb-routes-b8a1",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1541Z-T5-chat-obb-routes-b8a1",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T16:03:25.853Z",
+      "summary": "CI42248117179 SUCCESS authenticated original owner-tested run42058825739 signed OBB ZIP metadata: 39 OBB entries, 5/5 original FMOD bank jar paths and lengths totaling 123817498B, 29/29 original pinned Haptics WAV jar paths and lengths totaling 32733104B, one Unity Data member, all local headers match. 17/17 source-free tests; 6991 strict HTTP206 bytes / 86 requests. Outer GitHub checkpoint wrapper basenames differ from logical delivery names, not proof of wrong APK package or corrupted OBB. Prior original full OBB SHA CI42230326050 valid. Phone OBB mount/FMOD/Unity shader or water NOT verified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42248117179",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_SIGNED_OBB_JAR_ASSET_ROUTES_2026-11-06.md"
+      ],
+      "limits": "Old immutable signed archive metadata only; no full content individual bank verification this experiment, actual device read, current game build or shader/water/graphics readiness.",
+      "next_step": "Correlate original device installed main.89 OBB hash and fmod.bank_root/device resource reads; avoid duplicating old source SHA.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1541Z-T5-chat-obb-routes-b8a1.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -10175,7 +10213,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "14d23f7262a56869ba52137b9f46937656d90b3bb980c9987e35f156ec784f36",
+  "source_input_sha256": "48d8be85c3340ec6751f8d0042f80b549b852542f634a2779b6f1c3d5d5c6066",
   "generation": "T-2026-11-05",
-  "input_sha256": "0013a362c95a20a6577954d8ac4d19a9973af44f1296dd125d39972d558305be"
+  "input_sha256": "34c6714e2e313c44915f1ba30c71888e2be286a8ab653b712d85f110cc16cfd1"
 }
