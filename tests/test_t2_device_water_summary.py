@@ -1,6 +1,9 @@
 """Source-free tests of strict final device-water material totals."""
 import unittest
-from scripts.t2_device_water_summary import classify
+import json
+import tempfile
+from pathlib import Path
+from scripts.t2_device_water_summary import classify, read
 
 
 def fixture():
@@ -10,8 +13,8 @@ def fixture():
             "stop_time_android_process_exit_info": {
                 "final_render_failure_breakdown": {"ultimate_water_invalid_pass_by_material": rows},
                 "final_shader_pass_errors_total": 23884,
-                "final_compute_kernel_errors_total": 3850,
-                "final_error_category_breakdown": {"ultimate_water_invalid_pass": {"count": 23884}}}}
+                "final_compute_kernel_errors_total": 3850},
+            "final_error_category_breakdown": {"ultimate_water_invalid_pass": {"count": 23884}}}
 
 
 class TestDeviceWaterSummary(unittest.TestCase):
@@ -37,13 +40,31 @@ class TestDeviceWaterSummary(unittest.TestCase):
     def test_reject_boolean_or_string_root_count(self):
         for invalid in (True, False, "23884", 23884.0, None):
             s = fixture()
-            s["stop_time_android_process_exit_info"]["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] = invalid
+            s["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] = invalid
             with self.subTest(invalid=invalid), self.assertRaises(ValueError):
                 classify(s)
 
+    def test_read_rejects_duplicate_json_keys_at_any_depth(self):
+        valid = json.dumps(fixture())
+        nested = valid.replace('"foam_global": 15400', '"foam_global": 1, "foam_global": 15400')
+        root = valid.replace('"schema": 1', '"schema": 0, "schema": 1')
+        for payload in (nested, root):
+            with self.subTest(payload=payload[:60]):
+                with tempfile.TemporaryDirectory() as folder:
+                    path = Path(folder) / "summary.json"
+                    path.write_text(payload, encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "duplicate_json_key"):
+                        read(path)
+
+    def test_read_valid_summary(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "summary.json"
+            path.write_text(json.dumps(fixture()), encoding="utf-8")
+            self.assertEqual(read(path)["water_pass_errors"], 23884)
+
     def test_reject_category_root_mismatch(self):
         s = fixture()
-        s["stop_time_android_process_exit_info"]["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] += 1
+        s["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] += 1
         with self.assertRaises(ValueError):
             classify(s)
 
