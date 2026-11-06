@@ -30,6 +30,7 @@ NUMERIC = (
     "consumer_return_original_shader_field_load_instructions",
     "consumer_return_original_shader_field_reading_methods",
     "consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor",
+    "consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments",
     "consumer_nop_instructions_skipped_after_Find",
 )
 STATUS = "original_foam_ShaderFind_direct_return_consumer_typed_IL_census"
@@ -70,7 +71,8 @@ def validate(report):
         raise ValueError("original_typed_field_resolution_not_proven")
     if has_field == 0 and (report["consumer_return_original_shader_field_load_instructions"] != 0
                          or report["consumer_return_original_shader_field_reading_methods"] != 0
-                         or report["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"] != 0):
+                         or report["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"] != 0
+                         or report["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"] != 0):
         raise ValueError("false_positive_original_field_lineage")
     if not is_local and (report["consumer_return_original_shader_local_loads_same_method"] != 0
                          or report["consumer_return_original_shader_local_method_contains_Material_Shader_constructor"] != 0):
@@ -80,6 +82,12 @@ def validate(report):
     if (report["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"]
             > report["consumer_return_original_shader_field_reading_methods"]):
         raise ValueError("material_cooccurrence_partition")
+    if (report["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"]
+            > report["consumer_return_original_shader_field_load_instructions"]):
+        raise ValueError("direct_material_argument_exceeds_original_field_loads")
+    if (report["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"] > 0
+            and report["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"] == 0):
+        raise ValueError("direct_material_argument_without_any_corresponding_method")
     if (report["consumer_return_original_shader_local_method_contains_Material_Shader_constructor"] >
             min(1, report["consumer_return_original_shader_local_loads_same_method"])):
         raise ValueError("local_material_cooccurrence_partition")
