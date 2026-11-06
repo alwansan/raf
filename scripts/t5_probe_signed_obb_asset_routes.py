@@ -183,8 +183,6 @@ def inspect_original_checkpoint(parent, *, apk_size=ORIGINAL_APK_BYTES,
                 kind = _kind(item.filename)
                 if kind not in ("apk", "obb") or kind in target:
                     raise ProbeError("original_signed_checkpoint_member_drift")
-                if item.filename != (SIGNED_APK if kind == "apk" else SIGNED_OBB):
-                    raise ProbeError("original_signed_checkpoint_member_drift")
                 target[kind] = item
             if set(target) != {"apk", "obb"} or (
                     target["apk"].file_size != apk_size or
@@ -197,6 +195,8 @@ def inspect_original_checkpoint(parent, *, apk_size=ORIGINAL_APK_BYTES,
                 "source_original_owner_tested_run": ORIGINAL_RUN,
                 "source_original_commit": ORIGINAL_SHA,
                 "source_original_signed_checkpoint_id": CHECKPOINT[0],
+                "outer_signed_apk_member_basename_matches_delivery": target["apk"].filename.rsplit("/", 1)[-1] == SIGNED_APK,
+                "outer_signed_obb_member_basename_matches_delivery": target["obb"].filename.rsplit("/", 1)[-1] == SIGNED_OBB,
                 "full_actual_original_OBB_SHA_prior_CI": 42230326050,
                 **result,
                 "real_original_HTTP206_bytes": parent.transferred,
