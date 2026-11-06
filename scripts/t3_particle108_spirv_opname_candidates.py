@@ -47,7 +47,8 @@ def _private_program(blob,stage):
         raise ValueError("T3_SPIRV_INPUT_BOUNDS")
     words=struct.unpack("<"+"I"*(len(blob)//4),blob)
     if (words[0]!=SPV_MAGIC or words[1]>>16!=1 or
-        words[1]&0xffff>6 or words[3]<2 or words[3]>MAX_SPIRV_IDS
+        ((words[1]>>8)&0xff)>6 or (words[1]&0xff)!=0 or
+        words[3]<2 or words[3]>MAX_SPIRV_IDS
         or words[4]!=0):
         raise ValueError("T3_SPIRV_HEADER")
     bound=words[3]
