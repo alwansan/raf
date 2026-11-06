@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "Unity builtin shader restore transactional rollback protects externally changed include during failure",
-  "status": "active",
+  "status": "completed",
   "base_sha": "44341ce5761db7242900bdac0334dc35a783b391",
-  "updated_at": "2026-11-06T19:10:00Z",
+  "updated_at": "2026-11-06T19:11:30Z",
   "resumed_from_sessions": [
     "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
     "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
@@ -32,7 +32,21 @@
     "T3 original shader quality separate P0 scope"
   ],
   "coordination": "B clients retired; T3 owns Particle108 and other files, T1 FFT, T2 Foam, T4 local/save; scheduled T5 PID helper untouched. No full native Unity build or trial vote change.; after exact CI red, now include retired A15 synthetic test for stale pre-atomic Path.open injection, targeting real os.replace with same fail-closed output expectations.; A14 source-only workflow actually executes A15/builtin/A3/A9 tests but path list omitted them, allowing unchanged red workflow after test-only repair. Add exact test files to trigger paths to verify same source on next push; no native build.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Close actual A15 red with corrected atomic rename fixture and A14 test dependency path trigger; validate both immutable CI runs."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42276738013",
+    "https://github.com/alwansan/raf/actions/runs/42276738043",
+    "https://github.com/alwansan/raf/actions/runs/42277179726",
+    "https://github.com/alwansan/raf/actions/runs/42277322041"
+  ],
+  "result": {
+    "status": "SUCCESS_SOURCE_ONLY",
+    "source_commit": "67e659e3ea67c43a66e43d65e53afb168645305c",
+    "test_fixture_commit": "e9d125cc28f8a2f817a0c11ac21b5778f4aa59e9",
+    "A14_workflow_commit": "2de34977eb1b4cb0aa865e35afdfea6a96b8c272",
+    "B13_tests_passed": 15,
+    "A15_tests_passed": 27,
+    "A14_tests_passed": 36,
+    "device_verified": false
+  },
+  "next_step": "Completed rollback fix and corrected failing real A15/A14 regression; current active P0 shader/FFT program restoration remains independent. All reserved files released."
 }
