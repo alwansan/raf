@@ -3,7 +3,7 @@
   "owner": "T5",
   "session_id": "20261106T0145Z-T5-chat-unity-surface-bridge-f4c2",
   "origin": "chat",
-  "status": "active",
+  "status": "completed_real_source_verified",
   "issue_id": "PERF-007",
   "base_sha": "726035aa11c5a7f2b43e7cc51db8a255498fed5c",
   "track": "original Unity/internal and external SF frame telemetry bounded join",
@@ -36,7 +36,27 @@
     "docs/A4_PERF_GPU_SCENE_DIAGNOSTICS_2026-11-04.md",
     "docs/DEVICE_FEEDBACK_42058825739_AR.md"
   ],
-  "run_urls": [],
-  "next_step": "Implement UTC matched source-only Unity sample + external stale-window validator and negative fixtures, perform small source-pinned CI without altering runtime, report non-causal counts and scene distribution.",
-  "updated_at": "2026-11-06T01:45:04.981Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42146299959",
+    "https://github.com/alwansan/raf/actions/runs/42146496632"
+  ],
+  "next_step": "Future matched native APK+OBB and same world/scene/draw path device test with both Unity FrameTiming and SurfaceFlinger, quality/render scale; never treat stale SF as game freeze. T1-T3 shaders/FFT still P0.",
+  "updated_at": "2026-11-06T01:53:04.932Z",
+  "result": {
+    "first_run": "failed at Python module import only",
+    "second_run": 42146496632,
+    "conclusion": "success",
+    "synthetic_tests": "15/15",
+    "real_CL_SHA_blobs_verified": 4,
+    "qualified_unity_intervals_first": 36,
+    "qualified_unity_intervals_second": 116,
+    "second_sf_stale_samples": 105,
+    "second_unity_intervals_during_sf_stale": 62,
+    "second_scene_counts": {
+      "MainScene": 35,
+      "MainMenuScene": 27
+    },
+    "claim": "Unity game-side intervals continued despite stale independent SurfaceFlinger telemetry; no proved rendered frame or FPS gain",
+    "new_game_runtime_changed": false
+  }
 }
