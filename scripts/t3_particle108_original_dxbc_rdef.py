@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Exact original Particle108 four DXBC VS/FS pairs: source RDEF register census.
 
+T3-RDEF-reason-13-test-original: real source, privacy-safe classification.
 D3D11 compiled shader resource bindings in DXBC RDEF are the SOURCE-ORIGINAL
 register contract, before VKD3D/SPIRV-Cross/glslang set/binding remapping.
 No source resource names/register numbers, DXBC bytes, GUIDs, shader programs
