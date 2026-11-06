@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T12:26:00Z",
+  "summary": "Original SHA-pinned Foam CB0 managed IL CI42217370118 SUCCESS (11 Python plus Cecil source-only selftest, owner+Assembly-CSharp SHA auth). Exactly one source-private CB0 vector name remains direct Material.SetVector(string,Vector4) first formal, its typed second value is newobj (one), and instance Material receiver source is pre-literal unknown (one). No Vector4 numeric args, receiver Material→Foam or full Unity CB0 upload proven; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42217370118",
+    "docs/T2_FOAM_ORIGINAL_CB0_SETVECTOR_OPERAND_ORIGINS_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/205be806b79451097149c90a3a6301f05a6a009c"
+  ],
+  "limits": "No original private symbols/numbers/game code/IL emitted, no shader/.meta/GUID/runtime/native build changed; source-first formal→newobj opcode origin only, receiver unknown.",
+  "next_step": "Authenticate Vector4 ctor formal inputs and earlier receiver producer; link original source CB0 values to correct material/Unity upload and device water."
+}
