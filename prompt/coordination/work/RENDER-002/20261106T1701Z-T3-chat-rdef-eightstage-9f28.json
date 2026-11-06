@@ -6,7 +6,7 @@
   "session_id": "20261106T1701Z-T3-chat-rdef-eightstage-9f28",
   "issue_id": "RENDER-002",
   "track": "Particle108 original DXBC resource-table presence across 8 exact source stages",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bd99264adc2a0671ada73fc2801f7be23a44e066",
   "intended_files": [
     "scripts/t3_particle108_original_dxbc_rdef.py",
@@ -31,8 +31,14 @@
   "taken_over_from": [
     "T3 original-source CI 42249097396 returned RDEF ambiguous; T3 scheduled absence/multiple source commit 2fc26e03; T3 chat 14/14 source-free CI 42254748522"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42258460039",
+    "https://github.com/alwansan/raf/actions/runs/42258686807"
+  ],
   "limits": "Only source parser, synthetic regressions, scoped workflow, own per-session records. No Unity/Android build, no game/shader raw content or meta. Source stage uses pinned ZIP2, SHA checked, bounded runner, safe aggregate only.",
-  "next_step": "Add fail-closed all-eight presence census, synthetic regressions and CI, then launch one genuine SHA-pinned original source diagnostic only if fresh Actions collision check is clear.",
-  "updated_at": "2026-11-06T17:03:28.549Z"
+  "next_step": "Do NOT rerun RDEF on same eight stages. Investigate original SHDR/SHEX resource declaration tokens; SOURCE/TEST no device, preserve safe counts and authentic SHA. RENDER-002 remains OPEN/NOT_READY.",
+  "updated_at": "2026-11-06T17:10:11.307Z",
+  "result": "Source-free 17/17 PASS; eight selected original SHA-authenticated D3D11 DXBC Particle108 stage containers all lack RDEF, no unique and no duplicate chunks. Original real CI42258686807 SUCCESS, no RDEF register layouts proven; game shader/Adreno pixels not restored.",
+  "source_proof_sha": "73aa9369c796cf861d4761844fe9280befdfc192",
+  "original_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 }
