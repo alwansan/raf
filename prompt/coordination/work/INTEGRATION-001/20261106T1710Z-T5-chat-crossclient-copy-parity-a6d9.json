@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "T4 native/managed staging lexical regression after T5 helper extraction",
+  "status": "active",
+  "base_sha": "ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239",
+  "updated_at": "2026-11-06T17:10:00Z",
+  "resumed_from_sessions": [
+    "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
+    "20261106T1645Z-T5-chat-installed-obb-read-e7c4",
+    "20261106T1649Z-T5-scheduled-runtime-attribution-c82f"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42258089066",
+    "https://github.com/alwansan/raf/actions/runs/42258089028",
+    "https://github.com/alwansan/raf/actions/runs/42258190836"
+  ],
+  "intended_files": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_t5_offline_runtime_support_deps.py",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9.md",
+    "prompt/coordination/experiments/T5/20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9.json"
+  ],
+  "experiment_key": "T5-managed-runtime-copy-dictionary-T4-exact-two-file-lexical-pair-guards-source-v2",
+  "resource_key": "source-only python CI; T4 code and T5 runtime OBB probe untouched",
+  "hypothesis": "T5 refactor split two T4 expected adjacent filename literal sequences, introducing false T4 staging regression; preserve single-line paired literals in RUNTIME_COMPILE_SUPPORT_FILES and test T4 policy expectations with actual unit tests.",
+  "coordination": "Own T5 verifier script only; leave T4 mouse/immersive runtime and T4-owned tests untouched, leave T5 scheduled PERF-007 and concurrent installed OBB probe untouched; no Unity build or job cancellation",
+  "next_step": "Minimal exact literal restoration, T5 negative guard, independent CI verification using existing T4 workflows or source-only Python regression; record both successes and failures."
+}
