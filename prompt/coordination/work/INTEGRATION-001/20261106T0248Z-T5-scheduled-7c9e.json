@@ -2,16 +2,18 @@
   "session_id": "20261106T0248Z-T5-scheduled-7c9e",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
-  "base_sha": "89b98e60e8d1b8728d0b4463cac685a3b9a4d377",
-  "updated_at": "2026-11-06T02:49:00Z",
+  "status": "completed_evidence_only",
+  "updated_at": "2026-11-06T02:50:00Z",
+  "base_sha": "ece00abee0b7d1de53f6fb38fdfde84c59ec1219",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/20261106T0248Z-T5-scheduled-7c9e.json",
     "prompt/coordination/clients/T5/sessions/20261106T0248Z-T5-scheduled-7c9e.md"
   ],
   "experiment_key": "t5-head-actions-device-provenance-audit-20261106",
   "resource_key": null,
-  "hypothesis": "Separate currently running T1 FFT diagnostic from T4 platform success and prior signed device artifact; avoid duplicating Unity or OBB retrieval",
+  "result": "T4 platform 42152521731 success; T1 exact FFT 42152295025 in_progress; T2 Foam 42151620701 success; no newer device APK, no code fix",
+  "waiting_ci": "https://github.com/alwansan/raf/actions/runs/42152295025",
+  "next_step": "Inspect T1 exact FFT terminal outcome; map original GraphicsSettingsBox IL callback and persistence without touching T4 input or running Unity",
   "resumed_from": [
     "20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
     "20261106T0047Z-T5-scheduled-c4e8.md"
