@@ -1,0 +1,43 @@
+{
+  "id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
+  "session_id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "experiment_key": "ZIP2-15964-Foam-CB0-exact-managed-Material-field-stfld-bounded-linear-IL-value-stack-receiver-Shader-ctor-formal-v1",
+  "status": "source_original_exact_Material_stfld_ctor_Shader_field_dataflow_verified",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "run_id": 42224883549,
+  "job_id": 127915749429,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42224883549",
+  "conclusion": "success",
+  "source_sha": "d623cef56876b2ffd9fc76949e20598d02090391",
+  "sourcefree_python_tests_passed": 11,
+  "cecil_boundaries_and_alias_negative_controls_passed": true,
+  "original_managed_methods_scanned": 19512,
+  "original_managed_instructions_scanned": 491490,
+  "exact_original_source_named_Material_receiver_field_count": 1,
+  "exact_original_receiver_Material_stfld_count": 1,
+  "material_field_store_128_instruction_basic_block_dataflow_count": 7,
+  "exact_Material_store_value_origin": {
+    "exact_Material_ctor_with_Shader_formal": 1
+  },
+  "exact_Material_ctor_Shader_formal_origin": {
+    "typed_Shader_instance_field": 1
+  },
+  "before_stfld_immediate_source_remains_unproven": true,
+  "original_Shader_field_is_source_Foam_verified": false,
+  "original_executed_runtime_proof": false,
+  "complete_original_CB0_upload_verified": false,
+  "android_Adreno_water_verified": false,
+  "original_private_Shader_field_IL_asset_published": false,
+  "first_compile_failures": [
+    "https://github.com/alwansan/raf/actions/runs/42224601338",
+    "https://github.com/alwansan/raf/actions/runs/42224703030",
+    "https://github.com/alwansan/raf/actions/runs/42224754004"
+  ],
+  "compiler_fix_commit": "d623cef56876b2ffd9fc76949e20598d02090391",
+  "report": "docs/T2_FOAM_ORIGINAL_MATERIAL_STFLD_STACK_2026-11-06.md",
+  "next_step": "Track original typed Shader instance field supplied to exact Material::.ctor; inspect original managed stfld writer and/or authenticated Unity serialized field reference without assuming it is Foam; then verify full CB0 upload."
+}
