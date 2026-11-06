@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T0950Z-T3-chat-dxbc-spv-location-27af",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "source_commit": "7461d9957e8c916f5fd8e6ccd500e570121cac6d",
+  "source_original": "ZIP2 immutable 15964ea8f246b6e076ce26b60931ee2e1a9a2385; four source Shader/Material owners and six original scenes SHA size verified",
+  "hypothesis": "The authenticated original Particle108 DXBC user register numbers may numerically map to source vkd3d SPIR-V location; check unambiguous type class and lane count matches without implying semantic identity.",
+  "experiment_key": "T3-Particle108-four-original-pairs-DXBC-register-vkd3d-SPV-Locations-ZIP2sha15964ea8-private-counts-v1",
+  "workflow_path": ".github/workflows/raft-t3-particle108-register-location.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_register_location_probe.py' -v",
+    "python3 -m scripts.t3_particle108_register_location_probe --original \"$RUNNER_TEMP/t3-particle108-private-source\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-particle108-safe-aggregate.json\""
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "unitypy": "1.23.0",
+    "original_ref": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "translation_dependencies": "vkd3d-compiler;spirv-tools;spirv-cross;glslang-tools installed apt (versions in CI logs)"
+  },
+  "negative_controls": [
+    "duplicate SPIR-V location rejects",
+    "duplicate original semantic register treated ambiguous",
+    "mismatched integer/float type rejects",
+    "missing location and changed numerical location counted",
+    "mask lane count more than reflected vector width rejects",
+    "unknown SPIR-V type and invalid input rejects",
+    "system-value register special 0xffffffff excluded",
+    "bool location rejected"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42199149873",
+  "artifact_urls": [],
+  "budget": "26-minute isolated ubuntu-24.04 path-only workflow, original 4 SHA-pinned owners and six scenes; no game assets stored as artifacts",
+  "observed_result": {
+    "original_source_four_owner_SHA_verified": true,
+    "original_six_scene_SHA_verified": true,
+    "stage_programs_translated": 8,
+    "keyword_pairs": 4,
+    "original_user_records": 48,
+    "original_unique_registers": 48,
+    "source_spirv_located_rows": 46,
+    "source_spirv_unlocated_rows": 0,
+    "numerically_matching_register_records": 46,
+    "missing_numeric_register_locations": 2,
+    "type_class_matches": 46,
+    "type_class_mismatches": 0,
+    "component_width_shortfalls": 0,
+    "ambiguous_original_register_records": 0,
+    "extra_spirv_locations": 0,
+    "unique_numeric_type_width_candidates": 46,
+    "stage_all_user_records_numerical_candidate": 6,
+    "all_numeric_keyword_pairs": 2,
+    "source_free_tests_passed": 10,
+    "source_original_semantic_to_SPIRV_identity_proven": false,
+    "auto_location_patch_authorized": false,
+    "Android_GPU_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "All 48 original user register numbers numerically match source SPIR-V Location in all four variants",
+    "The source SPIR-V emitter has register-location numeric candidates with mismatching component type or width"
+  ],
+  "limitations": [
+    "No proven authored semantic name→compiler-created Location correspondence or HLSL generated-name restoration",
+    "Two original user registers lack identical numeric Locations; cannot infer where they moved from this aggregate",
+    "No genuine exported ShaderLab/Android Unity GPU render or on-phone fire smoke white-material verification; no existing game assets modified",
+    "Source-only original compiler validation; 46 candidate matches may be coincidences or changed component packing, must not auto-patch"
+  ],
+  "integration_commit": "7461d9957e8c916f5fd8e6ccd500e570121cac6d",
+  "next_step": "Classify two numeric register-location misses by VS/FS and input/output aggregate (not private per-pair data), verify whether they are optimizer-elided unused varyings vs true remapping; only then attempt semantic crosswalk under strict bounds, never assume identity or patch ShaderLab automatically."
+}
