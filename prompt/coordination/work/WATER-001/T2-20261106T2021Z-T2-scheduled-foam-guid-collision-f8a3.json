@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T2021Z-T2-scheduled-foam-guid-collision-f8a3",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "14084580e7ac2e2959d30198201dc8e54fbe370f",
+  "resumed_from_sessions": [
+    "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
+    "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_private_installer.py",
+    "tests/test_t2_foam_private_installer.py"
+  ],
+  "hypothesis": "An otherwise unique Foam ShaderLab target can share its GUID with another exported .meta; fail closed before backup or promotion.",
+  "experiment_key": "t2-foam-unique-export-guid-synthetic-20261106",
+  "resource_key": null,
+  "updated_at": "2026-11-06T20:21:00Z",
+  "notes": "T3 Shader48 CI 42287201379 in progress; no shared CI/native request; source-only tests."
+}
