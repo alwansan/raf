@@ -3,7 +3,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "base_sha": "87fb84944bdff8b352f6d9a17eb53457a1b91722",
-  "status": "active",
+  "status": "completed",
   "intended_files": [
     ".github/workflows/raft-t1-fft-gate-regression.yml",
     "prompt/coordination/work/WATER-001/20261106T093342Z-T1-chat-d82f.json",
@@ -13,6 +13,11 @@
   ],
   "experiment_key": "t1-source-free-sanitized-evidence-gate-exact-unittest-python3-ubuntu24-v1",
   "resource_key": null,
-  "updated_at": "2026-11-06T09:33:42Z",
-  "hypothesis": "The standing proof CI does not exercise either scheduled sanitized JSON guard; add existing tests to cheap push CI and validate exact HEAD."
+  "updated_at": "2026-11-06T09:35:37.269Z",
+  "hypothesis": "The standing proof CI does not exercise either scheduled sanitized JSON guard; add existing tests to cheap push CI and validate exact HEAD.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42196086122"
+  ],
+  "result": "CI job 127819568508 succeeded with both test steps. Exact local checkout also passed 12 JSON evidence tests and 7 NUnit contract tests. Three additional local FFT diagnostic suites passed 17 synthetic tests.",
+  "next_step": "Add a private, fail-closed step diagnostic to the paired replay to separate shader import, kernel resolution, dispatch, and readback. Once replay produces comparable output, use a promoted-only control against the integer-rewrite variant and record the first differing read without publishing raw values."
 }

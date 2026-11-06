@@ -1,0 +1,13 @@
+{
+  "id": "20261106T093342Z-T1-chat-d82f",
+  "owner": "T1",
+  "session_id": "20261106T093342Z-T1-chat-d82f",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Exact source CI exercises and passes both FFT evidence test suites, including the scheduled duplicate-key and editor-capability guards.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42196086122",
+    "https://github.com/alwansan/raf/commit/c6c113c947229b85bf5913766feed9bca8320d6b"
+  ],
+  "at": "2026-11-06T09:35:37.269Z"
+}

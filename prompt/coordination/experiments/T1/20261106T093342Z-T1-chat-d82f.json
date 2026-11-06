@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T093342Z-T1-chat-d82f",
+  "issue_id": "WATER-001",
+  "hypothesis": "The standing proof CI does not exercise either scheduled sanitized JSON guard; add existing tests to cheap push CI and validate exact HEAD.",
+  "source_commit": "c6c113c947229b85bf5913766feed9bca8320d6b",
+  "input_hashes": [],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s scripts -p 'test_t1_fft_unity_gpu_result_gate_contract.py' -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_unity_evidence_gate.py -v"
+  ],
+  "negative_controls": [
+    "duplicate evidence key with valid last value",
+    "compute capability without Editor invocation",
+    "contradictory NUnit suite and case states"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-gate-regression.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42196086122",
+  "artifact_urls": [],
+  "budget": "5 minutes; source only",
+  "status": "completed",
+  "observed_result": "CI job 127819568508 succeeded with both test steps. Exact local checkout also passed 12 JSON evidence tests and 7 NUnit contract tests. Three additional local FFT diagnostic suites passed 17 synthetic tests.",
+  "limitations": [
+    "No comparable Unity capture was produced by paired replay 42152295025.",
+    "No authored kernel binding or Android water validation."
+  ],
+  "integration_commit": "c6c113c947229b85bf5913766feed9bca8320d6b",
+  "next_step": "Add a private, fail-closed step diagnostic to the paired replay to separate shader import, kernel resolution, dispatch, and readback. Once replay produces comparable output, use a promoted-only control against the integer-rewrite variant and record the first differing read without publishing raw values."
+}
