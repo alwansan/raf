@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T051300Z-T1-scheduled-nunit-suite-c8e1",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "f9d54ab4c3b0b00de4fa999f46edd614b130e49f",
+  "intended_files": [
+    "scripts/t1_fft_unity_gpu_result_gate.py",
+    "tests/test_t1_fft_unity_gpu_result_gate.py",
+    "prompt/coordination/clients/T1/sessions/20261106T051300Z-T1-scheduled-nunit-suite-c8e1.md",
+    "prompt/coordination/work/WATER-001/20261106T051300Z-T1-scheduled-nunit-suite-c8e1.json"
+  ],
+  "experiment_key": "nunit-suite-contradictory-failure-guard:42160755558:source-gate",
+  "resource_key": null,
+  "hypothesis": "NUnit root Passed with nested failed test-suite or descendant failure may bypass the current direct test-case guard",
+  "updated_at": "2026-11-06T05:13:00Z"
+}
