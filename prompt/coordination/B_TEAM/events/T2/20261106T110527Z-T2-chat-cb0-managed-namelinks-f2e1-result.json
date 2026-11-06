@@ -1,0 +1,17 @@
+{
+  "id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result",
+  "owner": "T2",
+  "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+  "origin": "chat",
+  "type": "result",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T11:17:30Z",
+  "summary": "Original Foam CB0 serialized source name→original Assembly-CSharp.dll SHA-authentic private Cecil CI42208958212 SUCCESS: 11 tests; four real CB0 stage bindings, 5 distinct vector source names; 3/5 found as ldstr (4 sites), one near typed Material.SetFloat/SetVector in same method; original CB buffer name 0/1 found. Proximity is NOT first-argument proof or Unity upload, WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42208958212",
+    "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_LITERAL_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/eb1db19f3cdd38b43f61fdf842899c1ad10d6f9b"
+  ],
+  "limits": "No private names, SHA hashes, original DLL, shader or source printed; no Unity host CB0 upload proof, no Adreno water acceptance.",
+  "next_step": "Trace actual IL first argument of original matched literal candidate; preserve existing texture work and both CB0 compiled load direction findings."
+}
