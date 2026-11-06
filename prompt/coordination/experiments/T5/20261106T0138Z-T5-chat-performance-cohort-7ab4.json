@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0138Z-T5-chat-performance-cohort-7ab4",
+  "owner": "T5",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "experiment_key": "t5-CL520c4c-20261105-version89-two-sessions-performance-fresh-surface-same-rendererror-cohort-v1",
+  "source_sha": "7c0f7fb78a178d32c3539b35b661a848ffa8a9b9",
+  "source_CL_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+  "source_blobs": [
+    "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8",
+    "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+  ],
+  "workflow": ".github/workflows/raft-t5-cl-real-fps-cohort.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42145219506",
+  "status": "completed_verified",
+  "test_counts": "18/18 synthetic pass plus exact pinned real 190 samples",
+  "actual_results": {
+    "first": {
+      "rows": 71,
+      "valid_surface_fps": 57,
+      "stale": 6,
+      "first_render_error_sample": 11,
+      "valid_post_error": 57,
+      "median_presented_fps": 23.87
+    },
+    "second": {
+      "rows": 119,
+      "valid_surface_fps": 2,
+      "stale": 105,
+      "first_render_error_sample": 16,
+      "valid_post_error": 0,
+      "pre_error_fps": [
+        120.77,
+        120.78
+      ]
+    },
+    "verdict": "NOT_COMPARABLE_inadequate_fresh_post_render_error_samples"
+  },
+  "limits": [
+    "SurfaceFlinger presentation not Unity fps",
+    "KGSL GPU utilization system-wide",
+    "not proof of freeze or thermal causation",
+    "second valid FPS samples before render failure; game's own Unity telemetry must be inspected separately",
+    "not a correction to game/runtime"
+  ],
+  "next_step": "Link source-pinned Unity persistent diagnostics separately by session/scene and sample_count/delta; do not treat loss of SurfaceFlinger timestamps as game frame absence."
+}
