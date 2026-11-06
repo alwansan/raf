@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1835Z-T3-chat-property-defaults-c42d",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-PARTICLE108-SAMEEXPORT-SHADER48-PROPERTY-DEFAULT-SEMANTICS-c42d",
+  "hypothesis": "Name/type-identical Shader48 authored source/export property declarations can conceal changed Color/Vector/Float/Range defaults or a Texture default fallback; reject before structural ShaderLab acceptance.",
+  "inputs": "Source-only synthetic ShaderLab text from private-free 13-property fixture and source-free W1/B02 exact same-instance synthetic traces. No original game bytecode, original Unity export or private AssetRipper payload accessed during this run.",
+  "source_private_fingerprint_reuse": "Existing run(original) still requires six SHA-verified scenes, four owner assets, unique Shader48 from 108 particle Renderer slots, 13 original properties including 2 textures; nothing private exported in this test.",
+  "source_only_workflow": ".github/workflows/raft-t3-shaderlab-property-parity-source-only.yml",
+  "integration_workflow": ".github/workflows/raft-t3-particle108-shaderlab-quality-source-only.yml",
+  "property_unit_run": "https://github.com/alwansan/raf/actions/runs/42272706523",
+  "property_unit_job": 128081101924,
+  "property_unit_tests": 19,
+  "integration_run": "https://github.com/alwansan/raf/actions/runs/42272760367",
+  "integration_run_job": 128081291316,
+  "integration_tests": 16,
+  "source_commits": [
+    "59b9e9f4c0e1c6f0cd68f7658612141dd63b6bf6",
+    "70b45cf448724c50a93f216bf421223abe758d6f"
+  ],
+  "test_commits": [
+    "2653e5f6c836ce13d1d3ed31a6c348ced506dfd2",
+    "9aeebcd42d427080257a348e38ab6d249692c743"
+  ],
+  "commands": [
+    "python3 -m py_compile scripts/t3_particle108_shaderlab_property_parity.py tests/test_t3_particle108_shaderlab_property_parity.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_property_parity.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_export_quality.py' -v"
+  ],
+  "negative_controls": [
+    "Changed source Color default (names/types unchanged) detected and blocked from structural-ready claim",
+    "Changed Range endpoint and scalar default each detected",
+    "Changed Texture fallback reported as count, without value leak",
+    "1/1.0/1e0 default numeric spellings accepted",
+    "Malformed vectors, NaN/Inf, unexpected texture block and garbage scalar rejected",
+    "Source-only complete CGPROGRAM with name/type match but Color drift is rejected with AUTHORED_PROPERTY_DEFAULT_MISMATCH"
+  ],
+  "observed_result": "CI 42272706523 completed success with 19 tests, CI 42272760367 completed success with 16 tests. Same-export shader-quality checker now refuses authored property default drift. Initial malformed source commit 207e1287 failed CI 42272416082 and was repaired in 59b9e9f4.",
+  "rejected_hypotheses": [
+    "Name/type match alone is sufficient to claim authored default fidelity (false; synthetic changed Color/Range/Texture fallbacks pass old name/type check)."
+  ],
+  "limitations": [
+    "No private original SHA-pinned same-export on this run",
+    "No non-dummy original Shader48 program recovered",
+    "No actual Unity shader compile, APK/OBB/XAPK or Adreno pixels",
+    "Material instance values, Resource binding, pixel outputs and authored descriptions/attributes not verified",
+    "Numerics decode as Python finite float; exact semantic numeric compare intentionally uses no tolerance"
+  ],
+  "integration_commit": "70b45cf448724c50a93f216bf421223abe758d6f",
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "next_step": "Combine authentic original-vs-SPIR-V provenance map from scheduled T3 DXBC/SPIR-V work with same GUID-verified non-dummy Shader48 AssetRipper export and real default/property gates. Only after original ShaderLab integration and Unity compile request device check.",
+  "updated_at": "2026-11-06T18:41:14Z"
+}
