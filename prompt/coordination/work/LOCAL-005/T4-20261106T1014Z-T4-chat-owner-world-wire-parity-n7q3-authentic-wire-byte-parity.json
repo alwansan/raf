@@ -1,0 +1,34 @@
+{
+  "session_id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "35c9e3191d52da100212930c1177745578a61d66",
+  "updated_at": "2026-11-06T10:14:00Z",
+  "resumed_from_sessions": [
+    "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+    "20261106T0943Z-T4-scheduled-q7n4",
+    "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8"
+  ],
+  "taken_over_from": [
+    "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+    "https://github.com/alwansan/raf/actions/runs/42153533612"
+  ],
+  "experiment_key": "T4-local005-CL520c-owner7-original-Save-Load-wire-exact-byte-equality-original-zip2-15964ea8-source-guard-v1",
+  "resource_key": "T4-LOCAL005-ephemeral-CLR-original-owner7-small-CPU-not-Unity",
+  "hypothesis": "The actual original compiled SaveAndLoad.Save might preserve exact BinaryFormatter wire bytes of a genuine owner world, beyond the previously proven type-only original LoadT result. Compare authenticated input/output privately; equality is stronger than type matching, inequality alone is not data loss.",
+  "intended_files": [
+    "android-port/Experiments/T4/OwnerWorldRgdRoundtrip/Program.cs",
+    "scripts/t4_validate_owner_world_roundtrip.py",
+    "tests/test_t4_owner_world_roundtrip.py",
+    ".github/workflows/raft-t4-owner-world-save-roundtrip.yml",
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3-authentic-wire-byte-parity.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.md",
+    "prompt/coordination/experiments/T4/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.json",
+    "prompt/coordination/discussions/LOCAL-005/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3-to-T5.md"
+  ],
+  "nonoverlap": "No AndroidPhysicalMouseCapture or scheduled T4 release-target files, no T1/T2/T3, no T5 packaging, no native Unity job, no game assets or original RGD edits.",
+  "safety": "Exact original Git blobs and compiled DLL must be verified before any historical unsafe BinaryFormatter. Byte comparison private on runner with <=1 MiB bound; publish only safe count/boolean, no file bytes, hashes, paths or exceptions.",
+  "next_step": "Patch original private CLR probe + strict safe report schema + negative synthetic tests; allow inequality as an observation; run isolated existing T4 source workflow on exact commit; publish result and limitations."
+}
