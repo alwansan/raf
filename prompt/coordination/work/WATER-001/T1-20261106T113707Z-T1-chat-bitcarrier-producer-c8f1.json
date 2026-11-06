@@ -7,9 +7,9 @@
   "issue_id": "WATER-001",
   "track": "FFT site1 Y vector component writer bitcarrier provenance",
   "approach": "Classify original SPIR-V may-reaching scalar OpBitcast writer's numeric input/output type and distinguish exact bit reinterpretation from conversion/constant without exposing source constants or requiring source mutation. Use original fixed source pin, branch-aware writer set, 10+ synthetic controls, existing isolated Vulkan workflow.",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "2d69ccfcc0b36e7cf6490848899f00955d61bffa",
-  "updated_at": "2026-11-06T11:41:26.951Z",
+  "updated_at": "2026-11-06T11:43:20.909Z",
   "intended_files": [
     "scripts/t1_fft_spirv_scalar_writer_carrier.py",
     "tests/test_t1_fft_spirv_scalar_writer_carrier.py",
@@ -33,6 +33,6 @@
     "https://github.com/alwansan/raf/actions/runs/42211872487",
     "https://github.com/alwansan/raf/actions/runs/42212055131"
   ],
-  "result": "First source-only synthetic test stage failed 3/13 due duplicate synthetic SPIR-V result ID %b in new tests, before original recovery. Replaced 3 synthetic IDs only (08483339) and reran via distinct workflow SHA a9fe62d. Second CI step 3 synthetic tests completed success; original private stage pending.",
-  "next_step": "Read 42212055131 exact original marker RAFT_T1_FFT_SCALAR_WRITER_CARRIERS only after status completed; if successful record actual Bitcast source type and numeric/device limitations."
+  "result": "Original-source signed bitcarrier type hypothesis verified on private slot0 SPIR-V: butterfly site1 coordinate Y has two may-reaching writers (sint32_bits_to_float32 OpBitcast and float32 constant); site2 Y has one float32 constant. First synthetic CI failed due 3 fixture duplicate IDs, corrected test only; final source-authentic CI SUCCESS 13/13. No executed branch/numerical parity/Android water proof; WATER-001 stays OPEN.",
+  "next_step": "New independent scoped source-private control-flow predicate tracing for site1 Y two may-reaching writer paths, followed by controlled paired original Vulkan/Unity address/value comparison before any shader rewrite. No active T1 GPU/Unity resources reserved."
 }
