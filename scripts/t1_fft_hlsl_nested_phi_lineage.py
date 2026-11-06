@@ -41,6 +41,23 @@ def _type(value, values, types):
     return kind, width
 
 
+def _cfg_can_reach(fun, first, target):
+    """Structural CFG reachability only; branch truth remains unproven."""
+    pending = [first]
+    visited = set()
+    while pending:
+        block = pending.pop()
+        if block == target:
+            return True
+        if block in visited:
+            continue
+        visited.add(block)
+        if len(visited) > 512:
+            raise ValueError("CFG reachability node budget exceeded")
+        pending.extend(fun["edges"].get(block, ()))
+    return False
+
+
 def analyze(text, *, original_layout=False):
     types, values, decorations, _, fetches = read_module(text)
     funs = parse_functions(text)
@@ -62,7 +79,7 @@ def analyze(text, *, original_layout=False):
                         raise ValueError("Phi has multiple CFG definitions")
                     owner_by_result[rid] = (fun, block)
 
-    budget = {"states": 0, "phis": 0, "cycles": 0}
+    budget = {"states": 0, "phis": 0, "cycles": 0, "cfg_backedges": 0}
     def visit(value, index, path, depth):
         budget["states"] += 1
         if depth > MAX_DEPTH or budget["states"] > MAX_EXPANSIONS:
@@ -90,8 +107,14 @@ def analyze(text, *, original_layout=False):
                 if _type(operand, values, types) != (kind, width):
                     raise ValueError("Phi incoming vector shape mismatch")
                 pred = _pred_descriptor(fun, predecessor, phi_block, values)
+                # The predecessor edge returns to the Phi from a block
+                # structurally reachable after the Phi: a real CFG cycle,
+                # independent of any runtime predicate truth.
+                is_backedge = _cfg_can_reach(fun, phi_block, predecessor)
+                budget["cfg_backedges"] += int(is_backedge)
                 incoming.append({
                     "predecessor": pred,
+                    "predecessor_in_structural_cfg_cycle": is_backedge,
                     "source": visit(operand, index, path | {(value, index)}, depth+1)
                 })
             return {"status": "phi_merge",
@@ -122,6 +145,7 @@ def analyze(text, *, original_layout=False):
         "top_phi_kind": kind + ("_scalar" if width == 1 else "_vector"),
         "top_selected_component": _component_name(lane),
         "phi_expansions": budget["phis"], "cycle_boundaries": budget["cycles"],
+        "structural_phi_backedges": budget["cfg_backedges"],
         "chain": result, "private_values_exported": False,
         "selected_runtime_predecessor_proven": False,
         "actual_original_vs_unity_numeric_parity_proven": False,
