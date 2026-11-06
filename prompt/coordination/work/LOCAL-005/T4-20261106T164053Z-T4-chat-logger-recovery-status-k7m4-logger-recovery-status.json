@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T164053Z-T4-chat-logger-recovery-status-k7m4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "persistent_world_diagnostics",
+  "status": "active",
+  "base_sha": "484856828c2b0dfd9ac4bb3a6ebc293b562be942",
+  "approach": "Bounded diagnostic truthfulness repair: after a verified transient synthetic storage failure, Flush/worker must clear stale LastError only after successful drain+flush. Preserve queued first event, overflow count, and failure reporting. Red/green in existing source-only .NET8 diagnostics workflow.",
+  "intended_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs"
+  ],
+  "experiment_key": "T4-LOCAL005-PersistentDiagnosticLog-LastError-stale-after-durable-IO-recovery-source-net8-queue1-285checks-v1",
+  "resource_key": null,
+  "hypothesis": "PersistentDiagnosticLog.LastError is only assigned on catch and never cleared after successful I/O, so AndroidRuntimeLog.Status reports a stale storage failure indefinitely even after logs recover.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1553Z-T4-chat-diagnostic-queue-c4r7-critical-logger-queue-fault.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1553Z-T4-chat-diagnostic-queue-c4r7.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1637Z-T4-scheduled-v8m2.md"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261106T164053Z-T4-chat-logger-recovery-status-k7m4.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add failing synthetic recovered-state assertion; run existing diagnostics workflow to see red; repair only true successful Flush and Run state, then green and handoff.",
+  "updated_at": "2026-11-06T16:40:53Z"
+}
