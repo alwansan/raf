@@ -244,11 +244,19 @@ class Program
             AndroidRuntimeLog.Initialize();
             Require(AndroidRuntimeLog.StorageError != null);
             Require(AndroidRuntimeLog.Status == AndroidRuntimeLog.StorageError);
+            // The log callback must still permit the HUD to show an early
+            // original error, but never consume dedup state without a sink.
+            string initialError = "synthetic first exception\nSyntheticStackTrace_T4";
+            Require(AndroidRuntimeLog.UnityMessage("Error", initialError, true));
             File.Delete(blockedAppRoot);
             Directory.CreateDirectory(blockedAppRoot);
             AndroidRuntimeLog.Initialize();
             Require(AndroidRuntimeLog.StorageError == null);
             Require(AndroidRuntimeLog.Status == "ready");
+            // Same actual error after storage recovery is the FIRST durable
+            // occurrence and must include its full original stack.
+            Require(AndroidRuntimeLog.UnityMessage("Error", initialError, true));
+            Require(!AndroidRuntimeLog.UnityMessage("Error", initialError, true));
             // A third Initialize must leave the same working sink in place.
             AndroidRuntimeLog.Initialize();
             AndroidRuntimeLog.Flush();
@@ -256,6 +264,7 @@ class Program
             string recoveredLogs = Path.Combine(blockedAppRoot, "raft-logs");
             Require(Directory.GetFiles(recoveredLogs, "raft-*.jsonl").Length == 1);
             Require(Lines(recoveredLogs).Any(l => l.Contains("\"operation\":\"logger.ready\"")));
+            Require(Lines(recoveredLogs).Count(l => l.Contains("SyntheticStackTrace_T4")) == 1);
             foreach (string line in Lines(recoveredLogs))
                 using (JsonDocument.Parse(line)) { }
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
