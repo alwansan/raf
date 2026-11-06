@@ -1,0 +1,100 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+  "issue_id": "WATER-001",
+  "origin": "chat",
+  "hypothesis": "The authentic original FFT slot0 butterfly site1 coordinate Y has a may-reaching bitcast scalar source with original signed-integer bit carrier, distinct from its alternative float constant writer. Prove only typed producer categories, not executed branch or numeric identity.",
+  "source_commit": "a9fe62d73adbb90555599dd50120dc6cc3dd1fd8",
+  "input_hashes": [
+    "ZIP2 immutable source pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385; original FFT bytecode kept private"
+  ],
+  "tool_versions": {
+    "GitHub runner": "ubuntu-24.04",
+    "spirv-dis": "spirv-tools installed on isolated runner"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_spirv_scalar_writer_carrier.py -v",
+    "python3 -m scripts.t1_fft_spirv_scalar_writer_carrier \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "Signed versus unsigned int bitcasts to float distinguished",
+    "Numeric int-to-float conversion not mistaken for bit reinterpretation",
+    "Constant and bitcast writers remain separate at branch merge",
+    "Unrelated physical vector lane excluded",
+    "Unknown dynamic indexed write preserves uncertainty",
+    "Loop backedge, write-after-read and kill semantics guarded",
+    "Duplicate SPIR-V result IDs rejected before original; fixture corrected without altering provenance code",
+    "No original IDs, literal constants, shader bytes, traces, or pixels output"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42212055131",
+  "artifact_urls": [],
+  "budget": "existing 20-minute ubuntu-24.04 source-authentic private-data workflow, no Unity or APK job",
+  "status": "completed_scoped_original_bitcarrier_diagnostic",
+  "observed_result": {
+    "initial_fail": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42211872487",
+      "conclusion": "failure before source acquisition",
+      "cause": "3 synthetic duplicate SPIR-V result IDs; corrected test fixture 08483339"
+    },
+    "final_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42212055131",
+      "job_id": 127872831426,
+      "conclusion": "success",
+      "synthetic_tests": "13/13 PASS",
+      "original_recovery": "pass",
+      "original_private_vulkan": "pass",
+      "private_cleanup": "pass"
+    },
+    "sites": [
+      {
+        "site": 0,
+        "role": "source",
+        "x": "whole_vector_writer_candidate",
+        "y": "whole_vector_writer_candidate"
+      },
+      {
+        "site": 1,
+        "role": "butterfly",
+        "x": "whole_vector_writer_candidate",
+        "y": {
+          "physical_lane": "other",
+          "candidate_count": 2,
+          "typed_candidates": {
+            "float32_constant": 1,
+            "sint32_bits_to_float32": 1
+          }
+        }
+      },
+      {
+        "site": 2,
+        "role": "butterfly",
+        "x": "whole_vector_writer_candidate",
+        "y": {
+          "physical_lane": "y",
+          "candidate_count": 1,
+          "typed_candidates": {
+            "float32_constant": 1
+          }
+        }
+      }
+    ],
+    "full_executed_branch_proven": false,
+    "numeric_origin_proven": false,
+    "original_integer_coordinate_semantics_proven": false,
+    "unity_numeric_parity_proven": false,
+    "authored_kernel_identity_proven": false,
+    "android_adreno_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "The original site1 Y OpBitcast writer is necessarily a numeric int-to-float conversion: original private SPIR-V shows sint32 bit pattern reinterpreted into float32.",
+    "The site1 Y component has a single may-reaching value: original private CFG shows one signed-bitcarrier candidate plus one float constant candidate."
+  ],
+  "limitations": [
+    "Static may-reaching producer categories do not determine which branch or loop iteration actually executes",
+    "Bitcast preservation does not prove original integer semantics survive SPIRV-Cross/HLSL/recompile or original Unity runtime binding",
+    "No original game authored .compute, Vulkan↔Unity pixel parity, or Adreno phone water acceptance"
+  ],
+  "integration_commit": "a9fe62d73adbb90555599dd50120dc6cc3dd1fd8",
+  "next_step": "Original-private branch-sensitive disambiguation of butterfly site1 Y bitcarrier vs constant path; compare numeric value at same invocation/keyed coordinate in original Vulkan and Unity candidate without exposing raw values, then fix lowering only if replay proves it."
+}
