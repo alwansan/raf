@@ -239,6 +239,56 @@ class SavePathTests(unittest.TestCase):
             self.assertEqual(foreign.read_bytes(), b'FOREIGN OWNER')
             self.assertEqual((moved / source.name).read_bytes(), before)
 
+    def test_postinstall_external_source_or_meta_change_is_never_rolled_back(self):
+        # The adapter successfully wrote its source; before its postwrite
+        # verification a separate writer changes that source OR GUID meta.
+        # In either case the old snapshot is no longer ours to restore.
+        for target_name in ("SaveAndLoad.cs", "SaveAndLoad.cs.meta"):
+            with self.subTest(target_name=target_name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+                source.parent.mkdir(parents=True)
+                original = b'class SaveAndLoad {}\\n'
+                source.write_bytes(original)
+                meta = source.with_suffix('.cs.meta')
+                original_meta = b'guid: original-guid\\n'
+                meta.write_bytes(original_meta)
+                backup = root / 'complete-backup'
+                expected_adapted = original + b'\\n// adapted'
+                foreign_source = b'// another writer owns the new source epoch\\n'
+                foreign_meta = b'guid: another-writer-updated-meta\\n'
+                real_write = Path.write_bytes
+                independent_edit = False
+
+                def edit_after_adapter_write(path, data):
+                    nonlocal independent_edit
+                    count = real_write(path, data)
+                    if path == source and b'// adapted' in data and not independent_edit:
+                        independent_edit = True
+                        if target_name == source.name:
+                            real_write(source, foreign_source)
+                        else:
+                            real_write(meta, foreign_meta)
+                    return count
+
+                with patch('scripts.adapt_original_save_paths.adapt',
+                           side_effect=lambda value: value + '\\n// adapted'):
+                    with patch.object(Path, 'write_bytes', edit_after_adapter_write):
+                        with self.assertRaisesRegex(ValueError, 'changed'):
+                            apply(root / 'project', backup, write=True)
+
+                self.assertTrue(independent_edit)
+                self.assertEqual(
+                    source.read_bytes(),
+                    foreign_source if target_name == source.name else expected_adapted,
+                    'post-success source rollback may not overwrite external source')
+                self.assertEqual(
+                    meta.read_bytes(),
+                    foreign_meta if target_name == meta.name else original_meta,
+                    'external GUID sidecar must never be rolled back')
+                self.assertEqual((backup / source.name).read_bytes(), original)
+                self.assertEqual((backup / meta.name).read_bytes(), original_meta)
+
     def test_interrupted_metadata_backup_has_no_partial_backup_and_can_retry(self):
         import shutil
         with tempfile.TemporaryDirectory() as tmp:
