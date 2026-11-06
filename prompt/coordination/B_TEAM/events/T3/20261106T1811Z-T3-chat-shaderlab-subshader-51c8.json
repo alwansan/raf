@@ -1,0 +1,15 @@
+{
+  "event_id": "20261106T1811Z-T3-chat-shaderlab-subshader-51c8",
+  "session_id": "20261106T1811Z-T3-chat-shaderlab-subshader-51c8",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Fixed T3 original Particle108 same-AssetRipper export ShaderLab quality gate to classify 1 authored Pass PER alternative SubShader, not aggregate across mutually-exclusive alternatives. 3 new positive/negative fixtures, total 12 tests. First CI42267810469 revealed inherited mismatch-vs-unprogrammed precedence regression; corrected commit b18bbd7f and final CI42267917949 SUCCESS 12/12. No original shaders/game assets or Android package changed; scheduled T3 DXBC-SPIRV semantic join untouched. Trial round trial-20261106-r1 T3=لا يحتاج unchanged; RENDER-002 OPEN/NOT_READY.",
+  "links": [
+    "https://github.com/alwansan/raf/actions/runs/42267917949",
+    "https://github.com/alwansan/raf/commit/b18bbd7f20704cc65a56d1eafa184b6ce45a7621",
+    "prompt/coordination/clients/T3/sessions/20261106T1811Z-T3-chat-shaderlab-subshader-51c8.md"
+  ],
+  "updated_at": "2026-11-06T18:09:41.681Z"
+}
