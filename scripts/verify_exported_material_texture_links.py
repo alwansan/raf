@@ -11,7 +11,7 @@ HEADER=re.compile(r"(?m)^---[ \t]+!u!(\d+)[ \t]+&(-?\d+)(?:[ \t]+stripped)?[ \t]
 GUID=re.compile(r"(?m)^guid:[ \t]*([a-fA-F0-9]{32})[ \t]*$")
 TEXENV=re.compile(r"(?m)^    m_TexEnvs:[ \t]*(\[\])?[ \t]*$")
 SLOT=re.compile(r"(?m)^    - [^:\r\n]+:[ \t]*$")
-TEX=re.compile(r"(?m)^[ \t]+m_Texture:[ \t]*(\{[^\r\n{}]*\})[ \t]*$")
+TEX=re.compile(r"(?m)^        m_Texture:[ \t]*(\{[^\r\n{}]*\})[ \t]*$")
 NEXT=re.compile(r"(?m)^    m_[A-Za-z][A-Za-z0-9_]*:")
 IMAGES={".png",".jpg",".jpeg",".tga",".psd",".tif",".tiff",".bmp",".exr",".hdr",".dds",".ktx",".pvr",".webp"}
 CLASSES={28,84,86,89,117,187,188,205}
@@ -65,11 +65,16 @@ def texenv(doc):
     matches=list(TEXENV.finditer(doc))
     if len(matches)!=1: fail("missing_or_duplicate_texenv")
     m=matches[0]
-    if m[1]=="[]": return []
     next_field=NEXT.search(doc,m.end())
     region=doc[m.end():next_field.start() if next_field else len(doc)]
+    # An explicit empty array cannot have nested slot data; accepting such
+    # malformed YAML silently hides broken material-to-texture references.
+    if m[1]=="[]":
+        if region.strip(): fail("unexpected_texenv_content")
+        return []
     slots=list(SLOT.finditer(region))
     if not slots: fail("empty_or_unrecognized_texenv")
+    if region[:slots[0].start()].strip(): fail("unrecognized_texenv_prefix")
     result=[]
     for i,slot in enumerate(slots):
         end=slots[i+1].start() if i+1<len(slots) else len(region)

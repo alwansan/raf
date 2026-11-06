@@ -90,6 +90,23 @@ class ExportedTextureLinks(unittest.TestCase):
         p=self.assets/"m.mat"; s=p.read_text()
         p.write_text(s[:s.index("    m_TexEnvs:")]+"    m_TexEnvs: []\n"+s[s.index("    m_Ints: []"):])
         self.assertEqual(mod.audit(self.root)["texture_slots"],0)
+    def test_explicit_empty_array_with_child_slot_is_rejected(self):
+        # A textual [] must not silently hide a nested - _MainTex entry.
+        p=self.assets/"m.mat"; s=p.read_text()
+        p.write_text(s.replace("    m_TexEnvs:\n", "    m_TexEnvs: []\n", 1))
+        self.reject("unexpected_texenv_content")
+    def test_nonempty_array_with_unrecognized_prefix_is_rejected(self):
+        # A stray YAML key before the first texture slot cannot be ignored.
+        p=self.assets/"m.mat"; s=p.read_text()
+        p.write_text(s.replace("    m_TexEnvs:\n", "    m_TexEnvs:\n    bogus_member: invalid\n", 1))
+        self.reject("unrecognized_texenv_prefix")
+    def test_texture_field_at_wrong_indentation_is_rejected(self):
+        # Previously a field outside the exact 8-space slot scope could
+        # be mistaken for the actual Unity Material texture pointer.
+        p=self.assets/"m.mat"; s=p.read_text()
+        p.write_text(s.replace("        m_Texture: ", "      m_Texture: ", 1))
+        self.reject("missing_or_duplicate_texture_pointer")
+
     def test_implicit_empty_rejected(self):
         p=self.assets/"m.mat"; s=p.read_text()
         p.write_text(s[:s.index("    m_TexEnvs:")]+"    m_TexEnvs:\n"+s[s.index("    m_Ints: []"):])
