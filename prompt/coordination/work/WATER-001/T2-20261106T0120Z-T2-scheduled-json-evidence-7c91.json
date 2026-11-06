@@ -1,0 +1,21 @@
+{
+  "session_id": "20261106T0120Z-T2-scheduled-json-evidence-7c91",
+  "origin": "scheduled",
+  "agent": "T2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "e3b9f5223fcf2e874d8c43e2fba9a1cfd615fc38",
+  "hypothesis": "Fixture nests final_error_category_breakdown under stop_time while production checker requires top-level; additionally duplicate JSON keys silently override source evidence.",
+  "intended_files": [
+    "scripts/t2_device_water_summary.py",
+    "tests/test_t2_device_water_summary.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0120Z-T2-scheduled-json-evidence-7c91.md"
+  ],
+  "experiment_key": "t2-pinned-CL-summary-schema-fixture-and-duplicate-keys-20261106",
+  "resource_key": null,
+  "taken_over_from": [
+    "20261106T0024Z-T2-scheduled-water-summary-rootguard-c8e1"
+  ],
+  "shared_resource": "none; source-only",
+  "updated_at": "2026-11-06T01:20:00Z"
+}
