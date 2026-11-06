@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "track": "authenticated-original-mouse-adapter-transactional-staging",
-  "status": "active",
+  "status": "completed",
   "base_sha": "225e131dd039e24e1d74caa4b1d975391506bd4b",
   "approach": "Fix physical mouse adapted-original source partial mutations and unverified backups: source-only synthetic fault injections for interrupted backup, successful-but-corrupt backups, mid-source install torn writes and hardlinked original; fail closed, restore all originals and clean new backups only on proven rollback, safe retry. Preserve original runtime mouse, GUIDs, game assets and native workflow; no full Unity build.",
   "intended_files": [
@@ -20,7 +20,14 @@
     "20261106T1943Z-T4-scheduled-r6k2"
   ],
   "concurrent_work": "No newer T4 sessions than prior completed 2014Z; T1/T2/T3 rendering and T5 source integration actions separate. Owner native42281310905 failed, no new native request.",
-  "run_urls": [],
-  "updated_at": "2026-11-06T20:31:00Z",
-  "next_step": "First synthetic negative tests and expected RED source-only T4 bridge CI; fix minimal backup copy byte equivalence and transaction rollback; verify GREEN with authentic original ABI flow."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42289258833",
+    "https://github.com/alwansan/raf/actions/runs/42289512790",
+    "https://github.com/alwansan/raf/actions/runs/42289624213",
+    "https://github.com/alwansan/raf/actions/runs/42289712049"
+  ],
+  "updated_at": "2026-11-06T20:38:00Z",
+  "next_step": "Source scope released. No duplicate immutable run. T5 may use when owner permits next full native SHA candidate. T4 can focus independent original offline world/save or future signed owner phone evidence. LOCAL-005 INPUT-005 still OPEN and overall NOT_READY0/3.",
+  "integration_commit": "cb379e286adf22170eddb8a24955ad7cee5f1a49",
+  "result": "Four initial and six extended synthetic RED failure cases proved backup interruption, corruption, partial source write, BOM loss and unsafe external hardlinked source. Hardened transactional backup originals byte-for-byte, installed-source write checks and verified rollback. First patched version still failed BOM literal (fixed). Final exact SHA cb379e28 CI42289712049 green all 14 mouse adapter, 7 route, 21 pointer, 5 presence, 8 view and 48 CSharp delta tests plus original Unity2021 Editor/Android managed ABI and exact authenticated original decompiled 4+4+2 site adaptation. No Unity player/native XAPK/device proof."
 }
