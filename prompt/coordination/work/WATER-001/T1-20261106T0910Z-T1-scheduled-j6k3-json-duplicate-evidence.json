@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "WATER-001",
   "baseline_sha": "c16e7ac515b342f064f1e398043be98c112df36c",
-  "status": "active",
+  "status": "completed_source_unverified",
   "intended_files": [
     "scripts/t1_fft_unity_evidence_gate.py",
     "tests/test_t1_fft_unity_evidence_gate.py",
@@ -15,5 +15,10 @@
   "taken_over_from": [
     "prompt/coordination/clients/T1/sessions/20261106T0813Z-T1-scheduled-q4n8.md"
   ],
-  "updated_at": "2026-11-06T09:10:35Z"
+  "updated_at": "2026-11-06T09:10:35Z",
+  "code_commit": "fe282e70211418f5746f33a5d731bf87b31f3239",
+  "test_commit": "2c8db83a023b032509efb61f37bc631fa21d0fbf",
+  "session_commit": "2e472e13f6932e863f7d461b3538075fcd547cf1",
+  "verification": "not_run",
+  "next_step": "run python -m unittest tests.test_t1_fft_unity_evidence_gate"
 }
