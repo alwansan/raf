@@ -1,0 +1,20 @@
+{
+  "id": "20261106T2035Z-T3-scheduled-local-contract-test-f4b2",
+  "owner": "T3",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "status": "completed_local_replay",
+  "scope": [
+    "scripts/t3_dxbc_spirv_contract_join.py (read only)",
+    "tests/test_t3_dxbc_spirv_contract_join.py (read only)",
+    "prompt/coordination/clients/T3/sessions/20261106T2035Z-T3-scheduled-local-contract-test-f4b2.md",
+    "prompt/coordination/work/RENDER-002/20261106T2035Z-T3-scheduled-local-contract-test-f4b2.json"
+  ],
+  "hypothesis": "Existing twelve regression fixtures should pass under CPython without original game data.",
+  "experiment_key": "T3-DXBC-SPV-CONTRACT-LOCAL-12-20261106",
+  "shared_resource": "none; local isolated Python",
+  "results": "12/12 PASS on locally transcribed repository source and tests, Python 3; not CI nor original Shader48",
+  "taken_over_from": "T3 scheduled 20261106T1934Z-T3-scheduled-contract-validation-8c4e",
+  "owner_trial_vote": "لا يحتاج",
+  "limitations": "local reproduction was manually transcribed from GitHub fetch; cannot prove CI environment or original shader fidelity"
+}
