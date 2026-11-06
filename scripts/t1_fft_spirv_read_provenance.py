@@ -80,6 +80,60 @@ def coordinate_profile(root, values, types, max_depth):
     return counts, bitcasts
 
 
+def lane_count(value, values, types):
+    _, type_id, _ = values.get(value, ("", None, ()))
+    op, args = types.get(type_id, ("", ()))
+    if op == "OpTypeVector":
+        return int(args[1])
+    return int(numeric_kind(type_id, types) != "unresolved")
+
+
+def lane_input(op, args, lane, width, values, types):
+    if op == "OpVectorShuffle":
+        index = int(args[2 + lane])
+        first_width = lane_count(args[0], values, types)
+        second_width = lane_count(args[1], values, types)
+        if first_width and second_width and 0 <= index < first_width + second_width:
+            return (args[0], index) if index < first_width else (args[1], index - first_width)
+    elif op == "OpCompositeInsert" and len(args) == 3:
+        return (args[0], 0) if lane == int(args[2]) else (args[1], lane)
+    elif op == "OpCompositeExtract" and len(args) == 2 and width == 1:
+        return args[0], int(args[1])
+    elif op == "OpCompositeConstruct":
+        for operand in args:
+            operand_width = lane_count(operand, values, types)
+            if not operand_width:
+                return None
+            if lane < operand_width:
+                return operand, lane
+            lane -= operand_width
+    elif op in ("OpBitcast", "OpCopyObject") and len(args) == 1:
+        if lane_count(args[0], values, types) == width:
+            return args[0], lane
+    return None
+
+
+def coordinate_lane(root, lane, values, types, max_depth):
+    bitcasts = []
+    boundary = "depth_limit"
+    value = root
+    for _ in range(max_depth + 1):
+        width = lane_count(value, values, types)
+        if not 0 <= lane < width:
+            boundary = "unresolved"
+            break
+        op, _, args = values[value]
+        if op == "OpBitcast":
+            bitcasts.append(bitcast_kind(value, values, types))
+        following = lane_input(op, args, lane, width, values, types)
+        if following is None:
+            boundary = {"OpLoad": "load", "OpConstant": "constant",
+                        "OpConstantNull": "constant", "OpUndef": "undefined"}.get(op, "unresolved")
+            break
+        value, lane = following
+    return {"typed_bitcasts": bitcasts, "boundary": boundary}
+
+
 def analyze(disassembly, *, coordinates=False, coordinate_depth=4):
     if not 1 <= coordinate_depth <= 12:
         raise ValueError("Private coordinate slice depth outside bounds")
@@ -124,6 +178,11 @@ def analyze(disassembly, *, coordinates=False, coordinate_depth=4):
             site = {"role": role, "producer_opcodes": counts}
             if bitcasts:
                 site["typed_coordinate_bitcasts"] = bitcasts
+            if lane_count(coordinate, values, types) >= 2:
+                site["coordinate_lanes"] = {
+                    axis: coordinate_lane(coordinate, lane, values, types, coordinate_depth)
+                    for lane, axis in enumerate(("x", "y"))
+                }
             coordinate_sites.append(site)
     if coordinates:
         report["coordinate_sites"] = coordinate_sites
