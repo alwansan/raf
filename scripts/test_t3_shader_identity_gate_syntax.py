@@ -60,20 +60,20 @@ class IdentityGateTests(unittest.TestCase):
 
 
     def test_block_comment_shader_declaration_rejected(self):
-        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\\n")
-        (self.root / "particle.shader").write_text('/*\\nShader "Fake" {}\\n*/')
+        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n")
+        (self.root / "particle.shader").write_text('/*\nShader "Fake" {}\n*/')
         with self.assertRaisesRegex(ValueError, "missing_shader_declaration"):
             check(self.root, self.manifest)
 
     def test_unterminated_block_comment_declaration_rejected(self):
-        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\\n")
-        (self.root / "particle.shader").write_text('/* unclosed\\nShader "Fake" {}')
+        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n")
+        (self.root / "particle.shader").write_text('/* unclosed\nShader "Fake" {}')
         with self.assertRaisesRegex(ValueError, "missing_shader_declaration"):
             check(self.root, self.manifest)
 
     def test_valid_declaration_after_block_comment(self):
-        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\\n")
-        (self.root / "particle.shader").write_text('/* Shader "Fake" {} */\\nShader "Real" {}')
+        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n")
+        (self.root / "particle.shader").write_text('/* Shader "Fake" {} */\nShader "Real" {}')
         self.assertEqual(check(self.root, self.manifest)["status"], "STRUCTURAL_LINK_ONLY")
 
 if __name__ == "__main__":
