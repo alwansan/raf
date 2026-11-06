@@ -1,0 +1,15 @@
+{
+  "id": "20261106T1837Z-T4-offline-backup-byte-verify-z7n4",
+  "owner": "T4",
+  "session_id": "20261106T1835Z-T4-chat-backup-byte-verify-z7n4",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Original offline adapter now confirms source C# and GUID meta backup byte-for-byte before modifying staged original; synthetic red 2 subcases before fix, 22/22 green source-only after fix; B13 aggregate still fails on unrelated T3 record schema.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/493c4e35aaab4e6e4e3f1aea36da7e1d7ff4a779",
+    "https://github.com/alwansan/raf/commit/2ca4541c4b5ed5c9b81e737ae021080f05fe04d4",
+    "https://github.com/alwansan/raf/actions/runs/42272204049",
+    "https://github.com/alwansan/raf/actions/runs/42272236452"
+  ],
+  "at": "2026-11-06T18:37:00Z"
+}
