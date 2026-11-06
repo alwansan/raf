@@ -67,6 +67,9 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_resource_bridge.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_result_gate.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_private_unity_paired_capture.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_private_unity_input_join.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_original_direct_keyed_recorder.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_trace_variant.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
           PYTHONPATH=scripts python3 -m unittest discover -s tests -p test_t1_fft_rgba_error_signature.py -v
@@ -201,8 +204,14 @@ jobs:
           export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
           test -f "$VK_DRIVER_FILES"
           python3 -m scripts.t1_fft_vulkan_parity_capture --project t1-original-derived-unity
-          python3 -m scripts.t1_fft_pass0_vulkan_trace --project t1-original-derived-unity \
-            --invocation-keys --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin
+          # Reference MUST originate from directly instrumented original
+          # SPIR-V, not a translated-HLSL-to-Vulkan surrogate. Keep the
+          # original recorder's private signed-by-bytes sidecar in scratch.
+          python3 -m scripts.t1_fft_original_trace_vulkan --project t1-original-derived-unity \
+            --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin \
+            --export-private-evidence t1-original-derived-unity/T1VulkanCapture/original_trace_evidence.json
+          python3 -m scripts.t1_fft_candidate_keyed_trace_audit \
+            t1-original-derived-unity/T1VulkanCapture/trace.bin
           if [[ "$T1_PROMOTED_ONLY" == true && "$T1_INTEGER_SOURCE" == true ]]; then
             echo 'Conflicting T1 slot-zero control modes'
             exit 1
@@ -320,6 +329,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Fail closed before numeric comparison: independently verify the
+          # original directly-instrumented SPIR-V producer sidecar, actual
+          # source/butterfly images on BOTH backends, Unity GPU CopyInput
+          # zero-mismatch report and exact invocation-keyed trace site counts.
+          # The manifest remains private and cannot prove authored runtime
+          # kernel identity or independently attest the Unity compiler binary.
+          python3 -m scripts.t1_fft_private_unity_paired_capture \
+            --original-evidence t1-original-derived-unity/T1VulkanCapture/original_trace_evidence.json \
+            --original t1-original-derived-unity/T1VulkanCapture/trace.bin \
+            --unity t1-original-derived-unity/T1UnityCapture/trace.bin \
+            --vulkan-input-dir t1-original-derived-unity/T1VulkanCapture \
+            --unity-input-dir t1-original-derived-unity/T1UnityCapture \
+            --unity-shader t1-original-derived-unity/Assets/T1TracePass0.compute \
+            --manifest t1-original-derived-unity/T1PrivateActualPair.json
           python3 - <<'PY'
           import json
           from pathlib import Path
