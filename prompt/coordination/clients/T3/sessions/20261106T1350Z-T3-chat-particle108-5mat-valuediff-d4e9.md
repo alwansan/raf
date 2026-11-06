@@ -1,0 +1,22 @@
+# T3 chat — exact five original Particle108 Materials RGBA and float32/int32 same-export parity
+
+- session_id: `20261106T1350Z-T3-chat-particle108-5mat-valuediff-d4e9`; origin: `chat`; issue_id: `RENDER-002` (OPEN / NOT_READY).
+- base_sha: `f7ec2ade078eb25513af10db780fd75efd08d768`; prior code/source sessions: `20261106T1337Z-T3-chat-particle108-propstate-62fb` (13 authentic Shader48 properties/one Pass), `20261106T1308Z-T3-chat-particle108-postvendor-f8c1` (source 108-slot shader remains marked Dummy after vendor restore).
+- Registered independent work BEFORE changes: `prompt/coordination/work/RENDER-002/20261106T1350Z-T3-chat-particle108-5mat-valuediff-d4e9.json`, commit `c67089266130304e56c08a3a681669d93f26cf5f`. Distinct from T3's `20261106T1223Z-T3-chat-paired-glslang-a74c` (paired stage variants) and T1 FFT/T2 Foam/T4 world/T5 packaging. No shared game/Unity resources modified or running jobs cancelled.
+
+## Hypothesis and implementation
+
+Original source 5 Material21 objects are linked to the unique SHA-authentic Particle108 Shader48 from six source scenes. Prior real source→same W1/B02 export tested 10 TexEnv PPtrs and 10 UV transformations; it did not independently test these **five** source Material21 Color RGBA and float32/int32 scalar stored values, which could affect missing colors/alpha.
+
+- New `scripts/t3_particle108_sameexport_values.py`, commit `5fbee4cecf20e6b09ec84fb4759d9b0f477d63f6`: private five-Material source ID selection via `t3_original_particle_material_texenv.run`, genuine source original Material `m_SavedProperties` RGBA and numeric normalization with **inherited B44 and B22 helpers**, W1/B02 same-instance lineage verification, exact exported Unity Material YAML pointer mapping and compare; safe count-only result. Missing/extra source/export docs or duplicate/colliding pointers fail closed; no material names, source/private values, GUIDs or original assets published.
+- New `tests/test_t3_particle108_sameexport_values.py`, commit `23f32fe1b9a924dc9db554e05e8896ec7b41ed55`, **12 source-free adversarial tests** cover matches, RGBA drift, float32 bit drift, int32 changes, missing/extra slots, duplicate or missing trace identities and private-result protections.
+- New five-minute `.github/workflows/raft-t3-particle108-sameexport-values-tests.yml`, commit `32d61ee8d1722baf7326811b6788948349808696`: [run **42228442895 COMPLETED SUCCESS**](https://github.com/alwansan/raf/actions/runs/42228442895).
+- Existing original bounded one-export workflow `.github/workflows/raft-t3-particle108-sameexport.yml` updated at `f33597428b591375f8369d30f1b03591b6757bfc` to add source-free controls and exact private W1/B02 five-Material RGBA/scalar same-export comparison after original real export, before ShaderLab dummy check, safe counts in artifact. ZIP2 immutable `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, original six scenes/four source Material/Shader owners and one original texture-stream provider authenticated inside workflow. Pinned AssetRipperCLI `036098ab525a3f9f693dc101edeb21faad4d32d8`. No proprietary source/material files are uploaded.
+
+## Real original run awaiting terminal result
+
+[**GitHub Actions 42228661601**](https://github.com/alwansan/raf/actions/runs/42228661601), job `127928572422`, execution SHA `f33597428b591375f8369d30f1b03591b6757bfc` started. Source-free tests PASS; real SHA original exporter **in progress** when initially inspected. New safe per-five-material file `t3-particle108-values-safe.json` will be included in artifact `t3-private-particle108-sameexport-safe-result-42228661601`.
+
+Possible terminal statuses: `T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MATCH` (exact selected RGBA tolerance + float32/int32 value preservation); `...MISMATCH` (source/export real mismatch, CI marked failed and safe artifact retained); `INCONCLUSIVE` (parser/lineage/source or job failure; no material-fidelity verdict). The old shader remains Dummy until actual original program restoration; match would **only reject RGBA/scalar transport as a cause in these five Materials**. No Unity or phone-pixel evidence.
+
+**Next step:** inspect terminal job and safe stdout/artifact; fix a reproducible parser issue only if needed. Mark work completed only after terminal evidence. Keep RENDER-002 OPEN and no game production modifications. After completion remove self-push trigger on expensive exporter workflow, keep manual-only to avoid duplication.
