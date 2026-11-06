@@ -75,7 +75,15 @@ namespace RaftAndroid.Diagnostics
                 {
                     Interlocked.Decrement(ref count);
                     if (!critical) { Interlocked.Increment(ref dropped); return; }
+                    // A best-effort critical Flush may fail while storage is
+                    // unavailable. Never re-enqueue beyond queueLimit: keep
+                    // earlier pending crash evidence and count this loss.
                     Flush();
+                    if (Volatile.Read(ref count) >= queueLimit)
+                    {
+                        Interlocked.Increment(ref dropped);
+                        return;
+                    }
                     Interlocked.Increment(ref count);
                 }
                 long id = Interlocked.Increment(ref sequence);
@@ -117,11 +125,29 @@ namespace RaftAndroid.Diagnostics
         private void Drain()
         {
             long lost = Interlocked.Exchange(ref dropped, 0);
-            if (lost != 0) Append("{\"area\":\"logging\",\"operation\":\"queue_overflow\",\"dropped\":" + lost.ToString(CultureInfo.InvariantCulture) + "}");
-            while (pending.TryDequeue(out string line))
+            if (lost != 0)
             {
-                Interlocked.Decrement(ref count);
+                try
+                {
+                    Append("{\"area\":\"logging\",\"operation\":\"queue_overflow\",\"dropped\":" +
+                        lost.ToString(CultureInfo.InvariantCulture) + "}");
+                }
+                catch
+                {
+                    // A failed overflow record is still missing evidence.
+                    // Preserve its count for the next successful flush.
+                    Interlocked.Add(ref dropped, lost);
+                    throw;
+                }
+            }
+            // Only this ioGate-serialized consumer removes entries. On
+            // transient I/O failure keep the first queued full diagnostic;
+            // dequeueing before Append silently lost its original stack.
+            while (pending.TryPeek(out string line))
+            {
                 Append(line);
+                if (pending.TryDequeue(out _))
+                    Interlocked.Decrement(ref count);
             }
         }
 
