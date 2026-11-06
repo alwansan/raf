@@ -38,7 +38,7 @@ class PointerViewIdentityAudit(unittest.TestCase):
     def test_mismatched_probe_fails_back_before_accepting_other_view_capture(self):
         source = SOURCE.read_text(encoding="utf-8")
         body = method_body(source, "ProbeCapturedPointer")
-        mismatch = body.index("probedIdentity != requestedIdentity")
+        mismatch = body.index("requestedIdentity == 0 || probedIdentity != requestedIdentity")
         fallback = body.index("ObserveNativeCapture(token, false);", mismatch)
         early_return = body.index("return;", fallback)
         active = body.index("bool active = view != null", early_return)
@@ -47,6 +47,18 @@ class PointerViewIdentityAudit(unittest.TestCase):
         self.assertLess(early_return, active)
         # This is a source ordering contract, not proof of Android pointer
         # capture, camera direction, or a working Raft cursor on a device.
+
+    def test_uninitialized_identity_cannot_accept_foreign_view_capture(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        probe = method_body(source, "ProbeCapturedPointer")
+        request = method_body(source, "RequestCapture")
+        self.assertIn("requestedIdentity == 0 || probedIdentity != requestedIdentity", probe)
+        self.assertIn("Volatile.Write(ref captureViewIdentity, 0);", request)
+        self.assertLess(
+            request.index("Volatile.Write(ref captureViewIdentity, 0);"),
+            request.index("OnAndroidUi(() =>"))
+        # Request without a focused View leaves identity zero; a later probe
+        # must not trust capture belonging to another focused View.
 
     def test_epoch_guards_do_not_encode_view_identity(self):
         source = SOURCE.read_text(encoding="utf-8")
