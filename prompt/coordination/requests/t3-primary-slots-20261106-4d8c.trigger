@@ -1,0 +1,10 @@
+session_id=20261106T1730Z-T3-chat-primary-index-4d8c
+origin=chat
+issue_id=RENDER-002
+experiment_key=T3-ZIP2-15964-Particle108-8stage-4pairs-operand-first-register-vs-second-index-v1
+zip2_source_SHA=15964ea8f246b6e076ce26b60931ee2e1a9a2385
+previous_original_exact_operand_run=42261563646
+sourcefree_16_tests=PASS
+sourcefree_run=42262190492
+question=Are 4 VS and 2 FS full DCL operand layout differences in primary register identity or only secondary cbuffer index/opcode metadata?
+artifact=privacy-safe aggregate per-stage profile distinct counts, no source-private numeric indexes, no Unity build
