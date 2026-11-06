@@ -1,0 +1,17 @@
+{
+  "event_id": "20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd",
+  "session_id": "20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Added privacy-safe exact original authored Shader48 Property name/type to same-instance AssetRipper exported ShaderLab contract. Detect missing Texture/Color, same-name wrong type, extra/duplicate, nested/fake Properties blocks. Original source runner strictly selects 108 Renderer slot Shader48 with 13 props and 2 textures; no private names/values published. Source-only 14/14 CI42269593656 SUCCESS, exporter-gate integration 15/15 CI42270269076 SUCCESS. Does not recover dummy shaders or prove pixels. T3 trial vote remains لا يحتاج; RENDER-002 OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42269593656",
+    "https://github.com/alwansan/raf/actions/runs/42270269076",
+    "https://github.com/alwansan/raf/commit/f2bba4f343f56e0f4f3256875494dcbed501aad8",
+    "https://github.com/alwansan/raf/commit/a815b9732dd1329ed26e218ec474881640d5eb58",
+    "prompt/coordination/clients/T3/sessions/20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd.md"
+  ],
+  "utc": "2026-11-06T18:26:06.231Z"
+}
