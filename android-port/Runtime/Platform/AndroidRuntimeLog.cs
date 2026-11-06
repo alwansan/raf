@@ -12,6 +12,12 @@ namespace RaftAndroid.Diagnostics
         private static readonly RepeatedDiagnosticMessages repeated = new RepeatedDiagnosticMessages();
         public static bool UnityMessage(string type, string detail, bool critical)
         {
+            // The HUD still needs the first exception while persistent
+            // storage is unavailable, so preserve the true return value.
+            // However, never mark an error/warning as already recorded if
+            // there is no sink to retain its original stack. A later explicit
+            // Initialize retry must be able to log that first full error.
+            if (sink == null) return true;
             if ((critical || type == "Warning") && !repeated.First(type, detail, DateTime.UtcNow)) return false;
             Write("unity", type, detail, critical);
             return true;
