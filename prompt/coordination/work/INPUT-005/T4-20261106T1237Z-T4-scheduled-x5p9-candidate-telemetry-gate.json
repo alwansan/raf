@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1237Z-T4-scheduled-x5p9",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "base_sha": "e2f6c08bd632a4d9d348691053a2665b19abf641",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1237Z-T4-scheduled-x5p9-candidate-telemetry-gate.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1237Z-T4-scheduled-x5p9.md"
+  ],
+  "experiment_key": "T4-INPUT005-20261106-current-head-vs-owner-artifact-42058825739-telemetry-provenance-v2",
+  "resource_key": null,
+  "hypothesis": "Current HEAD contains mouse release telemetry absent from immutable owner APK; old CL cannot validate it. Identify evidence required for next phone acceptance without repeating CI.",
+  "updated_at": "2026-11-06T12:37:00Z",
+  "taken_over_from": [
+    "20261106T1140Z-T4-scheduled-k3m8",
+    "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2"
+  ]
+}
