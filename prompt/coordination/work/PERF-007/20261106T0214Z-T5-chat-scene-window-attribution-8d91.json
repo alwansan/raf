@@ -14,7 +14,10 @@
     "prompt/coordination/work/PERF-007/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json",
     "prompt/coordination/clients/T5/sessions/20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
     "prompt/coordination/experiments/T5/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json",
-    "prompt/coordination/B_TEAM/events/T5/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json"
+    "prompt/coordination/B_TEAM/events/T5/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json",
+    "scripts/t5_cl_unity_surface_bridge.py",
+    "tests/test_t5_cl_unity_surface_bridge.py",
+    ".github/workflows/raft-t5-cl-unity-surface-bridge.yml"
   ],
   "experiment_key": "t5-original-42058825739-CLscene-interval-join-retain-loading-stutters-tracked-scene-boundary-v1",
   "resource_key": "AndroidTestDiagnostics.cs-perf-window-provenance-only",
@@ -40,6 +43,6 @@
   ],
   "ci_urls": [],
   "next_step": "Implement scene-start tracking and transition-count flags with no reset/discard; ensure all current diagnostics source-policy checks and scoped CI pass; document runtime/device not yet tested.",
-  "updated_at": "2026-11-06T02:22:17.549Z",
-  "plan_refinement": "Existing raft-android-platform-tests.yml is already triggered by scoped AndroidTestDiagnostics.cs change, so extend its in-tree diagnostics policy tests rather than create duplicate workflow/runner; preserve existing validation scope and avoid unrelated CI."
+  "updated_at": "2026-11-06T02:26:47.900Z",
+  "plan_refinement": "Existing raft-android-platform-tests.yml is already triggered by scoped AndroidTestDiagnostics.cs change, so extend its in-tree diagnostics policy tests rather than create duplicate workflow/runner; preserve existing validation scope and avoid unrelated CI. Explicitly teach current T5 Unity/SF evidence analyzer to mark new source tagged mixed-content versus stable windows, retaining LEGACY_UNKNOWN for 2026-11-05 phone logs; run source-pinned T5 CI and refuse to claim legacy historical frames verified-stable."
 }
