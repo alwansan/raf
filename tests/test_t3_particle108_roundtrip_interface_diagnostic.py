@@ -94,6 +94,40 @@ class OriginalParticle108RoundtripTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"duplicate_private_SPIRV_IO_location"):
             self.check(duplicate,sf,duplicate,sf)
 
+    def test_vertex_output_narrowing_consumed_fragment_expects_source_width(self):
+        srcv=stage(outputs=[(0,"vec4")])
+        srcf=stage(inputs=[(0,"vec4")])
+        rtv=stage(outputs=[(0,"vec3")])
+        row=self.check(srcv,srcf,rtv,srcf)
+        self.assertEqual(row["vertex_changed_output_reflection_type_width_narrowing"],1)
+        self.assertEqual(row["vertex_changed_output_locations_consumed_by_fragment"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_fragment_type_equal_source"],1)
+        self.assertEqual(row["roundtrip_fragment_same_location_type_mismatch_records"],1)
+
+    def test_vertex_output_widening_unused_by_roundtrip_fragment(self):
+        srcv=stage(outputs=[(0,"vec2"),(3,"vec2")])
+        srcf=stage(inputs=[(0,"vec2")])
+        rtv=stage(outputs=[(0,"vec2"),(3,"vec4")])
+        row=self.check(srcv,srcf,rtv,srcf)
+        self.assertEqual(row["vertex_changed_output_reflection_type_width_widening"],1)
+        self.assertEqual(row["vertex_changed_output_locations_not_consumed_by_fragment"],1)
+        self.assertEqual(row["roundtrip_pairs_valid"],1)
+
+    def test_vertex_output_same_width_base_type_changed(self):
+        srcv=stage(outputs=[(0,"ivec3")])
+        srcf=stage(inputs=[(0,"ivec3")])
+        rtv=stage(outputs=[(0,"uvec3")])
+        row=self.check(srcv,srcf,rtv,srcf)
+        self.assertEqual(row["vertex_changed_output_reflection_type_same_width_base_kind_changed"],1)
+
+    def test_vertex_output_unsupported_numeric_type_is_counted_not_assumed(self):
+        srcv=stage(outputs=[(0,"dvec4")])
+        srcf=stage(inputs=[(0,"dvec4")])
+        rtv=stage(outputs=[(0,"vec4")])
+        row=self.check(srcv,srcf,rtv,srcf)
+        self.assertEqual(row["vertex_changed_output_reflection_type_unsupported"],1)
+        self.assertEqual(row["vertex_changed_output_reflection_type_width_narrowing"],0)
+
     def test_private_identifiers_not_leaked_in_counts(self):
         sv=stage(outputs=[(0,"PRIVATE_SHADER_TYPE")])
         sf=stage(inputs=[(0,"PRIVATE_SHADER_TYPE")])
