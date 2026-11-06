@@ -1,10 +1,5 @@
 name: T3 RENDER-002 ONE-SHOT SHA-original eight-stage DCL-SPV resource candidate probe 9f24
 on:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - 'prompt/coordination/trigger/T3/20261106T1959Z-T3-chat-original-stage-probe-9f24.txt'
   workflow_dispatch:
 permissions:
   contents: read
