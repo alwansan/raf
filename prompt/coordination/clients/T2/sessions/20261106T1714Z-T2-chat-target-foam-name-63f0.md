@@ -13,3 +13,9 @@
 - source pins: ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; original `sharedassets0.assets` 115978112B SHA `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`; Foam Shader PathID2420 original raw SHA `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
 - hypothesis: both newly verified external typed Shader targets could share serialized shader name with original Foam, or prove name mismatch. Compare only in private SHA-staged UnityPy runner and record safe count. GUID/true runtime Material binding remains unknown.
 - next_step: implement/tests/CI result then save checkpoint and event. Phone artifact 42058825739 confirms world/save/reopen, not water pixels. WATER-001 OPEN, NOT_READY.
+
+## CI checkpoint (2026-11-06T17:17:16.898Z)
+- Implemented T2-owned script and 10 source-free regressions, plus independent ZIP2 pinned authentic workflow; code commits include `c17e802d`, `5088ed7b`, `803eeddd`.
+- Run [42260145863](https://github.com/alwansan/raf/actions/runs/42260145863) launched on `803eeddd`, presently `in_progress`; status `waiting_ci`. Await verified result, do not claim name matches yet.
+- Does not reuse closed previous manifest question or edit game source/ShaderLab/assets. T1 Unity FFT and T3 genuine SHDR/SHEX run concurrently and are not touched.
+- next_step: inspect CI safe numeric counts and commit independent experiment/event/report, or debug only evidenced failure.
