@@ -21,10 +21,18 @@ Prior original FFT CI 42208261641 narrowed three source/first-butterfly direct s
 
 `scripts/t1_fft_spirv_alias_origins.py` classifies pointer alias write forms (exact OpCopyObject same pointer type, static/dynamic indexed OpAccessChain, OpPhi, OpSelect), and identifies the category of alias stores that may precede each source-authenticated coordinate load using bounded per-function CFG. The reporter emits only safe aggregate categories and may-path labels; no private SSA IDs, constants or shader assets. Added `tests/test_t1_fft_spirv_alias_origins.py` with 11 synthetic/negative controls and appended both to the isolated non-Unity original FFT Vulkan workflow. No shader/asset/game source rewritten.
 
-## Evidence pending
+## Original-source validation — completed
 
-Actual exact-source run 42209856944 triggered by workflow commit 1979568. At checkpoint, queued. Do not treat source-only results as original Unity kernel ID, numerical pixel parity or Android water fix.
+- CI: [42209856944](https://github.com/alwansan/raf/actions/runs/42209856944) **SUCCESS** on source commit `1979568f7741872e6ac965fe7b73eee1d48f9331`; job 127865516249 completed all original SHA-pinned ZIP2 recovery, same-Vulkan FFT stages and private cleanup.
+- New exact-source regression: `tests/test_t1_fft_spirv_alias_origins.py` **11/11 PASS**. Previous 16 CFG hazard tests also passed (and existing FFT tests passed). New tool: `scripts/t1_fft_spirv_alias_origins.py`.
+- Authenticated original FFT slot0 report: **all X/Y source, butterfly1, butterfly2 alias pre-load categories = `indexed_access_static`**. Static alias-store count: source **4**, butterfly1 **4**, butterfly2 **8**. No exact-pointer-copy, dynamic-index, phi/select categories observed on those pre-load paths in this source fixture.
+- Static index nature is not the literal index, memory-component identity or proof of the value that reaches the sampled coordinate. `full_reaching_definition_proven=false`, `original_integer_origin_proven=false` for all queried lanes.
+- Prior result [42208932160](https://github.com/alwansan/raf/actions/runs/42208932160) narrowed direct writers to 1 per lane but exposed `alias_store`; current run explains its pointer shape, **not** actual correct X/Y integer values. No authored Unity kernel identity, numerical Vulkan↔Unity parity, or Android phone water fix claimed.
+- Experiment: `prompt/coordination/experiments/T1/20261106T112050Z-T1-chat-alias-origins-b62f.json`; canonical event: `prompt/coordination/B_TEAM/events/T1/20261106T112050Z-T1-chat-alias-origins-b62f.json`; work record: `prompt/coordination/work/WATER-001/T1-20261106T112050Z-T1-chat-alias-origins-b62f.json`. No private payloads or SSA IDs published; audio, Settings, deferred touch and others' files unaffected. No new Android/XAPK build.
 
-## Next step
+## Session handoff
 
-Check run and read only allowlisted RAFT_T1_FFT_ALIAS_POINTER_ORIGINS marker, identify whether site1 X/site2 X/Y remaining pre-load aliases are exact-pointer copies, indexed component writes or conditional merges. If tests fail, repair minimal defect with checked latest blob SHA. End with complete event/experiment/work and session result.
+- origin: chat
+- status: **completed** (scoped original alias pointer classification)
+- run_urls: https://github.com/alwansan/raf/actions/runs/42209856944
+- next_step: create separate investigation of **component-specific** OpAccessChain static-index writes for each original butterfly X/Y coordinate lane, using original SPIR-V with private constant values retained only in runner. Distinguish original int carrier versus float bit interpretation and source code lowering without unsafe rewrite. Then controlled same-input Vulkan/Unity numeric parity, ultimately Adreno/device acceptance. WATER-001 stays OPEN.
