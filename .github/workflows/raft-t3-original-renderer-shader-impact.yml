@@ -27,9 +27,10 @@ jobs:
       - name: Source-free exact original Renderer and class48 join controls
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py scripts/t3_original_particle_stream_provider.py
+          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle108_dxbc_feasibility.py scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py scripts/t3_original_particle_stream_provider.py
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle108_dxbc_feasibility.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_stream_provider.py' -v
@@ -185,6 +186,35 @@ jobs:
             --original "$RUNNER_TEMP/t3-original-six-scene" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
             --out "$RUNNER_TEMP/t3-original-108particle-pass-state-safe.json"
+      - name: Link original SHA-authentic one-Pass Particle108 genuine D3D11 vertex fragment variants
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_original_particle108_dxbc_feasibility \
+            --original "$RUNNER_TEMP/t3-original-six-scene" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-actual-dxbc-stage-links-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle108-actual-dxbc-stage-links-safe.json").read_text())
+          assert d["status"] in (
+            "SOURCE_SHA_ORIGINAL_PARTICLE108_D3D11_STAGE_LINKAGE_CLASSIFIED",
+            "SOURCE_SHA_ORIGINAL_PARTICLE108_D3D11_PLATFORM_UNAVAILABLE")
+          assert d["original_six_source_scenes_SHA_verified"] is True
+          assert d["original_four_shader_owner_SHA_verified"] is True
+          assert d["original_source_108_particle_Shader48_slots"]==108
+          assert d["original_source_one_SubShader_one_Pass"] is True
+          assert d["source_original_program_bytes_or_program_hashes_published"] is False
+          assert d["original_shader_name_ID_GUID_or_shader_text_disclosed"] is False
+          assert d["authored_Android_ShaderLab_or_SPIRV_equivalence_proven"] is False
+          assert d["source_is_phone_fire_smoke_emitter_verified"] is False
+          assert d["actual_Unity_Android_Adreno_pixels_verified"] is False
+          if d["status"].endswith("_CLASSIFIED"):
+            assert d["genuine_D3D11_vertex_stage_variant_records"]>0
+            assert d["genuine_D3D11_fragment_stage_variant_records"]>0
+            assert d["original_D3D11_program_table_records"]>0
+          print("RAFT_T3_SHA_ORIGINAL_PARTICLE108_D3D11_STAGE_LINKAGE_CLASSIFIED=true gpu_pixels_proven=false")
+          PY
       - name: Verify genuine source 108-slot Particle Shader48 original Material TexEnv pointer scope
         run: |
           set -euo pipefail
@@ -271,6 +301,7 @@ jobs:
             ${{ runner.temp }}/t3-top921-renderer-class-safe-aggregate.json
             ${{ runner.temp }}/t3-original-particle-shader48-rank-safe.json
             ${{ runner.temp }}/t3-original-108particle-pass-state-safe.json
+            ${{ runner.temp }}/t3-particle108-actual-dxbc-stage-links-safe.json
             ${{ runner.temp }}/t3-original-particle108-material-texenv-safe.json
             ${{ runner.temp }}/t3-original-particle108-texture2d28-stream-safe.json
             ${{ runner.temp }}/t3-particle108-stream-provider-verified-safe.json
