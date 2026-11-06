@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "experiment_id": "20261106T2215Z-immutable-log-snapshot-n7b4",
+  "session_id": "20261106T2215Z-T4-chat-immutable-log-snapshot-n7b4",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "updated_at": "2026-11-06T22:21:22.954Z",
+  "experiment_key": "T4-CL520c4cf-original-owner-JSONL-immutable-single-read-provenance-v1",
+  "target_source": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "base_sha": "c2637f94aa71770caa34652e5a9e7442544e120a",
+  "red_commit": "1484ef6da276a777fa9c797fcc18019089bc0558",
+  "red_run": "https://github.com/alwansan/raf/actions/runs/42303698497",
+  "red_result": "Expected test-only failure after an authenticated same-size file is replaced between the summarizer and chronology; 19 preexisting synthetic tests pass; new synthetic throws StopIteration because originally authenticated Load<T>.enter no longer exists in reopened source.",
+  "green_commit": "d7fcf317a9d6cfff7bb7e6313619eb8af2dfc8af",
+  "green_run": "https://github.com/alwansan/raf/actions/runs/42303935027",
+  "green_result": "Completed success, 20/20 synthetic tests. Read once (MAX_BYTES global bound) then only in-memory immutable byte copies for baseline summary and detailed chronology; SHA1 Git blob checked over those exact byte copies when --pinned.",
+  "genuine_original_source": "CL@520c4cf409aa20a4db54ff80ed87d8807d9cba57 original 5-Nov three immutable JSONLs; no private logs uploaded.",
+  "verified_original_counts": {
+    "sessions": 3,
+    "fully_traced_original_savegame_cycles": [
+      3,
+      1,
+      3
+    ],
+    "fully_traced_original_loadt_calls": [
+      0,
+      3,
+      4
+    ],
+    "incomplete_original_cycles": 0,
+    "logging_queue_overflow_observed": false
+  },
+  "limits": [
+    "A JSONL operation trace does not prove original RGD serializer return type, save persistence across process restart, same world, phone acceptance or source SHA of signed binary.",
+    "In-memory snapshots protect provenance within one analysis, not a universal interprocess file lock or Android runtime.",
+    "No gameplay code, original GUIDs, .meta, .rgd, audio, Settings, controller or native workflows modified."
+  ],
+  "discarded_fixture_failures": [
+    "https://github.com/alwansan/raf/actions/runs/42303564130",
+    "https://github.com/alwansan/raf/actions/runs/42303622957"
+  ]
+}
