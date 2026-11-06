@@ -1,0 +1,44 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+  "issue_id": "WATER-001",
+  "hypothesis": "HLSL-roundtrip butterfly1 X unresolved at allowed depth12 has a specific unsupported SSA stop opcode (possibly OpPhi/IAdd) and typed numeric kind; safe stop metadata distinguishes structural walk limitation without exporting original values.",
+  "source_commit": "952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1",
+  "input_hashes": [
+    "Original source SHA pin zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385, private original and translated SPIR-V not exported"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "apt spirv-tools in existing isolated workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_spirv_read_provenance.py -v",
+    "python3 -m scripts.t1_fft_spirv_read_provenance --coordinates --coordinate-depth 12 \"$TMPDIR/coordinate.spv\""
+  ],
+  "negative_controls": [
+    "OpPhi and OpIAdd unresolved source report typed stop opcode and sint32 numeric kind",
+    "Unrecognized hypothetical opcode never output verbatim (other_opcode)",
+    "Resolved OpLoad output remains backward-compatible without extra stop fields",
+    "No SSA IDs or literal values returned in all new synthetic tests"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42221700354",
+  "artifact_urls": [],
+  "budget": "One existing isolated 20-minute original SHA-authentic CPU/Vulkan job",
+  "status": "waiting_ci",
+  "observed_result": {
+    "source_free_unit_step": "success",
+    "original_source_recovery": "pending",
+    "hlsl_stop_opcode": "pending",
+    "authored_kernel_identity_proven": false,
+    "numeric_parity_proven": false,
+    "android_water_proven": false
+  },
+  "limitations": [
+    "Original/roundtrip source stage must complete before any actual stop opcode can be named",
+    "Changing stop diagnostics cannot itself repair numerical coordinates or Vulkan↔Unity 252/256 X mismatch"
+  ],
+  "integration_commit": "952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1",
+  "next_step": "When 42221700354 completes inspect only aggregate RAFT_T1_PASS0_SPIRV_PROVENANCE hlsl_roundtrip site1 X stop_opcode/stop_numeric_kind; update own experiment/session/event. If CI fails due apt use failure evidence, do not assert source result."
+}
