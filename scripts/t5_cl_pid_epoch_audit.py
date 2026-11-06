@@ -28,6 +28,15 @@ def split_verified_pid_epochs(rows):
                     epochs.append(current)
                 current = []
             pid = new_pid
+        elif row.get("state") != "game_running":
+            # A stopped process is a lifetime boundary, even if Android
+            # later reuses its numeric PID. Do not combine FPS across it.
+            if current:
+                epochs.append(current)
+            epochs.append([row])
+            current = []
+            pid = None
+            continue
         elif row.get("state") == "game_running":
             # Unknown running-process ownership is its OWN epoch, neither
             # part of the preceding verified Raft PID nor part of a later
