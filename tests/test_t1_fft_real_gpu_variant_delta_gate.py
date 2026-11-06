@@ -179,6 +179,22 @@ class ActualVariantSafeDeltaTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.check()
 
+    def test_reject_nonzero_coordinate_mismatch_without_axis_coverage(self):
+        # A nonzero keyed coordinate drift must be explained by x/y/mip.
+        # Previously accepted an impossible profile, weakening first-site evidence.
+        site = self.b["RAFT_T1_PRIVATE_ORIGINAL_UNITY_JOIN"]["diagnostics"][1]
+        site["coordinate_zero_collapse_by_axis"] = {"x": 0, "y": 0, "mip": 0}
+        site["other_coordinate_drift_by_axis"] = {"x": 0, "y": 0, "mip": 0}
+        self.save()
+        with self.assertRaisesRegex(ValueError, "axis coverage"):
+            self.check()
+
+    def test_accept_multiaxis_overlap_with_sufficient_coverage(self):
+        site = self.b["RAFT_T1_PRIVATE_ORIGINAL_UNITY_JOIN"]["diagnostics"][1]
+        site["coordinate_zero_collapse_by_axis"] = {"x": 252, "y": 252, "mip": 0}
+        self.save()
+        self.assertEqual(self.check()["variant_coordinate_mismatch_by_site"][1], 252)
+
     def test_duplicates_and_nonfinite_json_rejected(self):
         text = self.variant.read_text()
         self.variant.write_text(text.replace('"unity_backend": "OpenGLCore"',
