@@ -80,6 +80,52 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         self.assertNotIn(str(self.root), rendered)
         self.assertNotIn("durable_RGD_unverified", rendered)
 
+    def _savegame_cycle(self, swapped=False, user_snapshot=True):
+        # An original SaveGame event-count parity is not evidence of authored
+        # SaveWorld -> SaveUser order: each completed phase must have its own
+        # nonzero Save.argumentFileSnapshot before reporting a full cycle.
+        order = ["SaveUser", "SaveWorld"] if swapped else ["SaveWorld", "SaveUser"]
+        events = [("SaveGame.enter", "")]
+        for phase in order:
+            events.append((phase + ".enter", ""))
+            events.append(("Save.enter", ""))
+            if phase == "SaveWorld" or user_snapshot:
+                events.append(("Save.argumentFileSnapshot",
+                               "exists_at_filename_argument=True; length_class=nonzero; durable_RGD_unverified=true"))
+            events.append(("Save.exit", ""))
+            events.append((phase + ".exit", ""))
+        events.append(("SaveGame.exit", ""))
+        return self.put("savegame.jsonl", [
+            row("original-synthetic", seq, "save", op,
+                "2026-11-05T12:00:%02dZ" % seq, detail)
+            for seq, (op, detail) in enumerate(events, start=1)
+        ])
+
+    def test_one_full_original_world_then_user_save_cycle_requires_two_snapshots(self):
+        result = analyze([self._savegame_cycle()])
+        stage = result["sessions"][0]
+        self.assertEqual(stage["fully_traced_original_savegame_cycles"], 1)
+        self.assertEqual(stage["incomplete_or_misordered_savegame_cycles"], 0)
+        self.assertTrue(stage["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
+        self.assertFalse(result["durable_rgd_reopen_proven"])
+
+    def test_equal_marker_counts_with_saveuser_before_saveworld_are_not_complete(self):
+        stage = analyze([self._savegame_cycle(swapped=True)])["sessions"][0]
+        self.assertEqual(stage["original_operation_counts"]["savegame_enter"], 1)
+        self.assertEqual(stage["original_operation_counts"]["saveworld_exit"], 1)
+        self.assertEqual(stage["original_operation_counts"]["saveuser_exit"], 1)
+        self.assertEqual(stage["fully_traced_original_savegame_cycles"], 0)
+        self.assertGreater(stage["incomplete_or_misordered_savegame_cycles"], 0)
+        self.assertFalse(stage["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
+
+    def test_world_user_call_counts_without_user_snapshot_are_incomplete(self):
+        stage = analyze([self._savegame_cycle(user_snapshot=False)])["sessions"][0]
+        self.assertEqual(stage["original_operation_counts"]["savegame_enter"], 1)
+        self.assertEqual(stage["original_operation_counts"]["saveworld_enter"], 1)
+        self.assertEqual(stage["original_operation_counts"]["saveuser_enter"], 1)
+        self.assertEqual(stage["fully_traced_original_savegame_cycles"], 0)
+        self.assertFalse(stage["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
+
     def test_duplicate_startup_segment_is_counted_once(self):
         event = row("synthetic", 1, "save", "SaveGame.enter", "2026-11-05T12:00:00Z")
         one = self.put("first.jsonl", [event])
