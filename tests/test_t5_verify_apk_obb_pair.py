@@ -166,7 +166,7 @@ class PairTests(unittest.TestCase):
     def test_obb_encrypted_flag_rejected(self):
         # A synthetic flagged member suffices: no encryption keys or game data.
         payload = bytearray(self.obb.read_bytes())
-        for signature, offset in ((b"PK\\x03\\x04", 6), (b"PK\\x01\\x02", 8)):
+        for signature, offset in ((b"PK\x03\x04", 6), (b"PK\x01\x02", 8)):
             pos = payload.find(signature)
             self.assertGreaterEqual(pos, 0)
             flags = struct.unpack_from("<H", payload, pos + offset)[0]
