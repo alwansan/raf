@@ -1,0 +1,67 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1837Z-T1-chat-ftz-trace-89ac",
+  "issue_id": "WATER-001",
+  "hypothesis": "Address-zero collapse and float32 subnormal-to-zero (FTZ) require distinct per-invocation taxonomy on source-authenticated original vs claimed Unity candidate traces; same-address-only float bit classification avoids misattributing texture-coordinate differences.",
+  "source_commit": "04d1315be1021775480d68a8fecb9f9c660ec32d",
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 standard CPython",
+    "runner": "ubuntu-24.04"
+  },
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_private_unity_ftz_diagnostic.py -v"
+  ],
+  "negative_controls": [
+    "samefile/hardlink",
+    "symlink",
+    "duplicate JSON key",
+    "tampered digest",
+    "wrong candidate role",
+    "mismatched input SHA",
+    "mismatched dispatch SHA",
+    "duplicate invocation key",
+    "other coordinate drift",
+    "signed-zero bitwise difference",
+    "subnormal to signed zero",
+    "changed-coordinate value classification exclusion"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42272859383",
+  "artifact_urls": [],
+  "budget": "4-minute source-only CI; no Unity, LFS, ZIP2 assets, native game build or release",
+  "status": "completed",
+  "observed_result": {
+    "unit_run": "completed success",
+    "new_adversarial_tests": "16/16 passed",
+    "existing_paired_test_suite": "all workflow steps success",
+    "scope": "diagnostic only; real Unity paired FFT trace not supplied",
+    "changes": [
+      {
+        "path": "scripts/t1_fft_private_unity_ftz_diagnostic.py",
+        "commit": "cec94bc0e6c1490df02a3d8eb14fcf2b35812cc7"
+      },
+      {
+        "path": "tests/test_t1_fft_private_unity_ftz_diagnostic.py",
+        "commit": "4bcdd060e1b00cc044325d4aa48a260e18fa5cc1"
+      },
+      {
+        "path": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+        "commit": "04d1315be1021775480d68a8fecb9f9c660ec32d"
+      }
+    ]
+  },
+  "rejected_hypotheses": [
+    "The new classifier itself establishes real Unity backend source authenticity or a cause of water failure (it explicitly does not).",
+    "Changed-coordinate sample values can be attributed to float-value FTZ (excluded)."
+  ],
+  "limitations": [
+    "Both original/candidate roles and same-input/dispatch hashes are unsigned producer declarations; truthful trusted runner and external source SHA still required.",
+    "Original Raft payload and real Unity candidate keyed captures were not acquired or executed.",
+    "A numerical subnormal-to-zero signature would be compatible with FTZ, not causal proof.",
+    "No authored kernel runtime mapping, water pixel, Adreno, or new APK evidence."
+  ],
+  "integration_commit": "04d1315be1021775480d68a8fecb9f9c660ec32d",
+  "next_step": "T1/T5: arrange true source-authenticated original and Unity 2021 keyed FFT capture for exactly same input and dispatch, validate private attestation and new taxonomy; if one site has zero collapse, isolate compiler/resource binding without speculative game edits. Keep trial vote لا يحتاج until substantial integrated game change."
+}
