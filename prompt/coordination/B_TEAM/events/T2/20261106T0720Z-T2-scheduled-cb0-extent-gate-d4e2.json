@@ -10,5 +10,7 @@
   "tests_commit": "801e0a3995e8980571eef3c1c793375821f184d0",
   "original_evidence_run": "https://github.com/alwansan/raf/actions/runs/42153150468",
   "result": "CB0 byte extents differ in two authentic Foam passes; source-only fail-closed member/upload gate added; no Unity/device claim.",
-  "next_step": "Run six repository unittest methods; authenticate CB0 member ABI and Unity upload before ShaderLab integration."
+  "next_step": "Run six repository unittest methods; authenticate CB0 member ABI and Unity upload before ShaderLab integration.",
+  "id": "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2",
+  "owner": "T2"
 }
