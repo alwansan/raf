@@ -8,6 +8,8 @@ on:
       - 'tests/test_t3_particle108_private_shaderlab_variants.py'
       - 'scripts/t3_particle108_private_stagewrapper_compile.py'
       - 'tests/test_t3_particle108_private_stagewrapper_compile.py'
+      - 'scripts/t3_particle108_original_keyword_lattice.py'
+      - 'tests/test_t3_particle108_original_keyword_lattice.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -36,6 +38,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_shaderlab_variants.py' -v
           python3 -m py_compile scripts/t3_particle108_private_stagewrapper_compile.py tests/test_t3_particle108_private_stagewrapper_compile.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_stagewrapper_compile.py' -v
+          python3 -m py_compile scripts/t3_particle108_original_keyword_lattice.py tests/test_t3_particle108_original_keyword_lattice.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_lattice.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -145,9 +149,30 @@ jobs:
           assert report['original_pixels_on_Android_verified'] is False
           print('T3_PRIVATE_SHADERLAB_BOTH_BRANCHES_SAFE=8_of_8_Vulkan11_glslang_only')
           PY
+      - name: Determine original Shader48 four VSFS serialized keyword index lattice (no original names)
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t3_particle108_original_keyword_lattice \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          data=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle108-original-keyword-lattice-safe.json").read_text())
+          assert data["status"]=="T3_SOURCE_AUTHENTIC_PARTICLE108_FOUR_KEYWORD_SERIALIZED_STRUCTURE"
+          assert data["source_original_VSFS_serialized_variant_keys_exact"] is True
+          assert data["source_original_D3D11_keyword_pairs_linked"]==4
+          assert data["source_original_six_scenes_SHA_authenticated"] is True
+          assert data["source_original_four_shader_owners_SHA_authenticated"] is True
+          assert data["original_keyword_index_to_authored_name_mapping_proven"] is False
+          assert data["all_four_variants_selectable_in_one_Unity_ShaderLab_proven"] is False
+          assert data["Unity_Editor_compilation_or_phone_pixels_verified"] is False
+          print("T3_ORIGINAL_KEYWORD_METADATA_COHORT_VERIFIED=4_PAIRS; runtime_authoring_unproven=true")
+          PY
       - name: Erase private staged sources and candidates from runner
         if: always()
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
-          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json"
+          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json" "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json"
