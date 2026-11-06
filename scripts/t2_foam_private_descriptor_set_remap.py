@@ -281,9 +281,15 @@ def verify_selective_reflection(before, after, conflicts, target_set):
     for category in CATEGORIES:
         old_rows=before.get(category,[])
         new_rows=after.get(category,[])
-        if (len(old_rows)!=len(new_rows) or
-            sorted((r["set"],r["binding"],r.get("id")) for r in old_rows)!=
-            sorted((r["set"],r["binding"],r.get("id")) for r in new_rows)):
+        # Compare IDs at their EXPECTED post-remap coordinates, not at
+        # original coordinates. The latter rejects every legitimate moved
+        # descriptor whenever optional reflection IDs are present.
+        expected_ids = sorted(
+            (target_set if (r["set"], r["binding"]) in conflicts else r["set"],
+             r["binding"], r.get("id")) for r in old_rows)
+        actual_ids = sorted(
+            (r["set"], r["binding"], r.get("id")) for r in new_rows)
+        if len(old_rows) != len(new_rows) or expected_ids != actual_ids:
             raise ValueError("selective_reflection_resource_id_changed")
     return True
 
