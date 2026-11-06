@@ -74,6 +74,7 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path,
            "selected_shaderlab_active_subshader_runtime_verified":False,
            "source_authored_properties_compared_to_exact_export":False,
            "source_to_export_authored_property_names_types_match":False,
+           "source_to_export_authored_property_defaults_match":False,
            "source_to_export_authored_property_counts":{},
            "authored_property_or_original_program_android_pixels_verified":False}
     if ptr[1] in BUILTIN:
@@ -148,13 +149,15 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path,
     if (private_authored_properties is not None and
         not basic["selected_shaderlab_dummy_exporter_marker"] and
         not basic["selected_shaderlab_no_subprogram_marker"]):
-        # Source-only exact original-author property names/types must survive
-        # the SAME AssetRipper shader GUID trace before claiming structural
-        # ShaderLab readiness. Names/defaults never enter the returned report.
+        # Exact original-authored properties, types and default semantics
+        # must survive the SAME AssetRipper GUID trace. The resulting report
+        # has aggregate counts only; original values are never published.
         checked=property_parity.compare(private_authored_properties,code)
         basic["source_authored_properties_compared_to_exact_export"]=True
         basic["source_to_export_authored_property_names_types_match"]=(
             checked["original_authored_property_names_types_exact"])
+        basic["source_to_export_authored_property_defaults_match"]=(
+            checked["original_authored_property_defaults_semantically_equal"])
         basic["source_to_export_authored_property_counts"]=checked["counts"]
 
     if basic["selected_shaderlab_dummy_exporter_marker"]:
@@ -164,6 +167,9 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path,
     elif (basic["source_authored_properties_compared_to_exact_export"]
           and not basic["source_to_export_authored_property_names_types_match"]):
         basic["exported_ShaderLab_source_status"]="AUTHORED_PROPERTY_NAME_OR_TYPE_MISMATCH"
+    elif (basic["source_authored_properties_compared_to_exact_export"]
+          and not basic["source_to_export_authored_property_defaults_match"]):
+        basic["exported_ShaderLab_source_status"]="AUTHORED_PROPERTY_DEFAULT_MISMATCH"
     elif (not coverage["pass_braces_balanced"] or count==0 or good==0
           or not sub_counts):
         basic["exported_ShaderLab_source_status"]="INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER"
