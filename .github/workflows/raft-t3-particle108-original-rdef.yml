@@ -1,6 +1,10 @@
 name: T3 RENDER-002 authentic original Particle108 D3D11 DXBC RDEF register contract
 on:
   workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t3_particle108_original_dxbc_rdef.py'
 permissions:
   contents: read
 concurrency:
