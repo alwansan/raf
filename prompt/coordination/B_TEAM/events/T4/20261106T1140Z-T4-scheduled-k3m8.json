@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "event_id": "20261106T1140Z-T4-scheduled-k3m8",
+  "agent": "T4",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "evidence_gate_documented",
+  "baseline_sha": "380edc11ca23dd1f59d3540811497aaf7aaab0ce",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42210561898",
+    "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log"
+  ],
+  "result": "Old owner artifact predates native release outcome telemetry; absent event cannot be used as diagnostic. No new phone confirmation.",
+  "next_step": "T5 exact signed APK+OBB provenance then new mouse/keyboard JSONL and world save/reopen",
+  "device_confirmed": false
+}
