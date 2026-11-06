@@ -19,3 +19,10 @@
 - Run [42260145863](https://github.com/alwansan/raf/actions/runs/42260145863) launched on `803eeddd`, presently `in_progress`; status `waiting_ci`. Await verified result, do not claim name matches yet.
 - Does not reuse closed previous manifest question or edit game source/ShaderLab/assets. T1 Unity FFT and T3 genuine SHDR/SHEX run concurrently and are not touched.
 - next_step: inspect CI safe numeric counts and commit independent experiment/event/report, or debug only evidenced failure.
+
+## Original-data diagnostic checkpoint (2026-11-06T17:18:31.721Z)
+- [CI42260145863](https://github.com/alwansan/raf/actions/runs/42260145863) completed **FAILURE** only at final JSON privacy assertion after all source-free tests and exact ZIP2 source+target authentication/original shader comparison succeeded. Safe original aggregate: typed target 2/2, parsed Shader names 2/2, exact Foam name matches 0/2, raw Foam Shader object byte equalities 0/2; original target 758412-byte SHA stage attested. **Not** a GUID or runtime asset binding proof.
+- Root cause: assertion scanned substrings, so safe documented key `private_shader_names_or_digests_published` itself contained banned `private_shader_name` phrase. No source leak and no original source failure evidenced.
+- Narrow workflow-only fix [bdc3095f](https://github.com/alwansan/raf/commit/bdc3095f7e1445307a719d15b038858982005db2): fail closed on exact forbidden JSON keys, retain all prior SHA/shape/absence/privacy assertions; no game file changed.
+- Follow-up [CI42260338766](https://github.com/alwansan/raf/actions/runs/42260338766) currently running. Distinct retry to correct false-negative final assertion; do not treat prior run as PASS and do not rerun if follow-up succeeds.
+- Status: `waiting_ci`; next: confirm final exact-name proof and safe artifact, update work/experiment/event/report; Unity external GUID, actual Foam runtime binding, mobile water pixels remain UNKNOWN.
