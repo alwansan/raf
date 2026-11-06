@@ -1,0 +1,32 @@
+{
+  "session_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "c40742978308ce801054649b48383751f58858a4",
+  "updated_at": "2026-11-06T11:06:00Z",
+  "resumed_from_sessions": [
+    "20261106T1042Z-T4-scheduled-f6n3",
+    "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+    "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1042Z-T4-scheduled-f6n3.md",
+    "https://github.com/alwansan/raf/actions/runs/42204448436"
+  ],
+  "experiment_key": "T4-INPUT005-API26-pointer-release-actual-JNI-call-vs-skipped-UI-outcome-enum-privacy-safe-source-Unity2021ABI-v1",
+  "resource_key": "T4-physical-mouse-source-only-dedicated-ci-no-unity-native",
+  "hypothesis": "The existing physical_mouse_capture_released event is emitted before async UI dispatch, so it cannot distinguish JNI release actually invoked from new-epoch cancellation, missing/moved focus, target not captured, or AndroidJavaException. Add one bounded classified outcome event for every queued ReleaseCapture attempt, without altering capture state or the JNI call conditions.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "prompt/coordination/work/INPUT-005/T4-20261106T1106Z-T4-chat-release-outcome-s8k4-native-release-outcome-telemetry.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1106Z-T4-chat-release-outcome-s8k4.md",
+    "prompt/coordination/experiments/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json",
+    "prompt/coordination/discussions/INPUT-005/20261106T1106Z-T4-chat-release-outcome-s8k4-to-T5.md"
+  ],
+  "nonoverlap": "T4 scheduled 1042Z is source read-only and explicitly avoids duplicate ownership repair; T5 owns APK/OBB and UI, T1/T2 water and T3 graphics. No actions running at initial head check. No changes to capture selection, world save, audio, Settings, touch, original code, scenes or assets.",
+  "safety": "Classified static status strings only; no view identity/hash, user/device paths, JNI exception text, or pointer coordinates. Logger failures must not affect game. No claim that release_invoked proves OS release completion. Bounded one outcome per ReleaseCapture callback; no per-frame logs.",
+  "next_step": "Patch telemetry helper and UI callback with fail-soft outcome categories and static regression tests; trigger only existing scoped T4 mouse CI and verify original managed ABI compile; persist exact pass/fail."
+}
