@@ -5,7 +5,7 @@
   "session_id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "waiting_ci",
+  "status": "completed_source_managed_ci_success_device_unverified",
   "base_sha": "315a3ed65fc6794b0848bd87af50a6a6cfd8f697",
   "track": "immersive-activity",
   "intended_files": [
@@ -26,11 +26,12 @@
     "20261105T2241Z-T4-chat-immersive-bars-h8q2"
   ],
   "nonoverlap": "Other T4 genuine RGD cross-process suite active; T1 FFT and T5 signed APK ZIP experiments separate. Only immersive policy files.",
-  "last_verified_result": "20261106T1304Z T4 mouse source CI42222687053 passed, device unverified. Existing immersive CI source ABI tested, not this race.",
-  "next_step": "Read exact source CI42225179203 and job logs; if pass, hand off signed APK+matching OBB device focus/home and gesture regressions to T5; if failure fix exact step.",
-  "updated_at": "2026-11-06T13:25:12.588Z",
+  "last_verified_result": "Exact CI42225179203 on f4b92e1da30fd78356f57ffe3c28bd72aae4be55 COMPLETED SUCCESS: 9/9 Python source controls, 28/28 actual C# policy tests, immutable original ZIP2 DLL SHA gate, actual Android Java Unity2021 managed ABI compile (AndroidPlayerBuilt=false DeviceVerified=false).",
+  "next_step": "T5 next signed Raft APK+matching OBB with exact SHA/source provenance. Owner real Activity focus/home/pause/recreate and screen-edge swipe/Back/Home test with mouse+keyboard, menu/game transition and saved world force-stop/reopen, post-marker private logs. Do not consider source-only test Android acceptance.",
+  "updated_at": "2026-11-06T13:26:35.266Z",
   "source_commit": "f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42225179203"
-  ]
+  ],
+  "result": "Exact CI42225179203 on f4b92e1da30fd78356f57ffe3c28bd72aae4be55 COMPLETED SUCCESS: 9/9 Python source controls, 28/28 actual C# policy tests, immutable original ZIP2 DLL SHA gate, actual Android Java Unity2021 managed ABI compile (AndroidPlayerBuilt=false DeviceVerified=false)."
 }
