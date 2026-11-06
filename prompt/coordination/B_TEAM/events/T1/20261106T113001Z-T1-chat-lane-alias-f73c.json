@@ -1,0 +1,13 @@
+{
+  "id": "20261106T113001Z-T1-chat-lane-alias-f73c",
+  "owner": "T1",
+  "session_id": "20261106T113001Z-T1-chat-lane-alias-f73c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-authentic original FFT slot0 physical-lane OpAccessChain/OpVectorShuffle audit passed 15 synthetic controls and original Vulkan CI 42211108743. All three read sites have a single reachable whole-vector writer in physical X. Site1 butterfly Y actually maps to a different physical vector component and retains two may-reaching same-component writers (OpBitcast and OpConstant). Site2 butterfly Y has one constant same-component writer. Under bounded tested model no unknown-index/escape candidates remain; numeric value/Unity parity/Adreno water unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42211108743",
+    "https://github.com/alwansan/raf/commit/3737326672b2168028970c17443ce08c511df408"
+  ],
+  "at": "2026-11-06T11:35:17.804Z"
+}
