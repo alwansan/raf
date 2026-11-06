@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1639Z-T2-chat-original-manifest-9d26",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "original Foam Shader Material PPtr identity",
+  "approach": "Use SHA-pinned original ZIP2 sharedassets0 serialized external paths and immutable 366-row manifest to disambiguate two previously unresolved Material.m_Shader external PPtrs. Fail closed on ambiguous/unverified candidate; stage targeted original files only if bounded and verify byte hashes and typed Shader PathID. Emit count-only public evidence.",
+  "status": "active",
+  "base_sha": "c7631ed7aef24cccc13e3efc7f9d5c38474eb0ed",
+  "intended_files": [
+    "scripts/t2_foam_original_manifest_pptr.py",
+    "tests/test_t2_foam_original_manifest_pptr.py",
+    ".github/workflows/raft-t2-foam-original-manifest-pptr.yml",
+    "prompt/coordination/clients/T2/sessions/20261106T1639Z-T2-chat-original-manifest-9d26.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1639Z-T2-chat-original-manifest-9d26.json",
+    "prompt/coordination/experiments/T2/20261106T1639Z-T2-chat-original-manifest-9d26.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1639Z-T2-chat-original-manifest-9d26-result.json",
+    "docs/T2_FOAM_EXTERNAL_MANIFEST_PPTR_2026-11-06.md"
+  ],
+  "hypothesis": "Two unresolved Shader target links in immutable original sharedassets0 may be uniquely represented in ZIP2 366-entry manifest; verified bytes plus typed target Shader object can narrow identity without extrapolating GUID or pixels.",
+  "experiment_key": "ZIP2-15964-sharedassets0-original-externals-unresolved-two-manifest-unique-typed-Shader-PathID-v1",
+  "resource_key": "ZIP2-original-sharedassets0-external-file-targets-readonly",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1619Z-T2-scheduled-external-target-ambiguity-k8m2.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1619Z-T2-scheduled-external-target-ambiguity-k8m2.md"
+  ],
+  "experiment_ids": [
+    "20261106T1639Z-T2-chat-original-manifest-9d26"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement original manifest-to-external candidate fail-closed scanner and synthetic controls; run SHA-authenticated isolated CI only on new source or workflow push; record evidence/limits.",
+  "updated_at": "2026-11-06T16:38:57.954Z"
+}
