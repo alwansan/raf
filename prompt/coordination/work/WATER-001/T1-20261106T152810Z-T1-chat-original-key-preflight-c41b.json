@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a99436ff7ee8351a465ef5f13ea4abad42841cbe",
-  "updated_at": "2026-11-06T15:28:10.506Z",
+  "updated_at": "2026-11-06T15:33:21.229Z",
   "resumed_from_sessions": [
     "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
     "20261106T1511Z-T1-scheduled-invocation-cli-k7m2",
@@ -25,7 +25,10 @@
   ],
   "experiment_key": "water001-original-spirv-direct-keyed-trace-typed-fetch-builtin-descriptor-preflight-v1-sha15964ea8",
   "resource_key": "t1-sourceonly-python-4min-different-from-running-private-vulkan",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build strict SPIR-V source-safe audit and synthetic controls without downloading original binary or launching a second private Vulkan runner. Original-actual validation will occur only after candidate run completes and when a new non-overlapping original-source experiment is reserved."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42243651596",
+    "https://github.com/alwansan/raf/actions/runs/42243693907"
+  ],
+  "result": "Source-only original-SPIR-V keyed capture prerequisites detector validated 12/12 and entire isolated gate 86/86 in CI 42243693907 SUCCESS. First 42243651596 failed only due assertion against public coordinate_type field; fixed fixture to check forbidden private %coordinate ID. Actual ZIP2 original SPIR-V has NOT been audited, keyed original capture absent, and no independent paired numerical FFT parity proven. This standalone source-only resource is released.",
+  "next_step": "Once original T1 Vulkan keyed candidate run 42242127723 terminates, check result and in a new source-authentic run apply private t1_fft_original_keyed_preflight to slot0.spv, then implement source-original keyed capture only if real input/binding prerequisites pass. WATER-001 OPEN."
 }
