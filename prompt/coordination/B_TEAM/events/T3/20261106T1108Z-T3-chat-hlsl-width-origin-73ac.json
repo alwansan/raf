@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "SHA-verified Particle108 4 original VSFS pairs: recovered HLSL Vertex output 16/16 exact source SPIR-V names/types, HLSL semantic VSFS link 4/4 (14 Fragment user inputs, zero missing or type mismatched), yet separate glslang HLSL->SPIRV roundtrip 2/4. Source/HLSL/roundtrip VS output type multisets match all 4; glslang roundtrip outputs have entirely different reflected names (0/16 exact match). Thus numeric same-Location earlier apparent narrowing is not proven component loss; inspect recompile stage IO mapping privately. 25/25 tests, CI 42209509708 SUCCESS. No original Unity assets patched, Adreno pixels not tested, RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42209509708",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json"
+  ],
+  "at": "2026-11-06T11:23:57.596Z"
+}
