@@ -1,0 +1,14 @@
+# T2 — original Foam CB0 scalar field producers + Material prefix
+- session_id: `20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e`
+- origin: `chat`
+- status: `active`
+- base_sha: `cabf3442d80a63f16261f00ae261e42b2e97fb1d`
+- work registration commit: `58a11097554bfb8a6f72f8c3c2172cd1293607b4`
+- resumed_from_sessions: `20261106T1218Z-T2-chat-cb0-setvector-operands-4d79` (CI [42218712162](https://github.com/alwansan/raf/actions/runs/42218712162) original SHA source success: Vector4 four float constructor, 3 field reads + 1 literal), `20261106T122027Z-T2-scheduled-ci-reconcile-a7c2` (independent SPIR-V pointer proof).
+- issue: WATER-001 OPEN; phone water not accepted. No queued or running GitHub Actions on feature branch at work scope, latest T1 FFT [42219435992](https://github.com/alwansan/raf/actions/runs/42219435992) success, no cancellation or file overlap.
+- experiment_key: `ZIP2-original-Foam-CB0-confirmed-SetVector-4float-3ldfld-private-field-identity-types-writers-receiver-IL-prefix-v1`
+- intended_file_scope: `android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs`, its isolated T2 CI, this session and own experiment/event and report; no game original shader, Unity Meta/GUID, assets, scenes, Android build or other T agents' files.
+- hypothesis: at exact source-original CB0 string first formal → one Material.SetVector(string,Vector4), examine whether each of 3 direct constructor `ldfld` sources maps to distinct declared original managed System.Single fields, and count original managed `stfld` writes to those exact private IDs. Separately inspect immediately preceding source-name `ldstr` instruction, stage type and all branch target protections before regarding it as the stack-top receiver source. Never leak exact field identities or infer runtime execution.
+- original pins: ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385, Assembly-CSharp.dll SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e, original Foam owner SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3.
+- no work results claimed yet.
+- next: source-free adversarial Cecil controls and original SHA-gated CI, bounded aggregate-only evidence; preserve no Unity upload proof.
