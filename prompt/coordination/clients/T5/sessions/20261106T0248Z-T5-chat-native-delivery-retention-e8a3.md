@@ -1,0 +1,14 @@
+# T5 chat — 20261106T0248Z-T5-chat-native-delivery-retention-e8a3
+- origin=chat
+- session_id=20261106T0248Z-T5-chat-native-delivery-retention-e8a3
+- base_sha=f9856f74db3d02cca97c6151877735a776816b0c
+- status=active
+- resumed_from=20261106T0214Z-T5-chat-scene-window-attribution-8d91, 20261105T2110Z-T5-chat-retain-delivery-a6f8, T5 scheduled 20261106T0047Z-T5-scheduled-c4e8
+- work=prompt/coordination/work/INTEGRATION-001/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json
+- original signed native source=e9c358eda01785b65e4eb14f18723da426635628 run 42058825739 reconstruct SUCCESS; GitHub Release publish job 127441439836 FAIL HTTP403 Resource not accessible by integration; job already requested contents:write but effective token policy denied. Delivery artifact original retention-days=1; signed checkpoint=2; delivery-result remains strict fail on 403.
+- T5 previous real archive byte-authenticated rescue artifact13454900880 exists to 2026-11-08T21:12:40Z; this new fix is preventive for FUTURE native runs and DOES NOT extend the old artifact.
+- No native build/actual game code, T1 FFT Unity paired replay (separate workflow 408169287) currently running; T2 private ShaderLab success CI42151620701 but Unity importer/device unknown. Scope strictly retention and owner-configured optional release PAT, no collision with T4 input/T5 scheduled Resolution.
+- intended files: .github/workflows/raft-unity-editor-android-import.yml; tests/test_t5_native_delivery_fallback_policy.py; .github/workflows/raft-t5-native-delivery-fallback-policy.yml; docs/T5_NATIVE_DELIVERY_FALLBACK_2026-11-06.md. This shared native workflow change is limited to upload-artifact retention and release publisher auth selection; no shared Unity compilation, native request, or game asset behavior.
+- resource=raft-unity-editor-android-import.yml-publish-early-test-retention-only
+- experiment=t5-native-42058825739-publish403-3day-signed-delivery-retention-authorized-token-route-source-policy-v1
+- next: source-only controls prove exact original job guards preserved, retention >=3 days, no permission bypass; test in CI without Unity. Record real limits and owner-secret requirement.
