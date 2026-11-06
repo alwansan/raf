@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-LOCAL005-actual-pinned-offline-original-13source-import-hardlink-cs-meta-synthetic-inode-alias-fail-closed-linux-v1",
+  "hypothesis": "Original offline source staging rejects symlinks but lacks hardlink detection; Linux Path.write_bytes() mutates external ZIP2/provider inode when an Assets copy is a hardlink. .meta hardlink also violates original ownership invariant.",
+  "source_commit": "e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7",
+  "test_only_sha": "f8d4233c3d7d4e0ab042c0af8ae1c37b0b9be9bd",
+  "inputs": {
+    "type": "synthetic only",
+    "classes": [
+      "Settings.cs",
+      "Settings.cs.meta"
+    ],
+    "source": "Minimal synthetic Settings C# containing expected SteamApps.GetAppBuildId() original guarded adapter anchor",
+    "alias": "Hardlink to external filename under disposable tempfile dir; valid physical same filesystem inode"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v"
+  ],
+  "negative_controls": [
+    "Existing source-only tests for PINS source fingerprint, meta GUID, symlink parents, dangling backup, copy interruptions, rollback failures and Android-only call site safeguards stay in place.",
+    "Link test requires explicit rejection before backup or original mutation, and external bytes identical.",
+    "Only the adapter source and synthetic tests are changed; no original game source or user RGD files are staged into CI."
+  ],
+  "workflow_path": ".github/workflows/raft-b13-offline-source-transaction.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42266868340",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42266760305",
+    "https://github.com/alwansan/raf/actions/runs/42266868340"
+  ],
+  "budget": "Existing B13 source-free transaction CI automatic trigger; no heavy Unity/Android APK/OBB or originals.",
+  "status": "waiting_ci",
+  "observed_result": "RED original source at test-only f8d4233c: CI42266760305 completed FAILURE, exactly two new tests failed: test_hardlinked_original_csharp_cannot_rewrite_external_source_inode and test_hardlinked_original_csharp_meta_cannot_alias_external_guid_inode, both AssertionError: ValueError not raised; 21 cases total with other 19 green. Production guard e88c54fa checks st_nlink==1 on each original .cs and optional .meta before read/backup/write. GREEN CI42266868340 pending.",
+  "rejected_hypotheses": [
+    "No evidence current game's staging is actually using hardlinks or that ZIP2 has already been corrupted.",
+    "This regression is source-stage preservation, not an Android runtime world save fix."
+  ],
+  "limitations": [
+    "Hardlink check is a managed filesystem precheck and does not protect against a malicious concurrent inode swap.",
+    "Only a source-free synthetic Linux filesystem fixture, not ZIP2/Unity/Android device validation."
+  ],
+  "integration_commit": "e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7",
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "يحتاج",
+    "reason": "Earlier substantial hardware mouse integration; this source-stage safety patch alone is not a new trial reason.",
+    "unchanged": true
+  },
+  "next_step": "Verify green B13 and genuine original local startup after guard, finalize report/event/T5 handoff; keep current T4 vote and game readiness unchanged."
+}
