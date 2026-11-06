@@ -49,6 +49,30 @@ class ImmersiveSystemBarsPolicyTests(unittest.TestCase):
         self.assertIn("private void OnDisable()", RUNTIME)
         self.assertIn("if (!value) ScheduleHide();", RUNTIME)
 
+    def test_pending_runnable_never_hides_another_activity(self):
+        self.assertIn("using System.Threading;", RUNTIME)
+        self.assertIn('system.CallStatic<int>("identityHashCode", activity)', RUNTIME)
+        self.assertIn("int queuedGeneration = Interlocked.Increment(ref hideGeneration);", RUNTIME)
+        self.assertIn("int queuedActivityIdentity = ActivityIdentity(activity);", RUNTIME)
+        self.assertIn("queuedGeneration != Volatile.Read(ref hideGeneration)", RUNTIME)
+        self.assertIn("AndroidSystemBarPolicy.CanApplyQueuedHide(", RUNTIME)
+        self.assertIn("queuedActivityIdentity, ActivityIdentity(current)", RUNTIME)
+        self.assertLess(RUNTIME.index("AndroidSystemBarPolicy.CanApplyQueuedHide("),
+                        RUNTIME.index('current.Call<AndroidJavaObject>("getWindow")'))
+        self.assertIn("queuedGeneration != 0 && queuedGeneration == currentGeneration", POLICY)
+        self.assertIn("queuedActivityIdentity != 0", POLICY)
+        self.assertIn("queuedActivityIdentity == currentActivityIdentity", POLICY)
+
+    def test_lifecycle_invalidates_old_queued_generation(self):
+        for start, end in (("OnEnable()", "Update()"),
+                           ("OnApplicationFocus(bool value)", "OnApplicationPause(bool value)"),
+                           ("OnApplicationPause(bool value)", "OnDisable()")):
+            body = RUNTIME.split("private void " + start, 1)[1].split("private void " + end, 1)[0]
+            self.assertIn("Interlocked.Increment(ref hideGeneration);", body)
+        self.assertIn("Interlocked.Increment(ref hideGeneration);",
+                      RUNTIME.split("private void OnDisable()", 1)[1])
+        self.assertNotIn("setSystemGestureExclusionRects", RUNTIME)
+
     def test_no_forced_os_escapes_and_no_display_changes(self):
         for forbidden in ("SetResolution", "Screen.fullScreen", "Screen.orientation",
                           "setSystemGestureExclusionRects", "disableBack", "disableHome",
