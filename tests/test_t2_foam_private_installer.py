@@ -172,7 +172,7 @@ class FoamInstallTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             project, target, candidate, backup = fixture(d)
             (project / "Assets" / "Elsewhere.asset.meta").write_bytes(
-                b"fileFormatVersion: 2\\nguid: " + b"b" * 32 + b"\\n")
+                META.replace(b"a" * 32, b"b" * 32))
             result = install(project, candidate, backup, SHA, stage())
             self.assertEqual(result["unique_original_foam_exported_target_installed"], 1)
             self.assertEqual(target.read_bytes(), CANDIDATE)
