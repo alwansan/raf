@@ -199,5 +199,44 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
 
 
 
+    def test_touchpad_event_must_cross_check_device_sources(self):
+        source = (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text()
+        self.assertIn("public const int Mouse = 8194;", source)
+        self.assertIn("public static Kind Classify(int eventSource, int deviceSources)", source)
+        self.assertIn("if (eventSource == Mouse && deviceSources >= 0 &&", source)
+        self.assertIn("(deviceSources & Touchpad) == Touchpad", source)
+        self.assertIn("if (direct != Kind.Ignore) return direct;", source)
+
+    def test_native_touchpad_getdevice_is_bounded_to_mouse_event(self):
+        listener = BRIDGE.split(
+            "public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)", 1
+        )[1].split("private bool RecordCapturedMotion", 1)[0]
+        self.assertIn('int source = motionEvent.Call<int>("getSource");', listener)
+        self.assertIn("if (source == PhysicalMouseMotionSource.Mouse)", listener)
+        self.assertIn('using (var device = motionEvent.Call<AndroidJavaObject>("getDevice"))', listener)
+        self.assertIn('deviceSources = device.Call<int>("getSources");', listener)
+        self.assertIn("PhysicalMouseMotionSource.Classify(source, deviceSources)", listener)
+        self.assertLess(
+            listener.index('if (source == PhysicalMouseMotionSource.Mouse)'),
+            listener.index('deviceSources = device.Call<int>("getSources");'),
+        )
+        self.assertLess(
+            listener.index("PhysicalMouseMotionSource.Classify(source, deviceSources)"),
+            listener.index("if (kind == PhysicalMouseMotionSource.Kind.Ignore)"),
+        )
+
+    def test_touchpad_source_guard_preserves_original_mouse_and_screen(self):
+        listener = BRIDGE.split(
+            "public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)", 1
+        )[1].split("private bool RecordCapturedMotion", 1)[0]
+        self.assertIn("kind == PhysicalMouseMotionSource.Kind.Mouse", listener)
+        self.assertIn("PhysicalMouseMotionSource.AxisRelativeX", listener)
+        self.assertIn("PhysicalMouseMotionSource.AxisRelativeY", listener)
+        self.assertIn("return owner.RecordCapturedMotion(listenerEpoch, dx, dy);", listener)
+        self.assertIn("if (motionEvent != null) motionEvent.Dispose();", listener)
+        self.assertIn("if (view != null) view.Dispose();", listener)
+
+
+
 if __name__ == "__main__":
     unittest.main()
