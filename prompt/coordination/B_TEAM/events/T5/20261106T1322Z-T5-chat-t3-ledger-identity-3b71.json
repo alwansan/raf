@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
+  "issue_id": "COORD-001",
+  "type": "result",
+  "at": "2026-11-06T13:21:58.767Z",
+  "summary": "Recovered new T3 postvendor event 20261106T1308Z missing explicit id after live canonical index CI42224618618 failed. Added only id equal to original session_id, preserved all 16 T3 fields and source evidence; commit c6f4693. Existing 11+3 parser tests unchanged, no T3 shaders/P0 status change. Strict index rerun pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42224618618",
+    "https://github.com/alwansan/raf/commit/c6f4693ee8329f87a2e3df47e04959aa0987a00b"
+  ],
+  "limits": "Only committed event schema repair; T3 shader recovery, game readiness, actual Android pixel/FFT and signed APK content unchanged.",
+  "next_step": "Check full live canonical ledger refresh CI with exact source and all events; no unsafe fallback."
+}
