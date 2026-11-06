@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1316Z-T5-chat-nested-zip-c53a",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed_real_signed_nested_zip_local_and_central_verified_no_full_hash",
+  "experiment_key": "T5-real-signed-42058825739-artifact13441766832-ZIP-STORED-nested-APK-OBB-central-HTTP206-v1",
+  "artifact": {
+    "source_run": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "signed_id": 13441766832,
+    "signed_outer_zip_bytes": 2974110506,
+    "metadata_digest": "sha256:0e99e82c44af0fa21f613515ca0cb8eee2c04aa7911e9a001aabd1abdcde16bd"
+  },
+  "workflow": ".github/workflows/raft-t5-real-signed-nested-zip-range.yml",
+  "source_commit": "26308123af645b92dde1ca36c98fda7c64aca29f",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42224062207",
+  "job_id": 127912959079,
+  "conclusion": "success",
+  "tests": "14/14 synthetic, then real original zip live pass",
+  "live_result": {
+    "outer_zip_stored_apk_and_obb": true,
+    "apk_bytes": 672853870,
+    "obb_bytes": 2301256312,
+    "apk_nested_zip_members": 31,
+    "obb_nested_zip_members": 39,
+    "local_headers_verified_count": 70,
+    "apk_arm64_libraries": 6,
+    "apk_assets_bin_data_members": 11,
+    "obb_assets_bin_data_members": 1,
+    "apk_AndroidManifest_binary_xml_magic": true,
+    "apk_DEX_magic": true,
+    "apk_Unity_IL2CPP_ELF64_AArch64_magic": true,
+    "obb_assets_prefix_present": true,
+    "real_HTTP_206_bytes": 25350,
+    "real_HTTP_206_requests": 165,
+    "full_signed_APK_SHA256_checked": false,
+    "full_signed_OBB_SHA256_checked": false,
+    "APK_certificate_checked": false,
+    "unity_OBB_GUID_checked": false,
+    "actual_android_device_tested": false
+  },
+  "failed_and_corrected_tests": [
+    {
+      "run": 42223773128,
+      "issue": "missing sparse helper script after integration, corrected in workflow"
+    },
+    {
+      "run": 42223856655,
+      "issue": "test expected private detailed error while exception intentionally redacts as safe inconclusive, corrected test expectations"
+    }
+  ],
+  "prior_success_runs": [
+    42223563645,
+    42223800025
+  ],
+  "provenance": "Both real original nested ZIP central directories and every local header were read via HTTP 206 with exact outer artifact pinned digest-size metadata. No actual original APK/OBB payload full stream was fetched; do not infer digital signing or full file digest from partial ranges.",
+  "next_step": "On resource-authorized isolated runner, verify complete signed APK SHA and apksigner / aapt binary AndroidManifest versionCode, then OBB SHA/Unity internal GUID and phone once actual bytes available. Coordinate with T5 scheduled and protect T1–T4.",
+  "report_path": "docs/T5_REAL_SIGNED_NESTED_ZIP_2026-11-06.md",
+  "updated_at": "2026-11-06T13:18:48.825Z"
+}
