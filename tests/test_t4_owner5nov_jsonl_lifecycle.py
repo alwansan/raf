@@ -183,13 +183,14 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
                 self.assertGreater(record["incomplete_or_misordered_savegame_cycles"], 0)
                 self.assertFalse(record["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
 
-    def _loadt_trace(self, operations):
+    def _loadt_trace(self, operations, exit_detail="exceptionEscaped=False; elapsed_ms=0.000"):
         return self.put("loadt.jsonl", [
             row("synthetic-load-session", seq, "save", op,
                 "2026-11-05T13:00:%02dZ" % seq,
-                "exists_at_filename_argument=True; length_class=nonzero; "
-                "readback_and_deserialization_unverified=true"
-                if op == "Load.argumentFileSnapshot" else "")
+                ("exists_at_filename_argument=True; length_class=nonzero; "
+                 "readback_and_deserialization_unverified=true")
+                if op == "Load.argumentFileSnapshot"
+                else (exit_detail if op == "Load<T>.exit" else ""))
             for seq, op in enumerate(operations, start=1)
         ])
 
@@ -228,6 +229,32 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
                 self.assertEqual(record["fully_traced_original_loadt_calls"], 0)
                 self.assertFalse(
                     record["all_original_loadt_calls_have_one_nonzero_snapshot_no_caught"])
+
+    def test_original_loadt_escaped_or_malformed_exit_disqualifies_nonzero_snapshot(self):
+        # The genuine original Android instrumented Load<T> has an explicit
+        # exceptionEscaped status on *every* finally exit. A nonzero file does
+        # not make an escaped or missing original exit detail a clean load.
+        for detail in (
+                "exceptionEscaped=True; elapsed_ms=0.000",
+                "exceptionEscaped=True; elapsed_ms=999.999",
+                "",
+                "exceptionEscaped=false; elapsed_ms=0.000",
+                "exceptionEscaped=False; elapsed_ms=unknown"):
+            with self.subTest(detail=detail):
+                stage = analyze([self._loadt_trace([
+                    "Load<T>.enter", "Load.argumentFileSnapshot", "Load<T>.exit",
+                ], exit_detail=detail)])["sessions"][0]
+                self.assertEqual(stage["fully_traced_original_loadt_calls"], 0)
+                self.assertGreater(stage["incomplete_or_ambiguous_original_loadt_calls"], 0)
+                self.assertFalse(stage["all_original_loadt_calls_have_one_nonzero_snapshot_no_caught"])
+
+    def test_original_loadt_exception_marker_cannot_be_counted_as_clean_load(self):
+        stage = analyze([self._loadt_trace([
+            "Load<T>.enter", "Load.argumentFileSnapshot",
+            "Load<T>.exception", "Load<T>.exit",
+        ])])["sessions"][0]
+        self.assertEqual(stage["fully_traced_original_loadt_calls"], 0)
+        self.assertFalse(stage["all_original_loadt_calls_have_one_nonzero_snapshot_no_caught"])
 
     def test_loadt_caught_exception_disqualifies_even_with_nonzero_path(self):
         record = analyze([self._loadt_trace([
