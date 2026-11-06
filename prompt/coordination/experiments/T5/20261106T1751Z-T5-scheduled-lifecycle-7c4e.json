@@ -1,0 +1,13 @@
+{
+  "session_id": "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
+  "origin": "scheduled",
+  "experiment_key": "t5-pid-epoch-stop-restart-same-pid-fixture-v1",
+  "hypothesis": "game_not_running boundary must separate identical PID process lifetimes",
+  "source_commits": [
+    "a5f2172f7433e8e0a6c4a6a178029a56a82d8cc9",
+    "da7fdeadd7f95a6273dca22d71aee4bce6736416"
+  ],
+  "expected": "three epochs for verified-running / not-running / verified-running, no whole-session aggregation",
+  "validation": "pending_ci",
+  "device_evidence": false
+}
