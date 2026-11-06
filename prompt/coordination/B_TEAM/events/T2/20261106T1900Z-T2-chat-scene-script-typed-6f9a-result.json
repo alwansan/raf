@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1900Z-T2-chat-scene-script-typed-6f9a-original-in-scene-typed-managed-subset-result",
+  "owner": "T2",
+  "session_id": "20261106T1900Z-T2-chat-scene-script-typed-6f9a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Genuine original ZIP2 SHA-pinned 40-scene class join CI42276583082 SUCCESS: 15/15 synthetic tests, 40 scenes 233237972B plus MonoScript provider 758412B and original managed DLL 3211776B SHA verified. 55328 original opaque m_Script PPtrs reference 473 distinct actual typed MonoScripts; 428 Assembly-CSharp candidates -> 427 unique exact TypeDef matches, 1 ambiguous, 0 missing; 45 other assembly, 0 unreadable. Source class proof only; no Foam runtime CB0/ShaderLab or device pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42276583082",
+    "docs/T2_ORIGINAL_SCENE_SCRIPT_MANAGED_SUBSET_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/fdaa5bf749ed07a0a6cd7d34718a90290b5e9322"
+  ],
+  "limitations": [
+    "Original manifest candidate + actual typed target PPtr is source evidence, not independent Unity runtime GUID.",
+    "427 original managed TypeDef matches are not 427 complete Unity custom field layouts.",
+    "One ambiguous same-namespace TypeDef remains unresolved.",
+    "No real Foam runtime ShaderLab/CB0 integration nor Android pixels."
+  ],
+  "at": "2026-11-06T19:07:15Z"
+}
