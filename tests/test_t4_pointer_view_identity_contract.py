@@ -31,9 +31,8 @@ class PointerViewIdentityAudit(unittest.TestCase):
         for name, body in bodies.items():
             with self.subTest(name=name):
                 self.assertIn('getCurrentFocus', body)
-        # Independent focus queries are NOT evidence of same View identity.
-        # A future fix should explicitly bind request/probe/release to the
-        # same capture target and replace this characterization test.
+        # Focus queries remain independent; identity checks now fail closed
+        # for probes and release, without retaining Java Views across threads.
 
     def test_mismatched_probe_fails_back_before_accepting_other_view_capture(self):
         source = SOURCE.read_text(encoding="utf-8")
@@ -59,6 +58,44 @@ class PointerViewIdentityAudit(unittest.TestCase):
             request.index("OnAndroidUi(() =>"))
         # Request without a focused View leaves identity zero; a later probe
         # must not trust capture belonging to another focused View.
+
+    def test_release_only_targets_original_nonzero_request_view_identity(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        release = method_body(source, "ReleaseCapture")
+        captured = release.index(
+            "releaseViewIdentity = Volatile.Read(ref captureViewIdentity);")
+        clearing = release.index("Volatile.Write(ref captureViewIdentity, 0);")
+        queued = release.index("OnAndroidUi(() =>")
+        self.assertLess(captured, clearing)
+        self.assertLess(clearing, queued)
+        self.assertIn("releaseEpoch = ++epoch;", release)
+        self.assertIn("releaseEpoch != Volatile.Read(ref epoch) || requested", release)
+        nonzero = release.index("releaseViewIdentity != 0")
+        identity = release.index(
+            "ViewIdentity(view) == releaseViewIdentity", nonzero)
+        captured_other = release.index(
+            'view.Call<bool>("hasPointerCapture")', identity)
+        release_call = release.index(
+            'view.Call("releasePointerCapture")', captured_other)
+        self.assertLess(queued, nonzero)
+        self.assertLess(nonzero, identity)
+        self.assertLess(identity, captured_other)
+        self.assertLess(captured_other, release_call)
+        self.assertEqual(release.count('view.Call("releasePointerCapture")'), 1)
+        # Source identity guard protects another focused View. It cannot prove
+        # that Android automatically released the former View on focus loss.
+
+    def test_release_never_retains_android_java_view_across_threads(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        release = method_body(source, "ReleaseCapture")
+        captured = release.split("OnAndroidUi(() =>", 1)[0]
+        self.assertIn("int releaseViewIdentity;", captured)
+        self.assertNotIn("AndroidJavaObject", captured)
+        self.assertNotIn("getCurrentFocus", captured)
+        self.assertIn(
+            'using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))',
+            release)
+        self.assertIn("ViewIdentity(view) == releaseViewIdentity", release)
 
     def test_epoch_guards_do_not_encode_view_identity(self):
         source = SOURCE.read_text(encoding="utf-8")

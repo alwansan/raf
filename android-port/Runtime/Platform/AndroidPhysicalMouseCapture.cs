@@ -362,18 +362,22 @@ namespace RaftAndroid.Platform
                     "physical_mouse_capture_released",
                     "focus=" + focused + "; paused=" + paused +
                     "; requested=" + requested + "; relativeEvents=" + deltas.ReceivedCount);
+            int releaseViewIdentity;
+            int releaseEpoch;
             lock (captureGate)
             {
-                epoch++;
+                // Capture the requested View identity before clearing it.
+                // Never retain or invoke an AndroidJavaObject across threads.
+                releaseViewIdentity = Volatile.Read(ref captureViewIdentity);
+                releaseEpoch = ++epoch;
                 requested = nativeHasMotion = nativeCaptured = false;
+                Volatile.Write(ref captureViewIdentity, 0);
                 deltas.Reset();
             }
             lastLoggedCount = 0;
-            Volatile.Write(ref captureViewIdentity, 0);
             nextProbeTime = 0f;
             // UI-thread dispatch is asynchronous: a new request may supersede
             // this release before it runs. Never revoke that newer capture.
-            int releaseEpoch = Volatile.Read(ref epoch);
             try
             {
                 OnAndroidUi(() =>
@@ -384,8 +388,16 @@ namespace RaftAndroid.Platform
                         using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
                         using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
                         using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
-                            if (view != null && view.Call<bool>("hasPointerCapture"))
+                        {
+                            // Focus may have moved to another View after request.
+                            // Do not release a capture owned by that unrelated
+                            // View. If Android revoked the old capture already,
+                            // this safely leaves the newer focused View alone.
+                            if (view != null && releaseViewIdentity != 0 &&
+                                ViewIdentity(view) == releaseViewIdentity &&
+                                view.Call<bool>("hasPointerCapture"))
                                 view.Call("releasePointerCapture");
+                        }
                     }
                     catch (AndroidJavaException) { /* focus-loss releases it */ }
                 });
