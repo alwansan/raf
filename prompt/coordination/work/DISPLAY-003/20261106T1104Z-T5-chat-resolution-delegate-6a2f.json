@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1104Z-T5-chat-resolution-delegate-6a2f",
+  "origin": "chat",
+  "issue_id": "DISPLAY-003",
+  "track": "Original Settings delegate compiled IL reachability",
+  "status": "active",
+  "base_sha": "c40742978308ce801054649b48383751f58858a4",
+  "updated_at": "2026-11-06T11:04:00Z",
+  "resumed_from_sessions": [
+    "20261106T1030Z-T5-chat-resolution-il-4b9e.md",
+    "20261106T1046Z-T5-scheduled-pair-success-q6f8.md"
+  ],
+  "experiment_key": "T5-ZIP2-sha0a6f-original-GraphicsSettingsBox-bounded-delegate-reachability-v1",
+  "resource_key": "ZIP2@15964ea8 pinned Assembly-CSharp.dll, private original compiled Mono.Cecil IL metadata; no Unity build",
+  "hypothesis": "Two same-type delegate target references can be resolved and classified for reachability to original SetResolution/Apply/option population, without pretending to prove Android render-scale persistence.",
+  "intended_files": [
+    "android-port/Experiments/T5/ResolutionDelegateProbe/ResolutionDelegateProbe.csproj",
+    "android-port/Experiments/T5/ResolutionDelegateProbe/Program.cs",
+    "scripts/t5_validate_resolution_delegate_probe.py",
+    "tests/test_t5_validate_resolution_delegate_probe.py",
+    ".github/workflows/raft-t5-original-resolution-delegates.yml",
+    "prompt/coordination/work/DISPLAY-003/20261106T1104Z-T5-chat-resolution-delegate-6a2f.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1104Z-T5-chat-resolution-delegate-6a2f.md",
+    "prompt/coordination/experiments/T5/20261106T1104Z-T5-chat-resolution-delegate-6a2f.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1104Z-T5-chat-resolution-delegate-6a2f.json",
+    "docs/T5_ORIGINAL_RESOLUTION_DELEGATE_IL_2026-11-06.md"
+  ],
+  "coordination": "Scheduled T5 owns APK/OBB, not this source-only IL probe; T1 FFT, T2 Foam, T3 particles, T4 input/save unmodified; no active CI at scope check.",
+  "checks": [
+    "original DLL fixed SHA and size",
+    "bounded same-type delegate target analysis",
+    "synthetic adversarial controls",
+    "no private IL publication",
+    "no gameplay Settings changes"
+  ],
+  "next_step": "Implement independent Cecil topology analyzer and fail-closed gate, test on original in separate CI, save source-only result."
+}
