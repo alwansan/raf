@@ -1,0 +1,20 @@
+{
+  "id": "T2-20261106T1743Z-T2-chat-trial-vote-foam-host-83a2-forty-original-sharedassets-no-direct-foam-material",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SHA-original 40/40 Raft_Data/sharedassets assets (474065455 bytes) run 42264851712 SUCCESS; 18/18 new synthetic tests, 1392/1392 material pointers parsed, 0 direct local or external PPtr Shader references to original Foam Shader sharedassets0 PathID2420; 885 Material refs to same owner but other shader pathIDs. This does not rule out script-driven/runtime or nonsharedassets Foam use. T2 trial round r1 votes لا يحتاج (no integrated Android Foam ShaderLab/CB0 fix).",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42264851712",
+    "docs/T2_FOAM_ORIGINAL_40_SHAREDASSETS_MATERIAL_HOST_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1743Z-T2-chat-trial-vote-foam-host-83a2.json"
+  ],
+  "limitations": [
+    "All original 40 SHA-authenticated sharedassets Material Shader PPtrs only; source code/MonoBehaviour and runtime allocation not tested",
+    "No Unity GUID original target proof from basename aliases",
+    "No new Android render integration; WATER-001 OPEN, NOT_READY"
+  ],
+  "at": "2026-11-06T17:49:43.153Z"
+}
