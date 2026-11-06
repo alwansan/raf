@@ -52,6 +52,8 @@ def success():
         "original_private_Save_output_created": True,
         "original_private_Save_output_nonzero": True,
         "original_private_Save_generated_LoadT_matching_root": True,
+        "original_private_Save_fresh_CLR_child_attempted": False,
+        "original_private_Save_fresh_CLR_child_LoadT_matching_root": False,
         "original_private_Save_private_wire_compared": True,
         # A type-preserving Save can change historical BinaryFormatter bytes.
         # Source-only fixture must not assert exact equality by default.
@@ -69,6 +71,54 @@ class OriginalOwnerRoundtripContract(unittest.TestCase):
         self.assertTrue(v["original_generated_LoadT_matching"])
         self.assertFalse(v["native_android_verified"])
         self.assertFalse(v["phone_world_save_reopen_verified"])
+
+    def test_actual_fresh_clr_child_requires_verified_private_original_wire(self):
+        p = success()
+        p["original_private_Save_private_wire_identical"] = True
+        p["original_private_Save_fresh_CLR_child_attempted"] = True
+        p["original_private_Save_fresh_CLR_child_LoadT_matching_root"] = True
+        q = validate(p)
+        self.assertTrue(q["original_fresh_CLR_child_executed"])
+        self.assertTrue(q["original_fresh_CLR_generated_LoadT_matching"])
+        self.assertFalse(q["native_android_verified"])
+
+    def test_child_matching_without_fresh_child_process_rejected(self):
+        p = success()
+        p["original_private_Save_private_wire_identical"] = True
+        p["original_private_Save_fresh_CLR_child_LoadT_matching_root"] = True
+        with self.assertRaisesRegex(ValueError, "impossible_fresh_clr_child_evidence"):
+            validate(p)
+
+    def test_child_attempt_on_changed_original_save_wire_rejected(self):
+        p = success()
+        p["original_private_Save_fresh_CLR_child_attempted"] = True
+        with self.assertRaisesRegex(ValueError, "impossible_fresh_clr_child_evidence"):
+            validate(p)
+
+    def test_child_executed_but_failed_load_does_not_claim_success(self):
+        p = success()
+        p["original_private_Save_private_wire_identical"] = True
+        p["original_private_Save_fresh_CLR_child_attempted"] = True
+        p["original_private_Save_fresh_CLR_child_LoadT_matching_root"] = False
+        q = validate(p)
+        self.assertTrue(q["original_fresh_CLR_child_executed"])
+        self.assertFalse(q["original_fresh_CLR_generated_LoadT_matching"])
+
+    def test_child_strict_original_identity_bounded_process_and_no_paths_logged(self):
+        source = ORIGINAL.read_text()
+        self.assertIn("private static int FreshClrLoadChild(string[] args)", source)
+        self.assertIn("!AuthenticOwnerWorldFile(generatedPath)", source)
+        self.assertIn("!OriginalFile(assemblyPath, OriginalDllSize, OriginalDllSha)", source)
+        self.assertIn("privateWireIdentical", source)
+        self.assertIn("FreshClrProcessLoadsGeneratedOwnerSave(", source)
+        self.assertIn('new System.Diagnostics.ProcessStartInfo("dotnet")', source)
+        self.assertIn("start.ArgumentList.Add(generatedPath);", source)
+        self.assertIn("child.WaitForExit(12000)", source)
+        self.assertIn("child.Kill(entireProcessTree: true)", source)
+        self.assertIn("Directory.Delete(workDirectory, recursive: true)", source)
+        self.assertIn("original_private_Save_fresh_CLR_child_LoadT_matching_root", source)
+        self.assertNotIn('"original_child_saved_path"', source)
+        self.assertNotIn('"original_child_private_world_data"', source)
 
     def test_real_seven_exact_git_hashes_compiled_into_probe(self):
         source = ORIGINAL.read_text()
