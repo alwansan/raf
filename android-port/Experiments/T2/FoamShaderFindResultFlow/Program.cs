@@ -216,6 +216,49 @@ internal static class Program
             return new("duplicated_unresolved",null,null,skipped);
         return new("unproved",null,null,skipped);
     }
+    private sealed record DupMaterialProbe(int TypedInitializerSetterCalls,
+        FieldDefinition? MaterialField, VariableDefinition? MaterialLocal, int SkippedNops);
+
+    private static DupMaterialProbe AnalyzeDupMaterialObjectInitializer(MethodDefinition method, int ctorIndex)
+    {
+        // Deliberately narrow and fail-closed: preserve both aliases after newobj;
+        // one duplicate must be consumed by a typed one-string instance setter,
+        // leaving the original Material reference for an exact material store.
+        // No branch or ambiguous call chain is traversed.
+        var il=method.Body.Instructions;
+        int dup=ImmediateAfterNops(il,ctorIndex);
+        if(dup>=il.Count || il[dup].OpCode.Code!=Code.Dup)
+            return new(0,null,null,0);
+        int nops=dup-ctorIndex-1;
+        int literal=ImmediateAfterNops(il,dup);
+        if(literal>=il.Count || il[literal].OpCode.Code!=Code.Ldstr)
+            return new(0,null,null,nops);
+        nops+=literal-dup-1;
+        int setterIndex=ImmediateAfterNops(il,literal);
+        if(setterIndex>=il.Count || il[setterIndex].OpCode.Code is not (Code.Call or Code.Callvirt)
+            || il[setterIndex].Operand is not MethodReference setter
+            || !setter.HasThis || !setter.Name.StartsWith("set_",StringComparison.Ordinal)
+            || setter.ReturnType.FullName!="System.Void"
+            || setter.Parameters.Count!=1 || setter.Parameters[0].ParameterType.FullName!="System.String"
+            || setter.DeclaringType.FullName is not ("UnityEngine.Object" or "UnityEngine.Material"))
+            return new(0,null,null,nops);
+        nops+=setterIndex-literal-1;
+        int storeIndex=ImmediateAfterNops(il,setterIndex);
+        nops+=storeIndex-setterIndex-1;
+        if(storeIndex>=il.Count)
+            return new(1,null,null,nops);
+        var store=il[storeIndex];
+        if(store.OpCode.Code is Code.Stfld or Code.Stsfld)
+        {
+            if(ResolveMaterialField(store,method.Module,out var field))
+                return new(1,field,null,nops);
+            return new(1,null,null,nops);
+        }
+        var local=LocalForStore(method,store);
+        if(local is not null && local.VariableType.FullName==MaterialType)
+            return new(1,null,local,nops);
+        return new(1,null,null,nops);
+    }
     private static bool IsFieldLoad(Instruction inst, FieldDefinition field)
     {
         if(inst.OpCode.Code is not (Code.Ldfld or Code.Ldsfld) ||
@@ -337,6 +380,36 @@ internal static class Program
         var materialBuckets=MaterialKinds.ToDictionary(
             x=>"material_result_consumer_"+x,
             y=>y==materialResult.Kind?1:0);
+        var dupProbe=AnalyzeDupMaterialObjectInitializer(materialSite.Method,materialSite.Index);
+        int dupFieldReads=0, dupFieldMethods=0, dupFieldDirectRenderer=0, dupFieldDirectShared=0;
+        int dupLocalReads=0, dupLocalDirectRendererCandidates=0, dupLocalDirectSharedCandidates=0;
+        if(dupProbe.MaterialField is not null)
+            foreach(var method in methods)
+            {
+                int loads=0;
+                var il=method.Body.Instructions;
+                for(int i=0;i<il.Count;i++)
+                    if(SameMaterialFieldLoad(il[i],dupProbe.MaterialField))
+                    {
+                        loads++;
+                        var kind=DirectRendererSetter(il,i);
+                        if(kind==1) dupFieldDirectRenderer++;
+                        if(kind==2) dupFieldDirectShared++;
+                    }
+                if(loads>0) {dupFieldReads+=loads;dupFieldMethods++;}
+            }
+        if(dupProbe.MaterialLocal is not null)
+        {
+            var il=materialSite.Method.Body.Instructions;
+            for(int i=materialSite.Index+1;i<il.Count;i++)
+                if(LocalIsLoadOf(il[i],dupProbe.MaterialLocal))
+                {
+                    dupLocalReads++;
+                    int kind=DirectRendererSetter(il,i);
+                    if(kind==1) dupLocalDirectRendererCandidates++;
+                    if(kind==2) dupLocalDirectSharedCandidates++;
+                }
+        }
         var output=new Dictionary<string,object>
         {
             ["status"]="original_foam_ShaderFind_direct_return_consumer_typed_IL_census",
@@ -366,6 +439,17 @@ internal static class Program
             ["material_result_material_constructor_direct_Renderer_set_material_arguments"]=directMaterialToRenderer,
             ["material_result_material_constructor_direct_Renderer_set_sharedMaterial_arguments"]=directMaterialToSharedRenderer,
             ["material_result_nops_skipped_after_ctor"]=materialResult.Nops,
+            ["material_dup_followed_by_authentic_typed_string_instance_setter"]=dupProbe.TypedInitializerSetterCalls,
+            ["material_dup_setter_followed_by_original_Material_field_store"]=dupProbe.MaterialField is null?0:1,
+            ["material_dup_setter_followed_by_original_Material_local_store"]=dupProbe.MaterialLocal is null?0:1,
+            ["material_dup_original_Material_field_read_instructions"]=dupFieldReads,
+            ["material_dup_original_Material_field_read_methods"]=dupFieldMethods,
+            ["material_dup_original_Material_field_direct_Renderer_set_material_args"]=dupFieldDirectRenderer,
+            ["material_dup_original_Material_field_direct_Renderer_set_sharedMaterial_args"]=dupFieldDirectShared,
+            ["material_dup_original_Material_local_loads"]=dupLocalReads,
+            ["material_dup_original_Material_local_direct_Renderer_set_material_candidates"]=dupLocalDirectRendererCandidates,
+            ["material_dup_original_Material_local_direct_Renderer_set_sharedMaterial_candidates"]=dupLocalDirectSharedCandidates,
+            ["material_dup_nops_skipped_in_initializer_probe"]=dupProbe.SkippedNops,
             ["original_Shader_Find_executed_in_Unity"]=false,
             ["field_declaring_TypeDef_is_427_scene_script_proven"]=false,
             ["Unity_Material_or_Renderer_actual_binding_verified"]=false,
@@ -456,6 +540,21 @@ internal static class Program
         method.Body.Instructions[3]=Instruction.Create(OpCodes.Pop);
         if(ConsumeMaterialResult(method,2).Kind!="discarded_pop")
             throw new InvalidOperationException("material_discarded");
+        method.Body.Instructions[3]=Instruction.Create(OpCodes.Dup);
+        method.Body.Instructions.Insert(4,Instruction.Create(OpCodes.Ldstr,"SYNTHETIC_ONLY"));
+        var objectType=new TypeReference("UnityEngine","Object",mod,mod.TypeSystem.CoreLibrary);
+        var setName=new MethodReference("set_name",mod.TypeSystem.Void,objectType){HasThis=true};
+        setName.Parameters.Add(new ParameterDefinition(mod.TypeSystem.String));
+        method.Body.Instructions.Insert(5,Instruction.Create(OpCodes.Callvirt,setName));
+        method.Body.Instructions.Insert(6,Instruction.Create(OpCodes.Stsfld,matField));
+        var dupProbe=AnalyzeDupMaterialObjectInitializer(method,2);
+        if(dupProbe.TypedInitializerSetterCalls!=1 || dupProbe.MaterialField!=matField)
+            throw new InvalidOperationException("typed_dup_original_material_field");
+        var wrongSetter=new MethodReference("set_name",mod.TypeSystem.Void,objectType){HasThis=false};
+        wrongSetter.Parameters.Add(new ParameterDefinition(mod.TypeSystem.String));
+        method.Body.Instructions[5]=Instruction.Create(OpCodes.Call,wrongSetter);
+        if(AnalyzeDupMaterialObjectInitializer(method,2).TypedInitializerSetterCalls!=0)
+            throw new InvalidOperationException("untyped_dup_setter_rejected");
         Console.WriteLine("T2_FOAM_SHADERFIND_RETURN_CECIL_SYNTHETIC_PASS");
     }
     public static int Main(string[] args)

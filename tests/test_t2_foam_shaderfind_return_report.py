@@ -91,6 +91,48 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r=baseline()
         r["material_result_nops_skipped_after_ctor"]=5
         self.rejects(r)
+    def test_valid_material_object_initializer_field(self):
+        r=baseline()
+        r["material_result_consumer_unproved"]=0
+        r["material_result_consumer_duplicated_unresolved"]=1
+        r["material_dup_followed_by_authentic_typed_string_instance_setter"]=1
+        r["material_dup_setter_followed_by_original_Material_field_store"]=1
+        r["material_dup_original_Material_field_read_instructions"]=2
+        r["material_dup_original_Material_field_read_methods"]=1
+        r["material_dup_original_Material_field_direct_Renderer_set_material_args"]=1
+        self.assertTrue(validate(r))
+    def test_false_dup_material_field_rejected(self):
+        r=baseline()
+        r["material_dup_setter_followed_by_original_Material_field_store"]=1
+        self.rejects(r)
+    def test_false_dup_material_field_load_rejected(self):
+        r=baseline()
+        r["material_dup_original_Material_field_read_instructions"]=1
+        self.rejects(r)
+    def test_false_dup_material_local_link_rejected(self):
+        r=baseline()
+        r["material_dup_original_Material_local_loads"]=1
+        self.rejects(r)
+    def test_dup_material_false_renderer_setter_rejected(self):
+        r=baseline()
+        r["material_result_consumer_unproved"]=0
+        r["material_result_consumer_duplicated_unresolved"]=1
+        r["material_dup_followed_by_authentic_typed_string_instance_setter"]=1
+        r["material_dup_setter_followed_by_original_Material_field_store"]=1
+        r["material_dup_original_Material_field_direct_Renderer_set_material_args"]=1
+        self.rejects(r)
+    def test_dup_probe_cannot_claim_without_dup_opcode(self):
+        r=baseline()
+        r["material_dup_followed_by_authentic_typed_string_instance_setter"]=1
+        self.rejects(r)
+    def test_dup_object_initializer_duplicate_stores_rejected(self):
+        r=baseline()
+        r["material_result_consumer_unproved"]=0
+        r["material_result_consumer_duplicated_unresolved"]=1
+        r["material_dup_followed_by_authentic_typed_string_instance_setter"]=1
+        r["material_dup_setter_followed_by_original_Material_field_store"]=1
+        r["material_dup_setter_followed_by_original_Material_local_store"]=1
+        self.rejects(r)
     def test_zero_calls_not_false_green(self):
         r=baseline();r["exact_source_Foam_name_direct_typed_Shader_Find_calls"]=0;self.rejects(r)
     def test_zero_partition_rejected(self):
