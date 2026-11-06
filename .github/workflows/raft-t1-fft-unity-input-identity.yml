@@ -27,6 +27,7 @@ jobs:
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
       DEBIAN_FRONTEND: noninteractive
+      T1_PROMOTED_ONLY: ${{ contains(github.event.head_commit.message, '[t1-promoted-only]') }}
       T1_INTEGER_SOURCE: ${{ contains(github.event.head_commit.message, '[t1-integer-source]') }}
       T1_DISPATCH_CANARY: ${{ contains(github.event.head_commit.message, '[t1-dispatch-canary]') }}
       ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
@@ -202,19 +203,29 @@ jobs:
           python3 -m scripts.t1_fft_vulkan_parity_capture --project t1-original-derived-unity
           python3 -m scripts.t1_fft_pass0_vulkan_trace --project t1-original-derived-unity \
             --invocation-keys --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin
-          if [[ "$T1_INTEGER_SOURCE" == true ]]; then
+          if [[ "$T1_PROMOTED_ONLY" == true && "$T1_INTEGER_SOURCE" == true ]]; then
+            echo 'Conflicting T1 slot-zero control modes'
+            exit 1
+          fi
+          if [[ "$T1_PROMOTED_ONLY" == true || "$T1_INTEGER_SOURCE" == true ]]; then
             scratch="$(mktemp -d "$RUNNER_TEMP/t1-integer-source.XXXXXX")"
             trap 'rm -rf "$scratch"' EXIT
             root=t1-original-derived-unity
             spirv-opt --target-env=vulkan1.1 --convert-local-access-chains \
               --eliminate-local-single-block --eliminate-local-single-store --ssa-rewrite \
               "$root/_private_vulkan/slot0.spv" -o "$scratch/promoted.spv" > "$scratch/opt.log" 2>&1
-            spirv-dis --raw-id "$scratch/promoted.spv" -o "$scratch/original.spvasm"
-            python3 -m scripts.t1_fft_source_integer_coordinates "$scratch/original.spvasm" "$scratch/integer.spvasm"
-            spirv-as --target-env vulkan1.1 "$scratch/integer.spvasm" -o "$scratch/integer.spv" > "$scratch/as.log" 2>&1
-            spirv-val --target-env vulkan1.1 "$scratch/integer.spv" > "$scratch/val.log" 2>&1
-            spirv-cross "$scratch/integer.spv" --hlsl --shader-model 50 --output "$scratch/integer.hlsl" > "$scratch/cross.log" 2>&1
-            python3 - "$root" "$scratch/integer.hlsl" <<'PY'
+            assembly="$scratch/promoted.spvasm"
+            spirv-dis --raw-id "$scratch/promoted.spv" -o "$assembly"
+            mode=promoted_only
+            if [[ "$T1_INTEGER_SOURCE" == true ]]; then
+              python3 -m scripts.t1_fft_source_integer_coordinates "$assembly" "$scratch/integer.spvasm"
+              assembly="$scratch/integer.spvasm"
+              mode=integer_source
+            fi
+            spirv-as --target-env vulkan1.1 "$assembly" -o "$scratch/variant.spv" > "$scratch/as.log" 2>&1
+            spirv-val --target-env vulkan1.1 "$scratch/variant.spv" > "$scratch/val.log" 2>&1
+            spirv-cross "$scratch/variant.spv" --hlsl --shader-model 50 --output "$scratch/variant.hlsl" > "$scratch/cross.log" 2>&1
+            python3 - "$root" "$scratch/variant.hlsl" "$mode" <<'PY'
           import hashlib
           import json
           from pathlib import Path
@@ -223,7 +234,8 @@ jobs:
               sanitize_translated_compute, validate_import_candidate_manifest,
           )
 
-          root, generated = map(Path, sys.argv[1:])
+          root, generated = map(Path, sys.argv[1:3])
+          mode = sys.argv[3]
           directory = root / "Assets/T1OriginalDerived"
           manifest_path = directory / "PrivateCandidates.json"
           manifest = json.loads(manifest_path.read_text())
@@ -233,18 +245,19 @@ jobs:
           variant = sanitize_translated_compute(generated.read_bytes(), row["expected_group_x"])
           variant_sha = hashlib.sha256(variant).hexdigest()
           if variant_sha == baseline_sha:
-              raise SystemExit("Expected a distinct source-coordinate variant")
+              raise SystemExit("Expected a distinct promoted candidate")
           (root / row["compute_asset"]).write_bytes(variant)
           row["candidate_sha256"] = variant_sha
           validate_import_candidate_manifest(manifest, root)
           manifest_path.write_text(json.dumps(manifest, sort_keys=True), encoding="utf-8")
-          (directory / "PrivateIntegerSourceVariant.json").write_text(json.dumps({
+          (directory / "PrivateSlot0Variant.json").write_text(json.dumps({
               "baseline_candidate_sha256": baseline_sha,
               "diagnostic_variant_sha256": variant_sha,
               "compiled_slot": 0,
+              "mode": mode,
           }, sort_keys=True), encoding="utf-8")
           PY
-            echo 'RAFT_T1_SOURCE_INTEGER_COORDINATES unity_candidate=true untouched_vulkan_reference=true'
+            printf 'RAFT_T1_SLOT0_VARIANT mode=%s untouched_vulkan_reference=true\n' "$mode"
           fi
           python3 - <<'PY'
           from pathlib import Path
