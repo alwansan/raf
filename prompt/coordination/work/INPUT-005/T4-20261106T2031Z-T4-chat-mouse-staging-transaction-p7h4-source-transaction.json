@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2031Z-T4-chat-mouse-staging-transaction-p7h4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "track": "authenticated-original-mouse-adapter-transactional-staging",
+  "status": "active",
+  "base_sha": "225e131dd039e24e1d74caa4b1d975391506bd4b",
+  "approach": "Fix physical mouse adapted-original source partial mutations and unverified backups: source-only synthetic fault injections for interrupted backup, successful-but-corrupt backups, mid-source install torn writes and hardlinked original; fail closed, restore all originals and clean new backups only on proven rollback, safe retry. Preserve original runtime mouse, GUIDs, game assets and native workflow; no full Unity build.",
+  "intended_files": [
+    "scripts/t4_adapt_original_mouse_axes.py",
+    "tests/test_t4_adapt_original_mouse_axes.py"
+  ],
+  "experiment_key": "T4-original-mouse-legacy-axis4x4-lock2-staging-backup-rollback-sourceonly-v1",
+  "resource_key": "T4-cpu-mouse-source-adapter-no-native",
+  "related_work": [
+    "20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9",
+    "20261106T1943Z-T4-scheduled-r6k2"
+  ],
+  "concurrent_work": "No newer T4 sessions than prior completed 2014Z; T1/T2/T3 rendering and T5 source integration actions separate. Owner native42281310905 failed, no new native request.",
+  "run_urls": [],
+  "updated_at": "2026-11-06T20:31:00Z",
+  "next_step": "First synthetic negative tests and expected RED source-only T4 bridge CI; fix minimal backup copy byte equivalence and transaction rollback; verify GREEN with authentic original ABI flow."
+}
