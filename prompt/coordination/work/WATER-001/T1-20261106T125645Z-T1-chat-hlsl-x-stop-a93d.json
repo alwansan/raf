@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "18b47bc7fffc66699f8f0556cd8b478f02dc01fe",
+  "updated_at": "2026-11-06T12:56:45.467Z",
+  "track": "HLSL translated FFT butterfly1 X exact unsupported coordinate SSA stop opcode",
+  "resumed_from_sessions": [
+    "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+    "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2"
+  ],
+  "hypothesis": "HLSL-roundtrip butterfly1 X coordinates stop at OpPhi, OpIAdd or another typed operation rather than simply reaching max 12. Exposing only a fixed allowlist opcode and numeric kind at the lane's stop will identify next safe tool extension.",
+  "approach": "Modify existing bounded coordinate_lane reporter only for unresolved boundary to emit a safe fixed-allowlist stop opcode and numeric type kind, preserving existing resolved output; add synthetic tests, run original plus HLSL-roundtrip CI. No private IDs/constants/bytes or game edits.",
+  "intended_files": [
+    "scripts/t1_fft_spirv_read_provenance.py",
+    "tests/test_t1_fft_spirv_read_provenance.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.md",
+    "prompt/coordination/experiments/T1/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json"
+  ],
+  "experiment_key": "water001-fft-original-vs-hlsl-compiled-butterfly1-x-exact-ssa-stop-opcode-sourcepin15964ea8-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add bounded stop category, test OpPhi/OpIAdd and unrecognized op sanitized, run one exact original private HLSL roundtrip CI and classify translated X."
+}
