@@ -485,20 +485,33 @@ internal static class Program
             new HashSet<string>(StringComparer.Ordinal);
         int constructorShaderFieldStoreInstructions=0;
         int constructorShaderWriterMethods=0;
+        var exactOriginalShaderFieldStoreStackSources =
+            new SortedDictionary<string,int>(StringComparer.Ordinal);
+        int exactOriginalShaderFieldStoreBasicBlockSteps=0;
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
         {
             if (!method.HasBody) continue;
             bool hasExactWrite=false;
-            foreach (var instruction in method.Body.Instructions)
-                if (instruction.OpCode.Code==Code.Stfld &&
-                    instruction.Operand is FieldReference field &&
-                    originalConstructorShaderFields.ContainsKey(field.FullName))
-                {
-                    hasExactWrite=true;
-                    constructorShaderFieldStoreInstructions++;
-                    constructorShaderFieldsWithManagedStores.Add(field.FullName);
-                }
+            var writerInstructions=method.Body.Instructions;
+            for (int instructionIndex=0;instructionIndex<writerInstructions.Count;instructionIndex++)
+            {
+                var instruction=writerInstructions[instructionIndex];
+                if (instruction.OpCode.Code!=Code.Stfld ||
+                    instruction.Operand is not FieldReference field ||
+                    !originalConstructorShaderFields.ContainsKey(field.FullName))
+                    continue;
+                hasExactWrite=true;
+                constructorShaderFieldStoreInstructions++;
+                constructorShaderFieldsWithManagedStores.Add(field.FullName);
+                var typedShaderValue=MaterialStoreValueTrace.Trace(
+                    writerInstructions,instructionIndex,method,"UnityEngine.Shader");
+                exactOriginalShaderFieldStoreStackSources[typedShaderValue.ValueOrigin] =
+                    exactOriginalShaderFieldStoreStackSources.GetValueOrDefault(
+                        typedShaderValue.ValueOrigin)+1;
+                exactOriginalShaderFieldStoreBasicBlockSteps+=
+                    typedShaderValue.BasicBlockInstructions;
+            }
             if (hasExactWrite) constructorShaderWriterMethods++;
         }
         int fieldDefinitionResolved=0, fieldPublic=0, fieldAttributeSerialize=0;
@@ -616,6 +629,12 @@ internal static class Program
                 constructorShaderFieldStoreInstructions,
             original_exact_Material_ctor_private_Shader_managed_writer_method_count =
                 constructorShaderWriterMethods,
+            original_exact_Material_ctor_private_Shader_field_stfld_value_stack_origin_buckets =
+                exactOriginalShaderFieldStoreStackSources,
+            original_exact_Material_ctor_private_Shader_field_store_block_instructions_examined =
+                exactOriginalShaderFieldStoreBasicBlockSteps,
+            original_exact_Material_ctor_private_Shader_field_writer_is_Original_Foam_Shader_verified = false,
+            original_exact_Material_ctor_private_Shader_field_writer_is_runtime_executed_verified = false,
             original_exact_Shader_field_original_Foam_asset_reference_verified = false,
             original_exact_Shader_field_runtime_populated_verified = false,
             original_source_name_exact_receiver_Material_store_block_instructions_examined =
