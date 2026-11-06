@@ -5,12 +5,12 @@
   "owner": "T3",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-06T00:57:10.295Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T01:13:33.698Z",
   "base_sha": "aab0f530bb7805049f6d0e270a04d20546ba82c0",
   "hypothesis": "All four exact serialized original 108-use ParticleShader48 DXBC VS/FS keyword pairs may translate through vkd3d to valid Vulkan1.1 SPIR-V, and SPIRV-Cross HLSL roundtrip and stage interface/resource layouts can be quantified without guessing names or altering native game shaders.",
   "experiment_key": "T3-ZIP2-15964ea8-SHA6scene-4owners-Particle108-1Pass-4matchedVSFS-8genuineDXBC-vkd3dSPIRV11-reflect-HLSLroundtrip-v1",
-  "resource_key": "T3-isolated-sixscene-fourowner-Particle108-4DXBCpairs-vulkanSPV-CPU-only",
+  "resource_key": null,
   "resumed_from_sessions": [
     "20261106T004219Z-T3-chat-particle108-dxbc-4f7c.md",
     "20261106T0030Z-T3-scheduled-native-stage-order-e6b4.md"
@@ -25,8 +25,16 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T005710Z-T3-chat-particle108-vulkan-c8f1.json",
     "docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
     "prompt/coordination/discussions/RENDER-002/20261106T005710Z-T3-chat-particle108-vulkan-c8f1-to-T5.md",
-    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json",
+    "prompt/coordination/B_TEAM/issues/RENDER-002.json",
+    ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
-  "run_urls": [],
-  "next_step": "Implement one-pass four matched variants private-source extractor and all 8 genuine DXBC→SPIR-V/Vulkan1.1 validation + HLSL→SPV roundtrip/reflection, source-free strict negative tests, run only T3 isolated authentic six-scene CI. Keep all source bytes and IDs runner-private, status OPEN and device NOT_TESTED."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42141030091",
+    "https://github.com/alwansan/raf/actions/runs/42141506120",
+    "https://github.com/alwansan/raf/actions/runs/42142271779"
+  ],
+  "next_step": "Private exact semantic and location relocation check across all four genuine source VS/FS keyword variants; use authenticated source and per-stage SPIR-V interface/reflection names, reject duplicate-type ambiguity and sampler binding drift. Must obtain 4/4 roundtrip stage-interface agreement plus full post-vendor Unity shader GUID and real Android emitter/device test before integrating production ShaderLab.",
+  "integration_commit": "9ab1c1ca2dcca4006d28be6ae416118cebc1fe25",
+  "result": "Genuine immutable ZIP2 source original Particle108 Shader48 one-Pass / 4 exact original VS-FS keyword pairs / 8 authentic DXBC stages. Real isolated CI42141506120 SUCCESS 133/133 controls, 8/8 source SPIR-V Vulkan1.1 valid, 8/8 HLSL and roundtrip SPIR-V valid, original paired stage IO compatible 4/4 but HLSL roundtrip only 2/4, 0/8 original-to-roundtrip exact stage IO, resource slot shape 6/8. 8/8 stage original/roundtrip input/output type multisets preserved; 4 input- and 4 output-stage location-only remap candidates, 26 input slots and 20 output slots preserved each. T3 canonical CI42142271779 SUCCESS, RENDER-002 stays OPEN and device NOT_TESTED. Game shader/.meta/Material/OBB/APK unchanged."
 }
