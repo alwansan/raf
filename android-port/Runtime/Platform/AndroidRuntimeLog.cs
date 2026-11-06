@@ -48,6 +48,9 @@ namespace RaftAndroid.Diagnostics
                 // new sink to the threaded Unity log callback.
                 repeated = new RepeatedDiagnosticMessages();
                 sink = newSink;
+                // An earlier open failure is obsolete only after a new real
+                // sink is established. Do not erase a later Write() failure.
+                StorageError = null;
                 Write("startup", "logger.ready", "version=" + Application.version + "; unity=" + Application.unityVersion +
                     "; package=" + Application.identifier + "; device=" + SystemInfo.deviceModel +
                     "; os=" + SystemInfo.operatingSystem + "; gpu=" + SystemInfo.graphicsDeviceName +
@@ -62,11 +65,9 @@ namespace RaftAndroid.Diagnostics
                 {
                     Write("water", "fft_device_capabilities.unavailable", ex.GetType().Name, true);
                 }
-                // Only clear a prior constructor/open failure after a real
-                // sink exists and the startup stage has completed.
-                // PersistentDiagnosticLog.LastError still reports subsequent
-                // flush failures independently through Status.
-                StorageError = null;
+                // Unexpected logger-write errors remain visible in Status.
+                // PersistentDiagnosticLog.LastError independently reports
+                // recoverable filesystem flush errors.
             }
             catch (Exception ex) { StorageError = ex.GetType().Name + ": " + ex.Message; }
         }
@@ -155,7 +156,29 @@ namespace RaftAndroid.Diagnostics
 
         public static void Write(string area, string operation, string detail = "", bool critical = false)
         {
-            sink?.Write(area, operation, detail, critical);
+            // Original SaveAndLoad and network callbacks must never fail merely
+            // because their optional diagnostics sink throws unexpectedly.
+            // PersistentDiagnosticLog normally catches filesystem faults, but
+            // a broken lifecycle/invariant can still throw before its Flush.
+            try
+            {
+                var current = sink;
+                if (current == null) return;
+                current.Write(area, operation, detail, critical);
+                // Clear only an earlier unexpected transport exception after
+                // the same real sink can write without a reported I/O fault.
+                if (current.LastError == null && StorageError != null &&
+                    StorageError.StartsWith("diagnostic_write_", StringComparison.Ordinal))
+                    StorageError = null;
+            }
+            catch (Exception error)
+            {
+                // No original filename, exception message, path or payload in
+                // public status. A fault may have occurred before enqueueing
+                // the first full Unity stack: do not suppress its later retry.
+                StorageError = "diagnostic_write_" + error.GetType().Name;
+                repeated = new RepeatedDiagnosticMessages();
+            }
         }
 
         public static void Stage(string operation, Action action)
