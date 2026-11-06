@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7",
+  "issue_id": "INPUT-005",
+  "base_sha": "797174cc02e14aef3f115a5917730a4068623c75",
+  "updated_at": "2026-11-06T01:30:00Z",
+  "status": "active",
+  "resumed_from_sessions": [
+    "20261106T0035Z-T4-scheduled-k9m2",
+    "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+    "20261105T2241Z-T4-chat-immersive-bars-h8q2"
+  ],
+  "related_work": [
+    "prompt/coordination/work/INPUT-005/20261106T0035Z-T4-scheduled-k9m2-physical-presence-policy.json"
+  ],
+  "experiment_key": "T4-official-Android-InputDevice-SOURCE_TOUCHPAD-from-getSources-MotionEvent-SOURCE_MOUSE-API26-Unity2021-ZIP2-15964ea8-v1",
+  "resource_key": "bounded-source-only-unity-managed-abi-0a6f0527856a-no-real-player",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T0130Z-T4-chat-touchpad-device-source-q4m7-device-source.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.md",
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "tests/test_t4_android_pointer_capture_policy.py",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    "prompt/coordination/experiments/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json"
+  ],
+  "hypothesis": "Android documents that a trackpad normally produces MotionEvent.getSource()=SOURCE_MOUSE while its InputDevice.getSources() includes SOURCE_TOUCHPAD; current captured listener only tests eventSource and drops the trackpad as Kind.Ignore.",
+  "approach": "Classify source=SOURCE_MOUSE with confirmed InputDevice SOURCE_TOUCHPAD, rejecting an ordinary mouse/touchscreen/stylus on the same device. Read InputEvent.getDevice only for SOURCE_MOUSE in captured onCapturedPointer callback, fail open if unavailable and keep original epoch/legacy axes. Extend existing C# executable source classification and Python native integration tests, include scheduled physical-presence policy test in existing isolated CI.",
+  "source": "https://developer.android.com/reference/android/view/InputDevice#SOURCE_TOUCHPAD",
+  "acceptance": "Authentic Unity managed compile; negative controls trackpad-device bit required, event source mouse mandatory, touchscreen ignored, non-trackpad mouse ignored, old epoch and temporary wrapper safety retained; no device acceptance claim.",
+  "next_step": "Patch helper and JNI listener safely; targeted CI only."
+}
