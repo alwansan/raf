@@ -64,7 +64,7 @@ def pinned_haptic_lengths(path=MANIFEST):
         raise ProbeError("pinned_haptics_manifest_schema_drift")
     result = {}
     for name, item in rows.items():
-        if (type(name) is not str or re.fullmatch(r"[A-Za-z0-9_-]+\\.wav", name) is None or
+        if (type(name) is not str or re.fullmatch(r"[A-Za-z0-9_-]+\.wav", name) is None or
                 type(item) is not dict or
                 set(item) != {"bytes", "git_blob_sha"} or
                 type(item["bytes"]) is not int or item["bytes"] < 1 or
@@ -97,11 +97,11 @@ def classify_signed_obb_routes(archive, *, haptics, banks=BANK_SIZES):
         raise ProbeError("signed_obb_local_header_inconclusive") from None
     if not names:
         raise ProbeError("signed_obb_empty")
-    if any(not isinstance(k, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+\\.bank", k) or
+    if any(not isinstance(k, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+\.bank", k) or
            type(v) is not int or not 1 <= v <= 128 * 1024 * 1024
            for k, v in banks.items()):
         raise ProbeError("resource_expectations_invalid")
-    if any(not isinstance(k, str) or not re.fullmatch(r"[A-Za-z0-9_-]+\\.wav", k) or
+    if any(not isinstance(k, str) or not re.fullmatch(r"[A-Za-z0-9_-]+\.wav", k) or
            type(v) is not int or not 1 <= v <= 128 * 1024 * 1024
            for k, v in haptics.items()):
         raise ProbeError("resource_expectations_invalid")
