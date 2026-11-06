@@ -120,6 +120,19 @@ jobs:
                   c["vertex_changed_output_reflection_type_width_widening"] +
                   c["vertex_changed_output_reflection_type_same_width_base_kind_changed"] +
                   c["vertex_changed_output_reflection_type_unsupported"])==4
+          for direction,original_key in (
+                  ("width_narrowing","vertex_changed_output_reflection_type_width_narrowing"),
+                  ("width_widening","vertex_changed_output_reflection_type_width_widening"),
+                  ("same_width_base_kind_changed","vertex_changed_output_reflection_type_same_width_base_kind_changed"),
+                  ("unsupported","vertex_changed_output_reflection_type_unsupported")):
+              assert (c["vertex_changed_output_consumed_"+direction] +
+                      c["vertex_changed_output_unconsumed_"+direction])==c[original_key]
+          assert sum(c["vertex_changed_output_consumed_"+d] for d in
+                  ("width_narrowing","width_widening",
+                   "same_width_base_kind_changed","unsupported"))==2
+          assert sum(c["vertex_changed_output_unconsumed_"+d] for d in
+                  ("width_narrowing","width_widening",
+                   "same_width_base_kind_changed","unsupported"))==2
           assert d["original_semantic_to_SPIRV_location_identity_proven"] is False
           assert d["roundtrip_HLSL_variable_semantic_identity_proven"] is False
           assert d["native_Unity_Android_Adreno_pixels_verified"] is False
