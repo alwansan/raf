@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T0240Z-T4-scheduled-v8q1",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_sha": "463650761b805f75bec149e0e39efadd4899017a",
+  "intended_files": [
+    "tests/test_t4_pointer_view_identity_contract.py"
+  ],
+  "experiment_key": "T4-pointer-view-drift-source-contract-46365076",
+  "resource_key": null,
+  "hypothesis": "request/probe/release each query getCurrentFocus independently, potentially a different View; source-only diagnostic must distinguish view ownership from pointer-capture success",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T0137Z-T4-scheduled-n7p2.md"
+  ],
+  "updated_at": "2026-11-06T02:40:52Z"
+}
