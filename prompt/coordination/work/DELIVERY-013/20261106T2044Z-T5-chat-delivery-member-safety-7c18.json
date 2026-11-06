@@ -5,9 +5,9 @@
   "session_id": "20261106T2044Z-T5-chat-delivery-member-safety-7c18",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5dc63f1e55e1a69be562e89f491afa47a8314080",
-  "updated_at": "2026-11-06T20:45:04.688Z",
+  "updated_at": "2026-11-06T20:50:04.249Z",
   "resumed_from_sessions": [
     "20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f",
     "20261106T1950Z-T5-scheduled-zip-prefix-6f2a",
@@ -29,5 +29,20 @@
   "experiment_key": "T5-DELIVERY-013-recovery-package-crc-green-unsafe-name-prefix-symlink-v1",
   "resource_key": "T5-source-only-A3-delivery-CI; no Unity/native build",
   "coordination": "Distinct files from T5 scheduled verifier scripts/t5_verify_apk_obb_pair.py and tests. No T1 FFT, T2 water, T3 shader, T4 local input, original resources, .meta/GUID, or live native runs touched. No 5/5 vote and no new build.",
-  "action": "reserve_before_edit"
+  "action": "completed_release_scope",
+  "source_commit": "80354ea67fffe670fb59de4d346ba0ead00c7398",
+  "result": {
+    "status": "SUCCESS_SOURCE_ONLY",
+    "checks_delivery": 16,
+    "checks_a3": 4,
+    "crc_green_negative_cases": 14,
+    "explicit_directory_positive_cases": 2,
+    "source_sha": "80354ea67fffe670fb59de4d346ba0ead00c7398",
+    "ci": "https://github.com/alwansan/raf/actions/runs/42291377400",
+    "reconstruction_preflight": "https://github.com/alwansan/raf/actions/runs/42291377418",
+    "termux_reassembly": "https://github.com/alwansan/raf/actions/runs/42291377478",
+    "native_requested": false,
+    "device_verified": false
+  },
+  "next_step": "Scoped files released. Actual signed original APK/OBB/XAPK still not rebuilt or device tested; maintain r1 trial ballot unchanged 1/5 and inspect next separately authorized candidate. Source-only negative controls are synthetic."
 }

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T2044Z-T5-chat-delivery-member-safety-7c18",
+  "issue_id": "DELIVERY-013",
+  "status": "completed",
+  "source_base_sha": "5dc63f1e55e1a69be562e89f491afa47a8314080",
+  "source_commit": "80354ea67fffe670fb59de4d346ba0ead00c7398",
+  "experiment_key": "T5-DELIVERY-013-recovery-package-crc-green-unsafe-name-prefix-symlink-v1",
+  "source_files": [
+    "scripts/package_android_delivery.py",
+    "tests/test_android_delivery_package.py"
+  ],
+  "hypothesis": "Recovery packaging accepts CRC-valid APK/OBB with unsafe ZIP path components, Unix symlink member, or a regular file colliding with a descendant member's required directory; this can yield a delivery/installer ambiguity even though native structural verifier rejects some of them separately. Reject before payload copy/output creation and preserve existing valid ZIP64 signed bytes.",
+  "commands": [
+    "python3 -m unittest -v tests.test_android_delivery_package",
+    "python3 -m unittest -v tests.test_a3_singlepart_publish"
+  ],
+  "observed_result": {
+    "ci_status": "SUCCESS",
+    "ci_run": 42291377400,
+    "ci_job": 128145378454,
+    "delivery_suite_passed": 16,
+    "other_a3_suite_passed": 4,
+    "negative_cases": 14,
+    "positive_cases": 2,
+    "crc_independently_valid_for_malformed_archives": true,
+    "output_not_created_on_invalid_zip": true,
+    "preflight_run": 42291377418,
+    "termux_run": 42291377478,
+    "real_native_build": false,
+    "android_device_verified": false
+  },
+  "limits": [
+    "Synthetic ZIP inputs only, no original APK/OBB or installed XAPK rechecked",
+    "No authentic Unity project rebuild, no new game shader/FFT/visual or save evidence",
+    "Owner-direct native run42281310905 failed; no new build authorized here"
+  ],
+  "updated_at": "2026-11-06T20:50:04.249Z",
+  "next_step": "Read source retest only on a separately authorized candidate; verify signed APK+OBB+XAPK and phone later. Existing 1/5 trial vote unchanged."
+}

@@ -1,0 +1,21 @@
+{
+  "id": "20261106T2044Z-T5-chat-delivery-member-safety-7c18",
+  "owner": "T5",
+  "session_id": "20261106T2044Z-T5-chat-delivery-member-safety-7c18",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "type": "integration",
+  "at": "2026-11-06T20:50:04.249Z",
+  "summary": "Integrated fail-closed source recovery APK/OBB ZIP member validation before copying/signed XAPK packaging: traversal/backslash/colon, Unix symlinks, encrypted paths, file-prefix and file-directory aliases. Source commit80354ea67, exact CI42291377400 16/16 delivery tests+4/4 A3 publish tests PASS, 14 CRC-green negative cases and 2 explicit directory positives. No native/phone acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/80354ea67fffe670fb59de4d346ba0ead00c7398",
+    "https://github.com/alwansan/raf/actions/runs/42291377400",
+    "https://github.com/alwansan/raf/actions/runs/42291377418",
+    "prompt/coordination/clients/T5/sessions/20261106T2044Z-T5-chat-delivery-member-safety-7c18.md"
+  ],
+  "limits": [
+    "source-only CRC-valid synthetic ZIP negative proof",
+    "No owner mobile game visuals/Unity shaders/OBB install acceptance",
+    "Trial r1 T4 YES rest NO; no native dispatch, NOT_READY 0/3"
+  ]
+}
