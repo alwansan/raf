@@ -213,15 +213,20 @@ def main():
     p.add_argument("--source", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
+    phase = "input_guard"
     try:
         source, out = a.source.absolute(), a.out.absolute()
         if (not source.is_dir() or not _physical(source)
                 or not out.parent.is_dir() or not _physical(out)
                 or out.exists() or out.is_relative_to(source)):
             raise ValueError("unsafe_original_private_input_output")
+        phase = "original_shader_sha"
         parsed = original_source_tree(source)
+        phase = "private_CB0_registry"
         r = build_private_target_set(parsed)
+        phase = "same_owner_catalog"
         r.update(original_owner_catalog(source,parsed))
+        phase = "safe_private_output"
         out.write_text(json.dumps(r, sort_keys=True) + "\n", encoding="utf8")
         result = {
             "status": "original_CB0_private_name_targets_prepared",
@@ -235,8 +240,29 @@ def main():
             "Unity_CB0_upload_verified": False,
         }
         rc = 0
-    except BaseException:
+    except BaseException as err:
+        # Only allowlisted diagnostic codes, never exception messages about
+        # original Shader objects, private paths or game data.
+        allowed = {
+            "original_Foam_identity_unbounded",
+            "original_owner_catalog_shape",
+            "original_owner_catalog_unbounded",
+            "duplicate_or_invalid_shader_object",
+            "original_Shader_name_invalid",
+            "original_Foam_identity_mismatch",
+            "original_Foam_not_unique_in_owner",
+            "original_owner_catalog_SHA_mismatch",
+            "original_owner_object_count_unbounded",
+            "original_Shader_count_unbounded",
+            "original_Material_count_unbounded",
+            "original_Foam_object_SHA_mismatch",
+            "invalid_original_Foam_shader_name",
+            "unsafe_original_private_input_output",
+        }
+        code = str(err) if type(err) is ValueError and str(err) in allowed else "other_error"
         result = {"status": "blocked_original_CB0_name_targets",
+                  "safe_pipeline_phase": phase,
+                  "safe_pipeline_error_code": code,
                   "exact_name_values_or_hashes_published": False,
                   "Unity_CB0_upload_verified": False}
         rc = 2
