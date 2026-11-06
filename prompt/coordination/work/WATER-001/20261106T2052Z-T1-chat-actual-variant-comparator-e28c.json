@@ -5,16 +5,16 @@
   "session_id": "20261106T2052Z-T1-chat-actual-variant-comparator-e28c",
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4ae3a130dd671909649dedbdee1f6f21c62e0210",
-  "updated_at": "2026-11-06T20:52:00Z",
+  "updated_at": "2026-11-06T21:00:00Z",
   "resumed_from_sessions": [
     "20261106T2038Z-T1-chat-integer-source-a47c",
     "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
     "20261106T2017Z-T1-chat-private-producer-gate-8f31"
   ],
   "experiment_key": "source-only-actual-gpu-original-zip2-15964ea8-seed19-same-input-Unity2021-GL-baseline-run42289238865-vs-integer-source-42290211798-aggregate-keyed-delta-gate-v1",
-  "resource_key": "none - source-only no Unity or native CI; T1 previous run 42290211798 remains active",
+  "resource_key": "none - prior private Unity job 42290211798 finished, all private files cleaned",
   "hypothesis": "After the already-running integer_source test completes, compare genuine direct-original vs Unity GPU keyed site mismatches against baseline only when both logs contain complete/physically verified producer, zero-input-mismatch, matching record coverage, proper variant marker; otherwise declare no variant result rather than infer from an incomplete run.",
   "intended_files": [
     "scripts/t1_fft_real_gpu_variant_delta_gate.py",
@@ -27,5 +27,30 @@
   ],
   "collision_check": "Only 42290211798 private Unity currently active, running T1 integer-source owner; no workflow or files of owner modified; implement disjoint source-only test/reporter on actual sanitized result logs",
   "trial_vote": "لا يحتاج",
-  "next_step": "Add private safe aggregate capture-delta comparison, test source-only; when 42290211798 completed apply to authenticated run logs and record actual outcome, no repeated Unity dispatch or changes to game shader."
+  "next_step": "Derive integer-compatible source-authenticated butterfly site1 and site2 coordinate lanes (Phi/CFG) and test same original ZIP2 SHA Vulkan-vs-Unity without changing author gameplay until full output parity.",
+  "result": {
+    "baseline_real_gpu_run_id": 42289238865,
+    "integer_source_real_gpu_run_id": 42290211798,
+    "original_vulkan_to_unity_source_x_mismatch_site0_before": 63,
+    "source_x_mismatch_site0_after": 0,
+    "site1_mismatch_before_after": [
+      252,
+      252
+    ],
+    "site2_mismatch_before_after": [
+      64,
+      64
+    ],
+    "final_pixel_parity": false,
+    "flutter_and_water_android_proven": false,
+    "source_only_ci_run_id": 42292770357,
+    "source_only_ci_conclusion": "success",
+    "new_tests": "13/13 pass",
+    "no_native_xapk_dispatched": true
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42289238865",
+    "https://github.com/alwansan/raf/actions/runs/42290211798",
+    "https://github.com/alwansan/raf/actions/runs/42292770357"
+  ]
 }
