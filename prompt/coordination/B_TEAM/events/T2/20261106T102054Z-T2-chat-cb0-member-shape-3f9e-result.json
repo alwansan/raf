@@ -1,0 +1,15 @@
+{
+  "id": "20261106T102054Z-T2-chat-cb0-member-shape-3f9e-result",
+  "owner": "T2",
+  "session_id": "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T10:24:00Z",
+  "summary": "Real SHA-original 2-pass Foam CI42201778065 SUCCESS: 86 source-free tests; 4 authentic stage SPIR-V reflections, each pass has 1 shared UBO and one same-offset same-type same-stride member in VS/FS, but reflected array shape and block extent differ in BOTH passes; exact member shape 0/1 per pass. Unity CB0 upload/Adreno water remain UNKNOWN, WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42201778065",
+    "https://github.com/alwansan/raf/commit/d8c5134e36f588a8273a5476e393d708c2ad639e",
+    "docs/T2_FOAM_ORIGINAL_CB0_MEMBER_ARRAY_SHAPE_2026-11-06.md"
+  ],
+  "next_step": "Authenticate original per-pass array extent direction and runtime CB0 material/global upload; no unproven ShaderLab install."
+}
