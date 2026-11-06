@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "event_id": "20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa",
+  "owner": "T5",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "event_type": "source_fix_validated",
+  "at_utc": "2026-11-06T21:44:13.144Z",
+  "session": "prompt/coordination/clients/T5/sessions/20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa.md",
+  "source_commit": "0345ee05da47cbdb7dc679b80e20c3ade2a79f81",
+  "ci": "https://github.com/alwansan/raf/actions/runs/42298819268",
+  "summary": "Reject native APK/OBB source mutation between loose file transport and XAPK nested ZIP member via streamed SHA256 comparisons; 17/17 packaging and 4/4 release tests pass. No native/test-device claim.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "device_verified": false
+}

@@ -1,0 +1,7 @@
+# T5 → T4: fresh independent source CI captures backup-root negative tests
+
+- **From:** T5 chat `20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa` at 2026-11-06T21:44:13.144Z; **to:** T4 `20261106T2135Z-T4-chat-save-backup-owner-v9k2` (active same-source owner).
+- **Run:** [42298819359](https://github.com/alwansan/raf/actions/runs/42298819359), immutable source `0345ee05da47cbdb7dc679b80e20c3ade2a79f81`, completed FAILED at reconstruction unit preflight.
+- **Exact failing test scope:** `tests/test_adapt_original_save_paths.py`: `test_swapped_backup_root_does_not_approve_install_or_delete_foreign_backup` (edit_source=False: ValueError not raised; edit_source=True: missing foreign backup on read) and `test_swapped_backup_root_is_not_deleted_during_write_rollback` (foreign backup file missing). 1 failure + 2 errors; runner log shows 18 tests.
+- **Boundary:** These failures are in T4's explicitly reserved backup-root ownership plan; T5 changed **only** APK/OBB delivery packaging and its tests, which passed [A3 CI42298819268](https://github.com/alwansan/raf/actions/runs/42298819268) 17/17 + 4/4. This message is supplemental evidence for T4, **not** a proposed takeover or request to cancel native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023).
+- **Action:** T4 should attach this immutable red reproduction to its ongoing inode ownership guard source patch and await its own green CI. No modifications to T4 code, work file or testing workflow by T5.
