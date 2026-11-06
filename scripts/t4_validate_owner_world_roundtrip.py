@@ -24,6 +24,8 @@ FIELDS = frozenset({
     "original_private_Save_audit_category", "original_private_Save_invoked",
     "original_private_Save_output_created", "original_private_Save_output_nonzero",
     "original_private_Save_generated_LoadT_matching_root",
+    "original_private_Save_fresh_CLR_child_attempted",
+    "original_private_Save_fresh_CLR_child_LoadT_matching_root",
     "original_private_Save_private_wire_compared",
     "original_private_Save_private_wire_identical",
     "original_private_Save_isolated_temp_removed",
@@ -78,6 +80,8 @@ SAVE_BOOLEANS = (
     "original_private_Save_IL_guard_passed", "original_private_Save_invoked",
     "original_private_Save_output_created", "original_private_Save_output_nonzero",
     "original_private_Save_generated_LoadT_matching_root",
+    "original_private_Save_fresh_CLR_child_attempted",
+    "original_private_Save_fresh_CLR_child_LoadT_matching_root",
     "original_private_Save_private_wire_compared",
     "original_private_Save_private_wire_identical",
     "original_private_Save_isolated_temp_removed",
@@ -125,6 +129,8 @@ def validate(document: dict) -> dict:
     wire_identical = document["original_private_Save_private_wire_identical"]
     cleaned = document["original_private_Save_isolated_temp_removed"]
     isolated = document["original_isolated_owner_world_roundtrip_verified"]
+    fresh_attempted = document["original_private_Save_fresh_CLR_child_attempted"]
+    fresh_loaded = document["original_private_Save_fresh_CLR_child_LoadT_matching_root"]
     if (guard and audit != "NONE") or (not guard and audit == "NONE"):
         raise ValueError("audit_guard_inconsistent")
     if (invoked and not guard or created and not guard or
@@ -137,6 +143,9 @@ def validate(document: dict) -> dict:
     if (wire_compared and not nonzero or wire_identical and not wire_compared or
             matched and not wire_compared):
         raise ValueError("impossible_original_wire_comparison")
+    if (fresh_loaded and not fresh_attempted or fresh_attempted and not all(
+            (guard, invoked, created, nonzero, matched, wire_identical))):
+        raise ValueError("impossible_fresh_clr_child_evidence")
     if category == "NONE" and not all((guard, invoked, created, nonzero, matched, cleaned)):
         raise ValueError("fabricated_complete_roundtrip")
     if all((guard, invoked, created, nonzero, matched, cleaned)) and category != "NONE":
@@ -150,6 +159,8 @@ def validate(document: dict) -> dict:
         "original_generated_LoadT_matching": matched,
         "original_wire_compared": wire_compared,
         "original_wire_identical": wire_identical,
+        "original_fresh_CLR_child_executed": fresh_attempted,
+        "original_fresh_CLR_generated_LoadT_matching": fresh_loaded,
         "original_temporary_files_removed": cleaned,
         "Save_audit_category": audit,
         "Save_result_category": category,
