@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "status": "waiting_ci",
+  "base_sha": "7977e6b61be76f3a3142852e8c383fc64fd38534",
+  "source_commit": "ccf88df86c6f274a63d4dc787bcfbba9d218f942",
+  "experiment_key": "T5-delivery-existing-package-CRC-green-duplicate-ZIP-name-synthetic-fail-closed-v1",
+  "workflow_path": ".github/workflows/raft-reconstruction-preflight.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42274874596",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_delivery_package.py -v"
+  ],
+  "synthetic_controls": [
+    "CRC-valid duplicate APK classes.dex, nonempty then zero entry",
+    "CRC-valid duplicate APK classes.dex, zero then nonempty entry",
+    "CRC-valid duplicate OBB Unity Data entry, nonempty then zero entry",
+    "CRC-valid duplicate OBB Unity Data entry, zero then nonempty entry",
+    "no release output directory on detected ambiguity",
+    "existing full roundtrip/CRC negatives unaffected"
+  ],
+  "observed_result": null,
+  "limits": [
+    "recovery-only packager guard; base APK and OBB auditors already reject duplicate names",
+    "synthetic input only; no genuine owner APK/OBB tested",
+    "source-only CI not Android device, graphics, audio or save evidence"
+  ],
+  "next_step": "Exact CI42274874596 terminal result, checkpoint/update work event. Never cancel other workers or request new native without five valid YES."
+}
