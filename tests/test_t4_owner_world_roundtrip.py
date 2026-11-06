@@ -52,6 +52,10 @@ def success():
         "original_private_Save_output_created": True,
         "original_private_Save_output_nonzero": True,
         "original_private_Save_generated_LoadT_matching_root": True,
+        "original_private_Save_private_wire_compared": True,
+        # A type-preserving Save can change historical BinaryFormatter bytes.
+        # Source-only fixture must not assert exact equality by default.
+        "original_private_Save_private_wire_identical": False,
         "original_private_Save_isolated_temp_removed": True,
         "original_private_Save_result_category": "NONE",
         "original_isolated_owner_world_roundtrip_verified": True,
@@ -83,6 +87,8 @@ class OriginalOwnerRoundtripContract(unittest.TestCase):
             "original_private_Save_IL_guard_passed", "original_private_Save_invoked",
             "original_private_Save_output_created", "original_private_Save_output_nonzero",
             "original_private_Save_generated_LoadT_matching_root",
+            "original_private_Save_private_wire_compared",
+            "original_private_Save_private_wire_identical",
             "original_private_Save_isolated_temp_removed",
             "original_isolated_owner_world_roundtrip_verified",
         ):
@@ -93,6 +99,49 @@ class OriginalOwnerRoundtripContract(unittest.TestCase):
             "OWNER_WORLD_ROOT_NOT_ASSIGNABLE_TO_ORIGINAL_RGD_SAVE_ARGUMENT")
         q = validate(p)
         self.assertFalse(q["original_private_Save_invoked"])
+
+    def test_wire_inequality_not_mislabeled_as_progress_loss(self):
+        p = success()
+        p["original_private_Save_private_wire_identical"] = False
+        q = validate(p)
+        self.assertTrue(q["original_wire_compared"])
+        self.assertFalse(q["original_wire_identical"])
+        self.assertTrue(q["original_generated_LoadT_matching"])
+
+    def test_wire_equality_allowed_only_after_authenticated_original_save(self):
+        p = success()
+        p["original_private_Save_private_wire_identical"] = True
+        q = validate(p)
+        self.assertTrue(q["original_wire_identical"])
+        p["original_private_Save_private_wire_compared"] = False
+        with self.assertRaises(ValueError):
+            validate(p)
+
+    def test_mismatched_wire_equality_flags_rejected(self):
+        p = success()
+        p["original_private_Save_private_wire_compared"] = False
+        with self.assertRaises(ValueError):
+            validate(p)
+        p = success()
+        p["original_private_Save_private_wire_identical"] = 1
+        with self.assertRaises(ValueError):
+            validate(p)
+
+    def test_saved_type_match_without_actual_wire_comparison_rejected(self):
+        p = success()
+        p["original_private_Save_private_wire_compared"] = False
+        p["original_private_Save_private_wire_identical"] = False
+        with self.assertRaises(ValueError):
+            validate(p)
+
+    def test_wire_comparison_source_never_exposes_user_blob_hashes(self):
+        source = ORIGINAL.read_text(encoding="utf-8")
+        self.assertIn("privateWireCompared", source)
+        self.assertIn("privateWireIdentical", source)
+        self.assertIn("SequenceEqual(", source)
+        self.assertIn("generated.Length <= 1024 * 1024", source)
+        self.assertNotIn('"original_private_Save_output_sha256"', source)
+        self.assertNotIn('"original_private_Save_user_data"', source)
 
     def test_wrong_owner_provenance_rejected(self):
         p = success()
