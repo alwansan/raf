@@ -44,6 +44,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_scalar_writer_carrier.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site1_y_branch_paths.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site1_y_inequal_source.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_site1_x_writer_lineage.py -v
           # disjoint-synthetic-bitcarrier-fixture-20261106: verify checked-out corrected SPIR-V result IDs
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_sourcefree_bitcarrier_contract.py -v
@@ -95,6 +96,7 @@ jobs:
           python3 -m scripts.t1_fft_site1_y_branch_paths "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           # reject-nonfinal-terminator-20261106: fail closed on malformed CFG branches
           python3 -m scripts.t1_fft_site1_y_inequal_source "$TMPDIR/candidates/_private_vulkan/slot0.spv"
+          python3 -m scripts.t1_fft_site1_x_writer_lineage "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           tail -n +2 "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute" > "$TMPDIR/coordinate.hlsl"
           glslangValidator -V -D -S comp -e main -o "$TMPDIR/coordinate.spv" "$TMPDIR/coordinate.hlsl" > "$TMPDIR/coordinate-compile.log" 2>&1
           spirv-val --target-env vulkan1.1 "$TMPDIR/coordinate.spv" > "$TMPDIR/coordinate-validation.log" 2>&1
