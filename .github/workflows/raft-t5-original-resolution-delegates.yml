@@ -1,0 +1,79 @@
+name: T5 DISPLAY-003 original Settings delegate IL reachability (source-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Experiments/T5/ResolutionDelegateProbe/**
+      - scripts/t5_validate_resolution_delegate_probe.py
+      - tests/test_t5_validate_resolution_delegate_probe.py
+      - .github/workflows/raft-t5-original-resolution-delegates.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-display-original-resolution-delegates-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-delegate-topology:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout bounded safe oracle and synthetic tests only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T5/ResolutionDelegateProbe/*
+            /scripts/t5_validate_resolution_delegate_probe.py
+            /tests/test_t5_validate_resolution_delegate_probe.py
+      - name: Check strict source-only report proof gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p 'test_t5_validate_resolution_delegate_probe.py' -v
+          python3 -m py_compile scripts/t5_validate_resolution_delegate_probe.py
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile Cecil graph oracle and run topology adversarial fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T5/ResolutionDelegateProbe/ResolutionDelegateProbe.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t5-resolution-delegates" \
+            > "$RUNNER_TEMP/t5-delegate-build.log" 2>&1 || {
+              tail -35 "$RUNNER_TEMP/t5-delegate-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t5-resolution-delegates/ResolutionDelegateProbe.dll" --self-test
+      - name: Read only immutable original ZIP2 managed DLL (no LFS or raw artifact upload)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Verify original SHA and inspect bounded compiled delegate graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c '%s' zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          dotnet "$RUNNER_TEMP/t5-resolution-delegates/ResolutionDelegateProbe.dll" \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t5-original-settings-delegate-bounded.json"
+          python3 -m scripts.t5_validate_resolution_delegate_probe \
+            --report "$RUNNER_TEMP/t5-original-settings-delegate-bounded.json"
+          echo 'T5_SETTINGS_DELEGATES original_compiled_il=true source_only=true runtime_callback_proven=false persistent_android_scale_proven=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: No original sources, assembly, raw IL or reconstructed game assets published
+        if: always()
+        run: echo 'The published log includes only bounded aggregate numeric topology, not private content or game/device success.'
