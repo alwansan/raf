@@ -1,0 +1,13 @@
+session_id=20261106T1710Z-T3-chat-shdr-declarations-3c7e
+origin=chat
+issue_id=RENDER-002
+experiment_key=T3-ZIP2-15964-Particle108-SHDR-SHEX-4pair-8stage-declaration-opcode-census-v1
+source_original_zip2=15964ea8f246b6e076ce26b60931ee2e1a9a2385
+source_free_CI=42259737650
+source_free_regressions=12/12_PASS
+original_RDEF_source_proof=42258686807
+original_RDEF_stages_absent=8/8
+question=Do SHDR/SHEX token programs contain resource declaration opcodes even with missing RDEF?
+private_source_resource=4_sha_verified_assets_6_sha_verified_scenes_8_selected_DXBC
+public_evidence=aggregate_declaration_opcode_counts_only
+native_build=false
