@@ -34,6 +34,7 @@ jobs:
           # Source class21 Materials have exactly three valid original
           # owner files; the fourth SHA-authenticated owner is Shader48 only.
           python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_sameexport_values.py' -v
           # The absent-Shader48 negative control retains valid W1 Material21
           # and B02 Texture2D28 same-instance rows; it must not fail at setup.
           python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_export_quality.py' -v
@@ -235,6 +236,32 @@ jobs:
           assert d["compiled_Unity_ShaderLab_or_Android_pixels_verified"] is False
           print("RAFT_T3_ACTUAL_SAME_INSTANCE_PARTICLE108_EXPORT_COMPARISON_COMPLETED=true")
           PY
+      - name: Compare true source 5 Particle108 Materials exact RGBA and float32-int32 same-export values
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_particle108_sameexport_values \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/t3-particle-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/t3-particle-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/t3-particle-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-particle108-values-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle108-values-safe.json").read_text())
+          assert d["status"] in (
+            "T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MATCH",
+            "T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MISMATCH")
+          assert d["selected_SHA_original_Particle108_source_Material21_objects"]==5
+          assert d["one_real_W1_B02_same_export_instance_verified"] is True
+          assert d["original_six_scenes_SHA_verified"] is True
+          assert d["original_four_shader_Material_owner_SHA_verified"] is True
+          assert d["private_Material_names_value_bytes_IDs_Guids_published"] is False
+          assert d["actual_Unity_import_GPU_color_or_phone_emitter_verified"] is False
+          print("T3_ORIGINAL_PARTICLE108_5M_RGBA_FLOAT_INT_VALUES="+d["status"])
+          assert d["status"]=="T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MATCH", "original_particle_material_numeric_export_mismatch"
+          PY
       - name: Trace exact SHA-original highest-use Particle Shader48 to exported ShaderLab program/dummy marker
         run: |
           set -euo pipefail
@@ -271,5 +298,6 @@ jobs:
             ${{ runner.temp }}/t3-particle-safe-source-bytes.json
             ${{ runner.temp }}/t3-particle-safe-export-result.json
             ${{ runner.temp }}/t3-particle108-shaderlab-quality-safe.json
+            ${{ runner.temp }}/t3-particle108-values-safe.json
           retention-days: 7
           if-no-files-found: ignore
