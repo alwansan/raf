@@ -1,0 +1,19 @@
+{
+  "id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+  "issue_id": "RENDER-002",
+  "type": "source_shader_reflected_name_mapping_result",
+  "at": "2026-11-06T01:41:41.217Z",
+  "summary": "Genuine SHA original 108-use ParticleShader48 4 keyword VS/FS pairs source SPIR-V to SPIRV-Cross HLSL to roundtrip 8/8 stages; all reflected I/O names changed: source+derived 26 inputs and 20 outputs each, 0/26 input name+type, 0/20 output name+type matches, 0/8 complete stage matches, 0/2 mismatched pair name bridges. CI42144978122 SUCCESS 141/141; prevent name-only location patch, RENDER-002 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42144978122",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+  ],
+  "limitations": [
+    "no native device pixels",
+    "compiler reflected names not original DXBC semantic registers"
+  ]
+}
