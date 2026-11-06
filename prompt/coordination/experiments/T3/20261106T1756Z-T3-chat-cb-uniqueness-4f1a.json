@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1756Z-T3-chat-cb-uniqueness-4f1a",
+  "issue_id": "RENDER-002",
+  "experiment_key": "T3-SOURCEONLY-SM4-CB-DUPLICATE-SLOT-and-SM51-RANGE-FAILCLOSED-v1",
+  "hypothesis": "The existing SM4/5 CB DCL decoder rejects illegal per-stage duplicate primary CB register declarations and rejects genuine SM5.1 3D range-style CB tokens by shader-version gate before misclassifying them as corrupt SM4 operands.",
+  "input_hashes": [],
+  "source_original_bytes_used": false,
+  "source_spec": "Microsoft DirectX-Headers/include/directx/D3D12TokenizedProgramFormat.hpp",
+  "commands": [
+    "python3 -m py_compile scripts/t3_particle108_cb_size_semantics.py tests/test_t3_particle108_cb_size_semantics.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_cb_size_semantics.py' -v"
+  ],
+  "runner": "ubuntu-24.04",
+  "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
+  "workflow_path": ".github/workflows/raft-t3-cb-size-source-only.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42266534555",
+  "run_id": 42266534555,
+  "job_id": 128059822810,
+  "negative_controls": [
+    "genuine-shaped SM5.1 3D CB range with extra vector-count/space tokens is rejected as unsupported shader model",
+    "duplicate CB first-index within one SM4.0 stage with different 16-byte-vector counts rejected",
+    "all 12 previous known/unknown CB vector size, source stage and type controls preserved"
+  ],
+  "status": "completed",
+  "result": "14/14 source-free tests PASS, genuine original Particle108 source not restaged or downloaded; original prior CI 42265293980 unchanged.",
+  "changes": [
+    {
+      "file": "scripts/t3_particle108_cb_size_semantics.py",
+      "commit": "c9d78fdce79f437948adf81e17be452ba6c4d8b4"
+    },
+    {
+      "file": "tests/test_t3_particle108_cb_size_semantics.py",
+      "commit": "2aca6214475f3f042754dcecbc84cbfb7acd6922"
+    }
+  ],
+  "safe_failure_class": "DUPLICATE_CB_SLOT_WITHIN_STAGE",
+  "semantic_change": "Reject unsupported SM5.1 version before 2D-only source-DCL parser; duplicate CB stage address cannot pollute across-keyword profile counts.",
+  "observed_original_reference": {
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_run": "https://github.com/alwansan/raf/actions/runs/42265293980",
+    "shader_model": "4.0 on all 8 selected stages",
+    "cb_declarations": 24,
+    "unknown_size_zero": 0
+  },
+  "limits": [
+    "No new original source-byte analysis, no cross original DXBC-to-SPIRV semantic proof.",
+    "No game ShaderLab, material, assets, Unity/Android build, APK, smoke, water or color repair.",
+    "Scheduled T3 crosscontract session 20261106T1734Z-T3-scheduled-crosscontract-a71c remains reserved to owner; no files touched.",
+    "Trial vote T3=لا يحتاج remains appropriate in trial-20261106-r1."
+  ],
+  "next_step": "Scheduled T3 owns DXBC→SPIR-V stage/keyword typed semantic join; chat T3 may work on separate genuine ShaderLab binding integration only after verified provenance. Do not rerun equivalent original CB-size source experiment. RENDER-002 OPEN/NOT_READY."
+}
