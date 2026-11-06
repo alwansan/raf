@@ -38,6 +38,11 @@ class GateTests(unittest.TestCase):
         with self.assertRaises(ValueError): classify(fixture(expected_threadgroups_matched=1,
                                                             candidate_main_kernels_resolved=1))
 
+    def test_reject_compute_capability_without_editor(self):
+        with self.assertRaisesRegex(ValueError, 'without editor invocation'):
+            classify(fixture(editor_invoked=False, editor_supports_compute=True,
+                             candidate_assets_imported=0))
+
     def test_reject_uninvoked(self):
         with self.assertRaises(ValueError): classify(fixture(editor_invoked=False))
 
