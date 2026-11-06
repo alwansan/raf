@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T2158Z-T3-chat-keyword-lattice-e6d4",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e5ab938df469e5422dfbaf94e0448609fc90d4d7",
-  "updated_at": "2026-11-06T21:58:30Z",
+  "updated_at": "2026-11-06T22:06:12Z",
   "resumed_from_sessions": [
     "20261106T2150Z-T3-chat-stagewrapper-19e4",
     "20261106T2133Z-T3-scheduled-contract-schema-9a2f"
@@ -25,5 +25,21 @@
   "resource_key": "T3 existing bounded SHA-original private variants CI, no Unity Editor/native, run after private stage checks",
   "tests": "Synthetic 2-toggle positive, nonlattice and unmatched-stage/player-bucket negative, boolean/duplicate/tier rejection, safe report; authenticated original SHA metadata classification in same T3 source pinned existing CI.",
   "concurrent_work": "T5 owner-native CI42296450023 Unity Editor in_progress at planning; do not alter request, launch native, or compete for editor. No T2/T1 files touched.",
-  "next_step": "Inspect original-backed lattice outcome; only if two-toggle confirmed investigate original keyword name table provenance before single runtime ShaderLab. Never guess Unity routing or claim device pixels."
+  "next_step": "Read original Shader48 m_ParsedForm keyword authoring name/flag provenance in private scoped mode; map 2 serialized indices to valid authentic authored keyword identifiers without publishing them, then Unity 2021.3 isolated runtime keyword test after existing native finishes.",
+  "completed_at": "2026-11-06T22:06:12Z",
+  "intended_files_released": true,
+  "implementation_commits": [
+    "0ce5981735c92a02fd95ae388afc591fcb2c9e94",
+    "31ff94f74520a29e433bf41f7ce38410d1cb874e",
+    "2f80ad1b65cc1f2add9220715725753ccdeda80b",
+    "ebeb83e2a47dab67c73ca9d0d484ab326aa408f8"
+  ],
+  "terminal_CI": "https://github.com/alwansan/raf/actions/runs/42301977939",
+  "source_classification": "Original SHA6 scenes/4 shader owners, four exact VSFS pairs from 16 D3D11 records. Four permutation index sets form exactly a 2-bit lattice before tier grouping: 0 baseline, 2 changing dimensions, four pairs; 0/4 explicit original hardware tier fields. Original exact same-tier routing NOT proven; original author keyword name mapping NOT proven, source-only.",
+  "false_start_runs": [
+    "42301337183 13/14 synthetic no-leak false-positive before source",
+    "42301439297 original ValueError safely unclassified",
+    "42301685831 original invalid_original_tier",
+    "42301977939 source-authentic successful"
+  ]
 }
