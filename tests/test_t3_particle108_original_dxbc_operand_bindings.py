@@ -1,7 +1,7 @@
 """Source-free original D3D11 declaration operand regression and negative controls."""
 import json,struct,unittest
 from scripts.t3_particle108_original_dxbc_operand_bindings import (
-    _private_parse_decl_operand,_private_stage_layout,classify_four_pairs,STATUS)
+    _private_parse_decl_operand,_private_stage_layout,classify_four_pairs,classify_primary_index_profiles,STATUS)
 
 def decl(op,typ,indices,tail=(),rep=0,extended=False):
     token=(typ<<12)|(len(indices)<<20)|(rep<<22)|(int(extended)<<31)
@@ -93,6 +93,42 @@ class Tests(unittest.TestCase):
         self.assertEqual(_private_stage_layout(one,1),())
         c=classify_four_pairs([(one,dxbc(0,[])) for _ in range(4)])["counts"]
         self.assertEqual(c["original_dcl_srv_operand_records"],0)
+
+
+    def test_second_cb_index_changes_full_but_not_primary(self):
+        p=pairs()
+        # Exact same cbuffer register ID but different second immediate index.
+        altered=(decl(89,8,[1,32])+decl(88,7,[3],[1234])+
+                 decl(90,6,[2])+decl(161,7,[4])+decl(162,7,[5],[16]))
+        p[3]=(dxbc(1,altered),p[3][1])
+        d=classify_primary_index_profiles(p)
+        c=d["counts"]
+        self.assertEqual(c["original_vertex_full_profiles_distinct"],2)
+        self.assertEqual(c["original_vertex_opcode_primary_profiles_distinct"],1)
+        self.assertEqual(c["original_vertex_family_primary_profiles_distinct"],1)
+        self.assertEqual(c["original_fragment_full_profiles_distinct"],1)
+        self.assertFalse(d["original_2d_secondary_index_size_semantics_proven"])
+
+    def test_first_register_change_changes_primary_profiles(self):
+        p=pairs()
+        altered=(decl(89,8,[9,24])+decl(88,7,[3],[1234])+
+                 decl(90,6,[2])+decl(161,7,[4])+decl(162,7,[5],[16]))
+        p[2]=(dxbc(1,altered),p[2][1])
+        c=classify_primary_index_profiles(p)["counts"]
+        self.assertEqual(c["original_vertex_opcode_primary_profiles_distinct"],2)
+        self.assertEqual(c["original_vertex_family_primary_profiles_distinct"],2)
+        self.assertEqual(c["original_vertex_cbuffer_first_register_profile_distinct"],2)
+
+    def test_resource_opcode_variant_differs_from_primary_family_slot(self):
+        p=pairs()
+        altered=(decl(89,8,[1,24])+decl(161,7,[3])+
+                 decl(90,6,[2])+decl(161,7,[4])+decl(162,7,[5],[16]))
+        p[3]=(dxbc(1,altered),p[3][1])
+        c=classify_primary_index_profiles(p)["counts"]
+        self.assertEqual(c["original_vertex_full_profiles_distinct"],2)
+        self.assertEqual(c["original_vertex_opcode_primary_profiles_distinct"],2)
+        self.assertEqual(c["original_vertex_family_primary_profiles_distinct"],1)
+        self.assertEqual(c["original_vertex_srv_first_register_profile_distinct"],1)
 
 if __name__=="__main__":
     unittest.main()
