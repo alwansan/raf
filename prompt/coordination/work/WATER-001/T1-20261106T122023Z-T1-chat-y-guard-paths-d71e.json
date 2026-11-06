@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "original butterfly site1 Y bitcarrier versus constant conditional path reachability",
+  "status": "active",
+  "base_sha": "4bfe352226792fcf5e8356fe621a4376a6d343f3",
+  "updated_at": "2026-11-06T12:20:24.487Z",
+  "resumed_from_sessions": [
+    "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+    "20261106T113001Z-T1-chat-lane-alias-f73c",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2"
+  ],
+  "approach": "Build a bounded per-function CFG path-state witness for butterfly site1 Y typed writer categories: distinguish paths that may pass both writers, read-last origin, and predicate producer opcode families. Private values and IDs stay in runner. On unsupported alias/call/loop exhaustion return unknown, not proof.",
+  "hypothesis": "If bitcarrier and float constant lie in mutually exclusive original SPIR-V branch paths, source-specific opcodes can identify selection mechanism; if both can run on one route, last writer and loops matter. Either outcome guides a targeted same-input Vulkan/Unity replay and rules out speculative shader rewrite.",
+  "intended_files": [
+    "scripts/t1_fft_site1_y_branch_paths.py",
+    "tests/test_t1_fft_site1_y_branch_paths.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T122023Z-T1-chat-y-guard-paths-d71e.md",
+    "prompt/coordination/experiments/T1/20261106T122023Z-T1-chat-y-guard-paths-d71e.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T122023Z-T1-chat-y-guard-paths-d71e.json"
+  ],
+  "experiment_key": "water001-original-slot0-butterfly-site1-y-cfg-branch-pathtyped-last-writer-v1-zip2sha15964ea8",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add adversarial CFG source-free controls for overlapping writes, loop, uninitialized, condition producers and alias escapes; run single authentic original Vulkan CI, classify without raw literal."
+}
