@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "white-material-texture original-export/Unity-source integration",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
-  "updated_at": "2026-11-06T19:38:00Z",
+  "updated_at": "2026-11-06T19:43:00Z",
   "resumed_from_sessions": [
     "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
     "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
@@ -31,7 +31,17 @@
   "resource_key": "Existing source-only B46 CI and existing native workflow source; DO NOT trigger native Unity build",
   "hypothesis": "Production Unity ARM64 workflow restores original shader and color settings but never invokes inherited B46 Material→Texture YAML→TextureImporter GUID/fileID validator; this leaves unresolved exported material-to-texture links invisible after reconstruction. Insert a non-mutating, fail-visible diagnostic at the real postrestorer native export path and retain safe aggregate output even when water gate subsequently fails, without false READY claim.",
   "coordination": "T1 FFT and T2 Foam source unchanged; T3 Particle108 property/parity scripts untouched; T4 local/world untouched; T5 scheduled PID helper untouched. No native dispatch, no changes to .github/raft-native-build-request.json or votes; existing native workflow only read-only optional added step, not gating/dummying shaders.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add exact production workflow invocation and immutable artifact output after shader restorer, make B46 synthetic CI assert source copy + ordering + artifact; monitor CI, keep P0 original-program blockers open."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281884475"
+  ],
+  "result": {
+    "status": "SOURCE_ONLY_INTEGRATION_SUCCESS",
+    "source_commit": "8789a710e21c5cbd48f7bec97a509bbd16a574c3",
+    "ci_run": 42281884475,
+    "existing_B46_checks": 21,
+    "new_integration_checks": 4,
+    "original_export_audited": false,
+    "device_verified": false
+  },
+  "next_step": "Work reservation released. Native graphics report will be observed only on a future authorized Unity build with 5/5 trial consent; shader/water programs remain P0."
 }

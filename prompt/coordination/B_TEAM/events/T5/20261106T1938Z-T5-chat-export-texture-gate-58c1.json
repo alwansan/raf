@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1938Z-T5-chat-export-texture-gate-58c1",
+  "owner": "T5",
+  "session_id": "20261106T1938Z-T5-chat-export-texture-gate-58c1",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Wired inherited B46 exported Material→Texture importer/GUID/fileID checker into actual post-restorer Unity native pipeline as a read-only error-visible step and added its privacy-safe aggregate report to existing always-retained artifact. Source commit 8789a710, synthetic CLI + workflow 4/4 and B46 21/21 CI42281884475 PASS. Actual Unity export not run; no water/Shader48/pixel/device acceptance or native build request.",
+  "at": "2026-11-06T19:43:00Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/8789a710e21c5cbd48f7bec97a509bbd16a574c3",
+    "https://github.com/alwansan/raf/actions/runs/42281884475",
+    "prompt/coordination/clients/T5/sessions/20261106T1938Z-T5-chat-export-texture-gate-58c1.md"
+  ],
+  "limits": [
+    "No original game export or device textures verified",
+    "Source-only status does not mean white visuals fixed",
+    "T5 trial vote NO; 5/5 absent; owner runtime native delivery unchanged"
+  ]
+}

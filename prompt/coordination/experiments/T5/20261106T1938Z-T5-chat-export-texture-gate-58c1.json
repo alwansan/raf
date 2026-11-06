@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1938Z-T5-chat-export-texture-gate-58c1",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "source_commit": "8789a710e21c5cbd48f7bec97a509bbd16a574c3",
+  "source_base_sha": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
+  "experiment_key": "T5-real-native-unity-post-shader-export-material-texture-b46-actual-asset-graph-stage-and-immutable-safe-report-v1",
+  "hypothesis": "The inherited exported Material→Texture GUID/fileID validator was not invoked during native Unity reconstruction; integrate its real read-only CLI at postrestorer project and retain privacy-safe result independent of water-gate failure.",
+  "workflow_path": ".github/workflows/raft-b46-render-texture-links.yml",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281884475"
+  ],
+  "tools": {
+    "runner": "ubuntu-24.04 Python 3.11",
+    "source_checker": "scripts/verify_exported_material_texture_links.py",
+    "native_workflow": "raft-unity-editor-android-import.yml"
+  },
+  "commands": [
+    "python -W error -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v",
+    "python -W error -m unittest discover -s tests -p test_t5_native_material_texture_integration.py -v"
+  ],
+  "negative_controls": [
+    "Source texture pointer references nonexistent exported GUID returns REJECTED/exit2",
+    "Source checker omits GUID/path text from public aggregate stdout",
+    "postrestorer stage must not pass --repair",
+    "retention artifact must use if:always, source step continue-on-error:true and pipefail",
+    "valid synthetic material/importer returns PASS without READY claim"
+  ],
+  "observed_result": {
+    "status": "SUCCESS_SOURCE_ONLY",
+    "run_id": 42281884475,
+    "job_id": 128112695345,
+    "branch_sha": "8789a710e21c5cbd48f7bec97a509bbd16a574c3",
+    "existing_B46_tests_passed": 21,
+    "new_integration_tests_passed": 4,
+    "real_native_workflow_stage_added": true,
+    "original_unity_export_audited": false,
+    "original_water_shaders_fixed": false,
+    "phone_visuals_verified": false,
+    "trial_votes_eligible": false
+  },
+  "limitations": [
+    "Read-only live build stage not run on an exported game in this test",
+    "No original materials/Texture2D raw source or GUID data persisted",
+    "No Unity Editor full build and no phone test",
+    "Material→Texture link PASS does not validate ShaderLab executable programs"
+  ],
+  "next_step": "Await substantive T1/T2/T3 shader fix; inspect postrestorer real exported project safe report at next 5/5-consented native candidate."
+}
