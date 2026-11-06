@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1946Z-T4-chat-original-load-cycles-h5m8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-owner5Nov-CL520c4c-seven-LoadT-percall-nonzero-snapshot-no-caught-20261106",
+  "hypothesis": "Aggregates of original LoadT entry, exit and nonzero filename snapshots do not prove each individual call had one nonzero snapshot and no caught exception. Per-call event ordering must be validated before preserving any real phone evidence conclusions.",
+  "source_commit": "5fc07e87873c1a8cfc85d56665024dd6288d68f8",
+  "input": {
+    "repo": "alwansan/CL",
+    "commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "phone_jsonl_count": 3,
+    "byte_sizes": [
+      869991,
+      499456,
+      1443270
+    ],
+    "git_blob_sha1": [
+      "28264b50a5a8aaefefb3bdd0256f0869c79e6116",
+      "413932e92fc24cd50b1fae1cbb25120f392e8158",
+      "60674be571e4979e329924e5e2679f43e40ec41a"
+    ],
+    "original_world_rgd_data_read": false
+  },
+  "tool_versions": {
+    "python": "GitHub Actions Python3 ubuntu-24.04",
+    "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "workflow_path": ".github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_owner5nov_jsonl_lifecycle.py -v",
+    "python3 -m scripts.t4_owner5nov_jsonl_lifecycle --root <pinned-private-owner-CL-raft-logs> --pinned"
+  ],
+  "negative_controls": [
+    "Correct original Load<T>.enter -> exactly one nonzero Load.argumentFileSnapshot -> Load<T>.exit accepted",
+    "Equal aggregate marker counts but snapshot preceding Load<T>.enter rejected",
+    "Missing snapshot rejected",
+    "Repeated snapshot rejected",
+    "Load.argumentFileSnapshot.unavailable rejected",
+    "Load.caughtException within call rejected",
+    "Actual RED test-only CI42282580407 six KeyErrors before new per-call result contract; original 11 tests passed"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42282698031",
+  "negative_run_url": "https://github.com/alwansan/raf/actions/runs/42282580407",
+  "status": "completed",
+  "result": {
+    "source_ci": "completed_success",
+    "synthetic_tests": 15,
+    "authenticated_real_owner_phone_sessions": 3,
+    "authentic_loadt_per_call_completed": [
+      0,
+      3,
+      4
+    ],
+    "invalid_or_ambiguous_calls": [
+      0,
+      0,
+      0
+    ],
+    "savegame_cycles_confirmed": [
+      3,
+      1,
+      3
+    ],
+    "all_load_calls_have_exactly_one_nonzero_snapshot_no_caught": [
+      false,
+      true,
+      true
+    ],
+    "queue_overflow_observed": false,
+    "readback_and_deserialization_proven": false,
+    "process_relaunch_proven": false,
+    "same_world_proven": false,
+    "new_apk_obb_proven": false,
+    "raw_user_data_printed": false
+  },
+  "limitations": [
+    "5-Nov owner phone archive only, no post-fix installed game candidate",
+    "Original Load.argumentFileSnapshot is an in-finally file argument size observation, not Deserialize return proof",
+    "No original RGD binary, private world/player name, or private exception stack read/exported by workflow",
+    "No signed installed APK/OBB cryptographic provenance or full process restart/same world assertion",
+    "This source-free evidence analyzer patch does not change any game logic or fix renderer/audio/touch"
+  ],
+  "next_step": "Wait until separately authorized source-identifiable signed APK+matching OBB has owner phone test; compare new Load<T> per-call traces and true same-world process restart with original .rgd for acceptance. Do not repeat same private snapshot experiment."
+}
