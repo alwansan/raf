@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261106T001430Z-T1-chat-b9631a",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "070280cad87f0ec0c5f32e5bd9eb5361d2f7bbe5",
   "intended_files": [
     "scripts/t1_fft_spirv_read_provenance.py",
@@ -16,6 +16,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42135445728"
   ],
-  "next_step": "Read typed casts and pointer storage from original and HLSL roundtrip. A float-to-int bitcast alone is insufficient: identify the matching integer-to-float producer or reaching stores before attempting a private rewrite.",
-  "result": "Added aggregate coordinate bitcast source/destination type and direct load storage classification to the existing bounded SPIR-V audit. It reports no operands or private identifiers and does not infer memory reaching definitions. 114 local FFT tests passed. Same-Vulkan authentic audit triggered."
+  "next_step": "Resolve reaching writes to the original float coordinate register with a conservative memory slice. Only if an integer bit carrier is proven, prototype integer-preserving coordinate generation in private scratch.",
+  "result": "All three authentic slot-0 fetch sites and all three roundtrip sites have float32-to-sint32 OpBitcast in the bounded coordinate slice. Immediate operand is a non-load SSA value, and the original slice reaches an OpLoad through vector reshaping. The inverse conversion and reaching stores are not proven. Same-Mesa-Vulkan output parity passed for 64 and 32 written pixels."
 }
