@@ -4,7 +4,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "base_sha": "da66c976fc422f2e02b83ed27c8deb0bdcf9a4a3",
-  "status": "waiting_ci",
+  "status": "completed",
   "intended_files": [
     ".github/workflows/raft-t1-fft-unity-input-identity.yml",
     "prompt/coordination/work/WATER-001/20261106T094845Z-T1-chat-p6f2.json",
@@ -12,11 +12,13 @@
   ],
   "experiment_key": "t1-original-slot0-ssa-promotion-only-unity-openglcore-vs-unchanged-vulkan-keyed-trace-v1",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-06T09:52:02.534Z",
+  "updated_at": "2026-11-06T10:14:56.553Z",
   "hypothesis": "With identical promotion and capture, omitting the integer rewrite changes the keyed read address divergence of replay 42196835754.",
   "source_commit": "58a411ed247e814c030c769322822e6a3d3c6f02",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42198180194"
   ],
-  "next_step": "Compare all three invocation-keyed sites and pass-zero numeric error to run 42196835754. If the signatures are unchanged, audit the address dependency chain for sites 1 and 2 before proposing another candidate."
+  "next_step": "Trace the two butterfly address producers across local loads/stores in the authenticated SPIR-V, beginning with the second site's X lane. Require evidence of an integer origin or a demonstrated backend lowering defect before changing the butterfly operands.",
+  "result": "Unity completed. Promoted-only address mismatches 63/252/64 vs integer rewrite 0/252/64, numerical parity still failed.",
+  "result_session": "20261106T101340Z-T1-chat-2f6a"
 }
