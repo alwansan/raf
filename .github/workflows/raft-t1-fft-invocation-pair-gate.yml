@@ -29,6 +29,8 @@ on:
       - scripts/t1_fft_private_invocation_pair_report.py
       - tests/test_t1_fft_private_invocation_pair_report.py
       - scripts/t1_fft_private_unity_ftz_diagnostic.py
+      - scripts/t1_fft_private_unity_input_join.py
+      - tests/test_t1_fft_private_unity_input_join.py
       - tests/test_t1_fft_private_unity_ftz_diagnostic.py
       - scripts/t1_fft_pass0_vulkan_trace.py
       - scripts/t1_fft_original_trace_vulkan.py
@@ -68,6 +70,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_original_direct_keyed_recorder.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_private_invocation_pair_report.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_private_unity_ftz_diagnostic.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_private_unity_input_join.py -v
       - name: Privacy and actual-source acceptance boundary
         run: |
           set -euo pipefail
