@@ -1,0 +1,37 @@
+{
+  "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "da274472d3070d69a8377fbffc8253bca051b39b",
+  "updated_at": "2026-11-06T11:05:27Z",
+  "resumed_from_sessions": [
+    "20261106T103459Z-T2-chat-cb0-index-48bd",
+    "20261106T101538Z-T2-scheduled-uploadtrace-6c8f"
+  ],
+  "experiment_key": "zip2-15964ea8-Foam-serialized-CB0-member-symbols-vs-original-managed-AssemblyCSharp-0a6f-ldstr-setter-context-v1",
+  "resource_key": "T2-source-original-Foam-private-owned-independent",
+  "hypothesis": "Source-authentic CB0 vector/matrix member and buffer name literals from both Foam passes can be cross-joined to original Assembly-CSharp.dll typed Unity Material/Shader float/vector/matrix setters, to classify potential original upload producer methods. Member-to-managed literal matches and typed setter adjacency are leads, never exact dataflow or GPU upload proof.",
+  "inputs": [
+    "Original Foam owner ZIP2 15964ea8... SHA asset 0498f738...",
+    "Original Assembly-CSharp.dll 3211776B SHA256 0a6f0527...",
+    "B25 original m_NameIndices registry"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_private_cb0_managed_targets.py",
+    "tests/test_t2_foam_private_cb0_managed_targets.py",
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/FoamCb0ManagedLiterals.csproj",
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.json",
+    "prompt/coordination/clients/T2/sessions/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.md",
+    "prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result.json"
+  ],
+  "evidence_baseline": "https://github.com/alwansan/raf/actions/runs/42204938466",
+  "actions_queued_in_progress_at_plan": 0,
+  "prior_completed_texture_il": "https://github.com/alwansan/raf/actions/runs/42019735778",
+  "safe_output": "only counts/buckets of string literal hits, typed setter method co-occurrence, no original source, no names/hashes/tokens, no guessed runtime assignments",
+  "no_game_asset_meta_guid_touch": true,
+  "next_step": "Stage exact original Foam m_VectorParams/m_MatrixParams source names privately; perform typed original Cecil managed ldstr join in isolated CI."
+}
