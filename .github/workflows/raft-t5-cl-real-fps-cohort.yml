@@ -1,0 +1,83 @@
+name: T5 PERF-007 verified CL presented FPS cohort gate
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths: [.github/workflows/raft-t5-cl-real-fps-cohort.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-cl-presentation-cohort-20261105
+  cancel-in-progress: false
+
+jobs:
+  source-pinned-cl-metrics:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[t5-cl-real-fps-cohort]'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CL_COMMIT: "520c4cf409aa20a4db54ff80ed87d8807d9cba57"
+      BLOB_A: "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8"
+      BLOB_B: "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Validate source-free stale and startup FPS controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t5_cl_fps_cohort_gate.py' -v
+          python3 -m py_compile scripts/t5_cl_fps_cohort_gate.py
+      - name: Download only two immutable public CL telemetry sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/alwansan/CL/contents/raft%20log/lf/LogRaft-20261105-220911-559/metrics-20261105-220911-559-00001.jsonl?ref=$CL_COMMIT" > "$RUNNER_TEMP/t5-first.json"
+          gh api "repos/alwansan/CL/contents/raft%20log/lf/LogRaft-20261105-230108-327/metrics-20261105-230108-327-00001.jsonl?ref=$CL_COMMIT" > "$RUNNER_TEMP/t5-second.json"
+          python3 - <<'PY'
+          import base64,hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          for label,sha in (("first",os.environ["BLOB_A"]),("second",os.environ["BLOB_B"])):
+              record=json.loads((root/("t5-"+label+".json")).read_text())
+              assert record["sha"]==sha and record["encoding"]=="base64"
+              raw=base64.b64decode("".join(record["content"].split()),validate=True)
+              assert 0<len(raw)<2_000_000
+              actual=hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()
+              assert actual==sha,"Authenticated pinned CL Git blob identity mismatch"
+              (root/("t5-"+label+".jsonl")).write_bytes(raw)
+              print("T5_CL_BLOB_SOURCE label="+label+" sha_authenticated=true size="+str(len(raw)))
+          PY
+      - name: Refuse unsupported FPS comparison using real 190 sample records
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/t5_cl_fps_cohort_gate.py \
+            --session-a "$RUNNER_TEMP/t5-first.jsonl" --label-a 220911-559 \
+            --session-b "$RUNNER_TEMP/t5-second.jsonl" --label-b 230108-327 \
+            > "$RUNNER_TEMP/t5-verdict.jsonl"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          data=(Path(os.environ["RUNNER_TEMP"])/"t5-verdict.jsonl").read_text().strip()
+          assert data.startswith("T5_CL_PRESENTATION_EVIDENCE ")
+          obj=json.loads(data[len("T5_CL_PRESENTATION_EVIDENCE "):])
+          first,second,compare=obj["session_a"],obj["session_b"],obj["comparison"]
+          assert first["total_samples"]==71 and second["total_samples"]==119
+          assert first["stale_presentation_samples"]==6 and second["stale_presentation_samples"]==105
+          assert first["fresh_surface_fps_all"]["samples"]==57 and second["fresh_surface_fps_all"]["samples"]==2
+          assert first["first_observed_render_failure_sample"]==11
+          assert second["first_observed_render_failure_sample"]==16
+          assert first["fresh_fps_during_or_after_render_error"]["samples"]==57
+          assert second["fresh_fps_during_or_after_render_error"] is None
+          assert compare["assessment"].startswith("NOT_COMPARABLE_")
+          assert compare["no_aggregate_cross_session_fps"] is True
+          print(data)
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as f:
+              f.write("Actual CL samples from pinned commit. Session 220911: 57 fresh post-render-error FPS / 6 stale; session 230108: 2 fresh startup FPS (before error onset sample16) / 105 stale; zero fresh post-error FPS. DO NOT compare 120 FPS to gameplay FPS or claim GPU/Unity speedup, game freeze or root causation.\n")
+          PY
