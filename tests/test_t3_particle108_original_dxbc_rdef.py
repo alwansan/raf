@@ -68,7 +68,7 @@ class OriginalRdefTests(unittest.TestCase):
         # Duplicate the synthetic RDEF chunk and rebuild the DXBC chunk-offset table.
         first=bytes(source[36:])
         second_offset=40+len(first)
-        duplicate=(b"DXBC"+b"\\x00"*16+
+        duplicate=(b"DXBC"+b"\x00"*16+
                    struct.pack("<III",1,second_offset+len(first),2)+
                    struct.pack("<II",40,second_offset)+first+first)
         with self.assertRaisesRegex(ValueError,"DXBC_ORIGINAL_RDEF_MULTIPLE"):
