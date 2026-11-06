@@ -211,6 +211,15 @@ def package(apk, obb, metadata, output, *, part_bytes=DEFAULT_PART, asset_limit=
     (output/'delivery.json').write_text(json.dumps(result,indent=2)+'\n')
     lines = [p['sha256']+'  '+p['name'] for r in records for p in r['parts']]
     (output/'SHA256SUMS').write_text('\n'.join(lines)+'\n')
+    if obb is not None:
+        # The native workflow retains/publishes this directory after package()
+        # returns. Close the gap between bytes hashed while writing and bytes
+        # actually present in APK, OBB and multi-part XAPK after closure.
+        # The independent verifier reads original transport parts and nested
+        # STORED APK/OBB without reassembly or extraction. Any drift FAILS
+        # packaging before a success marker is emitted by the CLI.
+        from scripts.t5_verify_xapk_cross_delivery import verify as verify_delivery
+        verify_delivery(output)
     return result
 
 
