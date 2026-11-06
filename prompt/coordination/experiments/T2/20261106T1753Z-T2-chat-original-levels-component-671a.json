@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1753Z-T2-chat-original-levels-component-671a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "hypothesis": "The genuine source-original Unity scene level0..39 component typetrees can structurally identify authored Foam Shader Material or MonoBehaviour/renderer PPtrs to original Foam owner PathID2420 that were absent from 40 original sharedassets Material records.",
+  "source_sha": "ddf2011cdafacc7e18989f8eaed95ff3f4c812ad",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_source": {
+    "scene_count": 40,
+    "source_verified_bytes": 233237972,
+    "each_original_scene_SHA256_verified_against_immutable_manifest": true,
+    "foam_shader_owner_SHA_verified_this_run": false,
+    "foam_shader_object_SHA_attested_by_prior_independent_run": true
+  },
+  "tools": {
+    "UnityPy": "1.25.4",
+    "runner": "ubuntu-24.04",
+    "source": "scripts/t2_original_scene_foam_component_scan.py",
+    "tests": "tests/test_t2_original_scene_foam_component_scan.py",
+    "workflow": ".github/workflows/raft-t2-original-scene-foam-component.yml"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_original_scene_foam_component_scan.py' -v",
+    "python3 -m scripts.t2_original_scene_foam_component_scan --zip2 <sha_original_provider> --scratch <runner_tmp> --out <safe_aggregate>"
+  ],
+  "negative_controls": [
+    "exact 40 scenes and SHA-declared byte budget, missing/duplicate scene file",
+    "scene owner mismatch",
+    "nested correct typed m_FileID,m_PathID parsing",
+    "false field-name near match rejected",
+    "boolean-typed or unbounded depth malformed PPtrs rejected",
+    "foreign same PathID2420 treated as another asset, not original Foam",
+    "external owner string only candidate, no GUID authority",
+    "unsupported typetree yields explicit unparsed component count",
+    "invalid fileID separated",
+    "no runtime/pixels claim in safe summary"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42266263645",
+  "artifact_id": 13525944952,
+  "result": {
+    "conclusion": "success",
+    "sourcefree_test_count": 21,
+    "original_level_files": 40,
+    "original_level_bytes_sha_verified": 233237972,
+    "components_examined": 240961,
+    "components_parsed": 185633,
+    "components_opaque_unparsed": 55328,
+    "structural_pptrs_examined": 1277371,
+    "scene_materials": 0,
+    "scene_foam_owner_external_table_entries": 40,
+    "component_refs_to_owner_other_pathids": 24660,
+    "component_exact_Foam_Shader_filename_PathID_candidates": 0,
+    "foreign_local_same_PathID_not_Foam": 15,
+    "invalid_external_fileIDs": 0,
+    "all_component_source_coverage_complete": false,
+    "independent_original_Unity_GUID_proven": false,
+    "foam_runtime_CB0_upload_verified": false,
+    "Android_Adreno_pixels_verified": false
+  },
+  "rejected_hypothesis": "All source-visible MonoBehaviour/renderer PPtr reference graphs in the 40 scenes contain directly typed external PPtr to original Foam shader object: 0 of 1277371 parsed structural PPtrs; however 55328 opaque components remain unexamined.",
+  "limitations": [
+    "55,328 unsupported/opaque scene component typetrees could contain additional serialized PPtrs; no universal negative inference.",
+    "No scene Material objects; material outcome is 0 because scene serialization stores components referencing materials elsewhere.",
+    "Only these 40 original scene files; no runtime Shader.Find and no original compiled Mono field layout interpretation for opaque custom data.",
+    "External basename+original Foam PathID would be candidate, not authenticated GUID/runtime binding.",
+    "Source-only provenance does not justify Android experimental build without integrated shader fix."
+  ],
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "T2": "لا يحتاج",
+    "updated": false
+  },
+  "evidence_doc": "docs/T2_FOAM_ORIGINAL_40_LEVEL_SCENE_COMPONENTS_2026-11-06.md",
+  "next_step": "Use original Assembly-CSharp SHA verified and source Mono Script custom type schema/Shader.Find/Material assignment to narrow unsupported 55328 component tree frontier and actual Foam runtime host, then implement and test real ShaderLab/CB0 before device vote.",
+  "at": "2026-11-06T17:59:12.030Z"
+}
