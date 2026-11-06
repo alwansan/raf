@@ -71,3 +71,4 @@ jobs:
 # T5 one-shot PERF-007 joined original LogRaft+Unity telemetry CI42146496632 2026-11-06
 # T5 PERF-007 scene attribution source fix / 11 platform tests / 23 legacy-safe reader CI 2026-11-06
 # T5 INTEGRATION-001 verified future 3-day native package retention 9of9 source CI 2026-11-06
+# T5 COORD-001 source-only alias event 20261106T1020Z-T5-chat-ledger-id-compat-c8e4; checkpoint index after event commit
