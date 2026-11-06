@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "ce8a29caca3fa5fc95e582bcd49f64039cf417d3",
+  "updated_at": "2026-11-06T18:07:46.593Z",
+  "resumed_from_sessions": [
+    "20261106T175623Z-T1-chat-float-carrier-context-b82c",
+    "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+    "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4"
+  ],
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "لا يحتاج",
+    "unchanged": true
+  },
+  "hypothesis": "Without a hard XML+metrics gate the new ten-category Unity carrier-context test can be misclassified as a backend proof on a stale/partial/unbounded report, or conflate diagnostic nonzero counts with fatal positive-control errors.",
+  "experiment_key": "t1-water001-sourcefree-unity2021-carrier-context-nunit-metric-10-category-failclosed-parser-variant-v1",
+  "resource_key": "none (local CPython source-free)",
+  "scope": "Add strict standalone 10-class mismatch report validator against exact one Unity NUnit case, explicit source-free status and separately characterized diagnostic/control categories; verify locally via tests; do not touch workflow/Unity engine, original Raft assets or other workers.",
+  "intended_files": [
+    "scripts/t1_fft_carrier_context_result_gate.py",
+    "tests/test_t1_fft_carrier_context_result_gate.py",
+    "prompt/coordination/work/WATER-001/20261106T181000Z-T1-chat-carrier-report-gate-4c7d.json",
+    "prompt/coordination/clients/T1/sessions/20261106T181000Z-T1-chat-carrier-report-gate-4c7d.md",
+    "prompt/coordination/experiments/T1/20261106T181000Z-T1-chat-carrier-report-gate-4c7d.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T181000Z-T1-chat-carrier-report-gate-4c7d.json",
+    "prompt/coordination/clients/T1/MEMORY.md"
+  ],
+  "references": [
+    "https://github.com/alwansan/raf/actions/runs/42129683073",
+    "https://github.com/alwansan/raf/actions/runs/42261467757",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/T_TEAM/TRIAL_BUILD_POLICY_AR.md"
+  ],
+  "actual_new_unity_run": false,
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 not accessed",
+  "next_step": "Develop and execute extensive source-only gate adversarial tests locally; publish with expected SHA, checkpoint. Do not misrepresent as real Unity evidence."
+}
