@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_authentic_old_APK_only_unity_guid_marker_not_engine_mount_verified",
   "base_sha": "7a58763cea912064db35958bd0299cf1d6921fae",
-  "updated_at": "2026-11-06T15:21:33.007Z",
+  "updated_at": "2026-11-06T15:33:50.329Z",
   "resumed_from_sessions": [
     "20261106T1413Z-T5-chat-ledger-t1id-7b42.md",
     "20261106T1358Z-T5-chat-obb-fullsha-7e39.md",
@@ -42,5 +42,20 @@
     "Source-free CI tests incl mismatched markers and fake path errors",
     "Report scope and canonical ledger event without calling game READY"
   ],
-  "next_step": "Implement isolated actual marker attestation and synthetic tests, run source-only CI, preserve evidence."
+  "next_step": "No runtime GUID patch without demonstrated Unity contract; original phone CL warnings were optional patch-only. Compare on-device installed main.89 OBB bytes & actual asset read path; collaborate graphics T1–T3.",
+  "result": {
+    "run": 42243852483,
+    "job_id": 127980808269,
+    "source_sha": "f128787aa536cf6db076e13634aba1c49034925d",
+    "conclusion": "success",
+    "synthetic_tests": 13,
+    "real_source_APK_marker_present": true,
+    "real_source_OBB_marker_present": false,
+    "actual_cross_pair_guid_equality_proven": false,
+    "original_local_ZIP_headers_verified": 70,
+    "HTTP206_original_bytes": 11447,
+    "HTTP206_requests": 156,
+    "phone_mount_tested": false,
+    "game_ready": false
+  }
 }
