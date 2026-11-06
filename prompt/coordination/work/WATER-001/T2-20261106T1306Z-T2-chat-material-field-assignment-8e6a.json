@@ -4,7 +4,7 @@
   "issue_id": "WATER-001",
   "status": "completed",
   "base_sha": "33c72f721c5aab7fd2b6cfafaabdbf224f96f2ef",
-  "updated_at": "2026-11-06T13:08:00Z",
+  "updated_at": "2026-11-06T13:10:00Z",
   "resumed_from_sessions": [
     "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e",
     "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
@@ -22,7 +22,8 @@
     "prompt/coordination/clients/T2/sessions/20261106T1306Z-T2-chat-material-field-assignment-8e6a.md",
     "prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a.json",
     "prompt/coordination/B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-result.json",
-    "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md"
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md",
+    "prompt/coordination/discussions/WATER-001/20261106T1309Z-T2-Foam-Material-receiver-field-assignment-T1T5.md"
   ],
   "test_plan": "Source-free Cecil controls verify exact receiver field identity, wrong-type and branch invalidation, exact original assembly SHA and isolated managed stfld writer census, type-specific Material ctor/getter/Shader.Find classification. Only aggregate facts/no private hashes names methods values.",
   "actions_active_at_plan": [
@@ -41,5 +42,10 @@
   "report": "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md",
   "experiment_record": "prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a.json",
   "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-result.json",
-  "next_step": "Investigate original typed stfld Material value via bounded locals / exact stack flow. Avoid inferring ctor directly from same-method occurrence. WATER-001 OPEN."
+  "next_step": "Investigate original typed stfld Material value via bounded locals / exact stack flow. Avoid inferring ctor directly from same-method occurrence. WATER-001 OPEN.",
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T1309Z-T2-Foam-Material-receiver-field-assignment-T1T5.md",
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ]
 }
