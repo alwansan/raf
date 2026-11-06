@@ -4,7 +4,7 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "LOCAL-005",
-  "status": "waiting_ci",
+  "status": "completed_source_free_ci_verified_device_unverified",
   "base_sha": "af440fa5c42be5c62aeec502accb020272bbbd15",
   "resumed_from_sessions": [
     "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
@@ -31,11 +31,12 @@
     "https://github.com/alwansan/raf/actions/runs/42228168580",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "next_step": "Read exact 42230233069 conclusion and job log; if success close source-only scope, publish T5 handoff; if failing fix only exact CIs.",
-  "updated_at": "2026-11-06T14:02:18.574Z",
+  "next_step": "Use one signed Raft APK+matched OBB carrying later source SHA; T5 attests package and owner checks physical mouse+keyboard, menu and Android focus, gameplay world save then complete app process exit and reopen same world. Parse private device JSONL with this strict source-free verifier and preserve provenance. This source parser's success does not prove durable .rgd or native mouse capture.",
+  "updated_at": "2026-11-06T14:03:31.068Z",
   "source_commit": "74607f816ab4bd6dd35686f928fe3d81bbb60494",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42230233069",
     "https://github.com/alwansan/raf/actions/runs/42230129397"
-  ]
+  ],
+  "result": "Exact source 74607f816ab4bd6dd35686f928fe3d81bbb60494 CI42230233069 COMPLETED SUCCESS (job 127933933723): 27/27 Python parser tests including 4 new duplicate/nonfinite/valid replay controls plus 2/2 overflow controls =29/29. Source-only, no phone logs, .rgd, Unity player or Android actual game tested."
 }
