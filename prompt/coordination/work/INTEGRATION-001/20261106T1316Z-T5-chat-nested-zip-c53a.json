@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1316Z-T5-chat-nested-zip-c53a",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_real_signed_APK_OBB_nested_zip_local_and_central_verified",
   "base_sha": "4491e8d1a4904ab4c5189e687174acbc7d33cc50",
-  "updated_at": "2026-11-06T13:08:34.202Z",
+  "updated_at": "2026-11-06T13:19:29.732Z",
   "resumed_from_sessions": [
     "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
     "20261106T1243Z-T5-chat-zip-local-headers-9e2a.md",
@@ -34,5 +34,25 @@
     "Actual SHA/checksum of inner signed APK/OBB and certificate still unproven, no phone"
   ],
   "coordination": "T5 scheduled signed artifact envelope metadata; this is new nonoverlapping deep probe; last Actions all completed; other clients P0 water/renderer source untouched, no Unity build.",
-  "next_step": "Implement nested range seekable ZIP reader and synthetic sparse 3GB test, run actual HTTP 206 source-only CI, preserve safe report."
+  "next_step": "Full original signed APK SHA256, actual binary manifest package/versionCode and apksigner only with authorized bandwidth/disk budget; OBB full SHA/GUID independently later. No full 9GB duplicate transfer.",
+  "final_source_sha": "26308123af645b92dde1ca36c98fda7c64aca29f",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42223563645",
+    "https://github.com/alwansan/raf/actions/runs/42223800025",
+    "https://github.com/alwansan/raf/actions/runs/42224062207"
+  ],
+  "result": {
+    "ci": "success",
+    "job_id": 127912959079,
+    "synthetic_tests": "14/14",
+    "real_original_source": true,
+    "actual_nested_APK_ZIP_members": 31,
+    "actual_nested_OBB_ZIP_members": 39,
+    "total_local_headers_verified": 70,
+    "original_HTTP_range_bytes": 25350,
+    "original_HTTP_range_requests": 165,
+    "actual_inner_SHA_verified": false,
+    "actual_APK_certificate_verified": false,
+    "actual_android_device_tested": false
+  }
 }
