@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+  "issue_id": "WATER-001",
+  "track": "Independent original-free Unity2021 OpenGLCore float-bitcarrier sampled-image address discriminator",
+  "status": "active",
+  "base_sha": "7c04928db1f45f4e66a656286bacc9e055bfea10",
+  "updated_at": "2026-11-06T17:22:58Z",
+  "resumed_from_sessions": [
+    "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
+    "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4",
+    "20261106T163310Z-T1-chat-real-fft-pair-d91e"
+  ],
+  "hypothesis": "OpenGLCore Unity compiler or GPU may reinterpret float32 subnormal bit-carried integer texel coordinates differently from direct integer Texture2D.Load addresses, accounting for FFT butterfly-site divergence seen on Unity but not Mesa Vulkan.",
+  "approach": "Use authored tiny synthetic HLSL with 64x32 RGBAFloat source and butterfly inputs, 64 dispatch threads, a storage buffer of per-thread uint coordinates, two direct sampled butterfly loads and two float4 bitcarrier/swizzled loads; compare 5*64 exact float-asuint image values in C# on Unity2021 OpenGLCore. Strict bounded result XML and aggregate counts, no original game assets or shader names.",
+  "experiment_key": "water001-t1-sourcefree-unity-openglcore-dynamic-uint-to-subnormal-float4-carrier-texture2d-load-64threads-2butterfly-sites-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port-Unity2021-GameCI-licensed",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftBitcarrierTextureLoad.compute",
+    "android-port/Experiments/T1/T1FftBitcarrierTextureLoadTests.cs",
+    "tests/test_t1_fft_bitcarrier_texture_fixture.py",
+    ".github/workflows/raft-t1-fft-unity-bitcarrier-texture-load.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9.md",
+    "prompt/coordination/experiments/T1/20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9.json",
+    "prompt/coordination/work/WATER-001/20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9.json"
+  ],
+  "related_work": [
+    "prompt/coordination/work/WATER-001/20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4.json",
+    "https://github.com/alwansan/raf/actions/runs/42259968584",
+    "https://github.com/alwansan/raf/actions/runs/42254539826",
+    "https://github.com/alwansan/raf/actions/runs/42198180194"
+  ],
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not downloaded)",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create synthetic code/workflow with source-only tests; run Unity actual source-free texture load and record per-site direct/bitcarrier mismatches to reject/retain backend primitive hypothesis. No main native build."
+}
