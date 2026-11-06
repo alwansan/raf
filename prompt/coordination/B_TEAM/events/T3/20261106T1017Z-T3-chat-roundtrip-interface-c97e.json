@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1017Z-T3-chat-roundtrip-interface-c97e",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1017Z-T3-chat-roundtrip-interface-c97e",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Genuine SHA-authenticated ZIP2 Particle108 original four VS/FS DXBC pairs: vkd3d source VSFS 4/4 compatible, HLSL SPIR-V roundtrip only 2/4. Both broken pairs have existing Fragment input Locations but same-Location Vertex output versus Fragment input TYPE mismatches (2 records); zero missing FS input location; four source→roundtrip Vertex and Fragment interface changes. Original active DXBC Fragment input read masks source-located 14/14. Source-only 11/11 tests; no shader patch or phone pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42201795150",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json"
+  ],
+  "at": "2026-11-06T10:21:00Z"
+}
