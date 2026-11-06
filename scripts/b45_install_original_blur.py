@@ -79,6 +79,20 @@ def install(project, candidate, backup):
     lines = [line for line in metadata.splitlines() if line.startswith(b"guid:")]
     if len(lines) != 1 or not re.fullmatch(rb"guid: *[0-9a-fA-F]{32} *", lines[0]):
         raise ValueError("Original exported shader GUID malformed or ambiguous")
+    # Unity resolves serialized Shader PPtrs through GUIDs, not ShaderLab names.
+    # Even one correctly named Blur target is unsafe if an unrelated export
+    # sidecar claims the same identifier. Verify before any backup/promotion.
+    target_guid = lines[0].split(b":", 1)[1].strip().lower()
+    for other_meta in assets.rglob("*.meta"):
+        _require_safe_asset_path(assets, other_meta)
+        if other_meta.is_symlink() or not other_meta.is_file():
+            raise ValueError("Redirected exported Blur metadata")
+        if other_meta == meta:
+            continue
+        for row in other_meta.read_bytes().splitlines():
+            if (row.startswith(b"guid:") and
+                    row.split(b":", 1)[1].strip().lower() == target_guid):
+                raise ValueError("Duplicate exported Blur shader GUID")
     backup.mkdir(parents=True, exist_ok=False)
     try:
         (backup / "original.shader").write_bytes(original)

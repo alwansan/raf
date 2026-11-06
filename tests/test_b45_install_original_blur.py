@@ -66,6 +66,37 @@ class OriginalBlurInstallTests(unittest.TestCase):
                     self.install_fixture(project, candidate, backup)
                 self.assertFalse(backup.exists())
 
+    def test_second_exported_asset_with_same_guid_rejected_before_backup(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, original, candidate, backup = fixture(d)
+            (project / "Assets" / "Elsewhere.asset.meta").write_text(META)
+            with self.assertRaisesRegex(ValueError, "Duplicate exported Blur shader GUID"):
+                self.install_fixture(project, candidate, backup)
+            self.assertEqual(original.read_bytes(), PLACEHOLDER.encode())
+            self.assertFalse(backup.exists())
+
+    def test_unrelated_unique_guid_keeps_original_meta_and_install(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, original, candidate, backup = fixture(d)
+            (project / "Assets" / "Elsewhere.asset.meta").write_text(
+                META.replace("a" * 32, "b" * 32))
+            original_meta = Path(str(original) + ".meta").read_bytes()
+            result = self.install_fixture(project, candidate, backup)
+            self.assertEqual(result["installed_exported_blur_targets"], 1)
+            self.assertEqual(original.read_bytes(), CANDIDATE.encode())
+            self.assertEqual(Path(str(original) + ".meta").read_bytes(), original_meta)
+
+    def test_unrelated_redirected_meta_rejected_before_backup(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, original, candidate, backup = fixture(d)
+            outside = Path(d) / "other-asset.meta"
+            outside.write_text(META.replace("a" * 32, "b" * 32))
+            (project / "Assets" / "Elsewhere.asset.meta").symlink_to(outside)
+            with self.assertRaises(ValueError):
+                self.install_fixture(project, candidate, backup)
+            self.assertEqual(original.read_bytes(), PLACEHOLDER.encode())
+            self.assertFalse(backup.exists())
+
     def test_backup_inside_project_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             project, original, candidate, backup = fixture(d)
