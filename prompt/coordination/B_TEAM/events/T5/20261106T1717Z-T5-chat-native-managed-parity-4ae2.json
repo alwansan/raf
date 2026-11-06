@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "id": "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
+  "owner": "T5",
+  "session_id": "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T17:21:12.421Z",
+  "summary": "Real native Unity Android and original-managed private compile platform source-copy lists match exactly 17/17; newly integrated strict source-only CI guard detects removed/duplicated/unsafe/redirected files. GitHub Actions42260528639 SUCCESS, new 8/8 adversarial tests PASS, original managed C# compile exit=0 and actual local RPC identity PASS. No Unity/OBB/pixel or device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42260528639",
+    "https://github.com/alwansan/raf/commit/cf580caf30b25f55eb601b6026b46fa10467bdf0",
+    "prompt/coordination/experiments/T5/20261106T1717Z-T5-chat-native-managed-parity-4ae2.json"
+  ],
+  "limits": [
+    "not a Unity2021 ARM64 IL2CPP build",
+    "actual OBB on-device mount, shaders, FFT/water, white graphics, game FPS not evaluated",
+    "team readiness NOT_READY 0/3"
+  ]
+}
