@@ -6,7 +6,7 @@
   "session_id": "20261106T1808Z-T2-chat-monohead-script-links-42a7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "e234bc8eeafd7957299e17755feaa08beb178951",
   "round_id": "trial-20261106-r1",
   "vote": "لا يحتاج",
@@ -34,6 +34,10 @@
     "CI42264851712 original SHA sharedassets0 and all 40 sharedassets Materials"
   ],
   "notes": "UnityPy1.25.4 generated MonoBehaviour typetree may have wrong m_Script header alignment; use original Unity class database header, never auto-generated full node without controlled layout check. Opaque component identifiers/names/private hashes never exported.",
-  "updated_at": "2026-11-06T18:07:02.677Z",
-  "next_step": "Implement conservative per-type opaque census and verified m_Script PPtr via built-in header parser. Reuse exact ZIP2 pins, isolate 350MB source scratch and run one original CI, then decide next custom Mono field reconstruction. T2 NO vote unchanged; no phone build."
+  "updated_at": "2026-11-06T18:13:03.671Z",
+  "next_step": "Initial 42268476115 failed pre-original source-free synthetic fixture only (test used {} dict instead of set); precise test-only fix 40d42257. Retry 42268585593 started; await exact 41-source-SHA counts, no duplicate launch, keep trial NO.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42268476115",
+    "https://github.com/alwansan/raf/actions/runs/42268585593"
+  ]
 }
