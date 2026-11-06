@@ -63,7 +63,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 scripts/t5_cl_unity_surface_bridge.py \
+          python3 -m scripts.t5_cl_unity_surface_bridge \
             --unity-a "$RUNNER_TEMP/t5-A_UNITY.jsonl" --sf-a "$RUNNER_TEMP/t5-A_SF.jsonl" \
             --unity-b "$RUNNER_TEMP/t5-B_UNITY.jsonl" --sf-b "$RUNNER_TEMP/t5-B_SF.jsonl" > "$RUNNER_TEMP/t5-cohort-result.txt"
           python3 - <<'PY'
