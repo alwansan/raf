@@ -236,7 +236,9 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42076494669",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md",
-        "https://github.com/alwansan/raf/actions/runs/42086855402"
+        "https://github.com/alwansan/raf/actions/runs/42086855402",
+        "https://github.com/alwansan/raf/actions/runs/42150216417",
+        "https://github.com/alwansan/raf/actions/runs/42149781353"
       ],
       "remaining": [
         "نجح دخول العالم والحفظ والخروج والعودة لدى المالك على Artifact 42058825739. حافظ على هذا المسار وتحقق من المشكلات المتبقية ومنع التراجع.",
@@ -272,15 +274,16 @@
         "T4 authenticated original RGD initialization-classification CI42068520588 SUCCESS 32/32: exact pinned original compiled SaveWorld derived RGD-producing call is a zero-argument instance method declared by SaveAndLoad with original body; SaveUser SaveAndLoad-owned derived RGD field has 1 lexical store inside SaveUser and 2 inside other SaveAndLoad methods (0 constructors and other types), 2 derived-typed immediate predecessors, one unknown, zero literal-null. Source-only metadata, not executed branch, object nonnull/Save/durable RGD or Android phone proof. T5 CI42058825739 in-progress Unity import at latest check. LOCAL-005 OPEN NOT_READY 0/3.",
         "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3.",
         "T4 authentic original SaveAndLoad RGD world factory returned-local assignment CI42076494669 SUCCESS 67/67: exact original SHA-pinned source IL has one lexical stloc to local loaded before unique ret, immediately preceded by derived-RGD newobj; no other direct literal null, call/local/field store to that slot. Constructor adjacency is not branch execution or device-proven non-null. No actual world/user .rgd durability, local-host play, Android exit/reopen proven. LOCAL-005 remains OPEN NOT_READY 0/3.",
-        "T4 2026-11-05 real CL-generated Android world RGD: CI42086855402 SUCCESS on SHA cbbc296c95b53d13354661eef3bd5212456f5364. Three distinct exact CL public git blobs (11255/310140/309863 bytes) authenticated before historical BinaryFormatter; genuinely invoked compiled original SaveAndLoad.Load<T> on .NET8 with original Assembly-CSharp and 151 sibling DLLs; 3/3 returned matching original CLR object and error category NONE, wrong input rejected. This weakens generic corrupted/incompatible RGD explanation only for those three CL inputs under .NET8; does NOT prove complete world content, Unity/Android IL2CPP, playable host, durable SaveGame or full-restart replay. CL Nov4 APK86 second session repeats StoreStats steam_api64 after MainScene/additive scenes and SaveWorld/SaveUser; new native reconstruct run42058825739 succeeded after guarded source staging but release create failed HTTP403 so no post-guard phone test. LOCAL-005 OPEN NOT_READY 0/3."
+        "T4 2026-11-05 real CL-generated Android world RGD: CI42086855402 SUCCESS on SHA cbbc296c95b53d13354661eef3bd5212456f5364. Three distinct exact CL public git blobs (11255/310140/309863 bytes) authenticated before historical BinaryFormatter; genuinely invoked compiled original SaveAndLoad.Load<T> on .NET8 with original Assembly-CSharp and 151 sibling DLLs; 3/3 returned matching original CLR object and error category NONE, wrong input rejected. This weakens generic corrupted/incompatible RGD explanation only for those three CL inputs under .NET8; does NOT prove complete world content, Unity/Android IL2CPP, playable host, durable SaveGame or full-restart replay. CL Nov4 APK86 second session repeats StoreStats steam_api64 after MainScene/additive scenes and SaveWorld/SaveUser; new native reconstruct run42058825739 succeeded after guarded source staging but release create failed HTTP403 so no post-guard phone test. LOCAL-005 OPEN NOT_READY 0/3.",
+        "T4 owner 5Nov CL@520c seven distinct real World RGD blobs (two equal-size distinct Git hashes), exact original .NET8 CLR Load<T> run42150216417 SUCCESS 7/7 typed original decoded and returned; 12 source-free negative tests and one-byte tamper rejection. This is managed source compatibility only, NOT new Android IL2CPP/device or world-progress/reopen acceptance; retain prior owner artifact42058825739 bounded success."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "owner-device-feedback",
-      "updated_at": "2026-11-05",
+      "updated_by": "T4",
+      "updated_at": "2026-11-06T02:26:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -8041,6 +8044,25 @@
       "_record_path": "../B_TEAM/events/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json"
     },
     {
+      "id": "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+      "session_id": "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+      "owner": "T4",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "authentic_original_clr_save_read_compatibility",
+      "at": "2026-11-06T02:26:00Z",
+      "timestamp": "2026-11-06T02:26:00Z",
+      "summary": "Authentic owner 5 Nov Raft phone CL@520c snapshot contains seven distinct World/*.rgd files. New pinned source-private .NET8 original compiled Load<T> run42150216417 SUCCESS: exact original DLL+151 siblings, all seven Git blob authentic; BinaryFormatter object 7/7, actual original SaveAndLoad.Load<T> invoked 7/7 and returned matching original CLR type 7/7; 12/12 adversarial intake tests, tampering rejected. Prior three 4Nov regression CI42149781353 SUCCESS. Source CLR only, no Unity Android build/phone progress test; LOCAL-005 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42150216417",
+        "https://github.com/alwansan/raf/actions/runs/42149781353",
+        "prompt/coordination/experiments/T4/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.json"
+      ],
+      "device": "NEW_NATIVE_DEVICE_REGRESSION_NOT_TESTED",
+      "raw_user_world_data_published": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -8443,6 +8465,21 @@
       "_record_path": "../B_TEAM/events/T5/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json"
     },
     {
+      "id": "T5-20261106-perf-scene-window-sourcefix",
+      "owner": "T5",
+      "session_id": "20261106T0214Z-T5-chat-scene-window-attribution-8d91",
+      "issue_id": "PERF-007",
+      "type": "integration",
+      "at": "2026-11-06T02:31:34.179Z",
+      "summary": "Fixed real CL-proven Unity FPS scene attribution: source logs had 96-frame and 12-frame intervals straddling Menu->MainScene but labeled new scene only. New diagnostic records start/end scene, active and additive content events, stable flags without dropping load stalls; B12 static callback and B04 preserved. CI42150116695 platform pass 11 diagnostics policy tests; CI42150086078 B12 pass; CI42150565706 23 tests and four actual CL blobs passed, old intervals correctly legacy-unlabeled. Device not tested, performance/water/graphics not fixed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42150116695",
+        "https://github.com/alwansan/raf/actions/runs/42150565706",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_SCENE_INTERVAL_ATTRIBUTION_2026-11-06.md"
+      ],
+      "_record_path": "../B_TEAM/events/T5/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -8471,7 +8508,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2dbf32c11fab0bd7e3a7e17caaf075cd1461e40fdc1ec0210738b58752378fb7",
+  "source_input_sha256": "2b3190d6f7512449d46328161853db784f2d662babc8d68c8af84cddead80ac2",
   "generation": "T-2026-11-05",
-  "input_sha256": "57c8495ce78eea638eb0367a104a1e8770a1c63a6b9ebfe2c9fd4ea4e91ac216"
+  "input_sha256": "a337102488253059ff806cc228ae5d845a94287c2edb0a295b3ee108822c54eb"
 }
