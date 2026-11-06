@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "source-original FFT butterfly1 Y OpINotEqual predicate operand origin and branch suffix read-gate/last writer classification",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "5d462bbbee3d2ddb8352203f60646a43679659d9",
-  "updated_at": "2026-11-06T12:40:28.285Z",
+  "updated_at": "2026-11-06T12:42:42.854Z",
   "resumed_from_sessions": [
     "20261106T122023Z-T1-chat-y-guard-paths-d71e",
     "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
@@ -30,6 +30,6 @@
     "https://github.com/alwansan/raf/actions/runs/42219209890",
     "https://github.com/alwansan/raf/actions/runs/42219435992"
   ],
-  "result": "First source-free CI 42219209890 failed 1/14 synthetic cases before private source recovery: malformed SPIR-V conditional in same block returned KeyError for nonexistent successor; source now rejects a mid-block terminator or missing target explicitly (3dd79472). Validated new workflow run fc3598e queued.",
-  "next_step": "Read second CI 42219435992, then only sanitized RAFT_T1_FFT_Y_INEQUAL_OPERANDS marker and log 14/14 tests. If source original completes, record predicate operand kind and whether branch gates read versus chooses between writers."
+  "result": "Authenticated source-original SPIR-V predicate inquiry PASS: 14/14 new synthetics after fail-closed malformed branch fix; original butterfly1 Y OpINotEqual tests uint32 bitcast input against uint32 constant. Only FALSE successor can reach the Y fetch, TRUE cannot; condition structurally gates read, not a direct Y bitcarrier-vs-float store selector. Prior full-path analysis confirms float constant last writer before read. Runtime predicate/Unity numeric/Adreno remains unproven. Scoped work completed, WATER-001 OPEN.",
+  "next_step": "Independent T1 focus must return to butterfly1 X actual 252/256 coordinate mismatches. Map original whole-vector OpVectorShuffle component producer and signed/float bit pattern, pair SHA-fixed same-input Vulkan-versus-Unity coordinate-keyed captures (scheduled source parser now hardened) before rewriting game shader. No T1 runner reservation retained."
 }
