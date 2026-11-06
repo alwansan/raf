@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a",
+  "issue_id": "WATER-001",
+  "track": "original Foam shader name to exact managed Shader.Find IL call-site evidence",
+  "status": "active",
+  "base_sha": "89f358edfab3bbe3ab10b4608413ef9722b89afd",
+  "updated_at": "2026-11-06T19:05:00Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.md",
+    "scripts/t2_original_foam_shaderfind_name.py",
+    "tests/test_t2_original_foam_shaderfind_name.py",
+    "android-port/Experiments/T2/FoamShaderFindOriginal/Program.cs",
+    "android-port/Experiments/T2/FoamShaderFindOriginal/FoamShaderFindOriginal.csproj",
+    ".github/workflows/raft-t2-foam-original-shaderfind-il.yml",
+    "docs/T2_ORIGINAL_FOAM_SHADERFIND_IL_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a-result.json"
+  ],
+  "experiment_key": "ZIP2-15964-original-Foam-shader-mName-to-AssemblyCSharp-typed-Shader.Find-ldstr-v1",
+  "resource_key": "original-sharedassets0-115978112-and-managedDLL-3211776-isolated-CPU-run",
+  "hypothesis": "Exact SHA-original Foam Shader m_Name may occur in Assembly-CSharp ldstr and be passed directly to UnityEngine.Shader.Find; count exact call arguments without inventing runtime use if only lexical/call cooccurrence.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1846Z-T2-chat-monoclass-assembly-7d3e.json",
+    "prompt/coordination/work/WATER-001/T2-20261106T1900Z-T2-chat-scene-script-typed-6f9a.json"
+  ],
+  "resumed_from_sessions": [
+    "20261106T1835Z-T2-chat-positive-attestation-3f8a",
+    "20261106T1846Z-T2-chat-monoclass-assembly-7d3e",
+    "20261106T1900Z-T2-chat-scene-script-typed-6f9a"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Sourcefree tests then SHA original Foam/name and original DLL through immutable ZIP2, Cecil typed IL exact ldstr immediate Shader.Find consumer. Counts-only safe result, no original names/IDs/artifact. No game/Android build.",
+  "trial_build_vote": "لا يحتاج"
+}
