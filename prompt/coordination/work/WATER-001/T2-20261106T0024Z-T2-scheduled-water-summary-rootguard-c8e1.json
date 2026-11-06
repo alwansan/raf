@@ -1,0 +1,18 @@
+{
+  "id": "20261106T0024Z-T2-scheduled-water-summary-rootguard-c8e1",
+  "agent": "T2",
+  "origin": "scheduled",
+  "baseline_sha": "2aa84a40bff9ac0b69277552e4a071e1a59299d4",
+  "status": "in_progress",
+  "scope": [
+    "scripts/t2_device_water_summary.py",
+    "tests/test_t2_device_water_summary.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0024Z-T2-scheduled-water-summary-rootguard-c8e1.md"
+  ],
+  "hypothesis": "A bool root category count passes Python equality with int totals, causing false provenance acceptance; reject bool and non-int strictly, and guard malformed session ID.",
+  "experiment_key": "T2-device-water-root-count-type-guard-v1",
+  "shared_resource": null,
+  "overlap": "T3 working Particle108 workflow, no overlapping files; T1 FFT and T5 delivery untouched",
+  "evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; CL pinned 520c4cf409aa20a4db54ff80ed87d8807d9cba57; previous T2 water triage source",
+  "next": "Implement strict validation and regression tests; run locally; preserve device evidence boundary"
+}
