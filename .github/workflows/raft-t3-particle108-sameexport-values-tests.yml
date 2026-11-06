@@ -1,0 +1,35 @@
+name: T3 RENDER-002 original Particle108 five-material RGBA scalar source-free controls
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-sameexport-values-tests.yml'
+      - 'scripts/t3_particle108_sameexport_values.py'
+      - 'tests/test_t3_particle108_sameexport_values.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-five-material-values-tests-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  safe-five-material-parity-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate strict W1/B02 material source selection and B44/B22 values
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_sameexport_values.py tests/test_t3_particle108_sameexport_values.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_sameexport_values.py' -v
+          echo 'T3_108_PARTICLE_MATERIAL_VALUE_PARITY_SOURCE_FREE_CONTROLS=PASS;not_Unity_GPU'
