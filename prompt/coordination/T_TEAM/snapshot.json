@@ -92,7 +92,8 @@
         "https://github.com/alwansan/raf/actions/runs/42118499200",
         "https://github.com/alwansan/raf/actions/runs/42121598304",
         "https://github.com/alwansan/raf/actions/runs/42124859112",
-        "https://github.com/alwansan/raf/actions/runs/42126395609"
+        "https://github.com/alwansan/raf/actions/runs/42126395609",
+        "https://github.com/alwansan/raf/actions/runs/42144434260"
       ],
       "remaining": [
         "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
@@ -101,17 +102,19 @@
         "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA.",
         "On-device test of SOURCE_MOUSE_RELATIVE vs SOURCE_TOUCHPAD captured motion, batching, cursor lock/release, wheel/buttons and old world/save/exit/reopen on same candidate SHA; source tests do not prove Android behavior.",
         "Immersive WindowInsetsController/legacy source added; validate on actual POCO F5 Pro whether bars disappear at mouse edges while OS swipes still work and landscape/Settings/game world-save remain stable on same signed candidate.",
-        "On-device verify old captured MotionEvent callback cannot move camera after rapid release/reacquire and show requested/lost/relative/released diagnostic state; no device proof yet."
+        "On-device verify old captured MotionEvent callback cannot move camera after rapid release/reacquire and show requested/lost/relative/released diagnostic state; no device proof yet.",
+        "Device acceptance: validate captured trackpad MotionEvent SOURCE_MOUSE and InputDevice SOURCE_TOUCHPAD pairing, camera X/Y, physical mouse vs touchscreen, focus/release/cursor/system bars, keyboard/touch, and world/save/full-reopen on same signed Android source."
       ],
       "acceptance": [
         "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T23:03:00Z",
+      "updated_at": "2026-11-06T01:33:00Z",
       "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
       "latest_T4_source_proof": "SOURCE_INTEGRATED_CI42121598304: API26 relative mouse getX/Y, captured touchpad AXIS_RELATIVE_X/Y, 0..64 historical samples; 28 Python +30 CSharp + original Unity2021 compile PASS; Android physical device unverified",
       "latest_T4_immersive_source": "SOURCE_INTEGRATED_CI42124859112: API30+ WindowInsetsController systemBars transient OS swipes; API26-29 additive legacy IMMERSIVE_STICKY flags; 7 Python and 18 CSharp policy checks; authentic original Unity2021 AndroidJNI/Core compile; NO DEVICE ACCEPTANCE",
       "latest_T4_listener_epoch_source": "SOURCE_CI_VERIFIED_42126395609: per-request Android captured listener epoch prevents stale prior-capture MOVE after release and reacquire. 32 Python +36 .NET + original Unity2021 managed compile, device unverified.",
+      "latest_T4_trackpad_source": "SOURCE_INTEGRATED_SUCCESS_CI42144434260: source=MOUSE + event InputDevice.getSources touchpad capability, API docs proven; 40/40 Python, 48/48 dotnet, original Unity2021 ABI compile. Not verified on Android device.",
       "_record_path": "../B_TEAM/issues/INPUT-005.json"
     },
     {
@@ -464,7 +467,9 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json",
         "https://github.com/alwansan/raf/actions/runs/42141030091",
         "https://github.com/alwansan/raf/actions/runs/42141506120",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42144978122",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -522,7 +527,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T01:12:00.217Z",
+      "updated_at": "2026-11-06T01:42:05.771Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -2577,7 +2582,7 @@
         "extraction": "EXACT_UNIQUE_108_PARTICLE_SHADER48_AND_ONE_NORMAL_PASS_SELECTED",
         "reconstruction": "FOUR_SOURCE_SHA_ORIGINAL_DXBC_KEYWORD_PAIRS_EIGHT_STAGES_VKD3D_COMPILER_TO_VALID_VULKAN11_SPIRV_ALL_EIGHT",
         "binding": "FOUR_ORIGINAL_VS_FS_PASSES_MATCHED_BY_EXACT_SERIALIZED_KEYWORD_PERMUTATIONS",
-        "integration": "SOURCE_ONLY_EIGHT_STAGE_SPIRV_CROSS_HLSL_AND_GLSLANG_ROUNDTRIP_ALL_VALID_BUT_STAGE_IO_LOCATION_REMAP_4_ORIGINAL_VSFS_PAIRS_COMPATIBLE_VS_2_ROUNDTRIP_PAIRS_NOT_Unity_Android_COMPILED",
+        "integration": "ORIGINAL_SOURCE_FOUR_DXBC_VS_FS_KEYWORD_PAIRS_ALL_AUTHORED_USER_SEMANTIC_TYPE_COMPONENT_MASK_COVERAGE_MATCH_16_RECORDS_58_LANES;_DERIVED_HLSL_LOCATION_BRIDGE_NOT_PROVEN",
         "device": "NOT_TESTED"
       },
       "counts": {
@@ -2591,7 +2596,7 @@
         "unmatched_fragment_permutations": 0,
         "original_source_programmable_Pass_count": 1,
         "source_original_particles_108_render_use_slots": 108,
-        "source_free_tests_passed": 133,
+        "source_free_tests_passed": 147,
         "original_stage_code_extracted_published": false,
         "Android_runtime_fragment_alpha_or_pixels_verified": false,
         "actual_original_DXBC_stage_translation_attempts": 8,
@@ -2613,7 +2618,29 @@
         "remapped_output_locations_added": 4,
         "remapped_output_locations_removed": 4,
         "same_location_output_type_assignments_changed": 4,
-        "native_Unity_ShaderLab_pixel_equivalence_verified": false
+        "native_Unity_ShaderLab_pixel_equivalence_verified": false,
+        "original_roundtrip_compiler_reflected_name_stage_comparisons": 8,
+        "original_roundtrip_input_named_entries_each": 26,
+        "original_roundtrip_output_named_entries_each": 20,
+        "original_roundtrip_input_name_type_matches": 0,
+        "original_roundtrip_output_name_type_matches": 0,
+        "original_roundtrip_stages_with_full_name_type_preservation": 0,
+        "mismatched_roundtrip_pairs_with_complete_reflected_name_bridge": 0,
+        "source_stage_pair_interfaces_compatible": 4,
+        "roundtrip_stage_pair_interfaces_compatible": 2,
+        "automated_location_patch_by_compiler_reflected_names_only_verified": false,
+        "original_DXBC_signature_semantic_map_verified": false,
+        "original_authored_source_DXBC_semantic_signature_pairs_checked": 4,
+        "original_authored_source_DXBC_stage_programs_checked": 8,
+        "original_authored_source_vertex_user_output_semantics": 16,
+        "original_authored_source_fragment_user_input_semantics": 16,
+        "original_authored_source_VSFS_matched_semantic_records": 16,
+        "original_authored_source_VSFS_matched_component_lanes": 58,
+        "original_authored_source_VSFS_unmatched_fragment_semantics": 0,
+        "original_authored_source_VSFS_missing_component_lanes": 0,
+        "original_authored_source_VSFS_matched_component_type_mismatches": 0,
+        "original_authored_source_VSFS_keyword_pairs_with_complete_signature_coverage": 4,
+        "authored_DXBC_semantics_to_HLSL_SPIRV_location_map_verified": false
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42139137265",
@@ -2621,16 +2648,20 @@
         "https://github.com/alwansan/raf/commit/927bf1d096f8c5500f237794b91fc71c90a946ab",
         "https://github.com/alwansan/raf/actions/runs/42141030091",
         "https://github.com/alwansan/raf/actions/runs/42141506120",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42144978122",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42146385054",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md"
       ],
       "remaining": [
-        "All 8 original D3D11 stages translate to valid Vulkan1.1 SPIR-V/HLSL/roundtrip, but 2/4 recovered HLSL Vertex/Fragment pairs do not match the original VS/FS interface; 0/8 stage original vs roundtrip exact I/O equality.",
-        "All 8 stages preserve input/output type multisets. Four input-stage and four output-stage interfaces are candidate location-only remaps; duplicated types and built-in semantics require private exact semantic mapping before any relocation.",
-        "SPIR-V original-vs-roundtrip resource binding shapes differ for 2/8 stages, so sampler/UBO exact bindings and alpha texture sampling unverified.",
-        "Original Shader48 post-vendor/native Unity GUID/program, installed Android square fire/smoke emitter identity and GPU pixels not verified. RENDER-002 OPEN."
+        "Four original DXBC source VS/FS keyword permutations have complete original authored semantic/mask/type joins: 16 matched user varyings, 58 component lanes, zero mismatches. This does NOT prove correspondence to recovered HLSL or SPIR-V Locations.",
+        "SPIR-V translated stage interface is 4/4 compatible, but HLSL roundtrip 2/4; compiler-reflected names changed 0/46. Do NOT force name-based or type-only interface remaps.",
+        "Next only private exact original DXBC register→authored semantic→source SPIR-V Location and recovered HLSL SV_*/TEXCOORD field mapping, then require deterministic 4/4 compatibility and resource binding parity.",
+        "Exact post-vendor source shader GUID, actual phone fire/smoke emitter, Unity ShaderLab Android compilation and Adreno pixels still untested. RENDER-002 OPEN."
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T01:10:05.200Z",
+      "updated_at": "2026-11-06T01:53:35.041Z",
       "_record_path": "../B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
     },
     {
@@ -6666,6 +6697,21 @@
       "_record_path": "../B_TEAM/events/T2/20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7-result.json"
     },
     {
+      "id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a-result",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T01:55:00Z",
+      "summary": "SHA original Foam 9731B final private ShaderLab compiled all 4 Vulkan1.1 stages, actual SPIRV-Cross VS outputs ↔ FS inputs match by numeric location/type in both passes 3/3 and 2/2, missing/type mismatch 0; 41 synthetic tests. CI42146401691 SUCCESS. Actual Unity, CB0 Material runtime and Adreno pixels unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42146401691",
+        "https://github.com/alwansan/raf/commit/a0534d22bc6bb32f12834acf736e565cd65d8a80"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261106T0145Z-T2-chat-foam-stage-io-9c4a-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -7342,6 +7388,26 @@
       "_record_path": "../B_TEAM/events/T3/20261106T005710Z-T3-chat-particle108-vulkan-c8f1.json"
     },
     {
+      "id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+      "issue_id": "RENDER-002",
+      "type": "source_shader_reflected_name_mapping_result",
+      "at": "2026-11-06T01:41:41.217Z",
+      "summary": "Genuine SHA original 108-use ParticleShader48 4 keyword VS/FS pairs source SPIR-V to SPIRV-Cross HLSL to roundtrip 8/8 stages; all reflected I/O names changed: source+derived 26 inputs and 20 outputs each, 0/26 input name+type, 0/20 output name+type matches, 0/8 complete stage matches, 0/2 mismatched pair name bridges. CI42144978122 SUCCESS 141/141; prevent name-only location patch, RENDER-002 remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42144978122",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+      ],
+      "limitations": [
+        "no native device pixels",
+        "compiler reflected names not original DXBC semantic registers"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261106T013239Z-T3-chat-particle108-namebridge-6f42.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -7886,6 +7952,43 @@
       "_record_path": "../B_TEAM/events/T4/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.json"
     },
     {
+      "id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7",
+      "schema_version": 1,
+      "session_id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7",
+      "owner": "T4",
+      "origin": "chat",
+      "issue_id": "INPUT-005",
+      "type": "source_integration",
+      "at": "2026-11-06T01:33:00Z",
+      "summary": "Official Android InputDevice declares captured trackpad event MotionEvent.getSource normally SOURCE_MOUSE while device.getSources advertises SOURCE_TOUCHPAD. T4 added event+device two-source classification and scoped getDevice capability fetch for captured SOURCE_MOUSE; regular mouse/touchscreen/unknown fall back to Unity. Source/authentic original Unity2021 ABI CI42144434260 SUCCESS, 40/40 Python, 48/48 .NET, original 4+4+2 private game sites. No Android player/device verification and INPUT-005 OPEN.",
+      "evidence": [
+        "https://developer.android.com/reference/android/view/InputDevice#SOURCE_TOUCHPAD",
+        "https://github.com/alwansan/raf/actions/runs/42144434260",
+        "https://github.com/alwansan/raf/commit/bf0f32326952ff5c4ff44e5df168ef1c701eb942",
+        "prompt/coordination/experiments/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json"
+      ],
+      "limitations": "Android hardware input and owner world/save/exit/reopen still require same-source signed POCO F5 Pro candidate; no game build, no T5 UI modification.",
+      "_record_path": "../B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json"
+    },
+    {
+      "id": "T4-20261106T0147Z-T4-chat-ledger-id-r8w2",
+      "session_id": "20261106T0147Z-T4-chat-ledger-id-r8w2",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "INPUT-005",
+      "type": "ledger_integrity_repair",
+      "at": "2026-11-06T01:49:00Z",
+      "timestamp": "2026-11-06T01:49:00Z",
+      "summary": "T4 repaired required id field in existing 20261106T0130Z captured touchpad event after T3 CI42145627443 revealed Missing record identity. Read-only T4 ledger CI42146543980 SUCCESS: 7/7 tests, actual 10 issues/58 resources/322 events and T-team parser; no T3 code or game assets altered, INPUT-005 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42146543980",
+        "https://github.com/alwansan/raf/commit/e7b716241430d76e8324d8119fc45255300d4889",
+        "prompt/coordination/experiments/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json"
+      ],
+      "device": "NOT_TESTED",
+      "_record_path": "../B_TEAM/events/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -8260,6 +8363,34 @@
       "_record_path": "../B_TEAM/events/T5/20261105T2208Z-T5-chat-obb-guid-3d7a.json"
     },
     {
+      "id": "T5-20261106-real-CL-frames-noncomparable",
+      "owner": "T5",
+      "session_id": "20261106T0138Z-T5-chat-performance-cohort-7ab4",
+      "issue_id": "PERF-007",
+      "type": "diagnostics",
+      "at": "2026-11-06T01:42:38.251Z",
+      "summary": "CI42145219506 verified two SHA-pinned real 190-sample CL JSONL files plus 18/18 synthetic controls. First: 57 valid post-error SurfaceFlinger FPS; second: two 120.77–120.78 startup pre-error readings, 105 stale, zero post-error. NOT_COMPARABLE; Unity internal game logs remain independent source.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42145219506",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_CL_PERFORMANCE_COHORT_2026-11-06.md"
+      ],
+      "_record_path": "../B_TEAM/events/T5/20261106T0138Z-T5-chat-performance-cohort-7ab4.json"
+    },
+    {
+      "id": "T5-20261106-unity-surface-stale-bridge",
+      "owner": "T5",
+      "session_id": "20261106T0145Z-T5-chat-unity-surface-bridge-f4c2",
+      "issue_id": "PERF-007",
+      "type": "diagnostics",
+      "at": "2026-11-06T01:52:16.961Z",
+      "summary": "CI42146496632 SUCCESS, 15/15 source-free and 4 real SHA-pinned CL blobs: 230108 had 105 SF-stale samples yet 62 qualified Unity internal frame intervals within same UTC span (35 MainScene, 27 MainMenuScene). SurfaceFlinger stale not game frozen, original 120Hz startup not gameplay. No cross-session FPS causation claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42146496632",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_CL_UNITY_SURFACE_BRIDGE_2026-11-06.md"
+      ],
+      "_record_path": "../B_TEAM/events/T5/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -8288,7 +8419,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "65897be3db015b3fbd6f188e8fb453e3692553daa590278b5f8d4747d6898de2",
+  "source_input_sha256": "7e9f8c956d351268fb611f9d61600e450c260a4d3c17c61cf3e1fcd3b6e27be5",
   "generation": "T-2026-11-05",
-  "input_sha256": "aa7be1ea0ee6f4726d0584969d784dfddddf371b23dfce34cc87ade4f81ba66c"
+  "input_sha256": "93af870d883055fb31b8a3b07c9f80aa4456169cf19a171125ea82b0b82df897"
 }
