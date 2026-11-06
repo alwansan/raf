@@ -224,6 +224,7 @@ jobs:
             assert d["original_D3D11_program_table_records"]>0
           print("RAFT_T3_SHA_ORIGINAL_PARTICLE108_D3D11_STAGE_LINKAGE_CLASSIFIED=true gpu_pixels_proven=false")
           PY
+      # Python concrete PosixPath runner-temp guard fixed at 622c2f40; source stage and translation semantics unchanged.
       - name: Translate all original 4 exact Particle108 VS FS keyword pairs to Vulkan1.1 SPIR-V and HLSL roundtrip
         run: |
           set -euo pipefail
