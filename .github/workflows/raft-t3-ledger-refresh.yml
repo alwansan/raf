@@ -93,6 +93,17 @@ jobs:
           # ten pointers and all ten UVs match in this bounded export only.
           particle_nonexportable_pointer="https://github.com/alwansan/raf/actions/runs/42134436841"
           assert particle_nonexportable_pointer in issue[0]["evidence"]
+          # Exact six-scene source 108-use ParticleShader48 output contains
+          # a real same-instance AssetRipper DummyShaderTextExporter marker.
+          # Balanced one-pass CGPROGRAM is not genuine original code or
+          # Android pixel evidence; remain RENDER-002 OPEN/NOT_READY.
+          particle108_dummy_output="https://github.com/alwansan/raf/actions/runs/42136474867"
+          assert particle108_dummy_output in issue[0]["evidence"]
+          assert any(r["id"]=="T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY"
+                     and r["counts"]["exact_original_particle_shader_exported_as_marked_dummy"]==1
+                     and r["counts"]["matched_source_to_export_texenv_texture_ptrs"]==10
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY"
                      and r["counts"]["matched_source_to_export_texenv_texture_ptrs"]==10
                      and r["counts"]["matched_nonexportable_container_texture_pointer_slots"]==1
