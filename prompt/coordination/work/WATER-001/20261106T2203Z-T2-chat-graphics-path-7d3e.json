@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2203Z-T2-chat-graphics-path-7d3e",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
+  "updated_at": "2026-11-06T22:03:34.193Z",
+  "resumed_from_sessions": [
+    "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
+    "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
+    "20261106T2044Z-T2-chat-field-consumer-trace-d4a6"
+  ],
+  "hypothesis": "The two typed UnityEngine.Graphics Material-parameter consumers of SHA-original Foam managed Material field can be classified into safe public categories Blit, DrawMesh, other, mixed without publishing private names, and exclusive partitioning reveals whether Foam is consumed as a screen-space or mesh draw material.",
+  "experiment_key": "SHA-original-115978112-shader-3211776-DLL-T2-Material-Graphics-API-method-category-v1",
+  "resource_key": "T2 isolated SHA-original Mono.Cecil source-only workflow; no Unity or T5-native",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "prompt/coordination/work/WATER-001/20261106T2203Z-T2-chat-graphics-path-7d3e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2203Z-T2-chat-graphics-path-7d3e.md",
+    "prompt/coordination/experiments/T2/20261106T2203Z-T2-chat-graphics-path-7d3e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2203Z-T2-chat-graphics-path-7d3e-result.json"
+  ],
+  "do_not_touch": [
+    "T1 FFT/T3 shaders/T4 world/T5 native",
+    "game shaders/.meta/GUIDs, .rgd",
+    "any native build request, release or Unity workflow"
+  ],
+  "prior_evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42291227491",
+    "https://github.com/alwansan/raf/actions/runs/42300107157",
+    "https://github.com/alwansan/raf/actions/runs/42300619078"
+  ],
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Extend count-only C# field API trace with exclusive public Graphics API method categories, strict validator partitions and source-free synthetic method controls; run existing pinned original source-only CI; no native requests."
+}
