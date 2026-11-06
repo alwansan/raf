@@ -1,0 +1,14 @@
+{
+  "id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T01:55:00Z",
+  "summary": "SHA original Foam 9731B final private ShaderLab compiled all 4 Vulkan1.1 stages, actual SPIRV-Cross VS outputs ↔ FS inputs match by numeric location/type in both passes 3/3 and 2/2, missing/type mismatch 0; 41 synthetic tests. CI42146401691 SUCCESS. Actual Unity, CB0 Material runtime and Adreno pixels unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42146401691",
+    "https://github.com/alwansan/raf/commit/a0534d22bc6bb32f12834acf736e565cd65d8a80"
+  ]
+}
