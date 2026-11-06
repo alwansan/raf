@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+  "session_id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "28ada994d32a403cd5f6663f1aed81c5e84928a5",
+  "updated_at": "2026-11-06T00:18:37.903Z",
+  "hypothesis": "The exact original 108-use Particle Shader48 is source-linked in the same pinned AssetRipper W1 export but its exported ShaderLab may be dummy or missing an actual program/pass. A metadata-only type/name match is insufficient for Android particle rendering.",
+  "experiment_key": "T3-original-ZIP2-15964-108-ParticleShader48-5Material-3Texture-same-export-ShaderLab-actual-file-dummy-marker-pass-program-v1",
+  "resource_key": "T3-isolated-12owner-one-stream-original-AssetRipper-Shader48-dummy-50min",
+  "resumed_from_sessions": [
+    "20261106T000407Z-T3-chat-nonexportable-pointer-b42f.md",
+    "20261105T2334Z-T3-scheduled-extent-nesting-c4a7.md"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_shaderlab_export_quality.py",
+    "tests/test_t3_particle108_shaderlab_export_quality.py",
+    ".github/workflows/raft-t3-particle108-sameexport.yml",
+    "prompt/coordination/work/RENDER-002/20261106T001837Z-T3-chat-particle108-shaderlab-5d72.json",
+    "prompt/coordination/clients/T3/sessions/20261106T001837Z-T3-chat-particle108-shaderlab-5d72.md",
+    "prompt/coordination/experiments/T3/20261106T001837Z-T3-chat-particle108-shaderlab-5d72.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T001837Z-T3-chat-particle108-shaderlab-5d72.json",
+    "docs/T3_PARTICLE108_SHADERLAB_EXPORT_QUALITY_2026-11-06.md",
+    "prompt/coordination/discussions/RENDER-002/20261106T001837Z-T3-chat-particle108-shaderlab-5d72-to-T5.md"
+  ],
+  "run_urls": [],
+  "next_step": "Create exact source-identified unique 108-slot Particle Shader48 W1 trace → same real export .shader.meta/.shader checker, strong synthetic false-positive controls for dummy vs genuine program and builtin mapping. Hook into isolated T3 12owner one .resS SHA-proven export workflow. No guessing fire/smoke emitter; device pixels unverified."
+}
