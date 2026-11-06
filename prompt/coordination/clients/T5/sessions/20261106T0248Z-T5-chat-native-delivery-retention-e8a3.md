@@ -24,3 +24,8 @@
 - Artifacts: production workflow, tests, isolated CI, [report](../../../docs/T5_NATIVE_DELIVERY_FALLBACK_2026-11-06.md), experiments/T5/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json and B_TEAM/events/T5/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json. Work scope completed in work/INTEGRATION-001/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json.
 - **Next action:** when repo owner grants a scoped Releases publisher, re-run deliberately authorized native delivery or a separately source-pinned release-only promotion after authenticating exact 6GB artifact, inspect real `gh release view` remote assets. Until permission is proved, HTTP403 remains and 3-day artifact is temporary. WATER-001/RENDER-002 and full phone acceptance remain OPEN; **NOT_READY 0/3**.
 - status: completed_source_verified_unauthorized_publisher_unresolved.
+
+## Team index and recovery-life recheck
+- [T5 inherited ledger refresh 42153507072](https://github.com/alwansan/raf/actions/runs/42153507072) **COMPLETED SUCCESS**, after the T5 event and completed work were recorded. The source index is not a readiness sign-off.
+- Actual source-pinned [retained artifact 13454900880](https://github.com/alwansan/raf/actions/runs/42110297871) checked again through Actions metadata: **expired=false**, bytes **5,948,243,834**, expiration **2026-11-08T21:12:40Z**. Future 3-day upload-artifact policy does **not** extend this pre-existing archive.
+- T2 independent subsequent [Foam private CI42153150468](https://github.com/alwansan/raf/actions/runs/42153150468) SUCCESS, separately owned; no T5 changes. T4 original owner-world .rgd source-tests also progressed separately, not reinterpreted as Android device relaunch.
