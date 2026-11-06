@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "cae0dbe8c4a98d2d874e0d0f593d91d2dadc3fb5",
+  "intended_files": [
+    "scripts/t2_foam_cb0_extent_gate.py",
+    "tests/test_t2_foam_cb0_extent_gate.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.md"
+  ],
+  "experiment_key": "foam-cb0-cross-stage-byte-extent-evidence-gate-synthetic-v1",
+  "resource_key": null,
+  "hypothesis": "A shared CB0 descriptor coordinate with unequal reflected byte extents cannot be classified as upload-compatible; enforce explicit unknown until member layout and Unity upload evidence exist.",
+  "resumed_from_sessions": [
+    "20261106T0620Z-T2-scheduled-selective-id-coordinate-4e8b",
+    "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
+  ],
+  "updated_at": "2026-11-06T07:20:00Z"
+}
