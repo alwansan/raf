@@ -347,7 +347,8 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
             for i, operation in enumerate(operations, 1)
         ]
         changed = [dict(item) for item in original]
-        changed[0]["operation"] = "Load<T>.exit"  # exactly same source byte count
+        changed[0]["operation"] = "Load<T>.exit"
+        changed[0]["detail"] = "x"  # preserve exact byte count despite shorter operation
         files = [self.put("a.jsonl", original)]
         files.extend([
             self.put("b.jsonl", [row("other1", 1, "startup", "logger.ready",
