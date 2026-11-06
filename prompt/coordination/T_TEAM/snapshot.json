@@ -9027,6 +9027,23 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json"
     },
     {
+      "id": "20261106T1104Z-T5-chat-resolution-delegate-6a2f",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1104Z-T5-chat-resolution-delegate-6a2f",
+      "issue_id": "DISPLAY-003",
+      "type": "result",
+      "at": "2026-11-06T11:13:00Z",
+      "summary": "Authentic SHA-pinned ZIP2 original compiled GraphicsSettingsBox: 2 same-type delegate IL sites resolve to 1 unique target, 0 target reach ApplyCurrentResolution/Screen.SetResolution, 0 option-population same-type delegate sites or paths, 22 resolved internal edges; 9 Python+5 compiled Cecil controls and actual original gate passed CI42208532103. No serialized UI, persistence, Android game or device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42208532103",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_RESOLUTION_DELEGATE_IL_2026-11-06.md"
+      ],
+      "limits": "Direct original same-type method-call graph only; cannot infer complete Settings callback/persistence or phone acceptance; all P0 graphics issues remain open.",
+      "next_step": "Inspect UI serialized callback owner and three original Apply callsites using authenticated typed metadata.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1104Z-T5-chat-resolution-delegate-6a2f.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9055,7 +9072,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "3a848cff2afd62ada4f4b456ccbebb4d483f08fbad4067f29152de2c7adcf482",
+  "source_input_sha256": "ae7e2a7ccd4b826252780c542d6fa730737f3375a15a1f6b1e022428e454e728",
   "generation": "T-2026-11-05",
-  "input_sha256": "503e628c32add5b5f12588034bb3dce9a97f3e4ab5b29c8df6f71113dc405566"
+  "input_sha256": "6b40de416c33121477b722cc219820d3319acf41d6cc68c661992f17f088e389"
 }
