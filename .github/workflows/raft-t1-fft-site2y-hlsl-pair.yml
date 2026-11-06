@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/t1_fft_site2_y_hlsl_pair.py
       - scripts/t1_fft_site2_y_phi_inputs.py
+      - scripts/t1_fft_site2_y_phi_recurrence.py
+      - tests/test_t1_fft_site2_y_phi_recurrence.py
       - tests/test_t1_fft_site2_y_phi_inputs.py
       - tests/test_t1_fft_site2_y_hlsl_pair.py
       - .github/workflows/raft-t1-fft-site2y-hlsl-pair.yml
@@ -35,6 +37,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_t1_fft_site2_y_hlsl_pair.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_inputs.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_recurrence.py -v
           python3 -m py_compile scripts/t1_fft_site2_y_hlsl_pair.py
           echo 'RAFT_T1_FFT_SITE2Y_PAIR source_free=true actual_original=false'
 
