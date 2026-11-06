@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1810Z-T4-chat-save-trace-hardlink-s9m4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "experiment_key": "T4-LOCAL005-original-save-operation-trace-apply-hardlinked-csharp-meta-synthetic-src-preservation-linux-redgreen-v1",
+  "hypothesis": "The original SHA-pinned SaveAndLoad/Raft_Network operation-trace importer rejects symbolic links but not original CSharp/.meta hardlinks, so its in-place writes can mutate an upstream real source inode outside Unity staging.",
+  "source_commit": "8e8e9e8dba123d1ee0b185e45745b03a06c88add",
+  "test_only_sha": "9e9b7efe7ffbc906cc21d17ce19da4bf14122657",
+  "fixture": "Synthetic exact-sha manifest with original-shaped SaveAndLoad.SaveGame bool arg, SaveWorld, original SteamUserStats.StoreStats and SaveUser; two independent disposable Linux inode aliases: hardlinked C# source vs outside file, and hardlinked .cs.meta vs outside GUID file. No original Raft game files or RGD used.",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v",
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v",
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v"
+  ],
+  "red_result": "CI42268654636 at test-only 9e9b7efe... completed failure: 17 test cases with two NEW hardlinked-source and hardlinked-GUID-meta tests failed AssertionError ValueError not raised. Old 15 prior runtime-operation tests passed. Authentic code tracer wrote through shared inode if it was hardlinked.",
+  "fix": "Source production 8e8e9e8d... adds st_nlink==1 for original .cs and optional .meta in scripts/instrument_android_runtime_operations.py::apply after symlink checks but before source reads, original source backups or modifying original files. No runtime instrumentation, original source manifest, wrapper or C# body changed.",
+  "green_result": "CI42268781552 completed success 17/17 original-save-operation source synthetic and actual C# preprocessed save-postcheck; CI42268781586 B22 original operation transaction synthetic 14/14 + runtime operation 17/17; CI42268781987 B50 original SaveGame Steam stats original-free source controls 17/17+21/21+15/15. All exact SHA 8e8e9e8d.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42268654636",
+    "https://github.com/alwansan/raf/actions/runs/42268781552",
+    "https://github.com/alwansan/raf/actions/runs/42268781586",
+    "https://github.com/alwansan/raf/actions/runs/42268781987",
+    "https://github.com/alwansan/raf/actions/runs/42268781691",
+    "https://github.com/alwansan/raf/actions/runs/42268781655",
+    "https://github.com/alwansan/raf/actions/runs/42268781957",
+    "https://github.com/alwansan/raf/actions/runs/42268781646",
+    "https://github.com/alwansan/raf/actions/runs/42268781607"
+  ],
+  "integration_commit": "8e8e9e8dba123d1ee0b185e45745b03a06c88add",
+  "artifact_urls": [],
+  "limitations": [
+    "This is a source-stage original preservation failclosed change; original source did not change and actual user .rgd/world save was NOT executed.",
+    "Linux hardlink synthetic fixture only; no actual ZIP2 shared inode corruption proved.",
+    "No Unity native Android build, APK/OBB or on-device original world/save/load/physical-mouse validation performed.",
+    "Preflight cannot prevent concurrent external path swaps after validation."
+  ],
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "owner": "T4",
+    "decision": "يحتاج",
+    "unchanged": true,
+    "reason": "Already scheduled T4's vote for substantive physical mouse capture; this source-only patch does not justify build."
+  },
+  "next_step": "Await exact CI42268781607 original startup pass before final documentation, ensure no vote change; T5 can include the guard on next owner-approved 5/5 signed native candidate. Continue original world/save non-device work; remain LOCAL-005 OPEN."
+}
