@@ -1,0 +1,13 @@
+{
+  "id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+  "owner": "T1",
+  "session_id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T12:55:24.755Z",
+  "summary": "Source-authentic original/roundtrip FFT glslang SPIR-V at supported coordinate-depth12: Source X/Y reach load, butterfly1 X ends unresolved (previous default depth4 ended depth_limit), butterfly1 Y hits constant; butterfly2 X/Y unresolved. Thus short depth alone does not explain translated X; private whole-slice has OpPhi and OpIAdd but no proven X-specific stop opcode. Scheduled T1 coordinate probe comparator tests validated on exact checkout 10/10 PASS. All CI 42221101286 SUCCESS, original recovery, same-Vulkan roundtrip, scratch cleanup. Original↔Unity numerical parity and Android water unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42221101286",
+    "https://github.com/alwansan/raf/commit/327c1b6431ad75de2a215c338e91c359e2f0a8f7"
+  ]
+}
