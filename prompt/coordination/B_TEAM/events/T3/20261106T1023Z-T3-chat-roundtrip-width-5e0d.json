@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Original SHA-verified Particle108 4 VSFS paired shaders: HLSL roundtrip 2/4 mismatch due source→roundtrip VS output types. Of four Vertex same-Location type changes, two vector widths narrow and two widen; exactly two changed VS output locations are consumed by Fragment, where Fragment still matches source Vertex type and differs from roundtrip Vertex. Other two changed locations are not consumed; 15 source-free regression tests and original workflow pass. No authored shader mapping, game edit or Android pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42202565721",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1023Z-T3-chat-roundtrip-width-5e0d.json"
+  ],
+  "at": "2026-11-06T10:27:00Z"
+}
