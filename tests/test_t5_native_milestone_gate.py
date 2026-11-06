@@ -148,6 +148,50 @@ class MilestoneGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Duplicate native job"):
             self.result()
 
+    def test_2026_native_export_extra_step_shifts_all_later_milestones(self):
+        # The real postrestorer Material->Texture guard added in November
+        # shifts water/GUID/Unity/APK/signature/retention step numbers. A
+        # run's source SHA, stage names and outcomes remain authoritative.
+        for stage in self.stages():
+            if stage["number"] >= 43:
+                stage["number"] += 1
+        result = self.result()
+        self.assertEqual(result["phase"], "unity_editor_in_progress")
+        self.assertTrue(result["water_documented_trial_gate_passed"])
+        self.assertFalse(result["signed_apk_bytes_digest_verified"])
+
+    def test_actual_full_job_extra_diagnostic_step_still_preserves_known_gates(self):
+        for stage in self.stages():
+            if stage["number"] >= 43:
+                stage["number"] += 1
+        self.stages().insert(2, {
+            "number": 43,
+            "name": "T5 inspect actual postrestorer Material-to-Texture references (non-mutating)",
+            "status": "completed",
+            "conclusion": "failure",  # diagnostic continue-on-error does not fake READY
+        })
+        result = self.result()
+        self.assertEqual(result["phase"], "unity_editor_in_progress")
+        self.assertTrue(result["water_documented_trial_gate_passed"])
+        self.assertFalse(result["published_release_asset_digest_verified"])
+
+    def test_new_step_name_cannot_replace_an_authentic_milestone(self):
+        self.stages()[2]["name"] = "T5 read-only unrelated diagnostic"
+        with self.assertRaisesRegex(ValueError, "milestone"):
+            self.result()
+
+    def test_duplicate_step_number_does_not_forge_a_native_stage(self):
+        self.stages()[3]["number"] = self.stages()[2]["number"]
+        with self.assertRaisesRegex(ValueError, "number|order|position"):
+            self.result()
+
+    def test_reordered_source_milestone_does_not_forge_success(self):
+        # Even with valid stage names, source chronology must be coherent.
+        self.stages()[2]["number"], self.stages()[3]["number"] = (
+            self.stages()[3]["number"], self.stages()[2]["number"])
+        with self.assertRaisesRegex(ValueError, "order|position"):
+            self.result()
+
     def test_missing_required_milestone_rejected(self):
         self.stages().pop(2)
         with self.assertRaisesRegex(ValueError, "Missing or additional"):
