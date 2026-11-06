@@ -114,7 +114,9 @@ class RealExportQualitySynthetic(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"Different exporter instances"):
                 m.classify(SOURCE,w,b,root)
             w,b=traces()
-            w["objects"]=[]
+            # Preserve a valid same-export Material21 source row so the
+            # fixture isolates a missing Shader48 trace, not missing Material.
+            w["objects"]=[x for x in w["objects"] if x["class_id"]!=48]
             with self.assertRaisesRegex(ValueError,"one_original_particle"):
                 m.classify(SOURCE,w,b,root)
             w,b=traces()
