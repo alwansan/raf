@@ -89,6 +89,11 @@ MATERIAL_NUMERIC = (
     "field_api_Graphics_Blit_sites_ExplicitPass",
     "field_api_Graphics_Blit_sites_OtherSignature",
     "field_api_Graphics_Blit_sites_MixedSignatures",
+    "field_api_Graphics_Blit_explicit_sites_pass_literal0",
+    "field_api_Graphics_Blit_explicit_sites_pass_literal1",
+    "field_api_Graphics_Blit_explicit_sites_pass_other_literal",
+    "field_api_Graphics_Blit_explicit_sites_pass_unknown",
+    "field_api_Graphics_Blit_explicit_sites_pass_mixed",
     "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
     "field_api_straightline_sites_with_Renderer_Material_parameter",
     "field_api_straightline_sites_with_other_typed_Material_parameter",
@@ -282,6 +287,16 @@ def validate(report):
     if sum(report[k] for k in blit_signature_categories) != report[
             "field_api_Graphics_material_sites_Blit"]:
         raise ValueError("Blit_public_overload_signature_partition_inconsistent")
+    blit_literal_categories=(
+        "field_api_Graphics_Blit_explicit_sites_pass_literal0",
+        "field_api_Graphics_Blit_explicit_sites_pass_literal1",
+        "field_api_Graphics_Blit_explicit_sites_pass_other_literal",
+        "field_api_Graphics_Blit_explicit_sites_pass_unknown",
+        "field_api_Graphics_Blit_explicit_sites_pass_mixed",
+    )
+    if sum(report[k] for k in blit_literal_categories) != report[
+            "field_api_Graphics_Blit_sites_ExplicitPass"]:
+        raise ValueError("Blit_explicit_pass_direct_literal_partition_inconsistent")
     categories=(
         "field_api_straightline_sites_with_Graphics_Material_parameter",
         "field_api_straightline_sites_with_CommandBuffer_Material_parameter",

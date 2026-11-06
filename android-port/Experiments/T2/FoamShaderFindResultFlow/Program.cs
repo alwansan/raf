@@ -193,7 +193,9 @@ internal static class Program
         int TypedMaterialArgument, int GraphicsArgument,
         int CommandBufferArgument, int RendererArgument, int OtherArgument,
         int GraphicsBlit, int GraphicsDrawMesh, int GraphicsOther, int GraphicsMixed,
-        int BlitImplicitPass, int BlitExplicitPass, int BlitOtherSignature, int BlitMixedSignatures);
+        int BlitImplicitPass, int BlitExplicitPass, int BlitOtherSignature, int BlitMixedSignatures,
+        int BlitPassLiteral0, int BlitPassLiteral1, int BlitPassOtherLiteral,
+        int BlitPassUnknown, int BlitPassMixed);
 
     private static int PublicBlitSignatureKind(MethodReference method)
     {
@@ -214,6 +216,31 @@ internal static class Program
         return 3;
     }
 
+    private static int DirectPublicBlitPassLiteralKind(IList<Instruction> il, int call)
+    {
+        // The public (Texture, RenderTexture, Material, int pass) overload has
+        // its int pass at the TOP of the IL stack. A direct ldc.i4 producer
+        // immediately before Call proves that argument's literal. Anything
+        // transformed, computed, indirect or >4 NOP away remains unknown.
+        int index=call-1,nops=0;
+        while(index>=0 && il[index].OpCode.Code==Code.Nop && nops++<4)index--;
+        if(index<0)return 4;
+        var inst=il[index];
+        int? value=inst.OpCode.Code switch
+        {
+            Code.Ldc_I4_M1 => -1, Code.Ldc_I4_0 => 0,
+            Code.Ldc_I4_1 => 1, Code.Ldc_I4_2 => 2,
+            Code.Ldc_I4_3 => 3, Code.Ldc_I4_4 => 4,
+            Code.Ldc_I4_5 => 5, Code.Ldc_I4_6 => 6,
+            Code.Ldc_I4_7 => 7, Code.Ldc_I4_8 => 8,
+            Code.Ldc_I4_S when inst.Operand is sbyte signed => signed,
+            Code.Ldc_I4 when inst.Operand is int wide => wide,
+            _ => null
+        };
+        if(!value.HasValue)return 4;
+        return value.Value==0 ? 1 : value.Value==1 ? 2 : 3;
+    }
+
     private static FieldApiTrace TraceExactMaterialFieldRead(MethodDefinition method, int sourceIndex)
     {
         // Forward-only, max 32 original IL instructions per exact FieldDefinition load.
@@ -227,6 +254,7 @@ internal static class Program
         int inspected=0,boundary=0,receiver=0,arg=0,graphics=0,command=0,renderer=0,other=0;
         int graphicsBlit=0,graphicsDrawMesh=0,graphicsOther=0;
         int blitImplicit=0,blitExplicit=0,blitOther=0;
+        int passLiteral0=0,passLiteral1=0,passOtherLiteral=0,passUnknown=0;
         bool Pop()
         {
             if(stack.Count==0)return false;
@@ -274,7 +302,16 @@ internal static class Program
                                 switch(PublicBlitSignatureKind(callee))
                                 {
                                     case 1: blitImplicit++;break;
-                                    case 2: blitExplicit++;break;
+                                    case 2:
+                                        blitExplicit++;
+                                        switch(DirectPublicBlitPassLiteralKind(il,i))
+                                        {
+                                            case 1: passLiteral0++;break;
+                                            case 2: passLiteral1++;break;
+                                            case 3: passOtherLiteral++;break;
+                                            default: passUnknown++;break;
+                                        }
+                                        break;
                                     default: blitOther++;break;
                                 }
                             }
@@ -317,6 +354,10 @@ internal static class Program
         // Per field-read site these public API categories are exclusive.
         int families=(graphicsBlit>0?1:0)+(graphicsDrawMesh>0?1:0)
                      +(graphicsOther>0?1:0);
+        int passKinds=(passLiteral0>0?1:0)+(passLiteral1>0?1:0)
+                     +(passOtherLiteral>0?1:0)+(passUnknown>0?1:0);
+        bool onlyExplicitBlit=(graphics>0 && families==1 && graphicsBlit>0 &&
+            blitExplicit>0 && blitImplicit==0 && blitOther==0);
         return new(inspected,boundary,receiver,arg,graphics,command,renderer,other,
             graphics>0 && families==1 && graphicsBlit>0 ? 1 : 0,
             graphics>0 && families==1 && graphicsDrawMesh>0 ? 1 : 0,
@@ -329,7 +370,12 @@ internal static class Program
             graphics>0 && families==1 && graphicsBlit>0 &&
                 blitOther>0 && blitImplicit==0 && blitExplicit==0 ? 1 : 0,
             graphics>0 && families==1 && graphicsBlit>0 &&
-                ((blitImplicit>0?1:0)+(blitExplicit>0?1:0)+(blitOther>0?1:0)>1) ? 1 : 0);
+                ((blitImplicit>0?1:0)+(blitExplicit>0?1:0)+(blitOther>0?1:0)>1) ? 1 : 0,
+            onlyExplicitBlit && passKinds==1 && passLiteral0>0 ? 1 : 0,
+            onlyExplicitBlit && passKinds==1 && passLiteral1>0 ? 1 : 0,
+            onlyExplicitBlit && passKinds==1 && passOtherLiteral>0 ? 1 : 0,
+            onlyExplicitBlit && passKinds==1 && passUnknown>0 ? 1 : 0,
+            onlyExplicitBlit && passKinds>1 ? 1 : 0);
     }
 
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
@@ -691,7 +737,9 @@ internal static class Program
             fieldApiGraphicsBlit=0,fieldApiGraphicsDrawMesh=0,
             fieldApiGraphicsOther=0,fieldApiGraphicsMixed=0,
             fieldApiBlitImplicit=0,fieldApiBlitExplicit=0,
-            fieldApiBlitOther=0,fieldApiBlitMixed=0;
+            fieldApiBlitOther=0,fieldApiBlitMixed=0,
+            fieldApiPassLiteral0=0,fieldApiPassLiteral1=0,
+            fieldApiPassOtherLiteral=0,fieldApiPassUnknown=0,fieldApiPassMixed=0;
         if(trace.OriginalMaterialField is not null)
             foreach(var method in methods)
             {
@@ -717,6 +765,11 @@ internal static class Program
                         fieldApiBlitExplicit+=api.BlitExplicitPass;
                         fieldApiBlitOther+=api.BlitOtherSignature;
                         fieldApiBlitMixed+=api.BlitMixedSignatures;
+                        fieldApiPassLiteral0+=api.BlitPassLiteral0;
+                        fieldApiPassLiteral1+=api.BlitPassLiteral1;
+                        fieldApiPassOtherLiteral+=api.BlitPassOtherLiteral;
+                        fieldApiPassUnknown+=api.BlitPassUnknown;
+                        fieldApiPassMixed+=api.BlitPassMixed;
                     }
             }
         if(fieldApiSites!=linearFieldReads)
@@ -787,6 +840,11 @@ internal static class Program
             ["field_api_Graphics_Blit_sites_ExplicitPass"]=fieldApiBlitExplicit,
             ["field_api_Graphics_Blit_sites_OtherSignature"]=fieldApiBlitOther,
             ["field_api_Graphics_Blit_sites_MixedSignatures"]=fieldApiBlitMixed,
+            ["field_api_Graphics_Blit_explicit_sites_pass_literal0"]=fieldApiPassLiteral0,
+            ["field_api_Graphics_Blit_explicit_sites_pass_literal1"]=fieldApiPassLiteral1,
+            ["field_api_Graphics_Blit_explicit_sites_pass_other_literal"]=fieldApiPassOtherLiteral,
+            ["field_api_Graphics_Blit_explicit_sites_pass_unknown"]=fieldApiPassUnknown,
+            ["field_api_Graphics_Blit_explicit_sites_pass_mixed"]=fieldApiPassMixed,
             ["field_api_straightline_sites_with_CommandBuffer_Material_parameter"]=fieldApiCommand,
             ["field_api_straightline_sites_with_Renderer_Material_parameter"]=fieldApiRenderer,
             ["field_api_straightline_sites_with_other_typed_Material_parameter"]=fieldApiOther,
@@ -962,8 +1020,43 @@ internal static class Program
         overloadTest.Body.Instructions.Insert(2,Instruction.Create(OpCodes.Call,blit4));
         exact=TraceExactMaterialFieldRead(overloadTest,0);
         if(exact.GraphicsBlit!=1 || exact.BlitExplicitPass!=1 ||
+           exact.BlitPassLiteral1!=1 || exact.BlitPassLiteral0!=0 ||
            exact.BlitImplicitPass!=0 || exact.BlitOtherSignature!=0)
             throw new InvalidOperationException("Blit_explicit_int_pass_public_overload");
+        overloadTest.Body.Instructions[1]=Instruction.Create(OpCodes.Ldc_I4_0);
+        exact=TraceExactMaterialFieldRead(overloadTest,0);
+        if(exact.BlitPassLiteral0!=1 || exact.BlitPassLiteral1!=0)
+            throw new InvalidOperationException("Blit_pass_literal_zero");
+        overloadTest.Body.Instructions[1]=Instruction.Create(OpCodes.Ldc_I4_7);
+        exact=TraceExactMaterialFieldRead(overloadTest,0);
+        if(exact.BlitPassOtherLiteral!=1 || exact.BlitPassLiteral0!=0)
+            throw new InvalidOperationException("Blit_other_public_literal");
+        overloadTest.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Int32));
+        overloadTest.Body.Instructions[1]=Instruction.Create(OpCodes.Ldarg_0);
+        exact=TraceExactMaterialFieldRead(overloadTest,0);
+        if(exact.BlitPassUnknown!=1 || exact.BlitPassLiteral1!=0)
+            throw new InvalidOperationException("Blit_dynamic_not_guessed");
+        // One field source may feed two explicit Blit overload calls:
+        // disjoint pass literals must be classified as MIXED, not double count.
+        var literalMix=new MethodDefinition("SyntheticTwoPassLiteralSources",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(literalMix);
+        var sharedMaterialLocal=new VariableDefinition(material);
+        literalMix.Body.Variables.Add(sharedMaterialLocal);
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,matField));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Stloc,sharedMaterialLocal));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ldloc,sharedMaterialLocal));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit4));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ldloc,sharedMaterialLocal));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit4));
+        literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        exact=TraceExactMaterialFieldRead(literalMix,0);
+        if(exact.BlitExplicitPass!=1 || exact.BlitPassMixed!=1 ||
+           exact.BlitPassLiteral0!=0 || exact.BlitPassLiteral1!=0)
+            throw new InvalidOperationException("Blit_pass_mixed_exclusive_source");
         var multiBlit=new MethodDefinition("SyntheticTwoBlitOverloads",
             Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
             mod.TypeSystem.Void);
