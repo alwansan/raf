@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
   "issue_id": "INTEGRATION-001",
-  "status": "waiting_real_signed_apk_full_sha_and_crypto_ci",
+  "status": "full_SHA_and_aapt_apksigner_CLI_passed_report_cert_parser_blocked",
   "base_sha": "4401387ed6da0e0b5892fab2be28a6b3104d3e8e",
-  "updated_at": "2026-11-06T13:31:39.362Z",
+  "updated_at": "2026-11-06T13:44:15.295Z",
   "resumed_from_sessions": [
     "20261106T1316Z-T5-chat-nested-zip-c53a.md",
     "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
@@ -34,7 +34,7 @@
     "If HTTPS 206 unavailable, stop; do not full-download 2.97GB envelope."
   ],
   "coordination": "T5 scheduled checkpoint focuses source-metadata; no active T5 scheduled run on last check, T2 active shader source-only, no overlap. Phone/gfx readiness remains NOT_READY 0/3.",
-  "next_step": "Await terminal run CI42227170402; inspect actual SHA/apksigner/binary manifest separately. If red, do not fabricate success; no other 673MB run until discriminating fix identified.",
+  "next_step": "Change reporter to distinguish verified apksigner CLI success from optional signer cert digest metadata parse, support multiple signers and unavailable metadata without inventing identity; test source-only and rerun actual original 673MB once with 700MiB cap.",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42227170402",
   "job_id": 127923480529,
   "source_commit": "c23b26efd1112cf1cd828e2190bd378f6f0b08d4",
@@ -44,5 +44,16 @@
     "installed_apksigner_and_aapt": true,
     "temp_disk_ge_1GiB": true,
     "full_apk_sha_pending": true
+  },
+  "actual_run_42227170402": {
+    "conclusion": "failure",
+    "job_id": 127923480529,
+    "synthetic_tests": 10,
+    "preflight": "pass",
+    "actual_full_original_apk_sha_check_reached_past": true,
+    "actual_aapt_binary_manifest_check_reached_past": true,
+    "apksigner_verify_command_returned_0": true,
+    "blocker": "apk_signer_certificate_invalid: reporter assumed exactly one parsed signer cert SHA-256 line; raw signer output intentionally not logged",
+    "raw_certificate_publication": false
   }
 }
