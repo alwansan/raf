@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2008Z-T4-chat-save-exception-proof-m5r8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Authentic original SaveGame sequence with two nonzero snapshots still cannot be classed complete if the original wrapper records any Save*/SaveGame exception, Save.argumentFileSnapshot.unavailable, or an escaped exception at return.",
+  "source_commit": "d6dc42f7ccbd7fc971868c17b370315c02d589b3",
+  "input_hashes": [
+    "CL immutable 520c4cf409aa20a4db54ff80ed87d8807d9cba57, 3 per-file Git blob digests internally verified"
+  ],
+  "tool_versions": {
+    "python": "Ubuntu 24.04 python3 GitHub CI"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_owner5nov_jsonl_lifecycle.py -v",
+    "python3 -m scripts.t4_owner5nov_jsonl_lifecycle --root <ephemeral verified owner CL phone JSONL> --pinned"
+  ],
+  "negative_controls": [
+    "RED 8b0e0a9e8d751d74a3b7dc357beebd2e2735a0e5 CI42285886433: 7 synthetic false positives accepted by old classifier, 16 old methods green"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42286032150",
+  "artifact_urls": [],
+  "budget": "source-only CI 7 minutes, no Unity or original private RGD",
+  "status": "completed",
+  "observed_result": "GREEN 42286032150, job128126969995, 17/17 source-only methods; immutable original CL5Nov owner phone real observed 3+1+3=7/7 SaveGame cycles and 7/7 original LoadT unchanged, zero incomplete/overflow. No device acceptance.",
+  "rejected_hypotheses": [
+    "Nonzero snapshot plus balanced SaveGame/SaveWorld/SaveUser enters/exits alone proves no original source save error"
+  ],
+  "limitations": [
+    "Source-only interpreter",
+    "No original game source or file changes",
+    "Not post-fix Android Unity IL2CPP phone trace",
+    "No evidence of same-world return or durable disk after force stop"
+  ],
+  "integration_commit": "d6dc42f7ccbd7fc971868c17b370315c02d589b3",
+  "next_step": "Do not rerun same immutable baseline. Source issue new old-native Unity Editor CS0234 AndroidPhysicalMouseCapture found in 42281310905; separately reserved INPUT-005 session 20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9. T5 controls build."
+}
