@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1918Z-T4-chat-owner-log-lifecycle-p6n2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Authentic pinned 5-Nov owner Android phone JSONL should distinguish original world ready, SaveGame/SaveWorld/SaveUser, and Load/Restore sequences while never implying same-world RGD durability or source acceptance. Raw file byte length alone must never authenticate an owner log.",
+  "experiment_key": "T4-owner5nov-CL520c4c-three-actual-raft-jsonl-original-world-save-load-sequence-20261106",
+  "source_commit": "cba461ecd1aebeb3a2e1bb67547ffa573c40d505",
+  "input_snapshot": {
+    "repository": "alwansan/CL",
+    "sha": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "file_count": 3,
+    "file_byte_sizes": [
+      869991,
+      499456,
+      1443270
+    ],
+    "blob_sha1": [
+      "28264b50a5a8aaefefb3bdd0256f0869c79e6116",
+      "413932e92fc24cd50b1fae1cbb25120f392e8158",
+      "60674be571e4979e329924e5e2679f43e40ec41a"
+    ],
+    "private_owner_file_paths_emitted": false
+  },
+  "tool_versions": {
+    "python": "GitHub-hosted Python 3 on Ubuntu 24.04",
+    "git": "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t4_owner5nov_jsonl_lifecycle.py' -v",
+    "python3 -m scripts.t4_owner5nov_jsonl_lifecycle --root <pinned-private-owner-cl-raft-logs-directory> --pinned"
+  ],
+  "negative_controls": [
+    "Source-free 7 synthetic privacy/ordering/gap/overflow/replay tests on first real-source run42279653393 passed.",
+    "Test-only ee94a751 three valid equal-sized impostor JSONL files: run42279906350 EXPECTED FAILURE, EvidenceInputError was not raised for a purported pinned source.",
+    "Final cba461ec adds Git blob SHA-1 check and labels synthetic source as unauthenticated, all 8/8 controls PASS."
+  ],
+  "workflow_path": ".github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42280021182",
+  "comparison_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42279653393",
+    "https://github.com/alwansan/raf/actions/runs/42279906350"
+  ],
+  "artifact_urls": [],
+  "budget": "7-minute read-only CPU runner, sparse immutable CL logs only, no Unity, no original game asset or RGD checkout",
+  "status": "completed",
+  "observed_result": {
+    "real_logger_sessions": 3,
+    "session_sequences_complete": 3,
+    "utc_monotonic_sessions": 3,
+    "queue_overflow_observed": false,
+    "savegame_enter_exit_pairs": 7,
+    "saveworld_enter_exit_pairs": 7,
+    "saveuser_enter_exit_pairs": 7,
+    "save_argument_nonzero_snapshots": 14,
+    "load_t_enter_exit_pairs": 7,
+    "load_argument_nonzero_snapshots": 7,
+    "restore_world_enter_exit_pairs": 2,
+    "restore_user_enter_exit_pairs": 2,
+    "original_world_completion_assignment_markers": 4,
+    "load_caught_exception_markers": 0,
+    "save_then_later_load_hint": true,
+    "process_restart_proven": false,
+    "same_world_proven": false,
+    "rgd_reopen_proven": false,
+    "new_source_candidate_sha_proven": false,
+    "android_runtime_postfix_proven": false,
+    "owner_phone_success_separately_reported": true,
+    "ci": "SUCCESS 8 synthetic controls and authentic 3-file immutable CL SHA/Git blob check"
+  },
+  "limitations": [
+    "All three JSONL correspond to 5-Nov owner device test only; not newer source/head",
+    "Nonzero file snapshots do not prove payload durability or deserialization",
+    "Logger sessions do not prove process restart, same-world, or installed APK/OBB binary identity",
+    "No private world/player IDs, exception payloads, file paths or original RGD bytes read/emitted",
+    "No new signed build or game runtime patch; original water, shader and mouse issues remain open"
+  ],
+  "next_step": "T5 future owner-approved signed APK+matching OBB phone test should prove actual same-world force-stop/reopen and verify manifest/version/hash and logs; T4 can compare without revealing identifiers. Do not repeat this CI unchanged."
+}
