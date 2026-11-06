@@ -2,7 +2,7 @@
 
 - session_id: `20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1`
 - origin: `chat`
-- status: `completed_CB0_managed_literal_candidate_SHA_original_success`
+- status: `completed_original_CB0_managed_name_and_exact_SetVector_formal_verified`
 - base_sha: `da274472d3070d69a8377fbffc8253bca051b39b`
 - scope registration commit: `1ee74f3872781a9f2886bac42fa2ef32d403b1ca`
 - resumed_from_sessions: `20261106T103459Z-T2-chat-cb0-index-48bd` (original 2-pass compiled index proof), `20261106T101538Z-T2-scheduled-uploadtrace-6c8f` (original managed upload producer still unidentified).
@@ -25,3 +25,15 @@
 - **NOT PROVEN:** actual `ldstr` first argument to setter, original member offsets/dataflow, how globals or buffer fields are uploaded, Unity importer, Android water frames. Original exact serialized CB name absent as a literal does not imply absent engine/native setter. No source/game shader/Meta/GUID/collision with T1/T3/T4/T5 touched, and no extra native build triggered.
 - Memo: [CB0 original managed literal evidence](../../../../../docs/T2_FOAM_ORIGINAL_CB0_MANAGED_LITERAL_2026-11-06.md); experiment `prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.json`, canonical event `prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result.json`, work complete.
 - Next: separate conservative Cecil IL stack `ldstr`→actual first formal provenance check for typed `Material.SetFloat`/`SetVector`; no elevation of simple proximity.
+
+## Second independent scoped experiment — exact typed first formal (2026-11-06T11:28Z)
+
+- Work/experiment scope pre-registered: `prompt/coordination/work/WATER-001/T2-20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json`, key `original-zip2-CB0-5-vector-3-managed-literal-candidates-verified-IL-stack-firstformal-v1`. This asks a different question from the initial lexical/same-method experiment.
+- Source-only `android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs` now contains a conservative **24-instruction** straight-line IL stack tracer, with exact original literal SHA from four source-original CB0 stage links, documented public Unity typed call `MethodReference`, branch/unknown-op fail-closed, and synthetic tests for discarded nearby strings, branch non-proof, direct argument, and `Shader.PropertyToID` typed argument.
+- [CI42209967318](https://github.com/alwansan/raf/actions/runs/42209967318) **SUCCESS**: matched **one** distinct original CB0 vector source name `ldstr` as the actual direct `System.String` **first formal** to one typed Unity uniform setter; zero source `PropertyToID` first-formal paths. Python original staged-name tests 11/11, Cecil synthetic direct and false-positive selftest, original DLL SHA and two-pass original source owner passed.
+- [CI42210166957](https://github.com/alwansan/raf/actions/runs/42210166957), job `127866539676`, source `c95cdaf51a9edf9a641c9463737427b619e2a67f`, **SUCCESS**: exact PROVEN family is `UnityEngine.Material.SetVector(string,Vector4)` **1**, **not** an asserted original `Material.SetFloat` first argument. A nearby `SetFloat` is a separate unproven proximity. Only one of five original CB0 vector names has this exact compiled first-string-formal proof.
+- Counts of source strings and exact family are safe aggregates. No source original private string, hash, class name, method signature, register, exact index, IL disassembly, original DLL, shader code or source asset published. No original managed code executed.
+- **Boundaries:** second `Vector4` value and receiver `Material` / Shader Foam identity and call reachability **unproven**; original member→translated HLSL CB alias, 160-byte host upload, pass0 Fragment and pass1 Vertex larger CB0 array contents **unproven**. No game source shader/Meta/GUID, APK, FMOD, Settings, touch, world/save modified.
+- Detailed memo: [exact original `SetVector` first argument](../../../../../docs/T2_FOAM_ORIGINAL_CB0_MANAGED_FIRST_OPERAND_2026-11-06.md). Experiment: `prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json`; event: `prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json`; completed work: `prompt/coordination/work/WATER-001/T2-20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json`.
+- Coordinated with T1 and T5 by [issue handoff](../../../discussions/WATER-001/20261106T112800Z-T2-CB0-MaterialSetVector-proof-T1T5.md), commit `86d802407dad8293dbcfc55b8643878a518e4693`.
+- End-of-session status: **Completed original SHA-backed first argument and baseline literal scope only; WATER-001 OPEN; game NOT_READY.** The next independent experiment should follow actual second value / material receiver identity from the proven original compiled `Material.SetVector` call, and only then original Shader CB0 member upload range. Do not claim actual GPU or Android pixels.
