@@ -42,6 +42,26 @@ static class Program
             "Pause leaves system UI alone");
         Check(!AndroidSystemBarPolicy.ShouldApply(false, false, true),
             "Stopped game leaves system UI alone");
+        Check(AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 120, 120), "Current owner and generation may hide");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 4, 120, 120), "Stale generation must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            4, 3, 120, 120), "Future generation must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            0, 0, 120, 120), "Uninitialized generation must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 120, 121), "Another Activity must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 0, 120), "Unbound Activity must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 120, 0), "Missing live Activity must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, false, false,
+            3, 3, 120, 120), "Background must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, true,
+            3, 3, 120, 120), "Pause must fail");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(false, true, false,
+            3, 3, 120, 120), "Disabled state must fail");
         Console.WriteLine("T4_SYSTEM_BARS_POLICY_CSHARP passed=" + count +
             " authenticUnityABICompiledSeparately=true androidDeviceVerified=false");
         return 0;
