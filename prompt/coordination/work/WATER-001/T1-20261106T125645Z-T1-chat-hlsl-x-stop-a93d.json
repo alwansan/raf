@@ -5,9 +5,9 @@
   "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "18b47bc7fffc66699f8f0556cd8b478f02dc01fe",
-  "updated_at": "2026-11-06T13:00:11.899Z",
+  "updated_at": "2026-11-06T13:12:33.599Z",
   "track": "HLSL translated FFT butterfly1 X exact unsupported coordinate SSA stop opcode",
   "resumed_from_sessions": [
     "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
@@ -29,6 +29,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42221700354"
   ],
-  "result": "New source-free stop-opcode tests including OpPhi/OpIAdd/unknown sanitization and resolved-load output passed unit gate in CI 42221700354. Original ZIP2 recovery and HLSL pass are pending; do not assert original translated X stop opcode until job completes.",
-  "next_step": "After Actions 42221700354 reaches completed, inspect hlsl-roundtrip RAFT_T1_PASS0_SPIRV_PROVENANCE site1 X stop_opcode and stop_numeric_kind; update only this session+experiment+event and close scope. No GPU build or source shader rewrite."
+  "result": "Authenticated original ZIP2 + HLSL-roundtrip Vulkan CI 42221700354 SUCCESS. Tests passed. At translated slot0 Butterfly1 X, unresolved lane stop_opcode=OpPhi, stop_numeric_kind=float32. Butterfly2 X/Y also OpPhi float32, source X/Y reaches OpLoad. No raw shader data; source-vs-Unity coordinate numeric parity and Adreno water remain NOT PROVEN. Scoped CI resource released.",
+  "next_step": "New independent T1 investigation: enumerate source-safe typed incoming values and predecessor branch conditions of translated butterfly1 X float32 OpPhi, with exact same-pinned source; then compare paired invocation traces under strict capture evidence gate (42223419922). No shader rewrite based solely on this marker."
 }
