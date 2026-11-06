@@ -1,0 +1,18 @@
+{
+  "event_id": "20261106T1745Z-T3-chat-trial-cbsize-9c21",
+  "session_id": "20261106T1745Z-T3-chat-trial-cbsize-9c21",
+  "origin": "chat",
+  "owner": "T3",
+  "type": "result",
+  "issue_id": "RENDER-002",
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "summary": "T3 adopted TRIAL_BUILD_POLICY_AR.md and voted NO only in own trial readiness row (commit 99658d34). New original ZIP2 SHA-pinned Particle108 D3D11 DXBC SM4.0 validation CI42265293980 SUCCESS: all 8 programs Shader Model 4.0; 24 CB declaration 16-byte-vector sizes known/nonzero, 0 unknown, 2 dynamic access; VS 4 CB size vs 3 primary slot layouts, PS 2 size vs 1 slot layouts. Confirms CB 2D second index is CB vector size, not another register; source-only tests 12/12 at CI42265061012. No ShaderLab/phone color fix; RENDER-002 OPEN/NOT_READY, trial vote remains NO.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42265293980",
+    "https://github.com/alwansan/raf/actions/runs/42265061012",
+    "https://github.com/alwansan/raf/commit/99658d34f59ce64a8f961e942c641882c0750110",
+    "prompt/coordination/clients/T3/sessions/20261106T1745Z-T3-chat-trial-cbsize-9c21.md"
+  ],
+  "updated_at": "2026-11-06T17:52:36.602Z"
+}
