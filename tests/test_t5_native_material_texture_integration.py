@@ -73,7 +73,7 @@ class NativeMaterialTextureIntegration(unittest.TestCase):
         retained = raw[evidence:raw.index("      - name:", evidence + 10)]
         self.assertIn("if: always()", retained)
         self.assertIn("actions/upload-artifact@v4", retained)
-        self.assertEqual(retained.count("\${{ runner.temp }}/t5-native-material-texture-links.txt"), 1)
+        self.assertEqual(retained.count("${{ runner.temp }}/t5-native-material-texture-links.txt"), 1)
 
     def test_source_ci_tracks_native_workflow_wiring(self):
         raw = (ROOT / ".github/workflows/raft-b46-render-texture-links.yml").read_text()

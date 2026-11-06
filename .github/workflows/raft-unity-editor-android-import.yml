@@ -540,6 +540,18 @@ jobs:
           python3 -m scripts.t3_audit_exported_material_programs \
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --out "$RUNNER_TEMP/t3-native-material-shader-quality.json"
+      - name: T5 inspect actual postrestorer Material-to-Texture references (non-mutating)
+        id: t5_material_texture_links
+        # Fail visibly when the exported links are broken, but do not prevent
+        # existing water/shader authenticity gates from reporting the real
+        # blockers. Never synthesize or rewrite a Texture GUID.
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.verify_exported_material_texture_links \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            | tee "$RUNNER_TEMP/t5-native-material-texture-links.txt"
       - name: Record actual water source contract before the first strict authenticity gate
         shell: bash
         run: |
@@ -560,6 +572,7 @@ jobs:
           path: |
             ${{ runner.temp }}/w1-native-material-shader-summary.json
             ${{ runner.temp }}/t3-native-material-shader-quality.json
+            ${{ runner.temp }}/t5-native-material-texture-links.txt
             ${{ runner.temp }}/w1-native-water-contract-summary.json
           if-no-files-found: ignore
           retention-days: 7

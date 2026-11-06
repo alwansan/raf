@@ -8,6 +8,8 @@ on:
     paths:
       - scripts/verify_exported_material_texture_links.py
       - tests/test_verify_exported_material_texture_links.py
+      - tests/test_t5_native_material_texture_integration.py
+      - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-b46-render-texture-links.yml
 
 permissions:
@@ -30,4 +32,6 @@ jobs:
         with:
           python-version: "3.11"
       - name: B46 fail-closed fixture tests (no proprietary payload)
-        run: python -W error -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
+        run: |
+          python -W error -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
+          python -W error -m unittest discover -s tests -p test_t5_native_material_texture_integration.py -v
