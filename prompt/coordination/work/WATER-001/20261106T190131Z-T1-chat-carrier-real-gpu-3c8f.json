@@ -6,9 +6,9 @@
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
   "track": "Original FFT Unity OpenGLCore precision context differentiation",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "4085da0987f754fdf5de1cebde40406358c640ad",
-  "updated_at": "2026-11-06T19:02:00Z",
+  "updated_at": "2026-11-06T19:05:00Z",
   "resumed_from_sessions": [
     "20261106T1850Z-T1-chat-gpu-input-join-b71c",
     "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
@@ -32,7 +32,18 @@
     "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
     "20261106T1850Z-T1-chat-gpu-input-join-b71c"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42276235955"
+  ],
   "result": null,
-  "next_step": "Implement licensed Unity synthetic run if publication permitted and inspect real metrics; otherwise stop blocked and record tool check, improve a non-overlapping verification path."
+  "next_step": "Inspect Unity GPU step terminal (logs: RAFT_T1_CARRIER_CONTEXT_GATE), repair only verified fixture/test issue if fail; do not rerun unchanged heavy job; record bounded metrics or blocked reason, cleanup and handoff.",
+  "waiting_ci": {
+    "run_id": 42276235955,
+    "job_id": 128093156740,
+    "source_sha": "4928f866d0f035797e776ee004cc9e476aa1d49d",
+    "initial_source_tests": "success",
+    "pinned_cli": "verified",
+    "actual_unity_step": "in_progress_at_checkpoint",
+    "criterion": "Exact one Unity NUnit case must PASS with Unity return0, all three positive controls zero; record 10 diagnostic category counts even when nonzero. Original and Adreno flags false."
+  }
 }
