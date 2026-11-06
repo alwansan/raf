@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
+  "issue_id": "DISPLAY-003",
+  "status": "source_verified_resolution_il_path_binding_unproven",
+  "base_sha": "8c71e017853ace358bed947556dc0156e38fe5d8",
+  "experiment_key": "T5-original-ZIP2-managed-dll-GraphicsSettingsBox-safecall-IL-fingerprint-v1",
+  "source_commit": "bf64f38e5770664e9fc1bb75f2a6befa7d1d7081",
+  "source_provider": "ZIP2 pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_dll_size": 3211776,
+  "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "tool_versions": {
+    "Mono.Cecil": "0.11.5",
+    "dotnet": "9.0",
+    "runner": "ubuntu-24.04"
+  },
+  "workflow_path": ".github/workflows/raft-t5-original-resolution-il.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42204488410",
+  "ci_job_id": 127847589607,
+  "ci_conclusion": "success",
+  "verified_test_counts": {
+    "python": 8,
+    "compiled_cecil_self_tests": 4,
+    "original_authenticated_types": 2
+  },
+  "compiled_il_call_sites": {
+    "settings": {
+      "method_bodies": 42,
+      "call_sites": 257,
+      "screen_set_resolution": 1,
+      "screen_resolutions_read": 9,
+      "screen_current_resolution_read": 3,
+      "event_add_listener": 0,
+      "option_population": 1,
+      "playerprefs_reads": 0,
+      "playerprefs_writes": 0,
+      "local_apply_resolution_calls": 3,
+      "dynamic_resolution_references": 0,
+      "same_type_delegate_targets": 2
+    },
+    "dynamic": {
+      "method_bodies": 7,
+      "call_sites": 14,
+      "resize_buffers": 2
+    }
+  },
+  "negative_controls": [
+    "wrong original DLL bytes/SHA rejected",
+    "JSON duplicate keys and unknown fields rejected",
+    "missing compiled IL classes fail",
+    "Screen.SetResolution and ResizeBuffers source-site counts enforced",
+    "zero AddListener alone not proof callback absent",
+    "PlayerPrefs absence does not rule out custom persistence",
+    "no inferred working Android selector or device performance"
+  ],
+  "original_game_modified": false,
+  "original_source_published": false,
+  "device_tested": false,
+  "limitations": [
+    "Structural IL calls do not establish interprocedural event/callback or serialized Unity UnityEvent wiring.",
+    "Existing original Android Screen.SetResolution adapter is separate and untested in new device binary.",
+    "No Android render scale choice, quality/aspect/persistence, native Unity compile or phone proof."
+  ],
+  "next_step": "Inspect exact two original GraphicsSettingsBox delegate IL targets and custom dropdown/persistence sites in independent bounded private metadata classification; then original scene serialized callback binding. No runtime Settings modifications before proof.",
+  "report_path": "docs/T5_ORIGINAL_SETTINGS_IL_2026-11-06.md",
+  "updated_at": "2026-11-06T10:44:02.955Z"
+}
