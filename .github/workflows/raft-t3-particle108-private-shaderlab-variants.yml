@@ -6,6 +6,8 @@ on:
       - '.github/workflows/raft-t3-particle108-private-shaderlab-variants.yml'
       - 'scripts/t3_particle108_private_shaderlab_variants.py'
       - 'tests/test_t3_particle108_private_shaderlab_variants.py'
+      - 'scripts/t3_particle108_private_stagewrapper_compile.py'
+      - 'tests/test_t3_particle108_private_stagewrapper_compile.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,6 +34,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t3_particle108_private_shaderlab_variants.py tests/test_t3_particle108_private_shaderlab_variants.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_shaderlab_variants.py' -v
+          python3 -m py_compile scripts/t3_particle108_private_stagewrapper_compile.py tests/test_t3_particle108_private_stagewrapper_compile.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_private_stagewrapper_compile.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -121,9 +125,29 @@ jobs:
               assert report[field] is False
           print('T3_PRIVATE_VARIANT_PROOF_SAFE='+json.dumps(report,sort_keys=True))
           PY
+      - name: Compile both macro branches of all four private ShaderLab HLSLPROGRAM blocks with Vulkan 1.1 glslang
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.t3_particle108_private_stagewrapper_compile \
+            --private-dir "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t3-particle108-stage-wrapper-safe.json'
+          report=json.loads(p.read_text(encoding='utf-8'))
+          assert report['status']=='T3_PRIVATE_SHADER48_BOTH_SHADERLAB_BRANCHES_GLSLANG_VULKAN11_VALID'
+          assert report['original_private_candidate_files_examined']==4
+          assert report['HLSLPROGRAM_macro_selected_stage_compiles_attempted']==8
+          assert report['HLSLPROGRAM_macro_selected_stage_spirv_validations_passed']==8
+          assert report['Unity_Editor_ShaderLab_import_proven'] is False
+          assert report['original_keyword_routing_or_material_binding_proven'] is False
+          assert report['original_pixels_on_Android_verified'] is False
+          print('T3_PRIVATE_SHADERLAB_BOTH_BRANCHES_SAFE=8_of_8_Vulkan11_glslang_only')
+          PY
       - name: Erase private staged sources and candidates from runner
         if: always()
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
-          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json"
+          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json"
