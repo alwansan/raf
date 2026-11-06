@@ -37,7 +37,45 @@ def analyze(project, host_file, export=None):
         run(["spirv-as", "--target-env", "vulkan1.1", "original-record.spvasm",
              "-o", "original-record.spv"], work)
         print("RAFT_T1_ORIGINAL_KEYED_STAGE spirv_validate", flush=True)
-        run(["spirv-val", "--target-env", "vulkan1.1", "original-record.spv"], work)
+        validate = subprocess.run(
+            ["spirv-val", "--target-env", "vulkan1.1", "original-record.spv"],
+            cwd=work, capture_output=True, text=True, timeout=30)
+        if validate.returncode:
+            # Private compiler diagnostics may contain original SSA IDs; only
+            # fixed instruction/semantic families are allowed in public logs.
+            raw_error = (validate.stderr + validate.stdout).lower()
+            families = {
+                "OpAtomicIAdd": "opatomiciadd",
+                "OpAccessChain": "opaccesschain",
+                "OpVariable": "opvariable",
+                "OpTypeRuntimeArray": "optyperuntimearray",
+                "OpTypePointer": "optypepointer",
+                "OpTypeStruct": "optypestruct",
+                "OpEntryPoint": "opentrypoint",
+                "OpStore": "opstore",
+                "OpLoad": "opload",
+                "OpBitcast": "opbitcast",
+                "OpCompositeExtract": "opcompositeextract",
+                "OpPhi": "opphi",
+                "StorageBuffer": "storagebuffer",
+                "Block": "block",
+                "ArrayStride": "arraystride",
+                "Offset": "offset",
+                "dominance": "dominat",
+                "variable_scope": "scope",
+                "type_mismatch": "type",
+                "logical_layout": "layout",
+                "memory_semantics": "semantics",
+                "atomic": "atomic",
+                "capability": "capability",
+            }
+            detected = sorted(name for name, signature in families.items()
+                              if signature in raw_error)
+            print("RAFT_T1_ORIGINAL_KEYED_VAL_DIAGNOSTIC " +
+                  json.dumps({"families": detected[:16], "classification_only": True,
+                              "private_error_text_exported": False}, sort_keys=True),
+                  flush=True)
+            raise ValueError("Original private SPIR-V validation rejected instrumented module")
         source = trace_host(host_file.read_text(encoding="utf-8"), INVOCATION_SIZE)
         if source.count("traceWrite.dstSet = sets[1];") != 1:
             raise ValueError("Original descriptor set host patch anchor absent")
