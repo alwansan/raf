@@ -306,7 +306,7 @@ class Program
             var lifecycleField = typeof(PersistentDiagnosticLog).GetField(
                 "lifecycleGate", binding);
             object savedLifecycleGate = lifecycleField.GetValue(actualSink);
-            string firstRecoveredStack = "Original synthetic SaveGame error\\nT4 save stack";
+            string firstRecoveredStack = "Original synthetic SaveGame error\nT4 save stack";
             try
             {
                 // Null out only the sink's lifecycle monitor via reflection:
@@ -333,7 +333,7 @@ class Program
             AndroidRuntimeLog.Shutdown();
             string faultRecoveredLogs = Path.Combine(logFailureRoot, "raft-logs");
             Require(Lines(faultRecoveredLogs).Count(l =>
-                l.Contains("\\\"operation\\\":\\\"Error\\\"") &&
+                l.Contains("\"operation\":\"Error\"") &&
                 l.Contains("T4 save stack")) == 1);
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
