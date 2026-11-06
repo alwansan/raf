@@ -1,0 +1,12 @@
+{
+  "id": "20261106T094304Z-T1-chat-e735",
+  "owner": "T1",
+  "session_id": "20261106T094304Z-T1-chat-e735",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Paired FFT replay reached comparison and isolated the first observed divergence to sample site 1 X-coordinate selection.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42196835754"
+  ],
+  "at": "2026-11-06T09:45:27.519Z"
+}
