@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "authentic-owner-5nov-original-savegame-nested-cycle-provenance",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fb21f2a1b49c8569eba38743c8aa52d3bcb010b2",
   "approach": "Upgrade existing exact CL blob-authenticated phone JSONL experiment with per-SaveGame deterministic nested SaveWorld -> SaveUser original boundary sequence, requiring nonzero file snapshot during both phases; reject malformed/reordered equal-count cycles as completion evidence without claiming payload durability or game acceptance.",
   "intended_files": [
@@ -22,8 +22,11 @@
   "taken_over_from": [
     "T4 prior phone logger per-operation static counts, completed previous own scope"
   ],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-06T19:36:00Z",
-  "next_step": "Introduce red source-only controls for equal-count impossible original ordering and no phase snapshots; upgrade cycle evidence to true nested sequence while reusing exact pinned CL3 CI. Record both red and green, no native build."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281305651",
+    "https://github.com/alwansan/raf/actions/runs/42281498879"
+  ],
+  "result": "Test-only RED run42281305651 3/3 newly added strict cycle controls failed on counts-only source; production 044110be per-SaveGame nested ordered SaveWorld→SaveUser with nonzero per-phase Save snapshots CI42281498879 COMPLETED SUCCESS (11/11 source synthetic and 3 genuine immutable CL files). Actual original 5-Nov Android logs 3+1+3=7/7 complete original authored savegame sequences; no missing/misordered; no private game data printed; actual post-Nov5 installed APK/OBB not verified.",
+  "updated_at": "2026-11-06T19:41:00Z",
+  "next_step": "Release own source work; T5 native owner-direct run42281310905 observed in progress but not initiated by this worker; no cancellation or XAPK success claim. Later compare any owner-tested new phone package to 7/7 baseline and confirm same world/save/process restart with .rgd. Trial r1 T4 vote unchanged, no5/5 there."
 }
