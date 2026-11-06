@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
+  "issue_id": "COORD-001",
+  "status": "one_field_identity_repaired_canonical_index_pending",
+  "experiment_key": "T5-canonical-live-ledger-T3-20261106T1308-missing-explicit-id-CI42224618618-v1",
+  "failure_run_url": "https://github.com/alwansan/raf/actions/runs/42224618618",
+  "failure_reason": "strict canonical B_TEAM read_records ValueError: Missing record identity, exact T3 event 20261106T1308Z...",
+  "source_event_path": "prompt/coordination/B_TEAM/events/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json",
+  "source_event_original_blob": "8fc86903e5a85d14d1ff3e2048bc3f1a6c0afc53",
+  "fix_commit": "c6f4693ee8329f87a2e3df47e04959aa0987a00b",
+  "fix_action": "Only explicit id equal to original T3 session_id was inserted; compared original 16 fields and values one by one, no results/source/CI claims altered.",
+  "source_only": true,
+  "android_device_tested": false,
+  "original_game_modified": false,
+  "next_step": "Trigger own strict canonical T5 index and verify source-only ledger includes T3 and new original signed APK/OBB evidence. No schema relaxation.",
+  "updated_at": "2026-11-06T13:21:58.767Z"
+}
