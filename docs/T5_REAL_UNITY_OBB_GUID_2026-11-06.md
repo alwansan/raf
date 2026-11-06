@@ -12,7 +12,7 @@ The production `scripts/audit_android_expansion.py` explicitly allows `assets/un
 
 ## New genuine original artifact measurement
 
-[CI42243273146](https://github.com/alwansan/raf/actions/runs/42243273146), job `127978801390`, exact code commit `c009d989ad8823e1f7d1ebe49fe9408ccd493d7b`: **COMPLETED SUCCESS**, **13/13** synthetic positive/negative tests and read-only actual original signed checkpoint ZIP (artifact `13441766832`, full outer ZIP `2,974,110,506` bytes). The tool authenticated GitHub artifact source metadata, used strict HTTP 206 only, validated all inner ZIP local headers versus central entries and checked only the exact marker `assets/unity_obb_guid`.
+[CI42243852483](https://github.com/alwansan/raf/actions/runs/42243852483), job `127980808269`, exact final code commit `f128787aa536cf6db076e13634aba1c49034925d`: **COMPLETED SUCCESS**, **13/13** synthetic positive/negative tests and read-only actual original signed checkpoint ZIP (artifact `13441766832`, full outer ZIP `2,974,110,506` bytes). The tool authenticated GitHub artifact source metadata, used strict HTTP 206 only, validated all inner ZIP local headers versus central entries and checked only the exact marker `assets/unity_obb_guid`.
 
 | Actual original signed member | `assets/unity_obb_guid` present |
 |---|---|
@@ -28,7 +28,7 @@ The production `scripts/audit_android_expansion.py` explicitly allows `assets/un
 
 - [CI42242913633](https://github.com/alwansan/raf/actions/runs/42242913633) **FAILED after 13/13 tests** because the *real* signed package had an unexpected one-sided marker; the first reporter rejected it with `unity_guid_marker_one_sided`. This demonstrates the finding was real, not merely guessed from packaging conventions.
 - The follow-up reporter was revised to explicitly distinguish `apk_only_identity_unavailable`, `obb_only_identity_unavailable`, `both_absent_identity_unavailable`, and `both_present_byte_identical`; mismatch when both contain values still raises an error, and the source never invents a GUID. [CI42243221625](https://github.com/alwansan/raf/actions/runs/42243221625) failed old synthetic one-sided expectations while the tests were being updated; not an OBB data failure.
-- Final [CI42243273146](https://github.com/alwansan/raf/actions/runs/42243273146) **SUCCESS** with 13 synthetic controls covering actual marker parity, one-sided asymmetry, both missing, equal-size mismatch, zero/overbound marker, path aliases, duplicates, ZIP local name/CRC corruption, signed checkpoint strict STORED fixture, wrong sizes, compressed outer members and range budget.
+- Initial full pass [CI42243273146](https://github.com/alwansan/raf/actions/runs/42243273146) **SUCCESS**; final semantically precise proof [CI42243852483](https://github.com/alwansan/raf/actions/runs/42243852483) **SUCCESS** with 13 synthetic controls covering actual marker parity, one-sided asymmetry, both missing, equal-size mismatch, zero/overbound marker, path aliases, duplicates, ZIP local name/CRC corruption, signed checkpoint strict STORED fixture, wrong sizes, compressed outer members and range budget.
 
 Files: `scripts/t5_probe_real_unity_obb_guid.py`, `tests/test_t5_probe_real_unity_obb_guid.py`, `.github/workflows/raft-t5-real-unity-obb-guid.yml`. They reuse the prior T5 original signed ZIP range/authenticity source modules, do not change real Unity runtime or the game's original assets.
 
