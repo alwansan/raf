@@ -128,7 +128,8 @@ def compiled_cb0_load_paths(blob, reflection, coordinate, own_length, other_leng
             if base in aliases:
                 if args[1] in aliases:
                     raise ValueError("duplicate_private_pointer_id")
-                aliases[args[1]] = aliases[base] + tuple(args[3:])
+                aliases[args[1]] = (None if aliases[base] is None
+                                    else aliases[base] + tuple(args[3:]))
         elif op in (OP_PTR_ACCESS_CHAIN, OP_IN_BOUNDS_PTR_ACCESS_CHAIN):
             if len(args) < 4:
                 raise ValueError("malformed_private_ptr_access_chain")
