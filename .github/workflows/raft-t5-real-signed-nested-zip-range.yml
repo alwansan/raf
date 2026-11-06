@@ -1,0 +1,51 @@
+name: T5 INTEGRATION-001 real signed APK OBB nested ZIP central via bounded byte ranges
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_probe_signed_nested_zip_range.py
+      - tests/test_t5_probe_signed_nested_zip_range.py
+      - .github/workflows/raft-t5-real-signed-nested-zip-range.yml
+permissions:
+  actions: read
+  contents: read
+concurrency:
+  group: t5-original-signed-42058825739-zip-nested-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  nested-real-apk-obb-source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout bounded original signed ZIP metadata tools only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t5_probe_github_artifact_zip_range.py
+            /scripts/t5_probe_signed_nested_zip_range.py
+            /tests/test_t5_probe_signed_nested_zip_range.py
+      - name: Test nested APK OBB ZIP parser on synthetic sparse 3GB layout and invalid cores
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_probe_signed_nested_zip_range.py -v
+          python3 -m py_compile scripts/t5_probe_signed_nested_zip_range.py
+          test ! -e Raft
+      - name: Inspect only real original checkpoint's nested APK OBB ZIP indexes
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          timeout 480s python3 -m scripts.t5_probe_signed_nested_zip_range --live
+          echo 'T5_SIGNED_NESTED_ZIP source_run=42058825739 real_nested_indexes=true full_inner_sha=false apk_certificate=false unity_guid=false device_tested=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: No original APK OBB extracted or published
+        if: always()
+        shell: bash
+        run: echo 'At most 16MiB HTTP range data read; raw games/assets/private blob redirect and token never enter log.'
