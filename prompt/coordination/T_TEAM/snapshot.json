@@ -6588,6 +6588,22 @@
       "_record_path": "../B_TEAM/events/T1/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json"
     },
     {
+      "id": "20261106T133640Z-T1-chat-nested-phi-8d31",
+      "owner": "T1",
+      "session_id": "20261106T133640Z-T1-chat-nested-phi-8d31",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T13:51:30.459Z",
+      "summary": "Source-authentic original FFT slot0 translated HLSL butterfly1 X selected float32-vector OpPhi has one uint32 Private load-to-bitcarrier entry and one self-fed OpCompositeInsert incoming path. Private CFG check 42228497335 SUCCESS shows second incoming predecessor is a real structural CFG backedge; first is not. One Phi expansion, one self-reference boundary, one CFG backedge. Nested Phi source-only tests 14/14 and scheduled T1 ULP tests 7/7 also passed in source-only CI 42228404633 (61/61 total). First test 42227505971 had incorrect one-ULP expectation within rel_tol 1e-5, corrected fixture without changing comparator. No actual branch execution, numeric original↔Unity parity, authored shader runtime identity or Adreno water proven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42227795780",
+        "https://github.com/alwansan/raf/actions/runs/42228404633",
+        "https://github.com/alwansan/raf/actions/runs/42228497335",
+        "https://github.com/alwansan/raf/commit/e936ad1f96c0bb0617a7a7199c2304c5f47442ff"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T133640Z-T1-chat-nested-phi-8d31.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -9147,6 +9163,24 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1334Z-T4-chat-windowfocus-m8v3.json"
     },
     {
+      "id": "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+      "owner": "T4",
+      "session_id": "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "at": "2026-11-06T13:48:40.613Z",
+      "summary": "Fixed scheduled T4 JSONL snapshot duplicate-field guard's incorrect raw regex literal backslash-s. Exact CI42228168580 23 parser tests+2 overflow tests SUCCESS including 3 previously failing legitimate-save cases; source-free, no device/game save evidence.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/8a99840fa20bf830fb496ad9681913168a439d8e",
+        "https://github.com/alwansan/raf/commit/66b45b86d7723ef80221da5087967bbb4b8c9936",
+        "https://github.com/alwansan/raf/actions/runs/42228168580"
+      ],
+      "device_confirmed": false,
+      "real_rgd_durability_proven": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9807,6 +9841,23 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json"
     },
     {
+      "id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T13:50:39.608Z",
+      "summary": "Original signed owner-tested APK 672853870 bytes from run42058825739 fully hashed SHA256 MATCH actual original delivery.json; Android binary manifest aapt versionCode89 and package com.alwansan.raft.androidtest MATCH; genuine Android apksigner cryptographic verification succeeds v1/v2, v3/v4 false, reports 1 signer. Source-only 12/12 synthetic and full real file CI42228262902 success. Certificate SHA print format unavailable, no certificate identity claim. OBB SHA/GUID and new phone GPU/water proof remain OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42228262902",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_APK_AUTH_2026-11-06.md"
+      ],
+      "limits": "Previous tested signed APK source only; no full OBB integrity or current source Android phone/pixel readiness.",
+      "next_step": "Full original main OBB 2301256312-byte digest with resource coordination and independent Unity GUID/device test.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9835,7 +9886,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "b03d982bcf62d6ca460b1f51163696ea00b85aa782093780273a6dbfd69bec29",
+  "source_input_sha256": "3458e6eeb260eb6afb1c159cb41687c3de3c4dafec458c4aac81e8a4f7a710a7",
   "generation": "T-2026-11-05",
-  "input_sha256": "29c9bf9d19e081b772a9f34ff4332eecd2a37de8dd1bcf7dd60d77697df86730"
+  "input_sha256": "90e40864cda435f56e7d6c322e77f85d0a1b68b805e082dfc99e208ab11e0cd8"
 }
