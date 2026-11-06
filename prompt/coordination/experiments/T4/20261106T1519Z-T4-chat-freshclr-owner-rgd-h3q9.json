@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-LOCAL005-CL520c-7realOwnerRGD-originalDLL0a6f05-full151-originalSave-DOTNET8-cleanchildOriginalLoadT-exactwire-v1",
+  "source_commit": "a65f06ed28f3c5fb703d8ecea7d0e99112509e93",
+  "workflow_path": ".github/workflows/raft-t4-owner-world-save-roundtrip.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42242683652",
+  "original_input": "Pinned CL owner 5 November seven genuine Git blob verified World RGD; original DOTNET8 managed Unity source original DLL SHA 0a6f05+151 companions, private runner only.",
+  "test_commands": [
+    "python3 -m unittest discover -s tests -p test_t4_owner_world_roundtrip.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_stage_owner5nov_world_rgds.py -v",
+    "dotnet publish android-port/Experiments/T4/OwnerWorldRgdRoundtrip/OwnerWorldRgdRoundtrip.csproj -c Release",
+    "for 7 authenticated owner worlds call private original Save then fresh child original generic LoadT"
+  ],
+  "negative_controls": [
+    "generated file changed from original owner Git blob rejected before unsafe formatter",
+    "nonmatching CLR original identity fails closed",
+    "child process timed out at 12 seconds",
+    "source-only verifier rejects fabricated child results",
+    "child never emits path/types/binary bytes",
+    "private temp always removed in finally"
+  ],
+  "budget": "single existing 15-minute owner-world CLR original gated CI; no Unity native heavy build; child at most 12s per original sample",
+  "status": "waiting_ci",
+  "observed_result": "Source C# + strict Python schema/test + existing workflow aggregate seven-child acceptance committed on a65f06ed; run 42242683652 executing. Earlier intermediate CIs 42242457754/42242571436 failure due as-yet-unsynchronized Python validator/schema; do not count as final.",
+  "device_confirmed": false,
+  "real_game_save_confirmed": false,
+  "limitations": [
+    "Fresh CLR process does not prove Android app process restart, Unity IL2CPP runtime, actual SaveGame event, world continuity, rendered water, physical mouse or signed package acceptance.",
+    "Sensitive owner world data remains only ephemeral private CI; no report hashes, content or paths."
+  ],
+  "next_step": "Read exact a65f06ed CI42242683652 job log; if 7/7 child and source tests pass, finalize work and handoff T5; else classify phase and fix bounded C#/CI.",
+  "updated_at": "2026-11-06T15:25:17.909Z"
+}
