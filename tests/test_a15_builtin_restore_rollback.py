@@ -4,6 +4,7 @@ Synthetic vendor paths/content only; no original game shaders, Unity or LFS.
 """
 from pathlib import Path
 from unittest import mock
+import os
 import tempfile
 import unittest
 
@@ -74,18 +75,22 @@ class BuiltinRestoreRollbackTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             project, shader, meta, custom, original, guid, private, mapping, files = fixture(root)
-            real_open = Path.open
+            # The production shader installer uses a staged temp file and
+            # atomic os.replace(), not Path.open(shader, 'wb'). Inject the
+            # failure at the real publication boundary; otherwise this test
+            # can pass the restore without exercising any rollback at all.
+            real_replace = os.replace
             failed = [False]
 
-            def interrupt(path, mode="r", *args, **kwargs):
-                handle = real_open(path, mode, *args, **kwargs)
-                if path == shader and mode in ("wb", "xb") and not failed[0]:
+            def interrupt(source, destination):
+                if Path(destination) == shader and not failed[0]:
                     failed[0] = True
-                    return _PartialWriter(handle)
-                return handle
+                    raise OSError("A15 simulated interrupted shader rename")
+                return real_replace(source, destination)
 
-            with mock.patch.object(Path, "open", interrupt):
-                with self.assertRaisesRegex(OSError, "interrupted write"):
+            with mock.patch('scripts.restore_builtin_shaders.os.replace',
+                            side_effect=interrupt):
+                with self.assertRaisesRegex(OSError, "interrupted shader rename"):
                     restore_project(project, root / "backup", mapping, files, b"MIT")
             self.assertTrue(failed[0])
             self.assertEqual(shader.read_bytes(), original)
