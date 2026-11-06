@@ -1,0 +1,24 @@
+{
+  "session_id": "20261106T0950Z-T5-chat-focus-frame-a7c3",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "PERF-007",
+  "updated_at": "2026-11-06T09:50:23Z",
+  "base_sha": "79e75191aad283072d639a14ab985a216ea7eec9",
+  "resumed_from_sessions": [
+    "20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
+    "20261106T0946Z-T5-scheduled-apk-zip-signature-n8c.md"
+  ],
+  "experiment_key": "T5-PERF-007-Unity-focus-pause-complete-five-second-frame-window-v1",
+  "resource_key": "AndroidTestDiagnostics.cs focus performance lifecycle only",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_android_diagnostics_policy.py",
+    "prompt/coordination/clients/T5/sessions/20261106T0950Z-T5-chat-focus-frame-a7c3.md",
+    "prompt/coordination/experiments/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json"
+  ],
+  "hypothesis": "Unity can deliver focus transition without pause, leaving five-second FPS sampling contaminated with offscreen/return stalls; pause reset also leaves nextSample overdue so resumed one-frame interval is mislabeled as steady scene. Reset only lifecycle windows; keep true render/loading stalls and scene provenance.",
+  "coordination": "T5 scheduled APK zip tests own a different issue/files; T1 FFT T2 Foam T3 shader and T4 input separate. Cheap source test CI only, no Unity build or dispatch.",
+  "prior_evidence": "CI42150565706 source-only scene attribution; real owner phone 42058825739 but not this patch."
+}
