@@ -1,0 +1,52 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T155244Z-T1-chat-original-builtin-inject-d5f2",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original GLCompute FFT module lacks GlobalInvocationId, so add a fresh built-in and test output invariance. Real source evidence instead proves an existing signed int3 direct Input GlobalInvocationId, not a missing declaration.",
+  "source_commit": "4e18b946e739396819334056a8043c33ad11f7d1",
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "status": "completed_rejected_duplicate_injection_and_recovered_existing_builtin",
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42249043033",
+  "observed_result": {
+    "source_only": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42248931621",
+      "conclusion": "success",
+      "tests": 111
+    },
+    "first_private_inject": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42247669231",
+      "conclusion": "failure",
+      "reason": "rejected privately before spirv-as"
+    },
+    "private_diagnostic": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42248163030",
+      "conclusion": "failure",
+      "safe_reason": "existing_builtin"
+    },
+    "actual_existing_builtin": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42249043033",
+      "conclusion": "success",
+      "direct_count": 1,
+      "member_count": 0,
+      "declaration": "Input variable included in compute entry interface",
+      "value_kind": "sint32_vector3",
+      "direct_load_users": 2,
+      "already_usable_after_safe_u32_key_conversion": true
+    },
+    "new_builtin_injected": false,
+    "original_GPU_keyed_buffer_produced": false,
+    "original_vs_candidate_numeric_parity_proven": false,
+    "phone_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "No GlobalInvocationId existed in original shader: a direct decorated, entry-interface-supplied Input variable already exists, with signed 32-bit triplet numeric type."
+  ],
+  "limitations": [
+    "An existing signed3 dispatch input can be structurally used but original reads have NOT been independently captured",
+    "Type reinterpretation must only apply to record keys, never replace original coordinate arithmetic",
+    "No new authored Unity or native Android shader build"
+  ],
+  "next_step": "New scoped original ImageFetch direct SPIR-V keyed recorder using existing sint32 GlobalInvocationId, atomic index bounds, correct 3-site occurrence, C++ host binding to original pipeline set0, then same-fixture original-vs-HLSL numeric key pairing strict gate."
+}
