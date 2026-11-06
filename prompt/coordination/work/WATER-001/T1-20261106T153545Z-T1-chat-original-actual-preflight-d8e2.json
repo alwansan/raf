@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "876ecbfb81206d659e109d6a6dad19cbf8f912dc",
+  "updated_at": "2026-11-06T15:35:45.039Z",
+  "resumed_from_sessions": [
+    "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+    "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+    "20261106T133640Z-T1-chat-nested-phi-8d31"
+  ],
+  "track": "Actual SHA-pinned original SPIR-V keyed invocation capture feasibility on private source",
+  "hypothesis": "Original exact FFT slot0 should have three integer-vector ImageFetch sites plus a dispatch invocation builtin and free trace descriptor binding, enabling direct original SPIR-V instrumentation rather than another HLSL roundtrip; check actual fields without publishing identifiers or shader bytes.",
+  "approach": "Use existing SHA-verified original ZIP2 isolated Vulkan workflow after confirming no active/queued T1 runner, run preflight only against $TMPDIR/candidates/_private_vulkan/slot0.spv before any other private HLSL compilation. Safe JSON marker with role/type and binding feasibility; no original source asset publication, no shader modification or Android native build.",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T153545Z-T1-chat-original-actual-preflight-d8e2.md",
+    "prompt/coordination/experiments/T1/20261106T153545Z-T1-chat-original-actual-preflight-d8e2.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T153545Z-T1-chat-original-actual-preflight-d8e2.json"
+  ],
+  "experiment_key": "water001-originalsha15964ea8-real-spirv-slot0-imagefetch-globalinvocationid-free-binding-keyed-read-tracer-prerequisites-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Run source-original private preflight once and record actual GlobalInvocationId and descriptor constraints, then design direct SPIR-V original keyed trace if viable. Distinguish this from completed HLSL candidate trace 42242127723 and source-only 86-test fixture proof."
+}
