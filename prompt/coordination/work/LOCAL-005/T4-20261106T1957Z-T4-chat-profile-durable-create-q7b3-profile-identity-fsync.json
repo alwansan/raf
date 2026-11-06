@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "original-local-profile-identity-persistence-creation-write-fault",
-  "status": "active",
+  "status": "completed",
   "base_sha": "289b9711a1e26118a0af921c43b1a86112919328",
   "approach": "In actual LocalProfileStore, separate CreateNew collision from write/flush failures so post-create IO faults cannot be swallowed and a generated but undurable profile ID advertised. Flush original profile writer then request FileStream.Flush(true) exactly once at creation; preserve existing stable identity and never regenerate bad IDs; add real compiled C# source / IL contract + synthetic fault-boundary test. No original game serializer or files modified.",
   "intended_files": [
@@ -21,7 +21,12 @@
     "T5 20261105T1115Z original FileManager runtime scope completed/blocked, no current file ownership"
   ],
   "concurrent_work": "T4 scheduled 20261106T1943Z-T4-scheduled-r6k2 owns read-only owner native candidate evidence (INPUT-005) and native build 42281310905 remains in_progress. No overlap or edits to their files.",
-  "run_urls": [],
-  "updated_at": "2026-11-06T19:57:00Z",
-  "next_step": "Use compiled IL evidence negative control against original source, then real minimal C# patch. GitHub Actions A9 offline identity workflow should run automatically. If writing flush proves unsafe or compiled ABI unsupported, revert and leave documented blocked rather than claiming device durability."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42284271128",
+    "https://github.com/alwansan/raf/actions/runs/42284421243",
+    "https://github.com/alwansan/raf/actions/runs/42284421421"
+  ],
+  "updated_at": "2026-11-06T20:02:00Z",
+  "next_step": "Scope released; T4 scheduled r6k2 follows separate INPUT-005 native run42281310905 pinned older source d692400. T5 consider this source for FUTURE authorized SHA-matched signed APK/OBB, verify actual fresh first-run identity across app restart and existing worlds on device. No new native build or vote change from this bounded improvement.",
+  "result": "Actual source LocalProfileStore.cs first-create new offline profile ID now uses writer.Flush followed by FileStream.Flush(true) and separate narrow FileMode.CreateNew-only IOException collision handler. RED actual compiled CLR IL test-only CI42284271128 failed missing OS flush, GREEN actual compiled A9 CI42284421243 passed 175 checks and independent android offline platform CI42284421421 completed success netstandard2.1 world/local identity secure save paths, corrupt ID and symlink guards. Scope closes; LOCAL-005 overall remains OPEN; power-loss durability/device not proved."
 }
