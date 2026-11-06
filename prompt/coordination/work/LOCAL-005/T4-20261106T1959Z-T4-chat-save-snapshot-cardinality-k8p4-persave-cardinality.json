@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1959Z-T4-chat-save-snapshot-cardinality-k8p4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "original-savegame-snapshot-per-call-cardinality",
+  "status": "active",
+  "base_sha": "60c1b859e86c83d73c556dcdf1b0e9cfdf8f7f0f",
+  "approach": "Make immutable CL original SaveGame stage evidence fail closed when duplicate Save.argumentFileSnapshot markers occur in a single Save() call, or when another Save() call exits without its own snapshot. Source-only synthetic tests plus authenticated pinned owner JSONL workflow, no world data readback and no game/Unity change.",
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "experiment_key": "T4-owner5nov-SaveGame-perSave-snapshot-EXACTLY-ONE-sourceonly-v1",
+  "resource_key": "owner5nov-readonly-JSONL-percall-state",
+  "related_work": [
+    "20261106T1946Z-T4-chat-original-load-cycles-h5m8",
+    "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2"
+  ],
+  "concurrent_work": "T4 20261106T1957Z profile first-create fsync owns LocalProfileStore.cs and OfflineSessionIdentity/Program.cs ONLY; T5 native run42281310905 remains in progress; no overlap or duplicate workflow dispatch.",
+  "run_urls": [],
+  "updated_at": "2026-11-06T19:59:00Z",
+  "next_step": "Commit adversarial source-only regression first and obtain expected RED; add minimal per-Save call snapshot cardinality guard then get GREEN 5-Nov pinned real owner evidence in automatic T4 YAML."
+}
