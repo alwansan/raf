@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "12318c5849d17316a488fa14a8304396843542dc",
-  "updated_at": "2026-11-06T15:17:30.027Z",
+  "updated_at": "2026-11-06T15:24:32.504Z",
   "resumed_from_sessions": [
     "20261106T1511Z-T1-scheduled-invocation-cli-k7m2",
     "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
@@ -26,7 +26,11 @@
   "experiment_key": "water001-candidate-only-keyed-real-vulkan-trace-originalzip2sha15964ea8-test-cli-v1",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
   "resource_key_unit": "t1-fft-invocation-pair-evidence-4m-python",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Run CLI 5 synthetic tests on current head first, then source-private --invocation-keys candidate on pinned original ZIP2; record actual keyed records-by-site and status; do not claim two GPU captures until original independently instrumented."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42241766200",
+    "https://github.com/alwansan/raf/actions/runs/42242015941",
+    "https://github.com/alwansan/raf/actions/runs/42242127723"
+  ],
+  "result": "Source-only 42242015941 SUCCESS 74/74 tests: original suite 61 + scheduled CLI 5 + candidate keyed audit 8. Original source-authentic Vulkan run 42242127723 in_progress with apt dependency installation; candidate keyed compile/dispatch/readback not yet verified. No original independent keyed capture, no paired same-input numeric verdict, WATER-001 OPEN.",
+  "next_step": "Inspect run 42242127723 after apt/source stage, require RAFT_T1_HLSL_KEYED_CANDIDATE_TRACE and nonempty per-site unique invocation keyed record counts, then checkpoint. On any failure correct minimal source and only then rerun changed CI; preserve script private data."
 }
