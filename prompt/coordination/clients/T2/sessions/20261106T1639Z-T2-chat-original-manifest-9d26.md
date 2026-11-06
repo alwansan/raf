@@ -33,3 +33,8 @@
 - Phone owner [artifact 42058825739](https://github.com/alwansan/raf/actions/runs/42058825739) had working world/save/reload and unresolved water; independent, older device result. `WATER-001` OPEN and game NOT_READY. No jobs cancelled/overridden or asset packages modified.
 - work_status: `completed` for this experiment only; run_urls: `42255582427` fail staging, `42255987406` safe isolated fail, `42256271654` pass, `42256633561` final pass.
 - next_step: verify genuine Unity external GUID and original Shader ownership for the two typed candidates in private SHA-pinned stage; only then trace a real Foam render Material/CB0 upload and test Unity/Adreno, coordinate any parser/Material changes with T3 and FFT shader source with T1. Do not rerun equivalent original experiments without new hypothesis or source.
+
+## Canonical team summary refresh independent blocker
+- The event path auto-triggered [T2 canonical summary CI 42257148394](https://github.com/alwansan/raf/actions/runs/42257148394). It FAILED because unrelated existing T3 event `prompt/coordination/B_TEAM/events/T3/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.json` lacks the required `id` or `event_id` (`refresh_b_team.py::read_records`), not because of this WATER-001 source result.
+- No T3 event/issue record rewritten. Dedicated T2→T3 coordination note: `prompt/coordination/discussions/RENDER-002/20261106T1639Z-T2-chat-original-manifest-9d26-T3-ledger-id-blocker.md` at commit `f4c90907dc6347a17196fe4bb998a9d544b99dca`.
+- T_TEAM/SUMMARY.md and snapshot.json **not claimed refreshed**. T3 should add its event identity preserving provenance, then existing trigger/generator can run with current ledger. Work for this T2 source-original scope remains completed and WATER-001 OPEN.
