@@ -1,0 +1,14 @@
+{
+  "id": "20261106T110543Z-T1-chat-cfgreach-f4d9",
+  "owner": "T1",
+  "session_id": "20261106T110543Z-T1-chat-cfgreach-f4d9",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original slot0 FFT CFG may-reach audit reduced direct Function-local writers 3->1 (source/site1) and 8->1 (butterfly site2) for X/Y. Each lane still has an alias_store hazard; true reaching definition and original integer-coordinate semantics remain unproven. Source-authentic CI 42208261641 (13/13) and 42208932160 (16/16) passed. No shader rewrite or Android fix.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42208261641",
+    "https://github.com/alwansan/raf/actions/runs/42208932160",
+    "https://github.com/alwansan/raf/commit/22c0a6f6017286d30b0f3c4fcb6550d924ceb3a4"
+  ],
+  "at": "2026-11-06T11:18:27.553Z"
+}
