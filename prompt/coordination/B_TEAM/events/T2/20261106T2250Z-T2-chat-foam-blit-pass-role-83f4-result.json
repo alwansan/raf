@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2250Z-T2-chat-foam-blit-pass-role-83f4-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2250Z-T2-chat-foam-blit-pass-role-83f4",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "at": "2026-11-06T23:00:57.041Z",
+  "summary": "Original SHA-pinned Foam Blit pass-specific proof: pass0 has directly typed RenderTexture source AND destination, pass1 remains unknown at both direct producer roles. CI42308583977 SUCCESS after synthetic regression fixes, 65+6 controls and Cecil selftest. No Android pixels or Unity runtime claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42308583977",
+    "https://github.com/alwansan/raf/commit/4e5f4d24e0049518928b0fe47db8adfa3b853db7",
+    "docs/T2_ORIGINAL_FOAM_BLIT_RENDER_TEXTURE_ROLES_2026-11-07.md"
+  ]
+}
