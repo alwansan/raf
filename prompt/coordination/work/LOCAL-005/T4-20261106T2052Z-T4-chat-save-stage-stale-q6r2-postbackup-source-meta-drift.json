@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2052Z-T4-chat-save-stage-stale-q6r2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "original-saveandload-path-portability-stale-post-backup-source",
+  "status": "active",
+  "base_sha": "70922d3736c55c716a7d4f7151fe7661c798912a",
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "tests/test_adapt_original_save_paths.py"
+  ],
+  "approach": "Deterministically inject a synthetic independent source or GUID meta write immediately after original SaveAndLoad backup directory promotion. RED baseline must fail to guard. Add preinstall byte and hardlink checks and clean only newly-owned backup before source mutation, then authenticate via existing original private ZIP2 save path CI. No world serializer/.rgd/schema changes.",
+  "hypothesis": "A second writer can change genuine SaveAndLoad.cs or its .meta after stage.rename(backup) and before path.write_bytes; the adapter currently installs a stale replacement or leaves a stranded backup, potentially overwriting a concurrent source edit.",
+  "experiment_key": "T4-authentic-save-path-adapter-post-backup-source-meta-drift-synthetic-interleaving-v1",
+  "resource_key": "T4-original-save-paths-source-CPU-original-ZIP2",
+  "related_work": [
+    "20261106T2044Z-T4-chat-mouse-plan-staleness-v3c8",
+    "20261106T1835Z-T4-chat-backup-byte-verify-z7n4",
+    "20261106T2035Z-T4-scheduled-native-failure-h7q2"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-06T20:52:00Z",
+  "next_step": "Add failing synthetic source/meta interleaving and validate RED via existing original-save-path CI; implement bounded fail-closed check and verify GREEN. Do not run Unity native or touch T5 workflows."
+}
