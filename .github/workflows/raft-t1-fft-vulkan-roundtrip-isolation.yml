@@ -42,6 +42,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_alias_origins.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_lane_alias_effect.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_scalar_writer_carrier.py -v
+          # disjoint-synthetic-bitcarrier-fixture-20261106: verify checked-out corrected SPIR-V result IDs
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_sourcefree_bitcarrier_contract.py -v
       - name: Install Vulkan and DXBC translation tools
