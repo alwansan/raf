@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T0420Z-T2-scheduled-opdecorate-91af",
+  "origin": "scheduled",
+  "agent": "T2",
+  "issue": "WATER-001",
+  "status": "in_progress",
+  "baseline_sha": "97052b8fcaea32074f9945a1acc7788dc2c285f0",
+  "hypothesis": "Malformed OpDecorate with word count below 3 currently bypasses fail-closed decoration scan, risking unsupported private SPIR-V metadata.",
+  "files": [
+    "scripts/t2_foam_private_descriptor_set_remap.py",
+    "tests/test_t2_foam_private_descriptor_set_remap.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0420Z-T2-scheduled-opdecorate-91af.md"
+  ],
+  "experiment_key": "T2-spirv-malformed-opdecorate-wordcount-v1",
+  "shared_resource": "none; source-free scanner only",
+  "taken_over_from": [
+    "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c",
+    "20261106T0316Z-T2-scheduled-cb0-gate-7e42"
+  ],
+  "owner_device_run": 42058825739,
+  "scope": "Only synthetic parser hardening; no private shader data, Unity, APK, audio, settings or touch."
+}
