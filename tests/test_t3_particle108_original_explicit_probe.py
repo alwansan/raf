@@ -51,7 +51,9 @@ class OriginalExplicitStageRunnerTests(unittest.TestCase):
         self.assertEqual(result["counts"]["private_compiler_invocations"],16)
         self.assertEqual(result["counts"]["private_spirv_val_invocations"],16)
         self.assertEqual(result["counts"]["verified_original_register_rows"],24)
-        self.assertEqual(len(self.calls),32)
+        self.assertEqual(result["counts"]["private_unmapped_baseline_compiler_invocations"],8)
+        self.assertEqual(result["counts"]["private_unmapped_baseline_spirv_val_invocations"],8)
+        self.assertEqual(len(self.calls),48)
         self.assertTrue(result["explicit_DX_source_register_to_chosen_VK_target_proven_by_dual_profile"])
         self.assertFalse(result["ShaderLab_program_recovered_or_Unity_Android_pixels_proven"])
         for value in ("safe-fake-spv","T3MAP1","source.dxbc","private-pair-"):
@@ -60,7 +62,7 @@ class OriginalExplicitStageRunnerTests(unittest.TestCase):
     def test_nonzero_compiler_is_not_laundered_as_valid_original_proof(self):
         def no_compile(argv,**kwargs):
             return SimpleNamespace(returncode=7)
-        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_COMPILER_NONZERO_EXIT_7"):
+        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_BASELINE_COMPILER_NONZERO_EXIT_7"):
             self.run_probe(runner=no_compile)
 
     def test_invalid_spirv_validator_is_fatal_before_pair_verification(self):
@@ -69,8 +71,23 @@ class OriginalExplicitStageRunnerTests(unittest.TestCase):
                 return SimpleNamespace(returncode=1)
             Path(argv[2]).write_bytes(b"test-spv"*4)
             return SimpleNamespace(returncode=0)
-        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_SPIRV_INVALID"):
+        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_BASELINE_SPIRV_INVALID"):
             self.run_probe(runner=invalid_spv)
+
+    def test_exact_same_original_stage_baseline_passes_but_explicit_binding_is_rejected(self):
+        attempts=[]
+        def baseline_ok_explicit_invalid(argv,**kwargs):
+            attempts.append(tuple(argv))
+            if argv[0]=="spirv-val":
+                return SimpleNamespace(returncode=0)
+            if len(argv)==4 and argv[3]=="D":
+                Path(argv[2]).write_bytes(b"synthetic-unmapped-spv"*2)
+                return SimpleNamespace(returncode=0)
+            return SimpleNamespace(returncode=44)
+        with self.assertRaisesRegex(
+                ValueError,"T3_PRIVATE_EXPLICIT_AFTER_VALID_BASELINE_COMPILER_NONZERO_EXIT_44"):
+            self.run_probe(runner=baseline_ok_explicit_invalid)
+        self.assertEqual([x[3] for x in attempts if len(x)==4 and x[0]!="spirv-val"],["D"])
 
     def test_missing_compiler_output_is_an_error(self):
         with self.assertRaisesRegex(ValueError,"T3_PRIVATE_OUTPUT_MISSING"):
