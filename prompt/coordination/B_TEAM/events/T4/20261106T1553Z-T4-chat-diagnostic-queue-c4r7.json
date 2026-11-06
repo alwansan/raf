@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
+  "owner": "T4",
+  "session_id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "at": "2026-11-06T16:03:21.858Z",
+  "summary": "Corrected PersistentDiagnosticLog transient startup I/O fault handling: failed Append retains pending original full event and overflow lost-count; critical writes refuse queue over-capacity. Final source f674025 CI42248437096 SUCCESS 285 managed synthetic checks, red old source CI42247880072 lost dropped marker. No Android phone or Unity acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/f674025abb39242ec34ea978d0f17fd6da5d2627",
+    "https://github.com/alwansan/raf/commit/73cfdc1878607bdb185ab40cc527807c4e09f71f",
+    "https://github.com/alwansan/raf/actions/runs/42247880072",
+    "https://github.com/alwansan/raf/actions/runs/42248437096"
+  ],
+  "source_scope_completed": true,
+  "device_confirmed": false,
+  "gameplay_world_persistence_confirmed": false,
+  "updated_at": "2026-11-06T16:03:21.858Z"
+}
