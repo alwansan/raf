@@ -1,0 +1,16 @@
+{
+  "event_id": "T4-20261106T0740Z-zero-view-identity-guard-p4k8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "kind": "source_fix_waiting_ci",
+  "source_commit": "d234b10e431e9b1f416456c5e767d70e49680397",
+  "test_commit": "446bc1f0a0817189a38db4803678e74dc27058db",
+  "work": "prompt/coordination/work/INPUT-005/T4-20261106T0740Z-T4-scheduled-p4k8-zero-identity-guard.json",
+  "session": "prompt/coordination/clients/T4/sessions/20261106T0740Z-T4-scheduled-p4k8.md",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42182264435",
+    "https://github.com/alwansan/raf/actions/runs/42182264431"
+  ],
+  "limitations": "Source fix not yet CI-confirmed, no Android phone test; owner local world/save success limited to artifact 42058825739.",
+  "updated_at": "2026-11-06T07:48:00Z"
+}
