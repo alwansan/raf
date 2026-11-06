@@ -1,0 +1,18 @@
+{
+  "id": "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+  "session_id": "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "authentic_original_clr_save_read_compatibility",
+  "at": "2026-11-06T02:26:00Z",
+  "timestamp": "2026-11-06T02:26:00Z",
+  "summary": "Authentic owner 5 Nov Raft phone CL@520c snapshot contains seven distinct World/*.rgd files. New pinned source-private .NET8 original compiled Load<T> run42150216417 SUCCESS: exact original DLL+151 siblings, all seven Git blob authentic; BinaryFormatter object 7/7, actual original SaveAndLoad.Load<T> invoked 7/7 and returned matching original CLR type 7/7; 12/12 adversarial intake tests, tampering rejected. Prior three 4Nov regression CI42149781353 SUCCESS. Source CLR only, no Unity Android build/phone progress test; LOCAL-005 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42150216417",
+    "https://github.com/alwansan/raf/actions/runs/42149781353",
+    "prompt/coordination/experiments/T4/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.json"
+  ],
+  "device": "NEW_NATIVE_DEVICE_REGRESSION_NOT_TESTED",
+  "raw_user_world_data_published": false
+}
