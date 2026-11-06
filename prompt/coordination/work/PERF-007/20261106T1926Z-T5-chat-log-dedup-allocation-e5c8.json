@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "PERF-007",
   "track": "runtime diagnostics CPU/managed GC during repeated Unity render errors",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ec625dfa82914244deb1709b99e41bab63cd95c2",
-  "updated_at": "2026-11-06T19:26:00Z",
+  "updated_at": "2026-11-06T19:30:00Z",
   "resumed_from_sessions": [
     "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
     "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
@@ -34,7 +34,22 @@
     "android-port/Runtime/Platform/PersistentDiagnosticLog.cs existing RepeatedDiagnosticMessages"
   ],
   "coordination": "T1 FFT, T2 Foam, T3 original shader and T4 offline/local scopes untouched; T5 scheduled PID session owns scripts/t5_cl_pid_epoch_audit.py only. No modifications to LogRaft app or native request.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Run fail-first .NET8 allocation regression on original code; implement composite key, verify all source-only diagnostic tests and bound memory; report no phone FPS improvement claimed."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42279780260",
+    "https://github.com/alwansan/raf/actions/runs/42279975562",
+    "https://github.com/alwansan/raf/actions/runs/42279975538",
+    "https://github.com/alwansan/raf/actions/runs/42279975514"
+  ],
+  "result": {
+    "status": "SOURCE_ONLY_RED_GREEN_SUCCESS",
+    "red_ci": 42279780260,
+    "source_fix_commit": "4e909cac516b021b23e06e55e2a1d72cc3777e67",
+    "green_ci": 42279975562,
+    "green_checks": 314,
+    "repeat_allocations_under_bytes": 131072,
+    "android_platform_ci_success": true,
+    "local_startup_ci_success": true,
+    "game_fps_verified": false
+  },
+  "next_step": "Scope complete/released; continue original shader/FFT source integration or device A/B after material trial approval."
 }
