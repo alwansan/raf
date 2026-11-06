@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1835Z-T4-chat-backup-byte-verify-z7n4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Offline original-source staging must fail before mutation when a successful copy2 silently corrupts a .cs or optional .cs.meta backup.",
+  "source_commit": "2ca4541c4b5ed5c9b81e737ae021080f05fe04d4",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub-hosted Python 3 unittest"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v"
+  ],
+  "negative_controls": [
+    "Test-only 493c4e35 CI42272204049: two synthetic corrupt backup subcases failed with ValueError not raised; 21 pre-existing test cases passed."
+  ],
+  "workflow_path": ".github/workflows/raft-b13-offline-source-transaction.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42272236452",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42272236452/artifacts/13529597284"
+  ],
+  "budget": "source-only CI; no native Unity build",
+  "status": "completed",
+  "observed_result": "Source test job 128079447681 SUCCESS 22/22 on 2ca4541c; workflow aggregate FAILURE from separate refresh_b_team.py T3 event identity schema (job 128079529176). Original startup and B07 jobs pending at checkpoint.",
+  "rejected_hypotheses": [
+    "shutil.copy2 returning normally always guarantees backup byte equality"
+  ],
+  "limitations": [
+    "Synthetic file copies, no authentic original source accessed in B13 test",
+    "No Unity, Android IL2CPP or phone acceptance",
+    "Unrelated summary-refresh job fails independently"
+  ],
+  "integration_commit": "2ca4541c4b5ed5c9b81e737ae021080f05fe04d4",
+  "next_step": "Check runs 42272236313 and 42272236197; T3/T5 handle own event schema; source scope completed."
+}
