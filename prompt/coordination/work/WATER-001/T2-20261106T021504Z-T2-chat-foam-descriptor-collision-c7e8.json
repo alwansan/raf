@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e41ee753de4342aff8e1359f258a03c05fab584a",
   "experiment_key": "zip2_15964ea8_Foam_full_private_ShaderLab_spirv_VSFS_descriptor_set_binding_type_overlap_v1",
   "resource_key": "Foam/Shader2420/privateVulkan1.1/2pass+4stages/descriptor-layout",
@@ -31,7 +31,44 @@
     "docs/T2_FOAM_PRIVATE_VULKAN_DESCRIPTOR_LAYOUT_2026-11-06.md"
   ],
   "prior_verified": "CI42146401691 all actual SPIR-V vertex↔fragment numeric varying 3/3 and 2/2; existing source-original Stage HLSL 4/4; source UBO/Sampler registries and per-stage actual descriptor cross-stage collision not yet measured. WATER-001 OPEN.",
-  "run_urls": [],
-  "updated_at": "2026-11-06T02:15:04Z",
-  "next_step": "Implement independent descriptor set/binding/class collision check on fully assembled original private ShaderLab and source-authentic CI."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42149571827"
+  ],
+  "updated_at": "2026-11-06T02:24:36Z",
+  "next_step": "Four real compiled per-pass Vulkan descriptor-type collisions established, 2 in each pass; unmodified stage SPIR-V cannot share one binding layout as-is. Source-bounded experiment to remap Fragment DescriptorSet decoration only in private SPIR-V, preserving non-decoration bytecode, then explicit runtime binding/Unity importer remains mandatory; WATER-001 OPEN.",
+  "source_commit": "375ade378ae990cdcbd06274fa25358d76e98c04",
+  "result": {
+    "conclusion": "SUCCESS",
+    "run_id": 42149571827,
+    "job_id": 127669230458,
+    "source_authenticated": true,
+    "original_private_ShaderLab_bytes": 9731,
+    "passes": 2,
+    "stage_variants_compiled_SPIRV_valid": 4,
+    "synthetic_old_controls": 41,
+    "synthetic_new_controls": 14,
+    "synthetic_total_controls": 55,
+    "stage_pass0": {
+      "vs_descriptors": 3,
+      "fs_descriptors": 11,
+      "shared_binding_pairs": 3,
+      "sampler_vs_UBO_conflicts": 2,
+      "texture_vs_UBO_conflicts": 0,
+      "CB_block_extent_differences": 1
+    },
+    "stage_pass1": {
+      "vs_descriptors": 3,
+      "fs_descriptors": 3,
+      "shared_binding_pairs": 3,
+      "sampler_vs_UBO_conflicts": 1,
+      "texture_vs_UBO_conflicts": 1,
+      "CB_block_extent_differences": 1
+    },
+    "cross_stage_different_descriptor_type_conflicts": 4,
+    "shared_descriptor_array_mismatches": 0,
+    "original_unmodified_shared_set_layout_compatible": false,
+    "original_Unity_stage_descriptor_remapping_verified": false,
+    "original_CB0_material_texture_upload_verified": false,
+    "actual_Adreno_water_pixels_verified": false
+  }
 }

@@ -1,0 +1,13 @@
+{
+  "id": "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8-result",
+  "owner": "T2",
+  "session_id": "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T02:24:36Z",
+  "summary": "Original SHA-proven full Foam private 2-pass ShaderLab actual four SPIR-V Vulkan stages: numeric VS-FS varying locations match, BUT per-pass Vulkan descriptor set binding classes collide 2+2=4 times (3 UBO-vs-Sampler, 1 UBO-vs-SampledImage); two CB extent differences. CI42149571827 SUCCESS, 55 synthetic tests. This is a compiled-source candidate limitation, not Unity/Adreno proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42149571827"
+  ]
+}

@@ -7,8 +7,8 @@
     "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
     "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
     "reconstruction": "ORIGINAL_FOAM_PRIVATE_2PASS_9731B_SHADERLAB_4STAGES_VULKAN11_COMPILED_AND_VALIDATED_NUMERIC_VS_FS_VARYINGS_MATCH_BOTH_PASSES",
-    "binding": "ORIGINAL_VS_FS_SPIRV_NUMERIC_LOCATION_TYPE_ARRAY_P0_3_OF_3_P1_2_OF_2;_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_NOT_VERIFIED",
-    "integration": "CI42146401691_SUCCESS_ALL_41_SYNTHETIC_TESTS;_UNITY_SHADERLAB_IMPORT_NOT_RUN",
+    "binding": "AUTHENTIC_VULKAN_STAGE_IO_PASS0_3_OF_3_PASS1_2_OF_2;_FOUR_NUMERIC_DESCRIPTOR_CLASS_COLLISIONS_AS_COMPILED_2_EACH_PASS;_CB0_UPLOAD_MATERIAL_TEXTURE_UNVERIFIED",
+    "integration": "CI42149571827_SUCCESS_55_CONTROLS_4_ORIGINAL_SPIRV_STAGES;_UNITY_IMPORT_AND_RUNTIME_DESCRIPTOR_REMAP_UNVERIFIED",
     "device": "NOT_TESTED"
   },
   "observed": {
@@ -33,14 +33,22 @@
     "numeric_varying_abi_pass1_total": 2,
     "numeric_varying_location_or_type_mismatches": 0,
     "source_original_VS_FS_numeric_varying_compatibility_proven": true,
-    "source_original_semantics_or_interpolation_verified": false
+    "source_original_semantics_or_interpolation_verified": false,
+    "cross_stage_numeric_descriptor_type_conflicts": 4,
+    "numeric_descriptor_conflicts_pass0": 2,
+    "numeric_descriptor_conflicts_pass1": 2,
+    "shared_UBO_block_size_differences": 2,
+    "cross_stage_unmodified_Vulkan_layout_compatible": false,
+    "synthetic_tests_passed": 55,
+    "original_Unity_descriptor_remapping_verified": false
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42125000030",
     "https://github.com/alwansan/raf/actions/runs/42125847863",
     "https://github.com/alwansan/raf/actions/runs/42143981891",
     "https://github.com/alwansan/raf/actions/runs/42144036981",
-    "https://github.com/alwansan/raf/actions/runs/42146401691"
+    "https://github.com/alwansan/raf/actions/runs/42146401691",
+    "https://github.com/alwansan/raf/actions/runs/42149571827"
   ],
-  "next_step": "Original numeric two-pass cross-stage VS/FS varyings match 3/3 and 2/2; still require exact Unity 2021 ShaderLab importer/CB0 dynamic Material.SetTexture upload and Adreno water testing."
+  "next_step": "Four real compiled per-pass Vulkan descriptor-type collisions established, 2 in each pass; unmodified stage SPIR-V cannot share one binding layout as-is. Source-bounded experiment to remap Fragment DescriptorSet decoration only in private SPIR-V, preserving non-decoration bytecode, then explicit runtime binding/Unity importer remains mandatory; WATER-001 OPEN."
 }
