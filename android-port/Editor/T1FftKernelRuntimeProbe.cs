@@ -97,7 +97,14 @@ public static class T1FftKernelRuntimeProbe
             try
             {
                 foreach (var keyword in keywords)
+                {
                     shader.EnableKeyword(keyword);
+                    // Unity can silently ignore undeclared compute keywords.
+                    // A nominally unique manifest selector is not evidence
+                    // unless this actual imported shader enables it.
+                    if (!shader.IsKeywordEnabled(keyword))
+                        throw new InvalidOperationException("T1 authored FFT keyword not enabled in imported shader");
+                }
                 if (!shader.HasKernel(row.kernel_name))
                     throw new InvalidOperationException("T1 staged authored runtime kernel name absent");
                 int kernelId = shader.FindKernel(row.kernel_name);
