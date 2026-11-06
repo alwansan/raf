@@ -21,7 +21,7 @@ def trace(change=False):
         records.append(INVOCATION_RECORD.pack(
             site, 1, 2, 3, 0, coordinate_x, 5, 0, 0x3f800000, 0, 0, 0))
     payload = struct.pack("<I", len(records)) + b"".join(records)
-    return payload.ljust(INVOCATION_SIZE, b"\\x00")
+    return payload.ljust(INVOCATION_SIZE, bytes([0]))
 
 
 class PairGateSyntheticTests(unittest.TestCase):
