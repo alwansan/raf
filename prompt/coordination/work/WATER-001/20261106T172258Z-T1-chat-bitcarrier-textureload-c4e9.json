@@ -6,9 +6,9 @@
   "session_id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
   "issue_id": "WATER-001",
   "track": "Independent original-free Unity2021 OpenGLCore float-bitcarrier sampled-image address discriminator",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "7c04928db1f45f4e66a656286bacc9e055bfea10",
-  "updated_at": "2026-11-06T17:22:58Z",
+  "updated_at": "2026-11-06T17:25:31.259Z",
   "resumed_from_sessions": [
     "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
     "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4",
@@ -35,7 +35,10 @@
     "https://github.com/alwansan/raf/actions/runs/42198180194"
   ],
   "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not downloaded)",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42261467757"
+  ],
   "result": null,
-  "next_step": "Create synthetic code/workflow with source-only tests; run Unity actual source-free texture load and record per-site direct/bitcarrier mismatches to reject/retain backend primitive hypothesis. No main native build."
+  "next_step": "Poll 42261467757 exact final job/steps; read RAFT_T1_BITCARRIER_TEXTURE_COUNTS + RAFT_T1_BITCARRIER_NUNIT safe markers. If metrics fail inspect direct-vs-carried site category; if never reached investigate Unity compile stage. No raw GameCI logs, no another equivalent CI.",
+  "source_commit": "2373a9310c659520e46479a0373d2b44f0d26134"
 }
