@@ -147,6 +147,16 @@ def compare(first, second):
 
 
 def main():
+    # Keep the original documented "python3 scripts/t5_cl_fps_cohort_gate.py"
+    # entry point working, not only "python3 -m scripts.t5_cl_fps_cohort_gate".
+    # Its sibling PID-epoch audit imports this module by package name, while
+    # direct file execution otherwise only puts the scripts/ directory on
+    # sys.path. Use the resolved local repo root, never an untrusted CL path.
+    if not __package__:
+        import sys
+        repo_root = str(Path(__file__).resolve().parents[1])
+        if repo_root not in sys.path:
+            sys.path.insert(0, repo_root)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--session-a", required=True, type=Path)
     parser.add_argument("--label-a", default="220911-559")
