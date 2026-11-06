@@ -6,11 +6,6 @@ name: T3 RENDER-002 genuine original scene Shader48 to postvendor GUID Dummy pri
 # question. Keep repeat of the expensive 12-owner export explicit/manual only.
 on:
   workflow_dispatch:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - 'scripts/t3_particle108_postvendor_delta.py'
-      - 'tests/test_t3_particle108_postvendor_delta.py'
 permissions:
   contents: read
 concurrency:
