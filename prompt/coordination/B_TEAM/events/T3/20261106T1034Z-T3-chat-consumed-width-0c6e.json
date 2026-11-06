@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "SHA-authentic Particle108 source four pairs and private HLSL regeneration: 18/18 source-free tests pass, source SPIR-V 4/4 VSFS link, roundtrip 2/4 link. Among four same-location Vertex output width changes, BOTH Fragment-consumed changes are vector-width NARROWING (2), BOTH unconsumed changes are widening (2). Roundtrip Fragment continues to expect source Vertex type for the 2 narrowed outputs. No semantic-to-HLSL variable identity, authored shader fixes, modified game assets, or Android pixel proof; RENDER-002 OPEN / NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42203844803",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json"
+  ],
+  "at": "2026-11-06T10:37:41.450Z"
+}
