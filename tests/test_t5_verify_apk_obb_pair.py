@@ -153,6 +153,27 @@ class PairTests(unittest.TestCase):
         self.write_manifest()
         self.rejected("Unsafe or duplicate")
 
+    def test_apk_unix_symlink_entry_rejected(self):
+        with zipfile.ZipFile(self.apk, "a") as archive:
+            link = zipfile.ZipInfo("assets/bin/Data/synthetic-link")
+            link.create_system = 3
+            link.external_attr = (0o120777 << 16)
+            archive.writestr(link, b"assets/bin/Data/globalgamemanagers")
+        self.write_manifest()
+        self.rejected("symbolic link")
+
+    def test_apk_encrypted_flag_rejected(self):
+        payload = bytearray(self.apk.read_bytes())
+        # Mutate one local and its matching central directory header.
+        for signature, offset in ((b"PK\\x03\\x04", 6), (b"PK\\x01\\x02", 8)):
+            pos = payload.find(signature)
+            self.assertGreaterEqual(pos, 0)
+            flags = struct.unpack_from("<H", payload, pos + offset)[0]
+            struct.pack_into("<H", payload, pos + offset, flags | 1)
+        self.apk.write_bytes(payload)
+        self.write_manifest()
+        self.rejected("Encrypted ZIP member")
+
     def test_obb_unix_symlink_entry_rejected(self):
         with zipfile.ZipFile(self.obb, "w") as archive:
             link = zipfile.ZipInfo("assets/link")
