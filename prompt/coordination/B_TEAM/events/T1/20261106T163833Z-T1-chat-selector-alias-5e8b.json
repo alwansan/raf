@@ -1,0 +1,22 @@
+{
+  "id": "20261106T163833Z-T1-chat-selector-alias-5e8b",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T163833Z-T1-chat-selector-alias-5e8b",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T16:46:00Z",
+  "summary": "Independent nominal Unity FFT compiled-slot selector-alias guard integrated in source staging and C# probe; final source-only CI 42255094227 PASS 8/8. Original runtime variant mapping, Unity Editor compile and Android water remain unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42255094227",
+    "https://github.com/alwansan/raf/commit/4fa8d1ba8e34c0b5b785e7e0f110a25fc97bae0c",
+    "https://github.com/alwansan/raf/commit/b898212e1d4878455961187aa9f1d263d9441770",
+    "https://github.com/alwansan/raf/commit/4b8b1552a9d84b9d2683a4a3230a3183f046a861",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261106T163833Z-T1-chat-selector-alias-5e8b.md"
+  ],
+  "limits": [
+    "WATER-001 OPEN; NOT_READY",
+    "Concurrently active T1 real paired trace untouched",
+    "Source-only synthetic tests; Unity/Adreno/device unverified"
+  ]
+}
