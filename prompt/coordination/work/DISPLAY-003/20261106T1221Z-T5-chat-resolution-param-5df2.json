@@ -4,9 +4,9 @@
   "session_id": "20261106T1221Z-T5-chat-resolution-param-5df2",
   "origin": "chat",
   "issue_id": "DISPLAY-003",
-  "status": "active",
+  "status": "completed_original_type_category_source_ci_verified",
   "base_sha": "8c2ef06bd8b40ff445c7ee12de0d8a0f2b451485",
-  "updated_at": "2026-11-06T12:22:06.921Z",
+  "updated_at": "2026-11-06T12:30:25.631Z",
   "resumed_from_sessions": [
     "20261106T1130Z-T5-chat-applycallers-c6e1.md",
     "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
@@ -28,5 +28,25 @@
   ],
   "coordination": "T5 scheduled tracks signed APK/OBB provenance; T1/T2/T3/T4 own water, shader, mouse and save. No shared runtime, private source or Unity changes. Last observed Actions all completed; independent source-only CI.",
   "constraints": "Keep original DLL and private type/method identifiers off public log; only bounded public API types/classes and counts. Must not call synthetic source-only pass phone resolution proof. One dedicated workflow; no full Unity or release actions.",
-  "next_step": "Run SHA-pinned original Cecil metadata and synthetic negative fixtures; determine if original parameter is UnityEngine.Resolution, int, bool, dropdown, custom struct, class, enum or other. Scope to original three callers; report no serialized UnityEvent proof."
+  "next_step": "Stop lower-value Settings probing while owner confirms Settings works; shift to original Android package/pixel/water integration with T1–T3. Keep alternate Unity serialized callback hypothesis open if future device regression arises.",
+  "source_commit": "82a8d38962f97bdae7ff9be030a44af72331e03a",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42217714507"
+  ],
+  "result": {
+    "run_id": 42217714507,
+    "job_id": 127891776765,
+    "conclusion": "success",
+    "python_tests": 9,
+    "cecil_synthetic": 8,
+    "source_verified": true,
+    "one_parameter_type": "custom_reference_type",
+    "one_parameter_caller_is_private": true,
+    "dropdown_value_set_sites": 4,
+    "dropdown_value_get_sites": 0,
+    "dropdown_refresh_sites": 1,
+    "direct_addlistener_sites": 0,
+    "android_selector_proven": false,
+    "phone_tested": false
+  }
 }
