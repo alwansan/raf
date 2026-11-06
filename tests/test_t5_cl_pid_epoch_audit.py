@@ -33,6 +33,20 @@ class EpochTests(unittest.TestCase):
         self.assertEqual(result["process_epoch_count"], 3)
         self.assertFalse(result["safe_to_aggregate_entire_session"])
 
+    def test_stop_restart_same_numeric_pid_is_not_one_lifetime(self):
+        stopped = {"state": "game_not_running", "pid": None,
+                   "pid_probe_status": "game_not_running"}
+        result = audit([sample(1), stopped, sample(2)])
+        self.assertEqual(result["process_epoch_count"], 3)
+        self.assertFalse(result["safe_to_aggregate_entire_session"])
+        self.assertEqual([e["fresh_presentation_samples"] for e in result["epochs"]], [1, 0, 1])
+
+    def test_stop_restart_different_pid_is_not_merged(self):
+        stopped = {"state": "game_not_running", "pid": None}
+        result = audit([sample(1), stopped, sample(2, 99)])
+        self.assertEqual(result["process_epoch_count"], 3)
+        self.assertFalse(result["safe_to_aggregate_entire_session"])
+
     def test_empty_rejected(self):
         with self.assertRaises(ValueError):
             split_verified_pid_epochs([])
