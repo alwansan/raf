@@ -92,8 +92,8 @@ def _parse_detail(text):
         raise EvidenceInputError("invalid_detail_type")
     # A valid prefix cannot override a later contradictory duplicate field.
     # Preserve optional unrelated diagnostic fields, but reject repeated keys.
-    if (len(re.findall(r"(?:^|;\\s*)exists_at_filename_argument=", text)) != 1
-            or len(re.findall(r"(?:^|;\\s*)length_class=", text)) != 1):
+    if (len(re.findall(r"(?:^|;\s*)exists_at_filename_argument=", text)) != 1
+            or len(re.findall(r"(?:^|;\s*)length_class=", text)) != 1):
         return "contradictory"
     match = SNAPSHOT_DETAIL.search(text)
     if not match:
