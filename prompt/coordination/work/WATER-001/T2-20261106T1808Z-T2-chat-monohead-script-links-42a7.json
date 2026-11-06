@@ -6,7 +6,7 @@
   "session_id": "20261106T1808Z-T2-chat-monohead-script-links-42a7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "e234bc8eeafd7957299e17755feaa08beb178951",
   "round_id": "trial-20261106-r1",
   "vote": "لا يحتاج",
@@ -34,10 +34,23 @@
     "CI42264851712 original SHA sharedassets0 and all 40 sharedassets Materials"
   ],
   "notes": "UnityPy1.25.4 generated MonoBehaviour typetree may have wrong m_Script header alignment; use original Unity class database header, never auto-generated full node without controlled layout check. Opaque component identifiers/names/private hashes never exported.",
-  "updated_at": "2026-11-06T18:13:03.671Z",
-  "next_step": "Initial 42268476115 failed pre-original source-free synthetic fixture only (test used {} dict instead of set); precise test-only fix 40d42257. Retry 42268585593 started; await exact 41-source-SHA counts, no duplicate launch, keep trial NO.",
+  "updated_at": "2026-11-06T18:15:43.047Z",
+  "next_step": "Source-only header recovery complete, WATER-001 OPEN. New distinct scope should authenticate actual external m_Script source providers against original manifest, type-check MonoScript PathIDs, then connect original managed custom fields and Foam runtime; no duplicate prior header run, no APK.",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42268476115",
     "https://github.com/alwansan/raf/actions/runs/42268585593"
-  ]
+  ],
+  "result": {
+    "source_original_SHA_verified_bytes": 349216084,
+    "opaque_original_component_count": 55328,
+    "opaque_original_MonoBehaviour_headers_parsed": 55328,
+    "opaque_script_refs_to_other_external_owners": 55328,
+    "original_sharedassets0_MonoScript_objects": 0,
+    "parsed_header_crosschecks": 128,
+    "sourcefree_tests_passed": 19,
+    "original_CI": "success",
+    "artifact_id": 13527627106,
+    "Android_water_fix_integrated": false,
+    "trial_vote": "لا يحتاج"
+  }
 }
