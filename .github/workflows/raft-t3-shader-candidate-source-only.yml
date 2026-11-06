@@ -59,7 +59,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends libvkd3d-dev gcc
           dpkg-query -W libvkd3d-dev libvkd3d-headers libvkd3d-shader1
-          gcc -std=c11 -Wall -Wextra -Werror -O2 -o "$RUNNER_TEMP/t3-private-vkd3d-graphics" scripts/t3_particle108_vkd3d_explicit_graphics.c -lvkd3d-shader
+          HEADER_DIR="$(dirname "$(dpkg -L libvkd3d-headers | grep -m1 '/vkd3d_shader.h
           python3 - <<'PY'
           from pathlib import Path
           import os,subprocess,tempfile
@@ -80,9 +80,38 @@ jobs:
               duplicate=lines[1].split()
               parts[-2:]=duplicate[-2:]
               lines[2]=" ".join(parts)
-              bad.write_text("\\n".join(lines)+"\\n")
+              bad.write_text("\n".join(lines)+"\n")
               assert subprocess.run([helper,"--check-map",str(bad),"A"],check=False,capture_output=True,timeout=5).returncode!=0
-              bad.write_text(files["A"].read_text()+"GARBAGE\\n")
+              bad.write_text(files["A"].read_text()+"GARBAGE\n")
+              assert subprocess.run([helper,"--check-map",str(bad),"A"],check=False,capture_output=True,timeout=5).returncode!=0
+          print("T3_VKD3D_PUBLIC_C_ABI_COMPILES=true SYNTHETIC_MAP_ACCEPT_REJECT=true")
+          PY
+)")"
+          test -f "$HEADER_DIR/vkd3d_shader.h"
+          gcc -std=c11 -Wall -Wextra -Werror -O2 -I "$HEADER_DIR" -o "$RUNNER_TEMP/t3-private-vkd3d-graphics" scripts/t3_particle108_vkd3d_explicit_graphics.c -lvkd3d-shader
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,subprocess,tempfile
+          from scripts.t3_particle108_explicit_map_packet import private_packets,private_write_packets
+          helper=os.environ["RUNNER_TEMP"]+"/t3-private-vkd3d-graphics"
+          layout=(("cbuffer",89,(2,8)),("srv",88,(3,)),("sampler",90,(1,)))
+          with tempfile.TemporaryDirectory(prefix="t3-map-synthetic-") as tmp:
+              files=private_write_packets(private_packets(layout,1)[0],Path(tmp))
+              for name,path in files.items():
+                  r=subprocess.run([helper,"--check-map",str(path),name],check=False,capture_output=True,timeout=5)
+                  assert r.returncode==0 and b"T3_EXPLICIT_MAP_SYNTAX_ACCEPTED_ONLY" in r.stdout
+              # An incorrect requested profile, duplicate target, and extra token must fail closed.
+              bad=Path(tmp)/"invalid.map"
+              bad.write_text(files["A"].read_text().replace("T3MAP1 V A","T3MAP1 V B",1))
+              assert subprocess.run([helper,"--check-map",str(bad),"A"],check=False,capture_output=True,timeout=5).returncode!=0
+              lines=files["A"].read_text().splitlines()
+              parts=lines[2].split()
+              duplicate=lines[1].split()
+              parts[-2:]=duplicate[-2:]
+              lines[2]=" ".join(parts)
+              bad.write_text("\n".join(lines)+"\n")
+              assert subprocess.run([helper,"--check-map",str(bad),"A"],check=False,capture_output=True,timeout=5).returncode!=0
+              bad.write_text(files["A"].read_text()+"GARBAGE\n")
               assert subprocess.run([helper,"--check-map",str(bad),"A"],check=False,capture_output=True,timeout=5).returncode!=0
           print("T3_VKD3D_PUBLIC_C_ABI_COMPILES=true SYNTHETIC_MAP_ACCEPT_REJECT=true")
           PY
