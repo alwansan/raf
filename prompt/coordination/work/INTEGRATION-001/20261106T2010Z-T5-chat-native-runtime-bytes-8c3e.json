@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "bb1824954bed52b48c7a14434b364ab445628fde",
+  "updated_at": "2026-11-06T20:10:56.354Z",
+  "resumed_from_sessions": [
+    "20261106T1959Z-T5-chat-texenv-structural-f6a9",
+    "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
+    "20261106T1950Z-T5-scheduled-zip-prefix-6f2a"
+  ],
+  "taken_over_from": [
+    "T4 original profile ID durable first-write source+IL evidence e9e6c0c7, CI42284421243 175 checks",
+    "T5 native/original managed 17-source filename manifest parity and CI tests"
+  ],
+  "intended_files": [
+    "scripts/t5_validate_runtime_staging_parity.py",
+    "tests/test_t5_runtime_staging_parity.py",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    ".github/workflows/raft-t5-native-runtime-byte-parity.yml",
+    "prompt/coordination/work/INTEGRATION-001/20261106T2010Z-T5-chat-native-runtime-bytes-8c3e.json",
+    "prompt/coordination/clients/T5/sessions/20261106T2010Z-T5-chat-native-runtime-bytes-8c3e.md",
+    "prompt/coordination/experiments/T5/20261106T2010Z-T5-chat-native-runtime-bytes-8c3e.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T2010Z-T5-chat-native-runtime-bytes-8c3e.json"
+  ],
+  "hypothesis": "Native Unity pipeline's 17-file source name parity does not attest that final unity-candidate/Assets/RaftAndroid/Platform contains exact current repository Android runtime C# bytes; a stale or mutated LocalProfileStore or any other runtime source could compile while name-parity gate reports PASS. Add bounded fail-closed byte equality in final staged project before Unity; test positive and corruption/alias/missing/extra negatives.",
+  "experiment_key": "T5-INTEGRATION-001-17-runtime-source-sha256-to-final-Unity-candidate-v1",
+  "resource_key": "T5 source-only runtime CI; no native Editor build or owner run 42281310905 modification",
+  "related_work": [
+    "T4 20261106T1957Z-T4-chat-profile-durable-create-q7b3",
+    "T5 20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9"
+  ],
+  "coordination": "Do not edit T4 LocalProfileStore or its tests; T1/T2/T3 water shaders, T4 local save/owner original source, T5 scheduled ZIP tester or native milestone tester paths untouched. Only insert fail-closed native staging guard on future source SHA, not in already-running owner-native immutable 42281310905.",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source/tests+source-only CI; verify live native workflow stage placement and actual runner result; record no phone/native claims."
+}
