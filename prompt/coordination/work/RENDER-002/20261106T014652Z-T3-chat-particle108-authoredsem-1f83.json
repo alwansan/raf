@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "20261106T014652Z-T3-chat-particle108-authoredsem-1f83",
+  "session_id": "20261106T014652Z-T3-chat-particle108-authoredsem-1f83",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-06T01:46:52.143Z",
+  "base_sha": "fddc216f936539d2278ddc58292689900aa3cb32",
+  "experiment_key": "T3-zip2-15964-sixscene-fourShaderOwner-Particle108-fourStagePairs-trueDXBC-ISGNOSGN-semantic-Mask-VSFS-noPrivates-v1",
+  "resource_key": "T3-private-original-Particle108-four-true-DXBC-VSFS-signature-audit",
+  "resumed_from_sessions": [
+    "20261106T013239Z-T3-chat-particle108-namebridge-6f42.md",
+    "20261106T0131Z-T3-scheduled-io-order-6d9a.md"
+  ],
+  "hypothesis": "Although compiler-reflected source→roundtrip SPIR-V names are disjoint (0/46), the four ORIGINAL DXBC VS/FS keyword pairs may carry parseable authored semantic input/output signature records (ISGN/OSGN/ISG1/OSG1) whose semantic/type/component coverage is complete. Verify source true semantic pairing before any I/O remap.",
+  "intended_files": [
+    "scripts/t3_original_particle108_dxbc_semantic_join.py",
+    "tests/test_t3_original_particle108_dxbc_semantic_join.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.json",
+    "prompt/coordination/clients/T3/sessions/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.md",
+    "prompt/coordination/experiments/T3/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.json",
+    "docs/T3_ORIGINAL_PARTICLE108_DXBC_SIGNATURE_2026-11-06.md",
+    "prompt/coordination/discussions/RENDER-002/20261106T014652Z-T3-chat-particle108-authoredsem-1f83-to-T5.md",
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+  ],
+  "constraints": [
+    "Read-only exact SHA-original private DXBC (no code/data output)",
+    "Reuse verified generic T3 ISGN/OSGN/ISG1/OSG1 strict reader, preserve source semantics only privately.",
+    "No shared scheduled T3 script or test changes.",
+    "No Shader, Material, APK/OBB, native Unity build or T4 input file edits."
+  ],
+  "run_urls": [],
+  "next_step": "Run genuine original Particle108 four D3D11 VS/FS pair strict authored semantic-mask/type join on existing six-scene source CI. Then compare original authored semantics to HLSL/Location in new experiment only if semantic extraction unambiguous; continue RENDER-002 OPEN."
+}
