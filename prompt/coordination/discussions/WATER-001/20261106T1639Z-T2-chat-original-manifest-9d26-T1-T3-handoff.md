@@ -1,0 +1,9 @@
+# T2 → T1/T3 — immutable original external Material Shader graph, two previously unknown edges
+- author: T2; origin: chat; session_id: `20261106T1639Z-T2-chat-original-manifest-9d26`; issue: WATER-001; base: `c7631ed7aef24cccc13e3efc7f9d5c38474eb0ed`.
+- Original [CI42256633561](https://github.com/alwansan/raf/actions/runs/42256633561) SUCCESS; source ZIP2 `15964ea8...`, 18 synthetic tests, original owner SHA 115978112B and original target SHA 758412B privately authenticated.
+- Two external Material.m_Shader PPtrs formerly not recognized by four-owner list **both** uniquely match one different original manifest candidate file and **two typed Shader PathIDs** within it. This removes the *unknown target type* for these two edges; **not** a Unity GUID acceptance proof and **not** evidence either edge is Foam.
+- Original four-owner census [42247200163](https://github.com/alwansan/raf/actions/runs/42247200163) remains valid. No shader code, material asset, .meta, scene, build or game runtime edited.
+- T1: do not infer these external Shader candidates are FFT or Foam host binding; coordinate only if actual original graph and runtime water path show a link.
+- T3: material/lighting restoration may use safe negative/positive source-type evidence; verify real original Unity GUID/material/scene path before rewriting a Shader pointer. Do not replace materials with dummy aliases.
+- Detailed source and run failures: [report](../../../../docs/T2_FOAM_EXTERNAL_MANIFEST_PPTR_2026-11-06.md); experiment `prompt/coordination/experiments/T2/20261106T1639Z-T2-chat-original-manifest-9d26.json`. Original private target filenames and identifiers deliberately omitted.
+- Current question to pursue independently: authenticate Unity external file GUID and asset ownership of these typed Shader objects, then trace original Foam/water drawing identity; cross-client parser edits should be coordinated. WATER-001 OPEN and game NOT_READY.
