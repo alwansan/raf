@@ -1,0 +1,51 @@
+{
+  "id": "T3-PARTICLE108-ORIGINAL-AUTHORED-PROPERTY-PASS-STATE",
+  "title": "Exact SHA-original 108-particle-slot Shader48 authored 13 properties and complete one-Pass fixed function ShaderLab fragment",
+  "kind": "private-original-property-pass-structural-fragment-not-program-or-device",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "scenes_SHA_verified": 6,
+    "original_Shader_Material_owners_SHA_verified": 4,
+    "original_Shader_Material_owner_bytes_verified": 269007288,
+    "unique_original_source_particle_material_use_slots": 108,
+    "distinct_original_particle_renderers": 54
+  },
+  "stages": {
+    "acquisition": "SOURCE_ZIP2_SHA_6_SCENES_4_OWNERS_VERIFIED",
+    "extraction": "EXACT_ORIGINAL_TYPED_Shader48_108_Particle_Use_Selected",
+    "reconstruction": "PRIVATE_STRUCTURAL_PROPERTIES_13_AND_SINGLE_PASS_RENDER_STATE_EXACT_NO_STAGE_PROGRAM",
+    "binding": "SAME_EXPORT_DUMMY_SOURCE_PROVEN_42223071341_BUT_PRIVATE_NEW_FRAGMENT_NOT_INSTALLED",
+    "integration": "NOT_INTEGRATED_OR_UNITY_COMPILED",
+    "device": "NOT_TESTED"
+  },
+  "counts": {
+    "declared_properties": 13,
+    "texture": 2,
+    "color": 1,
+    "vector": 0,
+    "float": 4,
+    "range": 6,
+    "parsed_original_subshaders": 1,
+    "parsed_original_passes": 1,
+    "full_source_pass_fixed_state_translated": 1,
+    "source_free_negative_controls_passed": 14,
+    "original_108_source_selector_verified": true,
+    "source_original_rgb_color_mask_preserved": true,
+    "source_stage_shader_programs_integrated": 0
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42226905270",
+    "https://github.com/alwansan/raf/actions/runs/42223071341",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T3/sessions/20261106T1337Z-T3-chat-particle108-propstate-62fb.md"
+  ],
+  "remaining": [
+    "Private property and fixed state fragment is intentionally NON-executable, has no HLSLPROGRAM. Never install it in Unity as if it were a restored shader.",
+    "Await separate T3 paired HLSL glslang stage-link experiment; four source keyword VSFS pairs must be implemented with 4/4 identity, samplers/CB/keyword and original pass state before any postvendor replacement.",
+    "Not proven that source Particle108 is the phone square-smoke emitter, that Unity compiles this candidate, or Android pixels are fixed. RENDER-002 OPEN."
+  ],
+  "private_property_values_names_ShaderLab_programs_published": false,
+  "updated_by": "T3",
+  "updated_at": "2026-11-06T13:40:50.701Z"
+}
