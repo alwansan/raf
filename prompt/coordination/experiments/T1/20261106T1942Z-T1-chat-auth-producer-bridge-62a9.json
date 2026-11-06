@@ -1,0 +1,65 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "source-safe-sha-pinned-original-spirv-site1x-input-sint32-bitcast-vs-hlsl-phi-private-typed-boundaries-plus-unity-computed-63-0-signature-proof-gap-v1",
+  "hypothesis": "Original SPIR-V Butterfly1.x signed32 Input bitcast writer and translated candidate float32 loop Phi with uint32 Private leaf differ in their accessible static boundaries; the 63-of-63 Unity synthetic zero-carrier signature demonstrates a relevant backend failure mode but does not establish the original runtime operand producer or numeric divergence.",
+  "tool": "scripts.t1_fft_original_phi_bridge",
+  "source_only": true,
+  "original_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_artifact": "tests/data/t1_fft_original_phi_evidence_public.json",
+  "evidence_sources": [
+    {
+      "run_id": 42220554705,
+      "commit": "00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f",
+      "stage": "original source private SSA writer marker"
+    },
+    {
+      "run_id": 42228497335,
+      "commit": "e936ad1f96c0bb0617a7a7199c2304c5f47442ff",
+      "stage": "translated HLSL private nested Phi marker"
+    },
+    {
+      "run_id": 42279949574,
+      "commit": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
+      "stage": "licensed Unity2021 OpenGLCore sourcefree 16-site GPU marker"
+    }
+  ],
+  "new_files": [
+    "scripts/t1_fft_original_phi_bridge.py",
+    "tests/test_t1_fft_original_phi_bridge.py",
+    "tests/data/t1_fft_original_phi_evidence_public.json",
+    ".github/workflows/raft-t1-fft-original-phi-bridge.yml"
+  ],
+  "result": {
+    "run_id": 42283086865,
+    "job_id": 128116844932,
+    "commit": "73e40fbbc591557cf8150f7bb36743acd8e22de5",
+    "conclusion": "success",
+    "unit_tests": "14/14 PASS",
+    "classification": "original_input_bitcast_vs_translated_private_loop_phi_gap",
+    "original_boundary": "sint32_input_vector_bitcast_to_float32",
+    "translated_boundary": "uint32_private_vector_through_float32_loop_phi",
+    "synthetic_computed_zero_signature_per_path": 63,
+    "synthetic_buffered_signature_per_path": 0,
+    "source_report_authenticated_by_this_gate": false,
+    "source_zip2_attested_by_previous_runs_only": true,
+    "sourcefree_no_assets": true
+  },
+  "negative_controls": [
+    "Reject unknown or duplicate JSON evidence fields, mismatching exact run IDs/SHAs and mismatching ZIP2 source pin.",
+    "Reject original wrong site/source type/bitcast chain, unknown alias/uninitialized paths and source promoted runtime claims.",
+    "Reject translated wrong Phi/Private type, number of incoming paths, missing loop-carried edge or promoted runtime predecessor proof.",
+    "Reject stale/incorrect synthetic Unity engine, dispatch/count signature, buffer controls, and fabricated game/Adreno success.",
+    "Do not emit private shader IDs, literal original values, pixel samples or runner-private hash digests."
+  ],
+  "limitations": [
+    "Evidence file is a manually transcribed bounded public subset of previous successful authenticated CI markers; a user-provided JSON alone cannot reauthenticate GitHub job log signatures or original game bytes.",
+    "The original Input signed32 vector and translated Private uint32 through loop Phi can be semantically equivalent through an intermediate copy; static difference is not numerical divergence proof.",
+    "The synthetic OpenGLCore float-bitcast zero signature is not itself proof of the original FFT failure, compiler FTZ cause, Android Adreno behavior, in-game FindKernel/Dispatch runtime mapping or actual device water fix.",
+    "The concurrently running full native Android build 42281310905 belongs to a separate workflow and was not cancelled or duplicated."
+  ],
+  "next_step": "After native Actions 42281310905 finishes naturally, use a dedicated authorized private run with SHA-pinned original ZIP2, actual paired original/Unity FFT keyed inputs and traces and C# CopyInput proof; apply t1_fft_private_unity_input_join and inspect dynamic candidate loop predecessor before minimal real shader fix. T1 trial vote remains لا يحتاج."
+}
