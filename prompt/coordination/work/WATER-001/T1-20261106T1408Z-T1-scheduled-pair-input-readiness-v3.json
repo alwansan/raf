@@ -2,7 +2,7 @@
   "session_id": "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "blocked",
   "base_sha": "70134bae931a241f3de981904e5c1aca5b67ee4c",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T1-20261106T1408Z-T1-scheduled-pair-input-readiness-v3.json",
@@ -15,5 +15,9 @@
     "20261106T133640Z-T1-chat-nested-phi-8d31",
     "20261106T1310Z-T1-scheduled-ulp32-m4q8"
   ],
-  "updated_at": "2026-11-06T14:08:00Z"
+  "updated_at": "2026-11-06T14:12:00Z",
+  "session_commit": "82a6a45f2665862baee986734d23aa020c692849",
+  "experiment_commit": "ee8f6b0ff881a9edd147901210d6b772e6a3a5d4",
+  "blocker": "No authenticated original/candidate paired invocation capture in inspected successful original/source-only runs; no numeric parity conclusion possible.",
+  "next_step": "Create private same-dispatch capture pair and run strict SHA gate; avoid duplicate provenance workflow."
 }
