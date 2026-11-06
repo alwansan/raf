@@ -49,11 +49,15 @@ MAX_INDEX=65535
 
 def _source_key(bucket, metadata):
     """Anonymous variant identity. Never return original private index literals."""
-    if type(metadata) is not dict or type(metadata.get("m_ShaderHardwareTier")) is not int:
+    if type(metadata) is not dict:
         raise ValueError("invalid_original_tier")
-    tier=metadata["m_ShaderHardwareTier"]
-    if tier<0 or tier>255 or (bucket is not None and
-                              (type(bucket) is not int or not 0<=bucket<32)):
+    # Some original serialized SubPrograms omit the optional tier field.
+    # Missing is NOT equivalent to tier 0; retain an explicit unknown sentinel.
+    tier=metadata.get("m_ShaderHardwareTier")
+    if "m_ShaderHardwareTier" in metadata:
+        if type(tier) is not int or not 0<=tier<=255:
+            raise ValueError("invalid_original_tier")
+    if bucket is not None and (type(bucket) is not int or not 0<=bucket<32):
         raise ValueError("invalid_original_bucket")
     tokens=set()
     family_counts=[]
@@ -101,15 +105,24 @@ def classify(pass_record:dict)->dict:
     additions=frozenset().union(*(set(s)-common for s in all_tokens))
     stripped={frozenset(set(s)-common) for s in all_tokens}
     # The actual index values/names cannot be exposed; prove only set shape.
-    two_toggle=(
-        len(groups)==1 and len(additions)==2 and len(stripped)==4
+    two_toggle_index_shape=(
+        len(additions)==2 and len(stripped)==4
         and stripped=={frozenset(),*map(frozenset,({x} for x in additions)),frozenset(additions)}
+    )
+    tier_tags_explicit=sum(tier is not None for _,tier,_ in observed)
+    # Even if four keyword SETS form a lattice, missing tier metadata means
+    # one-tier selection cannot be claimed from serialized evidence.
+    two_toggle=(
+        two_toggle_index_shape and len(groups)==1 and tier_tags_explicit==4
     )
     return {
         "schema_version":1,"status":STATUS,
         "source_original_stage_variants_per_stage":4,
         "source_original_VSFS_serialized_variant_keys_exact":True,
         "source_original_distinct_bucket_tier_groups":len(groups),
+        "source_original_explicit_tier_metadata_rows_per_stage":tier_tags_explicit,
+        "source_original_absent_tier_metadata_rows_per_stage":4-tier_tags_explicit,
+        "source_original_two_switch_index_set_shape_regardless_of_tier":two_toggle_index_shape,
         "source_original_keyword_baseline_intersection_count":len(common),
         "source_original_keyword_variable_index_dimension_count":len(additions),
         "source_original_exact_independent_two_toggle_index_lattice":two_toggle,

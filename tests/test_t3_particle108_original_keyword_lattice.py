@@ -94,6 +94,25 @@ class OriginalKeywordLatticeTests(unittest.TestCase):
         r=k.classify(pass_record(v,player=True))
         self.assertTrue(r["source_original_exact_independent_two_toggle_index_lattice"])
 
+    def test_missing_hardware_tier_is_not_invented_as_zero(self):
+        variants=[meta(),meta([1]),meta([2]),meta([1,2])]
+        for v in variants:
+            del v["m_ShaderHardwareTier"]
+        result=k.classify(pass_record(variants))
+        self.assertEqual(result["source_original_explicit_tier_metadata_rows_per_stage"],0)
+        self.assertEqual(result["source_original_absent_tier_metadata_rows_per_stage"],4)
+        self.assertTrue(result["source_original_two_switch_index_set_shape_regardless_of_tier"])
+        self.assertFalse(result["source_original_exact_independent_two_toggle_index_lattice"])
+        self.assertFalse(result["all_four_variants_selectable_in_one_Unity_ShaderLab_proven"])
+
+    def test_one_missing_tier_not_falsely_identified_as_explicit(self):
+        variants=[meta(),meta([1]),meta([2]),meta([1,2])]
+        del variants[0]["m_ShaderHardwareTier"]
+        result=k.classify(pass_record(variants))
+        self.assertEqual(result["source_original_explicit_tier_metadata_rows_per_stage"],3)
+        self.assertEqual(result["source_original_absent_tier_metadata_rows_per_stage"],1)
+        self.assertFalse(result["source_original_exact_independent_two_toggle_index_lattice"])
+
     def test_missing_or_boolean_tier_rejected(self):
         p=pass_record([meta(),meta([1]),meta([2]),meta([1,2])])
         p["progVertex"]["m_SubPrograms"][0]["m_ShaderHardwareTier"]=True
