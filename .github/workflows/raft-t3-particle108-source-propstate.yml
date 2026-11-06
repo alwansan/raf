@@ -1,0 +1,118 @@
+name: T3 RENDER-002 authentic original Particle108 private ShaderLab property and Pass state
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-source-propstate.yml'
+      - 'scripts/t3_particle108_source_propstate.py'
+      - 'tests/test_t3_particle108_source_propstate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-original-property-pass-state-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-shader-property-state:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free strict property/state controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_source_propstate.py tests/test_t3_particle108_source_propstate.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_source_propstate.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Constrain ZIP2 checkout to four original shader owners and scenes
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          out=Path(os.environ["RUNNER_TEMP"])/"t3-private-original-particle"
+          source=Path("zip2-source")
+          r=stage(source,out,{"Raft_Data/"+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED})
+          assert len(r["owners"])==4 and r["verified_bytes"]==269007288 and not r["lfs_used"]
+          for name,pin in PIN.items():
+              path=source/"Raft/Raft_Data"/name
+              verify_source(path,pin)
+              dst=out/"Raft_Data"/name
+              with path.open("rb") as reader,dst.open("xb") as writer:
+                  while chunk:=reader.read(1024*1024):
+                      writer.write(chunk)
+              verify_source(dst,pin)
+          print("T3_PARTICLE108_PRIVATE_AUTHENTIC_ORIGINAL_OWNERS=4;SCENES=6")
+          PY
+      - name: Read SHA-original selected Shader48 property table and complete one-Pass state only
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_particle108_source_propstate \
+            --original "$RUNNER_TEMP/t3-private-original-particle" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-dest "$RUNNER_TEMP/t3-original-particle108-PRIVATE-nonexecutable.txt" \
+            --out "$RUNNER_TEMP/t3-original-particle108-propstate-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])
+          report=json.loads((p/"t3-original-particle108-propstate-safe.json").read_text())
+          assert report["status"]=="T3_SHA_ORIGINAL_PARTICLE108_PRIVATE_PROPERTY_PASS_FRAGMENT"
+          assert report["six_original_scenes_sha_authenticated"] is True
+          assert report["four_original_Shader_Material_owner_sha_authenticated"] is True
+          assert report["source_particle_renderer_material_slots"]==108
+          assert report["original_fixed_function_selective_RGB_colormask_preserved"] is True
+          assert report["original_one_Pass_render_state_translated"] is True
+          assert report["original_keyword_VSFS_programs_integrated"] is False
+          assert report["native_Android_GPU_pixels_or_emitter_identity_verified"] is False
+          secret=p/"t3-original-particle108-PRIVATE-nonexecutable.txt"
+          assert secret.is_file() and 0<secret.stat().st_size<=2*1024*1024
+          assert "HLSLPROGRAM" not in secret.read_text()
+          print("T3_ORIGINAL_SOURCE_PROPERTY_STATE_RECONSTRUCTED_PRIVATE=true;UNREAL_SHADER_NOT_INSTALLED=true")
+          PY
+      - name: Retain only counts and fail-closed category; never original ShaderLab source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-particle108-source-propstate-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-particle108-propstate-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
