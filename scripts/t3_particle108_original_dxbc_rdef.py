@@ -173,6 +173,58 @@ def classify_four_pairs(pairs):
         "SPIRV_descriptor_set_mapping_proven":False}
 
 
+# Presence-only path avoids throwing away all eight authentic stage observations
+# just because one valid DXBC container has absent/multiple RDEF chunks.
+# It is never a substitute for a recovered binding table or working shader.
+STATUS_PRESENCE="T3_SHA_ORIGINAL_PARTICLE108_EIGHT_STAGE_RDEF_PRESENCE_ONLY"
+
+def classify_eight_stage_rdef_presence(pairs):
+    """Census exact eight source stages; any other malformed DXBC fails closed.
+
+    Only aggregate public counts are emitted. Binding details/names/IDs stay
+    private, and absence is not equated to a resource-free shader.
+    """
+    if (type(pairs) is not list or len(pairs)!=PAIRS or
+        any(type(pair) is not tuple or len(pair)!=2 for pair in pairs)):
+        raise ValueError("ORIGINAL_FOUR_DXBC_PAIRS_REQUIRED")
+    counts=Counter()
+    for vs,fs in pairs:
+        complete=True
+        for blob in (vs,fs):
+            counts["original_DXBC_stages_examined"]+=1
+            try:
+                source_rdef(blob)
+            except ValueError as exc:
+                reason=str(exc)
+                if reason=="DXBC_ORIGINAL_RDEF_ABSENT":
+                    counts["original_RDEF_absent_stages"]+=1
+                elif reason=="DXBC_ORIGINAL_RDEF_MULTIPLE":
+                    counts["original_RDEF_multiple_stages"]+=1
+                else:
+                    raise
+                complete=False
+            else:
+                counts["original_RDEF_unique_stages"]+=1
+        if complete:
+            counts["original_keyword_pairs_with_two_unique_RDEF_stages"]+=1
+    # Keep explicit zeros so consumers cannot mistake a missing field
+    # for an unmeasured original stage.
+    for key in ("original_RDEF_absent_stages","original_RDEF_multiple_stages",
+                "original_RDEF_unique_stages",
+                "original_keyword_pairs_with_two_unique_RDEF_stages"):
+        counts.setdefault(key,0)
+    if (counts["original_DXBC_stages_examined"]!=2*PAIRS or
+        sum(counts[k] for k in ("original_RDEF_absent_stages",
+              "original_RDEF_multiple_stages","original_RDEF_unique_stages"))!=2*PAIRS):
+        raise ValueError("ORIGINAL_EIGHT_STAGE_RDEF_PRESENCE_INVARIANT")
+    return {"schema_version":1,"status":STATUS_PRESENCE,
+        "source_original_keyword_pairs":PAIRS,"counts":dict(sorted(counts.items())),
+        "original_RDEF_register_layout_proven":False,
+        "original_DXBC_RDEF_register_numbers_names_types_or_bytecode_published":False,
+        "original_shader_program_Unity_compile_or_pixel_equivalence_proven":False,
+        "SPIRV_descriptor_set_mapping_proven":False}
+
+
 def probe(root,manifest):
     import UnityPy
     selected={}
@@ -199,7 +251,10 @@ def probe(root,manifest):
         baseline.get("original_D3D11_program_table_records")!=16):
         raise ValueError("original_paired_DXBC_shader_structure_changed")
     pairs=stage.exact_four_pairs(tree["m_ParsedForm"],platforms[0])
-    report=classify_four_pairs(pairs)
+    presence=classify_eight_stage_rdef_presence(pairs)
+    report=(classify_four_pairs(pairs) if
+            presence["counts"]["original_RDEF_unique_stages"]==2*PAIRS
+            else presence)
     report["source_original_six_scenes_SHA_authenticated"]=True
     report["source_original_four_owner_SHA_authenticated"]=True
     report["source_particle_renderer_material_slots"]=108
@@ -227,7 +282,7 @@ def main(argv=None):
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
     print("T3_ORIGINAL_PARTICLE108_DXBC_RDEF_SAFE="+json.dumps(report,sort_keys=True))
-    return 0 if report["status"]==STATUS else 2
+    return 0 if report["status"] in (STATUS,STATUS_PRESENCE) else 2
 
 
 if __name__=="__main__":
