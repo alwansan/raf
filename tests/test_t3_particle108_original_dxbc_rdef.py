@@ -5,6 +5,7 @@ import unittest
 
 from scripts.t3_particle108_original_dxbc_rdef import (
     source_rdef,_private_register_layout,classify_four_pairs,STATUS,SAFE_RDEF_FAILURE_REASON,
+    classify_eight_stage_rdef_presence,STATUS_PRESENCE,
 )
 
 
@@ -118,6 +119,48 @@ class OriginalRdefTests(unittest.TestCase):
         for bad in ([],fixtures()[:3],fixtures()+fixtures()[:1]):
             with self.assertRaisesRegex(ValueError,"ORIGINAL_FOUR_DXBC_PAIRS_REQUIRED"):
                 classify_four_pairs(bad)
+
+
+    def test_presence_census_eight_unique_reports_no_private_resources(self):
+        report=classify_eight_stage_rdef_presence(fixtures())
+        self.assertEqual(report["status"],STATUS_PRESENCE)
+        self.assertEqual(report["counts"]["original_DXBC_stages_examined"],8)
+        self.assertEqual(report["counts"]["original_RDEF_unique_stages"],8)
+        self.assertEqual(report["counts"]["original_RDEF_absent_stages"],0)
+        self.assertEqual(report["counts"]["original_RDEF_multiple_stages"],0)
+        self.assertEqual(report["counts"]["original_keyword_pairs_with_two_unique_RDEF_stages"],4)
+        self.assertIs(report["original_RDEF_register_layout_proven"],False)
+        self.assertNotIn("_PRIVATE",json.dumps(report))
+
+    def test_presence_census_mixed_absent_multiple_and_unique(self):
+        pairs=fixtures()
+        absent=bytearray(pairs[0][0])
+        absent[36:40]=b"ISGN"  # valid DXBC chunk, no RDEF
+        one=synthetic_dxbc([])
+        first=one[36:]
+        second_offset=40+len(first)
+        duplicate=(b"DXBC"+b"\\x00"*16+
+                   struct.pack("<III",1,second_offset+len(first),2)+
+                   struct.pack("<II",40,second_offset)+first+first)
+        # This is a VALID duplicate-RDEF DXBC container, not a malformed header.
+        self.assertEqual(len(duplicate),second_offset+len(first))
+        self.assertEqual(struct.unpack_from("<I",duplicate,24)[0],len(duplicate))
+        pairs[0]=(bytes(absent),duplicate)
+        report=classify_eight_stage_rdef_presence(pairs)
+        self.assertEqual(report["counts"]["original_RDEF_absent_stages"],1)
+        self.assertEqual(report["counts"]["original_RDEF_multiple_stages"],1)
+        self.assertEqual(report["counts"]["original_RDEF_unique_stages"],6)
+        self.assertEqual(report["counts"]["original_keyword_pairs_with_two_unique_RDEF_stages"],3)
+        self.assertEqual(report["counts"]["original_DXBC_stages_examined"],8)
+        self.assertNotIn("_PRIVATE",json.dumps(report))
+
+    def test_presence_census_rejects_other_corrupt_stage_before_safe_aggregate(self):
+        pairs=fixtures()
+        bad=bytearray(pairs[0][0])
+        struct.pack_into("<I",bad,40,2**32-1)
+        pairs[0]=(bytes(bad),pairs[0][1])
+        with self.assertRaisesRegex(ValueError,"DXBC_SOURCE_CHUNK_SIZE_INVALID"):
+            classify_eight_stage_rdef_presence(pairs)
 
 
 if __name__=="__main__":
