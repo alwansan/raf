@@ -15,7 +15,8 @@ internal static class Program
 
     private static void CreateZip(string dir, long version, bool unity,
         bool banks = false, bool emptyUnity = false, bool duplicateUnity = false,
-        bool duplicateBank = false, bool emptyDuplicateBank = false)
+        bool duplicateBank = false, bool emptyDuplicateBank = false,
+        bool emptyDuplicateUnity = false, bool emptyFirstUnity = false)
     {
         string path = Path.Combine(dir, "main." + version + "." + Package + ".obb");
         using (var file = File.Create(path))
@@ -23,9 +24,11 @@ internal static class Program
         {
             if (unity)
             {
-                Add(zip, "assets/bin/Data/synthetic-data-0", emptyUnity ? 0 : 4);
+                Add(zip, "assets/bin/Data/synthetic-data-0",
+                    (emptyUnity || emptyFirstUnity) ? 0 : 4);
                 if (duplicateUnity)
-                    Add(zip, "assets/bin/Data/synthetic-data-0", 2);
+                    Add(zip, "assets/bin/Data/synthetic-data-0",
+                        emptyDuplicateUnity ? 0 : 2);
             }
             if (banks)
             {
@@ -115,6 +118,27 @@ internal static class Program
             CreateZip(root, 92, true, duplicateUnity: true);
             Check(AndroidExpansionArchiveProbe.Inspect(root, Package, 92).Status ==
                 "ambiguous_unity_data", "ambiguous Unity path rejected");
+
+            // ZIP permits two central-directory entries with the same path.
+            // An empty alias must not make the Unity diagnostic pass just
+            // because only one entry is nonempty. Assert both entry orders.
+            CreateZip(root, 97, true, duplicateUnity: true, emptyDuplicateUnity: true);
+            var secondEmpty = AndroidExpansionArchiveProbe.Inspect(root, Package, 97);
+            Check(secondEmpty.Status == "ambiguous_unity_data",
+                "nonempty Unity entry followed by empty duplicate must be ambiguous");
+            Check(!secondEmpty.UnityFirstByteRead,
+                "second empty alias must reject before reading a Unity sample");
+            Check(!secondEmpty.ToLogFields().Contains(root),
+                "ambiguous Unity sample does not expose physical OBB paths");
+
+            CreateZip(root, 98, true, duplicateUnity: true, emptyFirstUnity: true);
+            var firstEmpty = AndroidExpansionArchiveProbe.Inspect(root, Package, 98);
+            Check(firstEmpty.Status == "ambiguous_unity_data",
+                "empty Unity entry followed by nonempty alias must be ambiguous");
+            Check(!firstEmpty.UnityFirstByteRead,
+                "first empty alias must reject before reading a Unity sample");
+            Check(firstEmpty.UnityDataEntries <= 1,
+                "empty alias must not inflate readable Unity data counts");
 
             File.WriteAllText(Path.Combine(root, "main.93." + Package + ".obb"),
                 "synthetic invalid ZIP");

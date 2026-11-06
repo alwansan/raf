@@ -146,15 +146,21 @@ namespace RaftAndroid.Platform
                         {
                             string name = entry.FullName;
                             if (name.StartsWith("assets/bin/Data/", StringComparison.Ordinal) &&
-                                !name.EndsWith("/", StringComparison.Ordinal) && entry.Length > 0)
+                                !name.EndsWith("/", StringComparison.Ordinal))
                             {
+                                // A zero-byte alias is still a ZIP entry and can
+                                // collide with a real Unity asset in jar:file lookup.
+                                // Detect duplicated names before filtering empties.
                                 if (!unityNames.Add(name))
                                 {
                                     report.Status = "ambiguous_unity_data";
                                     return report;
                                 }
-                                report.UnityDataEntries++;
-                                if (sample == null) sample = entry;
+                                if (entry.Length > 0)
+                                {
+                                    report.UnityDataEntries++;
+                                    if (sample == null) sample = entry;
+                                }
                             }
                             foreach (string bank in BankNames)
                             {
