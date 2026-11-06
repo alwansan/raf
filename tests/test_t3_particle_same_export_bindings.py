@@ -22,12 +22,15 @@ def source():
     textures=[(OWNERS[0],201),(OWNERS[1],202),(OWNERS[2],203)]
     # For m_FileID=0 a source material texture must be in the SAME
     # serialized owner, not merely share an arbitrary PathID.
-    keys=[textures[0]]*4+[textures[1]]*4+[textures[2]]*2
+    keys=[textures[0]]*5+[textures[1]]*4+[textures[2]]*1
     src, counts={},{}
+    index=0
     for i,key in enumerate(materials):
         slots={}
-        for j in range(2):
-            t=keys[2*i+j]
+        n=3 if i==0 else 1 if i==4 else 2
+        for j in range(n):
+            t=keys[index]
+            index+=1
             slots["fixture_slot_"+str(j)]=((0,t[1]),(1.,1.,0.,0.))
             counts[t]=counts.get(t,0)+1
         src[key]=slots
@@ -100,9 +103,9 @@ class OriginalParticleSameInstanceExport(unittest.TestCase):
         self.assertEqual(r["selected_missing_texture_skipped_nonexportable_collection"],1)
         self.assertEqual(r["selected_missing_texture_absent_all_export_collections"],0)
         self.assertEqual(r["selected_missing_texture_reason_unclassified"],0)
-        # This synthetic third source texture is shared by TWO material slots;
-        # missing one original Texture2D trace means 8/10 pointer matches.
-        self.assertEqual(r["selected_exact_material_texenv_pointer_matches"],8)
+        # This synthetic third source texture has ONE original Material slot;
+        # absent target's unproven pointer means 9/10 exact matches.
+        self.assertEqual(r["selected_exact_material_texenv_pointer_matches"],9)
         safe=json.dumps(r)
         self.assertNotIn(missed["source"]["owner"],safe)
         self.assertNotIn('"path_id"',safe)
@@ -126,6 +129,70 @@ class OriginalParticleSameInstanceExport(unittest.TestCase):
         b["nonexportable_texture_sources"]=[{"source":b["objects"][0]["source"]}]
         with self.assertRaisesRegex(ValueError,"both_exportable_and_nonexportable"):
             m.assess(s,t,w,b,exp)
+
+    def test_exact_nonexportable_container_export_pointer_matches_tenth_material(self):
+        source,targets,w1,b02,exported=build()
+        missed=b02["objects"].pop()
+        b02["nonexportable_texture_sources"]=[{
+            "source":missed["source"],
+            "container_export":missed["export"],
+            "container_export_pointer_captured":True
+        }]
+        result=m.assess(source,targets,w1,b02,exported)
+        self.assertEqual(result["status"],m.STATUS_NONEXPORTABLE_MATCH)
+        self.assertEqual(result["selected_exact_material_texenv_pointer_matches"],9)
+        self.assertEqual(result["selected_nonexportable_material_pointer_matches"],1)
+        self.assertEqual(result["selected_nonexportable_original_texture_source_pointer_captured"],1)
+        self.assertEqual(result["selected_missing_texture_skipped_nonexportable_collection"],1)
+        self.assertEqual(result["selected_source_texenv_target_unresolved"],0)
+        public=json.dumps(result,sort_keys=True)
+        self.assertNotIn(missed["source"]["owner"],public)
+        self.assertNotIn(missed["export"]["guid"],public)
+
+    def test_nonexportable_container_pointer_differs_from_actual_YAML(self):
+        source,targets,w1,b02,exported=build()
+        missed=b02["objects"].pop()
+        p=dict(missed["export"]);p["guid"]="a"*32
+        b02["nonexportable_texture_sources"]=[{
+            "source":missed["source"],
+            "container_export":p,
+            "container_export_pointer_captured":True
+        }]
+        result=m.assess(source,targets,w1,b02,exported)
+        self.assertEqual(result["status"],m.STATUS_MISMATCH)
+        self.assertEqual(result["selected_nonexportable_material_pointer_mismatches"],1)
+        self.assertEqual(result["selected_nonexportable_material_pointer_matches"],0)
+
+    def test_nonexportable_container_pointer_inaccessible_is_inconclusive(self):
+        source,targets,w1,b02,exported=build()
+        missed=b02["objects"].pop()
+        b02["nonexportable_texture_sources"]=[{
+            "source":missed["source"],
+            "container_export":None,
+            "container_export_pointer_captured":False
+        }]
+        result=m.assess(source,targets,w1,b02,exported)
+        self.assertEqual(result["status"],m.STATUS_MISMATCH)
+        self.assertEqual(result["selected_nonexportable_original_texture_source_pointer_unavailable"],1)
+        self.assertEqual(result["selected_nonexportable_material_pointer_unavailable"],1)
+        self.assertEqual(result["selected_source_texenv_target_unresolved"],1)
+
+    def test_malformed_or_duplicate_nonexportable_private_pointer_rejected(self):
+        source,targets,w1,b02,exported=build()
+        missed=b02["objects"].pop()
+        bad={"source":missed["source"],"container_export":missed["export"],
+             "container_export_pointer_captured":1}
+        b02["nonexportable_texture_sources"]=[bad]
+        with self.assertRaisesRegex(ValueError,"status"):
+            m.assess(source,targets,w1,b02,exported)
+        bad["container_export_pointer_captured"]=True
+        bad["container_export"]={"guid":"a"*32}
+        with self.assertRaisesRegex(ValueError,"fields"):
+            m.assess(source,targets,w1,b02,exported)
+        bad["container_export"]=dict(missed["export"])
+        b02["nonexportable_texture_sources"]=[bad,bad]
+        with self.assertRaisesRegex(ValueError,"duplicate_selected"):
+            m.assess(source,targets,w1,b02,exported)
 
     def test_missing_material_trace_is_not_called_a_verified_match(self):
         s,t,w,b,exp=build()
