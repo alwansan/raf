@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
   "issue_id": "INTEGRATION-001",
-  "status": "waiting_ci_original_2_3GB_full_OBB_SHA_and_CRC",
+  "status": "completed_original_signed_OBB_full_sha256_crc32_source_verified",
   "base_sha": "afdf718c02e82733163279a67d2ec5a601af912d",
-  "updated_at": "2026-11-06T14:04:09.783Z",
+  "updated_at": "2026-11-06T14:11:32.482Z",
   "resumed_from_sessions": [
     "20261106T1346Z-T5-scheduled-apk-live-failure-m7q2.md",
     "20261106T1330Z-T5-chat-signed-apk-auth-f7b2.md",
@@ -39,9 +39,23 @@
     "Actual full OBB byte stream 2,301,256,312B hashed, compare 64-hex source manifest digest and outer CRC",
     "CI success and exact source/run/limits recorded, or honest blocked outcome with redacted cause"
   ],
-  "next_step": "Inspect completed job. Do not claim original OBB hash until real green log; no repeated 2.3GB transfers unless source-specific failure identified.",
+  "next_step": "Investigate old owner device LogRaft OBB GUID/Unity jar:file read issue separately; full signed OBB source integrity is now proven for that old build but not installed-device byte identity or current Unity/game graphics.",
   "ci_run": "https://github.com/alwansan/raf/actions/runs/42230326050",
   "ci_job_id": 127934255743,
   "ci_source_sha": "867b332be6782777fc06810bb696ff20fc6e19ca",
-  "ci_stage_at_last_check": "actual OBB 2301256312-byte SHA256/CRC streaming in_progress after 9 Python unit tests passed"
+  "ci_stage_at_last_check": "actual OBB 2301256312-byte SHA256/CRC streaming in_progress after 9 Python unit tests passed",
+  "source_sha": "867b332be6782777fc06810bb696ff20fc6e19ca",
+  "verified": {
+    "ci_conclusion": "success",
+    "synthetic_tests": 9,
+    "original_main_obb_bytes": 2301256312,
+    "real_full_sha256_matches_original_delivery": true,
+    "safe_SHA_prefix": "660b6c0909ae",
+    "real_full_crc32_matches_checkpoint_central": true,
+    "HTTP_206_data_requests": 549,
+    "original_obb_saved_on_disk": false,
+    "raw_game_files_uploaded": false,
+    "actual_Unity_OBB_GUID_verified": false,
+    "phone_mount_verified": false
+  }
 }
