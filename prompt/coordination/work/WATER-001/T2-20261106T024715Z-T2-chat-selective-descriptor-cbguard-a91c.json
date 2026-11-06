@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1530d4efb3fe3f9d76d13423c81a9c09f8e3c341",
   "experiment_key": "zip2_original_Foam_two_pass_Vulkan_minimal_conflicting_descriptor_only_OpDecorate_DescriptorSet_relocation_with_CB0_guard_v1",
   "resource_key": "ZIP2@15964ea8/Shader2420/private_fragment_conflict_only_Vulkan_remap",
@@ -22,8 +22,8 @@
   "prior_verified": "CI42151620701 SUCCESS 67 synthetic tests; 4 original SPIR-V stage pass, four type collisions before, all 14 fragment DescriptorSet decorations relocated in private scratch resulting zero collisions and zero preserved shared resources; two CB0 shared extent differences unresolved. No Unity importer/material data/device proof.",
   "approach": "Use existing exact original Foam private ShaderLab CI to extract 4 actual compiled SPIR-V modules; reflect descriptor types, isolate exact per-pass mismatched numeric coordinates. Patch ONLY collision-site Fragment OpDecorate DescriptorSet literal words to a set unused by both stages (not all fragment resources). Preserve exact originals for CB0 descriptors and all non-DescriptorSet binary words. Revalidate patched SPIR-V Vulkan1.1 and reflection type/size/array/optional id. Record safe counts and CB extent mismatches without private numeric coordinates or symbols. Isolated T2 workflow only; no game assets or Unity build.",
   "intended_files": [
-    "scripts/t2_foam_private_selective_descriptor_set_remap.py",
-    "tests/test_t2_foam_private_selective_descriptor_set_remap.py",
+    "scripts/t2_foam_private_descriptor_set_remap.py",
+    "tests/test_t2_foam_private_descriptor_set_remap.py",
     ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
     "prompt/coordination/work/WATER-001/T2-20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c.json",
     "prompt/coordination/clients/T2/sessions/20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c.md",
@@ -31,7 +31,32 @@
     "prompt/coordination/B_TEAM/events/T2/20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c-result.json",
     "docs/T2_FOAM_PRIVATE_SELECTIVE_DESCRIPTOR_REMAP_2026-11-06.md"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-06T02:47:15Z",
-  "next_step": "Generate strict selective remap and source-free adversarial controls; SHA-original CI; compare 14-resource whole-fragment remap against minimal collision-only remap and CB extent differences; report Unity/device limitations."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42153150468"
+  ],
+  "updated_at": "2026-11-06T02:55:00Z",
+  "next_step": "Source-proof: 4 minimal Fragment DescriptorSet literal edits suffice to eliminate all four Vulkan descriptor class collisions while preserving same-type shared CB0 coords (1 each pass). BUT original same-class CB0 reflected block extents differ in both passes; require original field-by-field layout and Unity CB0 upload before installing any ShaderLab; then genuine Unity2021 import and Android phone proof with T1/T5. WATER-001 OPEN.",
+  "source_commit": "143ae1345a0bb222dba1cefe7bc82bf80da47bfa",
+  "result": {
+    "run_id": 42153150468,
+    "job_id": 127680946875,
+    "conclusion": "success",
+    "source_authenticated": true,
+    "source_free_tests_total": 71,
+    "source_free_tests_passed": 71,
+    "original_private_ShaderLab_bytes": 9731,
+    "original_4_SPIRV_stages_validated": true,
+    "initial_descriptor_class_conflicts": 4,
+    "full_fragment_remap_descriptor_literals_changed": 14,
+    "full_fragment_remap_conflicts_after": 0,
+    "selective_fragment_only_type_conflict_literals_changed": 4,
+    "selective_remap_conflicts_after": 0,
+    "selective_original_same_type_CB_links_retained": 2,
+    "selective_unresolved_CB_block_extent_differences": 2,
+    "both_selectively_modified_fragment_SPIRV_validated_vulkan11": true,
+    "all_non_DescriptorSet_original_SPIRV_words_preserved": true,
+    "original_Unity2021_import_verified": false,
+    "CB0_Material_Texture_runtime_upload_verified": false,
+    "Adreno_pixels_verified": false
+  }
 }

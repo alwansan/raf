@@ -7,8 +7,8 @@
     "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
     "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
     "reconstruction": "ORIGINAL_FOAM_PRIVATE_2PASS_9731B_SHADERLAB_4STAGES_VULKAN11_COMPILED_AND_VALIDATED_NUMERIC_VS_FS_VARYINGS_MATCH_BOTH_PASSES",
-    "binding": "SOURCE_ORIGINAL_PRIVATE_SPIRV_PRE_REMAP_4_DESCRIPTOR_TYPE_COLLISIONS;_FRAGMENT_ONLY_DECORATION_SET_RELOCATED_14_RESOURCES_ZERO_COLLISIONS_IN_SCRATCH;_UNITY_CB0_AND_MATERIAL_RUNTIME_UPLOAD_UNVERIFIED",
-    "integration": "CI42151620701_SUCCESS_67_SOURCE_FREE_TESTS_4_ORIGINAL_STAGES_2_REMAPPED_SPIRV_VAL;_UNITY_IMPORT_UNTESTED",
+    "binding": "SOURCE_ORIGINAL_PRIVATE_SPIRV_FOUR_NUMERIC_TYPE_CONFLICTS;_MINIMAL_FOUR_FRAGMENT_DESCRIPTORSET_EDIT_REMOVES_ALL_FOUR_PRESERVES_TWO_SHARED_CB0_NUMERIC_COORDINATES;_TWO_CB_BLOCK_EXTENT_DIFFERENCES_UNRESOLVED;_UNITY_MATERIAL_RUNTIME_UNVERIFIED",
+    "integration": "CI42153150468_SUCCESS_71_SOURCE_FREE_TESTS_ORIGINAL_TWO_FRAGMENT_PRIVATE_SELECTIVE_SPIRV_VAL;_UNITY_SHADERLAB_IMPORT_NOT_RUN",
     "device": "NOT_TESTED"
   },
   "observed": {
@@ -21,7 +21,7 @@
     "original_render_states": 2,
     "exact_original_DXBC_shader_models_verified": 4,
     "private_candidate_bytes": 9731,
-    "source_free_tests_passed": 67,
+    "source_free_tests_passed": 71,
     "Unity2021_import_verified": false,
     "CB0_and_original_Material_sampler_upload_verified": false,
     "Android_Adreno_pixels_verified": false,
@@ -46,7 +46,15 @@
     "private_fragment_descriptor_set_literals_relocated": 14,
     "original_SPIRV_non_DescriptorSet_words_preserved": true,
     "private_relocated_fragment_binaries_validated_vulkan11": 2,
-    "original_Unity_DescriptorSet_binding_integration_verified": false
+    "original_Unity_DescriptorSet_binding_integration_verified": false,
+    "original_fragment_descriptor_type_conflicts_before": 4,
+    "private_fragment_selective_remap_modified_literals": 4,
+    "private_fragment_selective_remap_type_conflicts_after": 0,
+    "private_same_type_CB0_numeric_links_preserved": 2,
+    "private_CB0_byte_extent_differences_unresolved": 2,
+    "private_selectively_remapped_SPIRV_modules_vulkan11_validated": 2,
+    "all_original_other_SPIRV_words_preserved": true,
+    "original_Unity_material_or_CB0_upload_verified": false
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42125000030",
@@ -55,7 +63,8 @@
     "https://github.com/alwansan/raf/actions/runs/42144036981",
     "https://github.com/alwansan/raf/actions/runs/42146401691",
     "https://github.com/alwansan/raf/actions/runs/42149571827",
-    "https://github.com/alwansan/raf/actions/runs/42151620701"
+    "https://github.com/alwansan/raf/actions/runs/42151620701",
+    "https://github.com/alwansan/raf/actions/runs/42153150468"
   ],
-  "next_step": "Production integration needs exact Unity resource alias + CB0 upload remap, not simply copying private relocated binaries. Run separate minimal collision-only remap test to retain shared CB0 coordinates where source semantics allow, with source-original SHA and Vulkan validation; then genuine Unity importer + Adreno phone. WATER-001 remains OPEN."
+  "next_step": "Source-proof: 4 minimal Fragment DescriptorSet literal edits suffice to eliminate all four Vulkan descriptor class collisions while preserving same-type shared CB0 coords (1 each pass). BUT original same-class CB0 reflected block extents differ in both passes; require original field-by-field layout and Unity CB0 upload before installing any ShaderLab; then genuine Unity2021 import and Android phone proof with T1/T5. WATER-001 OPEN."
 }

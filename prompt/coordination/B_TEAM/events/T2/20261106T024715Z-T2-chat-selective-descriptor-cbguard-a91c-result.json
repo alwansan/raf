@@ -1,0 +1,13 @@
+{
+  "id": "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c-result",
+  "owner": "T2",
+  "session_id": "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T02:55:00Z",
+  "summary": "SHA-original Foam final private two-pass Vulkan candidate: after detecting four VS/FS descriptor class conflicts, selective Fragment OpDecorate DescriptorSet only relocation of FOUR conflicting resources (rather than all 14) reduces type collisions 4→0, preserves 2 shared same-class CB0 numeric coordinates and all other SPIR-V words; both remapped fragment SPIR-V validate. 71 synthetic tests. Two source CB0 byte extent mismatches still open. CI42153150468 SUCCESS. Unity/Material/Adreno unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42153150468",
+    "https://github.com/alwansan/raf/commit/143ae1345a0bb222dba1cefe7bc82bf80da47bfa"
+  ]
+}
