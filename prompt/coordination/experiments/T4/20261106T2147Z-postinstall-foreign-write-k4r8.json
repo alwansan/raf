@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2147Z-T4-chat-postinstall-owner-drift-k4r8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "type": "source-stage-rollback-external-writer",
+  "experiment_key": "T4-local005-source-adapter-post-success-write-pre-postcheck-interleave-owner-drift-v1",
+  "source_manifest": "ZIP2 ref 15964ea8f246b6e076ce26b60931ee2e1a9a2385 (original source checked privately in CI)",
+  "negative": {
+    "commit": "c080bdf819c0bc677ba9f80b059758a52820b389",
+    "run": "https://github.com/alwansan/raf/actions/runs/42300040391",
+    "status": "expected_failure",
+    "evidence": "Existing 18 methods pass; new test two cases fail. After successful adapted C# write and before postwrite check, injected external source change was overwritten by rollback to raw; external GUID meta change also caused inappropriate source rollback."
+  },
+  "positive": {
+    "commit": "9b0ca69a5fbbacf50b63964347e373c9d00d8949",
+    "run": "https://github.com/alwansan/raf/actions/runs/42300166577",
+    "job_id": 128175573346,
+    "status": "success",
+    "evidence": "19/19 SaveAndLoad tests (including two independent synthetic injected source/meta interleaves and previous interrupted write rollback), 11 ZIP2 provider identity tests, 4 selector controls; source-only original ILSpy SaveAndLoad strict pin proof, unchanged non-path text, original 16 replacements and .NET10 14 Unix/Windows semantics."
+  },
+  "fix": "Track whether adapted Path.write_bytes returns normally. If a post-success error occurs, verify physical non-linked regular source, untouched GUID meta, and exact source bytes from our install. On foreign divergence refuse rollback and retain original complete backup. If write itself throws, preserve existing interrupted-write best-effort rollback.",
+  "limits": "The guard cannot detect arbitrary concurrent writer after the last check, and does not make source writes atomic; failure during a partially written source cannot always establish ownership. No authored game .rgd/meta/GUID or runtime serialization changed. CI does not prove Unity/IL2CPP/on-device saving. The independent signed native build at older SHA does not contain this patch.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Keep LOCAL-005 open. Wait for T5's verified signed package; capture same-user/world .rgd create/save/full-exit/reopen, and physical mouse acceptance. Do not start duplicate native.",
+  "at": "2026-11-06T21:53:00Z"
+}
