@@ -31,7 +31,9 @@ def classify(summary):
     if type(total) is not int or total < 0 or sum(rows.values()) != total:
         raise ValueError("material_total_inconsistent")
     groups = summary.get("final_error_category_breakdown")
-    if not isinstance(groups, dict) or not isinstance(groups.get("ultimate_water_invalid_pass"), dict) or groups["ultimate_water_invalid_pass"].get("count") != total:
+    if (not isinstance(groups, dict) or not isinstance(groups.get("ultimate_water_invalid_pass"), dict)
+            or type(groups["ultimate_water_invalid_pass"].get("count")) is not int
+            or groups["ultimate_water_invalid_pass"]["count"] != total):
         raise ValueError("root_category_total_inconsistent")
     kernel = stop.get("final_compute_kernel_errors_total")
     if type(kernel) is not int or kernel < 0:
