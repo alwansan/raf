@@ -16,11 +16,18 @@ SOURCE=("resources.assets",777)
 
 
 def traces(*,guid=SHA,kind=3):
+    # The real W1/B02 one-instance adapter intentionally requires at least
+    # one Material21 and one Texture2D28 object, even for a shader-only query.
     w1={"schema_version":1,"export_instance":INSTANCE,"objects":[
         {"class_id":48,"source":{"owner":"Raft_Data/"+SOURCE[0],"path_id":SOURCE[1]},
-         "export":{"file_id":4800000,"guid":guid,"type":kind}}
+         "export":{"file_id":4800000,"guid":guid,"type":kind}},
+        {"class_id":21,"source":{"owner":"Raft_Data/"+SOURCE[0],"path_id":SOURCE[1]+1},
+         "export":{"file_id":2100000,"guid":"c"*32,"type":2}}
     ]}
-    b02={"schema_version":1,"export_instance":INSTANCE,"objects":[]}
+    b02={"schema_version":1,"export_instance":INSTANCE,"objects":[
+        {"class_id":28,"source":{"owner":"Raft_Data/"+SOURCE[0],"path_id":SOURCE[1]+2},
+         "export":{"file_id":2800000,"guid":"d"*32,"type":2}}
+    ]}
     return w1,b02
 
 
