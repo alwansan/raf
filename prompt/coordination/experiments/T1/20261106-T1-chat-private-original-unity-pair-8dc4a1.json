@@ -1,0 +1,93 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106-T1-chat-private-original-unity-pair-8dc4a1",
+  "issue_id": "WATER-001",
+  "status": "completed_source_only_armed_opt_in_not_executed",
+  "hypothesis": "Existing T1 opt-in Unity FFT input-identity workflow was comparing genuine Unity keyed capture against a Vulkan trace produced by translated HLSL, not directly from original SHA-verified SPIR-V. Replace reference producer with the original SPIR-V recorder and constrain all producer sidecars and physical input bytes before any numerical diagnosis.",
+  "base_commit": "31a7cd97c4ad9cd101a532895334d11bb0f778ee",
+  "source_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "new_source_files": [
+    {
+      "path": "scripts/t1_fft_private_unity_paired_capture.py",
+      "commit": "0ddcbf943e333c8ca19ae4f8ceb08017a10283eb"
+    },
+    {
+      "path": "tests/test_t1_fft_private_unity_paired_capture.py",
+      "commit": "f5c516a9517956ff9839effb4c75b7684b9d7d0a"
+    },
+    {
+      "path": ".github/workflows/raft-t1-fft-private-unity-paired-bridge-ci.yml",
+      "commit": "6064aa3bba8ff3b5f3bbf9fb72b014a6e737a73a"
+    },
+    {
+      "path": ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+      "commit": "544887b819ccc5ea04f8a629024f2b321794e20a"
+    },
+    {
+      "path": "tests/test_t1_fft_private_unity_paired_capture.py",
+      "commit": "1da7eacde96875b5ceae8e10d148526b207c7605"
+    },
+    {
+      "path": ".github/workflows/raft-t1-fft-private-unity-paired-bridge-ci.yml",
+      "commit": "ccb013e1b1e7dafbe6c4cd9a64b9576c373e01b2"
+    }
+  ],
+  "actions": [
+    {
+      "run": 42284886357,
+      "result": "success",
+      "tests": "17 new +17 existing",
+      "sourcefree": true
+    },
+    {
+      "run": 42285163665,
+      "result": "skipped",
+      "meaning": "native/Unity 65min workflow not auto-run by normal source push"
+    },
+    {
+      "run": 42285163732,
+      "result": "success",
+      "meaning": "existing paired diagnostics CI remained successful"
+    },
+    {
+      "run": 42285313864,
+      "result": "failure",
+      "reason": "source-only regression temporarily required workflow file that was omitted from its sparse checkout; corrected and retested"
+    },
+    {
+      "run": 42285338050,
+      "result": "success",
+      "tests": "21 current +17 prior",
+      "sourcefree": true
+    },
+    {
+      "run": 42281310905,
+      "result": "in_progress_at_last_check",
+      "meaning": "peer full native XAPK build not cancelled or duplicated"
+    }
+  ],
+  "private_capture_contract": {
+    "reference": "scripts.t1_fft_original_trace_vulkan authentic original-SPIRV direct keyed capture, not translated-HLSL Vulkan",
+    "reference_evidence": "private source/butterfly input hashes, shader digest, trace digest and fixed dispatch SHA generated from the direct original producer",
+    "unity": "T1PrivateFftInputIdentityTests.cs with actual Unity2021 GPU CopyInput zero-mismatch report and keyed first-pass trace",
+    "physical_inputs": "1024x32 float32 RGBA source and butterfly separately read as actual byte arrays on each backend; byte equality and evidence digest enforced",
+    "trace": "exact [64,256,64] invocation-by-site complete coverage, independent trace SHA256 and no duplicate keys, 512 capacity",
+    "privacy": "physical inputs, provenance metadata, compiled shader and invocation keys never uploaded or printed; stdout bounded aggregate-only diagnostic",
+    "authentication_boundary": "Original ZIP2 pin and C# Unity source declared; signed hardware attestation and authored runtime FindKernel mapping remain unproven"
+  },
+  "negative_controls": [
+    "Reject candidate Vulkan-HLSL sidecar role instead of original_spirv, forged sidecar stages, bad original trace digest, changed canonical dispatch digest, zero-claim input mismatch.",
+    "Reject physical image byte differences, hardlinked or symlink inputs and traces, partial/extended byte blobs, role alias and fake CopyInput GPU report.",
+    "Reject partial record site coverage, duplicate dispatch-occurrence keys, absent/stale candidate `.compute` shader identity, duplicate/occupied metadata manifest, failed Unicode and stdout secret leaks.",
+    "Keep T1 manual-only replay if job event is ordinary branch push and no explicit [t1-paired-replay] tag; shared raft-native-engine mutex cancel false, preserve private cleanup.",
+    "Numeric mismatches between original and derived candidate remain valid diagnosis, not automatically a causal/Android fix."
+  ],
+  "limitations": [
+    "No new real ZIP2 source was fetched or Unity original-derived FFT run invoked this cycle: new source-only CI tests simulate the evidence protocol; real first invocation parity remains pending an explicit opt-in run.",
+    "The original recorder's SHA sidecar and Unity's C# CopyInput result are meaningful runner claims, but this tool cannot independently authenticate Unity compiler binary or in-game authored kernel map.",
+    "Run 42281310905 native is actively in progress and was not cancelled or overlapped; no source changes in that preexisting run, and no new APK/OBB requested.",
+    "WATER-001 remains open and NOT_READY; T1 trial vote remains لا يحتاج."
+  ],
+  "next_step": "After native XAPK build completes or engineering budget approved, dispatch only the opt-in raft-t1-fft-unity-input-identity workflow, inspect RAFT_T1_PRIVATE_ORIGINAL_UNITY_JOIN and GPU CopyInput, verify actual original-SPIRV vs Unity 64+256+64 per-invocation site coordinate mismatches. If failing, diagnose exact step from sanitized private logs; do not rewrite game shader or infer FTZ without genuine parity."
+}
