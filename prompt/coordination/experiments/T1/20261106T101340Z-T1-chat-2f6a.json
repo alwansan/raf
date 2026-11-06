@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261106T101340Z-T1-chat-2f6a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "source_commit": "58a411ed247e814c030c769322822e6a3d3c6f02",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42198180194",
+  "status": "completed_negative_parity",
+  "observed_result": {
+    "paired_reads": [
+      64,
+      256,
+      64
+    ],
+    "promoted_only_address_mismatches": [
+      63,
+      252,
+      64
+    ],
+    "integer_rewrite_address_mismatches": [
+      0,
+      252,
+      64
+    ],
+    "rgba_mismatches_both": [
+      63,
+      62,
+      63,
+      63
+    ]
+  },
+  "next_step": "Trace the two butterfly address producers across local loads/stores in the authenticated SPIR-V, beginning with the second site's X lane. Require evidence of an integer origin or a demonstrated backend lowering defect before changing the butterfly operands."
+}
