@@ -1,0 +1,17 @@
+{
+  "id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T11:27:40Z",
+  "summary": "SHA-original Foam CB0 vector name original managed Cecil bounded IL first formal proof: CI42209967318 and CI42210166957 SUCCESS, 11 sourcefree tests and Cecil false-positive controls. Exactly 1 of 5 original CB0 vector source names proven direct string first argument to Material.SetVector(string,Vector4), exact public setter family material_vector:1. Other 4 vector names, receiver Material→Foam, second Vector4 data and runtime full CB0 upload UNPROVEN. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42209967318",
+    "https://github.com/alwansan/raf/actions/runs/42210166957",
+    "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_FIRST_OPERAND_2026-11-06.md"
+  ],
+  "limits": "Original Shader/DLL SHA exact; private member names, hashes, method identities, IL and bytes never published. Source-matched compiled first string formal is not runtime call/CB0 upload or device pixels.",
+  "next_step": "T2 trace typed Vector4 second-operand and Material receiver provenance; preserve pass0 Fragment/pass1 Vertex larger compiled array capacity constraints and coordinate Unity integration with T1/T5."
+}
