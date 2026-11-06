@@ -67,9 +67,18 @@ def require_unity_pass(blob: bytes, exit_code: int) -> None:
         raise ValueError("Unity NUnit suite not passed")
 
 
-def analyze(xml: bytes, exit_code: int, metrics: bytes) -> dict:
+def analyze(xml: bytes, exit_code: int, metrics: bytes, signatures: bytes) -> dict:
     require_unity_pass(xml, exit_code)
     counts = parse_metrics(metrics)
+    signs = parse_metrics(signatures)
+    if any(value > total for value, total in zip(signs, counts)):
+        raise ValueError("Zero-coordinate signature exceeds observed mismatch count")
+    if any(signs[i] for i in CONTROLS):
+        raise ValueError("Zero-coordinate signature invalid on protected GPU control")
+    if any(signs[i] for i in range(N)
+           if i not in COMPUTED and i not in STAGED):
+        raise ValueError("Zero-coordinate signature outside diagnostic path")
+    remainder = [total - value for total, value in zip(counts, signs)]
     if any(counts[i] for i in CONTROLS):
         raise ValueError("GPU integer, uploaded-buffer, direct texture or normal-float baseline failed")
     computed = [counts[i] for i in COMPUTED]
@@ -87,6 +96,13 @@ def analyze(xml: bytes, exit_code: int, metrics: bytes) -> dict:
         "synthetic_gpu_invocations_expected": 64,
         "positive_controls_passed": True,
         "synthetic_category_mismatch_counts": list(counts),
+        "zero_or_x0_sample_signature_counts": list(signs),
+        "other_mismatch_counts": remainder,
+        "computed_zero_signatures": [signs[i] for i in COMPUTED],
+        "buffered_zero_signatures": [signs[i] for i in STAGED],
+        "computed_other_mismatches": [remainder[i] for i in COMPUTED],
+        "buffered_other_mismatches": [remainder[i] for i in STAGED],
+        "zero_signature_is_float_FTZ_causality": False,
         "computed_address_category_mismatches": computed,
         "buffered_address_category_mismatches": staged,
         "pair_names": list(PAIR_NAMES),
@@ -113,11 +129,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--xml", required=True, type=Path)
     parser.add_argument("--metrics", required=True, type=Path)
+    parser.add_argument("--signatures", required=True, type=Path)
     parser.add_argument("--exit-code", required=True, type=int)
     args = parser.parse_args()
     try:
         result = analyze(read_bounded(args.xml, MAX_XML), args.exit_code,
-                         read_bounded(args.metrics, MAX_METRICS))
+                         read_bounded(args.metrics, MAX_METRICS),
+                         read_bounded(args.signatures, MAX_METRICS))
     except (ValueError, OSError):
         parser.exit(2, "RAFT_T1_ADDRESS_PROVENANCE_GATE invalid_or_failed_private_evidence=true\n")
     print("RAFT_T1_ADDRESS_PROVENANCE_GATE " + json.dumps(result, sort_keys=True))
