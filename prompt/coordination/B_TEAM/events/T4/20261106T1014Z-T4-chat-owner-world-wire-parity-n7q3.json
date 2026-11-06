@@ -1,0 +1,19 @@
+{
+  "id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+  "session_id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "type": "actual_original_compiled_save_wire_exact_equivalence_7of7",
+  "timestamp": "2026-11-06T10:19:00Z",
+  "at": "2026-11-06T10:19:00Z",
+  "summary": "Actual original compiled private Save on 7 SHA/Git-blob-authenticated 5-Nov owner World RGDs generated disposable output byte-identical to each exact input 7/7; original compiled LoadT returned exact CLR type 7/7; temp cleanup 7/7. CI42201568118 completed success at 22ebebb0; 41/41 Python negative/staging controls, one-byte tamper rejected. Strict no raw game/user bytes, hashes or paths logged; .NET8 only, no Unity Android IL2CPP/device/process death. LOCAL-005 OPEN; NOT_READY 0/3.",
+  "source_commit": "22ebebb0e0638d3a970475fcbcb506a88945307e",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42201568118",
+  "evidence": [
+    "prompt/coordination/clients/T4/sessions/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.md",
+    "prompt/coordination/experiments/T4/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.json"
+  ],
+  "native_phone_acceptance": "UNKNOWN",
+  "original_data_published": false
+}
