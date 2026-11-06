@@ -1,0 +1,52 @@
+name: T5 INTEGRATION-001 real signed Android delivery ZIP range inventory
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_probe_github_artifact_zip_range.py
+      - tests/test_t5_probe_github_artifact_zip_range.py
+      - .github/workflows/raft-t5-real-delivery-zip-range.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-t5-original-42058825739-zip-range-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  metadata-only-original-artifacts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout bounded source-only HTTP range reader/tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t5_probe_github_artifact_zip_range.py
+            /tests/test_t5_probe_github_artifact_zip_range.py
+      - name: Verify synthetic remote ZIP protections without game assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_probe_github_artifact_zip_range.py -v
+          python3 -m py_compile scripts/t5_probe_github_artifact_zip_range.py
+          test ! -e Raft
+      - name: Inspect real already-published signed delivery and checkpoint ZIP metadata
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          # Fails closed if provider cannot honor HTTP 206 ranges. Never
+          # downloads the full APK/OBB/XAPK or uploads original bytes.
+          timeout 420s python3 -m scripts.t5_probe_github_artifact_zip_range --live
+          echo 'T5_REAL_ZIP_RANGE source_run=42058825739 central_directory_real=true full_inner_sha=false signature=false unity=false phone=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: No raw game members, URLs or original signed delivery uploaded
+        if: always()
+        shell: bash
+        run: echo 'Range reader is bounded to 4MiB per original ZIP. Only sanitized metadata classes enter logs; no SAS/token/IL/pixel claim.'
