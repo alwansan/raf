@@ -2,7 +2,7 @@
   "session_id": "20261106T1637Z-T4-scheduled-v8m2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "051b80ba754b652e8fe20092559da7197029cdcf",
   "intended_files": [
     "prompt/coordination/work/INPUT-005/T4-20261106T1637Z-T4-scheduled-v8m2-diagnostic-provenance.json",
@@ -15,5 +15,7 @@
     "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
     "20261106T1543Z-T4-scheduled-p8r2"
   ],
-  "updated_at": "2026-11-06T16:37:00Z"
+  "updated_at": "2026-11-06T16:38:00Z",
+  "result": "Verified CI42248437096 completed success on f674025; only .NET8 diagnostic recovery. No new mouse device evidence; no duplicate CI.",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261106T1637Z-T4-scheduled-v8m2.md"
 }
