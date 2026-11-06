@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1649Z-T5-scheduled-runtime-attribution-c82f",
+  "origin": "scheduled",
+  "issue_id": "PERF-007",
+  "baseline_sha": "2fc2a5c2237fc63df67e23a76d320418746a0033",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/clients/T5/sessions/20261106T1649Z-T5-scheduled-runtime-attribution-c82f.md",
+    "prompt/coordination/work/PERF-007/20261106T1649Z-T5-scheduled-runtime-attribution-c82f.json"
+  ],
+  "experiment_key": "T5-owner42058825739-LogRaft-SurfaceFlinger-vs-Unity-HUD-attribution-readonly-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-06T16:49:25Z",
+  "hypothesis": "Do not compare SurfaceFlinger presentation FPS to Unity HUD p95 or GPU timings; review existing cohort gate and actual signed OBB provenance before new collection.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261106T0138Z-T5-chat-performance-cohort-7ab4.md",
+    "prompt/coordination/clients/T5/sessions/20261106T1541Z-T5-chat-obb-routes-b8a1.md"
+  ]
+}
