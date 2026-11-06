@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "FFT Unity-versus-Vulkan address/value diagnostics",
-  "status": "active",
+  "status": "completed",
   "base_sha": "57d32472a8a70fbaca982fd7c661f1c5d4404a60",
-  "updated_at": "2026-11-06T18:37:00Z",
+  "updated_at": "2026-11-06T18:42:00Z",
   "resumed_from_sessions": [
     "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
     "20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8",
@@ -30,7 +30,27 @@
     "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
     "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add fail-closed classifier and adversarial local tests; use on authenticated actual Unity capture only when produced; never infer root cause from synthetic probes."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42272859383"
+  ],
+  "result": {
+    "source_only_classifier_committed": true,
+    "source_only_tests_committed": true,
+    "source_only_workflow_extended": true,
+    "code_commits": [
+      "cec94bc0e6c1490df02a3d8eb14fcf2b35812cc7",
+      "4bcdd060e1b00cc044325d4aa48a260e18fa5cc1",
+      "04d1315be1021775480d68a8fecb9f9c660ec32d"
+    ],
+    "ci_run": 42272859383,
+    "ci_job": 128081621126,
+    "ci_conclusion": "success",
+    "new_python_tests": "16/16 pass",
+    "original_game_shader_used": false,
+    "actual_unity_gpu_test": false,
+    "ftz_root_cause_proven": false,
+    "phone_test": false,
+    "trial_vote": "لا يحتاج"
+  },
+  "next_step": "Await true same-input original/source-authentic Unity keyed FFT capture from trusted licensed runner; only then run this private taxonomy to disambiguate coordinate-to-zero, subnormal float value FTZ and bindings; no speculative shaders or native APK build."
 }
