@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0431Z-T3-scheduled-postrestore-gate-6f2c",
+  "origin": "scheduled",
+  "agent": "T3",
+  "baseline_sha": "4506c4d0afa298947bc7a116a8a0c8c722a97fbc",
+  "issue": "RENDER-002",
+  "status": "in_progress",
+  "files": [
+    "prompt/coordination/work/RENDER-002/20261106T0431Z-T3-scheduled-postrestore-gate-6f2c.json",
+    "prompt/coordination/clients/T3/sessions/20261106T0431Z-T3-scheduled-postrestore-gate-6f2c.md"
+  ],
+  "hypothesis": "Post-restoration Shader48 source authenticity is not asserted by structural ShaderLab audit; require identity/variant proof before diagnosing square smoke.",
+  "experiment_key": "T3-POSTRESTORE-IDENTITY-BOUNDARY-20261106",
+  "shared_resource": "none; read-only audit",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T0330Z-T3-scheduled-postrestore-boundary-8d41.md"
+  ],
+  "next_step": "Inspect source and postrestorer audit schema; avoid duplicate CI and do not modify shared workflow without T5 coordination."
+}
