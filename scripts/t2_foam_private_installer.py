@@ -140,6 +140,20 @@ def install(project: Path, candidate: Path, backup: Path,
     if len(lines) != 1 or not re.fullmatch(rb"guid: *[0-9a-fA-F]{32} *", lines[0]):
         raise ValueError("untrusted original shader GUID")
 
+    # A unique shader name is insufficient when another exported asset reuses
+    # its GUID. Unity resolves asset references by GUID, not by ShaderLab name.
+    # Fail before modifying the export or allocating an external backup.
+    target_guid = lines[0].split(b":", 1)[1].strip().lower()
+    for other_meta in assets.rglob("*.meta"):
+        _require_safe_asset_path(assets, other_meta)
+        if other_meta.is_symlink() or not other_meta.is_file():
+            raise ValueError("redirected exported metadata")
+        if other_meta == meta:
+            continue
+        for row in other_meta.read_bytes().splitlines():
+            if row.startswith(b"guid:") and row.split(b":", 1)[1].strip().lower() == target_guid:
+                raise ValueError("duplicate exported Foam shader GUID")
+
     backup.mkdir(mode=0o700, parents=False, exist_ok=False)
     try:
         _write_backup(backup / "original.shader", original)
