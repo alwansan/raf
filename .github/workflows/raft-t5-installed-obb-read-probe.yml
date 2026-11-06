@@ -8,6 +8,7 @@ on:
     paths:
       - 'android-port/Runtime/Platform/AndroidExpansionArchiveProbe.cs'
       - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
+      - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'android-port/Tests/ExpansionArchiveProbe/**'
       - '.github/workflows/raft-t5-installed-obb-read-probe.yml'
 
@@ -30,10 +31,25 @@ jobs:
           sparse-checkout: |
             android-port/Runtime/Platform
             android-port/Tests/ExpansionArchiveProbe
+            .github/workflows
           sparse-checkout-cone-mode: true
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+      - name: Guard actual Unity Android source-copy integration
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          native=Path('.github/workflows/raft-unity-editor-android-import.yml').read_text()
+          lines=[line.strip() for line in native.splitlines()
+                 if line.strip().startswith('for name in AndroidStreamingAssets.cs ')]
+          assert len(lines)==1, 'unexpected Unity platform copy-loop cardinality'
+          names=lines[0].split(';',1)[0].split()[3:]
+          assert names.count('AndroidExpansionArchiveProbe.cs')==1, 'probe omitted or duplicated in Unity import'
+          diagnostic=Path('android-port/Runtime/Platform/AndroidTestDiagnostics.cs').read_text()
+          assert 'AndroidExpansionArchiveProbe.Inspect(' in diagnostic, 'runtime hook missing'
+          print('T5_UNITY_IMPORT_COPY_PROBE status=PASS exact_file_once=true')
+          PY
       - name: Compile actual pure production probe and run adversarial ZIP fixtures
         run: dotnet run --project android-port/Tests/ExpansionArchiveProbe/ExpansionArchiveProbe.csproj -c Release
       - name: Compile platform managed project (Unity Android-only implementation excluded)
