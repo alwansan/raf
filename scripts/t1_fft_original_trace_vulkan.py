@@ -28,21 +28,28 @@ def analyze(project, host_file, export=None):
             raise ValueError("Private original module not available in bound")
     with tempfile.TemporaryDirectory(prefix="t1-original-keyed-vulkan-") as scratch:
         work = Path(scratch)
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE disassemble", flush=True)
         dis = subprocess.run(["spirv-dis", "--raw-id", str(original)],
                              check=True, capture_output=True, text=True, timeout=30)
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE instrument", flush=True)
         (work / "original-record.spvasm").write_text(instrument(dis.stdout), encoding="utf-8")
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE assemble", flush=True)
         run(["spirv-as", "--target-env", "vulkan1.1", "original-record.spvasm",
              "-o", "original-record.spv"], work)
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE spirv_validate", flush=True)
         run(["spirv-val", "--target-env", "vulkan1.1", "original-record.spv"], work)
         source = trace_host(host_file.read_text(encoding="utf-8"), INVOCATION_SIZE)
         if source.count("traceWrite.dstSet = sets[1];") != 1:
             raise ValueError("Original descriptor set host patch anchor absent")
         source = source.replace("traceWrite.dstSet = sets[1];",
                                 "traceWrite.dstSet = sets[0];")
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE host_compile", flush=True)
         (work / "trace.cpp").write_text(source, encoding="utf-8")
         run(["g++", "-std=c++17", "-O2", "trace.cpp", "-lvulkan", "-o", "trace"], work)
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE vulkan_dispatch", flush=True)
         run(["./trace", "original-record.spv", str(original), str(other), str(other),
              str(WIDTH), str(HEIGHT), "19", "1", "rgba32f"], work)
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE readback_decode", flush=True)
         record = read_image(work / "trace.bin", INVOCATION_SIZE)
         (count,) = struct.unpack_from("<I", record)
         if count > CAPACITY:
@@ -55,6 +62,7 @@ def analyze(project, host_file, export=None):
             raise ValueError("Original keyed capture count inconsistent")
         # Both are the ORIGINAL shader: original0 is private instrumented,
         # roundtrip0 is unmodified original, same host/input/dispatch.
+        print("RAFT_T1_ORIGINAL_KEYED_STAGE output_compare", flush=True)
         original_image = read_image(work / "original0.rgba32f", WIDTH * HEIGHT * 16)
         baseline_image = read_image(work / "roundtrip0.rgba32f", WIDTH * HEIGHT * 16)
         invariant = compare_pass(baseline_image, original_image)
