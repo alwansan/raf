@@ -6,7 +6,7 @@
   "generation": "T-2026-11-05",
   "issue_id": "RENDER-002",
   "track": "Original authentic Particle108 HLSL roundtrip 2/4 VS/FS interface drift source diagnosis",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a04368f3b4b5197bfb2b9a34969f8921e42c5dc5",
   "intended_files": [
     "scripts/t3_particle108_roundtrip_interface_diagnostic.py",
@@ -32,8 +32,24 @@
   "experiment_ids": [
     "20261106T1017Z-T3-chat-roundtrip-interface-c97e"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement aggregate per VS/FS source vs HLSL-roundtrip numeric interface error classifier and run private original workflow; no authored semantic/Android pixel claim.",
-  "updated_at": "2026-11-06T10:17:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42201795150"
+  ],
+  "result": {
+    "source_commit": "430b20ef65dc9f9083b7e2525574bb31f9b94712",
+    "run_id": 42201795150,
+    "job_id": 127838602630,
+    "conclusion": "success",
+    "source_free_tests": 11,
+    "original_source_SHA_owners": 4,
+    "original_source_SHA_scenes": 6,
+    "source_spirv_vsfs_compatible": 4,
+    "roundtrip_spirv_vsfs_compatible": 2,
+    "roundtrip_same_numeric_location_type_mismatch": 2,
+    "roundtrip_missing_fragment_output_locations": 0,
+    "original_compiled_active_fragment_inputs_source_numeric_present": 14,
+    "Android_pixels_verified": false
+  },
+  "next_step": "Trace four Vertex source→HLSL-roundtrip same-numeric-Location type changes to private generated HLSL output declaration and source DXBC signature component masks; prove whether 2 incompatible VSFS pairs are vector packing versus true semantic change before any disposable patch. Preserve RENDER-002 OPEN.",
+  "updated_at": "2026-11-06T10:21:00Z"
 }
