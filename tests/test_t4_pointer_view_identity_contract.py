@@ -68,7 +68,8 @@ class PointerViewIdentityAudit(unittest.TestCase):
         queued = release.index("OnAndroidUi(() =>")
         self.assertLess(captured, clearing)
         self.assertLess(clearing, queued)
-        self.assertIn("releaseEpoch = ++epoch;", release)
+        self.assertIn("epoch++;", release)
+        self.assertIn("int releaseEpoch = Volatile.Read(ref epoch);", release)
         self.assertIn("releaseEpoch != Volatile.Read(ref epoch) || requested", release)
         nonzero = release.index("releaseViewIdentity != 0")
         identity = release.index(

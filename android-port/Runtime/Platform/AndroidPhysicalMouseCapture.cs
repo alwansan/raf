@@ -363,19 +363,21 @@ namespace RaftAndroid.Platform
                     "focus=" + focused + "; paused=" + paused +
                     "; requested=" + requested + "; relativeEvents=" + deltas.ReceivedCount);
             int releaseViewIdentity;
-            int releaseEpoch;
             lock (captureGate)
             {
                 // Capture the requested View identity before clearing it.
                 // Never retain or invoke an AndroidJavaObject across threads.
                 releaseViewIdentity = Volatile.Read(ref captureViewIdentity);
-                releaseEpoch = ++epoch;
+                epoch++;
                 requested = nativeHasMotion = nativeCaptured = false;
                 Volatile.Write(ref captureViewIdentity, 0);
                 deltas.Reset();
             }
             lastLoggedCount = 0;
             nextProbeTime = 0f;
+            // Preserve the original release-epoch checkpoint and queued
+            // callback guard. An unrelated View must still never be released.
+            int releaseEpoch = Volatile.Read(ref epoch);
             // UI-thread dispatch is asynchronous: a new request may supersede
             // this release before it runs. Never revoke that newer capture.
             try
