@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "T2-20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
+  "client": "T2",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "d5330515a091e4503187040361cad226a01fb35b",
+  "round_id": "trial-20261106-r1",
+  "approach": "Adopt owner trial-vote protocol, update T2 only without touching four other rows or T5 decision, and independently identify a real source-original Foam material host among SHA-verified original assets before any actual Unity/Adreno build vote.",
+  "experiment_key": "ZIP2-SHA-15964-original-Foam-material-host-asset-path-identity-independent-source-v1",
+  "resource_key": "ZIP2-manifest-readonly-private-original-foam-owner-tests",
+  "intended_files": [
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1743Z-T2-chat-trial-vote-foam-host-83a2.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1743Z-T2-chat-trial-vote-foam-host-83a2.json",
+    "scripts/t2_original_foam_material_host_scan.py",
+    "tests/test_t2_original_foam_material_host_scan.py",
+    ".github/workflows/raft-t2-original-foam-material-host-scan.yml"
+  ],
+  "resumed_from_sessions": [
+    "20261106T1728Z-T2-chat-original-external-guid-4c81",
+    "20261106T1719Z-T2-scheduled-target-name-ci-7f2c"
+  ],
+  "vote": "لا يحتاج",
+  "vote_reason": "No implemented new Android Foam ShaderLab/CB0/graphics integration: original zero-GUID external PPtr scan was source-only, not phone-testable change.",
+  "latest_proven_run": "https://github.com/alwansan/raf/actions/runs/42262404131",
+  "next_step": "Write T2-only vote under current round; then inspect source original metadata and material host candidates. Do not build or vote yes without substantial integrated Android change.",
+  "updated_at": "2026-11-06T17:43:27.355Z"
+}
