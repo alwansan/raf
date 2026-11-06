@@ -107,5 +107,61 @@ class ExactAuthoredPropertyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"T3_PROPERTY_OVERSIZE_OR_INVALID"):
             m.compare(SRC,shader()+"\n"+"x"*m.MAX_SHADERLAB)
 
+
+    def test_color_default_drift_does_not_pass_structural_default_gate(self):
+        drift=[line.replace("(1,1,1,1)", "(1,0,1,1)")
+               if line.startswith("_Color") else line for line in DATA]
+        out=m.compare(SRC,shader(drift))
+        self.assertTrue(out["original_authored_property_names_types_exact"])
+        self.assertFalse(out["original_authored_property_defaults_semantically_equal"])
+        self.assertFalse(out["original_property_default_value_parity_proven"])
+        self.assertEqual(out["counts"]["matched_name_type_different_default"],1)
+        self.assertNotIn("(1,0,1,1)",json.dumps(out))
+
+    def test_range_bounds_and_scalar_default_drift_are_detected(self):
+        drift=[line.replace("Range(0,1)", "Range(0,2)")
+               if line.startswith("_Fade") else line for line in DATA]
+        out=m.compare(SRC,shader(drift))
+        self.assertTrue(out["original_authored_property_names_types_exact"])
+        self.assertFalse(out["original_authored_property_defaults_semantically_equal"])
+        self.assertEqual(out["counts"]["matched_name_type_different_default"],1)
+        changed=[line.replace("= 0.5", "= 0.9") if line.startswith("_Fade")
+                 else line for line in DATA]
+        self.assertEqual(m.compare(SRC,shader(changed))["counts"]
+                         ["matched_name_type_different_default"],1)
+
+    def test_texture_fallback_default_drift_is_detected_without_leak(self):
+        drift=[line.replace('"white" {}','"gray" {}')
+               if line.startswith("_Ramp") else line for line in DATA]
+        out=m.compare(SRC,shader(drift))
+        self.assertTrue(out["original_authored_property_names_types_exact"])
+        self.assertFalse(out["original_authored_property_defaults_semantically_equal"])
+        self.assertEqual(out["counts"]["matched_name_type_different_default"],1)
+        self.assertNotIn('"gray"',json.dumps(out))
+
+    def test_numeric_default_spellings_parse_as_same_values(self):
+        changed=[line.replace("(1,1,1,1)","(1e0, 1.0, +1, 1.)")
+                 if line.startswith("_Color") else line for line in DATA]
+        changed=[line.replace("Range(0,1) = 0.5","Range(0e0, 1.) = 5e-1")
+                 if line.startswith("_Fade") else line for line in changed]
+        self.assertTrue(m.compare(SRC,shader(changed))
+                        ["original_authored_property_defaults_semantically_equal"])
+
+    def test_non_finite_or_malformed_defaults_fail_closed(self):
+        scenarios=[
+            DATA[0].replace("(1,1,1,1)","(nan,1,1,1)"),
+            DATA[0].replace("(1,1,1,1)","(1,1,1)"),
+            DATA[0].replace("(1,1,1,1)","(1e9999,1,1,1)"),
+            DATA[7].replace('"white" {}','"white" { extra }'),
+            DATA[3].replace("= 1","= 1; garbage"),
+        ]
+        for index,bad in enumerate(scenarios):
+            with self.subTest(index=index),self.assertRaisesRegex(
+                    ValueError,"T3_PROPERTY_DEFAULT_UNSUPPORTED"):
+                rows=DATA.copy()
+                rows[0 if index<3 else 7 if index==3 else 3]=bad
+                m.compare(SRC,shader(rows))
+
+
 if __name__=="__main__":
     unittest.main()
