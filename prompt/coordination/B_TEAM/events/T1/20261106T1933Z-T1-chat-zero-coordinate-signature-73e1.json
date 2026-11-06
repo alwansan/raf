@@ -1,0 +1,15 @@
+{
+  "id": "T1-WATER-001-20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T19:32:00Z",
+  "summary": "Authentic licensed Unity 2021 OpenGLCore sourcefree 64-thread FFT carrier-provenance diagnostic: 1024 GPU words. Computed-address paths bitcast/plain/precise/image-via-bitcast/image-via-precise each 63/64 mismatches, all 63 were signed-zero carrier or x0 texel signature; other mismatch 0. Five matched uploaded-buffer paths and 6 positive controls all zero. New 16 Python gate tests + 4 fixture tests passed, CI 42279949574 SUCCESS, private scratch cleaned. Supports synthetic float-carrier zero-coordinate signature, NOT original Raft FFT, compiler FTZ causal proof, water fix or Adreno/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42279949574",
+    "https://github.com/alwansan/raf/commit/93f27342d4b2c46d811c6c16a2672d9a247f346a"
+  ],
+  "status": "WATER-001 OPEN; NOT_READY 0/3; T1 trial لا يحتاج unchanged"
+}
