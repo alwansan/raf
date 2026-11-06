@@ -13,7 +13,7 @@ def cb0_integration_gate(shared_links, *, member_abi_verified=False,
     extents for the *same authenticated CB0 descriptor coordinate*.
     Missing, invalid, or mismatched extents are explicitly non-integrable.
     Set expected_pass_count from independently authenticated original pass count
-    to prevent incomplete evidence from satisfying the gate.
+    to prevent incomplete evidence from satisfying the gate. With an expected\n    count, each row must carry its authenticated zero-based pass_index;\n    duplicates and omissions cannot count as separate original passes.
     """
     if not isinstance(shared_links, list) or not shared_links:
         return {"status": "blocked_missing_authenticated_CB0_links"}
@@ -27,9 +27,17 @@ def cb0_integration_gate(shared_links, *, member_abi_verified=False,
                     "observed_pass_count": len(shared_links),
                     "expected_pass_count": expected_pass_count}
     mismatches = 0
+    seen_passes = set()
     for row in shared_links:
-        if not isinstance(row, dict) or set(row) != {"vertex_bytes", "fragment_bytes", "authenticated_shared_coordinate"}:
+        if not isinstance(row, dict) or set(row) != ({"vertex_bytes", "fragment_bytes", "authenticated_shared_coordinate"} | ({"pass_index"} if expected_pass_count is not None else set())):
             return {"status": "blocked_invalid_CB0_link"}
+        if expected_pass_count is not None:
+            index = row["pass_index"]
+            if type(index) is not int or not 0 <= index < expected_pass_count:
+                return {"status": "blocked_invalid_CB0_pass_identity"}
+            if index in seen_passes:
+                return {"status": "blocked_duplicate_CB0_pass_identity"}
+            seen_passes.add(index)
         v, f = row["vertex_bytes"], row["fragment_bytes"]
         if (type(v) is not int or type(f) is not int or
                 not 0 < v <= 65536 or not 0 < f <= 65536 or
