@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed_original_signed_main_OBB_full_SHA256_and_CRC32_verified",
+  "experiment_key": "T5-immutable-original-run42058825739-main-OBB-2301256312B-pinned-artifact13441766832-full-SHA256-checkpoint-CRC32-delivery-manifest-v1",
+  "original": {
+    "source_run": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "delivery_artifact_id": 13441227298,
+    "signed_artifact_id": 13441766832,
+    "main_obb_logical_bytes": 2301256312,
+    "main_obb_name": "main.89.com.alwansan.raft.androidtest.obb"
+  },
+  "source_commit": "867b332be6782777fc06810bb696ff20fc6e19ca",
+  "workflow": ".github/workflows/raft-t5-real-signed-obb-attestation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42230326050",
+  "job_id": 127934255743,
+  "conclusion": "success",
+  "synthetic_unit_tests": "9/9",
+  "method": "Authenticate exact original run+artifacts from GitHub source metadata, original delivered JSON OBB size/hash and actual ZIP_STORED signed checkpoint OBB header/CRC, then hash all 2301256312 original OBB bytes through strict HTTP206 with incremental SHA256+CRC32, no original OBB disk write.",
+  "observed": {
+    "real_original_obb_bytes_fully_hashed": 2301256312,
+    "full_obb_sha256_matches_original_delivery_manifest": true,
+    "sha256_prefix_12": "660b6c0909ae",
+    "full_obb_crc32_matches_original_signed_checkpoint_central": true,
+    "real_obb_range_requests": 549,
+    "real_obb_payload_range_bytes": 2301256312,
+    "source_delivery_metadata_range_bytes": 3275,
+    "checkpoint_metadata_range_bytes": 255,
+    "source_original_apk_full_SHA_aapt_apksigner_verified_elsewhere_run": 42228262902,
+    "original_outer_checkpoint_full_zip_hash_independently_computed": false,
+    "source_manifest_independently_publisher_signed": false,
+    "original_unity_obb_guid_verified": false,
+    "android_obb_mount_verified": false,
+    "current_branch_android_build_verified": false,
+    "phone_framebuffer_water_shader_verified": false
+  },
+  "limitations": [
+    "Full SHA and CRC prove consistency against the previous source run internal delivery and ZIP central reference; not an independent trusted publisher statement.",
+    "Original user-installed bytes on phone not captured for direct hash comparison.",
+    "Unity OBB GUID/path and resource reads on Android still unknown; owner device log previously warned about GUID.",
+    "Does not validate current T1/T2/T3 graphics fixes, current branch Unity APK/OBB or full game acceptance."
+  ],
+  "outputs": {
+    "script": "scripts/t5_verify_real_signed_obb.py",
+    "tests": "tests/test_t5_verify_real_signed_obb.py",
+    "workflow": ".github/workflows/raft-t5-real-signed-obb-attestation.yml",
+    "report": "docs/T5_REAL_SIGNED_OBB_SHA_2026-11-06.md"
+  },
+  "next_step": "Trace original Unity OBB GUID warning and actual content mount/path on owner logs; compare installed APK/OBB hashes and runtime reads before asserting asset-loading parity. Then work on GPU water/FFT graphics acceptance with T1–T3.",
+  "updated_at": "2026-11-06T14:10:39.487Z"
+}
