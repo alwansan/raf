@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1957Z-T4-chat-profile-durable-create-q7b3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-offline-local-profile-durable-first-create-fsync-and-open-IOException-scope-dotnet8-v1",
+  "hypothesis": "A newly created stable local profile.id can be returned without an explicit flush-to-disk, and a broad IOException catch filtered merely by existing path may suppress actual post-create write/flush failures.",
+  "initial_source_base": "289b9711a1e26118a0af921c43b1a86112919328",
+  "production_source_sha": "e9e6c0c7c6f4d9cc9fe304e69394a45be48b5e12",
+  "input": {
+    "original_game_rgd_read": false,
+    "generated_synthetic_profile_id": true,
+    "compiler_source": "actual android-port/Runtime/Platform/LocalProfileStore.cs",
+    "android_phone_used": false
+  },
+  "commands": [
+    "dotnet run --project android-port/Tests/OfflineSessionIdentity/OfflineSessionIdentity.csproj --configuration Release --nologo",
+    "dotnet build/run source platform and ProfileLinkSafety in raft-android-offline-platform workflow"
+  ],
+  "negative_controls": [
+    "Test-only 31a7cd97 compiled real CLR GetOrCreateProfileId IL lacks FileStream.Flush(bool), RED run42284271128 failed expected 134.",
+    "Compiled method IL decoder verifies OS flush-to-disk requested by real GetOrCreateProfileId.",
+    "Compiled method IL ExceptionHandlingClause Filter TryOffset/TryLength does not include flush instruction; only FileMode.CreateNew open protected.",
+    "Valid previously created identity remains unchanged; independent profile-derived game local player ID stable; invalid path/profile IDs rejected.",
+    "Original profile symlinks, dangling save redirects, corrupt pre-existing ID fail closed (offline platform CI)."
+  ],
+  "workflow_paths": [
+    ".github/workflows/raft-a9-offline-session-identity.yml",
+    "existing Raft Android offline platform adapter build/test workflow"
+  ],
+  "red_run": "https://github.com/alwansan/raf/actions/runs/42284271128",
+  "green_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42284421243",
+    "https://github.com/alwansan/raf/actions/runs/42284421421"
+  ],
+  "status": "completed",
+  "result": {
+    "compiled_actual_file_stream_flush_to_disk_requested": true,
+    "original_create_collision_only_try_region": true,
+    "real_compiled_CSharp_test_count": 175,
+    "identity_workflow_result": "completed_success",
+    "android_offline_platform_result": "completed_success",
+    "platform_abi": "netstandard2.1 compiled",
+    "additional_profile_symlink_guards": 7,
+    "world_save_payload_tested": false,
+    "phone_runtime_tested": false,
+    "crash_power_loss_durability_proven": false,
+    "original_save_schema_changed": false
+  },
+  "limitations": [
+    "fsync-to-disk is an OS request; no directory fsync or power-loss durability guarantee",
+    "New partial file after a failed write is deliberately not overwritten/repaired",
+    "Only first profile creation path changes; existing IDs and original RGD bytes untouched",
+    "Actual Unity ARM64 IL2CPP and device file system not tested by these .NET8/NET10 source workflows",
+    "Concurrent owner-direct native build42281310905 is pinned to an earlier source and does not contain this patch"
+  ],
+  "next_step": "Preserve this code for T5 to integrate in a future authorized signed APK+OBB (not current older SHA running build); on Android verify first-run profile stability and existing owner save reopen after full app exit. Do not claim old phone world test proves this new change."
+}
