@@ -23,7 +23,7 @@ class Tests(unittest.TestCase):
     def test_immediate_operand_cb_srv_sampler(self):
         for op,kind,indices,trail,family in ((89,8,[2,24],(),"cbuffer"),(88,7,[3],[1],"srv"),(90,6,[1],(),"sampler")):
             with self.subTest(family=family):
-                self.assertEqual(_private_parse_decl_operand(decl(op,kind,indices,trail)[1:],op),(family,op,tuple(indices)))
+                self.assertEqual(_private_parse_decl_operand(decl(op,kind,indices,trail),op),(family,op,tuple(indices)))
 
     def test_stage_decodes_all_declarations(self):
         layout=_private_stage_layout(dxbc(),1)
@@ -52,32 +52,32 @@ class Tests(unittest.TestCase):
 
     def test_wrong_operand_type(self):
         with self.assertRaisesRegex(ValueError,"DXBC_BIND_OPERAND_TYPE"):
-            _private_parse_decl_operand(decl(88,6,[4],[1])[1:],88)
+            _private_parse_decl_operand(decl(88,6,[4],[1]),88)
 
     def test_unsupported_operand_dimensions(self):
         for idx in ([],[1,2,3]):
             with self.subTest(dimension=len(idx)),self.assertRaisesRegex(ValueError,"DXBC_BIND_OPERAND_DIMENSION"):
-                _private_parse_decl_operand(decl(88,7,idx,[1])[1:],88)
+                _private_parse_decl_operand(decl(88,7,idx,[1]),88)
 
     def test_non_immediate_index_modes_rejected(self):
         for rep in range(1,8):
             with self.subTest(rep=rep),self.assertRaisesRegex(ValueError,"DXBC_BIND_OPERAND_INDEX_REP_UNSUPPORTED"):
-                _private_parse_decl_operand(decl(90,6,[2],rep=rep)[1:],90)
+                _private_parse_decl_operand(decl(90,6,[2],rep=rep),90)
 
     def test_operand_extension_rejected(self):
         with self.assertRaisesRegex(ValueError,"DXBC_BIND_OPERAND_EXTENSION_UNSUPPORTED"):
-            _private_parse_decl_operand(decl(90,6,[2],extended=True)[1:],90)
+            _private_parse_decl_operand(decl(90,6,[2],extended=True),90)
 
     def test_operand_index_truncation_and_absence_rejected(self):
         with self.assertRaisesRegex(ValueError,"DXBC_BIND_OPERAND_INDEX_OVERRUN"):
-            _private_parse_decl_operand([(8<<12)|(1<<20)],89)
+            _private_parse_decl_operand([89,(8<<12)|(1<<20)],89)
         with self.assertRaisesRegex(ValueError,"DXBC_BIND_OPERAND_MISSING"):
-            _private_parse_decl_operand([],89)
+            _private_parse_decl_operand([89],89)
 
     def test_bad_trailer_rejected(self):
         for op,typ,idx,trail in ((88,7,[4],()),(90,6,[2],[10])):
             with self.subTest(op=op),self.assertRaisesRegex(ValueError,"DXBC_BIND_DECL_TRAILER"):
-                _private_parse_decl_operand(decl(op,typ,idx,trail)[1:],op)
+                _private_parse_decl_operand(decl(op,typ,idx,trail),op)
 
     def test_wrong_compiled_shader_stage_rejected(self):
         with self.assertRaisesRegex(ValueError,"DXBC_BIND_PROGRAM_STAGE"):
