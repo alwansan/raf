@@ -24,6 +24,22 @@ class GPUReportControls(unittest.TestCase):
         self.assertFalse(record["fft_derived_two_pass_gpu_dispatch_with_observed_writes"])
         self.assertNotIn("PRIVATE SOURCE CONTENT",str(record))
 
+    def test_nested_suite_failure_cannot_claim_success(self):
+        baseline=xml().decode()
+        for suite in (
+            '<test-suite result="Failed"><failure><message>PRIVATE SOURCE CONTENT</message></failure>%s</test-suite>',
+            '<test-suite result="Failed">%s</test-suite>',
+            '<test-suite result="Passed"><reason><message>PRIVATE SOURCE CONTENT</message></reason>%s</test-suite>',
+        ):
+            start=baseline.index('>')+1
+            end=baseline.rindex('</test-run>')
+            candidate=(baseline[:start]+suite%baseline[start:end]+baseline[end:]).encode()
+            with self.subTest(suite=suite.split('>')[0]):
+                result=classify(candidate,0)
+                self.assertFalse(result["all_private_unity_tests_passed"])
+                self.assertFalse(result["fft_derived_two_pass_gpu_dispatch_with_observed_writes"])
+                self.assertNotIn("PRIVATE SOURCE CONTENT",str(result))
+
     def test_nonzero_process_fails(self):
         self.assertFalse(classify(xml(),3)["all_private_unity_tests_passed"])
 
