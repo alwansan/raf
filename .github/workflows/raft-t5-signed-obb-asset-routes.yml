@@ -1,0 +1,57 @@
+name: T5 INTEGRATION-001 real signed main OBB FMOD and Haptics jar paths
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_probe_signed_obb_asset_routes.py
+      - tests/test_t5_probe_signed_obb_asset_routes.py
+      - .github/workflows/raft-t5-signed-obb-asset-routes.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-t5-42058825739-obb-runtime-jar-route-206-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  real-original-signed-obb-runtime-routes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Fetch only T5 standalone probe, pinned original WAV manifest, and synthetic fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /config/original-haptics-manifest.json
+            /scripts/probe_haptics_asset_manifest.py
+            /scripts/t5_probe_github_artifact_zip_range.py
+            /scripts/t5_probe_signed_nested_zip_range.py
+            /scripts/t5_verify_apk_obb_pair.py
+            /scripts/t5_verify_real_signed_apk.py
+            /scripts/t5_probe_signed_obb_asset_routes.py
+            /tests/test_t5_probe_signed_obb_asset_routes.py
+      - name: Verify original audio paths, byte lengths, and strict ZIP rule negative fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_probe_signed_obb_asset_routes.py -v
+          python3 -m py_compile scripts/t5_probe_signed_obb_asset_routes.py
+          test ! -e Raft
+          echo 'T5_SIGNED_OBB_ROUTES source_only_tests_passed=true raw_assets_checked_out=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: Compare actual signed OBB ZIP entries to Android jar asset route identities
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          timeout 450s python3 -m scripts.t5_probe_signed_obb_asset_routes --live
+          echo 'T5_SIGNED_OBB_ROUTES actual_original_archive_index_verified=true OBB_full_SHA_prerequisite_CI42230326050=true phone_mounted=false game_ready=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: No original game files, signed redirect links, tokens or resources uploaded
+        if: always()
+        shell: bash
+        run: echo '16MiB strict 206 metadata-only original OBB probe; no full 2.3GB source, Unity build, APK, GUID, or device claim.'
