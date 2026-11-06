@@ -1,0 +1,35 @@
+{
+  "session_id": "20261106T1756Z-T3-chat-cb-uniqueness-4f1a",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ea1f1ef4565ff1e995db9474c1b042129fcfaace",
+  "scope": "Independent source-only safety fix SM4/5 CB DCL duplicate slot, early SM5.1 range version gate. Avoid reserved scheduled T3 DXBC-to-SPIRV crosscontract.",
+  "experiment_key": "T3-SOURCEONLY-SM4-CB-DUPLICATE-SLOT-and-SM51-RANGE-FAILCLOSED-v1",
+  "resource_key": "synthetic DXBC SM4 and SM5.1 declarations; no private ZIP2",
+  "resumed_from_sessions": [
+    "20261106T1745Z-T3-chat-trial-cbsize-9c21",
+    "20261106T1734Z-T3-scheduled-crosscontract-a71c"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_cb_size_semantics.py",
+    "tests/test_t3_particle108_cb_size_semantics.py",
+    "prompt/coordination/work/RENDER-002/20261106T1756Z-T3-chat-cb-uniqueness-4f1a.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1756Z-T3-chat-cb-uniqueness-4f1a.md",
+    "prompt/coordination/experiments/T3/20261106T1756Z-T3-chat-cb-uniqueness-4f1a.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1756Z-T3-chat-cb-uniqueness-4f1a.json"
+  ],
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "trial_last_voted_commit": "99658d34f59ce64a8f961e942c641882c0750110",
+  "hypothesis": "Same-stage duplicate DCL CB first-register falsely labeled across-variant reuse; SM5.1 legal 3D range should be rejected by version gate ahead of generic operand dimension error.",
+  "negative_controls": [
+    "duplicate CB first slot with different vector sizes same stage",
+    "SM5.1 3D CB declaration",
+    "existing 12 source-free cases"
+  ],
+  "constraints": "No shader assets/source ZIP2/Unity native build/APK/OBB/trial change. Keep RENDER-002 OPEN.",
+  "next_step": "Minimal parser guard, 2 synthetic cases and source-free CI; record independent session evidence.",
+  "updated_at": "2026-11-06T17:58:04.328Z"
+}
