@@ -1,0 +1,17 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T094845Z-T1-chat-p6f2",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "base_sha": "da66c976fc422f2e02b83ed27c8deb0bdcf9a4a3",
+  "status": "active",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    "prompt/coordination/work/WATER-001/20261106T094845Z-T1-chat-p6f2.json",
+    "prompt/coordination/clients/T1/sessions/20261106T094845Z-T1-chat-p6f2.md"
+  ],
+  "experiment_key": "t1-original-slot0-ssa-promotion-only-unity-openglcore-vs-unchanged-vulkan-keyed-trace-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "updated_at": "2026-11-06T09:48:45Z",
+  "hypothesis": "With identical promotion and capture, omitting the integer rewrite changes the keyed read address divergence of replay 42196835754."
+}
