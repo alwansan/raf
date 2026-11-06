@@ -1,0 +1,19 @@
+{
+  "owner": "T1",
+  "origin": "scheduled",
+  "session_id": "20261106T001347Z-T1-scheduled-bc47",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "070280cad87f0ec0c5f32e5bd9eb5361d2f7bbe5",
+  "intended_files": [
+    "tests/test_t1_fft_sourcefree_bitcarrier_contract.py",
+    "prompt/coordination/clients/T1/sessions/20261106T001347Z-T1-scheduled-bc47.md"
+  ],
+  "experiment_key": "sourcefree-openglcore-bitcarrier-fixture-contract-regression-39351c0",
+  "resource_key": null,
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261105T232830Z-T1-chat-5d3b90.md"
+  ],
+  "hypothesis": "Source-free Unity fixture could regress to an undetectable bitcarrier lane or lose its positive control; assert lane identity and distinguish non-asserted diagnostic counters from strict baseline controls.",
+  "updated_at": "2026-11-06T00:13:47Z"
+}
