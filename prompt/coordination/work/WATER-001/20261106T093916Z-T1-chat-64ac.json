@@ -4,7 +4,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "base_sha": "784a8439d2ccb8e8258cb83aa748cf293f640f9c",
-  "status": "active",
+  "status": "waiting_ci",
   "intended_files": [
     ".github/workflows/raft-t1-fft-unity-input-identity.yml",
     "android-port/Experiments/T1/T1PrivateFftInputIdentityTests.cs",
@@ -13,9 +13,14 @@
   ],
   "experiment_key": "t1-slot0-zip2-pinned-integer-rewrite-vulkan-unity-paired-replay-stage-diagnostic-v1",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-06T09:39:16Z",
+  "updated_at": "2026-11-06T09:41:49.476Z",
   "taken_over_from": [
     "20261106T093342Z-T1-chat-d82f",
     "20261106T024340Z-T1-chat-84f0c6 (its pending replay has completed failure)"
-  ]
+  ],
+  "source_commit": "166312ecd64b4ff097e1bc30d0cb9cc6e73c737a",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42196835754"
+  ],
+  "next_step": "Read the last-entered stage and the separate comparison step for run 42196835754. If it reaches parity comparison, inspect the first sanitized address/value mismatch and compare a promoted-only variant before attributing any effect to the integer rewrite. If it stops before comparison, reproduce the reported stage with the smallest fixture."
 }
