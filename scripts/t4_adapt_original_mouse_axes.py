@@ -7,6 +7,7 @@ On Windows the Android-only runtime shim is not imported into the output project
 import argparse
 import json
 import re
+import shutil
 from pathlib import Path
 
 from scripts.t4_original_mouse_routing import assert_original, without_comments
@@ -39,7 +40,8 @@ def replacement_plan(root: Path, *, project_assets=False):
             continue
         if file.stat().st_size > 2 * 1024 * 1024:
             raise ValueError("Oversized original source refused")
-        data = file.read_text(encoding="utf-8-sig")
+        # Byte-decoding here preserves original CRLF/LF in the generated patch.
+        data = file.read_bytes().decode("utf-8-sig")
         visible = without_comments(data)
         if len(visible) != len(data):
             raise ValueError("Lexical comments must preserve source positions")
@@ -54,6 +56,15 @@ def replacement_plan(root: Path, *, project_assets=False):
             matches.append((m.start(), m.end(), SHIM + ".ApplyCursorLock(" + data[m.start("rhs"):m.end("rhs")] + ");"))
         if not matches:
             continue
+        # A hardlinked original is a regular file: any in-place rewrite would
+        # silently modify an external alias, possibly outside the Unity runner.
+        if file.stat().st_nlink != 1:
+            raise ValueError("Unsafe hardlinked original mouse source")
+        parent = file.parent
+        while parent != root:
+            if parent.is_symlink() or parent == parent.parent:
+                raise ValueError("Redirected original mouse source parent")
+            parent = parent.parent
         matches.sort(key=lambda item: item[0])
         if any(a[1] > b[0] for a, b in zip(matches, matches[1:])):
             raise ValueError("Overlapping original input patch candidates")
@@ -72,18 +83,55 @@ def patch(source_root: Path, original_dll: Path, *, apply=False, project_assets=
     assert_original(original_dll)
     sources, counts = replacement_plan(source_root, project_assets=project_assets)
     if apply:
-        if backup is None or backup.is_symlink() or backup.exists():
+        if backup is None or any(node.is_symlink() for node in (backup, *backup.parents)) or backup.exists():
             raise ValueError("New, nonlinked private backup directory is required")
-        if backup.resolve().is_relative_to(source_root.resolve()) or source_root.resolve().is_relative_to(backup.resolve()):
+        if (backup.resolve().is_relative_to(source_root.resolve())
+                or source_root.resolve().is_relative_to(backup.resolve())):
             raise ValueError("Backup must be external to source root")
+        # Snapshot every source before creating any backup, and preserve a
+        # decompiler's original BOM if present. Original .meta/GUIDs are never
+        # edited. This is an integrity check, not atomic cross-process locking.
+        originals = {file: file.read_bytes() for file in sources}
+        installed = {
+            file: (b"\\xef\\xbb\\xbf" if raw.startswith(b"\\xef\\xbb\\xbf") else b"")
+                  + sources[file].encode("utf-8")
+            for file, raw in originals.items()
+        }
         backup.mkdir(parents=True, exist_ok=False)
-        # Save every original input-site source before any mutation.
-        for file in sources:
-            destination = backup / file.relative_to(source_root)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            destination.write_bytes(file.read_bytes())
-        for file, text in sources.items():
-            file.write_text(text, encoding="utf-8")
+        mutations_started = False
+        try:
+            # No project source may be rewritten before ALL original backups
+            # have been written and compared byte-for-byte to their snapshots.
+            for file, raw in originals.items():
+                destination = backup / file.relative_to(source_root)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(raw)
+            for file, raw in originals.items():
+                if (backup / file.relative_to(source_root)).read_bytes() != raw:
+                    raise ValueError("Original mouse source backup is not byte-identical")
+                if file.read_bytes() != raw or file.stat().st_nlink != 1:
+                    raise ValueError("Original mouse source changed during backup")
+            mutations_started = True
+            for file, payload in installed.items():
+                file.write_bytes(payload)
+                if file.read_bytes() != payload:
+                    raise ValueError("Installed original mouse source bytes changed")
+        except BaseException as error:
+            if mutations_started:
+                try:
+                    for file, raw in originals.items():
+                        if file.read_bytes() != raw:
+                            file.write_bytes(raw)
+                    if any(file.read_bytes() != raw for file, raw in originals.items()):
+                        raise ValueError("Original mouse source rollback byte mismatch")
+                except BaseException:
+                    # Retain intact backup data for human recovery if any
+                    # source cannot be restored. Never remove original bytes.
+                    raise ValueError("Original mouse source rollback failed; backups retained") from error
+            if backup.is_symlink():
+                raise ValueError("Unsafe redirected mouse backup; retained") from error
+            shutil.rmtree(backup)
+            raise
     return {"status": "AUTHENTIC_LEGACY_MOUSE_BRIDGE_PLAN",
             "original_sha_verified": True,
             "matched": counts,
