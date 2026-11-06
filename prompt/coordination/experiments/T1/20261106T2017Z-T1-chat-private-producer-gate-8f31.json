@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261106T2017Z-T1-chat-private-producer-gate-8f31",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "source_commit": "3f618bbbd12d94f3424811ac1019a725867ec48d",
+  "source_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_assets_downloaded": false,
+  "hypothesis": "Existing direct-original-SPIRV vs Unity paired SHA gate validates trace/input bytes but does not separately require Unity C# replay final complete stage or physically cross-check both original-derived candidate source files against the private generated resource manifest before interpreting keyed read mismatches.",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_private_unity_paired_capture.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_private_unity_input_join.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_unity_trace_producer_gate.py -v",
+    "python3 -m scripts.t1_fft_unity_trace_producer_gate --project <private Unity scratch> --pair-manifest <private joined manifest> (in opt-in Unity workflow only, not executed this cycle)"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-private-unity-paired-bridge-ci.yml",
+  "opt_in_unity_workflow_path": ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42287568433",
+  "skipped_unity_url": "https://github.com/alwansan/raf/actions/runs/42287573222",
+  "budget": "Ubuntu 24.04 source-only <=4 minutes; no Unity engine scheduled in this chat",
+  "tools": {
+    "python": "GitHub Actions runner python3",
+    "unity": "not run in this cycle"
+  },
+  "negative_controls": [
+    "incomplete/stale/altered Unity stage, invalid symlink",
+    "original-derived candidate0/1 SHA drift or physical alias",
+    "wrong pinned original object SHA, slots/group size, false stage claim",
+    "unsafe/duplicate/oversized private JSON, invalid resource property names",
+    "trace injected shader SHA drift; truncated/oversized trace bytes; copied GPU input identity mismatches",
+    "safe stderr/stdout redaction; no raw original values/hashes in printed report"
+  ],
+  "observed_result": {
+    "run_id": 42287568433,
+    "job_id": 128132253694,
+    "conclusion": "success",
+    "prior_direct_original_pair_tests": "21/21",
+    "prior_input_join_tests": "17/17",
+    "new_producer_stage_tests": "15/15",
+    "total_source_only_tests": 53,
+    "private_pair_real_unity_executed": false,
+    "original_vs_unity_actual_numeric_parity_proven": false,
+    "android_water_proven": false
+  },
+  "limitations": [
+    "The Unity C# last-entered 'complete' file is UNSIGNED and can be stale or forged.",
+    "The sidecar SHA binds physical files for candidate0/1 and injected shader/trace; it does not attest the compiler's actual GPU binary or game authored FindKernel mapping.",
+    "Original source ZIP2 and private GPU trace not acquired; no new original/Unity binary or numeric comparison this cycle.",
+    "Opt-in private Unity job skipped on standard push, retained native-engine shared mutex and no cancellation."
+  ],
+  "integration_commits": [
+    "e7c07a8b257824b07945f9d993615b8fbebc159f",
+    "f9036d0fa14a838a2e90605c8bb2161954613691",
+    "b0b934d601714ebd6c7669a5a955fed41b2910bc",
+    "3f618bbbd12d94f3424811ac1019a725867ec48d"
+  ],
+  "owner_native_build": {
+    "run_id": 42281310905,
+    "conclusion": "failure",
+    "job_id": 128111384362,
+    "failed_step": "Unity Editor Android script compile",
+    "compiler": "CS0234",
+    "missing_type": "RaftAndroid.Platform.AndroidPhysicalMouseCapture",
+    "issue_owner": "T4/T5",
+    "no_code_changes": true
+  },
+  "next_step": "Owner T4/T5 fix Unity Editor conditional compilation and retry native only under owner authority; T1 later run explicitly authorized private original-source vs Unity keyed trace using pinned ZIP2 same inputs, stage and SHA checks, then identify real butterfly X drift before any in-game shader fix. Vote T1 remains لا يحتاج."
+}
