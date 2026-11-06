@@ -1,0 +1,13 @@
+# T2 — chat: SHA-original Foam Shader field stfld exact value
+- session_id: `20261106T1340Z-T2-chat-shader-stfld-source-a84d`
+- origin: `chat`
+- status: `active`
+- resumed_from_sessions: `20261106T1326Z-T2-chat-source-Shader-field-51d2`, `20261106T1322Z-T2-scheduled-ci-isolation-b83e`
+- base_sha: `ed1ac040e8a361ba253b8088d89c23ba87c06959`
+- work registration: `10831fc3aa98fcdae3930e1b7ca70137094192b8`, `prompt/coordination/work/WATER-001/T2-20261106T1340Z-T2-chat-shader-stfld-source-a84d.json`
+- source original ZIP2: `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; `Assembly-CSharp.dll` exact 3,211,776B SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`.
+- latest proven: [CI42225913516](https://github.com/alwansan/raf/actions/runs/42225913516), original source SHA authentic; exact `UnityEngine.Shader` field fed into source-authentic `new Material(Shader)`, nonpublic [SerializeField] field, exactly one compiled original `stfld` writer site in one method; value producer unproven.
+- concurrent unrelated Actions at registration: T1 `42227505971`, T5 `42227170402`. No overlapping T2 Cecil jobs; T1/T5 files untouched.
+- hypothesis: the exact one Shader field stfld has a statically provable stack value source, such as Shader.Find return, typed Shader field/parameter, or null; any code path or IL instructions not supported must block proof. Passing a Shader typed value cannot establish it is Foam unless exact source reference matches.
+- intended_files: own MaterialStoreValueTrace.cs, Program.cs, T2 original source-only workflow, work/session/experiment/event/report/handoff. No game source, Unity meta/GUID, input, audio, Settings, world/save, native builds or APK.
+- status: registration complete; implementation/CI verdict not yet recorded.
