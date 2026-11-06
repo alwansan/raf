@@ -307,6 +307,7 @@ def apply(project, backup, manifest, write=False):
         targets = [backup / n for path, meta, raw, metadata, data in plans
                    for n in ((path.name, meta.name) if metadata is not None else (path.name,))]
         mutations_started = False
+        prewrite_source_check = False
         try:
             for path, meta, raw, metadata, data in plans:
                 shutil.copy2(path, backup / path.name)
@@ -316,6 +317,24 @@ def apply(project, backup, manifest, write=False):
                 if ((backup / path.name).read_bytes() != raw
                     or (metadata is not None and (backup / meta.name).read_bytes() != metadata)):
                     raise ValueError('Original operation backup is not byte-identical')
+            # The source was authenticated during planning, but another
+            # writer might update original .cs or Unity .meta after copy2()
+            # and before this transaction writes. Fail closed *before any*
+            # source mutation and retain the authentic backup for reconcile.
+            prewrite_source_check = True
+            for path, meta, raw, metadata, data in plans:
+                _reject_linked_ancestors(path, 'source')
+                _reject_linked_ancestors(meta, 'meta')
+                if (not path.is_file() or path.stat().st_nlink != 1
+                        or path.read_bytes() != raw):
+                    raise ValueError('Original operation source changed after backup')
+                if metadata is None:
+                    if meta.exists() or meta.is_symlink():
+                        raise ValueError('Original operation meta appeared after backup')
+                elif (not meta.is_file() or meta.stat().st_nlink != 1
+                      or meta.read_bytes() != metadata):
+                    raise ValueError('Original operation meta changed after backup')
+            prewrite_source_check = False
             mutations_started = True
             for path, meta, raw, metadata, data in plans:
                 path.write_bytes(data)
@@ -323,6 +342,13 @@ def apply(project, backup, manifest, write=False):
                     or (meta.read_bytes() if meta.exists() else None) != metadata):
                     raise ValueError('Installed operation/meta changed')
         except BaseException as error:
+            if prewrite_source_check:
+                # Nothing has been installed. In particular, never roll back
+                # old planned bytes over a different writer's new .cs/.meta.
+                # Backups are retained, not silently unlinked on stale input.
+                raise ValueError(
+                    'Original operation source/meta changed after backup; backups retained'
+                ) from error
             if mutations_started:
                 # Preserve all original backups if rollback itself fails.
                 try:
