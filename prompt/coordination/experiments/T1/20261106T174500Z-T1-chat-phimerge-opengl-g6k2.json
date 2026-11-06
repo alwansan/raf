@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+  "issue_id": "WATER-001",
+  "owner_trial_policy": "prompt/coordination/T_TEAM/TRIAL_BUILD_POLICY_AR.md",
+  "vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "لا يحتاج",
+    "commit": "d5330515a091e4503187040361cad226a01fb35b"
+  },
+  "hypothesis": "Nested conditional and dynamic loop-carried float32 Phi merges of bitcarried integer coordinates might reproduce original FFT Unity/OpenGLCore butterfly address drift absent from simple direct bitcasts.",
+  "source_commit": "c5c05827589db1810b1ab9bb738c92028fce6e4a",
+  "inputs": {
+    "source": "synthetic public authored 64×32 RGBAFloat",
+    "threads": 64,
+    "site_kinds": [
+      "direct_a",
+      "direct_b",
+      "simple_branch_phi",
+      "nested_branch_phi",
+      "dynamic_loop_phi"
+    ],
+    "private_original_game_source_used": false
+  },
+  "tool_versions": {
+    "unity": "2021.3.45f2",
+    "GameCI": "v0.1.72 SHA 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_phi_merge_texture_fixture.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v",
+    "GameCI docker Unity2021 1-case test + strict bounded NUnit + 320 GPU float-bit reads"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-phi-merge-texture.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42264618337",
+  "artifact_urls": [],
+  "negative_controls": [
+    "actual OpenGLCore backend required",
+    "sourcefree synthetic fixture rejects absence of 3 carrier Phi categories",
+    "2 direct integer samples prove basic texture path",
+    "5 class counts must be 0 for strict positive",
+    "C# Unity full readback and exact one NUnit case mandatory"
+  ],
+  "status": "waiting_ci",
+  "expected_result": {
+    "sites": 5,
+    "reads_per_site": 64,
+    "exact_gpu_words": 320
+  },
+  "observed_result": null,
+  "limitations": [
+    "Synthetic branch/loop carrier does not reproduce original SPIR-V/DXBC arithmetic",
+    "Proprietary original FFT not imported, Android/Adreno not tested"
+  ],
+  "next_step": "Read actual Unity terminal verdict and five counts, record result; remain no APK need until major original integration."
+}
