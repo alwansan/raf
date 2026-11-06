@@ -4,8 +4,8 @@
   "session_id": "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "active",
-  "updated_at": "2026-11-06T21:51:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T21:55:00Z",
   "base_sha": "26c124ab5a4c786de0e7ffec4182c7b5bc85517d",
   "resumed_from_sessions": [
     "20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa",
@@ -24,5 +24,16 @@
   "experiment_key": "T5-DELIVERY-013-source-0345ee05-xapk-split-multipart-nested-apk-obb-sha256-manifest-parity-streaming-v1",
   "resource_key": "source-only; independent 5-minute Python CI, no Unity/ZIP2/original assets",
   "coordination": "Distinct files from scheduled T5 scripts/t5_verify_apk_obb_pair.py and tests; does not edit T4 active LOCAL-005, T1/T2 water or T3 shaders. Existing native 42296450023 immutable a1737bd7 running Unity Editor; no cancellation/duplicate request.",
-  "next_step": "Add bounded read-only segmented XAPK verifier/test and workflow; test synthetic drift and valid multi-part XAPK; checkpoint exact immutable CI evidence."
+  "next_step": "Revisit native 42296450023 final Unity/output status; if actual signed delivery parts are available and source SHA attributed, run python3 scripts/t5_verify_xapk_cross_delivery.py --delivery-root PATH, record actual SHA and limitations. Never claim signed device evidence from synthetic tests.",
+  "source_commit": "07adfa6a0c537bcd39ac19cfd1a7116559816d2a",
+  "result": {
+    "ci": "https://github.com/alwansan/raf/actions/runs/42300311686",
+    "source_sha": "07adfa6a0c537bcd39ac19cfd1a7116559816d2a",
+    "synthetic_tests": "7/7 PASS",
+    "real_signed_payload_verified": false,
+    "android_device_verified": false,
+    "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+    "native_source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+    "native_state_at_checkpoint": "in_progress Unity Editor import/compile"
+  }
 }

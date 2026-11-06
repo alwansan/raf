@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
+  "issue_id": "DELIVERY-013",
+  "experiment_key": "T5-DELIVERY-013-source-0345ee05-xapk-split-multipart-nested-apk-obb-sha256-manifest-parity-streaming-v1",
+  "source_commit": "07adfa6a0c537bcd39ac19cfd1a7116559816d2a",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42300311686",
+  "tests": {
+    "positive": 2,
+    "negative": 5,
+    "passed": 7,
+    "failed": 0
+  },
+  "result": "SUCCESS_SYNTHETIC_ONLY",
+  "limitations": [
+    "No real signed Raft payload inspected",
+    "No Android device or Unity graphics proof",
+    "Local manifest not authenticated to GitHub API"
+  ],
+  "next_step": "Revisit native 42296450023 final Unity/output status; if actual signed delivery parts are available and source SHA attributed, run python3 scripts/t5_verify_xapk_cross_delivery.py --delivery-root PATH, record actual SHA and limitations. Never claim signed device evidence from synthetic tests."
+}

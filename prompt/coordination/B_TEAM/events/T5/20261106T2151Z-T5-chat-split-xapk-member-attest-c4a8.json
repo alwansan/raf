@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
+  "issue_id": "DELIVERY-013",
+  "event_type": "split_xapk_member_parity_source_green",
+  "at_utc": "2026-11-06T21:55:00Z",
+  "source_commit": "07adfa6a0c537bcd39ac19cfd1a7116559816d2a",
+  "ci": "https://github.com/alwansan/raf/actions/runs/42300311686",
+  "passed_tests": 7,
+  "real_game_artifact_verified": false,
+  "session": "prompt/coordination/clients/T5/sessions/20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8.md"
+}
