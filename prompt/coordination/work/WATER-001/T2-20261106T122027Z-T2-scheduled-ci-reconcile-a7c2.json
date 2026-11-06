@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "ca3046a9d9b87cad8ed830c8dca6195bddfd8064",
+  "intended_files": [
+    "prompt/coordination/clients/T2/sessions/20261106T122027Z-T2-scheduled-ci-reconcile-a7c2.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T122027Z-T2-scheduled-ci-reconcile-a7c2.json"
+  ],
+  "experiment_key": "t2-original-foam-pointer-ssa-74fe4f77-ci42209039138-confirm-and-next-managed-second-operand-disjoint",
+  "resource_key": null,
+  "taken_over_from": [
+    "20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9",
+    "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1"
+  ],
+  "hypothesis": "Existing source-only CI already verifies pointer guard; do not duplicate. Establish precise next independent second-value provenance scope.",
+  "updated_at": "2026-11-06T12:20:27Z"
+}
