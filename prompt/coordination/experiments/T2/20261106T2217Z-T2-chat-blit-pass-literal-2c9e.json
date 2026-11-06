@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
+  "issue_id": "WATER-001",
+  "hypothesis": "For both SHA-original Foam Material→Graphics.Blit(Texture,RenderTexture,Material,int) callsites, a bounded backwards direct literal on pass int stack may prove exact public pass0/pass1 selection without original private values or guessing. Unknown producer must stay unknown.",
+  "source_commit": "a36bf27c60959abf1e4128abb31c21b31b2bd133",
+  "input_hashes": [
+    "ZIP2 immutable 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original shader owner 115978112B and original managed DLL 3211776B SHA-pinned by workflow"
+  ],
+  "tool_versions": {
+    "dotnet": "9.0.x",
+    "UnityPy": "1.25.4",
+    "MonoCecil": "project-pinned"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_shaderfind_return_report.py' -v",
+    "dotnet publish android-port/Experiments/T2/FoamShaderFindResultFlow/FoamShaderFindResultFlow.csproj -c Release",
+    "dotnet FoamShaderFindResultFlow.dll --selftest",
+    "dotnet FoamShaderFindResultFlow.dll <original-DLL> <private-Foam-source-identity> <safe-report>",
+    "python3 -m scripts.t2_foam_shaderfind_return_report <safe-report>"
+  ],
+  "negative_controls": [
+    "computed/dynamic int pass not guessed literal",
+    "literal other-than-0-or-1 not recorded as pass0/1",
+    "mixed pass literal values from same Material source site not double counted",
+    "missing category or overcounted category fails source-safe report validation"
+  ],
+  "positive_controls": [
+    "direct ldc.i4.0 before typed Blit(int) yields public literal0",
+    "direct ldc.i4.1 yields literal1",
+    "original exact two public Blit explicit overload consumers remain source-linked"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42303756960",
+  "artifact_urls": [],
+  "budget": "20-minute source-original CPU Mono.Cecil; no Unity game build",
+  "status": "waiting_ci",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Public int pass source literal is static IL, not actual Android execution",
+    "No exact original private shader function, materials, GUIDs, original bytecode or IL exported",
+    "If original producer is indirect, unknown remains unknown",
+    "No UnityShaderLab or on-device water pixel validation"
+  ],
+  "integration_commit": "a36bf27c60959abf1e4128abb31c21b31b2bd133",
+  "next_step": "Check CI42303756960 success and exact public literal 0/1/other/dynamic/mixed counts; fix source-only synthetic failure if present, do not assume source-original until SHA verified. Report only safe literal classes."
+}
