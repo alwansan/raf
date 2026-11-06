@@ -1,0 +1,10 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T001430Z-T1-chat-b9631a",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "source_commit": "ecee16656d45ed1d73d36928b192934d7f9accc9",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42135445728",
+  "observed_result": "All three authentic slot-0 fetch sites and all three roundtrip sites have float32-to-sint32 OpBitcast in the bounded coordinate slice. Immediate operand is a non-load SSA value, and the original slice reaches an OpLoad through vector reshaping. The inverse conversion and reaching stores are not proven. Same-Mesa-Vulkan output parity passed for 64 and 32 written pixels.",
+  "next_step": "Resolve reaching writes to the original float coordinate register with a conservative memory slice. Only if an integer bit carrier is proven, prototype integer-preserving coordinate generation in private scratch."
+}
