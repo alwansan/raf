@@ -39,4 +39,5 @@ jobs:
       - name: Compile platform managed project (Unity Android-only implementation excluded)
         run: dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj -c Release
       - name: Report source-only boundary
-        run: echo 'T5: source-only compile and synthetic ZIP read proof. No phone OBB mount or Unity engine resource acceptance.'
+        run: |
+          echo 'T5: source-only compile and synthetic ZIP read proof. No phone OBB mount or Unity engine resource acceptance.'
