@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "blocked",
   "base_sha": "2ddeeedb17364461a4237b81076b4c49f371e971",
   "resumed_from_sessions": [
     "20261106T1614Z-T3-chat-particle108-bindings-b9c2",
@@ -12,7 +12,7 @@
     "20261106T1532Z-T3-scheduled-particle108-causality-8f3a"
   ],
   "experiment_key": "T3-ZIP2-15964-6scenes-4owners-Particle108-4VSFS-8actual-DXBC-SM40SM50-RDEF-resource-registers-before-SPIRV-v1",
-  "resource_key": "T3-Particle108-4owner-6scene-DXBC-RDEF-CPU-no-graphics-export",
+  "resource_key": null,
   "hypothesis": "The original DXBC RDEF resource binding table (CB, texture SRV, sampler, UAV) for exact 8 original Particle108 stage programs may be fully recovered without compiler-dependent SPIR-V set/binding ambiguity; compare register layout consistency across four genuine keyword pairs.",
   "intended_files": [
     "scripts/t3_particle108_original_dxbc_rdef.py",
@@ -24,6 +24,15 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.json"
   ],
   "method": "Parse SHA-original DXBC RDEF binary container/resource bindings privately using strict bounds, inspect four source-true VSFS keyword permutations selected by six-scene original PPtrs. Report only aggregate counts: bound kinds, register-range overlap, per-variant original register layout stability, source-authentic material shader properties=13 and original Texture props=2. No proprietary resource names/register numbers published. No SPV tools, no Unity or Android build.",
-  "updated_at": "2026-11-06T16:00:39.454Z",
-  "next_step": "Implement parser and source-only negative controls; one immutable original ZIP2 source runner. Preserve all other clients' code and jobs. RENDER-002 stays OPEN."
+  "updated_at": "2026-11-06T16:07:56.804Z",
+  "next_step": "With authorization and a safe tooling route, separate absent/multiple RDEF source stages in 8 genuine DXBC programs, then recover resource registers using declaration instructions if stripped. Never assume user device pixels or shader compile.",
+  "resource_released": true,
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42248772531",
+    "https://github.com/alwansan/raf/actions/runs/42249097396"
+  ],
+  "safe_original_outcome": "ORIGINAL_RDEF_ABSENT_OR_AMBIGUOUS: at least one exact source D3D11 stage has no unique RDEF table, not a confirmed zero-resources register map",
+  "source_free_tests_passed": 13,
+  "workflow_manual_only_commit": "5479077f74e34c9713619c54bc5ec1c799f32339",
+  "followup_patch_attempt": "blocked_by_tool_safety_check_not_committed"
 }
