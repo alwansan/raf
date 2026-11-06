@@ -4,6 +4,9 @@ import json
 import math
 from pathlib import Path
 
+MAX_CAPTURE_BYTES = 2 * 1024 * 1024
+MAX_SAMPLES = 8192
+
 def read_samples(path):
     def no_duplicates(pairs):
         d = {}
@@ -12,10 +15,18 @@ def read_samples(path):
                 raise ValueError("duplicate JSON key")
             d[key] = value
         return d
-    doc = json.loads(Path(path).read_text(encoding="utf-8"), object_pairs_hook=no_duplicates,
+    capture = Path(path)
+    # Bound the input before JSON parsing, not after constructing a huge sample list.
+    with capture.open("rb") as stream:
+        raw = stream.read(MAX_CAPTURE_BYTES + 1)
+    if len(raw) > MAX_CAPTURE_BYTES:
+        raise ValueError("capture exceeds size limit")
+    doc = json.loads(raw.decode("utf-8"), object_pairs_hook=no_duplicates,
                      parse_constant=lambda s: (_ for _ in ()).throw(ValueError("nonfinite JSON")))
     if not isinstance(doc, dict) or set(doc) != {"samples"} or not isinstance(doc["samples"], list):
         raise ValueError("expected samples array")
+    if len(doc["samples"]) > MAX_SAMPLES:
+        raise ValueError("capture exceeds sample limit")
     result = {}
     for item in doc["samples"]:
         if not isinstance(item, dict) or set(item) != {"pass", "x", "y", "channel", "value"}:
@@ -24,12 +35,18 @@ def read_samples(path):
             raise ValueError("invalid coordinate")
         if not isinstance(item["channel"], str) or not item["channel"]:
             raise ValueError("invalid channel")
-        if type(item["value"]) not in (int, float) or not math.isfinite(item["value"]):
+        if type(item["value"]) not in (int, float):
+            raise ValueError("invalid value")
+        try:
+            numeric_value = float(item["value"])
+        except (OverflowError, ValueError):
+            raise ValueError("invalid value") from None
+        if not math.isfinite(numeric_value):
             raise ValueError("invalid value")
         key = (item["pass"], item["x"], item["y"], item["channel"])
         if key in result:
             raise ValueError("duplicate sample")
-        result[key] = float(item["value"])
+        result[key] = numeric_value
     return result
 
 def first_difference(vulkan, unity, atol=1e-6, rtol=1e-5):
