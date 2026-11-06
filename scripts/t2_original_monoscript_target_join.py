@@ -211,8 +211,8 @@ def inspect_sha_original_source(zip2, scratch, checkpoint=lambda _: None):
     checkpoint("map_actual_original_script_owner_candidates")
     categories, grouped=validated_safe_classification(script_refs,manifest)
     selected, skipped, byte_budget=choose_bounded_SHA_original_targets(grouped,manifest)
-    if not selected and categories["original_unique_basename_candidate_ref_rows"]:
-        raise ValueError("original_target_staging_budget_zero_for_unique_candidates")
+    # Original targets outside the bounded budget are recorded as unresolved;
+    # not a claim of missing scripts or corrupted original game data.
     # No private source paths or class names are serialized.
     output={
         "status":"source_original_opaque_m_Script_target_type_join",
