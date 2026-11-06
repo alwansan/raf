@@ -1,0 +1,42 @@
+{
+  "id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+  "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "original_sha_authentic_SetVector_second_and_receiver_origin_classified",
+  "experiment_key": "SHA-original-ZIP2-Foam-CB0-exact-Material.SetVector-first-string-typed-second-Vector4-and-receiver-IL-origin-v1",
+  "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "run_id": 42217370118,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42217370118",
+  "job_id": 127890628850,
+  "run_conclusion": "success",
+  "source_commit": "205be806b79451097149c90a3a6301f05a6a009c",
+  "sourcefree_test_methods_passed": 11,
+  "cecil_selftest_passed": true,
+  "original_methods_scanned": 19512,
+  "original_il_instructions_scanned": 491490,
+  "original_ldstr_count": 7246,
+  "exact_first_formal_typed_setter": {
+    "material_vector": 1
+  },
+  "second_operand_IL_origin": {
+    "new_object": 1
+  },
+  "receiver_IL_origin": {
+    "pre_literal_unknown": 1
+  },
+  "source_vector_names": 5,
+  "source_vector_names_exact_typed_SetVector_first_formal": 1,
+  "original_vector_component_values_proven": false,
+  "constructor_type_and_arguments_proven": false,
+  "material_identity_original_foam_proven": false,
+  "original_CB0_160_byte_upload_verified": false,
+  "Unity_2021_or_Adreno_water_verified": false,
+  "original_managed_executed": false,
+  "private_names_hashes_IL_or_assembly_disclosed": false,
+  "report": "docs/T2_FOAM_ORIGINAL_CB0_SETVECTOR_OPERAND_ORIGINS_2026-11-06.md",
+  "conclusion_limits": "IL newobj produced a typed second Vector4 argument of exactly one source-authenticated Material.SetVector call; receiver pre-literal unresolved, no runtime CBuffer upload or shader/pixel acceptance.",
+  "next_step": "Inspect exact newobj constructor signature and inputs, plus pre-ldstr receiver stack dataflow with bounded paths; then verify Material Foam link and 160B CB0 host value writes for both passes."
+}
