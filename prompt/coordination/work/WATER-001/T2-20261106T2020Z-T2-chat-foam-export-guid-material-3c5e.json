@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "track": "real Unity-export Foam Shader GUID and Material PPtr read-only fail-closed preflight; source-authentic private 2-pass candidate checked against synthetic same-GUID Material link",
+  "base_sha": "d41cd1c646a4f1c1c8ce43b5eb08c9b175a08424",
+  "updated_at": "2026-11-06T20:19:37.098Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.md",
+    "scripts/t2_foam_export_binding_probe.py",
+    "tests/test_t2_foam_export_binding_probe.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    ".github/workflows/raft-t2-foam-private-installer-sourceonly.yml",
+    "docs/T2_FOAM_EXPORT_GUID_MATERIAL_PREFLIGHT_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-result.json",
+    "prompt/coordination/discussions/WATER-001/20261106T2020Z-T2-chat-foam-export-guid-material-3c5e-to-T5.md"
+  ],
+  "experiment_key": "FoamExportGuidMaterial-before-after-2pass-private-ShaderLab-attested-source+synthetic-YAML-Material-4800000-GUID-integrity-v1",
+  "resource_key": "isolated T2 sourcefree controls and existing pinned ZIP2 original private Foam ShaderLab workflow, no Unity native job",
+  "hypothesis": "An actually exported Foam Shader identity and original .meta have exactly one GUID, no collision with any other Assets .meta, and no material YAML binding mutates when the source-authenticated private 2pass candidate replaces source content; synthetic GUID link tests distinguish true fileID 4800000/type3 from false positives.",
+  "resumed_from_sessions": [
+    "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
+    "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7"
+  ],
+  "last_native_evidence": "42281310905 original exported Foam has only one pass but .meta present; no new Android APK",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T2000Z-T2-chat-foam-private-installer-a4c7.json"
+  ],
+  "trial_vote": "لا يحتاج",
+  "next_step": "Build new read-only export Foam identity/Material PPtr probe and negative controls; exercise authentic private ShaderLab install preserving synthetic serialized Material pointer; handoff to T5 without altering shared native build workflow."
+}
