@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "provenance": "SANITIZED_PINNED_CI_LOG_EXCERPTS_UNAUTHENTICATED_AT_RUNTIME",
+  "original": {
+    "run_id": 42220554705,
+    "commit": "00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f",
+    "zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "role": "butterfly",
+    "site": 1,
+    "coordinate": "x",
+    "status": "bounded_last_write_component_lineage",
+    "reachable_last_writer_count": 1,
+    "source_boundary": {
+      "immediate_store_opcode": "OpVectorShuffle",
+      "ssa_ops": [
+        "OpVectorShuffle",
+        "OpBitcast",
+        "OpVectorShuffle",
+        "OpLoad"
+      ],
+      "cast_kinds": [
+        "sint32_bits_to_float32"
+      ],
+      "leaf_storage_class": "Input",
+      "leaf_numeric_kind": "sint32_vector",
+      "status": "memory_load_boundary",
+      "write_form": "whole"
+    },
+    "no_unknown_alias_write": true,
+    "no_uninitialized_path": true,
+    "original_numeric_semantics_proven": false,
+    "authored_unity_runtime_mapping_proven": false
+  },
+  "candidate": {
+    "run_id": 42228497335,
+    "commit": "e936ad1f96c0bb0617a7a7199c2304c5f47442ff",
+    "zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "role": "butterfly",
+    "site": 1,
+    "coordinate": "x",
+    "status": "bounded_nested_phi_component_provenance",
+    "top_phi_kind": "float32_vector",
+    "top_selected_component": "x",
+    "phi_expansions": 1,
+    "cycle_boundaries": 1,
+    "structural_phi_backedges": 1,
+    "incoming_count": 2,
+    "first_noncyclic_boundary": {
+      "leaf_storage_class": "Private",
+      "leaf_numeric_kind": "uint32_vector",
+      "status": "memory_load_boundary",
+      "has_bitcast": true
+    },
+    "second_boundary": "loop_carried_or_cyclic_phi",
+    "selected_runtime_predecessor_proven": false,
+    "original_vs_unity_numeric_parity_proven": false
+  },
+  "synthetic_unity": {
+    "run_id": 42279949574,
+    "commit": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
+    "engine": "2021.3.45f2",
+    "backend": "OpenGLCore",
+    "site_count": 16,
+    "threads": 64,
+    "positive_controls_all_zero": true,
+    "computed_mismatches": [
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "computed_zero_signatures": [
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "buffered_mismatches": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "buffered_zero_signatures": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sourcefree_only": true,
+    "original_shader_executed": false,
+    "android_adreno_proven": false
+  }
+}
