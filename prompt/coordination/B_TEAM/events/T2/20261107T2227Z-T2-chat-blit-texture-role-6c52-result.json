@@ -1,0 +1,15 @@
+{
+  "id": "20261107T2227Z-T2-chat-blit-texture-role-6c52-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261107T2227Z-T2-chat-blit-texture-role-6c52",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "at": "2026-11-06T22:35:50.847Z",
+  "summary": "SHA-original Foam Material→Graphics.Blit two-pass direct source/destination role probe PASS in CI42305522855, 63+6 synthetic controls + Mono.Cecil. One RenderTexture source and one RenderTexture destination each proven from immediate IL, other site unknown; no pass correlation or Android pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42305522855",
+    "https://github.com/alwansan/raf/commit/681c239c29959e420829b48ba24c4ab203ce9ca5",
+    "docs/T2_ORIGINAL_FOAM_BLIT_RENDER_TEXTURE_ROLES_2026-11-07.md"
+  ]
+}
