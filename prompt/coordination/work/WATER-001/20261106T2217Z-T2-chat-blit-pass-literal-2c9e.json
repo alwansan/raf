@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "dc6518bbbfadbd6887be868cdc1ff3996ebb2e09",
+  "updated_at": "2026-11-06T22:17:11.529Z",
+  "resumed_from_sessions": [
+    "20261106T2211Z-T2-chat-blit-overload-b47a",
+    "20261106T2203Z-T2-chat-graphics-path-7d3e"
+  ],
+  "hypothesis": "For both SHA-original Foam Material→Graphics.Blit(Texture,RenderTexture,Material,int) callsites, a bounded backwards direct literal on pass int stack may prove exact public pass0/pass1 selection without original private values or guessing. Unknown producer must stay unknown.",
+  "experiment_key": "T2-original-Foam-2xBlit-explicit-pass-literal-stack-adjacent-v1",
+  "resource_key": "T2 isolated source-only original Mono.Cecil scan; same pinned DLL, public pass argument only",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "prompt/coordination/work/WATER-001/20261106T2217Z-T2-chat-blit-pass-literal-2c9e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2217Z-T2-chat-blit-pass-literal-2c9e.md",
+    "prompt/coordination/experiments/T2/20261106T2217Z-T2-chat-blit-pass-literal-2c9e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2217Z-T2-chat-blit-pass-literal-2c9e-result.json"
+  ],
+  "do_not_touch": [
+    "other T1/T3/T4/T5 clients' files",
+    "Unity assets shaders .meta GUID/OBB",
+    ".github/raft-native-build-request.json",
+    "Unity native build workflows"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42303074180"
+  ],
+  "next_step": "Trace immediate public pass argument at exact original typed Blit call from instruction directly preceding call (max 4 NOP), record only literal 0 / literal 1 / other literal / dynamic / mixed category, with no private code output. Run existing source-original workflow, never infer live Unity stage selection."
+}
