@@ -41,6 +41,8 @@ def operand_info(value, values, types):
 def suffix_from_branch(fun, start, load_block, load_idx, base, lane,
                        shape, values, types):
     blocks, edges = fun["blocks"], fun["edges"]
+    if start not in blocks:
+        raise ValueError("SPIR-V branch successor missing")
     entry = (start, 0, "prior_writer", False)
     visited = {entry}
     queue = deque([entry])
@@ -104,6 +106,15 @@ def analyze(text, *, original_layout=False):
     if len(owners) != 1:
         raise ValueError("Ambiguous Function local load")
     fun, read_block, read_idx = owners[0]
+    terminators = {
+        "OpBranch", "OpBranchConditional", "OpSwitch", "OpReturn",
+        "OpReturnValue", "OpKill", "OpUnreachable", "OpTerminateInvocation",
+    }
+    for instructions in fun["blocks"].values():
+        if any(op in terminators for op, _, _ in instructions[:-1]):
+            raise ValueError("SPIR-V terminator is not final in its block")
+        if instructions[-1][0] not in terminators:
+            raise ValueError("Missing SPIR-V block terminator")
     reachable = {fun["entry"]}
     pending = [fun["entry"]]
     while pending:
