@@ -1,0 +1,18 @@
+{
+  "id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
+  "issue_id": "WATER-001",
+  "type": "checkpoint",
+  "status": "waiting_ci",
+  "at": "2026-11-06T22:24:51.691Z",
+  "summary": "SHA-original slot0 HLSL50-derived Site2-Y Phi loop backedge has verified same-selected-component syntactic SSA self-dependence (7 states), non-backedge entry no self-dependence (2 states); CI42304068126 actual source-private success. Follow-up CI42304106607 source-only 35/35 successful and private job pending. Runtime branch choice, Unity shader ABI/numeric output and Adreno water remain unproven.",
+  "proof_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42304068126",
+    "https://github.com/alwansan/raf/actions/runs/42304106607",
+    "https://github.com/alwansan/raf/commit/17b043b4e729a3e0493467d8aa7d0577af7a2727"
+  ],
+  "vote": "لا يحتاج",
+  "no_proprietary_shader_or_pixel_export": true
+}
