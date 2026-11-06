@@ -26,8 +26,8 @@
   "red_run_url": "https://github.com/alwansan/raf/actions/runs/42290968831",
   "artifact_urls": [],
   "budget": "Bounded <=15 min CPU/original DLL only, no Unity/IL2CPP native player build, no OBB",
-  "status": "waiting_ci",
-  "observed_result": "RED test-only run42290968831 completed expected failure at 902acf7205cfc3efcb9ef89c449972f70659bb2f: new test fails `ValueError not raised` while 14 previous tests pass. Production fix 65635d6086cfc9dd19a5989a31562882ed367419 stores original source bytes at planning time, compares to later snapshot before backup creation. GREEN run42291057653 pending.",
+  "status": "completed",
+  "observed_result": "Test-only RED workflow run42290968831 on SHA 902acf72 FAILED exactly 1/15 synthetic source plan interleaving (ValueError not raised), 14 old PASS. Production SHA65635d60 GREEN workflow run42291057653 JOB128144269055 COMPLETED SUCCESS, all 15/15 mouse-source synthetic tests, original 4 X / 4 Y / 2 cursor sites verified across 5 original private C# sources, original Unity2021 Editor+Android managed ABI compiles and 48 C# physical mouse controls. No native Unity player/IL2CPP/device proof.",
   "rejected_hypotheses": [
     "A backup byte-equivalence check alone proves planned output matches the source version being backed up: false under a concurrent source edit."
   ],
@@ -36,5 +36,6 @@
     "No native Editor Unity/player, IL2CPP, Android owner device, RGD save/reopen, or new signed APK+OBB+XAPK evidence."
   ],
   "integration_commit": "65635d6086cfc9dd19a5989a31562882ed367419",
-  "next_step": "Confirm GREEN run job conclusions and actual original signed compiled ABI, then release work scope. T5 owns any later authorized native package."
+  "next_step": "Source scope closed/released. T5 may adopt in future authorized source-pinned native build, followed by device relative mouse and same-world .rgd verification.",
+  "green_run_job_id": 128144269055
 }
