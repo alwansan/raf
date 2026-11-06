@@ -15,7 +15,8 @@
     "prompt/coordination/work/WATER-001/T2-20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json",
     "prompt/coordination/clients/T2/sessions/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.md",
     "prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json",
+    "prompt/coordination/discussions/WATER-001/20261106T112800Z-T2-CB0-MaterialSetVector-proof-T1T5.md"
   ],
   "baseline_real_CI": "https://github.com/alwansan/raf/actions/runs/42208958212",
   "previous_scoped_work_completed": true,
@@ -43,5 +44,10 @@
     "Second value Vector4 and receiver material Foam identity not proven",
     "CB0 full upload bytes and larger pass0 Fragment/pass1 Vertex capacities unproven",
     "No Unity import/Adreno accepted"
-  ]
+  ],
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ],
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T112800Z-T2-CB0-MaterialSetVector-proof-T1T5.md"
 }
