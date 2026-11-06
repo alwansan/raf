@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1334Z-T4-chat-windowfocus-m8v3",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "base_sha": "2ec048fefdc2167fdd55faa2c2f5ce43f3082302",
+  "status": "active",
+  "hypothesis": "Unity focus callback and Android main-window focus can temporarily differ during overlay transitions.",
+  "approach": "Check Android Activity.hasWindowFocus before applying immersive UI changes. Retain existing Activity identity and generation guards.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidImmersiveSystemBars.cs",
+    "android-port/Runtime/Platform/AndroidSystemBarPolicy.cs",
+    "android-port/Tests/ImmersiveBars/Program.cs",
+    "tests/test_t4_android_immersive_system_bars.py",
+    "prompt/coordination/work/INPUT-005/20261106T1334Z-T4-chat-windowfocus-m8v3-focused-window-guard.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1334Z-T4-chat-windowfocus-m8v3.md"
+  ],
+  "experiment_key": "T4-input005-android-windowfocus-v1",
+  "resource_key": "T4-immersive-source-abi-CI",
+  "resumed_from_sessions": [
+    "20261106T1320Z-T4-chat-immersive-lease-v4n8"
+  ],
+  "next_step": "Implement independent native focus guard and run existing source+original Unity ABI CI; preserve system gestures; record results.",
+  "updated_at": "2026-11-06T13:34:35Z"
+}
