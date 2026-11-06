@@ -28,9 +28,12 @@ def inst(op, *args):
 
 
 def spirv(index=2, *, dynamic=False, no_load=False, pointer_copy=False,
-          negative=False, extra=None):
+          negative=False, extra=None, mode="vert"):
+    if mode not in ("vert", "frag"):
+        raise ValueError("invalid synthetic stage")
     body = (
-        inst(71, 5, 33, 0) + inst(71, 5, 34, 0)
+        inst(15, 0 if mode == "vert" else 4, 17, 0x6e69616d, 0)
+        + inst(71, 5, 33, 0) + inst(71, 5, 34, 0)
         + inst(21, 6, 32, 1 if negative else 0)
         + inst(43, 6, 7, 0)
         + inst(43, 6, 8, 0xffffffff if negative else index)
@@ -134,6 +137,14 @@ class CB0CompiledLoadIndexTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             compiled_cb0_load_paths(spirv(), reflection("frag"), (0, 0), 8, 6)
 
+    def test_fragment_stage_binary_matches_fragment_reflection(self):
+        r = compiled_cb0_load_paths(spirv(index=2, mode="frag"),
+                                    reflection("frag"), (0, 0), 8, 6)
+        self.assertEqual(r["observed_static_index_load_count"], 1)
+        with self.assertRaises(ValueError):
+            compiled_cb0_load_paths(spirv(index=2, mode="frag"),
+                                    reflection("vert"), (0, 0), 8, 6)
+
     def test_unknown_array_capacity_is_not_rounded_or_assumed(self):
         for x in (True, 0, -1, 8.0, 65537, None):
             with self.subTest(x=x), self.assertRaises(ValueError):
@@ -148,7 +159,9 @@ class CB0CompiledLoadIndexTests(unittest.TestCase):
                 assemble(parsed, stages, states, source_model_fixture())[0])
             def fake_invoke(cmd):
                 if cmd[0] == "glslangValidator":
-                    Path(cmd[cmd.index("-o")+1]).write_bytes(spirv(index=7))
+                    out = Path(cmd[cmd.index("-o")+1])
+                    out.write_bytes(spirv(index=7, mode=(
+                        "frag" if "-frag" in out.name else "vert")))
                 return True
             def fake_reflect(path):
                 return reflection("vert" if "-vert" in path.name else "frag",
