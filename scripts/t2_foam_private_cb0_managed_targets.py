@@ -87,7 +87,7 @@ def build_private_target_set(parsed):
     # of a predictable shader name can disclose the original name.
     shader_name = parsed["m_Name"]
     if (not isinstance(shader_name, str) or not shader_name
-            or len(shader_name) > 256 or "\\x00" in shader_name):
+            or len(shader_name) > 256 or chr(0) in shader_name):
         raise ValueError("invalid_original_Foam_shader_name")
     original_shader_digest = hashlib.sha256(shader_name.encode("utf8")).hexdigest()
     return {"schema": 1, "source_kind": "SHA_original_Foam_CB0_source_name_registry",
