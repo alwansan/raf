@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "bfe5c21618494a87033ad34521d51f2873756b68",
+  "updated_at": "2026-11-06T19:46:46.656Z",
+  "resumed_from_sessions": [
+    "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
+    "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
+    "20261106T191751Z-T3-chat-spv-opname-b71e"
+  ],
+  "experiment_key": "T3-VKD3D-public-1.2-explicit-source-D3D-register-to-VK-binding-packet-VSFS-no-original-v1",
+  "resource_key": "synthetic-C-compile-vkd3d-shader-public-header-no-ZIP2",
+  "hypothesis": "B18 proven explicit D3D11 resource register binding API can be reused for graphics VS/FS source CB/SRV/sampler families, separating authoritative chosen target set/binding mappings from nonauthoritative SPIR-V debug OpName heuristics. Need a fail-closed private mapping compiler and stage-aware control before original-shader experiment.",
+  "intended_files": [
+    "scripts/t3_particle108_vkd3d_explicit_graphics.c",
+    "scripts/t3_particle108_explicit_map_packet.py",
+    "tests/test_t3_particle108_explicit_map_packet.py",
+    ".github/workflows/raft-t3-shader-candidate-source-only.yml",
+    "prompt/coordination/work/RENDER-002/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json",
+    "prompt/coordination/clients/T3/sessions/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.md",
+    "prompt/coordination/experiments/T3/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json"
+  ],
+  "constraints": [
+    "Only feature/android-native-port",
+    "No original shader private bytecode/name/actual registers in committed code/logs",
+    "Do not edit B18 helper, scheduled T3 contract files, Unity assets, or native build",
+    "Do not dispatch original ZIP2 or native Unity workflows; native build 42281310905 running at scope",
+    "No claim of shader fix/phone colors from source-only C compiler"
+  ],
+  "next_step": "Build explicit VSFS private resource map packet with strong invariants and public VKD3D C API tool that respects stage visibility and CBV/SRV/sampler, test source-only in GitHub Actions with installed distro libvkd3d-shader headers, later authorized original SHA8 stage compare to default and mask target binding operands."
+}
