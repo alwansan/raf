@@ -6356,6 +6356,21 @@
       "_record_path": "../B_TEAM/events/T1/20261106T103645Z-T1-chat-storewriters-b4a7.json"
     },
     {
+      "id": "20261106T110543Z-T1-chat-cfgreach-f4d9",
+      "owner": "T1",
+      "session_id": "20261106T110543Z-T1-chat-cfgreach-f4d9",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated original slot0 FFT CFG may-reach audit reduced direct Function-local writers 3->1 (source/site1) and 8->1 (butterfly site2) for X/Y. Each lane still has an alias_store hazard; true reaching definition and original integer-coordinate semantics remain unproven. Source-authentic CI 42208261641 (13/13) and 42208932160 (16/16) passed. No shader rewrite or Android fix.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42208261641",
+        "https://github.com/alwansan/raf/actions/runs/42208932160",
+        "https://github.com/alwansan/raf/commit/22c0a6f6017286d30b0f3c4fcb6550d924ceb3a4"
+      ],
+      "at": "2026-11-06T11:18:27.553Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T110543Z-T1-chat-cfgreach-f4d9.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -6952,6 +6967,24 @@
       "limits": "Original source HLSL/DXBC/SPV remains private, source->CB0 upload semantics unknown, no ShaderLab installation, no device water acceptance.",
       "next_step": "Authenticate real per-pass Unity host CB0 value producer and buffer extent across larger compiled per-stage accesses; coordinate T1/T5 before Unity/Adreno test.",
       "_record_path": "../B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json"
+    },
+    {
+      "id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result",
+      "owner": "T2",
+      "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+      "origin": "chat",
+      "type": "result",
+      "issue_id": "WATER-001",
+      "at": "2026-11-06T11:17:30Z",
+      "summary": "Original Foam CB0 serialized source name→original Assembly-CSharp.dll SHA-authentic private Cecil CI42208958212 SUCCESS: 11 tests; four real CB0 stage bindings, 5 distinct vector source names; 3/5 found as ldstr (4 sites), one near typed Material.SetFloat/SetVector in same method; original CB buffer name 0/1 found. Proximity is NOT first-argument proof or Unity upload, WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42208958212",
+        "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_LITERAL_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/eb1db19f3cdd38b43f61fdf842899c1ad10d6f9b"
+      ],
+      "limits": "No private names, SHA hashes, original DLL, shader or source printed; no Unity host CB0 upload proof, no Adreno water acceptance.",
+      "next_step": "Trace actual IL first argument of original matched literal candidate; preserve existing texture work and both CB0 compiled load direction findings.",
+      "_record_path": "../B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -8507,6 +8540,27 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1030Z-T4-chat-release-view-ownership-b7m4.json"
     },
     {
+      "id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+      "event_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+      "session_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "INPUT-005",
+      "type": "async_native_mouse_release_classified_outcome",
+      "timestamp": "2026-11-06T11:18:00Z",
+      "at": "2026-11-06T11:18:00Z",
+      "summary": "T4 distinguishes queued Unity mouse release marker from actual Android UI-thread JNI return or bounded skip statuses (superseded request, unbound View, missing/changed focus, capture absent, JNI/dispatch exception). No capture state/policy change, no user/view identifiers. Source commit 8f0b51a, final tests e06566a. Exact CI42208882663 COMPLETED SUCCESS 47/47 Python and original Unity2021 managed ABI compile; CI42208627329 platform source success. No real Android hardware, new APK/OBB or full Unity IL2CPP proof. INPUT-005 OPEN, NOT_READY 0/3.",
+      "source_commit": "e06566a7e72f6128252e2a974e66af46ca57bac3",
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42208882663",
+      "evidence": [
+        "prompt/coordination/clients/T4/sessions/20261106T1106Z-T4-chat-release-outcome-s8k4.md",
+        "prompt/coordination/experiments/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json"
+      ],
+      "native_phone_acceptance": "UNKNOWN",
+      "original_data_published": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9072,7 +9126,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "ae7e2a7ccd4b826252780c542d6fa730737f3375a15a1f6b1e022428e454e728",
+  "source_input_sha256": "0cc013668e143d8272ab072a725174fed562b792cd0e1d7327aeaaf5687bf8b4",
   "generation": "T-2026-11-05",
-  "input_sha256": "6b40de416c33121477b722cc219820d3319acf41d6cc68c661992f17f088e389"
+  "input_sha256": "ecfd0731f15e6ef772051c9d1d92ca75d54eb77cfda9c0d124afc04b0b25ebd8"
 }
