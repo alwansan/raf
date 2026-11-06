@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed_real_original_signed_APK_only_unity_guid_marker_proven_identity_unavailable",
+  "experiment_key": "T5-real-original-42058825739-APK-OBB-Unity-guid-marker-crosscheck-actual-HTTP206-v1",
+  "source_commit": "c009d989ad8823e1f7d1ebe49fe9408ccd493d7b",
+  "real_run_url": "https://github.com/alwansan/raf/actions/runs/42243273146",
+  "real_job_id": 127978801390,
+  "real_run_conclusion": "success",
+  "synthetic_cases": "13/13",
+  "authentic_source": {
+    "owner_tested_run_id": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "signed_checkpoint_artifact_id": 13441766832,
+    "outer_ZIP_bytes": 2974110506,
+    "original_signed_APK_bytes": 672853870,
+    "original_signed_OBB_bytes": 2301256312
+  },
+  "real_result": {
+    "nested_APK_entries": 31,
+    "nested_OBB_entries": 39,
+    "all_70_local_ZIP_headers_checked": true,
+    "apk_assets_unity_obb_guid_present": true,
+    "obb_assets_unity_obb_guid_present": false,
+    "actual_status": "apk_only_identity_unavailable",
+    "source_shared_guid_marker_bytes_compared": 0,
+    "actual_Unity_engine_GUID_verified": false,
+    "owner_device_mount_verified": false,
+    "full_APK_OBB_source_SHA_in_prior_CI": true,
+    "real_206_range_bytes": 11447,
+    "real_206_range_requests": 156
+  },
+  "observed_phone_baseline": {
+    "pinned_CL_original_GUID_warnings_optional_unshipped_patch_89": 3,
+    "main_89_GUID_warnings": 0,
+    "prior_CL_run": 42119428667
+  },
+  "not_a_runtime_fix": true,
+  "tests_and_intermediate_failures": [
+    {
+      "run": 42242913633,
+      "conclusion": "failure",
+      "description": "13 synthetic passed, actual one-sided GUID raised fail-closed blocker before status categories supported"
+    },
+    {
+      "run": 42243221625,
+      "conclusion": "failure",
+      "description": "legacy synthetic one-sided expectation after safe category change; not archive failure"
+    },
+    {
+      "run": 42243273146,
+      "conclusion": "success",
+      "description": "13 synthetic plus actual owner-signed ZIP marker inventory complete"
+    }
+  ],
+  "security": "Read only pinned archived source over strict HTTPS 206, max 16 MiB, never log marker bytes, original GUID value, private downloaded URL, game assets or credentials.",
+  "limits": [
+    "APK-only marker is layout data, not by itself corruption or proof Unity fails to load main OBB",
+    "No on-device installed OBB full SHA or actual Unity streaming asset path success",
+    "No new Unity/Android APK built and no GPU water/FFT/material rendering acceptance"
+  ],
+  "next_step": "Correlate actual installed main.89 OBB path+SHA with owner LogRaft resource access and Unity loaded file before considering packaging fix; coordinate P0 water/FX source work otherwise.",
+  "report": "docs/T5_REAL_UNITY_OBB_GUID_2026-11-06.md",
+  "updated_at": "2026-11-06T15:30:40.042Z"
+}
