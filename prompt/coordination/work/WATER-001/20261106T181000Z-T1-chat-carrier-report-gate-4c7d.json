@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ce8a29caca3fa5fc95e582bcd49f64039cf417d3",
-  "updated_at": "2026-11-06T18:07:46.593Z",
+  "updated_at": "2026-11-06T18:12:58.649Z",
   "resumed_from_sessions": [
     "20261106T175623Z-T1-chat-float-carrier-context-b82c",
     "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
@@ -37,5 +37,20 @@
   ],
   "actual_new_unity_run": false,
   "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 not accessed",
-  "next_step": "Develop and execute extensive source-only gate adversarial tests locally; publish with expected SHA, checkpoint. Do not misrepresent as real Unity evidence."
+  "next_step": "Work complete: independent strict 10-category metrics + one-exact-case NUnit gate source-only tested 14/14, SHA matched. Use only when actual authorized Unity runner exists; prior 10-category Unity workflow publication blocked; actual FFT root cause still open. Trial vote T1 لا يحتاج.",
+  "result": {
+    "source_only_gate_committed": true,
+    "commits": [
+      "41e016403a179d885fd13c13b6a9eebcaeaa902a",
+      "204944ec664c4e994d60b87f5fe40e3255fb7126"
+    ],
+    "local_python_tests_passed": 14,
+    "local_python_tests_total": 14,
+    "local_compileall_success": true,
+    "exact_github_blob_sha_match": true,
+    "new_gameci_run": false,
+    "new_android_trial_build": false,
+    "real_unity_carrier_fixture_still_blocked": true,
+    "original_fft_source_or_adreno_proven": false
+  }
 }
