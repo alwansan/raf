@@ -40,9 +40,15 @@ class PointerViewIdentityAudit(unittest.TestCase):
         self.assertIn("currentEpoch != Volatile.Read(ref epoch)", method_body(source, "RequestCapture"))
         self.assertIn("token != Volatile.Read(ref epoch)", method_body(source, "ProbeCapturedPointer"))
         self.assertIn("releaseEpoch != Volatile.Read(ref epoch)", method_body(source, "ReleaseCapture"))
-        self.assertNotIn("captureViewIdentity", source)
-        # Generation guards prevent stale asynchronous callbacks but do not
-        # identify which Android View currently owns pointer capture.
+        # Generation guards alone do not identify the View. A separate,
+        # non-invasive diagnostic now compares the request and probe Views.
+        self.assertIn("captureViewIdentity", source)
+        self.assertIn('"identityHashCode"', source)
+        self.assertIn("probedIdentity != requestedIdentity", method_body(source, "ProbeCapturedPointer"))
+        self.assertIn("Volatile.Write(ref captureViewIdentity, ViewIdentity(view))", method_body(source, "RequestCapture"))
+        self.assertIn("Volatile.Write(ref captureViewIdentity, 0)", method_body(source, "ReleaseCapture"))
+        self.assertIn('"physical_mouse_capture_view_changed"', source)
+        # This is diagnostic only; do not change capture or legacy axis routing.
 
 
 if __name__ == "__main__":
