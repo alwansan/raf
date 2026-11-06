@@ -153,8 +153,16 @@ def apply(project, backup, write=False):
             raise ValueError('Expected unique original source: ' + name)
         path = paths[0]
         meta = path.with_suffix('.cs.meta')
-        if path.is_symlink() or meta.is_symlink() or (meta.exists() and not meta.is_file()):
+        if path.is_symlink() or meta.is_symlink() or not path.is_file() or (meta.exists() and not meta.is_file()):
             raise ValueError('Regular original source and any existing meta required')
+        # A hardlinked .cs shares the inode with a source outside this Unity
+        # staging tree: path.write_bytes() would rewrite that external origin.
+        # Also reject linked .meta even though its bytes are only backed up,
+        # retaining the same fail-closed source/GUID ownership contract as the
+        # original save-path adapter. The backing project must contain its
+        # own physical copies before any backup or in-place modification.
+        if path.stat().st_nlink != 1 or (meta.exists() and meta.stat().st_nlink != 1):
+            raise ValueError('Unsafe hardlinked original source or metadata')
         raw = path.read_bytes()
         result = adapt(name, raw.decode('utf-8-sig')).encode()
         if raw.startswith(b'\xef\xbb\xbf'):
