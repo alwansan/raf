@@ -3,7 +3,7 @@ import copy
 from pathlib import Path
 import tempfile
 import unittest
-from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError,PrivateDocumentError,exported_selected_values
+from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError,PrivateDocumentError,exported_selected_values,normalize_selected_exported_scalar_fields
 from scripts.b22_verify_material_scalars import _float_bits
 
 def fixture():
@@ -182,7 +182,42 @@ Material:
             path.write_text(path.read_text().replace("    m_Floats:", "    m_Floats: 123\n    ignore:"))
             with self.assertRaises(PrivateDocumentError) as ctx:
                 exported_selected_values(project,wanted)
-            self.assertEqual(ctx.exception.code,"SELECTED_SCALAR_SCHEMA")
+            self.assertEqual(ctx.exception.code,"SELECTED_SCALAR_CONTAINER_UNSUPPORTED")
+    def test_real_asset_ripper_scalar_dict_fields_preserve_all_original_values(self):
+        from scripts.b22_verify_material_scalars import _float_bits
+        saved={"m_Floats":{"_SyntheticAlpha":0.4,"_SyntheticScale":1.25},
+               "m_Ints":{"_SyntheticMode":7}}
+        result,mapped=normalize_selected_exported_scalar_fields(saved)
+        self.assertEqual(mapped,2)
+        self.assertEqual(result["m_Floats"]["_SyntheticAlpha"],_float_bits(0.4))
+        self.assertEqual(result["m_Floats"]["_SyntheticScale"],_float_bits(1.25))
+        self.assertEqual(result["m_Ints"]["_SyntheticMode"],7)
+        self.assertNotIn("_SyntheticAlpha",str({"mapped_count":mapped}))
+    def test_scalar_dict_value_type_and_missing_fields_still_fail_closed(self):
+        saved={"m_Floats":{"_SyntheticAlpha":"private_bad_number"},"m_Ints":{}}
+        with self.assertRaises(PrivateDocumentError) as cm:
+            normalize_selected_exported_scalar_fields(saved)
+        self.assertEqual(cm.exception.code,"SELECTED_SCALAR_SCHEMA")
+        self.assertNotIn("private_bad_number",str(cm.exception))
+        with self.assertRaises(PrivateDocumentError) as cm:
+            normalize_selected_exported_scalar_fields({"m_Floats":{}})
+        self.assertEqual(cm.exception.code,"SELECTED_SCALAR_FIELDS_MISSING")
+    def test_selected_material_yaml_scalar_dictionaries_are_losslessly_read(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            for i in range(1,6):
+                f=project/"Assets"/f"synthetic{i}.mat"
+                body=f.read_text()
+                body=body.replace("    m_Floats:\n      - _Alpha: 0.4\n",
+                                  "    m_Floats:\n      _Alpha: 0.4\n")
+                body=body.replace("    m_Ints:\n      - _Mode: 1\n",
+                                  "    m_Ints:\n      _Mode: 1\n")
+                f.write_text(body)
+            counts={}
+            c,scalars=exported_selected_values(project,wanted,safe_mapping_counts=counts)
+            self.assertEqual(len(c),5)
+            self.assertEqual(len(scalars),5)
+            self.assertEqual(counts["exported_scalar_dict_fields_normalized"],10)
     def test_safe_failure_code_only_allows_static_categories(self):
         with self.assertRaises(ValueError):
             PrivateDocumentError("MY_PRIVATE_MATERIAL_EXTRACT")
