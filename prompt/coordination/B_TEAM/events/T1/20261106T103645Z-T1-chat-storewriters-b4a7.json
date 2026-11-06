@@ -1,0 +1,15 @@
+{
+  "id": "20261106T103645Z-T1-chat-storewriters-b4a7",
+  "owner": "T1",
+  "session_id": "20261106T103645Z-T1-chat-storewriters-b4a7",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original slot0 SPIR-V private direct Function OpStore candidate census: site0 source and site1 butterfly each have 3 float32 OpVectorShuffle writers for their coordinate load; site2 butterfly has 8 float32 writers (7 OpVectorShuffle, 1 OpImageFetch). All sites' lanes pass through float32-to-sint32 bitcasts, and none of the writer counts proves reaching definitions. The distinct original Vulkan audit and 8 source-only tests passed; original Unity numerical parity/device water remains unresolved.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42204760126",
+    "https://github.com/alwansan/raf/commit/ac6c8c4fb5e7cd2651baabe4d4900f3c6ef93440",
+    "https://github.com/alwansan/raf/actions/runs/42198180194",
+    "https://github.com/alwansan/raf/actions/runs/42196835754"
+  ],
+  "at": "2026-11-06T10:45:00Z"
+}
