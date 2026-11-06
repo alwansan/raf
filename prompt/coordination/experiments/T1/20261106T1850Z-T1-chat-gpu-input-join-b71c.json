@@ -1,0 +1,81 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1850Z-T1-chat-gpu-input-join-b71c",
+  "issue_id": "WATER-001",
+  "hypothesis": "Equal declared input SHA and dispatch SHA in FFT paired trace metadata can be misleading without an independent actual source/butterfly image-byte comparison and a separate Unity OpenGLCore GPU CopyInput zero-mismatch report.",
+  "source_commit": "181910545d4ced5a8454b95e4d380756ba2ac36f",
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
+  "input_hashes": [],
+  "tool_versions": {
+    "test_runner": "ubuntu-24.04",
+    "python": "GitHub runner CPython standard library"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_private_unity_input_join.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_private_unity_ftz_diagnostic.py -v"
+  ],
+  "negative_controls": [
+    "Declared equal SHA strings but physically different source image",
+    "Declared equal SHA but different butterfly image",
+    "Source and butterfly indistinguishable",
+    "False declared actual-input digest",
+    "False declared canonical dispatch digest",
+    "Input truncated/oversized",
+    "GPU CopyInput reports nonzero mismatch",
+    "Wrong backend (Vulkan, not OpenGLCore)",
+    "Noncanonical/missing/oversized CopyInput result",
+    "Original and Unity hardlinked image evidence",
+    "Source and butterfly samefile alias",
+    "Unsafe symlinks",
+    "Changed private trace digest",
+    "Wrong candidate role",
+    "Duplicate metadata key",
+    "Public CLI redaction"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42274801434",
+  "artifact_urls": [],
+  "budget": "Existing source-only 4 minute T1 CI; no Unity, source ZIP2, LFS, Vulkan original, APK, OBB, or XAPK dispatched",
+  "status": "completed",
+  "observed_result": {
+    "test_run": 42274801434,
+    "test_job": 128088260468,
+    "conclusion": "completed success",
+    "actual_python_unit_tests": 17,
+    "passed_python_unit_tests": 17,
+    "files_committed": [
+      {
+        "path": "scripts/t1_fft_private_unity_input_join.py",
+        "commits": [
+          "0278df06850b0566dd29f29fd7ff08c81f8fcb05",
+          "6fc67cf22cbfa49615297a93f4db6d445e9e3ab3"
+        ]
+      },
+      {
+        "path": "tests/test_t1_fft_private_unity_input_join.py",
+        "commit": "33c41f27dc61f1f347324a850226c44cf27851e1"
+      },
+      {
+        "path": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+        "commit": "181910545d4ced5a8454b95e4d380756ba2ac36f"
+      }
+    ],
+    "physical_image_bytes_checked_on_synthetic_test": true,
+    "genuine_private_original_unity_images_run": false,
+    "signed_hardware_attestation": false,
+    "shader_fixed": false
+  },
+  "rejected_hypotheses": [
+    "Equal unsigned SHA declarations alone guarantee matching actual image uploads (rejected by adversarial fixture).",
+    "A Unity GPU CopyInput marker by itself certifies that the real original-derived FFT shader was executed (not claimed)."
+  ],
+  "limitations": [
+    "Synthetic image/trace inputs only: no original ZIP2 or SHA-authentic shader compiled/executed in this CI.",
+    "Unity GPU copyinput report is unsigned and proves zero mismatches only if its test actually ran on trusted licensed runner.",
+    "GPU texture-binding identity for actual FFT candidate, numeric parity, Android water and original authored kernel mapping unverified.",
+    "Input hash join checks physical captured files, not a remote device GPU attestation. Existing T1 validation of captured pair remains separate."
+  ],
+  "integration_commit": "181910545d4ced5a8454b95e4d380756ba2ac36f",
+  "next_step": "Within an authorized existing private licensed Unity FFT original-derived keyed runner, retain source/butterfly capture files and CopyInput bounded result, then join them with actual paired original/Unity invocation traces, SHA-pinned original provider and runtime-binding metadata before interpreting FTZ taxonomy. Do not run game APK without 5/5 trial vote."
+}
