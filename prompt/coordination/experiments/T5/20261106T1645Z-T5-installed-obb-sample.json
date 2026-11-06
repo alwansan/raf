@@ -1,0 +1,35 @@
+{
+  "id": "20261106T1645Z-T5-installed-obb-sample",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1645Z-T5-chat-installed-obb-read-e7c4",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "T5-installed-exact-main-version-package-OBB-zip-central-directory-real-Unity-entry-first-byte-source-test-v1",
+  "source_branch": "feature/android-native-port",
+  "source_sha": "c9f55dc103ddc817315e44ddf9ee34449f35ca62",
+  "original_owner_provenance": {
+    "game_run": 42058825739,
+    "original_obb_integrity_run": 42230326050,
+    "original_routes_run": 42248117179
+  },
+  "test_ci": {
+    "run_id": 42257103707,
+    "job_id": 128027083765,
+    "status": "completed",
+    "conclusion": "success",
+    "synthetic_checks": 24,
+    "native_import_copy_guard": "pass",
+    "platform_dotnet_build": "success_zero_errors"
+  },
+  "status": "source_integrated_and_source_tested",
+  "device_verified": false,
+  "unity_android_build_verified": false,
+  "unity_engine_asset_read_verified": false,
+  "source_modified": [
+    "android-port/Runtime/Platform/AndroidExpansionArchiveProbe.cs",
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    ".github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "limits": "Read-only exact version OBB ZIP first-byte diagnostic; no original bytes exposed. Does not prove Unity engine can load scene, OBB full SHA on device, texture/shader/GPU or current-build acceptance.",
+  "next_step": "Run on a new permitted signed Android candidate and correlate same-session versionCode+getObbDir ZIP first byte with FMOD and Unity resource load logs."
+}
