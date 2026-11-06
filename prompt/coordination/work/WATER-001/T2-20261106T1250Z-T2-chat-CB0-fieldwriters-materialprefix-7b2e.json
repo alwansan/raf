@@ -2,9 +2,9 @@
   "session_id": "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "cabf3442d80a63f16261f00ae261e42b2e97fb1d",
-  "updated_at": "2026-11-06T12:50:00Z",
+  "updated_at": "2026-11-06T12:53:10Z",
   "resumed_from_sessions": [
     "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
     "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
@@ -24,7 +24,8 @@
     "prompt/coordination/clients/T2/sessions/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.md",
     "prompt/coordination/experiments/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.json",
     "prompt/coordination/B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json",
-    "docs/T2_FOAM_ORIGINAL_CB0_FIELD_WRITERS_RECEIVER_2026-11-06.md"
+    "docs/T2_FOAM_ORIGINAL_CB0_FIELD_WRITERS_RECEIVER_2026-11-06.md",
+    "prompt/coordination/discussions/WATER-001/20261106T1250Z-T2-foam-CB0-fieldwriter-receiver-to-T1T5.md"
   ],
   "negative_controls": [
     "private field identities never serialized",
@@ -40,5 +41,22 @@
     "No cancelling T1 FFT job",
     "Private original names/method tokens/bytes cannot appear in logs or artifacts",
     "WATER-001 remains OPEN pending Unity upload and device pixels"
-  ]
+  ],
+  "run_id": 42220621927,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42220621927",
+  "run_conclusion": "success",
+  "job_id": 127901459744,
+  "source_commit": "710ffd83b38554f45e602dba85d01027d7f8b4aa",
+  "sourcefree_tests_passed": 11,
+  "original_managed_dll_sha_verified": true,
+  "result": "3 exactly original typed System.Single fields -> one four-float Vector4 constructor -> source-named Material.SetVector; all 3 fields are from one declaring class with 3 stfld instruction sites in one original method; receiver immediately before ldstr is typed Material ldfld (branch guarded). Runtime values and original Foam Material.shader, CB0 upload remain unknown.",
+  "report": "docs/T2_FOAM_ORIGINAL_CB0_FIELD_WRITERS_RECEIVER_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json",
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T1250Z-T2-foam-CB0-fieldwriter-receiver-to-T1T5.md",
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ],
+  "next_step": "Original SHA-authentic Material field assignment producer and actual Material.shader Foam identity; then field value semantics / original CB0 complete member uploads and Adreno visual proof. No repeated identical census."
 }
