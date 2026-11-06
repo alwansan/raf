@@ -9,6 +9,7 @@ import tempfile
 from scripts.t1_fft_pass0_trace_variant import instrument
 from scripts.t1_fft_readback_parity import compare_pass, read_image
 from scripts.t1_fft_trace_compare import CAPACITY, INVOCATION_RECORD, RECORD
+from scripts.t1_fft_private_input_evidence import capture_evidence, save_private_evidence
 from scripts.t1_fft_vulkan_roundtrip_isolation import HEIGHT, WIDTH, capture_host, run
 
 
@@ -106,7 +107,7 @@ def trace_host(source, trace_bytes, *, capture_inputs=False):
     return source
 
 
-def analyze(project, export=None, *, keyed=False):
+def analyze(project, export=None, *, keyed=False, private_evidence_export=None):
     record = INVOCATION_RECORD if keyed else RECORD
     trace_bytes = 4 + CAPACITY * record.size
     with tempfile.TemporaryDirectory(prefix="t1-runtime-trace-") as temp:
@@ -122,7 +123,8 @@ def analyze(project, export=None, *, keyed=False):
         run(["spirv-val", "--target-env", "vulkan1.1", "trace.spv"], work)
         print("RAFT_T1_TRACE_STAGE host_compile", flush=True)
         host = Path("scripts/a1_fft_two_pass_vulkan.cpp").read_text()
-        (work / "trace.cpp").write_text(trace_host(host, trace_bytes))
+        (work / "trace.cpp").write_text(trace_host(host, trace_bytes,
+                                capture_inputs=private_evidence_export is not None))
         run(["g++", "-std=c++17", "-O2", "trace.cpp", "-lvulkan", "-o", "trace"], work)
         print("RAFT_T1_TRACE_STAGE dispatch", flush=True)
         modules = project / "_private_vulkan"
@@ -154,6 +156,12 @@ def analyze(project, export=None, *, keyed=False):
         if export is not None and all(sites) and all(row["match"] for row in passes):
             with export.open("xb") as stream:
                 stream.write(trace)
+        if private_evidence_export is not None:
+            if not keyed or not all(sites) or not all(row["match"] for row in passes):
+                raise ValueError("Private HLSL keyed evidence requires validated readback")
+            save_private_evidence(private_evidence_export,
+                                  capture_evidence(work, work / "trace.spv",
+                                                   trace, "hlsl_roundtrip_spirv"))
         return {"records_by_site": sites, "out_of_bounds_by_site": out_of_bounds,
                 "output_parity": passes}
 
@@ -163,9 +171,12 @@ def main():
     parser.add_argument("--project", type=Path, required=True)
     parser.add_argument("--export-private-trace", type=Path)
     parser.add_argument("--invocation-keys", action="store_true")
+    parser.add_argument("--export-private-evidence", type=Path)
     args = parser.parse_args()
     try:
-        result = analyze(args.project.resolve(), args.export_private_trace, keyed=args.invocation_keys)
+        result = analyze(args.project.resolve(), args.export_private_trace,
+                         keyed=args.invocation_keys,
+                         private_evidence_export=args.export_private_evidence)
     except (OSError, ValueError, subprocess.SubprocessError):
         parser.exit(2, "Private Vulkan trace execution or validation failed\n")
     print("RAFT_T1_VULKAN_TRACE " + json.dumps(result, sort_keys=True))
