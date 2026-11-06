@@ -355,6 +355,20 @@ namespace RaftAndroid.Platform
             catch (AndroidJavaException) { ObserveNativeCapture(currentEpoch, false); }
         }
 
+        private static void ReportReleaseOutcome(string result)
+        {
+            // UI-thread release is async: the original request marker is not
+            // proof that a native View release method has actually returned.
+            // Emit only fixed categories, no hashes, paths, event data or JNI.
+            try
+            {
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_release_outcome",
+                    "result=" + result + "; native_release_confirmed=false");
+            }
+            catch (Exception) { /* Diagnostics must never alter pointer state. */ }
+        }
+
         private void ReleaseCapture()
         {
             if (requested || nativeHasMotion)
@@ -384,27 +398,47 @@ namespace RaftAndroid.Platform
             {
                 OnAndroidUi(() =>
                 {
-                    if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;
+                    if (releaseEpoch != Volatile.Read(ref epoch) || requested)
+                    {
+                        ReportReleaseOutcome("superseded_generation");
+                        return;
+                    }
                     try
                     {
                         using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
                         using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
                         using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
                         {
-                            // Focus may have moved to another View after request.
-                            // Do not release a capture owned by that unrelated
-                            // View. If Android revoked the old capture already,
-                            // this safely leaves the newer focused View alone.
-                            if (view != null && releaseViewIdentity != 0 &&
-                                ViewIdentity(view) == releaseViewIdentity &&
-                                view.Call<bool>("hasPointerCapture"))
+                            // Same target rule as before. Distinguish skipped
+                            // UI-thread calls from a successful *invocation*.
+                            // OS capture state after this call is still unknown.
+                            string result;
+                            if (releaseViewIdentity == 0)
+                                result = "unbound_request_view";
+                            else if (view == null)
+                                result = "focus_view_unavailable";
+                            else if (ViewIdentity(view) != releaseViewIdentity)
+                                result = "focused_view_changed";
+                            else if (!view.Call<bool>("hasPointerCapture"))
+                                result = "target_not_captured";
+                            else
+                            {
                                 view.Call("releasePointerCapture");
+                                result = "release_call_returned";
+                            }
+                            ReportReleaseOutcome(result);
                         }
                     }
-                    catch (AndroidJavaException) { /* focus-loss releases it */ }
+                    catch (AndroidJavaException)
+                    {
+                        ReportReleaseOutcome("jni_exception");
+                    }
                 });
             }
-            catch (AndroidJavaException) { }
+            catch (AndroidJavaException)
+            {
+                ReportReleaseOutcome("ui_dispatch_exception");
+            }
         }
 
         private void OnApplicationPause(bool value)

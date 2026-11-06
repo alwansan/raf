@@ -71,9 +71,9 @@ class PointerViewIdentityAudit(unittest.TestCase):
         self.assertIn("epoch++;", release)
         self.assertIn("int releaseEpoch = Volatile.Read(ref epoch);", release)
         self.assertIn("releaseEpoch != Volatile.Read(ref epoch) || requested", release)
-        nonzero = release.index("releaseViewIdentity != 0")
+        nonzero = release.index("releaseViewIdentity == 0")
         identity = release.index(
-            "ViewIdentity(view) == releaseViewIdentity", nonzero)
+            "ViewIdentity(view) != releaseViewIdentity", nonzero)
         captured_other = release.index(
             'view.Call<bool>("hasPointerCapture")', identity)
         release_call = release.index(
@@ -100,7 +100,26 @@ class PointerViewIdentityAudit(unittest.TestCase):
         self.assertIn(
             'using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))',
             release)
-        self.assertIn("ViewIdentity(view) == releaseViewIdentity", release)
+        self.assertIn("ViewIdentity(view) != releaseViewIdentity", release)
+
+    def test_release_result_telemetry_is_nonblocking_and_disambiguated(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        release = method_body(source, "ReleaseCapture")
+        for status in ("superseded_generation", "unbound_request_view",
+                       "focus_view_unavailable", "focused_view_changed",
+                       "target_not_captured", "release_call_returned",
+                       "jni_exception", "ui_dispatch_exception"):
+            with self.subTest(status=status):
+                self.assertIn('"' + status + '"', release)
+        self.assertLess(release.index('view.Call("releasePointerCapture")'),
+                        release.index('result = "release_call_returned"'))
+        self.assertIn("releaseEpoch != Volatile.Read(ref epoch) || requested", release)
+        helper = source.split("private static void ReportReleaseOutcome(string result)", 1)[1]
+        helper = helper.split("private void ReleaseCapture()", 1)[0]
+        self.assertIn('"physical_mouse_capture_release_outcome"', helper)
+        self.assertIn("native_release_confirmed=false", helper)
+        self.assertIn("catch (Exception)", helper)
+        self.assertNotIn("ReportReleaseOutcome(", method_body(source, "Update"))
 
     def test_epoch_guards_do_not_encode_view_identity(self):
         source = SOURCE.read_text(encoding="utf-8")
