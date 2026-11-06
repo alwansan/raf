@@ -6,9 +6,9 @@
   "session_id": "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
   "issue_id": "WATER-001",
   "track": "GPU FFT computed-coordinate zero-signature taxonomy",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "de574cc91877d55157fff850debb48549cba5b91",
-  "updated_at": "2026-11-06T19:36:00Z",
+  "updated_at": "2026-11-06T19:34:00Z",
   "resumed_from_sessions": [
     "20261106T1916Z-T1-chat-address-provenance-e6b2",
     "20261106T1907Z-T1-scheduled-report-shape-n8v2",
@@ -36,20 +36,45 @@
     "https://github.com/alwansan/raf/actions/runs/42279949574"
   ],
   "result": {
-    "files_changed": {
-      "android-port/Experiments/T1/T1FftAddressProvenanceTests.cs": "c41e29badea34ed722684b46b30dae7fb7d9b358",
-      "scripts/t1_fft_address_provenance_gate.py": "0246db33d5ae7fcfdf4e594ba4ee85aef29cb02e",
-      "tests/test_t1_fft_address_provenance_gate.py": "6d8a380b6f7e5fd3ced7e82200506c09381534f7",
-      ".github/workflows/raft-t1-fft-unity-address-provenance.yml": "93f27342d4b2c46d811c6c16a2672d9a247f346a"
-    },
-    "real_gpu_signature_proven": false,
-    "original_source_executed": false
-  },
-  "next_step": "Check ONLY run 42279949574 @ 93f27342. If failed, inspect specific source-test step or safe marker; fix narrow regression and avoid changing original shader. If completed, compare signed zero conversion counts for 2/4/6 and zero-pixel x0 sample signature for 10/12, keep counts from previous 42278153683 as baseline. No APK, no Android or original fix claim.",
-  "waiting_ci": {
     "run_id": 42279949574,
-    "source_sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
-    "queue_status": "pending behind earlier automatically dispatched same workflow revision; no manual cancellation",
-    "acceptance": "Source unit tests PASS, exact one Unity2021 OpenGLCore NUnit PASS with exit0 and 6 integer/image controls all0, two independent 16-line bounded 0..64 reports, signatures<=mismatches, complete real GPU result with 16 counts and zero signatures; privacy cleanup succeeds."
-  }
+    "job_id": 128106388433,
+    "sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
+    "conclusion": "success",
+    "synthetic_gpu_invocations": 64,
+    "synthetic_gpu_words": 1024,
+    "computed_mismatch": [
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "computed_zero_or_x0_signature": [
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "buffered_mismatch": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "buffered_zero_signature": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "source_unit_tests": "16+4 passed",
+    "all_positive_controls": true,
+    "original_authentic_fft_compared": false,
+    "android_water_proven": false
+  },
+  "next_step": "Do source-authenticated original FFT direct SPIR-V butterfly X producer analysis and actual original-derived Unity keyed capture with verified physical image/dispatch input identity. Do not patch or rebuild game on synthetic-only evidence; T1 trial لا يحتاج.",
+  "waiting_ci": null
 }
