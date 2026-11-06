@@ -1,0 +1,16 @@
+{
+  "id": "20261106T0542Z-T4-scheduled-c8v5",
+  "session_id": "20261106T0542Z-T4-scheduled-c8v5",
+  "origin": "scheduled",
+  "client": "T4",
+  "issue_id": "INPUT-005",
+  "type": "ci_result_verified",
+  "timestamp_utc": "2026-11-06T05:42:50Z",
+  "status": "SOURCE_FIXED",
+  "summary": "Previously waiting physical mouse View-mismatch source CI42163839014 and platform CI42163838785 both completed success on f97dda27; no phone acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42163839014",
+    "https://github.com/alwansan/raf/actions/runs/42163838785"
+  ],
+  "next_step": "T5-coordinated signed Android physical mouse plus keyboard and world save regression."
+}
