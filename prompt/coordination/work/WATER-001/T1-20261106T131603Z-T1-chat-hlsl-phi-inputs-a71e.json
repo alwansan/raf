@@ -4,8 +4,8 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "session_id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-06T13:25:39.449Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T13:29:04.161Z",
   "base_sha": "727a15ef97b3b498c4353fcbcdd49f650fbc0eb2",
   "resumed_from_sessions": [
     "20261106T130729Z-T1-chat-pair-gate-6c2e",
@@ -30,6 +30,6 @@
     "https://github.com/alwansan/raf/actions/runs/42224927222",
     "https://github.com/alwansan/raf/actions/runs/42225317476"
   ],
-  "result": "First SHA-source original run 42224533880 failed in private new Phi analyzer after 13/13 synthetic tests (generic validation error). Diagnostic retry 42224927222 passed 15/15 tests and proved source Phi is vector, not scalar: safe category Unexpected scalar Phi lane type. Code corrected to follow selected component of float32 vector Phi; 3 additional negative controls added. New actual original source CI 42225317476 in progress.",
-  "next_step": "Check private source run 42225317476 (18/18 tests); on completion collect only RAFT_T1_FFT_HLSL_BUTTERFLY_X_PHI_INPUTS sanitized report or safe failure category. Then finalize own experiment/event/session/work. No shader rewrite or native build."
+  "result": "Final private SHA-pinned original-derived HLSL translated Butterfly1 X source CI 42225317476 SUCCESS, 18/18 synthetic tests and same-Vulkan SHA private stages passed. A scalar-only Phi assumption caused first failure; safe diagnostic 42224927222 proved actual vector Phi; corrected selected-component analyzer reveals two incoming float32-vector values: first OpCompositeInsert/uint32 Private load via unsigned→signed→float bitcasts, second OpCompositeInsert/nested Phi. Dynamic branch and original-vs-translated numeric parity/Android water unproven. Scope completed; runner reservation released.",
+  "next_step": "New T1 private nested-Phi predecessor and component lineages, plus real same-input separate original/translated invocation trace and strict source-free pair admission (42223419922). Preserve source pin and no shader rewrite without numerical proof."
 }
