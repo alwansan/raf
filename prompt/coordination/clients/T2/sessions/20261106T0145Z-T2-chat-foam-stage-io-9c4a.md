@@ -1,6 +1,6 @@
 # T2 chat — original full Foam ShaderLab Vulkan vertex-fragment interface
 
-- session_id: `20261106T0145Z-T2-chat-foam-stage-io-9c4a`; origin: chat; status: active
+- session_id: `20261106T0145Z-T2-chat-foam-stage-io-9c4a`; origin: chat; status: completed
 - base_sha: `16182a34039acafdb81552afe726abfeafb63c93`
 - resumed_from_sessions: `20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7`, `20261106T0120Z-T2-scheduled-json-evidence-7c91`.
 - work: `prompt/coordination/work/WATER-001/T2-20261106T0145Z-T2-chat-foam-stage-io-9c4a.json`; issue WATER-001.
@@ -10,3 +10,10 @@
 - Files `scripts/t2_foam_embedded_stage_io.py`, `tests/test_t2_foam_embedded_stage_io.py`, isolated `.github/workflows/raft-t2-foam-private-shaderlab-candidate.yml` and own records.
 - Do not edit other T clients' work or mutable game .shader/.meta/GUID, no heavy Unity/native build or job cancellations. Sound/Settings preserved.
 - next_step: synthetic ABI tests, source-pinned original workflow, update experiment/evidence and WATER-001 not-ready boundary.
+
+## Original SHA-pinned embedded full ShaderLab numeric VS/FS compatibility — 2026-11-06T01:54Z
+- [Code a0534d22](https://github.com/alwansan/raf/commit/a0534d22bc6bb32f12834acf736e565cd65d8a80): `scripts/t2_foam_embedded_stage_io.py`, 14 targeted source-free tests, and isolated existing T2 private ShaderLab workflow extension.
+- Real original [CI42146401691](https://github.com/alwansan/raf/actions/runs/42146401691), job `127658818302`, **SUCCESS**. **17+10+14=41** source-free synthetic tests; ZIP2 owner original SHA, Foam object SHA, two authored properties, original 4 stages and pass state source authentication retained. Exact private ShaderLab 9731B reassembled, embedded 4 stage programs compiled and `spirv-val` validated for Vulkan1.1. All private HLSL/SPV/reflection data erased.
+- Private SPIRV-Cross reflection per exact assembled pass: pass0 3 Vertex user varying outputs, 3 Fragment user inputs, **3/3 same location+type+array**, 0 missing, 0 mismatch, 0 unconsumed VS outputs. Pass1 **2 VS outputs and 2 FS inputs, 2/2 exact matches**, same zero missing/mismatch. Thus one potentially hidden numerical cross-stage varying ABI blocker is ruled out for this pair of translated Vulkan shader stages. Report only bounded counts; no private original names or numerical slot IDs.
+- Distinguish Vulkan ABI from source-original interpolation/semantics, true Unity2021 ShaderLab import, original CB0 data upload, 4 non-authored Material texture/sampler runtime binding, numerical water pixels and Android/Adreno device acceptance: **all unverified**. **WATER-001 OPEN, NOT_READY**. No game assets/.meta/GUID, sound/Settings/input, other agent files or native build touched/canceled.
+- Work `prompt/coordination/work/WATER-001/T2-20261106T0145Z-T2-chat-foam-stage-io-9c4a.json` completed. Experiment `prompt/coordination/experiments/T2/T2-20261106T0145Z-T2-chat-foam-stage-io-9c4a.json`, event `prompt/coordination/B_TEAM/events/T2/20261106T0145Z-T2-chat-foam-stage-io-9c4a-result.json`, memo `docs/T2_FOAM_ORIGINAL_EMBEDDED_VERTEX_FRAGMENT_IO_2026-11-06.md`. Next source-authentic runtime CB0/material upload and coordinated Unity/T1 FFT/T5 integration.
