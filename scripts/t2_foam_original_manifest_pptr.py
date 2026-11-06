@@ -150,12 +150,13 @@ def load_original_foam_material_edges(source):
     return [x.path for x in file.externals], pointers
 
 
-def stage_and_check_targets(zip2, destination, targets, manifest):
+def stage_and_check_targets(zip2, destination, targets, manifest, checkpoint=lambda _: None):
     """Stage a bounded unique set from original pinned bytes; type-check PPtrs.
 
     No filenames or Unity tracebacks may appear in public output.
     """
     import UnityPy
+    checkpoint("candidate_manifest_target_shapes")
     lookup = {r["path"]: r for r in manifest}
     unique = {}
     for name, sha, path_id in targets:
@@ -178,6 +179,7 @@ def stage_and_check_targets(zip2, destination, targets, manifest):
         patterns = ["/Raft/" + name]
         if info["kind"] == "split":
             patterns.append("/Raft/" + name + "/*")
+        checkpoint("candidate_sparse_checkout")
         process = subprocess.run(
             ["git", "-C", str(zip2), "sparse-checkout", "add", "--no-cone",
              *patterns],
@@ -188,12 +190,14 @@ def stage_and_check_targets(zip2, destination, targets, manifest):
             raise ValueError("private_source_sparse_checkout_unavailable")
         target_dest = destination / name
         # stage() checks manifest exact row, full size, SHA and ordered parts.
+        checkpoint("candidate_bytes_sha_stage")
         stage(zip2, destination, {name: (size, info["sha256"])})
         safe(target_dest)
         if fingerprint(target_dest) != (size, info["sha256"]):
             raise ValueError("private_target_byte_authentication_mismatch")
         consumed += size
         status["staged_target_files"] += 1
+        checkpoint("candidate_UnityPy_type_lookup")
         try:
             target_file = UnityPy.load(str(target_dest)).file
             objs = list(target_file.objects.values())
@@ -211,7 +215,7 @@ def stage_and_check_targets(zip2, destination, targets, manifest):
     return status
 
 
-def run(zip2, source, destination):
+def run(zip2, source, destination, checkpoint=lambda _: None):
     zip2, source, destination = map(lambda p: Path(p).absolute(),
                                     (zip2, source, destination))
     safe(zip2)
@@ -225,15 +229,20 @@ def run(zip2, source, destination):
     ).strip()
     if actual != ZIP2_SHA:
         raise ValueError("original_provider_revision_not_pinned")
+    checkpoint("manifest_full_row_check")
     manifest = parse_original_manifest(zip2 / "RAFT_FILE_MANIFEST.tsv")
+    checkpoint("original_foam_owner_UnityPy_and_object_SHA")
     externals, pointers = load_original_foam_material_edges(source)
+    checkpoint("original_external_PPtr_manifest_partition")
     counts, targets = resolve_unmapped_external_materials(
         externals, pointers, manifest,
     )
+    checkpoint("external_PPtr_baseline_count_check")
     if counts["total_external"] != 7 or counts["known_four_owner"] != 5 or (
             counts["unmapped"] != 2):
         raise ValueError("original_four_owner_external_baseline_drift")
-    staged = stage_and_check_targets(zip2, destination, targets, manifest)
+    checkpoint("target_candidate_staging")
+    staged = stage_and_check_targets(zip2, destination, targets, manifest, checkpoint)
     return {
         "status": "source_original_external_PPtr_manifest_verified",
         "original_zip2_commit_authenticated": True,
@@ -258,6 +267,9 @@ def main():
     p.add_argument("--out", type=Path, required=True)
     args = p.parse_args()
     stage_name = "source_input"
+    def checkpoint(label):
+        nonlocal stage_name
+        stage_name = label
     try:
         out = args.out.absolute()
         safe(out)
@@ -266,7 +278,7 @@ def main():
                 out.is_relative_to(args.zip2.absolute())):
             raise ValueError("unsafe_public_output")
         stage_name = "private_original_manifest_and_typecheck"
-        report = run(args.zip2, args.source, args.destination)
+        report = run(args.zip2, args.source, args.destination, checkpoint)
         stage_name = "safe_count_only_report"
         out.write_text(json.dumps(report, sort_keys=True) + "\n", encoding="utf-8")
         print("T2_ORIGINAL_MANIFEST_PPTR_SAFE " + json.dumps(report, sort_keys=True))
