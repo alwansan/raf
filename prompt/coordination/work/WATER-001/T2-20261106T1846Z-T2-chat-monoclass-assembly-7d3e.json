@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1846Z-T2-chat-monoclass-assembly-7d3e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "original MonoScript class metadata vs SHA-original managed TypeDef",
+  "status": "active",
+  "base_sha": "97f156f9f09e8cd6f5412e281bb751d2bb1a8cd6",
+  "updated_at": "2026-11-06T18:46:20Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1846Z-T2-chat-monoclass-assembly-7d3e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1846Z-T2-chat-monoclass-assembly-7d3e.md",
+    "scripts/t2_original_monoscript_managed_class_bridge.py",
+    "tests/test_t2_original_monoscript_managed_class_bridge.py",
+    ".github/workflows/raft-t2-original-monoscript-managed-class-bridge.yml",
+    "docs/T2_ORIGINAL_MONOSCRIPT_MANAGED_CLASS_BRIDGE_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1846Z-T2-chat-monoclass-assembly-7d3e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1846Z-T2-chat-monoclass-assembly-7d3e-result.json"
+  ],
+  "experiment_key": "ZIP2-15964-one-758412-MonoScript-owner-one-3211776-AssemblyCSharp-source-SHA-unique-class-namespace-TypeDef-join-v1",
+  "resource_key": "t2-source-original-two-small-files-stage",
+  "hypothesis": "Original 758412-byte MonoScript owner has metadata for script classes; SHA original 3211776-byte Assembly-CSharp managed TypeDef can be compared by exact namespace+class with explicit missing/ambiguous/other assembly partitions, without leaking identifiers.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1835Z-T2-chat-positive-attestation-3f8a.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1835Z-T2-chat-positive-attestation-3f8a.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Generate standalone sourcefree join/control code then isolated SHA-staged source-only CI; report exact aggregate match scope and limits; do not infer Foam runtime linkage."
+}
