@@ -83,7 +83,7 @@ class PrivateStageFamilyTests(unittest.TestCase):
             r=m.classify(pairs,Path(d),
                         translator=lambda _blob,stage,_dir:{
                             "stage":stage,"vulkan11_valid":True},
-                        reflector=lambda _path:reflected())
+                        reflector=lambda _path:reflected(ubos=1,textures=1,samplers=0))
         self.assertEqual(r["counts"]["stage_all_four_resource_family_cardinalities_equal"],8)
         self.assertFalse(r["original_to_SPIRV_descriptor_register_provenance_proven"])
         self.assertTrue(r["per_stage_family_count_equality_is_not_register_identity"])
