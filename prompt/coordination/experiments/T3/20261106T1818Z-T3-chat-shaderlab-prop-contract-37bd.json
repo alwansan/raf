@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-SAMEEXPORT-PARTICLE108-SOURCE-AUTHORED-SHADER-PROPERTY-CONTRACT-v1",
+  "hypothesis": "An export can have a syntactically complete one-Pass ShaderLab while omitting or mistyping original Shader48 authored Color/Texture properties; identical source to exported property NAME+TYPE is required before structural source-ready classification.",
+  "inputs": "Synthetic ShaderLab and exact W1/B02 source/export Shader48 trace fixture; original source property text is only read privately by run(original...) in a future SHA-locked real export test; no original game bytes were read in these CI runs.",
+  "source_private_fingerprint_reuse": "Original six-scene/four-owner SHA-pinned shader source reader from existing t3_original_renderer_shader_impact. Only exact unique 108 Renderer slots, 13 original authored properties, 2 original texture properties are accepted. Original source program bytes/names/values never enter report.",
+  "source_only_workflow": ".github/workflows/raft-t3-shaderlab-property-parity-source-only.yml",
+  "integration_workflow": ".github/workflows/raft-t3-particle108-shaderlab-quality-source-only.yml",
+  "property_unit_run": "https://github.com/alwansan/raf/actions/runs/42269593656",
+  "property_unit_job": 128070385480,
+  "property_unit_tests": 14,
+  "integration_run": "https://github.com/alwansan/raf/actions/runs/42270269076",
+  "integration_run_job": 128072704772,
+  "integration_tests": 15,
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_property_parity.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_export_quality.py' -v"
+  ],
+  "negative_controls": [
+    "13 original property/2 texture synthetic source fixture exact names/types accepted",
+    "missing Texture / Color property rejected; same-name wrong type and unexpected added name counted",
+    "multiple Shader roots, fake Properties inside comments or strings, Properties nested in SubShader, malformed default and duplicate names fail closed",
+    "authored source fragment bounds enforced; only count-only safe aggregate returned",
+    "same-instance Shader48 exporter expected file path/GUID unchanged",
+    "prior DummyShaderTextExporter/no-subprogram marker remains primary failure and does not silently pass property parity",
+    "original shader program bytecode/compiled variants/Unity GPU pixels and runtime active SubShader never proven"
+  ],
+  "observed": {
+    "property_unit_ci": "SUCCESS 14/14",
+    "integration_ci": "SUCCESS 15/15",
+    "exact_authored_source_names_and_types_checked_in_synthetic": true,
+    "run_original_Shader48_real_export_now": false,
+    "game_shader_asset_changed": false,
+    "original_private_names_or_GUIDs_emitted": false,
+    "android_APK_OBB_XAPK_requested": false,
+    "T3_trial_vote": "لا يحتاج"
+  },
+  "failed_attempts": [
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42269781906",
+      "reason": "Accidental literal escaped newline in modified Python source function signature (syntax error)."
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42269995095",
+      "reason": "After syntax fix, two new fixture strings contained doubled literal slash-n; parser correctly rejected malformed Properties lines."
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42270126041",
+      "reason": "Initial test-fixture newline replacement still left double-backslash escapes; final corrected fixture sources."
+    }
+  ],
+  "commits": [
+    "080518fa83b8f080a4647ee5442233177fe4bc92",
+    "f2bba4f343f56e0f4f3256875494dcbed501aad8",
+    "652fcf28ec40456f0f76d52b5c71ab1a09decab2",
+    "87fd8b0ec7a5547d2381ffb5efe583acf0cfdbb9",
+    "a815b9732dd1329ed26e218ec474881640d5eb58",
+    "9d8f21b3b55273976f90c7f4d892375c5bc5d09b",
+    "a2f37354c17f18b4cb105af6ee4a65a84c4c094c",
+    "3ab408db18a77a5de6ce07c5e73706906c87075a",
+    "4520d23a8d21d1462d7b98f3b3d255d2d865408c",
+    "f8eea6f82e49fae621014ec0530ba79c32b16fba"
+  ],
+  "limitations": [
+    "This is a source-authored ShaderLab property name/type contract only. Descriptions, original per-property defaults/texture dimensions/attribute semantics, per-Material values, resource register links, and program execution remain unverified.",
+    "Original selected Shader48 same-export source had DummyShaderTextExporter; this changes a validator/gate, NOT that missing shader itself. Dummy remains explicit regardless of property matching.",
+    "Original to translated SPIR-V resource descriptor semantic join is reserved by scheduled T3; no collision or duplicate source CI.",
+    "Unity native ARM64 GPU colors, white raft/hand, fire/water/smoke and square-particle problems remain unaccepted.",
+    "Trial build vote under trial-20261106-r1 stays T3=لا يحتاج, no native build started."
+  ],
+  "next_step": "Only when a genuinely recovered non-dummy Shader48 export exists, run the existing authenticated W1+B02 original export path and enforce private 13-property 2-texture name/type parity in same CI; then join typed DXBC/SPIRV bindings and actual Unity shader compilation, finally device screenshots before re-voting.",
+  "updated_at": "2026-11-06T18:24:54.641Z"
+}
