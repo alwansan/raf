@@ -1,0 +1,45 @@
+name: T1 WATER-001 source-safe original Input vs translated Phi evidence bridge
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-original-phi-bridge.yml
+      - scripts/t1_fft_original_phi_bridge.py
+      - tests/test_t1_fft_original_phi_bridge.py
+      - tests/data/t1_fft_original_phi_evidence_public.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-water001-source-only-original-phi-bridge-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  safe-source-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - name: Checkout only public source-free verified evidence tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate fail-closed SHA-pinned historical FFT evidence schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_original_phi_bridge.py -v
+          python3 -m py_compile scripts/t1_fft_original_phi_bridge.py
+      - name: Classify public CI evidence boundaries without claiming original GPU parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t1_fft_original_phi_bridge \
+            --evidence tests/data/t1_fft_original_phi_evidence_public.json
+          echo 'RAFT_T1_FFT_ORIGINAL_PHI_BACKEND original_assets_acquired=false real_unity_original_fft_executed=false full_game_water_fixed=false'
