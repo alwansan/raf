@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1515Z-T3-chat-5mat-yamlphase-e73b",
   "issue_id": "RENDER-002",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "9a109902fefcff43945ccc141cf762ce7a44876b",
   "resumed_from_sessions": [
     "20261106T1350Z-T3-chat-particle108-5mat-valuediff-d4e9",
@@ -17,7 +17,7 @@
   ],
   "hypothesis": "Real original Particle108 same-W1-B02-export 5 Material RGBA/scalar parity is blocked in EXPORTED_RGBA_YAML parser, even after exact-scoped material filtering; missing original values comparison not evidence of changed materials.",
   "experiment_key": "T3-ZIP2-15964-Particle108-5M-actualYAML-private-five-doc-phase-reason-and-source-authentic-parity-v2",
-  "resource_key": "T3-single-bounded-original-AssetRipper-five-Material-W1B02",
+  "resource_key": null,
   "intended_files": [
     "scripts/t3_particle108_sameexport_values.py",
     "tests/test_t3_particle108_sameexport_values.py",
@@ -29,8 +29,8 @@
   ],
   "team_conflicts": "T1 water FFT, T2 Foam, T4 local input, T5 packaging operate outside these files; T3 scheduled session 1429 read-only native dummy audit.",
   "plan": "Restore expensive exporter to manual-only if tool permits; classify exact selected YAML failure with sanitized enumerated stage and no raw private values; source-free 19+ control regression, one original read-only SHA-locked export if relevant; record terminal or waiting run.",
-  "updated_at": "2026-11-06T15:27:41.403Z",
-  "next_step": "Inspect 42243130856 terminal and safe numeric/field result; if inconclusive record category; do not claim device graphics fixed.",
+  "updated_at": "2026-11-06T15:32:29.852Z",
+  "next_step": "Experiment complete: no original Particle108 RGBA or float transport loss in scoped 5 Materials. Resume T3 separate original 4-pair VSFS HLSL semantic/CB/sampler reconstruction; program remains Dummy, test Unity+phone only after authentic GUID/variants. RENDER-002 OPEN.",
   "ci_runs": [
     "https://github.com/alwansan/raf/actions/runs/42241999485",
     "https://github.com/alwansan/raf/actions/runs/42242213756",
@@ -42,5 +42,24 @@
   "original_run_immutable_sha": "0cdab0cbd0e19c868261a3cbb556a3c4adacb19f",
   "workflow_manual_only_commit": "0c962a0f5354dbc0f253e40388b5333f7d1a06db",
   "latest_proven_failure_reason": "42242213756 real selected Particle108 YAML EXPORTED_RGBA_YAML=>SELECTED_SCALAR_SCHEMA (no values compared)",
-  "new_adaptation": "private selected exported m_Floats/m_Ints dict→original pairs, B22 float32/int32 preserved, no missing fields synthesized"
+  "new_adaptation": "private selected exported m_Floats/m_Ints dict→original pairs, B22 float32/int32 preserved, no missing fields synthesized",
+  "resource_released": true,
+  "original_run_conclusion": "success",
+  "original_run_result": "T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MATCH",
+  "safe_artifact_id": 13515768078,
+  "last_verified_result": {
+    "source_scenes_SHA": 6,
+    "source_owners_SHA": 4,
+    "source_Material_objects": 5,
+    "original_108_particle_material_use_slots": 108,
+    "actual_original_vs_sameexport_RGBA_slots_compared": 15,
+    "RGBA_changes": 0,
+    "original_vs_export_Float32_slots_compared": 145,
+    "Float32_changes": 0,
+    "Int32_slots_compared": 0,
+    "missing_RGBA_or_scalar_slots": 0,
+    "extra_RGBA_or_scalar_slots": 0,
+    "actual_shader_program": "DUMMY_MARKER_PERSISTS",
+    "real_Unity_device_pixels": false
+  }
 }
