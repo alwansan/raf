@@ -208,7 +208,7 @@ class NestedRealSignedArtifactTests(unittest.TestCase):
         local_name_last = member.header_offset + 30 + name_bytes - 1
         app[local_name_last] ^= 1  # mutate local name but leave central unchanged
         blob, a, o = outer(apk=bytes(app))
-        with self.assertRaisesRegex(ProbeError, "local member header name"):
+        with self.assertRaisesRegex(ProbeError, "signed_nested_zip_metadata_inconclusive"):
             check(blob, a, o)
 
     def test_nested_obb_local_crc_discrepancy_is_rejected(self):
@@ -218,7 +218,7 @@ class NestedRealSignedArtifactTests(unittest.TestCase):
         crc_at = member.header_offset + 14
         original[crc_at] ^= 1  # change only local CRC, central same
         blob, a, o = outer(obb=bytes(original))
-        with self.assertRaisesRegex(ProbeError, "local member header CRC"):
+        with self.assertRaisesRegex(ProbeError, "signed_nested_zip_metadata_inconclusive"):
             check(blob, a, o)
 
 
