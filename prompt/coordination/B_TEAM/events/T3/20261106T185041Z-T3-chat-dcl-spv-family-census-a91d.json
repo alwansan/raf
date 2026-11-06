@@ -1,0 +1,23 @@
+{
+  "event_id": "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
+  "session_id": "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "source_original_result",
+  "utc": "2026-11-06T18:58:25.876Z",
+  "summary": "Genuine SHA-original 4 Particle108 keyword VSFS pairs/8-stage D3D11 SHDR DCL declarations compared privately with same-pair VKD3D-translated SPIRV stage resource-family reflection. Source DCL CB24/SRV10/sampler10/UAV0 vs SPV UBO24/separate_images10/separate_samplers10/UAV-image0. Zero stages with original CB/SRV/sampler category but no matching reflected category presence. Genuine CI42274933802 SUCCESS; 10/10 synthetic CI42274655551. Exact per-register mapping, per-stage cardinality equality, ShaderLab, GPU pixels unproven. T3 vote NO and RENDER-002 OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42274933802",
+    "https://github.com/alwansan/raf/actions/runs/42274655551",
+    "https://github.com/alwansan/raf/commit/05949e25d4a294b658874ea3811da3d75f12bf06",
+    "https://github.com/alwansan/raf/commit/419890fb16a090e636c49bba76bf774e9eb2de2f",
+    "prompt/coordination/clients/T3/sessions/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.md",
+    "prompt/coordination/experiments/T3/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.json"
+  ],
+  "limitations": [
+    "No source register to VK descriptor binding equivalence",
+    "No original executable ShaderLab/Android pixels",
+    "No APK trial and no source game assets changed"
+  ]
+}
