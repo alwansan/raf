@@ -1,0 +1,21 @@
+{
+  "id": "20261106T0229Z-T3-scheduled-semantic-ambiguity-a6f2",
+  "identity": "T3",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "baseline_sha": "e50abe7c36759117a0c5092ab90ba90500dff653",
+  "status": "in_progress",
+  "experiment_key": "T3-sourcefree-semantic-location-unique-bipartite-proof-v1",
+  "hypothesis": "An interface candidate mapping must be rejected if multiple bijections satisfy semantic lane/type constraints, even when all four original DXBC VSFS pairs match.",
+  "files": [
+    "scripts/t3_semantic_location_uniqueness.py",
+    "tests/test_t3_semantic_location_uniqueness.py",
+    "prompt/coordination/clients/T3/sessions/20261106T0229Z-T3-scheduled-semantic-ambiguity-a6f2.md"
+  ],
+  "shared_resource": "none; source-free Python only",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.md",
+    "prompt/coordination/clients/T3/sessions/20261106T0131Z-T3-scheduled-io-order-6d9a.md"
+  ],
+  "no_CI_dispatch": true
+}
