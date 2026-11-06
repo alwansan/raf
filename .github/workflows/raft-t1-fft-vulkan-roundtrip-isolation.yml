@@ -73,7 +73,7 @@ jobs:
             --original-data "$RUNNER_TEMP/t1-original-verified/Raft_Data" \
             --project "$TMPDIR/candidates" --keep-first-pair-spirv
           python3 -m scripts.t1_fft_pass0_load_inventory --project "$TMPDIR/candidates"
-          echo "RAFT_T1_COORDINATE_PROFILE original_slot0"
+          echo "RAFT_T1_COORDINATE_PROFILE original_slot0 typed_bitcasts=true"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           tail -n +2 "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute" > "$TMPDIR/coordinate.hlsl"
           glslangValidator -V -D -S comp -e main -o "$TMPDIR/coordinate.spv" "$TMPDIR/coordinate.hlsl" > "$TMPDIR/coordinate-compile.log" 2>&1
