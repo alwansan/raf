@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2215Z-T4-chat-immutable-log-snapshot-n7b4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "c2637f94aa71770caa34652e5a9e7442544e120a",
+  "updated_at": "2026-11-06T22:16:28.963Z",
+  "resumed_from_sessions": [
+    "20261106T2202Z-T4-chat-load-exit-proof-v6m2",
+    "20261106T2138Z-T4-scheduled-native-retry-q4n7"
+  ],
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "experiment_key": "T4-CL520c4cf-original-owner-JSONL-immutable-single-read-provenance-v1",
+  "resource_key": "T4-CL520c4cf-pinned-JSONL-readonly",
+  "hypothesis": "Pinned Git blob is verified before independent reopen for summarize and chronology; mutable input can change after authentication and contaminate trusted marker counts.",
+  "approach": "Reproduce synthetic mutation between parsing passes; make one capped read of each source into in-memory immutable objects and validate pinned Git SHA on precisely those bytes; run existing source-only workflow including immutable genuine CL pinned logs.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "RED/GREEN source-only negative test and pinned CL validation, no native dispatch."
+}
