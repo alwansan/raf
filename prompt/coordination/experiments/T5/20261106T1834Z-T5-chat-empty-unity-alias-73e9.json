@@ -5,7 +5,7 @@
   "session_id": "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "experiment_key": "T5-real-installed-OBB-Unity-ZIP-path-empty-duplicate-entry-order-synthetic-strict-v1",
   "source_commit": "4b78710027607801a1620af29c65f04b45b45fa1",
   "workflow_path": ".github/workflows/raft-t5-installed-obb-read-probe.yml",
@@ -24,7 +24,18 @@
     "missing, empty, invalid and stale OBB behavior unchanged"
   ],
   "expected_checks": 35,
-  "observed_result": null,
+  "observed_result": {
+    "run_id": 42272184563,
+    "job_id": 128079268161,
+    "status": "success",
+    "source_sha": "4b78710027607801a1620af29c65f04b45b45fa1",
+    "unity_copy_guard": "PASS exact_file_once=true",
+    "synthetic_checks": 35,
+    "platform_managed_build": "success",
+    "compile_errors": 0,
+    "existing_other_warnings": 6,
+    "actual_phone_tested": false
+  },
   "actual_phone_tested": false,
   "original_obb_tested": false,
   "limits": [
@@ -32,5 +43,5 @@
     "no real on-phone Unity/FMOD/water/FX/performance evidence",
     "no Android native trial request due to 1/5 YES"
   ],
-  "next_step": "Inspect exact source-pinned CI42272184563 and mark final outcome; no duplicate dispatch."
+  "next_step": "Source diagnostic completed; future device build only after trial vote 5/5; no CI rerun necessary."
 }
