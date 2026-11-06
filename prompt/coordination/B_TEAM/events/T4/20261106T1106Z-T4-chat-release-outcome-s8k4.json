@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+  "event_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+  "session_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "type": "async_native_mouse_release_classified_outcome",
+  "timestamp": "2026-11-06T11:18:00Z",
+  "at": "2026-11-06T11:18:00Z",
+  "summary": "T4 distinguishes queued Unity mouse release marker from actual Android UI-thread JNI return or bounded skip statuses (superseded request, unbound View, missing/changed focus, capture absent, JNI/dispatch exception). No capture state/policy change, no user/view identifiers. Source commit 8f0b51a, final tests e06566a. Exact CI42208882663 COMPLETED SUCCESS 47/47 Python and original Unity2021 managed ABI compile; CI42208627329 platform source success. No real Android hardware, new APK/OBB or full Unity IL2CPP proof. INPUT-005 OPEN, NOT_READY 0/3.",
+  "source_commit": "e06566a7e72f6128252e2a974e66af46ca57bac3",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42208882663",
+  "evidence": [
+    "prompt/coordination/clients/T4/sessions/20261106T1106Z-T4-chat-release-outcome-s8k4.md",
+    "prompt/coordination/experiments/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json"
+  ],
+  "native_phone_acceptance": "UNKNOWN",
+  "original_data_published": false
+}
