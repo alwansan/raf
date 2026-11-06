@@ -1,0 +1,40 @@
+name: T3 RENDER-002 Shader48 structural identity gate source-free regression
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-shader48-syntax-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-shader48-sourcefree-regression-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-free-identity-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Compile shader identity gate and fixtures
+        run: |
+          set -euo pipefail
+          python3 --version
+          python3 -m py_compile scripts/t3_shader_identity_gate.py scripts/test_t3_shader_identity_gate_syntax.py
+      - name: Validate authentic link gate stays structural only with 10 negative/positive source-free fixtures
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s scripts -p 'test_t3_shader_identity_gate_syntax.py' -v
+      - name: Source-only scope declaration
+        run: |
+          echo 'T3_SHADER48_SOURCEFREE_REGRESSION=passed'
+          echo 'ORIGINAL_SHADER_PROGRAM_PROVEN=false'
+          echo 'ANDROID_PIXELS_VERIFIED=false'
