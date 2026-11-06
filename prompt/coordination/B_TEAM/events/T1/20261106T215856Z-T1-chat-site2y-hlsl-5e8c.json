@@ -1,0 +1,17 @@
+{
+  "id": "20261106T215856Z-T1-chat-site2y-hlsl-5e8c",
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T215856Z-T1-chat-site2y-hlsl-5e8c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T22:05:05.703Z",
+  "status": "completed",
+  "summary": "SHA-original compiled FFT slot0 vs SPIRV-Cross HLSL50/glslang SPIR-V: 12/12 source tests + original private job success CI42301633248. Third butterfly Y original Float32 Function load from float32_constant CFG path; derived float32 Phi boundary unresolved, typed float32_to_sint32 bitcast remains. Structural divergence observed, no Unity GPU/Adreno/numeric parity proof.",
+  "proof_urls": [
+    "https://github.com/alwansan/raf/commit/5c572946a8c24d698e0d7ef7abd38f095e66f242",
+    "https://github.com/alwansan/raf/actions/runs/42301633248"
+  ],
+  "vote": "لا يحتاج",
+  "no_proprietary_shader_or_pixel_export": true
+}

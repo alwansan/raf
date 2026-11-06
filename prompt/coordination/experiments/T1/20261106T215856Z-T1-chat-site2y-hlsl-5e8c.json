@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T215856Z-T1-chat-site2y-hlsl-5e8c",
+  "status": "completed",
+  "issue_id": "WATER-001",
+  "experiment_key": "sha15964ea8-original-fft-slot0-third-butterfly-y-direct-vkd3d-spirv-vs-spirvcross-hlsl50-glslang-roundtrip-typed-producer-v1",
+  "source_commit": "5c572946a8c24d698e0d7ef7abd38f095e66f242",
+  "ci": {
+    "run": 42301633248,
+    "source_job": 128180603216,
+    "source_tests_passed": 12,
+    "private_job": 128180658520,
+    "private_status": "success"
+  },
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "compiled_slots": 20,
+    "original_pairs": 10
+  },
+  "observed": {
+    "code_commit": "5c572946a8c24d698e0d7ef7abd38f095e66f242",
+    "ci_run_id": 42301633248,
+    "ci_url": "https://github.com/alwansan/raf/actions/runs/42301633248",
+    "source_job": 128180603216,
+    "source_tests_passed": 12,
+    "original_private_job": 128180658520,
+    "original_private_status": "success",
+    "zip2_original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_owner_bytes": 115978112,
+    "original_program_count": 20,
+    "original_pairs": 10,
+    "original_site2_y": {
+      "boundary": "load",
+      "typed_bitcasts": [
+        "float32_to_sint32:nonload"
+      ],
+      "final_writers_possible": [
+        "float32_constant"
+      ],
+      "observed_branch": [
+        "OpINotEqual"
+      ],
+      "abstract_states_at_read": 2
+    },
+    "derived_site2_y": {
+      "boundary": "unresolved_lane",
+      "stop_opcode": "OpPhi",
+      "stop_numeric_kind": "float32",
+      "typed_bitcasts": [
+        "float32_to_sint32:nonload"
+      ],
+      "last_writer_evidence_available": false
+    },
+    "source_boundary_equal": false,
+    "bitcast_chain_equal": true,
+    "final_writer_equal": false,
+    "structural_signature_equal": false,
+    "shader_binary_attested_independently": false,
+    "actual_unity_gpu_compiler_test": false,
+    "authored_kernel_mapping_proven": false,
+    "android_water_proven": false
+  },
+  "limits": [
+    "No signed binary attestation or Unity compiler execution",
+    "No original authored runtime kernel/Dispatch mapping",
+    "No real GPU/numeric fix nor Android Adreno water",
+    "Private code/data not published"
+  ],
+  "next_step": "Trace actual *derived* site2 Y OpPhi incoming value/component and CFG predecessor validity against pinned original slot0. Reuse existing T1 nested-Phi logic with bounded safe summaries; then test branch-sensitive translation counterfactual, eventually Unity/Vulkan same-input numeric parity. Do not treat OpPhi structural change as causation. T1 vote لا يحتاج."
+}
