@@ -62,6 +62,16 @@ static class Program
             3, 3, 120, 120), "Pause must fail");
         Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(false, true, false,
             3, 3, 120, 120), "Disabled state must fail");
+        Check(AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 120, 120, true), "Focused original Android window may hide");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 120, 120, false), "Native focus loss overrides stale Unity focus");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 4, 120, 120, true), "Focused window cannot bypass stale generation");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, false,
+            3, 3, 120, 121, true), "Focused other Activity cannot borrow owner");
+        Check(!AndroidSystemBarPolicy.CanApplyQueuedHide(true, true, true,
+            3, 3, 120, 120, true), "Focused window cannot bypass paused Unity");
         Console.WriteLine("T4_SYSTEM_BARS_POLICY_CSHARP passed=" + count +
             " authenticUnityABICompiledSeparately=true androidDeviceVerified=false");
         return 0;
