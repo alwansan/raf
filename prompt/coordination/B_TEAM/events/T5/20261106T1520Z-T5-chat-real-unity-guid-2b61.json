@@ -1,0 +1,18 @@
+{
+  "id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
+  "owner": "T5",
+  "session_id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T15:30:40.042Z",
+  "summary": "Actual owner-tested run42058825739 source authenticated signed APK+OBB Unity marker probe: APK 31 members DOES contain assets/unity_obb_guid, main OBB 39 members has NO exact marker; status apk_only_identity_unavailable (NOT a mismatched two-sided GUID nor engine/mount failure proof). CI42243273146 SUCCESS 13/13 synthetic + 11447 real HTTP206 bytes /156 requests, 70 local headers verified. Old CL CI42119428667 independently showed 3 optional unshipped patch.89 GUID warnings, 0 main warnings. APK/OBB full SHA from previous CI remains sound. No Unity runtime/game changes.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42243273146",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_UNITY_OBB_GUID_2026-11-06.md",
+    "https://github.com/alwansan/raf/actions/runs/42119428667",
+    "https://github.com/alwansan/raf/actions/runs/42230326050"
+  ],
+  "limitations": "One-sided marker only means cross-archive marker identity cannot be compared, does not prove Unity engine runtime GUID, actual phone OBB mount, loaded scene/FX or current branch source acceptance.",
+  "next_step": "Verify installed main OBB SHA and device Unity main asset read path; no invented optional patch OBB, no fabricated GUID."
+}
