@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "event_id": "20261106T0950Z-T5-chat-focus-frame-a7c3",
+  "origin": "chat",
+  "actor": "T5",
+  "issue_id": "PERF-007",
+  "status": "SOURCE_FIXED_CI_VERIFIED_DEVICE_UNVERIFIED",
+  "title": "Focus-only Android transitions and start/resume one-frame FPS interval regression isolated",
+  "commits": [
+    "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+    "c4cf247bcc4b84b257cb4769e6be9f8a0bb802fc"
+  ],
+  "tests": [
+    {
+      "run_id": 42198367607,
+      "conclusion": "success",
+      "diagnostics_policy": "12/12"
+    },
+    {
+      "run_id": 42198281963,
+      "conclusion": "success"
+    },
+    {
+      "run_id": 42198281878,
+      "conclusion": "success"
+    }
+  ],
+  "important_limit": "Not a measured increase in FPS or a Unity/Adreno device-pass; old original phone logs cannot contain these new fields/behavior.",
+  "work_path": "prompt/coordination/work/PERF-007/20261106T0950Z-T5-chat-focus-frame-a7c3.json",
+  "experiment_path": "prompt/coordination/experiments/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json",
+  "session_path": "prompt/coordination/clients/T5/sessions/20261106T0950Z-T5-chat-focus-frame-a7c3.md",
+  "next": "Validate foreground-only full 5s sampling and scene loading provenance with future device logs; no duplicate native build.",
+  "updated_at": "2026-11-06T09:54:00Z"
+}
