@@ -6,7 +6,7 @@
   "session_id": "20261106T0950Z-T3-chat-dxbc-spv-location-27af",
   "issue_id": "RENDER-002",
   "track": "Particle108 original DXBC semantic register -> source translated SPIR-V numeric Location hypothesis",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "a47b552655d22404b15eeb0676f594a51a62cf11",
   "intended_files": [
     "scripts/t3_particle108_register_location_probe.py",
@@ -31,8 +31,18 @@
   "experiment_ids": [
     "20261106T0950Z-T3-chat-dxbc-spv-location-27af"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement isolated type/width-aware numeric register-location classifier; run source-free fixtures, then one original SHA-pinned CI probe if no conflicting heavy experiment.",
-  "updated_at": "2026-11-06T09:50:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42199149873"
+  ],
+  "result": {
+    "commit": "7461d9957e8c916f5fd8e6ccd500e570121cac6d",
+    "workflow": ".github/workflows/raft-t3-particle108-register-location.yml",
+    "run_id": 42199149873,
+    "job_id": 127829840017,
+    "current_state": "in_progress after source-free tests, exact original four SHA-verified owner and six scene verification all passed; apt dependencies in progress",
+    "source_free_pycompile_and_fixture_tests": "passed",
+    "original_location_numerical_result": "PENDING"
+  },
+  "next_step": "Check https://github.com/alwansan/raf/actions/runs/42199149873 and job 127829840017; inspect safe aggregate only; if failed isolate root cause, fix without re-running equivalent experiment blindly. No semantic/HLSL/pixel claim.",
+  "updated_at": "2026-11-06T09:59:30Z"
 }
