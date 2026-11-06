@@ -469,7 +469,9 @@
         "https://github.com/alwansan/raf/actions/runs/42141506120",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
         "https://github.com/alwansan/raf/actions/runs/42144978122",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42146385054",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -527,7 +529,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T01:42:05.771Z",
+      "updated_at": "2026-11-06T01:55:25.194Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -1954,9 +1956,9 @@
       "stages": {
         "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
         "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
-        "reconstruction": "PRIVATE_SHADERLAB_9731_BYTES_TWO_COMPLETE_PASSES_SOURCE_DXBC_TARGET;_EMBEDDED_HLSL_ACTUAL_FOUR_STAGES_VULKAN11_VALID",
-        "binding": "ORIGINAL_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_UNVERIFIED",
-        "integration": "SHA_ORIGINAL_CI42143981891_AND_42144036981_SUCCESS_27_SYNTHETIC_CONTROLS;_SHADERLAB_UNITY_EDITOR_IMPORT_NOT_TESTED",
+        "reconstruction": "ORIGINAL_FOAM_PRIVATE_2PASS_9731B_SHADERLAB_4STAGES_VULKAN11_COMPILED_AND_VALIDATED_NUMERIC_VS_FS_VARYINGS_MATCH_BOTH_PASSES",
+        "binding": "ORIGINAL_VS_FS_SPIRV_NUMERIC_LOCATION_TYPE_ARRAY_P0_3_OF_3_P1_2_OF_2;_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_NOT_VERIFIED",
+        "integration": "CI42146401691_SUCCESS_ALL_41_SYNTHETIC_TESTS;_UNITY_SHADERLAB_IMPORT_NOT_RUN",
         "device": "NOT_TESTED"
       },
       "observed": {
@@ -1969,20 +1971,28 @@
         "original_render_states": 2,
         "exact_original_DXBC_shader_models_verified": 4,
         "private_candidate_bytes": 9731,
-        "source_free_tests_passed": 27,
+        "source_free_tests_passed": 41,
         "Unity2021_import_verified": false,
         "CB0_and_original_Material_sampler_upload_verified": false,
         "Android_Adreno_pixels_verified": false,
         "embedded_programs_extracted_from_full_private_ShaderLab": 2,
-        "embedded_program_stages_compiled_vulkan11": 4
+        "embedded_program_stages_compiled_vulkan11": 4,
+        "numeric_varying_abi_pass0_matches": 3,
+        "numeric_varying_abi_pass0_total": 3,
+        "numeric_varying_abi_pass1_matches": 2,
+        "numeric_varying_abi_pass1_total": 2,
+        "numeric_varying_location_or_type_mismatches": 0,
+        "source_original_VS_FS_numeric_varying_compatibility_proven": true,
+        "source_original_semantics_or_interpolation_verified": false
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42125000030",
         "https://github.com/alwansan/raf/actions/runs/42125847863",
         "https://github.com/alwansan/raf/actions/runs/42143981891",
-        "https://github.com/alwansan/raf/actions/runs/42144036981"
+        "https://github.com/alwansan/raf/actions/runs/42144036981",
+        "https://github.com/alwansan/raf/actions/runs/42146401691"
       ],
-      "next_step": "Full private original Foam ShaderLab embedded HLSL recompiled 4/4 Vulkan1.1. Real blocker now Unity2021 ShaderLab actual importer+CB0/resolved sampler/Material runtime upload. With T1 FFT and T5 integration, run controlled Unity shader import and device test; do not claim water ready. WATER-001 OPEN.",
+      "next_step": "Original numeric two-pass cross-stage VS/FS varyings match 3/3 and 2/2; still require exact Unity 2021 ShaderLab importer/CB0 dynamic Material.SetTexture upload and Adreno water testing.",
       "_record_path": "../B_TEAM/resources/T2-foam-original-private-two-pass-ShaderLab-candidate.json"
     },
     {
@@ -7408,6 +7418,26 @@
       "_record_path": "../B_TEAM/events/T3/20261106T013239Z-T3-chat-particle108-namebridge-6f42.json"
     },
     {
+      "id": "20261106T014652Z-T3-chat-particle108-authoredsem-1f83",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T014652Z-T3-chat-particle108-authoredsem-1f83",
+      "issue_id": "RENDER-002",
+      "type": "original_authored_DXBC_signature_join_result",
+      "at": "2026-11-06T01:54:57.837Z",
+      "summary": "CI42146385054 SUCCESS 147/147 controls + SHA-original Particle108 compiled 4 VS/FS keyword pairs exact ISGN/OSGN signatures: 16 user interpolator semantic records matched, 58 component lanes matched, zero missing fragment semantics, zero type or mask mismatches, 4/4 original authored pairs valid. HLSL roundtrip still only 2/4 compatible and original→HLSL location map not yet proven. RENDER-002 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42146385054",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+      ],
+      "limitations": [
+        "source-only original authored semantic proof, not recovered HLSL or Android",
+        "no shader source IDs/strings output"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8419,7 +8449,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "7e9f8c956d351268fb611f9d61600e450c260a4d3c17c61cf3e1fcd3b6e27be5",
+  "source_input_sha256": "e393feb50f441c759d8bbdcda8634cece0f94454e603d12262b6cecc94bdb76e",
   "generation": "T-2026-11-05",
-  "input_sha256": "93af870d883055fb31b8a3b07c9f80aa4456169cf19a171125ea82b0b82df897"
+  "input_sha256": "6f18f89bbb7ce46416d0b92403e80b7644244cb72b2b1b12e5433a8e393c3b64"
 }
