@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1850Z-T1-chat-gpu-input-join-b71c",
+  "issue_id": "WATER-001",
+  "track": "Real Unity FFT input/provenance bridge",
+  "status": "active",
+  "base_sha": "97f156f9f09e8cd6f5412e281bb751d2bb1a8cd6",
+  "updated_at": "2026-11-06T18:50:20Z",
+  "resumed_from_sessions": [
+    "20261106T1837Z-T1-chat-ftz-trace-89ac",
+    "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+    "20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8"
+  ],
+  "experiment_key": "t1-water001-actual-source-butterfly-byte-join-original-vulkan-unity-openglcore-upload-proof-fft-1024x32-seed19-v1",
+  "resource_key": "none (source-only synthetic CI; no shared Unity engine)",
+  "hypothesis": "Unsigned common input_sha256 in existing paired evidence can be true as a declaration even when physically loaded source/butterfly images are different. Verify actual images from both capture roots against the declared SHA, and require the separate Unity GPU CopyInput identity test reports OpenGLCore zero source/butterfly mismatches before diagnostic report.",
+  "intended_files": [
+    "scripts/t1_fft_private_unity_input_join.py",
+    "tests/test_t1_fft_private_unity_input_join.py",
+    ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    "prompt/coordination/work/WATER-001/20261106T1850Z-T1-chat-gpu-input-join-b71c.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1850Z-T1-chat-gpu-input-join-b71c.md",
+    "prompt/coordination/experiments/T1/20261106T1850Z-T1-chat-gpu-input-join-b71c.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T1850Z-T1-chat-gpu-input-join-b71c.json"
+  ],
+  "scope": "New independently named source-only strict actual-image + CopyInput GPU proof join used in the next private Unity original FFT trace run; synthetic negative controls and safe bounded aggregate only. Do not modify code/assets/shared resources of T2–T5, or Unity workflows. No original ZIP2 download or APK build.",
+  "related_work": [
+    "20261106T1837Z-T1-chat-ftz-trace-89ac",
+    "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create strict private actual-input join, source-only tests, integrate tests into T1 existing source-only workflow; if CI passes, integrate use into future authenticated private Unity actual FFT trace capture with T5."
+}
