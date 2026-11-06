@@ -1,0 +1,35 @@
+{
+  "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "ed1ac040e8a361ba253b8088d89c23ba87c06959",
+  "updated_at": "2026-11-06T13:40:00Z",
+  "resumed_from_sessions": [
+    "20261106T1326Z-T2-chat-source-Shader-field-51d2",
+    "20261106T1322Z-T2-scheduled-ci-isolation-b83e"
+  ],
+  "experiment_key": "ZIP2-original-SHA-15964-exact-MaterialCtor-Shader-field-stfld-value-basicblock-typed-Shader-origin-v1",
+  "resource_key": "T2-original-Foam-Cecil-Shader-writer-only",
+  "baseline_ci": "https://github.com/alwansan/raf/actions/runs/42225913516",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "hypothesis": "The one exact original managed UnityEngine.Shader field written by stfld and passed to a Material(Shader) constructor may have provable typed stack producer (other Shader field, Shader.Find, typed parameter, or null); implement a bounded source-authentic typed Shader-store trace and reject nearby calls not feeding stfld. Only report finite aggregate origin categories, no private Shader names or IL.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/MaterialStoreValueTrace.cs",
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1340Z-T2-chat-shader-stfld-source-a84d.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1340Z-T2-chat-shader-stfld-source-a84d.md",
+    "docs/T2_FOAM_ORIGINAL_SHADER_STFLD_STACK_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-result.json",
+    "prompt/coordination/discussions/WATER-001/20261106T1340Z-T2-chat-shader-stfld-source-a84d-handoff.md"
+  ],
+  "active_actions_at_registration": [
+    "T1 WATER-001 42227505971",
+    "T5 INTEGRATION-001 42227170402"
+  ],
+  "collision_policy": "Only T2 source-authentic Cecil and isolated CI; no T1/T5 workflows or native Unity builds, no changing original game assets, GUID/meta, audio, save, Settings, input.",
+  "acceptance": "source-only original owner and managed DLL SHA gating; synthetic Cecil positive/negative controls; classify exact Shader field stfld value by typed source, no claim actual Foam asset identity or runtime upload."
+}
