@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "experiment_key": "T5-OBB-exact-installed-APK-main-ZIP-duplicate-original-FMOD-bank-path-1of5-duplicate-positive-and-zeroentry-synthetic-v1",
+  "hypothesis": "Two ZIP entries sharing the exact original FMOD bank name must not be silently collapsed by a HashSet and reported as an unambiguous bank route.",
+  "source_commit": "830358d3f5cd5b18b02780561b244d33d4a4b577",
+  "workflow_path": ".github/workflows/raft-t5-installed-obb-read-probe.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42268743309",
+  "other_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42268699096"
+  ],
+  "tool_versions": {
+    "dotnet": "8.0.x",
+    "github_runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "dotnet run --project android-port/Tests/ExpansionArchiveProbe/ExpansionArchiveProbe.csproj -c Release",
+    "dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj -c Release",
+    "python3 - <<'PY'  # real Unity workflow copy list exactly once assertion (existing step)"
+  ],
+  "negative_controls": [
+    "same valid five unique FMOD banks remain detected 5/5",
+    "duplicated exact FMOD bank path nonempty ZIP entry rejected as ambiguous",
+    "duplicated exact FMOD bank path with empty second ZIP entry rejected as ambiguous",
+    "duplicate rejected before arbitrary Unity ZIP byte sampling and without physical device path logging",
+    "duplicate Unity data path still rejected as before",
+    "invalid package, missing and stale OBB, malformed ZIP, and empty source still fail with existing statuses"
+  ],
+  "observed_result": {
+    "run_id": 42268743309,
+    "job_id": 128067595438,
+    "status": "success",
+    "probe_synthetic_checks": 29,
+    "read_only_unity_copy_list": "PASS exact_file_once=true",
+    "platform_managed_build": "success",
+    "compile_errors": 0,
+    "existing_other_warnings": 6,
+    "android_phone_tested": false,
+    "original_obb_data_tested": false,
+    "actual_fmod_playback_tested": false,
+    "actual_unity_asset_read_tested": false
+  },
+  "limitations": [
+    "New status only flags exact duplicate bank paths in installed archive; no real phone OBB was read",
+    "Successful ZIP byte/synthetic probe does not prove engine audio/graphics or device sound",
+    "No new native APK build justified by this minor diagnostic, T5 trial vote NO",
+    "No changes to FMOD bank source, JAR loader or original Unity resources"
+  ],
+  "next_step": "When team votes all five YES and a documented current signed build is legitimately delivered, inspect same-run obb.unity_zip_read_sample with fmod.bank_root and current package/version; do not infer new audio status from source-only CI."
+}
