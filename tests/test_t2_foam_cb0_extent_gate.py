@@ -3,9 +3,12 @@ import unittest
 from scripts.t2_foam_cb0_extent_gate import cb0_integration_gate
 
 
-def link(v=96, f=96):
-    return {"vertex_bytes": v, "fragment_bytes": f,
-            "authenticated_shared_coordinate": True}
+def link(v=96, f=96, pass_index=None):
+    row = {"vertex_bytes": v, "fragment_bytes": f,
+           "authenticated_shared_coordinate": True}
+    if pass_index is not None:
+        row["pass_index"] = pass_index
+    return row
 
 
 class FoamCB0GateTests(unittest.TestCase):
@@ -51,9 +54,27 @@ class FoamCB0GateTests(unittest.TestCase):
         self.assertEqual(result["observed_pass_count"], 1)
         self.assertEqual(result["expected_pass_count"], 2)
         self.assertEqual(cb0_integration_gate(
-            [link(), link()], member_abi_verified=True,
+            [link(pass_index=0), link(pass_index=1)], member_abi_verified=True,
             unity_upload_verified=True, expected_pass_count=2)["status"],
             "source_gate_satisfied_not_Unity_or_device_verified")
+
+    def test_duplicate_pass_identity_cannot_fake_coverage(self):
+        self.assertEqual(cb0_integration_gate(
+            [link(pass_index=0), link(pass_index=0)],
+            member_abi_verified=True, unity_upload_verified=True,
+            expected_pass_count=2)["status"], "blocked_duplicate_CB0_pass_identity")
+
+    def test_missing_or_forged_pass_identity_fails_closed(self):
+        for rows, expected in (
+            ([link(), link(pass_index=1)], "blocked_invalid_CB0_link"),
+            ([link(pass_index=True), link(pass_index=1)], "blocked_invalid_CB0_pass_identity"),
+            ([link(pass_index=2), link(pass_index=1)], "blocked_invalid_CB0_pass_identity"),
+            ([link(pass_index=-1), link(pass_index=1)], "blocked_invalid_CB0_pass_identity"),
+        ):
+            with self.subTest(rows=rows):
+                self.assertEqual(cb0_integration_gate(
+                    rows, member_abi_verified=True, unity_upload_verified=True,
+                    expected_pass_count=2)["status"], expected)
 
     def test_expected_pass_count_is_strict_bounded_integer(self):
         for invalid in (True, 2.0, 0, -1, 65, "2"):
