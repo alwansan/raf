@@ -37,7 +37,7 @@
     "No Unity game source, .meta, build request, assets or native full build changes",
     "No blind repeated original export; distinct stage-family evidence"
   ],
-  "updated_at": "2026-11-06T18:57:30.569Z",
+  "updated_at": "2026-11-06T19:00:34.777Z",
   "result": "Genuine SHA-verified six-scene/four-asset Particle108 source→8 VKD3D stage SPIRV family census SUCCESS run42274933802 job128088713454. Original DCL CB24/SRV10/sampler10/UAV0 vs reflected SPV UBO24/separate_images10/separate_samplers10/images0; zero stage-level missing family presence signals in all eight stages, zero inverse-UBO source absence. Family cardinality globally equal but per-resource register set/binding mapping NOT proven. Source-free 10/10 CI42274655551. Preserve RENDER-002 OPEN, no game shader integrated or phone result.",
   "next_step": "Do not repeat the equal total family-count probe. Stage-local *count* per family can still drift and cancel across stages; add original per-stage count parity (without publishing locations) only if needed, then authoritative exact per-stage/keyword primary register↔SPIRV set/binding provenance. Source ShaderLab still Dummy; no Unity/phone accept and T3 trial vote NO.",
   "run_urls": [
@@ -48,5 +48,18 @@
     "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d"
   ],
   "source_execution_sha": "419890fb16a090e636c49bba76bf774e9eb2de2f",
-  "workflow_manual_only_commit": "b6fcd74b4c474c33c67d6ce27c7b5b5d77b16bf5"
+  "workflow_manual_only_commit": "b6fcd74b4c474c33c67d6ce27c7b5b5d77b16bf5",
+  "files_changed": [
+    "scripts/t3_particle108_dcl_spv_family_census.py",
+    "tests/test_t3_particle108_dcl_spv_family_census.py",
+    ".github/workflows/raft-t3-particle108-dcl-spv-family-source-only.yml",
+    ".github/workflows/raft-t3-particle108-dcl-spv-family-census.yml",
+    "prompt/coordination/requests/t3-dcl-spv-family-a91d.trigger",
+    "prompt/coordination/clients/T3/sessions/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.md",
+    "prompt/coordination/experiments/T3/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.json",
+    "prompt/coordination/work/RENDER-002/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.json"
+  ],
+  "original_artifact_url": "https://github.com/alwansan/raf/actions/runs/42274933802/artifacts/13532217588",
+  "original_safe_artifact_id": 13532217588
 }
