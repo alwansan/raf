@@ -5,8 +5,8 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "base_sha": "ce2c1ae43b50d6994605a14e11f5bf78492b0b11",
-  "status": "active",
-  "updated_at": "2026-11-06T19:17:51.193Z",
+  "status": "completed_source_only",
+  "updated_at": "2026-11-06T19:28:32.172Z",
   "resumed_from_sessions": [
     "20261106T190315Z-T3-chat-stage-cardinality-e6a2",
     "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
@@ -24,5 +24,27 @@
   ],
   "scope_overlap_check": "Do not edit scheduled T3 t3_dxbc_spirv_contract_join.py. Do not change T5 native request or T1/T2 shader/water files. Existing original-source workflow stays manual-only; no bypass of prior blocked dispatch.",
   "approach": "Build a bounded fail-closed binary SPIR-V reader for OpEntryPoint, OpName, OpDecorate DescriptorSet+Binding, OpTypePointer/OpVariable and resource type. Source-private matching uses literal named CB/SRV/Sampler/UAV register prefix only as candidate debug identity, aggregates counts safely, tests on synthetic byte streams via existing source-only CI. Never declare program/phone restoration.",
-  "next_step": "Write parser, synthetic regression test; run existing CI source-only and record terminal success; consider source-authenticated probe only through authorized manual Actions after exact tool/compiler provenance assurance."
+  "next_step": "When authorized original-only source execution becomes available and no equivalent run is active: verify exact per-stage 8 shader family cardinality, then run private original SPIRV debug-name candidate analyzer on pinned 4 original keyword VS/FS pairs. Candidate names cannot prove register provenance; secure independent translation binding contract required before ShaderLab/Unity/phone. Keep RENDER-002 OPEN and trial vote لا يحتاج.",
+  "result": "Bounded private SPV 1.0–1.6 OpName/OpDecorate/OpVariable typed debug candidate parser and pinned original eight-stage adapter integrated. Synthetic 29/29 CI42279422349 SUCCESS after correcting SPV header minor-bit parser (initial CI42278854388 failure). No authentic ZIP2 shader run, no authoritative DXBC→SPV binding map, Unity/Android pixels or game asset changes.",
+  "intended_files": [
+    "scripts/t3_particle108_spirv_opname_candidates.py",
+    "tests/test_t3_particle108_dcl_spv_family_census.py",
+    "prompt/coordination/experiments/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T191751Z-T3-chat-spv-opname-b71e.md",
+    "prompt/coordination/B_TEAM/events/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json"
+  ],
+  "files_changed": [
+    "scripts/t3_particle108_spirv_opname_candidates.py",
+    "scripts/t3_particle108_spv_named_original_probe.py",
+    "tests/test_t3_particle108_dcl_spv_family_census.py",
+    "prompt/coordination/experiments/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T191751Z-T3-chat-spv-opname-b71e.md",
+    "prompt/coordination/B_TEAM/events/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json",
+    "prompt/coordination/work/RENDER-002/20261106T191751Z-T3-chat-spv-opname-b71e.json"
+  ],
+  "work_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42278854388",
+    "https://github.com/alwansan/raf/actions/runs/42279006117",
+    "https://github.com/alwansan/raf/actions/runs/42279422349"
+  ]
 }
