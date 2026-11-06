@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
+  "owner": "T5",
+  "session_id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T14:10:39.487Z",
+  "summary": "REAL owner-tested signed main OBB from source run42058825739, full 2301256312 bytes read over 549 strict HTTP206 range requests; full SHA-256 MATCH actual original delivery.json original SHA (safe prefix 660b6c0909ae), whole OBB CRC32 MATCH original signed checkpoint ZIP_STORED central directory. Isolated CI42230326050 COMPLETED SUCCESS, 9/9 synthetic tests, no disk OBB upload. Prior original APK CI42228262902 SHA/signature/v89 passed. Unity OBB GUID, phone mount, actual device hashes, water/FFT/graphics CURRENT branch not verified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42230326050",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_OBB_SHA_2026-11-06.md",
+    "https://github.com/alwansan/raf/actions/runs/42228262902"
+  ],
+  "limits": "Old owner-tested source artifact SHA vs its own delivery reference only, no independent publisher-signed manifest, no new phone or OBB GUID and Unity resource read proof; NOT_READY 0/3.",
+  "next_step": "Investigate OBB GUID warnings and actual Android mounted OBB resource paths, and plan current-branch performance/graphics validation after T1–T3 patches."
+}
