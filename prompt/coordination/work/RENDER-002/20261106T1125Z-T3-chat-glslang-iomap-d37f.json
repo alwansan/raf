@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "b34c69cd52c9369cf42766a477d90ea973288757",
+  "resumed_from_sessions": [
+    "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
+    "20261106T1026Z-T3-scheduled-91ac"
+  ],
+  "track": "Private source-authentic Particle108 HLSL glslang independent-stage IO mapping candidate variants",
+  "intended_files": [
+    "scripts/t3_particle108_glslang_io_map_experiment.py",
+    "tests/test_t3_particle108_glslang_io_map_experiment.py",
+    ".github/workflows/raft-t3-particle108-glslang-io-map.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1125Z-T3-chat-glslang-iomap-d37f.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1125Z-T3-chat-glslang-iomap-d37f.md",
+    "prompt/coordination/experiments/T3/20261106T1125Z-T3-chat-glslang-iomap-d37f.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1125Z-T3-chat-glslang-iomap-d37f.json"
+  ],
+  "hypothesis": "HLSL VS/FS semantics link 4/4, but glslang independent HLSL-to-SPIRV compilation yields SPIRV 2/4, so explicit HLSL IO-mapping and auto-location flags may restore structural 4/4 without editing authored shader data.",
+  "experiment_key": "T3-Particle108-4SHA-fourpair-glslang-HLSL-iomap-auto-location-alternate-compilation-v1",
+  "resource_key": "T3-private-four-original-Particle108-IOmap-compiler-runner",
+  "approach": "Run baseline, --hlsl-iomap, --auto-map-locations and combined flags separately on exact original four HLSL pairs in private CI, record only successful stage counts, vulkan1.1 spirv-val and anonymous reflection stage link; no original ShaderLab changes or private program artifacts.",
+  "updated_at": "2026-11-06T11:26:13.180Z"
+}
