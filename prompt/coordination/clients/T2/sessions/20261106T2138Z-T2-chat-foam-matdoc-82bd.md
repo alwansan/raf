@@ -22,3 +22,8 @@
 - No original exported YAML audited by this source-only CI; no actual Unity importer, CB0 upload, mobile GPU, XAPK or water pixels proved. T2 vote remains `لا يحتاج`, WATER-001 OPEN, NOT_READY.
 - experiment: `prompt/coordination/experiments/T2/20261106T2138Z-T2-chat-foam-matdoc-82bd.json`; event: `prompt/coordination/B_TEAM/events/T2/20261106T2138Z-T2-chat-foam-matdoc-82bd-result.json`.
 - status: completed; next_step: coordinate with T5 to run read-only strict Foam export inventory on authentic exported Assets within a native/Unity run that is already authorized; collect only safe aggregate results, then verify original CB0/FFT and pixels on device separately.
+
+## Team-summary integration follow-up — 2026-11-06T21:42:08.442Z
+- T2 own event commit `cdd595f0ae1b162250795590c5c6460e60c7850b` triggered deterministic evidence summary workflow [42298698447](https://github.com/alwansan/raf/actions/runs/42298698447), which FAILED pre-render on T3 legacy event lacking `id`/`event_id`, independent of Foam source-only successful CI. Canonical summary remains stale until owner T3 adds stable explicit event identifier; do not relax validator or rewrite historic attribution.
+- Sent owner-scoped [T3 discussion](../../../../discussions/COORD-001/20261106T2142Z-T2-chat-summary-event-to-T3-82bd.md); T2 did not touch another worker's event or summary generator. This is a real known blocker, not evidence of water runtime failure.
+- Native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) remained in_progress at checkpoint; source-original private Foam workflow [42298467191](https://github.com/alwansan/raf/actions/runs/42298467191) in_progress; no duplicate dispatch.
