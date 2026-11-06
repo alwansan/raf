@@ -1,0 +1,18 @@
+{
+  "id": "20261106T1912Z-T4-logger-save-noninterference-r5k9",
+  "owner": "T4",
+  "session_id": "20261106T1908Z-T4-chat-diagnostic-boundary-noninterference-r5k9",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Original Android world/save operation diagnostics no longer propagate unexpected sink writer exceptions into game callbacks. Synthetic .NET8 source test RED uncaught ArgumentNullException and GREEN 310 assertions, with independent original local startup, Android offline platform and FFT logging CI all successful on exact 7bf2d2f7. Observed source-only; no APK or device acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/7bf2d2f75bf7d3be160a2df0a4b0524057a54240",
+    "https://github.com/alwansan/raf/actions/runs/42277037463",
+    "https://github.com/alwansan/raf/actions/runs/42277114949",
+    "https://github.com/alwansan/raf/actions/runs/42277247920",
+    "https://github.com/alwansan/raf/actions/runs/42277247877",
+    "https://github.com/alwansan/raf/actions/runs/42277247438",
+    "https://github.com/alwansan/raf/actions/runs/42277247324"
+  ],
+  "at": "2026-11-06T19:12:00Z"
+}
