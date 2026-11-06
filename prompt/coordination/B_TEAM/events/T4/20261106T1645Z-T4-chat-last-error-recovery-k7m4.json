@@ -1,0 +1,15 @@
+{
+  "id": "20261106T1645Z-T4-chat-last-error-recovery-k7m4",
+  "owner": "T4",
+  "session_id": "20261106T164053Z-T4-chat-logger-recovery-status-k7m4",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Source-only synthetic I/O fault recovery: old logger permanently retained LastError after durable recovered Flush (red CI42254862695 Program.cs:145 check51); production reset after full successful drain+file flush, green CI42255132103 checks=286. No actual Android storage fault/device fix proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/7c7b63dae280b3462cf479b6f1bb286ff26ee270",
+    "https://github.com/alwansan/raf/actions/runs/42254862695",
+    "https://github.com/alwansan/raf/commit/4b10629cfb16d3b8b963ce160a548b998443c374",
+    "https://github.com/alwansan/raf/actions/runs/42255132103"
+  ],
+  "at": "2026-11-06T16:45:00Z"
+}
