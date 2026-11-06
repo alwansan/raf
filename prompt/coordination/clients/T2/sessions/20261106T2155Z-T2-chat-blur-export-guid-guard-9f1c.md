@@ -15,3 +15,7 @@
 - No original Blur SHA-pinned source candidate was generated or installed by this synthetic-only run. B45 original private candidate hash and real original shader asset remain unchanged. No Unity importer/Adreno pixels or runtime material binding proof; WATER-001 OPEN, NOT_READY.
 - Work `prompt/coordination/work/WATER-001/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c.json` completed. Experiment `prompt/coordination/experiments/T2/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c.json`; independent event `prompt/coordination/B_TEAM/events/T2/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c-result.json`.
 - Next: authentic export GUID scan and original candidate install only under T5 coordinated Unity run with private sources verified and independent phone pixel evidence.
+
+## Team integration checkpoint — 2026-11-06T21:58:22.436Z
+- Source-only Blur 12/12 guard tests verified; separate T2 CB0 original [CI42300107157](https://github.com/alwansan/raf/actions/runs/42300107157) SUCCESS and handed off to T5 via [discussion](../../../discussions/WATER-001/20261106T2201Z-T2-chat-cb0-array-bounds-to-T5-5bc1.md). No original Blur ShaderLab imported, no new APK proof.
+- The source ledger summary auto-refresh remains blocked by T3 historical event missing `id`/`event_id`, as independently proven in [CI42300902868](https://github.com/alwansan/raf/actions/runs/42300902868); do not claim it refreshed. No user action needed for T2's work completion.
