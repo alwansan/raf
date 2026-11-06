@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0147Z-T4-chat-ledger-id-r8w2",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "608d8506e5af5efa89fe7113cf7415169cf6fb04",
+  "updated_at": "2026-11-06T01:47:00Z",
+  "resumed_from_sessions": [
+    "20261106T0137Z-T4-scheduled-n7p2",
+    "20261106T0130Z-T4-chat-touchpad-device-source-q4m7"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T013239Z-T3-chat-particle108-namebridge-6f42.md"
+  ],
+  "experiment_key": "T4-20261106-0130-event-identity-surgical-same-original-summary-latest-T3-ledger-failure-42145627443",
+  "resource_key": "cheap-T4-ledger-identity-python-no-Unity",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T0147Z-T4-chat-ledger-id-r8w2-event-identity.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0147Z-T4-chat-ledger-id-r8w2.md",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json",
+    "tests/test_t4_event_ledger_identity.py",
+    ".github/workflows/raft-t4-event-ledger-identity.yml",
+    "prompt/coordination/experiments/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json"
+  ],
+  "hypothesis": "The shared T-team refresh is blocked solely at T4's latest event without required id; adding stable unambiguous id preserving existing payload will unblock ledger parsing and prevent recurrence with isolated test.",
+  "related_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42145627443"
+  ],
+  "next_step": "Add missing exact event id; source-only checker scans all events for ids and ledger parser using existing refresh_b_team.py; no other T3 assets or workflows changed.",
+  "result": null
+}
