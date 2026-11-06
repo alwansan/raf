@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1854Z-T4-overflow-record-shape-v6q3",
+  "owner": "T4",
+  "session_id": "20261106T1850Z-T4-chat-overflow-shape-integrity-v6q3",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "T4 world/save phone JSONL diagnostic parser now validates exact original Android logger queue_overflow record (area,operation,dropped positive signed Int64), refusing malformed spoof rows rather than silently suppressing pair hints; synthetic CI red 9 subcases on test-only source and green 30+2 tests after source+legacy-fixture correction. No on-device acceptance or raw RGD involved.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a2b9e7f91732af8ef2705127c5d0567cc30a5d6a",
+    "https://github.com/alwansan/raf/actions/runs/42274640154",
+    "https://github.com/alwansan/raf/commit/7977e6b61be76f3a3142852e8c383fc64fd38534",
+    "https://github.com/alwansan/raf/actions/runs/42274682716",
+    "https://github.com/alwansan/raf/commit/409222d455317044f2e021ac13420b7312e49e3f",
+    "https://github.com/alwansan/raf/actions/runs/42274708854"
+  ],
+  "at": "2026-11-06T18:54:00Z"
+}
