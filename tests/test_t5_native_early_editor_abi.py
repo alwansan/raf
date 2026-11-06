@@ -65,10 +65,13 @@ class EarlyEditorNativeAbi(unittest.TestCase):
             native_stage(changed)
 
     def test_losing_real_editor_or_android_compile_is_rejected(self):
+        selected = native_stage(self.native)
         for command in ("UnityEditorBridgeCompile UnityBridgeCompile",
                         'test "$(stat -c', 'sha256sum -c --status', 'exit 1'):
             with self.subTest(command=command):
-                changed = self.native.replace(command, "REMOVED", 1)
+                self.assertIn(command, selected)
+                changed = self.native.replace(
+                    selected, selected.replace(command, "REMOVED", 1), 1)
                 with self.assertRaises(ValueError):
                     native_stage(changed)
 
