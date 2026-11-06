@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "afdf718c02e82733163279a67d2ec5a601af912d",
+  "updated_at": "2026-11-06T13:58:58.369Z",
+  "resumed_from_sessions": [
+    "20261106T1346Z-T5-scheduled-apk-live-failure-m7q2.md",
+    "20261106T1330Z-T5-chat-signed-apk-auth-f7b2.md",
+    "20261106T1316Z-T5-chat-nested-zip-c53a.md"
+  ],
+  "experiment_key": "T5-immutable-original-run42058825739-main-OBB-2301256312B-pinned-artifact13441766832-full-SHA256-checkpoint-CRC32-delivery-manifest-v1",
+  "resource_key": "one signed checkpoint original main OBB 2,301,256,312 bytes; no outer download, GitHub Actions only, bounded 2.4GB HTTP206 read no disk; no Unity builder",
+  "hypothesis": "Original main OBB in the verified checkpoint, already ZIP_STORED with genuine nested local headers, matches exact full SHA-256 from original run's delivery.json and the CRC32 from immutable outer signed checkpoint ZIP central directory; this narrows original installation asset integrity separately from Android runtime mount.",
+  "intended_files": [
+    "scripts/t5_verify_real_signed_obb.py",
+    "tests/test_t5_verify_real_signed_obb.py",
+    ".github/workflows/raft-t5-real-signed-obb-attestation.yml",
+    "docs/T5_REAL_SIGNED_OBB_SHA_2026-11-06.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1358Z-T5-chat-obb-fullsha-7e39.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1358Z-T5-chat-obb-fullsha-7e39.md",
+    "prompt/coordination/experiments/T5/20261106T1358Z-T5-chat-obb-fullsha-7e39.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1358Z-T5-chat-obb-fullsha-7e39.json"
+  ],
+  "scope": "New T5-specific source-only verifier and synthetic fixtures; exact old owner-tested OBB only, live SHA256 versus original delivery manifest and outer archive CRC. No source assets or graphics code changes. Team T3 renderer CI active, do not conflict.",
+  "limits": [
+    "Keep only feature/android-native-port writes",
+    "Pin original run42058825739 source e9c358e and original artifact metadata digests",
+    "No complete checkpoint/delivery ZIP download; only original OBB stored bytes via strict HTTP206",
+    "Remote read hard cap 2,400,000,000 bytes plus 8MiB metadata; no OBB disk storage or upload, no URLs/tokens in logs",
+    "Never claim Unity resource GUID, mount, audio, water/FFT/pixels or current branch game readiness",
+    "No new full Unity/IL2CPP build or cancellation of other clients' jobs"
+  ],
+  "acceptance": [
+    "Unit tests prove positive OBB SHA and CRC and reject bad digest/CRC, incorrect size, short chunks and over-budget before network",
+    "Actual full OBB byte stream 2,301,256,312B hashed, compare 64-hex source manifest digest and outer CRC",
+    "CI success and exact source/run/limits recorded, or honest blocked outcome with redacted cause"
+  ],
+  "next_step": "Implement isolated streamed signed OBB SHA+CRC verifier, launch CI with source-only synthetic test first; report real success only after terminal green job."
+}
