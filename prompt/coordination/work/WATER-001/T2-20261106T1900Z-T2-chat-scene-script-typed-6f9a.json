@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "SHA-original 473-scene-referenced MonoScript managed TypeDef subset",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b23f452c8ce034e064cd6166d94bd05d80a16dff",
-  "updated_at": "2026-11-06T19:00:00Z",
+  "updated_at": "2026-11-06T19:07:15Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T1900Z-T2-chat-scene-script-typed-6f9a.json",
     "prompt/coordination/clients/T2/sessions/20261106T1900Z-T2-chat-scene-script-typed-6f9a.md",
@@ -29,7 +29,31 @@
     "prompt/coordination/clients/T2/sessions/20261106T1846Z-T2-chat-monoclass-assembly-7d3e.md",
     "prompt/coordination/clients/T2/sessions/20261106T1817Z-T2-chat-original-script-target-5ac9.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Rebuild SHA original scene source in ephemeral runner, derive 473 actual m_Script PathID subset, exact join original script metadata to original TypeDef, report only safe aggregate counts; no Android build."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42276583082"
+  ],
+  "result": {
+    "status": "success",
+    "run_id": 42276583082,
+    "synthetic_tests": 15,
+    "original_scene_files_sha_checked": 40,
+    "original_scene_bytes_sha_checked": 233237972,
+    "original_mono_owner_sha_checked": 758412,
+    "original_dll_sha_checked": 3211776,
+    "original_total_sha_checked": 237208160,
+    "opaque_m_script_refs": 55328,
+    "actual_referenced_distinct_MonoScripts": 473,
+    "exact_Assembly_CSharp_candidate_objects": 428,
+    "unique_TypeDef_matches": 427,
+    "ambiguous_TypeDef": 1,
+    "missing_TypeDef": 0,
+    "other_assembly_original_scripts": 45,
+    "unreadable_MonoScript_metadata": 0,
+    "whole_source_provider_MonoScript_objects": 3827,
+    "original_managed_typedef_rows": 3033,
+    "device_water_pixels_verified": false,
+    "artifact_id": 13533820909
+  },
+  "next_step": "Private source-authentic join of 427 proven in-scene MonoScript TypeDefs to original managed field signatures + actual original water Material/Shader/CB0 entry points. Keep 1 ambiguous TypeDef unresolved until independent disambiguation. No fuzzy matching, no game asset edits or APK until substantive integrated render patch.",
+  "integration_commit": "fdaa5bf749ed07a0a6cd7d34718a90290b5e9322"
 }
