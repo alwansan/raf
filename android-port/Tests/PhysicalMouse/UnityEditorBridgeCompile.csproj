@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <!-- Unity Editor compiles the restored gameplay source for the selected
+         Android target while UNITY_EDITOR is set; the Android player-only
+         runtime must not be required merely to resolve original mouse sites. -->
+    <DefineConstants>UNITY_ANDROID;UNITY_EDITOR;UNITY_5_3_OR_NEWER</DefineConstants>
+    <Nullable>disable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoWarn>0618;0672;CS1701;CS1702</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Runtime/Platform/AndroidPhysicalMouseCapture.cs" />
+    <Compile Include="UnityEditorBridgeUsage.cs" />
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(OriginalManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(OriginalManagedDir)/UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
