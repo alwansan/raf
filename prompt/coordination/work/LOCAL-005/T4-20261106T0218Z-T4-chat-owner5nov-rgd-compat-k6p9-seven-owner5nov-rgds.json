@@ -3,8 +3,8 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-06T02:18:00Z",
+  "status": "completed_original_CLR_verified_phone_new_candidate_unverified",
+  "updated_at": "2026-11-06T02:26:00Z",
   "base_sha": "375ade378ae990cdcbd06274fa25358d76e98c04",
   "resumed_from_sessions": [
     "20261106T0147Z-T4-chat-ledger-id-r8w2",
@@ -37,5 +37,23 @@
     "managed_siblings": "02e9fba7fb42b83579595885391be636ee3b56e8"
   },
   "output_boundary": "numeric sample ordinals and booleans only; not gameplay/Android/IL2CPP acceptance",
-  "next_step": "Pin source exact seven and run distinct source-only original Load<T> CI; preserve existing 3-blob 4 Nov CI."
+  "next_step": "T5 exact source signed APK+OBB device test; user confirms same-world play, save, process exit/relaunch, load and original operation logs plus .rgd file parity. Original .NET8 LoadT proof alone is NOT phone/IL2CPP acceptance.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42149781353",
+    "https://github.com/alwansan/raf/actions/runs/42150216417"
+  ],
+  "result": {
+    "run": 42150216417,
+    "conclusion": "SUCCESS",
+    "real_owner_worlds": 7,
+    "original_binaryformatter_created": 7,
+    "original_compiled_SaveAndLoad_LoadT_invoked": 7,
+    "returned_original_matching_RGD_type": 7,
+    "synthetic_intake_controls": "12/12",
+    "tamper": "one-byte same-size rejected",
+    "old_three_regression": "SUCCESS 42149781353",
+    "android_unity_native_build": false,
+    "device_retested": false,
+    "user_world_progress_verified": false
+  }
 }
