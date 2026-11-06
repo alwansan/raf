@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
+  "issue_id": "WATER-001",
+  "track": "Blur original shader guarded install",
+  "status": "active",
+  "base_sha": "ebbdf7917eb581d5a6379a95afdd86f0613d2fd5",
+  "updated_at": "2026-11-06T21:54:36.149Z",
+  "resumed_from_sessions": [
+    "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
+    "20261106T2138Z-T2-chat-foam-matdoc-82bd"
+  ],
+  "taken_over_from": [
+    "B45 original Blur importer and source-only tests; https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b45_install_original_blur.py"
+  ],
+  "hypothesis": "B45 original Blur installer checks only its target .meta GUID syntax but not uniqueness across exported Assets, allowing an unrelated .meta with the same GUID to make material references ambiguous. Reject duplicate and unsafe unrelated .meta before any backup or replacement.",
+  "experiment_key": "T2-inherited-B45-Blur-unique-exported-shader-guid-before-install-sourceonly-v1",
+  "resource_key": "B45 source-only Blur installer; independent Foam CB0 original candidate, owner native workflow and Unity resources",
+  "intended_files": [
+    "scripts/b45_install_original_blur.py",
+    "tests/test_b45_install_original_blur.py",
+    "prompt/coordination/work/WATER-001/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c.md",
+    "prompt/coordination/experiments/T2/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c-result.json"
+  ],
+  "do_not_touch": [
+    "T1 FFT and T3 effects files",
+    "T2 original Foam CB0 member test and CI",
+    "T4/T5 native CI workflows",
+    "game .shader/.meta GUIDs",
+    "original private source/asset"
+  ],
+  "ci_existing": ".github/workflows/raft-b45-blur-install-check.yml",
+  "next_step": "Add duplicate-GUID rejection before backup and symlink sidecar guard, source-only synthetic red/green tests, check CI; do not change B45 pinned private candidate or Unity assets."
+}
