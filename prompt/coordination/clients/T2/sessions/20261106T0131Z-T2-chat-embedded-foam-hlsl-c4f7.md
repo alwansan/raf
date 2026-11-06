@@ -1,0 +1,13 @@
+# T2 session 20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7
+- origin: chat
+- status: active
+- scope: WATER-001 original full private ShaderLab embedded VS/PS HLSL verification.
+- baseline_sha: abb6c9ada4245c2844ac3914c778ca2002d97386
+- experiment_key: SHAOriginalFoam-PrivateShaderLabEmbeddedHLSL4StageCompile-v1
+- work: prompt/coordination/work/WATER-001/T2-20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.json
+- source authentication: ZIP2 @ 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original Foam Shader owner exact SHA.
+- Previous successful source-authentic [CI42125847863](https://github.com/alwansan/raf/actions/runs/42125847863) private 2-pass 9731B ShaderLab; previous [CI42121817207](https://github.com/alwansan/raf/actions/runs/42121817207) only recompiles paired HLSL **before** final ShaderLab embedding.
+- Investigation distinguishes embedded ShaderLab stage compilation from runtime CB0/Material/Adreno. Original setter argument first-string 4/4 and texture returned call values established previously. Avoid redundant scans.
+- Planned: independent two-pass HLSLPROGRAM parser with strict source boundaries, four actual stage compiler+spirv-val calls in private CI scratch, negative source-free parser and process-output tests; only safe booleans/counts published.
+- No original source/ShaderLab/bytecode in GitHub output, game assets, GUID or .meta changes, other agent files, Unity build or actions cancellation.
+- Next: new test and actual SHA original CI then record outcome, WATER-001 OPEN.
