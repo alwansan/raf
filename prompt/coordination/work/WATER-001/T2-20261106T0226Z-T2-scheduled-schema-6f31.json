@@ -2,9 +2,9 @@
   "session_id": "20261106T0226Z-T2-scheduled-schema-6f31",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_only",
   "baseline_sha": "9fb807f6cf45743c1bffd9d61b7aa9a42e3f7d0e",
-  "updated_at": "2026-11-06T02:26:00Z",
+  "updated_at": "2026-11-06T02:30:00Z",
   "intended_files": [
     "scripts/t2_device_water_summary.py",
     "tests/test_t2_device_water_summary.py",
@@ -18,5 +18,12 @@
     "20261106T0120Z-T2-scheduled-json-evidence-7c91.md",
     "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8.md"
   ],
-  "scope_note": "Different files from active chat Foam Vulkan descriptor workflow; no Unity, native, or Actions dispatch."
+  "scope_note": "Different files from active chat Foam Vulkan descriptor workflow; no Unity, native, or Actions dispatch.",
+  "result_commits": [
+    "9508f0c573a4bfb4f4f8a074ecc1944a0c5fcacf",
+    "58e118f0fec0b3813924381f9328378c24faacdd",
+    "3bade5790643fe959d43a22178120daca7dec04f"
+  ],
+  "validation": "isolated Python semantic guard smoke 9/9; full repository unittest NOT executed",
+  "next_step": "Run tests.test_t2_device_water_summary against checkout and pinned CL; resume original Foam ShaderLab descriptor layout independent chat work"
 }
