@@ -31,6 +31,18 @@ namespace RaftAndroid.Platform
                 queuedActivityIdentity == currentActivityIdentity;
         }
 
+        // Android window focus can diverge from Unity lifecycle focus.
+        // Refuse a queued hide while a dialog or system overlay owns focus.
+        public static bool CanApplyQueuedHide(bool active, bool focused, bool paused,
+            int queuedGeneration, int currentGeneration,
+            int queuedActivityIdentity, int currentActivityIdentity,
+            bool androidWindowFocused)
+        {
+            return androidWindowFocused &&
+                CanApplyQueuedHide(active, focused, paused, queuedGeneration,
+                    currentGeneration, queuedActivityIdentity, currentActivityIdentity);
+        }
+
         public static int MergeLegacy(int existing)
         {
             return existing | LegacyFullscreen | LegacyHideNavigation |
