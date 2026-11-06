@@ -4,6 +4,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - .github/workflows/raft-t5-ledger-refresh.yml
+      - scripts/refresh_b_team.py
+      - tests/test_refresh_b_team.py
   workflow_dispatch:
 permissions:
   contents: write
@@ -21,6 +23,22 @@ jobs:
           ref: feature/android-native-port
           lfs: false
           persist-credentials: true
+      - name: Source-free parser regression and live inherited-ledger identity check
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_refresh_b_team.py -v
+          python3 -m unittest discover -s tests -p test_refresh_t_team.py -v
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.refresh_t_team import build_t
+          data = build_t(Path("prompt/coordination/B_TEAM"))
+          assert data["readiness"] == "NOT_ASSESSED_BY_THIS_SUMMARY"
+          assert all(isinstance(r["id"], str) and r["id"] for r in data["events"])
+          print("T5_LIVE_EVENT_ALIAS", "events="+str(len(data["events"])),
+                "source_only=true", "game_ready=false")
+          PY
       - name: Regenerate from inherited ledger and push only index
         shell: bash
         run: |
