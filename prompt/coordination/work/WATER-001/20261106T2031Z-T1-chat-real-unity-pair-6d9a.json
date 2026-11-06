@@ -6,9 +6,9 @@
   "session_id": "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
   "issue_id": "WATER-001",
   "track": "Opt-in SHA-original FFT SPIR-V Vulkan versus Unity2021 OpenGLCore same seed19 keyed GPU capture",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "3d6ed8f1a42a3a05d7feb8e8365820703ba92df4",
-  "updated_at": "2026-11-06T20:31:00Z",
+  "updated_at": "2026-11-06T20:33:00Z",
   "resumed_from_sessions": [
     "20261106T2017Z-T1-chat-private-producer-gate-8f31",
     "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
@@ -28,5 +28,32 @@
   "native_conflict_preflight": "At reserve 20:30Z no queued/in_progress Unity/native jobs, only CI compatibility guard; T5 working source-only Unity ABI preflight.",
   "zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "trial_vote": "لا يحتاج",
-  "next_step": "Use existing immutable opt-in workflow once; monitor job status and classify earliest failure or real private safe numeric result. If long-running save waiting_ci and do not cancel/duplicate."
+  "next_step": "T1 scheduled/chat on resume: check run42289238865 job128138000484 first. If failure, retrieve private safe stage/log family without exposing shader/asset, repair only its root cause; if success inspect RAFT_T1_PRIVATE_ORIGINAL_UNITY_JOIN and producer SHA stage flags; do not confuse Unity synthetic tests with original numeric parity. Preserve native mutex and no duplicate replay.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42289104961",
+    "https://github.com/alwansan/raf/actions/runs/42289238865"
+  ],
+  "scope_commits": [
+    "225e131dd039e24e1d74caa4b1d975391506bd4b",
+    "177a57342dc6197e2f5dceee940c9bb0bec34c6f"
+  ],
+  "result": {
+    "preflight_first_run": {
+      "id": 42289104961,
+      "conclusion": "failure",
+      "precise_reason": "4 FileNotFoundError: sparse-checkout had omitted .github/workflows/raft-t1-fft-unity-input-identity.yml for 4 workflow-contract tests; no original data staged"
+    },
+    "retry": {
+      "id": 42289238865,
+      "job_id": 128138000484,
+      "status": "in_progress",
+      "at": "2026-11-06T20:33:00Z",
+      "passed": [
+        "License/disk preflight",
+        "Source-only Python contract/unit tests",
+        "GameCI CLI exact SHA download"
+      ],
+      "running": "source-free Unity ComputeShader test before ZIP2 acquisition"
+    }
+  }
 }
