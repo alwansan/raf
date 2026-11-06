@@ -4,9 +4,9 @@
   "session_id": "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_only",
   "base_sha": "3bc7c96a42b566f302417dde91193baab691f6ad",
-  "updated_at": "2026-11-06T19:35:02.933Z",
+  "updated_at": "2026-11-06T19:39:44.874Z",
   "resumed_from_sessions": [
     "20261106T191751Z-T3-chat-spv-opname-b71e",
     "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
@@ -35,5 +35,11 @@
     "42280404780 T2 WATER-001 source IL",
     "42280404628 Android offline adapter; neither touched"
   ],
-  "next_step": "Commit two isolated workflow files; observe new sourcefree CI; save session/experiment/event. Future authorized manual workflow dispatch on current vetted HEAD to extract only anonymous original SPV OpName candidate counts."
+  "next_step": "First authorized manual dispatch only: verify 4 paired source stages SHA15964 and per-stage CB/SRV/Sampler counts; collect only safe debug candidate counts. Never treat OpName or equal numbers as authoritative register-to-binding mapping. Follow with real ShaderLab Unity compiler+Adreno; trial vote remains لا يحتاج. T3 scheduled contract v2 was checked 12/12 by CI 42281080458; scheduled agent may reference.",
+  "result": "Added distinct manual-only SHA-original 8-stage Particle108 SPV OpName debug candidate plus per-stage cardinality workflow, not dispatched. Built sourcefree CI42281080458 success, total 41 PASS (29 T3 candidate tests + 12 scheduled T3 exact provenance validator tests); compiled Python. Scheduled owner scripts/tests untouched. No original DXBC→Vulkan binding proof and no Android shader/pixel fix.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281080458"
+  ],
+  "original_source_run": null,
+  "release_resource_key": true
 }
