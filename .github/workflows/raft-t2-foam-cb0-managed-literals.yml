@@ -186,6 +186,36 @@ jobs:
                       'original_source_name_exact_receiver_Material_writer_methods_with_Material_ctor',
                       'original_source_name_exact_receiver_Material_writer_methods_with_Renderer_getter'):
             assert type(r[key]) is int and 0<=r[key]<=material_methods
+          stack_sources=r['original_source_name_exact_receiver_Material_stfld_value_stack_origin_buckets']
+          stack_allow={'invalid_Material_stfld','alternate_entry_at_store',
+                       'unbounded_basic_block','window_truncated',
+                       'flow_boundary_inside_block','unbounded_stack',
+                       'invalid_local_definition','local_address_alias_not_proven',
+                       'malformed_or_unbounded_field_read',
+                       'malformed_or_unbounded_static_field_read',
+                       'invalid_method_reference','unsupported_opcode',
+                       'exact_Material_ctor_with_Shader_formal',
+                       'exact_Material_ctor_other_formals',
+                       'typed_Renderer_Material_getter',
+                       'typed_Material_call_result',
+                       'typed_Material_parameter','typed_Material_instance_field',
+                       'typed_Material_static_field','null_literal','unproven'}
+          assert set(stack_sources)<=stack_allow
+          assert all(type(v) is int and v>=0 for v in stack_sources.values())
+          assert sum(stack_sources.values())==material_stores
+          shader_inputs=r['original_source_name_exact_receiver_Material_ctor_Shader_formal_origin_buckets']
+          shader_allow={'unproven','typed_Shader_parameter','typed_Shader_instance_field',
+                        'typed_Shader_static_field','typed_Shader_Find_result',
+                        'typed_Shader_other_call_result','null_literal'}
+          assert set(shader_inputs)<=shader_allow
+          assert all(type(v) is int and v>=0 for v in shader_inputs.values())
+          assert sum(shader_inputs.values())==(
+            stack_sources.get('exact_Material_ctor_with_Shader_formal',0)+
+            stack_sources.get('exact_Material_ctor_other_formals',0))
+          steps=r['original_source_name_exact_receiver_Material_store_block_instructions_examined']
+          assert type(steps) is int and 0<=steps<=128*material_stores
+          assert r['compiled_Material_store_Shader_is_original_Foam_verified'] is False
+          assert r['compiled_Material_store_value_original_runtime_executed_verified'] is False
           assert r['original_exact_Material_shader_is_source_Foam_verified'] is False
           assert r['original_150_byte_or_160_byte_CB0_complete_managed_upload_proven'] is False
           assert r['original_Vector4_ctor_input_values_verified'] is False
