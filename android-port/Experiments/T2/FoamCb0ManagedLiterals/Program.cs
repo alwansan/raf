@@ -63,6 +63,53 @@ internal static class Program
         return groups;
     }
 
+    internal static string MaterialFieldStoreImmediateProducer(
+        IList<Instruction> instructions, int storePosition, MethodDefinition? context = null)
+    {
+        if (storePosition < 1 || storePosition >= instructions.Count ||
+            instructions[storePosition].OpCode.Code != Code.Stfld ||
+            instructions[storePosition].Operand is not FieldReference target ||
+            target.FieldType.FullName != "UnityEngine.Material")
+            return "unverified_Material_field_store";
+        var atStore = instructions[storePosition];
+        if (instructions.Any(x => ReferenceEquals(x.Operand, atStore) ||
+            x.Operand is Instruction[] branches &&
+            branches.Any(t => ReferenceEquals(t,atStore))) ||
+            context?.HasBody == true && context.Body.ExceptionHandlers.Any(x =>
+                ReferenceEquals(x.TryStart,atStore) ||
+                ReferenceEquals(x.HandlerStart,atStore) ||
+                ReferenceEquals(x.FilterStart,atStore)))
+            return "alternate_entry_at_store";
+        var before=instructions[storePosition-1];
+        if (before.OpCode.Code == Code.Newobj &&
+            before.Operand is MethodReference constructor &&
+            constructor.DeclaringType.FullName == "UnityEngine.Material" &&
+            constructor.Name == ".ctor" &&
+            constructor.HasThis)
+            return constructor.Parameters.Count == 1 &&
+                constructor.Parameters[0].ParameterType.FullName == "UnityEngine.Shader"
+                ? "immediate_new_Material_with_Shader_formal"
+                : "immediate_new_Material_other_formals";
+        if (before.OpCode.Code is Code.Call or Code.Callvirt &&
+            before.Operand is MethodReference method &&
+            method.ReturnType.FullName == "UnityEngine.Material")
+            return method.DeclaringType.FullName == "UnityEngine.Renderer" &&
+                method.Name is "get_material" or "get_sharedMaterial"
+                ? "immediate_Renderer_material_getter"
+                : "immediate_typed_Material_call_result";
+        if (before.OpCode.Code == Code.Ldfld &&
+            before.Operand is FieldReference field &&
+            field.FieldType.FullName == "UnityEngine.Material")
+            return "immediate_typed_Material_field_load";
+        if (before.OpCode.Code == Code.Ldsfld &&
+            before.Operand is FieldReference staticField &&
+            staticField.FieldType.FullName == "UnityEngine.Material")
+            return "immediate_typed_Material_static_field_load";
+        if (before.OpCode.Code == Code.Ldnull)
+            return "immediate_null_literal";
+        return "immediate_value_source_unproven";
+    }
+
     private static IEnumerable<TypeDefinition> Walk(IEnumerable<TypeDefinition> types)
     {
         foreach (var type in types)
@@ -164,6 +211,8 @@ internal static class Program
         int exactOriginalCtorDistinctDeclaringTypes = 0;
         var exactOriginalCtorFields = new HashSet<string>(StringComparer.Ordinal);
         var originalMaterialPrefixCategories = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var exactOriginalReceiverMaterialFieldIds = new HashSet<string>(StringComparer.Ordinal);
+        var exactOriginalReceiverMaterialDeclaringTypes = new HashSet<string>(StringComparer.Ordinal);
 
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
@@ -221,6 +270,17 @@ internal static class Program
                         originalMaterialPrefixCategories[exact.Value.StrictMaterialReceiverImmediatePrefixOrigin] =
                             originalMaterialPrefixCategories.GetValueOrDefault(
                                 exact.Value.StrictMaterialReceiverImmediatePrefixOrigin) + 1;
+                        if (exact.Value.StrictMaterialReceiverImmediatePrefixOrigin ==
+                                "direct_adjacent_typed_Material_field_load" &&
+                            row.Position > 0 &&
+                            items[row.Position-1].Operand is FieldReference materialField &&
+                            materialField.FieldType.FullName == "UnityEngine.Material")
+                        {
+                            // Never serialize or print these source-private field IDs.
+                            exactOriginalReceiverMaterialFieldIds.Add(materialField.FullName);
+                            exactOriginalReceiverMaterialDeclaringTypes.Add(
+                                materialField.DeclaringType.FullName);
+                        }
                         exactlyProvenSetterFamilies[exact.Value.SetterFamily] =
                             exactlyProvenSetterFamilies.GetValueOrDefault(exact.Value.SetterFamily) + 1;
                         // Only attached to the same authenticated literal→setter
@@ -289,22 +349,68 @@ internal static class Program
         int exactOriginalFieldStoreInstructions = 0;
         int methodsWithStoreToExactOriginalFields = 0;
         var exactOriginalFieldsWithStores = new HashSet<string>(StringComparer.Ordinal);
+        int originalExactReceiverMaterialFieldStores = 0;
+        int originalExactReceiverMaterialWriterMethodCount = 0;
+        int materialWriterMethodsContainingShaderFind = 0;
+        int materialWriterMethodsContainingMaterialCtor = 0;
+        int materialWriterMethodsContainingRendererGetter = 0;
+        var originalMaterialStoreImmediateSources =
+            new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var originalReceiverMaterialFieldsWithStfld = new HashSet<string>(StringComparer.Ordinal);
         foreach (var definition in Walk(assembly.MainModule.Types))
         foreach (var method in definition.Methods)
         {
             if (!method.HasBody) continue;
             bool methodHasStore = false;
-            foreach (var instruction in method.Body.Instructions)
+            bool methodHasExactMaterialStore = false;
+            var originalInstructions=method.Body.Instructions;
+            for (int i=0;i<originalInstructions.Count;i++)
             {
+                var instruction=originalInstructions[i];
                 if (instruction.OpCode.Code != Code.Stfld ||
-                    instruction.Operand is not FieldReference field ||
-                    !exactOriginalCtorFields.Contains(field.FullName))
+                    instruction.Operand is not FieldReference field)
                     continue;
-                exactOriginalFieldStoreInstructions++;
-                exactOriginalFieldsWithStores.Add(field.FullName);
-                methodHasStore = true;
+                if (exactOriginalCtorFields.Contains(field.FullName))
+                {
+                    exactOriginalFieldStoreInstructions++;
+                    exactOriginalFieldsWithStores.Add(field.FullName);
+                    methodHasStore = true;
+                }
+                if (field.FieldType.FullName == "UnityEngine.Material" &&
+                    exactOriginalReceiverMaterialFieldIds.Contains(field.FullName))
+                {
+                    originalExactReceiverMaterialFieldStores++;
+                    originalReceiverMaterialFieldsWithStfld.Add(field.FullName);
+                    methodHasExactMaterialStore = true;
+                    string origin=MaterialFieldStoreImmediateProducer(
+                        originalInstructions,i,method);
+                    originalMaterialStoreImmediateSources[origin] =
+                        originalMaterialStoreImmediateSources.GetValueOrDefault(origin)+1;
+                }
             }
             if (methodHasStore) methodsWithStoreToExactOriginalFields++;
+            if (methodHasExactMaterialStore)
+            {
+                originalExactReceiverMaterialWriterMethodCount++;
+                bool hasShaderFind=false, hasMaterialCtor=false, hasRendererGetter=false;
+                foreach (var instruction in originalInstructions)
+                {
+                    if (instruction.OpCode.Code is not (Code.Call or Code.Callvirt or Code.Newobj) ||
+                        instruction.Operand is not MethodReference call) continue;
+                    hasShaderFind |= call.DeclaringType.FullName == "UnityEngine.Shader" &&
+                        call.Name == "Find" &&
+                        call.ReturnType.FullName == "UnityEngine.Shader";
+                    hasMaterialCtor |= instruction.OpCode.Code == Code.Newobj &&
+                        call.DeclaringType.FullName == "UnityEngine.Material" &&
+                        call.Name == ".ctor";
+                    hasRendererGetter |= call.DeclaringType.FullName == "UnityEngine.Renderer" &&
+                        call.Name is "get_material" or "get_sharedMaterial" &&
+                        call.ReturnType.FullName == "UnityEngine.Material";
+                }
+                materialWriterMethodsContainingShaderFind += hasShaderFind ? 1 : 0;
+                materialWriterMethodsContainingMaterialCtor += hasMaterialCtor ? 1 : 0;
+                materialWriterMethodsContainingRendererGetter += hasRendererGetter ? 1 : 0;
+            }
         }
         return new
         {
@@ -364,6 +470,25 @@ internal static class Program
                 methodsWithStoreToExactOriginalFields,
             original_source_name_exact_Material_receiver_pre_ldstr_IL_prefix_buckets =
                 originalMaterialPrefixCategories,
+            original_source_name_exact_receiver_Material_FieldReference_count =
+                exactOriginalReceiverMaterialFieldIds.Count,
+            original_source_name_exact_receiver_Material_declaring_type_count =
+                exactOriginalReceiverMaterialDeclaringTypes.Count,
+            original_source_name_exact_receiver_Material_stfld_instruction_count =
+                originalExactReceiverMaterialFieldStores,
+            original_source_name_exact_receiver_Material_distinct_fields_with_stfld =
+                originalReceiverMaterialFieldsWithStfld.Count,
+            original_source_name_exact_receiver_Material_writer_method_count =
+                originalExactReceiverMaterialWriterMethodCount,
+            original_source_name_exact_receiver_Material_store_immediate_producer_buckets =
+                originalMaterialStoreImmediateSources,
+            original_source_name_exact_receiver_Material_writer_methods_with_Shader_Find =
+                materialWriterMethodsContainingShaderFind,
+            original_source_name_exact_receiver_Material_writer_methods_with_Material_ctor =
+                materialWriterMethodsContainingMaterialCtor,
+            original_source_name_exact_receiver_Material_writer_methods_with_Renderer_getter =
+                materialWriterMethodsContainingRendererGetter,
+            original_exact_Material_shader_is_source_Foam_verified = false,
             original_150_byte_or_160_byte_CB0_complete_managed_upload_proven = false,
             original_Vector4_ctor_input_values_verified = false,
             exact_original_Vector4_value_dataflow_to_CB0_verified = false,
@@ -400,6 +525,43 @@ internal static class Program
                        "System.Single") != null)
             throw new InvalidOperationException("Setter negative schema");
         Cb0ExactFirstFormal.SelfTest();
+        using (var module = ModuleDefinition.CreateModule(
+            "public-material-writer-fixture", ModuleKind.Dll))
+        {
+            var materialType = new TypeReference("UnityEngine","Material",module,module);
+            var shaderType = new TypeReference("UnityEngine","Shader",module,module);
+            var sourceType = new TypeReference("PublicTest","Container",module,module);
+            var field = new FieldReference("publicMaterial",materialType,sourceType);
+            var wrongField = new FieldReference("notMaterial",module.TypeSystem.Object,sourceType);
+            var ctor = new MethodReference(".ctor",module.TypeSystem.Void,materialType)
+                {HasThis=true};
+            ctor.Parameters.Add(new ParameterDefinition(shaderType));
+            var store=Instruction.Create(OpCodes.Stfld,field);
+            var valid=new List<Instruction> {
+                Instruction.Create(OpCodes.Ldarg_0),
+                Instruction.Create(OpCodes.Ldarg_1),
+                Instruction.Create(OpCodes.Newobj,ctor),
+                store
+            };
+            if (MaterialFieldStoreImmediateProducer(valid,3)!=
+                "immediate_new_Material_with_Shader_formal")
+                throw new InvalidOperationException("Material ctor typed immediate producer");
+            var wrong=new List<Instruction>(valid);
+            wrong[3]=Instruction.Create(OpCodes.Stfld,wrongField);
+            if (MaterialFieldStoreImmediateProducer(wrong,3)!=
+                "unverified_Material_field_store")
+                throw new InvalidOperationException("NonMaterial field false-positive");
+            var branched=new List<Instruction>(valid);
+            branched.Insert(0,Instruction.Create(OpCodes.Br_S,store));
+            if (MaterialFieldStoreImmediateProducer(branched,4)!=
+                "alternate_entry_at_store")
+                throw new InvalidOperationException("Direct branch to stfld invalidates producer");
+            var unknown=new List<Instruction>(valid);
+            unknown[2]=Instruction.Create(OpCodes.Ldarg_1);
+            if (MaterialFieldStoreImmediateProducer(unknown,3)!=
+                "immediate_value_source_unproven")
+                throw new InvalidOperationException("Unknown immediate source not guessed");
+        }
         Console.WriteLine("T2_CB0_MANAGED_CECIL_SELFTEST pass");
     }
 
