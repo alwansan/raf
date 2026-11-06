@@ -1,0 +1,16 @@
+{
+  "session_id": "20261106T1608Z-T1-scheduled-pair-gate-regressions-k7p4",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "base_sha_observed": "952684b060f6aec1b02471294b5a726a8048ee7e",
+  "experiment_key": "water001-t1-paired-invocation-gate-synthetic-regressions-k7p4",
+  "files": [
+    "tests/test_t1_fft_pair_gate_synthetic_k7p4.py",
+    "prompt/coordination/work/WATER-001/20261106T1608Z-T1-scheduled-pair-gate-regressions-k7p4.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1608Z-T1-scheduled-pair-gate-regressions-k7p4.md"
+  ],
+  "hypothesis": "Existing paired trace admission gate must reject malformed provenance and nonindependent captures before numeric comparison; synthetic tests can validate without proprietary captures.",
+  "shared_resource": "none; CPU-only synthetic test, no Unity/Actions",
+  "taken_over_from": "T1 20261106T1408Z paired capture readiness; no modification to live comparator",
+  "status": "planned"
+}
