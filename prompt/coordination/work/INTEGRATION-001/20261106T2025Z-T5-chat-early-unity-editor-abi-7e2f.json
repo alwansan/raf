@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "Native Editor compilation failure early original ABI preflight to prevent repeated full asset reconstruction",
-  "status": "active",
+  "status": "completed",
   "base_sha": "981751c1cd45514d1c8f53c657afe67a30cb650d",
-  "updated_at": "2026-11-06T20:31:52.126Z",
+  "updated_at": "2026-11-06T20:36:17.470Z",
   "resumed_from_sessions": [
     "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
     "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
@@ -36,8 +36,26 @@
     "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e completed"
   ],
   "coordination": "T4 owns physical mouse C# runtime and its original ABI compile projects; consume unchanged. T1 FFT, T2 Foam, T3 shaders, T4 local save and T5 scheduled ZIP source unaffected. Touch layout/audio/Settings deferred and original .meta/GUID/.rgd untouched. No native request/vote changes. Final owner-direct 42281310905 verdict to be appended under separate marker in T5-owned trial ledger, leaving 1/5 r1 ballots and collecting state intact.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add bounded early native workflow compile on already-staged original managed Unity modules, source-only wiring tests and independent CI; no new XAPK request.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/actions/runs/42287041110",
+    "https://github.com/alwansan/raf/actions/runs/42288563445",
+    "https://github.com/alwansan/raf/actions/runs/42288716874",
+    "https://github.com/alwansan/raf/actions/runs/42288563457"
+  ],
+  "result": {
+    "state": "SOURCE_INTEGRATED_GREEN",
+    "source_commit": "7d1981ae8f349c5afd8a37082982ac2ccd548c03",
+    "regression_fix_commit": "ec5b73f716f46ee671e79ab78bee189e4a2e5396",
+    "ci_20_of_20": 42288716874,
+    "original_unity2021_managed_ABI_GREEN": 42288563457,
+    "owner_native_run_42281310905": "FAILED_UNITY_CS0234_X10",
+    "kernel_oom_kills": 0,
+    "new_native_run": false,
+    "new_signed_XAPK": false,
+    "phone_verified": false,
+    "votes": "1/5 NO consensus"
+  },
+  "next_step": "Scope released. Wait for explicit owner request or same-round 5/5 before one new native. Confirm stage on candidate immutable SHA and inspect first real error; genuine shaders and water still P0.",
   "action": "extend scope before writing shared trial status; no native run/ballot change"
 }

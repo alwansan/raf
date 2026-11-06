@@ -1,0 +1,23 @@
+{
+  "id": "20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f",
+  "owner": "T5",
+  "session_id": "20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T20:36:17.470Z",
+  "summary": "Owner-direct run42281310905 (immutable d6924001) FAILED at Unity Editor CS0234 x10 missing AndroidPhysicalMouseCapture in UNITY_EDITOR; no OOM or signed delivery. T4 fix f554e8b and real original-Unity2021 ABI 42287041110/42288563457 green. T5 production pre-ZIP2 Editor+Android original-ABI build preflight 7d1981a integrated; 20/20 source-only CI42288716874 green after synthetic negative fixture ec5b73f; no repeat native or device build.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/7d1981ae8f349c5afd8a37082982ac2ccd548c03",
+    "https://github.com/alwansan/raf/commit/ec5b73f716f46ee671e79ab78bee189e4a2e5396",
+    "https://github.com/alwansan/raf/actions/runs/42288716874",
+    "https://github.com/alwansan/raf/actions/runs/42288563457",
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "prompt/coordination/clients/T5/sessions/20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f.md"
+  ],
+  "limits": [
+    "native owner 422813 FAILED before signing",
+    "no new owner build request authorized, trial r1 still 1/5",
+    "source-only and pinned managed ABI checks are not full Unity/Adreno or phone test"
+  ]
+}

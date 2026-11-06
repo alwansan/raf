@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "source_base_sha": "981751c1cd45514d1c8f53c657afe67a30cb650d",
+  "source_commit": "7d1981ae8f349c5afd8a37082982ac2ccd548c03",
+  "fixture_fix": "ec5b73f716f46ee671e79ab78bee189e4a2e5396",
+  "experiment_key": "T5-owner-native-42281310905-editor-CS0234-original-Unity2021-ABI-preflight-compile-before-ZIP2-v1",
+  "workflow_path": ".github/workflows/raft-t5-native-runtime-byte-parity.yml",
+  "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/actions/runs/42287041110",
+    "https://github.com/alwansan/raf/actions/runs/42288563445",
+    "https://github.com/alwansan/raf/actions/runs/42288716874",
+    "https://github.com/alwansan/raf/actions/runs/42288563457"
+  ],
+  "commands": [
+    "python3 -W error -m unittest -v tests.test_t5_runtime_staging_parity",
+    "python3 -W error -m unittest -v tests.test_t5_native_early_editor_abi",
+    "[future authorized native] dotnet build android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj -c Release -p:OriginalManagedDir=...",
+    "[future authorized native] dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=..."
+  ],
+  "negative_controls": [
+    "early stage deleted/moved after ZIP2",
+    "Editor or player compile omitted",
+    "no original managed DLL SHA256 authentication",
+    "hidden error result/no fail-closed exit"
+  ],
+  "observed_result": {
+    "status": "SUCCESS_SOURCE_ONLY",
+    "checks": 20,
+    "ci": 42288716874,
+    "independent_unity2021_abi_ci": 42288563457,
+    "owner_native_failed": 42281310905,
+    "owner_native_failure": "CS0234 x10",
+    "original_DLL_blob_matches_zip2": true,
+    "full_native_after_fix": false,
+    "apk_obb_xapk_produced": false,
+    "device_verified": false
+  },
+  "limitations": [
+    "Future authenticated Unity Editor compilation not run",
+    "No original phone shader/water/graphics acceptance"
+  ],
+  "updated_at": "2026-11-06T20:36:17.470Z",
+  "next_step": "One new owner-authorized native run only, after source and team coordination."
+}
