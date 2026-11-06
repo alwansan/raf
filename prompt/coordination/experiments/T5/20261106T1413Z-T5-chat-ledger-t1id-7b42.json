@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
   "issue_id": "COORD-001",
-  "status": "one_field_T1_identity_fixed_live_index_pending",
+  "status": "completed_strict_live_index_success",
   "experiment_key": "T5-20261106T1408Z-T1-event-missing-id-strict-index-v1",
   "failure_run": 42231823163,
   "failure_reason": "ValueError Missing record identity for exact T1 scheduled WATER-001 event after 11 B and 3 T tests passed",
@@ -18,5 +18,15 @@
   "owner_evidence_changed": false,
   "checks": "All 1330Z+ recent T1–T5 records checked for explicit identity, no other malformed recent record.",
   "next_step": "Strict T5 ledger refresh, include completed original OBB full digest evidence.",
-  "updated_at": "2026-11-06T14:14:57.637Z"
+  "updated_at": "2026-11-06T14:16:47.717Z",
+  "canonical_team_index": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42232342733",
+    "job_id": 127941092867,
+    "conclusion": "success",
+    "committed_event_rows": 409,
+    "bteam_unit_tests": 11,
+    "tteam_unit_tests": 3,
+    "fast_forward_only": true,
+    "force": false
+  }
 }
