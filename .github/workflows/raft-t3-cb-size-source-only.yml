@@ -1,0 +1,35 @@
+name: T3 RENDER-002 source-only ShaderModel4-5 CB size vector contract
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t3_particle108_cb_size_semantics.py
+      - tests/test_t3_particle108_cb_size_semantics.py
+      - .github/workflows/raft-t3-cb-size-source-only.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-sourcefree-cb-size-16byte-vector-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  cb-sourcefree:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate strict CB declaration semantics without original game bytes
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_cb_size_semantics.py tests/test_t3_particle108_cb_size_semantics.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_cb_size_semantics.py' -v
