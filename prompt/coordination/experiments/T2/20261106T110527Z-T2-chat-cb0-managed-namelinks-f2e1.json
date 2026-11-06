@@ -1,0 +1,45 @@
+{
+  "id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+  "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "verified_source_original_managed_name_candidates",
+  "run_id": 42208958212,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42208958212",
+  "job_id": 127862550030,
+  "run_conclusion": "success",
+  "source_sha": "eb1db19f3cdd38b43f61fdf842899c1ad10d6f9b",
+  "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "test_count_passed": 11,
+  "cecil_selftest_passed": true,
+  "cb0_stages": 4,
+  "unresolved_source_member_names": 0,
+  "source_name_targets": {
+    "buffer": 1,
+    "vector": 5,
+    "matrix": 0
+  },
+  "original_managed_literal_distinct_hits": {
+    "buffer": 0,
+    "vector": 3,
+    "matrix": 0
+  },
+  "matched_vector_ldstr_occurrences": 4,
+  "matched_vector_methods": 4,
+  "matched_vector_methods_with_typed_setter": 1,
+  "matched_vector_ldstr_near_setter": 1,
+  "near_setter_public_categories": {
+    "material_float": 1,
+    "material_vector": 1
+  },
+  "methods_scanned": 19512,
+  "instructions_scanned": 491490,
+  "typed_numeric_unity_setter_calls": 489,
+  "original_first_arg_proven": false,
+  "original_Unity_CB0_upload_verified": false,
+  "Adreno_water_verified": false,
+  "private_shader_names_or_assembly_dump_published": false,
+  "report": "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_LITERAL_2026-11-06.md",
+  "next_step": "Implement conservative instruction-stack first formal argument binding for exact source CB0 vector name and Material.SetFloat/SetVector call; never infer from proximity alone."
+}
