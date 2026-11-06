@@ -27,8 +27,8 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42225179203",
   "artifact_urls": [],
   "budget": "existing source-only 9 minute GitHub Actions job; no native Unity build",
-  "status": "waiting_ci",
-  "observed_result": "Source and tests committed. Most recent exact-SHA CI pending; no device result.",
+  "status": "completed_source_managed_ci_success_device_unverified",
+  "observed_result": "Exact CI42225179203 on f4b92e1da30fd78356f57ffe3c28bd72aae4be55 COMPLETED SUCCESS: 9/9 Python source controls, 28/28 actual C# policy tests, immutable original ZIP2 DLL SHA gate, actual Android Java Unity2021 managed ABI compile (AndroidPlayerBuilt=false DeviceVerified=false).",
   "rejected_hypotheses": [],
   "limitations": [
     "Source tests and genuine Unity2021 managed ABI compile are not Android OS behavior or physical mouse runtime evidence.",
@@ -36,5 +36,5 @@
     "UI thread can still receive window changes after final check; full device lifecycle testing remains needed."
   ],
   "integration_commit": "f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
-  "next_step": "Read exact source CI42225179203 and job logs; if pass, hand off signed APK+matching OBB device focus/home and gesture regressions to T5; if failure fix exact step."
+  "next_step": "T5 next signed Raft APK+matching OBB with exact SHA/source provenance. Owner real Activity focus/home/pause/recreate and screen-edge swipe/Back/Home test with mouse+keyboard, menu/game transition and saved world force-stop/reopen, post-marker private logs. Do not consider source-only test Android acceptance."
 }
