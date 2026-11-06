@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T1322Z-T2-scheduled-ci-isolation-b83e",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "baseline_sha": "8094f937da92aa5357604f7dc3a2f3f57a1195e2",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1322Z-T2-scheduled-ci-isolation-b83e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1322Z-T2-scheduled-ci-isolation-b83e.md"
+  ],
+  "experiment_key": "original-foam-cb0-managed-material-stfld-provenance-ci-8094f937-42224754004",
+  "resource_key": "T2-original-foam-managed-probe-readonly",
+  "hypothesis": "Earlier Cecil scanner compile failure may be superseded by live HEAD follow-up; determine outcome before editing or re-running.",
+  "observed": {
+    "failed_run": "https://github.com/alwansan/raf/actions/runs/42224703030",
+    "failed_step": "Compile independent typed Cecil source-free scanner and selftest",
+    "current_run": "https://github.com/alwansan/raf/actions/runs/42224754004",
+    "current_status": "in_progress"
+  },
+  "scope": "Read-only CI reconciliation, no overlapping scanner or workflow edits; no CI dispatch.",
+  "next_step": "Check 42224754004 conclusion, inspect first compiler error if failed, coordinate with concurrent T2 chat before any source edit."
+}
