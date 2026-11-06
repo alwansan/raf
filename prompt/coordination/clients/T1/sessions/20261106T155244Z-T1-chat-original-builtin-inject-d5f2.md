@@ -3,7 +3,7 @@
 - session_id: 20261106T155244Z-T1-chat-original-builtin-inject-d5f2
 - origin: chat
 - issue_id: WATER-001 (OPEN / NOT_READY)
-- status: waiting_ci
+- status: completed (invalid duplicate injection rejected; original built-in reused as next scope)
 - resumed_from_sessions: 20261106T153545Z-T1-chat-original-actual-preflight-d8e2; 20261106T151730Z-T1-chat-keyed-candidate-3a7f; 20261106T133640Z-T1-chat-nested-phi-8d31
 - base_sha: 112e528906872add2eafe32f8bd1e5eb30c30ee0
 - work: prompt/coordination/work/WATER-001/T1-20261106T155244Z-T1-chat-original-builtin-inject-d5f2.json
@@ -38,3 +38,16 @@ Added a fixed allowlist of rejection reason categories to the injector, with two
 - experiment: prompt/coordination/experiments/T1/20261106T155244Z-T1-chat-original-builtin-inject-d5f2.json (must be updated with actual result)
 - canonical event: prompt/coordination/B_TEAM/events/T1/20261106T155244Z-T1-chat-original-builtin-inject-d5f2.json (must reflect verified result)
 - next_step: inspect 42248163030 safe error category, fix only demonstrated original-SPIRV difference, then require `spirv-as`, `spirv-val`, and actual same-Vulkan output parity before reporting injected input ready. An unused Input load is not direct original keyed capture, not original-vs-HLSL matching, not Unity authored kernel/Adreno water acceptance. WATER-001 remains OPEN.
+
+## Final SHA-original proof: existing signed GlobalInvocationId
+
+- [Source-only CI 42248931621](https://github.com/alwansan/raf/actions/runs/42248931621) SUCCESS: **111/111 synthetic regression tests**, including signed/direct/struct/input-interface GlobalInvocationId shape guard.
+- Initial private [42247669231](https://github.com/alwansan/raf/actions/runs/42247669231) and diagnostic [42248163030](https://github.com/alwansan/raf/actions/runs/42248163030) **FAILED SAFELY**: original SPIR-V already contains GlobalInvocationId so the attempted addition of a second built-in correctly rejected `existing_builtin`; original SHA source recovered and private scratch cleaned. Neither failure proves shader invalid.
+- Introduced read-only `scripts/t1_fft_original_existing_gid_audit.py` and 9 source-free tests; replaced the invalid original-inject workflow stage with this shape audit (without modifying original).
+- Exact original [42249043033](https://github.com/alwansan/raf/actions/runs/42249043033), job `127998868288`, **SUCCESS**. Original signed existing built-in shape: `direct_count=1`, `member_count=0`, `declaration_form=input_variable`, `pointer_storage_class=Input`, `in_compute_entry_interface=true`, `direct_load_user_count=2`, **`numeric_kind=sint32`, `width=3`**. This explains the previous `GlobalInvocationId not_proven` false-negative: the scanner required a uint32 vector, while the source's direct built-in is signed32 vector3. No original SPIR-V keyed read trace exists yet.
+- The injector `t1_fft_original_global_id_inject.py` remains a guarded diagnostic for fixtures lacking the built-in; **do not invoke it on the actual original source**. The actual Vulkan workflow now uses the existing source read-only audit.
+- No shader asset/game/Android changes, no raw IDs, bytecode or pixel data exposed, no peer jobs cancelled.
+
+## Next engineering scope
+
+Create an **independent direct original SPIR-V ImageFetch trace instrumenter** using the existing signed-int3 GlobalInvocationId in the entrypoint. Convert or bitcast only the *recorded* invocation-key lanes to uint32; retain authored signed FFT arithmetic and original fetch coordinates. Ensure buffer binding collision checks, exact keyed layout, per-site occurrence, atomic capacity bounds, same-input dispatch authentication, and validate with SPIRV-as/spirv-val and private Vulkan. Compare original vs HLSL traces only once independently produced, using strict `t1_fft_invocation_pair_gate.py`. Static SPIR-V structure success is not numerical parity or Android device evidence; WATER-001 remains OPEN.
