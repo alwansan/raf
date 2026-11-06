@@ -7,7 +7,6 @@ GPU test's bounded zero-mismatch report (an execution claim, not a signed
 attestation). All raw game data stay inside a private runner.
 """
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -61,12 +60,18 @@ def join(manifest, original, unity, vulkan_input_dir, unity_input_dir):
     # per-site invocation-key validation before any public result.
     report = classify(manifest, original, unity)
     stage_bytes = []
+    stage_paths = []
     for root in (a_root, b_root):
         source = _private_file(root / "source.rgba32f")
         butterfly = _private_file(root / "butterfly.rgba32f")
         if source.samefile(butterfly):
             raise ValueError("Source and butterfly files are aliased")
+        stage_paths.append((source, butterfly))
         stage_bytes.append((_read_actual(source), _read_actual(butterfly)))
+    if any(left.samefile(right) for left, right in zip(*stage_paths)):
+        raise ValueError("Vulkan and Unity evidence files cannot be aliases")
+    if stage_bytes[0][0] == stage_bytes[0][1]:
+        raise ValueError("Pinned FFT source and butterfly fixtures are indistinguishable")
     for first, second in zip(stage_bytes[0], stage_bytes[1]):
         if first != second:
             raise ValueError("Physical Vulkan/Unity image inputs differ")
