@@ -3,7 +3,7 @@
   "session_id": "20261106T1645Z-T5-chat-installed-obb-read-e7c4",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4fe296d91954e0e38d2cb5835795f6da114993ed",
   "resumed_from_sessions": [
     "20261106T1541Z-T5-chat-obb-routes-b8a1",
@@ -24,10 +24,30 @@
     "prompt/coordination/B_TEAM/events/T5/20261106T1658Z-T5-installed-obb-sample.json"
   ],
   "experiment_key": "T5-installed-exact-main-version-package-OBB-zip-central-directory-real-Unity-entry-first-byte-source-test-v1",
-  "resource_key": "T5-independent-source-only-installed-obb-evidence",
-  "updated_at": "2026-11-06T16:58:26.250Z",
+  "resource_key": null,
+  "updated_at": "2026-11-06T17:01:03.876Z",
   "hypothesis": "Installed same-version main OBB may be absent/inaccessible or Unity assets unreadable even though old signed archive digest and FMOD/Haptics paths are correct. Diagnostic only; no assertions of phone success until a new device log.",
   "ci_run_url": "https://github.com/alwansan/raf/actions/runs/42257103707",
-  "next_step": "Publish bounded evidence/session/event; INTEGRATION-001 stays OPEN until exact installed phone OBB evidence and engine-side resource reads; T1/T2/T3 graphics remain open.",
-  "proven_finding": "Final CI42257103707 SUCCESS: 24/24 executable source-free .NET ZIP fixture checks, exact real native Unity copy-loop inclusion guard, platform managed compile 0 errors. No phone read or Unity Android IL2CPP build."
+  "next_step": "Current branch T5 probe source integrated, CI42257103707 pass. Device installed main OBB and Unity engine read unverified; next permitted signed phone candidate collect same-session storage/obb.unity_zip_read_sample and fmod.bank_root with LogRaft. Avoid duplicate heavy Unity build or auto READY.",
+  "proven_finding": "Final CI42257103707 SUCCESS: 24/24 executable source-free .NET ZIP fixture checks, exact real native Unity copy-loop inclusion guard, platform managed compile 0 errors. No phone read or Unity Android IL2CPP build.",
+  "result": "source_integrated_source_tested_not_device_verified",
+  "evidence_files": [
+    "docs/T5_INSTALLED_OBB_UNITY_ZIP_READ_PROBE_2026-11-06.md",
+    "prompt/coordination/experiments/T5/20261106T1645Z-T5-installed-obb-sample.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1658Z-T5-installed-obb-sample.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1645Z-T5-chat-installed-obb-read-e7c4.md"
+  ],
+  "released_files": [
+    "android-port/Runtime/Platform/AndroidExpansionArchiveProbe.cs",
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "android-port/Tests/ExpansionArchiveProbe/ExpansionArchiveProbe.csproj",
+    "android-port/Tests/ExpansionArchiveProbe/Program.cs",
+    ".github/workflows/raft-t5-installed-obb-read-probe.yml",
+    "prompt/coordination/clients/T5/sessions/20261106T1645Z-T5-chat-installed-obb-read-e7c4.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1645Z-T5-chat-installed-obb-read-e7c4.json",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "docs/T5_INSTALLED_OBB_UNITY_ZIP_READ_PROBE_2026-11-06.md",
+    "prompt/coordination/experiments/T5/20261106T1645Z-T5-installed-obb-sample.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1658Z-T5-installed-obb-sample.json"
+  ]
 }
