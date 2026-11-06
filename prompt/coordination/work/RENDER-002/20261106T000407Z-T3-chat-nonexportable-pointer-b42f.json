@@ -5,13 +5,13 @@
   "owner": "T3",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-06T00:13:50.057Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T00:15:23.444Z",
   "base_sha": "a5fb5ee852df285590dff7643ebbbeb58c436b94",
   "track": "Authentic one missing Particle108 Texture2D nonexportable container export pointer against same-export Material YAML",
   "hypothesis": "The third source Texture2D28 class28, present in collection.Exportable=false and omitted from B02 exportable trace, may have a valid container.CreateExportPointer matching the tenth nonnull exported Material TexEnv PPtr, distinguishing an engine/builtin alias from a real mismatch.",
   "experiment_key": "T3-ZIP2-15964-particle108-5M-3Texture-one-nonexportable-AssetRipper-CreateExportPointer-v1",
-  "resource_key": "T3-particle108-one-original-12owner-one-resS-sameexport-nonexportable-pointer-50min",
+  "resource_key": null,
   "resumed_from_sessions": [
     "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.md",
     "20261105T2334Z-T3-scheduled-extent-nesting-c4a7.md"
@@ -33,6 +33,11 @@
     ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
   "status_note": "No active queued CI observed at scope registration; work only on isolated T3 source and dedicated workflow.",
-  "run_urls": [],
-  "next_step": "CI42134436841 SUCCESS source/export 10/10 including exact nonexportable container pointer; attach evidence to RENDER-002 OPEN, refresh T team canonical index and close scoped work. Remaining APK/OBB actual device pixels unverified."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42134436841",
+    "https://github.com/alwansan/raf/actions/runs/42135375280"
+  ],
+  "next_step": "T5 Android native/device correlation: match phone square fire/smoke emitter's genuine ParticleSystemRenderer/Material and verify actual shipped shader fragment alpha/sampler/TextureImporter/decoded Texture2D/OBB; do not infer missing image from B02 exportable trace 2/3 or inject placeholder; preserve 10/10 source Material links.",
+  "integration_commit": "eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5",
+  "result": "Actual same-instance AssetRipperCLI export from SHA-original pinned ZIP2 six scenes/four Material owners/two globals plus full SHA image stream CI42134436841 SUCCESS 104/104 tests. Original 108-use Particle Shader48 five Material21 ten m_TexEnvs three class28 Texture2D: nine exact regular B02 exported pointers + one exact nonexportable source asset's container.CreateExportPointer vs exported .mat YAML = 10/10 matched; UV 10/10, zero null/wrong GUID/unresolved. Native full Android/Adreno GPU pixels not tested. Canonical T-team issue/resource index CI42135375280 SUCCESS, RENDER-002 remains OPEN."
 }
