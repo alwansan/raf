@@ -3,7 +3,7 @@
   "origin": "chat",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4d5f224179ae402883d78c0b50addf63b0f1ea89",
   "scope": "Adopt trial vote policy and independently diagnose D3D10/11 SHDR/SHEX CB declaration 2D second index as 16-byte vector count on Shader Model 4-5; source-free and optional SHA-locked original aggregate only. No overlap with T3 scheduled RDEF-to-SPIRV crosscontract audit.",
   "work_key": "T3-RENDER-002-CB_DECL_SIZE_SEMANTIC-SM4_SM5-v1",
@@ -28,6 +28,23 @@
     "prompt/coordination/experiments/T3/20261106T1745Z-T3-chat-trial-cbsize-9c21.json",
     "prompt/coordination/B_TEAM/events/T3/20261106T1745Z-T3-chat-trial-cbsize-9c21.json"
   ],
-  "next_step": "Implement fail-closed Shader Model 4/5 CB two-index vector-size semantics with synthetic tests; scan authentic original source only if needed to classify zero unknown sizes and variation safely.",
-  "updated_at": "2026-11-06T17:45:41.480Z"
+  "next_step": "Do not repeat original CB size census; scheduled T3 crosscontract handles independent DXBC-SPIRV mapping. Future original shader binding/ShaderLab fix must be integrated and tested before changing T3 trial vote to يحتاج. RENDER-002 remains OPEN/NOT_READY.",
+  "updated_at": "2026-11-06T17:53:39.255Z",
+  "result": "Trial vote T3=لا يحتاج, round trial-20261106-r1, commit 99658d34. Source-free 12/12 CI42265061012 PASS. Authentic source ZIP2 SHA-pinned CI42265293980 SUCCESS: all eight original DXBC Shader Model 4.0; 24 CB declarations with 24 known 16-byte vector counts, 0 unknown, 2 dynamic; VS CB 4 size vs 3 slot layouts, PS 2 size vs 1 slot layouts. Only source diagnostic, NOT Android ShaderLab/device repair.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42265061012",
+    "https://github.com/alwansan/raf/actions/runs/42265293980"
+  ],
+  "sha_original_execution": "50037ee4896f03f0d56760827ef077c3aaee0dee",
+  "files_changed": [
+    "scripts/t3_particle108_cb_size_semantics.py",
+    "tests/test_t3_particle108_cb_size_semantics.py",
+    ".github/workflows/raft-t3-cb-size-source-only.yml",
+    ".github/workflows/raft-t3-particle108-cb-vector-size.yml",
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "prompt/coordination/clients/T3/sessions/20261106T1745Z-T3-chat-trial-cbsize-9c21.md",
+    "prompt/coordination/clients/T3/MEMORY.md",
+    "prompt/coordination/experiments/T3/20261106T1745Z-T3-chat-trial-cbsize-9c21.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1745Z-T3-chat-trial-cbsize-9c21.json"
+  ]
 }
