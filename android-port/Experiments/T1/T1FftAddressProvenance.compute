@@ -1,0 +1,49 @@
+// T1 WATER-001 authored sourcefree 64-lane provenance vs precise float context matrix.
+// NO original Raft data or authored FFT shader, NOT an Android/Adreno result.
+#pragma kernel T1AddressProvenance
+
+StructuredBuffer<uint> T1StagedAddress;
+Texture2D<float4> T1AddressImage;
+RWStructuredBuffer<uint> T1Observed;
+uint T1AddressOffset;
+float T1CarrierScale;
+static uint3 T1DispatchId;
+
+struct T1EntryInput
+{
+    uint3 thread : SV_DispatchThreadID;
+};
+
+[numthreads(64,1,1)]
+void T1AddressProvenance(T1EntryInput input)
+{
+    T1DispatchId = input.thread;
+    uint i = input.thread.x;
+    uint computed = ((i << 2) + i + T1AddressOffset) & 63u;
+    uint staged = T1StagedAddress[i];
+    float computedCarrier = asfloat(computed);
+    float stagedCarrier = asfloat(staged);
+    float computedScaled = computedCarrier * T1CarrierScale;
+    float stagedScaled = stagedCarrier * T1CarrierScale;
+    precise float computedPrecise = asfloat(computed) * T1CarrierScale;
+    precise float stagedPrecise = asfloat(staged) * T1CarrierScale;
+    precise float normalPrecise = asfloat(0x3f800000u | computed) * T1CarrierScale;
+
+    uint at = i * 16u;
+    T1Observed[at + 0u] = computed; // positive control: integer ALU
+    T1Observed[at + 1u] = staged; // positive control: buffer upload
+    T1Observed[at + 2u] = asuint(computedCarrier); // computed bitcast
+    T1Observed[at + 3u] = asuint(stagedCarrier); // buffer bitcast
+    T1Observed[at + 4u] = asuint(computedScaled); // computed plain multiply
+    T1Observed[at + 5u] = asuint(stagedScaled); // buffer plain multiply
+    T1Observed[at + 6u] = asuint(computedPrecise); // computed precise multiply
+    T1Observed[at + 7u] = asuint(stagedPrecise); // buffer precise multiply
+    T1Observed[at + 8u] = asuint(T1AddressImage.Load(int3(int(computed),0,0)).x);
+    T1Observed[at + 9u] = asuint(T1AddressImage.Load(int3(int(staged),0,0)).x);
+    T1Observed[at + 10u] = asuint(T1AddressImage.Load(int3(asint(computedCarrier),0,0)).x);
+    T1Observed[at + 11u] = asuint(T1AddressImage.Load(int3(asint(stagedCarrier),0,0)).x);
+    T1Observed[at + 12u] = asuint(T1AddressImage.Load(int3(asint(computedPrecise),0,0)).x);
+    T1Observed[at + 13u] = asuint(T1AddressImage.Load(int3(asint(stagedPrecise),0,0)).x);
+    T1Observed[at + 14u] = T1StagedAddress[T1DispatchId.x]; // static global positive control
+    T1Observed[at + 15u] = asuint(normalPrecise); // normalized float positive control
+}
