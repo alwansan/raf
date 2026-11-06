@@ -308,6 +308,8 @@ def apply(project, backup, manifest, write=False):
                    for n in ((path.name, meta.name) if metadata is not None else (path.name,))]
         mutations_started = False
         prewrite_source_check = False
+        successfully_installed = set()
+        write_inflight = None
         try:
             for path, meta, raw, metadata, data in plans:
                 shutil.copy2(path, backup / path.name)
@@ -337,7 +339,10 @@ def apply(project, backup, manifest, write=False):
             prewrite_source_check = False
             mutations_started = True
             for path, meta, raw, metadata, data in plans:
+                write_inflight = path
                 path.write_bytes(data)
+                successfully_installed.add(path)
+                write_inflight = None
                 if (path.read_bytes() != data
                     or (meta.read_bytes() if meta.exists() else None) != metadata):
                     raise ValueError('Installed operation/meta changed')
@@ -350,10 +355,42 @@ def apply(project, backup, manifest, write=False):
                     'Original operation source/meta changed after backup; backups retained'
                 ) from error
             if mutations_started:
-                # Preserve all original backups if rollback itself fails.
+                # A successful write does not confer ownership of a later
+                # rewrite by a second worker. Verify the entire source/meta
+                # epoch BEFORE any rollback; otherwise one foreign file could
+                # be silently overwritten while another raises at validation.
+                # An interrupted write can be partial; retain the prior
+                # best-effort rollback for only that in-flight source.
                 try:
                     for path, meta, raw, metadata, data in plans:
-                        path.write_bytes(raw)
+                        _reject_linked_ancestors(path, 'source')
+                        _reject_linked_ancestors(meta, 'meta')
+                        if not path.is_file() or path.stat().st_nlink != 1:
+                            raise ValueError('Source changed physical identity')
+                        if metadata is None:
+                            if meta.exists() or meta.is_symlink():
+                                raise ValueError('Unexpected new GUID metadata')
+                        elif (not meta.is_file() or meta.stat().st_nlink != 1
+                              or meta.read_bytes() != metadata):
+                            raise ValueError('Foreign GUID metadata change')
+                        observed = path.read_bytes()
+                        if path in successfully_installed:
+                            if observed != data:
+                                raise ValueError('Foreign installed C# change')
+                        elif path != write_inflight and observed != raw:
+                            raise ValueError('Foreign not-yet-installed C# change')
+                except BaseException:
+                    # No original source can be safely restored when a foreign
+                    # epoch is observed. Keep the complete original backup.
+                    raise ValueError(
+                        'Original operation postinstall foreign change; backups retained'
+                    ) from error
+                # No foreign epoch observed. Restore only files actually
+                # written or potentially torn by an interrupted write.
+                try:
+                    for path, meta, raw, metadata, data in plans:
+                        if path in successfully_installed or path == write_inflight:
+                            path.write_bytes(raw)
                     for path, meta, raw, metadata, data in plans:
                         if (path.read_bytes() != raw
                             or (meta.read_bytes() if meta.exists() else None) != metadata):
