@@ -146,7 +146,7 @@ class RealExportQualitySynthetic(unittest.TestCase):
         _Color ("Tint", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
         }'''
-        shader=PROGRAM.replace("SubShader {",private+"\\nSubShader {",1)
+        shader=PROGRAM.replace("SubShader {",private+"\nSubShader {",1)
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);write(root,shader)
             r=m.classify(SOURCE,*traces(),root,
@@ -168,7 +168,7 @@ class RealExportQualitySynthetic(unittest.TestCase):
         }'''
         scenarios=(
             ('Properties { _Color ("Tint", Color) = (1,1,1,1) }',1,0),
-            ('Properties { _Color ("Tint", Float) = 1\\n'
+            ('Properties { _Color ("Tint", Float) = 1\n'
              '_MainTex ("Texture", 2D) = "white" {} }',0,1),
         )
         for export,missing,wrong in scenarios:
@@ -176,8 +176,8 @@ class RealExportQualitySynthetic(unittest.TestCase):
                 root=Path(d)
                 # One property per line is deliberate, matching exact source
                 # serializer and bounded export-parser grammar.
-                export=export.replace("{ _Color","{\\n_Color").replace(") }",")\\n}")
-                code=PROGRAM.replace("SubShader {",export+"\\nSubShader {",1)
+                export=export.replace("{ _Color","{\n_Color").replace(") }",")\n}")
+                code=PROGRAM.replace("SubShader {",export+"\nSubShader {",1)
                 write(root,code)
                 r=m.classify(SOURCE,*traces(),root,
                              private_authored_properties=private)
@@ -190,7 +190,7 @@ class RealExportQualitySynthetic(unittest.TestCase):
 
     def test_dummy_exporter_marker_remains_primary_failure_with_property_gate(self):
         with tempfile.TemporaryDirectory() as d:
-            root=Path(d);write(root,"//DummyShaderTextExporter\\n"+PROGRAM)
+            root=Path(d);write(root,"//DummyShaderTextExporter\n"+PROGRAM)
             r=m.classify(SOURCE,*traces(),root,
                          private_authored_properties='Properties { _Secret ("Private", Float)=1 }')
             self.assertEqual(r["exported_ShaderLab_source_status"],
