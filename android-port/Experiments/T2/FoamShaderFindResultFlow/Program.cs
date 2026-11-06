@@ -117,6 +117,15 @@ internal static class Program
         ctor.Name == ".ctor" && ctor.DeclaringType.FullName == "UnityEngine.Material" &&
         ctor.Parameters.Count == 1 &&
         ctor.Parameters[0].ParameterType.FullName == ShaderType;
+    private static bool DirectOriginalFieldToMaterialCtor(IList<Instruction> il, int fieldLoadIndex)
+    {
+        // Material(Shader) has exactly one Shader arg; an adjacent ldfld is
+        // therefore the actual stack value of that argument, not cooccurrence.
+        int index = fieldLoadIndex + 1, skipped = 0;
+        while (index < il.Count && il[index].OpCode.Code == Code.Nop && skipped++ < 4)
+            index++;
+        return index < il.Count && IsCtorMaterialShader(il[index]);
+    }
     private static bool IsFieldLoad(Instruction inst, FieldDefinition field)
     {
         if(inst.OpCode.Code is not (Code.Ldfld or Code.Ldsfld) ||
@@ -164,12 +173,19 @@ internal static class Program
         if(!Kinds.Contains(consumer.Kind)) throw new InvalidOperationException();
         var buckets=Kinds.ToDictionary(x=>"return_consumer_"+x,y=>y==consumer.Kind?1:0);
         int fieldReads=0,fieldReadMethods=0,fieldReadCtorMethods=0;
+        int directFieldToMaterialCtor=0;
         int localReads=0, localMethodWithCtor=0;
         if(consumer.Field is not null)
             foreach(var method in methods)
             {
                 var il=method.Body.Instructions;
-                int loads=il.Count(x=>IsFieldLoad(x,consumer.Field));
+                int loads=0;
+                for(int i=0;i<il.Count;i++)
+                    if(IsFieldLoad(il[i],consumer.Field))
+                    {
+                        loads++;
+                        if(DirectOriginalFieldToMaterialCtor(il,i)) directFieldToMaterialCtor++;
+                    }
                 if(loads>0)
                 {
                     fieldReads+=loads;
@@ -198,6 +214,7 @@ internal static class Program
             ["consumer_return_original_shader_field_load_instructions"]=fieldReads,
             ["consumer_return_original_shader_field_reading_methods"]=fieldReadMethods,
             ["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"]=fieldReadCtorMethods,
+            ["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"]=directFieldToMaterialCtor,
             ["consumer_nop_instructions_skipped_after_Find"]=consumer.Nops,
             ["original_Shader_Find_executed_in_Unity"]=false,
             ["field_declaring_TypeDef_is_427_scene_script_proven"]=false,
@@ -240,6 +257,15 @@ internal static class Program
         if(NextConsumer(method,1).Kind!="static_shader_field" ||
            !IsFieldLoad(Instruction.Create(OpCodes.Ldsfld,field),field))
             throw new InvalidOperationException("field");
+        var ctor=new MethodReference(".ctor",mod.TypeSystem.Void,
+            new TypeReference("UnityEngine","Material",mod,mod.TypeSystem.CoreLibrary)){HasThis=true};
+        ctor.Parameters.Add(new ParameterDefinition(shader));
+        var directLoad=Instruction.Create(OpCodes.Ldsfld,field);
+        if(!DirectOriginalFieldToMaterialCtor(new List<Instruction>{
+             directLoad,Instruction.Create(OpCodes.Nop),Instruction.Create(OpCodes.Newobj,ctor)},0)
+           || DirectOriginalFieldToMaterialCtor(new List<Instruction>{
+             directLoad,Instruction.Create(OpCodes.Pop),Instruction.Create(OpCodes.Newobj,ctor)},0))
+             throw new InvalidOperationException("direct_Material_Stack_guard");
         var other=new FieldDefinition("wrong",Mono.Cecil.FieldAttributes.Private,mod.TypeSystem.Int32);
         owner.Fields.Add(other);
         method.Body.Instructions[2]=Instruction.Create(OpCodes.Stsfld,other);
