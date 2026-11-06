@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T13:23:00Z",
+  "summary": "T2 source-original SHA-pinned Foam CB0 Cecil CI42224883549 SUCCESS. The one original Material field receiving an authentic Foam CB0 named Material.SetVector is assigned via exact 7-instruction single-basic-block stack dataflow from new Material(Shader); its constructor Shader parameter is an original UnityEngine.Shader instance-field load. This is proven direct IL value-to-stfld ownership, not same-method co-occurrence. Shader object matching source Foam, runtime invocation, full CB0 bytes and Android Adreno pixels NOT proven. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42224883549",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_STFLD_STACK_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/d623cef56876b2ffd9fc76949e20598d02090391"
+  ],
+  "limits": "Only one source-named Foam CB0 property candidate, synthetic Cecil and genuine source managed SHA; no original game private names/IL/assets published; no native Unity/GPU game change.",
+  "next_step": "Trace exact original Shader field source/serialized reference and validate Foam asset identity, then stage-specific 160B CB0 values and device pixels."
+}
