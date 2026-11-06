@@ -100,7 +100,8 @@ jobs:
           # T1-ORIGINAL-SPIRV-VALIDATOR-DIAG-20261106: only allowlisted validator tags may be logged.
           # ORIGINAL-SSBO-NOT-ENTRY-20261106: Vulkan1.1 SPIR-V1.3 cannot list StorageBuffer in OpEntryPoint interface.
           python3 -m scripts.t1_fft_original_trace_vulkan --project "$TMPDIR/candidates" \
-            --export-private-trace "$TMPDIR/original-keyed-trace.bin"
+            --export-private-trace "$TMPDIR/original-keyed-trace.bin" \
+            --export-private-evidence "$TMPDIR/original-keyed-evidence.json"
           python3 -m scripts.t1_fft_candidate_keyed_trace_audit "$TMPDIR/original-keyed-trace.bin"
           echo "RAFT_T1_ORIGINAL_GID_REUSE_AUDIT classification_only=true original_invocation_capture=false"
           echo "RAFT_T1_COORDINATE_PROFILE original_slot0 typed_bitcasts=true"
@@ -143,8 +144,16 @@ jobs:
           python3 -m scripts.t1_fft_trace_compare "$TMPDIR/vulkan-trace.bin" "$TMPDIR/vulkan-trace.bin"
           # Capture real keyed HLSL candidate reads once on exact pinned source; never export raw bytes.
           python3 -m scripts.t1_fft_pass0_vulkan_trace --project "$TMPDIR/candidates" \
-            --invocation-keys --export-private-trace "$TMPDIR/translated-keyed-trace.bin"
+            --invocation-keys --export-private-trace "$TMPDIR/translated-keyed-trace.bin" \
+            --export-private-evidence "$TMPDIR/translated-keyed-evidence.json"
           python3 -m scripts.t1_fft_candidate_keyed_trace_audit "$TMPDIR/translated-keyed-trace.bin"
+          # Same SHA-pinned source: independently captured original/HLSL outputs,
+          # and both actually uploaded source/butterfly readbacks must be byte-identical.
+          python3 -m scripts.t1_fft_private_invocation_pair_report \
+            --original-trace "$TMPDIR/original-keyed-trace.bin" \
+            --candidate-trace "$TMPDIR/translated-keyed-trace.bin" \
+            --original-evidence "$TMPDIR/original-keyed-evidence.json" \
+            --candidate-evidence "$TMPDIR/translated-keyed-evidence.json"
           spirv-dis --raw-id "$TMPDIR/coordinate-ssa.spv" -o "$TMPDIR/source-coordinate.spvasm"
           python3 -m scripts.t1_fft_source_integer_coordinates "$TMPDIR/source-coordinate.spvasm" "$TMPDIR/source-integer.spvasm"
           spirv-as --target-env vulkan1.1 "$TMPDIR/source-integer.spvasm" -o "$TMPDIR/source-integer.spv" > "$TMPDIR/source-as.log" 2>&1
