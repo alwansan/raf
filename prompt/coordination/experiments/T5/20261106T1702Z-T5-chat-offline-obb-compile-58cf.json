@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "waiting_ci",
+  "hypothesis": "The private original-managed compatibility build omitted new AndroidExpansionArchiveProbe.cs while AndroidTestDiagnostics.cs calls it; explicit dependency parity plus preflight should remove two compile CS0103.",
+  "source_commit": "591e6e7da79b69916f8fe9a63f6242a17c226934",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 system",
+    "dotnet": "10.0.x",
+    "ILSpy": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_offline_runtime_support_deps.py -v",
+    "python3 -m scripts.verify_android_offline_candidate --source $RUNNER_TEMP/original --managed Raft/Raft_Data/Managed --runtime android-port/Runtime/Platform --output $RUNNER_TEMP/offline-check",
+    "dotnet build $RUNNER_TEMP/original/Candidate.csproj --configuration Release --nologo -v:q"
+  ],
+  "negative_controls": [
+    "missing AndroidExpansionArchiveProbe.cs refuses all copy",
+    "symlink AndroidExpansionArchiveProbe.cs refuses all copy",
+    "all declared support files copied byte-identically",
+    "real runtime diagnostic call has declared class in copied support set"
+  ],
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42258190836",
+  "artifact_urls": [],
+  "budget": "single normal push-triggered ubuntu-24.04 CPU-only source CI; no new native Unity build or original data publication",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Managed original C# compatibility compile is not Unity Editor/IL2CPP",
+    "No installed OBB or on-device Unity engine resource evidence",
+    "Does not solve water shaders or visuals"
+  ],
+  "integration_commit": "591e6e7da79b69916f8fe9a63f6242a17c226934",
+  "next_step": "Inspect 42258190836 terminal job and sanitized compile error summary, update session/work, preserve running other agents/jobs"
+}
