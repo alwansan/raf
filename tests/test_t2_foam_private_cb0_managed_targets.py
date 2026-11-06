@@ -54,6 +54,14 @@ class OriginalCb0NameTargetTests(unittest.TestCase):
                          [hashlib.sha256(b"PRIVATE_VECTOR_LITERAL").hexdigest()])
         self.assertNotIn("PRIVATE_VECTOR_LITERAL", str(data))
 
+    def test_source_foam_shader_mname_digest_private_only(self):
+        data = audit(fixture())
+        self.assertEqual(
+            data["original_Foam_Shader_mName_SHA256_private"],
+            hashlib.sha256(TARGET.encode("utf8")).hexdigest())
+        self.assertNotIn(TARGET, str(data))
+        self.assertEqual(len(data["original_Foam_Shader_mName_SHA256_private"]), 64)
+
     def test_incomplete_original_name_reference_is_not_invented(self):
         data = fixture()
         data["m_SubShaders"][0]["m_Passes"][0]["progVertex"]["m_CommonParameters"]["m_ConstantBuffers"][0]["m_VectorParams"][0]["m_NameIndex"] = 400
