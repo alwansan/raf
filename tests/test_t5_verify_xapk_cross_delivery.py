@@ -4,7 +4,10 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 import zipfile
+
+import scripts.t5_verify_xapk_cross_delivery as verifier_module
 
 from scripts.package_android_delivery import PACKAGE, package, parse_badging
 from scripts.t5_verify_xapk_cross_delivery import verify
@@ -115,6 +118,31 @@ class SplitDeliveryAttestationTests(unittest.TestCase):
             root = self.fixtures(Path(tmp), split=False)
             self.assertTrue((root / "Raft-Android-Test.xapk").is_file())
             self.assertEqual(verify(root)["actual_transport_parts_verified"], 3)
+
+    def test_inplace_zip_header_change_after_preflight_before_nested_read_is_rejected(self):
+        """ZIP CRC can remain valid after a same-size outer header change."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.fixtures(Path(tmp), split=True)
+            target = root / "Raft-Android-Test.xapk.part001"
+            real_reader = verifier_module.SplitZipReader
+            touched = []
+
+            def change_between_checks(parts):
+                # ZIP local header DOS timestamp is outside nested APK/OBB data.
+                # Replacing one byte here leaves all three internal CRCs valid.
+                with target.open("r+b") as stream:
+                    stream.seek(10)
+                    original = stream.read(1)
+                    stream.seek(10)
+                    stream.write(bytes([original[0] ^ 1]))
+                touched.append(True)
+                return real_reader(parts)
+
+            with mock.patch.object(verifier_module, "SplitZipReader",
+                                   side_effect=change_between_checks):
+                with self.assertRaisesRegex(ValueError, "transport part SHA256"):
+                    verify(root)
+            self.assertEqual(touched, [True])
 
     def test_changed_split_xapk_part_rejected_even_with_same_length(self):
         with tempfile.TemporaryDirectory() as tmp:
