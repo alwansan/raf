@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "5944e6fa217dab94c87441cde2fd56a4439bd796",
+  "intended_files": [
+    "scripts/t2_foam_private_cb0_index_access.py",
+    "tests/test_t2_foam_private_cb0_index_access.py",
+    "prompt/coordination/clients/T2/sessions/20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9.json"
+  ],
+  "hypothesis": "SPIR-V CB0 compiled-load parser may silently accept duplicate pointer SSA result IDs in OpCopyObject/OpPhi, allowing forged or overwritten pointer provenance",
+  "experiment_key": "t2-cb0-pointer-ssa-duplicate-id-synthetic-source-free-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "20261106T103459Z-T2-chat-cb0-index-48bd"
+  ],
+  "updated_at": "2026-11-06T11:24:00Z"
+}
