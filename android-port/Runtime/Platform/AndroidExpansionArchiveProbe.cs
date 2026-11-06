@@ -136,7 +136,7 @@ namespace RaftAndroid.Platform
                         }
 
                         var unityNames = new HashSet<string>(StringComparer.Ordinal);
-                        ZipArchiveEntry sample = null;
+                        ZipArchiveEntry sample = null!;
                         var banks = new HashSet<string>(StringComparer.Ordinal);
                         foreach (ZipArchiveEntry entry in zip.Entries)
                         {
