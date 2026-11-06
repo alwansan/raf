@@ -1,0 +1,14 @@
+{
+  "id": "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
+  "owner": "T1",
+  "session_id": "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
+  "issue_id": "WATER-001",
+  "type": "progress",
+  "at": "2026-11-06T15:37:23.031Z",
+  "summary": "Completed and preserved actual HLSL-original-derived Vulkan keyed candidate capture 42242127723, 384 invocation-keyed reads [64,256,64], no duplicate keys or out-of-bounds, private output cleaned. Original SPIR-V independently keyed capture still missing; source-only original preflight tests 86/86 PASS 42243693907. New exact SHA-pinned source-only-structural original SPIR-V private prerequisite probe dispatched in Actions 42244565958, pending verified result. No shader/Unity native changes, no authored FindKernel, numerical original-vs-Unity parity or Android water accepted.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42242127723",
+    "https://github.com/alwansan/raf/actions/runs/42243693907",
+    "https://github.com/alwansan/raf/actions/runs/42244565958"
+  ]
+}
