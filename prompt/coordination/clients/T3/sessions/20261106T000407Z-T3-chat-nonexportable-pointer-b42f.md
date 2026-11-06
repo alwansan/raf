@@ -1,0 +1,25 @@
+# T3 chat — exact nonexportable ParticleTexture2D real AssetRipper→Material pointer equality
+
+- session_id: `20261106T000407Z-T3-chat-nonexportable-pointer-b42f`; **origin chat**; **owner T3**; **issue RENDER-002 OPEN / NOT_READY**; source/export pointer verification completed and released; no Android proof.
+- resumed_from: `20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab` (real source third class28 Texture in AssetRipper Exportable=false); scheduled independent `20261105T2334Z-T3-scheduled-extent-nesting-c4a7`.
+- registered work **BEFORE edits** `prompt/coordination/work/RENDER-002/20261106T000407Z-T3-chat-nonexportable-pointer-b42f.json`, base SHA `a5fb5ee852df285590dff7643ebbbeb58c436b94`, registration commit `d5e900e10a414045a8f5cb5d3328246aab2eec87`.
+- experiment_key `T3-ZIP2-15964-particle108-5M-3Texture-one-nonexportable-AssetRipper-CreateExportPointer-v1`; resource_key `T3-particle108-one-original-12owner-one-resS-sameexport-nonexportable-pointer-50min` now released.
+
+## Real terminal CI and evidence
+
+[CI42134436841](https://github.com/alwansan/raf/actions/runs/42134436841) **COMPLETED SUCCESS** on exact code/source commit `eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5`. Source-free test controls **16+4+13+7+23+7+9+11+14=104/104 PASS**, SHA-verified six immutable original PC Raft scenes+four Shader/Material owners+two runtime globals at ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, one external image `.resS` provider full size/SHA, three authentic image byte ranges read. Pinned public AssetRipperCLI `036098ab525a3f9f693dc101edeb21faad4d32d8` compiled and exported the bounded original source with W1/B02/B21 private captures for ONE SAME export instance. Actual exported Unity `.mat` YAML parsed.
+
+Unique source original 108-slot Particle Shader48 → FIVE actual Material21 → TEN nonnull original local TexEnv texture pointers → THREE typed Texture2D28. Of three source Texture2D objects, TWO exportable class28 B02 trace identities, ONE nonexportable class28 source in private collection trace. Nine ordinary source→same-instance exported Texture pointers match the real exported `.mat` YAML. Newly instrumented **`container.CreateExportPointer` for the one nonexportable original Texture2D** was CAPTURED successfully and its pointer exactly matched the tenth actual exported Material YAML TexEnv pointer. **Total: 10/10 source→actual same-export Material Texture PPtrs matched; 10/10 source UV values matched; 0 null/incorrect GUID, 0 source-target unresolved, 0 missing/extra slots and 0 wrong nonexportable pointer.**
+
+Status `SAME_INSTANCE_SOURCE_PARTICLE108_NONEXPORTABLE_CONTAINER_POINTER_PARITY`. Crucial: one source class28 in nonexportable collection does NOT mean a third separate Unity Texture asset is exported or proves a native GPU image, but prior **9/10 was a B02 tracer coverage limit, NOT a lost Material/Texture link**.
+
+Code contributions: disposable private C# `container.CreateExportPointer(asset)` capture + fail-closed exception classification `scripts/t3_stage_particle_nonexportable_trace.py` commit `b118abc6f09906d0392bc7b0bc127a5c1fab7053`; direct private source identity→container MetaPtr→real exported Material YAML comparator `scripts/t3_particle_same_export_bindings.py` commit `9f50ecf451154b486e02858fcda261b713b88926`; four new adversarial actual pointer tests + changed source multiplicity fixture `tests/test_t3_particle_same_export_bindings.py` commit `98637448e3b0a1fa3a49d8cda240acd3d65a59bb`; C# invariant tests commit `5c8f793809a7820168059136d9d4bcd85e7c139c`; workflow successful integration commit `eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5`. Only safe numeric counts uploaded, no original IDs/paths/GUIDs/digests/Shader source or binary resources.
+
+Detailed report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md
+Updated source-to-export resource ledger: https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json
+
+## Remaining acceptance boundary
+
+Android Unity ARM64 actual APK/OBB resource and ShaderLab pass/fragment compiled texture/alpha behavior, texture decode and real fire/smoke ParticleSystemRenderer emitter identity are **NOT verified** by this bounded source/export test; `RENDER-002` must remain OPEN. No game `.shader`, `.meta`, Material, texture, prefab, scene, audio, Settings, water/FFT, input, saved world, APK or OBB was edited, and no other worker CI cancelled.
+
+Next: Do NOT replace the third source Texture2D or inject an opaque/placeholder image: its actual nonexportable AssetRipper container PPtr equals the nonnull exported Material YAML tenth TexEnv pointer. Identify the real installed Android fire/smoke emitter source prefab/Material and inspect its compiled fragment shader texture/alpha/discard, image decoding/importer, native Unity/OBB image and actual device pixels. Coordinate T5 same exact APK+OBB run and results. Keep RENDER-002 OPEN.
