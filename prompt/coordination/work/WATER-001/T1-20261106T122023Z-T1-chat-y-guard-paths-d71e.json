@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "original butterfly site1 Y bitcarrier versus constant conditional path reachability",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4bfe352226792fcf5e8356fe621a4376a6d343f3",
-  "updated_at": "2026-11-06T12:20:24.487Z",
+  "updated_at": "2026-11-06T12:32:00.081Z",
   "resumed_from_sessions": [
     "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
     "20261106T113001Z-T1-chat-lane-alias-f73c",
@@ -26,7 +26,10 @@
   ],
   "experiment_key": "water001-original-slot0-butterfly-site1-y-cfg-branch-pathtyped-last-writer-v1-zip2sha15964ea8",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add adversarial CFG source-free controls for overlapping writes, loop, uninitialized, condition producers and alias escapes; run single authentic original Vulkan CI, classify without raw literal."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42217597416",
+    "https://github.com/alwansan/raf/actions/runs/42217830589"
+  ],
+  "result": "Private original butterfly1 Y 15/15 corrected synthetic/CI SUCCESS (run 42217830589); structural CFG source-backed last-writer categories only float32_constant, whereas prior whole-function census had signed-int bitcast and float constant among five static writers. Branch predicate opcode OpINotEqual. One bounded abstract state; no unknown writes or escapes in model. Runtime predicate, original↔Unity numeric parity and Android water unproven. WATER-001 OPEN.",
+  "next_step": "Separate source-private original OpINotEqual comparison predicate SSA operand type/provenance and branch successor path analysis, then same-input paired Vulkan/Unity numerical compare. Prior butterfly1 X mismatch 252/256 remains major blocker; no Android shader patch without evidence."
 }
