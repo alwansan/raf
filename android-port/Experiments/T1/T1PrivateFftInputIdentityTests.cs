@@ -176,9 +176,18 @@ public sealed class T1PrivateFftGpuDispatchTests
         });
     }
 
+    // Private fixed labels only. The workflow never prints paths, exceptions or pixel data.
+    private static void RecordReplayStage(string stage)
+    {
+        var root = Directory.GetParent(Application.dataPath).FullName;
+        File.WriteAllText(Path.Combine(root, "T1ReplayStage.txt"), stage);
+    }
+
     private static int Dispatch(T1GpuResourceRow role, Texture input, Texture butterfly, RenderTexture output,
         ComputeBuffer trace = null)
     {
+        string pass = trace != null ? "trace" : role.compiled_slot == 0 ? "pass0" : "pass1";
+        RecordReplayStage(pass + "_candidate");
         string root = Directory.GetParent(Application.dataPath).FullName;
         string asset = "Assets/T1OriginalDerived/FFT_Candidate_" + role.compiled_slot.ToString("00") + ".compute";
         string source = Path.Combine(root, asset);
@@ -186,9 +195,11 @@ public sealed class T1PrivateFftGpuDispatchTests
             "Selected original-derived shader SHA mutated");
         if (trace != null)
             asset = "Assets/T1TracePass0.compute";
+        RecordReplayStage(pass + "_import");
         AssetDatabase.ImportAsset(asset, ImportAssetOptions.ForceSynchronousImport);
         var shader = AssetDatabase.LoadAssetAtPath<ComputeShader>(asset);
         Assert.That(shader, Is.Not.Null, "Private original-derived ComputeShader not imported");
+        RecordReplayStage(pass + "_kernel");
         Assert.That(shader.HasKernel("main"), Is.True);
         int kernel = shader.FindKernel("main");
         uint x, y, z;
@@ -196,12 +207,15 @@ public sealed class T1PrivateFftGpuDispatchTests
         Assert.That(x, Is.EqualTo((uint)role.expected_group_x));
         Assert.That(y, Is.EqualTo(1u));
         Assert.That(z, Is.EqualTo(1u));
+        RecordReplayStage(pass + "_bind");
         shader.SetTexture(kernel, role.source_property, input);
         shader.SetTexture(kernel, role.butterfly_property, butterfly);
         shader.SetTexture(kernel, role.output_property, output);
         if (trace != null)
             shader.SetBuffer(kernel, "T1TraceBuffer", trace);
+        RecordReplayStage(pass + "_dispatch");
         shader.Dispatch(kernel, 1, 1, 1);
+        RecordReplayStage(pass + "_readback");
         var actual = Read(output);
         int changed = 0;
         foreach (var c in actual)
@@ -213,6 +227,7 @@ public sealed class T1PrivateFftGpuDispatchTests
         Assert.That(changed, Is.GreaterThan(0),
             "GPU Dispatch produced no observed writes to the intended UAV");
         Assert.That(changed, Is.LessThanOrEqualTo(Width * Height));
+        RecordReplayStage(pass + "_capture");
         string captureName = trace == null ? "pass" + role.compiled_slot : "trace_pass0";
         using (var stream = File.Create(CapturePath("T1UnityCapture", captureName)))
         using (var writer = new BinaryWriter(stream))
@@ -231,6 +246,7 @@ public sealed class T1PrivateFftGpuDispatchTests
     [Test]
     public void AuthenticatedFirstPairActuallyDispatchesWithSampledImages()
     {
+        RecordReplayStage("setup");
         Assert.That(Application.unityVersion, Is.EqualTo("2021.3.45f2"));
         Assert.That(SystemInfo.supportsComputeShaders, Is.True,
             "No supported hardware GPU for genuine Unity Dispatch");
@@ -274,6 +290,7 @@ public sealed class T1PrivateFftGpuDispatchTests
             butterfly = SeedTexture("butterfly");
             intermediate = Target();
             final = Target();
+            RecordReplayStage("input_identity");
             ReportInputIdentity(source, butterfly, final);
             ClearSentinel(intermediate);
             ClearSentinel(final);
@@ -287,6 +304,7 @@ public sealed class T1PrivateFftGpuDispatchTests
                     trace.SetData(records);
                     ClearSentinel(intermediate);
                     Dispatch(manifest.resources[0], source, butterfly, intermediate, trace);
+                    RecordReplayStage("trace_buffer_readback");
                     trace.GetData(records);
                 }
                 string tracePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName,
@@ -298,6 +316,7 @@ public sealed class T1PrivateFftGpuDispatchTests
             }
             Assert.That(pass0, Is.GreaterThan(0));
             Assert.That(pass1, Is.GreaterThan(0));
+            RecordReplayStage("complete");
             Debug.Log("RAFT_T1_PRIVATE_FFT_GPU_DISPATCH " +
                 "authentic_derived_first_pass=true authentic_derived_second_pass=true " +
                 "output_changed_both_passes=true original_in_game_kernel_mapping=false " +

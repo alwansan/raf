@@ -282,11 +282,31 @@ jobs:
           rc=$?
           set -e
           sudo chown -R "$(id -u):$(id -g)" t1-original-derived-unity t1-original-private-test-artifacts || true
+          # Decode only a bounded, exact stage label written by the private test.
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          marker = Path("t1-original-derived-unity/T1ReplayStage.txt")
+          try:
+              with marker.open("rb") as stream:
+                  data = stream.read(64)
+          except OSError:
+              data = b""
+          allowed = rb"(?:setup|input_identity|trace_buffer_readback|complete|(?:pass0|pass1|trace)_(?:candidate|import|kernel|bind|dispatch|readback|capture))"
+          stage = data.decode("ascii") if re.fullmatch(allowed, data) else "unavailable"
+          print("RAFT_T1_REPLAY_LAST_ENTERED_STAGE stage=" + stage)
+          PY
           # Parse NUnit root attributes and exact expected test-case identity;
           # NEVER display XML messages, compiler logs, shader contents or source paths.
           python3 -m scripts.t1_fft_unity_gpu_result_gate \
             --exit-code "$rc" \
             --xml t1-original-private-test-artifacts/editmode-results.xml
+      - name: Compare private Unity and original Vulkan captures
+        if: env.T1_DISPATCH_CANARY != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
           python3 - <<'PY'
           import json
           from pathlib import Path
