@@ -183,6 +183,30 @@ int main(int argc, char **argv)
      * map. A compiler success here and failure under A/B isolates mapping
      * semantics; neither success implies source shader renders in Unity. */
     int baseline = argc == 4 && !strcmp(argv[3], "D");
+    if (argc == 2 && !strcmp(argv[1], "--self-test-type-flags"))
+    {
+        static const char *test_rows[] = {
+            "C 2 4 37", "T 3 4 38", "S 1 4 39", "U 0 4 40"
+        };
+        static const unsigned int expected[] = {
+            VKD3D_SHADER_BINDING_FLAG_BUFFER,
+            VKD3D_SHADER_BINDING_FLAG_IMAGE,
+            0,
+            VKD3D_SHADER_BINDING_FLAG_IMAGE
+        };
+        unsigned int i;
+        memset(&mapping, 0, sizeof(mapping));
+        mapping.stage = 'V';
+        mapping.count = 4;
+        for (i = 0; i < 4; ++i)
+        {
+            if (parse_map_line(test_rows[i], &mapping, i) ||
+                    mapping.rows[i].flags != expected[i])
+                return 2;
+        }
+        puts("T3_VKD3D_PUBLIC_DESCRIPTOR_TYPE_FLAGS_SYNTHETIC_OK=true");
+        return 0;
+    }
     if (argc == 4 && !strcmp(argv[1], "--check-map"))
     {
         rc = load_private_map(argv[2], argv[3], &mapping);
