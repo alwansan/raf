@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "T2-20261106T1719Z-T2-scheduled-target-name-ci-7f2c",
+  "client": "T2",
+  "origin": "scheduled",
+  "session_id": "20261106T1719Z-T2-scheduled-target-name-ci-7f2c",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "0b2aaafc1a8147098cbd933b563ecaf1ce4e0a28",
+  "experiment_key": "ZIP2-15964-typed-target-foam-name-followup-ci-reconcile-only",
+  "resource_key": "none-read-only-CI",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1719Z-T2-scheduled-target-name-ci-7f2c.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1719Z-T2-scheduled-target-name-ci-7f2c.md"
+  ],
+  "hypothesis": "The latest corrected privacy-assertion CI has completed; reconcile only without touching active chat's source and experiment.",
+  "resumed_from": [
+    "20261106T1714Z-T2-chat-target-foam-name-63f0",
+    "20261106T1639Z-T2-chat-original-manifest-9d26"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260145863",
+    "https://github.com/alwansan/raf/actions/runs/42260338766"
+  ],
+  "result": "CI42260338766 completed success at 2026-11-06T17:18:37Z on bdc3095f; prior 42260145863 failed privacy substring assertion. Original aggregate from chat session 2/2 typed and parsed, 0/2 exact Foam name matches; not new independent asset inspection.",
+  "next_step": "Chat T2 owns original-name experiment final artifact and event; trace Unity external GUID/real Foam material ownership separately. No ShaderLab integration without proof."
+}
