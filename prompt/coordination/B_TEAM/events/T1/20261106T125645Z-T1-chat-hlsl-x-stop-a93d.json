@@ -1,0 +1,13 @@
+{
+  "id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+  "owner": "T1",
+  "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+  "issue_id": "WATER-001",
+  "type": "progress",
+  "at": "2026-11-06T13:01:20.727Z",
+  "summary": "New bounded HLSL FFT butterfly1 X unresolved-lane stop opcode and numeric-kind reporter added; four synthetic tests for OpPhi/OpIAdd/unknown sanitization/resolved-load backward compatibility passed in original CI test gate. Run 42221700354 source authentic Vulkan stage still in progress while runner installs dependencies. No actual X stop opcode claimed yet, no original source bits or raw IDs emitted, no Android water fix.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42221700354",
+    "https://github.com/alwansan/raf/commit/952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1"
+  ]
+}
