@@ -6,7 +6,7 @@
   "session_id": "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
   "issue_id": "RENDER-002",
   "track": "Authentic Particle108 HLSL roundtrip vertex output same-location width/type mismatch",
-  "status": "active",
+  "status": "completed",
   "base_sha": "24aa76f6bb66d6a954448d146a43581b4b1c0407",
   "intended_files": [
     "scripts/t3_particle108_roundtrip_interface_diagnostic.py",
@@ -27,8 +27,26 @@
     "prompt/coordination/clients/T3/sessions/20261106T1017Z-T3-chat-roundtrip-interface-c97e.md"
   ],
   "approach": "Extend only own diagnostic with safe aggregate vector type-width/class direction and FS read-site join; add source-free controls, one genuine SHA-pinned workflow rerun, no authored .shader patch.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add strict numeric source/roundtrip VS output shape classifier and safe synthetic controls, then verify original four-pair counts and classify only when data supports.",
-  "updated_at": "2026-11-06T10:23:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42202565721"
+  ],
+  "result": {
+    "run_id": 42202565721,
+    "job_id": 127841185885,
+    "conclusion": "success",
+    "source_free_tests_passed": 15,
+    "original_SHAs_verified": "four_shader_material_owners_six_scenes",
+    "source_vsfs_compatible": 4,
+    "roundtrip_vsfs_compatible": 2,
+    "vertex_same_location_type_changes": 4,
+    "vertex_width_narrowing": 2,
+    "vertex_width_widening": 2,
+    "roundtrip_fragment_consumed_changed_locations": 2,
+    "roundtrip_fragment_unconsumed_changed_locations": 2,
+    "fragment_consumed_original_source_vertex_type_match": 2,
+    "roundtrip_output_type_match_at_consumed": 0,
+    "Android_pixels_verified": false
+  },
+  "next_step": "Original-private HLSL struct-declaration/semantic field map required for two consumed Vertex output vector-width defects; cross-tab width direction and prove authored DXBC component mask correspondence, disposable 4/4 SPIRV candidate only if exact field match, no game shader edits without fidelity.",
+  "updated_at": "2026-11-06T10:27:30Z"
 }
