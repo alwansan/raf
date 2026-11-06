@@ -93,7 +93,7 @@ def patch(source_root: Path, original_dll: Path, *, apply=False, project_assets=
         # edited. This is an integrity check, not atomic cross-process locking.
         originals = {file: file.read_bytes() for file in sources}
         installed = {
-            file: (b"\\xef\\xbb\\xbf" if raw.startswith(b"\\xef\\xbb\\xbf") else b"")
+            file: (b"\xef\xbb\xbf" if raw.startswith(b"\xef\xbb\xbf") else b"")
                   + sources[file].encode("utf-8")
             for file, raw in originals.items()
         }
