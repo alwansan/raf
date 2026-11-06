@@ -1,11 +1,6 @@
 name: T3 RENDER-002 authentic original Particle108 D3D11 SHDR SHEX declaration census
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - prompt/coordination/requests/t3-dxbc-declarations-20261106-3c7e.trigger
 permissions:
   contents: read
 concurrency:
