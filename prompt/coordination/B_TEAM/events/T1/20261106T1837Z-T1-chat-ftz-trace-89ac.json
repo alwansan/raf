@@ -1,0 +1,14 @@
+{
+  "id": "T1-WATER-001-20261106T1837Z-T1-chat-ftz-trace-89ac",
+  "owner": "T1",
+  "session_id": "20261106T1837Z-T1-chat-ftz-trace-89ac",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Privacy-safe source-only paired FFT taxonomy now distinguishes coordinate-to-zero drift, same-address float32 subnormal-to-zero, and other float-bit differences. CI42272859383 source-only PASS 16/16. Does not establish original Unity execution, causal FTZ, or Android water restoration.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42272859383",
+    "https://github.com/alwansan/raf/commit/04d1315be1021775480d68a8fecb9f9c660ec32d"
+  ],
+  "at": "2026-11-06T18:41:45Z"
+}
