@@ -6,9 +6,9 @@
   "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
   "issue_id": "DISPLAY-003",
   "track": "Original Settings resolution callback executable IL metadata",
-  "status": "waiting_ci_index_checkpoint",
+  "status": "completed_original_il_source_verified_indexed",
   "base_sha": "8c71e017853ace358bed947556dc0156e38fe5d8",
-  "updated_at": "2026-11-06T10:45:53.605Z",
+  "updated_at": "2026-11-06T10:46:50.277Z",
   "resumed_from_sessions": [
     "20261106T1020Z-T5-chat-ledger-id-compat-c8e4.md",
     "20261106T0047Z-T5-scheduled-c4e8.md"
@@ -33,7 +33,8 @@
   "next_step": "Safe original IL delegate/callback ownership audit of 2 GraphicsSettingsBox same-type delegates, then serialized UI selection/persistence proof; no speculative Settings runtime change.",
   "source_commit": "bf64f38e5770664e9fc1bb75f2a6befa7d1d7081",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42204488410"
+    "https://github.com/alwansan/raf/actions/runs/42204488410",
+    "https://github.com/alwansan/raf/actions/runs/42205178791"
   ],
   "result": {
     "original_pin_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
@@ -46,5 +47,15 @@
     "device_tested": false
   },
   "resource_key_for_index": "T5 one-shot canonical ledger refresh, no Unity, no shared T2 writer",
-  "index_reason": "Generate canonical T_TEAM summary after latest own new DISPLAY-003 event; use isolated T5 workflow and immutable report with no original assets."
+  "index_reason": "Generate canonical T_TEAM summary after latest own new DISPLAY-003 event; use isolated T5 workflow and immutable report with no original assets.",
+  "index_result": {
+    "run_id": 42205178791,
+    "conclusion": "success",
+    "events": 359,
+    "b_team_tests": 11,
+    "t_team_tests": 3,
+    "fast_forward": true,
+    "force": false,
+    "device_proven": false
+  }
 }
