@@ -11,10 +11,13 @@ internal static class MaterialStoreValueTrace
                                               int BasicBlockInstructions,
                                               bool OriginalShaderIdentityVerified,
                                               bool RuntimeCB0UploadVerified,
-                                              FieldReference? PrivateOriginalShaderInputField);
-    // The original private field reference stays in runner process memory only.
+                                              FieldReference? PrivateOriginalShaderInputField,
+                                              string? PrivateShaderFindRequestedName);
+    // Private field reference and exact Shader.Find requested string stay in
+    // runner process memory only, never serialize them or log digests.
     private readonly record struct Value(string Origin, string ShaderOrigin = "unproven",
-                                         FieldReference? PrivateField = null);
+                                         FieldReference? PrivateField = null,
+                                         string? PrivateSourceString = null);
     private const int MaxBlockInstructions = 128;
     private const int MaxStack = 96;
     private const string Unknown = "unproven";
@@ -56,23 +59,29 @@ internal static class MaterialStoreValueTrace
                           "parameter");
     }
 
-    private static string TypedLocal(Instruction i, MethodDefinition context,
-                                     IDictionary<int, Value> locals)
+    private static Value TypedLocal(Instruction i, MethodDefinition context,
+                                    IDictionary<int, Value> locals)
     {
         int? idx=i.Operand is VariableDefinition variable
             ? variable.Index : IndexSuffix(i);
         if (idx is null || idx < 0 || idx.Value >= context.Body.Variables.Count)
-            return Unknown;
-        // A known local value must have its reaching definition *in this same
-        // block*. A local type alone does not prove actual newobj/value source.
-        return locals.TryGetValue(idx.Value,out Value provenLocal) ? provenLocal.Origin : Unknown;
+            return new Value(Unknown);
+        // A known local value must have its reaching definition in the
+        // same single basic block; verify string type before propagating a
+        // private literal to a later Shader.Find first argument.
+        if (!locals.TryGetValue(idx.Value,out Value provenLocal))
+            return new Value(Unknown);
+        if (provenLocal.PrivateSourceString is not null &&
+            context.Body.Variables[idx.Value].VariableType.FullName!="System.String")
+            return new Value(Unknown);
+        return provenLocal;
     }
 
     internal static Evidence Trace(IList<Instruction> instructions,
                                    int storePos, MethodDefinition? context,
                                    string expectedFieldType="UnityEngine.Material")
     {
-        Evidence Block(string reason) => new(reason,Unknown,0,false,false,null);
+        Evidence Block(string reason) => new(reason,Unknown,0,false,false,null,null);
         if (storePos < 0 || storePos >= instructions.Count ||
             instructions[storePos].OpCode.Code != Code.Stfld ||
             instructions[storePos].Operand is not FieldReference target ||
@@ -162,7 +171,7 @@ internal static class MaterialStoreValueTrace
                 return Block("local_address_alias_not_proven");
             if (opcode.StartsWith("ldloc",StringComparison.Ordinal))
             {
-                if (!Push(new Value(TypedLocal(ins,context,locals))))
+                if (!Push(TypedLocal(ins,context,locals)))
                     return Block("unbounded_stack");
                 continue;
             }
@@ -207,7 +216,12 @@ internal static class MaterialStoreValueTrace
             if (opcode.StartsWith("ldc.",StringComparison.Ordinal) ||
                 opcode is "ldstr" or "ldtoken")
             {
-                if(!Push(new Value(opcode=="ldstr"?"string_literal":Unknown)))
+                string? privateSource=opcode=="ldstr" &&
+                    ins.Operand is string sourceName &&
+                    sourceName.Length>0 && sourceName.Length<=256 &&
+                    !sourceName.Contains('\0') ? sourceName : null;
+                if(!Push(new Value(opcode=="ldstr"?"string_literal":Unknown,
+                                   Unknown,null,privateSource)))
                     return Block("unbounded_stack");
                 continue;
             }
@@ -234,8 +248,9 @@ internal static class MaterialStoreValueTrace
                     method.Name=="Find" && method.ReturnType.FullName=="UnityEngine.Shader" &&
                     method.Parameters.Count==1 &&
                     method.Parameters[0].ParameterType.FullName=="System.String" &&
-                    ins.OpCode.Code!=Code.Newobj)
-                    result=new Value("typed_Shader_Find_result");
+                    ins.OpCode.Code!=Code.Newobj && !method.HasThis)
+                    result=new Value("typed_Shader_Find_result",Unknown,null,
+                        args.Length>0?args[0].PrivateSourceString:null);
                 else if (ins.OpCode.Code!=Code.Newobj &&
                     method.ReturnType.FullName=="UnityEngine.Material")
                     result=new Value(method.DeclaringType.FullName=="UnityEngine.Renderer" &&
@@ -267,7 +282,9 @@ internal static class MaterialStoreValueTrace
         Pop();
         return new Evidence(source.Origin,source.ShaderOrigin,steps,false,false,
             source.Origin=="exact_Material_ctor_with_Shader_formal"
-                ? source.PrivateField : null);
+                ? source.PrivateField : null,
+            source.Origin=="typed_Shader_Find_result"
+                ? source.PrivateSourceString : null);
     }
 
     internal static void SelfTest()
@@ -377,9 +394,10 @@ internal static class MaterialStoreValueTrace
             Instruction.Create(OpCodes.Call,find),
             originalShaderStore
         };
-        if (Trace(sourceFind,3,ctx,"UnityEngine.Shader").ValueOrigin !=
-            "typed_Shader_Find_result")
-            throw new InvalidOperationException("Shader.Find result must be exact store value");
+        var sourceFindProof=Trace(sourceFind,3,ctx,"UnityEngine.Shader");
+        if (sourceFindProof.ValueOrigin!="typed_Shader_Find_result" ||
+            sourceFindProof.PrivateShaderFindRequestedName!="PUBLIC_FAKE_SHADER")
+            throw new InvalidOperationException("Shader.Find actual requested string to stfld proof");
         var distractorShader=new List<Instruction> {
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldstr,"PUBLIC_FAKE_SHADER"),
@@ -388,9 +406,28 @@ internal static class MaterialStoreValueTrace
             Instruction.Create(OpCodes.Ldarg_1),
             originalShaderStore
         };
-        if (Trace(distractorShader,5,ctx,"UnityEngine.Shader").ValueOrigin !=
-            "typed_Shader_parameter")
+        var nearbyDiscarded=Trace(distractorShader,5,ctx,"UnityEngine.Shader");
+        if (nearbyDiscarded.ValueOrigin!="typed_Shader_parameter" ||
+            nearbyDiscarded.PrivateShaderFindRequestedName is not null)
             throw new InvalidOperationException("Nearby Shader.Find must not stand for store");
+        ctx.Body.Variables.Add(new VariableDefinition(module.TypeSystem.String));
+        var sourceFindLocal=new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_FAKE_SHADER"),
+            Instruction.Create(OpCodes.Stloc_1),
+            Instruction.Create(OpCodes.Ldloc_1),
+            Instruction.Create(OpCodes.Call,find),
+            originalShaderStore
+        };
+        if (Trace(sourceFindLocal,5,ctx,"UnityEngine.Shader")
+                .PrivateShaderFindRequestedName!="PUBLIC_FAKE_SHADER")
+            throw new InvalidOperationException("Private Shader.Find request through typed local");
+        var mismatchedLocal=new List<Instruction>(sourceFindLocal);
+        mismatchedLocal[2]=Instruction.Create(OpCodes.Stloc_0);
+        mismatchedLocal[3]=Instruction.Create(OpCodes.Ldloc_0);
+        if (Trace(mismatchedLocal,5,ctx,"UnityEngine.Shader")
+                .PrivateShaderFindRequestedName is not null)
+            throw new InvalidOperationException("Nonstring local must not carry Shader.Find name");
         var directShaderField=new FieldReference("PUBLIC_OTHER_SHADER",shader,owner);
         var inputFieldStore=new List<Instruction> {
             Instruction.Create(OpCodes.Ldarg_0),
