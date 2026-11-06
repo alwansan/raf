@@ -5,8 +5,8 @@
   "session_id": "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "active",
-  "updated_at": "2026-11-06T18:52:58.345Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T18:56:30Z",
   "base_sha": "7977e6b61be76f3a3142852e8c383fc64fd38534",
   "resumed_from_sessions": [
     "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
@@ -25,5 +25,20 @@
   "resource_key": "T5 independent source-only delivery unit suite; no full native Unity/OBB production run",
   "hypothesis": "`package()` standalone recovery validates ZipFile.testzip but not central-directory duplicate names; CRC-green ZIP with two same-name original Unity entries can be repackaged although Android jar resolution is ambiguous. Strictly reject duplicated exact entry paths for signed APK/OBB input before copying or creating output, without relaxing existing byte CRC, signature/original pipeline gates.",
   "coordination": "T3 owns malformed event causing canonical index CI red; do not edit T3 event. B13 source fault injection succeeded but its generated summary failed from T3 event. T5 scheduled PID work remains independent. No T1-4 files or shared Unity workflow or native request modified.",
-  "next_step": "Add tiny boundary check to package input validation, adversarial synthetic tests in current delivery unit suite, validate targeted source-only workflow. Keep prior 5/5 trial vote unchanged."
+  "next_step": "Completed; release the two own code/test files. Future genuine package recovery should apply existing signed-output SHA checks and device-validation rules, no duplicate native build.",
+  "source_sha": "ccf88df86c6f274a63d4dc787bcfbba9d218f942",
+  "result": {
+    "status": "SUCCESS",
+    "final_run_id": 42274874577,
+    "source_sha": "ccf88df86c6f274a63d4dc787bcfbba9d218f942",
+    "packaging_suite_pass": 14,
+    "a3_suite_pass": 4,
+    "duplicate_alias_subcases_pass": 4,
+    "source_only": true,
+    "phone_verified": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42274874577",
+    "https://github.com/alwansan/raf/actions/runs/42274874596"
+  ]
 }
