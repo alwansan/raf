@@ -1,0 +1,51 @@
+{
+  "id": "T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS",
+  "title": "Six-scene authenticated 108-particle-use original Shader48 contains four exact linked D3D11 vertex+fragment keyword permutation pairs (behind plain AssetRipper dummy)",
+  "kind": "original-source-stage-program-bytecode-availability-not-native-restoration",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_scenes_SHA_verified": 6,
+    "source_shader_Material_owners_SHA_verified": 4,
+    "selected_unique_original_particle_renderer_shader_material_slots": 108,
+    "distinct_original_particle_renderers": 54,
+    "original_Shader48_parsed_subshaders": 1,
+    "original_Shader48_parsed_passes": 1
+  },
+  "stages": {
+    "acquisition": "SIX_SCENE_FOUR_SHADER_OWNER_SHA_VERIFIED_ONE_RES_S_FULL_SHA_VERIFIED",
+    "extraction": "EXACT_UNIQUE_108_PARTICLE_SHADER48_AND_ONE_NORMAL_PASS_SELECTED",
+    "reconstruction": "ONE_ORIGINAL_PLATFORM4_D3D11_TABLE_PROGRAMS_LINKED_PRIVATE_NO_SOURCE_BYTES_PUBLISHED",
+    "binding": "FOUR_ORIGINAL_VS_FS_PASSES_MATCHED_BY_EXACT_SERIALIZED_KEYWORD_PERMUTATIONS",
+    "integration": "SOURCE_ONLY_D3D11_STAGES_AUTHENTIC_NOT_VULKAN_SPIRV_OR_UNITY_IMPORTED",
+    "device": "NOT_TESTED"
+  },
+  "counts": {
+    "original_D3D11_program_table_records": 16,
+    "linked_vertex_variants": 4,
+    "linked_fragment_variants": 4,
+    "exact_matched_vertex_fragment_keyword_permutation_pairs": 4,
+    "distinct_original_linked_D3D11_programs": 8,
+    "linked_stage_variant_records_with_keywords": 6,
+    "unmatched_vertex_permutations": 0,
+    "unmatched_fragment_permutations": 0,
+    "original_source_programmable_Pass_count": 1,
+    "source_original_particles_108_render_use_slots": 108,
+    "source_free_tests_passed": 117,
+    "original_stage_code_extracted_published": false,
+    "Android_runtime_fragment_alpha_or_pixels_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42139137265",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/927bf1d096f8c5500f237794b91fc71c90a946ab"
+  ],
+  "remaining": [
+    "SPIR-V/GLSL/Unity HLSL translation and Vulkan stage interface checking NOT performed in this experiment; original PC D3D11 source linkage alone is not GPU parity.",
+    "T5 native post-vendor actual Shader GUID, custom dummy/non-dummy program and user phone fire/smoke emitter identity still unproven.",
+    "RENDER-002 stays OPEN, do not claim Android graphics fixed."
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-06T00:48:22.748Z"
+}
