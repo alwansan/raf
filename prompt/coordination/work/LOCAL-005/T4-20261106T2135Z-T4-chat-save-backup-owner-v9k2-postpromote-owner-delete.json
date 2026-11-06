@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2135Z-T4-chat-save-backup-owner-v9k2",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "LOCAL-005",
+  "track": "original-save-source-backup-ownership",
+  "base_sha": "e2cbadb6acc4d927ec2e61e4b7e012e049235146",
+  "resumed_from_sessions": [
+    "20261106T2052Z-T4-chat-save-stage-stale-q6r2",
+    "20261106T2035Z-T4-scheduled-native-failure-h7q2"
+  ],
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "tests/test_adapt_original_save_paths.py"
+  ],
+  "hypothesis": "Another writer can move and replace the newly published backup root while our adapter cleans up stale source or rolls back a write; rmtree then removes the foreign backup root.",
+  "approach": "Inject deterministic stale and rollback replacement interleaves, prove RED, then verify original staged backup dev/ino before cleanup and run original ZIP2 source-only CI.",
+  "experiment_key": "T4-original-save-backup-postpromote-identity-preserving-cleanup-v1",
+  "resource_key": "T4-original-save-paths-source-CPU-ZIP2",
+  "related_native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "updated_at": "2026-11-06T21:35:00Z",
+  "next_step": "Add RED negative control before source fix; no native workflow dispatch."
+}
