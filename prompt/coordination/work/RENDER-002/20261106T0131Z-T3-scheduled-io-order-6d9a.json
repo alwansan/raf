@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T0131Z-T3-scheduled-io-order-6d9a",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "baseline_sha": "797174cc02e14aef3f115a5917730a4068623c75",
+  "resumed_from_sessions": [
+    "20261106T005710Z-T3-chat-particle108-vulkan-c8f1",
+    "20261106T0030Z-T3-scheduled-native-stage-order-e6b4"
+  ],
+  "intended_files": [
+    "scripts/t3_original_particle108_spirv_translation.py",
+    "tests/test_t3_original_particle108_spirv_translation.py",
+    "prompt/coordination/clients/T3/sessions/20261106T0131Z-T3-scheduled-io-order-6d9a.md"
+  ],
+  "hypothesis": "Order of SPIR-V reflection IO records can differ while location/type mapping is identical; raw list equality may yield false mismatches.",
+  "experiment_key": "T3-particle108-reflection-IO-permutation-canonical-equality-sourcefree-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-06T01:31:00Z"
+}
