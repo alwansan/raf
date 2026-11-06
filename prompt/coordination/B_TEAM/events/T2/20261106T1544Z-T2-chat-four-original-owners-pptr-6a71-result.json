@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1544Z-T2-chat-four-original-owners-pptr-6a71-result",
+  "owner": "T2",
+  "session_id": "20261106T1544Z-T2-chat-four-original-owners-pptr-6a71",
+  "origin": "chat",
+  "type": "result",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T15:55:00Z",
+  "summary": "Original ZIP2 four SHA-pinned owner graph CI42247200163 SUCCESS, 8 sourcefree controls, 233281064 original bytes SHA verified: 165 Shader and 516 Material objects; 156 external Material.m_Shader PPtrs, 154 basename+typed original target PathID candidates in four known files and 2 unresolved; zero original Foam same-owner fileID0/pathID2420 and zero external basename+PathID Foam candidate. Prior seven external pointers in sharedassets0 separate 5 known candidates and 2 unpinned/unresolved. No GUID/runtime CB0 or Adreno acceptance; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42247200163",
+    "docs/T2_FOAM_ORIGINAL_FOUR_OWNER_SHADER_PPTR_GRAPH_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/805901f738d54b54a01992e3624d24c06c8cdc97"
+  ],
+  "limitations": "Only four pinned owner files; basename+PathID does not authenticate runtime GUID, two external PPtrs unresolved; no original game assets or private external paths/GUIDs logged.",
+  "next_step": "Match two remaining source external table references to immutable source manifest, stage matching owner(s) and verify Shader types/GUID; preserve WATER-001 OPEN."
+}
