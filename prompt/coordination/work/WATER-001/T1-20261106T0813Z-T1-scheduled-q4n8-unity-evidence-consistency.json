@@ -2,7 +2,7 @@
   "session_id": "20261106T0813Z-T1-scheduled-q4n8",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_change_awaiting_test",
   "baseline_sha": "8aa55f47c7d68469502e992d109ed3033c5471fa",
   "intended_files": [
     "scripts/t1_fft_unity_evidence_gate.py",
@@ -15,5 +15,9 @@
   "hypothesis": "Source-free Unity evidence classifier currently accepts editor_supports_compute=true while editor_invoked=false, allowing contradictory observation metadata; fail closed.",
   "owner_device_run": 42058825739,
   "taken_over_from": "prompt/coordination/clients/T1/sessions/20261106T0710Z-T1-scheduled-a6d4.md",
-  "updated_at": "2026-11-06T08:13:00Z"
+  "updated_at": "2026-11-06T08:17:00Z",
+  "code_commit": "8e7e685876783c43a5d80d414335573db86c219c",
+  "test_commit": "89773b917dc95e8b9b2987e8b8ffbf040fc8103b",
+  "session_commit": "9ae9ee8f2c814645cc7d9be701b62d3947b6d78f",
+  "test_result": "not_run_exact_source_due_to_local_dns"
 }
