@@ -1,0 +1,125 @@
+name: T2 WATER-001 original external FileIdentifier GUID and reverse Foam Shader graph
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_external_guid_evidence.py
+      - tests/test_t2_original_external_guid_evidence.py
+      - .github/workflows/raft-t2-original-external-guid-evidence.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-original-external-guid-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  guid-original-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/scripts
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-free strict GUID/fileID and reciprocal graph controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_external_guid_evidence.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_external_guid_evidence.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_manifest_pptr.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-external-guid-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Authenticate immutable source owner and 366-row manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess,json
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS,ZIP2_SHA,stage
+          from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
+          root=Path('t2-original-external-guid-zip2')
+          assert subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          assert len(parse_original_manifest(root/'RAFT_FILE_MANIFEST.tsv'))==366
+          target=Path(os.environ['RUNNER_TEMP'])/'t2-original-external-guid-owner'
+          result=stage(root,target,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert result['verified_bytes']==115978112 and not result['lfs_used']
+          print('T2_ORIGINAL_EXTERNAL_GUID_SOURCE_SAFE '+json.dumps({
+              'original_source_sha_verified':True,
+              'original_owner_verified_bytes':result['verified_bytes'],
+              'original_manifest_declared_metadata_validated':True
+          },sort_keys=True))
+          PY
+      - name: Private SHA-original FileIdentifier GUID and reverse Material graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 600s python3 -m scripts.t2_original_external_guid_evidence \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-external-guid-zip2" \
+            --source "$RUNNER_TEMP/t2-original-external-guid-owner" \
+            --target "$RUNNER_TEMP/t2-original-external-guid-target" \
+            --out "$RUNNER_TEMP/t2-original-external-guid-safe.json"
+      - name: Assert original GUID shape result without private identifiers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t2-original-external-guid-safe.json'
+          r=json.loads(p.read_text(encoding='utf8'))
+          assert r['status']=='original_SHA_verified_external_GUID_shape_and_reciprocal_graph'
+          assert r['original_ZIP2_SHA_verified'] is True
+          assert r['original_Foam_owner_object_and_source_SHA_verified'] is True
+          assert r['original_target_file_758412_bytes_SHA_verified'] is True
+          assert r['external_original_Shader_refs']==2
+          assert 1<=r['external_unique_fileIDs']<=2
+          assert r['external_unique_filename_targets']==1
+          assert r['external_GUID_zero_rows']+r['external_GUID_nonzero_rows']==2
+          assert 0<=r['external_distinct_nonzero_GUIDs']<=2
+          assert sum(r['external_type_'+str(i)+'_rows'] for i in range(4))==2
+          assert r['original_file_identifier_values_published'] is False
+          assert r['GUID_is_independent_original_target_authority'] is False
+          assert r['original_Unity_target_file_GUID_independently_authenticated'] is False
+          assert r['Foam_render_material_binding_verified'] is False
+          assert r['Unity_ShaderLab_Adreno_pixels_verified'] is False
+          assert r['private_original_names_GUIDs_paths_raw_published'] is False
+          assert all(type(v) in (str,bool,int) for v in r.values())
+          assert not any(k in r for k in (
+              'original_guid_values','material_m_Name','original_external_paths',
+              'private_raw_bytes','source_shader_names','private_source_GUIDs'))
+          print('T2_ORIGINAL_GUID_SAFE_ASSERTIONS pass')
+          PY
+      - name: Delete staged original assets and temporary source before upload
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-external-guid-owner" \
+            "$RUNNER_TEMP/t2-original-external-guid-target" \
+            "$GITHUB_WORKSPACE/t2-original-external-guid-zip2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-fileidentifier-guid-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-original-external-guid-safe.json
+          if-no-files-found: error
+          retention-days: 7
