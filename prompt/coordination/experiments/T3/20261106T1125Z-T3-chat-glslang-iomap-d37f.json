@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+  "issue_id": "RENDER-002",
+  "status": "completed_source_only_candidate_flags_no_improvement",
+  "source_ref": "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "experiment_key": "T3-Particle108-4SHA-fourpair-glslang-HLSL-iomap-auto-location-alternate-compilation-v1",
+  "resource_key": "T3-private-four-original-Particle108-IOmap-compiler-runner",
+  "workflow": ".github/workflows/raft-t3-particle108-glslang-io-map.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42210538214",
+  "job_id": 127867804070,
+  "conclusion": "success",
+  "source_free_tests_passed": 8,
+  "original_owner_SHAs_verified": 4,
+  "original_scene_SHAs_verified": 6,
+  "counts": {
+    "source_pairs_linked": 4,
+    "baseline": {
+      "valid_stage_compiles": 8,
+      "pairs_compared": 4,
+      "pairs_linked": 2,
+      "missing_fragment_locations": 0,
+      "same_location_type_mismatches": 2
+    },
+    "iomap": {
+      "valid_stage_compiles": 8,
+      "pairs_compared": 4,
+      "pairs_linked": 2,
+      "missing_fragment_locations": 0,
+      "same_location_type_mismatches": 2
+    },
+    "auto_map_locations": {
+      "valid_stage_compiles": 8,
+      "pairs_compared": 4,
+      "pairs_linked": 2,
+      "missing_fragment_locations": 0,
+      "same_location_type_mismatches": 2
+    },
+    "both": {
+      "valid_stage_compiles": 8,
+      "pairs_compared": 4,
+      "pairs_linked": 2,
+      "missing_fragment_locations": 0,
+      "same_location_type_mismatches": 2
+    }
+  },
+  "interpretation": "Independent-stage glslang HLSL --hlsl-iomap, --auto-map-locations and both are NOT sufficient to restore SPIR-V stage interface; they reproduce baseline two existing Location type mismatches. Previous original/generated HLSL semantics link 4/4, so next test must address paired-stage semantic linking or proven mapping of SPIRV output locations; not blindly coerce widths.",
+  "limits": {
+    "Unity_game_asset_modified": false,
+    "Android_Adreno_pixels_verified": false,
+    "exact_source_semantic_to_roundtrip_SPIRV_Location_identity_proven": false,
+    "RENDER_002_OPEN": true
+  },
+  "next_step": "Private paired glslang HLSL stage link with 4 authentic pairs and spirv-val, or independently recover field-semantic to SPV numeric Location binding with unambiguous disassembly; no authored source shader patch until verified.",
+  "updated_at": "2026-11-06T11:30:02.843Z"
+}
