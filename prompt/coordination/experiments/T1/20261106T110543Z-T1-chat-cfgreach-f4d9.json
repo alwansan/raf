@@ -1,0 +1,91 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T110543Z-T1-chat-cfgreach-f4d9",
+  "issue_id": "WATER-001",
+  "origin": "chat",
+  "hypothesis": "Bounded CFG may-reach sets on authentic FFT slot0 can narrow ambiguous Function-local direct writers, with conservative guards for aliases/initialization and an independent hazard-cause control.",
+  "source_commit": "22c0a6f6017286d30b0f3c4fcb6550d924ceb3a4",
+  "input_hashes": [
+    "alwansan/raf zip2 source @15964ea8f246b6e076ce26b60931ee2e1a9a2385 (ZIP2 original exact-source gate; private bytes not published)"
+  ],
+  "tool_versions": {
+    "host": "GitHub Ubuntu-24.04",
+    "spirv-dis": "spirv-tools via apt in existing workflow; exact apt version not asserted"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_spirv_reaching_stores.py -v",
+    "python3 -m scripts.t1_fft_spirv_reaching_stores \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "Branches with distinct store candidates remain ambiguous",
+    "Uninitialized branch/path blocks source-proof",
+    "Unreachable or overwritten stores excluded",
+    "Loop backedges retained",
+    "Indirect alias writes and escaped pointers block uniqueness",
+    "CopyMemory FROM local is read-only, TO local flags hazard",
+    "Malformed basic-block targets reject input",
+    "No raw private SPIR-V SSA identifiers or literals leave reporter"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42208932160",
+  "artifact_urls": [],
+  "budget": "One 20-minute capped Ubuntu-24.04 source-authentic workflow at each distinct question; no Unity/Android runner or heavyweight build; no raw source artifact",
+  "status": "completed_scoped_provenance",
+  "observed_result": {
+    "first_pass": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42208261641",
+      "job_id": 127860217360,
+      "conclusion": "success",
+      "synthetic": "13/13 PASS"
+    },
+    "hazard_refinement": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42208932160",
+      "job_id": 127862461434,
+      "conclusion": "success",
+      "synthetic": "16/16 PASS"
+    },
+    "private_source": "Recovered SHA-pinned ZIP2 original FFT and validated 3 image read roles; source and trace removed by workflow cleanup.",
+    "sites": [
+      {
+        "site": 0,
+        "role": "source",
+        "static_direct_stores": 3,
+        "reachable_direct_stores": 1,
+        "writer": "float32 OpVectorShuffle",
+        "hazard": "alias_store"
+      },
+      {
+        "site": 1,
+        "role": "butterfly",
+        "static_direct_stores": 3,
+        "reachable_direct_stores": 1,
+        "writer": "float32 OpVectorShuffle",
+        "hazard": "alias_store"
+      },
+      {
+        "site": 2,
+        "role": "butterfly",
+        "static_direct_stores": 8,
+        "reachable_direct_stores": 1,
+        "writer": "float32 OpVectorShuffle",
+        "hazard": "alias_store"
+      }
+    ],
+    "uninitialized_load_paths": false,
+    "unique_semantic_origin_proven": false,
+    "original_authored_kernel_mapping_proven": false,
+    "android_water_pixels_proven": false
+  },
+  "rejected_hypotheses": [
+    "Every one of the 3/8 static direct candidate OpStores can reach the lane load: CFG shows only one direct candidate may reach for all three sites (both x/y).",
+    "One CFG direct writer safely proves the original coordinate value: rejected by an alias_store hazard along all observed lanes."
+  ],
+  "limitations": [
+    "CFG analysis tracks exact Function-local direct stores and conservatively flags aliases; does NOT prove reaching write through aliases, pointer offsets, or original integer semantic origin",
+    "No authenticated original Unity kernel identity binding, no original-vs-Unity parity, no Adreno or Android device water result",
+    "The term alias_store denotes potential unknown write, not necessarily a wrong pixel or confirmed alias bug."
+  ],
+  "integration_commit": "22c0a6f6017286d30b0f3c4fcb6550d924ceb3a4",
+  "next_step": "For each butterfly load, statically classify the alias_store pointer chain (exact OpCopyObject vs OpAccessChain/indexed component vs Phi/Select) under source pin. Then incorporate only provably identical-pointer overwrites or remain fail-closed; no speculative shader coordinate rewrite.",
+  "at": "2026-11-06T11:17:39.220Z"
+}
