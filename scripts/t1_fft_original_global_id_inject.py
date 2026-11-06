@@ -20,6 +20,21 @@ TYPES = {
     "OpTypeInt", "OpTypeFloat", "OpTypeVector", "OpTypePointer",
 }
 EXPECTED_MEMORY_MODEL = "OpMemoryModel Logical GLSL450"
+SAFE_ERRORS = {
+    "Original SPIR-V assembly size invalid": "input_size",
+    "Original shader exceeds bound or instrumentation already applied": "already_instrumented_or_size",
+    "Shader capability not proven": "shader_capability",
+    "Expected Vulkan GLSL450 memory model not proven": "memory_model",
+    "Expected exactly one compute entry point": "compute_entry",
+    "Original already declares GlobalInvocationId": "existing_builtin",
+    "Original type/function section not found": "type_or_function",
+    "Unexpected SPIR-V logical layout": "logical_layout",
+    "Compute entry function ID not found": "entry_function",
+    "Compute entry function block not found": "entry_block",
+    "Original entrypoint instruction insertion invalid": "entry_instruction",
+    "Injected dispatch Input did not preserve uniqueness": "output_injection",
+    "Private assembly outside byte limit": "file_size",
+}
 
 
 def _type_for(types, op, operands):
@@ -149,7 +164,14 @@ def main():
         updated = inject(args.input.read_text(encoding="utf-8"))
         with args.output.open("x", encoding="utf-8") as target:
             target.write(updated)
-    except (OSError, UnicodeError, ValueError):
+    except ValueError as error:
+        reason = SAFE_ERRORS.get(str(error), "unclassified_validation")
+        print("RAFT_T1_ORIGINAL_GID_DIAGNOSTIC " +
+              json.dumps({"reason": reason}, sort_keys=True), flush=True)
+        parser.exit(2, "Private original dispatch builtin probe could not be proven\n")
+    except (OSError, UnicodeError):
+        print("RAFT_T1_ORIGINAL_GID_DIAGNOSTIC " +
+              json.dumps({"reason": "private_file_io"}), flush=True)
         parser.exit(2, "Private original dispatch builtin probe could not be proven\n")
     print("RAFT_T1_ORIGINAL_DISPATCH_INPUT_INJECT " + json.dumps({
         "status": "injected_original_spirv_builtin_prerequisite_only",
