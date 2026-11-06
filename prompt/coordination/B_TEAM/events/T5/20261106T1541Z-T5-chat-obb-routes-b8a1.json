@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1541Z-T5-chat-obb-routes-b8a1",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1541Z-T5-chat-obb-routes-b8a1",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T16:03:25.853Z",
+  "summary": "CI42248117179 SUCCESS authenticated original owner-tested run42058825739 signed OBB ZIP metadata: 39 OBB entries, 5/5 original FMOD bank jar paths and lengths totaling 123817498B, 29/29 original pinned Haptics WAV jar paths and lengths totaling 32733104B, one Unity Data member, all local headers match. 17/17 source-free tests; 6991 strict HTTP206 bytes / 86 requests. Outer GitHub checkpoint wrapper basenames differ from logical delivery names, not proof of wrong APK package or corrupted OBB. Prior original full OBB SHA CI42230326050 valid. Phone OBB mount/FMOD/Unity shader or water NOT verified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42248117179",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_SIGNED_OBB_JAR_ASSET_ROUTES_2026-11-06.md"
+  ],
+  "limits": "Old immutable signed archive metadata only; no full content individual bank verification this experiment, actual device read, current game build or shader/water/graphics readiness.",
+  "next_step": "Correlate original device installed main.89 OBB hash and fmod.bank_root/device resource reads; avoid duplicating old source SHA."
+}
