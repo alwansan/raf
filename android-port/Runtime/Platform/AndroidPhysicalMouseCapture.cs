@@ -238,7 +238,14 @@ namespace RaftAndroid.Platform
         {
             using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
             using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                // During Android activity teardown there may be no UI thread
+                // target. Fail softly via the existing request/probe/release
+                // fallbacks instead of dereferencing a null JNI wrapper.
+                if (activity == null)
+                    throw new InvalidOperationException("Unity Activity unavailable");
                 activity.Call("runOnUiThread", new AndroidJavaRunnable(() => work()));
+            }
         }
 
         // Android can revoke pointer capture without Unity focus callbacks.
@@ -279,7 +286,7 @@ namespace RaftAndroid.Platform
                     {
                         using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
                         using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
-                        using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
+                        using (var view = activity == null ? null : activity.Call<AndroidJavaObject>("getCurrentFocus"))
                         {
                             int probedIdentity = ViewIdentity(view);
                             int requestedIdentity = Volatile.Read(ref captureViewIdentity);
@@ -302,6 +309,7 @@ namespace RaftAndroid.Platform
                 });
             }
             catch (AndroidJavaException) { ObserveNativeCapture(token, false); }
+            catch (InvalidOperationException) { ObserveNativeCapture(token, false); }
         }
 
         private void RequestCapture()
@@ -331,7 +339,7 @@ namespace RaftAndroid.Platform
                     {
                         using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
                         using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
-                        using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
+                        using (var view = activity == null ? null : activity.Call<AndroidJavaObject>("getCurrentFocus"))
                         {
                             // Do not steal focus from Unity, nor trap the user
                             // when activity/menu does not own a focused view.
@@ -353,6 +361,7 @@ namespace RaftAndroid.Platform
                 });
             }
             catch (AndroidJavaException) { ObserveNativeCapture(currentEpoch, false); }
+            catch (InvalidOperationException) { ObserveNativeCapture(currentEpoch, false); }
         }
 
         private static void ReportReleaseOutcome(string result)
@@ -407,7 +416,7 @@ namespace RaftAndroid.Platform
                     {
                         using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
                         using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
-                        using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
+                        using (var view = activity == null ? null : activity.Call<AndroidJavaObject>("getCurrentFocus"))
                         {
                             // Same target rule as before. Distinguish skipped
                             // UI-thread calls from a successful *invocation*.
@@ -436,6 +445,10 @@ namespace RaftAndroid.Platform
                 });
             }
             catch (AndroidJavaException)
+            {
+                ReportReleaseOutcome("ui_dispatch_exception");
+            }
+            catch (InvalidOperationException)
             {
                 ReportReleaseOutcome("ui_dispatch_exception");
             }

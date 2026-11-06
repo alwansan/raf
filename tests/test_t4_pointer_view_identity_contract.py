@@ -98,7 +98,7 @@ class PointerViewIdentityAudit(unittest.TestCase):
         self.assertNotIn("GetStatic<AndroidJavaObject>", captured)
         self.assertNotIn("getCurrentFocus", captured)
         self.assertIn(
-            'using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))',
+            'using (var view = activity == null ? null : activity.Call<AndroidJavaObject>("getCurrentFocus"))',
             release)
         self.assertIn("ViewIdentity(view) != releaseViewIdentity", release)
 
@@ -120,6 +120,32 @@ class PointerViewIdentityAudit(unittest.TestCase):
         self.assertIn("native_release_confirmed=false", helper)
         self.assertIn("catch (Exception)", helper)
         self.assertNotIn("ReportReleaseOutcome(", method_body(source, "Update"))
+
+    def test_missing_unity_activity_falls_back_before_jni_view_access(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        dispatcher = source.split("private static void OnAndroidUi(Action work)", 1)[1]
+        dispatcher = dispatcher.split("private void ObserveNativeCapture", 1)[0]
+        guard = dispatcher.index("if (activity == null)")
+        dispatch = dispatcher.index('activity.Call("runOnUiThread"')
+        self.assertLess(guard, dispatch)
+        self.assertIn('throw new InvalidOperationException("Unity Activity unavailable");',
+                      dispatcher)
+        # Dispatch failure is handled by existing safe observer/release
+        # categories; the UI callback may also see activity teardown later.
+        for name in ("ProbeCapturedPointer", "RequestCapture", "ReleaseCapture"):
+            body = method_body(source, name)
+            with self.subTest(name=name):
+                self.assertIn("catch (InvalidOperationException)", body)
+                self.assertIn(
+                    'activity == null ? null : activity.Call<AndroidJavaObject>("getCurrentFocus")',
+                    body)
+                self.assertNotIn(
+                    'using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))',
+                    body)
+        release = method_body(source, "ReleaseCapture")
+        self.assertIn('ReportReleaseOutcome("ui_dispatch_exception")', release)
+        self.assertIn('result = "focus_view_unavailable"', release)
+        # No extra telemetry categories, Unity mouse axis or touch semantics.
 
     def test_epoch_guards_do_not_encode_view_identity(self):
         source = SOURCE.read_text(encoding="utf-8")
