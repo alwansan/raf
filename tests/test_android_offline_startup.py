@@ -181,6 +181,44 @@ class AndroidOfflineStartupTests(unittest.TestCase):
             self.assertEqual(source.read_text(), original)
             self.assertEqual(meta.read_bytes(), b'guid: synthetic-settings\n')
 
+    def test_b13_silent_corrupt_backup_refused_before_original_mutation(self):
+        # A successful copy2 return is not proof that an original C# or GUID
+        # metadata backup is usable for rollback. Exercise each payload.
+        import shutil
+        original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
+        guid = b'guid: synthetic-original-settings\\n'
+        for corrupt_name in ('Settings.cs', 'Settings.cs.meta'):
+            with self.subTest(corrupt_name=corrupt_name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                project = root / 'project'
+                assets = project / 'Assets/Assembly-CSharp'
+                assets.mkdir(parents=True)
+                source = assets / 'Settings.cs'
+                meta = assets / 'Settings.cs.meta'
+                source.write_text(original)
+                meta.write_bytes(guid)
+                backup = root / 'backup'
+                real_copy = shutil.copy2
+
+                def corrupt_but_report_success(src, dst, *args, **kwargs):
+                    if Path(dst).name == corrupt_name:
+                        Path(dst).write_bytes(b'synthetic silent backup corruption')
+                        return dst
+                    return real_copy(src, dst, *args, **kwargs)
+
+                with patch.dict('scripts.adapt_android_offline_startup.PINS',
+                                {'Settings': fingerprint(original)}, clear=True):
+                    with patch('scripts.adapt_android_offline_startup.shutil.copy2',
+                               side_effect=corrupt_but_report_success):
+                        with self.assertRaisesRegex(ValueError, 'backup is not byte-identical'):
+                            apply(project, backup, write=True)
+                    self.assertEqual(source.read_text(), original)
+                    self.assertEqual(meta.read_bytes(), guid)
+                    self.assertFalse(backup.exists(), 'corrupt backup must be removable for retry')
+                    self.assertTrue(apply(project, backup, write=True)['applied'])
+                    self.assertEqual((backup / source.name).read_text(), original)
+                    self.assertEqual((backup / meta.name).read_bytes(), guid)
+
     def test_b13_partial_backup_copy_failure_is_retriable_without_source_changes(self):
         from scripts import adapt_android_offline_startup as stage
         import shutil
