@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1957Z-T4-chat-profile-durable-create-q7b3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "original-local-profile-identity-persistence-creation-write-fault",
+  "status": "active",
+  "base_sha": "289b9711a1e26118a0af921c43b1a86112919328",
+  "approach": "In actual LocalProfileStore, separate CreateNew collision from write/flush failures so post-create IO faults cannot be swallowed and a generated but undurable profile ID advertised. Flush original profile writer then request FileStream.Flush(true) exactly once at creation; preserve existing stable identity and never regenerate bad IDs; add real compiled C# source / IL contract + synthetic fault-boundary test. No original game serializer or files modified.",
+  "intended_files": [
+    "android-port/Runtime/Platform/LocalProfileStore.cs",
+    "android-port/Tests/OfflineSessionIdentity/Program.cs"
+  ],
+  "experiment_key": "T4-offline-local-profile-durable-first-create-fsync-and-open-IOException-scope-dotnet8-v1",
+  "resource_key": "actual-local-profile-store-source-low-cost-dotnet8",
+  "related_work": [
+    "20261106T1946Z-T4-chat-original-load-cycles-h5m8 (7/7 original real CL LoadT)",
+    "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2 (7/7 original real CL SaveGame)",
+    "T5 20261105T1115Z original FileManager runtime scope completed/blocked, no current file ownership"
+  ],
+  "concurrent_work": "T4 scheduled 20261106T1943Z-T4-scheduled-r6k2 owns read-only owner native candidate evidence (INPUT-005) and native build 42281310905 remains in_progress. No overlap or edits to their files.",
+  "run_urls": [],
+  "updated_at": "2026-11-06T19:57:00Z",
+  "next_step": "Use compiled IL evidence negative control against original source, then real minimal C# patch. GitHub Actions A9 offline identity workflow should run automatically. If writing flush proves unsafe or compiled ABI unsupported, revert and leave documented blocked rather than claiming device durability."
+}
