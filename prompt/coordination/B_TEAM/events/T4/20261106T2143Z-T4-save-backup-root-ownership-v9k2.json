@@ -1,0 +1,16 @@
+{
+  "id": "T4-20261106T2143Z-save-backup-root-ownership-v9k2",
+  "owner": "T4",
+  "session_id": "20261106T2135Z-T4-chat-save-backup-owner-v9k2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Authenticated original SaveAndLoad path adapter previously trusted only its backup pathname after stage.rename. Synthetic staged replacement caused silent install without own backup or two foreign backup root deletions. RED CI42298749358 old source 15 existing pass + 3 new scenarios failed. Fix c294b76e captures stage directory dev/ino before rename, fail-closes backup identity before original C# install and before both cleanup routes. GREEN CI42298846571 passed 18/18 save path methods, 11 ZIP2 provider and 4 selector tests, private pinned original ZIP2 ILSpy and 16 original path expressions plus 14 Unix/Windows checks. No game .rgd/GUID edits, Android device proof or full concurrency lock; native run 42296450023 independent in progress.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42298749358",
+    "https://github.com/alwansan/raf/commit/c294b76e99332e0e04dad25f368b0ea27bd4fb36",
+    "https://github.com/alwansan/raf/actions/runs/42298846571",
+    "https://github.com/alwansan/raf/actions/runs/42296450023"
+  ],
+  "at": "2026-11-06T21:43:00Z"
+}
