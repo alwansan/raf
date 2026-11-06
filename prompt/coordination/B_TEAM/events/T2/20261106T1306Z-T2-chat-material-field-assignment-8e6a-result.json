@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a-result",
+  "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+  "owner": "T2",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T13:07:00Z",
+  "summary": "Real SHA-original Foam source/member to typed Material.SetVector receiver field audit CI42222313603 SUCCESS (11 sourcefree tests+Cecil negatives). Exactly one typed Material field used by the source-authenticated setter has exactly one original compiled stfld writer site in one method. Same writer method contains Material constructor, no Shader.Find/Renderer.material getter; direct stfld value producer unproven. No Material.shader Foam identity, 160B CB0 upload or Android water verified. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42222313603",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/cf5a01b3149128c8ca6ee995537896baf2df524b"
+  ],
+  "limits": "Material ctor same-method co-occurrence is not assignment producer proof; no original source names/bytes or method labels published; no game shader/meta/native alterations.",
+  "next_step": "Trace exact original stfld stack value back through local/ctor and Shader first formal; verify Foam material association separately before device shader integration."
+}
