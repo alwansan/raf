@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1721Z-T3-chat-dxbc-operands-6e2a",
+  "issue_id": "RENDER-002",
+  "experiment_key": "T3-PARTICLE108-SHA15964-4VSFS-8SHDR-DCL-operand-register-parse-v1",
+  "hypothesis": "Source-original SHDR/SHEX DCL operands can be parsed as immediate indexed register declarations without RDEF; stage/keyword layouts may differ and must not be reused blindly.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_free_run_url": "https://github.com/alwansan/raf/actions/runs/42261376386",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42261563646",
+  "run_id": 42261563646,
+  "job_id": 128042538079,
+  "immutable_run_sha": "57fca38271f2dc88fea64b156d8bb4ac9dc5938e",
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
+    "runner": "ubuntu-24.04",
+    "format": "Microsoft DirectX-Headers D3D10/11 tokenized shader operands"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_operand_bindings.py' -v",
+    "python3 -m scripts.t3_particle108_original_dxbc_operand_bindings --original $RUNNER_TEMP/t3-original-private-DXBC-OPERANDS --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-particle108-operands-safe.json"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-original-operands.yml",
+  "controls": [
+    "13 synthetic cases on source-free CI, complete opcode+operand fixtures after initial test-only failure",
+    "four pairs SHA-original shader owner and six scenes pin checks",
+    "strict operand type/number dimensions and per-instruction bounds, non-immediate modes/unknown forms fail closed"
+  ],
+  "budget": "18 min Ubuntu 24.04, 540s original parser limit, 4 SHA-authenticated private asset owners / 6 original scenes, safe counts only",
+  "status": "completed",
+  "observed_result": {
+    "source_free": "13/13 PASS",
+    "source_original": "SUCCESS",
+    "source_original_scenes_verified": 6,
+    "source_original_owner_files_verified": 4,
+    "renderer_particle_material_slots": 108,
+    "source_keyword_vsfs_pairs": 4,
+    "stage_layouts_parsed": 8,
+    "declaration_operand_records": 44,
+    "cbuffer_operand_records": 24,
+    "srv_operand_records": 10,
+    "sampler_operand_records": 10,
+    "uav_operand_records": 0,
+    "immediate_index_dims_1": 20,
+    "immediate_index_dims_2": 24,
+    "repeated_exact_declaration_private_keys_within_stage": 0,
+    "vertex_full_declaration_operand_layouts_distinct_across_4_keywords": 4,
+    "fragment_full_declaration_operand_layouts_distinct_across_4_keywords": 2
+  },
+  "rejected_hypotheses": [
+    "All four original vertex shader keyword variants use the same full declaration operand tuples.",
+    "Every original fragment shader keyword variant has an identical full declaration operand tuple set."
+  ],
+  "limitations": [
+    "The reported 4/2 distinct full operand layouts can reflect changed cbuffer second indices/sizes and/or first register indices; source does not yet isolate which.",
+    "No DCL array span/cbuffer byte offset proof; no D3D11-Vulkan descriptor mapping; no authored ShaderLab repair or phone pixel proof.",
+    "Raw original shader instructions, identifiers and register indexes are private; they were not published in the report."
+  ],
+  "integration_commits": [
+    "b1bb6dae358d024897f26fbb9d5fa21404dab5e8",
+    "7c04928db1f45f4e66a656286bacc9e055bfea10",
+    "646a2d5f76a361e8c36313b2dc071d0ec77e329e",
+    "c312808ddc1c7aebd1bf72b021d8d235eea985d9",
+    "457e1b589995c21a3a9f4766d97406e3e7831891",
+    "d522b365ab0dbd898a887923adc60ed56f6a56bf"
+  ],
+  "next_step": "Separate primary register slot differences from 2D second-index/CB size differences for exact original four VS/FS keyword pairs, then compare per-variant SPIR-V descriptor counts and dynamic dimensions before restoring ShaderLab. RENDER-002 OPEN/NOT_READY."
+}
