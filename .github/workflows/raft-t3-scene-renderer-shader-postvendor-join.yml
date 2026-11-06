@@ -6,6 +6,11 @@ name: T3 RENDER-002 genuine original scene Shader48 to postvendor GUID Dummy pri
 # question. Keep repeat of the expensive 12-owner export explicit/manual only.
 on:
   workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t3_particle108_postvendor_delta.py'
+      - 'tests/test_t3_particle108_postvendor_delta.py'
 permissions:
   contents: read
 concurrency:
@@ -41,6 +46,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_restore_tmp_shaders.py' -v
           python3 -m unittest discover -s tests -p 'test_restore_postfx_shaders.py' -v
           python3 -m unittest discover -s tests -p 'test_restore_volumetric_shaders.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_postvendor_delta.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_material_shader_target.py' -v
           python3 -m unittest discover -s tests -p 'test_a13_exported_material_shader_guids.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
@@ -221,6 +227,25 @@ jobs:
           (Path(os.environ['RUNNER_TEMP'])/'t3-original-export-private-snapshot.json').write_text(json.dumps(snapshot))
           print('T3_ORIGINAL_METADATA_SNAPSHOT_CREATED=true; values_private=true')
           PY
+      - name: Classify exact genuine source Particle108 Shader48 before vendor restorers
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_particle108_shaderlab_export_quality \
+            --original "$RUNNER_TEMP/b21-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-particle108-prevendor-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-particle108-prevendor-safe.json').read_text())
+          assert d['status']=='T3_ORIGINAL_PARTICLE108_REAL_SAMEEXPORT_SHADERLAB_CLASSIFIED'
+          assert d['exported_ShaderLab_source_status']=='ACTUAL_DUMMY_SHADER_TEXT_EXPORTER'
+          assert d['source_to_export_Shader48_trace_verified'] is True
+          print('T3_SOURCE_PARTICLE108_ACTUAL_PREVENDOR_DUMMY=true')
+          PY
       - name: Restore authentic TMP 3.0.6 Shader sources in disposable bounded export
         run: |
           set -euo pipefail
@@ -313,6 +338,30 @@ jobs:
             --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
             --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
             --out "$RUNNER_TEMP/t3-scene-Shader48-postvendor-aggregate.json"
+      - name: Verify same original Particle108 Shader48 after all three vendor restorers
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_particle108_shaderlab_export_quality \
+            --original "$RUNNER_TEMP/b21-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-particle108-postvendor-safe.json"
+          python3 -m scripts.t3_particle108_postvendor_delta \
+            --before "$RUNNER_TEMP/t3-particle108-prevendor-safe.json" \
+            --after "$RUNNER_TEMP/t3-particle108-postvendor-safe.json" \
+            --out "$RUNNER_TEMP/t3-particle108-vendor-delta-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-particle108-vendor-delta-safe.json').read_text())
+          assert d['status']=='T3_AUTHENTIC_PARTICLE108_POSTVENDOR_DELTA_CLASSIFIED'
+          assert d['source_original_particle_renderer_slots']==108
+          assert d['same_original_Shader48_selected_from_same_export_W1_B02'] is True
+          assert d['Unity_GPU_pixels_or_game_readiness_proven'] is False
+          print('T3_PARTICLE108_POSTVENDOR_SOURCE_IDENTITY_DELTA='+d['interpretation'])
+          PY
       - name: Publish ONLY safe aggregates, never staged game assets, original metadata, traces or vendor raw logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -324,5 +373,8 @@ jobs:
             ${{ runner.temp }}/t3-bounded-after-safe.json
             ${{ runner.temp }}/t3-bounded-delta-safe.json
             ${{ runner.temp }}/t3-scene-Shader48-postvendor-aggregate.json
+            ${{ runner.temp }}/t3-particle108-prevendor-safe.json
+            ${{ runner.temp }}/t3-particle108-postvendor-safe.json
+            ${{ runner.temp }}/t3-particle108-vendor-delta-safe.json
           retention-days: 7
           if-no-files-found: ignore
