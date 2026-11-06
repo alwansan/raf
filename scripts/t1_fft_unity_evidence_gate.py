@@ -25,6 +25,8 @@ def classify(record):
     imported, resolved, groups, errors = (record[k] for k in COUNTS)
     if resolved > imported or groups > resolved:
         raise ValueError('impossible Unity observation counts')
+    if not record['editor_invoked'] and record['editor_supports_compute']:
+        raise ValueError('compute support claimed without editor invocation')
     if not record['editor_invoked'] and (imported or resolved or groups):
         raise ValueError('observation without editor invocation')
     if not record['editor_supports_compute'] and (resolved or groups):
