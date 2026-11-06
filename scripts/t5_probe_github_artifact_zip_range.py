@@ -33,7 +33,7 @@ MAX_MEMBERS = 40000
 MAX_MANIFEST = 100_000
 PACKAGE = "com.alwansan.raft.androidtest"
 CONTENT_RANGE = re.compile(r"^bytes ([0-9]+)-([0-9]+)/([0-9]+)$")
-ZIP_PART = re.compile(r"\\.part[0-9]{3,6}$")
+ZIP_PART = re.compile(r"\.part[0-9]{3,6}$")
 
 
 class ProbeError(ValueError):
@@ -59,7 +59,7 @@ def _safe_json(content: bytes):
 
 
 def _safe_member(name: str):
-    if not name or name.startswith("/") or "\\\\" in name or ":" in name:
+    if not name or name.startswith("/") or "\\" in name or ":" in name:
         raise ProbeError("unsafe_zip_member")
     segments = (name[:-1] if name.endswith("/") else name).split("/")
     if not segments or any(part in ("", ".", "..") for part in segments):
