@@ -73,3 +73,4 @@ jobs:
 # T5 INTEGRATION-001 verified future 3-day native package retention 9of9 source CI 2026-11-06
 # T5 COORD-001 source-only alias event 20261106T1020Z-T5-chat-ledger-id-compat-c8e4; checkpoint index after event commit
 # T5 DISPLAY-003 original compiled Settings IL SHA-pinned oracle CI42204488410 report and event indexed 2026-11-06
+# T5 DISPLAY-003 resolved original same-type delegate graph CI42208532103 session 20261106T1104Z-T5-chat-resolution-delegate-6a2f
