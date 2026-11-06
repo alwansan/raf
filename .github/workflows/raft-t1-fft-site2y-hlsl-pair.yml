@@ -1,0 +1,86 @@
+name: T1 WATER-001 original FFT site2 Y versus HLSL50 roundtrip
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t1_fft_site2_y_hlsl_pair.py
+      - tests/test_t1_fft_site2_y_hlsl_pair.py
+      - .github/workflows/raft-t1-fft-site2y-hlsl-pair.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-site2y-original-hlsl-pair
+  cancel-in-progress: false
+
+jobs:
+  source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify 12 adversarial source-free pair controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_site2_y_hlsl_pair.py -v
+          python3 -m py_compile scripts/t1_fft_site2_y_hlsl_pair.py
+          echo 'RAFT_T1_FFT_SITE2Y_PAIR source_free=true actual_original=false'
+
+  private-original-cpu:
+    needs: source-only
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Install original shader CPU translators and exact UnityPy
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools python3-venv
+          python3 -m venv "$RUNNER_TEMP/t1-site2y-pair-venv"
+          "$RUNNER_TEMP/t1-site2y-pair-venv/bin/python" -m pip install -q --disable-pip-version-check UnityPy==1.25.4
+      - name: Reassemble exact original ZIP2 115978112 byte owner without LFS
+        run: |
+          set -euo pipefail
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 2097152
+          mkdir -p "$RUNNER_TEMP/t1-site2y-pair-zip2"
+          git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" init -q
+          git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1-site2y-pair-zip2" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1-site2y-pair-zip2" \
+            --destination "$RUNNER_TEMP/t1-site2y-pair-owner/Raft_Data/sharedassets0.assets"
+      - name: Authenticate one original compiled slot and compare HLSL roundtrip Y provenance
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t1-site2y-pair-venv/bin/python" -m scripts.t1_fft_site2_y_hlsl_pair \
+            --original-data "$RUNNER_TEMP/t1-site2y-pair-owner/Raft_Data"
+          echo 'RAFT_T1_FFT_SITE2Y_PAIR full_numeric_parity=false unity_editor=false android_water=false'
+      - name: Erase original bytes, translated HLSL and all private buffers
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/t1-site2y-pair-zip2" "$RUNNER_TEMP/t1-site2y-pair-owner" "$RUNNER_TEMP/t1-site2y-pair-venv"
