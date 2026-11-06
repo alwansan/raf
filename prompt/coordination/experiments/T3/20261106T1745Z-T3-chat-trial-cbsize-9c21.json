@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1745Z-T3-chat-trial-cbsize-9c21",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "experiment_key": "T3-DXBC-DECL-CB-SIZE16-VECTOR-SEMANTIC-SM4_SM5-SHA15964-PARTICLE108-8STAGE-v1",
+  "hypothesis": "Original VS/PS full DCL_CONSTANT_BUFFER 2D operand differences may be vector-count sizes (16 bytes each) rather than separate register slots. A zero second-index means UNKNOWN size in SM4-5, not an empty buffer; source-major version must be proved first.",
+  "public_spec_source": "https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/D3D12TokenizedProgramFormat.hpp",
+  "original_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42265293980",
+  "run_id": 42265293980,
+  "job_id": 128055508551,
+  "original_run_immutable_sha": "50037ee4896f03f0d56760827ef077c3aaee0dee",
+  "source_free_run_url": "https://github.com/alwansan/raf/actions/runs/42265061012",
+  "source_free_run_id": 42265061012,
+  "tools": {
+    "runner": "ubuntu-24.04",
+    "UnityPy": "1.23.0",
+    "repo_checkout_action": "11bd71901bbe5b1630ceea73d27597364c9af683",
+    "python": "python3"
+  },
+  "workflow_path": ".github/workflows/raft-t3-particle108-cb-vector-size.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_cb_size_semantics.py' -v",
+    "python3 -m scripts.t3_particle108_cb_size_semantics --original $RUNNER_TEMP/t3-original-private-CB-VECTORS --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-particle108-cb-vectors-safe.json"
+  ],
+  "original_sha_authentication": "exact 4 source owner assets and 6 original Renderer scenes pinned; 4 original keyword VS/PS pairs; Particle108 108 Material use slots",
+  "negative_controls": [
+    "12 source-free tests: CB size 16byte vectors, zero-unknown, nonzero, dynamic access bit, SM4.0/4.1, unsupported SM5.1+SM6, bad operand type/dimension, stage/scope",
+    "Original source must have 24 CB declarations consistent with earlier 42261563646 8 stage operand census, fail closed if mismatch"
+  ],
+  "status": "completed",
+  "run_outcome": "success",
+  "source_free_tests": "12/12 PASS",
+  "observed_original_counts": {
+    "original_CB_16byte_vector_size_declarations": 24,
+    "original_CB_declaration_stage_programs": 8,
+    "source_original_SM_4_0_stages": 8,
+    "original_CB_nonzero_known_size_declarations": 24,
+    "original_CB_zero_unknown_size_declarations": 0,
+    "original_CB_dynamic_access_declarations": 2,
+    "original_VS_CB_full_profile_distinct": 4,
+    "original_VS_CB_size_profile_distinct": 4,
+    "original_VS_CB_slot_profile_distinct": 3,
+    "original_VS_CB_slots_with_size_change": 3,
+    "original_PS_CB_full_profile_distinct": 2,
+    "original_PS_CB_size_profile_distinct": 2,
+    "original_PS_CB_slot_profile_distinct": 1,
+    "original_PS_CB_slots_with_size_change": 1
+  },
+  "proven_by_public_format": "In original SM4.0 CB declarations, second 2D immediate index is size measured in 16-byte (4x32-bit) vectors. 0 would mean unknown. Source-original 24 counts all known/nonzero, but values omitted.",
+  "rejected_hypotheses": [
+    "Distinct CB second indices in SM4.0 source necessarily indicate second register binding rather than CB byte/vector count",
+    "All original Particle108 fragment variants share identical CB declaration vector sizes despite same primary CB register slots",
+    "Some of the 24 original selected CB declarations have unknown-zero vector size"
+  ],
+  "limits": [
+    "Only 4 selected original VS/PS keyword pairs from one Shader48 linked to 108 Renderer Material uses; cannot generalize to all game shaders.",
+    "No raw private DXBC bytes, individual CB register indices, vector sizes, shader names/IDs or texture payloads published.",
+    "No original DXBC CB-to-Vulkan SPIR-V descriptor-set/binding comparison, ShaderLab pass restoration, Adreno pixels, water/FFT/particle smoke or APK test.",
+    "No new integrated graphical runtime fix; trial vote remains T3=لا يحتاج."
+  ],
+  "fix_commits": [
+    "40348aa974e074a010060a865249cb24317b8e21",
+    "ec899dcf4114d22bc0cbeef6ca71777e5d34756a",
+    "219763c511d78f8ea6473f860c2b499c8efa2fea",
+    "d5b74fa8022f23783d033da775bde281eb4b0ac8",
+    "5064380d04589ad0b9f617f6261b80a4d6d731ae"
+  ],
+  "vote": {
+    "round_id": "trial-20261106-r1",
+    "T3": "لا يحتاج",
+    "commit": "99658d34f59ce64a8f961e942c641882c0750110"
+  },
+  "next_step": "Stage/keyword-exact private SPIR-V descriptor pairing with original DXBC CB first register IDs and sizes, preserving SM4 vector semantics. Only integrated shader fix then device pixels justifies switching trial vote. RENDER-002 OPEN/NOT_READY."
+}
