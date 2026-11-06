@@ -3,3 +3,6 @@ session_id=20261106T2007Z-T3-chat-explicit-original-d52e
 source_zip2=15964ea8f246b6e076ce26b60931ee2e1a9a2385
 scope=8 original source stages, 16 private VKD3D compilations with A/B maps
 proprietary_outputs=none;native_build=none
+
+recheck=bounded public C helper exit code only, no private compiler stderr
+first_run=42286299737
