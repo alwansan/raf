@@ -3,9 +3,9 @@
   "origin": "scheduled",
   "owner": "T4",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "source_integrated_waiting_ci",
   "base_sha": "0dc71121565dca82c53366ac3fd3320b2496aa8b",
-  "updated_at": "2026-11-06T00:35:00Z",
+  "updated_at": "2026-11-06T00:42:00Z",
   "resumed_from_sessions": [
     "20261105T2339Z-T4-scheduled-f3n7",
     "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8"
@@ -20,5 +20,8 @@
   ],
   "shared_resource": "none; no Unity build",
   "acceptance": "Physical InputSystem mouse accepted regardless legacy flag; virtual RaftAndroidTouchLeft excluded; null/unadded excluded; original keyboard/touch unchanged; static test not device proof",
-  "next_step": "Implement narrowly scoped policy and test after checking head and overlapping T4 changes."
+  "next_step": "Run isolated Python source-policy test; then verify actual InputSystem physical mouse enumeration and pointer capture on signed Android build; do not claim device success from static tests.",
+  "production_commit": "24ee50022a681048ed5aec36de1a8d87d46dcf46",
+  "test_commit": "8a3de6f72d0fb89304cab37cc7f482ff0d7c425e",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261106T0035Z-T4-scheduled-k9m2.md"
 }
