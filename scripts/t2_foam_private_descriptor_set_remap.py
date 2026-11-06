@@ -21,6 +21,50 @@ from scripts.t2_foam_embedded_descriptor_layout import (
 from scripts.t2_foam_embedded_stage_io import reflect_stage
 from scripts.t2_foam_original_pair_compile import MAX_SPV
 
+# Never expose arbitrary exception text from source parsers/compiler. Only our
+# exact static classifications may appear in the public-safe status report.
+SAFE_FAILURE_CODES = frozenset((
+    "unbounded_or_misaligned_private_SPIRV",
+    "private_SPIRV_header_invalid",
+    "malformed_private_SPIRV_opcode_boundaries",
+    "malformed_private_descriptor_decoration",
+    "unbounded_SPIRV_decorated_register",
+    "duplicated_SPIRV_Binding_decoration",
+    "duplicated_SPIRV_DescriptorSet_decoration",
+    "incomplete_descriptor_decoration_pair",
+    "no_unique_reflected_SPIRV_descriptor_id",
+    "reflected_SPIRV_descriptor_cardinality_mismatch",
+    "SPIRV_resource_id_register_map_invalid",
+    "invalid_unique_stage_descriptor_set",
+    "private_binary_descriptor_reflection_id_drift",
+    "original_Foam_fragment_descriptor_set_missing",
+    "private_OpDecorate_does_not_match_reflection",
+    "source_fragment_descriptor_set_not_single_zero",
+    "ambiguous_reflected_binding_alias",
+    "already_moved_original_fragment_descriptor",
+    "private_SPIRV_non_Decorate_words_changed",
+    "source_program_not_modified_only_as_expected",
+    "original_SPIRV_register_or_instruction_drift",
+    "SPIRV_reflection_after_relocation_incomplete",
+    "source_stage_resource_class_or_binding_drift",
+    "post_relocation_extra_set_or_missing_binding",
+    "post_relocation_original_resource_id_drift",
+    "no_unused_private_fragment_descriptor_set",
+    "original_stage_descriptor_conflict_pin_missing",
+    "remapped_shader_still_has_cross_stage_collision",
+    "reflection_mismatch_after_descriptor_relocation",
+    "private_original_candidate_or_scratch_invalid",
+    "unsafe_numeric_output",
+))
+
+
+def safe_failure_code(exc):
+    message = str(exc)
+    if isinstance(exc, ValueError) and message in SAFE_FAILURE_CODES:
+        return message
+    return "unclassified_private_error"
+
+
 SPIRV_MAGIC = 0x07230203
 OP_DECORATE = 71
 DECOR_BINDING = 33
@@ -274,6 +318,7 @@ def main():
     except BaseException as exc:
         result = {"status": "blocked_private_fragment_descriptor_set_relocation",
                   "failure_type": type(exc).__name__,
+                  "safe_failure_code": safe_failure_code(exc),
                   "private_binary_or_original_shader_source_published": False}
         code = 2
     if out.parent.is_dir() and _physical(out) and not out.exists():
