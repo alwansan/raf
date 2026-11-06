@@ -62,7 +62,11 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
            "selected_shaderlab_no_subprogram_marker":False,
            "selected_shaderlab_complete_program_passes":0,
            "selected_shaderlab_total_passes":0,
-           "selected_shaderlab_balanced_braces":False}
+           "selected_shaderlab_balanced_braces":False,
+           "selected_shaderlab_subshader_count":0,
+           "selected_shaderlab_one_pass_per_subshader":False,
+           "selected_shaderlab_all_subshaders_programmed":False,
+           "selected_shaderlab_active_subshader_runtime_verified":False}
     if ptr[1] in BUILTIN:
         if ptr[2]!=0:
             raise ValueError("invalid_builtin_original_particle_Shader48_export_type")
@@ -104,10 +108,22 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
     if (type(coverage) is not dict
         or type(coverage.get("pass_count")) is not int
         or type(coverage.get("passes_with_complete_program")) is not int
-        or type(coverage.get("pass_braces_balanced")) is not bool):
+        or type(coverage.get("pass_braces_balanced")) is not bool
+        or type(coverage.get("subshader_pass_counts")) is not list
+        or type(coverage.get("subshader_programmed_pass_counts")) is not list
+        or type(coverage.get("all_subshaders_programmed")) is not bool
+        or coverage.get("active_subshader_runtime_verified") is not False):
         raise ValueError("untrusted_exact_source_export_ShaderLab_parser")
     count=coverage["pass_count"];good=coverage["passes_with_complete_program"]
-    if count<0 or good<0 or good>count:
+    sub_counts=coverage["subshader_pass_counts"]
+    sub_good=coverage["subshader_programmed_pass_counts"]
+    if (type(count) is not int or type(good) is not int
+        or count<0 or good<0 or good>count
+        or len(sub_counts)!=len(sub_good) or len(sub_counts)>128
+        or any(type(n) is not int or n<0 for n in sub_counts)
+        or any(type(n) is not int or n<0 for n in sub_good)
+        or any(complete>total for complete,total in zip(sub_good,sub_counts))
+        or sum(sub_counts)!=count or sum(sub_good)!=good):
         raise ValueError("nonsensical_original_particle_ShaderLab_pass_count")
     basic["selected_shaderlab_file_present"]=True
     basic["selected_shaderlab_dummy_exporter_marker"]="//DummyShaderTextExporter" in code
@@ -115,13 +131,22 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
     basic["selected_shaderlab_complete_program_passes"]=good
     basic["selected_shaderlab_total_passes"]=count
     basic["selected_shaderlab_balanced_braces"]=coverage["pass_braces_balanced"]
+    basic["selected_shaderlab_subshader_count"]=len(sub_counts)
+    basic["selected_shaderlab_one_pass_per_subshader"]=bool(sub_counts) and all(
+        n==1 for n in sub_counts)
+    basic["selected_shaderlab_all_subshaders_programmed"]=coverage["all_subshaders_programmed"]
+    basic["selected_shaderlab_active_subshader_runtime_verified"]=False
     if basic["selected_shaderlab_dummy_exporter_marker"]:
         basic["exported_ShaderLab_source_status"]="ACTUAL_DUMMY_SHADER_TEXT_EXPORTER"
     elif basic["selected_shaderlab_no_subprogram_marker"]:
         basic["exported_ShaderLab_source_status"]="NO_PROGRAM_SUBPROGRAMS_EXPORTED"
-    elif not coverage["pass_braces_balanced"] or count==0 or good==0:
+    elif (not coverage["pass_braces_balanced"] or count==0 or good==0
+          or not sub_counts or not coverage["all_subshaders_programmed"]):
         basic["exported_ShaderLab_source_status"]="INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER"
-    elif count!=1:
+    elif not basic["selected_shaderlab_one_pass_per_subshader"]:
+        # Alternate SubShaders are fallbacks, not sequential Passes.
+        # Original one normal Pass must match EACH exported alternative,
+        # not the sum of all mutually exclusive alternatives.
         basic["exported_ShaderLab_source_status"]="CUSTOM_PASS_COUNT_DIFFERS_FROM_ORIGINAL"
     else:
         basic["exported_ShaderLab_source_status"]="STRUCTURAL_ONE_PASS_PROGRAM_PRESENT_NOT_EQUIVALENCE"
