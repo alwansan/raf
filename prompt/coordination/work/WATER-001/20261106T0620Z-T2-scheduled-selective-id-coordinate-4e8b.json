@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T0620Z-T2-scheduled-selective-id-coordinate-4e8b",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "f112131561060d8a626018ec784b9b8c86a67cba",
+  "intended_files": [
+    "scripts/t2_foam_private_descriptor_set_remap.py",
+    "tests/test_t2_foam_private_descriptor_set_remap.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0620Z-T2-scheduled-selective-id-coordinate-4e8b.md"
+  ],
+  "hypothesis": "verify_selective_reflection wrongly compares pre-remap descriptor set coordinates unchanged for moved IDs; normalize expected coordinate before checking ID; preserve identity and CB0",
+  "experiment_key": "foam-selective-reflection-id-coordinate-expected-remap-sourcefree-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "20261106T0518Z-T2-scheduled-reflection-id-guard-6c91",
+    "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
+  ],
+  "updated_at": "2026-11-06T06:20:00Z"
+}
