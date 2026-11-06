@@ -1,0 +1,18 @@
+{
+  "id": "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+  "session_id": "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "type": "source_ci_regression_coverage_verified",
+  "timestamp": "2026-11-06T09:48:00Z",
+  "at": "2026-11-06T09:48:00Z",
+  "summary": "Integrated previously unexecuted post-446bc1f0 View identity source audit in T4 isolated mouse workflow; exact commit e3fb678, CI42197616749 success and job logs show 4/4 new tests actually executed, 44/44 Python total, original Unity2021 managed ABI compile and source-gates successful. No Android phone or native APK; scheduled release-target gap unchanged. INPUT-005 OPEN; NOT_READY 0/3.",
+  "source_commit": "e3fb67812368fb6cafd327c9e99ce1886eea1b57",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42197616749",
+    "prompt/coordination/experiments/T4/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.md"
+  ],
+  "device": "NOT_TESTED"
+}
