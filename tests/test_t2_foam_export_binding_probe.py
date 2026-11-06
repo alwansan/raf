@@ -132,6 +132,35 @@ class FoamExportBindingProbeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 inspect_export(project)
 
+    def test_valid_yaml_mat_missing_material_document_fails_closed(self):
+        # Valid YAML syntax is insufficient: .mat must carry Unity class 21.
+        cases = (
+            "%YAML 1.1\\n%TAG !u! tag:unity3d.com,2011:\\n",
+            "%YAML 1.1\\n--- !u!1 &1\\nGameObject:\\n  m_Name: Fixture\\n",
+            "%YAML 1.1\\n--- !u!21\\nMaterial:\\n  m_Name: Fixture\\n",
+        )
+        for content in cases:
+            with tempfile.TemporaryDirectory() as d:
+                project, shader, meta, material = fixture(d)
+                material.write_text(content.replace("\\n", "\n"), encoding="utf-8")
+                with self.subTest(content=content[:26]), self.assertRaisesRegex(
+                    ValueError, "exported_Material_file_missing_Material_document"
+                ):
+                    inspect_export(project)
+
+    def test_non_material_yaml_asset_does_not_require_material_document(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, shader, meta, material = fixture(d)
+            material.unlink()
+            generic_asset = project / "Assets" / "Generic.asset"
+            generic_asset.write_text(
+                "%YAML 1.1\\n--- !u!1 &1\\nGameObject:\\n  m_Name: Fixture\\n".replace("\\n", "\n"),
+                encoding="utf-8",
+            )
+            report = inspect_export(project)
+            self.assertEqual(report["material_documents"], 0)
+            self.assertFalse(report["Foam_Material_links_at_runtime_verified"])
+
     def test_duplicate_Foam_ShaderLab_identity_refused(self):
         with tempfile.TemporaryDirectory() as d:
             project, shader, meta, material = fixture(d)

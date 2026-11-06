@@ -70,6 +70,11 @@ def _material_target_counts(entries: list[Path], target_guid: str) -> dict[str, 
         except UnicodeError as exc:
             raise ValueError("invalid_YAML_encoding") from exc
         headers = list(HEADER.finditer(body))
+        # A Unity .mat file must contain at least one serialized Material.
+        # Without this guard a valid-YAML, wrong-class .mat is silently skipped
+        # and the reported Foam GUID inventory appears complete.
+        if path.suffix == ".mat" and not any(h.group(1) == "21" for h in headers):
+            raise ValueError("exported_Material_file_missing_Material_document")
         for index, header in enumerate(headers):
             if header.group(1) != "21":
                 continue
