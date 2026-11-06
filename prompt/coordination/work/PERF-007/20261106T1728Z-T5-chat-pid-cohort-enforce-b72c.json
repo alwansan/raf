@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "PERF-007",
   "track": "integration-cl-surface-pid-epoch-guard",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1a5170e8bccb64d4f88bf30dc5013f1dd363347b",
-  "updated_at": "2026-11-06T17:31:52.690Z",
+  "updated_at": "2026-11-06T17:38:11.233Z",
   "resumed_from_sessions": [
     "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
     "20261106T1649Z-T5-scheduled-runtime-attribution-c82f",
@@ -33,12 +33,51 @@
   "resource_key": "read-only pinned CL two JSONL blobs 374587+646527; one existing T5 source-only workflow run",
   "hypothesis": "Original T5 LogRaft SurfaceFlinger cohort script groups fresh samples regardless of independently verified Raft PID lifecycle; scheduled T5 produced process-epoch auditor but not integrated. Reuse exact scheduled audit to suppress unverified cross-process FPS cohorts in real report/compare while preserving previously verified one-PID genuine CL 190-row conclusion.",
   "coordination": "Complement T5 scheduled PID audit source without modifying its scripts/t5_cl_pid_epoch_audit.py or tests; only integrate into earlier chat-owned cohort reader and own new integration tests. T1/T2/T3 graphics and T4 local/world and Unity native workflow untouched. No native dispatch/cancel or alterations to previously authenticated source CL commit.",
-  "next_step": "Repair scheduled helper's unverified running PID split to isolate unknown interval as own epoch (not relax test), rerun source-only CI with 18+4+7 tests and pinned original CL 190 rows.",
+  "next_step": "Scope finished and files released. Future valid same-APK/same-OBB/same-scene Unity+SurfaceFlinger time windows needed before actual FPS comparisons; shader pass and FFT render errors remain P0. T5 scheduled has independent later work and must not overwrite it.",
   "related_work": [
     "prompt/coordination/work/PERF-007/20261106T1649Z-T5-scheduled-runtime-attribution-c82f.json"
   ],
   "ci_intermediate_failure": {
     "run_id": 42262250870,
     "reason": "4 scheduled audit tests: test_unknown_pid_breaks_cohort 2!=3; discovered pre-existing unverified interval epoch split off-by-one, while 18 older tests pass; add code file to scope before fixing same-T5 source; leave scheduled checkpoint unchanged."
-  }
+  },
+  "source_commit": "145fefb5bc3f2cbd94617051fa6588d1e62d35af",
+  "result": {
+    "conclusion": "success",
+    "source_run": 42263013004,
+    "source_sha": "145fefb5bc3f2cbd94617051fa6588d1e62d35af",
+    "unit_tests": "18 historical + 4 scheduled + 8 new = 30/30 PASS",
+    "authentic_cl_verified": true,
+    "source_blobs": 2,
+    "rows": 190,
+    "process_epoch_count": [
+      1,
+      1
+    ],
+    "fresh_surface_frames": [
+      57,
+      2
+    ],
+    "post_render_error_fresh_frames": [
+      57,
+      0
+    ],
+    "verdict": "NOT_COMPARABLE_inadequate_fresh_post_render_error_samples",
+    "prior_failed_runs": [
+      42262250870,
+      42262695277
+    ],
+    "unity_or_phone_improvement_proven": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42262250870",
+    "https://github.com/alwansan/raf/actions/runs/42262695277",
+    "https://github.com/alwansan/raf/actions/runs/42263013004"
+  ],
+  "evidence_files": [
+    "prompt/coordination/clients/T5/sessions/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.md",
+    "prompt/coordination/experiments/T5/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json",
+    "docs/T5_REAL_CL_PERFORMANCE_COHORT_2026-11-06.md"
+  ]
 }
