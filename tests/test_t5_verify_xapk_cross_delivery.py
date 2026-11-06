@@ -58,14 +58,17 @@ class SplitDeliveryAttestationTests(unittest.TestCase):
                         self.assertTrue(body.endswith("}"))
                         body = body[:-1] + ', "package": "' + PACKAGE + '"}'
                         path.write_text(body)
-                        error = "Duplicate JSON key"
+                        with self.assertRaisesRegex(ValueError, "Invalid local delivery manifest") as caught:
+                            verify(root)
+                        # The public error is intentionally generic; the
+                        # chained cause proves strict duplicate-key detection.
+                        self.assertIn("Duplicate JSON key", str(caught.exception.__cause__))
                     else:
                         data = json.loads(path.read_text())
                         data["schema"] = True
                         path.write_text(json.dumps(data))
-                        error = "Delivery identity/companion"
-                    with self.assertRaisesRegex(ValueError, error):
-                        verify(root)
+                        with self.assertRaisesRegex(ValueError, "Delivery identity/companion"):
+                            verify(root)
 
     def test_nested_xapk_rejects_ambiguous_or_noncanonical_json(self):
         for case in ("duplicate_root", "duplicate_expansion", "boolean_version", "nan"):
