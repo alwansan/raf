@@ -200,6 +200,33 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             verify_selective_reflection(old(),x,conflicts,1)
 
+    def test_selective_reflection_ids_cannot_swap_at_same_binding_across_sets(self):
+        # Two sampler coordinates share a binding number but not a set.
+        # The remap must preserve each original SPIR-V variable ID, rather
+        # than comparing dicts keyed by binding (which lose one row).
+        original=old()
+        original["separate_samplers"].append(
+            {"id":10,"set":2,"binding":1})
+        remapped={
+            "entryPoints":[{"name":"main","mode":"frag"}],
+            "separate_samplers":[
+                {"id":6,"set":1,"binding":1},
+                {"id":10,"set":2,"binding":1}],
+            "ubos":[{"id":7,"set":0,"binding":0,"block_size":128}],
+        }
+        self.assertTrue(verify_selective_reflection(
+            original,remapped,{(0,1)},1))
+        swapped={
+            "entryPoints":remapped["entryPoints"],
+            "separate_samplers":[
+                {"id":10,"set":1,"binding":1},
+                {"id":6,"set":2,"binding":1}],
+            "ubos":remapped["ubos"],
+        }
+        with self.assertRaisesRegex(ValueError,
+                "^selective_reflection_resource_id_changed$"):
+            verify_selective_reflection(original,swapped,{(0,1)},1)
+
     def test_selective_used_target_or_reflection_mismatch_rejected(self):
         with self.assertRaises(ValueError):
             relocate_conflicting_only(binary(),vertex(),old(),0)
