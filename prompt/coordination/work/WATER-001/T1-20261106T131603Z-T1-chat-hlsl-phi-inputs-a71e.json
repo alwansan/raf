@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "session_id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+  "status": "active",
+  "updated_at": "2026-11-06T13:16:03.470Z",
+  "base_sha": "727a15ef97b3b498c4353fcbcdd49f650fbc0eb2",
+  "resumed_from_sessions": [
+    "20261106T130729Z-T1-chat-pair-gate-6c2e",
+    "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+    "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3"
+  ],
+  "track": "SHA-authenticated original-derived translated FFT butterfly1 X float32 OpPhi input type and predecessor source audit",
+  "hypothesis": "The translated X Phi may merge a signed-bitcarrying float with a genuinely calculated float/constant. Enumerating safe SSA source and CFG predecessor opcode families can isolate the next numeric discrepancy without exposing original bytecode or guessing actual branch truth.",
+  "approach": "On exact original pinned ZIP2 glslang-compiled HLSL slot0 SPIR-V, find selected X lane Phi, verify predecessor block edges and input shape, classify input immediate producer opcode and bounded typed SSA component chain. Publish only allowlisted categories, input count and predicate opcode families. Source-free synthetic regression and isolated original Vulkan workflow; no authored shader edit/native build.",
+  "intended_files": [
+    "scripts/t1_fft_hlsl_phi_input_origins.py",
+    "tests/test_t1_fft_hlsl_phi_input_origins.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.md",
+    "prompt/coordination/experiments/T1/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json"
+  ],
+  "experiment_key": "water001-sourcepin15964ea8-translated-butterfly1-x-float32-phi-incoming-value-predecessor-classification-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Validate synthetic Phi predecessor and SSA chain inputs; run exact-original translated compilation; record safe input opcode/type summary and actual source-authentic outcome."
+}
