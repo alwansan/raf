@@ -12,3 +12,8 @@
 - hypothesis: one-to-one pass literal 0/1 and source/destination categories can be attributed *within the exact same authenticated managed Material field-read site*.
 - negative controls: fail closed on multiple Blits from one field read, mixed/indirect pass selectors, impossible role partitions and invented pass/source counts.
 - next_step: implement, run original SHA pinned source-only GitHub Actions, document counts and unresolved real resource ownership.
+
+## Code checkpoint — 2026-11-06T22:52:40.660Z
+- Code [dd92034a](https://github.com/alwansan/raf/commit/dd92034aaef9b61ad2170c768142398795eff154) published on only writable branch. Three isolated T2 files changed: Mono.Cecil original scanner, strict source-safe report validator, adversarial Python tests. Both pass-index role partitions must sum exactly and conserve original global role inventory when pass0+pass1 cover all explicit Blit sites.
+- Checkpoint: workflow dispatch awaited after code commit; no run result yet. Input still immutable original ZIP2 shader owner + managed DLL with SHA verification, no source artifacts leaked; no Unity game asset/ShaderLab/.meta change, no other T-client file touch.
+- Next: inspect exact SHA source-only run; fix any fail-closed synthetic/Cecil guard failures. Native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) independently in progress at last query, do not cancel/duplicate.
