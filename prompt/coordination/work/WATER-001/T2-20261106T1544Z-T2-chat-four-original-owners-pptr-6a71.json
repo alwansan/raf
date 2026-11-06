@@ -2,9 +2,9 @@
   "session_id": "20261106T1544Z-T2-chat-four-original-owners-pptr-6a71",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "40564c35f138061b7d28f23bd867f4e066882491",
-  "updated_at": "2026-11-06T15:44:00Z",
+  "updated_at": "2026-11-06T15:56:00Z",
   "resumed_from_sessions": [
     "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84",
     "20261106T1518Z-T2-scheduled-original-foam-identity-reconcile-p7k4"
@@ -33,5 +33,23 @@
   "baseline_run": "https://github.com/alwansan/raf/actions/runs/42243327311",
   "in_progress_actions_at_registration": 0,
   "scope_separation": "Independent new T2 script+workflow (no rewrite of previous private CB0 validator, no T1/T3/T4/T5 files, no Unity build or original game assets changed)",
-  "next_gate": "Full original source SHA + selftests + strictly bounded cross-owner output; candidate match never accepted as actual Unity loaded Shader without GUID/external identity and device evidence."
+  "next_gate": "Full original source SHA + selftests + strictly bounded cross-owner output; candidate match never accepted as actual Unity loaded Shader without GUID/external identity and device evidence.",
+  "run_id": 42247200163,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42247200163",
+  "job_id": 127992415067,
+  "run_conclusion": "success",
+  "source_commit": "805901f738d54b54a01992e3624d24c06c8cdc97",
+  "sourcefree_tests_passed": 8,
+  "original_source_owner_sha_verified": 4,
+  "original_bytes_verified": 233281064,
+  "result": "Original 4 pinned owners: 516 Material/165 Shader; 156 external Material PPtrs, 154 filename+typed target candidates, 2 unresolved; original Foam local and external basename+PathID candidates zero. 7 old sharedassets0 external references comprise 5 known candidate typed Shader and 2 unknown. GUID/runtime and CB0 upload unproven.",
+  "report": "docs/T2_FOAM_ORIGINAL_FOUR_OWNER_SHADER_PPTR_GRAPH_2026-11-06.md",
+  "experiment": "prompt/coordination/experiments/T2/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71-result.json",
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71-handoff.md",
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ],
+  "next_step": "Reconcile two unpinned unresolved source external table links with original manifest and source SHA; scan precisely selected missing asset owner, then identify actual Foam Material and Unity CB0 upload; WATER-001 OPEN."
 }
