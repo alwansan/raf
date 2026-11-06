@@ -6,7 +6,7 @@
   "origin": "chat",
   "session_id": "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "d5330515a091e4503187040361cad226a01fb35b",
   "round_id": "trial-20261106-r1",
   "approach": "Adopt owner trial-vote protocol, update T2 only without touching four other rows or T5 decision, and independently identify a real source-original Foam material host among SHA-verified original assets before any actual Unity/Adreno build vote.",
@@ -27,9 +27,26 @@
   "vote": "لا يحتاج",
   "vote_reason": "No implemented new Android Foam ShaderLab/CB0/graphics integration: original zero-GUID external PPtr scan was source-only, not phone-testable change.",
   "latest_proven_run": "https://github.com/alwansan/raf/actions/runs/42262404131",
-  "next_step": "CI42264851712 original 40 SHA source assets queued. Inspect source-free negative tests and exact staged-bytes results; if CI fails fix only evidenced cause. T2 trial vote stays NO unless substantial integrated shader fix. No duplicate dispatch.",
-  "updated_at": "2026-11-06T17:47:45.265Z",
+  "next_step": "This source-only experiment complete; WATER-001 remains OPEN. Find original serialized MonoBehaviour/script runtime Foam Material assignments and integrate proven ShaderLab/CB0 before phone trial. Keep r1 T2 NO; re-evaluate after substantive project code integration, not a theoretical audit.",
+  "updated_at": "2026-11-06T17:49:58.742Z",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42264851712"
-  ]
+  ],
+  "last_source_commit": "980d8a9b0b3c04d3eb8136954e7c106675654a32",
+  "result": {
+    "source_original_SHA_verified": true,
+    "files": 40,
+    "bytes": 474065455,
+    "material_objects": 1392,
+    "parsed_material_shader_PPtrs": 1392,
+    "original_direct_Foam_Shader_Material_PPtr_candidates": 0,
+    "external_material_other_shader_PPtrs_to_Foam_owner": 885,
+    "source_free_regression_tests_passed": 18,
+    "conclusion": "success",
+    "artifact_id": 13526981272,
+    "documentation": "docs/T2_FOAM_ORIGINAL_40_SHAREDASSETS_MATERIAL_HOST_2026-11-06.md",
+    "T2_trial_vote": "لا يحتاج",
+    "trial_round": "trial-20261106-r1",
+    "Android_render_verified": false
+  }
 }
