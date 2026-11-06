@@ -6,7 +6,7 @@
   "origin": "chat",
   "session_id": "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "d5330515a091e4503187040361cad226a01fb35b",
   "round_id": "trial-20261106-r1",
   "approach": "Adopt owner trial-vote protocol, update T2 only without touching four other rows or T5 decision, and independently identify a real source-original Foam material host among SHA-verified original assets before any actual Unity/Adreno build vote.",
@@ -27,6 +27,9 @@
   "vote": "لا يحتاج",
   "vote_reason": "No implemented new Android Foam ShaderLab/CB0/graphics integration: original zero-GUID external PPtr scan was source-only, not phone-testable change.",
   "latest_proven_run": "https://github.com/alwansan/raf/actions/runs/42262404131",
-  "next_step": "Write T2-only vote under current round; then inspect source original metadata and material host candidates. Do not build or vote yes without substantial integrated Android change.",
-  "updated_at": "2026-11-06T17:43:27.355Z"
+  "next_step": "CI42264851712 original 40 SHA source assets queued. Inspect source-free negative tests and exact staged-bytes results; if CI fails fix only evidenced cause. T2 trial vote stays NO unless substantial integrated shader fix. No duplicate dispatch.",
+  "updated_at": "2026-11-06T17:47:45.265Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42264851712"
+  ]
 }
