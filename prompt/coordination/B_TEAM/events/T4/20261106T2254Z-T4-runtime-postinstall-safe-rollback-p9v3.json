@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2250Z-T4-chat-runtime-postinstall-rollback-p9v3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "event": "original_runtime_operation_trace_postinstall_foreign_writer_rollback_guard",
+  "status": "completed_source_ci",
+  "timestamp": "2026-11-06T22:54:09.427Z",
+  "baseline_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
+  "red_commit": "748562011da90ec95ee6121134a7866da7fcb4d1",
+  "red_run": "https://github.com/alwansan/raf/actions/runs/42307770698",
+  "green_commit": "5f31be4be6623b3077d8fbbfba34cf52c7e367fa",
+  "green_run": "https://github.com/alwansan/raf/actions/runs/42307892688",
+  "b22_run": "https://github.com/alwansan/raf/actions/runs/42307892487",
+  "experiment": "prompt/coordination/experiments/T4/20261106T2250Z-runtime-postinstall-foreign-rollback-p9v3.json",
+  "result": "RED 2 foreign epoch rollback subcases; GREEN 19/19 runtime operation tests, 14/14 B22 transaction controls, authentic original source adapted managed C# compile exit=0. When post-install .cs or .meta is changed by another writer, retain foreign data and complete original backup instead of restoring stale bytes.",
+  "limit": "Source staging only; no full interprocess lock, original gameplay changes, new native build, owner phone save/relaunch proof, or RGD/Unity acceptance. T5 owns in-progress 42296450023.",
+  "project_state": "LOCAL-005 OPEN; NOT_READY 0/3; T4 trial r1 unchanged."
+}
