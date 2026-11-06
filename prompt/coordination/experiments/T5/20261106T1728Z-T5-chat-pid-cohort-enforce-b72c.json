@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "status": "completed",
+  "experiment_key": "T5-CL@520c4cf4-pid-epoch-audit-integration-verified-surface-only-exact-same-190-rows-v1",
+  "source_commit": "145fefb5bc3f2cbd94617051fa6588d1e62d35af",
+  "hypothesis": "Integrating T5 scheduled per-process epoch audit into existing original CL SurfaceFlinger FPS cohort prevents otherwise individually verified cross-PID medians; preserves genuinely single-PID pinned real CL decision.",
+  "source_inputs": {
+    "CL_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "sha_b": [
+      "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8",
+      "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+    ],
+    "real_bytes": [
+      374587,
+      646527
+    ],
+    "real_rows": [
+      71,
+      119
+    ]
+  },
+  "tool_versions": {
+    "python": "ubuntu-24.04 runner Python3",
+    "github_actions": "actions/checkout@v4, GitHub API pinned CL content SHA1"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_cl_fps_cohort_gate.py -v",
+    "python3 -m unittest discover -s tests -p test_t5_cl_pid_epoch_audit.py -v",
+    "python3 -m unittest discover -s tests -p test_t5_cl_pid_cohort_integration.py -v",
+    "python3 scripts/t5_cl_fps_cohort_gate.py --session-a \"$RUNNER_TEMP/t5-first.jsonl\" --label-a 220911-559 --session-b \"$RUNNER_TEMP/t5-second.jsonl\" --label-b 230108-327"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-cl-real-fps-cohort.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42263013004",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42262250870",
+    "https://github.com/alwansan/raf/actions/runs/42262695277",
+    "https://github.com/alwansan/raf/actions/runs/42263013004"
+  ],
+  "negative_controls": [
+    "validated individual main_pid_verified samples cannot be aggregated across verified PID change",
+    "unknown running PID interval splits as own epoch rather than inheriting next verified PID",
+    "unverified/stale sample does not allow full-session median aggregation",
+    "cross-session comparison refuses unsafe process epoch even when both have 10+ post-error frame samples",
+    "direct Python CLI invokes analyzer from unrelated working directory",
+    "invalid sample ordering and signed immutable source identity inherited from earlier cohort parser"
+  ],
+  "ci_history": [
+    {
+      "id": 42262250870,
+      "conclusion": "failure",
+      "finding": "pre-existing scheduled epoch guard test expected unknown interval in separate epoch; source fixed rather than weakening test"
+    },
+    {
+      "id": 42262695277,
+      "conclusion": "failure",
+      "finding": "29/29 synthetic pass, both CL blobs authenticated but direct script CLI lost scripts module root; fixed CLI"
+    },
+    {
+      "id": 42263013004,
+      "conclusion": "success",
+      "finding": "18 old + 4 scheduled + 8 new tests PASS (30), exact immutable CL 71+119 samples one PID each, original comparison preserved"
+    }
+  ],
+  "observed_result": {
+    "conclusion": "success",
+    "job_id": 128047574816,
+    "unit_tests": {
+      "legacy": 18,
+      "scheduled": 4,
+      "new": 8,
+      "passed": 30
+    },
+    "source_identity": "two exact pinned public CL Git blob SHA1 and byte length verified",
+    "real_samples": [
+      71,
+      119
+    ],
+    "game_running": [
+      70,
+      113
+    ],
+    "process_epoch_count": [
+      1,
+      1
+    ],
+    "safe_to_aggregate_entire_session": [
+      true,
+      true
+    ],
+    "withheld_samples": [
+      0,
+      0
+    ],
+    "fresh_surface_fps": [
+      57,
+      2
+    ],
+    "stale_samples": [
+      6,
+      105
+    ],
+    "post_render_failure_fresh_samples": [
+      57,
+      0
+    ],
+    "assessment": "NOT_COMPARABLE_inadequate_fresh_post_render_error_samples",
+    "native_build_ran": false,
+    "device_build_verified": false
+  },
+  "limitations": [
+    "No physical Raft FPS or Unity FrameTiming / Adreno GPU timing claim from SurfaceFlinger",
+    "not a graphics/water shader repair or FPS improvement",
+    "LogRaft PID alone may be insufficient to distinguish PID reused after process exit if stop boundary not included",
+    "No current signed native APK/OBB mounted device run after source integration"
+  ],
+  "rejected_hypotheses": [
+    "Legacy inherited T5 scheduled unknown PID test was wrong; rejected: source split was flawed, corrected."
+  ],
+  "integration_commit": "145fefb5bc3f2cbd94617051fa6588d1e62d35af",
+  "documentation": "docs/T5_REAL_CL_PERFORMANCE_COHORT_2026-11-06.md",
+  "next_step": "Only compare future samples after exact signed APK/OBB, same scene/quality/device, valid Unity frame time and per-process/freshness verification; P0 water and white rendering remain independent."
+}
