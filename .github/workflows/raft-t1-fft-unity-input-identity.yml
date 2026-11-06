@@ -1,5 +1,8 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
 
+# T1 opt-in real original-SPIRV-vs-Unity paired replay: 20261106T2031Z-T1-chat-real-unity-pair-6d9a
+# One attempt; same SHA-pinned ZIP2 fixture, no native build request or cancellations.
+
 # Opt-in replay session: 20261106T024340Z-T1-chat-84f0c6
 on:
   workflow_dispatch:
