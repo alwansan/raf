@@ -4,7 +4,7 @@
   "issue_id": "WATER-001",
   "status": "completed",
   "base_sha": "7fc6df9b93aef285cb4a262fd6147ba14cedb9d9",
-  "updated_at": "2026-11-06T10:50:30Z",
+  "updated_at": "2026-11-06T10:50:08Z",
   "resumed_from_sessions": [
     "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
     "20261106T101538Z-T2-scheduled-uploadtrace-6c8f"
@@ -19,7 +19,8 @@
     "prompt/coordination/work/WATER-001/T2-20261106T103459Z-T2-chat-cb0-index-48bd.json",
     "prompt/coordination/clients/T2/sessions/20261106T103459Z-T2-chat-cb0-index-48bd.md",
     "prompt/coordination/experiments/T2/20261106T103459Z-T2-chat-cb0-index-48bd.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json",
+    "prompt/coordination/discussions/WATER-001/20261106T105008Z-T2-cb0-compiled-index-to-T1-T5.md"
   ],
   "taken_over_from": [
     "prompt/coordination/clients/T2/sessions/20261106T102054Z-T2-chat-cb0-member-shape-3f9e.md",
@@ -52,5 +53,10 @@
   "experiment_record": "prompt/coordination/experiments/T2/20261106T103459Z-T2-chat-cb0-index-48bd.json",
   "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T103459Z-T2-chat-cb0-index-48bd-result.json",
   "source_private_cleanup_verified": true,
-  "not_ready": true
+  "not_ready": true,
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ],
+  "handoff_path": "prompt/coordination/discussions/WATER-001/20261106T105008Z-T2-cb0-compiled-index-to-T1-T5.md"
 }
