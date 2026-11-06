@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "7a58763cea912064db35958bd0299cf1d6921fae",
+  "updated_at": "2026-11-06T15:21:33.007Z",
+  "resumed_from_sessions": [
+    "20261106T1413Z-T5-chat-ledger-t1id-7b42.md",
+    "20261106T1358Z-T5-chat-obb-fullsha-7e39.md",
+    "20261105T2208Z-T5-chat-obb-guid-3d7a.md"
+  ],
+  "taken_over_from": [
+    "docs/T5_REAL_CL_OBB_PATCH_GUID_DIAGNOSIS_2026-11-05.md",
+    "scripts/audit_android_expansion.py"
+  ],
+  "experiment_key": "T5-real-original-42058825739-APK-OBB-Unity-guid-marker-crosscheck-actual-HTTP206-v1",
+  "resource_key": "old owner original signed checkpoint artifact 13441766832 APK/OBB ZIP_STORED; bounded HTTP206 no bulk",
+  "hypothesis": "Check actual assets/unity_obb_guid presence and if both present exact 256-byte-bounded equality in real nested APK and OBB, alongside protected Unity resources ZIP metadata; no assertion that optional patch.89 warning is main OBB corruption.",
+  "proof_before": "CI42230326050 original full OBB SHA/CRC matches; CI42228262902 original signed APK SHA and v1/v2; CL CI42119428667 saw 3 optional patch GUID warnings and zero main GUID failures. Original audit returns unavailable when marker missing but did not prove actual marker disposition.",
+  "intended_files": [
+    "scripts/t5_probe_real_unity_obb_guid.py",
+    "tests/test_t5_probe_real_unity_obb_guid.py",
+    ".github/workflows/raft-t5-real-unity-obb-guid.yml",
+    "docs/T5_REAL_UNITY_OBB_GUID_2026-11-06.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1520Z-T5-chat-real-unity-guid-2b61.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1520Z-T5-chat-real-unity-guid-2b61.md",
+    "prompt/coordination/experiments/T5/20261106T1520Z-T5-chat-real-unity-guid-2b61.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1520Z-T5-chat-real-unity-guid-2b61.json"
+  ],
+  "constraints": [
+    "Writable feature/android-native-port only; no game changes or T1–T4 file modifications",
+    "Read authenticated source run42058825739 signed checkpoint HTTP206 bounded <=16MiB, no actual APK/OBB full download",
+    "Never upload original game bytes, reveal original GUID value or infer Unity runtime mount from archive metadata",
+    "Use fail-closed tests for absent/mismatch/corrupt marker and provenance",
+    "No full Unity build or job cancellation"
+  ],
+  "acceptance": [
+    "Actual old APK/OBB marker present/missing/identical state proven from complete nested ZIP central and <=256B marker payload where present",
+    "Source-free CI tests incl mismatched markers and fake path errors",
+    "Report scope and canonical ledger event without calling game READY"
+  ],
+  "next_step": "Implement isolated actual marker attestation and synthetic tests, run source-only CI, preserve evidence."
+}
