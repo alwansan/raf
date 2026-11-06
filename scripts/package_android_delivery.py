@@ -187,8 +187,22 @@ def package(apk, obb, metadata, output, *, part_bytes=DEFAULT_PART, asset_limit=
     try:
         with zipfile.ZipFile(sink,'w',compression=zipfile.ZIP_STORED,allowZip64=True) as archive:
             archive.writestr('manifest.json',json.dumps(manifest,ensure_ascii=False))
-            for path,name in members:
-                archive.write(path,name,compress_type=zipfile.ZIP_STORED)
+            # The loose APK/OBB records were hashed during transport. Read the
+            # signed native inputs again to populate XAPK and compare SHA256
+            # during this second streaming pass. A source mutation between
+            # passes must never publish two incompatible delivery variants.
+            for (path, name), loose in zip(members, records):
+                member_info = zipfile.ZipInfo.from_file(path, arcname=name)
+                member_info.compress_type = zipfile.ZIP_STORED
+                digest = hashlib.sha256()
+                byte_count = 0
+                with path.open('rb') as original, archive.open(member_info, 'w', force_zip64=True) as packed:
+                    for block in iter(lambda: original.read(BUFFER), b''):
+                        packed.write(block)
+                        digest.update(block)
+                        byte_count += len(block)
+                if byte_count != loose['bytes'] or digest.hexdigest() != loose['sha256']:
+                    raise ValueError('Native input changed between loose delivery and XAPK packaging')
         records.append(sink.finish())
     finally: sink._finish()
     result = {'schema':1,'package':PACKAGE,'version_code':metadata['version_code'],

@@ -206,6 +206,44 @@ class DeliveryTests(unittest.TestCase):
                             package(apk, obb, meta, output)
                         self.assertFalse(output.exists())
 
+    def test_xapk_source_mutation_between_loose_and_nested_copy_is_rejected(self):
+        # CRC and structure were verified on the original input. Changing a
+        # valid ZIP source after loose-copy but before XAPK-copy must fail:
+        # otherwise delivery.json would attest incompatible APK/OBB variants.
+        for container in ('apk', 'obb'):
+            with self.subTest(container=container):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    apk, obb, meta = self.inputs(root)
+                    target = apk if container == 'apk' else obb
+                    before = target.read_bytes()
+                    replacement = root / 'changed-source.zip'
+                    with zipfile.ZipFile(replacement, 'w', compression=zipfile.ZIP_STORED) as z:
+                        member = ('classes.dex' if container == 'apk'
+                                  else 'assets/bin/Data/data.unity3d')
+                        z.writestr(member, b'different synthetic valid archive bytes' * 20)
+                    changed = replacement.read_bytes()
+                    self.assertNotEqual(before, changed)
+                    original_writestr = zipfile.ZipFile.writestr
+                    did_mutate = False
+
+                    def swap_after_loose_copy(archive, member, data, *args, **kwargs):
+                        nonlocal did_mutate
+                        if member == 'manifest.json' and not did_mutate:
+                            did_mutate = True
+                            target.write_bytes(changed)
+                        return original_writestr(archive, member, data, *args, **kwargs)
+
+                    out = root / 'delivery'
+                    with patch.object(zipfile.ZipFile, 'writestr', new=swap_after_loose_copy):
+                        with self.assertRaisesRegex(ValueError, 'Native input changed'):
+                            package(apk, obb, meta, out)
+                    self.assertTrue(did_mutate)
+                    self.assertFalse((out / 'delivery.json').exists())
+                    published = ('Raft-Android-Test.apk' if container == 'apk'
+                                 else 'main.77.' + PACKAGE + '.obb')
+                    self.assertEqual((out / published).read_bytes(), before)
+
     def test_explicit_zip_directory_ancestors_remain_valid(self):
         for container in ('apk', 'obb'):
             with self.subTest(container=container):
