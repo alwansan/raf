@@ -7,13 +7,14 @@ acceptance or authentic save-deserialization proof.
 import argparse
 from collections import Counter
 import hashlib
+import io
 import json
 from pathlib import Path
 import re
 
 from scripts.t4_verify_device_world_save_log import (
     EvidenceInputError, _strict_json_object, _strict_json_constant,
-    _parse_utc, _parse_detail, summarize,
+    _parse_utc, _parse_detail, summarize, MAX_BYTES,
 )
 
 # File byte sizes are public fixed non-content provenance checks on the exact
@@ -249,27 +250,60 @@ def _fully_traced_original_loadt_calls(events, evidence_sequence_complete):
     }
 
 
+class _ImmutableOriginalLogBytes:
+    """Private source-free byte snapshot, shared by both parser passes.
+
+    Raw owner JSONL never leaves the process. The existing summary parser
+    only needs .open("rb"), so it can re-read the verified same bytes without
+    re-opening a mutable filesystem path after authentication.
+    """
+
+    def __init__(self, payload):
+        self.payload = payload
+
+    def open(self, mode="rb"):
+        if mode != "rb":
+            raise EvidenceInputError("read_only_original_log")
+        return io.BytesIO(self.payload)
+
+
+def _snapshot_original_logs(files):
+    """Read each input only once with a global bounded evidence byte budget."""
+    remaining = MAX_BYTES
+    snapshots = []
+    for path in files:
+        with path.open("rb") as stream:
+            payload = stream.read(remaining + 1)
+        if len(payload) > remaining:
+            raise EvidenceInputError("input_limit")
+        remaining -= len(payload)
+        snapshots.append(_ImmutableOriginalLogBytes(payload))
+    return snapshots
+
+
 def analyze(paths, pinned=False):
     files = sorted(Path(p) for p in paths)
     if not files or len(files) > 3 or any(not p.is_file() or p.is_symlink() for p in files):
         raise EvidenceInputError("invalid_owner_log_files")
+    # A mutable path must not be trusted again after provenance checking.
+    # The base summary and chronology now read identical verified bytes.
+    snapshots = _snapshot_original_logs(files)
     if pinned:
-        if len(files) != 3 or tuple(p.stat().st_size for p in files) != PINNED_BYTES:
+        if len(snapshots) != 3 or tuple(len(s.payload) for s in snapshots) != PINNED_BYTES:
             raise EvidenceInputError("unverified_pinned_owner_log_bytes")
-        # Immutable commit in the workflow is the first provenance layer; also
-        # authenticate each Git blob independently so a local --pinned call
-        # cannot pass a same-sized synthetic JSONL file as genuine owner data.
-        for path, expected in zip(files, PINNED_GIT_BLOBS):
-            payload = path.read_bytes()
+        # Source commit is immutable in CI; independently verify each Git
+        # blob against the exact snapshot passed to both parsers.
+        for item, expected in zip(snapshots, PINNED_GIT_BLOBS):
+            payload = item.payload
             digest = hashlib.sha1(
                 b"blob " + str(len(payload)).encode("ascii") + b"\0" + payload
             ).hexdigest()
             if digest != expected:
                 raise EvidenceInputError("unverified_pinned_owner_log_git_blob")
-    base = summarize(files)
+    base = summarize(snapshots)
     groups = {}
-    for path in files:
-        with path.open("rb") as stream:
+    for item in snapshots:
+        with item.open("rb") as stream:
             for raw in stream:
                 record = json.loads(raw, object_pairs_hook=_strict_json_object,
                                     parse_constant=_strict_json_constant)
