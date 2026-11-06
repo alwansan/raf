@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1104Z-T5-chat-resolution-delegate-6a2f",
+  "issue_id": "DISPLAY-003",
+  "status": "source_verified_same_type_delegate_nonreachability_android_binding_unproven",
+  "experiment_key": "T5-ZIP2-sha0a6f-original-GraphicsSettingsBox-bounded-delegate-reachability-v1",
+  "input": {
+    "provider": "ZIP2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "relative_path": "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commit": "689d45d290b9ef3efd0e439b70dc60903495a058",
+  "workflow_path": ".github/workflows/raft-t5-original-resolution-delegates.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42208532103",
+  "job_id": 127861131183,
+  "conclusion": "success",
+  "tool_versions": {
+    "dotnet": "9.0",
+    "Mono.Cecil": "0.11.5",
+    "runner": "ubuntu-24.04"
+  },
+  "synthetic_python_tests": 9,
+  "compiled_cecil_graph_assertions": 5,
+  "observed": {
+    "compiled_methods": 42,
+    "delegate_instruction_sites": 2,
+    "resolved_delegate_sites": 2,
+    "unique_delegate_target_methods": 1,
+    "delegate_targets_with_int_parameter": 0,
+    "option_population_call_sites": 1,
+    "methods_populating_options": 1,
+    "option_methods_with_delegate_sites": 0,
+    "option_methods_reach_apply": 0,
+    "option_methods_reach_screen_setresolution": 0,
+    "delegate_targets_reach_apply": 0,
+    "delegate_targets_reach_screen_setresolution": 0,
+    "delegate_targets_direct_playerprefs_write": 0,
+    "internal_direct_call_edges": 22,
+    "unresolved_internal_call_sites": 0
+  },
+  "rejected_hypothesis": "Two same-type delegate site references were two distinct resolution setter candidates; actually one unique target and zero bounded direct same-class path to Apply/Screen.SetResolution.",
+  "negative_controls": [
+    "reject duplicate/invalid JSON fields",
+    "source SHA/size authentic only",
+    "exact 2 old delegate sites both resolved",
+    "no unbounded internal call graph",
+    "cycle-safe synthetic DFS/BFS",
+    "zero direct IL path not false complete event graph",
+    "no fabricated Android/device success"
+  ],
+  "limitations": [
+    "Direct same-type CIL reference graph only; Unity serialized event, custom Settings persistence, indirect callbacks, reflection, other classes and native UI remain untested.",
+    "No game runtime or phone, no real lower resolution selection, no renderer/pixel or performance improvement.",
+    "No private binary/IL/method tokens or raw asset output."
+  ],
+  "original_game_modified": false,
+  "original_source_published": false,
+  "android_device_tested": false,
+  "next_step": "Correlate original Settings UI serialized event owner with SHA-pinned original compiled caller or determine event wiring independently; leave actual Settings unchanged until selection/persistence proven.",
+  "report_path": "docs/T5_ORIGINAL_RESOLUTION_DELEGATE_IL_2026-11-06.md",
+  "updated_at": "2026-11-06T11:13:00Z"
+}
