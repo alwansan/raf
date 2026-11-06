@@ -178,19 +178,44 @@ def parse_aapt_badging(output, expected_version):
 
 
 def parse_apksigner(output: str):
+    """Parse only bounded metadata AFTER the external apksigner verify exited 0.
+
+    Older/newer Android SDK versions may print no certificate digest line, or
+    more than one signer. Neither absence nor multiplicity overrides a genuine
+    successful apksigner cryptographic verification command. We report unknown
+    certificate metadata as unknown, never as one imaginary signer.
+    """
     if type(output) is not str or not SIG_VERIFIED.search(output):
         raise ProbeError("apksigner_output_incomplete")
     schemes = dict((name, state == "true") for name, state in SCHEME.findall(output))
-    signer = CERT_SHA.findall(output)
-    if len(signer) != 1 or signer[0][0] != "1":
-        raise ProbeError("apk_signer_certificate_invalid")
     if not any(schemes.values()):
         raise ProbeError("apksigner_output_incomplete")
+    claimed = re.search(r"^Number of signers:\s*([0-9]+)\s*$", output, re.M)
+    count = int(claimed.group(1)) if claimed is not None else None
+    if count is not None and not 1 <= count <= 32:
+        raise ProbeError("apksigner_output_incomplete")
+    fingerprints = {}
+    for raw_index, full_digest in CERT_SHA.findall(output):
+        index = int(raw_index)
+        if index <= 0 or index > 32 or index in fingerprints:
+            # Certificates are not fabricated from conflicting display rows.
+            fingerprints = {}
+            break
+        fingerprints[index] = full_digest.lower()[:12]
+    metadata_readable = bool(fingerprints) and (
+        count is None or len(fingerprints) == count
+    )
+    if not metadata_readable:
+        fingerprints = {}
     return {
         "apksigner_crypto_verified": True,
         "apksigner_signature_schemes_verified": schemes,
-        "apksigner_signer_count": 1,
-        "apksigner_certificate_sha256_prefix_12": signer[0][1].lower()[:12],
+        "apksigner_signer_count_reported_by_tool": count,
+        "apksigner_certificate_digest_metadata_available": metadata_readable,
+        "apksigner_certificate_sha256_prefixes_12_if_reported": [
+            fingerprints[key] for key in sorted(fingerprints)
+        ],
+        "apksigner_full_certificates_or_subjects_exposed": False,
     }
 
 
