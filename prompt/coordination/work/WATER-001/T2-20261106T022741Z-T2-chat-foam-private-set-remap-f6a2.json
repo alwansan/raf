@@ -4,7 +4,7 @@
   "session_id": "20261106T022741Z-T2-chat-foam-private-set-remap-f6a2",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e50abe7c36759117a0c5092ab90ba90500dff653",
   "resumed_from_sessions": [
     "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8",
@@ -31,7 +31,52 @@
     "prompt/coordination/B_TEAM/events/T2/20261106T022741Z-T2-chat-foam-private-set-remap-f6a2-result.json",
     "docs/T2_FOAM_PRIVATE_DESCRIPTOR_SET_REMAP_2026-11-06.md"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-06T02:27:41Z",
-  "next_step": "Implement binary-only SPIR-V OpDecorate DescriptorSet rebinding with synthetic controls, then original SHA-authentic private 4-stage CI and categorized before/after descriptor conflicts, preserving source/private cleanup."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42150881209",
+    "https://github.com/alwansan/raf/actions/runs/42151101013",
+    "https://github.com/alwansan/raf/actions/runs/42151534584",
+    "https://github.com/alwansan/raf/actions/runs/42151620701"
+  ],
+  "updated_at": "2026-11-06T02:43:00Z",
+  "next_step": "Production integration needs exact Unity resource alias + CB0 upload remap, not simply copying private relocated binaries. Run separate minimal collision-only remap test to retain shared CB0 coordinates where source semantics allow, with source-original SHA and Vulkan validation; then genuine Unity importer + Adreno phone. WATER-001 remains OPEN.",
+  "source_commits": [
+    "d7f4ff58da5561bd867ee65fee6c65ad5124cf95",
+    "e5e99fd4589fa55ff547e34e8963c1e4c525089e",
+    "8977b90757f6b966690e85a2a88cab23488517c2",
+    "463650761b805f75bec149e0e39efadd4899017a"
+  ],
+  "result": {
+    "conclusion": "success",
+    "source_original_sha_authentication": true,
+    "source_original_run_id": 42151620701,
+    "source_original_job_id": 127675958430,
+    "source_free_test_count": 67,
+    "source_free_tests_passed": 67,
+    "original_compiled_SPIRV_stages": 4,
+    "original_descriptor_type_conflicts_before": 4,
+    "fragment_descriptor_decorations_only_changed": 14,
+    "fragment_private_relocated_SPIRV_validated": 2,
+    "descriptor_type_conflicts_after": 0,
+    "shared_descriptor_coordinates_after": 0,
+    "SPIRV_original_non_set_decorations_or_instructions_changed": false,
+    "original_Binding_numeric_IDs_changed": false,
+    "shaderlab_Unity2021_import_verified": false,
+    "original_Material_and_CB0_data_upload_verified": false,
+    "Adreno_device_water_pixels_verified": false,
+    "private_original_shader_or_spirv_published": false
+  },
+  "failed_attempts": [
+    {
+      "run_id": 42150881209,
+      "reason": "source-only private reflection omitted optional id, strict gate stopped before remap proof"
+    },
+    {
+      "run_id": 42151101013,
+      "reason": "safe enum identified absent optional reflected id; not an original program failure"
+    },
+    {
+      "run_id": 42151534584,
+      "reason": "synthetic negative test used legacy function signature after fix; source-only fixture error"
+    }
+  ]
 }

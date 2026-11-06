@@ -1,0 +1,14 @@
+{
+  "id": "20261106T022741Z-T2-chat-foam-private-set-remap-f6a2-result",
+  "owner": "T2",
+  "session_id": "20261106T022741Z-T2-chat-foam-private-set-remap-f6a2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T02:43:00Z",
+  "summary": "SHA-original Foam 2-pass private ShaderLab 4 Vulkan1.1 stages validated; fragment-only SPIR-V DescriptorSet decoration relocation of exactly 14 variables eliminates four cross-stage resource-type collisions to zero, leaving all original other SPIR-V words, Binding decorations and variable IDs unchanged. Both private modified fragment SPIR-V validate. Original CI42151620701 SUCCESS, 67 source-free tests. No Unity material/CB0/Adreno proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42151620701",
+    "https://github.com/alwansan/raf/commit/8977b90757f6b966690e85a2a88cab23488517c2",
+    "https://github.com/alwansan/raf/commit/463650761b805f75bec149e0e39efadd4899017a"
+  ]
+}
