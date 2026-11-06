@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Previously queued UI runner may hide bars on a new Activity after foreground window swap, or after focus/pause lifecycle transition.",
+  "source_commit": "f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
+  "tool_versions": {
+    "Unity2021 managed ABI": "pinned original ZIP2 managed DLL 3,211,776B original SHA0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "sdk": "Android API26+ legacy; API30+ WindowInsetsController"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_android_immersive_system_bars.py -v",
+    "dotnet run --project android-port/Tests/ImmersiveBars/ImmersiveBars.csproj -c Release",
+    "dotnet build android-port/Tests/ImmersiveBars/UnityManagedCompile.csproj -c Release -p:OriginalManagedDir=..."
+  ],
+  "negative_controls": [
+    "queuedGeneration=3,activeGeneration=4 → reject",
+    "queued Activity identity120, current121 → reject",
+    "identity0 → reject",
+    "focus false or paused true or active false → reject",
+    "nonzero equal owner + current generation foreground → permit",
+    "reapply legacy system bits without clearing existing flags, OS transient swipe remains"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-immersive-system-bars.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42225179203",
+  "artifact_urls": [],
+  "budget": "existing source-only 9 minute GitHub Actions job; no native Unity build",
+  "status": "waiting_ci",
+  "observed_result": "Source and tests committed. Most recent exact-SHA CI pending; no device result.",
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Source tests and genuine Unity2021 managed ABI compile are not Android OS behavior or physical mouse runtime evidence.",
+    "Java System.identityHashCode uses an integer and can theoretically collide; no persisted JNI view is retained.",
+    "UI thread can still receive window changes after final check; full device lifecycle testing remains needed."
+  ],
+  "integration_commit": "f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
+  "next_step": "Read exact source CI42225179203 and job logs; if pass, hand off signed APK+matching OBB device focus/home and gesture regressions to T5; if failure fix exact step."
+}
