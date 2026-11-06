@@ -6,9 +6,9 @@
   "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
   "issue_id": "DISPLAY-003",
   "track": "Original Settings resolution callback executable IL metadata",
-  "status": "active",
+  "status": "completed_source_verified_binding_unproven",
   "base_sha": "8c71e017853ace358bed947556dc0156e38fe5d8",
-  "updated_at": "2026-11-06T10:36:16.102Z",
+  "updated_at": "2026-11-06T10:44:29.712Z",
   "resumed_from_sessions": [
     "20261106T1020Z-T5-chat-ledger-id-compat-c8e4.md",
     "20261106T0047Z-T5-scheduled-c4e8.md"
@@ -29,5 +29,19 @@
   "hypothesis": "Original GraphicsSettingsBox IL can distinguish legacy Screen.SetResolution, UI option/listener wiring, PlayerPrefs persistence, DynamicResolution ResizeBuffers and direct Settings->DynamicResolution references. Existing lexical tests do not prove callback or persisted Android render-scale binding.",
   "constraints": "No original DLL/shader/source published in public outputs/artifacts; workflow reads immutable ZIP2 DLL at pinned SHA, publishes bounded numeric call categories only; no Unity/game runtime modifications or false render-scale claim.",
   "coordination": "T5 scheduled owns APK/OBB pair tests, not this IL probe; T1-T3 water/render work and T4 input/save paths unmodified; distinct fast source-only workflow and concurrency, no heavy Unity game build.",
-  "next_step": "Implement isolated Mono.Cecil metadata oracle and adversarial synthetic validation, verify on actual original DLL in T5 workflow; report bounded classification and stop short of unproven Android binding."
+  "next_step": "Safe original IL delegate/callback ownership audit of 2 GraphicsSettingsBox same-type delegates, then serialized UI selection/persistence proof; no speculative Settings runtime change.",
+  "source_commit": "bf64f38e5770664e9fc1bb75f2a6befa7d1d7081",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42204488410"
+  ],
+  "result": {
+    "original_pin_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "ci": "success",
+    "python_tests": "8/8",
+    "cecil_selftests": "4/4",
+    "original_screen_setresolution_sites": 1,
+    "original_dynamic_resolution_resize_sites": 2,
+    "android_resolution_selector_proven": false,
+    "device_tested": false
+  }
 }
