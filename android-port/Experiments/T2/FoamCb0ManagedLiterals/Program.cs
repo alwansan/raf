@@ -22,7 +22,8 @@ internal static class Program
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 
     private static Dictionary<string, HashSet<string>> LoadPrivateTargets(string path,
-                                                                           out int unknownSource)
+                                                                           out int unknownSource,
+                                                                           out string originalShaderNameSha256)
     {
         using var doc = JsonDocument.Parse(File.ReadAllText(path, Encoding.UTF8));
         var root = doc.RootElement;
@@ -37,6 +38,12 @@ internal static class Program
             "original_cb0_parameter_name_indices_unresolved").GetInt32();
         if (unknownSource < 0 || unknownSource > 512)
             throw new InvalidDataException("Unbounded unresolved original CB names");
+        originalShaderNameSha256 = root.GetProperty(
+            "original_Foam_Shader_mName_SHA256_private").GetString() ??
+            throw new InvalidDataException("Original Shader name private digest missing");
+        if (originalShaderNameSha256.Length!=64 ||
+            originalShaderNameSha256.Any(c=>!"0123456789abcdef".Contains(c)))
+            throw new InvalidDataException("Original private Shader name digest invalid");
         var categories = root.GetProperty("categories_sha256");
         var groups = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
         int sum = 0;
@@ -232,7 +239,8 @@ internal static class Program
                 File.ReadAllBytes(originalDll))).ToLowerInvariant(), OriginalSha256,
                 StringComparison.Ordinal))
             throw new InvalidDataException("Original managed DLL SHA/size authentication failed");
-        var names = LoadPrivateTargets(privateTargetFile, out int unknownSource);
+        var names = LoadPrivateTargets(privateTargetFile,out int unknownSource,
+            out string originalShaderNameSha256);
         using var assembly = AssemblyDefinition.ReadAssembly(originalDll,
             new ReaderParameters { ReadSymbols = false, ReadingMode = ReadingMode.Deferred });
         var groups = Roles.ToDictionary(x => x, _ => new Category(), StringComparer.Ordinal);
@@ -488,6 +496,9 @@ internal static class Program
         var exactOriginalShaderFieldStoreStackSources =
             new SortedDictionary<string,int>(StringComparer.Ordinal);
         int exactOriginalShaderFieldStoreBasicBlockSteps=0;
+        int exactShaderFindRequestedOriginalFoamName=0;
+        int exactShaderFindRequestedDifferentName=0;
+        int exactShaderFindRequestedNameUnknown=0;
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
         {
@@ -511,6 +522,16 @@ internal static class Program
                         typedShaderValue.ValueOrigin)+1;
                 exactOriginalShaderFieldStoreBasicBlockSteps+=
                     typedShaderValue.BasicBlockInstructions;
+                if (typedShaderValue.ValueOrigin=="typed_Shader_Find_result")
+                {
+                    string? requested=typedShaderValue.PrivateShaderFindRequestedName;
+                    if (requested is null)
+                        exactShaderFindRequestedNameUnknown++;
+                    else if (Sha(requested)==originalShaderNameSha256)
+                        exactShaderFindRequestedOriginalFoamName++;
+                    else
+                        exactShaderFindRequestedDifferentName++;
+                }
             }
             if (hasExactWrite) constructorShaderWriterMethods++;
         }
@@ -633,6 +654,13 @@ internal static class Program
                 exactOriginalShaderFieldStoreStackSources,
             original_exact_Material_ctor_private_Shader_field_store_block_instructions_examined =
                 exactOriginalShaderFieldStoreBasicBlockSteps,
+            original_exact_Material_ctor_private_Shader_Find_requested_original_Foam_mName_count =
+                exactShaderFindRequestedOriginalFoamName,
+            original_exact_Material_ctor_private_Shader_Find_requested_different_mName_count =
+                exactShaderFindRequestedDifferentName,
+            original_exact_Material_ctor_private_Shader_Find_requested_name_unknown_count =
+                exactShaderFindRequestedNameUnknown,
+            original_exact_Shader_Find_name_match_implies_runtime_Shader_asset_identity = false,
             original_exact_Material_ctor_private_Shader_field_writer_is_Original_Foam_Shader_verified = false,
             original_exact_Material_ctor_private_Shader_field_writer_is_runtime_executed_verified = false,
             original_exact_Shader_field_original_Foam_asset_reference_verified = false,
