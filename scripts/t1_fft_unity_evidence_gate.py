@@ -3,6 +3,8 @@
 Synthetic candidate main kernels are never original game runtime identities.
 """
 import json
+import os
+import stat
 
 FIELDS = {'editor_invoked', 'editor_supports_compute', 'candidate_assets_imported',
           'candidate_main_kernels_resolved', 'expected_threadgroups_matched',
@@ -52,15 +54,39 @@ def parse_sanitized_json(raw):
     return classify(json.loads(raw, object_pairs_hook=unique_pairs))
 
 
+def read_sanitized_evidence(path):
+    """Read at most 4096 bytes from one regular file descriptor, without following symlinks."""
+    flags = os.O_RDONLY | getattr(os, 'O_CLOEXEC', 0)
+    if hasattr(os, 'O_NOFOLLOW'):
+        flags |= os.O_NOFOLLOW
+    else:
+        # On platforms without O_NOFOLLOW, reject links before opening.
+        if path.is_symlink():
+            raise ValueError('invalid evidence file')
+    fd = os.open(path, flags)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_size > 4096:
+            raise ValueError('invalid evidence file')
+        data = os.read(fd, 4097)
+        if len(data) > 4096:
+            raise ValueError('invalid evidence file')
+        return parse_sanitized_json(data.decode('utf-8', errors='strict'))
+    finally:
+        os.close(fd)
+
+
 def main():
     import argparse
     from pathlib import Path
     p = argparse.ArgumentParser()
     p.add_argument('sanitized_json', type=Path)
     args = p.parse_args()
-    if args.sanitized_json.is_symlink() or args.sanitized_json.stat().st_size > 4096:
-        p.error('invalid evidence file')
-    print(json.dumps(parse_sanitized_json(args.sanitized_json.read_text()), sort_keys=True))
+    try:
+        result = read_sanitized_evidence(args.sanitized_json)
+    except (OSError, UnicodeError, ValueError) as exc:
+        p.error('invalid evidence file: ' + type(exc).__name__)
+    print(json.dumps(result, sort_keys=True))
 
 
 if __name__ == '__main__':
