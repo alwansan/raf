@@ -1,0 +1,39 @@
+{
+  "session_id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "1ce09e9c248739c788ea2fc40eff358d1da7f112",
+  "updated_at": "2026-11-06T13:14:00Z",
+  "resumed_from_sessions": [
+    "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+    "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
+  ],
+  "experiment_key": "ZIP2-15964-Foam-CB0-exact-managed-Material-field-stfld-bounded-linear-IL-value-stack-receiver-Shader-ctor-formal-v1",
+  "resource_key": "T2-source-original-Cecil-managed-Material-field-value-provenance",
+  "baseline_original_sha": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "baseline_ci": "https://github.com/alwansan/raf/actions/runs/42222884964",
+  "hypothesis": "The exact source-original Material stfld for the material receiving a proven Foam CB0 named Material.SetVector call may take its value from a same-basic-block Material(Shader) newobj through local/dup; prove actual stfld stack ownership without relying on same-method ctor co-occurrence. Any branch-target/unsupported opcode must fail closed. Categorize shader argument origins without asserting Foam shader identity.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/MaterialStoreValueTrace.cs",
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1314Z-T2-chat-material-stfld-stack-4c62.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1314Z-T2-chat-material-stfld-stack-4c62.md",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_STFLD_STACK_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62-result.json"
+  ],
+  "safe_output": "only finite typed source buckets; no private field/method identities, no raw Shader source/name/bytecode or exact IL sequences, original pinned source only in runner",
+  "test_plan": "Typed Cecil synthetic exact newobj + Shader, one local bridge and dup, wrong assigned argument despite nearby ctor, branch-to-store, unsupported opcode fail-closed; isolated CI authentic original DLL SHA and original source CB0 name registry.",
+  "actions_in_progress_at_reservation": [
+    "T5 signed APK OBB ZIP 42223800025"
+  ],
+  "overlap": "No shared CI slots or T5 files; no native Unity build. Existing T2 scheduled session not editing Cecil files.",
+  "not_proven": [
+    "Material.shader == actual Foam",
+    "complete CB0 buffer bytes uploaded",
+    "Unity importer",
+    "Android Adreno pixels"
+  ]
+}
