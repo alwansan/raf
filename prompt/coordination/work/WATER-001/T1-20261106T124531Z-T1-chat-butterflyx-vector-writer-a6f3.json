@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "432dc4b7bc819a49b561e948b471664ee88bd085",
+  "updated_at": "2026-11-06T12:45:31.510Z",
+  "track": "FFT original slot0 butterfly1 X whole-vector writer component provenance",
+  "resumed_from_sessions": [
+    "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+    "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2"
+  ],
+  "approach": "Use independent path-sensitive last-write identification at private original butterfly1 X fetch, then trace the selected OpVectorShuffle vector-component producer through bounded SSA ops beyond OpLoad boundary; report opcode/type-chain only, no original values, IDs or pixels; guard unknown alias and multiple candidates.",
+  "hypothesis": "The original butterfly1 X single whole-vector OpVectorShuffle writer has a specific upstream component type/bitcast/load boundary; exposing only bounded producer family and last-writer possibilities can discriminate whether next numeric correction belongs at integer carrier, shuffle selection, or load boundary. Does not claim actual correct Unity value.",
+  "intended_files": [
+    "scripts/t1_fft_site1_x_writer_lineage.py",
+    "tests/test_t1_fft_site1_x_writer_lineage.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3.md",
+    "prompt/coordination/experiments/T1/20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3.json"
+  ],
+  "experiment_key": "water001-original-slot0-butterfly1-x-lastwriter-vector-shuffle-ssa-component-lineage-v1-zip2sha15964ea8",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add safe test-confirmed original X whole-writer SSA component lineage with conditional/loop/unknown alias negative controls, source SHA-verified CI, then paired coordinate trace. Do not change shader."
+}
