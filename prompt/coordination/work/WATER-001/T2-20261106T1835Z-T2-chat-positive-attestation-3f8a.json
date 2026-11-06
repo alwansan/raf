@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1835Z-T2-chat-positive-attestation-3f8a",
+  "issue_id": "WATER-001",
+  "track": "original Foam m_Script typed-target validation",
+  "status": "active",
+  "base_sha": "3887e5629424ea59f1525d97b83fbd8cca73aba8",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1835Z-T2-chat-positive-attestation-3f8a.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1835Z-T2-chat-positive-attestation-3f8a.md",
+    "scripts/t2_original_monoscript_target_attestation.py",
+    "tests/test_t2_original_monoscript_target_attestation.py",
+    ".github/workflows/raft-t2-original-monoscript-target-join.yml",
+    "prompt/coordination/experiments/T2/20261106T1835Z-T2-chat-positive-attestation-3f8a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1835Z-T2-chat-positive-attestation-3f8a-result.json"
+  ],
+  "experiment_key": "zip2-15964-40-scenes-55328-monoscript-target-typed-positive-coverage-attestation-v2",
+  "resource_key": "sourcefree-attestation-and-existing-pinned-original-join-workflow",
+  "hypothesis": "Prior CI green assertions are fail-open for zero typed target coverage; add standalone strict positive typed coverage gate and independent adversarial tests, reconcile authenticated safe counts from 42269806221, and run one modified workflow without changing game sources.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1817Z-T2-chat-original-script-target-5ac9.json",
+    "prompt/coordination/work/WATER-001/T2-20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1817Z-T2-chat-original-script-target-5ac9.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e.md"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42269806221"
+  ],
+  "result": null,
+  "next_step": "Implement positive coverage guard, test with synthetic zero/budget/ambiguous failures, integrate into existing isolated workflow; confirm new Actions result; keep T2 trial no-needs until integrated water shader patch.",
+  "updated_at": "2026-11-06T18:35:15Z"
+}
