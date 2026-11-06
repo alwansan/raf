@@ -5,7 +5,7 @@
   "session_id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
   "issue_id": "RENDER-002",
   "track": "Original Particle108 missing DXBC register vs SPIRV Location source stage roles",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "841d3ae2ffc3bb9400f3c4cafcce020a0d48d202",
   "intended_files": [
     "scripts/t3_particle108_register_location_probe.py",
@@ -30,14 +30,17 @@
     "https://github.com/alwansan/raf/actions/runs/42199952229"
   ],
   "result": {
-    "source_commit": "9991791b0952f2d079c1a57bd5f732cfcf9b7869",
+    "conclusion": "success",
+    "tests": 12,
     "run_id": 42199952229,
-    "original_sha_authentic_full_probe": "PENDING",
-    "expected_total_user_records": 48,
-    "expected_source_spirv_location_rows": 46,
-    "expected_missing_numeric_locations": 2,
-    "stage_role_locations": "PENDING"
+    "authentic_sha_owners": 4,
+    "authentic_sha_scenes": 6,
+    "original_records": 48,
+    "source_spirv_locations": 46,
+    "source_fragment_input_missing": 2,
+    "other_stage_role_missing": 0,
+    "semantic_identity_unverified": true
   },
-  "next_step": "Read run 42199952229 final; inspect aggregate by vertex_inputs/outputs and fragment_inputs/outputs, confirm 48/46/2 totals; if mismatch report INCONCLUSIVE and fix reproducibly. No ShaderLab patch yet.",
-  "updated_at": "2026-11-06T10:06:00Z"
+  "next_step": "Private original DXBC fragment input used_mask zero/nonzero classification for the two missing source SPIRV numeric register locations; compare source pair vertex output without disclosing names/values; do not auto-patch.",
+  "updated_at": "2026-11-06T10:06:20Z"
 }
