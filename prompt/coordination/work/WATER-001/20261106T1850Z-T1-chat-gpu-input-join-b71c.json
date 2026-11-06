@@ -6,9 +6,9 @@
   "session_id": "20261106T1850Z-T1-chat-gpu-input-join-b71c",
   "issue_id": "WATER-001",
   "track": "Real Unity FFT input/provenance bridge",
-  "status": "active",
+  "status": "completed",
   "base_sha": "97f156f9f09e8cd6f5412e281bb751d2bb1a8cd6",
-  "updated_at": "2026-11-06T18:50:20Z",
+  "updated_at": "2026-11-06T18:57:30Z",
   "resumed_from_sessions": [
     "20261106T1837Z-T1-chat-ftz-trace-89ac",
     "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
@@ -31,7 +31,19 @@
     "20261106T1837Z-T1-chat-ftz-trace-89ac",
     "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Create strict private actual-input join, source-only tests, integrate tests into T1 existing source-only workflow; if CI passes, integrate use into future authenticated private Unity actual FFT trace capture with T5."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42274801434"
+  ],
+  "result": {
+    "run_id": 42274801434,
+    "job_id": 128088260468,
+    "run_conclusion": "success",
+    "new_python_synthetic_tests": "17/17 PASS",
+    "source_only": true,
+    "commit": "181910545d4ced5a8454b95e4d380756ba2ac36f",
+    "authentic_original_fft_executed": false,
+    "unity_runtime_executed_this_cycle": false,
+    "android_water_proven": false
+  },
+  "next_step": "Use pinned actual original and Unity 2021 keyed trace buffers, independent source/butterfly image bytes and CopyInput GPU proof inside trusted runner; diagnose first site, no speculative game asset change or new APK."
 }
