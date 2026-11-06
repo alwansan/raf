@@ -2,7 +2,7 @@
   "session_id": "20261106T0620Z-T2-scheduled-selective-id-coordinate-4e8b",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_unverified_tests",
   "base_sha": "f112131561060d8a626018ec784b9b8c86a67cba",
   "intended_files": [
     "scripts/t2_foam_private_descriptor_set_remap.py",
@@ -16,5 +16,11 @@
     "20261106T0518Z-T2-scheduled-reflection-id-guard-6c91",
     "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
   ],
-  "updated_at": "2026-11-06T06:20:00Z"
+  "updated_at": "2026-11-06T06:24:00Z",
+  "result_commits": [
+    "6e8c29f77a3421cd596e630057d9b2e760a84c30",
+    "46de562d560ed56ca2f54eb3505d95908208efda"
+  ],
+  "validation": "Tests not run: local git cannot resolve github.com; existing test expected legitimate move already exposed bug. CI not duplicated.",
+  "next_step": "Run python -m unittest tests.test_t2_foam_private_descriptor_set_remap on checkout and check authentic original CI before ShaderLab integration."
 }
