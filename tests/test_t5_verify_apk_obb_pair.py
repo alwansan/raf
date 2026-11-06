@@ -153,6 +153,28 @@ class PairTests(unittest.TestCase):
         self.write_manifest()
         self.rejected("Unsafe or duplicate")
 
+    def test_obb_unix_symlink_entry_rejected(self):
+        with zipfile.ZipFile(self.obb, "w") as archive:
+            link = zipfile.ZipInfo("assets/link")
+            link.create_system = 3
+            link.external_attr = (0o120777 << 16)
+            archive.writestr(link, b"assets/target")
+            archive.writestr("assets/target", b"synthetic-asset")
+        self.write_manifest()
+        self.rejected("symbolic link")
+
+    def test_obb_encrypted_flag_rejected(self):
+        # A synthetic flagged member suffices: no encryption keys or game data.
+        payload = bytearray(self.obb.read_bytes())
+        for signature, offset in ((b"PK\\x03\\x04", 6), (b"PK\\x01\\x02", 8)):
+            pos = payload.find(signature)
+            self.assertGreaterEqual(pos, 0)
+            flags = struct.unpack_from("<H", payload, pos + offset)[0]
+            struct.pack_into("<H", payload, pos + offset, flags | 1)
+        self.obb.write_bytes(payload)
+        self.write_manifest()
+        self.rejected("Encrypted ZIP member")
+
     def test_obb_duplicate_entries(self):
         self.make_obb([("assets/entry", b"x"), ("assets/entry", b"y")])
         self.write_manifest()
