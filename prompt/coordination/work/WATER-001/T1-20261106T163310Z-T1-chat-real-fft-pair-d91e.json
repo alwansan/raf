@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T163310Z-T1-chat-real-fft-pair-d91e",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "8e2a01bcfd2de019e904190c4dc6fffb7abd6fb4",
+  "updated_at": "2026-11-06T16:33:10.137Z",
+  "resumed_from_sessions": [
+    "20261106T161112Z-T1-chat-original-keyed-recorder-7be2",
+    "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+    "20261106T130729Z-T1-chat-pair-gate-6c2e"
+  ],
+  "track": "Exact source-authenticated original SPIR-V and translated HLSL keyed GPU trace pair with actual input byte attestation",
+  "hypothesis": "The existing private original and candidate Vulkan runs capture two distinct real 384-keyed buffers, but numerical equality at each invocation is unknown. When each private host writes actual source/butterfly input image bytes and the dispatch specification is identical, the strict SHA manifest gate will establish whether FFT coordinate/value mismatches persist and which site/axes are affected.",
+  "approach": "Keep existing two original/candidate private trace routines, add optional private-only source/butterfly readback digest sidecar for each, verify both actual input SHA and dispatch SHA in same SHA-pinned CI, pass two distinct trace files into strict t1_fft_invocation_pair_gate and report aggregate mismatches without raw IDs/values/hashes. Source-free adversarial tests first. Do not change authored shaders/Android or assert actual Unity runtime binding.",
+  "intended_files": [
+    "scripts/t1_fft_pass0_vulkan_trace.py",
+    "scripts/t1_fft_original_trace_vulkan.py",
+    "scripts/t1_fft_private_invocation_pair_report.py",
+    "tests/test_t1_fft_private_invocation_pair_report.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T163310Z-T1-chat-real-fft-pair-d91e.md",
+    "prompt/coordination/experiments/T1/20261106T163310Z-T1-chat-real-fft-pair-d91e.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T163310Z-T1-chat-real-fft-pair-d91e.json"
+  ],
+  "experiment_key": "water001-actual-original-spirv-vs-hlsl-invocation-trace-same-input-byte-digest-same-dispatch-sha-pin15964ea8-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Verify identical actual host-generated source/butterfly image input digest and dispatch digest per run; compare distinct original/hlsl 384 keyed trace under strict gate; report aggregate count mismatches, no raw samples."
+}
