@@ -32,6 +32,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle108_dxbc_feasibility.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle108_spirv_translation.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_stage_io_drift.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_stream_provider.py' -v
@@ -245,6 +246,11 @@ jobs:
           assert d["original_D3D11_table_records"]==16
           assert d["all_original_four_keyword_pairs_translation_attempted"] is True
           assert d["counts"]["stage_translation_attempts"]==8
+          assert d["counts"]["stage_original_roundtrip_io_drift_classified"]==8
+          assert d["counts"]["io_drift_inputs_identical"]<=8
+          assert d["counts"]["io_drift_outputs_identical"]<=8
+          assert d["counts"]["io_drift_inputs_location_only_remap_candidate"]<=8
+          assert d["counts"]["io_drift_outputs_location_only_remap_candidate"]<=8
           assert d["private_game_shader_program_bytes_names_hashes_or_Guids_published"] is False
           assert d["native_Unity_Android_Adreno_pixels_verified"] is False
           assert d["source_shader_is_users_phone_fire_smoke_emitter_verified"] is False
