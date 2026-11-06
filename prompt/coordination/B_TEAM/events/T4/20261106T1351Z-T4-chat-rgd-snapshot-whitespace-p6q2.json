@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+  "owner": "T4",
+  "session_id": "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "at": "2026-11-06T13:48:40.613Z",
+  "summary": "Fixed scheduled T4 JSONL snapshot duplicate-field guard's incorrect raw regex literal backslash-s. Exact CI42228168580 23 parser tests+2 overflow tests SUCCESS including 3 previously failing legitimate-save cases; source-free, no device/game save evidence.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/8a99840fa20bf830fb496ad9681913168a439d8e",
+    "https://github.com/alwansan/raf/commit/66b45b86d7723ef80221da5087967bbb4b8c9936",
+    "https://github.com/alwansan/raf/actions/runs/42228168580"
+  ],
+  "device_confirmed": false,
+  "real_rgd_durability_proven": false
+}
