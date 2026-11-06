@@ -1,0 +1,23 @@
+{
+  "work_id": "20261106T2320Z-T2-scheduled-summary-gate-c8f1",
+  "owner": "T2",
+  "origin": "scheduled",
+  "status": "completed_read_only_diagnosis",
+  "baseline_sha": "1f97b4911c021263d034e4520afa01a64d30a00b",
+  "issue_id": "WATER-001",
+  "experiment_key": "T2-ledger-failure-reconciliation-42308935364",
+  "scope": [
+    "read-only Actions job 128205280437",
+    "independent T2 work and session only"
+  ],
+  "hypothesis": "The evidence-summary failure is a missing event record identity rather than Foam shader analysis failure",
+  "evidence": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42308935364",
+    "job": 128205280437,
+    "exception": "ValueError: Missing record identity",
+    "path": "prompt/coordination/B_TEAM/events/T3/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.json",
+    "foam_success": "https://github.com/alwansan/raf/actions/runs/42308583977"
+  },
+  "shared_resource": "none",
+  "next_step": "T3 should repair its event identity per ledger schema, then rerun existing refresh; T2 trace authentic pass1 unknown source producer in isolated experiment. Do not duplicate CI."
+}
