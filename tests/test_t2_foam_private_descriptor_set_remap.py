@@ -141,8 +141,9 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
 
     def test_unrecognized_unsafe_descriptor_category_rejected(self):
         corrupted=old();corrupted["push_constants"]=[{"id":99}]
+        _, bindings, sets, _ = scan_binary_decorations(binary())
         with self.assertRaises(ValueError):
-            reflected_ids(corrupted,mode="frag")
+            reflected_ids(corrupted, bindings, sets, mode="frag")
 
     def test_repeated_source_binary_relocation_has_failsafe(self):
         once,_=relocate_fragment_sets(binary(),old(),1)
