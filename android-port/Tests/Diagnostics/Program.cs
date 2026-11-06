@@ -99,6 +99,9 @@ class Program
             string failedRoot = Path.Combine(root, "fault-bounded-queue");
             var broken = new PersistentDiagnosticLog(failedRoot, 1024, 3, 1);
             int queueCountUnderFault = -1, pendingUnderFault = -1;
+            bool originalSeedSurvivedFault = false;
+            bool originalSeedRecoverable = false;
+            long overflowRetained = -1;
             try
             {
                 var reflection = System.Reflection.BindingFlags.Instance |
@@ -109,6 +112,7 @@ class Program
                 var pendingFault = (System.Collections.Concurrent.ConcurrentQueue<string>)
                     type.GetField("pending", reflection).GetValue(broken);
                 var countField = type.GetField("count", reflection);
+                var droppedField = type.GetField("dropped", reflection);
                 lock (faultIoGate)
                 {
                     // The background worker must not drain the queue until the
@@ -122,12 +126,28 @@ class Program
                     }
                     queueCountUnderFault = (int)countField.GetValue(broken);
                     pendingUnderFault = pendingFault.Count;
+                    overflowRetained = (long)droppedField.GetValue(broken);
+                    originalSeedSurvivedFault = pendingFault.Any(
+                        line => line.Contains("\"operation\":\"seed\""));
+                    Require(broken.LastError != null);
+                    // Restore test-only I/O. A durable queue must preserve the
+                    // first diagnostic and record the lost flood on recovery.
+                    string originalStartupPath = Directory.GetFiles(
+                        Path.Combine(failedRoot, "startup"), "startup-*.jsonl").Single();
+                    type.GetField("startup", reflection).SetValue(broken,
+                        new FileStream(originalStartupPath, FileMode.Append,
+                            FileAccess.Write, FileShare.Read));
+                    broken.Flush();
+                    originalSeedRecoverable = Lines(failedRoot).Any(
+                        line => line.Contains("\"operation\":\"seed\""));
                 }
             }
             finally { broken.Dispose(); }
             Require(queueCountUnderFault <= 1);
             Require(pendingUnderFault <= 1);
-            Require(broken.LastError != null);
+            Require(overflowRetained > 0);
+            Require(originalSeedSurvivedFault);
+            Require(originalSeedRecoverable);
             var repeated = new RepeatedDiagnosticMessages();
             DateTime now = DateTime.UtcNow;
             Require(repeated.First("Error", "same message\nfull stack", now));
