@@ -2,9 +2,9 @@
   "session_id": "20261106T0440Z-T4-scheduled-v2q8",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "de853ecee9fd56e450999b351f4b62977b59d78f",
-  "updated_at": "2026-11-06T04:40:00Z",
+  "updated_at": "2026-11-06T04:46:00Z",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
     "tests/test_t4_pointer_view_identity_contract.py",
@@ -18,5 +18,13 @@
     "20261106T0336Z-T4-scheduled-m7q2",
     "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8"
   ],
-  "owner_device_run": 42058825739
+  "owner_device_run": 42058825739,
+  "source_commit": "f97dda279dad10425db3ec5d859a00c32b666560",
+  "test_commit": "57b1f4724474be43d28e93a1f65a63400deff7cd",
+  "session_commit": "405cb736301c76cbfda44c66fc6e9e65933c455a",
+  "ci_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42163839014",
+    "https://github.com/alwansan/raf/actions/runs/42163838785"
+  ],
+  "next_step": "Read CI conclusions; do not duplicate runs; then device validation via T5 coordinated signed candidate."
 }
