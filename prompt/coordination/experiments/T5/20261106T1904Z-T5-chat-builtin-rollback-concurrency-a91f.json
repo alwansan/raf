@@ -5,9 +5,9 @@
   "session_id": "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "waiting_ci",
+  "status": "completed",
   "hypothesis": "Post-creation, pre-rollback externally modified or replaced shader include was unlinked unconditionally by builtin restorer. Inode+content guard preserves external changes while normal own-partial cleanup continues.",
-  "source_commit": "67e659e3ea67c43a66e43d65e53afb168645305c",
+  "source_commit": "2de34977eb1b4cb0aa865e35afdfea6a96b8c272",
   "experiment_key": "T5-builtin-shader-restore-rollback-synthetic-external-include-mutation-after-successful-create-before-osreplace-v1",
   "input_hashes": [],
   "tool_versions": {
@@ -29,15 +29,46 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42276738043",
     "https://github.com/alwansan/raf/actions/runs/42276737999",
-    "https://github.com/alwansan/raf/actions/runs/42276738013"
+    "https://github.com/alwansan/raf/actions/runs/42276738013",
+    "https://github.com/alwansan/raf/actions/runs/42277179726",
+    "https://github.com/alwansan/raf/actions/runs/42277322041"
   ],
   "budget": "existing source-only on-push CI; no heavy Unity/native or manual dispatch",
-  "observed_result": null,
+  "observed_result": {
+    "builtin_authentic_archive_sample_run": 42276738013,
+    "builtin_sample_shaders_restored": 5,
+    "builtin_archive_fingerprint_verified": true,
+    "source_only_B13_ci": 42276738043,
+    "b13_tests": 15,
+    "initial_A15_status": "red_due_stale_pre_atomic_test_fixture",
+    "test_fix_commit": "e9d125cc28f8a2f817a0c11ac21b5778f4aa59e9",
+    "A15_fixed_ci": 42277179726,
+    "A15_suites": [
+      4,
+      15,
+      4,
+      4
+    ],
+    "A15_final": "success",
+    "A14_workflow_dependency_fix": "2de34977eb1b4cb0aa865e35afdfea6a96b8c272",
+    "A14_fixed_ci": 42277322041,
+    "A14_suites": [
+      9,
+      4,
+      4,
+      4,
+      15
+    ],
+    "A14_final": "success",
+    "real_unity_game_build": false,
+    "device_verified": false
+  },
   "limitations": [
     "no device source data or private shader programs published",
     "no shader/FFT/Unity engine runtime fidelity claimed",
     "TOCTOU remains possible absent OS atomic conditional unlink",
     "trial r1 1/5, no native delivery request"
   ],
-  "next_step": "Read final source-pinned CI and close own scope."
+  "next_step": "Source-only final green and work released. Continue independent original-program/source↔Unity runtime binding after T3 evidence; no native build without 5/5 trial votes.",
+  "integration_commit": "67e659e3ea67c43a66e43d65e53afb168645305c"
 }
