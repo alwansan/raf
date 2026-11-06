@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
+  "issue_id": "COORD-001",
+  "type": "result",
+  "at": "2026-11-06T14:14:57.637Z",
+  "summary": "CI42231823163 strict canonical index failed Missing record identity on T1 scheduled paired FFT evidence 20261106T1408Z; added only explicit id equal unchanged session_id, preserved all seven original T1 keys/values using CAS commit9dd0316b. Strict parser unchanged. Original signed OBB full SHA and CRC remain SUCCESS CI42230326050; this is index hygiene only.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42231823163",
+    "https://github.com/alwansan/raf/commit/9dd0316b5713b894929d2fd6f61428d0150aba50",
+    "https://github.com/alwansan/raf/actions/runs/42230326050"
+  ],
+  "limitations": "No change to T1 WATER-001 computation, FFT parity or original test results; no OBB mount, Unity pixel shader or phone validation.",
+  "next_step": "Run strict live full T5 source-only index again and verify original OBB event included; no force."
+}
