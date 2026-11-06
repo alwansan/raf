@@ -1,0 +1,16 @@
+{
+  "id": "20261106T2020Z-T4-editor-mouse-cs0234-fix-k3m9",
+  "owner": "T4",
+  "session_id": "20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9",
+  "issue_id": "INPUT-005",
+  "type": "result",
+  "summary": "Owner native Unity run42281310905 failed Editor CS0234 x10 on AndroidPhysicalMouseCapture; T4 added editor-target C# ABI negative fixture under original Unity2021 references (RED CI42286855872 CS0103 x6) and fixed missing editor class with UNITY_5_3_OR_NEWER legacy static noncapture fallback f554e8b6; GREEN CI42287041110 Editor+Android managed compile and 48/48 physical mouse checks, plus platform CI42287041051. No native APK rerun/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/actions/runs/42286855872",
+    "https://github.com/alwansan/raf/commit/f554e8b6757e46aa037603ed592a04acc2bf7a61",
+    "https://github.com/alwansan/raf/actions/runs/42287041110",
+    "https://github.com/alwansan/raf/actions/runs/42287041051"
+  ],
+  "at": "2026-11-06T20:20:00Z"
+}
