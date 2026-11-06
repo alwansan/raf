@@ -4,11 +4,11 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2250Z-T4-chat-runtime-postinstall-rollback-p9v3",
   "origin": "chat",
-  "status": "active",
+  "status": "completed",
   "issue_id": "LOCAL-005",
   "track": "original-runtime-operations-postinstall-foreign-writer-rollback",
   "base_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
-  "updated_at": "2026-11-06T22:50:37.095Z",
+  "updated_at": "2026-11-06T22:54:29.945Z",
   "resumed_from_sessions": [
     "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2",
     "20261106T2237Z-T4-scheduled-native-sha-boundary-k8v3"
@@ -25,5 +25,13 @@
   "hypothesis": "After an instrumented C# write succeeds, another writer may edit source C# or GUID .meta before verification. Current failure rollback unconditionally writes stale original source bytes and overwrites the writer; replacement must be preserved with original backup.",
   "approach": "Add deterministic RED tests patching successful Path.write_bytes with immediately foreign edit to C# or meta. On post-write mismatch fail closed, preserving alternate source and whole backup rather than writing stale original C#; retain existing best-effort recovery for interrupted source writes. Verify existing offline original-C# integration workflow and no game bytes exposed.",
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Source-only, no Unity dispatch; RED and GREEN tests then independent session/experiment/event and ownership release."
+  "next_step": "Release both source/test files; inspect T5 owned native 42296450023 final status and evidence. If signed candidate, require exact source SHA and OBB then same-world RGD full-close/reopen on phone and hardware mouse. LOCAL-005 open, NOT_READY 0/3.",
+  "red_commit": "748562011da90ec95ee6121134a7866da7fcb4d1",
+  "red_run": "https://github.com/alwansan/raf/actions/runs/42307770698",
+  "green_commit": "5f31be4be6623b3077d8fbbfba34cf52c7e367fa",
+  "green_run": "https://github.com/alwansan/raf/actions/runs/42307892688",
+  "secondary_source_run": "https://github.com/alwansan/raf/actions/runs/42307892487",
+  "result": "RED original postinstall source and GUID foreign writes overwritten by stale rollback; GREEN 19/19 operation trace synthetic tests, B22 14/14 source transaction tests and original-source managed C# compile exit=0; source, meta and full backup preserved after foreign epoch. No original game data or Unity native build changed.",
+  "event": "prompt/coordination/B_TEAM/events/T4/20261106T2254Z-T4-runtime-postinstall-safe-rollback-p9v3.json",
+  "experiment": "prompt/coordination/experiments/T4/20261106T2250Z-runtime-postinstall-foreign-rollback-p9v3.json"
 }
