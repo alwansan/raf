@@ -169,6 +169,11 @@ def _profile(path, *, variant):
         for axis in ("x", "y", "mip"):
             if _count(zero[axis], 0, changed) + _count(other[axis], 0, changed) > changed:
                 raise ValueError("Impossible per-axis coordinate profile")
+        # Every mismatched coordinate must differ on at least one axis.
+        # Axes may overlap per invocation, so only reject insufficient coverage.
+        axis_coverage_upper_bound = sum(zero[axis] + other[axis] for axis in ("x", "y", "mip"))
+        if axis_coverage_upper_bound < changed:
+            raise ValueError("FFT coordinate drift lacks axis coverage")
         mismatch.append(changed)
         zeros_x.append(zero["x"])
         zeros_y.append(zero["y"])
