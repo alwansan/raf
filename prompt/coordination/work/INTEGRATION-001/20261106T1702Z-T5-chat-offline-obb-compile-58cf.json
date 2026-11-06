@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "offline-managed-build-dependency",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d8b014363bcfcf82cbcb496a81e512acad60b7d8",
-  "updated_at": "2026-11-06T17:02:00Z",
+  "updated_at": "2026-11-06T17:05:50.951Z",
   "resumed_from_sessions": [
     "20261106T1649Z-T5-scheduled-runtime-attribution-c82f.md",
     "20261106T1541Z-T5-chat-obb-routes-b8a1.md"
@@ -30,5 +30,44 @@
   "resource_key": "offline managed gameplay compile only, independent of Unity native/OBB source probe",
   "hypothesis": "Offline original managed build excludes newly used AndroidExpansionArchiveProbe.cs from runtime source copy allowlist, causing two CS0103 in copied AndroidTestDiagnostics; adding only source dependency and a fail-closed parity test should restore compile.",
   "coordination": "Active T5 chat owns AndroidTestDiagnostics.cs and .github/workflows/raft-t5-installed-obb-read-probe.yml; scheduled T5 owns PERF-007 PID epoch guard. Neither touched. T4 local gameplay untouched.",
-  "next_step": "Inspect HEAD and isolated test, add source allowlist/workflow triggers, rerun existing cheap offline integration CI; avoid full native build."
+  "next_step": "Preserve corrected compiler support allowlist in native diagnostic changes; future Unity ARM64 or phone exact installed OBB test needed for real device proof; separate T5 chat owns runtime probe and T5 scheduled owns performance epoch scope; no duplicate build.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42256234615",
+    "https://github.com/alwansan/raf/actions/runs/42258190836"
+  ],
+  "source_commit": "591e6e7da79b69916f8fe9a63f6242a17c226934",
+  "result": {
+    "previous_run": 42256234615,
+    "previous_job": 128024049155,
+    "previous_compile_exit": 1,
+    "previous_error_codes": {
+      "CS0103": 2
+    },
+    "repaired_run": 42258190836,
+    "repaired_job": 128030880997,
+    "conclusion": "success",
+    "adversarial_unit_tests": "4/4 PASS",
+    "original_managed_source_units": 14,
+    "original_local_rpc_identity": "PASS",
+    "original_managed_compile_exit": 0,
+    "remaining_compile_errors": 0,
+    "runtime_apk_or_phone_verified": false
+  },
+  "observed_result": {
+    "previous_run": 42256234615,
+    "previous_job": 128024049155,
+    "previous_compile_exit": 1,
+    "previous_error_codes": {
+      "CS0103": 2
+    },
+    "repaired_run": 42258190836,
+    "repaired_job": 128030880997,
+    "conclusion": "success",
+    "adversarial_unit_tests": "4/4 PASS",
+    "original_managed_source_units": 14,
+    "original_local_rpc_identity": "PASS",
+    "original_managed_compile_exit": 0,
+    "remaining_compile_errors": 0,
+    "runtime_apk_or_phone_verified": false
+  }
 }
