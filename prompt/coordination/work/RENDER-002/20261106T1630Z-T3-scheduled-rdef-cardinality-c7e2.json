@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "owner": "T3",
   "issue": "RENDER-002",
-  "status": "in_progress",
+  "status": "source_fixed_pending_test",
   "base_sha": "e9ef2627d8bc09e007c5d2d59da1385136e5778b",
   "resumed_from_sessions": [
     "20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c",
@@ -17,5 +17,10 @@
   "experiment_key": "T3-PARTICLE108-RDEF-CARDINALITY-SOURCE-ONLY",
   "shared_resource": "none; no Unity, ZIP2 staging or Actions dispatch",
   "taken_over_from": "T3 chat native RDEF diagnostic CI42249097396; no B agent reactivated",
-  "constraints": "No game assets, metadata or original bytes; distinct files from concurrent T3 chat if overlap"
+  "constraints": "No game assets, metadata or original bytes; distinct files from concurrent T3 chat if overlap",
+  "source_commit": "2fc26e0373cf1b6e77f64343b5ea29348f9fa4df",
+  "test_commit": "7c5fb5987ec29c17a53bb83ccf538cdb401bd2c2",
+  "session_commit": "b146f2d8b2f70f3166841fbedcd55ecd66d29550",
+  "verification": "Not executed; source-only review and GitHub publish; CI not dispatched",
+  "next_step": "Run source-free tests; after fresh overlap check coordinate original 8-stage RDEF cardinality recheck; do not claim shader recovery"
 }
