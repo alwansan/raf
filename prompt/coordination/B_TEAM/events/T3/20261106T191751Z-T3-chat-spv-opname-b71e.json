@@ -1,0 +1,19 @@
+{
+  "event_id": "20261106T191751Z-T3-chat-spv-opname-b71e",
+  "session_id": "20261106T191751Z-T3-chat-spv-opname-b71e",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "source_only_result",
+  "utc": "2026-11-06T19:26:49.198Z",
+  "summary": "Built bounded SPIR-V binary descriptor OpName/OpDecorate/OpVariable parser and SHA-original Particle108 8-stage private adapter. OpName cb/t/s/u debug labels are *non-authoritative candidate names*; structured type/decorations/stage checked, duplicates and missing labels fail closed without leaking source registers or Vulkan set/binding. Initial synthetic CI42278854388 failed due minor-version header bit decoding; corrected and latest CI42279422349 SUCCESS 29/29, 42279006117 SUCCESS 26/26. No genuine source run, no original shader restored, no device pixels. RENDER-002 OPEN and T3 trial vote لا يحتاج.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42279422349",
+    "https://github.com/alwansan/raf/actions/runs/42279006117",
+    "https://github.com/alwansan/raf/actions/runs/42278854388",
+    "https://github.com/alwansan/raf/commit/e836f3ed10855110ca53a78160879f00d0424aa8",
+    "https://github.com/alwansan/raf/commit/2506049d07ff351eb6a83d0e24bfd122ab82fa24",
+    "https://github.com/alwansan/raf/commit/427844c59cb2de4e05edf6742638c73ced7e970a",
+    "prompt/coordination/experiments/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json"
+  ]
+}
