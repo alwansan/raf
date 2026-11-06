@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0843Z-T4-scheduled-r6v2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "baseline_sha": "b1709e18bb88fad9094c5c0ac3a1c32c81bc7d3c",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T0843Z-T4-scheduled-r6v2-ci-source-gate.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0843Z-T4-scheduled-r6v2.md"
+  ],
+  "experiment_key": "T4-pointer-identity-d234b10e-source-ci-42182264435-42182264431-and-446bc1f0-test-coverage",
+  "resource_key": null,
+  "hypothesis": "Verify actual CI coverage of production fix versus later regression test, and distinguish source gate from phone acceptance without duplicating runs",
+  "resumed_from_sessions": [
+    "20261106T0740Z-T4-scheduled-p4k8",
+    "20261106T0644Z-T4-scheduled-h6r9"
+  ],
+  "updated_at": "2026-11-06T08:43:00Z"
+}
