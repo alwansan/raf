@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2138Z-T2-chat-foam-matdoc-82bd",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "afa18e3371c882f2b0842111ef6ea61aa78b71fc",
+  "updated_at": "2026-11-06T21:38:01Z",
+  "resumed_from_sessions": [
+    "20261106T2117Z-T2-scheduled-foam-ci-reconcile-k6m2",
+    "20261106T2044Z-T2-chat-field-consumer-trace-d4a6"
+  ],
+  "hypothesis": "A syntactically YAML .mat file with no !u!21 Material document is silently excluded from the read-only Foam exported Material inventory, causing false successful completeness; fail closed only for malformed .mat, preserve no-material-file dynamic-host case.",
+  "experiment_key": "T2-Foam-export-YAML-dotmat-without-Material-document-redgreen-v1",
+  "resource_key": "T2 source-only synthetic export pointer verifier; not Unity/native",
+  "intended_files": [
+    "scripts/t2_foam_export_binding_probe.py",
+    "tests/test_t2_foam_export_binding_probe.py",
+    ".github/workflows/raft-t2-foam-export-material-guid-sourceonly.yml (existing path-trigger only; no edit)",
+    "prompt/coordination/clients/T2/sessions/20261106T2138Z-T2-chat-foam-matdoc-82bd.md",
+    "prompt/coordination/work/WATER-001/20261106T2138Z-T2-chat-foam-matdoc-82bd.json",
+    "prompt/coordination/experiments/T2/20261106T2138Z-T2-chat-foam-matdoc-82bd.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2138Z-T2-chat-foam-matdoc-82bd-result.json"
+  ],
+  "do_not_touch": [
+    "scripts/t2_foam_private_installer.py",
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    ".github/raft-native-build-request.json",
+    ".github/raft-native-experiment-request.json",
+    "any Unity asset or meta/GUID",
+    "T1/T3/T4/T5 files"
+  ],
+  "prior_evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42288126476",
+    "https://github.com/alwansan/raf/actions/runs/42291227491",
+    "https://github.com/alwansan/raf/actions/runs/42287347419"
+  ],
+  "native_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Add test for valid %YAML .mat with missing !u!21 document, implement one-path fail-closed guard, let existing source-only Actions run, reconcile; no Unity or private data."
+}
