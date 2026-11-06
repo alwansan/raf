@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "event_id": "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
+  "session_id": "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "type": "source_only_integration",
+  "utc": "2026-11-06T19:39:28.521Z",
+  "summary": "Manual-only SHA-original Particle108 8-stage SPIR-V debug candidate + stage cardinality workflow created; NOT dispatched. Separate source-free CI 42281080458 SUCCESS, 29/29 T3 SPV name/type+source-adapter tests plus 12/12 scheduled T3 strict DXBC-SPV contract validation tests = 41/41 PASS. Scheduled agent script/tests left unchanged. No original source resource mapping, Unity rendering, or Adreno pixels proven. T3 vote NO and RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42281080458",
+    "https://github.com/alwansan/raf/commit/95d401fe6e6408c3c07789b13c9f8dfa1354c0bc",
+    "https://github.com/alwansan/raf/commit/a1b6be9f1d4109ab144f754be00a74c7a44682fd",
+    "prompt/coordination/clients/T3/sessions/20261106T193502Z-T3-chat-original-candidate-gate-d41f.md",
+    "prompt/coordination/experiments/T3/20261106T193502Z-T3-chat-original-candidate-gate-d41f.json"
+  ],
+  "limitations": [
+    "Manual-only original shader workflow unrun",
+    "SPV debug names and cardinality do not establish DXBC register-to-Vulkan descriptor equivalence",
+    "No production original Shader48 restoration or Android phone pixels",
+    "No native build, no other agents' jobs cancelled"
+  ]
+}
