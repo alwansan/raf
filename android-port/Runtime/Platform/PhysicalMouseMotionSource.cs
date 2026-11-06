@@ -7,6 +7,7 @@ namespace RaftAndroid.Platform
     // captured SOURCE_TOUCHPAD has absolute getX/Y and relative AXIS 27/28.
     public static class PhysicalMouseMotionSource
     {
+        public const int Mouse = 8194; // InputDevice.SOURCE_MOUSE (event from touchpad too)
         public const int MouseRelative = 131076; // InputDevice.SOURCE_MOUSE_RELATIVE
         public const int Touchpad = 1048584; // InputDevice.SOURCE_TOUCHPAD
         public const int AxisRelativeX = 27; // MotionEvent.AXIS_RELATIVE_X
@@ -21,6 +22,22 @@ namespace RaftAndroid.Platform
             if (source < 0) return Kind.Ignore;
             if ((source & MouseRelative) == MouseRelative) return Kind.Mouse;
             if ((source & Touchpad) == Touchpad) return Kind.Touchpad;
+            return Kind.Ignore;
+        }
+
+        // Android documents that a touchpad normally sends MotionEvent
+        // SOURCE_MOUSE, while InputDevice.getSources() advertises both mouse
+        // and touchpad. Event source alone cannot identify a touchpad.
+        // This fallback is only for an actual SOURCE_MOUSE event with an
+        // attached device advertising SOURCE_TOUCHPAD. Other event classes
+        // (including a touchscreen from the same composite device) fail open.
+        public static Kind Classify(int eventSource, int deviceSources)
+        {
+            Kind direct = Classify(eventSource);
+            if (direct != Kind.Ignore) return direct;
+            if (eventSource == Mouse && deviceSources >= 0 &&
+                (deviceSources & Touchpad) == Touchpad)
+                return Kind.Touchpad;
             return Kind.Ignore;
         }
 
