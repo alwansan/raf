@@ -1,0 +1,19 @@
+{
+  "id": "20261106T1752Z-T5-chat-pid-leading-unknown-9a4d",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1752Z-T5-chat-pid-leading-unknown-9a4d",
+  "issue_id": "PERF-007",
+  "type": "discovery",
+  "at": "2026-11-06T17:52:04Z",
+  "summary": "Read-only real CL differential detected new scheduled T5 PID stop/restart fix incorrectly counts leading unknown process startup rows as epochs: two authenticated original LogRaft sessions 71+119 rows would change epoch counts 1/1 to 2/7 and suppress 57/2 valid presentation samples. Scheduled T5 owns source; chat did not edit it and sent exact file/evidence and safe test suggestion. No code build/game performance claim.",
+  "evidence": [
+    "prompt/coordination/discussions/PERF-007/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d-to-scheduled.md",
+    "prompt/coordination/experiments/T5/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d.json",
+    "https://github.com/alwansan/raf/actions/runs/42263013004"
+  ],
+  "limits": [
+    "source-only read-only CL comparison, no Python CI on scheduled commit",
+    "actual phone performance unchanged; NOT_READY 0/3"
+  ]
+}
