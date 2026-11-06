@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "track": "source-only Unity exception diagnostics for original world and save",
+  "base_sha": "c5c05827589db1810b1ab9bb738c92028fce6e4a",
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "يحتاج",
+    "source": "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "decision_owner": "T4",
+    "decision_timestamp_utc": "2026-11-06T17:36:00Z",
+    "note": "Already valid and sourced to substantial post-phone physical mouse capture changes; no vote rewrite as unchanged, never claim this source-only scope merits new trial."
+  },
+  "hypothesis": "A Shutdown then Initialize in the same Unity process creates a fresh PersistentDiagnosticLog but leaves static RepeatedDiagnosticMessages entries from the previous session, silently dropping first occurrence of identical Unity error stack from subsequent durable JSONL.",
+  "experiment_key": "T4-LOCAL005-reinitialize-same-process-fresh-logger-dedup-first-Unity-error-synthetic-AndroidRuntimeLog-dotnet8-v1",
+  "intended_files": [
+    "android-port/Tests/Diagnostics/Program.cs",
+    "android-port/Runtime/Platform/AndroidRuntimeLog.cs"
+  ],
+  "resource_key": null,
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1736Z-T4-scheduled-m7q2.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1719Z-T4-chat-first-unity-error-recovery-b5q7.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1731Z-T4-chat-log-pair-linear-w6q2.md"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add same-process second AndroidRuntimeLog.Initialize synthetic test demanding new full Error per logger session; source-only red gate; fix only grouping lifecycle if reproduced; green CI and original startup smoke. Preserve vote and all other T-team rows; no native build.",
+  "updated_at": "2026-11-06T17:51:00Z"
+}
