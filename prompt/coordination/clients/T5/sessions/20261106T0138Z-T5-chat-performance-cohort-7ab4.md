@@ -1,0 +1,14 @@
+# T5 chat: 20261106T0138Z-T5-chat-performance-cohort-7ab4
+- origin: chat
+- session_id: 20261106T0138Z-T5-chat-performance-cohort-7ab4
+- baseline_sha: 6421459579fa5e0c006a088cb30ecf76f023e129
+- status: active
+- resumed_from: T5 chat 20261105T2208Z patch OBB exact classification; T5 scheduled 20261106T0047Z resolution audit (separate ownership); owner device report
+- work: prompt/coordination/work/PERF-007/20261106T0138Z-T5-chat-performance-cohort-7ab4.json
+- scope: PERF-007, read-only LogRaft SurfaceFlinger freshness/error-onset cohort; scripts/tests/one source-only workflow/new report only
+- source CL pinned tree 520c4cf409aa20a4db54ff80ed87d8807d9cba57; JSONL blob bb24dda68503897cf4e2a5e4e2d8aef3e71777b8 (220911-559, 71 rows), 0327e5a3bb01ca944b2c40e07d49f503914dd274 (230108-327, 119 rows).
+- preliminary source observation: first session 57 valid SurfaceFlinger FPS and 6 stale telemetry; 2nd session only 2 valid samples at 120.77/120.78 before render errors start at sample16, then 105 stale. No comparative performance conclusion.
+- caution: SurfaceFlinger presentation estimates not Unity FrameTiming, KGSL GPU busy system-wide; no causal thermal/gpu interpretation or multi-session mean averaging.
+- experiment_key: t5-CL520c4c-20261105-version89-two-sessions-performance-fresh-surface-same-rendererror-cohort-v1
+- files/experiment and resource registered before implementation; no T5 scheduled Resolution, T1/T2 water, T3 materials, T4 input, Unity, OBB files or release touched.
+- next: strict time/pid/freshness/evidence tests and source-authenticated real pinned CI; document non-comparable verdict, avoid disclosing raw user logs.
