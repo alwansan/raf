@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1221Z-T5-chat-resolution-param-5df2",
+  "issue_id": "DISPLAY-003",
+  "status": "original_compiled_parameter_classified_source_ci_success",
+  "experiment_key": "T5-original-ZIP2-AssemblyCSharp-sha0a6f-GraphicsSettingsBox-one-nonint-parameter-type-categories-v1",
+  "original": {
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "file": "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commit": "82a8d38962f97bdae7ff9be030a44af72331e03a",
+  "source_files": [
+    "android-port/Experiments/T5/ResolutionParameterProbe/Program.cs",
+    "android-port/Experiments/T5/ResolutionParameterProbe/ResolutionParameterProbe.csproj",
+    "scripts/t5_validate_original_resolution_parameter.py",
+    "tests/test_t5_validate_original_resolution_parameter.py",
+    ".github/workflows/raft-t5-original-resolution-parameter.yml"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42217714507",
+  "job_id": 127891776765,
+  "conclusion": "success",
+  "tests": {
+    "python_adversarial": "9/9",
+    "compiled_cecil_synthetic": "8/8",
+    "authentic_original_sha_and_caller": "pass"
+  },
+  "result": {
+    "type_category": "custom_reference_type",
+    "caller_is_private": true,
+    "caller_is_static": false,
+    "caller_returns_void": true,
+    "one_parameter_caller_count": 1,
+    "zero_parameter_caller_count": 2,
+    "dropdown_call_sites": 8,
+    "dropdown_field_references": 8,
+    "dropdown_value_set_sites": 4,
+    "dropdown_value_get_sites": 0,
+    "dropdown_refresh_sites": 1,
+    "dropdown_event_get_sites": 0,
+    "whole_class_addlistener_sites": 0,
+    "whole_class_dropdown_event_get_sites": 0,
+    "prefs_write_sites_in_caller": 0,
+    "resolution_set_sites_in_caller": 0,
+    "scalable_buffer_resize_sites_in_caller": 0,
+    "serialized_unity_event_callback_proven": false,
+    "persisted_android_render_resolution_proven": false,
+    "android_device_tested": false
+  },
+  "discriminating_result": "The one-param Dropdown-heavy caller is private void instance method taking custom reference object (not int/bool/UnityEngine.Resolution or Dropdown), with four value setters and one UI refresh but zero direct value getters/listener event registration; consistent with UI synchronization, not proof of behavior.",
+  "limitations": [
+    "No original proprietary symbols, tokens, bytecode or source published.",
+    "No concrete Unity onValueChanged/selected-option callback or custom prefs read/write path proved.",
+    "No Unity editor, signed Android APK or phone runtime test; owner settings already worked."
+  ],
+  "next_step": "Leave working Settings unchanged; prioritize high-impact T5 package/integration verification and original graphics/FFT root-cause support in coordination with T1-T3, with actual artifact or device proof.",
+  "report": "docs/T5_ORIGINAL_RESOLUTION_PARAMETER_2026-11-06.md",
+  "updated_at": "2026-11-06T12:29:57.347Z"
+}
