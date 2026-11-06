@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
+  "owner": "T1",
+  "session_id": "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T20:33:00Z",
+  "summary": "One opt-in original source SHA ZIP2-vs-real Unity FFT private comparison started: first source-only CI42289104961 RED due omitted workflow path in sparse checkout, corrected commit 177a573. Retry 42289238865 passed source-only and GameCI digest, running Unity sourcefree preflight. No original GPU or Android result claimed and no native XAPK request.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42289104961",
+    "https://github.com/alwansan/raf/actions/runs/42289238865",
+    "https://github.com/alwansan/raf/commit/177a57342dc6197e2f5dceee940c9bb0bec34c6f"
+  ],
+  "status": "waiting_ci"
+}
