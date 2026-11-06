@@ -1,6 +1,6 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
 
-# Opt-in replay session: 20261105T232830Z-T1-chat-5d3b90
+# Opt-in replay session: 20261106T024340Z-T1-chat-84f0c6
 on:
   workflow_dispatch:
   push:
@@ -27,6 +27,7 @@ jobs:
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
       DEBIAN_FRONTEND: noninteractive
+      T1_INTEGER_SOURCE: ${{ contains(github.event.head_commit.message, '[t1-integer-source]') }}
       T1_DISPATCH_CANARY: ${{ contains(github.event.head_commit.message, '[t1-dispatch-canary]') }}
       ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
       CLI_SHA256: 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a
@@ -201,6 +202,21 @@ jobs:
           python3 -m scripts.t1_fft_vulkan_parity_capture --project t1-original-derived-unity
           python3 -m scripts.t1_fft_pass0_vulkan_trace --project t1-original-derived-unity \
             --invocation-keys --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin
+          if [[ "$T1_INTEGER_SOURCE" == true ]]; then
+            scratch="$(mktemp -d "$RUNNER_TEMP/t1-integer-source.XXXXXX")"
+            trap 'rm -rf "$scratch"' EXIT
+            root=t1-original-derived-unity
+            spirv-opt --target-env=vulkan1.1 --convert-local-access-chains \
+              --eliminate-local-single-block --eliminate-local-single-store --ssa-rewrite \
+              "$root/_private_vulkan/slot0.spv" -o "$scratch/promoted.spv" > "$scratch/opt.log" 2>&1
+            spirv-dis --raw-id "$scratch/promoted.spv" -o "$scratch/original.spvasm"
+            python3 -m scripts.t1_fft_source_integer_coordinates "$scratch/original.spvasm" "$scratch/integer.spvasm"
+            spirv-as --target-env vulkan1.1 "$scratch/integer.spvasm" -o "$scratch/integer.spv" > "$scratch/as.log" 2>&1
+            spirv-val --target-env vulkan1.1 "$scratch/integer.spv" > "$scratch/val.log" 2>&1
+            spirv-cross "$scratch/integer.spv" --hlsl --shader-model 50 --output "$scratch/integer.hlsl" > "$scratch/cross.log" 2>&1
+            { printf '#pragma kernel main\n'; cat "$scratch/integer.hlsl"; } > "$root/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
+            echo 'RAFT_T1_SOURCE_INTEGER_COORDINATES unity_candidate=true untouched_vulkan_reference=true'
+          fi
           python3 - <<'PY'
           from pathlib import Path
           from scripts.t1_fft_pass0_trace_variant import instrument
