@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f",
+  "issue_id": "RENDER-002",
+  "status": "completed_original_source_private_structural_candidate_proven",
+  "source_branch": "feature/android-native-port",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "base_sha": "e4ada76d62e6e3dcb073147cd1205e94fed8a4a5",
+  "experiment_key": "T3-SHA-original-Shader48-4paired-programs-private-one-variant-per-ShaderLab-structural-preflight-zip2-15964-6b2f",
+  "hypothesis": "Four original Shader48 DXBC keyword pairs can be each independently translated to scratch HLSL and placed into four structurally complete private ShaderLab one-Pass files with original authored properties/defaults and RGB pass state; keyword runtime selection remains unproven.",
+  "terminal_run": {
+    "id": 42291454379,
+    "url": "https://github.com/alwansan/raf/actions/runs/42291454379",
+    "job_id": 128145640222,
+    "run_sha": "f1f1587296ec48853b4ef57511291ceb2ee3c23d",
+    "conclusion": "success",
+    "source_only_regressions_passed": 12
+  },
+  "original_evidence": {
+    "original_sha_verified_scene_files": 6,
+    "original_sha_verified_shader_owner_files": 4,
+    "original_selected_particle_renderer_use_slots": 108,
+    "original_vsfs_keyword_pairs": 4,
+    "original_vertex_stages": 4,
+    "original_fragment_stages": 4,
+    "original_dxbc_stages_translated": 8,
+    "original_private_spirv_to_HLSL_stages": 8,
+    "independent_HLSL_SPIRV_roundtrip_stages_valid": 8,
+    "private_ShaderLab_files_created": 4,
+    "per_candidate_complete_passes": 1,
+    "per_candidate_authored_properties": 13,
+    "per_candidate_texture_properties": 2,
+    "authored_property_name_type_default_parity_candidates": 4
+  },
+  "code_commits": [
+    {
+      "sha": "a86e0f711a7152c1e136aedd4b88252b852efdcc",
+      "change": "private no-leak original source to one-variant-per-shader structural staging"
+    },
+    {
+      "sha": "f7402bc02d9c0f55ac59ef071346163c1eb35330",
+      "change": "12 synthetic fail-closed regression controls"
+    },
+    {
+      "sha": "f1f1587296ec48853b4ef57511291ceb2ee3c23d",
+      "change": "bounded automatic source-authentic original CI"
+    }
+  ],
+  "paths": [
+    "scripts/t3_particle108_private_shaderlab_variants.py",
+    "tests/test_t3_particle108_private_shaderlab_variants.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml"
+  ],
+  "constraints": {
+    "all_shaderlab_sources_exist_runner_temp_only": true,
+    "runner_cleanup_after_success": true,
+    "raw_game_shader_source_values_guids_or_bindings_published": false,
+    "private_shaderlab_or_HLSL_artifact_uploaded": false,
+    "production_project_shader_or_meta_changed": false,
+    "original_material_texture_bindings_verified": false,
+    "keyword_runtime_selectability_verified": false,
+    "Unity_import_or_gpu_shader_compiler_verified": false,
+    "Android_visual_effects_verified": false,
+    "trial_vote": "لا يحتاج",
+    "issue": "OPEN_NOT_READY"
+  },
+  "next_step": "Private Unity2021.3 shader import/compile probe on each of four scratch-only candidates without integrating into game, followed by a source-verified keyword-selection and real material binding strategy; do NOT treat four separate files as one runnable shader or start duplicate Android build."
+}
