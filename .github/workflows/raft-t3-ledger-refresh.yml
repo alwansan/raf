@@ -109,6 +109,20 @@ jobs:
           # only 2/4 paired interfaces; phone remains explicitly untested.
           particle108_vulkan="https://github.com/alwansan/raf/actions/runs/42141506120"
           assert particle108_vulkan in issue[0]["evidence"]
+          # Exact original Particle108 source and HLSL roundtrip SPIR-V
+          # compiler-reflected variable names share NONE of 26 input or
+          # 20 output names. Name-only location rewrites are unsafe.
+          particle108_namebridge="https://github.com/alwansan/raf/actions/runs/42144978122"
+          assert particle108_namebridge in issue[0]["evidence"]
+          assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
+                     and r["counts"]["original_roundtrip_input_name_type_matches"]==0
+                     and r["counts"]["original_roundtrip_output_name_type_matches"]==0
+                     and r["counts"]["original_roundtrip_input_named_entries_each"]==26
+                     and r["counts"]["original_roundtrip_output_named_entries_each"]==20
+                     and r["counts"]["original_roundtrip_stages_with_full_name_type_preservation"]==0
+                     and r["counts"]["automated_location_patch_by_compiler_reflected_names_only_verified"] is False
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
                      and r["counts"]["original_source_DXBC_to_valid_SPIRV_Vulkan11_stage_count"]==8
                      and r["counts"]["roundtrip_SPIRV_vertex_fragment_pair_interfaces_compatible"]==2
