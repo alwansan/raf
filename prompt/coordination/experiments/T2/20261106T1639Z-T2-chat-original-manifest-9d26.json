@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1639Z-T2-chat-original-manifest-9d26",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "Two previously unresolved external Material Shader PPtrs in original sharedassets0 could be uniquely resolved to immutable manifest candidates and SHA-staged typed Shader PathIDs without inventing a Foam runtime alias.",
+  "source_commit": "605acff84d7a7d59315cdeaf227fb1ce748df295",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    {
+      "scope": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "scope": "Foam Shader PathID2420 (source object)",
+      "sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+    },
+    {
+      "scope": "new original target file",
+      "bytes": 758412,
+      "sha256": "private_source_only_verification_withheld"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "git_sparse_checkout": "set --no-cone Git CLI",
+    "python": "runner Python 3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_foam_original_manifest_pptr.py -v",
+    "python3 -m unittest discover -s tests -p test_t2_external_pptr_manifest_resolver.py -v",
+    "python3 -m scripts.t2_foam_original_manifest_pptr --zip2 <pinned immutable checkout> --source <SHA-staged sharedassets0> --destination <isolated scratch> --out <safe count-only JSON>"
+  ],
+  "negative_controls": [
+    "unique vs absent vs ambiguous basenames",
+    "fail-closed malformed unrelated manifest SHA/path",
+    "invalid path traversal and unpinned target rejection",
+    "invalid material pointer type/fileID",
+    "full 366-row declared-byte and independent four-owner pin guard",
+    "SHA check staged target and typed Shader PathID"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-manifest-pptr.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42256633561",
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42255582427",
+    "https://github.com/alwansan/raf/actions/runs/42255987406",
+    "https://github.com/alwansan/raf/actions/runs/42256271654"
+  ],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42256633561/artifacts/13523097034"
+  ],
+  "budget": "18 minutes Ubuntu 24.04; original single 115978112B owner + at most 384MiB additional candidate target staging; no game binaries run, Unity game build or Android devices.",
+  "status": "completed",
+  "observed_result": {
+    "source_pin_authenticated": true,
+    "original_manifest_rows": 366,
+    "original_manifest_total_declared_bytes": 7789295609,
+    "manifest_total_bytes_sha_verified": false,
+    "original_materials": 351,
+    "external_material_shader_pptrs": 7,
+    "prior_known_four_owner_candidates": 5,
+    "previously_unresolved": 2,
+    "unique_manifest_matches": 2,
+    "matched_distinct_target_files": 1,
+    "original_target_file_bytes_sha_verified": 758412,
+    "typed_Shader_PathIDs_verified": 2,
+    "typed_Shader_absent": 0,
+    "synthetic_tests_passed": 18,
+    "GitHub_Actions_conclusion": "success",
+    "UNITY_GUID_verified": false,
+    "Adreno_pixels_verified": false,
+    "CB0_upload_verified": false
+  },
+  "rejected_hypotheses": [
+    "A missing four-owner basename candidate means no original file exists: both two pointers uniquely match one other pinned original file.",
+    "git sparse-checkout add --no-cone is accepted on Linux Git: it fails; set --no-cone is required.",
+    "Source-typed Shader target identity is equivalent to Unity GUID/runtime or original Foam Material identity: not proven."
+  ],
+  "limitations": [
+    "The 366-row manifest aggregate is verified metadata, not an all-files content digest.",
+    "The two target Shader objects may not be water/Foam; no runtime material owner asserted.",
+    "Unity external GUID, ShaderLab binding, CB upload, Spectrum/Blur/FFT integration and device pixels remain unverified.",
+    "No raw proprietary game bytes, private symbols, paths or target SHA was exported."
+  ],
+  "integration_commit": "605acff84d7a7d59315cdeaf227fb1ce748df295",
+  "evidence_doc": "docs/T2_FOAM_EXTERNAL_MANIFEST_PPTR_2026-11-06.md",
+  "next_step": "Privately test external Unity GUID identity and true Shader owner/Material binding for these two candidates; then pursue actual two-pass Foam water ShaderLab/Unity/Adreno without synthetic placeholders.",
+  "updated_at": "2026-11-06T16:56:51.777Z"
+}
