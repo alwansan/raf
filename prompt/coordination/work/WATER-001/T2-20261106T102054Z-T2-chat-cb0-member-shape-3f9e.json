@@ -2,9 +2,9 @@
   "session_id": "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "a04368f3b4b5197bfb2b9a34969f8921e42c5dc5",
-  "updated_at": "2026-11-06T10:21:00Z",
+  "updated_at": "2026-11-06T10:24:00Z",
   "resumed_from_sessions": [
     "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
     "20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e",
@@ -39,5 +39,13 @@
     "d8c5134e36f588a8273a5476e393d708c2ad639e"
   ],
   "sourcefree_preflight": "CI completed preflight source-only tests successfully; original-private phase installing tools",
-  "next_step": "Inspect original compiled two pass member geometry safe summary and CI verdict, fix any failed guard without removing authentic source pins; record exact evidence and open member-upload limitation."
+  "next_step": "Prove per-pass original CB0 array extent direction/active index access and Unity CBuffer upload range/lifetime; only then consider authentic ShaderLab install coordinated with T1/T5. Do not repeat equivalent CI without new hypothesis.",
+  "run_conclusion": "success",
+  "test_result": "sourcefree_86_of_86_passed_and_original_4_stages_private_source_authenticated",
+  "safe_observation": "In BOTH original Foam passes 1 shared UBO, one member VS+FS same start/type/stride, array length shape mismatched, different reflected CB0 extents. Exact member geometry 0 of 1 each pass.",
+  "evidence_memo": "docs/T2_FOAM_ORIGINAL_CB0_MEMBER_ARRAY_SHAPE_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T102054Z-T2-chat-cb0-member-shape-3f9e.json",
+  "result_event": "prompt/coordination/B_TEAM/events/T2/20261106T102054Z-T2-chat-cb0-member-shape-3f9e-result.json",
+  "private_cleanup_verified": true,
+  "unity_import_or_device_verified": false
 }
