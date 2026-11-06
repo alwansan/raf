@@ -68,7 +68,13 @@ jobs:
               { echo 'T1 historical run metadata unavailable'; exit 1; }
             gh api "repos/alwansan/raf/actions/jobs/$job" > "$d/$name-job" 2>/dev/null ||
               { echo 'T1 historical job metadata unavailable'; exit 1; }
-            gh api "repos/alwansan/raf/actions/jobs/$job/logs" > "$d/$name-log" 2>/dev/null ||
+            # REST job-log endpoint returns an ephemeral signed cross-host redirect.
+            # curl -L follows it without forwarding authorization to the other host.
+            curl -fsSL --retry 2 --connect-timeout 15 --max-time 70 \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/alwansan/raf/actions/jobs/$job/logs" \
+              -o "$d/$name-log" 2>/dev/null ||
               { echo 'T1 historical job log unavailable'; exit 1; }
           done
           python3 -m scripts.t1_fft_historical_ci_log_verify \
