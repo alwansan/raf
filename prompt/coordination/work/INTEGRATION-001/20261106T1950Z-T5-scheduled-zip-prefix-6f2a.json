@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T1950Z-T5-scheduled-zip-prefix-6f2a",
+  "origin": "scheduled",
+  "owner": "T5",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "3699074104512a7278b6c9712b18c1c2663632a3",
+  "intended_files": [
+    "scripts/t5_verify_apk_obb_pair.py",
+    "tests/test_t5_verify_apk_obb_pair.py"
+  ],
+  "hypothesis": "ZIP delivery structural checker accepts a regular file entry that is an ancestor of another ZIP member; extraction path collision is ambiguous even when names are unique.",
+  "experiment_key": "T5-zip-file-ancestor-collision-structural-synthetic-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-06T19:50:00Z",
+  "shared_resource": "none; no native build"
+}
