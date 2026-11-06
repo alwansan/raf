@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "876ecbfb81206d659e109d6a6dad19cbf8f912dc",
-  "updated_at": "2026-11-06T15:37:37.154Z",
+  "updated_at": "2026-11-06T15:39:15.801Z",
   "resumed_from_sessions": [
     "20261106T152810Z-T1-chat-original-key-preflight-c41b",
     "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
@@ -26,6 +26,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42244565958"
   ],
-  "result": "Source-only original SPIR-V keyed prerequisite parser passed 12 synthetic cases / full 86/86 in CI 42243693907. True original HLSL candidate side 384 keyed records confirmed in CI 42242127723. New distinct original SHA ZIP2 private run 42244565958 pending actual RAFT_T1_ORIGINAL_KEYED_PREFLIGHT marker. No original direct instrumentation or independent paired numeric match, WATER-001 OPEN.",
-  "next_step": "Read run 42244565958 conclusion and safe marker (actual GlobalInvocationId direct/struct/missing, ImageFetch coordinate/result types, set0/set1 binding3 availability), update own experiment/session/event/work; then only source-backed direct original GPU key capture and strict pair numeric compare. Do not duplicate running T1 job or invent shader readiness."
+  "result": "Exact-source private CI 42244565958 SUCCESS and safe original FFT slot0 SPIR-V preflight executed: 3 source/butterfly/butterfly fetches, each 2-lane sint32 coordinate and 4-lane float32 output, descriptor set0/1 binding3 free, but direct/struct Input GlobalInvocationId NOT proven. No original GPU keyed trace or numeric paired original-vs-HLSL proof. Scope complete, WATER-001 OPEN.",
+  "next_step": "New distinct T1 source-private safe audit for alternative local/workgroup dispatch builtins or safe GlobalInvocationId injection before original SPIR-V instrumentation. Afterwards execute original keyed capture and strict source-authenticated pair; no HLSL rewrite based only on preflight."
 }
