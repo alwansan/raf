@@ -1,0 +1,21 @@
+{
+  "event_id": "20261106T190315Z-T3-chat-stage-cardinality-e6a2",
+  "session_id": "20261106T190315Z-T3-chat-stage-cardinality-e6a2",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "source_only_result",
+  "utc": "2026-11-06T19:11:07.992Z",
+  "summary": "Per-stage DXBC original declaration vs translated SPIR-V family cardinality gate implemented for Particle108. Source-only 14/14 tests CI42276510557 SUCCESS, detecting offsetting per-stage drift even where global totals match. Original SHA-pinned workflow not dispatched for this newly added count check. Earlier authenticated global counts CI42274933802 do not establish per-stage cardinality or exact bindings. RENDER-002 OPEN and T3 vote لا يحتاج.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42276510557",
+    "https://github.com/alwansan/raf/actions/runs/42274933802",
+    "https://github.com/alwansan/raf/commit/dd2580e25c1959a066ce597b6b6397dd5d1ae622",
+    "prompt/coordination/clients/T3/sessions/20261106T190315Z-T3-chat-stage-cardinality-e6a2.md"
+  ],
+  "limits": [
+    "No original per-stage test yet",
+    "No Unity ShaderLab restoration or Android pixels",
+    "No native APK build"
+  ]
+}
