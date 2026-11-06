@@ -88,6 +88,17 @@ jobs:
           particle_nonexportable="https://github.com/alwansan/raf/actions/runs/42132262184"
           assert particle_sameexport in issue[0]["evidence"]
           assert particle_nonexportable in issue[0]["evidence"]
+          # Actual same-instance nonexportable class28 container pointer
+          # matches the tenth original Particle Material YAML TexEnv; all
+          # ten pointers and all ten UVs match in this bounded export only.
+          particle_nonexportable_pointer="https://github.com/alwansan/raf/actions/runs/42134436841"
+          assert particle_nonexportable_pointer in issue[0]["evidence"]
+          assert any(r["id"]=="T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY"
+                     and r["counts"]["matched_source_to_export_texenv_texture_ptrs"]==10
+                     and r["counts"]["matched_nonexportable_container_texture_pointer_slots"]==1
+                     and r["counts"]["source_uv_transforms_matching"]==10
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY"
                      and r["counts"]["original_texture_source_skipped_due_nonexportable_collection"]==1
                      and r["stages"]["device"]=="NOT_TESTED"
