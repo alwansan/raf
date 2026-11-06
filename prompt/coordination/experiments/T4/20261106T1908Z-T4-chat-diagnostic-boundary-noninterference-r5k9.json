@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1908Z-T4-chat-diagnostic-boundary-noninterference-r5k9",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Unexpected PersistentDiagnosticLog.Write exceptions escape from AndroidRuntimeLog.Write invoked inside authentic world/save instrumentation, replacing or interrupting original behavior; a failed first Unity stack can be prematurely grouped.",
+  "source_commit": "7bf2d2f75bf7d3be160a2df0a4b0524057a54240",
+  "input_hashes": [],
+  "tool_versions": {
+    "dotnet": "8.0.x on GitHub-hosted ubuntu-24.04",
+    "compiler": "C#9 compiled actual AndroidRuntimeLog.cs via test-only UNITY_ANDROID stubs"
+  },
+  "commands": [
+    "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "test-only ef319045 CI42277037463, source logger fault propagated System.ArgumentNullException and process exited 134",
+    "test-only corrected 4ba319c3 CI42277114949 remained failure on original unguarded source"
+  ],
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42277247920",
+  "artifact_urls": [],
+  "budget": "source-only .NET8; no native/Unity editor/device build",
+  "status": "completed",
+  "observed_result": "Exact patch 7bf2d2f7 CI42277247920 COMPLETED SUCCESS: RAFT_PERSISTENT_LOG_TEST checks=310 passed=true actualAndroidStorageVerified=false. Additional same-SHA original Android local startup CI42277247877 SUCCESS, offline platform CI42277247438 SUCCESS, B06 FFT capability logger CI42277247324 SUCCESS. Test forces synthetic sink lifecycle monitor error, verified no original operation trace exception escape, sanitized StorageError and first-stack retry after recovery.",
+  "rejected_hypotheses": [
+    "The original unguarded AndroidRuntimeLog.Write already contained all sink exceptions",
+    "An error suppressed during a failed sink write may safely remain permanently grouped"
+  ],
+  "limitations": [
+    "Injected synthetic .NET sink fault; cannot conclude actual phone logger/storage, game save or native Unity behavior",
+    "Original shipped .rgd/world data not modified or run by synthetic logger test",
+    "No new APK/OBB/device acceptance",
+    "No claims about water/lighting/shader correctness"
+  ],
+  "integration_commit": "7bf2d2f75bf7d3be160a2df0a4b0524057a54240",
+  "next_step": "Recheck native build only if T5 proves 5/5 trial consensus; then correlate on-device logger Status/first stack with exact APK/OBB and world save. LOCAL-005 OPEN; source-only scope completed."
+}
