@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1808Z-T2-chat-monohead-script-links-42a7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "All or a useful subset of 55328 source-original opaque scene component records retain a parseable Unity class-database MonoBehaviour base header and valid m_Script pointer, even without custom MonoBehaviour typetree.",
+  "experiment_key": "zip2-15964-40level-sourceSHA-opaque-MonoBehaviour-primitive-header-m_Script-PPtr-original-sharedassets0-MonoScript-resolve-v1",
+  "source_commit": "40d42257dbfaf237e3060b043bbb599e9cdd9903",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_input": {
+    "scene_count": 40,
+    "scene_sha_verified_bytes": 233237972,
+    "original_shader_owner_sha_verified_bytes": 115978112,
+    "total_source_sha_verified_bytes": 349216084,
+    "raw_original_names_guids_source_bytes_published": false
+  },
+  "workflow": ".github/workflows/raft-t2-original-opaque-monoscript-head.yml",
+  "source": "scripts/t2_original_opaque_monoscript_head.py",
+  "synthetic_tests": "tests/test_t2_original_opaque_monoscript_head.py",
+  "runs": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42268476115",
+      "conclusion": "failure_before_original",
+      "reason": "Synthetic fixture dict {} instead of empty set; test-only correction."
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42268585593",
+      "conclusion": "success",
+      "artifact_id": 13527627106
+    }
+  ],
+  "result": {
+    "synthetic_regression_tests_passed": 19,
+    "source_sha_verified_bytes": 349216084,
+    "original_components_examined": 240961,
+    "original_fully_parsed_components": 185633,
+    "original_opaque_components": 55328,
+    "opaque_components_confirmed_MonoBehaviour": 55328,
+    "opaque_mono_built_in_headers_parsed": 55328,
+    "opaque_mono_script_PPtr_other_external_owner_rows": 55328,
+    "opaque_mono_script_PPtr_to_shaders_owner_rows": 0,
+    "opaque_null_script_PPtr": 0,
+    "opaque_invalid_fileID": 0,
+    "source_owner_typed_MonoScript_objects": 0,
+    "original_128_header_vs_full_tree_PPtr_crosschecks": 128,
+    "custom_MonoBehaviour_fields_recovered": false,
+    "original_Foam_Material_runtime_binding_verified": false,
+    "Android_water_pixels_verified": false
+  },
+  "test_controls": [
+    "strict m_FileID/m_PathID int and invalid bool guard",
+    "null script versus opaque failure partition",
+    "foreign local PathID is not source owner target",
+    "same typed MonoScript repeated within scene counted once only per scene",
+    "external owner basename casing",
+    "typed source MonoScript target vs missing foreign type",
+    "naming privacy",
+    "raw original SHA and immutable ZIP2 stage",
+    "exact previous 55328 opaque coverage retained",
+    "exact original header crosschecks with parseable original MonoBehaviour typetree",
+    "source-free fixture typo fixed before original stage"
+  ],
+  "limits": [
+    "Original full custom MonoBehaviour payload still not parsed; source original full type identity not established.",
+    "All opaque script refs point to external owner(s) not included in staged sharedassets0. This is neither script absence nor original asset corruption.",
+    "Script PPtr target owner filename and typed MonoScript/GUID must be authenticated independently.",
+    "Source-only diagnostic does not justify T2 trial vote change."
+  ],
+  "status": "completed",
+  "trial_build": {
+    "round": "trial-20261106-r1",
+    "T2_vote": "لا يحتاج",
+    "native_build_run_requested": false
+  },
+  "documentation": "docs/T2_ORIGINAL_OPAQUE_MONOSCRIPT_HEAD_2026-11-06.md",
+  "next_step": "Resolve actual 55328 external m_Script target owner filenames against immutable SHA original manifest and typed MonoScript objects, then recover custom fields with original assembly and correct classDB header alignment. No repeated 41-source header census absent changed hypothesis.",
+  "at": "2026-11-06T18:15:15.434Z"
+}
