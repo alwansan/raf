@@ -139,6 +139,10 @@ class Program
                         new FileStream(originalStartupPath, FileMode.Append,
                             FileAccess.Write, FileShare.Read));
                     broken.Flush();
+                    // A successful recovery must clear the stale storage-fault
+                    // status, not keep AndroidRuntimeLog.Status permanently red.
+                    // The earlier LastError != null assertion proves the fault.
+                    Require(broken.LastError == null);
                     originalSeedRecoverable = Lines(failedRoot).Any(
                         line => line.Contains("\"operation\":\"seed\""));
                     overflowMarkerRecoverable = Lines(failedRoot).Any(
