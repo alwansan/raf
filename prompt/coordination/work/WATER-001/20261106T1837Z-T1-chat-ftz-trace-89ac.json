@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1837Z-T1-chat-ftz-trace-89ac",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "FFT Unity-versus-Vulkan address/value diagnostics",
+  "status": "active",
+  "base_sha": "57d32472a8a70fbaca982fd7c661f1c5d4404a60",
+  "updated_at": "2026-11-06T18:37:00Z",
+  "resumed_from_sessions": [
+    "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+    "20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8",
+    "20261106T174500Z-T1-chat-phimerge-opengl-g6k2"
+  ],
+  "experiment_key": "t1-water001-private-same-input-unity-vulkan-invocation-trace-address-zero-and-f32-subnormal-ftz-taxonomy-v1",
+  "resource_key": "none (CPython source-only independent consumer; no Unity mutex)",
+  "hypothesis": "Prior authentic-original Unity OpenGLCore butterfly coordinate drift might include coordinate-zero collapse, while candidate float-carrier materialization may show float32 subnormal-to-zero at identical sample address; the signatures must be separated before shader changes.",
+  "intended_files": [
+    "scripts/t1_fft_private_unity_ftz_diagnostic.py",
+    "tests/test_t1_fft_private_unity_ftz_diagnostic.py",
+    "prompt/coordination/work/WATER-001/20261106T1837Z-T1-chat-ftz-trace-89ac.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1837Z-T1-chat-ftz-trace-89ac.md",
+    "prompt/coordination/experiments/T1/20261106T1837Z-T1-chat-ftz-trace-89ac.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T1837Z-T1-chat-ftz-trace-89ac.json"
+  ],
+  "scope": "Implement only source-free privacy-preserving aggregate taxonomy on already SHA-bound private paired invocation buffers, with strict same-input+dispatch declared manifest and Unity candidate-role requirement. Test on synthetic captures. Do not touch shaders/game artifacts/other workers and do not dispatch Unity/native build.",
+  "related_work": [
+    "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+    "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add fail-closed classifier and adversarial local tests; use on authenticated actual Unity capture only when produced; never infer root cause from synthetic probes."
+}
