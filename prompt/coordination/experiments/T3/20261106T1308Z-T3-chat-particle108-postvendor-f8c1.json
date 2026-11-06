@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
   "issue_id": "RENDER-002",
-  "status": "waiting_ci",
+  "status": "completed_source_authentic",
   "experiment_key": "T3-SHAZIP2-15964-6scenes-12owners-AssetRipper036098-W1B02-sameexport-ParticleShader48-108-before-after-vendor-TMPPostFXVolumetric-v1",
   "resource_key": "T3-bounded-12-owner-original-export-38min-no-native",
   "original_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -15,7 +15,7 @@
   "unit_test_conclusion": "success",
   "genuine_source_run": "https://github.com/alwansan/raf/actions/runs/42223071341",
   "genuine_source_run_sha": "90149d3f7ec3f89a40dcaad976f8102737370693",
-  "genuine_source_conclusion": null,
+  "genuine_source_conclusion": "success",
   "evaluated_scope": "SHA-original unique 108 Particle Renderer material slots and same W1/B02 original Shader48 traced custom GUID before/after official vendor-only shader restorers",
   "touched_game_assets": false,
   "proprietary_shader_dump": false,
@@ -26,6 +26,28 @@
     "t3-particle108-postvendor-safe.json",
     "t3-particle108-vendor-delta-safe.json"
   ],
-  "classification_pending": true,
-  "next_step": "Read 42223071341 terminal step status and three count-only safe reports, update this experiment and T3 session; do not duplicate original export or claim Android smoke repair."
+  "classification_pending": false,
+  "next_step": "Coordinate with T3 paired glslang work 20261106T1223Z, then develop private original Shader48 four keyword VS/FS genuine code and ColorMask RGB, alpha Blend/Cull OFF/ZWrite OFF state with immutable source, Unity compile, device/emitter matching before any real assets or readiness changes.",
+  "genuine_source_run_job_id": 127909618354,
+  "genuine_source_artifact_id": 13503374104,
+  "exact_original_result": "DUMMY_PERSISTS_AFTER_VENDOR_RESTORERS",
+  "genuine_evidence": {
+    "twelve_ZIP2_original_owners_SHA_verified": true,
+    "six_original_scenes_SHA_verified": true,
+    "same_original_W1_B02_Shader48_source_to_export_GUID": true,
+    "original_particle_renderer_material_slots": 108,
+    "pre_vendor_shader_dummy": true,
+    "post_vendor_shader_dummy": true,
+    "all_material_documents_dummy_before": 511,
+    "all_material_documents_dummy_after": 495,
+    "official_restorers": [
+      "TMP 3.0.6",
+      "PostFX v1",
+      "Volumetric"
+    ],
+    "source_selected_shader_restored_to_authentic_program": false,
+    "unity_import_verified": false,
+    "android_pixels_verified": false,
+    "square_smoke_device_emitter_identity_proven": false
+  }
 }
