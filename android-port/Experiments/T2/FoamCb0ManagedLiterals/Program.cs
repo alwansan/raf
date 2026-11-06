@@ -154,6 +154,7 @@ internal static class Program
         var groups = Roles.ToDictionary(x => x, _ => new Category(), StringComparer.Ordinal);
         int methods = 0, instructions = 0, strings = 0, typedSetters = 0;
         var nearSetterCategories = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var exactlyProvenSetterFamilies = new SortedDictionary<string, int>(StringComparer.Ordinal);
 
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
@@ -208,6 +209,8 @@ internal static class Program
                     if (exact.HasValue)
                     {
                         summary.ExactFirstFormalProvenNames.Add(row.Hash);
+                        exactlyProvenSetterFamilies[exact.Value.SetterFamily] =
+                            exactlyProvenSetterFamilies.GetValueOrDefault(exact.Value.SetterFamily) + 1;
                         if (exact.Value.Kind == "source_literal_as_string")
                             summary.ExactSourceStringFirstFormalCallCount++;
                         else if (exact.Value.Kind == "source_literal_via_PropertyToID")
@@ -260,6 +263,7 @@ internal static class Program
                 Roles.ToDictionary(x=>x,x=>groups[x].ExactSourceStringFirstFormalCallCount),
             original_source_name_exact_typed_PropertyToID_first_formal_calls_by_role =
                 Roles.ToDictionary(x=>x,x=>groups[x].ExactSourcePropertyIdFirstFormalCallCount),
+            original_source_name_exact_first_formal_typed_setter_API_categories = exactlyProvenSetterFamilies,
             literal_adjacency_does_not_prove_operand_or_runtime_upload = true,
             original_Ldstr_is_exact_setter_argument_proven = false,
             runtime_Unity_CB0_value_upload_verified = false,
