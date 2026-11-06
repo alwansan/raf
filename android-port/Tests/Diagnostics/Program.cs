@@ -92,6 +92,42 @@ class Program
                 ready.Dispose();
                 go.Dispose();
             }
+            // Storage-fault regression: a full queue plus dropped ordinary
+            // diagnostics MUST NOT permit critical reports to grow the queue
+            // without bound when Flush() fails before dequeuing anything.
+            // This fault is confined to a private synthetic sink, no app data.
+            string failedRoot = Path.Combine(root, "fault-bounded-queue");
+            var broken = new PersistentDiagnosticLog(failedRoot, 1024, 3, 1);
+            int queueCountUnderFault = -1, pendingUnderFault = -1;
+            try
+            {
+                var reflection = System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.NonPublic;
+                var type = typeof(PersistentDiagnosticLog);
+                object faultIoGate = type.GetField("ioGate", reflection).GetValue(broken);
+                var startupFault = (FileStream)type.GetField("startup", reflection).GetValue(broken);
+                var pendingFault = (System.Collections.Concurrent.ConcurrentQueue<string>)
+                    type.GetField("pending", reflection).GetValue(broken);
+                var countField = type.GetField("count", reflection);
+                lock (faultIoGate)
+                {
+                    // The background worker must not drain the queue until the
+                    // deterministic error/overflow sequence has completed.
+                    startupFault.Dispose(); // simulate persistent startup I/O fault
+                    broken.Write("synthetic", "seed", "", false);
+                    for (int i = 0; i < 24; i++)
+                    {
+                        broken.Write("synthetic", "ordinary_dropped", "", false);
+                        broken.Write("synthetic", "critical_during_io_fault", "", true);
+                    }
+                    queueCountUnderFault = (int)countField.GetValue(broken);
+                    pendingUnderFault = pendingFault.Count;
+                }
+            }
+            finally { broken.Dispose(); }
+            Require(queueCountUnderFault <= 1);
+            Require(pendingUnderFault <= 1);
+            Require(broken.LastError != null);
             var repeated = new RepeatedDiagnosticMessages();
             DateTime now = DateTime.UtcNow;
             Require(repeated.First("Error", "same message\nfull stack", now));
