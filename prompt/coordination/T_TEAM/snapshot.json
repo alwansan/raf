@@ -6493,14 +6493,29 @@
       "owner": "T1",
       "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
       "issue_id": "WATER-001",
-      "type": "progress",
-      "at": "2026-11-06T13:01:20.727Z",
-      "summary": "New bounded HLSL FFT butterfly1 X unresolved-lane stop opcode and numeric-kind reporter added; four synthetic tests for OpPhi/OpIAdd/unknown sanitization/resolved-load backward compatibility passed in original CI test gate. Run 42221700354 source authentic Vulkan stage still in progress while runner installs dependencies. No actual X stop opcode claimed yet, no original source bits or raw IDs emitted, no Android water fix.",
+      "type": "result",
+      "at": "2026-11-06T13:12:40.888Z",
+      "summary": "Original source SHA-pinned Vulkan CI 42221700354 completed SUCCESS after extended apt install. Original compiled HLSL FFT slot0 butterfly1 X coordinate lane stops at float32 OpPhi (not generic unknown, not OpIAdd); site2 X/Y also float32 OpPhi; Source site0 X/Y reaches OpLoad. Four new allowlisted stop-opcode source tests passed. Numeric mismatch attribution/Unity device water remains unproven.",
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42221700354",
         "https://github.com/alwansan/raf/commit/952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1"
       ],
       "_record_path": "../B_TEAM/events/T1/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json"
+    },
+    {
+      "id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
+      "owner": "T1",
+      "session_id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T13:14:34.269Z",
+      "summary": "Distinct independent source-only FFT paired invocation evidence gate added and tested. Source-only CI 42223419922 SUCCESS: 20 new strict manifest/digest/independent file/site coverage controls, 11 coordinate comparator tests (including empty-both rejection) and 9 existing trace comparator tests = 40 pass. Self-comparison trace parser smoke check is not parity. Actual original-vs-Unity captures not run; manifest unsigned so source authenticity and Adreno water unproven. Separate original private CI 42221700354 finished success and translated X stop is float32 OpPhi.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42223419922",
+        "https://github.com/alwansan/raf/actions/runs/42221700354",
+        "https://github.com/alwansan/raf/commit/5c8199e794dd18983fd5c52e77ba8c0fa3591d18"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T130729Z-T1-chat-pair-gate-6c2e.json"
     },
     {
       "id": "T2-20261104T2354Z-start-foamabi",
@@ -7224,6 +7239,24 @@
       "limits": "Material ctor same-method co-occurrence is not assignment producer proof; no original source names/bytes or method labels published; no game shader/meta/native alterations.",
       "next_step": "Trace exact original stfld stack value back through local/ctor and Shader first formal; verify Foam material association separately before device shader integration.",
       "_record_path": "../B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-result.json"
+    },
+    {
+      "id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62-result",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T13:23:00Z",
+      "summary": "T2 source-original SHA-pinned Foam CB0 Cecil CI42224883549 SUCCESS. The one original Material field receiving an authentic Foam CB0 named Material.SetVector is assigned via exact 7-instruction single-basic-block stack dataflow from new Material(Shader); its constructor Shader parameter is an original UnityEngine.Shader instance-field load. This is proven direct IL value-to-stfld ownership, not same-method co-occurrence. Shader object matching source Foam, runtime invocation, full CB0 bytes and Android Adreno pixels NOT proven. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42224883549",
+        "docs/T2_FOAM_ORIGINAL_MATERIAL_STFLD_STACK_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/d623cef56876b2ffd9fc76949e20598d02090391"
+      ],
+      "limits": "Only one source-named Foam CB0 property candidate, synthetic Cecil and genuine source managed SHA; no original game private names/IL/assets published; no native Unity/GPU game change.",
+      "next_step": "Trace exact original Shader field source/serialized reference and validate Foam asset identity, then stage-specific 160B CB0 values and device pixels.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -8078,6 +8111,63 @@
       "_record_path": "../B_TEAM/events/T3/20261106T1125Z-T3-chat-glslang-iomap-d37f.json"
     },
     {
+      "id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+      "schema_version": 1,
+      "actor": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+      "issue_id": "RENDER-002",
+      "event_type": "original-particle-shader-vendor-delta-probe-started",
+      "recorded_at": "2026-11-06T13:10:51.454Z",
+      "source_evidence_url": "https://github.com/alwansan/raf/actions/runs/42136474867",
+      "new_source_free_ci": "https://github.com/alwansan/raf/actions/runs/42222939320",
+      "new_original_source_run_url": "https://github.com/alwansan/raf/actions/runs/42223071341",
+      "new_original_source_run_status": "in_progress_at_last_check",
+      "stage": "authentic original postvendor proof pending, no shipped game fix",
+      "affected_files": [
+        "scripts/t3_particle108_postvendor_delta.py",
+        "tests/test_t3_particle108_postvendor_delta.py",
+        ".github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml",
+        ".github/workflows/raft-t3-particle108-postvendor-delta-tests.yml"
+      ],
+      "not_ready": true,
+      "android_pixels_verified": false,
+      "next_step": "Check terminal run, inspect only aggregate classification, update own experiment/session/work and handoff to T-team.",
+      "_record_path": "../B_TEAM/events/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json"
+    },
+    {
+      "id": "20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1",
+      "schema_version": 1,
+      "actor": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+      "issue_id": "RENDER-002",
+      "event_type": "original-particle-shader-vendor-delta-proven",
+      "status": "completed_source_authentic_not_device",
+      "original_source": "alwansan/raf@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "test_run_url": "https://github.com/alwansan/raf/actions/runs/42222939320",
+      "original_run_url": "https://github.com/alwansan/raf/actions/runs/42223071341",
+      "original_run_conclusion": "success",
+      "artifact_id": 13503374104,
+      "source_original_shader_particle_material_slots": 108,
+      "pre_vendor_dummy": true,
+      "post_vendor_dummy": true,
+      "classification": "DUMMY_PERSISTS_AFTER_VENDOR_RESTORERS",
+      "bounded_export_original_owners_verified": 12,
+      "original_scenes_verified": 6,
+      "bounded_export_vendor_restore_dummy_linked_Material_documents_before": 511,
+      "bounded_export_vendor_restore_dummy_linked_Material_documents_after": 495,
+      "private_ShaderGUID_names_and_source_programs_published": false,
+      "source_Shader_program_authenticity_restored": false,
+      "phone_square_smoke_emitter_identity_proven": false,
+      "unity_android_pixel_result": false,
+      "issue_still_open": true,
+      "next_step": "Coordinate T3 independent paired glslang result; reconstruct real source Particle108 VS/FS pass variants and original state only after source semantic evidence, then Unity build/pixel/phone tests.",
+      "session_path": "prompt/coordination/clients/T3/sessions/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.md",
+      "experiment_path": "prompt/coordination/experiments/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json",
+      "_record_path": "../B_TEAM/events/T3/20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8871,6 +8961,22 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1140Z-T4-scheduled-k3m8.json"
     },
     {
+      "id": "20261106T1304Z-T4-chat-null-activity-p7h2",
+      "owner": "T4",
+      "session_id": "20261106T1304Z-T4-chat-null-activity-p7h2",
+      "issue_id": "INPUT-005",
+      "type": "integration",
+      "at": "2026-11-06T13:12:10.881Z",
+      "summary": "Activity-null safe physical mouse UI dispatch/request/probe/release source fix; exact Unity2021 original-managed ABI and 48/48 source tests passed; Android OS behavior unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1",
+        "https://github.com/alwansan/raf/actions/runs/42222687053",
+        "https://github.com/alwansan/raf/actions/runs/42222686931"
+      ],
+      "device_confirmed": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1304Z-T4-chat-null-activity-p7h2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9496,6 +9602,41 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1301Z-T5-chat-artifact-range-probe-f9c2.json"
     },
     {
+      "id": "20261106T1316Z-T5-chat-nested-zip-c53a",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1316Z-T5-chat-nested-zip-c53a",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T13:18:48.825Z",
+      "summary": "REAL original signed native checkpoint from owner-tested CI42058825739: outer APK and OBB are STORED; direct bounded HTTP206 nested ZIP inspection confirms actual APK 31 members incl 6 ARM64 .so, actual OBB 39 members, all 70 local ZIP headers agree with nested central entries, AndroidManifest binary XML, dex and libil2cpp/libunity ELF64 AArch64 magic. Live source CI42224062207 PASS 14/14 synthetic, 25350 ranged bytes/165 requests, no 3GB download. Full inner SHA/signature/Unity OBB GUID/phone unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42224062207",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_NESTED_ZIP_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42222494746"
+      ],
+      "limits": "Original signed artifacts structure-only; no real app signature, file-wide content digest or new Android GPU/FFT/render acceptance.",
+      "next_step": "Independent full signed APK SHA/aapt/apksigner with resource budget, later OBB SHA/GUID; coordinate scheduled T5 artifact provenance.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1316Z-T5-chat-nested-zip-c53a.json"
+    },
+    {
+      "id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
+      "issue_id": "COORD-001",
+      "type": "result",
+      "at": "2026-11-06T13:21:58.767Z",
+      "summary": "Recovered new T3 postvendor event 20261106T1308Z missing explicit id after live canonical index CI42224618618 failed. Added only id equal to original session_id, preserved all 16 T3 fields and source evidence; commit c6f4693. Existing 11+3 parser tests unchanged, no T3 shaders/P0 status change. Strict index rerun pending.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42224618618",
+        "https://github.com/alwansan/raf/commit/c6f4693ee8329f87a2e3df47e04959aa0987a00b"
+      ],
+      "limits": "Only committed event schema repair; T3 shader recovery, game readiness, actual Android pixel/FFT and signed APK content unchanged.",
+      "next_step": "Check full live canonical ledger refresh CI with exact source and all events; no unsafe fallback.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9524,7 +9665,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "cffff895b9acaf0d2a4c2583e84a2536b99df152ba717409eb7953a0e8795443",
+  "source_input_sha256": "2a6419e1f2a54d9fa3199f40bcd8475015ebf01731b25957dfab56312649641f",
   "generation": "T-2026-11-05",
-  "input_sha256": "9a4f450c3b1a329161c0a99bde782f907d4e5c113c2e9d781bfc59654af8c426"
+  "input_sha256": "0a6452e879af1b206ea2f02da3b0e3646a2b491af86df0ebe3982222c58f0d9b"
 }
