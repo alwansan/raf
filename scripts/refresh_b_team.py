@@ -15,9 +15,21 @@ def read_records(root, folder):
         if path.is_symlink():
             raise ValueError("Symlink record refused: " + str(path))
         row = json.loads(path.read_text(encoding="utf-8"))
-        if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"]:
+        if not isinstance(row, dict):
             raise ValueError("Missing record identity: " + str(path))
         row = dict(row)
+        # New T-team events sometimes use an explicit event_id instead of the
+        # inherited id key. Normalize only this documented event identifier:
+        # never derive an event identity from a filename, owner or session.
+        if folder == "events" and "event_id" in row:
+            event_id = row["event_id"]
+            if not isinstance(event_id, str) or not event_id.strip():
+                raise ValueError("Invalid event_id: " + str(path))
+            if "id" in row and row["id"] != event_id:
+                raise ValueError("Conflicting event identities: " + str(path))
+            row["id"] = event_id
+        if not isinstance(row.get("id"), str) or not row["id"].strip():
+            raise ValueError("Missing record identity: " + str(path))
         row["_record_path"] = path.relative_to(root).as_posix()
         result.append(row)
     ids = [r["id"] for r in result]
