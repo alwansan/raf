@@ -1,0 +1,97 @@
+name: T2 WATER-001 original 40 level scene Foam component PPtr coverage
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_scene_foam_component_scan.py
+      - tests/test_t2_original_scene_foam_component_scan.py
+      - .github/workflows/raft-t2-original-scene-foam-component.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-source-original-level-scenes-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-level-scene-component-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 23
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: T2 source-free scene PPtr positive and negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_scene_foam_component_scan.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_scene_foam_component_scan.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 2*1024**3
+          print('T2_PRIVATE_LEVEL_SCENE_SOURCE_DISK_BUDGET_SAFE')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-level-scenes-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Inspect all genuine SHA-verified Unity level scene Material and component PPtrs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 950s python3 -m scripts.t2_original_scene_foam_component_scan \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-level-scenes-zip2" \
+            --scratch "$RUNNER_TEMP/t2-original-40-level-scenes" \
+            --out "$RUNNER_TEMP/t2-original-40-level-scenes-safe.json"
+      - name: Assert original coverage and finite safe records (no runtime proof)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-original-40-level-scenes-safe.json').read_text())
+          assert r['status']=='source_original_scene_40_Foam_PPtr_census'
+          assert r['original_ZIP2_commit_authenticated'] is True
+          assert r['original_scene_SHA_authenticated_file_count']==40
+          assert r['original_scene_SHA_authenticated_bytes']==233237972
+          assert r['scene_Material_records']==r['scene_Material_parsed']+r['scene_Material_unparsed']
+          assert r['scene_Component_records']==r['scene_Component_parsed']+r['scene_Component_unparsed']
+          assert r['scene_Component_structural_PPtrs_examined']>=0
+          assert r['scene_foam_Component_PPtr_candidates']>=0
+          assert r['source_external_basename_proves_Unity_GUID'] is False
+          assert r['original_Foam_Shader_asset_SHA_authenticated_this_run'] is False
+          assert r['original_Foam_Shader_asset_SHA_attested_previous_CI'] is True
+          assert r['opaque_MonoBehaviour_components_proved_no_Foam'] is False
+          assert r['actual_rendered_Foam_or_CB0_upload_verified'] is False
+          assert r['Android_Adreno_water_pixels_verified'] is False
+          assert r['private_paths_names_GUIDs_raw_asset_bytes_exported'] is False
+          assert all(type(x) in (int,bool,str) for x in r.values())
+          assert not any(k in r for k in ('private_guid', 'source_asset_names','component_source_paths','original_material_names','source_shader_names'))
+          print('T2_ORIGINAL_LEVEL_SCENE_SAFE_ASSERTIONS_PASS')
+          PY
+      - name: Destroy transient ZIP2 source and 233MB original stage before artifact
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-40-level-scenes" \
+            "$GITHUB_WORKSPACE/t2-original-level-scenes-zip2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-40-level-scene-foam-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-original-40-level-scenes-safe.json
+          if-no-files-found: error
+          retention-days: 7
