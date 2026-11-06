@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2138Z-T2-chat-foam-matdoc-82bd-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2138Z-T2-chat-foam-matdoc-82bd",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "T2 exported Foam GUID/Material probe now fails closed on valid YAML .mat missing Unity Material class 21; no false complete synthetic inventory. 18/18 probe +17/17 installer source-only regression PASS; no Foam game runtime claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42298466950",
+    "https://github.com/alwansan/raf/commit/9951deea2c2c055ceedfc4c0997efb040c5288db",
+    "prompt/coordination/clients/T2/sessions/20261106T2138Z-T2-chat-foam-matdoc-82bd.md"
+  ],
+  "at": "2026-11-06T21:40:33.769Z"
+}
