@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1350Z-T3-chat-particle108-5mat-valuediff-d4e9",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "f7ec2ade078eb25513af10db780fd75efd08d768",
   "resumed_from_sessions": [
     "20261106T1337Z-T3-chat-particle108-propstate-62fb",
@@ -25,6 +25,16 @@
   ],
   "approach": "Use prior original Particle108 5 Material ID selector, private W1+B02 same-instance lineage, B44 strict RGBA compare and B22 binary32 scalar compare, with original source owner SHA and actual exported YAML; fail closed on missing/extra identities and report safe aggregate only. Use existing manual 12-owner one-stream Particle exporter one time.",
   "owner_source_pins": "alwansan/raf@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "updated_at": "2026-11-06T13:44:54.327Z",
-  "next_step": "Implement scoped true same-instance 5 Material RGBA+float32+int parity, synthetic controls; then one source authentic private export on existing isolated workflow with safe reports. Do not modify Unity game assets."
+  "updated_at": "2026-11-06T13:57:38.433Z",
+  "next_step": "Read run 42229446358 terminal and sanitized failure safe_phase or true values verdict. Do not modify exporter script while one-time push path active; need authorized workflow manual-only reset when permitted. RENDER-002 still OPEN.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42228442895",
+    "https://github.com/alwansan/raf/actions/runs/42228661601",
+    "https://github.com/alwansan/raf/actions/runs/42229361330",
+    "https://github.com/alwansan/raf/actions/runs/42229446358"
+  ],
+  "last_verified_result": "13 source-free controls success 42229361330; first source 42228661601 exact old texture PPtrs pass but new Material RGBA/scalar checker INCONCLUSIVE ValueError; no mismatch proven.",
+  "in_progress_run_id": 42229446358,
+  "in_progress_run_sha": "9c3171176169d8d48c1e9bf4179e847eb217aa99",
+  "workflow_manual_only_restoration": "BLOCKED_BY_TOOL_SAFETY_CHECK"
 }
