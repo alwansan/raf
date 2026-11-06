@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1946Z-T4-chat-original-load-cycles-h5m8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "real-owner-5nov-each-original-LoadT-argument-snapshot-and-exception",
+  "base_sha": "f0e3b10e73817bf90e50330fa0db683df3c2bc39",
+  "status": "active",
+  "approach": "Check each genuine original SaveAndLoad.Load<T> traced invocation has a strictly ordered single nonzero argument filename snapshot and exit without Load.caughtException. Source-only negative controls first, then re-run independent immutable CL 5-Nov 3 real logs. No claim of returned RGD, durable world, new phone candidate or app restart.",
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "experiment_key": "T4-owner5Nov-CL520c4c-seven-LoadT-percall-nonzero-snapshot-no-caught-20261106",
+  "resource_key": "T4-owner-CL520c4c-readonly-small-sparse-CI",
+  "related_work": [
+    "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2 CI42281498879 11/11 real 7/7 SaveGame cycles",
+    "20261106T1918Z-T4-chat-owner-log-lifecycle-p6n2 CI42280021182 real CL Git blob-attested three log files"
+  ],
+  "concurrent_scope": "T4-20261106T1943Z-T4-scheduled-r6k2 owns INPUT-005 native candidate read-only boundary; this chat owns only T4 JSONL evidence parser and its tests, no native build control.",
+  "hypothesis": "An equal count of Load<T>.enter, Load.argumentFileSnapshot and Load<T>.exit with zero exceptions can hide mismatched order, missing per-call snapshots, or exception during one Load despite a nonzero file snapshot from another call.",
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-06T19:46:00Z",
+  "next_step": "Add source-only inverse-order, missing or repeated nonzero, caught-exception tests, establish CI RED, implement per-LoadT state machine, verify pinned CL and CI GREEN, handoff and release scope."
+}
