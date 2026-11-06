@@ -9,6 +9,10 @@ class CoordinateProbeTests(unittest.TestCase):
         a = {(2, 0, 0, "r"): 1., (0, 0, 0, "r"): 2.}
         b = {(2, 0, 0, "r"): 4., (0, 0, 0, "r"): 3.}
         self.assertEqual(first_difference(a, b)["pass"], 0)
+    def test_both_empty_captures_do_not_match(self):
+        with self.assertRaisesRegex(ValueError, "empty"):
+            first_difference({}, {})
+
     def test_missing_not_numeric(self):
         self.assertEqual(first_difference({}, {(0, 0, 0, "r"): 1.})["status"], "missing")
     def test_tolerance(self):
