@@ -229,8 +229,15 @@ def _delivery(root: Path):
 def verify(root: Path) -> dict:
     """Verify SHA256 on every actual transport part AND nested APK/OBB bytes."""
     code, obb, records = _delivery(root)
-    for row, parts in records:
-        _hash_parts(parts, row["bytes"], row["sha256"])
+    # Validate existence and declared sizes before ZIP parsing, while delaying
+    # SHA attestation until AFTER all nested members have been read. Otherwise
+    # an in-place, same-size change to a ZIP local header between the two
+    # passes can leave all nested CRCs/digests intact but invalidate the XAPK
+    # transport hash after we already recorded a successful first pass.
+    for _, parts in records:
+        for path, size, _ in parts:
+            if path.is_symlink() or not path.is_file() or path.stat().st_size != size:
+                raise ValueError("Missing, linked or incorrectly sized transport part")
     xapk_parts = records[2][1]
     expected = [("manifest.json", None),
                 (PACKAGE + ".apk", records[0][0]),
@@ -278,6 +285,12 @@ def verify(root: Path) -> dict:
                         raise ValueError("Nested XAPK APK/OBB SHA256 differs from loose delivery")
         except (zipfile.BadZipFile, EOFError, UnicodeError, json.JSONDecodeError) as exc:
             raise ValueError("Invalid XAPK ZIP or nested manifest structure") from exc
+    # Single final SHA pass (rather than a pre-parse SHA and another full
+    # multi-GB read). Verify the actual bytes AFTER ZIP parsing, so changes
+    # made between initial size preflight and nested reads are caught, even
+    # if only the outer ZIP header/metadata changed and nested CRCs are valid.
+    for row, parts in records:
+        _hash_parts(parts, row["bytes"], row["sha256"])
     return {
         "package_name": PACKAGE,
         "version_code": code,
