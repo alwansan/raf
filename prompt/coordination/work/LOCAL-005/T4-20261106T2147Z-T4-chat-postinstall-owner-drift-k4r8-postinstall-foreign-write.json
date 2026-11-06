@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2147Z-T4-chat-postinstall-owner-drift-k4r8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "track": "source-save-path-adapter-post-install-external-write-detection",
+  "base_sha": "41dd30d045bb4fff3b739b7e7610ebff8f1deb50",
+  "resumed_from_sessions": [
+    "20261106T2135Z-T4-chat-save-backup-owner-v9k2",
+    "20261106T2138Z-T4-scheduled-native-retry-q4n7"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T2135Z-T4-chat-save-backup-owner-v9k2.md"
+  ],
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "tests/test_adapt_original_save_paths.py"
+  ],
+  "hypothesis": "After successful source write, another writer updates SaveAndLoad.cs or its GUID .meta before post-install verification; unconditional rollback writes stale raw source over foreign edits.",
+  "experiment_key": "T4-local005-source-adapter-post-success-write-pre-postcheck-interleave-owner-drift-v1",
+  "resource_key": "T4-original-save-paths-source-only-ZIP2",
+  "approach": "Add deterministic negative interleavings at post-success source write to expose source/meta drift erased on rollback; retain synthetic torn-write rollback semantics and implement post-success fail-closed checks. Run original ZIP2 source-only CI. No duplicate native.",
+  "related_work": "prompt/coordination/work/LOCAL-005/T4-20261106T2135Z-T4-chat-save-backup-owner-v9k2-postpromote-owner-delete.json",
+  "native_running": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "updated_at": "2026-11-06T21:47:00Z",
+  "next_step": "RED test first, then minimal postwrite rollback refusal after write completed."
+}
