@@ -1,0 +1,28 @@
+{
+  "session_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "d8bf08a9fe4305dadea4948c2079962669292a86",
+  "updated_at": "2026-11-06T10:30:00Z",
+  "resumed_from_sessions": [
+    "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+    "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+    "20261106T0943Z-T4-scheduled-q7n4"
+  ],
+  "experiment_key": "T4-INPUT005-AndroidPhysicalMouseCapture-ReleaseCapture-currentFocus-different-request-View-identity-null-epoch-failclosed-CI-v1",
+  "resource_key": "T4-physical-mouse-source-managed-CI-only-no-Unity",
+  "hypothesis": "ReleaseCapture reads a *new* getCurrentFocus View after clearing captureViewIdentity; if focus switched to another View with pointer capture, it may release unrelated capture. Revoke only when nonzero recorded request-target identity, unchanged epoch, and current focus View of that same identity.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "prompt/coordination/work/INPUT-005/T4-20261106T1030Z-T4-chat-release-view-ownership-b7m4-release-identity-failclosed.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1030Z-T4-chat-release-view-ownership-b7m4.md",
+    "prompt/coordination/experiments/T4/20261106T1030Z-T4-chat-release-view-ownership-b7m4.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1030Z-T4-chat-release-view-ownership-b7m4.json",
+    "prompt/coordination/discussions/INPUT-005/20261106T1030Z-T4-chat-release-view-ownership-b7m4-to-T5.md"
+  ],
+  "nonoverlap": "T4 scheduled q7n4 concluded read-only release-target audit. Current chat addresses wrong-target release safety ONLY, not old View release across JNI. No T1/T2/T3, T5 packaging, touch layout, original SaveAndLoad, assets or Unity build changes.",
+  "safety": "Never retain Java View wrapper across JNI threads; capture int identity before reset, compare current focus identity on Android UI thread, retain epoch and requested guard, skip unrelated view. Source/ABI validation; Android device still UNKNOWN.",
+  "next_step": "Atomic two-file source+test commit with HEAD lease; existing bounded T4 mouse CI auto-trigger; verify exact job log."
+}
