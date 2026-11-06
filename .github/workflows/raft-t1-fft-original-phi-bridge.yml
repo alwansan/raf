@@ -51,7 +51,7 @@ jobs:
       - name: Verify three immutable historical CI job logs against safe evidence
         shell: bash
         env:
-          GH_TOKEN: \${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           d="$(mktemp -d)"
