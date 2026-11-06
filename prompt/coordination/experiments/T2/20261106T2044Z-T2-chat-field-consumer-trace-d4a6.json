@@ -1,0 +1,59 @@
+{
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2044Z-T2-chat-field-consumer-trace-d4a6",
+  "issue_id": "WATER-001",
+  "status": "completed_SHA_original_source_typed_Graphics_material_argument_proven",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "code_commit": "589cdf6160176f913c90e69d9105d7255d00b835",
+  "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42291227491",
+  "job_id": 128144861565,
+  "method": "Bounded max32 original Material FieldDefinition ldfld/ldsfld typed stack and local-taint trace; typed receiver and UnityEngine.Material parameter attribution. Reject branches/unknown varpop. Signed-off synthetic adversarial attestation.",
+  "hypothesis": "Original authenticated dynamically constructed Foam Material is passed to actual typed Unity Graphics APIs, rather than only nearby operations.",
+  "result": {
+    "source_original_sha_verified": true,
+    "original_managed_dll_bytes": 3211776,
+    "original_shader_owner_bytes": 115978112,
+    "field_reads": 13,
+    "field_load_sites_scanned": 13,
+    "forward_instructions": 98,
+    "material_receiver_sites": 9,
+    "typed_material_parameter_sites": 2,
+    "graphics_material_parameter_sites": 2,
+    "command_buffer_material_parameter_sites": 0,
+    "renderer_material_parameter_sites": 0,
+    "other_material_parameter_sites": 0,
+    "field_api_boundary_or_budget_sites": 0,
+    "synthetic_python_tests": 53,
+    "synthetic_name_tests": 6,
+    "cecil_sourcefree_selftest": "PASS",
+    "unity_import_verified": false,
+    "graphics_method_runtime_executed_verified": false,
+    "android_water_pixels_verified": false
+  },
+  "artifact": {
+    "id": 13539837293,
+    "size_bytes": 1216,
+    "sha256_zip": "039b502d19d067980352e014acae9243b7145e1249517bfa8681d08e9259d037"
+  },
+  "negative_controls": [
+    "typed argument positional identity when another argument follows",
+    "nonadjacent Material local provenance",
+    "false method Material parameter signature rejected",
+    "branch stops before source inference",
+    "invalid fake Graphics without typed parameter",
+    "partial 13-site source coverage rejected",
+    "32 IL budget enforced",
+    "extra material API category unbacked by taint rejected",
+    "false device claim rejected"
+  ],
+  "limits": [
+    "A typed IL method call is not runtime reachability or phone pixel proof",
+    "No original private method name or IL exported",
+    "No original Foam 2pass candidate installed in actual Unity export",
+    "No full native build requested"
+  ],
+  "trial_vote": "لا يحتاج",
+  "next_step": "Identify private exact Graphics receiver/call semantics and source class-to-scene TypeDef join, then owner-authorized Unity export and device pixel test."
+}

@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T2044Z-T2-chat-field-consumer-trace-d4a6",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bd807b012b9541b25869315177d52e4390fe2cef",
-  "updated_at": "2026-11-06T20:42:42.721Z",
+  "updated_at": "2026-11-06T20:47:40Z",
   "resumed_from_sessions": [
     "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e",
     "20261106T2021Z-T2-scheduled-foam-guid-collision-f8a3",
@@ -34,5 +34,22 @@
     "T5 native CI",
     "game assets / meta"
   ],
-  "vote": "لا يحتاج"
+  "vote": "لا يحتاج",
+  "code_commit": "589cdf6160176f913c90e69d9105d7255d00b835",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42291227491",
+  "result": {
+    "sha_original_ci": "SUCCESS",
+    "safely_verified_original_field_reads": 13,
+    "exact_field_reads_scanned": 13,
+    "forward_IL_instructions_scanned": 98,
+    "material_receiver_sites": 9,
+    "typed_Graphics_material_parameter_sites": 2,
+    "commandbuffer_sites": 0,
+    "renderer_parameter_sites": 0,
+    "boundary_or_budget_sites": 0,
+    "source_free_python_tests": 53,
+    "original_name_python_tests": 6,
+    "cecil_synthetic_selftest": "PASS",
+    "native_Unity_import_or_android_pixels_verified": false
+  }
 }

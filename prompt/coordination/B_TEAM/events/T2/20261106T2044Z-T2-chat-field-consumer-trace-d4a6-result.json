@@ -1,0 +1,17 @@
+{
+  "id": "20261106T2044Z-T2-chat-field-consumer-trace-d4a6-original-foam-field-graphics-typed-parameter-proven",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2044Z-T2-chat-field-consumer-trace-d4a6",
+  "issue_id": "WATER-001",
+  "type": "source_original_typed_Foam_material_to_Graphics_consumer",
+  "status": "SOURCE_AUTHENTIC_ORIGINAL_TYPED_GRAPHICS_ARG_ONLY",
+  "at": "2026-11-06T20:47:40Z",
+  "summary": "SHA-original Foam Shader.Find->Material(Shader)->exact managed Material field is passed as actual typed Material parameter to UnityEngine.Graphics at two distinct of 13 authentic field load sites, and as typed Material/Object receiver at nine sites. 13/13 inspected, 98 subsequent IL, 0 unbounded branches; CI42291227491 PASS 53+6 synthetic and Cecil selftest. No Unity import/native water pixels or CB0 proven; no APK requested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/589cdf6160176f913c90e69d9105d7255d00b835",
+    "https://github.com/alwansan/raf/actions/runs/42291227491",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_ORIGINAL_FOAM_MATERIAL_FIELD_API_CONSUMERS_2026-11-06.md"
+  ],
+  "trial_vote": "لا يحتاج"
+}
