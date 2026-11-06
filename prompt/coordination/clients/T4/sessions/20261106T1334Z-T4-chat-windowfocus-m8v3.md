@@ -17,3 +17,10 @@ Separate T4 original seven-world cross-process CLR scope remains active; T1/T2/T
 ## Next
 
 Write the narrowed code/test changes and capture exact CI SHA, outcome and limitations here before closing source-only work.
+
+## Implementation checkpoint — source CI pending
+
+- Production guard + tests final commit [1496971](https://github.com/alwansan/raf/commit/1496971df6f14335b5d479d8cc488d7636a998be) on permitted branch. Changes: AndroidSystemBarPolicy overload with explicit boolean Android main-window focus, runtime UI callback `Activity.hasWindowFocus` checked before accessing the window and immediately before modern/legacy bar hide, five additional direct C# policy negatives and one source test. Original identity, generation, and Android transient OS swipes remain preserved. No touch, .rgd, game project or heavy build changed.
+- Exact final existing T4 original-managed CI [42227039188](https://github.com/alwansan/raf/actions/runs/42227039188) pending. GitHub intermediate push runs 42227033115 and 42227024068 were cancelled by queue behavior without T4 cancellation; they are not final test evidence. T1/T2/T3/T5 CI remains independent.
+- Hypothesis from official [Android Activity.hasWindowFocus()](https://developer.android.com/reference/android/app/Activity#hasWindowFocus()): Activity main-window focus is separate from lifecycle callbacks. A non-focused Activity must not be used to hide OS bars even if Unity focus flag lags. Source-only expected safety; no device validation or claimed fixed phone visual.
+- Experiment `prompt/coordination/experiments/T4/20261106T1334Z-T4-chat-windowfocus-m8v3.json`, work `prompt/coordination/work/INPUT-005/20261106T1334Z-T4-chat-windowfocus-m8v3-focused-window-guard.json`. Next: inspect actual full final CI result, update status with exact pass/fail, T5 signed candidate acceptance. INPUT-005 OPEN and project NOT_READY 0/3.
