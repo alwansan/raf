@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_integrated_device_unverified",
+  "title": "Captured Android touchpad MotionEvent SOURCE_MOUSE needs InputDevice.getSources SOURCE_TOUCHPAD",
+  "source_reference": "https://developer.android.com/reference/android/view/InputDevice#SOURCE_TOUCHPAD",
+  "hypothesis": "Normally an Android trackpad reports MotionEvent.getSource=SOURCE_MOUSE=8194 while its InputDevice.getSources includes SOURCE_TOUCHPAD=1048584; event-only Classify previously ignored those captured relative-axis packets.",
+  "input_provenance": {
+    "original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dll_size": 3211776,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "authentic_original_game_source_unpublished": true,
+    "official_android": "https://developer.android.com/reference/android/view/InputDevice#SOURCE_TOUCHPAD"
+  },
+  "implementation": [
+    {
+      "path": "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+      "commit": "b968375ceec98136cbef437ecbb53589bc9a62ec",
+      "description": "Keeps one-argument Classify for historic regression and adds Classify(eventSource,deviceSources) with source=SOURCE_MOUSE and device touchpad capability both necessary."
+    },
+    {
+      "path": "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+      "commit": "bf0f32326952ff5c4ff44e5df168ef1c701eb942",
+      "description": "For captured SOURCE_MOUSE only, reads InputEvent.getDevice().getSources with scoped disposed JNI wrapper, passes both sources to classifier; touches/screens/uncaptured events return to original Unity."
+    },
+    {
+      "path": "android-port/Tests/PhysicalMouse/Program.cs",
+      "commit": "8253bd7fdd09730c6bfd79a57fcc51968d872cf5",
+      "description": "12 executable new negative/positive device-source cases."
+    },
+    {
+      "path": "tests/test_t4_android_pointer_capture_policy.py",
+      "commit": "f0e6cfd60761195ff38292b2b6765e029df051c6",
+      "description": "3 new native JNI source guards and updated legacy assertion for correct two-argument classification."
+    },
+    {
+      "path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+      "commit": "bc64aa8ceb4c7445d8910e5bf140b0a749ad4261",
+      "description": "Runs all source policies including 5 previously unexecuted scheduled T4 physical mouse presence assertions inside existing isolated original ABI CI."
+    }
+  ],
+  "workflow": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "validation": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42144434260",
+    "job_id": 127652374706,
+    "source_commit": "f0e6cfd60761195ff38292b2b6765e029df051c6",
+    "conclusion": "SUCCESS",
+    "tests_python": {
+      "original_router": 7,
+      "original_patch": 7,
+      "native_bridge_policy": 21,
+      "scheduled_presence": 5,
+      "total": 40
+    },
+    "tests_dotnet": 48,
+    "real_unity_2021_managed_compile": "PASS",
+    "original_authentic_private_ILSpy": {
+      "mouse_x": 4,
+      "mouse_y": 4,
+      "cursor_lock": 2,
+      "source_files_changed": 5
+    },
+    "android_player_built": false,
+    "device_tested": false
+  },
+  "controls": [
+    "Ordinary SOURCE_MOUSE with only mouse device sources is not accepted as touchpad.",
+    "Event SOURCE_TOUCHSCREEN stays ignored even if composite device advertises touchpad.",
+    "SOURCE_MOUSE_RELATIVE uses the existing relative Mouse.getX/Y with no additional getDevice JNI lookup.",
+    "InputDevice.getSources read only if event source is SOURCE_MOUSE; missing device conservatively ignored.",
+    "AndroidJavaObject device wrapper disposed with using and callback old-generation token remains checked under captureGate.",
+    "Scheduled T4 legacy Input.mousePresent exclusion and virtual RaftAndroidTouchLeft exclusion remain unchanged.",
+    "No Android touch injection, gameplay, original .rgd, shader, UI or Settings changes."
+  ],
+  "initial_ci_failures": [
+    "Intermediate runs 42144331049 and 42144368616 failed because an old static assertion still required single-argument Classify(source); corrected to require Classify(source, deviceSources) at commit f0e6cfd6. Final full CI PASS."
+  ],
+  "limitations": [
+    "Android official API classification proves former touchpad branch misses usual events, not that a touchpad was used on this device.",
+    "Native JNI, real Unity IL2CPP Android player and actual captured pointer hardware tests have not run.",
+    "Unknown/missing InputDevice falls back to original Unity handling; intentional fail-open.",
+    "Actual camera sensitivity, touchpad vendor differences, Android OS black cursor/bars, buttons/wheel, T5 Resolution and .rgd world/save/reopen require signed device regression."
+  ],
+  "next_step": "On T5-coordinated signed source candidate verify device trackpad SOURCE_MOUSE with actual getSources touchpad capability; captured AXIS_RELATIVE_X/Y accumulation, physical USB mouse, frequent game/menu/reenter, OS pointer and bars, keyboard/wheel/touch, and local playable world/save/exit/reopen. Do not claim READY or close INPUT-005."
+}
