@@ -1,0 +1,32 @@
+{
+  "session_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "f9a71c33d502f9155cb79ad8f1cb677ac059bff4",
+  "updated_at": "2026-11-06T11:27:07.776Z",
+  "resumed_from_sessions": [
+    "20261106T1106Z-T4-chat-release-outcome-s8k4",
+    "20261106T1042Z-T4-scheduled-f6n3",
+    "20261106T1030Z-T4-chat-release-view-ownership-b7m4"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42208882663",
+    "prompt/coordination/clients/T4/sessions/20261106T1106Z-T4-chat-release-outcome-s8k4.md"
+  ],
+  "experiment_key": "T4-INPUT005-device-JSONL-release-status-eight-static-original-20261106-e06566a-source-free-overflow-privacy-negative-v1",
+  "resource_key": "T4-source-free-JSONL-Python-only-no-Unity-no-phone-dataset",
+  "hypothesis": "The existing T4 source-free Android JSONL session classifier ignores physical mouse capture release outcome, leaving the next phone test unable to distinguish the Unity release-request event from the actual Java-call-return observation. Add bounded safe per-session categories and malformed/contradictory negative controls, never interpret return as OS success.",
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py",
+    "prompt/coordination/work/INPUT-005/T4-20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2-source-free-device-log-mouse-classifier.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.md",
+    "prompt/coordination/experiments/T4/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.json",
+    "prompt/coordination/discussions/INPUT-005/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2-to-T5.md"
+  ],
+  "nonoverlap": "T4 scheduled 1042Z reviewed release-target runtime code; T4 chat 1106Z completed it. Here do not touch mouse runtime, native build, world/game files, T5 packaging, T1/T2/T3 source, shared workflows, touch, audio or Settings. Existing dedicated source-free workflow path trigger.",
+  "safety": "Allowlist eight known outcome labels, reject claimed native_release_confirmed=true/unknown extras as unparseable, expose only aggregate counts; no raw JSONL values, IDs, paths, coordinates, exceptions, or hashes; preserve dedup/truncation rules and 0/3 readiness.",
+  "next_step": "Patch parser and tests via atomic two-file Git tree at current HEAD, verify bounded existing T4 JSONL CI, session/experiment/event and T5 device handoff."
+}
