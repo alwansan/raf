@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T2052Z-T1-chat-actual-variant-comparator-e28c",
+  "generation": "T-2026-11-05",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "4ae3a130dd671909649dedbdee1f6f21c62e0210",
+  "updated_at": "2026-11-06T20:52:00Z",
+  "resumed_from_sessions": [
+    "20261106T2038Z-T1-chat-integer-source-a47c",
+    "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
+    "20261106T2017Z-T1-chat-private-producer-gate-8f31"
+  ],
+  "experiment_key": "source-only-actual-gpu-original-zip2-15964ea8-seed19-same-input-Unity2021-GL-baseline-run42289238865-vs-integer-source-42290211798-aggregate-keyed-delta-gate-v1",
+  "resource_key": "none - source-only no Unity or native CI; T1 previous run 42290211798 remains active",
+  "hypothesis": "After the already-running integer_source test completes, compare genuine direct-original vs Unity GPU keyed site mismatches against baseline only when both logs contain complete/physically verified producer, zero-input-mismatch, matching record coverage, proper variant marker; otherwise declare no variant result rather than infer from an incomplete run.",
+  "intended_files": [
+    "scripts/t1_fft_real_gpu_variant_delta_gate.py",
+    "tests/test_t1_fft_real_gpu_variant_delta_gate.py",
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml",
+    "prompt/coordination/work/WATER-001/20261106T2052Z-T1-chat-actual-variant-comparator-e28c.json",
+    "prompt/coordination/experiments/T1/20261106T2052Z-T1-chat-actual-variant-comparator-e28c.json",
+    "prompt/coordination/clients/T1/sessions/20261106T2052Z-T1-chat-actual-variant-comparator-e28c.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T2052Z-T1-chat-actual-variant-comparator-e28c.json"
+  ],
+  "collision_check": "Only 42290211798 private Unity currently active, running T1 integer-source owner; no workflow or files of owner modified; implement disjoint source-only test/reporter on actual sanitized result logs",
+  "trial_vote": "لا يحتاج",
+  "next_step": "Add private safe aggregate capture-delta comparison, test source-only; when 42290211798 completed apply to authenticated run logs and record actual outcome, no repeated Unity dispatch or changes to game shader."
+}
