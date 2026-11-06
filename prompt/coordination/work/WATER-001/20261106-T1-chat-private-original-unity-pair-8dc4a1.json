@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106-T1-chat-private-original-unity-pair-8dc4a1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "31a7cd97c4ad9cd101a532895334d11bb0f778ee",
+  "updated_at": "2026-11-06",
+  "track": "Real SHA-original SPIR-V direct keyed trace versus Unity original-derived FFT paired capture bridge",
+  "resumed_from_sessions": [
+    "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
+    "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+    "20261106T1850Z-T1-chat-gpu-input-join-b71c"
+  ],
+  "experiment_key": "original-zip2@15964ea8-sha-slot0-direct-original-spirv-vulkan-keyed-trace-plus-Unity2021-openglcore-HLSL-candidate-keyed-trace-exact-physical-source-butterfly-copyinput-v1",
+  "resource_key": "none for source-only verification; raft-native-engine-${{ github.ref }} remains unavailable to T1 while full XAPK run 42281310905 is active",
+  "hypothesis": "Existing opt-in Unity input-identity replay incorrectly uses translated HLSL Vulkan trace as reference; switching reference to direct instrumented original SPIR-V and creating a SHA-bound private trace metadata manifest will yield a meaningful paired original-vs-Unity keyed diagnosis with byte-identical physical images and mandatory GPU CopyInput evidence, without claiming original authored runtime kernel identity.",
+  "scope": "Modify only T1 opt-in legacy source-authentic Unity replay workflow and newly scoped private metadata collector + adversarial tests + isolated 4-minute source-only CI. Native build not cancelled or duplicated; do not dispatch real Unity while native underway; workflow push gate remains manual or explicit original-pair tag.",
+  "intended_files": [
+    "scripts/t1_fft_private_unity_paired_capture.py",
+    "tests/test_t1_fft_private_unity_paired_capture.py",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    ".github/workflows/raft-t1-fft-private-unity-paired-bridge-ci.yml",
+    "prompt/coordination/work/WATER-001/20261106-T1-chat-private-original-unity-pair-8dc4a1.json",
+    "prompt/coordination/experiments/T1/20261106-T1-chat-private-original-unity-pair-8dc4a1.json",
+    "prompt/coordination/clients/T1/sessions/20261106-T1-chat-private-original-unity-pair-8dc4a1.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106-T1-chat-private-original-unity-pair-8dc4a1.json"
+  ],
+  "related_runs": [
+    42281310905,
+    42198180194,
+    42254539826,
+    42283086865
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Prove private collector source-only with adversarial captures; opt-in workflow stage direct original-SPIRV independently and verify input identity and original-vs-unity manifest; do not dispatch 65-minute Unity runner until available."
+}
