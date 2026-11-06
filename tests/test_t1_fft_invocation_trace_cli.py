@@ -12,7 +12,7 @@ from scripts.t1_fft_trace_compare import INVOCATION_RECORD, INVOCATION_SIZE, REC
 
 def capture(rows):
     return (struct.pack("<I", len(rows)) +
-            b"".join(INVOCATION_RECORD.pack(*row) for row in rows)).ljust(INVOCATION_SIZE, b"\\0")
+            b"".join(INVOCATION_RECORD.pack(*row) for row in rows)).ljust(INVOCATION_SIZE, b"\0")
 
 
 ROWS = [(site, 3, 0, 0, 0, 1, 2, 0, 10, 0, 0, 0) for site in range(3)]
@@ -55,7 +55,7 @@ class InvocationCliTests(unittest.TestCase):
     def test_legacy_trace_layout_is_rejected(self):
         legacy = (struct.pack("<I", 3) +
                   b"".join(RECORD.pack(site, 1, 2, 0, 10, 0, 0, 0)
-                           for site in range(3))).ljust(SIZE, b"\\0")
+                           for site in range(3))).ljust(SIZE, b"\0")
         status, _, _ = self.run_pair(capture(ROWS), legacy)
         self.assertEqual(status, 2)
 
