@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1330Z-T5-chat-signed-apk-auth-f7b2",
   "issue_id": "INTEGRATION-001",
-  "status": "full_SHA_and_aapt_apksigner_CLI_passed_report_cert_parser_blocked",
+  "status": "completed_actual_signed_apk_full_SHA_binary_manifest_and_apksigner_verified",
   "base_sha": "4401387ed6da0e0b5892fab2be28a6b3104d3e8e",
-  "updated_at": "2026-11-06T13:44:15.295Z",
+  "updated_at": "2026-11-06T13:51:45.476Z",
   "resumed_from_sessions": [
     "20261106T1316Z-T5-chat-nested-zip-c53a.md",
     "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
@@ -34,7 +34,7 @@
     "If HTTPS 206 unavailable, stop; do not full-download 2.97GB envelope."
   ],
   "coordination": "T5 scheduled checkpoint focuses source-metadata; no active T5 scheduled run on last check, T2 active shader source-only, no overlap. Phone/gfx readiness remains NOT_READY 0/3.",
-  "next_step": "Change reporter to distinguish verified apksigner CLI success from optional signer cert digest metadata parse, support multiple signers and unavailable metadata without inventing identity; test source-only and rerun actual original 673MB once with 700MiB cap.",
+  "next_step": "Separate isolated 2.3GB original OBB full SHA verification with bounded budget, no full archive repetition or raw asset publication; GPU/water/FFT Android still unverified.",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42227170402",
   "job_id": 127923480529,
   "source_commit": "c23b26efd1112cf1cd828e2190bd378f6f0b08d4",
@@ -55,5 +55,26 @@
     "apksigner_verify_command_returned_0": true,
     "blocker": "apk_signer_certificate_invalid: reporter assumed exactly one parsed signer cert SHA-256 line; raw signer output intentionally not logged",
     "raw_certificate_publication": false
+  },
+  "final_run_url": "https://github.com/alwansan/raf/actions/runs/42228262902",
+  "final_job_id": 127927198011,
+  "final_source_commit": "7e5d69ce00e5c22183915205f164b67101694d8c",
+  "final_result": {
+    "status": "success",
+    "synthetic_tests": "12/12",
+    "actual_full_signed_apk_bytes": 672853870,
+    "actual_SHA256_matches_real_original_delivery_manifest": true,
+    "actual_full_SHA_digest_prefix": "d200b212ca8c",
+    "actual_binary_manifest_package": "com.alwansan.raft.androidtest",
+    "actual_binary_manifest_version_code": "89",
+    "actual_apksigner_verify_exit_zero": true,
+    "apksigner_v1": true,
+    "apksigner_v2": true,
+    "apksigner_v3": false,
+    "apksigner_v4": false,
+    "reported_signer_count": 1,
+    "certificate_digest_metadata_available": false,
+    "full_main_OBB_SHA_verified": false,
+    "Android_phone_tested_this_cycle": false
   }
 }
