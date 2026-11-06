@@ -1,0 +1,26 @@
+{
+  "session_id": "20261106T2138Z-T4-scheduled-native-retry-q4n7",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue": "INPUT-005",
+  "baseline_sha": "f2716a0e8e20413416ac8375086f96006e6fe9fb",
+  "status": "waiting_ci",
+  "hypothesis": "Owner-triggered native retry at a1737bd includes Editor mouse ABI shim and can produce signed output; only device test can establish actual pointer capture.",
+  "files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T2138Z-scheduled-native-retry-observation.json",
+    "prompt/coordination/clients/T4/sessions/20261106T2138Z-T4-scheduled-native-retry-q4n7.md"
+  ],
+  "shared_resource": "Native Unity CI 42296450023 read-only; T5 owns build/delivery; no dispatch",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T2052Z-T4-chat-save-stage-stale-q6r2.md",
+    "prompt/coordination/clients/T4/sessions/20261106T2035Z-T4-scheduled-native-failure-h7q2.md"
+  ],
+  "evidence": {
+    "owner_phone_run": 42058825739,
+    "live_native_run": 42296450023,
+    "live_run_source": "a1737bd736e276d53df808442cfae3b1eea0d488",
+    "native_status": "in_progress/reconstruct",
+    "source_path_ci": 42292421337
+  },
+  "next_step": "On completion inspect reconstruct Editor CS0234, signed artifacts/manifest/OBB SHA; then T5-coordinated device test for relative mouse, cursor UI, keyboard and original same-world .rgd."
+}
