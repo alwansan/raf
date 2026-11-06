@@ -4,8 +4,8 @@
   "session_id": "20261106T2229Z-T5-chat-native-package-postattest-c61b",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "active",
-  "updated_at": "2026-11-06T22:29:00.478Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T22:33:54.164Z",
   "base_sha": "a02afd104b72359c7955d7519be1fda978018ce5",
   "resumed_from_sessions": [
     "20261106T2216Z-T5-chat-xapk-postread-sha-0e8d",
@@ -26,5 +26,28 @@
   "experiment_key": "T5-DELIVERY-013-native-package-source-a58672b-postattestation-split-SHA-source-only-v1",
   "resource_key": "T5 CPU-only synthetic Python CI; no Unity or real APK/OBB, no native request or heavy runner",
   "coordination": "Current native 42296450023 source a1737bd7 in_progress, immutable, do not cancel/retrigger or claim it includes this change. T5 scheduled native observer has separate source. T1/T2/T3/T4 files untouched; existing shared workflow is not modified.",
-  "next_step": "First reproduce gap with a deterministic corrupted post-write XAPK part fixture in an independent workflow; then invoke read-only cross-delivery verifier for companion_required true from native packager before return, confirm red-to-green regression and original A3 packaging CI; record scope/session."
+  "next_step": "Follow native 42296450023 to terminal Unity/IL2CPP/packaging; do not duplicate native or claim new guard applied to a1737bd7 immutable run. Future full build source includes post-attestation when at or after f68af8; if successful inspect exact artifact SHA, signing and XAPK/OBB, avoid release 403 false claims. T5 trial vote remains NO (1/5 YES), full readiness NOT_READY 0/3.",
+  "result": {
+    "scope_status": "completed_source_only",
+    "red_commit": "26ed3f8952df7279482535461595bbe451f6b4bb",
+    "red_ci": "https://github.com/alwansan/raf/actions/runs/42305228829",
+    "red_tests": "1/3 success; 2 FAIL, post-close XAPK corruption was accepted and verifier never called",
+    "fix_commit": "f68af8185665d17d98fc13ea7f95b325c258d82f",
+    "green_ci": "https://github.com/alwansan/raf/actions/runs/42305389897",
+    "green_tests": "3/3 success",
+    "a3_ci": "https://github.com/alwansan/raf/actions/runs/42305389870",
+    "a3_tests": "17/17 delivery + 4/4 publisher success",
+    "termux_ci": "https://github.com/alwansan/raf/actions/runs/42305389659",
+    "termux_tests": "31/31 success",
+    "reconstruction_ci": "https://github.com/alwansan/raf/actions/runs/42305389801",
+    "reconstruction_result": "success",
+    "platform_ci": "https://github.com/alwansan/raf/actions/runs/42305389761",
+    "platform_result": "success",
+    "native_immutable_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+    "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+    "native_status_at_checkpoint": "in_progress Unity Editor 2021.3.45f2 Android import and compile",
+    "actual_signed_game_apk_verified": false,
+    "actual_obb_payload_verified": false,
+    "device_tested": false
+  }
 }

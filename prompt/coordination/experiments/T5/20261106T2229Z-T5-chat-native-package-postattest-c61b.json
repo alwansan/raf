@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2229Z-T5-chat-native-package-postattest-c61b",
+  "origin": "chat",
+  "owner": "T5",
+  "issue_id": "DELIVERY-013",
+  "experiment_key": "T5-DELIVERY-013-native-package-source-a58672b-postattestation-split-SHA-source-only-v1",
+  "hypothesis": "Native workflow runs scripts.package_android_delivery but never invokes new actual XAPK nested SHA checker before retaining/publishing. Package can return success if a transport part changes between writer completion and metadata record; integrate post-packaging integrity attestation to make a complete APK+OBB+XAPK source fail closed before printing success, preserving APK-only compatibility.",
+  "base_sha": "a02afd104b72359c7955d7519be1fda978018ce5",
+  "red_commit": "26ed3f8952df7279482535461595bbe451f6b4bb",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42305228829",
+  "red_result": "1/3 success; 2 FAIL, post-close XAPK corruption was accepted and verifier never called",
+  "green_commit": "f68af8185665d17d98fc13ea7f95b325c258d82f",
+  "green_ci": "https://github.com/alwansan/raf/actions/runs/42305389897",
+  "green_result": "3/3 success",
+  "existing_validation": [
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42305389870",
+      "result": "17/17 delivery + 4/4 publisher success"
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42305389659",
+      "result": "31/31 success"
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42305389761",
+      "result": "success"
+    }
+  ],
+  "new_files": [
+    "tests/test_t5_native_package_postattest.py",
+    ".github/workflows/raft-t5-native-package-postattest.yml"
+  ],
+  "production_file": "scripts/package_android_delivery.py",
+  "source_only": true,
+  "real_signed_artifact_verified": false,
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "limits": [
+    "Actual signed Raft outputs not tested",
+    "No new device or Unity gameplay proof",
+    "Extra file I/O after packaging, no new disk assembly",
+    "Current immutable native job predates the source change"
+  ],
+  "next_step": "Follow native 42296450023 to terminal Unity/IL2CPP/packaging; do not duplicate native or claim new guard applied to a1737bd7 immutable run. Future full build source includes post-attestation when at or after f68af8; if successful inspect exact artifact SHA, signing and XAPK/OBB, avoid release 403 false claims. T5 trial vote remains NO (1/5 YES), full readiness NOT_READY 0/3."
+}
