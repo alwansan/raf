@@ -1,0 +1,43 @@
+name: T1 WATER-001 source-only strict invocation pair evidence gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t1_fft_invocation_pair_gate.py
+      - scripts/t1_fft_coordinate_probe_compare.py
+      - tests/test_t1_fft_invocation_pair_gate.py
+      - tests/test_t1_fft_coordinate_probe_compare.py
+      - .github/workflows/raft-t1-fft-invocation-pair-gate.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-invocation-pair-evidence-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify strict independent paired-trace admission
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_invocation_pair_gate.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
+      - name: Privacy and actual-source acceptance boundary
+        run: |
+          set -euo pipefail
+          test -f scripts/t1_fft_invocation_pair_gate.py
+          test -f scripts/t1_fft_trace_compare.py
+          printf '%s\n' 'RAFT_T1_PAIR_GATE unit_tests_only=true original_shader_capture_not_included=true same_file_comparison_forbidden=true manifest_unsigned=true'
