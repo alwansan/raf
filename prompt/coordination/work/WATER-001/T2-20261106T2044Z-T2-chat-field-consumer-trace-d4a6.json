@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2044Z-T2-chat-field-consumer-trace-d4a6",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "bd807b012b9541b25869315177d52e4390fe2cef",
+  "updated_at": "2026-11-06T20:42:42.721Z",
+  "resumed_from_sessions": [
+    "20261106T2020Z-T2-chat-foam-export-guid-material-3c5e",
+    "20261106T2021Z-T2-scheduled-foam-guid-collision-f8a3",
+    "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7"
+  ],
+  "hypothesis": "The 13 original SHA-verified Foam Material field reads may feed typed Graphics/CommandBuffer/Renderer/Material Unity APIs non-adjacently; prove only bounded exact-taint IL consumers without raw symbols.",
+  "experiment_key": "T2-Foam-SHA-original-Material-field-load-typed-API-taint-32ops-v1",
+  "resource_key": "T2 independent mono-cecil source-only original SHA-pinned workflow; no Unity/native GPU or scheduled installer",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "docs/T2_ORIGINAL_FOAM_MATERIAL_FIELD_API_CONSUMERS_2026-11-06.md",
+    "prompt/coordination/clients/T2/sessions/20261106T2044Z-T2-chat-field-consumer-trace-d4a6.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T2044Z-T2-chat-field-consumer-trace-d4a6.json",
+    "prompt/coordination/experiments/T2/20261106T2044Z-T2-chat-field-consumer-trace-d4a6.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2044Z-T2-chat-field-consumer-trace-d4a6-result.json"
+  ],
+  "do_not_touch": [
+    "scripts/t2_foam_private_installer.py",
+    ".github/raft-native-build-request.json",
+    "T1 FFT",
+    "T3 shader48",
+    "T4 Android input",
+    "T5 native CI",
+    "game assets / meta"
+  ],
+  "vote": "لا يحتاج"
+}
