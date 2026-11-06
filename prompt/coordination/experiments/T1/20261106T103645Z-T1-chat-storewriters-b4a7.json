@@ -1,0 +1,39 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T103645Z-T1-chat-storewriters-b4a7",
+  "issue_id": "WATER-001",
+  "origin": "chat",
+  "hypothesis": "The failed butterfly address sites may be loaded from function locals with explicit stores; an opcode/type direct-store census may show where the integer-bitcarrier assumption becomes unproven, without a rewrite.",
+  "source_commit": "ac6c8c4fb5e7cd2651baabe4d4900f3c6ef93440",
+  "input_hashes": [
+    "raf/zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (original source pin; no bytes retained in public)"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "apt spirv-tools (runner package version to check)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_local_store_writers.py -v",
+    "python3 -m scripts.t1_fft_local_store_writers \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "Multiple direct OpStore candidates never imply unique reaching definition",
+    "No-store and indirect pointer never imply a source",
+    "Changed original descriptor binding rejects genuine-layout mode",
+    "Static count bound rejects unexpected large store census"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42204760126",
+  "artifact_urls": [],
+  "budget": "Existing isolated 20-minute Ubuntu-24.04 workflow; no Unity Editor build, no native Android build, no public raw original output",
+  "status": "waiting_ci",
+  "observed_result": "Runner step 3 synthetic suite completed successfully; original source acquisition step 5 completed; step 6 was in progress at last check. Local separate synthetic 8/8 PASS.",
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Direct OpStore candidate counts are NOT reaching definitions; pointer aliases/branches/function calls unverified",
+    "No original authored kernel index, numerical pixel match, Adreno/Android device proof",
+    "Private original SPIR-V never published"
+  ],
+  "integration_commit": "ac6c8c4fb5e7cd2651baabe4d4900f3c6ef93440",
+  "next_step": "Inspect only bounded RAFT_T1_FFT_LOCAL_STORE_CANDIDATES label after actual CI; note site1 X and site2 X/Y. If step fails, isolate compilation-versus-audit and adjust once with fresh scope lease."
+}
