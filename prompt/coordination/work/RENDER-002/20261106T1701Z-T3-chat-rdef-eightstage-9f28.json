@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1701Z-T3-chat-rdef-eightstage-9f28",
+  "issue_id": "RENDER-002",
+  "track": "Particle108 original DXBC resource-table presence across 8 exact source stages",
+  "status": "active",
+  "base_sha": "bd99264adc2a0671ada73fc2801f7be23a44e066",
+  "intended_files": [
+    "scripts/t3_particle108_original_dxbc_rdef.py",
+    "tests/test_t3_particle108_original_dxbc_rdef.py",
+    ".github/workflows/raft-t3-particle108-original-rdef.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1701Z-T3-chat-rdef-eightstage-9f28.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1701Z-T3-chat-rdef-eightstage-9f28.md",
+    "prompt/coordination/experiments/T3/20261106T1701Z-T3-chat-rdef-eightstage-9f28.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1701Z-T3-chat-rdef-eightstage-9f28.json"
+  ],
+  "hypothesis": "One missing/duplicate original DXBC RDEF chunk aborts whole four-pair census. Aggregate 8-stage unique/absent/multiple count, reject other malformed containers, and authenticate genuine ZIP2 stage selection without emitting private shader identifiers. Real experiment differs from 42249097396 because source parser and duplicate fixture changed.",
+  "experiment_key": "T3-RENDER002-zip2SHA15964-Particle108-4keyword-pairs-8DXBC-RDEF-presence-aggregated-v2",
+  "resource_key": "zip2-15964-particle108-4owner-6scenes-cpu-original-source",
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/20261106T1630Z-T3-scheduled-rdef-cardinality-c7e2.json",
+    "prompt/coordination/work/RENDER-002/20261106T164001Z-T3-chat-rdef-fixture-6d0abc.json"
+  ],
+  "resumed_from_sessions": [
+    "20261106T1630Z-T3-scheduled-rdef-cardinality-c7e2",
+    "20261106T164001Z-T3-chat-rdef-fixture-6d0abc"
+  ],
+  "taken_over_from": [
+    "T3 original-source CI 42249097396 returned RDEF ambiguous; T3 scheduled absence/multiple source commit 2fc26e03; T3 chat 14/14 source-free CI 42254748522"
+  ],
+  "run_urls": [],
+  "limits": "Only source parser, synthetic regressions, scoped workflow, own per-session records. No Unity/Android build, no game/shader raw content or meta. Source stage uses pinned ZIP2, SHA checked, bounded runner, safe aggregate only.",
+  "next_step": "Add fail-closed all-eight presence census, synthetic regressions and CI, then launch one genuine SHA-pinned original source diagnostic only if fresh Actions collision check is clear.",
+  "updated_at": "2026-11-06T17:03:28.549Z"
+}
