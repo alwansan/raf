@@ -51,5 +51,17 @@ class JoinTests(unittest.TestCase):
     def test_negative_provenance_register_rejected(self):
         self.assertIn("invalid_coordinate", self.check(mapping=[dict(self.mapping[0], register=-3)]))
 
+    def test_missing_dxbc_register_is_schema_error(self):
+        self.assertEqual(["invalid_schema"], self.check(dx=[{"stage":"vertex","family":"texture","count":4}]))
+
+    def test_missing_spirv_binding_is_schema_error(self):
+        self.assertEqual(["invalid_schema"], self.check(spv=[{"stage":"vertex","family":"texture","set":2,"count":4}]))
+
+    def test_missing_provenance_set_is_schema_error(self):
+        self.assertEqual(["invalid_schema"], self.check(mapping=[{"stage":"vertex","family":"texture","register":3,"binding":9,"count":4}]))
+
+    def test_non_mapping_record_is_schema_error(self):
+        self.assertEqual(["invalid_schema"], self.check(dx=[None]))
+
 if __name__ == "__main__":
     unittest.main()
