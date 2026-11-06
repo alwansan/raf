@@ -1,0 +1,17 @@
+{
+  "id": "T4-20261106T0147Z-T4-chat-ledger-id-r8w2",
+  "session_id": "20261106T0147Z-T4-chat-ledger-id-r8w2",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "type": "ledger_integrity_repair",
+  "at": "2026-11-06T01:49:00Z",
+  "timestamp": "2026-11-06T01:49:00Z",
+  "summary": "T4 repaired required id field in existing 20261106T0130Z captured touchpad event after T3 CI42145627443 revealed Missing record identity. Read-only T4 ledger CI42146543980 SUCCESS: 7/7 tests, actual 10 issues/58 resources/322 events and T-team parser; no T3 code or game assets altered, INPUT-005 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42146543980",
+    "https://github.com/alwansan/raf/commit/e7b716241430d76e8324d8119fc45255300d4889",
+    "prompt/coordination/experiments/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json"
+  ],
+  "device": "NOT_TESTED"
+}
