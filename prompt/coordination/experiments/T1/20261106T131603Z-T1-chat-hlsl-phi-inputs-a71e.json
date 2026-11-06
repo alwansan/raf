@@ -1,0 +1,62 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+  "issue_id": "WATER-001",
+  "hypothesis": "The translated HLSL FFT butterfly1 X OpPhi has multiple typed incoming branches, and selected vector component source may expose integer-bitcarrier vs float arithmetic split. Phi shape was unproven before running actual private glslang source.",
+  "source_commit": "6fc10ec699659167bd4a084c34839a2a3e519827",
+  "input_hashes": [
+    "SHA-pinned private ZIP2 original @15964ea8f246b6e076ce26b60931ee2e1a9a2385; original SPIR-V and HLSL candidate retained in private workflow scratch only"
+  ],
+  "tool_versions": {
+    "host": "ubuntu-24.04",
+    "spirv-dis": "apt spirv-tools in isolated Vulkan CI"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_hlsl_phi_input_origins.py -v",
+    "python3 -m scripts.t1_fft_hlsl_phi_input_origins \"$TMPDIR/coordinate.spv\""
+  ],
+  "negative_controls": [
+    "Scalar Phi and vector Phi lane X/Y both supported",
+    "Incoming value type matches actual Phi result shape",
+    "CFG predecessor labels must link to Phi block",
+    "Bitcast signed32-to-float32 recognized without numeric operands",
+    "Arithmetic and load boundaries remain unresolved, not numerical truth",
+    "Unknown source opcode name sanitized",
+    "Private CLI errors classified against fixed allowlist, unknown contents never logged",
+    "Wrong original descriptor roles rejected and more than 12 Phi inputs fail closed"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42225317476",
+  "artifact_urls": [],
+  "budget": "Original SHA-authentic private 20-min Ubuntu 24.04 non-Unity Vulkan workflow",
+  "status": "waiting_ci",
+  "observed_result": {
+    "first_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42224533880",
+      "conclusion": "failure",
+      "synthetic_tests": "13/13 PASS",
+      "private_reason": "generic failed, source input was actually vector Phi"
+    },
+    "diagnostic_retry": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42224927222",
+      "conclusion": "failure",
+      "synthetic_tests": "15/15 PASS",
+      "safe_reason": "Unexpected scalar Phi lane type"
+    },
+    "vector_fix_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42225317476",
+      "status": "in_progress",
+      "expected_synthetic_tests": 18
+    },
+    "actual_phi_incoming_operands_proven": false,
+    "original_vs_unity_numeric_parity_proven": false,
+    "android_water_proven": false
+  },
+  "limitations": [
+    "Even proving all possible Phi inputs and type families does not prove which branch executes or numeric equality to original shader",
+    "The source-private HLSL candidate is not an authenticated authored Unity kernel map nor Adreno device validation"
+  ],
+  "integration_commit": "6fc10ec699659167bd4a084c34839a2a3e519827",
+  "next_step": "When current CI terminates, read only safe actual Phi incoming source summary, record predecessor source kinds and next comparison task. Do not duplicate private runner unless new cause/fix required."
+}
