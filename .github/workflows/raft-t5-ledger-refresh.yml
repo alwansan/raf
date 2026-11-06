@@ -50,3 +50,4 @@ jobs:
 # T5 chat one-native-diagnostic CI42042902522 canonical index 2026-11-05T1416Z
 # T5 one-shot verified-native-artifact-retention 42110297871 ledger checkpoint 2026-11-05T21:14Z
 # T5 one-shot checkpoint real CL patch.89 diagnostics and signed APK/OBB 20261105T2213Z
+# T5 one-shot PERF-007 joined original LogRaft+Unity telemetry CI42146496632 2026-11-06
