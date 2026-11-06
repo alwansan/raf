@@ -2,7 +2,7 @@
 
 - session_id: `20261106T1714Z-T2-chat-target-foam-name-63f0`
 - origin: `chat`
-- status: `active`
+- status: `completed`
 - resumed_from_sessions: `20261106T1639Z-T2-chat-original-manifest-9d26`; `20261106T1619Z-T2-scheduled-external-target-ambiguity-k8m2`
 - base_sha: `08b0215aab074689de9fe0daf62b8964f2473a02`; registered scope commit `8c5ec44eb96dd8758f292be20f47c9234f604115`.
 - work: `prompt/coordination/work/WATER-001/T2-20261106T1714Z-T2-chat-target-foam-name-63f0.json`.
@@ -26,3 +26,13 @@
 - Narrow workflow-only fix [bdc3095f](https://github.com/alwansan/raf/commit/bdc3095f7e1445307a719d15b038858982005db2): fail closed on exact forbidden JSON keys, retain all prior SHA/shape/absence/privacy assertions; no game file changed.
 - Follow-up [CI42260338766](https://github.com/alwansan/raf/actions/runs/42260338766) currently running. Distinct retry to correct false-negative final assertion; do not treat prior run as PASS and do not rerun if follow-up succeeds.
 - Status: `waiting_ci`; next: confirm final exact-name proof and safe artifact, update work/experiment/event/report; Unity external GUID, actual Foam runtime binding, mobile water pixels remain UNKNOWN.
+
+## Final proved source-original result (2026-11-06T17:21:05.332Z)
+- Final [GitHub Actions 42260338766](https://github.com/alwansan/raf/actions/runs/42260338766) **SUCCESS** at `bdc3095f7e1445307a719d15b038858982005db2`: 10/10 new exact-Shader-name controls and 11/11 inherited original-manifest controls passed. ZIP2 original sharedassets0 SHA (115978112 bytes) and the extra target file original SHA (758412 bytes) validated, original Foam raw Shader PathID2420 authentication and private typed target inspection succeeded.
+- Original two previously unresolved Material.m_Shader target objects both serialized Shader names readable (**2/2**) and both **not equal** exact original Foam Shader serialized `m_ParsedForm.m_Name` (**0/2** name matches). They also differ in raw original Foam Shader bytes (**0/2** raw identical objects). Distinct original file, so do not identify external targets as the single original Foam Shader object.
+- Safe evidence [artifact 13523704013](https://github.com/alwansan/raf/actions/runs/42260338766/artifacts/13523704013) (478 bytes) contains only bounded count/boolean data, no original names, raw bytes, target SHA/GUID/private paths.
+- First [42260145863](https://github.com/alwansan/raf/actions/runs/42260145863) failed after successful private source comparison due safe privacy field substring check. Narrow exact forbidden JSON key assertion fix at `bdc3095f` restored valid fail-closed check; retested from original authenticated data successfully.
+- Files committed this scope: `scripts/t2_foam_original_target_name_relation.py`, `tests/test_t2_foam_original_target_name_relation.py`, `.github/workflows/raft-t2-foam-original-target-name-relation.yml`, `docs/T2_FOAM_ORIGINAL_EXTERNAL_SHADER_NAME_RELATION_2026-11-06.md`; no game assets, Unity shaders, ShaderLab, scenes, GUID/.meta, Settings, audio, save, touch, mouse or other agent files altered.
+- Work `prompt/coordination/work/WATER-001/T2-20261106T1714Z-T2-chat-target-foam-name-63f0.json` completed for this question only; experiment `prompt/coordination/experiments/T2/20261106T1714Z-T2-chat-target-foam-name-63f0.json`; canonical event `prompt/coordination/B_TEAM/events/T2/20261106T1714Z-T2-chat-target-foam-name-63f0-result.json`.
+- **Limits:** This tests the two external material Shader pointers from one source owner, not all game references. Actual Unity external FileIdentifier GUID runtime mapping, genuine Foam Material Shader host, CB0 upload, ShaderLab pass rendering, FFT/Spectrum/Blur, phone water colors are **UNKNOWN**. WATER-001 **OPEN**, full game **NOT_READY**; do not confuse successful original-source CI with device visuals.
+- **Next session:** private full external GUID/file-identifier and original Foam Material-path tracing (coordinate with T3 Material work; T1 FFT). No need to repeat prior manifest or this exact Shader-name comparison. Do not edit unrelated T1/T3 workflows or launch duplicate heavy builds.
