@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "world_save_diagnostics",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "9f006935edb40189ae6f74074eb334ae9003205d",
   "experiment_key": "T4-LOCAL005-AndroidRuntimeLog-UnityMessage-unsaved-first-critical-when-sink-null-then-recovery-source-net8-v1",
   "resource_key": null,
@@ -26,8 +26,13 @@
   "experiment_ids": [
     "prompt/coordination/experiments/T4/20261106T1719Z-T4-chat-first-unity-error-recovery-b5q7.json"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260446981",
+    "https://github.com/alwansan/raf/actions/runs/42260590793",
+    "https://github.com/alwansan/raf/actions/runs/42260590701",
+    "https://github.com/alwansan/raf/actions/runs/42260590952"
+  ],
   "result": null,
-  "next_step": "Add deterministic real-source .NET8 failing regression to existing startup-fault synthetic fixture; confirm red at exact new assertion, then minimal sink-null policy preserving return=true HUD; green and document phone boundary.",
-  "updated_at": "2026-11-06T17:19:00Z"
+  "next_step": "Red CI42260446981 completed FAILURE check291 at Program.cs:258 with real AndroidRuntimeLog; production 5e0b52a8 fixed null-sink marker poisoning without hiding HUD. Wait green 42260590793 and source smoke 42260590701/42260590952; device/unity unverified.",
+  "updated_at": "2026-11-06T17:21:00Z"
 }
