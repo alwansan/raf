@@ -1,5 +1,10 @@
 """T5: prevent mixed Raft process lifetime FPS aggregation in the existing CL CLI."""
 import unittest
+import json
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
 
 from scripts.t5_cl_fps_cohort_gate import analyze, compare
 from scripts.t5_cl_pid_epoch_audit import audit
@@ -99,6 +104,25 @@ class ProcessEpochCohortIntegration(unittest.TestCase):
         self.assertFalse(report["safe_to_aggregate_entire_session"])
         self.assertIsNone(report["fresh_surface_fps_all"])
         self.assertEqual(report["fps_rows_withheld_unverified_process_epoch"], 12)
+
+
+    def test_direct_script_cli_retains_original_entry_point(self):
+        script = Path(__file__).resolve().parents[1] / "scripts/t5_cl_fps_cohort_gate.py"
+        with tempfile.TemporaryDirectory() as temp:
+            a = Path(temp) / "one.jsonl"
+            b = Path(temp) / "two.jsonl"
+            a.write_text(json.dumps(row(1)) + "\n", encoding="utf-8")
+            b.write_text(json.dumps(row(1)) + "\n", encoding="utf-8")
+            completed = subprocess.run([
+                sys.executable, str(script),
+                "--session-a", str(a), "--label-a", "synthetic-a",
+                "--session-b", str(b), "--label-b", "synthetic-b",
+            ], cwd=temp, capture_output=True, text=True, timeout=10)
+            self.assertEqual(completed.returncode, 0, completed.stderr[:300])
+            self.assertTrue(completed.stdout.startswith("T5_CL_PRESENTATION_EVIDENCE "))
+            report = json.loads(completed.stdout.split("T5_CL_PRESENTATION_EVIDENCE ", 1)[1])
+            self.assertTrue(report["session_a"]["safe_to_aggregate_entire_session"])
+            self.assertTrue(report["session_b"]["safe_to_aggregate_entire_session"])
 
 
 if __name__ == "__main__":
