@@ -89,6 +89,10 @@ def classify(snapshot, *, expected_id, expected_sha):
     # Accept a full official job-step list as well as a bounded filtered one.
     if type(steps) is not list or not 1 <= len(steps) <= 256:
         raise ValueError("Missing or excessive native milestone steps")
+    # Official GitHub jobs legitimately repeat generic checkout/setup-dotnet
+    # step names. Only duplicate *critical milestone* names are ambiguous;
+    # every step must still have its own strictly increasing positive number.
+    required_step_names = {name for _, _, name in _MILESTONES}
     step_index = {}
     previous_position = 0
     for row in steps:
@@ -96,7 +100,7 @@ def classify(snapshot, *, expected_id, expected_sha):
         name = row.get("name")
         if not isinstance(name, str) or not 1 <= len(name) <= 256:
             raise ValueError("Invalid native step name")
-        if name in step_index:
+        if name in required_step_names and name in step_index:
             raise ValueError("Duplicate milestone")
         number = row.get("number")
         if type(number) is not int:
@@ -105,7 +109,8 @@ def classify(snapshot, *, expected_id, expected_sha):
             raise ValueError("Native step number order or positive position violated")
         previous_position = number
         _state(row, "milestone " + name)
-        step_index[name] = row
+        if name in required_step_names:
+            step_index[name] = row
     if len(step_index) < len(_MILESTONES):
         raise ValueError("Missing or additional source milestones")
     flags = {}
