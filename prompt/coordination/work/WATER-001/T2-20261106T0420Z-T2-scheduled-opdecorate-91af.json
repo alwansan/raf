@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "agent": "T2",
   "issue": "WATER-001",
-  "status": "in_progress",
+  "status": "source_fixed_test_pending",
   "baseline_sha": "97052b8fcaea32074f9945a1acc7788dc2c285f0",
   "hypothesis": "Malformed OpDecorate with word count below 3 currently bypasses fail-closed decoration scan, risking unsupported private SPIR-V metadata.",
   "files": [
@@ -18,5 +18,10 @@
     "20261106T0316Z-T2-scheduled-cb0-gate-7e42"
   ],
   "owner_device_run": 42058825739,
-  "scope": "Only synthetic parser hardening; no private shader data, Unity, APK, audio, settings or touch."
+  "scope": "Only synthetic parser hardening; no private shader data, Unity, APK, audio, settings or touch.",
+  "source_commit": "6579cc33ea6187d6443945a95f5c1bc87b54feae",
+  "test_commit": "9a14e9634316cf31dbfaef3f3ef39ea2bd9b5e61",
+  "session_commit": "b6a0f6093330a1f8fe0f6b29c9609421bfc3cd63",
+  "validation": "Not executed: local github DNS failure; synthetic regression authored; no original shader or Unity/device validation.",
+  "next_step": "Execute unittest in checkout, then CB0 member extent/upload proof."
 }
