@@ -93,6 +93,7 @@ jobs:
           python3 -m scripts.t1_fft_original_keyed_preflight "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           # ORIGINAL-GID-SMOKE-20261106: temporary private original SPIR-V Input injection; no original fetch tracing.
           spirv-dis --raw-id "$TMPDIR/candidates/_private_vulkan/slot0.spv" -o "$TMPDIR/original-gid-before.spvasm"
+          # ORIGINAL-GID-DIAGNOSTIC-RETRY-20261106: fixed-category-only rejection; no private source IDs.
           python3 -m scripts.t1_fft_original_global_id_inject \
             "$TMPDIR/original-gid-before.spvasm" "$TMPDIR/original-gid-injected.spvasm"
           spirv-as --target-env vulkan1.1 "$TMPDIR/original-gid-injected.spvasm" \
