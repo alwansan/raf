@@ -1,0 +1,10 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T004130Z-T1-chat-c1476b",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "source_commit": "951a48a9d0f958ad09719058d2f7575d54249390",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42138743345",
+  "observed_result": "Authentic slot-0 local-memory SSA promotion validated successfully. The source texture coordinate slice contains both sint32_to_float32 and float32_to_sint32, plus vector insert/shuffle and two loads. The two butterfly slices show only float32_to_sint32 within the bounded walk. The aggregate is not lane-sensitive and does not prove the two casts affect the same X lane. Unmodified original/roundtrip Vulkan parity passed for 64 and 32 written pixels. Scheduled synthetic contract passed in CI.",
+  "next_step": "Resolve lane-specific reaching producers through OpVectorShuffle and OpCompositeInsert, keeping unresolved loads explicit. Prototype a private integer-preserving X path only when that lane's roundtrip is confirmed."
+}
