@@ -1,0 +1,19 @@
+{
+  "id": "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9",
+  "owner": "T4",
+  "session_id": "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "at": "2026-11-06T15:27:10.526Z",
+  "summary": "Seven SHA-authentic owner 5Nov real RGD worlds: actual original compiled Save output byte-identical 7/7 then genuine original generic LoadT on those Save-generated files in seven fresh .NET8 CLR child processes 7/7, 7/7 private temp cleanup. 46/46 source-only controls. Exact CI42242683652 success; no Unity/Android device/world-progression proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a65f06ed28f3c5fb703d8ecea7d0e99112509e93",
+    "https://github.com/alwansan/raf/actions/runs/42242683652"
+  ],
+  "device_confirmed": false,
+  "original_clr_fresh_process_verified": true,
+  "real_android_rgd_restart_proven": false,
+  "source_only": false,
+  "offline_player_tested": false
+}
