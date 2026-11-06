@@ -1,0 +1,130 @@
+name: T3 RENDER-002 SHA-original Particle108 VSFS resource descriptor parity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-resource-binding-parity.yml'
+      - 'scripts/t3_particle108_resource_binding_parity.py'
+      - 'tests/test_t3_particle108_resource_binding_parity.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-particle108-descriptor-parity-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-8-stage-descriptor-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Strict source-free four variant per-stage resource reflection tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_resource_binding_parity.py tests/test_t3_particle108_resource_binding_parity.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_resource_binding_parity.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Stage only four SHA pinned original shader owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate six original Renderer scenes and 4 genuine shader owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-original-Particle108-descriptor'
+          pins={'Raft_Data/'+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          found=stage(source,out,pins)
+          assert len(found['owners'])==4 and found['verified_bytes']==269007288 and not found['lfs_used']
+          for name,pin in PIN.items():
+              src=source/'Raft/Raft_Data'/name
+              verify_source(src,pin)
+              dest=out/'Raft_Data'/name
+              with src.open('rb') as inp,dest.open('xb') as outp:
+                  while block:=inp.read(1024*1024):outp.write(block)
+              verify_source(dest,pin)
+          print('T3_ORIGINAL_FOUR_OWNERS_SIX_SCENES_SHA_VERIFIED=true')
+          PY
+      - name: Source compiler and reflector dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Verify 8 real original and HLSL-roundtrip SPIRV descriptor manifests privately
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_resource_binding_parity \
+            --original "$RUNNER_TEMP/t3-original-Particle108-descriptor" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-original-descriptor-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t3-particle108-original-descriptor-safe.json'
+          d=json.loads(p.read_text())
+          assert d['status']=='T3_SHA_ORIGINAL_PARTICLE108_FOURPAIR_RESOURCE_SLOT_CLASSIFIED'
+          assert d['source_original_six_scenes_SHA_verified'] is True
+          assert d['source_original_four_Shader_Material_owners_SHA_verified'] is True
+          assert d['source_original_particle_material_use_slots']==108
+          assert d['source_authored_shader_properties']==13
+          assert d['source_authored_texture_properties']==2
+          assert d['counts']['source_stage_reflections']==8
+          assert d['counts']['roundtrip_stage_reflections']==8
+          assert d['counts']['source_VSFS_keyword_pairs_linked']==4
+          assert d['counts']['roundtrip_VSFS_keyword_pairs_linked']==2
+          assert d['counts']['stage_full_resource_slot_parity']<=8
+          assert d['original_source_descriptor_set_binding_numbers_published'] is False
+          assert d['original_private_names_HLSL_DXBC_SPIRV_Guids_published'] is False
+          assert d['source_shader_replaced_or_Unity_Android_pixels_proven'] is False
+          print('T3_ORIGINAL_PARTICLE108_RESOURCE_DESCRIPTOR_CLASSIFICATION_ACCEPTED=true device=false')
+          PY
+      - name: Upload only source-authentic anonymous numeric descriptor counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle108-descriptors-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-particle108-original-descriptor-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
