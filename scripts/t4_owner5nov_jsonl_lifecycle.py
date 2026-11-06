@@ -46,6 +46,7 @@ TRACKED = {
     ("save", "Save.argumentFileSnapshot"): "save_file_snapshot",
     ("save", "Load<T>.enter"): "load_enter",
     ("save", "Load<T>.exit"): "load_exit",
+    ("save", "Load<T>.exception"): "load_exception",
     ("save", "Load.argumentFileSnapshot"): "load_file_snapshot",
     ("save", "Load.argumentFileSnapshot.unavailable"): "load_unavailable",
     ("save", "Load.caughtException"): "load_caught_exception",
@@ -59,6 +60,7 @@ TRACKED = {
 # exit detail is not evidence of a clean return. Never echo raw details.
 ORIGINAL_SAVE_EXIT = re.compile(r"^exceptionEscaped=(True|False); elapsed_ms=[0-9]+[.][0-9]{3}$")
 SAVE_EXIT_MARKERS = frozenset(("savegame_exit", "saveworld_exit", "saveuser_exit", "save_exit"))
+LOAD_EXIT_MARKERS = frozenset(("load_exit",))
 
 
 def _clean_original_save_exit(detail):
@@ -188,8 +190,9 @@ def _fully_traced_original_loadt_calls(events, evidence_sequence_complete):
     """Track one authentic original Load<T> boundary and snapshot per call.
 
     The original Android-only trace writes a filename existence/size snapshot
-    in the Load<T> finally. A nonzero argument is not proof that Deserialize
-    returned the original world, nor a process restart or durable storage.
+    in the Load<T> finally. Require a clean exceptionEscaped=False original
+    finally exit and reject any escaped exception marker. Nonzero argument
+    is not proof Deserialize returned an original world or persisted to disk.
     """
     active = False
     snapshot_count = 0
@@ -204,12 +207,17 @@ def _fully_traced_original_loadt_calls(events, evidence_sequence_complete):
             snapshot_count = 0
             failed = False
         elif marker == "load_exit":
-            if active and not failed and snapshot_count == 1:
+            if active and not failed and snapshot_count == 1 and snapshot_class == "clean":
                 good += 1
             else:
                 incomplete += 1
             active = False
             snapshot_count = 0
+        elif marker == "load_exception":
+            if active:
+                failed = True
+            else:
+                incomplete += 1
         elif marker == "load_caught_exception":
             if active:
                 failed = True
@@ -285,7 +293,7 @@ def analyze(paths, pinned=False):
                         _parse_detail(record.get("detail"))
                         if marker in ("save_file_snapshot", "load_file_snapshot")
                         else (_clean_original_save_exit(record.get("detail"))
-                              if marker in SAVE_EXIT_MARKERS else None),
+                              if marker in SAVE_EXIT_MARKERS | LOAD_EXIT_MARKERS else None),
                     ))
     ordered = sorted(groups.values(), key=lambda g: (g["first"], g["last"]))
     if len(ordered) != base["session_count"]:
