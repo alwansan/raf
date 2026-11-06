@@ -1,0 +1,14 @@
+{
+  "id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
+  "owner": "T1",
+  "session_id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T13:14:34.269Z",
+  "summary": "Distinct independent source-only FFT paired invocation evidence gate added and tested. Source-only CI 42223419922 SUCCESS: 20 new strict manifest/digest/independent file/site coverage controls, 11 coordinate comparator tests (including empty-both rejection) and 9 existing trace comparator tests = 40 pass. Self-comparison trace parser smoke check is not parity. Actual original-vs-Unity captures not run; manifest unsigned so source authenticity and Adreno water unproven. Separate original private CI 42221700354 finished success and translated X stop is float32 OpPhi.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42223419922",
+    "https://github.com/alwansan/raf/actions/runs/42221700354",
+    "https://github.com/alwansan/raf/commit/5c8199e794dd18983fd5c52e77ba8c0fa3591d18"
+  ]
+}
