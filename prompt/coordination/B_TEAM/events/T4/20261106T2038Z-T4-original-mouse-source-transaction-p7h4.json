@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2038Z-T4-original-mouse-source-transaction-p7h4",
+  "owner": "T4",
+  "session_id": "20261106T2031Z-T4-chat-mouse-staging-transaction-p7h4",
+  "issue_id": "INPUT-005",
+  "type": "result",
+  "summary": "Original authenticated CSharp mouse-axis adapter now uses byte-equivalent backups, prevents hardlinked external source mutation and verifies/rolls back all CSharp sources if a write fails, preserving original UTF8 BOM and original 4+4 axes/2 cursor sites. Red six synthetic partial-write/corrupt-backup/BOM cases in CI42289512790, green 14/14 tests and original Unity2021 Android+Editor ABI source compile CI42289712049. Source-only; no Unity player XAPK/phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42289258833",
+    "https://github.com/alwansan/raf/actions/runs/42289512790",
+    "https://github.com/alwansan/raf/commit/cb379e286adf22170eddb8a24955ad7cee5f1a49",
+    "https://github.com/alwansan/raf/actions/runs/42289712049"
+  ],
+  "at": "2026-11-06T20:38:00Z"
+}
