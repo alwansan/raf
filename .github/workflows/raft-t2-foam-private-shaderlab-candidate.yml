@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/t2_foam_private_shaderlab_candidate.py
       - tests/test_t2_foam_private_shaderlab_candidate.py
+      - scripts/t2_foam_candidate_embedded_validation.py
+      - tests/test_t2_foam_candidate_embedded_validation.py
       - .github/workflows/raft-t2-foam-private-shaderlab-candidate.yml
   workflow_dispatch:
 permissions:
@@ -28,6 +30,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t2_foam_private_shaderlab_candidate.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_private_shaderlab_candidate.py' -v
+          python3 -m py_compile scripts/t2_foam_candidate_embedded_validation.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_candidate_embedded_validation.py' -v
       - name: Check scratch disk
         run: python3 -c 'import shutil; assert shutil.disk_usage(".").free>3*1024**3'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -95,6 +99,27 @@ jobs:
           assert r["original_numeric_or_device_pixels_verified"] is False
           assert r["private_shaderlab_published"] is False
           PY
+      - name: Recompile actual HLSLPROGRAM bodies extracted from complete private ShaderLab
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.t2_foam_candidate_embedded_validation \
+            --candidate "$RUNNER_TEMP/t2-authentic-foam-private.shader" \
+            --scratch "$RUNNER_TEMP" \
+            --out "$RUNNER_TEMP/t2-foam-embedded-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          data=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-foam-embedded-safe.json").read_text())
+          assert data["status"]=="original_private_candidate_embedded_four_stages_vulkan11_valid"
+          assert data["complete_embedded_original_pass_programs"]==2
+          assert data["embedded_stage_variants_compiled_and_validated"]==4
+          assert data["original_stage_order_preserved"] is True
+          assert data["verified_programs_extracted_from_completed_private_ShaderLab"] is True
+          assert data["unity_2021_shaderlab_import_verified"] is False
+          assert data["runtime_cb0_and_material_texture_sampler_upload_verified"] is False
+          assert data["original_gpu_or_android_pixels_verified"] is False
+          assert data["private_source_published"] is False
+          PY
       - name: Erase original and private ShaderLab/HLSL, even on error
         if: always()
         run: |
@@ -108,6 +133,8 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: t2-foam-private-shaderlab-safe-${{ github.run_id }}
-          path: ${{ runner.temp }}/t2-foam-candidate-safe.json
+          path: |
+            ${{ runner.temp }}/t2-foam-candidate-safe.json
+            ${{ runner.temp }}/t2-foam-embedded-safe.json
           if-no-files-found: ignore
           retention-days: 7
