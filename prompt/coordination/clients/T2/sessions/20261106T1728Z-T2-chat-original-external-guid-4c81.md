@@ -1,6 +1,6 @@
 # T2 — original external Shader FileIdentifier provenance
 
-- session_id: `20261106T1728Z-T2-chat-original-external-guid-4c81`; origin: `chat`; status: `active`.
+- session_id: `20261106T1728Z-T2-chat-original-external-guid-4c81`; origin: `chat`; status: `completed`.
 - resumed_from_sessions: `20261106T1714Z-T2-chat-target-foam-name-63f0`, `20261106T1719Z-T2-scheduled-target-name-ci-7f2c`.
 - base_sha: `9d55f5dbe65c05b031e7261658a23f8ff90cbe57`; work registration commit `d23a3c09df34b1afef6b0834cbc0628ced8cd400`.
 - work: `prompt/coordination/work/WATER-001/T2-20261106T1728Z-T2-chat-original-external-guid-4c81.json`; experiment_key `ZIP2-15964-SHA-sharedassets0-2-material-external-Shader-PPtrs-FileIdentifier-GUID-type-reciprocal-target-v1`.
@@ -16,3 +16,14 @@
 - [Actions run 42262404131](https://github.com/alwansan/raf/actions/runs/42262404131) `in_progress` (job 128045452148); status `waiting_ci`. Separate T1 FFT GPU and T3 Particle DXBC jobs untouched; preserve all active work.
 - Source question: two original external FileIdentifier GUID bytes/type and whether original 758412-byte target references back to original Foam PathID2420. Output only safe numeric aggregates; GUID identity/runtime binding remains **unknown** pending genuine data.
 - If run still executing, check its status and assertions, then update experiment/event/doc from actual result. Do not repeat prior exact-name or target SHA proof without distinct hypothesis.
+
+## Completed original-data checkpoint (2026-11-06T17:34:20.769Z)
+
+- Source code `scripts/t2_original_external_guid_evidence.py` commit `f45940ad4e142a4af1051c1d588904ad2e02401a`, tests `tests/test_t2_original_external_guid_evidence.py` commit `e38f9d253fc483abf85d15fa80f6d25c98a868a8`, original checkout CI `.github/workflows/raft-t2-original-external-guid-evidence.yml` commit `5f5ba4450209841993c8600534cdc63e097a5de9`.
+- **Genuine ZIP2 Actions [42262404131](https://github.com/alwansan/raf/actions/runs/42262404131) SUCCESS**, SHA `5f5ba445`, original source stage authenticated 115978112 bytes and original target stage 758412 bytes. **11/11** new source-free negative controls plus **11/11** inherited manifest controls PASS. Private source FileIdentifier and target reverse graph step and final assertions PASS; scratch cleaned before upload.
+- Original **two** external Material.m_Shader Shader PPtrs reference **one** source fileID, type=0, **2/2 GUID all-zero** (16 bytes), **0/2 nonzero**, zero conflicting source FileIdentifier target GUID signatures. This source field cannot independently verify a nonzero GUID for the target.
+- Original SHA target: **2** external FileIdentifiers and **1** Material object; **0** reciprocal external FileIdentifiers naming original Foam owner, **0** target Material pointers back to original Foam Shader PathID2420. No false "source corrupt" inference, no runtime absence proof across other scenes/owners.
+- Final safe artifact [13525462480](https://github.com/alwansan/raf/actions/runs/42262404131/artifacts/13525462480) **621 bytes**, count/boolean only, no original private names/paths/GUID values/raw assets.
+- Report `docs/T2_FOAM_ORIGINAL_EXTERNAL_GUID_EVIDENCE_2026-11-06.md`; experiment `prompt/coordination/experiments/T2/20261106T1728Z-T2-chat-original-external-guid-4c81.json`; event `prompt/coordination/B_TEAM/events/T2/20261106T1728Z-T2-chat-original-external-guid-4c81-result.json`; work `prompt/coordination/work/WATER-001/T2-20261106T1728Z-T2-chat-original-external-guid-4c81.json` status `completed` for this question only.
+- No original game source shaders/ShaderLab/Materials/.meta/GUID/assets/scenes, phone APK/OBB, FMOD/Settings/touch/mouse, native request or other agents' jobs changed. `WATER-001` remains OPEN and full game NOT_READY; the user's phone world/save/reopen proof is independent of water effect recovery.
+- **Next exact step**: search a new authenticated original scene, prefab or asset owner linking original Foam Shader PathID2420 into actual water/material host. If original serialized external GUID is zero, require other independent provenance rather than inventing a GUID, then trace real CB0 upload and shader passes with original resources. Do not repeat the same two-link GUID census.
