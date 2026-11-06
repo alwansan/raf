@@ -5,10 +5,10 @@
   "owner": "T3",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "951a48a9d0f958ad09719058d2f7575d54249390",
-  "updated_at": "2026-11-06T00:42:19.885Z",
-  "resource_key": "T3-private-original-sixscene-fourowner-108Particle-onepass-D3D11-analysis-only",
+  "updated_at": "2026-11-06T00:52:14.331Z",
+  "resource_key": null,
   "experiment_key": "T3-ZIP2-15964ea8-6scenes-4SHAowners-108ParticleShader48-onePass-D3D11-true-linked-VSFS-keyword-pairs-sourceonly-v1",
   "hypothesis": "The exact original 108-use Particle Shader48 whose plain AssetRipper ShaderLab is a Dummy may still contain fully linked original D3D11 vertex/fragment stage programs and matched keyword permutations in immutable original serialized code. Establish available counts and stage-link integrity before proposing any Android replacement.",
   "resumed_from_sessions": [
@@ -24,8 +24,16 @@
     "prompt/coordination/experiments/T3/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.json",
     "prompt/coordination/B_TEAM/events/T3/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.json",
     "docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
-    "prompt/coordination/discussions/RENDER-002/20261106T004219Z-T3-chat-particle108-dxbc-4f7c-to-T5.md"
+    "prompt/coordination/discussions/RENDER-002/20261106T004219Z-T3-chat-particle108-dxbc-4f7c-to-T5.md",
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json",
+    "prompt/coordination/B_TEAM/issues/RENDER-002.json",
+    ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
-  "run_urls": [],
-  "next_step": "Probe privately the exact original SHA-pinned highest particle 108-use Shader48 one Pass original platform=4 D3D11 linked VS/FS stage programs, all variants/keyword permutation pairing, no program/ID/code/hash leak. Synthetic fail-closed tests and isolated original six-scene CI. Keep RENDER-002 OPEN and do not modify native full build or game assets."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42139137265",
+    "https://github.com/alwansan/raf/actions/runs/42139827190"
+  ],
+  "next_step": "Coordinate a separate bounded original DXBC→Vulkan SPIR-V translation/validation for four matched source VS/FS permutations and T5 actual postvendor native source GUID, then phone fire/smoke emitter pixel attribution before any .shader edit.",
+  "integration_commit": "927bf1d096f8c5500f237794b91fc71c90a946ab",
+  "result": "Authenticated original 108-use ParticleShader48 one-Pass source D3D11 contains 16 program records; 4 original linked Vertex variants, 4 linked Fragment variants, 4 exact serialized keyword pairs, 8 distinct genuine stage programs, 6 keyword-bearing stage variant records, 0 unmatched. CI42139137265 SUCCESS 117/117 source-free tests, original ZIP2 six scenes+4 owners SHA, one external resS provider full SHA. Plain AssetRipper dummy persists in separate earlier bounded export, but T5 full native postvendor and Android GPU pixels unproven. Canonical ledger CI42139827190 SUCCESS. Source work completed, RENDER-002 OPEN."
 }
