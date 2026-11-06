@@ -1,0 +1,15 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T001430Z-T1-chat-b9631a",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "070280cad87f0ec0c5f32e5bd9eb5361d2f7bbe5",
+  "intended_files": [
+    "scripts/t1_fft_spirv_read_provenance.py",
+    "tests/test_t1_fft_spirv_read_provenance.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
+  ],
+  "experiment_key": "fft-slot0-typed-coordinate-bitcast-provenance",
+  "updated_at": "2026-11-06T00:14:30Z"
+}
