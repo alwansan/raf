@@ -333,8 +333,27 @@ internal static class Program
 // that its receiver uses Foam, nor that Unity writes CB0 bytes on device.
 internal static class Cb0ExactFirstFormal
 {
-    internal readonly record struct Evidence(string SetterFamily, string Kind);
-    private enum Tag { Unknown, SourceString, SourcePropertyId }
+    internal readonly record struct Evidence(
+        string SetterFamily, string Kind, string SecondVectorValueOrigin,
+        string MaterialReceiverOrigin);
+    private enum Tag {
+        Unknown, SourceString, SourcePropertyId, MethodArgument, NumericLiteral,
+        InstanceFieldLoad, StaticFieldLoad, CallReturn, ConstructedInstance,
+        NullLiteral, OtherString, PreLiteralUnknown
+    }
+    // These are opcode-source categories, not runtime object/value identity.
+    private static string Origin(Tag tag) => tag switch {
+        Tag.MethodArgument => "method_argument_load",
+        Tag.NumericLiteral => "numeric_literal",
+        Tag.InstanceFieldLoad => "instance_field_load",
+        Tag.StaticFieldLoad => "static_field_load",
+        Tag.CallReturn => "call_return",
+        Tag.ConstructedInstance => "new_object",
+        Tag.NullLiteral => "null_literal",
+        Tag.OtherString => "other_string_literal",
+        Tag.PreLiteralUnknown => "pre_literal_unknown",
+        _ => "unproven_or_unsupported"
+    };
     private const int MaxSteps = 24;
     private const int MaxStack = 64;
 
@@ -358,7 +377,7 @@ internal static class Cb0ExactFirstFormal
         var locals = new Dictionary<int, Tag>();
         Tag Pop()
         {
-            if (stack.Count == 0) return Tag.Unknown;
+            if (stack.Count == 0) return Tag.PreLiteralUnknown;
             var v = stack[^1];
             stack.RemoveAt(stack.Count - 1);
             return v;
@@ -410,13 +429,21 @@ internal static class Cb0ExactFirstFormal
                 || name is "ldnull" or "ldsfld" or "ldsflda" or "ldstr"
                     or "ldtoken" or "ldftn" or "sizeof")
             {
-                if (!Push(Tag.Unknown)) return null;
+                Tag origin = name.StartsWith("ldarg", StringComparison.Ordinal)
+                    ? Tag.MethodArgument
+                    : name.StartsWith("ldc.", StringComparison.Ordinal)
+                        ? Tag.NumericLiteral
+                        : name == "ldsfld" ? Tag.StaticFieldLoad
+                        : name == "ldnull" ? Tag.NullLiteral
+                        : name == "ldstr" ? Tag.OtherString : Tag.Unknown;
+                if (!Push(origin)) return null;
                 continue;
             }
             if (name is "ldfld" or "ldflda")
             {
                 Pop();
-                if (!Push(Tag.Unknown)) return null;
+                if (!Push(name == "ldfld" ? Tag.InstanceFieldLoad : Tag.Unknown))
+                    return null;
                 continue;
             }
             if (name is "stfld")
@@ -455,8 +482,8 @@ internal static class Cb0ExactFirstFormal
                 var formals = new Tag[method.Parameters.Count];
                 for (int k = formals.Length - 1; k >= 0; k--)
                     formals[k] = Pop();
-                if (ins.OpCode.Code != Code.Newobj && method.HasThis)
-                    Pop();
+                Tag receiver = (ins.OpCode.Code != Code.Newobj && method.HasThis)
+                    ? Pop() : Tag.Unknown;
                 if (method.Parameters.Count >= 2 &&
                     ins.OpCode.Code != Code.Newobj)
                 {
@@ -469,13 +496,16 @@ internal static class Cb0ExactFirstFormal
                         string firstType = method.Parameters[0].ParameterType.FullName;
                         if (firstType == "System.String" &&
                             formals[0] == Tag.SourceString)
-                            return new Evidence(family,"source_literal_as_string");
+                            return new Evidence(family,"source_literal_as_string",
+                                Origin(formals[1]), Origin(receiver));
                         if (firstType == "System.Int32" &&
                             formals[0] == Tag.SourcePropertyId)
-                            return new Evidence(family,"source_literal_via_PropertyToID");
+                            return new Evidence(family,"source_literal_via_PropertyToID",
+                                Origin(formals[1]), Origin(receiver));
                     }
                 }
-                Tag result = Tag.Unknown;
+                Tag result = ins.OpCode.Code == Code.Newobj
+                    ? Tag.ConstructedInstance : Tag.CallReturn;
                 if (ins.OpCode.Code != Code.Newobj &&
                     method.DeclaringType.FullName == "UnityEngine.Shader" &&
                     method.Name == "PropertyToID" &&
@@ -513,8 +543,11 @@ internal static class Cb0ExactFirstFormal
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Callvirt,setter)
         };
-        if (Trace(direct,0)?.Kind != "source_literal_as_string")
-            throw new InvalidOperationException("Exact first formal string positive");
+        var directEvidence = Trace(direct,0);
+        if (directEvidence?.Kind != "source_literal_as_string" ||
+            directEvidence?.SecondVectorValueOrigin != "method_argument_load" ||
+            directEvidence?.MaterialReceiverOrigin != "pre_literal_unknown")
+            throw new InvalidOperationException("Exact first formal and numeric-typed origin positive");
         var distractor = new List<Instruction> {
             Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
             Instruction.Create(OpCodes.Pop),
@@ -545,7 +578,52 @@ internal static class Cb0ExactFirstFormal
             Instruction.Create(OpCodes.Ldc_R4,1.0f),
             Instruction.Create(OpCodes.Callvirt,setFloat)
         };
-        if (Trace(ids,0)?.Kind != "source_literal_via_PropertyToID")
+        var propertyEvidence = Trace(ids,0);
+        if (propertyEvidence?.Kind != "source_literal_via_PropertyToID" ||
+            propertyEvidence?.SecondVectorValueOrigin != "numeric_literal" ||
+            propertyEvidence?.MaterialReceiverOrigin != "pre_literal_unknown")
             throw new InvalidOperationException("PropertyToID first formal positive");
+        var owner = new TypeReference("PublicFixture", "Owner", module, module);
+        var field = new FieldReference("publicValue", vector4, owner);
+        var fieldOrigin = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr, "PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld, field),
+            Instruction.Create(OpCodes.Callvirt, setter)
+        };
+        if (Trace(fieldOrigin,0)?.SecondVectorValueOrigin != "instance_field_load")
+            throw new InvalidOperationException("Exact second operand field origin");
+        var getValue = new MethodReference("PublicGetValue", vector4, owner)
+            { HasThis = false };
+        var callOrigin = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Call,getValue),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        if (Trace(callOrigin,0)?.SecondVectorValueOrigin != "call_return")
+            throw new InvalidOperationException("Exact second operand call result");
+        // A receiver loaded before the name cannot be reconstructed from a
+        // forward-only slice; the local bridge can demonstrate the distinction.
+        var local = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Stloc_0),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldloc_0),
+            Instruction.Create(OpCodes.Ldarg_1),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        var localEvidence=Trace(local,0);
+        if (localEvidence?.Kind != "source_literal_as_string" ||
+            localEvidence?.SecondVectorValueOrigin != "method_argument_load" ||
+            localEvidence?.MaterialReceiverOrigin != "method_argument_load")
+            throw new InvalidOperationException("Exact receiver after local name bridge");
+        var unsupported = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Add),
+            Instruction.Create(OpCodes.Ldarg_1),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        if (Trace(unsupported,0) is not null)
+            throw new InvalidOperationException("Unknown IL must not imply origins");
     }
 }
