@@ -45,6 +45,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_site1_y_branch_paths.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site1_y_inequal_source.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site1_x_writer_lineage.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v
           # disjoint-synthetic-bitcarrier-fixture-20261106: verify checked-out corrected SPIR-V result IDs
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_sourcefree_bitcarrier_contract.py -v
@@ -108,7 +109,7 @@ jobs:
           echo "RAFT_T1_COORDINATE_PROFILE original_slot0_promoted_ssa lane_sensitive=true"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates --coordinate-depth 12 "$TMPDIR/coordinate-ssa.spv"
           echo "RAFT_T1_COORDINATE_PROFILE hlsl_roundtrip_slot0"
-          python3 -m scripts.t1_fft_spirv_read_provenance --coordinates "$TMPDIR/coordinate.spv"
+          python3 -m scripts.t1_fft_spirv_read_provenance --coordinates --coordinate-depth 12 "$TMPDIR/coordinate.spv"
           python3 -m scripts.t1_fft_pass0_trace_variant "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
           # The trace runner validates capacity for the observed 384 reads.
