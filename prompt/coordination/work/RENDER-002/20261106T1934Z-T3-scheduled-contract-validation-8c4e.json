@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "status": "in_progress",
+  "base_sha": "cba461ecd1aebeb3a2e1bb67547ffa573c40d505",
+  "experiment_key": "T3-DXBC-SPV-SYNTH-CONTRACT-VALIDATION-v2",
+  "scope_files": [
+    "scripts/t3_dxbc_spirv_contract_join.py",
+    "tests/test_t3_dxbc_spirv_contract_join.py",
+    "prompt/coordination/clients/T3/sessions/20261106T1934Z-T3-scheduled-contract-validation-8c4e.md",
+    "prompt/coordination/work/RENDER-002/20261106T1934Z-T3-scheduled-contract-validation-8c4e.json"
+  ],
+  "hypothesis": "Python bool is accepted as integer count and negative/noninteger register/set/binding coordinates are accepted, permitting invalid contracts to pass",
+  "shared_resource": "none; source-free local validation",
+  "taken_over_from": "T3 scheduled 20261106T1828Z-T3-scheduled-contract-fixture-b6e1; T3 chat 20261106T191751Z-T3-chat-spv-opname-b71e (distinct files)",
+  "ci": "no equivalent dispatch; synthetic-only"
+}
