@@ -1,0 +1,19 @@
+{
+  "id": "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+  "session_id": "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "type": "actual_original_managed_world_Save_Load_roundtrip",
+  "at": "2026-11-06T02:58:00Z",
+  "timestamp": "2026-11-06T02:58:00Z",
+  "summary": "T4 actual original private SaveAndLoad.Save(string,RGD) on seven SHA-authenticated owner 5-Nov world RGD objects: original Source RGD base/derived CLR assignability, original Mono.Cecil strict IL allowlist, original Save invocation 7/7, nonzero temp original Save output 7/7, original generic LoadT of the generated output returns matching original class 7/7, temp cleanup 7/7; 12+24 source-free tests, CI42153533612 SUCCESS. Initial exact-type guard refusal 7/7 corrected via authenticated original RGD inheritance, not a game code change. NO Unity Android/phone, world progress or process-relaunch acceptance; LOCAL-005 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42153533612",
+    "https://github.com/alwansan/raf/actions/runs/42153104453",
+    "prompt/coordination/experiments/T4/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.json"
+  ],
+  "source_commit": "5c1d78117640b174d571a5a2a592b8388fb662ed",
+  "device": "UNVERIFIED_NEW_SIGNED_ANDROID_CANDIDATE",
+  "raw_user_world_data_published": false
+}
