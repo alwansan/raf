@@ -181,6 +181,26 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         summary = summarize(_paths(self.root))
         self.assertIn("unparseable_snapshot", summary["sessions"][0]["anomalies"])
 
+    def test_duplicate_snapshot_keys_cannot_forge_nonzero_save_load_hint(self):
+        self.put("save.jsonl", [
+            row("save", 1, "save", "Save.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero; "
+                "exists_at_filename_argument=False; length_class=not_checked",
+                utc="2026-11-05T12:00:00Z")])
+        self.put("load.jsonl", [
+            row("load", 1, "save", "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero; "
+                "length_class=zero",
+                utc="2026-11-05T13:00:00Z")])
+        report = summarize(_paths(self.root))
+        self.assertFalse(report["save_nonzero_in_earlier_session"])
+        self.assertFalse(report["load_nonzero_in_later_session"])
+        self.assertEqual(report["sessions"][0]["save_argument_file_classes"],
+                         {"contradictory": 1})
+        self.assertEqual(report["sessions"][1]["load_argument_file_classes"],
+                         {"contradictory": 1})
+        self.assertFalse(report["local005_device_confirmed"])
+
     def test_unknown_log_detail_not_echoed(self):
         sensitive = "/storage/emulated/0/private-worldname.rgd"
         self.put("log.jsonl", [row("PRIVATE_SESSION_IDENTIFIER", 1,
