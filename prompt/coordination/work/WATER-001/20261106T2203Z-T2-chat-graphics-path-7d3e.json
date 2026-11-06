@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2203Z-T2-chat-graphics-path-7d3e",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
-  "updated_at": "2026-11-06T22:03:34.193Z",
+  "updated_at": "2026-11-06T22:08:13.782Z",
   "resumed_from_sessions": [
     "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
     "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
@@ -36,5 +36,9 @@
     "https://github.com/alwansan/raf/actions/runs/42300619078"
   ],
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Extend count-only C# field API trace with exclusive public Graphics API method categories, strict validator partitions and source-free synthetic method controls; run existing pinned original source-only CI; no native requests."
+  "next_step": "Inspect CI42302222142 for Python 56+ aggregate tests, Mono.Cecil synthetic test, original source-private Unity Graphics categorical partition. If FAIL, diagnose exact failure and patch safely; if PASS record categorical counts and limitations. Do not claim native/game water without phone.",
+  "code_commit": "3bbb7b040b7a626e61f68e5572d402ee49a93a4d",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42302222142"
+  ]
 }
