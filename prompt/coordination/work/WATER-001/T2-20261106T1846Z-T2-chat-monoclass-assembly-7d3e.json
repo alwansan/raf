@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "original MonoScript class metadata vs SHA-original managed TypeDef",
-  "status": "active",
+  "status": "completed",
   "base_sha": "97f156f9f09e8cd6f5412e281bb751d2bb1a8cd6",
-  "updated_at": "2026-11-06T18:46:20Z",
+  "updated_at": "2026-11-06T18:58:30Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T1846Z-T2-chat-monoclass-assembly-7d3e.json",
     "prompt/coordination/clients/T2/sessions/20261106T1846Z-T2-chat-monoclass-assembly-7d3e.md",
@@ -28,7 +28,31 @@
   "taken_over_from": [
     "prompt/coordination/clients/T2/sessions/20261106T1835Z-T2-chat-positive-attestation-3f8a.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Generate standalone sourcefree join/control code then isolated SHA-staged source-only CI; report exact aggregate match scope and limits; do not infer Foam runtime linkage."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42274792423",
+    "https://github.com/alwansan/raf/actions/runs/42275038330"
+  ],
+  "result": {
+    "source_original_status": "success",
+    "run_id": 42275038330,
+    "artifact_id": 13532172702,
+    "sourcefree_tests": 18,
+    "original_monoscripts": 3827,
+    "metadata_unreadable": 0,
+    "assembly_csharp_candidate": 1789,
+    "assembly_csharp_unique_type_matches": 1605,
+    "assembly_csharp_missing": 183,
+    "assembly_csharp_ambiguous": 1,
+    "other_assemblies": 2038,
+    "managed_typedef_rows": 3033,
+    "managed_distinct_type_keys": 2914,
+    "original_monoscript_owner_sha_verified_bytes": 758412,
+    "original_managed_dll_sha_verified_bytes": 3211776,
+    "device_water_verified": false
+  },
+  "next_step": "Use original 40-scene SHA corpus to isolate the 473 actually referenced MonoScript PathIDs; exact join those to original 3211776B Assembly-CSharp TypeDef and prioritize material/Shader/CB0 consumers. Avoid claiming 3827 object coverage equals 473 scene usage.",
+  "integration_commits": [
+    "b44c5f55899bba22a2da019126a4978084315ca7",
+    "d09d74bd0c0890d02d4122fc7ad80e2175e529bc"
+  ]
 }

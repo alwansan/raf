@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1846Z-T2-chat-monoclass-assembly-7d3e-original-script-managed-class-census",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1846Z-T2-chat-monoclass-assembly-7d3e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SHA-pinned ZIP2 source-only CI42275038330 SUCCESS with UnityPy1.25.4+dnfile0.18.0: 3827 genuine MonoScript metadata readable (0 unknown); 1789 original Assembly-CSharp metadata candidates; 1605 exact unique managed TypeDef, 183 exact misses, 1 ambiguous; other assembly 2038. Source SHAs verified for 758412B original owner and 3211776B managed DLL. Scope all 3827 provider objects, NOT 473 original-scene-referenced PathIDs; no runtime Foam ShaderLab/CB0/Android pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42275038330",
+    "docs/T2_ORIGINAL_MONOSCRIPT_MANAGED_CLASS_BRIDGE_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/d09d74bd0c0890d02d4122fc7ad80e2175e529bc"
+  ],
+  "limitations": [
+    "3827 whole-provider MonoScript count is NOT the 473 referenced by 40 scenes.",
+    "Exact TypeDef identity is NOT managed runtime behavior or custom Unity field schema.",
+    "No original serialized GUID/Material/Shader/CB0 verified.",
+    "No water pixels or Android build verified."
+  ],
+  "at": "2026-11-06T18:58:30Z"
+}
