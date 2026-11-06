@@ -32,7 +32,8 @@ DOCUMENT_REASONS=frozenset((
     "EXPORT_ASSETS_UNSAFE", "SELECTED_DOCUMENT_DUPLICATE",
     "SELECTED_DOCUMENT_PARSE", "SELECTED_SAVEDPROPERTIES_ABSENT",
     "SELECTED_COLOR_FIELD_ABSENT", "SELECTED_RGBA_SCHEMA",
-    "SELECTED_SCALAR_SCHEMA", "SELECTED_DOCUMENTS_MISSING",
+    "SELECTED_SCALAR_SCHEMA", "SELECTED_SCALAR_FIELDS_MISSING",
+    "SELECTED_SCALAR_CONTAINER_UNSUPPORTED", "SELECTED_DOCUMENTS_MISSING",
 ))
 class PrivateDocumentError(ValueError):
     """Only an allowlisted category; no proprietary YAML payload is exposed."""
@@ -54,7 +55,42 @@ class PrivatePhaseError(ValueError):
         super().__init__("private_material_values_"+phase)
 
 
-def exported_selected_values(project, wanted):
+def normalize_selected_exported_scalar_fields(saved):
+    """T3 selected-YAML adapter: mapping is an on-disk collection, not lost floats.
+
+    Original Material m_SavedProperties arrays remain subject to B22 strict
+    source normalization. Only exported m_Floats/m_Ints dictionaries may be
+    converted to two-item pairs in private memory, preserving every name and
+    binary32/int32 value for the existing B22 value comparator. No default or
+    missing property is synthesized. PyYAML duplicate-key rejection happens
+    before this adapter.
+    """
+    if not isinstance(saved,dict):
+        raise PrivateDocumentError("SELECTED_SCALAR_SCHEMA")
+    if any(name not in saved for name in ("m_Floats","m_Ints")):
+        raise PrivateDocumentError("SELECTED_SCALAR_FIELDS_MISSING")
+    converted={}
+    mapped=0
+    for name in ("m_Floats","m_Ints"):
+        raw=saved[name]
+        if type(raw) is dict:
+            if len(raw)>4096:
+                raise PrivateDocumentError("SELECTED_SCALAR_CONTAINER_UNSUPPORTED")
+            converted[name]=list(raw.items())
+            mapped+=1
+        elif type(raw) is list:
+            if len(raw)>4096:
+                raise PrivateDocumentError("SELECTED_SCALAR_CONTAINER_UNSUPPORTED")
+            converted[name]=raw
+        else:
+            raise PrivateDocumentError("SELECTED_SCALAR_CONTAINER_UNSUPPORTED")
+    try:
+        return scalars.normalize(converted,exported=True), mapped
+    except (ValueError,TypeError,KeyError,IndexError):
+        raise PrivateDocumentError("SELECTED_SCALAR_SCHEMA") from None
+
+
+def exported_selected_values(project, wanted, *, safe_mapping_counts=None):
     """Read only exact source-traced exported Materials, fail closed on them.
 
     The full project can contain unrelated AssetRipper YAML, including
@@ -91,7 +127,11 @@ def exported_selected_values(project, wanted):
                     raise ValueError("duplicate_selected_exported_Material_YAML_key")
                 output[key]=self.construct_object(v,deep=deep)
             return output
+    if safe_mapping_counts is not None and (
+        type(safe_mapping_counts) is not dict or safe_mapping_counts):
+        raise ValueError("private_scalar_mapping_count_output_must_be_empty")
     c,s={},{}
+    mapping_containers=0
     for path in entries:
         if not path.is_file() or path.suffix not in (".mat",".asset",".unity",".prefab"):
             continue
@@ -135,12 +175,12 @@ def exported_selected_values(project, wanted):
                 c[key]=colors.normalize_colors(saved["m_Colors"],exported=True)
             except (ValueError,TypeError,KeyError,IndexError):
                 raise PrivateDocumentError("SELECTED_RGBA_SCHEMA") from None
-            try:
-                s[key]=scalars.normalize(saved,exported=True)
-            except (ValueError,TypeError,KeyError,IndexError):
-                raise PrivateDocumentError("SELECTED_SCALAR_SCHEMA") from None
+            s[key], converted=normalize_selected_exported_scalar_fields(saved)
+            mapping_containers+=converted
     if set(c)!=wanted or set(s)!=wanted:
         raise PrivateDocumentError("SELECTED_DOCUMENTS_MISSING")
+    if safe_mapping_counts is not None:
+        safe_mapping_counts["exported_scalar_dict_fields_normalized"]=mapping_containers
     return c,s
 
 def assess(source_colors,source_scalars,w1,actual_colors,actual_scalars):
@@ -279,7 +319,9 @@ def run(original,manifest,project,w1_trace,b02_trace):
                 pointers.add(colors._export_pointer(row["export"]))
         if len(pointers)!=EXPECTED_MATERIALS:
             raise ValueError("missing_or_colliding_selected_Material_export_ptr")
-        exported_color,exported_scalar=exported_selected_values(project,pointers)
+        mapping_counts={}
+        exported_color,exported_scalar=exported_selected_values(
+            project,pointers,safe_mapping_counts=mapping_counts)
     except (ValueError,KeyError,TypeError) as exc:
         raise PrivatePhaseError("EXPORTED_RGBA_YAML") from exc
     try:
@@ -291,6 +333,7 @@ def run(original,manifest,project,w1_trace,b02_trace):
     result["original_six_scenes_SHA_verified"]=True
     result["original_four_shader_Material_owner_SHA_verified"]=True
     result["one_real_W1_B02_same_export_instance_verified"]=True
+    result.update(mapping_counts)
     return result
 
 def main(argv=None):
