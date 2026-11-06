@@ -128,16 +128,16 @@ class OriginalScalarWriterCarrierTests(unittest.TestCase):
         self.assertEqual(r["may_reach_writer_count"], 0)
 
     def test_earlier_store_killed_by_later_constant_store(self):
-        program = ("%b = OpBitcast %f32 %signed\n"
+        program = ("%tmpbits = OpBitcast %f32 %signed\n"
                    "%p = OpAccessChain %ptrscalar %local %i2\n"
-                   "OpStore %p %b\nOpStore %p %zero\n")
+                   "OpStore %p %tmpbits\nOpStore %p %zero\n")
         r = result(program)
         self.assertEqual(r["component_producer_categories"], {"float32_constant": 1})
 
     def test_earlier_store_and_loop_backedge_may_both_reach(self):
-        program = ("%b = OpBitcast %f32 %signed\n"
+        program = ("%tmpbits = OpBitcast %f32 %signed\n"
                    "%p = OpAccessChain %ptrscalar %local %i2\n"
-                   "OpStore %p %b\nOpBranch %loop\n"
+                   "OpStore %p %tmpbits\nOpBranch %loop\n"
                    "%loop = OpLabel\nOpBranchConditional %cond %body %join\n"
                    "%body = OpLabel\nOpStore %p %zero\nOpBranch %loop\n"
                    "%join = OpLabel\n")
@@ -151,9 +151,9 @@ class OriginalScalarWriterCarrierTests(unittest.TestCase):
                     + "OpStore %local %v\n" + READS, original_layout=True)
 
     def test_public_report_has_no_ssa_or_constant_values(self):
-        raw = HEADER + ("%b = OpBitcast %f32 %signed\n"
+        raw = HEADER + ("%tmpbits = OpBitcast %f32 %signed\n"
                         "%p = OpAccessChain %ptrscalar %local %i2\n"
-                        "OpStore %p %b\n") + READS
+                        "OpStore %p %tmpbits\n") + READS
         report = analyze(raw, original_layout=True)
         self.assertFalse(report["private_ids_and_literals_exported"])
         self.assertFalse(report["original_integer_coordinate_semantics_proven"])
