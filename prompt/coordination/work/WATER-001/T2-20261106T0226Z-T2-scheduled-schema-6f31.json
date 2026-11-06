@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T0226Z-T2-scheduled-schema-6f31",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "9fb807f6cf45743c1bffd9d61b7aa9a42e3f7d0e",
+  "updated_at": "2026-11-06T02:26:00Z",
+  "intended_files": [
+    "scripts/t2_device_water_summary.py",
+    "tests/test_t2_device_water_summary.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0226Z-T2-scheduled-schema-6f31.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T0226Z-T2-scheduled-schema-6f31.json"
+  ],
+  "experiment_key": "T2-CL-20261105-summary-schema-bool-and-nonfinite-failclosed-v1",
+  "resource_key": null,
+  "hypothesis": "Python bool equals int schema 1 and json.loads accepts NaN/Infinity; evidence ingestion must fail closed",
+  "resumed_from_sessions": [
+    "20261106T0120Z-T2-scheduled-json-evidence-7c91.md",
+    "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8.md"
+  ],
+  "scope_note": "Different files from active chat Foam Vulkan descriptor workflow; no Unity, native, or Actions dispatch."
+}
