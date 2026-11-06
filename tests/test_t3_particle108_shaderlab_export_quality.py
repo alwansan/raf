@@ -80,6 +80,67 @@ class RealExportQualitySynthetic(unittest.TestCase):
                             "Synthetic/Particle"):
                 self.assertNotIn(private,public)
 
+    def test_two_valid_alternate_subshaders_are_not_two_runtime_passes(self):
+        # Two mutually-exclusive SubShaders with one Pass each are NOT
+        # a source-to-export original one-Pass mismatch.
+        two='''Shader "Synthetic/Particle" {
+        SubShader { Pass { CGPROGRAM
+            float4 v() { return 0; }
+            ENDCG } }
+        SubShader { Pass { HLSLPROGRAM
+            float4 f() { return 1; }
+            ENDHLSL } }
+        }'''
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);write(root,two)
+            report=m.classify(SOURCE,*traces(),root)
+            self.assertEqual(report["selected_shaderlab_total_passes"],2)
+            self.assertEqual(report["selected_shaderlab_subshader_count"],2)
+            self.assertTrue(report["selected_shaderlab_one_pass_per_subshader"])
+            self.assertTrue(report["selected_shaderlab_all_subshaders_programmed"])
+            self.assertFalse(report["selected_shaderlab_active_subshader_runtime_verified"])
+            self.assertEqual(report["exported_ShaderLab_source_status"],
+                             "STRUCTURAL_ONE_PASS_PROGRAM_PRESENT_NOT_EQUIVALENCE")
+            self.assertFalse(report["native_Unity_Android_GPU_pixels_verified"])
+
+    def test_unprogrammed_fallback_cannot_be_accepted_as_structural_shader(self):
+        alt='''Shader "Synthetic/Particle" {
+        SubShader { Pass { CGPROGRAM
+          float4 v() { return 0; }
+          ENDCG } }
+        SubShader { Pass { /* fallback without any program */ } }
+        }'''
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);write(root,alt)
+            report=m.classify(SOURCE,*traces(),root)
+            self.assertEqual(report["selected_shaderlab_subshader_count"],2)
+            self.assertTrue(report["selected_shaderlab_one_pass_per_subshader"])
+            self.assertFalse(report["selected_shaderlab_all_subshaders_programmed"])
+            self.assertEqual(report["exported_ShaderLab_source_status"],
+                             "INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER")
+
+    def test_one_alternate_two_pass_still_mismatches_original_one_pass(self):
+        alt='''Shader "Synthetic/Particle" {
+        SubShader { Pass { CGPROGRAM
+          float4 v() { return 0; }
+          ENDCG } }
+        SubShader { Pass { CGPROGRAM
+          float4 f() { return 0; }
+          ENDCG }
+          Pass { HLSLPROGRAM
+          float4 f2() { return 0; }
+          ENDHLSL } }
+        }'''
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);write(root,alt)
+            report=m.classify(SOURCE,*traces(),root)
+            self.assertEqual(report["selected_shaderlab_total_passes"],3)
+            self.assertEqual(report["selected_shaderlab_subshader_count"],2)
+            self.assertFalse(report["selected_shaderlab_one_pass_per_subshader"])
+            self.assertTrue(report["selected_shaderlab_all_subshaders_programmed"])
+            self.assertEqual(report["exported_ShaderLab_source_status"],
+                             "CUSTOM_PASS_COUNT_DIFFERS_FROM_ORIGINAL")
+
     def test_dummy_marker_remains_dummy_even_with_plausible_fake_program(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);write(root,"//DummyShaderTextExporter\n"+PROGRAM)
