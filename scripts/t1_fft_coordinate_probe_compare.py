@@ -50,6 +50,8 @@ def read_samples(path):
     return result
 
 def first_difference(vulkan, unity, atol=1e-6, rtol=1e-5):
+    if not vulkan and not unity:
+        raise ValueError("both paired captures are empty")
     if not all(math.isfinite(v) and v >= 0 for v in (atol, rtol)):
         raise ValueError("invalid tolerance")
     for key in sorted(set(vulkan) | set(unity)):
