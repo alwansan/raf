@@ -3,7 +3,7 @@
   "origin": "chat",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "173d110f703a79238f511e4661d1363e71555663",
   "experiment_key": "T3-SAMEEXPORT-PARTICLE108-SOURCE-AUTHORED-SHADER-PROPERTY-CONTRACT-v1",
   "scope": "Add fail-closed source-original Shader48 authored property name/type to same-AssetRipper exported ShaderLab property identity parity guard. Test absent/mismatched/duplicate texture/color properties and fake Properties comments. Reuse unchanged 6-scene/4-owner SHA-pinned original selector in real run; no DXBC-SPIRV crosscontract reservation overlap.",
@@ -28,6 +28,23 @@
   "last_vote_commit": "99658d34f59ce64a8f961e942c641882c0750110",
   "hypothesis": "A syntactically one-Pass ShaderLab can silently drop/mis-type an original Shader48 texture or color property; author property name/type parity must be checked against the exact SHA-original selected Shader48 before claiming even structural export fidelity.",
   "constraints": "No original raw names, property descriptions, game shader bytes/identifiers in logs, files, artifacts. Do not modify source game .meta/assets or Unity/Android build, nor scheduled T3 SPIRV join. Source-only CI first; no trial vote YES.",
-  "next_step": "Implement independent strict parsed property identity and negative tests, add optional real export provenance to quality probe, run CI, checkpoint.",
-  "updated_at": "2026-11-06T18:16:42.071Z"
+  "next_step": "Await source-original DXBC↔SPIRV stage/keyword descriptor join, then recover genuinely non-dummy Particle108 ShaderLab and rerun authenticated same AssetRipper export to prove property parity. Unity and device pixels unverified. Keep T3 vote NO until actual substantial shader integrated.",
+  "updated_at": "2026-11-06T18:26:56.606Z",
+  "result": "Added strict privacy-safe source-original Shader48 Property name/type parity to same AssetRipper export ShaderLab acceptance path: 14/14 standalone synthetic CI42269593656, 15/15 integration synthetic CI42270269076. Tests detect missing texture/color props, wrong types, additions, duplicate keys, fake blocks. Authentic 6-scene 4-owner Shader48 private source selector reused in run() but no real new export CI run or Unity/device graphics change. Vote T3=لا يحتاج, RENDER-002 OPEN/NOT_READY.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42269593656",
+    "https://github.com/alwansan/raf/actions/runs/42270269076"
+  ],
+  "files_changed": [
+    "scripts/t3_particle108_shaderlab_property_parity.py",
+    "tests/test_t3_particle108_shaderlab_property_parity.py",
+    ".github/workflows/raft-t3-shaderlab-property-parity-source-only.yml",
+    "scripts/t3_particle108_shaderlab_export_quality.py",
+    "tests/test_t3_particle108_shaderlab_export_quality.py",
+    "prompt/coordination/experiments/T3/20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd.md",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1818Z-T3-chat-shaderlab-prop-contract-37bd.json",
+    "prompt/coordination/clients/T3/MEMORY.md"
+  ],
+  "scheduled_T3_independent_scope": "20261106T1734Z-T3-scheduled-crosscontract-a71c"
 }
