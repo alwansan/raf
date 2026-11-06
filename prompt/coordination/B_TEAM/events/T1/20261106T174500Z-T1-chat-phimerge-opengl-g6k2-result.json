@@ -1,0 +1,21 @@
+{
+  "id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2-result",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T17:48:15Z",
+  "summary": "Original-free licensed Unity2021 OpenGLCore float-bitcarrier Phi/CFG GPU fixture 320/320 exact sampled-image loads across direct, branch merge, nested branch and dynamic loop-carried sites; 1/1 real NUnit, 7/7 synthetic source tests. The original real FFT mismatch remains; T1 vote لا يحتاج in trial-20261106-r1.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42264618337",
+    "https://github.com/alwansan/raf/commit/c5c05827589db1810b1ab9bb738c92028fce6e4a",
+    "https://github.com/alwansan/raf/commit/d5330515a091e4503187040361cad226a01fb35b"
+  ],
+  "limitations": [
+    "No original authored Unity FFT shader/device tested",
+    "Synthetic CFG Phi cannot verify real original SSA/loops",
+    "No new major integrated water fix or need for APK in T1 scope",
+    "WATER-001 OPEN / NOT_READY 0/3"
+  ]
+}
