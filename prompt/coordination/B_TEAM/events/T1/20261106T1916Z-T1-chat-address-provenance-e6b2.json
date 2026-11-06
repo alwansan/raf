@@ -1,0 +1,14 @@
+{
+  "id": "T1-WATER-001-20261106T1916Z-T1-chat-address-provenance-e6b2",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1916Z-T1-chat-address-provenance-e6b2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Genuine licensed Unity2021.3.45f2 OpenGLCore 64-thread one-dispatch synthetic FFT provenance matrix: all 6 controls 0, computed shift/add/mask address produced exactly 63/64 mismatch in each of bitcast/plain/precise/Texture2D.Load bitcast/precise five paths, while exactly same integer-valued addresses staged from buffer produced 0/64 mismatch in all five paired paths. 1024 GPU words, strict exact NUnit passed; source-only CI tests 11/11 + 4/4. This narrows synthetic float-coordinate instability to computed-address origin and is not original Raft or Android water proof. No original shader edit or APK.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42278153683",
+    "https://github.com/alwansan/raf/commit/aba2bcacd253ea91f225d768d802e5359018f008"
+  ],
+  "at": "2026-11-06T19:19:00Z"
+}
