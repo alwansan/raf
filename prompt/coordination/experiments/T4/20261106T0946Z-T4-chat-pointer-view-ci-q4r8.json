@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_ci_success_device_unverified",
+  "experiment_key": "T4-input005-post-446bc1f0-view-identity-static-python-ci-coverage-original-mouse-workflow-v1",
+  "hypothesis": "post-446bc1f0 static regression was not in T4 dedicated workflow; add guarded coverage without altering production mouse source",
+  "baseline_sha": "c2f399ebe1fa749c93f68fb21c2ebd729f01c601",
+  "source_commit": "e3fb67812368fb6cafd327c9e99ce1886eea1b57",
+  "modified_files": [
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml"
+  ],
+  "existing_test": "tests/test_t4_pointer_view_identity_contract.py",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42197616749",
+  "run_id": 42197616749,
+  "job_id": 127824703878,
+  "run_conclusion": "success",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_pointer_view_identity_contract.py -v"
+  ],
+  "observed": {
+    "pointer_view_identity": "4/4 PASS actually executed",
+    "original_route": "7/7 PASS",
+    "original_axis_adapter": "7/7 PASS",
+    "mouse_capture_policy": "21/21 PASS",
+    "physical_mouse_presence": "5/5 PASS",
+    "python_total": "44/44 PASS",
+    "original_unity2021_managed_abi_compile": "SUCCESS",
+    "original_sha_gate": "SUCCESS"
+  },
+  "limitations": [
+    "Static source checks cannot simulate Android focused View or OS pointer capture",
+    "No Unity native APK, POCO F5 Pro device, signed APK/OBB, or gameplay/cursor test",
+    "Scheduled T4 release target hypothesis untested on phone",
+    "LOCAL-005 owner world save only established on older artifact 42058825739"
+  ],
+  "next_step": "T5 signed paired Android candidate device test covering mouse focus/view release and same-world save/exit/reopen; isolate observed failure before runtime edits"
+}
