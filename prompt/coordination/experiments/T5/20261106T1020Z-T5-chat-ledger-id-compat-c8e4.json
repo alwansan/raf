@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
+  "issue_id": "COORD-001",
+  "status": "source_integrated_ci_verified",
+  "base_sha": "c79b22a201db40df84f502ff8eca827773569175",
+  "experiment_key": "T5-inherited-ledger-event-id-explicit-alias-fail-closed-current-live-source-v1",
+  "hypothesis": "Explicit event_id without id in committed T-team events breaks inherited event reader, as in T4 event and T5's previous event.",
+  "source_commit": "94b8e83e06064ec29e714dda413247cd909811cf",
+  "test_commit": "bfa53c3f88f16d0b34dd8e20cd60a6bc8a0abd9f",
+  "ci_workflow_commit": "8a6f3ab61ca9a68f3cc755a5b18599fb3141f9de",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42201831309",
+  "job_id": 127838722892,
+  "live_ci": {
+    "conclusion": "success",
+    "b_team_test_count": 11,
+    "t_team_test_count": 3,
+    "canonical_ledger_events": 350,
+    "summary_updated_without_force": true
+  },
+  "negative_controls": [
+    "malformed or empty event_id rejected",
+    "id/event_id mismatch rejected",
+    "duplicate cross-format identity rejected",
+    "session_id-only event rejected",
+    "issues and resources unchanged strict id",
+    "symlink regression preserved"
+  ],
+  "observed_result": "Events explicitly using event_id are safely normalized into id in transient read copy; original event JSON remains untouched. Full canonical live ledger parsed 350 events and generated current T_TEAM snapshot. This is source-only evidence, not game readiness.",
+  "changed_files": [
+    "scripts/refresh_b_team.py",
+    "tests/test_refresh_b_team.py",
+    ".github/workflows/raft-t5-ledger-refresh.yml"
+  ],
+  "known_limits": [
+    "Owner phone/world/save evidence remains tied to older signed 42058825739 only; no new Unity build.",
+    "Historical T2 runs that failed before this source fix remain failed.",
+    "Records without either explicit id or event_id still fail closed; author display metadata may be missing."
+  ],
+  "next_step": "Monitor T2 future canonical refresh; independently assist P0 water/renderer/Android delivery without overlapping T1–T4.",
+  "updated_at": "2026-11-06T10:20:23Z"
+}
