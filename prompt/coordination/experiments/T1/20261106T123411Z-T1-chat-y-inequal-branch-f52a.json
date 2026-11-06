@@ -1,0 +1,96 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "The original FFT slot0 butterfly1 Y OpINotEqual predicate is either a read gate or a writer-selection branch; typed operand categories and successor reachability can discriminate the structural role safely.",
+  "source_commit": "fc3598e1f3c7cffea41d2f9db9ccdf872274083e",
+  "input_hashes": [
+    "ZIP2 source pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385; source-authenticated original SPIR-V private object (not published)"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "installed via existing bounded workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_site1_y_inequal_source.py -v",
+    "python3 -m scripts.t1_fft_site1_y_inequal_source \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "True-only and false-only read gating distinguished",
+    "Both successors to read with separate bitcarrier/constant writers",
+    "Postjoin writer overrides both branch-specific writers",
+    "Typed loaded integer versus constant operand source classification",
+    "Unsupported dynamic-index alias and escaped pointer fail conservatively",
+    "Unreachable predicate and non-OpINotEqual branch ignored",
+    "Loops terminate under bounded CFG state model",
+    "Malformed mid-block terminator and missing branch target rejected explicitly, not raw KeyError",
+    "No private original SSA IDs or constants emitted"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42219435992",
+  "artifact_urls": [],
+  "budget": "Existing source-authentic 20-minute CPU/Vulkan Ubuntu-24.04 workflow; no Unity/Android heavy run",
+  "status": "completed_scoped_typed_inequality_read_gate",
+  "observed_result": {
+    "initial_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42219209890",
+      "conclusion": "failure before original extraction",
+      "cause": "One invalid synthetic block had mid-block OpBranchConditional with missing targets and produced KeyError; stricter CFG validation added",
+      "synthetic": "13/14 passed"
+    },
+    "validation_fix_commit": "3dd79472e5ae998554c122ba71acee7a5e74887a",
+    "final_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42219435992",
+      "job_id": 127897502697,
+      "conclusion": "success",
+      "synthetic_tests": "14/14 PASS",
+      "original_private_recovery": "success",
+      "original_Vulkan_roundtrip": "success",
+      "private_cleanup": "success"
+    },
+    "relevant_inequality_branches": 1,
+    "original_site": 1,
+    "role": "butterfly",
+    "coordinate": "y",
+    "physical_lane_outside_xy": true,
+    "original_condition": "OpINotEqual",
+    "typed_inputs": [
+      {
+        "kind": "uint32",
+        "producer": "OpBitcast"
+      },
+      {
+        "kind": "uint32",
+        "producer": "OpConstant"
+      }
+    ],
+    "true_successor": {
+      "read_can_be_reached": false,
+      "possible_last_writes_since_branch": []
+    },
+    "false_successor": {
+      "read_can_be_reached": true,
+      "possible_last_writes_since_branch": [
+        "prior_writer"
+      ]
+    },
+    "read_gate": "only_false_successor_may_reach_read",
+    "predicate_runtime_truth_proven": false,
+    "comparison_integer_values_proven": false,
+    "full_numeric_parity_proven": false,
+    "authored_Unity_kernel_identity_proven": false,
+    "Adreno_phone_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "The source-authentic OpINotEqual directly chooses between bitcast and float constant writing Y: observed true successor cannot structurally reach Y fetch, false successor can, with no new scalar writer after that branch; instead it gates read reachability.",
+    "The original inequality compares floating-point numerical values: both immediate input types are uint32, one from OpBitcast and one from an integer constant."
+  ],
+  "limitations": [
+    "Branch truth and actual invocation-specific addressing are not evaluated; only structural successor reachability proven",
+    "Prior_writer label means the last value was established before the branch; combined with previous full-path last-writer audit (42217830589) this candidate is float32 constant, but the suffix alone does not prove that value",
+    "No source-authored ComputeShader FindKernel mapping, paired original-vs-Unity coordinate/pixel trace or Android water acceptance"
+  ],
+  "integration_commit": "fc3598e1f3c7cffea41d2f9db9ccdf872274083e",
+  "next_step": "Prioritize earlier butterfly1 X mismatch 252/256: trace the X whole-vector OpVectorShuffle component source through bitcasts and branch eligibility on the exact original SPIR-V, then paired same-input Vulkan/Unity integer coordinate read trace; do not rewrite shader based on isolated source provenance."
+}
