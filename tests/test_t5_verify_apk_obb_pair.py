@@ -61,7 +61,7 @@ class PairTests(unittest.TestCase):
 
     def mutate_obb_archive(self, mutator):
         payload = bytearray(self.obb.read_bytes())
-        local = payload.find(b"PK\\x03\\x04")
+        local = payload.find(b"PK\x03\x04")
         self.assertGreaterEqual(local, 0)
         mutator(payload, local)
         self.obb.write_bytes(payload)
@@ -273,8 +273,8 @@ class PairTests(unittest.TestCase):
     def test_obb_compressed_payload_region_overlaps_next_local_entry(self):
         self.make_obb([("assets/first", b"x"), ("assets/second", b"y")])
         payload = bytearray(self.obb.read_bytes())
-        local = payload.find(b"PK\\x03\\x04")
-        central = payload.find(b"PK\\x01\\x02")
+        local = payload.find(b"PK\x03\x04")
+        central = payload.find(b"PK\x01\x02")
         self.assertGreaterEqual(local, 0)
         self.assertGreaterEqual(central, 0)
         # Both headers agree on the corrupted length; neither can be trusted
