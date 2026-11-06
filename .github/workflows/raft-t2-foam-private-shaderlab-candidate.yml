@@ -14,6 +14,8 @@ on:
       - scripts/t2_foam_private_descriptor_set_remap.py
       - scripts/t2_foam_private_cb0_member_shape.py
       - tests/test_t2_foam_private_cb0_member_shape.py
+      - scripts/t2_foam_private_cb0_index_access.py
+      - tests/test_t2_foam_private_cb0_index_access.py
       - tests/test_t2_foam_private_descriptor_set_remap.py
       - .github/workflows/raft-t2-foam-private-shaderlab-candidate.yml
   workflow_dispatch:
@@ -48,6 +50,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t2_foam_private_descriptor_set_remap.py' -v
           python3 -m py_compile scripts/t2_foam_private_cb0_member_shape.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_private_cb0_member_shape.py' -v
+          python3 -m py_compile scripts/t2_foam_private_cb0_index_access.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_private_cb0_index_access.py' -v
       - name: Check scratch disk
         run: python3 -c 'import shutil; assert shutil.disk_usage(".").free>3*1024**3'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -234,6 +238,36 @@ jobs:
           assert r["actual_Unity_2021_or_Adreno_verified"] is False
           assert r["private_identifiers_or_spirv_published"] is False
           PY
+      - name: Trace authentic four-stage CB0 compiled OpLoad index paths privately
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.t2_foam_private_cb0_index_access \
+            --candidate "$RUNNER_TEMP/t2-authentic-foam-private.shader" \
+            --scratch "$RUNNER_TEMP" \
+            --out "$RUNNER_TEMP/t2-foam-cb0-index-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-foam-cb0-index-safe.json").read_text())
+          assert r["status"]=="authentic_two_pass_CB0_compiled_load_paths_observed"
+          assert r["original_pass_count"]==2 and r["original_compiled_stage_count"]==4
+          rows=r["per_pass_relative_loads"]
+          assert len(rows)==2 and [x["pass_index"] for x in rows]==[0,1]
+          assert all(x["relative_array_capacity"] in ("vertex_larger","fragment_larger")
+                     for x in rows)
+          assert all(x["same_member_start_type_and_stride"] is True for x in rows)
+          for x in rows:
+            for stage in ("vertex_compiled_loads","fragment_compiled_loads"):
+              counts=x[stage]
+              assert counts["observed_load_index_paths_not_runtime_access_proof"] is True
+              assert counts["no_trace_means_no_reads_proven"] is False
+              assert all(type(v) is int and v>=0
+                         for k,v in counts.items() if k.endswith("_count"))
+          assert r["active_runtime_branch_reachability_verified"] is False
+          assert r["Unity_original_CB0_upload_verified"] is False
+          assert r["Android_Adreno_water_verified"] is False
+          assert r["private_names_indices_and_spirv_published"] is False
+          PY
       - name: Erase original and private ShaderLab/HLSL, even on error
         if: always()
         run: |
@@ -254,5 +288,6 @@ jobs:
             ${{ runner.temp }}/t2-foam-layout-safe.json
             ${{ runner.temp }}/t2-foam-set-remap-safe.json
             ${{ runner.temp }}/t2-foam-cb0-member-shape-safe.json
+            ${{ runner.temp }}/t2-foam-cb0-index-safe.json
           if-no-files-found: ignore
           retention-days: 7
