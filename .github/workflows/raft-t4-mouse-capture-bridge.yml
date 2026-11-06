@@ -117,6 +117,22 @@ jobs:
             exit 1
           }
           echo 'T4_MOUSE_MANAGED_COMPILE originalUnityRefs=true actualUnityPlayerBuild=false'
+      - name: Compile original Unity2021 Editor+Android-target mouse API against pinned original Unity ABI
+        shell: bash
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          managed="$GITHUB_WORKSPACE/t4-original/Raft/Raft_Data/Managed"
+          timeout 150s dotnet build android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj -c Release -p:OriginalManagedDir="$managed" > "$RUNNER_TEMP/t4-private-editor-compile.log" 2>&1 || {
+            python3 - <<'PY'
+          import os,re,pathlib,collections
+          s=(pathlib.Path(os.environ["RUNNER_TEMP"])/"t4-private-editor-compile.log").read_text(errors="replace")
+          print("T4_MOUSE_EDITOR_COMPILE_ERROR_CODES",dict(collections.Counter(re.findall(r"error +((?:CS|NETSDK|NU)\d+)",s))))
+          PY
+            exit 1
+          }
+          echo 'T4_MOUSE_EDITOR_MANAGED_COMPILE originalUnity2021Refs=true editorTargetAndroid=true javaBridgeInactive=true deviceVerified=false'
       - name: Decompile immutable original DLL only in ephemeral runner
         shell: bash
         run: |
