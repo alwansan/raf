@@ -4,9 +4,9 @@
   "owner": "T4",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_readonly_parser_ci_pass",
   "base_sha": "608d8506e5af5efa89fe7113cf7415169cf6fb04",
-  "updated_at": "2026-11-06T01:47:00Z",
+  "updated_at": "2026-11-06T01:50:00Z",
   "resumed_from_sessions": [
     "20261106T0137Z-T4-scheduled-n7p2",
     "20261106T0130Z-T4-chat-touchpad-device-source-q4m7"
@@ -23,12 +23,30 @@
     "tests/test_t4_event_ledger_identity.py",
     ".github/workflows/raft-t4-event-ledger-identity.yml",
     "prompt/coordination/experiments/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json",
-    "prompt/coordination/B_TEAM/events/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json"
+    "prompt/coordination/B_TEAM/events/T4/20261106T0147Z-T4-chat-ledger-id-r8w2.json",
+    "prompt/coordination/discussions/INPUT-005/20261106T0147Z-T4-chat-ledger-id-r8w2-to-T3-ledger-unblocked.md"
   ],
   "hypothesis": "The shared T-team refresh is blocked solely at T4's latest event without required id; adding stable unambiguous id preserving existing payload will unblock ledger parsing and prevent recurrence with isolated test.",
   "related_runs": [
     "https://github.com/alwansan/raf/actions/runs/42145627443"
   ],
-  "next_step": "Add missing exact event id; source-only checker scans all events for ids and ledger parser using existing refresh_b_team.py; no other T3 assets or workflows changed.",
-  "result": null
+  "next_step": "T3 should now retry its own canonical team summary refresh under its existing lease; T4 source/phone work remains unverified and returns to LOCAL-005.",
+  "result": {
+    "fixed_commit": "e7b716241430d76e8324d8119fc45255300d4889",
+    "source_ci_commit": "e57dfe57211fe9692656ced432d262207e6c3d76",
+    "ci_run": 42146543980,
+    "ci_status": "success",
+    "source_test": "7/7",
+    "canonical_parser": {
+      "issues": 10,
+      "resources": 58,
+      "events": 322,
+      "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
+      "input005": "OPEN"
+    },
+    "new_T3_summary_written": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42146543980"
+  ]
 }
