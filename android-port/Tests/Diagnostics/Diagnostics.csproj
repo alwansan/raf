@@ -2,6 +2,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework>
     <LangVersion>9.0</LangVersion><ImplicitUsings>disable</ImplicitUsings>
+    <!-- Compile the actual Android-only logger against test-only Unity stubs. -->
+    <DefineConstants>$(DefineConstants);UNITY_ANDROID</DefineConstants>
   </PropertyGroup>
-  <ItemGroup><Compile Include="../../Runtime/Platform/PersistentDiagnosticLog.cs" Link="PersistentDiagnosticLog.cs" /></ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../Runtime/Platform/PersistentDiagnosticLog.cs" Link="PersistentDiagnosticLog.cs" />
+    <Compile Include="../../Runtime/Platform/AndroidRuntimeLog.cs" Link="AndroidRuntimeLog.cs" />
+  </ItemGroup>
 </Project>
