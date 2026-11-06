@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "Foam original external Material Shader FileIdentifier GUID and reciprocal source graph",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "9d55f5dbe65c05b031e7261658a23f8ff90cbe57",
   "approach": "On immutable ZIP2 SHA-original sharedassets0 and one independently SHA-original 758412-byte candidate target file, inspect the two material external fileID->FileIdentifier GUID/type references and target's reciprocal FileIdentifier table in private runner. Validate GUID structure/identity consistency without publishing GUID, file path/name, raw shader asset or claiming runtime binding.",
   "hypothesis": "Two verified external Shader references may share a stable original FileIdentifier GUID/type/target path, or carry empty/inconsistent GUIDs. Observing exact source GUID shape and independently staged target external table will determine whether GUID identity can be asserted from compiled game artifacts.",
@@ -35,7 +35,28 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42262404131"
   ],
-  "result": null,
-  "updated_at": "2026-11-06T17:31:58.385Z",
-  "next_step": "CI42262404131 running on SHA 5f5ba445. Read source-free and pinned ZIP2 original FileIdentifier GUID categorical result; if CI fails, inspect safe step and fix evidence-backed issue only. No Unity GUID runtime assertion or duplicate heavy run."
+  "result": {
+    "original_ZIP2_SHA_verified": true,
+    "original_source_owner_bytes_SHA_verified": 115978112,
+    "original_external_target_bytes_SHA_verified": 758412,
+    "original_external_refs": 2,
+    "unique_external_fileID": 1,
+    "source_GUID_all_zero_rows": 2,
+    "source_GUID_nonzero_rows": 0,
+    "source_FileIdentifier_type0_rows": 2,
+    "external_target_file_identifier_entries": 2,
+    "external_target_materials": 1,
+    "reverse_foam_owner_identifier_candidates": 0,
+    "reverse_foam_material_shader_candidates": 0,
+    "synthetic_tests_passed": 22,
+    "GitHub_Actions_conclusion": "success",
+    "original_Unity_target_GUID_independently_verified": false,
+    "Foam_material_CB0_upload_verified": false,
+    "Android_Adreno_pixels_verified": false,
+    "artifact_id": 13525462480,
+    "report": "docs/T2_FOAM_ORIGINAL_EXTERNAL_GUID_EVIDENCE_2026-11-06.md"
+  },
+  "updated_at": "2026-11-06T17:33:59.565Z",
+  "next_step": "Close only original two-external-fileID GUID shape scope. Seek authentic Foam Shader hosting Material/scene/bundle elsewhere; GUID zero means cannot certify target with this field. Do not repeat same census; trace original path and CB0 before Unity/Adreno tests. WATER-001 OPEN.",
+  "last_source_commit": "5f5ba4450209841993c8600534cdc63e097a5de9"
 }
