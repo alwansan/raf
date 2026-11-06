@@ -1,0 +1,15 @@
+// T1 WATER-001: PUBLIC synthetic Unity 2021 keyword GPU fixture, no Raft source.
+#pragma kernel T1VariantMain
+#pragma multi_compile_local __ T1_VARIANT_ON
+
+RWStructuredBuffer<uint> T1Output;
+
+[numthreads(64,1,1)]
+void T1VariantMain(uint3 thread : SV_DispatchThreadID)
+{
+#if defined(T1_VARIANT_ON)
+    T1Output[thread.x] = thread.x + 29u;
+#else
+    T1Output[thread.x] = thread.x + 7u;
+#endif
+}
