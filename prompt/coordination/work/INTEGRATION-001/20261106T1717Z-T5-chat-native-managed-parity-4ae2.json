@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "native-vs-managed-runtime-staging-source-parity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "623fb7268dbab3167ee643ca5da0299384d846f0",
-  "updated_at": "2026-11-06T17:17:15Z",
+  "updated_at": "2026-11-06T17:21:44.465Z",
   "resumed_from_sessions": [
     "20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9",
     "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
@@ -32,5 +32,21 @@
   "resource_key": "source-only native workflow copy metadata and T5 offline candidate runtime list (read-only to others)",
   "hypothesis": "The real Unity native Android copy loop and offline managed compile helper independently enumerate 17 runtime source files; drift can let original-managed CI pass while Unity misses a dependency. Fail closed on exact membership/count/path/order-independent parity and malformed duplicate/path escape; trigger source-only CI when native workflow changes.",
   "coordination": "T1 has unrelated Unity keyword variant GPU experiment in progress; no Unity dispatch/cancel and no modifications to shared native workflow or T1–T4 owned files. T5 scheduled PERF-007 untouched. Existing offline managed CI workflow/test path is own integration scope.",
-  "next_step": "Implement strict source-only parser and mutation controls, trigger existing low-cost CI on source/native workflow path changes, inspect real CI; record no device claim."
+  "next_step": "Completed and released source/CI scope. Real ARM64 Unity and installed OBB game device acceptance remains unknown; P0 water/visuals open. Strict T_TEAM summary regeneration still blocked by T3 20261106T1625Z event missing explicit id; don't overwrite colleague-owned event.",
+  "source_commit": "cf580caf30b25f55eb601b6026b46fa10467bdf0",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260528639"
+  ],
+  "result": {
+    "conclusion": "success",
+    "run_id": 42260528639,
+    "native_unity_source_files": 17,
+    "original_managed_source_files": 17,
+    "exact_set_match": true,
+    "new_parity_tests": "8/8",
+    "original_managed_compile": "exit=0 errorCodes={} affectedFiles=[]",
+    "local_rpc_identity": "PASS",
+    "unity_editor_build": false,
+    "android_device_verified": false
+  }
 }
