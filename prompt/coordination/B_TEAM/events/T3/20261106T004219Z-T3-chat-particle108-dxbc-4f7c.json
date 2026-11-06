@@ -1,0 +1,19 @@
+{
+  "id": "20261106T004219Z-T3-chat-particle108-dxbc-4f7c",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T004219Z-T3-chat-particle108-dxbc-4f7c",
+  "issue_id": "RENDER-002",
+  "type": "source_program_linkage_result",
+  "at": "2026-11-06T00:50:22.939Z",
+  "summary": "Authentic source ParticleShader48 one Pass 108 source Particle Renderer slot uses: original D3D11 16 table records, 4 genuine VS+4 FS variants, four exact keyword permutation pairs, 8 distinct linked programs, 0 unpaired; CI42139137265 SUCCESS 117 tests. No Vulkan/native/phone evidence.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42139137265",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+  ],
+  "limitations": [
+    "source code linkage only",
+    "RENDER-002 remains OPEN"
+  ]
+}
