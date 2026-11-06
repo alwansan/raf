@@ -9,3 +9,9 @@
 - experiment_key: T2-Foam-CB0-reflected-array-terminal-stride-vs-declared-block-bounds-v1
 - plan: require stride for reflected nonempty arrays; compute conservative lower bound offset + (first dimension length - 1)*stride < block_size without assuming vector/matrix element final bytes; test boundary, offset and valid source-like fixtures; run source-original CI to check if original geometry is genuinely bounded.
 - next_step: implement and run; preserve source privacy; update only this session.
+
+## Code/CI checkpoint
+- source fix commit: https://github.com/alwansan/raf/commit/2dae3686d9f2a3144172b035d795e5cd975e13ac (only `scripts/t2_foam_private_cb0_member_shape.py` and its own synthetic test file).
+- CI: https://github.com/alwansan/raf/actions/runs/42300107157, SHA 2dae3686d9f2a3144172b035d795e5cd975e13ac; auto-started by specific file paths, not a native/Unity request.
+- At this checkpoint, pre-original synthetic test stage completed SUCCESS; pinned source staging completed SUCCESS; original tooling installation running. Preserve run and inspect final `Compare original two-pass shared CB0 reflected member geometry privately` step, which is the relevant hypothesis oracle. If final RED, do not bypass check; record reflected-inconsistency and investigate source. Do not count source test as GPU pixels.
+- This local checkpoint is source-only and independent of native https://github.com/alwansan/raf/actions/runs/42296450023 (older immutable SHA, Unity Editor import running).
