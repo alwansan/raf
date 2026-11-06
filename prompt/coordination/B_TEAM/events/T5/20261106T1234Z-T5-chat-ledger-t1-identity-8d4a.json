@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a",
+  "issue_id": "COORD-001",
+  "type": "result",
+  "at": "2026-11-06T12:35:35.356Z",
+  "summary": "Canonical B_TEAM ledger refresh CI42217811393 (T2) and CI42218319821 (T5) failed Missing record identity on T1 20261106T1215Z coordinate-overflow event; added explicit id equal to already-present session_id via blob-CAS, all 12 other authored T1 fields retained. Commit f4d459b. Strict parser unchanged; re-index pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42217811393",
+    "https://github.com/alwansan/raf/actions/runs/42218319821",
+    "https://github.com/alwansan/raf/commit/f4d459b57d5aac03836278d079763ab20844ae11"
+  ],
+  "limitations": "Evidence ledger integrity only; T1 FFT, P0 water, original rendering and Android device acceptance unchanged.",
+  "next_step": "Run full source-only canonical T5 ledger refresh with 14 tests and check push."
+}
