@@ -97,6 +97,117 @@ def build_private_target_set(parsed):
             "actual_Unity_upload_proven": False}
 
 
+def _owner_catalog_from_rows(shaders, materials, foam_name, foam_path_id):
+    """Privacy-preserving synthetic/original typed name and local PPtr census.
+
+    Source strings are hashed and retained *only* in runner scratch. The
+    (file_id,path_id) pair is mandatory: a foreign asset can reuse PathID.
+    Unparseable objects must be counted and cannot imply exhaustive results.
+    """
+    if (not isinstance(foam_name, str) or not foam_name or len(foam_name) > 256
+            or chr(0) in foam_name or type(foam_path_id) is not int):
+        raise ValueError("original_Foam_identity_unbounded")
+    if not isinstance(shaders, list) or not isinstance(materials, list):
+        raise ValueError("original_owner_catalog_shape")
+    if len(shaders) > 8192 or len(materials) > 32768:
+        raise ValueError("original_owner_catalog_unbounded")
+    foam_count = 0
+    seen = set()
+    other = {}
+    shader_unparsed = 0
+    material_unparsed = 0
+    local_foam_refs = 0
+    external_shader_refs = 0
+    for path_id, name in shaders:
+        if type(path_id) is not int or path_id in seen:
+            raise ValueError("duplicate_or_invalid_shader_object")
+        seen.add(path_id)
+        if name is None:
+            shader_unparsed += 1
+            continue
+        if not isinstance(name, str) or not 0 < len(name) <= 256 or chr(0) in name:
+            raise ValueError("original_Shader_name_invalid")
+        if path_id == foam_path_id:
+            if name != foam_name:
+                raise ValueError("original_Foam_identity_mismatch")
+            foam_count += 1
+        else:
+            digest = hashlib.sha256(name.encode("utf8")).hexdigest()
+            other[digest] = other.get(digest, 0) + 1
+    if foam_count != 1:
+        raise ValueError("original_Foam_not_unique_in_owner")
+    for ptr in materials:
+        if ptr is None:
+            material_unparsed += 1
+            continue
+        if (not isinstance(ptr, (tuple, list)) or len(ptr) != 2
+                or any(type(n) is not int for n in ptr)):
+            material_unparsed += 1
+            continue
+        file_id, path_id = ptr
+        if file_id < 0 or path_id < 0:
+            material_unparsed += 1
+        elif file_id == 0 and path_id == foam_path_id:
+            local_foam_refs += 1
+        elif file_id != 0:
+            external_shader_refs += 1
+    return {
+        "original_owner_other_Shader_names_SHA256_private": other,
+        "original_owner_shader_objects_examined": len(shaders),
+        "original_owner_other_shader_names_count": sum(other.values()),
+        "original_owner_shader_name_unparsed_count": shader_unparsed,
+        "original_owner_material_objects_examined": len(materials),
+        "original_owner_material_source_pointer_unparsed_count": material_unparsed,
+        "original_owner_material_local_Foam_Shader_ref_count": local_foam_refs,
+        "original_owner_material_external_Shader_ref_count": external_shader_refs,
+        "original_owner_material_Foam_PathID_other_fileID_not_counted": True,
+        "original_owner_material_ref_is_runtime_bound_verified": False,
+    }
+
+
+def original_owner_catalog(source, parsed):
+    """Read only the exact independently SHA-pinned sharedassets0 owner."""
+    import UnityPy
+    owner_path = Path(source) / OWNER
+    if (not _physical(owner_path) or not owner_path.is_file()
+            or fingerprint(owner_path) != PINS[OWNER]):
+        raise ValueError("original_owner_catalog_SHA_mismatch")
+    foam_name = parsed.get("m_Name")
+    env = UnityPy.load(str(owner_path))
+    objects = list(env.file.objects.values())
+    if len(objects) > 250000:
+        raise ValueError("original_owner_object_count_unbounded")
+    shaders, materials = [], []
+    for obj in objects:
+        if obj.type.name == "Shader":
+            if len(shaders) >= 8192:
+                raise ValueError("original_Shader_count_unbounded")
+            path_id = int(obj.path_id)
+            if path_id == 2420:
+                from scripts.b24_original_foam_stage_translation import ORIGINAL_OBJECT_SHA256
+                if hashlib.sha256(obj.get_raw_data()).hexdigest() != ORIGINAL_OBJECT_SHA256:
+                    raise ValueError("original_Foam_object_SHA_mismatch")
+            try:
+                shader_tree = obj.read_typetree()
+                name = shader_tree["m_ParsedForm"]["m_Name"]
+            except (KeyError, TypeError, ValueError, AttributeError):
+                name = None
+            shaders.append((path_id,name))
+        elif obj.type.name == "Material":
+            if len(materials) >= 32768:
+                raise ValueError("original_Material_count_unbounded")
+            try:
+                mat_tree = obj.read_typetree()
+                ref = mat_tree["m_Shader"]
+                pointer = (ref["m_FileID"],ref["m_PathID"])
+            except (KeyError, TypeError, ValueError, AttributeError):
+                pointer = None
+            materials.append(pointer)
+    result = _owner_catalog_from_rows(shaders,materials,foam_name,2420)
+    del env
+    return result
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--source", type=Path, required=True)
@@ -108,7 +219,9 @@ def main():
                 or not out.parent.is_dir() or not _physical(out)
                 or out.exists() or out.is_relative_to(source)):
             raise ValueError("unsafe_original_private_input_output")
-        r = build_private_target_set(original_source_tree(source))
+        parsed = original_source_tree(source)
+        r = build_private_target_set(parsed)
+        r.update(original_owner_catalog(source,parsed))
         out.write_text(json.dumps(r, sort_keys=True) + "\n", encoding="utf8")
         result = {
             "status": "original_CB0_private_name_targets_prepared",
@@ -117,6 +230,8 @@ def main():
             "original_CB0_parameter_name_indices_unresolved":
                 r["original_cb0_parameter_name_indices_unresolved"],
             "exact_name_values_or_hashes_published": False,
+            "original_owner_source_census_derived_only": True,
+            "original_Shader_names_or_hashes_published": False,
             "Unity_CB0_upload_verified": False,
         }
         rc = 0
