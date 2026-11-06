@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "session_id": "20261106T011155Z-T1-scheduled-k7m2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "eba229a0374db0176099336238d0bae702828d6d",
   "resumed_from_sessions": [
     "20261106T005610Z-T1-chat-6d2b91",
@@ -18,5 +18,14 @@
   "resource_key": null,
   "shared_ci": "42141540903 in_progress; no duplicate",
   "hypothesis": "Existing private source-coordinate rewrite must fail closed on ambiguous source fetch or unresolved lane and preserve non-source image fetches.",
-  "updated_at": "2026-11-06T01:11:55Z"
+  "updated_at": "2026-11-06T01:11:55Z",
+  "test_commits": [
+    "d997e20169482c4ba68e08dc05d9dd6767214cb2",
+    "cc135ad6072d44eaff1245b24cf3dff593c5a145"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42141540903"
+  ],
+  "result": "Five independent adversarial regression tests committed; not executed. Existing authentic Vulkan rewrite run still in progress; no duplicate dispatch.",
+  "next_step": "Read original Vulkan result, run new adversarial unittest, then investigate failed assertion or continue original FindKernel/Dispatch provenance."
 }
