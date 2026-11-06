@@ -2,9 +2,9 @@
   "session_id": "20261106T1230Z-T3-scheduled-source-gate-7e4c",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "fb58c70c247c6d8c7ec7593c183647339a76e96d",
-  "updated_at": "2026-11-06T12:30:27Z",
+  "updated_at": "2026-11-06T12:32:00Z",
   "intended_files": [
     "scripts/t3_shader_identity_gate.py",
     "tests/test_t3_shader_identity_gate.py",
@@ -16,5 +16,8 @@
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261106T1131Z-T3-scheduled-newline-7d4c.md"
   ],
-  "limits": "Source-only. No native/device or pixel proof; no duplicate CI."
+  "limits": "Source-only. No native/device or pixel proof; no duplicate CI.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42218286983",
+  "workflow_commit": "51434e548a796f6e26a805810d86f3e7404156f4",
+  "next_step": "Read exact CI conclusion and fix only demonstrated test failure; then move to original-export Shader48/Particle108 binding, no pixel claims."
 }
