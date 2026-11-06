@@ -5,9 +5,9 @@
   "session_id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fb17194e8658ac3b2f3fa2fdfdffd991bd730484",
-  "updated_at": "2026-11-06T12:53:00.525Z",
+  "updated_at": "2026-11-06T12:56:03.000Z",
   "track": "Original vs HLSL-roundtrip butterfly X coordinate provenance depth budget and scheduled coordinate parser tests",
   "resumed_from_sessions": [
     "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
@@ -24,7 +24,9 @@
   ],
   "experiment_key": "water001-slot0-hlsl-translation-coordinate-depth4-vs12-sourcepin15964ea8-plus-scheduled-coordinate-compare-unit-ci",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Use one existing non-Unity original-source workflow. Check T1 job first, then compare HLSL typed-coordinate lane boundary depth4 vs depth12; preserve mismatch/no parity conclusion."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42221101286"
+  ],
+  "result": "Exact-source CI success and scheduled coordinate capture tests 10/10 PASS. HLSL-roundtrip glslang FFT slot0 with coordinate-depth12: Source X/Y reach OpLoad, butterfly1 X unresolved (not default-depth4 depth_limit), butterfly1 Y constant, butterfly2 X/Y unresolved. No per-lane stop opcode or numeric parity/Adreno proof. Scope complete, WATER-001 OPEN.",
+  "next_step": "New source-private stop_opcode numeric-kind classification for HLSL butterfly1 X at max legal depth12. Prior original exact bitcarrier Input signed32 proven but translation difference causal attribution remains unproven."
 }
