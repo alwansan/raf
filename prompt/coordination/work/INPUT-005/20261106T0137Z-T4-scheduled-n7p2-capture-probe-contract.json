@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T0137Z-T4-scheduled-n7p2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_source_blob": "db8c5ecbd1dac7ff32d9f7b8ab5b7eaafb6f2d4b",
+  "resumed_from_sessions": [
+    "20261106T0035Z-T4-scheduled-k9m2",
+    "20261106T0130Z-T4-chat-touchpad-device-source-q4m7"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261106T0137Z-T4-scheduled-n7p2-capture-probe-contract.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0137Z-T4-scheduled-n7p2.md"
+  ],
+  "experiment_key": "T4-Android-API26-capture-probe-focus-view-change-and-epoch-readonly-contract-v1",
+  "resource_key": null,
+  "hypothesis": "getCurrentFocus may change between pointer capture request and periodic probe; verify that probe does not incorrectly classify a valid capture on an old view as a lost capture; assess risk without editing chat-owned bridge.",
+  "evidence": "AndroidPhysicalMouseCapture.cs RequestCapture and ProbeCapturedPointer both independently resolve activity.getCurrentFocus; epoch guards request generation but not View identity.",
+  "next_step": "Read latest chat bridge and run device validation of View identity and hasPointerCapture before modifying source."
+}
