@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "7533b22af692568b0e4df1b5dc9c73191f0aeceb",
+  "updated_at": "2026-11-06T21:50:28.988Z",
+  "resumed_from_sessions": [
+    "20261106T2138Z-T2-chat-foam-matdoc-82bd",
+    "20261106T2117Z-T2-scheduled-foam-ci-reconcile-k6m2"
+  ],
+  "experiment_key": "T2-Foam-CB0-reflected-array-terminal-stride-vs-declared-block-bounds-v1",
+  "resource_key": "T2 source-authentic private candidate CPU-only reflection validation; independent native/Unity runner",
+  "hypothesis": "Reflected SPIRV-Cross member arrays whose final element begins outside the declared UBO block, or whose stride is missing, currently pass as valid CB0 geometry; rejecting them prevents fictitious compatibility and disambiguates original Foam mismatch.",
+  "intended_files": [
+    "scripts/t2_foam_private_cb0_member_shape.py",
+    "tests/test_t2_foam_private_cb0_member_shape.py",
+    "prompt/coordination/work/WATER-001/20261106T2148Z-T2-chat-cb0-array-bounds-5bc1.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2148Z-T2-chat-cb0-array-bounds-5bc1.md",
+    "prompt/coordination/experiments/T2/20261106T2148Z-T2-chat-cb0-array-bounds-5bc1.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2148Z-T2-chat-cb0-array-bounds-5bc1-result.json"
+  ],
+  "related_work": [
+    "20261106T2138Z-T2-chat-foam-matdoc-82bd",
+    "20261106T2044Z-T2-chat-field-consumer-trace-d4a6"
+  ],
+  "do_not_touch": [
+    ".github/raft-native-build-request.json",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "scripts/t2_foam_private_installer.py",
+    "other T worker files",
+    "Unity original assets / shader meta"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42298467191",
+    "https://github.com/alwansan/raf/actions/runs/42296450023"
+  ],
+  "next_step": "Implement fail-closed array first-dimension stride and last-element-start < reflected block_size check with adversarial synthetic cases; evaluate original SHA-pinned two-pass existing workflow, never equate reflection with runtime CB0 upload."
+}
