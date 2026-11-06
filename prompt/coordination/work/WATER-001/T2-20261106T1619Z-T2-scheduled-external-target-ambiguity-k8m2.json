@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T1619Z-T2-scheduled-external-target-ambiguity-k8m2",
+  "origin": "scheduled",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "195a2f0f85448ed39bbc6d792c942b8728e8e085",
+  "resumed_from_sessions": [
+    "20261106T1544Z-T2-chat-four-original-owners-pptr-6a71",
+    "20261106T1518Z-T2-scheduled-original-foam-identity-reconcile-p7k4"
+  ],
+  "experiment_key": "T2-ZIP2-15964-external-Shader-PPtr-target-manifest-unique-resolution-negative-controls-v1",
+  "resource_key": null,
+  "intended_files": [
+    "scripts/t2_external_pptr_manifest_resolver.py",
+    "tests/test_t2_external_pptr_manifest_resolver.py",
+    "prompt/coordination/clients/T2/sessions/20261106T1619Z-T2-scheduled-external-target-ambiguity-k8m2.md"
+  ],
+  "hypothesis": "An external FileIdentifier basename can be ambiguous across 366 immutable ZIP2 owner entries; a strict resolver must refuse ambiguity and absent SHA identity rather than infer Foam PathID2420. No raw private filenames may enter public output.",
+  "taken_over_from": "CI42247200163 original four-owner census; two unresolved external Shader PPtrs",
+  "updated_at": "2026-11-06T16:19:00Z"
+}
