@@ -172,6 +172,8 @@ jobs:
               # private RGD content, hashes, names, paths or length.
               "original_private_wire_exact_match":sum(v["original_wire_identical"] for v in results),
               "original_private_wire_differs":sum(v["original_wire_compared"] and not v["original_wire_identical"] for v in results),
+              "original_fresh_CLR_child_executed":sum(v["original_fresh_CLR_child_executed"] for v in results),
+              "original_fresh_CLR_generated_LoadT_matching":sum(v["original_fresh_CLR_generated_LoadT_matching"] for v in results),
               "private_temp_cleanup_proven":sum(v["original_temporary_files_removed"] for v in results),
               "original_save_audit_categories":dict(collections.Counter(v["Save_audit_category"] for v in results)),
               "original_save_categories":dict(collections.Counter(v["Save_result_category"] for v in results)),
@@ -179,6 +181,11 @@ jobs:
               "phone_world_reopen_retested":False,
               "world_progress_verified":False
           }
+          assert len(results)==7
+          assert result_summary["original_private_wire_exact_match"]==7
+          assert result_summary["original_fresh_CLR_child_executed"]==7
+          assert result_summary["original_fresh_CLR_generated_LoadT_matching"]==7
+          assert result_summary["private_temp_cleanup_proven"]==7
           print("T4_OWNER5NOV_ORIGINAL_SAVE_ROUNDTRIP",json.dumps(result_summary,sort_keys=True))
           PY
       - name: Reject one-byte tampering before unsafe legacy formatter invocation
