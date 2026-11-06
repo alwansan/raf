@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T1959Z-T3-chat-original-stage-probe-9f24",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "T3-PARTICLE108-ZIP2-15964ea8-SHA8STAGE-DCL-SPV-per-stage-typed-OpName-once-9f24",
+  "status": "completed_success_source_original_only",
+  "hypothesis": "Eight-stage globally equal DXBC DCL and translated SPIRV resource counts may conceal stage-local drift; SPIRV OpName may give only partial, nonauthoritative source-register candidates.",
+  "immutable_executable_source_sha": "0f29d6d729ead27f2c21479c76a492a89426a2be",
+  "original_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "evidence": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42284607990",
+    "job_id": 128122075281,
+    "conclusion": "success",
+    "artifact_id": 13536662902,
+    "artifact_name": "t3-original-particle108-shader48-9f24-safe-42284607990",
+    "original_owner_sha_pins_verified": 4,
+    "original_renderer_scenes_sha_pins_verified": 6,
+    "exact_keyword_pairs": 4,
+    "original_vsfs_stages": 8,
+    "source_free_regressions": {
+      "candidate_tests_passed": 29,
+      "strict_contract_tests_passed": 12
+    },
+    "dcl_source_declaration_totals": {
+      "cbuffer": 24,
+      "srv": 10,
+      "sampler": 10,
+      "uav": 0
+    },
+    "spirv_translated_reflection_totals": {
+      "ubos": 24,
+      "separate_images": 10,
+      "separate_samplers": 10,
+      "images": 0,
+      "ssbos": 0,
+      "combined_textures": 0
+    },
+    "exact_stage_all_four_family_counts_equal": 8,
+    "per_stage_family_mismatches": {
+      "cbuffer": 0,
+      "srv": 0,
+      "sampler": 0,
+      "uav": 0
+    },
+    "count_only_debug_name_candidates": {
+      "original_source_dcl_resource_rows": 44,
+      "candidates": 20,
+      "candidates_matching_source": 20,
+      "uncovered_original_rows": 24,
+      "stages_with_all_named_candidates": 0,
+      "duplicate_targets": 0,
+      "unbound_or_unsupported_or_orphan": 0
+    },
+    "source_register_to_spirv_descriptor_binding_proven": false,
+    "ShaderLab_original_executable_or_Unity_or_Adreno_pixels_proven": false
+  },
+  "interpretation": "Original per-stage DCL resource family count loss (for these 8 tested stages) ruled out; no trustworthy per-resource DXBC register to VKD3D set/binding binding map and only 20 of 44 debug candidates. Names are explicitly not authoritative. No original shader assembly was restored.",
+  "workflow_cleanup": "Isolated temporary push workflow disarmed after queue, then workflow file and marker deleted after terminal success; pre-existing manual-only workflow untouched.",
+  "touched_existing_code": false,
+  "trial_vote": "لا يحتاج",
+  "render_issue_status": "OPEN/NOT_READY",
+  "next_step": "Join scheduled/active T3 explicit public VKD3D graphics VS/FS typed descriptor mapping implementation with SHA-authenticated original 8 stage source and verify independently; restore 4 original ShaderLab programs, compile Unity and test phone graphics. Do not infer register mappings from OpName, family count or numeric equality."
+}
