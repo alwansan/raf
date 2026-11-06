@@ -140,3 +140,116 @@ class PrivateStageFamilyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             with self.assertRaisesRegex(ValueError,"INVALID_PRIVATE_FOUR_PAIR_SCOPE"):
                 m.classify([(b"\x01",b"\x00")],Path(d))
+
+
+class SpirvNamedCandidatesSynthetic(unittest.TestCase):
+    """Binary SPV fixtures are synthetic grammar probes, not original Raft code."""
+
+    @staticmethod
+    def build(*, names=("cb2","t3","s1"), bindings=(0,1,2),
+              omissions=(), duplicate_dec=False, wrong_family=False,
+              stage_model=0, spoof_extra=False, second_binding_collision=False,
+              array_texture=False):
+        import struct
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        def op(code,*payload):
+            return [(len(payload)+1)<<16 | code,*payload]
+        def spv_str(value):
+            encoded=value.encode("utf-8")+b"\0"
+            encoded+=b"\0"*((4-len(encoded)%4)%4)
+            return list(struct.unpack("<"+"I"*(len(encoded)//4),encoded))
+        instructions=[]
+        instructions+=op(15,stage_model,2,*spv_str("main"))
+        instructions+=op(30,10)   # struct -> uniform CB
+        instructions+=op(25,11,40,1,0,0,0,1,0) # sampled image
+        instructions+=op(26,12)   # separate sampler
+        if array_texture:
+            instructions+=op(28,13,11,42)
+        instructions+=op(32,20,2,10) # pointer Uniform/CB
+        instructions+=op(32,21,0,13 if array_texture else 11)
+        instructions+=op(32,22,0,12)
+        instructions+=op(59,20,30,2)
+        instructions+=op(59,21 if not wrong_family else 22,31,0)
+        instructions+=op(59,22,32,0)
+        for i,(name,binding) in enumerate(zip(names,bindings)):
+            vid=30+i
+            if i not in omissions:
+                instructions+=op(5,vid,*spv_str(name))
+            instructions+=op(71,vid,34,0) # DescriptorSet
+            instructions+=op(71,vid,33,bindings[0] if
+                            second_binding_collision and i==1 else binding)
+            if duplicate_dec and i==0:
+                instructions+=op(71,vid,33,binding)
+        if spoof_extra:
+            instructions+=op(59,21,33,0)
+            instructions+=op(5,33,*spv_str("t9"))
+            instructions+=op(71,33,34,0)
+            instructions+=op(71,33,33,9)
+        words=[probe.SPV_MAGIC,0x00010300,0,256,0]+instructions
+        return struct.pack("<"+"I"*len(words),*words)
+
+    def summary(self, **kwargs):
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        return probe.candidate_counts(fixture(),self.build(**kwargs),1)
+
+    def test_exact_debug_names_are_candidate_only_not_register_proof(self):
+        report=self.summary()
+        self.assertEqual(report["spirv_debug_candidates_matching_original_source_name_keys"],3)
+        self.assertEqual(report["original_source_dcl_without_typed_debug_candidate"],0)
+        self.assertTrue(report["all_original_resource_names_have_debug_candidates"])
+        self.assertFalse(report["original_to_SPIRV_register_provenance_proven"])
+        self.assertTrue(report["debug_names_are_not_authoritative_binding_provenance"])
+        for private in ('"cb2"','"t3"','"s1"',"private.hlsl"):
+            self.assertNotIn(private,json.dumps(report))
+
+    def test_missing_debug_name_not_treated_as_proven(self):
+        r=self.summary(omissions=(1,))
+        self.assertEqual(r["original_source_dcl_without_typed_debug_candidate"],1)
+        self.assertFalse(r["all_original_resource_names_have_debug_candidates"])
+
+    def test_forged_debug_name_cannot_be_authoritative(self):
+        r=self.summary(names=("cb2","t9","s1"))
+        self.assertEqual(r["spirv_named_candidate_not_in_source_dcl"],1)
+        self.assertEqual(r["original_source_dcl_without_typed_debug_candidate"],1)
+        self.assertFalse(r["original_to_SPIRV_register_provenance_proven"])
+
+    def test_duplicate_binding_target_not_a_unique_correspondence(self):
+        r=self.summary(second_binding_collision=True)
+        self.assertEqual(r["duplicate_candidate_descriptor_targets"],1)
+        self.assertFalse(r["all_original_resource_names_have_debug_candidates"])
+
+    def test_sampler_named_texture_is_wrong_type(self):
+        r=self.summary(wrong_family=True)
+        self.assertEqual(r["spirv_debug_named_family_or_type_unsupported"],1)
+        self.assertEqual(r["original_source_dcl_without_typed_debug_candidate"],1)
+
+    def test_array_descriptor_stays_unsupported_without_span_metadata(self):
+        r=self.summary(array_texture=True)
+        self.assertEqual(r["spirv_debug_named_family_or_type_unsupported"],1)
+        self.assertFalse(r["all_original_resource_names_have_debug_candidates"])
+
+    def test_extra_spv_debug_resource_is_not_source_contract(self):
+        r=self.summary(spoof_extra=True)
+        self.assertEqual(r["spirv_named_candidate_not_in_source_dcl"],1)
+        self.assertFalse(r["all_original_resource_names_have_debug_candidates"])
+
+    def test_duplicate_descriptor_decoration_fails_closed(self):
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        with self.assertRaisesRegex(ValueError,"T3_SPIRV_DUPLICATE_DECORATION"):
+            self.summary(duplicate_dec=True)
+
+    def test_spv_entrypoint_wrong_stage_rejected(self):
+        with self.assertRaisesRegex(ValueError,"T3_SPIRV_STAGE_ENTRYPOINT"):
+            self.summary(stage_model=4)
+
+    def test_truncated_spirv_instruction_rejected(self):
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        corrupted=self.build()[:-4]
+        with self.assertRaisesRegex(ValueError,"T3_SPIRV_INSTRUCTION_BOUNDS"):
+            probe.candidate_counts(fixture(),corrupted,1)
+
+    def test_malformed_dxbc_primary_register_rejected(self):
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        with self.assertRaisesRegex(ValueError,"T3_DX_SOURCE_PRIMARY_COLLISION"):
+            probe.candidate_counts(fixture()+(("cbuffer",89,(2,10)),),
+                                   self.build(),1)
