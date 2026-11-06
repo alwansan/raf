@@ -1,0 +1,16 @@
+{
+  "id": "T4-20261106T2047Z-mouse-plan-staleness-v3c8",
+  "owner": "T4",
+  "session_id": "20261106T2044Z-T4-chat-mouse-plan-staleness-v3c8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "summary": "Original legacy mouse C# stage previously installed output derived from stale lexical source after a concurrent writer changed bytes before backup. RED synthetic CI42290968831 one expected fail and prior 14 pass. Fix SHA65635d60 captures original plan bytes and rejects stale plan prior to backup; exact source CI42291057653 green 15/15 tests, authentic original 4+4+2 input rewrite, Unity2021 Android and Editor managed ABI compiles. No native XAPK or phone proof; vote/readiness unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/902acf7205cfc3efcb9ef89c449972f70659bb2f",
+    "https://github.com/alwansan/raf/actions/runs/42290968831",
+    "https://github.com/alwansan/raf/commit/65635d6086cfc9dd19a5989a31562882ed367419",
+    "https://github.com/alwansan/raf/actions/runs/42291057653"
+  ],
+  "at": "2026-11-06T20:47:00Z"
+}
