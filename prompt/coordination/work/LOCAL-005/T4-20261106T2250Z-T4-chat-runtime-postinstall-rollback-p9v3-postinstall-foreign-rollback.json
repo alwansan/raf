@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2250Z-T4-chat-runtime-postinstall-rollback-p9v3",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "LOCAL-005",
+  "track": "original-runtime-operations-postinstall-foreign-writer-rollback",
+  "base_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
+  "updated_at": "2026-11-06T22:50:37.095Z",
+  "resumed_from_sessions": [
+    "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2",
+    "20261106T2237Z-T4-scheduled-native-sha-boundary-k8v3"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T2226Z-T4-chat-runtime-staging-drift-c6p2.md"
+  ],
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py"
+  ],
+  "experiment_key": "T4-original-trace-post-write-foreign-CSharp-or-meta-rollback-synthetic-v1",
+  "resource_key": "T4-original-runtime-operation-instrumenter-source-only",
+  "hypothesis": "After an instrumented C# write succeeds, another writer may edit source C# or GUID .meta before verification. Current failure rollback unconditionally writes stale original source bytes and overwrites the writer; replacement must be preserved with original backup.",
+  "approach": "Add deterministic RED tests patching successful Path.write_bytes with immediately foreign edit to C# or meta. On post-write mismatch fail closed, preserving alternate source and whole backup rather than writing stale original C#; retain existing best-effort recovery for interrupted source writes. Verify existing offline original-C# integration workflow and no game bytes exposed.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Source-only, no Unity dispatch; RED and GREEN tests then independent session/experiment/event and ownership release."
+}
