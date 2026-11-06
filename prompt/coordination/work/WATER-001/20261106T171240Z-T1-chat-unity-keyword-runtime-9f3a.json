@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "b6c03cc3f4c7d40444eca623e058bd67377b5d0b",
+  "updated_at": "2026-11-06T17:12:40Z",
+  "resumed_from_sessions": [
+    "20261106T170532Z-T1-chat-variant-declarations-7c4e",
+    "20261106T163310Z-T1-chat-real-fft-pair-d91e",
+    "20261105T140300Z-T1-chat-vulkan-editor"
+  ],
+  "track": "Original-free actual Unity 2021 variant keyword activation and numeric GPU dispatch control",
+  "hypothesis": "SHA-guarded authored Unity FFT compute selector must reject nonexistent keyword and Unity should actually select two different numeric GPU branches when #pragma multi_compile_local keyword is toggled. Last 11/11 Python checks do not compile or execute C#.",
+  "approach": "Build standalone public synthetic Unity .compute and strict NUnit EditMode test for present vs absent keyword, enable/disable runtime state, and 64 actual ComputeBuffer GPU output words for both variants; run pinned existing GameCI CLI on shared raft-native-engine mutex, sanitize XML, no original assets.",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftKeywordVariantRuntime.compute",
+    "android-port/Experiments/T1/T1FftKeywordVariantRuntimeTests.cs",
+    "tests/test_t1_fft_keyword_variant_fixture.py",
+    ".github/workflows/raft-t1-fft-unity-keyword-runtime.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a.md",
+    "prompt/coordination/experiments/T1/20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a.json",
+    "prompt/coordination/work/WATER-001/20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a.json"
+  ],
+  "experiment_key": "water001-unity2021-sourcefree-keyword-variant-both-GPU-branches-64u32-strictNUnit-no-original-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port/Unity2021-GameCI-lightweight",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/20261106T170532Z-T1-chat-variant-declarations-7c4e.json"
+  ],
+  "concurrent_scope": "No nonterminal current branch runs on initial 60-list; no overlap with T1 private Vulkan original pair runner (completed 42254539826). T2/T3/T4/T5 source files unchanged.",
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Publish source-only synthetic control + GameCI isolated workflow, inspect actual NUnit case identity and GPU output, record any failure before claiming Unity variant activation."
+}
