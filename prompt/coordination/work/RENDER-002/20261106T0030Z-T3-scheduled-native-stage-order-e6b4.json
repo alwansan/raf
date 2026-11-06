@@ -2,7 +2,7 @@
   "session_id": "20261106T0030Z-T3-scheduled-native-stage-order-e6b4",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "7f93b646a61b5fb952866b19a3729fdb8d80fbef",
   "intended_files": [
     "prompt/coordination/work/RENDER-002/20261106T0030Z-T3-scheduled-native-stage-order-e6b4.json",
@@ -11,5 +11,7 @@
   "experiment_key": "T3-native-workflow-static-Particle108-postvendor-stage-order-v1",
   "resource_key": null,
   "scope": "read-only native workflow stage-order analysis; no exporter/Unity rerun; no shared ledger modification",
-  "updated_at": "2026-11-06T00:30:00Z"
+  "updated_at": "2026-11-06T00:34:00Z",
+  "result": "Native workflow lacks exact source-identity Particle108 Shader48 post-restoration check; generic T3 material audit is continue-on-error. No evidence yet whether builtin restorer fixes this target.",
+  "session_commit": "eda672913591dd73b47f92b77a64a8ef63f30ca4"
 }
