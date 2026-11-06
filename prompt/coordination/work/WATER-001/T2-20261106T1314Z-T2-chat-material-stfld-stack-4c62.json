@@ -2,9 +2,9 @@
   "session_id": "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1ce09e9c248739c788ea2fc40eff358d1da7f112",
-  "updated_at": "2026-11-06T13:14:00Z",
+  "updated_at": "2026-11-06T13:24:00Z",
   "resumed_from_sessions": [
     "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
     "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
@@ -35,5 +35,17 @@
     "complete CB0 buffer bytes uploaded",
     "Unity importer",
     "Android Adreno pixels"
-  ]
+  ],
+  "run_id": 42224883549,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42224883549",
+  "run_conclusion": "success",
+  "source_commit": "d623cef56876b2ffd9fc76949e20598d02090391",
+  "job_id": 127915749429,
+  "sourcefree_python_tests_passed": 11,
+  "genuine_original_shaders_and_managed_SHA_verified": true,
+  "result": "Same exact Material receiver field's stfld value is 7-instruction bounded source-backed IL new Material(Shader) constructor, whose Shader input is an instance field. Compiled assignment dataflow proved; Shader field matching original Foam material NOT verified.",
+  "memo": "docs/T2_FOAM_ORIGINAL_MATERIAL_STFLD_STACK_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62-result.json",
+  "next_step": "SHA-original typed Shader field managed writer census and serialized-field eligibility, then original Foam Shader asset GUID/PathID match. No Unity CB0 upload or Adreno pixel claim."
 }
