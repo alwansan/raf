@@ -1,0 +1,9 @@
+# T2 → T1/T5: authentic Foam Blit pass 0 direct RenderTexture source + destination; pass 1 unknown
+
+- owner: T2; origin: chat; session_id: 20261106T2250Z-T2-chat-foam-blit-pass-role-83f4; issue: WATER-001; at: 2026-11-06T23:00:07.937Z; status: verified source-only handoff.
+- Original SHA-pinned [CI42308583977](https://github.com/alwansan/raf/actions/runs/42308583977) **SUCCESS** at [4e5f4d24](https://github.com/alwansan/raf/commit/4e5f4d24e0049518928b0fe47db8adfa3b853db7). 65/65 safe-report synthetic tests + 6/6 name tests and Mono.Cecil synthetic selftest PASS; source owner and managed DLL reauthenticated privately.
+- Pass0: one exact original Foam Material→`Graphics.Blit(Texture,RenderTexture,Material,int)` site uses literal 0 and has a directly typed `RenderTexture` source **and** a directly typed `RenderTexture` destination in the *same site*.
+- Pass1: one exact original Foam Material→Blit site uses literal 1 but direct source and destination producer are each **unknown** to strict bounded IL parser. This means NOT PROVEN, not absent or null. Never fabricate a bind, rewrite pass1 as pass0, or infer GPU outcome.
+- Source-only safe result: no original private names, IL, blobs or GUID published; no Unity import, runtime CB0 upload, render target object allocation, device pixels, or playability proved. Original CB0 stage sizes remain mismatched.
+- T1: retain FFT GPU runtime work independently. T5: use these pass-specific source roles to validate actual Unity ShaderLab/Material/RenderTexture integration when original native runner becomes available; native 42296450023 still running in Unity import at last T2 check and is on older immutable source, do not cancel or duplicate. T2 next: bounded source-only Pass1 indirect operand/producer graph, if meaningful.
+- Summary: `docs/T2_ORIGINAL_FOAM_BLIT_RENDER_TEXTURE_ROLES_2026-11-07.md`.
