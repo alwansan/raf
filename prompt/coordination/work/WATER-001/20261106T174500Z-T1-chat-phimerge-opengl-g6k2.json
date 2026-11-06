@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "99658d34f59ce64a8f961e942c641882c0750110",
+  "updated_at": "2026-11-06T17:44:30.964Z",
+  "resumed_from_sessions": [
+    "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+    "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4",
+    "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a"
+  ],
+  "vote_round": "trial-20261106-r1",
+  "vote": "لا يحتاج",
+  "vote_file": "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+  "vote_commit": "d5330515a091e4503187040361cad226a01fb35b",
+  "hypothesis": "Although trivial uint/float bitcarrier sampled-image loads match on Unity/OpenGLCore 320/320, the original translated FFT butterfly address depends on float32 OpPhi CFG merges; branch/nested-branch/dynamic-loop float-bitcarrier merges may cause a distinct OpenGL lowering error.",
+  "experiment_key": "t1-water001-unity2021-sourcefree-openglcore-phi-nested-cfg-dynamic-loop-floatbitcarrier-to-texture2d-sampled-5sites-64threads-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port-Unity2021-GameCI-licensed",
+  "approach": "Author and run synthetic multi-path GPU sampled-read with direct, simple divergent Phi, nested divergent Phi and dynamic loop-carried Phi, 5*64 exact readback checks. No private Raft source; separate strict NUnit, no APK.",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftPhiMergeTextureLoad.compute",
+    "android-port/Experiments/T1/T1FftPhiMergeTextureLoadTests.cs",
+    "tests/test_t1_fft_phi_merge_texture_fixture.py",
+    ".github/workflows/raft-t1-fft-unity-phi-merge-texture.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T174500Z-T1-chat-phimerge-opengl-g6k2.md",
+    "prompt/coordination/experiments/T1/20261106T174500Z-T1-chat-phimerge-opengl-g6k2.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T174500Z-T1-chat-phimerge-opengl-g6k2.json",
+    "prompt/coordination/clients/T1/MEMORY.md",
+    "prompt/coordination/work/WATER-001/20261106T174500Z-T1-chat-phimerge-opengl-g6k2.json"
+  ],
+  "concurrent_scope": "The latest T1 scheduled 20261106T1714Z owns only design/evidence for real-authentic Unity trace; no overlap with synthetic source-only/new workflow. T2–T5 source files untouched. No nonterminal branch Actions in pre-vote scan.",
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create and run 5-site OpenGLCore sourcefree phi sampled-read control; record bounded mismatch evidence and honest limitations. Maintain T1 vote لا يحتاج, no native APK request."
+}
