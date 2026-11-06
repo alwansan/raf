@@ -5,12 +5,13 @@
   "origin": "chat",
   "issue_id": "DELIVERY-013",
   "type": "delivery",
-  "at": "2026-11-06T18:56:00Z",
-  "summary": "Source-only recovery hardening: package_android_delivery now rejects CRC-green duplicate APK/OBB ZIP member names before delivery; 4 synthetic adversarial tests committed at ccf88df8 and preflight CI42274874596 pending. Core full-native auditors already reject duplicates. No real phone package or native build submitted.",
+  "at": "2026-11-06T18:56:30Z",
+  "summary": "DELIVERY-013 source integration completed: CRC-green duplicate exact ZIP names in APK or OBB are now rejected by package() before creating output. Exact source ccf88df8, A3 CI42274874577 SUCCESS with packaging 14/14 including 4 adversarial alias subcases and A3 exclusivity 4/4. Preflight CI42274874596 separately success, but does not run packaging suite. No original APK/OBB or phone tested.",
   "evidence": [
     "https://github.com/alwansan/raf/commit/ccf88df86c6f274a63d4dc787bcfbba9d218f942",
     "https://github.com/alwansan/raf/actions/runs/42274874596",
-    "prompt/coordination/experiments/T5/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.json"
+    "prompt/coordination/experiments/T5/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.json",
+    "https://github.com/alwansan/raf/actions/runs/42274874596"
   ],
   "limits": [
     "no original signed output inspected",
