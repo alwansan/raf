@@ -1,0 +1,16 @@
+{
+  "id": "20261106T2001Z-T4-profile-first-create-fsync-q7b3",
+  "owner": "T4",
+  "session_id": "20261106T1957Z-T4-chat-profile-durable-create-q7b3",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Actual Android platform LocalProfileStore first stable offline profile ID creation now explicitly flushes profile.id to the OS with FileStream.Flush(true), and write/flush IOException cannot be swallowed by a broadly scoped FileMode.CreateNew collision catch. Test-only real compiled CLR IL RED CI42284271128 failed absence of Flush(true); final source e9e6c0c7 A9 offline identity green CI42284421243 175 checks and independent Android offline platform green CI42284421421 netstandard2.1 secure world/save paths, corrupt-ID preservation and profile symlink guards. Does not prove durable .rgd under power loss, Unity IL2CPP phone acceptance or post-fix APK inclusion. Separate owner-direct native run42281310905 older SHA in progress untouched.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/31a7cd97c4ad9cd101a532895334d11bb0f778ee",
+    "https://github.com/alwansan/raf/actions/runs/42284271128",
+    "https://github.com/alwansan/raf/commit/e9e6c0c7c6f4d9cc9fe304e69394a45be48b5e12",
+    "https://github.com/alwansan/raf/actions/runs/42284421243",
+    "https://github.com/alwansan/raf/actions/runs/42284421421"
+  ],
+  "at": "2026-11-06T20:01:00Z"
+}
