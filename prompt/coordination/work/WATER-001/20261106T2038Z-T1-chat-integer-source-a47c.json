@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T2038Z-T1-chat-integer-source-a47c",
+  "issue_id": "WATER-001",
+  "track": "Controlled original FFT Vulkan vs Unity2021 integer_source translated coordinate variant",
+  "status": "active",
+  "base_sha": "deb46f69187bc7491f97b9aef555980bb66de46d",
+  "updated_at": "2026-11-06T20:38:00Z",
+  "resumed_from_sessions": [
+    "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
+    "20261106T2017Z-T1-chat-private-producer-gate-8f31"
+  ],
+  "experiment_key": "zip2-15964ea8-exact-original-spv-mesa-vulkan-vs-unity-openglcore-2021-3-45f2-slot0-integer-source-control-1024x32-seed19-same-keyed-traces-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port, opt-in one T1 Unity GPU experiment with no native build request",
+  "hypothesis": "Promoting local SPIR-V SSA and preserving original image coordinate derivation in uint32 integer source before HLSL translation may prevent deterministic X=0 coordinate collapse (baseline original vs Unity: site0 63/64, site1 252/256, site2 64/64), while unchanged original Vulkan reference and identical inputs enable A/B.",
+  "baseline": {
+    "run_id": 42289238865,
+    "job_id": 128138000484,
+    "conclusion": "failure_numeric_mismatch_expected",
+    "site_coordinate_mismatches": [
+      63,
+      252,
+      64
+    ],
+    "pixel_mismatch_first_pass": 63,
+    "pixel_mismatch_second_pass": 31,
+    "original_instrumented_vs_uninstrumented_source_same": true,
+    "unity_recorded_vs_unrecorded_same": true
+  },
+  "scope": "Reuse pinned T1 opt-in private Unity workflow; change only ephemeral slot0 candidate transformation via existing T1_INTEGER_SOURCE flag; no game shader asset/source code edits, no XAPK, no votes, no interference with T2-5.",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    "prompt/coordination/work/WATER-001/20261106T2038Z-T1-chat-integer-source-a47c.json",
+    "prompt/coordination/experiments/T1/20261106T2038Z-T1-chat-integer-source-a47c.json",
+    "prompt/coordination/clients/T1/sessions/20261106T2038Z-T1-chat-integer-source-a47c.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T2038Z-T1-chat-integer-source-a47c.json"
+  ],
+  "trial_vote": "لا يحتاج",
+  "next_step": "One SHA pinned sourcefree+Unity private integer_source A/B; if smaller coordinate/pixel mismatch mark success of hypothesis with caveats; otherwise record precise rejection/failure without blind reruns."
+}
