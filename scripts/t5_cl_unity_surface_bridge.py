@@ -48,6 +48,36 @@ def detail_fields(text):
     return fields
 
 
+def scene_window_provenance(fields, scene):
+    """Don't convert older unlabeled intervals into confirmed same-scene frames."""
+    names = ("frame_window_start_scene", "frame_window_end_scene",
+             "frame_window_active_scene_changes", "frame_window_content_scene_events",
+             "frame_window_active_scene_stable", "frame_window_content_stable")
+    present = [name in fields for name in names]
+    if not any(present):
+        return "legacy_unlabeled"
+    if not all(present):
+        raise ValueError("Partial mixed-scene telemetry provenance")
+    try:
+        active_changes = int(fields[names[2]])
+        content_events = int(fields[names[3]])
+    except ValueError as exc:
+        raise ValueError("Invalid scene transition counter") from exc
+    if active_changes < 0 or content_events < 0:
+        raise ValueError("Negative scene transition counter")
+    if fields[names[4]] not in ("True", "False") or fields[names[5]] not in ("True", "False"):
+        raise ValueError("Invalid mixed-scene telemetry boolean")
+    start, end = fields[names[0]], fields[names[1]]
+    if not start or len(start) > 80 or not end or len(end) > 80 or end != scene:
+        raise ValueError("Invalid start/end scene identity")
+    expected_active = active_changes == 0 and start == end
+    expected_content = expected_active and content_events == 0
+    if (fields[names[4]] != str(expected_active)
+            or fields[names[5]] != str(expected_content)):
+        raise ValueError("Contradictory scene provenance flags")
+    return "tagged_stable_content" if expected_content else "tagged_mixed_loading"
+
+
 def load_unity(path):
     if not path.is_file() or path.is_symlink() or not 0 < path.stat().st_size <= MAX_BYTES:
         raise ValueError("Missing, linked or oversized Unity diagnostic JSONL")
@@ -83,10 +113,12 @@ def load_unity(path):
                     raise ValueError("Nonfinite Unity frame metric")
                 if not scene or len(scene) > 80 or any(x in scene for x in "/\\:"):
                     raise ValueError("Unsafe/unknown scene label")
+                provenance = scene_window_provenance(fields, scene)
                 parsed.append({"at_ms": ts, "scene": scene, "frames": frames,
                                "samples": samples, "overflow": overflow,
                                "fps": fps, "p95_ms": p95, "width": width,
-                               "height": height, "orientation": orientation})
+                               "height": height, "orientation": orientation,
+                               "scene_window_provenance": provenance})
     if not parsed:
         raise ValueError("No game-side Unity performance intervals")
     return parsed
@@ -141,8 +173,14 @@ def analyze(unity, sf, session):
     scenes = {}
     for r in overlap:
         scenes.setdefault(r["scene"], []).append(r)
+    scene_evidence = {
+        key: sum(x["scene_window_provenance"] == key for x in qualified)
+        for key in ("legacy_unlabeled", "tagged_stable_content", "tagged_mixed_loading")
+    }
     return {
         "session": session,
+        "unity_qualified_scene_window_provenance": scene_evidence,
+        "tagged_stable_scene_does_not_prove_same_world_or_camera": True,
         "sf_total_samples": len(sf),
         "sf_stale_sample_count": sum(x.get("frame_telemetry_stale") is True for x in sf),
         "sf_stale_windows": len(windows),
