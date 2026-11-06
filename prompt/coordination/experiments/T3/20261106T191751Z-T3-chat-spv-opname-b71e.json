@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T191751Z-T3-chat-spv-opname-b71e",
+  "issue_id": "RENDER-002",
+  "status": "completed_sourcefree_original_not_executed",
+  "experiment_key": "T3-PARTICLE108-SPIRV-VKD3D-OpName-DXBC-source-DCL-debug-candidate-contract-v1",
+  "hypothesis": "VKD3D-generated SPIR-V OpName may preserve a D3D source register debug label, but a name is not authoritative descriptor provenance; parse bounded SPV metadata privately and reject malformed/ambiguous or mismatched typed candidate IDs.",
+  "inputs": "Synthetic binary SPIR-V OpEntryPoint/OpName/OpDecorate/OpType/OpVariable with synthetic DXBC DCL tuples. No source-private original Raft bytecode or original Vulkan translation was read in this CI.",
+  "new_scripts": [
+    "scripts/t3_particle108_spirv_opname_candidates.py",
+    "scripts/t3_particle108_spv_named_original_probe.py"
+  ],
+  "modified_tests": [
+    "tests/test_t3_particle108_dcl_spv_family_census.py"
+  ],
+  "code_commits": [
+    "e836f3ed10855110ca53a78160879f00d0424aa8",
+    "2506049d07ff351eb6a83d0e24bfd122ab82fa24",
+    "427844c59cb2de4e05edf6742638c73ced7e970a"
+  ],
+  "test_commits": [
+    "5aecd7c71f9044cfeb1577d4df919d974e10dd4d",
+    "d00887f1f03f964ec7bf9c19bbabdc1f48c27bc3",
+    "c37e07a5566a4eebe3767115eb37bd7cac893f57"
+  ],
+  "source_only_runs": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42278854388",
+      "conclusion": "failure",
+      "reason": "SPIRV version minor read from wrong bits in initial parser; synthetic fixture only"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42279006117",
+      "conclusion": "success",
+      "tests": 26,
+      "job_id": 128102726757
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42279422349",
+      "conclusion": "success",
+      "tests": 29,
+      "job_id": 128104185298
+    }
+  ],
+  "negative_controls": [
+    "Wrong stage-specific OpEntryPoint model rejected",
+    "Duplicate DescriptorSet or Binding decorations rejected",
+    "Malformed instruction length and SPIR-V header rejected",
+    "Wrong image/sampler type for named D3D register candidate rejected",
+    "Combined/array descriptor lowering cannot silently become unique single-register provenance",
+    "Duplicate named targets and binding alias counts checked",
+    "Unsupported or stripped debug labels never imply original register mapping",
+    "Malicious synthetic candidate reporting provenance_proven=true rejected by original probe adapter",
+    "Four SHA-source VSFS keyword pair stage-byte placement preserved and eight synthetic stages counted"
+  ],
+  "original_authentication_adapter": "Private T3 source reader SHA-authenticates six original scenes, four asset owners and unique original 108-slot Particle108 Shader48. Then four original VS/FS keyword pairs translate with VKD3D, and original.spv is parsed with bounded debug-name candidate scanner. This adapter was synthetically tested only, not executed against real original ZIP2 assets.",
+  "actual_original_run": null,
+  "manual_only_workflow_unchanged": true,
+  "trial_vote": "لا يحتاج",
+  "trial_round": "trial-20261106-r1",
+  "observed_result": "29/29 source-free tests successful; strict bounded candidate parser and SHA-source adapter are committed. No real source-register-to-SPV descriptor set/binding mapping proven. Existing authentic stage-family aggregate equality remains CI42274933802, newer original per-stage cardinality probe remains unrun.",
+  "limitations": [
+    "OpName is forgeable/strippable debug metadata; cannot prove binding even with matched name",
+    "Synthetic-only SPV fixtures do not prove VKD3D emitted this debug-name convention on original Raft",
+    "No same-authentic source→translated SPV run of new adapter, no Unity shader compilation or phone pixels",
+    "Exact Shader48 original remains exported as DummyShaderTextExporter, original HLSL ShaderLab not integrated",
+    "No game assets, .shader, .mat, .meta, scene, save, audio, Settings, HUD or APK/OBB/XAPK changed"
+  ],
+  "next_step": "On authorized original source workflow dispatch: first run per-stage family cardinality on same original SHA, then run this debug-name candidate probe privately to see if VKD3D retains source register labels; no debug names/real set-bind values logged. Even full debug candidate coverage does not establish authoritative provenance: require independent translator mapping or original SPV interface contract before recovered non-dummy ShaderLab/Unity/phone validation.",
+  "updated_at": "2026-11-06T19:26:28.290Z"
+}
