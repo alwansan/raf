@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "original-save-exception-boundary-evidence",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8c5050d2cc6eec90cee4cb189f3aa0f01cfc0455",
   "approach": "Verify original SaveGame/SaveWorld/SaveUser/Save exceptions cannot be misreported as completed cycles when original finally logs nonzero files. Add strict C# EndOperation exit classification (exceptionEscaped=False) and fail-closed unexpected exception/unavailable snapshot. RED synthetic negative examples then GREEN same SHA immutable CL@520c4cf evidence. No original world payload or game code change.",
   "intended_files": [
@@ -20,7 +20,12 @@
     "20261106T1957Z-T4-chat-profile-durable-create-q7b3"
   ],
   "concurrent_work": "Latest T4 scheduled 20261106T1943Z-T4-scheduled-r6k2 owns INPUT-005; T4 profile 20261106T1957Z completed. Existing owner-direct native run42281310905 in_progress at older source SHA d6924001; not launched/modified.",
-  "run_urls": [],
-  "updated_at": "2026-11-06T20:08:00Z",
-  "next_step": "Publish new tests first; old verifier should fail to reject original Save.exception, SaveWorld.exception, SaveGame.exit exceptionEscaped=True, and Save.argumentFileSnapshot.unavailable. Then minimal production classifier and original owner CL regression."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42285886433",
+    "https://github.com/alwansan/raf/actions/runs/42286032150"
+  ],
+  "updated_at": "2026-11-06T20:20:00Z",
+  "next_step": "Scope released. T4 INPUT-005 follow-up separately reserved editor bridge missing symbol CS0234 from owner-direct native42281310905; check C# managed original Unity2021 ABI CI before T5 native retry. No redundant immutable log CI.",
+  "integration_commit": "d6dc42f7ccbd7fc971868c17b370315c02d589b3",
+  "result": "RED 7 subcases on old classifier, GREEN 17/17 source-only and immutable owner CL5Nov 7/7 SaveGame and 7/7 LoadT. No phone or world save source proof; original exceptionEscaped and unavailable markers fail closed."
 }
