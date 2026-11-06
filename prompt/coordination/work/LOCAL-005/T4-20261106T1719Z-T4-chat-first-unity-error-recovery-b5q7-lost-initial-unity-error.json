@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1719Z-T4-chat-first-unity-error-recovery-b5q7",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "world_save_diagnostics",
+  "status": "active",
+  "base_sha": "9f006935edb40189ae6f74074eb334ae9003205d",
+  "experiment_key": "T4-LOCAL005-AndroidRuntimeLog-UnityMessage-unsaved-first-critical-when-sink-null-then-recovery-source-net8-v1",
+  "resource_key": null,
+  "approach": "On failed initial AndroidRuntimeLog.Initialize, test UnityMessage error callback before sink available and same error after storage recovers; retain HUD callback true without poisoning grouped repeat before disk exists.",
+  "hypothesis": "UnityMessage calls repeated.First before checking if persistent sink exists; the first fatal exception during a failed logger startup can be counted yet not stored, so its next occurrence after successful retry is suppressed and original full stack never persisted.",
+  "intended_files": [
+    "android-port/Tests/Diagnostics/Program.cs",
+    "android-port/Runtime/Platform/AndroidRuntimeLog.cs"
+  ],
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2-startup-retry.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1637Z-T4-scheduled-v8m2.md"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261106T1719Z-T4-chat-first-unity-error-recovery-b5q7.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add deterministic real-source .NET8 failing regression to existing startup-fault synthetic fixture; confirm red at exact new assertion, then minimal sink-null policy preserving return=true HUD; green and document phone boundary.",
+  "updated_at": "2026-11-06T17:19:00Z"
+}
