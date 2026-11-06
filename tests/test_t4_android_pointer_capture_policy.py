@@ -133,7 +133,7 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         listener = BRIDGE.split("public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)", 1)[1].split(
             "private bool RecordCapturedMotion", 1)[0]
         self.assertIn('motionEvent.Call<int>("getSource")', listener)
-        self.assertIn("PhysicalMouseMotionSource.Classify(source)", listener)
+        self.assertIn("PhysicalMouseMotionSource.Classify(source, deviceSources)", listener)
         self.assertIn("kind == PhysicalMouseMotionSource.Kind.Ignore", listener)
         self.assertIn("PhysicalMouseMotionSource.ValidHistory(historyCount)", listener)
         self.assertIn("for (int h = 0; h < historyCount; h++)", listener)
