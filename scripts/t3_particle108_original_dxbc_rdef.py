@@ -29,6 +29,22 @@ MAX_REGISTER=4095
 
 # Standard D3D_SHADER_INPUT_TYPE categories; preserve exact private type IDs
 # for register families even though the report publishes only broad counts.
+SAFE_RDEF_FAILURE_REASON={
+    "DXBC_SOURCE_CONTAINER_LENGTH_OR_MAGIC":"SOURCE_CONTAINER",
+    "DXBC_SOURCE_CHUNK_TABLE_BOUNDS":"CHUNK_TABLE",
+    "DXBC_SOURCE_CHUNK_OFFSET_INVALID":"CHUNK_OFFSET",
+    "DXBC_SOURCE_CHUNK_SIZE_INVALID":"CHUNK_SIZE",
+    "DXBC_SOURCE_OVERLAPPING_CHUNKS":"CHUNK_OVERLAP",
+    "DXBC_ORIGINAL_RDEF_NOT_UNIQUE":"ORIGINAL_RDEF_ABSENT_OR_AMBIGUOUS",
+    "DXBC_SOURCE_RDEF_HEADER_SHORT":"RDEF_HEADER_SHORT",
+    "DXBC_SOURCE_RDEF_BINDING_TABLE_BOUNDS":"RDEF_TABLE",
+    "DXBC_SOURCE_RDEF_DESCRIPTOR_INVALID":"RDEF_DESCRIPTOR",
+    "DXBC_SOURCE_RDEF_NAME_BOUNDS":"RDEF_NAME_BOUNDS",
+    "DXBC_SOURCE_RDEF_NAME_ENCODING":"RDEF_NAME_ENCODING",
+    "DXBC_RDEF_BINARY_BOUNDS":"RDEF_BINARY_BOUNDS",
+    "original_authored_Shader48_props_changed":"ORIGINAL_SHADER_PROPERTY_SCOPE",
+    "original_paired_DXBC_shader_structure_changed":"ORIGINAL_STAGE_SELECTION",
+}
 BIND_FAMILIES={0:"cbuffer",1:"srv",2:"srv",3:"sampler",
                4:"uav",5:"srv",6:"uav",7:"srv",8:"uav",
                9:"uav",10:"uav",11:"uav",12:"srv",13:"uav"}
@@ -200,6 +216,8 @@ def main(argv=None):
     except Exception as exc:
         report={"schema_version":1,"status":"INCONCLUSIVE",
                 "failure_type":type(exc).__name__,
+                "safe_original_RDEF_failure_reason":SAFE_RDEF_FAILURE_REASON.get(
+                    str(exc),"UNCLASSIFIED_ORIGINAL_SOURCE"),
                 "original_DXBC_RDEF_register_numbers_names_types_or_bytecode_published":False,
                 "original_shader_program_Unity_compile_or_pixel_equivalence_proven":False}
     a.out.parent.mkdir(parents=True,exist_ok=True)
