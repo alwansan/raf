@@ -1,0 +1,14 @@
+{
+  "id": "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+  "owner": "T1",
+  "session_id": "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original FFT slot0 butterfly site1 Y typed writer origins: two may-reaching same-component producers, one sint32 bits reinterpreted into float32 via OpBitcast, one float32 constant. Butterfly site2 Y has one float32 constant writer. Corrected 3 duplicate-ID synthetic fixture errors; final GitHub Actions 42212055131 SUCCESS with 13/13 tests and private Vulkan original analysis. Branch-selected actual value/Unity numeric parity/Adreno water remain unproven; no shader rewrite.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42211872487",
+    "https://github.com/alwansan/raf/actions/runs/42212055131",
+    "https://github.com/alwansan/raf/commit/a9fe62d73adbb90555599dd50120dc6cc3dd1fd8"
+  ],
+  "at": "2026-11-06T11:42:32.882Z"
+}
