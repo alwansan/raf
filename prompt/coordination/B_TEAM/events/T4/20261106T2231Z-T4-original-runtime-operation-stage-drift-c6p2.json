@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2",
+  "issue_id": "LOCAL-005",
+  "event": "runtime_operation_instrumentation_prewrite_source_meta_drift_guard",
+  "status": "completed_source_integration",
+  "updated_at": "2026-11-06T22:31:39.925Z",
+  "red_commit": "a02afd104b72359c7955d7519be1fda978018ce5",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42304948072",
+  "green_commit": "a2577acef04ff8d1997f1e2af14cc85aa27a84d0",
+  "green_ci": "https://github.com/alwansan/raf/actions/runs/42305089873",
+  "result": "Red independent .cs post-copy drift silently overwritten and meta change led stale rollback; after fail-closed pre-first-write epoch check green 18/18 synthetic and pinned original managed compatibility compile success exit=0, no errors.",
+  "experiment": "prompt/coordination/experiments/T4/20261106T2226Z-runtime-stage-prewrite-drift-c6p2.json",
+  "native_build": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "boundaries": "Instrumenter source staging guard only; not full interprocess lock, post-install race still possible. No changes to .rgd, Steam, assets, .meta GUID bytes, audio, Settings, touch, native workflow or request.",
+  "readiness": "LOCAL-005 OPEN; game NOT_READY 0/3; T4 trial vote unchanged."
+}
