@@ -155,6 +155,12 @@ namespace RaftAndroid.Platform
         private readonly FrameTiming[] timings = new FrameTiming[1];
         private int sampleCount, intervalFrames;
         private double intervalSeconds;
+        // Keep transition frames (and their real stalls), but never mislabel a
+        // mixed loading interval as a stable gameplay scene benchmark.
+        private string frameWindowStartScene = "";
+        private int activeSceneTransitionsInWindow;
+        private int frameWindowStartSceneRevision;
+        private static int sceneContentRevision;
         private float nextGraphicsMemoryProbe;
         private string lastAndroidGraphicsKb = "unavailable";
         private static string Number(double value) => value.ToString("F2", CultureInfo.InvariantCulture);
@@ -203,6 +209,10 @@ namespace RaftAndroid.Platform
             Func<double, string> percentile = p => sampleCount == 0 ? "unavailable" :
                 Number(frameSamples[Math.Min(sampleCount - 1, (int)Math.Ceiling(sampleCount * p) - 1)]);
             uint available = FrameTimingManager.GetLatestTimings(1, timings);
+            string endScene = SceneManager.GetActiveScene().name;
+            int sceneContentEvents = Math.Max(0, sceneContentRevision - frameWindowStartSceneRevision);
+            bool stableActiveScene = activeSceneTransitionsInWindow == 0 &&
+                string.Equals(frameWindowStartScene, endScene, StringComparison.Ordinal);
             hud = "FPS: " + (intervalSeconds > 0 ? Number(intervalFrames / intervalSeconds) : "unavailable") +
                 " | frame p95: " + percentile(0.95) + " ms | CPU system: " + SystemCpu() +
                 " | GPU: unavailable (no reliable counter)\n" + MemoryHud();
@@ -223,8 +233,18 @@ namespace RaftAndroid.Platform
                  "; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes() +
                 "; thermal=unavailable; draw_calls=unavailable" +
                 "; width=" + Screen.width + "; height=" + Screen.height + "; orientation=" + Screen.orientation +
-                "; refresh_hz=" + Screen.currentResolution.refreshRate + "; scene=" + SceneManager.GetActiveScene().name;
+                "; refresh_hz=" + Screen.currentResolution.refreshRate +
+                "; frame_window_start_scene=" + frameWindowStartScene +
+                "; frame_window_end_scene=" + endScene +
+                "; frame_window_active_scene_changes=" + activeSceneTransitionsInWindow +
+                "; frame_window_content_scene_events=" + sceneContentEvents +
+                "; frame_window_active_scene_stable=" + stableActiveScene +
+                "; frame_window_content_stable=" + (stableActiveScene && sceneContentEvents == 0) +
+                "; scene=" + endScene;
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
+            frameWindowStartScene = "";
+            activeSceneTransitionsInWindow = 0;
+            frameWindowStartSceneRevision = sceneContentRevision;
             return report;
         }
         private static void ReportPriorExits()
@@ -320,6 +340,7 @@ namespace RaftAndroid.Platform
         }
         private void SceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            sceneContentRevision++;
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "loaded",
                 scene.name + "; mode=" + mode + "; " + GraphicsMemoryAtBoundary(), true);
             // Diagnostic only. Do not sample or instantiate materials every frame.
@@ -574,17 +595,22 @@ namespace RaftAndroid.Platform
         }
         private static void SceneUnloaded(Scene scene)
         {
+            sceneContentRevision++;
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "unloaded",
                 scene.name + "; " + GraphicsMemoryAtBoundary(), true);
         }
-        private static void ActiveSceneChanged(Scene before, Scene after)
+        private void ActiveSceneChanged(Scene before, Scene after)
         {
+            if (intervalFrames > 0) activeSceneTransitionsInWindow++;
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "active_changed", before.name + " -> " + after.name, true);
         }
         private void OnApplicationPause(bool paused)
         {
             if (!paused) EnforceLandscape();
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
+            frameWindowStartScene = "";
+            activeSceneTransitionsInWindow = 0;
+            frameWindowStartSceneRevision = sceneContentRevision;
             skipNextFrame = true;
             // Persist the transition itself before flushing: the previous order
             // could omit the last pause event when Android kills the process.
@@ -611,6 +637,11 @@ namespace RaftAndroid.Platform
         private void Update()
         {
             if (skipNextFrame) { skipNextFrame = false; return; }
+            if (intervalFrames == 0)
+            {
+                frameWindowStartScene = SceneManager.GetActiveScene().name;
+                frameWindowStartSceneRevision = sceneContentRevision;
+            }
             float delta = Time.unscaledDeltaTime;
             intervalFrames++; intervalSeconds += delta;
             if (sampleCount < frameSamples.Length) frameSamples[sampleCount++] = delta * 1000f;
