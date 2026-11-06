@@ -1,0 +1,14 @@
+{
+  "id": "T1-WATER-001-20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Actual Unity2021.3.45f2 OpenGLCore source-free ten-category float-bitcarrier GPU fixture completed success. Exactly one NUnit case; 64 GPU invocations x 10 words, 640/640 exact; all ten mismatch counts zero. This rules out basic synthetic FTZ/carrier operations in tested context only, not original FFT Unity SSA/variant, authored kernels or Android water.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42276235955",
+    "https://github.com/alwansan/raf/commit/4928f866d0f035797e776ee004cc9e476aa1d49d"
+  ],
+  "at": "2026-11-06T19:07:00Z"
+}
