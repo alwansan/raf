@@ -127,9 +127,14 @@ def evaluate(pairs,parsed,private_dir:Path,*,translator=translate,
             folder=private_dir/("keyword-%d-stage-%d"%(n,stage))
             folder.mkdir(exist_ok=False)
             result=translator(data,stage,folder)
+            # A recovered text file alone is not an accepted graphics stage:
+            # require an attested Vulkan 1.1 roundtrip and exact stage identity.
+            # bool is a subclass of int in Python, so reject True as vertex=1.
             if (type(result) is not dict or result.get("vulkan11_valid") is not True
-                or result.get("hlsl_recovered") is not True or
-                (result.get("stage") is not None and result["stage"]!=stage)):
+                or result.get("hlsl_recovered") is not True
+                or result.get("roundtrip_vulkan11_valid") is not True
+                or type(result.get("stage")) is not int
+                or result["stage"] != stage):
                 raise ValueError("T3_VARIANT_TRANSLATION_MISSING")
             hlsl=folder/"private.hlsl"
             if (hlsl.is_symlink() or not hlsl.is_file()
@@ -148,6 +153,7 @@ def evaluate(pairs,parsed,private_dir:Path,*,translator=translate,
         totals["private_complete_one_pass_ShaderLab_candidates"]+=1
         totals["private_property_default_parity_passes"]+=1
     if (totals["genuine_original_DXBC_stages_translated"]!=8 or
+        totals["separately_validated_HLSL_roundtrip_stages"]!=8 or
         totals["private_complete_one_pass_ShaderLab_candidates"]!=4):
         raise ValueError("T3_VARIANT_STRUCTURE_INVALID")
     return {"schema_version":1,"status":STATUS,

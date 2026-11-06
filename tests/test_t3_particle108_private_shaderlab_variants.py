@@ -110,6 +110,40 @@ class PrivateVariantControls(unittest.TestCase):
                            translator=bad_translator,model_reader=lambda x,y:(5,0))
             self.assertEqual(list(Path(tmp).glob("*.shader")),[])
 
+    def test_roundtrip_missing_false_or_unverified_fails_closed(self):
+        # Original stage translation and HLSL text are insufficient if the
+        # recovered HLSL was never validated back to Vulkan 1.1 SPIR-V.
+        for status in ("missing", False, None):
+            with self.subTest(roundtrip=status), tempfile.TemporaryDirectory() as tmp:
+                def translator(data,stage,path):
+                    (path/"private.hlsl").write_text(VERT if stage else FRAG,encoding="utf-8")
+                    result={"vulkan11_valid":True,"hlsl_recovered":True,"stage":stage}
+                    if status!="missing":
+                        result["roundtrip_vulkan11_valid"]=status
+                    return result
+                root=Path(tmp)
+                with self.assertRaisesRegex(ValueError,"T3_VARIANT_TRANSLATION_MISSING"):
+                    v.evaluate([(b"a",b"b")]*4,synthetic_original(),root,
+                               translator=translator,model_reader=lambda x,y:(5,0))
+                self.assertEqual(list(root.glob("*.shader")),[])
+
+    def test_stage_attestation_missing_boolean_or_wrong_fails_closed(self):
+        # False equals 0 and True equals 1; neither is an authentic stage code.
+        for status in ("missing", True, False, "1", 0):
+            with self.subTest(stage=status), tempfile.TemporaryDirectory() as tmp:
+                def translator(data,stage,path):
+                    (path/"private.hlsl").write_text(VERT if stage else FRAG,encoding="utf-8")
+                    result={"vulkan11_valid":True,"hlsl_recovered":True,
+                            "roundtrip_vulkan11_valid":True}
+                    if status!="missing":
+                        result["stage"]=status
+                    return result
+                root=Path(tmp)
+                with self.assertRaisesRegex(ValueError,"T3_VARIANT_TRANSLATION_MISSING"):
+                    v.evaluate([(b"a",b"b")]*4,synthetic_original(),root,
+                               translator=translator,model_reader=lambda x,y:(5,0))
+                self.assertEqual(list(root.glob("*.shader")),[])
+
     def test_preexisting_variant_private_path_cannot_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)
