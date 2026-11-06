@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1811Z-T3-chat-shaderlab-subshader-51c8",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-SHADERLAB-ALT-SUBSHADER-1PASS-EACH-STRUCTURAL-NOT-RUNTIME-PROOF-v1",
+  "hypothesis": "A per-source-authored one-Pass Shader can export mutually exclusive SubShaders, each having one Pass. Sum of Passes across SubShaders must not be treated as per-active-SubShader pass count; missing program and 2 real passes in same SubShader must still be rejected.",
+  "inputs": "synthetic locally generated ShaderLab and one-instance W1/B02 fixtures; NO original Raft source asset transfer or Unity-native runtime",
+  "baseline_contract": "scripts/b49_shaderlab_pass_contract.py pass_coverage per-subshader counters; not modified",
+  "workflow_path": ".github/workflows/raft-t3-particle108-shaderlab-quality-source-only.yml",
+  "source_only_run_url": "https://github.com/alwansan/raf/actions/runs/42267917949",
+  "source_only_run_id": 42267917949,
+  "job_id": 128064575980,
+  "first_failure_url": "https://github.com/alwansan/raf/actions/runs/42267810469",
+  "first_failure_reason": "An inherited test of two Passes in a single SubShader with one unprogrammed Pass expected PASS_COUNT_MISMATCH precedence; initial implementation returned INCOMPLETE. Corrected priority without compromising unprogrammed alternate rejection.",
+  "run_outcome": "SUCCESS",
+  "synthetic_tests_passed": 12,
+  "synthetic_tests_failed": 0,
+  "changes": [
+    "scripts/t3_particle108_shaderlab_export_quality.py",
+    "tests/test_t3_particle108_shaderlab_export_quality.py",
+    ".github/workflows/raft-t3-particle108-shaderlab-quality-source-only.yml"
+  ],
+  "commits": [
+    "e234bc8eeafd7957299e17755feaa08beb178951",
+    "03ae841b2e0f407c9df62439361870f8be0c4525",
+    "ce8a29caca3fa5fc95e582bcd49f64039cf417d3",
+    "b18bbd7f20704cc65a56d1eafa184b6ce45a7621"
+  ],
+  "checks": [
+    "two valid fallback SubShaders each with one programmed Pass -> structural one pass per alternative, active choice UNPROVEN",
+    "two fallback SubShaders one with empty Pass -> INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER",
+    "one fallback with genuine 2 Passes -> CUSTOM_PASS_COUNT_DIFFERS_FROM_ORIGINAL",
+    "existing dummy/no-subprogram/empty braces/cross-export-instance/GUID/metadata privacy assertions preserved"
+  ],
+  "new_safe_fields": [
+    "selected_shaderlab_subshader_count",
+    "selected_shaderlab_one_pass_per_subshader",
+    "selected_shaderlab_all_subshaders_programmed",
+    "selected_shaderlab_active_subshader_runtime_verified"
+  ],
+  "none_of_these_claims_original_equivalence": true,
+  "remaining_limitations": [
+    "The source original Particle108 export had DummyShaderTextExporter; this syntactic classifier does not restore its compiled programs.",
+    "An authored 1-Pass per SubShader is structural evidence only: active Android SubShader selection/runtime pass compiled/pixel output remain unproven.",
+    "No game shader/Material/asset/.meta/API calls, no native build, no Android GPU pixels, no original DXBC↔SPIR-V register mapping verified.",
+    "Scheduled T3 crosscontract scope was not modified; trial vote T3 stays لا يحتاج."
+  ],
+  "next_step": "Resolve exact source-native DXBC to translated SPIRV stage/category/set binding join in separate scheduled T3 scope, then produce proven ShaderLab program integration; only after integrated graphics fix re-vote for native phone experiment."
+}
