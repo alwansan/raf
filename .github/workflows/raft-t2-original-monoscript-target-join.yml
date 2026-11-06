@@ -1,0 +1,105 @@
+name: T2 WATER-001 original opaque m_Script external MonoScript target SHA join
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_monoscript_target_join.py
+      - tests/test_t2_original_monoscript_target_join.py
+      - .github/workflows/raft-t2-original-monoscript-target-join.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-script-target-sourcejoin-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  sha-original-script-target-join:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Fail-closed source-free external script filename and typed target controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_monoscript_target_join.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_monoscript_target_join.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 3*1024**3
+          print("T2_ORIGINAL_SCRIPT_OWNER_BUDGET_SAFE")
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-script-target-zip2
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Privately authenticate original SHA source and actual typed MonoScript target identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 1100s python3 -m scripts.t2_original_monoscript_target_join \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-script-target-zip2" \
+            --scratch "$RUNNER_TEMP/t2-original-script-targets-stage" \
+            --out "$RUNNER_TEMP/t2-original-script-target-typed-safe.json"
+      - name: Assert source-preserving typed target partitions and privacy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-original-script-target-typed-safe.json").read_text())
+          assert r["status"]=="source_original_opaque_m_Script_target_type_join"
+          assert r["original_zip2_SHA_authenticated"] is True
+          assert r["original_scene_SHA_authenticated_file_count"]==40
+          assert r["original_scene_SHA_authenticated_bytes"]==233237972
+          assert r["script_refs_from_opaque_original_MonoBehaviours"]==55328
+          assert sum(r[k] for k in (
+              "original_unique_basename_candidate_ref_rows",
+              "original_missing_manifest_candidate_ref_rows",
+              "original_ambiguous_manifest_candidate_ref_rows"))==55328
+          assert r["original_opaque_m_Script_rows_typed_target_checked"]+r["source_target_rows_budget_skipped"]==r["original_unique_basename_candidate_ref_rows"]
+          assert r["script_refs_to_SHA_original_typed_MonoScript_objects"]+r["script_refs_to_SHA_original_absent_or_other_type_PathIDs"]==r["original_opaque_m_Script_rows_typed_target_checked"]
+          assert r["original_typed_target_files_SHA_staged"]<=12
+          assert r["original_typed_target_bytes_SHA_staged"]<=268435456
+          assert r["original_MonoScript_source_TypeName_published"] is False
+          assert r["source_external_basename_proves_Unity_GUID"] is False
+          assert r["original_MonoScript_field_layout_reconstructed"] is False
+          assert r["original_Foam_Runtime_Shader_binding_verified"] is False
+          assert r["Android_water_pixels_verified"] is False
+          assert r["private_original_script_object_ids_paths_or_hashes_exported"] is False
+          assert all(type(v) in (int,bool,str) for v in r.values())
+          assert not any(k in r for k in (
+              "original_script_class_name", "private_external_path",
+              "private_original_sha", "original_mono_script_id",
+              "original_field_name", "proprietary_raw_bytes",
+          ))
+          print("T2_ORIGINAL_TYPED_MONOSCRIPT_TARGET_SAFE_ASSERTIONS_PASS")
+          PY
+      - name: Purge original ZIP2 provider and private target-source stage
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-script-targets-stage" \
+            "$GITHUB_WORKSPACE/t2-original-script-target-zip2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-monoscript-target-typed-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-original-script-target-typed-safe.json
+          if-no-files-found: error
+          retention-days: 7
