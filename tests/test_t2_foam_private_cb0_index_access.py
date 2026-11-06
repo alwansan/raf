@@ -101,6 +101,21 @@ class CB0CompiledLoadIndexTests(unittest.TestCase):
             spirv(index=7, pointer_copy=True), reflection("vert"), (0, 0), 8, 6)
         self.assertEqual(r["static_index_exceeds_other_stage_array_count"], 1)
 
+    def test_duplicate_or_invalid_pointer_ssa_result_fails_closed(self):
+        # Synthetic conflicting result IDs must never overwrite tracked CB0
+        # provenance, including when a second alias comes from a phi/select.
+        for extra in (
+            inst(83, 9, 21, 21),  # CopyObject overwrites AccessChain ID
+            inst(83, 9, 64, 21),  # CopyObject result outside SPIR-V bound
+            inst(245, 9, 21, 21, 44),  # Phi overwrites tracked ID
+            inst(169, 9, 21, 40, 21, 42),  # Select overwrites tracked ID
+            inst(67, 9, 21, 5, 8),  # PtrAccessChain overwrites tracked ID
+        ):
+            with self.subTest(op=extra[0] & 0xffff), self.assertRaises(ValueError):
+                compiled_cb0_load_paths(
+                    spirv(no_load=True, extra=extra),
+                    reflection("vert"), (0, 0), 8, 6)
+
     def test_unrelated_pointer_load_is_ignored_not_falsely_attributed(self):
         blob = spirv(index=2, extra=inst(61, 10, 32, 42))
         r = compiled_cb0_load_paths(blob, reflection("vert"), (0, 0), 8, 6)
