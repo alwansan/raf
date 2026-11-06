@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/t2_original_monoscript_target_join.py
       - tests/test_t2_original_monoscript_target_join.py
+      - scripts/t2_original_monoscript_target_attestation.py
+      - tests/test_t2_original_monoscript_target_attestation.py
       - .github/workflows/raft-t2-original-monoscript-target-join.yml
   workflow_dispatch:
 permissions:
@@ -29,7 +31,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile scripts/t2_original_monoscript_target_join.py
+          python3 -m py_compile scripts/t2_original_monoscript_target_attestation.py
           python3 -m unittest discover -s tests -p 'test_t2_original_monoscript_target_join.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_original_monoscript_target_attestation.py' -v
           python3 - <<'PY'
           import shutil
           assert shutil.disk_usage(".").free > 3*1024**3
@@ -90,6 +94,12 @@ jobs:
           ))
           print("T2_ORIGINAL_TYPED_MONOSCRIPT_TARGET_SAFE_ASSERTIONS_PASS")
           PY
+      - name: Fail-closed positive typed-target coverage and safe evidence contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t2_original_monoscript_target_attestation \
+            --input "$RUNNER_TEMP/t2-original-script-target-typed-safe.json"
       - name: Purge original ZIP2 provider and private target-source stage
         if: always()
         shell: bash
