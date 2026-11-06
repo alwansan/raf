@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T1943Z-T4-scheduled-r6k2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "c60f3e3b1f7190c9b972bd79b789a86d3b83d677",
+  "resumed_from_sessions": [
+    "20261106T1840Z-T4-scheduled-h8k3",
+    "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1943Z-T4-scheduled-r6k2-native-candidate-evidence-boundary.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1943Z-T4-scheduled-r6k2.md"
+  ],
+  "experiment_key": "native-candidate-42281310905-vs-owner5nov-42058825739-provenance-boundary",
+  "resource_key": "read-only-existing-native-build-42281310905",
+  "hypothesis": "The active owner-direct native build may yield a newer candidate, but until signed APK/OBB and phone evidence exist its mouse and save status cannot be promoted.",
+  "updated_at": "2026-11-06T19:43:00Z",
+  "constraints": "No CI dispatch, no shared edits, no native build cancellation, no production edits."
+}
