@@ -3,7 +3,7 @@
   "session_id": "20261106T0336Z-T4-scheduled-m7q2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "source_integrated_waiting_ci",
   "baseline_sha": "ecc39e52edc69614b99aacd79762b4b5fce21e92",
   "updated_at": "2026-11-06T03:36:00Z",
   "hypothesis": "Android currentFocus View may differ between capture request and probe; record per-request View identity without changing pointer capture behavior.",
@@ -18,5 +18,10 @@
   "taken_over_from": [
     "20261106T0240Z-T4-scheduled-v8q1",
     "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8"
-  ]
+  ],
+  "source_commit": "9b94ad1cbbd97048848340536243ced3022c8e3b",
+  "test_commit": "23333548d94c54f68c027c65ec611d551898377c",
+  "result": "Android System.identityHashCode of request View is compared against probed focus View per epoch; one diagnostic event emitted in Unity Update on mismatch. No capture behavior altered.",
+  "validation": "Source inspected; new Python regression test updated but not executed in CI or on device.",
+  "next_step": "Run isolated pointer View identity contract test; check actual phone logs for physical_mouse_capture_view_changed; only then decide whether binding capture to original View is justified."
 }
