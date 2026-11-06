@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1725Z-T4-first-unity-error-recovery-b5q7",
+  "owner": "T4",
+  "session_id": "20261106T1719Z-T4-chat-first-unity-error-recovery-b5q7",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Real AndroidRuntimeLog source with synthetic Unity signatures proved first critical exception deduped without any disk sink: red CI42260446981 check291; minimal production fix 5e0b52a8 checks sink before repeat grouping but returns true for HUD. Final real-source green CI42260791146 SUCCESS 297/297; legitimate repeat_summary kept distinct from one full Error, no native Unity or phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42260446981",
+    "https://github.com/alwansan/raf/commit/5e0b52a8e9aef6bf0f66e54a51bc890f3151c20b",
+    "https://github.com/alwansan/raf/commit/af9e5c5c4192cf5f2df776ca860ae0731347f49f",
+    "https://github.com/alwansan/raf/actions/runs/42260791146",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_FIRST_UNITY_ERROR_AFTER_LOGGER_RECOVERY_2026-11-06.md"
+  ],
+  "at": "2026-11-06T17:25:00Z"
+}
