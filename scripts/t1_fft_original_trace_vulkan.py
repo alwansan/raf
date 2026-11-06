@@ -16,11 +16,12 @@ from scripts.t1_fft_pass0_vulkan_trace import trace_host
 from scripts.t1_fft_vulkan_roundtrip_isolation import WIDTH, HEIGHT, run
 from scripts.t1_fft_readback_parity import read_image, compare_pass
 from scripts.t1_fft_trace_compare import INVOCATION_SIZE, decode_invocations, CAPACITY
+from scripts.t1_fft_private_input_evidence import capture_evidence, save_private_evidence
 
 EXPECTED_RECORDS = [64, 256, 64]
 
 
-def analyze(project, host_file, export=None):
+def analyze(project, host_file, export=None, *, private_evidence_export=None):
     original = project / "_private_vulkan" / "slot0.spv"
     other = project / "_private_vulkan" / "slot1.spv"
     for x in (original, other):
@@ -76,7 +77,8 @@ def analyze(project, host_file, export=None):
                               "private_error_text_exported": False}, sort_keys=True),
                   flush=True)
             raise ValueError("Original private SPIR-V validation rejected instrumented module")
-        source = trace_host(host_file.read_text(encoding="utf-8"), INVOCATION_SIZE)
+        source = trace_host(host_file.read_text(encoding="utf-8"), INVOCATION_SIZE,
+                            capture_inputs=private_evidence_export is not None)
         if source.count("traceWrite.dstSet = sets[1];") != 1:
             raise ValueError("Original descriptor set host patch anchor absent")
         source = source.replace("traceWrite.dstSet = sets[1];",
@@ -109,6 +111,10 @@ def analyze(project, host_file, export=None):
         if export is not None:
             with Path(export).open("xb") as destination:
                 destination.write(record)
+        if private_evidence_export is not None:
+            save_private_evidence(private_evidence_export,
+                                  capture_evidence(work, work / "original-record.spv",
+                                                   record, "original_spirv"))
         return {
             "status": "actual_original_spirv_invocation_keyed_gpu_capture",
             "original_sha_source_staged_privately": True,
@@ -129,10 +135,12 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--project", type=Path, required=True)
     p.add_argument("--export-private-trace", type=Path)
+    p.add_argument("--export-private-evidence", type=Path)
     args = p.parse_args()
     try:
         result = analyze(args.project.resolve(), Path("scripts/a1_fft_two_pass_vulkan.cpp"),
-                         args.export_private_trace)
+                         args.export_private_trace,
+                         private_evidence_export=args.export_private_evidence)
     except (OSError, ValueError, UnicodeError, subprocess.SubprocessError):
         p.exit(2, "Private original FFT GPU keyed trace generation failed\n")
     print("RAFT_T1_ORIGINAL_SPIRV_KEYED_GPU_TRACE " + json.dumps(result, sort_keys=True))
