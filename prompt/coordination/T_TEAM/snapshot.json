@@ -6340,6 +6340,22 @@
       "_record_path": "../B_TEAM/events/T1/20261106T101340Z-T1-chat-2f6a.json"
     },
     {
+      "id": "20261106T103645Z-T1-chat-storewriters-b4a7",
+      "owner": "T1",
+      "session_id": "20261106T103645Z-T1-chat-storewriters-b4a7",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated original slot0 SPIR-V private direct Function OpStore candidate census: site0 source and site1 butterfly each have 3 float32 OpVectorShuffle writers for their coordinate load; site2 butterfly has 8 float32 writers (7 OpVectorShuffle, 1 OpImageFetch). All sites' lanes pass through float32-to-sint32 bitcasts, and none of the writer counts proves reaching definitions. The distinct original Vulkan audit and 8 source-only tests passed; original Unity numerical parity/device water remains unresolved.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42204760126",
+        "https://github.com/alwansan/raf/commit/ac6c8c4fb5e7cd2651baabe4d4900f3c6ef93440",
+        "https://github.com/alwansan/raf/actions/runs/42198180194",
+        "https://github.com/alwansan/raf/actions/runs/42196835754"
+      ],
+      "at": "2026-11-06T10:45:00Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T103645Z-T1-chat-storewriters-b4a7.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -7712,6 +7728,36 @@
       "_record_path": "../B_TEAM/events/T3/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json"
     },
     {
+      "id": "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Original SHA-verified Particle108 4 VSFS paired shaders: HLSL roundtrip 2/4 mismatch due source→roundtrip VS output types. Of four Vertex same-Location type changes, two vector widths narrow and two widen; exactly two changed VS output locations are consumed by Fragment, where Fragment still matches source Vertex type and differs from roundtrip Vertex. Other two changed locations are not consumed; 15 source-free regression tests and original workflow pass. No authored shader mapping, game edit or Android pixels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42202565721",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1023Z-T3-chat-roundtrip-width-5e0d.json"
+      ],
+      "at": "2026-11-06T10:27:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1023Z-T3-chat-roundtrip-width-5e0d.json"
+    },
+    {
+      "id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "SHA-authentic Particle108 source four pairs and private HLSL regeneration: 18/18 source-free tests pass, source SPIR-V 4/4 VSFS link, roundtrip 2/4 link. Among four same-location Vertex output width changes, BOTH Fragment-consumed changes are vector-width NARROWING (2), BOTH unconsumed changes are widening (2). Roundtrip Fragment continues to expect source Vertex type for the 2 narrowed outputs. No semantic-to-HLSL variable identity, authored shader fixes, modified game assets, or Android pixel proof; RENDER-002 OPEN / NOT_READY.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42203844803",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json"
+      ],
+      "at": "2026-11-06T10:37:41.450Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8422,6 +8468,27 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.json"
     },
     {
+      "id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+      "event_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+      "session_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "INPUT-005",
+      "type": "physical_mouse_release_focus_view_ownership_guard",
+      "timestamp": "2026-11-06T10:41:00Z",
+      "at": "2026-11-06T10:41:00Z",
+      "summary": "T4 prevents ReleaseCapture from revoking pointer capture of a different currently focused Android View by comparing nonzero original requested View identity under preserved release epoch guard. Final source/test commit cb86cdcd; dedicated CI42204448436 SUCCESS with 46/46 Python tests including 6 View-identity tests and original Unity2021 managed ABI compile, Android platform source CI42204354877 success. Intermediate lexical test failures fixed; no Android phone/runtime or local save regression tested. INPUT-005 OPEN, NOT_READY 0/3.",
+      "source_commit": "cb86cdcd8baf462f35c4217758a0a9e19fd56d4e",
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42204448436",
+      "links": [
+        "prompt/coordination/clients/T4/sessions/20261106T1030Z-T4-chat-release-view-ownership-b7m4.md",
+        "prompt/coordination/experiments/T4/20261106T1030Z-T4-chat-release-view-ownership-b7m4.json"
+      ],
+      "device": "NOT_TESTED",
+      "original_data_published": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1030Z-T4-chat-release-view-ownership-b7m4.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -8925,6 +8992,23 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json"
     },
     {
+      "id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
+      "issue_id": "DISPLAY-003",
+      "type": "result",
+      "at": "2026-11-06T10:44:02.955Z",
+      "summary": "Independent original SHA-pinned managed DLL Mono.Cecil metadata probe found GraphicsSettingsBox 1 Screen.SetResolution, 9 Screen.resolutions reads, 3 currentResolution reads, 3 local apply calls, no direct PlayerPrefs/UnityEvent AddListener or DynamicResolution refs, 2 same-type delegate refs; DynamicResolution has 2 ResizeBuffers sites. CI 42204488410 passed 8 Python+4 compiled Cecil selftests+real IL. Callback/persisted Android render-scale binding unproven, no runtime change.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42204488410",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_SETTINGS_IL_2026-11-06.md"
+      ],
+      "limitations": "Source-verified original IL callsite categories only; no Unity import, no game native build/device, no Settings selector implemented. WATER-001 and RENDER-002 remain OPEN.",
+      "next_step": "Inspect bounded original delegate targets and UI callback/persistence chain, preserve original game and delegated T1–T4 work.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -8953,7 +9037,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "c9000d3f3438d573227b3407eba14f28671ac3668ad21696dfdf95f339a6a326",
+  "source_input_sha256": "46ed72082980c035e2f116638a06603f1575554273aa6ccbe8d97e748d7ee930",
   "generation": "T-2026-11-05",
-  "input_sha256": "73a59c68d77c86055b2c30c573c5bb13c80e1bd99a4c8b83120bbfb6f8b8e0ea"
+  "input_sha256": "f5b068c60ca45f110f73460fc635566a86b1b6f48696bcc33eb00fd04d54a5b1"
 }
