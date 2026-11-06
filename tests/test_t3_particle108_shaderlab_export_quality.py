@@ -167,9 +167,9 @@ class RealExportQualitySynthetic(unittest.TestCase):
         _MainTex ("Texture", 2D) = "white" {}
         }'''
         scenarios=(
-            ('Properties {\\n_Color ("Tint", Color) = (1,1,1,1)\\n}',1,0),
-            ('Properties {\\n_Color ("Tint", Float) = 1\\n'
-             '_MainTex ("Texture", 2D) = "white" {}\\n}',0,1),
+            ('Properties {\n_Color ("Tint", Color) = (1,1,1,1)\n}',1,0),
+            ('Properties {\n_Color ("Tint", Float) = 1\n'
+             '_MainTex ("Texture", 2D) = "white" {}\n}',0,1),
         )
         for export,missing,wrong in scenarios:
             with self.subTest(export=export),tempfile.TemporaryDirectory() as d:
