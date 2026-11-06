@@ -67,7 +67,9 @@ static int parse_map_line(const char *line, struct t3_map *m, unsigned int i)
     {
         case 'C':
             r->type = VKD3D_SHADER_DESCRIPTOR_TYPE_CBV;
-            r->flags = 0;
+            /* A CBV is a buffer descriptor. Zero flags make the explicit
+             * register invisible to VKD3D's descriptor-binding matcher. */
+            r->flags = VKD3D_SHADER_BINDING_FLAG_BUFFER;
             break;
         case 'T':
             r->type = VKD3D_SHADER_DESCRIPTOR_TYPE_SRV;
