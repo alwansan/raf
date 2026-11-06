@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T220645Z-T1-chat-site2y-phi-9b61",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "original-zip2-sha15964ea8-fft-slot0-site2y-translated-hlsl-phi-first-incoming-typed-cfg-source-audit-v1",
+  "source_commit": "163f2d171fe9f8cb1e7ad94bede4ba7c4ec0952e",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "ci": {
+    "run": 42302489519,
+    "source_job": 128183512485,
+    "source_controls": 24,
+    "original_private_job": 128183587278,
+    "conclusion": "success"
+  },
+  "direct_original": {
+    "site": 2,
+    "axis": "y",
+    "last_writer_possible": [
+      "float32_constant"
+    ],
+    "value_kind": "float32_load_bitcast_sint32"
+  },
+  "derived_phi": {
+    "status": "verified_translated_site2_y_phi_incoming_cfg",
+    "incoming_count": 2,
+    "kind": "float32_vector",
+    "selected_lane": "other",
+    "paths": [
+      {
+        "immediate": "OpCompositeInsert",
+        "upstream": "OpCompositeInsert→OpConstant",
+        "boundary": "constant",
+        "is_structural_backedge": false,
+        "predecessor": "OpBranch"
+      },
+      {
+        "immediate": "OpCompositeInsert",
+        "upstream": "OpCompositeInsert→OpBitcast→OpIAdd",
+        "boundary": "arithmetic",
+        "is_structural_backedge": true,
+        "predecessor": "OpBranch"
+      }
+    ]
+  },
+  "limitations": [
+    "structural CFG paths only, runtime predicate truth unknown",
+    "glslang SPIR-V not Unity compiled binary",
+    "no actual GPU pixel/coordinate parity nor authored FindKernel",
+    "no original bit values or source exported",
+    "no Android water restoration"
+  ],
+  "next_step": "Use SHA-original and original-derived HLSL keyed GPU capture to discriminate Site2 Y Phi entry vs loop-carried signed bit lane for the same real invocations; prove exact branch path/value through private bounded trace. Do not assert that OpPhi is cause of 64/64 Unity Y collapse or patch game before actual numeric parity; ongoing native42296450023 separate."
+}

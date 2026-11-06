@@ -1,0 +1,17 @@
+{
+  "id": "20261106T220645Z-T1-chat-site2y-phi-9b61",
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T220645Z-T1-chat-site2y-phi-9b61",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T22:11:31.204Z",
+  "type": "result",
+  "status": "completed",
+  "summary": "Authentic original FFT slot0 vs derived HLSL50 real private CPU CI42302489519 success 24/24 source controls. Derived butterfly site2 Y float32-vector Phi has 2 validated CFG predecessors: direct OpCompositeInsert→OpConstant and loop-carried OpCompositeInsert→OpBitcast→OpIAdd signed32 bits. Original possible last writer float32_constant. Runtime Phi selection/FFT numeric parity/Adreno water unverified.",
+  "proof_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42302489519",
+    "https://github.com/alwansan/raf/commit/163f2d171fe9f8cb1e7ad94bede4ba7c4ec0952e"
+  ],
+  "vote": "لا يحتاج",
+  "no_proprietary_shader_or_pixel_export": true
+}

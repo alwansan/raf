@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T220645Z-T1-chat-site2y-phi-9b61",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b207c26a4f52f6dfe73f831591e092e8cfe3f31f",
-  "updated_at": "2026-11-06T22:06:45.955Z",
+  "updated_at": "2026-11-06T22:11:31.204Z",
   "resumed_from_sessions": [
     "20261106T215856Z-T1-chat-site2y-hlsl-5e8c",
     "20261106T214945Z-T1-chat-site2y-cfg-73af"
@@ -26,5 +26,48 @@
   ],
   "collision_check": "Previous T1 paired source-vs-HLSL workflow 42301633248 COMPLETE SUCCESS 12/12, no concurrent T1 jobs; native42296450023 remains in_progress separate Unity mutex. Reuse same private CPU staged source in existing T1 workflow, no new Unity, ZIP2 commit, or production shader edits.",
   "trial_vote": "لا يحتاج",
-  "next_step": "Implement CFG Phi predecessor shape/typed source classifier, adversarial source tests, integrate existing private roundtrip in same small CPU workflow; report observed source categories without claiming numeric cause."
+  "next_step": "Use SHA-original and original-derived HLSL keyed GPU capture to discriminate Site2 Y Phi entry vs loop-carried signed bit lane for the same real invocations; prove exact branch path/value through private bounded trace. Do not assert that OpPhi is cause of 64/64 Unity Y collapse or patch game before actual numeric parity; ongoing native42296450023 separate.",
+  "result": {
+    "commit": "163f2d171fe9f8cb1e7ad94bede4ba7c4ec0952e",
+    "ci_run_id": 42302489519,
+    "ci_url": "https://github.com/alwansan/raf/actions/runs/42302489519",
+    "ci_source_job_id": 128183512485,
+    "ci_private_original_job_id": 128183587278,
+    "ci_source_tests_passed": 24,
+    "ci_private_original_conclusion": "success",
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_owner_bytes": 115978112,
+    "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "direct_original_site2_y_last_writer_possible": [
+      "float32_constant"
+    ],
+    "derived_site2_y_phi": {
+      "status": "verified_translated_site2_y_phi_incoming_cfg",
+      "incoming_count": 2,
+      "kind": "float32_vector",
+      "selected_lane": "other",
+      "paths": [
+        {
+          "immediate": "OpCompositeInsert",
+          "upstream": "OpCompositeInsert→OpConstant",
+          "boundary": "constant",
+          "is_structural_backedge": false,
+          "predecessor": "OpBranch"
+        },
+        {
+          "immediate": "OpCompositeInsert",
+          "upstream": "OpCompositeInsert→OpBitcast→OpIAdd",
+          "boundary": "arithmetic",
+          "is_structural_backedge": true,
+          "predecessor": "OpBranch"
+        }
+      ]
+    },
+    "typed_bitcast_from_coordinate_still_same": true,
+    "true_branch_selection_proven": false,
+    "original_vs_derived_numeric_parity_proven": false,
+    "executed_unity_gpu": false,
+    "authored_unity_kernel_identity_proven": false,
+    "android_water_proven": false
+  }
 }
