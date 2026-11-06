@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1316Z-T5-chat-nested-zip-c53a",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1316Z-T5-chat-nested-zip-c53a",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T13:18:48.825Z",
+  "summary": "REAL original signed native checkpoint from owner-tested CI42058825739: outer APK and OBB are STORED; direct bounded HTTP206 nested ZIP inspection confirms actual APK 31 members incl 6 ARM64 .so, actual OBB 39 members, all 70 local ZIP headers agree with nested central entries, AndroidManifest binary XML, dex and libil2cpp/libunity ELF64 AArch64 magic. Live source CI42224062207 PASS 14/14 synthetic, 25350 ranged bytes/165 requests, no 3GB download. Full inner SHA/signature/Unity OBB GUID/phone unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42224062207",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_NESTED_ZIP_2026-11-06.md",
+    "https://github.com/alwansan/raf/actions/runs/42222494746"
+  ],
+  "limits": "Original signed artifacts structure-only; no real app signature, file-wide content digest or new Android GPU/FFT/render acceptance.",
+  "next_step": "Independent full signed APK SHA/aapt/apksigner with resource budget, later OBB SHA/GUID; coordinate scheduled T5 artifact provenance."
+}
