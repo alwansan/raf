@@ -6,9 +6,9 @@
   "session_id": "20261106T1752Z-T5-chat-pid-leading-unknown-9a4d",
   "issue_id": "PERF-007",
   "track": "independent genuine CL regression review of T5 scheduled PID lifecycle guard",
-  "status": "active",
+  "status": "completed_readonly_handoff",
   "base_sha": "58a52de5126ee4e84e018d449a4ceefb6bc617ea",
-  "updated_at": "2026-11-06T17:52:04Z",
+  "updated_at": "2026-11-06T17:54:21.962Z",
   "resumed_from_sessions": [
     "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
     "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
@@ -29,5 +29,31 @@
     "https://github.com/alwansan/raf/actions/runs/42263013004"
   ],
   "coordination": "Scheduled session owns scripts/t5_cl_pid_epoch_audit.py and tests/test_t5_cl_pid_epoch_audit.py, currently waiting_ci; do not modify them, their session, their work or original T5 workflow while scope active. Publish read-only actual CL differential finding and safe fix suggestion in separate PERF discussion.",
-  "next_step": "Record actual pinned 71/119 input lengths, leading unknown counts and observed 2/7 epoch error without revealing private PID; ask scheduled T5 to add negative fixture and validate actual pinned CI; keep trial vote NO and no Unity build."
+  "next_step": "Own read-only scope closed and released. T5 scheduled lifecycle still waiting_ci: fix leading prefix without weakening stop/restart 3-epoch negative controls, verify 190 true CL rows using original existing source-pinned CI; trial vote T5=لا يحتاج unchanged.",
+  "result": {
+    "original_real_cl_rows": [
+      71,
+      119
+    ],
+    "original_verified_process_epoch_counts": [
+      1,
+      1
+    ],
+    "new_scheduled_source_epoch_counts": [
+      2,
+      7
+    ],
+    "leading_unverified_startup_rows": [
+      1,
+      6
+    ],
+    "surface_presentation_fresh_samples_before_bad_split": [
+      57,
+      2
+    ],
+    "scheduled_source_owner_not_modified": true,
+    "discussion": "prompt/coordination/discussions/PERF-007/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d-to-scheduled.md",
+    "ci_validation_on_scheduled_change": "awaiting scheduled owner",
+    "game_performance_impact": "not measured"
+  }
 }
