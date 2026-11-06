@@ -20,5 +20,6 @@
   "game_asset_files_modified": false,
   "private_source_code_or_guid_or_resource_names_published": false,
   "checkpoint": "prompt/coordination/clients/T3/sessions/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.md",
-  "next_step": "Distinguish original RDEF absent vs multiple, or parse source declaration tokens; no guessed shader resource registers, 108-slot source Shader48 remains Dummy postvendor, RENDER-002 OPEN."
+  "next_step": "Distinguish original RDEF absent vs multiple, or parse source declaration tokens; no guessed shader resource registers, 108-slot source Shader48 remains Dummy postvendor, RENDER-002 OPEN.",
+  "event_id": "T3-20261106T1625Z-particle108-nativeRDEF-7d2c"
 }
