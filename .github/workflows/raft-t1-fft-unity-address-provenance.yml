@@ -97,6 +97,7 @@ jobs:
           python3 -m scripts.t1_fft_address_provenance_gate \
             --xml t1-address-provenance-test-results/editmode-results.xml \
             --metrics t1-address-provenance-unity/t1-address-provenance-counts.txt \
+            --signatures t1-address-provenance-unity/t1-address-provenance-zero-signatures.txt \
             --exit-code "$rc"
           echo 'RAFT_T1_ADDRESS_PROVENANCE_BACKEND synthetic_gpu_test_complete=true original_raft_compared=false adreno_water_proven=false'
       - name: Erase synthetic Unity project, NUnit XML and captured private logs
