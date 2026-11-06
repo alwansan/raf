@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0518Z-T2-scheduled-reflection-id-guard-6c91",
+  "origin": "scheduled",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "79191296a7396fa1e8c2ebb62218f202f364f943",
+  "resumed_from_sessions": [
+    "20261106T0420Z-T2-scheduled-opdecorate-91af",
+    "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_private_descriptor_set_remap.py",
+    "tests/test_t2_foam_private_descriptor_set_remap.py"
+  ],
+  "experiment_key": "foam-selective-remap-reflection-identity-coordinate-guard-sourcefree-v1",
+  "resource_key": null,
+  "hypothesis": "binding-only identity comparison can hide a reflection ID swap when distinct descriptor sets share binding numbers; preserve full coordinate identity",
+  "source_pin": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "shared_ci": "T1 run 42167120994 pending; no duplicate CI",
+  "updated_at": "2026-11-06T05:18:00Z",
+  "limitations": "source-free guard only; CB0 extent mismatch remains; no Unity/device claim"
+}
