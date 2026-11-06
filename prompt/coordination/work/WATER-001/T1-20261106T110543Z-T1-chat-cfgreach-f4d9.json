@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "FFT butterfly flow-sensitive SPIR-V reaching direct stores",
   "approach": "Build independent bounded per-function CFG and store-before-load dataflow for source-authenticated private slot0 FFT SPIR-V. Fail closed on aliases and uninitialized paths; do not rewrite shaders or leak instruction IDs.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a4d492631ed515d31c7759626c5e62ec2f3b5fc2",
   "intended_files": [
     "scripts/t1_fft_spirv_reaching_stores.py",
@@ -27,8 +27,11 @@
     "T1-20261106T103645Z-T1-chat-storewriters-b4a7"
   ],
   "hypothesis": "Among 3/8 static direct Function-local OpStore candidates at butterfly fetches, CFG-sensitive reaching-def sets can narrow which writes reach the OpLoad. Unmodeled alias/initialization/indirect CFG edges must block proof.",
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-06T11:05:43.340Z",
-  "next_step": "Implement and locally test bounded reach-def analysis and synthetic negative controls, then use existing isolated original slot0 Vulkan workflow for private SHA-authenticated evidence. Preserve other agents' files."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42208261641",
+    "https://github.com/alwansan/raf/actions/runs/42208932160"
+  ],
+  "result": "Source-authentic original FFT slot0 SPIR-V CFG may-reach test success: 13/13 then 16/16 synthetic controls, all original Vulkan steps passed; direct candidates narrowed to 1 per lane from 3/3/8 static, but alias_store remains on all lanes, so unique total reaching definition and integer origin NOT PROVEN. Scope completed; WATER-001 open.",
+  "updated_at": "2026-11-06T11:19:13.328Z",
+  "next_step": "New independent T1 scope to examine alias_store pointer chain categories (OpCopyObject, OpAccessChain, OpPhi/Select) before deciding whether exact aliases can be promoted into may-reach set; no source/Android rewrite yet."
 }
