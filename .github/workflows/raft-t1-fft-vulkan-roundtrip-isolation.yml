@@ -48,6 +48,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_hlsl_phi_input_origins.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_hlsl_nested_phi_lineage.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_candidate_keyed_trace_audit.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_original_global_id_inject.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v
           # disjoint-synthetic-bitcarrier-fixture-20261106: verify checked-out corrected SPIR-V result IDs
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
@@ -90,6 +91,20 @@ jobs:
           python3 -m scripts.t1_fft_pass0_load_inventory --project "$TMPDIR/candidates"
           # Verify exact original SPIR-V keyed ImageFetch/dispatch/binding prerequisites, no instrumentation yet.
           python3 -m scripts.t1_fft_original_keyed_preflight "$TMPDIR/candidates/_private_vulkan/slot0.spv"
+          # ORIGINAL-GID-SMOKE-20261106: temporary private original SPIR-V Input injection; no original fetch tracing.
+          spirv-dis --raw-id "$TMPDIR/candidates/_private_vulkan/slot0.spv" -o "$TMPDIR/original-gid-before.spvasm"
+          python3 -m scripts.t1_fft_original_global_id_inject \
+            "$TMPDIR/original-gid-before.spvasm" "$TMPDIR/original-gid-injected.spvasm"
+          spirv-as --target-env vulkan1.1 "$TMPDIR/original-gid-injected.spvasm" \
+            -o "$TMPDIR/original-gid-injected.spv" > "$TMPDIR/gid-assemble.log" 2>&1
+          spirv-val --target-env vulkan1.1 "$TMPDIR/original-gid-injected.spv" \
+            > "$TMPDIR/gid-validate.log" 2>&1
+          # This is only a same-Vulkan original-output invariance smoke.
+          cp "$TMPDIR/candidates/_private_vulkan/slot0.spv" "$TMPDIR/original-unmodified-spv"
+          cp "$TMPDIR/original-gid-injected.spv" "$TMPDIR/candidates/_private_vulkan/slot0.spv"
+          python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
+          cp "$TMPDIR/original-unmodified-spv" "$TMPDIR/candidates/_private_vulkan/slot0.spv"
+          echo "RAFT_T1_ORIGINAL_GID_SMOKE spv_validated=true unused_gid_load_executed=true pass_output_invariance=true original_gpu_keyed_capture=false"
           echo "RAFT_T1_COORDINATE_PROFILE original_slot0 typed_bitcasts=true"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           python3 -m scripts.t1_fft_local_store_writers "$TMPDIR/candidates/_private_vulkan/slot0.spv"
