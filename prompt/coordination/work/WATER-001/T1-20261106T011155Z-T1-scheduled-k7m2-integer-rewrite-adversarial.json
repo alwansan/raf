@@ -1,0 +1,22 @@
+{
+  "owner": "T1",
+  "origin": "scheduled",
+  "session_id": "20261106T011155Z-T1-scheduled-k7m2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "eba229a0374db0176099336238d0bae702828d6d",
+  "resumed_from_sessions": [
+    "20261106T005610Z-T1-chat-6d2b91",
+    "20261106T001347Z-T1-scheduled-bc47"
+  ],
+  "intended_files": [
+    "tests/test_t1_fft_source_integer_coordinates_adversarial.py",
+    "prompt/coordination/clients/T1/sessions/20261106T011155Z-T1-scheduled-k7m2.md",
+    "prompt/coordination/work/WATER-001/T1-20261106T011155Z-T1-scheduled-k7m2-integer-rewrite-adversarial.json"
+  ],
+  "experiment_key": "fft-slot0-private-integer-coordinate-rewrite-adversarial-guards-v1",
+  "resource_key": null,
+  "shared_ci": "42141540903 in_progress; no duplicate",
+  "hypothesis": "Existing private source-coordinate rewrite must fail closed on ambiguous source fetch or unresolved lane and preserve non-source image fetches.",
+  "updated_at": "2026-11-06T01:11:55Z"
+}
