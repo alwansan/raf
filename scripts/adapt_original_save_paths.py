@@ -47,6 +47,24 @@ def adapt(text, expected=ORIGINAL, inventory=EXPECTED):
     return result
 
 
+def _original_backup_identity(backup):
+    # Directory path membership is not ownership: another process can move
+    # our staged backup away and replace its pathname with unrelated files.
+    if backup.is_symlink() or not backup.is_dir():
+        return None
+    info = backup.stat()
+    return (info.st_dev, info.st_ino)
+
+
+def _remove_owned_original_backup(backup, expected_identity):
+    # Refuse cleanup if another writer replaced the directory after we
+    # published it. This only protects the observed non-atomic interval:
+    # cross-process locking is still required for a full race-free install.
+    if _original_backup_identity(backup) != expected_identity:
+        raise ValueError('Original save backup root replaced; foreign backup retained')
+    shutil.rmtree(backup)
+
+
 def apply(project, backup, write=False):
     # Both source and backup roots must be physical paths, including parents.
     # Assets.is_symlink() alone misses a symlinked project (and its descendants);
@@ -105,6 +123,9 @@ def apply(project, backup, write=False):
                 raise ValueError('Original backup bytes changed during staging')
             if backup.is_symlink() or backup.exists():
                 raise ValueError('Original backup appeared during staging')
+            # Capture identity before promotion: an interleaved actor may swap
+            # the published pathname even before rename() returns to us.
+            owned_backup_identity = _original_backup_identity(stage)
             stage.rename(backup)
         finally:
             if stage.exists():
@@ -113,6 +134,10 @@ def apply(project, backup, write=False):
         # original if another Unity/source stage writes after the promotion.
         # Do not overwrite that writer's C# or GUID metadata, and do not run
         # rollback: there has been NO mutation by us at this point.
+        # Never install adapted source when its authenticated backup has
+        # vanished or been replaced, even if source and GUID bytes are intact.
+        if _original_backup_identity(backup) != owned_backup_identity:
+            raise ValueError('Original save backup root replaced after staging')
         still_original = (
             not path.is_symlink() and not meta.is_symlink()
             and path.is_file() and meta.is_file()
@@ -123,9 +148,7 @@ def apply(project, backup, write=False):
             # This backup was created exclusively by our stage.rename above.
             # Cleanup of the owned backup keeps retry possible. Never follow
             # a redirected backup directory or remove an earlier user's copy.
-            if backup.is_symlink() or not backup.is_dir():
-                raise ValueError('Original save backup redirected; retained')
-            shutil.rmtree(backup)
+            _remove_owned_original_backup(backup, owned_backup_identity)
             raise ValueError('Original SaveAndLoad source or meta changed after backup staging')
         encoded = result.encode('utf-8')
         if raw.startswith(b'\xef\xbb\xbf'):
@@ -143,7 +166,7 @@ def apply(project, backup, write=False):
                 rolled_back = path.read_bytes() == raw and meta.read_bytes() == metadata
             finally:
                 if rolled_back:
-                    shutil.rmtree(backup)
+                    _remove_owned_original_backup(backup, owned_backup_identity)
             raise
     return dict(applied=write, changed=changed, pathExpressions=sum(EXPECTED.values()),
                 originalMetaUnchanged=meta.read_bytes() == metadata,
