@@ -4,7 +4,7 @@
   "session_id": "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
   "origin": "chat",
   "issue_id": "PERF-007",
-  "status": "waiting_ci",
+  "status": "completed",
   "experiment_key": "T5-PERF007-persistent-Unity-repeated-error-dictionary-composite-key-nonalloc-2000x4096chars-net8-CI-v1",
   "hypothesis": "Composite pair key for existing error string references removes duplicate concatenation allocations per repeated long Unity stack, without weakening first stack, typed boundary, capacity overflow, per-session reset or persisted summary.",
   "source_commit": "4e909cac516b021b23e06e55e2a1d72cc3777e67",
@@ -27,18 +27,31 @@
   "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42279780260",
-    "https://github.com/alwansan/raf/actions/runs/42279975562"
+    "https://github.com/alwansan/raf/actions/runs/42279975562",
+    "https://github.com/alwansan/raf/actions/runs/42279975538",
+    "https://github.com/alwansan/raf/actions/runs/42279975514"
   ],
   "budget": "existing CPU-only dotnet CI no Unity license, no original assets",
   "observed_result": {
-    "red_commit": "a8dc28508728f802e6e35b89cb08b4042cc8b56f",
-    "red_run": 42279780260,
-    "red_reason": "Persistent logging check failed: 280 at new repeated stack allocation assertion"
+    "red_ci": 42279780260,
+    "red_original_allocation_assertion_failed": true,
+    "red_check_number": 280,
+    "green_ci": 42279975562,
+    "green_checks": 314,
+    "synthetic_repeat_count": 2048,
+    "synthetic_stack_chars": 4096,
+    "green_allocated_bytes_bound": "<131072",
+    "original_full_stack_and_repeated_count_preserved": true,
+    "android_platform_ci": 42279975538,
+    "android_managed_build_errors": 0,
+    "offline_local_ci": 42279975514,
+    "game_runtime_verified": false,
+    "device_fps_verified": false
   },
   "limitations": [
     "actual logcat volume does not equal number of managed First calls",
     "no Android FPS/CPU/GC measured; must not claim perf gain on phone",
     "original water pass and FFT invalid kernel root cause unchanged"
   ],
-  "next_step": "Check green CI exact source, finalize scope."
+  "next_step": "Completed and released source-only PERF optimization; actual Android GC/FPS gain requires identical phone A/B after substantive new candidate, water shader and FFT remain open."
 }
