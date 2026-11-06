@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a",
+  "issue_id": "COORD-001",
+  "status": "active",
+  "base_sha": "d8d4b3f3132b8eb0bb2015b78579be90d9d87a7b",
+  "updated_at": "2026-11-06T12:34:19.874Z",
+  "resumed_from_sessions": [
+    "20261106T1221Z-T5-chat-resolution-param-5df2.md",
+    "20261106T1130Z-T5-chat-applycallers-c6e1.md"
+  ],
+  "experiment_key": "T5-exact-T1-event-session-id-explicit-id-preserved-schema-CI42218319821-v1",
+  "resource_key": "single T1 20261106T1215Z event JSON record; no runtime source",
+  "intended_files": [
+    "prompt/coordination/B_TEAM/events/T1/20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2.json",
+    "prompt/coordination/work/COORD-001/20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md",
+    "prompt/coordination/experiments/T5/20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.json",
+    ".github/workflows/raft-t5-ledger-refresh.yml"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42217811393",
+    "https://github.com/alwansan/raf/actions/runs/42218319821"
+  ],
+  "root_cause": "T1 event lacks id/event_id, has exact unique session_id. Strict read_records rejects missing explicit identity. This is a document schema fault, not water fix.",
+  "fix_scope": "Add only explicit id matching unchanged session_id to T1 event preserving all other keys, using CAS blob SHA. Do not infer in parser or overwrite T1 work/source. Independently rerun full canonical index.",
+  "no_overlap": "Last checked no T1 Actions active. T2 CI runs separately; no T2 paths modified.",
+  "next_step": "Surgical T1 schema correction then source-only canonical ledger CI."
+}
