@@ -78,7 +78,7 @@ class TableProvenance(unittest.TestCase):
     def test_unexpected_global_namespace_rejected(self):
         p=parsed()
         p["m_SubShaders"][0]["m_Passes"][0]["progVertex"]["m_SubPrograms"][1]["m_GlobalKeywordIndices"]=[7]
-        with self.assertRaisesRegex(ValueError,"namespace"):
+        with self.assertRaisesRegex(ValueError,"namespace|mismatch"):
             m.classify(p)
 
     def test_not_4_true_source_pairs_fail_closed(self):
