@@ -155,6 +155,8 @@ internal static class Program
         int methods = 0, instructions = 0, strings = 0, typedSetters = 0;
         var nearSetterCategories = new SortedDictionary<string, int>(StringComparer.Ordinal);
         var exactlyProvenSetterFamilies = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var exactlyProvenSecondValueOrigins = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var exactlyProvenMaterialReceiverOrigins = new SortedDictionary<string, int>(StringComparer.Ordinal);
 
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
@@ -211,6 +213,12 @@ internal static class Program
                         summary.ExactFirstFormalProvenNames.Add(row.Hash);
                         exactlyProvenSetterFamilies[exact.Value.SetterFamily] =
                             exactlyProvenSetterFamilies.GetValueOrDefault(exact.Value.SetterFamily) + 1;
+                        // Only attached to the same authenticated literal→setter
+                        // first-formal link, never arbitrary adjacent calls.
+                        exactlyProvenSecondValueOrigins[exact.Value.SecondVectorValueOrigin] =
+                            exactlyProvenSecondValueOrigins.GetValueOrDefault(exact.Value.SecondVectorValueOrigin) + 1;
+                        exactlyProvenMaterialReceiverOrigins[exact.Value.MaterialReceiverOrigin] =
+                            exactlyProvenMaterialReceiverOrigins.GetValueOrDefault(exact.Value.MaterialReceiverOrigin) + 1;
                         if (exact.Value.Kind == "source_literal_as_string")
                             summary.ExactSourceStringFirstFormalCallCount++;
                         else if (exact.Value.Kind == "source_literal_via_PropertyToID")
@@ -264,6 +272,12 @@ internal static class Program
             original_source_name_exact_typed_PropertyToID_first_formal_calls_by_role =
                 Roles.ToDictionary(x=>x,x=>groups[x].ExactSourcePropertyIdFirstFormalCallCount),
             original_source_name_exact_first_formal_typed_setter_API_categories = exactlyProvenSetterFamilies,
+            original_source_name_exact_first_formal_second_value_IL_origin_buckets =
+                exactlyProvenSecondValueOrigins,
+            original_source_name_exact_first_formal_Material_receiver_IL_origin_buckets =
+                exactlyProvenMaterialReceiverOrigins,
+            exact_original_Vector4_value_dataflow_to_CB0_verified = false,
+            original_Material_receiver_Shader_is_Foam_verified = false,
             literal_adjacency_does_not_prove_operand_or_runtime_upload = true,
             original_Ldstr_is_exact_setter_argument_proven = false,
             runtime_Unity_CB0_value_upload_verified = false,
