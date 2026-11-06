@@ -100,6 +100,8 @@ class OriginalParticle108RoundtripTests(unittest.TestCase):
         rtv=stage(outputs=[(0,"vec3")])
         row=self.check(srcv,srcf,rtv,srcf)
         self.assertEqual(row["vertex_changed_output_reflection_type_width_narrowing"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_width_narrowing"],1)
+        self.assertEqual(row["vertex_changed_output_unconsumed_width_narrowing"],0)
         self.assertEqual(row["vertex_changed_output_locations_consumed_by_fragment"],1)
         self.assertEqual(row["vertex_changed_output_consumed_fragment_type_equal_source"],1)
         self.assertEqual(row["roundtrip_fragment_same_location_type_mismatch_records"],1)
@@ -110,6 +112,8 @@ class OriginalParticle108RoundtripTests(unittest.TestCase):
         rtv=stage(outputs=[(0,"vec2"),(3,"vec4")])
         row=self.check(srcv,srcf,rtv,srcf)
         self.assertEqual(row["vertex_changed_output_reflection_type_width_widening"],1)
+        self.assertEqual(row["vertex_changed_output_unconsumed_width_widening"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_width_widening"],0)
         self.assertEqual(row["vertex_changed_output_locations_not_consumed_by_fragment"],1)
         self.assertEqual(row["roundtrip_pairs_valid"],1)
 
@@ -119,6 +123,7 @@ class OriginalParticle108RoundtripTests(unittest.TestCase):
         rtv=stage(outputs=[(0,"uvec3")])
         row=self.check(srcv,srcf,rtv,srcf)
         self.assertEqual(row["vertex_changed_output_reflection_type_same_width_base_kind_changed"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_same_width_base_kind_changed"],1)
 
     def test_vertex_output_unsupported_numeric_type_is_counted_not_assumed(self):
         srcv=stage(outputs=[(0,"dvec4")])
@@ -126,7 +131,41 @@ class OriginalParticle108RoundtripTests(unittest.TestCase):
         rtv=stage(outputs=[(0,"vec4")])
         row=self.check(srcv,srcf,rtv,srcf)
         self.assertEqual(row["vertex_changed_output_reflection_type_unsupported"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_unsupported"],1)
         self.assertEqual(row["vertex_changed_output_reflection_type_width_narrowing"],0)
+
+    def test_consumed_vertex_output_width_widening_is_separately_counted(self):
+        sv=stage(outputs=[(0,"vec2")])
+        sf=stage(inputs=[(0,"vec2")])
+        rv=stage(outputs=[(0,"vec4")])
+        row=self.check(sv,sf,rv,sf)
+        self.assertEqual(row["vertex_changed_output_consumed_width_widening"],1)
+        self.assertEqual(row["vertex_changed_output_unconsumed_width_widening"],0)
+        self.assertEqual(row["roundtrip_fragment_same_location_type_mismatch_records"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_fragment_type_equal_source"],1)
+
+    def test_unconsumed_vertex_output_width_narrowing_does_not_break_link(self):
+        sv=stage(outputs=[(0,"vec2"),(3,"vec4")])
+        sf=stage(inputs=[(0,"vec2")])
+        rv=stage(outputs=[(0,"vec2"),(3,"vec2")])
+        row=self.check(sv,sf,rv,sf)
+        self.assertEqual(row["vertex_changed_output_unconsumed_width_narrowing"],1)
+        self.assertEqual(row["vertex_changed_output_consumed_width_narrowing"],0)
+        self.assertEqual(row["roundtrip_pairs_valid"],1)
+
+    def test_mixed_consumed_and_unconsumed_cross_tab_conserves_counts(self):
+        sv=stage(outputs=[(0,"vec4"),(3,"vec2")])
+        sf=stage(inputs=[(0,"vec4")])
+        rv=stage(outputs=[(0,"vec3"),(3,"vec4")])
+        row=self.check(sv,sf,rv,sf)
+        self.assertEqual(row["vertex_same_location_type_changes"],2)
+        self.assertEqual(row["vertex_changed_output_consumed_width_narrowing"],1)
+        self.assertEqual(row["vertex_changed_output_unconsumed_width_widening"],1)
+        self.assertEqual(sum(row["vertex_changed_output_"+suffix] for suffix in (
+            "consumed_width_narrowing","consumed_width_widening",
+            "consumed_same_width_base_kind_changed","consumed_unsupported",
+            "unconsumed_width_narrowing","unconsumed_width_widening",
+            "unconsumed_same_width_base_kind_changed","unconsumed_unsupported")),2)
 
     def test_private_identifiers_not_leaked_in_counts(self):
         sv=stage(outputs=[(0,"PRIVATE_SHADER_TYPE")])
