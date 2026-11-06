@@ -22,6 +22,16 @@ ALL_VALUE_INPUTS = {
     "OpCopyObject", "OpSelect",
 }
 LEAF_OPS = {"OpLoad", "OpConstant", "OpConstantNull", "OpFunctionCall", "OpUndef"}
+# Only fixed syntax-level opcode families may be printed on a private stop.
+# Do not emit arbitrary instruction names, SSA IDs or literal operands.
+SAFE_STOP_OPS = {
+    "OpPhi", "OpSelect", "OpIAdd", "OpISub", "OpIMul", "OpUDiv",
+    "OpSDiv", "OpUMod", "OpSMod", "OpSRem", "OpFAdd", "OpFSub",
+    "OpFMul", "OpFDiv", "OpCompositeExtract", "OpCompositeInsert",
+    "OpVectorShuffle", "OpConvertFToS", "OpConvertFToU",
+    "OpConvertSToF", "OpConvertUToF", "OpSConvert", "OpUConvert",
+    "OpBitcast", "OpCopyObject", "OpFunctionCall", "OpImageFetch",
+}
 
 
 def numeric_kind(type_id, types):
@@ -116,22 +126,34 @@ def lane_input(op, args, lane, width, values, types):
 def coordinate_lane(root, lane, values, types, max_depth):
     bitcasts = []
     boundary = "depth_limit"
+    stop = None
     value = root
     for _ in range(max_depth + 1):
         width = lane_count(value, values, types)
         if not 0 <= lane < width:
             boundary = "unresolved"
+            stop = {"stop_opcode": "other_opcode", "stop_numeric_kind": "unresolved"}
             break
-        op, _, args = values[value]
+        op, type_id, args = values.get(value, ("unresolved", None, []))
         if op == "OpBitcast":
             bitcasts.append(bitcast_kind(value, values, types))
         following = lane_input(op, args, lane, width, values, types)
         if following is None:
             boundary = {"OpLoad": "load", "OpConstant": "constant",
                         "OpConstantNull": "constant", "OpUndef": "undefined"}.get(op, "unresolved")
+            if boundary == "unresolved":
+                kind = numeric_kind(type_id, types)
+                stop = {
+                    "stop_opcode": op if op in SAFE_STOP_OPS else "other_opcode",
+                    "stop_numeric_kind": kind if kind in ("float32", "sint32", "uint32")
+                                         else "unresolved",
+                }
             break
         value, lane = following
-    return {"typed_bitcasts": bitcasts, "boundary": boundary}
+    report = {"typed_bitcasts": bitcasts, "boundary": boundary}
+    if stop is not None:
+        report.update(stop)
+    return report
 
 
 def analyze(disassembly, *, coordinates=False, coordinate_depth=4):
