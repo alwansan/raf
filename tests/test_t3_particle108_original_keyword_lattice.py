@@ -103,7 +103,7 @@ class OriginalKeywordLatticeTests(unittest.TestCase):
         p=pass_record([meta([417]),meta([417,422]),meta([417,428]),meta([417,422,428])])
         report=k.classify(p)
         out=json.dumps(report)
-        for forbidden in ("417","422","428","m_KeywordIndices","Shader48_original_secret","guid"):
+        for forbidden in ("417","422","428","Shader48_original_secret","private-original-index-417"):
             self.assertNotIn(forbidden,out)
         self.assertFalse(report["source_keyword_names_indices_bytes_guids_or_paths_published"])
 
