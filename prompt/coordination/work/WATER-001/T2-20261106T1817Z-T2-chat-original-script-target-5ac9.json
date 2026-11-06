@@ -5,7 +5,7 @@
   "session_id": "20261106T1817Z-T2-chat-original-script-target-5ac9",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "4a544ef294c11dab99414e1e12eb39f1d1852bd6",
   "experiment_key": "ZIP2-15964-40original-scenes-55328-opaque-m_Script-mFileID-owner-manifest-SHA-typed-MonoScript-join-v1",
   "resource_key": "ZIP2-original-scenes-and-candidate-script-owner-only-readonly",
@@ -28,6 +28,9 @@
   "trial_round": "trial-20261106-r1",
   "vote": "لا يحتاج",
   "new_vs_prior": "Different hypothesis: prior 41-byte SHA run proved header integrity and all target owners other; this run resolves actual SHA-original target file identity and MonoScript typed object IDs, which prior run did not stage.",
-  "updated_at": "2026-11-06T18:16:55.796Z",
-  "next_step": "Implement strict synthetic target manifest resolution and typed verified Source MonoScript target mapping, then isolated original CI. Do not rerun if equivalent ongoing; trial NO, no Android build."
+  "updated_at": "2026-11-06T18:20:46.895Z",
+  "next_step": "Original typed MonoScript source join CI42269806221 in progress on 91e6df3c. Synthetic fixture/tests, original 40 scene SHA, manifest private candidate owner/typed SHA all must pass; count-only result, no runtime/GUID assertions. Trial r1 T2 NO unchanged.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42269806221"
+  ]
 }
