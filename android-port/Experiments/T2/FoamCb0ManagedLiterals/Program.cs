@@ -380,7 +380,13 @@ internal static class Cb0ExactFirstFormal
         string MaterialReceiverOrigin, string UniqueVector4ConstructorStatus,
         int UniqueVector4ConstructorParameterCount,
         int UniqueVector4ConstructorFloatFormalCount,
-        IReadOnlyDictionary<string, int> UniqueVector4ConstructorInputOriginCounts);
+        IReadOnlyDictionary<string, int> UniqueVector4ConstructorInputOriginCounts,
+        int UniqueVector4ConstructorExactInputFieldCount,
+        int UniqueVector4ConstructorInputSystemSingleFieldCount,
+        int UniqueVector4ConstructorDistinctInputFieldCount,
+        int UniqueVector4ConstructorDistinctDeclaringTypeCount,
+        IReadOnlyList<string> PrivateCtorInputFieldIds,
+        string StrictMaterialReceiverImmediatePrefixOrigin);
     private enum Tag {
         Unknown, SourceString, SourcePropertyId, MethodArgument, NumericLiteral,
         InstanceFieldLoad, StaticFieldLoad, CallReturn, ConstructedInstance,
@@ -401,6 +407,59 @@ internal static class Cb0ExactFirstFormal
     };
     private const int MaxSteps = 24;
     private const int MaxStack = 64;
+    // Field handles stay in the original-source runner; never serialize them.
+    private readonly record struct TraceValue(Tag Kind, FieldReference? Field = null)
+    {
+        public static implicit operator TraceValue(Tag tag) => new(tag);
+    }
+    private static string StrictReceiverPrefix(
+        IList<Instruction> items, int literalIndex, int preLiteralPops,
+        MethodDefinition? context)
+    {
+        if (preLiteralPops != 1 || literalIndex < 1 || literalIndex >= items.Count)
+            return "pre_literal_unproven";
+        var atLiteral = items[literalIndex];
+        // A branch or an exception-handler entry could skip the previous
+        // instruction, so an adjacent field load would not prove stack-top.
+        foreach (var instruction in items)
+        {
+            if (ReferenceEquals(instruction.Operand, atLiteral) ||
+                instruction.Operand is Instruction[] targets &&
+                targets.Any(t => ReferenceEquals(t, atLiteral)))
+                return "pre_literal_alternate_entry";
+        }
+        if (context?.HasBody == true &&
+            context.Body.ExceptionHandlers.Any(x =>
+                ReferenceEquals(x.TryStart, atLiteral) ||
+                ReferenceEquals(x.HandlerStart, atLiteral) ||
+                ReferenceEquals(x.FilterStart, atLiteral)))
+            return "pre_literal_alternate_entry";
+        var preceding=items[literalIndex-1];
+        if (preceding.OpCode.Code == Code.Ldfld &&
+            preceding.Operand is FieldReference field &&
+            field.FieldType.FullName == "UnityEngine.Material")
+            return "direct_adjacent_typed_Material_field_load";
+        if (preceding.OpCode.Code == Code.Ldsfld &&
+            preceding.Operand is FieldReference staticField &&
+            staticField.FieldType.FullName == "UnityEngine.Material")
+            return "direct_adjacent_typed_Material_static_field_load";
+        if (preceding.OpCode.Code is Code.Call or Code.Callvirt &&
+            preceding.Operand is MethodReference method &&
+            method.ReturnType.FullName == "UnityEngine.Material")
+            return "direct_adjacent_typed_Material_call_result";
+        if (context?.HasBody == true &&
+            preceding.OpCode.Name.StartsWith("ldloc", StringComparison.Ordinal) &&
+            !preceding.OpCode.Name.StartsWith("ldloca", StringComparison.Ordinal))
+        {
+            int? localIndex=Local(preceding);
+            if (localIndex is >= 0 &&
+                localIndex.Value < context.Body.Variables.Count &&
+                context.Body.Variables[localIndex.Value].VariableType.FullName ==
+                    "UnityEngine.Material")
+                return "direct_adjacent_typed_Material_local_load";
+        }
+        return "pre_literal_unproven";
+    }
 
     private static int? Local(Instruction i)
     {
@@ -413,37 +472,52 @@ internal static class Cb0ExactFirstFormal
         return null;
     }
 
-    internal static Evidence? Trace(IList<Instruction> instructions, int literalIndex)
+    internal static Evidence? Trace(
+        IList<Instruction> instructions, int literalIndex,
+        MethodDefinition? methodContext = null)
     {
         if (literalIndex < 0 || literalIndex >= instructions.Count ||
             instructions[literalIndex].OpCode.Code != Code.Ldstr)
             return null;
-        var stack = new List<Tag> { Tag.SourceString };
-        var locals = new Dictionary<int, Tag>();
+        var stack = new List<TraceValue> { Tag.SourceString };
+        var locals = new Dictionary<int, TraceValue>();
+        int preLiteralUnderflows = 0;
         int newobjCount = 0, typedVector4CtorFormals = 0, typedVector4CtorFloats = 0;
         var uniqueCtorOrigins = new Dictionary<string, int>(StringComparer.Ordinal);
+        var uniqueCtorFields = new List<FieldReference>();
         bool typedVector4CtorSeen = false;
-        Evidence Matched(string family, string kind, Tag value, Tag receiver)
+        Evidence Matched(string family, string kind, TraceValue value, TraceValue receiver)
         {
-            bool valid = value == Tag.ConstructedInstance &&
+            bool valid = value.Kind == Tag.ConstructedInstance &&
                 newobjCount == 1 && typedVector4CtorSeen;
+            var fields=valid ? uniqueCtorFields : new List<FieldReference>();
             return new Evidence(
-                family, kind, Origin(value), Origin(receiver),
+                family, kind, Origin(value.Kind), Origin(receiver.Kind),
                 valid ? "one_typed_UnityEngine_Vector4_ctor_in_slice"
                       : "not_uniquely_proven",
                 valid ? typedVector4CtorFormals : 0,
                 valid ? typedVector4CtorFloats : 0,
                 valid ? new Dictionary<string, int>(uniqueCtorOrigins, StringComparer.Ordinal)
-                      : new Dictionary<string, int>(StringComparer.Ordinal));
+                      : new Dictionary<string, int>(StringComparer.Ordinal),
+                fields.Count,
+                fields.Count(x=>x.FieldType.FullName=="System.Single"),
+                fields.Select(x=>x.FullName).Distinct(StringComparer.Ordinal).Count(),
+                fields.Select(x=>x.DeclaringType.FullName).Distinct(StringComparer.Ordinal).Count(),
+                fields.Select(x=>x.FullName).Distinct(StringComparer.Ordinal).ToArray(),
+                StrictReceiverPrefix(instructions,literalIndex,preLiteralUnderflows,methodContext));
         }
-        Tag Pop()
+        TraceValue Pop()
         {
-            if (stack.Count == 0) return Tag.PreLiteralUnknown;
+            if (stack.Count == 0)
+            {
+                preLiteralUnderflows++;
+                return Tag.PreLiteralUnknown;
+            }
             var v = stack[^1];
             stack.RemoveAt(stack.Count - 1);
             return v;
         }
-        bool Push(Tag t)
+        bool Push(TraceValue t)
         {
             if (stack.Count >= MaxStack) return false;
             stack.Add(t);
@@ -503,8 +577,11 @@ internal static class Cb0ExactFirstFormal
             if (name is "ldfld" or "ldflda")
             {
                 Pop();
-                if (!Push(name == "ldfld" ? Tag.InstanceFieldLoad : Tag.Unknown))
-                    return null;
+                TraceValue value = name == "ldfld" &&
+                    ins.Operand is FieldReference field
+                        ? new TraceValue(Tag.InstanceFieldLoad,field)
+                        : Tag.Unknown;
+                if (!Push(value)) return null;
                 continue;
             }
             if (name is "stfld")
@@ -540,10 +617,10 @@ internal static class Cb0ExactFirstFormal
                 if (ins.Operand is not MethodReference method ||
                     method.Parameters.Count > 32)
                     return null;
-                var formals = new Tag[method.Parameters.Count];
+                var formals = new TraceValue[method.Parameters.Count];
                 for (int k = formals.Length - 1; k >= 0; k--)
                     formals[k] = Pop();
-                Tag receiver = (ins.OpCode.Code != Code.Newobj && method.HasThis)
+                TraceValue receiver = (ins.OpCode.Code != Code.Newobj && method.HasThis)
                     ? Pop() : Tag.Unknown;
                 if (method.Parameters.Count >= 2 &&
                     ins.OpCode.Code != Code.Newobj)
@@ -556,11 +633,11 @@ internal static class Cb0ExactFirstFormal
                     {
                         string firstType = method.Parameters[0].ParameterType.FullName;
                         if (firstType == "System.String" &&
-                            formals[0] == Tag.SourceString)
+                            formals[0].Kind == Tag.SourceString)
                             return Matched(family, "source_literal_as_string",
                                            formals[1], receiver);
                         if (firstType == "System.Int32" &&
-                            formals[0] == Tag.SourcePropertyId)
+                            formals[0].Kind == Tag.SourcePropertyId)
                             return Matched(family, "source_literal_via_PropertyToID",
                                            formals[1], receiver);
                     }
@@ -578,11 +655,14 @@ internal static class Cb0ExactFirstFormal
                         typedVector4CtorFormals = method.Parameters.Count;
                         typedVector4CtorFloats = method.Parameters.Count(x =>
                             x.ParameterType.FullName == "System.Single");
-                        foreach (Tag input in formals)
+                        foreach (TraceValue input in formals)
                         {
-                            string category = Origin(input);
+                            string category = Origin(input.Kind);
                             uniqueCtorOrigins[category] =
                                 uniqueCtorOrigins.GetValueOrDefault(category) + 1;
+                            if (input.Kind == Tag.InstanceFieldLoad &&
+                                input.Field is FieldReference field)
+                                uniqueCtorFields.Add(field);
                         }
                     }
                 }
@@ -594,7 +674,7 @@ internal static class Cb0ExactFirstFormal
                     method.Parameters.Count == 1 &&
                     method.Parameters[0].ParameterType.FullName == "System.String" &&
                     method.ReturnType.FullName == "System.Int32" &&
-                    formals[0] == Tag.SourceString)
+                    formals[0].Kind == Tag.SourceString)
                     result = Tag.SourcePropertyId;
                 if (ins.OpCode.Code == Code.Newobj ||
                     method.ReturnType.FullName != "System.Void")
