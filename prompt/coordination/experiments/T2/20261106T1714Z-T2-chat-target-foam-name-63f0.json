@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1714Z-T2-chat-target-foam-name-63f0",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "Two SHA-verified external Material.m_Shader target Shader objects might share the exact original serialized Foam Shader m_ParsedForm.m_Name or raw Shader object identity; detect exact matches only, do not infer Unity GUID/runtime binding.",
+  "source_commit": "bdc3095f7e1445307a719d15b038858982005db2",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    {
+      "scope": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "scope": "original Foam Shader source object PathID2420",
+      "sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+    },
+    {
+      "scope": "original target Shader owner one file",
+      "bytes": 758412,
+      "sha256": "original_manifest_SHA_verified_in_private_runner_not_published"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "Git": "sparse-checkout set --no-cone",
+    "Python": "GitHub Actions ubuntu-24.04 runner Python 3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_foam_original_target_name_relation.py -v",
+    "python3 -m unittest discover -s tests -p test_t2_foam_original_manifest_pptr.py -v",
+    "python3 -m scripts.t2_foam_original_target_name_relation --zip2 <pinned original ZIP2> --source <SHA-verified source owner scratch> --scratch <private original target owner scratch> --out <count-only report>"
+  ],
+  "negative_controls": [
+    "positive equal and negative unequal original Shader names",
+    "unparsed target name reported unknown not negative match",
+    "invalid original Foam source name and unsupported serialized Shader tree",
+    "duplicate target owner/pathID rejected",
+    "invalid target PathID and source string contents rejected",
+    "raw Shader identity flag must be boolean, not truthy integer",
+    "bounded target count",
+    "report forbids sensitive exact JSON keys while allowing safe privacy boolean marker"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-target-name-relation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42260338766",
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260145863"
+  ],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260338766/artifacts/13523704013"
+  ],
+  "budget": "18-min Ubuntu 24.04; immutable ZIP2 original owner 115978112 bytes plus 758412-byte source target within 384MiB resource cap; no proprietary code/logs, Unity game build or Android device.",
+  "status": "completed",
+  "observed_result": {
+    "source_original_SHA_authenticated": true,
+    "typed_external_Shader_targets": 2,
+    "original_target_names_readable": 2,
+    "original_target_names_unparsed": 0,
+    "target_exact_original_Foam_name_matches": 0,
+    "target_exact_original_Foam_raw_bytes_matches": 0,
+    "one_target_owner_bytes_verified": 758412,
+    "original_manifest_366_metadata_rows_verified": true,
+    "full_7_79GB_bytes_verified": false,
+    "sourcefree_tests_passed": 21,
+    "GitHub_Actions_conclusion": "success",
+    "Unity_external_GUID_verified": false,
+    "original_Foam_CB0_upload_verified": false,
+    "Android_Adreno_water_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "The two verified typed external original Shader targets are exact-name matches with original Foam: zero of two read target names match.",
+    "The two objects are raw-byte-identical with original Foam Shader object: zero of two match.",
+    "A failure in first original run represents private source mismatch: actually false-positive report guard matched an allowed documented boolean name as a substring."
+  ],
+  "limitations": [
+    "Only the two previously unresolved external material Shader pointers from one authenticated owner were compared; not every Shader reference in the game.",
+    "No Unity external FileIdentifier GUID authentication or runtime material target resolution proven.",
+    "No actual Foam shader pass, CB0 upload, Spectrum/Blur/FFT integration or GPU device image result.",
+    "The complete 7.79GB original provider was not SHA checked, only subset and manifest metadata.",
+    "Original Shader symbols, names/digests, external file paths, target SHA and source bytes kept private, no publication."
+  ],
+  "integration_commit": "bdc3095f7e1445307a719d15b038858982005db2",
+  "evidence_doc": "docs/T2_FOAM_ORIGINAL_EXTERNAL_SHADER_NAME_RELATION_2026-11-06.md",
+  "next_step": "Do not repeat same comparison. Independently resolve actual original external Unity FileIdentifier GUID against independently staged owner GUID and any authentic scene/water material host; only after true Foam binding trace CB0 and test Unity/Adreno.",
+  "updated_at": "2026-11-06T17:20:12.198Z"
+}
