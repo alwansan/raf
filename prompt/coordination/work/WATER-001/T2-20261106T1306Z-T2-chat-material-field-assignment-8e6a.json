@@ -1,0 +1,33 @@
+{
+  "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "33c72f721c5aab7fd2b6cfafaabdbf224f96f2ef",
+  "updated_at": "2026-11-06T13:06:00Z",
+  "resumed_from_sessions": [
+    "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e",
+    "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
+  ],
+  "experiment_key": "original-ZIP2-Foam-source-matched-SetVector-typed-Material-receiver-field-assignment-stfld-shader-producer-census-v1",
+  "resource_key": "T2-SHA-original-Foam-managed-Cecil-only",
+  "baseline_run": "https://github.com/alwansan/raf/actions/runs/42220621927",
+  "original_source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "hypothesis": "Source-authentic original CB0-vector named Material.SetVector receiver is one specifically typed UnityEngine.Material field. Inspect original compiled stfld writes to the same exact FieldReference; distinguish declarations, static writer sites and typed Shader/Material creation candidates from actual Material.shader Foam link. Do not interpret nearby type names as value dataflow.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1306Z-T2-chat-material-field-assignment-8e6a.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1306Z-T2-chat-material-field-assignment-8e6a.md",
+    "prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-result.json",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md"
+  ],
+  "test_plan": "Source-free Cecil controls verify exact receiver field identity, wrong-type and branch invalidation, exact original assembly SHA and isolated managed stfld writer census, type-specific Material ctor/getter/Shader.Find classification. Only aggregate facts/no private hashes names methods values.",
+  "actions_active_at_plan": [
+    "T1 FFT 42221700354"
+  ],
+  "overlap_resolution": "Independent source-only Cecil; no T1 FFT/native Unity resource, no game files, no other worker files.",
+  "no_runtime_upload_proof_expected": true
+}
