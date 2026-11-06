@@ -20,3 +20,10 @@ Files: `scripts/t3_original_particle108_dxbc_semantic_join.py` (new source selec
 Detailed report https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md
 Resource https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json
 Next Next distinct original shader interface repair experiment: map original DXBC authored ISGN/OSGN semantic/index/component mask/register to source vkd3d SPIR-V Location and recovered SPIRV-Cross HLSL SV_*/TEXCOORD* declarations for all 4 exact keyword pairs. Reject missing system values, duplicate same-type ambiguous varyings and mismatched binding. Only then test disposable shader location patch with spirv-val and all four VSFS pair interfaces. T5 post-restorer/Android phone emitter still needs corroboration.
+
+## Canonical ledger result
+
+- The T4-owned event schema blocker from prior T3 session was resolved by T4 (`prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json` now has its required `id`). T3 did not edit T4-owned source.
+- Indexed new genuine semantic evidence under OPEN `prompt/coordination/B_TEAM/issues/RENDER-002.json`, updated `T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS` with **4/4 source semantic matches, 16 user semantic records, 58 matched lanes**, and `device: NOT_TESTED`.
+- [Canonical T3 team summary refresh CI42147047846](https://github.com/alwansan/raf/actions/runs/42147047846) **COMPLETED SUCCESS** on source `de0aef5907d1cd54c5eccd46847bf86ff4ee1e5a`; checks exact source semantic/bytecode verified counts without suggesting Android visual readiness.
+- Source-only scope complete and resource released; Android Unity shaders and phone pixels still untested.
