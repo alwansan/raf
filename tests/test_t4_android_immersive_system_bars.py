@@ -73,6 +73,18 @@ class ImmersiveSystemBarsPolicyTests(unittest.TestCase):
                       RUNTIME.split("private void OnDisable()", 1)[1])
         self.assertNotIn("setSystemGestureExclusionRects", RUNTIME)
 
+    def test_native_activity_main_window_focus_is_required(self):
+        self.assertIn("bool androidWindowFocused", POLICY)
+        self.assertIn("return androidWindowFocused &&", POLICY)
+        self.assertEqual(RUNTIME.count('current.Call<bool>("hasWindowFocus")'), 3)
+        self.assertIn("queuedActivityIdentity, ActivityIdentity(current),", RUNTIME)
+        self.assertLess(RUNTIME.index('current.Call<bool>("hasWindowFocus")'),
+                        RUNTIME.index('current.Call<AndroidJavaObject>("getWindow")'))
+        self.assertLess(RUNTIME.index('!current.Call<bool>("hasWindowFocus")'),
+                        RUNTIME.index('controller.Call("hide", bars)'))
+        self.assertLess(RUNTIME.rindex('current.Call<bool>("hasWindowFocus")'),
+                        RUNTIME.index('decor.Call("setSystemUiVisibility", merged)'))
+
     def test_no_forced_os_escapes_and_no_display_changes(self):
         for forbidden in ("SetResolution", "Screen.fullScreen", "Screen.orientation",
                           "setSystemGestureExclusionRects", "disableBack", "disableHome",
