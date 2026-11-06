@@ -6,9 +6,9 @@
   "session_id": "20261106T1130Z-T5-chat-applycallers-c6e1",
   "issue_id": "DISPLAY-003",
   "track": "Original GraphicsSettingsBox ApplyCurrentResolutionAndFullscreenMode exact caller provenance",
-  "status": "active",
+  "status": "completed_source_authentic_IL_three_distinct_callers_android_unverified",
   "base_sha": "53c1bda9a7982f07d2cce70b9f8bffd9215716b7",
-  "updated_at": "2026-11-06T11:27:15.768Z",
+  "updated_at": "2026-11-06T11:34:51.745Z",
   "resumed_from_sessions": [
     "20261106T1104Z-T5-chat-resolution-delegate-6a2f.md",
     "20261106T1046Z-T5-scheduled-pair-success-q6f8.md"
@@ -39,5 +39,24 @@
     "Reject exact source/ABI drift, cap graph/report; preserve .meta and GUIDs.",
     "CI source only, never claim phone success."
   ],
-  "next_step": "Create independent original IL caller census with fake-UI and callback negative controls and run source-only pinned runner; document session/experiment/event."
+  "next_step": "Resolve third caller's one non-int/non-bool parameter category and match authentic serialized Unity dropdown event onValueChanged owner; do not assume persistence or alter runtime Settings until proven.",
+  "source_commit": "14f8ca279b35a9032267f9e8fb59ac54bbb4feb6",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42210936332"
+  ],
+  "result": {
+    "ci": "success",
+    "job_id": 127869109940,
+    "python_methods": 10,
+    "compiled_synthetic_cecil_assertions": 5,
+    "original_assembly_sha_verified": true,
+    "original_direct_apply_call_sites": 3,
+    "unique_original_caller_methods": 3,
+    "caller_methods_direct_dropdown": 1,
+    "dropdown_calls_in_that_method": 8,
+    "other_type_direct_apply_calls": 0,
+    "android_resolution_binding_proven": false,
+    "source_only": true,
+    "device_tested": false
+  }
 }
