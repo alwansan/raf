@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
   "issue_id": "COORD-001",
-  "status": "active",
+  "status": "completed_two_T3_event_ids_repaired_and_full_ledger_index_verified",
   "base_sha": "8094f937da92aa5357604f7dc3a2f3f57a1195e2",
-  "updated_at": "2026-11-06T13:24:10.822Z",
+  "updated_at": "2026-11-06T13:26:24.404Z",
   "resumed_from_sessions": [
     "20261106T1316Z-T5-chat-nested-zip-c53a.md",
     "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md"
@@ -28,5 +28,20 @@
   ],
   "coordination": "T3 latest 1311Z event exists and no T3 active CI at scope; add only canonical id to 1308Z T3 event equal to authored session_id; CAS blob and preserve all authored fields. T2 jobs unrelated, no touch.",
   "next_step": "CAS update only id in 13:11 event to distinct 20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1, preserving original session. Rerun strict full ledger after two-record original event sanity check.",
-  "additional_observation": "All 17 T3 event files from 2026-11-06 were enumerated: after fixing 13:08, exactly 13:11 remains malformed. The 13:11 confirmation record has SAME session_id as 13:08. Assign a distinct explicit id equal to its unique event-file identity instead, preserve same session_id and all 28 original keys, prevent parser-inferred ID and duplicate collision."
+  "additional_observation": "All 17 T3 event files from 2026-11-06 were enumerated: after fixing 13:08, exactly 13:11 remains malformed. The 13:11 confirmation record has SAME session_id as 13:08. Assign a distinct explicit id equal to its unique event-file identity instead, preserve same session_id and all 28 original keys, prevent parser-inferred ID and duplicate collision.",
+  "second_t3_event_path": "prompt/coordination/B_TEAM/events/T3/20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1.json",
+  "second_t3_fix_commit": "94b83de8542db51ab49349d867ee9ab8b7744049",
+  "second_t3_id": "20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1",
+  "shared_original_t3_session_id_preserved": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+  "second_t3_original_fields_unchanged": 28,
+  "first_t3_original_fields_unchanged": 16,
+  "index_url": "https://github.com/alwansan/raf/actions/runs/42225352448",
+  "final_index": {
+    "conclusion": "success",
+    "job_id": 127917317768,
+    "events": 395,
+    "Bteam_tests": 11,
+    "Tteam_tests": 3,
+    "source_only": true
+  }
 }
