@@ -3,7 +3,13 @@ on:
   workflow_dispatch:
   push:
     branches: [feature/android-native-port]
-    paths: [.github/workflows/raft-t5-cl-real-fps-cohort.yml]
+    paths:
+      - '.github/workflows/raft-t5-cl-real-fps-cohort.yml'
+      - 'scripts/t5_cl_fps_cohort_gate.py'
+      - 'scripts/t5_cl_pid_epoch_audit.py'
+      - 'tests/test_t5_cl_fps_cohort_gate.py'
+      - 'tests/test_t5_cl_pid_epoch_audit.py'
+      - 'tests/test_t5_cl_pid_cohort_integration.py'
 
 permissions:
   contents: read
@@ -32,7 +38,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_t5_cl_fps_cohort_gate.py' -v
-          python3 -m py_compile scripts/t5_cl_fps_cohort_gate.py
+          python3 -m unittest discover -s tests -p 'test_t5_cl_pid_epoch_audit.py' -v
+          python3 -m unittest discover -s tests -p 'test_t5_cl_pid_cohort_integration.py' -v
+          python3 -m py_compile scripts/t5_cl_fps_cohort_gate.py scripts/t5_cl_pid_epoch_audit.py
       - name: Download only two immutable public CL telemetry sources
         shell: bash
         run: |
@@ -69,6 +77,12 @@ jobs:
           obj=json.loads(data[len("T5_CL_PRESENTATION_EVIDENCE "):])
           first,second,compare=obj["session_a"],obj["session_b"],obj["comparison"]
           assert first["total_samples"]==71 and second["total_samples"]==119
+          # Process lifetimes, not just freshness, are now part of the
+          # authorization to aggregate any SurfaceFlinger median.
+          for report in (first, second):
+              assert report["process_epoch_count"]==1
+              assert report["safe_to_aggregate_entire_session"] is True
+              assert report["fps_rows_withheld_unverified_process_epoch"]==0
           assert first["stale_presentation_samples"]==6 and second["stale_presentation_samples"]==105
           assert first["fresh_surface_fps_all"]["samples"]==57 and second["fresh_surface_fps_all"]["samples"]==2
           assert first["first_observed_render_failure_sample"]==11
