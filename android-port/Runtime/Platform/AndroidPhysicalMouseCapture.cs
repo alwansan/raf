@@ -284,7 +284,15 @@ namespace RaftAndroid.Platform
                             int probedIdentity = ViewIdentity(view);
                             int requestedIdentity = Volatile.Read(ref captureViewIdentity);
                             if (requestedIdentity != 0 && probedIdentity != requestedIdentity)
+                            {
+                                // A different focused View cannot establish capture for
+                                // the View that installed our generation-bound listener.
+                                // Fail back to original Unity axes until reacquisition;
+                                // do not report the other View's capture as our own.
                                 Volatile.Write(ref mismatchedViewEpoch, token);
+                                ObserveNativeCapture(token, false);
+                                return;
+                            }
                             bool active = view != null && view.Call<bool>("hasWindowFocus") &&
                                 view.Call<bool>("isFocused") && view.Call<bool>("hasPointerCapture");
                             ObserveNativeCapture(token, active);
