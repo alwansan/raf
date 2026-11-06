@@ -200,6 +200,23 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             verify_selective_reflection(old(),x,conflicts,1)
 
+    def test_selective_reflection_optional_id_preserved_after_actual_move(self):
+        # The ID guard must accept the exact legitimate coordinate move.
+        # Previously it compared original coordinates unchanged and rejected
+        # the real moved sampler even when its SPIR-V variable ID was stable.
+        source=old()
+        remapped={
+            "entryPoints":[{"name":"main","mode":"frag"}],
+            "separate_samplers":[{"id":6,"set":1,"binding":1}],
+            "ubos":[{"id":7,"set":0,"binding":0,"block_size":128}],
+        }
+        self.assertTrue(verify_selective_reflection(
+            source,remapped,{(0,1)},1))
+        remapped["separate_samplers"][0]["id"]=99
+        with self.assertRaisesRegex(
+                ValueError,"^selective_reflection_resource_id_changed$"):
+            verify_selective_reflection(source,remapped,{(0,1)},1)
+
     def test_selective_reflection_ids_cannot_swap_at_same_binding_across_sets(self):
         # Two sampler coordinates share a binding number but not a set.
         # The remap must preserve each original SPIR-V variable ID, rather
