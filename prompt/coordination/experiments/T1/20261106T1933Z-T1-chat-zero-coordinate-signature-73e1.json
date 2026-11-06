@@ -1,0 +1,64 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "hypothesis": "Same-source real Unity2021.3.45f2 OpenGLCore computed float carrier 63/64 mismatches are specifically signed-zero collapse when bitcast via float, and corresponding Texture2D.Load mismatch reads x=0 pixel. If not, classify nonzero-other mismatch without assuming FTZ cause.",
+  "source_sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
+  "original_asset_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
+  "input_fixture": "64 synthetic integer addresses ((i*5+11)&63), matching independent uploaded structured buffer; 16-word output per invocation, 1x1x1 workgroup Dispatch, 1.0 scale, normal RGBAFloat x texel value 4096+x",
+  "input_hashes_exported": false,
+  "tool_versions": {
+    "engine": "Unity 2021.3.45f2",
+    "backend": "OpenGLCore exact NUnit",
+    "gameci": "v0.1.72 SHA256 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a",
+    "runner": "ubuntu-24.04"
+  },
+  "workflow": ".github/workflows/raft-t1-fft-unity-address-provenance.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42279949574",
+  "job_id": 128106388433,
+  "negative_controls": [
+    "Both physical computed and structured-buffer address integer baselines stay zero mismatch",
+    "Direct image with computed and buffer address and static global buffer read and normal precise float control all require zero mismatch",
+    "All 16 category mismatch counts bound 0..64 and six positive controls zero",
+    "Independent second 16-line signed-zero or x0 sampled pixel signature report is mandatory (cannot infer from mismatch counts)",
+    "For every category signature<=mismatches; positive control signatures must be zero",
+    "Match exact one Unity NUnit case, successful return code, Unity2021 OpenGLCore GPU; no private XML logs exported",
+    "No original Raft asset, shader, captured pixel bytes, private fingerprints or release published"
+  ],
+  "observed_so_far": {
+    "source_unit_tests": "completed success",
+    "pinned_gameci_cli": "completed success",
+    "actual_unity_gpu": "in_progress",
+    "gpu_numeric_outcome": null
+  },
+  "prior_evidence": {
+    "run": 42278153683,
+    "counts": [
+      0,
+      0,
+      63,
+      0,
+      63,
+      0,
+      63,
+      0,
+      0,
+      0,
+      63,
+      0,
+      63,
+      0,
+      0,
+      0
+    ],
+    "baseline": "Unity2021 OpenGLCore sourcefree one dispatch"
+  },
+  "limitations": [
+    "A zero-signature may be compiler selection/optimization or float FTZ; it is not independent proof of cause.",
+    "Texture pixel at x0 is a proxy for address collapse in this synthetic linear uniquely-coded image, not a direct GPU coordinate trace.",
+    "No original serialized Raft FFT kernel/variant/production binding/Adreno device executed in this experiment."
+  ],
+  "next_step": "On actual run 42279949574 success parse RAFT_T1_ADDRESS_PROVENANCE_GATE counts/signatures; classify x0 origin; then prepare original SHA-authentic per-invocation ImageFetch provenance before gameplay shader changes."
+}
