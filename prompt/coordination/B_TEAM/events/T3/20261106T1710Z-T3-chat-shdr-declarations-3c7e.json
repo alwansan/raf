@@ -1,0 +1,15 @@
+{
+  "id": "20261106T1710Z-T3-chat-shdr-declarations-3c7e",
+  "owner": "T3",
+  "session_id": "20261106T1710Z-T3-chat-shdr-declarations-3c7e",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "SHA-verified original Particle108 eight D3D11 DXBC stages have SHDR/SHEX tokenized programs with 24 constant-buffer, 10 SRV and 10 sampler declaration instructions (0 UAV) across 296 total instructions, despite 8/8 absent RDEF. CI42259943968 success. Counts are not unique registers nor Unity/Adreno restoration; RENDER-002 remains OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42259943968",
+    "https://github.com/alwansan/raf/actions/runs/42259737650",
+    "prompt/coordination/clients/T3/sessions/20261106T1710Z-T3-chat-shdr-declarations-3c7e.md"
+  ],
+  "at": "2026-11-06T17:17:21.605Z"
+}
