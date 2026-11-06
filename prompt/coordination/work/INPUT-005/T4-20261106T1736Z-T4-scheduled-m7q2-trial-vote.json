@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1736Z-T4-scheduled-m7q2",
+  "origin": "scheduled",
+  "status": "active",
+  "baseline_sha": "4b4e8ab4d238ce2e512e4cd683e9e6b3f2170c0e",
+  "issue": "INPUT-005",
+  "experiment_key": "T4-trial-r1-physical-mouse-evidence",
+  "files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1736Z-T4-scheduled-m7q2-trial-vote.json",
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1736Z-T4-scheduled-m7q2.md"
+  ],
+  "hypothesis": "Integrated Android View identity/epoch-safe mouse capture since phone-tested e9c358ed warrants a targeted device acceptance test, while source CI cannot confirm relative camera movement, cursor transitions or keyboard.",
+  "shared_resource": "TRIAL_BUILD_READINESS.md T4 row only; no native workflow request",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1042Z-T4-scheduled-f6n3.md",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "next_step": "Vote T4 only after checking current row and no newer T4 vote; record separate session; T5 owns trial decision."
+}
