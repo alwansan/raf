@@ -5,7 +5,7 @@
   "session_id": "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "track": "run the newly source-only tested Foam safe installer on SHA-original private 2pass candidate against *synthetic exported Unity placeholder*, no Unity native build",
   "base_sha": "b258559ac5a2aa102233faea70583a2cf7597d3b",
   "intended_files": [
@@ -21,9 +21,24 @@
   "related_work": [
     "prompt/coordination/work/WATER-001/T2-20261106T2000Z-T2-chat-foam-private-installer-a4c7.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add isolated source-authentic workflow smoke with scratch-only synthetic exported target and original private candidate; purge private target before artifact upload, maintain false Unity/Android claims.",
-  "updated_at": "2026-11-06T20:06:28.115Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42285589469"
+  ],
+  "result": {
+    "workflow_commit": "89225270b56fd5879c96a37d355dda679978c4aa",
+    "run": "42285589469",
+    "job": "128125434883",
+    "status": "SUCCESS",
+    "authentic_source_sha_checked": true,
+    "original_Foam_candidate_bytes": 9731,
+    "transaction_target": "synthetic Unity-export placeholder",
+    "synthetic_guid_preserved": true,
+    "original_real_export_guid_validated": false,
+    "Unity_2021_Editor_import_verified": false,
+    "Android_render_verified": false,
+    "safe_artifact_id": 13537721839
+  },
+  "next_step": "Consume original source-auth candidate only when actual exported AssetRipper target + original GUID are validated; require Unity shader import and device visual checks separately.",
+  "updated_at": "2026-11-06T20:14:08.401Z",
   "trial_vote": "لا يحتاج"
 }

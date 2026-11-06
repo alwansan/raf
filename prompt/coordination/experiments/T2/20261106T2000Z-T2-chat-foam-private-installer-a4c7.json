@@ -1,0 +1,66 @@
+{
+  "owner": "T2",
+  "session_id": "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "A SHA-pinned original Foam 2-pass private candidate can be safely installed without corrupting original exported shader or GUID, against uniquely matched synthetic exported ShaderLab placeholder, while detecting destructive mutations.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    "b258559ac5a2aa102233faea70583a2cf7597d3b",
+    "89225270b56fd5879c96a37d355dda679978c4aa"
+  ],
+  "tool_versions": {
+    "Python": "GitHub ubuntu-24.04 runtime",
+    "UnityPy": "1.25.4 pinned original source workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_private_installer.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b45_install_original_blur.py' -v",
+    "source-verified T2 original private ShaderLab candidate workflow with synthetic exported target transaction"
+  ],
+  "negative_controls": [
+    "candidate SHA mutation",
+    "duplicate/missing exported Shader identity",
+    "invalid/missing GUID .meta",
+    "symlink redirection",
+    "in-project/previous backup",
+    "atomic write and rollback failure",
+    "stage runtime proof flags forbidden",
+    "exact two-pass structural mismatch",
+    "duplicate JSON stage keys"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-private-installer-sourceonly.yml",
+  "extra_workflow_path": ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42285589469",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42285589469/artifacts/13537721839"
+  ],
+  "budget": "7min source-only + existing 25min authenticated shader workflow; native Unity not dispatched by T2",
+  "status": "completed_source_authentic_candidate_synthetic_export_only",
+  "observed_result": {
+    "source_only_tests": 21,
+    "original_candidate_bytes": 9731,
+    "authored_passes": 2,
+    "translated_stage_count": 4,
+    "source_sha_authenticated": true,
+    "installed_over_synthetic_unity_target": true,
+    "original_real_export_Guid_verified": false,
+    "unity_import_verified": false,
+    "material_CB0_upload_verified": false,
+    "android_water_pixels_verified": false,
+    "own_older_native_build": "not initiated",
+    "external_T5_owner_run_42281310905": "failed Unity C# physical mouse class missing"
+  },
+  "rejected_hypotheses": [
+    "Prior positive source-only Foam graphics gates imply Unity import or Android pixels.",
+    "Green synthetic exported target install proves real exported original GUID identity."
+  ],
+  "limitations": [
+    "SHA computed in installer smoke from staged content; authenticity is independently in preceding pinned source staging, not from SHA alone.",
+    "No actual AssetRipper output target verified, no .meta matching from real game export.",
+    "T4 owns original Unity mouse Editor compile bridge and T5 native coordination."
+  ],
+  "integration_commit": "b258559ac5a2aa102233faea70583a2cf7597d3b",
+  "workflow_commit": "89225270b56fd5879c96a37d355dda679978c4aa",
+  "next_step": "Only real original export identity/guid, real Unity import, CB0/material and device pixels can close source→runtime gaps."
+}

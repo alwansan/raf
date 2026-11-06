@@ -5,10 +5,10 @@
   "session_id": "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "track": "source-authentic Foam private ShaderLab transient Unity install safety (distinct from active original Foam Material→Renderer CIL scanner)",
   "base_sha": "0ddcbf943e333c8ca19ae4f8ceb08017a10283eb",
-  "updated_at": "2026-11-06T20:01:03.753Z",
+  "updated_at": "2026-11-06T20:14:08.401Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T2000Z-T2-chat-foam-private-installer-a4c7.json",
     "prompt/coordination/clients/T2/sessions/20261106T2000Z-T2-chat-foam-private-installer-a4c7.md",
@@ -29,8 +29,22 @@
   "related_work": [
     "prompt/coordination/work/WATER-001/T2-20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement own isolated Foam staged installer and rigorous synthetic failure tests; do not change shared native workflow while 42281310905 is running.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42285233663",
+    "https://github.com/alwansan/raf/actions/runs/42285589469"
+  ],
+  "result": {
+    "code_commit": "b258559ac5a2aa102233faea70583a2cf7597d3b",
+    "source_only_CI": "42285233663",
+    "new_synthetic_tests_passed": 15,
+    "inherited_blur_regression_passed": 6,
+    "total_passed": 21,
+    "genuine_candidate_onto_synthetic_export": "CI42285589469 SUCCESS",
+    "source_original_private_shaderlab_bytes": 9731,
+    "unity_real_export_import_verified": false,
+    "runtime_Foam_Material_CB0_bound": false,
+    "android_water_pixels_verified": false
+  },
+  "next_step": "T5/T2 coordinate a separately requested actual ephemeral AssetRipper export identity probe and real Unity import; do not touch ongoing owner-native request or assume original GUID match.",
   "trial_vote": "لا يحتاج"
 }

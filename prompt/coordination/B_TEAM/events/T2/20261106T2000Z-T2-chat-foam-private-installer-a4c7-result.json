@@ -1,0 +1,18 @@
+{
+  "id": "20261106T2000Z-T2-chat-foam-private-installer-a4c7-source-to-synthetic-export-pass",
+  "owner": "T2",
+  "session_id": "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
+  "issue_id": "WATER-001",
+  "type": "engineering_source_only_integration",
+  "summary": "Fail-closed SHA-original Foam private ShaderLab transactional installer added: CI42285233663 green 15+6 synthetic controls; CI42285589469 green original verified 9731-byte two-pass candidate installed over synthetic export preserving fake GUID and rollback. Real exported GUID, Unity compile, CB0 upload, Adreno pixels remain unverified. T4 already triages unrelated older full-native CS0234 physical mouse Editor guard failure.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/b258559ac5a2aa102233faea70583a2cf7597d3b",
+    "https://github.com/alwansan/raf/commit/89225270b56fd5879c96a37d355dda679978c4aa",
+    "https://github.com/alwansan/raf/actions/runs/42285233663",
+    "https://github.com/alwansan/raf/actions/runs/42285589469",
+    "docs/T2_FOAM_PRIVATE_INSTALLER_PREFLIGHT_2026-11-06.md"
+  ],
+  "at": "2026-11-06T20:14:08.401Z",
+  "status": "source_only_verified_real_export_and_device_unverified",
+  "trial_vote": "لا يحتاج"
+}
