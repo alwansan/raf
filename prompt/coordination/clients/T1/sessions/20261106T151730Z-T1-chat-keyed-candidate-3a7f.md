@@ -2,7 +2,7 @@
 
 - session_id: 20261106T151730Z-T1-chat-keyed-candidate-3a7f
 - origin: chat
-- status: waiting_ci
+- status: completed (real HLSL candidate keyed Vulkan readback)
 - issue_id: WATER-001 / OPEN / NOT_READY
 - resumed_from_sessions: 20261106T1511Z-T1-scheduled-invocation-cli-k7m2; 20261106T1408Z-T1-scheduled-pair-input-readiness-v3; 20261106T133640Z-T1-chat-nested-phi-8d31
 - original_source_pin: zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
@@ -31,3 +31,21 @@ Last session 20261106T133640Z proved that translated Butterfly1 X is a signed-in
 ## Current state and next step
 
 [Run 42242127723](https://github.com/alwansan/raf/actions/runs/42242127723) running; wait for actual full Vulkan compile/GPU dispatch. Verify `RAFT_T1_HLSL_KEYED_CANDIDATE_TRACE`, per-site record counts, duplicate-key rejection and original-source recovery before marking this scope completed. If failing, identify exact safe failing stage and implement minimal fix before retrying; do not assert any candidate capture success without the marker. Then build the original SPIR-V independently instrumented keyed capture, attest both same input/dispatch, and use strict paired manifest gate. Original-vs-Unity numeric parity and Android water acceptance remain unproven; WATER-001 stays OPEN. No heavy Unity build/Android APK/shader rewrite was launched, no other agents' jobs canceled.
+
+## Exact-original source-authenticated GPU result (final)
+
+[GitHub Actions 42242127723](https://github.com/alwansan/raf/actions/runs/42242127723), job `127974821489`, **COMPLETED SUCCESS** on workflow commit `9505df9a085bbf800c303d6dfa5ee750012eba32`. Original ZIP2 immutable SHA verification, private shader staging, glslang compilation, SPIR-V validation, Vulkan CPU/Mesa dispatch, private scratch cleanup all passed.
+
+The new execution of `--invocation-keys --export-private-trace` produced exactly **384 real original-derived HLSL candidate GPU reads**, **[64, 256, 64]** by source / butterfly1 / butterfly2. All per-invocation+occurrence keys decoded without duplicate, out-of-bounds counts **[0,0,0]**. Two same-Vulkan pass output readbacks within this host fixture compared 64 and 32 written pixels and both matched expected outputs internally; this does **not** mean original source and translated HLSL coordinate arrays matched. The audit emitted only `RAFT_T1_HLSL_KEYED_CANDIDATE_TRACE`, candidate-only, no original keyed buffer, no source vs translated invocation-keyed comparison. Binary trace remained in temporary private runner scratch and was removed; no game shader, trace or original SPIR-V was exported in Artifacts.
+
+Source-only [CI 42242015941](https://github.com/alwansan/raf/actions/runs/42242015941): **74/74 PASS**, including all five newly added scheduled CLI tests and eight candidate keyed audit tests.
+
+## Final scope and next step
+
+- origin: chat
+- status: completed scoped candidate HLSL real keyed GPU readback
+- experiment: `prompt/coordination/experiments/T1/20261106T151730Z-T1-chat-keyed-candidate-3a7f.json`
+- canonical event: `prompt/coordination/B_TEAM/events/T1/20261106T151730Z-T1-chat-keyed-candidate-3a7f.json`
+- run_urls: https://github.com/alwansan/raf/actions/runs/42241766200 ; https://github.com/alwansan/raf/actions/runs/42242015941 ; https://github.com/alwansan/raf/actions/runs/42242127723
+- next: independently recover and instrument **original SPIR-V** source reads for invocation-keyed capture on same input/dispatch; source-free preflight tool `scripts/t1_fft_original_keyed_preflight.py` is already 86/86 synthetic CI validated in separate T1 session `20261106T152810Z-T1-chat-original-key-preflight-c41b`, but not yet run on original SHA-private SPIR-V. Execute that private preflight first. Then use strict `scripts/t1_fft_invocation_pair_gate.py` with original/candidate independent trace/manifest and real numeric proof before shader patch.
+- No authored shader/native Android changes, Unity heavy build, T2–T5 overlap or device acceptance; WATER-001 remains **OPEN / NOT_READY**.
