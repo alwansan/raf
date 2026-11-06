@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T0248Z-T5-chat-native-delivery-retention-e8a3",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "f9856f74db3d02cca97c6151877735a776816b0c",
+  "intended_files": [
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "tests/test_t5_native_delivery_fallback_policy.py",
+    ".github/workflows/raft-t5-native-delivery-fallback-policy.yml",
+    "docs/T5_NATIVE_DELIVERY_FALLBACK_2026-11-06.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json",
+    "prompt/coordination/clients/T5/sessions/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.md",
+    "prompt/coordination/experiments/T5/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json"
+  ],
+  "experiment_key": "t5-native-42058825739-publish403-3day-signed-delivery-retention-authorized-token-route-source-policy-v1",
+  "resource_key": "raft-unity-editor-android-import.yml-publish-early-test-retention-only",
+  "hypothesis": "A successful genuine Unity signed native build must remain safely recoverable for a bounded 3 days even when GitHub Releases reject the effective integration token, while an explicitly configured owner repository secret can independently authorize GitHub Release publication without weakening delivery-result failure guards.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T2110Z-T5-chat-retain-delivery-a6f8.md",
+    "prompt/coordination/clients/T5/sessions/20261105T2153Z-T5-chat-signed-pair-4e91.md",
+    "prompt/coordination/clients/T5/sessions/20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
+    "docs/T5_NATIVE_DELIVERY_RETENTION_2026-11-05.md"
+  ],
+  "source_pins": {
+    "native_build_run": 42058825739,
+    "original_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "publish_job": 127441439836,
+    "publish_failure": "HTTP403 Resource not accessible by integration /repos/alwansan/raf/releases",
+    "retained_current_artifact_id": 13454900880,
+    "current_expiry": "2026-11-08T21:12:40Z"
+  },
+  "no_overlap_reason": "T1 currently uses isolated FFT Unity comparison workflow 408169287; no active native delivery job, T2 owns private Foam source, T4 input/local, T5 scheduled Resolution separate.",
+  "requested_change": "Raise future signed/transport recovery retention to 3d, optionally select owner-provisioned RAFT_RELEASE_TOKEN over github.token for publication, leave all build/quality/contents hashes and strict delivery result logic unchanged.",
+  "next_step": "Implement surgical production workflow change and source-only CI proof; do not launch native Unity or try to create Release without a configured owner-authorized token.",
+  "updated_at": "2026-11-06T02:49:22.915Z"
+}
