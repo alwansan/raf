@@ -7,7 +7,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save-device-evidence-parse",
   "approach": "Validate actual JSONL queue_overflow no-session diagnostic record shape and positive dropped count before suppressing cross-session file hints; migrate existing synthetic overflow test fixture to the authentic source logger three-field payload",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ede9325a74f41d6d0a14eacaebfcafb037242fd7",
   "intended_files": [
     "scripts/t4_verify_device_world_save_log.py",
@@ -26,8 +26,12 @@
   "experiment_ids": [
     "20261106T1850Z-T4-chat-overflow-shape-integrity-v6q3"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add valid production-shape and malformed queue overflow synthetic negative controls first, run existing verifier source-only workflow if auto triggered; guard pre-session skip and preserve legitimate overflow suppression.",
-  "updated_at": "2026-11-06T18:52:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42274640154",
+    "https://github.com/alwansan/raf/actions/runs/42274682716",
+    "https://github.com/alwansan/raf/actions/runs/42274708854"
+  ],
+  "result": "Test-only a2b9e7f9 CI42274640154 expected 9 malformed overflow cases fail; producer-shape parser fix 7977e6b6 passes parser30/30 but reveals stale synthetic fixture; corrected fixture409222d4 CI42274708854 SUCCESS 30/30+2/2. Native producer code read-only. No phone-game acceptance or world/rgd change.",
+  "next_step": "Completed; source scope released. T4 scheduled session 20261106T1840Z mouse scope untouched. Resume independent LOCAL-005 world/save blocker or actual post-approved-candidate device logs; no redundant CI or build. T4 r1 trial vote unchanged, no 5/5.",
+  "updated_at": "2026-11-06T18:55:00Z"
 }
