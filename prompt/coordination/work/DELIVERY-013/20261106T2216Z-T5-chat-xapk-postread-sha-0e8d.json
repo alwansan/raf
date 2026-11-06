@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T2216Z-T5-chat-xapk-postread-sha-0e8d",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "base_sha": "4e12e5957054b992d90a3c362fea5288ec5609c7",
+  "updated_at": "2026-11-06T22:14:22.262Z",
+  "resumed_from_sessions": [
+    "20261106T2207Z-T5-chat-strict-xapk-json-92e4",
+    "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
+    "20261106T2150Z-T5-scheduled-native-reconstruct-8b4f"
+  ],
+  "taken_over_from": "T5 own split XAPK raw streamed verifier SHA 44263e26419e9d3dda91930ecc28784a98d46f3b",
+  "intended_files": [
+    "scripts/t5_verify_xapk_cross_delivery.py",
+    "tests/test_t5_verify_xapk_cross_delivery.py",
+    "prompt/coordination/work/DELIVERY-013/20261106T2216Z-T5-chat-xapk-postread-sha-0e8d.json",
+    "prompt/coordination/clients/T5/sessions/20261106T2216Z-T5-chat-xapk-postread-sha-0e8d.md",
+    "prompt/coordination/experiments/T5/20261106T2216Z-T5-chat-xapk-postread-sha-0e8d.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T2216Z-T5-chat-xapk-postread-sha-0e8d.json"
+  ],
+  "hypothesis": "Verifier initially authenticates XAPK transport SHA256, then opens part paths again to parse ZIP and check nested APK/OBB SHA; same-size modification of ZIP local timestamp between passes can retain CRC and nested digests while invalidating the outer XAPK SHA256 without detection. Final whole-record rehash after nested parsing must reject mutation.",
+  "experiment_key": "T5-DELIVERY-013-source-44263e2-posthash-xapk-localheader-same-size-swap-source-only-v1",
+  "resource_key": "T5 synthetic Python CI only, no Unity/no native assets",
+  "coordination": "Independent T5 verifier source and isolated CI. T5 scheduled native checkpoint does not own these two files. T1 FFT, T2 Foam, T3 rendering, T4 local saves untouched; native 42296450023 still immutable a1737bd7 in_progress. No trial build dispatch.",
+  "next_step": "Add second-pass SHA authentication after ZIP member read and deterministic local-header timestamp mutation test; run immutable CI and preserve red/green evidence."
+}
