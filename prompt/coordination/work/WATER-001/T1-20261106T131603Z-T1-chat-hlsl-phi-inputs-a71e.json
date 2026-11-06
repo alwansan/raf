@@ -4,8 +4,8 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "session_id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
-  "status": "active",
-  "updated_at": "2026-11-06T13:16:03.470Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-06T13:25:39.449Z",
   "base_sha": "727a15ef97b3b498c4353fcbcdd49f650fbc0eb2",
   "resumed_from_sessions": [
     "20261106T130729Z-T1-chat-pair-gate-6c2e",
@@ -25,7 +25,11 @@
   ],
   "experiment_key": "water001-sourcepin15964ea8-translated-butterfly1-x-float32-phi-incoming-value-predecessor-classification-v1",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Validate synthetic Phi predecessor and SSA chain inputs; run exact-original translated compilation; record safe input opcode/type summary and actual source-authentic outcome."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42224533880",
+    "https://github.com/alwansan/raf/actions/runs/42224927222",
+    "https://github.com/alwansan/raf/actions/runs/42225317476"
+  ],
+  "result": "First SHA-source original run 42224533880 failed in private new Phi analyzer after 13/13 synthetic tests (generic validation error). Diagnostic retry 42224927222 passed 15/15 tests and proved source Phi is vector, not scalar: safe category Unexpected scalar Phi lane type. Code corrected to follow selected component of float32 vector Phi; 3 additional negative controls added. New actual original source CI 42225317476 in progress.",
+  "next_step": "Check private source run 42225317476 (18/18 tests); on completion collect only RAFT_T1_FFT_HLSL_BUTTERFLY_X_PHI_INPUTS sanitized report or safe failure category. Then finalize own experiment/event/session/work. No shader rewrite or native build."
 }
