@@ -6,3 +6,6 @@ proprietary_outputs=none;native_build=none
 
 recheck=bounded public C helper exit code only, no private compiler stderr
 first_run=42286299737
+
+recheck_original_dx_source_same_stage=plain_C_no_interface_then_explicit_A_B
+prior_numeric_compiler=44-invalid_shader
