@@ -177,13 +177,17 @@ int main(int argc, char **argv)
     FILE *output;
     size_t written;
     int rc;
+    /* Private source-only control: same C ABI and DXBC, but no interface
+     * map. A compiler success here and failure under A/B isolates mapping
+     * semantics; neither success implies source shader renders in Unity. */
+    int baseline = argc == 4 && !strcmp(argv[3], "D");
     if (argc == 4 && !strcmp(argv[1], "--check-map"))
     {
         rc = load_private_map(argv[2], argv[3], &mapping);
         if (!rc) puts("T3_EXPLICIT_MAP_SYNTAX_ACCEPTED_ONLY");
         return rc ? 2 : 0;
     }
-    if (argc != 5 || load_private_map(argv[3], argv[4], &mapping))
+    if (!baseline && (argc != 5 || load_private_map(argv[3], argv[4], &mapping)))
         return 2;
     if (read_dxbc(argv[1], &source))
         return 3;
@@ -192,7 +196,7 @@ int main(int argc, char **argv)
     interface.bindings = mapping.rows;
     interface.binding_count = mapping.count;
     info.type = VKD3D_SHADER_STRUCTURE_TYPE_COMPILE_INFO;
-    info.next = &interface;
+    info.next = baseline ? NULL : &interface;
     info.source = source;
     info.source_type = VKD3D_SHADER_SOURCE_DXBC_TPF;
     info.target_type = VKD3D_SHADER_TARGET_SPIRV_BINARY;
