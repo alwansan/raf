@@ -25,7 +25,11 @@ namespace RaftAndroid.Diagnostics
 
         public static void Initialize()
         {
-            if (sink != null || StorageError != null) return;
+            // A failed storage mount is not permanent. A later explicit
+            // Initialize call may recover after the app sandbox is writable.
+            // A non-null sink already owns its background writer; never
+            // create a second sink while the first is alive.
+            if (sink != null) return;
             try
             {
                 LogDirectory = Path.Combine(Application.persistentDataPath, "raft-logs");
@@ -44,6 +48,11 @@ namespace RaftAndroid.Diagnostics
                 {
                     Write("water", "fft_device_capabilities.unavailable", ex.GetType().Name, true);
                 }
+                // Only clear a prior constructor/open failure after a real
+                // sink exists and the startup stage has completed.
+                // PersistentDiagnosticLog.LastError still reports subsequent
+                // flush failures independently through Status.
+                StorageError = null;
             }
             catch (Exception ex) { StorageError = ex.GetType().Name + ": " + ex.Message; }
         }
