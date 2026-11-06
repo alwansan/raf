@@ -1,0 +1,65 @@
+// T1 WATER-001 PUBLIC synthetic OpenGLCore float32-Phi/CFG carrier test.
+// NO original Raft HLSL, DXBC, ZIP2 or private resource names.
+#pragma kernel T1PhiFetch
+Texture2D<float4> T1Butterfly;
+StructuredBuffer<uint4> T1Coords;
+RWStructuredBuffer<uint> T1Observed;
+
+[numthreads(64,1,1)]
+void T1PhiFetch(uint3 thread : SV_DispatchThreadID)
+{
+    uint i = thread.x;
+    uint4 coord = T1Coords[i];
+    float2 a = asfloat(coord.xy);
+    float2 b = asfloat(coord.zw);
+
+    float2 branchMerge;
+    if ((i & 1u) != 0u)
+        branchMerge = b;
+    else
+        branchMerge = a;
+
+    float2 nestedMerge;
+    if ((i & 2u) != 0u)
+    {
+        if ((i & 1u) != 0u)
+            nestedMerge = a;
+        else
+            nestedMerge = b;
+    }
+    else
+    {
+        if ((i & 1u) != 0u)
+            nestedMerge = b;
+        else
+            nestedMerge = a;
+    }
+
+    float2 loopMerge = a;
+    uint rounds = (i % 3u) + 1u;
+    [loop]
+    for (uint step = 0u; step < rounds; ++step)
+    {
+        if ((step & 1u) == 0u)
+        {
+            if ((i & 4u) != 0u)
+                loopMerge = b;
+            else
+                loopMerge = a;
+        }
+        else
+        {
+            if ((i & 4u) != 0u)
+                loopMerge = a;
+            else
+                loopMerge = b;
+        }
+    }
+
+    uint offset = 5u * i;
+    T1Observed[offset + 0u] = asuint(T1Butterfly.Load(int3(int2(coord.xy), 0)).x);
+    T1Observed[offset + 1u] = asuint(T1Butterfly.Load(int3(int2(coord.zw), 0)).x);
+    T1Observed[offset + 2u] = asuint(T1Butterfly.Load(int3(asint(branchMerge), 0)).x);
+    T1Observed[offset + 3u] = asuint(T1Butterfly.Load(int3(asint(nestedMerge), 0)).x);
+    T1Observed[offset + 4u] = asuint(T1Butterfly.Load(int3(asint(loopMerge), 0)).x);
+}
