@@ -20,7 +20,7 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42244565958",
   "artifact_urls": [],
   "budget": "SHA-original full source-private Vulkan 20-minute Ubuntu-24.04 T1 isolated runner; no Unity Editor or native Android build",
-  "status": "waiting_ci",
+  "status": "completed_scoped_source_private_preflight",
   "observed_result": {
     "last_candidate_real_run": {
       "run": "https://github.com/alwansan/raf/actions/runs/42242127723",
@@ -39,10 +39,32 @@
     },
     "private_real_original_preflight": {
       "run": "https://github.com/alwansan/raf/actions/runs/42244565958",
-      "status": "in_progress",
-      "source_roles": null,
-      "global_invocation_id": null,
-      "set0_binding3_free": null
+      "job_id": 127983274940,
+      "status": "completed",
+      "conclusion": "success",
+      "source_sha_verified": true,
+      "roles": [
+        "source",
+        "butterfly",
+        "butterfly"
+      ],
+      "site_coordinate_types": [
+        "sint32_vector2",
+        "sint32_vector2",
+        "sint32_vector2"
+      ],
+      "fetched_result_types": [
+        "float32_vector4",
+        "float32_vector4",
+        "float32_vector4"
+      ],
+      "global_invocation_id": "not_proven",
+      "set0_binding3_free": true,
+      "set1_binding3_free": true,
+      "instrumented_original_spirv": false,
+      "original_gpu_keyed_capture_proven": false,
+      "pair_numeric_parity_proven": false,
+      "scratch_cleanup": "success"
     },
     "actual_original_instrumentation_proven": false,
     "paired_numeric_parity_proven": false,
@@ -54,5 +76,5 @@
     "A real pair requires authenticated same input+dispatch, independently executed original and candidate traces, and strict pair gate"
   ],
   "integration_commit": "315780d1bfd9da3f6ca0cec6fde4a217d67de6d9",
-  "next_step": "On CI completion inspect only RAFT_T1_ORIGINAL_KEYED_PREFLIGHT safe marker and distinguish direct builtin vs struct or absent, descriptor conflicts, actual coordinate/value shapes. Then implement secure original direct SPIR-V keyed instrumentation under new session if feasible, no early shader rewrite."
+  "next_step": "The direct/struct-member GlobalInvocationId was not found in the original source. Probe alternative BuiltIn inputs (LocalInvocationId, LocalInvocationIndex, WorkgroupId, NumWorkgroups) and/or structurally safe built-in injection under a new source-private scope, with no raw IDs or signed values. Do not record a real original invocation-keyed capture without GPU execution."
 }
