@@ -1,0 +1,16 @@
+# T2 → T1/T5 — SHA-original Foam owner Shader and Material cross-reference negative evidence
+
+- Session: `20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84` origin `chat`; WATER-001 OPEN / NOT_READY.
+- Definitive source-original [CI42243327311](https://github.com/alwansan/raf/actions/runs/42243327311), job 127978991083, source commit `29b23e72522addc748560db7ca5b8f948d8aa7e1` **SUCCESS**, **16/16** sourcefree Python tests, Cecil synthetic controls and exact original ZIP2 SHA pins. [Full source-backed diagnostic](../../../../docs/T2_FOAM_ORIGINAL_OWNER_SHADER_MATERIAL_LINKS_2026-11-06.md).
+- Original file `Raft_Data/sharedassets0.assets`, 115978112 bytes SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`; original Foam Shader PathID2420 raw SHA256 `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`, ZIP2 source commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
+
+**Critical negative conclusion, limited to this one authenticated owner**:
+- Enumerated **58 Shader** objects and **351 Material** objects; *zero unreadable* Shader names or Material m_Shader pointers.
+- Of all Materials in this file, **0** have an exact local Shader PPtr with `fileID=0,pathID=2420` (original Foam object). **7** have external Shader references (nonzero fileID), not yet resolved; do not assume their identity.
+- The exact `Shader.Find` request string from the already source-verified managed `Shader.Find → Shader field → new Material(Shader) → Material.SetVector(one Foam CB0 property name)` path **matches 0 other serialized Shader names in this same source file**. The previous private name comparison [CI42229056366](https://github.com/alwansan/raf/actions/runs/42229056366) already proved its requested name **differs from original Foam Shader.m_Name**. Original private names/hashes never published.
+
+**Integration constraints**: A common shader property name is not a Material shader-object identity proof. T5 must not map this unrelated `Shader.Find` to Foam or install a placeholder Shader/CB0 binding based on the overlap. T1 FFT stage tests can proceed independently but do not satisfy real Foam CB0 upload or phone pixels. No Unity native/Adreno screenshot, full original 160-byte CB0 host value upload, or direct Material→Foam reference has been proven.
+
+**Next meaningful owner-targeted work**: Resolve original SHA-pinned other asset owners containing Materials/Shader objects and external `m_Shader` PPtrs against their serialized file reference tables, or original scene/prefab MonoBehaviour Shader fields, to find an **immutable GUID/PathID** edge to original Foam Shader, not a private name guess. Local 0 refs in one owner does not prove 0 refs across Raft. Check existing team resource claims before heavy asset staging. Do not modify original shaders/.meta/GUID/scenes, audio/Settings/world/save/input, or cancel T5/T1 actions.
+
+Work completed `prompt/coordination/work/WATER-001/T2-20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84.json`; original-safe experiment `prompt/coordination/experiments/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84.json`, canonical event `prompt/coordination/B_TEAM/events/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result.json`.
