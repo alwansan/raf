@@ -151,6 +151,9 @@ namespace RaftAndroid.Platform
         }
         private float nextSample;
         private bool skipNextFrame = true;
+        // Diagnostic-only lifecycle state. Focus can be lost without OnApplicationPause.
+        private bool applicationFocused = true;
+        private bool applicationPaused;
         private readonly float[] frameSamples = new float[2048];
         private readonly FrameTiming[] timings = new FrameTiming[1];
         private int sampleCount, intervalFrames;
@@ -609,6 +612,7 @@ namespace RaftAndroid.Platform
         private void OnApplicationPause(bool paused)
         {
             if (!paused) EnforceLandscape();
+            applicationPaused = paused;
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
             frameWindowStartScene = "";
             frameWindowStartActiveSceneRevision = activeSceneRevision;
@@ -621,6 +625,14 @@ namespace RaftAndroid.Platform
         }
         private void OnApplicationFocus(bool focused)
         {
+            // Android may change focus without pausing Unity (e.g. system UI).
+            // Discard incomplete background intervals, not scene-loading frames.
+            applicationFocused = focused;
+            intervalFrames = sampleCount = 0; intervalSeconds = 0;
+            frameWindowStartScene = "";
+            frameWindowStartActiveSceneRevision = activeSceneRevision;
+            frameWindowStartSceneRevision = sceneContentRevision;
+            skipNextFrame = true;
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "focus", focused.ToString(), true);
         }
         private void OnApplicationQuit()
@@ -638,7 +650,15 @@ namespace RaftAndroid.Platform
         }
         private void Update()
         {
-            if (skipNextFrame) { skipNextFrame = false; return; }
+            if (applicationPaused || !applicationFocused) return;
+            // First frame after startup/resume may contain a long OS pause.
+            // Begin a fresh full five-second window rather than logging 1 frame.
+            if (skipNextFrame)
+            {
+                skipNextFrame = false;
+                nextSample = Time.realtimeSinceStartup + 5f;
+                return;
+            }
             if (intervalFrames == 0)
             {
                 frameWindowStartScene = SceneManager.GetActiveScene().name;
