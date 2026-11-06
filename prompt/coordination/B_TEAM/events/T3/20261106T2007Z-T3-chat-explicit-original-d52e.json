@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2007Z-T3-chat-explicit-original-d52e",
+  "issue_id": "RENDER-002",
+  "event_type": "authenticated_original_shader48_explicit_descriptor_proof",
+  "status": "SOURCE_ORIGINAL_PROVEN_NOT_UNITY_RENDER_READY",
+  "updated_at": "2026-11-06T20:31:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42288756206",
+  "run_sha": "0764b0793febd1fad707ce7afd9e074595a449a2",
+  "original_stage_pairs": 4,
+  "verified_stages": 8,
+  "two_profile_compiler_invocations": 16,
+  "no_map_reference_invocations": 8,
+  "mapped_source_register_rows": 44,
+  "source_to_chosen_vk_target_proven": true,
+  "same_spv_program_except_descriptor_literals": true,
+  "shaderlab_integrated": false,
+  "android_pixels_verified": false,
+  "trial_vote": "لا يحتاج",
+  "next_step": "Build original 4-variant Shader48 ShaderLab in private staged Unity project, then compile and verify original scene/material owner phone effects."
+}
