@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T164001Z-T3-chat-rdef-fixture-6d0abc",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Invalid ASCII escaped-zero header made duplicate-RDEF synthetic case stop at DXBC length guard rather than duplicate-cardinality guard.",
+  "source_commit": "7c5fb5987ec29c17a53bb83ccf538cdb401bd2c2",
+  "source_code_commit": "2fc26e0373cf1b6e77f64343b5ea29348f9fa4df",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 runner Python3 (version not separately pinned)",
+    "github_actions_checkout": "11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_particle108_original_dxbc_rdef.py tests/test_t3_particle108_original_dxbc_rdef.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_rdef.py' -v"
+  ],
+  "negative_controls": [
+    "synthetic valid duplicated RDEF triggers DXBC_ORIGINAL_RDEF_MULTIPLE rather than container mismatch",
+    "synthetic absent RDEF triggers DXBC_ORIGINAL_RDEF_ABSENT",
+    "resource invalid kind, overflow and overlapping ranges remain negative controls"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-rdef-fixture-source-only.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42254748522",
+  "run_id": 42254748522,
+  "run_commit": "33e2b538e524185917ffba92cfef52d35f99f28f",
+  "run_job_id": 128018846651,
+  "artifact_urls": [],
+  "budget": "5-minute Ubuntu runner, sparse source-only checkout; no ZIP2/Unity/RE actions",
+  "status": "completed",
+  "observed_result": "PASS, 14 tests / 0 errors / 0 failures, one focused duplicate-chunk case specifically OK; source-free synthetic result. Real private RDEF probe remains not rerun and earlier real source INCONCLUSIVE.",
+  "rejected_hypotheses": [
+    "The duplicate-RDEF synthetic failure indicated an authentic shader defect",
+    "A synthetic duplicate-RDEF test using 64 ASCII backslash-x bytes represents a valid DXBC container"
+  ],
+  "limitations": [
+    "No authentic original stage RDEF cardinality recheck",
+    "No shader resource binding recovered",
+    "No Unity/Adreno pixel, original renderer emitter identity, or game repair evidence",
+    "No proprietary assets downloaded, logged or published"
+  ],
+  "integration_commit": "e3695147b4894fdc453d1134ef2a9516f8625b0a",
+  "workflow_commit": "33e2b538e524185917ffba92cfef52d35f99f28f",
+  "next_step": "Scheduled T3 should recheck original eight-stage DXBC only after confirming updated parser and no equivalent active CI; distinguish ORIGINAL_RDEF_ABSENT vs MULTIPLE from safe allowlisted output; if absent investigate DXBC declarations rather than fabricate registers."
+}
