@@ -26,6 +26,7 @@ FAILURE_CODES = frozenset({
     "T3_PRIVATE_COMPILER_NONZERO", "T3_PRIVATE_COMPILER_UNAVAILABLE",
     "T3_PRIVATE_SPIRV_INVALID", "T3_PRIVATE_SPIRV_TOOL_UNAVAILABLE",
     "T3_PRIVATE_OUTPUT_MISSING", "T3_PRIVATE_DUAL_PROFILE_PAIR_REJECTED",
+    "T3_PRIVATE_BASELINE_COMPILER_NONZERO", "T3_PRIVATE_BASELINE_SPIRV_INVALID",
     "T3_PRIVATE_RESULT_CONTRACT", "T3_PRIVATE_SCOPE_INVALID",
 })
 
@@ -40,7 +41,9 @@ def _quiet_run(argv,*,run=subprocess.run,code):
         # Public helper process exit integer (not stderr/stdout, DXBC, paths,
         # register values or SPIR-V content) is needed to separate a parser
         # contract fault from a real vkd3d shader-compiler rejection.
-        if code=="T3_PRIVATE_COMPILER_NONZERO" and 1<=proc.returncode<=127:
+        if code in ("T3_PRIVATE_COMPILER_NONZERO",
+                    "T3_PRIVATE_BASELINE_COMPILER_NONZERO",
+                    "T3_PRIVATE_EXPLICIT_AFTER_VALID_BASELINE_COMPILER_NONZERO") and 1<=proc.returncode<=127:
             raise ValueError(code+"_EXIT_"+str(proc.returncode)) from None
         raise ValueError(code) from None
 
@@ -73,12 +76,26 @@ def classify(pairs,temporary,compiler,*,layout=original.dx._private_stage_layout
                 or not 1<=metadata["source_stage_resource_count"]<=64):
                 raise ValueError("T3_PRIVATE_RESULT_CONTRACT")
             paths=packets.private_write_packets(map_text,folder)
+            # Contrast exact SAME original stage source and C API without any
+            # explicit descriptor interface. A valid baseline + A/B rejection
+            # isolates the explicit register map contract rather than claiming
+            # the original source was corrupt.
+            default_spv=folder/"unmapped-baseline.spv"
+            _quiet_run([str(compiler),str(dxbc),str(default_spv),"D"],
+                       run=runner,code="T3_PRIVATE_BASELINE_COMPILER_NONZERO")
+            if (not default_spv.is_file() or default_spv.is_symlink() or
+                not 20<=default_spv.stat().st_size<=dual.spv.MAX_SPIRV_BYTES):
+                raise ValueError("T3_PRIVATE_OUTPUT_MISSING")
+            _quiet_run(["spirv-val","--target-env","vulkan1.1",str(default_spv)],
+                       run=runner,code="T3_PRIVATE_BASELINE_SPIRV_INVALID")
+            counts["private_unmapped_baseline_compiler_invocations"]+=1
+            counts["private_unmapped_baseline_spirv_val_invocations"]+=1
             binaries={}
             for profile in ("A","B"):
                 output=folder/("mapped-"+profile+".spv")
                 _quiet_run([str(compiler),str(dxbc),str(output),
                             str(paths[profile]),profile],
-                           run=runner,code="T3_PRIVATE_COMPILER_NONZERO")
+                           run=runner,code="T3_PRIVATE_EXPLICIT_AFTER_VALID_BASELINE_COMPILER_NONZERO")
                 if (not output.is_file() or output.is_symlink() or
                     not 20<=output.stat().st_size<=dual.spv.MAX_SPIRV_BYTES):
                     raise ValueError("T3_PRIVATE_OUTPUT_MISSING")
@@ -108,7 +125,8 @@ def classify(pairs,temporary,compiler,*,layout=original.dx._private_stage_layout
         counts["verified_source_keyword_pairs"]+=1
     if (counts["source_stages_with_two_explicit_profiles_verified"]!=8
         or counts["verified_source_keyword_pairs"]!=4
-        or counts["private_compiler_invocations"]!=16):
+        or counts["private_compiler_invocations"]!=16
+        or counts["private_unmapped_baseline_compiler_invocations"]!=8):
         raise ValueError("T3_PRIVATE_RESULT_CONTRACT")
     return {
         "schema_version":1,"status":STATUS,"counts":dict(sorted(counts.items())),
@@ -173,10 +191,14 @@ def main(argv=None):
         literal=str(exc) if type(exc) is ValueError else ""
         # The C helper's return code is bounded and source-independent.
         # All other exception messages are discarded to protect game data.
-        compiler_exit=(literal.startswith("T3_PRIVATE_COMPILER_NONZERO_EXIT_") and
-            literal.removeprefix("T3_PRIVATE_COMPILER_NONZERO_EXIT_").isascii() and
-            literal.removeprefix("T3_PRIVATE_COMPILER_NONZERO_EXIT_").isdecimal() and
-            1<=int(literal.removeprefix("T3_PRIVATE_COMPILER_NONZERO_EXIT_"))<=127)
+        exit_prefixes=("T3_PRIVATE_BASELINE_COMPILER_NONZERO_EXIT_",
+                       "T3_PRIVATE_EXPLICIT_AFTER_VALID_BASELINE_COMPILER_NONZERO_EXIT_",
+                       "T3_PRIVATE_COMPILER_NONZERO_EXIT_")
+        compiler_exit=any(
+            literal.startswith(prefix) and
+            literal.removeprefix(prefix).isascii() and
+            literal.removeprefix(prefix).isdecimal() and
+            1<=int(literal.removeprefix(prefix))<=127 for prefix in exit_prefixes)
         reason=literal if literal in FAILURE_CODES or compiler_exit else "T3_PRIVATE_UNCLASSIFIED_FAILURE"
         result={
             "schema_version":1,"status":"INCONCLUSIVE",
