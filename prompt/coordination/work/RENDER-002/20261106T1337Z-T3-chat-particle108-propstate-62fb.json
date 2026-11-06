@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1337Z-T3-chat-particle108-propstate-62fb",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ec6c948277d0a621285e25aa827b069e30570fe7",
   "resumed_from_sessions": [
     "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
@@ -19,7 +19,7 @@
   ],
   "hypothesis": "The exact original 108-use ParticleShader48 source property declarations + complete serialized Pass fixed function state can be losslessly and safely emitted as an isolated ShaderLab structural fragment; property names/defaults must remain private and unsupported flags/types fail closed, never replace DUMMY until authentic variant linkage.",
   "experiment_key": "T3-ZIP2-15964-ParticleShader48-108-Original-PropInfo-PassState-Unity2021-ShaderLab-strict-no-HLSL-private-v1",
-  "resource_key": "T3-SHA-original-particle-4owner-6scene-structural-propstate-CPU",
+  "resource_key": null,
   "intended_files": [
     "scripts/t3_particle108_source_propstate.py",
     "tests/test_t3_particle108_source_propstate.py",
@@ -30,6 +30,30 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T1337Z-T3-chat-particle108-propstate-62fb.json"
   ],
   "approach": "Read exact source SHA-original uniquely selected 108-particle-slot Shader48; serialize original m_PropInfo + one-pass m_State to private scratch with allowlisted syntax, zero false fallback to invented fields; safe aggregate counts only. Test synthetic negatives and original via bounded manual/on-paths CI. No GPU or Unity export, no source HLSL or game asset edits.",
-  "updated_at": "2026-11-06T13:31:36.230Z",
-  "next_step": "Implement strict private property+render state parser and source-free negative controls; test genuine selected original Shader48 with SHA locked four owners/six scenes."
+  "updated_at": "2026-11-06T13:42:26.065Z",
+  "next_step": "Separate paired T3 glslang work 20261106T1223Z remains distinct; after 4/4 genuine VS/FS semantic/Location and binding proof, combine source-authentic private 13 props + one Pass full state with real keyword variants and test Unity/device; RENDER-002 OPEN.",
+  "resource_released": true,
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42226905270"
+  ],
+  "workflow_source_sha": "6504d56834048181b986b2f4ef1bc28b792f0a15",
+  "ci_conclusion": "success",
+  "original_source_SHA_owners_verified": 4,
+  "original_source_SHA_scenes_verified": 6,
+  "safe_artifact_id": 13506590606,
+  "last_verified_result": {
+    "shader_selection": "unique_original_108_ParticleSystemRenderer_Material_slots",
+    "original_authored_properties": 13,
+    "texture": 2,
+    "color": 1,
+    "vector": 0,
+    "float": 4,
+    "range": 6,
+    "source_original_Pass_count": 1,
+    "original_RGB_colormask_translated": true,
+    "source_free_tests_passed": 14,
+    "stage_programs_integrated": false,
+    "native_game_shader_modified": false,
+    "Adreno_pixels_verified": false
+  }
 }
