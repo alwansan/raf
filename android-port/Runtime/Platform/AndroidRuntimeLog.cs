@@ -9,7 +9,11 @@ namespace RaftAndroid.Diagnostics
     public static class AndroidRuntimeLog
     {
         private static PersistentDiagnosticLog sink;
-        private static readonly RepeatedDiagnosticMessages repeated = new RepeatedDiagnosticMessages();
+        // Deduplication belongs to one persistent logger session only.
+        // Unity can stop and restart its managed logger without restarting
+        // the process, so the first full stack in the new session must not
+        // be suppressed by a previous session's dictionary.
+        private static RepeatedDiagnosticMessages repeated = new RepeatedDiagnosticMessages();
         public static bool UnityMessage(string type, string detail, bool critical)
         {
             // The HUD still needs the first exception while persistent
@@ -39,7 +43,11 @@ namespace RaftAndroid.Diagnostics
             try
             {
                 LogDirectory = Path.Combine(Application.persistentDataPath, "raft-logs");
-                sink = new PersistentDiagnosticLog(LogDirectory);
+                var newSink = new PersistentDiagnosticLog(LogDirectory);
+                // Prepare a fresh grouping dictionary *before* exposing the
+                // new sink to the threaded Unity log callback.
+                repeated = new RepeatedDiagnosticMessages();
+                sink = newSink;
                 Write("startup", "logger.ready", "version=" + Application.version + "; unity=" + Application.unityVersion +
                     "; package=" + Application.identifier + "; device=" + SystemInfo.deviceModel +
                     "; os=" + SystemInfo.operatingSystem + "; gpu=" + SystemInfo.graphicsDeviceName +
