@@ -1,0 +1,14 @@
+{
+  "id": "20261106T0950Z-T3-chat-dxbc-spv-location-27af",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T0950Z-T3-chat-dxbc-spv-location-27af",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Actual SHA-authentic original Particle108 four VS/FS keyword pairs (8 DXBC stages): source vkd3d SPIRV numerically matches 46/48 original user registers, 2 absent numeric location, 46 type-class matches, zero width deficits, only 2/4 pairs wholly candidate; no semantic name identity, HLSL map or Android pixel proof; no auto shader patch.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42199149873",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T0950Z-T3-chat-dxbc-spv-location-27af.json"
+  ],
+  "at": "2026-11-06T10:00:00Z"
+}
