@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_ci_success_device_unverified",
+  "experiment_key": "T4-INPUT005-API26-pointer-release-actual-JNI-call-vs-skipped-UI-outcome-enum-privacy-safe-source-Unity2021ABI-v1",
+  "baseline_sha": "c40742978308ce801054649b48383751f58858a4",
+  "source_implementation_sha": "8f0b51a4ad710928937797b5352efc5893832f56",
+  "final_test_commit_sha": "e06566a7e72f6128252e2a974e66af46ca57bac3",
+  "final_ci": {
+    "url": "https://github.com/alwansan/raf/actions/runs/42208882663",
+    "job_id": 127862302416,
+    "head_sha": "e06566a7e72f6128252e2a974e66af46ca57bac3",
+    "conclusion": "success",
+    "counts": {
+      "routing": 7,
+      "axes": 7,
+      "pointer_policy": 21,
+      "presence": 5,
+      "view_identity_and_release_outcome": 7,
+      "total": 47
+    },
+    "unity2021_original_managed_abi_compile": "success",
+    "android_phone": "unverified"
+  },
+  "initial_ci": {
+    "url": "https://github.com/alwansan/raf/actions/runs/42208627456",
+    "conclusion": "failure",
+    "reason": "two preexisting inline-return lexical-only assertions failed; actual epoch condition and stale-return behavior preserved and tests updated to check ordering"
+  },
+  "platform_ci": {
+    "url": "https://github.com/alwansan/raf/actions/runs/42208627329",
+    "source_sha": "8f0b51a4ad710928937797b5352efc5893832f56",
+    "conclusion": "success"
+  },
+  "modified_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "tests/test_t4_android_pointer_capture_policy.py"
+  ],
+  "observation": "Queued-release logs now classify eight bounded outcomes. release_call_returned reports invocation only; all events say native_release_confirmed=false. Existing original View identity and epoch guards remain.",
+  "privacy": "Fixed categories only; no raw original code or game data, user save paths, View hashes, JNI exception text, mouse coordinates, device IDs. No per-frame logging. Diagnostic failure swallowed.",
+  "limits": "Source/managed ABI test only: no Unity ARM64 runtime, hardware mouse, focus transitions, actual OS capture result or phone persistence validation.",
+  "next_step": "T5 single signed source-pinned APK+OBB; owner device mouse focus/cursor/camera and full same-world save/force-exit/reopen paired with existing original markers."
+}
