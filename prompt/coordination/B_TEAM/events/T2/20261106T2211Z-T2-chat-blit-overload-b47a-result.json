@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2211Z-T2-chat-blit-overload-b47a-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2211Z-T2-chat-blit-overload-b47a",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "at": "2026-11-06T22:15:52.203Z",
+  "summary": "Source-original Mono.Cecil exact Foam typed Material→Graphics.Blit consumers are 2/2 public Blit(Texture,RenderTexture,Material,int) signatures with explicit pass argument, zero implicit/default. CI42303074180 passed 58+6 Python and Cecil tests; pass values/device execution not proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42303074180",
+    "https://github.com/alwansan/raf/commit/201e14caf01c4cbc47a798055830235eebbcbdb8",
+    "docs/T2_ORIGINAL_FOAM_TYPED_GRAPHICS_ROUTE_2026-11-06.md"
+  ]
+}
