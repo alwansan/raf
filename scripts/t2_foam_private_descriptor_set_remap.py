@@ -103,7 +103,9 @@ def scan_binary_decorations(blob):
         n = words[i] >> 16
         if not n or i+n > len(words):
             raise ValueError("malformed_private_SPIRV_opcode_boundaries")
-        if opcode == OP_DECORATE and n >= 3 and words[i+2] in (
+        if opcode == OP_DECORATE and n < 3:
+            raise ValueError("malformed_private_descriptor_decoration")
+        if opcode == OP_DECORATE and words[i+2] in (
                 DECOR_BINDING, DECOR_DESCRIPTOR_SET):
             if n != 4 or not 0 < words[i+1] < words[3]:
                 raise ValueError("malformed_private_descriptor_decoration")
