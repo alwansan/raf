@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T2229Z-T5-chat-native-package-postattest-c61b",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "updated_at": "2026-11-06T22:29:00.478Z",
+  "base_sha": "a02afd104b72359c7955d7519be1fda978018ce5",
+  "resumed_from_sessions": [
+    "20261106T2216Z-T5-chat-xapk-postread-sha-0e8d",
+    "20261106T2207Z-T5-chat-strict-xapk-json-92e4",
+    "20261106T2150Z-T5-scheduled-native-reconstruct-8b4f"
+  ],
+  "taken_over_from": "Source-only APK/OBB/XAPK byte parity 07adfa6a and post-read SHA dc6518bb",
+  "intended_files": [
+    "scripts/package_android_delivery.py",
+    "tests/test_t5_native_package_postattest.py",
+    ".github/workflows/raft-t5-native-package-postattest.yml",
+    "prompt/coordination/work/DELIVERY-013/20261106T2229Z-T5-chat-native-package-postattest-c61b.json",
+    "prompt/coordination/clients/T5/sessions/20261106T2229Z-T5-chat-native-package-postattest-c61b.md",
+    "prompt/coordination/experiments/T5/20261106T2229Z-T5-chat-native-package-postattest-c61b.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T2229Z-T5-chat-native-package-postattest-c61b.json"
+  ],
+  "hypothesis": "Native workflow runs scripts.package_android_delivery but never invokes new actual XAPK nested SHA checker before retaining/publishing. Package can return success if a transport part changes between writer completion and metadata record; integrate post-packaging integrity attestation to make a complete APK+OBB+XAPK source fail closed before printing success, preserving APK-only compatibility.",
+  "experiment_key": "T5-DELIVERY-013-native-package-source-a58672b-postattestation-split-SHA-source-only-v1",
+  "resource_key": "T5 CPU-only synthetic Python CI; no Unity or real APK/OBB, no native request or heavy runner",
+  "coordination": "Current native 42296450023 source a1737bd7 in_progress, immutable, do not cancel/retrigger or claim it includes this change. T5 scheduled native observer has separate source. T1/T2/T3/T4 files untouched; existing shared workflow is not modified.",
+  "next_step": "First reproduce gap with a deterministic corrupted post-write XAPK part fixture in an independent workflow; then invoke read-only cross-delivery verifier for companion_required true from native packager before return, confirm red-to-green regression and original A3 packaging CI; record scope/session."
+}
