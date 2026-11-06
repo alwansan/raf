@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T2038Z-T1-chat-integer-source-a47c",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "hypothesis": "Rewriting only source ImageFetch signed-integer coordinate lanes before SPIRV-Cross HLSL translation, with SSA local store promotion, prevents the 63/64 baseline site0 Unity X zero collapse while unchanged reference original-SPIRV Vulkan and frozen source inputs remain.",
+  "source_commit": "18ed8e3a8db0e29e955bf8dfcb7a4b3f019cd26e",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "tools": {
+    "Unity": "2021.3.45f2 OpenGLCore",
+    "GameCI CLI": "v0.1.72, sha 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a",
+    "SPIRV": "spirv-opt --convert-local-access-chains --eliminate-local-single-block --eliminate-local-single-store --ssa-rewrite, then scripts.t1_fft_source_integer_coordinates on source-fetch only"
+  },
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42290211798",
+  "baseline_run_url": "https://github.com/alwansan/raf/actions/runs/42289238865",
+  "commands": [
+    "Opt-in same workflow with commit markers [t1-paired-replay] [t1-integer-source] at source SHA 18ed8e3a",
+    "CI computes original ZIP2 direct SPIR-V keyed reference and same 1024x32 seed19 Vulkan physical image bytes; only Unity candidate0 generated HLSL rewritten from optimized SPIRV with integer source path",
+    "Current run 42290211798 in progress"
+  ],
+  "negative_controls": [
+    "bit-identical pinned original 1024x32 seed19 input, original Vulkan trace unchanged",
+    "Unity GPU input CopyInput zero mismatches, direct original trace & per-site keyed coverage",
+    "private candidate0/1 actual SHA and Unity C# stage 'complete'",
+    "no raw shader/sample/private IDs in outputs",
+    "no in-game authored kernel/Android acceptance claims"
+  ],
+  "observed_result": {
+    "source_only_preflights": "passed checkout Python/CLI, Unity synthetic in progress",
+    "result_not_yet_known": true,
+    "baseline_site_coordinate_mismatches": [
+      63,
+      252,
+      64
+    ],
+    "baseline_zero_axis_x": [
+      63,
+      252,
+      63
+    ],
+    "baseline_pixel_mismatches": [
+      63,
+      31
+    ]
+  },
+  "limitations": [
+    "Counterfactual rewrites only source ImageFetch coordinate; cannot infer butterfly site fix from unmodified sites.",
+    "No change to original game asset, author-authored runtime mapping or Android.",
+    "A numerical mismatch causes workflow failure by design; source-only earlier success not Unity pass."
+  ],
+  "next_step": "Check run42290211798 exact safe markers and compare with baseline; if rewrite validator fails, record stage no claims; if success inspect direct source coord collapse site0 and numerical pixel errors before any live in-game shader patch."
+}
