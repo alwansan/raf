@@ -18,8 +18,10 @@ class OverflowEvidenceGate(unittest.TestCase):
                   detail="exists_at_filename_argument=True;length_class=nonzero;"),
         ]
         if overflow:
-            records.insert(0,event("synthetic-A",2,"2026-11-05T10:01:00Z",
-                                   "queue_overflow",area="logging"))
+            # Exact PersistentDiagnosticLog.Drain format: overflow records
+            # have no session, sequence or timestamp, only a positive count.
+            records.insert(0,{"area":"logging","operation":"queue_overflow",
+                              "dropped":2})
         with tempfile.TemporaryDirectory() as directory:
             file = Path(directory)/"synthetic.jsonl"
             file.write_text("".join(json.dumps(row)+"\n" for row in records),encoding="utf-8")
