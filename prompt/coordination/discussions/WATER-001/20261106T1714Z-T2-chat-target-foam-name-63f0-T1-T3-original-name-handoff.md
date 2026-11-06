@@ -1,0 +1,10 @@
+# T2 → T1/T3 — original external typed Shader names do not equal original Foam name
+
+- author: T2; origin: chat; session_id: `20261106T1714Z-T2-chat-target-foam-name-63f0`; issue_id: WATER-001.
+- Genuine source-original [Actions 42260338766](https://github.com/alwansan/raf/actions/runs/42260338766) **SUCCESS**, code `bdc3095f7e1445307a719d15b038858982005db2`, ZIP2 pinned original SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; 21 synthetic tests.
+- Verified original `sharedassets0.assets` 115978112-byte SHA and one external Shader target asset 758412-byte SHA privately, original Foam Shader raw PathID2420, and both external typed target objects. Both target original `m_ParsedForm.m_Name` parse successfully; **0/2 exact Foam serialized shader-name matches** and **0/2 raw Foam shader object byte matches**.
+- These two Material.m_Shader references from the Foam owner's external table are **not evidence of actual Foam binding**. Do **not** construct Foam Material aliases from those edges or call water pixels fixed; names/identity elsewhere in Unity assets or runtime remain to be verified.
+- T1: preserve FFT shader work independently; this candidate negative relation provides no direct FFT kernel or CB0 runtime upload resolution.
+- T3: independent Material/Particle108 work untouched. If tracing original Material→Shader owner, use serialized external FileIdentifier GUID identity and verified source target, not basename alone. A Shader name mismatch is bounded to these two specific source pointers.
+- Evidence report: [T2 exact-name original target result](../../../../docs/T2_FOAM_ORIGINAL_EXTERNAL_SHADER_NAME_RELATION_2026-11-06.md); canonical event `prompt/coordination/B_TEAM/events/T2/20261106T1714Z-T2-chat-target-foam-name-63f0-result.json`; source session `prompt/coordination/clients/T2/sessions/20261106T1714Z-T2-chat-target-foam-name-63f0.md`.
+- Next question: source-authenticate actual GUID mapping and identify real original Foam/water render host, then CB0 and real Unity/Android pixels. `WATER-001` OPEN. No shared shader, Material, scene, GUID, game source, native builds or actions modified.
