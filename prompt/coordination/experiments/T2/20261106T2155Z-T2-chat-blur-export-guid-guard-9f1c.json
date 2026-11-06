@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
+  "issue_id": "WATER-001",
+  "hypothesis": "B45 original Blur installer checks only its target .meta GUID syntax but not uniqueness across exported Assets, allowing an unrelated .meta with the same GUID to make material references ambiguous. Reject duplicate and unsafe unrelated .meta before any backup or replacement.",
+  "source_commit": "52dc2c6a8410f24893342a3b8c7db9db2c920522",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 default Python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_b45_*original_blur.py' -v"
+  ],
+  "negative_controls": [
+    "unrelated exported .asset.meta collides with Blur Shader GUID",
+    "unrelated redirected .meta symlink"
+  ],
+  "positive_controls": [
+    "unrelated well-formed distinct GUID installs candidate and preserves target .meta exactly"
+  ],
+  "workflow_path": ".github/workflows/raft-b45-blur-install-check.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42300619078",
+  "artifact_urls": [],
+  "status": "completed",
+  "budget": "existing path-filter source-only CI 4-minute budget, no Unity/APK",
+  "observed_result": "12/12 synthetic Blur installer rollback tests pass; B20 rollback workflow also success on same SHA.",
+  "rejected_hypotheses": [
+    "Unique ShaderLab name and syntactically valid GUID alone prove unambiguous Unity Material Shader PPtr"
+  ],
+  "limitations": [
+    "No original exported Assets/GUID inventory tested",
+    "No private Blur original code or asset published",
+    "No native Unity compile or Android pixel run"
+  ],
+  "integration_commit": "52dc2c6a8410f24893342a3b8c7db9db2c920522",
+  "next_step": "T5 authorised authentic Unity export: enumerate all .meta GUIDs and verified Blur target, use private source candidate only after matching authoritative original and clean importer; verify Unity original Blur pass colors and phone pixels; no forced native."
+}
