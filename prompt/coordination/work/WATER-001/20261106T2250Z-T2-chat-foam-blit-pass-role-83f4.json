@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2250Z-T2-chat-foam-blit-pass-role-83f4",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
-  "updated_at": "2026-11-06T22:50:31.000Z",
+  "updated_at": "2026-11-06T22:52:40.660Z",
   "resumed_from_sessions": [
     "20261107T2227Z-T2-chat-blit-texture-role-6c52",
     "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3"
@@ -35,5 +35,6 @@
     "https://github.com/alwansan/raf/actions/runs/42303756960"
   ],
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Add per-literal0/per-literal1 source and destination categories to existing C# scanner, strict per-pass partition and conservation checks to JSON validator, synthetic controls; run original SHA-pinned CI; record results and limitations without leaking private symbols."
+  "next_step": "Await exact code SHA Actions trigger from T2 original Foam Shader.Find typed IL workflow; inspect Python/Cecil synthetic and original authenticated 2x Blit pass source/destination per-role category. If no trigger, inspect on.push.paths and dispatch only permitted separate source-only workflow; do not run native.",
+  "code_commit": "dd92034aaef9b61ad2170c768142398795eff154"
 }
