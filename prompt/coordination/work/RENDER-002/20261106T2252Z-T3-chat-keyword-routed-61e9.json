@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T2252Z-T3-chat-keyword-routed-61e9",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "created_at": "2026-11-06T22:52:00Z",
+  "updated_at": "2026-11-06T22:52:00Z",
+  "resumed_from_sessions": [
+    "20261106T2213Z-T3-chat-keyword-name-table-c9a2",
+    "20261106T2158Z-T3-chat-keyword-lattice-e6d4",
+    "20261106T2228Z-T3-scheduled-contract-unhashable-k7p2"
+  ],
+  "scope": "PRIVATE runner-only single provisional ShaderLab HLSLPROGRAM 4-pair keyword routing from source SHA authenticated Shader48 m_KeywordIndices to m_KeywordNames. Fail closed on malformed/ambiguous sets; compile exactly 8 HLSL macro-selected stage+keyword branches via glslang/spirv-val; NEVER edit original project game Shader/Material GUID or assert Unity/runtime binding.",
+  "intended_files": [
+    "scripts/t3_particle108_private_keyword_routed_shaderlab.py",
+    "tests/test_t3_particle108_private_keyword_routed_shaderlab.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml"
+  ],
+  "experiment_key": "SHA15964-T3-Shader48-4-pairs-2-source-keyword-index-names-one-private-provisional-HLSLPROGRAM-8-combo-compile-v1",
+  "resource_key": "existing T3 ZIP2 pinned original SHA15964 4 owners 6 scenes, private HLSL scratch; no native Unity",
+  "acceptance": "Original SHA-pinned four pairs and stage metadata name mapping only; one private provisional ShaderLab assembled, 8/8 HLSL (4 combos x vertex/frag) Vulkan1.1 validations, synthetic fail-closed controls; no original names, indices, source, or compiler traces in logs; no Unity Editor import/game integration",
+  "planning_run": "Native owner/T5 42296450023 still in_progress pinned a1737bd; existing T3 original 42303585869 SUCCESS; scheduled T3 contract file separate; no native dispatch",
+  "trial_vote": "لا يحتاج",
+  "base_sha": "748562011da90ec95ee6121134a7866da7fcb4d1"
+}
