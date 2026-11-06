@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2213Z-T3-chat-keyword-name-table-c9a2",
+  "issue_id": "RENDER-002",
+  "status": "SOURCE_ORIGINAL_KEYWORD_NAME_TABLE_MAPPING_PROVEN",
+  "experiment_key": "SHA15964-T3-Shader48-Particle108-4VSFS-2bit-keyword-index-to-ParsedForm-name-flag-table-private-existence-v1",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "code_sha": "50790bac18dbee72159be818480f2e9165eda0d9",
+  "terminal_run": {
+    "id": 42303585869,
+    "url": "https://github.com/alwansan/raf/actions/runs/42303585869",
+    "job_id": 128187236608,
+    "conclusion": "success"
+  },
+  "failed_intermediate_runs": [
+    {
+      "id": 42303344912,
+      "reason": "one synthetic negative control asserted later rather than earlier fail-closed gate"
+    },
+    {
+      "id": 42303410851,
+      "reason": "workflow accidental extra CLI argument; original table step not run"
+    }
+  ],
+  "authenticated": {
+    "original_scenes": 6,
+    "original_shader_owners": 4,
+    "original_D3D11_VSFS_keyword_pairs": 4,
+    "original_name_table_count": 9,
+    "original_flag_table_count": 9,
+    "name_flag_table_structurally_sound": true,
+    "two_anonymous_source_switches_map_to_two_distinct_legal_original_names": true,
+    "all_four_keyword_index_sets_complete_two_toggle_boolean_lattice": true
+  },
+  "tests": {
+    "new_synthetic_keyword_table": 13,
+    "inherited_lattice": 17,
+    "inherited_private_HLSL_VSFS_wrapper": 10,
+    "inherited_shaderlab_variants": 14
+  },
+  "not_proven": [
+    "Unity2021 runtime shader keyword declaration or material binding",
+    "serialized flag semantic meaning",
+    "Unity ShaderLab import or GPU compilation",
+    "Android/Adreno particle colors/fire/smoke"
+  ],
+  "private_names_indexes_flags_hlsl_dxbc_shader_path_or_guids_published": false,
+  "native_actions_cancelled_or_restarted": false,
+  "game_assets_modified": false,
+  "trial_vote": "لا يحتاج",
+  "render_issue": "OPEN_NOT_READY",
+  "next_step": "Source-authentic private material Keyword state to mapped Shader48 index names and flags provenance; followed by isolated Unity shader import when native engine slot available."
+}
