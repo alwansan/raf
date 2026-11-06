@@ -6,6 +6,12 @@ on:
       - scripts/restore_builtin_shaders.py
       - tests/test_a14_builtin_backup_atomicity.py
       - tests/test_a14_shader_meta_guid_preflight.py
+      # This job also executes these suites. A test-only correction must
+      # revalidate the combined checkpoint without a fake source edit.
+      - tests/test_a3_builtin_shader_symlink_paths.py
+      - tests/test_a9_builtin_shader_identity.py
+      - tests/test_a15_builtin_restore_rollback.py
+      - tests/test_restore_builtin_shaders.py
       - .github/workflows/raft-a14-builtin-backup-atomicity.yml
   workflow_dispatch:
 permissions:
