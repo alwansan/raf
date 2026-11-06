@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1017Z-T3-chat-roundtrip-interface-c97e",
+  "generation": "T-2026-11-05",
+  "issue_id": "RENDER-002",
+  "track": "Original authentic Particle108 HLSL roundtrip 2/4 VS/FS interface drift source diagnosis",
+  "status": "active",
+  "base_sha": "a04368f3b4b5197bfb2b9a34969f8921e42c5dc5",
+  "intended_files": [
+    "scripts/t3_particle108_roundtrip_interface_diagnostic.py",
+    "tests/test_t3_particle108_roundtrip_interface_diagnostic.py",
+    ".github/workflows/raft-t3-particle108-roundtrip-interface.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1017Z-T3-chat-roundtrip-interface-c97e.md",
+    "prompt/coordination/experiments/T3/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json"
+  ],
+  "hypothesis": "Genuine SHA-original four-pair Particle108 VS/FS HLSL roundtrip 2/4 mismatch is caused by distinguishable missing VS-output location vs same-location type discrepancies; source SPIRV original 4/4 remains compatible. Report aggregate only, no inferred semantic identity or patch.",
+  "experiment_key": "T3-Particle108-ZIP2-15964ea8-fourpair-vkd3d-HLSL-SPV-source-vsfs-roundtrip-mismatch-shape-v1",
+  "resource_key": "T3-original-Particle108-4owners-private-shader-runner",
+  "approach": "New original SHA-authentic, runner-private four-pair compiled DXBC -> source vkd3d SPIR-V -> recovered HLSL -> validated roundtrip SPIR-V structural diagnostic. Fail-closed source-free unit fixtures; no modification to original Shader48 asset, no duplicate source numeric register CI.",
+  "related_work": [
+    "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+    "20261106T0930Z-T3-scheduled-blockcomment-2d7f"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.md",
+    "prompt/coordination/clients/T3/sessions/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.md"
+  ],
+  "experiment_ids": [
+    "20261106T1017Z-T3-chat-roundtrip-interface-c97e"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement aggregate per VS/FS source vs HLSL-roundtrip numeric interface error classifier and run private original workflow; no authored semantic/Android pixel claim.",
+  "updated_at": "2026-11-06T10:17:00Z"
+}
