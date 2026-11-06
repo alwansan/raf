@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2158Z-T3-chat-keyword-lattice-e6d4",
+  "issue_id": "RENDER-002",
+  "status": "completed_SHA_original_keyword_set_lattice_structurally_proven_tier_unspecified",
+  "base_sha": "e5ab938df469e5422dfbaf94e0448609fc90d4d7",
+  "experiment_key": "T3-PARTICLE108-ORIGINAL4-vsfs-bucket-keyword-lattice-structural-verified-sixScenes-fourOwners-ZIP2-15964-e6d4",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "terminal_run": {
+    "id": 42301977939,
+    "url": "https://github.com/alwansan/raf/actions/runs/42301977939",
+    "run_sha": "ebeb83e2a47dab67c73ca9d0d484ab326aa408f8",
+    "job_id": 128181759344,
+    "conclusion": "success"
+  },
+  "previous_runs": [
+    {
+      "id": 42301337183,
+      "stage": "synthetic fixture public schema-key false positive, 13 of 14 pass; no original data read"
+    },
+    {
+      "id": 42301439297,
+      "stage": "source valueerror unknown; diagnostic inconclusive"
+    },
+    {
+      "id": 42301685831,
+      "stage": "original optional hardware tier absent diagnosed fail-closed"
+    }
+  ],
+  "proof": {
+    "original_scene_file_sha_verified": 6,
+    "original_shader_owner_file_sha_verified": 4,
+    "source_original_program_table_records": 16,
+    "original_vs_fs_matching_keyword_pair_count": 4,
+    "vertex_keyword_index_entries": 4,
+    "fragment_keyword_index_entries": 4,
+    "global_keyword_index_entries": 0,
+    "local_keyword_index_entries": 0,
+    "common_always_on_keyword_index_count": 0,
+    "changing_keyword_dimensions": 2,
+    "serialized_distinct_permutation_sets": 4,
+    "two_independent_keyword_index_set_shape_verified": true,
+    "explicit_hardware_tier_metadata_rows": 0,
+    "hardware_tier_metadata_omitted_rows": 4,
+    "same_explicit_tier_runtime_dispatch_verified": false
+  },
+  "tests": {
+    "source_free_keyword_lattice": 16,
+    "prior_private_variant": 14,
+    "prior_dual_stage_macro": 10
+  },
+  "changed_paths": [
+    "scripts/t3_particle108_original_keyword_lattice.py",
+    "tests/test_t3_particle108_original_keyword_lattice.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml"
+  ],
+  "constraints": {
+    "indices_or_source_keyword_names_published": false,
+    "shader_DXBC_HLSL_SPV_or_game_assets_published": false,
+    "original_index_to_authored_name_mapping_proven": false,
+    "unity_ShaderLab_keyword_runtime_selection_proven": false,
+    "unity_editor_import_or_android_pixels_proven": false,
+    "game_shader_or_meta_modified": false,
+    "trial_vote": "لا يحتاج",
+    "render_issue": "OPEN_NOT_READY"
+  },
+  "next_step": "Investigate exact original serialized keyword authored-name/flags mapping for two anonymous index dimensions, without claiming Unity runtime single-program conversion; coordinate isolated Editor test after native completes."
+}
