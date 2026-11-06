@@ -1,0 +1,15 @@
+{
+  "id": "20261106T1733Z-T4-linear-save-load-log-pairing-w6q2",
+  "owner": "T4",
+  "session_id": "20261106T1731Z-T4-chat-log-pair-linear-w6q2",
+  "issue_id": "LOCAL-005",
+  "type": "source_only",
+  "summary": "Authentic source-free phone JSONL verifier previously materialized O(session_count^2) save-load pairs although boolean hints only. Red CI42262198164 on 200 synthetic sessions counted 20499 timestamp comparisons; production fix 2e141724 uses one-pass earliest-ending eligible prior save and preserves strict chronological, sequence, overflow and false native acceptance gates. Green CI42262364475 SUCCESS 28 parser+2 overflow synthetic tests. No original RGD or Android device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42262198164",
+    "https://github.com/alwansan/raf/commit/2e1417246a327e0a047d0817e328fd9d422b7c4c",
+    "https://github.com/alwansan/raf/actions/runs/42262364475",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_WORLD_SAVE_LOG_LINEAR_PAIRING_2026-11-06.md"
+  ],
+  "at": "2026-11-06T17:33:00Z"
+}
