@@ -1,0 +1,15 @@
+# T1 scheduled session — 20261106T110837Z-T1-scheduled-fft-first-divergence
+- origin: scheduled
+- issue: WATER-001 (open)
+- started_at: 2026-11-06T11:08:37Z
+- base_sha: previous work reservation c6254baa0fc53cea048df5c4efbc143e5fca6df3
+- resumed_from: previous T1 scheduled session references in conversation, including 99efc8dc863f56f89c274a5a8760a97800cc67e0; older FFT first divergence script already present at scripts/t1_fft_first_divergence.py
+- owner evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md; source e9c358eda01785b65e4eb14f18723da426635628; owner confirms world enter/save/reopen from artifact 13441227298, packaging publication failed. 220911-559: 23,884 water pass and 3,850 FFT kernel errors; 230108-327: 39,132 pass and 6,026 kernel errors. Device success does not prove water.
+- previous experiments: Vulkan 42141540903; Unity 42160755558; previous first-pass discrepancy 63/64 and 31/32 remains to be explained.
+- scope: isolated sanitized coordinate-keyed FFT comparison, complementing existing RGBA32F per-pass comparator; no Unity run or native build.
+- files: scripts/t1_fft_coordinate_probe_compare.py (commit 53235a66d972daeb60154c96432745d30a2adf8e), tests/test_t1_fft_coordinate_probe_compare.py (commit 18aae1bfd1f9936ab27f3c9128344d26d9fc173e).
+- hypothesis: keying by pass/x/y/channel distinguishes missing capture coordinates from numeric divergence, and identifies earliest pass deterministically irrespective of sample input order. Duplicate keys and nonfinite values are rejected.
+- local evidence: six tests on prototype comparator passed in sandbox. Published repository code has NOT been executed in CI; do not treat prototype test as CI validation.
+- limitation: no private Vulkan/Unity coordinate sample capture was retrieved, no real first mismatch localized, no FindKernel/Dispatch original binding proven. Existing first-divergence script was inspected to avoid overwriting.
+- next: run repository tests, collect sanitized coordinate-keyed capture from same pinned FFT inputs for Vulkan and Unity, report first key and compare dispatch kernel mapping; avoid leaking original shader bytes. Recheck latest Actions and T-team scope before GPU work.
+- device status: WATER-001 open; NOT_READY 0/3. Mouse and Resolution assigned to T4/T5; no changes.
