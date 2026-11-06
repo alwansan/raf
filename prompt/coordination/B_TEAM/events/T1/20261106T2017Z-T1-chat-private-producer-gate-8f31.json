@@ -1,0 +1,16 @@
+{
+  "id": "20261106T2017Z-T1-chat-private-producer-gate-8f31",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T2017Z-T1-chat-private-producer-gate-8f31",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SUCCESS source-only 42287568433: 53/53 FFT producer/private pair synthetic tests, including 15 new checks of Unity C# complete-stage marker, two actual original-derived candidate shader SHA files, resource/variant binding and trace SHA. Opt-in real Unity 42287573222 skipped, no original game GPU/phone water proof.",
+  "at": "2026-11-06T20:22:00Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42287568433",
+    "https://github.com/alwansan/raf/commit/3f618bbbd12d94f3424811ac1019a725867ec48d"
+  ],
+  "proven": false,
+  "water_issue_status": "OPEN"
+}
