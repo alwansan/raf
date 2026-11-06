@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2211Z-T2-chat-blit-overload-b47a",
+  "issue_id": "WATER-001",
+  "hypothesis": "The two source-authentic Foam Material→UnityEngine.Graphics.Blit call sites may use explicit pass index vs implicit/default pass, which can be classified from exact public signature without releasing original method names or identifying data.",
+  "source_commit": "201e14caf01c4cbc47a798055830235eebbcbdb8",
+  "input_hashes": [
+    "ZIP2 pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385; SHA-original Unity source owner 115978112B; managed DLL 3211776B"
+  ],
+  "tool_versions": {
+    "dotnet": "9.0.x",
+    "UnityPy": "1.25.4",
+    "MonoCecil": "project pinned"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_shaderfind_return_report.py' -v",
+    "dotnet publish android-port/Experiments/T2/FoamShaderFindResultFlow/FoamShaderFindResultFlow.csproj -c Release",
+    "dotnet FoamShaderFindResultFlow.dll --selftest",
+    "dotnet FoamShaderFindResultFlow.dll <private-original-DLL> <private-original-Foam-name> <source-safe-report>",
+    "python3 -m scripts.t2_foam_shaderfind_return_report <source-safe-report>"
+  ],
+  "negative_controls": [
+    "Blit method name but wrong public argument type/position cannot masquerade as 3-argument default-pass",
+    "One field alias reaching both Blit signatures classified mixed not double-counted",
+    "Original field reader must pass exact Material to typed Graphics.Blit parameter to count",
+    "Public-family and Blit-signature per-source-site partitions must sum exactly"
+  ],
+  "positive_controls": [
+    "Synthetic Graphics.Blit(Texture,RenderTexture,Material) classified implicit",
+    "Synthetic Graphics.Blit(Texture,RenderTexture,Material,int) classified explicit",
+    "Other signature retained unknown rather than guessed",
+    "Previous 2/2 original public Blit API sites retained"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42303074180",
+  "artifact_urls": [],
+  "budget": "20min source-only SHA-original Mono.Cecil GH Actions, no Unity APK/OBB",
+  "status": "waiting_ci",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Public typed Unity signatures only, no private argument values or game names",
+    "Static original method bodies cannot prove actual device execution/pass index values",
+    "No direct RenderTexture ownership, native Unity ShaderLab import, CB0, or phone pixels"
+  ],
+  "integration_commit": "201e14caf01c4cbc47a798055830235eebbcbdb8",
+  "next_step": "Inspect original CI42303074180 on exact SHA 201e14ca: synthetic validator and Mono.Cecil tests first; if green, capture public Blit overload category counts and report to T5, otherwise fix with another hypothesis, never bypass original proof."
+}
