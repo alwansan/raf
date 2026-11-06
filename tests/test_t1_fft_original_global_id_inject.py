@@ -1,4 +1,11 @@
 import unittest
+from unittest.mock import patch
+from contextlib import redirect_stdout
+from io import StringIO
+from pathlib import Path
+import tempfile
+import sys
+import scripts.t1_fft_original_global_id_inject as injector
 
 from scripts.t1_fft_original_global_id_inject import inject
 
@@ -106,6 +113,32 @@ class OriginalGlobalDispatchInjectionTests(unittest.TestCase):
         for src in ("", BASE + " " * (2*1024*1024)):
             with self.assertRaises(ValueError):
                 inject(src)
+
+
+    def test_private_diagnostic_reports_only_allowlisted_category(self):
+        with tempfile.TemporaryDirectory() as root:
+            source, output = Path(root)/"input.asm", Path(root)/"output.asm"
+            source.write_text("this private sample must not leak "*2)
+            capture = StringIO()
+            with patch.object(sys, "argv", ["inj", str(source), str(output)]), \
+                 patch.object(injector, "inject", side_effect=ValueError("secret source id %42")), \
+                 redirect_stdout(capture), self.assertRaises(SystemExit) as failed:
+                injector.main()
+        self.assertEqual(failed.exception.code, 2)
+        self.assertIn('"reason": "unclassified_validation"', capture.getvalue())
+        self.assertNotIn("%42", capture.getvalue())
+
+    def test_inconsistent_original_compute_role_is_safe_category(self):
+        with tempfile.TemporaryDirectory() as root:
+            source, output = Path(root)/"input.asm", Path(root)/"output.asm"
+            source.write_text(BASE)
+            capture = StringIO()
+            with patch.object(sys, "argv", ["inj", str(source), str(output)]), \
+                 patch.object(injector, "inject", side_effect=ValueError("Expected exactly one compute entry point")), \
+                 redirect_stdout(capture), self.assertRaises(SystemExit):
+                injector.main()
+        self.assertIn('"reason": "compute_entry"', capture.getvalue())
+        self.assertNotIn("OpEntryPoint", capture.getvalue())
 
 
 if __name__ == "__main__":
