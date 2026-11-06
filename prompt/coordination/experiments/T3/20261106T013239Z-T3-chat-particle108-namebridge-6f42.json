@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "hypothesis": "Compiler-reflected original Vulkan SPIR-V I/O variable name+type may survive SPIRV-Cross HLSL to glslang SPIR-V roundtrip, potentially permitting deterministic location correspondence for 2/4 incompatible original Particle108 keyword variants.",
+  "source_commit": "0998c6d82115b0f9753ede85d49ab2a9b7fc26ec",
+  "source_hashes": [
+    "six source ZIP2 scenes SHA pinned at 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "four Shader/Material owner files SHA authenticated",
+    "one original external Texture2D .resS full provider SHA checked"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_particle108_reflected_name_bridge.py -v",
+    "python3 -m scripts.t3_particle108_reflected_name_bridge --original $RUNNER_TEMP/t3-original-six-scene --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-particle108-reflected-names-safe.json"
+  ],
+  "tools": {
+    "UnityPy": "1.23.0",
+    "vkd3d": "1.2-15build1",
+    "spirv_cross": "2021.01.15+1.3.239.0-1build1",
+    "glslang": "15.1.0-2~ubuntu0.24.04.2"
+  },
+  "negative_controls": [
+    "raw/private names compared only when sanitized reflection location/type matches already validated IO",
+    "stage compiler names may be renamed (0 name matches != no shader IO types)",
+    "duplicate/reflected malicious names or invalid numeric classifier flagged",
+    "unlocated builtins not counted as proof for automap",
+    "source exact 4 keyword variants and 8 private program codes, no SHA/ID leaks",
+    "scheduled T3 sorting fix source and unit test were not modified"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42144978122",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42144978122/artifacts"
+  ],
+  "observed_result": {
+    "original_source_particle_renderers": 54,
+    "source_original_particle_material_slots": 108,
+    "source_compiled_stage_pairs": 4,
+    "source_vulkan11_valid_stages": 8,
+    "roundtrip_hlsl_vulkan11_valid_stages": 8,
+    "original_vs_fs_interface_compatible_pairs": 4,
+    "roundtrip_vs_fs_interface_compatible_pairs": 2,
+    "original_compiler_reflected_located_named_input_variables": 26,
+    "roundtrip_compiler_reflected_located_named_input_variables": 26,
+    "original_compiler_reflected_located_named_output_variables": 20,
+    "roundtrip_compiler_reflected_located_named_output_variables": 20,
+    "matching_original_to_roundtrip_input_name_type": 0,
+    "matching_original_to_roundtrip_output_name_type": 0,
+    "stages_with_complete_name_type_preservation": 0,
+    "incompatible_pairs_with_complete_name_type_bridge": 0,
+    "source_free_tests_passed": 141,
+    "android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "The SPIRV-Cross HLSL roundtrip preserves original compiler-reflected variable names sufficiently to recover varying locations by name",
+    "Duplicate typed Shader IO can be assigned source semantics by name-only automatic mapping"
+  ],
+  "limitations": [
+    "SPIR-V compiler-generated names are NOT original DXBC authored semantics",
+    "DXBC authentic semantic register→HLSL semantic mapping not attempted",
+    "No Unity native shader import, Vulkan device test, nor phone effect emitter attribution"
+  ],
+  "integration_commit": "0998c6d82115b0f9753ede85d49ab2a9b7fc26ec",
+  "next_step": "Original compiler-reflected SPIR-V names differ completely 0/46, so do NOT auto-patch varying locations by type/name or index. Next private experiment original DXBC ISGN/OSGN semantic+register extraction and HLSL SV_*/TEXCOORD* declarations, require one-to-one verified semantic/type mapping on all four exact keyword pairs, no ambiguous duplicate types; only then prototype location fixes in disposable SPIR-V and validate all 4 VS/FS pairs. Coordinate T5 postvendor/Android shader GUID and phone emitter."
+}
