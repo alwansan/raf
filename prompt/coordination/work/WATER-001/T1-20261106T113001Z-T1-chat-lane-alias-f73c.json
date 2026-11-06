@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T113001Z-T1-chat-lane-alias-f73c",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "private source-authentic FFT component-lane alias reaching stores",
+  "status": "active",
+  "base_sha": "0f1df68c33d614ea497c1bc0d790b9f849839c1f",
+  "approach": "Distinguish vector physical load lanes via OpVectorShuffle/OpComposite; classify constant-index Function OpAccessChain stores as same-lane/other-lane with bounded intraprocedural CFG propagation. Unknown offsets, escapes and types fail closed. No original constants or binaries published.",
+  "intended_files": [
+    "scripts/t1_fft_spirv_lane_alias_effect.py",
+    "tests/test_t1_fft_spirv_lane_alias_effect.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T113001Z-T1-chat-lane-alias-f73c.md",
+    "prompt/coordination/experiments/T1/20261106T113001Z-T1-chat-lane-alias-f73c.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T113001Z-T1-chat-lane-alias-f73c.json"
+  ],
+  "experiment_key": "water001-original-slot0-fft-constant-index-vector-lane-alias-effect-v1-originalzip2pin-15964ea8-fft0",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-only",
+  "resumed_from_sessions": [
+    "20261106T112050Z-T1-chat-alias-origins-b62f",
+    "20261106T110543Z-T1-chat-cfgreach-f4d9",
+    "20261106T110837Z-T1-scheduled-fft-first-divergence"
+  ],
+  "hypothesis": "After lowering constant-index alias accesses onto a Function pointer to a 32-bit vector, some aliases write only the other lane; secure physical lane transfer and may-reach propagation may narrow but cannot by itself prove numeric parity or authored Unity kernel identity.",
+  "related_work": [
+    "T1-20261106T112050Z-T1-chat-alias-origins-b62f"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-06T11:30:01.747Z",
+  "result": null,
+  "next_step": "Implement source-free adversarial regression and original-SPIR-V bounded private analysis, run one independent existing non-Unity workflow only if no competing T1 experiment, record numerical/device limitations."
+}
