@@ -5,9 +5,9 @@
   "origin": "chat",
   "session_id": "20261106T2211Z-T2-chat-blit-overload-b47a",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "084075ec1f31bba3aa5591c3db1ac8caefde057b",
-  "updated_at": "2026-11-06T22:14:32.525Z",
+  "updated_at": "2026-11-06T22:15:52.203Z",
   "resumed_from_sessions": [
     "20261106T2203Z-T2-chat-graphics-path-7d3e",
     "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1"
@@ -35,9 +35,22 @@
     "https://github.com/alwansan/raf/actions/runs/42300107157"
   ],
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Inspect original CI42303074180 on exact SHA 201e14ca: synthetic validator and Mono.Cecil tests first; if green, capture public Blit overload category counts and report to T5, otherwise fix with another hypothesis, never bypass original proof.",
+  "next_step": "Trace exact original Blit pass index operands at two typed Material sites (literal 0/1 versus dynamic), source-only and fail-closed; do not infer runtime execution or game pass selection from overload alone.",
   "code_commit": "201e14caf01c4cbc47a798055830235eebbcbdb8",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42303074180"
-  ]
+  ],
+  "result": {
+    "original_SHA_authenticated": true,
+    "source_only_CI": "success",
+    "safe_python_tests": 58,
+    "source_name_tests": 6,
+    "mono_cecil_selftest": "PASS",
+    "original_Foam_Material_Graphics_Blit_sites": 2,
+    "exact_explicit_pass_overload": 2,
+    "implicit_pass_overload": 0,
+    "other_or_mixed_overloads": 0,
+    "pass_value_literal_verified": false,
+    "unity_or_android_verified": false
+  }
 }
