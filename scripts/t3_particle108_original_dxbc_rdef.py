@@ -36,7 +36,8 @@ SAFE_RDEF_FAILURE_REASON={
     "DXBC_SOURCE_CHUNK_OFFSET_INVALID":"CHUNK_OFFSET",
     "DXBC_SOURCE_CHUNK_SIZE_INVALID":"CHUNK_SIZE",
     "DXBC_SOURCE_OVERLAPPING_CHUNKS":"CHUNK_OVERLAP",
-    "DXBC_ORIGINAL_RDEF_NOT_UNIQUE":"ORIGINAL_RDEF_ABSENT_OR_AMBIGUOUS",
+    "DXBC_ORIGINAL_RDEF_ABSENT":"ORIGINAL_RDEF_ABSENT",
+    "DXBC_ORIGINAL_RDEF_MULTIPLE":"ORIGINAL_RDEF_MULTIPLE",
     "DXBC_SOURCE_RDEF_HEADER_SHORT":"RDEF_HEADER_SHORT",
     "DXBC_SOURCE_RDEF_BINDING_TABLE_BOUNDS":"RDEF_TABLE",
     "DXBC_SOURCE_RDEF_DESCRIPTOR_INVALID":"RDEF_DESCRIPTOR",
@@ -79,8 +80,10 @@ def source_rdef(dx):
         occupied.append((off,off+size+8))
         if dx[off:off+4]==b"RDEF":
             found.append(dx[off+8:off+8+size])
-    if len(found)!=1:
-        raise ValueError("DXBC_ORIGINAL_RDEF_NOT_UNIQUE")
+    if not found:
+        raise ValueError("DXBC_ORIGINAL_RDEF_ABSENT")
+    if len(found)>1:
+        raise ValueError("DXBC_ORIGINAL_RDEF_MULTIPLE")
     rdef=found[0]
     if len(rdef)<28:
         raise ValueError("DXBC_SOURCE_RDEF_HEADER_SHORT")
