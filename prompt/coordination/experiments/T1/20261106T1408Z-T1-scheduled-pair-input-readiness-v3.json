@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "blocked_on_missing_paired_capture",
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "verified_runs": [
+    42228497335,
+    42228404633,
+    42227795780
+  ],
+  "observed_artifacts": 0,
+  "first_numeric_mismatch": null,
+  "reason": "No separately authenticated same-input same-dispatch original/candidate invocation-keyed captures in inspected successful runs; structural CFG proof is not numeric replay.",
+  "next_step": "Capture both streams in private source-authenticated Vulkan job; strict pair gate then coordinate/ULP; only afterward inspect FindKernel/Dispatch Unity binding.",
+  "no_ci_dispatched": true
+}
