@@ -6,7 +6,7 @@
   "session_id": "20261106T1835Z-T2-chat-positive-attestation-3f8a",
   "issue_id": "WATER-001",
   "track": "original Foam m_Script typed-target validation",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3887e5629424ea59f1525d97b83fbd8cca73aba8",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T1835Z-T2-chat-positive-attestation-3f8a.json",
@@ -15,7 +15,8 @@
     "tests/test_t2_original_monoscript_target_attestation.py",
     ".github/workflows/raft-t2-original-monoscript-target-join.yml",
     "prompt/coordination/experiments/T2/20261106T1835Z-T2-chat-positive-attestation-3f8a.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T1835Z-T2-chat-positive-attestation-3f8a-result.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T1835Z-T2-chat-positive-attestation-3f8a-result.json",
+    "docs/T2_ORIGINAL_MONOSCRIPT_POSITIVE_ATTESTATION_2026-11-06.md"
   ],
   "experiment_key": "zip2-15964-40-scenes-55328-monoscript-target-typed-positive-coverage-attestation-v2",
   "resource_key": "sourcefree-attestation-and-existing-pinned-original-join-workflow",
@@ -29,9 +30,27 @@
     "prompt/coordination/clients/T2/sessions/20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e.md"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42269806221"
+    "https://github.com/alwansan/raf/actions/runs/42269806221",
+    "https://github.com/alwansan/raf/actions/runs/42272563817"
   ],
-  "result": null,
-  "next_step": "Implement positive coverage guard, test with synthetic zero/budget/ambiguous failures, integrate into existing isolated workflow; confirm new Actions result; keep T2 trial no-needs until integrated water shader patch.",
-  "updated_at": "2026-11-06T18:35:15Z"
+  "result": {
+    "workflow_status": "success",
+    "run_id": 42272563817,
+    "artifact_id": 13531436397,
+    "old_controls_passed": 16,
+    "new_controls_passed": 18,
+    "original_typed_refs_checked": 55328,
+    "original_typed_refs_resolved": 55328,
+    "not_typed": 0,
+    "source_budget_skips": 0,
+    "original_typed_target_provider_count": 1,
+    "original_typed_target_size_bytes": 758412,
+    "distinct_real_MonoScript_objects": 473,
+    "unique_size_rows_in_immutable_366_row_manifest": 1,
+    "game_shaderlab_modified": false,
+    "phone_water_proved": false
+  },
+  "next_step": "Decode original 473 MonoScript type/assembly metadata privately, join exact original Assembly-CSharp schema and script-host water code, then bridge real Foam Material/CB0/ShaderLab with Unity compile; do not equate source proof to device success.",
+  "updated_at": "2026-11-06T18:40:15Z",
+  "integration_commit": "76b580c33eb01de641a1726d95865005f231fc7c"
 }

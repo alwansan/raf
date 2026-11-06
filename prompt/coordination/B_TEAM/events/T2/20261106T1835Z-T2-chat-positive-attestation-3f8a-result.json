@@ -1,0 +1,21 @@
+{
+  "id": "T2-20261106T1835Z-T2-chat-positive-attestation-3f8a-positive-typed-target-attestation-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1835Z-T2-chat-positive-attestation-3f8a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original ZIP2 SHA-pinned join CI42272563817 SUCCESS: 16 inherited+18 new source-free tests; strict typed-positive coverage accepted 55328/55328 real MonoScript targets, 0 skipped/wrong-type, 473 distinct targets. Immutable 366-row manifest has exactly 1 file of 758412 bytes, common to earlier external Shader target and MonoScript join SHA stages. This resolves source-file identity *within pinned manifest* but NOT Foam Material/Shader runtime linkage or Android water drawing. T2 trial vote no-needs unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/76b580c33eb01de641a1726d95865005f231fc7c",
+    "https://github.com/alwansan/raf/actions/runs/42272563817",
+    "docs/T2_ORIGINAL_MONOSCRIPT_POSITIVE_ATTESTATION_2026-11-06.md"
+  ],
+  "limitations": [
+    "Original source SHA is proven by prior stage; count validator alone is not cryptographic source attestation.",
+    "Unique 758412-byte manifest entry gives same immutable source provider, not MonoScript-to-Shader usage.",
+    "No original custom field schema nor Unity GUID linked; no device water pixels/ShaderLab.",
+    "Trial vote stays no-needs; game not READY."
+  ],
+  "at": "2026-11-06T18:40:15Z"
+}

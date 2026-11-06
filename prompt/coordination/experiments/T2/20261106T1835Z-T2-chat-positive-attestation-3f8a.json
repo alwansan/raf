@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1835Z-T2-chat-positive-attestation-3f8a",
+  "issue_id": "WATER-001",
+  "experiment_key": "zip2-15964-40-scenes-55328-monoscript-target-typed-positive-coverage-attestation-v2",
+  "hypothesis": "Prior CI green assertions are fail-open for zero typed target coverage; add standalone strict positive typed coverage gate and independent adversarial tests, reconcile authenticated safe counts from 42269806221, and run one modified workflow without changing game sources.",
+  "source_commit": "76b580c33eb01de641a1726d95865005f231fc7c",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_manifest_blob": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+  "tools": {
+    "Python": "3.x",
+    "UnityPy": "1.25.4",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_original_monoscript_target_attestation.py -v",
+    "python3 -m scripts.t2_original_monoscript_target_attestation --input <safe SHA-source-join output>"
+  ],
+  "negative_controls": [
+    "zero typed/all budget skipped",
+    "partial typed/budget skip",
+    "wrong type target",
+    "ambiguous or missing manifest",
+    "provider bytes/unique row drift",
+    "duplicate JSON field",
+    "private extra field",
+    "float/bool type confusion",
+    "false Android/GUID/runtime claim"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-original-monoscript-target-join.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42272563817",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42272563817/artifacts/13531436397"
+  ],
+  "status": "completed",
+  "observed_result": {
+    "workflow_status": "success",
+    "run_id": 42272563817,
+    "artifact_id": 13531436397,
+    "old_controls_passed": 16,
+    "new_controls_passed": 18,
+    "original_typed_refs_checked": 55328,
+    "original_typed_refs_resolved": 55328,
+    "not_typed": 0,
+    "source_budget_skips": 0,
+    "original_typed_target_provider_count": 1,
+    "original_typed_target_size_bytes": 758412,
+    "distinct_real_MonoScript_objects": 473,
+    "unique_size_rows_in_immutable_366_row_manifest": 1,
+    "game_shaderlab_modified": false,
+    "phone_water_proved": false
+  },
+  "limitations": [
+    "Original source SHA is proven by prior stage; count validator alone is not cryptographic source attestation.",
+    "Unique 758412-byte manifest entry gives same immutable source provider, not MonoScript-to-Shader usage.",
+    "No original custom field schema nor Unity GUID linked; no device water pixels/ShaderLab.",
+    "Trial vote stays no-needs; game not READY."
+  ],
+  "integration_commit": "76b580c33eb01de641a1726d95865005f231fc7c",
+  "next_step": "Decode original 473 MonoScript type/assembly metadata privately, join exact original Assembly-CSharp schema and script-host water code, then bridge real Foam Material/CB0/ShaderLab with Unity compile; do not equate source proof to device success.",
+  "updated_at": "2026-11-06T18:40:15Z"
+}
