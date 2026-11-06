@@ -14,7 +14,8 @@ internal static class Program
     }
 
     private static void CreateZip(string dir, long version, bool unity,
-        bool banks = false, bool emptyUnity = false, bool duplicateUnity = false)
+        bool banks = false, bool emptyUnity = false, bool duplicateUnity = false,
+        bool duplicateBank = false, bool emptyDuplicateBank = false)
     {
         string path = Path.Combine(dir, "main." + version + "." + Package + ".obb");
         using (var file = File.Create(path))
@@ -31,6 +32,8 @@ internal static class Program
                 foreach (string name in new[] { "MasterBank.strings.bank", "MasterBank.bank",
                     "VO_logs_english.bank", "VO_npc_english.bank", "VO_olof_english.bank" })
                     Add(zip, "assets/" + name, 3);
+                if (duplicateBank)
+                    Add(zip, "assets/MasterBank.bank", emptyDuplicateBank ? 0 : 3);
             }
             Add(zip, "assets/Haptics/synthetic.wav", 2);
         }
@@ -68,6 +71,23 @@ internal static class Program
             Check(good.UnityDataEntries == 1, "one Unity entry");
             Check(good.OriginalBankPaths == 5, "all 5 symbolic FMOD routes");
             Check(good.ObbBytes > 0 && good.ZipEntries == 7, "bounded ZIP index");
+
+            CreateZip(root, 95, true, banks: true, duplicateBank: true);
+            var duplicate = AndroidExpansionArchiveProbe.Inspect(root, Package, 95);
+            Check(duplicate.Status == "ambiguous_fmod_bank_path",
+                "duplicate nonempty FMOD path must not masquerade as valid 5/5");
+            Check(!duplicate.UnityFirstByteRead,
+                "ambiguous FMOD ZIP paths rejected before sample read");
+            Check(!duplicate.ToLogFields().Contains(root),
+                "ambiguous FMOD diagnostic never logs physical source path");
+
+            CreateZip(root, 96, true, banks: true,
+                duplicateBank: true, emptyDuplicateBank: true);
+            var emptyDuplicate = AndroidExpansionArchiveProbe.Inspect(root, Package, 96);
+            Check(emptyDuplicate.Status == "ambiguous_fmod_bank_path",
+                "empty FMOD duplicate must not disappear in path set");
+            Check(emptyDuplicate.OriginalBankPaths <= 5,
+                "ambiguous FMOD bank counts remain bounded");
             Check(!good.ToLogFields().Contains(root), "no raw physical path");
             Check(good.ToLogFields().Contains("installed_obb_sha_verified=false"),
                 "sample is never full integrity claim");
