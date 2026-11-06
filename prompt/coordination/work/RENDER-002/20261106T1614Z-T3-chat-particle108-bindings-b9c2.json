@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1614Z-T3-chat-particle108-bindings-b9c2",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "d745f19f7de0d7517e4e1f2cf955bc54ed585c81",
+  "resumed_from_sessions": [
+    "20261106T1515Z-T3-chat-5mat-yamlphase-e73b",
+    "20261106T1532Z-T3-scheduled-particle108-causality-8f3a",
+    "20261106T1337Z-T3-chat-particle108-propstate-62fb"
+  ],
+  "parallel_scope_avoided": "20261106T1223Z-T3-chat-paired-glslang-a74c owns paired glslang HLSL interface tooling; this cycle separately audits exact original stage CB/texture descriptor binding parity only.",
+  "experiment_key": "T3-ZIP2-15964-6scenes-4owner-Particle108-4trueVSFS-DXBC-sourceSPIRV-vs-HLSLroundtrip-resource-ubo-texture-sampler-descriptors-v1",
+  "resource_key": "T3-SHAoriginal-P108-4owners-6scenes-8DXBC-CPU-descriptor-only",
+  "hypothesis": "Four original ParticleShader48 keyword VS/FS pairs may change descriptor bind categories, sets/bindings or count during DXBC→SPIRV→HLSL→SPIRV even when IO positional compatibility is separately measured; this must be known before constructing real ShaderLab candidate.",
+  "intended_files": [
+    "scripts/t3_particle108_resource_binding_parity.py",
+    "tests/test_t3_particle108_resource_binding_parity.py",
+    ".github/workflows/raft-t3-particle108-resource-binding-parity.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1614Z-T3-chat-particle108-bindings-b9c2.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1614Z-T3-chat-particle108-bindings-b9c2.md",
+    "prompt/coordination/experiments/T3/20261106T1614Z-T3-chat-particle108-bindings-b9c2.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1614Z-T3-chat-particle108-bindings-b9c2.json"
+  ],
+  "method": "SHA pin 6 original scenes 4 Shader/Material owners, select unique 108-use Shader48 by actual PPtrs, linked 4 original VSFS keyword pairs, real vkd3d original SPIRV1.1, spirv-cross HLSL, glslang roundtrip, reflect exact per-stage resource categories and descriptor slot sets privately; count 8-stage source vs roundtrip and per-variant stability. Fail closed on malformed duplicate descriptor and no accidental real game asset edits or private program release.",
+  "updated_at": "2026-11-06T15:49:45.054Z",
+  "next_step": "Implement isolated safe classifier and negative controls, run one authentic original constrained GitHub Actions CPU pipeline; compare per-stage descriptor differences, no Unity/Adreno READY claims."
+}
