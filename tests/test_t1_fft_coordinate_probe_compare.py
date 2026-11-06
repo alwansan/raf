@@ -2,7 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from scripts.t1_fft_coordinate_probe_compare import read_samples, first_difference
+from scripts.t1_fft_coordinate_probe_compare import read_samples, first_difference, MAX_CAPTURE_BYTES, MAX_SAMPLES
 
 class CoordinateProbeTests(unittest.TestCase):
     def test_first_pass(self):
@@ -32,5 +32,29 @@ class CoordinateProbeTests(unittest.TestCase):
             path.write_text('{"samples":[],"samples":[]}')
             with self.assertRaisesRegex(ValueError, "duplicate JSON"):
                 read_samples(path)
+    def test_integer_float_overflow_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d)/"overflow.json"
+            path.write_text(json.dumps({"samples": [{"pass": 0, "x": 0, "y": 0, "channel": "r", "value": 10 ** 400}]}))
+            with self.assertRaisesRegex(ValueError, "invalid value"):
+                read_samples(path)
+    def test_capture_byte_limit(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d)/"huge.json"
+            path.write_bytes(b" " * (MAX_CAPTURE_BYTES + 1))
+            with self.assertRaisesRegex(ValueError, "size limit"):
+                read_samples(path)
+    def test_capture_sample_limit(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d)/"many.json"
+            row = {"pass": 0, "x": 0, "y": 0, "channel": "r", "value": 1}
+            path.write_text(json.dumps({"samples": [row] * (MAX_SAMPLES + 1)}))
+            with self.assertRaisesRegex(ValueError, "sample limit"):
+                read_samples(path)
+    def test_capture_limit_boundary(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d)/"boundary.json"
+            path.write_text(json.dumps({"samples": [{"pass": 0, "x": 0, "y": 0, "channel": "r", "value": 1}]}))
+            self.assertEqual(len(read_samples(path)), 1)
 if __name__ == "__main__":
     unittest.main()
