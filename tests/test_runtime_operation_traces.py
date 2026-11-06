@@ -244,3 +244,57 @@ class OperationTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'duplicate operation instrumentation'):
             wrap(result, signature, 'save', 'filename')
 
+
+    def test_runtime_trace_staging_rejects_postbackup_original_source_or_meta_drift(self):
+        # A second writer is allowed to touch a physical C# or Unity GUID meta
+        # between the source adapter's backup copy and instrumented write.
+        # Do not overwrite that writer or erase the original backup as if the
+        # source tree had remained unchanged.
+        import shutil
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from scripts.instrument_android_runtime_operations import apply
+
+        source = b'class Demo { void Start() { OriginalMethod(); } }'
+        original_meta = b'guid: original-synthetic-GUID\\n'
+        manifest = {'sources': {'Demo': {
+            'sha256': hashlib.sha256(source).hexdigest(),
+            'area': 'startup',
+            'methods': [{'signature': 'void Start()'}],
+        }}}
+        for target_name in ('source', 'meta'):
+            with self.subTest(target_name=target_name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                path = root / 'project/Assets/Assembly-CSharp/Demo.cs'
+                path.parent.mkdir(parents=True)
+                path.write_bytes(source)
+                meta = path.with_suffix('.cs.meta')
+                meta.write_bytes(original_meta)
+                backup = root / 'backup'
+                foreign_source = source + b' // authored-by-another-writer'
+                foreign_meta = b'guid: replacement-synthetic-GUID\\n'
+                real_copy2 = shutil.copy2
+
+                def edit_after_backup_copy(src, dst, *args, **kwargs):
+                    copied = real_copy2(src, dst, *args, **kwargs)
+                    if Path(src) == meta:
+                        if target_name == 'source':
+                            path.write_bytes(foreign_source)
+                        else:
+                            meta.write_bytes(foreign_meta)
+                    return copied
+
+                with patch('scripts.instrument_android_runtime_operations.shutil.copy2',
+                           side_effect=edit_after_backup_copy):
+                    with self.assertRaisesRegex(
+                            ValueError, 'source/meta changed after backup; backups retained'):
+                        apply(root / 'project', backup, manifest, write=True)
+
+                self.assertEqual(path.read_bytes(),
+                                 foreign_source if target_name == 'source' else source)
+                self.assertEqual(meta.read_bytes(),
+                                 foreign_meta if target_name == 'meta' else original_meta)
+                self.assertEqual((backup / path.name).read_bytes(), source)
+                self.assertEqual((backup / meta.name).read_bytes(), original_meta)
+
