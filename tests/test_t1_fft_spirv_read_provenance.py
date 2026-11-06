@@ -68,6 +68,60 @@ class SpirvReadProvenanceTests(unittest.TestCase):
         self.assertEqual(site["typed_coordinate_bitcasts"], {"float32_to_sint32:Function": 1})
         self.assertEqual(site["producer_opcodes"], {"OpBitcast": 1, "OpLoad": 1})
 
+    def test_unsupported_lane_stop_reports_phi_without_ids(self):
+        report = analyze("""
+        OpDecorate %image DescriptorSet 0
+        OpDecorate %image Binding 1
+        %int = OpTypeInt 32 1
+        %v2i = OpTypeVector %int 2
+        %constant = OpConstant %int 7
+        %selected = OpPhi %int %constant %left %constant %right
+        %coord = OpCompositeConstruct %v2i %selected %constant
+        %fetch = OpImageFetch %v2i %image %coord
+        """, coordinates=True, coordinate_depth=12)
+        x = report["coordinate_sites"][0]["coordinate_lanes"]["x"]
+        self.assertEqual(x, {"typed_bitcasts": [], "boundary": "unresolved",
+                             "stop_opcode": "OpPhi", "stop_numeric_kind": "sint32"})
+        self.assertNotIn("%", str(x))
+
+    def test_arithmetic_stop_opcode_typed_without_source_values(self):
+        report = analyze("""
+        %int = OpTypeInt 32 1
+        %v2i = OpTypeVector %int 2
+        %constant = OpConstant %int 7
+        %sum = OpIAdd %int %constant %constant
+        %coord = OpCompositeConstruct %v2i %sum %constant
+        %fetch = OpImageFetch %v2i %image %coord
+        """, coordinates=True, coordinate_depth=12)
+        x = report["coordinate_sites"][0]["coordinate_lanes"]["x"]
+        self.assertEqual(x["stop_opcode"], "OpIAdd")
+        self.assertEqual(x["stop_numeric_kind"], "sint32")
+        self.assertNotIn("7", str(x))
+
+    def test_nonallowlisted_stop_opcode_is_sanitized(self):
+        report = analyze("""
+        %uint = OpTypeInt 32 0
+        %v2u = OpTypeVector %uint 2
+        %constant = OpConstant %uint 4
+        %secret = OpPrivateCustom %uint %constant
+        %coord = OpCompositeConstruct %v2u %secret %constant
+        %fetch = OpImageFetch %v2u %image %coord
+        """, coordinates=True, coordinate_depth=12)
+        x = report["coordinate_sites"][0]["coordinate_lanes"]["x"]
+        self.assertEqual(x["stop_opcode"], "other_opcode")
+        self.assertEqual(x["stop_numeric_kind"], "uint32")
+        self.assertNotIn("OpPrivateCustom", str(x))
+
+    def test_resolved_load_omits_stop_metadata(self):
+        report = analyze("""
+        %int = OpTypeInt 32 1
+        %v2i = OpTypeVector %int 2
+        %load = OpLoad %v2i %ptr
+        %fetch = OpImageFetch %v2i %image %load
+        """, coordinates=True, coordinate_depth=12)
+        x = report["coordinate_sites"][0]["coordinate_lanes"]["x"]
+        self.assertEqual(x, {"typed_bitcasts": [], "boundary": "load"})
+
     def test_coordinate_lanes_follow_insert_and_shuffle_separately(self):
         report = analyze("""
         %20 = OpTypeFloat 32
