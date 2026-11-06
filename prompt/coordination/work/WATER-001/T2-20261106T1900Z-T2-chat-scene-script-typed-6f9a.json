@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1900Z-T2-chat-scene-script-typed-6f9a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "SHA-original 473-scene-referenced MonoScript managed TypeDef subset",
+  "status": "active",
+  "base_sha": "b23f452c8ce034e064cd6166d94bd05d80a16dff",
+  "updated_at": "2026-11-06T19:00:00Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1900Z-T2-chat-scene-script-typed-6f9a.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1900Z-T2-chat-scene-script-typed-6f9a.md",
+    "scripts/t2_original_scene_managed_subset.py",
+    "tests/test_t2_original_scene_managed_subset.py",
+    ".github/workflows/raft-t2-original-scene-monoscript-managed-subset.yml",
+    "docs/T2_ORIGINAL_SCENE_SCRIPT_MANAGED_SUBSET_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1900Z-T2-chat-scene-script-typed-6f9a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1900Z-T2-chat-scene-script-typed-6f9a-result.json"
+  ],
+  "experiment_key": "ZIP2-15964-40scene-55328-mScript-473unique-MonoScript-typed-managed-AssemblyCSharp-TypeDef-original-v1",
+  "resource_key": "t2-original-scene-corpus-233237972-source-ubuntu24",
+  "hypothesis": "The 473 typed original MonoScript objects actually referenced by 55,328 opaque components in 40 original level scenes can be isolated by precise source file PPtr+PathID and cross-matched against SHA-authenticated original managed TypeDef without name leaks.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1846Z-T2-chat-monoclass-assembly-7d3e.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1846Z-T2-chat-monoclass-assembly-7d3e.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1817Z-T2-chat-original-script-target-5ac9.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Rebuild SHA original scene source in ephemeral runner, derive 473 actual m_Script PathID subset, exact join original script metadata to original TypeDef, report only safe aggregate counts; no Android build."
+}
