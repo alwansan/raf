@@ -5,9 +5,9 @@
   "session_id": "20261106T2150Z-T3-chat-stagewrapper-19e4",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-11-06T21:50:04Z",
-  "updated_at": "2026-11-06T21:50:04Z",
+  "updated_at": "2026-11-06T21:53:15Z",
   "base_sha": "f5996ddef53c5004dd1033059bfac291ab3e673d",
   "resumed_from_sessions": [
     "20261106T2138Z-T3-chat-variant-proofgate-5dc9",
@@ -31,5 +31,11 @@
   ],
   "trial_vote": "لا يحتاج",
   "test_plan": "Source-free negative extraction/attestation tests first; lightweight glslang/spirv-val for both macro branches of four SHA-authentic private original Shader48 HLSLPROGRAM blocks in existing independent CI, safe counts only; no Unity import.",
-  "next_step": "Compare terminal CI and classify stage macro compiler outcomes; only after 8/8 consider isolated Unity editor import with team resource coordination."
+  "next_step": "Coordinate isolated Unity 2021.3 Editor shader import once native resource allows; do not edit game Shader GUID or claim Android visuals.",
+  "completed_at": "2026-11-06T21:53:15Z",
+  "implementation_sha": "ede493225d075afd238e0cdd8868a8f3bfa27c2c",
+  "test_run_url": "https://github.com/alwansan/raf/actions/runs/42300232793",
+  "test_job_id": 128175794238,
+  "result": "PASS: 14 inherited and 10 new source-free controls; 4 original SHA-authenticated owners + 6 scenes; 8/8 branch-selected generated HLSLPROGRAM stages compiled by glslang and validated by spirv-val Vulkan1.1. Not Unity imported.",
+  "intended_files_released": true
 }
