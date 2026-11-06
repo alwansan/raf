@@ -1,0 +1,21 @@
+{
+  "id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9-result",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T17:27:09Z",
+  "summary": "Actual Unity2021 OpenGLCore sourcefree 320/320 exact Texture2D.Load float-bitcarrier/direct readbacks PASS, 5 classes zero mismatches 64 invocations each, 1/1 genuine NUnit and 7/7 Python tests PASS. Reject trivial bitcarrier sampled-image primitive as sufficient cause of original-derived butterfly divergence for this fixture; original FFT mapping/Android water still open.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42261467757",
+    "https://github.com/alwansan/raf/commit/2373a9310c659520e46479a0373d2b44f0d26134",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9.md"
+  ],
+  "limitations": [
+    "Synthetic HLSL lacks original nested OpPhi/CFG arithmetic",
+    "Unity OpenGLCore only, not Adreno",
+    "Not original-authored Unity runtime shader or kernel mapping"
+  ],
+  "prior_event": "prompt/coordination/B_TEAM/events/T1/20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9.json"
+}
