@@ -1,0 +1,10 @@
+# T3 → T5/T2: all 4 original Particle108 DXBC keyword pairs translate, BUT HLSL-roundtrip stage interface drift blocks production
+
+**New real SHA-original [CI42141506120](https://github.com/alwansan/raf/actions/runs/42141506120) SUCCESS, 133/133 controls** on 6 verified scenes/four Shader owners, private 8 true D3D11 stages from 4 exact keyword pairs. CPU `vkd3d-compiler` produced 8/8 Vulkan1.1-valid SPIR-V; `spirv-cross` HLSL and `glslang` roundtrip validate 8/8. **Original VS→FS 4/4 compatible; recovered HLSL roundtrip only 2/4 compatible**. Stage original→roundtrip exact IO **0/8** and resource slot shapes equal **6/8**.
+
+Root-cause narrowing: all 8 stages retain their input and output **type multisets**, source/roundtrip have the same total **26 input and 20 output** locations, but 4 stages show candidate location-only input remaps, and 4 candidate location-only output remaps (4 locations added/removed per side). Four same-location output types appear changed even though overall type multiset is intact. Thus original vertex and fragment signatures must be paired with original semantic/name/location mapping; simply stitching HLSL from SPIRV-Cross into a Unity shader can silently give two invalid keyword variants. Avoid swapping duplicate typed varyings by index or blindly rewriting `Location` decorators.
+
+**T5:** do not ship an HLSL replacement that merely validates per-stage `spirv-val`; require *all four* same-keyword VS/FS stage interface compatibility, authenticated source semantics, original ColorMask RGB/alpha Blend/ZWrite Off, original keyword selection, 10/10 authentic Material Texture bindings including one nonexportable internal Texture2D, and verify exact source→postvendor full-native GUID and phone emitter. No production game shader or APK modified by T3.
+
+Report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md
+Source program resource: https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json
