@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "original Foam Shader Material PPtr identity",
   "approach": "Use SHA-pinned original ZIP2 sharedassets0 serialized external paths and immutable 366-row manifest to disambiguate two previously unresolved Material.m_Shader external PPtrs. Fail closed on ambiguous/unverified candidate; stage targeted original files only if bounded and verify byte hashes and typed Shader PathID. Emit count-only public evidence.",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "c7631ed7aef24cccc13e3efc7f9d5c38474eb0ed",
   "intended_files": [
     "scripts/t2_foam_original_manifest_pptr.py",
@@ -32,8 +32,11 @@
   "experiment_ids": [
     "20261106T1639Z-T2-chat-original-manifest-9d26"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42255582427"
+  ],
   "result": null,
-  "next_step": "Implement original manifest-to-external candidate fail-closed scanner and synthetic controls; run SHA-authenticated isolated CI only on new source or workflow push; record evidence/limits.",
-  "updated_at": "2026-11-06T16:38:57.954Z"
+  "next_step": "CI42255582427 pending after 12/12? sourcefree controls. Read complete job steps, safe JSON artifact and original staging result; if failure fix exact source-free issue and rerun with new input, if success report actual two-reference categories. No other CI dispatch while run active.",
+  "updated_at": "2026-11-06T16:48:14.928Z",
+  "last_source_commit": "fbf2a03a4345674349d2b4b7d96dfe4e32fdacf4"
 }
