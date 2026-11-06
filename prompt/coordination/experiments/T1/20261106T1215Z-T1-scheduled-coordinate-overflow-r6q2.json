@@ -1,0 +1,12 @@
+{
+  "session_id": "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2",
+  "issue_id": "WATER-001",
+  "status": "source_changed_tests_pending",
+  "base_sha": "1cc26ea5c9b525d07e3b7116f0caf9fa034c2920",
+  "source_commit": "61ce53f0f3523927bc7e782c2c4080ddcdbdf7cf",
+  "tests_commit": "04f9c9782b49fd6e37ce190ca3c42b3b6d20f218",
+  "reproducer": "math.isfinite(10**400) raises OverflowError",
+  "change": "2MiB input and 8192 sample bounds; finite float conversion with invalid value rejection",
+  "limits": "No actual repo tests/paired captures/Unity/Adreno; no new CI",
+  "next": "Execute four new tests on exact repository commit and compare paired original captures"
+}
