@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2044Z-T4-chat-mouse-plan-staleness-v3c8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Changing original C# after 8+2 mouse patch planning but before backup snapshot leads the old implementation to install outdated source, silently clobbering a concurrent source edit.",
+  "source_commit": "65635d6086cfc9dd19a5989a31562882ed367419",
+  "input_hashes": [
+    "authenticated original Assembly-CSharp.dll SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e (private runner only)"
+  ],
+  "tool_versions": {
+    "python": "Ubuntu24.04 runner Python3",
+    "dotnet": "8+10; original Unity2021.3.45f2 ABI",
+    "ilspycmd": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v",
+    "Workflow raft-t4-mouse-capture-bridge.yml source/Unity2021 ABI/private original source"
+  ],
+  "negative_controls": [
+    "After lexical replacement_plan returns, append synthetic comment to Camera0.cs before patch() snapshots; require ValueError with unchanged edited source, no backup, and successful recomputed retry."
+  ],
+  "workflow_path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42291057653",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/42290968831",
+  "artifact_urls": [],
+  "budget": "Bounded <=15 min CPU/original DLL only, no Unity/IL2CPP native player build, no OBB",
+  "status": "waiting_ci",
+  "observed_result": "RED test-only run42290968831 completed expected failure at 902acf7205cfc3efcb9ef89c449972f70659bb2f: new test fails `ValueError not raised` while 14 previous tests pass. Production fix 65635d6086cfc9dd19a5989a31562882ed367419 stores original source bytes at planning time, compares to later snapshot before backup creation. GREEN run42291057653 pending.",
+  "rejected_hypotheses": [
+    "A backup byte-equivalence check alone proves planned output matches the source version being backed up: false under a concurrent source edit."
+  ],
+  "limitations": [
+    "Synthetic interleaving, not reproduction of real concurrent GitHub job; cannot claim serializable cross-process locking or safe behavior against adversarial writes after comparison.",
+    "No native Editor Unity/player, IL2CPP, Android owner device, RGD save/reopen, or new signed APK+OBB+XAPK evidence."
+  ],
+  "integration_commit": "65635d6086cfc9dd19a5989a31562882ed367419",
+  "next_step": "Confirm GREEN run job conclusions and actual original signed compiled ABI, then release work scope. T5 owns any later authorized native package."
+}
