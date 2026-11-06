@@ -87,7 +87,7 @@ def compare_unity_obb_guid(apk: zipfile.ZipFile, obb: zipfile.ZipFile):
         "apk_obb_shared_guid_marker_comparison_proven": bool(a_present and o_present),
         "unity_internal_engine_guid_verified": False,
         "actual_installed_phone_obb_mount_verified": False,
-        "optional_patch_89_probe_caused_main_corruption": False,
+        "optional_patch_89_caused_main_corruption_proven": False,
     }
 
 
