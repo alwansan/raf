@@ -6,14 +6,14 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "T5 trial build voting coordination and source-integrated delivery review",
-  "status": "active",
+  "status": "completed",
   "base_sha": "99658d34f59ce64a8f961e942c641882c0750110",
   "resumed_from_sessions": [
     "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c",
     "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
     "20261106T1645Z-T5-chat-installed-obb-read-e7c4"
   ],
-  "updated_at": "2026-11-06T17:45:00Z",
+  "updated_at": "2026-11-06T17:50:40.243Z",
   "intended_files": [
     "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
     "prompt/coordination/clients/T5/sessions/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.md",
@@ -32,5 +32,36 @@
     "https://github.com/alwansan/raf/actions/runs/42257103707",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "next_step": "Review live prior signed artifacts/release outcome and consensus; update T5 row NO in round r1 and own decision; checkpoint; continue non-overlapping high-value engineering as team progresses."
+  "next_step": "Scoped vote review completed, reserve/release current T5-row; preserve new voting protocol in all chat/scheduled T5 major milestones. No build without fresh five independent need votes and manual source/actions/artifact checks. Continue source/engine integration on separate reserved work.",
+  "last_commit": "095d776d280457741f15922566d693ab6ec6ff24",
+  "result": {
+    "round_id": "trial-20261106-r1",
+    "votes": {
+      "T1": "لا يحتاج",
+      "T2": "لا يحتاج",
+      "T3": "لا يحتاج",
+      "T4": "يحتاج",
+      "T5": "لا يحتاج"
+    },
+    "consensus": false,
+    "build_dispatched": false,
+    "other_vote_rows_preserved": true,
+    "recovered_old_signed_delivery_artifact": 13454900880,
+    "old_artifact_expired": false,
+    "old_artifact_expires_at": "2026-11-08T21:12:40Z",
+    "previous_native_release_status": "HTTP403; no release confirmed",
+    "latest_branch_actions_pending_or_running": 0,
+    "full_readiness": "NOT_READY 0/3",
+    "limits": "No new game/rendering runtime patch in this scope"
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42110297871"
+  ],
+  "evidence_files": [
+    "prompt/coordination/clients/T5/sessions/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.md",
+    "prompt/coordination/experiments/T5/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1745Z-T5-chat-trial-vote-adoption-46c2.json",
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md"
+  ]
 }
