@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T12:49:29.935Z",
+  "summary": "Fixed APK/OBB pair verifier gap: non-core local ZIP header name/flag/method/CRC/size could disagree with central directory despite recomputed matching manifest SHA, causing resource read BadZipFile. Now checks every local header plus compressed payload bounds/nonoverlap without unpacking 6GB. New 7 adversarial +2 ZIP64/descriptor positives; final CI42220308068 PASS 32/32. No real artifact/device checked.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42220308068",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_APK_OBB_LOCAL_ZIP_HEADER_VALIDATION_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/7839aa9c13ebff573762d8ade1f390fddb0268c0"
+  ],
+  "limits": "Production packaging validator improved but synthetic-only proof; original signed APK, OBB internal GUID/signature, runtime mount, water/FFT and device readiness unresolved.",
+  "next_step": "Verify signed APK/OBB inner bytes and real ZIP structure in authorized isolated runner, preserve T1–T4 scope."
+}
