@@ -1,0 +1,13 @@
+{
+  "id": "T5-20261106-unity-surface-stale-bridge",
+  "owner": "T5",
+  "session_id": "20261106T0145Z-T5-chat-unity-surface-bridge-f4c2",
+  "issue_id": "PERF-007",
+  "type": "diagnostics",
+  "at": "2026-11-06T01:52:16.961Z",
+  "summary": "CI42146496632 SUCCESS, 15/15 source-free and 4 real SHA-pinned CL blobs: 230108 had 105 SF-stale samples yet 62 qualified Unity internal frame intervals within same UTC span (35 MainScene, 27 MainMenuScene). SurfaceFlinger stale not game frozen, original 120Hz startup not gameplay. No cross-session FPS causation claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42146496632",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_CL_UNITY_SURFACE_BRIDGE_2026-11-06.md"
+  ]
+}
