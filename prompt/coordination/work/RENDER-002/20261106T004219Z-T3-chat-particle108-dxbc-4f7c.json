@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "id": "20261106T004219Z-T3-chat-particle108-dxbc-4f7c",
+  "session_id": "20261106T004219Z-T3-chat-particle108-dxbc-4f7c",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "951a48a9d0f958ad09719058d2f7575d54249390",
+  "updated_at": "2026-11-06T00:42:19.885Z",
+  "resource_key": "T3-private-original-sixscene-fourowner-108Particle-onepass-D3D11-analysis-only",
+  "experiment_key": "T3-ZIP2-15964ea8-6scenes-4SHAowners-108ParticleShader48-onePass-D3D11-true-linked-VSFS-keyword-pairs-sourceonly-v1",
+  "hypothesis": "The exact original 108-use Particle Shader48 whose plain AssetRipper ShaderLab is a Dummy may still contain fully linked original D3D11 vertex/fragment stage programs and matched keyword permutations in immutable original serialized code. Establish available counts and stage-link integrity before proposing any Android replacement.",
+  "resumed_from_sessions": [
+    "20261106T001837Z-T3-chat-particle108-shaderlab-5d72.md",
+    "20261106T0030Z-T3-scheduled-native-stage-order-e6b4.md"
+  ],
+  "intended_files": [
+    "scripts/t3_original_particle108_dxbc_feasibility.py",
+    "tests/test_t3_original_particle108_dxbc_feasibility.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.json",
+    "prompt/coordination/clients/T3/sessions/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.md",
+    "prompt/coordination/experiments/T3/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.json",
+    "docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
+    "prompt/coordination/discussions/RENDER-002/20261106T004219Z-T3-chat-particle108-dxbc-4f7c-to-T5.md"
+  ],
+  "run_urls": [],
+  "next_step": "Probe privately the exact original SHA-pinned highest particle 108-use Shader48 one Pass original platform=4 D3D11 linked VS/FS stage programs, all variants/keyword permutation pairing, no program/ID/code/hash leak. Synthetic fail-closed tests and isolated original six-scene CI. Keep RENDER-002 OPEN and do not modify native full build or game assets."
+}
