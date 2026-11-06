@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+  "issue_id": "WATER-001",
+  "track": "GPU FFT computed-coordinate zero-signature taxonomy",
+  "status": "active",
+  "base_sha": "de574cc91877d55157fff850debb48549cba5b91",
+  "updated_at": "2026-11-06T19:33:00Z",
+  "resumed_from_sessions": [
+    "20261106T1916Z-T1-chat-address-provenance-e6b2",
+    "20261106T1907Z-T1-scheduled-report-shape-n8v2",
+    "20261106T1850Z-T1-chat-gpu-input-join-b71c"
+  ],
+  "experiment_key": "T1-sourcefree-Unity2021.3.45f2-OpenGLCore-64-lane-computed-vs-buffered-FFT-X-coordinate-bitcarrier-zero-vs-other-and-image-zero-sample-signature-v2",
+  "resource_key": "raft-native-engine-${{ github.ref }} licensed unity for original workflow, cancel=false",
+  "hypothesis": "In 42278153683, 63/64 computed-coordinate carrier mismatches may be subnormal-to-zero in scalar lanes 2/4/6, with Texture2D.Load lanes 10/12 returning the pixel at x=0, rather than unrelated corruption. Add signed-zero aware GPU signature counter per lane and require signature<=mismatch; distinguish zero conversion vs other mismatch; preserve true 6 baselines and 16 mismatch measurements.",
+  "scope": "T1-owned existing synthetic Unity address provenance fixture C# plus its own strict Python gate/adversarial unit tests and own workflow; no original/private assets, no APK, no T2–T5 files. One updated 25m licensed Unity run only if source checks pass.",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftAddressProvenanceTests.cs",
+    "scripts/t1_fft_address_provenance_gate.py",
+    "tests/test_t1_fft_address_provenance_gate.py",
+    ".github/workflows/raft-t1-fft-unity-address-provenance.yml",
+    "prompt/coordination/work/WATER-001/20261106T1933Z-T1-chat-zero-coordinate-signature-73e1.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1933Z-T1-chat-zero-coordinate-signature-73e1.md",
+    "prompt/coordination/experiments/T1/20261106T1933Z-T1-chat-zero-coordinate-signature-73e1.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T1933Z-T1-chat-zero-coordinate-signature-73e1.json"
+  ],
+  "related_work": [
+    "20261106T1916Z-T1-chat-address-provenance-e6b2",
+    "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Extend prior successful synthetic GPU experiment with a strictly bounded second signature report, verify no first-report regressions, collect actual signed-zero vs wrong-address-image signature counts, and prepare original SHA source tracing."
+}
