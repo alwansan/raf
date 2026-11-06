@@ -1,5 +1,6 @@
 import unittest
-from scripts.t1_fft_unity_evidence_gate import classify
+import json
+from scripts.t1_fft_unity_evidence_gate import classify, parse_sanitized_json
 
 
 def fixture(**changes):
@@ -48,6 +49,15 @@ class GateTests(unittest.TestCase):
 
     def test_reject_extra_field(self):
         with self.assertRaises(ValueError): classify(fixture(unexpected='leak'))
+
+    def test_reject_duplicate_json_field_even_if_last_value_valid(self):
+        raw = json.dumps(fixture())
+        raw = raw.replace('"editor_invoked": true', '"editor_invoked": false, "editor_invoked": true')
+        with self.assertRaisesRegex(ValueError, 'duplicate Unity evidence field'):
+            parse_sanitized_json(raw)
+
+    def test_accept_unique_json_evidence(self):
+        self.assertTrue(parse_sanitized_json(json.dumps(fixture()))['candidate_import_proven'])
 
     def test_error_blocks_positive(self):
         self.assertFalse(classify(fixture(observed_errors=1))['candidate_import_proven'])
