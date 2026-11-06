@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "colors-materials",
-  "status": "active",
+  "status": "completed",
   "base_sha": "47df6c4b344a688928219596cae66ef865108050",
-  "updated_at": "2026-11-06T20:15:30Z",
+  "updated_at": "2026-11-06T20:32:00Z",
   "resumed_from_sessions": [
     "20261106T1959Z-T3-chat-original-stage-probe-9f24",
     "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
@@ -37,9 +37,33 @@
     "Private original DXBC, names, register values, shader resource identities, SPV binary only runner temp; logs only aggregate flags and safe failure codes",
     "No ShaderLab or phone fidelity assumed from dual-profile structural equality; trial vote remains لا يحتاج until material integrated renderer fix"
   ],
-  "next_step": "Fix verifier real graphics interface input/output false positive with tests, then authenticate original eight stages and compile A/B through bounded GitHub source-only action. Publish safe report and close work.",
+  "next_step": "Construct full genuine non-dummy Shader48 four-keyword original VSFS ShaderLab candidate in SHA-authentic private staging, preserve exact original authored props default semantics and Renderer/Material identity and source resource contracts; test real Unity shader compilation before any owner Adreno pixel re-test. Do not launch duplicate native build.",
   "related_runs": [
     "https://github.com/alwansan/raf/actions/runs/42286299737",
-    "https://github.com/alwansan/raf/actions/runs/42286681868"
-  ]
+    "https://github.com/alwansan/raf/actions/runs/42286681868",
+    "https://github.com/alwansan/raf/actions/runs/42287201379",
+    "https://github.com/alwansan/raf/actions/runs/42287806319",
+    "https://github.com/alwansan/raf/actions/runs/42288482626",
+    "https://github.com/alwansan/raf/actions/runs/42288756206"
+  ],
+  "result": "SHA-original Shader48 source 4 keyword VSFS pairs, 8 stages, 44 source D3D register rows: VKD3D C no-map baseline 8/8 + two explicit chosen target layouts A/B 16/16 + spirv-val all 24 + whole-SPV graph identity except DescriptorSet/Binding numeric literal changes + same original register→SPV variable identity across A/B. CI42288756206 SUCCESS 31/31 synthetic, authenticated six scenes/four shader owner source SHA. Root cause of original C explicit failure identified: Sampler binding flag required IMAGE, while C previously set zero; CBV requires BUFFER. No executable ShaderLab or Unity/Android graphics proven, trial T3 no need.",
+  "root_cause": "C helper's vkd3d-shader resource descriptor flags: CBV BUFFER, Sampler IMAGE; sampler was previously 0, causing public-classified Sampler resource binding missing. Fixed and verified against authentic original shader eight stages.",
+  "terminal_run_url": "https://github.com/alwansan/raf/actions/runs/42288756206",
+  "terminal_run_sha": "0764b0793febd1fad707ce7afd9e074595a449a2",
+  "terminal_job_id": 128136360031,
+  "artifact_id": 13539295425,
+  "source_code_commits": [
+    "027ba08dc86e47cb7d70edf7ce10f2112b23e005",
+    "8c5050d2cc6eec90cee4cb189f3aa0f01cfc0455",
+    "16ca0912a622e2d7f0d2905051b0bf653f2b1b14",
+    "bb1824954bed52b48c7a14434b364ab445628fde",
+    "030e6d61058cc6421ef824903ea69c3a56271e05",
+    "ddc456a0ffe0b0c3ae64574a08011f9df800ec64",
+    "1f9a28d88f83625ff51855747eaf8479b1d9e30d"
+  ],
+  "temporary_workflow_cleaned": true,
+  "temporary_trigger_cleaned": true,
+  "resource_released": true,
+  "trial_vote": "لا يحتاج",
+  "issue_status": "OPEN/NOT_READY"
 }
