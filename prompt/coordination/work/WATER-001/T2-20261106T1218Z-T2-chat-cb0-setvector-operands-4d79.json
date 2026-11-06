@@ -1,0 +1,31 @@
+{
+  "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "ca3046a9d9b87cad8ed830c8dca6195bddfd8064",
+  "updated_at": "2026-11-06T12:18:00Z",
+  "resumed_from_sessions": [
+    "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+    "20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9"
+  ],
+  "experiment_key": "SHA-original-ZIP2-Foam-CB0-exact-Material.SetVector-first-string-typed-second-Vector4-and-receiver-IL-origin-v1",
+  "resource_key": "T2-private-source-original-foam-Cecil-only",
+  "baseline_run": "https://github.com/alwansan/raf/actions/runs/42210166957",
+  "expected_source": "ZIP2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original DLL SHA256 0a6f0527856a9ce538d8d4217358b467c58f24f72e",
+  "hypothesis": "The one first-arg authenticated source original CB0 Material.SetVector call can conservatively classify the actual second formal Vector4 expression and Material receiver IL origin; only provable path categories leave CI. Neither operand origin proves actual runtime material shader identity or upload.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    "tests/test_t2_foam_private_cb0_managed_targets.py",
+    "docs/T2_FOAM_ORIGINAL_CB0_SETVECTOR_OPERAND_ORIGINS_2026-11-06.md",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.md",
+    "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-result.json"
+  ],
+  "tests": "Synthetic positive/negative IL stack cases verify direct arg/local/field/call-return and fail-closed receiver unknown, original DLL SHA source run with 11 Python original name guards and Cecil fixture; report safe finite category counts only.",
+  "queued_in_progress_actions_at_plan": 0,
+  "collision_policy": "New independent scope from scheduled T2 pointer SSA; no game ShaderLab content changes, no T1/T3/T4/T5 files, no Unity native build, no forced commits.",
+  "status_note": "Original first formal string was proven only one of five vector names in CI42210166957; second value, receiver identity not yet known."
+}
