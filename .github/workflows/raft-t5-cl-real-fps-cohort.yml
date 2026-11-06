@@ -83,6 +83,7 @@ jobs:
               assert report["process_epoch_count"]==1
               assert report["safe_to_aggregate_entire_session"] is True
               assert report["fps_rows_withheld_unverified_process_epoch"]==0
+              assert report["process_epoch_diagnostic"]=="verified_one_process"
           assert first["stale_presentation_samples"]==6 and second["stale_presentation_samples"]==105
           assert first["fresh_surface_fps_all"]["samples"]==57 and second["fresh_surface_fps_all"]["samples"]==2
           assert first["first_observed_render_failure_sample"]==11
@@ -93,5 +94,5 @@ jobs:
           assert compare["no_aggregate_cross_session_fps"] is True
           print(data)
           with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as f:
-              f.write("Actual CL samples from pinned commit. Session 220911: 57 fresh post-render-error FPS / 6 stale; session 230108: 2 fresh startup FPS (before error onset sample16) / 105 stale; zero fresh post-error FPS. DO NOT compare 120 FPS to gameplay FPS or claim GPU/Unity speedup, game freeze or root causation.\n")
+              f.write("Actual CL samples from pinned commit. Session 220911: 57 fresh post-render-error FPS / 6 stale; session 230108: 2 fresh startup FPS (before error onset sample16) / 105 stale; zero fresh post-error FPS. Both pinned sessions have exactly one verified Raft PID epoch; synthetic restarts/unknown periods are rejected before FPS median reporting. DO NOT compare 120 FPS to gameplay FPS or claim GPU/Unity speedup, game freeze or root causation.\n")
           PY
