@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T191751Z-T3-chat-spv-opname-b71e",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "base_sha": "ce2c1ae43b50d6994605a14e11f5bf78492b0b11",
+  "status": "active",
+  "updated_at": "2026-11-06T19:17:51.193Z",
+  "resumed_from_sessions": [
+    "20261106T190315Z-T3-chat-stage-cardinality-e6a2",
+    "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
+    "20261106T1828Z-T3-scheduled-contract-fixture-b6e1"
+  ],
+  "experiment_key": "T3-PARTICLE108-SPIRV-VKD3D-OpName-DXBC-source-DCL-debug-candidate-contract-v1",
+  "resource_key": "synthetic-SPIRV-only-no-original-shader-run",
+  "hypothesis": "VKD3D SPIR-V OpName debug names may retain source D3D CB/SRV/Sampler register identities; unsupported or stripped names must remain inconclusive. Exact register provenance cannot be inferred from equal resource counts or name coincidence alone.",
+  "scope": [
+    "scripts/t3_particle108_spirv_opname_candidates.py",
+    "tests/test_t3_particle108_dcl_spv_family_census.py",
+    "prompt/coordination/experiments/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T191751Z-T3-chat-spv-opname-b71e.md",
+    "prompt/coordination/B_TEAM/events/T3/20261106T191751Z-T3-chat-spv-opname-b71e.json"
+  ],
+  "scope_overlap_check": "Do not edit scheduled T3 t3_dxbc_spirv_contract_join.py. Do not change T5 native request or T1/T2 shader/water files. Existing original-source workflow stays manual-only; no bypass of prior blocked dispatch.",
+  "approach": "Build a bounded fail-closed binary SPIR-V reader for OpEntryPoint, OpName, OpDecorate DescriptorSet+Binding, OpTypePointer/OpVariable and resource type. Source-private matching uses literal named CB/SRV/Sampler/UAV register prefix only as candidate debug identity, aggregates counts safely, tests on synthetic byte streams via existing source-only CI. Never declare program/phone restoration.",
+  "next_step": "Write parser, synthetic regression test; run existing CI source-only and record terminal success; consider source-authenticated probe only through authorized manual Actions after exact tool/compiler provenance assurance."
+}
