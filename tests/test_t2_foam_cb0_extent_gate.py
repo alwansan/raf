@@ -43,6 +43,25 @@ class FoamCB0GateTests(unittest.TestCase):
                 self.assertEqual(cb0_integration_gate(
                     [link(invalid, 96)])["status"], "blocked_invalid_CB0_link")
 
+    def test_authenticated_two_pass_coverage_required(self):
+        result = cb0_integration_gate(
+            [link()], member_abi_verified=True, unity_upload_verified=True,
+            expected_pass_count=2)
+        self.assertEqual(result["status"], "blocked_CB0_pass_coverage_mismatch")
+        self.assertEqual(result["observed_pass_count"], 1)
+        self.assertEqual(result["expected_pass_count"], 2)
+        self.assertEqual(cb0_integration_gate(
+            [link(), link()], member_abi_verified=True,
+            unity_upload_verified=True, expected_pass_count=2)["status"],
+            "source_gate_satisfied_not_Unity_or_device_verified")
+
+    def test_expected_pass_count_is_strict_bounded_integer(self):
+        for invalid in (True, 2.0, 0, -1, 65, "2"):
+            with self.subTest(value=invalid):
+                self.assertEqual(cb0_integration_gate(
+                    [link(), link()], expected_pass_count=invalid)["status"],
+                    "blocked_invalid_expected_pass_count")
+
     def test_missing_keys_and_non_boolean_evidence_fail_closed(self):
         self.assertEqual(cb0_integration_gate(
             [{"vertex_bytes": 96}])["status"], "blocked_invalid_CB0_link")
