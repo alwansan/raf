@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2016Z-T4-save-exception-completion-evidence-m5r8",
+  "owner": "T4",
+  "session_id": "20261106T2008Z-T4-chat-save-exception-proof-m5r8",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Original SaveGame evidence now fails closed on Save/SaveWorld/SaveUser/SaveGame .exception and exit exceptionEscaped=True/malformed, and Save.argumentFileSnapshot.unavailable. Synthetic RED seven failures, GREEN 17/17 plus real immutable owner CL 5-Nov 7/7 SaveGame and 7/7 LoadT traces; no game source/device acceptance. Independent native run42281310905 failed Unity Editor compile CS0234 AndroidPhysicalMouseCapture, follow-up INPUT-005 T4 session reserved.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42285886433",
+    "https://github.com/alwansan/raf/commit/d6dc42f7ccbd7fc971868c17b370315c02d589b3",
+    "https://github.com/alwansan/raf/actions/runs/42286032150",
+    "https://github.com/alwansan/raf/actions/runs/42281310905"
+  ],
+  "at": "2026-11-06T20:16:00Z"
+}
