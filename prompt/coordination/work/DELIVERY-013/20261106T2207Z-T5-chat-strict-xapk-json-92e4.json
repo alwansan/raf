@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2207Z-T5-chat-strict-xapk-json-92e4",
+  "origin": "chat",
+  "owner": "T5",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "base_sha": "307986cbdde31e578eda7651614f35c56291e7ae",
+  "updated_at": "2026-11-06T22:07:00Z",
+  "resumed_from_sessions": [
+    "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
+    "20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa"
+  ],
+  "taken_over_from": [
+    "T5 split XAPK actual nested hash 07adfa6a0c537bcd39ac19cfd1a7116559816d2a"
+  ],
+  "intended_files": [
+    "scripts/t5_verify_xapk_cross_delivery.py",
+    "tests/test_t5_verify_xapk_cross_delivery.py",
+    "prompt/coordination/work/DELIVERY-013/20261106T2207Z-T5-chat-strict-xapk-json-92e4.json",
+    "prompt/coordination/clients/T5/sessions/20261106T2207Z-T5-chat-strict-xapk-json-92e4.md",
+    "prompt/coordination/experiments/T5/20261106T2207Z-T5-chat-strict-xapk-json-92e4.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T2207Z-T5-chat-strict-xapk-json-92e4.json"
+  ],
+  "hypothesis": "Python json.loads accepts duplicate keys by last-wins and bool True compares equal to integer 1. Nested XAPK and delivery manifest may pass typed gates despite ambiguous duplicate package/version/expansion fields; reject duplicate keys recursively and strictly type schema/xapk_version/total_size.",
+  "experiment_key": "T5-DELIVERY-013-json-duplicate-keys-type-bool-xapk-actual-hash-07adfa6a-source-v1",
+  "resource_key": "source-only T5 XAPK CI, no Unity/no native download",
+  "coordination": "Current native 42296450023 immutable a1737bd7 is in_progress Unity Editor; T5 scheduled 20261106T2150Z owns native observation only. No T1/T2/T3/T4 or scheduled pair verifier files.",
+  "next_step": "Write fail-closed JSON verifier and synthetic duplicate keys/bool tests, run immutable source CI and checkpoint."
+}
