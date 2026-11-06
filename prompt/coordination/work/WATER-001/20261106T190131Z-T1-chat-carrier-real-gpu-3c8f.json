@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
+  "generation": "T-2026-11-05",
+  "issue_id": "WATER-001",
+  "track": "Original FFT Unity OpenGLCore precision context differentiation",
+  "status": "active",
+  "base_sha": "4085da0987f754fdf5de1cebde40406358c640ad",
+  "updated_at": "2026-11-06T19:02:00Z",
+  "resumed_from_sessions": [
+    "20261106T1850Z-T1-chat-gpu-input-join-b71c",
+    "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+    "20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8"
+  ],
+  "experiment_key": "unity2021.3.45f2-openglcore-64-lane-10-category-float32-carrier-materialization-vs-textureload-synthetic-no-original-v1",
+  "resource_key": "raft-native-engine-${{ github.ref }} (only if isolated Unity workflow is permitted, cancel=false)",
+  "hypothesis": "Previously observed raw float carrier subnormal instability and later zero mismatches in simpler Texture2D paths may be context-dependent. Execute existing 10-category Unity C# canary and classify same-dispatch value preservation through materialization/arithmetic versus Texture2D.Load with 3 positive controls.",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-unity-carrier-context.yml",
+    "scripts/t1_fft_carrier_context_result_gate.py",
+    "tests/test_t1_fft_carrier_context_result_gate.py",
+    "prompt/coordination/work/WATER-001/20261106T190131Z-T1-chat-carrier-real-gpu-3c8f.json",
+    "prompt/coordination/clients/T1/sessions/20261106T190131Z-T1-chat-carrier-real-gpu-3c8f.md",
+    "prompt/coordination/experiments/T1/20261106T190131Z-T1-chat-carrier-real-gpu-3c8f.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T190131Z-T1-chat-carrier-real-gpu-3c8f.json"
+  ],
+  "scope": "Validate actual sourcefree 10-category Unity OpenGLCore fixture using isolated licensed Unity2021 GameCI, if workflow publication is allowed. Maintain safety gate: no original ZIP2, no native build, no raw shader/private Unity logs, only strict bounded categorization. If workflow creation blocked, stop and build independent source-only contract tests rather than circumvent tool security.",
+  "related_work": [
+    "20261106T175623Z-T1-chat-float-carrier-context-b82c",
+    "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+    "20261106T1850Z-T1-chat-gpu-input-join-b71c"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement licensed Unity synthetic run if publication permitted and inspect real metrics; otherwise stop blocked and record tool check, improve a non-overlapping verification path."
+}
