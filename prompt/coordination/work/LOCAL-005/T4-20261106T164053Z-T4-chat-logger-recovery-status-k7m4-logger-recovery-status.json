@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "persistent_world_diagnostics",
-  "status": "active",
+  "status": "completed",
   "base_sha": "484856828c2b0dfd9ac4bb3a6ebc293b562be942",
   "approach": "Bounded diagnostic truthfulness repair: after a verified transient synthetic storage failure, Flush/worker must clear stale LastError only after successful drain+flush. Preserve queued first event, overflow count, and failure reporting. Red/green in existing source-only .NET8 diagnostics workflow.",
   "intended_files": [
@@ -26,8 +26,19 @@
   "experiment_ids": [
     "prompt/coordination/experiments/T4/20261106T164053Z-T4-chat-logger-recovery-status-k7m4.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add failing synthetic recovered-state assertion; run existing diagnostics workflow to see red; repair only true successful Flush and Run state, then green and handoff.",
-  "updated_at": "2026-11-06T16:40:53Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42254862695",
+    "https://github.com/alwansan/raf/actions/runs/42255132103"
+  ],
+  "result": {
+    "red_test_sha": "7c7b63dae280b3462cf479b6f1bb286ff26ee270",
+    "red_run": "42254862695: completed failure at Program.cs:145 check51 after recovery, expected",
+    "fix_sha": "4b10629cfb16d3b8b963ce160a548b998443c374",
+    "green_run": "42255132103: completed success, 286/286 checks on actual .NET8 runner",
+    "source_fixed": true,
+    "android_storage_verified": false,
+    "local_world_still_open": true
+  },
+  "next_step": "T5 signed source-attested APK+matching OBB and owner phone world save/reopen, mouse, and real persistence log Status; no Unity APK dispatched by T4. Avoid conflating synthetic I/O recovery with phone proof.",
+  "updated_at": "2026-11-06T16:45:00Z"
 }
