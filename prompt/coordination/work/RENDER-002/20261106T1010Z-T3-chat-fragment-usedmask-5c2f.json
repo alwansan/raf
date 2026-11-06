@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+  "issue_id": "RENDER-002",
+  "track": "Particle108 original missing fragment input DXBC used_mask",
+  "status": "active",
+  "base_sha": "6e9d9151fea887c508aa3044d828facd6aee1b6a",
+  "intended_files": [
+    "scripts/t3_particle108_register_location_probe.py",
+    "tests/test_t3_particle108_register_location_probe.py",
+    ".github/workflows/raft-t3-particle108-register-location.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.md",
+    "prompt/coordination/experiments/T3/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json"
+  ],
+  "hypothesis": "Two absent source SPIRV numeric fragment input locations are original compiled DXBC inputs with unknown used_mask; their source metadata zero/nonzero read masks distinguish likely optimization versus a potentially active input disappearance.",
+  "experiment_key": "T3-Original-Particle108-4pair-2-missing-frag-input-DXBC-usedmask-sha15964ea8-v3",
+  "resource_key": "T3-original-Particle108-4owners-private-20min-runner",
+  "related_work": [
+    "20261106T1002Z-T3-chat-stage-role-misses-7e13"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T1002Z-T3-chat-stage-role-misses-7e13.md"
+  ],
+  "approach": "Private original DXBC missing Fragment input lookup via register and safe translated SPIRV Location; count source used_mask==0/nonzero for exactly missing two and original VS semantic link; aggregate only, no per-stage original names/locations, no automatic patch.",
+  "experiment_ids": [
+    "20261106T1010Z-T3-chat-fragment-usedmask-5c2f"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement and synthetically validate strict private DXBC used-mask classifier, run new original gated CI, document safe aggregate and distinguish source metadata from runtime proof.",
+  "updated_at": "2026-11-06T10:10:00Z"
+}
