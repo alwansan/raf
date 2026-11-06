@@ -74,7 +74,7 @@ internal static class Program
     }
 
     // Public Unity type/overload schema only. Does not prove actual call argument.
-    private static string? SetterKind(string declaringType, string name,
+    internal static string? SetterKind(string declaringType, string name,
                                       string firstFormalType, string secondFormalType)
     {
         if (firstFormalType is not ("System.String" or "System.Int32"))
@@ -135,6 +135,9 @@ internal static class Program
         public int MethodsContainingTypedSetter;
         public int LiteralWithin16InstructionsOfTypedSetter;
         public int LiteralWithin4InstructionsOfPropertyToId;
+        public int ExactSourceStringFirstFormalCallCount;
+        public int ExactSourcePropertyIdFirstFormalCallCount;
+        public readonly HashSet<string> ExactFirstFormalProvenNames = new(StringComparer.Ordinal);
     }
 
     private static object Probe(string originalDll, string privateTargetFile)
@@ -201,6 +204,15 @@ internal static class Program
                 foreach (var row in rows)
                 {
                     summary.Unique.Add(row.Hash);
+                    var exact = Cb0ExactFirstFormal.Trace(items, row.Position);
+                    if (exact.HasValue)
+                    {
+                        summary.ExactFirstFormalProvenNames.Add(row.Hash);
+                        if (exact.Value.Kind == "source_literal_as_string")
+                            summary.ExactSourceStringFirstFormalCallCount++;
+                        else if (exact.Value.Kind == "source_literal_via_PropertyToID")
+                            summary.ExactSourcePropertyIdFirstFormalCallCount++;
+                    }
                     if (setters.Any(s => s.Position >= row.Position &&
                                         s.Position <= row.Position + NearInstructionWindow))
                     {
@@ -242,6 +254,13 @@ internal static class Program
             literal_within_4_following_IL_instructions_of_PropertyToID_by_role =
                 Roles.ToDictionary(x=>x,x=>groups[x].LiteralWithin4InstructionsOfPropertyToId),
             matched_literal_near_typed_setter_API_categories = nearSetterCategories,
+            original_source_name_exact_typed_first_formal_unique_by_role =
+                Roles.ToDictionary(x=>x,x=>groups[x].ExactFirstFormalProvenNames.Count),
+            original_source_name_exact_typed_string_first_formal_calls_by_role =
+                Roles.ToDictionary(x=>x,x=>groups[x].ExactSourceStringFirstFormalCallCount),
+            original_source_name_exact_typed_PropertyToID_first_formal_calls_by_role =
+                Roles.ToDictionary(x=>x,x=>groups[x].ExactSourcePropertyIdFirstFormalCallCount),
+            literal_adjacency_does_not_prove_operand_or_runtime_upload = true,
             original_Ldstr_is_exact_setter_argument_proven = false,
             runtime_Unity_CB0_value_upload_verified = false,
             actual_Adreno_water_pixels_verified = false,
@@ -272,6 +291,7 @@ internal static class Program
             SetterKind("UnityEngine.Material", "SetColor", "System.String",
                        "System.Single") != null)
             throw new InvalidOperationException("Setter negative schema");
+        Cb0ExactFirstFormal.SelfTest();
         Console.WriteLine("T2_CB0_MANAGED_CECIL_SELFTEST pass");
     }
 
@@ -300,5 +320,228 @@ internal static class Program
                               + "\"private_original_strings_disclosed\":false}");
             return 2;
         }
+    }
+}
+
+
+// Fail-closed, single-basic-block IL stack provenance only. A proof of a
+// compiled setter's first formal argument is NOT proof that the call executes,
+// that its receiver uses Foam, nor that Unity writes CB0 bytes on device.
+internal static class Cb0ExactFirstFormal
+{
+    internal readonly record struct Evidence(string SetterFamily, string Kind);
+    private enum Tag { Unknown, SourceString, SourcePropertyId }
+    private const int MaxSteps = 24;
+    private const int MaxStack = 64;
+
+    private static int? Local(Instruction i)
+    {
+        if (i.Operand is VariableDefinition variable)
+            return variable.Index;
+        string n = i.OpCode.Name;
+        for (int k = 0; k < 4; k++)
+            if (n.EndsWith("." + k.ToString(), StringComparison.Ordinal))
+                return k;
+        return null;
+    }
+
+    internal static Evidence? Trace(IList<Instruction> instructions, int literalIndex)
+    {
+        if (literalIndex < 0 || literalIndex >= instructions.Count ||
+            instructions[literalIndex].OpCode.Code != Code.Ldstr)
+            return null;
+        var stack = new List<Tag> { Tag.SourceString };
+        var locals = new Dictionary<int, Tag>();
+        Tag Pop()
+        {
+            if (stack.Count == 0) return Tag.Unknown;
+            var v = stack[^1];
+            stack.RemoveAt(stack.Count - 1);
+            return v;
+        }
+        bool Push(Tag t)
+        {
+            if (stack.Count >= MaxStack) return false;
+            stack.Add(t);
+            return true;
+        }
+        for (int pos = literalIndex + 1;
+             pos < instructions.Count && pos <= literalIndex + MaxSteps; pos++)
+        {
+            var ins = instructions[pos];
+            if (ins.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
+                or FlowControl.Return or FlowControl.Throw or FlowControl.Break)
+                return null;
+            string name = ins.OpCode.Name;
+            if (name == "nop") continue;
+            if (name == "dup")
+            {
+                if (!Push(stack.Count > 0 ? stack[^1] : Tag.Unknown))
+                    return null;
+                continue;
+            }
+            if (name == "pop") { Pop(); continue; }
+            if (name.StartsWith("stloc", StringComparison.Ordinal))
+            {
+                int? i = Local(ins);
+                if (i is null || i < 0 || i > 255) return null;
+                locals[i.Value] = Pop();
+                continue;
+            }
+            if (name.StartsWith("ldloca", StringComparison.Ordinal))
+            {
+                if (!Push(Tag.Unknown)) return null;
+                continue;
+            }
+            if (name.StartsWith("ldloc", StringComparison.Ordinal))
+            {
+                int? i = Local(ins);
+                if (i is null || i < 0 || i > 255) return null;
+                if (!Push(locals.GetValueOrDefault(i.Value, Tag.Unknown)))
+                    return null;
+                continue;
+            }
+            if (name.StartsWith("ldarg", StringComparison.Ordinal)
+                || name.StartsWith("ldc.", StringComparison.Ordinal)
+                || name is "ldnull" or "ldsfld" or "ldsflda" or "ldstr"
+                    or "ldtoken" or "ldftn" or "sizeof")
+            {
+                if (!Push(Tag.Unknown)) return null;
+                continue;
+            }
+            if (name is "ldfld" or "ldflda")
+            {
+                Pop();
+                if (!Push(Tag.Unknown)) return null;
+                continue;
+            }
+            if (name is "stfld")
+            {
+                Pop(); Pop(); continue;
+            }
+            if (name is "stsfld") { Pop(); continue; }
+            if (name is "newarr" or "ldlen" or "box" or "castclass"
+                or "unbox.any")
+            {
+                Pop();
+                if (!Push(Tag.Unknown)) return null;
+                continue;
+            }
+            if (name.StartsWith("conv.", StringComparison.Ordinal))
+            {
+                Pop();
+                if (!Push(Tag.Unknown)) return null;
+                continue;
+            }
+            if (name.StartsWith("ldelem", StringComparison.Ordinal))
+            {
+                Pop(); Pop();
+                if (!Push(Tag.Unknown)) return null;
+                continue;
+            }
+            if (name.StartsWith("stelem", StringComparison.Ordinal))
+            {
+                Pop(); Pop(); Pop(); continue;
+            }
+            if (ins.OpCode.Code is Code.Call or Code.Callvirt or Code.Newobj)
+            {
+                if (ins.Operand is not MethodReference method ||
+                    method.Parameters.Count > 32)
+                    return null;
+                var formals = new Tag[method.Parameters.Count];
+                for (int k = formals.Length - 1; k >= 0; k--)
+                    formals[k] = Pop();
+                if (ins.OpCode.Code != Code.Newobj && method.HasThis)
+                    Pop();
+                if (method.Parameters.Count >= 2 &&
+                    ins.OpCode.Code != Code.Newobj)
+                {
+                    string? family = Program.SetterKind(
+                        method.DeclaringType.FullName, method.Name,
+                        method.Parameters[0].ParameterType.FullName,
+                        method.Parameters[1].ParameterType.FullName);
+                    if (family is not null)
+                    {
+                        string firstType = method.Parameters[0].ParameterType.FullName;
+                        if (firstType == "System.String" &&
+                            formals[0] == Tag.SourceString)
+                            return new Evidence(family,"source_literal_as_string");
+                        if (firstType == "System.Int32" &&
+                            formals[0] == Tag.SourcePropertyId)
+                            return new Evidence(family,"source_literal_via_PropertyToID");
+                    }
+                }
+                Tag result = Tag.Unknown;
+                if (ins.OpCode.Code != Code.Newobj &&
+                    method.DeclaringType.FullName == "UnityEngine.Shader" &&
+                    method.Name == "PropertyToID" &&
+                    method.Parameters.Count == 1 &&
+                    method.Parameters[0].ParameterType.FullName == "System.String" &&
+                    method.ReturnType.FullName == "System.Int32" &&
+                    formals[0] == Tag.SourceString)
+                    result = Tag.SourcePropertyId;
+                if (ins.OpCode.Code == Code.Newobj ||
+                    method.ReturnType.FullName != "System.Void")
+                {
+                    if (!Push(result)) return null;
+                }
+                continue;
+            }
+            // No assumptions about unsupported opcode stack behavior.
+            return null;
+        }
+        return null;
+    }
+
+    internal static void SelfTest()
+    {
+        using var module = ModuleDefinition.CreateModule("t2-cb0-public-fixture",
+                                                         ModuleKind.Dll);
+        var material = new TypeReference("UnityEngine","Material",module,module);
+        var shader = new TypeReference("UnityEngine","Shader",module,module);
+        var vector4 = new TypeReference("UnityEngine","Vector4",module,module);
+        var setter = new MethodReference("SetVector",module.TypeSystem.Void,material)
+            { HasThis = true };
+        setter.Parameters.Add(new ParameterDefinition(module.TypeSystem.String));
+        setter.Parameters.Add(new ParameterDefinition(vector4));
+        var direct = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        if (Trace(direct,0)?.Kind != "source_literal_as_string")
+            throw new InvalidOperationException("Exact first formal string positive");
+        var distractor = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Pop),
+            Instruction.Create(OpCodes.Ldstr,"UNRELATED"),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        if (Trace(distractor,0) is not null)
+            throw new InvalidOperationException("Proximity false-positive control");
+        var branch = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Br_S,Instruction.Create(OpCodes.Nop)),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        if (Trace(branch,0) is not null)
+            throw new InvalidOperationException("Branch must block first formal proof");
+        var propertyId = new MethodReference("PropertyToID",module.TypeSystem.Int32,shader)
+            { HasThis = false };
+        propertyId.Parameters.Add(new ParameterDefinition(module.TypeSystem.String));
+        var setFloat = new MethodReference("SetFloat",module.TypeSystem.Void,material)
+            { HasThis = true };
+        setFloat.Parameters.Add(new ParameterDefinition(module.TypeSystem.Int32));
+        setFloat.Parameters.Add(new ParameterDefinition(module.TypeSystem.Single));
+        var ids = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Call,propertyId),
+            Instruction.Create(OpCodes.Ldc_R4,1.0f),
+            Instruction.Create(OpCodes.Callvirt,setFloat)
+        };
+        if (Trace(ids,0)?.Kind != "source_literal_via_PropertyToID")
+            throw new InvalidOperationException("PropertyToID first formal positive");
     }
 }
