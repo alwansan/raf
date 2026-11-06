@@ -14,11 +14,11 @@
     "assets/./unexpected"
   ],
   "run_url": "https://github.com/alwansan/raf/actions/runs/42158794051",
-  "status": "waiting_ci",
-  "observed_result": "Not yet final",
+  "status": "completed",
+  "observed_result": "CI42158794051 completed SUCCESS, source-free regression suite. Not real APK/OBB verification.",
   "limitations": [
     "synthetic fixtures only",
     "no real APK/OBB payload or device"
   ],
-  "next_step": "Read CI42158794051 final result; if failed inspect assertion, repair without duplicate run. If passed retain source-only validation and inspect actual signed artifact pairing separately."
+  "next_step": "Verify actual signed APK/OBB versionCode/size/SHA and manifest from retained artifact; do not claim phone pairing from synthetic tests."
 }
