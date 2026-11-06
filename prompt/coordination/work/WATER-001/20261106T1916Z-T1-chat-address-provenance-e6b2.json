@@ -4,11 +4,11 @@
   "origin": "chat",
   "session_id": "20261106T1916Z-T1-chat-address-provenance-e6b2",
   "generation": "T-2026-11-05",
-  "status": "active",
+  "status": "waiting_ci",
   "issue_id": "WATER-001",
   "track": "Unity sourcefree FFT carrier address provenance",
   "base_sha": "e718c98ff98c6f3f31de589b082aab52360972a2",
-  "updated_at": "2026-11-06T19:16:00Z",
+  "updated_at": "2026-11-06T19:20:00Z",
   "resumed_from_sessions": [
     "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
     "20261106T1907Z-T1-scheduled-report-shape-n8v2",
@@ -33,7 +33,18 @@
     "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
     "20261106T1907Z-T1-scheduled-report-shape-n8v2"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42278153683"
+  ],
   "result": null,
-  "next_step": "Write strict differential fixture; run private Unity2021 OpenGLCore one dispatch with 16 output lanes per thread; release work after verified CI."
+  "next_step": "Inspect Actions terminal result; log category counts without original data; contrast previous 42129683073 and 42276235955. No APK or real game change.",
+  "waiting_ci": {
+    "run_id": 42278153683,
+    "job_id": 128099796286,
+    "head_sha": "aba2bcacd253ea91f225d768d802e5359018f008",
+    "source_preflights": "completed success",
+    "gameci_pinned_cli": "completed success",
+    "unity_gpu_step": "in_progress",
+    "criterion": "6 control counts all 0; exact 1 NUnit case, return 0; all 16 counts bounded 0..64; record computed-only/staged-only/both/none; scrub private XML and shaders"
+  }
 }
