@@ -100,6 +100,18 @@ MATERIAL_NUMERIC = (
     "field_api_Graphics_Blit_explicit_destination_RenderTexture",
     "field_api_Graphics_Blit_explicit_destination_null",
     "field_api_Graphics_Blit_explicit_destination_unknown",
+    "field_api_Graphics_Blit_pass0_source_Texture",
+    "field_api_Graphics_Blit_pass0_source_RenderTexture",
+    "field_api_Graphics_Blit_pass0_source_unknown",
+    "field_api_Graphics_Blit_pass0_destination_RenderTexture",
+    "field_api_Graphics_Blit_pass0_destination_null",
+    "field_api_Graphics_Blit_pass0_destination_unknown",
+    "field_api_Graphics_Blit_pass1_source_Texture",
+    "field_api_Graphics_Blit_pass1_source_RenderTexture",
+    "field_api_Graphics_Blit_pass1_source_unknown",
+    "field_api_Graphics_Blit_pass1_destination_RenderTexture",
+    "field_api_Graphics_Blit_pass1_destination_null",
+    "field_api_Graphics_Blit_pass1_destination_unknown",
     "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
     "field_api_straightline_sites_with_Renderer_Material_parameter",
     "field_api_straightline_sites_with_other_typed_Material_parameter",
@@ -317,6 +329,35 @@ def validate(report):
         if sum(report[k] for k in group) != report[
                 "field_api_Graphics_Blit_sites_ExplicitPass"]:
             raise ValueError("Blit_direct_source_destination_partition_inconsistent")
+    # Cross-attribute role counts on the *same exact field-read site*.
+    # A mixed, computed or non-literal pass contributes no pass0/1 roles.
+    source_categories=("Texture", "RenderTexture", "unknown")
+    destination_categories=("RenderTexture", "null", "unknown")
+    covered=(
+        report["field_api_Graphics_Blit_explicit_sites_pass_literal0"] +
+        report["field_api_Graphics_Blit_explicit_sites_pass_literal1"]
+    )
+    for pass_index in (0,1):
+        site_count=report[
+            f"field_api_Graphics_Blit_explicit_sites_pass_literal{pass_index}"
+        ]
+        for role,categories in (("source",source_categories),
+                                ("destination",destination_categories)):
+            if sum(report[
+                f"field_api_Graphics_Blit_pass{pass_index}_{role}_{cat}"
+            ] for cat in categories)!=site_count:
+                raise ValueError("Blit_pass_specific_role_partition_incomplete")
+    for role,categories in (("source",source_categories),
+                            ("destination",destination_categories)):
+        for cat in categories:
+            total=sum(report[
+                f"field_api_Graphics_Blit_pass{p}_{role}_{cat}"
+            ] for p in (0,1))
+            overall=report[f"field_api_Graphics_Blit_explicit_{role}_{cat}"]
+            if total>overall or (
+                    covered==report["field_api_Graphics_Blit_sites_ExplicitPass"]
+                    and total!=overall):
+                raise ValueError("Blit_pass_role_global_conservation_mismatch")
     categories=(
         "field_api_straightline_sites_with_Graphics_Material_parameter",
         "field_api_straightline_sites_with_CommandBuffer_Material_parameter",

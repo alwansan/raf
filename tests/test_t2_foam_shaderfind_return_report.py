@@ -321,6 +321,10 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
             r["field_api_Graphics_Blit_explicit_sites_pass_"+kind]=1
             r["field_api_Graphics_Blit_explicit_source_unknown"]=1
             r["field_api_Graphics_Blit_explicit_destination_unknown"]=1
+            if kind in ("literal0","literal1"):
+                pass_index=0 if kind=="literal0" else 1
+                r[f"field_api_Graphics_Blit_pass{pass_index}_source_unknown"]=1
+                r[f"field_api_Graphics_Blit_pass{pass_index}_destination_unknown"]=1
             with self.subTest(kind=kind): self.assertTrue(validate(r))
             r["field_api_Graphics_Blit_explicit_sites_pass_"+kind]=0
             with self.subTest(kind=kind, missing=True): self.rejects(r)
@@ -359,6 +363,8 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
                 r["field_api_Graphics_Blit_explicit_sites_pass_literal0"]=1
                 r["field_api_Graphics_Blit_explicit_source_"+src]=1
                 r["field_api_Graphics_Blit_explicit_destination_"+dst]=1
+                r["field_api_Graphics_Blit_pass0_source_"+src]=1
+                r["field_api_Graphics_Blit_pass0_destination_"+dst]=1
                 with self.subTest(source=src,destination=dst):
                     self.assertTrue(validate(r))
                 if src!="unknown":
@@ -369,6 +375,61 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
                     r["field_api_Graphics_Blit_explicit_destination_unknown"]=1
                     with self.subTest(source=src,destination=dst,duplicates=True):
                         self.rejects(r)
+
+    def test_pass_specific_roles_are_exclusive_and_conserved(self):
+        # Source-free synthetic single-call fixtures for pass 0 and pass 1.
+        for pass_index in (0,1):
+            for source in ("Texture", "RenderTexture", "unknown"):
+                for destination in ("RenderTexture", "null", "unknown"):
+                    r=baseline()
+                    r["material_linear_original_material_field_stores"]=1
+                    r["material_linear_original_material_unique_field_definition_resolved"]=1
+                    r["material_linear_original_material_field_read_instructions"]=1
+                    r["field_api_exact_original_material_field_sites_scanned"]=1
+                    r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+                    r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+                    r["field_api_Graphics_material_sites_Blit"]=1
+                    r["field_api_Graphics_Blit_sites_ExplicitPass"]=1
+                    r[f"field_api_Graphics_Blit_explicit_sites_pass_literal{pass_index}"]=1
+                    r[f"field_api_Graphics_Blit_explicit_source_{source}"]=1
+                    r[f"field_api_Graphics_Blit_explicit_destination_{destination}"]=1
+                    r[f"field_api_Graphics_Blit_pass{pass_index}_source_{source}"]=1
+                    r[f"field_api_Graphics_Blit_pass{pass_index}_destination_{destination}"]=1
+                    with self.subTest(pass_index=pass_index,source=source,destination=destination):
+                        self.assertTrue(validate(r))
+                    wrong=1-pass_index
+                    r[f"field_api_Graphics_Blit_pass{wrong}_source_{source}"]=1
+                    with self.subTest(pass_index=pass_index,source=source,destination=destination,wrong_pass=True):
+                        self.rejects(r)
+                    r[f"field_api_Graphics_Blit_pass{wrong}_source_{source}"]=0
+                    r[f"field_api_Graphics_Blit_pass{pass_index}_source_{source}"]=0
+                    with self.subTest(pass_index=pass_index,source=source,destination=destination,missing=True):
+                        self.rejects(r)
+
+    def test_pass_specific_role_global_conservation_rejects_misattribution(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=2
+        r["field_api_exact_original_material_field_sites_scanned"]=2
+        r["field_api_straightline_sites_with_typed_Material_parameter"]=2
+        r["field_api_straightline_sites_with_Graphics_Material_parameter"]=2
+        r["field_api_Graphics_material_sites_Blit"]=2
+        r["field_api_Graphics_Blit_sites_ExplicitPass"]=2
+        r["field_api_Graphics_Blit_explicit_sites_pass_literal0"]=1
+        r["field_api_Graphics_Blit_explicit_sites_pass_literal1"]=1
+        r["field_api_Graphics_Blit_explicit_source_Texture"]=1
+        r["field_api_Graphics_Blit_explicit_source_unknown"]=1
+        r["field_api_Graphics_Blit_explicit_destination_RenderTexture"]=1
+        r["field_api_Graphics_Blit_explicit_destination_unknown"]=1
+        r["field_api_Graphics_Blit_pass0_source_Texture"]=1
+        r["field_api_Graphics_Blit_pass0_destination_RenderTexture"]=1
+        r["field_api_Graphics_Blit_pass1_source_unknown"]=1
+        r["field_api_Graphics_Blit_pass1_destination_unknown"]=1
+        self.assertTrue(validate(r))
+        r["field_api_Graphics_Blit_pass1_source_unknown"]=0
+        r["field_api_Graphics_Blit_pass1_source_Texture"]=1
+        self.rejects(r)
 
     def test_direct_source_destination_roles_require_original_typed_blit(self):
         r=baseline()

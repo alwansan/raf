@@ -197,7 +197,9 @@ internal static class Program
         int BlitPassLiteral0, int BlitPassLiteral1, int BlitPassOtherLiteral,
         int BlitPassUnknown, int BlitPassMixed,
         int BlitSourceTexture, int BlitSourceRenderTexture, int BlitSourceUnknown,
-        int BlitDestinationRenderTexture, int BlitDestinationNull, int BlitDestinationUnknown);
+        int BlitDestinationRenderTexture, int BlitDestinationNull, int BlitDestinationUnknown,
+        BlitPass0SourceTexture, BlitPass0SourceRenderTexture, BlitPass0SourceUnknown, BlitPass0DestinationRenderTexture, BlitPass0DestinationNull, BlitPass0DestinationUnknown,
+        BlitPass1SourceTexture, BlitPass1SourceRenderTexture, BlitPass1SourceUnknown, BlitPass1DestinationRenderTexture, BlitPass1DestinationNull, BlitPass1DestinationUnknown);
 
     private static int PublicBlitSignatureKind(MethodReference method)
     {
@@ -457,6 +459,12 @@ internal static class Program
                      +(passOtherLiteral>0?1:0)+(passUnknown>0?1:0);
         bool onlyExplicitBlit=(graphics>0 && families==1 && graphicsBlit>0 &&
             blitExplicit>0 && blitImplicit==0 && blitOther==0);
+        // Attribute roles to a pass ONLY when this exact field-load site
+        // has one authenticated typed Blit call and one literal pass index.
+        bool singlePass0=onlyExplicitBlit && blitExplicit==1 &&
+            passKinds==1 && passLiteral0==1;
+        bool singlePass1=onlyExplicitBlit && blitExplicit==1 &&
+            passKinds==1 && passLiteral1==1;
         return new(inspected,boundary,receiver,arg,graphics,command,renderer,other,
             graphics>0 && families==1 && graphicsBlit>0 ? 1 : 0,
             graphics>0 && families==1 && graphicsDrawMesh>0 ? 1 : 0,
@@ -480,7 +488,19 @@ internal static class Program
             onlyExplicitBlit && (blitExplicit!=1 || sourceKind==0) ? 1 : 0,
             onlyExplicitBlit && blitExplicit==1 && destinationKind==1 ? 1 : 0,
             onlyExplicitBlit && blitExplicit==1 && destinationKind==2 ? 1 : 0,
-            onlyExplicitBlit && (blitExplicit!=1 || destinationKind==0) ? 1 : 0);
+            onlyExplicitBlit && (blitExplicit!=1 || destinationKind==0) ? 1 : 0,
+            singlePass0 && sourceKind==1 ? 1 : 0,
+            singlePass0 && sourceKind==2 ? 1 : 0,
+            singlePass0 && sourceKind==3 ? 1 : 0,
+            singlePass0 && destinationKind==1 ? 1 : 0,
+            singlePass0 && destinationKind==2 ? 1 : 0,
+            singlePass0 && destinationKind==3 ? 1 : 0,
+            singlePass1 && sourceKind==1 ? 1 : 0,
+            singlePass1 && sourceKind==2 ? 1 : 0,
+            singlePass1 && sourceKind==3 ? 1 : 0,
+            singlePass1 && destinationKind==1 ? 1 : 0,
+            singlePass1 && destinationKind==2 ? 1 : 0,
+            singlePass1 && destinationKind==3 ? 1 : 0);
     }
 
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
@@ -847,7 +867,9 @@ internal static class Program
             fieldApiPassOtherLiteral=0,fieldApiPassUnknown=0,fieldApiPassMixed=0,
             fieldApiSourceTexture=0,fieldApiSourceRenderTexture=0,
             fieldApiSourceUnknown=0,fieldApiDestinationRenderTexture=0,
-            fieldApiDestinationNull=0,fieldApiDestinationUnknown=0;
+            fieldApiDestinationNull=0,fieldApiDestinationUnknown=0,
+            fieldApiPass0SourceTexture=0,fieldApiPass0SourceRenderTexture=0,fieldApiPass0SourceUnknown=0,fieldApiPass0DestinationRenderTexture=0,fieldApiPass0DestinationNull=0,fieldApiPass0DestinationUnknown=0,
+            fieldApiPass1SourceTexture=0,fieldApiPass1SourceRenderTexture=0,fieldApiPass1SourceUnknown=0,fieldApiPass1DestinationRenderTexture=0,fieldApiPass1DestinationNull=0,fieldApiPass1DestinationUnknown=0;
         if(trace.OriginalMaterialField is not null)
             foreach(var method in methods)
             {
@@ -884,6 +906,18 @@ internal static class Program
                         fieldApiDestinationRenderTexture+=api.BlitDestinationRenderTexture;
                         fieldApiDestinationNull+=api.BlitDestinationNull;
                         fieldApiDestinationUnknown+=api.BlitDestinationUnknown;
+                        fieldApiPass0SourceTexture+=api.BlitPass0SourceTexture;
+                        fieldApiPass0SourceRenderTexture+=api.BlitPass0SourceRenderTexture;
+                        fieldApiPass0SourceUnknown+=api.BlitPass0SourceUnknown;
+                        fieldApiPass0DestinationRenderTexture+=api.BlitPass0DestinationRenderTexture;
+                        fieldApiPass0DestinationNull+=api.BlitPass0DestinationNull;
+                        fieldApiPass0DestinationUnknown+=api.BlitPass0DestinationUnknown;
+                        fieldApiPass1SourceTexture+=api.BlitPass1SourceTexture;
+                        fieldApiPass1SourceRenderTexture+=api.BlitPass1SourceRenderTexture;
+                        fieldApiPass1SourceUnknown+=api.BlitPass1SourceUnknown;
+                        fieldApiPass1DestinationRenderTexture+=api.BlitPass1DestinationRenderTexture;
+                        fieldApiPass1DestinationNull+=api.BlitPass1DestinationNull;
+                        fieldApiPass1DestinationUnknown+=api.BlitPass1DestinationUnknown;
                     }
             }
         if(fieldApiSites!=linearFieldReads)
@@ -965,6 +999,18 @@ internal static class Program
             ["field_api_Graphics_Blit_explicit_destination_RenderTexture"]=fieldApiDestinationRenderTexture,
             ["field_api_Graphics_Blit_explicit_destination_null"]=fieldApiDestinationNull,
             ["field_api_Graphics_Blit_explicit_destination_unknown"]=fieldApiDestinationUnknown,
+            ["field_api_Graphics_Blit_pass0_source_Texture"]=fieldApiPass0SourceTexture,
+            ["field_api_Graphics_Blit_pass0_source_RenderTexture"]=fieldApiPass0SourceRenderTexture,
+            ["field_api_Graphics_Blit_pass0_source_unknown"]=fieldApiPass0SourceUnknown,
+            ["field_api_Graphics_Blit_pass0_destination_RenderTexture"]=fieldApiPass0DestinationRenderTexture,
+            ["field_api_Graphics_Blit_pass0_destination_null"]=fieldApiPass0DestinationNull,
+            ["field_api_Graphics_Blit_pass0_destination_unknown"]=fieldApiPass0DestinationUnknown,
+            ["field_api_Graphics_Blit_pass1_source_Texture"]=fieldApiPass1SourceTexture,
+            ["field_api_Graphics_Blit_pass1_source_RenderTexture"]=fieldApiPass1SourceRenderTexture,
+            ["field_api_Graphics_Blit_pass1_source_unknown"]=fieldApiPass1SourceUnknown,
+            ["field_api_Graphics_Blit_pass1_destination_RenderTexture"]=fieldApiPass1DestinationRenderTexture,
+            ["field_api_Graphics_Blit_pass1_destination_null"]=fieldApiPass1DestinationNull,
+            ["field_api_Graphics_Blit_pass1_destination_unknown"]=fieldApiPass1DestinationUnknown,
             ["field_api_straightline_sites_with_CommandBuffer_Material_parameter"]=fieldApiCommand,
             ["field_api_straightline_sites_with_Renderer_Material_parameter"]=fieldApiRenderer,
             ["field_api_straightline_sites_with_other_typed_Material_parameter"]=fieldApiOther,
@@ -1175,7 +1221,8 @@ internal static class Program
         literalMix.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
         exact=TraceExactMaterialFieldRead(literalMix,0);
         if(exact.BlitExplicitPass!=1 || exact.BlitPassMixed!=1 ||
-           exact.BlitPassLiteral0!=0 || exact.BlitPassLiteral1!=0)
+           exact.BlitPassLiteral0!=0 || exact.BlitPassLiteral1!=0 ||
+           exact.BlitPass0SourceUnknown!=0 || exact.BlitPass1SourceUnknown!=0)
             throw new InvalidOperationException("Blit_pass_mixed_exclusive_source");
         var multiBlit=new MethodDefinition("SyntheticTwoBlitOverloads",
             Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
@@ -1215,8 +1262,20 @@ internal static class Program
         imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
         var roles=TraceExactMaterialFieldRead(imageTrace,2);
         if(roles.BlitSourceTexture!=1 || roles.BlitDestinationRenderTexture!=1 ||
-           roles.BlitDestinationUnknown!=0)
+           roles.BlitDestinationUnknown!=0 ||
+           roles.BlitPass0SourceTexture!=1 ||
+           roles.BlitPass0DestinationRenderTexture!=1 ||
+           roles.BlitPass1SourceTexture!=0 ||
+           roles.BlitPass1DestinationRenderTexture!=0)
             throw new InvalidOperationException("direct_Texture_RenderTexture_producer");
+        imageTrace.Body.Instructions[3]=Instruction.Create(OpCodes.Ldc_I4_1);
+        roles=TraceExactMaterialFieldRead(imageTrace,2);
+        if(roles.BlitPass1SourceTexture!=1 ||
+           roles.BlitPass1DestinationRenderTexture!=1 ||
+           roles.BlitPass0SourceTexture!=0 ||
+           roles.BlitPass0DestinationRenderTexture!=0)
+            throw new InvalidOperationException("pass1_direct_Texture_RenderTexture_producer");
+        imageTrace.Body.Instructions[3]=Instruction.Create(OpCodes.Ldc_I4_0);
         imageTrace.Body.Instructions[1]=Instruction.Create(OpCodes.Ldnull);
         roles=TraceExactMaterialFieldRead(imageTrace,2);
         if(roles.BlitSourceTexture!=1 || roles.BlitDestinationNull!=1)
