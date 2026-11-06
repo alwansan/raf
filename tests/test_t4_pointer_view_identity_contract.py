@@ -91,7 +91,11 @@ class PointerViewIdentityAudit(unittest.TestCase):
         release = method_body(source, "ReleaseCapture")
         captured = release.split("OnAndroidUi(() =>", 1)[0]
         self.assertIn("int releaseViewIdentity;", captured)
-        self.assertNotIn("AndroidJavaObject", captured)
+        # Comments may mention AndroidJavaObject; reject actual JNI
+        # wrapper construction/access before UI-thread dispatch instead.
+        self.assertNotIn("new AndroidJavaObject(", captured)
+        self.assertNotIn("Call<AndroidJavaObject>", captured)
+        self.assertNotIn("GetStatic<AndroidJavaObject>", captured)
         self.assertNotIn("getCurrentFocus", captured)
         self.assertIn(
             'using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))',
