@@ -1,0 +1,62 @@
+name: T4 LOCAL-005 immutable owner 5Nov world-save runtime JSONL evidence
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_owner5nov_jsonl_lifecycle.py'
+      - 'tests/test_t4_owner5nov_jsonl_lifecycle.py'
+      - '.github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-owner5nov-true-log-lifecycle-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authentic-owner-log-lifecycle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Checkout only T4 safe interpreter and synthetic negative controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_owner5nov_jsonl_lifecycle.py
+            /scripts/t4_verify_device_world_save_log.py
+            /tests/test_t4_owner5nov_jsonl_lifecycle.py
+      - name: Verify negative controls without any owner data
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_owner5nov_jsonl_lifecycle.py scripts/t4_verify_device_world_save_log.py tests/test_t4_owner5nov_jsonl_lifecycle.py
+          python3 -m unittest discover -s tests -p 'test_t4_owner5nov_jsonl_lifecycle.py' -v
+          test ! -e Raft
+      - name: Read immutable owner 5-Nov phone JSONL only, no game assets or world files
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/CL
+          ref: 520c4cf409aa20a4db54ff80ed87d8807d9cba57
+          path: owner-cl
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /raft log/انتاج مسار /9/com.alwansan.raft.androidtest/files/raft-logs/
+      - name: Authenticate CL source commit and print only redacted original event counts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          test "$(git -C owner-cl rev-parse HEAD)" = "520c4cf409aa20a4db54ff80ed87d8807d9cba57"
+          test ! -e owner-cl/raft\ log/انتاج\ مسار\ /9/com.alwansan.raft.androidtest/files/User
+          python3 -m scripts.t4_owner5nov_jsonl_lifecycle \
+            --root "owner-cl/raft log/انتاج مسار /9/com.alwansan.raft.androidtest/files/raft-logs" \
+            --pinned
+      - name: Clarify evidence limits
+        if: always()
+        run: echo 'real_phone_log_markers_only=true source_sha_attested=false same_world_proven=false device_acceptance_proven=false rgd_payload_read=false'
