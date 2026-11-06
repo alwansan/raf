@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
   "issue_id": "INTEGRATION-001",
-  "status": "completed_original_signed_OBB_full_sha256_crc32_source_verified",
+  "status": "completed_verified_real_OBB_full_SHA_CRC_and_409_event_index",
   "base_sha": "afdf718c02e82733163279a67d2ec5a601af912d",
-  "updated_at": "2026-11-06T14:11:32.482Z",
+  "updated_at": "2026-11-06T14:16:33.629Z",
   "resumed_from_sessions": [
     "20261106T1346Z-T5-scheduled-apk-live-failure-m7q2.md",
     "20261106T1330Z-T5-chat-signed-apk-auth-f7b2.md",
@@ -57,5 +57,15 @@
     "raw_game_files_uploaded": false,
     "actual_Unity_OBB_GUID_verified": false,
     "phone_mount_verified": false
+  },
+  "canonical_team_index": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42232342733",
+    "job_id": 127941092867,
+    "conclusion": "success",
+    "committed_event_rows": 409,
+    "bteam_unit_tests": 11,
+    "tteam_unit_tests": 3,
+    "fast_forward_only": true,
+    "force": false
   }
 }
