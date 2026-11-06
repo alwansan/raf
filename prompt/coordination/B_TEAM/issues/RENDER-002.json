@@ -149,7 +149,10 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md",
     "https://github.com/alwansan/raf/actions/runs/42139137265",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json",
+    "https://github.com/alwansan/raf/actions/runs/42141030091",
+    "https://github.com/alwansan/raf/actions/runs/42141506120",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -207,5 +210,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-06T00:50:57.930Z"
+  "updated_at": "2026-11-06T01:12:00.217Z"
 }
