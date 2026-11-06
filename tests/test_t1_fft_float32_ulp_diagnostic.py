@@ -12,9 +12,18 @@ class Float32UlpDiagnosticTests(unittest.TestCase):
         self.assertIsNone(ulp32_gap(1e300, 1.0))
     def test_diagnostic_first_coordinate_only(self):
         key = (0, 2, 3, "r")
-        result = diagnose({key: 1.0}, {key: 1.0 + 2**-23})
+        # The primary first_difference comparator uses rel_tol=1e-5.
+        # A one-ULP delta at 1.0 is deliberately within its tolerance;
+        # this larger first mismatch is 128 ULP and outside tolerance.
+        result = diagnose({key: 1.0}, {key: 1.0 + 2**-16})
         self.assertEqual(result["status"], "different")
-        self.assertEqual(result["float32_ulp_gap"], 1)
+        self.assertEqual(result["float32_ulp_gap"], 128)
+
+    def test_one_ulp_within_original_tolerance_reports_match(self):
+        key = (0, 2, 3, "r")
+        result = diagnose({key: 1.0}, {key: 1.0 + 2**-23})
+        self.assertEqual(result["status"], "match")
+        self.assertNotIn("float32_ulp_gap", result)
     def test_missing_has_no_ulp(self):
         result = diagnose({}, {(0, 0, 0, "r"): 1.0})
         self.assertEqual(result["status"], "missing")
