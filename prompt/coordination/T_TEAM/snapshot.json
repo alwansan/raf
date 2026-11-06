@@ -7412,6 +7412,23 @@
       "_record_path": "../B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-result.json"
     },
     {
+      "id": "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84",
+      "type": "result",
+      "issue_id": "WATER-001",
+      "at": "2026-11-06T15:31:00Z",
+      "summary": "Genuine ZIP2 SHA-original sharedassets0 owner and Foam PathID2420 census CI42243327311 SUCCESS (16 Python+typed Cecil). 58 Shader,351 Material objects; zero unparsed names/pointers; ZERO Material local fileID0/pathID2420 Foam links; seven external Shader PPtrs not yet resolved; exact original Shader.Find requested name matches ZERO other Shader names within this owner, complementing previous negative against Foam m_Name. Only one asset owner surveyed; no original Foam runtime Material/CB0/Adreno proof. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42243327311",
+        "docs/T2_FOAM_ORIGINAL_OWNER_SHADER_MATERIAL_LINKS_2026-11-06.md"
+      ],
+      "limits": "No game source/private shader names/digests/raw PPtrs leaked; zero local refs is not proof across all original game assets, seven external targets unresolved; no .meta/GUID shader edits.",
+      "next_step": "Resolve external PPtrs and other original asset owners by immutable PathID/GUID, not any indirect shared CB0-name overlap.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -9231,6 +9248,26 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2.json"
     },
     {
+      "id": "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9",
+      "owner": "T4",
+      "session_id": "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "at": "2026-11-06T15:27:10.526Z",
+      "summary": "Seven SHA-authentic owner 5Nov real RGD worlds: actual original compiled Save output byte-identical 7/7 then genuine original generic LoadT on those Save-generated files in seven fresh .NET8 CLR child processes 7/7, 7/7 private temp cleanup. 46/46 source-only controls. Exact CI42242683652 success; no Unity/Android device/world-progression proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/a65f06ed28f3c5fb703d8ecea7d0e99112509e93",
+        "https://github.com/alwansan/raf/actions/runs/42242683652"
+      ],
+      "device_confirmed": false,
+      "original_clr_fresh_process_verified": true,
+      "real_android_rgd_restart_proven": false,
+      "source_only": false,
+      "offline_player_tested": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9944,6 +9981,25 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1413Z-T5-chat-ledger-t1id-7b42.json"
     },
     {
+      "id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
+      "owner": "T5",
+      "session_id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
+      "origin": "chat",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T15:30:40.042Z",
+      "summary": "Actual owner-tested run42058825739 source authenticated signed APK+OBB Unity marker probe: APK 31 members DOES contain assets/unity_obb_guid, main OBB 39 members has NO exact marker; status apk_only_identity_unavailable (NOT a mismatched two-sided GUID nor engine/mount failure proof). CI42243273146 SUCCESS 13/13 synthetic + 11447 real HTTP206 bytes /156 requests, 70 local headers verified. Old CL CI42119428667 independently showed 3 optional unshipped patch.89 GUID warnings, 0 main warnings. APK/OBB full SHA from previous CI remains sound. No Unity runtime/game changes.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42243273146",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_UNITY_OBB_GUID_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42119428667",
+        "https://github.com/alwansan/raf/actions/runs/42230326050"
+      ],
+      "limitations": "One-sided marker only means cross-archive marker identity cannot be compared, does not prove Unity engine runtime GUID, actual phone OBB mount, loaded scene/FX or current branch source acceptance.",
+      "next_step": "Verify installed main OBB SHA and device Unity main asset read path; no invented optional patch OBB, no fabricated GUID.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1520Z-T5-chat-real-unity-guid-2b61.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9972,7 +10028,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "6c7416291c96cbfa83a9fa5178d30987b0125aa63409a0b18454e9f6ea8f6054",
+  "source_input_sha256": "91949ee0d4b5839257d365570da71f289583a7a29d9e76a245104577ebfdcf11",
   "generation": "T-2026-11-05",
-  "input_sha256": "d4ae92a86dcd49e9c864acbbe3a6e16068401e9f0fa394ce354c31318fbb7cee"
+  "input_sha256": "b65e3df151cfccacb840ce4a8ee49e0cdb7287b6d0f78b71ba8829d6a319a758"
 }
