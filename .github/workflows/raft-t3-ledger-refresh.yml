@@ -104,6 +104,19 @@ jobs:
           # This is SOURCE ONLY; ShaderLab dummy still not restored on phone.
           particle108_dxbc="https://github.com/alwansan/raf/actions/runs/42139137265"
           assert particle108_dxbc in issue[0]["evidence"]
+          # Real pinned original Particle108 all eight DXBC stages can
+          # compile Vulkan1.1 SPIR-V, but SPIRV-Cross HLSL roundtrip maps
+          # only 2/4 paired interfaces; phone remains explicitly untested.
+          particle108_vulkan="https://github.com/alwansan/raf/actions/runs/42141506120"
+          assert particle108_vulkan in issue[0]["evidence"]
+          assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
+                     and r["counts"]["original_source_DXBC_to_valid_SPIRV_Vulkan11_stage_count"]==8
+                     and r["counts"]["roundtrip_SPIRV_vertex_fragment_pair_interfaces_compatible"]==2
+                     and r["counts"]["source_SPIRV_vertex_fragment_pair_interfaces_compatible"]==4
+                     and r["counts"]["stages_with_same_input_type_multiset"]==8
+                     and r["counts"]["stages_with_same_output_type_multiset"]==8
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
                      and r["counts"]["exact_matched_vertex_fragment_keyword_permutation_pairs"]==4
                      and r["counts"]["distinct_original_linked_D3D11_programs"]==8
