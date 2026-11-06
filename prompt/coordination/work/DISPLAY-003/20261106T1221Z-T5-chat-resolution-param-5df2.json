@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1221Z-T5-chat-resolution-param-5df2",
+  "origin": "chat",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "base_sha": "8c2ef06bd8b40ff445c7ee12de0d8a0f2b451485",
+  "updated_at": "2026-11-06T12:22:06.921Z",
+  "resumed_from_sessions": [
+    "20261106T1130Z-T5-chat-applycallers-c6e1.md",
+    "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
+  ],
+  "experiment_key": "T5-original-ZIP2-AssemblyCSharp-sha0a6f-GraphicsSettingsBox-one-nonint-parameter-type-categories-v1",
+  "resource_key": "read-only original ZIP2@15964ea8 Assembly-CSharp.dll 3211776B SHA256 0a6f05, bounded Mono.Cecil",
+  "hypothesis": "The sole one-parameter GraphicsSettingsBox caller of ApplyCurrentResolutionAndFullscreenMode is a UI-selected value handler or an object-based display synchronization method. Exact compiled parameter type category plus method semantics can separate hypotheses and avoid a speculative Android render-scale UI patch.",
+  "intended_files": [
+    "android-port/Experiments/T5/ResolutionParameterProbe/ResolutionParameterProbe.csproj",
+    "android-port/Experiments/T5/ResolutionParameterProbe/Program.cs",
+    "scripts/t5_validate_original_resolution_parameter.py",
+    "tests/test_t5_validate_original_resolution_parameter.py",
+    ".github/workflows/raft-t5-original-resolution-parameter.yml",
+    "docs/T5_ORIGINAL_RESOLUTION_PARAMETER_2026-11-06.md",
+    "prompt/coordination/work/DISPLAY-003/20261106T1221Z-T5-chat-resolution-param-5df2.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1221Z-T5-chat-resolution-param-5df2.md",
+    "prompt/coordination/experiments/T5/20261106T1221Z-T5-chat-resolution-param-5df2.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1221Z-T5-chat-resolution-param-5df2.json"
+  ],
+  "coordination": "T5 scheduled tracks signed APK/OBB provenance; T1/T2/T3/T4 own water, shader, mouse and save. No shared runtime, private source or Unity changes. Last observed Actions all completed; independent source-only CI.",
+  "constraints": "Keep original DLL and private type/method identifiers off public log; only bounded public API types/classes and counts. Must not call synthetic source-only pass phone resolution proof. One dedicated workflow; no full Unity or release actions.",
+  "next_step": "Run SHA-pinned original Cecil metadata and synthetic negative fixtures; determine if original parameter is UnityEngine.Resolution, int, bool, dropdown, custom struct, class, enum or other. Scope to original three callers; report no serialized UnityEvent proof."
+}
