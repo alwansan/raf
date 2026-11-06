@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "e6e60329362a23798e42b76e0ffe61dec3fe6313",
+  "experiment_key": "foam-cb0-two-pass-identity-uniqueness-source-gate-v1",
+  "resource_key": null,
+  "intended_files": [
+    "scripts/t2_foam_cb0_extent_gate.py",
+    "tests/test_t2_foam_cb0_extent_gate.py",
+    "prompt/coordination/clients/T2/sessions/20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e.md"
+  ],
+  "hypothesis": "expected_pass_count alone permits duplicated same-pass CB0 evidence to masquerade as complete two-pass coverage; require authenticated unique pass indices for coverage",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T0820Z-T2-scheduled-cb0-pass-coverage-8f3a.md"
+  ],
+  "updated_at": "2026-11-06T09:16:36Z"
+}
