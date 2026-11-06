@@ -397,6 +397,9 @@ internal static class Program
             new SortedDictionary<string, int>(StringComparer.Ordinal);
         var exactOriginalMaterialConstructorShaderOrigins =
             new SortedDictionary<string, int>(StringComparer.Ordinal);
+        // Private Shader field identity never leaves this CLR process.
+        var originalConstructorShaderFields =
+            new Dictionary<string, FieldReference>(StringComparer.Ordinal);
         int sourceOriginalMaterialStoreBasicBlockScannedInstructions = 0;
         var originalReceiverMaterialFieldsWithStfld = new HashSet<string>(StringComparer.Ordinal);
         foreach (var definition in Walk(assembly.MainModule.Types))
@@ -435,6 +438,11 @@ internal static class Program
                             stackEvidence.ValueOrigin)+1;
                     sourceOriginalMaterialStoreBasicBlockScannedInstructions +=
                         stackEvidence.BasicBlockInstructions;
+                    if (stackEvidence.ValueOrigin=="exact_Material_ctor_with_Shader_formal" &&
+                        stackEvidence.ShaderInputOrigin=="typed_Shader_instance_field" &&
+                        stackEvidence.PrivateOriginalShaderInputField is FieldReference shaderField &&
+                        shaderField.FieldType.FullName=="UnityEngine.Shader")
+                        originalConstructorShaderFields.TryAdd(shaderField.FullName,shaderField);
                     if (stackEvidence.ValueOrigin is
                         "exact_Material_ctor_with_Shader_formal" or
                         "exact_Material_ctor_other_formals")
@@ -469,6 +477,52 @@ internal static class Program
                 materialWriterMethodsContainingMaterialCtor += hasMaterialCtor ? 1 : 0;
                 materialWriterMethodsContainingRendererGetter += hasRendererGetter ? 1 : 0;
             }
+        }
+        // Third original managed pass: exact instance Shader field used as
+        // Material(Shader) formal, not a similarly named field elsewhere.
+        // No assumption that absence of stfld means no Unity serialized value.
+        var constructorShaderFieldsWithManagedStores =
+            new HashSet<string>(StringComparer.Ordinal);
+        int constructorShaderFieldStoreInstructions=0;
+        int constructorShaderWriterMethods=0;
+        foreach (var type in Walk(assembly.MainModule.Types))
+        foreach (var method in type.Methods)
+        {
+            if (!method.HasBody) continue;
+            bool hasExactWrite=false;
+            foreach (var instruction in method.Body.Instructions)
+                if (instruction.OpCode.Code==Code.Stfld &&
+                    instruction.Operand is FieldReference field &&
+                    originalConstructorShaderFields.ContainsKey(field.FullName))
+                {
+                    hasExactWrite=true;
+                    constructorShaderFieldStoreInstructions++;
+                    constructorShaderFieldsWithManagedStores.Add(field.FullName);
+                }
+            if (hasExactWrite) constructorShaderWriterMethods++;
+        }
+        int fieldDefinitionResolved=0, fieldPublic=0, fieldAttributeSerialize=0;
+        int fieldNonSerialized=0, conventionEligible=0;
+        foreach (var field in originalConstructorShaderFields.Values)
+        {
+            FieldDefinition? definition=null;
+            try { definition=field.Resolve(); }
+            catch (AssemblyResolutionException) { }
+            catch (InvalidOperationException) { }
+            if (definition is null) continue;
+            fieldDefinitionResolved++;
+            bool hasSerializeField=definition.CustomAttributes.Any(x =>
+                x.AttributeType.FullName=="UnityEngine.SerializeField");
+            bool hasNonSerialized=definition.IsNotSerialized ||
+                definition.CustomAttributes.Any(x =>
+                    x.AttributeType.FullName=="System.NonSerializedAttribute");
+            fieldPublic+=definition.IsPublic ? 1 : 0;
+            fieldAttributeSerialize+=hasSerializeField ? 1 : 0;
+            fieldNonSerialized+=hasNonSerialized ? 1 : 0;
+            if (!definition.IsStatic && !definition.IsInitOnly && !hasNonSerialized &&
+                (definition.IsPublic||hasSerializeField) &&
+                definition.FieldType.FullName=="UnityEngine.Shader")
+                conventionEligible++;
         }
         return new
         {
@@ -544,6 +598,26 @@ internal static class Program
                 exactOriginalMaterialStoreStackSources,
             original_source_name_exact_receiver_Material_ctor_Shader_formal_origin_buckets =
                 exactOriginalMaterialConstructorShaderOrigins,
+            original_exact_Material_ctor_private_Shader_instance_FieldReference_count =
+                originalConstructorShaderFields.Count,
+            original_exact_Material_ctor_private_Shader_field_definitions_resolved =
+                fieldDefinitionResolved,
+            original_exact_Material_ctor_private_Shader_field_declarations_public =
+                fieldPublic,
+            original_exact_Material_ctor_private_Shader_field_declarations_SerializeField =
+                fieldAttributeSerialize,
+            original_exact_Material_ctor_private_Shader_field_declarations_NonSerialized =
+                fieldNonSerialized,
+            original_exact_Material_ctor_private_Shader_fields_convention_eligible_for_Unity_serialization =
+                conventionEligible,
+            original_exact_Material_ctor_private_Shader_fields_with_managed_stfld =
+                constructorShaderFieldsWithManagedStores.Count,
+            original_exact_Material_ctor_private_Shader_stfld_instructions =
+                constructorShaderFieldStoreInstructions,
+            original_exact_Material_ctor_private_Shader_managed_writer_method_count =
+                constructorShaderWriterMethods,
+            original_exact_Shader_field_original_Foam_asset_reference_verified = false,
+            original_exact_Shader_field_runtime_populated_verified = false,
             original_source_name_exact_receiver_Material_store_block_instructions_examined =
                 sourceOriginalMaterialStoreBasicBlockScannedInstructions,
             compiled_Material_store_Shader_is_original_Foam_verified = false,
