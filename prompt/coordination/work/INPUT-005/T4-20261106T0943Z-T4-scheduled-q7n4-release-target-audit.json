@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "INPUT-005",
   "baseline_sha": "d348be10e9f3090e56c99f0f807c743333bbbe81",
-  "status": "active",
+  "status": "completed_source_audit",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs (read-only audit)",
     "prompt/coordination/clients/T4/sessions/20261106T0943Z-T4-scheduled-q7n4.md"
@@ -12,5 +12,7 @@
   "experiment_key": "T4-release-focus-target-source-audit@d348be10",
   "resource_key": null,
   "updated_at": "2026-11-06T09:43:00Z",
-  "taken_over_from": "T4 20261106T0843Z-T4-scheduled-r6v2; owner device 42058825739"
+  "taken_over_from": "T4 20261106T0843Z-T4-scheduled-r6v2; owner device 42058825739",
+  "result": "Confirmed source-level release target ambiguity; no device reproduction or production modification.",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261106T0943Z-T4-scheduled-q7n4.md"
 }
