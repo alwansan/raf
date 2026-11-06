@@ -34,6 +34,13 @@ class TestDeviceWaterSummary(unittest.TestCase):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 classify(s)
 
+    def test_reject_boolean_or_string_root_count(self):
+        for invalid in (True, False, "23884", 23884.0, None):
+            s = fixture()
+            s["stop_time_android_process_exit_info"]["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] = invalid
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                classify(s)
+
     def test_reject_category_root_mismatch(self):
         s = fixture()
         s["stop_time_android_process_exit_info"]["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] += 1
