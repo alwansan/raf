@@ -5,9 +5,9 @@
   "session_id": "20261106T2017Z-T1-chat-private-producer-gate-8f31",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "afb519b625b6c346420153caa88b4c40972d44de",
-  "updated_at": "2026-11-06T20:17:00Z",
+  "updated_at": "2026-11-06T20:23:00Z",
   "resumed_from_sessions": [
     "20261106T195959Z-T1-chat-ci-log-pin-7b42",
     "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
@@ -31,7 +31,7 @@
     "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
     "20261106T195959Z-T1-chat-ci-log-pin-7b42"
   ],
-  "next_step": "Source-only strict producer stage+candidate digest validator, independent synthetic tests, CI; do not run shared Unity. Publish native missing-type failure evidence for T4/T5 without editing mouse implementation.",
+  "next_step": "T4/T5 repair and validate AndroidPhysicalMouseCapture Unity Editor conditional-compile references in authorized native build; T1 use opt-in real original ZIP2 vs Unity private source SHA/stage/input/trace after owner coordination; no synthetic data inferred as phone water fix.",
   "native_run": {
     "id": 42281310905,
     "status": "failure",
@@ -39,5 +39,22 @@
     "owner": "T4/T5",
     "no_edit": true
   },
-  "trial_vote": "لا يحتاج"
+  "trial_vote": "لا يحتاج",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42287568433",
+    "https://github.com/alwansan/raf/actions/runs/42287573222",
+    "https://github.com/alwansan/raf/actions/runs/42281310905"
+  ],
+  "result": {
+    "source_only_run_id": 42287568433,
+    "conclusion": "success",
+    "prior_pair_tests": "21/21 PASS",
+    "prior_input_join_tests": "17/17 PASS",
+    "new_stage_sha_tests": "15/15 PASS",
+    "total_tests": "53/53 PASS",
+    "native_42281310905": "failed CS0234 before game FFT",
+    "real_original_unity_gpu_executed_this_cycle": false,
+    "android_water_proven": false,
+    "trial_vote": "لا يحتاج"
+  }
 }
