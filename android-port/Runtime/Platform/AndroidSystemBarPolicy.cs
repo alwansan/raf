@@ -19,6 +19,18 @@ namespace RaftAndroid.Platform
             return active && focused && !paused;
         }
 
+        // A queued runnable must not apply to a replacement Activity or
+        // a stale focus/pause generation. A zero identity is unbound.
+        public static bool CanApplyQueuedHide(bool active, bool focused, bool paused,
+            int queuedGeneration, int currentGeneration,
+            int queuedActivityIdentity, int currentActivityIdentity)
+        {
+            return ShouldApply(active, focused, paused) &&
+                queuedGeneration != 0 && queuedGeneration == currentGeneration &&
+                queuedActivityIdentity != 0 &&
+                queuedActivityIdentity == currentActivityIdentity;
+        }
+
         public static int MergeLegacy(int existing)
         {
             return existing | LegacyFullscreen | LegacyHideNavigation |
