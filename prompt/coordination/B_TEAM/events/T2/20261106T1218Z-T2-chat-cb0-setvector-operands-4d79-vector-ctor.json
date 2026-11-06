@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T12:36:00Z",
+  "summary": "Authentic ZIP2 original Foam CB0 setter path CI42218712162 SUCCESS: 11 Python negative tests and Cecil fixture. One exact original CB0 name Material.SetVector(string,Vector4) call's second argument is uniquely produced by a typed UnityEngine.Vector4 four-Single constructor; three scalar arguments are instance field loads, one numeric literal. Receiver before name ldstr remains unknown, field values/material Foam identity/160-byte CB0 upload/Adreno water not proven. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42218712162",
+    "docs/T2_FOAM_ORIGINAL_CB0_VECTOR_CTOR_FORMALS_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/a5293ce4e8057b1b64102350ac4c8f4ac4d9e92e"
+  ],
+  "limitations": "Only one actual managed setter first-string formal and scalar IL opcode origins proven, not all original five CB0 vector members; no private names/data/IL printed; no game/Unity/GPU edit.",
+  "next_step": "Investigate original field values' producer and receiving Material identity; coordinate Unity import with T1/T5 once ready."
+}
