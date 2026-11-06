@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "track": "runtime diagnostics CPU/managed GC during repeated Unity render errors",
+  "status": "active",
+  "base_sha": "ec625dfa82914244deb1709b99e41bab63cd95c2",
+  "updated_at": "2026-11-06T19:26:00Z",
+  "resumed_from_sessions": [
+    "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
+    "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
+    "20261106T1751Z-T5-scheduled-lifecycle-7c4e"
+  ],
+  "intended_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs",
+    "prompt/coordination/work/PERF-007/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.md",
+    "prompt/coordination/experiments/T5/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1926Z-T5-chat-log-dedup-allocation-e5c8.json"
+  ],
+  "experiment_key": "T5-PERF007-persistent-Unity-repeated-error-dictionary-composite-key-nonalloc-2000x4096chars-net8-CI-v1",
+  "resource_key": "existing raft-persistent-diagnostics-tests source-only .NET8 workflow, no Unity build",
+  "hypothesis": "RepeatedDiagnosticMessages.First allocates a new opLength:operation+detail concatenation on every repeated identical error, causing avoidable managed pressure under phone Logcat shader floods. Struct key using original string references+ordinal pair equality avoids per-repeat concatenation while preserving collision grouping/count/timestamps/first stack, bounded dictionary and overflow pass-through.",
+  "related_work": [
+    "T5 PER-007 CL epoch diagnostic source CI42263013004",
+    "T4 DIAG-010 dedup collision guards",
+    "old B12 bounded renderer traversal"
+  ],
+  "taken_over_from": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs existing RepeatedDiagnosticMessages"
+  ],
+  "coordination": "T1 FFT, T2 Foam, T3 original shader and T4 offline/local scopes untouched; T5 scheduled PID session owns scripts/t5_cl_pid_epoch_audit.py only. No modifications to LogRaft app or native request.",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Run fail-first .NET8 allocation regression on original code; implement composite key, verify all source-only diagnostic tests and bound memory; report no phone FPS improvement claimed."
+}
