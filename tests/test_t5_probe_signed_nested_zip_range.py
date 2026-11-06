@@ -200,5 +200,28 @@ class NestedRealSignedArtifactTests(unittest.TestCase):
                 stored_member_offset(parent, archive, member)
 
 
+    def test_nested_noncore_local_header_name_discrepancy_is_rejected(self):
+        app = bytearray(valid_apk())
+        with zipfile.ZipFile(io.BytesIO(app)) as archive:
+            member = archive.getinfo("assets/bin/Data/resources.assets")
+        name_bytes = len(member.filename.encode("utf-8"))
+        local_name_last = member.header_offset + 30 + name_bytes - 1
+        app[local_name_last] ^= 1  # mutate local name but leave central unchanged
+        blob, a, o = outer(apk=bytes(app))
+        with self.assertRaisesRegex(ProbeError, "local member header name"):
+            check(blob, a, o)
+
+    def test_nested_obb_local_crc_discrepancy_is_rejected(self):
+        original = bytearray(valid_obb())
+        with zipfile.ZipFile(io.BytesIO(original)) as archive:
+            member = archive.getinfo("assets/bin/Data/resources.assets")
+        crc_at = member.header_offset + 14
+        original[crc_at] ^= 1  # change only local CRC, central same
+        blob, a, o = outer(obb=bytes(original))
+        with self.assertRaisesRegex(ProbeError, "local member header CRC"):
+            check(blob, a, o)
+
+
+
 if __name__ == "__main__":
     unittest.main()
