@@ -1,11 +1,6 @@
 name: T3 RENDER-002 original Particle108 CB 16-byte vector declaration sizes
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - prompt/coordination/requests/t3-original-cb-size-20261106-9c21.trigger
 permissions:
   contents: read
 concurrency:
