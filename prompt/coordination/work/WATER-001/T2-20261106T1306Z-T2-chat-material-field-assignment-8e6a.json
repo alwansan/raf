@@ -2,9 +2,9 @@
   "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "33c72f721c5aab7fd2b6cfafaabdbf224f96f2ef",
-  "updated_at": "2026-11-06T13:06:00Z",
+  "updated_at": "2026-11-06T13:08:00Z",
   "resumed_from_sessions": [
     "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e",
     "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
@@ -29,5 +29,17 @@
     "T1 FFT 42221700354"
   ],
   "overlap_resolution": "Independent source-only Cecil; no T1 FFT/native Unity resource, no game files, no other worker files.",
-  "no_runtime_upload_proof_expected": true
+  "no_runtime_upload_proof_expected": true,
+  "run_id": 42222313603,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42222313603",
+  "run_conclusion": "success",
+  "job_id": 127907105758,
+  "source_sha": "cf5a01b3149128c8ca6ee995537896baf2df524b",
+  "sourcefree_tests_passed": 11,
+  "source_authentic_original_shader_and_managed_verified": true,
+  "result": "One exact Material receiver FieldReference, one matching original stfld in one method; Material ctor in writer method but immediate assignment value producer unproven; Shader.Find and Renderer.material getter absent from same method. Runtime shader identity and complete CB0 upload unproven.",
+  "report": "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-result.json",
+  "next_step": "Investigate original typed stfld Material value via bounded locals / exact stack flow. Avoid inferring ctor directly from same-method occurrence. WATER-001 OPEN."
 }
