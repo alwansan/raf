@@ -6,9 +6,9 @@
   "session_id": "20261106T2038Z-T1-chat-integer-source-a47c",
   "issue_id": "WATER-001",
   "track": "Controlled original FFT Vulkan vs Unity2021 integer_source translated coordinate variant",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "deb46f69187bc7491f97b9aef555980bb66de46d",
-  "updated_at": "2026-11-06T20:38:00Z",
+  "updated_at": "2026-11-06T20:40:20Z",
   "resumed_from_sessions": [
     "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
     "20261106T2017Z-T1-chat-private-producer-gate-8f31"
@@ -39,5 +39,16 @@
     "prompt/coordination/B_TEAM/events/T1/20261106T2038Z-T1-chat-integer-source-a47c.json"
   ],
   "trial_vote": "لا يحتاج",
-  "next_step": "One SHA pinned sourcefree+Unity private integer_source A/B; if smaller coordinate/pixel mismatch mark success of hypothesis with caveats; otherwise record precise rejection/failure without blind reruns."
+  "next_step": "Read 42290211798 on return; expect source-only guard then private integer_source transformation. Compare [63,252,64] baseline site mismatch to actual variant, pass0 63 pass1 31. If stage fails before live Unity, mark blocked and do not count as successful alternate. Preserve native mutex and privacy.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42290211798"
+  ],
+  "replay_commit": "18ed8e3a8db0e29e955bf8dfcb7a4b3f019cd26e",
+  "result": {
+    "run_id": 42290211798,
+    "job_id": 128141366121,
+    "status": "in_progress",
+    "last_observed_step": "Run source-free Unity ComputeShader tests through same SHA pinned CLI",
+    "baseline_run_id": 42289238865
+  }
 }
