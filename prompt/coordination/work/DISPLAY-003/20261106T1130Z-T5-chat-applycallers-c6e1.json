@@ -6,9 +6,9 @@
   "session_id": "20261106T1130Z-T5-chat-applycallers-c6e1",
   "issue_id": "DISPLAY-003",
   "track": "Original GraphicsSettingsBox ApplyCurrentResolutionAndFullscreenMode exact caller provenance",
-  "status": "completed_source_authentic_IL_three_distinct_callers_android_unverified",
+  "status": "completed_original_IL_verified_and_canonical_index_updated",
   "base_sha": "53c1bda9a7982f07d2cce70b9f8bffd9215716b7",
-  "updated_at": "2026-11-06T11:35:25.490Z",
+  "updated_at": "2026-11-06T11:36:19.665Z",
   "resumed_from_sessions": [
     "20261106T1104Z-T5-chat-resolution-delegate-6a2f.md",
     "20261106T1046Z-T5-scheduled-pair-success-q6f8.md"
@@ -43,7 +43,8 @@
   "next_step": "Resolve third caller's one non-int/non-bool parameter category and match authentic serialized Unity dropdown event onValueChanged owner; do not assume persistence or alter runtime Settings until proven.",
   "source_commit": "14f8ca279b35a9032267f9e8fb59ac54bbb4feb6",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42210936332"
+    "https://github.com/alwansan/raf/actions/runs/42210936332",
+    "https://github.com/alwansan/raf/actions/runs/42211414421"
   ],
   "result": {
     "ci": "success",
@@ -60,5 +61,14 @@
     "source_only": true,
     "device_tested": false
   },
-  "index_intent": "Regenerate canonical T_TEAM SUMMARY/snapshot after exact original caller event entered canonical B_TEAM; use T5 owned source-only fast-forward workflow, no direct overwrite of shared index and no duplicate heavy CI."
+  "index_intent": "Regenerate canonical T_TEAM SUMMARY/snapshot after exact original caller event entered canonical B_TEAM; use T5 owned source-only fast-forward workflow, no direct overwrite of shared index and no duplicate heavy CI.",
+  "index_run": "https://github.com/alwansan/raf/actions/runs/42211414421",
+  "index_result": {
+    "conclusion": "success",
+    "job_id": 127870675991,
+    "canonical_event_rows": 371,
+    "source_only_bteam_unittests": 11,
+    "source_only_tteam_unittests": 3,
+    "fast_forward_only": true
+  }
 }
