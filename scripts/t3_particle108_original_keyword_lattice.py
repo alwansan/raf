@@ -22,6 +22,27 @@ from scripts.w1_recover_depth_passes import stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
 STATUS="T3_SOURCE_AUTHENTIC_PARTICLE108_FOUR_KEYWORD_SERIALIZED_STRUCTURE"
+# No dynamic errors, identifiers, original indices, paths or compiler stderr.
+PUBLIC_FAILURE_CODES=frozenset({
+    "invalid_original_tier","invalid_original_bucket",
+    "invalid_original_keyword_indices","wrong_original_pass_kind",
+    "not_four_original_stage_variants","invalid_original_variant_ordinal",
+    "original_duplicate_keyword_bucket_tier",
+    "original_VSFS_keyword_bucket_tier_mismatch",
+    "original_owner_SHA_drift","original_source_identity_not_unique",
+    "original_D3D11_variant_blob_table_drift",
+    "original_DXBC_pair_linkage_drift","original_subshader_pass_drift",
+    "original_particle108_stage_keyword_bucket_mismatch",
+    "not_four_original_particle108_stage_variants",
+    "untrusted_original_particle108_program_table",
+    "untrusted_original_particle108_one_Pass_graph",
+})
+
+def safe_failure(exc:Exception)->str:
+    """Allowlist only our invariant strings, never arbitrary original errors."""
+    reason=str(exc) if type(exc) is ValueError else ""
+    return reason if reason in PUBLIC_FAILURE_CODES else "UNCLASSIFIED_ORIGINAL_SOURCE"
+
 FIELDS=("m_KeywordIndices", "m_GlobalKeywordIndices", "m_LocalKeywordIndices")
 MAX_INDEX=65535
 
@@ -154,6 +175,7 @@ def main(argv=None):
         # No free-form private exception text/values in public logs.
         result={"schema_version":1,"status":"INCONCLUSIVE",
                 "failure_category":type(e).__name__,
+                "failure_code":safe_failure(e),
                 "original_keyword_index_to_authored_name_mapping_proven":False,
                 "Unity_Editor_compilation_or_phone_pixels_verified":False,
                 "source_keyword_names_indices_bytes_guids_or_paths_published":False}

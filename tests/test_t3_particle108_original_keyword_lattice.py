@@ -99,6 +99,17 @@ class OriginalKeywordLatticeTests(unittest.TestCase):
         p["progVertex"]["m_SubPrograms"][0]["m_ShaderHardwareTier"]=True
         with self.assertRaisesRegex(ValueError,"tier"):k.classify(p)
 
+    def test_safe_failure_codes_never_repeat_private_exception_text(self):
+        self.assertEqual(k.safe_failure(ValueError("invalid_original_tier")),
+                         "invalid_original_tier")
+        for message in ("private shader name from original", "invalid_original_tier 123",
+                        "private-asset/GUID",
+                        "m_KeywordIndices value 7331"):
+            self.assertEqual(k.safe_failure(ValueError(message)),
+                             "UNCLASSIFIED_ORIGINAL_SOURCE")
+        self.assertEqual(k.safe_failure(RuntimeError("private path")),
+                         "UNCLASSIFIED_ORIGINAL_SOURCE")
+
     def test_aggregate_report_does_not_leak_source_keyword_literals(self):
         p=pass_record([meta([417]),meta([417,422]),meta([417,428]),meta([417,422,428])])
         report=k.classify(p)
