@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
+  "issue_id": "DISPLAY-003",
+  "type": "result",
+  "at": "2026-11-06T10:44:02.955Z",
+  "summary": "Independent original SHA-pinned managed DLL Mono.Cecil metadata probe found GraphicsSettingsBox 1 Screen.SetResolution, 9 Screen.resolutions reads, 3 currentResolution reads, 3 local apply calls, no direct PlayerPrefs/UnityEvent AddListener or DynamicResolution refs, 2 same-type delegate refs; DynamicResolution has 2 ResizeBuffers sites. CI 42204488410 passed 8 Python+4 compiled Cecil selftests+real IL. Callback/persisted Android render-scale binding unproven, no runtime change.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42204488410",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_SETTINGS_IL_2026-11-06.md"
+  ],
+  "limitations": "Source-verified original IL callsite categories only; no Unity import, no game native build/device, no Settings selector implemented. WATER-001 and RENDER-002 remain OPEN.",
+  "next_step": "Inspect bounded original delegate targets and UI callback/persistence chain, preserve original game and delegated T1–T4 work."
+}
