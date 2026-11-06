@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "status": "completed_expected_red_source_regression",
+  "experiment_key": "T5-CL520c4c-live-190rows-startup-nonrunning-prefix-1and6-vs-stop-after-verified-red-source-regression-v1",
+  "source_commit": "26c4473030dd6e0b3dd2b34ffdbec6cd3f926ee1",
+  "hypothesis": "A pre-first-verified unknown LogRaft startup prefix must not make an extra process epoch, but an actual post-verified stopped state must always isolate a new lifetime even with numeric PID reuse.",
+  "workflow_path": ".github/workflows/raft-t5-cl-real-fps-cohort.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42266849601",
+  "run_id": 42266849601,
+  "job_id": 128060887799,
+  "tool_versions": {
+    "python": "ubuntu-24.04 GitHub Actions Python 3",
+    "source_validation": "strict module import original PID audit"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t5_cl_fps_cohort_gate.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t5_cl_pid_epoch_audit.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t5_cl_pid_cohort_integration.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t5_cl_pid_startup_prefix_real_gate.py' -v"
+  ],
+  "input_hashes": [
+    "CL@520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "GitBlob:bb24dda68503897cf4e2a5e4e2d8aef3e71777b8",
+    "GitBlob:0327e5a3bb01ca944b2c40e07d49f503914dd274"
+  ],
+  "negative_controls": [
+    "true game_not_running after verified running Raft PID must split even if numeric PID reused",
+    "unknown running PID interval must break verified ownership",
+    "no verified process must not be accepted as stable epoch"
+  ],
+  "observed_result": {
+    "conclusion": "failure_expected",
+    "failing_step": "Validate source-free stale and startup FPS controls",
+    "historical_controls": "18/18 PASS",
+    "scheduled_controls": "6/6 PASS",
+    "chat_existing_controls": "8/8 PASS",
+    "new_controls": {
+      "total_tests": 5,
+      "new_test_methods_pass": 2,
+      "failed_subtest_cases": 3
+    },
+    "actual_failures": [
+      {
+        "input": "1 leading unknown, one verified running PID",
+        "expected_epochs": 1,
+        "actual_epochs": 2
+      },
+      {
+        "input": "6 leading unknown, one verified running PID",
+        "expected_epochs": 1,
+        "actual_epochs": 7
+      },
+      {
+        "input": "1 leading unknown then verified game→not_running→same PID",
+        "expected_epochs": 3,
+        "actual_epochs": 4
+      }
+    ],
+    "real_cl_blob_download_reached": false,
+    "game_phone_failed": false,
+    "native_build_started": false
+  },
+  "limitations": [
+    "Synthetic source-only CI; pinned CL real inputs were inspected read-only in previous session but not downloaded in failing run because preflight test stopped it",
+    "Only next scheduled source owner should patch PID auditor after read of handoff",
+    "P0 water, shaders and colors still open. This is not an FPS improvement or phone acceptance test",
+    "No new APK requested; T5 trial vote remains NO"
+  ],
+  "coordination_message": "prompt/coordination/discussions/PERF-007/20261106T1759Z-T5-chat-pid-prefix-regression-4ca1-ci-red-to-scheduled.md",
+  "integration_commit": "26c4473030dd6e0b3dd2b34ffdbec6cd3f926ee1",
+  "next_step": "Scheduled T5 source owner to add verified-seen boolean avoiding leading unknown epoch and retaining true stop→same-PID epoch boundary. Run one source-pinned original real CL workflow on new exact source SHA to prove 190 original rows 1/1 epochs and 57/2 fresh, plus stop controls green."
+}
