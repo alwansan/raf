@@ -175,7 +175,9 @@ jobs:
                            'immediate_typed_Material_call_result',
                            'immediate_typed_Material_field_load',
                            'immediate_typed_Material_static_field_load',
-                           'immediate_null_literal','immediate_value_source_unproven'}
+                           'immediate_null_literal','immediate_value_source_unproven',
+                           'immediate_typed_Material_local_load',
+                           'immediate_typed_Material_parameter_load'}
           assert set(immediate)<=valid_immediate
           assert all(type(v) is int and v>=0 for v in immediate.values())
           assert sum(immediate.values())==material_stores
