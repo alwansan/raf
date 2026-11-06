@@ -2,7 +2,7 @@
   "session_id": "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_smoke_only",
   "base_sha": "cae0dbe8c4a98d2d874e0d0f593d91d2dadc3fb5",
   "intended_files": [
     "scripts/t2_foam_cb0_extent_gate.py",
@@ -16,5 +16,6 @@
     "20261106T0620Z-T2-scheduled-selective-id-coordinate-4e8b",
     "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c"
   ],
-  "updated_at": "2026-11-06T07:20:00Z"
+  "updated_at": "2026-11-06T07:25:00Z",
+  "result": "Added fail-closed CB0 extent/member/upload gate and 6 synthetic regression methods; 2 isolated smoke assertions passed; repository suite and original Unity/device tests not run."
 }
