@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261106T010520Z-T1-chat-e85c41",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3e01555d67514697b1895813782000f8a15f5aa4",
   "intended_files": [
     "scripts/t1_fft_source_integer_coordinates.py",
@@ -11,5 +11,10 @@
     ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
   ],
   "experiment_key": "fft-slot0-source-only-integer-coordinate-vulkan-parity",
-  "updated_at": "2026-11-06T01:05:20Z"
+  "updated_at": "2026-11-06T01:05:20Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42141540903"
+  ],
+  "result": "The source-only integer fetch rewrite passes SPIR-V validation and same-Mesa-Vulkan output parity at 64/64 and 32/32 written pixels. All five exact scheduled adversarial tests passed locally. Started Unity paired replay with untouched Vulkan reference. The first Unity attempt uses a stale candidate digest after the private rewrite; the corrected queued attempt validates baseline manifest, validates and hashes the rewritten candidate, and preserves both hashes in a private sidecar. No attempt was cancelled.",
+  "next_step": "Check the corrected Unity run's import, input identity and trace output parity before comparing source read coordinate mismatches. The variant also uses promoted SPIR-V, so a positive result requires a promoted-only Unity control to isolate the rewrite effect."
 }
