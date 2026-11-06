@@ -1,11 +1,5 @@
 name: T3 RENDER-002 authentic original Particle108 private ShaderLab property and Pass state
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - '.github/workflows/raft-t3-particle108-source-propstate.yml'
-      - 'scripts/t3_particle108_source_propstate.py'
-      - 'tests/test_t3_particle108_source_propstate.py'
   workflow_dispatch:
 permissions:
   contents: read
