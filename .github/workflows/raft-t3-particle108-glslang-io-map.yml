@@ -1,0 +1,127 @@
+name: T3 RENDER-002 original Particle108 glslang HLSL IO map alternatives
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-glslang-io-map.yml'
+      - 'scripts/t3_particle108_glslang_io_map_experiment.py'
+      - 'tests/test_t3_particle108_glslang_io_map_experiment.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-particle108-glslang-iomap-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-hlsl-io-map-alternatives:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 26
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate source-free glslang alternative stage-link and privacy controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_glslang_io_map_experiment.py tests/test_t3_particle108_glslang_io_map_experiment.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_glslang_io_map_experiment.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Restore only four original source shader owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Verify four SHA-authentic owners and six original scenes
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-particle108-private-source'
+          pins={'Raft_Data/'+n:SHADER_OWNERS[n] for n in SHADER_OWNERS_SELECTED}
+          r=stage(source,out,pins)
+          assert len(r['owners'])==4 and r['verified_bytes']==269007288 and not r['lfs_used']
+          for scene,pin in PIN.items():
+              p=source/'Raft/Raft_Data'/scene
+              verify_source(p,pin)
+              dst=out/'Raft_Data'/scene
+              if dst.exists() or dst.is_symlink():raise ValueError('scene_stage_collision')
+              with p.open('rb') as src,dst.open('xb') as target:
+                  while piece:=src.read(1024*1024):target.write(piece)
+              verify_source(dst,pin)
+          print('T3_ORIGINAL_SHA_AUTHENTIC=4_owners_6_scenes')
+          PY
+      - name: Pin reflection and translation dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Evaluate independent original HLSL pair glslang IO location mapping variants privately
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_glslang_io_map_experiment \
+            --original "$RUNNER_TEMP/t3-particle108-private-source" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-glslang-iomap-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t3-particle108-glslang-iomap-safe.json"
+          d=json.loads(p.read_text())
+          assert d["status"]=="T3_SHA_ORIGINAL_PARTICLE108_GLSLANG_HLSL_STAGE_IO_MAP_CANDIDATES"
+          assert d["source_original_six_scenes_SHA_verified"] is True
+          assert d["source_original_four_Shader_Material_owner_SHA_verified"] is True
+          assert d["original_keyword_pairs"]==4
+          c=d["counts"]
+          assert c["source_pairs_linked"]==4
+          assert c["baseline_stage_compiles_valid"]==8
+          assert c["baseline_pairs_compared"]==4
+          assert c["baseline_pairs_linked"]==2
+          for variant in ("baseline","iomap","aml","iomap_aml"):
+              assert 0<=c[variant+"_stage_compiles_valid"]<=8
+              assert 0<=c[variant+"_pairs_compared"]<=4
+              assert 0<=c[variant+"_pairs_linked"]<=c[variant+"_pairs_compared"]
+              assert c[variant+"_stage_compiles_valid"]>=2*c[variant+"_pairs_compared"]
+          assert d["original_DXBC_semantic_to_recompiled_SPIRV_location_proven"] is False
+          assert d["Android_Unity_asset_modified"] is False
+          assert d["numeric_pixels_or_Adreno_acceptance_verified"] is False
+          assert d["private_HLSL_original_bytecode_program_names_or_locations_published"] is False
+          print("T3_ORIGINAL_GLSLANG_IO_ALTERNATIVES_COUNTS_SAFE="+json.dumps(c,sort_keys=True))
+          PY
