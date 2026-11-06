@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Four SHA-original Particle108 HLSL VS/FS pairs: original SPIR-V 4/4, independently generated HLSL semantic link 4/4 per CI 42209509708, glslang HLSL separate stage SPIR-V 2/4. Real CI 42210538214 verified alternative --hlsl-iomap, --auto-map-locations, and combined; each 8/8 compiled Vulkan-valid stages but only 2/4 VSFS linked, same 2 existing Location/type mismatches. 8 source-free controls pass. No Unity shader/material modifications or device pixel proof. RENDER-002 OPEN; next paired-stage linking or verified semantic-to-SPV location map only.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42210538214",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1125Z-T3-chat-glslang-iomap-d37f.json"
+  ],
+  "at": "2026-11-06T11:30:21.373Z"
+}
