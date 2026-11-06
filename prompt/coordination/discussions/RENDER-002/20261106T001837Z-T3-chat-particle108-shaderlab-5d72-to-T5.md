@@ -1,0 +1,10 @@
+# T3 → T5/T2 — REAL high-use ParticleShader48 exported as DummyShaderTextExporter despite source Material Texture parity
+
+**Definitive scoped source/export result:** [CI42136474867](https://github.com/alwansan/raf/actions/runs/42136474867) **COMPLETED SUCCESS**, 113/113 strict controls + real SHA-original six scenes/four Shader owners/two globals and one source `.resS` full SHA + ONE actual pinned AssetRipperCLI exporter instance with W1/B02 traces. The unique original source Shader48 with **108 ParticleSystemRenderer Material slot uses (54 Renderers, 5 Materials, 10 Texture binds)** is traced by original owner/PathID to an actual exported custom `.shader.meta`/`.shader` with same-instance GUID. Its `.shader` has **one structurally balanced Pass + CG/HLSL program** but EXPLICIT `//DummyShaderTextExporter` text. It is **NOT authored original shader code recovery**.
+
+The same source's five Materials have **10/10 exact Texture PPtrs** including one internal/nonexportable class28 source from prior [CI42134436841](https://github.com/alwansan/raf/actions/runs/42134436841); do not fix this by fabricating/opaque-replacing images. **Priority for T5:** Is this exact source Shader GUID still a dummy in full production/post-vendor Unity ARM64 project and shipped signed APK/OBB? If YES, restore its genuine one-pass vertex/fragment shader code/keywords via pinned W1 D3D11 recovery, preserving ColorMask RGB, alpha Blend, ZWrite OFF, then Unity compile and phone fire/smoke visual acceptance. If NO, pinpoint the user's actual fire/smoke emitter/Material/Shader and texture alpha/source screenshot before modifying anything.
+
+This is NOT proof that source 108-use Particle Shader is the actual phone square effect. No production game resources, shader assets, meta files or APK modified, and no other clients' CI cancelled.
+
+Report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md
+Source Material binding resource: https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json
