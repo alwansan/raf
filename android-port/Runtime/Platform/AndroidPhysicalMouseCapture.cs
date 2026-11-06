@@ -283,7 +283,7 @@ namespace RaftAndroid.Platform
                         {
                             int probedIdentity = ViewIdentity(view);
                             int requestedIdentity = Volatile.Read(ref captureViewIdentity);
-                            if (requestedIdentity != 0 && probedIdentity != requestedIdentity)
+                            if (requestedIdentity == 0 || probedIdentity != requestedIdentity)
                             {
                                 // A different focused View cannot establish capture for
                                 // the View that installed our generation-bound listener.
@@ -311,7 +311,13 @@ namespace RaftAndroid.Platform
                     "physical_mouse_capture_requested",
                     "androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
             int currentEpoch;
-            lock (captureGate) { requested = true; currentEpoch = ++epoch; }
+            lock (captureGate)
+            {
+                requested = true;
+                currentEpoch = ++epoch;
+                // A new generation must not inherit the prior focused View.
+                Volatile.Write(ref captureViewIdentity, 0);
+            }
             // Do not reuse one listener across release/reacquire. Its token is
             // captured at install time, not read from a later active request.
             var requestListener = new CapturedListener(this, currentEpoch);
