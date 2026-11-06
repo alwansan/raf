@@ -60,7 +60,7 @@ class OriginalExplicitStageRunnerTests(unittest.TestCase):
     def test_nonzero_compiler_is_not_laundered_as_valid_original_proof(self):
         def no_compile(argv,**kwargs):
             return SimpleNamespace(returncode=7)
-        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_COMPILER_NONZERO"):
+        with self.assertRaisesRegex(ValueError,"T3_PRIVATE_COMPILER_NONZERO_EXIT_7"):
             self.run_probe(runner=no_compile)
 
     def test_invalid_spirv_validator_is_fatal_before_pair_verification(self):
