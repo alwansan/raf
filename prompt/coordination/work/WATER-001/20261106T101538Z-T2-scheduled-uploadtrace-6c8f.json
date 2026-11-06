@@ -1,0 +1,20 @@
+{
+  "id": "20261106T101538Z-T2-scheduled-uploadtrace-6c8f",
+  "session_id": "20261106T101538Z-T2-scheduled-uploadtrace-6c8f",
+  "origin": "scheduled",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "35c9e3191d52da100212930c1177745578a61d66",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261106T101538Z-T2-scheduled-uploadtrace-6c8f.json",
+    "prompt/coordination/clients/T2/sessions/20261106T101538Z-T2-scheduled-uploadtrace-6c8f.md"
+  ],
+  "hypothesis": "Identify real Unity-side CB0 upload producer and whether any current repository evidence establishes original two-pass Foam member ABI, without repeating successful synthetic CB0 smoke.",
+  "experiment_key": "foam-cb0-upload-producer-source-trace-current-head-20261106-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T094126Z-T2-chat-cb0-gate-ci-83e1.md"
+  ],
+  "updated_at": "2026-11-06T10:15:38Z"
+}
