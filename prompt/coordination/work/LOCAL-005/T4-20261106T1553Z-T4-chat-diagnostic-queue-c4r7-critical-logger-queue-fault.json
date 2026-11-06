@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "0538a6a2f310bb9f01391c50bdd73af4655ec19c",
+  "updated_at": "2026-11-06T15:53:05.275Z",
+  "resumed_from_sessions": [
+    "20261106T1543Z-T4-scheduled-p8r2",
+    "20261106T1519Z-T4-chat-freshclr-owner-rgd-h3q9"
+  ],
+  "taken_over_from": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "https://github.com/alwansan/raf/actions/runs/42242683652"
+  ],
+  "experiment_key": "T4-LOCAL005-PersistentDiagnosticLog-source-synthetic-IO-failure-mixed-critical-uncritical-queueLimit-redgreen-net8-v1",
+  "resource_key": "T4-no-Unity-dotnet8-persistent-diagnostics-isolated",
+  "hypothesis": "Critical Write when pending queue full does Flush then unconditionally re-increments count, even if Flush fails before dequeuing overflow marker. Alternating dropped noncritical with critical writes during startup/file I/O failure can grow pending/count beyond queueLimit and cause device memory pressure.",
+  "nonoverlap": "T4 scheduled 1543Z only evidence audit and previous original-world CLR experiment closed; T1/T2/T3 shader and T5 signed OBB files separate. Existing dedicated diagnostics workflow runs source-only dotnet8 and does not share Unity runner. No game save or native source files modified.",
+  "intended_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs",
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1553Z-T4-chat-diagnostic-queue-c4r7-critical-logger-queue-fault.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1553Z-T4-chat-diagnostic-queue-c4r7.md",
+    "prompt/coordination/experiments/T4/20261106T1553Z-T4-chat-diagnostic-queue-c4r7.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1553Z-T4-chat-diagnostic-queue-c4r7.json",
+    "prompt/coordination/discussions/LOCAL-005/20261106T1553Z-T4-chat-diagnostic-queue-c4r7-to-T5.md"
+  ],
+  "safety": "Fault injection only in .NET8 synthetic test via reflection on test-private startup FileStream, lock ioGate to prevent race; no real original RGD or Android device; critical barrier on healthy storage must remain. Preserve original logs, format, startup/retention and Unity behavior.",
+  "plan": "Add failing deterministic C# regression with queueLimit=1, managed startup file disposal and alternating noncritical drop/critical; correct critical enqueue to recheck capacity after failed Flush. Dedicated existing diagnostics workflow on source/test push, no full Unity build.",
+  "acceptance": "Original tests and new red/green negative controls, managed .NET8 on exact source SHA, queue count stays <= limit and fresh healthy critical logs are actually flushed, no phone claim.",
+  "next_step": "Commit test first, confirm red; apply narrowly bounded Write correction; run actual exact-source CI; document limitations and handoff."
+}
