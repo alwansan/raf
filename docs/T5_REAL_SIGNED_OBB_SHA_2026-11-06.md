@@ -20,10 +20,10 @@
 
 - [GitHub Actions CI42230326050](https://github.com/alwansan/raf/actions/runs/42230326050), job `127934255743`, exact source `867b332be6782777fc06810bb696ff20fc6e19ca`.
 - **9/9 synthetic unit-test cases** passed (correct positive hash/CRC; altered same-size bytes; wrong SHA; bad CRC; truncated range; size/cap and bad format).
-- **Live full original OBB read state: RUNNING at checkpoint.** Do not label OBB SHA or CRC successful until terminal CI has completed with both explicit full comparisons.
+- **Live real source OBB read: COMPLETED SUCCESS.** [CI42230326050](https://github.com/alwansan/raf/actions/runs/42230326050), job `127934255743`, exact source `867b332be6782777fc06810bb696ff20fc6e19ca`: **9/9 source-free Python tests** and entire authentic original **2,301,256,312-byte** signed main OBB read. SHA-256 full 64-character digest equals actual original delivery manifest claim (**safe printed digest prefix `660b6c0909ae`**). Independently computed CRC32 across all bytes equals its STORED ZIP checkpoint central-directory CRC32. **549 HTTP 206 data requests**, plus original delivery range metadata **3,275 bytes** and signed checkpoint range metadata **255 bytes**. No raw original OBB was saved/uploaded; status includes `unity_original_obb_guid_verified=false` and `actual_android_obb_mount_verified=false`.
 
 ## Limits and next decision
 
 Even a positive complete OBB SHA would **not** prove an Android mounted OBB from `/Android/obb`, embedded Unity `data.unity3d` GUID, FMOD event playback, shader/water/FFT/color parity, or readiness of a new 2026-11-06 build. The owner confirmed world/save/reentry on the **old signed package**, not current active T1–T4 changes. Game readiness remains `NOT_READY 0/3`.
 
-**Next:** read the terminal result of CI42230326050; if successful, record full OBB bytes, safe SHA prefix, ZIP CRC result, request count and complete team event/index. If blocked, record the redacted blocker, do not repeat a multi-GB transfer without an identified correction.
+**Next:** inspect the prior owner device warning `OBB GUID` against the original package path and the Unity player-consumed OBB internal data; source and on-device access still require separate tests. Compare installed-file hashes to the now SHA-authenticated original APK and OBB if device proof is available, then assess shader/water performance after T1–T3 integration. Do not treat an authenticated old delivery as a current-branch release.
