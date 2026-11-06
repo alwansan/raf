@@ -2,7 +2,7 @@
   "session_id": "20261106T0137Z-T4-scheduled-n7p2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_audit_device_unverified",
   "baseline_source_blob": "db8c5ecbd1dac7ff32d9f7b8ab5b7eaafb6f2d4b",
   "resumed_from_sessions": [
     "20261106T0035Z-T4-scheduled-k9m2",
@@ -16,5 +16,7 @@
   "resource_key": null,
   "hypothesis": "getCurrentFocus may change between pointer capture request and periodic probe; verify that probe does not incorrectly classify a valid capture on an old view as a lost capture; assess risk without editing chat-owned bridge.",
   "evidence": "AndroidPhysicalMouseCapture.cs RequestCapture and ProbeCapturedPointer both independently resolve activity.getCurrentFocus; epoch guards request generation but not View identity.",
-  "next_step": "Read latest chat bridge and run device validation of View identity and hasPointerCapture before modifying source."
+  "next_step": "Device test View identity and hasPointerCapture across focus/menu transition; coordinate with T4 chat before editing bridge.",
+  "result": "Source audit found conditional View identity mismatch between RequestCapture and ProbeCapturedPointer; no demonstrated Android fault and no source modification justified. Existing CI42144434260 SUCCESS reused.",
+  "session_file": "prompt/coordination/clients/T4/sessions/20261106T0137Z-T4-scheduled-n7p2.md"
 }
