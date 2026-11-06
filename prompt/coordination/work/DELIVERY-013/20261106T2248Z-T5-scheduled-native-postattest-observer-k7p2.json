@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T2248Z-T5-scheduled-native-postattest-observer-k7p2",
+  "origin": "scheduled",
+  "owner": "T5",
+  "issue_id": "DELIVERY-013",
+  "base_sha": "0346399e628e0303cf68b3f514c383a05d749b8c",
+  "intended_files": [
+    "prompt/coordination/work/DELIVERY-013/20261106T2248Z-T5-scheduled-native-postattest-observer-k7p2.json",
+    "prompt/coordination/clients/T5/sessions/20261106T2248Z-T5-scheduled-native-postattest-observer-k7p2.md"
+  ],
+  "experiment_key": "native-42296450023-a1737bd-reconstruct-observe-vs-f68af818-postattest",
+  "resource_key": "native-run-42296450023-readonly",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-06T22:48:00Z",
+  "hypothesis": "Existing native run predates source package postattestation; inspect immutable run without duplicating Unity or attributing later source to older artifact.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42296450023"
+}
