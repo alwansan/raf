@@ -37,3 +37,13 @@ Pinned source: `alwansan/raf:zip2` immutable `15964ea8f246b6e076ce26b60931ee2e1a
 - Existing native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) was still in `Unity Editor 2021.3.45f2 Android import and compile` at last check on older immutable SHA `a1737bd736e276d53df808442cfae3b1eea0d488`; it **does not contain** this new source-only scanner commit, and was not cancelled or duplicated.
 
 **Next engineering:** inspect exact public `Graphics.Blit` method overload signature on the same original typed field value; classify input `Texture`, output `RenderTexture`, optional explicit pass int and material alias, with source-only synthetic negatives; then join original RenderTexture ownership/producer to water pipeline and coordinate with T5 on an authorised actual Unity export/pixel test. WATER-001 OPEN; game NOT_READY.
+
+## Original explicit Blit overload verification (2026-11-06T22:15:52.203Z)
+
+Follow-up [source-only CI42303074180](https://github.com/alwansan/raf/actions/runs/42303074180) on [201e14ca](https://github.com/alwansan/raf/commit/201e14caf01c4cbc47a798055830235eebbcbdb8) independently authenticates original managed source and categorizes the **same two** exact Material-consuming Blit sites:
+
+- **2/2**: public static `Graphics.Blit(UnityEngine.Texture, UnityEngine.RenderTexture, UnityEngine.Material, System.Int32)` (explicit `pass` parameter).
+- **0**: implicit/default-pass three-argument overload; **0**: other or mixed typed signatures.
+- 58/58 strict Python report tests + 6/6 synthetic original-name controls + C# Mono.Cecil selftest PASS. Safe aggregate artifact id `13545620124`, 1295 bytes, SHA256 `52a035aae3e2a170ca70bd08fe32b7f83b4fd17095d1f246f5a69d755330cf94`.
+
+This establishes the *public method signature*, **not** the value of either original `int pass`, actual source/destination RenderTexture identities, live Unity ShaderLab selection, or Android water pixels. Next: trace the precise integer operands of the two original calls, refuse dynamic/unknown without guessing and test whether the original two-pass paths are actually distinguished.
