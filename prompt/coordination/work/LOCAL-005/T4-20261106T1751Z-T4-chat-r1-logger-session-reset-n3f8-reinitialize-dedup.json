@@ -4,7 +4,7 @@
   "session_id": "20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "track": "source-only Unity exception diagnostics for original world and save",
   "base_sha": "c5c05827589db1810b1ab9bb738c92028fce6e4a",
   "trial_vote": {
@@ -30,8 +30,24 @@
   "experiment_ids": [
     "prompt/coordination/experiments/T4/20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add same-process second AndroidRuntimeLog.Initialize synthetic test demanding new full Error per logger session; source-only red gate; fix only grouping lifecycle if reproduced; green CI and original startup smoke. Preserve vote and all other T-team rows; no native build.",
-  "updated_at": "2026-11-06T17:51:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42264862203",
+    "https://github.com/alwansan/raf/actions/runs/42265007972",
+    "https://github.com/alwansan/raf/actions/runs/42265007954",
+    "https://github.com/alwansan/raf/actions/runs/42265008306"
+  ],
+  "result": {
+    "red_run": "42264862203 completed FAILURE expected check298 after same-process Shutdown/Initialize",
+    "fix_commit": "12d80d12a85dc8e2d62a3b035abaf25d6012cc8f",
+    "green_run": "42265007972 completed SUCCESS 302/302 actualAndroidStorageVerified=false",
+    "compatibility_runs": [
+      "42265007954 original local startup SUCCESS",
+      "42265008306 offline platform SUCCESS"
+    ],
+    "native_apk_built": false,
+    "phone_acceptance_claimed": false,
+    "trial_vote_unchanged": "T4 needs trial-20261106-r1 based on substantive earlier physical mouse, not this diagnostic fix"
+  },
+  "next_step": "T5 future one signed candidate after genuine 5/5 and other checks; test actual owner mouse/world save and keep logged RGD contents private. No new build requested. LOCAL-005 OPEN.",
+  "updated_at": "2026-11-06T17:50:00Z"
 }
