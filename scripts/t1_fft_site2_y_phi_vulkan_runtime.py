@@ -79,6 +79,13 @@ def counter_profile(unmodified, tagged):
     }
 
 
+def _safe_read(path, nbytes):
+    path = Path(path)
+    if path.is_symlink() or not path.is_file():
+        raise ValueError("Private Vulkan readback file unsafe")
+    return read_image(path, nbytes)
+
+
 def readback_pair(plain_dir, tagged_dir):
     """Require physical input bytes and original controls stable across runs."""
     left, right = Path(plain_dir), Path(tagged_dir)
@@ -87,7 +94,7 @@ def readback_pair(plain_dir, tagged_dir):
     if left.samefile(right):
         raise ValueError("Untagged/tagged experiment directories alias")
     for name in (*INPUTS, OUTPUTS[0], OUTPUTS[1]):
-        a, b = (read_image(root / name, BYTES) for root in (left, right))
+        a, b = (_safe_read(root / name, BYTES) for root in (left, right))
         if a != b:
             raise ValueError("Vulkan physical input or original-control output changed")
     candidates = {}
@@ -201,7 +208,7 @@ def inspect(original_data, host_path):
             run_private([str(binary), str(spv0), str(selected), str(spv1),
                          str(spv1), str(WIDTH), str(HEIGHT), "19", "1",
                          "rgba32f"], path, timeout=110)
-        raw0, raw1 = (read_image(p / "trace.bin", COUNTER_BYTES)
+        raw0, raw1 = (_safe_read(p / "trace.bin", COUNTER_BYTES)
                       for p in directories)
         counts = counter_profile(raw0, raw1)
         parity = readback_pair(*directories)
