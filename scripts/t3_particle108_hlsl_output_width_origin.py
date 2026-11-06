@@ -25,6 +25,7 @@ STATUS="T3_ORIGINAL_PARTICLE108_PRIVATE_HLSL_VERTEX_OUTPUT_TYPE_ORIGIN"
 MAX_HLSL=1024*1024
 IDENT=r"[A-Za-z_][A-Za-z_0-9]*"
 OUTPUT_STRUCT=re.compile(r"\bstruct\s+SPIRV_Cross_Output\s*\{([^{}]*)\}\s*;",re.S)
+INPUT_STRUCT=re.compile(r"\bstruct\s+SPIRV_Cross_Input\s*\{([^{}]*)\}\s*;",re.S)
 OUTPUT_FIELD=re.compile(
     rf"^\s*(?:(?:nointerpolation|linear|centroid|sample|noperspective)\s+)*"
     rf"({IDENT})\s+({IDENT})\s*:\s*({IDENT})\s*$")
@@ -55,6 +56,10 @@ COUNTERS=(
     "source_to_roundtrip_exact_name_location_changed",
     "hlsl_to_roundtrip_exact_name_matches",
     "hlsl_to_roundtrip_exact_name_type_equal",
+    "hlsl_vsfs_semantic_pairs_parsed","hlsl_vsfs_semantic_pairs_compatible",
+    "hlsl_vsfs_semantic_fragment_user_inputs","hlsl_vsfs_semantic_vertex_user_outputs",
+    "hlsl_vsfs_semantic_fragment_missing_output","hlsl_vsfs_semantic_fragment_type_mismatch",
+    "hlsl_vsfs_semantic_unparsed_or_unsupported_fields",
     "original_vs_fs_pairs_linked","roundtrip_vs_fs_pairs_linked",
 )
 def _normalized_spirv(kind):
@@ -73,10 +78,18 @@ def _normalized_hlsl(kind):
     return (m.group(1),int(m.group(2) or "1")) if m else None
 
 def extract_output_struct(hlsl):
-    """Private strict structural extractor. Names and semantics MUST NOT be returned in public report."""
+    """Private strict Vertex output struct extractor."""
+    return _extract_io_struct(hlsl,OUTPUT_STRUCT)
+
+def extract_input_struct(hlsl):
+    """Private strict Fragment input struct extractor."""
+    return _extract_io_struct(hlsl,INPUT_STRUCT)
+
+def _extract_io_struct(hlsl,pattern):
+    """Keep private HLSL field names and semantics inside ephemeral CI."""
     if type(hlsl) is not str or not 0<len(hlsl.encode("utf-8"))<=MAX_HLSL:
         raise ValueError("invalid_private_generated_hlsl_scope")
-    blocks=OUTPUT_STRUCT.findall(hlsl)
+    blocks=pattern.findall(hlsl)
     if len(blocks)!=1:
         return None
     fields=[]
@@ -92,6 +105,53 @@ def extract_output_struct(hlsl):
     if len(fields)>256:
         raise ValueError("unbounded_generated_output_fields")
     return fields
+
+def classify_generated_hlsl_stage_link(vertex_fields,fragment_fields):
+    """Join generated HLSL-stage semantics only; original DXBC semantic identity is unproven."""
+    out=Counter()
+    if vertex_fields is None or fragment_fields is None:
+        return {k:int(out[k]) for k in (
+            "hlsl_vsfs_semantic_pairs_parsed","hlsl_vsfs_semantic_pairs_compatible",
+            "hlsl_vsfs_semantic_fragment_user_inputs","hlsl_vsfs_semantic_vertex_user_outputs",
+            "hlsl_vsfs_semantic_fragment_missing_output","hlsl_vsfs_semantic_fragment_type_mismatch",
+            "hlsl_vsfs_semantic_unparsed_or_unsupported_fields")}
+    out["hlsl_vsfs_semantic_pairs_parsed"]+=1
+    def interface(fields):
+        indexed={}
+        for field in fields:
+            if type(field) is not dict or set(field)!={"name","semantic","type"}:
+                raise ValueError("invalid_private_hlsl_interface_field")
+            name,semantic,kind=field["name"],field["semantic"],field["type"]
+            if name is None or semantic is None or kind is None:
+                out["hlsl_vsfs_semantic_unparsed_or_unsupported_fields"]+=1
+                continue
+            if type(name) is not str or type(semantic) is not str or len(semantic)>256:
+                raise ValueError("invalid_generated_hlsl_semantic_identity")
+            sem=semantic.upper()
+            if sem.startswith("SV_") or sem=="PSIZE":
+                continue
+            if sem in indexed:
+                raise ValueError("duplicate_generated_HLSL_stage_semantic")
+            indexed[sem]=kind
+        return indexed
+    v=interface(vertex_fields)
+    f=interface(fragment_fields)
+    out["hlsl_vsfs_semantic_fragment_user_inputs"]+=len(f)
+    out["hlsl_vsfs_semantic_vertex_user_outputs"]+=len(v)
+    for sem,kind in f.items():
+        if sem not in v:
+            out["hlsl_vsfs_semantic_fragment_missing_output"]+=1
+        elif v[sem]!=kind:
+            out["hlsl_vsfs_semantic_fragment_type_mismatch"]+=1
+    out["hlsl_vsfs_semantic_pairs_compatible"]+=int(not (
+        out["hlsl_vsfs_semantic_fragment_missing_output"] or
+        out["hlsl_vsfs_semantic_fragment_type_mismatch"] or
+        out["hlsl_vsfs_semantic_unparsed_or_unsupported_fields"]))
+    return {k:int(out[k]) for k in (
+        "hlsl_vsfs_semantic_pairs_parsed","hlsl_vsfs_semantic_pairs_compatible",
+        "hlsl_vsfs_semantic_fragment_user_inputs","hlsl_vsfs_semantic_vertex_user_outputs",
+        "hlsl_vsfs_semantic_fragment_missing_output","hlsl_vsfs_semantic_fragment_type_mismatch",
+        "hlsl_vsfs_semantic_unparsed_or_unsupported_fields")}
 
 def classify(source,roundtrip,raw_source,fields,raw_roundtrip=None):
     """Accept only in-process private data, return only allow-listed counts."""
@@ -228,6 +288,7 @@ def evaluate(pairs,workspace,*,translator=translate,reflector=reflection,
     totals=Counter()
     for index,pair in enumerate(pairs):
         stages={}
+        hlsl_interfaces={}
         for stage,code in ((1,pair[0]),(0,pair[1])):
             folder=workspace/f"variant-{index}-stage-{stage}"
             folder.mkdir(exist_ok=False)
@@ -238,15 +299,21 @@ def evaluate(pairs,workspace,*,translator=translate,reflector=reflection,
             original=_stage(reflector(folder/"original.spv"))
             roundtrip=_stage(reflector(folder/"roundtrip.spv"))
             stages[stage]=(original,roundtrip)
+            hlsl_file=folder/"private.hlsl"
+            if (hlsl_file.is_symlink() or not hlsl_file.is_file() or
+                not 0<hlsl_file.stat().st_size<=MAX_HLSL):
+                raise ValueError("missing_or_oversized_private_hlsl")
+            hlsl=hlsl_file.read_text()
+            hlsl_interfaces[stage]=(extract_output_struct(hlsl) if stage==1
+                                    else extract_input_struct(hlsl))
             if stage==1:
-                hlsl_file=folder/"private.hlsl"
-                if (hlsl_file.is_symlink() or not hlsl_file.is_file() or
-                    not 0<hlsl_file.stat().st_size<=MAX_HLSL):
-                    raise ValueError("missing_or_oversized_private_hlsl")
-                fields=extract_output_struct(hlsl_file.read_text())
+                fields=hlsl_interfaces[stage]
                 row=classify(original,roundtrip,raw_reader(folder/"original.spv"),fields,
                              raw_roundtrip=raw_reader(folder/"roundtrip.spv"))
                 for k in COUNTERS: totals[k]+=row[k]
+        semantic_link=classify_generated_hlsl_stage_link(
+            hlsl_interfaces[1],hlsl_interfaces[0])
+        for k,amount in semantic_link.items(): totals[k]+=amount
         totals["original_vs_fs_pairs_linked"]+=int(interfaces_match(stages[1][0],stages[0][0]))
         totals["roundtrip_vs_fs_pairs_linked"]+=int(interfaces_match(stages[1][1],stages[0][1]))
     if totals["vertex_variants_checked"]!=PAIRS or totals["original_vs_fs_pairs_linked"]!=PAIRS:
