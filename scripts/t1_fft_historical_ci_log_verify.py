@@ -25,7 +25,7 @@ PINS = (
 MAX_META = 256 * 1024
 MAX_LOG = 2 * 1024 * 1024
 MAX_MARKER = 24 * 1024
-STAMP = r"\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+Z"
+STAMP = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z"
 
 
 def _pairs(pairs):
@@ -73,7 +73,7 @@ def _validate_status(run, job, pin):
 
 
 def _marker(log, name):
-    pattern = re.compile("^" + STAMP + " " + re.escape(name) + r" (\\{.*\\})$")
+    pattern = re.compile("^" + STAMP + " " + re.escape(name) + r" (\{.*\})$")
     matches = []
     for line in log.splitlines():
         if name not in line:
@@ -234,7 +234,7 @@ def main():
         }
         report = verify(evidence, entries)
     except (OSError, ValueError, TypeError, KeyError, UnicodeError, RecursionError):
-        p.exit(2, "RAFT_T1_FFT_HISTORICAL_CI_LOG invalid_or_untrusted_private_evidence=true\\n")
+        p.exit(2, "RAFT_T1_FFT_HISTORICAL_CI_LOG invalid_or_untrusted_private_evidence=true\n")
     print("RAFT_T1_FFT_HISTORICAL_CI_LOG " + json.dumps(report, sort_keys=True))
     return 0
 
