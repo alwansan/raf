@@ -153,6 +153,41 @@ def install_adapted_originals(changed, traces):
         raise
 
 
+# Keep the private original-managed compatibility compile aligned with native
+# runtime dependencies: a new AndroidTestDiagnostics reference must not silently
+# drop its companion compile unit from this project.
+RUNTIME_COMPILE_SUPPORT_FILES = (
+    'AndroidStreamingAssets.cs',
+    'TouchPointerGesture.cs',
+    'TouchPointerButtons.cs',
+    'AndroidTouchPointer.cs',
+    'AndroidPhysicalMouseCapture.cs',
+    'PhysicalMouseDeltaAccumulator.cs',
+    'PhysicalMouseMotionSource.cs',
+    'AndroidImmersiveSystemBars.cs',
+    'AndroidSystemBarPolicy.cs',
+    'AndroidTouchUiPanel.cs',
+    'LocalPlayerIdentity.cs',
+    'LocalProfileStore.cs',
+    'AndroidExpansionArchiveProbe.cs',
+    'AndroidTestDiagnostics.cs',
+    'AndroidTouchGamepadOverlay.cs',
+    'PersistentDiagnosticLog.cs',
+    'AndroidRuntimeLog.cs',
+)
+
+
+def copy_runtime_compile_support_files(runtime: Path, source: Path):
+    """Preflight every runtime compile source before copying any of them."""
+    paths = [(runtime / name, source / ('RaftAndroid-' + name))
+             for name in RUNTIME_COMPILE_SUPPORT_FILES]
+    for origin, _ in paths:
+        if origin.is_symlink() or not origin.is_file():
+            raise FileNotFoundError('Missing regular runtime compile source: ' + origin.name)
+    for origin, target in paths:
+        shutil.copy2(origin, target)
+
+
 def prepare(source, managed, runtime, output):
     changed = {}
     for name in PINS:
@@ -168,8 +203,7 @@ def prepare(source, managed, runtime, output):
                      for p in sorted(managed.glob('*.dll')) if p.name != 'Assembly-CSharp.dll')
     # This mirrors the established original managed compatibility diagnostic.
     project = '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion><DefineConstants>UNITY_ANDROID;UNITY_5_3_OR_NEWER</DefineConstants><GenerateAssemblyInfo>false</GenerateAssemblyInfo><AllowUnsafeBlocks>true</AllowUnsafeBlocks><Nullable>disable</Nullable><NoWarn>0168;0649;0618;0672;SYSLIB0011</NoWarn></PropertyGroup><ItemGroup>' + refs + '</ItemGroup></Project>'
-    for name in ('AndroidStreamingAssets.cs', 'TouchPointerGesture.cs', 'TouchPointerButtons.cs', 'AndroidTouchPointer.cs', 'AndroidPhysicalMouseCapture.cs', 'PhysicalMouseDeltaAccumulator.cs', 'PhysicalMouseMotionSource.cs', 'AndroidImmersiveSystemBars.cs', 'AndroidSystemBarPolicy.cs', 'AndroidTouchUiPanel.cs', 'LocalPlayerIdentity.cs', 'LocalProfileStore.cs', 'AndroidTestDiagnostics.cs', 'AndroidTouchGamepadOverlay.cs', 'PersistentDiagnosticLog.cs', 'AndroidRuntimeLog.cs'):
-        shutil.copy2(runtime / name, source / ('RaftAndroid-' + name))
+    copy_runtime_compile_support_files(runtime, source)
     (source / 'Candidate.csproj').write_text(project)
     harness = output / 'harness'
     harness.mkdir()
