@@ -712,6 +712,10 @@ internal static class Cb0ExactFirstFormal
             throw new InvalidOperationException("Wrong ctor type must not prove Vector4");
         var twoConstructors = new List<Instruction> {
             Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Ldc_R4,5f),
+            Instruction.Create(OpCodes.Ldc_R4,6f),
+            Instruction.Create(OpCodes.Ldc_R4,7f),
+            Instruction.Create(OpCodes.Ldc_R4,8f),
             Instruction.Create(OpCodes.Newobj,nonVectorCtor),
             Instruction.Create(OpCodes.Pop),
             Instruction.Create(OpCodes.Ldc_R4,1f),
