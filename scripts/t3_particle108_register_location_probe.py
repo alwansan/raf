@@ -113,6 +113,77 @@ def classify_stage_roles(original,reflected):
         result[name]=classify_stage(sig,raw)
     return result
 
+def classify_missing_fragment_usedmask(vertex,fragment,raw_fragment_spirv):
+    """Classify absent *numeric* Fragment input Locations by private DXBC used_mask.
+
+    Read masks are compiled signature metadata, not pixel/semantic proof.
+    Return only bounded class counts, NEVER individual names, IDs or Locations.
+    """
+    if (type(vertex) is not dict or type(fragment) is not dict or
+        type(raw_fragment_spirv) is not dict or
+        type(vertex.get("output")) is not list or
+        type(fragment.get("input")) is not list or
+        type(raw_fragment_spirv.get("inputs",[])) is not list or
+        max(len(vertex["output"]),len(fragment["input"]),
+            len(raw_fragment_spirv.get("inputs",[])))>256):
+        raise ValueError("untrusted_fragment_missing_usedmask_scope")
+    located=set()
+    for row in raw_fragment_spirv.get("inputs",[]):
+        if type(row) is not dict:
+            raise ValueError("untrusted_private_fragment_reflection")
+        if "location" in row:
+            loc=row["location"]
+            if type(loc) is not int or not 0<=loc<=65535 or loc in located:
+                raise ValueError("untrusted_or_duplicate_fragment_SPIRV_location")
+            located.add(loc)
+    upstream={}
+    for row in vertex["output"]:
+        if type(row) is not dict:
+            raise ValueError("invalid_private_vertex_semantic")
+        if row.get("system_value")==0:
+            key=(row.get("semantic"),row.get("index"))
+            if (type(key[0]) is not str or type(key[1]) is not int or
+                key in upstream):
+                raise ValueError("invalid_or_duplicate_private_vertex_semantic")
+            upstream[key]=row
+    out=Counter()
+    for row in fragment["input"]:
+        if type(row) is not dict:
+            raise ValueError("invalid_private_fragment_signature")
+        if row.get("system_value")!=0:
+            continue
+        reg,mask,read_mask=row.get("register"),row.get("mask"),row.get("used_mask")
+        if (type(reg) is not int or not 0<=reg<=4095 or
+            type(mask) is not int or not 1<=mask<=15 or
+            type(read_mask) is not int or not 0<=read_mask<=15 or
+            type(row.get("semantic")) is not str or
+            type(row.get("index")) is not int):
+            raise ValueError("invalid_original_fragment_DXBC_used_mask")
+        if reg in located:
+            continue
+        out["missing_fragment_numeric_location_records"]+=1
+        if read_mask==0:
+            out["missing_fragment_original_used_mask_zero"]+=1
+        else:
+            out["missing_fragment_original_used_mask_nonzero"]+=1
+            out["missing_fragment_original_used_mask_lanes"]+=read_mask.bit_count()
+        out["missing_fragment_used_mask_outside_declared_mask"]+=int(
+            bool(read_mask & ~mask))
+        src=upstream.get((row["semantic"],row["index"]))
+        compatible=(src is not None and src.get("system_value")==0 and
+                    type(src.get("mask")) is int and
+                    type(src.get("type")) is int and
+                    src["type"]==row.get("type") and
+                    (mask & ~src["mask"])==0)
+        out["missing_fragment_original_vertex_semantic_mask_type_join"]+=int(compatible)
+    return {key:int(out[key]) for key in (
+        "missing_fragment_numeric_location_records",
+        "missing_fragment_original_used_mask_zero",
+        "missing_fragment_original_used_mask_nonzero",
+        "missing_fragment_original_used_mask_lanes",
+        "missing_fragment_used_mask_outside_declared_mask",
+        "missing_fragment_original_vertex_semantic_mask_type_join")}
+
 def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
              spirv_reader=None,safe_spirv_reader=None,reflection_validator=None):
     from scripts import t3_original_particle108_spirv_translation as tr
@@ -134,7 +205,9 @@ def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
         raise ValueError("untrusted_original_fourpair_private_scope")
     total=Counter(); complete=0
     role_counts={k:Counter() for k in ('vertex_inputs','vertex_outputs','fragment_inputs','fragment_outputs')}
+    fragment_used_mask_totals=Counter()
     for i,pair in enumerate(pairs):
+        source_by_stage={1:dxbc_reader(pair[0]),0:dxbc_reader(pair[1])}
         stage_ok=0
         for stage,code in ((1,pair[0]),(0,pair[1])):
             folder=workspace/f"pair-{i}-stage-{stage}"
@@ -156,7 +229,12 @@ def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
                                  key=lambda x:x["location"])
                 if projected!=safe[side]:
                     raise ValueError("original_private_SPIRV_safe_reflection_disagrees")
-            source_signature=dxbc_reader(code)
+            source_signature=source_by_stage[stage]
+            if stage==0:
+                missing=classify_missing_fragment_usedmask(
+                    source_by_stage[1],source_by_stage[0],raw)
+                for k,v in missing.items():
+                    fragment_used_mask_totals[k]+=v
             row=classify_stage(source_signature,raw)
             scoped=classify_stage_roles(source_signature,raw)
             phase='vertex' if stage==1 else 'fragment'
@@ -180,6 +258,14 @@ def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
                 "original_DXBC_to_SPIRV_stages",
                 "original_four_VSFS_keyword_pairs",
                 "four_pairs_with_numerical_unique_register_location_candidates")},
+            "missing_fragment_usedmask_aggregate":{
+                k:int(fragment_used_mask_totals[k]) for k in (
+                    "missing_fragment_numeric_location_records",
+                    "missing_fragment_original_used_mask_zero",
+                    "missing_fragment_original_used_mask_nonzero",
+                    "missing_fragment_original_used_mask_lanes",
+                    "missing_fragment_used_mask_outside_declared_mask",
+                    "missing_fragment_original_vertex_semantic_mask_type_join")},
             "stage_role_aggregate_counts":{
                 role:{key:int(values[key]) for key in (
                     'original_user_records','spirv_located_rows',
