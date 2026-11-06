@@ -4,11 +4,11 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2",
   "origin": "chat",
-  "status": "active",
+  "status": "completed",
   "issue_id": "LOCAL-005",
   "track": "original-runtime-operations-staging-source-drift",
   "base_sha": "dc395792b78aff3c93308c0312f7e2335e3cbe3d",
-  "updated_at": "2026-11-06T22:27:06.211Z",
+  "updated_at": "2026-11-06T22:31:57.961Z",
   "resumed_from_sessions": [
     "20261106T2215Z-T4-chat-immutable-log-snapshot-n7b4",
     "20261106T2138Z-T4-scheduled-native-retry-q4n7"
@@ -25,5 +25,12 @@
   "hypothesis": "apply() authenticates original source during plan and backup but not again before instrumented C# overwrite. If an independent writer updates .cs/.meta after backup copy, this transaction can silently destroy updated source or rollback over it.",
   "approach": "Use two synthetic controlled shutil.copy2 interleaves after backup snapshot; expect RED current source overwrites concurrent edit or meta drift; implement source+metadata prewrite fail-closed before first mutation, retaining complete byte-identical backup for reconciliation; validate T4 test and full existing offline integration CI.",
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Preserve native owner T5 CI. No source data or RGD schema changes; detect drift before any instrumented source write; run source integration and checkpoint."
+  "next_step": "Completed and released instrumenter/test ownership. T5 native build 42296450023 still independent on older source; verify terminal status and signed candidate then owner same-world RGD close/restart/reopen and mouse. Later potential post-write rollback race requires separate distinct scope. LOCAL-005 OPEN, NOT_READY 0/3.",
+  "red_commit": "a02afd104b72359c7955d7519be1fda978018ce5",
+  "green_commit": "a2577acef04ff8d1997f1e2af14cc85aa27a84d0",
+  "red_run": "https://github.com/alwansan/raf/actions/runs/42304948072",
+  "green_run": "https://github.com/alwansan/raf/actions/runs/42305089873",
+  "experiment": "prompt/coordination/experiments/T4/20261106T2226Z-runtime-stage-prewrite-drift-c6p2.json",
+  "event": "prompt/coordination/B_TEAM/events/T4/20261106T2231Z-T4-original-runtime-operation-stage-drift-c6p2.json",
+  "result": "RED 2 synthetic source/meta postbackup concurrent-edit failures (source silently clobbered, metadata stale rollback); GREEN 18/18 synthetic and original managed compile exit=0. Source+metadata prewrite verification added, nonlinked path, retain original backups on drift. No Unity/phone claim."
 }
