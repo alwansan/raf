@@ -22,3 +22,7 @@
 - No changes to actual Unity runtime, T5 scheduled Resolution, T4 mouse, T1/T2/T3 shaders, Audio, Steam, resource GUID, native artifact, LFS, Release, or private telemetry sharing. PERF-007 open, full game readiness NOT_READY 0/3.
 - next_step: same-scene, same-ABI+APK/OBB SHA and quality/render-scale tagged Unity frames and device present audit on a future legitimately tested build. Do not claim 120FPS startup performance or a device hang from SF telemetry.
 - status: completed_real_source_verified
+
+## Team source-evidence index follow-up
+- [CI42146886344](https://github.com/alwansan/raf/actions/runs/42146886344) COMPLETED SUCCESS: canonical T_TEAM refresh script reran against branch; first push raced with another client and failed safely (no force). Bounded re-fetch found generated index already current, exited `T5_LEDGER_REFRESH already_current=true`. The verified T5 experiment/event files remain recorded independently.
+- Preserve final verified performance evidence on immutable original CL four blobs and source CI42146496632. Do not equate any CI result to a new playable APK; WATER-001/RENDER-002 and PERF-007 remain OPEN.
