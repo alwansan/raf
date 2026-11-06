@@ -29,12 +29,16 @@ def split_verified_pid_epochs(rows):
                 current = []
             pid = new_pid
         elif row.get("state") == "game_running":
-            # Unknown process ownership breaks the cohort rather than
-            # silently inheriting the previous verified process identity.
+            # Unknown running-process ownership is its OWN epoch, neither
+            # part of the preceding verified Raft PID nor part of a later
+            # re-verified PID (even if the numeric PID is reused). Do not
+            # ever publish the actual PID to a report.
             if current:
                 epochs.append(current)
+            epochs.append([row])
             current = []
             pid = None
+            continue
         current.append(row)
     if current:
         epochs.append(current)
