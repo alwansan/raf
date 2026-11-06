@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "hypothesis": "Same-source real Unity2021.3.45f2 OpenGLCore computed float carrier 63/64 mismatches are specifically signed-zero collapse when bitcast via float, and corresponding Texture2D.Load mismatch reads x=0 pixel. If not, classify nonzero-other mismatch without assuming FTZ cause.",
   "source_sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
   "original_asset_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
@@ -60,5 +60,69 @@
     "Texture pixel at x0 is a proxy for address collapse in this synthetic linear uniquely-coded image, not a direct GPU coordinate trace.",
     "No original serialized Raft FFT kernel/variant/production binding/Adreno device executed in this experiment."
   ],
-  "next_step": "On actual run 42279949574 success parse RAFT_T1_ADDRESS_PROVENANCE_GATE counts/signatures; classify x0 origin; then prepare original SHA-authentic per-invocation ImageFetch provenance before gameplay shader changes."
+  "next_step": "Apply private SHA-authentic original FFT slot0 coordinate SSA/producer and Unity candidate keyed actual input/output capture to determine whether butterfly1 X passes this computed-float-bitcarrier path. Only then consider a minimal integer-preserving fix to translated HLSL and numeric parity across both Vulkan+Unity with all provenance/binding checks; trial vote remains لا يحتاج.",
+  "observed_result": {
+    "run_id": 42279949574,
+    "job_id": 128106388433,
+    "head_sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
+    "run": "COMPLETED SUCCESS",
+    "source_python_adversarial_tests": "16/16 PASS",
+    "unity_fixture_python_tests": "4/4 PASS",
+    "genuine_unity2021_openglcore_nunit": true,
+    "invocations": 64,
+    "gpu_u32_outputs": 1024,
+    "all_six_positive_controls_zero": true,
+    "computed_mismatch": [
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "computed_zero_signatures": [
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "computed_other_mismatches": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "buffered_mismatch": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "buffered_zero_signatures": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "pair_names": [
+      "bitcast",
+      "plain_multiply",
+      "precise_multiply",
+      "texture_from_bitcast",
+      "texture_from_precise"
+    ],
+    "exact_gated_signature_contract": true,
+    "cleanup_private_outputs": "SUCCESS",
+    "actual_original_shader_executed": false,
+    "android_adreno_water_proven": false
+  },
+  "limits_confirmed": [
+    "Computed scalar carrier category 2/4/6 observed bitwise signed-zero on all 63 nonzero selected address lanes; matched integer baseline unchanged.",
+    "Corresponding computed Texture2D.Load categories 10/12 returned exactly synthetic pixel x0 rather than intended uniquely-coded pixel; this is strong signature of coordinate-zero read in test fixture, not direct recovered shader internal coordinate register.",
+    "All 5 buffered paths 0/64, all 6 controls 0/64. No other mismatch category remains on this fixture.",
+    "A zero signature is not independent causal proof of GPU FTZ, because compiler/optimizer lowering can alter a bitcast producer. Neither original Raft runtime/Android GPU nor authored kernel identity tested."
+  ]
 }
