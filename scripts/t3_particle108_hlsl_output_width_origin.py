@@ -24,10 +24,10 @@ from scripts.w1_recover_graphics_programs import translate
 STATUS="T3_ORIGINAL_PARTICLE108_PRIVATE_HLSL_VERTEX_OUTPUT_TYPE_ORIGIN"
 MAX_HLSL=1024*1024
 IDENT=r"[A-Za-z_][A-Za-z_0-9]*"
-OUTPUT_STRUCT=re.compile(r"\\bstruct\\s+SPIRV_Cross_Output\\s*\\{([^{}]*)\\}\\s*;",re.S)
+OUTPUT_STRUCT=re.compile(r"\bstruct\s+SPIRV_Cross_Output\s*\{([^{}]*)\}\s*;",re.S)
 OUTPUT_FIELD=re.compile(
-    rf"^\\s*(?:(?:nointerpolation|linear|centroid|sample|noperspective)\\s+)*"
-    rf"({IDENT})\\s+({IDENT})\\s*:\\s*({IDENT})\\s*$")
+    rf"^\s*(?:(?:nointerpolation|linear|centroid|sample|noperspective)\s+)*"
+    rf"({IDENT})\s+({IDENT})\s*:\s*({IDENT})\s*$")
 VECTOR_TYPE=re.compile(r"^(float|int|uint)([1-4]?)$")
 SPIRV_VECTOR_TYPE=re.compile(r"^(vec|ivec|uvec)([2-4])$")
 COUNTERS=(
