@@ -1,0 +1,14 @@
+{
+  "id": "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+  "owner": "T1",
+  "session_id": "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T12:41:54.149Z",
+  "summary": "Authenticated original slot0 FFT butterfly1 Y branch predicate original SPIR-V OpINotEqual uses two uint32 operands (one OpBitcast, one integer OpConstant). Only the FALSE successor can reach the Y image read; TRUE successor cannot reach it. Predicate structurally gates the read rather than choosing Y store directly. CI 42219435992 SUCCESS with 14/14 source-free controls after hardening mid-block branch/target validation. Prior path analysis 42217830589 found last Y writer float32 constant before branch. No dynamic predicate truth, original↔Unity numeric parity or Android water fix established.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42219209890",
+    "https://github.com/alwansan/raf/actions/runs/42219435992",
+    "https://github.com/alwansan/raf/commit/fc3598e1f3c7cffea41d2f9db9ccdf872274083e"
+  ]
+}
