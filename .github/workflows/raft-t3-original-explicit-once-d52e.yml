@@ -1,0 +1,142 @@
+name: T3 RENDER-002 SHA original Shader48 dual explicit VKD3D A/B proof d52e
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'prompt/coordination/trigger/T3/20261106T2007Z-T3-chat-explicit-original-d52e.txt'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-Shader48-dual-explicit-profile-once-d52e-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-8-stage-DXBC-SPV-debug-candidate-manual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate source-free debug names, stage counts, and explicit contract validator
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_explicit_probe.py scripts/t3_particle108_spirv_explicit_pair.py scripts/t3_particle108_explicit_map_packet.py tests/test_t3_particle108_original_explicit_probe.py tests/test_t3_particle108_spirv_explicit_pair.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_explicit_probe.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_spirv_explicit_pair.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_explicit_map_packet.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Stage only four SHA pinned original shader owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate six original Renderer scenes and 4 genuine shader owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-original-Particle108-stage-family'
+          pins={'Raft_Data/'+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          found=stage(source,out,pins)
+          assert len(found['owners'])==4 and found['verified_bytes']==269007288 and not found['lfs_used']
+          for name,pin in PIN.items():
+              src=source/'Raft/Raft_Data'/name
+              verify_source(src,pin)
+              dest=out/'Raft_Data'/name
+              with src.open('rb') as inp,dest.open('xb') as outp:
+                  while block:=inp.read(1024*1024):outp.write(block)
+              verify_source(dest,pin)
+          print('T3_ORIGINAL_FOUR_OWNERS_SIX_SCENES_SHA_VERIFIED=true')
+          PY
+      - name: Source compiler and reflector dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools libvkd3d-dev gcc
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools libvkd3d-dev libvkd3d-headers libvkd3d-shader1 gcc
+      - name: Compile original graphics explicit VS and PS VKD3D C helper on pinned public ABI
+        run: |
+          set -euo pipefail
+          HEADER_DIR="$(dirname "$(dpkg -L libvkd3d-headers | grep -m1 '/vkd3d_shader.h$')")"
+          test -f "$HEADER_DIR/vkd3d_shader.h"
+          gcc -std=c11 -Wall -Wextra -Werror -O2 -I "$HEADER_DIR" \
+            -o "$RUNNER_TEMP/t3-private-vkd3d-graphics" \
+            scripts/t3_particle108_vkd3d_explicit_graphics.c -lvkd3d-shader
+          test -x "$RUNNER_TEMP/t3-private-vkd3d-graphics"
+          echo 'T3_GRAPHICS_EXPLICIT_VKD3D_PUBLIC_C_ABI_COMPILED=true'
+      - name: Compile 8 SHA-original VSFS programs with two explicit VKD3D register maps each
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.t3_particle108_original_explicit_probe \
+            --original "$RUNNER_TEMP/t3-original-Particle108-stage-family" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --compiler "$RUNNER_TEMP/t3-private-vkd3d-graphics" \
+            --out "$RUNNER_TEMP/t3-shader48-explicit-AB-d52e-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-shader48-explicit-AB-d52e-safe.json').read_text())
+          assert r['status']=='T3_SHA_ORIGINAL_PARTICLE108_VKD3D_EXPLICIT_DUAL_PROFILE_PROOF'
+          c=r['counts']
+          assert c['verified_source_keyword_pairs']==4
+          assert c['source_stages_with_two_explicit_profiles_verified']==8
+          assert c['verified_vertex_stages']==4 and c['verified_fragment_stages']==4
+          assert c['private_compiler_invocations']==16 and c['private_spirv_val_invocations']==16
+          assert c['verified_original_register_rows']==44
+          assert r['original_six_renderer_scenes_SHA_authenticated'] is True
+          assert r['original_four_shader_owners_SHA_authenticated'] is True
+          assert r['source_original_particle_renderer_material_use_slots']==108
+          assert r['explicit_DX_source_register_to_chosen_VK_target_proven_by_dual_profile'] is True
+          assert r['source_program_identity_except_descriptor_decorations_proven'] is True
+          assert r['ShaderLab_program_recovered_or_Unity_Android_pixels_proven'] is False
+          assert r['private_original_registers_source_bytes_SPIRV_ids_or_bindings_published'] is False
+          print('T3_ORIGINAL_SHADER48_8_STAGE_16_EXPLICIT_COMPILATIONS_AUTHENTIC=true Unity_android_pixels=false')
+          PY
+      - name: Upload only count-only SHA-original stage-family and optional debug-name candidate reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-Shader48-explicit-d52e-safe-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/t3-shader48-explicit-AB-d52e-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
