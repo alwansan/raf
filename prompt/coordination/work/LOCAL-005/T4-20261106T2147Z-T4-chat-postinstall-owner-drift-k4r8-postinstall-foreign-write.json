@@ -5,7 +5,7 @@
   "session_id": "20261106T2147Z-T4-chat-postinstall-owner-drift-k4r8",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "waiting_ci",
   "track": "source-save-path-adapter-post-install-external-write-detection",
   "base_sha": "41dd30d045bb4fff3b739b7e7610ebff8f1deb50",
   "resumed_from_sessions": [
@@ -25,6 +25,13 @@
   "approach": "Add deterministic negative interleavings at post-success source write to expose source/meta drift erased on rollback; retain synthetic torn-write rollback semantics and implement post-success fail-closed checks. Run original ZIP2 source-only CI. No duplicate native.",
   "related_work": "prompt/coordination/work/LOCAL-005/T4-20261106T2135Z-T4-chat-save-backup-owner-v9k2-postpromote-owner-delete.json",
   "native_running": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "updated_at": "2026-11-06T21:47:00Z",
-  "next_step": "RED test first, then minimal postwrite rollback refusal after write completed."
+  "updated_at": "2026-11-06T21:54:00Z",
+  "next_step": "Observe CI42300166577 status and detailed checks; if green release source; if red inspect exact failure. Native run 42296450023 remains separate.",
+  "red_test_commit": "c080bdf819c0bc677ba9f80b059758a52820b389",
+  "fix_commit": "9b0ca69a5fbbacf50b63964347e373c9d00d8949",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42300040391",
+    "https://github.com/alwansan/raf/actions/runs/42300166577"
+  ],
+  "result": "RED source-only CI42300040391: 19 save path test methods, 17 pass and new two synthetic foreign source/GUID change subcases FAIL (old rollback overwrites an external source epoch). Source correction 9b0ca69 adds source_write_completed guard; GREEN source CI42300166577 pending with authentic original ZIP2 read-only gating."
 }
