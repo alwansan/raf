@@ -48,6 +48,13 @@ COUNTERS=(
     "source_to_hlsl_exact_name_type_narrowing",
     "source_to_hlsl_exact_name_type_widening",
     "source_to_hlsl_exact_name_type_other",
+    "roundtrip_named_output_records","roundtrip_output_names_unique",
+    "source_to_roundtrip_exact_name_matches",
+    "source_to_roundtrip_exact_name_type_equal",
+    "source_to_roundtrip_exact_name_location_same",
+    "source_to_roundtrip_exact_name_location_changed",
+    "hlsl_to_roundtrip_exact_name_matches",
+    "hlsl_to_roundtrip_exact_name_type_equal",
     "original_vs_fs_pairs_linked","roundtrip_vs_fs_pairs_linked",
 )
 def _normalized_spirv(kind):
@@ -86,7 +93,7 @@ def extract_output_struct(hlsl):
         raise ValueError("unbounded_generated_output_fields")
     return fields
 
-def classify(source,roundtrip,raw_source,fields):
+def classify(source,roundtrip,raw_source,fields,raw_roundtrip=None):
     """Accept only in-process private data, return only allow-listed counts."""
     original=_stage(source)
     rebuilt=_stage(roundtrip)
@@ -105,6 +112,7 @@ def classify(source,roundtrip,raw_source,fields):
         "source_output_type_multiset_equals_roundtrip":int(orig_shapes==rt_shapes),
     })
     raw_names={}
+    source_locations={}
     for row in raw_source["outputs"]:
         if (type(row) is not dict or type(row.get("location")) is not int or
             type(row.get("type")) is not str):
@@ -120,7 +128,26 @@ def classify(source,roundtrip,raw_source,fields):
             if name in raw_names:
                 raise ValueError("duplicate_original_output_reflection_name")
             raw_names[name]=_normalized_spirv(row["type"])
+            source_locations[name]=loc
     counts["source_output_names_unique"]=int(len(raw_names)==len(original_map))
+    round_names={}
+    if raw_roundtrip is not None:
+        if type(raw_roundtrip) is not dict or type(raw_roundtrip.get("outputs")) is not list:
+            raise ValueError("invalid_private_named_roundtrip_reflection")
+        for row in raw_roundtrip["outputs"]:
+            if (type(row) is not dict or type(row.get("location")) is not int or
+                type(row.get("type")) is not str):
+                raise ValueError("invalid_private_roundtrip_output_row")
+            loc=row["location"]
+            if loc not in round_map or round_map[loc]!=row["type"]:
+                raise ValueError("unverified_named_roundtrip_location_type")
+            name=row.get("name")
+            if type(name) is str and name:
+                if len(name)>256 or name in round_names:
+                    raise ValueError("unbounded_or_duplicate_roundtrip_output_name")
+                counts["roundtrip_named_output_records"]+=1
+                round_names[name]=(_normalized_spirv(row["type"]),loc)
+        counts["roundtrip_output_names_unique"]=int(len(round_names)==len(round_map))
     if fields is None:
         counts["generated_hlsl_output_struct_not_found"]+=1
         return {k:int(counts[k]) for k in COUNTERS}
@@ -173,6 +200,15 @@ def classify(source,roundtrip,raw_source,fields):
             counts["source_to_hlsl_exact_name_type_widening"]+=1
         else:
             counts["source_to_hlsl_exact_name_type_other"]+=1
+    for name,(kind,loc) in round_names.items():
+        if name in raw_names:
+            counts["source_to_roundtrip_exact_name_matches"]+=1
+            counts["source_to_roundtrip_exact_name_type_equal"]+=int(raw_names[name]==kind)
+            counts["source_to_roundtrip_exact_name_location_same"]+=int(source_locations[name]==loc)
+            counts["source_to_roundtrip_exact_name_location_changed"]+=int(source_locations[name]!=loc)
+        if name in hlsl_names:
+            counts["hlsl_to_roundtrip_exact_name_matches"]+=1
+            counts["hlsl_to_roundtrip_exact_name_type_equal"]+=int(hlsl_names[name]==kind)
     return {k:int(counts[k]) for k in COUNTERS}
 
 def raw_reflection_private(path):
@@ -208,7 +244,8 @@ def evaluate(pairs,workspace,*,translator=translate,reflector=reflection,
                     not 0<hlsl_file.stat().st_size<=MAX_HLSL):
                     raise ValueError("missing_or_oversized_private_hlsl")
                 fields=extract_output_struct(hlsl_file.read_text())
-                row=classify(original,roundtrip,raw_reader(folder/"original.spv"),fields)
+                row=classify(original,roundtrip,raw_reader(folder/"original.spv"),fields,
+                             raw_roundtrip=raw_reader(folder/"roundtrip.spv"))
                 for k in COUNTERS: totals[k]+=row[k]
         totals["original_vs_fs_pairs_linked"]+=int(interfaces_match(stages[1][0],stages[0][0]))
         totals["roundtrip_vs_fs_pairs_linked"]+=int(interfaces_match(stages[1][1],stages[0][1]))
