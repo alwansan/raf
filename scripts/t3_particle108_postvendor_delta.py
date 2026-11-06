@@ -6,6 +6,8 @@ is selected afresh from SHA-verified original scenes and the *same* W1/B02
 export trace before and after the bounded official vendor restorers. This
 cannot prove original authored programs, Unity compile, or Android pixels.
 """
+# One-shot authentic original experiment: six scenes, twelve SHA-pinned owners,
+# W1/B02 same-instance exporter; TMP/PostFX/Volumetric bounded restorer delta.
 from __future__ import annotations
 
 import argparse
