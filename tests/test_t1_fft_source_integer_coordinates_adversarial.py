@@ -6,7 +6,21 @@ ambiguity handling, not Vulkan/Unity correctness or original shader identity.
 import unittest
 
 from scripts.t1_fft_source_integer_coordinates import rewrite
-from tests.test_t1_fft_source_integer_coordinates import ASSEMBLY
+ASSEMBLY = """OpDecorate %image DescriptorSet 0
+OpDecorate %image Binding 0
+OpDecorate %other DescriptorSet 0
+OpDecorate %other Binding 1
+%i = OpTypeInt 32 1
+%f = OpTypeFloat 32
+%iv = OpTypeVector %i 2
+%fv = OpTypeVector %f 2
+%address = OpLoad %iv %pointer
+%carrier = OpBitcast %fv %address
+%swapped = OpVectorShuffle %fv %carrier %carrier 1 0
+%coord = OpBitcast %iv %swapped
+%a = OpImageFetch %fv %image %coord Lod %zero
+%b = OpImageFetch %fv %other %coord Lod %zero
+"""
 
 
 class SourceIntegerRewriteAdversarialTests(unittest.TestCase):
