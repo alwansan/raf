@@ -1,0 +1,25 @@
+{
+  "session_id": "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "status": "investigation",
+  "baseline_sha": "4799d27b78631069e045354522009f675c6355f3",
+  "scope": "independent evidence reconciliation; no shared source files",
+  "files": [
+    "prompt/coordination/work/WATER-001/20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4.md"
+  ],
+  "hypothesis": "Original/HLSL paired Mesa Vulkan parity does not cover Unity OpenGLCore mismatch; next discriminating experiment is matched Unity backend readback with identical fixture and original program identity.",
+  "experiment_key": "T1-UNITY-GLCORE-FIRST-DIVERGENCE-1024x32-seed19",
+  "shared_resource": "none; no CI requested",
+  "taken_over_from": [
+    "20261106T163310Z-T1-chat-real-fft-pair-d91e",
+    "20261106T170532Z-T1-chat-variant-declarations-7c4e"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42254539826",
+    "https://github.com/alwansan/raf/actions/runs/42258825614",
+    "https://github.com/alwansan/raf/actions/runs/42025620147"
+  ],
+  "next": "Capture Unity OpenGLCore pass0 with same authenticated fixture and per-invocation trace; distinguish compiler backend vs binding/dispatch before any shader change."
+}
