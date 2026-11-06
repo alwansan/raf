@@ -78,3 +78,4 @@ jobs:
 # T5 source evidence indexed after CI 42217714507
 # T5 canonical event id correction verified CI refresh 20261106T1234Z
 # T5 INTEGRATION-001 source-only APK OBB ZIP local member parity 32-test CI 42220308068
+# T5 INTEGRATION-001 real original 42058825739 signed APK OBB 70 nested ZIP local headers verified CI42224062207
