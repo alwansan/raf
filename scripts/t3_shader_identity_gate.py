@@ -43,6 +43,9 @@ def check(root, manifest):
     shader_text = shader.read_text(encoding='utf-8-sig')
     if any(s in shader_text for s in ('DummyShaderTextExporter', 'No subprograms found', 'ShaderUnknownExporter')):
         raise ValueError('unresolved_exporter_placeholder')
+    # A valid GUID link is insufficient when the exported shader file is blank or only comments.
+    if not re.search(r'(?m)^\s*Shader\s+"[^"\r\n]+"\s*\{', shader_text):
+        raise ValueError('missing_shader_declaration')
     materials = manifest['material_paths']
     if not isinstance(materials, list) or not materials or not all(isinstance(x,str) for x in materials) or len(materials) != len(set(materials)):
         raise ValueError('invalid_material_scope')
