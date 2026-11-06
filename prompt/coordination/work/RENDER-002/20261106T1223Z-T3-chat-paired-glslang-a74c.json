@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1223Z-T3-chat-paired-glslang-a74c",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "4bfe352226792fcf5e8356fe621a4376a6d343f3",
+  "resumed_from_sessions": [
+    "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+    "20261106T1131Z-T3-scheduled-newline-7d4c"
+  ],
+  "track": "SHA-authentic four Particle108 generated HLSL Vertex and Fragment pairs compiled jointly with glslang -l; verify real SPIRV entrypoint stages and Vulkan validity",
+  "intended_files": [
+    "scripts/t3_particle108_paired_hlsl_link.py",
+    "tests/test_t3_particle108_paired_hlsl_link.py",
+    ".github/workflows/raft-t3-particle108-paired-hlsl-link.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1223Z-T3-chat-paired-glslang-a74c.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1223Z-T3-chat-paired-glslang-a74c.md",
+    "prompt/coordination/experiments/T3/20261106T1223Z-T3-chat-paired-glslang-a74c.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1223Z-T3-chat-paired-glslang-a74c.json"
+  ],
+  "experiment_key": "T3-PARTICLE108-ZIP2-4sourceSHA-4paired-VSFS-glslang-link-Vulkan1.1-entrypoint-stage-v1",
+  "resource_key": "T3-private-Particle108-4owner-paired-HLSL-glslang-runner",
+  "hypothesis": "glslangValidator -V -D -l compiling paired HLSL Vertex and Fragment may preserve semantic linking unlike independent -o stage compilation; verify both ExecutionModel Vertex and Fragment in single SPIRV, and test --hlsl-iomap/--auto-map-locations alternatives.",
+  "approach": "Use existing SHA-authentic four source owners six scenes, ephemerally recovered HLSL and single linked module per pair plus negative tests for malformed SPIRV, no private logs/bytecode/artifacts or source game edits; separate workflow non-Unity.",
+  "updated_at": "2026-11-06T12:20:55.037Z"
+}
