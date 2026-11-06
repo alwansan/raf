@@ -13,5 +13,10 @@
   "experiment_key": "T3-shader-declaration-synthetic-20261106",
   "shared_resource": "none; no CI/Unity",
   "taken_over_from": "T3 scheduled 20261106T0732Z-T3-scheduled-gate-syntax-b91e; original renderer/shader evidence inherited from B_TEAM",
-  "status": "planned"
+  "status": "source_fixed_pending_test",
+  "code_commit": "ba83733edbdaf0f2e8d81b2c95d654877ff74590",
+  "test_commit": "b8297d15974fed888d8d9a06bbad32be43353ef5",
+  "session_commit": "781d21f00c35cf3775b7f43c633555b85660e3f7",
+  "verification": "Fetched and inspected tests; no Python/CI run; no original Shader48 proof",
+  "next_step": "Run Python unittest then postrestore same-instance pinned shader/material identity comparison; keep RENDER-002 OPEN"
 }
