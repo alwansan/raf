@@ -1,0 +1,28 @@
+name: T3 Shader48 structural identity gate source tests
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_shader_identity_gate.py
+      - tests/test_t3_shader_identity_gate.py
+      - .github/workflows/raft-t3-shader-identity-gate-tests.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-shader48-identity-source-tests-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  structural-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python compile and exact structural-gate tests
+        run: |
+          python3 -m py_compile scripts/t3_shader_identity_gate.py tests/test_t3_shader_identity_gate.py
+          python3 -m unittest discover -s tests -p test_t3_shader_identity_gate.py -v
+      - name: State evidence boundary
+        run: echo "Source-only Python tests; no original shader provenance, Unity import, GPU pixels, or phone acceptance."
