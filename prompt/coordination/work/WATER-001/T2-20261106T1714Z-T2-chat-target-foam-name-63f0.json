@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1714Z-T2-chat-target-foam-name-63f0",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "original cross-file Foam Shader name and external Material target identity",
+  "approach": "Compare exactly the two newly SHA-authenticated external Material.m_Shader target Shader m_ParsedForm.m_Name values against original Foam Shader m_Name on authentic ZIP2 original objects in private runner; emit only comparisons/counters. Check source SerializedFile external GUID structural presence but do not assert target identity without independent GUID attestation.",
+  "status": "active",
+  "base_sha": "08b0215aab074689de9fe0daf62b8964f2473a02",
+  "intended_files": [
+    "scripts/t2_foam_original_target_name_relation.py",
+    "tests/test_t2_foam_original_target_name_relation.py",
+    ".github/workflows/raft-t2-foam-original-target-name-relation.yml",
+    "prompt/coordination/clients/T2/sessions/20261106T1714Z-T2-chat-target-foam-name-63f0.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1714Z-T2-chat-target-foam-name-63f0.json",
+    "prompt/coordination/experiments/T2/20261106T1714Z-T2-chat-target-foam-name-63f0.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1714Z-T2-chat-target-foam-name-63f0-result.json",
+    "docs/T2_FOAM_ORIGINAL_EXTERNAL_SHADER_NAME_RELATION_2026-11-06.md"
+  ],
+  "hypothesis": "The two newly authenticated external target Shader objects may or may not share the serialized original Foam Shader identity/name; a fail-closed exact-name comparison can separate direct name continuity from unrelated candidate shader objects.",
+  "experiment_key": "ZIP2-15964-SHAshared0-two-sourceOriginal-typed-target-Shader-mParsedFormName-exact-Foam2420-equality-v1",
+  "resource_key": "ZIP2-original-sharedassets0-external-file-targets-readonly",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1639Z-T2-chat-original-manifest-9d26.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1639Z-T2-chat-original-manifest-9d26.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1619Z-T2-scheduled-external-target-ambiguity-k8m2.md"
+  ],
+  "experiment_ids": [
+    "20261106T1714Z-T2-chat-target-foam-name-63f0"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Use the final original-manifest T2 verifier to stage authenticated target, compare target original Shader parsed names and Foam source serialized name in private runner, with sourcefree bad name/duplicate/unparsed cases; capture strictly aggregated safe result.",
+  "updated_at": "2026-11-06T17:13:44.882Z"
+}
