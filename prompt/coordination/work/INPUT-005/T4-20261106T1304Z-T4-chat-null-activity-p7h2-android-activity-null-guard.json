@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "track": "physical-mouse",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "6e498046b70129bfa255e248fc65292818f966fe",
   "approach": "Fail-soft Android Unity currentActivity lifecycle null guards on pointer capture request/probe/release; no change to real mouse motion, cursor policy, touch, OS intent, or Save/Load.",
   "intended_files": [
@@ -27,11 +27,17 @@
   ],
   "experiment_key": "T4-INPUT005-android-unityplayer-null-currentActivity-safe-dispatch-UI-probe-request-release-Unity2021-managedABI-v1",
   "resource_key": "T4-mouse-managed-source-only-no-Unity-build",
-  "experiment_ids": [],
-  "run_urls": [],
+  "experiment_ids": [
+    "20261106T1304Z-T4-chat-null-activity-p7h2"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42222687053",
+    "https://github.com/alwansan/raf/actions/runs/42222686931"
+  ],
   "result": null,
   "nonoverlap": "T4 separate active cross-process .rgd runner LOCAL-005 only; latest T4 scheduled source-provenance work completed; T1 FFT CI active. Only mouse bridge and existing mouse source tests; no heavy game CI.",
   "last_verified_result": "T4 CI42210561898 source log parser 22/22 success; T4 CI42208882663 native mouse source 47/47 and Unity2021 managed compile success; no post-marker owner APK.",
-  "next_step": "Implement activity null dispatch and callback guards, preserve fixed 8 telemetry labels, run original-authenticated T4 mouse bridge workflow and read actual logs.",
-  "updated_at": "2026-11-06T13:03:49.347Z"
+  "next_step": "Await exact SHA42222687053 T4 compile+ABI tests and 42222686931 platform CI; if failure, inspect job steps and fix; if pass, document source-only result and hand off device test to T5.",
+  "updated_at": "2026-11-06T13:06:21.272Z",
+  "implementation_commit": "0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1"
 }

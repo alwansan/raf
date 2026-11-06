@@ -19,3 +19,9 @@ Inspect `AndroidPhysicalMouseCapture.OnAndroidUi` and UI callbacks for missing `
 
 ## Next step
 Implement targeted guard and test, verify C# original managed ABI and CI, record resulting SHA/status and limitations in this session. Do not write state.json/MEMORY.md belonging to possibly concurrent T4 sessions.
+
+## Implementation checkpoint (source CI running)
+- Commit: [0f6632cd](https://github.com/alwansan/raf/commit/0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1). Only `AndroidPhysicalMouseCapture.cs` and `test_t4_pointer_view_identity_contract.py` changed.
+- OnAndroidUi explicitly guards null `UnityPlayer.currentActivity` with a caught InvalidOperationException; callback view lookups are null-aware. Probe and request fall back via `ObserveNativeCapture(..., false)`, release uses existing `ui_dispatch_exception` or `focus_view_unavailable` classes; no new arbitrary detail. Existing View identity, epoch and release logic unchanged.
+- Exact source mouse CI [42222687053](https://github.com/alwansan/raf/actions/runs/42222687053) and platform CI [42222686931](https://github.com/alwansan/raf/actions/runs/42222686931) were **in_progress** when recorded. Neither is a Unity game build or a phone test. No additional dispatch, cancellations, or workflow modification.
+- Resume: check both runs' conclusions and failed steps; keep experiment/work as waiting_ci until actual pass. Current C# compile is the known 2021 managed ABI check, not runtime Android JNI lifecycle execution.

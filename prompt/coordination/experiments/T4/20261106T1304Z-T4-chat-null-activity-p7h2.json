@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1304Z-T4-chat-null-activity-p7h2",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "UnityPlayer.currentActivity can be null across Android pause/destroy transitions. Existing OnAndroidUi and callback activity.Call paths may dereference it outside AndroidJavaException catches, interrupting safe capture release.",
+  "source_commit": "0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1",
+  "input_hashes": [],
+  "tool_versions": {
+    "Unity2021OriginalManagedABI": "workflow private exact original pinned DLL SHA"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_pointer_view_identity_contract.py -v",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=..."
+  ],
+  "negative_controls": [
+    "Null Activity dispatch must short-circuit before runOnUiThread.",
+    "All three UI callbacks must avoid dereferencing null Activity for getCurrentFocus.",
+    "Original View target identity, capture epoch and release categories unchanged."
+  ],
+  "workflow_path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42222687053",
+  "artifact_urls": [],
+  "budget": "existing 15min source-only workflow, no Unity native/player build",
+  "status": "waiting_ci",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Static regression checks and original Unity2021 C# ABI compile cannot exercise actual Android Activity teardown, JNI View, cursor, device mouse or game world.",
+    "No new phone APK+OBB or owner device logs."
+  ],
+  "integration_commit": "0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1",
+  "next_step": "Await exact SHA42222687053 T4 compile+ABI tests and 42222686931 platform CI; if failure, inspect job steps and fix; if pass, document source-only result and hand off device test to T5."
+}
