@@ -20,9 +20,13 @@
     "assertion": "Program.cs:148 Require(overflowRetained > 0) failed, proving zero dropped count after failed Append; old basic queue bound test passed and was an insufficient negative"
   },
   "green_test": {
-    "commit": "73cfdc1878607bdb185ab40cc527807c4e09f71f",
-    "run_url": "https://github.com/alwansan/raf/actions/runs/42248102165",
-    "status": "waiting_ci"
+    "commit": "f674025abb39242ec34ea978d0f17fd6da5d2627",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42248437096",
+    "status": "completed",
+    "conclusion": "success",
+    "job_id": 127996721173,
+    "managed_checks_passed": 285,
+    "androidDeviceVerified": false
   },
   "negative_controls": [
     "synthetic startup FileStream disposal with ioGate held prevents background worker race",
@@ -37,7 +41,8 @@
     "Unexpected no-op line-dropping can still occur on partially successful storage writes; this test covers append-throw rather than fsync/crash atomicity."
   ],
   "safety": "No original game worlds/Unity/Android phone data in CI; controlled private synthetic only, all game/asset/save serializations untouched.",
-  "next_step": "Inspect exact final CI42248102165. On success record event/T5 handoff; on failure revise only bounded diagnostic logger and tests.",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-06T16:00:21.278Z"
+  "next_step": "T5: include exact production commit 73cfdc1878607bdb185ab40cc527807c4e09f71f or later in one signed APK+matching OBB, track manifest/package/versionCode/source SHA and exact downloaded bytes. On owner phone stress log I/O while monitoring memory; confirm private first crash/first Save/Load event, startup/rotated segments and queue_overflow recovery without claiming absolute durability under power loss; separately test original real world save/force-stop/reopen and physical mouse. No new native build T4.",
+  "status": "completed_managed_source_ci_success_device_unverified",
+  "updated_at": "2026-11-06T16:02:33.842Z",
+  "observed_result": "Exact final source f674025abb39242ec34ea978d0f17fd6da5d2627 CI42248437096 COMPLETED SUCCESS, job 127996721173: RAFT_PERSISTENT_LOG_TEST checks=285 passed=true actualAndroidStorageVerified=false. Synthetic startup FileStream disposal (only test sink) + one queued seed + 24 alternating ordinary drops and critical attempts; original pending event and dropped count survive failed Append; after recovery flush writes both original event and queue_overflow JSONL; queueLimit 1 still respected. Existing Unicode JSONL/rotation/startup/shutdown/repetition tests also green. Earlier focused negative CI42247880072 failed at Program.cs:148 because overflow lost count was reset; CI42247352569 initial queue-cap-only test succeeded (initial unbounded-memory conjecture not proven). No Unity/Android/real RGD tested."
 }
