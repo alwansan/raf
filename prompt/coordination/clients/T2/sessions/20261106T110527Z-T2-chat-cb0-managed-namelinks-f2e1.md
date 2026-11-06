@@ -2,7 +2,7 @@
 
 - session_id: `20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1`
 - origin: `chat`
-- status: `active`
+- status: `completed_CB0_managed_literal_candidate_SHA_original_success`
 - base_sha: `da274472d3070d69a8377fbffc8253bca051b39b`
 - scope registration commit: `1ee74f3872781a9f2886bac42fa2ef32d403b1ca`
 - resumed_from_sessions: `20261106T103459Z-T2-chat-cb0-index-48bd` (original 2-pass compiled index proof), `20261106T101538Z-T2-scheduled-uploadtrace-6c8f` (original managed upload producer still unidentified).
@@ -14,5 +14,14 @@
 - planned: source-authenticate original Foam Shader + name indices, enumerate source CB0 vector/matrix member names in private scratch, hash only in private temporary input. Independently SHA-authenticate original managed DLL and statically scan Cecil `ldstr` plus typed Unity `Material`/`Shader`/`MaterialPropertyBlock` float/vector/matrix/color and constant buffer setters. Publish only bounded aggregate category counts; no symbols, exact register IDs, private SHA hashes, IL text, source or DLL.
 - strict limitation: same-method `ldstr` and setter occurrence is **a candidate lead, not original call-argument/source-to-upload dataflow proof**; no Unity draw, Android pixel, allocation, runtime branch execution, shader replacements, GUID/meta or other agent file writes.
 - actions at scope: no queued/in_progress. Other agents' current native/FFT workflows complete; do not interfere with their runtime CI.
-- run_urls: [].
-- next_step: implement isolated probes and tests, run original authenticated CI, record exact outcome and failure classes; then follow real typed call if found, otherwise document bounded negative and keep WATER-001 OPEN.
+- run_urls: [42208958212](https://github.com/alwansan/raf/actions/runs/42208958212) — **SUCCESS**, job `127862550030`.
+- next_step: inspect the actual IL argument stack for the sole source-matched vector literal near typed Material.SetFloat/SetVector; first-argument proof may be absent even when proximity exists. WATER-001 remains OPEN.
+
+## Original SHA-authenticated result — 2026-11-06T11:18Z
+
+- Added `scripts/t2_foam_private_cb0_managed_targets.py` (private original CB0 names hashes only), `tests/test_t2_foam_private_cb0_managed_targets.py` (11 source-free test methods), `android-port/Experiments/T2/FoamCb0ManagedLiterals/` with pinned Mono.Cecil 0.11.5 static managed scanner and selftest, and isolated `.github/workflows/raft-t2-foam-cb0-managed-literals.yml`. Workflow source commit `eb1db19f3cdd38b43f61fdf842899c1ad10d6f9b`.
+- Actual [CI42208958212](https://github.com/alwansan/raf/actions/runs/42208958212), job `127862550030`: **SUCCESS**. Original ZIP2 SHA owner, original 3,211,776B `Assembly-CSharp.dll` SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`, source-free 11/11, Cecil selftest, actual original 4 CB0 stage bindings passed; no raw original private data printed.
+- Genuine private original CB0 source registry: **1 distinct buffer name**, **5 distinct vector member names**, **0 matrix member names**, **0 unresolved member names**. Exact original managed `ldstr`: **0/1 buffer**, **3/5 vector names** (4 literal occurrences across four methods). Of those methods **one** contains an exact source name and typed public Unity uniform setter calls, **one** source name occurrence is followed within 16 IL instructions by typed `Material.SetFloat` and `Material.SetVector`; same occurrence may be near both calls. There were **489** typed uniform setter calls in all scanned original code; 19,512 methods, 491,490 IL instructions, 7,246 `ldstr` instructions.
+- **NOT PROVEN:** actual `ldstr` first argument to setter, original member offsets/dataflow, how globals or buffer fields are uploaded, Unity importer, Android water frames. Original exact serialized CB name absent as a literal does not imply absent engine/native setter. No source/game shader/Meta/GUID/collision with T1/T3/T4/T5 touched, and no extra native build triggered.
+- Memo: [CB0 original managed literal evidence](../../../../../docs/T2_FOAM_ORIGINAL_CB0_MANAGED_LITERAL_2026-11-06.md); experiment `prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.json`, canonical event `prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result.json`, work complete.
+- Next: separate conservative Cecil IL stack `ldstr`→actual first formal provenance check for typed `Material.SetFloat`/`SetVector`; no elevation of simple proximity.
