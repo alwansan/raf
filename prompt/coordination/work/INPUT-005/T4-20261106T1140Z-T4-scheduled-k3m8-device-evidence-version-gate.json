@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T1140Z-T4-scheduled-k3m8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "380edc11ca23dd1f59d3540811497aaf7aaab0ce",
+  "updated_at": "2026-11-06T11:40:00Z",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1140Z-T4-scheduled-k3m8-device-evidence-version-gate.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1140Z-T4-scheduled-k3m8.md",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1140Z-T4-scheduled-k3m8.json"
+  ],
+  "experiment_key": "T4-INPUT005-CL-520c4cf-pre-telemetry-vs-e06566a-native-release-marker-version-gate-v1",
+  "resource_key": "read-only-CL-pinned-520c4cf-no-Unity-no-phone",
+  "hypothesis": "2026-11-05 CL logs predate the new release-outcome telemetry and cannot establish Android release outcome; require signed artifact SHA/version matching before interpreting absent markers",
+  "resumed_from_sessions": [
+    "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+    "20261106T1042Z-T4-scheduled-f6n3"
+  ],
+  "taken_over_from": "T4 chat source-free JSONL parser CI42210561898",
+  "shared_resource": "none; read-only CL"
+}
