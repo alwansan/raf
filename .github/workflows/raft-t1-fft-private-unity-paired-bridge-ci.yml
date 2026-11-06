@@ -29,6 +29,7 @@ jobs:
           sparse-checkout: |
             scripts
             tests
+            .github/workflows
       - name: Enforce direct original-SPIRV, physical input and GPU CopyInput guards
         shell: bash
         run: |
