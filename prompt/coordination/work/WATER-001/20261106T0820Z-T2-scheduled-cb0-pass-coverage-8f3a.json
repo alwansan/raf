@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0820Z-T2-scheduled-cb0-pass-coverage-8f3a",
+  "origin": "scheduled",
+  "owner": "T2",
+  "issue": "WATER-001",
+  "status": "in_progress",
+  "base_sha": "6f8c3d970756d931056d52a103db52e8407d7c04",
+  "experiment_key": "foam-cb0-pass-coverage-source-gate-v1",
+  "hypothesis": "A one-pass CB0 evidence sample may falsely satisfy an expected two-pass source gate; require explicit pass coverage before a positive verdict.",
+  "files": [
+    "scripts/t2_foam_cb0_extent_gate.py",
+    "tests/test_t2_foam_cb0_extent_gate.py"
+  ],
+  "shared_resource": null,
+  "resumed_from_sessions": [
+    "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2"
+  ],
+  "taken_over_from": "T2 prior CB0 source gate; original run 42153150468",
+  "limits": "No original shader assets, Unity, GPU or device test; avoid T1/T3/T4/T5 files."
+}
