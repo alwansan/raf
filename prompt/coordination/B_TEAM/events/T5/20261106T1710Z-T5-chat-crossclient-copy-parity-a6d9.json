@@ -1,0 +1,21 @@
+{
+  "id": "20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9",
+  "owner": "T5",
+  "session_id": "20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T17:12:05.874Z",
+  "summary": "Fixed T5-managed compile source list refactor invalidating existing T4 literal adjacency tests (mouse and immersive), with no T4 runtime/test code change; T4 mouse CI42259099674 PASS, immersive CI42259099680 PASS, T5 original managed compile CI42259133117 PASS 5/5 own tests and zero C# compile errors; no Unity or device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42258089066",
+    "https://github.com/alwansan/raf/actions/runs/42258089028",
+    "https://github.com/alwansan/raf/actions/runs/42259099674",
+    "https://github.com/alwansan/raf/actions/runs/42259099680",
+    "https://github.com/alwansan/raf/actions/runs/42259133117",
+    "https://github.com/alwansan/raf/commit/905285215e6cbc5d72f480fa478bdbfc762cc775"
+  ],
+  "limits": [
+    "source-only T4 validation and managed original compile, not installed Android / full Unity scene success",
+    "P0 water/FFT and white visuals still open"
+  ]
+}
