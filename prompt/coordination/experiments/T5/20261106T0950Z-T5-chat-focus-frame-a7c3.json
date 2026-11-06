@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0950Z-T5-chat-focus-frame-a7c3",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "status": "source_integrated_ci_verified_phone_unverified",
+  "resumed_from_sessions": [
+    "20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
+    "20261106T0946Z-T5-scheduled-apk-zip-signature-n8c.md"
+  ],
+  "baseline_sha": "79e75191aad283072d639a14ab985a216ea7eec9",
+  "scope_commit": "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+  "test_commit": "c4cf247bcc4b84b257cb4769e6be9f8a0bb802fc",
+  "experiment_key": "T5-PERF-007-Unity-focus-pause-complete-five-second-frame-window-v1",
+  "hypothesis": "Focus-only Android system UI transitions can leave Unity frame windows mixing foreground and background; nextSample initial zero or overdue after pause yields one-frame first sample.",
+  "diagnosis": "Existing nextSample default zero and skipNextFrame never rescheduled a full interval; OnApplicationFocus only wrote a log without clearing counters. This is a code-path observation, not proven prior phone FPS impact.",
+  "changed_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_android_diagnostics_policy.py"
+  ],
+  "behavior": "Track focused/paused flags only in diagnostics; drop off-focus Update samples; restart complete 5-sec sampling on first foreground frame after startup/reentry; reset scene revisions at focus change; retain uninterrupted in-foreground scene loading frames and original FrameTimingManager/HUD, no input/gameplay changes.",
+  "evidence": [
+    {
+      "ci": "https://github.com/alwansan/raf/actions/runs/42198367607",
+      "sha": "c4cf247bcc4b84b257cb4769e6be9f8a0bb802fc",
+      "conclusion": "success",
+      "tests": "diagnostic source-policy 12/12",
+      "job_id": 127827219361
+    },
+    {
+      "ci": "https://github.com/alwansan/raf/actions/runs/42198282111",
+      "sha": "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+      "conclusion": "success"
+    },
+    {
+      "ci": "https://github.com/alwansan/raf/actions/runs/42198281963",
+      "sha": "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+      "conclusion": "success"
+    },
+    {
+      "ci": "https://github.com/alwansan/raf/actions/runs/42198281878",
+      "sha": "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+      "conclusion": "success"
+    }
+  ],
+  "uncertainty": "No Android Unity player built for this patch, no owner phone focus/resume trace, device performance improvement unverified. Source-only diagnostics policy and platform adapter CI do not assert Unity player integration.",
+  "next_step": "In a coordinated signed future Android test, capture focus false/true with no pause and a normal pause/resume; confirm no performance/sample during unfocused interval, first sample >=5sec after foreground restart, no single-frame sample, 6 scene-window provenance tags retained. Keep loading stutters in true foreground windows and compare APK+OBB hashes; P0 water/FX work is independent.",
+  "tools": "Direct source/C# lifecycle analysis; REA/jadx not applicable to a directly authored diagnostics C# source regression; no private assets read or published.",
+  "updated_at": "2026-11-06T09:54:00Z"
+}
