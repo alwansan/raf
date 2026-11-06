@@ -165,7 +165,7 @@ class PairTests(unittest.TestCase):
     def test_apk_encrypted_flag_rejected(self):
         payload = bytearray(self.apk.read_bytes())
         # Mutate one local and its matching central directory header.
-        for signature, offset in ((b"PK\\x03\\x04", 6), (b"PK\\x01\\x02", 8)):
+        for signature, offset in ((b"PK\x03\x04", 6), (b"PK\x01\x02", 8)):
             pos = payload.find(signature)
             self.assertGreaterEqual(pos, 0)
             flags = struct.unpack_from("<H", payload, pos + offset)[0]
