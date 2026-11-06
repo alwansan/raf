@@ -12,6 +12,7 @@ import tempfile
 
 from scripts.t1_fft_site2_y_cfg import analyze as site2y
 from scripts.t1_fft_site2_y_phi_recurrence import analyze as phi_ssa
+from scripts.t1_fft_site2_y_phi_path_tag import instrument as tag_phi_path
 from scripts.t1_fft_site2_y_phi_inputs import analyze as phi_census
 from scripts.probe_authentic_fft_dxbc_translation import (
     OWNER, PATH_ID, ORIGINAL_OBJECT_SHA256, EXPECTED_CONTAINERS)
@@ -143,6 +144,16 @@ def inspect(original_data):
         if phi_inputs.get("status") != "verified_translated_site2_y_phi_incoming_cfg":
             raise ValueError("Translated third-Y Phi input paths remain unverified")
         comparison["derived_site2_y_phi_inputs"] = phi_inputs
+        tag_text, tag_report = tag_phi_path(outputs[1])
+        tag_assembly = root / "private_phi_entry_backedge.spvasm"
+        tag_module = root / "private_phi_entry_backedge.spv"
+        tag_assembly.write_text(tag_text, encoding="utf-8")
+        private_command(["spirv-as", "--target-env", "vulkan1.1",
+                         "-o", str(tag_module), str(tag_assembly)], timeout=25)
+        private_command(["spirv-val", "--target-env", "vulkan1.1", str(tag_module)], timeout=25)
+        comparison["private_phi_entry_backedge_counter"] = {
+            **tag_report, "private_spirv_assembled_and_validated": True,
+        }
     return {
         "original_owner_and_serialized_compute_sha_verified": True,
         "original_compiled_slots_verified": 20,

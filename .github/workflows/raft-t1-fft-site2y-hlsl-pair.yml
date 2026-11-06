@@ -7,6 +7,8 @@ on:
       - scripts/t1_fft_site2_y_hlsl_pair.py
       - scripts/t1_fft_site2_y_phi_inputs.py
       - scripts/t1_fft_site2_y_phi_recurrence.py
+      - scripts/t1_fft_site2_y_phi_path_tag.py
+      - tests/test_t1_fft_site2_y_phi_path_tag.py
       - tests/test_t1_fft_site2_y_phi_recurrence.py
       - tests/test_t1_fft_site2_y_phi_inputs.py
       - tests/test_t1_fft_site2_y_hlsl_pair.py
@@ -38,7 +40,8 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_site2_y_hlsl_pair.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_inputs.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_recurrence.py -v
-          python3 -m py_compile scripts/t1_fft_site2_y_hlsl_pair.py
+          python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_path_tag.py -v
+          python3 -m py_compile scripts/t1_fft_site2_y_hlsl_pair.py scripts/t1_fft_site2_y_phi_path_tag.py
           echo 'RAFT_T1_FFT_SITE2Y_PAIR source_free=true actual_original=false'
 
   private-original-cpu:
