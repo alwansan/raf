@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "dc6518bbbfadbd6887be868cdc1ff3996ebb2e09",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3.md"
+  ],
+  "hypothesis": "Determine whether existing SHA-original Graphics.Blit four-argument evidence proves pass values; keep static-IL signature distinct from runtime pass value, avoid parallel scanner edits",
+  "experiment_key": "T2-original-Foam-Blit-pass-operand-evidence-reconcile-201e14ca-v1",
+  "resource_key": "read-only-original-CI42303074180",
+  "updated_at": "2026-11-06T22:18:00Z",
+  "resumed_from_sessions": [
+    "20261106T2211Z-T2-chat-blit-overload-b47a",
+    "20261106T2117Z-T2-scheduled-foam-ci-reconcile-k6m2"
+  ],
+  "notes": "Read-only verification of original SHA and safe CI result, while chat T2 owns Cecil scanner and pass literal trace; no duplicate CI or shared file changes."
+}
