@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T2250Z-T4-chat-runtime-postinstall-rollback-p9v3",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "updated_at": "2026-11-06T22:53:54.662Z",
+  "experiment_key": "T4-original-trace-post-write-foreign-CSharp-or-meta-rollback-synthetic-v1",
+  "source_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py"
+  ],
+  "baseline_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
+  "red_commit": "748562011da90ec95ee6121134a7866da7fcb4d1",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42307770698",
+  "red_result": "Original 18 tests pass, new synthetic test two subcases FAILED because postinstalled source/meta foreign epoch got old-source rollback or wrong error; 19 methods with two RED subtests overall.",
+  "green_commit": "5f31be4be6623b3077d8fbbfba34cf52c7e367fa",
+  "green_ci": "https://github.com/alwansan/raf/actions/runs/42307892688",
+  "green_job": 128201774638,
+  "green_result": "COMPLETED SUCCESS: original Python runtime operation tests 19/19; original Android local startup source integration read private source and managed compile exit=0 errorCodes={} affectedFiles=[].",
+  "secondary_ci": "https://github.com/alwansan/raf/actions/runs/42307892487",
+  "secondary_result": "COMPLETED SUCCESS: B22 source transaction 14/14 and operation trace 19/19.",
+  "safety_fix": "Track successfully installed source paths and the in-flight write; before any restoration of original C# check every staged source/meta is physically nonlinked and equals the expected original or our installed bytes. If foreign write/meta observed preserve the entire authentic backup and foreign source; restore only owned previously written or possibly torn in-flight files otherwise.",
+  "limitations": [
+    "Not an atomic interprocess source lock; race after last ownership check remains possible.",
+    "An exception thrown inside a partially completed write remains best-effort rollback and can be ambiguous if a second writer interleaves inside that same failed operation.",
+    "No on-device world save/RGD reload, no Unity native APK, no game source/metadata modifications.",
+    "Original owner phone save/reopen only bounded to older 42058825739."
+  ],
+  "native_running_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "native_immutable_source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+  "vote": "T4 needs physical mouse acceptance, unchanged",
+  "project_readiness": "NOT_READY 0/3"
+}
