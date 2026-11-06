@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2008Z-T4-chat-save-exception-proof-m5r8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "original-save-exception-boundary-evidence",
+  "status": "active",
+  "base_sha": "8c5050d2cc6eec90cee4cb189f3aa0f01cfc0455",
+  "approach": "Verify original SaveGame/SaveWorld/SaveUser/Save exceptions cannot be misreported as completed cycles when original finally logs nonzero files. Add strict C# EndOperation exit classification (exceptionEscaped=False) and fail-closed unexpected exception/unavailable snapshot. RED synthetic negative examples then GREEN same SHA immutable CL@520c4cf evidence. No original world payload or game code change.",
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "experiment_key": "T4-owner-CL-5nov-SaveGame-exceptionEscaped-and-exception-marker-failclosed-v1",
+  "resource_key": "T4-owner5nov-sourceonly-log-cycle-no-native",
+  "related_work": [
+    "20261106T1959Z-T4-chat-save-snapshot-cardinality-k8p4",
+    "20261106T1957Z-T4-chat-profile-durable-create-q7b3"
+  ],
+  "concurrent_work": "Latest T4 scheduled 20261106T1943Z-T4-scheduled-r6k2 owns INPUT-005; T4 profile 20261106T1957Z completed. Existing owner-direct native run42281310905 in_progress at older source SHA d6924001; not launched/modified.",
+  "run_urls": [],
+  "updated_at": "2026-11-06T20:08:00Z",
+  "next_step": "Publish new tests first; old verifier should fail to reject original Save.exception, SaveWorld.exception, SaveGame.exit exceptionEscaped=True, and Save.argumentFileSnapshot.unavailable. Then minimal production classifier and original owner CL regression."
+}
