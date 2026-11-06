@@ -175,6 +175,38 @@ class MilestoneGateTests(unittest.TestCase):
         self.assertTrue(result["water_documented_trial_gate_passed"])
         self.assertFalse(result["published_release_asset_digest_verified"])
 
+    def test_full_github_job_allows_repeated_unrelated_action_step_labels(self):
+        # Official immutable run42281310905 has two checkout actions and
+        # multiple setup-dotnet actions, with the same GitHub step names.
+        # Those are NOT duplicated trust milestones. All official step
+        # numbers must still be strictly increasing and distinct.
+        for stage in self.stages():
+            if stage["number"] >= 43:
+                stage["number"] += 2
+        for number in (43, 44):
+            self.stages().insert(2 + number - 43, {
+                "number": number, "name": "Run actions/checkout@v4",
+                "status": "completed", "conclusion": "success",
+            })
+        result = self.result()
+        self.assertEqual(result["phase"], "unity_editor_in_progress")
+        self.assertEqual(result["milestones"]["scenes"], "success")
+        self.assertFalse(result["published_release_asset_digest_verified"])
+
+    def test_repeated_required_milestone_name_is_still_rejected(self):
+        # Two true Unity Editor milestones is ambiguous even if ordered
+        # and both appear to have success: the aggregate must fail closed.
+        for stage in self.stages():
+            if stage["number"] >= 62:
+                stage["number"] += 1
+        self.stages().insert(4, {
+            "number": 62,
+            "name": "Unity Editor 2021.3.45f2 Android import and compile",
+            "status": "completed", "conclusion": "success",
+        })
+        with self.assertRaisesRegex(ValueError, "Duplicate milestone"):
+            self.result()
+
     def test_new_step_name_cannot_replace_an_authentic_milestone(self):
         self.stages()[2]["name"] = "T5 read-only unrelated diagnostic"
         with self.assertRaisesRegex(ValueError, "milestone"):
