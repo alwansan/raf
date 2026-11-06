@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "waiting_ci",
+  "experiment_key": "T5-real-installed-OBB-Unity-ZIP-path-empty-duplicate-entry-order-synthetic-strict-v1",
+  "source_commit": "4b78710027607801a1620af29c65f04b45b45fa1",
+  "workflow_path": ".github/workflows/raft-t5-installed-obb-read-probe.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42272184563",
+  "tool_versions": {
+    "dotnet": "8.0.x",
+    "runner": "ubuntu-24.04"
+  },
+  "hypothesis": "Unity zero-length duplicate ZIP central-directory name was not registered in HashSet; must report ambiguous_unity_data in either alias order before first byte.",
+  "negative_controls": [
+    "nonempty then empty same Unity ZIP path",
+    "empty then nonempty same Unity ZIP path",
+    "existing nonempty duplicate rejection",
+    "valid one nonempty Unity entry with five original bank routes remains readable",
+    "reject before first byte without exposing physical path",
+    "missing, empty, invalid and stale OBB behavior unchanged"
+  ],
+  "expected_checks": 35,
+  "observed_result": null,
+  "actual_phone_tested": false,
+  "original_obb_tested": false,
+  "limits": [
+    "source-only diagnostic, original game resources not executed",
+    "no real on-phone Unity/FMOD/water/FX/performance evidence",
+    "no Android native trial request due to 1/5 YES"
+  ],
+  "next_step": "Inspect exact source-pinned CI42272184563 and mark final outcome; no duplicate dispatch."
+}
