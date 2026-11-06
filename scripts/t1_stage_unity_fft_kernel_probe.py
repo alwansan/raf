@@ -70,6 +70,7 @@ def validate_private_manifest(manifest, compute_bytes):
     if not isinstance(rows, list) or len(rows) != 20:
         raise ValueError("Expected exactly 20 original compiled candidate rows")
     used = set()
+    selectors = set()
     for row in rows:
         if not isinstance(row, dict) or set(row) != {
             "compiled_slot", "resolution", "bank", "pass_index",
@@ -94,11 +95,20 @@ def validate_private_manifest(manifest, compute_bytes):
                 any(not isinstance(k, str) or not IDENTIFIER.fullmatch(k) for k in keywords) or
                 len(set(keywords)) != len(keywords)):
             raise ValueError("Private kernel keywords invalid")
+        # Two distinct original compiled slots cannot be distinguished by this
+        # probe if the named authored kernel and enabled keyword SET coincide.
+        # This checks declared selector uniqueness, not Unity compilation or
+        # original author runtime identity: arbitrary keywords remain unproven.
+        selector = (name, tuple(sorted(keywords)))
+        if selector in selectors:
+            raise ValueError("Ambiguous original FFT kernel/keyword selector alias")
+        selectors.add(selector)
     if used != set(range(20)):
         raise ValueError("Incomplete original compiled candidate coverage")
     return {
         "compiled_candidate_rows": len(used),
         "unique_authored_kernel_names": len(set(r["kernel_name"] for r in rows)),
+        "distinct_declared_kernel_keyword_selectors": len(selectors),
         "source_only_stage": True,
         "original_unity_runtime_mapping_proven": False,
     }
