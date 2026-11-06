@@ -1,10 +1,5 @@
 name: T3 RENDER-002 SHA original Shader48 dual explicit VKD3D A/B proof d52e
 on:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - 'prompt/coordination/trigger/T3/20261106T2007Z-T3-chat-explicit-original-d52e.txt'
   workflow_dispatch:
 permissions:
   contents: read
