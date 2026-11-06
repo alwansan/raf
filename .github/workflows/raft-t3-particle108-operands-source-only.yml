@@ -1,0 +1,35 @@
+name: T3 RENDER-002 source-only D3D11 DXBC declaration-operand controls
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t3_particle108_original_dxbc_operand_bindings.py
+      - tests/test_t3_particle108_original_dxbc_operand_bindings.py
+      - .github/workflows/raft-t3-particle108-operands-source-only.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-dxbc-decl-operand-sourcefree-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate 13 strict D3D11 operand parsing controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_dxbc_operand_bindings.py tests/test_t3_particle108_original_dxbc_operand_bindings.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_operand_bindings.py' -v
