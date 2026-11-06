@@ -12,7 +12,8 @@ from pathlib import Path
 from scripts.b20_foam_cb_descriptor_lineage import SOURCE_SLOTS
 from scripts.b25_foam_cb_namebridge import original_name_registry, inspect_parsed
 from scripts.t2_foam_member_abi import STAGES, original_source_tree, original_members, _physical
-from scripts.b24_original_foam_stage_translation import TARGET, validate_stage
+from scripts.b24_original_foam_stage_translation import TARGET, OWNER, validate_stage
+from scripts.w1_stage_zip2_owners import PINS, fingerprint
 
 MAX_NAMES = 128
 MAX_INPUT_BYTES = 4096
