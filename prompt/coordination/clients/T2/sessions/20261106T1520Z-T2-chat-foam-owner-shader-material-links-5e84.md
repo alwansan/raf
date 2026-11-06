@@ -1,0 +1,10 @@
+# T2 — original Foam Shader owner Material references and private Shader.Find name census
+
+- session_id: `20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84`; origin: `chat`; status: `active`.
+- base_sha: `71212a9a6f8c710b8a5064f5a3b48f0f190f1326`, work registered commit `e30af84eb3631a5903de91fc3f378666cac01463`, [work](../../../work/WATER-001/T2-20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84.json).
+- resumed_from_sessions: `20261106T1340Z-T2-chat-shader-stfld-source-a84d` (definitive negative [CI42229056366](https://github.com/alwansan/raf/actions/runs/42229056366) SUCCESS: same actual Shader.Find first string argument **differs** from original Foam Shader serialized m_Name), latest scheduled `20261106T1423Z-T2-scheduled-cecil-diagnostics-f6c1` (refers to old CS0136/CS1929 compile failure already corrected by chat and later CI success).
+- original source pinned: ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; owner `Raft_Data/sharedassets0.assets` 115978112B SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`; original Foam Shader PathID2420 SHA256 `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
+- experiment: `ZIP2-SHA15964-original-sharedassets0-ShaderFind-private-name-census-and-local-FoamShader-PathID2420-Material-refs-v1`.
+- question: does genuine original Shader.Find name match a *different* original Shader in this owner, and do genuine Material objects within this owner have same-file `m_Shader` references to PathID2420? Only exact fileID0/pathID2420 count qualifies as direct local association. Neither absence nor match alone proves other owners, runtime asset resolution or CB0 upload.
+- intended_files: own Python original private name/census script, synthetic test, existing T2 source-only managed checker/workflow, experiment/event/report and this session. No Unity game source shader/meta/GUID/audio/Settings/touch/save/input or native build, no T1/T3/T4/T5 files touched.
+- no run launched or outcome asserted yet. Next: implement tight privacy/shape guards and source-authentic CI, report only safe finite aggregate counts.
