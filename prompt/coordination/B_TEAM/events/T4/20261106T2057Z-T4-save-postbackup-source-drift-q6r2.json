@@ -1,0 +1,15 @@
+{
+  "id": "T4-20261106T2057Z-save-postbackup-source-drift-q6r2",
+  "owner": "T4",
+  "session_id": "20261106T2052Z-T4-chat-save-stage-stale-q6r2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "SaveAndLoad original path adapter could overwrite concurrent source or start modifying C# after GUID .meta changed following verified backup promotion; deterministic RED 2 injected cases on CI42292236717. Fix 5d374392 checks original source, GUID metadata, links and nlink after backup, before source write; removes owned backup and preserves external changes on drift. GREEN original ZIP2 SaveAndLoad authentic CI42292421337 16/16 source tests and original 16 path expressions plus 14 Unix/Windows checks. No new Unity Android or same-world .rgd phone acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42292236717",
+    "https://github.com/alwansan/raf/commit/5d3743920eaead00ac40d6ad863f53c638629a76",
+    "https://github.com/alwansan/raf/actions/runs/42292421337"
+  ],
+  "at": "2026-11-06T20:57:00Z"
+}
