@@ -5,10 +5,10 @@
   "session_id": "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "track": "original Foam exact Material(Shader) constructor returned Material typed IL destination and renderer assignment proof",
   "base_sha": "29a9463d42a08e020c0a65389f640682b72377d7",
-  "updated_at": "2026-11-06T19:42:00Z",
+  "updated_at": "2026-11-06T20:00:00Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.json",
     "prompt/coordination/clients/T2/sessions/20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.md",
@@ -27,12 +27,50 @@
     "20261106T1921Z-T2-scheduled-shaderfind-ci-reconcile-c6e4",
     "20261106T1900Z-T2-chat-scene-script-typed-6f9a"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Extend existing proven T2 Cecil scanner/validator in own files, fail-closed exact immediate Material return dataflow & typed renderer assignment call, original SHA CI, safe counts-only; do not touch native run 42281310905 or other workers.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42282679089",
+    "https://github.com/alwansan/raf/actions/runs/42283382388",
+    "https://github.com/alwansan/raf/actions/runs/42284117891"
+  ],
+  "result": {
+    "source_commit": "289b9711a1e26118a0af921c43b1a86112919328",
+    "original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "success_run": "https://github.com/alwansan/raf/actions/runs/42284117891",
+    "success_job": 128120397510,
+    "source_free_report_tests": 44,
+    "source_free_original_name_tests": 6,
+    "cecil_selftest": "pass",
+    "original_Foam_Shader_owner_bytes_SHA_authenticated": 115978112,
+    "original_Assembly_CSharp_bytes_SHA_authenticated": 3211776,
+    "original_managed_method_bodies": 19118,
+    "original_managed_IL_instructions": 491490,
+    "original_typed_Shader_Find_calls": 81,
+    "original_Foam_exact_direct_Shader_Find_calls": 1,
+    "original_Foam_Shader_instance_field_stores": 1,
+    "original_Shader_field_loads": 2,
+    "original_Shader_field_load_direct_Material_ctor": 1,
+    "original_Material_ctor_followed_by_dup": 1,
+    "original_Material_alias_instructions_inspected": 5,
+    "original_Material_alias_ambiguous_branches": 0,
+    "original_Material_alias_typed_instance_method_calls": 1,
+    "original_Material_alias_field_stores_to_exact_original_Material_definition": 1,
+    "original_Material_exact_field_loads": 13,
+    "distinct_original_managed_methods_loading_Material_field": 4,
+    "original_Material_field_direct_Renderer_set_material_arguments": 0,
+    "original_Material_field_direct_Renderer_set_sharedMaterial_arguments": 0,
+    "original_Unity_runtime_execution_confirmed": false,
+    "original_water_material_actual_draw_binding_confirmed": false,
+    "original_Foam_CB0_upload_confirmed": false,
+    "Android_water_pixels_confirmed": false,
+    "safe_artifact_id": 13535764546,
+    "safe_artifact_zip_bytes": 1101,
+    "safe_artifact_zip_sha256": "da58031b87164cf7ca62876f2810c5adc76e827801df9bd9daee93f6ee837cf8"
+  },
+  "next_step": "Follow 13 source-original Material field reads through typed Graphics, CommandBuffer, Material and actual Unity drawing APIs; join declaring TypeDef with 427 scene-referenced classes, then only real runtime integration and Adreno pixels; do not infer from no adjacent Renderer setter.",
   "trial_vote": "لا يحتاج",
   "native_build_observed_running": "https://github.com/alwansan/raf/actions/runs/42281310905",
   "related_work": [
     "prompt/coordination/work/WATER-001/T2-20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4.json"
-  ]
+  ],
+  "integration_commit": "289b9711a1e26118a0af921c43b1a86112919328"
 }

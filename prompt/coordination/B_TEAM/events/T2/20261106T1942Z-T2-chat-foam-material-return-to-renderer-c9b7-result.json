@@ -1,0 +1,17 @@
+{
+  "id": "T2-20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7-material-alias-original-field-13loads",
+  "event_id": "T2-20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7-material-alias-original-field-13loads",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7",
+  "issue_id": "WATER-001",
+  "type": "original_managed_IL_evidence",
+  "at": "2026-11-06T20:00:00Z",
+  "summary": "On immutable ZIP2 original SHA, Foam Shader.Find->original Shader instance field->Material(Shader) creates 1 Material; dup copies it, 1 typed Material instance call and 1 exact original Material field store in 5 linear IL instructions with 0 branch boundaries. That exact original field has 13 IL loads in 4 methods; 0 adjacent Renderer.set_material/sharedMaterial args, no runtime drawing proof. Source-only CI42284117891 success, 44+6 tests+Cecil selftest.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42284117891",
+  "report": "docs/T2_ORIGINAL_FOAM_MATERIAL_RETURN_TRACE_2026-11-06.md",
+  "source_sha": "289b9711a1e26118a0af921c43b1a86112919328",
+  "original_assets_exposed": false,
+  "game_ready": false,
+  "water_device_verified": false
+}
