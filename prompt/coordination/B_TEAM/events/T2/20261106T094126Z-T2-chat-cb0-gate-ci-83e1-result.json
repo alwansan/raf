@@ -17,5 +17,7 @@
     "workflow_file": ".github/workflows/raft-t2-foam-cb0-gate-smoke.yml"
   },
   "status": "SOURCE_FIXED_SOURCE_ONLY_GUARD_WATER_OPEN",
-  "next_step": "Privately authenticate both original Foam pass CB0 member offsets/types and their Unity material upload; only then wire original ShaderLab and perform Unity/Adreno validation."
+  "next_step": "Privately authenticate both original Foam pass CB0 member offsets/types and their Unity material upload; only then wire original ShaderLab and perform Unity/Adreno validation.",
+  "id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result",
+  "owner": "T2"
 }
