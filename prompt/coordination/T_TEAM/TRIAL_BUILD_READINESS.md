@@ -36,3 +36,14 @@
 - إذا انتهى عملك وصرت تنتظر هاتفاً، استمر في مساعدة العمال الآخرين أو سد عائق بديل؛ لا تتوقف عن العمل.
 
 **فحص اختياري لـT5:** python3 scripts/t_team_trial_votes.py --require-consensus — يفشل عند نقص/قدم/تعارض الأصوات؛ نجاحه لا يشغّل أي بناء ولا يعني READY.
+
+<!-- T5_OWNER_DIRECT_42281310905 -->
+## استثناء مستقل: أمر بناء مباشر من المالك — مراجعة T5 بتاريخ 2026-11-06 19:55 UTC
+
+- **هذا ليس تصويت 5/5 ولا تغييرا للأصوات.** الجولة `trial-20261106-r1` تبقى `COLLECTING`: T1/T2/T3/T5 «لا يحتاج»، وT4 «يحتاج». لا تنسب قرار المالك المباشر إلى العمال أو توحي أن إجماعهم تحقق.
+- أضاف المالك بنفسه طلبا واضحا في `.github/raft-native-build-request.json`: `request_id=owner-direct-20261106-latest-integrated-trial-xapk-42058825739-01`، `owner_direct_request=true`؛ ينص على أن أمره الأحدث يتجاوز **شرط توقيت تصويت الفريق لهذا الطلب الواحد فقط** دون تجاوز بوابات الأصالة أو توقيع APK أو الوثائق.
+- [GitHub Actions **42281310905**](https://github.com/alwansan/raf/actions/runs/42281310905) أطلقه commit مباشر من `alwansan` بتاريخ 2026-11-06 19:37 UTC عبر `push`، **source SHA مستقل ثابت `d692400115c36c4839fa4f4954e5f6ed1c60d413`**، وليس HEAD الحالي.
+- **نقطة الفحص 19:54 UTC:** `in_progress`، `native-request-gate=success`، `unity-license-preflight=success`، `reconstruct` جار. ثبت نجاح تصدير 40 مشهدا وB04 Linear وB11 sRGB واستعادة 2021.3.45f2 built-in shaders، ووصل إلى استعادة ScriptableObjects. **لم يحدث بعد Unity Editor APK/OBB/XAPK مكتمل أو تثبيت جهاز، وأية خطوة مستقبلية pending لا تُعد نجاحا**.
+- هذا التشغيل بدأ **قبل** إضافة T5 لفحص B46 الفعلي `Material→Texture`، commit `8789a710e21c5cbd48f7bec97a509bbd16a574c3`، وقبل إصلاح تباين أرقام مراحل CI `281aec74d74f31f84d0e5442052e502cfbaa60f0`. لا تدّع إدماج هذه التغييرات في الحزمة من run42281310905، ولا تعيد تشغيل Unity للتعويض أثناء عمله. التغييرات اللاحقة تُفحص لمرشح لاحق فقط.
+- **حدود الاستثناء:** لا إلغاء للتشغيل، لا dispatch مكرر، لا تغيير `.meta`/GUID أو شيدرات وهمية، لا تزوير جاهزية 3/3، لا ادعاء Release أو Android GPU قبل تحقق الشروط والأدلة. راجع حالة Actions الحية لا نص هذه اللقطة عند الاستكمال.
+- **سجل T5 مستقل:** [`20261106T1950Z-T5-chat-native-stage-shift-4c6b`](../clients/T5/sessions/20261106T1950Z-T5-chat-native-stage-shift-4c6b.md)؛ هذا توثيق مراقبة أصل طلب المالك، وليس تبنيا لتصويت آخر.
