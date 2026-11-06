@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "DISPLAY-003",
   "track": "Original Settings delegate compiled IL reachability",
-  "status": "active",
+  "status": "completed_source_verified_delegate_nonreachability",
   "base_sha": "c40742978308ce801054649b48383751f58858a4",
-  "updated_at": "2026-11-06T11:04:00Z",
+  "updated_at": "2026-11-06T11:14:00Z",
   "resumed_from_sessions": [
     "20261106T1030Z-T5-chat-resolution-il-4b9e.md",
     "20261106T1046Z-T5-scheduled-pair-success-q6f8.md"
@@ -36,5 +36,25 @@
     "no private IL publication",
     "no gameplay Settings changes"
   ],
-  "next_step": "Implement independent Cecil topology analyzer and fail-closed gate, test on original in separate CI, save source-only result."
+  "next_step": "Inspect original three ApplyCurrentResolution callsites and serialized UI/other-type callback links on immutable source; no Android Settings mutation until confirmed.",
+  "source_commit": "689d45d290b9ef3efd0e439b70dc60903495a058",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42208532103"
+  ],
+  "result": {
+    "ci_conclusion": "success",
+    "run_id": 42208532103,
+    "job_id": 127861131183,
+    "source_only": true,
+    "python_tests": "9/9",
+    "cecil_synthetic_checks": "5/5",
+    "original_delegate_sites": 2,
+    "unique_resolved_original_methods": 1,
+    "same_type_graph_edges": 22,
+    "same_type_calls_unresolved": 0,
+    "delegate_target_reaches_resolution": false,
+    "option_population_reaches_resolution": false,
+    "android_ui_persistence_proven": false,
+    "device_tested": false
+  }
 }
