@@ -1,0 +1,19 @@
+{
+  "id": "20261106T213843Z-T1-chat-axis-overlap-0ba942",
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T213843Z-T1-chat-axis-overlap-0ba942",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T21:43:24Z",
+  "status": "completed",
+  "summary": "New source-only 11/11 CI guard computes safe x/y coordinate-zero-collapse co-occurrence bounds for previously real original-Vulkan vs Unity FFT site counts; site2 mismatch 64/64 with x-zero63 and y-zero64 forces exact overlap63, not 127 independent errors. No new GPU test, kernel restoration, Android water proof or native dispatch.",
+  "proof_urls": [
+    "https://github.com/alwansan/raf/commit/14dbce3773ed4a69f9855a949ea24c88d438d3ce",
+    "https://github.com/alwansan/raf/actions/runs/42298969328",
+    "https://github.com/alwansan/raf/actions/runs/42289238865",
+    "https://github.com/alwansan/raf/actions/runs/42290211798"
+  ],
+  "vote": "لا يحتاج",
+  "no_proprietary_shader_or_pixel_export": true
+}

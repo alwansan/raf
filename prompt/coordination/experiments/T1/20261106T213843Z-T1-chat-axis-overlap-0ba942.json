@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T213843Z-T1-chat-axis-overlap-0ba942",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "t1-fft-real-gpu-vulkan-unity-42289238865-42290211798-keyed-axis-frechet-overlap-source-only-v1",
+  "source_commits": [
+    "14dbce3773ed4a69f9855a949ea24c88d438d3ce"
+  ],
+  "input_evidence": [
+    {
+      "run": 42289238865,
+      "kind": "previous_actual_original_vulkan_vs_unity_aggregate"
+    },
+    {
+      "run": 42290211798,
+      "kind": "previous_real_gpu_integer_source_counterfactual_aggregate"
+    }
+  ],
+  "source_only_ci": {
+    "run": 42298969328,
+    "job": 128171469124,
+    "conclusion": "success",
+    "tests": 11
+  },
+  "counts": {
+    "baseline": {
+      "mismatches": [
+        63,
+        252,
+        64
+      ],
+      "x_zero": [
+        63,
+        252,
+        63
+      ],
+      "y_zero": [
+        0,
+        0,
+        64
+      ]
+    },
+    "integer_source": {
+      "mismatches": [
+        0,
+        252,
+        64
+      ],
+      "x_zero": [
+        0,
+        252,
+        63
+      ],
+      "y_zero": [
+        0,
+        0,
+        64
+      ]
+    }
+  },
+  "overlap_site2": {
+    "intersection_lower_bound": 63,
+    "intersection_upper_bound": 63,
+    "union_lower_bound": 64,
+    "union_upper_bound": 64
+  },
+  "proven": "mathematical lower/upper overlap bounds for previously reported site2 read coordinates",
+  "not_proven": [
+    "new_original_GPU_run",
+    "signed_source_identity_by_this_tool",
+    "independent_per_invocation_trace",
+    "numeric_FFT_parity",
+    "authored_Unity_runtime_FindKernel",
+    "Android_Adreno_or_water"
+  ],
+  "next_step": "Use SHA-authenticated original FFT SPIR-V to establish site2 Y reaching-store, conditional branch and signed-bit producer; propose source-preserving butterfly coordinate transformation; compare actual original Vulkan vs Unity on pinned 1024x32 seed19 fixture only after native42296450023 completes/runner contention clears. No production shader fix before actual full numeric pass parity and authored Unity runtime mapping."
+}

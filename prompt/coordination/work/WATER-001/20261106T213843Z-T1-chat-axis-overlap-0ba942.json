@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T213843Z-T1-chat-axis-overlap-0ba942",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1d608192634db991e246b812f84ead1ec422810c",
   "resumed_from_sessions": [
     "20261106T2114Z-T1-scheduled-axis-coverage-p7m2",
@@ -27,5 +27,23 @@
     "20261106T2052Z-T1-chat-actual-variant-comparator-e28c"
   ],
   "execution_plan": "Implement a sound x/y overlap interval derived from per-site coordinate mismatch and zero-collapse aggregate counts after existing strict source-only marker validation; adversarial tests, no raw private logs committed.",
-  "updated_at": "2026-11-06T21:38:43Z"
+  "updated_at": "2026-11-06T21:43:24Z",
+  "result": {
+    "source_commit": "14dbce3773ed4a69f9855a949ea24c88d438d3ce",
+    "workflow": ".github/workflows/raft-t1-fft-axis-overlap-source.yml",
+    "ci_run_id": 42298969328,
+    "ci_job_id": 128171469124,
+    "ci_conclusion": "success",
+    "synthetic_tests_passed": 11,
+    "site2_coordinate_mismatching_invocations": 64,
+    "site2_y_zero_collapse_invocations": 64,
+    "site2_x_zero_collapse_invocations": 63,
+    "site2_x_y_overlap_min": 63,
+    "site2_x_y_overlap_max": 63,
+    "site1_x_zero_collapse_invocations": 252,
+    "original_new_private_gpu_test_run": false,
+    "source_only_math_and_public_log_aggregates": true,
+    "authored_unity_kernel_or_android_water_proven": false
+  },
+  "next_step": "Use SHA-authenticated original FFT SPIR-V to establish site2 Y reaching-store, conditional branch and signed-bit producer; propose source-preserving butterfly coordinate transformation; compare actual original Vulkan vs Unity on pinned 1024x32 seed19 fixture only after native42296450023 completes/runner contention clears. No production shader fix before actual full numeric pass parity and authored Unity runtime mapping."
 }
