@@ -35,6 +35,23 @@ class IdentityGateTests(unittest.TestCase):
         self.material(f"  m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}} # authored\n")
         self.assertEqual(check(self.root, self.manifest)["matched_materials"], 1)
 
+    def test_empty_shader_rejected(self):
+        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n")
+        (self.root / "particle.shader").write_text("")
+        with self.assertRaisesRegex(ValueError, "missing_shader_declaration"):
+            check(self.root, self.manifest)
+
+    def test_comment_only_shader_rejected(self):
+        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n")
+        (self.root / "particle.shader").write_text("// Shader \"Fake\" { }\n")
+        with self.assertRaisesRegex(ValueError, "missing_shader_declaration"):
+            check(self.root, self.manifest)
+
+    def test_multiline_shader_declaration_accepted(self):
+        self.material(f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n")
+        (self.root / "particle.shader").write_text('Shader "Test"\n{ SubShader { Pass {} } }')
+        self.assertEqual(check(self.root, self.manifest)["status"], "STRUCTURAL_LINK_ONLY")
+
     def test_duplicate_real_pointer_rejected(self):
         line = f"m_Shader: {{fileID: 4800000, guid: {GUID}, type: 3}}\n"
         self.material(line + line)
