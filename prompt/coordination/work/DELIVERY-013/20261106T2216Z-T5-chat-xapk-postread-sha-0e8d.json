@@ -4,9 +4,9 @@
   "session_id": "20261106T2216Z-T5-chat-xapk-postread-sha-0e8d",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4e12e5957054b992d90a3c362fea5288ec5609c7",
-  "updated_at": "2026-11-06T22:14:22.262Z",
+  "updated_at": "2026-11-06T22:18:58.355Z",
   "resumed_from_sessions": [
     "20261106T2207Z-T5-chat-strict-xapk-json-92e4",
     "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
@@ -25,5 +25,20 @@
   "experiment_key": "T5-DELIVERY-013-source-44263e2-posthash-xapk-localheader-same-size-swap-source-only-v1",
   "resource_key": "T5 synthetic Python CI only, no Unity/no native assets",
   "coordination": "Independent T5 verifier source and isolated CI. T5 scheduled native checkpoint does not own these two files. T1 FFT, T2 Foam, T3 rendering, T4 local saves untouched; native 42296450023 still immutable a1737bd7 in_progress. No trial build dispatch.",
-  "next_step": "Add second-pass SHA authentication after ZIP member read and deterministic local-header timestamp mutation test; run immutable CI and preserve red/green evidence."
+  "next_step": "Native 42296450023 remains in progress. On completion check build result, authentic signed APK/OBB/XAPK artifacts and immutable input SHA; run new read-only checker only on complete source-verified files. New verifier fix source-only, not part of immutable a1737bd7 native build. T5 trial vote remains no need (1/5 YES from T4) and NOT_READY 0/3.",
+  "result": {
+    "baseline_commit": "44263e26419e9d3dda91930ecc28784a98d46f3b",
+    "failing_regression_test_commit": "8d925bddc39b1e7d5ecf347dc23a8af69880749b",
+    "red_ci": "https://github.com/alwansan/raf/actions/runs/42303397526",
+    "red_result": "FAILED 1/10, ValueError not raised, old verifier false-accepted same-size ZIP local header mutation between pre-SHA and nested read",
+    "fix_commit": "dc6518bbbfadbd6887be868cdc1ff3996ebb2e09",
+    "green_ci": "https://github.com/alwansan/raf/actions/runs/42303533044",
+    "green_result": "COMPLETED SUCCESS 10/10",
+    "additional_full_file_hash_reads": 0,
+    "unity_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+    "unity_source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+    "unity_status": "in_progress Unity Editor Android import and compile",
+    "signed_raft_payload_attested": false,
+    "device_verified": false
+  }
 }

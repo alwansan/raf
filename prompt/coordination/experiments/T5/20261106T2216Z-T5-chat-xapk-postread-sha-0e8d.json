@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2216Z-T5-chat-xapk-postread-sha-0e8d",
+  "owner": "T5",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "experiment_key": "T5-DELIVERY-013-source-44263e2-posthash-xapk-localheader-same-size-swap-source-only-v1",
+  "base_sha": "4e12e5957054b992d90a3c362fea5288ec5609c7",
+  "hypothesis": "Verifier initially authenticates XAPK transport SHA256, then opens part paths again to parse ZIP and check nested APK/OBB SHA; same-size modification of ZIP local timestamp between passes can retain CRC and nested digests while invalidating the outer XAPK SHA256 without detection. Final whole-record rehash after nested parsing must reject mutation.",
+  "baseline_commit": "44263e26419e9d3dda91930ecc28784a98d46f3b",
+  "test_commit": "8d925bddc39b1e7d5ecf347dc23a8af69880749b",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42303397526",
+  "red_result": "FAILED 1/10, ValueError not raised, old verifier false-accepted same-size ZIP local header mutation between pre-SHA and nested read",
+  "fix_commit": "dc6518bbbfadbd6887be868cdc1ff3996ebb2e09",
+  "green_ci": "https://github.com/alwansan/raf/actions/runs/42303533044",
+  "green_result": "COMPLETED SUCCESS 10/10",
+  "real_signed_artifact_tested": false,
+  "notes": "Test changes ZIP local DOS timestamp after the original first SHA, preserving inner ZIP entries and CRC. Red 9/10 confirms erroneous positive; moving single SHA pass after ZIP member read yields green 10/10. No additional full-file pass and no extra multi-GB storage.",
+  "limitations": [
+    "Synthetic fixture only",
+    "No atomic snapshot of user-controlled mutable directory",
+    "Cannot vouch for signed APK or OBB identity absent original bytes",
+    "Immutable native a1737bd7 does not contain T5 checker fix"
+  ],
+  "next_step": "Native 42296450023 remains in progress. On completion check build result, authentic signed APK/OBB/XAPK artifacts and immutable input SHA; run new read-only checker only on complete source-verified files. New verifier fix source-only, not part of immutable a1737bd7 native build. T5 trial vote remains no need (1/5 YES from T4) and NOT_READY 0/3."
+}

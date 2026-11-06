@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2216Z-T5-chat-xapk-postread-sha-0e8d",
+  "origin": "chat",
+  "owner": "T5",
+  "issue_id": "DELIVERY-013",
+  "event_type": "split_xapk_postread_sha_race_fixed",
+  "at_utc": "2026-11-06T22:18:58.355Z",
+  "source_commit": "dc6518bbbfadbd6887be868cdc1ff3996ebb2e09",
+  "regression_commit": "8d925bddc39b1e7d5ecf347dc23a8af69880749b",
+  "ci_red": "https://github.com/alwansan/raf/actions/runs/42303397526",
+  "ci_green": "https://github.com/alwansan/raf/actions/runs/42303533044",
+  "tests_passed": 10,
+  "tests_failed": 0,
+  "original_game_asset_verified": false,
+  "device_tested": false,
+  "summary": "Demonstrated false-positive after same-size XAPK local-header mutation between hash and nested reads; defer single transport SHA pass until after ZIP parsing, green 10/10 and no extra full-file hash."
+}
