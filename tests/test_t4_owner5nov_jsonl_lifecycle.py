@@ -81,7 +81,8 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         self.assertNotIn("durable_RGD_unverified", rendered)
 
     def _savegame_cycle(self, swapped=False, user_snapshot=True,
-                        repeated_world_snapshot=False, unchecked_extra_save=False):
+                        repeated_world_snapshot=False, unchecked_extra_save=False,
+                        fault=None):
         # An original SaveGame event-count parity is not evidence of authored
         # SaveWorld -> SaveUser order: each completed phase must have its own
         # nonzero Save.argumentFileSnapshot before reporting a full cycle.
@@ -100,9 +101,26 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
                     # Equal SaveGame/phase counts do not guarantee per-call trace integrity.
                     events.append(("Save.argumentFileSnapshot",
                                    "exists_at_filename_argument=True; length_class=nonzero; durable_RGD_unverified=true"))
-            events.append(("Save.exit", ""))
-            events.append((phase + ".exit", ""))
-        events.append(("SaveGame.exit", ""))
+            if phase == "SaveWorld" and fault == "Save.argumentFileSnapshot.unavailable":
+                events.append(("Save.argumentFileSnapshot.unavailable", "probe_error_type=IOException"))
+            if phase == "SaveWorld" and fault == "Save.exception":
+                events.append(("Save.exception", "synthetic private exception"))
+            events.append(("Save.exit",
+                           "exceptionEscaped=True; elapsed_ms=0.000"
+                           if phase == "SaveWorld" and fault == "Save.exit.escaped"
+                           else "exceptionEscaped=False; elapsed_ms=0.000"))
+            if phase == "SaveWorld" and fault == "SaveWorld.exception":
+                events.append(("SaveWorld.exception", "synthetic private exception"))
+            events.append((phase + ".exit",
+                           "exceptionEscaped=True; elapsed_ms=0.000"
+                           if phase == "SaveWorld" and fault == "SaveWorld.exit.escaped"
+                           else "exceptionEscaped=False; elapsed_ms=0.000"))
+        if fault == "SaveGame.exception":
+            events.append(("SaveGame.exception", "synthetic private exception"))
+        events.append(("SaveGame.exit",
+                       "exceptionEscaped=True; elapsed_ms=0.000"
+                       if fault == "SaveGame.exit.escaped"
+                       else "exceptionEscaped=False; elapsed_ms=0.000"))
         return self.put("savegame.jsonl", [
             row("original-synthetic", seq, "save", op,
                 "2026-11-05T12:00:%02dZ" % seq, detail)
@@ -144,6 +162,23 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
                 self.assertEqual(record["original_operation_counts"]["savegame_exit"], 1)
                 self.assertEqual(record["original_operation_counts"]["saveworld_exit"], 1)
                 self.assertEqual(record["original_operation_counts"]["saveuser_exit"], 1)
+                self.assertEqual(record["fully_traced_original_savegame_cycles"], 0)
+                self.assertGreater(record["incomplete_or_misordered_savegame_cycles"], 0)
+                self.assertFalse(record["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
+
+    def test_original_savegame_exceptions_and_escaped_exits_disqualify_traced_cycle(self):
+        # Nonzero file snapshots in finally do not establish Save() success.
+        # Original wrappers emit operation.exception and exceptionEscaped=True
+        # even when SaveWorld/User methods ultimately unwind.
+        faults = ("Save.exception", "SaveWorld.exception", "SaveGame.exception",
+                  "Save.argumentFileSnapshot.unavailable", "Save.exit.escaped",
+                  "SaveWorld.exit.escaped", "SaveGame.exit.escaped")
+        for fault in faults:
+            with self.subTest(fault=fault):
+                record = analyze([self._savegame_cycle(fault=fault)])["sessions"][0]
+                self.assertEqual(record["original_operation_counts"]["savegame_enter"], 1)
+                self.assertEqual(record["original_operation_counts"]["savegame_exit"], 1)
+                self.assertEqual(record["save_nonzero_file_snapshots"], 2)
                 self.assertEqual(record["fully_traced_original_savegame_cycles"], 0)
                 self.assertGreater(record["incomplete_or_misordered_savegame_cycles"], 0)
                 self.assertFalse(record["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
