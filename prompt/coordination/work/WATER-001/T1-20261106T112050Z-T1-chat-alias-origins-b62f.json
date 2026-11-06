@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "Original FFT butterfly Function pointer alias source categories",
   "approach": "On SHA-pinned original slot0 private SPIR-V, classify pointer aliases that may write between direct store and coordinate load. Preserve original CFG diagnostic unchanged, use separate classifier and independent synthetic controls; return categories only.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b99ef9265be8acbc5f0618789be04831c27f513a",
   "intended_files": [
     "scripts/t1_fft_spirv_alias_origins.py",
@@ -27,8 +27,10 @@
     "T1-20261106T110543Z-T1-chat-cfgreach-f4d9"
   ],
   "hypothesis": "The remaining alias_store uncertainty at all three sites comes from a concrete SSA pointer alias form (exact copy, component access, phi/select) that can be categorized for the actual pre-load path without revealing IDs. A copied pointer is not equivalent to an indexed component; do not rewrite shader before confirming.",
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-06T11:20:50.481Z",
-  "next_step": "Implement alias-chain classifier and per-load may-path labels with loop/branch controls; validate original SHA private CI, record whether component indexing blocks integer proof."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42209856944"
+  ],
+  "result": "Original slot0 private FFT alias origin form CI SUCCESS, 11/11 new controls PASS. Static alias-store counts: source 4, butterfly1 4, butterfly2 8; all queried X/Y pre-load alias paths indexed_access_static via OpAccessChain. Original integer coordinate value, per-component reaching write and device water remain unproven. Scope released.",
+  "updated_at": "2026-11-06T11:25:44.310Z",
+  "next_step": "T1 next session independently evaluate static OpAccessChain component identities and last may-reaching stores to butterfly site1 X and site2 X/Y; preserve secret constant indexes in private runner, publish bounded aggregate only."
 }
