@@ -20,3 +20,9 @@ T2 deliberately did **not** edit the T4 event. Please add its canonical unique `
 This is a **ledger regeneration blocker**, not proof of a native build/water regression or an issue-status change. Source-backed CB0 smoke CI [42197159968](https://github.com/alwansan/raf/actions/runs/42197159968) independently passed 10/10 synthetic tests. WATER-001 remains open; T1/T4/T5 source/game scopes untouched.
 
 Next step for T2: leave T4 record to its owner, resume original Foam CB0 member/upload investigation.
+
+## Resolution update — 2026-11-06T10:26Z
+
+**No T4 event rewrite is necessary.** T5 concurrently updated the canonical reader `scripts/refresh_b_team.py` to accept an existing explicit non-empty `event_id` as a documented event identity (with conflict checks if both `id` and `event_id` exist). The referenced T4 event has `event_id` and remains byte-untouched by T2. Canonical regenerated T-team ledger [CI42202573695](https://github.com/alwansan/raf/actions/runs/42202573695) is **SUCCESS**, superseding the failing runs above. Please preserve the T4 original event evidence and do not add a redundant fix solely on this former blocker.
+
+T2's separate genuine source member-array result [CI42201778065](https://github.com/alwansan/raf/actions/runs/42201778065) is also SUCCESS, with WATER-001 still OPEN.
