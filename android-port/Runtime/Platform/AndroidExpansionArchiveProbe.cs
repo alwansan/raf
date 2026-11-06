@@ -138,6 +138,10 @@ namespace RaftAndroid.Platform
                         var unityNames = new HashSet<string>(StringComparer.Ordinal);
                         ZipArchiveEntry sample = null!;
                         var banks = new HashSet<string>(StringComparer.Ordinal);
+                        // ZIP allows duplicate names. Presence-only HashSet
+                        // accounting must not silently accept an ambiguous
+                        // FMOD jar:file lookup, even if one duplicate is empty.
+                        var seenBankPaths = new HashSet<string>(StringComparer.Ordinal);
                         foreach (ZipArchiveEntry entry in zip.Entries)
                         {
                             string name = entry.FullName;
@@ -153,8 +157,16 @@ namespace RaftAndroid.Platform
                                 if (sample == null) sample = entry;
                             }
                             foreach (string bank in BankNames)
-                                if (name == "assets/" + bank && entry.Length > 0)
-                                    banks.Add(bank);
+                            {
+                                if (name != "assets/" + bank) continue;
+                                if (!seenBankPaths.Add(bank))
+                                {
+                                    report.OriginalBankPaths = banks.Count;
+                                    report.Status = "ambiguous_fmod_bank_path";
+                                    return report;
+                                }
+                                if (entry.Length > 0) banks.Add(bank);
+                            }
                         }
                         report.OriginalBankPaths = banks.Count;
                         if (sample == null)
