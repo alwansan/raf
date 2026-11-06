@@ -151,7 +151,9 @@ def store_transfer(op, args, state, pointer, values, ordinal_by_instruction,
                    location):
     if op == "OpStore" and len(args) >= 2:
         if args[0] == pointer:
-            return {ordinal_by_instruction[location]}
+            # A previously escaped pointer remains unsafe even after a direct store:
+            # an untracked alias may later write through that escaped address.
+            return {ordinal_by_instruction[location]} | ({-3} if -3 in state else set())
         if aliases(args[0], pointer, values):
             return set(state) | {-2}
         if aliases(args[1], pointer, values):
