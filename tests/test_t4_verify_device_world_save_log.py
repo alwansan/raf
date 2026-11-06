@@ -383,5 +383,58 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         self.assertTrue(result["save_nonzero_in_earlier_session"])
         self.assertFalse(result["local005_device_confirmed"])
 
+    def test_many_logger_sessions_keep_pair_search_bounded(self):
+        # Compare algorithmic operations, not wall-clock speed. A valid
+        # many-launch log must not build every eligible save/load pair.
+        # The old list comprehension does ~20,000 timestamp comparisons here.
+        from datetime import datetime, timedelta, timezone
+        from unittest.mock import patch
+        from scripts import t4_verify_device_world_save_log as verifier
+
+        class CountedTime:
+            comparisons = 0
+
+            def __init__(self, instant):
+                self.instant = instant
+
+            def __lt__(self, other):
+                CountedTime.comparisons += 1
+                return self.instant < other.instant
+
+            def __le__(self, other):
+                CountedTime.comparisons += 1
+                return self.instant <= other.instant
+
+            def __eq__(self, other):
+                return isinstance(other, CountedTime) and self.instant == other.instant
+
+        epoch = datetime(2026, 11, 6, tzinfo=timezone.utc)
+        events = []
+        for i in range(200):
+            is_save = i < 100
+            events.append(row(
+                "synthetic-session-" + str(i), 1, "save",
+                "Save.argumentFileSnapshot" if is_save else "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc=(epoch + timedelta(seconds=i)).isoformat()))
+        self.put("many-synthetic-sessions.jsonl", events)
+        original_parse = verifier._parse_utc
+
+        def counted_parse(value):
+            return CountedTime(original_parse(value))
+
+        with patch.object(verifier, "_parse_utc", side_effect=counted_parse):
+            result = summarize(_paths(self.root))
+        self.assertEqual(result["session_count"], 200)
+        self.assertTrue(result["save_nonzero_in_earlier_session"])
+        self.assertTrue(result["load_nonzero_in_later_session"])
+        self.assertFalse(result["process_restart_proven"])
+        self.assertFalse(result["cross_session_same_world_proven"])
+        self.assertFalse(result["real_rgd_durability_or_reopen_proven"])
+        self.assertFalse(result["local005_device_confirmed"])
+        # Includes startup min/max, sorted ordering and monotonicity checks.
+        # O(n^2) pair enumeration fails; linear pair lookup passes with margin.
+        self.assertLess(CountedTime.comparisons, 2000)
+
 if __name__ == "__main__":
     unittest.main()
