@@ -2,9 +2,9 @@
   "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "11ee735c87eac69b5be6d1c03f6492608ae9b214",
-  "updated_at": "2026-11-06T12:28:00Z",
+  "updated_at": "2026-11-06T12:36:30Z",
   "resumed_from_experiment": "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.json",
   "experiment_key": "ZIP2-original-Foam-CB0-exact-SetVector-second-newobj-unique-UnityEngine.Vector4-ctor-formals-scalar-IL-provenance-v1",
   "resource_key": "T2-original-private-Foam-Cecil-composition-no-Unity",
@@ -30,5 +30,25 @@
   "latest_running_or_queued_actions_at_scope": 0,
   "no_original_private_source_or_bytes_in_report": true,
   "no_runtime_CBuffer_upload_proof_expected": true,
-  "continuation_note": "A unique matched typed SetVector call has second IL origin new_object, receiver pre_literal_unknown; ctor identity currently not proven."
+  "continuation_note": "A unique matched typed SetVector call has second IL origin new_object, receiver pre_literal_unknown; ctor identity currently not proven.",
+  "run_id": 42218712162,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42218712162",
+  "job_id": 127895095363,
+  "run_conclusion": "success",
+  "final_source_sha": "a5293ce4e8057b1b64102350ac4c8f4ac4d9e92e",
+  "original_shader_and_managed_SHA_verified": true,
+  "source_free_negative_tests_passed": 11,
+  "original_unique_source_matched_Vector4_ctor_formal_count": 4,
+  "original_ctor_float_formal_count": 4,
+  "IL_scalar_sources": {
+    "instance_field_load": 3,
+    "numeric_literal": 1
+  },
+  "Material_receiver_pre_literal_unknown": true,
+  "actual_Unity_CB0_upload_proven": false,
+  "Adreno_water_verified": false,
+  "report": "docs/T2_FOAM_ORIGINAL_CB0_VECTOR_CTOR_FORMALS_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-vector-ctor.json",
+  "next_step": "Authenticate exact three original instance field producers and pre-ldstr material receiver/Shader Foam identity. Do not assert original 160 byte CB0 upload or device water. Preserve team assets and source only scope."
 }
