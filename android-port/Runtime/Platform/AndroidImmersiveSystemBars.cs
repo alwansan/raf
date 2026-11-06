@@ -91,7 +91,8 @@ namespace RaftAndroid.Platform
                                     !AndroidSystemBarPolicy.CanApplyQueuedHide(
                                         active, focused, paused, queuedGeneration,
                                         Volatile.Read(ref hideGeneration),
-                                        queuedActivityIdentity, ActivityIdentity(current)))
+                                        queuedActivityIdentity, ActivityIdentity(current),
+                                        current.Call<bool>("hasWindowFocus")))
                                     return;
                                 using (var window = current.Call<AndroidJavaObject>("getWindow"))
                                 {
@@ -108,7 +109,8 @@ namespace RaftAndroid.Platform
                                             controller.Call("setSystemBarsBehavior",
                                                 AndroidSystemBarPolicy.TransientBarsBySwipe);
                                             if (queuedGeneration != Volatile.Read(ref hideGeneration) ||
-                                                !AndroidSystemBarPolicy.ShouldApply(active, focused, paused))
+                                                !AndroidSystemBarPolicy.ShouldApply(active, focused, paused) ||
+                                                !current.Call<bool>("hasWindowFocus"))
                                                 return;
                                             controller.Call("hide", bars);
                                         }
@@ -122,7 +124,8 @@ namespace RaftAndroid.Platform
                                             int merged = AndroidSystemBarPolicy.MergeLegacy(previous);
                                             if (merged != previous &&
                                                 queuedGeneration == Volatile.Read(ref hideGeneration) &&
-                                                AndroidSystemBarPolicy.ShouldApply(active, focused, paused))
+                                                AndroidSystemBarPolicy.ShouldApply(active, focused, paused) &&
+                                                current.Call<bool>("hasWindowFocus"))
                                                 decor.Call("setSystemUiVisibility", merged);
                                         }
                                     }
