@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "shader-original-to-vulkan-resource-parity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "97f156f9f09e8cd6f5412e281bb751d2bb1a8cd6",
   "approach": "Build independent SHA-original four-keyword/8-stage DXBC DCL family presence versus translated SPIR-V reflected resource-family census. Report only stage aggregate counts/presence, never infer exact register mapping or mislabel optimization as corruption. Source-free CI first, one bounded original CI only if no similar job.",
   "hypothesis": "Current source DCL reports and source SPIRV reflection reports separately cannot tell whether a stage declaring CB/SRV/Sampler has a reflected SPIRV resource-family representation at all; stage-local join can classify missing-family signals before exact provenance map.",
@@ -37,7 +37,16 @@
     "No Unity game source, .meta, build request, assets or native full build changes",
     "No blind repeated original export; distinct stage-family evidence"
   ],
-  "updated_at": "2026-11-06T18:50:41.946Z",
-  "result": null,
-  "next_step": "Run synthetic tests and one SHA-authentic source-only stage-family census; report count-only original/SPV resource families; preserve NOT_READY until full provenance+Unity+device."
+  "updated_at": "2026-11-06T18:57:30.569Z",
+  "result": "Genuine SHA-verified six-scene/four-asset Particle108 source→8 VKD3D stage SPIRV family census SUCCESS run42274933802 job128088713454. Original DCL CB24/SRV10/sampler10/UAV0 vs reflected SPV UBO24/separate_images10/separate_samplers10/images0; zero stage-level missing family presence signals in all eight stages, zero inverse-UBO source absence. Family cardinality globally equal but per-resource register set/binding mapping NOT proven. Source-free 10/10 CI42274655551. Preserve RENDER-002 OPEN, no game shader integrated or phone result.",
+  "next_step": "Do not repeat the equal total family-count probe. Stage-local *count* per family can still drift and cancel across stages; add original per-stage count parity (without publishing locations) only if needed, then authoritative exact per-stage/keyword primary register↔SPIRV set/binding provenance. Source ShaderLab still Dummy; no Unity/phone accept and T3 trial vote NO.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42274655551",
+    "https://github.com/alwansan/raf/actions/runs/42274933802"
+  ],
+  "experiment_ids": [
+    "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d"
+  ],
+  "source_execution_sha": "419890fb16a090e636c49bba76bf774e9eb2de2f",
+  "workflow_manual_only_commit": "b6fcd74b4c474c33c67d6ce27c7b5b5d77b16bf5"
 }
