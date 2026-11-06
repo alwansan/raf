@@ -6,9 +6,9 @@
   "session_id": "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
   "issue_id": "WATER-001",
   "track": "GPU FFT computed-coordinate zero-signature taxonomy",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "de574cc91877d55157fff850debb48549cba5b91",
-  "updated_at": "2026-11-06T19:33:00Z",
+  "updated_at": "2026-11-06T19:36:00Z",
   "resumed_from_sessions": [
     "20261106T1916Z-T1-chat-address-provenance-e6b2",
     "20261106T1907Z-T1-scheduled-report-shape-n8v2",
@@ -32,7 +32,24 @@
     "20261106T1916Z-T1-chat-address-provenance-e6b2",
     "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Extend prior successful synthetic GPU experiment with a strictly bounded second signature report, verify no first-report regressions, collect actual signed-zero vs wrong-address-image signature counts, and prepare original SHA source tracing."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42279949574"
+  ],
+  "result": {
+    "files_changed": {
+      "android-port/Experiments/T1/T1FftAddressProvenanceTests.cs": "c41e29badea34ed722684b46b30dae7fb7d9b358",
+      "scripts/t1_fft_address_provenance_gate.py": "0246db33d5ae7fcfdf4e594ba4ee85aef29cb02e",
+      "tests/test_t1_fft_address_provenance_gate.py": "6d8a380b6f7e5fd3ced7e82200506c09381534f7",
+      ".github/workflows/raft-t1-fft-unity-address-provenance.yml": "93f27342d4b2c46d811c6c16a2672d9a247f346a"
+    },
+    "real_gpu_signature_proven": false,
+    "original_source_executed": false
+  },
+  "next_step": "Check ONLY run 42279949574 @ 93f27342. If failed, inspect specific source-test step or safe marker; fix narrow regression and avoid changing original shader. If completed, compare signed zero conversion counts for 2/4/6 and zero-pixel x0 sample signature for 10/12, keep counts from previous 42278153683 as baseline. No APK, no Android or original fix claim.",
+  "waiting_ci": {
+    "run_id": 42279949574,
+    "source_sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a",
+    "queue_status": "pending behind earlier automatically dispatched same workflow revision; no manual cancellation",
+    "acceptance": "Source unit tests PASS, exact one Unity2021 OpenGLCore NUnit PASS with exit0 and 6 integer/image controls all0, two independent 16-line bounded 0..64 reports, signatures<=mismatches, complete real GPU result with 16 counts and zero signatures; privacy cleanup succeeds."
+  }
 }
