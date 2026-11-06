@@ -49,7 +49,8 @@ class RealUnityObbGuidSourceFreeTests(unittest.TestCase):
     def test_both_realistic_guid_markers_match_bytewise(self):
         data = compare(payload(b"\x00\x01-GUID-UNIQUE"), payload(b"\x00\x01-GUID-UNIQUE"))
         self.assertEqual(data["unity_obb_guid_marker_identity"], "both_present_byte_identical")
-        self.assertTrue(data["unity_internal_engine_guid_verified"])
+        self.assertFalse(data["unity_internal_engine_guid_verified"])
+        self.assertTrue(data["apk_obb_shared_guid_marker_comparison_proven"])
         self.assertEqual(data["marker_exact_bytes_compared"], 14)
         self.assertFalse(data["unity_obb_guid_embedded_value_revealed"])
         self.assertFalse(data["actual_installed_phone_obb_mount_verified"])
@@ -62,12 +63,17 @@ class RealUnityObbGuidSourceFreeTests(unittest.TestCase):
         self.assertFalse(data["obb_unity_obb_guid_marker_present"])
         self.assertEqual(data["marker_exact_bytes_compared"], 0)
 
-    def test_one_sided_markers_rejected_not_silent_unavailable(self):
-        for apk, obb in ((payload(b"GUID"), payload()),
-                         (payload(), payload(b"GUID"))):
-            with self.subTest(apk_has_marker=MARKER.encode() in apk):
-                with self.assertRaisesRegex(ProbeError, "one_sided"):
-                    compare(apk, obb)
+    def test_one_sided_markers_report_exact_direction_but_never_prove_identity(self):
+        for apk, obb, expected in (
+            (payload(b"GUID"), payload(), "apk_only_identity_unavailable"),
+            (payload(), payload(b"GUID"), "obb_only_identity_unavailable"),
+        ):
+            with self.subTest(expected=expected):
+                result = compare(apk, obb)
+                self.assertEqual(result["unity_obb_guid_marker_identity"], expected)
+                self.assertFalse(result["apk_obb_shared_guid_marker_comparison_proven"])
+                self.assertFalse(result["unity_internal_engine_guid_verified"])
+                self.assertEqual(result["marker_exact_bytes_compared"], 0)
 
     def test_actual_different_equal_size_marker_payloads_rejected(self):
         with self.assertRaisesRegex(ProbeError, "marker_mismatch"):
@@ -125,7 +131,8 @@ class RealUnityObbGuidSourceFreeTests(unittest.TestCase):
         o = payload(b"guid-same")
         stream = simulated_signed_checkpoint(a, o)
         result = inspect_checkpoint(stream, expected_apk_bytes=len(a), expected_obb_bytes=len(o))
-        self.assertTrue(result["unity_internal_engine_guid_verified"])
+        self.assertFalse(result["unity_internal_engine_guid_verified"])
+        self.assertTrue(result["apk_obb_shared_guid_marker_comparison_proven"])
         self.assertEqual(result["real_nested_apk_zip_member_count"], 2)
         self.assertEqual(result["real_nested_obb_zip_member_count"], 2)
         self.assertLess(result["real_original_HTTP206_bytes"], 1024 * 1024)
