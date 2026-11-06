@@ -19,9 +19,14 @@ Prior original source [42220554705](https://github.com/alwansan/raf/actions/runs
 
 New standalone scope registers no other T1 GPU workflow in progress at reservation. Modify `scripts/t1_fft_spirv_read_provenance.py` to add only a fixed-allowlisted `stop_opcode` and `stop_numeric_kind` when a lane has boundary `unresolved`; preserve exact original report for resolved load/constant. Four new source-free `tests/test_t1_fft_spirv_read_provenance.py` cases cover unresolved OpPhi, OpIAdd, unknown custom opcode normalization, and resolved load no metadata. Existing isolated non-Unity original FFT workflow @`952c2a3` reuses full source pin and glslang HLSL compilation.
 
-## Awaiting exact CI
+## Actual test gate / original CI pending
 
-Run [42221700354](https://github.com/alwansan/raf/actions/runs/42221700354) in progress at checkpoint. Check test step then only `RAFT_T1_PASS0_SPIRV_PROVENANCE` after `RAFT_T1_COORDINATE_PROFILE hlsl_roundtrip_slot0`, specifically butterfly site1 X stop. No full Unity/native APK build, original shader edits, original IDs, bit patterns or raw game binaries. Keep WATER-001 OPEN and downstream Unity/Adreno parity unproven.
+Run [42221700354](https://github.com/alwansan/raf/actions/runs/42221700354) checked source commit `952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1`. **Synthetic tests step PASSED** (including 4 new stop opcode cases and prior regression suites). The GitHub Actions original Vulkan stage **remains in progress** while dependencies install; no authenticated final HLSL butterfly1 X `stop_opcode` result is asserted yet.
+- Experiment: `prompt/coordination/experiments/T1/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json` (waiting_ci).
+- Canonical progress event: `prompt/coordination/B_TEAM/events/T1/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json`.
+- Work status: waiting_ci; actual runner resource may remain in use until run completion. No other T1 run was cancelled, no original shader/Unity/native APK modification made. WATER-001 OPEN / NOT_READY.
+
+Next: inspect terminal status and safe `RAFT_T1_PASS0_SPIRV_PROVENANCE` marker following `RAFT_T1_COORDINATE_PROFILE hlsl_roundtrip_slot0`. Record actual site1 X `stop_opcode` and `stop_numeric_kind` only if original private HLSL stage passes; if installation fails, report runner failure instead of claiming shader semantics. Then update this own session/experiment/event/work as completed or blocked, without running an equivalent duplicate job.
 
 ## Next step
 
