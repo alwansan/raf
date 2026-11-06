@@ -2,9 +2,9 @@
   "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ca3046a9d9b87cad8ed830c8dca6195bddfd8064",
-  "updated_at": "2026-11-06T12:18:00Z",
+  "updated_at": "2026-11-06T12:26:45Z",
   "resumed_from_sessions": [
     "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
     "20261106T1124Z-T2-scheduled-cb0-pointer-audit-72c9"
@@ -27,5 +27,26 @@
   "tests": "Synthetic positive/negative IL stack cases verify direct arg/local/field/call-return and fail-closed receiver unknown, original DLL SHA source run with 11 Python original name guards and Cecil fixture; report safe finite category counts only.",
   "queued_in_progress_actions_at_plan": 0,
   "collision_policy": "New independent scope from scheduled T2 pointer SSA; no game ShaderLab content changes, no T1/T3/T4/T5 files, no Unity native build, no forced commits.",
-  "status_note": "Original first formal string was proven only one of five vector names in CI42210166957; second value, receiver identity not yet known."
+  "status_note": "Original first formal string was proven only one of five vector names in CI42210166957; second value, receiver identity not yet known.",
+  "run_id": 42217370118,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42217370118",
+  "job_id": 127890628850,
+  "run_conclusion": "success",
+  "source_final_sha": "205be806b79451097149c90a3a6301f05a6a009c",
+  "sourcefree_tests_passed": 11,
+  "actual_original_sha_verified": true,
+  "original_managed_Cecil_selftests_passed": true,
+  "original_exact_verified_SetVector_name_count": 1,
+  "second_typed_vector_value_IL_origin": {
+    "new_object": 1
+  },
+  "material_receiver_IL_origin": {
+    "pre_literal_unknown": 1
+  },
+  "original_CB0_upload_verified": false,
+  "unity_or_adreno_water_verified": false,
+  "evidence_memo": "docs/T2_FOAM_ORIGINAL_CB0_SETVECTOR_OPERAND_ORIGINS_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79.json",
+  "canonical_result_event": "prompt/coordination/B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-result.json",
+  "next_step": "Original SHA source private trace the exact Vector4 newobj constructor and scalar input origins; independently resolve earlier Material receiver and actual Foam Shader link. Do not promote one first property formal into 160B CB0 upload. WATER-001 OPEN."
 }
