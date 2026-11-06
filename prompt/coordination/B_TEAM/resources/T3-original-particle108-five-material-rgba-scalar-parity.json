@@ -1,0 +1,52 @@
+{
+  "id": "T3-ORIGINAL-PARTICLE108-FIVE-MATERIAL-RGBA-SCALAR-PARITY",
+  "title": "Five source Particle108 Shader48 Materials retain 15 RGBA property slots and 145 float32 scalars exactly in same genuine AssetRipper export",
+  "kind": "authentic-same-export-material-property-values-not-shader-runtime",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "source": {
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "selected_particle_renderer_material_slots": 108,
+    "distinct_selected_materials": 5,
+    "six_original_scenes_SHA_verified": true,
+    "four_shader_Material_owners_SHA_verified": true
+  },
+  "stages": {
+    "acquisition": "SHA_ORIGINAL_6SCENES_4OWNERS_AND_ONE_RESS_PROVEN",
+    "extraction": "SHA_AUTHENTIC_UNIQUE_PARTICLE108_Shader48_FIVE_MATERIAL21",
+    "reconstruction": "PRIVATE_RGBA_15_FLOAT32_145_EXACT_SAVEDVALUES_VERIFIED",
+    "binding": "ONE_TRUE_W1_MATERIAL_B02_TEXTURE_SAME_EXPORT_SOURCE_MAPPED",
+    "integration": "SHADER48_STILL_DUMMY_NOT_REPLACED",
+    "device": "NOT_TESTED"
+  },
+  "counts": {
+    "original_Materials": 5,
+    "RGBA_slots": 15,
+    "Float32_slots": 145,
+    "Int32_slots": 0,
+    "changed_RGBA_values": 0,
+    "changed_float32_values": 0,
+    "changed_int32_values": 0,
+    "missing_or_extra_RGBA_or_scalar_properties": 0,
+    "mismatched_Materials": 0,
+    "source_materials_with_nonidentity_color": 5,
+    "all_source_export_values_preserved": true,
+    "exported_scalar_dicts_normalized_losslessly": 10,
+    "original_TexEnv_UV_slots": 10,
+    "exact_traced_original_texture_links": 9,
+    "additional_source_nonexportable_pointer_parity_proven": 1
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42243130856",
+    "https://github.com/alwansan/raf/actions/runs/42243009945",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T3/sessions/20261106T1515Z-T3-chat-5mat-yamlphase-e73b.md"
+  ],
+  "remaining": [
+    "The 108-source-slot Shader48 remains a DummyShaderTextExporter in this same export. Material value parity does not repair missing executable shader VS/FS code.",
+    "Source shader has 13 authored shader Properties + one Pass with RGB ColorMask, alpha Blend, depth write OFF. Four original keyword VS/FS pairs need source-authentic semantic+resource binding and Unity compile.",
+    "No installed APK/Unity/Adreno image test, no proof actual square smoke emitter identity, no whole game status; RENDER-002 OPEN."
+  ],
+  "published_original_private_names_GUID_shader_bytes_or_values": false,
+  "updated_by": "T3",
+  "updated_at": "2026-11-06T15:33:10.501Z"
+}
