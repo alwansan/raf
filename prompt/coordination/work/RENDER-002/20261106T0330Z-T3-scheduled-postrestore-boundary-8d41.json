@@ -2,7 +2,7 @@
   "session_id": "20261106T0330Z-T3-scheduled-postrestore-boundary-8d41",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "baseline_sha": "2f01a235e60a55873b22b5d9ac54fd1afd430a6d",
   "resumed_from_sessions": [
     "20261106T0229Z-T3-scheduled-semantic-ambiguity-a6f2",
@@ -17,5 +17,7 @@
   "resource_key": null,
   "updated_at": "2026-11-06T03:30:00Z",
   "taken_over_from": "T3 chat genuine DXBC CI42146385054; T3 scheduled uniqueness dd90874d",
-  "next_step": "Inspect post-restorer Unity export shader identity before claiming device visual fix."
+  "next_step": "Authenticated original Shader48-to-postrestorer Material/Shader GUID same-export private join, then 4/4 VSFS correspondence.",
+  "result": "Verified native post-restorer audit explicitly does not join original Shader48 identity, and is continue-on-error; no original shader/device fix inferred.",
+  "session_commit": "a359dfd5042bb67cb8e58f43c5f7317699e15648"
 }
