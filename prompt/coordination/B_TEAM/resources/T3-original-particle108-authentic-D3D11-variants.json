@@ -16,9 +16,9 @@
   "stages": {
     "acquisition": "SIX_SCENE_FOUR_SHADER_OWNER_SHA_VERIFIED_ONE_RES_S_FULL_SHA_VERIFIED",
     "extraction": "EXACT_UNIQUE_108_PARTICLE_SHADER48_AND_ONE_NORMAL_PASS_SELECTED",
-    "reconstruction": "ONE_ORIGINAL_PLATFORM4_D3D11_TABLE_PROGRAMS_LINKED_PRIVATE_NO_SOURCE_BYTES_PUBLISHED",
+    "reconstruction": "FOUR_SOURCE_SHA_ORIGINAL_DXBC_KEYWORD_PAIRS_EIGHT_STAGES_VKD3D_COMPILER_TO_VALID_VULKAN11_SPIRV_ALL_EIGHT",
     "binding": "FOUR_ORIGINAL_VS_FS_PASSES_MATCHED_BY_EXACT_SERIALIZED_KEYWORD_PERMUTATIONS",
-    "integration": "SOURCE_ONLY_D3D11_STAGES_AUTHENTIC_NOT_VULKAN_SPIRV_OR_UNITY_IMPORTED",
+    "integration": "SOURCE_ONLY_EIGHT_STAGE_SPIRV_CROSS_HLSL_AND_GLSLANG_ROUNDTRIP_ALL_VALID_BUT_STAGE_IO_LOCATION_REMAP_4_ORIGINAL_VSFS_PAIRS_COMPATIBLE_VS_2_ROUNDTRIP_PAIRS_NOT_Unity_Android_COMPILED",
     "device": "NOT_TESTED"
   },
   "counts": {
@@ -32,20 +32,44 @@
     "unmatched_fragment_permutations": 0,
     "original_source_programmable_Pass_count": 1,
     "source_original_particles_108_render_use_slots": 108,
-    "source_free_tests_passed": 117,
+    "source_free_tests_passed": 133,
     "original_stage_code_extracted_published": false,
-    "Android_runtime_fragment_alpha_or_pixels_verified": false
+    "Android_runtime_fragment_alpha_or_pixels_verified": false,
+    "actual_original_DXBC_stage_translation_attempts": 8,
+    "original_source_DXBC_to_valid_SPIRV_Vulkan11_stage_count": 8,
+    "SPIRV_Cross_HLSL_recovered_stage_count": 8,
+    "HLSL_roundtrip_valid_Vulkan11_SPIRV_stage_count": 8,
+    "source_SPIRV_vertex_fragment_pair_interfaces_compatible": 4,
+    "roundtrip_SPIRV_vertex_fragment_pair_interfaces_compatible": 2,
+    "source_vs_roundtrip_stage_full_IO_equal": 0,
+    "stage_original_roundtrip_resources_binding_shape_equal": 6,
+    "original_roundtrip_total_input_slots": 26,
+    "original_roundtrip_total_output_slots": 20,
+    "stages_with_same_input_type_multiset": 8,
+    "stages_with_same_output_type_multiset": 8,
+    "stages_with_location_only_input_remap_candidates": 4,
+    "stages_with_location_only_output_remap_candidates": 4,
+    "remapped_input_locations_added": 4,
+    "remapped_input_locations_removed": 4,
+    "remapped_output_locations_added": 4,
+    "remapped_output_locations_removed": 4,
+    "same_location_output_type_assignments_changed": 4,
+    "native_Unity_ShaderLab_pixel_equivalence_verified": false
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42139137265",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
-    "https://github.com/alwansan/raf/commit/927bf1d096f8c5500f237794b91fc71c90a946ab"
+    "https://github.com/alwansan/raf/commit/927bf1d096f8c5500f237794b91fc71c90a946ab",
+    "https://github.com/alwansan/raf/actions/runs/42141030091",
+    "https://github.com/alwansan/raf/actions/runs/42141506120",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md"
   ],
   "remaining": [
-    "SPIR-V/GLSL/Unity HLSL translation and Vulkan stage interface checking NOT performed in this experiment; original PC D3D11 source linkage alone is not GPU parity.",
-    "T5 native post-vendor actual Shader GUID, custom dummy/non-dummy program and user phone fire/smoke emitter identity still unproven.",
-    "RENDER-002 stays OPEN, do not claim Android graphics fixed."
+    "All 8 original D3D11 stages translate to valid Vulkan1.1 SPIR-V/HLSL/roundtrip, but 2/4 recovered HLSL Vertex/Fragment pairs do not match the original VS/FS interface; 0/8 stage original vs roundtrip exact I/O equality.",
+    "All 8 stages preserve input/output type multisets. Four input-stage and four output-stage interfaces are candidate location-only remaps; duplicated types and built-in semantics require private exact semantic mapping before any relocation.",
+    "SPIR-V original-vs-roundtrip resource binding shapes differ for 2/8 stages, so sampler/UBO exact bindings and alpha texture sampling unverified.",
+    "Original Shader48 post-vendor/native Unity GUID/program, installed Android square fire/smoke emitter identity and GPU pixels not verified. RENDER-002 OPEN."
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-06T00:48:22.748Z"
+  "updated_at": "2026-11-06T01:10:05.200Z"
 }
