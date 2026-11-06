@@ -10,8 +10,11 @@ internal static class MaterialStoreValueTrace
     internal readonly record struct Evidence(string ValueOrigin, string ShaderInputOrigin,
                                               int BasicBlockInstructions,
                                               bool OriginalShaderIdentityVerified,
-                                              bool RuntimeCB0UploadVerified);
-    private readonly record struct Value(string Origin, string ShaderOrigin = "unproven");
+                                              bool RuntimeCB0UploadVerified,
+                                              FieldReference? PrivateOriginalShaderInputField);
+    // The original private field reference stays in runner process memory only.
+    private readonly record struct Value(string Origin, string ShaderOrigin = "unproven",
+                                         FieldReference? PrivateField = null);
     private const int MaxBlockInstructions = 128;
     private const int MaxStack = 96;
     private const string Unknown = "unproven";
@@ -68,7 +71,7 @@ internal static class MaterialStoreValueTrace
     internal static Evidence Trace(IList<Instruction> instructions,
                                    int storePos, MethodDefinition? context)
     {
-        Evidence Block(string reason) => new(reason,Unknown,0,false,false);
+        Evidence Block(string reason) => new(reason,Unknown,0,false,false,null);
         if (storePos < 0 || storePos >= instructions.Count ||
             instructions[storePos].OpCode.Code != Code.Stfld ||
             instructions[storePos].Operand is not FieldReference target ||
@@ -175,7 +178,9 @@ internal static class MaterialStoreValueTrace
                 if (ins.Operand is not FieldReference field ||
                     !Push(new Value(opcode=="ldfld"
                         ? TypeOrigin(field.FieldType.FullName,"instance_field")
-                        : Unknown)))
+                        : Unknown, Unknown,
+                        opcode=="ldfld" && field.FieldType.FullName=="UnityEngine.Shader"
+                            ? field : null)))
                     return Block("malformed_or_unbounded_field_read");
                 continue;
             }
@@ -184,7 +189,9 @@ internal static class MaterialStoreValueTrace
                 if (ins.Operand is not FieldReference field ||
                     !Push(new Value(opcode=="ldsfld"
                         ? TypeOrigin(field.FieldType.FullName,"static_field")
-                        : Unknown)))
+                        : Unknown, Unknown,
+                        opcode=="ldsfld" && field.FieldType.FullName=="UnityEngine.Shader"
+                            ? field : null)))
                     return Block("malformed_or_unbounded_static_field_read");
                 continue;
             }
@@ -218,7 +225,8 @@ internal static class MaterialStoreValueTrace
                         method.Parameters[0].ParameterType.FullName=="UnityEngine.Shader"
                         ? "exact_Material_ctor_with_Shader_formal"
                         : "exact_Material_ctor_other_formals";
-                    result=new Value(origin,args.Length>0?args[0].Origin:Unknown);
+                    result=new Value(origin,args.Length>0?args[0].Origin:Unknown,
+                        args.Length>0?args[0].PrivateField:null);
                 }
                 else if (method.DeclaringType.FullName=="UnityEngine.Shader" &&
                     method.Name=="Find" && method.ReturnType.FullName=="UnityEngine.Shader" &&
@@ -255,7 +263,9 @@ internal static class MaterialStoreValueTrace
         // The instance receiver is popped separately and not identified. We
         // make no claim that the object owning this field is Foam.
         Pop();
-        return new Evidence(source.Origin,source.ShaderOrigin,steps,false,false);
+        return new Evidence(source.Origin,source.ShaderOrigin,steps,false,false,
+            source.Origin=="exact_Material_ctor_with_Shader_formal"
+                ? source.PrivateField : null);
     }
 
     internal static void SelfTest()
@@ -331,6 +341,23 @@ internal static class MaterialStoreValueTrace
         unsupported.Insert(2,Instruction.Create(OpCodes.Add));
         if (Trace(unsupported,4,ctx).ValueOrigin!="unsupported_opcode")
             throw new InvalidOperationException("Unsupported IL cannot produce attribution");
+        var shaderField=new FieldReference("publicShader",shader,owner);
+        var shaderFieldInput=new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld,shaderField),
+            Instruction.Create(OpCodes.Newobj,ctor),
+            store
+        };
+        var verifiedPrivateField=Trace(shaderFieldInput,4,ctx);
+        if (verifiedPrivateField.ShaderInputOrigin!="typed_Shader_instance_field" ||
+            verifiedPrivateField.PrivateOriginalShaderInputField?.FullName != shaderField.FullName)
+            throw new InvalidOperationException("Typed exact constructor Shader field identity");
+        var nonShaderField = new FieldReference("publicOther",module.TypeSystem.Object,owner);
+        var wrongShaderType=new List<Instruction>(shaderFieldInput);
+        wrongShaderType[2]=Instruction.Create(OpCodes.Ldfld,nonShaderField);
+        if (Trace(wrongShaderType,4,ctx).PrivateOriginalShaderInputField is not null)
+            throw new InvalidOperationException("Wrong type must not masquerade as Shader field");
         var wrongField=new FieldReference("wrong",module.TypeSystem.Object,owner);
         var wrongTarget=new List<Instruction>(direct);
         wrongTarget[3]=Instruction.Create(OpCodes.Stfld,wrongField);
