@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "FFT SPIR-V butterfly coordinate dataflow",
   "approach": "Source-authenticated private SPIR-V direct local pointer writer candidate census at butterfly image-fetch coordinate leaves, explicit no-dominance/no-rewrite status. Synthetic fail-closed regression then distinct original Vulkan CI audit.",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "13e03d803b7820d3fabe31cd502abadf20c97be2",
   "intended_files": [
     "scripts/t1_fft_local_store_writers.py",
@@ -19,7 +19,7 @@
   ],
   "experiment_key": "water001-t1-original-fft-slot0-spv-local-store-writer-census-base-13e03d8-distinct-from-42196835754-42198180194",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu-24.04-no-shared-unity",
-  "updated_at": "2026-11-06T10:44:20Z",
+  "updated_at": "2026-11-06T10:46:00Z",
   "hypothesis": "Some butterfly coordinate lane stops at a Function OpLoad; direct pointer OpStore producer census can identify candidate opcode/type or multiple writes without falsely proving reaching definition, potentially separating float carrier from integer provenance before any shader mutation.",
   "related_work": [
     "20261106T101340Z-T1-chat-2f6a",
@@ -33,6 +33,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42204760126"
   ],
-  "result": "Isolated original SPIR-V writer-origin tool and 8 local source-free regressions implemented. CI source tests and ZIP2 acquisition succeeded; authenticated Vulkan stage still under test.",
-  "next_step": "Read 42204760126 bounded writer label and compare site1 X/site2 Y; direct stores are only candidates; no kernel rewrite on count alone."
+  "result": "Original SHA-pinned private FFT slot0 SPIR-V source audit CI SUCCESS. 8/8 exact-source synthetic tests PASS. Site1 butterfly has 3 float32 OpVectorShuffle direct store candidates; site2 has 8 float32 candidates (7 shuffle, 1 image fetch). Static candidates only; cannot prove reaching definition nor numeric parity. Source-only scoped diagnostic completed; WATER-001 OPEN.",
+  "next_step": "In new separate T1 work/session, trace CFG-aware reaching def and vector shuffle lane origins for site1 X and site2 X/Y. Do not rewrite butterfly coordinates using raw bitcast alone. No running CI resource reserved."
 }
