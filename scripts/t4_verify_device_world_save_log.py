@@ -71,6 +71,25 @@ class EvidenceInputError(ValueError):
     pass
 
 
+def _strict_json_object(pairs):
+    # Standard JSON object members are unique in the runtime's diagnostic
+    # writer. Python json.loads otherwise silently keeps the LAST member,
+    # potentially turning a copied, ambiguous log line into a save marker.
+    # Never echo any field names or values from owner-device diagnostics.
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise EvidenceInputError("duplicate_json_field")
+        result[key] = value
+    return result
+
+
+def _strict_json_constant(_token):
+    # Python's JSON decoder accepts NaN/Infinity as an extension; these are
+    # not valid JSON numbers and must not be silently trusted in evidence.
+    raise EvidenceInputError("nonfinite_json_constant")
+
+
 def _paths(source):
     p = Path(source)
     if not p.exists() or p.is_symlink():
@@ -141,7 +160,11 @@ def summarize(paths):
                 if total_lines > MAX_LINES or total_bytes > MAX_BYTES or len(raw) > MAX_LINE:
                     raise EvidenceInputError("input_limit")
                 try:
-                    record = json.loads(raw)
+                    record = json.loads(
+                        raw, object_pairs_hook=_strict_json_object,
+                        parse_constant=_strict_json_constant)
+                except EvidenceInputError:
+                    raise  # Keep sanitized duplicate/nonfinite category.
                 except (UnicodeDecodeError, ValueError) as exc:
                     raise EvidenceInputError("invalid_jsonl") from exc
                 if not isinstance(record, dict):
