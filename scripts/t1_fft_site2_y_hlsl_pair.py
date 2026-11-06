@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 
 from scripts.t1_fft_site2_y_cfg import analyze as site2y
+from scripts.t1_fft_site2_y_phi_recurrence import analyze as phi_ssa
 from scripts.t1_fft_site2_y_phi_inputs import analyze as phi_census
 from scripts.probe_authentic_fft_dxbc_translation import (
     OWNER, PATH_ID, ORIGINAL_OBJECT_SHA256, EXPECTED_CONTAINERS)
@@ -134,6 +135,10 @@ def inspect(original_data):
                 raise ValueError("Disassembled private shader outside bound")
             outputs.append(run.stdout)
         comparison = pair(*outputs)
+        ssa = phi_ssa(outputs[1], require_original=True)
+        if ssa.get("status") != "original_derived_third_butterfly_Y_Phi_component_SSA_audit" or ssa.get("incoming_count") != 2:
+            raise ValueError("Original-derived third read SSA recurrence evidence incomplete")
+        comparison["derived_site2_y_phi_ssa"] = ssa
         phi_inputs = phi_census(outputs[1], require_original=True)
         if phi_inputs.get("status") != "verified_translated_site2_y_phi_incoming_cfg":
             raise ValueError("Translated third-Y Phi input paths remain unverified")
