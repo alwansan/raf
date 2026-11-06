@@ -143,6 +143,16 @@ class PairTests(unittest.TestCase):
         self.write_manifest()
         self.rejected("Unsafe or duplicate")
 
+    def test_obb_repeated_separator_rejected_even_with_matching_hash(self):
+        self.make_obb([("assets//unexpected", b"x"), ("assets/valid", b"x")])
+        self.write_manifest()
+        self.rejected("Unsafe or duplicate")
+
+    def test_obb_dot_segment_rejected_even_with_matching_hash(self):
+        self.make_obb([("assets/./unexpected", b"x"), ("assets/valid", b"x")])
+        self.write_manifest()
+        self.rejected("Unsafe or duplicate")
+
     def test_obb_duplicate_entries(self):
         self.make_obb([("assets/entry", b"x"), ("assets/entry", b"y")])
         self.write_manifest()

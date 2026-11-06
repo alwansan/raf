@@ -8,7 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 import re
 import struct
 import subprocess
@@ -56,7 +56,9 @@ def _digest(obj) -> bool:
 def _safe_zip_name(name: str) -> bool:
     if not name or name.startswith("/") or "\\" in name or ":" in name:
         return False
-    return all(part not in (".", "..", "") for part in PurePosixPath(name).parts)
+    # PurePosixPath collapses repeated separators and dot segments: inspect raw ZIP names.
+    segments = (name[:-1] if name.endswith("/") else name).split("/")
+    return all(segment not in ("", ".", "..") for segment in segments)
 
 
 def _zip_structure(path: Path, apk: bool) -> int:
