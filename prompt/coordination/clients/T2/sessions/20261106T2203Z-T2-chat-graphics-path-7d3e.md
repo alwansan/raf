@@ -10,3 +10,9 @@
 - planned code files: android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs, scripts/t2_foam_shaderfind_return_report.py, tests/test_t2_foam_shaderfind_return_report.py.
 - Workflow: `.github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml` (existing source-only, no manual dispatch). Preserve original source SHA manifests; don't request Unity/native.
 - next_step: implement classification, synthetic negative checks, authenticate original in existing CI, interpret counts as IL static flow only; record result, remaining unknowns, and safe T5 handoff.
+
+## Source commit and CI checkpoint — 2026-11-06T22:08:13.782Z
+- Code committed on allowed branch at [3bbb7b04](https://github.com/alwansan/raf/commit/3bbb7b040b7a626e61f68e5572d402ee49a93a4d), changing only the original T2 Mono.Cecil scanner + safe report schema + source-free tests. No original source/Unity asset mutation.
+- [CI42302222142](https://github.com/alwansan/raf/actions/runs/42302222142) auto-triggered on that immutable SHA; currently in_progress. Do not dispatch duplicate or assume original counts until PASS. Preexisting platform adapter workflow 42302222216 auto-triggered independently, no native build.
+- New fields classify two previously known typed Graphics receiver sites by public `Blit`, `DrawMesh`, `Other`, `Mixed` families, mutually exclusive by exact original material field load site. Tests require complete 1-of-4 partition and reject false name-only evidence.
+- When CI settles, read logs for aggregate safe method-family counts and selftest, record evidence and handoff; if RED, fix real regression without bypassing validation.
