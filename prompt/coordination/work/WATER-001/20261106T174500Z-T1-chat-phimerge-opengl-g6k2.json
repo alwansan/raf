@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "99658d34f59ce64a8f961e942c641882c0750110",
-  "updated_at": "2026-11-06T17:44:30.964Z",
+  "updated_at": "2026-11-06T17:47:22.509Z",
   "resumed_from_sessions": [
     "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
     "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4",
@@ -33,7 +33,9 @@
   ],
   "concurrent_scope": "The latest T1 scheduled 20261106T1714Z owns only design/evidence for real-authentic Unity trace; no overlap with synthetic source-only/new workflow. T2–T5 source files untouched. No nonterminal branch Actions in pre-vote scan.",
   "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42264618337"
+  ],
   "result": null,
-  "next_step": "Create and run 5-site OpenGLCore sourcefree phi sampled-read control; record bounded mismatch evidence and honest limitations. Maintain T1 vote لا يحتاج, no native APK request."
+  "next_step": "Await run42264618337 job128053163170 terminal, inspect safe RAFT_T1_PHI_MERGE_TEXTURE_COUNTS and _NUNIT markers before concluding; vote stays لا يحتاج; no new trial APK."
 }
