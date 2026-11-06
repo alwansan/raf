@@ -14,6 +14,14 @@ internal static class Program
         "duplicated_unresolved", "unproved"
     };
     private sealed record Consumer(string Kind, FieldDefinition? Field, VariableDefinition? Local, int Nops);
+    private sealed record MaterialConsumer(string Kind, FieldDefinition? Field, VariableDefinition? Local, int Nops);
+    private static readonly string[] MaterialKinds = {
+        "instance_material_field", "static_material_field", "material_local",
+        "material_return", "direct_renderer_material_setter",
+        "direct_renderer_shared_material_setter", "discarded_pop",
+        "duplicated_unresolved", "unproved"
+    };
+    private const string MaterialType = "UnityEngine.Material";
 
     private static bool IsFind(Instruction instruction)
     {
@@ -117,6 +125,13 @@ internal static class Program
         ctor.Name == ".ctor" && ctor.DeclaringType.FullName == "UnityEngine.Material" &&
         ctor.Parameters.Count == 1 &&
         ctor.Parameters[0].ParameterType.FullName == ShaderType;
+    private static int ImmediateAfterNops(IList<Instruction> il, int previous)
+    {
+        int next = previous + 1, skips = 0;
+        while(next < il.Count && il[next].OpCode.Code == Code.Nop && skips < 4)
+        { next++; skips++; }
+        return next;
+    }
     private static bool DirectOriginalFieldToMaterialCtor(IList<Instruction> il, int fieldLoadIndex)
     {
         // Material(Shader) has exactly one Shader arg; an adjacent ldfld is
@@ -125,6 +140,81 @@ internal static class Program
         while (index < il.Count && il[index].OpCode.Code == Code.Nop && skipped++ < 4)
             index++;
         return index < il.Count && IsCtorMaterialShader(il[index]);
+    }
+    private static int RendererMaterialSetter(Instruction inst)
+    {
+        if(inst.OpCode.Code is not (Code.Call or Code.Callvirt)
+            || inst.Operand is not MethodReference m
+            || !m.HasThis || m.DeclaringType.FullName != "UnityEngine.Renderer"
+            || m.ReturnType.FullName != "System.Void"
+            || m.Parameters.Count != 1
+            || m.Parameters[0].ParameterType.FullName != MaterialType)
+            return 0;
+        if(m.Name == "set_material") return 1;
+        if(m.Name == "set_sharedMaterial") return 2;
+        return 0;
+    }
+    private static int DirectRendererSetter(IList<Instruction> il, int materialValueIndex)
+    {
+        int next=ImmediateAfterNops(il,materialValueIndex);
+        return next < il.Count ? RendererMaterialSetter(il[next]) : 0;
+    }
+    private static bool ResolveMaterialField(Instruction inst, ModuleDefinition module,
+        out FieldDefinition? field)
+    {
+        field=null;
+        if(inst.Operand is not FieldReference fr ||
+            fr.FieldType.FullName != MaterialType) return false;
+        try {
+            var f=fr.Resolve();
+            if(f is not null && f.Module==module && f.FieldType.FullName==MaterialType)
+            {
+                field=f;
+                return true;
+            }
+        } catch(AssemblyResolutionException) {} catch(ResolutionException) {}
+        return false;
+    }
+    private static bool SameMaterialFieldLoad(Instruction inst, FieldDefinition field)
+    {
+        if(inst.OpCode.Code is not (Code.Ldfld or Code.Ldsfld)
+            || inst.Operand is not FieldReference fr
+            || fr.FieldType.FullName != MaterialType) return false;
+        try {
+            var f=fr.Resolve();
+            return f is not null && f.Module==field.Module &&
+                   f.MetadataToken==field.MetadataToken;
+        } catch(AssemblyResolutionException) {return false;}
+          catch(ResolutionException) {return false;}
+    }
+    private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
+    {
+        var il=method.Body.Instructions;
+        int next=ImmediateAfterNops(il,ctorIndex);
+        int skipped=next-ctorIndex-1;
+        if(next>=il.Count) return new("unproved",null,null,skipped);
+        var x=il[next];
+        if(x.OpCode.Code is Code.Stfld or Code.Stsfld)
+        {
+            if(ResolveMaterialField(x,method.Module,out var field))
+                return new(x.OpCode.Code==Code.Stfld?"instance_material_field":"static_material_field",
+                    field,null,skipped);
+            return new("unproved",null,null,skipped);
+        }
+        var local=LocalForStore(method,x);
+        if(local is not null)
+            return new(local.VariableType.FullName==MaterialType?"material_local":"unproved",
+                null,local,skipped);
+        if(x.OpCode.Code==Code.Ret && method.ReturnType.FullName==MaterialType)
+            return new("material_return",null,null,skipped);
+        int setter=RendererMaterialSetter(x);
+        if(setter==1) return new("direct_renderer_material_setter",null,null,skipped);
+        if(setter==2) return new("direct_renderer_shared_material_setter",null,null,skipped);
+        if(x.OpCode.Code==Code.Pop)
+            return new("discarded_pop",null,null,skipped);
+        if(x.OpCode.Code==Code.Dup)
+            return new("duplicated_unresolved",null,null,skipped);
+        return new("unproved",null,null,skipped);
     }
     private static bool IsFieldLoad(Instruction inst, FieldDefinition field)
     {
@@ -174,6 +264,7 @@ internal static class Program
         var buckets=Kinds.ToDictionary(x=>"return_consumer_"+x,y=>y==consumer.Kind?1:0);
         int fieldReads=0,fieldReadMethods=0,fieldReadCtorMethods=0;
         int directFieldToMaterialCtor=0;
+        var originalMaterialSites=new List<(MethodDefinition Method,int Index)>();
         int localReads=0, localMethodWithCtor=0;
         if(consumer.Field is not null)
             foreach(var method in methods)
@@ -184,7 +275,12 @@ internal static class Program
                     if(IsFieldLoad(il[i],consumer.Field))
                     {
                         loads++;
-                        if(DirectOriginalFieldToMaterialCtor(il,i)) directFieldToMaterialCtor++;
+                        if(DirectOriginalFieldToMaterialCtor(il,i))
+                        {
+                            directFieldToMaterialCtor++;
+                            int ctorIndex=ImmediateAfterNops(il,i);
+                            originalMaterialSites.Add((method,ctorIndex));
+                        }
                     }
                 if(loads>0)
                 {
@@ -199,6 +295,48 @@ internal static class Program
             localReads=il.Count(x=>LocalIsLoadOf(x,consumer.Local));
             if(localReads>0 && il.Any(IsCtorMaterialShader)) localMethodWithCtor=1;
         }
+        if(originalMaterialSites.Count != 1 || directFieldToMaterialCtor != 1)
+            throw new InvalidOperationException("original_Foam_material_direct_constructor_drift");
+        var materialSite=originalMaterialSites[0];
+        var materialResult=ConsumeMaterialResult(materialSite.Method,materialSite.Index);
+        if(!MaterialKinds.Contains(materialResult.Kind))
+            throw new InvalidOperationException("original_material_result_partition_drift");
+        int materialFieldReads=0, materialFieldReaderMethods=0;
+        int materialFieldToRenderer=0, materialFieldToSharedRenderer=0;
+        int materialLocalLoads=0, materialLocalToRenderer=0, materialLocalToSharedRenderer=0;
+        int directMaterialToRenderer=0, directMaterialToSharedRenderer=0;
+        if(materialResult.Field is not null)
+            foreach(var m in methods)
+            {
+                int reads=0;
+                var il=m.Body.Instructions;
+                for(int i=0;i<il.Count;i++)
+                    if(SameMaterialFieldLoad(il[i],materialResult.Field))
+                    {
+                        reads++;
+                        int setter=DirectRendererSetter(il,i);
+                        if(setter==1) materialFieldToRenderer++;
+                        if(setter==2) materialFieldToSharedRenderer++;
+                    }
+                if(reads>0) {materialFieldReads+=reads;materialFieldReaderMethods++;}
+            }
+        if(materialResult.Local is not null && materialResult.Kind=="material_local")
+        {
+            var il=materialSite.Method.Body.Instructions;
+            for(int i=materialSite.Index+1;i<il.Count;i++)
+                if(LocalIsLoadOf(il[i],materialResult.Local))
+                {
+                    materialLocalLoads++;
+                    int setter=DirectRendererSetter(il,i);
+                    if(setter==1) materialLocalToRenderer++;
+                    if(setter==2) materialLocalToSharedRenderer++;
+                }
+        }
+        if(materialResult.Kind=="direct_renderer_material_setter") directMaterialToRenderer=1;
+        if(materialResult.Kind=="direct_renderer_shared_material_setter") directMaterialToSharedRenderer=1;
+        var materialBuckets=MaterialKinds.ToDictionary(
+            x=>"material_result_consumer_"+x,
+            y=>y==materialResult.Kind?1:0);
         var output=new Dictionary<string,object>
         {
             ["status"]="original_foam_ShaderFind_direct_return_consumer_typed_IL_census",
@@ -216,6 +354,18 @@ internal static class Program
             ["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"]=fieldReadCtorMethods,
             ["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"]=directFieldToMaterialCtor,
             ["consumer_nop_instructions_skipped_after_Find"]=consumer.Nops,
+            ["original_Foam_source_field_to_Material_ctor_sites"]=originalMaterialSites.Count,
+            ["material_result_exact_original_field_definition_resolved"]=materialResult.Field is null?0:1,
+            ["material_result_original_material_field_loads"]=materialFieldReads,
+            ["material_result_original_material_field_distinct_readers"]=materialFieldReaderMethods,
+            ["material_result_material_field_direct_Renderer_set_material_arguments"]=materialFieldToRenderer,
+            ["material_result_material_field_direct_Renderer_set_sharedMaterial_arguments"]=materialFieldToSharedRenderer,
+            ["material_result_material_local_loads_after_constructor"]=materialLocalLoads,
+            ["material_result_material_local_direct_Renderer_set_material_argument_candidates"]=materialLocalToRenderer,
+            ["material_result_material_local_direct_Renderer_set_sharedMaterial_argument_candidates"]=materialLocalToSharedRenderer,
+            ["material_result_material_constructor_direct_Renderer_set_material_arguments"]=directMaterialToRenderer,
+            ["material_result_material_constructor_direct_Renderer_set_sharedMaterial_arguments"]=directMaterialToSharedRenderer,
+            ["material_result_nops_skipped_after_ctor"]=materialResult.Nops,
             ["original_Shader_Find_executed_in_Unity"]=false,
             ["field_declaring_TypeDef_is_427_scene_script_proven"]=false,
             ["Unity_Material_or_Renderer_actual_binding_verified"]=false,
@@ -224,6 +374,7 @@ internal static class Program
             ["private_original_names_fields_method_IDs_or_IL_exported"]=false
         };
         foreach(var (name,value) in buckets) output[name]=value;
+        foreach(var (name,value) in materialBuckets) output[name]=value;
         return output;
     }
     private static void SelfTest()
@@ -276,6 +427,35 @@ internal static class Program
         var bad=new MethodReference("Find",mod.TypeSystem.Int32,shader){HasThis=false};
         bad.Parameters.Add(new ParameterDefinition(mod.TypeSystem.String));
         if(IsFind(Instruction.Create(OpCodes.Call,bad))) throw new InvalidOperationException("signature_guard");
+        var material=new TypeReference("UnityEngine","Material",mod,mod.TypeSystem.CoreLibrary);
+        var matCtor=new MethodReference(".ctor",mod.TypeSystem.Void,material){HasThis=true};
+        matCtor.Parameters.Add(new ParameterDefinition(shader));
+        method.Body.Instructions[2]=Instruction.Create(OpCodes.Newobj,matCtor);
+        var matLocal=new VariableDefinition(material);
+        method.Body.Variables.Add(matLocal);
+        method.Body.Instructions.Insert(3,Instruction.Create(OpCodes.Stloc,matLocal));
+        if(ConsumeMaterialResult(method,2).Kind!="material_local")
+            throw new InvalidOperationException("material_local_source_provenance");
+        var matField=new FieldDefinition("materialSynthetic",Mono.Cecil.FieldAttributes.Static,material);
+        owner.Fields.Add(matField);
+        method.Body.Instructions[3]=Instruction.Create(OpCodes.Stsfld,matField);
+        if(ConsumeMaterialResult(method,2).Kind!="static_material_field"
+            || !SameMaterialFieldLoad(Instruction.Create(OpCodes.Ldsfld,matField),matField))
+            throw new InvalidOperationException("material_field_provenance");
+        var renderer=new TypeReference("UnityEngine","Renderer",mod,mod.TypeSystem.CoreLibrary);
+        var setter=new MethodReference("set_material",mod.TypeSystem.Void,renderer){HasThis=true};
+        setter.Parameters.Add(new ParameterDefinition(material));
+        method.Body.Instructions[3]=Instruction.Create(OpCodes.Callvirt,setter);
+        if(ConsumeMaterialResult(method,2).Kind!="direct_renderer_material_setter"
+           || DirectRendererSetter(method.Body.Instructions,2)!=1)
+            throw new InvalidOperationException("material_renderer_signature");
+        var impostor=new MethodReference("set_material",mod.TypeSystem.Void,renderer){HasThis=false};
+        impostor.Parameters.Add(new ParameterDefinition(material));
+        if(RendererMaterialSetter(Instruction.Create(OpCodes.Call,impostor))!=0)
+            throw new InvalidOperationException("no_fake_renderer_setter");
+        method.Body.Instructions[3]=Instruction.Create(OpCodes.Pop);
+        if(ConsumeMaterialResult(method,2).Kind!="discarded_pop")
+            throw new InvalidOperationException("material_discarded");
         Console.WriteLine("T2_FOAM_SHADERFIND_RETURN_CECIL_SYNTHETIC_PASS");
     }
     public static int Main(string[] args)

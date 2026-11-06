@@ -33,6 +33,26 @@ NUMERIC = (
     "consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments",
     "consumer_nop_instructions_skipped_after_Find",
 )
+MATERIAL_KINDS = (
+    "instance_material_field", "static_material_field", "material_local",
+    "material_return", "direct_renderer_material_setter",
+    "direct_renderer_shared_material_setter", "discarded_pop",
+    "duplicated_unresolved", "unproved",
+)
+MATERIAL_NUMERIC = (
+    "original_Foam_source_field_to_Material_ctor_sites",
+    "material_result_exact_original_field_definition_resolved",
+    "material_result_original_material_field_loads",
+    "material_result_original_material_field_distinct_readers",
+    "material_result_material_field_direct_Renderer_set_material_arguments",
+    "material_result_material_field_direct_Renderer_set_sharedMaterial_arguments",
+    "material_result_material_local_loads_after_constructor",
+    "material_result_material_local_direct_Renderer_set_material_argument_candidates",
+    "material_result_material_local_direct_Renderer_set_sharedMaterial_argument_candidates",
+    "material_result_material_constructor_direct_Renderer_set_material_arguments",
+    "material_result_material_constructor_direct_Renderer_set_sharedMaterial_arguments",
+    "material_result_nops_skipped_after_ctor",
+)
 STATUS = "original_foam_ShaderFind_direct_return_consumer_typed_IL_census"
 
 def unique_keys(pairs):
@@ -47,14 +67,16 @@ def validate(report):
     if type(report) is not dict:
         raise ValueError("report_type")
     counts = tuple("return_consumer_" + x for x in KINDS)
-    expected = set(NUMERIC) | set(FLAGS_TRUE) | set(FLAGS_FALSE) | set(counts) | {"status"}
+    material_counts = tuple("material_result_consumer_" + x for x in MATERIAL_KINDS)
+    expected = (set(NUMERIC) | set(MATERIAL_NUMERIC) | set(FLAGS_TRUE) |
+                set(FLAGS_FALSE) | set(counts) | set(material_counts) | {"status"})
     if set(report) != expected or report["status"] != STATUS:
         raise ValueError("unexpected_original_safe_report_shape")
     if any(report[k] is not True for k in FLAGS_TRUE):
         raise ValueError("unauthenticated_original")
     if any(report[k] is not False for k in FLAGS_FALSE):
         raise ValueError("unsupported_original_runtime_claim")
-    for key in NUMERIC + counts:
+    for key in NUMERIC + MATERIAL_NUMERIC + counts + material_counts:
         if type(report[key]) is not int or not 0 <= report[key] <= 20000000:
             raise ValueError("bad_safe_aggregate_int")
     if (report["original_compiled_method_bodies_scanned"] != 19118
@@ -93,6 +115,41 @@ def validate(report):
         raise ValueError("local_material_cooccurrence_partition")
     if report["consumer_nop_instructions_skipped_after_Find"] > 4:
         raise ValueError("unbounded_source_nop_boundary")
+    if report["original_Foam_source_field_to_Material_ctor_sites"] != 1:
+        raise ValueError("original_material_direct_producer_not_proven")
+    if sum(report[k] for k in material_counts) != 1 or any(report[k]>1 for k in material_counts):
+        raise ValueError("original_material_result_consumer_partition")
+    material_field = sum(report["material_result_consumer_" + k] for k in
+                         ("instance_material_field","static_material_field"))
+    if report["material_result_exact_original_field_definition_resolved"] != material_field:
+        raise ValueError("original_material_field_identity_unproven")
+    if material_field == 0 and any(report[k]!=0 for k in (
+            "material_result_original_material_field_loads",
+            "material_result_original_material_field_distinct_readers",
+            "material_result_material_field_direct_Renderer_set_material_arguments",
+            "material_result_material_field_direct_Renderer_set_sharedMaterial_arguments")):
+        raise ValueError("original_material_field_link_fabricated")
+    if report["material_result_consumer_material_local"] == 0 and any(report[k]!=0 for k in (
+            "material_result_material_local_loads_after_constructor",
+            "material_result_material_local_direct_Renderer_set_material_argument_candidates",
+            "material_result_material_local_direct_Renderer_set_sharedMaterial_argument_candidates")):
+        raise ValueError("original_material_local_link_fabricated")
+    if report["material_result_original_material_field_distinct_readers"] > report["material_result_original_material_field_loads"]:
+        raise ValueError("original_material_field_read_partition")
+    if sum(report[k] for k in (
+            "material_result_material_field_direct_Renderer_set_material_arguments",
+            "material_result_material_field_direct_Renderer_set_sharedMaterial_arguments")) > report["material_result_original_material_field_loads"]:
+        raise ValueError("material_field_renderer_args_exceed_field_reads")
+    if sum(report[k] for k in (
+            "material_result_material_local_direct_Renderer_set_material_argument_candidates",
+            "material_result_material_local_direct_Renderer_set_sharedMaterial_argument_candidates")) > report["material_result_material_local_loads_after_constructor"]:
+        raise ValueError("material_local_renderer_args_exceed_local_reads")
+    if report["material_result_material_constructor_direct_Renderer_set_material_arguments"] != report["material_result_consumer_direct_renderer_material_setter"]:
+        raise ValueError("material_constructor_direct_renderer_material_partition")
+    if report["material_result_material_constructor_direct_Renderer_set_sharedMaterial_arguments"] != report["material_result_consumer_direct_renderer_shared_material_setter"]:
+        raise ValueError("material_constructor_direct_renderer_shared_partition")
+    if report["material_result_nops_skipped_after_ctor"] > 4:
+        raise ValueError("unbounded_material_result_nops")
     return True
 
 def main():

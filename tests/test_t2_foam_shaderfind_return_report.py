@@ -1,7 +1,7 @@
 """Adversarial source-free guards for original Foam Shader.Find result flow."""
 import unittest
 from scripts.t2_foam_shaderfind_return_report import (
-    KINDS, FLAGS_TRUE, FLAGS_FALSE, NUMERIC, STATUS, unique_keys, validate
+    KINDS, MATERIAL_KINDS, MATERIAL_NUMERIC, FLAGS_TRUE, FLAGS_FALSE, NUMERIC, STATUS, unique_keys, validate
 )
 
 def baseline(kind="unproved"):
@@ -14,6 +14,9 @@ def baseline(kind="unproved"):
     r.update({k: True for k in FLAGS_TRUE})
     r.update({k: False for k in FLAGS_FALSE})
     r.update({"return_consumer_" + k: int(k == kind) for k in KINDS})
+    r.update({k:0 for k in MATERIAL_NUMERIC})
+    r["original_Foam_source_field_to_Material_ctor_sites"]=1
+    r.update({"material_result_consumer_" + k: int(k=="unproved") for k in MATERIAL_KINDS})
     return r
 
 class ReturnConsumerSafeReportTests(unittest.TestCase):
@@ -35,6 +38,59 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r.update(consumer_return_original_shader_local_loads_same_method=2,
                  consumer_return_original_shader_local_method_contains_Material_Shader_constructor=1)
         self.assertTrue(validate(r))
+    def test_real_material_field_to_renderer_setter(self):
+        r=baseline("instance_shader_field")
+        r["consumer_exact_original_managed_Shader_field_definitions_resolved"]=1
+        r["material_result_consumer_unproved"]=0
+        r["material_result_consumer_instance_material_field"]=1
+        r["material_result_exact_original_field_definition_resolved"]=1
+        r["material_result_original_material_field_loads"]=2
+        r["material_result_original_material_field_distinct_readers"]=2
+        r["material_result_material_field_direct_Renderer_set_material_arguments"]=1
+        self.assertTrue(validate(r))
+    def test_material_false_direct_renderer_setter_rejected(self):
+        r=baseline()
+        r["material_result_material_constructor_direct_Renderer_set_material_arguments"]=1
+        self.rejects(r)
+    def test_material_false_field_identity_rejected(self):
+        r=baseline()
+        r["material_result_exact_original_field_definition_resolved"]=1
+        self.rejects(r)
+    def test_material_false_field_read_rejected(self):
+        r=baseline()
+        r["material_result_original_material_field_loads"]=1
+        self.rejects(r)
+    def test_material_no_candidate_local_without_local(self):
+        r=baseline()
+        r["material_result_material_local_direct_Renderer_set_material_argument_candidates"]=1
+        self.rejects(r)
+    def test_material_multiple_consumers_rejected(self):
+        r=baseline()
+        r["material_result_consumer_material_local"]=1
+        self.rejects(r)
+    def test_material_zero_producer_rejected(self):
+        r=baseline()
+        r["original_Foam_source_field_to_Material_ctor_sites"]=0
+        self.rejects(r)
+    def test_material_direct_renderer_positive(self):
+        r=baseline()
+        r["material_result_consumer_unproved"]=0
+        r["material_result_consumer_direct_renderer_material_setter"]=1
+        r["material_result_material_constructor_direct_Renderer_set_material_arguments"]=1
+        self.assertTrue(validate(r))
+    def test_material_field_reads_excess_direct_setter(self):
+        r=baseline()
+        r["material_result_consumer_unproved"]=0
+        r["material_result_consumer_static_material_field"]=1
+        r["material_result_exact_original_field_definition_resolved"]=1
+        r["material_result_original_material_field_loads"]=1
+        r["material_result_original_material_field_distinct_readers"]=1
+        r["material_result_material_field_direct_Renderer_set_sharedMaterial_arguments"]=2
+        self.rejects(r)
+    def test_material_unsafe_nops_rejected(self):
+        r=baseline()
+        r["material_result_nops_skipped_after_ctor"]=5
+        self.rejects(r)
     def test_zero_calls_not_false_green(self):
         r=baseline();r["exact_source_Foam_name_direct_typed_Shader_Find_calls"]=0;self.rejects(r)
     def test_zero_partition_rejected(self):
