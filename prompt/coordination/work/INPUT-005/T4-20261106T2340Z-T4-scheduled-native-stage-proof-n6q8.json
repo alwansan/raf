@@ -1,0 +1,21 @@
+{
+  "session_id": "20261106T2340Z-T4-scheduled-native-stage-proof-n6q8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "waiting_ci",
+  "base_sha": "1815543b50ee389772a91cfb6df98a0b1e87376a",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T2340Z-T4-scheduled-native-stage-proof-n6q8.json",
+    "prompt/coordination/clients/T4/sessions/20261106T2340Z-T4-scheduled-native-stage-proof-n6q8.md"
+  ],
+  "experiment_key": "native-42296450023-a1737bd7-reconstruct-stage-versus-signed-delivery",
+  "resource_key": "read-only:native-run-42296450023",
+  "hypothesis": "Artifacts visible before reconstruct completes are diagnostic staging, not signed APK/OBB delivery",
+  "resumed_from_sessions": [
+    "20261106T2237Z-T4-scheduled-native-sha-boundary-k8v3",
+    "20261106T2250Z-T4-chat-runtime-postinstall-rollback-p9v3"
+  ],
+  "updated_at": "2026-11-06T23:40:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next": "Await reconstruct terminal result; inspect exact build/package jobs and signed pair before attributing physical mouse behavior."
+}
