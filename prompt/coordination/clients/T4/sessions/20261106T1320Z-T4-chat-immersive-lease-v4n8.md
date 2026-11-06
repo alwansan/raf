@@ -18,3 +18,10 @@ Check legacy flags and WindowInsetsController still run only for original focuse
 ## Next
 
 Implement, inspect exact C# + Python regressions, verify source ABI CI and log SHA/status, provide T5 a future-phone acceptance boundary.
+
+## Implemented source checkpoint — awaiting exact CI
+
+- Source and tests pushed on `feature/android-native-port`, final [f4b92e1](https://github.com/alwansan/raf/commit/f4b92e1da30fd78356f57ffe3c28bd72aae4be55); original runtime+policy+managed Program+Python tests modified, no workflow alteration.
+- `CanApplyQueuedHide` requires nonzero owner, matching current Activity ID, nonzero matching generation, foreground focused and unpaused; `ScheduleHide` validates before getWindow; lifecycle invalidates old generation; check again immediately before modern or legacy hide. No saved Java wrapper across threads; Android swipe/transient bars policy unchanged.
+- CI source only [42225179203](https://github.com/alwansan/raf/actions/runs/42225179203) on exact final SHA was pending at checkpoint. Earlier superseded pending runs 42225172874/42225166933 show cancelled by GitHub concurrency; **do not label them failures or claim T4 manually cancelled**. No native Unity/player build and no Android phone test.
+- Next: inspect exact run conclusion and compile/test logs, set work/experiment result precisely. INPUT-005 OPEN; world RGD scope remains separately active; NOT_READY 0/3.
