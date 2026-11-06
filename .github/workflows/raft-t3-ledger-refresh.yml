@@ -99,6 +99,16 @@ jobs:
           # Android pixel evidence; remain RENDER-002 OPEN/NOT_READY.
           particle108_dummy_output="https://github.com/alwansan/raf/actions/runs/42136474867"
           assert particle108_dummy_output in issue[0]["evidence"]
+          # Genuine immutable original source particle 108-use D3D11 has
+          # 4 paired VS/FS keyword variants / 8 distinct stage programs.
+          # This is SOURCE ONLY; ShaderLab dummy still not restored on phone.
+          particle108_dxbc="https://github.com/alwansan/raf/actions/runs/42139137265"
+          assert particle108_dxbc in issue[0]["evidence"]
+          assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
+                     and r["counts"]["exact_matched_vertex_fragment_keyword_permutation_pairs"]==4
+                     and r["counts"]["distinct_original_linked_D3D11_programs"]==8
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY"
                      and r["counts"]["exact_original_particle_shader_exported_as_marked_dummy"]==1
                      and r["counts"]["matched_source_to_export_texenv_texture_ptrs"]==10
