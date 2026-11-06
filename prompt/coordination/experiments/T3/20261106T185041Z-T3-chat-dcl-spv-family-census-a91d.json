@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
+  "issue_id": "RENDER-002",
+  "status": "completed_source_authentic",
+  "experiment_key": "T3-Particle108-original-SHDR-DCL-versus-VKD3D-SPV-stagefamily-census-15964ea8-8stage-v1",
+  "hypothesis": "Source DXBC resource declarations and Vulkan-translated stage descriptor resource families have not been compared stage-by-stage; missing CB/SRV/Sampler category could explain lost graphics independently of original Material colors.",
+  "source_repo": "alwansan/raf",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_sha": "419890fb16a090e636c49bba76bf774e9eb2de2f",
+  "inputs": "Six exact original ZIP2 scenes and four source shader/material owner files authenticated from immutable SHA; SHA-scoped original four Particle108 keyword pairs/8 stage DXBC; source-free fixture only in public tests.",
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "runner": "ubuntu-24.04",
+    "vkd3d-compiler": "1.2-15build1",
+    "spirv-tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+    "spirv-cross": "2021.01.15+1.3.239.0-1build1",
+    "glslang-tools": "15.1.0-2~ubuntu0.24.04.2"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_dcl_spv_family_census.py' -v",
+    "python3 -m scripts.t3_particle108_dcl_spv_family_census --original $RUNNER_TEMP/t3-original-Particle108-stage-family --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-particle108-dcl-spv-family-safe.json"
+  ],
+  "source_only_run": "https://github.com/alwansan/raf/actions/runs/42274655551",
+  "source_only_job": 128087756106,
+  "source_only_tests": 10,
+  "real_original_run": "https://github.com/alwansan/raf/actions/runs/42274933802",
+  "real_original_job": 128088713454,
+  "real_original_conclusion": "success",
+  "workflow_path": ".github/workflows/raft-t3-particle108-dcl-spv-family-census.yml",
+  "workflow_manual_only_commit": "b6fcd74b4c474c33c67d6ce27c7b5b5d77b16bf5",
+  "original_source_sha_verified": true,
+  "original_eight_stages_verified": true,
+  "original_dxbc_declarations": {
+    "cbuffer": 24,
+    "srv": 10,
+    "sampler": 10,
+    "uav": 0
+  },
+  "translated_spirv_reflections": {
+    "ubos": 24,
+    "separate_images": 10,
+    "separate_samplers": 10,
+    "images": 0,
+    "ssbos": 0,
+    "combined_textures": 0
+  },
+  "stage_family_absence_signals": {
+    "source_cb_without_translated_ubo": 0,
+    "source_srv_without_translated_image_category": 0,
+    "source_sampler_without_translated_sampler_category": 0,
+    "source_uav_without_storage_descriptor": 0,
+    "translated_ubo_without_source_cb": 0
+  },
+  "negative_controls": [
+    "Synthetic no-provenance even when totals agree; public aggregation has no numeric source register or Vulkan set/binding values",
+    "Missing category signals, combined sampler/image category, malformed DCL and SPV descriptors and duplicate first register keys tested sourcefree",
+    "Eight stages across four exact VS/FS pairs, no swapped stage evidence accepted",
+    "Original stage families complete but this is not per-resource binding identity, ShaderLab, pixels or real device test"
+  ],
+  "rejected_hypotheses": [
+    "At least one of eight original Particle108 stages declaring CB/SRV/sampler has no reflected translated corresponding resource family category (false on this source).",
+    "Total original source DCL resource-family counts differ from reflected SPIR-V category counts for the selected eight stages (false for the selected source)."
+  ],
+  "limitations": [
+    "Aggregate family counts equal, but stage-local descriptor family cardinalities and per-resource DXBC register↔Vulkan set/binding provenance still unproven",
+    "DCL can be unused/optimized away; combined image/sampler translation possible; flags are indicators, not correctness proof",
+    "No HLSL ShaderLab restored; exact selected export remains DummyShaderTextExporter; no Unity/Android GPU device pixel evidence",
+    "No private identifiers, hashes of individual stages or source values, raw bytecode, GLSL/HLSL or asset data published",
+    "No full native build or APK request; trial vote T3 stays لا يحتاج"
+  ],
+  "game_shaders_modified": false,
+  "shaderlab_original_program_integrated": false,
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "owner_phone_artifact": "https://github.com/alwansan/raf/actions/runs/42058825739",
+  "next_step": "Investigate exact per-stage counts (totals can mask moving category counts), then trustworthy source primary DCL register↔SPIRV descriptor remapping by keyword with explicit provenance. Only integrate verified non-dummy Shader48, validate Unity and Adreno before T3 trial vote changes.",
+  "updated_at": "2026-11-06T18:58:05.947Z"
+}
