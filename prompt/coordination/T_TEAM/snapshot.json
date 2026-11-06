@@ -6446,6 +6446,21 @@
       "_record_path": "../B_TEAM/events/T1/20261106T122023Z-T1-chat-y-guard-paths-d71e.json"
     },
     {
+      "id": "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+      "owner": "T1",
+      "session_id": "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T12:41:54.149Z",
+      "summary": "Authenticated original slot0 FFT butterfly1 Y branch predicate original SPIR-V OpINotEqual uses two uint32 operands (one OpBitcast, one integer OpConstant). Only the FALSE successor can reach the Y image read; TRUE successor cannot reach it. Predicate structurally gates the read rather than choosing Y store directly. CI 42219435992 SUCCESS with 14/14 source-free controls after hardening mid-block branch/target validation. Prior path analysis 42217830589 found last Y writer float32 constant before branch. No dynamic predicate truth, original↔Unity numeric parity or Android water fix established.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42219209890",
+        "https://github.com/alwansan/raf/actions/runs/42219435992",
+        "https://github.com/alwansan/raf/commit/fc3598e1f3c7cffea41d2f9db9ccdf872274083e"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T123411Z-T1-chat-y-inequal-branch-f52a.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -9351,6 +9366,24 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.json"
     },
     {
+      "id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T12:49:29.935Z",
+      "summary": "Fixed APK/OBB pair verifier gap: non-core local ZIP header name/flag/method/CRC/size could disagree with central directory despite recomputed matching manifest SHA, causing resource read BadZipFile. Now checks every local header plus compressed payload bounds/nonoverlap without unpacking 6GB. New 7 adversarial +2 ZIP64/descriptor positives; final CI42220308068 PASS 32/32. No real artifact/device checked.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42220308068",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_APK_OBB_LOCAL_ZIP_HEADER_VALIDATION_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/7839aa9c13ebff573762d8ade1f390fddb0268c0"
+      ],
+      "limits": "Production packaging validator improved but synthetic-only proof; original signed APK, OBB internal GUID/signature, runtime mount, water/FFT and device readiness unresolved.",
+      "next_step": "Verify signed APK/OBB inner bytes and real ZIP structure in authorized isolated runner, preserve T1–T4 scope.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1243Z-T5-chat-zip-local-headers-9e2a.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9379,7 +9412,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "95867b524fca3aad2478b1eda89bf5f0d89f396d5d4ef5aa1b4582c6cc82e53d",
+  "source_input_sha256": "2355b1645c3a51c415a3d9e899f57061ad30a2d763a89e3651d18ae02dd3fb1f",
   "generation": "T-2026-11-05",
-  "input_sha256": "6fae06d6ffdb11b0eedfff932201deca21d0bf9cbec386fef63d76c7fd75aadf"
+  "input_sha256": "9a2af70fb5b1ea233d173b32ec9fe6aa08b6c52535e2cf7dcccd224864daff15"
 }
