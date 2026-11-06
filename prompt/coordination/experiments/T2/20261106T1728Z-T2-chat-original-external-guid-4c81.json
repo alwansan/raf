@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1728Z-T2-chat-original-external-guid-4c81",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "The two immutable original Material external Shader references may or may not carry a usable nonzero Unity FileIdentifier GUID; the authentic target may or may not contain reverse reference(s) to Foam Shader source owner. Distinguish valid zero GUID from missing data without promoting compiled path candidates to Unity runtime identity.",
+  "source_commit": "5f5ba4450209841993c8600534cdc63e097a5de9",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    {
+      "scope": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "scope": "Original Foam Shader PathID2420 raw object",
+      "sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+    },
+    {
+      "scope": "original one external Shader target file",
+      "bytes": 758412,
+      "sha256": "private_original_manifest_SHA_checked_not_exported"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "Python": "GitHub Actions ubuntu-24.04 Python 3",
+    "Git": "sparse-checkout set --no-cone"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_original_external_guid_evidence.py -v",
+    "python3 -m unittest discover -s tests -p test_t2_foam_original_manifest_pptr.py -v",
+    "python3 -m scripts.t2_original_external_guid_evidence --zip2 <pinned original> --source <authenticated owner scratch> --target <SHA-verified original target scratch> --out <count-only JSON>"
+  ],
+  "negative_controls": [
+    "both zero GUID rows, one FileID",
+    "two distinct type enumerations and nonzero GUIDs",
+    "same target path with different GUIDs counted rather than falsely authenticated",
+    "same fileID with contradictory GUID/type/path rejected",
+    "GUID bytes wrong size/type rejected",
+    "invalid fileIDs, unknown file types, bad row shape rejected",
+    "reciprocal original Foam candidate vs unrelated target link",
+    "malformed target external GUID or type rejected",
+    "malformed target Material Shader pointer rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-original-external-guid-evidence.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42262404131",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42262404131/artifacts/13525462480"
+  ],
+  "budget": "18 minutes Ubuntu24.04; 115978112-byte SHA original owner and one 758412-byte SHA target from ZIP2; no game code executed, no Unity build/Android device.",
+  "status": "completed",
+  "observed_result": {
+    "original_source_authenticated": true,
+    "original_target_sha_verified": true,
+    "original_external_Shader_PPtr_rows": 2,
+    "unique_external_fileIDs": 1,
+    "GUID_zero_rows": 2,
+    "GUID_nonzero_rows": 0,
+    "GUID_distinct_nonzero": 0,
+    "source_type_0_rows": 2,
+    "original_target_external_table_entries": 2,
+    "original_target_Material_objects": 1,
+    "reciprocal_target_foam_owner_identifiers": 0,
+    "reciprocal_target_foam_material_shader_pptr_candidates": 0,
+    "sourcefree_controls_passed": 22,
+    "GitHub_Actions_conclusion": "success",
+    "independent_original_Unity_GUID_identity_verified": false,
+    "original_Foam_Material_CB0_upload_verified": false,
+    "Adreno_water_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "Two original external Shader pointers carry a nonzero FileIdentifier GUID suitable for independent target GUID verification: both have zero 16-byte GUID.",
+    "Target file contains a direct reverse FileIdentifier to Foam owner and Material.m_Shader reference to original Foam PathID2420: zero in this single file.",
+    "Any all-zero GUID proves corrupt original data: false, zero is observed source metadata only and does not determine Unity runtime path handling."
+  ],
+  "limitations": [
+    "Original source only covers the exact two external target pointers from sharedassets0 and one original target file, not whole-game materials.",
+    "Original zero GUID means this field alone cannot authenticate external target GUID independently; filename and typed PathID remain candidates.",
+    "Reverse links absent in this asset do not rule out other materials/scenes/dynamic allocations referencing Foam.",
+    "Full ZIP2 data set not SHA-verified, only staged owners; original shader names, GUID bytes, source paths and raw private data never published.",
+    "Unity gameplay CB0 binding/ShaderLab compilation and device water pixels unverified."
+  ],
+  "integration_commit": "5f5ba4450209841993c8600534cdc63e097a5de9",
+  "evidence_doc": "docs/T2_FOAM_ORIGINAL_EXTERNAL_GUID_EVIDENCE_2026-11-06.md",
+  "next_step": "Select a new original-pinned source owner/scene/bundle with genuine Foam Shader PathID reference evidence; trace real Material/host CB0 and link ShaderLab before separate Unity/Adreno phone validation. Do not repeat zero-GUID census unchanged.",
+  "updated_at": "2026-11-06T17:33:31.859Z"
+}
