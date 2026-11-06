@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T0248Z-T5-chat-native-delivery-retention-e8a3",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "t5-native-42058825739-publish403-3day-signed-delivery-retention-authorized-token-route-source-policy-v1",
+  "resource_key": "raft-unity-editor-android-import.yml-publish-early-test-retention-only",
+  "status": "completed_source_verified",
+  "baseline_native_run": 42058825739,
+  "baseline_native_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+  "native_build_job": 127354763134,
+  "native_publish_failure_job": 127441439836,
+  "original_release_failure": "HTTP 403 Resource not accessible by integration, API /repos/alwansan/raf/releases; requested contents:write but effective permission denied",
+  "prior_artifact_retention_days": {
+    "delivery": 1,
+    "signed": 2,
+    "audited_recovery": 2
+  },
+  "new_artifact_retention_days": {
+    "delivery": 3,
+    "signed": 3,
+    "audited_recovery": 3
+  },
+  "publisher_auth": "owner-provisioned secrets.RAFT_RELEASE_TOKEN if available else unchanged github.token",
+  "observed_result": {
+    "new_native_build_executed": false,
+    "real_release_published": false,
+    "token_presence_checked": false,
+    "token_scope_verified": false,
+    "source_ci_url": "https://github.com/alwansan/raf/actions/runs/42153075428",
+    "source_ci_job": 127680694541,
+    "source_ci_conclusion": "success",
+    "tests": "9/9 passing",
+    "failed_publication_still_fails_delivery_result": true,
+    "current_rescue_artifact_id": 13454900880,
+    "current_rescue_expiry": "2026-11-08T21:12:40Z",
+    "prior_exact_original_5_95GB_hash_verified": true
+  },
+  "source_modification_commit": "eae703a3c136327e08c55ab60ad35b7a5d3007ab",
+  "test_commit": "594b8a5128e54b5fc1ba1a7b3b5b9b3a4f979182",
+  "workflow_commit": "d2e4adabd7a25ae4a4ae6b9442cbc561208eb5ca",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42153075428",
+  "source_provenance": "full original native archive SHA verified by independent older CI42110297871, this experiment reads only source/YAML and cannot verify token or publication",
+  "negative_controls": [
+    "1-day delivery",
+    "2-day signed checkpoint",
+    "missing recovery artifact",
+    "missing optional owner-token precedence",
+    "release failure swallowed",
+    "release remote asset mismatch check removed",
+    "downstream release-result bypass",
+    "source-only push accidentally invoking Unity"
+  ],
+  "limitations": [
+    "No new Unity native build",
+    "No actual token authorization test; repository secret may be missing",
+    "No GitHub Release published",
+    "New retention applies only to newly created artifacts",
+    "3-day artifacts are time-limited and subject to GitHub repo policy, not permanent Releases",
+    "P0 shader FFT and world save acceptance remain separately open"
+  ],
+  "next_step": "Owner can configure repository Actions secret RAFT_RELEASE_TOKEN with limited Contents:RW to alwansan/raf if policy permits, or correct effective repo Actions permissions, then explicitly dispatch native delivery and require actual gh release view + exact asset equality. Until then use original authenticated retained artifact13454900880 before 2026-11-08T21:12:40Z."
+}
