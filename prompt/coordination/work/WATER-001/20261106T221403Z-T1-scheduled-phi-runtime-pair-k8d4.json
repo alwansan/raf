@@ -1,0 +1,25 @@
+{
+  "session_id": "20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4",
+  "origin": "scheduled",
+  "agent": "T1",
+  "branch": "feature/android-native-port",
+  "baseline_sha": "4e12e5957054b992d90a3c362fea5288ec5609c7",
+  "status": "in_progress",
+  "hypothesis": "Static translated site2 Y OpPhi two incoming CFG paths cannot identify selected runtime predecessor; need matched keyed per-invocation original/Unity captures and exact FindKernel/Dispatch resource bindings before claiming causal fix.",
+  "experiment_key": "T1-site2-y-phi-runtime-pair-k8d4",
+  "files": [
+    "prompt/coordination/work/WATER-001/20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4.json",
+    "prompt/coordination/clients/T1/sessions/20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4.md"
+  ],
+  "shared_resource": "none; no CI or native run",
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261106T220645Z-T1-chat-site2y-phi-9b61.md"
+  ],
+  "avoid": [
+    "T1 chat site2 phi source tools",
+    "T2 water foam",
+    "T4 mouse",
+    "T5 resolution and buttons"
+  ],
+  "current_native_run": 42296450023
+}
