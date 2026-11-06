@@ -1,0 +1,27 @@
+name: T1 WATER-001 FFT coordinate axis-overlap source checks
+
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t1_fft_coordinate_axis_overlap_gate.py
+      - tests/test_t1_fft_coordinate_axis_overlap_gate.py
+      - .github/workflows/raft-t1-fft-axis-overlap-source.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-axis-overlap-source-only
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run CPU-only adversarial axis-overlap tests
+        run: python3 -m unittest discover -s tests -p 'test_t1_fft_coordinate_axis_overlap_gate.py' -v
