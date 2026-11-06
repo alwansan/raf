@@ -84,3 +84,4 @@ jobs:
 # T5 INTEGRATION-001 full original 672853870B signed APK SHA and v1 v2 cryptography verified CI42228262902
 # T5 INTEGRATION-001 20261106T1358Z original 2301256312-byte signed OBB full SHA + CRC verified CI42230326050
 # T5 real 2.3GB original OBB SHA/CRC CI42230326050 and T1 exact missing event id 20261106T1408Z corrected
+# T5 INTEGRATION-001 20261106T1520Z real original signed APK-only Unity OBB GUID marker CI42243852483 13 tests, engine/device mount unknown
