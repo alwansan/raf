@@ -101,6 +101,7 @@ class Program
             int queueCountUnderFault = -1, pendingUnderFault = -1;
             bool originalSeedSurvivedFault = false;
             bool originalSeedRecoverable = false;
+            bool overflowMarkerRecoverable = false;
             long overflowRetained = -1;
             try
             {
@@ -140,6 +141,8 @@ class Program
                     broken.Flush();
                     originalSeedRecoverable = Lines(failedRoot).Any(
                         line => line.Contains("\"operation\":\"seed\""));
+                    overflowMarkerRecoverable = Lines(failedRoot).Any(
+                        line => line.Contains("\"operation\":\"queue_overflow\""));
                 }
             }
             finally { broken.Dispose(); }
@@ -148,6 +151,7 @@ class Program
             Require(overflowRetained > 0);
             Require(originalSeedSurvivedFault);
             Require(originalSeedRecoverable);
+            Require(overflowMarkerRecoverable);
             var repeated = new RepeatedDiagnosticMessages();
             DateTime now = DateTime.UtcNow;
             Require(repeated.First("Error", "same message\nfull stack", now));
