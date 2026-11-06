@@ -2,7 +2,7 @@
   "session_id": "20261106T0740Z-T4-scheduled-p4k8",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "waiting_ci",
   "baseline_sha": "ecd4490f669d8cc7bacf558810762dd9c2565c29",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
@@ -16,5 +16,13 @@
     "20261106T0644Z-T4-scheduled-h6r9",
     "20261106T0336Z-T4-scheduled-m7q2"
   ],
-  "updated_at": "2026-11-06T07:40:00Z"
+  "updated_at": "2026-11-06T07:47:00Z",
+  "source_commit": "d234b10e431e9b1f416456c5e767d70e49680397",
+  "test_commit": "446bc1f0a0817189a38db4803678e74dc27058db",
+  "ci_runs": [
+    42182264435,
+    42182264431
+  ],
+  "verification": "static source assertions pass; source CI in_progress on d234b10e; regression test committed afterward; phone untested",
+  "next_step": "Inspect CI for source commit and subsequent test commit; then signed paired APK/OBB device mouse keyboard cursor test; do not rerun equivalent jobs"
 }
