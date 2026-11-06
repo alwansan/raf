@@ -1,0 +1,21 @@
+{
+  "id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a-result",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T17:17:30Z",
+  "summary": "Actual Unity2021 EditMode 2/2 genuine synthetic keyword tests PASS, 192 GPU uint32 readback words match default/enabled/disabled variants, undeclared keyword rejected; private cleanup success. Not original Raft program/Adreno.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42259968584",
+    "https://github.com/alwansan/raf/commit/b958990243523d18a6d44d888e6328e17fe07ddf",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a.md"
+  ],
+  "limitations": [
+    "Original authored FFT kernel/keyword mapping not proven",
+    "Full private T1FftKernelRuntimeProbe.cs not compiled by sourcefree run",
+    "No Android/Adreno GPU water or original Unity/OpenGL numeric parity evidence"
+  ],
+  "prior_event": "prompt/coordination/B_TEAM/events/T1/20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a.json"
+}
