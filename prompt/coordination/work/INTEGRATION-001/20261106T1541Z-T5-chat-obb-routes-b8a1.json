@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1541Z-T5-chat-obb-routes-b8a1",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_real_old_signed_5_FMOD_29_Haptics_runtime_routes_and_lengths_verified",
   "base_sha": "e5852a6703bd2014afddd6719a19601ff7d38105",
-  "updated_at": "2026-11-06T15:51:59.684Z",
+  "updated_at": "2026-11-06T16:04:06.188Z",
   "resumed_from_sessions": [
     "20261106T1520Z-T5-chat-real-unity-guid-2b61.md",
     "20261106T1413Z-T5-chat-ledger-t1id-7b42.md",
@@ -43,5 +43,21 @@
     "fail closed on unexpected resource inventories or duplicate/unsafe archive entries",
     "no modifications to T1-T4 production sources"
   ],
-  "next_step": "Add data-only original runtime route inventory probe and synthetic mismatch/path tests; run independently in GH Actions and record exact original results."
+  "next_step": "Original owner-device OBB main.89 mounted file hash/path and runtime fmod.bank_root/asset read; avoid more original metadata census unless new evidence. Team P0 water/visuals OPEN.",
+  "source_result_commit": "6c4c7363b703cb0e0aa4d8940f0d5afd550afd75",
+  "result": {
+    "ci_run": "https://github.com/alwansan/raf/actions/runs/42248117179",
+    "job_id": 127995625188,
+    "conclusion": "success",
+    "synthetic_tests": 17,
+    "actual_old_signed_obb_FMOD_banks": 5,
+    "actual_old_signed_obb_haptic_wavs": 29,
+    "actual_obb_zip_members": 39,
+    "actual_original_HTTP_206_bytes": 6991,
+    "actual_original_HTTP_206_requests": 86,
+    "exact_paths_and_uncompressed_lengths": true,
+    "full_OBB_SHA_prior_ci": 42230326050,
+    "actual_phone_obb_mount_verified": false,
+    "current_game_source_GPU_ready": false
+  }
 }
