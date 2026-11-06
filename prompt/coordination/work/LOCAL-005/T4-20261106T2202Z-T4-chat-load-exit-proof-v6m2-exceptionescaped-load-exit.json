@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2202Z-T4-chat-load-exit-proof-v6m2",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "LOCAL-005",
+  "track": "original-owner5nov-LoadT-exit-exception-disambiguation",
+  "base_sha": "889e0afd021ff8f4b27ef4a65c45b8a6ff156f4e",
+  "resumed_from_sessions": [
+    "20261106T2147Z-T4-chat-postinstall-owner-drift-k4r8",
+    "20261106T2138Z-T4-scheduled-native-retry-q4n7"
+  ],
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py"
+  ],
+  "experiment_key": "T4-immutable-owner5nov-LoadT-original-escaped-error-exit-negative-control-original-logger-F3-v1",
+  "resource_key": "T4-CL520c4cf-pinned-JSONL-readonly",
+  "hypothesis": "A Load<T> original operation that logs a nonzero filename snapshot but exits with exceptionEscaped=True (or malformed/missing exit detail) is currently counted as fully traced; the original wrapper explicitly emits exceptionEscaped status, so this can overstate load evidence.",
+  "approach": "Add deterministic RED tests for escaped/malformed/missing Load<T> exit details and explicit operation exception marker, then require clean original exit and no escaped exception; run exact pinned original CL 3 JSONL Git blobs in existing isolated CI.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "updated_at": "2026-11-06T22:02:00Z",
+  "next_step": "Register RED source-only test then minimal strict classifier fix, no native build request."
+}
