@@ -1,11 +1,6 @@
 name: T3 RENDER-002 SHA-original DCL vs SPIR-V stage-local descriptor family census
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - prompt/coordination/requests/t3-dcl-spv-family-a91d.trigger
 permissions:
   contents: read
 concurrency:
