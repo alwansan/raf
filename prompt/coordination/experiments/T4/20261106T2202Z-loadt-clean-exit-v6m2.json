@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2202Z-T4-chat-load-exit-proof-v6m2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "experiment_key": "T4-immutable-owner5nov-LoadT-original-escaped-error-exit-negative-control-original-logger-F3-v1",
+  "original_wrapper": "scripts/instrument_android_runtime_operations.py emits Load<T>.exit with exceptionEscaped=True/False; elapsed_ms=F3 and Load<T>.exception for escaped original failures.",
+  "negative": {
+    "commit": "0896fbf15e754e66fe8abb66639cd69594c55d46",
+    "run": "https://github.com/alwansan/raf/actions/runs/42301170684",
+    "status": "expected_failure",
+    "evidence": "18 prior tests pass; new 2 test methods with 6 synthetic scenarios fail: 5 malformed/missing/escaped exits plus explicit Load<T>.exception erroneously counted as fully-traced."
+  },
+  "integration": {
+    "commit": "39ff084dfd1343e4311d77a040680d049ec6c872",
+    "run": "https://github.com/alwansan/raf/actions/runs/42301269067",
+    "job_id": 128179377923,
+    "status": "success",
+    "evidence": "19/19 synthetic tests pass. Immutable CL 2026-11-05 original phone JSONL Git blobs exact source 520c4cf409aa20a4db54ff80ed87d8807d9cba57 verified. Session 1/2/3 genuine save cycles=3/1/3, genuine Load<T> well-traced clean exits=0/3/4, incomplete load=0/0/0, no queue overflow. No private data emitted."
+  },
+  "fix": "Require exact original exceptionEscaped=False; elapsed_ms=F3 for Load<T>.exit, disqualify escaped/malformed/missing original Load<T> exits and explicit Load<T>.exception before claiming a fully traced call.",
+  "limitations": "This is immutable 5-Nov log interpretation, not proof of original BinaryFormatter object, full app restart, same world, durability, latest source candidate or new Android acceptance. No .rgd/raw log content published.",
+  "native_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "source_sha_native": "a1737bd736e276d53df808442cfae3b1eea0d488",
+  "next_step": "Observe owner-requested native build completion; request device same-world .rgd save/quit/restart/reopen and signed APK/OBB provenance. Leave full NOT_READY 0/3 and LOCAL-005 open.",
+  "at": "2026-11-06T22:02:00Z"
+}
