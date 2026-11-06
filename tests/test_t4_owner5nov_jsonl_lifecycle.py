@@ -126,6 +126,62 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         self.assertEqual(stage["fully_traced_original_savegame_cycles"], 0)
         self.assertFalse(stage["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
 
+    def _loadt_trace(self, operations):
+        return self.put("loadt.jsonl", [
+            row("synthetic-load-session", seq, "save", op,
+                "2026-11-05T13:00:%02dZ" % seq,
+                "exists_at_filename_argument=True; length_class=nonzero; "
+                "readback_and_deserialization_unverified=true"
+                if op == "Load.argumentFileSnapshot" else "")
+            for seq, op in enumerate(operations, start=1)
+        ])
+
+    def test_one_original_loadt_call_has_one_nonzero_file_snapshot_and_exit(self):
+        path = self._loadt_trace([
+            "Load<T>.enter", "Load.argumentFileSnapshot", "Load<T>.exit",
+        ])
+        record = analyze([path])["sessions"][0]
+        self.assertEqual(record["fully_traced_original_loadt_calls"], 1)
+        self.assertEqual(record["incomplete_or_ambiguous_original_loadt_calls"], 0)
+        self.assertTrue(
+            record["all_original_loadt_calls_have_one_nonzero_snapshot_no_caught"])
+        self.assertFalse(analyze([path])["original_rgd_deserialization_success_proven"])
+
+    def test_equal_loadt_counts_but_snapshot_before_entry_does_not_prove_load(self):
+        record = analyze([self._loadt_trace([
+            "Load.argumentFileSnapshot", "Load<T>.enter", "Load<T>.exit",
+        ])])["sessions"][0]
+        self.assertEqual(record["original_operation_counts"]["load_enter"], 1)
+        self.assertEqual(record["original_operation_counts"]["load_file_snapshot"], 1)
+        self.assertEqual(record["original_operation_counts"]["load_exit"], 1)
+        self.assertEqual(record["fully_traced_original_loadt_calls"], 0)
+        self.assertGreater(record["incomplete_or_ambiguous_original_loadt_calls"], 0)
+
+    def test_loadt_with_two_or_missing_snapshots_must_not_look_complete(self):
+        cases = [
+            ["Load<T>.enter", "Load<T>.exit"],
+            ["Load<T>.enter", "Load.argumentFileSnapshot",
+             "Load.argumentFileSnapshot", "Load<T>.exit"],
+            ["Load<T>.enter", "Load.argumentFileSnapshot.unavailable",
+             "Load<T>.exit"],
+        ]
+        for operations in cases:
+            with self.subTest(operations=operations):
+                record = analyze([self._loadt_trace(operations)])["sessions"][0]
+                self.assertEqual(record["fully_traced_original_loadt_calls"], 0)
+                self.assertFalse(
+                    record["all_original_loadt_calls_have_one_nonzero_snapshot_no_caught"])
+
+    def test_loadt_caught_exception_disqualifies_even_with_nonzero_path(self):
+        record = analyze([self._loadt_trace([
+            "Load<T>.enter", "Load.caughtException",
+            "Load.argumentFileSnapshot", "Load<T>.exit",
+        ])])["sessions"][0]
+        self.assertEqual(record["fully_traced_original_loadt_calls"], 0)
+        self.assertGreater(record["incomplete_or_ambiguous_original_loadt_calls"], 0)
+        self.assertFalse(
+            record["all_original_loadt_calls_have_one_nonzero_snapshot_no_caught"])
+
     def test_duplicate_startup_segment_is_counted_once(self):
         event = row("synthetic", 1, "save", "SaveGame.enter", "2026-11-05T12:00:00Z")
         one = self.put("first.jsonl", [event])
