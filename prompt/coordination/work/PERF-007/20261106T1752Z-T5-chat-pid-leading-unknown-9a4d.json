@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1752Z-T5-chat-pid-leading-unknown-9a4d",
+  "issue_id": "PERF-007",
+  "track": "independent genuine CL regression review of T5 scheduled PID lifecycle guard",
+  "status": "active",
+  "base_sha": "58a52de5126ee4e84e018d449a4ceefb6bc617ea",
+  "updated_at": "2026-11-06T17:52:04Z",
+  "resumed_from_sessions": [
+    "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
+    "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
+    "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/PERF-007/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d.md",
+    "prompt/coordination/discussions/PERF-007/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d-to-scheduled.md",
+    "prompt/coordination/experiments/T5/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d.json"
+  ],
+  "experiment_key": "T5-CL520c4cf4-scheduled-PID-stop-source-a5f2172f-leading-unknown-1-and-6-rows-regression-v1",
+  "resource_key": "two original read-only small public pinned CL JSONL blobs; no game source, no CI dispatch",
+  "hypothesis": "Scheduled T5 stop/restart patch treats pre-first-verified nonrunning startup rows as distinct process epochs. On real source-pinned CL 71/119-row datasets, that would convert proven one PID epoch into 2/7, rejecting previously valid fresh FPS and breaking existing real CL workflow assertions. Preserve explicit stop/restart safety while exempting leading nonrunning rows from epoch count until first verified running PID.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261106T1751Z-T5-scheduled-lifecycle-7c4e.md",
+    "https://github.com/alwansan/raf/actions/runs/42263013004"
+  ],
+  "coordination": "Scheduled session owns scripts/t5_cl_pid_epoch_audit.py and tests/test_t5_cl_pid_epoch_audit.py, currently waiting_ci; do not modify them, their session, their work or original T5 workflow while scope active. Publish read-only actual CL differential finding and safe fix suggestion in separate PERF discussion.",
+  "next_step": "Record actual pinned 71/119 input lengths, leading unknown counts and observed 2/7 epoch error without revealing private PID; ask scheduled T5 to add negative fixture and validate actual pinned CI; keep trial vote NO and no Unity build."
+}
