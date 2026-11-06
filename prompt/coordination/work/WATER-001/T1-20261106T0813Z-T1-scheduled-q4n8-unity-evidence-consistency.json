@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0813Z-T1-scheduled-q4n8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "8aa55f47c7d68469502e992d109ed3033c5471fa",
+  "intended_files": [
+    "scripts/t1_fft_unity_evidence_gate.py",
+    "tests/test_t1_fft_unity_evidence_gate.py",
+    "prompt/coordination/clients/T1/sessions/20261106T0813Z-T1-scheduled-q4n8.md",
+    "prompt/coordination/work/WATER-001/T1-20261106T0813Z-T1-scheduled-q4n8-unity-evidence-consistency.json"
+  ],
+  "experiment_key": "T1-Unity-evidence-editor-support-without-invocation-negative-control-v1",
+  "resource_key": null,
+  "hypothesis": "Source-free Unity evidence classifier currently accepts editor_supports_compute=true while editor_invoked=false, allowing contradictory observation metadata; fail closed.",
+  "owner_device_run": 42058825739,
+  "taken_over_from": "prompt/coordination/clients/T1/sessions/20261106T0710Z-T1-scheduled-a6d4.md",
+  "updated_at": "2026-11-06T08:13:00Z"
+}
