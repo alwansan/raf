@@ -1,0 +1,99 @@
+name: T2 WATER-001 source-original 40 sharedassets Foam Material host scan
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_foam_material_host_scan.py
+      - tests/test_t2_original_foam_material_host_scan.py
+      - .github/workflows/raft-t2-original-foam-material-host-scan.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-original-foam-material-host-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  authentic-foam-host-graph:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: New Foam material PPtr source-free negative and positive tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_foam_material_host_scan.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_foam_material_host_scan.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          print("T2_SHAREDASSETS_SCRATCH_BUDGET_SAFE")
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-foam-allshared
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Private source-original all-40 SHA check and Foam Material link graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 1080s python3 -m scripts.t2_original_foam_material_host_scan \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-foam-allshared" \
+            --scratch "$RUNNER_TEMP/t2-foam-allshared-sha" \
+            --out "$RUNNER_TEMP/t2-foam-original-host-safe.json"
+      - name: Validate only safe complete original source graph counts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t2-foam-original-host-safe.json"
+          r=json.loads(p.read_text(encoding="utf8"))
+          assert r["status"] == "original_SHA_authenticated_sharedassets_Foam_PPtr_census"
+          assert r["original_zip2_provider_SHA_verified"] is True
+          assert r["original_Foam_owner_and_shader_SHA_verified"] is True
+          assert r["sharedassets_original_files_SHA_verified"] == 40
+          assert r["sharedassets_original_bytes_SHA_verified"] == 474065455
+          assert r["material_rows"] == r["material_parsed"] + r["material_unparsed"]
+          assert r["material_rows"] > 0
+          assert 0 <= r["owners_with_local_foam_material_refs"] <= 40
+          assert 0 <= r["owners_with_external_foam_PPtr_candidates"] <= 40
+          assert r["basename_candidate_is_original_Unity_GUID_verified"] is False
+          assert r["Foam_actual_CB0_runtime_binding_verified"] is False
+          assert r["Android_water_render_pixels_verified"] is False
+          assert r["private_original_paths_names_GUIDs_or_raw_exported"] is False
+          assert all(type(v) in (int,bool,str) for v in r.values())
+          assert not any(k in r for k in (
+             "original_guid_values", "external_paths", "material_names",
+             "original_shader_names", "original_asset_bodies", "private_raw_bytes"
+          ))
+          print("T2_ORIGINAL_40_SHAREDASSETS_SAFE_ASSERTIONS_PASS")
+          PY
+      - name: Remove original ZIP2 and SHA staged assets before artifact
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-allshared-sha" \
+            "$GITHUB_WORKSPACE/t2-original-foam-allshared"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-40-sharedassets-foam-host-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-original-host-safe.json
+          if-no-files-found: error
+          retention-days: 7
