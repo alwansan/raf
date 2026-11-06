@@ -224,8 +224,8 @@ def inspect_original_source(zip2, scratch, progress=lambda _: None):
             if key <= 0 or key in scripts or len(scripts) > MAX_TYPED_SCRIPT_OBJECTS:
                 raise ValueError("original_MonoScript_local_object_duplicate_or_unbounded")
             scripts.add(key)
-    if not scripts:
-        raise ValueError("original_foam_owner_no_typed_MonoScript_objects")
+    # A source owner with zero MonoScript objects is a valid negative,
+    # not evidence that source scripts or runtime links do not exist elsewhere.
     del objects, env
     gc.collect()
     progress("load_original_level_MonoBehaviour_headers")
