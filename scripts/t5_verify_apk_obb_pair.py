@@ -137,6 +137,14 @@ def _zip_structure(path: Path, apk: bool) -> int:
                 if not info.is_dir() and info.file_size > 0:
                     has_asset |= info.filename.startswith(
                         "assets/bin/Data/" if apk else "assets/")
+            # Distinct ZIP names can still collide when a regular file is
+            # also used as the parent directory of another member.
+            regular_files = {info.filename for info in entries if not info.is_dir()}
+            for name in names:
+                segments = name.rstrip("/").split("/")
+                for depth in range(1, len(segments)):
+                    if "/".join(segments[:depth]) in regular_files:
+                        raise ValueError("ZIP regular file collides with member directory")
             _verify_local_zip_headers(archive, entries)
             if not has_asset:
                 raise ValueError("No populated Unity APK/OBB asset entry")
