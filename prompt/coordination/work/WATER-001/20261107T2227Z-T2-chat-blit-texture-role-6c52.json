@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261107T2227Z-T2-chat-blit-texture-role-6c52",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "ebc78f1c3f561433666d6355c45cc90edaad03fb",
-  "updated_at": "2026-11-06T22:27:17.820Z",
+  "updated_at": "2026-11-06T22:33:50.966Z",
   "resumed_from_sessions": [
     "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
     "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3"
@@ -34,5 +34,9 @@
     "https://github.com/alwansan/raf/actions/runs/42303074180"
   ],
   "native_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Implement strict no-branch direct IL operand producer classification for source and destination of exact authentic Foam Blit pass sites; source-free synthetic negative/positive tests, original pinned managed DLL workflow. Preserve unknown when not direct, no Unity/pixel claims."
+  "next_step": "Inspect 42305522855: safe Python and Cecil selftest, exact original authenticated texture source and render target direct IL producer categories; if PASS document observed counts and limitations, if FAIL patch without weakening. Continue T5 native independently.",
+  "code_commit": "681c239c29959e420829b48ba24c4ab203ce9ca5",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42305522855"
+  ]
 }
