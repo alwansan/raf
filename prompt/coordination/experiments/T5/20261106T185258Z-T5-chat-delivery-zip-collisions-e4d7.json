@@ -5,12 +5,12 @@
   "session_id": "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "7977e6b61be76f3a3142852e8c383fc64fd38534",
   "source_commit": "ccf88df86c6f274a63d4dc787bcfbba9d218f942",
   "experiment_key": "T5-delivery-existing-package-CRC-green-duplicate-ZIP-name-synthetic-fail-closed-v1",
   "workflow_path": ".github/workflows/raft-reconstruction-preflight.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/42274874596",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42274874577",
   "commands": [
     "python3 -m unittest discover -s tests -p test_android_delivery_package.py -v"
   ],
@@ -22,11 +22,23 @@
     "no release output directory on detected ambiguity",
     "existing full roundtrip/CRC negatives unaffected"
   ],
-  "observed_result": null,
+  "observed_result": {
+    "source_sha": "ccf88df86c6f274a63d4dc787bcfbba9d218f942",
+    "main_run_id": 42274874577,
+    "job_id": 128088509506,
+    "final": "success",
+    "delivery_packaging_tests_passed": 14,
+    "additional_a3_tests_passed": 4,
+    "crc_green_duplicate_subcases_passed": 4,
+    "preflight_run_id": 42274874596,
+    "preflight_success_but_does_not_execute_delivery_tests": true,
+    "original_signed_apk_obb_tested": false,
+    "device_verified": false
+  },
   "limits": [
     "recovery-only packager guard; base APK and OBB auditors already reject duplicate names",
     "synthetic input only; no genuine owner APK/OBB tested",
     "source-only CI not Android device, graphics, audio or save evidence"
   ],
-  "next_step": "Exact CI42274874596 terminal result, checkpoint/update work event. Never cancel other workers or request new native without five valid YES."
+  "next_step": "Source-only completed. Preserve exact 14+4 PASS evidence; original input authenticity/device remain unverified. No 5/5 votes for native."
 }
