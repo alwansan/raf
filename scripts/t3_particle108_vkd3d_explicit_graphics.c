@@ -170,12 +170,46 @@ static int read_dxbc(const char *path, struct vkd3d_shader_code *source)
     return 0;
 }
 
+/* Classify compiler diagnostics IN-MEMORY only: never print vkd3d's raw
+ * message because it can include private source registers and resource IDs.
+ * Return fixed public enum-family codes, no positions or values. */
+static int classify_private_error_message(const char *msg)
+{
+    const char *p;
+    unsigned int kind = UINT_MAX;
+    if (!msg) return 0;
+    p = strstr(msg, "Could not find descriptor binding for type ");
+    if (!p)
+        p = strstr(msg, "Could not find binding for type ");
+    if (p)
+    {
+        const char *after = strstr(p, "type ");
+        if (after && sscanf(after, "type %x", &kind) == 1)
+        {
+            switch (kind)
+            {
+                case VKD3D_SHADER_DESCRIPTOR_TYPE_SRV: return 101;
+                case VKD3D_SHADER_DESCRIPTOR_TYPE_UAV: return 102;
+                case VKD3D_SHADER_DESCRIPTOR_TYPE_CBV: return 103;
+                case VKD3D_SHADER_DESCRIPTOR_TYPE_SAMPLER: return 104;
+                default: return 105;
+            }
+        }
+        return 105;
+    }
+    if (strstr(msg, "descriptor binding") || strstr(msg, "Descriptor binding"))
+        return 106;
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
     struct t3_map mapping;
     struct vkd3d_shader_interface_info interface = {0};
     struct vkd3d_shader_compile_info info = {0};
     struct vkd3d_shader_code source = {0}, spv = {0};
+    char *private_messages = NULL;
+    int classified = 0;
     FILE *output;
     size_t written;
     int rc;
@@ -183,6 +217,19 @@ int main(int argc, char **argv)
      * map. A compiler success here and failure under A/B isolates mapping
      * semantics; neither success implies source shader renders in Unity. */
     int baseline = argc == 4 && !strcmp(argv[3], "D");
+    if (argc == 2 && !strcmp(argv[1], "--self-test-error-classification"))
+    {
+        char fixture[192];
+        snprintf(fixture, sizeof(fixture),
+            "E0000: Could not find descriptor binding for type %#x, "
+            "space 0, registers [99:99].",
+            (unsigned int)VKD3D_SHADER_DESCRIPTOR_TYPE_CBV);
+        if (classify_private_error_message(fixture) != 103 ||
+            classify_private_error_message("not a vkd3d message") != 0)
+            return 2;
+        puts("T3_PUBLIC_SYNTHETIC_DIAGNOSTIC_CLASSIFIER_OK=true");
+        return 0;
+    }
     if (argc == 2 && !strcmp(argv[1], "--self-test-type-flags"))
     {
         static const char *test_rows[] = {
@@ -230,12 +277,18 @@ int main(int argc, char **argv)
     info.option_count = 0;
     info.source_name = NULL;
     /* Never pass debug-log output pointer: source names can be private. */
-    rc = vkd3d_shader_compile(&info, &spv, NULL);
+    info.log_level = VKD3D_SHADER_LOG_ERROR;
+    rc = vkd3d_shader_compile(&info, &spv, &private_messages);
+    /* Never print, persist or upload compiler messages. Identify only
+     * broad public descriptor-family failure category from private memory. */
+    if (rc != 0)
+        classified = classify_private_error_message(private_messages);
+    vkd3d_shader_free_messages(private_messages);
     free((void *)source.code);
     if (rc != 0 || !spv.code || spv.size < 20 || spv.size > T3_MAX_SPV)
     {
         if (spv.code) vkd3d_shader_free_shader_code(&spv);
-        return rc < 0 ? 40 + ((-rc) > 49 ? 49 : -rc) : 4;
+        return classified ? classified : (rc < 0 ? 40 + ((-rc) > 49 ? 49 : -rc) : 4);
     }
     output = fopen(argv[2], "wb");
     if (!output)
