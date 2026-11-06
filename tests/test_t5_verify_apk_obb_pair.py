@@ -1,6 +1,7 @@
 """Source-free adversarial checks for completed Raft APK+OBB pairing."""
 import copy
 import hashlib
+import io
 import json
 from pathlib import Path
 import struct
@@ -297,6 +298,32 @@ class PairTests(unittest.TestCase):
         self.apk.write_bytes(payload)
         self.write_manifest()
         self.rejected("ZIP local member header name")
+
+
+
+    def test_valid_zip64_local_size_placeholders_are_supported(self):
+        # Large Unity asset files use ZIP64. A forced ZIP64 synthetic member
+        # exercises 0xffffffff placeholders without allocating multi-GB data.
+        with zipfile.ZipFile(self.obb, "w", allowZip64=True) as archive:
+            with archive.open("assets/bin/Data/resources.assets", "w",
+                              force_zip64=True) as stream:
+                stream.write(b"synthetic-zip64-file")
+        self.write_manifest()
+        self.assertGreater(self.check()["obb_zip_members"], 0)
+
+    def test_valid_streamed_zip_data_descriptor_is_supported(self):
+        # Non-seekable ZIP writers use flag bit 3 with deferred CRC/sizes.
+        # These are valid; reject only conflicts, not descriptor-based ZIPs.
+        class Sink(io.BytesIO):
+            def seek(self, *args, **kwargs):
+                raise OSError("fixture is not seekable")
+        sink = Sink()
+        with zipfile.ZipFile(sink, "w") as archive:
+            archive.writestr("assets/bin/Data/resources.assets",
+                             b"synthetic-streamed-data-descriptor")
+        self.obb.write_bytes(sink.getvalue())
+        self.write_manifest()
+        self.assertGreater(self.check()["obb_zip_members"], 0)
 
 
 
