@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
+  "issue_id": "DISPLAY-003",
+  "track": "Original Settings resolution callback executable IL metadata",
+  "status": "active",
+  "base_sha": "8c71e017853ace358bed947556dc0156e38fe5d8",
+  "updated_at": "2026-11-06T10:36:16.102Z",
+  "resumed_from_sessions": [
+    "20261106T1020Z-T5-chat-ledger-id-compat-c8e4.md",
+    "20261106T0047Z-T5-scheduled-c4e8.md"
+  ],
+  "experiment_key": "T5-original-ZIP2-managed-dll-GraphicsSettingsBox-safecall-IL-fingerprint-v1",
+  "resource_key": "source-pinned original ZIP2 Assembly-CSharp.dll, private runner Mono.Cecil metadata",
+  "intended_files": [
+    "android-port/Experiments/T5/ResolutionILProbe/Program.cs",
+    "android-port/Experiments/T5/ResolutionILProbe/ResolutionILProbe.csproj",
+    "scripts/t5_validate_resolution_il_probe.py",
+    "tests/test_t5_validate_resolution_il_probe.py",
+    ".github/workflows/raft-t5-original-resolution-il.yml",
+    "prompt/coordination/clients/T5/sessions/20261106T1030Z-T5-chat-resolution-il-4b9e.md",
+    "prompt/coordination/experiments/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
+    "prompt/coordination/work/DISPLAY-003/20261106T1030Z-T5-chat-resolution-il-4b9e.json"
+  ],
+  "hypothesis": "Original GraphicsSettingsBox IL can distinguish legacy Screen.SetResolution, UI option/listener wiring, PlayerPrefs persistence, DynamicResolution ResizeBuffers and direct Settings->DynamicResolution references. Existing lexical tests do not prove callback or persisted Android render-scale binding.",
+  "constraints": "No original DLL/shader/source published in public outputs/artifacts; workflow reads immutable ZIP2 DLL at pinned SHA, publishes bounded numeric call categories only; no Unity/game runtime modifications or false render-scale claim.",
+  "coordination": "T5 scheduled owns APK/OBB pair tests, not this IL probe; T1-T3 water/render work and T4 input/save paths unmodified; distinct fast source-only workflow and concurrency, no heavy Unity game build.",
+  "next_step": "Implement isolated Mono.Cecil metadata oracle and adversarial synthetic validation, verify on actual original DLL in T5 workflow; report bounded classification and stop short of unproven Android binding."
+}
