@@ -1,0 +1,21 @@
+{
+  "id": "20261106T175623Z-T1-chat-float-carrier-context-b82c",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T175623Z-T1-chat-float-carrier-context-b82c",
+  "issue_id": "WATER-001",
+  "type": "blocked",
+  "at": "2026-11-06T17:59:54.483Z",
+  "summary": "Recovered authentic historical synthetic Unity2021 OpenGLCore canary: 63/64 bitcast-only and subnormal-multiply mismatches but direct integer/normal 0. Added new public 10-category same-dispatch carrier-context test code, 10 structural checks green, but new GitHub Actions workflow publication blocked by tool security. No new Unity run or APK. Trial vote T1 لا يحتاج unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42129683073",
+    "https://github.com/alwansan/raf/actions/runs/42261467757",
+    "https://github.com/alwansan/raf/commit/278cd350e30ba8cd0ba3e1463f666262d28e6c02"
+  ],
+  "limits": [
+    "No Unity run of new code",
+    "No original game shader or Android water result",
+    "WATER-001 OPEN",
+    "Tool security checks prevent GitHub workflow publication from this cycle"
+  ]
+}
