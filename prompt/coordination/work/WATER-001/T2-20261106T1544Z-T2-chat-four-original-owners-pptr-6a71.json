@@ -1,0 +1,37 @@
+{
+  "session_id": "20261106T1544Z-T2-chat-four-original-owners-pptr-6a71",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "40564c35f138061b7d28f23bd867f4e066882491",
+  "updated_at": "2026-11-06T15:44:00Z",
+  "resumed_from_sessions": [
+    "20261106T1520Z-T2-chat-foam-owner-shader-material-links-5e84",
+    "20261106T1518Z-T2-scheduled-original-foam-identity-reconcile-p7k4"
+  ],
+  "experiment_key": "original-ZIP2-15964-4-SHA-pinned-owner-MaterialShader-PPtr-external-file-identity-pathID2420-graph-v1",
+  "resource_key": "T2-source-original-4-owner-PPtr-graph",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_owner_pins": {
+    "Raft_Data/sharedassets0.assets": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Raft_Data/resources.assets": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "Raft_Data/Resources/unity default resources": "026e6d1d96dc2e28c72ece25f2419469d649a95e25b6929bc5cfc95bca529f8e",
+    "Raft_Data/Resources/unity_builtin_extra": "0eb8f0a4ea47b075a6b637abc02d0c7930d96cb9f6c5d723819eb8042cfb3886"
+  },
+  "hypothesis": "Seven source-owner external Material.m_Shader PPtrs may target other Unity serialized files. Scan 4 explicitly pinned original owner files, reconcile exact m_FileID→SerializedFile.externals index→external path with verified owner identity, distinguish exact local Foam pathID2420 from external basename candidates and same PathID in non-Foam file. Fail closed for missing, unparseable or ambiguous externals. No GUID/object runtime identity claim from basename match alone.",
+  "intended_files": [
+    "scripts/t2_foam_original_external_pptr_graph.py",
+    "tests/test_t2_foam_original_external_pptr_graph.py",
+    ".github/workflows/raft-t2-foam-original-external-pptr.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1544Z-T2-chat-four-original-owners-pptr-6a71.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71.md",
+    "docs/T2_FOAM_ORIGINAL_FOUR_OWNER_SHADER_PPTR_GRAPH_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71-result.json",
+    "prompt/coordination/discussions/WATER-001/20261106T1544Z-T2-chat-four-original-owners-pptr-6a71-handoff.md"
+  ],
+  "baseline_run": "https://github.com/alwansan/raf/actions/runs/42243327311",
+  "in_progress_actions_at_registration": 0,
+  "scope_separation": "Independent new T2 script+workflow (no rewrite of previous private CB0 validator, no T1/T3/T4/T5 files, no Unity build or original game assets changed)",
+  "next_gate": "Full original source SHA + selftests + strictly bounded cross-owner output; candidate match never accepted as actual Unity loaded Shader without GUID/external identity and device evidence."
+}
