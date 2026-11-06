@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T155244Z-T1-chat-original-builtin-inject-d5f2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "112e528906872add2eafe32f8bd1e5eb30c30ee0",
-  "updated_at": "2026-11-06T15:52:44.148Z",
+  "updated_at": "2026-11-06T16:09:13.679Z",
   "resumed_from_sessions": [
     "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
     "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
@@ -26,7 +26,11 @@
   ],
   "experiment_key": "water001-originalsha15964ea8-slot0-GlobalInvocationId-inject-opload-spirv-val-output-preserving-smoke-v1",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Synthetic negative controls then private original ZIP2 SPIR-V injection/validation and output invariance; no original invocation trace or numeric pair claimed until separately instrumented and tested."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42247669231",
+    "https://github.com/alwansan/raf/actions/runs/42248163030",
+    "https://github.com/alwansan/raf/actions/runs/42249043033"
+  ],
+  "result": "Original injection of new GlobalInvocationId rejected correctly: actual source already has Input sint32_vector3 built-in (one direct declaration in entrypoint, 2 OpLoads). Original SHA-private read-only audit CI 42249043033 SUCCESS; 111/111 synthetic tests passed 42248931621. No original keyed GPU capture. Scope complete and resource released.",
+  "next_step": "Separate T1 direct original SPIR-V ImageFetch keyed GPU recorder using existing signed3 built-in; no duplicate injection; strict identical-fixture original/candidate numeric pair with private data only."
 }
