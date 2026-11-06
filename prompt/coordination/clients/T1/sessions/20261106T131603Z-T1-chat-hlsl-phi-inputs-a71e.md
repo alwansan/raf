@@ -3,7 +3,7 @@
 - session_id: 20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e
 - origin: chat
 - issue_id: WATER-001 (OPEN)
-- status: waiting_ci
+- status: completed (source-authentic Phi vector incoming paths)
 - base_sha: 727a15ef97b3b498c4353fcbcdd49f650fbc0eb2
 - resumed_from_sessions: 20261106T130729Z-T1-chat-pair-gate-6c2e; 20261106T125645Z-T1-chat-hlsl-x-stop-a93d; 20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3
 - scope_commit: 1ce09e9c248739c788ea2fc40eff358d1da7f112
@@ -28,3 +28,21 @@ Run [42224533880](https://github.com/alwansan/raf/actions/runs/42224533880) trig
 Expected comparison: immediate incoming OpBitcast / OpFAdd / OpLoad / OpPhi, each with predecessor edge family. Actual result may be different and must override expectation. Even a concrete Phi input census is not same-input Vulkan-vs-Unity numerical parity, not authoritative FindKernel binding, not Android water restoration. Keep WATER-001 OPEN.
 
 Next: review CI steps/logs, fix minimal synthetic defect if present, then publish sanitized source-backed Phi inputs in own experiment/event/work and close this independent diagnostic scope. Do not rerun equivalent original heavy test without a changed source question.
+
+## Final original-source CI evidence
+
+- First exact-original private run [42224533880](https://github.com/alwansan/raf/actions/runs/42224533880) failed **after 13/13 synthetic tests passed**, during private HLSL Phi source analysis. Added fail-closed fixed-category-only diagnostic handling and two tests to ensure private exception text never leaks.
+- Diagnostic retry [42224927222](https://github.com/alwansan/raf/actions/runs/42224927222) failed **after 15/15 tests passed**, with safe private reason `Unexpected scalar Phi lane type`. The earlier successful stop_opcode reporter only established `float32` numeric kind, without scalar/vector width. **The compiled actual Phi was a vector**; the analyzer's scalar-only precondition was incorrect.
+- Fixed `scripts/t1_fft_hlsl_phi_input_origins.py` to follow the *selected X physical component* within a 1–4-wide Phi vector, require matching incoming shape, and preserve path terminator/semantic uncertainty. Added three source-free vector/selected-Y/mismatched-type tests; corrected workflow [42225317476](https://github.com/alwansan/raf/actions/runs/42225317476) job `127917202402` **COMPLETED SUCCESS**, 18/18 tests PASS, original SHA-pinned ZIP2 recovery, exact HLSL compile/original Vulkan stages and private scratch cleanup passed.
+- **Actual glslang translated FFT slot0 Butterfly1 X:** `OpPhi float32_vector`, selected component X, **two incoming values**:
+  - First immediate producer `OpCompositeInsert`, component chain `OpCompositeInsert → OpCompositeInsert → OpCompositeConstruct → OpCompositeExtract → OpBitcast → OpVectorShuffle → OpBitcast → OpLoad`; two typed reinterpretations `uint32_bits_to_sint32`, `sint32_bits_to_float32`; terminal `uint32_vector` load from **Private** storage, one first-shuffle input.
+  - Second immediate producer `OpCompositeInsert`, chain `OpCompositeInsert → OpPhi`, **nested conditional Phi boundary**, `float32_vector`. Both Phi predecessor edges are direct unconditional `OpBranch` blocks, though their own earlier control-flow predicates are **not** proven.
+- This is *static SSA/component provenance*, NOT numerical parity, runtime branch truth, original Unity authored kernel mapping, or Android/Adreno water acceptance. No raw game shader/SPIR-V values, image samples, SSA IDs or original binary source exported.
+- Work: `prompt/coordination/work/WATER-001/T1-20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json`; experiment: `prompt/coordination/experiments/T1/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json`; canonical event: `prompt/coordination/B_TEAM/events/T1/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json`. Other agents' files untouched, no Unity heavy/native build, no shader rewritten.
+
+## Final handoff
+
+- origin: chat
+- status: completed for this scoped vector Phi input classification; WATER-001 remains **OPEN / NOT_READY**
+- run_urls: https://github.com/alwansan/raf/actions/runs/42224533880 ; https://github.com/alwansan/raf/actions/runs/42224927222 ; https://github.com/alwansan/raf/actions/runs/42225317476
+- next_step: Under a new T1 scope, trace the **second incoming nested Phi** backwards with bounded cycle-sensitive CFG predecessor and typed selected component logic. In parallel derive actual SHA-linked independent original/candidate invocation trace on the *same* fixture; use source-only strict gate `scripts/t1_fft_invocation_pair_gate.py` (CI [42223419922](https://github.com/alwansan/raf/actions/runs/42223419922), 40/40 tests) to exclude self-comparison, mismatched inputs and incomplete coverage. Only then attempt source-backed HLSL fix and Adreno verification.
