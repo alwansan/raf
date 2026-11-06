@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1518Z-T2-scheduled-original-foam-identity-reconcile-p7k4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-06T15:18:00Z",
+  "base_sha": "71212a9a6f8c710b8a5064f5a3b48f0f190f1326",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1518Z-T2-scheduled-original-foam-identity-reconcile-p7k4.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1518Z-T2-scheduled-original-foam-identity-reconcile-p7k4.md"
+  ],
+  "experiment_key": "T2-foam-original-Shader.Find-vs-serialized-Foam-m_Name-identity-reconcile-CI42229056366",
+  "resource_key": null,
+  "hypothesis": "Current authenticated original Shader.Find name mismatch prevents claiming Foam-specific CB0 setter despite successful Cecil compilation; reconcile latest evidence without touching concurrent T2 source scanner.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1423Z-T2-scheduled-cecil-diagnostics-f6c1.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1340Z-T2-chat-shader-stfld-source-a84d.md"
+  ],
+  "scope": "read-only evidence reconciliation; no CI or shared source edits"
+}
