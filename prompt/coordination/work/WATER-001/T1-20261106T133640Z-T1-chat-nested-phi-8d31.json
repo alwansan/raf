@@ -5,9 +5,9 @@
   "origin": "chat",
   "session_id": "20261106T133640Z-T1-chat-nested-phi-8d31",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e5810f78c9f901925d85179d81e8efba4053596c",
-  "updated_at": "2026-11-06T13:36:40.630Z",
+  "updated_at": "2026-11-06T13:52:33.229Z",
   "resumed_from_sessions": [
     "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
     "20261106T1310Z-T1-scheduled-ulp32-m4q8",
@@ -28,6 +28,13 @@
   "experiment_key": "water001-sourcepin15964ea8-hlsl-butterfly1-x-nested-phi-loop-or-bitcarrier-typed-incoming-cfg-v1",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
   "sourcefree_key": "t1-fft-invocation-pair-evidence-4m-python",
-  "run_urls": [],
-  "next_step": "Build cycle/type-safe nested Phi summary; confirm synthetic and scheduled ULP tests first; run original exact-source private CI with bounded marker, then preserve experiment/result event and release work."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42227505971",
+    "https://github.com/alwansan/raf/actions/runs/42227663129",
+    "https://github.com/alwansan/raf/actions/runs/42227795780",
+    "https://github.com/alwansan/raf/actions/runs/42228404633",
+    "https://github.com/alwansan/raf/actions/runs/42228497335"
+  ],
+  "next_step": "Only next distinct T1 scope: source-authenticate and capture two independent original and translated X invocation-keyed GPU traces on exact same input/dispatch, then use strict pair gate and float32 ULP diagnostic to locate first numeric discrepancy. Do not rewrite shader solely based on structural loop analysis.",
+  "result": "Nested Phi original-source diagnosis SUCCESS: FFT slot0 translated butterfly1 X has one scalar-component-selecting float32-vector OpPhi with two inputs, one uint32 Private signed/float bitcast source and one OpCompositeInsert self-fed loop-carried value; source-authentic CFG confirms one actual structural backedge, first input not backedge. 42228497335 SUCCESS and 14/14 nested tests, source-only 42228404633 SUCCESS 61/61 including scheduled ULP fixture correction. Real branch truth, original↔Unity numeric parity and Android water acceptance still unproven. Scope and CI reservation released."
 }
