@@ -1,0 +1,13 @@
+{
+  "id": "T5-20261106-real-CL-frames-noncomparable",
+  "owner": "T5",
+  "session_id": "20261106T0138Z-T5-chat-performance-cohort-7ab4",
+  "issue_id": "PERF-007",
+  "type": "diagnostics",
+  "at": "2026-11-06T01:42:38.251Z",
+  "summary": "CI42145219506 verified two SHA-pinned real 190-sample CL JSONL files plus 18/18 synthetic controls. First: 57 valid post-error SurfaceFlinger FPS; second: two 120.77–120.78 startup pre-error readings, 105 stale, zero post-error. NOT_COMPARABLE; Unity internal game logs remain independent source.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42145219506",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_CL_PERFORMANCE_COHORT_2026-11-06.md"
+  ]
+}
