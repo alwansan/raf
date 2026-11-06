@@ -1,0 +1,108 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+  "issue_id": "WATER-001",
+  "hypothesis": "The HLSL-roundtrip butterfly1 X coordinate depth_limit at default 4 may be an insufficient provenance depth rather than a semantic difference. Existing coordinate probe comparator hardened by scheduled T1 lacked exact-source CI.",
+  "source_commit": "327c1b6431ad75de2a215c338e91c359e2f0a8f7",
+  "input_hashes": [
+    "SHA-verified original ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385; translated HLSL-roundtrip compiled from SHA-pinned private original slot0, original binary never published"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "apt spirv-tools in existing runner",
+    "glslangValidator": "apt glslang-tools in source workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v",
+    "python3 -m scripts.t1_fft_spirv_read_provenance --coordinates --coordinate-depth 12 \"$TMPDIR/coordinate.spv\""
+  ],
+  "negative_controls": [
+    "Scheduled capture parser rejects overflowing 400-digit integers",
+    "Reject oversized sample bytes and count plus duplicated JSON keys and nonfinite samples",
+    "Translated HLSL coordinate tracing uses supported max 12 steps, not an unbounded deep walk",
+    "No original private SPIR-V bytecode or pixel data emitted"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42221101286",
+  "artifact_urls": [],
+  "budget": "Existing 20-minute source-authenticated CPU/Vulkan no-Unity workflow",
+  "status": "completed_scoped_translated_depth_diagnostic",
+  "observed_result": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42221101286",
+    "job_id": 127903059685,
+    "conclusion": "success",
+    "scheduled_coordinate_probe_tests": "10/10 PASS",
+    "original_recovery": "pass",
+    "same_vulkan_roundtrip": "pass",
+    "scratch_cleanup": "pass",
+    "hlsl_roundtrip_compiled_slot0": {
+      "source": {
+        "x": {
+          "boundary": "load",
+          "bitcasts": [
+            "float32_to_sint32",
+            "sint32_to_float32",
+            "uint32_to_sint32"
+          ]
+        },
+        "y": {
+          "boundary": "load",
+          "bitcasts": [
+            "float32_to_sint32",
+            "sint32_to_float32",
+            "uint32_to_sint32"
+          ]
+        }
+      },
+      "butterfly_site1": {
+        "x": {
+          "boundary": "unresolved",
+          "visible_bitcasts": [
+            "float32_to_sint32"
+          ]
+        },
+        "y": {
+          "boundary": "constant",
+          "visible_bitcasts": [
+            "float32_to_sint32"
+          ]
+        },
+        "slice_opcode_families": {
+          "OpPhi": 1,
+          "OpIAdd": 1,
+          "OpCompositeExtract": 6,
+          "OpCompositeInsert": 4
+        }
+      },
+      "butterfly_site2": {
+        "x": {
+          "boundary": "unresolved",
+          "visible_bitcasts": [
+            "float32_to_sint32"
+          ]
+        },
+        "y": {
+          "boundary": "unresolved",
+          "visible_bitcasts": [
+            "float32_to_sint32"
+          ]
+        }
+      }
+    },
+    "hlsl_depth4_vs12": "At previous default depth4 butterfly site1 X stopped at depth_limit; at depth12 it stops at unresolved opcode/lane boundary, not a proven numeric mismatch.",
+    "signed_int_source_bitcarrier_preserved_in_translation_proven": false,
+    "original_Unity_numeric_parity_proven": false,
+    "Adreno_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Increasing HLSL-roundtrip butterfly1 X coordinate trace depth from 4 to supported 12 necessarily reaches its original signed Input bitcarrier: instead trace ends unresolved. Thus insufficient depth alone does not resolve the translated SSA boundary."
+  ],
+  "limitations": [
+    "Generic tracer does not disclose the exact unsupported opcode at lane stop; the whole-slice contains OpPhi and OpIAdd but cannot attribute either to the particular X lane without an additional targeted diagnostic",
+    "A successful translated shader Vulkan roundtrip is internal translation parity, not original-vs-Unity numerically matching every image coordinate",
+    "No native water shader fix, original authored Unity kernel mapping or Android acceptance"
+  ],
+  "integration_commit": "327c1b6431ad75de2a215c338e91c359e2f0a8f7",
+  "next_step": "Add privacy-safe stop_opcode type classification for HLSL butterfly1 X lane in existing t1_fft_spirv_read_provenance.py; then isolate actual translated SSA Phi/IAdd branch input provenance before any bitcast-related rewrite. Pair exact input original/Unity coordinate captures."
+}
