@@ -270,5 +270,31 @@ class RealExportQualitySynthetic(unittest.TestCase):
             self.assertEqual(r["exported_ShaderLab_source_status"],
                              "CUSTOM_PASS_COUNT_DIFFERS_FROM_ORIGINAL")
 
+
+    def test_default_drift_blocks_shader48_structural_ready(self):
+        private='''Properties {
+        _Color ("Tint", Color) = (1,1,1,1)
+        _MainTex ("Texture", 2D) = "white" {}
+        }'''
+        changed='''Properties {
+        _Color ("Tint", Color) = (1,0,1,1)
+        _MainTex ("Texture", 2D) = "white" {}
+        }'''
+        shader=PROGRAM.replace("SubShader {",changed+"\nSubShader {",1)
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);write(root,shader)
+            report=m.classify(SOURCE,*traces(),root,
+                              private_authored_properties=private)
+            self.assertTrue(report["source_authored_properties_compared_to_exact_export"])
+            self.assertTrue(report["source_to_export_authored_property_names_types_match"])
+            self.assertFalse(report["source_to_export_authored_property_defaults_match"])
+            self.assertEqual(report["source_to_export_authored_property_counts"]
+                             ["matched_name_type_different_default"],1)
+            self.assertEqual(report["exported_ShaderLab_source_status"],
+                             "AUTHORED_PROPERTY_DEFAULT_MISMATCH")
+            self.assertFalse(report["native_Unity_Android_GPU_pixels_verified"])
+            self.assertNotIn("(1,0,1,1)",json.dumps(report))
+
+
 if __name__=="__main__":
     unittest.main()
