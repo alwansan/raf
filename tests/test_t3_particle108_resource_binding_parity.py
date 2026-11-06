@@ -118,6 +118,13 @@ class OriginalResourceTests(unittest.TestCase):
             r=reflect(1);r["resource_slots"]=bad
             with self.assertRaises(ValueError):
                 t3.canonical_resources(r)
+    def test_safe_original_failure_reason_is_whitelisted(self):
+        from scripts.t3_particle108_resource_binding_parity import PrivateReasonError
+        e=PrivateReasonError("DESCRIPTOR_SET_OR_BINDING_UNLOCATED")
+        self.assertEqual(e.reason,"DESCRIPTOR_SET_OR_BINDING_UNLOCATED")
+        self.assertNotIn("PRIVATE_HLSL",str(e))
+        with self.assertRaises(ValueError):
+            PrivateReasonError("PRIVATE_HLSL_VERTEX_SOURCE")
     def test_actual_original_program_not_inferred_from_clean_resource_report(self):
         r=t3.classify_stages(fixtures())
         self.assertTrue(r["roundtrip_layout_parity_is_NOT_program_numeric_equivalence"])
