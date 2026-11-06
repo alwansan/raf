@@ -30,33 +30,73 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42225317476",
   "artifact_urls": [],
   "budget": "Original SHA-authentic private 20-min Ubuntu 24.04 non-Unity Vulkan workflow",
-  "status": "waiting_ci",
+  "status": "completed_scoped_phi_vector_inputs",
   "observed_result": {
-    "first_run": {
+    "initial_scalar_error_run": {
       "run": "https://github.com/alwansan/raf/actions/runs/42224533880",
       "conclusion": "failure",
       "synthetic_tests": "13/13 PASS",
-      "private_reason": "generic failed, source input was actually vector Phi"
+      "safe_reason": "source-private analyzer rejected original vector Phi with scalar-only type expectation"
     },
-    "diagnostic_retry": {
+    "diagnostic_run": {
       "run": "https://github.com/alwansan/raf/actions/runs/42224927222",
       "conclusion": "failure",
       "synthetic_tests": "15/15 PASS",
-      "safe_reason": "Unexpected scalar Phi lane type"
+      "safe_failure_category": "Unexpected scalar Phi lane type"
     },
-    "vector_fix_run": {
+    "corrected_run": {
       "run": "https://github.com/alwansan/raf/actions/runs/42225317476",
-      "status": "in_progress",
-      "expected_synthetic_tests": 18
+      "job_id": 127917202402,
+      "conclusion": "success",
+      "synthetic_tests": "18/18 PASS",
+      "SHA_pinned_ZIP2_original_recovery": "success",
+      "translated_private_Vulkan_stage": "success",
+      "scratch_cleanup": "success"
     },
-    "actual_phi_incoming_operands_proven": false,
-    "original_vs_unity_numeric_parity_proven": false,
-    "android_water_proven": false
+    "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "butterfly1_X_phi": {
+      "result_kind": "float32_vector",
+      "selected_component": "x",
+      "input_count": 2,
+      "inputs": [
+        {
+          "immediate_producer": "OpCompositeInsert",
+          "last_boundary": "OpLoad",
+          "leaf_kind": "uint32_vector",
+          "leaf_storage": "Private",
+          "cast_kinds": [
+            "uint32_bits_to_sint32",
+            "sint32_bits_to_float32"
+          ],
+          "shuffle_sources": [
+            "first"
+          ],
+          "predecessor": "unconditional OpBranch"
+        },
+        {
+          "immediate_producer": "OpCompositeInsert",
+          "last_boundary": "conditional_phi_boundary",
+          "leaf_kind": "float32_vector",
+          "cast_kinds": [],
+          "predecessor": "unconditional OpBranch"
+        }
+      ],
+      "selected_branch_runtime_proven": false,
+      "numeric_value_original_vs_translated_proven": false
+    },
+    "authored_unity_kernel_identity_proven": false,
+    "Adreno_phone_water_proven": false
   },
   "limitations": [
-    "Even proving all possible Phi inputs and type families does not prove which branch executes or numeric equality to original shader",
-    "The source-private HLSL candidate is not an authenticated authored Unity kernel map nor Adreno device validation"
+    "One Phi input is nested inside another Phi; the safe bounded tracer stops there and does not prove all transitive incoming branches.",
+    "The first input's bitcast chain is structural. No source runtime numeric value, executed branch, Unity FindKernel binding or phone water pixels are known.",
+    "Authorship and capture provenance still require actual independent source/candidate execution. The strict paired-evidence gate is separately tested at 42223419922."
   ],
   "integration_commit": "6fc10ec699659167bd4a084c34839a2a3e519827",
-  "next_step": "When current CI terminates, read only safe actual Phi incoming source summary, record predecessor source kinds and next comparison task. Do not duplicate private runner unless new cause/fix required."
+  "next_step": "New scoped source-private nested-Phi predecessor/value chain may-run analysis for Butterfly1 X while preserving loop path bounds; then independent paired original/translated invocation-keyed GPU captures fed through strict gate, before any HLSL shader rewrite.",
+  "rejected_hypotheses": [
+    "Translated Butterfly1 X Phi is necessarily float32 scalar: actual authentic HLSL SPIR-V has a float32 vector Phi with selected physical X component.",
+    "Phi incoming values are both direct float arithmetic or constants: first selected component reaches uint32 Private OpLoad through signed/float bit reinterpretations, second reaches nested Phi.",
+    "Original versus translated numeric parity can be concluded from static Phi shape: no dynamic source/candidate invocation paired trace was collected."
+  ]
 }
