@@ -1,0 +1,19 @@
+{
+  "id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "at": "2026-11-06T17:15:30Z",
+  "summary": "T1 launched isolated sourcefree Unity2021 actual compute keyword activation and 192 GPU words test, source-only preflight and verified CLI successful; GPU NUnit step pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42259968584",
+    "https://github.com/alwansan/raf/commit/b958990243523d18a6d44d888e6328e17fe07ddf"
+  ],
+  "limits": [
+    "No original/private source acquired",
+    "Unity GPU stage pending",
+    "WATER-001 OPEN"
+  ]
+}
