@@ -63,6 +63,18 @@ MATERIAL_NUMERIC = (
     "material_dup_original_Material_local_direct_Renderer_set_material_candidates",
     "material_dup_original_Material_local_direct_Renderer_set_sharedMaterial_candidates",
     "material_dup_nops_skipped_in_initializer_probe",
+    "material_linear_original_material_alias_instructions_inspected",
+    "material_linear_original_material_alias_ambiguous_or_branch_boundaries",
+    "material_linear_original_material_instance_method_calls",
+    "material_linear_original_material_field_stores",
+    "material_linear_original_material_typed_local_stores",
+    "material_linear_original_material_direct_Renderer_set_material_args",
+    "material_linear_original_material_direct_Renderer_set_sharedMaterial_args",
+    "material_linear_original_material_unique_field_definition_resolved",
+    "material_linear_original_material_field_read_instructions",
+    "material_linear_original_material_field_distinct_reader_methods",
+    "material_linear_original_material_field_direct_Renderer_set_material_args",
+    "material_linear_original_material_field_direct_Renderer_set_sharedMaterial_args",
 )
 STATUS = "original_foam_ShaderFind_direct_return_consumer_typed_IL_census"
 
@@ -194,6 +206,31 @@ def validate(report):
         raise ValueError("dup_material_direct_renderer_local_bound")
     if report["material_dup_nops_skipped_in_initializer_probe"] > 16:
         raise ValueError("dup_initializer_excess_nops")
+    if report["material_linear_original_material_alias_instructions_inspected"] > 48:
+        raise ValueError("source_linear_probe_unbounded")
+    if report["material_linear_original_material_alias_ambiguous_or_branch_boundaries"] > 1:
+        raise ValueError("source_linear_probe_multiple_boundaries")
+    if (report["material_linear_original_material_unique_field_definition_resolved"] >
+            min(1,report["material_linear_original_material_field_stores"])):
+        raise ValueError("material_alias_field_identity_not_proven")
+    if report["material_linear_original_material_unique_field_definition_resolved"] == 0 and any(
+            report[k]!=0 for k in (
+            "material_linear_original_material_field_read_instructions",
+            "material_linear_original_material_field_distinct_reader_methods",
+            "material_linear_original_material_field_direct_Renderer_set_material_args",
+            "material_linear_original_material_field_direct_Renderer_set_sharedMaterial_args")):
+        raise ValueError("unresolved_material_alias_field_used_as_proof")
+    if (report["material_linear_original_material_field_distinct_reader_methods"] >
+            report["material_linear_original_material_field_read_instructions"]):
+        raise ValueError("linear_material_field_read_partition")
+    if sum(report[k] for k in (
+            "material_linear_original_material_field_direct_Renderer_set_material_args",
+            "material_linear_original_material_field_direct_Renderer_set_sharedMaterial_args")) > report["material_linear_original_material_field_read_instructions"]:
+        raise ValueError("linear_material_field_renderer_load_partition")
+    if sum(report[k] for k in (
+            "material_linear_original_material_direct_Renderer_set_material_args",
+            "material_linear_original_material_direct_Renderer_set_sharedMaterial_args")) > 8:
+        raise ValueError("linear_source_dup_reference_unbounded_renderer_uses")
     return True
 
 def main():

@@ -133,6 +133,38 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r["material_dup_setter_followed_by_original_Material_field_store"]=1
         r["material_dup_setter_followed_by_original_Material_local_store"]=1
         self.rejects(r)
+    def test_material_linear_true_original_field_link(self):
+        r=baseline()
+        r["material_linear_original_material_alias_instructions_inspected"]=4
+        r["material_linear_original_material_instance_method_calls"]=1
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=3
+        r["material_linear_original_material_field_distinct_reader_methods"]=2
+        r["material_linear_original_material_field_direct_Renderer_set_material_args"]=1
+        self.assertTrue(validate(r))
+    def test_material_linear_field_reader_without_source_store_rejected(self):
+        r=baseline()
+        r["material_linear_original_material_field_read_instructions"]=1
+        self.rejects(r)
+    def test_material_linear_bad_field_resolution_rejected(self):
+        r=baseline()
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        self.rejects(r)
+    def test_material_linear_bad_field_to_renderer_count(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_direct_Renderer_set_material_args"]=1
+        self.rejects(r)
+    def test_material_linear_unsafe_branch_count_rejected(self):
+        r=baseline()
+        r["material_linear_original_material_alias_ambiguous_or_branch_boundaries"]=2
+        self.rejects(r)
+    def test_material_linear_budget_rejected(self):
+        r=baseline()
+        r["material_linear_original_material_alias_instructions_inspected"]=49
+        self.rejects(r)
     def test_zero_calls_not_false_green(self):
         r=baseline();r["exact_source_Foam_name_direct_typed_Shader_Find_calls"]=0;self.rejects(r)
     def test_zero_partition_rejected(self):

@@ -259,6 +259,118 @@ internal static class Program
             return new(1,null,local,nops);
         return new(1,null,null,nops);
     }
+    private sealed record LinearMaterialTrace(
+        int Inspected, int ConservativeBoundaries, int MaterialInstanceCalls,
+        int OriginalMaterialFieldStores, int TypedMaterialLocalStores,
+        int RendererSetMaterialArguments, int RendererSetSharedArguments,
+        FieldDefinition? OriginalMaterialField);
+
+    private static int FixedPopCount(Instruction inst)
+    {
+        string name=inst.OpCode.StackBehaviourPop.ToString();
+        if(name=="Pop0")return 0;
+        if(name=="Varpop" || !name.StartsWith("Pop",StringComparison.Ordinal))return -1;
+        return name.Split('_').Length;
+    }
+    private static int FixedPushCount(Instruction inst)
+    {
+        string name=inst.OpCode.StackBehaviourPush.ToString();
+        if(name=="Push0")return 0;
+        if(name=="Varpush" || !name.StartsWith("Push",StringComparison.Ordinal))return -1;
+        return name.Split('_').Length;
+    }
+    private static LinearMaterialTrace TraceMaterialAliasLinear(MethodDefinition m,int ctorIndex)
+    {
+        // Straight-line, bounded, source-only stack taint. Initial stack contains
+        // one authenticated original Material result. Inputs below it are unknown.
+        // Stop at any branch or unknown stack behavior; do NOT infer runtime path
+        // dominance, Unity material assignment or Android rendering.
+        var il=m.Body.Instructions;
+        var stack=new List<bool>{true};
+        var locals=new Dictionary<int,bool>();
+        var knownFields=new HashSet<FieldDefinition>();
+        int inspected=0, boundaries=0, materialCalls=0, fieldStores=0,
+            localStores=0, rendererCalls=0, sharedCalls=0;
+        bool Pop()
+        {
+            if(stack.Count==0)return false; // unknown preexisting lower stack
+            bool v=stack[^1];stack.RemoveAt(stack.Count-1);return v;
+        }
+        for(int i=ctorIndex+1;i<il.Count && inspected<48;i++)
+        {
+            var x=il[i];
+            if(x.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
+                or FlowControl.Return or FlowControl.Throw)
+            {boundaries++;break;}
+            inspected++;
+            if(x.OpCode.Code==Code.Nop)continue;
+            if(x.OpCode.Code==Code.Dup)
+            {
+                bool last=Pop();stack.Add(last);stack.Add(last);
+                continue;
+            }
+            if(x.OpCode.Code is Code.Call or Code.Callvirt or Code.Newobj)
+            {
+                if(x.Operand is not MethodReference callee) {boundaries++;break;}
+                bool constructing=x.OpCode.Code==Code.Newobj;
+                bool hasReceiver=!constructing && callee.HasThis;
+                int pops=callee.Parameters.Count+(hasReceiver?1:0);
+                if(pops>32){boundaries++;break;}
+                var consumed=new List<bool>();
+                for(int k=0;k<pops;k++)consumed.Add(Pop());
+                bool receiverAlias=hasReceiver && consumed.Count>callee.Parameters.Count
+                    && consumed[callee.Parameters.Count];
+                if(receiverAlias && callee.DeclaringType.FullName is
+                    ("UnityEngine.Material" or "UnityEngine.Object"))materialCalls++;
+                if(consumed.Count>0 && consumed[0])
+                {
+                    int kind=RendererMaterialSetter(x);
+                    if(kind==1)rendererCalls++;
+                    if(kind==2)sharedCalls++;
+                }
+                if(constructing || callee.ReturnType.FullName!="System.Void")stack.Add(false);
+                continue;
+            }
+            var storeLocal=LocalForStore(m,x);
+            if(storeLocal is not null)
+            {
+                bool alias=Pop();
+                locals[storeLocal.Index]=alias && storeLocal.VariableType.FullName==MaterialType;
+                if(locals[storeLocal.Index])localStores++;
+                continue;
+            }
+            VariableDefinition? loadLocal=null;
+            if(x.OpCode.Code is Code.Ldloc or Code.Ldloc_S or
+                Code.Ldloc_0 or Code.Ldloc_1 or Code.Ldloc_2 or Code.Ldloc_3)
+                loadLocal=m.Body.Variables.FirstOrDefault(v=>LocalIsLoadOf(x,v));
+            if(loadLocal is not null)
+            {
+                stack.Add(locals.GetValueOrDefault(loadLocal.Index,false));
+                continue;
+            }
+            if(x.OpCode.Code is Code.Stfld or Code.Stsfld)
+            {
+                bool valueAlias=Pop();
+                if(x.OpCode.Code==Code.Stfld)Pop();
+                if(valueAlias && ResolveMaterialField(x,m.Module,out var f) && f is not null)
+                {
+                    fieldStores++;
+                    knownFields.Add(f);
+                }
+                continue;
+            }
+            int pop=FixedPopCount(x),push=FixedPushCount(x);
+            if(pop<0 || push<0 || pop>6 || push>2) {boundaries++;break;}
+            for(int k=0;k<pop;k++)Pop();
+            for(int k=0;k<push;k++)stack.Add(false);
+            if(!stack.Any(v=>v) && !locals.Values.Any(v=>v))break;
+        }
+        if(inspected>=48)boundaries++;
+        // Two distinct destination fields cannot be silently merged into one.
+        FieldDefinition? field=knownFields.Count==1?knownFields.Single():null;
+        return new(inspected,boundaries,materialCalls,fieldStores,localStores,
+            rendererCalls,sharedCalls,field);
+    }
     private static bool IsFieldLoad(Instruction inst, FieldDefinition field)
     {
         if(inst.OpCode.Code is not (Code.Ldfld or Code.Ldsfld) ||
@@ -410,6 +522,23 @@ internal static class Program
                     if(kind==2) dupLocalDirectSharedCandidates++;
                 }
         }
+        var trace=TraceMaterialAliasLinear(materialSite.Method,materialSite.Index);
+        int linearFieldReads=0,linearFieldReaders=0,linearFieldToRenderer=0,linearFieldToShared=0;
+        if(trace.OriginalMaterialField is not null)
+            foreach(var method in methods)
+            {
+                var il=method.Body.Instructions;
+                int reads=0;
+                for(int i=0;i<il.Count;i++)
+                    if(SameMaterialFieldLoad(il[i],trace.OriginalMaterialField))
+                    {
+                        reads++;
+                        int renderer=DirectRendererSetter(il,i);
+                        if(renderer==1)linearFieldToRenderer++;
+                        if(renderer==2)linearFieldToShared++;
+                    }
+                if(reads>0){linearFieldReads+=reads;linearFieldReaders++;}
+            }
         var output=new Dictionary<string,object>
         {
             ["status"]="original_foam_ShaderFind_direct_return_consumer_typed_IL_census",
@@ -450,6 +579,18 @@ internal static class Program
             ["material_dup_original_Material_local_direct_Renderer_set_material_candidates"]=dupLocalDirectRendererCandidates,
             ["material_dup_original_Material_local_direct_Renderer_set_sharedMaterial_candidates"]=dupLocalDirectSharedCandidates,
             ["material_dup_nops_skipped_in_initializer_probe"]=dupProbe.SkippedNops,
+            ["material_linear_original_material_alias_instructions_inspected"]=trace.Inspected,
+            ["material_linear_original_material_alias_ambiguous_or_branch_boundaries"]=trace.ConservativeBoundaries,
+            ["material_linear_original_material_instance_method_calls"]=trace.MaterialInstanceCalls,
+            ["material_linear_original_material_field_stores"]=trace.OriginalMaterialFieldStores,
+            ["material_linear_original_material_typed_local_stores"]=trace.TypedMaterialLocalStores,
+            ["material_linear_original_material_direct_Renderer_set_material_args"]=trace.RendererSetMaterialArguments,
+            ["material_linear_original_material_direct_Renderer_set_sharedMaterial_args"]=trace.RendererSetSharedArguments,
+            ["material_linear_original_material_unique_field_definition_resolved"]=trace.OriginalMaterialField is null?0:1,
+            ["material_linear_original_material_field_read_instructions"]=linearFieldReads,
+            ["material_linear_original_material_field_distinct_reader_methods"]=linearFieldReaders,
+            ["material_linear_original_material_field_direct_Renderer_set_material_args"]=linearFieldToRenderer,
+            ["material_linear_original_material_field_direct_Renderer_set_sharedMaterial_args"]=linearFieldToShared,
             ["original_Shader_Find_executed_in_Unity"]=false,
             ["field_declaring_TypeDef_is_427_scene_script_proven"]=false,
             ["Unity_Material_or_Renderer_actual_binding_verified"]=false,
@@ -555,6 +696,15 @@ internal static class Program
         method.Body.Instructions[5]=Instruction.Create(OpCodes.Call,wrongSetter);
         if(AnalyzeDupMaterialObjectInitializer(method,2).TypedInitializerSetterCalls!=0)
             throw new InvalidOperationException("untyped_dup_setter_rejected");
+        method.Body.Instructions[5]=Instruction.Create(OpCodes.Callvirt,setName);
+        var linear=TraceMaterialAliasLinear(method,2);
+        if(linear.OriginalMaterialField!=matField ||
+           linear.OriginalMaterialFieldStores!=1 ||
+           linear.MaterialInstanceCalls!=1)
+            throw new InvalidOperationException("typed_material_dup_linear_flow");
+        method.Body.Instructions[5]=Instruction.Create(OpCodes.Br_S,method.Body.Instructions[6]);
+        if(TraceMaterialAliasLinear(method,2).ConservativeBoundaries==0)
+            throw new InvalidOperationException("branch_must_stop_original_trace");
         Console.WriteLine("T2_FOAM_SHADERFIND_RETURN_CECIL_SYNTHETIC_PASS");
     }
     public static int Main(string[] args)
