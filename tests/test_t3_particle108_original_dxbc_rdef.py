@@ -4,7 +4,7 @@ import struct
 import unittest
 
 from scripts.t3_particle108_original_dxbc_rdef import (
-    source_rdef,_private_register_layout,classify_four_pairs,STATUS,
+    source_rdef,_private_register_layout,classify_four_pairs,STATUS,SAFE_RDEF_FAILURE_REASON,
 )
 
 
@@ -97,6 +97,10 @@ class OriginalRdefTests(unittest.TestCase):
     def test_register_namespace_separation_sampler_srv_cb_is_preserved(self):
         _,count=_private_register_layout(((0,0,1),(2,0,1),(3,0,1)))
         self.assertEqual(count["same_family_overlapping_register_slots"],0)
+    def test_rdef_fail_reason_is_only_safe_static_classifier(self):
+        self.assertEqual(SAFE_RDEF_FAILURE_REASON["DXBC_ORIGINAL_RDEF_NOT_UNIQUE"],
+                         "ORIGINAL_RDEF_ABSENT_OR_AMBIGUOUS")
+        self.assertNotIn("_PrivateTexture",json.dumps(SAFE_RDEF_FAILURE_REASON))
     def test_missing_four_original_pairs_rejected(self):
         for bad in ([],fixtures()[:3],fixtures()+fixtures()[:1]):
             with self.assertRaisesRegex(ValueError,"ORIGINAL_FOUR_DXBC_PAIRS_REQUIRED"):
