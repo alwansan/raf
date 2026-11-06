@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "status": "active",
   "base_sha": "bfe5c21618494a87033ad34521d51f2873756b68",
-  "updated_at": "2026-11-06T19:46:46.656Z",
+  "updated_at": "2026-11-06T19:55:47.220Z",
   "resumed_from_sessions": [
     "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
     "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
@@ -23,7 +23,9 @@
     "prompt/coordination/work/RENDER-002/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json",
     "prompt/coordination/clients/T3/sessions/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.md",
     "prompt/coordination/experiments/T3/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json",
-    "prompt/coordination/B_TEAM/events/T3/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json"
+    "prompt/coordination/B_TEAM/events/T3/20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2.json",
+    "scripts/t3_particle108_spirv_explicit_pair.py",
+    "tests/test_t3_particle108_spirv_explicit_pair.py"
   ],
   "constraints": [
     "Only feature/android-native-port",
@@ -32,5 +34,5 @@
     "Do not dispatch original ZIP2 or native Unity workflows; native build 42281310905 running at scope",
     "No claim of shader fix/phone colors from source-only C compiler"
   ],
-  "next_step": "Build explicit VSFS private resource map packet with strong invariants and public VKD3D C API tool that respects stage visibility and CBV/SRV/sampler, test source-only in GitHub Actions with installed distro libvkd3d-shader headers, later authorized original SHA8 stage compare to default and mask target binding operands."
+  "next_step": "Add independent strict SPIRV descriptor variable-ID and full module masked-pair verifier for two explicit mapping profiles, prove same-key variable IDs stable and detect silent same-family binding swaps, with sourcefree synthetic CI. No original ZIP2 or Unity run."
 }
