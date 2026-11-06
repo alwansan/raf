@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1658Z-T5-installed-obb-sample",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1645Z-T5-chat-installed-obb-read-e7c4",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T17:00:24.850Z",
+  "summary": "T5 integrated fail-open exact-version installed-main-OBB Unity ZIP one-byte runtime probe, plus real native Unity source import explicit copy-list dependency. CI42257103707 SUCCESS: 24/24 synthetic ZIP controls, real workflow copy-loop guard, managed platform .NET build 0 errors. No Unity ARM64 APK/device test or engine asset load; project still NOT_READY 0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42257103707",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_INSTALLED_OBB_UNITY_ZIP_READ_PROBE_2026-11-06.md"
+  ],
+  "limits": "Source-only (Unity Android code path not compiled by .NET), no actual device ZIP byte, SHA, Unity engine texture/shader/FFT pixels, gameplay readiness.",
+  "next_step": "Read storage/obb.unity_zip_read_sample from a fresh signed candidate installed on phone and correlate same-run FMOD and Unity resource access."
+}
