@@ -1,0 +1,67 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
+  "issue_id": "WATER-001",
+  "hypothesis": "A pair comparator's self-comparison smoke test and empty JSON coordinate maps risk false parity interpretation; require independent capture files, declared same input/dispatch, digest matching and all expected site records before numerical conclusions.",
+  "source_commit": "5c8199e794dd18983fd5c52e77ba8c0fa3591d18",
+  "input_hashes": [
+    "source-only synthetic invocation traces, no private original FFT input or Unity capture"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "system python3 in GitHub Actions, no external dependencies"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_invocation_pair_gate.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_coordinate_probe_compare.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v"
+  ],
+  "negative_controls": [
+    "Same path, symlink and hardlink are never independent capture files",
+    "Zero samples from both JSON captures raise ValueError, not a false match",
+    "Bounded exact size binary, actual all-three site coverage and duplicate invocation checks",
+    "Strict schema, duplicate manifest keys, invalid SHA256, oversized manifest",
+    "Reference must be declared original_spirv and candidate declared hlsl_roundtrip_spirv or unity_compute_spirv",
+    "Declared input and dispatch SHA256 must agree across stages, individual trace digest must equal actual capture bytes",
+    "Changed read coordinate and value produce nonmatch; true independent files with equal output may match",
+    "Unsigned producer declaration is explicitly reported and cannot be considered source attestation"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42223419922",
+  "artifact_urls": [],
+  "budget": "4-minute Ubuntu-24.04 source-free synthetic tests only, no GPU, no game asset staging",
+  "status": "completed_scoped_comparator_acceptance",
+  "observed_result": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42223419922",
+    "job_id": 127910779313,
+    "conclusion": "success",
+    "test_sets": {
+      "new_pair_gate": "20/20 PASS",
+      "coordinate_sample_comparator": "11/11 PASS",
+      "existing_trace_comparator": "9/9 PASS"
+    },
+    "total_passed": 40,
+    "private_original_capture_included": false,
+    "unity_candidate_capture_included": false,
+    "source_provenance_authenticated": false,
+    "manifest_is_unsigned": true,
+    "new_file": "scripts/t1_fft_invocation_pair_gate.py",
+    "new_workflow": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    "zero_coordinate_maps_falsely_matched_before_fix": true,
+    "actual_original_vs_hlsl_numeric_parity_proven": false,
+    "android_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Identical file used twice supplies independent shader parity evidence: new gate rejects same inode, symlink and hardlink as not independent.",
+    "Two empty sample maps are evidence of match: now reject empty-both captures explicitly.",
+    "Successful parser smoke test establishes original vs Unity numerical fidelity: false, producer manifest is unsigned and no real paired captures were supplied."
+  ],
+  "limitations": [
+    "Declared shader/dispatch/input digests are required and compared, but unsigned metadata cannot authenticate actual capture-producing shader, GPU or runner. External SHA-linked CI stage is necessary.",
+    "Matching independently stored synthetic binary traces does not establish actual Vulkan original vs Unity or Adreno parity.",
+    "No shader changes, original assets or Android build in this scoped work."
+  ],
+  "integration_commit": "5c8199e794dd18983fd5c52e77ba8c0fa3591d18",
+  "next_step": "Extend original-private glslang HLSL SPIR-V analysis of Butterfly1 X float32 OpPhi incoming SSA value kinds and predecessor blocks. Only once SHA-authenticated, run actual independent invocation-keyed original/candidate traces on identical dispatch, feeding them to the new strict evidence gate."
+}
