@@ -1,0 +1,140 @@
+name: T2 WATER-001 SHA-original Foam CB0 source member-name to managed uniform setter candidates
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_private_cb0_managed_targets.py
+      - tests/test_t2_foam_private_cb0_managed_targets.py
+      - android-port/Experiments/T2/FoamCb0ManagedLiterals/**
+      - .github/workflows/raft-t2-foam-cb0-managed-literals.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-source-original-foam-cb0-managed-name-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-foam-cb0-managed-names:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run source-free original name registry adversarial tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_private_cb0_managed_targets.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_private_cb0_managed_targets.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile independent typed Cecil source-free scanner and selftest
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish android-port/Experiments/T2/FoamCb0ManagedLiterals/FoamCb0ManagedLiterals.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t2-cb0-cecil" \
+            > "$RUNNER_TEMP/t2-cb0-cecil-build.log" 2>&1 || {
+              python3 - <<'PY'
+          import collections,json,os,re
+          from pathlib import Path
+          log=(Path(os.environ['RUNNER_TEMP'])/'t2-cb0-cecil-build.log').read_text(errors='replace')
+          errors=dict(collections.Counter(re.findall(r'error\s+((?:CS|NU|NETSDK)[0-9]+)', log)))
+          print('T2_CB0_CECIL_BUILD_SAFE '+json.dumps({'status':'blocked','public_compiler_error_codes':errors,
+            'private_original_game_source_published':False},sort_keys=True))
+          PY
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t2-cb0-cecil/FoamCb0ManagedLiterals.dll" --selftest
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-foam-cb0-managed-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Reconstruct SHA-original Foam owner and independently authenticate managed DLL
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage
+          root=Path('t2-original-foam-cb0-managed-zip2')
+          assert subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          source=Path(os.environ['RUNNER_TEMP'])/'t2-original-foam-cb0-source'
+          attest=stage(root,source,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert attest['verified_bytes']==115978112 and attest['lfs_used'] is False
+          dll=root/'Raft/Raft_Data/Managed/Assembly-CSharp.dll'
+          assert dll.is_file() and not dll.is_symlink() and dll.stat().st_size==3211776
+          assert hashlib.sha256(dll.read_bytes()).hexdigest()=='0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e'
+          print('T2_CB0_ORIGINAL_PROVENANCE original_Foam_SHA=true managed_DLL_SHA=true original_game_DLL_not_executed=true')
+          PY
+      - name: Read original Shader typetree in private scratch only
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 140s python3 -m scripts.t2_foam_private_cb0_managed_targets \
+            --source "$RUNNER_TEMP/t2-original-foam-cb0-source" \
+            --out "$RUNNER_TEMP/t2-private-cb0-name-hashes.json"
+      - name: Cross-check authentic CB0 names against original typed managed setter contexts
+        run: |
+          set -euo pipefail
+          timeout 150s dotnet "$RUNNER_TEMP/t2-cb0-cecil/FoamCb0ManagedLiterals.dll" \
+            t2-original-foam-cb0-managed-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            "$RUNNER_TEMP/t2-private-cb0-name-hashes.json" \
+            "$RUNNER_TEMP/t2-cb0-managed-namelinks-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-cb0-managed-namelinks-safe.json').read_text())
+          assert r['status']=='original_Foam_CB0_source_name_managed_literal_contexts_scanned'
+          assert r['original_managed_DLL_sha256_authenticated'] is True
+          assert r['original_managed_DLL_size_bytes']==3211776
+          assert r['source_original_CB0_stage_bindings']==4
+          assert r['total_original_compiled_methods_scanned']>1000
+          assert r['total_original_IL_instructions_scanned']>10000
+          assert r['total_original_ldstr_instructions_scanned']>1000
+          for key in ('source_target_count_by_role','unique_matched_managed_ldstr_by_role',
+                      'literal_occurrences_by_role','original_methods_with_matching_literal_by_role',
+                      'original_methods_containing_both_literal_and_typed_setter_by_role',
+                      'literal_within_16_following_IL_instructions_of_typed_setter_by_role',
+                      'literal_within_4_following_IL_instructions_of_PropertyToID_by_role'):
+            rows=r[key]
+            assert set(rows)=={'buffer','vector','matrix'}
+            assert all(type(x) is int and 0<=x<=128000 for x in rows.values())
+          assert 0 <= r['private_source_names_with_unresolved_name_index_count'] <= 512
+          assert r['source_target_count_by_role']['buffer']>=1
+          assert r['original_Ldstr_is_exact_setter_argument_proven'] is False
+          assert r['runtime_Unity_CB0_value_upload_verified'] is False
+          assert r['actual_Adreno_water_pixels_verified'] is False
+          assert r['private_original_strings_hashes_method_IL_disclosed'] is False
+          assert 'categories_sha256' not in r and 'original_method_names' not in r
+          PY
+      - name: Delete exact original files and private source-name digests even on failure
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-foam-cb0-source" \
+            "$RUNNER_TEMP/t2-private-cb0-name-hashes.json" \
+            "$GITHUB_WORKSPACE/t2-original-foam-cb0-managed-zip2"
+      - name: Upload safe numeric classifications only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-cb0-managed-namelinks-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-cb0-managed-namelinks-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
