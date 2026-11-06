@@ -43,16 +43,63 @@
     "5 class counts must be 0 for strict positive",
     "C# Unity full readback and exact one NUnit case mandatory"
   ],
-  "status": "waiting_ci",
+  "status": "completed_actual_unity2021_sourcefree_phi_gpu_positive",
   "expected_result": {
     "sites": 5,
     "reads_per_site": 64,
     "exact_gpu_words": 320
   },
-  "observed_result": null,
+  "observed_result": {
+    "run_id": 42264618337,
+    "job_id": 128053163170,
+    "conclusion": "success",
+    "actual_unity2021_openglcore_gpu_executed": true,
+    "synthetic_texture_reads_total": 320,
+    "mismatch_counts": {
+      "first_direct": 0,
+      "second_direct": 0,
+      "single_branch_phi": 0,
+      "nested_branch_phi": 0,
+      "dynamic_loop_phi": 0
+    },
+    "source_only_tests_passed": 7,
+    "source_only_tests_total": 7,
+    "nunit_passed": 1,
+    "nunit_total": 1,
+    "private_game_source_compared": false,
+    "original_fft_runtime_identity_proven": false,
+    "android_adreno_water_proven": false,
+    "runner_cleanup_succeeded": true
+  },
   "limitations": [
     "Synthetic branch/loop carrier does not reproduce original SPIR-V/DXBC arithmetic",
     "Proprietary original FFT not imported, Android/Adreno not tested"
   ],
-  "next_step": "Read actual Unity terminal verdict and five counts, record result; remain no APK need until major original integration."
+  "next_step": "Sourcefree OpenGLCore 320/320 nested Phi/loop carrier exact; original optimized Phi path, resource identity and actual Unity FFT vs Vulkan still unproven; compare real authenticated keyed GPU trace before Android. T1 vote لا يحتاج, no new APK.",
+  "updated_at": "2026-11-06T17:48:15Z",
+  "result": {
+    "run_id": 42264618337,
+    "job_id": 128053163170,
+    "conclusion": "success",
+    "actual_unity2021_openglcore_gpu_executed": true,
+    "synthetic_texture_reads_total": 320,
+    "mismatch_counts": {
+      "first_direct": 0,
+      "second_direct": 0,
+      "single_branch_phi": 0,
+      "nested_branch_phi": 0,
+      "dynamic_loop_phi": 0
+    },
+    "source_only_tests_passed": 7,
+    "source_only_tests_total": 7,
+    "nunit_passed": 1,
+    "nunit_total": 1,
+    "private_game_source_compared": false,
+    "original_fft_runtime_identity_proven": false,
+    "android_adreno_water_proven": false,
+    "runner_cleanup_succeeded": true
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42264618337"
+  ]
 }
