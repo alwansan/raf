@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "updated_at": "2026-11-06T18:52:58.345Z",
+  "base_sha": "7977e6b61be76f3a3142852e8c383fc64fd38534",
+  "resumed_from_sessions": [
+    "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
+    "20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c",
+    "20261106T1745Z-T5-chat-trial-vote-adoption-46c2"
+  ],
+  "intended_files": [
+    "scripts/package_android_delivery.py",
+    "tests/test_android_delivery_package.py",
+    "prompt/coordination/work/DELIVERY-013/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.json",
+    "prompt/coordination/clients/T5/sessions/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.md",
+    "prompt/coordination/experiments/T5/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.json"
+  ],
+  "experiment_key": "T5-delivery-existing-package-CRC-green-duplicate-ZIP-name-synthetic-fail-closed-v1",
+  "resource_key": "T5 independent source-only delivery unit suite; no full native Unity/OBB production run",
+  "hypothesis": "`package()` standalone recovery validates ZipFile.testzip but not central-directory duplicate names; CRC-green ZIP with two same-name original Unity entries can be repackaged although Android jar resolution is ambiguous. Strictly reject duplicated exact entry paths for signed APK/OBB input before copying or creating output, without relaxing existing byte CRC, signature/original pipeline gates.",
+  "coordination": "T3 owns malformed event causing canonical index CI red; do not edit T3 event. B13 source fault injection succeeded but its generated summary failed from T3 event. T5 scheduled PID work remains independent. No T1-4 files or shared Unity workflow or native request modified.",
+  "next_step": "Add tiny boundary check to package input validation, adversarial synthetic tests in current delivery unit suite, validate targeted source-only workflow. Keep prior 5/5 trial vote unchanged."
+}
