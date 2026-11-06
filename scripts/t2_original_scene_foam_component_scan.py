@@ -135,7 +135,7 @@ def classify_scene_foam(owner, externals, material_rows, component_rows):
         elif f > len(externals):
             counts["scene_external_fileID_out_of_range"] += 1
         elif f in source_indices and p == FOAM_PATHID:
-            counts["scene_foam_" + source + "_PPtr_candidates"] += 1
+            counts["scene_foam_" + source + ("_Shader" if source == "Material" else "") + "_PPtr_candidates"] += 1
         elif f in source_indices and p != 0:
             counts["scene_other_" + source + "_PPtrs_to_foam_owner"] += 1
     for row in material_rows:
@@ -143,7 +143,7 @@ def classify_scene_foam(owner, externals, material_rows, component_rows):
             counts["scene_Material_unparsed"] += 1
         else:
             counts["scene_Material_parsed"] += 1
-            consider(row, "Material_Shader")
+            consider(row, "Material")
     for refs in component_rows:
         if refs is None:
             counts["scene_Component_unparsed"] += 1
@@ -176,7 +176,8 @@ def safe_scene_summary(rows, bytes_verified):
         "original_scene_SHA_authenticated_file_count": EXPECTED_SCENES,
         "original_scene_SHA_authenticated_bytes": bytes_verified,
         **aggregate,
-        "original_Foam_Shader_asset_SHA_authenticated": True,
+        "original_Foam_Shader_asset_SHA_authenticated_this_run": False,
+        "original_Foam_Shader_asset_SHA_attested_previous_CI": True,
         "source_external_basename_proves_Unity_GUID": False,
         "opaque_MonoBehaviour_components_proved_no_Foam": False,
         "actual_rendered_Foam_or_CB0_upload_verified": False,
@@ -263,9 +264,6 @@ def inspect_original_scenes(zip2, scratch, checkpoint=lambda _: None):
         del objs, file, env, matrows, componentrows
         gc.collect()
     result = safe_scene_summary(results, staged["verified_bytes"])
-    # The checked Foam source pin in this run was metadata, not source bytes.
-    result["original_Foam_Shader_asset_SHA_authenticated"] = False
-    result["original_Foam_Shader_asset_SHA_attested_previous_CI"] = True
     return result
 
 
