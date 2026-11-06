@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1728Z-T2-chat-original-external-guid-4c81",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "Foam original external Material Shader FileIdentifier GUID and reciprocal source graph",
+  "status": "active",
+  "base_sha": "9d55f5dbe65c05b031e7261658a23f8ff90cbe57",
+  "approach": "On immutable ZIP2 SHA-original sharedassets0 and one independently SHA-original 758412-byte candidate target file, inspect the two material external fileID->FileIdentifier GUID/type references and target's reciprocal FileIdentifier table in private runner. Validate GUID structure/identity consistency without publishing GUID, file path/name, raw shader asset or claiming runtime binding.",
+  "hypothesis": "Two verified external Shader references may share a stable original FileIdentifier GUID/type/target path, or carry empty/inconsistent GUIDs. Observing exact source GUID shape and independently staged target external table will determine whether GUID identity can be asserted from compiled game artifacts.",
+  "experiment_key": "ZIP2-15964-SHA-sharedassets0-2-material-external-Shader-PPtrs-FileIdentifier-GUID-type-reciprocal-target-v1",
+  "resource_key": "ZIP2-original-sharedassets0-and-758412-target-readonly",
+  "intended_files": [
+    "scripts/t2_original_external_guid_evidence.py",
+    "tests/test_t2_original_external_guid_evidence.py",
+    ".github/workflows/raft-t2-original-external-guid-evidence.yml",
+    "prompt/coordination/clients/T2/sessions/20261106T1728Z-T2-chat-original-external-guid-4c81.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1728Z-T2-chat-original-external-guid-4c81.json",
+    "prompt/coordination/experiments/T2/20261106T1728Z-T2-chat-original-external-guid-4c81.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1728Z-T2-chat-original-external-guid-4c81-result.json",
+    "docs/T2_FOAM_ORIGINAL_EXTERNAL_GUID_EVIDENCE_2026-11-06.md"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1714Z-T2-chat-target-foam-name-63f0.md",
+    "prompt/coordination/clients/T2/sessions/20261106T1719Z-T2-scheduled-target-name-ci-7f2c.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1714Z-T2-chat-target-foam-name-63f0.json"
+  ],
+  "experiment_ids": [
+    "20261106T1728Z-T2-chat-original-external-guid-4c81"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-06T17:28:01.316Z",
+  "next_step": "Write source-free controls for external GUID shape/duplicate target identity; reuse original SHA-stage while testing real UnityPy FileIdentifier bytes/type and target reverse file table. Dispatch one isolated source-original CI, keep GUID and source data private; record unknown when independent target GUID is not present."
+}
