@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2138Z-T2-chat-foam-matdoc-82bd",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "afa18e3371c882f2b0842111ef6ea61aa78b71fc",
-  "updated_at": "2026-11-06T21:38:01Z",
+  "updated_at": "2026-11-06T21:40:33.769Z",
   "resumed_from_sessions": [
     "20261106T2117Z-T2-scheduled-foam-ci-reconcile-k6m2",
     "20261106T2044Z-T2-chat-field-consumer-trace-d4a6"
@@ -38,5 +38,21 @@
     "https://github.com/alwansan/raf/actions/runs/42287347419"
   ],
   "native_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Add test for valid %YAML .mat with missing !u!21 document, implement one-path fail-closed guard, let existing source-only Actions run, reconcile; no Unity or private data."
+  "next_step": "When real Unity export is available and T5 owns the native runner, run this read-only inventory against exact export; separately verify original ShaderLab pass+material mapping, importer and phone pixels. Do not dispatch native or claim Foam/CB0 restored.",
+  "code_commit": "9951deea2c2c055ceedfc4c0997efb040c5288db",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42298466950",
+    "https://github.com/alwansan/raf/actions/runs/42298467191"
+  ],
+  "result": {
+    "source_only_probe_regression": "PASS",
+    "test_count": 18,
+    "installer_regression_count": 17,
+    "guards_added": 1,
+    "red_green_cases_added": 2,
+    "code_sha": "9951deea2c2c055ceedfc4c0997efb040c5288db",
+    "ci_status": "SUCCESS",
+    "verified_original_export": false,
+    "unity_or_android_verified": false
+  }
 }
