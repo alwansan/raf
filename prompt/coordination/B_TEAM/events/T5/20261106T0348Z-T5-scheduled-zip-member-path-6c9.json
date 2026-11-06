@@ -1,0 +1,13 @@
+{
+  "id": "20261106T0348Z-T5-scheduled-zip-member-path-6c9",
+  "owner": "T5",
+  "session_id": "20261106T0348Z-T5-scheduled-zip-member-path-6c9",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "Hardened ZIP member raw path validation and added two adversarial synthetic tests; CI pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/7061c0a6ea76e5161268f46873cb4f2ee9110152",
+    "https://github.com/alwansan/raf/actions/runs/42158794051"
+  ],
+  "at": "2026-11-06T03:50:00Z"
+}

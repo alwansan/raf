@@ -1,0 +1,24 @@
+{
+  "owner": "T5",
+  "session_id": "20261106T0348Z-T5-scheduled-zip-member-path-6c9",
+  "issue_id": "INTEGRATION-001",
+  "source_commit": "7061c0a6ea76e5161268f46873cb4f2ee9110152",
+  "tool_versions": {
+    "python": "CI runner version pending"
+  },
+  "commands": [
+    "python -m unittest tests.test_t5_verify_apk_obb_pair"
+  ],
+  "negative_controls": [
+    "assets//unexpected",
+    "assets/./unexpected"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42158794051",
+  "status": "waiting_ci",
+  "observed_result": "Not yet final",
+  "limitations": [
+    "synthetic fixtures only",
+    "no real APK/OBB payload or device"
+  ],
+  "next_step": "Read CI42158794051 final result; if failed inspect assertion, repair without duplicate run. If passed retain source-only validation and inspect actual signed artifact pairing separately."
+}

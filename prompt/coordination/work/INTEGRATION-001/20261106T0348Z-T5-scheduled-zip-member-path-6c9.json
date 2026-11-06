@@ -1,27 +1,23 @@
 {
   "schema_version": 1,
   "owner": "T5",
-  "generation": "T-2026-11-05",
   "session_id": "20261106T0348Z-T5-scheduled-zip-member-path-6c9",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "track": "APK_OBB_integrity",
-  "approach": "Harden ZIP member path validation: PurePosixPath normalizes repeated slashes and can mask empty path segments; add synthetic tests, no game payload.",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "6b91af7898dcc9fa4759d812f9672afa80be25b2",
   "intended_files": [
     "scripts/t5_verify_apk_obb_pair.py",
-    "tests/test_t5_verify_apk_obb_pair.py",
-    "prompt/coordination/work/INTEGRATION-001/20261106T0348Z-T5-scheduled-zip-member-path-6c9.json",
-    "prompt/coordination/clients/T5/sessions/20261106T0348Z-T5-scheduled-zip-member-path-6c9.md"
+    "tests/test_t5_verify_apk_obb_pair.py"
   ],
-  "hypothesis": "ZIP names with double slash currently accepted despite unsafe empty segment",
+  "hypothesis": "PurePosixPath normalizes ZIP member repeated separators and dot segments, bypassing intended raw-path safety check",
   "experiment_key": "T5-zipmember-double-slash-synthetic-source-v1",
   "resource_key": null,
-  "taken_over_from": [
-    "scripts/t5_verify_apk_obb_pair.py"
+  "implementation_commit": "7061c0a6ea76e5161268f46873cb4f2ee9110152",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42158794051"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-06T03:48:00Z",
-  "next_step": "Reproduce with synthetic names, patch path validation and tests."
+  "result": "Code patch and two adversarial synthetic regression tests committed; CI in_progress at checkpoint. No actual APK/OBB bytes inspected, no device proof.",
+  "next_step": "Read CI42158794051 final result; if failed inspect assertion, repair without duplicate run. If passed retain source-only validation and inspect actual signed artifact pairing separately.",
+  "updated_at": "2026-11-06T03:50:00Z"
 }
