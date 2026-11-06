@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261106T004130Z-T1-chat-c1476b",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "3f703cc82010f09657db6c0eafdabc6c44a2dcc4",
   "intended_files": [
     "scripts/t1_fft_spirv_read_provenance.py",
@@ -15,6 +15,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42138743345"
   ],
-  "result": "Added a private diagnostic spirv-opt local memory promotion followed by spirv-val and a 12-level coordinate walk. It preserves the original shader for numeric comparison. Scheduled bit-carrier contract now runs in this CPU workflow; exact scheduled tests and other local FFT tests passed, 117 total.",
-  "next_step": "Inspect the optimized address slice for integer-to-float producers or unresolved storage. Validate any future private rewrite in Vulkan and Unity before production integration."
+  "result": "Authentic slot-0 local-memory SSA promotion validated successfully. The source texture coordinate slice contains both sint32_to_float32 and float32_to_sint32, plus vector insert/shuffle and two loads. The two butterfly slices show only float32_to_sint32 within the bounded walk. The aggregate is not lane-sensitive and does not prove the two casts affect the same X lane. Unmodified original/roundtrip Vulkan parity passed for 64 and 32 written pixels. Scheduled synthetic contract passed in CI.",
+  "next_step": "Resolve lane-specific reaching producers through OpVectorShuffle and OpCompositeInsert, keeping unresolved loads explicit. Prototype a private integer-preserving X path only when that lane's roundtrip is confirmed."
 }
