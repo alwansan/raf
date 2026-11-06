@@ -124,6 +124,23 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(EvidenceInputError, "conflicting_replayed_sequence"):
             analyze([first, second])
 
+    def test_same_size_fake_jsonl_cannot_claim_pinned_owner_log_provenance(self):
+        # Exact byte length alone is not content identity. A forged three-file
+        # fixture matching every expected size must still fail its Git blob
+        # integrity check, rather than claiming to be CL@520c4c phone logs.
+        from unittest.mock import patch
+        from scripts import t4_owner5nov_jsonl_lifecycle as owner
+        paths = []
+        for i in range(3):
+            paths.append(self.put(str(i) + ".jsonl", [
+                row("synthetic-" + str(i), 1, "startup", "logger.ready",
+                    "2026-11-05T10:00:00Z"),
+            ]))
+        fake_sizes = tuple(p.stat().st_size for p in sorted(paths))
+        with patch.object(owner, "PINNED_BYTES", fake_sizes):
+            with self.assertRaisesRegex(EvidenceInputError, "unverified_pinned_owner_log_git_blob"):
+                analyze(paths, pinned=True)
+
     def test_wrong_immutable_three_log_provenance_refused(self):
         path = self.put("first.jsonl", [
             row("x", 1, "startup", "logger.ready", "2026-11-05T10:00:00Z")])
