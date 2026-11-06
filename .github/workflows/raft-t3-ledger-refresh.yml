@@ -114,6 +114,20 @@ jobs:
           # 20 output names. Name-only location rewrites are unsafe.
           particle108_namebridge="https://github.com/alwansan/raf/actions/runs/42144978122"
           assert particle108_namebridge in issue[0]["evidence"]
+          # Real SHA-original compiled Particle108 four VS/FS DXBC keyword
+          # pairs carry 16 authored semantic records / 58 component lanes,
+          # all source-compatible. Derived HLSL-to-SPIRV location mapping
+          # is still UNVERIFIED, so graphics issue remains OPEN.
+          particle108_authored_signatures="https://github.com/alwansan/raf/actions/runs/42146385054"
+          assert particle108_authored_signatures in issue[0]["evidence"]
+          assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
+                     and r["counts"]["original_authored_source_VSFS_keyword_pairs_with_complete_signature_coverage"]==4
+                     and r["counts"]["original_authored_source_VSFS_matched_semantic_records"]==16
+                     and r["counts"]["original_authored_source_VSFS_matched_component_lanes"]==58
+                     and r["counts"]["original_authored_source_VSFS_unmatched_fragment_semantics"]==0
+                     and r["counts"]["authored_DXBC_semantics_to_HLSL_SPIRV_location_map_verified"] is False
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS"
                      and r["counts"]["original_roundtrip_input_name_type_matches"]==0
                      and r["counts"]["original_roundtrip_output_name_type_matches"]==0
