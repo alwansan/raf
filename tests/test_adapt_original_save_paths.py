@@ -104,6 +104,56 @@ class SavePathTests(unittest.TestCase):
             self.assertIn(b'// adapted', source.read_bytes())
             self.assertEqual(len(list(backup.iterdir())), 2)
 
+    def test_external_edit_after_complete_backup_must_not_be_overwritten(self):
+        # A complete backup proves the OLD original bytes were preserved,
+        # not that Unity's source/.meta remained unchanged after promotion.
+        # Inject a deterministic independent write after stage.rename(backup).
+        for target_name in ("SaveAndLoad.cs", "SaveAndLoad.cs.meta"):
+            with self.subTest(target_name=target_name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = root / "project/Assets/Assembly-CSharp/SaveAndLoad.cs"
+                source.parent.mkdir(parents=True)
+                before = b"class SaveAndLoad {}\\n"
+                source.write_bytes(before)
+                meta = source.with_suffix(".cs.meta")
+                metadata = b"guid: original-immutable-until-external-edit\\n"
+                meta.write_bytes(metadata)
+                backup = root / "original-save-backup"
+                external_target = source if target_name.endswith(".cs") else meta
+                new_bytes = external_target.read_bytes() + b"// synthetic concurrent source/meta edit\\n"
+                rename = Path.rename
+                promoted = False
+
+                def external_writer_after_promotion(stage, destination):
+                    nonlocal promoted
+                    outcome = rename(stage, destination)
+                    if destination == backup:
+                        promoted = True
+                        external_target.write_bytes(new_bytes)
+                    return outcome
+
+                with patch("scripts.adapt_original_save_paths.adapt",
+                           side_effect=lambda text: text + "\\n// portable paths installed"):
+                    with patch.object(Path, "rename", external_writer_after_promotion):
+                        with self.assertRaisesRegex(ValueError, "changed after backup staging"):
+                            apply(root / "project", backup, write=True)
+                    self.assertTrue(promoted)
+                    self.assertEqual(external_target.read_bytes(), new_bytes)
+                    self.assertFalse(backup.exists(), "new backup should be removed on prewrite refusal")
+                    if external_target == meta:
+                        self.assertEqual(source.read_bytes(), before)
+                    else:
+                        self.assertEqual(meta.read_bytes(), metadata)
+                    # A later healthy retry recomputes against the CURRENT
+                    # source rather than discarding the other writer's edit.
+                    report = apply(root / "project", backup, write=True)
+                    self.assertTrue(report["changed"])
+                    self.assertEqual((backup / target_name).read_bytes(), new_bytes)
+                    if external_target == source:
+                        self.assertIn(b"synthetic concurrent source", source.read_bytes())
+                    else:
+                        self.assertEqual(meta.read_bytes(), new_bytes)
+
     def test_interrupted_metadata_backup_has_no_partial_backup_and_can_retry(self):
         import shutil
         with tempfile.TemporaryDirectory() as tmp:
