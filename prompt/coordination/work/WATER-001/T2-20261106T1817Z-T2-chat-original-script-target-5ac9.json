@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "client": "T2",
+  "owner": "T2",
+  "session_id": "20261106T1817Z-T2-chat-original-script-target-5ac9",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "4a544ef294c11dab99414e1e12eb39f1d1852bd6",
+  "experiment_key": "ZIP2-15964-40original-scenes-55328-opaque-m_Script-mFileID-owner-manifest-SHA-typed-MonoScript-join-v1",
+  "resource_key": "ZIP2-original-scenes-and-candidate-script-owner-only-readonly",
+  "approach": "Follow CI42268585593: all 55,328 recoverable original opaque MonoBehaviour.m_Script PPtrs target foreign serialized files rather than sharedassets0. From SHA-original 40 scenes, privately group actual external script target paths+PathIDs, map to exactly unique 366-row immutable ZIP2 manifest entries, stage matched candidate original asset provider(s) within bounded 350MB budget, and type-check referenced objects as original MonoScript. Never publish names, GUIDs, private SHA of nonpublic names, raw assets or actual pathIDs.",
+  "hypothesis": "The 55,328 valid source m_Script references can be verified against one or a small number of immutable original MonoScript provider files, giving concrete target object counts necessary for type-schema restoration rather than only syntactic headers.",
+  "intended_files": [
+    "scripts/t2_original_monoscript_target_join.py",
+    "tests/test_t2_original_monoscript_target_join.py",
+    ".github/workflows/raft-t2-original-monoscript-target-join.yml",
+    "prompt/coordination/clients/T2/sessions/20261106T1817Z-T2-chat-original-script-target-5ac9.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1817Z-T2-chat-original-script-target-5ac9.json",
+    "prompt/coordination/experiments/T2/20261106T1817Z-T2-chat-original-script-target-5ac9.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1817Z-T2-chat-original-script-target-5ac9-result.json",
+    "docs/T2_ORIGINAL_SCRIPT_TARGET_PROVENANCE_2026-11-06.md"
+  ],
+  "resumed_from": [
+    "20261106T1808Z-T2-chat-monohead-script-links-42a7",
+    "20261106T1753Z-T2-chat-original-levels-component-671a"
+  ],
+  "trial_round": "trial-20261106-r1",
+  "vote": "لا يحتاج",
+  "new_vs_prior": "Different hypothesis: prior 41-byte SHA run proved header integrity and all target owners other; this run resolves actual SHA-original target file identity and MonoScript typed object IDs, which prior run did not stage.",
+  "updated_at": "2026-11-06T18:16:55.796Z",
+  "next_step": "Implement strict synthetic target manifest resolution and typed verified Source MonoScript target mapping, then isolated original CI. Do not rerun if equivalent ongoing; trial NO, no Android build."
+}
