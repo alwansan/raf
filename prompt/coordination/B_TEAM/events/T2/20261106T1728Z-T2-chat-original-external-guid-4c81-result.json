@@ -1,0 +1,20 @@
+{
+  "id": "T2-20261106T1728Z-T2-chat-original-external-guid-4c81-original-fileidentifier-zero-guid-result",
+  "owner": "T2",
+  "session_id": "20261106T1728Z-T2-chat-original-external-guid-4c81",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original immutable SHA ZIP2 CI42262404131 SUCCESS: two source Material Shader external PPtrs share one fileID/type0 with all-zero 16-byte FileIdentifier GUID (2/2). The separately original-SHA-verified 758412-byte target has two external entries, one Material, zero reverse Foam owner identifiers and zero direct Material Shader links back to original Foam Shader PathID2420. 22/22 synthetic checks pass. No independently verified Unity GUID, CB0 runtime or Android water pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42262404131",
+    "docs/T2_FOAM_ORIGINAL_EXTERNAL_GUID_EVIDENCE_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1728Z-T2-chat-original-external-guid-4c81.json"
+  ],
+  "at": "2026-11-06T17:33:45.668Z",
+  "limitations": [
+    "Original zero FileIdentifier GUID is a source fact, not proof of game file corruption or runtime binding failure.",
+    "One target file with no reciprocal Foam link does not rule out original Foam host elsewhere.",
+    "No private original names/GUID paths or assets exported; WATER-001 OPEN and game NOT_READY."
+  ]
+}
