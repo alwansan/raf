@@ -5,9 +5,9 @@
   "origin": "chat",
   "session_id": "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "7533b22af692568b0e4df1b5dc9c73191f0aeceb",
-  "updated_at": "2026-11-06T21:50:28.988Z",
+  "updated_at": "2026-11-06T21:57:16.332Z",
   "resumed_from_sessions": [
     "20261106T2138Z-T2-chat-foam-matdoc-82bd",
     "20261106T2117Z-T2-scheduled-foam-ci-reconcile-k6m2"
@@ -38,5 +38,20 @@
     "https://github.com/alwansan/raf/actions/runs/42298467191",
     "https://github.com/alwansan/raf/actions/runs/42296450023"
   ],
-  "next_step": "Implement fail-closed array first-dimension stride and last-element-start < reflected block_size check with adversarial synthetic cases; evaluate original SHA-pinned two-pass existing workflow, never equate reflection with runtime CB0 upload."
+  "next_step": "Coordinate with T5 on authentic Unity export and shader importer; compute true original CB0 runtime vector uploads and verify VS/FS compatible member semantics/layout. Neither a successful SPIR-V validator nor array lower-bound proves runtime CB0 upload/pixels.",
+  "code_commit": "2dae3686d9f2a3144172b035d795e5cd975e13ac",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42300107157"
+  ],
+  "result": {
+    "original_source_sha_verified": true,
+    "source_original_original_candidate": true,
+    "synthetic_cb0_member_geometry_tests": 15,
+    "source_original_four_shader_stages_validated": true,
+    "source_original_cb0_two_pass_geometry_check": "PASS",
+    "source_original_cb0_mismatch_preserved": true,
+    "actual_Unity_shader_import": false,
+    "runtime_CB0_data_upload_verified": false,
+    "android_pixels_verified": false
+  }
 }
