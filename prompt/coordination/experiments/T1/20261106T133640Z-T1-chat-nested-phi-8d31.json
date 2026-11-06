@@ -1,0 +1,77 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T133640Z-T1-chat-nested-phi-8d31",
+  "issue_id": "WATER-001",
+  "hypothesis": "A second incoming translated FFT butterfly1 X component initially reported as nested OpPhi is actually the same Phi fed back through a composite insert; verify it has an actual CFG return edge, not just self-referential SSA.",
+  "source_commit": "e936ad1f96c0bb0617a7a7199c2304c5f47442ff",
+  "input_hashes": [
+    "ZIP2 exact original source SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385; derived original/HLSL SPIR-V private to runner"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "runner apt spirv-tools; exact version not claimed",
+    "python": "system python3, no special packages for source-only tests"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_hlsl_nested_phi_lineage.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_float32_ulp_diagnostic.py -v",
+    "python3 -m scripts.t1_fft_hlsl_nested_phi_lineage \"$TMPDIR/coordinate.spv\""
+  ],
+  "negative_controls": [
+    "One nested distinct Phi and self-looping same Phi distinguished",
+    "Selected vector component X/Y propagated, numeric shape validated on every incoming value",
+    "Predecessor must be exact CFG predecessor, loop return edge requires structural reachability from Phi block",
+    "Unsound self-reference rejected as loop claim without actual CFG backedge",
+    "Cycle/24-depth/256-state/24-Phi/12-input bounds, unknown op sanitize",
+    "No private SSA identifiers, literal indexes, private opcode spellings, numerical bits or image pixels exported",
+    "Scheduled ULP helper respects original 1e-5 tolerance on first mismatch; one ULP remains match and 128 ULP mismatch reported as 128"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42228497335",
+  "artifact_urls": [],
+  "budget": "One exact SHA-pinned private Ubuntu 24.04 Vulkan workflow, 20-minute timeout; source-only separate four-minute unit suite",
+  "status": "waiting_original_cfg_backedge_verification",
+  "observed_result": {
+    "first_original_run": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42227795780",
+      "conclusion": "success",
+      "phi_expansions": 1,
+      "cycle_boundaries": 1,
+      "static_path": "First incoming UINT32 Private OpLoad through signed/float bitcasts, second incoming composite insert back to same float32-vector Phi"
+    },
+    "source_only_first": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42227505971",
+      "conclusion": "failure",
+      "reason": "1 scheduled ULP fixture assumed 1-ULP error is outside original rel_tol 1e-5; nested 13/13 passed"
+    },
+    "source_only_corrected": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42227663129",
+      "conclusion": "success",
+      "tests": 60
+    },
+    "source_only_backedge": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42228404633",
+      "conclusion": "success",
+      "tests": 61
+    },
+    "last_original_source": {
+      "run": "https://github.com/alwansan/raf/actions/runs/42228497335",
+      "status": "in_progress",
+      "actual_structural_backedges": null
+    },
+    "runtime_loop_iteration_truth_proven": false,
+    "numeric_original_vs_candidate_parity_proven": false,
+    "android_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Second incoming X path ends in a distinct independent nested Phi: first source-authentic output self-recurses into same Phi from composite insert."
+  ],
+  "limitations": [
+    "Static Phi SSA self-reference alone is not necessarily a CFG backedge; source-original second run tests reachability.",
+    "A structural CFG cycle does not establish runtime branch truth or number of loop iterations.",
+    "No independent same-input original/candidate execution trace, authored Unity FindKernel mapping or Adreno water acceptance."
+  ],
+  "integration_commit": "e936ad1f96c0bb0617a7a7199c2304c5f47442ff",
+  "next_step": "When 42228497335 terminates, read only sanitized RAFT_T1_FFT_HLSL_NESTED_PHI_X structural_phi_backedges and cycle_boundaries; close work/session/event. Then attempt independent paired numerical replay with source/dispatch provenance and strict pair gate before shader rewrite."
+}
