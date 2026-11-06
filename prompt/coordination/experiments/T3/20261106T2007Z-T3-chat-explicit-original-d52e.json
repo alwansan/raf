@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2007Z-T3-chat-explicit-original-d52e",
+  "issue_id": "RENDER-002",
+  "status": "completed_original_source_verified",
+  "source_branch": "feature/android-native-port",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "experiment_key": "T3-original-Shader48-eightstage-explicit-vkd3d-AB-dual-profile-SPIRV-verified-15964-d52e",
+  "hypothesis": "The existing source-only VKD3D graphics VS/FS A/B binding helper may fail on exact authenticated original Shader48 due to missing descriptor type flags and a SPIRV variable coverage false-positive; a correctly typed explicit mapping should preserve whole SPIRV module aside from descriptors.",
+  "actual_original_results": {
+    "terminal_run": "https://github.com/alwansan/raf/actions/runs/42288756206",
+    "execution_sha": "0764b0793febd1fad707ce7afd9e074595a449a2",
+    "job_id": 128136360031,
+    "conclusion": "success",
+    "artifact_id": 13539295425,
+    "safe_artifact": "t3-original-Shader48-explicit-d52e-safe-42288756206",
+    "artifact_expiration": "2026-11-13T20:29:49Z",
+    "original_scene_sources_SHA_verified": 6,
+    "original_shader_owner_sources_SHA_verified": 4,
+    "exact_original_vsfs_keyword_pairs": 4,
+    "original_vertex_stages": 4,
+    "original_fragment_stages": 4,
+    "stage_binding_profiles_A_and_B_verified": 8,
+    "two_profile_vkd3d_compiler_invocations": 16,
+    "no_map_reference_vkd3d_compiler_invocations": 8,
+    "spirv_val_invocations_for_all_profiles": 24,
+    "source_original_DXBC_register_rows_covered": 44,
+    "same_register_to_spv_variable_identity_A_vs_B": true,
+    "same_spv_module_except_descriptor_literals_A_vs_B": true,
+    "explicit_source_register_to_chosen_vk_target_proven": true,
+    "source_free_python_tests_passed": 31,
+    "real_public_vkd3d_compiled_with_strict_gcc": true
+  },
+  "diagnostics": {
+    "initial_original_explicit_run": {
+      "id": 42286299737,
+      "status": "failure",
+      "reason": "mapped C compiler nonzero, original authenticated, synthetic tests passed"
+    },
+    "numeric_code_run": {
+      "id": 42286681868,
+      "status": "failure",
+      "reason": "VKD3D_ERROR_INVALID_SHADER -4"
+    },
+    "baseline_control_run": {
+      "id": 42287201379,
+      "status": "failure",
+      "reason": "same original graphics DXBC passes public vkd3d C no-map + Vulkan SPIRV validation; explicit map rejected with -4"
+    },
+    "cbv_buffer_flag_run": {
+      "id": 42287806319,
+      "status": "failure",
+      "reason": "CBV BUFFER fix alone insufficient; still explicit -4"
+    },
+    "private_diagnostic_classifier_run": {
+      "id": 42288482626,
+      "status": "failure",
+      "reason": "only public category sampler descriptor not found (exit104); no private values exposed"
+    },
+    "terminal_fixed_sampler_run": {
+      "id": 42288756206,
+      "status": "success",
+      "reason": "Sampler IMAGE binding flag fulfills vkd3d matching; all 8 exact source stages and A/B register relocation proven"
+    }
+  },
+  "changes": [
+    "scripts/t3_particle108_spirv_explicit_pair.py",
+    "tests/test_t3_particle108_spirv_explicit_pair.py",
+    "scripts/t3_particle108_original_explicit_probe.py",
+    "tests/test_t3_particle108_original_explicit_probe.py",
+    "scripts/t3_particle108_vkd3d_explicit_graphics.c"
+  ],
+  "temporary_ci_workflow_removed_after_success": true,
+  "temporary_trigger_removed_after_success": true,
+  "safety": {
+    "original_raw_binary_or_shader_private_values_published": false,
+    "original_Unity_shaderlab_program_recovered": false,
+    "Unity_shader_compiler_or_Adreno_pixels_verified": false,
+    "original_to_Unity_material_binding_equivalence_proven": false,
+    "all_other_render_materials_or_smoke_emitters_recovered": false,
+    "native_apk_build_requested": false,
+    "trial_vote": "لا يحتاج",
+    "issue_status": "OPEN_NOT_READY"
+  },
+  "next_step": "Stage 4 exact original VS/FS keyword shader programs into a private source-authenticated real non-dummy ShaderLab candidate (not dummy shader or approximate colors), validate source-to-export properties/defaults and stage binding, compile the shader in Unity and eventually test owner phone colors/smoke/fire; continue collaborating T1/T2/T5 and avoid introducing full native duplicate."
+}
