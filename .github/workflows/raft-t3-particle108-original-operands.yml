@@ -1,11 +1,6 @@
 name: T3 RENDER-002 original Particle108 D3D11 DCL operand register placement
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - prompt/coordination/requests/t3-dxbc-operands-20261106-6e2a.trigger
 permissions:
   contents: read
 concurrency:
