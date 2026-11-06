@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2017Z-T1-chat-private-producer-gate-8f31",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "afb519b625b6c346420153caa88b4c40972d44de",
+  "updated_at": "2026-11-06T20:17:00Z",
+  "resumed_from_sessions": [
+    "20261106T195959Z-T1-chat-ci-log-pin-7b42",
+    "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
+    "20261106T1942Z-T1-chat-auth-producer-bridge-62a9"
+  ],
+  "track": "Private Unity FFT trace producer stage and original-derived HLSL candidate binding",
+  "experiment_key": "fft-private-original-vulkan-vs-unity-openGLCore-paired-trace-producer-final-stage-candidate0-1-sha-bound-gameci-2021.3.45f2-seed19-source-verified-v1",
+  "resource_key": "none: source-only tests, no Unity license/native build dispatch",
+  "hypothesis": "Existing paired trace checks exact inputs and SHA but not the Unity producer's final stage or physically SHA-linked original-derived candidate sources from PrivateGpuResources. A new fail-closed validator can make staged Unity-original derived source swaps and incomplete GPU captures detectable before interpreting FFT trace; this is not signed Unity binary attestation.",
+  "intended_files": [
+    "scripts/t1_fft_unity_trace_producer_gate.py",
+    "tests/test_t1_fft_unity_trace_producer_gate.py",
+    ".github/workflows/raft-t1-fft-private-unity-paired-bridge-ci.yml",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    "prompt/coordination/work/WATER-001/20261106T2017Z-T1-chat-private-producer-gate-8f31.json",
+    "prompt/coordination/experiments/T1/20261106T2017Z-T1-chat-private-producer-gate-8f31.json",
+    "prompt/coordination/clients/T1/sessions/20261106T2017Z-T1-chat-private-producer-gate-8f31.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T2017Z-T1-chat-private-producer-gate-8f31.json"
+  ],
+  "related_work": [
+    "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
+    "20261106T195959Z-T1-chat-ci-log-pin-7b42"
+  ],
+  "next_step": "Source-only strict producer stage+candidate digest validator, independent synthetic tests, CI; do not run shared Unity. Publish native missing-type failure evidence for T4/T5 without editing mouse implementation.",
+  "native_run": {
+    "id": 42281310905,
+    "status": "failure",
+    "discovery": "CS0234 AndroidPhysicalMouseCapture missing at Unity Editor import; #if UNITY_ANDROID && !UNITY_EDITOR excludes class in Editor, references remain in staged original gameplay scripts",
+    "owner": "T4/T5",
+    "no_edit": true
+  },
+  "trial_vote": "لا يحتاج"
+}
