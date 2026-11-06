@@ -8,8 +8,8 @@
   "status": "active",
   "base_sha": "19cf49c47b72ba828bc582fcad1212544a87b69f",
   "intended_files": [
+    "tests/test_android_diagnostics_policy.py",
     "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
-    "tests/test_t5_performance_scene_interval_policy.py",
     "docs/T5_SCENE_INTERVAL_ATTRIBUTION_2026-11-06.md",
     "prompt/coordination/work/PERF-007/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json",
     "prompt/coordination/clients/T5/sessions/20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
@@ -40,5 +40,6 @@
   ],
   "ci_urls": [],
   "next_step": "Implement scene-start tracking and transition-count flags with no reset/discard; ensure all current diagnostics source-policy checks and scoped CI pass; document runtime/device not yet tested.",
-  "updated_at": "2026-11-06T02:18:49.116Z"
+  "updated_at": "2026-11-06T02:22:17.549Z",
+  "plan_refinement": "Existing raft-android-platform-tests.yml is already triggered by scoped AndroidTestDiagnostics.cs change, so extend its in-tree diagnostics policy tests rather than create duplicate workflow/runner; preserve existing validation scope and avoid unrelated CI."
 }
