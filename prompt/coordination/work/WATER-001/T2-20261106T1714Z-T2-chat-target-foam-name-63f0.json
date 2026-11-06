@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "original cross-file Foam Shader name and external Material target identity",
   "approach": "Compare exactly the two newly SHA-authenticated external Material.m_Shader target Shader m_ParsedForm.m_Name values against original Foam Shader m_Name on authentic ZIP2 original objects in private runner; emit only comparisons/counters. Check source SerializedFile external GUID structural presence but do not assert target identity without independent GUID attestation.",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "08b0215aab074689de9fe0daf62b8964f2473a02",
   "intended_files": [
     "scripts/t2_foam_original_target_name_relation.py",
@@ -33,9 +33,26 @@
     "20261106T1714Z-T2-chat-target-foam-name-63f0"
   ],
   "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260338766",
     "https://github.com/alwansan/raf/actions/runs/42260145863"
   ],
-  "result": null,
-  "next_step": "Inspect live CI 42260145863 for synthetic-test+original PIN+exact-name comparisons; on success publish only finite safe counts and record canonical event, on failure categorize phase safely and fix distinct evidenced CI issue. Keep source original GUID/Unity/device unproven.",
-  "updated_at": "2026-11-06T17:17:13.442Z"
+  "result": {
+    "source_original_SHA_authenticated": true,
+    "source_only": true,
+    "original_external_typed_shader_targets": 2,
+    "target_original_names_readable": 2,
+    "target_exact_original_Foam_Shader_name_matches": 0,
+    "target_exact_original_Foam_object_raw_matches": 0,
+    "original_target_bytes_sha_verified": 758412,
+    "tests_passed": 21,
+    "GitHub_Actions_conclusion": "success",
+    "original_Unity_external_GUID_verified": false,
+    "actual_game_Foam_CB0_upload_verified": false,
+    "Adreno_water_pixels_verified": false,
+    "evidence_doc": "docs/T2_FOAM_ORIGINAL_EXTERNAL_SHADER_NAME_RELATION_2026-11-06.md",
+    "artifact_id": 13523704013
+  },
+  "next_step": "Source-authentic cross-file name comparison closed, not WATER-001. Independently validate true external Unity GUID and authentic original Foam/water runtime Material/CB0 binding, then Unity/Adreno. Do not rerun same 2-target name test without changed source hypothesis.",
+  "updated_at": "2026-11-06T17:20:42.278Z",
+  "last_source_commit": "bdc3095f7e1445307a719d15b038858982005db2"
 }
