@@ -32,6 +32,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Python __pycache__ would otherwise violate the strict clean-worktree assertion.
+          export PYTHONDONTWRITEBYTECODE=1
           python3 -m unittest discover -s tests -p test_t4_ledger_event_identity.py -v
           python3 - <<'PY'
           from pathlib import Path
