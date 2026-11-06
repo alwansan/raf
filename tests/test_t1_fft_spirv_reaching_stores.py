@@ -119,6 +119,32 @@ class ReachingStoresTests(unittest.TestCase):
         self.assertTrue(result['unknown_alias_or_side_effect_path'])
         self.assertFalse(result['unique_direct_store_if_no_unmodeled_aliases'])
 
+    def test_copy_memory_source_does_not_write_local(self):
+        program = ('%other = OpVariable %ptr Function\\n'
+                   'OpStore %local %v0\\n'
+                   'OpCopyMemory %other %local\\n' + READS)
+        result = lane(program)
+        self.assertFalse(result['unknown_alias_or_side_effect_path'])
+        self.assertEqual(result['unknown_path_categories'], [])
+        self.assertTrue(result['unique_direct_store_if_no_unmodeled_aliases'])
+
+    def test_copy_memory_destination_is_unknown_write(self):
+        program = ('%other = OpVariable %ptr Function\\n'
+                   'OpStore %local %v0\\n'
+                   'OpCopyMemory %local %other\\n' + READS)
+        result = lane(program)
+        self.assertTrue(result['unknown_alias_or_side_effect_path'])
+        self.assertEqual(result['unknown_path_categories'], ['copy_memory_target'])
+
+    def test_escaped_pointer_hazard_survives_later_direct_store(self):
+        program = ('%ptrptr = OpTypePointer Function %ptr\\n'
+                   '%other = OpVariable %ptrptr Function\\n'
+                   'OpStore %other %local\\n'
+                   'OpStore %local %v0\\n' + READS)
+        result = lane(program)
+        self.assertEqual(result['unknown_path_categories'], ['pointer_escape'])
+        self.assertFalse(result['unique_direct_store_if_no_unmodeled_aliases'])
+
     def test_function_call_with_local_pointer_is_unknown(self):
         program = ('OpStore %local %v0\n'
                    '%call = OpFunctionCall %void %helper %local\n' + READS)
