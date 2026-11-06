@@ -186,6 +186,13 @@ def apply(project, backup, write=False):
                 shutil.copy2(path, backup / path.name)
                 if metadata is not None:
                     shutil.copy2(meta, backup / meta.name)
+            # A copy operation can return normally but leave truncated or
+            # modified bytes on the backup filesystem. Verify *every* source
+            # and optional GUID sidecar before mutating any original file.
+            for path, meta, raw, metadata, result in plans:
+                if ((backup / path.name).read_bytes() != raw or
+                    (metadata is not None and (backup / meta.name).read_bytes() != metadata)):
+                    raise ValueError('Original offline backup is not byte-identical')
             mutation_started = True
             for path, meta, raw, metadata, result in plans:
                 path.write_bytes(result)
