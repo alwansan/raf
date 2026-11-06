@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Latest T3 scheduled Shader48 structural gate code compiles and its 10 source-free regressions pass on stable Ubuntu 24.04/Python 3.12.3 without needing original game assets.",
+  "source_commit": "a2d53aee8ab583edb316fcc2b08d55934d212cb4",
+  "input_hashes": [
+    {
+      "path": "scripts/t3_shader_identity_gate.py",
+      "git_blob_sha": "4bdd1959d016dcf634eab0dba41528dfc33504d2"
+    },
+    {
+      "path": "scripts/test_t3_shader_identity_gate_syntax.py",
+      "git_blob_sha": "f21c6b66729127eb04a65e56d9b3cb78e3ff6532"
+    }
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "3.12.3",
+    "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_shader_identity_gate.py scripts/test_t3_shader_identity_gate_syntax.py",
+    "python3 -m unittest discover -s scripts -p 'test_t3_shader_identity_gate_syntax.py' -v"
+  ],
+  "negative_controls": [
+    "shader token in /*block comment*/ rejected",
+    "unterminated /*block comment rejected",
+    "comment-only // shader rejected",
+    "empty shader rejected",
+    "commented-out material pointer rejected",
+    "duplicate material pointers rejected",
+    "valid pointer and declaration accepted"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-shader48-syntax-regression.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42197356111",
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04 isolated 6 minutes timeout; sparse scripts checkout, no source ZIP2, game assets, Unity, GPU, or Android build",
+  "status": "completed",
+  "observed_result": {
+    "job_id": 127823833230,
+    "job_conclusion": "success",
+    "py_compile": "pass",
+    "unittest_count": 10,
+    "unittest_passed": 10,
+    "unittest_failed": 0,
+    "runner_os": "ubuntu-24.04",
+    "python": "3.12.3",
+    "source_free": true,
+    "real_export_link_verified": false,
+    "shader_program_authenticity_verified": false,
+    "android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "Recent T3 Shader48 gate source is syntactically invalid",
+    "The committed 10 regression fixtures fail under ubuntu-24.04 Python 3.12.3"
+  ],
+  "limitations": [
+    "The regression checks use only synthetic fixtures and prove structural link validation, not authored shader identities or compiled subprograms",
+    "No real SHA-pinned post-restorer export was fed into this gate; no Android GPU, water, fire, smoke, hand, or raft white surfaces confirmed",
+    "No game files, GUID, shader assets, or .rgd modified"
+  ],
+  "integration_commit": "a2d53aee8ab583edb316fcc2b08d55934d212cb4",
+  "next_step": "Obtain authenticated post-restoration Shader48 exported .shader/.meta and actual linked .mat in private same-instance runner; run structural gate while independently comparing original source DXBC identities/variant-semantic stage joins, then test visually on new Android artifact."
+}
