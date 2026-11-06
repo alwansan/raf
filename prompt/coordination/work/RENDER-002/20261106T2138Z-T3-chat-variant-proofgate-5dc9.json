@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2138Z-T3-chat-variant-proofgate-5dc9",
+  "origin": "chat",
+  "username": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "f2716a0e8e20413416ac8375086f96006e6fe9fb",
+  "resumed_from_sessions": [
+    "20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f",
+    "20261106T2133Z-T3-scheduled-contract-schema-9a2f"
+  ],
+  "taken_over_from": "T3 prior authentic Shader48 private variants CI42291454379; scheduled session owns scripts/t3_dxbc_spirv_contract_join.py (not edited)",
+  "scope": "Fail closed for incomplete Shader48 private stage translation attestations before accepting 4 ShaderLab candidates; no original/game assets modified.",
+  "intended_files": [
+    "scripts/t3_particle108_private_shaderlab_variants.py",
+    "tests/test_t3_particle108_private_shaderlab_variants.py"
+  ],
+  "experiment_key": "t3-shader48-4private-variant-stage-identity-plus-vulkan11-roundtrip-mandatory-f1f15872-negative-fixtures-20261106-5dc9",
+  "resource_key": "source-only-private-stage-variant-guard; existing isolated workflow on push; no native build request",
+  "reference_proof": "https://github.com/alwansan/raf/actions/runs/42291454379",
+  "concurrent_actions": [
+    "42297849128 completed success exact 084a3d9d schema validator",
+    "42296450023 native in_progress on a1737bd7, do not cancel/duplicate"
+  ],
+  "test_plan": "Add missing/false roundtrip and missing/boolean stage negative regression; existing positive 4x2 roundtrip pass must remain; trigger existing isolated T3 workflow once on push, inspect synthetic job first.",
+  "updated_at": "2026-11-06T21:38:00Z"
+}
