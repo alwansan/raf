@@ -477,7 +477,9 @@
         "https://github.com/alwansan/raf/actions/runs/42144978122",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
         "https://github.com/alwansan/raf/actions/runs/42146385054",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42226905270",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-private-original-propstate.json"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -535,7 +537,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T01:55:25.194Z",
+      "updated_at": "2026-11-06T13:41:38.556Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -2820,6 +2822,58 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T14:36:00Z",
       "_record_path": "../B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
+    },
+    {
+      "id": "T3-PARTICLE108-ORIGINAL-AUTHORED-PROPERTY-PASS-STATE",
+      "title": "Exact SHA-original 108-particle-slot Shader48 authored 13 properties and complete one-Pass fixed function ShaderLab fragment",
+      "kind": "private-original-property-pass-structural-fragment-not-program-or-device",
+      "owner": "T3",
+      "issue_id": "RENDER-002",
+      "source": {
+        "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "scenes_SHA_verified": 6,
+        "original_Shader_Material_owners_SHA_verified": 4,
+        "original_Shader_Material_owner_bytes_verified": 269007288,
+        "unique_original_source_particle_material_use_slots": 108,
+        "distinct_original_particle_renderers": 54
+      },
+      "stages": {
+        "acquisition": "SOURCE_ZIP2_SHA_6_SCENES_4_OWNERS_VERIFIED",
+        "extraction": "EXACT_ORIGINAL_TYPED_Shader48_108_Particle_Use_Selected",
+        "reconstruction": "PRIVATE_STRUCTURAL_PROPERTIES_13_AND_SINGLE_PASS_RENDER_STATE_EXACT_NO_STAGE_PROGRAM",
+        "binding": "SAME_EXPORT_DUMMY_SOURCE_PROVEN_42223071341_BUT_PRIVATE_NEW_FRAGMENT_NOT_INSTALLED",
+        "integration": "NOT_INTEGRATED_OR_UNITY_COMPILED",
+        "device": "NOT_TESTED"
+      },
+      "counts": {
+        "declared_properties": 13,
+        "texture": 2,
+        "color": 1,
+        "vector": 0,
+        "float": 4,
+        "range": 6,
+        "parsed_original_subshaders": 1,
+        "parsed_original_passes": 1,
+        "full_source_pass_fixed_state_translated": 1,
+        "source_free_negative_controls_passed": 14,
+        "original_108_source_selector_verified": true,
+        "source_original_rgb_color_mask_preserved": true,
+        "source_stage_shader_programs_integrated": 0
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42226905270",
+        "https://github.com/alwansan/raf/actions/runs/42223071341",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T3/sessions/20261106T1337Z-T3-chat-particle108-propstate-62fb.md"
+      ],
+      "remaining": [
+        "Private property and fixed state fragment is intentionally NON-executable, has no HLSLPROGRAM. Never install it in Unity as if it were a restored shader.",
+        "Await separate T3 paired HLSL glslang stage-link experiment; four source keyword VSFS pairs must be implemented with 4/4 identity, samplers/CB/keyword and original pass state before any postvendor replacement.",
+        "Not proven that source Particle108 is the phone square-smoke emitter, that Unity compiles this candidate, or Android pixels are fixed. RENDER-002 OPEN."
+      ],
+      "private_property_values_names_ShaderLab_programs_published": false,
+      "updated_by": "T3",
+      "updated_at": "2026-11-06T13:40:50.701Z",
+      "_record_path": "../B_TEAM/resources/T3-particle108-private-original-propstate.json"
     },
     {
       "id": "T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY",
@@ -7293,6 +7347,23 @@
       "_record_path": "../B_TEAM/events/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2-result.json"
     },
     {
+      "id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d-result",
+      "owner": "T2",
+      "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
+      "origin": "chat",
+      "type": "result",
+      "issue_id": "WATER-001",
+      "at": "2026-11-06T13:48:00Z",
+      "summary": "SHA-original Foam CB0 Material(Shader) consumed field's single Shader stfld source is exactly typed UnityEngine.Shader.Find(string) return, not method proximity. 3 bounded IL instructions; original SHA-pinned CI42228032544 SUCCESS, 11 source-free and Cecil false-positive controls. Original requested Shader.Find string match to serialized Foam m_Name, runtime Shader asset loading, full CB0 upload and Android pixels UNPROVEN; WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42228032544",
+        "docs/T2_FOAM_ORIGINAL_SHADER_STFLD_STACK_2026-11-06.md"
+      ],
+      "limits": "No private original shader name/bytes/IL disclosed; compiled call/stfld source not runtime execution or actual asset identity",
+      "next_step": "Compare exact original Shader.Find argument to original Foam m_Name in private SHA-gated CI; preserve all Unity/game assets.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -8202,6 +8273,41 @@
       "_record_path": "../B_TEAM/events/T3/20261106T1311Z-T3-chat-particle108-postvendor-confirmed-f8c1.json"
     },
     {
+      "schema_version": 1,
+      "id": "T3-20261106T1337Z-particle108-propstate-authentic",
+      "actor": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1337Z-T3-chat-particle108-propstate-62fb",
+      "issue_id": "RENDER-002",
+      "event_type": "original-particle-shader-private-property-state-fragment-authenticated",
+      "status": "completed_source_authentic_not_runtime",
+      "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42226905270",
+      "run_conclusion": "success",
+      "artifact_id": 13506590606,
+      "source_providers_verified": 4,
+      "scenes_verified": 6,
+      "original_unique_particle_shader_use_slots": 108,
+      "authored_properties_total": 13,
+      "authored_properties_by_kind": {
+        "texture": 2,
+        "color": 1,
+        "vector": 0,
+        "float": 4,
+        "range": 6
+      },
+      "one_normal_pass": true,
+      "original_RGB_colormask_preserved": true,
+      "source_only_fragment_not_executable": true,
+      "original_VSFS_stage_programs_integrated": false,
+      "source_game_assets_modified": false,
+      "Android_Adreno_pixels_verified": false,
+      "original_ShaderLab_and_raw_values_published": false,
+      "readable_session": "prompt/coordination/clients/T3/sessions/20261106T1337Z-T3-chat-particle108-propstate-62fb.md",
+      "next_step": "Wait for paired glslang result 20261106T1223Z then construct strict authentic 4-keyword VSFS candidate with original CB/samplers, use Unity actual compile and Android pixel acceptance; RENDER-002 remains OPEN.",
+      "_record_path": "../B_TEAM/events/T3/20261106T1337Z-T3-chat-particle108-propstate-62fb.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -9026,6 +9132,21 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1320Z-T4-chat-immersive-lease-v4n8.json"
     },
     {
+      "id": "20261106T1334Z-T4-chat-windowfocus-m8v3",
+      "owner": "T4",
+      "session_id": "20261106T1334Z-T4-chat-windowfocus-m8v3",
+      "issue_id": "INPUT-005",
+      "type": "integration",
+      "at": "2026-11-06T13:40:31.748Z",
+      "summary": "Android WindowInsets/legacy immersive policy now requires Activity.hasWindowFocus in UI-thread hide path in addition to owner Activity identity and valid generation. Exact original-managed source CI 42227039188 success: 10 source and 33 executable C# controls plus Unity2021 ABI compile; device not verified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/1496971df6f14335b5d479d8cc488d7636a998be",
+        "https://github.com/alwansan/raf/actions/runs/42227039188"
+      ],
+      "device_confirmed": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1334Z-T4-chat-windowfocus-m8v3.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9714,7 +9835,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "da78ff2f8401005e10984a0463ee6cdbb1f9195638153a6f0cbfadcf7184bf43",
+  "source_input_sha256": "b03d982bcf62d6ca460b1f51163696ea00b85aa782093780273a6dbfd69bec29",
   "generation": "T-2026-11-05",
-  "input_sha256": "5f2d9165f774fedc6629930a518b960f81c58d27c21289ff2cdc81ba23069505"
+  "input_sha256": "29c9bf9d19e081b772a9f34ff4332eecd2a37de8dd1bcf7dd60d77697df86730"
 }
