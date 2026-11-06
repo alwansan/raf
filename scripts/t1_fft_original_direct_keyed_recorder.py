@@ -211,8 +211,10 @@ def instrument(assembly):
 
     # Mutation indices are computed only on the original disassembly and
     # applied in reverse. No source item is modified in the repository.
+    # spirv-as --target-env vulkan1.1 emits SPIR-V <= 1.3: OpEntryPoint
+    # interfaces contain Input/Output variables only. StorageBuffer MUST
+    # remain a global descriptor but MUST NOT be appended to that interface.
     edits = [
-        (entry_i, 1, [entry.group(1) + " " + buffer + entry.group(3)]),
         (type_i, 0, decorations),
         (first_function, 0, added),
         (label_i + 1, 0, local_init),
