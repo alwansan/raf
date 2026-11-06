@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T21:56:08.545Z",
+  "summary": "Inherited B45 original Blur installer now refuses colliding Shader GUID in another exported meta and unsafe redirected meta before backup or promotion; 12/12 synthetic source-only tests PASS, no Unity/device evidence.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42300619078",
+    "https://github.com/alwansan/raf/actions/runs/42300619027",
+    "https://github.com/alwansan/raf/commit/52dc2c6a8410f24893342a3b8c7db9db2c920522"
+  ]
+}
