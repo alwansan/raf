@@ -1,0 +1,34 @@
+{
+  "session_id": "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "4ed17012aaf5e3ed79bf17f230cd9c34767f4157",
+  "updated_at": "2026-11-06T02:46:00Z",
+  "resumed_from_sessions": [
+    "20261106T0240Z-T4-scheduled-v8q1",
+    "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+    "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8"
+  ],
+  "experiment_key": "T4-CL520c-owner7-original-RGD-typed-SaveAndLoad-private-Save-and-LoadT-exact-byte-gitblob-ZIP2-15964ea8-ILaudit-v1",
+  "resource_key": "T4-owner-world-compiled-CLR-readonly-original-DLL-private-temp-CPU-not-Unity",
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/T4-20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8-original-owner-save-roundtrip.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.md",
+    "android-port/Experiments/T4/OwnerWorldRgdRoundtrip/Program.cs",
+    "android-port/Experiments/T4/OwnerWorldRgdRoundtrip/OwnerWorldRgdRoundtrip.csproj",
+    "scripts/t4_validate_owner_world_roundtrip.py",
+    "tests/test_t4_owner_world_roundtrip.py",
+    ".github/workflows/raft-t4-owner-world-save-roundtrip.yml",
+    "prompt/coordination/experiments/T4/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.json",
+    "prompt/coordination/discussions/LOCAL-005/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8-to-T5.md"
+  ],
+  "hypothesis": "Unlike shipped Data.rgd root, seven actual owner-created World RGD roots may match original SaveAndLoad.Save(string,RGD) private parameter, allowing proven typed original Save → Load<T> on isolated temporary path.",
+  "approach": "Fork previously SHA-pinned original Save IL allowlist and reflection test, replacing shipped seed with exact 7 hash-verified owner-world inputs; ensure original CreateFile/Serialize direct call allowlist, no original field reads, protect input and produce only bounded booleans; isolate generated world bytes in ephemeral private temp and cleanup. Source-free adversarial tests; no phone/native claims.",
+  "acceptance": "CI checks original CLR load, authenticated private Save argument type, original Save IL guard, original Save invoked, generated nonzero file and original generic LoadT matching root, or records why a given category is impossible. Never mask non-success as pass.",
+  "previous_proof": "https://github.com/alwansan/raf/actions/runs/42150216417",
+  "next_step": "New actual saved-world original Save/Load roundtrip with fail-closed guard; only original source/private runner.",
+  "result": null
+}
