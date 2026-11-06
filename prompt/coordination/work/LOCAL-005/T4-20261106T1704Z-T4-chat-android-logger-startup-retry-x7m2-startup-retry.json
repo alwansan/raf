@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "diagnostic_world_save_evidence",
+  "status": "active",
+  "base_sha": "e45f57f1f236b1ca4096408c1f2cf5375bd3eb5a",
+  "experiment_key": "T4-LOCAL005-AndroidRuntimeLog.Initialize-transient-path-IOException-retry-real-source-net8-Unity-stubs-v1",
+  "resource_key": null,
+  "approach": "Test and fix permanent AndroidRuntimeLog initialization lockout after a synthetic transient filesystem failure, using real conditionally compiled Android logger source and synthetic Unity API stubs in existing .NET8 diagnostic gate; no actual game or device files.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidRuntimeLog.cs",
+    "android-port/Tests/Diagnostics/Diagnostics.csproj",
+    "android-port/Tests/Diagnostics/Program.cs",
+    "android-port/Tests/Diagnostics/UnityEngineStubs.cs"
+  ],
+  "hypothesis": "StorageError != null guard prevents any later Initialize from recovering a previously failed PersistentDiagnosticLog constructor when storage returns.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261106T164053Z-T4-chat-logger-recovery-status-k7m4-logger-recovery-status.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T164053Z-T4-chat-logger-recovery-status-k7m4.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1637Z-T4-scheduled-v8m2.md"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Publish synthetic real AndroidRuntimeLog compilation and transient failure/recovery negative control; verify red .NET8 CI; minimally permit later explicit Initialize recovery; require green source CI. Keep LOCAL-005 OPEN.",
+  "updated_at": "2026-11-06T17:04:00Z"
+}
