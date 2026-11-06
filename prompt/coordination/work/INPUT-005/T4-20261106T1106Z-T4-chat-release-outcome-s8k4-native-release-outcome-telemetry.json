@@ -2,7 +2,7 @@
   "session_id": "20261106T1106Z-T4-chat-release-outcome-s8k4",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "active_ci_legacy_lexical_test_adjustment",
   "base_sha": "c40742978308ce801054649b48383751f58858a4",
   "updated_at": "2026-11-06T11:06:00Z",
   "resumed_from_sessions": [
@@ -24,7 +24,8 @@
     "prompt/coordination/clients/T4/sessions/20261106T1106Z-T4-chat-release-outcome-s8k4.md",
     "prompt/coordination/experiments/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json",
     "prompt/coordination/B_TEAM/events/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json",
-    "prompt/coordination/discussions/INPUT-005/20261106T1106Z-T4-chat-release-outcome-s8k4-to-T5.md"
+    "prompt/coordination/discussions/INPUT-005/20261106T1106Z-T4-chat-release-outcome-s8k4-to-T5.md",
+    "tests/test_t4_android_pointer_capture_policy.py"
   ],
   "nonoverlap": "T4 scheduled 1042Z is source read-only and explicitly avoids duplicate ownership repair; T5 owns APK/OBB and UI, T1/T2 water and T3 graphics. No actions running at initial head check. No changes to capture selection, world save, audio, Settings, touch, original code, scenes or assets.",
   "safety": "Classified static status strings only; no view identity/hash, user/device paths, JNI exception text, or pointer coordinates. Logger failures must not affect game. No claim that release_invoked proves OS release completion. Bounded one outcome per ReleaseCapture callback; no per-frame logs.",
