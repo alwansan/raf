@@ -6,17 +6,26 @@ member ABI or Unity material upload semantics. No private shader data is emitted
 
 
 def cb0_integration_gate(shared_links, *, member_abi_verified=False,
-                         unity_upload_verified=False):
+                         unity_upload_verified=False, expected_pass_count=None):
     """Return a bounded verdict; never infer ABI from equal descriptor extents.
 
     shared_links is a list of per-pass summaries with integer VS/FS byte
     extents for the *same authenticated CB0 descriptor coordinate*.
     Missing, invalid, or mismatched extents are explicitly non-integrable.
+    Set expected_pass_count from independently authenticated original pass count
+    to prevent incomplete evidence from satisfying the gate.
     """
     if not isinstance(shared_links, list) or not shared_links:
         return {"status": "blocked_missing_authenticated_CB0_links"}
     if type(member_abi_verified) is not bool or type(unity_upload_verified) is not bool:
         return {"status": "blocked_invalid_evidence_flags"}
+    if expected_pass_count is not None:
+        if type(expected_pass_count) is not int or not 1 <= expected_pass_count <= 64:
+            return {"status": "blocked_invalid_expected_pass_count"}
+        if len(shared_links) != expected_pass_count:
+            return {"status": "blocked_CB0_pass_coverage_mismatch",
+                    "observed_pass_count": len(shared_links),
+                    "expected_pass_count": expected_pass_count}
     mismatches = 0
     for row in shared_links:
         if not isinstance(row, dict) or set(row) != {"vertex_bytes", "fragment_bytes", "authenticated_shared_coordinate"}:
