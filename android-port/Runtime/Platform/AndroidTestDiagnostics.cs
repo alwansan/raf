@@ -50,7 +50,50 @@ namespace RaftAndroid.Platform
             // Independent API26+ physical mouse; original touch pointer remains untouched.
             host.AddComponent<AndroidPhysicalMouseCapture>();
             ReportPriorExits();
+            ReportInstalledObbUnityZipSample();
             Debug.Log("RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
+        }
+
+
+        // One-time, read-only check of the EXACT installed version's expansion
+        // ZIP. A single entry byte is not Unity's internal asset loader, a SHA,
+        // or proof that water/shader/scene pixels rendered correctly.
+        private static void ReportInstalledObbUnityZipSample()
+        {
+            try
+            {
+                using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+                {
+                    if (activity == null) throw new InvalidOperationException("currentActivity unavailable");
+                    long installedVersion;
+                    using (var manager = activity.Call<AndroidJavaObject>("getPackageManager"))
+                    using (var info = manager.Call<AndroidJavaObject>(
+                        "getPackageInfo", Application.identifier, 0))
+                    using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                    {
+                        if (info == null) throw new InvalidOperationException("PackageInfo unavailable");
+                        installedVersion = version.GetStatic<int>("SDK_INT") >= 28
+                            ? info.Call<long>("getLongVersionCode") : info.Get<int>("versionCode");
+                    }
+                    string directory = null;
+                    using (var obb = activity.Call<AndroidJavaObject>("getObbDir"))
+                        if (obb != null) directory = obb.Call<string>("getAbsolutePath");
+                    var result = AndroidExpansionArchiveProbe.Inspect(
+                        directory, Application.identifier, installedVersion);
+                    RaftAndroid.Diagnostics.AndroidRuntimeLog.Write(
+                        "storage", "obb.unity_zip_read_sample",
+                        "installed_version_code=" + installedVersion + "; " + result.ToLogFields(), true);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Diagnostic failure must never prevent original scene or audio startup.
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write(
+                    "storage", "obb.unity_zip_read_probe_unavailable",
+                    "error_type=" + ex.GetType().Name +
+                    "; unity_engine_resource_load_verified=false", true);
+            }
         }
 
         private static void Capture(string message, string stack, LogType type)
