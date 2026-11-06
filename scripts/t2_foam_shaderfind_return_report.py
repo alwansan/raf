@@ -94,6 +94,12 @@ MATERIAL_NUMERIC = (
     "field_api_Graphics_Blit_explicit_sites_pass_other_literal",
     "field_api_Graphics_Blit_explicit_sites_pass_unknown",
     "field_api_Graphics_Blit_explicit_sites_pass_mixed",
+    "field_api_Graphics_Blit_explicit_source_Texture",
+    "field_api_Graphics_Blit_explicit_source_RenderTexture",
+    "field_api_Graphics_Blit_explicit_source_unknown",
+    "field_api_Graphics_Blit_explicit_destination_RenderTexture",
+    "field_api_Graphics_Blit_explicit_destination_null",
+    "field_api_Graphics_Blit_explicit_destination_unknown",
     "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
     "field_api_straightline_sites_with_Renderer_Material_parameter",
     "field_api_straightline_sites_with_other_typed_Material_parameter",
@@ -297,6 +303,20 @@ def validate(report):
     if sum(report[k] for k in blit_literal_categories) != report[
             "field_api_Graphics_Blit_sites_ExplicitPass"]:
         raise ValueError("Blit_explicit_pass_direct_literal_partition_inconsistent")
+    source_producers=(
+        "field_api_Graphics_Blit_explicit_source_Texture",
+        "field_api_Graphics_Blit_explicit_source_RenderTexture",
+        "field_api_Graphics_Blit_explicit_source_unknown",
+    )
+    destination_producers=(
+        "field_api_Graphics_Blit_explicit_destination_RenderTexture",
+        "field_api_Graphics_Blit_explicit_destination_null",
+        "field_api_Graphics_Blit_explicit_destination_unknown",
+    )
+    for group in (source_producers, destination_producers):
+        if sum(report[k] for k in group) != report[
+                "field_api_Graphics_Blit_sites_ExplicitPass"]:
+            raise ValueError("Blit_direct_source_destination_partition_inconsistent")
     categories=(
         "field_api_straightline_sites_with_Graphics_Material_parameter",
         "field_api_straightline_sites_with_CommandBuffer_Material_parameter",

@@ -195,7 +195,9 @@ internal static class Program
         int GraphicsBlit, int GraphicsDrawMesh, int GraphicsOther, int GraphicsMixed,
         int BlitImplicitPass, int BlitExplicitPass, int BlitOtherSignature, int BlitMixedSignatures,
         int BlitPassLiteral0, int BlitPassLiteral1, int BlitPassOtherLiteral,
-        int BlitPassUnknown, int BlitPassMixed);
+        int BlitPassUnknown, int BlitPassMixed,
+        int BlitSourceTexture, int BlitSourceRenderTexture, int BlitSourceUnknown,
+        int BlitDestinationRenderTexture, int BlitDestinationNull, int BlitDestinationUnknown);
 
     private static int PublicBlitSignatureKind(MethodReference method)
     {
@@ -241,6 +243,95 @@ internal static class Program
         return value.Value==0 ? 1 : value.Value==1 ? 2 : 3;
     }
 
+    private sealed record DirectBlitInputs(int Source, int Destination);
+
+    private static int PreviousNonNop(IList<Instruction> il, int index)
+    {
+        int skipped=0;
+        while(index>=0 && il[index].OpCode.Code==Code.Nop && skipped<4)
+        {index--;skipped++;}
+        if(index<0 || il[index].OpCode.Code==Code.Nop)return -1;
+        return index;
+    }
+
+    private static bool SimpleFieldReceiver(Instruction inst)
+    {
+        return inst.OpCode.Code is
+            Code.Ldarg_0 or Code.Ldarg_1 or Code.Ldarg_2 or Code.Ldarg_3 or
+            Code.Ldarg or Code.Ldarg_S or Code.Ldloc or Code.Ldloc_S or
+            Code.Ldloc_0 or Code.Ldloc_1 or Code.Ldloc_2 or Code.Ldloc_3 or
+            Code.Ldsfld;
+    }
+
+    private static bool TryDirectTypedValue(MethodDefinition method,
+        IList<Instruction> il, ref int index, out string type)
+    {
+        type="";
+        index=PreviousNonNop(il,index);
+        if(index<0)return false;
+        var inst=il[index];
+        if(inst.OpCode.Code==Code.Ldnull)
+        {type="<null>";index--;return true;}
+        if(inst.OpCode.Code is Code.Ldloc or Code.Ldloc_S or
+           Code.Ldloc_0 or Code.Ldloc_1 or Code.Ldloc_2 or Code.Ldloc_3)
+        {
+            var local=method.Body.Variables.FirstOrDefault(v=>LocalIsLoadOf(inst,v));
+            if(local is null)return false;
+            type=local.VariableType.FullName;
+            index--;
+            return true;
+        }
+        if((inst.OpCode.Code is Code.Ldfld or Code.Ldsfld) &&
+           inst.Operand is FieldReference field)
+        {
+            type=field.FieldType.FullName;
+            index--;
+            if(inst.OpCode.Code==Code.Ldfld)
+            {
+                index=PreviousNonNop(il,index);
+                if(index<0 || !SimpleFieldReceiver(il[index]))return false;
+                index--;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static DirectBlitInputs TraceDirectBlitInputs(MethodDefinition method,
+        int materialFieldIndex, int callIndex)
+    {
+        // Canonical straight-line stack only: source, destination, original
+        // Material field, int pass, Graphics.Blit. No private names exported.
+        // A call/cast/branch/unknown nested expression fails closed.
+        var unknown=new DirectBlitInputs(0,0);
+        var il=method.Body.Instructions;
+        if(materialFieldIndex<0 || callIndex>=il.Count ||
+           materialFieldIndex>=callIndex ||
+           il[materialFieldIndex].OpCode.Code is not (Code.Ldfld or Code.Ldsfld))
+            return unknown;
+        int passIndex=PreviousNonNop(il,callIndex-1);
+        if(passIndex<=materialFieldIndex ||
+           DirectPublicBlitPassLiteralKind(il,callIndex)==4)return unknown;
+        for(int k=materialFieldIndex+1;k<callIndex;k++)
+            if(k!=passIndex && il[k].OpCode.Code!=Code.Nop)return unknown;
+        int cursor=PreviousNonNop(il,materialFieldIndex-1);
+        if(cursor<0)return unknown;
+        if(il[materialFieldIndex].OpCode.Code==Code.Ldfld)
+        {
+            if(!SimpleFieldReceiver(il[cursor]))return unknown;
+            cursor--;
+        }
+        if(!TryDirectTypedValue(method,il,ref cursor,out var destination))
+            return unknown;
+        if(!TryDirectTypedValue(method,il,ref cursor,out var source))
+            return unknown;
+        return new(
+            source=="UnityEngine.Texture" ? 1 :
+              source=="UnityEngine.RenderTexture" ? 2 : 0,
+            destination=="UnityEngine.RenderTexture" ? 1 :
+              destination=="<null>" ? 2 : 0);
+    }
+
     private static FieldApiTrace TraceExactMaterialFieldRead(MethodDefinition method, int sourceIndex)
     {
         // Forward-only, max 32 original IL instructions per exact FieldDefinition load.
@@ -255,6 +346,7 @@ internal static class Program
         int graphicsBlit=0,graphicsDrawMesh=0,graphicsOther=0;
         int blitImplicit=0,blitExplicit=0,blitOther=0;
         int passLiteral0=0,passLiteral1=0,passOtherLiteral=0,passUnknown=0;
+        int sourceKind=0,destinationKind=0;
         bool Pop()
         {
             if(stack.Count==0)return false;
@@ -304,6 +396,13 @@ internal static class Program
                                     case 1: blitImplicit++;break;
                                     case 2:
                                         blitExplicit++;
+                                        if(blitExplicit==1)
+                                        {
+                                            var direct=TraceDirectBlitInputs(method,sourceIndex,i);
+                                            sourceKind=direct.Source;
+                                            destinationKind=direct.Destination;
+                                        }
+                                        else {sourceKind=0;destinationKind=0;}
                                         switch(DirectPublicBlitPassLiteralKind(il,i))
                                         {
                                             case 1: passLiteral0++;break;
@@ -375,7 +474,13 @@ internal static class Program
             onlyExplicitBlit && passKinds==1 && passLiteral1>0 ? 1 : 0,
             onlyExplicitBlit && passKinds==1 && passOtherLiteral>0 ? 1 : 0,
             onlyExplicitBlit && passKinds==1 && passUnknown>0 ? 1 : 0,
-            onlyExplicitBlit && passKinds>1 ? 1 : 0);
+            onlyExplicitBlit && passKinds>1 ? 1 : 0,
+            onlyExplicitBlit && blitExplicit==1 && sourceKind==1 ? 1 : 0,
+            onlyExplicitBlit && blitExplicit==1 && sourceKind==2 ? 1 : 0,
+            onlyExplicitBlit && (blitExplicit!=1 || sourceKind==0) ? 1 : 0,
+            onlyExplicitBlit && blitExplicit==1 && destinationKind==1 ? 1 : 0,
+            onlyExplicitBlit && blitExplicit==1 && destinationKind==2 ? 1 : 0,
+            onlyExplicitBlit && (blitExplicit!=1 || destinationKind==0) ? 1 : 0);
     }
 
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
@@ -739,7 +844,10 @@ internal static class Program
             fieldApiBlitImplicit=0,fieldApiBlitExplicit=0,
             fieldApiBlitOther=0,fieldApiBlitMixed=0,
             fieldApiPassLiteral0=0,fieldApiPassLiteral1=0,
-            fieldApiPassOtherLiteral=0,fieldApiPassUnknown=0,fieldApiPassMixed=0;
+            fieldApiPassOtherLiteral=0,fieldApiPassUnknown=0,fieldApiPassMixed=0,
+            fieldApiSourceTexture=0,fieldApiSourceRenderTexture=0,
+            fieldApiSourceUnknown=0,fieldApiDestinationRenderTexture=0,
+            fieldApiDestinationNull=0,fieldApiDestinationUnknown=0;
         if(trace.OriginalMaterialField is not null)
             foreach(var method in methods)
             {
@@ -770,6 +878,12 @@ internal static class Program
                         fieldApiPassOtherLiteral+=api.BlitPassOtherLiteral;
                         fieldApiPassUnknown+=api.BlitPassUnknown;
                         fieldApiPassMixed+=api.BlitPassMixed;
+                        fieldApiSourceTexture+=api.BlitSourceTexture;
+                        fieldApiSourceRenderTexture+=api.BlitSourceRenderTexture;
+                        fieldApiSourceUnknown+=api.BlitSourceUnknown;
+                        fieldApiDestinationRenderTexture+=api.BlitDestinationRenderTexture;
+                        fieldApiDestinationNull+=api.BlitDestinationNull;
+                        fieldApiDestinationUnknown+=api.BlitDestinationUnknown;
                     }
             }
         if(fieldApiSites!=linearFieldReads)
@@ -845,6 +959,12 @@ internal static class Program
             ["field_api_Graphics_Blit_explicit_sites_pass_other_literal"]=fieldApiPassOtherLiteral,
             ["field_api_Graphics_Blit_explicit_sites_pass_unknown"]=fieldApiPassUnknown,
             ["field_api_Graphics_Blit_explicit_sites_pass_mixed"]=fieldApiPassMixed,
+            ["field_api_Graphics_Blit_explicit_source_Texture"]=fieldApiSourceTexture,
+            ["field_api_Graphics_Blit_explicit_source_RenderTexture"]=fieldApiSourceRenderTexture,
+            ["field_api_Graphics_Blit_explicit_source_unknown"]=fieldApiSourceUnknown,
+            ["field_api_Graphics_Blit_explicit_destination_RenderTexture"]=fieldApiDestinationRenderTexture,
+            ["field_api_Graphics_Blit_explicit_destination_null"]=fieldApiDestinationNull,
+            ["field_api_Graphics_Blit_explicit_destination_unknown"]=fieldApiDestinationUnknown,
             ["field_api_straightline_sites_with_CommandBuffer_Material_parameter"]=fieldApiCommand,
             ["field_api_straightline_sites_with_Renderer_Material_parameter"]=fieldApiRenderer,
             ["field_api_straightline_sites_with_other_typed_Material_parameter"]=fieldApiOther,
@@ -1075,6 +1195,45 @@ internal static class Program
         if(exact.GraphicsBlit!=1 || exact.BlitMixedSignatures!=1 ||
            exact.BlitImplicitPass!=0 || exact.BlitExplicitPass!=0)
             throw new InvalidOperationException("Blit_mixed_overload_exclusive");
+        // Exact direct stack operands: source and destination are classified
+        // only when adjacent, not from an unrelated instruction or name.
+        var syntheticTextureSource=new FieldDefinition("SyntheticTexture",
+            Mono.Cecil.FieldAttributes.Static|Mono.Cecil.FieldAttributes.Private,texture);
+        var syntheticRenderTarget=new FieldDefinition("SyntheticTarget",
+            Mono.Cecil.FieldAttributes.Static|Mono.Cecil.FieldAttributes.Private,renderTexture);
+        owner.Fields.Add(syntheticTextureSource);
+        owner.Fields.Add(syntheticRenderTarget);
+        var imageTrace=new MethodDefinition("SyntheticDirectBlit",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(imageTrace);
+        imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,syntheticTextureSource));
+        imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,syntheticRenderTarget));
+        imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,matField));
+        imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit4));
+        imageTrace.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        var roles=TraceExactMaterialFieldRead(imageTrace,2);
+        if(roles.BlitSourceTexture!=1 || roles.BlitDestinationRenderTexture!=1 ||
+           roles.BlitDestinationUnknown!=0)
+            throw new InvalidOperationException("direct_Texture_RenderTexture_producer");
+        imageTrace.Body.Instructions[1]=Instruction.Create(OpCodes.Ldnull);
+        roles=TraceExactMaterialFieldRead(imageTrace,2);
+        if(roles.BlitSourceTexture!=1 || roles.BlitDestinationNull!=1)
+            throw new InvalidOperationException("direct_null_destination");
+        imageTrace.Body.Instructions[0]=Instruction.Create(OpCodes.Ldsfld,syntheticRenderTarget);
+        roles=TraceExactMaterialFieldRead(imageTrace,2);
+        if(roles.BlitSourceRenderTexture!=1 || roles.BlitDestinationNull!=1)
+            throw new InvalidOperationException("direct_RenderTexture_source");
+        imageTrace.Body.Instructions[1]=Instruction.Create(OpCodes.Ldc_I4_0);
+        roles=TraceExactMaterialFieldRead(imageTrace,2);
+        if(roles.BlitDestinationUnknown!=1 || roles.BlitDestinationNull!=0)
+            throw new InvalidOperationException("non_Texture_destination_unknown");
+        imageTrace.Body.Instructions[1]=Instruction.Create(OpCodes.Ldsfld,syntheticRenderTarget);
+        imageTrace.Body.Instructions.Insert(3,Instruction.Create(OpCodes.Dup));
+        roles=TraceExactMaterialFieldRead(imageTrace,2);
+        if(roles.BlitSourceUnknown!=1 || roles.BlitDestinationUnknown!=1)
+            throw new InvalidOperationException("noncanonical_stack_unknown");
         draw.Name="DrawMesh";
         exact=TraceExactMaterialFieldRead(traceMethod,0);
         if(exact.GraphicsDrawMesh!=1 || exact.GraphicsBlit!=0 || exact.GraphicsOther!=0)
