@@ -5,16 +5,21 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "type": "integration",
-  "summary": "Reserved independent RENDER-002 scope then implemented inode+content ownership guard for built-in ShaderLab include cleanup on failure, with synthetic same-inode external edit and new-inode replacement fixtures. Source commit 67e659e3; B13/A15/authentic builtin-source CI pending at initial checkpoint; no device shader claims.",
+  "summary": "T5 source P0 ShaderLab restorer cleanup now refuses unlinking post-created include altered by other worker (inode+content verified) while own interrupted writes still rollback. Exact B13 15/15 and authenticated vendor sample 5/5 PASS, corrected stale A15 atomic-rename failure fixture and A14 CI path dependencies. Final A15 CI42277179726 27/27 and A14 CI42277322041 36/36 source-only PASS. No original Raft shader/FFT/water or device graphics acceptance.",
   "evidence": [
     "https://github.com/alwansan/raf/commit/67e659e3ea67c43a66e43d65e53afb168645305c",
     "https://github.com/alwansan/raf/actions/runs/42276738043",
     "https://github.com/alwansan/raf/actions/runs/42276737999",
-    "https://github.com/alwansan/raf/actions/runs/42276738013"
+    "https://github.com/alwansan/raf/actions/runs/42276738013",
+    "https://github.com/alwansan/raf/commit/e9d125cc28f8a2f817a0c11ac21b5778f4aa59e9",
+    "https://github.com/alwansan/raf/commit/2de34977eb1b4cb0aa865e35afdfea6a96b8c272",
+    "https://github.com/alwansan/raf/actions/runs/42277179726",
+    "https://github.com/alwansan/raf/actions/runs/42277322041"
   ],
-  "at": "2026-11-06T19:07:00Z",
+  "at": "2026-11-06T19:11:30Z",
   "limits": [
-    "synthetic post-addition rollback race; no real phone visual change",
-    "no Unity Editor/native build or trial vote 5/5"
+    "script/fixture/CI for rollback integrity only, not original Raft shader program recovery",
+    "authentic vendor archive five synthetic export samples, not actual native Unity game build or phone",
+    "trial r1 NO consensus; no native APK/XAPK, final readiness NOT_READY 0/3"
   ]
 }
