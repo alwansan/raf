@@ -1,0 +1,16 @@
+{
+  "session_id": "20261106T1332Z-T3-scheduled-particle108-handoff-6c9e",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "2e4e4112973b3c29db9b34db233b5f9089a4505d",
+  "hypothesis": "Selected original Particle108 Shader48 remains Dummy after vendor restoration; diagnose actual program variant recovery before replacing texture or material",
+  "experiment_key": "T3-particle108-original-SHA-pinned-postvendor-42223071341-result-reuse-no-new-export",
+  "resource_key": null,
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/20261106T1332Z-T3-scheduled-particle108-handoff-6c9e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1332Z-T3-scheduled-particle108-handoff-6c9e.md"
+  ],
+  "taken_over_from": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+  "updated_at": "2026-11-06T13:32:00Z"
+}
