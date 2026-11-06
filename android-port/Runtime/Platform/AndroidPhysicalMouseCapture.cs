@@ -22,6 +22,7 @@ namespace RaftAndroid.Platform
         private volatile bool nativeHasMotion, requested, nativeCaptured;
         private readonly object captureGate = new object();
         private int epoch, lastLoggedCount, captureLossCount, loggedLossCount;
+        private int captureViewIdentity, mismatchedViewEpoch, loggedMismatchedViewEpoch;
         private float nextRequestTime, nextProbeTime;
 
         private sealed class CapturedListener : AndroidJavaProxy
@@ -207,6 +208,14 @@ namespace RaftAndroid.Platform
                 nextProbeTime = Time.unscaledTime + 0.15f;
                 ProbeCapturedPointer();
             }
+            int mismatch = Volatile.Read(ref mismatchedViewEpoch);
+            if (mismatch != 0 && mismatch != loggedMismatchedViewEpoch)
+            {
+                loggedMismatchedViewEpoch = mismatch;
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_view_changed",
+                    "epoch=" + mismatch + "; legacyFallbackMayApply=true");
+            }
             int losses = Volatile.Read(ref captureLossCount);
             if (losses != loggedLossCount)
             {
@@ -251,6 +260,13 @@ namespace RaftAndroid.Platform
             }
         }
 
+        private static int ViewIdentity(AndroidJavaObject view)
+        {
+            if (view == null) return 0;
+            using (var system = new AndroidJavaClass("java.lang.System"))
+                return system.CallStatic<int>("identityHashCode", view);
+        }
+
         private void ProbeCapturedPointer()
         {
             int token = Volatile.Read(ref epoch);
@@ -265,6 +281,10 @@ namespace RaftAndroid.Platform
                         using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
                         using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
                         {
+                            int probedIdentity = ViewIdentity(view);
+                            int requestedIdentity = Volatile.Read(ref captureViewIdentity);
+                            if (requestedIdentity != 0 && probedIdentity != requestedIdentity)
+                                Volatile.Write(ref mismatchedViewEpoch, token);
                             bool active = view != null && view.Call<bool>("hasWindowFocus") &&
                                 view.Call<bool>("isFocused") && view.Call<bool>("hasPointerCapture");
                             ObserveNativeCapture(token, active);
@@ -307,6 +327,7 @@ namespace RaftAndroid.Platform
                                 ObserveNativeCapture(currentEpoch, false);
                                 return;
                             }
+                            Volatile.Write(ref captureViewIdentity, ViewIdentity(view));
                             view.Call("setOnCapturedPointerListener", requestListener);
                             if (view.Call<bool>("hasPointerCapture"))
                                 ObserveNativeCapture(currentEpoch, true);
@@ -334,6 +355,7 @@ namespace RaftAndroid.Platform
                 deltas.Reset();
             }
             lastLoggedCount = 0;
+            Volatile.Write(ref captureViewIdentity, 0);
             nextProbeTime = 0f;
             // UI-thread dispatch is asynchronous: a new request may supersede
             // this release before it runs. Never revoke that newer capture.
