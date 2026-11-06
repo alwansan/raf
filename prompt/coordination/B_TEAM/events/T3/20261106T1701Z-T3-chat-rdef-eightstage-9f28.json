@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1701Z-T3-chat-rdef-eightstage-9f28",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1701Z-T3-chat-rdef-eightstage-9f28",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Authenticated eight original Particle108 D3D11 DXBC VS/FS stages from SHA-pinned ZIP2 source: all 8 lack RDEF, zero unique or multiple; no source-original binding layout recoverable through RDEF alone. Stage shader resources may still reside in SHDR/SHEX tokens. CI 42258686807 SUCCESS, source-free 17/17 CI 42258460039 SUCCESS. RENDER-002 remains OPEN/NOT_READY, no game shader/Android visual fix.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42258686807",
+    "https://github.com/alwansan/raf/actions/runs/42258460039",
+    "https://github.com/alwansan/raf/commit/08dea8c5b1bfe82768c9b93d6b6a5fed6f73e93e",
+    "prompt/coordination/clients/T3/sessions/20261106T1701Z-T3-chat-rdef-eightstage-9f28.md"
+  ],
+  "at": "2026-11-06T17:09:57.932Z"
+}
