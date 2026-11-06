@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2138Z-T3-chat-variant-proofgate-5dc9",
+  "issue_id": "RENDER-002",
+  "status": "completed_exact_source_and_original_private_regression_pass",
+  "source_branch": "feature/android-native-port",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "base_sha": "f2716a0e8e20413416ac8375086f96006e6fe9fb",
+  "experiment_key": "t3-shader48-4private-variant-stage-identity-plus-vulkan11-roundtrip-mandatory-f1f15872-negative-fixtures-20261106-5dc9",
+  "hypothesis": "Before counting a source-authentic Shader48 per-keyword private ShaderLab candidate, require exact numeric stage identity and Vulkan1.1 HLSL→SPIR-V roundtrip attestation; otherwise a missing/false flag could silently lead to accepted 4 candidates with only partial stage validation.",
+  "implementation_sha": "e2cbadb6acc4d927ec2e61e4b7e012e049235146",
+  "terminal_run": {
+    "id": 42298502781,
+    "url": "https://github.com/alwansan/raf/actions/runs/42298502781",
+    "job_id": 128169873851,
+    "run_sha": "e2cbadb6acc4d927ec2e61e4b7e012e049235146",
+    "conclusion": "success",
+    "source_only_regressions_passed": 14
+  },
+  "negative_controls": [
+    "missing roundtrip",
+    "false roundtrip",
+    "null roundtrip",
+    "missing stage",
+    "boolean 0/1 stage",
+    "wrong numeric stage",
+    "string stage"
+  ],
+  "original_evidence": {
+    "original_sha_verified_scene_files": 6,
+    "original_sha_verified_shader_owner_files": 4,
+    "source_authenticated_keyword_pairs": 4,
+    "original_stage_translations": 8,
+    "roundtrip_validated_stages": 8,
+    "private_one_pass_ShaderLab_candidates": 4,
+    "property_default_parity_passes": 4
+  },
+  "changed_paths": [
+    "scripts/t3_particle108_private_shaderlab_variants.py",
+    "tests/test_t3_particle108_private_shaderlab_variants.py"
+  ],
+  "scope_constraints": {
+    "original_private_shader_sources_published": false,
+    "original_HLSL_or_SPV_published": false,
+    "game_shader_or_meta_modified": false,
+    "actual_Unity_import_proven": false,
+    "runtime_original_keyword_routing_proven": false,
+    "Adreno_device_pixels_proven": false,
+    "trial_vote": "لا يحتاج",
+    "issue": "RENDER-002_OPEN_NOT_READY"
+  },
+  "next_step": "Independent bounded Unity 2021.3 ShaderLab import validation of staged private variants when no competing heavy native job; then genuine resource binding/keyword routing and phone pixels before integration."
+}
