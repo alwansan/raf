@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T110543Z-T1-chat-cfgreach-f4d9",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "FFT butterfly flow-sensitive SPIR-V reaching direct stores",
+  "approach": "Build independent bounded per-function CFG and store-before-load dataflow for source-authenticated private slot0 FFT SPIR-V. Fail closed on aliases and uninitialized paths; do not rewrite shaders or leak instruction IDs.",
+  "status": "active",
+  "base_sha": "a4d492631ed515d31c7759626c5e62ec2f3b5fc2",
+  "intended_files": [
+    "scripts/t1_fft_spirv_reaching_stores.py",
+    "tests/test_t1_fft_spirv_reaching_stores.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T110543Z-T1-chat-cfgreach-f4d9.md",
+    "prompt/coordination/experiments/T1/20261106T110543Z-T1-chat-cfgreach-f4d9.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T110543Z-T1-chat-cfgreach-f4d9.json"
+  ],
+  "experiment_key": "water001-slot0-private-function-cfg-reach-stores-20261106-source-pin-15964ea8-not-equivalent-to-static-42204760126",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-nonunity-ubuntu24",
+  "resumed_from_sessions": [
+    "20261106T103645Z-T1-chat-storewriters-b4a7",
+    "20261106T101340Z-T1-chat-2f6a"
+  ],
+  "related_work": [
+    "T1-20261106T103645Z-T1-chat-storewriters-b4a7"
+  ],
+  "hypothesis": "Among 3/8 static direct Function-local OpStore candidates at butterfly fetches, CFG-sensitive reaching-def sets can narrow which writes reach the OpLoad. Unmodeled alias/initialization/indirect CFG edges must block proof.",
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-06T11:05:43.340Z",
+  "next_step": "Implement and locally test bounded reach-def analysis and synthetic negative controls, then use existing isolated original slot0 Vulkan workflow for private SHA-authenticated evidence. Preserve other agents' files."
+}
