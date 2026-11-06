@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
+  "issue_id": "COORD-001",
+  "status": "active",
+  "base_sha": "a2ac927c20fbc88dde6ab5e89635340e9dce762d",
+  "updated_at": "2026-11-06T14:13:45.420Z",
+  "resumed_from_sessions": [
+    "20261106T1358Z-T5-chat-obb-fullsha-7e39.md",
+    "20261106T1322Z-T5-chat-t3-ledger-identity-3b71.md"
+  ],
+  "experiment_key": "T5-20261106T1408Z-T1-event-missing-id-strict-index-v1",
+  "resource_key": "one T1 authored event record only",
+  "cause": "CI42231823163 failed Missing record identity after 11+3 tests; T1 event has session_id but no id or event_id",
+  "intended_files": [
+    "prompt/coordination/B_TEAM/events/T1/20261106T1408Z-T1-scheduled-pair-input-readiness-v3.json",
+    "prompt/coordination/work/COORD-001/20261106T1413Z-T5-chat-ledger-t1id-7b42.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1413Z-T5-chat-ledger-t1id-7b42.md",
+    "prompt/coordination/experiments/T5/20261106T1413Z-T5-chat-ledger-t1id-7b42.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1413Z-T5-chat-ledger-t1id-7b42.json",
+    ".github/workflows/raft-t5-ledger-refresh.yml"
+  ],
+  "coordination": "No T1 active Actions. Add only explicit id matching original session_id. Preserve all existing T1 keys and values. Never change T1 source, FFT tests or results. No parser heuristic.",
+  "next_step": "CAS repair one id, strict canonical index re-run."
+}
