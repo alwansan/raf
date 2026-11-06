@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_ci_success_device_unverified",
+  "experiment_key": "T4-INPUT005-AndroidPhysicalMouseCapture-ReleaseCapture-currentFocus-different-request-View-identity-null-epoch-failclosed-CI-v1",
+  "base_sha": "d8bf08a9fe4305dadea4948c2079962669292a86",
+  "initial_candidate_sha": "5ca365e134a2a3134017cf5128c4ee42a86a1e62",
+  "stable_source_sha": "db74ad778cb8315c61fe3519d0fa3a2a76e10894",
+  "final_test_source_sha": "cb86cdcd8baf462f35c4217758a0a9e19fd56d4e",
+  "modified_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py"
+  ],
+  "result": {
+    "source_view_identity_guard": true,
+    "nonzero_original_target_required": true,
+    "stale_release_epoch_guard_preserved": true,
+    "cross_thread_android_java_object_retained": false,
+    "final_ci": "completed_success",
+    "final_run_id": 42204448436,
+    "job_id": 127847457650,
+    "python_test_counts": {
+      "original_route": 7,
+      "axis_patch": 7,
+      "native_policy": 21,
+      "physical_presence": 5,
+      "view_identity": 6,
+      "total": 46
+    },
+    "native_unity_abi_compile": "success",
+    "android_platform_run": "42204354877 success",
+    "phone": "NOT_TESTED"
+  },
+  "provenance": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42204448436",
+    "original_game_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_save_world_wire_parity_run": "42201568118"
+  },
+  "failed_intermediates": [
+    {
+      "run": 42204140756,
+      "reason": "three outdated legacy source lexical test assertions; no runtime evidence"
+    },
+    {
+      "run": 42204361104,
+      "reason": "one new overbroad assertion rejected a comment mentioning AndroidJavaObject; fixed in final"
+    }
+  ],
+  "limits": [
+    "IdentityHashCode is not cryptographically collision-free",
+    "No Android View/pointer capture device instrumentation run",
+    "No full Unity2021 IL2CPP build, no APK/OBB delivered here",
+    "No guarantee old View release on focus loss; Android may release automatically"
+  ],
+  "next_step": "T5 signed exact APK/OBB handoff; owner physical mouse 360-degree, cursor, focus release/reacquire + same world full process death save/reopen."
+}
