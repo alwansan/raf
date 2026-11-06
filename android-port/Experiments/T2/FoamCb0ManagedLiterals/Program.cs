@@ -160,6 +160,10 @@ internal static class Program
         var uniqueVector4ConstructorStatuses = new SortedDictionary<string, int>(StringComparer.Ordinal);
         var typedVector4CtorScalarInputSources = new SortedDictionary<string, int>(StringComparer.Ordinal);
         int typedVector4CtorFormalTotal = 0, typedVector4CtorFloatFormalTotal = 0;
+        int exactOriginalCtorFieldOccurrences = 0, exactOriginalCtorFloatFieldOccurrences = 0;
+        int exactOriginalCtorDistinctDeclaringTypes = 0;
+        var exactOriginalCtorFields = new HashSet<string>(StringComparer.Ordinal);
+        var originalMaterialPrefixCategories = new SortedDictionary<string, int>(StringComparer.Ordinal);
 
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
@@ -210,10 +214,13 @@ internal static class Program
                 foreach (var row in rows)
                 {
                     summary.Unique.Add(row.Hash);
-                    var exact = Cb0ExactFirstFormal.Trace(items, row.Position);
+                    var exact = Cb0ExactFirstFormal.Trace(items, row.Position, method);
                     if (exact.HasValue)
                     {
                         summary.ExactFirstFormalProvenNames.Add(row.Hash);
+                        originalMaterialPrefixCategories[exact.Value.StrictMaterialReceiverImmediatePrefixOrigin] =
+                            originalMaterialPrefixCategories.GetValueOrDefault(
+                                exact.Value.StrictMaterialReceiverImmediatePrefixOrigin) + 1;
                         exactlyProvenSetterFamilies[exact.Value.SetterFamily] =
                             exactlyProvenSetterFamilies.GetValueOrDefault(exact.Value.SetterFamily) + 1;
                         // Only attached to the same authenticated literal→setter
@@ -231,6 +238,21 @@ internal static class Program
                                 exact.Value.UniqueVector4ConstructorParameterCount;
                             typedVector4CtorFloatFormalTotal +=
                                 exact.Value.UniqueVector4ConstructorFloatFormalCount;
+                            exactOriginalCtorFieldOccurrences +=
+                                exact.Value.UniqueVector4ConstructorExactInputFieldCount;
+                            exactOriginalCtorFloatFieldOccurrences +=
+                                exact.Value.UniqueVector4ConstructorInputSystemSingleFieldCount;
+                            exactOriginalCtorDistinctDeclaringTypes +=
+                                exact.Value.UniqueVector4ConstructorDistinctDeclaringTypeCount;
+                            if (exact.Value.UniqueVector4ConstructorExactInputFieldCount == 3 &&
+                                exact.Value.UniqueVector4ConstructorInputSystemSingleFieldCount == 3 &&
+                                exact.Value.UniqueVector4ConstructorInputOriginCounts.GetValueOrDefault(
+                                    "instance_field_load") == 3 &&
+                                exact.Value.PrivateCtorInputFieldIds.Count == 3)
+                            {
+                                foreach (string identity in exact.Value.PrivateCtorInputFieldIds)
+                                    exactOriginalCtorFields.Add(identity);
+                            }
                             foreach (var origin in exact.Value.UniqueVector4ConstructorInputOriginCounts)
                             {
                                 typedVector4CtorScalarInputSources[origin.Key] =
@@ -260,6 +282,29 @@ internal static class Program
                         summary.LiteralWithin4InstructionsOfPropertyToId++;
                 }
             }
+        }
+        // Second static pass only over authenticated managed DLL: lexical
+        // stfld references to exactly the three proven constructor operands.
+        // A write site does not establish runtime reachability or numeric value.
+        int exactOriginalFieldStoreInstructions = 0;
+        int methodsWithStoreToExactOriginalFields = 0;
+        var exactOriginalFieldsWithStores = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var definition in Walk(assembly.MainModule.Types))
+        foreach (var method in definition.Methods)
+        {
+            if (!method.HasBody) continue;
+            bool methodHasStore = false;
+            foreach (var instruction in method.Body.Instructions)
+            {
+                if (instruction.OpCode.Code != Code.Stfld ||
+                    instruction.Operand is not FieldReference field ||
+                    !exactOriginalCtorFields.Contains(field.FullName))
+                    continue;
+                exactOriginalFieldStoreInstructions++;
+                exactOriginalFieldsWithStores.Add(field.FullName);
+                methodHasStore = true;
+            }
+            if (methodHasStore) methodsWithStoreToExactOriginalFields++;
         }
         return new
         {
@@ -303,6 +348,23 @@ internal static class Program
                 typedVector4CtorFloatFormalTotal,
             original_source_name_proven_unique_Vector4_ctor_scalar_input_origin_buckets =
                 typedVector4CtorScalarInputSources,
+            original_source_name_exact_Vector4_ctor_input_FieldReference_count =
+                exactOriginalCtorFieldOccurrences,
+            original_source_name_exact_Vector4_ctor_input_SystemSingle_FieldReference_count =
+                exactOriginalCtorFloatFieldOccurrences,
+            original_source_name_exact_Vector4_ctor_distinct_field_identity_count =
+                exactOriginalCtorFields.Count,
+            original_source_name_exact_Vector4_ctor_distinct_field_declaring_type_count =
+                exactOriginalCtorDistinctDeclaringTypes,
+            original_source_name_exact_Vector4_ctor_field_store_IL_instructions =
+                exactOriginalFieldStoreInstructions,
+            original_source_name_exact_Vector4_ctor_distinct_fields_with_stfld =
+                exactOriginalFieldsWithStores.Count,
+            original_source_name_exact_Vector4_ctor_original_methods_with_stfld =
+                methodsWithStoreToExactOriginalFields,
+            original_source_name_exact_Material_receiver_pre_ldstr_IL_prefix_buckets =
+                originalMaterialPrefixCategories,
+            original_150_byte_or_160_byte_CB0_complete_managed_upload_proven = false,
             original_Vector4_ctor_input_values_verified = false,
             exact_original_Vector4_value_dataflow_to_CB0_verified = false,
             original_Material_receiver_Shader_is_Foam_verified = false,
@@ -836,5 +898,45 @@ internal static class Cb0ExactFirstFormal
         if (Trace(twoConstructors,0)?.UniqueVector4ConstructorStatus !=
             "not_uniquely_proven")
             throw new InvalidOperationException("Multiple newobj sources are ambiguous");
+        var sourceOwner = new TypeReference("PublicFixture","WaterOwner",module,module);
+        var publicMaterialField = new FieldReference("publicMaterial",material,sourceOwner);
+        var firstField = new FieldReference("publicFirst",module.TypeSystem.Single,sourceOwner);
+        var secondField = new FieldReference("publicSecond",module.TypeSystem.Single,sourceOwner);
+        var thirdField = new FieldReference("publicThird",module.TypeSystem.Single,sourceOwner);
+        var sourceName = Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME");
+        var exactFieldsWithPrefix = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld,publicMaterialField),
+            sourceName,
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld,firstField),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld,secondField),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld,thirdField),
+            Instruction.Create(OpCodes.Ldc_R4,1f),
+            Instruction.Create(OpCodes.Newobj,ctor),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        var exactFieldEvidence=Trace(exactFieldsWithPrefix,2);
+        if (exactFieldEvidence?.UniqueVector4ConstructorExactInputFieldCount != 3 ||
+            exactFieldEvidence?.UniqueVector4ConstructorInputSystemSingleFieldCount != 3 ||
+            exactFieldEvidence?.UniqueVector4ConstructorDistinctInputFieldCount != 3 ||
+            exactFieldEvidence?.UniqueVector4ConstructorDistinctDeclaringTypeCount != 1 ||
+            exactFieldEvidence?.PrivateCtorInputFieldIds.Count != 3 ||
+            exactFieldEvidence?.StrictMaterialReceiverImmediatePrefixOrigin !=
+                "direct_adjacent_typed_Material_field_load")
+            throw new InvalidOperationException("Typed original Vector4 field ids and receiver prefix");
+        var wrongMaterialField = new FieldReference("otherObject",module.TypeSystem.Object,sourceOwner);
+        var wrongPrefix = new List<Instruction>(exactFieldsWithPrefix);
+        wrongPrefix[1] = Instruction.Create(OpCodes.Ldfld, wrongMaterialField);
+        if (Trace(wrongPrefix,2)?.StrictMaterialReceiverImmediatePrefixOrigin !=
+            "pre_literal_unproven")
+            throw new InvalidOperationException("Untyped preliteral field receiver rejected");
+        var branchedPrefix = new List<Instruction>(exactFieldsWithPrefix);
+        branchedPrefix.Insert(0,Instruction.Create(OpCodes.Br_S,sourceName));
+        if (Trace(branchedPrefix,3)?.StrictMaterialReceiverImmediatePrefixOrigin !=
+            "pre_literal_alternate_entry")
+            throw new InvalidOperationException("Branch into ldstr invalidates immediate receiver");
     }
 }

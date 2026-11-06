@@ -139,6 +139,27 @@ jobs:
           assert type(total) is int and type(floats) is int and 0<=floats<=total<=32
           assert sum(ctor_inputs.values())==total
           assert (total>0)==(ctor.get('one_typed_UnityEngine_Vector4_ctor_in_slice',0)>0)
+          assert r['original_source_name_exact_first_formal_typed_setter_API_categories']=={'material_vector':1}
+          assert r['original_source_name_exact_Vector4_ctor_input_FieldReference_count']>=0
+          assert r['original_source_name_exact_Vector4_ctor_input_SystemSingle_FieldReference_count']>=0
+          assert r['original_source_name_exact_Vector4_ctor_distinct_field_identity_count']>=0
+          assert r['original_source_name_exact_Vector4_ctor_distinct_field_declaring_type_count']>=0
+          assert r['original_source_name_exact_Vector4_ctor_field_store_IL_instructions']>=0
+          assert r['original_source_name_exact_Vector4_ctor_distinct_fields_with_stfld']>=0
+          assert r['original_source_name_exact_Vector4_ctor_original_methods_with_stfld']>=0
+          assert r['original_source_name_exact_Vector4_ctor_input_FieldReference_count']<=4
+          assert r['original_source_name_exact_Vector4_ctor_input_SystemSingle_FieldReference_count']<=4
+          assert r['original_source_name_exact_Vector4_ctor_distinct_field_identity_count']<=4
+          assert (r['original_source_name_exact_Vector4_ctor_distinct_fields_with_stfld']
+                   <= r['original_source_name_exact_Vector4_ctor_distinct_field_identity_count'])
+          prefixes=r['original_source_name_exact_Material_receiver_pre_ldstr_IL_prefix_buckets']
+          allowed_prefix={'pre_literal_unproven','pre_literal_alternate_entry',
+                          'direct_adjacent_typed_Material_field_load',
+                          'direct_adjacent_typed_Material_static_field_load',
+                          'direct_adjacent_typed_Material_call_result',
+                          'direct_adjacent_typed_Material_local_load'}
+          assert set(prefixes)<=allowed_prefix and sum(prefixes.values())==1
+          assert r['original_150_byte_or_160_byte_CB0_complete_managed_upload_proven'] is False
           assert r['original_Vector4_ctor_input_values_verified'] is False
           assert r['exact_original_Vector4_value_dataflow_to_CB0_verified'] is False
           assert r['original_Material_receiver_Shader_is_Foam_verified'] is False
