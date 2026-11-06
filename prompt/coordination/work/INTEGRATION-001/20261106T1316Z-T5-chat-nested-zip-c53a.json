@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1316Z-T5-chat-nested-zip-c53a",
   "issue_id": "INTEGRATION-001",
-  "status": "completed_real_signed_APK_OBB_nested_zip_local_and_central_verified",
+  "status": "completed_actual_signed_nested_APK_OBB_70_headers_and_395_event_index_verified",
   "base_sha": "4491e8d1a4904ab4c5189e687174acbc7d33cc50",
-  "updated_at": "2026-11-06T13:19:29.732Z",
+  "updated_at": "2026-11-06T13:26:42.297Z",
   "resumed_from_sessions": [
     "20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
     "20261106T1243Z-T5-chat-zip-local-headers-9e2a.md",
@@ -54,5 +54,7 @@
     "actual_inner_SHA_verified": false,
     "actual_APK_certificate_verified": false,
     "actual_android_device_tested": false
-  }
+  },
+  "canonical_team_index": "https://github.com/alwansan/raf/actions/runs/42225352448",
+  "index_events": 395
 }
