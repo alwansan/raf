@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1334Z-T4-chat-windowfocus-m8v3",
+  "owner": "T4",
+  "session_id": "20261106T1334Z-T4-chat-windowfocus-m8v3",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "at": "2026-11-06T13:40:31.748Z",
+  "summary": "Android WindowInsets/legacy immersive policy now requires Activity.hasWindowFocus in UI-thread hide path in addition to owner Activity identity and valid generation. Exact original-managed source CI 42227039188 success: 10 source and 33 executable C# controls plus Unity2021 ABI compile; device not verified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/1496971df6f14335b5d479d8cc488d7636a998be",
+    "https://github.com/alwansan/raf/actions/runs/42227039188"
+  ],
+  "device_confirmed": false
+}
