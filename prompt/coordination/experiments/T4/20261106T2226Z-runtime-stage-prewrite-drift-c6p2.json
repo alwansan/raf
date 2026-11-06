@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "updated_at": "2026-11-06T22:31:19.747Z",
+  "experiment_key": "T4-original-operation-apply-postbackup-prewrite-stale-CSharp-meta-guard-synthetic-v1",
+  "baseline_sha": "dc395792b78aff3c93308c0312f7e2335e3cbe3d",
+  "tests": [
+    "tests/test_runtime_operation_traces.py"
+  ],
+  "source": [
+    "scripts/instrument_android_runtime_operations.py"
+  ],
+  "red_commit": "a02afd104b72359c7955d7519be1fda978018ce5",
+  "red_run": "https://github.com/alwansan/raf/actions/runs/42304948072",
+  "red_result": "Source-only synthetic post-backup copy interleave: independent .cs change silently overwritten, .meta change detected only after stale original C# was written; both new subtests expected FAILED, existing 17 tests PASS.",
+  "green_commit": "a2577acef04ff8d1997f1e2af14cc85aa27a84d0",
+  "green_run": "https://github.com/alwansan/raf/actions/runs/42305089873",
+  "green_job": 128192313291,
+  "green_result": "COMPLETED SUCCESS: original runtime operation trace synthetic tests 18/18; production adapter re-verifies source and .meta bytes/non-hardlinked physical paths after backup and before first write, fails closed preserving original backup on mismatch; original offline integration private managed C# compile exit=0 errorCodes={} affectedFiles=[].",
+  "limits": [
+    "Checks a post-backup pre-first-write source epoch, not a full atomic interprocess transaction.",
+    "An independent write after per-file installation is still a separate potential race; no on-device Unity/IL2CPP gameplay test.",
+    "No game source, asset bytes, .rgd, GUID content, FMOD, Settings or touch modified."
+  ],
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "current_device_acceptance": false,
+  "original_save_schema_modified": false
+}
