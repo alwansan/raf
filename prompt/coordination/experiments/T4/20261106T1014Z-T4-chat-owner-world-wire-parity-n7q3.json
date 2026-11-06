@@ -4,7 +4,7 @@
   "owner": "T4",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "waiting_ci",
+  "status": "completed_original_managed_byte_for_byte_7_of_7_device_unverified",
   "experiment_key": "T4-local005-CL520c-owner7-original-Save-Load-wire-exact-byte-equality-original-zip2-15964ea8-source-guard-v1",
   "baseline_sha": "35c9e3191d52da100212930c1177745578a61d66",
   "source_commit": "22ebebb0e0638d3a970475fcbcb506a88945307e",
@@ -19,5 +19,23 @@
   "privacy": "No original game or owner bytes/sha/length/path, exception text, type names or per-world digest printed. Aggregate Boolean equality only.",
   "criteria": "Compare 7 actual Save outputs to authenticated input bytes and classify exact-equality vs changed only; do not claim semantic corruption on byte inequality.",
   "device": "NOT_TESTED",
-  "next_step": "Review immutable final CI 42201568118 output, record aggregates, preserve Android owner device acceptance gap"
+  "next_step": "One exact signed matching APK+OBB from T5; on POCO phone verify save/full process exit/reopen of same world with physical mouse and keyboard; compare Android Save/Load markers before any schema changes.",
+  "final_run_status": "completed_success",
+  "final_job_id": 127837973923,
+  "observed_result": {
+    "sample_count": 7,
+    "original_guard_passed": 7,
+    "original_private_Save_invoked": 7,
+    "original_saved_file_nonzero": 7,
+    "generated_original_LoadT_matched": 7,
+    "original_private_wire_compared": 7,
+    "original_private_wire_exact_match": 7,
+    "original_private_wire_differs": 0,
+    "private_temp_cleanup_proven": 7,
+    "source_free_controls_passed": 41,
+    "source_free_controls_total": 41,
+    "one_byte_tampering_rejected": true
+  },
+  "verified_run_at": "2026-11-06T10:18:26Z",
+  "result_limits": "Only original .NET8 CLR actual Save→LoadT on seven immutable 5-Nov owner World RGDs with exact wire equality; not Android IL2CPP, user progress, actual game save path, device process restart or new native build."
 }
