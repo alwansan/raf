@@ -245,5 +245,57 @@ class PrivateOriginalUnityCaptureTests(unittest.TestCase):
             self.assertNotIn(str(self.root), err.getvalue())
 
 
+class OptInOriginalUnityWorkflowContract(unittest.TestCase):
+    """Source-only guard preventing a translated HLSL surrogate becoming reference."""
+
+    def workflow(self):
+        path = Path(__file__).resolve().parents[1] / ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+        return path.read_text(encoding="utf-8")
+
+    def test_genuine_direct_original_spirv_is_the_reference(self):
+        workflow = self.workflow()
+        self.assertIn("python3 -m scripts.t1_fft_original_trace_vulkan --project", workflow)
+        self.assertIn("--export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin", workflow)
+        self.assertIn("--export-private-evidence t1-original-derived-unity/T1VulkanCapture/original_trace_evidence.json", workflow)
+        self.assertNotIn("python3 -m scripts.t1_fft_pass0_vulkan_trace --project", workflow)
+        self.assertIn("python3 -m scripts.t1_fft_candidate_keyed_trace_audit", workflow)
+
+    def test_unity_trace_and_copyinput_are_real_private_gpu_fixture(self):
+        workflow = self.workflow()
+        self.assertIn("T1PrivateFftInputIdentityTests.cs", workflow)
+        self.assertIn("T1FftInputIdentity.compute", workflow)
+        self.assertIn("T1TracePass0.compute", workflow)
+        self.assertIn("--unity t1-original-derived-unity/T1UnityCapture/trace.bin", workflow)
+        self.assertIn("--vulkan-input-dir t1-original-derived-unity/T1VulkanCapture", workflow)
+        self.assertIn("--unity-input-dir t1-original-derived-unity/T1UnityCapture", workflow)
+
+    def test_private_join_after_real_unity_and_before_unsafe_numeric_inference(self):
+        workflow = self.workflow()
+        capture = workflow.index("python3 -m scripts.t1_fft_original_trace_vulkan")
+        imported = workflow.index("Execute exact original-derived FFT ComputeShader import and two-pass GPU dispatch")
+        joined = workflow.index("python3 -m scripts.t1_fft_private_unity_paired_capture")
+        old_compare = workflow.index("python3 -m scripts.t1_fft_readback_parity")
+        cleanup = workflow.index("Destroy ALL private shader assets")
+        self.assertLess(capture, imported)
+        self.assertLess(imported, joined)
+        self.assertLess(joined, old_compare)
+        self.assertLess(old_compare, cleanup)
+        self.assertIn("--original-evidence t1-original-derived-unity/T1VulkanCapture/original_trace_evidence.json", workflow)
+        self.assertIn("--unity-shader t1-original-derived-unity/Assets/T1TracePass0.compute", workflow)
+        self.assertIn("--manifest t1-original-derived-unity/T1PrivateActualPair.json", workflow)
+
+    def test_shared_mutex_and_push_optin_prevent_native_xapk_collision(self):
+        workflow = self.workflow()
+        self.assertIn("environment: UNITY_LICENSE", workflow)
+        self.assertIn("group: raft-native-engine-", workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[t1-paired-replay]')", workflow)
+        self.assertIn("ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385", workflow)
+        self.assertIn("CLI_SHA256: 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a", workflow)
+        self.assertIn("if: always()", workflow)
+        self.assertNotIn("upload-artifact", workflow)
+        self.assertNotIn("cancel-in-progress: true", workflow)
+
+
 if __name__ == "__main__":
     unittest.main()
