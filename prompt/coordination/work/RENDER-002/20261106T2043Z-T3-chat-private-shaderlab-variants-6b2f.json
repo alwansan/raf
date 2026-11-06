@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "original-shader48-private-shaderlab",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e4ada76d62e6e3dcb073147cd1205e94fed8a4a5",
-  "updated_at": "2026-11-06T20:43:00Z",
+  "updated_at": "2026-11-06T20:49:30Z",
   "resumed_from_sessions": [
     "20261106T2007Z-T3-chat-explicit-original-d52e",
     "20261106T2035Z-T3-scheduled-local-contract-test-f4b2"
@@ -30,5 +30,21 @@
     "No change to production game assets, .meta/GUID, native request, touch/audio/Settings, source ZIP2 branch, T3 scheduled dxbc-spv contract, or other worker files",
     "One per-variant ShaderLab candidate is NOT a single working keyword-selecting shader; fail closed on missing/unsafe variant metadata",
     "Any source-only/structural success cannot change T3 trial vote لا يحتاج or RENDER-002 NOT_READY"
-  ]
+  ],
+  "completion_evidence": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42291454379",
+    "run_sha": "f1f1587296ec48853b4ef57511291ceb2ee3c23d",
+    "job_id": 128145640222,
+    "conclusion": "success",
+    "source_only_tests_pass": 12,
+    "authentic_original_shaders_SceneOwners_verified": "4 owners + 6 scenes",
+    "original_stages_translated": 8,
+    "private_HLSL_roundtrip_stages_valid": 8,
+    "structurally_complete_private_shaderlab_variants": 4,
+    "per_variant_authored_property_default_parity": true
+  },
+  "write_scope_released": true,
+  "resource_occupied_by_CI": false,
+  "next_step": "Private isolated Unity2021 ShaderLab import/compile of exact four candidates, do not integrate fake keyword routing or native build until proven",
+  "trial_vote": "لا يحتاج"
 }
