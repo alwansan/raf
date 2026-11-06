@@ -1,0 +1,19 @@
+{
+  "id": "20261106T1750Z-T4-logger-session-grouping-trial-vote-n3f8",
+  "owner": "T4",
+  "session_id": "20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "source_only",
+  "summary": "Read owner trial-build policy and readiness: T4 already voted يحتاج in trial-20261106-r1 (scheduled T4 m7q2) based on substantial physical mouse View/epoch integration, so did NOT overwrite fresh vote nor other workers' rows or T5 header. Independent real AndroidRuntimeLog source-only negative control showed static dedup table loses first original Error after same-process Shutdown/Initialize: red CI42264862203 check298. Production 12d80d12a8 allocates new RepeatedDiagnosticMessages for each new persistent sink before publishing it, preserving full stack in each session; green CI42265007972 302/302, original local startup42265007954 and offline adapter42265008306 SUCCESS. No new APK vote rationale, native build, phone proof or game save modification.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/T_TEAM/TRIAL_BUILD_POLICY_AR.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md",
+    "https://github.com/alwansan/raf/actions/runs/42264862203",
+    "https://github.com/alwansan/raf/commit/12d80d12a85dc8e2d62a3b035abaf25d6012cc8f",
+    "https://github.com/alwansan/raf/actions/runs/42265007972",
+    "https://github.com/alwansan/raf/actions/runs/42265007954",
+    "https://github.com/alwansan/raf/actions/runs/42265008306"
+  ],
+  "at": "2026-11-06T17:50:00Z"
+}
