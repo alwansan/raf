@@ -94,7 +94,8 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/42086855402",
     "https://github.com/alwansan/raf/actions/runs/42150216417",
-    "https://github.com/alwansan/raf/actions/runs/42149781353"
+    "https://github.com/alwansan/raf/actions/runs/42149781353",
+    "https://github.com/alwansan/raf/actions/runs/42153533612"
   ],
   "remaining": [
     "نجح دخول العالم والحفظ والخروج والعودة لدى المالك على Artifact 42058825739. حافظ على هذا المسار وتحقق من المشكلات المتبقية ومنع التراجع.",
@@ -131,7 +132,8 @@
     "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3.",
     "T4 authentic original SaveAndLoad RGD world factory returned-local assignment CI42076494669 SUCCESS 67/67: exact original SHA-pinned source IL has one lexical stloc to local loaded before unique ret, immediately preceded by derived-RGD newobj; no other direct literal null, call/local/field store to that slot. Constructor adjacency is not branch execution or device-proven non-null. No actual world/user .rgd durability, local-host play, Android exit/reopen proven. LOCAL-005 remains OPEN NOT_READY 0/3.",
     "T4 2026-11-05 real CL-generated Android world RGD: CI42086855402 SUCCESS on SHA cbbc296c95b53d13354661eef3bd5212456f5364. Three distinct exact CL public git blobs (11255/310140/309863 bytes) authenticated before historical BinaryFormatter; genuinely invoked compiled original SaveAndLoad.Load<T> on .NET8 with original Assembly-CSharp and 151 sibling DLLs; 3/3 returned matching original CLR object and error category NONE, wrong input rejected. This weakens generic corrupted/incompatible RGD explanation only for those three CL inputs under .NET8; does NOT prove complete world content, Unity/Android IL2CPP, playable host, durable SaveGame or full-restart replay. CL Nov4 APK86 second session repeats StoreStats steam_api64 after MainScene/additive scenes and SaveWorld/SaveUser; new native reconstruct run42058825739 succeeded after guarded source staging but release create failed HTTP403 so no post-guard phone test. LOCAL-005 OPEN NOT_READY 0/3.",
-    "T4 owner 5Nov CL@520c seven distinct real World RGD blobs (two equal-size distinct Git hashes), exact original .NET8 CLR Load<T> run42150216417 SUCCESS 7/7 typed original decoded and returned; 12 source-free negative tests and one-byte tamper rejection. This is managed source compatibility only, NOT new Android IL2CPP/device or world-progress/reopen acceptance; retain prior owner artifact42058825739 bounded success."
+    "T4 owner 5Nov CL@520c seven distinct real World RGD blobs (two equal-size distinct Git hashes), exact original .NET8 CLR Load<T> run42150216417 SUCCESS 7/7 typed original decoded and returned; 12 source-free negative tests and one-byte tamper rejection. This is managed source compatibility only, NOT new Android IL2CPP/device or world-progress/reopen acceptance; retain prior owner artifact42058825739 bounded success.",
+    "T4 original world Save→Load real compiled CLR experiment run42153533612 SUCCESS: 7/7 exact CL 5-Nov owner world object roots assignable to authentic original RGD base; strict original private Save IL guard 7/7, real Save invocations and nonzero disposable files 7/7, original generic LoadT matching roots 7/7, cleanup 7/7; 36 safe tests. This is isolated .NET8, not Android IL2CPP, original in-game SaveGame event, data content equivalence, or new phone process relaunch; retain owner42058825739 prior bounded acceptance."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -139,5 +141,6 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-06T02:26:00Z"
+  "updated_at": "2026-11-06T02:58:00Z",
+  "latest_T4_original_world_save_roundtrip": "SOURCE_ORIGINAL_CLR_7_OF_7_SAVE_AND_GENERATED_LOAD_SUCCESS_CI42153533612_DEVICE_UNVERIFIED"
 }
