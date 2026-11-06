@@ -6,9 +6,9 @@
   "session_id": "20261106T1030Z-T5-chat-resolution-il-4b9e",
   "issue_id": "DISPLAY-003",
   "track": "Original Settings resolution callback executable IL metadata",
-  "status": "completed_source_verified_binding_unproven",
+  "status": "waiting_ci_index_checkpoint",
   "base_sha": "8c71e017853ace358bed947556dc0156e38fe5d8",
-  "updated_at": "2026-11-06T10:44:29.712Z",
+  "updated_at": "2026-11-06T10:45:53.605Z",
   "resumed_from_sessions": [
     "20261106T1020Z-T5-chat-ledger-id-compat-c8e4.md",
     "20261106T0047Z-T5-scheduled-c4e8.md"
@@ -24,7 +24,8 @@
     "prompt/coordination/clients/T5/sessions/20261106T1030Z-T5-chat-resolution-il-4b9e.md",
     "prompt/coordination/experiments/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
     "prompt/coordination/B_TEAM/events/T5/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
-    "prompt/coordination/work/DISPLAY-003/20261106T1030Z-T5-chat-resolution-il-4b9e.json"
+    "prompt/coordination/work/DISPLAY-003/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
+    ".github/workflows/raft-t5-ledger-refresh.yml"
   ],
   "hypothesis": "Original GraphicsSettingsBox IL can distinguish legacy Screen.SetResolution, UI option/listener wiring, PlayerPrefs persistence, DynamicResolution ResizeBuffers and direct Settings->DynamicResolution references. Existing lexical tests do not prove callback or persisted Android render-scale binding.",
   "constraints": "No original DLL/shader/source published in public outputs/artifacts; workflow reads immutable ZIP2 DLL at pinned SHA, publishes bounded numeric call categories only; no Unity/game runtime modifications or false render-scale claim.",
@@ -43,5 +44,7 @@
     "original_dynamic_resolution_resize_sites": 2,
     "android_resolution_selector_proven": false,
     "device_tested": false
-  }
+  },
+  "resource_key_for_index": "T5 one-shot canonical ledger refresh, no Unity, no shared T2 writer",
+  "index_reason": "Generate canonical T_TEAM summary after latest own new DISPLAY-003 event; use isolated T5 workflow and immutable report with no original assets."
 }
