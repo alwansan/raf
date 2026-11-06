@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2150Z-T3-chat-stagewrapper-19e4",
+  "issue_id": "RENDER-002",
+  "status": "completed_source_authentic_combined_stage_glslang_vulkan11_proven",
+  "base_sha": "f5996ddef53c5004dd1033059bfac291ab3e673d",
+  "implementation_sha": "ede493225d075afd238e0cdd8868a8f3bfa27c2c",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "experiment_key": "T3-Particle108-four-authenticated-private-HLSLPROGRAM-wrapper-dual-macro-8stage-glslang-vulkan11-exact-ZIP2-15964-20261106-19e4",
+  "hypothesis": "4 structurally complete private Shader48 source-authentic ShaderLab wrappers might still fail to compile both conditional HLSLPROGRAM macro branches when the vertex and fragment code is combined; test both under Vulkan1.1 glslang without Unity or game replacements.",
+  "terminal_run": {
+    "id": 42300232793,
+    "url": "https://github.com/alwansan/raf/actions/runs/42300232793",
+    "job_id": 128175794238,
+    "run_sha": "ede493225d075afd238e0cdd8868a8f3bfa27c2c",
+    "conclusion": "success"
+  },
+  "source_free_positive_negative_tests_passed": 10,
+  "inherited_private_variant_tests_passed": 14,
+  "source_authentic_evidence": {
+    "original_shader_owner_files_sha_verified": 4,
+    "original_scene_files_sha_verified": 6,
+    "private_one_pass_shaderlab_candidates": 4,
+    "combined_HLSLPROGRAM_branch_compiles_attempted": 8,
+    "combined_HLSLPROGRAM_Vulkan11_SPIRV_validated": 8
+  },
+  "changed_paths": [
+    "scripts/t3_particle108_private_stagewrapper_compile.py",
+    "tests/test_t3_particle108_private_stagewrapper_compile.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml"
+  ],
+  "constraints": {
+    "original_proprietary_HLSL_DXBC_shader_names_programs_or_SPV_published": false,
+    "raw_assets_uploaded": false,
+    "actual_Unity_Editor_ShaderLab_import_proven": false,
+    "runtime_original_keywords_material_binding_proven": false,
+    "Android_device_pixel_or_effect_parity_proven": false,
+    "game_guid_or_meta_changed": false,
+    "trial_vote": "لا يحتاج",
+    "render_issue": "OPEN_NOT_READY"
+  },
+  "next_step": "Coordinate a single bounded Unity2021.3 Editor import of four scratch private source-authentic candidates (no game insertion), followed by genuinely mapped keyword/resource ABI and device test."
+}
