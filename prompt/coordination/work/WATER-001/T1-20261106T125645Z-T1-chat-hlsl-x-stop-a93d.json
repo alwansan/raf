@@ -5,9 +5,9 @@
   "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "18b47bc7fffc66699f8f0556cd8b478f02dc01fe",
-  "updated_at": "2026-11-06T12:56:45.467Z",
+  "updated_at": "2026-11-06T13:00:11.899Z",
   "track": "HLSL translated FFT butterfly1 X exact unsupported coordinate SSA stop opcode",
   "resumed_from_sessions": [
     "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
@@ -26,7 +26,9 @@
   ],
   "experiment_key": "water001-fft-original-vs-hlsl-compiled-butterfly1-x-exact-ssa-stop-opcode-sourcepin15964ea8-v1",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add bounded stop category, test OpPhi/OpIAdd and unrecognized op sanitized, run one exact original private HLSL roundtrip CI and classify translated X."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42221700354"
+  ],
+  "result": "New source-free stop-opcode tests including OpPhi/OpIAdd/unknown sanitization and resolved-load output passed unit gate in CI 42221700354. Original ZIP2 recovery and HLSL pass are pending; do not assert original translated X stop opcode until job completes.",
+  "next_step": "After Actions 42221700354 reaches completed, inspect hlsl-roundtrip RAFT_T1_PASS0_SPIRV_PROVENANCE site1 X stop_opcode and stop_numeric_kind; update only this session+experiment+event and close scope. No GPU build or source shader rewrite."
 }
