@@ -6,7 +6,7 @@
   "session_id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
   "issue_id": "RENDER-002",
   "track": "Private original Particle108 roundtrip VS vector-width changes cross-tabulated by whether the altered output is actually read by Fragment",
-  "status": "active",
+  "status": "completed",
   "base_sha": "87ccb82b8e82517f3314583963804aae3fdd56de",
   "resumed_from_sessions": [
     "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
@@ -28,5 +28,29 @@
     "20261106T1023Z-T3-chat-roundtrip-width-5e0d"
   ],
   "approach": "Add count-only 2x2 width/Fragment consumption cross-tab; strict source-free controls and assertions in own dedicated SHA-pinned CI; no original game asset source or raw semantics logs",
-  "updated_at": "2026-11-06T10:33:54.976Z"
+  "updated_at": "2026-11-06T10:38:46.689Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42203844803"
+  ],
+  "result": {
+    "run_id": 42203844803,
+    "job_id": 127845429843,
+    "conclusion": "success",
+    "source_free_tests_passed": 18,
+    "original_source_owners_SHA_verified": 4,
+    "original_scenes_SHA_verified": 6,
+    "source_VSFS_pairs_linked": 4,
+    "roundtrip_VSFS_pairs_linked": 2,
+    "consumed_vertex_width_narrowing": 2,
+    "consumed_vertex_width_widening": 0,
+    "unconsumed_vertex_width_narrowing": 0,
+    "unconsumed_vertex_width_widening": 2,
+    "semantics_identity_proven": false,
+    "Unity_Android_Adreno_pixels_verified": false,
+    "game_assets_modified": false
+  },
+  "code_commit": "e3f3d12b8a331cd39349ca604b426d3e848522a1",
+  "test_commit": "7fc6df9b93aef285cb4a262fd6147ba14cedb9d9",
+  "ci_commit": "3a30a95838cc92dbc63f3d170ee6b31688f953d7",
+  "next_step": "Private source-SPIRV-output-to-generated-HLSL-field-to-roundtrip-SPIRV location/type identity diagnostic; distinguish SPIRV-Cross emitter vs glslang compiler; no game edits until proof."
 }
