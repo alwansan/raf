@@ -22,6 +22,7 @@ from scripts import t3_same_export_material_texenv as common
 SOURCE_STATUS=original.STATUS
 STATUS_MATCH="SAME_INSTANCE_SOURCE_PARTICLE108_5M_3T_10_TEXTURE_PPTR_EXACT"
 STATUS_MISMATCH="SAME_INSTANCE_SOURCE_PARTICLE108_SCOPED_EXPORT_MISMATCH_OR_INCOMPLETE"
+STATUS_NONEXPORTABLE_MATCH="SAME_INSTANCE_SOURCE_PARTICLE108_NONEXPORTABLE_CONTAINER_POINTER_PARITY"
 EXPECTED_MATERIALS=5
 EXPECTED_TEXTURES=3
 EXPECTED_SLOTS=10
@@ -46,6 +47,11 @@ FIELDS=(
     "selected_missing_texture_skipped_nonexportable_collection",
     "selected_missing_texture_absent_all_export_collections",
     "selected_missing_texture_reason_unclassified",
+    "selected_nonexportable_original_texture_source_pointer_captured",
+    "selected_nonexportable_original_texture_source_pointer_unavailable",
+    "selected_nonexportable_material_pointer_matches",
+    "selected_nonexportable_material_pointer_mismatches",
+    "selected_nonexportable_material_pointer_unavailable",
 )
 PRIVACY_FALSE="private_original_export_shader_material_texture_labels_guids_disclosed"
 
@@ -120,6 +126,7 @@ def assess(source_materials:dict,source_texture_targets:dict,
     counts["selected_material21_missing_export_trace"]=EXPECTED_MATERIALS-len(selected_materials)
     counts["selected_texture2d28_missing_export_trace"]=EXPECTED_TEXTURES-len(selected_textures)
     missing=set(source_texture_targets)-set(selected_textures)
+    private_nonexportable_pointers={}  # keys and values NEVER serialized.
     if "nonexportable_texture_sources" in b02:
         candidates=b02["nonexportable_texture_sources"]
         if type(candidates) is not list:
@@ -129,7 +136,26 @@ def assess(source_materials:dict,source_texture_targets:dict,
             # PRIVATE: use only source identity, never expose source IDs/owner.
             src=b05._trace_source(candidate)
             if src in source_texture_targets:
+                if src in skipped:
+                    raise ValueError("duplicate_selected_private_nonexportable_Texture2D_source")
                 skipped.add(src)
+                if "container_export_pointer_captured" in candidate:
+                    recorded=candidate["container_export_pointer_captured"]
+                    val=candidate.get("container_export")
+                    if type(recorded) is not bool or (
+                        (recorded and type(val) is not dict)
+                        or (not recorded and val is not None)):
+                        raise ValueError("invalid_private_nonexportable_container_pointer_status")
+                    if recorded:
+                        if set(val)!={"file_id","guid","type"}:
+                            raise ValueError("invalid_private_nonexportable_container_pointer_fields")
+                        ptr=b05._export_pointer({"fileID":val["file_id"],
+                                                 "guid":val["guid"],"type":val["type"]})
+                        private_nonexportable_pointers[src]=ptr
+                        counts["selected_nonexportable_original_texture_source_pointer_captured"]+=1
+                    else:
+                        private_nonexportable_pointers[src]=None
+                        counts["selected_nonexportable_original_texture_source_pointer_unavailable"]+=1
         if skipped & set(selected_textures):
             raise ValueError("selected_B02_texture_both_exportable_and_nonexportable")
         counts["selected_missing_texture_skipped_nonexportable_collection"]=len(
@@ -175,7 +201,18 @@ def assess(source_materials:dict,source_texture_targets:dict,
             else:
                 expected=selected_textures.get((src[0],src_ptr[1]))
                 if expected is None:
-                    counts["selected_source_texenv_target_unresolved"]+=1
+                    source_key=(src[0],src_ptr[1])
+                    if source_key in private_nonexportable_pointers:
+                        builtin=private_nonexportable_pointers[source_key]
+                        if builtin is None:
+                            counts["selected_nonexportable_material_pointer_unavailable"]+=1
+                            counts["selected_source_texenv_target_unresolved"]+=1
+                        elif builtin==dst_ptr:
+                            counts["selected_nonexportable_material_pointer_matches"]+=1
+                        else:
+                            counts["selected_nonexportable_material_pointer_mismatches"]+=1
+                    else:
+                        counts["selected_source_texenv_target_unresolved"]+=1
                 elif expected==dst_ptr:
                     counts["selected_exact_material_texenv_pointer_matches"]+=1
                 else:
@@ -200,7 +237,37 @@ def assess(source_materials:dict,source_texture_targets:dict,
            and counts["selected_exact_material_texenv_pointer_matches"]==EXPECTED_SLOTS
            and counts["selected_uv_scale_offset_matches"]==EXPECTED_SLOTS
            and not any(counts[k] for k in FIELDS[5:15]+FIELDS[17:]))
-    out["status"]=STATUS_MATCH if exact else STATUS_MISMATCH
+    # Only a genuine same-instance class28 nonexportable source pointer and
+    # all its original Material slots may upgrade the *bounded export* verdict.
+    # Never reinterpret this as an Android runtime or shader pixel test.
+    nonexportable_exact=(
+        counts["traced_selected_material21"]==EXPECTED_MATERIALS
+        and counts["traced_selected_texture2d28"]==EXPECTED_TEXTURES-1
+        and counts["selected_missing_texture_skipped_nonexportable_collection"]==1
+        and counts["selected_nonexportable_original_texture_source_pointer_captured"]==1
+        and counts["selected_exact_material_texenv_pointer_matches"]==EXPECTED_SLOTS-1
+        and counts["selected_nonexportable_material_pointer_matches"]==1
+        and counts["selected_uv_scale_offset_matches"]==EXPECTED_SLOTS
+        and counts["selected_missing_texture_absent_all_export_collections"]==0
+        and counts["selected_missing_texture_reason_unclassified"]==0
+        and not any(counts[k] for k in (
+            "selected_material21_missing_export_trace",
+            "selected_material21_export_guid_collisions",
+            "selected_texture2d28_export_guid_collisions",
+            "selected_material21_without_exported_YAML",
+            "selected_material21_source_slots_missing_after_export",
+            "selected_material21_new_texenv_slots_after_export",
+            "selected_source_nonnull_texture_to_null",
+            "selected_source_texture_to_other_exported_target",
+            "selected_source_texenv_target_unresolved",
+            "selected_uv_missing_or_mismatched",
+            "selected_nonexportable_original_texture_source_pointer_unavailable",
+            "selected_nonexportable_material_pointer_mismatches",
+            "selected_nonexportable_material_pointer_unavailable",
+        )))
+    out["status"]=(STATUS_MATCH if exact else
+                   STATUS_NONEXPORTABLE_MATCH if nonexportable_exact else
+                   STATUS_MISMATCH)
     return out
 
 
@@ -249,7 +316,7 @@ def main(argv=None):
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
     print("T3_PARTICLE108_SAMEINSTANCE_EXPORT "+json.dumps(result,sort_keys=True))
-    return 0 if result["status"] in (STATUS_MATCH,STATUS_MISMATCH) else 2
+    return 0 if result["status"] in (STATUS_MATCH,STATUS_NONEXPORTABLE_MATCH,STATUS_MISMATCH) else 2
 
 
 if __name__=="__main__":
