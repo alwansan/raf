@@ -219,8 +219,8 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
         swapped={
             "entryPoints":remapped["entryPoints"],
             "separate_samplers":[
-                {"id":10,"set":1,"binding":1},
-                {"id":6,"set":2,"binding":1}],
+                {"id":6,"set":2,"binding":1},
+                {"id":10,"set":1,"binding":1}],
             "ubos":remapped["ubos"],
         }
         with self.assertRaisesRegex(ValueError,
