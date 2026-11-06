@@ -63,6 +63,14 @@ COUNTERS=(
     "vertex_changed_output_locations_not_consumed_by_fragment",
     "vertex_changed_output_consumed_fragment_type_equal_source",
     "vertex_changed_output_consumed_fragment_type_equal_roundtrip",
+    "vertex_changed_output_consumed_width_narrowing",
+    "vertex_changed_output_consumed_width_widening",
+    "vertex_changed_output_consumed_same_width_base_kind_changed",
+    "vertex_changed_output_consumed_unsupported",
+    "vertex_changed_output_unconsumed_width_narrowing",
+    "vertex_changed_output_unconsumed_width_widening",
+    "vertex_changed_output_unconsumed_same_width_base_kind_changed",
+    "vertex_changed_output_unconsumed_unsupported",
 )
 
 def _stage(stage):
@@ -99,17 +107,25 @@ def classify_vertex_output_type_shape(source_vertex,round_vertex,round_fragment)
             counts["vertex_changed_output_consumed_fragment_type_equal_roundtrip"]+=int(f[loc]==r[loc])
         src_type=_type(s[loc])
         rt_type=_type(r[loc])
+        direction="unsupported"
         if src_type is None or rt_type is None:
             counts["vertex_changed_output_reflection_type_unsupported"]+=1
-            continue
-        src_kind,src_width=src_type
-        rt_kind,rt_width=rt_type
-        if src_width>rt_width:
-            counts["vertex_changed_output_reflection_type_width_narrowing"]+=1
-        elif src_width<rt_width:
-            counts["vertex_changed_output_reflection_type_width_widening"]+=1
-        elif src_kind!=rt_kind:
-            counts["vertex_changed_output_reflection_type_same_width_base_kind_changed"]+=1
+        else:
+            src_kind,src_width=src_type
+            rt_kind,rt_width=rt_type
+            if src_width>rt_width:
+                direction="width_narrowing"
+                counts["vertex_changed_output_reflection_type_width_narrowing"]+=1
+            elif src_width<rt_width:
+                direction="width_widening"
+                counts["vertex_changed_output_reflection_type_width_widening"]+=1
+            elif src_kind!=rt_kind:
+                direction="same_width_base_kind_changed"
+                counts["vertex_changed_output_reflection_type_same_width_base_kind_changed"]+=1
+            else:
+                raise ValueError("ambiguous_changed_reflection_type_width_or_kind")
+        counts["vertex_changed_output_"+("consumed" if consumed else "unconsumed")+
+               "_"+direction]+=1
     return {key:int(counts[key]) for key in (
         "vertex_same_location_type_changes",
         "vertex_changed_output_reflection_type_width_narrowing",
@@ -119,7 +135,15 @@ def classify_vertex_output_type_shape(source_vertex,round_vertex,round_fragment)
         "vertex_changed_output_locations_consumed_by_fragment",
         "vertex_changed_output_locations_not_consumed_by_fragment",
         "vertex_changed_output_consumed_fragment_type_equal_source",
-        "vertex_changed_output_consumed_fragment_type_equal_roundtrip")}
+        "vertex_changed_output_consumed_fragment_type_equal_roundtrip",
+        "vertex_changed_output_consumed_width_narrowing",
+        "vertex_changed_output_consumed_width_widening",
+        "vertex_changed_output_consumed_same_width_base_kind_changed",
+        "vertex_changed_output_consumed_unsupported",
+        "vertex_changed_output_unconsumed_width_narrowing",
+        "vertex_changed_output_unconsumed_width_widening",
+        "vertex_changed_output_unconsumed_same_width_base_kind_changed",
+        "vertex_changed_output_unconsumed_unsupported")}
 
 def classify_pair(vsource,fsource,vround,fround,original_fragment):
     """Bounded structural counts, no private reflection values returned."""
