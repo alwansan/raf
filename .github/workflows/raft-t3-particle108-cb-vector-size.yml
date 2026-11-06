@@ -1,0 +1,123 @@
+name: T3 RENDER-002 original Particle108 CB 16-byte vector declaration sizes
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - prompt/coordination/requests/t3-original-cb-size-20261106-9c21.trigger
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-original-cb-vector-size-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-DXBC-eight-stage-cb-vector-sizes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free Shader Model 4/5 CB 16-byte vector count and unknown semantics
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_cb_size_semantics.py tests/test_t3_particle108_cb_size_semantics.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_cb_size_semantics.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Restore only four original SHA-pinned shader owner data files
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate exactly six original Renderer scenes and four asset owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path("zip2-source")
+          out=Path(os.environ["RUNNER_TEMP"])/"t3-original-private-CB-VECTORS"
+          pins={"Raft_Data/"+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED}
+          result=stage(source,out,pins)
+          assert len(result["owners"])==4 and result["verified_bytes"]==269007288 and not result["lfs_used"]
+          for name,pin in PIN.items():
+              file=source/"Raft/Raft_Data"/name
+              verify_source(file,pin)
+              dest=out/"Raft_Data"/name
+              with file.open("rb") as src,dest.open("xb") as dst:
+                  while buf:=src.read(1024*1024):dst.write(buf)
+              verify_source(dest,pin)
+          print("T3_ORIGINAL_DXBC_RDEF_SIX_SCENES_FOUR_OWNERS_SHA=true")
+          PY
+      - name: Classify original DXBC CB first slot versus second index 16-byte vector size
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          timeout 540s python3 -m scripts.t3_particle108_cb_size_semantics \
+            --original "$RUNNER_TEMP/t3-original-private-CB-VECTORS" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-particle108-cb-vectors-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-particle108-cb-vectors-safe.json").read_text())
+          assert d["status"]=="T3_ORIGINAL_SM4_SM5_CB_DECL_SIZE16_CLASSIFIED"
+          assert d["source_original_six_scenes_SHA_authenticated"] is True
+          assert d["source_original_four_owner_SHA_authenticated"] is True
+          assert d["source_particle_renderer_material_slots"]==108
+          assert d["source_original_keyword_pairs"]==4
+          c=d["counts"]
+          assert c["original_CB_declaration_stage_programs"]==8
+          assert c["original_CB_16byte_vector_size_declarations"]==24
+          assert c["original_CB_zero_unknown_size_declarations"]+c["original_CB_nonzero_known_size_declarations"]==24
+          assert (c.get("source_original_SM_5_0_stages",0)+c.get("source_original_SM_4_0_stages",0)+
+                  c.get("source_original_SM_4_1_stages",0))==8
+          assert 1<=c["original_VS_CB_full_profile_distinct"]<=4
+          assert 1<=c["original_PS_CB_full_profile_distinct"]<=4
+          assert d["CB_second_index_semantics"]=="16_BYTE_VECTOR_COUNT"
+          assert d["CB_zero_size_means_UNKNOWN"] is True
+          assert d["private_CB_register_ids_and_sizes_published"] is False
+          assert d["original_SPIRV_descriptor_parity_or_pixel_fix_proven"] is False
+          print("T3_SOURCE_ORIGINAL_CB_VECTOR_COUNT_SEMANTICS_VALID=true")
+          PY
+      - name: Publish privacy-safe CB declaration size profiles and no raw original data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle108-DXBC-CB-VECTORS-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-particle108-cb-vectors-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
