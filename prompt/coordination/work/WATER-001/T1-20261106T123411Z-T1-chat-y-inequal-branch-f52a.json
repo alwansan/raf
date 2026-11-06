@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "source-original FFT butterfly1 Y OpINotEqual predicate operand origin and branch suffix read-gate/last writer classification",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5d462bbbee3d2ddb8352203f60646a43679659d9",
-  "updated_at": "2026-11-06T12:34:12.252Z",
+  "updated_at": "2026-11-06T12:40:28.285Z",
   "resumed_from_sessions": [
     "20261106T122023Z-T1-chat-y-guard-paths-d71e",
     "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
@@ -26,7 +26,10 @@
   ],
   "experiment_key": "water001-slot0-original-site1y-inequal-operandtyped-branch-suffix-gating-v1-sha15964ea8",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add original SPIR-V private predicate source + successor suffix explorer with controls for true/false read gating, branch merges, loops, unknown alias, compare operand numeric type. Run single CI, checkpoint and release scope."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42219209890",
+    "https://github.com/alwansan/raf/actions/runs/42219435992"
+  ],
+  "result": "First source-free CI 42219209890 failed 1/14 synthetic cases before private source recovery: malformed SPIR-V conditional in same block returned KeyError for nonexistent successor; source now rejects a mid-block terminator or missing target explicitly (3dd79472). Validated new workflow run fc3598e queued.",
+  "next_step": "Read second CI 42219435992, then only sanitized RAFT_T1_FFT_Y_INEQUAL_OPERANDS marker and log 14/14 tests. If source original completes, record predicate operand kind and whether branch gates read versus chooses between writers."
 }
