@@ -5,16 +5,16 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "type": "integration",
-  "at": "2026-11-06T18:35:55Z",
-  "summary": "T5 fixed read-only installed OBB Unity ZIP probe's empty duplicate-name blind spot in both alias orders; source+6 synthetic assertions committed at 4b787100; scoped .NET8 CI42272184563 running at first record. No device proof or native build requested.",
+  "at": "2026-11-06T18:37:00Z",
+  "summary": "Exact immutable .NET8 CI42272184563 SUCCESS on T5 4b787100: 35/35 synthetic OBB probe checks (six new Unity zero-length alias rejection checks), Unity copy guard PASS, platform compile 0 errors (6 existing warnings), no phone original OBB verification or new APK request.",
   "evidence": [
     "https://github.com/alwansan/raf/commit/4b78710027607801a1620af29c65f04b45b45fa1",
     "https://github.com/alwansan/raf/actions/runs/42272184563",
     "prompt/coordination/experiments/T5/20261106T1834Z-T5-chat-empty-unity-alias-73e9.json"
   ],
   "limits": [
-    "synthetic ZIP tests only, CI result pending at first checkpoint",
-    "actual Android installed-version OBB, Unity render, water and phone FPS unverified",
-    "trial 20261106-r1 not 5/5, no native request"
+    "source-only diagnostic of exact duplicate Unity ZIP path; no real installed OBB sampled on phone",
+    "Unity engine GPU water, shaders, colors, FMOD audio, world gameplay and FPS unverified",
+    "trial round1 lacks 5/5 vote, no native build; full readiness 0/3"
   ]
 }
