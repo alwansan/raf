@@ -113,6 +113,13 @@ jobs:
           assert c["original_fragment_missing_vertex_location_records"]==0
           assert c["original_compiled_active_fragment_inputs_source_numeric_absent"]==0
           assert c["original_compiled_unread_fragment_inputs_source_numeric_absent"]==2
+          assert c["vertex_same_location_type_changes"]==4
+          assert (c["vertex_changed_output_locations_consumed_by_fragment"] +
+                  c["vertex_changed_output_locations_not_consumed_by_fragment"])==4
+          assert (c["vertex_changed_output_reflection_type_width_narrowing"] +
+                  c["vertex_changed_output_reflection_type_width_widening"] +
+                  c["vertex_changed_output_reflection_type_same_width_base_kind_changed"] +
+                  c["vertex_changed_output_reflection_type_unsupported"])==4
           assert d["original_semantic_to_SPIRV_location_identity_proven"] is False
           assert d["roundtrip_HLSL_variable_semantic_identity_proven"] is False
           assert d["native_Unity_Android_Adreno_pixels_verified"] is False
