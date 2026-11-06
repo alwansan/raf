@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T123411Z-T1-chat-y-inequal-branch-f52a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "source-original FFT butterfly1 Y OpINotEqual predicate operand origin and branch suffix read-gate/last writer classification",
+  "status": "active",
+  "base_sha": "5d462bbbee3d2ddb8352203f60646a43679659d9",
+  "updated_at": "2026-11-06T12:34:12.252Z",
+  "resumed_from_sessions": [
+    "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+    "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2"
+  ],
+  "approach": "Under pinned original private slot0 SPIR-V, classify type and SSA producer opcode of OpINotEqual operands; for true/false branch successor, statically see if branch gates target load or distinguishes later last scalar writer candidates. All results aggregate and branch IDs anonymous; no original constants. Strict bounded structural path suffix with unknown state on unresolved writes.",
+  "hypothesis": "Original OpINotEqual may gate butterfly1 Y fetch or select between float-constant and signed-bitcarrier source. Distinguishing successor suffix outcomes narrows whether HLSL lowering mishandles conditional routing vs coordinate arithmetic; only safe type/opcode categories output.",
+  "intended_files": [
+    "scripts/t1_fft_site1_y_inequal_source.py",
+    "tests/test_t1_fft_site1_y_inequal_source.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T123411Z-T1-chat-y-inequal-branch-f52a.md",
+    "prompt/coordination/experiments/T1/20261106T123411Z-T1-chat-y-inequal-branch-f52a.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T123411Z-T1-chat-y-inequal-branch-f52a.json"
+  ],
+  "experiment_key": "water001-slot0-original-site1y-inequal-operandtyped-branch-suffix-gating-v1-sha15964ea8",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add original SPIR-V private predicate source + successor suffix explorer with controls for true/false read gating, branch merges, loops, unknown alias, compare operand numeric type. Run single CI, checkpoint and release scope."
+}
