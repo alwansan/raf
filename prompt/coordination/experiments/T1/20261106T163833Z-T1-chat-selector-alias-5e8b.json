@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T163833Z-T1-chat-selector-alias-5e8b",
+  "issue_id": "WATER-001",
+  "hypothesis": "Two different original compiled FFT slots declared with the same staged authored Unity kernel name and the same enabled keyword set are indistinguishable selectors, invalidating a claimed count of 20 unique nominal configs.",
+  "source_commit": "4b8b1552a9d84b9d2683a4a3230a3183f046a861",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 python3",
+    "unity": "not executed in this scope"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t1_stage_unity_fft_kernel_probe.py",
+    "python3 -m unittest discover -s tests -p test_t1_stage_unity_fft_kernel_probe.py -v"
+  ],
+  "negative_controls": [
+    "Different bank/original compiled slot with same kernel and identical keyword list rejected",
+    "Same indistinguishable selector with keyword ordering reversed rejected",
+    "Original 20 row positive synthetic fixture with 2 kernel names and distinct bank/resolution keyword sets still accepted",
+    "Original hash and declared original-unity mapping assertion remained fail-closed"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-kernel-probe.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42255094227",
+  "artifact_urls": [],
+  "budget": "6min source-only GitHub CI, no original game assets, no Unity APK/GPU dispatch",
+  "status": "completed_source_only_alias_guard",
+  "observed_result": {
+    "success": true,
+    "head_sha": "4b8b1552a9d84b9d2683a4a3230a3183f046a861",
+    "job_id": 128020186830,
+    "source_only_synthetic_tests_passed": 8,
+    "source_only_synthetic_tests_total": 8,
+    "compiled_source_python": true,
+    "editor_csharp_compiled": false,
+    "original_kernel_mapping_proven": false,
+    "android_adreno_water_proven": false,
+    "transient_failed_run": 42255076430,
+    "transient_cancelled_pending_run": 42255086500
+  },
+  "rejected_hypotheses": [
+    "Previous Unity staging selector validation already rejected distinct compiled slots with the same kernel and keyword set: not true before this fix"
+  ],
+  "limitations": [
+    "Canonical keyword-set selection identity is necessary but not sufficient: keyword pragmas/actual Unity compiled variants not authenticated",
+    "C# Editor code was not compiled in this source-only workflow",
+    "No original/candidate same-input invocation pair or numeric comparison",
+    "No actual Android water/shader device validation"
+  ],
+  "integration_commit": "4b8b1552a9d84b9d2683a4a3230a3183f046a861",
+  "next_step": "Once concurrent original-vs-HLSL paired GPU trace is complete, inspect signed private input/dispatch attestation and first true numeric divergence; separately validate original authored multi-variant keyword behavior in real Unity Editor with source-authenticated fixture."
+}
