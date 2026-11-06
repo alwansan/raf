@@ -1,0 +1,45 @@
+name: T3 RENDER-002 source-only SPIRV debug candidates + scheduled DXBC contract validator
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t3_particle108_spirv_opname_candidates.py
+      - scripts/t3_particle108_spv_named_original_probe.py
+      - scripts/t3_dxbc_spirv_contract_join.py
+      - tests/test_t3_dxbc_spirv_contract_join.py
+      - .github/workflows/raft-t3-particle108-spv-named-original-manual.yml
+      - .github/workflows/raft-t3-shader-candidate-source-only.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-source-only-spv-candidate-contract-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-free-gates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Parse candidate translator and original adapter code syntax
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_spirv_opname_candidates.py scripts/t3_particle108_spv_named_original_probe.py scripts/t3_particle108_dcl_spv_family_census.py scripts/t3_dxbc_spirv_contract_join.py
+      - name: Check original-stage resource candidate/descriptor tests synthetic only
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_dcl_spv_family_census.py' -v
+      - name: Validate scheduled T3 exact DXBC SPIRV provenance checker (no edits)
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_dxbc_spirv_contract_join.py' -v
