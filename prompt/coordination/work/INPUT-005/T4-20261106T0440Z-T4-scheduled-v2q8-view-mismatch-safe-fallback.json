@@ -1,0 +1,22 @@
+{
+  "session_id": "20261106T0440Z-T4-scheduled-v2q8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "de853ecee9fd56e450999b351f4b62977b59d78f",
+  "updated_at": "2026-11-06T04:40:00Z",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "prompt/coordination/clients/T4/sessions/20261106T0440Z-T4-scheduled-v2q8.md",
+    "prompt/coordination/work/INPUT-005/T4-20261106T0440Z-T4-scheduled-v2q8-view-mismatch-safe-fallback.json"
+  ],
+  "hypothesis": "Probe of different focused Android View must not enable captured-axis override; current probe only logs mismatch but can accept hasPointerCapture from unrelated View.",
+  "experiment_key": "T4-view-identity-probe-mismatch-safe-fallback-source-contract-v1",
+  "resource_key": null,
+  "resumed_from_sessions": [
+    "20261106T0336Z-T4-scheduled-m7q2",
+    "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8"
+  ],
+  "owner_device_run": 42058825739
+}
