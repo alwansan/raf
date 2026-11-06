@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "SHA-original Foam Shader.Find Shader result typed consumer and original managed field reads",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d00887f1f03f964ec7bf9c19bbabdc1f48c27bc3",
-  "updated_at": "2026-11-06T19:23:00Z",
+  "updated_at": "2026-11-06T19:34:00Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4.json",
     "prompt/coordination/clients/T2/sessions/20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4.md",
@@ -32,7 +32,41 @@
   "related_work": [
     "prompt/coordination/work/WATER-001/T2-20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source-only C# typed IL direct-return consumer analyzer on original Shader.Find call, independent PIN source validation and exact count-only report. No Android build or shared-file edits."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42280001282",
+    "https://github.com/alwansan/raf/actions/runs/42280404780",
+    "https://github.com/alwansan/raf/actions/runs/42280450929",
+    "https://github.com/alwansan/raf/actions/runs/42280502421"
+  ],
+  "result": {
+    "verified_source_commit": "4bc616aab744f00111581916b804699b47c87b1c",
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "final_run_id": 42280502421,
+    "final_job_id": 128107906474,
+    "final_run_conclusion": "success",
+    "python_synthetic_report_controls": 21,
+    "original_shader_name_synthetic_controls": 6,
+    "cecil_synthetic_selftest": "pass",
+    "SHA_original_shader_owner_bytes": 115978112,
+    "SHA_original_managed_dll_bytes": 3211776,
+    "original_methods_with_compiled_body": 19118,
+    "original_IL_instructions": 491490,
+    "original_Shader_Find_calls_typed": 81,
+    "Foam_original_name_direct_find_calls": 1,
+    "original_Find_return_consumed_by_instance_shader_field": 1,
+    "field_exact_managed_definition_resolved": 1,
+    "field_read_instructions_original": 2,
+    "distinct_methods_reading_original_field": 2,
+    "field_reader_methods_with_Material_Shader_ctor": 1,
+    "exact_field_load_direct_Material_Shader_ctor_argument": 1,
+    "final_safe_artifact_id": 13535172390,
+    "final_safe_artifact_size": 723,
+    "final_safe_artifact_zip_digest": "sha256:ae85a4cbbfdf830e3a3f77d97faba7021bd99f2c30e2c1f9fe6026265314304d",
+    "Unity_Shader_Find_execution_verified": false,
+    "Material_renderer_binding_verified": false,
+    "original_Foam_CB0_upload_verified": false,
+    "Android_water_pixels_verified": false
+  },
+  "next_step": "Trace original new Material(Shader) return via original typed field/property and renderer assignment; join the owning managed class against true 427 original scene-referenced TypeDefs; then actual Unity/Android water test, no inferred runtime CB0/pixels.",
+  "integration_commit": "4bc616aab744f00111581916b804699b47c87b1c"
 }

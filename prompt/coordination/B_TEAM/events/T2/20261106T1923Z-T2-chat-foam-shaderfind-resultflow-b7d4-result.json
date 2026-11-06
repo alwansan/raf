@@ -1,0 +1,17 @@
+{
+  "id": "T2-20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4-shaderfind-return-material-argument",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4",
+  "issue_id": "WATER-001",
+  "type": "original_source_evidence",
+  "summary": "SHA-authentic original Foam Shader.Find literal call result goes into exact original instance Shader FieldDefinition, 2 field reads across 2 methods, and 1 exact same-field ldfld directly supplies newobj Material(Shader). Original 115978112B shader owner + 3211776B managed DLL SHA-authenticated; final CI42280502421 SUCCESS with 21+6 synthetic tests and Cecil selftest. No actual Renderer/CB0/Android water proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42280502421",
+    "docs/T2_ORIGINAL_FOAM_SHADERFIND_RESULT_FLOW_2026-11-06.md"
+  ],
+  "runtime_verified": false,
+  "Android_pixels_verified": false,
+  "game_ready": false,
+  "at": "2026-11-06T19:34:00Z"
+}
