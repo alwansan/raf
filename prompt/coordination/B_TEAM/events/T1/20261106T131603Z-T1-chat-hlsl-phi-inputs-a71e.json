@@ -1,0 +1,15 @@
+{
+  "id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+  "owner": "T1",
+  "session_id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T13:27:53.537Z",
+  "summary": "Authentic original SHA-pinned FFT HLSL-roundtrip butterfly1 X OpPhi is a float32 vector with exactly two selected-X component incoming paths. First immediate OpCompositeInsert traces through two bitcasts (uint32_bits_to_sint32, sint32_bits_to_float32) to uint32_vector OpLoad Private. Second OpCompositeInsert traces to nested float32-vector OpPhi. Both predecessor blocks terminate in unconditional OpBranch. Original CI 42225317476 SUCCESS and 18/18 synthetic tests. Two earlier private stage failures isolated scalar-only analyzer assumption; 42224927222 safe diagnostic. Runtime branch, numeric Vulkan↔Unity parity and phone water remain unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42224533880",
+    "https://github.com/alwansan/raf/actions/runs/42224927222",
+    "https://github.com/alwansan/raf/actions/runs/42225317476",
+    "https://github.com/alwansan/raf/commit/6fc10ec699659167bd4a084c34839a2a3e519827"
+  ]
+}
