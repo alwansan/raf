@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1840Z-T4-scheduled-h8k3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "baseline_sha": "9aeebcd42d427080257a348e38ab6d249692c743",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261106T1840Z-T4-scheduled-h8k3-mouse-evidence-contract.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1840Z-T4-scheduled-h8k3.md"
+  ],
+  "experiment_key": "T4-physical-mouse-device-evidence-contract-e9c358ed-vs-postfix-d234b10e-20261106",
+  "resource_key": null,
+  "hypothesis": "Old CL from e9c358ed cannot validate post-build Android pointer capture release diagnostics; check provenance and build vote before any CI duplication.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1736Z-T4-scheduled-m7q2.md"
+  ],
+  "updated_at": "2026-11-06T18:40:00Z",
+  "next_step": "Check post-fix signed APK/OBB provenance and capture on actual device; no duplicate Unity build without T5 consensus."
+}
