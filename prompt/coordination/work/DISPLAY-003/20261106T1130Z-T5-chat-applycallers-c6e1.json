@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1130Z-T5-chat-applycallers-c6e1",
+  "issue_id": "DISPLAY-003",
+  "track": "Original GraphicsSettingsBox ApplyCurrentResolutionAndFullscreenMode exact caller provenance",
+  "status": "active",
+  "base_sha": "53c1bda9a7982f07d2cce70b9f8bffd9215716b7",
+  "updated_at": "2026-11-06T11:27:15.768Z",
+  "resumed_from_sessions": [
+    "20261106T1104Z-T5-chat-resolution-delegate-6a2f.md",
+    "20261106T1046Z-T5-scheduled-pair-success-q6f8.md"
+  ],
+  "experiment_key": "T5-ZIP2-15964ea8-original-DLL-0a6f05-applycurrentresolution-3calls-owner-IL-v1",
+  "resource_key": "immutable ZIP2@15964ea8/Assembly-CSharp.dll exactly 3211776B + Mono.Cecil isolated read-only",
+  "hypothesis": "Three direct ApplyCurrentResolutionAndFullscreenMode calls can be assigned to containing methods and classified by signature + built-in UI/serialization/prefs/read operations without claiming persisted Android render-scale callback; external callers separately counted.",
+  "intended_files": [
+    "android-port/Experiments/T5/ResolutionApplyProbe/ResolutionApplyProbe.csproj",
+    "android-port/Experiments/T5/ResolutionApplyProbe/Program.cs",
+    "scripts/t5_validate_resolution_apply_callers.py",
+    "tests/test_t5_validate_resolution_apply_callers.py",
+    ".github/workflows/raft-t5-original-resolution-apply-callers.yml",
+    "prompt/coordination/work/DISPLAY-003/20261106T1130Z-T5-chat-applycallers-c6e1.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1130Z-T5-chat-applycallers-c6e1.md",
+    "prompt/coordination/experiments/T5/20261106T1130Z-T5-chat-applycallers-c6e1.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1130Z-T5-chat-applycallers-c6e1.json",
+    "docs/T5_ORIGINAL_RESOLUTION_APPLY_CALLERS_2026-11-06.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
+    "prompt/coordination/work/DISPLAY-003/20261106T1104Z-T5-chat-resolution-delegate-6a2f.json"
+  ],
+  "overlap": "Existing T5 scheduled work is APK/OBB CI, not this IL tool. T1 FFT, T2 Foam, T3 particles, T4 input/world read-only unaffected; no active competing CI.",
+  "rules": [
+    "No new native Unity build, LFS, original source/IL assets publication.",
+    "No runtime Settings changes or second UI menu absent callback and persistence proof.",
+    "Reject exact source/ABI drift, cap graph/report; preserve .meta and GUIDs.",
+    "CI source only, never claim phone success."
+  ],
+  "next_step": "Create independent original IL caller census with fake-UI and callback negative controls and run source-only pinned runner; document session/experiment/event."
+}
