@@ -73,6 +73,13 @@ def _zip_structure(path: Path, apk: bool) -> int:
                 if not _safe_zip_name(info.filename) or info.filename in names:
                     raise ValueError("Unsafe or duplicate ZIP member")
                 names.add(info.filename)
+                # ZIP external attributes can mark a member as a Unix symlink even
+                # when its name looks safe. Never accept such a delivery payload.
+                unix_mode = (info.external_attr >> 16) & 0xffff
+                if info.create_system == 3 and (unix_mode & 0o170000) == 0o120000:
+                    raise ValueError("ZIP member is a symbolic link")
+                if info.flag_bits & 0x1:
+                    raise ValueError("Encrypted ZIP member is not a usable Unity asset")
                 if not info.is_dir() and info.file_size > 0:
                     has_asset |= info.filename.startswith(
                         "assets/bin/Data/" if apk else "assets/")
