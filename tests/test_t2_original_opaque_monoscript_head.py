@@ -53,7 +53,7 @@ class HeaderSourceProofTests(unittest.TestCase):
 class OriginalScriptTargetCategoryTests(unittest.TestCase):
     def test_recover_typed_monoscipt_through_external_owner(self):
         x=classify_opaque_script_links(
-            {1},[(1,500,2),(1,500,2),(1,501,2)],{500},{})
+            {1},[(1,500,2),(1,500,2),(1,501,2)],{500},set())
         self.assertEqual(x["opaque_MonoBehaviour_header_parsed"],3)
         self.assertEqual(x["opaque_MonoBehaviour_script_to_external_owner"],3)
         self.assertEqual(x["opaque_MonoBehaviour_script_to_external_typed_MonoScript"],2)
