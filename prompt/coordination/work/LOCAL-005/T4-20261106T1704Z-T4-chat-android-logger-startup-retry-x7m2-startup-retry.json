@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "diagnostic_world_save_evidence",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "e45f57f1f236b1ca4096408c1f2cf5375bd3eb5a",
   "experiment_key": "T4-LOCAL005-AndroidRuntimeLog.Initialize-transient-path-IOException-retry-real-source-net8-Unity-stubs-v1",
   "resource_key": null,
@@ -31,10 +31,22 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42258727771",
     "https://github.com/alwansan/raf/actions/runs/42259053551",
+    "https://github.com/alwansan/raf/actions/runs/42259053531",
     "https://github.com/alwansan/raf/actions/runs/42259053586",
-    "https://github.com/alwansan/raf/actions/runs/42259053531"
+    "https://github.com/alwansan/raf/actions/runs/42259053518"
   ],
-  "result": null,
-  "next_step": "Red authentic Android source CI42258727771 proved permanent initialization lockout after filesystem recovery at check288, actual compiled source. Production fix cdfa4bd855... committed; wait green CI42259053551, original startup42259053586, FFT synthetic42259053531; record exact verdict and avoid Unity phone claims.",
-  "updated_at": "2026-11-06T17:10:00Z"
+  "result": {
+    "original_source_compiled": true,
+    "source_fixed_sha": "cdfa4bd855651d9c0f7642875b5eb08f25157908",
+    "red_ci": "42258727771 completed FAILURE as expected; runtime test check288 at Program.cs:250 after storage recovers",
+    "green_ci": "42259053551 SUCCESS; 292/292 .NET8 synthetic checks; actualAndroidStorageVerified=false",
+    "related_ci": [
+      "42259053531 FFT logger SUCCESS",
+      "42259053586 original startup SUCCESS",
+      "42259053518 offline platform SUCCESS"
+    ],
+    "actual_android_test": false
+  },
+  "next_step": "T5 single signed source-authenticated APK+OBB and owner device regression; not an Android storage repro or Unity IL2CPP proof. World save/reopen retains prior OWNER_CONFIRMED for 42058825739 only; issue remains OPEN.",
+  "updated_at": "2026-11-06T17:11:00Z"
 }
