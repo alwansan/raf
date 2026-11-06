@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1130Z-T5-chat-applycallers-c6e1",
+  "owner": "T5",
+  "session_id": "20261106T1130Z-T5-chat-applycallers-c6e1",
+  "origin": "chat",
+  "issue_id": "DISPLAY-003",
+  "type": "result",
+  "at": "2026-11-06T11:34:27.578Z",
+  "summary": "Exact original ZIP2 SHA-authenticated 3 ApplyCurrentResolutionAndFullscreenMode callsites belong to 3 distinct GraphicsSettingsBox methods; one method contains 8 Dropdown API call sites/8 typed field references and one non-int/non-bool parameter, other two no parameters. 0 external direct calls, 0 direct PlayerPrefs writes in callers; original apply has 1 Screen.SetResolution and 0 ResizeBuffers. CI42210936332 10 Python + 5 Cecil synthetic and genuine IL passed. UI event binding/render-scale persistence not proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42210936332",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_RESOLUTION_APPLY_CALLERS_2026-11-06.md"
+  ],
+  "limits": "Source-only compiled IL; no original game runtime changed, no Android device, water/FFT/renderer readiness still OPEN; NOT_READY 0/3.",
+  "work_path": "prompt/coordination/work/DISPLAY-003/20261106T1130Z-T5-chat-applycallers-c6e1.json",
+  "next_step": "Identify typed serialized original UI binding and bounded parameter category before implementation."
+}
