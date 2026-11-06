@@ -21,6 +21,7 @@ from scripts.t2_foam_private_descriptor_set_remap import (
 )
 from scripts.t2_foam_original_pair_compile import MAX_SPV
 
+OP_ENTRY_POINT = 15
 OP_TYPE_INT = 21
 OP_CONSTANT = 43
 OP_CONSTANT_NULL = 46
@@ -89,6 +90,12 @@ def compiled_cb0_load_paths(blob, reflection, coordinate, own_length, other_leng
         raise ValueError("invalid_private_CB0_array_capacity")
     instructions, bound, bindings, sets = _instructions(blob)
     mode = reflection["entryPoints"][0]["mode"]
+    # Reflection's stage label must agree with the compiled SPIR-V entrypoint.
+    entrypoints = [args for op, args in instructions if op == OP_ENTRY_POINT]
+    if (len(entrypoints) != 1 or len(entrypoints[0]) < 3
+            or not 0 < entrypoints[0][1] < bound
+            or entrypoints[0][0] != {"vert": 0, "frag": 4}.get(mode)):
+        raise ValueError("private_compiled_stage_entrypoint_mismatch")
     joined = reflected_ids(reflection, bindings, sets, mode=mode)
     roots = [ident for ident, coord in joined.items() if coord == coordinate]
     if len(roots) != 1:
