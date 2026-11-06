@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "1b868a64fc1ffdb8e9ba0ceb5e4ba1dcb4f307aa",
   "resumed_from_sessions": [
     "20261106T220645Z-T1-chat-site2y-phi-9b61"
@@ -24,7 +24,7 @@
   ],
   "collision_check": "T1 CI 42302489519 success completed; only native 42296450023 in progress, no additional Unity/native dispatch. Other T2/T3/T4/T5 files untouched.",
   "trial_vote": "لا يحتاج",
-  "updated_at": "2026-11-06T22:23:31.126Z",
+  "updated_at": "2026-11-06T22:25:45.002Z",
   "result": {
     "source_commit": "17b043b4e729a3e0493467d8aa7d0577af7a2727",
     "test_commit": "a581f1c89223bf31e83ead45e51883d560fbc582",
@@ -47,7 +47,10 @@
       "source_job": 128189156035,
       "source_tests_passed": 35,
       "private_original_job": 128189212633,
-      "private_status": "in_progress_at_checkpoint"
+      "private_status": "success",
+      "private_verified_sha_original": true,
+      "verified_self_data_recurrence": true,
+      "numeric_parity_proven": false
     },
     "source_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "limitations": [
@@ -57,5 +60,5 @@
       "No device water pixels/numeric parity"
     ]
   },
-  "next_step": "Check run 42304106607 private-original-cpu (job128189212633) result; if failed, classify first real failure and fix without duplicate Unity native build. If success, mark completed and design keyed GPU per-invocation branch selection/invariance proof without publishing private Phi constants/coordinates."
+  "next_step": "Perform a SHA-pinned direct-original Vulkan versus derived Unity/OpenGLCore *per-invocation* test which records Phi predecessor choice at Site2 Y (privacy-safe keyed aggregate only), verify trace output invariance and same physical input/dispatch before attributing any 64/64 Y collapse to loop branch. Do not ship a game shader or dispatch new native build without numeric parity."
 }
