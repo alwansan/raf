@@ -1,0 +1,14 @@
+{
+  "id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+  "owner": "T1",
+  "session_id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T15:33:03.821Z",
+  "summary": "Source-only original SPIR-V direct invocation-key capture prerequisites detector added. It verifies 3 original ImageFetch role/type patterns, direct/struct-member GlobalInvocationId, descriptor set binding 3 collision and privacy; corrected CI 42243693907 SUCCESS 86/86 synthetic tests, including 12 new checks. Actual authentic original SPIR-V NOT yet audited or instrumented, original-side invocation read buffer absent, Vulkan↔Unity numerical parity and Android water not proven. Separate candidate-only real Vulkan trace CI 42242127723 remains in progress and is not cancelled.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42243651596",
+    "https://github.com/alwansan/raf/actions/runs/42243693907",
+    "https://github.com/alwansan/raf/commit/a64b0f89b0b7b52ba24b322fde71b8fd35e7511d"
+  ]
+}
