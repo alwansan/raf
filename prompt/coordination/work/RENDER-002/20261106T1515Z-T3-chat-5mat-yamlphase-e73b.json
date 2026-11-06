@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1515Z-T3-chat-5mat-yamlphase-e73b",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "9a109902fefcff43945ccc141cf762ce7a44876b",
   "resumed_from_sessions": [
     "20261106T1350Z-T3-chat-particle108-5mat-valuediff-d4e9",
@@ -29,6 +29,14 @@
   ],
   "team_conflicts": "T1 water FFT, T2 Foam, T4 local input, T5 packaging operate outside these files; T3 scheduled session 1429 read-only native dummy audit.",
   "plan": "Restore expensive exporter to manual-only if tool permits; classify exact selected YAML failure with sanitized enumerated stage and no raw private values; source-free 19+ control regression, one original read-only SHA-locked export if relevant; record terminal or waiting run.",
-  "updated_at": "2026-11-06T15:17:36.260Z",
-  "next_step": "Resolve EXPORTED_RGBA_YAML sanitized failure in 42230103847; never infer graphics correction or material value mismatch from INCONCLUSIVE."
+  "updated_at": "2026-11-06T15:21:31.386Z",
+  "next_step": "Read terminal 42242213756 safe_document_reason/values; investigate evidenced genuine selected Material YAML shape, not guessed pass; don't dispatch duplicate exporter. Keep source and Pixel/Android findings separate.",
+  "ci_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42241999485",
+    "https://github.com/alwansan/raf/actions/runs/42242213756"
+  ],
+  "source_only_controls": "21/21 PASS (42241999485)",
+  "original_run": 42242213756,
+  "original_run_immutable_sha": "e5c36cb8adbc5fde144891ab62826b4e5c068309",
+  "workflow_manual_only_commit": "599c3a8b623aa7eb81fc69ac7362a4a12aeb3f78"
 }
