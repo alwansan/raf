@@ -8,7 +8,7 @@
   "track": "Unity builtin shader restore transactional rollback protects externally changed include during failure",
   "status": "active",
   "base_sha": "44341ce5761db7242900bdac0334dc35a783b391",
-  "updated_at": "2026-11-06T19:04:00Z",
+  "updated_at": "2026-11-06T19:09:00Z",
   "resumed_from_sessions": [
     "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
     "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
@@ -20,7 +20,8 @@
     "prompt/coordination/work/RENDER-002/20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f.json",
     "prompt/coordination/clients/T5/sessions/20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f.md",
     "prompt/coordination/experiments/T5/20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f.json",
-    "prompt/coordination/B_TEAM/events/T5/20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f.json"
+    "prompt/coordination/B_TEAM/events/T5/20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f.json",
+    "tests/test_a15_builtin_restore_rollback.py"
   ],
   "experiment_key": "T5-builtin-shader-restore-rollback-synthetic-external-include-mutation-after-successful-create-before-osreplace-v1",
   "resource_key": "existing B13/A15/builtin source-only CI (not native Editor or game build)",
@@ -29,8 +30,8 @@
     "B13-20261104T2247Z-B13-builtin-atomic-builtin-shader-transaction",
     "T3 original shader quality separate P0 scope"
   ],
-  "coordination": "B clients retired; T3 owns Particle108 and other files, T1 FFT, T2 Foam, T4 local/save; scheduled T5 PID helper untouched. No full native Unity build or trial vote change.",
+  "coordination": "B clients retired; T3 owns Particle108 and other files, T1 FFT, T2 Foam, T4 local/save; scheduled T5 PID helper untouched. No full native Unity build or trial vote change.; after exact CI red, now include retired A15 synthetic test for stale pre-atomic Path.open injection, targeting real os.replace with same fail-closed output expectations.",
   "run_urls": [],
   "result": null,
-  "next_step": "Add bounded source-only regression and guard; run existing shader CI to terminal and close with evidence."
+  "next_step": "Update A15 legacy injection to target actual atomic os.replace failure, rerun A15/A14 source CI and preserve all prior assertions; no native build."
 }
