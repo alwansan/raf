@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2203Z-T2-chat-graphics-path-7d3e",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
-  "updated_at": "2026-11-06T22:08:13.782Z",
+  "updated_at": "2026-11-06T22:10:30.652Z",
   "resumed_from_sessions": [
     "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
     "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
@@ -36,9 +36,23 @@
     "https://github.com/alwansan/raf/actions/runs/42300619078"
   ],
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "Inspect CI42302222142 for Python 56+ aggregate tests, Mono.Cecil synthetic test, original source-private Unity Graphics categorical partition. If FAIL, diagnose exact failure and patch safely; if PASS record categorical counts and limitations. Do not claim native/game water without phone.",
+  "next_step": "Classify exact public Graphics.Blit overload signatures and optional pass selection from two original typed Material sites using separate source-only T2 session; trace RenderTexture ownership; T5 retains actual Unity integration.",
   "code_commit": "3bbb7b040b7a626e61f68e5572d402ee49a93a4d",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42302222142"
-  ]
+  ],
+  "result": {
+    "original_source_sha_authenticated": true,
+    "safe_python_tests": 56,
+    "synthetic_name_tests": 6,
+    "cecil_selftest": "PASS",
+    "original_material_field_sites": 13,
+    "original_typed_Graphics_material_sites": 2,
+    "original_Graphics_Blit_material_sites": 2,
+    "original_Graphics_DrawMesh_material_sites": 0,
+    "original_Graphics_other_sites": 0,
+    "original_Graphics_mixed_sites": 0,
+    "source_only": true,
+    "unity_or_android_pixels_verified": false
+  }
 }
