@@ -128,6 +128,18 @@ jobs:
           assert all(type(x) is int and x>=0 for x in origins.values())
           assert all(type(x) is int and x>=0 for x in receivers.values())
           assert sum(origins.values())==sum(receivers.values())==1
+          ctor=r['original_source_name_exact_first_formal_Vector4_ctor_uniqueness_buckets']
+          assert set(ctor)<={'one_typed_UnityEngine_Vector4_ctor_in_slice','not_uniquely_proven'}
+          assert sum(ctor.values())==1 and all(type(v) is int and v>=0 for v in ctor.values())
+          ctor_inputs=r['original_source_name_proven_unique_Vector4_ctor_scalar_input_origin_buckets']
+          assert set(ctor_inputs)<=allowed
+          assert all(type(v) is int and v>=0 for v in ctor_inputs.values())
+          total=r['original_source_name_proven_unique_Vector4_ctor_formal_count']
+          floats=r['original_source_name_proven_unique_Vector4_ctor_float_formal_count']
+          assert type(total) is int and type(floats) is int and 0<=floats<=total<=32
+          assert sum(ctor_inputs.values())==total
+          assert (total>0)==(ctor.get('one_typed_UnityEngine_Vector4_ctor_in_slice',0)>0)
+          assert r['original_Vector4_ctor_input_values_verified'] is False
           assert r['exact_original_Vector4_value_dataflow_to_CB0_verified'] is False
           assert r['original_Material_receiver_Shader_is_Foam_verified'] is False
           assert r['original_Ldstr_is_exact_setter_argument_proven'] is False
