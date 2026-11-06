@@ -147,16 +147,26 @@ internal static class Program
             auditCategory = "ORIGINAL_SAVE_PRIVATE_SIGNATURE_SHAPE_MISSING";
             return null;
         }
-        var matches = matchingShape
-            .Where(m => m.Parameters[1].ParameterType.Name == originalRootType.Name)
-            .ToArray();
+        // The original SaveWorld factory produces an RGD-derived class.
+        // A private Save(string, RGD) accepts an RGD-derived root, not only
+        // an exact concrete class of the same name. Authenticate the actual
+        // CLR inheritance against the original declaring assembly: do not
+        // trust a forged same-name class from another assembly.
+        var matches = matchingShape.Where(m =>
+        {
+            var sourceArg = m.Parameters[1].ParameterType;
+            if (sourceArg.Name != "RGD" || sourceArg.IsGenericParameter)
+                return false;
+            string clrName = sourceArg.FullName.Replace('/', '+');
+            Type? originalArg = originalRootType.Assembly.GetType(
+                clrName, throwOnError: false, ignoreCase: false);
+            return originalArg is not null &&
+                originalArg.Assembly == originalRootType.Assembly &&
+                originalArg.IsAssignableFrom(originalRootType);
+        }).ToArray();
         if (matches.Length != 1)
         {
-            // Report only structural relation to known RGD argument, not
-            // either original CLR type name or metadata values.
-            auditCategory = matchingShape[0].Parameters[1].ParameterType.Name == "RGD"
-                ? "OWNER_WORLD_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT"
-                : "ORIGINAL_SAVE_ARGUMENT_DIFFERS_FROM_OWNER_WORLD_ROOT";
+            auditCategory = "OWNER_WORLD_ROOT_NOT_ASSIGNABLE_TO_ORIGINAL_RGD_SAVE_ARGUMENT";
             return null;
         }
         var candidate = matches[0];
@@ -377,7 +387,9 @@ internal static class Program
                         if (method.Length != 1 ||
                             method[0].GetParameters().Length != 2 ||
                             method[0].GetParameters()[0].ParameterType != typeof(string) ||
-                            method[0].GetParameters()[1].ParameterType != originalRootType ||
+                            method[0].GetParameters()[1].ParameterType.Assembly != original ||
+                            !method[0].GetParameters()[1].ParameterType.IsAssignableFrom(
+                                originalRootType) ||
                             method[0].ReturnType != typeof(void))
                         {
                             saveCategory = "ORIGINAL_SAVE_REFLECTION_SIGNATURE_MISMATCH";
