@@ -142,6 +142,7 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r["material_linear_original_material_field_read_instructions"]=3
         r["material_linear_original_material_field_distinct_reader_methods"]=2
         r["material_linear_original_material_field_direct_Renderer_set_material_args"]=1
+        r["field_api_exact_original_material_field_sites_scanned"]=3
         self.assertTrue(validate(r))
     def test_material_linear_field_reader_without_source_store_rejected(self):
         r=baseline()
@@ -217,6 +218,78 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r=baseline();r["original_compiled_IL_instructions_scanned"]=491489;self.rejects(r)
     def test_nop_boundary_fails(self):
         r=baseline();r["consumer_nop_instructions_skipped_after_Find"]=5;self.rejects(r)
+
+
+    def test_source_true_nonadjacent_typed_Graphics_material_arg(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=13
+        r["material_linear_original_material_field_distinct_reader_methods"]=4
+        r["field_api_exact_original_material_field_sites_scanned"]=13
+        r["field_api_straightline_total_following_IL_instructions_scanned"]=27
+        r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+        r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+        self.assertTrue(validate(r))
+
+    def test_source_true_typed_material_receiver(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=2
+        r["field_api_exact_original_material_field_sites_scanned"]=2
+        r["field_api_straightline_sites_with_typed_Material_receiver"]=1
+        self.assertTrue(validate(r))
+
+    def test_field_API_coverage_partial_forbidden(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=13
+        r["field_api_exact_original_material_field_sites_scanned"]=12
+        self.rejects(r)
+
+    def test_field_API_scope_without_real_field_forbidden(self):
+        r=baseline()
+        r["field_api_exact_original_material_field_sites_scanned"]=1
+        self.rejects(r)
+
+    def test_field_API_wrong_Graphics_without_material_param_forbidden(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=1
+        r["field_api_exact_original_material_field_sites_scanned"]=1
+        r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+        self.rejects(r)
+
+    def test_field_API_typed_parameter_requires_category(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=1
+        r["field_api_exact_original_material_field_sites_scanned"]=1
+        r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+        self.rejects(r)
+
+    def test_field_API_budget_forbidden(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=1
+        r["field_api_exact_original_material_field_sites_scanned"]=1
+        r["field_api_straightline_total_following_IL_instructions_scanned"]=33
+        self.rejects(r)
+
+    def test_field_API_boundary_excess_forbidden(self):
+        r=baseline()
+        r["field_api_straightline_sites_with_boundary_or_budget"]=1
+        self.rejects(r)
+
+    def test_field_API_negative_count_forbidden(self):
+        r=baseline()
+        r["field_api_straightline_sites_with_typed_Material_receiver"]=-1
+        self.rejects(r)
 
 if __name__ == "__main__":
     unittest.main()

@@ -187,6 +187,98 @@ internal static class Program
         } catch(AssemblyResolutionException) {return false;}
           catch(ResolutionException) {return false;}
     }
+
+    private sealed record FieldApiTrace(
+        int Inspected, int Boundary, int MaterialReceiver,
+        int TypedMaterialArgument, int GraphicsArgument,
+        int CommandBufferArgument, int RendererArgument, int OtherArgument);
+
+    private static FieldApiTrace TraceExactMaterialFieldRead(MethodDefinition method, int sourceIndex)
+    {
+        // Forward-only, max 32 original IL instructions per exact FieldDefinition load.
+        // The field value, NOT the mere presence of a call, must reach the typed
+        // Material parameter or exact UnityEngine.Material/Object instance receiver.
+        // Unknown returns, indirect references, CFG branches and stack effects
+        // do not inherit the source identity.
+        var il=method.Body.Instructions;
+        var stack=new List<bool>{true};
+        var locals=new Dictionary<int,bool>();
+        int inspected=0,boundary=0,receiver=0,arg=0,graphics=0,command=0,renderer=0,other=0;
+        bool Pop()
+        {
+            if(stack.Count==0)return false;
+            bool a=stack[^1]; stack.RemoveAt(stack.Count-1); return a;
+        }
+        for(int i=sourceIndex+1;i<il.Count && inspected<32;i++)
+        {
+            var op=il[i];
+            if(op.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
+                or FlowControl.Return or FlowControl.Throw) {boundary=1;break;}
+            inspected++;
+            if(op.OpCode.Code==Code.Nop)continue;
+            if(op.OpCode.Code==Code.Dup)
+            {
+                if(stack.Count==0){boundary=1;break;}
+                bool a=Pop();stack.Add(a);stack.Add(a);
+            }
+            else if(op.OpCode.Code is Code.Call or Code.Callvirt or Code.Newobj)
+            {
+                if(op.Operand is not MethodReference callee){boundary=1;break;}
+                int param=callee.Parameters.Count;
+                bool constructing=op.OpCode.Code==Code.Newobj;
+                int n=param+(!constructing && callee.HasThis?1:0);
+                if(n>24){boundary=1;break;}
+                var consumed=new bool[n];
+                for(int j=0;j<n;j++)consumed[j]=Pop();
+                bool recv=!constructing && callee.HasThis && consumed[param];
+                if(recv && callee.DeclaringType.FullName is
+                    ("UnityEngine.Material" or "UnityEngine.Object"))receiver++;
+                bool materialArg=false;
+                for(int j=0;j<param;j++)
+                    if(callee.Parameters[j].ParameterType.FullName==MaterialType &&
+                       consumed[param-1-j])materialArg=true;
+                if(materialArg)
+                {
+                    arg++;
+                    switch(callee.DeclaringType.FullName)
+                    {
+                        case "UnityEngine.Graphics": graphics++;break;
+                        case "UnityEngine.Rendering.CommandBuffer": command++;break;
+                        case "UnityEngine.Renderer": renderer++;break;
+                        default: other++;break;
+                    }
+                }
+                if(constructing || callee.ReturnType.FullName!="System.Void")stack.Add(false);
+            }
+            else
+            {
+                var storeLocal=LocalForStore(method,op);
+                if(storeLocal is not null)
+                    locals[storeLocal.Index]=Pop() &&
+                        storeLocal.VariableType.FullName==MaterialType;
+                else
+                {
+                    VariableDefinition? load=null;
+                    if(op.OpCode.Code is Code.Ldloc or Code.Ldloc_S or
+                        Code.Ldloc_0 or Code.Ldloc_1 or Code.Ldloc_2 or Code.Ldloc_3)
+                        load=method.Body.Variables.FirstOrDefault(v=>LocalIsLoadOf(op,v));
+                    if(load is not null)
+                        stack.Add(locals.GetValueOrDefault(load.Index,false));
+                    else
+                    {
+                        int pop=FixedPopCount(op),push=FixedPushCount(op);
+                        if(pop<0 || push<0 || pop>6 || push>2){boundary=1;break;}
+                        for(int j=0;j<pop;j++)Pop();
+                        for(int j=0;j<push;j++)stack.Add(false);
+                    }
+                }
+            }
+            if(!stack.Any(v=>v) && !locals.Values.Any(v=>v))break;
+        }
+        if(inspected>=32)boundary=1;
+        return new(inspected,boundary,receiver,arg,graphics,command,renderer,other);
+    }
+
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
     {
         var il=method.Body.Instructions;
@@ -539,6 +631,31 @@ internal static class Program
                     }
                 if(reads>0){linearFieldReads+=reads;linearFieldReaders++;}
             }
+
+        int fieldApiSites=0,fieldApiInstructions=0,fieldApiBoundaries=0,
+            fieldApiReceiver=0,fieldApiMaterialArgs=0,fieldApiGraphics=0,
+            fieldApiCommand=0,fieldApiRenderer=0,fieldApiOther=0;
+        if(trace.OriginalMaterialField is not null)
+            foreach(var method in methods)
+            {
+                var il=method.Body.Instructions;
+                for(int i=0;i<il.Count;i++)
+                    if(SameMaterialFieldLoad(il[i],trace.OriginalMaterialField))
+                    {
+                        fieldApiSites++;
+                        var api=TraceExactMaterialFieldRead(method,i);
+                        fieldApiInstructions+=api.Inspected;
+                        fieldApiBoundaries+=api.Boundary;
+                        fieldApiReceiver+=api.MaterialReceiver>0?1:0;
+                        fieldApiMaterialArgs+=api.TypedMaterialArgument>0?1:0;
+                        fieldApiGraphics+=api.GraphicsArgument>0?1:0;
+                        fieldApiCommand+=api.CommandBufferArgument>0?1:0;
+                        fieldApiRenderer+=api.RendererArgument>0?1:0;
+                        fieldApiOther+=api.OtherArgument>0?1:0;
+                    }
+            }
+        if(fieldApiSites!=linearFieldReads)
+            throw new InvalidOperationException("exact_material_field_api_site_coverage");
         var output=new Dictionary<string,object>
         {
             ["status"]="original_foam_ShaderFind_direct_return_consumer_typed_IL_census",
@@ -591,6 +708,15 @@ internal static class Program
             ["material_linear_original_material_field_distinct_reader_methods"]=linearFieldReaders,
             ["material_linear_original_material_field_direct_Renderer_set_material_args"]=linearFieldToRenderer,
             ["material_linear_original_material_field_direct_Renderer_set_sharedMaterial_args"]=linearFieldToShared,
+            ["field_api_exact_original_material_field_sites_scanned"]=fieldApiSites,
+            ["field_api_straightline_total_following_IL_instructions_scanned"]=fieldApiInstructions,
+            ["field_api_straightline_sites_with_boundary_or_budget"]=fieldApiBoundaries,
+            ["field_api_straightline_sites_with_typed_Material_receiver"]=fieldApiReceiver,
+            ["field_api_straightline_sites_with_typed_Material_parameter"]=fieldApiMaterialArgs,
+            ["field_api_straightline_sites_with_Graphics_Material_parameter"]=fieldApiGraphics,
+            ["field_api_straightline_sites_with_CommandBuffer_Material_parameter"]=fieldApiCommand,
+            ["field_api_straightline_sites_with_Renderer_Material_parameter"]=fieldApiRenderer,
+            ["field_api_straightline_sites_with_other_typed_Material_parameter"]=fieldApiOther,
             ["original_Shader_Find_executed_in_Unity"]=false,
             ["field_declaring_TypeDef_is_427_scene_script_proven"]=false,
             ["Unity_Material_or_Renderer_actual_binding_verified"]=false,
@@ -705,6 +831,41 @@ internal static class Program
         method.Body.Instructions[5]=Instruction.Create(OpCodes.Br_S,method.Body.Instructions[6]);
         if(TraceMaterialAliasLinear(method,2).ConservativeBoundaries==0)
             throw new InvalidOperationException("branch_must_stop_original_trace");
+
+        var traceMethod=new MethodDefinition("SyntheticMaterialCall",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(traceMethod);
+        var gfx=new TypeReference("UnityEngine","Graphics",mod,mod.TypeSystem.CoreLibrary);
+        var draw=new MethodReference("DrawSynthetic",mod.TypeSystem.Void,gfx){HasThis=false};
+        draw.Parameters.Add(new ParameterDefinition(material));
+        draw.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Object));
+        traceMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,matField));
+        traceMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ldnull));
+        traceMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Call,draw));
+        traceMethod.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        var exact=TraceExactMaterialFieldRead(traceMethod,0);
+        if(exact.TypedMaterialArgument!=1 || exact.GraphicsArgument!=1 ||
+           exact.RendererArgument!=0 || exact.Boundary!=0)
+            throw new InvalidOperationException("typed_Graphics_argument_stack_identity");
+        var localForTrace=new VariableDefinition(material);
+        traceMethod.Body.Variables.Add(localForTrace);
+        traceMethod.Body.Instructions.Insert(1,Instruction.Create(OpCodes.Stloc,localForTrace));
+        traceMethod.Body.Instructions.Insert(2,Instruction.Create(OpCodes.Ldloc,localForTrace));
+        exact=TraceExactMaterialFieldRead(traceMethod,0);
+        if(exact.GraphicsArgument!=1 || exact.TypedMaterialArgument!=1 ||
+           exact.Inspected<4)throw new InvalidOperationException("nonadjacent_original_field_local_alias");
+        var fake=new MethodReference("DrawSynthetic",mod.TypeSystem.Void,gfx){HasThis=false};
+        fake.Parameters.Add(new ParameterDefinition(shader));
+        fake.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Object));
+        traceMethod.Body.Instructions[4]=Instruction.Create(OpCodes.Call,fake);
+        if(TraceExactMaterialFieldRead(traceMethod,0).TypedMaterialArgument!=0)
+            throw new InvalidOperationException("reject_untyped_fake_material_argument");
+        traceMethod.Body.Instructions[4]=Instruction.Create(OpCodes.Call,draw);
+        traceMethod.Body.Instructions[3]=Instruction.Create(OpCodes.Br_S,traceMethod.Body.Instructions[4]);
+        exact=TraceExactMaterialFieldRead(traceMethod,0);
+        if(exact.Boundary!=1 || exact.GraphicsArgument!=0)
+            throw new InvalidOperationException("no_control_flow_crossing");
         Console.WriteLine("T2_FOAM_SHADERFIND_RETURN_CECIL_SYNTHETIC_PASS");
     }
     public static int Main(string[] args)

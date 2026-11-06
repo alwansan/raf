@@ -75,6 +75,15 @@ MATERIAL_NUMERIC = (
     "material_linear_original_material_field_distinct_reader_methods",
     "material_linear_original_material_field_direct_Renderer_set_material_args",
     "material_linear_original_material_field_direct_Renderer_set_sharedMaterial_args",
+    "field_api_exact_original_material_field_sites_scanned",
+    "field_api_straightline_total_following_IL_instructions_scanned",
+    "field_api_straightline_sites_with_boundary_or_budget",
+    "field_api_straightline_sites_with_typed_Material_receiver",
+    "field_api_straightline_sites_with_typed_Material_parameter",
+    "field_api_straightline_sites_with_Graphics_Material_parameter",
+    "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
+    "field_api_straightline_sites_with_Renderer_Material_parameter",
+    "field_api_straightline_sites_with_other_typed_Material_parameter",
 )
 STATUS = "original_foam_ShaderFind_direct_return_consumer_typed_IL_census"
 
@@ -231,6 +240,34 @@ def validate(report):
             "material_linear_original_material_direct_Renderer_set_material_args",
             "material_linear_original_material_direct_Renderer_set_sharedMaterial_args")) > 8:
         raise ValueError("linear_source_dup_reference_unbounded_renderer_uses")
+    sites=report["field_api_exact_original_material_field_sites_scanned"]
+    if sites!=report["material_linear_original_material_field_read_instructions"]:
+        raise ValueError("source_exact_original_material_field_API_sites_partial")
+    if report["field_api_straightline_total_following_IL_instructions_scanned"]>32*sites:
+        raise ValueError("unbounded_exact_field_api_IL")
+    for key in (
+        "field_api_straightline_sites_with_boundary_or_budget",
+        "field_api_straightline_sites_with_typed_Material_receiver",
+        "field_api_straightline_sites_with_typed_Material_parameter",
+        "field_api_straightline_sites_with_Graphics_Material_parameter",
+        "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
+        "field_api_straightline_sites_with_Renderer_Material_parameter",
+        "field_api_straightline_sites_with_other_typed_Material_parameter",
+    ):
+        if report[key]>sites:
+            raise ValueError("source_exact_field_API_site_partition_overflow")
+    categories=(
+        "field_api_straightline_sites_with_Graphics_Material_parameter",
+        "field_api_straightline_sites_with_CommandBuffer_Material_parameter",
+        "field_api_straightline_sites_with_Renderer_Material_parameter",
+        "field_api_straightline_sites_with_other_typed_Material_parameter",
+    )
+    if (max(report[k] for k in categories)>
+            report["field_api_straightline_sites_with_typed_Material_parameter"]):
+        raise ValueError("typed_Unity_API_without_material_param_provenance")
+    if (report["field_api_straightline_sites_with_typed_Material_parameter"]>
+            sum(report[k] for k in categories)):
+        raise ValueError("material_argument_without_typed_API_category")
     return True
 
 def main():
