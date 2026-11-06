@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261107T2227Z-T2-chat-blit-texture-role-6c52",
+  "issue_id": "WATER-001",
+  "hypothesis": "For original Foam's two authenticated Material→Graphics.Blit(Texture,RenderTexture,Material,int pass) sites, the immediate straight-line IL producer of source Texture and destination RenderTexture may be a local, field or null; reconstruct only direct two-operand expressions and fail closed on indirect producers, no private symbol emission.",
+  "source_commit": "681c239c29959e420829b48ba24c4ab203ce9ca5",
+  "input_hashes": [
+    "ZIP2 immutable ref 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original shader owner 115978112 bytes; original managed DLL 3211776 bytes; exact SHA pinned by existing CI workflow"
+  ],
+  "tool_versions": {
+    "dotnet": "9.0.x",
+    "MonoCecil": "project-locked",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_shaderfind_return_report.py' -v",
+    "dotnet publish android-port/Experiments/T2/FoamShaderFindResultFlow/FoamShaderFindResultFlow.csproj -c Release",
+    "dotnet FoamShaderFindResultFlow.dll --selftest",
+    "dotnet FoamShaderFindResultFlow.dll <private-original-managed-DLL> <private-Shader-name> <safe-json>"
+  ],
+  "negative_controls": [
+    "computed/non-adjacent source-destination producer is unknown",
+    "noncanonical stack between Material field and pass/call is unknown",
+    "unknown typed or indirect field input is not guessed RenderTexture",
+    "source and destination categories strict per real exact Material field→Blit site"
+  ],
+  "positive_controls": [
+    "direct field Texture + RenderTexture destination accepted",
+    "direct RenderTexture as source accepted",
+    "direct null destination accepted"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42305522855",
+  "artifact_urls": [],
+  "budget": "Existing <=20min no Unity/LFS source-original CPU workflow",
+  "status": "waiting_ci",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "only immediate typed producers, not actual object identity or RenderTexture allocation/ownership",
+    "static original IL cannot prove on-device execution",
+    "missing/ambiguous producer stays unknown; original CB0 mismatch unchanged"
+  ],
+  "integration_commit": "681c239c29959e420829b48ba24c4ab203ce9ca5",
+  "next_step": "Inspect 42305522855: safe Python and Cecil selftest, exact original authenticated texture source and render target direct IL producer categories; if PASS document observed counts and limitations, if FAIL patch without weakening. Continue T5 native independently."
+}
