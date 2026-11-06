@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Source-free regression fixtures for private original DXBC->SPIR-V hypothesis."""
 import unittest
-from scripts.t3_particle108_register_location_probe import classify_stage,classify_stage_roles,_type
+from scripts.t3_particle108_register_location_probe import classify_stage,classify_stage_roles,classify_missing_fragment_usedmask,_type
 
 def row(reg=0,mask=15,kind=3,system=0):
     return {"register":reg,"mask":mask,"type":kind,"system_value":system}
@@ -76,6 +76,39 @@ class OriginalRegisterLocationTests(unittest.TestCase):
             {'inputs':[],'outputs':[]})
         self.assertEqual(result['inputs']['original_user_records'],0)
         self.assertEqual(result['outputs']['missing_numeric_register_locations'],0)
+
+    def test_missing_fragment_zero_readmask_and_authored_vertex_semantic(self):
+        vertex={'output':[{'semantic':'TEXCOORD','index':0,'mask':3,
+                           'type':3,'system_value':0}]}
+        fragment={'input':[{'semantic':'TEXCOORD','index':0,'register':2,
+                            'mask':3,'used_mask':0,'type':3,'system_value':0}]}
+        report=classify_missing_fragment_usedmask(vertex,fragment,{'inputs':[]})
+        self.assertEqual(report['missing_fragment_numeric_location_records'],1)
+        self.assertEqual(report['missing_fragment_original_used_mask_zero'],1)
+        self.assertEqual(report['missing_fragment_original_used_mask_nonzero'],0)
+        self.assertEqual(report['missing_fragment_original_vertex_semantic_mask_type_join'],1)
+
+    def test_missing_fragment_nonzero_readmask_not_dismissed(self):
+        vertex={'output':[]}
+        fragment={'input':[{'semantic':'TEXCOORD','index':0,'register':2,
+                            'mask':3,'used_mask':1,'type':3,'system_value':0}]}
+        report=classify_missing_fragment_usedmask(vertex,fragment,{'inputs':[]})
+        self.assertEqual(report['missing_fragment_original_used_mask_nonzero'],1)
+        self.assertEqual(report['missing_fragment_original_used_mask_lanes'],1)
+        self.assertEqual(report['missing_fragment_original_vertex_semantic_mask_type_join'],0)
+
+    def test_present_location_not_counted_even_when_used_mask_nonzero(self):
+        fragment={'input':[{'semantic':'TEXCOORD','index':0,'register':2,
+                            'mask':15,'used_mask':15,'type':3,'system_value':0}]}
+        report=classify_missing_fragment_usedmask(
+            {'output':[]},fragment,{'inputs':[{'location':2,'type':'vec4'}]})
+        self.assertEqual(report['missing_fragment_numeric_location_records'],0)
+
+    def test_invalid_missing_fragment_used_mask_fails_closed(self):
+        fragment={'input':[{'semantic':'TEXCOORD','index':0,'register':2,
+                            'mask':3,'used_mask':True,'type':3,'system_value':0}]}
+        with self.assertRaisesRegex(ValueError,'used_mask'):
+            classify_missing_fragment_usedmask({'output':[]},fragment,{'inputs':[]})
 
     def test_unknown_reflection_type_or_spoofed_register_rejected(self):
         with self.assertRaises(ValueError):
