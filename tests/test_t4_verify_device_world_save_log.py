@@ -241,6 +241,65 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         self.assertNotIn("PRIVATE_SESSION_IDENTIFIER", rendered)
         self.assertNotIn(str(self.root), rendered)
 
+    def test_duplicate_json_record_members_cannot_rewrite_save_marker(self):
+        # json.loads without object_pairs_hook silently accepts the LAST
+        # duplicate operation/detail/session. That is ambiguous evidence.
+        raw_samples = (
+            '{"session":"s","sequence":1,"utc":"2026-11-05T13:00:00Z",'
+            '"area":"save","operation":"Load.caughtException",'
+            '"operation":"Save.argumentFileSnapshot",'
+            '"detail":"exists_at_filename_argument=True; length_class=nonzero"}',
+            '{"session":"private-world","session":"s","sequence":1,'
+            '"utc":"2026-11-05T13:00:00Z","area":"save",'
+            '"operation":"Save.argumentFileSnapshot",'
+            '"detail":"exists_at_filename_argument=True; length_class=nonzero"}',
+            '{"session":"s","sequence":1,"utc":"2026-11-05T13:00:00Z",'
+            '"area":"save","operation":"Save.argumentFileSnapshot",'
+            '"detail":"exists_at_filename_argument=False; length_class=not_checked",'
+            '"detail":"exists_at_filename_argument=True; length_class=nonzero"}',
+        )
+        for n, raw in enumerate(raw_samples):
+            with self.subTest(n=n):
+                p = self.root / "ambiguous.jsonl"
+                p.write_text(raw + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(EvidenceInputError, "duplicate_json_field") as caught:
+                    summarize(_paths(p))
+                self.assertNotIn("private-world", str(caught.exception))
+                self.assertNotIn("exists_at_filename_argument", str(caught.exception))
+
+    def test_nested_duplicate_json_members_are_rejected_even_if_ignored(self):
+        # Even an optional field may hide contradictory duplicate members.
+        p = self.root / "nested.jsonl"
+        p.write_text(
+            '{"session":"s","sequence":1,"utc":"2026-11-05T13:00:00Z",'
+            '"area":"startup","operation":"logger.ready",'
+            '"optional":{"x":1,"x":2},"detail":""}\n', encoding="utf-8")
+        with self.assertRaisesRegex(EvidenceInputError, "duplicate_json_field"):
+            summarize(_paths(p))
+
+    def test_nonstandard_json_nan_and_infinity_fail_closed(self):
+        for bad in ("NaN", "Infinity", "-Infinity"):
+            with self.subTest(bad=bad):
+                p = self.root / "nonfinite.jsonl"
+                p.write_text(
+                    '{"session":"s","sequence":1,"utc":"2026-11-05T13:00:00Z",'
+                    '"area":"startup","operation":"logger.ready","thread":'
+                    + bad + ',"detail":""}\n', encoding="utf-8")
+                with self.assertRaisesRegex(EvidenceInputError, "nonfinite_json_constant"):
+                    summarize(_paths(p))
+
+    def test_unique_optional_nested_json_and_rotated_replay_still_work(self):
+        event = row("s", 1, "save", "Save.argumentFileSnapshot",
+                    "exists_at_filename_argument=True; length_class=nonzero")
+        event["optional"] = {"non_sensitive": 1, "other": {"a": True}}
+        self.put("startup/startup-synthetic.jsonl", [event])
+        self.put("raft-synthetic.jsonl", [event])
+        report = summarize(_paths(self.root))
+        self.assertEqual(report["sessions"][0]["deduplicated_replay_lines"], 1)
+        self.assertEqual(report["sessions"][0]["save_argument_file_classes"],
+                         {"nonzero": 1})
+        self.assertFalse(report["real_rgd_durability_or_reopen_proven"])
+
     def test_invalid_json_rejected_not_partially_accepted(self):
         p = self.root / "bad.jsonl"
         p.write_text('{"session":')
