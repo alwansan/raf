@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T163833Z-T1-chat-selector-alias-5e8b",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "Isolated original FFT staged Unity compiled-slot vs kernel/keyword selector alias safety",
+  "approach": "Add fail-closed duplicate (kernel_name, normalized keyword-set) rejection in source-only staging and Editor runtime validation, plus synthetic regression. Preserve correct two-kernel/20-variant staging, explicitly do not claim original runtime variant mapping.",
+  "status": "active",
+  "base_sha": "c7631ed7aef24cccc13e3efc7f9d5c38474eb0ed",
+  "intended_files": [
+    "scripts/t1_stage_unity_fft_kernel_probe.py",
+    "tests/test_t1_stage_unity_fft_kernel_probe.py",
+    "android-port/Editor/T1FftKernelRuntimeProbe.cs",
+    "prompt/coordination/clients/T1/sessions/20261106T163833Z-T1-chat-selector-alias-5e8b.md",
+    "prompt/coordination/experiments/T1/20261106T163833Z-T1-chat-selector-alias-5e8b.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T163833Z-T1-chat-selector-alias-5e8b.json",
+    "prompt/coordination/work/WATER-001/20261106T163833Z-T1-chat-selector-alias-5e8b.json"
+  ],
+  "hypothesis": "Different authenticated original compiled FFT slots sharing the same declared Unity (kernel name, enabled keyword set) are indistinguishable by this runtime selection probe, and current staging accepts this ambiguous mapping.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe.json"
+  ],
+  "resumed_from_sessions": [
+    "20261106T161112Z-T1-chat-original-keyed-recorder-7be2",
+    "20261106T1608Z-T1-scheduled-pair-gate-regressions-k7p4",
+    "20261105T002257Z-T1-fft-unity-contract"
+  ],
+  "concurrent_scope_respected": "20261106T163310Z-T1-chat-real-fft-pair-d91e owns original/candidate private paired trace workflows; no writes to its files/CI resource",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41941716641",
+    "https://github.com/alwansan/raf/actions/runs/42014120625"
+  ],
+  "experiment_key": "water001-fft-staged-unity-kernel-keyword-nominal-selector-alias-guard-synthetic-v1",
+  "resource_key": "source-only-unity-staging-contract-no-gpu",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Reject duplicate nominal selectors in source staging+Unity Editor, make 20-row synthetic fixture 20 unique selector combinations preserving 2 kernel names, run isolated lightweight CI via push, record limits.",
+  "updated_at": "2026-11-06T16:38:33Z"
+}
