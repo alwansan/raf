@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T170532Z-T1-chat-variant-declarations-7c4e",
+  "issue_id": "WATER-001",
+  "hypothesis": "FFT staged Unity source selector uniqueness is not a real variant proof unless each keyword is an explicitly declared mutually-exclusive choice and Unity confirms successful activation.",
+  "source_commit": "ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "Ubuntu24 GitHub Actions python3",
+    "unity": "Unity2021.3.45f2 API checked, Unity Editor not executed"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t1_stage_unity_fft_kernel_probe.py",
+    "python3 -m unittest discover -s tests -p test_t1_stage_unity_fft_kernel_probe.py -v"
+  ],
+  "negative_controls": [
+    "reject undeclared manifest keyword in SHA-pinned authored compute",
+    "reject 2 mutually exclusive keywords in same variant set",
+    "reject no selected option in variant set lacking explicit '_' or '__'",
+    "reject comment-forged, malformed and unknown multi_compile directives",
+    "reject keyword repeated across variant pragma groups",
+    "accept 20 distinct synthetic declared selector rows with 2 kernel names",
+    "accept _local directive and explicit default where omitted keyword is legal"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-kernel-probe.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42258825614",
+  "artifact_urls": [],
+  "budget": "6min source-only CI; no private original source or heavy Unity",
+  "status": "completed_source_only_variant_provenance_guard",
+  "observed_result": {
+    "run_id": 42258825614,
+    "job_id": 128033110287,
+    "conclusion": "success",
+    "head_sha": "ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239",
+    "synthetic_tests_passed": 11,
+    "synthetic_tests_total": 11,
+    "source_declared_keyword_sets_checked": true,
+    "unity_csharp_compiled": false,
+    "unity_actual_variant_selected": false,
+    "android_device_water_verified": false,
+    "other_completed_private_paired_vulkan_run": 42254539826,
+    "other_paired_numeric_results": {
+      "same_backend": "Mesa_Vulkan",
+      "same_input_bytes": true,
+      "same_dispatch": true,
+      "pairs_by_site": [
+        64,
+        256,
+        64
+      ],
+      "coordinate_and_value_mismatches": 0
+    }
+  },
+  "rejected_hypotheses": [
+    "The prior source-only FFT staging validates that arbitrary unique declared keyword strings correspond to actual source-authored variants: false; fixed by bounded declaration gate"
+  ],
+  "limitations": [
+    "No real authored original multi-variant compute source obtained this scope",
+    "Original compiled program slot != original Unity runtime kernel ID or variant",
+    "No Unity C# compilation, actual source-derived variant activation or Adreno device proof",
+    "Bans unsupported/macro-expanded shader keyword pragmas conservatively even if Unity could compile them"
+  ],
+  "integration_commit": "ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239",
+  "next_step": "Isolate Unity OpenGLCore source-derived compute divergence from proven same-Mesa-Vulkan parity; use private keyed GPU readback or verified Vulkan Unity backend, keep original assets private."
+}
