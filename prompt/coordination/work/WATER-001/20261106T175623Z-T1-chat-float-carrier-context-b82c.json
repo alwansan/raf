@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T175623Z-T1-chat-float-carrier-context-b82c",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "blocked_ci_workflow_publication",
   "base_sha": "6af6fba382e5f7dc050070c4620abf140f1e6820",
-  "updated_at": "2026-11-06T17:56:40.506Z",
+  "updated_at": "2026-11-06T18:00:32.637Z",
   "resumed_from_sessions": [
     "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
     "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
@@ -41,6 +41,23 @@
   ],
   "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
   "run_urls": [],
-  "result": null,
-  "next_step": "Implement source-free same-dispatch bitcarrier context discriminator, run pinned Unity2021 GameCI. Revisit T1 vote only if a substantial original in-game FFT fix is integrated, not on synthetic test."
+  "result": {
+    "historical_unity_canary_run": 42129683073,
+    "historical_synthetic_counts": {
+      "integer": 0,
+      "bitcast_only": 63,
+      "subnormal_multiply": 63,
+      "normal_multiply": 0
+    },
+    "new_code_commits": [
+      "278cd350e30ba8cd0ba3e1463f666262d28e6c02",
+      "dfc4855b123d67601f066903c9529647e5b3b1f4",
+      "ea1f1ef4565ff1e995db9474c1b042129fcfaace"
+    ],
+    "new_source_contract_checks_passed": 10,
+    "new_actual_unity_run": false,
+    "workflow_publish_blocked": true,
+    "android_water_proven": false
+  },
+  "next_step": "New sourcefree 10-category Unity candidate staged and static guards checked; workflow creation blocked by tool security. Resume with authorized workflow publication if available, or focus original private provenance; do not run APK, keep T1 لا يحتاج."
 }
