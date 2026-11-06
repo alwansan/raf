@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "source_commit": "f8abf47204fa33b4d5a9f67a4bfa23dc6ac7156f",
+  "hypothesis": "Two authenticated original DXBC Fragment user inputs absent from same-number vkd3d source SPIRV Locations may be unused according to original compiled DXBC signature used_mask, rather than evidence of live-varying loss.",
+  "experiment_key": "T3-Original-Particle108-4pair-2-missing-frag-input-DXBC-usedmask-sha15964ea8-v3",
+  "source_original": "ZIP2 immutable 15964ea8f246b6e076ce26b60931ee2e1a9a2385; 4 exact owner SHA and 6 source scene SHA verified",
+  "workflow_path": ".github/workflows/raft-t3-particle108-register-location.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42200663399",
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "UnityPy": "1.23.0",
+    "DXBC_source_signature_parser": "scripts/t3_original_921_dxbc_semantic_join.py",
+    "SPIRV_translation": "vkd3d-compiler",
+    "SPIRV_reflection": "spirv-cross"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_particle108_register_location_probe.py tests/test_t3_particle108_register_location_probe.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_register_location_probe.py' -v",
+    "python3 -m scripts.t3_particle108_register_location_probe --original \"$RUNNER_TEMP/t3-particle108-private-source\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-particle108-safe-aggregate.json\""
+  ],
+  "negative_controls": [
+    "synthetic missing fragment input original readmask 0 versus nonzero; confirms nonzero never silently classified unused",
+    "source VS semantic component/type join source-free fixture",
+    "present numeric location never counted absent",
+    "invalid boolean source used_mask rejects",
+    "all previous stage-role ambiguity controls"
+  ],
+  "budget": "single 26-minute timeout isolated SHA-original four owner / six scene pipeline, path-only trigger; private bytecode not published",
+  "observed_result": {
+    "workflow_run": 42200663399,
+    "job_id": 127834839833,
+    "conclusion": "success",
+    "source_free_tests_passed": 16,
+    "actual_SHA_original_owner_count": 4,
+    "actual_SHA_original_scene_count": 6,
+    "original_DXBC_stage_programs": 8,
+    "original_exact_keyword_pairs": 4,
+    "original_user_records": 48,
+    "source_spirv_numeric_candidates": 46,
+    "missing_fragment_input_numeric_locations": 2,
+    "missing_fragment_original_DXBC_used_mask_zero": 2,
+    "missing_fragment_original_DXBC_used_mask_nonzero": 0,
+    "missing_fragment_original_DXBC_used_mask_component_lanes": 0,
+    "missing_fragment_original_vertex_semantic_mask_type_join": 2,
+    "missing_fragment_original_used_mask_outside_declared_mask": 0,
+    "source_DXBC_semantic_to_SPIRV_Location_identity_proven": false,
+    "Android_Adreno_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "The two missing Fragment input numeric locations correspond to original DXBC user input signature with nonzero compiled used_mask",
+    "The two missing Fragment inputs lack matching original Vertex output authored semantic and component mask"
+  ],
+  "limitations": [
+    "Original DXBC signature used_mask zero strongly suggests compiler considered these inputs unread; not a disassembly/flow-data proof of runtime harmlessness",
+    "Numerically equal Location does not prove source semantic identity or HLSL reconstructed interface mapping",
+    "No patched original ShaderLab/Unity game assets or Android GPU visual test; RENDER-002 remains OPEN and NOT_READY"
+  ],
+  "integration_commit": "f8abf47204fa33b4d5a9f67a4bfa23dc6ac7156f",
+  "next_step": "Do not patch original→source SPIRV numeric registers based solely on missing 2 unused-signature inputs. Focus on 2/4 HLSL-roundtrip VS/FS stage I/O mismatch and compare actual authored DXBC semantics to recovered HLSL / source and roundtrip SPIRV descriptor locations, preserving authentic Texture/Material pointers. Inspect whether HLSL roundtrip fails on active semantics, then produce minimal private verified candidate; GPU and phone tests required."
+}
