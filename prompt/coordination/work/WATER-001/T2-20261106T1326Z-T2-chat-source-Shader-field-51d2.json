@@ -2,9 +2,9 @@
   "session_id": "20261106T1326Z-T2-chat-source-Shader-field-51d2",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1f37742820b8bba37dda396e397f7e5c9d81194d",
-  "updated_at": "2026-11-06T13:26:00Z",
+  "updated_at": "2026-11-06T13:30:30Z",
   "resumed_from_sessions": [
     "20261106T1314Z-T2-chat-material-stfld-stack-4c62",
     "20261106T1306Z-T2-chat-material-field-assignment-8e6a"
@@ -25,7 +25,8 @@
     "prompt/coordination/clients/T2/sessions/20261106T1326Z-T2-chat-source-Shader-field-51d2.md",
     "prompt/coordination/experiments/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2.json",
     "prompt/coordination/B_TEAM/events/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2-result.json",
-    "docs/T2_FOAM_ORIGINAL_SHADER_FIELD_PROVENANCE_2026-11-06.md"
+    "docs/T2_FOAM_ORIGINAL_SHADER_FIELD_PROVENANCE_2026-11-06.md",
+    "prompt/coordination/discussions/WATER-001/20261106T1330Z-T2-Foam-Material-Shadersource-to-T1T5.md"
   ],
   "safe_output": "one private original Shader FieldReference handle in memory, counts of original stfld writer sites and public SerializeField field attribute; do not publish names/tokens/numeric asset paths",
   "tests": "source-free C# synthetic exact field identity through direct typed Shader ldfield vs unrelated field and local alias; bounded field stfld census in original SHA binary; independent stable workflow without native build",
@@ -35,5 +36,22 @@
     "managed writer invokes at runtime",
     "full CB0 upload",
     "Android pixels"
-  ]
+  ],
+  "run_id": 42225913516,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42225913516",
+  "run_conclusion": "success",
+  "job_id": 127919252873,
+  "source_commit": "2e4e4112973b3c29db9b34db233b5f9089a4505d",
+  "sourcefree_python_tests_passed": 11,
+  "original_Foam_source_managed_SHA_verified": true,
+  "result": "Exact Shader field feeding Material(Shader) resolved, is private Unity [SerializeField] eligible, and has one compiled managed stfld writer in one original method. No Shader asset identity or runtime value proven.",
+  "report": "docs/T2_FOAM_ORIGINAL_SHADER_FIELD_PROVENANCE_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2-result.json",
+  "handoff_discussion": "prompt/coordination/discussions/WATER-001/20261106T1330Z-T2-Foam-Material-Shadersource-to-T1T5.md",
+  "handoff_targets": [
+    "T1",
+    "T5"
+  ],
+  "next_step": "Trace actual managed Shader stfld value and/or source-authenticated serialized field reference to original Foam Shader. Runtime Unity CB0 upload/Adreno water not yet proven."
 }
