@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T133640Z-T1-chat-nested-phi-8d31",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "e5810f78c9f901925d85179d81e8efba4053596c",
+  "updated_at": "2026-11-06T13:36:40.630Z",
+  "resumed_from_sessions": [
+    "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+    "20261106T1310Z-T1-scheduled-ulp32-m4q8",
+    "20261106T130729Z-T1-chat-pair-gate-6c2e"
+  ],
+  "track": "Translated FFT butterfly1 X nested float32-vector OpPhi incoming component source and conservative loop guard",
+  "hypothesis": "The nested Phi on the second translated X incoming path may be a loop-carried value, another bitcarrier, or an arithmetic value. Bounded recursive Phi/CFG input tracing can discriminate static categories, but not actual runtime choice or source numeric parity.",
+  "approach": "Use the exact immutable original SHA pin and new standalone source-private nested-Phi analyzer with cycle/width/type guards; tests on synthetic SPIR-V; put tests plus T1 scheduled ULP unittest in isolated source-only workflow, then one exact-original Vulkan CI. Never leak IDs, raw shader bytes, literal coordinates or dynamic values. Do not change authored shaders or native artifacts.",
+  "intended_files": [
+    "scripts/t1_fft_hlsl_nested_phi_lineage.py",
+    "tests/test_t1_fft_hlsl_nested_phi_lineage.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T133640Z-T1-chat-nested-phi-8d31.md",
+    "prompt/coordination/experiments/T1/20261106T133640Z-T1-chat-nested-phi-8d31.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T133640Z-T1-chat-nested-phi-8d31.json"
+  ],
+  "experiment_key": "water001-sourcepin15964ea8-hlsl-butterfly1-x-nested-phi-loop-or-bitcarrier-typed-incoming-cfg-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "sourcefree_key": "t1-fft-invocation-pair-evidence-4m-python",
+  "run_urls": [],
+  "next_step": "Build cycle/type-safe nested Phi summary; confirm synthetic and scheduled ULP tests first; run original exact-source private CI with bounded marker, then preserve experiment/result event and release work."
+}
