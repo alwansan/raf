@@ -1,7 +1,7 @@
 # T2 — chat: SHA-original Foam Shader field stfld exact value
 - session_id: `20261106T1340Z-T2-chat-shader-stfld-source-a84d`
 - origin: `chat`
-- status: `active`
+- status: `completed_exact_Shader_stfld_Find_and_source_original_name_mismatch`
 - resumed_from_sessions: `20261106T1326Z-T2-chat-source-Shader-field-51d2`, `20261106T1322Z-T2-scheduled-ci-isolation-b83e`
 - base_sha: `ed1ac040e8a361ba253b8088d89c23ba87c06959`
 - work registration: `10831fc3aa98fcdae3930e1b7ca70137094192b8`, `prompt/coordination/work/WATER-001/T2-20261106T1340Z-T2-chat-shader-stfld-source-a84d.json`
@@ -11,3 +11,19 @@
 - hypothesis: the exact one Shader field stfld has a statically provable stack value source, such as Shader.Find return, typed Shader field/parameter, or null; any code path or IL instructions not supported must block proof. Passing a Shader typed value cannot establish it is Foam unless exact source reference matches.
 - intended_files: own MaterialStoreValueTrace.cs, Program.cs, T2 original source-only workflow, work/session/experiment/event/report/handoff. No game source, Unity meta/GUID, input, audio, Settings, world/save, native builds or APK.
 - status: registration complete; implementation/CI verdict not yet recorded.
+
+## Verified original Shader field writer source — 2026-11-06T13:48Z
+
+- Distinct source-original work `prompt/coordination/work/WATER-001/T2-20261106T1340Z-T2-chat-shader-stfld-source-a84d.json` completed. Added only T2-owned `MaterialStoreValueTrace.cs` Shader-stfld typed basic-block trace with synthetic positive and false-positive controls, integrated only for exact private `Shader` field identity in `Program.cs`, and tightened isolated original-source T2 workflow. Existing 128-op same-basic-block boundary and SHA gates retained.
+- [CI42228032544](https://github.com/alwansan/raf/actions/runs/42228032544), job `127926415695` **SUCCESS** (11/11 Python, Cecil sourcefree selftest, original Shader owner and managed SHA check); one original Shader field `stfld` value is **exactly the typed `Shader.Find(string)` result**, 3 prior basic-block instructions. This was not merely a nearby call. Work/experiment `prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d.json` and canonical event `prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-result.json`.
+- Memo [original Shader store stack](../../../../../docs/T2_FOAM_ORIGINAL_SHADER_STFLD_STACK_2026-11-06.md). The requested Shader.Find name, original Foam shader asset association and runtime water still unproven at this checkpoint.
+
+## Independent source Shader.Find exact name mismatch — 2026-11-06T13:56Z
+
+- Pre-registered new scope `prompt/coordination/work/WATER-001/T2-20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name-match.json` before modifying source model/checker. Generated private original Foam serialized Shader `m_Name` digest in `RUNNER_TEMP`, retained actual original `Shader.Find` first string formal through Cecil IL stack/literal or typed string local in memory only, and compared private digests. Changed T2-only `scripts/t2_foam_private_cb0_managed_targets.py`, `tests/test_t2_foam_private_cb0_managed_targets.py`, `MaterialStoreValueTrace.cs`, `Program.cs` and T2 isolated workflow. No game assets changed and neither original name nor its digest appears in logs/artifacts.
+- **Definitive SHA-authentic [CI42229056366](https://github.com/alwansan/raf/actions/runs/42229056366)**, job `127929919326`, source SHA `50c7616ff5099f82d23279f7a0ec8c5ba5e598ba`: **SUCCESS**. 12/12 source-free Python tests (private digest no-plaintext regression) and synthetic Cecil exact first-string/false-positive tests; original ZIP2 shader owner and 3211776B Assembly-CSharp.dll SHA authenticated. [Intermediate CI42228964040](https://github.com/alwansan/raf/actions/runs/42228964040) SUCCESS with identical genuine original output.
+- **Critical NEGATIVE:** `Shader.Find` actual request name **does NOT exactly equal** original Foam serialized Shader `m_Name`: **0 exact matches, 1 confirmed different, 0 unresolved**. Thus the typed Material that invokes one CB0 source-name-matched `SetVector` **does not have proven original Foam Shader identity**; the shared property name may be used by a different shader or alias. Previous exact managed IL links remain correct only as compiled code facts, not as proof of actual original Foam upload.
+- Evidence memo [genuine private original Shader.Find name comparison](../../../../../docs/T2_FOAM_ORIGINAL_SHADER_FIND_NAME_MATCH_2026-11-06.md), `prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json`, canonical event `prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json`, scoped work **completed**.
+- Immediately handed off to T1/T5 with the required downgrade of this Material-to-Foam inference: [source-original mismatch warning](../../../discussions/WATER-001/20261106T1340Z-T2-chat-shader-stfld-source-a84d-handoff.md).
+- Privacy: no original Shader Find request name, Shader m_Name, private name digest, IL, method/field names, source DLL, Shader asset bytes, GUIDs or text leaked. All original source artifacts private/temporary SHA authenticated. No Unity/Adreno device test or native game build initiated; T1/T5 in-progress workflows were not cancelled.
+- Next distinct source goal: privately compare actual Shader.Find request against other SHA-original Shader asset objects (not just original Foam m_Name), or trace *real Foam Material* shader asset links by original PathID/GUID. Only original Foam-specific material and complete CB0 stage upload proof can justify Unity/device water acceptance. `WATER-001` remains OPEN, `NOT_READY`.
