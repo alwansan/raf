@@ -38,6 +38,90 @@ class PrivatePhaseError(ValueError):
         self.phase=phase
         super().__init__("private_material_values_"+phase)
 
+
+def exported_selected_values(project, wanted):
+    """Read only exact source-traced exported Materials, fail closed on them.
+
+    The full project can contain unrelated AssetRipper YAML, including
+    unrelated Material encodings; those must not invalidate a 5-source-identity
+    comparison. Selected GUID+fileID must still be unique and fully parsed
+    with duplicate-key-rejecting PyYAML, B44 RGBA and B22 binary32 semantics.
+    """
+    import yaml
+    if (not isinstance(project,Path) or not isinstance(wanted,set)
+        or len(wanted)!=EXPECTED_MATERIALS
+        or any(type(key) is not tuple or len(key)!=2 or
+               type(key[0]) is not int or key[0]<=0 or
+               type(key[1]) is not str or len(key[1])!=32
+               for key in wanted)):
+        raise ValueError("invalid_source_selected_export_Material_pointer_scope")
+    assets=project/"Assets"
+    if (not assets.is_dir() or assets.is_symlink() or
+        any(p.is_symlink() for p in (project,*project.parents))):
+        raise ValueError("unsafe_exported_original_Material_scope")
+    entries=sorted(assets.rglob("*"))
+    if len(entries)>150000 or any(p.is_symlink() for p in entries):
+        raise ValueError("unsafe_or_unbounded_exported_Material_inventory")
+    guid_set={guid for _,guid in wanted}
+    class StrictLoader(yaml.SafeLoader):
+        def construct_mapping(self,node,deep=False):
+            output={}
+            for k,v in node.value:
+                key=self.construct_object(k,deep=deep)
+                try:
+                    duplicate=key in output
+                except TypeError:
+                    raise ValueError("unhashable_selected_exported_Material_key") from None
+                if duplicate:
+                    raise ValueError("duplicate_selected_exported_Material_YAML_key")
+                output[key]=self.construct_object(v,deep=deep)
+            return output
+    c,s={},{}
+    for path in entries:
+        if not path.is_file() or path.suffix not in (".mat",".asset",".unity",".prefab"):
+            continue
+        if path.stat().st_size>256*1024*1024:
+            raise ValueError("unbounded_exported_Material_YAML_candidate")
+        with path.open("rb") as reader:
+            if not reader.read(16).lstrip(b"\xef\xbb\xbf").startswith(b"%YAML"):
+                continue
+        meta=Path(str(path)+".meta")
+        if meta.is_symlink() or not meta.is_file() or meta.stat().st_size>256000:
+            # Unrelated containers are not selection evidence.
+            continue
+        ids=colors.GUID.findall(meta.read_text("utf-8-sig"))
+        if len(ids)!=1 or ids[0].lower() not in guid_set:
+            continue
+        guid=ids[0].lower()
+        content=path.read_text("utf-8-sig")
+        headers=list(colors.ALL_HEADER.finditer(content))
+        for idx,header in enumerate(headers):
+            match=colors.MATERIAL_HEADER.fullmatch(header.group(0))
+            if match is None:
+                continue
+            key=(int(match.group(1)),guid)
+            if key not in wanted:
+                continue
+            if key in c or key in s:
+                raise ValueError("duplicate_source_selected_export_Material_document")
+            block=content[header.end():headers[idx+1].start()
+                          if idx+1<len(headers) else len(content)]
+            try:
+                data=yaml.load(block,Loader=StrictLoader)
+            except (ValueError,TypeError,yaml.YAMLError):
+                raise ValueError("malformed_source_selected_exported_Material_YAML") from None
+            if (type(data) is not dict or type(data.get("Material")) is not dict
+                or type(data["Material"].get("m_SavedProperties")) is not dict):
+                raise ValueError("source_selected_export_Material_saved_properties_missing")
+            saved=data["Material"]["m_SavedProperties"]
+            if "m_Colors" not in saved:
+                raise ValueError("source_selected_export_Material_color_field_missing")
+            c[key]=colors.normalize_colors(saved["m_Colors"],exported=True)
+            s[key]=scalars.normalize(saved,exported=True)
+    if set(c)!=wanted or set(s)!=wanted:
+        raise ValueError("original_five_selected_export_Material_documents_incomplete")
+    return c,s
+
 def assess(source_colors,source_scalars,w1,actual_colors,actual_scalars):
     """Compare only selected real Material21 documents; reject inexact ID coverage."""
     if (type(source_colors) is not dict or type(source_scalars) is not dict
@@ -165,13 +249,18 @@ def run(original,manifest,project,w1_trace,b02_trace):
     except (ValueError,KeyError,TypeError) as exc:
         raise PrivatePhaseError("SAME_EXPORT_W1_B02") from None
     try:
-        exported_color=colors.exported_colors(project)
+        original_keys=set(source_colors)
+        pointers=set()
+        for row in w1["objects"]:
+            if row.get("class_id")!=21:
+                continue
+            if colors._source_id(row.get("source")) in original_keys:
+                pointers.add(colors._export_pointer(row["export"]))
+        if len(pointers)!=EXPECTED_MATERIALS:
+            raise ValueError("missing_or_colliding_selected_Material_export_ptr")
+        exported_color,exported_scalar=exported_selected_values(project,pointers)
     except (ValueError,KeyError,TypeError) as exc:
         raise PrivatePhaseError("EXPORTED_RGBA_YAML") from None
-    try:
-        exported_scalar=scalars.exported_scalars(project)
-    except (ValueError,KeyError,TypeError) as exc:
-        raise PrivatePhaseError("EXPORTED_SCALAR_YAML") from None
     try:
         result=assess(source_colors,source_scalars,w1,exported_color,exported_scalar)
     except PrivatePhaseError:
