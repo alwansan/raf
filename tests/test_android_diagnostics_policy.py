@@ -135,6 +135,45 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         self.assertIn('message + "\\n" + stack, critical)', capture)
 
 
+    def test_focused_five_second_windows_exclude_background_and_short_resume(self):
+        # Startup/focus-only transitions must not yield one-frame "steady scene"
+        # samples or contaminate the next window with an Android OS stall.
+        update = self.source.split("private void Update()", 1)[1]
+        update = update.split("private void OnGUI()", 1)[0]
+        paused = self.source.split("private void OnApplicationPause(bool paused)", 1)[1]
+        paused = paused.split("private void OnApplicationFocus(", 1)[0]
+        focus = self.source.split("private void OnApplicationFocus(bool focused)", 1)[1]
+        focus = focus.split("private void OnApplicationQuit()", 1)[0]
+
+        self.assertIn("private bool applicationFocused = true;", self.source)
+        self.assertIn("private bool applicationPaused;", self.source)
+        self.assertIn("applicationPaused = paused;", paused)
+        self.assertIn("applicationFocused = focused;", focus)
+        for callback in (paused, focus):
+            self.assertIn("intervalFrames = sampleCount = 0; intervalSeconds = 0;", callback)
+            self.assertIn('frameWindowStartScene = "";', callback)
+            self.assertIn("frameWindowStartActiveSceneRevision = activeSceneRevision;", callback)
+            self.assertIn("frameWindowStartSceneRevision = sceneContentRevision;", callback)
+            self.assertIn("skipNextFrame = true;", callback)
+
+        self.assertIn("if (applicationPaused || !applicationFocused) return;", update)
+        self.assertLess(update.index("if (applicationPaused || !applicationFocused) return;"),
+                        update.index("FrameTimingManager.CaptureFrameTimings();"))
+        skip = update.split("if (skipNextFrame)", 1)[1]
+        skip = skip.split("if (intervalFrames == 0)", 1)[0]
+        self.assertIn("nextSample = Time.realtimeSinceStartup + 5f;", skip)
+        self.assertIn("return;", skip)
+        self.assertLess(update.index("nextSample = Time.realtimeSinceStartup + 5f;"),
+                        update.index("intervalFrames++; intervalSeconds += delta;"))
+        self.assertIn("if (Time.realtimeSinceStartup < nextSample) return;", update)
+        self.assertIn("intervalFrames++; intervalSeconds += delta;", update)
+        # Actual scene loads/stalls are still counted, not reset by scene callbacks.
+        active = self.source.split("private static void ActiveSceneChanged(", 1)[1]
+        active = active.split("private void OnApplicationPause(", 1)[0]
+        self.assertNotIn("intervalFrames =", active)
+        self.assertNotIn("skipNextFrame =", active)
+
+
 if __name__ == "__main__":
     unittest.main()
 
