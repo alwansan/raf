@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T214945Z-T1-chat-site2y-cfg-73af",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "41dd30d045bb4fff3b739b7e7610ebff8f1deb50",
   "resumed_from_sessions": [
     "20261106T213843Z-T1-chat-axis-overlap-0ba942",
@@ -29,6 +29,48 @@
   ],
   "collision_check": "Latest T1 scheduled site1/axis controls and prior T1 aggregate completed; new isolated site2-Y tool+tests; native 42296450023 reconstruct Unity Editor in_progress, do not rerun Unity/native or fetch original 116MB concurrently. T2/T3/T4/T5 files unchanged.",
   "trial_vote": "لا يحتاج",
-  "next_step": "Build and run source-only bounded site2-Y CFG tests. Stage private-original SHA-pinned probe workflow for manual execution only once heavy native is no longer running; store exact dispatch continuation for next T1 cycle.",
-  "updated_at": "2026-11-06T21:49:45.169Z"
+  "next_step": "Compare original source constant float-bit-to-signed coordinate on Site2 Y against HLSL/SPIRV-Cross-derived Unity candidate Site2 Y SSA and evaluated shader GPU addresses, preserving specific constant values private; isolate whether translator bitcast or Phi/branch selection loses signed payload without assuming float32_constant == 0. Existing native 42296450023 remains separate.",
+  "updated_at": "2026-11-06T21:55:39.714Z",
+  "result": {
+    "code_commit": "8874afc8707bbbb897481327e3cbaad71d8cee48",
+    "ci_id": 42300397465,
+    "ci_url": "https://github.com/alwansan/raf/actions/runs/42300397465",
+    "source_only_job_id": 128176356928,
+    "source_only_tests": "12/12 passed",
+    "original_private_job_id": 128176424609,
+    "original_private_status": "success",
+    "source_zip2": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "compute_object_sha_verified": true,
+    "compiled_pairs_verified": 10,
+    "vkd3d_spirv_val_passed": true,
+    "original_site": 2,
+    "axis": "y",
+    "role": "butterfly",
+    "source_boundary": "load",
+    "coordinate_lane_bitcast": [
+      "float32_to_sint32:nonload"
+    ],
+    "physical_lane_outside_xy": false,
+    "abstract_states_at_load": 2,
+    "may_last_writer_categories": [
+      "float32_constant"
+    ],
+    "static_writer_categories": {
+      "float32_constant": 1,
+      "whole_vector": 8
+    },
+    "conditional_predicates_on_may_paths": [
+      "OpINotEqual"
+    ],
+    "backward_cfg_edge_seen": true,
+    "uninitialized_final_path": false,
+    "unknown_final_write_possible": false,
+    "pointer_escape_possible": false,
+    "note": "float32_constant is a typed writer class, not proof of literal zero or signed integer numeric value; branch may-paths ignore predicate satisfiability. Static whole-vector writers not present in current final may-category.",
+    "actual_numeric_fft_parity_proven": false,
+    "android_water_proven": false,
+    "unity_authored_kernel_map_proven": false
+  }
 }

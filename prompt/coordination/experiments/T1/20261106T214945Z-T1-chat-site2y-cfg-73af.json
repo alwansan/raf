@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T214945Z-T1-chat-site2y-cfg-73af",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "t1-sha15964ea8-fft2456-original-slot0-site2-y-physical-load-last-writer-cfg-reuse-v1",
+  "source_commit": "8874afc8707bbbb897481327e3cbaad71d8cee48",
+  "source_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "ci": {
+    "run": 42300397465,
+    "source_only_job": 128176356928,
+    "original_private_job": 128176424609,
+    "conclusion": "success",
+    "synthetic_tests": 12
+  },
+  "original_real": {
+    "site": 2,
+    "role": "butterfly",
+    "axis": "y",
+    "typed_bitcast": "float32_to_sint32:nonload",
+    "last_writer_categories": [
+      "float32_constant"
+    ],
+    "static_writer_categories": {
+      "float32_constant": 1,
+      "whole_vector": 8
+    },
+    "observed_cfg_predicates": [
+      "OpINotEqual"
+    ],
+    "backedge": true,
+    "abstract_states_at_read": 2,
+    "unknown_write": false,
+    "uninitialized_path": false
+  },
+  "limits": [
+    "No original constant literal output",
+    "No actual branch runtime truth",
+    "No HLSL-derived candidate comparison in this job",
+    "No original Unity runtime FindKernel mapping",
+    "No Android water pixel evidence"
+  ],
+  "next_step": "Compare original source constant float-bit-to-signed coordinate on Site2 Y against HLSL/SPIRV-Cross-derived Unity candidate Site2 Y SSA and evaluated shader GPU addresses, preserving specific constant values private; isolate whether translator bitcast or Phi/branch selection loses signed payload without assuming float32_constant == 0. Existing native 42296450023 remains separate."
+}

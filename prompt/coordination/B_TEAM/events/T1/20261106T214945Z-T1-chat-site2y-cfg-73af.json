@@ -1,0 +1,17 @@
+{
+  "id": "20261106T214945Z-T1-chat-site2y-cfg-73af",
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T214945Z-T1-chat-site2y-cfg-73af",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T21:55:39.714Z",
+  "status": "completed",
+  "summary": "Original ZIP2 SHA-verified first FFT compiled program -> real vkd3d SPIR-V site2 Butterfly Y CFG. Source 115978112B SHA verified, 20 slots/10 pairs; 12/12 source tests; original job success 42300397465. Site2 Y from Function local float32-to-sint32 bitcast, only float32_constant possible final writer across 2 bounded may-path states, OpINotEqual/backedge. Constant category != zero literal, no runtime branch/Unity/Android pixel proof.",
+  "proof_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42300397465",
+    "https://github.com/alwansan/raf/commit/8874afc8707bbbb897481327e3cbaad71d8cee48"
+  ],
+  "vote": "لا يحتاج",
+  "no_proprietary_shader_or_pixel_export": true
+}
