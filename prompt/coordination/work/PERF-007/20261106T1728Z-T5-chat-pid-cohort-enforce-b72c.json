@@ -8,7 +8,7 @@
   "track": "integration-cl-surface-pid-epoch-guard",
   "status": "active",
   "base_sha": "1a5170e8bccb64d4f88bf30dc5013f1dd363347b",
-  "updated_at": "2026-11-06T17:28:40Z",
+  "updated_at": "2026-11-06T17:31:52.690Z",
   "resumed_from_sessions": [
     "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
     "20261106T1649Z-T5-scheduled-runtime-attribution-c82f",
@@ -26,11 +26,19 @@
     "prompt/coordination/work/PERF-007/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json",
     "prompt/coordination/clients/T5/sessions/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.md",
     "prompt/coordination/experiments/T5/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json",
-    "prompt/coordination/B_TEAM/events/T5/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json"
+    "prompt/coordination/B_TEAM/events/T5/20261106T1728Z-T5-chat-pid-cohort-enforce-b72c.json",
+    "scripts/t5_cl_pid_epoch_audit.py"
   ],
   "experiment_key": "T5-CL@520c4cf4-pid-epoch-audit-integration-verified-surface-only-exact-same-190-rows-v1",
   "resource_key": "read-only pinned CL two JSONL blobs 374587+646527; one existing T5 source-only workflow run",
   "hypothesis": "Original T5 LogRaft SurfaceFlinger cohort script groups fresh samples regardless of independently verified Raft PID lifecycle; scheduled T5 produced process-epoch auditor but not integrated. Reuse exact scheduled audit to suppress unverified cross-process FPS cohorts in real report/compare while preserving previously verified one-PID genuine CL 190-row conclusion.",
   "coordination": "Complement T5 scheduled PID audit source without modifying its scripts/t5_cl_pid_epoch_audit.py or tests; only integrate into earlier chat-owned cohort reader and own new integration tests. T1/T2/T3 graphics and T4 local/world and Unity native workflow untouched. No native dispatch/cancel or alterations to previously authenticated source CL commit.",
-  "next_step": "Add fail-closed process-epoch gate and synthetic mutation cases; test genuine original CL two blobs on existing source-only workflow; record CI and limits (SurfaceFlinger not Unity GPU/FPS)."
+  "next_step": "Repair scheduled helper's unverified running PID split to isolate unknown interval as own epoch (not relax test), rerun source-only CI with 18+4+7 tests and pinned original CL 190 rows.",
+  "related_work": [
+    "prompt/coordination/work/PERF-007/20261106T1649Z-T5-scheduled-runtime-attribution-c82f.json"
+  ],
+  "ci_intermediate_failure": {
+    "run_id": 42262250870,
+    "reason": "4 scheduled audit tests: test_unknown_pid_breaks_cohort 2!=3; discovered pre-existing unverified interval epoch split off-by-one, while 18 older tests pass; add code file to scope before fixing same-T5 source; leave scheduled checkpoint unchanged."
+  }
 }
