@@ -1,0 +1,20 @@
+{
+  "id": "T2-20261106T1817Z-T2-chat-original-script-target-5ac9-55k-original-mono-target-type-join-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1817Z-T2-chat-original-script-target-5ac9",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Genuine SHA-pinned ZIP2 CI42269806221 SUCCESS: 16/16 new source-free tests; original 40 level scenes 233237972 bytes SHA checked, 55328/55328 m_Script refs all map to one uniquely manifest-resolved source provider, SHA-verified 758412 bytes; all 55328/55328 PathIDs correspond to 473 distinct real typed original MonoScript objects in that file. No private names/GUIDs/paths/raw bytes. This is source script identity, not Foam Shader runtime binding or Android pixels. T2 trial r1 NO unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42269806221",
+    "docs/T2_ORIGINAL_SCRIPT_TARGET_PROVENANCE_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1817Z-T2-chat-original-script-target-5ac9.json"
+  ],
+  "limitations": [
+    "Only source manifest basename + actual typed MonoScript object, no independent Unity runtime GUID proof.",
+    "Original 473 scripts' custom fields/Assembly-CSharp match not yet reconstructed.",
+    "No original Foam CB0/ShaderLab integrated; WATER-001 OPEN, game NOT_READY."
+  ],
+  "at": "2026-11-06T18:23:45.231Z"
+}
