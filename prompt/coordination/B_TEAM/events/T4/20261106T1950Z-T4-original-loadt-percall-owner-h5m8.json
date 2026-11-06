@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1950Z-T4-original-loadt-percall-owner-h5m8",
+  "owner": "T4",
+  "session_id": "20261106T1946Z-T4-chat-original-load-cycles-h5m8",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Authenticated actual 5-Nov CL owner Android phone JSONL: seven original Load<T> calls each trace one nonzero file argument snapshot then exit with no Load.caughtException (session 1=0, session 2=3, session 3=4); no ambiguous/incomplete calls. New source-only adversarial equal-count/missing/repeated/unavailable/caught tests RED CI42282580407 pre-fix, GREEN CI42282698031 15/15 synthetic + same three immutable Git-blob-authenticated phone logs, source 5fc07e87. No actual Deserialize return/same-world/durable RGD/new APK/OBB proof; owner-direct native run42281310905 in progress and not touched.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42282580407",
+    "https://github.com/alwansan/raf/commit/1665b4fbfa0cdd23932b82f0769389ef0928bbb3",
+    "https://github.com/alwansan/raf/commit/5fc07e87873c1a8cfc85d56665024dd6288d68f8",
+    "https://github.com/alwansan/raf/actions/runs/42282698031",
+    "https://github.com/alwansan/CL/commit/520c4cf409aa20a4db54ff80ed87d8807d9cba57"
+  ],
+  "at": "2026-11-06T19:50:00Z"
+}
