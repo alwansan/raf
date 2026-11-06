@@ -76,7 +76,7 @@ class SignedApkAuthenticityTests(unittest.TestCase):
         self.assertTrue(result["apksigner_crypto_verified"])
         self.assertTrue(result["apksigner_signature_schemes_verified"]["v2"])
         self.assertFalse(result["apksigner_signature_schemes_verified"]["v3"])
-        self.assertIsNone(result["apksigner_signer_count_reported_by_tool"])
+        self.assertEqual(result["apksigner_signer_count_reported_by_tool"], 1)
         self.assertTrue(result["apksigner_certificate_digest_metadata_available"])
         self.assertEqual(result["apksigner_certificate_sha256_prefixes_12_if_reported"],
                          ["a" * 12])
