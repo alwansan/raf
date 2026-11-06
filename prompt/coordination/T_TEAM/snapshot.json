@@ -238,7 +238,8 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42086855402",
         "https://github.com/alwansan/raf/actions/runs/42150216417",
-        "https://github.com/alwansan/raf/actions/runs/42149781353"
+        "https://github.com/alwansan/raf/actions/runs/42149781353",
+        "https://github.com/alwansan/raf/actions/runs/42153533612"
       ],
       "remaining": [
         "نجح دخول العالم والحفظ والخروج والعودة لدى المالك على Artifact 42058825739. حافظ على هذا المسار وتحقق من المشكلات المتبقية ومنع التراجع.",
@@ -275,7 +276,8 @@
         "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3.",
         "T4 authentic original SaveAndLoad RGD world factory returned-local assignment CI42076494669 SUCCESS 67/67: exact original SHA-pinned source IL has one lexical stloc to local loaded before unique ret, immediately preceded by derived-RGD newobj; no other direct literal null, call/local/field store to that slot. Constructor adjacency is not branch execution or device-proven non-null. No actual world/user .rgd durability, local-host play, Android exit/reopen proven. LOCAL-005 remains OPEN NOT_READY 0/3.",
         "T4 2026-11-05 real CL-generated Android world RGD: CI42086855402 SUCCESS on SHA cbbc296c95b53d13354661eef3bd5212456f5364. Three distinct exact CL public git blobs (11255/310140/309863 bytes) authenticated before historical BinaryFormatter; genuinely invoked compiled original SaveAndLoad.Load<T> on .NET8 with original Assembly-CSharp and 151 sibling DLLs; 3/3 returned matching original CLR object and error category NONE, wrong input rejected. This weakens generic corrupted/incompatible RGD explanation only for those three CL inputs under .NET8; does NOT prove complete world content, Unity/Android IL2CPP, playable host, durable SaveGame or full-restart replay. CL Nov4 APK86 second session repeats StoreStats steam_api64 after MainScene/additive scenes and SaveWorld/SaveUser; new native reconstruct run42058825739 succeeded after guarded source staging but release create failed HTTP403 so no post-guard phone test. LOCAL-005 OPEN NOT_READY 0/3.",
-        "T4 owner 5Nov CL@520c seven distinct real World RGD blobs (two equal-size distinct Git hashes), exact original .NET8 CLR Load<T> run42150216417 SUCCESS 7/7 typed original decoded and returned; 12 source-free negative tests and one-byte tamper rejection. This is managed source compatibility only, NOT new Android IL2CPP/device or world-progress/reopen acceptance; retain prior owner artifact42058825739 bounded success."
+        "T4 owner 5Nov CL@520c seven distinct real World RGD blobs (two equal-size distinct Git hashes), exact original .NET8 CLR Load<T> run42150216417 SUCCESS 7/7 typed original decoded and returned; 12 source-free negative tests and one-byte tamper rejection. This is managed source compatibility only, NOT new Android IL2CPP/device or world-progress/reopen acceptance; retain prior owner artifact42058825739 bounded success.",
+        "T4 original world Save→Load real compiled CLR experiment run42153533612 SUCCESS: 7/7 exact CL 5-Nov owner world object roots assignable to authentic original RGD base; strict original private Save IL guard 7/7, real Save invocations and nonzero disposable files 7/7, original generic LoadT matching roots 7/7, cleanup 7/7; 36 safe tests. This is isolated .NET8, not Android IL2CPP, original in-game SaveGame event, data content equivalence, or new phone process relaunch; retain owner42058825739 prior bounded acceptance."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -283,7 +285,8 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-06T02:26:00Z",
+      "updated_at": "2026-11-06T02:58:00Z",
+      "latest_T4_original_world_save_roundtrip": "SOURCE_ORIGINAL_CLR_7_OF_7_SAVE_AND_GENERATED_LOAD_SUCCESS_CI42153533612_DEVICE_UNVERIFIED",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -6269,6 +6272,74 @@
       "_record_path": "../B_TEAM/events/T1/20261105T210230Z-T1-chat-a8dc31.json"
     },
     {
+      "id": "20261106T093342Z-T1-chat-d82f",
+      "owner": "T1",
+      "session_id": "20261106T093342Z-T1-chat-d82f",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Exact source CI exercises and passes both FFT evidence test suites, including the scheduled duplicate-key and editor-capability guards.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42196086122",
+        "https://github.com/alwansan/raf/commit/c6c113c947229b85bf5913766feed9bca8320d6b"
+      ],
+      "at": "2026-11-06T09:35:37.269Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T093342Z-T1-chat-d82f.json"
+    },
+    {
+      "id": "20261106T093916Z-T1-chat-64ac",
+      "owner": "T1",
+      "session_id": "20261106T093916Z-T1-chat-64ac",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Started paired FFT replay with allowlisted Unity stage diagnostics and a separate Vulkan comparison step.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42196835754"
+      ],
+      "at": "2026-11-06T09:41:49.476Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T093916Z-T1-chat-64ac.json"
+    },
+    {
+      "id": "20261106T094304Z-T1-chat-e735",
+      "owner": "T1",
+      "session_id": "20261106T094304Z-T1-chat-e735",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Paired FFT replay reached comparison and isolated the first observed divergence to sample site 1 X-coordinate selection.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42196835754"
+      ],
+      "at": "2026-11-06T09:45:27.519Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T094304Z-T1-chat-e735.json"
+    },
+    {
+      "id": "20261106T094845Z-T1-chat-p6f2",
+      "owner": "T1",
+      "session_id": "20261106T094845Z-T1-chat-p6f2",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Launched the promoted-only FFT candidate as a control for the prior source integer rewrite.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42198180194"
+      ],
+      "at": "2026-11-06T09:52:22.682Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T094845Z-T1-chat-p6f2.json"
+    },
+    {
+      "id": "20261106T101340Z-T1-chat-2f6a",
+      "owner": "T1",
+      "session_id": "20261106T101340Z-T1-chat-2f6a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Promoted-only control isolates the source-coordinate benefit of the rewrite; both butterfly address divergences remain.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42198180194",
+        "https://github.com/alwansan/raf/actions/runs/42196835754",
+        "https://github.com/alwansan/raf/actions/runs/42141540903"
+      ],
+      "at": "2026-11-06T10:14:37.487Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T101340Z-T1-chat-2f6a.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -6790,6 +6861,47 @@
         "https://github.com/alwansan/raf/commit/143ae1345a0bb222dba1cefe7bc82bf80da47bfa"
       ],
       "_record_path": "../B_TEAM/events/T2/20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c-result.json"
+    },
+    {
+      "session_id": "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2",
+      "agent": "T2",
+      "origin": "scheduled",
+      "issue_id": "WATER-001",
+      "type": "source_guard_added",
+      "status": "source_smoke_only",
+      "base_sha": "cae0dbe8c4a98d2d874e0d0f593d91d2dadc3fb5",
+      "source_commit": "2f7ff680df6ca49f11cd62e044020efb133b6439",
+      "tests_commit": "801e0a3995e8980571eef3c1c793375821f184d0",
+      "original_evidence_run": "https://github.com/alwansan/raf/actions/runs/42153150468",
+      "result": "CB0 byte extents differ in two authentic Foam passes; source-only fail-closed member/upload gate added; no Unity/device claim.",
+      "next_step": "Run six repository unittest methods; authenticate CB0 member ABI and Unity upload before ShaderLab integration.",
+      "id": "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2",
+      "owner": "T2",
+      "_record_path": "../B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json"
+    },
+    {
+      "schema_version": 1,
+      "type": "result",
+      "event_type": "result",
+      "username": "T2",
+      "author": "T2",
+      "session_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
+      "origin": "chat",
+      "issue_id": "WATER-001",
+      "at": "2026-11-06T09:44:00Z",
+      "source_sha": "88f1c258362061b54703285863e51f1eaa682bbd",
+      "title": "Source-only CB0 two-pass gate regression CI passed",
+      "summary": "10/10 source-free tests pass in isolated Ubuntu 24.04 run; no private shader or Unity/device evidence; original two CB0 extent mismatches still unresolved.",
+      "evidence": {
+        "workflow_run": "https://github.com/alwansan/raf/actions/runs/42197159968",
+        "job_id": 127823183108,
+        "workflow_file": ".github/workflows/raft-t2-foam-cb0-gate-smoke.yml"
+      },
+      "status": "SOURCE_FIXED_SOURCE_ONLY_GUARD_WATER_OPEN",
+      "next_step": "Privately authenticate both original Foam pass CB0 member offsets/types and their Unity material upload; only then wire original ShaderLab and perform Unity/Adreno validation.",
+      "id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result",
+      "owner": "T2",
+      "_record_path": "../B_TEAM/events/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -7508,6 +7620,67 @@
       "_record_path": "../B_TEAM/events/T3/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.json"
     },
     {
+      "id": "20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "T3 scheduled Shader48 gate now verified by independent GitHub Actions py_compile plus all ten source-free synthetic regressions (Python 3.12.3 Ubuntu24.04), after earlier SOURCE_FIXED_PENDING_TEST. Real original_shader/pass/Android pixel equivalence remains unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42197356111",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-t3-shader48-syntax-regression.yml",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9.json"
+      ],
+      "at": "2026-11-06T09:45:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9.json"
+    },
+    {
+      "id": "20261106T0950Z-T3-chat-dxbc-spv-location-27af",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T0950Z-T3-chat-dxbc-spv-location-27af",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Actual SHA-authentic original Particle108 four VS/FS keyword pairs (8 DXBC stages): source vkd3d SPIRV numerically matches 46/48 original user registers, 2 absent numeric location, 46 type-class matches, zero width deficits, only 2/4 pairs wholly candidate; no semantic name identity, HLSL map or Android pixel proof; no auto shader patch.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42199149873",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T0950Z-T3-chat-dxbc-spv-location-27af.json"
+      ],
+      "at": "2026-11-06T10:00:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T0950Z-T3-chat-dxbc-spv-location-27af.json"
+    },
+    {
+      "id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
+      "owner": "T3",
+      "session_id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
+      "origin": "chat",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Genuine ZIP2 original Particle108 four paired DXBC VS/FS stages: 2/48 original user registers absent by numeric source SPIR-V Location, both from Fragment Shader INPUT (14/16), not Vertex INPUT (12/12), Vertex OUTPUT (16/16) or Fragment OUTPUT (4/4); 12 synthetic controls pass; source identity and Android pixels not proven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42199952229",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1002Z-T3-chat-stage-role-misses-7e13.json"
+      ],
+      "at": "2026-11-06T10:06:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1002Z-T3-chat-stage-role-misses-7e13.json"
+    },
+    {
+      "id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+      "owner": "T3",
+      "session_id": "20261106T1010Z-T3-chat-fragment-usedmask-5c2f",
+      "origin": "chat",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Authentic original Particle108 4 VS/FS pairs/8 source DXBC stages: 2 original Fragment inputs absent by numeric source vkd3d SPIRV Location both have original compiled DXBC input used_mask=0 (0 nonzero), both originally connect to VS output semantic mask/type, 16 source-free tests passed; supports possible benign compiler elimination, not semantic identity or Android GPU proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42200663399",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json"
+      ],
+      "at": "2026-11-06T10:12:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8108,6 +8281,96 @@
       "_record_path": "../B_TEAM/events/T4/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.json"
     },
     {
+      "id": "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+      "session_id": "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "LOCAL-005",
+      "type": "actual_original_managed_world_Save_Load_roundtrip",
+      "at": "2026-11-06T02:58:00Z",
+      "timestamp": "2026-11-06T02:58:00Z",
+      "summary": "T4 actual original private SaveAndLoad.Save(string,RGD) on seven SHA-authenticated owner 5-Nov world RGD objects: original Source RGD base/derived CLR assignability, original Mono.Cecil strict IL allowlist, original Save invocation 7/7, nonzero temp original Save output 7/7, original generic LoadT of the generated output returns matching original class 7/7, temp cleanup 7/7; 12+24 source-free tests, CI42153533612 SUCCESS. Initial exact-type guard refusal 7/7 corrected via authenticated original RGD inheritance, not a game code change. NO Unity Android/phone, world progress or process-relaunch acceptance; LOCAL-005 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42153533612",
+        "https://github.com/alwansan/raf/actions/runs/42153104453",
+        "prompt/coordination/experiments/T4/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.json"
+      ],
+      "source_commit": "5c1d78117640b174d571a5a2a592b8388fb662ed",
+      "device": "UNVERIFIED_NEW_SIGNED_ANDROID_CANDIDATE",
+      "raw_user_world_data_published": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.json"
+    },
+    {
+      "id": "T4-20261106T0336Z-T4-scheduled-m7q2-view-identity",
+      "session_id": "20261106T0336Z-T4-scheduled-m7q2",
+      "origin": "scheduled",
+      "owner": "T4",
+      "issue_id": "INPUT-005",
+      "status": "SOURCE_FIXED",
+      "timestamp": "2026-11-06T03:36:00Z",
+      "summary": "Source-only diagnostic tracks Android pointer capture request/probe View identity by epoch; no behavior change and no phone verification.",
+      "evidence": [
+        "9b94ad1cbbd97048848340536243ced3022c8e3b",
+        "23333548d94c54f68c027c65ec611d551898377c"
+      ],
+      "next_step": "Run contract test and check device log; coordinate next signed candidate with T5.",
+      "_record_path": "../B_TEAM/events/T4/20261106T0336Z-T4-scheduled-m7q2.json"
+    },
+    {
+      "id": "20261106T0542Z-T4-scheduled-c8v5",
+      "session_id": "20261106T0542Z-T4-scheduled-c8v5",
+      "origin": "scheduled",
+      "client": "T4",
+      "issue_id": "INPUT-005",
+      "type": "ci_result_verified",
+      "timestamp_utc": "2026-11-06T05:42:50Z",
+      "status": "SOURCE_FIXED",
+      "summary": "Previously waiting physical mouse View-mismatch source CI42163839014 and platform CI42163838785 both completed success on f97dda27; no phone acceptance.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42163839014",
+        "https://github.com/alwansan/raf/actions/runs/42163838785"
+      ],
+      "next_step": "T5-coordinated signed Android physical mouse plus keyboard and world save regression.",
+      "_record_path": "../B_TEAM/events/T4/20261106T0542Z-T4-scheduled-c8v5.json"
+    },
+    {
+      "event_id": "T4-20261106T0740Z-zero-view-identity-guard-p4k8",
+      "origin": "scheduled",
+      "issue_id": "INPUT-005",
+      "kind": "source_fix_waiting_ci",
+      "source_commit": "d234b10e431e9b1f416456c5e767d70e49680397",
+      "test_commit": "446bc1f0a0817189a38db4803678e74dc27058db",
+      "work": "prompt/coordination/work/INPUT-005/T4-20261106T0740Z-T4-scheduled-p4k8-zero-identity-guard.json",
+      "session": "prompt/coordination/clients/T4/sessions/20261106T0740Z-T4-scheduled-p4k8.md",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42182264435",
+        "https://github.com/alwansan/raf/actions/runs/42182264431"
+      ],
+      "limitations": "Source fix not yet CI-confirmed, no Android phone test; owner local world/save success limited to artifact 42058825739.",
+      "updated_at": "2026-11-06T07:48:00Z",
+      "id": "T4-20261106T0740Z-zero-view-identity-guard-p4k8",
+      "_record_path": "../B_TEAM/events/T4/20261106T0740Z-zero-view-identity-guard-p4k8.json"
+    },
+    {
+      "id": "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+      "session_id": "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "INPUT-005",
+      "type": "source_ci_regression_coverage_verified",
+      "timestamp": "2026-11-06T09:48:00Z",
+      "at": "2026-11-06T09:48:00Z",
+      "summary": "Integrated previously unexecuted post-446bc1f0 View identity source audit in T4 isolated mouse workflow; exact commit e3fb678, CI42197616749 success and job logs show 4/4 new tests actually executed, 44/44 Python total, original Unity2021 managed ABI compile and source-gates successful. No Android phone or native APK; scheduled release-target gap unchanged. INPUT-005 OPEN; NOT_READY 0/3.",
+      "source_commit": "e3fb67812368fb6cafd327c9e99ce1886eea1b57",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42197616749",
+        "prompt/coordination/experiments/T4/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.json",
+        "prompt/coordination/clients/T4/sessions/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.md"
+      ],
+      "device": "NOT_TESTED",
+      "_record_path": "../B_TEAM/events/T4/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -8540,6 +8803,56 @@
       "_record_path": "../B_TEAM/events/T5/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json"
     },
     {
+      "id": "20261106T0348Z-T5-scheduled-zip-member-path-6c9",
+      "owner": "T5",
+      "session_id": "20261106T0348Z-T5-scheduled-zip-member-path-6c9",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "summary": "Hardened ZIP member raw path validation and added two adversarial synthetic tests; CI pending.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/7061c0a6ea76e5161268f46873cb4f2ee9110152",
+        "https://github.com/alwansan/raf/actions/runs/42158794051"
+      ],
+      "at": "2026-11-06T03:50:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261106T0348Z-T5-scheduled-zip-member-path-6c9.json"
+    },
+    {
+      "schema_version": 1,
+      "event_id": "20261106T0950Z-T5-chat-focus-frame-a7c3",
+      "origin": "chat",
+      "actor": "T5",
+      "issue_id": "PERF-007",
+      "status": "SOURCE_FIXED_CI_VERIFIED_DEVICE_UNVERIFIED",
+      "title": "Focus-only Android transitions and start/resume one-frame FPS interval regression isolated",
+      "commits": [
+        "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+        "c4cf247bcc4b84b257cb4769e6be9f8a0bb802fc"
+      ],
+      "tests": [
+        {
+          "run_id": 42198367607,
+          "conclusion": "success",
+          "diagnostics_policy": "12/12"
+        },
+        {
+          "run_id": 42198281963,
+          "conclusion": "success"
+        },
+        {
+          "run_id": 42198281878,
+          "conclusion": "success"
+        }
+      ],
+      "important_limit": "Not a measured increase in FPS or a Unity/Adreno device-pass; old original phone logs cannot contain these new fields/behavior.",
+      "work_path": "prompt/coordination/work/PERF-007/20261106T0950Z-T5-chat-focus-frame-a7c3.json",
+      "experiment_path": "prompt/coordination/experiments/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json",
+      "session_path": "prompt/coordination/clients/T5/sessions/20261106T0950Z-T5-chat-focus-frame-a7c3.md",
+      "next": "Validate foreground-only full 5s sampling and scene loading provenance with future device logs; no duplicate native build.",
+      "updated_at": "2026-11-06T09:54:00Z",
+      "id": "20261106T0950Z-T5-chat-focus-frame-a7c3",
+      "_record_path": "../B_TEAM/events/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -8568,7 +8881,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "b2c39d818be88f953c6ad1040ddaf1b600fa5c23e51b61ad50e9c3cc419c45f5",
+  "source_input_sha256": "a8fa231a4d398e9a8db3ba60f5237961309b28a0b484a33eca3bf0c90fb420c9",
   "generation": "T-2026-11-05",
-  "input_sha256": "5e94e07ca22ea0060ed43f2ff59fc7482febdf1d78fbbb88aa9f20ea76e0d906"
+  "input_sha256": "fd670c915f1f7af13374d04dfa9945b0950369d82f743a8951f914375d2b6478"
 }
