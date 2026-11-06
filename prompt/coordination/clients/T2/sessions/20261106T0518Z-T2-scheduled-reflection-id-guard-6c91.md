@@ -1,0 +1,12 @@
+# T2 scheduled — coordinate-aware Foam reflection identity guard
+
+- session_id: `20261106T0518Z-T2-scheduled-reflection-id-guard-6c91`; origin: `scheduled`; issue: WATER-001.
+- resumed_from: `20261106T0420Z-T2-scheduled-opdecorate-91af`, `20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c`.
+- initial HEAD: `79191296a7396fa1e8c2ebb62218f202f364f943`; work registered before changes: `a3d94a186f43c0ce0c9edea00e73e6b8293ff691`.
+- Owner device baseline: [42058825739](https://github.com/alwansan/raf/actions/runs/42058825739), [report](../../../../docs/DEVICE_FEEDBACK_42058825739_AR.md); world save/reopen confirmed, water/FFT remains open; CL pin `520c4cf409aa20a4db54ff80ed87d8807d9cba57`.
+- Last original Foam selective private test: [42153150468](https://github.com/alwansan/raf/actions/runs/42153150468), 71 passed, four class conflicts removed by four literal changes, two CB0 block extents unresolved. No new original-data run.
+- Finding: `verify_selective_reflection` previously reduced descriptor IDs to a dict keyed solely by Binding, although bindings are set-scoped. Two entries with the same Binding in different DescriptorSets collapse, permitting a deliberately ordered ID swap to pass identity validation. Changed identity comparison to full `(set,binding,id)` tuples per category, preserving existing reflection signature and count checks.
+- Source commit: [13a908f](https://github.com/alwansan/raf/commit/13a908ff0f0f1c682593d40e819193eafd62a94a); adversarial regression [081642a](https://github.com/alwansan/raf/commit/081642ae15dc198fe18b9fc57695c01f2eab4299). Regression includes same-binding/different-set descriptors and an ID swap ordered to evade old dict.
+- Validation boundary: repository unit tests **not executed** (container GitHub DNS failure). No Unity, device, authentic shader, CB0 upload, .meta/GUID, game assets, audio, Settings, touch, mouse, Resolution or release edits. Pending T1 Actions were not cancelled or duplicated.
+- Work: `prompt/coordination/work/WATER-001/20261106T0518Z-T2-scheduled-reflection-id-guard-6c91.json`; experiment key: `foam-selective-remap-reflection-identity-coordinate-guard-sourcefree-v1`.
+- Next: run `python -m unittest tests.test_t2_foam_private_descriptor_set_remap` on checkout at/after `081642a`, then compare authentic CB0 member offsets/types and actual Unity upload before any ShaderLab installation. WATER-001 OPEN; NOT_READY.
