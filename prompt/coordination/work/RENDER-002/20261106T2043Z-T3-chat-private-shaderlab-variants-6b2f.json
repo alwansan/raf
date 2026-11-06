@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "track": "original-shader48-private-shaderlab",
+  "status": "active",
+  "base_sha": "e4ada76d62e6e3dcb073147cd1205e94fed8a4a5",
+  "updated_at": "2026-11-06T20:43:00Z",
+  "resumed_from_sessions": [
+    "20261106T2007Z-T3-chat-explicit-original-d52e",
+    "20261106T2035Z-T3-scheduled-local-contract-test-f4b2"
+  ],
+  "experiment_key": "T3-SHA-original-Shader48-4paired-programs-private-one-variant-per-ShaderLab-structural-preflight-zip2-15964-6b2f",
+  "resource_key": "T3 private SHA-original ZIP2 Shader48 4 variants, no Unity/native, no competing original job running",
+  "intended_files": [
+    "scripts/t3_particle108_private_shaderlab_variants.py",
+    "tests/test_t3_particle108_private_shaderlab_variants.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml",
+    "prompt/coordination/work/RENDER-002/20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f.json",
+    "prompt/coordination/clients/T3/sessions/20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f.md",
+    "prompt/coordination/experiments/T3/20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f.json"
+  ],
+  "hypothesis": "Each of four exact source-authenticated Shader48 VS+PS keyword pairs can be staged into its own non-dummy structural one-pass ShaderLab compile-only file while retaining original 13 authored property defaults and RGB pass state. Do not claim 4 keyword-switchable runtime permutations, material binding, Unity compilation or Android visuals.",
+  "constraints": [
+    "Only feature/android-native-port; no raw DXBC/SPV/HLSL/ShaderLab/private values or source identifiers in public artifacts/logs",
+    "No change to production game assets, .meta/GUID, native request, touch/audio/Settings, source ZIP2 branch, T3 scheduled dxbc-spv contract, or other worker files",
+    "One per-variant ShaderLab candidate is NOT a single working keyword-selecting shader; fail closed on missing/unsafe variant metadata",
+    "Any source-only/structural success cannot change T3 trial vote لا يحتاج or RENDER-002 NOT_READY"
+  ]
+}
