@@ -264,7 +264,15 @@ class Program
             string recoveredLogs = Path.Combine(blockedAppRoot, "raft-logs");
             Require(Directory.GetFiles(recoveredLogs, "raft-*.jsonl").Length == 1);
             Require(Lines(recoveredLogs).Any(l => l.Contains("\"operation\":\"logger.ready\"")));
-            Require(Lines(recoveredLogs).Count(l => l.Contains("SyntheticStackTrace_T4")) == 1);
+            // A single full original Error record is expected. Shutdown
+            // correctly emits a separate repeat_summary containing that
+            // operation's original text; don't miscount it as a second crash.
+            Require(Lines(recoveredLogs).Count(l =>
+                l.Contains("\"operation\":\"Error\"") &&
+                l.Contains("SyntheticStackTrace_T4")) == 1);
+            Require(Lines(recoveredLogs).Any(l =>
+                l.Contains("\"operation\":\"repeat_summary\"") &&
+                l.Contains("SyntheticStackTrace_T4")));
             foreach (string line in Lines(recoveredLogs))
                 using (JsonDocument.Parse(line)) { }
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
