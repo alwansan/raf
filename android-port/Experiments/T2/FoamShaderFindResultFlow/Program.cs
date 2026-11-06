@@ -198,8 +198,8 @@ internal static class Program
         int BlitPassUnknown, int BlitPassMixed,
         int BlitSourceTexture, int BlitSourceRenderTexture, int BlitSourceUnknown,
         int BlitDestinationRenderTexture, int BlitDestinationNull, int BlitDestinationUnknown,
-        BlitPass0SourceTexture, BlitPass0SourceRenderTexture, BlitPass0SourceUnknown, BlitPass0DestinationRenderTexture, BlitPass0DestinationNull, BlitPass0DestinationUnknown,
-        BlitPass1SourceTexture, BlitPass1SourceRenderTexture, BlitPass1SourceUnknown, BlitPass1DestinationRenderTexture, BlitPass1DestinationNull, BlitPass1DestinationUnknown);
+        int BlitPass0SourceTexture, int BlitPass0SourceRenderTexture, int BlitPass0SourceUnknown, int BlitPass0DestinationRenderTexture, int BlitPass0DestinationNull, int BlitPass0DestinationUnknown,
+        int BlitPass1SourceTexture, int BlitPass1SourceRenderTexture, int BlitPass1SourceUnknown, int BlitPass1DestinationRenderTexture, int BlitPass1DestinationNull, int BlitPass1DestinationUnknown);
 
     private static int PublicBlitSignatureKind(MethodReference method)
     {
