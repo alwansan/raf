@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
+  "issue_id": "COORD-001",
+  "track": "team evidence ledger integration",
+  "status": "active",
+  "base_sha": "c79b22a201db40df84f502ff8eca827773569175",
+  "updated_at": "2026-11-06T10:18:24.372Z",
+  "resumed_from_sessions": [
+    "20261106T0950Z-T5-chat-focus-frame-a7c3.md",
+    "20261106T0946Z-T5-scheduled-apk-zip-signature-n8c.md"
+  ],
+  "experiment_key": "T5-inherited-ledger-event-id-explicit-alias-fail-closed-current-live-source-v1",
+  "resource_key": "canonical refresh_b_team.py event identity parser + isolated T5 index workflow",
+  "intended_files": [
+    "scripts/refresh_b_team.py",
+    "tests/test_refresh_b_team.py",
+    ".github/workflows/raft-t5-ledger-refresh.yml",
+    "prompt/coordination/work/COORD-001/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.md",
+    "prompt/coordination/experiments/T5/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json"
+  ],
+  "hypothesis": "Mixed T-team event records use event_id for explicit stable identity but canonical renderer requires id only, causing T2 team evidence refresh to fail. Accept event_id only for events, reject conflicts/duplicates and missing identities; safely preserve legacy id identities and unchanged issue/resource strict rules.",
+  "prior_failures": [
+    42197783466,
+    42197777826,
+    42197371532
+  ],
+  "current_live_evidence": [
+    "T4/20261106T0740Z-zero-view-identity-guard-p4k8.json has event_id, no id",
+    "T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json has event_id, no id"
+  ],
+  "coordination": "No edits to T4/T2 authored events or T2 workflow. T1 FFT and T3 shader workflows distinct. T5 separate own ledger workflow includes inexpensive source-only tests + safe refresh, no Unity Actions.",
+  "next_step": "Add explicit event_id compatibility with alias conflict / duplicate negative controls, run T5 isolated source CI and canonical full-ledger regeneration, retain NOT_READY for phone."
+}
