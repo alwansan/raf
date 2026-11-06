@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
   "baseline_sha": "927bf1d096f8c5500f237794b91fc71c90a946ab",
-  "status": "active",
+  "status": "blocked",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/20261106T0047Z-T5-scheduled-resolution-callsite-audit.json",
     "prompt/coordination/clients/T5/sessions/20261106T0047Z-T5-scheduled-c4e8.md"
@@ -15,5 +15,8 @@
     "20261105T2351Z-T5-scheduled-resolution-bind-k7m2",
     "20261105T2208Z-T5-chat-obb-guid-3d7a"
   ],
-  "updated_at": "2026-11-06T00:47:00Z"
+  "updated_at": "2026-11-06T00:53:00Z",
+  "result": "Live original audits and Android Runtime/Platform inventory reviewed. Original GraphicsSettingsBox dropdown event and preference IL unavailable; no justified code patch or CI repeat. See independent session.",
+  "session_path": "prompt/coordination/clients/T5/sessions/20261106T0047Z-T5-scheduled-c4e8.md",
+  "next_step": "Pin original managed DLL and run private Mono.Cecil callback/persistence edge probe with adversarial fixtures; avoid duplicate Unity/OBB and T4 mouse scope."
 }
