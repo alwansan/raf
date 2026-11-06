@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-06T09:47:00Z",
+  "base_sha": "e3fb67812368fb6cafd327c9e99ce1886eea1b57",
+  "experiment_key": "t2-inherited-event-schema-identity-repair-ci-failure-42197371532-v1",
+  "resource_key": null,
+  "intended_files": [
+    "prompt/coordination/B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result.json",
+    "prompt/coordination/work/WATER-001/T2-20261106T094126Z-T2-chat-cb0-gate-ci-83e1-event-schema-repair.json",
+    "prompt/coordination/clients/T2/sessions/20261106T094126Z-T2-chat-cb0-gate-ci-83e1.md"
+  ],
+  "hypothesis": "Canonical summary refresh failed at source-authentic scheduled T2 CB0 event missing required id; this session's new own T2 event also omitted id, so normalize only missing unique id and owner without changing evidence/result contents or other clients' events.",
+  "evidence_run": "https://github.com/alwansan/raf/actions/runs/42197371532",
+  "original_error": "ValueError: Missing record identity: prompt/coordination/B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json",
+  "next_step": "Use GitHub expected blob SHA updates on only the two observed T2 event files; allow canonical refresher to revalidate ledger, repair additional demonstrated blockers if any; no authored source changes."
+}
