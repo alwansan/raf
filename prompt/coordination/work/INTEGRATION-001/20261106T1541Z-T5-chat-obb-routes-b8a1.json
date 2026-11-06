@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1541Z-T5-chat-obb-routes-b8a1",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "e5852a6703bd2014afddd6719a19601ff7d38105",
+  "updated_at": "2026-11-06T15:51:59.684Z",
+  "resumed_from_sessions": [
+    "20261106T1520Z-T5-chat-real-unity-guid-2b61.md",
+    "20261106T1413Z-T5-chat-ledger-t1id-7b42.md",
+    "20261105T2208Z-T5-chat-obb-guid-3d7a.md"
+  ],
+  "experiment_key": "T5-real42058825739-checkpoint13441766832-exact-AndroidStreamingAssets-FMOD+Haptics-JAR-routes-inner-zip-metadata-HTTP206-v1",
+  "resource_key": "original signed main.89 OBB inner ZIP central and local header metadata <=16MiB; no bulk payload or Unity builds",
+  "hypothesis": "The old signed main.89 OBB's actual ZIP contains the exact assets/<5 original FMOD banks> and assets/Haptics/<29 pinned WAV> entries requested by Android runtime and their independently recorded byte lengths; APK-only Unity GUID marker does not imply missing runtime asset entries. Classify actual original Unity assets/bin/Data path independently.",
+  "provenance_prior": {
+    "original_run": 42058825739,
+    "source_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+    "original_signed_artifact": 13441766832,
+    "full_obb_sha_ci": 42230326050,
+    "unity_guid_marker_ci": 42243852483,
+    "old_phone_guid_warning_ci": 42119428667
+  },
+  "intended_files": [
+    "scripts/t5_probe_signed_obb_asset_routes.py",
+    "tests/test_t5_probe_signed_obb_asset_routes.py",
+    ".github/workflows/raft-t5-signed-obb-asset-routes.yml",
+    "docs/T5_SIGNED_OBB_JAR_ASSET_ROUTES_2026-11-06.md",
+    "prompt/coordination/clients/T5/sessions/20261106T1541Z-T5-chat-obb-routes-b8a1.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1541Z-T5-chat-obb-routes-b8a1.json",
+    "prompt/coordination/experiments/T5/20261106T1541Z-T5-chat-obb-routes-b8a1.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1541Z-T5-chat-obb-routes-b8a1.json"
+  ],
+  "coordination": "Current T1/T2/T3 water and particle CI source changes independent; audio and Settings owner-confirmed, no production audio/runtime edits. T5 scheduled not currently running in Actions. Avoid duplicating prior full hash and optional patch analysis.",
+  "limits": [
+    "only feature/android-native-port writes",
+    "pin all original source identities and provider metadata",
+    "do not upload original binary or expose original WAV names/private ZIP data",
+    "bounded HTTP206 tiny metadata reads, never full 2.3GB OBB",
+    "no false Android physical mount/GUID/graphics readiness",
+    "fail closed on unexpected resource inventories or duplicate/unsafe archive entries",
+    "no modifications to T1-T4 production sources"
+  ],
+  "next_step": "Add data-only original runtime route inventory probe and synthetic mismatch/path tests; run independently in GH Actions and record exact original results."
+}
