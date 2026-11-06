@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "track": "Signed APK/OBB ZIP structural integrity and usability",
+  "base_sha": "06b3d07b2961466a4ae186a7ea22c087829ed87b",
+  "updated_at": "2026-11-06T12:42:17.904Z",
+  "resumed_from_sessions": [
+    "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md",
+    "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
+  ],
+  "experiment_key": "T5-zip-local-header-central-directory-noncore-parity-and-payload-bounds-synthetic-v1",
+  "resource_key": "scripts/t5_verify_apk_obb_pair.py + owned isolated source-only paired-file workflow, no real 5.9 GB signed asset fetch",
+  "scope": "Fix ZIP local-header vs central-directory incongruence and physically overlapping compressed byte regions in APK/OBB verification without extracting original assets or overclaiming signature. Generate adversarial malformed synthetic ZIP tests; run existing T5 source-only workflow.",
+  "intended_files": [
+    "scripts/t5_verify_apk_obb_pair.py",
+    "tests/test_t5_verify_apk_obb_pair.py",
+    ".github/workflows/raft-t5-apk-obb-pair.yml",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1243Z-T5-chat-zip-local-headers-9e2a.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1243Z-T5-chat-zip-local-headers-9e2a.md",
+    "prompt/coordination/experiments/T5/20261106T1243Z-T5-chat-zip-local-headers-9e2a.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1243Z-T5-chat-zip-local-headers-9e2a.json"
+  ],
+  "evidence_of_gap": "Synthetic ZIP with central assets/hello.bin and local assets/hellx.bin: ZipFile.namelist lists safe name but ZipFile.open raises BadZipFile. Existing _zip_structure does not inspect non-core local headers, so recomputed delivery manifest digests cannot detect usability failure.",
+  "constraints": [
+    "No signed Android phone files downloaded or original contents published.",
+    "No original Unity/runtime/other T-client production source changes.",
+    "No claiming phone acceptance, APK signature verification, XAPK proof, Unity GUID or runtime OBB mount.",
+    "No overwrite T5 scheduled output: separate session and own existing T5 source/test path with no active runs."
+  ],
+  "acceptance": [
+    "Synthetic valid APK/OBB still passes",
+    "central/local name, flags, compression and offset/payload overlaps rejected even with matching delivery hashes",
+    "fast CI pass, no new full Unity build"
+  ],
+  "next_step": "Patch only T5 pair validator and tests, source-only CI; preserve all phone provenance limits."
+}
