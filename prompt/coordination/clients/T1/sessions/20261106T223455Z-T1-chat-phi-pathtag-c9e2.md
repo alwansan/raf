@@ -1,0 +1,9 @@
+# T1 — Private FFT Site2/Y Φ predecessor path-tag injector
+
+- session_id: `20261106T223455Z-T1-chat-phi-pathtag-c9e2`; origin: `chat`; base_sha `531453ff9990d45898336a206192e4385e6c5e11` on branch `feature/android-native-port`.
+- resumes chat `20261106T221550Z-T1-chat-phi-ssa-6db4` and scheduled `20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4`.
+- Latest genuine [CI42304106607](https://github.com/alwansan/raf/actions/runs/42304106607) 35/35 source and SHA-original private pass. Derived site2/Y Phi: one constant entry (no self-data recurrence), one backedge loop-selected-component SSA recurrence. **No actual runtime branch choice yet**.
+- New scope `prompt/coordination/work/WATER-001/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json`: instrument a **private derivative** of original-derived glslang SPIR-V using one new non-shipping StorageBuffer binding3 counter (two counters per physical invocation x) along the two Phi predecessor branches; explicitly verify both counter indices and CFG, and run `spirv-as` / `spirv-val` after injection. Preserve code/SSA IDs/values/pixels privately, export only bounded boolean summaries; never edit original asset or production shader. Counter buffer not yet bound or executed by GPU. 64-thread dispatch assumed only in future runner, not general game.
+- Native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) in progress and T5 independent CPU 42305228829 in progress, untouched. WATER-001 OPEN, NOT_READY0/3, trial vote `لا يحتاج`.
+- Expected files: `scripts/t1_fft_site2_y_phi_path_tag.py`, `tests/test_t1_fft_site2_y_phi_path_tag.py`, `scripts/t1_fft_site2_y_hlsl_pair.py`, own narrow workflow, own work/session/experiment/event.
+- Next: tested deterministic candidate injection; failure if source changes binding3, Phi incoming shape, builtin, SSA Phi recurrence or shader layout. Later gate actual per-invocation branch counts vs direct-original keyed GPU traces + shader output invariance.
