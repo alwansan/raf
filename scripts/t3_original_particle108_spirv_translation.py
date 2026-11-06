@@ -116,7 +116,7 @@ def evaluate(pairs:list, temporary:Path, *, translator=translate,
              reflector=reflection, pair_checker=interfaces_match):
     """Safe aggregate from eight private compilers; failed stage ≠ device fix."""
     if (type(pairs) is not list or len(pairs)!=PAIRS or
-        type(temporary) is not Path or not temporary.is_dir() or
+        not isinstance(temporary,Path) or not temporary.is_dir() or
         temporary.is_symlink()):
         raise ValueError("invalid_fourpair_private_SPIRV_translation_scope")
     counts=Counter()
