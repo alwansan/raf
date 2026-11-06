@@ -287,6 +287,14 @@ def apply(project, backup, manifest, write=False):
         _reject_linked_ancestors(meta, 'meta')
         if not path.is_file() or (meta.exists() and not meta.is_file()):
             raise ValueError('Original operation source/meta must be regular')
+        # A hardlinked original source or GUID metadata is a *regular file*
+        # but shares its inode with a path outside the Unity staging tree.
+        # In-place trace writes would mutate the outside original and poison
+        # subsequent source-authenticated world/save rebuilds. Reject before
+        # reading/staging any original or creating backup files, consistent
+        # with the offline and original SaveAndLoad path adapters.
+        if path.stat().st_nlink != 1 or (meta.exists() and meta.stat().st_nlink != 1):
+            raise ValueError('Unsafe hardlinked original operation source or metadata')
         raw = path.read_bytes()
         text = instrument(name, raw.decode('utf-8-sig'), manifest)
         data = (b'\xef\xbb\xbf' if raw.startswith(b'\xef\xbb\xbf') else b'') + text.encode()
