@@ -11,10 +11,13 @@
     "prompt/coordination/B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json",
     "prompt/coordination/B_TEAM/events/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result.json",
     "prompt/coordination/work/WATER-001/T2-20261106T094126Z-T2-chat-cb0-gate-ci-83e1-event-schema-repair.json",
-    "prompt/coordination/clients/T2/sessions/20261106T094126Z-T2-chat-cb0-gate-ci-83e1.md"
+    "prompt/coordination/clients/T2/sessions/20261106T094126Z-T2-chat-cb0-gate-ci-83e1.md",
+    "prompt/coordination/discussions/INTEGRATION-001/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-T4-summary-event-schema-blocker.md"
   ],
   "hypothesis": "Canonical summary refresh failed at source-authentic scheduled T2 CB0 event missing required id; this session's new own T2 event also omitted id, so normalize only missing unique id and owner without changing evidence/result contents or other clients' events.",
   "evidence_run": "https://github.com/alwansan/raf/actions/runs/42197371532",
   "original_error": "ValueError: Missing record identity: prompt/coordination/B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json",
-  "next_step": "Use GitHub expected blob SHA updates on only the two observed T2 event files; allow canonical refresher to revalidate ledger, repair additional demonstrated blockers if any; no authored source changes."
+  "next_step": "Use GitHub expected blob SHA updates on only the two observed T2 event files; allow canonical refresher to revalidate ledger, repair additional demonstrated blockers if any; no authored source changes.",
+  "remaining_external_blocker": "T4 event 20261106T0740Z-zero-view-identity-guard-p4k8.json missing canonical id; DO NOT edit T4 event from T2 session.",
+  "latest_failed_regen_run": "https://github.com/alwansan/raf/actions/runs/42197783466"
 }
