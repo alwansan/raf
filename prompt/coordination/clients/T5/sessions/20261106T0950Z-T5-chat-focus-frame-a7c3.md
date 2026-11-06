@@ -2,7 +2,7 @@
 
 - **session_id:** `20261106T0950Z-T5-chat-focus-frame-a7c3`; **origin:** `chat`.
 - **repository/branch:** `alwansan/raf:feature/android-native-port` only.
-- **base_sha:** `79e75191aad283072d639a14ab985a216ea7eec9`; **work reservation:** [PERF-007/20261106T0950Z-T5-chat-focus-frame-a7c3.json](../../work/PERF-007/20261106T0950Z-T5-chat-focus-frame-a7c3.json).
+- **base_sha:** `79e75191aad283072d639a14ab985a216ea7eec9`; **work reservation:** [PERF-007/20261106T0950Z-T5-chat-focus-frame-a7c3.json](../../../work/PERF-007/20261106T0950Z-T5-chat-focus-frame-a7c3.json).
 - **resumed_from_session(s):** `20261106T0214Z-T5-chat-scene-window-attribution-8d91.md`, `20261106T0946Z-T5-scheduled-apk-zip-signature-n8c.md`.
 - **issue_id:** PERF-007; **experiment_key:** T5-PERF-007-Unity-focus-pause-complete-five-second-frame-window-v1.
 - **resource_key:** AndroidTestDiagnostics.cs focus/performance lifecycle only; no overlap with scheduled T5 APK/OBB archive guards, T1 FFT, T2 water shader, T3 render materials or T4 physical mouse.
@@ -15,4 +15,4 @@
 - **REA/asset note:** no reverse engineering needed for this directly authored C# lifecycle fix; no Unity private game assets or raw logs transported. Source-only test and CI proved only bounded behavior/policy.
 - **bounds:** Owner confirmed world/save/reentry previously on signed native artifact [42058825739](https://github.com/alwansan/raf/actions/runs/42058825739), source `e9c358e`. This particular performance patch has **not** run on Android phone or real Unity player; water/FFT/color/FX remain P0 OPEN. Overall game **NOT_READY 0/3** under full readiness gates.
 - **next:** Test future device sequence Android focus false → true without pause and pause/resume, verify no background `performance/sample`, first foreground sample after a complete five-second interval, FPS/p95 meaningful; check retained mixed scene loading samples and compare signed APK+OBB SHA before cross-version claims. Coordinates with T1–T4 without overlapping files.
-- **record:** [experiment](../../experiments/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json) and [event](../../../B_TEAM/events/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json). **status:** `completed_source_ci_verified_device_unverified`.
+- **record:** [experiment](../../../experiments/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json) and [event](../../../B_TEAM/events/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json). **status:** `completed_source_ci_verified_device_unverified`.
