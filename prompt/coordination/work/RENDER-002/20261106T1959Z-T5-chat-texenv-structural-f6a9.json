@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1959Z-T5-chat-texenv-structural-f6a9",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "track": "actual Unity Material TexEnv structural validation at postrestorer stage",
+  "status": "active",
+  "base_sha": "b308df2fc5b88cbabf57253c94058c2aaddb6d2f",
+  "updated_at": "2026-11-06T20:00:20.624Z",
+  "resumed_from_sessions": [
+    "20261106T1938Z-T5-chat-export-texture-gate-58c1",
+    "20261106T1950Z-T5-scheduled-zip-prefix-6f2a",
+    "20261106T1950Z-T5-chat-native-stage-shift-4c6b"
+  ],
+  "taken_over_from": [
+    "B46 verifier; authenticated original exporter wiring T5 CI 42281884475"
+  ],
+  "intended_files": [
+    "scripts/verify_exported_material_texture_links.py",
+    "tests/test_verify_exported_material_texture_links.py",
+    "prompt/coordination/work/RENDER-002/20261106T1959Z-T5-chat-texenv-structural-f6a9.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1959Z-T5-chat-texenv-structural-f6a9.md",
+    "prompt/coordination/experiments/T5/20261106T1959Z-T5-chat-texenv-structural-f6a9.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1959Z-T5-chat-texenv-structural-f6a9.json"
+  ],
+  "hypothesis": "Actual exported Unity Material TexEnv guard accepts malformed explicit empty TexEnv with child slot entries and incorrectly indented m_Texture pointers, yielding a synthetic false PASS. Reject malformed structure before issuing a safe material-texture link PASS.",
+  "experiment_key": "T5-B46-material-texenv-empty-child-orphan-prefix-indentation-fail-closed-v1",
+  "resource_key": "source-only B46 CI, no Unity/native build",
+  "related_work": [
+    "20261106T1938Z-T5-chat-export-texture-gate-58c1 (completed)"
+  ],
+  "coordination": "Separate file ownership from T1 FFT, T2 Foam, T3 shader SPV, T4 world, T5 native milestone active and T5 scheduled ZIP prefix checks. No native build, no vote edit, no touch or audio change.",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source + strict synthetic tests and existing B46 CI; report only source/structural result."
+}
