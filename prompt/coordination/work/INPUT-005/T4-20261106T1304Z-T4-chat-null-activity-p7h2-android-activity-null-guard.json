@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1304Z-T4-chat-null-activity-p7h2",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "track": "physical-mouse",
+  "status": "active",
+  "base_sha": "6e498046b70129bfa255e248fc65292818f966fe",
+  "approach": "Fail-soft Android Unity currentActivity lifecycle null guards on pointer capture request/probe/release; no change to real mouse motion, cursor policy, touch, OS intent, or Save/Load.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "prompt/coordination/work/INPUT-005/T4-20261106T1304Z-T4-chat-null-activity-p7h2-android-activity-null-guard.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1304Z-T4-chat-null-activity-p7h2.md",
+    "prompt/coordination/experiments/T4/20261106T1304Z-T4-chat-null-activity-p7h2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1304Z-T4-chat-null-activity-p7h2.json"
+  ],
+  "hypothesis": "UnityPlayer.currentActivity can be null across Android pause/destroy transitions. Existing OnAndroidUi and callback activity.Call paths may dereference it outside AndroidJavaException catches, interrupting safe capture release.",
+  "related_work": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1237Z-T4-scheduled-x5p9-candidate-telemetry-gate.json"
+  ],
+  "taken_over_from": [
+    "20261106T1237Z-T4-scheduled-x5p9",
+    "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2"
+  ],
+  "experiment_key": "T4-INPUT005-android-unityplayer-null-currentActivity-safe-dispatch-UI-probe-request-release-Unity2021-managedABI-v1",
+  "resource_key": "T4-mouse-managed-source-only-no-Unity-build",
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "nonoverlap": "T4 separate active cross-process .rgd runner LOCAL-005 only; latest T4 scheduled source-provenance work completed; T1 FFT CI active. Only mouse bridge and existing mouse source tests; no heavy game CI.",
+  "last_verified_result": "T4 CI42210561898 source log parser 22/22 success; T4 CI42208882663 native mouse source 47/47 and Unity2021 managed compile success; no post-marker owner APK.",
+  "next_step": "Implement activity null dispatch and callback guards, preserve fixed 8 telemetry labels, run original-authenticated T4 mouse bridge workflow and read actual logs.",
+  "updated_at": "2026-11-06T13:03:49.347Z"
+}
