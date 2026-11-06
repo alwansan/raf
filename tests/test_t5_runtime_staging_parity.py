@@ -5,7 +5,7 @@ import unittest
 
 from scripts.t5_validate_runtime_staging_parity import (
     MANAGED_HELPER, NATIVE_WORKFLOW, RUNTIME_DIR, managed_sources,
-    native_sources, verify,
+    native_sources, verify, verify_staged_runtime_bytes,
 )
 
 
@@ -80,6 +80,82 @@ class AndroidSourceStagingParity(unittest.TestCase):
         repeated = "\n".join(lines[idx:idx + 3])
         with self.assertRaisesRegex(ValueError, "one exact native"):
             verify(self.managed, self.native + "\n" + repeated, RUNTIME_DIR)
+
+
+    def _staged_fixture(self, temp):
+        base = Path(temp)
+        runtime = base / "runtime"
+        candidate = base / "unity-candidate"
+        staged = candidate / "Assets" / "RaftAndroid" / "Platform"
+        runtime.mkdir()
+        staged.mkdir(parents=True)
+        names = native_sources(self.native)
+        for index, name in enumerate(names):
+            data = (f"// synthetic runtime sample {index}: {name}\n").encode()
+            (runtime / name).write_bytes(data)
+            (staged / name).write_bytes(data)
+        return runtime, candidate, staged, names
+
+    def test_staged_final_native_candidate_exact_bytes_all_runtime_sources(self):
+        with tempfile.TemporaryDirectory() as temp:
+            runtime, project, staged, names = self._staged_fixture(temp)
+            found = verify_staged_runtime_bytes(runtime, project, names)
+            self.assertEqual(found, tuple(sorted(names)))
+            self.assertIn("LocalProfileStore.cs", found)
+
+    def test_staged_runtime_byte_mutation_cannot_claim_same_source(self):
+        with tempfile.TemporaryDirectory() as temp:
+            runtime, project, staged, names = self._staged_fixture(temp)
+            (staged / "LocalProfileStore.cs").write_bytes(b"// stale offline identity source")
+            with self.assertRaisesRegex(ValueError, "bytes changed"):
+                verify_staged_runtime_bytes(runtime, project, names)
+
+    def test_staged_source_absence_and_injected_cs_fail_closed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            runtime, project, staged, names = self._staged_fixture(temp)
+            (staged / "LocalProfileStore.cs").unlink()
+            with self.assertRaisesRegex(ValueError, "Missing or unexpected"):
+                verify_staged_runtime_bytes(runtime, project, names)
+            (staged / "LocalProfileStore.cs").write_bytes((runtime / "LocalProfileStore.cs").read_bytes())
+            (staged / "UntrustedOverride.cs").write_bytes(b"class Foo {}")
+            with self.assertRaisesRegex(ValueError, "Missing or unexpected"):
+                verify_staged_runtime_bytes(runtime, project, names)
+
+    def test_staged_runtime_symlink_and_linked_parent_fail_closed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            runtime, project, staged, names = self._staged_fixture(temp)
+            target = staged / "LocalProfileStore.cs"
+            target.unlink()
+            try:
+                target.symlink_to(runtime / "LocalProfileStore.cs")
+            except (OSError, NotImplementedError):
+                self.skipTest("symlink creation unavailable")
+            with self.assertRaisesRegex(ValueError, "Linked"):
+                verify_staged_runtime_bytes(runtime, project, names)
+            target.unlink()
+            target.write_bytes((runtime / "LocalProfileStore.cs").read_bytes())
+            alias = Path(temp) / "linked-candidate"
+            alias.symlink_to(project, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "linked native runtime staging root"):
+                verify_staged_runtime_bytes(runtime, alias, names)
+
+    def test_final_unity_candidate_runtime_stage_is_before_compiler(self):
+        label = "      - name: T5 attest final native Android runtime source bytes (read-only)"
+        self.assertEqual(self.native.count(label), 1)
+        start = self.native.index(label)
+        before = self.native.index("      - name: Stage private Unity project candidate inside runner workspace")
+        after = self.native.index("      - name: Unity Editor 2021.3.45f2 Android import and compile")
+        self.assertLess(before, start)
+        self.assertLess(start, after)
+        block = self.native[start:self.native.index("      - name:", start + len(label))]
+        self.assertIn("python3 -m scripts.t5_validate_runtime_staging_parity", block)
+        self.assertIn('--project "$GITHUB_WORKSPACE/unity-candidate"', block)
+        self.assertNotIn("continue-on-error:", block)
+
+    def test_t4_durable_profile_writer_present_in_current_staging(self):
+        self.assertIn("LocalProfileStore.cs", native_sources(self.native))
+        current = (RUNTIME_DIR / "LocalProfileStore.cs").read_text()
+        self.assertIn("Flush(flushToDisk: true)", current)
 
 
 if __name__ == "__main__":

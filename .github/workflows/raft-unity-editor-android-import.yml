@@ -790,6 +790,16 @@ jobs:
             --project "$GITHUB_WORKSPACE/unity-candidate"
           du -sh "$GITHUB_WORKSPACE/unity-candidate"
           df -h /
+      - name: T5 attest final native Android runtime source bytes (read-only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Reject a stale/altered Platform C# copy even if all 17 names match.
+          # This checks current repository source against FINAL staged Unity
+          # candidate, including T4's durable LocalProfileStore first-write.
+          # No original Raft bytes, GUIDs or Android build artifacts printed.
+          python3 -m scripts.t5_validate_runtime_staging_parity \
+            --project "$GITHUB_WORKSPACE/unity-candidate"
       - name: Reserve bounded swap and record host memory before full-data Unity build
         shell: bash
         run: |

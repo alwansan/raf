@@ -88,24 +88,67 @@ def verify(managed: str, native: str, runtime_dir: Path) -> tuple[str, ...]:
     return tuple(sorted(managed_names))
 
 
+def verify_staged_runtime_bytes(
+    runtime_dir: Path, project_root: Path, expected_names: tuple[str, ...]
+) -> tuple[str, ...]:
+    """Check the FINAL Unity candidate's C# sources, not merely its copy list.
+
+    The 17 runtime .cs inputs, including the offline profile identity writer,
+    must have identical bytes to current repository source immediately before
+    starting the native Unity Editor. Does not inspect original Raft resources.
+    """
+    names = _safe_names(expected_names, "expected-staged")
+    if "LocalProfileStore.cs" not in names:
+        raise ValueError("Missing required offline profile identity source")
+    runtime_dir = Path(runtime_dir)
+    project_root = Path(project_root)
+    platform = project_root / "Assets" / "RaftAndroid" / "Platform"
+    for candidate in (
+        runtime_dir, project_root, project_root / "Assets",
+        project_root / "Assets" / "RaftAndroid", platform,
+    ):
+        if candidate.is_symlink() or not candidate.is_dir():
+            raise ValueError("Missing or linked native runtime staging root")
+    listed = list(platform.iterdir())
+    if any(path.is_symlink() for path in listed):
+        raise ValueError("Linked runtime candidate source")
+    staged_cs = {path.name for path in listed if path.suffix.lower() == ".cs"}
+    if staged_cs != set(names):
+        raise ValueError("Missing or unexpected staged Android runtime source")
+    for name in names:
+        original, staged = runtime_dir / name, platform / name
+        if (original.is_symlink() or staged.is_symlink()
+            or not original.is_file() or not staged.is_file()):
+            raise ValueError("Non-regular native runtime source")
+        if original.stat().st_size > 2 * 1024 * 1024 or staged.stat().st_size > 2 * 1024 * 1024:
+            raise ValueError("Oversized staged Android runtime source")
+        if staged.read_bytes() != original.read_bytes():
+            raise ValueError("Staged Android runtime bytes changed")
+    return tuple(sorted(names))
+
+
 def main() -> None:
     arg = argparse.ArgumentParser(description=__doc__)
     arg.add_argument("--managed-helper", type=Path, default=MANAGED_HELPER)
     arg.add_argument("--native-workflow", type=Path, default=NATIVE_WORKFLOW)
     arg.add_argument("--runtime", type=Path, default=RUNTIME_DIR)
+    arg.add_argument("--project", type=Path, help="Final staged unity-candidate project, for byte-level attestation")
     args = arg.parse_args()
     matches = verify(
         args.managed_helper.read_text(encoding="utf-8"),
         args.native_workflow.read_text(encoding="utf-8"),
         args.runtime,
     )
+    if args.project is not None:
+        verify_staged_runtime_bytes(args.runtime, args.project, matches)
     # Public-source names only. Never dump original Raft data or game code.
     print(
         "T5_RUNTIME_STAGING_PARITY status=PASS "
         + "native_count=" + str(len(matches))
         + " original_managed_count=" + str(len(matches))
         + " source_names_identical=true runtime_sources_regular=true "
-        + "unity_editor_build=false device_verified=false"
+        + "final_unity_candidate_bytes_equal=" + str(args.project is not None).lower()
+        + " unity_editor_build=false device_verified=false"
     )
 
 

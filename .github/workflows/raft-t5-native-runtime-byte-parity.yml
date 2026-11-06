@@ -1,0 +1,35 @@
+name: T5 INTEGRATION-001 final staged Unity runtime byte equality (source-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_validate_runtime_staging_parity.py
+      - tests/test_t5_runtime_staging_parity.py
+      - .github/workflows/raft-unity-editor-android-import.yml
+      - .github/workflows/raft-t5-native-runtime-byte-parity.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-final-runtime-bytes-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-only-runtime-attestation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact source-to-final-candidate byte parity and tamper negatives
+        run: |
+          set -euo pipefail
+          python3 -W error -m unittest -v tests.test_t5_runtime_staging_parity
+          python3 -m scripts.t5_validate_runtime_staging_parity
+      - name: State source-only limit
+        if: always()
+        run: echo 'No original Unity export, native Android IL2CPP build, signed APK/OBB or device-world save was tested.'
