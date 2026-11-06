@@ -3,6 +3,7 @@
 
 One-shot original 5-Material phase diagnosis; source and values never logged.
 T3-1515Z source category run: bounded original export, report safe phase only.
+T3-original-map-shape-24test-proof: source-selected scalar maps, exact binary32 compare.
 
 The 108-use Particle Shader48's five Material identities are selected by
 six original scene Renderer→Material→Shader PPtrs, not names. Private W1+B02
