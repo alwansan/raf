@@ -1,0 +1,55 @@
+name: T2 WATER-001 CB0 extent two-pass identity source-only smoke
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_cb0_extent_gate.py
+      - tests/test_t2_foam_cb0_extent_gate.py
+      - .github/workflows/raft-t2-foam-cb0-gate-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-cb0-gate-source-only-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  cb0-two-pass-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout exact source candidate, no LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Compile source-only CB0 gate and run adversarial two-pass controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_cb0_extent_gate.py tests/test_t2_foam_cb0_extent_gate.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_cb0_extent_gate.py' -v
+      - name: Preserve original source and device evidence boundaries
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from scripts.t2_foam_cb0_extent_gate import cb0_integration_gate
+          rows = [
+              {"vertex_bytes": 96, "fragment_bytes": 128,
+               "authenticated_shared_coordinate": True, "pass_index": 0},
+              {"vertex_bytes": 64, "fragment_bytes": 80,
+               "authenticated_shared_coordinate": True, "pass_index": 1},
+          ]
+          verdict = cb0_integration_gate(
+              rows, expected_pass_count=2,
+              member_abi_verified=True, unity_upload_verified=True)
+          assert verdict == {
+              "status": "blocked_CB0_byte_extent_mismatch",
+              "mismatched_pass_count": 2,
+          }, verdict
+          print("SYNTHETIC_CB0_VERDICT=blocked; original_CB0_upload=UNKNOWN; device_water=UNKNOWN")
+          PY
