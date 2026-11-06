@@ -2,7 +2,7 @@
   "session_id": "20261106T1131Z-T3-scheduled-newline-7d4c",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_fix_pending_test",
   "base_sha": "e44585a35ad959b05028dbb9d0dd8120983fcac1",
   "resumed_from_sessions": [
     "20261106T1026Z-T3-scheduled-91ac",
@@ -16,5 +16,8 @@
   "experiment_key": "T3-identity-gate-multiline-fixture-literal-backslash-vs-real-newline",
   "resource_key": null,
   "hypothesis": "The multiline ShaderLab regression fixture uses literal backslash-n rather than a newline, causing a false failure; correct fixture without touching runtime shaders.",
-  "updated_at": "2026-11-06T11:31:00Z"
+  "updated_at": "2026-11-06T11:33:00Z",
+  "result_commit": "9dcc294e7174ca7e3ca33b4901fb193af9286172",
+  "session_path": "prompt/coordination/clients/T3/sessions/20261106T1131Z-T3-scheduled-newline-7d4c.md",
+  "next_step": "Run all 13 Python unittest cases; no runtime shader/device acceptance claim."
 }
