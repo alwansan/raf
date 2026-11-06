@@ -4,9 +4,9 @@
   "owner": "T1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "531453ff9990d45898336a206192e4385e6c5e11",
-  "updated_at": "2026-11-06T22:42:21.102Z",
+  "updated_at": "2026-11-06T22:54:03.963Z",
   "resumed_from_sessions": [
     "20261106T221550Z-T1-chat-phi-ssa-6db4",
     "20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4"
@@ -29,7 +29,7 @@
   ],
   "collision_check": "Latest T1 scheduled 20261106T221403Z only wrote evidence-gap plan (no active overlapping source changes); prior T1 42304106607 success; only native 42296450023 and T5 42305228829 in_progress. Do not touch shared heavy Unity builds or T2/T3/T4/T5 files.",
   "trial_vote": "لا يحتاج",
-  "next_step": "Create bounded source-free synthetic adversarial Phi predecessor path counter injection and validate exact SHA-original-derived HLSL candidate SPIR-V with spirv-as/val. No GPU launch, no claim of runtime branch selection until physical capture and parity join.",
+  "next_step": "Actual SHA-pinned original Vulkan vs Unity2021 OpenGLCore keyed Site2 Y numeric/branch tracing with same physical input and shader-output invariance; this CPU Vulkan proof alone does not establish Unity, Adreno water, or authored FindKernel. No second native build. WATER-001 OPEN, NOT_READY0/3, T1 vote لا يحتاج.",
   "scope_extension": {
     "at": "2026-11-06T22:42:21.101Z",
     "reason": "Authenticated original private SPIR-V path-tag assembly CI42306367304 success; next required safety condition is physical counter readback and output-invariance control on CPU Vulkan, independent of native Unity.",
@@ -42,5 +42,59 @@
       "scripts/t1_fft_site2_y_hlsl_pair.py"
     ],
     "note": "Use existing pinned original DXBC staging, prevalidated private tagged SPIR-V, existing T1 trace_host Vulkan binding3 for 128-word counter, compare actual physically distinct runs source+butterfly input bytes and pass0/pass1 untagged/tagged readbacks. Reject any proof of Android/Unity authored kernel."
+  },
+  "result": {
+    "original_sha_cpu_stage": {
+      "ci": 42306367304,
+      "conclusion": "success",
+      "controls_passed": 51,
+      "private_spirv_tagged_assembled_validated": true
+    },
+    "first_cpu_run": {
+      "ci": 42307267780,
+      "result": "failed_source_only_pre_original",
+      "reason": "candidate output symlink validation missing",
+      "fixed_commit": "0346399e628e0303cf68b3f514c383a05d749b8c"
+    },
+    "first_positive_gpu": {
+      "ci": 42307363513,
+      "conclusion": "success",
+      "source_controls_passed": 33
+    },
+    "final_positive_gpu": {
+      "ci": 42307656709,
+      "conclusion": "success",
+      "source_controls_passed": 34,
+      "original_source_zip2": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "original_owner_bytes": 115978112,
+      "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "original_compiled_slots_verified": [
+        0,
+        1
+      ],
+      "fixture": "Mesa CPU Vulkan 1024x32 seed19 group1x1x1 RGBA32F",
+      "thread_slots": 64,
+      "threads_with_exactly_one_entry_visit": 64,
+      "threads_with_exactly_four_loop_visits": 64,
+      "entry_total": 64,
+      "loop_backedge_total": 256,
+      "source_and_butterfly_inputs_byte_identical": true,
+      "original_control_output_bytes_identical": true,
+      "tagged_vs_untagged_candidate_pass0_and_pass1_bitwise_equal": true,
+      "written_pixel_counts_pass0_pass1": [
+        64,
+        32
+      ],
+      "nonfinite_or_missing_or_outside_tolerance_pixels": 0
+    },
+    "limitations": {
+      "runtime_phi_value_at_imagefetch_observed": false,
+      "original_vulkan_vs_unity_parity_proven": false,
+      "original_authored_kernel_mapping_proven": false,
+      "android_adreno_water_proven": false,
+      "source_shader_bytes_or_pixels_exported": false,
+      "production_shader_modified": false,
+      "native_build_interfered": false
+    }
   }
 }
