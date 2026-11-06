@@ -17,13 +17,20 @@ internal static class Program
     private const int MaxInstructions = 2000000;
     private const int MaxTargetHashes = 128;
     private const int NearInstructionWindow = 16;
+    // Original source object names/digests never leave private Actions scratch.
+    private readonly record struct OwnerCatalog(
+        Dictionary<string,int> PrivateOtherShaderNames,
+        int ShaderObjectCount, int UnparsedShaderNames,
+        int MaterialObjectCount, int UnparsedMaterialPointers,
+        int LocalFoamMaterialRefs, int ExternalShaderRefs);
 
     private static string Sha(string value) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 
     private static Dictionary<string, HashSet<string>> LoadPrivateTargets(string path,
                                                                            out int unknownSource,
-                                                                           out string originalShaderNameSha256)
+                                                                           out string originalShaderNameSha256,
+                                                                           out OwnerCatalog owner)
     {
         using var doc = JsonDocument.Parse(File.ReadAllText(path, Encoding.UTF8));
         var root = doc.RootElement;
@@ -44,6 +51,42 @@ internal static class Program
         if (originalShaderNameSha256.Length!=64 ||
             originalShaderNameSha256.Any(c=>!"0123456789abcdef".Contains(c)))
             throw new InvalidDataException("Original private Shader name digest invalid");
+        var ownerNames = root.GetProperty("original_owner_other_Shader_names_SHA256_private");
+        if (ownerNames.ValueKind!=JsonValueKind.Object ||
+            ownerNames.EnumerateObject().Count()>8192)
+            throw new InvalidDataException("Invalid original Shader owner private digest catalog");
+        var otherNames = new Dictionary<string,int>(StringComparer.Ordinal);
+        foreach (var row in ownerNames.EnumerateObject())
+        {
+            if (row.Name.Length!=64 ||
+                row.Name.Any(c=>!"0123456789abcdef".Contains(c)) ||
+                !row.Value.TryGetInt32(out int count) ||
+                count<=0 || count>8192 ||
+                !otherNames.TryAdd(row.Name,count))
+                throw new InvalidDataException("Invalid private original owner Shader names");
+        }
+        int ReadOwnerCount(string name, int maximum=32768)
+        {
+            var v=root.GetProperty(name);
+            if (v.ValueKind!=JsonValueKind.Number || !v.TryGetInt32(out int count) ||
+                count<0 || count>maximum)
+                throw new InvalidDataException("Original owner census bound invalid");
+            return count;
+        }
+        int shaderCount=ReadOwnerCount("original_owner_shader_objects_examined",8192);
+        int shaderUnparsed=ReadOwnerCount("original_owner_shader_name_unparsed_count",8192);
+        int materialCount=ReadOwnerCount("original_owner_material_objects_examined");
+        int materialUnparsed=ReadOwnerCount("original_owner_material_source_pointer_unparsed_count");
+        int localFoamRefs=ReadOwnerCount("original_owner_material_local_Foam_Shader_ref_count");
+        int externalRefs=ReadOwnerCount("original_owner_material_external_Shader_ref_count");
+        if (otherNames.Values.Sum()!=ReadOwnerCount("original_owner_other_shader_names_count",8192) ||
+            shaderUnparsed+otherNames.Values.Sum()+1!=shaderCount ||
+            materialUnparsed+localFoamRefs+externalRefs>materialCount ||
+            root.GetProperty("original_owner_material_ref_is_runtime_bound_verified").GetBoolean() ||
+            !root.GetProperty("original_owner_material_Foam_PathID_other_fileID_not_counted").GetBoolean())
+            throw new InvalidDataException("Original owner Shader/Material catalog inconsistent");
+        owner=new OwnerCatalog(otherNames,shaderCount,shaderUnparsed,materialCount,
+            materialUnparsed,localFoamRefs,externalRefs);
         var categories = root.GetProperty("categories_sha256");
         var groups = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
         int sum = 0;
@@ -240,7 +283,7 @@ internal static class Program
                 StringComparison.Ordinal))
             throw new InvalidDataException("Original managed DLL SHA/size authentication failed");
         var names = LoadPrivateTargets(privateTargetFile,out int unknownSource,
-            out string originalShaderNameSha256);
+            out string originalShaderNameSha256, out OwnerCatalog ownerCatalog);
         using var assembly = AssemblyDefinition.ReadAssembly(originalDll,
             new ReaderParameters { ReadSymbols = false, ReadingMode = ReadingMode.Deferred });
         var groups = Roles.ToDictionary(x => x, _ => new Category(), StringComparer.Ordinal);
@@ -499,6 +542,7 @@ internal static class Program
         int exactShaderFindRequestedOriginalFoamName=0;
         int exactShaderFindRequestedDifferentName=0;
         int exactShaderFindRequestedNameUnknown=0;
+        int exactShaderFindNameMatchesOtherObjectsInOriginalOwner=0;
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
         {
@@ -530,7 +574,13 @@ internal static class Program
                     else if (Sha(requested)==originalShaderNameSha256)
                         exactShaderFindRequestedOriginalFoamName++;
                     else
+                    {
                         exactShaderFindRequestedDifferentName++;
+                        if (ownerCatalog.PrivateOtherShaderNames.TryGetValue(
+                            Sha(requested),out int sourceOwnerShaderCount))
+                            exactShaderFindNameMatchesOtherObjectsInOriginalOwner +=
+                                sourceOwnerShaderCount;
+                    }
                 }
             }
             if (hasExactWrite) constructorShaderWriterMethods++;
@@ -661,6 +711,18 @@ internal static class Program
             original_exact_Material_ctor_private_Shader_Find_requested_name_unknown_count =
                 exactShaderFindRequestedNameUnknown,
             original_exact_Shader_Find_name_match_implies_runtime_Shader_asset_identity = false,
+            original_owner_Shader_object_count_examined = ownerCatalog.ShaderObjectCount,
+            original_owner_Shader_name_unparsed_count = ownerCatalog.UnparsedShaderNames,
+            original_owner_Material_object_count_examined = ownerCatalog.MaterialObjectCount,
+            original_owner_Material_pointer_unparsed_count = ownerCatalog.UnparsedMaterialPointers,
+            original_owner_Material_original_Foam_same_file_PPtr_count =
+                ownerCatalog.LocalFoamMaterialRefs,
+            original_owner_Material_external_Shader_PPtr_count =
+                ownerCatalog.ExternalShaderRefs,
+            original_Shader_Find_requested_other_Shader_object_same_owner_name_match_count =
+                exactShaderFindNameMatchesOtherObjectsInOriginalOwner,
+            original_source_owner_is_all_Raft_Shader_assets_verified = false,
+            original_source_owner_PPtr_links_are_runtime_loaded_verified = false,
             original_exact_Material_ctor_private_Shader_field_writer_is_Original_Foam_Shader_verified = false,
             original_exact_Material_ctor_private_Shader_field_writer_is_runtime_executed_verified = false,
             original_exact_Shader_field_original_Foam_asset_reference_verified = false,
