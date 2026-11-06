@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1921Z-T2-scheduled-shaderfind-ci-reconcile-c6e4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "7ade75774368548d68a9b3d0ae0e18cc4ef1f1a4",
+  "resumed_from_sessions": [
+    "20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e",
+    "20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1921Z-T2-scheduled-shaderfind-ci-reconcile-c6e4.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1921Z-T2-scheduled-shaderfind-ci-reconcile-c6e4.md"
+  ],
+  "experiment_key": "reconcile-original-foam-shaderfind-typed-il-ci-42278043015-9aed14b5",
+  "resource_key": null,
+  "updated_at": "2026-11-06T19:21:00Z",
+  "hypothesis": "Green typed Shader.Find CI alone does not prove a positive original Foam binding; verify asserted limits and preserve source-only status."
+}
