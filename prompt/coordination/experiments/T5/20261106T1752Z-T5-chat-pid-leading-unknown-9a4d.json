@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1752Z-T5-chat-pid-leading-unknown-9a4d",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "status": "completed_readonly_differential",
+  "experiment_key": "T5-CL520c4cf4-scheduled-a5f2172f-leading-unknown-1-6-real-rows-regression-v1",
+  "source_commit": "a5f2172f7433e8e0a6c4a6a178029a56a82d8cc9",
+  "hypothesis": "Non-running startup rows before the first verified Raft PID are not process lifetime boundaries; new scheduled helper incorrectly creates additional epochs and invalidates previously authenticated genuine CL results.",
+  "source_inputs": {
+    "source_repo": "alwansan/CL",
+    "source_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "blob_shas": [
+      "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8",
+      "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+    ],
+    "rows": [
+      71,
+      119
+    ],
+    "leading_unknown_before_first_verified_running": [
+      1,
+      6
+    ]
+  },
+  "commands": [
+    "Read exact new scheduled T5 helper and two new stop/restart source tests from feature branch",
+    "Read two exact pinned real CL JSONL Git blobs from connector; calculate initial unknown prefix counts and verified running process cardinality",
+    "Evaluate current committed helper's branch on each original row and count resulting process epochs without publishing actual PID identifiers"
+  ],
+  "negative_controls": [
+    "Do not change scheduled-owned script or tests while scope waiting_ci",
+    "Do not invent passing actual Python/Actions test on new commit",
+    "Do not interpret missing SurfaceFlinger FPS as gameplay freeze or GPU speedup"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-cl-real-fps-cohort.yml",
+  "run_url": null,
+  "observed_result": {
+    "source_only_conditional_simulation": true,
+    "real_rows": [
+      71,
+      119
+    ],
+    "prior_ci_epoch_counts": [
+      1,
+      1
+    ],
+    "current_source_epoch_counts": [
+      2,
+      7
+    ],
+    "previously_valid_fresh_surface_samples": [
+      57,
+      2
+    ],
+    "current_source_unsafe_full_session": [
+      true,
+      true
+    ],
+    "actual_python_ci_on_scheduled_commit": "unverified",
+    "game_performance_improved": false
+  },
+  "limitations": [
+    "JS-equivalent source condition evaluated read-only, not newly executed Python unit/Actions CI",
+    "Real data contain no actual PID values exposed by this report",
+    "The scheduled source owner must implement the corrective code and rerun sourcefree plus genuine CL CI"
+  ],
+  "integration_commit": null,
+  "discussion_path": "prompt/coordination/discussions/PERF-007/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d-to-scheduled.md",
+  "next_step": "Scheduled T5 to retain startup nonrunning prefix in first verified epoch but split true stop/restart, then prove new stop/restart tests and original pinned 190-row CI."
+}
