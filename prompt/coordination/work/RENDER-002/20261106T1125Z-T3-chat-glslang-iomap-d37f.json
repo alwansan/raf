@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b34c69cd52c9369cf42766a477d90ea973288757",
   "resumed_from_sessions": [
     "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
@@ -24,5 +24,26 @@
   "experiment_key": "T3-Particle108-4SHA-fourpair-glslang-HLSL-iomap-auto-location-alternate-compilation-v1",
   "resource_key": "T3-private-four-original-Particle108-IOmap-compiler-runner",
   "approach": "Run baseline, --hlsl-iomap, --auto-map-locations and combined flags separately on exact original four HLSL pairs in private CI, record only successful stage counts, vulkan1.1 spirv-val and anonymous reflection stage link; no original ShaderLab changes or private program artifacts.",
-  "updated_at": "2026-11-06T11:26:13.180Z"
+  "updated_at": "2026-11-06T11:31:10.248Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42210538214"
+  ],
+  "result": {
+    "run_id": 42210538214,
+    "job_id": 127867804070,
+    "conclusion": "success",
+    "source_free_tests_passed": 8,
+    "source_owner_SHAs_verified": 4,
+    "source_scene_SHAs_verified": 6,
+    "source_SPIRV_pairs_linked": 4,
+    "generated_HLSL_semantic_pairs_linked": 4,
+    "baseline_roundtrip_pairs_linked": 2,
+    "hlsl_iomap_pairs_linked": 2,
+    "auto_map_locations_pairs_linked": 2,
+    "both_flags_pairs_linked": 2,
+    "spirv_vulkan_valid_stages_each_config": 8,
+    "android_pixels_verified": false,
+    "original_game_assets_modified": false
+  },
+  "next_step": "Need new isolated private paired-stage glslang HLSL linker or exact semantic-to-SPIRV Location map; no source game shader edit until source plus SPV stage-identity proof. RENDER-002 OPEN."
 }
