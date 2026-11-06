@@ -1,7 +1,7 @@
 """Synthetic-only 5 true-source ParticleShader Material RGBA + scalar parity."""
 import copy
 import unittest
-from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH
+from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError
 from scripts.b22_verify_material_scalars import _float_bits
 
 def fixture():
@@ -92,6 +92,13 @@ class SelectedParticle108ValueParityTests(unittest.TestCase):
         w["objects"][0]["export"]={"file_id":2100000,"guid":"0"*32,"type":0}
         with self.assertRaises(ValueError):
             assess(c,s,w,ac,as_)
+    def test_private_rgba_value_parser_failure_only_exposes_phase(self):
+        c,s,w,ac,as_=fixture()
+        c[("resources.assets",1)]["_SyntheticTint"]=("PRIVATE_NONNUMERIC",1,1,1)
+        with self.assertRaises(PrivatePhaseError) as cm:
+            assess(c,s,w,ac,as_)
+        self.assertEqual(cm.exception.phase,"COMPARE_RGBA")
+        self.assertNotIn("PRIVATE_NONNUMERIC",str(cm.exception))
     def test_private_original_names_and_values_do_not_leave_aggregate(self):
         c,s,w,ac,as_=fixture()
         r=assess(c,s,w,ac,as_)
