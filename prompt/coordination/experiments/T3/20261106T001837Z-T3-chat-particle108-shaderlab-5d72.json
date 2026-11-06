@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Exact six-scene source 108-use ParticleShader48 may export to a fake/dummy `.shader` despite one Pass and 10/10 authentic original Material Texture binds; identity must be mapped to same-instance W1 source GUID, not guessed by name.",
+  "source_commit": "2aa84a40bff9ac0b69277552e4a071e1a59299d4",
+  "input_hashes": [
+    "ZIP2 pinned SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six real original scene SHA verified",
+    "four original Shader/Material owner SHA verified plus two runtime global assets",
+    "one original image resource `.resS` full manifest SHA verified, 3 image source ranges read",
+    "pinned public AssetRipperCLI 036098ab525a3f9f693dc101edeb21faad4d32d8"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "dotnet": "9.0",
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_particle108_shaderlab_export_quality.py -v",
+    "dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release --self-contained false -o $RUNNER_TEMP/t3-particle-compiled",
+    "dotnet $RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll $RUNNER_TEMP/t3-particle-original $RUNNER_TEMP/t3-particle-export",
+    "python3 -m scripts.t3_particle108_shaderlab_export_quality --original $RUNNER_TEMP/t3-particle-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/t3-particle-export/ExportedProject --w1-trace $RUNNER_TEMP/t3-particle-w1-private.json --b02-trace $RUNNER_TEMP/t3-particle-b02-private.json --out $RUNNER_TEMP/t3-particle108-shaderlab-quality-safe.json"
+  ],
+  "negative_controls": [
+    "original SHA-verified source Shader selected by private 108 particle Renderer use, never source name",
+    "cross-export W1/B02 identity mismatch rejected",
+    "builtin Shader pointer not misclassified as missing custom shader",
+    "custom Shader GUID requires exact metadata, duplicates rejected",
+    "dummy exporter marker overrides apparently complete one-pass CGPROGRAM",
+    "quoted/comment fake `Pass` not accepted as actual pass",
+    "source and Shader text code/private GUID/PathIDs never public"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-sameexport.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42136474867",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42136474867/artifacts"
+  ],
+  "budget": "50min source-only one pinned original AssetRipper export, 12 SHA-authenticated owners plus one .resS; no Unity native APK",
+  "status": "completed",
+  "observed_result": {
+    "source_108_Particle_Renderer_slots": 108,
+    "original_distinct_Particle_Renderers": 54,
+    "original_material21": 5,
+    "original_mat_texenv_PPtrs_with_previous_parity": 10,
+    "original_Shader48_Passes": 1,
+    "real_exported_ShaderLab_passes": 1,
+    "real_exported_complete_structural_program_passes": 1,
+    "real_exported_ShaderLab_Meta_present": true,
+    "real_exported_ShaderLab_file_present": true,
+    "exported_ShaderLab_contains_DummyShaderTextExporter_marker": true,
+    "exported_ShaderLab_is_custom_not_builtin": true,
+    "source_Shader_D3D11_program_recovered_or_compiled": false,
+    "Android_fire_smoke_emitter_or_pixels_verified": false,
+    "tests_passed": 113
+  },
+  "rejected_hypotheses": [
+    "The selected source 108-use Particle Shader48 has a genuinely authored/non-dummy original executable program in the bounded vanilla AssetRipper ShaderLab output",
+    "A balanced real .shader file and one `CGPROGRAM` block alone prove authored source shader parity"
+  ],
+  "limitations": [
+    "post-vendor/native Unity full game may separately replace this dummy",
+    "the one source shader's identity is not correlated to phone fire/smoke emitter",
+    "no fragment program alpha/texture sampling/Adreno pixels proven"
+  ],
+  "failed_synthetic_preflight_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42136195978",
+    "https://github.com/alwansan/raf/actions/runs/42136368256"
+  ],
+  "integration_commit": "2aa84a40bff9ac0b69277552e4a071e1a59299d4",
+  "next_step": "Determine whether the exact 108-use source ParticleShader48 dummy output survives T5's post-vendor/native Unity project; then recover original genuine D3D11 one-pass VS/FS/keyword permutations with W1 pinned graph and preserve original ColorMask RGB / Alpha Blend / ZWrite OFF; correlate installed Android smoke/fire emitter GUID and actual GPU pixels. Do not replace source images (10/10 PPtr parity) or claim phone fix."
+}
