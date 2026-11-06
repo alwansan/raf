@@ -461,10 +461,12 @@ internal static class Program
             blitExplicit>0 && blitImplicit==0 && blitOther==0);
         // Attribute roles to a pass ONLY when this exact field-load site
         // has one authenticated typed Blit call and one literal pass index.
-        bool singlePass0=onlyExplicitBlit && blitExplicit==1 &&
-            passKinds==1 && passLiteral0==1;
-        bool singlePass1=onlyExplicitBlit && blitExplicit==1 &&
-            passKinds==1 && passLiteral1==1;
+        // The existing per-field-load pass partition can prove one pass family
+        // even if repeated Blit calls share that source field read. In that
+        // case TraceDirectBlitInputs deliberately sets source/destination
+        // UNKNOWN rather than fabricating a single original producer.
+        bool singlePass0=onlyExplicitBlit && passKinds==1 && passLiteral0>0;
+        bool singlePass1=onlyExplicitBlit && passKinds==1 && passLiteral1>0;
         return new(inspected,boundary,receiver,arg,graphics,command,renderer,other,
             graphics>0 && families==1 && graphicsBlit>0 ? 1 : 0,
             graphics>0 && families==1 && graphicsDrawMesh>0 ? 1 : 0,
@@ -1224,6 +1226,16 @@ internal static class Program
            exact.BlitPassLiteral0!=0 || exact.BlitPassLiteral1!=0 ||
            exact.BlitPass0SourceUnknown!=0 || exact.BlitPass1SourceUnknown!=0)
             throw new InvalidOperationException("Blit_pass_mixed_exclusive_source");
+        // Two calls reaching the same original Material field-read site
+        // can select the SAME pass. We prove that pass once, but refuse
+        // to infer a unique source or destination for the combined site.
+        literalMix.Body.Instructions[3]=Instruction.Create(OpCodes.Ldc_I4_1);
+        exact=TraceExactMaterialFieldRead(literalMix,0);
+        if(exact.BlitPassLiteral1!=1 || exact.BlitPassMixed!=0 ||
+           exact.BlitPass1SourceUnknown!=1 ||
+           exact.BlitPass1DestinationUnknown!=1 ||
+           exact.BlitPass0SourceUnknown!=0)
+            throw new InvalidOperationException("two_same_pass_calls_must_keep_roles_unknown");
         var multiBlit=new MethodDefinition("SyntheticTwoBlitOverloads",
             Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
             mod.TypeSystem.Void);
