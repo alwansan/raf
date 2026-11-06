@@ -1,0 +1,14 @@
+{
+  "id": "20261106T195959Z-T1-chat-ci-log-pin-7b42",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T195959Z-T1-chat-ci-log-pin-7b42",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SUCCESS CI 42285401655: 3 SHA+job pinned historical GitHub CI logs physically fetched and unique redacted FFT site1 X Input/HLSL Phi/Unity 63-vs-0 markers matched curated evidence. 12 new+14 prior tests passed; original in-game GPU and Android still unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42285401655",
+    "https://github.com/alwansan/raf/commit/47df6c4b344a688928219596cae66ef865108050"
+  ],
+  "at": "2026-11-06T20:07:00Z"
+}
