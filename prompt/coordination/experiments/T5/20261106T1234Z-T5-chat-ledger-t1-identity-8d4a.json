@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a",
+  "origin": "chat",
+  "issue_id": "COORD-001",
+  "status": "source_corrected_waiting_canonical_index",
+  "experiment_key": "T5-exact-T1-event-session-id-explicit-id-preserved-schema-CI42218319821-v1",
+  "causal_evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42217811393",
+    "https://github.com/alwansan/raf/actions/runs/42218319821"
+  ],
+  "root_cause": "The strict canonical B_TEAM events reader requires an explicit id or valid event_id, but one T1 scheduled event contained only session_id, causing ValueError Missing record identity.",
+  "original_event_path": "prompt/coordination/B_TEAM/events/T1/20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2.json",
+  "original_event_sha": "dc6efb72d762d150b2340e8dec9f55c1226a7cc9",
+  "remediation_commit": "f4d459b57d5aac03836278d079763ab20844ae11",
+  "remediation": "Added only explicit id matching unchanged existing session_id; verified all 12 other T1 keys and values unchanged by pre-update JSON comparison. Parser remains fail-closed, no source, FFT tests or owner status touched.",
+  "result_semantics": "coordination schema correction only; no T1 FFT numerical parity or Android water readiness claim",
+  "next_step": "Run own canonical T5 one-shot fast-forward refresh and confirm full live ledger/14 regression tests; stop if more malformed author events appear, no silent drops.",
+  "updated_at": "2026-11-06T12:35:35.356Z"
+}
