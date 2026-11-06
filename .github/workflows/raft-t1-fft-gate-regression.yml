@@ -8,6 +8,8 @@ on:
       - .github/workflows/raft-t1-fft-gate-regression.yml
       - scripts/t1_fft_unity_gpu_result_gate.py
       - scripts/test_t1_fft_unity_gpu_result_gate_contract.py
+      - scripts/t1_fft_unity_evidence_gate.py
+      - tests/test_t1_fft_unity_evidence_gate.py
 
 permissions:
   contents: read
@@ -28,5 +30,9 @@ jobs:
           sparse-checkout: |
             scripts/t1_fft_unity_gpu_result_gate.py
             scripts/test_t1_fft_unity_gpu_result_gate_contract.py
+            scripts/t1_fft_unity_evidence_gate.py
+            tests/test_t1_fft_unity_evidence_gate.py
       - name: Verify exact repository gate and seven adversarial contract tests
         run: python3 -m unittest discover -s scripts -p 'test_t1_fft_unity_gpu_result_gate_contract.py' -v
+      - name: Verify sanitized Unity FFT evidence parsing and classification
+        run: python3 -m unittest discover -s tests -p test_t1_fft_unity_evidence_gate.py -v
