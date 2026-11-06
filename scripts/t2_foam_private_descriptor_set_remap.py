@@ -275,12 +275,15 @@ def verify_selective_reflection(before, after, conflicts, target_set):
         raise ValueError("selective_reflection_signature_or_CB0_changed")
     # Reflection's optional ID is verified where reported. Actual SPIR-V ID
     # identity is guaranteed by exact non-DescriptorSet word equality.
+    # Binding numbers are scoped to descriptor sets. A binding-only dict
+    # silently collapses distinct (set, binding) entries and may conceal a
+    # reflection ID swap after a selective relocation.
     for category in CATEGORIES:
         old_rows=before.get(category,[])
         new_rows=after.get(category,[])
         if (len(old_rows)!=len(new_rows) or
-            {x["binding"]:x.get("id") for x in old_rows}!=
-            {x["binding"]:x.get("id") for x in new_rows}):
+            sorted((r["set"],r["binding"],r.get("id")) for r in old_rows)!=
+            sorted((r["set"],r["binding"],r.get("id")) for r in new_rows)):
             raise ValueError("selective_reflection_resource_id_changed")
     return True
 
