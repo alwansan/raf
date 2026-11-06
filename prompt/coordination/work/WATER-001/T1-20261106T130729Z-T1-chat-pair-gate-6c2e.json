@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "session_id": "20261106T130729Z-T1-chat-pair-gate-6c2e",
+  "status": "active",
+  "base_sha": "42cffcc8e06fc4b86ee5cdb90e9f6a639214f0e5",
+  "updated_at": "2026-11-06T13:07:29.297Z",
+  "resumed_from_sessions": [
+    "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+    "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2"
+  ],
+  "track": "source-only strict paired Vulkan-original vs Unity candidate invocation-trace evidence gate",
+  "approach": "New independent bounded wrapper around existing invocation-keyed trace comparator. Reject same underlying trace file, unverified capture SHA256, absent original/candidate role declaration, input/dispatch fingerprints mismatch, empty/missing site coverage and oversized trace/manifest. Emit aggregates only. Sourced metadata are declarative not cryptographically attested; no claim of original-vs-Unity parity without two actual captured files.",
+  "hypothesis": "Existing identity parser self-check and zero-sample comparator behavior can accidentally be misread as parity. Strict source/candidate and data identity/coverage preflight will rule out false acceptance without accessing game/private shader data.",
+  "intended_files": [
+    "scripts/t1_fft_invocation_pair_gate.py",
+    "tests/test_t1_fft_invocation_pair_gate.py",
+    "tests/test_t1_fft_coordinate_probe_compare.py",
+    "scripts/t1_fft_coordinate_probe_compare.py",
+    ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T130729Z-T1-chat-pair-gate-6c2e.md",
+    "prompt/coordination/experiments/T1/20261106T130729Z-T1-chat-pair-gate-6c2e.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T130729Z-T1-chat-pair-gate-6c2e.json"
+  ],
+  "experiment_key": "water001-sourcefree-strict-invocation-pair-gate-valid-path-digest-input-dispatch-and-site-coverage-v1",
+  "resource_key": "source-only-python-ubuntu24-4min-no-private-assets",
+  "other_active_runs": [
+    42221700354
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build source-free strict gate and adversarial tests, run independent short Actions workflow once; keep original source authentic Vulkan run 42221700354 unaffected."
+}
