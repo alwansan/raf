@@ -1,0 +1,12 @@
+# T2 — Foam exported GUID collision guard
+
+- session_id: `20261106T2021Z-T2-scheduled-foam-guid-collision-f8a3`; origin: `scheduled`; issue: WATER-001; status: `waiting_ci`.
+- resumed_from: `20261106T2000Z-T2-chat-foam-private-installer-a4c7`, `20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7`.
+- baseline HEAD: `14084580e7ac2e2959d30198201dc8e54fbe370f`; work registered at `b6395ed7a96793a721571a935566ce7cdf588c19` before source edits.
+- Owner device source: run 42058825739, e9c358eda01785b65e4eb14f18723da426635628; owner confirmed world enter/save/re-enter. Water pass/FFT errors remain; no claim of current water pixels. CL snapshot 520c4cf409aa20a4db54ff80ed87d8807d9cba57.
+- New independent failure mode: the installer already required exactly one ShaderLab Foam identity and a well-formed target .meta GUID, but did not reject a **second exported asset using that same GUID**. Unity references by GUID, so a unique shader *name* alone cannot ensure unambiguous binding.
+- Source commit `014d48fafbfd93b0bf0f2bff46c3c82ad2940ef3`: fail closed before backup/promotion if another exported .meta shares the target GUID; reject redirected metadata. Source-free regression commits `edc70e76ec5cd8d694c2a531f3a54139282d09e1`, `41e2ae8736971c24dbe956c05d5aaf597d63874b`: collision rejected without writing, distinct GUID accepted. No original GUID or shader bytes logged.
+- CI source-only [42287298277](https://github.com/alwansan/raf/actions/runs/42287298277) **SUCCESS** on code-only SHA 014d48faf; [42287329219](https://github.com/alwansan/raf/actions/runs/42287329219) running on initial test SHA; [42287347419](https://github.com/alwansan/raf/actions/runs/42287347419) queued on corrected test SHA 41e2ae873. No duplicate dispatch or native build.
+- T3 original Shader48 CI [42287201379](https://github.com/alwansan/raf/actions/runs/42287201379) **FAILED** independently; T2 did not touch its files. Native 42281310905 older SHA failed Editor compile; T4 owns bridge and T5 delivery.
+- No changes to game shaders, Unity assets, .meta, GUID, .rgd, audio, Settings, touch, native requests or team votes. T2 trial r1 remains `لا يحتاج`. This is a source-only integrity guard, not proof of original export uniqueness, CB0 upload, Unity import, or Android water.
+- next_step: check final corrected test CI 42287347419; if PASS, inspect actual ephemeral original exported shader target + all GUID sidecars before guarded install, then Unity importer/runtime verification coordinated with T5. Keep WATER-001 OPEN.
