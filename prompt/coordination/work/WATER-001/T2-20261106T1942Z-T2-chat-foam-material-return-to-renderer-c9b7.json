@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "track": "original Foam exact Material(Shader) constructor returned Material typed IL destination and renderer assignment proof",
+  "base_sha": "29a9463d42a08e020c0a65389f640682b72377d7",
+  "updated_at": "2026-11-06T19:42:00Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.md",
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "docs/T2_ORIGINAL_FOAM_MATERIAL_RETURN_TRACE_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7-result.json"
+  ],
+  "experiment_key": "ZIP2-15964-original-foam-field-ldfld-direct-MaterialShader-constructor-return-consumer-and-Renderer-set-material-IL-v2",
+  "resource_key": "same pinned ZIP2 original owner and Assembly-CSharp through isolated T2 resultflow workflow (no Unity GPU build)",
+  "hypothesis": "Unique authenticated original Foam Shader field supplied to exactly one typed Material(Shader) newobj; identify its next typed IL result consumer and narrow original Renderer.set_material call, rather than claiming runtime rendering by cooccurrence.",
+  "resumed_from_sessions": [
+    "20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4",
+    "20261106T1921Z-T2-scheduled-shaderfind-ci-reconcile-c6e4",
+    "20261106T1900Z-T2-chat-scene-script-typed-6f9a"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Extend existing proven T2 Cecil scanner/validator in own files, fail-closed exact immediate Material return dataflow & typed renderer assignment call, original SHA CI, safe counts-only; do not touch native run 42281310905 or other workers.",
+  "trial_vote": "لا يحتاج",
+  "native_build_observed_running": "https://github.com/alwansan/raf/actions/runs/42281310905",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4.json"
+  ]
+}
