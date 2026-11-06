@@ -1,0 +1,116 @@
+name: T2 WATER-001 original external Shader name versus Foam identity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_original_target_name_relation.py
+      - tests/test_t2_foam_original_target_name_relation.py
+      - .github/workflows/raft-t2-foam-original-target-name-relation.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-original-target-name-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-Shader-name-relation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/scripts
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-free exact-name and unknown-owner controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_original_target_name_relation.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_target_name_relation.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_manifest_pptr.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free>3*1024**3
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-foam-shader-name-original-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Independently authenticate original Foam owner source
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,json,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS,ZIP2_SHA,stage
+          from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
+          root=Path('t2-foam-shader-name-original-zip2')
+          sha=subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()
+          assert sha==ZIP2_SHA
+          assert len(parse_original_manifest(root/'RAFT_FILE_MANIFEST.tsv'))==366
+          target=Path(os.environ['RUNNER_TEMP'])/'t2-foam-shader-name-source'
+          x=stage(root,target,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert x['verified_bytes']==115978112 and x['lfs_used'] is False
+          print('T2_FOAM_TARGET_NAME_ORIGINAL_OWNER_SAFE '+json.dumps({
+              'original_source_SHA_verified':True,
+              'original_owner_bytes_verified':x['verified_bytes'],
+              'full_manifest_metadata_validated_not_full_bytes':True
+          },sort_keys=True))
+          PY
+      - name: Privately compare original external typed Shader names with original Foam
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 540s python3 -m scripts.t2_foam_original_target_name_relation \
+            --zip2 "$GITHUB_WORKSPACE/t2-foam-shader-name-original-zip2" \
+            --source "$RUNNER_TEMP/t2-foam-shader-name-source" \
+            --scratch "$RUNNER_TEMP/t2-foam-shader-name-target" \
+            --out "$RUNNER_TEMP/t2-foam-shader-name-safe.json"
+      - name: Assert authentic target name comparison with bounded public evidence
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          raw=(Path(os.environ['RUNNER_TEMP'])/'t2-foam-shader-name-safe.json').read_text()
+          r=json.loads(raw)
+          assert r['status']=='source_original_Foam_external_Shader_name_relation_verified'
+          assert r['zip2_SHA_attested'] and r['source_owner_and_target_object_SHA_attested']
+          assert r['verified_target_file_count']==1 and r['original_target_bytes']==758412
+          assert r['typed_external_Shader_targets']==2
+          assert 0<=r['target_original_shader_name_readable']<=2
+          assert r['target_original_shader_name_readable']+r['target_original_shader_name_unreadable']==2
+          assert 0<=r['target_exact_Foam_name_matches']<=r['target_original_shader_name_readable']
+          assert 0<=r['target_exact_Foam_raw_bytes_matches']<=2
+          assert r['name_match_is_Unity_GUID_runtime_identity'] is False
+          assert r['target_material_is_Foam_runtime_upload_verified'] is False
+          assert r['Android_Adreno_water_pixels_verified'] is False
+          assert r['private_shader_names_or_digests_published'] is False
+          assert all(type(v) in (str,int,bool) for v in r.values())
+          assert not any(x in raw for x in ('private_shader_name','original_external_paths',
+                                            'm_PathID','m_FileID','private_raw'))
+          print('T2_FOAM_TARGET_NAME_RELATION_SAFE_ASSERTIONS pass')
+          PY
+      - name: Remove original data and all temporary target assets before publication
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-shader-name-source" \
+            "$RUNNER_TEMP/t2-foam-shader-name-target" \
+            "$GITHUB_WORKSPACE/t2-foam-shader-name-original-zip2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-foam-original-target-name-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-shader-name-safe.json
+          if-no-files-found: error
+          retention-days: 7
