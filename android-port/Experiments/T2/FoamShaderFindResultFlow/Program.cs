@@ -493,16 +493,16 @@ internal static class Program
             onlyExplicitBlit && (blitExplicit!=1 || destinationKind==0) ? 1 : 0,
             singlePass0 && sourceKind==1 ? 1 : 0,
             singlePass0 && sourceKind==2 ? 1 : 0,
-            singlePass0 && sourceKind==3 ? 1 : 0,
+            singlePass0 && sourceKind==0 ? 1 : 0,
             singlePass0 && destinationKind==1 ? 1 : 0,
             singlePass0 && destinationKind==2 ? 1 : 0,
-            singlePass0 && destinationKind==3 ? 1 : 0,
+            singlePass0 && destinationKind==0 ? 1 : 0,
             singlePass1 && sourceKind==1 ? 1 : 0,
             singlePass1 && sourceKind==2 ? 1 : 0,
-            singlePass1 && sourceKind==3 ? 1 : 0,
+            singlePass1 && sourceKind==0 ? 1 : 0,
             singlePass1 && destinationKind==1 ? 1 : 0,
             singlePass1 && destinationKind==2 ? 1 : 0,
-            singlePass1 && destinationKind==3 ? 1 : 0);
+            singlePass1 && destinationKind==0 ? 1 : 0);
     }
 
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
@@ -1235,16 +1235,7 @@ internal static class Program
            exact.BlitPass1SourceUnknown!=1 ||
            exact.BlitPass1DestinationUnknown!=1 ||
            exact.BlitPass0SourceUnknown!=0)
-        {
-            // Synthetic fixture counts only. Never print original symbols/IL.
-            Console.WriteLine("T2_SYNTHETIC_SAME_PASS_SAFE " +
-                "literal1="+exact.BlitPassLiteral1+
-                " mixed="+exact.BlitPassMixed+
-                " pass1srcUnknown="+exact.BlitPass1SourceUnknown+
-                " pass1dstUnknown="+exact.BlitPass1DestinationUnknown+
-                " pass0srcUnknown="+exact.BlitPass0SourceUnknown);
             throw new InvalidOperationException("two_same_pass_calls_must_keep_roles_unknown");
-        }
         var multiBlit=new MethodDefinition("SyntheticTwoBlitOverloads",
             Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
             mod.TypeSystem.Void);
