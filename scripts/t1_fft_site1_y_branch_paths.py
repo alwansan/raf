@@ -31,7 +31,7 @@ ALLOWED_PREDICATES = (
 
 
 def safe_category(category):
-    if category in ("whole_vector", "uninitialized", "unknown_write"):
+    if category in ("whole_vector", "uninitialized", "unknown_write", "pointer_escape"):
         return category
     if category in ("sint32_bits_to_float32", "uint32_bits_to_float32",
                     "float32_constant", "float32_load", "numeric_sint32_to_float32",
@@ -54,8 +54,10 @@ def writer_event(op, operands, base, lane, shape, values, types):
             return "whole_vector"
         if effect == "same_lane":
             return safe_category(scalar_carrier(src, values, types))
-        if effect == "unknown" or src == base or aliases(src, base, values):
+        if effect == "unknown":
             return "unknown_write"
+        if src == base or aliases(src, base, values):
+            return "pointer_escape"
     elif op in ("OpCopyMemory", "OpCopyMemorySized") and operands:
         effect = pointer_effect(operands[0], base, lane, shape, values, types)
         if effect in ("whole", "same_lane", "unknown"):
@@ -88,25 +90,27 @@ def path_witness(fun, load_id, physical_lane, base, shape, values, types):
     if len(static) > MAX_CATEGORIES:
         raise ValueError("Unexpected typed FFT writer diversity")
     # State: block, offset, last writer, has seen bitcarrier, has seen constant,
-    # predicates encountered, has crossed a CFG backward edge.
+    # predicates encountered, has crossed a CFG backward edge, pointer escape.
     order = {b: i for i, b in enumerate(blocks)}
-    init = (fun["entry"], 0, "uninitialized", False, False, 0, False)
+    init = (fun["entry"], 0, "uninitialized", False, False, 0, False, False)
     queue = deque([init])
     seen = {init}
     endings = set()
     while queue:
         if len(seen) > MAX_ABSTRACT_STATES:
             raise ValueError("Private CFG path-state bound exceeded")
-        block, offset, last, bit, const, mask, backwards = queue.popleft()
+        block, offset, last, bit, const, mask, backwards, escaped = queue.popleft()
         if (block, offset) == (load_block, load_idx):
-            endings.add((last, bit, const, mask, backwards))
+            endings.add((last, bit, const, mask, backwards, escaped))
             continue
         instr = blocks[block]
         if offset >= len(instr):
             raise ValueError("Missing private basic block terminator")
         op, _, args = instr[offset]
         event = writer_event(op, args, base, physical_lane, shape, values, types)
-        if event is not None:
+        if event == "pointer_escape":
+            escaped = True
+        elif event is not None:
             last = event
             bit = bit or event == "sint32_bits_to_float32"
             const = const or event == "float32_constant"
@@ -130,7 +134,7 @@ def path_witness(fun, load_id, physical_lane, base, shape, values, types):
         for target, next_offset in successors:
             edge_back = backwards or (
                 target != block and order[target] <= order[block])
-            key = (target, next_offset, last, bit, const, mask, edge_back)
+            key = (target, next_offset, last, bit, const, mask, edge_back, escaped)
             if key not in seen:
                 seen.add(key)
                 queue.append(key)
@@ -141,7 +145,7 @@ def path_witness(fun, load_id, physical_lane, base, shape, values, types):
     final = Counter(last for last, *_ in endings)
     pred_by_final = defaultdict(set)
     backwards_by_final = defaultdict(bool)
-    for last, seen_bit, seen_const, mask, backwards in endings:
+    for last, seen_bit, seen_const, mask, backwards, escaped in endings:
         for idx, pred in enumerate(ALLOWED_PREDICATES):
             if mask & (1 << idx):
                 pred_by_final[last].add(pred)
@@ -157,12 +161,13 @@ def path_witness(fun, load_id, physical_lane, base, shape, values, types):
         "final_writer_categories_possible": sorted(final),
         "abstract_states_at_load": len(endings),
         "may_visit_bitcarrier_and_float_constant_on_same_cfg_path":
-            any(bit and const for _, bit, const, _, _ in endings),
+            any(bit and const for _, bit, const, _, _, _ in endings),
         "conditional_predicate_producers_seen_on_paths_by_final_writer":
             {k: sorted(v) for k, v in sorted(pred_by_final.items())},
         "backward_cfg_edge_seen_by_final_writer":
             {k: v for k, v in sorted(backwards_by_final.items())},
         "unknown_final_writer_path_possible": "unknown_write" in final,
+        "pointer_escape_seen_on_any_cfg_path": any(s[-1] for s in endings),
         "uninitialized_final_path_possible": "uninitialized" in final,
         "full_execution_path_proven": False,
         "original_integer_numeric_semantics_proven": False,
