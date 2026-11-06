@@ -141,13 +141,17 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
     elif basic["selected_shaderlab_no_subprogram_marker"]:
         basic["exported_ShaderLab_source_status"]="NO_PROGRAM_SUBPROGRAMS_EXPORTED"
     elif (not coverage["pass_braces_balanced"] or count==0 or good==0
-          or not sub_counts or not coverage["all_subshaders_programmed"]):
+          or not sub_counts):
         basic["exported_ShaderLab_source_status"]="INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER"
     elif not basic["selected_shaderlab_one_pass_per_subshader"]:
+        # Preserve original mismatch precedence when one SubShader truly
+        # has two Passes, even if its second Pass is also unprogrammed.
         # Alternate SubShaders are fallbacks, not sequential Passes.
-        # Original one normal Pass must match EACH exported alternative,
-        # not the sum of all mutually exclusive alternatives.
         basic["exported_ShaderLab_source_status"]="CUSTOM_PASS_COUNT_DIFFERS_FROM_ORIGINAL"
+    elif not coverage["all_subshaders_programmed"]:
+        # One Pass per alternative is structurally correct, but an
+        # unprogrammed fallback cannot be accepted as a viable shader.
+        basic["exported_ShaderLab_source_status"]="INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER"
     else:
         basic["exported_ShaderLab_source_status"]="STRUCTURAL_ONE_PASS_PROGRAM_PRESENT_NOT_EQUIVALENCE"
     return basic
