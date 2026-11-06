@@ -4,10 +4,10 @@
   "origin": "chat",
   "session_id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_source_fix_ci_32_synthetic_verified",
   "track": "Signed APK/OBB ZIP structural integrity and usability",
   "base_sha": "06b3d07b2961466a4ae186a7ea22c087829ed87b",
-  "updated_at": "2026-11-06T12:42:17.904Z",
+  "updated_at": "2026-11-06T12:50:03.810Z",
   "resumed_from_sessions": [
     "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md",
     "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
@@ -36,5 +36,26 @@
     "central/local name, flags, compression and offset/payload overlaps rejected even with matching delivery hashes",
     "fast CI pass, no new full Unity build"
   ],
-  "next_step": "Patch only T5 pair validator and tests, source-only CI; preserve all phone provenance limits."
+  "next_step": "Check actual APK/OBB signed inner bytes in authorized isolated CI using owner tested archived delivery if disk and provenance permit; independently verify signature/aapt version and OBB GUID; no current device proof. T5 scheduled may own real file provenance: coordinate.",
+  "source_commits": [
+    "7839aa9c13ebff573762d8ade1f390fddb0268c0",
+    "432dc4b7bc819a49b561e948b471664ee88bd085",
+    "5b700fa6a2fd3f734f0a51ffc70ba2b534db9198"
+  ],
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42219989211",
+    "https://github.com/alwansan/raf/actions/runs/42220094481",
+    "https://github.com/alwansan/raf/actions/runs/42220308068"
+  ],
+  "result": {
+    "final_run": 42220308068,
+    "job_id": 127900400890,
+    "conclusion": "success",
+    "tests": "32/32",
+    "corrupt_member_cases": 7,
+    "zip64_and_descriptor_valid_cases": 2,
+    "real_signed_files_checked": false,
+    "phone_tested": false,
+    "full_game_ready": false
+  }
 }
