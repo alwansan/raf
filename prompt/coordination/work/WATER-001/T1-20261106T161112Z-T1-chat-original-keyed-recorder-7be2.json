@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T161112Z-T1-chat-original-keyed-recorder-7be2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-06T16:11:12.255Z",
+  "base_sha": "f70eb499f157c5af40ff2c74712d1e039cc0d79b",
+  "resumed_from_sessions": [
+    "20261106T155244Z-T1-chat-original-builtin-inject-d5f2",
+    "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
+    "20261106T151730Z-T1-chat-keyed-candidate-3a7f"
+  ],
+  "track": "Instrument authenticated original FFT slot0 SPIR-V directly for private keyed image-fetch readback",
+  "hypothesis": "The original signed32 GlobalInvocationId is a live Input with two loads; original three ImageFetch reads use sint2 coordinates and float4 values, free set0 binding3. A direct SPIR-V-only storage-buffer tracer can record key/occurrence/coordinates/value bits without HLSL conversion, preserving FFT output, enabling future matched numerical comparison against translated keyed candidate trace.",
+  "approach": "Add bounded fail-closed original-source-only SPIR-V instrumentation and source-free adversarial tests, plus private Vulkan original-pipeline host (set0 binding3) using exact original pin. Do not expose any original SPIR-V/trace bytes or change game shader; if original CFG/function ownership differs or SPIRV-val fails, classify safe blocker before actual readback. No Unity heavy build or work on other clients.",
+  "intended_files": [
+    "scripts/t1_fft_original_direct_keyed_recorder.py",
+    "tests/test_t1_fft_original_direct_keyed_recorder.py",
+    ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T161112Z-T1-chat-original-keyed-recorder-7be2.md",
+    "prompt/coordination/experiments/T1/20261106T161112Z-T1-chat-original-keyed-recorder-7be2.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T161112Z-T1-chat-original-keyed-recorder-7be2.json"
+  ],
+  "experiment_key": "water001-sourcepin15964ea8-original-spirv-3imagefetch-direct-signed3-gid-ssbo-keyed-capture-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Prove on synthetic SPIR-V first, then disassemble SHA-original, insert keyed recorder, assemble/spirv-val, bind trace buffer to original pipeline set0 and capture private 384 records. Do not call candidate comparison success until independently paired same-input records."
+}
