@@ -1,0 +1,51 @@
+name: T4 INPUT-005 inherited ledger event identity read-only guard
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json'
+      - 'tests/test_t4_ledger_event_identity.py'
+      - '.github/workflows/raft-t4-ledger-event-identity.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-event-identity-readonly-20261106
+  cancel-in-progress: false
+jobs:
+  real-source-ledger-and-adversarial-records:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Fetch authoritative ledger and approved canonical parser (read only)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /prompt/coordination/B_TEAM/
+            /scripts/refresh_b_team.py
+            /scripts/refresh_t_team.py
+            /tests/test_t4_ledger_event_identity.py
+      - name: Run exact T4 fixed event plus all real source ledger parser and adversarial controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t4_ledger_event_identity.py -v
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.refresh_t_team import build_t, render_t
+          d=build_t(Path("prompt/coordination/B_TEAM"))
+          out=render_t(d)
+          assert "INPUT-005" in out
+          assert d["readiness"] == "NOT_ASSESSED_BY_THIS_SUMMARY"
+          assert all("id" in row and row["id"] for row in d["events"])
+          print("T4_LEDGER_IDENTITY_CANONICAL_READONLY",
+                "issues=",len(d["issues"]),
+                "resources=",len(d["resources"]),
+                "events=",len(d["events"]),
+                "source_only=true",
+                "changed_repo=false")
+          PY
+          test -z "$(git status --porcelain)"
