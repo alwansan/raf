@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1645Z-T5-chat-installed-obb-read-e7c4",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "4fe296d91954e0e38d2cb5835795f6da114993ed",
+  "resumed_from_sessions": [
+    "20261106T1541Z-T5-chat-obb-routes-b8a1",
+    "20261106T1520Z-T5-chat-real-unity-guid-2b61"
+  ],
+  "taken_over_from": "T5 authenticated original archive, CI42248117179; owner device installed OBB read not established",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidExpansionArchiveProbe.cs",
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "android-port/Tests/ExpansionArchiveProbe/ExpansionArchiveProbe.csproj",
+    "android-port/Tests/ExpansionArchiveProbe/Program.cs",
+    ".github/workflows/raft-t5-installed-obb-read-probe.yml",
+    "prompt/coordination/clients/T5/sessions/20261106T1645Z-T5-chat-installed-obb-read-e7c4.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1645Z-T5-chat-installed-obb-read-e7c4.json"
+  ],
+  "experiment_key": "T5-installed-exact-main-version-package-OBB-zip-central-directory-real-Unity-entry-first-byte-source-test-v1",
+  "resource_key": "T5-independent-source-only-installed-obb-evidence",
+  "updated_at": "2026-11-06T16:44:21.214Z",
+  "hypothesis": "Installed same-version main OBB may be absent/inaccessible or Unity assets unreadable even though old signed archive digest and FMOD/Haptics paths are correct. Diagnostic only; no assertions of phone success until a new device log.",
+  "ci_run_url": null,
+  "next_step": "Create fail-open, safe read-only diagnostic and controlled .NET fixtures; run isolated CI; no Unity build or source assets."
+}
