@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-LOCAL005-AndroidRuntimeLog.Initialize-transient-path-IOException-retry-real-source-net8-Unity-stubs-v1",
+  "hypothesis": "An early synthetic storage directory creation error leaves StorageError sticky forever, preventing later explicit AndroidRuntimeLog.Initialize from recovering after storage becomes writable.",
+  "source_commit": "cdfa4bd855651d9c0f7642875b5eb08f25157908",
+  "input_hashes": [],
+  "tool_versions": {
+    "dotnet": "8.0.427",
+    "UnityStub": "test-only UnityEngineStubs.cs; actual AndroidRuntimeLog.cs included under UNITY_ANDROID"
+  },
+  "commands": [
+    "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "A temporary persistentDataPath is a regular file and first initialization fails; Status must record StorageError.",
+    "After replacing file with a directory, second real AndroidRuntimeLog.Initialize must clear initial StorageError, create logger.ready and persist valid JSONL.",
+    "A third Initialize must not create a duplicate persistent sink/segment; previous 286 PersistentDiagnosticLog tests still pass."
+  ],
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42259053551",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42258727771",
+    "https://github.com/alwansan/raf/actions/runs/42259053551"
+  ],
+  "artifact_urls": [],
+  "budget": "Existing 10m source-only .NET8 workflow plus independently triggered offline platform/local startup synthetic gates; no Unity native build, OBB, original assets or LFS.",
+  "status": "waiting_ci",
+  "observed_result": "RED CI42258727771 completed failure on a9a9a9709b4f9946180bc953c1f48731f0db446b: Program.cs:250 Persistent logging check failed: 288, after successful .NET8 compile and initial failed storage root, at recovered-state assertion. Production source fix cdfa4bd8 removes permanent StorageError return guard and clears StorageError after successful initialized sink; green CI42259053551 in progress.",
+  "rejected_hypotheses": [
+    "No real device storage outage inferred: source regression only."
+  ],
+  "limitations": [
+    "Explicit future Initialize required; not a background polling retry.",
+    "Actual Unity IL2CPP /Android physical storage behavior not yet tested.",
+    "T5 owns signed APK/OBB candidate; LOCAL-005 remains OPEN."
+  ],
+  "integration_commit": "cdfa4bd855651d9c0f7642875b5eb08f25157908",
+  "next_step": "Confirm exact green CI results and original startup/FFT compatibility; finalize standalone checkpoint, work/event and T5 handoff."
+}
