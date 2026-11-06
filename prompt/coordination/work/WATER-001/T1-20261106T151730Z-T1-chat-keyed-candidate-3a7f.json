@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "12318c5849d17316a488fa14a8304396843542dc",
-  "updated_at": "2026-11-06T15:24:32.504Z",
+  "updated_at": "2026-11-06T15:35:07.293Z",
   "resumed_from_sessions": [
     "20261106T1511Z-T1-scheduled-invocation-cli-k7m2",
     "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
@@ -31,6 +31,6 @@
     "https://github.com/alwansan/raf/actions/runs/42242015941",
     "https://github.com/alwansan/raf/actions/runs/42242127723"
   ],
-  "result": "Source-only 42242015941 SUCCESS 74/74 tests: original suite 61 + scheduled CLI 5 + candidate keyed audit 8. Original source-authentic Vulkan run 42242127723 in_progress with apt dependency installation; candidate keyed compile/dispatch/readback not yet verified. No original independent keyed capture, no paired same-input numeric verdict, WATER-001 OPEN.",
-  "next_step": "Inspect run 42242127723 after apt/source stage, require RAFT_T1_HLSL_KEYED_CANDIDATE_TRACE and nonempty per-site unique invocation keyed record counts, then checkpoint. On any failure correct minimal source and only then rerun changed CI; preserve script private data."
+  "result": "Source-only CI 42242015941 PASS 74/74. SHA-original ZIP2 HLSL candidate real Vulkan invocation-keyed CI 42242127723 SUCCESS; 384 real reads by site [64,256,64], unique dispatch+occurrence keys and 0 out-of-bounds, two same-host image pass outputs within tolerance. This is candidate-only; no independent original SPIR-V keyed capture or original-vs-translated matched invocation numeric proof. Private trace cleaned. Work and T1 GPU reservation released, WATER-001 OPEN.",
+  "next_step": "New distinct source-private exact-original SPIR-V keyed preflight with source-only 86-pass tool, then original-side GPU instrumentation and true independent SHA-bound paired trace. Do not rewrite shader or claim Android water fix until original-vs-translated numeric proof and phone evidence."
 }
