@@ -21,6 +21,52 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         p.write_text("".join(json.dumps(e) + "\n" for e in events), encoding="utf-8")
         return p
 
+    def test_actual_writer_queue_overflow_suppresses_only_hints(self):
+        # PersistentDiagnosticLog.Drain emits exactly area/operation/dropped
+        # and has no session, sequence or timestamp for this loss counter.
+        self.put("events.jsonl", [
+            row("save", 1, "save", "Save.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-06T12:00:00Z"),
+            {"area": "logging", "operation": "queue_overflow", "dropped": 3},
+            row("load", 1, "save", "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-06T13:00:00Z"),
+        ])
+        result = summarize(_paths(self.root))
+        self.assertEqual(result["session_count"], 2)
+        self.assertTrue(result["logging_queue_overflow_observed"])
+        self.assertFalse(result["save_nonzero_in_earlier_session"])
+        self.assertFalse(result["load_nonzero_in_later_session"])
+        self.assertFalse(result["real_rgd_durability_or_reopen_proven"])
+        self.assertFalse(result["local005_device_confirmed"])
+
+    def test_malformed_queue_overflow_cannot_silently_suppress_world_hints(self):
+        # Only the exact recorder shape is trustworthy. The current parser
+        # skips validation based on two attacker-controlled strings alone.
+        invalid = [
+            {"area": "logging", "operation": "queue_overflow"},
+            {"area": "logging", "operation": "queue_overflow", "dropped": 0},
+            {"area": "logging", "operation": "queue_overflow", "dropped": -1},
+            {"area": "logging", "operation": "queue_overflow", "dropped": True},
+            {"area": "logging", "operation": "queue_overflow", "dropped": "2"},
+            {"area": "logging", "operation": "queue_overflow", "dropped": 2.0},
+            {"area": "logging", "operation": "queue_overflow", "dropped": 2**63},
+            {"area": "logging", "operation": "queue_overflow", "dropped": 2,
+             "session": "forged-session"},
+            {"area": "logging", "operation": "queue_overflow", "dropped": 2,
+             "detail": "/private/game/world.rgd"},
+        ]
+        for index, entry in enumerate(invalid):
+            with self.subTest(index=index):
+                self.put("events.jsonl", [
+                    row("save", 1, "save", "Save.argumentFileSnapshot",
+                        "exists_at_filename_argument=True; length_class=nonzero"),
+                    entry,
+                ])
+                with self.assertRaisesRegex(EvidenceInputError, "invalid_overflow_record"):
+                    summarize(_paths(self.root))
+
     def test_mouse_release_outcomes_are_static_and_never_prove_android_os_state(self):
         outcomes = (
             "superseded_generation", "unbound_request_view",
