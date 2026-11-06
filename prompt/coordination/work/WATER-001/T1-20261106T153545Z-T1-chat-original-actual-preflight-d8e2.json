@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T153545Z-T1-chat-original-actual-preflight-d8e2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "876ecbfb81206d659e109d6a6dad19cbf8f912dc",
-  "updated_at": "2026-11-06T15:35:45.039Z",
+  "updated_at": "2026-11-06T15:37:37.154Z",
   "resumed_from_sessions": [
     "20261106T152810Z-T1-chat-original-key-preflight-c41b",
     "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
@@ -23,7 +23,9 @@
   ],
   "experiment_key": "water001-originalsha15964ea8-real-spirv-slot0-imagefetch-globalinvocationid-free-binding-keyed-read-tracer-prerequisites-v1",
   "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Run source-original private preflight once and record actual GlobalInvocationId and descriptor constraints, then design direct SPIR-V original keyed trace if viable. Distinguish this from completed HLSL candidate trace 42242127723 and source-only 86-test fixture proof."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42244565958"
+  ],
+  "result": "Source-only original SPIR-V keyed prerequisite parser passed 12 synthetic cases / full 86/86 in CI 42243693907. True original HLSL candidate side 384 keyed records confirmed in CI 42242127723. New distinct original SHA ZIP2 private run 42244565958 pending actual RAFT_T1_ORIGINAL_KEYED_PREFLIGHT marker. No original direct instrumentation or independent paired numeric match, WATER-001 OPEN.",
+  "next_step": "Read run 42244565958 conclusion and safe marker (actual GlobalInvocationId direct/struct/missing, ImageFetch coordinate/result types, set0/set1 binding3 availability), update own experiment/session/event/work; then only source-backed direct original GPU key capture and strict pair numeric compare. Do not duplicate running T1 job or invent shader readiness."
 }
