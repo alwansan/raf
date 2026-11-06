@@ -1,0 +1,70 @@
+name: T5 INTEGRATION-001 original signed APK SHA256 and aapt apksigner attestation
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_verify_real_signed_apk.py
+      - tests/test_t5_verify_real_signed_apk.py
+      - .github/workflows/raft-t5-real-signed-apk-attestation.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-t5-owner-original-42058825739-signed-apk-673mb-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authentic-original-signed-apk-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout isolated T5 code and fixtures without original game or LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t5_probe_github_artifact_zip_range.py
+            /scripts/t5_probe_signed_nested_zip_range.py
+            /scripts/t5_verify_apk_obb_pair.py
+            /scripts/t5_verify_real_signed_apk.py
+            /tests/test_t5_verify_real_signed_apk.py
+      - name: Run fail-closed synthetic signed APK digest and Android identity controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_verify_real_signed_apk.py -v
+          python3 -m py_compile scripts/t5_verify_real_signed_apk.py
+          test ! -e Raft
+      - name: Confirm Android SDK signer tools and temporary disk before 673MB transfer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          from scripts.t5_verify_real_signed_apk import android_tools
+          sdk = Path(os.environ.get("ANDROID_HOME") or os.environ.get("ANDROID_SDK_ROOT") or "/nonexistent")
+          signer, aapt, version = android_tools(sdk)
+          assert signer.is_file() and aapt.is_file()
+          assert shutil.disk_usage(os.environ["RUNNER_TEMP"]).free >= 1024 * 1024 * 1024
+          print("T5_APK_PREFLIGHT sdk_tools_available=true disk_gt_1g=true build_tools_version=" + version)
+          PY
+      - name: Stream actual original signed 673MB APK only from ZIP_STORED remote member
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TMPDIR: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          # HTTP Content-Range must be 206, no redirect URL/token logged.
+          # 700MiB transfer cap; no 2.3GiB OBB or 2.97GiB outer ZIP download.
+          timeout 900s python3 -m scripts.t5_verify_real_signed_apk --live
+          echo 'T5_REAL_SIGNED_APK full_sha_verified=true real_binary_manifest_and_apksigner_verified=true obb_sha=false phone_tested=false game_ready=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: Never publish raw APK certificate text, Azure URL, or original game file
+        if: always()
+        shell: bash
+        run: echo 'Only bounded source build/verification flags; private signed APK is temporary and never uploaded.'
