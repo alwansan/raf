@@ -141,6 +141,63 @@ class RealExportQualitySynthetic(unittest.TestCase):
             self.assertEqual(report["exported_ShaderLab_source_status"],
                              "CUSTOM_PASS_COUNT_DIFFERS_FROM_ORIGINAL")
 
+    def test_exact_authored_shader_properties_are_checked_before_structural_claim(self):
+        private='''Properties {
+        _Color ("Tint", Color) = (1,1,1,1)
+        _MainTex ("Texture", 2D) = "white" {}
+        }'''
+        shader=PROGRAM.replace("SubShader {",private+"\\nSubShader {",1)
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);write(root,shader)
+            r=m.classify(SOURCE,*traces(),root,
+                         private_authored_properties=private)
+            self.assertTrue(r["source_authored_properties_compared_to_exact_export"])
+            self.assertTrue(r["source_to_export_authored_property_names_types_match"])
+            self.assertEqual(r["source_to_export_authored_property_counts"]
+                             ["source_authored_texture_property_count"],1)
+            self.assertEqual(r["exported_ShaderLab_source_status"],
+                             "STRUCTURAL_ONE_PASS_PROGRAM_PRESENT_NOT_EQUIVALENCE")
+            self.assertFalse(r["authored_property_or_original_program_android_pixels_verified"])
+            for label in ("_Color","_MainTex","Synthetic/Particle"):
+                self.assertNotIn(label,json.dumps(r))
+
+    def test_missing_authored_texture_or_mistyped_color_rejects_structural_ready(self):
+        private='''Properties {
+        _Color ("Tint", Color) = (1,1,1,1)
+        _MainTex ("Texture", 2D) = "white" {}
+        }'''
+        scenarios=(
+            ('Properties { _Color ("Tint", Color) = (1,1,1,1) }',1,0),
+            ('Properties { _Color ("Tint", Float) = 1\\n'
+             '_MainTex ("Texture", 2D) = "white" {} }',0,1),
+        )
+        for export,missing,wrong in scenarios:
+            with self.subTest(export=export),tempfile.TemporaryDirectory() as d:
+                root=Path(d)
+                # One property per line is deliberate, matching exact source
+                # serializer and bounded export-parser grammar.
+                export=export.replace("{ _Color","{\\n_Color").replace(") }",")\\n}")
+                code=PROGRAM.replace("SubShader {",export+"\\nSubShader {",1)
+                write(root,code)
+                r=m.classify(SOURCE,*traces(),root,
+                             private_authored_properties=private)
+                self.assertFalse(r["source_to_export_authored_property_names_types_match"])
+                self.assertEqual(r["exported_ShaderLab_source_status"],
+                                 "AUTHORED_PROPERTY_NAME_OR_TYPE_MISMATCH")
+                counts=r["source_to_export_authored_property_counts"]
+                self.assertEqual(counts["original_authored_property_names_missing_in_export"],missing)
+                self.assertEqual(counts["matched_name_different_type"],wrong)
+
+    def test_dummy_exporter_marker_remains_primary_failure_with_property_gate(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);write(root,"//DummyShaderTextExporter\\n"+PROGRAM)
+            r=m.classify(SOURCE,*traces(),root,
+                         private_authored_properties='Properties { _Secret ("Private", Float)=1 }')
+            self.assertEqual(r["exported_ShaderLab_source_status"],
+                             "ACTUAL_DUMMY_SHADER_TEXT_EXPORTER")
+            self.assertFalse(r["source_authored_properties_compared_to_exact_export"])
+            self.assertFalse(r["source_to_export_authored_property_names_types_match"])
+
     def test_dummy_marker_remains_dummy_even_with_plausible_fake_program(self):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);write(root,"//DummyShaderTextExporter\n"+PROGRAM)
