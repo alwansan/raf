@@ -65,6 +65,11 @@ public sealed class T1FftAddressProvenanceTests
             }
 
             var mismatch = new int[Categories];
+            // Complementary bounded signatures: subnormal-bit carrier became
+            // signed +/-zero, or a texture read returned precisely pixel x=0.
+            // Keep raw observed words PRIVATE; a signature is not FTZ causality.
+            var zeroSignature = new int[Categories];
+            uint zeroPixel = Bits(4096f);
             for (int i = 0; i < Threads; i++)
             {
                 uint address = staged[i];
@@ -78,13 +83,28 @@ public sealed class T1FftAddressProvenanceTests
                     sampled, sampled, address, normal
                 };
                 for (int category = 0; category < Categories; category++)
-                    if (observed[i * Categories + category] != expected[category])
-                        mismatch[category]++;
+                {
+                    uint actual = observed[i * Categories + category];
+                    if (actual == expected[category])
+                        continue;
+                    mismatch[category]++;
+                    // Category 2..7 carries expected subnormal bit patterns.
+                    bool scalarCarrier = category >= 2 && category <= 7;
+                    // Category 10..13 is a coordinate -> Texture2D.Load path.
+                    bool fetchedImage = category >= 10 && category <= 13;
+                    if ((scalarCarrier && (actual & 0x7fffffffu) == 0u) ||
+                        (fetchedImage && actual == zeroPixel))
+                        zeroSignature[category]++;
+                }
             }
 
             string file = Path.Combine(Directory.GetParent(Application.dataPath).FullName,
                                        "t1-address-provenance-counts.txt");
             File.WriteAllLines(file, Array.ConvertAll(mismatch, m => m.ToString()));
+            string signatureFile = Path.Combine(
+                Directory.GetParent(Application.dataPath).FullName,
+                "t1-address-provenance-zero-signatures.txt");
+            File.WriteAllLines(signatureFile, Array.ConvertAll(zeroSignature, n => n.ToString()));
             // Fail only if integer/texture upload or normal float controls are broken.
             // Do NOT discard nonzero float/materialization/Texture2D.Load differences.
             Assert.That(mismatch[0], Is.Zero, "Computed integer address baseline");
