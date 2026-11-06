@@ -248,6 +248,18 @@ class SpirvNamedCandidatesSynthetic(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"T3_SPIRV_INSTRUCTION_BOUNDS"):
             probe.candidate_counts(fixture(),corrupted,1)
 
+    def test_spirv_header_version_reads_minor_from_correct_bits(self):
+        import struct
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        original=self.build()
+        self.assertEqual(probe.candidate_counts(fixture(),original,1)
+                         ["spirv_debug_name_resource_candidates"],3)
+        # Minor 7 is not supported by the bounded SPV1.6 parser.
+        future=bytearray(original)
+        struct.pack_into("<I",future,4,0x00010700)
+        with self.assertRaisesRegex(ValueError,"T3_SPIRV_HEADER"):
+            probe.candidate_counts(fixture(),bytes(future),1)
+
     def test_malformed_dxbc_primary_register_rejected(self):
         from scripts import t3_particle108_spirv_opname_candidates as probe
         with self.assertRaisesRegex(ValueError,"T3_DX_SOURCE_PRIMARY_COLLISION"):
