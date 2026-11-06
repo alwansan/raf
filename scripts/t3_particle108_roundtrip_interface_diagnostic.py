@@ -54,6 +54,15 @@ COUNTERS=(
     "original_compiled_active_fragment_inputs_source_numeric_absent",
     "original_compiled_unread_fragment_inputs_source_numeric_absent",
     "original_compiled_active_fragment_inputs_roundtrip_same_numeric_location",
+    "vertex_same_location_type_changes",
+    "vertex_changed_output_reflection_type_width_narrowing",
+    "vertex_changed_output_reflection_type_width_widening",
+    "vertex_changed_output_reflection_type_same_width_base_kind_changed",
+    "vertex_changed_output_reflection_type_unsupported",
+    "vertex_changed_output_locations_consumed_by_fragment",
+    "vertex_changed_output_locations_not_consumed_by_fragment",
+    "vertex_changed_output_consumed_fragment_type_equal_source",
+    "vertex_changed_output_consumed_fragment_type_equal_roundtrip",
 )
 
 def _stage(stage):
@@ -68,6 +77,49 @@ def _join(vertex,fragment):
     missing=sum(loc not in v for loc in f)
     type_changed=sum(loc in v and typ!=v[loc] for loc,typ in f.items())
     return missing,type_changed
+
+def classify_vertex_output_type_shape(source_vertex,round_vertex,round_fragment):
+    """Count-only comparison; no original semantic or reflected type strings returned."""
+    from scripts.t3_particle108_register_location_probe import _type
+    if any(type(x) is not dict for x in (source_vertex,round_vertex,round_fragment)):
+        raise ValueError("invalid_source_roundtrip_vertex_shape")
+    s=_indexed(source_vertex,"outputs")
+    r=_indexed(round_vertex,"outputs")
+    f=_indexed(round_fragment,"inputs")
+    counts=Counter()
+    for loc in s.keys() & r.keys():
+        if s[loc]==r[loc]:
+            continue
+        counts["vertex_same_location_type_changes"]+=1
+        consumed=loc in f
+        counts["vertex_changed_output_locations_consumed_by_fragment"]+=int(consumed)
+        counts["vertex_changed_output_locations_not_consumed_by_fragment"]+=int(not consumed)
+        if consumed:
+            counts["vertex_changed_output_consumed_fragment_type_equal_source"]+=int(f[loc]==s[loc])
+            counts["vertex_changed_output_consumed_fragment_type_equal_roundtrip"]+=int(f[loc]==r[loc])
+        src_type=_type(s[loc])
+        rt_type=_type(r[loc])
+        if src_type is None or rt_type is None:
+            counts["vertex_changed_output_reflection_type_unsupported"]+=1
+            continue
+        src_kind,src_width=src_type
+        rt_kind,rt_width=rt_type
+        if src_width>rt_width:
+            counts["vertex_changed_output_reflection_type_width_narrowing"]+=1
+        elif src_width<rt_width:
+            counts["vertex_changed_output_reflection_type_width_widening"]+=1
+        elif src_kind!=rt_kind:
+            counts["vertex_changed_output_reflection_type_same_width_base_kind_changed"]+=1
+    return {key:int(counts[key]) for key in (
+        "vertex_same_location_type_changes",
+        "vertex_changed_output_reflection_type_width_narrowing",
+        "vertex_changed_output_reflection_type_width_widening",
+        "vertex_changed_output_reflection_type_same_width_base_kind_changed",
+        "vertex_changed_output_reflection_type_unsupported",
+        "vertex_changed_output_locations_consumed_by_fragment",
+        "vertex_changed_output_locations_not_consumed_by_fragment",
+        "vertex_changed_output_consumed_fragment_type_equal_source",
+        "vertex_changed_output_consumed_fragment_type_equal_roundtrip")}
 
 def classify_pair(vsource,fsource,vround,fround,original_fragment):
     """Bounded structural counts, no private reflection values returned."""
@@ -114,6 +166,8 @@ def classify_pair(vsource,fsource,vround,fround,original_fragment):
         "pairs_with_both_interface_sides_changed":int(vc and fc),
         "pairs_with_no_interface_side_change":int(not vc and not fc),
     })
+    for k,v in classify_vertex_output_type_shape(vsource,vround,fround).items():
+        result[k]+=v
     for item in original_fragment["input"]:
         if type(item) is not dict:
             raise ValueError("invalid_original_DXBC_signature_record")
