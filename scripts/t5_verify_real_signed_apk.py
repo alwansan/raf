@@ -129,9 +129,9 @@ def locate_stored_apk(token):
 
 def stream_bounded_apk(fetcher, offset, length, destination: Path,
                        expected_digest: str, *, max_bytes=MAX_PAYLOAD_BYTES,
-                       chunk_bytes=CHUNK_BYTES):
+                       chunk_bytes=CHUNK_BYTES, expected_length=APK_BYTES):
     """Strong SHA comparison of *every* original APK byte; no ZIP meta shortcut."""
-    if (type(length) is not int or length != APK_BYTES
+    if (type(length) is not int or length != expected_length
             or length > max_bytes or chunk_bytes < 1
             or chunk_bytes > CHUNK_BYTES):
         raise ProbeError("remote_apk_size_cap")
