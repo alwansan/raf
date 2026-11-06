@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
+  "issue_id": "RENDER-002",
+  "track": "Private original Particle108 roundtrip VS vector-width changes cross-tabulated by whether the altered output is actually read by Fragment",
+  "status": "active",
+  "base_sha": "87ccb82b8e82517f3314583963804aae3fdd56de",
+  "resumed_from_sessions": [
+    "20261106T1023Z-T3-chat-roundtrip-width-5e0d",
+    "20261106T1026Z-T3-scheduled-91ac"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_roundtrip_interface_diagnostic.py",
+    "tests/test_t3_particle108_roundtrip_interface_diagnostic.py",
+    ".github/workflows/raft-t3-particle108-roundtrip-interface.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1034Z-T3-chat-consumed-width-0c6e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1034Z-T3-chat-consumed-width-0c6e.md",
+    "prompt/coordination/experiments/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json"
+  ],
+  "hypothesis": "Two Fragment-consumed original->roundtrip Vertex output width changes can be safely classified narrowing vs widening, independently of the two Fragment-unconsumed changes. The result constrains targeted private HLSL candidate repairs without implying semantic identity.",
+  "experiment_key": "T3-Particle108-SHA-authentic-fourpair-roundtrip-vertex-width-by-fragment-consumption-v3",
+  "resource_key": "T3-original-Particle108-4owners-private-shader-runner",
+  "related_work": [
+    "20261106T1023Z-T3-chat-roundtrip-width-5e0d"
+  ],
+  "approach": "Add count-only 2x2 width/Fragment consumption cross-tab; strict source-free controls and assertions in own dedicated SHA-pinned CI; no original game asset source or raw semantics logs",
+  "updated_at": "2026-11-06T10:33:54.976Z"
+}
