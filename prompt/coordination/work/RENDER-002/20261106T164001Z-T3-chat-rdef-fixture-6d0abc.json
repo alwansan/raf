@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T164001Z-T3-chat-rdef-fixture-6d0abc",
+  "issue_id": "RENDER-002",
+  "track": "particle108 DXBC RDEF synthetic fixture and source-free regression CI",
+  "status": "active",
+  "base_sha": "b5d292e6f2da3d8ff243d1387f399d6a25ad539d",
+  "intended_files": [
+    "tests/test_t3_particle108_original_dxbc_rdef.py",
+    ".github/workflows/raft-t3-rdef-fixture-source-only.yml",
+    "prompt/coordination/clients/T3/sessions/20261106T164001Z-T3-chat-rdef-fixture-6d0abc.md",
+    "prompt/coordination/experiments/T3/20261106T164001Z-T3-chat-rdef-fixture-6d0abc.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T164001Z-T3-chat-rdef-fixture-6d0abc.json",
+    "prompt/coordination/work/RENDER-002/20261106T164001Z-T3-chat-rdef-fixture-6d0abc.json"
+  ],
+  "hypothesis": "Existing multiple-RDEF negative test silently forms 64 ASCII slash-x zero bytes instead of 16 zero bytes; it rejects malformed DXBC header before duplicate RDEF cardinality. Correct test fixture and independently exercise all synthetic source-free cases.",
+  "experiment_key": "T3-RENDER002-SOURCEONLY-RDEF-DUPLICATE-FIXTURE-14TEST-V1",
+  "resource_key": "source-free-test-only; no ZIP2/Unity/REA resource",
+  "resumed_from_sessions": [
+    "20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c",
+    "20261106T1630Z-T3-scheduled-rdef-cardinality-c7e2"
+  ],
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/20261106T1630Z-T3-scheduled-rdef-cardinality-c7e2.json"
+  ],
+  "taken_over_from": [
+    "T3 scheduled 20261106T1630Z parser/test commits 2fc26e03,7c5fb598; observed source fixture defect independent from source parser"
+  ],
+  "verified_local": "64 header bytes instead of 16; actual 160 vs declared garbled 808482908; corrected synthetic fixture actual and declared 112",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Fix only synthetic duplicate RDEF fixture; add isolated source-free CI to avoid staging original ZIP2; inspect CI and checkpoint.",
+  "updated_at": "2026-11-06T16:40:01Z"
+}
