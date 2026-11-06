@@ -90,6 +90,7 @@ class MouseOriginalPatchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             _, source_root, backup, original = self._source_and_backup(temp)
             original_write = Path.write_text
+            original_write_bytes = Path.write_bytes
             broken = source_root / "Camera1.cs"
             faulted = False
 
@@ -97,13 +98,22 @@ class MouseOriginalPatchTests(unittest.TestCase):
                 nonlocal faulted
                 if path == broken and not faulted:
                     faulted = True
-                    path.write_bytes(b"partial-mutated-original")
+                    original_write_bytes(path, b"partial-mutated-original")
                     raise OSError("synthetic source install interruption")
                 return original_write(path, data, *args, **kwargs)
 
-            # Exercise the pre-fix write_text path; a future write_bytes
-            # implementation must also have an independently injected fault.
-            with mock_patch.object(Path, "write_text", interrupted):
+            def interrupted_bytes(path, data):
+                nonlocal faulted
+                if path == broken and SHIM.encode("utf-8") in data and not faulted:
+                    faulted = True
+                    original_write_bytes(path, b"partial-mutated-original")
+                    raise OSError("synthetic source install interruption")
+                return original_write_bytes(path, data)
+
+            # Fault both original pre-fix write_text() and byte-preserving
+            # post-fix write_bytes(), without intercepting restore writes.
+            with mock_patch.object(Path, "write_text", interrupted), \
+                    mock_patch.object(Path, "write_bytes", interrupted_bytes):
                 with self.assertRaisesRegex(OSError, "source install interruption"):
                     self._invoke(source_root, backup)
             self.assertEqual({p: p.read_bytes() for p in original}, original,
@@ -112,6 +122,40 @@ class MouseOriginalPatchTests(unittest.TestCase):
             self._invoke(source_root, backup)
             for source, before in original.items():
                 self.assertEqual((backup / source.name).read_bytes(), before)
+
+    def test_successful_but_corrupt_installed_source_is_reverted(self):
+        with tempfile.TemporaryDirectory() as temp:
+            _, source_root, backup, original = self._source_and_backup(temp)
+            original_write = Path.write_bytes
+            broken = source_root / "Camera1.cs"
+            injected = False
+
+            def silently_damage_original(path, data):
+                nonlocal injected
+                if path == broken and SHIM.encode("utf-8") in data and not injected:
+                    injected = True
+                    return original_write(path, b"silent-source-corruption")
+                return original_write(path, data)
+
+            with mock_patch.object(Path, "write_bytes", silently_damage_original):
+                with self.assertRaisesRegex(ValueError, "[Ii]nstalled|byte|source"):
+                    self._invoke(source_root, backup)
+            self.assertTrue(injected)
+            self.assertEqual({p: p.read_bytes() for p in original}, original)
+            self.assertFalse(backup.exists())
+            self._invoke(source_root, backup)
+            for source, before in original.items():
+                self.assertEqual((backup / source.name).read_bytes(), before)
+
+    def test_original_utf8_bom_survives_exact_mouse_adaptation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            _, source_root, backup, original = self._source_and_backup(temp)
+            first = source_root / "Camera0.cs"
+            first.write_bytes(b"\xef\xbb\xbf" + first.read_bytes())
+            original[first] = first.read_bytes()
+            self._invoke(source_root, backup)
+            self.assertTrue(first.read_bytes().startswith(b"\xef\xbb\xbf"))
+            self.assertEqual((backup / first.name).read_bytes(), original[first])
 
     def test_external_hardlinked_original_source_cannot_be_mutated(self):
         with tempfile.TemporaryDirectory() as temp:
