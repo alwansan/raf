@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "owner": "T5",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "3699074104512a7278b6c9712b18c1c2663632a3",
   "intended_files": [
     "scripts/t5_verify_apk_obb_pair.py",
@@ -12,6 +12,12 @@
   "hypothesis": "ZIP delivery structural checker accepts a regular file entry that is an ancestor of another ZIP member; extraction path collision is ambiguous even when names are unique.",
   "experiment_key": "T5-zip-file-ancestor-collision-structural-synthetic-v1",
   "resource_key": null,
-  "updated_at": "2026-11-06T19:50:00Z",
-  "shared_resource": "none; no native build"
+  "updated_at": "2026-11-06T19:52:00Z",
+  "shared_resource": "none; no native build",
+  "commits": [
+    "22ce377a97b61e3530682abbd86b5b2fb2aba529",
+    "791751b42764ae89087376caf1adb9bca4db013a"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42283255333",
+  "next_step": "Confirm CI test result; do not claim device APK/OBB mount."
 }
