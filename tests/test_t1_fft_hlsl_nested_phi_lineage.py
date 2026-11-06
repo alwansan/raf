@@ -1,7 +1,26 @@
 import unittest
 
 from scripts.t1_fft_hlsl_nested_phi_lineage import analyze
-from tests.test_t1_fft_hlsl_phi_input_origins import HEAD, END
+HEAD = """
+OpDecorate %source DescriptorSet 0
+OpDecorate %source Binding 0
+OpDecorate %butter DescriptorSet 0
+OpDecorate %butter Binding 1
+%float = OpTypeFloat 32
+%int = OpTypeInt 32 1
+%v2f = OpTypeVector %float 2
+%v2i = OpTypeVector %int 2
+%bool = OpTypeBool
+%f0 = OpConstant %float 0
+%f1 = OpConstant %float 1
+%i1 = OpConstant %int 1
+%condition = OpConstantTrue %bool
+%void = OpTypeVoid
+%ft = OpTypeFunction %void
+%func = OpFunction %void None %ft
+%entry = OpLabel
+"""
+
 
 
 NESTED = """
