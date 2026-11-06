@@ -1,0 +1,11 @@
+session_id=20261106T1745Z-T3-chat-trial-cbsize-9c21
+origin=chat
+issue_id=RENDER-002
+experiment_key=T3-DXBC-DECL-CB-SIZE16-VECTOR-SEMANTIC-SM4_SM5-SHA15964-PARTICLE108-8STAGE-v1
+source_sha_zip2=15964ea8f246b6e076ce26b60931ee2e1a9a2385
+source_free_regression_run=42265061012
+source_free_tests=12/12_PASS
+question=Count original 16-byte vector declaration sizes (zero unknown) across four exact keyword VSFS pairs and distinguish size metadata from register slot drift
+source_original_CI_only=true
+phone_APK_build_request=false
+artifacts=count_only_no_register_ids_no_bytecode
