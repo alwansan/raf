@@ -5,8 +5,8 @@
   "session_id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7",
   "issue_id": "INPUT-005",
   "base_sha": "797174cc02e14aef3f115a5917730a4068623c75",
-  "updated_at": "2026-11-06T01:30:00Z",
-  "status": "active",
+  "updated_at": "2026-11-06T01:33:00Z",
+  "status": "completed_source_integrated_device_unverified",
   "resumed_from_sessions": [
     "20261106T0035Z-T4-scheduled-k9m2",
     "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
@@ -32,5 +32,23 @@
   "approach": "Classify source=SOURCE_MOUSE with confirmed InputDevice SOURCE_TOUCHPAD, rejecting an ordinary mouse/touchscreen/stylus on the same device. Read InputEvent.getDevice only for SOURCE_MOUSE in captured onCapturedPointer callback, fail open if unavailable and keep original epoch/legacy axes. Extend existing C# executable source classification and Python native integration tests, include scheduled physical-presence policy test in existing isolated CI.",
   "source": "https://developer.android.com/reference/android/view/InputDevice#SOURCE_TOUCHPAD",
   "acceptance": "Authentic Unity managed compile; negative controls trackpad-device bit required, event source mouse mandatory, touchscreen ignored, non-trackpad mouse ignored, old epoch and temporary wrapper safety retained; no device acceptance claim.",
-  "next_step": "Patch helper and JNI listener safely; targeted CI only."
+  "next_step": "Next signed T5 candidate device test InputDevice.getSources touchpad with MotionEvent SOURCE_MOUSE, preserve mouse/touch and original world-save-reopen, verify system bars and camera rotation; no READY.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42144434260"
+  ],
+  "result": {
+    "final_source_SHA": "f0e6cfd60761195ff38292b2b6765e029df051c6",
+    "code_commits": [
+      "b968375ceec98136cbef437ecbb53589bc9a62ec",
+      "bf0f32326952ff5c4ff44e5df168ef1c701eb942"
+    ],
+    "CI_run": 42144434260,
+    "conclusion": "SUCCESS",
+    "python": "40/40",
+    "dotnet": "48/48",
+    "original_managed_ABI_compilation": "SUCCESS",
+    "original_legacy_4_4_2_sites": "PASS",
+    "device_tested": false,
+    "Unity_IL2CPP_built": false
+  }
 }
