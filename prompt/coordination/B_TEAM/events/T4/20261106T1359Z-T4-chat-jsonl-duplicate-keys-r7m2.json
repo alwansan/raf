@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2",
+  "owner": "T4",
+  "session_id": "20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "at": "2026-11-06T14:04:06.710Z",
+  "summary": "Source-free world-save JSONL verifier now rejects ambiguous duplicate JSON object members (incl nested) and Python json.loads nonstandard NaN/Infinity without leaking owner details. Exact final CI42230233069 source 74607f8 successful 27 parser+2 overflow =29/29. No Android/Unity/game-world device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/74607f816ab4bd6dd35686f928fe3d81bbb60494",
+    "https://github.com/alwansan/raf/actions/runs/42230233069"
+  ],
+  "device_confirmed": false,
+  "world_save_durability_proven": false,
+  "source_only": true
+}
