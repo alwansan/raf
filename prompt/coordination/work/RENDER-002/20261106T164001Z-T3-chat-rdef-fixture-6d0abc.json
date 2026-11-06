@@ -6,7 +6,7 @@
   "session_id": "20261106T164001Z-T3-chat-rdef-fixture-6d0abc",
   "issue_id": "RENDER-002",
   "track": "particle108 DXBC RDEF synthetic fixture and source-free regression CI",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b5d292e6f2da3d8ff243d1387f399d6a25ad539d",
   "intended_files": [
     "tests/test_t3_particle108_original_dxbc_rdef.py",
@@ -30,8 +30,16 @@
     "T3 scheduled 20261106T1630Z parser/test commits 2fc26e03,7c5fb598; observed source fixture defect independent from source parser"
   ],
   "verified_local": "64 header bytes instead of 16; actual 160 vs declared garbled 808482908; corrected synthetic fixture actual and declared 112",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Fix only synthetic duplicate RDEF fixture; add isolated source-free CI to avoid staging original ZIP2; inspect CI and checkpoint.",
-  "updated_at": "2026-11-06T16:40:01Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42254748522"
+  ],
+  "result": "Synthetic duplicate-RDEF test header corrected at e3695147; separate source-free CI workflow 33e2b538 PASSED 14/14 at 42254748522 (job128018846651). Authentic original DXBC RDEF absence/multiple not retested; game visuals not fixed.",
+  "next_step": "Inspect current T3 scheduled work and any active matching CI before one SHA-pinned genuine 8-stage DXBC resource parser recheck. If absent inspect declaration tokens, not fabricated RDEF; publish only safe aggregates. RENDER-002 OPEN/NOT_READY.",
+  "updated_at": "2026-11-06T16:43:00Z",
+  "evidence_commits": [
+    "e3695147b4894fdc453d1134ef2a9516f8625b0a",
+    "33e2b538e524185917ffba92cfef52d35f99f28f",
+    "65c2c0725db49046c0d4ff784d5cb4e202c9cd64",
+    "4fe296d91954e0e38d2cb5835795f6da114993ed"
+  ]
 }
