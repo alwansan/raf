@@ -3,7 +3,7 @@ import copy
 from pathlib import Path
 import tempfile
 import unittest
-from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError,exported_selected_values
+from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError,PrivateDocumentError,exported_selected_values
 from scripts.b22_verify_material_scalars import _float_bits
 
 def fixture():
@@ -158,7 +158,7 @@ Material:
         with tempfile.TemporaryDirectory() as d:
             project,wanted=self.setup_project(d)
             (project/"Assets"/"synthetic1.mat").unlink()
-            with self.assertRaisesRegex(ValueError,"original_five_selected_export_Material_documents_incomplete"):
+            with self.assertRaisesRegex(PrivateDocumentError,"SELECTED_DOCUMENTS_MISSING"):
                 exported_selected_values(project,wanted)
     def test_selected_duplicate_material_key_fails_closed(self):
         with tempfile.TemporaryDirectory() as d:
@@ -167,11 +167,32 @@ Material:
             f.write_text(f.read_text().replace("    m_Colors:", "    m_Colors: []\n    m_Colors:"))
             with self.assertRaises(ValueError):
                 exported_selected_values(project,wanted)
+    def test_selected_real_material_yaml_color_and_scalar_failure_reason_sanitized(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            path=project/"Assets"/"synthetic1.mat"
+            path.write_text(path.read_text().replace("    m_Colors:", "    m_Colors: [" ).replace("      - _Tint:", "      - _Tint:"))
+            with self.assertRaises(PrivateDocumentError) as ctx:
+                exported_selected_values(project,wanted)
+            self.assertEqual(ctx.exception.code,"SELECTED_DOCUMENT_PARSE")
+            self.assertNotIn("synthetic1",str(ctx.exception))
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            path=project/"Assets"/"synthetic1.mat"
+            path.write_text(path.read_text().replace("    m_Floats:", "    m_Floats: 123\n    ignore:"))
+            with self.assertRaises(PrivateDocumentError) as ctx:
+                exported_selected_values(project,wanted)
+            self.assertEqual(ctx.exception.code,"SELECTED_SCALAR_SCHEMA")
+    def test_safe_failure_code_only_allows_static_categories(self):
+        with self.assertRaises(ValueError):
+            PrivateDocumentError("MY_PRIVATE_MATERIAL_EXTRACT")
+        e=PrivateDocumentError("SELECTED_RGBA_SCHEMA")
+        self.assertNotIn("_PRIVATE",str(e))
     def test_selected_export_symlink_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             project,wanted=self.setup_project(d)
             (project/"Assets"/"linked.mat").symlink_to(project/"Assets"/"synthetic1.mat")
-            with self.assertRaisesRegex(ValueError,"unsafe_or_unbounded_exported_Material_inventory"):
+            with self.assertRaisesRegex(PrivateDocumentError,"EXPORT_ASSETS_UNSAFE"):
                 exported_selected_values(project,wanted)
 
 if __name__=="__main__":
