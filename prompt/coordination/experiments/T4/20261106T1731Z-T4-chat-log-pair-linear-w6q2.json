@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1731Z-T4-chat-log-pair-linear-w6q2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "T4-LOCAL005-device-jsonl-many-logger-sessions-n2-evidence-pairs-quadratic-to-linear-200-counted-datetime-v1",
+  "hypothesis": "Building a list of all valid save→load logger session pairs causes O(n²) comparisons and O(n²) heap even though only an existence boolean is exported; scan prior eligible saves by earliest end time to keep same conservative evidence verdict.",
+  "source_commit": "2e1417246a327e0a047d0817e328fd9d422b7c4c",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m py_compile scripts/t4_verify_device_world_save_log.py scripts/test_t4_overflow_gate.py tests/test_t4_verify_device_world_save_log.py",
+    "python3 -m unittest discover -s tests -p 'test_t4_verify_device_world_save_log.py' -v",
+    "python3 -m unittest scripts.test_t4_overflow_gate -v"
+  ],
+  "test_fixture": "200 synthetic distinct logger sessions with strictly increasing timestamps, 100 Save.argumentFileSnapshot nonzero then 100 Load.argumentFileSnapshot nonzero; instrument datetime comparison count via test-only wrapped _parse_utc; compare bound <2000 without imposing flaky wall-clock timeout.",
+  "original_result": "Red CI42262198164: completed failure on test-only 6f82344374bcbe91b6051a10f4a79f2c0262605b at test_many_logger_sessions_keep_pair_search_bounded, 20499 timestamp comparisons not less than 2000; other 27 parser controls passed (28 total, one failed).",
+  "observed_result": "Green CI42262364475 completed success exact source 2e1417246a327e0a047d0817e328fd9d422b7c4c; 28 source-free parser controls and 2 overflow-gate tests pass. Test-many-session comparator budget passes; no native phone claims. The algorithm scans sorted sessions linearly, stores just earliest prior valid Save session end; compares only before current Load and keeps overflow, UTC monotonicity and sequence completeness filters unchanged.",
+  "rejected_hypotheses": [
+    "No owner device run was consulted or necessary; synthetic logs test analyzer complexity and conservative inference only.",
+    "No Android save corruption or new-world gameplay issue proved by this tool correction."
+  ],
+  "negative_controls": [
+    "same-world, process restart, RGD durability, owner device, hardware mouse, source candidate attestation remain false",
+    "out-of-order/overlapping, missing sequences, duplicate JSON fields, contradictory snapshot flags, queue overflow continue strict handling"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42262364475",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42262198164",
+    "https://github.com/alwansan/raf/actions/runs/42262364475"
+  ],
+  "artifact_urls": [],
+  "status": "completed",
+  "integration_commit": "2e1417246a327e0a047d0817e328fd9d422b7c4c",
+  "limitations": [
+    "Source-free Python and synthetic JSONL only, no owner device captured here.",
+    "No actual .rgd, world or game source modified; source-only probe cannot prove native app/world acceptance.",
+    "Analysis still sorts sessions/sequence lists, so O(n log n) sorting remains; no claim of constant time."
+  ],
+  "next_step": "T5 can apply analyzer to future private signed-source-attested device logs and correlate original world save/reopen evidence with owner confirmation, without exporting sensitive logs; LOCAL-005 remains OPEN."
+}
