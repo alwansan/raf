@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T2052Z-T1-chat-actual-variant-comparator-e28c",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "source-only-actual-gpu-original-zip2-15964ea8-seed19-same-input-Unity2021-GL-baseline-run42289238865-vs-integer-source-42290211798-aggregate-keyed-delta-gate-v1",
+  "hypothesis": "A single direct-source ImageFetch integer coordinate rewrite prevents at least site0 X zero-collapse while other butterfly ImageFetch operands remain unchanged. Real baseline and counterfactual can be compared with an independent source-only bounded public marker classifier, without false full water parity.",
+  "source_commits": [
+    "3cd1c9e175038c99c1914493138970f34bbd88db",
+    "dabf16484518cd1fa402a65d4357f6ca51cea94d",
+    "b8d823a86ac9d5c300f7f02dfaa5e75de915cb01"
+  ],
+  "programs": {
+    "baseline_run": 42289238865,
+    "baseline_job": 128138000484,
+    "baseline_sha": "177a57342dc6197e2f5dceee940c9bb0bec34c6f",
+    "variant_run": 42290211798,
+    "variant_job": 128141366121,
+    "variant_sha": "18ed8e3a8db0e29e955bf8dfcb7a4b3f019cd26e",
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "unity": "2021.3.45f2 OpenGLCore",
+    "mode": "integer_source",
+    "fixture": "same original 1024x32 seed19 source and butterfly capture, no raw inputs published"
+  },
+  "commands": [
+    "Existing immutable two actual GitHub CI job logs read through GitHub connector as ephemeral text, extracting only vetted RAFT_T1_* markers",
+    "python3 -m unittest discover -s tests -p test_t1_fft_real_gpu_variant_delta_gate.py -v",
+    "tools/scripts/t1_fft_real_gpu_variant_delta_gate.py --baseline-job-log <private actual job log> --integer-job-log <private actual job log> (available for replay; validated on synthetic logs)"
+  ],
+  "source_only_ci": {
+    "id": 42292770357,
+    "job_id": 128150192350,
+    "conclusion": "success",
+    "new_tests": "13/13 passed",
+    "result": "safe source-only marker classifier with controls; no new Unity run started"
+  },
+  "observed_real_gpu": {
+    "baseline": {
+      "run": 42289238865,
+      "status": "completed failure because expected numeric parity false",
+      "coordinate_mismatch_by_site": [
+        63,
+        252,
+        64
+      ],
+      "zero_collapse_x_by_site": [
+        63,
+        252,
+        63
+      ],
+      "zero_collapse_y_by_site": [
+        0,
+        0,
+        64
+      ],
+      "copyinput_source_mismatch": 0,
+      "copyinput_butterfly_mismatch": 0,
+      "first_pass_pixel_mismatches": 63,
+      "second_pass_pixel_mismatches": 31
+    },
+    "integer_source": {
+      "run": 42290211798,
+      "status": "completed failure because expected numeric parity false",
+      "step_unity_dispatch": "success",
+      "step_cleanup": "success",
+      "coordinate_mismatch_by_site": [
+        0,
+        252,
+        64
+      ],
+      "zero_collapse_x_by_site": [
+        0,
+        252,
+        63
+      ],
+      "zero_collapse_y_by_site": [
+        0,
+        0,
+        64
+      ],
+      "copyinput_source_mismatch": 0,
+      "copyinput_butterfly_mismatch": 0,
+      "first_pass_pixel_mismatches": 63,
+      "second_pass_pixel_mismatches": 31
+    },
+    "delta_variant_minus_baseline": [
+      -63,
+      0,
+      0
+    ],
+    "site0_coordinate_parity_restored": true,
+    "all_sites_coordinate_parity": false,
+    "pass0_and_pass1_output_parity_still_false": true,
+    "authored_ingame_fft_kernel_not_proven": true,
+    "adreno_android_water_not_proven": true
+  },
+  "negative_controls": [
+    "Input source/butterfly must be 0/32768 GPU CopyInput mismatches",
+    "Original direct SPI-V reference and translated source candidate SHA provenance flags",
+    "Unity C# replay stage complete and traced vs untraced output pixel invariance 64/64",
+    "Expected 64/256/64 invocation keys, exact 3-site nonduplicated safe marker JSON",
+    "Baseline marker must lack variant, candidate must have one fixed integer_source marker",
+    "No false signed binary/runtime/device proof and no private raw log/token/operands output",
+    "Reject missing/duplicated markers, duplicate JSON keys, oversized/aliased files, false output parity"
+  ],
+  "interpretation": "Real first source-fetch signed-bit integer derivation removes all 63 baseline X coordinate mismatches at site0, isolating one translated coordinate carrier defect. Butterfly site1 and site2 unchanged and output still mismatches. This is a targeted successful counterfactual, not FTZ causal proof or playable water restoration.",
+  "next_step": "Build a separate private two-butterfly-site signed-integer coordinate proposal from exact original SPIR-V reaching writer+CFG Phi paths; synthetic guards first, then explicitly authorized original ZIP2 Vulkan-vs-Unity A/B, ensure output invariant before shipping. Do not patch game until actual source/kernel mapping and Android device evidence."
+}
