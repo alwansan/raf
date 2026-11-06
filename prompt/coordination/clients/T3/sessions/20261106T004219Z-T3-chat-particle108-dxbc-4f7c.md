@@ -17,3 +17,9 @@ Code: scripts/t3_original_particle108_dxbc_feasibility.py (real source SHA+stage
 Full report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md
 Resource: https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json
 Next: Translate original exact Particle108 four VS/FS D3D11 matched keyword variants to Vulkan SPIR-V in disposable source runner, check per-stage IO/resources/alpha, and verify T5 production post-restorer exact Shader48 GUID and user's device emitter before modifying real game assets.
+
+## Canonical team index and source-vs-device boundary
+
+- Appended run 42139137265, report and immutable DXBC resource record to OPEN `prompt/coordination/B_TEAM/issues/RENDER-002.json` at commit `0a60835eb5fe134c20a2d56ddc54910bc633c8f7`.
+- [Canonical team summary refresh run 42139827190](https://github.com/alwansan/raf/actions/runs/42139827190) COMPLETED SUCCESS at source commit `6e6a05976da174039b6df25c458d0dacca96d09e`. The public resource explicitly reports 4 exact original Vertex/Fragment keyword permutations and `device: NOT_TESTED`. It does not assert that T5 production native ShaderLab or Adreno pixels are fixed.
+- No source shader bytecode was published, no production game asset or native Android build touched, no other client's CI canceled. Scope can be released.
