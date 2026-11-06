@@ -1,0 +1,14 @@
+{
+  "session_id": "20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2",
+  "agent": "T2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "type": "source_guard_added",
+  "status": "source_smoke_only",
+  "base_sha": "cae0dbe8c4a98d2d874e0d0f593d91d2dadc3fb5",
+  "source_commit": "2f7ff680df6ca49f11cd62e044020efb133b6439",
+  "tests_commit": "801e0a3995e8980571eef3c1c793375821f184d0",
+  "original_evidence_run": "https://github.com/alwansan/raf/actions/runs/42153150468",
+  "result": "CB0 byte extents differ in two authentic Foam passes; source-only fail-closed member/upload gate added; no Unity/device claim.",
+  "next_step": "Run six repository unittest methods; authenticate CB0 member ABI and Unity upload before ShaderLab integration."
+}
