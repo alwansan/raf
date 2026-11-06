@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2135Z-T4-chat-save-backup-owner-v9k2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "type": "source-integrity-race-regression",
+  "experiment_key": "T4-original-save-backup-postpromote-identity-preserving-cleanup-v1",
+  "baseline_sha": "27d876c54c6e2442a7e727fcf00e717d61247f0f",
+  "final_source_sha": "c294b76e99332e0e04dad25f368b0ea27bd4fb36",
+  "original_zip2_ref": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_scope": "No raw game saves or code published; Python synthetic backup and source/metadata and authenticated original ZIP2 SaveAndLoad private ILSpy checks.",
+  "hypothesis": "Replacing a promoted, verified backup directory with a foreign directory lets unguarded cleanup delete another writer's data and can let source adaptation proceed without its own original backup.",
+  "negative_control": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42298749358",
+    "status": "expected_failure",
+    "results": "18 source safety methods: 15 pass, 1 failure+2 errors in new interleavings; edit_source=false proceeded despite replaced original backup; edit_source=true and rollback deleted foreign-root marker."
+  },
+  "integration": {
+    "commit": "c294b76e99332e0e04dad25f368b0ea27bd4fb36",
+    "run": "https://github.com/alwansan/raf/actions/runs/42298846571",
+    "status": "success",
+    "tests": "11 ZIP2 provider +18 save path +4 A10 selector; authentic original SaveAndLoad ILSpy exact revision, original 16 path expressions idempotent source nonpath unchanged, .NET10 Unix/Windows 14 checks",
+    "fix": "Capture stage backup root st_dev+st_ino before promote; require same directory after rename and before C# write; refuse cleanup and leave foreign root intact on stale-source and postwrite rollback paths."
+  },
+  "limitations": "Path identity is sampled, not a cross-process atomic lock; race after stat and before removal, and source changes after the final byte guard, remain possible. No original .rgd schema or game code changes. Source-only CI does not prove Unity/IL2CPP, signed APK, Android filesystems, or same-world phone save and reopen.",
+  "native_run_in_progress": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "T5 owns independent native run; confirm actual signed candidate/first error and owner same-world offline save/quit/reopen only when delivered. No repeat of this source CI without changed evidence.",
+  "at": "2026-11-06T21:43:00Z"
+}
