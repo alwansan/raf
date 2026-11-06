@@ -26,19 +26,56 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42221700354",
   "artifact_urls": [],
   "budget": "One existing isolated 20-minute original SHA-authentic CPU/Vulkan job",
-  "status": "waiting_ci",
+  "status": "completed_scoped_private_source_verified",
   "observed_result": {
-    "source_free_unit_step": "success",
-    "original_source_recovery": "pending",
-    "hlsl_stop_opcode": "pending",
-    "authored_kernel_identity_proven": false,
-    "numeric_parity_proven": false,
+    "run": "https://github.com/alwansan/raf/actions/runs/42221700354",
+    "job_id": 127905081188,
+    "conclusion": "success",
+    "unit_step": "success",
+    "original_source_recovery": "success",
+    "same_vulkan_roundtrip": "success",
+    "private_cleanup": "success",
+    "translated_hlsl_slot0": {
+      "source": {
+        "x": {
+          "boundary": "load"
+        },
+        "y": {
+          "boundary": "load"
+        }
+      },
+      "butterfly_site1": {
+        "x": {
+          "boundary": "unresolved",
+          "stop_opcode": "OpPhi",
+          "stop_numeric_kind": "float32"
+        },
+        "y": {
+          "boundary": "constant"
+        }
+      },
+      "butterfly_site2": {
+        "x": {
+          "boundary": "unresolved",
+          "stop_opcode": "OpPhi",
+          "stop_numeric_kind": "float32"
+        },
+        "y": {
+          "boundary": "unresolved",
+          "stop_opcode": "OpPhi",
+          "stop_numeric_kind": "float32"
+        }
+      }
+    },
+    "original_input_bitcarrier": "Original Butterfly1 X path from CI 42220554705: Input signed32 vector via shuffle -> bitcast to float -> shuffle; compared source-vs-candidate numerical values NOT proven.",
+    "unity_runtime_binding_proven": false,
     "android_water_proven": false
   },
   "limitations": [
-    "Original/roundtrip source stage must complete before any actual stop opcode can be named",
-    "Changing stop diagnostics cannot itself repair numerical coordinates or Vulkan↔Unity 252/256 X mismatch"
+    "Phi is a translated SPIR-V SSA merge of multiple candidate values, not direct evidence of faulty numeric transformation or dynamic branch choice.",
+    "This tool does not report actual Phi incoming value operands or CFG predecessors; follow-up must retain them private.",
+    "Original vs translated same-input matched invocation traces and Unity/Adreno water acceptance are still required."
   ],
   "integration_commit": "952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1",
-  "next_step": "When 42221700354 completes inspect only aggregate RAFT_T1_PASS0_SPIRV_PROVENANCE hlsl_roundtrip site1 X stop_opcode/stop_numeric_kind; update own experiment/session/event. If CI fails due apt use failure evidence, do not assert source result."
+  "next_step": "Classify Butterfly1 X Phi incoming producer opcodes and typed bitcast chain privately; compare actual independent original/candidate invocation traces with strict gate, not a self-comparison."
 }
