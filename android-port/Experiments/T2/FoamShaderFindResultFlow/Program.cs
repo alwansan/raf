@@ -192,7 +192,27 @@ internal static class Program
         int Inspected, int Boundary, int MaterialReceiver,
         int TypedMaterialArgument, int GraphicsArgument,
         int CommandBufferArgument, int RendererArgument, int OtherArgument,
-        int GraphicsBlit, int GraphicsDrawMesh, int GraphicsOther, int GraphicsMixed);
+        int GraphicsBlit, int GraphicsDrawMesh, int GraphicsOther, int GraphicsMixed,
+        int BlitImplicitPass, int BlitExplicitPass, int BlitOtherSignature, int BlitMixedSignatures);
+
+    private static int PublicBlitSignatureKind(MethodReference method)
+    {
+        // Only public Unity parameter TYPES, not original argument values.
+        // 1 = three-argument implicit pass; 2 = four-argument explicit int pass;
+        // 3 = other/unsupported. 0 = not the public static Blit API.
+        if(method.DeclaringType.FullName!="UnityEngine.Graphics" ||
+           method.HasThis || method.Name!="Blit")return 0;
+        var p=method.Parameters;
+        if(p.Count is 3 or 4 &&
+           p[0].ParameterType.FullName=="UnityEngine.Texture" &&
+           p[1].ParameterType.FullName=="UnityEngine.RenderTexture" &&
+           p[2].ParameterType.FullName==MaterialType)
+        {
+            if(p.Count==3)return 1;
+            if(p[3].ParameterType.FullName=="System.Int32")return 2;
+        }
+        return 3;
+    }
 
     private static FieldApiTrace TraceExactMaterialFieldRead(MethodDefinition method, int sourceIndex)
     {
@@ -206,6 +226,7 @@ internal static class Program
         var locals=new Dictionary<int,bool>();
         int inspected=0,boundary=0,receiver=0,arg=0,graphics=0,command=0,renderer=0,other=0;
         int graphicsBlit=0,graphicsDrawMesh=0,graphicsOther=0;
+        int blitImplicit=0,blitExplicit=0,blitOther=0;
         bool Pop()
         {
             if(stack.Count==0)return false;
@@ -247,7 +268,16 @@ internal static class Program
                         case "UnityEngine.Graphics":
                             graphics++;
                             // Only public Unity method families enter the safe report.
-                            if(!callee.HasThis && callee.Name=="Blit")graphicsBlit++;
+                            if(!callee.HasThis && callee.Name=="Blit")
+                            {
+                                graphicsBlit++;
+                                switch(PublicBlitSignatureKind(callee))
+                                {
+                                    case 1: blitImplicit++;break;
+                                    case 2: blitExplicit++;break;
+                                    default: blitOther++;break;
+                                }
+                            }
                             else if(!callee.HasThis && callee.Name=="DrawMesh")graphicsDrawMesh++;
                             else graphicsOther++;
                             break;
@@ -291,7 +321,15 @@ internal static class Program
             graphics>0 && families==1 && graphicsBlit>0 ? 1 : 0,
             graphics>0 && families==1 && graphicsDrawMesh>0 ? 1 : 0,
             graphics>0 && families==1 && graphicsOther>0 ? 1 : 0,
-            graphics>0 && families>1 ? 1 : 0);
+            graphics>0 && families>1 ? 1 : 0,
+            graphics>0 && families==1 && graphicsBlit>0 &&
+                blitImplicit>0 && blitExplicit==0 && blitOther==0 ? 1 : 0,
+            graphics>0 && families==1 && graphicsBlit>0 &&
+                blitExplicit>0 && blitImplicit==0 && blitOther==0 ? 1 : 0,
+            graphics>0 && families==1 && graphicsBlit>0 &&
+                blitOther>0 && blitImplicit==0 && blitExplicit==0 ? 1 : 0,
+            graphics>0 && families==1 && graphicsBlit>0 &&
+                ((blitImplicit>0?1:0)+(blitExplicit>0?1:0)+(blitOther>0?1:0)>1) ? 1 : 0);
     }
 
     private static MaterialConsumer ConsumeMaterialResult(MethodDefinition method,int ctorIndex)
@@ -651,7 +689,9 @@ internal static class Program
             fieldApiReceiver=0,fieldApiMaterialArgs=0,fieldApiGraphics=0,
             fieldApiCommand=0,fieldApiRenderer=0,fieldApiOther=0,
             fieldApiGraphicsBlit=0,fieldApiGraphicsDrawMesh=0,
-            fieldApiGraphicsOther=0,fieldApiGraphicsMixed=0;
+            fieldApiGraphicsOther=0,fieldApiGraphicsMixed=0,
+            fieldApiBlitImplicit=0,fieldApiBlitExplicit=0,
+            fieldApiBlitOther=0,fieldApiBlitMixed=0;
         if(trace.OriginalMaterialField is not null)
             foreach(var method in methods)
             {
@@ -673,6 +713,10 @@ internal static class Program
                         fieldApiGraphicsDrawMesh+=api.GraphicsDrawMesh;
                         fieldApiGraphicsOther+=api.GraphicsOther;
                         fieldApiGraphicsMixed+=api.GraphicsMixed;
+                        fieldApiBlitImplicit+=api.BlitImplicitPass;
+                        fieldApiBlitExplicit+=api.BlitExplicitPass;
+                        fieldApiBlitOther+=api.BlitOtherSignature;
+                        fieldApiBlitMixed+=api.BlitMixedSignatures;
                     }
             }
         if(fieldApiSites!=linearFieldReads)
@@ -739,6 +783,10 @@ internal static class Program
             ["field_api_Graphics_material_sites_DrawMesh"]=fieldApiGraphicsDrawMesh,
             ["field_api_Graphics_material_sites_Other"]=fieldApiGraphicsOther,
             ["field_api_Graphics_material_sites_Mixed"]=fieldApiGraphicsMixed,
+            ["field_api_Graphics_Blit_sites_ImplicitPass"]=fieldApiBlitImplicit,
+            ["field_api_Graphics_Blit_sites_ExplicitPass"]=fieldApiBlitExplicit,
+            ["field_api_Graphics_Blit_sites_OtherSignature"]=fieldApiBlitOther,
+            ["field_api_Graphics_Blit_sites_MixedSignatures"]=fieldApiBlitMixed,
             ["field_api_straightline_sites_with_CommandBuffer_Material_parameter"]=fieldApiCommand,
             ["field_api_straightline_sites_with_Renderer_Material_parameter"]=fieldApiRenderer,
             ["field_api_straightline_sites_with_other_typed_Material_parameter"]=fieldApiOther,
@@ -884,8 +932,56 @@ internal static class Program
             throw new InvalidOperationException("nonadjacent_original_field_local_alias");
         draw.Name="Blit";
         exact=TraceExactMaterialFieldRead(traceMethod,0);
-        if(exact.GraphicsBlit!=1 || exact.GraphicsDrawMesh!=0 || exact.GraphicsOther!=0)
+        if(exact.GraphicsBlit!=1 || exact.GraphicsDrawMesh!=0 ||
+           exact.GraphicsOther!=0 || exact.BlitOtherSignature!=1)
             throw new InvalidOperationException("Graphics_Blit_public_typed_route");
+        // A Blit name with wrong overload signature must not imply pass semantics.
+        var texture=new TypeReference("UnityEngine","Texture",mod,mod.TypeSystem.CoreLibrary);
+        var renderTexture=new TypeReference("UnityEngine","RenderTexture",mod,mod.TypeSystem.CoreLibrary);
+        var blit3=new MethodReference("Blit",mod.TypeSystem.Void,gfx){HasThis=false};
+        blit3.Parameters.Add(new ParameterDefinition(texture));
+        blit3.Parameters.Add(new ParameterDefinition(renderTexture));
+        blit3.Parameters.Add(new ParameterDefinition(material));
+        var blit4=new MethodReference("Blit",mod.TypeSystem.Void,gfx){HasThis=false};
+        blit4.Parameters.Add(new ParameterDefinition(texture));
+        blit4.Parameters.Add(new ParameterDefinition(renderTexture));
+        blit4.Parameters.Add(new ParameterDefinition(material));
+        blit4.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Int32));
+        var overloadTest=new MethodDefinition("SyntheticBlitOverload",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(overloadTest);
+        overloadTest.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,matField));
+        overloadTest.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit3));
+        overloadTest.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        exact=TraceExactMaterialFieldRead(overloadTest,0);
+        if(exact.GraphicsBlit!=1 || exact.BlitImplicitPass!=1 ||
+           exact.BlitExplicitPass!=0 || exact.BlitOtherSignature!=0)
+            throw new InvalidOperationException("Blit_implicit_public_overload");
+        overloadTest.Body.Instructions[1]=Instruction.Create(OpCodes.Ldc_I4_1);
+        overloadTest.Body.Instructions.Insert(2,Instruction.Create(OpCodes.Call,blit4));
+        exact=TraceExactMaterialFieldRead(overloadTest,0);
+        if(exact.GraphicsBlit!=1 || exact.BlitExplicitPass!=1 ||
+           exact.BlitImplicitPass!=0 || exact.BlitOtherSignature!=0)
+            throw new InvalidOperationException("Blit_explicit_int_pass_public_overload");
+        var multiBlit=new MethodDefinition("SyntheticTwoBlitOverloads",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(multiBlit);
+        var matAlias=new VariableDefinition(material);
+        multiBlit.Body.Variables.Add(matAlias);
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,matField));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Stloc,matAlias));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Ldloc,matAlias));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit3));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Ldloc,matAlias));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Call,blit4));
+        multiBlit.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        exact=TraceExactMaterialFieldRead(multiBlit,0);
+        if(exact.GraphicsBlit!=1 || exact.BlitMixedSignatures!=1 ||
+           exact.BlitImplicitPass!=0 || exact.BlitExplicitPass!=0)
+            throw new InvalidOperationException("Blit_mixed_overload_exclusive");
         draw.Name="DrawMesh";
         exact=TraceExactMaterialFieldRead(traceMethod,0);
         if(exact.GraphicsDrawMesh!=1 || exact.GraphicsBlit!=0 || exact.GraphicsOther!=0)

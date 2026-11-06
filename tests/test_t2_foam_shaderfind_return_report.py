@@ -243,8 +243,12 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
             r["field_api_straightline_sites_with_typed_Material_parameter"]=1
             r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
             r["field_api_Graphics_material_sites_"+kind]=1
+            if kind=="Blit":
+                r["field_api_Graphics_Blit_sites_OtherSignature"]=1
             with self.subTest(kind=kind): self.assertTrue(validate(r))
             r["field_api_Graphics_material_sites_"+kind]=0
+            if kind=="Blit":
+                r["field_api_Graphics_Blit_sites_OtherSignature"]=0
             with self.subTest(kind=kind, missing=True): self.rejects(r)
 
     def test_graphics_method_family_double_count_rejected(self):
@@ -262,6 +266,37 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
     def test_graphics_method_name_only_cannot_invent_material_lineage(self):
         r=baseline()
         r["field_api_Graphics_material_sites_Blit"]=1
+        self.rejects(r)
+
+    def test_blit_explicit_or_implicit_pass_signature_partition(self):
+        for kind in ("ImplicitPass","ExplicitPass","OtherSignature","MixedSignatures"):
+            r=baseline()
+            r["material_linear_original_material_field_stores"]=1
+            r["material_linear_original_material_unique_field_definition_resolved"]=1
+            r["material_linear_original_material_field_read_instructions"]=1
+            r["field_api_exact_original_material_field_sites_scanned"]=1
+            r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+            r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+            r["field_api_Graphics_material_sites_Blit"]=1
+            r["field_api_Graphics_Blit_sites_"+kind]=1
+            with self.subTest(kind=kind): self.assertTrue(validate(r))
+            r["field_api_Graphics_Blit_sites_"+kind]=0
+            with self.subTest(kind=kind, missing=True): self.rejects(r)
+
+    def test_blit_signature_double_count_and_non_blit_source_rejected(self):
+        r=baseline()
+        r["material_linear_original_material_field_stores"]=1
+        r["material_linear_original_material_unique_field_definition_resolved"]=1
+        r["material_linear_original_material_field_read_instructions"]=1
+        r["field_api_exact_original_material_field_sites_scanned"]=1
+        r["field_api_straightline_sites_with_typed_Material_parameter"]=1
+        r["field_api_straightline_sites_with_Graphics_Material_parameter"]=1
+        r["field_api_Graphics_material_sites_Blit"]=1
+        r["field_api_Graphics_Blit_sites_ImplicitPass"]=1
+        r["field_api_Graphics_Blit_sites_ExplicitPass"]=1
+        self.rejects(r)
+        r["field_api_Graphics_material_sites_Blit"]=0
+        r["field_api_Graphics_material_sites_Other"]=1
         self.rejects(r)
 
     def test_source_true_typed_material_receiver(self):
