@@ -4,9 +4,9 @@
   "session_id": "20261106T1221Z-T5-chat-resolution-param-5df2",
   "origin": "chat",
   "issue_id": "DISPLAY-003",
-  "status": "completed_original_type_category_source_ci_verified",
+  "status": "completed_original_type_category_source_ci_verified_and_indexed",
   "base_sha": "8c2ef06bd8b40ff445c7ee12de0d8a0f2b451485",
-  "updated_at": "2026-11-06T12:30:25.631Z",
+  "updated_at": "2026-11-06T12:37:08.629Z",
   "resumed_from_sessions": [
     "20261106T1130Z-T5-chat-applycallers-c6e1.md",
     "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
@@ -48,5 +48,15 @@
     "direct_addlistener_sites": 0,
     "android_selector_proven": false,
     "phone_tested": false
+  },
+  "index": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42218915907",
+    "source_commit": "04bcd8e5c98b075ec3cf067cbdba1a73e077bdad",
+    "job_id": 127895762293,
+    "conclusion": "success",
+    "event_records": 378,
+    "b_team_unittest_passed": 11,
+    "t_team_unittest_passed": 3,
+    "fast_forward_only": true
   }
 }
