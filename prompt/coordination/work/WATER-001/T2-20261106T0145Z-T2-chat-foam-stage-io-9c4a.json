@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "16182a34039acafdb81552afe726abfeafb63c93",
   "experiment_key": "zip2_15964ea8_Foam_4_embedded_SPIRV_stageIO_matching_location_type_v1",
   "resource_key": "Foam/path2420/vulkan1.1/2passes/4compiled-stages",
@@ -37,7 +37,39 @@
     "https://github.com/alwansan/raf/actions/runs/42141540903"
   ],
   "prior_verified": "Private exact original Foam ShaderLab source 9731B, 2 passes, 4 embedded Vulkan1.1 stage recompiles pass individually, source-only 27 tests; same-pass cross-stage input-output ABI untested; CB0/Texture runtime binding and Unity import remain unknown.",
-  "updated_at": "2026-11-06T01:45:00Z",
-  "run_urls": [],
-  "next_step": "Implement exact stage I/O reflection gate; run source-free controls and SHA-authentic private candidate CI; if mismatch report quantitative blocker and keep WAVER water OPEN."
+  "updated_at": "2026-11-06T01:54:00Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42146401691"
+  ],
+  "next_step": "Original VS/FS varying ABI exact 3/3 and 2/2 in both genuine private Foam passes. Next prove CB0 data and all four runtime non-authored Material.SetTexture deliveries, then coordinate Unity2021 import/Adreno with T1 FFT and T5. WATER-001 OPEN.",
+  "source_commit": "a0534d22bc6bb32f12834acf736e565cd65d8a80",
+  "result": {
+    "run_id": 42146401691,
+    "job_id": 127658818302,
+    "conclusion": "SUCCESS",
+    "source_sha_verified": true,
+    "private_ShaderLab_bytes": 9731,
+    "original_passes": 2,
+    "original_spirv_stage_validations": 4,
+    "synthetic_existing_tests_passed": 27,
+    "synthetic_new_tests_passed": 14,
+    "pass0": {
+      "vs_varyings": 3,
+      "ps_varyings": 3,
+      "matched": 3,
+      "missing": 0,
+      "wrong_types": 0
+    },
+    "pass1": {
+      "vs_varyings": 2,
+      "ps_varyings": 2,
+      "matched": 2,
+      "missing": 0,
+      "wrong_types": 0
+    },
+    "all_fragment_inputs_match_vertex_outputs": true,
+    "unity_import_verified": false,
+    "cb0_material_sampler_runtime_verified": false,
+    "android_device_pixels_verified": false
+  }
 }
