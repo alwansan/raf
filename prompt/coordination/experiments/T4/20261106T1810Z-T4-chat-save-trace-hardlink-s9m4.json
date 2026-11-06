@@ -17,7 +17,7 @@
   ],
   "red_result": "CI42268654636 at test-only 9e9b7efe... completed failure: 17 test cases with two NEW hardlinked-source and hardlinked-GUID-meta tests failed AssertionError ValueError not raised. Old 15 prior runtime-operation tests passed. Authentic code tracer wrote through shared inode if it was hardlinked.",
   "fix": "Source production 8e8e9e8d... adds st_nlink==1 for original .cs and optional .meta in scripts/instrument_android_runtime_operations.py::apply after symlink checks but before source reads, original source backups or modifying original files. No runtime instrumentation, original source manifest, wrapper or C# body changed.",
-  "green_result": "CI42268781552 completed success 17/17 original-save-operation source synthetic and actual C# preprocessed save-postcheck; CI42268781586 B22 original operation transaction synthetic 14/14 + runtime operation 17/17; CI42268781987 B50 original SaveGame Steam stats original-free source controls 17/17+21/21+15/15. All exact SHA 8e8e9e8d.",
+  "green_result": "CI42268781552 completed success 17/17 original-save-operation source synthetic and actual C# preprocessed save-postcheck; CI42268781586 B22 original operation transaction synthetic 14/14 + runtime operation 17/17; CI42268781987 B50 original SaveGame Steam stats original-free source controls 17/17+21/21+15/15. All exact SHA 8e8e9e8d. CI42268781607 original local startup also COMPLETED SUCCESS at exact patch SHA; original world-ready, Load classification, original callback and preflight all SUCCESS.",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42268654636",
     "https://github.com/alwansan/raf/actions/runs/42268781552",
@@ -44,5 +44,5 @@
     "unchanged": true,
     "reason": "Already scheduled T4's vote for substantive physical mouse capture; this source-only patch does not justify build."
   },
-  "next_step": "Await exact CI42268781607 original startup pass before final documentation, ensure no vote change; T5 can include the guard on next owner-approved 5/5 signed native candidate. Continue original world/save non-device work; remain LOCAL-005 OPEN."
+  "next_step": "Source-only scope complete. T5 next signed candidate if 5/5 votes; device owner actual world create/save/quit/reopen plus physical mouse. Keep LOCAL-005/INPUT-005 OPEN. No vote change after small source-stage guard."
 }
