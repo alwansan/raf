@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1904Z-T5-chat-builtin-rollback-concurrency-a91f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "waiting_ci",
+  "hypothesis": "Post-creation, pre-rollback externally modified or replaced shader include was unlinked unconditionally by builtin restorer. Inode+content guard preserves external changes while normal own-partial cleanup continues.",
+  "source_commit": "67e659e3ea67c43a66e43d65e53afb168645305c",
+  "experiment_key": "T5-builtin-shader-restore-rollback-synthetic-external-include-mutation-after-successful-create-before-osreplace-v1",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "3.x ubuntu-24.04",
+    "engine": "Unity original built-in archive pinned externally, synthetic tests only for new race"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v",
+    "python3 -m unittest discover -s tests -p test_a15_builtin_restore_rollback.py -v"
+  ],
+  "negative_controls": [
+    "same-inode external edit preserved",
+    "post-create new-inode replacement preserved",
+    "induced shader publish failure still preserves original .shader/.meta",
+    "own successful additions removed if unmodified",
+    "earlier partial writer cleanup still expected intact"
+  ],
+  "workflow_path": ".github/workflows/raft-b13-builtin-atomic.yml",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42276738043",
+    "https://github.com/alwansan/raf/actions/runs/42276737999",
+    "https://github.com/alwansan/raf/actions/runs/42276738013"
+  ],
+  "budget": "existing source-only on-push CI; no heavy Unity/native or manual dispatch",
+  "observed_result": null,
+  "limitations": [
+    "no device source data or private shader programs published",
+    "no shader/FFT/Unity engine runtime fidelity claimed",
+    "TOCTOU remains possible absent OS atomic conditional unlink",
+    "trial r1 1/5, no native delivery request"
+  ],
+  "next_step": "Read final source-pinned CI and close own scope."
+}
