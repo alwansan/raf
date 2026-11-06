@@ -5,9 +5,9 @@
   "origin": "chat",
   "session_id": "20261106T2211Z-T2-chat-blit-overload-b47a",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "084075ec1f31bba3aa5591c3db1ac8caefde057b",
-  "updated_at": "2026-11-06T22:11:52.613Z",
+  "updated_at": "2026-11-06T22:14:32.525Z",
   "resumed_from_sessions": [
     "20261106T2203Z-T2-chat-graphics-path-7d3e",
     "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1"
@@ -35,5 +35,9 @@
     "https://github.com/alwansan/raf/actions/runs/42300107157"
   ],
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "next_step": "On exact Foam material field→Blit public API calls, classify signature Texture,RenderTexture,Material vs optional int pass and mixed/other without observing private args or inferring runtime. Validate synthetic tests and original pinned managed DLL through existing source-only CI. No Unity build."
+  "next_step": "Inspect original CI42303074180 on exact SHA 201e14ca: synthetic validator and Mono.Cecil tests first; if green, capture public Blit overload category counts and report to T5, otherwise fix with another hypothesis, never bypass original proof.",
+  "code_commit": "201e14caf01c4cbc47a798055830235eebbcbdb8",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42303074180"
+  ]
 }
