@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T190315Z-T3-chat-stage-cardinality-e6a2",
+  "issue_id": "RENDER-002",
+  "status": "source_only_verified_original_pending",
+  "experiment_key": "T3-SHA15964-fourpair-eight-stage-DCL-SPV-per-stage-cardinality-20261106-e6a2",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "previous_original_run": "https://github.com/alwansan/raf/actions/runs/42274933802",
+  "new_original_run": null,
+  "source_only_run": "https://github.com/alwansan/raf/actions/runs/42276510557",
+  "tests_passed": 14,
+  "prior_failed_fixture_run": "https://github.com/alwansan/raf/actions/runs/42276412595",
+  "code_commits": [
+    "dd2580e25c1959a066ce597b6b6397dd5d1ae622",
+    "44341ce5761db7242900bdac0334dc35a783b391",
+    "6d584b6aee43b1e8decee12e5c5c2c0649d00c79"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-dcl-spv-family-census.yml",
+  "workflow_current_mode": "manual_only",
+  "hypothesis": "Equal eight-stage total resource-family counts may mask opposite per-stage differences; compare each source DCL stage to translated SPV source stage, publish only anonymous counters.",
+  "negative_controls": [
+    "Original source CB2 versus SPV UBO1 in stage A, opposite stage B, totals both 3: two stage mismatches counted",
+    "Combined image sampler representation accepted without counting separate sampler twice",
+    "Missing SRV descriptor despite family presence detected",
+    "Pass 14 synthetic tests and never claim register provenance"
+  ],
+  "result": "Synthetic counts logic source-fixed and 14/14 validated; no new authentic source run. Last original global-count result remains valid but cannot establish each-stage cardinality.",
+  "limitations": [
+    "No new original ZIP2 source test of updated per-stage cardinality methods",
+    "No numerical register identity or variant-to-descriptor provenance proof",
+    "No original non-dummy ShaderLab or Android color pixels",
+    "No Unity/APK/OBB/XAPK test"
+  ],
+  "next_step": "Dispatch existing manual-only pinned original workflow when authorized; inspect aggregate stage-mismatch counters before exact source register to Vulkan binding provenance, ShaderLab integration, device pixels.",
+  "updated_at": "2026-11-06T19:10:23.183Z"
+}
