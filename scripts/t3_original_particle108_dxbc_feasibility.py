@@ -79,7 +79,11 @@ def inspect(parsed:dict,table:list|None,*,link=None)->dict:
         values["original_D3D11_program_table_records"]=0
         values["original_all_compiled_vertex_fragment_stages_available"]=False
         return values
-    if type(table) is not list or not table or len(table)>200000:
+    if (type(table) is not list or not table or len(table)>200000
+        or any(type(row) is not tuple or len(row)!=2
+               or type(row[0]) is not int or row[0]<0
+               or type(row[1]) is not bytes or not row[1]
+               for row in table)):
         raise ValueError("invalid_authentic_original_D3D11_program_entry_scope")
     kwargs={} if link is None else {"link":link}
     summary=top.summarize(parsed,table,**kwargs)
