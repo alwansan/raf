@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "session_id": "20261106T001347Z-T1-scheduled-bc47",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_regression_unexecuted",
   "base_sha": "070280cad87f0ec0c5f32e5bd9eb5361d2f7bbe5",
   "intended_files": [
     "tests/test_t1_fft_sourcefree_bitcarrier_contract.py",
@@ -15,5 +15,9 @@
     "prompt/coordination/clients/T1/sessions/20261105T232830Z-T1-chat-5d3b90.md"
   ],
   "hypothesis": "Source-free Unity fixture could regress to an undetectable bitcarrier lane or lose its positive control; assert lane identity and distinguish non-asserted diagnostic counters from strict baseline controls.",
-  "updated_at": "2026-11-06T00:13:47Z"
+  "updated_at": "2026-11-06T00:17:00Z",
+  "code_commit": "9ba2121f0aa66bebb5a580c7b1391afdc35574e4",
+  "session_commit": "acfd73ee3570f31c46d03c82ab9823b0df4c8eda",
+  "result": "Three regression test methods added to preserve six canary output lanes and separate strict positive controls from diagnostic bitcarrier counts; not executed against repository.",
+  "next_step": "Run targeted Python unittest then authenticated slot-0 typed-load provenance and private uint-preserving variant parity."
 }
