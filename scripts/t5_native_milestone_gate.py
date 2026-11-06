@@ -10,6 +10,8 @@ from pathlib import Path
 import re
 
 _SHA = re.compile(r"^[a-f0-9]{40}$")
+# Historical step numbers document the real 42058825739 snapshot. They are
+# NOT acceptance criteria for later native runs; names and order are.
 _MILESTONES = (
     ("mesh", 15, "Restore every pinned external Mesh buffer while retaining original serialized identities"),
     ("scenes", 19, "Export 40 scenes into a Unity Editor project with correct MonoScript metadata"),
@@ -80,26 +82,42 @@ def classify(snapshot, *, expected_id, expected_sha):
     if not required.issubset(indexed):
         raise ValueError("Incomplete native job snapshot")
     steps = indexed["reconstruct"].get("steps")
-    if type(steps) is not list:
-        raise ValueError("Missing native milestone steps")
+    # GitHub Actions step *numbers* identify their order only within one
+    # immutable run. Additional nonmutating exporter diagnostics shift every
+    # downstream number; use exact milestone NAMES + monotonic positions,
+    # never the historical absolute numbers from a different source SHA.
+    # Accept a full official job-step list as well as a bounded filtered one.
+    if type(steps) is not list or not 1 <= len(steps) <= 256:
+        raise ValueError("Missing or excessive native milestone steps")
     step_index = {}
+    previous_position = 0
     for row in steps:
         row = _obj(row, "milestone")
         name = row.get("name")
+        if not isinstance(name, str) or not 1 <= len(name) <= 256:
+            raise ValueError("Invalid native step name")
         if name in step_index:
             raise ValueError("Duplicate milestone")
-        if type(row.get("number")) is not int:
+        number = row.get("number")
+        if type(number) is not int:
             raise ValueError("Milestone step number must be integer")
-        _state(row, "milestone " + str(name))
+        if number <= previous_position:
+            raise ValueError("Native step number order or positive position violated")
+        previous_position = number
+        _state(row, "milestone " + name)
         step_index[name] = row
-    if len(step_index) != len(_MILESTONES):
+    if len(step_index) < len(_MILESTONES):
         raise ValueError("Missing or additional source milestones")
     flags = {}
     outcomes = {}
-    for key, number, name in _MILESTONES:
+    last_milestone_position = 0
+    for key, _historical_number, name in _MILESTONES:
         row = step_index.get(name)
-        if row is None or row["number"] != number:
-            raise ValueError("Missing or renumbered verified milestone")
+        if row is None:
+            raise ValueError("Missing required verified milestone")
+        if row["number"] <= last_milestone_position:
+            raise ValueError("Native milestone source order changed")
+        last_milestone_position = row["number"]
         flags[key] = row["conclusion"] == "success"
         outcomes[key] = row["status"] if row["status"] != "completed" else row["conclusion"]
     # A later necessary milestone cannot pass while an earlier required one
