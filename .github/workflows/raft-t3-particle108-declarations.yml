@@ -1,0 +1,118 @@
+name: T3 RENDER-002 authentic original Particle108 D3D11 SHDR SHEX declaration census
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - prompt/coordination/requests/t3-dxbc-declarations-20261106-3c7e.trigger
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-original-SHDR-SHEX-declarations-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-DXBC-eight-stage-declarations:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free tokenized SHDR SHEX declaration parsing controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_dxbc_declarations.py tests/test_t3_particle108_original_dxbc_declarations.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_declarations.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Restore only four original SHA-pinned shader owner data files
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate exactly six original Renderer scenes and four asset owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path("zip2-source")
+          out=Path(os.environ["RUNNER_TEMP"])/"t3-original-private-DXBC-DECLARATIONS"
+          pins={"Raft_Data/"+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED}
+          result=stage(source,out,pins)
+          assert len(result["owners"])==4 and result["verified_bytes"]==269007288 and not result["lfs_used"]
+          for name,pin in PIN.items():
+              file=source/"Raft/Raft_Data"/name
+              verify_source(file,pin)
+              dest=out/"Raft_Data"/name
+              with file.open("rb") as src,dest.open("xb") as dst:
+                  while buf:=src.read(1024*1024):dst.write(buf)
+              verify_source(dest,pin)
+          print("T3_ORIGINAL_DXBC_RDEF_SIX_SCENES_FOUR_OWNERS_SHA=true")
+          PY
+      - name: Read bounded source-original SHDR SHEX instruction and resource declaration opcodes
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          timeout 540s python3 -m scripts.t3_particle108_original_dxbc_declarations \
+            --original "$RUNNER_TEMP/t3-original-private-DXBC-DECLARATIONS" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-particle108-declarations-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-particle108-declarations-safe.json").read_text())
+          assert d["status"]=="T3_SHA_ORIGINAL_PARTICLE108_EIGHT_STAGE_DXBC_DECLARATIONS"
+          assert d["source_original_six_scenes_SHA_authenticated"] is True
+          assert d["source_original_four_owner_SHA_authenticated"] is True
+          assert d["source_particle_renderer_material_slots"]==108
+          assert d["source_original_keyword_pairs"]==4
+          assert d["counts"]["original_tokenized_shader_stages"]==8
+          assert d["counts"]["original_source_vertex_fragment_keyword_pairs"]==4
+          assert d["counts"]["original_tokenized_instructions"]>0
+          assert d["declaration_count_is_not_register_binding_layout"] is True
+          assert d["original_binding_register_numbers_names_shader_bytes_or_GUIDs_published"] is False
+          assert d["original_shader_program_Android_pixels_or_Unity_shader_compilation_proven"] is False
+          assert d["original_vulkan_descriptor_equivalence_proven"] is False
+          print("T3_SOURCE_ORIGINAL_PARTICLE108_SHDR_SHEX_DECLARATION_COUNTS_VALID=true")
+          PY
+      - name: Publish only privacy-safe SHDR SHEX declaration family aggregate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle108-DXBC-DECL-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-particle108-declarations-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
