@@ -4,11 +4,11 @@
   "origin": "chat",
   "session_id": "20261106T1520Z-T5-chat-real-unity-guid-2b61",
   "issue_id": "INTEGRATION-001",
-  "status": "completed_real_original_signed_APK_only_unity_guid_marker_proven_identity_unavailable",
+  "status": "completed_real_original_signed_apk_only_guid_marker_inventory_verified",
   "experiment_key": "T5-real-original-42058825739-APK-OBB-Unity-guid-marker-crosscheck-actual-HTTP206-v1",
-  "source_commit": "c009d989ad8823e1f7d1ebe49fe9408ccd493d7b",
-  "real_run_url": "https://github.com/alwansan/raf/actions/runs/42243273146",
-  "real_job_id": 127978801390,
+  "source_commit": "f128787aa536cf6db076e13634aba1c49034925d",
+  "real_run_url": "https://github.com/alwansan/raf/actions/runs/42243852483",
+  "real_job_id": 127980808269,
   "real_run_conclusion": "success",
   "synthetic_cases": "13/13",
   "authentic_source": {
@@ -31,7 +31,8 @@
     "owner_device_mount_verified": false,
     "full_APK_OBB_source_SHA_in_prior_CI": true,
     "real_206_range_bytes": 11447,
-    "real_206_range_requests": 156
+    "real_206_range_requests": 156,
+    "optional_patch_89_caused_main_corruption_proven": false
   },
   "observed_phone_baseline": {
     "pinned_CL_original_GUID_warnings_optional_unshipped_patch_89": 3,
@@ -64,5 +65,6 @@
   ],
   "next_step": "Correlate actual installed main.89 OBB path+SHA with owner LogRaft resource access and Unity loaded file before considering packaging fix; coordinate P0 water/FX source work otherwise.",
   "report": "docs/T5_REAL_UNITY_OBB_GUID_2026-11-06.md",
-  "updated_at": "2026-11-06T15:30:40.042Z"
+  "updated_at": "2026-11-06T15:33:25.649Z",
+  "previous_source_verified_run": 42243273146
 }
