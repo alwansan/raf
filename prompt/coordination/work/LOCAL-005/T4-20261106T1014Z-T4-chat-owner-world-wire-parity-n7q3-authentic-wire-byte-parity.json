@@ -2,9 +2,9 @@
   "session_id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "35c9e3191d52da100212930c1177745578a61d66",
-  "updated_at": "2026-11-06T10:14:00Z",
+  "updated_at": "2026-11-06T10:19:00Z",
   "resumed_from_sessions": [
     "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
     "20261106T0943Z-T4-scheduled-q7n4",
@@ -30,5 +30,15 @@
   ],
   "nonoverlap": "No AndroidPhysicalMouseCapture or scheduled T4 release-target files, no T1/T2/T3, no T5 packaging, no native Unity job, no game assets or original RGD edits.",
   "safety": "Exact original Git blobs and compiled DLL must be verified before any historical unsafe BinaryFormatter. Byte comparison private on runner with <=1 MiB bound; publish only safe count/boolean, no file bytes, hashes, paths or exceptions.",
-  "next_step": "Patch original private CLR probe + strict safe report schema + negative synthetic tests; allow inequality as an observation; run isolated existing T4 source workflow on exact commit; publish result and limitations."
+  "next_step": "T5 one signed matching APK+OBB; device new-world original Save/load full process exit and physical mouse focus/camera; investigate Android I/O/IL2CPP only on reproduced failure.",
+  "final_source_sha": "22ebebb0e0638d3a970475fcbcb506a88945307e",
+  "ci_runs": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42201568118",
+      "head_sha": "22ebebb0e0638d3a970475fcbcb506a88945307e",
+      "conclusion": "success",
+      "job_id": 127837973923
+    }
+  ],
+  "result": "Actual original private Save file byte-equal to exact owner World RGD seed 7/7, original LoadT match 7/7; 12+29 Python controls pass. No Unity Android/phone claim."
 }
