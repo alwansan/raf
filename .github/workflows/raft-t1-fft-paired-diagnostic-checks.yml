@@ -6,6 +6,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - .github/workflows/raft-t1-fft-paired-diagnostic-checks.yml
+      - scripts/t1_fft_real_gpu_variant_delta_gate.py
+      - tests/test_t1_fft_real_gpu_variant_delta_gate.py
       - scripts/t1_fft_paired_diagnostic.py
       - tests/test_t1_fft_paired_diagnostic.py
       - scripts/t1_fft_rgba_error_signature.py
@@ -38,6 +40,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_t1_fft_paired_diagnostic.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_real_gpu_variant_delta_gate.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_first_divergence.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_tolerance_validation.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_tolerance_overflow.py -v
