@@ -35,6 +35,19 @@ class PointerViewIdentityAudit(unittest.TestCase):
         # A future fix should explicitly bind request/probe/release to the
         # same capture target and replace this characterization test.
 
+    def test_mismatched_probe_fails_back_before_accepting_other_view_capture(self):
+        source = SOURCE.read_text(encoding="utf-8")
+        body = method_body(source, "ProbeCapturedPointer")
+        mismatch = body.index("probedIdentity != requestedIdentity")
+        fallback = body.index("ObserveNativeCapture(token, false);", mismatch)
+        early_return = body.index("return;", fallback)
+        active = body.index("bool active = view != null", early_return)
+        self.assertLess(mismatch, fallback)
+        self.assertLess(fallback, early_return)
+        self.assertLess(early_return, active)
+        # This is a source ordering contract, not proof of Android pointer
+        # capture, camera direction, or a working Raft cursor on a device.
+
     def test_epoch_guards_do_not_encode_view_identity(self):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn("currentEpoch != Volatile.Read(ref epoch)", method_body(source, "RequestCapture"))
