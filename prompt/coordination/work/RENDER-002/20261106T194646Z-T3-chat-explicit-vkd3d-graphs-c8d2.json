@@ -4,9 +4,9 @@
   "session_id": "20261106T194646Z-T3-chat-explicit-vkd3d-graphs-c8d2",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_only",
   "base_sha": "bfe5c21618494a87033ad34521d51f2873756b68",
-  "updated_at": "2026-11-06T19:55:47.220Z",
+  "updated_at": "2026-11-06T20:01:31.782Z",
   "resumed_from_sessions": [
     "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
     "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
@@ -34,5 +34,11 @@
     "Do not dispatch original ZIP2 or native Unity workflows; native build 42281310905 running at scope",
     "No claim of shader fix/phone colors from source-only C compiler"
   ],
-  "next_step": "Add independent strict SPIRV descriptor variable-ID and full module masked-pair verifier for two explicit mapping profiles, prove same-key variable IDs stable and detect silent same-family binding swaps, with sourcefree synthetic CI. No original ZIP2 or Unity run."
+  "next_step": "Use authorized ZIP2 pinned source-only original workflow to compile 8 original source Shader48 stages with B18-style two explicit map profiles A/B using private packets, verify chosen target resource bindings and non-binding SPIRV instruction identity. No shader/game assets or native build touched; RENDER-002 OPEN; T3 vote لا يحتاج.",
+  "result": "T3 source-only explicit VS/FS vkd3d graphics DXBC register mappings A/B implemented, real public vkd3d 1.2 C ABI compilation and correct/invalid packet validation succeeded in CI42284214002. Stage-local SPIRV A/B literal-only normalized whole-graph and same original source-to-variable identity synthetic checks passed; total 61/61 Python across four suites. NOT run on original SHA-pinned 8 Shader48 programs, no Unity/Adreno pixels.",
+  "original_source_run": null,
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42283609567",
+    "https://github.com/alwansan/raf/actions/runs/42284214002"
+  ]
 }
