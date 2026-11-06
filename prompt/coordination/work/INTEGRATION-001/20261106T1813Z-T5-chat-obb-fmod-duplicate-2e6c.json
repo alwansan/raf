@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "installed main OBB real FMOD bank path ambiguity read-only diagnostic",
-  "status": "active",
+  "status": "completed",
   "base_sha": "9e9b7efe7ffbc906cc21d17ce19da4bf14122657",
-  "updated_at": "2026-11-06T18:13:00.141Z",
+  "updated_at": "2026-11-06T18:15:40.722Z",
   "resumed_from_sessions": [
     "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
     "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
@@ -27,5 +27,21 @@
   "resource_key": "existing T5 dotnet8 source-only installed OBB probe CI auto-trigger; not Unity/native delivery lane",
   "hypothesis": "Current installed OBB first-byte probe uses HashSet for five FMOD banks; duplicate exact ZIP entries are silently collapsed and may be reported present as five unique routes. Distinguish a readable original archive with five unique bank paths vs ambiguous ZIP central directory entries, fail diagnostic closed without dumping paths, bytes, GUID or altering actual FMOD loader/Unity.",
   "coordination": "Own T5 OBB probe source/fixtures, no edits to scheduled T5 PID-audit helper, T1/T2/T3 graphics, T4 local/world or native build; check active CI and votes, no new APK until five owner-validated YES.",
-  "next_step": "Introduce separate seen-name set and ambiguity result, synthetic positive and empty second entry probes, run existing low-cost .NET C# CI, retain vote T5 NO and update own session."
+  "next_step": "Own code, test and workflow CI scope completed and released. Keep event/experiment/session evidence. No current trial-build consensus and no new native APK dispatch. T5 scheduled PID source remains separately reserved and red source handoff awaits correct owner.",
+  "source_sha": "830358d3f5cd5b18b02780561b244d33d4a4b577",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42268699096",
+    "https://github.com/alwansan/raf/actions/runs/42268743309"
+  ],
+  "result": {
+    "status": "SUCCESS",
+    "final_run_id": 42268743309,
+    "synthetic_obb_checks_passed": 29,
+    "unity_source_copy_test": "PASS",
+    "platform_managed_compile_errors": 0,
+    "existing_other_source_warnings": 6,
+    "actual_phone_obb_verified": false,
+    "original_fmod_playback_verified": false,
+    "source_only_diagnostic": true
+  }
 }
