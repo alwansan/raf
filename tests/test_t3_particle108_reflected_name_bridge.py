@@ -137,12 +137,13 @@ class Particle108NameBridge(unittest.TestCase):
             if path.name.startswith("roundtrip") and r["outputs"]:
                 r["outputs"][0]["location"]=123
             return r
+        # A raw named reflection disagreeing with the already-validated
+        # sanitized source locations is an integrity violation, not a
+        # partially successful location-map candidate.
         with tempfile.TemporaryDirectory() as d:
-            r=t3.evaluate(PAIRS,Path(d),translator=fake_translate,
-                          safe_reflector=bad_safe,raw_reflector=raw_reflect)
-        self.assertEqual(r["counts"]["source_vs_roundtrip_stage_names_classified"],4)
-        self.assertEqual(r["counts"]["roundtrip_stage_pair_interfaces_compatible"],2)
-        self.assertNotIn("PRIVATE_INTERPOLATOR",json.dumps(r))
+            with self.assertRaisesRegex(ValueError,"disagrees_with_safe_IO_baseline"):
+                t3.evaluate(PAIRS,Path(d),translator=fake_translate,
+                            safe_reflector=bad_safe,raw_reflector=raw_reflect)
 
     def test_untrusted_translation_result_fails_closed_no_program_digests(self):
         def malformed(_code,stage,_path):
