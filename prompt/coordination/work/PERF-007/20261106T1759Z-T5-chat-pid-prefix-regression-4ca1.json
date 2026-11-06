@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "track": "independent genuine CL startup PID source-regression CI without modifying scheduled-owned auditor",
+  "status": "active",
+  "base_sha": "6a49666f951b91c63180f93507e7542fa200ba6b",
+  "updated_at": "2026-11-06T17:59:32Z",
+  "resumed_from_sessions": [
+    "20261106T1752Z-T5-chat-pid-leading-unknown-9a4d",
+    "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
+    "20261106T1745Z-T5-chat-trial-vote-adoption-46c2",
+    "20261106T1728Z-T5-chat-pid-cohort-enforce-b72c"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/discussions/PERF-007/20261106T1752Z-T5-chat-pid-leading-unknown-9a4d-to-scheduled.md",
+    "https://github.com/alwansan/raf/actions/runs/42263013004"
+  ],
+  "intended_files": [
+    "tests/test_t5_cl_pid_startup_prefix_real_gate.py",
+    ".github/workflows/raft-t5-cl-real-fps-cohort.yml",
+    "prompt/coordination/work/PERF-007/20261106T1759Z-T5-chat-pid-prefix-regression-4ca1.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1759Z-T5-chat-pid-prefix-regression-4ca1.md",
+    "prompt/coordination/experiments/T5/20261106T1759Z-T5-chat-pid-prefix-regression-4ca1.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1759Z-T5-chat-pid-prefix-regression-4ca1.json"
+  ],
+  "experiment_key": "T5-CL520c4c-live-190rows-startup-nonrunning-prefix-1and6-vs-stop-after-verified-red-source-regression-v1",
+  "resource_key": "own source-only existing T5 CL workflow; expected red on scheduled source a5f2172f; no Unity runner",
+  "hypothesis": "The scheduled auditor erroneously counts unknown pre-first-verified running startup status as separate process lifetime. New independent source-free tests assert 1- and 6-row benign prefixes are same first verified epoch, contrasted with actual postverified stop/restart same-PID 3 epochs. Existing pinned authentic CL workflow should fail (red) until scheduled-owner safe fix.",
+  "coordination": "Source files scripts/t5_cl_pid_epoch_audit.py and tests/test_t5_cl_pid_epoch_audit.py reserved by scheduled T5 1751Z, DO NOT EDIT them or scheduled session. Own new independent test and own preexisting PERF workflow only, with explicit source-only commit marker; do not dispatch game Unity or mutate vote T5=NO. On expected red CI hand off exact offending assertion to scheduled owner; pause until their green source change.",
+  "next_step": "Add independent synthetic prefix vs true-stop regression tests and source-pinned CL workflow invocation (existing 190 original rows), record genuine red/green; scoped handoff to scheduled owner."
+}
