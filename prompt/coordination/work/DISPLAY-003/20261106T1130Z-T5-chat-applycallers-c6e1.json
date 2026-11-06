@@ -8,7 +8,7 @@
   "track": "Original GraphicsSettingsBox ApplyCurrentResolutionAndFullscreenMode exact caller provenance",
   "status": "completed_source_authentic_IL_three_distinct_callers_android_unverified",
   "base_sha": "53c1bda9a7982f07d2cce70b9f8bffd9215716b7",
-  "updated_at": "2026-11-06T11:34:51.745Z",
+  "updated_at": "2026-11-06T11:35:25.490Z",
   "resumed_from_sessions": [
     "20261106T1104Z-T5-chat-resolution-delegate-6a2f.md",
     "20261106T1046Z-T5-scheduled-pair-success-q6f8.md"
@@ -26,7 +26,8 @@
     "prompt/coordination/clients/T5/sessions/20261106T1130Z-T5-chat-applycallers-c6e1.md",
     "prompt/coordination/experiments/T5/20261106T1130Z-T5-chat-applycallers-c6e1.json",
     "prompt/coordination/B_TEAM/events/T5/20261106T1130Z-T5-chat-applycallers-c6e1.json",
-    "docs/T5_ORIGINAL_RESOLUTION_APPLY_CALLERS_2026-11-06.md"
+    "docs/T5_ORIGINAL_RESOLUTION_APPLY_CALLERS_2026-11-06.md",
+    ".github/workflows/raft-t5-ledger-refresh.yml"
   ],
   "related_work": [
     "prompt/coordination/work/DISPLAY-003/20261106T1030Z-T5-chat-resolution-il-4b9e.json",
@@ -58,5 +59,6 @@
     "android_resolution_binding_proven": false,
     "source_only": true,
     "device_tested": false
-  }
+  },
+  "index_intent": "Regenerate canonical T_TEAM SUMMARY/snapshot after exact original caller event entered canonical B_TEAM; use T5 owned source-only fast-forward workflow, no direct overwrite of shared index and no duplicate heavy CI."
 }
