@@ -1,0 +1,78 @@
+name: T5 DISPLAY-003 source-authentic original Settings resolution compiled IL metadata
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Experiments/T5/ResolutionILProbe/**
+      - scripts/t5_validate_resolution_il_probe.py
+      - tests/test_t5_validate_resolution_il_probe.py
+      - .github/workflows/raft-t5-original-resolution-il.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-display003-original-resolution-il-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-original-il:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout only new bounded metadata oracle and synthetic tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T5/ResolutionILProbe/*
+            /scripts/t5_validate_resolution_il_probe.py
+            /tests/test_t5_validate_resolution_il_probe.py
+      - name: Run Python synthetic proof and false-positive controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_validate_resolution_il_probe.py -v
+          python3 -m py_compile scripts/t5_validate_resolution_il_probe.py
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile independent Cecil oracle and run synthetic compiled metadata tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish android-port/Experiments/T5/ResolutionILProbe/ResolutionILProbe.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t5-resolution-il" \
+            > "$RUNNER_TEMP/t5-resolution-build.log" 2>&1 || {
+              tail -35 "$RUNNER_TEMP/t5-resolution-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t5-resolution-il/ResolutionILProbe.dll" --self-test
+      - name: Fetch SHA-pinned ZIP2 original managed DLL only; never publish private bytes
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Authenticate original DLL and evaluate real compiled Settings and DynamicResolution IL
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c '%s' zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          dotnet "$RUNNER_TEMP/t5-resolution-il/ResolutionILProbe.dll" \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t5-resolution-il-safe.json"
+          python3 -m scripts.t5_validate_resolution_il_probe --report "$RUNNER_TEMP/t5-resolution-il-safe.json"
+          echo 'T5_DISPLAY_IL genuine_original_bytes=true source_only=true selector_binding_unverified=true actual_android_resolution_unverified=true' >> "$GITHUB_STEP_SUMMARY"
+      - name: Never upload original DLL or reconstructed source or raw IL
+        if: always()
+        shell: bash
+        run: echo 'Only bounded numeric code-path categories; no private asset, source, raw IL, Unity build, APK, device acceptance.'
