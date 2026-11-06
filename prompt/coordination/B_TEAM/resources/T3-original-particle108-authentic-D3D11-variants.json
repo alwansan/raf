@@ -18,7 +18,7 @@
     "extraction": "EXACT_UNIQUE_108_PARTICLE_SHADER48_AND_ONE_NORMAL_PASS_SELECTED",
     "reconstruction": "FOUR_SOURCE_SHA_ORIGINAL_DXBC_KEYWORD_PAIRS_EIGHT_STAGES_VKD3D_COMPILER_TO_VALID_VULKAN11_SPIRV_ALL_EIGHT",
     "binding": "FOUR_ORIGINAL_VS_FS_PASSES_MATCHED_BY_EXACT_SERIALIZED_KEYWORD_PERMUTATIONS",
-    "integration": "SOURCE_CPU_ONLY_FOUR_GENUINE_PARTICLE108_DXBC_KEYWORD_PAIRS_EIGHT_VALID_SPIRV_AND_HLSL_BUT_ZERO_OF_46_COMPILER_REFLECTED_INTERFACE_NAMES_PRESERVED_AND_ROUNDTRIP_VSFS_ONLY_TWO_OF_FOUR_PAIRS_COMPATIBLE",
+    "integration": "ORIGINAL_SOURCE_FOUR_DXBC_VS_FS_KEYWORD_PAIRS_ALL_AUTHORED_USER_SEMANTIC_TYPE_COMPONENT_MASK_COVERAGE_MATCH_16_RECORDS_58_LANES;_DERIVED_HLSL_LOCATION_BRIDGE_NOT_PROVEN",
     "device": "NOT_TESTED"
   },
   "counts": {
@@ -32,7 +32,7 @@
     "unmatched_fragment_permutations": 0,
     "original_source_programmable_Pass_count": 1,
     "source_original_particles_108_render_use_slots": 108,
-    "source_free_tests_passed": 141,
+    "source_free_tests_passed": 147,
     "original_stage_code_extracted_published": false,
     "Android_runtime_fragment_alpha_or_pixels_verified": false,
     "actual_original_DXBC_stage_translation_attempts": 8,
@@ -65,7 +65,18 @@
     "source_stage_pair_interfaces_compatible": 4,
     "roundtrip_stage_pair_interfaces_compatible": 2,
     "automated_location_patch_by_compiler_reflected_names_only_verified": false,
-    "original_DXBC_signature_semantic_map_verified": false
+    "original_DXBC_signature_semantic_map_verified": false,
+    "original_authored_source_DXBC_semantic_signature_pairs_checked": 4,
+    "original_authored_source_DXBC_stage_programs_checked": 8,
+    "original_authored_source_vertex_user_output_semantics": 16,
+    "original_authored_source_fragment_user_input_semantics": 16,
+    "original_authored_source_VSFS_matched_semantic_records": 16,
+    "original_authored_source_VSFS_matched_component_lanes": 58,
+    "original_authored_source_VSFS_unmatched_fragment_semantics": 0,
+    "original_authored_source_VSFS_missing_component_lanes": 0,
+    "original_authored_source_VSFS_matched_component_type_mismatches": 0,
+    "original_authored_source_VSFS_keyword_pairs_with_complete_signature_coverage": 4,
+    "authored_DXBC_semantics_to_HLSL_SPIRV_location_map_verified": false
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42139137265",
@@ -75,14 +86,16 @@
     "https://github.com/alwansan/raf/actions/runs/42141506120",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
     "https://github.com/alwansan/raf/actions/runs/42144978122",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md",
+    "https://github.com/alwansan/raf/actions/runs/42146385054",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_AUTHORED_SIGNATURE_2026-11-06.md"
   ],
   "remaining": [
-    "All eight SPIR-V stages Vulkan1.1-valid but HLSL roundtrip stage IO 2/4 compatible; prior 8/8 type multiset equality is NOT original shader semantics proof.",
-    "Real original→roundtrip compiler-reflected named stage interfaces: 0/26 input and 0/20 output names preserved, 0/8 stages with full name/type preservation. Never attempt reflected-name-only location remapping.",
-    "Need private original DXBC semantic signature and recovered HLSL semantic mapping; require no duplicate interpolation/semantic ambiguity and per-pair original resource binding comparison before any executable ShaderLab prototype.",
-    "Full native T5 post-restorer source Shader GUID and installed Android fire/smoke ParticleRenderer emitter, decoded texture alpha, Vulkan GPU pixels unverified. RENDER-002 OPEN."
+    "Four original DXBC source VS/FS keyword permutations have complete original authored semantic/mask/type joins: 16 matched user varyings, 58 component lanes, zero mismatches. This does NOT prove correspondence to recovered HLSL or SPIR-V Locations.",
+    "SPIR-V translated stage interface is 4/4 compatible, but HLSL roundtrip 2/4; compiler-reflected names changed 0/46. Do NOT force name-based or type-only interface remaps.",
+    "Next only private exact original DXBC register→authored semantic→source SPIR-V Location and recovered HLSL SV_*/TEXCOORD field mapping, then require deterministic 4/4 compatibility and resource binding parity.",
+    "Exact post-vendor source shader GUID, actual phone fire/smoke emitter, Unity ShaderLab Android compilation and Adreno pixels still untested. RENDER-002 OPEN."
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-06T01:39:57.003Z"
+  "updated_at": "2026-11-06T01:53:35.041Z"
 }
