@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T0248Z-T5-chat-native-delivery-retention-e8a3",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_source_verified_unauthorized_publisher_unresolved",
   "base_sha": "f9856f74db3d02cca97c6151877735a776816b0c",
   "intended_files": [
     ".github/workflows/raft-unity-editor-android-import.yml",
@@ -35,6 +35,22 @@
   },
   "no_overlap_reason": "T1 currently uses isolated FFT Unity comparison workflow 408169287; no active native delivery job, T2 owns private Foam source, T4 input/local, T5 scheduled Resolution separate.",
   "requested_change": "Raise future signed/transport recovery retention to 3d, optionally select owner-provisioned RAFT_RELEASE_TOKEN over github.token for publication, leave all build/quality/contents hashes and strict delivery result logic unchanged.",
-  "next_step": "Implement surgical production workflow change and source-only CI proof; do not launch native Unity or try to create Release without a configured owner-authorized token.",
-  "updated_at": "2026-11-06T02:49:22.915Z"
+  "next_step": "Later authorized owner setup secret RAFT_RELEASE_TOKEN (scoped Contents RW) or correct GitHub effective integration permission; require real Release create/view and exact remote asset parity. For next native build 3d artifacts recoverable; original retained artifact13454900880 expires Nov8 21:12:40 UTC. Leave T1 FFT/T2 Foam runtime tasks independent.",
+  "updated_at": "2026-11-06T02:55:21.854Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42153075428"
+  ],
+  "result": {
+    "run": 42153075428,
+    "conclusion": "success",
+    "tests": "9/9",
+    "future_delivery_retention_days": 3,
+    "future_signed_checkpoint_retention_days": 3,
+    "future_audited_recovery_retention_days": 3,
+    "release_authorization": "optional secrets.RAFT_RELEASE_TOKEN or fallback github.token",
+    "release_permission_persisting": "original 403 still unresolved",
+    "existing_rescue_artifact_extension": false,
+    "current_original_retained_artifact": 13454900880,
+    "sourceonly_run": true
+  }
 }
