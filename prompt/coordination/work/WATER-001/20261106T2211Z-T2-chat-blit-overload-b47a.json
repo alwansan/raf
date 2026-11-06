@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T2211Z-T2-chat-blit-overload-b47a",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "084075ec1f31bba3aa5591c3db1ac8caefde057b",
+  "updated_at": "2026-11-06T22:11:52.613Z",
+  "resumed_from_sessions": [
+    "20261106T2203Z-T2-chat-graphics-path-7d3e",
+    "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1"
+  ],
+  "experiment_key": "T2-original-Foam-Graphics-Blit-overload-Texture-RT-Material-optional-pass-v1",
+  "resource_key": "T2 SHA-original Mono.Cecil source-only fixed immutable source; no Unity/ZIP2 GPU",
+  "hypothesis": "The two source-authentic Foam Material→UnityEngine.Graphics.Blit call sites may use explicit pass index vs implicit/default pass, which can be classified from exact public signature without releasing original method names or identifying data.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "prompt/coordination/work/WATER-001/20261106T2211Z-T2-chat-blit-overload-b47a.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2211Z-T2-chat-blit-overload-b47a.md",
+    "prompt/coordination/experiments/T2/20261106T2211Z-T2-chat-blit-overload-b47a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2211Z-T2-chat-blit-overload-b47a-result.json"
+  ],
+  "blocked_scopes": [
+    ".github/raft-native-build-request.json",
+    "T1/T3/T4/T5 work",
+    "Game Assets/GUID/.rgd/ShaderLab",
+    ".github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42302222142",
+    "https://github.com/alwansan/raf/actions/runs/42300107157"
+  ],
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "On exact Foam material field→Blit public API calls, classify signature Texture,RenderTexture,Material vs optional int pass and mixed/other without observing private args or inferring runtime. Validate synthetic tests and original pinned managed DLL through existing source-only CI. No Unity build."
+}
