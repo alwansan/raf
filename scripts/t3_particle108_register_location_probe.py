@@ -97,6 +97,22 @@ def classify_stage(original,reflected):
         out["unique_numeric_type_width_candidates"]==out["original_user_records"])
     return {key:int(out[key]) for key in KEYS}
 
+def classify_stage_roles(original,reflected):
+    """Four-variant aggregate caller; never return original semantic/location IDs."""
+    if type(original) is not dict or type(reflected) is not dict:
+        raise ValueError("invalid_private_stage_role_scope")
+    result={}
+    for name,plural,other,other_plural in (
+        ("inputs","inputs","output","outputs"),
+        ("outputs","outputs","input","inputs")):
+        sig={"input":[],"output":[]}
+        raw={"inputs":[],"outputs":[]}
+        sig["input" if name=="inputs" else "output"]=original.get(
+            "input" if name=="inputs" else "output")
+        raw[plural]=reflected.get(plural,[])
+        result[name]=classify_stage(sig,raw)
+    return result
+
 def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
              spirv_reader=None,safe_spirv_reader=None,reflection_validator=None):
     from scripts import t3_original_particle108_spirv_translation as tr
@@ -117,6 +133,7 @@ def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
         or workspace.is_symlink()):
         raise ValueError("untrusted_original_fourpair_private_scope")
     total=Counter(); complete=0
+    role_counts={k:Counter() for k in ('vertex_inputs','vertex_outputs','fragment_inputs','fragment_outputs')}
     for i,pair in enumerate(pairs):
         stage_ok=0
         for stage,code in ((1,pair[0]),(0,pair[1])):
@@ -139,7 +156,19 @@ def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
                                  key=lambda x:x["location"])
                 if projected!=safe[side]:
                     raise ValueError("original_private_SPIRV_safe_reflection_disagrees")
-            row=classify_stage(dxbc_reader(code),raw)
+            source_signature=dxbc_reader(code)
+            row=classify_stage(source_signature,raw)
+            scoped=classify_stage_roles(source_signature,raw)
+            phase='vertex' if stage==1 else 'fragment'
+            for side,values in scoped.items():
+                slot=role_counts[phase+'_'+side]
+                for key in ('original_user_records','spirv_located_rows',
+                            'missing_numeric_register_locations',
+                            'numerically_matching_register_records',
+                            'type_class_mismatches',
+                            'component_width_shortfalls',
+                            'extra_spirv_locations'):
+                    slot[key]+=values[key]
             for key in KEYS: total[key]+=row[key]
             total["original_DXBC_to_SPIRV_stages"]+=1
             stage_ok+=int(row["all_user_records_unique_numeric_candidates"]==1)
@@ -151,6 +180,14 @@ def evaluate(pairs,workspace,*,translator=None,dxbc_reader=None,
                 "original_DXBC_to_SPIRV_stages",
                 "original_four_VSFS_keyword_pairs",
                 "four_pairs_with_numerical_unique_register_location_candidates")},
+            "stage_role_aggregate_counts":{
+                role:{key:int(values[key]) for key in (
+                    'original_user_records','spirv_located_rows',
+                    'missing_numeric_register_locations',
+                    'numerically_matching_register_records',
+                    'type_class_mismatches','component_width_shortfalls',
+                    'extra_spirv_locations')}
+                for role,values in sorted(role_counts.items())},
             "source_SPIRV_Location_equals_DXBC_register_semantic_identity_proven":False,
             "authored_semantic_to_HLSL_variable_mapping_proven":False,
             "auto_location_patch_authorized":False,
