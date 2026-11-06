@@ -190,7 +190,10 @@ def original_owner_catalog(source, parsed):
             try:
                 shader_tree = obj.read_typetree()
                 name = shader_tree["m_ParsedForm"]["m_Name"]
-            except (KeyError, TypeError, ValueError, AttributeError):
+            except Exception:
+                # Other original Shader typetrees may be unsupported on this
+                # pinned UnityPy version. Count them as unparsed, never as a
+                # proven absence of a name.
                 name = None
             shaders.append((path_id,name))
         elif obj.type.name == "Material":
@@ -200,7 +203,9 @@ def original_owner_catalog(source, parsed):
                 mat_tree = obj.read_typetree()
                 ref = mat_tree["m_Shader"]
                 pointer = (ref["m_FileID"],ref["m_PathID"])
-            except (KeyError, TypeError, ValueError, AttributeError):
+            except Exception:
+                # Material typetree failures block exhaustive claims but must
+                # not take down SHA-authentic Foam Shader-object evidence.
                 pointer = None
             materials.append(pointer)
     result = _owner_catalog_from_rows(shaders,materials,foam_name,2420)
