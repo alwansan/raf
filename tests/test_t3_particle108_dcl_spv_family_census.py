@@ -265,3 +265,55 @@ class SpirvNamedCandidatesSynthetic(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"T3_DX_SOURCE_PRIMARY_COLLISION"):
             probe.candidate_counts(fixture()+(("cbuffer",89,(2,10)),),
                                    self.build(),1)
+
+
+class OriginalPrivateSpvAdapterSynthetic(unittest.TestCase):
+    """Original source selection isn't faked; only stage-folder classification."""
+    def test_all_four_pairs_stage_exact_private_debug_candidates_only(self):
+        from scripts import t3_particle108_spv_named_original_probe as adapter
+        stage_fixture=SpirvNamedCandidatesSynthetic.build
+        def translator(blob,stage,path):
+            (path/"original.spv").write_bytes(stage_fixture(
+                stage_model=0 if stage==1 else 4))
+            return {"stage":stage,"vulkan11_valid":True}
+        with tempfile.TemporaryDirectory() as d:
+            result=adapter.classify([(b"\x01",b"\x00")]*4,Path(d),
+                translator=translator,
+                dcl=lambda _code,_stage:fixture())
+        counts=result["counts"]
+        self.assertEqual(counts["source_stages_analyzed"],8)
+        self.assertEqual(counts["source_original_vsfs_keyword_pairs_analyzed"],4)
+        self.assertEqual(counts["spirv_debug_candidates_matching_original_source_name_keys"],24)
+        self.assertEqual(counts["source_stages_with_all_debug_name_candidates"],8)
+        self.assertFalse(result["source_register_to_vulkan_descriptor_equivalence_proven"])
+        self.assertFalse(result["original_shader_Unity_compile_or_Android_pixels_proven"])
+
+    def test_adapter_rejects_stage_incorrect_spv_debug_module(self):
+        from scripts import t3_particle108_spv_named_original_probe as adapter
+        def translator(_blob,stage,path):
+            (path/"original.spv").write_bytes(
+                SpirvNamedCandidatesSynthetic.build(stage_model=0))
+            return {"stage":stage,"vulkan11_valid":True}
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaisesRegex(ValueError,"T3_SPIRV_STAGE_ENTRYPOINT"):
+                adapter.classify([(b"\x01",b"\x00")]*4,Path(d),
+                                 translator=translator,
+                                 dcl=lambda _code,_stage:fixture())
+
+    def test_adapter_rejects_false_provenance_injected_by_candidate(self):
+        from scripts import t3_particle108_spv_named_original_probe as adapter
+        from scripts import t3_particle108_spirv_opname_candidates as probe
+        def translator(_blob,stage,path):
+            (path/"original.spv").write_bytes(
+                SpirvNamedCandidatesSynthetic.build(stage_model=0 if stage else 4))
+            return {"stage":stage,"vulkan11_valid":True}
+        def malicious(dcl,spv,stage):
+            result=probe.candidate_counts(dcl,spv,stage)
+            result["original_to_SPIRV_register_provenance_proven"]=True
+            return result
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaisesRegex(ValueError,"T3_PRIVATE_SPV_DEBUG_CANDIDATE_RESULT_INVALID"):
+                adapter.classify([(b"\x01",b"\x00")]*4,Path(d),
+                                 translator=translator,
+                                 dcl=lambda _code,_stage:fixture(),
+                                 match=malicious)
