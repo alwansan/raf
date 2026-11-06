@@ -10,6 +10,8 @@ on:
       - 'tests/test_t3_particle108_private_stagewrapper_compile.py'
       - 'scripts/t3_particle108_original_keyword_lattice.py'
       - 'tests/test_t3_particle108_original_keyword_lattice.py'
+      - 'scripts/t3_particle108_original_keyword_names.py'
+      - 'tests/test_t3_particle108_original_keyword_names.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -40,6 +42,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_stagewrapper_compile.py' -v
           python3 -m py_compile scripts/t3_particle108_original_keyword_lattice.py tests/test_t3_particle108_original_keyword_lattice.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_lattice.py' -v
+          python3 -m py_compile scripts/t3_particle108_original_keyword_names.py tests/test_t3_particle108_original_keyword_names.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_names.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -155,7 +159,7 @@ jobs:
           timeout 180s python3 -m scripts.t3_particle108_original_keyword_lattice \
             --original "$RUNNER_TEMP/t3-private-variant-original" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
-            --out "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json"
+            --out "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json" "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json"
           python3 - <<'PY'
           from pathlib import Path
           import json,os
@@ -169,6 +173,28 @@ jobs:
           assert data["all_four_variants_selectable_in_one_Unity_ShaderLab_proven"] is False
           assert data["Unity_Editor_compilation_or_phone_pixels_verified"] is False
           print("T3_ORIGINAL_KEYWORD_METADATA_COHORT_VERIFIED=4_PAIRS; runtime_authoring_unproven=true")
+          PY
+      - name: Diagnose exact original Shader48 keyword-name and flags table provenance privately
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t3_particle108_original_keyword_names \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          data=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-keyword-name-table-safe.json").read_text())
+          assert data["status"]=="T3_SOURCE_ORIGINAL_PARTICLE108_KEYWORD_AUTHOR_TABLE_CLASSIFIED"
+          assert data["original_source_four_VSFS_pairs_joined"] is True
+          assert data["source_sha_verified_six_scenes"] is True
+          assert data["source_sha_verified_four_shader_owners"] is True
+          assert data["original_four_D3D11_program_pairs_linked"]==4
+          assert data["original_index_name_to_unity_directive_or_global_scope_proven"] is False
+          assert data["original_material_keyword_variant_runtime_binding_proven"] is False
+          assert data["Unity_Editor_compile_or_Android_GPU_pixels_proven"] is False
+          assert data["source_keyword_names_indices_flags_shader_text_or_paths_published"] is False
+          print("T3_PRIVATE_KEYWORD_NAME_TABLE_CLASSIFIED="+data["table_category"])
           PY
       - name: Erase private staged sources and candidates from runner
         if: always()
