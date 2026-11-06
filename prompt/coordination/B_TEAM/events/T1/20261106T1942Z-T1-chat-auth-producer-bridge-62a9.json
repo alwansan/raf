@@ -1,0 +1,18 @@
+{
+  "id": "T1-WATER-001-20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T19:50:00Z",
+  "summary": "Source-only fail-closed original FFT first butterfly X producer evidence bridge published and passed 14/14 unit tests on Actions 42283086865. Pinned actual-source original SPIR-V writer boundary signed32 Input -> bitcast and translated HLSL vector loop Phi with Private uint32 leaf are visibly different static contexts, while genuine sourcefree Unity OpenGLCore 42279949574 shows 63/64 computed-carrier signed-zero per path vs 0/64 buffered. Source-authentic run logs were independently checked and curated to small safe JSON; tool cannot reauthenticate prior job logs from JSON and proves neither original-vs-Unity numeric divergence, FTZ causality, runtime kernel identity, Android water repair, nor readiness. No native job interrupted.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42220554705",
+    "https://github.com/alwansan/raf/actions/runs/42228497335",
+    "https://github.com/alwansan/raf/actions/runs/42279949574",
+    "https://github.com/alwansan/raf/actions/runs/42283086865",
+    "https://github.com/alwansan/raf/commit/73e40fbbc591557cf8150f7bb36743acd8e22de5"
+  ],
+  "readiness": "WATER-001 OPEN / NOT_READY 0/3 / trial-20261106-r1 T1 لا يحتاج"
+}
