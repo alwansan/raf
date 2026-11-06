@@ -8,3 +8,8 @@
 - owner native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) separate; no new build request, no work on shared T1 FFT, T3 particles, T4 input, T5 delivery.
 - work: prompt/coordination/work/WATER-001/20261106T2217Z-T2-chat-blit-pass-literal-2c9e.json; experiment_key: T2-original-Foam-2xBlit-explicit-pass-literal-stack-adjacent-v1; resource_key: T2 isolated source-only original Mono.Cecil scan; same pinned DLL, public pass argument only
 - next_step: implement strict public pass literal categories, synthetic positive/negative controls and original CI; preserve unknown if any argument computation is not direct.
+
+## Code and CI checkpoint — 2026-11-06T22:19:42.982Z
+- Commit [a36bf27c](https://github.com/alwansan/raf/commit/a36bf27c60959abf1e4128abb31c21b31b2bd133) on feature/android-native-port modifies only T2 Mono.Cecil scanner and safe report/test files. Public `Graphics.Blit` last pass int operand: direct literal0/literal1/other literal/unknown, mixed categories, <=4 NOPs, per exact field read site; no private source or values exported.
+- Source-original [CI42303756960](https://github.com/alwansan/raf/actions/runs/42303756960) auto-triggered, in_progress at checkpoint; do NOT infer original values until full SHA-original report verified; no manual dispatch or native build.
+- Work `prompt/coordination/work/WATER-001/20261106T2217Z-T2-chat-blit-pass-literal-2c9e.json` status waiting_ci; experiment `prompt/coordination/experiments/T2/20261106T2217Z-T2-chat-blit-pass-literal-2c9e.json`. Native [42296450023](https://github.com/alwansan/raf/actions/runs/42296450023) remains outside scope. Next check source-free Python, Cecil selftest, original two typed Material Blit callsite values; if original dynamic, publish unknown.
