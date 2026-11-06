@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T181000Z-T1-chat-carrier-report-gate-4c7d",
+  "issue_id": "WATER-001",
+  "status": "completed_sourceonly_local_adversarial_tests",
+  "vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "لا يحتاج",
+    "unchanged": true
+  },
+  "hypothesis": "Sourcefree 10-category Unity float-carrier context test requires an exact bounded NUnit+metrics result gate to reject stale/spoofed/partial captures and distinguish legitimate diagnostic mismatches from failed baseline controls.",
+  "source_commits": {
+    "gate": "41e016403a179d885fd13c13b6a9eebcaeaa902a",
+    "tests": "204944ec664c4e994d60b87f5fe40e3255fb7126"
+  },
+  "local_evidence": {
+    "python_tests": 14,
+    "python_passed": 14,
+    "compileall": true,
+    "git_blob_shas_match_live_github": true,
+    "script_sha1_blob": "dc5d7492eabf9e680d00e3e28d5f10a93df338ad",
+    "test_sha1_blob": "92983941d0ed90a571e337b8aeb80832c9539198",
+    "source_sha256": "93e6f27dd2e032096c2181048c236ce1789c174f7129412f23eef7e16e47b0c6",
+    "test_sha256": "a69b00d35febd9d373b1f73afa8a8acf8aab84fae322d20b34151532580e9081"
+  },
+  "tool_versions": {
+    "python": "CPython from local runtime, version not pinned",
+    "unity": "Not executed this scope"
+  },
+  "positive_controls": [
+    0,
+    3,
+    4
+  ],
+  "diagnostic_materialization_categories": [
+    1,
+    2,
+    9
+  ],
+  "diagnostic_texture_fetch_categories": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "negative_controls": [
+    "missing/partial/multiple count rows",
+    "noncanonical decimal, CRLF, BOM, trailing text, negative value",
+    "counts >64, invalid number of categories",
+    "wrong/duplicate NUnit case identity",
+    "nonzero Unity exit code",
+    "failed skipped inconclusive suites/cases",
+    "XML error and private failure/reason nodes",
+    "symlink/oversized report files",
+    "positive control nonzero despite reported success",
+    "no raw private XML in public output"
+  ],
+  "new_gpu_run_url": null,
+  "actual_new_unity_gpu_executed": false,
+  "original_shader_or_adreno_proven": false,
+  "limitations": [
+    "No workflow publication or actual Unity run for 10-category fixture",
+    "Synthetic test XML alone cannot authenticate underlying Unity or original game shaders",
+    "No Android build or phone testing"
+  ],
+  "next_step": "Execute new carrier-context fixture only via authorized real Unity runner with strict NUnit+metric gate, or prioritize authentic Unity vs Vulkan original FFT keyed capture; do not vote يحتاج for synthetic checks."
+}
