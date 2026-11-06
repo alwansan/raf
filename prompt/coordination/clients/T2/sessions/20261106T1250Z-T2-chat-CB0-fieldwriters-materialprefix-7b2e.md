@@ -1,7 +1,7 @@
 # T2 — original Foam CB0 scalar field producers + Material prefix
 - session_id: `20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e`
 - origin: `chat`
-- status: `active`
+- status: `completed_original_SHA_Cecil_float_field_writers_material_receiver_prefix`
 - base_sha: `cabf3442d80a63f16261f00ae261e42b2e97fb1d`
 - work registration commit: `58a11097554bfb8a6f72f8c3c2172cd1293607b4`
 - resumed_from_sessions: `20261106T1218Z-T2-chat-cb0-setvector-operands-4d79` (CI [42218712162](https://github.com/alwansan/raf/actions/runs/42218712162) original SHA source success: Vector4 four float constructor, 3 field reads + 1 literal), `20261106T122027Z-T2-scheduled-ci-reconcile-a7c2` (independent SPIR-V pointer proof).
@@ -10,5 +10,16 @@
 - intended_file_scope: `android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs`, its isolated T2 CI, this session and own experiment/event and report; no game original shader, Unity Meta/GUID, assets, scenes, Android build or other T agents' files.
 - hypothesis: at exact source-original CB0 string first formal → one Material.SetVector(string,Vector4), examine whether each of 3 direct constructor `ldfld` sources maps to distinct declared original managed System.Single fields, and count original managed `stfld` writes to those exact private IDs. Separately inspect immediately preceding source-name `ldstr` instruction, stage type and all branch target protections before regarding it as the stack-top receiver source. Never leak exact field identities or infer runtime execution.
 - original pins: ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385, Assembly-CSharp.dll SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e, original Foam owner SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3.
-- no work results claimed yet.
+- run_url: [42220621927](https://github.com/alwansan/raf/actions/runs/42220621927), job `127901459744`: **SUCCESS**, source commit `710ffd83b38554f45e602dba85d01027d7f8b4aa`.
 - next: source-free adversarial Cecil controls and original SHA-gated CI, bounded aggregate-only evidence; preserve no Unity upload proof.
+
+## Completed scope: authentic source field/writer and receiver prefix
+
+- Modified only T2-owned `android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs` and the paired isolated T2 original-source workflow, as one atomic SHA-checked tree commit `710ffd83b38554f45e602dba85d01027d7f8b4aa`. Existing original Shader/DLL source pins and public synthetic name tests preserved; no original managed assembly executed or game source changed.
+- Genuine [CI42220621927](https://github.com/alwansan/raf/actions/runs/42220621927) **SUCCESS** (11/11 source-free tests, Cecil synthetic field/receiver positive/negative/branch protections, exact ZIP2 owner and Assembly-CSharp.dll SHAs verified).
+- New original typed IL values for exactly **one** authenticated Foam CB0 member-name `Material.SetVector(string,Vector4)` caller: `Vector4` has four `float` inputs, three from `ldfld`. The three actual ctor operands are **three distinct `System.Single` FieldReference IDs declared in one original class**. Across original 19,512 managed methods/491,490 IL instructions, **three** `stfld` instruction sites target those exact private field identities; **all three sites in one compiled method**. Each field has one detected site.
+- Receiver field check: before the original `ldstr`, the immediate previous IL op is a `ldfld` with public field type `UnityEngine.Material`; strict branch-to-literal and exception-handler entry guards pass. This is **typed receiver source evidence, not original Material.shader Foam identity**. Actual scalar field values, original writer method runtime execution/condition, complete serialized 160B CB0 upload, Unity import and Adreno water pixels **not proven**.
+- Privacy: no original field names/declaring class labels, original numeric literal, method/class identities, source IL, original DLL/Shader bytes, source hash tokens or descriptor indices logged or published. Only public Unity types and aggregate counts.
+- Report: [field/writer and receiver origin](../../../../../docs/T2_FOAM_ORIGINAL_CB0_FIELD_WRITERS_RECEIVER_2026-11-06.md); experiment `prompt/coordination/experiments/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.json`; canonical result `prompt/coordination/B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json`; work `prompt/coordination/work/WATER-001/T2-20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.json` **completed**.
+- Cross-team handoff: [T2 → T1/T5](../../../discussions/WATER-001/20261106T1250Z-T2-foam-CB0-fieldwriter-receiver-to-T1T5.md) with exact CI and new source gates.
+- Next distinct task: authenticate original `Material` field assignment/real Shader Foam identity, examine 3 writer field source/value provenance and all five serialized Foam CB0 members. Do not repeat this now-complete writer census. Coordinate Unity/Adreno device work with T1/T5. `WATER-001` OPEN, NOT_READY.
