@@ -1,0 +1,93 @@
+name: T1 WATER-001 actual original FFT Phi entry/backedge CPU Vulkan counters
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t1_fft_site2_y_phi_vulkan_runtime.py
+      - tests/test_t1_fft_site2_y_phi_vulkan_runtime.py
+      - .github/workflows/raft-t1-fft-site2y-phi-vulkan-runtime.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-original-fft-site2y-phi-cpu-vulkan-\${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-counter-and-invariance-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify private counter bounds, original input isolation and readback controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_vulkan_runtime.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_site2_y_phi_path_tag.py -v
+          python3 -m py_compile scripts/t1_fft_site2_y_phi_vulkan_runtime.py scripts/t1_fft_site2_y_phi_path_tag.py
+          echo 'RAFT_T1_FFT_PHI_PATH_CPU_VULKAN_CONTROLS sourcefree_only=true original_raft_loaded=false'
+
+  original-private-cpu-vulkan:
+    needs: synthetic-counter-and-invariance-controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      VK_LOADER_DEBUG: 'none'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Install source-auth CPU shader translators and Mesa Vulkan
+        run: |
+          set -euo pipefail
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 3145728
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y --no-install-recommends \
+            vkd3d-compiler spirv-tools spirv-cross glslang-tools \
+            libvulkan-dev mesa-vulkan-drivers g++ python3-venv
+          python3 -m venv "$RUNNER_TEMP/t1-site2y-phi-vulkan-env"
+          "$RUNNER_TEMP/t1-site2y-phi-vulkan-env/bin/python" -m pip install \
+            --disable-pip-version-check -q UnityPy==1.25.4
+      - name: Recover the precise original FFT owner from immutable ZIP2 without LFS
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2"
+          git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" init -q
+          git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" \
+            --destination "$RUNNER_TEMP/t1-site2y-phi-vulkan-owner/Raft_Data/sharedassets0.assets"
+      - name: Two physically independent Mesa Vulkan dispatches; count Phi edges and compare pixel output
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t1-site2y-phi-vulkan-env/bin/python" -m scripts.t1_fft_site2_y_phi_vulkan_runtime \
+            --original-data "$RUNNER_TEMP/t1-site2y-phi-vulkan-owner/Raft_Data" \
+            --vulkan-host scripts/a1_fft_two_pass_vulkan.cpp
+          echo 'RAFT_T1_FFT_PHI_CPU_VULKAN_BOUNDS backend=software_cpu_vulkan original_authored_kernel=false unity2021=false android_water=false'
+      - name: Erase private SHA original, translated shaders, Vulkan pixel/counter bytes and Python environment
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/t1-site2y-phi-vulkan-owner" "$RUNNER_TEMP/t1-site2y-phi-vulkan-zip2" \
+                 "$RUNNER_TEMP/t1-site2y-phi-vulkan-env"
