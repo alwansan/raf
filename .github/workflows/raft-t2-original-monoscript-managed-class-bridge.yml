@@ -51,6 +51,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0 -q
+          install -d -m 0700 -- "$RUNNER_TEMP/t2-original-class-bridge-stage"
           timeout 800s python3 -m scripts.t2_original_monoscript_managed_class_bridge \
             --zip2 "$GITHUB_WORKSPACE/t2-original-source-managed" \
             --scratch "$RUNNER_TEMP/t2-original-class-bridge-stage" \
