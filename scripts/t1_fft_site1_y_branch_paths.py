@@ -163,7 +163,7 @@ def path_witness(fun, load_id, physical_lane, base, shape, values, types):
         "may_visit_bitcarrier_and_float_constant_on_same_cfg_path":
             any(bit and const for _, bit, const, _, _, _ in endings),
         "conditional_predicate_producers_seen_on_paths_by_final_writer":
-            {k: sorted(v) for k, v in sorted(pred_by_final.items())},
+            {k: sorted(pred_by_final.get(k, set())) for k in sorted(final)},
         "backward_cfg_edge_seen_by_final_writer":
             {k: v for k, v in sorted(backwards_by_final.items())},
         "unknown_final_writer_path_possible": "unknown_write" in final,
