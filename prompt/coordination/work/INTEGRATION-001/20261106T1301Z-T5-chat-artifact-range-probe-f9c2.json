@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_real_envelope_zip_metadata_verified_inner_hash_not_verified",
   "base_sha": "cf5d3c38456e0d7b2b50a6e73680ab8c01f1256a",
-  "updated_at": "2026-11-06T12:59:21.738Z",
+  "updated_at": "2026-11-06T13:07:56.291Z",
   "resumed_from_sessions": [
     "20261106T1243Z-T5-chat-zip-local-headers-9e2a.md",
     "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
@@ -32,5 +32,22 @@
     "No inner actual signed APK/OBB SHA/cert/device claims absent full downloads",
     "Bound ZIP member counts/metadata, no original filenames or game resource bytes in reports"
   ],
-  "next_step": "Implement safe range seek adapter for actual Action v4 artifact ZIP; run synthetic tests and live read-only runner; save source-only envelope observations and limits."
+  "next_step": "Separate experiment: inspect checkpoint's real nested APK and OBB central metadata only if outer files ZIP_STORED; keep byte budget, no bulk download.",
+  "source_commit": "edce82b5e9f93ef73fed6dcd4cb85876b960aa0e",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42222494746"
+  ],
+  "result": {
+    "ci": "success",
+    "run_id": 42222494746,
+    "job_id": 127907699077,
+    "source_free_tests": 11,
+    "actual_ranged_zip_read": true,
+    "actual_delivery_zip_members": 12,
+    "actual_checkpoint_zip_members": 2,
+    "remote_range_bytes_total": 3468,
+    "delivery_version_code": "89",
+    "original_signed_inner_file_hashes_verified": false,
+    "phone_tested": false
+  }
 }
