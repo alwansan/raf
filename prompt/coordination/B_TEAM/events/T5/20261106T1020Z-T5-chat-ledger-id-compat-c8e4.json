@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
+  "owner": "T5",
+  "session_id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
+  "origin": "chat",
+  "issue_id": "COORD-001",
+  "type": "integration",
+  "at": "2026-11-06T10:21:47.004Z",
+  "summary": "Canonical inherited ledger parser now accepts explicit event_id event records with strict conflict/duplicate/invalid identity rejection. T5 independent 14/14 tests and live 350-event build passed; summary pushed without force, no Unity or phone build.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/94b8e83e06064ec29e714dda413247cd909811cf",
+    "https://github.com/alwansan/raf/commit/bfa53c3f88f16d0b34dd8e20cd60a6bc8a0abd9f",
+    "https://github.com/alwansan/raf/commit/8a6f3ab61ca9a68f3cc755a5b18599fb3141f9de",
+    "https://github.com/alwansan/raf/actions/runs/42201831309"
+  ],
+  "limits": "Team evidence source-only, water/FFT/render and device acceptance remain OPEN.",
+  "work_path": "prompt/coordination/work/COORD-001/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json",
+  "experiment_path": "prompt/coordination/experiments/T5/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json",
+  "updated_at": "2026-11-06T10:21:47.004Z"
+}
