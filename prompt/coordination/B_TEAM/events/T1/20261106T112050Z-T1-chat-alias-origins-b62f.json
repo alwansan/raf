@@ -1,0 +1,14 @@
+{
+  "id": "20261106T112050Z-T1-chat-alias-origins-b62f",
+  "owner": "T1",
+  "session_id": "20261106T112050Z-T1-chat-alias-origins-b62f",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-authenticated FFT original slot0 alias-store pointer form proved to be statically indexed OpAccessChain (source+butterfly1 four static alias writes each; butterfly2 eight). Both X and Y pre-load paths may include such writes. CI 42209856944 SUCCESS with 11/11 new synthetic controls and original private SPIR-V audit. Static indices do not prove per-component reaching value or original integer semantics; no shader rewrite/Android water acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42209856944",
+    "https://github.com/alwansan/raf/commit/1979568f7741872e6ac965fe7b73eee1d48f9331",
+    "https://github.com/alwansan/raf/actions/runs/42208932160"
+  ],
+  "at": "2026-11-06T11:25:07.386Z"
+}
