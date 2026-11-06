@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1926Z-T5-chat-log-dedup-allocation-e5c8",
+  "origin": "chat",
+  "issue_id": "PERF-007",
+  "status": "waiting_ci",
+  "experiment_key": "T5-PERF007-persistent-Unity-repeated-error-dictionary-composite-key-nonalloc-2000x4096chars-net8-CI-v1",
+  "hypothesis": "Composite pair key for existing error string references removes duplicate concatenation allocations per repeated long Unity stack, without weakening first stack, typed boundary, capacity overflow, per-session reset or persisted summary.",
+  "source_commit": "4e909cac516b021b23e06e55e2a1d72cc3777e67",
+  "input_hashes": [],
+  "tool_versions": {
+    "test_runner": "dotnet 8.0 on ubuntu-24.04",
+    "production_target": "Unity2021 Android netstandard2.1 source compiled in tests using stubs"
+  },
+  "commands": [
+    "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "2048 repeat same 4K stack must allocate below 128KiB and be suppressed",
+    "64 prior repeats included in exact aggregate count 2112",
+    "first original error stack and repeat_summary remain intact",
+    "different operation/detail pairs separated as existing DIAG-010 test",
+    "capacity 128 overflow still passes through",
+    "logger init/shutdown and fault handling unchanged"
+  ],
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42279780260",
+    "https://github.com/alwansan/raf/actions/runs/42279975562"
+  ],
+  "budget": "existing CPU-only dotnet CI no Unity license, no original assets",
+  "observed_result": {
+    "red_commit": "a8dc28508728f802e6e35b89cb08b4042cc8b56f",
+    "red_run": 42279780260,
+    "red_reason": "Persistent logging check failed: 280 at new repeated stack allocation assertion"
+  },
+  "limitations": [
+    "actual logcat volume does not equal number of managed First calls",
+    "no Android FPS/CPU/GC measured; must not claim perf gain on phone",
+    "original water pass and FFT invalid kernel root cause unchanged"
+  ],
+  "next_step": "Check green CI exact source, finalize scope."
+}
