@@ -45,6 +45,49 @@ class PrivateStageFamilyTests(unittest.TestCase):
         counts=m._stage_evidence(fixture(),reflected(ubos=1,textures=1,samplers=0))
         self.assertEqual(counts["dcl_sampler_but_no_spv_sampler_category"],0)
 
+    def test_exact_same_stage_resource_counts_across_all_four_families(self):
+        counts=m._stage_evidence(fixture(),reflected(ubos=1,textures=1,samplers=0))
+        self.assertEqual(counts["stage_all_four_resource_family_cardinalities_equal"],1)
+        for family in ("cbuffer","srv","sampler","uav"):
+            self.assertEqual(counts["stage_"+family+"_cardinality_mismatch"],0)
+            self.assertEqual(counts["stage_"+family+"_absolute_descriptor_count_delta"],0)
+
+    def test_missing_one_resource_in_same_stage_does_not_hide_behind_presence(self):
+        rows=fixture()+(("srv",88,(5,)),)
+        counts=m._stage_evidence(rows,reflected(ubos=1,textures=1,samplers=1))
+        self.assertEqual(counts["dcl_srv_but_no_spv_image_category"],0)
+        self.assertEqual(counts["stage_srv_cardinality_equal"],0)
+        self.assertEqual(counts["stage_srv_cardinality_mismatch"],1)
+        self.assertEqual(counts["stage_srv_absolute_descriptor_count_delta"],1)
+        self.assertEqual(counts["stage_all_four_resource_family_cardinalities_equal"],0)
+
+    def test_cross_stage_counterbalancing_detected_despite_matching_total(self):
+        from collections import Counter
+        # Stage 1 has two original CBs, one translated UBO; stage 2 has
+        # one original CB, two translated UBOs. Global totals both three.
+        first=(("cbuffer",89,(2,8)),("cbuffer",89,(3,8)))
+        second=(("cbuffer",89,(2,8)),)
+        a=m._stage_evidence(first,reflected(ubos=1,textures=0,samplers=0))
+        b=m._stage_evidence(second,reflected(ubos=2,textures=0,samplers=0))
+        sum_counts=Counter(a)+Counter(b)
+        self.assertEqual(sum_counts["source_decl_cbuffer"],3)
+        self.assertEqual(sum_counts["spv_reflected_ubos"],3)
+        self.assertEqual(sum_counts["stage_cbuffer_cardinality_mismatch"],2)
+        self.assertEqual(sum_counts["stage_cbuffer_absolute_descriptor_count_delta"],2)
+        self.assertEqual(sum_counts["stage_all_four_resource_family_cardinalities_equal"],0)
+
+    def test_stage_cardinality_not_misreported_as_descriptor_register_provenance(self):
+        pairs=[(b"\x01",b"\x00") for _ in range(4)]
+        with tempfile.TemporaryDirectory() as d,patch.object(
+                m.dx,"_private_stage_layout",return_value=fixture()):
+            r=m.classify(pairs,Path(d),
+                        translator=lambda _blob,stage,_dir:{
+                            "stage":stage,"vulkan11_valid":True},
+                        reflector=lambda _path:reflected())
+        self.assertEqual(r["counts"]["stage_all_four_resource_family_cardinalities_equal"],8)
+        self.assertFalse(r["original_to_SPIRV_descriptor_register_provenance_proven"])
+        self.assertTrue(r["per_stage_family_count_equality_is_not_register_identity"])
+
     def test_duplicate_primary_source_register_rejected(self):
         with self.assertRaisesRegex(ValueError,"DUPLICATE_PRIVATE_PRIMARY_REGISTER"):
             m._stage_evidence(fixture()+(("cbuffer",89,(2,12)),),reflected())
