@@ -30,10 +30,11 @@ jobs:
       - name: Run source-free exact source-vs-export and immutable resource contract controls
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t3_particle_same_export_bindings.py scripts/t3_original_particle_material_texenv.py
+          python3 -m py_compile scripts/t3_particle_same_export_bindings.py scripts/t3_original_particle_material_texenv.py scripts/t3_particle108_shaderlab_export_quality.py
           # Source class21 Materials have exactly three valid original
           # owner files; the fourth SHA-authenticated owner is Shader48 only.
           python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_export_quality.py' -v
           # A single source Texture2D may feed several Material TexEnv slots;
           # count original object/slot multiplicities independently.
           python3 -m unittest discover -s tests -p 'test_t3_stage_particle_nonexportable_trace.py' -v
@@ -232,6 +233,32 @@ jobs:
           assert d["compiled_Unity_ShaderLab_or_Android_pixels_verified"] is False
           print("RAFT_T3_ACTUAL_SAME_INSTANCE_PARTICLE108_EXPORT_COMPARISON_COMPLETED=true")
           PY
+      - name: Trace exact SHA-original highest-use Particle Shader48 to exported ShaderLab program/dummy marker
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_particle108_shaderlab_export_quality \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/t3-particle-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/t3-particle-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/t3-particle-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-particle108-shaderlab-quality-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t3-particle108-shaderlab-quality-safe.json"
+          d=json.loads(p.read_text())
+          assert d["status"]=="T3_ORIGINAL_PARTICLE108_REAL_SAMEEXPORT_SHADERLAB_CLASSIFIED"
+          assert d["original_particle_use_slots"]==108
+          assert d["source_to_export_Shader48_trace_verified"] is True
+          assert d["same_export_instance_W1_B02_verified"] is True
+          assert d["original_six_scene_SHA_verified"] is True
+          assert d["original_four_shader_owner_SHA_verified"] is True
+          assert d["original_private_Shader48_name_owner_id_export_guid_not_published"] is True
+          assert d["native_Unity_Android_GPU_pixels_verified"] is False
+          assert d["source_particle108_is_phone_square_emitter_verified"] is False
+          print("RAFT_T3_REAL_SOURCE_PARTICLE108_SHADERTEXT_CLASSIFIED=true android_pixels_verified=false")
+          PY
       - name: Upload only safe source and export numeric aggregates
         if: always()
         uses: actions/upload-artifact@v4
@@ -241,5 +268,6 @@ jobs:
             ${{ runner.temp }}/t3-particle-safe-source.json
             ${{ runner.temp }}/t3-particle-safe-source-bytes.json
             ${{ runner.temp }}/t3-particle-safe-export-result.json
+            ${{ runner.temp }}/t3-particle108-shaderlab-quality-safe.json
           retention-days: 7
           if-no-files-found: ignore
