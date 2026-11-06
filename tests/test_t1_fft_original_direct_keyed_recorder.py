@@ -50,7 +50,15 @@ class OriginalDirectKeyedTraceTests(unittest.TestCase):
         self.assertEqual(result.count("%gid = OpVariable"), 1)
         self.assertIn("OpLoad %v3s32 %gid", result)
         self.assertIn("OpBitcast %t1_original_trace_v3u", result)
-        self.assertIn('OpEntryPoint GLCompute %main "main" %gid %t1_original_trace_buffer', result)
+        # SPIR-V 1.3 OpEntryPoint interfaces list Input/Output only.
+        self.assertIn('OpEntryPoint GLCompute %main "main" %gid', result)
+        self.assertNotIn('OpEntryPoint GLCompute %main "main" %gid %t1_original_trace_buffer', result)
+
+    def test_storage_buffer_is_not_an_entrypoint_interface_in_vulkan_11(self):
+        p = instrument(BASE)
+        entry = next(row for row in p.splitlines() if row.startswith("OpEntryPoint"))
+        self.assertEqual(entry.strip(), 'OpEntryPoint GLCompute %main "main" %gid')
+        self.assertIn("%t1_original_trace_buffer = OpVariable", p)
 
     def test_all_three_site_occurrence_counters_are_function_local(self):
         result = instrument(BASE)
