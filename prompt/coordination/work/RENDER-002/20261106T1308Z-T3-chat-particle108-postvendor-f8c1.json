@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "6e498046b70129bfa255e248fc65292818f966fe",
   "resumed_from_sessions": [
     "20261106T1125Z-T3-chat-glslang-iomap-d37f",
@@ -29,8 +29,20 @@
   "resource_key": "T3-bounded-12-owner-original-export-38min-no-native",
   "hypothesis": "Same-instance genuine original 108-use Particle Shader48 remains an AssetRipper dummy after the official vendor restorers; previous evidence shows pre-restorer dummy and separately top921 source dummy, not exact 108 postvendor outcome.",
   "approach": "Reuse only existing manual T3 12-owner SHA-original CI; obtain exact pre/post source-selected W1 Shader48 GUID classification with same W1/B02 exporter, fail-closed comparison safe public counts and statuses. Add isolated guarded diagnostic controls; do not alter game files.",
-  "run_urls": [],
-  "updated_at": "2026-11-06T13:04:00.087Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42222939320",
+    "https://github.com/alwansan/raf/actions/runs/42223071341"
+  ],
+  "updated_at": "2026-11-06T13:11:04.827Z",
   "limits": "No Unity/APK/Adreno pixel proof; one bounded original source experiment; no secrets/raw assets/GUIDs/hashes in artifacts; no active T1/T2/T4/T5 tasks affected.",
-  "next_step": "Read existing postvendor workflow stage points, insert pre/post private classifications and safe delta, validate source-free controls, execute once and record terminal CI result."
+  "next_step": "Inspect 42223071341 terminal job and only safe pre/post/delta JSON; if necessary use new scoped work for data-backed patch, do not duplicate while running; update this same work+session+experiment with terminal status.",
+  "synthetic_source_free_ci_conclusion": "success",
+  "exact_original_export_run_id": 42223071341,
+  "exact_original_export_job_id": 127909618354,
+  "exact_original_export_sha": "90149d3f7ec3f89a40dcaad976f8102737370693",
+  "results": {
+    "source_free_tests": "PASS 8 unittest controls",
+    "real_original_asset_before_after": "PENDING_CI",
+    "android_pixels": "NOT_TESTED"
+  }
 }
