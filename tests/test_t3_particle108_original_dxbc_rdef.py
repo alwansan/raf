@@ -139,7 +139,7 @@ class OriginalRdefTests(unittest.TestCase):
         one=synthetic_dxbc([])
         first=one[36:]
         second_offset=40+len(first)
-        duplicate=(b"DXBC"+b"\\x00"*16+
+        duplicate=(b"DXBC"+b"\x00"*16+
                    struct.pack("<III",1,second_offset+len(first),2)+
                    struct.pack("<II",40,second_offset)+first+first)
         # This is a VALID duplicate-RDEF DXBC container, not a malformed header.
