@@ -1,0 +1,15 @@
+{
+  "id": "20261106T1730Z-T3-chat-primary-index-4d8c",
+  "owner": "T3",
+  "session_id": "20261106T1730Z-T3-chat-primary-index-4d8c",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Authenticated source Particle108 VS has 4 full DCL layouts but 3 primary register mappings (CB primary 3, SRV/sampler stable 1); PS has 2 full/primary mappings (CB stable 1, SRV and sampler 2). This is original 8-stage SHA-pinned CPU evidence at CI42262329490 SUCCESS after 16/16 source-free tests CI42262190492. Register numbers private; 2D CB auxiliary index semantics, Vulkan binding, Unity GPU and phone colors NOT proven. RENDER-002 OPEN/NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42262329490",
+    "https://github.com/alwansan/raf/actions/runs/42262190492",
+    "prompt/coordination/clients/T3/sessions/20261106T1730Z-T3-chat-primary-index-4d8c.md"
+  ],
+  "at": "2026-11-06T17:33:38.932Z"
+}
