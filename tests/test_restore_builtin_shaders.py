@@ -24,6 +24,43 @@ class BuiltinShaderTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'fingerprint'):
             archive_sources(b'not authenticated')
 
+    def test_rollback_preserves_externally_changed_created_include(self):
+        # Two independent synthetic races: same inode modified in place, and
+        # a replacement inode installed after our complete include write.
+        # Neither is owned by the failed restoration at rollback time.
+        for kind in ('edit', 'replace'):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                project, shader, custom, shaders, files = self.fixture(root)
+                original_shader = shader.read_bytes()
+                meta = Path(str(shader) + '.meta')
+                original_meta = meta.read_bytes()
+                include = project / ROOT / 'CGIncludes/UnityCG.cginc'
+                external = b'external-after-builtin-include-publish'
+                original_replace = os.replace
+
+                def fail_after_additions(source, destination):
+                    if Path(destination) == shader:
+                        if kind == 'replace':
+                            include.unlink()
+                        include.write_bytes(external)
+                        raise OSError('injected shader publish failure after external edit')
+                    return original_replace(source, destination)
+
+                with mock.patch('scripts.restore_builtin_shaders.os.replace',
+                                side_effect=fail_after_additions):
+                    with self.assertRaisesRegex(RuntimeError, 'rollback incomplete'):
+                        restore_project(project, root / 'backup', shaders, files, b'MIT')
+
+                self.assertEqual(include.read_bytes(), external)
+                self.assertEqual(shader.read_bytes(), original_shader)
+                self.assertEqual(meta.read_bytes(), original_meta)
+                self.assertEqual((root / 'backup/Shader/standard.shader').read_bytes(),
+                                 original_shader)
+                self.assertFalse((project / NOTICE).exists())
+                self.assertFalse((project / ROOT / 'license.txt').exists())
+                self.assertTrue(custom.exists())
+
     def test_restore_preserves_metadata_custom_shader_and_exact_backup(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

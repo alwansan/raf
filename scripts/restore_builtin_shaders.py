@@ -270,8 +270,20 @@ def restore_project(project, backup, shaders, files, license, engine_inputs=None
             # Exclusive create avoids overwriting a file added after preflight.
             # Record it only once opened, so a concurrent file is never deleted.
             with path.open('xb') as stream:
-                created_additions.append(path)
+                # Keep the identity of the inode WE exclusively created.
+                # Later rollback must not unlink a replacement or modified
+                # dependency installed by another worker after this point.
+                try:
+                    created_stat = os.fstat(stream.fileno())
+                except (AttributeError, io.UnsupportedOperation):
+                    # Synthetic interrupted-write wrappers can hide fileno;
+                    # production FileIO uses the descriptor-backed identity.
+                    created_stat = path.stat()
+                created = {'path': path, 'identity': (created_stat.st_dev, created_stat.st_ino),
+                           'content': content, 'complete': False}
+                created_additions.append(created)
                 stream.write(content)
+            created['complete'] = True
         for path, content, original, meta, metadata in plan:
             # All source bytes were snapshotted before the backup. A separate
             # exporter/agent may have changed them while dependencies staged:
@@ -301,9 +313,31 @@ def restore_project(project, backup, shaders, files, license, engine_inputs=None
         finally:
             # Remove temporary dependencies created by this attempt, not
             # pre-existing files which were never rewritten.
-            for path in reversed(created_additions):
-                if path.is_file() and not path.is_symlink():
+            for created in reversed(created_additions):
+                path = created['path']
+                try:
+                    if path.is_symlink():
+                        raise ValueError('Created built-in dependency replaced by symlink before rollback')
+                    if not path.exists():
+                        continue
+                    if not path.is_file():
+                        raise ValueError('Created built-in dependency type changed before rollback')
+                    current = path.stat()
+                    if (current.st_dev, current.st_ino) != created['identity']:
+                        raise ValueError('Created built-in dependency inode changed before rollback')
+                    if current.st_size > len(created['content']):
+                        raise ValueError('Created built-in dependency expanded before rollback')
+                    actual = path.read_bytes()
+                    if created['complete']:
+                        if actual != created['content']:
+                            raise ValueError('Created built-in dependency edited before rollback')
+                    elif not created['content'].startswith(actual):
+                        # Preserve the A15 own-partial-write cleanup, but do
+                        # not unlink an externally changed partial entry.
+                        raise ValueError('Partial built-in dependency edited before rollback')
                     path.unlink()
+                except BaseException as error:
+                    rollback_errors.append(error)
         if rollback_errors:
             raise RuntimeError(
                 'Built-in shader rollback incomplete; exact originals retained '
