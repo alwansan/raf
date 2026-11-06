@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T175623Z-T1-chat-float-carrier-context-b82c",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "6af6fba382e5f7dc050070c4620abf140f1e6820",
+  "updated_at": "2026-11-06T17:56:40.506Z",
+  "resumed_from_sessions": [
+    "20261106T174500Z-T1-chat-phimerge-opengl-g6k2",
+    "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+    "20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4"
+  ],
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "لا يحتاج",
+    "last_vote_commit": "d5330515a091e4503187040361cad226a01fb35b",
+    "will_modify_vote": false
+  },
+  "hypothesis": "Actual sourcefree Unity OpenGLCore canary 42129683073 exposes 63/64 asuint(asfloat(uint)) bitcarrier errors despite 0 integer and normal-float errors; later 42261467757 simple bitcarrier Texture2D.Load shows 320/320 exact. The discrepancy may be context-dependent compiler optimization or subnormal FTZ, and original authentic Unity butterfly X collapses to a constant.",
+  "experiment_key": "t1-water001-openglcore-float32-bitcarrier-context-compute-output-vs-image-load-same-dispatch-64-lanes-direct-vs-products-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port-Unity2021",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftCarrierContext.compute",
+    "android-port/Experiments/T1/T1FftCarrierContextTests.cs",
+    "tests/test_t1_fft_carrier_context_fixture.py",
+    ".github/workflows/raft-t1-fft-unity-carrier-context.yml",
+    "prompt/coordination/work/WATER-001/20261106T175623Z-T1-chat-float-carrier-context-b82c.json",
+    "prompt/coordination/clients/T1/sessions/20261106T175623Z-T1-chat-float-carrier-context-b82c.md",
+    "prompt/coordination/experiments/T1/20261106T175623Z-T1-chat-float-carrier-context-b82c.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T175623Z-T1-chat-float-carrier-context-b82c.json"
+  ],
+  "approach": "In one public authored ComputeShader/Unity2021 OpenGLCore dispatch, compare raw asuint(asfloat(x)), float subnormal arithmetic, normal float control and sampled Texture2D.Load for same coordinates. Return bounded 0–64 category mismatch counts, verify strict real NUnit and positive controls. Do not touch actual Raft shader or run APK.",
+  "evidence_baseline": [
+    "https://github.com/alwansan/raf/actions/runs/42129683073",
+    "https://github.com/alwansan/raf/actions/runs/42261467757",
+    "https://github.com/alwansan/raf/actions/runs/42264618337",
+    "https://github.com/alwansan/raf/actions/runs/42198180194",
+    "https://github.com/alwansan/raf/actions/runs/42254539826"
+  ],
+  "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not acquired)",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement source-free same-dispatch bitcarrier context discriminator, run pinned Unity2021 GameCI. Revisit T1 vote only if a substantial original in-game FFT fix is integrated, not on synthetic test."
+}
