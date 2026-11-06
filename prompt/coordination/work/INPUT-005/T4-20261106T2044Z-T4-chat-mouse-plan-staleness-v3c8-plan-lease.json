@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "track": "authenticated-original-mouse-application-plan-source-consistency",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "1b6191f234a364108aa4e80457ed9ca61c574812",
   "intended_files": [
     "scripts/t4_adapt_original_mouse_axes.py",
@@ -21,7 +21,12 @@
     "20261106T2035Z-T4-scheduled-native-failure-h7q2",
     "20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-06T20:44:00Z",
-  "next_step": "Add RED synthetic source-change-during-plan regression, verify failed current code; then minimal fail-closed guard and GREEN CI; coordinate T5 by evidence only."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42290968831",
+    "https://github.com/alwansan/raf/actions/runs/42291057653"
+  ],
+  "updated_at": "2026-11-06T20:46:00Z",
+  "next_step": "Await exact-sha CI42291057653; if green, complete and release. Do not request full native Unity build.",
+  "negative_control_commit": "902acf7205cfc3efcb9ef89c449972f70659bb2f",
+  "integration_commit": "65635d6086cfc9dd19a5989a31562882ed367419"
 }
