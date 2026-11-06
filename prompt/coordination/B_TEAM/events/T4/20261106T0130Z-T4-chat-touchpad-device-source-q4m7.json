@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "type": "source_integration",
+  "at": "2026-11-06T01:33:00Z",
+  "summary": "Official Android InputDevice declares captured trackpad event MotionEvent.getSource normally SOURCE_MOUSE while device.getSources advertises SOURCE_TOUCHPAD. T4 added event+device two-source classification and scoped getDevice capability fetch for captured SOURCE_MOUSE; regular mouse/touchscreen/unknown fall back to Unity. Source/authentic original Unity2021 ABI CI42144434260 SUCCESS, 40/40 Python, 48/48 .NET, original 4+4+2 private game sites. No Android player/device verification and INPUT-005 OPEN.",
+  "evidence": [
+    "https://developer.android.com/reference/android/view/InputDevice#SOURCE_TOUCHPAD",
+    "https://github.com/alwansan/raf/actions/runs/42144434260",
+    "https://github.com/alwansan/raf/commit/bf0f32326952ff5c4ff44e5df168ef1c701eb942",
+    "prompt/coordination/experiments/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json"
+  ],
+  "limitations": "Android hardware input and owner world/save/exit/reopen still require same-source signed POCO F5 Pro candidate; no game build, no T5 UI modification."
+}
