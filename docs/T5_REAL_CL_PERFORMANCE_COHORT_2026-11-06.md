@@ -33,3 +33,14 @@ Run: https://github.com/alwansan/raf/actions/runs/42145219506 — **check its ac
 When a later Android test is performed with a **matched signed APK/OBB identity, same world/scene, same render scale/quality, and captured `FrameTimingManager`/SurfaceFlinger freshness**, compare distributions (gameplay frame p50 and p95, error roots/s, CPU, system GPU busy with caveats, memory/RSS/PSS separately). Do not project older sample counts onto newer builds. Independently resolve WATER-001/RENDER-002 shader/kernel roots with T1–T3 and preserve working singleplayer save/audio. This work does not repair water or improve FPS directly; it prevents an unsupported success verdict and pinpoints the telemetry gap to close.
 
 Status: PERF-007 diagnostic scope pending CI; original full game readiness NOT_READY 0/3.
+
+## Completed source-authenticated CI — 2026-11-06 01:39 UTC
+
+[Run 42145219506](https://github.com/alwansan/raf/actions/runs/42145219506), job **127654944860**, exact workflow source `7c0f7fb78a178d32c3539b35b661a848ffa8a9b9`: **COMPLETED SUCCESS**.
+
+- **18/18** synthetic positive and negative controls passed (0.005s); `py_compile` passed.
+- Actual CL metrics files downloaded read-only, pinned to source commit; verified both original Git blob SHA1 identities, sizes **374,587** and **646,527** bytes. No raw telemetry uploaded as artifact or exposed in CI outputs.
+- Output on genuine 190 records reproduced **57 vs 2** valid SurfaceFlinger FPS samples, **6 vs 105** stale, first render-error samples **11 vs 16**, and **57 vs 0** valid FPS samples at/after observed render error phase. The first session post-error fresh FPS sample median was **23.87**, min **3.02**, max **33.56**; second has **no valid post-error SurfaceFlinger FPS**, so **NOT_COMPARABLE_inadequate_fresh_post_render_error_samples**.
+- This is a **diagnostic refusal of an unsupported comparison**, not proof the game froze or got faster. In fact, contemporaneous Unity internal persistent JSONL data also exist and must be independently linked/qualified; SurfaceFlinger unavailability is NOT Unity frame unavailability.
+
+Next independent T5 work should analyze actual `raft-logs` game-side interval measurements with scene identity and startup/frame window gates; do not infer comparative FPS from their simple averages either.
