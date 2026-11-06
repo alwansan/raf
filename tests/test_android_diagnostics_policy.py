@@ -143,3 +143,52 @@ class PerformanceHudContract(unittest.TestCase):
         text = (Path(__file__).resolve().parents[1] / "android-port/Runtime/Platform/AndroidTestDiagnostics.cs").read_text()
         for marker in ("RAM system used/total:", "game PSS:", "CPU system:", "GPU: unavailable", "Texture2D.whiteTexture", "Color.black", "Color.white"):
             self.assertIn(marker, text)
+
+    def test_perf_scene_window_provenance_keeps_transition_stalls(self):
+        # Actual Nov 5 phone logs contained mixed MainMenuScene -> MainScene
+        # 5s intervals labeled only by the *ending* scene. Keep the real
+        # slow frames, but mark attribution unsafe for per-scene benchmarks.
+        source = (Path(__file__).resolve().parents[1] /
+                  "android-port/Runtime/Platform/AndroidTestDiagnostics.cs").read_text()
+        perf = source.split("private string PerformanceSample()", 1)[1]
+        perf = perf.split("private static void ReportPriorExits()", 1)[0]
+        update = source.split("private void Update()", 1)[1]
+        update = update.split("private void OnGUI()", 1)[0]
+        active = source.split("private void ActiveSceneChanged(Scene before, Scene after)", 1)[1]
+        active = active.split("private void OnApplicationPause(bool paused)", 1)[0]
+        loaded = source.split("private void SceneLoaded(Scene scene, LoadSceneMode mode)", 1)[1]
+        loaded = loaded.split("private static string OriginalQualityStateSnapshot()", 1)[0]
+        unloaded = source.split("private static void SceneUnloaded(Scene scene)", 1)[1]
+        unloaded = unloaded.split("private void ActiveSceneChanged(", 1)[0]
+        paused = source.split("private void OnApplicationPause(bool paused)", 1)[1]
+        paused = paused.split("private void OnApplicationFocus(", 1)[0]
+
+        self.assertIn("SceneManager.activeSceneChanged += ActiveSceneChanged;", source)
+        self.assertIn("if (intervalFrames > 0) activeSceneTransitionsInWindow++;", active)
+        self.assertNotIn("intervalFrames = ", active)
+        self.assertNotIn("sampleCount = ", active)
+        self.assertNotIn("skipNextFrame", active)
+        self.assertIn("sceneContentRevision++;", loaded)
+        self.assertIn("sceneContentRevision++;", unloaded)
+        self.assertNotIn("intervalFrames =", loaded)
+        self.assertNotIn("intervalFrames =", unloaded)
+
+        self.assertIn("if (intervalFrames == 0)", update)
+        self.assertLess(update.index("frameWindowStartScene = SceneManager.GetActiveScene().name;"),
+                        update.index("intervalFrames++; intervalSeconds += delta;"))
+        self.assertIn("frameWindowStartSceneRevision = sceneContentRevision;", update)
+        self.assertIn("FrameTimingManager.CaptureFrameTimings();", update)
+        self.assertIn("frame_window_start_scene=", perf)
+        self.assertIn("frame_window_end_scene=", perf)
+        self.assertIn("frame_window_active_scene_changes=", perf)
+        self.assertIn("frame_window_content_scene_events=", perf)
+        self.assertIn("frame_window_active_scene_stable=", perf)
+        self.assertIn("frame_window_content_stable=", perf)
+        self.assertIn("string.Equals(frameWindowStartScene, endScene, StringComparison.Ordinal)", perf)
+        self.assertIn("sceneContentEvents == 0", perf)
+        # Preserve the existing performance interval schema and sample budget.
+        self.assertIn('"; scene=" + endScene;', perf)
+        self.assertIn("intervalFrames = sampleCount = 0; intervalSeconds = 0;", perf)
+        self.assertIn("frameWindowStartScene = \"\";", paused)
+        self.assertIn("activeSceneTransitionsInWindow = 0;", paused)
+        self.assertIn("skipNextFrame = true;", paused)
