@@ -4,7 +4,7 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2135Z-T4-chat-save-backup-owner-v9k2",
   "origin": "chat",
-  "status": "active",
+  "status": "waiting_ci",
   "issue_id": "LOCAL-005",
   "track": "original-save-source-backup-ownership",
   "base_sha": "e2cbadb6acc4d927ec2e61e4b7e012e049235146",
@@ -21,6 +21,13 @@
   "experiment_key": "T4-original-save-backup-postpromote-identity-preserving-cleanup-v1",
   "resource_key": "T4-original-save-paths-source-CPU-ZIP2",
   "related_native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
-  "updated_at": "2026-11-06T21:35:00Z",
-  "next_step": "Add RED negative control before source fix; no native workflow dispatch."
+  "updated_at": "2026-11-06T21:42:00Z",
+  "next_step": "Confirm CI42298846571 authentic original ZIP2 ILSpy/source path + all 18 tests; then close scope and save session/event. Native run 42296450023 independent and in progress.",
+  "red_test_commit": "27d876c54c6e2442a7e727fcf00e717d61247f0f",
+  "fix_commit": "c294b76e99332e0e04dad25f368b0ea27bd4fb36",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42298749358",
+    "https://github.com/alwansan/raf/actions/runs/42298846571"
+  ],
+  "result": "RED CI42298749358 source-only 18 test methods: 15 original pass, three deliberately injected backup-root-swap failures (one silent stale-backup install and two foreign-directory deletes). GREEN CI42298846571 pending at SHA c294b76; stage dev/ino pre-rename and fail-closed guards added."
 }
