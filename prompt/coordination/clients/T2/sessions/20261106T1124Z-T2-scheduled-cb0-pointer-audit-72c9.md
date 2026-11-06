@@ -9,3 +9,7 @@
 - Added five source-free adversarial inputs in `tests/test_t2_foam_private_cb0_index_access.py`, commit [74fe4f77](https://github.com/alwansan/raf/commit/74fe4f77ce9d47f08edc93a191989a6bff04b34e). No private original source/program/name/indices published.
 - Validation: tests not yet executed; container GitHub DNS lookup failed, so no local repository checkout. Do not claim PASS. Inspect current Actions before considering one targeted validation, avoid duplicate active jobs. No Unity or device build initiated.
 - Next: run this test module and original private Foam compile workflow only if the new parser changes original outcomes or tests show a gap. Confirm real stage SPIR-V still passes; source-only validation cannot establish CB0 host upload or water pixels. WATER-001 OPEN; no .meta/GUID/.rgd/audio/Settings/input changes.
+
+## CI checkpoint
+- Existing automatic [run 42209039138](https://github.com/alwansan/raf/actions/runs/42209039138) on test SHA `74fe4f77ce9d47f08edc93a191989a6bff04b34e` was **in_progress** at last read; no manual dispatch, cancellation, or duplicate requested. Scope work is `waiting_ci` at commit `5fd248256d4975bdcfc957e21feceeb9b198c0d4`.
+- The run validates source and fixtures only; keep actual original CB0 upload and Android water status unknown.
