@@ -2,7 +2,7 @@
 
 - session_id: 20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9
 - origin: chat
-- status: waiting_ci
+- status: completed (scoped Unity synthetic OpenGLCore primitive diagnostic, WATER-001 still OPEN)
 - issue_id: WATER-001 (OPEN, NOT_READY 0/3)
 - base_sha: 7c04928db1f45f4e66a656286bacc9e055bfea10
 - resumed_from_sessions: 20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a; 20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4; 20261106T163310Z-T1-chat-real-fft-pair-d91e
@@ -33,3 +33,13 @@ Published files (all new, no source overlap):
 ## Observed stage and next
 
 [42261467757](https://github.com/alwansan/raf/actions/runs/42261467757) sourcefree unit preflight SUCCESS, SHA-pinned CLI download SUCCESS, genuine Unity EditMode GPU step in_progress as of first checkpoint. No parity claim before terminal job. Read only bounded `RAFT_T1_BITCARRIER_TEXTURE_COUNTS` and `RAFT_T1_BITCARRIER_NUNIT`, plus explicit final Action stage. If nonzero bitcarrier mismatches but direct controls pass, this synthetic backend primitive is suspect. If all zero, reject this **simple primitive-only** explanation; it would not disprove more complex original SSA/Phi/precision path causes. If Unity test fails before count, classify compiler/runtime boundary and fix exact synthetic issue if justified. No Android water or original Unity FFT claim from sourcefree tests. Do not repeat unchanged CI.
+
+## Actual Unity runtime result (2026-11-06 17:27 UTC)
+
+Run [42261467757](https://github.com/alwansan/raf/actions/runs/42261467757) on `2373a9310c659520e46479a0373d2b44f0d26134`, job `128042200390`: **COMPLETED SUCCESS**, genuine Unity2021.3.45f2 licensed EditMode stage and cleanup **SUCCESS**. Exact source-only Python tests: 3 fixture tests + 4 fixture-staging tests, all PASS. Exact NUnit case `T1FftBitcarrierTextureLoadTests.SourceAndButterflyBitcarriedFetchesMatchExactIntegerAddresses` PASS 1/1 (strict expected case gate).
+
+Verified live GPU categories: `RAFT_T1_BITCARRIER_TEXTURE_COUNTS`: `capture_reached=true`; `source_direct=0`, `butterfly1_direct=0`, `butterfly1_float_carrier=0`, `butterfly2_direct=0`, `butterfly2_swizzled_carrier=0` mismatches over 64 reads each. `RAFT_T1_BITCARRIER_NUNIT`: `GPU_word_tests=320`, `all_expected_tests_passed=true`, original shader compared=false, Android Adreno proven=false. Unity actual GPU dispatch and 320 exact readback bits were validated; private logs/project/test XML cleaned by successful always step.
+
+**Discriminator:** The trivial dynamic `uint4 -> float4 -> int2` and float4 swizzle into two `Texture2D.Load` sites is faithful in this synthetic OpenGLCore fixture. Therefore the real original-derived OpenGLCore butterfly error (252/256 site1 X, 64/64 site2) cannot be attributed to the *basic carrier->texture fetch primitive alone* under this tested configuration. It may depend on more complicated arithmetic, nested Phi/loop predecessor selection, register layout, host variant binding or compiler lowering of the original HLSL. This positive test does not prove the original shader, unity authored mapping, source-vs-Unity parity, full water or Adreno.
+
+**Next independent discriminator:** add the observed `OpPhi float32` merge/nested CFG branch and original HLSL vector-carrier arithmetic to a *source-free* OpenGLCore test, while another session pursues actual source-authenticated Unity keyed trace and per-site comparison. Do not modify Raft shader speculatively. Session completed, resource released. WATER-001 OPEN / NOT_READY.
