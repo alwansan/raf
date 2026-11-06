@@ -116,6 +116,7 @@ jobs:
           # PHI-FAILURE-SAFE-DIAGNOSTIC: only fixed-category private validation failures may appear in logs.
           # PHI-VECTOR-LANE-20261106: the original-derived float32 Phi may be a vector; audit selected component.
           python3 -m scripts.t1_fft_hlsl_phi_input_origins "$TMPDIR/coordinate.spv"
+          # T1-PHI-STRUCTURAL-CFG-BACKEDGE-20261106: verify selected component feedback corresponds to a reachable CFG loop edge.
           python3 -m scripts.t1_fft_hlsl_nested_phi_lineage "$TMPDIR/coordinate.spv"
           python3 -m scripts.t1_fft_pass0_trace_variant "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
