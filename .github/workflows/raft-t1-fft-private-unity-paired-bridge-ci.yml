@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/raft-t1-fft-private-unity-paired-bridge-ci.yml
       - scripts/t1_fft_private_unity_paired_capture.py
+      - scripts/t1_fft_unity_trace_producer_gate.py
+      - tests/test_t1_fft_unity_trace_producer_gate.py
       - tests/test_t1_fft_private_unity_paired_capture.py
 
 permissions:
@@ -36,5 +38,6 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_t1_fft_private_unity_paired_capture.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_private_unity_input_join.py -v
-          python3 -m py_compile scripts/t1_fft_private_unity_paired_capture.py
+          python3 -m unittest discover -s tests -p test_t1_fft_unity_trace_producer_gate.py -v
+          python3 -m py_compile scripts/t1_fft_private_unity_paired_capture.py scripts/t1_fft_unity_trace_producer_gate.py
           echo 'RAFT_T1_PRIVATE_ORIGINAL_UNITY_BRIDGE sourcefree_guard_passed=true actual_original_zip2_unity_gpu_ran=false'
