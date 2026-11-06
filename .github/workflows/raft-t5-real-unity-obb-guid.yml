@@ -1,0 +1,54 @@
+name: T5 INTEGRATION-001 genuine old APK OBB Unity GUID marker 206-range proof
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_probe_real_unity_obb_guid.py
+      - tests/test_t5_probe_real_unity_obb_guid.py
+      - .github/workflows/raft-t5-real-unity-obb-guid.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-t5-42058825739-genuine-unity-guid-compare-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  actual-source-only-unity-guid:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout limited T5 ZIP tools only without LFS or game assets
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t5_probe_github_artifact_zip_range.py
+            /scripts/t5_probe_signed_nested_zip_range.py
+            /scripts/t5_verify_apk_obb_pair.py
+            /scripts/t5_verify_real_signed_apk.py
+            /scripts/t5_probe_real_unity_obb_guid.py
+            /tests/test_t5_probe_real_unity_obb_guid.py
+      - name: Validate GUID marker behavior against synthetic APK OBB pairs
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_probe_real_unity_obb_guid.py -v
+          python3 -m py_compile scripts/t5_probe_real_unity_obb_guid.py
+          test ! -e Raft
+      - name: Inspect genuine original signed ZIP_STORED APK and OBB GUID marker
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          timeout 420s python3 -m scripts.t5_probe_real_unity_obb_guid --live
+          echo 'T5_UNITY_OBB_GUID actual_original_ZIP_marker_checked=true phone=false main_mount=false GPU_water=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: No game resources, private GUID or archive URLs uploaded
+        if: always()
+        shell: bash
+        run: echo '16MiB max strict HTTP206 source bounds, synthetic test fixtures, no Unity build or game data file output.'
