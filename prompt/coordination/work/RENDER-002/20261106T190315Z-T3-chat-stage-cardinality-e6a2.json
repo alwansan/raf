@@ -6,8 +6,8 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "colors-shaders",
-  "status": "active",
-  "updated_at": "2026-11-06T19:03:15.893Z",
+  "status": "paused",
+  "updated_at": "2026-11-06T19:09:21.785Z",
   "base_sha": "322908960532923deb0f16c359885fc9c423bdb2",
   "resumed_from_sessions": [
     "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
@@ -35,6 +35,10 @@
     "No native build, .meta, GUID, APK or game source changes",
     "T3 trial vote remains لا يحتاج until original genuine ShaderLab program integrated"
   ],
-  "result": null,
-  "next_step": "Implement unit tests for offsetting per-stage drift; original staged workflow returns anonymized totals and per-stage mismatch counters; decide exact semantic provenance next."
+  "result": "Source-only per-stage source DCL versus SPIR-V cardinality counts implemented in dd2580e2, tested with 14/14 passing GitHub Actions run 42276510557 after fixture correction 6d584b6a. No new original ZIP2 run; existing manual-only workflow could not be started with available authorized tool actions. Prior original aggregate equality run 42274933802 remains the last authenticated result.",
+  "next_step": "At next authorized workflow_dispatch, run the existing manual-only raft-t3-particle108-dcl-spv-family-census.yml on updated HEAD and classify eight-stage family-cardinality counters; keep RENDER-002 open, vote NO, no shader/device claim.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42276412595",
+    "https://github.com/alwansan/raf/actions/runs/42276510557"
+  ]
 }
