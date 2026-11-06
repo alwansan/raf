@@ -4,7 +4,7 @@
   "session_id": "20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6a49666f951b91c63180f93507e7542fa200ba6b",
   "track": "original local world/source-staging preservation",
   "resource_key": null,
@@ -28,8 +28,27 @@
     "unchanged": true,
     "basis": "Substantial post-device physical mouse capture integration, not this source staging fix"
   },
-  "run_urls": [],
-  "result": null,
-  "next_step": "Write two synthetic Linux hardlinked C# and metadata rejection tests in existing isolated offline adapter tests, prove red CI; patch original 13-file adapter to fail closed on either hardlinked source/meta before backup or source mutations; green CI plus source original test smoke. No native APK, no private files.",
-  "updated_at": "2026-11-06T18:01:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42266760305",
+    "https://github.com/alwansan/raf/actions/runs/42266868340",
+    "https://github.com/alwansan/raf/actions/runs/42266867777",
+    "https://github.com/alwansan/raf/actions/runs/42266867856",
+    "https://github.com/alwansan/raf/actions/runs/42266868238",
+    "https://github.com/alwansan/raf/actions/runs/42266868066"
+  ],
+  "result": {
+    "red": "42266760305 two expected missing-hardlink-rejection failures (19 preexisting tests pass)",
+    "fix_sha": "e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7",
+    "source_only": "42266868340 fault-injection job128060948927 SUCCESS 21/21",
+    "ci_full": "42266868340 overall FAILURE because downstream summary job128061025208 ValueError Missing record identity for unrelated T3 event20261106T1625Z",
+    "compatibility": [
+      "42266867777 B14 original save source path SUCCESS",
+      "42266867856 B07 original coroutine SUCCESS",
+      "42266868238 original local startup integration SUCCESS",
+      "42266868066 reconstruction preflight SUCCESS"
+    ],
+    "actual_device_or_game_source_tested": false
+  },
+  "next_step": "T5 original-source staging safe with independent physical copies; T3/T5 schema issue separate. T4 remains needs trial r1 solely for prior physical mouse, no new build. LOCAL-005 OPEN.",
+  "updated_at": "2026-11-06T18:04:00Z"
 }
