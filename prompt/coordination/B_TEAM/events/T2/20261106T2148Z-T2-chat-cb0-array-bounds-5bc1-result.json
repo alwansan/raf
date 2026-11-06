@@ -1,0 +1,14 @@
+{
+  "id": "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T21:57:16.332Z",
+  "summary": "Strengthened original Foam CB0 reflected member lower-bound/array-stride gate with three source-free adversarial tests; 15/15 member geometry PASS, SHA-original source CI42300107157 PASS, preserves two real VS/FS CB0 array extent mismatches and own-safe compiled index counts; Unity runtime/Android pixels unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42300107157",
+    "https://github.com/alwansan/raf/commit/2dae3686d9f2a3144172b035d795e5cd975e13ac"
+  ]
+}
