@@ -1,0 +1,17 @@
+{
+  "id": "T1-WATER-001-20261106-T1-chat-private-original-unity-pair-8dc4a1",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106-T1-chat-private-original-unity-pair-8dc4a1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "status": "completed_source_only_opt_in_unity_not_run",
+  "summary": "Corrected T1 private opt-in Unity FFT evidence boundary: replaced translated HLSL Vulkan keyed reference with directly instrumented SHA-original SPIR-V keyed trace and original source/butterfly input SHA evidence sidecar; introduced private manifest builder, exact original and Unity physical image byte comparisons, mandated Unity2021 OpenGLCore GPU CopyInput zero-mismatch report, 384 invocation keyed records split [64,256,64], and sanitized trace classification. 38/38 tests PASS in 42285338050; 42285163665 shows heavy Unity skipped on regular push. Native Android build 42281310905 in progress and untouched. No original-vs-Unity GPU parity in this cycle, no original water/Android fix claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42285338050",
+    "https://github.com/alwansan/raf/actions/runs/42285163665",
+    "https://github.com/alwansan/raf/commit/544887b819ccc5ea04f8a629024f2b321794e20a"
+  ],
+  "at": "2026-11-06",
+  "trial_vote": "لا يحتاج (trial-20261106-r1) unchanged"
+}
