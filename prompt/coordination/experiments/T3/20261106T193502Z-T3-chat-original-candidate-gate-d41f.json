@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
+  "issue_id": "RENDER-002",
+  "status": "source_only_accepted_original_not_run",
+  "experiment_key": "T3-ZIP2-SHA15964-Particle108-eightstage-SPV-debug-resource-candidates-manual-gated-v1",
+  "original_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "base_sha": "3bc7c96a42b566f302417dde91193baab691f6ad",
+  "hypothesis": "Run already-implemented T3 SHA-original Particle108 debug candidates and stage-family counts together in an authenticated, isolated, manual-only workflow; verify scheduled T3 synthetic DXBC/SPV strict-coordinate guard without modifying its files.",
+  "intended_files": [
+    ".github/workflows/raft-t3-particle108-spv-named-original-manual.yml",
+    ".github/workflows/raft-t3-shader-candidate-source-only.yml"
+  ],
+  "files_changed": [
+    ".github/workflows/raft-t3-particle108-spv-named-original-manual.yml",
+    ".github/workflows/raft-t3-shader-candidate-source-only.yml"
+  ],
+  "new_commits": [
+    "95d401fe6e6408c3c07789b13c9f8dfa1354c0bc",
+    "a1b6be9f1d4109ab144f754be00a74c7a44682fd"
+  ],
+  "source_only_ci_run": "https://github.com/alwansan/raf/actions/runs/42281080458",
+  "source_only_run_sha": "a1b6be9f1d4109ab144f754be00a74c7a44682fd",
+  "source_only_job_id": 128109880556,
+  "source_only_result": "completed_success",
+  "source_only_suites": [
+    {
+      "module": "tests/test_t3_particle108_dcl_spv_family_census.py",
+      "tests": 29,
+      "pass": true
+    },
+    {
+      "module": "tests/test_t3_dxbc_spirv_contract_join.py",
+      "tests": 12,
+      "pass": true
+    },
+    {
+      "check": "Python module syntax",
+      "pass": true
+    }
+  ],
+  "tests_passed": 41,
+  "scheduled_source_fix_evidence": {
+    "session_id": "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
+    "source_commit": "b7907d5929c2bc298a9bc45754dbe588fea3140d",
+    "tests_commit": "4d5fb6ed543a7467b2678fe4b6a5965b18cf67ae",
+    "previous_status": "SOURCE_FIXED_PENDING_TEST",
+    "validation": "12/12 synthetic now PASS in T3 independent CI 42281080458",
+    "scheduled_agent_files_edited": false
+  },
+  "authentic_original_manual_workflow": ".github/workflows/raft-t3-particle108-spv-named-original-manual.yml",
+  "authentic_original_workflow_dispatch_started": false,
+  "input_budget": "SHA-locked ZIP2 four owner files + six scenes. 24m timeout, one manual original source run max, no Unity build. Source assets and program bytes stay temporary.",
+  "assumptions": [
+    "Source DCL family global 24/10/10 matched VKD3D SPV UBO/separate-image/separate-sampler overall in previous original CI 42274933802",
+    "Stage-by-stage cardinality of same original eight shader variants not yet authenticated",
+    "OpName may be stripped or forged; never proves actual source register-to-VK binding",
+    "VKD3D compiler defaults may allocate sequential binding numbers in register set zero in absence of explicit interface binding mappings (documented vkd3d_shader_interface_info behavior)"
+  ],
+  "limits": [
+    "No new authentic original ZIP2 DXBC/SPV probe run",
+    "No ShaderLab restoration, Unity shader compiler proof, native build, Adreno rendering, or owner phone acceptance",
+    "Manual original workflow does not self-dispatch and no original raw shader resources published",
+    "Only control-plane/source-free evidence, RENDER-002 OPEN"
+  ],
+  "trial_round": "trial-20261106-r1",
+  "trial_vote": "لا يحتاج",
+  "next_step": "Authorized single workflow_dispatch on SHA-pinned manual original workflow after checking parallel actions. Analyze safe per-stage cardinality and name-candidate counts; proceed to vkd3d authoritative mapping/real ShaderLab and Unity then phone only on proven source.",
+  "updated_at": "2026-11-06T19:39:10.796Z"
+}
