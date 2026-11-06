@@ -1,0 +1,21 @@
+{
+  "id": "20261106T1959Z-T5-chat-texenv-structural-f6a9",
+  "owner": "T5",
+  "session_id": "20261106T1959Z-T5-chat-texenv-structural-f6a9",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "at": "2026-11-06T20:03:52.939Z",
+  "summary": "Hardened actual postrestorer Material-to-Texture source verifier against malformed explicit empty m_TexEnvs child slots, stray leading YAML keys and wrongly indented m_Texture. Exact immutable source-only CI42284795898 SUCCESS at 9d880bc: 24/24 B46 and 4/4 T5 integration tests; no actual original Unity export, rendering/phone proof or native build request.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/9d880bc4032ac6b7175353b3f67053b578eb3fee",
+    "https://github.com/alwansan/raf/actions/runs/42284795898",
+    "prompt/coordination/clients/T5/sessions/20261106T1959Z-T5-chat-texenv-structural-f6a9.md",
+    "prompt/coordination/experiments/T5/20261106T1959Z-T5-chat-texenv-structural-f6a9.json"
+  ],
+  "limits": [
+    "P0 RENDER-002 original white colors, ShaderLab and water not solved",
+    "No original game pixels/GPU source proven or APK/OBB/XAPK delivered",
+    "Owner-direct native run 42281310905 pinned to older source; trial r1 1/5, T5 NO unchanged"
+  ]
+}

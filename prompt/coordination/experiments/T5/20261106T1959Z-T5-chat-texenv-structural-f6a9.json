@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1959Z-T5-chat-texenv-structural-f6a9",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "source_commit": "9d880bc4032ac6b7175353b3f67053b578eb3fee",
+  "base_sha": "b308df2fc5b88cbabf57253c94058c2aaddb6d2f",
+  "experiment_key": "T5-B46-material-texenv-empty-child-orphan-prefix-indentation-fail-closed-v1",
+  "hypothesis": "Actual exported Unity Material TexEnv guard accepts malformed explicit empty TexEnv with child slot entries and incorrectly indented m_Texture pointers, yielding a synthetic false PASS. Reject malformed structure before issuing a safe material-texture link PASS.",
+  "workflow_path": ".github/workflows/raft-b46-render-texture-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42284795898",
+  "job_id": 128122705364,
+  "commands": [
+    "python -W error -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v",
+    "python -W error -m unittest discover -s tests -p test_t5_native_material_texture_integration.py -v"
+  ],
+  "negative_controls": [
+    "m_TexEnvs: [] with nested - _MainTex is REJECTED instead of silently zero slots",
+    "malformed unrecognized YAML key before the first texture slot is REJECTED",
+    "m_Texture at incorrect six-space indentation is REJECTED",
+    "legitimate explicit m_TexEnvs: [], valid local GUID importer/fileID and existing source-only native wiring are accepted"
+  ],
+  "observed_result": {
+    "source_only": true,
+    "CI": "SUCCESS",
+    "CI_SHA": "9d880bc4032ac6b7175353b3f67053b578eb3fee",
+    "run_id": 42284795898,
+    "job_id": 128122705364,
+    "B46_fixture_tests_passed": 24,
+    "integration_tests_passed": 4,
+    "actual_export_tested": false,
+    "phone_tested": false
+  },
+  "limitations": [
+    "No original material exported game filesystem used",
+    "The existing native build 42281310905 is pinned before this commit",
+    "No original ShaderLab/FFT/pixel/device or game READY evidence"
+  ],
+  "updated_at": "2026-11-06T20:03:52.939Z",
+  "next_step": "Read future actual exported Unity count-only B46 report; prioritize true P0 shader/water/white materials defects and avoid duplicate native builds."
+}
