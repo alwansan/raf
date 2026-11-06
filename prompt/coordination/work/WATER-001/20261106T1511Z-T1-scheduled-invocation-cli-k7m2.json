@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T1511Z-T1-scheduled-invocation-cli-k7m2",
+  "origin": "scheduled",
+  "worker": "T1",
+  "issue": "WATER-001",
+  "baseline_sha": "9b267bad42fe5e4be07b603d871564d86f5c214a",
+  "experiment_key": "water001-invocation-trace-cli-contract-k7m2",
+  "hypothesis": "Existing trace comparator CLI invokes legacy coordinate histogram only, not invocation-keyed comparison; independent wrapper makes paired capture gating executable without modifying shared comparator.",
+  "files": [
+    "scripts/t1_fft_invocation_trace_cli.py",
+    "tests/test_t1_fft_invocation_trace_cli.py",
+    "prompt/coordination/clients/T1/sessions/20261106T1511Z-T1-scheduled-invocation-cli-k7m2.md"
+  ],
+  "shared_resource": "none; no CI dispatched",
+  "taken_over_from": "T1 20261106T1408Z paired-capture readiness",
+  "status": "in_progress"
+}
