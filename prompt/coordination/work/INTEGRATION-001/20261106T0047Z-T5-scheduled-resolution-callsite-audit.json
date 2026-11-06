@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0047Z-T5-scheduled-c4e8",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "baseline_sha": "927bf1d096f8c5500f237794b91fc71c90a946ab",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/20261106T0047Z-T5-scheduled-resolution-callsite-audit.json",
+    "prompt/coordination/clients/T5/sessions/20261106T0047Z-T5-scheduled-c4e8.md"
+  ],
+  "experiment_key": "t5-20261106-original-graphicssettingsbox-vs-android-resolution-callsite-no-duplicate-v1",
+  "resource_key": "none-read-only",
+  "hypothesis": "Existing Android resolution code may already implement safe equal-axis render scaling or a binding path; inspect current source before proposing changes.",
+  "resumed_from": [
+    "20261105T2351Z-T5-scheduled-resolution-bind-k7m2",
+    "20261105T2208Z-T5-chat-obb-guid-3d7a"
+  ],
+  "updated_at": "2026-11-06T00:47:00Z"
+}
