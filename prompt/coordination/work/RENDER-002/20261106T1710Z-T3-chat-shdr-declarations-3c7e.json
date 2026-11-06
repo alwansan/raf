@@ -6,7 +6,7 @@
   "session_id": "20261106T1710Z-T3-chat-shdr-declarations-3c7e",
   "issue_id": "RENDER-002",
   "track": "Original Particle108 DXBC SHDR/SHEX instruction declaration source evidence",
-  "status": "active",
+  "status": "completed",
   "base_sha": "edb7bd6ce0c8f50c4046fbd5463524abb1f34f1e",
   "resumed_from_sessions": [
     "20261106T1701Z-T3-chat-rdef-eightstage-9f28",
@@ -28,7 +28,13 @@
   "related_work": [
     "prompt/coordination/work/RENDER-002/20261106T1701Z-T3-chat-rdef-eightstage-9f28.json"
   ],
-  "run_urls": [],
-  "next_step": "Build bounded new declaration-only parser and synthetic tests. Run source-free CI first; one private original diagnostic only after overlap check, then restore manual-only workflow.",
-  "updated_at": "2026-11-06T17:11:51.828Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42259737650",
+    "https://github.com/alwansan/raf/actions/runs/42259943968"
+  ],
+  "next_step": "Bounded operand-level DXBC DCL resource register and array ranges, private per-stage binding map then compare exact original-vs-SPIRV/Vulkan. Do not repeat proven RDEF/SHDR opcode census; RENDER-002 OPEN/NOT_READY.",
+  "updated_at": "2026-11-06T17:17:34.348Z",
+  "result": "Source-free 12/12 PASS at CI42259737650, genuine SHA-original 8-stage SHDR/SHEX tokenized stream CI42259943968 SUCCESS: 296 instructions, 24 cbuffer declarations, 10 SRV declarations, 10 sampler declarations, 0 UAV. Original RDEF absent all eight but does not imply resource absence. No register operands parsed, no game shaders or device behavior changed.",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow_immutable_sha": "adfc6bc3661a08c06996aac1b84a4c9da218971d"
 }
