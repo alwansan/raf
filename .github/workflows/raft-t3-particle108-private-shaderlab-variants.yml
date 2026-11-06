@@ -159,7 +159,7 @@ jobs:
           timeout 180s python3 -m scripts.t3_particle108_original_keyword_lattice \
             --original "$RUNNER_TEMP/t3-private-variant-original" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
-            --out "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json" "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json"
+            --out "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json"
           python3 - <<'PY'
           from pathlib import Path
           import json,os
@@ -201,4 +201,4 @@ jobs:
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
-          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json" "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json"
+          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json" "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json" "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json"
