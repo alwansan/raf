@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2052Z-T4-chat-save-stage-stale-q6r2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Original SaveAndLoad source or GUID .cs.meta could be edited by a different staging writer after successfully byte-verifying and promoting original backup; old adapter would write old adapted C# or strand backup on post-write meta mismatch.",
+  "source_commit": "5d3743920eaead00ac40d6ad863f53c638629a76",
+  "input_hashes": [
+    "original ZIP2 ref 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original SaveAndLoad fingerprint sha256 b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb"
+  ],
+  "tool_versions": {
+    "python": "CI ubuntu-24.04 runner python3",
+    "ilspycmd": "11.2.0.10050",
+    "dotnet": "10.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v",
+    "python3 -m scripts.verify_a8_zip2_local_save_provider --zip2-checkout original-zip2",
+    "CI original source private ILSpy SaveAndLoad + 16 expression Unix+Windows .NET 10 checks"
+  ],
+  "negative_controls": [
+    "After staging original source+meta and successful rename(stage,backup), independently write changed bytes to SaveAndLoad.cs or SaveAndLoad.cs.meta; refuse before first source mutation and clean own backup for retriable current source."
+  ],
+  "workflow_path": ".github/workflows/raft-original-save-path-tests.yml",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/42292236717",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42292421337",
+  "artifact_urls": [],
+  "budget": "10 minute bounded CPU, immutable ZIP2 SaveAndLoad DLL only, not Unity/IL2CPP/OBB",
+  "status": "waiting_ci",
+  "observed_result": "RED at test-only SHA 1e6d4133 / CI42292236717 job128148328670 completed failure, exactly 2 subcases: source change `ValueError not raised`; meta change raises after source mutation with incorrect error; 15 pre-existing test methods PASS. Source patch at SHA 5d374392 adds post-backup-promotion C# + GUID metadata byte/link rechecks before the first source write; on observed drift rejects and removes only fresh owned backup, preserving independent writer bytes. GREEN CI42292421337 pending.",
+  "rejected_hypotheses": [
+    "Verified complete backup implies original C# and GUID remained unchanged until installation: false under deterministic injected concurrent edit."
+  ],
+  "limitations": [
+    "Not an observed owner device save bug. Does not prove original .rgd serialization, same-world identity, APK, Android runtime/device or filesystem atomicity against adversarial races after the guard.",
+    "Existing native owner direct run 42281310905 older SHA failed Editor CS0234, T4 fixed separately; new source staging fix does not itself justify next native build."
+  ],
+  "integration_commit": "5d3743920eaead00ac40d6ad863f53c638629a76",
+  "next_step": "Verify exact source GREEN 42292421337 original ZIP2 CSharp fingerprint and 16 Unix path expressions plus synthetic negative controls; then close work scope and hand off to T5."
+}
