@@ -1,7 +1,9 @@
 """Synthetic-only 5 true-source ParticleShader Material RGBA + scalar parity."""
 import copy
+from pathlib import Path
+import tempfile
 import unittest
-from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError
+from scripts.t3_particle108_sameexport_values import assess,MATCH,MISMATCH,PrivatePhaseError,exported_selected_values
 from scripts.b22_verify_material_scalars import _float_bits
 
 def fixture():
@@ -106,6 +108,71 @@ class SelectedParticle108ValueParityTests(unittest.TestCase):
         for needle in ("resources.assets","_SyntheticTint","_SyntheticAlpha",
                        "00000000000000000000000000000001"):
             self.assertNotIn(needle,output)
+
+class OriginalSelectedOnlyYAMLTests(unittest.TestCase):
+    def setup_project(self,root):
+        project=Path(root)/"ExportedProject"
+        assets=project/"Assets"
+        assets.mkdir(parents=True)
+        wanted=set()
+        for i in range(1,6):
+            guid=f"{i:032x}"
+            wanted.add((2100000,guid))
+            f=assets/f"synthetic{i}.mat"
+            f.write_text("""%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  m_SavedProperties:
+    m_Colors:
+      - _Tint: {r: 0.5, g: 1, b: 0.25, a: 1}
+    m_Floats:
+      - _Alpha: 0.4
+    m_Ints:
+      - _Mode: 1
+""")
+            (assets/f"synthetic{i}.mat.meta").write_text("guid: "+guid+"\n")
+        return project,wanted
+    def test_only_five_selected_original_material_yaml_documents_parsed(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            c,s=exported_selected_values(project,wanted)
+            self.assertEqual(set(c),wanted)
+            self.assertEqual(set(s),wanted)
+            self.assertEqual(len(c),5)
+            self.assertEqual(sum(len(x["m_Floats"]) for x in s.values()),5)
+    def test_unrelated_material_invalid_yaml_not_counted_as_selected_drift(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            (project/"Assets"/"unrelated.mat").write_text("%YAML 1.1\n--- !u!21 &2100000\nMaterial: [this is broken\n")
+            (project/"Assets"/"unrelated.mat.meta").write_text("guid: "+("f"*32)+"\n")
+            c,s=exported_selected_values(project,wanted)
+            self.assertEqual(set(c),wanted)
+    def test_selected_material_broken_yaml_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            (project/"Assets"/"synthetic1.mat").write_text("%YAML 1.1\n--- !u!21 &2100000\nMaterial: [this is broken\n")
+            with self.assertRaises(ValueError):
+                exported_selected_values(project,wanted)
+    def test_missing_selected_original_document_never_succeeds(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            (project/"Assets"/"synthetic1.mat").unlink()
+            with self.assertRaisesRegex(ValueError,"original_five_selected_export_Material_documents_incomplete"):
+                exported_selected_values(project,wanted)
+    def test_selected_duplicate_material_key_fails_closed(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            f=project/"Assets"/"synthetic1.mat"
+            f.write_text(f.read_text().replace("    m_Colors:", "    m_Colors: []\n    m_Colors:"))
+            with self.assertRaises(ValueError):
+                exported_selected_values(project,wanted)
+    def test_selected_export_symlink_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            project,wanted=self.setup_project(d)
+            (project/"Assets"/"linked.mat").symlink_to(project/"Assets"/"synthetic1.mat")
+            with self.assertRaisesRegex(ValueError,"unsafe_or_unbounded_exported_Material_inventory"):
+                exported_selected_values(project,wanted)
 
 if __name__=="__main__":
     unittest.main()
