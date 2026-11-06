@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "scheduled",
+  "session_id": "20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e",
+  "status": "in_progress",
+  "baseline_sha": "4520d23a8d21d1462d7b98f3b3d255d2d865408c",
+  "issue": "WATER-001",
+  "experiment_key": "t2-original-monoscript-target-typed-safe-42269806221-provenance-reconcile",
+  "hypothesis": "Successful typed external MonoScript CI confirms safe original-source target classification only; does not prove original Foam material/shader identity or Unity runtime CB upload.",
+  "files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1822Z-T2-scheduled-original-target-ci-reconcile-9c3e.md"
+  ],
+  "shared_resource": "none; no Unity or ZIP2 download; CI read-only",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261106T1817Z-T2-chat-original-script-target-5ac9.md",
+    "https://github.com/alwansan/raf/actions/runs/42269806221"
+  ],
+  "next_step": "Inspect safe CI artifact only if accessible without private source; otherwise record SHA provenance and precise remaining original GUID/PPtr material binding uncertainty; avoid modifying chat T2 experiment."
+}
