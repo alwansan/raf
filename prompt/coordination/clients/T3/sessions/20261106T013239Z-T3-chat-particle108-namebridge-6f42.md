@@ -21,3 +21,10 @@
 Report https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_REFLECTED_NAME_MAPPING_2026-11-06.md
 Resource https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json
 Next Original compiler-reflected SPIR-V names differ completely 0/46, so do NOT auto-patch varying locations by type/name or index. Next private experiment original DXBC ISGN/OSGN semantic+register extraction and HLSL SV_*/TEXCOORD* declarations, require one-to-one verified semantic/type mapping on all four exact keyword pairs, no ambiguous duplicate types; only then prototype location fixes in disposable SPIR-V and validate all 4 VS/FS pairs. Coordinate T5 postvendor/Android shader GUID and phone emitter.
+
+## Canonical refresh blocked by independent T4 event schema
+
+- Added evidence real CI42144978122 + report to still-OPEN `prompt/coordination/B_TEAM/issues/RENDER-002.json` and verified source program resource; T3 SHA-original results remain independently proved and committed.
+- [T3 shared ledger refresh CI42145627443](https://github.com/alwansan/raf/actions/runs/42145627443) **FAILED**, NOT a shader/test failure. `scripts/refresh_b_team.py:read_records` stopped at missing `id` in `prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json` (T4's event has valid `session_id` but omits required `id`).
+- Preserved T4 ownership; sent surgical field-only repair request in `prompt/coordination/discussions/INPUT-005/20261106T013239Z-T3-chat-particle108-namebridge-6f42-to-T4-ledger-refresh-blocker.md` commit `db9b6c90645f7ddb451c2d181e2adb7d816562ba`. Did NOT change T4's event nor relax ledger identity checks.
+- This T3 source scope can be marked completed (with **canonical team refresh BLOCKED until T4-owned event schema repaired**); all game-source and GPU readiness limitations unchanged.
