@@ -255,15 +255,27 @@ def summarize(paths):
             "native_mouse_release_by_os_proven": False,
             "anomalies": anomalies,
         })
-    valid_pairs = [(i, j) for i in range(len(out)) for j in range(i + 1, len(out))
-                   if not invalid_truncation
-                   and ordered[i]["last"] < ordered[j]["first"]
-                   and out[i]["sequence_complete"] and out[j]["sequence_complete"]
-                   and out[i]["utc_monotonic"] and out[j]["utc_monotonic"]
-                   and out[i]["save_argument_file_classes"].get("nonzero", 0)
-                   and out[j]["load_argument_file_classes"].get("nonzero", 0)]
-    save_any = bool(valid_pairs)
-    load_after = bool(valid_pairs)
+    # Exported hints require only the existence of a strictly ordered pair.
+    # Building all valid pairs costs quadratic time and memory as sessions
+    # grow. Retain the earliest end time of any eligible prior save instead.
+    earliest_prior_save_end = None
+    valid_pair_observed = False
+    if not invalid_truncation:
+        for group, row in zip(ordered, out):
+            if not (row["sequence_complete"] and row["utc_monotonic"]):
+                continue
+            if (row["load_argument_file_classes"].get("nonzero", 0)
+                    and earliest_prior_save_end is not None
+                    and earliest_prior_save_end < group["first"]):
+                valid_pair_observed = True
+                break
+            # Update only after testing the load: this session cannot be
+            # paired with itself even if it has both save and load markers.
+            if row["save_argument_file_classes"].get("nonzero", 0):
+                if earliest_prior_save_end is None or group["last"] < earliest_prior_save_end:
+                    earliest_prior_save_end = group["last"]
+    save_any = valid_pair_observed
+    load_after = valid_pair_observed
     return {
         "schema": 1,
         "analysis_type": "source_free_log_evidence_only",
