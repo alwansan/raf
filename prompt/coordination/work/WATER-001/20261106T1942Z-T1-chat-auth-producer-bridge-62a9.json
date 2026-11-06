@@ -6,16 +6,16 @@
   "session_id": "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
   "issue_id": "WATER-001",
   "track": "Original FFT Butterfly1 X original Input vs translated Phi evidence join",
-  "status": "active",
+  "status": "completed",
   "base_sha": "83eb4f1f90c1436afc5c529c525791f50ac0b068",
-  "updated_at": "2026-11-06T19:42:00Z",
+  "updated_at": "2026-11-06T19:51:30Z",
   "resumed_from_sessions": [
     "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
     "20261106T1916Z-T1-chat-address-provenance-e6b2",
     "20261106T1850Z-T1-chat-gpu-input-join-b71c"
   ],
   "experiment_key": "source-safe-sha-pinned-original-spirv-site1x-input-sint32-bitcast-vs-hlsl-phi-private-typed-boundaries-plus-unity-computed-63-0-signature-proof-gap-v1",
-  "resource_key": "none: source-only evidence join, no Unity/private assets/APK",
+  "resource_key": "none (source-only job completed; native 42281310905 not touched)",
   "hypothesis": "Actual SHA-original SPIR-V butterfly1 X has a signed32 Input memory-load boundary and bitcast; generated HLSL candidate has float32 Phi with loop-carried boundary. Those structural facts plus 63/64 sourcefree Unity zero signatures constrain but do not prove original runtime origin or water cause; a fail-closed evidence bridge should prevent unproven classification and point to exact next capture.",
   "scope": "Create isolated source-only strict fixed-schema, bounded, privacy-safe evidence provenance report from previously successful historical CI; verify original-vs-translation structural categories, distinct runs immutable SHAs and synthetic GPU controls; output only safe origin boundary and follow-up gap. No duplicate native run and no Unity mutex; do not touch T2–T5 files or source assets.",
   "intended_files": [
@@ -38,7 +38,24 @@
     "20261106T133640Z-T1-chat-nested-phi-8d31",
     "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Create exact safe evidence bridge and adversarial tests; source-only CI; never claim dynamic Unity original FFT parity based on structural/driver evidence."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42283086865"
+  ],
+  "result": {
+    "run_id": 42283086865,
+    "job_id": 128116844932,
+    "run_conclusion": "success",
+    "source_sha": "73e40fbbc591557cf8150f7bb36743acd8e22de5",
+    "adversarial_source_tests": "14/14 pass",
+    "source_only": true,
+    "original_source_app_runtime_executed_this_cycle": false,
+    "structural_original": "sint32_Input_vector_bitcast_shuffle",
+    "structural_candidate": "uint32_Private_noncyclic_load_via_float32_loop_phi",
+    "synthetic_computed_zero_signature": 63,
+    "synthetic_buffered_zero_signature": 0,
+    "original_vs_unity_numeric_parity_proven": false,
+    "android_water_proven": false,
+    "trial_vote": "لا يحتاج"
+  },
+  "next_step": "Trust boundary: manually copied sanitized historical CI marker JSON is not runtime cryptographic attestation. Next private original ZIP2 vs real Unity keyed Butterfly1.x trace with actual matched inputs/dispatch via t1_fft_private_unity_input_join, then any minimal validated HLSL runtime shader fix. WATER-001 OPEN."
 }
