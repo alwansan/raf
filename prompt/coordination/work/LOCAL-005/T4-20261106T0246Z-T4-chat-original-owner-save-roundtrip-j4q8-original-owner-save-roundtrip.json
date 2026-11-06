@@ -3,9 +3,9 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed_original_save_and_load_CI_success_android_device_unverified",
   "base_sha": "4ed17012aaf5e3ed79bf17f230cd9c34767f4157",
-  "updated_at": "2026-11-06T02:46:00Z",
+  "updated_at": "2026-11-06T02:58:00Z",
   "resumed_from_sessions": [
     "20261106T0240Z-T4-scheduled-v8q1",
     "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
@@ -29,6 +29,25 @@
   "approach": "Fork previously SHA-pinned original Save IL allowlist and reflection test, replacing shipped seed with exact 7 hash-verified owner-world inputs; ensure original CreateFile/Serialize direct call allowlist, no original field reads, protect input and produce only bounded booleans; isolate generated world bytes in ephemeral private temp and cleanup. Source-free adversarial tests; no phone/native claims.",
   "acceptance": "CI checks original CLR load, authenticated private Save argument type, original Save IL guard, original Save invoked, generated nonzero file and original generic LoadT matching root, or records why a given category is impossible. Never mask non-success as pass.",
   "previous_proof": "https://github.com/alwansan/raf/actions/runs/42150216417",
-  "next_step": "New actual saved-world original Save/Load roundtrip with fail-closed guard; only original source/private runner.",
-  "result": null
+  "next_step": "T5 exact SHA paired signed Android APK+OBB to check world create/play/save/full-process-relaunch/same-world progress using original operation marker evidence, plus physical mouse/cursor/system bars and water visual regression; no READY or issue closure from managed CLR.",
+  "result": {
+    "new_CI": 42153533612,
+    "status": "COMPLETED SUCCESS",
+    "tested_source": "5c1d78117640b174d571a5a2a592b8388fb662ed",
+    "original_5Nov_world_files_authenticated": 7,
+    "original_RGD_derived_assignability": 7,
+    "original_private_Save_IL_guard": 7,
+    "original_private_Save_invoked": 7,
+    "nonzero_temporary_save_outputs": 7,
+    "original_generated_LoadT_matching": 7,
+    "temp_cleanup": 7,
+    "synthetic_tests": "12/12 + 24/24",
+    "tamper_rejection": true,
+    "new_android_player_built": false,
+    "owner_device_retested": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42153104453",
+    "https://github.com/alwansan/raf/actions/runs/42153533612"
+  ]
 }
