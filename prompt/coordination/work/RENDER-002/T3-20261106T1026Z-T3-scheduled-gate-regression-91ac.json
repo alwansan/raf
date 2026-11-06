@@ -1,0 +1,18 @@
+{
+  "session_id": "20261106T1026Z-T3-scheduled-91ac",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "efbc8d9596cc7ea0a080d1d9a7e5dc75037310b6",
+  "intended_files": [
+    "tests/test_t3_shader_identity_gate.py",
+    "prompt/coordination/clients/T3/sessions/20261106T1026Z-T3-scheduled-91ac.md"
+  ],
+  "experiment_key": "T3-gate-comment-yaml-negative-controls@efbc8d95:python-unittest",
+  "resource_key": null,
+  "hypothesis": "Existing source gate fixes for comment-only and YAML PPtr regressions are not covered by current committed six-test suite; add tests to prevent false-positive reintroduction.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T0930Z-T3-scheduled-blockcomment-2d7f.md"
+  ],
+  "updated_at": "2026-11-06T10:26:00Z"
+}
