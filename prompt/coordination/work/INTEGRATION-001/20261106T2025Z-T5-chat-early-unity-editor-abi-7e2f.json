@@ -8,7 +8,7 @@
   "track": "Native Editor compilation failure early original ABI preflight to prevent repeated full asset reconstruction",
   "status": "active",
   "base_sha": "981751c1cd45514d1c8f53c657afe67a30cb650d",
-  "updated_at": "2026-11-06T20:25:54.276Z",
+  "updated_at": "2026-11-06T20:31:52.126Z",
   "resumed_from_sessions": [
     "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
     "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
@@ -25,7 +25,8 @@
     "prompt/coordination/work/INTEGRATION-001/20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f.json",
     "prompt/coordination/clients/T5/sessions/20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f.md",
     "prompt/coordination/experiments/T5/20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f.json",
-    "prompt/coordination/B_TEAM/events/T5/20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f.json"
+    "prompt/coordination/B_TEAM/events/T5/20261106T2025Z-T5-chat-early-unity-editor-abi-7e2f.json",
+    "prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md"
   ],
   "hypothesis": "In owner-direct native run Unity failed after many resource restoration steps because Android-only mouse class was absent for UNITY_EDITOR, despite T4 source-only pinned original CLR bridge compile exposing this upfront. Integrate exact existing original-ABI editor and player CSharp compilations immediately after SHA-validated managed DLL staging and before expensive ZIP2/project reconstruction, fail closed without raw source/SDK asset publication or another full Unity request.",
   "experiment_key": "T5-owner-native-42281310905-editor-CS0234-original-Unity2021-ABI-preflight-compile-before-ZIP2-v1",
@@ -34,8 +35,9 @@
     "20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9 completed",
     "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e completed"
   ],
-  "coordination": "T4 owns physical mouse C# runtime and its original ABI compile projects; consume unchanged. T1 FFT, T2 Foam, T3 shaders, T4 local save and T5 scheduled ZIP source unaffected. Touch layout/audio/Settings deferred and original .meta/GUID/.rgd untouched. No native request/vote changes.",
+  "coordination": "T4 owns physical mouse C# runtime and its original ABI compile projects; consume unchanged. T1 FFT, T2 Foam, T3 shaders, T4 local save and T5 scheduled ZIP source unaffected. Touch layout/audio/Settings deferred and original .meta/GUID/.rgd untouched. No native request/vote changes. Final owner-direct 42281310905 verdict to be appended under separate marker in T5-owned trial ledger, leaving 1/5 r1 ballots and collecting state intact.",
   "run_urls": [],
   "result": null,
-  "next_step": "Add bounded early native workflow compile on already-staged original managed Unity modules, source-only wiring tests and independent CI; no new XAPK request."
+  "next_step": "Add bounded early native workflow compile on already-staged original managed Unity modules, source-only wiring tests and independent CI; no new XAPK request.",
+  "action": "extend scope before writing shared trial status; no native run/ballot change"
 }
