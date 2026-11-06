@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T005710Z-T3-chat-particle108-vulkan-c8f1",
+  "issue_id": "RENDER-002",
+  "hypothesis": "All four matched original 108-use ParticleShader48 DXBC VS/FS keyword pairs can be Vulkan1.1 SPIR-V validated, but SPIRV-Cross HLSL->glslang roundtrip might lose stage IO location or sampler binding parity; quantify without publishing private names or rewriting game shaders.",
+  "source_commit": "9ab1c1ca2dcca4006d28be6ae416118cebc1fe25",
+  "original_source": [
+    "ZIP2 immutable 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six original scenes SHA verified",
+    "four original Shader/Material owner SHA verified",
+    "one original image .resS provider SHA verified three Texture2D private ranges"
+  ],
+  "tools": {
+    "UnityPy": "1.23.0",
+    "vkd3d-compiler": "1.2-15build1",
+    "spirv-tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+    "spirv-cross": "2021.01.15+1.3.239.0-1build1",
+    "glslang-tools": "15.1.0-2~ubuntu0.24.04.2"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_original_particle108_spirv_translation.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_stage_io_drift.py -v",
+    "python3 -m scripts.t3_original_particle108_spirv_translation --original $RUNNER_TEMP/t3-original-six-scene --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-particle108-fourpair-spirv-aggregate-safe.json"
+  ],
+  "negative_controls": [
+    "four exact player-bucket+keyword source permuted VS/FS stages linked privately; no first-variant guessed fallbacks",
+    "wrong DXBC stage, duplicate source stage keys and unpaired keywords fail closed",
+    "native PosixPath and other pathlib subclasses accepted; path symlinks rejected",
+    "all compiler code/program SHA returned only private, safe numeric aggregation",
+    "translated SPIRV validation does not mean HLSL roundtrip pair interface compatible",
+    "malformed / private name or negative IO classifier values rejected",
+    "source/roundtrip stage input/output type multiset vs location drift separately classified"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42140918323",
+    "https://github.com/alwansan/raf/actions/runs/42141030091",
+    "https://github.com/alwansan/raf/actions/runs/42141506120"
+  ],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42141506120/artifacts"
+  ],
+  "budget": "28min isolated original six scenes SHA + CPU-only vkd3d/spirv stage translation, never Unity Android build",
+  "status": "completed",
+  "observed_result": {
+    "original_compiled_stage_programs": 8,
+    "original_exact_matched_keyword_pairs": 4,
+    "original_DXBC_to_vulkan11_valid": 8,
+    "HLSL_from_SPIRV_recovered": 8,
+    "HLSL_to_vulkan11_SPIRV_roundtrip_valid": 8,
+    "original_vs_fs_pairs_compatible": 4,
+    "roundtrip_vs_fs_pairs_compatible": 2,
+    "original_vs_roundtrip_exact_stage_IO": 0,
+    "original_vs_roundtrip_resource_binding_equal": 6,
+    "total_original_roundtrip_input_slots_each": 26,
+    "total_original_roundtrip_output_slots_each": 20,
+    "io_drift_inputs_type_multiset_equal_stages": 8,
+    "io_drift_outputs_type_multiset_equal_stages": 8,
+    "io_drift_input_location_only_remap_candidate_stages": 4,
+    "io_drift_output_location_only_remap_candidate_stages": 4,
+    "source_free_tests_passed": 133,
+    "full_authored_Unity_ShaderLab_or_Android_pixel_proven": false
+  },
+  "limitations": [
+    "SPIR-V stage interfaces after HLSL roundtrip not preserved for two of four keyword pairs",
+    "location-only label is candidate, not a guaranteed safe name/semantic mapping",
+    "full T5 Unity postvendor GUID and actual Android emitter still unknown",
+    "resource/sampler exact bindings vary 2 of 8 stages"
+  ],
+  "integration_commit": "9ab1c1ca2dcca4006d28be6ae416118cebc1fe25",
+  "next_step": "Privately correlate original vs roundtrip SPIR-V names/locations, builtin SV_POSITION and duplicate-type semantics across four exact keyword pairs; guard per-pair resource slots. Prototype a strictly source-authentic 4/4 location-safe repair only inside disposable CPU shader tooling, then check the exact postvendor Unity Shader GUID and Android fire/smoke emitter on T5 device. RENDER-002 stays OPEN."
+}
