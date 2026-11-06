@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "16182a34039acafdb81552afe726abfeafb63c93",
+  "experiment_key": "zip2_15964ea8_Foam_4_embedded_SPIRV_stageIO_matching_location_type_v1",
+  "resource_key": "Foam/path2420/vulkan1.1/2passes/4compiled-stages",
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "shader_owner": "Raft_Data/sharedassets0.assets",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "resumed_from_sessions": [
+    "20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7",
+    "20261106T0120Z-T2-scheduled-json-evidence-7c91"
+  ],
+  "hypothesis": "The actual 4 Vulkan1.1 SPIR-V programs compiled out of the SHA-original fully composed 2-pass private Foam ShaderLab have matching vertex output ↔ fragment input numerical interface locations/types for both passes; mismatches distinguish a true pipeline blocker hidden by per-stage success.",
+  "approach": "Keep private original SHA-pinned source; after full assembled private ShaderLab and 4-stage recompilation, recompile private embedded HLSL into private SPIR-V, use spirv-cross --reflect bounded JSON to compare unique location/component+type and all fragment location inputs against VS outputs per pass, fail closed malformed/duplicate or missing signatures; report only category booleans/counts. Never infer Unity import or pixel correctness. Isolated script/tests and T2 workflow only; no game assets or native build.",
+  "intended_files": [
+    "scripts/t2_foam_embedded_stage_io.py",
+    "tests/test_t2_foam_embedded_stage_io.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T0145Z-T2-chat-foam-stage-io-9c4a.json",
+    "prompt/coordination/clients/T2/sessions/20261106T0145Z-T2-chat-foam-stage-io-9c4a.md",
+    "prompt/coordination/experiments/T2/T2-20261106T0145Z-T2-chat-foam-stage-io-9c4a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T0145Z-T2-chat-foam-stage-io-9c4a-result.json",
+    "docs/T2_FOAM_EMBEDDED_VULKAN_STAGE_IO_2026-11-06.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42144036981",
+    "https://github.com/alwansan/raf/actions/runs/42125847863",
+    "https://github.com/alwansan/raf/actions/runs/42141540903"
+  ],
+  "prior_verified": "Private exact original Foam ShaderLab source 9731B, 2 passes, 4 embedded Vulkan1.1 stage recompiles pass individually, source-only 27 tests; same-pass cross-stage input-output ABI untested; CB0/Texture runtime binding and Unity import remain unknown.",
+  "updated_at": "2026-11-06T01:45:00Z",
+  "run_urls": [],
+  "next_step": "Implement exact stage I/O reflection gate; run source-free controls and SHA-authentic private candidate CI; if mismatch report quantitative blocker and keep WAVER water OPEN."
+}
