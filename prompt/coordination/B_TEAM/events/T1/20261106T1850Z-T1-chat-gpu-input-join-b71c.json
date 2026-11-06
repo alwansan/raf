@@ -1,0 +1,14 @@
+{
+  "id": "T1-WATER-001-20261106T1850Z-T1-chat-gpu-input-join-b71c",
+  "owner": "T1",
+  "session_id": "20261106T1850Z-T1-chat-gpu-input-join-b71c",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Physical original Vulkan versus Unity source/butterfly bytes and claimed GPU CopyInput zero mismatches now must join SHA-bound keyed FFT trace evidence in reusable private verifier. Source-only CI 42274801434 SUCCESS 17/17 adversarial tests. No original or Unity shader executed by this test; WATER-001 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42274801434",
+    "https://github.com/alwansan/raf/commit/181910545d4ced5a8454b95e4d380756ba2ac36f"
+  ],
+  "at": "2026-11-06T18:55:00Z"
+}
