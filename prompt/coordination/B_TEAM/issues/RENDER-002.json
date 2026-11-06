@@ -144,7 +144,9 @@
     "https://github.com/alwansan/raf/actions/runs/42132262184",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md",
     "https://github.com/alwansan/raf/actions/runs/42134436841",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md",
+    "https://github.com/alwansan/raf/actions/runs/42136474867",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -202,5 +204,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-06T00:14:05.201Z"
+  "updated_at": "2026-11-06T00:30:56.989Z"
 }
