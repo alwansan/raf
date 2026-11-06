@@ -46,9 +46,22 @@ namespace RaftAndroid.Platform
                         motionEvent.Call<int>("getActionMasked") != 2)
                         return false; // ACTION_MOVE only and current generation.
                     int source = motionEvent.Call<int>("getSource");
-                    var kind = PhysicalMouseMotionSource.Classify(source);
+                    int deviceSources = 0;
+                    // Android touchpad MotionEvent.getSource() normally reports
+                    // SOURCE_MOUSE, not SOURCE_TOUCHPAD. Only for this source,
+                    // consult its real InputDevice capabilities; never treat
+                    // a touchscreen position as a camera-relative movement.
+                    if (source == PhysicalMouseMotionSource.Mouse)
+                    {
+                        using (var device = motionEvent.Call<AndroidJavaObject>("getDevice"))
+                        {
+                            if (device != null)
+                                deviceSources = device.Call<int>("getSources");
+                        }
+                    }
+                    var kind = PhysicalMouseMotionSource.Classify(source, deviceSources);
                     if (kind == PhysicalMouseMotionSource.Kind.Ignore)
-                        return false; // Ordinary touchscreen/mouse UI events remain Unity-owned.
+                        return false; // Unknown mouse/touch remains Unity-owned.
                     int historyCount = motionEvent.Call<int>("getHistorySize");
                     if (!PhysicalMouseMotionSource.ValidHistory(historyCount))
                         return false; // Never block Android UI on unbounded batched packets.
