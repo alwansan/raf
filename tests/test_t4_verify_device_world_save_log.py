@@ -201,6 +201,37 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
                          {"contradictory": 1})
         self.assertFalse(report["local005_device_confirmed"])
 
+    def test_valid_whitespace_delimited_snapshot_flags_are_not_contradictory(self):
+        self.put("save.jsonl", [
+            row("save", 1, "save", "Save.argumentFileSnapshot",
+                "optional_source=world; exists_at_filename_argument=True; "
+                "length_class=nonzero; durable_RGD_unverified=true",
+                utc="2026-11-05T12:00:00Z")])
+        self.put("load.jsonl", [
+            row("load", 1, "save", "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True;\tlength_class=nonzero; "
+                "audit=unverified",
+                utc="2026-11-05T13:00:00Z")])
+        report = summarize(_paths(self.root))
+        self.assertEqual(report["sessions"][0]["save_argument_file_classes"],
+                         {"nonzero": 1})
+        self.assertEqual(report["sessions"][1]["load_argument_file_classes"],
+                         {"nonzero": 1})
+        self.assertTrue(report["save_nonzero_in_earlier_session"])
+        self.assertTrue(report["load_nonzero_in_later_session"])
+        self.assertFalse(report["real_rgd_durability_or_reopen_proven"])
+
+    def test_repeated_snapshot_flags_with_whitespace_are_rejected(self):
+        self.put("save.jsonl", [
+            row("save", 1, "save", "Save.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero; "
+                "  exists_at_filename_argument=True;\tlength_class=nonzero")])
+        result = summarize(_paths(self.root))
+        self.assertEqual(result["sessions"][0]["save_argument_file_classes"],
+                         {"contradictory": 1})
+        self.assertIn("unparseable_snapshot", result["sessions"][0]["anomalies"])
+        self.assertFalse(result["real_rgd_durability_or_reopen_proven"])
+
     def test_unknown_log_detail_not_echoed(self):
         sensitive = "/storage/emulated/0/private-worldname.rgd"
         self.put("log.jsonl", [row("PRIVATE_SESSION_IDENTIFIER", 1,
