@@ -1,0 +1,15 @@
+{
+  "id": "T4-20261106T0336Z-T4-scheduled-m7q2-view-identity",
+  "session_id": "20261106T0336Z-T4-scheduled-m7q2",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "status": "SOURCE_FIXED",
+  "timestamp": "2026-11-06T03:36:00Z",
+  "summary": "Source-only diagnostic tracks Android pointer capture request/probe View identity by epoch; no behavior change and no phone verification.",
+  "evidence": [
+    "9b94ad1cbbd97048848340536243ced3022c8e3b",
+    "23333548d94c54f68c027c65ec611d551898377c"
+  ],
+  "next_step": "Run contract test and check device log; coordinate next signed candidate with T5."
+}
