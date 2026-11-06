@@ -3,7 +3,30 @@ import unittest
 
 from scripts.t5_cl_fps_cohort_gate import analyze, compare
 from scripts.t5_cl_pid_epoch_audit import audit
-from tests.test_t5_cl_fps_cohort_gate import row
+from scripts.t5_cl_fps_cohort_gate import PACKAGE
+
+
+def row(sample, *, fps=24.0, error=1, running=True):
+    """Public synthetic only; never inject actual owner PID or timestamps."""
+    return {
+        "schema": 1, "source": "lograf_shell", "package": PACKAGE,
+        "sample": sample, "timestamp_unix_ms": 1700000000000 + 3200 * sample,
+        "state": "game_running" if running else "game_not_running",
+        "pid": 123 if running else None,
+        "pid_probe_status": "main_pid_verified",
+        "fps_quality": "surface_presentation_estimate",
+        "fps_tracking_status": "valid_surface_presentation_estimate",
+        "fps_valid_sample_count": sample,
+        "frame_telemetry_stale": False,
+        "presented_fps_estimate": fps,
+        "presented_frame_window_count": 50,
+        "last_present_progress_age_ms": 0,
+        "shader_pass_errors_total": error,
+        "invalid_compute_kernel_total": 0,
+        "render_error_roots_per_second": 0.0,
+        "render_error_flood_warning": error > 0,
+    }
+
 
 
 class ProcessEpochCohortIntegration(unittest.TestCase):
