@@ -2,7 +2,7 @@
   "session_id": "20261106T1532Z-T3-scheduled-particle108-causality-8f3a",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2c0c0af7023a9e0f157b12e615e1a8545cba915a",
   "intended_files": [
     "prompt/coordination/clients/T3/sessions/20261106T1532Z-T3-scheduled-particle108-causality-8f3a.md",
@@ -11,5 +11,7 @@
   "experiment_key": "particle108-causal-attribution-owner-42058825739-vs-original-export-42243130856",
   "resource_key": null,
   "hypothesis": "Original Particle108 shader dummy after export is an actionable shader-program defect, but is not yet causally attributed to photographed square smoke; 5 material numeric transport is already disproven as source",
-  "updated_at": "2026-11-06T15:32:00Z"
+  "updated_at": "2026-11-06T15:34:00Z",
+  "result": "Five selected original Particle108 Materials preserve 15 RGBA, 145 Float32 and 10 UV slots in actual export; shader still dummy; photographed smoke emitter identity not proven. No redundant export.",
+  "session_path": "prompt/coordination/clients/T3/sessions/20261106T1532Z-T3-scheduled-particle108-causality-8f3a.md"
 }
