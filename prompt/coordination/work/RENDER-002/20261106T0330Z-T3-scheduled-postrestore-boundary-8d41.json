@@ -1,0 +1,21 @@
+{
+  "session_id": "20261106T0330Z-T3-scheduled-postrestore-boundary-8d41",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "baseline_sha": "2f01a235e60a55873b22b5d9ac54fd1afd430a6d",
+  "resumed_from_sessions": [
+    "20261106T0229Z-T3-scheduled-semantic-ambiguity-a6f2",
+    "20261106T014652Z-T3-chat-particle108-authoredsem-1f83"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/20261106T0330Z-T3-scheduled-postrestore-boundary-8d41.json",
+    "prompt/coordination/clients/T3/sessions/20261106T0330Z-T3-scheduled-postrestore-boundary-8d41.md"
+  ],
+  "hypothesis": "Existing authentic original DXBC semantic joins 4/4 do not establish post-restorer Shader48 identity; verify whether any fresh CI run supplies that evidence before costly rerun.",
+  "experiment_key": "T3-Shader48-postrestore-identity-evidence-gap-HEAD2f01a235-CIreview-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-06T03:30:00Z",
+  "taken_over_from": "T3 chat genuine DXBC CI42146385054; T3 scheduled uniqueness dd90874d",
+  "next_step": "Inspect post-restorer Unity export shader identity before claiming device visual fix."
+}
