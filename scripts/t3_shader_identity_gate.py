@@ -46,10 +46,10 @@ def check(root, manifest):
     # A valid GUID link is insufficient when the exported shader file is blank or only comments.
     # Strip comments without interpreting comment markers inside quoted ShaderLab strings.
     # Preserve line breaks so an apparent declaration in a block comment cannot pass.
-    token = re.compile(r'"(?:\\\\.|[^"\\\\])*"|/\\*[\\s\\S]*?(?:\\*/|\\Z)|//[^\\r\\n]*')
+    token = re.compile(r'"(?:\\.|[^"\\])*"|/\*[\s\S]*?(?:\*/|\Z)|//[^\r\n]*')
     uncommented = token.sub(lambda m: m.group(0) if m.group(0).startswith('"') else
-                            ''.join(c if c in '\\r\\n' else ' ' for c in m.group(0)), shader_text)
-    if not re.search(r'(?m)^\\s*Shader\\s+"[^"\\r\\n]+"\\s*\\{', uncommented):
+                            ''.join(c if c in '\r\n' else ' ' for c in m.group(0)), shader_text)
+    if not re.search(r'(?m)^\s*Shader\s+"[^"\r\n]+"\s*\{', uncommented):
         raise ValueError('missing_shader_declaration')
     materials = manifest['material_paths']
     if not isinstance(materials, list) or not materials or not all(isinstance(x,str) for x in materials) or len(materials) != len(set(materials)):
