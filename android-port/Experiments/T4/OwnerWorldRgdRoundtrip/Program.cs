@@ -155,8 +155,8 @@ internal static class Program
             // Report only structural relation to known RGD argument, not
             // either original CLR type name or metadata values.
             auditCategory = matchingShape[0].Parameters[1].ParameterType.Name == "RGD"
-                ? "SHIPPED_SEED_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT"
-                : "ORIGINAL_SAVE_ARGUMENT_DIFFERS_FROM_SHIPPED_SEED_ROOT";
+                ? "OWNER_WORLD_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT"
+                : "ORIGINAL_SAVE_ARGUMENT_DIFFERS_FROM_OWNER_WORLD_ROOT";
             return null;
         }
         var candidate = matches[0];
