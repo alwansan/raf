@@ -473,4 +473,33 @@ namespace RaftAndroid.Platform
         }
     }
 }
+#elif UNITY_5_3_OR_NEWER
+using UnityEngine;
+
+namespace RaftAndroid.Platform
+{
+    // Unity Editor compiles restored original gameplay scripts for Android
+    // while UNITY_EDITOR is true. The real Android JNI/View bridge above must
+    // not run there, but its static original-input call sites must resolve.
+    // Other non-Android Unity players keep exact legacy input semantics.
+    // Netstandard source-only builds without Unity symbols exclude both arms.
+    public sealed class AndroidPhysicalMouseCapture : MonoBehaviour
+    {
+        public static CursorLockMode ApplyCursorLock(CursorLockMode mode)
+        {
+            Cursor.lockState = mode;
+            return mode;
+        }
+
+        public static float GetAxis(string axis)
+        {
+            return Input.GetAxis(axis);
+        }
+
+        public static float GetAxisRaw(string axis)
+        {
+            return Input.GetAxisRaw(axis);
+        }
+    }
+}
 #endif
