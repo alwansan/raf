@@ -70,6 +70,22 @@ class CBufferSizeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"DXBC_CB_UNSUPPORTED_SHADER_MODEL"):
             private_cb_declarations(dx(1,major=5,minor=1),1)
 
+    def test_sm5_1_valid_three_index_decl_is_rejected_by_version_before_2d_decoder(self):
+        # Shader Model 5.1 uses a 3-index CB range: id, lower, upper,
+        # followed by size in 16-byte vectors and register space.
+        # This is structurally different from SM4.0's 2D cb#[size].
+        operand=(8<<12)|(3<<20)
+        sm51=[89|(7<<24),operand,1,0,3,64,0]
+        with self.assertRaisesRegex(ValueError,"DXBC_CB_UNSUPPORTED_SHADER_MODEL"):
+            private_cb_declarations(dx(1,major=5,minor=1,decls=sm51),1)
+
+    def test_duplicate_cb_register_slot_within_one_stage_is_fail_closed(self):
+        # Cannot count a duplicated source cb slot with conflicting sizes
+        # as if it were valid variation between original keywords.
+        duplicate=cb(1,16)+cb(1,32)
+        with self.assertRaisesRegex(ValueError,"DXBC_CB_DUPLICATE_DECL_SLOT"):
+            private_cb_declarations(dx(1,decls=duplicate),1)
+
     def test_sm4_2_and_sm6_0_fail_closed(self):
         for major,minor in ((4,2),(6,0)):
             with self.subTest(ver=(major,minor)),self.assertRaisesRegex(ValueError,"DXBC_CB_UNSUPPORTED_SHADER_MODEL"):
