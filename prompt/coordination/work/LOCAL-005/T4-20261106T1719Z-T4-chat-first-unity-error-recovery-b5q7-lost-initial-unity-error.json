@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "world_save_diagnostics",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "9f006935edb40189ae6f74074eb334ae9003205d",
   "experiment_key": "T4-LOCAL005-AndroidRuntimeLog-UnityMessage-unsaved-first-critical-when-sink-null-then-recovery-source-net8-v1",
   "resource_key": null,
@@ -30,16 +30,18 @@
     "https://github.com/alwansan/raf/actions/runs/42260446981",
     "https://github.com/alwansan/raf/actions/runs/42260590793",
     "https://github.com/alwansan/raf/actions/runs/42260791146",
-    "https://github.com/alwansan/raf/actions/runs/42260590952",
-    "https://github.com/alwansan/raf/actions/runs/42260590701"
+    "https://github.com/alwansan/raf/actions/runs/42260590701",
+    "https://github.com/alwansan/raf/actions/runs/42260590952"
   ],
   "result": {
-    "red": "42260446981 failed (expected) actual original logger source compile and Program.cs:258 check291",
-    "first_green": "42260590793 failed later check295 at Program.cs:267 because test counted legitimate repeat_summary as duplicate stack; original recovered first-stack assertion had passed",
-    "fix_sha": "5e0b52a8e9aef6bf0f66e54a51bc890f3151c20b",
-    "test_fix_sha": "af9e5c5c4192cf5f2df776ca860ae0731347f49f",
-    "green_run": "42260791146 pending"
+    "red": "42260446981 completed failure expected after real AndroidRuntimeLog source compiled: Program.cs:258 check291",
+    "fix": "5e0b52a8e9aef6bf0f66e54a51bc890f3151c20b",
+    "intermediate": "42260590793 failed later in test because it counted legitimate repeat_summary as a second full error; initial recovered assertion passed",
+    "test_fix": "af9e5c5c4192cf5f2df776ca860ae0731347f49f",
+    "final": "42260791146 completed SUCCESS 297/297 .NET8 checks; real source via UNITY_ANDROID synthetic Unity API; actualAndroidStorageVerified=false",
+    "android_device_proof": false,
+    "world_save_unmodified": true
   },
-  "next_step": "Wait CI42260791146 to verify exactly one operation Error with full original stack and separate repeat_summary; if pass, finalize session and T5 handoff; no device claims.",
-  "updated_at": "2026-11-06T17:23:00Z"
+  "next_step": "T5 future signed native candidate+matching main OBB should verify real device first error records, original world save/reopen and no source regressions; no duplicate build by T4. LOCAL-005 remains OPEN.",
+  "updated_at": "2026-11-06T17:25:00Z"
 }
