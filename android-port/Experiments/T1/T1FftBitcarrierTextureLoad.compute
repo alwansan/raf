@@ -1,0 +1,39 @@
+// T1 WATER-001 synthetic bitcarrier Texture2D.Load diagnostic.
+// PUBLIC authored control; not an original Raft compute kernel.
+#pragma kernel T1Fetch
+Texture2D<float4> T1Source;
+Texture2D<float4> T1Butterfly;
+StructuredBuffer<uint4> T1Coords;
+RWStructuredBuffer<uint> T1Captured;
+
+float4 Carrier(uint4 coords)
+{
+    return asfloat(coords);
+}
+int2 FirstAddress(float4 carrier)
+{
+    return asint(carrier.xy);
+}
+int2 SwizzledSecondAddress(float4 carrier)
+{
+    float4 rearranged = carrier.zwxy;
+    return asint(rearranged.xy);
+}
+
+[numthreads(64,1,1)]
+void T1Fetch(uint3 thread : SV_DispatchThreadID)
+{
+    uint i = thread.x;
+    uint4 coord = T1Coords[i];
+    float4 carrier = Carrier(coord);
+    uint baseIndex = 5u * i;
+    T1Captured[baseIndex] = asuint(T1Source.Load(int3(int(i), 0, 0)).x);
+    T1Captured[baseIndex + 1u] = asuint(T1Butterfly.Load(
+        int3(int2(coord.xy), 0)).x);
+    T1Captured[baseIndex + 2u] = asuint(T1Butterfly.Load(
+        int3(FirstAddress(carrier), 0)).x);
+    T1Captured[baseIndex + 3u] = asuint(T1Butterfly.Load(
+        int3(int2(coord.zw), 0)).x);
+    T1Captured[baseIndex + 4u] = asuint(T1Butterfly.Load(
+        int3(SwizzledSecondAddress(carrier), 0)).x);
+}
