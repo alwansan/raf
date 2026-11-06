@@ -97,6 +97,7 @@ jobs:
           python3 -m scripts.t1_fft_original_existing_gid_audit "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           # First actual original SPIR-V ImageFetch keyed trace, not an HLSL surrogate.
           # ORIGINAL-TRACE-SAFE-STAGE-20261106: identify exact private failure stage, no raw shader logs.
+          # T1-ORIGINAL-SPIRV-VALIDATOR-DIAG-20261106: only allowlisted validator tags may be logged.
           python3 -m scripts.t1_fft_original_trace_vulkan --project "$TMPDIR/candidates" \
             --export-private-trace "$TMPDIR/original-keyed-trace.bin"
           python3 -m scripts.t1_fft_candidate_keyed_trace_audit "$TMPDIR/original-keyed-trace.bin"
