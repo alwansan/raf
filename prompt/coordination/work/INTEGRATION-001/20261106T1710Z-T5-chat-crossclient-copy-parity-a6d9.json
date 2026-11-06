@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "T4 native/managed staging lexical regression after T5 helper extraction",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239",
-  "updated_at": "2026-11-06T17:10:00Z",
+  "updated_at": "2026-11-06T17:12:18.172Z",
   "resumed_from_sessions": [
     "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
     "20261106T1645Z-T5-chat-installed-obb-read-e7c4",
@@ -31,5 +31,19 @@
   "resource_key": "source-only python CI; T4 code and T5 runtime OBB probe untouched",
   "hypothesis": "T5 refactor split two T4 expected adjacent filename literal sequences, introducing false T4 staging regression; preserve single-line paired literals in RUNTIME_COMPILE_SUPPORT_FILES and test T4 policy expectations with actual unit tests.",
   "coordination": "Own T5 verifier script only; leave T4 mouse/immersive runtime and T4-owned tests untouched, leave T5 scheduled PERF-007 and concurrent installed OBB probe untouched; no Unity build or job cancellation",
-  "next_step": "Minimal exact literal restoration, T5 negative guard, independent CI verification using existing T4 workflows or source-only Python regression; record both successes and failures."
+  "next_step": "No ongoing T5 file reservation. Preserve both T4 literal staging contract pairs and original managed build pass before any later refactor; real Unity/phone acceptance unresolved.",
+  "source_commit": "905285215e6cbc5d72f480fa478bdbfc762cc775",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42259099674",
+    "https://github.com/alwansan/raf/actions/runs/42259099680",
+    "https://github.com/alwansan/raf/actions/runs/42259133117"
+  ],
+  "result": {
+    "t4_mouse_policy_ci": "SUCCESS",
+    "t4_immersive_policy_ci": "SUCCESS",
+    "t5_compile_dependency_tests": "5/5 PASS",
+    "original_managed_compile": "exit=0, errors={}",
+    "scope": "source-only",
+    "game_ready": false
+  }
 }
