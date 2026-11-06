@@ -5,7 +5,7 @@
   "session_id": "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "hypothesis": "Actual original SHA-pinned ZIP2 directly instrumented SPIR-V and generated HLSL imported by Unity2021 OpenGLCore have a reproducible first FFT butterfly invocation site1 coordinate/pixel difference on byte-identical seed19 buffers when measured in separate real GPU runtimes.",
   "source_sha": "177a57342dc6197e2f5dceee940c9bb0bec34c6f",
   "source_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -44,17 +44,66 @@
     "retry": {
       "id": 42289238865,
       "job_id": 128138000484,
-      "status": "in_progress",
-      "passed_steps": [
-        "license and disk budget",
-        "checkout + all source-only guards",
-        "GameCI CLI pinned SHA"
-      ]
+      "status": "completed",
+      "conclusion": "failure_numeric_difference",
+      "details": {
+        "run_id": 42289238865,
+        "job_id": 128138000484,
+        "job_status": "completed",
+        "job_conclusion": "failure",
+        "interpretation": "positive numeric mismatch detection; actual direct-original-SPIRV Vulkan and Unity2021 OpenGLCore physically identical source+butterfly inputs, different keyed read coordinates; gate fails as designed",
+        "sourcefree_unity_passed": true,
+        "zip2_sha_pin_matched": true,
+        "original_vulkan_two_pass_passed": true,
+        "unity_shader_import_dispatch_two_pass_passed": true,
+        "nunit_stage": "complete",
+        "shader_candidate0_and_candidate1_physical_SHA_verified": true,
+        "unity_gpu_copyinput_source_mismatch": 0,
+        "unity_gpu_copyinput_butterfly_mismatch": 0,
+        "unity_gpu_copyinput_texels_per_input": 32768,
+        "record_counts": [
+          64,
+          256,
+          64
+        ],
+        "sites": [
+          {
+            "site": 0,
+            "paired": 64,
+            "coordinate_mismatches": 63,
+            "zero_collapse_x": 63,
+            "zero_collapse_y": 0
+          },
+          {
+            "site": 1,
+            "paired": 256,
+            "coordinate_mismatches": 252,
+            "zero_collapse_x": 252,
+            "zero_collapse_y": 0
+          },
+          {
+            "site": 2,
+            "paired": 64,
+            "coordinate_mismatches": 64,
+            "zero_collapse_x": 63,
+            "zero_collapse_y": 64
+          }
+        ],
+        "reference_only": 0,
+        "unity_only": 0,
+        "unity_traced_vs_untraced_output_numeric_match": true,
+        "pixel_mismatches_pass0": "63/64",
+        "pixel_mismatches_pass1": "31/32",
+        "android_adreno_test": false,
+        "authored_original_findkernel_mapping_proven": false,
+        "ftz_causal_proof": false
+      }
     },
     "unity_real_original_comparison_completed": false
   },
   "rejected_hypotheses": [
-    "First failure was shader or Unity numeric error: false; failed earlier in sparse checkout contract validation."
+    "First failure was shader or Unity numeric error: false; failed earlier in sparse checkout contract validation.",
+    "Equal physical GPU input files and successful Unity import suffice for numeric parity: false."
   ],
   "limitations": [
     "No original game FFT Unity numeric result yet; do not claim water restored.",
@@ -62,5 +111,5 @@
     "External workflow status may advance after this checkpoint; scheduled T1 must verify from fresh GitHub evidence."
   ],
   "integration_commit": "177a57342dc6197e2f5dceee940c9bb0bec34c6f",
-  "next_step": "Check exact 42289238865 full run/jobjob. If failed locate first stage and repair without blind rerun, if successful read safe numeric site signatures and compare with original. No native XAPK."
+  "next_step": "Test separate integer_source translated shader variant under identical private SHA original and input/dispatch, then distinguish cause; no android acceptance."
 }
