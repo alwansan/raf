@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "waiting_ci",
+  "experiment_key": "T4-local005-CL520c-owner7-original-Save-Load-wire-exact-byte-equality-original-zip2-15964ea8-source-guard-v1",
+  "baseline_sha": "35c9e3191d52da100212930c1177745578a61d66",
+  "source_commit": "22ebebb0e0638d3a970475fcbcb506a88945307e",
+  "final_run_url": "https://github.com/alwansan/raf/actions/runs/42201568118",
+  "prior_success_run": "https://github.com/alwansan/raf/actions/runs/42153533612",
+  "changes": [
+    "android-port/Experiments/T4/OwnerWorldRgdRoundtrip/Program.cs",
+    "scripts/t4_validate_owner_world_roundtrip.py",
+    "tests/test_t4_owner_world_roundtrip.py",
+    ".github/workflows/raft-t4-owner-world-save-roundtrip.yml"
+  ],
+  "privacy": "No original game or owner bytes/sha/length/path, exception text, type names or per-world digest printed. Aggregate Boolean equality only.",
+  "criteria": "Compare 7 actual Save outputs to authenticated input bytes and classify exact-equality vs changed only; do not claim semantic corruption on byte inequality.",
+  "device": "NOT_TESTED",
+  "next_step": "Review immutable final CI 42201568118 output, record aggregates, preserve Android owner device acceptance gap"
+}
