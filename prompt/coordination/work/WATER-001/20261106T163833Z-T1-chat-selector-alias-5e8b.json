@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "Isolated original FFT staged Unity compiled-slot vs kernel/keyword selector alias safety",
   "approach": "Add fail-closed duplicate (kernel_name, normalized keyword-set) rejection in source-only staging and Editor runtime validation, plus synthetic regression. Preserve correct two-kernel/20-variant staging, explicitly do not claim original runtime variant mapping.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c7631ed7aef24cccc13e3efc7f9d5c38474eb0ed",
   "intended_files": [
     "scripts/t1_stage_unity_fft_kernel_probe.py",
@@ -34,8 +34,25 @@
   ],
   "experiment_key": "water001-fft-staged-unity-kernel-keyword-nominal-selector-alias-guard-synthetic-v1",
   "resource_key": "source-only-unity-staging-contract-no-gpu",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Reject duplicate nominal selectors in source staging+Unity Editor, make 20-row synthetic fixture 20 unique selector combinations preserving 2 kernel names, run isolated lightweight CI via push, record limits.",
-  "updated_at": "2026-11-06T16:38:33Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42255094227"
+  ],
+  "result": {
+    "scope": "distinct nominal Unity FFT kernel keyword selector alias guard, source-only",
+    "source_commits": [
+      "4fa8d1ba8e34c0b5b785e7e0f110a25fc97bae0c",
+      "b898212e1d4878455961187aa9f1d263d9441770",
+      "4b8b1552a9d84b9d2683a4a3230a3183f046a861"
+    ],
+    "ci_run": 42255094227,
+    "ci_job": 128020186830,
+    "synthetic_tests_passed": 8,
+    "synthetic_tests_total": 8,
+    "unity_editor_compiled": false,
+    "original_runtime_mapping_proven": false,
+    "android_water_proven": false,
+    "other_t1_private_pair_scope_untouched": true
+  },
+  "next_step": "Once concurrent original-vs-HLSL paired GPU trace is complete, inspect signed private input/dispatch attestation and first true numeric divergence; separately validate original authored multi-variant keyword behavior in real Unity Editor with source-authenticated fixture.",
+  "updated_at": "2026-11-06T16:46:00Z"
 }
