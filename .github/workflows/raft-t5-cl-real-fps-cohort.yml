@@ -65,6 +65,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Exercise the original direct-file CLI entry point too, not just
+          # importing the module in unit tests (the process-epoch helper uses
+          # a sibling package import and requires the resolved project root).
           python3 scripts/t5_cl_fps_cohort_gate.py \
             --session-a "$RUNNER_TEMP/t5-first.jsonl" --label-a 220911-559 \
             --session-b "$RUNNER_TEMP/t5-second.jsonl" --label-b 230108-327 \
