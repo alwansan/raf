@@ -1,0 +1,52 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1916Z-T1-chat-address-provenance-e6b2",
+  "issue_id": "WATER-001",
+  "hypothesis": "Unity2021 OpenGLCore carrier loss may depend on computed shift/add/mask address provenance versus host-staged buffer, and/or precise float qualifier. Compare both sources within the same 64-lane GPU dispatch and isolate bitcast, scaled, precise, image Load contexts.",
+  "source_commit": "aba2bcacd253ea91f225d768d802e5359018f008",
+  "source_sha_original_raft": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (NOT acquired)",
+  "input_hashes": [],
+  "tool_versions": {
+    "unity": "2021.3.45f2",
+    "gameci_cli": "v0.1.72 pinned SHA256 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a",
+    "runner": "ubuntu-24.04",
+    "backend": "OpenGLCore exact Assert"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_address_provenance_gate.py -v",
+    "python3 -m scripts.t1_sourcefree_unity_fixture --project t1-address-provenance-unity",
+    "GameCI test --docker --engine=unity --engineVersion=2021.3.45f2 --testPlatforms=editmode (private)",
+    "python3 -m scripts.t1_fft_address_provenance_gate --xml <private xml> --metrics <bounded> --exit-code <Unity rc>"
+  ],
+  "negative_controls": [
+    "Exact SHA-pinned GameCI CLI and real Unity license",
+    "OpenGLCore 2021.3.45f2, one NUnit test, 64-group compute and actual ComputeBuffer.GetData",
+    "16 decimal counters must each be 0..64, no private data, strict XML and stdout",
+    "Mandatory zero controls 0/1 integer source, 8/9 direct images, 14 static global source, 15 normal float",
+    "Ten diagnostic categories 2..7/10..13 allowed nonzero and reported, never suppressed",
+    "No original Raft source, authored runtime kernel mapping, Android, APK/OBB/XAPK"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-address-provenance.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42278153683",
+  "artifact_urls": [],
+  "budget": "25 min per run, game engine mutex raft-native-engine, cancel-in-progress:false, no original/download/export",
+  "status": "waiting_ci",
+  "observed_result": {
+    "run_id": 42278153683,
+    "job_id": 128099796286,
+    "source_sha": "aba2bcacd253ea91f225d768d802e5359018f008",
+    "source_preflight": "success",
+    "cli_authentication": "success",
+    "actual_Unity_GPU": "in_progress",
+    "result_counts": null
+  },
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Synthetic sourcefree matrix only, no original Raft FFT or Android testing.",
+    "Computed/staged signed source SHA cannot be inferred from synthetic controls.",
+    "Previous synthetic canaries had different compiler context, so a new measured difference cannot on its own prove root cause."
+  ],
+  "integration_commit": "aba2bcacd253ea91f225d768d802e5359018f008",
+  "next_step": "After live Actions result, record exact 16 counts & compare computed-vs-buffered and precise/raw pairs. If all zero, investigate old independent compiled shader optimization; if nonzero, add minimal counterfactual. Never patch original shader or request APK without source-authentic proof."
+}
