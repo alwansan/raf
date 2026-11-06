@@ -1,0 +1,105 @@
+name: T2 WATER-001 original opaque MonoBehaviour script header linkage
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_original_opaque_monoscript_head.py
+      - tests/test_t2_original_opaque_monoscript_head.py
+      - .github/workflows/raft-t2-original-opaque-monoscript-head.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-original-opaque-monoscript-head-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-monoscript-base-header:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Source-free base MonoBehaviour header and target provenance controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_original_opaque_monoscript_head.py
+          python3 -m unittest discover -s tests -p 'test_t2_original_opaque_monoscript_head.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 3*1024**3
+          print("T2_ORIGINAL_41_ASSET_SCRATCH_BUDGET_SAFE")
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-opaque-monoscript-zip2
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Read built-in m_Script headers from genuine original 40 scenes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 1100s python3 -m scripts.t2_original_opaque_monoscript_head \
+            --zip2 "$GITHUB_WORKSPACE/t2-original-opaque-monoscript-zip2" \
+            --scratch "$RUNNER_TEMP/t2-original-opaque-monoscript-source" \
+            --out "$RUNNER_TEMP/t2-original-opaque-monoscript-counts-safe.json"
+      - name: Assert safe complete source coverage and source-only proof limits
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          path=Path(os.environ["RUNNER_TEMP"])/"t2-original-opaque-monoscript-counts-safe.json"
+          r=json.loads(path.read_text(encoding="utf8"))
+          assert r["status"]=="source_original_MonoBehaviour_base_header_script_PPtr_census"
+          assert r["original_zip2_SHA_authenticated"] is True
+          assert r["original_scene_file_count_SHA_verified"] == 40
+          assert r["original_scene_bytes_SHA_verified"] == 233237972
+          assert r["original_foam_owner_bytes_SHA_verified"] == 115978112
+          assert r["combined_original_sha_verified_bytes"] == 349216084
+          assert r["original_scene_components_examined"] == 240961
+          assert r["original_scene_components_fully_parsed"] == 185633
+          assert r["original_scene_components_opaque"] == 55328
+          assert r["opaque_non_MonoBehaviour_components"] + r["opaque_MonoBehaviour_records"] == 55328
+          assert r["opaque_MonoBehaviour_header_parsed"] + r["opaque_MonoBehaviour_header_unparsed"] == r["opaque_MonoBehaviour_records"]
+          assert r["opaque_MonoBehaviour_script_to_external_typed_MonoScript"] <= r["opaque_MonoBehaviour_script_to_external_owner"]
+          assert r["script_PPtr_is_original_Foam_Shader_runtime_identity_proven"] is False
+          assert r["script_name_or_original_GUID_published"] is False
+          assert r["generated_custom_typetree_alignment_proven"] is False
+          assert r["opaque_custom_fields_recovered"] is False
+          assert r["source_original_Foam_Material_CB0_upload_verified"] is False
+          assert r["Android_Adreno_water_pixels_verified"] is False
+          assert all(type(v) in (int,bool,str) for v in r.values())
+          assert not any(k in r for k in (
+              "MonoScript_private_name", "MonoScript_original_ids",
+              "private_raw_object", "private_source_guid", "game_class_name",
+              "private_assembly_original_name"
+          ))
+          print("T2_ORIGINAL_OPAQUE_MONOSCRIPT_SAFE_ASSERTIONS_PASS")
+          PY
+      - name: Remove original Unity data before safe artifact upload
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-opaque-monoscript-source" \
+            "$GITHUB_WORKSPACE/t2-original-opaque-monoscript-zip2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-opaque-monoscript-header-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-original-opaque-monoscript-counts-safe.json
+          if-no-files-found: error
+          retention-days: 7
