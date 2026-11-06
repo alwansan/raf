@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1337Z-T3-chat-particle108-propstate-62fb",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ec6c948277d0a621285e25aa827b069e30570fe7",
+  "resumed_from_sessions": [
+    "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+    "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+    "20261106T1230Z-T3-scheduled-source-gate-7e4c"
+  ],
+  "parallel_T3_active": "20261106T1223Z-T3-chat-paired-glslang-a74c (separate HLSL staged pair tool)",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42223071341",
+    "https://github.com/alwansan/raf/actions/runs/42116530618",
+    "scripts/t2_foam_private_shaderlab_candidate.py"
+  ],
+  "hypothesis": "The exact original 108-use ParticleShader48 source property declarations + complete serialized Pass fixed function state can be losslessly and safely emitted as an isolated ShaderLab structural fragment; property names/defaults must remain private and unsupported flags/types fail closed, never replace DUMMY until authentic variant linkage.",
+  "experiment_key": "T3-ZIP2-15964-ParticleShader48-108-Original-PropInfo-PassState-Unity2021-ShaderLab-strict-no-HLSL-private-v1",
+  "resource_key": "T3-SHA-original-particle-4owner-6scene-structural-propstate-CPU",
+  "intended_files": [
+    "scripts/t3_particle108_source_propstate.py",
+    "tests/test_t3_particle108_source_propstate.py",
+    ".github/workflows/raft-t3-particle108-source-propstate.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1337Z-T3-chat-particle108-propstate-62fb.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1337Z-T3-chat-particle108-propstate-62fb.md",
+    "prompt/coordination/experiments/T3/20261106T1337Z-T3-chat-particle108-propstate-62fb.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1337Z-T3-chat-particle108-propstate-62fb.json"
+  ],
+  "approach": "Read exact source SHA-original uniquely selected 108-particle-slot Shader48; serialize original m_PropInfo + one-pass m_State to private scratch with allowlisted syntax, zero false fallback to invented fields; safe aggregate counts only. Test synthetic negatives and original via bounded manual/on-paths CI. No GPU or Unity export, no source HLSL or game asset edits.",
+  "updated_at": "2026-11-06T13:31:36.230Z",
+  "next_step": "Implement strict private property+render state parser and source-free negative controls; test genuine selected original Shader48 with SHA locked four owners/six scenes."
+}
