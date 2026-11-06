@@ -15,6 +15,7 @@ OpDecorate %butter Binding 1
 %v2f = OpTypeVector %float 2
 %v2i = OpTypeVector %int 2
 %ptr = OpTypePointer Function %v2f
+%ptrptr = OpTypePointer Function %ptr
 %zero = OpConstant %float 0
 %one = OpConstant %float 1
 %v0 = OpCompositeConstruct %v2f %zero %zero
@@ -120,27 +121,26 @@ class ReachingStoresTests(unittest.TestCase):
         self.assertFalse(result['unique_direct_store_if_no_unmodeled_aliases'])
 
     def test_copy_memory_source_does_not_write_local(self):
-        program = ('%other = OpVariable %ptr Function\\n'
-                   'OpStore %local %v0\\n'
-                   'OpCopyMemory %other %local\\n' + READS)
+        program = ('%other = OpVariable %ptr Function\n'
+                   'OpStore %local %v0\n'
+                   'OpCopyMemory %other %local\n' + READS)
         result = lane(program)
         self.assertFalse(result['unknown_alias_or_side_effect_path'])
         self.assertEqual(result['unknown_path_categories'], [])
         self.assertTrue(result['unique_direct_store_if_no_unmodeled_aliases'])
 
     def test_copy_memory_destination_is_unknown_write(self):
-        program = ('%other = OpVariable %ptr Function\\n'
-                   'OpStore %local %v0\\n'
-                   'OpCopyMemory %local %other\\n' + READS)
+        program = ('%other = OpVariable %ptr Function\n'
+                   'OpStore %local %v0\n'
+                   'OpCopyMemory %local %other\n' + READS)
         result = lane(program)
         self.assertTrue(result['unknown_alias_or_side_effect_path'])
         self.assertEqual(result['unknown_path_categories'], ['copy_memory_target'])
 
     def test_escaped_pointer_hazard_survives_later_direct_store(self):
-        program = ('%ptrptr = OpTypePointer Function %ptr\\n'
-                   '%other = OpVariable %ptrptr Function\\n'
-                   'OpStore %other %local\\n'
-                   'OpStore %local %v0\\n' + READS)
+        program = ('%other = OpVariable %ptrptr Function\n'
+                   'OpStore %other %local\n'
+                   'OpStore %local %v0\n' + READS)
         result = lane(program)
         self.assertEqual(result['unknown_path_categories'], ['pointer_escape'])
         self.assertFalse(result['unique_direct_store_if_no_unmodeled_aliases'])
