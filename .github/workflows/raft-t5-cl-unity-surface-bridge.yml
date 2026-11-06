@@ -1,0 +1,89 @@
+name: T5 PERF-007 actual Unity vs SurfaceFlinger stale-time bridge
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths: [.github/workflows/raft-t5-cl-unity-surface-bridge.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-cl-unity-surface-20261105
+  cancel-in-progress: false
+
+jobs:
+  time-bound-real-telemetry:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[t5-unity-surface-real-bridge]'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CL_COMMIT: 520c4cf409aa20a4db54ff80ed87d8807d9cba57
+      A_UNITY: 413932e92fc24cd50b1fae1cbb25120f392e8158
+      B_UNITY: 60674be571e4979e329924e5e2679f43e40ec41a
+      A_SF: bb24dda68503897cf4e2a5e4e2d8aef3e71777b8
+      B_SF: 0327e5a3bb01ca944b2c40e07d49f503914dd274
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run synthetic source/cross-clock separation controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t5_cl_unity_surface_bridge.py' -v
+          python3 -m py_compile scripts/t5_cl_unity_surface_bridge.py
+      - name: Verify 4 exact immutable CL Git blobs before reading numeric data
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/alwansan/CL/git/commits/$CL_COMMIT" --jq .sha | grep -qx "$CL_COMMIT"
+          for label in A_UNITY B_UNITY A_SF B_SF; do
+            sha="$(printenv "$label")"
+            gh api "repos/alwansan/CL/git/blobs/$sha" > "$RUNNER_TEMP/t5-$label.json"
+          done
+          python3 - <<'PY'
+          import base64,hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          for label in ("A_UNITY","B_UNITY","A_SF","B_SF"):
+              sha=os.environ[label]
+              v=json.loads((root/("t5-"+label+".json")).read_text())
+              assert v["sha"]==sha and v["encoding"]=="base64"
+              raw=base64.b64decode("".join(v["content"].split()),validate=True)
+              assert 0<len(raw)<2_000_000
+              git_sha=hashlib.sha1(("blob "+str(len(raw))+"\0").encode()+raw).hexdigest()
+              assert git_sha==sha,"Real CL telemetry SHA pinning failed"
+              (root/("t5-"+label+".jsonl")).write_bytes(raw)
+              print("T5_CL_SOURCE label="+label+" sha_verified=true bytes="+str(len(raw)))
+          PY
+      - name: Join actual Unity frame windows against SF stale UTC windows without gameplay claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/t5_cl_unity_surface_bridge.py \
+            --unity-a "$RUNNER_TEMP/t5-A_UNITY.jsonl" --sf-a "$RUNNER_TEMP/t5-A_SF.jsonl" \
+            --unity-b "$RUNNER_TEMP/t5-B_UNITY.jsonl" --sf-b "$RUNNER_TEMP/t5-B_SF.jsonl" > "$RUNNER_TEMP/t5-cohort-result.txt"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          data=(Path(os.environ["RUNNER_TEMP"])/"t5-cohort-result.txt").read_text().strip()
+          assert data.startswith("T5_CL_UNITY_SURFACE_BRIDGE ")
+          r=json.loads(data[len("T5_CL_UNITY_SURFACE_BRIDGE "):])
+          a,b=r["first"],r["second"]
+          assert a["unity_total_performance_intervals"]==39
+          assert a["unity_qualified_intervals"]==36
+          assert b["unity_total_performance_intervals"]==123
+          assert b["unity_qualified_intervals"]==116
+          assert b["sf_stale_sample_count"]==105
+          assert b["qualified_unity_intervals_during_sf_stale"]==62
+          assert b["unity_during_sf_stale_by_scene"]["MainScene"]["intervals"]==35
+          assert b["unity_during_sf_stale_by_scene"]["MainMenuScene"]["intervals"]==27
+          assert b["sf_stale_does_not_prove_game_freeze"] is True
+          assert r["cross_session_gameplay_fps_gain_proven"] is False
+          print(data)
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as f:
+              f.write("Pinned CL exact game+SF UTC join: second session had 105 stale SF measurements while Unity logged 62 qualified frame intervals within same stale UTC span (35 MainScene, 27 MainMenuScene). This proves telemetry source divergence, NOT actual screen presents, GPU improvement, gameplay fidelity or same-world benchmark.\n")
+          PY
