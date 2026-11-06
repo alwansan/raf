@@ -159,6 +159,24 @@ class FoamInstallTests(unittest.TestCase):
                 self.assertEqual(target.read_bytes(), PLACEHOLDER)
                 self.assertFalse(backup.exists())
 
+    def test_duplicate_exported_guid_rejected_before_backup(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, target, candidate, backup = fixture(d)
+            (project / "Assets" / "Elsewhere.asset.meta").write_bytes(META)
+            with self.assertRaisesRegex(ValueError, "duplicate exported Foam shader GUID"):
+                install(project, candidate, backup, SHA, stage())
+            self.assertEqual(target.read_bytes(), PLACEHOLDER)
+            self.assertFalse(backup.exists())
+
+    def test_unrelated_exported_guid_does_not_block_install(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, target, candidate, backup = fixture(d)
+            (project / "Assets" / "Elsewhere.asset.meta").write_bytes(
+                b"fileFormatVersion: 2\\nguid: " + b"b" * 32 + b"\\n")
+            result = install(project, candidate, backup, SHA, stage())
+            self.assertEqual(result["unique_original_foam_exported_target_installed"], 1)
+            self.assertEqual(target.read_bytes(), CANDIDATE)
+
     def test_backup_must_be_external_and_fresh(self):
         for within in (True, False):
             with tempfile.TemporaryDirectory() as d:
