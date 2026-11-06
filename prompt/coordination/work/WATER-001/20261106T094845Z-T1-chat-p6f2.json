@@ -4,7 +4,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "base_sha": "da66c976fc422f2e02b83ed27c8deb0bdcf9a4a3",
-  "status": "active",
+  "status": "waiting_ci",
   "intended_files": [
     ".github/workflows/raft-t1-fft-unity-input-identity.yml",
     "prompt/coordination/work/WATER-001/20261106T094845Z-T1-chat-p6f2.json",
@@ -12,6 +12,11 @@
   ],
   "experiment_key": "t1-original-slot0-ssa-promotion-only-unity-openglcore-vs-unchanged-vulkan-keyed-trace-v1",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-06T09:48:45Z",
-  "hypothesis": "With identical promotion and capture, omitting the integer rewrite changes the keyed read address divergence of replay 42196835754."
+  "updated_at": "2026-11-06T09:52:02.534Z",
+  "hypothesis": "With identical promotion and capture, omitting the integer rewrite changes the keyed read address divergence of replay 42196835754.",
+  "source_commit": "58a411ed247e814c030c769322822e6a3d3c6f02",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42198180194"
+  ],
+  "next_step": "Compare all three invocation-keyed sites and pass-zero numeric error to run 42196835754. If the signatures are unchanged, audit the address dependency chain for sites 1 and 2 before proposing another candidate."
 }
