@@ -1,0 +1,15 @@
+{
+  "session_id": "20261106T1440Z-T4-scheduled-c9q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_sha": "6b4e10fcbbb70675aed5f8a2e6acee4a606a6224",
+  "intended_files": [
+    "prompt/coordination/clients/T4/sessions/20261106T1440Z-T4-scheduled-c9q2.md",
+    "prompt/coordination/work/INPUT-005/T4-20261106T1440Z-T4-scheduled-c9q2-mouse-device-acceptance-gate.json"
+  ],
+  "experiment_key": "T4-INPUT005-20261106-source-vs-device-candidate-capture-evidence-gate",
+  "resource_key": "source-only-read-only-actions-no-native-build",
+  "hypothesis": "Current successful source CI and legacy CL do not establish pointer capture on a matching signed Android package; verify latest evidence and identify exact missing proof.",
+  "updated_at": "2026-11-06T14:40:50Z"
+}
