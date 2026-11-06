@@ -4,7 +4,7 @@
   "session_id": "20261106T0138Z-T5-chat-performance-cohort-7ab4",
   "origin": "chat",
   "issue_id": "PERF-007",
-  "status": "active",
+  "status": "completed_source_and_actual_CL_verified",
   "base_sha": "6421459579fa5e0c006a088cb30ecf76f023e129",
   "intended_files": [
     "prompt/coordination/work/PERF-007/20261106T0138Z-T5-chat-performance-cohort-7ab4.json",
@@ -38,7 +38,25 @@
       }
     ]
   },
-  "ci_urls": [],
-  "next_step": "Implement strict source-free telemetry cohort gate and unit fixtures; pin and check real CL blobs in CPU-only GitHub Actions; report only safe aggregates; no Unity/build/game/Runtime changes.",
-  "updated_at": "2026-11-06T01:35:55.872Z"
+  "ci_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42145219506"
+  ],
+  "next_step": "Separate new live-game-interval analysis for real source pinned Unity persistent JSONL blobs 413932e92fc24cd50b1fae1cbb25120f392e8158 and 60674be571e4979e329924e5e2679f43e40ec41a; same scene and time windows required; do not change runtime.",
+  "updated_at": "2026-11-06T01:43:12.003Z",
+  "result": {
+    "run": 42145219506,
+    "job": 127654944860,
+    "conclusion": "success",
+    "synthetic_tests": "18/18",
+    "pinned_CL_files_validated": 2,
+    "actual_rows": 190,
+    "first_valid_fps": 57,
+    "second_valid_fps": 2,
+    "first_stale": 6,
+    "second_stale": 105,
+    "first_post_render_error_valid_fps": 57,
+    "second_post_render_error_valid_fps": 0,
+    "verdict": "NOT_COMPARABLE",
+    "unity_game_internal_diagnostics_found_in_CL": true
+  }
 }
