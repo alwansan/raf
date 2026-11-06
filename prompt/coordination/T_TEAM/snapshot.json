@@ -6400,6 +6400,52 @@
       "_record_path": "../B_TEAM/events/T1/20261106T113001Z-T1-chat-lane-alias-f73c.json"
     },
     {
+      "id": "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+      "owner": "T1",
+      "session_id": "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated original FFT slot0 butterfly site1 Y typed writer origins: two may-reaching same-component producers, one sint32 bits reinterpreted into float32 via OpBitcast, one float32 constant. Butterfly site2 Y has one float32 constant writer. Corrected 3 duplicate-ID synthetic fixture errors; final GitHub Actions 42212055131 SUCCESS with 13/13 tests and private Vulkan original analysis. Branch-selected actual value/Unity numeric parity/Adreno water remain unproven; no shader rewrite.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42211872487",
+        "https://github.com/alwansan/raf/actions/runs/42212055131",
+        "https://github.com/alwansan/raf/commit/a9fe62d73adbb90555599dd50120dc6cc3dd1fd8"
+      ],
+      "at": "2026-11-06T11:42:32.882Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T113707Z-T1-chat-bitcarrier-producer-c8f1.json"
+    },
+    {
+      "id": "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2",
+      "session_id": "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2",
+      "issue_id": "WATER-001",
+      "status": "source_changed_tests_pending",
+      "base_sha": "1cc26ea5c9b525d07e3b7116f0caf9fa034c2920",
+      "source_commit": "61ce53f0f3523927bc7e782c2c4080ddcdbdf7cf",
+      "tests_commit": "04f9c9782b49fd6e37ce190ca3c42b3b6d20f218",
+      "reproducer": "math.isfinite(10**400) raises OverflowError",
+      "change": "2MiB input and 8192 sample bounds; finite float conversion with invalid value rejection",
+      "limits": "No actual repo tests/paired captures/Unity/Adreno; no new CI",
+      "next": "Execute four new tests on exact repository commit and compare paired original captures",
+      "event_type": "source_only_regression",
+      "origin": "scheduled",
+      "_record_path": "../B_TEAM/events/T1/20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2.json"
+    },
+    {
+      "id": "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+      "owner": "T1",
+      "session_id": "20261106T122023Z-T1-chat-y-guard-paths-d71e",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T12:30:42.282Z",
+      "summary": "Authenticated original FFT slot0 butterfly1 Y structural CFG path analysis: five static writes (3 whole vector, one sint32-bit-pattern-to-float, one float32 constant), but at target Y fetch only float32_constant is possible last writer in bounded path model. One abstract path state; encountered predicate producer family OpINotEqual. No same-path bitcarrier+float, unknown writes or escapes observed. Source-authentic CI 42217830589 PASS 15/15 tests after correcting omitted empty predicate map. No dynamic predicate feasibility, Vulkan↔Unity numeric parity or Android water fix proven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42217597416",
+        "https://github.com/alwansan/raf/actions/runs/42217830589",
+        "https://github.com/alwansan/raf/commit/c04278edeb3429738259ca7ef28300bfae00d91b"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T122023Z-T1-chat-y-guard-paths-d71e.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -7032,6 +7078,24 @@
       "limits": "Original Shader/DLL SHA exact; private member names, hashes, method identities, IL and bytes never published. Source-matched compiled first string formal is not runtime call/CB0 upload or device pixels.",
       "next_step": "T2 trace typed Vector4 second-operand and Material receiver provenance; preserve pass0 Fragment/pass1 Vertex larger compiled array capacity constraints and coordinate Unity integration with T1/T5.",
       "_record_path": "../B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json"
+    },
+    {
+      "id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-result",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T12:26:00Z",
+      "summary": "Original SHA-pinned Foam CB0 managed IL CI42217370118 SUCCESS (11 Python plus Cecil source-only selftest, owner+Assembly-CSharp SHA auth). Exactly one source-private CB0 vector name remains direct Material.SetVector(string,Vector4) first formal, its typed second value is newobj (one), and instance Material receiver source is pre-literal unknown (one). No Vector4 numeric args, receiver Material→Foam or full Unity CB0 upload proven; WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42217370118",
+        "docs/T2_FOAM_ORIGINAL_CB0_SETVECTOR_OPERAND_ORIGINS_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/205be806b79451097149c90a3a6301f05a6a009c"
+      ],
+      "limits": "No original private symbols/numbers/game code/IL emitted, no shader/.meta/GUID/runtime/native build changed; source-first formal→newobj opcode origin only, receiver unknown.",
+      "next_step": "Authenticate Vector4 ctor formal inputs and earlier receiver producer; link original source CB0 values to correct material/Unity upload and device water.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1218Z-T2-chat-cb0-setvector-operands-4d79-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -8660,6 +8724,25 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.json"
     },
     {
+      "schema_version": 1,
+      "event_id": "20261106T1140Z-T4-scheduled-k3m8",
+      "agent": "T4",
+      "origin": "scheduled",
+      "issue_id": "INPUT-005",
+      "status": "evidence_gate_documented",
+      "baseline_sha": "380edc11ca23dd1f59d3540811497aaf7aaab0ce",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42058825739",
+        "https://github.com/alwansan/raf/actions/runs/42210561898",
+        "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log"
+      ],
+      "result": "Old owner artifact predates native release outcome telemetry; absent event cannot be used as diagnostic. No new phone confirmation.",
+      "next_step": "T5 exact signed APK+OBB provenance then new mouse/keyboard JSONL and world save/reopen",
+      "device_confirmed": false,
+      "id": "20261106T1140Z-T4-scheduled-k3m8",
+      "_record_path": "../B_TEAM/events/T4/20261106T1140Z-T4-scheduled-k3m8.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9215,6 +9298,41 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1130Z-T5-chat-applycallers-c6e1.json"
     },
     {
+      "id": "20261106T1221Z-T5-chat-resolution-param-5df2",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1221Z-T5-chat-resolution-param-5df2",
+      "issue_id": "DISPLAY-003",
+      "type": "result",
+      "at": "2026-11-06T12:29:57.347Z",
+      "summary": "Original SHA-pinned GraphicsSettingsBox 3 Apply callers: sole one-parameter private void instance caller takes custom reference type, has 4 Dropdown value writes, 1 shown-value refresh, 0 get_value, 0 direct onValueChanged/AddListener; class has 0 direct AddListener. CI42217714507 passed 9 Python+8 synthetic and real original gates. Likely UI synchronization but serialized callbacks/persistence/device unproven. No game changes.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42217714507",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_RESOLUTION_PARAMETER_2026-11-06.md"
+      ],
+      "limits": "Source-only IL category proof; not a new Settings feature, Android phone acceptance, water/FFT graphics fix or performance measurement.",
+      "next_step": "Deprioritize working Settings until real regression; focus on release/asset integration with T1-T3.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1221Z-T5-chat-resolution-param-5df2.json"
+    },
+    {
+      "id": "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a",
+      "issue_id": "COORD-001",
+      "type": "result",
+      "at": "2026-11-06T12:35:35.356Z",
+      "summary": "Canonical B_TEAM ledger refresh CI42217811393 (T2) and CI42218319821 (T5) failed Missing record identity on T1 20261106T1215Z coordinate-overflow event; added explicit id equal to already-present session_id via blob-CAS, all 12 other authored T1 fields retained. Commit f4d459b. Strict parser unchanged; re-index pending.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42217811393",
+        "https://github.com/alwansan/raf/actions/runs/42218319821",
+        "https://github.com/alwansan/raf/commit/f4d459b57d5aac03836278d079763ab20844ae11"
+      ],
+      "limitations": "Evidence ledger integrity only; T1 FFT, P0 water, original rendering and Android device acceptance unchanged.",
+      "next_step": "Run full source-only canonical T5 ledger refresh with 14 tests and check push.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9243,7 +9361,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "bbdbfa1267c5ceb64335431ade08670ff2eda751d6c8da937d2d73c0f0c953d1",
+  "source_input_sha256": "d56e3489af2ba09eeecc6963d687ab48be83b5d0fb0009333bb862f377aceeee",
   "generation": "T-2026-11-05",
-  "input_sha256": "b51d97d5b0f05e8e629d1c60edca07cefd121e29e72f890dc92e40f12cbd2eed"
+  "input_sha256": "b213e291cb657922a5c43d9288b42de21b4afe86c881520d75b1570febb37bb7"
 }
