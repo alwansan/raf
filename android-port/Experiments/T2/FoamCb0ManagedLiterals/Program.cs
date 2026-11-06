@@ -349,7 +349,10 @@ internal static class Cb0ExactFirstFormal
 {
     internal readonly record struct Evidence(
         string SetterFamily, string Kind, string SecondVectorValueOrigin,
-        string MaterialReceiverOrigin);
+        string MaterialReceiverOrigin, string UniqueVector4ConstructorStatus,
+        int UniqueVector4ConstructorParameterCount,
+        int UniqueVector4ConstructorFloatFormalCount,
+        IReadOnlyDictionary<string, int> UniqueVector4ConstructorInputOriginCounts);
     private enum Tag {
         Unknown, SourceString, SourcePropertyId, MethodArgument, NumericLiteral,
         InstanceFieldLoad, StaticFieldLoad, CallReturn, ConstructedInstance,
@@ -389,6 +392,22 @@ internal static class Cb0ExactFirstFormal
             return null;
         var stack = new List<Tag> { Tag.SourceString };
         var locals = new Dictionary<int, Tag>();
+        int newobjCount = 0, typedVector4CtorFormals = 0, typedVector4CtorFloats = 0;
+        var uniqueCtorOrigins = new Dictionary<string, int>(StringComparer.Ordinal);
+        bool typedVector4CtorSeen = false;
+        Evidence Matched(string family, string kind, Tag value, Tag receiver)
+        {
+            bool valid = value == Tag.ConstructedInstance &&
+                newobjCount == 1 && typedVector4CtorSeen;
+            return new Evidence(
+                family, kind, Origin(value), Origin(receiver),
+                valid ? "one_typed_UnityEngine_Vector4_ctor_in_slice"
+                      : "not_uniquely_proven",
+                valid ? typedVector4CtorFormals : 0,
+                valid ? typedVector4CtorFloats : 0,
+                valid ? new Dictionary<string, int>(uniqueCtorOrigins, StringComparer.Ordinal)
+                      : new Dictionary<string, int>(StringComparer.Ordinal));
+        }
         Tag Pop()
         {
             if (stack.Count == 0) return Tag.PreLiteralUnknown;
@@ -510,12 +529,33 @@ internal static class Cb0ExactFirstFormal
                         string firstType = method.Parameters[0].ParameterType.FullName;
                         if (firstType == "System.String" &&
                             formals[0] == Tag.SourceString)
-                            return new Evidence(family,"source_literal_as_string",
-                                Origin(formals[1]), Origin(receiver));
+                            return Matched(family, "source_literal_as_string",
+                                           formals[1], receiver);
                         if (firstType == "System.Int32" &&
                             formals[0] == Tag.SourcePropertyId)
-                            return new Evidence(family,"source_literal_via_PropertyToID",
-                                Origin(formals[1]), Origin(receiver));
+                            return Matched(family, "source_literal_via_PropertyToID",
+                                           formals[1], receiver);
+                    }
+                }
+                if (ins.OpCode.Code == Code.Newobj)
+                {
+                    newobjCount++;
+                    // Source-symbol-free classification only. Multiple newobj
+                    // operations in this slice make value attribution ambiguous.
+                    if (newobjCount == 1 &&
+                        method.DeclaringType.FullName == "UnityEngine.Vector4" &&
+                        method.Name == ".ctor" && method.HasThis)
+                    {
+                        typedVector4CtorSeen = true;
+                        typedVector4CtorFormals = method.Parameters.Count;
+                        typedVector4CtorFloats = method.Parameters.Count(x =>
+                            x.ParameterType.FullName == "System.Single");
+                        foreach (Tag input in formals)
+                        {
+                            string category = Origin(input);
+                            uniqueCtorOrigins[category] =
+                                uniqueCtorOrigins.GetValueOrDefault(category) + 1;
+                        }
                     }
                 }
                 Tag result = ins.OpCode.Code == Code.Newobj
@@ -639,5 +679,50 @@ internal static class Cb0ExactFirstFormal
         };
         if (Trace(unsupported,0) is not null)
             throw new InvalidOperationException("Unknown IL must not imply origins");
+        var ctor = new MethodReference(".ctor", module.TypeSystem.Void, vector4)
+            { HasThis = true };
+        for (int n=0;n<4;n++)
+            ctor.Parameters.Add(new ParameterDefinition(module.TypeSystem.Single));
+        var vectorCtor = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr, "PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Ldc_R4,1f),
+            Instruction.Create(OpCodes.Ldc_R4,2f),
+            Instruction.Create(OpCodes.Ldc_R4,3f),
+            Instruction.Create(OpCodes.Ldc_R4,4f),
+            Instruction.Create(OpCodes.Newobj,ctor),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        var verifiedVectorCtor = Trace(vectorCtor,0);
+        if (verifiedVectorCtor?.UniqueVector4ConstructorStatus !=
+                "one_typed_UnityEngine_Vector4_ctor_in_slice" ||
+            verifiedVectorCtor?.UniqueVector4ConstructorParameterCount != 4 ||
+            verifiedVectorCtor?.UniqueVector4ConstructorFloatFormalCount != 4 ||
+            !verifiedVectorCtor.Value.UniqueVector4ConstructorInputOriginCounts
+                .TryGetValue("numeric_literal", out int literalCount) ||
+            literalCount != 4)
+            throw new InvalidOperationException("Typed Vector4 ctor with scalar origins");
+        var nonVectorCtor = new MethodReference(".ctor", module.TypeSystem.Void, owner)
+            { HasThis = true };
+        for (int n=0;n<4;n++)
+            nonVectorCtor.Parameters.Add(new ParameterDefinition(module.TypeSystem.Single));
+        var rejectedCtor = vectorCtor.Select(x => x).ToList();
+        rejectedCtor[5] = Instruction.Create(OpCodes.Newobj,nonVectorCtor);
+        if (Trace(rejectedCtor,0)?.UniqueVector4ConstructorStatus !=
+            "not_uniquely_proven")
+            throw new InvalidOperationException("Wrong ctor type must not prove Vector4");
+        var twoConstructors = new List<Instruction> {
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_SOURCE_NAME"),
+            Instruction.Create(OpCodes.Newobj,nonVectorCtor),
+            Instruction.Create(OpCodes.Pop),
+            Instruction.Create(OpCodes.Ldc_R4,1f),
+            Instruction.Create(OpCodes.Ldc_R4,2f),
+            Instruction.Create(OpCodes.Ldc_R4,3f),
+            Instruction.Create(OpCodes.Ldc_R4,4f),
+            Instruction.Create(OpCodes.Newobj,ctor),
+            Instruction.Create(OpCodes.Callvirt,setter)
+        };
+        if (Trace(twoConstructors,0)?.UniqueVector4ConstructorStatus !=
+            "not_uniquely_proven")
+            throw new InvalidOperationException("Multiple newobj sources are ambiguous");
     }
 }
