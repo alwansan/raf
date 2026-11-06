@@ -7,7 +7,7 @@
   "issue_id": "LOCAL-005",
   "track": "original-offline-source-transaction",
   "approach": "Fail closed on silent byte-inaccurate original C# or .cs.meta backup before mutating source, with two synthetic fault-injection tests",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f86e1ac9d651440bbb2aa98736dd01477ac65be9",
   "intended_files": [
     "scripts/adapt_android_offline_startup.py",
@@ -25,8 +25,15 @@
   "experiment_ids": [
     "20261106T1835Z-T4-chat-backup-byte-verify-z7n4"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add synthetic copy2 silent corruption negative controls, then byte-equivalence guard before any original write, confirm relevant source CI.",
-  "updated_at": "2026-11-06T18:35:10Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42272204049",
+    "https://github.com/alwansan/raf/actions/runs/42272236452",
+    "https://github.com/alwansan/raf/actions/runs/42272236313",
+    "https://github.com/alwansan/raf/actions/runs/42272236197",
+    "https://github.com/alwansan/raf/actions/runs/42272236350",
+    "https://github.com/alwansan/raf/actions/runs/42272236493"
+  ],
+  "result": "Synthetic RED exactly 2 silent-corruption subcases on test-only 493c4e35; GREEN 22/22 B13 source job on fix 2ca4541c; same-SHA B14, B07, original local startup and reconstruction preflight all completed success. B13 aggregate failed only due unrelated T3 event Missing record identity in summary job.",
+  "next_step": "This source scope complete and released. Future T4 cycle resume original world/save phone acceptance if T5-approved signed candidate, or new independent LOCAL-005 blocker; T3/T5 independent schema event repair. Do not repeat CI42272236452 or native build.",
+  "updated_at": "2026-11-06T18:38:00Z"
 }
