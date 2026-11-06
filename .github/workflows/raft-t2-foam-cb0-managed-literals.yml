@@ -255,6 +255,24 @@ jobs:
           name_unknown=r['original_exact_Material_ctor_private_Shader_Find_requested_name_unknown_count']
           assert all(type(v) is int and v>=0 for v in (name_matches,name_differs,name_unknown))
           assert name_matches+name_differs+name_unknown==find_count
+          owner_shaders=r['original_owner_Shader_object_count_examined']
+          owner_shaders_unparsed=r['original_owner_Shader_name_unparsed_count']
+          owner_materials=r['original_owner_Material_object_count_examined']
+          owner_materials_unparsed=r['original_owner_Material_pointer_unparsed_count']
+          owner_foam_material_refs=r['original_owner_Material_original_Foam_same_file_PPtr_count']
+          owner_external_shader_refs=r['original_owner_Material_external_Shader_PPtr_count']
+          owner_find_other=r['original_Shader_Find_requested_other_Shader_object_same_owner_name_match_count']
+          assert type(owner_shaders) is int and 1<=owner_shaders<=8192
+          assert type(owner_materials) is int and 0<=owner_materials<=32768
+          assert all(type(v) is int and v>=0 for v in
+                     (owner_shaders_unparsed,owner_materials_unparsed,
+                      owner_foam_material_refs,owner_external_shader_refs,owner_find_other))
+          assert owner_shaders_unparsed<owner_shaders
+          assert owner_materials_unparsed+owner_foam_material_refs+owner_external_shader_refs<=owner_materials
+          assert owner_find_other<=owner_shaders-1
+          assert r['original_source_owner_is_all_Raft_Shader_assets_verified'] is False
+          assert r['original_source_owner_PPtr_links_are_runtime_loaded_verified'] is False
+          assert 'original_owner_other_Shader_names_SHA256_private' not in r
           assert r['original_exact_Shader_Find_name_match_implies_runtime_Shader_asset_identity'] is False
           assert 'original_Foam_Shader_mName_SHA256_private' not in r
           assert 'PrivateShaderFindRequestedName' not in r
