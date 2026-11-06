@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "T2-20261106T1753Z-T2-chat-original-levels-component-671a",
+  "client": "T2",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1753Z-T2-chat-original-levels-component-671a",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "277a8ccc8ab1f3355bc1b3f0e3f1b7ea958f83fa",
+  "round_id": "trial-20261106-r1",
+  "vote": "لا يحتاج",
+  "experiment_key": "ZIP2-15964-40-original-scene-level0-39-SHA-serial-Material-Shaders-typed-component-Foam2420-v1",
+  "resource_key": "immutable-zip2-original-40-scenes-readonly-budget-234MB",
+  "approach": "Check source-pinned all 40 original scene level data (233237972 bytes) for genuine Material Shader references and parsed component Shader PPtrs to original Foam owner PathID2420, with strict distinction local/foreign/fileID, parse limits, aggregate-only report. This is distinct from completed 40 sharedassets Material PPtr census and previous original managed Shader.Find name comparison. If opaque MonoBehaviour fields, report coverage not false-negative.",
+  "resumed_from_sessions": [
+    "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
+    "20261106T1719Z-T2-scheduled-target-name-ci-7f2c"
+  ],
+  "intended_files": [
+    "scripts/t2_original_scene_foam_component_scan.py",
+    "tests/test_t2_original_scene_foam_component_scan.py",
+    ".github/workflows/raft-t2-original-scene-foam-component.yml",
+    "prompt/coordination/clients/T2/sessions/20261106T1753Z-T2-chat-original-levels-component-671a.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1753Z-T2-chat-original-levels-component-671a.json",
+    "prompt/coordination/experiments/T2/20261106T1753Z-T2-chat-original-levels-component-671a.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1753Z-T2-chat-original-levels-component-671a-result.json",
+    "docs/T2_FOAM_ORIGINAL_40_LEVEL_SCENE_COMPONENTS_2026-11-06.md"
+  ],
+  "last_source_proof": "https://github.com/alwansan/raf/actions/runs/42264851712",
+  "hypothesis": "Actual source Foam shader may have direct authored Material Shader pointers or PPtr<Shader> references in 40 original scene serialized level files, absent from all 40 sharedassets Material records; inspect both negative and non-opaque coverage.",
+  "updated_at": "2026-11-06T17:53:51.638Z",
+  "next_step": "Add source-free typed PPtr traversal controls and one isolated SHA-original scene scan. No APK build request and no vote change until substantive integrated game shader patch."
+}
