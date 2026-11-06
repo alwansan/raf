@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "cf5d3c38456e0d7b2b50a6e73680ab8c01f1256a",
+  "updated_at": "2026-11-06T12:59:21.738Z",
+  "resumed_from_sessions": [
+    "20261106T1243Z-T5-chat-zip-local-headers-9e2a.md",
+    "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
+  ],
+  "experiment_key": "T5-GitHub-Actions-42058825739-artifact-13441227298+13441766832-digest-size-ranged-ZIP-central-manifest-v1",
+  "resource_key": "real existing owner-tested GitHub Actions artifact metadata; HTTP-range <=4MiB per archive, no full original asset downloads",
+  "hypothesis": "Read authenticated GitHub artifact REST metadata, ZIP central directory, and safe small delivery.json from existing 5.95GB delivery and 2.97GB signed-checkpoint archive with bounded HTTP 206 ranges. Identify actual inner logical filenames/sizes and any source-provided manifest without extracting original game files, and rigorously label SHA/signature/phone as unverified.",
+  "intended_files": [
+    "scripts/t5_probe_github_artifact_zip_range.py",
+    "tests/test_t5_probe_github_artifact_zip_range.py",
+    ".github/workflows/raft-t5-real-delivery-zip-range.yml",
+    "docs/T5_REAL_ARTIFACT_ZIP_RANGE_2026-11-06.md",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1301Z-T5-chat-artifact-range-probe-f9c2.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1301Z-T5-chat-artifact-range-probe-f9c2.md",
+    "prompt/coordination/experiments/T5/20261106T1301Z-T5-chat-artifact-range-probe-f9c2.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1301Z-T5-chat-artifact-range-probe-f9c2.json"
+  ],
+  "coordination": "T5 scheduled owns signed APK/OBB provenance; this is independent minimal remote envelope inventory, no 9GB transfer. No shared Unity, T1/T2/T3/T4 owner files or build jobs touched. All latest branch Actions completed at scope check.",
+  "security": [
+    "GITHUB_TOKEN only from Actions secret, no URLs/tokens printed",
+    "Only HTTPS GitHub REST redirect to trusted asset blob hosts",
+    "Reject no-range servers; per archive <=4MiB fetched or abort",
+    "No inner actual signed APK/OBB SHA/cert/device claims absent full downloads",
+    "Bound ZIP member counts/metadata, no original filenames or game resource bytes in reports"
+  ],
+  "next_step": "Implement safe range seek adapter for actual Action v4 artifact ZIP; run synthetic tests and live read-only runner; save source-only envelope observations and limits."
+}
