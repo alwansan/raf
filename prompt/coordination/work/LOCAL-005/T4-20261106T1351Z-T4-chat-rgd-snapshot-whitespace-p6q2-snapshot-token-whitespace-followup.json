@@ -4,7 +4,7 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed_source_free_ci_verified_device_unverified",
   "base_sha": "9c6e70887fab25089beacc2ef790f29c2e11c252",
   "resumed_from_sessions": [
     "20261106T1343Z-T4-scheduled-n8p4",
@@ -29,6 +29,12 @@
     "https://github.com/alwansan/raf/actions/runs/42227626291"
   ],
   "nonoverlap": "Prior T4 scheduled 1343Z scope completed with CI unverified. This is a concrete follow-on fix to its 3 failed regression controls; no active T4 parser job. T4 older CLR 1221Z is separate .NET C# workspace; T5 packaging and other team files untouched.",
-  "next_step": "Correct both field-key whitespace regexes without weakening duplicate detection, expand positive and negative examples; validate Python local and exact CI, checkpoint results.",
-  "updated_at": "2026-11-06T13:44:48.643Z"
+  "next_step": "Use new matched signed Raft APK/OBB SHA/versionCode on owner POCO F5 Pro, collect private post-source JSONL + real world save/force-stop/reopen and actual hardware mouse focus/menu; source-only hints do NOT prove same-world durability. T4 1221Z original CLR fresh-process RGD scope remains independent.",
+  "updated_at": "2026-11-06T13:47:55.647Z",
+  "result": "Exact final CI42228168580 COMPLETED SUCCESS on source 66b45b86: 23/23 real Python parser control cases (including previous three failures and two new positive/negative whitespace duplicates), 2/2 overflow controls = 25/25 source-free. Earlier CI42227641309 failed three tests; original whitespace escaping error corrected. No original game data, Android player or phone data tested.",
+  "source_commit": "66b45b86d7723ef80221da5087967bbb4b8c9936",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42228168580",
+    "https://github.com/alwansan/raf/actions/runs/42228118335"
+  ]
 }
