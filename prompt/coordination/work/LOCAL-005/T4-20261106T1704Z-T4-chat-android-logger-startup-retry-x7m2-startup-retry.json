@@ -29,9 +29,12 @@
     "prompt/coordination/experiments/T4/20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2.json"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42258727771"
+    "https://github.com/alwansan/raf/actions/runs/42258727771",
+    "https://github.com/alwansan/raf/actions/runs/42259053551",
+    "https://github.com/alwansan/raf/actions/runs/42259053586",
+    "https://github.com/alwansan/raf/actions/runs/42259053531"
   ],
   "result": null,
-  "next_step": "CI42258727771 on a9a9a970 tests real AndroidRuntimeLog with synthetic Unity API, expect a runtime recovery assertion red; distinguish source compile/error from legitimate red. Then patch only logger Initialize after confirmed result.",
-  "updated_at": "2026-11-06T17:08:00Z"
+  "next_step": "Red authentic Android source CI42258727771 proved permanent initialization lockout after filesystem recovery at check288, actual compiled source. Production fix cdfa4bd855... committed; wait green CI42259053551, original startup42259053586, FFT synthetic42259053531; record exact verdict and avoid Unity phone claims.",
+  "updated_at": "2026-11-06T17:10:00Z"
 }
