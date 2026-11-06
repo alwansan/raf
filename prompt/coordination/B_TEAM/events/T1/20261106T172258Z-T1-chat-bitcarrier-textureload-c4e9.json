@@ -1,0 +1,19 @@
+{
+  "id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "at": "2026-11-06T17:25:14Z",
+  "summary": "T1 started actual Unity2021 OpenGLCore sourcefree direct vs float-bitcarrier Texture2D.Load discriminator, five 64-thread read sites; safe aggregate counts and strict NUnit pending. Not original Raft game shader.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42261467757",
+    "https://github.com/alwansan/raf/commit/2373a9310c659520e46479a0373d2b44f0d26134"
+  ],
+  "limits": [
+    "Synthetic GPU only",
+    "WATER-001 OPEN",
+    "No original source or Adreno testing"
+  ]
+}
