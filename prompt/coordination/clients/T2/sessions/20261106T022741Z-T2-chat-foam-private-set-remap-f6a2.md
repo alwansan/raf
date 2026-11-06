@@ -1,0 +1,10 @@
+# T2 chat — SHA-original Foam private Vulkan DescriptorSet-only relocation
+
+- session_id `20261106T022741Z-T2-chat-foam-private-set-remap-f6a2`; origin chat; status active; base_sha `e50abe7c36759117a0c5092ab90ba90500dff653`.
+- resumed from `20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8` and `20261106T0145Z-T2-chat-foam-stage-io-9c4a`. work `prompt/coordination/work/WATER-001/T2-20261106T022741Z-T2-chat-foam-private-set-remap-f6a2.json`.
+- Prior genuine original [CI42149571827](https://github.com/alwansan/raf/actions/runs/42149571827) SUCCESS: per-pass 2+2=4 **compiled SPIR-V descriptor-type collisions**, 3 UBO-vs-sampler and 1 UBO-vs-image; two same-class CB size differences; 55 source-free controls. This is a concrete Vulkan stage-layout pre-integration barrier, not actual Unity importer/pixel proof.
+- Hypothesis: private fragment-only DescriptorSet decoration relocation (not code/Binding/ID changes) can remove same-number cross-stage resource-type collisions; need exact byte invariant and two new fragment `spirv-val --target-env vulkan1.1` passes, and reflect independently to confirm stage-wise descriptor class/array/size preserved.
+- Immutable source `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`, Foam `sharedassets0.assets` 115978112B SHA `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, Shader raw SHA `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
+- Scoped `scripts/t2_foam_private_descriptor_set_remap.py`, `tests/test_t2_foam_private_descriptor_set_remap.py`, isolated `.github/workflows/raft-t2-foam-private-shaderlab-candidate.yml`, own session/experiment/event/memo. Actual original .shader/.meta/GUID/game assets unchanged; no Unity player build or input/audio/Settings edits, no interfering T1/T3/T4/T5 jobs.
+- Strict limits: temporary SPIR-V descriptor relocation without actual authored Unity ShaderLab importer/Material.SetTexture/CB0 upload/Adreno frame verification cannot fix game water. WATER-001 OPEN.
+- Next: implement and test, source-authenticated original private CI, document definite result.

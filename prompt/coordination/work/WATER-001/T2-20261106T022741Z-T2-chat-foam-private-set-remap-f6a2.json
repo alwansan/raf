@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T022741Z-T2-chat-foam-private-set-remap-f6a2",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "e50abe7c36759117a0c5092ab90ba90500dff653",
+  "resumed_from_sessions": [
+    "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8",
+    "20261106T0145Z-T2-chat-foam-stage-io-9c4a"
+  ],
+  "experiment_key": "zip2_original_Foam_two_pass_SPIRV_fragment_only_OpDecorate_DescriptorSet_relocation_exact_nondecoration_word_equality_v1",
+  "resource_key": "ZIP2@15964ea8/Shader2420/private_fragment_spirv_descriptor_set_conflict_repair",
+  "hypothesis": "The four verified shader stage SPIR-V binaries from the complete original private Foam ShaderLab can be made cross-stage descriptor-layout type compatible by relocating fragment DescriptorSet decorations to an unused per-pass set, leaving all actual SPIR-V shader code, original Binding operands and resource variable IDs byte-for-byte unchanged.",
+  "prior_verified": "CI42149571827 SHA-original 4/4 stages SPIRV valid, 4 genuine VS/FS descriptor class conflicts (2 per pass), 2 CB byte extent differences; CI42146401691 numeric varying 3/3 and 2/2, no Unity importer/runtime proof.",
+  "approach": "Use exact original CI source and assembled private HLSLPROGRAM. Compile all four stages; for each fragment binary read SPIR-V words, require authentic SPIRV-Cross reflection id/set/binding mapping to both OpDecorate Binding and DescriptorSet targets, set fragment descriptorSet to a numerically stage-exclusive set. Preserve original fragment SPIR-V bytes except DescriptorSet literals. Validate both remapped SPIR-V stages via spirv-val Vulkan1.1 and post-remap reflection with unchanged binding/class/size/array plus collision count zero. Never publish binary, new layout numbers, source, identifiers or claim Unity Material upload/Adreno.",
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "shader_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "intended_files": [
+    "scripts/t2_foam_private_descriptor_set_remap.py",
+    "tests/test_t2_foam_private_descriptor_set_remap.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T022741Z-T2-chat-foam-private-set-remap-f6a2.json",
+    "prompt/coordination/clients/T2/sessions/20261106T022741Z-T2-chat-foam-private-set-remap-f6a2.md",
+    "prompt/coordination/experiments/T2/T2-20261106T022741Z-T2-chat-foam-private-set-remap-f6a2.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T022741Z-T2-chat-foam-private-set-remap-f6a2-result.json",
+    "docs/T2_FOAM_PRIVATE_DESCRIPTOR_SET_REMAP_2026-11-06.md"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-06T02:27:41Z",
+  "next_step": "Implement binary-only SPIR-V OpDecorate DescriptorSet rebinding with synthetic controls, then original SHA-authentic private 4-stage CI and categorized before/after descriptor conflicts, preserving source/private cleanup."
+}
