@@ -23,3 +23,10 @@ Resource: https://github.com/alwansan/raf/blob/feature/android-native-port/promp
 Next: Privately correlate original vs roundtrip SPIR-V names/locations, builtin SV_POSITION and duplicate-type semantics across four exact keyword pairs; guard per-pair resource slots. Prototype a strictly source-authentic 4/4 location-safe repair only inside disposable CPU shader tooling, then check the exact postvendor Unity Shader GUID and Android fire/smoke emitter on T5 device. RENDER-002 stays OPEN.
 
 **Boundary:** Source CPU shader feasibility, not a full authored ShaderLab/Unity native ARM64 or Adreno device pixel test; no proof original top108 Shader is actual square smoke/fire emitter. No game `.shader`, `.meta`, Material, Texture, scene, world/save, APK/OBB, audio, Settings, touch, or water/FFT modified. No other client's CI cancelled. RENDER-002 stays OPEN.
+
+## Canonical team status and reproducible checkpoints
+
+- Documented real source CI42141030091 (126/126, 8/8 Vulkan1.1), followed by strengthened IO drift run CI42141506120 (133/133, original source VS/FS 4/4 compatible vs HLSL roundtrip 2/4). Synthetic-only CI42140918323 failed the wrong `type(PosixPath)` comparison before source staging; fixed without weakening DXBC/Shader source verification.
+- Resource `prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json` now records stage type-multiset equality **8/8** and original→roundtrip source device gap, with `stages.device=NOT_TESTED`. `prompt/coordination/B_TEAM/issues/RENDER-002.json` remains `OPEN` and includes actual runs and report at commit `eba229a0374db0176099336238d0bae702828d6d`.
+- [T3 canonical team evidence refresh CI42142271779](https://github.com/alwansan/raf/actions/runs/42142271779) **COMPLETED SUCCESS** on workflow-source SHA `88c9868898a2ce150f801fc624db7c3c8112c489`; expressly checks stage 8/8 Vulkan validity, HLSL 2/4 interfaces and device NOT_TESTED. This is reporting acceptance, not a Unity native/Android graphics pass.
+- No post-vendor game ShaderLab patch, native Unity build or actual phone/pixel test was performed. CPU-only resource released on scoped task completion.
