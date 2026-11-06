@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "20261106T005710Z-T3-chat-particle108-vulkan-c8f1",
+  "session_id": "20261106T005710Z-T3-chat-particle108-vulkan-c8f1",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-06T00:57:10.295Z",
+  "base_sha": "aab0f530bb7805049f6d0e270a04d20546ba82c0",
+  "hypothesis": "All four exact serialized original 108-use ParticleShader48 DXBC VS/FS keyword pairs may translate through vkd3d to valid Vulkan1.1 SPIR-V, and SPIRV-Cross HLSL roundtrip and stage interface/resource layouts can be quantified without guessing names or altering native game shaders.",
+  "experiment_key": "T3-ZIP2-15964ea8-SHA6scene-4owners-Particle108-1Pass-4matchedVSFS-8genuineDXBC-vkd3dSPIRV11-reflect-HLSLroundtrip-v1",
+  "resource_key": "T3-isolated-sixscene-fourowner-Particle108-4DXBCpairs-vulkanSPV-CPU-only",
+  "resumed_from_sessions": [
+    "20261106T004219Z-T3-chat-particle108-dxbc-4f7c.md",
+    "20261106T0030Z-T3-scheduled-native-stage-order-e6b4.md"
+  ],
+  "intended_files": [
+    "scripts/t3_original_particle108_spirv_translation.py",
+    "tests/test_t3_original_particle108_spirv_translation.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261106T005710Z-T3-chat-particle108-vulkan-c8f1.json",
+    "prompt/coordination/clients/T3/sessions/20261106T005710Z-T3-chat-particle108-vulkan-c8f1.md",
+    "prompt/coordination/experiments/T3/20261106T005710Z-T3-chat-particle108-vulkan-c8f1.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T005710Z-T3-chat-particle108-vulkan-c8f1.json",
+    "docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
+    "prompt/coordination/discussions/RENDER-002/20261106T005710Z-T3-chat-particle108-vulkan-c8f1-to-T5.md",
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+  ],
+  "run_urls": [],
+  "next_step": "Implement one-pass four matched variants private-source extractor and all 8 genuine DXBC→SPIR-V/Vulkan1.1 validation + HLSL→SPV roundtrip/reflection, source-free strict negative tests, run only T3 isolated authentic six-scene CI. Keep all source bytes and IDs runner-private, status OPEN and device NOT_TESTED."
+}
