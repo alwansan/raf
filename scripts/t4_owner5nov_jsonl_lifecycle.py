@@ -41,6 +41,7 @@ TRACKED = {
     ("save", "Load<T>.enter"): "load_enter",
     ("save", "Load<T>.exit"): "load_exit",
     ("save", "Load.argumentFileSnapshot"): "load_file_snapshot",
+    ("save", "Load.argumentFileSnapshot.unavailable"): "load_unavailable",
     ("save", "Load.caughtException"): "load_caught_exception",
     ("save", "RestoreRGDGame.enter"): "restore_world_enter",
     ("save", "RestoreRGDGame.exit"): "restore_world_exit",
@@ -141,6 +142,63 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
     }
 
 
+def _fully_traced_original_loadt_calls(events, evidence_sequence_complete):
+    """Track one authentic original Load<T> boundary and snapshot per call.
+
+    The original Android-only trace writes a filename existence/size snapshot
+    in the Load<T> finally. A nonzero argument is not proof that Deserialize
+    returned the original world, nor a process restart or durable storage.
+    """
+    active = False
+    snapshot_count = 0
+    failed = False
+    good = incomplete = total_enter = 0
+    for _seq, marker, snapshot_class in events:
+        if marker == "load_enter":
+            total_enter += 1
+            if active:
+                incomplete += 1
+            active = True
+            snapshot_count = 0
+            failed = False
+        elif marker == "load_exit":
+            if active and not failed and snapshot_count == 1:
+                good += 1
+            else:
+                incomplete += 1
+            active = False
+            snapshot_count = 0
+        elif marker == "load_caught_exception":
+            if active:
+                failed = True
+            else:
+                incomplete += 1
+        elif marker == "load_unavailable":
+            if active:
+                failed = True
+            else:
+                incomplete += 1
+        elif marker == "load_file_snapshot":
+            if not active:
+                incomplete += 1
+            else:
+                snapshot_count += 1
+                if snapshot_count != 1 or snapshot_class != "nonzero":
+                    failed = True
+    if active:
+        incomplete += 1
+    coherent = bool(evidence_sequence_complete)
+    return {
+        "fully_traced_original_loadt_calls": good if coherent else 0,
+        "incomplete_or_ambiguous_original_loadt_calls": (
+            incomplete + (good if not coherent else 0)
+        ),
+        "all_original_loadt_calls_have_one_nonzero_snapshot_no_caught": (
+            coherent and total_enter > 0 and good == total_enter and incomplete == 0
+        ),
+    }
+
+
 def analyze(paths, pinned=False):
     files = sorted(Path(p) for p in paths)
     if not files or len(files) > 3 or any(not p.is_file() or p.is_symlink() for p in files):
@@ -182,7 +240,8 @@ def analyze(paths, pinned=False):
                 if marker is not None:
                     group["events"].append((
                         seq, marker,
-                        _parse_detail(record.get("detail")) if marker == "save_file_snapshot" else None,
+                        _parse_detail(record.get("detail"))
+                        if marker in ("save_file_snapshot", "load_file_snapshot") else None,
                     ))
     ordered = sorted(groups.values(), key=lambda g: (g["first"], g["last"]))
     if len(ordered) != base["session_count"]:
@@ -193,9 +252,12 @@ def analyze(paths, pinned=False):
         counts = Counter(marker for _, marker, _ in events)
         first_seq = {key: min(seq for seq, marker, _ in events if marker == key)
                      for key in counts}
-        full_cycles = _fully_traced_original_savegame_cycles(
-            events, base_row["sequence_complete"] and base_row["utc_monotonic"]
-            and not base["logging_queue_overflow_observed"])
+        coherent_session = (
+            base_row["sequence_complete"] and base_row["utc_monotonic"]
+            and not base["logging_queue_overflow_observed"]
+        )
+        full_cycles = _fully_traced_original_savegame_cycles(events, coherent_session)
+        load_cycles = _fully_traced_original_loadt_calls(events, coherent_session)
         chronological = {
             left + "_before_" + right:
             bool(left in counts and right in counts and first_seq[left] < first_seq[right])
@@ -208,6 +270,7 @@ def analyze(paths, pinned=False):
             "original_operation_counts": dict(sorted(counts.items())),
             "original_stage_order_hints": chronological,
             **full_cycles,
+            **load_cycles,
             "save_nonzero_file_snapshots": base_row["save_argument_file_classes"].get("nonzero", 0),
             "load_nonzero_file_snapshots": base_row["load_argument_file_classes"].get("nonzero", 0),
             "load_caught_exception_count": base_row["marker_counts"].get("load_caught", 0),
