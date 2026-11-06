@@ -1,0 +1,25 @@
+{
+  "id": "20261106T2017Z-T1-chat-private-producer-gate-8f31-native-compile-handoff",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T2017Z-T1-chat-private-producer-gate-8f31",
+  "issue_id": "INTEGRATION-001",
+  "type": "discovery",
+  "recipient_owners": [
+    "T4",
+    "T5"
+  ],
+  "at": "2026-11-06T20:22:00Z",
+  "summary": "Owner-direct native build 42281310905 at immutable d692400... FAILED at Unity 2021 Android script compile with CS0234: RaftAndroid.Platform.AndroidPhysicalMouseCapture not resolved in 10 distinct locations across CameraRotation, Helper, MeshCombineStudio/NavigationCamera, MouseLook, ThirdPerson. Native workflow stages AndroidPhysicalMouseCapture.cs but its only class body uses #if UNITY_ANDROID && !UNITY_EDITOR, plausibly excluding the type during Unity Editor compilation while callers are compiled. T4 should reconcile editor-safe reference and original device input semantics; T5 should verify exact compilation before owner-authorized native retry. No T1 edits to T4 source or build request.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "original_run_sha": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
+  "job_id": 128111384362,
+  "error_code": "CS0234",
+  "missing_type": "RaftAndroid.Platform.AndroidPhysicalMouseCapture",
+  "no_edit_to_owner_files": true,
+  "verified_fixed_on_new_native_build": false
+}
