@@ -249,6 +249,15 @@ jobs:
           assert type(store_steps) is int and 0<=store_steps<=128*r['original_exact_Material_ctor_private_Shader_stfld_instructions']
           assert r['original_exact_Material_ctor_private_Shader_field_writer_is_Original_Foam_Shader_verified'] is False
           assert r['original_exact_Material_ctor_private_Shader_field_writer_is_runtime_executed_verified'] is False
+          find_count=shader_store_buckets.get('typed_Shader_Find_result',0)
+          name_matches=r['original_exact_Material_ctor_private_Shader_Find_requested_original_Foam_mName_count']
+          name_differs=r['original_exact_Material_ctor_private_Shader_Find_requested_different_mName_count']
+          name_unknown=r['original_exact_Material_ctor_private_Shader_Find_requested_name_unknown_count']
+          assert all(type(v) is int and v>=0 for v in (name_matches,name_differs,name_unknown))
+          assert name_matches+name_differs+name_unknown==find_count
+          assert r['original_exact_Shader_Find_name_match_implies_runtime_Shader_asset_identity'] is False
+          assert 'original_Foam_Shader_mName_SHA256_private' not in r
+          assert 'PrivateShaderFindRequestedName' not in r
           assert r['original_exact_Shader_field_original_Foam_asset_reference_verified'] is False
           assert r['original_exact_Shader_field_runtime_populated_verified'] is False
           assert r['compiled_Material_store_Shader_is_original_Foam_verified'] is False
