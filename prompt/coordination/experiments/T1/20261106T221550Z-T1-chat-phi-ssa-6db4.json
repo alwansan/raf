@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "experiment_key": "ZIP2-15964ea8-FFT-slot0-HLSL50-site2Y-Phi-SSA-component-recurrence-v1",
+  "source_original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "source_commits": [
+    "17b043b4e729a3e0493467d8aa7d0577af7a2727",
+    "a581f1c89223bf31e83ead45e51883d560fbc582",
+    "0c7ebc3b4f1170df7edd847a7f4ac2a6b3e2184d",
+    "08f04692ff23e85499d6c7d8036837a6c12fc77b"
+  ],
+  "verified_run": {
+    "id": 42304068126,
+    "result": "success",
+    "private_job": 128188915314,
+    "entry_phi_self_dataflow": false,
+    "loop_phi_self_dataflow": true,
+    "states": [
+      2,
+      7
+    ]
+  },
+  "checking_run": {
+    "id": 42304106607,
+    "source_job": 128189156035,
+    "source_tests_passed": 35,
+    "private_job": 128189212633,
+    "private_status": "in_progress_at_checkpoint"
+  },
+  "limits": [
+    "Syntactic Phi data recurrence not runtime branch truth",
+    "No Unity compiled binary attestation or Android proof",
+    "No numeric FFT parity or production water fix"
+  ],
+  "next": "Check private job 128189212633 then decide keyed GPU Phi branch selection test."
+}
