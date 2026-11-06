@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T1959Z-T3-chat-original-stage-probe-9f24",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "kind": "original_source_stage_cardinality_and_spv_debug_name_probe",
+  "timestamp_utc": "2026-11-06T20:02:00Z",
+  "status": "source_original_confirmed_not_ready",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42284607990",
+  "run_sha": "0f29d6d729ead27f2c21479c76a492a89426a2be",
+  "stage_family_all_four_equal": 8,
+  "stage_family_mismatches": 0,
+  "original_dcl_resource_rows": 44,
+  "typed_name_candidates": 20,
+  "uncovered_original_rows": 24,
+  "all_named_stages": 0,
+  "original_to_VK_descriptor_proven": false,
+  "ShaderLab_original_program_recovered": false,
+  "Unity_or_phone_graphics_verified": false,
+  "trial_vote": "لا يحتاج",
+  "next_step": "Explicit VKD3D authenticated per-stage binding provenance, then non-dummy Shader48 ShaderLab and Unity/Android validation."
+}
