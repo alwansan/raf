@@ -357,13 +357,13 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         ])
         payloads = [p.read_bytes() for p in files]
         blob = lambda data: hashlib.sha1(
-            b"blob " + str(len(data)).encode("ascii") + b"\\0" + data
+            b"blob " + str(len(data)).encode("ascii") + b"\0" + data
         ).hexdigest()
         base_summarize = owner.summarize
 
         def rewrite_after_base_read(inputs):
             result = base_summarize(inputs)
-            files[0].write_text("".join(json.dumps(r) + "\\n" for r in changed),
+            files[0].write_text("".join(json.dumps(r) + "\n" for r in changed),
                                 encoding="utf-8")
             self.assertEqual(files[0].stat().st_size, len(payloads[0]))
             return result
