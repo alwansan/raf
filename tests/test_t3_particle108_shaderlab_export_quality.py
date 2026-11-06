@@ -167,16 +167,15 @@ class RealExportQualitySynthetic(unittest.TestCase):
         _MainTex ("Texture", 2D) = "white" {}
         }'''
         scenarios=(
-            ('Properties { _Color ("Tint", Color) = (1,1,1,1) }',1,0),
-            ('Properties { _Color ("Tint", Float) = 1\n'
-             '_MainTex ("Texture", 2D) = "white" {} }',0,1),
+            ('Properties {\\n_Color ("Tint", Color) = (1,1,1,1)\\n}',1,0),
+            ('Properties {\\n_Color ("Tint", Float) = 1\\n'
+             '_MainTex ("Texture", 2D) = "white" {}\\n}',0,1),
         )
         for export,missing,wrong in scenarios:
             with self.subTest(export=export),tempfile.TemporaryDirectory() as d:
                 root=Path(d)
-                # One property per line is deliberate, matching exact source
-                # serializer and bounded export-parser grammar.
-                export=export.replace("{ _Color","{\n_Color").replace(") }",")\n}")
+                # Each fixture property is on one line; no extra claims
+                # about interpreting arbitrary nonstandard ShaderLab syntax.
                 code=PROGRAM.replace("SubShader {",export+"\nSubShader {",1)
                 write(root,code)
                 r=m.classify(SOURCE,*traces(),root,
