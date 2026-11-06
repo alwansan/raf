@@ -2,7 +2,7 @@
   "session_id": "20261106T051300Z-T1-scheduled-nunit-suite-c8e1",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f9d54ab4c3b0b00de4fa999f46edd614b130e49f",
   "intended_files": [
     "scripts/t1_fft_unity_gpu_result_gate.py",
@@ -13,5 +13,10 @@
   "experiment_key": "nunit-suite-contradictory-failure-guard:42160755558:source-gate",
   "resource_key": null,
   "hypothesis": "NUnit root Passed with nested failed test-suite or descendant failure may bypass the current direct test-case guard",
-  "updated_at": "2026-11-06T05:13:00Z"
+  "updated_at": "2026-11-06T05:19:00Z",
+  "source_commit": "348668d609ff82a6cdb2f6e41ddef1efcfce2de0",
+  "test_commit": "e88c739225da06d585d8545821aa79514594be9b",
+  "session_commit": "96d3f0c16bbdaec0a81a402a3987c9eeb44fe68a",
+  "test_status": "not_executed_dns",
+  "next_step": "Run actual unittest and inspect redacted 42160755558 private gate report; compare original FFT first divergence"
 }
