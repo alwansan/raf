@@ -1,0 +1,22 @@
+{
+  "id": "T4-20261106T0336Z-view-identity-telemetry",
+  "session_id": "20261106T0336Z-T4-scheduled-m7q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_sha": "ecc39e52edc69614b99aacd79762b4b5fce21e92",
+  "updated_at": "2026-11-06T03:36:00Z",
+  "hypothesis": "Android currentFocus View may differ between capture request and probe; record per-request View identity without changing pointer capture behavior.",
+  "experiment_key": "T4-android-pointer-capture-currentFocus-identity-telemetry-epoch-v1",
+  "resource_key": "T4-mouse-source-only-no-Unity",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T0336Z-T4-scheduled-view-identity-telemetry-m7q2.json",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "prompt/coordination/clients/T4/sessions/20261106T0336Z-T4-scheduled-m7q2.md"
+  ],
+  "taken_over_from": [
+    "20261106T0240Z-T4-scheduled-v8q1",
+    "20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8"
+  ]
+}
