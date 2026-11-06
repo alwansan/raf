@@ -1960,8 +1960,8 @@
         "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
         "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
         "reconstruction": "ORIGINAL_FOAM_PRIVATE_2PASS_9731B_SHADERLAB_4STAGES_VULKAN11_COMPILED_AND_VALIDATED_NUMERIC_VS_FS_VARYINGS_MATCH_BOTH_PASSES",
-        "binding": "AUTHENTIC_VULKAN_STAGE_IO_PASS0_3_OF_3_PASS1_2_OF_2;_FOUR_NUMERIC_DESCRIPTOR_CLASS_COLLISIONS_AS_COMPILED_2_EACH_PASS;_CB0_UPLOAD_MATERIAL_TEXTURE_UNVERIFIED",
-        "integration": "CI42149571827_SUCCESS_55_CONTROLS_4_ORIGINAL_SPIRV_STAGES;_UNITY_IMPORT_AND_RUNTIME_DESCRIPTOR_REMAP_UNVERIFIED",
+        "binding": "SOURCE_ORIGINAL_PRIVATE_SPIRV_PRE_REMAP_4_DESCRIPTOR_TYPE_COLLISIONS;_FRAGMENT_ONLY_DECORATION_SET_RELOCATED_14_RESOURCES_ZERO_COLLISIONS_IN_SCRATCH;_UNITY_CB0_AND_MATERIAL_RUNTIME_UPLOAD_UNVERIFIED",
+        "integration": "CI42151620701_SUCCESS_67_SOURCE_FREE_TESTS_4_ORIGINAL_STAGES_2_REMAPPED_SPIRV_VAL;_UNITY_IMPORT_UNTESTED",
         "device": "NOT_TESTED"
       },
       "observed": {
@@ -1974,7 +1974,7 @@
         "original_render_states": 2,
         "exact_original_DXBC_shader_models_verified": 4,
         "private_candidate_bytes": 9731,
-        "source_free_tests_passed": 41,
+        "source_free_tests_passed": 67,
         "Unity2021_import_verified": false,
         "CB0_and_original_Material_sampler_upload_verified": false,
         "Android_Adreno_pixels_verified": false,
@@ -1993,7 +1993,13 @@
         "shared_UBO_block_size_differences": 2,
         "cross_stage_unmodified_Vulkan_layout_compatible": false,
         "synthetic_tests_passed": 55,
-        "original_Unity_descriptor_remapping_verified": false
+        "original_Unity_descriptor_remapping_verified": false,
+        "original_descriptor_conflicts_before_binary_only_relocation": 4,
+        "private_descriptor_conflicts_after_fragment_set_relocation": 0,
+        "private_fragment_descriptor_set_literals_relocated": 14,
+        "original_SPIRV_non_DescriptorSet_words_preserved": true,
+        "private_relocated_fragment_binaries_validated_vulkan11": 2,
+        "original_Unity_DescriptorSet_binding_integration_verified": false
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42125000030",
@@ -2001,9 +2007,10 @@
         "https://github.com/alwansan/raf/actions/runs/42143981891",
         "https://github.com/alwansan/raf/actions/runs/42144036981",
         "https://github.com/alwansan/raf/actions/runs/42146401691",
-        "https://github.com/alwansan/raf/actions/runs/42149571827"
+        "https://github.com/alwansan/raf/actions/runs/42149571827",
+        "https://github.com/alwansan/raf/actions/runs/42151620701"
       ],
-      "next_step": "Four real compiled per-pass Vulkan descriptor-type collisions established, 2 in each pass; unmodified stage SPIR-V cannot share one binding layout as-is. Source-bounded experiment to remap Fragment DescriptorSet decoration only in private SPIR-V, preserving non-decoration bytecode, then explicit runtime binding/Unity importer remains mandatory; WATER-001 OPEN.",
+      "next_step": "Production integration needs exact Unity resource alias + CB0 upload remap, not simply copying private relocated binaries. Run separate minimal collision-only remap test to retain shared CB0 coordinates where source semantics allow, with source-original SHA and Vulkan validation; then genuine Unity importer + Adreno phone. WATER-001 remains OPEN.",
       "_record_path": "../B_TEAM/resources/T2-foam-original-private-two-pass-ShaderLab-candidate.json"
     },
     {
@@ -6747,6 +6754,21 @@
       "_record_path": "../B_TEAM/events/T2/20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8-result.json"
     },
     {
+      "id": "20261106T022741Z-T2-chat-foam-private-set-remap-f6a2-result",
+      "owner": "T2",
+      "session_id": "20261106T022741Z-T2-chat-foam-private-set-remap-f6a2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T02:43:00Z",
+      "summary": "SHA-original Foam 2-pass private ShaderLab 4 Vulkan1.1 stages validated; fragment-only SPIR-V DescriptorSet decoration relocation of exactly 14 variables eliminates four cross-stage resource-type collisions to zero, leaving all original other SPIR-V words, Binding decorations and variable IDs unchanged. Both private modified fragment SPIR-V validate. Original CI42151620701 SUCCESS, 67 source-free tests. No Unity material/CB0/Adreno proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42151620701",
+        "https://github.com/alwansan/raf/commit/8977b90757f6b966690e85a2a88cab23488517c2",
+        "https://github.com/alwansan/raf/commit/463650761b805f75bec149e0e39efadd4899017a"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261106T022741Z-T2-chat-foam-private-set-remap-f6a2-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -8508,7 +8530,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2b3190d6f7512449d46328161853db784f2d662babc8d68c8af84cddead80ac2",
+  "source_input_sha256": "5b1f133960b4818fb7e63f94bf5311d46aac42d7628fc806a665ff68b8867e2f",
   "generation": "T-2026-11-05",
-  "input_sha256": "a337102488253059ff806cc228ae5d845a94287c2edb0a295b3ee108822c54eb"
+  "input_sha256": "4a802e66b9fd0caa8c82483ace5a3ef8a09ae7cdae673adb04b6e48957b935ce"
 }
