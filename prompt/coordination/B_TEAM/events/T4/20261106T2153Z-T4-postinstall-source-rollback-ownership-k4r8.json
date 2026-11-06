@@ -1,0 +1,16 @@
+{
+  "id": "T4-20261106T2153Z-postinstall-source-rollback-ownership-k4r8",
+  "owner": "T4",
+  "session_id": "20261106T2147Z-T4-chat-postinstall-owner-drift-k4r8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Original SaveAndLoad path adapter could undo another writer's C# change after its own successful adapted source write, and could also inappropriately revert adapted source after independent .meta GUID update. T4 deterministic RED source CI42300040391 18 previous pass/new two subcases fail. Corrected source commit9b0ca69 guards post-success ownership before rollback, refuses to clobber source or metadata and retains complete original backup; older torn-write best-effort rollback remains green. CI42300166577 SUCCESS 19/19 save path, 11 ZIP2, 4 selector, original ILSpy strict pins / 16 expressions and 14 dotnet path checks. Source-only; no device or native guarantee.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42300040391",
+    "https://github.com/alwansan/raf/commit/9b0ca69a5fbbacf50b63964347e373c9d00d8949",
+    "https://github.com/alwansan/raf/actions/runs/42300166577",
+    "https://github.com/alwansan/raf/actions/runs/42296450023"
+  ],
+  "at": "2026-11-06T21:53:00Z"
+}
