@@ -1,0 +1,32 @@
+# T5 — real owner-signed native APK and OBB nested ZIP authentication bounds
+
+**Session:** `20261106T1316Z-T5-chat-nested-zip-c53a` • `origin=chat` • `INTEGRATION-001` • writable branch `feature/android-native-port`.
+
+## Original evidence and actual source identity
+
+Immutable owner-tested native run [42058825739](https://github.com/alwansan/raf/actions/runs/42058825739), exact source `e9c358eda01785b65e4eb14f18723da426635628`. Original GitHub Actions signed checkpoint artifact **13441766832**, name `raft-android-signed-output-checkpoint`, original artifact ZIP **2,974,110,506 bytes**, provider metadata digest `sha256:0e99e82c44af0fa21f613515ca0cb8eee2c04aa7911e9a001aabd1abdcde16bd`, `expired=false`.
+
+Prior real envelope [CI42222494746](https://github.com/alwansan/raf/actions/runs/42222494746) actually read original ZIP central index and `delivery.json`, not archive descriptions: real `version_code=89`, complete signed APK **672,853,870 bytes**, main OBB **2,301,256,312 bytes**, and both inner sizes match source delivery manifest declarations.
+
+## Real ZIP_STORED random-access validation
+
+- [Original nested central probe CI42223563645](https://github.com/alwansan/raf/actions/runs/42223563645), job `127911268602`, exact source `007af6b2c00e1546bc3f39f284d66bad85383ac6`, **SUCCESS**: 12/12 synthetic tests and actual source-index probe. Original checkpoint outer ZIP contains two `ZIP_STORED` members, permitting two read-only seekable subfile views without unpacking full data.
+- Real **nested APK ZIP contains 31 members**, including **6 ARM64 shared libraries**, **11** entries prefixed `assets/bin/Data/`, and the required standard Android core `AndroidManifest.xml`, `classes.dex`, `lib/arm64-v8a/libil2cpp.so`, `lib/arm64-v8a/libunity.so`. Actual compressed member **prefixes** verify Android binary XML magic, DEX magic and ELF64 little-endian AArch64 header for Unity + IL2CPP. This is structural startup evidence, not executable validity, app signing, runtime linker proof or file-wide CRC.
+- Real **nested OBB ZIP contains 39 members**, including at least one `assets/bin/Data/` item and populated `assets/` payload. No entries ending literally in `.assets`, `.resS` or `.resource` were found by this exact central-directory classifier; this may reflect packaging/wrapping and **cannot prove texture/scene files are absent** without examining correctly mapped payloads.
+- Initial signed-checkpoint nested probe used **21,131 actual HTTP-range bytes / 25 requests**, rather than 2,974,110,506-byte envelope download.
+
+## Expanded real ZIP local-header parity guard
+
+- Reused the previously proven native package validator `scripts/t5_verify_apk_obb_pair.py:_verify_local_zip_headers` and applied it to **every nested APK and OBB member**. It compares each local header's name, flags, method, CRC and ZIP64 size rules with the corresponding central-directory metadata, and rejects out-of-range and overlapping compressed member regions without extraction.
+- [CI42223800025](https://github.com/alwansan/raf/actions/runs/42223800025), job `127912064560`, exact source SHA `40cb7ca97f47ee349b09e50df8ac90393aea3b6d`, **SUCCESS**: 12 synthetic tests + actual nested APK/OBB all-member local-header parity; real total **25,350 transferred range bytes / 165 HTTP requests**. All **31 APK + 39 OBB = 70** indexed local entries agreed with their central directory in the original signed checkpoint archive.
+- During incremental implementation, CI42223773128 failed on missing sparse checkout of existing T5 local checker; fixed by including its path in dedicated workflow. CI42223856655 failed two new synthetic tests because the safe error wrapper intentionally obscures a detailed private-header error as `signed_nested_zip_metadata_inconclusive`. Tests now assert this conservative fail-closed output, not a potentially sensitive exception string. This does not mean corrupt files passed.
+- Final job: [CI42224062207](https://github.com/alwansan/raf/actions/runs/42224062207) at final source `26308123af645b92dde1ca36c98fda7c64aca29f` adds two adversarial cases: non-core nested APK local filename divergence and OBB local CRC divergence; records their safe rejection. Its completion status should be checked before citing final test count.
+- Owned implementation: `scripts/t5_probe_signed_nested_zip_range.py`, synthetic cases `tests/test_t5_probe_signed_nested_zip_range.py`, separate bounded workflow `.github/workflows/raft-t5-real-signed-nested-zip-range.yml` plus reused original ZIP-range and local-header modules. The source-only job pins artifact provenance, enforces **16 MiB maximum total HTTP-range bytes**, refuses outer compression other than STORE, rejects malicious paths/symlinks/encryption and missing ARM64 core, does not upload any original APK/OBB or expose SAS tokens/redirects/asset content.
+
+## Acceptance boundary and next discriminating action
+
+**Verified now:** original GitHub-hosted owner-tested artifact provenance; outer ZIP central directory and parsed delivery manifest; original signed checkpoint nested APK and OBB ZIP central directory, all central-vs-local ZIP headers, original Android core binary header signatures and counts. This gives a much more defensible **structure-only** provenance and accessibility proof for signed delivery components.
+
+**Not verified:** whole-file APK and OBB SHA256 vs `delivery.json`, provider full artifact transport digest independently recomputed, APK v2/v3 cryptographic signature or signing certificate, binary AndroidManifest versionCode crosscheck with aapt, each compressed member's full CRC/extraction, Unity GUID and content integrity, Android OBB mount, emulator/phone, framebuffer/color/water/FFT parity. Do not call this release READY. Owner's world/save/re-entry remains tested on this older build, and major water/shader/color gates are still **OPEN / NOT_READY 0/3**.
+
+**Next:** use the existing owner-tested signed checkpoint's two STORED members in an authorized isolated environment to perform a complete bounded-budget signed APK digest and signing verification first (672.85MB actual inner payload) if disk/network budget permits; then plan OBB full-stream SHA256 (2.30GB) only with explicit resource coordination and compare against delivery manifest's authentic declared per-file digest. Cross-check package versionCode 89 from actual AndroidManifest rather than inferring it from `delivery.json` alone. Continue T1/T2/T3 graphics integration; do not re-download 8.9GB envelopes without need.
