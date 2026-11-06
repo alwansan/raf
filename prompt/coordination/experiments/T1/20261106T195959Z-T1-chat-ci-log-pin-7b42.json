@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261106T195959Z-T1-chat-ci-log-pin-7b42",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "source_commit": "47df6c4b344a688928219596cae66ef865108050",
+  "source_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_rafruntime_executed_this_cycle": false,
+  "hypothesis": "Verify historical original/synthetic Unity evidence against actual GitHub run + job metadata and unique safe CI log markers, not manually copied JSON alone.",
+  "historical_pins": [
+    {
+      "kind": "original",
+      "run_id": 42220554705,
+      "job_id": 127901229510,
+      "sha": "00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f"
+    },
+    {
+      "kind": "candidate",
+      "run_id": 42228497335,
+      "job_id": 127928005249,
+      "sha": "e936ad1f96c0bb0617a7a7199c2304c5f47442ff"
+    },
+    {
+      "kind": "synthetic_unity",
+      "run_id": 42279949574,
+      "job_id": 128106388433,
+      "sha": "93f27342d4b2c46d811c6c16a2672d9a247f346a"
+    }
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_original_phi_bridge.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_historical_ci_log_verify.py -v",
+    "python3 -m scripts.t1_fft_historical_ci_log_verify --evidence <safe-json> --<producer>-run <tmp-run> --<producer>-job <tmp-job> --<producer>-log <tmp-log> (3 producers; transient logs not published)"
+  ],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 stock Python3",
+    "github_cli": "gh api for run/job metadata",
+    "curl": "HTTPS REST job-log 302 follow without cross-host bearer",
+    "github_actions_job": "128124791160"
+  },
+  "workflow_path": ".github/workflows/raft-t1-fft-original-phi-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42285401655",
+  "prior_failed_runs": [
+    {
+      "run_id": 42285184968,
+      "issue": "bad GH_TOKEN workflow interpolation, corrected"
+    },
+    {
+      "run_id": 42285244540,
+      "issue": "gh api job-log redirect handling failed, corrected via curl -L without cross-host credential forwarding"
+    }
+  ],
+  "negative_controls": [
+    "reject SHA or branch drift, failed or wrong run/job",
+    "reject missing/duplicate/malformed log markers, duplicate JSON fields",
+    "reject original alias/source drift, candidate Phi bitcast/loop drift",
+    "reject Unity zero63 signature/positive-control changes",
+    "reject invalid/oversized/symlinked input, ensure redacted stdout"
+  ],
+  "observed_result": {
+    "run_id": 42285401655,
+    "job_id": 128124791160,
+    "conclusion": "success",
+    "new_synthetic_adversarial_tests": "12/12 PASS",
+    "prior_original_phi_bridge_tests": "14/14 PASS",
+    "pinned_successful_runs_and_jobs_checked": 3,
+    "unique_historical_markers": 3,
+    "curated_report_matches_logs": true,
+    "original_runtime_FFT_or_phone_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Manually transcribed JSON alone is authentic evidence: false",
+    "Transported historical markers prove original game numeric or Android parity: false"
+  ],
+  "limitations": [
+    "Historical CI job logs and metadata are GH-hosted (not signed producer attestation).",
+    "Only historical original-SPIRV static, candidate HLSL static, synthetic Unity canary contexts verified; no same-run original-vs-Unity numeric/texture parity.",
+    "No original ZIP2 shader bytes or Android GPU accessed; raw downloaded logs removed via runner trap and never printed/uploaded."
+  ],
+  "integration_commit": "47df6c4b344a688928219596cae66ef865108050",
+  "trial_vote": "لا يحتاج",
+  "native_owner_direct_run": "42281310905 (in_progress as of 20:06 UTC; T1 did not modify)",
+  "next_step": "T1 scheduled independent original-SPIRV vs Unity paired input/dispatch trace: verify real original game kernel/variant and capture SHA-authored keyed reads on identical bytes; only then HLSL correction."
+}
