@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T0147Z-T4-chat-ledger-id-r8w2",
+  "issue_id": "INPUT-005",
+  "status": "completed_ledger_integrity_verified",
+  "hypothesis": "Canonical T-team refresh CI42145627443 failed because the T4 INPUT-005 latest event had session_id but omitted mandatory id.",
+  "reproduction": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42145627443",
+    "stack": "scripts.refresh_b_team.read_records ValueError Missing record identity prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json",
+    "not_shader_failure": true
+  },
+  "change": {
+    "path": "prompt/coordination/B_TEAM/events/T4/20261106T0130Z-T4-chat-touchpad-device-source-q4m7.json",
+    "commit": "e7b716241430d76e8324d8119fc45255300d4889",
+    "added_field": {
+      "id": "20261106T0130Z-T4-chat-touchpad-device-source-q4m7"
+    },
+    "original_fields_retained": true
+  },
+  "verification": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42146543980",
+    "status": "SUCCESS",
+    "job": 127659281630,
+    "source_sha": "e57dfe57211fe9692656ced432d262207e6c3d76",
+    "actual_ledger": {
+      "issues": 10,
+      "resources": 58,
+      "events": 322,
+      "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
+      "issue_input_005": "OPEN"
+    },
+    "python_synthetic_negative_checks": 4,
+    "python_total": 7,
+    "parser": "build_t/read_records actual inherited B_TEAM",
+    "source_only": true,
+    "modified_summary": false,
+    "no_original_game_files": true
+  },
+  "prior_partial_fail": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42146360124",
+    "root_cause": "Python __pycache__ untracked made git status --porcelain nonempty though 7 tests and 10/58/322 parser passed.",
+    "fix": "export PYTHONDONTWRITEBYTECODE=1",
+    "fix_commit": "e57dfe57211fe9692656ced432d262207e6c3d76"
+  },
+  "artifacts": [],
+  "limits": [
+    "The T4 read-only check does not itself commit the T3 T_TEAM/SUMMARY.md or snapshot.json; T3 shared refresh can now be retried under its own lease.",
+    "Unity Android game/phone not built or tested; unaffected original world/save acceptance applies only to older artifact42058825739.",
+    "T3 authentic RENDER-002 compiler and shaders were not modified."
+  ],
+  "next_step": "Notify T3 in separate discussion reply and allow T3 refresh to regenerate T_TEAM index under existing owner workflow. Then return T4 to P0 local world/save regression tests on exact paired device artifact."
+}
