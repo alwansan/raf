@@ -29,6 +29,18 @@ PAIR_COUNT=4
 CATEGORIES=("ubos","ssbos","textures","separate_images","separate_samplers","images")
 MAX_BINDINGS=128
 MAX_SLOT_ID=4095
+SAFE_FAILURE_CATEGORIES=frozenset((
+    "SOURCE_AUTHENTICATION", "ORIGINAL_SHADER_PROPERTY_SCHEMA",
+    "ORIGINAL_COMPILED_KEYWORD_PAIRS", "SOURCE_STAGE_TRANSLATION",
+    "STAGE_SPIRV_REFLECTION", "DESCRIPTOR_SET_OR_BINDING_UNLOCATED",
+    "STAGE_DESCRIPTOR_SCHEMA_OTHER",
+))
+class PrivateReasonError(ValueError):
+    def __init__(self,reason):
+        if reason not in SAFE_FAILURE_CATEGORIES:
+            raise ValueError("untrusted_original_descriptor_failure_category")
+        self.reason=reason
+        super().__init__("original_resource_descriptor_"+reason)
 
 
 def canonical_resources(reflected):
@@ -141,18 +153,29 @@ def evaluate(pairs,temporary,*,translator=translate,reflector=reflection):
         for stage,code in ((1,pair[0]),(0,pair[1])):
             folder=temporary/("keyword-%d-stage-%d"%(i,stage))
             folder.mkdir(exist_ok=False)
-            private_report=translator(code,stage,folder)
+            try:
+                private_report=translator(code,stage,folder)
+            except (ValueError,RuntimeError,OSError,TypeError,KeyError):
+                raise PrivateReasonError("SOURCE_STAGE_TRANSLATION") from None
             if (type(private_report) is not dict or
                 private_report.get("stage")!=stage or
                 any(private_report.get(flag) is not True for flag in (
                     "vulkan11_valid","hlsl_recovered","roundtrip_vulkan11_valid"))):
-                raise ValueError("source_original_stage_compiler_unavailable")
-            row[stage]={
-                "source":reflector(folder/"original.spv"),
-                "roundtrip":reflector(folder/"roundtrip.spv"),
-            }
+                raise PrivateReasonError("SOURCE_STAGE_TRANSLATION")
+            try:
+                row[stage]={
+                    "source":reflector(folder/"original.spv"),
+                    "roundtrip":reflector(folder/"roundtrip.spv"),
+                }
+            except (ValueError,RuntimeError,OSError,TypeError,KeyError):
+                raise PrivateReasonError("STAGE_SPIRV_REFLECTION") from None
         stages.append(row)
-    return classify_stages(stages)
+    try:
+        return classify_stages(stages)
+    except (ValueError,RuntimeError,OSError,TypeError,KeyError) as error:
+        if str(error)=="unlocated_or_malformed_private_resource_descriptor":
+            raise PrivateReasonError("DESCRIPTOR_SET_OR_BINDING_UNLOCATED") from None
+        raise PrivateReasonError("STAGE_DESCRIPTOR_SCHEMA_OTHER") from None
 
 
 def probe(original_root,manifest):
@@ -160,9 +183,12 @@ def probe(original_root,manifest):
         if shutil.which(command) is None:
             raise ValueError("missing_pinned_source_private_compiler")
     selection={}
-    baseline=identity.source.load_original(
-        original_root,manifest,private_particle_slot_counts=selection)
-    owner,pid=identity.select(selection,baseline)
+    try:
+        baseline=identity.source.load_original(
+            original_root,manifest,private_particle_slot_counts=selection)
+        owner,pid=identity.select(selection,baseline)
+    except (ValueError,RuntimeError,OSError,TypeError,KeyError):
+        raise PrivateReasonError("SOURCE_AUTHENTICATION") from None
     path=original_root/"Raft_Data"/owner
     if any(p.is_symlink() for p in (path,*path.parents)) or fingerprint(path)!=SHADER_OWNERS[owner]:
         raise ValueError("original_selected_particle108_Shader48_SHA_drift")
@@ -173,7 +199,10 @@ def probe(original_root,manifest):
         raise ValueError("missing_exact_SHA_original_108_particle_Shader48")
     source_tree=objects[0].read_typetree()
     parsed=source_tree.get("m_ParsedForm")
-    text,shape=serialize_properties(parsed)
+    try:
+        text,shape=serialize_properties(parsed)
+    except (ValueError,RuntimeError,OSError,TypeError,KeyError):
+        raise PrivateReasonError("ORIGINAL_SHADER_PROPERTY_SCHEMA") from None
     if (shape["original_authored_property_count"]!=13 or
         shape["original_authored_texture_property_count"]!=2 or
         "HLSLPROGRAM" in text):
@@ -187,7 +216,10 @@ def probe(original_root,manifest):
         src.get("matched_vertex_fragment_permutation_pairs")!=PAIR_COUNT or
         src.get("original_D3D11_program_table_records")!=16):
         raise ValueError("original_keyword_and_DXBC_baseline_drift")
-    pairs=original.exact_four_pairs(parsed,tables[0])
+    try:
+        pairs=original.exact_four_pairs(parsed,tables[0])
+    except (ValueError,RuntimeError,OSError,TypeError,KeyError):
+        raise PrivateReasonError("ORIGINAL_COMPILED_KEYWORD_PAIRS") from None
     with tempfile.TemporaryDirectory(prefix="t3-private-particle108-descriptors-") as dirname:
         report=evaluate(pairs,Path(dirname))
     report["source_original_six_scenes_SHA_verified"]=True
@@ -211,6 +243,8 @@ def main(argv=None):
     except Exception as exc:
         report={"schema_version":1,"status":"INCONCLUSIVE",
                 "failure_type":type(exc).__name__,
+                "safe_failure_reason":(exc.reason if isinstance(exc,PrivateReasonError)
+                                       else "UNKNOWN_PRIVATE_STAGE"),
                 "original_private_names_HLSL_DXBC_SPIRV_Guids_published":False,
                 "source_shader_replaced_or_Unity_Android_pixels_proven":False}
     args.out.parent.mkdir(parents=True,exist_ok=True)
