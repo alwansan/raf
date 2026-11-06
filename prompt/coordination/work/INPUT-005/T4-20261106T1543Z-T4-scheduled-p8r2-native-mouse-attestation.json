@@ -3,8 +3,8 @@
   "session_id": "20261106T1543Z-T4-scheduled-p8r2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
-  "updated_at": "2026-11-06T15:43:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T15:47:00Z",
   "intended_files": [
     "prompt/coordination/work/INPUT-005/T4-20261106T1543Z-T4-scheduled-p8r2-native-mouse-attestation.json",
     "prompt/coordination/clients/T4/sessions/20261106T1543Z-T4-scheduled-p8r2.md"
@@ -22,5 +22,7 @@
     "B19",
     "B37",
     "B50"
-  ]
+  ],
+  "result": "Evidence provenance separation: original phone world/save success retained; new T5 actual OBB marker comparison unavailable; mouse source checks do not prove physical device behavior. No native duplicate.",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261106T1543Z-T4-scheduled-p8r2.md"
 }
