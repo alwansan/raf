@@ -1,0 +1,35 @@
+name: T3 RENDER-002 source-only SHDR SHEX declaration-token tests
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t3_particle108_original_dxbc_declarations.py
+      - tests/test_t3_particle108_original_dxbc_declarations.py
+      - .github/workflows/raft-t3-particle108-declarations-source-only.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-dxbc-token-sourceonly-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate strict SHDR SHEX and twelve source-free controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_dxbc_declarations.py tests/test_t3_particle108_original_dxbc_declarations.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_declarations.py' -v
