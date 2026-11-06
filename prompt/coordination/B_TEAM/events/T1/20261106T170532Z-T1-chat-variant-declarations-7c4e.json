@@ -1,0 +1,22 @@
+{
+  "id": "20261106T170532Z-T1-chat-variant-declarations-7c4e",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T170532Z-T1-chat-variant-declarations-7c4e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T17:09:06Z",
+  "summary": "T1 implemented source-declared Unity compute variant-keyword exclusivity and imported keyword activation guards, final source-only CI 42258825614 PASS 11/11; independent actual original-vs-HLSL same-Vulkan 42254539826 PASS 384 keyed reads 0 mismatches, Unity/Android graphics still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42258825614",
+    "https://github.com/alwansan/raf/actions/runs/42254539826",
+    "https://github.com/alwansan/raf/commit/5a9f925afdb01ca90167c5acc858a90a395a27fc",
+    "https://github.com/alwansan/raf/commit/479b16853bb537f469b78cc1386f2eeb79476b84",
+    "https://github.com/alwansan/raf/commit/ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239"
+  ],
+  "limitations": [
+    "Source-only CI does not compile C# or execute Unity original shader",
+    "Private Vulkan one-fixture positive is not Unity OpenGLCore or Adreno acceptance",
+    "WATER-001 OPEN, NOT_READY 0/3"
+  ]
+}
