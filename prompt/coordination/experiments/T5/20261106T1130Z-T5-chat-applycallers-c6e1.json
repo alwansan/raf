@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1130Z-T5-chat-applycallers-c6e1",
+  "issue_id": "DISPLAY-003",
+  "status": "completed_original_compiled_IL_exact_three_caller_proven_android_unverified",
+  "experiment_key": "T5-ZIP2-15964ea8-original-DLL-0a6f05-applycurrentresolution-3calls-owner-IL-v1",
+  "source_provider": {
+    "repo": "alwansan/raf",
+    "ref": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commit": "14f8ca279b35a9032267f9e8fb59ac54bbb4feb6",
+  "workflow_path": ".github/workflows/raft-t5-original-resolution-apply-callers.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42210936332",
+  "job_id": 127869109940,
+  "ci_conclusion": "success",
+  "tool_versions": {
+    "Mono.Cecil": "0.11.5",
+    "dotnet": "9",
+    "github_runner": "ubuntu-24.04"
+  },
+  "tests": {
+    "source_free_python": 10,
+    "synthetic_compiled_cecil": 5,
+    "real_source_validator": "success"
+  },
+  "observed": {
+    "original_methods": 42,
+    "apply_call_sites": 3,
+    "unique_apply_callers": 3,
+    "apply_direct_screen_setresolution_sites": 1,
+    "apply_direct_scalable_resizebuffers_sites": 0,
+    "external_direct_apply_calls": 0,
+    "callers_with_direct_dropdown_calls": 1,
+    "dropdown_call_sites_in_that_caller": 8,
+    "dropdown_field_references_in_that_caller": 8,
+    "that_caller_parameter_count": 1,
+    "that_caller_has_Int32_parameter": false,
+    "that_caller_has_Boolean_parameter": false,
+    "other_two_caller_methods_have_parameters": false,
+    "option_population_api_owner_method_count": 1,
+    "apply_caller_option_population_site_count": 0,
+    "apply_caller_playerprefs_writes": 0
+  },
+  "hypothesis": "Are original 3 Apply call sites in one or three distinct methods and which has UI/persistence metadata?",
+  "discriminating_result": "3 distinct same-class callers, one has 8 Dropdown API uses and a non-int/non-bool single parameter, no direct external apply call, no direct prefs write. Method signatures and IL direct references alone cannot prove UI selection binding or Android render-scale persistence.",
+  "negative_controls": [
+    "exact original byte pin SHA+size",
+    "original method/site authenticity",
+    "distinct callers vs 3 callsites",
+    "per-caller callsite sums",
+    "external caller subset limits",
+    "boolean and numeric typing",
+    "schema unknown-field and duplicate JSON rejection",
+    "no faked callback, persistence or phone proof"
+  ],
+  "original_source_published": false,
+  "game_runtime_modified": false,
+  "device_tested": false,
+  "limitations": [
+    "No serialized UnityEvent callback binding or game custom preferences inspected.",
+    "Direct IL census does not cover reflection or native/Unity serialization callback dispatch.",
+    "No new signed APK, owner device test, water or shader parity."
+  ],
+  "report_path": "docs/T5_ORIGINAL_RESOLUTION_APPLY_CALLERS_2026-11-06.md",
+  "next_step": "Privately inspect single parameter type category and original serialized UI event callback owner, then prove Settings selection/persistence before changing Android runtime.",
+  "updated_at": "2026-11-06T11:34:27.578Z"
+}
