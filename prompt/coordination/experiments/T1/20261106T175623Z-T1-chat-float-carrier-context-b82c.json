@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T175623Z-T1-chat-float-carrier-context-b82c",
+  "issue_id": "WATER-001",
+  "status": "blocked_ci_workflow_publication",
+  "vote": {
+    "round_id": "trial-20261106-r1",
+    "decision": "لا يحتاج",
+    "unchanged": true
+  },
+  "hypothesis": "Observed Unity2021 63/64 raw float-bitcarrier errors and 0/64 simple bitcarrier-to-image path errors may be context-sensitive optimizer/FTZ behavior; need same-dispatch 10-category GPU test",
+  "prior_real_gpu_run": "https://github.com/alwansan/raf/actions/runs/42129683073",
+  "prior_derived_fft_run": "https://github.com/alwansan/raf/actions/runs/42198180194",
+  "source_files": [
+    "android-port/Experiments/T1/T1FftCarrierContext.compute",
+    "android-port/Experiments/T1/T1FftCarrierContextTests.cs",
+    "tests/test_t1_fft_carrier_context_fixture.py"
+  ],
+  "new_run_url": null,
+  "actual_new_unity_gpu_executed": false,
+  "source_contract_checks": {
+    "passed": 10,
+    "total": 10,
+    "implementation": "JS structural assertions against committed GitHub source; not Python NUnit or Unity runtime"
+  },
+  "published_workflow": false,
+  "workflow_blocker": "connected GitHub create_file action blocked by tool security checks when attempting new .github/workflows/ file; do not bypass or misreport",
+  "expected_gpu_words_if_workflow_authorized": 640,
+  "original_source_used": false,
+  "android_adreno_proven": false,
+  "next_step": "Use authorized CI workflow publication path if available in a later session, then actual GPU test with 10 bounded mismatch categories; or select distinct original-source engineering scope."
+}
