@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T000407Z-T3-chat-nonexportable-pointer-b42f",
+  "issue_id": "RENDER-002",
+  "hypothesis": "The third real original ParticleShader48 Texture2D class28 object, omitted from B02 exportable trace because collection.Exportable=false, nevertheless resolves to an actual SAME AssetRipper container.CreateExportPointer equal to the tenth nonnull source-identified exported Material YAML TexEnv PPtr.",
+  "source_commit": "eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5",
+  "input_hashes": [
+    "immutable ZIP2 source commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six original scenes and four Shader/Material owners independently size/SHA checked",
+    "two additional original runtime global serialized files SHA authenticated",
+    "one external original image .resS provider full manifest size+SHA checked and 3 source Texture2D stream ranges read",
+    "public pinned AssetRipperCLI source 036098ab525a3f9f693dc101edeb21faad4d32d8"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "dotnet": "9.0",
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_particle_same_export_bindings.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_stage_particle_nonexportable_trace.py -v",
+    "python3 -m scripts.t3_stage_particle_nonexportable_trace --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --staged-helper $RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs",
+    "dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release --self-contained false -o $RUNNER_TEMP/t3-particle-compiled",
+    "dotnet $RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll $RUNNER_TEMP/t3-particle-original $RUNNER_TEMP/t3-particle-export",
+    "python3 -m scripts.t3_particle_same_export_bindings --original $RUNNER_TEMP/t3-particle-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/t3-particle-export/ExportedProject --w1-trace $RUNNER_TEMP/t3-particle-w1-private.json --b02-trace $RUNNER_TEMP/t3-particle-b02-private.json --out $RUNNER_TEMP/t3-particle-safe-export-result.json"
+  ],
+  "negative_controls": [
+    "exact disposable W1+B02+B21 original SHA-pin and non-export selection preserved",
+    "cross-export W1/B02 instance IDs forbidden",
+    "nonexportable C# MetaPtr capture unavailable or exception is NOT an exact link",
+    "wrong nonexportable MetaPtr and malformed/duplicate private source IDs rejected",
+    "original source Material21/Texture2D source graph and TexEnv slot counts exact 5/3/10",
+    "only numeric aggregate artifact uploaded, no original owner/PathID, game names or GUIDs"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-sameexport.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42134436841",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42134436841/artifacts"
+  ],
+  "budget": "50 minute isolated one AssetRipper bounded original export with one SHA-original image .resS provider; no Unity native Android build",
+  "status": "completed",
+  "observed_result": {
+    "real_pinned_assetripper_export_completed": true,
+    "source_material21": 5,
+    "source_class28_Texture2D": 3,
+    "exportable_B02_trace_targets": 2,
+    "nonexportable_source_class28_objects": 1,
+    "regular_texture_pointer_matches": 9,
+    "nonexportable_container_pointer_captured": 1,
+    "nonexportable_container_pointer_matches_actual_exported_Material": 1,
+    "material_texture_total_pointer_matches": 10,
+    "uv_scale_offset_matches": 10,
+    "wrong_guid": 0,
+    "null_regressions": 0,
+    "unresolved_original_targets": 0,
+    "original_source_stream_full_sha_proven": true,
+    "synthetic_tests_passed": 104,
+    "compiled_android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "The tenth original Particle Shader48 Material Texture binding has a wrong exported GUID or null pointer in the same bounded real AssetRipper instance",
+    "The third Texture2D nonexportable source cannot produce a container pointer in the actual exporter"
+  ],
+  "limitations": [
+    "Only one bounded export, not actual complete Unity native Android APK/OBB source-to-device instance",
+    "Did not decode original or exported Texture2D image content/alpha, or test shader fragment on Adreno",
+    "No identification that original high-use Particle Shader48 is the phone's square fire/smoke emitter"
+  ],
+  "integration_commit": "eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5",
+  "next_step": "Do NOT replace the third source Texture2D or inject an opaque/placeholder image: its actual nonexportable AssetRipper container PPtr equals the nonnull exported Material YAML tenth TexEnv pointer. Identify the real installed Android fire/smoke emitter source prefab/Material and inspect its compiled fragment shader texture/alpha/discard, image decoding/importer, native Unity/OBB image and actual device pixels. Coordinate T5 same exact APK+OBB run and results. Keep RENDER-002 OPEN."
+}
