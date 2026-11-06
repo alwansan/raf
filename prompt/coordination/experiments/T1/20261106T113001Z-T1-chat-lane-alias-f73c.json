@@ -1,0 +1,124 @@
+{
+  "owner": "T1",
+  "session_id": "20261106T113001Z-T1-chat-lane-alias-f73c",
+  "issue_id": "WATER-001",
+  "origin": "chat",
+  "hypothesis": "A constant-index OpAccessChain to an exact Function vector and a proven coordinate OpVectorShuffle lane can show that some writes target a different physical element and should not be counted as may-reaching that coordinate.",
+  "source_commit": "3737326672b2168028970c17443ce08c511df408",
+  "input_hashes": [
+    "alwansan/raf zip2 pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385; private original FFT owner SHA authenticated by existing stage, raw bytes not published"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "spirv-dis": "pinned Ubuntu apt spirv-tools release (exact version not claimed)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_spirv_lane_alias_effect.py -v",
+    "python3 -m scripts.t1_fft_spirv_lane_alias_effect \"$TMPDIR/candidates/_private_vulkan/slot0.spv\""
+  ],
+  "negative_controls": [
+    "OpVectorShuffle coordinate X/Y swapped across physical lanes",
+    "other-lane-only alias writes cannot initialize target lane",
+    "constant-index element x versus element y validated with base-pointer vector/scalar types",
+    "dynamic or specialization index and out-of-range index fail closed",
+    "conditional branches and loop backedges preserve alternate reaching writes",
+    "pointer escapes and unknown alias sources do not establish full proof",
+    "wrong original descriptor bindings rejected; SSA IDs and literal index values absent from output"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42211108743",
+  "artifact_urls": [],
+  "budget": "existing isolated Ubuntu-24.04 20-minute non-Unity source-authentic Vulkan workflow; no private artifacts",
+  "status": "completed_scoped_original_component_audit",
+  "observed_result": {
+    "conclusion": "success",
+    "job_id": 127869673627,
+    "exact_source_tests": "15/15 PASS",
+    "authentic_original_recovery": "success, pinned original input and private SPIR-V schema/layout guard",
+    "source_privacy": "no raw IDs, constants, bytes, pixels emitted; private project removed",
+    "sites": [
+      {
+        "site": 0,
+        "role": "source",
+        "x": {
+          "physical": "x",
+          "may_reach": 1,
+          "forms": [
+            "whole"
+          ]
+        },
+        "y": {
+          "physical": "y",
+          "may_reach": 1,
+          "forms": [
+            "whole"
+          ]
+        }
+      },
+      {
+        "site": 1,
+        "role": "butterfly",
+        "x": {
+          "physical": "x",
+          "may_reach": 1,
+          "forms": [
+            "whole"
+          ]
+        },
+        "y": {
+          "physical": "other",
+          "may_reach": 2,
+          "forms": [
+            "same_lane"
+          ],
+          "producer_opcodes": [
+            "OpBitcast",
+            "OpConstant"
+          ]
+        }
+      },
+      {
+        "site": 2,
+        "role": "butterfly",
+        "x": {
+          "physical": "x",
+          "may_reach": 1,
+          "forms": [
+            "whole"
+          ]
+        },
+        "y": {
+          "physical": "y",
+          "may_reach": 1,
+          "forms": [
+            "same_lane"
+          ],
+          "producer_opcodes": [
+            "OpConstant"
+          ]
+        }
+      }
+    ],
+    "all_observed_lanes": {
+      "static_unknown_alias_writers": 0,
+      "uninitialized_possible": false,
+      "unknown_write_possible": false,
+      "pointer_escape_possible": false
+    },
+    "original_integer_origin_proven": false,
+    "numerical_parity_proven": false,
+    "authored_kernel_mapping_proven": false,
+    "android_water_proven": false
+  },
+  "rejected_hypotheses": [
+    "Each coordinate Y necessarily reads Function-vector component 1: butterfly site1 Y traverses an original vector shuffle and originates from a different physical component.",
+    "All 4/8 statically indexed alias writes may affect both physical coordinate lanes: source-backed component-sensitive analysis excludes writes to different lanes."
+  ],
+  "limitations": [
+    "Only bounded same-function direct and single-index scalar Function vector access chains modeled; intermediate composite/array, pointer escape, unsupported access remain unproven",
+    "May-reach counts are not path-exclusive actual executed values, nor original integer-source or Vulkan/Unity numerical parity evidence",
+    "No shader rewrite, no Unity authored FindKernel mapping or Android GPU execution"
+  ],
+  "integration_commit": "3737326672b2168028970c17443ce08c511df408",
+  "next_step": "Investigate butterfly site1 Y two same-component may-reaching writers and their OpBitcast/OpConstant producer chains with a private typed SSA origin discriminator; preserve numerical constants private. Then rerun exact original/translated Vulkan+Unity capture for pixel parity only if source-backed rewrite exists."
+}
