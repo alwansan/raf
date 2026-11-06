@@ -1,0 +1,79 @@
+name: T5 DISPLAY-003 original Settings Apply resolution 3 caller IL census
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Experiments/T5/ResolutionApplyProbe/**
+      - scripts/t5_validate_resolution_apply_callers.py
+      - tests/test_t5_validate_resolution_apply_callers.py
+      - .github/workflows/raft-t5-original-resolution-apply-callers.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-display003-apply-callers-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authentic-original-caller-inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout public categorical tool and synthetic test only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T5/ResolutionApplyProbe/*
+            /scripts/t5_validate_resolution_apply_callers.py
+            /tests/test_t5_validate_resolution_apply_callers.py
+      - name: Run source-free negative and positive metadata schema tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_validate_resolution_apply_callers.py -v
+          python3 -m py_compile scripts/t5_validate_resolution_apply_callers.py
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build bounded Cecil tool and execute synthetic compiled IL caller census
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T5/ResolutionApplyProbe/ResolutionApplyProbe.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t5-apply-callers" \
+            > "$RUNNER_TEMP/t5-apply-build.log" 2>&1 || {
+              tail -35 "$RUNNER_TEMP/t5-apply-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t5-apply-callers/ResolutionApplyProbe.dll" --self-test
+      - name: Checkout original immutable ZIP2 managed DLL alone
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Authenticate original bytes and inventory actual resolution apply caller profiles
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c %s zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          dotnet "$RUNNER_TEMP/t5-apply-callers/ResolutionApplyProbe.dll" \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t5-original-apply-caller-safe.json"
+          python3 -m scripts.t5_validate_resolution_apply_callers \
+            --report "$RUNNER_TEMP/t5-original-apply-caller-safe.json"
+          echo 'T5_ORIGINAL_APPLY_CALLER authentic_source=true android_scale_proven=false unity_compiled=false phone_tested=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: No private original source, IL, binary or game assets uploaded
+        if: always()
+        run: echo 'This source-only job exports only bounded aggregate original IL counters; Unity/native/phone not verified.'
