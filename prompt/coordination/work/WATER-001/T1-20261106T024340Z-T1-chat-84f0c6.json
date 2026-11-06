@@ -3,12 +3,19 @@
   "origin": "chat",
   "session_id": "20261106T024340Z-T1-chat-84f0c6",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "4760202b85490849a2870f2c225c7c13a4e93960",
   "intended_files": [
     ".github/workflows/raft-t1-fft-unity-input-identity.yml"
   ],
   "experiment_key": "fft-slot0-source-integer-unity-openglcore-vulkan",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-06T02:43:40Z"
+  "updated_at": "2026-11-06T02:43:40Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42141540903",
+    "https://github.com/alwansan/raf/actions/runs/42152199100",
+    "https://github.com/alwansan/raf/actions/runs/42152295025"
+  ],
+  "result": "The source-only integer fetch rewrite passes SPIR-V validation and same-Mesa-Vulkan output parity at 64/64 and 32/32 written pixels. All five exact scheduled adversarial tests passed locally. Started Unity paired replay with untouched Vulkan reference. The first Unity attempt uses a stale candidate digest after the private rewrite; the corrected queued attempt validates baseline manifest, validates and hashes the rewritten candidate, and preserves both hashes in a private sidecar. No attempt was cancelled.",
+  "next_step": "Check the corrected Unity run's import, input identity and trace output parity before comparing source read coordinate mismatches. The variant also uses promoted SPIR-V, so a positive result requires a promoted-only Unity control to isolate the rewrite effect."
 }
