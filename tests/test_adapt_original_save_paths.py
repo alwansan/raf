@@ -154,6 +154,91 @@ class SavePathTests(unittest.TestCase):
                     else:
                         self.assertEqual(meta.read_bytes(), new_bytes)
 
+
+    def test_swapped_backup_root_does_not_approve_install_or_delete_foreign_backup(self):
+        # A second process may move our just-published backup and create a
+        # DIFFERENT directory at the same path. The backup pathname alone is
+        # not proof that the bytes belong to this transaction.
+        for edit_source in (False, True):
+            with self.subTest(edit_source=edit_source), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+                source.parent.mkdir(parents=True)
+                before = b'class SaveAndLoad {}\n'
+                source.write_bytes(before)
+                meta = source.with_suffix('.cs.meta')
+                metadata = b'guid: do-not-change\n'
+                meta.write_bytes(metadata)
+                backup = root / 'original-backup'
+                moved = root / 'original-backup-moved-by-other-writer'
+                foreign = backup / 'owned-by-another-process.txt'
+                original_rename = Path.rename
+                promoted = False
+                edited = before + b'// independent source edit\n'
+
+                def swap_backup_after_promotion(path, destination):
+                    nonlocal promoted
+                    outcome = original_rename(path, destination)
+                    if destination == backup:
+                        promoted = True
+                        original_rename(backup, moved)
+                        backup.mkdir()
+                        foreign.write_bytes(b'FOREIGN BACKUP: NEVER DELETE')
+                        if edit_source:
+                            source.write_bytes(edited)
+                    return outcome
+
+                with patch('scripts.adapt_original_save_paths.adapt',
+                           side_effect=lambda text: text + '\n// synthetic portable paths'):
+                    with patch.object(Path, 'rename', swap_backup_after_promotion):
+                        with self.assertRaises(ValueError):
+                            apply(root / 'project', backup, write=True)
+                self.assertTrue(promoted)
+                self.assertEqual(source.read_bytes(), edited if edit_source else before)
+                self.assertEqual(meta.read_bytes(), metadata)
+                self.assertEqual(foreign.read_bytes(), b'FOREIGN BACKUP: NEVER DELETE')
+                self.assertEqual((moved / source.name).read_bytes(), before)
+                self.assertEqual((moved / meta.name).read_bytes(), metadata)
+
+    def test_swapped_backup_root_is_not_deleted_during_write_rollback(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            source.parent.mkdir(parents=True)
+            before = b'class SaveAndLoad {}\n'
+            source.write_bytes(before)
+            meta = source.with_suffix('.cs.meta')
+            metadata = b'guid: original\n'
+            meta.write_bytes(metadata)
+            backup = root / 'backup'
+            moved = root / 'owned-backup-moved'
+            foreign = backup / 'foreign-owner-proof'
+            original_rename = Path.rename
+            original_write = Path.write_bytes
+            swapped = False
+
+            def replace_backup_then_fail(path, data):
+                nonlocal swapped
+                if path == source and b'// synthetic portable paths' in data and not swapped:
+                    original_write(path, data)
+                    original_rename(backup, moved)
+                    backup.mkdir()
+                    foreign.write_bytes(b'FOREIGN OWNER')
+                    swapped = True
+                    raise OSError('synthetic failure after source mutation')
+                return original_write(path, data)
+
+            with patch('scripts.adapt_original_save_paths.adapt',
+                       side_effect=lambda text: text + '\n// synthetic portable paths'):
+                with patch.object(Path, 'write_bytes', replace_backup_then_fail):
+                    with self.assertRaises((ValueError, OSError)):
+                        apply(root / 'project', backup, write=True)
+            self.assertTrue(swapped)
+            self.assertEqual(source.read_bytes(), before)
+            self.assertEqual(meta.read_bytes(), metadata)
+            self.assertEqual(foreign.read_bytes(), b'FOREIGN OWNER')
+            self.assertEqual((moved / source.name).read_bytes(), before)
+
     def test_interrupted_metadata_backup_has_no_partial_backup_and_can_retry(self):
         import shutil
         with tempfile.TemporaryDirectory() as tmp:
