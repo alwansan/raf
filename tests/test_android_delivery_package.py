@@ -165,6 +165,64 @@ class DeliveryTests(unittest.TestCase):
                             package(apk, obb, meta, out)
                         self.assertFalse(out.exists())
 
+    def test_crc_green_unsafe_zip_members_rejected_before_delivery(self):
+        # Each archive remains CRC-valid; only the structural names or
+        # Unix type make it unsafe for Android/Unity ZIP extraction.
+        cases = ('parent_traversal', 'absolute', 'backslash', 'windows_drive',
+                 'file_ancestor', 'file_directory_alias', 'unix_symlink')
+        for container in ('apk', 'obb'):
+            for case in cases:
+                with self.subTest(container=container, case=case):
+                    with tempfile.TemporaryDirectory() as tmp:
+                        root = Path(tmp)
+                        apk, obb, meta = self.inputs(root)
+                        target = apk if container == 'apk' else obb
+                        with zipfile.ZipFile(target, 'a') as archive:
+                            if case == 'parent_traversal':
+                                archive.writestr('assets/../bad.bin', b'synthetic')
+                            elif case == 'absolute':
+                                archive.writestr('/assets/bad.bin', b'synthetic')
+                            elif case == 'backslash':
+                                archive.writestr('assets\\bad.bin', b'synthetic')
+                            elif case == 'windows_drive':
+                                archive.writestr('C:/assets/bad.bin', b'synthetic')
+                            elif case == 'file_ancestor':
+                                archive.writestr('assets', b'not a directory')
+                                if container == 'apk':
+                                    archive.writestr('assets/bin/Data/new.bin', b'synthetic')
+                            elif case == 'file_directory_alias':
+                                archive.writestr('assets/bin/Data/alias', b'file')
+                                archive.writestr('assets/bin/Data/alias/', b'')
+                            else:
+                                info = zipfile.ZipInfo('assets/bin/Data/alias')
+                                info.create_system = 3
+                                info.external_attr = 0o120777 << 16
+                                archive.writestr(info, b'outside')
+                        with zipfile.ZipFile(target) as archive:
+                            self.assertIsNone(archive.testzip())
+                        output = root / 'delivery'
+                        with self.assertRaisesRegex(ValueError,
+                                                    'unsafe member path|collides with member directory|file/directory alias|symbolic-link member'):
+                            package(apk, obb, meta, output)
+                        self.assertFalse(output.exists())
+
+    def test_explicit_zip_directory_ancestors_remain_valid(self):
+        for container in ('apk', 'obb'):
+            with self.subTest(container=container):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    apk, obb, meta = self.inputs(root)
+                    target = apk if container == 'apk' else obb
+                    with zipfile.ZipFile(target, 'a') as archive:
+                        archive.writestr('assets/', b'')
+                        archive.writestr('assets/bin/', b'')
+                        archive.writestr('assets/bin/Data/', b'')
+                    out = root / 'delivery'
+                    result = package(apk, obb, meta, out)
+                    self.assertTrue(result['companion_required'])
+                    self.assertTrue((out / 'Raft-Android-Test.apk').is_file())
+                    self.assertTrue((out / 'Raft-Android-Test.xapk').is_file())
+
     def test_member_crc_corruption_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);apk,obb,meta=self.inputs(root)

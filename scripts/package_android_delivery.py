@@ -88,6 +88,52 @@ def parse_badging(text, expected_version):
             'permissions':re.findall(r"^uses-permission: name='([^']+)'",text,re.M)}
 
 
+def _validate_native_zip_members(entries):
+    """Reject ambiguous or unsafe APK/OBB member layout before recovery packaging.
+
+    The original ZIP bytes remain unchanged. CRC checks alone cannot detect
+    traversal, ZIP symlink metadata, or file/directory prefix collisions.
+    """
+    if not entries or len(entries) > 200_000:
+        raise ValueError('Native ZIP has an invalid member count')
+    names = set()
+    regular_files = set()
+    for item in entries:
+        name = item.filename
+        if name in names:
+            raise ValueError('Native ZIP duplicate member name')
+        names.add(name)
+        path = name[:-1] if name.endswith('/') else name
+        if (not path or name.startswith('/') or '\\' in name or ':' in name
+                or any(part in ('', '.', '..') for part in path.split('/'))):
+            raise ValueError('Native ZIP unsafe member path')
+        # Unix symlinks can have an ordinary-looking ZIP path yet resolve to
+        # files outside the intended member tree at extraction time.
+        mode = (item.external_attr >> 16) & 0xffff
+        if item.create_system == 3 and (mode & 0o170000) == 0o120000:
+            raise ValueError('Native ZIP symbolic-link member')
+        if item.flag_bits & 1:
+            raise ValueError('Native ZIP encrypted member')
+        if item.is_dir():
+            if item.file_size:
+                raise ValueError('Native ZIP nonempty directory member')
+        else:
+            regular_files.add(name)
+    # 'assets' and 'assets/bin/Data/file' are distinct names, but the first
+    # is a regular file that prevents the second from being extracted.
+    # Also reject 'assets/dir' and 'assets/dir/' aliases in either order.
+    for name in names:
+        path = name[:-1] if name.endswith('/') else name
+        if name.endswith('/') and path in regular_files:
+            raise ValueError('Native ZIP file/directory alias')
+        segments = path.split('/')
+        prefix = ''
+        for segment in segments[:-1]:
+            prefix = segment if not prefix else prefix + '/' + segment
+            if prefix in regular_files:
+                raise ValueError('Native ZIP regular file collides with member directory')
+
+
 def copy_transport(source, output, name, limit):
     sink = PartsWriter(output,name,limit)
     try:
@@ -113,11 +159,7 @@ def package(apk, obb, metadata, output, *, part_bytes=DEFAULT_PART, asset_limit=
                 # unambiguous. A ZIP may contain two identical names with valid
                 # CRCs, and Android/Unity lookups can resolve the wrong one.
                 # Recovery packaging must not bypass the primary APK/OBB audit.
-                names = set()
-                for item in archive.infolist():
-                    if item.filename in names:
-                        raise ValueError('Native ZIP duplicate member name')
-                    names.add(item.filename)
+                _validate_native_zip_members(archive.infolist())
                 if archive.testzip() is not None: raise ValueError('Native ZIP CRC mismatch')
         except (zipfile.BadZipFile, RuntimeError, OSError, EOFError):
             raise ValueError('Native ZIP integrity failure') from None
