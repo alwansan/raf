@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261106-perf-scene-window-sourcefix",
+  "owner": "T5",
+  "session_id": "20261106T0214Z-T5-chat-scene-window-attribution-8d91",
+  "issue_id": "PERF-007",
+  "type": "integration",
+  "at": "2026-11-06T02:31:34.179Z",
+  "summary": "Fixed real CL-proven Unity FPS scene attribution: source logs had 96-frame and 12-frame intervals straddling Menu->MainScene but labeled new scene only. New diagnostic records start/end scene, active and additive content events, stable flags without dropping load stalls; B12 static callback and B04 preserved. CI42150116695 platform pass 11 diagnostics policy tests; CI42150086078 B12 pass; CI42150565706 23 tests and four actual CL blobs passed, old intervals correctly legacy-unlabeled. Device not tested, performance/water/graphics not fixed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42150116695",
+    "https://github.com/alwansan/raf/actions/runs/42150565706",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_SCENE_INTERVAL_ATTRIBUTION_2026-11-06.md"
+  ]
+}
