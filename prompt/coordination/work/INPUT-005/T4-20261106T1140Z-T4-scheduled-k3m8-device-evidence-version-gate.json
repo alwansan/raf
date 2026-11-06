@@ -2,7 +2,7 @@
   "session_id": "20261106T1140Z-T4-scheduled-k3m8",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "380edc11ca23dd1f59d3540811497aaf7aaab0ce",
   "updated_at": "2026-11-06T11:40:00Z",
   "intended_files": [
@@ -18,5 +18,9 @@
     "20261106T1042Z-T4-scheduled-f6n3"
   ],
   "taken_over_from": "T4 chat source-free JSONL parser CI42210561898",
-  "shared_resource": "none; read-only CL"
+  "shared_resource": "none; read-only CL",
+  "result": "Immutable CL owner artifact predates native release outcome telemetry; version gate documented; no device confirmation",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261106T1140Z-T4-scheduled-k3m8.md",
+  "event_path": "prompt/coordination/B_TEAM/events/T4/20261106T1140Z-T4-scheduled-k3m8.json",
+  "next_step": "T5 provide matching signed APK/OBB source SHA and fresh post-telemetry device JSONL"
 }
