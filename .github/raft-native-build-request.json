@@ -1,12 +1,15 @@
 {
-  "request_id": "t5-exact-water-ack-20261105T1543Z-f2c9",
-  "reason": "New diagnostic request from the updated feature branch. Previous native run reached the existing strict water gate; document the observed five outstanding conditions exactly. Preserve original assets, Unity integrity, signature and packaging checks. Experimental water remains unproven; NOT_READY 0/3.",
-  "requested_from_sha": "f4c5f00f81cd91f34272b331c8801d0478888293",
+  "request_id": "owner-direct-20261106-latest-integrated-trial-xapk-42058825739-01",
+  "reason": "Direct instruction from the main project owner on 2026-11-06: run exactly one new experimental signed APK+OBB+XAPK delivery from the latest integrated feature/android-native-port HEAD. Prior run 42058825739 reconstructed successfully but Release POST returned HTTP403. Keep all real asset, signature, water, offline and delivery checks; no cancellation or other agent contact.",
+  "requested_from_sha": "0cb2b404843926a5a0be842bc8cd389a0fb08e77",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
     "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
     "shader_pass_contract:UltimateWater/Depth/Depth Copy",
     "water_compute_source_candidate"
-  ]
+  ],
+  "owner_direct_request": true,
+  "owner_instruction": "Newer direct owner order for one trial build supersedes the optional T_TEAM 5/5 timing vote for this request only; do not modify or impersonate T1-T5 votes and do not claim READY.",
+  "previous_run_id": 42058825739
 }
