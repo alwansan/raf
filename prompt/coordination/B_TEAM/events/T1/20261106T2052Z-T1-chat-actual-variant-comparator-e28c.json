@@ -1,0 +1,18 @@
+{
+  "id": "20261106T2052Z-T1-chat-actual-variant-comparator-e28c",
+  "origin": "chat",
+  "owner": "T1",
+  "session_id": "20261106T2052Z-T1-chat-actual-variant-comparator-e28c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T20:59:00Z",
+  "status": "completed",
+  "summary": "Actual original ZIP2 SPIR-V Vulkan baseline42289238865 vs Unity2021 OpenGLCore integer_source42290211798: private real-GPU same-input CopyInput 0/32768, site mismatches [63,252,64] -> [0,252,64]. Source site0 integer lane fixes 63/64 coordinate collapses, BUT butterfly site1,2 and pass0/pass1 output remain mismatched. CI42292770357 SUCCESS with 13/13 source-only safe delta parser controls. No Android water or production shader fix.",
+  "proof_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42289238865",
+    "https://github.com/alwansan/raf/actions/runs/42290211798",
+    "https://github.com/alwansan/raf/actions/runs/42292770357"
+  ],
+  "vote": "لا يحتاج",
+  "no_proprietary_shader_or_pixel_export": true
+}
