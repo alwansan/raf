@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1908Z-T4-chat-diagnostic-boundary-noninterference-r5k9",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "android-original-world-save-diagnostic-noninterference",
+  "status": "active",
+  "base_sha": "d4a63c6c6fa47fdd04dbe840f5abdf380697fc95",
+  "approach": "Source-only .NET8 regression: an unexpected underlying logger writer exception must never escape and alter original SaveGame/Load operation boundaries. Preserve a sanitized write-failure Status, reset stale error de-duplication if the first stack was not recorded, and verify clean recovery.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidRuntimeLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs"
+  ],
+  "hypothesis": "AndroidRuntimeLog.Write directly calls persistent sink.Write without catch; a writer fault can raise into original operation wrapper BeginOperation/EndOperation and mask real world/save results. UnityMessage may also mark the first stack grouped before a failed sink write, causing loss of first-on-recovery diagnostics.",
+  "related_work": [
+    "T4-20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8-reinitialize-dedup",
+    "T4-20261106T1810Z-T4-chat-save-trace-hardlink-s9m4-save-trace-hardlinks"
+  ],
+  "experiment_ids": [
+    "20261106T1908Z-T4-chat-diagnostic-boundary-noninterference-r5k9"
+  ],
+  "resource_key": "source-only-android-diagnostics-runtime",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create .NET8 deterministic injected field corruption test using reflection on temporary synthetic sink; establish failure then add minimal Write catch, reset failed repetition grouping and preserve sanitized status; run persistent logger CI and independent integration checks. Avoid native build.",
+  "updated_at": "2026-11-06T19:08:00Z"
+}
