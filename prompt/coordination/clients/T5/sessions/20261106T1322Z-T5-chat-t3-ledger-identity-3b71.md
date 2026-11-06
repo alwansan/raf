@@ -6,3 +6,8 @@
 - **safe coordination:** no modifications to T3 Shader48 / Particle108 source, experiments, CI, statuses, .meta, Unity or GPU; original shader remains source-only and not phone verified. Parser remains strict: no filename fallback or silently ignored event. Scope T5 isolated own new evidence, no other team client path rewritten.
 - **related genuine signed APK/OBB proof** (separate T5 INTEGRATION-001 scope): [CI42224062207](https://github.com/alwansan/raf/actions/runs/42224062207) **SUCCESS** 14 synthetic tests + original signed checkpoint 70/70 nested ZIP local header parity using just 25,350 HTTP-range bytes. Report `docs/T5_REAL_SIGNED_NESTED_ZIP_2026-11-06.md`. No full SHA/signature or phone acceptance.
 - **next_step:** strict inherited canonical team ledger refresh from all current events, record exact count + T5 source CI, update only this session/work. Water/FFT/RENDER P0 still open, overall `NOT_READY 0/3`.
+
+## Canonical final team evidence
+
+- [T5 full team refresh CI42225352448](https://github.com/alwansan/raf/actions/runs/42225352448), job `127917317768`, **COMPLETED SUCCESS**; source-only canonical index read **395** committed events, **11/11 B-team + 3/3 T-team** unit tests passed. The inherited strict reader now accepts both distinct T3 postvendor event records after additive explicit identities, without filename fallback or lost evidence. No force push/Android game acceptance implied.
+- Real original signed APK+OBB nested ZIP [CI42224062207](https://github.com/alwansan/raf/actions/runs/42224062207) remained **SUCCESS, 14/14** synthetic + **70/70** original local headers, 25,350 range bytes; no full SHA, certificate, GPU or phone evidence.
