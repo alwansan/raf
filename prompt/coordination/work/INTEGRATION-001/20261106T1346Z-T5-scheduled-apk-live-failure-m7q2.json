@@ -1,0 +1,30 @@
+{
+  "session_id": "20261106T1346Z-T5-scheduled-apk-live-failure-m7q2",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "base_head_sha": "7e5d69ce00e5c22183915205f164b67101694d8c",
+  "status": "diagnosed_ci_stage_no_root_cause",
+  "experiment_key": "T5-original-42058825739-signed-apk-live-stream-failure-triage-v1",
+  "scope_files": [
+    "prompt/coordination/work/INTEGRATION-001/20261106T1346Z-T5-scheduled-apk-live-failure-m7q2.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1346Z-T5-scheduled-apk-live-failure-m7q2.md"
+  ],
+  "shared_resource": "none; read-only existing CI 42227170402",
+  "hypothesis": "The original signed APK full-byte attestation has not passed; determine failed stage without retrying costly transfer.",
+  "evidence": {
+    "run": 42227170402,
+    "job": 127923480529,
+    "source_sha": "c23b26efd1112cf1cd828e2190bd378f6f0b08d4",
+    "run_conclusion": "failure",
+    "synthetic": "success",
+    "sdk_preflight": "success",
+    "full_apk_stream": "failure",
+    "cleanup": "success"
+  },
+  "limitations": "Step-level API does not disclose exact sanitized script failure reason; no proof of SHA mismatch, signature failure, or corrupt APK.",
+  "next_step": "Read redacted job log reason T5_REAL_SIGNED_APK status=BLOCKED; classify HTTP range / expiry / disk / digest; fix only evidenced defect, avoid rerun without changed cause; coordinate chat T5.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.md",
+    "prompt/coordination/clients/T5/sessions/20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
+  ]
+}
