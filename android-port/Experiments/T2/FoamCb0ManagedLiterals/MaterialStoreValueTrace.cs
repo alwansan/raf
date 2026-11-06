@@ -69,14 +69,16 @@ internal static class MaterialStoreValueTrace
     }
 
     internal static Evidence Trace(IList<Instruction> instructions,
-                                   int storePos, MethodDefinition? context)
+                                   int storePos, MethodDefinition? context,
+                                   string expectedFieldType="UnityEngine.Material")
     {
         Evidence Block(string reason) => new(reason,Unknown,0,false,false,null);
         if (storePos < 0 || storePos >= instructions.Count ||
             instructions[storePos].OpCode.Code != Code.Stfld ||
             instructions[storePos].Operand is not FieldReference target ||
-            target.FieldType.FullName != "UnityEngine.Material" || context?.HasBody != true)
-            return Block("invalid_Material_stfld");
+            target.FieldType.FullName != expectedFieldType || context?.HasBody != true)
+            return Block(expectedFieldType=="UnityEngine.Shader"
+                ? "invalid_Shader_stfld" : "invalid_Material_stfld");
         // A branch directly to this store may arrive with a stack from another
         // block. Do not claim any unique producer in that situation.
         var targetInstruction=instructions[storePos];
@@ -358,6 +360,55 @@ internal static class MaterialStoreValueTrace
         wrongShaderType[2]=Instruction.Create(OpCodes.Ldfld,nonShaderField);
         if (Trace(wrongShaderType,4,ctx).PrivateOriginalShaderInputField is not null)
             throw new InvalidOperationException("Wrong type must not masquerade as Shader field");
+        var originalShaderStore=Instruction.Create(OpCodes.Stfld,shaderField);
+        var typedShaderParamStore=new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldarg_1),
+            originalShaderStore
+        };
+        if (Trace(typedShaderParamStore,2,ctx,"UnityEngine.Shader").ValueOrigin !=
+            "typed_Shader_parameter")
+            throw new InvalidOperationException("Typed Shader parameter must be exact store source");
+        var find=new MethodReference("Find",shader,shader) { HasThis=false };
+        find.Parameters.Add(new ParameterDefinition(module.TypeSystem.String));
+        var sourceFind=new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_FAKE_SHADER"),
+            Instruction.Create(OpCodes.Call,find),
+            originalShaderStore
+        };
+        if (Trace(sourceFind,3,ctx,"UnityEngine.Shader").ValueOrigin !=
+            "typed_Shader_Find_result")
+            throw new InvalidOperationException("Shader.Find result must be exact store value");
+        var distractorShader=new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldstr,"PUBLIC_FAKE_SHADER"),
+            Instruction.Create(OpCodes.Call,find),
+            Instruction.Create(OpCodes.Pop),
+            Instruction.Create(OpCodes.Ldarg_1),
+            originalShaderStore
+        };
+        if (Trace(distractorShader,5,ctx,"UnityEngine.Shader").ValueOrigin !=
+            "typed_Shader_parameter")
+            throw new InvalidOperationException("Nearby Shader.Find must not stand for store");
+        var directShaderField=new FieldReference("PUBLIC_OTHER_SHADER",shader,owner);
+        var inputFieldStore=new List<Instruction> {
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldarg_0),
+            Instruction.Create(OpCodes.Ldfld,directShaderField),
+            originalShaderStore
+        };
+        if (Trace(inputFieldStore,3,ctx,"UnityEngine.Shader").ValueOrigin !=
+            "typed_Shader_instance_field")
+            throw new InvalidOperationException("Original shader instance field value source");
+        var branchShaderStore=new List<Instruction>(typedShaderParamStore);
+        branchShaderStore.Insert(0,Instruction.Create(OpCodes.Br_S,originalShaderStore));
+        if (Trace(branchShaderStore,3,ctx,"UnityEngine.Shader").ValueOrigin !=
+            "alternate_entry_at_store")
+            throw new InvalidOperationException("Branch cannot prove Shader field source");
+        if (Trace(direct,3,ctx,"UnityEngine.Shader").ValueOrigin !=
+            "invalid_Shader_stfld")
+            throw new InvalidOperationException("Material field not accepted as Shader store");
         var wrongField=new FieldReference("wrong",module.TypeSystem.Object,owner);
         var wrongTarget=new List<Instruction>(direct);
         wrongTarget[3]=Instruction.Create(OpCodes.Stfld,wrongField);
