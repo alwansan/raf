@@ -6386,6 +6386,20 @@
       "_record_path": "../B_TEAM/events/T1/20261106T112050Z-T1-chat-alias-origins-b62f.json"
     },
     {
+      "id": "20261106T113001Z-T1-chat-lane-alias-f73c",
+      "owner": "T1",
+      "session_id": "20261106T113001Z-T1-chat-lane-alias-f73c",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Source-authentic original FFT slot0 physical-lane OpAccessChain/OpVectorShuffle audit passed 15 synthetic controls and original Vulkan CI 42211108743. All three read sites have a single reachable whole-vector writer in physical X. Site1 butterfly Y actually maps to a different physical vector component and retains two may-reaching same-component writers (OpBitcast and OpConstant). Site2 butterfly Y has one constant same-component writer. Under bounded tested model no unknown-index/escape candidates remain; numeric value/Unity parity/Adreno water unproven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42211108743",
+        "https://github.com/alwansan/raf/commit/3737326672b2168028970c17443ce08c511df408"
+      ],
+      "at": "2026-11-06T11:35:17.804Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T113001Z-T1-chat-lane-alias-f73c.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -7857,6 +7871,21 @@
       "_record_path": "../B_TEAM/events/T3/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json"
     },
     {
+      "id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Four SHA-original Particle108 HLSL VS/FS pairs: original SPIR-V 4/4, independently generated HLSL semantic link 4/4 per CI 42209509708, glslang HLSL separate stage SPIR-V 2/4. Real CI 42210538214 verified alternative --hlsl-iomap, --auto-map-locations, and combined; each 8/8 compiled Vulkan-valid stages but only 2/4 VSFS linked, same 2 existing Location/type mismatches. 8 source-free controls pass. No Unity shader/material modifications or device pixel proof. RENDER-002 OPEN; next paired-stage linking or verified semantic-to-SPV location map only.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42210538214",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1125Z-T3-chat-glslang-iomap-d37f.json"
+      ],
+      "at": "2026-11-06T11:30:21.373Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1125Z-T3-chat-glslang-iomap-d37f.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8609,6 +8638,28 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1106Z-T4-chat-release-outcome-s8k4.json"
     },
     {
+      "id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+      "event_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+      "session_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "INPUT-005",
+      "type": "source_free_android_mouse_release_outcome_classifier",
+      "timestamp": "2026-11-06T11:30:00Z",
+      "at": "2026-11-06T11:30:00Z",
+      "summary": "T4 extended the existing source-free JSONL world/save evidence parser to classify original native mouse release outcomes with eight fixed labels, six input markers, counts only and strict forged/extra/private detail rejection. Immutable CI42210561898 SUCCESS at 4d18a096, 20/20 parser and 2/2 overflow (22/22); five new tests. No owner phone logs, hardware mouse/device, or Unity run checked. OS release/camera and world progress remain unverified; INPUT-005 and LOCAL-005 OPEN, NOT_READY 0/3.",
+      "source_commit": "4d18a096707d4c7fc134e967e7f807aeee8a5c0e",
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42210561898",
+      "source_free_only": true,
+      "original_data_published": false,
+      "evidence": [
+        "prompt/coordination/clients/T4/sessions/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.md",
+        "prompt/coordination/experiments/T4/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.json"
+      ],
+      "native_phone_acceptance": "UNKNOWN",
+      "_record_path": "../B_TEAM/events/T4/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9146,6 +9197,24 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1104Z-T5-chat-resolution-delegate-6a2f.json"
     },
     {
+      "id": "20261106T1130Z-T5-chat-applycallers-c6e1",
+      "owner": "T5",
+      "session_id": "20261106T1130Z-T5-chat-applycallers-c6e1",
+      "origin": "chat",
+      "issue_id": "DISPLAY-003",
+      "type": "result",
+      "at": "2026-11-06T11:34:27.578Z",
+      "summary": "Exact original ZIP2 SHA-authenticated 3 ApplyCurrentResolutionAndFullscreenMode callsites belong to 3 distinct GraphicsSettingsBox methods; one method contains 8 Dropdown API call sites/8 typed field references and one non-int/non-bool parameter, other two no parameters. 0 external direct calls, 0 direct PlayerPrefs writes in callers; original apply has 1 Screen.SetResolution and 0 ResizeBuffers. CI42210936332 10 Python + 5 Cecil synthetic and genuine IL passed. UI event binding/render-scale persistence not proven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42210936332",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_RESOLUTION_APPLY_CALLERS_2026-11-06.md"
+      ],
+      "limits": "Source-only compiled IL; no original game runtime changed, no Android device, water/FFT/renderer readiness still OPEN; NOT_READY 0/3.",
+      "work_path": "prompt/coordination/work/DISPLAY-003/20261106T1130Z-T5-chat-applycallers-c6e1.json",
+      "next_step": "Identify typed serialized original UI binding and bounded parameter category before implementation.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1130Z-T5-chat-applycallers-c6e1.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9174,7 +9243,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "fc23aca94cb389f2beedcdc8079c6333caa035bcdbef85eba880c902313153ca",
+  "source_input_sha256": "bbdbfa1267c5ceb64335431ade08670ff2eda751d6c8da937d2d73c0f0c953d1",
   "generation": "T-2026-11-05",
-  "input_sha256": "282cbdcaab15d90c4a6c37fbb7da60701e470fbda4f858618ddc1904c6f9a9fa"
+  "input_sha256": "b51d97d5b0f05e8e629d1c60edca07cefd121e29e72f890dc92e40f12cbd2eed"
 }
