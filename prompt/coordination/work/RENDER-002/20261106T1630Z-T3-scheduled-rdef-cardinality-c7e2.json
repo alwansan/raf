@@ -1,0 +1,21 @@
+{
+  "session_id": "20261106T1630Z-T3-scheduled-rdef-cardinality-c7e2",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "status": "in_progress",
+  "base_sha": "e9ef2627d8bc09e007c5d2d59da1385136e5778b",
+  "resumed_from_sessions": [
+    "20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c",
+    "20261106T1532Z-T3-scheduled-particle108-causality-8f3a"
+  ],
+  "hypothesis": "Original DXBC RDEF cardinality absence versus multiple currently conflated; classify safely without exposing private shader data",
+  "files": [
+    "scripts/t3_particle108_original_dxbc_rdef.py",
+    "tests/test_t3_particle108_original_dxbc_rdef.py"
+  ],
+  "experiment_key": "T3-PARTICLE108-RDEF-CARDINALITY-SOURCE-ONLY",
+  "shared_resource": "none; no Unity, ZIP2 staging or Actions dispatch",
+  "taken_over_from": "T3 chat native RDEF diagnostic CI42249097396; no B agent reactivated",
+  "constraints": "No game assets, metadata or original bytes; distinct files from concurrent T3 chat if overlap"
+}
