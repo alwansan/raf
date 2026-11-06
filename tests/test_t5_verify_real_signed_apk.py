@@ -102,7 +102,7 @@ class SignedApkAuthenticityTests(unittest.TestCase):
         for value in (
             "package: name='com.other.raft.androidtest' versionCode='89' versionName='1'\n",
             "package: name='" + PACKAGE + "' versionCode='88' versionName='1'\n",
-            "package: name='" + PACKAGE + "' versionCode='89' versionName='1'\n" * 2,
+            ("package: name='" + PACKAGE + "' versionCode='89' versionName='1'\n") * 2,
             "not a real Android manifest",
         ):
             with self.subTest(value=value[:70]), self.assertRaises(ProbeError):
