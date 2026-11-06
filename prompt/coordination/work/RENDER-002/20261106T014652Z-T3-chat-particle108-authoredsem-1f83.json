@@ -5,11 +5,11 @@
   "owner": "T3",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-06T01:46:52.143Z",
+  "status": "completed",
+  "updated_at": "2026-11-06T01:57:02.127Z",
   "base_sha": "fddc216f936539d2278ddc58292689900aa3cb32",
   "experiment_key": "T3-zip2-15964-sixscene-fourShaderOwner-Particle108-fourStagePairs-trueDXBC-ISGNOSGN-semantic-Mask-VSFS-noPrivates-v1",
-  "resource_key": "T3-private-original-Particle108-four-true-DXBC-VSFS-signature-audit",
+  "resource_key": null,
   "resumed_from_sessions": [
     "20261106T013239Z-T3-chat-particle108-namebridge-6f42.md",
     "20261106T0131Z-T3-scheduled-io-order-6d9a.md"
@@ -25,7 +25,9 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.json",
     "docs/T3_ORIGINAL_PARTICLE108_DXBC_SIGNATURE_2026-11-06.md",
     "prompt/coordination/discussions/RENDER-002/20261106T014652Z-T3-chat-particle108-authoredsem-1f83-to-T5.md",
-    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json",
+    "prompt/coordination/B_TEAM/issues/RENDER-002.json",
+    ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
   "constraints": [
     "Read-only exact SHA-original private DXBC (no code/data output)",
@@ -33,6 +35,11 @@
     "No shared scheduled T3 script or test changes.",
     "No Shader, Material, APK/OBB, native Unity build or T4 input file edits."
   ],
-  "run_urls": [],
-  "next_step": "Run genuine original Particle108 four D3D11 VS/FS pair strict authored semantic-mask/type join on existing six-scene source CI. Then compare original authored semantics to HLSL/Location in new experiment only if semantic extraction unambiguous; continue RENDER-002 OPEN."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42146385054",
+    "https://github.com/alwansan/raf/actions/runs/42147047846"
+  ],
+  "next_step": "Map exact original DXBC semantic+index/register/component mask from 4 VSFS pairs to source vkd3d SPIR-V variable Locations and recovered SPIRV-Cross HLSL SV_*/TEXCOORD declarations; reject ambiguities and resource binding drift before attempt to remap any derived shader. Then full T5 native/postvendor source Shader GUID and physical Android square-effect emitter validation; preserve original ColorMask RGB and source 10/10 Material texture bindings.",
+  "integration_commit": "1ed58e7beab792c877edeaeab163a78c5ba23303",
+  "result": "Genuine SHA-original unique 108-use ParticleShader48 four DXBC source VS/FS exact keyword pairs and eight true original stage programs; compiled authored ISGN/OSGN source user varyings 16 VS output ↔16 FS input semantic+index records matched, 58 component lanes, zero missing fragment semantics/lanes or type mismatches, all 4/4 original source pairs valid. CI42146385054 SUCCESS 147/147 controls, all 6 original scenes and 4 Shader owners SHA plus source .resS full SHA. Prior SPIR-V to HLSL compiler names changed 0/46; HLSL roundtrip VS/FS only 2/4, original semantics to derived Location HLSL mapping not proven. Canonical ledger CI42147047846 SUCCESS after T4-owned missing event id fixed; RENDER-002 OPEN, device NOT_TESTED, no assets or APK altered."
 }
