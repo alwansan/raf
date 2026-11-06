@@ -140,10 +140,12 @@ def compile_one(code,stage,keyword_names,bits,root):
             return False
 
 def verify(root,parsed,*,compiler=compile_one):
-    private,keywords,routes=compose(root,parsed)
+    # Detect conflicting output before scanning original keyword candidate files:
+    # keyword-routed-private.shader also matches keyword-*-private.shader glob.
     destination=root/"keyword-routed-private.shader"
     if destination.exists() or destination.is_symlink():
         raise ValueError("will_not_overwrite_private_routed_shader")
+    private,keywords,routes=compose(root,parsed)
     destination.write_text(private,encoding="utf-8")
     code=executable(private,keywords)
     passed=sum(compiler(code,stage,keywords,bits,root) is True
