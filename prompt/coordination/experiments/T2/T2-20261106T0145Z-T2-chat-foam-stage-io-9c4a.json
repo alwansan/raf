@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T0145Z-T2-chat-foam-stage-io-9c4a",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "zip2_15964ea8_Foam_4_embedded_SPIRV_stageIO_matching_location_type_v1",
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "owner_bytes": 115978112,
+    "shader_raw_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "source_commit": "a0534d22bc6bb32f12834acf736e565cd65d8a80",
+  "workflow": ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42146401691",
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_embedded_stage_io.py' -v",
+    "python3 -m scripts.t2_foam_private_shaderlab_candidate --source $RUNNER_TEMP/t2-auth-original --packet $RUNNER_TEMP/t2-foam-auth-private --manifest $RUNNER_TEMP/t2-foam-private-manifest.json --private-dest $RUNNER_TEMP/t2-authentic-foam-private.shader --out $RUNNER_TEMP/t2-foam-candidate-safe.json",
+    "python3 -m scripts.t2_foam_embedded_stage_io --candidate $RUNNER_TEMP/t2-authentic-foam-private.shader --scratch $RUNNER_TEMP --out $RUNNER_TEMP/t2-foam-io-safe.json"
+  ],
+  "controls": [
+    "duplicate/bool/unsupported VS FS Location or component",
+    "mismatched scalar-vector type/array",
+    "unknown/struct stage interfaces rejected rather than assumed matching",
+    "builtins without Location excluded",
+    "wrong stage entry point",
+    "fake compiler missing binaries",
+    "strict original ShaderLab program boundaries"
+  ],
+  "tool_versions": {
+    "original_reader": "UnityPy==1.25.4",
+    "runner": "ubuntu-24.04",
+    "SPIRV_target": "vulkan1.1"
+  },
+  "result": {
+    "source_original_status": "SUCCESS",
+    "run_id": 42146401691,
+    "job_id": 127658818302,
+    "private_shaderlab_bytes": 9731,
+    "source_original_shaderlab_passes": 2,
+    "source_original_embedded_stages_compiled_validated": 4,
+    "source_free_tests_passed": 41,
+    "new_source_free_tests_passed": 14,
+    "pass0": {
+      "vertex_outputs": 3,
+      "fragment_inputs": 3,
+      "numeric_matches": 3,
+      "missing": 0,
+      "wrong_type_or_array": 0
+    },
+    "pass1": {
+      "vertex_outputs": 2,
+      "fragment_inputs": 2,
+      "numeric_matches": 2,
+      "missing": 0,
+      "wrong_type_or_array": 0
+    },
+    "complete_numeric_stage_io_passes": 2,
+    "unity_import_verified": false,
+    "cb0_material_sampler_runtime_verified": false,
+    "actual_Adreno_pixels_verified": false
+  },
+  "limitations": [
+    "Exact SPIRV-cross numeric varying match is not proof of original interpolation and Unity compositor behavior.",
+    "No source original Material runtime/CB0 upload or Adreno image proof.",
+    "No game assets or private programs published."
+  ],
+  "next_step": "Prove original runtime CB0, 4 dynamic Texture/Material upload and Unity2021 original ShaderLab importer. Keep WATER-001 OPEN."
+}
