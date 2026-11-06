@@ -60,7 +60,7 @@ class GateTests(unittest.TestCase):
     def test_multiline_shader_declaration_accepted(self):
         with tempfile.TemporaryDirectory() as d:
             m=fixture(Path(d))
-            (Path(d)/'x.shader').write_text('Shader "valid"\\n{ SubShader { Pass {} } }')
+            (Path(d)/'x.shader').write_text('Shader "valid"\n{ SubShader { Pass {} } }')
             self.assertEqual(check(d,m)['status'],'STRUCTURAL_LINK_ONLY')
 
     def test_comment_material_pointer_rejected(self):
@@ -73,13 +73,13 @@ class GateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             m=fixture(Path(d))
             line='m_Shader: {fileID: 4800000, guid: '+G+', type: 3}'
-            (Path(d)/'m.mat').write_text(line+'\\n'+line)
+            (Path(d)/'m.mat').write_text(line+'\n'+line)
             with self.assertRaisesRegex(ValueError,'material_shader_link_mismatch'): check(d,m)
 
     def test_block_comment_with_real_shader_declaration_accepted(self):
         with tempfile.TemporaryDirectory() as d:
             m=fixture(Path(d))
-            (Path(d)/'x.shader').write_text('/* Shader "fake" { } */\\nShader "valid" { SubShader { Pass {} } }')
+            (Path(d)/'x.shader').write_text('/* Shader "fake" { } */\nShader "valid" { SubShader { Pass {} } }')
             self.assertEqual(check(d,m)['status'],'STRUCTURAL_LINK_ONLY')
 
 if __name__ == '__main__': unittest.main()
