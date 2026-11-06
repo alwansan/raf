@@ -10,3 +10,9 @@
 - Latest scheduled session `20261106T1719Z-T2-scheduled-target-name-ci-7f2c` only reconciled prior CI (completed), no overlapping work. T1 OpenGLCore synthetic FFT run and T3 Particle108 probes are independent. Do not edit their files or cancel runs.
 - Question: privately inspect original source `FileIdentifier.guid` length/zero/type and whether the two actual material fileID references are consistent; check target's own external table for reciprocal source references. Never publish GUIDs/paths, never claim target's own GUID exists if it is not independently authenticated.
 - next_step: sourcefree controls and immutable SHA-pinned original CI. WATER-001 OPEN / NOT_READY; user phone world/save/reopen is separate evidence, not water recovery.
+
+## CI launched — 2026-11-06T17:32:01.170Z
+- Source implementation `scripts/t2_original_external_guid_evidence.py` at `f45940ad`, 11 sourcefree negative/positive tests at `e38f9d25`, isolated SHA-pinned workflow at `5f5ba4450209841993c8600534cdc63e097a5de9`.
+- [Actions run 42262404131](https://github.com/alwansan/raf/actions/runs/42262404131) `in_progress` (job 128045452148); status `waiting_ci`. Separate T1 FFT GPU and T3 Particle DXBC jobs untouched; preserve all active work.
+- Source question: two original external FileIdentifier GUID bytes/type and whether original 758412-byte target references back to original Foam PathID2420. Output only safe numeric aggregates; GUID identity/runtime binding remains **unknown** pending genuine data.
+- If run still executing, check its status and assertions, then update experiment/event/doc from actual result. Do not repeat prior exact-name or target SHA proof without distinct hypothesis.
