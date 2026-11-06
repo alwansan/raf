@@ -20,6 +20,38 @@ ORIGINAL_FFT_OWNER_SHA256 = "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d41
 ORIGINAL_FFT_OBJECT_SHA256 = "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z_0-9]{0,99}\Z")
 MAX_COMPUTE_BYTES = 2_000_000
+# Only literal Unity-2021 compute variant pragmas are supported by source
+# admission; macro-expanded or unknown variants fail closed.
+VARIANT_PRAGMA = re.compile(
+    r"(?m)^[ \t]*#[ \t]*pragma[ \t]+"
+    r"(?:multi_compile|shader_feature)(?:_local)?[ \t]+"
+    r"([^\r\n]{1,512})[ \t]*$"
+)
+
+
+def declared_variant_sets(clean_source):
+    """Bounded mutually exclusive keyword groups from active declarations."""
+    labels = re.findall(r"(?m)^[ \t]*#[ \t]*pragma[ \t]+(\S+)", clean_source)
+    variants = [name for name in labels
+                if name.startswith(("multi_compile", "shader_feature"))]
+    directives = list(VARIANT_PRAGMA.finditer(clean_source))
+    if len(variants) != len(directives) or len(directives) > 16:
+        raise ValueError("Unrecognized authored FFT keyword pragma")
+    groups, used = [], set()
+    for directive in directives:
+        words = directive.group(1).split()
+        if (not 2 <= len(words) <= 16 or
+                any(IDENTIFIER.fullmatch(word) is None for word in words)):
+            raise ValueError("Invalid authored FFT keyword alternatives")
+        names = {word for word in words if word not in ("_", "__")}
+        empties = sum(word in ("_", "__") for word in words)
+        if (not names or len(names) + empties != len(words) or empties > 1
+                or used.intersection(names)):
+            raise ValueError("Repeated or ambiguous authored FFT keyword set")
+        groups.append((names, bool(empties)))
+        used.update(names)
+    return groups
+
 
 
 def sha256_file(path):
@@ -66,6 +98,7 @@ def validate_private_manifest(manifest, compute_bytes):
         raise ValueError("Authored .compute has no unambiguous bounded kernel entrypoints")
     clean = mask_inactive_preprocessor(mask_comments_and_strings(source))
     names = set(re.findall(r"(?m)^\s*#\s*pragma\s+kernel\s+([A-Za-z_]\w*)\b", clean))
+    variant_sets = declared_variant_sets(clean)
     rows = manifest.get("rows")
     if not isinstance(rows, list) or len(rows) != 20:
         raise ValueError("Expected exactly 20 original compiled candidate rows")
@@ -95,6 +128,18 @@ def validate_private_manifest(manifest, compute_bytes):
                 any(not isinstance(k, str) or not IDENTIFIER.fullmatch(k) for k in keywords) or
                 len(set(keywords)) != len(keywords)):
             raise ValueError("Private kernel keywords invalid")
+        active = set(keywords)
+        declared = set()
+        # Exactly one keyword per non-default variant set; at most one
+        # alternative for sets with explicit _ or __ default. A nominally
+        # unique keyword that was not declared in authored compute is invalid.
+        for alternatives, permits_empty in variant_sets:
+            selected = len(active.intersection(alternatives))
+            if selected > 1 or (selected == 0 and not permits_empty):
+                raise ValueError("Authored FFT mutually exclusive keyword selection invalid")
+            declared.update(alternatives)
+        if not active.issubset(declared):
+            raise ValueError("Authored FFT keyword undeclared in compute source")
         # Two distinct original compiled slots cannot be distinguished by this
         # probe if the named authored kernel and enabled keyword SET coincide.
         # This checks declared selector uniqueness, not Unity compilation or
@@ -109,6 +154,7 @@ def validate_private_manifest(manifest, compute_bytes):
         "compiled_candidate_rows": len(used),
         "unique_authored_kernel_names": len(set(r["kernel_name"] for r in rows)),
         "distinct_declared_kernel_keyword_selectors": len(selectors),
+        "source_declared_variant_keyword_sets_checked": len(variant_sets),
         "source_only_stage": True,
         "original_unity_runtime_mapping_proven": False,
     }
