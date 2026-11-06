@@ -40,3 +40,7 @@ Current original Shader48 still `DummyShaderTextExporter` under the selected rea
 - No Unity shader, scene, material, .meta, Steam/Internet, FMOD, Settings, .rgd, OBB, APK or touch/control layout changed.
 - **Vote T3:** «لا يحتاج», `trial-20261106-r1`; no substantive renderer integration for new phone APK. T5 retains native build authority and 5/5 consensus.
 - **Status:** scope completed_sourceonly; original SHA-authenticated workflow ready but unrun; RENDER-002 OPEN/NOT_READY.
+
+## Concurrent native Actions discovered at final read
+
+- During closing check at 2026-11-06T19:40Z, [native run 42281310905](https://github.com/alwansan/raf/actions/runs/42281310905) was **in_progress**, event `push`, immutable build SHA `d692400115c36c4839fa4f4954e5f6ed1c60d413`, actor `alwansan`; gate and license-preflight were successful; the `reconstruct` job was in progress. This is **not a T3-dispatched original Shader48 probe**, and does not prove current HEAD render source or device pixels. T3 did not launch or cancel this job, did not modify native request or vote, and did not declare READY. The ongoing native run must be assessed separately by T5/owner under its own candidate/request rules.
