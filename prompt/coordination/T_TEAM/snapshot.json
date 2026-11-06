@@ -456,7 +456,9 @@
         "https://github.com/alwansan/raf/actions/runs/42132262184",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md",
         "https://github.com/alwansan/raf/actions/runs/42134436841",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42136474867",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -514,7 +516,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T00:14:05.201Z",
+      "updated_at": "2026-11-06T00:30:56.989Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -2681,7 +2683,7 @@
         "extraction": "REAL_SOURCE_PARTICLE108_RENDERER_SLOTS_FIVE_MATERIAL21_TEN_NONNULL_LOCAL_TEXENVS_THREE_TYPED_TEXTURE2D28",
         "reconstruction": "ONE_ACTUAL_PINNED_ASSETRIPPER_CLI_EXPORT_FROM_SAME_SHA_SOURCE_WITH_W1_B02_B21_PRIVATE_TRACES",
         "binding": "REAL_ONE_ASSETRIPPER_SAMEINSTANCE_FIVE_OF_FIVE_SOURCE_MATERIAL21_NINE_EXACT_EXPORTABLE_TEXTURE_PPTRS_PLUS_ONE_EXACT_NONEXPORTABLE_CLASS28_CONTAINER_PPTR_EQUALS_ALL_TEN_ACTUAL_MATERIAL_YAML_TEXENV_BINDINGS_TEN_UV_MATCHED",
-        "integration": "T3_GENUINE_PINNED_ONE_EXPORT_CI42134436841_SUCCESS_104_OF_104_SYNTHETIC_CONTROLS_PRIVATE_SOURCE_TEXENV_CONTAINER_PTR_PARITY_EXACT_NO_GAME_ASSETS_EDITED",
+        "integration": "T3_SAME_INSTANCE_MATERIAL_TEXTURE_PPTR_EXACT_10_OF_10_CI42134436841_AND_TARGET_SOURCE_SHADER48_ACTUAL_ASSETRIPPER_DUMMY_TEXT_MARKER_CI42136474867_SUCCEEDED_NO_GAME_ASSET_MODIFICATION",
         "device": "NOT_TESTED"
       },
       "counts": {
@@ -2710,7 +2712,13 @@
         "nonexportable_container_pointer_captured_for_source_objects": 1,
         "nonexportable_container_pointer_unavailable_for_source_objects": 0,
         "nonexportable_container_pointer_to_YAML_mismatches": 0,
-        "original_texenv_binding_unresolved_after_private_container_pointer_join": 0
+        "original_texenv_binding_unresolved_after_private_container_pointer_join": 0,
+        "exact_original_particle_shader_exported_as_marked_dummy": 1,
+        "original_particle_source_Shader48_passes": 1,
+        "exported_particle_ShaderLab_structural_passes": 1,
+        "exported_particle_ShaderLab_structural_programmed_passes": 1,
+        "android_particle_shader_fragment_alpha_verified": 0,
+        "exact_source_shader_GUID_trace_to_real_AssetRipper_export_verified": 1
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42130529677",
@@ -2720,15 +2728,18 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md",
         "https://github.com/alwansan/raf/actions/runs/42134436841",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md",
-        "https://github.com/alwansan/raf/commit/eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5"
+        "https://github.com/alwansan/raf/commit/eeecaae71e20df2abac7e7bb5693aa7e20c5e7e5",
+        "https://github.com/alwansan/raf/actions/runs/42136474867",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md"
       ],
       "remaining": [
-        "All ten original source ParticleShader48 Material TexEnv pointers now equal same-instance generated actual exported Material YAML pointers, including 1 internal/nonexportable source Texture2D pointer. This is not proof that 3 separate Texture assets were exported or that image pixels decoded.",
-        "Whether the 108-use selected original ParticleShader48 actually drives the user's square fire/smoke emitter is not verified on the installed phone; do not conflate source impact ranking with emitter identification.",
-        "Full native Unity ARM64/Android Material ShaderLab fragment, decoded image sRGB/alpha/sampler, actual OBB contents and Adreno device pixels unverified. RENDER-002 OPEN."
+        "REAL bounded AssetRipper source→same-instance Shader48 GUID bridge is classified: the one-Pass actual exported ShaderLab text has explicit //DummyShaderTextExporter marker, despite structurally valid CGPROGRAM block. Program visual/code equivalence NOT proven.",
+        "Verify if full T5 production/post-vendor Unity project still uses this exact dummy Shader or separately restores actual particle vertex/fragment DXBC and alpha blending.",
+        "Match actual fire/smoke screen emitter/Material on installed Android build before attributing artifact; retain all ten source-authentic Material Texture PPtrs and ColorMask RGB alpha-dependent Blend.",
+        "Native Unity ARM64 Vulkan program compilation, image sampler/decoded Texture2D and Adreno phone screenshot not tested. RENDER-002 OPEN."
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T00:12:05.416Z",
+      "updated_at": "2026-11-06T00:28:53.245Z",
       "_record_path": "../B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
     },
     {
@@ -7168,6 +7179,27 @@
       "_record_path": "../B_TEAM/events/T3/20261106T000407Z-T3-chat-nonexportable-pointer-b42f.json"
     },
     {
+      "id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T001837Z-T3-chat-particle108-shaderlab-5d72",
+      "issue_id": "RENDER-002",
+      "type": "source_export_result",
+      "at": "2026-11-06T00:30:11.054Z",
+      "summary": "Authentic original 108-use ParticleRenderer Shader48 source→same AssetRipper W1 GUID trace shows ACTUAL exported custom .shader/.meta has one balanced Pass and one CG/HLSL program block BUT exact //DummyShaderTextExporter marker. Genuine CI42136474867 SUCCESS 113/113 synthetic controls. 10/10 original Material textures faithful in same export; actual full native/Android pixels/emitter still untested.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42136474867",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+      ],
+      "limitations": [
+        "bounded raw AssetRipper output, post-vendor Unity state unknown",
+        "real fire/smoke emitter not linked to selected source shader",
+        "no Android pixel proof"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261106T001837Z-T3-chat-particle108-shaderlab-5d72.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8114,7 +8146,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "017adf70a59d748c1f44329a469bcb0de8def880b731d950d90d23ae3aa22f37",
+  "source_input_sha256": "be8d353c275df701438aff77c99e44a18ff32c634f37b70e43a623e1212469a3",
   "generation": "T-2026-11-05",
-  "input_sha256": "2f1845463ac62ec63407e78b876038afb8eb7350f846060bb8787e8751f830b0"
+  "input_sha256": "496108af899e23472838e84c49c0be12afadfda7c3d848d3201dbaa65e35b330"
 }
