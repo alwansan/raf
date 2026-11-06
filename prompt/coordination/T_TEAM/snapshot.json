@@ -7681,6 +7681,21 @@
       "_record_path": "../B_TEAM/events/T3/20261106T1010Z-T3-chat-fragment-usedmask-5c2f.json"
     },
     {
+      "id": "20261106T1017Z-T3-chat-roundtrip-interface-c97e",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1017Z-T3-chat-roundtrip-interface-c97e",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Genuine SHA-authenticated ZIP2 Particle108 original four VS/FS DXBC pairs: vkd3d source VSFS 4/4 compatible, HLSL SPIR-V roundtrip only 2/4. Both broken pairs have existing Fragment input Locations but same-Location Vertex output versus Fragment input TYPE mismatches (2 records); zero missing FS input location; four source→roundtrip Vertex and Fragment interface changes. Original active DXBC Fragment input read masks source-located 14/14. Source-only 11/11 tests; no shader patch or phone pixels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42201795150",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json"
+      ],
+      "at": "2026-11-06T10:21:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1017Z-T3-chat-roundtrip-interface-c97e.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8371,6 +8386,26 @@
       "_record_path": "../B_TEAM/events/T4/20261106T0946Z-T4-chat-pointer-view-ci-q4r8.json"
     },
     {
+      "id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+      "session_id": "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
+      "origin": "chat",
+      "owner": "T4",
+      "issue_id": "LOCAL-005",
+      "type": "actual_original_compiled_save_wire_exact_equivalence_7of7",
+      "timestamp": "2026-11-06T10:19:00Z",
+      "at": "2026-11-06T10:19:00Z",
+      "summary": "Actual original compiled private Save on 7 SHA/Git-blob-authenticated 5-Nov owner World RGDs generated disposable output byte-identical to each exact input 7/7; original compiled LoadT returned exact CLR type 7/7; temp cleanup 7/7. CI42201568118 completed success at 22ebebb0; 41/41 Python negative/staging controls, one-byte tamper rejected. Strict no raw game/user bytes, hashes or paths logged; .NET8 only, no Unity Android IL2CPP/device/process death. LOCAL-005 OPEN; NOT_READY 0/3.",
+      "source_commit": "22ebebb0e0638d3a970475fcbcb506a88945307e",
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42201568118",
+      "evidence": [
+        "prompt/coordination/clients/T4/sessions/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.md",
+        "prompt/coordination/experiments/T4/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.json"
+      ],
+      "native_phone_acceptance": "UNKNOWN",
+      "original_data_published": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -8853,6 +8888,27 @@
       "_record_path": "../B_TEAM/events/T5/20261106T0950Z-T5-chat-focus-frame-a7c3.json"
     },
     {
+      "id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
+      "owner": "T5",
+      "session_id": "20261106T1020Z-T5-chat-ledger-id-compat-c8e4",
+      "origin": "chat",
+      "issue_id": "COORD-001",
+      "type": "integration",
+      "at": "2026-11-06T10:21:47.004Z",
+      "summary": "Canonical inherited ledger parser now accepts explicit event_id event records with strict conflict/duplicate/invalid identity rejection. T5 independent 14/14 tests and live 350-event build passed; summary pushed without force, no Unity or phone build.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/94b8e83e06064ec29e714dda413247cd909811cf",
+        "https://github.com/alwansan/raf/commit/bfa53c3f88f16d0b34dd8e20cd60a6bc8a0abd9f",
+        "https://github.com/alwansan/raf/commit/8a6f3ab61ca9a68f3cc755a5b18599fb3141f9de",
+        "https://github.com/alwansan/raf/actions/runs/42201831309"
+      ],
+      "limits": "Team evidence source-only, water/FFT/render and device acceptance remain OPEN.",
+      "work_path": "prompt/coordination/work/COORD-001/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json",
+      "experiment_path": "prompt/coordination/experiments/T5/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json",
+      "updated_at": "2026-11-06T10:21:47.004Z",
+      "_record_path": "../B_TEAM/events/T5/20261106T1020Z-T5-chat-ledger-id-compat-c8e4.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -8881,7 +8937,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "a8fa231a4d398e9a8db3ba60f5237961309b28a0b484a33eca3bf0c90fb420c9",
+  "source_input_sha256": "f1381a4c9fa1617c98b640eb694395c9a1604d3c944aec254144472ac69a5c72",
   "generation": "T-2026-11-05",
-  "input_sha256": "fd670c915f1f7af13374d04dfa9945b0950369d82f743a8951f914375d2b6478"
+  "input_sha256": "a316c8a5081cac33134d0f6694f6cb9798c3fe9a1bf47844ed2fb74c04e8b803"
 }
