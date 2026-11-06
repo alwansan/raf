@@ -1,0 +1,15 @@
+{
+  "id": "20261106T1304Z-T4-chat-null-activity-p7h2",
+  "owner": "T4",
+  "session_id": "20261106T1304Z-T4-chat-null-activity-p7h2",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "at": "2026-11-06T13:12:10.881Z",
+  "summary": "Activity-null safe physical mouse UI dispatch/request/probe/release source fix; exact Unity2021 original-managed ABI and 48/48 source tests passed; Android OS behavior unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1",
+    "https://github.com/alwansan/raf/actions/runs/42222687053",
+    "https://github.com/alwansan/raf/actions/runs/42222686931"
+  ],
+  "device_confirmed": false
+}
