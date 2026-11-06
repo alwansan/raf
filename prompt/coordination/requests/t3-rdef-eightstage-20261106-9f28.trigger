@@ -1,0 +1,11 @@
+session_id=20261106T1701Z-T3-chat-rdef-eightstage-9f28
+origin=chat
+issue=RENDER-002
+experiment_key=T3-RENDER002-zip2SHA15964-Particle108-4keyword-pairs-8DXBC-RDEF-presence-aggregated-v2
+source_zip2=15964ea8f246b6e076ce26b60931ee2e1a9a2385
+source_free_ci=42258460039
+source_free_tests=17/17 PASS
+original_source_workflow=raft-t3-particle108-original-rdef.yml
+expected_output=8-stage RDEF presence counts only; no shaders, binding rows, GUIDs, private bytes
+concurrency=t3-particle108-original-DXBC-rdef
+no_Unity_or_Android_build=true
