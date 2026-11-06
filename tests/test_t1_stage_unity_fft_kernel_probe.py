@@ -102,6 +102,48 @@ class T1FftUnityProbeStagingTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "selector alias"):
                     validate_private_manifest(trial, SHADER.encode())
 
+    def test_declared_variants_reject_invented_or_ambiguous_keywords(self):
+        cases = [
+            (["BANK0", "SIZE32", "NOT_DECLARED"], "undeclared"),
+            (["BANK0", "BANK1", "SIZE32"], "mutually exclusive"),
+            (["BANK0"], "mutually exclusive"),
+            (["SIZE32"], "mutually exclusive"),
+        ]
+        for keywords, category in cases:
+            with self.subTest(keywords=keywords):
+                trial = manifest()
+                trial["rows"][0]["keywords"] = keywords
+                with self.assertRaisesRegex(ValueError, category):
+                    validate_private_manifest(trial, SHADER.encode())
+
+    def test_source_keyword_directives_must_be_active_and_bounded(self):
+        cases = [
+            SHADER.replace("#pragma multi_compile BANK0 BANK1",
+                           "// #pragma multi_compile BANK0 BANK1"),
+            SHADER.replace("#pragma multi_compile BANK0 BANK1",
+                           "#pragma multi_compile BANK0"),
+            SHADER.replace("#pragma multi_compile BANK0 BANK1",
+                           "#pragma multi_compile BANK0 BANK1 SIZE32"),
+            SHADER.replace("#pragma multi_compile BANK0 BANK1",
+                           "#pragma multi_compile_fragment BANK0 BANK1"),
+        ]
+        for code in cases:
+            with self.subTest(index=cases.index(code)):
+                trial = manifest()
+                trial["authored_compute_sha256"] = hashlib.sha256(code.encode()).hexdigest()
+                with self.assertRaises(ValueError):
+                    validate_private_manifest(trial, code.encode())
+
+    def test_supported_local_variant_set_and_explicit_default(self):
+        local = SHADER.replace("#pragma multi_compile BANK0 BANK1",
+                               "#pragma multi_compile_local __ BANK0 BANK1")
+        trial = manifest()
+        trial["authored_compute_sha256"] = hashlib.sha256(local.encode()).hexdigest()
+        trial["rows"][0]["keywords"] = ["SIZE32"]
+        result = validate_private_manifest(trial, local.encode())
+        self.assertEqual(result["distinct_declared_kernel_keyword_selectors"], 20)
+        self.assertEqual(result["source_declared_variant_keyword_sets_checked"], 2)
+
     def test_kernel_and_keyword_negative_controls(self):
         for field, value in [
             ("kernel_name", "MISSING"), ("kernel_name", "../TestA"),
