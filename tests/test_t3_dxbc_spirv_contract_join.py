@@ -36,5 +36,20 @@ class JoinTests(unittest.TestCase):
     def test_invalid_zero_span(self):
         self.assertIn("invalid_count", self.check(dx=[dict(self.dx[0], count=0)]))
 
+    def test_boolean_array_span_rejected(self):
+        self.assertIn("invalid_count", self.check(dx=[dict(self.dx[0], count=True)]))
+
+    def test_negative_dxbc_register_rejected(self):
+        self.assertIn("invalid_coordinate", self.check(dx=[dict(self.dx[0], register=-1)]))
+
+    def test_boolean_spv_binding_rejected(self):
+        self.assertIn("invalid_coordinate", self.check(spv=[dict(self.spv[0], binding=False)]))
+
+    def test_fractional_provenance_set_rejected(self):
+        self.assertIn("invalid_coordinate", self.check(mapping=[dict(self.mapping[0], set=2.5)]))
+
+    def test_negative_provenance_register_rejected(self):
+        self.assertIn("invalid_coordinate", self.check(mapping=[dict(self.mapping[0], register=-3)]))
+
 if __name__ == "__main__":
     unittest.main()
