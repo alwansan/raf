@@ -1,0 +1,11 @@
+session_id=20261106T1721Z-T3-chat-dxbc-operands-6e2a
+origin=chat
+issue_id=RENDER-002
+experiment_key=T3-PARTICLE108-SHA15964-4VSFS-8SHDR-DCL-operand-register-parse-v1
+original_zip2_source_sha=15964ea8f246b6e076ce26b60931ee2e1a9a2385
+authentic_previous_SHDR_declaration_run=42259943968
+source_free_tests=13/13
+source_free_run=42261376386
+hypothesis=source-original operand register forms can be decoded with immediate index validation across all eight stages
+privacy_only_aggregate_counts_and_variant_stability=true
+no_Unity_Android_APK_obb_or_assets_changed=true
