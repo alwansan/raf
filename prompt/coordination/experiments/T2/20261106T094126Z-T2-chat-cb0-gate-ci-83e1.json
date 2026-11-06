@@ -1,0 +1,30 @@
+{
+  "experiment_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "experiment_key": "foam-sourcefree-cb0-extent-two-pass-identity-unexecuted-regression-fast-ubuntu24.04-v1",
+  "base_sha": "38c857f64a069e61fa5d50a170342d7d31385996",
+  "workflow_commit": "88f1c258362061b54703285863e51f1eaa682bbd",
+  "workflow_path": ".github/workflows/raft-t2-foam-cb0-gate-smoke.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42197159968",
+  "run_id": 42197159968,
+  "job_id": 127823183108,
+  "conclusion": "success",
+  "synthetic_test_methods": 10,
+  "synthetic_tests_passed": 10,
+  "controls": [
+    "incomplete two-pass coverage fails closed",
+    "duplicate and invalid pass identities rejected",
+    "integer byte extent and shared-coordinate type strict",
+    "two unequal per-pass byte extents remain blocking even if global member/upload booleans set",
+    "equal extents do not prove member ABI or Unity upload"
+  ],
+  "original_private_data_acquired": false,
+  "unity_compile_tested": false,
+  "android_device_tested": false,
+  "original_source_backed_remap_reference": "https://github.com/alwansan/raf/actions/runs/42153150468",
+  "original_observed_two_cb0_extent_mismatches_still_open": true,
+  "water_ready": false,
+  "notes": "Smoke verifies formerly unexecuted T2 scheduled source guard regressions. No new original Foam ABI/member or Unity upload proof. Artifact/release unchanged.",
+  "next_step": "Privately authenticate both original Foam pass CB0 member offsets/types and their Unity material upload; only then wire original ShaderLab and perform Unity/Adreno validation."
+}
