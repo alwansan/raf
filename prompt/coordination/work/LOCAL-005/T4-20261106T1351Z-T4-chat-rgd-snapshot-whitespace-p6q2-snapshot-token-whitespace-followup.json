@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "9c6e70887fab25089beacc2ef790f29c2e11c252",
+  "resumed_from_sessions": [
+    "20261106T1343Z-T4-scheduled-n8p4",
+    "20261106T1334Z-T4-chat-windowfocus-m8v3"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T1343Z-T4-scheduled-n8p4-snapshot-conflict.json"
+  ],
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py",
+    "prompt/coordination/work/LOCAL-005/T4-20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2-snapshot-token-whitespace-followup.json",
+    "prompt/coordination/clients/T4/sessions/20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2.md",
+    "prompt/coordination/experiments/T4/20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2.json"
+  ],
+  "experiment_key": "T4-LOCAL005-JSONL-snapshot-count-fields-whitespace-correction-regression-r42227641309-v1",
+  "resource_key": "T4-source-free-world-save-evidence-ci-no-original-game/no-native",
+  "hypothesis": "In scheduled T4 duplicate-key guard, r'(?:^|;\\\\s*)' regex matches literal backslash-s, so even a legitimate length_class preceded by '; ' is ignored; prior valid snapshot records become contradictory.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42227641309",
+    "https://github.com/alwansan/raf/actions/runs/42227626291"
+  ],
+  "nonoverlap": "Prior T4 scheduled 1343Z scope completed with CI unverified. This is a concrete follow-on fix to its 3 failed regression controls; no active T4 parser job. T4 older CLR 1221Z is separate .NET C# workspace; T5 packaging and other team files untouched.",
+  "next_step": "Correct both field-key whitespace regexes without weakening duplicate detection, expand positive and negative examples; validate Python local and exact CI, checkpoint results.",
+  "updated_at": "2026-11-06T13:44:48.643Z"
+}
