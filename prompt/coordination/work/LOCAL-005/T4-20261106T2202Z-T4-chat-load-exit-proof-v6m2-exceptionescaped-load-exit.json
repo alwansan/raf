@@ -4,7 +4,7 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2202Z-T4-chat-load-exit-proof-v6m2",
   "origin": "chat",
-  "status": "active",
+  "status": "completed",
   "issue_id": "LOCAL-005",
   "track": "original-owner5nov-LoadT-exit-exception-disambiguation",
   "base_sha": "889e0afd021ff8f4b27ef4a65c45b8a6ff156f4e",
@@ -22,5 +22,14 @@
   "approach": "Add deterministic RED tests for escaped/malformed/missing Load<T> exit details and explicit operation exception marker, then require clean original exit and no escaped exception; run exact pinned original CL 3 JSONL Git blobs in existing isolated CI.",
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
   "updated_at": "2026-11-06T22:02:00Z",
-  "next_step": "Register RED source-only test then minimal strict classifier fix, no native build request."
+  "next_step": "Release these two interpretation code/test files. T5 native CI42296450023 is separate and still in Unity 2021.3 import/compile stage at last check. After artifact delivery, correlate signed candidate SHA with phone same-world save/relaunch/reopen and full logs. LOCAL-005 remains open NOT_READY 0/3.",
+  "red_commit": "0896fbf15e754e66fe8abb66639cd69594c55d46",
+  "green_commit": "39ff084dfd1343e4311d77a040680d049ec6c872",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42301170684",
+    "https://github.com/alwansan/raf/actions/runs/42301269067"
+  ],
+  "result": "RED 6 synthetic original Load<T> false-positive cases at 42301170684, GREEN 19/19 and actual immutable owner 5-Nov CL 3-source log validation at 42301269067; 7/7 fully traced original Load<T> remain clean and 7/7 SaveGame originally coherent. Exact exceptionEscaped=False F3 and explicit escaped exception required. No actual .rgd/object/device validation.",
+  "event": "prompt/coordination/B_TEAM/events/T4/20261106T2202Z-T4-original-loadt-escaped-exit-v6m2.json",
+  "experiment": "prompt/coordination/experiments/T4/20261106T2202Z-loadt-clean-exit-v6m2.json"
 }
