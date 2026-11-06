@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed_real_envelope_range_central_verified_but_inner_hashes_unverified",
+  "experiment_key": "T5-GitHub-Actions-42058825739-artifact-13441227298+13441766832-digest-size-ranged-ZIP-central-manifest-v1",
+  "source_commit": "edce82b5e9f93ef73fed6dcd4cb85876b960aa0e",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42222494746",
+  "job_id": 127907699077,
+  "conclusion": "success",
+  "tests": "11/11 synthetic plus actual HTTP 206 ranged ZIP",
+  "artifact_source": {
+    "source_run": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "delivery_id": 13441227298,
+    "delivery_zip_bytes": 5948243524,
+    "signed_id": 13441766832,
+    "signed_zip_bytes": 2974110506,
+    "expired": false
+  },
+  "observed": {
+    "delivery_member_count": 12,
+    "delivery_range_bytes": 3275,
+    "delivery_range_requests": 7,
+    "signed_member_count": 2,
+    "signed_range_bytes": 193,
+    "signed_range_requests": 3,
+    "manifest_read_from_actual_compressed_member": true,
+    "version_code": "89",
+    "package": "com.alwansan.raft.androidtest",
+    "logical_file_bytes": {
+      "apk": 672853870,
+      "obb": 2301256312,
+      "xapk": 2974111434
+    },
+    "declared_transfer_part_counts": {
+      "apk": 1,
+      "obb": 3,
+      "xapk": 3
+    },
+    "checkpoint_outer_apk_file_bytes": 672853870,
+    "checkpoint_outer_obb_file_bytes": 2301256312
+  },
+  "result": "Authentic ZIP envelopes central directories show two complete checkpoint files matching original delivery manifest sizes. Content-range verified; original payloads, hashes, certificates, OBB GUID and phone mount not verified.",
+  "limits": [
+    "Bounded HTTP 206 ranges total 3468 bytes; full GitHub provider archive digest not locally recomputed",
+    "Original signed APK/OBB and XAPK internal bytes/certificate not yet validated",
+    "Owner phone-tested world/save/reentry only older source e9c358e, water/graphics OPEN"
+  ],
+  "next_step": "Attempt second independent bounded nested ZIP central inspection if checkpoint outer files are STORED; no bulk transfer. Any full file fetch requires disk/budget and authorization constraints.",
+  "report": "docs/T5_REAL_ARTIFACT_ZIP_RANGE_2026-11-06.md",
+  "updated_at": "2026-11-06T13:07:26.541Z"
+}
