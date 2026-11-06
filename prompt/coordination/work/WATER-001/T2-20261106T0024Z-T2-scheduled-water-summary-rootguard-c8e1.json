@@ -3,7 +3,7 @@
   "agent": "T2",
   "origin": "scheduled",
   "baseline_sha": "2aa84a40bff9ac0b69277552e4a071e1a59299d4",
-  "status": "in_progress",
+  "status": "source_fixed_unverified",
   "scope": [
     "scripts/t2_device_water_summary.py",
     "tests/test_t2_device_water_summary.py",
@@ -14,5 +14,12 @@
   "shared_resource": null,
   "overlap": "T3 working Particle108 workflow, no overlapping files; T1 FFT and T5 delivery untouched",
   "evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; CL pinned 520c4cf409aa20a4db54ff80ed87d8807d9cba57; previous T2 water triage source",
-  "next": "Implement strict validation and regression tests; run locally; preserve device evidence boundary"
+  "next": "Execute unit tests, then compare pinned CL JSON; source-authentic ShaderLab requires CB0/material binding and Unity/phone proof",
+  "commits": [
+    "888e9e5105f857a52d51d38e36ab8bf952e0e811",
+    "3416638c029419c9c413f3781caee86862c02c34",
+    "b4f8783839c401bd5779831eb38233ac35fed31e",
+    "a01bad3b7f67f7bd0ee2e21c32ac0ac8d6906008"
+  ],
+  "validation": "not_executed_local_DNS_unavailable"
 }
