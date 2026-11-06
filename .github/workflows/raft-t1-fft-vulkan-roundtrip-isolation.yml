@@ -33,6 +33,7 @@ jobs:
         run: |
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 1048576
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_source_integer_coordinates.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_empty_capture_guard.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_trace_variant.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_read_provenance.py -v
@@ -95,6 +96,14 @@ jobs:
             --export-private-trace "$TMPDIR/vulkan-trace.bin"
           # Verify the actual private binary export is accepted by the paired comparator.
           python3 -m scripts.t1_fft_trace_compare "$TMPDIR/vulkan-trace.bin" "$TMPDIR/vulkan-trace.bin"
+          spirv-dis --raw-id "$TMPDIR/coordinate-ssa.spv" -o "$TMPDIR/source-coordinate.spvasm"
+          python3 -m scripts.t1_fft_source_integer_coordinates "$TMPDIR/source-coordinate.spvasm" "$TMPDIR/source-integer.spvasm"
+          spirv-as --target-env vulkan1.1 "$TMPDIR/source-integer.spvasm" -o "$TMPDIR/source-integer.spv" > "$TMPDIR/source-as.log" 2>&1
+          spirv-val --target-env vulkan1.1 "$TMPDIR/source-integer.spv" > "$TMPDIR/source-val.log" 2>&1
+          spirv-cross "$TMPDIR/source-integer.spv" --hlsl --shader-model 50 --output "$TMPDIR/source-integer.hlsl" > "$TMPDIR/source-cross.log" 2>&1
+          { printf '#pragma kernel main\n'; cat "$TMPDIR/source-integer.hlsl"; } > "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
+          echo "RAFT_T1_SOURCE_INTEGER_COORDINATES validating_rewrite=true"
+          python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
       - name: Remove all private inputs and scratch data
         if: always()
         run: |
