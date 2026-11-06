@@ -1,5 +1,13 @@
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
+from pathlib import Path
+import tempfile
+from types import SimpleNamespace
+from unittest.mock import patch
+import sys
 
+import scripts.t1_fft_hlsl_phi_input_origins as phi
 from scripts.t1_fft_hlsl_phi_input_origins import analyze
 
 
@@ -151,6 +159,34 @@ OpBranch %join
         self.assertFalse(result["private_values_exported"])
         self.assertNotIn("%", str(result))
         self.assertNotIn("predecessor_id", str(result))
+
+
+    def test_private_error_diagnostic_does_not_leak_unknown_exception(self):
+        with tempfile.TemporaryDirectory() as d:
+            blob = Path(d) / "fake.spv"
+            blob.write_bytes(b"x" * 32)
+            out = StringIO()
+            with patch.object(sys, "argv", ["phi_probe", str(blob)]), \
+                 patch.object(phi.subprocess, "run", return_value=SimpleNamespace(stdout="fixture")), \
+                 patch.object(phi, "analyze", side_effect=ValueError("secret_%privateID=42")), \
+                 redirect_stdout(out), self.assertRaises(SystemExit) as caught:
+                phi.main()
+        self.assertEqual(caught.exception.code, 2)
+        self.assertIn('"reason": "unclassified_validation"', out.getvalue())
+        self.assertNotIn("secret_", out.getvalue())
+
+    def test_allowlisted_failure_reason_is_bounded(self):
+        with tempfile.TemporaryDirectory() as d:
+            blob = Path(d) / "fake.spv"
+            blob.write_bytes(b"x" * 32)
+            out = StringIO()
+            with patch.object(sys, "argv", ["phi_probe", str(blob)]), \
+                 patch.object(phi.subprocess, "run", return_value=SimpleNamespace(stdout="fixture")), \
+                 patch.object(phi, "analyze", side_effect=ValueError("Phi predecessor is not a CFG incoming block")), \
+                 redirect_stdout(out), self.assertRaises(SystemExit):
+                phi.main()
+        self.assertIn('"reason": "Phi predecessor is not a CFG incoming block"', out.getvalue())
+        self.assertNotIn("%", out.getvalue())
 
 
 if __name__ == "__main__":
