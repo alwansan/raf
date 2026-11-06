@@ -10,6 +10,7 @@ on:
       - 'tests/test_t5_cl_fps_cohort_gate.py'
       - 'tests/test_t5_cl_pid_epoch_audit.py'
       - 'tests/test_t5_cl_pid_cohort_integration.py'
+      - 'tests/test_t5_cl_pid_startup_prefix_real_gate.py'
 
 permissions:
   contents: read
@@ -40,6 +41,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t5_cl_fps_cohort_gate.py' -v
           python3 -m unittest discover -s tests -p 'test_t5_cl_pid_epoch_audit.py' -v
           python3 -m unittest discover -s tests -p 'test_t5_cl_pid_cohort_integration.py' -v
+          python3 -m unittest discover -s tests -p 'test_t5_cl_pid_startup_prefix_real_gate.py' -v
           python3 -m py_compile scripts/t5_cl_fps_cohort_gate.py scripts/t5_cl_pid_epoch_audit.py
       - name: Download only two immutable public CL telemetry sources
         shell: bash
