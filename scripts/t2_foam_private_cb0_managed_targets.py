@@ -260,9 +260,17 @@ def main():
             "unsafe_original_private_input_output",
         }
         code = str(err) if type(err) is ValueError and str(err) in allowed else "other_error"
+        safe_kinds = {
+            "KeyError", "TypeError", "AttributeError", "IndexError",
+            "ValueError", "RuntimeError", "AssertionError", "OverflowError",
+            "NotImplementedError", "UnicodeError", "ImportError",
+            "ModuleNotFoundError", "MemoryError", "OSError",
+        }
+        kind = type(err).__name__ if type(err).__name__ in safe_kinds else "other"
         result = {"status": "blocked_original_CB0_name_targets",
                   "safe_pipeline_phase": phase,
                   "safe_pipeline_error_code": code,
+                  "safe_exception_class": kind,
                   "exact_name_values_or_hashes_published": False,
                   "Unity_CB0_upload_verified": False}
         rc = 2
