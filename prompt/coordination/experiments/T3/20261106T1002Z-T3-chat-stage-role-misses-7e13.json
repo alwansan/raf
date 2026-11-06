@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1002Z-T3-chat-stage-role-misses-7e13",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "source_commit": "9991791b0952f2d079c1a57bd5f732cfcf9b7869",
+  "hypothesis": "The two authenticated original DXBC user registers without numerically identical source SPIR-V Locations can be localized to an original shader stage/interface role without publishing raw names, IDs, register numbers, per-keyword values or shaders.",
+  "experiment_key": "T3-Particle108-original-4pair-48reg-46located-sha15964ea8-stage-role-counts-v2",
+  "original_source": "ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385: SHA-verified four original shader/material owner blobs and six original scenes",
+  "workflow_path": ".github/workflows/raft-t3-particle108-register-location.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42199952229",
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "unitypy": "1.23.0",
+    "original_DXBC_translator": "vkd3d-compiler",
+    "SPIRV_reflection": "spirv-cross"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_particle108_register_location_probe.py tests/test_t3_particle108_register_location_probe.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_particle108_register_location_probe.py' -v",
+    "python3 -m scripts.t3_particle108_register_location_probe --original $RUNNER_TEMP/t3-particle108-private-source --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-particle108-safe-aggregate.json"
+  ],
+  "negative_controls": [
+    "two new synthetic stage/input-output split attribution fixtures",
+    "inherited strict DXBC signature, original SHA, raw reflection vs safe type/location equality",
+    "no private per-variant semantic values or locations published"
+  ],
+  "budget": "isolated 26 minute max Ubuntu runner; tests source free then four original owner SHA-scoped runtime; no game/Unity build, no artifacts with private assets",
+  "observed_result": {
+    "run_id": 42199952229,
+    "job_id": 127832481829,
+    "conclusion": "success",
+    "source_free_tests": 12,
+    "exact_original_four_pairs": 4,
+    "real_DXBC_stages": 8,
+    "original_user_records": 48,
+    "SPIRV_located": 46,
+    "total_missing_numeric_locations": 2,
+    "source_fragment_inputs": {
+      "original": 16,
+      "located": 14,
+      "missing": 2
+    },
+    "source_vertex_inputs": {
+      "original": 12,
+      "located": 12,
+      "missing": 0
+    },
+    "source_vertex_outputs": {
+      "original": 16,
+      "located": 16,
+      "missing": 0
+    },
+    "source_fragment_outputs": {
+      "original": 4,
+      "located": 4,
+      "missing": 0
+    },
+    "type_mismatches": 0,
+    "source_semantic_identity_proven": false,
+    "Android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "The two missing numeric locations were in vertex input or output",
+    "The two missing numeric locations were in fragment output",
+    "Type mismatch/extra source SPIRV locations explained the 46/48 numerical register counts"
+  ],
+  "limitations": [
+    "No original DXBC used_mask/readmask analysis of the two absent translated fragment input slots yet; cannot classify optimizer dead input versus live dropped interpolator",
+    "No authored DXBC semantic-name→source SPIRV identifier or HLSL recovered semantic crosswalk proven",
+    "No true exported Unity Android ShaderLab, effects or pixels verified"
+  ],
+  "integration_commit": "9991791b0952f2d079c1a57bd5f732cfcf9b7869",
+  "next_step": "For exactly the two original Fragment input records not present at same source SPIRV numeric Location, classify original DXBC input used_mask (zero versus nonzero) privately and prove each corresponding original VS output source semantic mask, then distinguish harmless compiler-pruned inputs from a real active-varying loss; do not auto-patch."
+}
