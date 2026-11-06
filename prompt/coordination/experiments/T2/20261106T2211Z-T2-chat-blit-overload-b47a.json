@@ -35,16 +35,21 @@
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42303074180",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42303074180/artifacts/13545620124"
+  ],
   "budget": "20min source-only SHA-original Mono.Cecil GH Actions, no Unity APK/OBB",
-  "status": "waiting_ci",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Original SHA CI42303074180 SUCCESS: 58 Python safe-report tests, 6 source name tests, Mono.Cecil selftest, 2/2 exact public Graphics.Blit(Texture,RenderTexture,Material,int) consumers, 0 implicit pass or unknown signatures. Does not determine values of the explicit int pass.",
+  "rejected_hypotheses": [
+    "Original two Foam Blit calls use implicit/default-pass three-argument API"
+  ],
   "limitations": [
     "Public typed Unity signatures only, no private argument values or game names",
     "Static original method bodies cannot prove actual device execution/pass index values",
     "No direct RenderTexture ownership, native Unity ShaderLab import, CB0, or phone pixels"
   ],
   "integration_commit": "201e14caf01c4cbc47a798055830235eebbcbdb8",
-  "next_step": "Inspect original CI42303074180 on exact SHA 201e14ca: synthetic validator and Mono.Cecil tests first; if green, capture public Blit overload category counts and report to T5, otherwise fix with another hypothesis, never bypass original proof."
+  "next_step": "Trace exact original Blit pass index operands at two typed Material sites (literal 0/1 versus dynamic), source-only and fail-closed; do not infer runtime execution or game pass selection from overload alone.",
+  "artifact_digest": "sha256:52a035aae3e2a170ca70bd08fe32b7f83b4fd17095d1f246f5a69d755330cf94"
 }
