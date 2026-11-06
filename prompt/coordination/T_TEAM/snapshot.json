@@ -458,7 +458,10 @@
         "https://github.com/alwansan/raf/actions/runs/42134436841",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md",
         "https://github.com/alwansan/raf/actions/runs/42136474867",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SHADERLAB_OUTPUT_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42139137265",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -516,7 +519,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-06T00:30:56.989Z",
+      "updated_at": "2026-11-06T00:50:57.930Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -2546,6 +2549,58 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T14:45:34.592Z",
       "_record_path": "../B_TEAM/resources/T3-original-highuse-dxbc-source-variants.json"
+    },
+    {
+      "id": "T3-ORIGINAL-PARTICLE108-AUTHENTIC-D3D11-VARIANTS",
+      "title": "Six-scene authenticated 108-particle-use original Shader48 contains four exact linked D3D11 vertex+fragment keyword permutation pairs (behind plain AssetRipper dummy)",
+      "kind": "original-source-stage-program-bytecode-availability-not-native-restoration",
+      "owner": "T3",
+      "issue_id": "RENDER-002",
+      "source": {
+        "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "source_scenes_SHA_verified": 6,
+        "source_shader_Material_owners_SHA_verified": 4,
+        "selected_unique_original_particle_renderer_shader_material_slots": 108,
+        "distinct_original_particle_renderers": 54,
+        "original_Shader48_parsed_subshaders": 1,
+        "original_Shader48_parsed_passes": 1
+      },
+      "stages": {
+        "acquisition": "SIX_SCENE_FOUR_SHADER_OWNER_SHA_VERIFIED_ONE_RES_S_FULL_SHA_VERIFIED",
+        "extraction": "EXACT_UNIQUE_108_PARTICLE_SHADER48_AND_ONE_NORMAL_PASS_SELECTED",
+        "reconstruction": "ONE_ORIGINAL_PLATFORM4_D3D11_TABLE_PROGRAMS_LINKED_PRIVATE_NO_SOURCE_BYTES_PUBLISHED",
+        "binding": "FOUR_ORIGINAL_VS_FS_PASSES_MATCHED_BY_EXACT_SERIALIZED_KEYWORD_PERMUTATIONS",
+        "integration": "SOURCE_ONLY_D3D11_STAGES_AUTHENTIC_NOT_VULKAN_SPIRV_OR_UNITY_IMPORTED",
+        "device": "NOT_TESTED"
+      },
+      "counts": {
+        "original_D3D11_program_table_records": 16,
+        "linked_vertex_variants": 4,
+        "linked_fragment_variants": 4,
+        "exact_matched_vertex_fragment_keyword_permutation_pairs": 4,
+        "distinct_original_linked_D3D11_programs": 8,
+        "linked_stage_variant_records_with_keywords": 6,
+        "unmatched_vertex_permutations": 0,
+        "unmatched_fragment_permutations": 0,
+        "original_source_programmable_Pass_count": 1,
+        "source_original_particles_108_render_use_slots": 108,
+        "source_free_tests_passed": 117,
+        "original_stage_code_extracted_published": false,
+        "Android_runtime_fragment_alpha_or_pixels_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42139137265",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/927bf1d096f8c5500f237794b91fc71c90a946ab"
+      ],
+      "remaining": [
+        "SPIR-V/GLSL/Unity HLSL translation and Vulkan stage interface checking NOT performed in this experiment; original PC D3D11 source linkage alone is not GPU parity.",
+        "T5 native post-vendor actual Shader GUID, custom dummy/non-dummy program and user phone fire/smoke emitter identity still unproven.",
+        "RENDER-002 stays OPEN, do not claim Android graphics fixed."
+      ],
+      "updated_by": "T3",
+      "updated_at": "2026-11-06T00:48:22.748Z",
+      "_record_path": "../B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
     },
     {
       "id": "T3-ORIGINAL-PARTICLE108-IMAGE-STREAM-FULLSHA",
@@ -7200,6 +7255,26 @@
       "_record_path": "../B_TEAM/events/T3/20261106T001837Z-T3-chat-particle108-shaderlab-5d72.json"
     },
     {
+      "id": "20261106T004219Z-T3-chat-particle108-dxbc-4f7c",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T004219Z-T3-chat-particle108-dxbc-4f7c",
+      "issue_id": "RENDER-002",
+      "type": "source_program_linkage_result",
+      "at": "2026-11-06T00:50:22.939Z",
+      "summary": "Authentic source ParticleShader48 one Pass 108 source Particle Renderer slot uses: original D3D11 16 table records, 4 genuine VS+4 FS variants, four exact keyword permutation pairs, 8 distinct linked programs, 0 unpaired; CI42139137265 SUCCESS 117 tests. No Vulkan/native/phone evidence.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42139137265",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_DXBC_LINKAGE_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+      ],
+      "limitations": [
+        "source code linkage only",
+        "RENDER-002 remains OPEN"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261106T004219Z-T3-chat-particle108-dxbc-4f7c.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -8146,7 +8221,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "be8d353c275df701438aff77c99e44a18ff32c634f37b70e43a623e1212469a3",
+  "source_input_sha256": "90d715a7003fef75563fb74405f99fbeb5c06291553a5502a8989ec7ba5a6d43",
   "generation": "T-2026-11-05",
-  "input_sha256": "496108af899e23472838e84c49c0be12afadfda7c3d848d3201dbaa65e35b330"
+  "input_sha256": "c6c9ea72176263e4a32347aba00a465ebbf95ea42a43817d76e41e28a597a44d"
 }
