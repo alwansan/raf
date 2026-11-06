@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T112050Z-T1-chat-alias-origins-b62f",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "Original FFT butterfly Function pointer alias source categories",
+  "approach": "On SHA-pinned original slot0 private SPIR-V, classify pointer aliases that may write between direct store and coordinate load. Preserve original CFG diagnostic unchanged, use separate classifier and independent synthetic controls; return categories only.",
+  "status": "active",
+  "base_sha": "b99ef9265be8acbc5f0618789be04831c27f513a",
+  "intended_files": [
+    "scripts/t1_fft_spirv_alias_origins.py",
+    "tests/test_t1_fft_spirv_alias_origins.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T112050Z-T1-chat-alias-origins-b62f.md",
+    "prompt/coordination/experiments/T1/20261106T112050Z-T1-chat-alias-origins-b62f.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T112050Z-T1-chat-alias-origins-b62f.json"
+  ],
+  "experiment_key": "water001-original-slot0-fft-alias-store-pointer-chain-classification-no-rewrite-pin15964ea8-v1",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-nonunity",
+  "resumed_from_sessions": [
+    "20261106T110543Z-T1-chat-cfgreach-f4d9",
+    "20261106T103645Z-T1-chat-storewriters-b4a7"
+  ],
+  "related_work": [
+    "T1-20261106T110543Z-T1-chat-cfgreach-f4d9"
+  ],
+  "hypothesis": "The remaining alias_store uncertainty at all three sites comes from a concrete SSA pointer alias form (exact copy, component access, phi/select) that can be categorized for the actual pre-load path without revealing IDs. A copied pointer is not equivalent to an indexed component; do not rewrite shader before confirming.",
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-06T11:20:50.481Z",
+  "next_step": "Implement alias-chain classifier and per-load may-path labels with loop/branch controls; validate original SHA private CI, record whether component indexing blocks integer proof."
+}
