@@ -170,7 +170,7 @@ def _read_small_prefix(archive: zipfile.ZipFile, name: str, limit: int):
         return stream.read(limit)
 
 
-def scan_signed_checkpoint(parent: LimitedRangeIO):
+def scan_signed_checkpoint(parent: LimitedRangeIO, *, expected_apk_bytes=672853870, expected_obb_bytes=2301256312):
     try:
         with zipfile.ZipFile(parent, "r", allowZip64=True) as envelope:
             members = envelope.infolist()
@@ -185,8 +185,8 @@ def scan_signed_checkpoint(parent: LimitedRangeIO):
                 info[kind] = candidate
             if set(info) != {"apk", "obb"}:
                 raise ProbeError("signed_checkpoint_missing_apk_or_obb")
-            if (info["apk"].file_size != 672853870 or
-                    info["obb"].file_size != 2301256312):
+            if (info["apk"].file_size != expected_apk_bytes or
+                    info["obb"].file_size != expected_obb_bytes):
                 raise ProbeError("signed_checkpoint_manifest_size_drift")
             apk_start = stored_member_offset(parent, envelope, info["apk"])
             obb_start = stored_member_offset(parent, envelope, info["obb"])
