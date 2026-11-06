@@ -15,13 +15,18 @@ from scripts import t3_particle108_original_dxbc_rdef as native
 
 STATUS="T3_ORIGINAL_SM4_SM5_CB_DECL_SIZE16_CLASSIFIED"
 def private_cb_declarations(dx,stage):
-    full=bind._private_stage_layout(dx,stage)  # validates all DCL operand bounds
     code=dec.shader_chunk(dx)
+    if len(code)<8 or len(code)%4:
+        raise ValueError("DXBC_BIND_PROGRAM_ALIGNMENT")
     words=struct.unpack("<"+"I"*(len(code)//4),code)
     major,minor=(words[0]>>4)&15,words[0]&15
+    # Check version before the inherited SM4/5 DCL 2D operand decoder:
+    # a valid SM5.1 3D CB range must not masquerade as corrupt SM4 data.
     if not ((major==4 and minor in (0,1)) or (major==5 and minor==0)):
         raise ValueError("DXBC_CB_UNSUPPORTED_SHADER_MODEL")
+    full=bind._private_stage_layout(dx,stage)  # validates all DCL operand bounds
     found=[]
+    seen_cb_slots=set()
     i=2
     while i<len(words):
         op=words[i]&0x7ff
@@ -30,6 +35,11 @@ def private_cb_declarations(dx,stage):
             family,_,index=bind._private_parse_decl_operand(words[i:i+size],89)
             if family!="cbuffer" or len(index)!=2:
                 raise ValueError("DXBC_CB_EXPECT_TWO_INDEX_DECL")
+            if index[0] in seen_cb_slots:
+                # Two declarations of the same cb slot inside ONE stage cannot
+                # be counted as different keyword variants or size drift.
+                raise ValueError("DXBC_CB_DUPLICATE_DECL_SLOT")
+            seen_cb_slots.add(index[0])
             found.append((index[0],index[1],(words[i]>>11)&1))
         i+=size
     if len(found)!=sum(x[0]=="cbuffer" for x in full):
@@ -103,6 +113,7 @@ SAFE_REASONS={
     "DXBC_CB_UNSUPPORTED_SHADER_MODEL":"UNSUPPORTED_SHADER_MODEL",
     "DXBC_CB_EXPECT_TWO_INDEX_DECL":"CB_NOT_2D",
     "DXBC_CB_DCL_CARDINALITY_MISMATCH":"CB_COUNT_MISMATCH",
+    "DXBC_CB_DUPLICATE_DECL_SLOT":"DUPLICATE_CB_SLOT_WITHIN_STAGE",
     "ORIGINAL_FOUR_DXBC_PAIRS_REQUIRED":"WRONG_PAIR_SCOPE",
 }
 def main(argv=None):
