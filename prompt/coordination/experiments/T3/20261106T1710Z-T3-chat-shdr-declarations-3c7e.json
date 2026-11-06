@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1710Z-T3-chat-shdr-declarations-3c7e",
+  "issue_id": "RENDER-002",
+  "experiment_key": "T3-ZIP2-15964-Particle108-SHDR-SHEX-4pair-8stage-declaration-opcode-census-v1",
+  "hypothesis": "Original RDEF absent 8/8; SHDR/SHEX tokenized shader streams carry resource declarations that can be verified safely even without source register binding layout.",
+  "input_hashes": [],
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "runner": "ubuntu-24.04",
+    "python": "python3",
+    "token_format": "Microsoft D3D10/D3D11 tokenized-program opcode format; Microsoft DirectX-Headers D3D12TokenizedProgramFormat.hpp"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_particle108_original_dxbc_declarations.py tests/test_t3_particle108_original_dxbc_declarations.py",
+    "python3 -m unittest discover -s tests -p test_t3_particle108_original_dxbc_declarations.py -v",
+    "python3 -m scripts.t3_particle108_original_dxbc_declarations --original $RUNNER_TEMP/t3-original-private-DXBC-DECLARATIONS --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-particle108-declarations-safe.json"
+  ],
+  "negative_controls": [
+    "12 synthetic tests including instruction length, DXBC chunk format, SHDR/SHEX cardinality, declared stage identity, customdata length, non-private aggregate",
+    "17/17 previous exact RDEF stage presence tests success"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-declarations.yml",
+  "source_free_run_url": "https://github.com/alwansan/raf/actions/runs/42259737650",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42259943968",
+  "run_id": 42259943968,
+  "job_id": 128036916642,
+  "run_sha": "adfc6bc3661a08c06996aac1b84a4c9da218971d",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42259943968"
+  ],
+  "budget": "18 minute max, four SHA-verified original ZIP2 owner files / six scene owners / eight original D3D11 DXBC stages, no Unity, no public source data",
+  "status": "completed",
+  "observed_result": {
+    "real_original_CI": "SUCCESS",
+    "source_free_CI": "SUCCESS",
+    "synthetic_tests": 12,
+    "source_original_six_scenes_authenticated": true,
+    "source_original_four_owner_files_authenticated": true,
+    "selected_particle_renderer_material_uses": 108,
+    "actual_DXBC_stages": 8,
+    "actual_shader_instructions": 296,
+    "actual_dcl_constant_buffer_instructions": 24,
+    "actual_dcl_sampler_instructions": 10,
+    "actual_dcl_srv_instructions": 10,
+    "actual_dcl_uav_instructions": 0,
+    "prior_original_RDEF_absent_stages": 8
+  },
+  "rejected_hypotheses": [
+    "Because RDEF is absent, compiled original Particle108 stages lack resource declarations",
+    "Without RDEF no source-original typed opcode declaration family evidence is available"
+  ],
+  "limitations": [
+    "Opcode counts across 8 stages not unique register counts; cannot infer 24 unique constant buffers or 10 distinct textures/samplers.",
+    "No original binding register-number, array range, sampler mode, SRV dimension, CB size proof yet; operands require separate strict parser.",
+    "No Vulkan descriptor correspondence, shader program reconstruction, Unity import, Android screen output or phone emitter identity demonstrated.",
+    "No raw stage bytes, names, GUIDs or register numbers published"
+  ],
+  "integration_commits": [
+    "70c5b97b28ee417f7d2b68e5701883fb49597dfb",
+    "08b0215aab074689de9fe0daf62b8964f2473a02",
+    "38110023aa3d54af07ce80531750cd0db723e741",
+    "c5694a44ec4f22b47aa1f774ae3aa3ac71ede112",
+    "ea147847fed841083c9646138d6afb0ad814be3a"
+  ],
+  "next_step": "Parse SHDR/SHEX declaration OPERAND tokens safely, retain exact per-stage register namespaces and arrays PRIVATE, compare with same original VS/FS glslang/Vulkan descriptors and verify provenance. Only then generate candidate ShaderLab binding patches, with Unity/phone tests before acceptance. RENDER-002 OPEN/NOT_READY."
+}
