@@ -1,0 +1,45 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original SPIR-V requires typed integer fetch coordinates, valid GlobalInvocationId Input and collision-free descriptor binding for independent keyed capture. Source-only regression must fail closed, without editing original game shader.",
+  "source_commit": "a64b0f89b0b7b52ba24b322fde71b8fd35e7511d",
+  "input_hashes": [
+    "Synthetic SPIR-V fixtures only, original ZIP2 SHA pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385 not read"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42243693907",
+  "status": "completed_sourcefree_only",
+  "observed_result": {
+    "first_run": {
+      "id": 42243651596,
+      "conclusion": "failure",
+      "reason": "Invalid privacy test asserted absence of public coordinate schema key, not private symbol"
+    },
+    "corrected_run": {
+      "id": 42243693907,
+      "conclusion": "success",
+      "total_synthetic_tests": 86,
+      "original_preflight_tests": 12
+    },
+    "original_spirv_audited": false,
+    "original_spirv_instrumented": false,
+    "original_independent_invocation_capture_present": false,
+    "paired_numeric_parity_proven": false,
+    "android_water_proven": false
+  },
+  "negative_controls": [
+    "Direct and struct-member GlobalInvocationId input cases",
+    "integer ImageFetch vectors, fetched scalar/vector numeric type bounds",
+    "source-butterfly-butterfly image roles",
+    "binding3 set0/set1 collision classification",
+    "duplicate descriptors, extra fetches, missing entrypoint interface",
+    "no private SSA IDs or literal image coordinates in emitted report"
+  ],
+  "limitations": [
+    "Fixture proof only; does not establish actual source binding availability or correct SPIR-V instrumentation",
+    "No original vs candidate two independently authentic GPU traces or same-input matched-value comparison"
+  ],
+  "next_step": "When original source-authentic runner is free, execute private script on exact ZIP2 slot0.spv and then implement independently captured original read trace if prerequisites are met."
+}
