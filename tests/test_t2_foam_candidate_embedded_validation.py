@@ -6,7 +6,7 @@ import tempfile
 from scripts.t2_foam_candidate_embedded_validation import (
     extract_embedded_programs, compile_embedded,
 )
-from tests.test_t2_foam_private_shaderlab_candidate import (
+from test_t2_foam_private_shaderlab_candidate import (
     fixture, source_model_fixture,
 )
 from scripts.t2_foam_private_shaderlab_candidate import assemble
