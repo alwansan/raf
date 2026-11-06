@@ -1,0 +1,124 @@
+name: T2 WATER-001 SHA-original Foam Shader.Find return consumer typed IL
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_shaderfind_return_report.py
+      - tests/test_t2_foam_shaderfind_return_report.py
+      - android-port/Experiments/T2/FoamShaderFindResultFlow/**
+      - .github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-original-foam-shaderfind-return-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-foam-shaderfind-return:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Strict source-free return-flow aggregate tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_shaderfind_return_report.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_shaderfind_return_report.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_original_foam_shaderfind_name.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build typed Cecil result-flow scanner, then run synthetic IL controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish android-port/Experiments/T2/FoamShaderFindResultFlow/FoamShaderFindResultFlow.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t2-foam-resultflow-cecil" \
+            > "$RUNNER_TEMP/t2-foam-resultflow-build.log" 2>&1 || {
+              python3 - <<'PY'
+          import collections,os,re
+          from pathlib import Path
+          log=(Path(os.environ['RUNNER_TEMP'])/'t2-foam-resultflow-build.log').read_text(errors='replace')
+          codes=collections.Counter(re.findall(r'error\s+((?:CS|NU|NETSDK)[0-9]+)',log))
+          locations=re.findall(r'Program.cs\((\d+),(\d+)\):\s*error\s+(CS\d+)',log)
+          print('T2_FOAM_RESULTFLOW_BUILD_SAFE',dict(codes),'T2_source_locations',locations[:10])
+          PY
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t2-foam-resultflow-cecil/FoamShaderFindResultFlow.dll" --selftest
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-foam-resultflow-original-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Independently authenticate immutable original shader owner and managed DLL SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage,fingerprint
+          repo=Path('t2-foam-resultflow-original-zip2')
+          assert subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          manifest=parse_original_manifest(repo/'RAFT_FILE_MANIFEST.tsv')
+          dlls=[m for m in manifest if m['path']=='Raft_Data/Managed/Assembly-CSharp.dll']
+          assert len(dlls)==1 and dlls[0]['bytes']==3211776 and dlls[0]['kind']=='plain'
+          dll=repo/'Raft'/dlls[0]['path']
+          assert fingerprint(dll)==(dlls[0]['bytes'],dlls[0]['sha256'])
+          original=Path(os.environ['RUNNER_TEMP'])/'t2-original-foam-resultflow-stage'
+          a=stage(repo,original,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert a['provider_sha']==ZIP2_SHA and a['verified_bytes']==115978112 and a['lfs_used'] is False
+          print('T2_FOAM_ORIGINAL_RESULTFLOW_SHA_AUTHENTICATED owner_bytes=115978112 dll_bytes=3211776 original_literal_private=true')
+          PY
+      - name: Read original Foam Shader name in private scratch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 160s python3 -m scripts.t2_original_foam_shaderfind_name \
+            --source "$RUNNER_TEMP/t2-original-foam-resultflow-stage" \
+            --private-out "$RUNNER_TEMP/t2-private-foam-resultflow-name.txt"
+      - name: Inspect typed Shader.Find return consumer in original managed IL
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s dotnet "$RUNNER_TEMP/t2-foam-resultflow-cecil/FoamShaderFindResultFlow.dll" \
+            t2-foam-resultflow-original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            "$RUNNER_TEMP/t2-private-foam-resultflow-name.txt" \
+            "$RUNNER_TEMP/t2-foam-resultflow-safe.json"
+          python3 -m scripts.t2_foam_shaderfind_return_report "$RUNNER_TEMP/t2-foam-resultflow-safe.json"
+      - name: Purge original source and name before safe artifact upload
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-foam-resultflow-stage" \
+            "$GITHUB_WORKSPACE/t2-foam-resultflow-original-zip2" \
+            "$RUNNER_TEMP/t2-private-foam-resultflow-name.txt"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-original-foam-shaderfind-return-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-resultflow-safe.json
+          if-no-files-found: error
+          retention-days: 7
