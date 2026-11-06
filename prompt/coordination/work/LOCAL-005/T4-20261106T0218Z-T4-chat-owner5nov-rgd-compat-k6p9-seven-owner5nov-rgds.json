@@ -1,0 +1,41 @@
+{
+  "session_id": "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-06T02:18:00Z",
+  "base_sha": "375ade378ae990cdcbd06274fa25358d76e98c04",
+  "resumed_from_sessions": [
+    "20261106T0147Z-T4-chat-ledger-id-r8w2",
+    "20261106T0137Z-T4-scheduled-n7p2",
+    "20261105T1838Z-T4-chat-cl-rgd-real-9p4s"
+  ],
+  "experiment_key": "T4-CL-520c4cf409aa-2026-11-05-owner-7-RGD-git-blob-original-LoadT-ZIP2-15964ea8-SHA0a6f0527-newinput-v1",
+  "resource_key": "T4-ephemeral-original-CLR-7-owner-worlds-source-only-ubuntu2404",
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/T4-20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9-seven-owner5nov-rgds.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.md",
+    "android-port/Experiments/T4/ClWorldRgdRuntime/Program.cs",
+    "tests/test_t4_owner5nov_rgd_source_contract.py",
+    ".github/workflows/raft-t4-owner5nov-world-rgd-clr.yml",
+    "prompt/coordination/experiments/T4/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9.json",
+    "prompt/coordination/discussions/LOCAL-005/20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9-to-T5.md"
+  ],
+  "hypothesis": "Owner's 5 Nov signed Raft artifact42058825739 produced seven distinct real world .rgd blobs, but prior original SaveAndLoad.Load<T> proof only covered three 4 Nov APK86 saves. Exact authentic seven 5 Nov blobs could reveal schema or loader failures absent from older sample.",
+  "approach": "Pin CL@520c4cf world saved blobs via sparse checkout + exact Git sha1/size whitelist. Extend strict existing historical RGD CLR loader allowlist to support two equal-length but distinct Git blobs. Execute original compiled SaveAndLoad.Load<T> in private ephemeral .NET8 against each exact 5 Nov blob; no user names/private bytes/payload output or raw files committed. Retain existing three 4 Nov regression inputs and existing CI. No native Unity/full build. Reject wrong blobs and symlinks.",
+  "expected_input_classes": {
+    "owner_5nov_count": 7,
+    "distinct_git_blobs": 7,
+    "size_min": 309519,
+    "size_max": 331887
+  },
+  "source_ref": {
+    "owner_CL": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "zip2_game": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_siblings": "02e9fba7fb42b83579595885391be636ee3b56e8"
+  },
+  "output_boundary": "numeric sample ordinals and booleans only; not gameplay/Android/IL2CPP acceptance",
+  "next_step": "Pin source exact seven and run distinct source-only original Load<T> CI; preserve existing 3-blob 4 Nov CI."
+}
