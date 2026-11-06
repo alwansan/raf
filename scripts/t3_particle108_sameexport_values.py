@@ -24,6 +24,17 @@ SOURCE_STATUS=particle.STATUS
 MATCH="T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MATCH"
 MISMATCH="T3_SOURCE_PARTICLE108_5M_SAMEEXPORT_RGBA_FLOAT32_INT32_VALUES_MISMATCH"
 EXPECTED_MATERIALS=5
+SAFE_PHASES=frozenset((
+    "SOURCE_SELECTED_GRAPH","ORIGINAL_RGBA_VALUES","ORIGINAL_SCALAR_VALUES",
+    "SAME_EXPORT_W1_B02","EXPORTED_RGBA_YAML","EXPORTED_SCALAR_YAML",
+    "COMPARE_RGBA","COMPARE_SCALARS","COMPARE_SELECTED_MATERIALS",
+))
+class PrivatePhaseError(ValueError):
+    def __init__(self,phase):
+        if phase not in SAFE_PHASES:
+            raise ValueError("unknown_private_material_value_phase")
+        self.phase=phase
+        super().__init__("private_material_values_"+phase)
 
 def assess(source_colors,source_scalars,w1,actual_colors,actual_scalars):
     """Compare only selected real Material21 documents; reject inexact ID coverage."""
@@ -57,8 +68,14 @@ def assess(source_colors,source_scalars,w1,actual_colors,actual_scalars):
         raise ValueError("missing_original_particle108_exported_Material_YAML")
     scoped={"schema_version":1,"export_instance":w1.get("export_instance"),
             "objects":selected}
-    c=colors.compare(scoped,source_colors,{k:actual_colors[k] for k in wanted})
-    s=scalars.compare(scoped,source_scalars,{k:actual_scalars[k] for k in wanted})
+    try:
+        c=colors.compare(scoped,source_colors,{k:actual_colors[k] for k in wanted})
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("COMPARE_RGBA") from None
+    try:
+        s=scalars.compare(scoped,source_scalars,{k:actual_scalars[k] for k in wanted})
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("COMPARE_SCALARS") from None
     if (c["source_materials_verified"]!=EXPECTED_MATERIALS
         or c["yaml_materials_compared"]!=EXPECTED_MATERIALS
         or s["original_materials_verified"]!=EXPECTED_MATERIALS
@@ -99,7 +116,10 @@ def run(original,manifest,project,w1_trace,b02_trace):
            for p in (original,manifest,project,w1_trace,b02_trace)):
         raise ValueError("unsafe_source_or_export_private_path")
     selected={}
-    source_result=particle.run(original,manifest,private_material_texenvs=selected)
+    try:
+        source_result=particle.run(original,manifest,private_material_texenvs=selected)
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("SOURCE_SELECTED_GRAPH") from None
     if (source_result.get("status")!=SOURCE_STATUS
         or source_result.get("original_108_use_ParticleShader48_reference_authenticated") is not True
         or source_result.get("original_particle_material_objects")!=EXPECTED_MATERIALS
@@ -126,16 +146,36 @@ def run(original,manifest,project,w1_trace,b02_trace):
             saved=obj.read_typetree().get("m_SavedProperties")
             if not isinstance(saved,dict) or "m_Colors" not in saved:
                 raise ValueError("selected_source_Particle_material_missing_colors")
-            source_colors[key]=colors.normalize_colors(saved["m_Colors"])
-            source_scalars[key]=scalars.normalize(saved)
+            try:
+                source_colors[key]=colors.normalize_colors(saved["m_Colors"])
+            except (ValueError,KeyError,TypeError) as exc:
+                raise PrivatePhaseError("ORIGINAL_RGBA_VALUES") from None
+            try:
+                source_scalars[key]=scalars.normalize(saved)
+            except (ValueError,KeyError,TypeError) as exc:
+                raise PrivatePhaseError("ORIGINAL_SCALAR_VALUES") from None
     if set(source_colors)!=set(selected):
         raise ValueError("selected_source_original_Particle_five_Material_coverage")
     w1=json.loads(w1_trace.read_text("utf-8"))
     b02=json.loads(b02_trace.read_text("utf-8"))
-    sameexport.combine_same_export(w1,b02)
-    result=assess(source_colors,source_scalars,w1,
-                  colors.exported_colors(project),
-                  scalars.exported_scalars(project))
+    try:
+        sameexport.combine_same_export(w1,b02)
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("SAME_EXPORT_W1_B02") from None
+    try:
+        exported_color=colors.exported_colors(project)
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("EXPORTED_RGBA_YAML") from None
+    try:
+        exported_scalar=scalars.exported_scalars(project)
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("EXPORTED_SCALAR_YAML") from None
+    try:
+        result=assess(source_colors,source_scalars,w1,exported_color,exported_scalar)
+    except PrivatePhaseError:
+        raise
+    except (ValueError,KeyError,TypeError) as exc:
+        raise PrivatePhaseError("COMPARE_SELECTED_MATERIALS") from None
     result["original_six_scenes_SHA_verified"]=True
     result["original_four_shader_Material_owner_SHA_verified"]=True
     result["one_real_W1_B02_same_export_instance_verified"]=True
@@ -155,6 +195,7 @@ def main(argv=None):
     except Exception as exc:
         report={"schema_version":1,"status":"INCONCLUSIVE",
                 "failure_type":type(exc).__name__,
+                "safe_phase":(exc.phase if isinstance(exc,PrivatePhaseError) else "UNCLASSIFIED"),
                 "actual_Unity_import_GPU_color_or_phone_emitter_verified":False,
                 "private_Material_names_value_bytes_IDs_Guids_published":False}
     a.out.parent.mkdir(parents=True,exist_ok=True)
