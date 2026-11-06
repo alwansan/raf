@@ -77,7 +77,9 @@ static int parse_map_line(const char *line, struct t3_map *m, unsigned int i)
             break;
         case 'S':
             r->type = VKD3D_SHADER_DESCRIPTOR_TYPE_SAMPLER;
-            r->flags = 0;
+            /* vkd3d-shader 1.2 applies IMAGE flag to sampler descriptor
+             * selection too (RESOURCE_NONE falls into non-BUFFER branch). */
+            r->flags = VKD3D_SHADER_BINDING_FLAG_IMAGE;
             break;
         case 'U':
             r->type = VKD3D_SHADER_DESCRIPTOR_TYPE_UAV;
@@ -238,7 +240,7 @@ int main(int argc, char **argv)
         static const unsigned int expected[] = {
             VKD3D_SHADER_BINDING_FLAG_BUFFER,
             VKD3D_SHADER_BINDING_FLAG_IMAGE,
-            0,
+            VKD3D_SHADER_BINDING_FLAG_IMAGE,
             VKD3D_SHADER_BINDING_FLAG_IMAGE
         };
         unsigned int i;
