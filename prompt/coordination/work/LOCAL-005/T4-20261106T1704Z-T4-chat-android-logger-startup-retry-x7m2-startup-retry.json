@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "diagnostic_world_save_evidence",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "e45f57f1f236b1ca4096408c1f2cf5375bd3eb5a",
   "experiment_key": "T4-LOCAL005-AndroidRuntimeLog.Initialize-transient-path-IOException-retry-real-source-net8-Unity-stubs-v1",
   "resource_key": null,
@@ -28,8 +28,10 @@
   "experiment_ids": [
     "prompt/coordination/experiments/T4/20261106T1704Z-T4-chat-android-logger-startup-retry-x7m2.json"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42258727771"
+  ],
   "result": null,
-  "next_step": "Publish synthetic real AndroidRuntimeLog compilation and transient failure/recovery negative control; verify red .NET8 CI; minimally permit later explicit Initialize recovery; require green source CI. Keep LOCAL-005 OPEN.",
-  "updated_at": "2026-11-06T17:04:00Z"
+  "next_step": "CI42258727771 on a9a9a970 tests real AndroidRuntimeLog with synthetic Unity API, expect a runtime recovery assertion red; distinguish source compile/error from legitimate red. Then patch only logger Initialize after confirmed result.",
+  "updated_at": "2026-11-06T17:08:00Z"
 }
