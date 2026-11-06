@@ -99,7 +99,7 @@ def readback_pair(plain_dir, tagged_dir):
             raise ValueError("Vulkan physical input or original-control output changed")
     candidates = {}
     for i, name in enumerate(OUTPUTS[2:]):
-        original, tagged = (read_image(root / name, BYTES) for root in (left, right))
+        original, tagged = (_safe_read(root / name, BYTES) for root in (left, right))
         check = compare_pass(original, tagged)
         candidates["pass" + str(i)] = {
             "original_untagged_to_tagged_readback_byte_identical": original == tagged,

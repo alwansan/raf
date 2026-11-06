@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: t1-original-fft-site2y-phi-cpu-vulkan-\${{ github.ref }}
+  group: t1-original-fft-site2y-phi-cpu-vulkan-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
