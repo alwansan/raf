@@ -157,6 +157,9 @@ internal static class Program
         var exactlyProvenSetterFamilies = new SortedDictionary<string, int>(StringComparer.Ordinal);
         var exactlyProvenSecondValueOrigins = new SortedDictionary<string, int>(StringComparer.Ordinal);
         var exactlyProvenMaterialReceiverOrigins = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var uniqueVector4ConstructorStatuses = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var typedVector4CtorScalarInputSources = new SortedDictionary<string, int>(StringComparer.Ordinal);
+        int typedVector4CtorFormalTotal = 0, typedVector4CtorFloatFormalTotal = 0;
 
         foreach (var type in Walk(assembly.MainModule.Types))
         foreach (var method in type.Methods)
@@ -219,6 +222,22 @@ internal static class Program
                             exactlyProvenSecondValueOrigins.GetValueOrDefault(exact.Value.SecondVectorValueOrigin) + 1;
                         exactlyProvenMaterialReceiverOrigins[exact.Value.MaterialReceiverOrigin] =
                             exactlyProvenMaterialReceiverOrigins.GetValueOrDefault(exact.Value.MaterialReceiverOrigin) + 1;
+                        string ctorStatus = exact.Value.UniqueVector4ConstructorStatus;
+                        uniqueVector4ConstructorStatuses[ctorStatus] =
+                            uniqueVector4ConstructorStatuses.GetValueOrDefault(ctorStatus) + 1;
+                        if (ctorStatus == "one_typed_UnityEngine_Vector4_ctor_in_slice")
+                        {
+                            typedVector4CtorFormalTotal +=
+                                exact.Value.UniqueVector4ConstructorParameterCount;
+                            typedVector4CtorFloatFormalTotal +=
+                                exact.Value.UniqueVector4ConstructorFloatFormalCount;
+                            foreach (var origin in exact.Value.UniqueVector4ConstructorInputOriginCounts)
+                            {
+                                typedVector4CtorScalarInputSources[origin.Key] =
+                                    typedVector4CtorScalarInputSources.GetValueOrDefault(origin.Key) +
+                                    origin.Value;
+                            }
+                        }
                         if (exact.Value.Kind == "source_literal_as_string")
                             summary.ExactSourceStringFirstFormalCallCount++;
                         else if (exact.Value.Kind == "source_literal_via_PropertyToID")
@@ -276,6 +295,15 @@ internal static class Program
                 exactlyProvenSecondValueOrigins,
             original_source_name_exact_first_formal_Material_receiver_IL_origin_buckets =
                 exactlyProvenMaterialReceiverOrigins,
+            original_source_name_exact_first_formal_Vector4_ctor_uniqueness_buckets =
+                uniqueVector4ConstructorStatuses,
+            original_source_name_proven_unique_Vector4_ctor_formal_count =
+                typedVector4CtorFormalTotal,
+            original_source_name_proven_unique_Vector4_ctor_float_formal_count =
+                typedVector4CtorFloatFormalTotal,
+            original_source_name_proven_unique_Vector4_ctor_scalar_input_origin_buckets =
+                typedVector4CtorScalarInputSources,
+            original_Vector4_ctor_input_values_verified = false,
             exact_original_Vector4_value_dataflow_to_CB0_verified = false,
             original_Material_receiver_Shader_is_Foam_verified = false,
             literal_adjacency_does_not_prove_operand_or_runtime_upload = true,
