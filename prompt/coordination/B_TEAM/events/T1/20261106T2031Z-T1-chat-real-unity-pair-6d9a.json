@@ -5,11 +5,12 @@
   "issue_id": "WATER-001",
   "type": "result",
   "at": "2026-11-06T20:33:00Z",
-  "summary": "One opt-in original source SHA ZIP2-vs-real Unity FFT private comparison started: first source-only CI42289104961 RED due omitted workflow path in sparse checkout, corrected commit 177a573. Retry 42289238865 passed source-only and GameCI digest, running Unity sourcefree preflight. No original GPU or Android result claimed and no native XAPK request.",
+  "summary": "Real original ZIP2 FFT SPIR-V Vulkan vs Unity2021 OpenGLCore private SHA-pinned same inputs completed: Unity imported and two-pass GPU executed, CopyInput 0/32768 mismatches per image, keyed site coordinate divergence [63/64,252/256,64/64] dominated by zero-collapse X; pass0 pixel 63/64 and pass1 31/32 numeric differences. CI42289238865 correctly RED on expected parity mismatch; true origin-vs-derived GPU evidence, no authored in-game kernel/Adreno proof. First run42289104961 preflight sparse error repaired commit177a573.",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42289104961",
     "https://github.com/alwansan/raf/actions/runs/42289238865",
-    "https://github.com/alwansan/raf/commit/177a57342dc6197e2f5dceee940c9bb0bec34c6f"
+    "https://github.com/alwansan/raf/commit/177a57342dc6197e2f5dceee940c9bb0bec34c6f",
+    "https://github.com/alwansan/raf/actions/runs/42289238865"
   ],
-  "status": "waiting_ci"
+  "status": "completed_actual_divergence_proven"
 }
