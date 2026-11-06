@@ -1,0 +1,119 @@
+name: T3 RENDER-002 authentic original Particle108 D3D11 DXBC RDEF register contract
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-original-rdef.yml'
+      - 'scripts/t3_particle108_original_dxbc_rdef.py'
+      - 'tests/test_t3_particle108_original_dxbc_rdef.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-original-DXBC-rdef-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-DXBC-eight-stage-rdef:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free exact original DXBC resource parsing negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_dxbc_rdef.py tests/test_t3_particle108_original_dxbc_rdef.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_rdef.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Restore only four original SHA-pinned shader owner data files
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate exactly six original Renderer scenes and four asset owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path("zip2-source")
+          out=Path(os.environ["RUNNER_TEMP"])/"t3-original-private-DXBC-RDEF"
+          pins={"Raft_Data/"+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED}
+          result=stage(source,out,pins)
+          assert len(result["owners"])==4 and result["verified_bytes"]==269007288 and not result["lfs_used"]
+          for name,pin in PIN.items():
+              file=source/"Raft/Raft_Data"/name
+              verify_source(file,pin)
+              dest=out/"Raft_Data"/name
+              with file.open("rb") as src,dest.open("xb") as dst:
+                  while buf:=src.read(1024*1024):dst.write(buf)
+              verify_source(dest,pin)
+          print("T3_ORIGINAL_DXBC_RDEF_SIX_SCENES_FOUR_OWNERS_SHA=true")
+          PY
+      - name: Read exact original D3D11 RDEF source eight stage records
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          timeout 540s python3 -m scripts.t3_particle108_original_dxbc_rdef \
+            --original "$RUNNER_TEMP/t3-original-private-DXBC-RDEF" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-particle108-rdef-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-particle108-rdef-safe.json").read_text())
+          assert d["status"]=="T3_SHA_ORIGINAL_PARTICLE108_FOUR_PAIR_DXBC_RDEF_CLASSIFIED"
+          assert d["source_original_six_scenes_SHA_authenticated"] is True
+          assert d["source_original_four_owner_SHA_authenticated"] is True
+          assert d["source_particle_renderer_material_slots"]==108
+          assert d["source_shader_authored_properties"]==13
+          assert d["source_shader_authored_texture_properties"]==2
+          assert d["source_original_keyword_pairs"]==4
+          assert d["counts"]["original_DXBC_stages_parsed"]==8
+          assert d["counts"]["source_original_vertex_fragment_keyword_pairs_parsed"]==4
+          assert d["original_DXBC_RDEF_register_numbers_names_types_or_bytecode_published"] is False
+          assert d["original_shader_program_Unity_compile_or_pixel_equivalence_proven"] is False
+          assert d["SPIRV_descriptor_set_mapping_proven"] is False
+          print("T3_SOURCE_ORIGINAL_PARTICLE108_FOUR_RDEF_REGISTER_CONTRACTS_VERIFIED=true")
+          PY
+      - name: Publish safe aggregate register-family counts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle108-DXBC-RDEF-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-particle108-rdef-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
