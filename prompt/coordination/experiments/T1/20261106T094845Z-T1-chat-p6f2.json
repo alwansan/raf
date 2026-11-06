@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T094845Z-T1-chat-p6f2",
+  "issue_id": "WATER-001",
+  "hypothesis": "With identical promotion and capture, omitting the integer rewrite changes the keyed read address divergence of replay 42196835754.",
+  "source_commit": "58a411ed247e814c030c769322822e6a3d3c6f02",
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42198180194",
+  "status": "waiting_ci",
+  "budget": "Existing shared Unity mutex; 65-minute workflow timeout",
+  "observed_result": "18 local source tests and YAML/Bash syntax passed. Authentic replay in progress.",
+  "limitations": [
+    "No promoted-only numerical result or Android device result yet."
+  ],
+  "next_step": "Compare keyed read sites and numeric pass-zero mismatch against run 42196835754."
+}
