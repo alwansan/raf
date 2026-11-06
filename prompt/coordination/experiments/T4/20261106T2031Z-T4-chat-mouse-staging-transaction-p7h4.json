@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T2031Z-T4-chat-mouse-staging-transaction-p7h4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Original mouse-axis/staged C# source adapter must not mutate any source unless every original backup was byte-verified; a partial later source write must roll back all originals, preserving exact BOM and not modifying hardlinked external aliases.",
+  "source_commit": "cb379e286adf22170eddb8a24955ad7cee5f1a49",
+  "input_hashes": [
+    "original Assembly-CSharp.dll 3,211,776 bytes SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original zip2 managed references pinned source 15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 Python3 unittest",
+    "dotnet": "GitHub-hosted .NET8+.NET10",
+    "ilspycmd": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v",
+    "dotnet run --project android-port/Tests/PhysicalMouse/PhysicalMouse.csproj -c Release",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=<verified private original>",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj -c Release -p:OriginalManagedDir=<verified private original>",
+    "python3 -m scripts.t4_adapt_original_mouse_axes --original-dll <pinned original> --source-root <private ILSpy> --backup <new ephemeral backup> --apply"
+  ],
+  "negative_controls": [
+    "RED 42289258833: four synthetic source corruption/hardlink/backup cases failed as expected on old adapter",
+    "Extended RED 42289512790: six counterexamples including lost UTF8 BOM and silent partial install",
+    "Intermediate 42289624213: one uncovered BOM double-escape regression after first implementation, corrected in final source"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42289712049",
+  "artifact_urls": [],
+  "budget": "source-only 15m GitHub Actions, no native Unity player or owner-private world files",
+  "status": "completed",
+  "observed_result": "GREEN final 42289712049 job128139624765 success; 14/14 original-source adapter fault/success unit tests, 7 original input routing, 21 pointer policy, 5 presence, 8 view contracts, 48 physical delta C#, original managed Unity2021 Android + Editor ABI compile, authenticated original patched 4x X/4x Y/2x cursor lock sites in five C# source files. Rollback and BOM negative tests pass.",
+  "rejected_hypotheses": [
+    "Successful Path.write_bytes always yields complete byte-identical original backups.",
+    "Source installation failure cannot corrupt an earlier camera source when applying multiple files.",
+    "Path.write_text(encoding=utf-8) preserves original source UTF8 BOM automatically.",
+    "A regular-looking original C# path can always be safely rewritten when hardlinked outside project."
+  ],
+  "limitations": [
+    "Synthetic controlled write/storage failures on ephemeral runner; no hostile concurrent filesystem mutation atomicity guarantee",
+    "No original .meta/schema/Unity assets touched",
+    "Original source privately decompiled only, source and DLL not published",
+    "No Android IL2CPP/native XAPK/device world/mouse acceptance"
+  ],
+  "integration_commit": "cb379e286adf22170eddb8a24955ad7cee5f1a49",
+  "next_step": "T5 eventually uses staged original adapter in next authorized native SHA; T4 can pursue independent original world/save or phone evidence. Do not rerun identical green CI on same source."
+}
