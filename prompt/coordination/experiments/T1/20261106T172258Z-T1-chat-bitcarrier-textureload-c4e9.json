@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9",
+  "issue_id": "WATER-001",
+  "hypothesis": "Unity 2021 OpenGLCore sampled-image butterfly addressing through dynamic uint4 -> float4 -> int2 bitcasts may diverge from direct integer Texture2D.Load even when input bits and dispatch match.",
+  "source_commit": "2373a9310c659520e46479a0373d2b44f0d26134",
+  "input_hashes": [],
+  "tool_versions": {
+    "unity": "2021.3.45f2",
+    "gameci": "v0.1.72 SHA 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_bitcarrier_texture_fixture.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v",
+    "Unity 2021 EditMode T1FftBitcarrierTextureLoadTests.SourceAndButterflyBitcarriedFetchesMatchExactIntegerAddresses"
+  ],
+  "negative_controls": [
+    "Source direct 64 Texture2D.Load reads exact bits",
+    "Two butterfly direct integer address reads each 64 exact bits",
+    "First butterfly bitcarrier float2 asint read 64 exact bits",
+    "Second butterfly vector swizzle float4 asint read 64 exact bits",
+    "Require OpenGLCore backend and exact one NUnit case",
+    "Reject sourcefree invalid/absent report or nonzero category count"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-bitcarrier-texture-load.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42261467757",
+  "artifact_urls": [],
+  "budget": "25min Ubuntu2021 GameCI; no original source; shared Unity CI mutex",
+  "status": "waiting_ci",
+  "observed_result": {
+    "job_id": 128042200390,
+    "preflight_synthetic_success": true,
+    "pinned_cli_success": true,
+    "unity_gpu_in_progress": true
+  },
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Synthetic shader does not model all original SPIR-V optimized Phi/SSA loops",
+    "Does not compile original shader or run Adreno",
+    "OpenGLCore base runner is distinct from Android ARM64 GPU"
+  ],
+  "integration_commit": "2373a9310c659520e46479a0373d2b44f0d26134",
+  "next_step": "Inspect terminal CI safe five-category aggregate counts and exact NUnit result; discriminate primitive vs original control-flow-specific divergence."
+}
