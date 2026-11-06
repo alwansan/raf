@@ -3,7 +3,7 @@
   "origin": "chat",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ea1f1ef4565ff1e995db9474c1b042129fcfaace",
   "scope": "Independent source-only safety fix SM4/5 CB DCL duplicate slot, early SM5.1 range version gate. Avoid reserved scheduled T3 DXBC-to-SPIRV crosscontract.",
   "experiment_key": "T3-SOURCEONLY-SM4-CB-DUPLICATE-SLOT-and-SM51-RANGE-FAILCLOSED-v1",
@@ -30,6 +30,14 @@
     "existing 12 source-free cases"
   ],
   "constraints": "No shader assets/source ZIP2/Unity native build/APK/OBB/trial change. Keep RENDER-002 OPEN.",
-  "next_step": "Minimal parser guard, 2 synthetic cases and source-free CI; record independent session evidence.",
-  "updated_at": "2026-11-06T17:58:04.328Z"
+  "next_step": "Stage+keyword exact DXBC↔SPIR-V register/descriptor semantic join reserved by scheduled T3 20261106T1734Z-T3-scheduled-crosscontract-a71c; follow through when that report lands. RENDER-002 remains OPEN/NOT_READY. Trial vote unchanged NO until major integrated phone-worthy graphics repair.",
+  "updated_at": "2026-11-06T18:01:14.292Z",
+  "result": "Strict source-only DXBC CB-size parser now rejects per-stage duplicate cb first-index and SM5.1 3D-range DCL before SM4 2D parsing. CI42266534555 SUCCESS 14/14 tests. No genuine source-byte rerun (CI42265293980 already established 8 original SM4.0 DXBC stages); no Android shader/Unity APK fix. T3 vote NO remains unchanged under trial-20261106-r1.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42266534555"
+  ],
+  "integration_commits": [
+    "c9d78fdce79f437948adf81e17be452ba6c4d8b4",
+    "2aca6214475f3f042754dcecbc84cbfb7acd6922"
+  ]
 }
