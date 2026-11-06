@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original Foam Shader has direct Material.m_Shader PPtr owners somewhere among the 40 immutable ZIP2 sharedassets serialized files, even if not found among prior four pinned owner datasets.",
+  "source_commit": "980d8a9b0b3c04d3eb8136954e7c106675654a32",
+  "provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_original_foam_material_host_scan.py -v",
+    "python3 -m scripts.t2_original_foam_material_host_scan --zip2 <ZIP2_SHA_pinned> --scratch <runner_temp> --out <safe_result>"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "GitHub_Runner": "ubuntu-24.04"
+  },
+  "original_assets": {
+    "selected_count": 40,
+    "selected_original_bytes": 474065455,
+    "individual_manifest_SHA256_verified": true,
+    "all_private_names_and_SHA_hashes_withheld": true,
+    "foam_owner": "Raft_Data/sharedassets0.assets",
+    "foam_owner_bytes": 115978112,
+    "foam_owner_sha": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "foam_Shader_PathID": 2420,
+    "foam_shader_raw_sha": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "negative_controls": [
+    "missing original owner",
+    "bad original SHA pin",
+    "duplicate original owner",
+    "declared byte budget drift",
+    "foreign local same-number PathID not Foam",
+    "external basename+PathID candidate not runtime GUID",
+    "wrong external target name",
+    "malformed or missing fileID",
+    "unparsed Material counted separately",
+    "invalid material pointer types",
+    "path traversal/invalid original owner tag",
+    "truncated owner source report rejected"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42264851712",
+  "artifact_id": 13526981272,
+  "observed_result": {
+    "GitHub_Actions_conclusion": "success",
+    "source_free_tests_passed": 18,
+    "original_sharedasset_files_SHA_verified": 40,
+    "original_sharedasset_bytes_SHA_verified": 474065455,
+    "material_objects_total": 1392,
+    "material_PPtr_parsed": 1392,
+    "material_unparsed": 0,
+    "malformed_external_fileID": 0,
+    "external_identifiers_pointing_to_Foam_owner": 39,
+    "material_external_refs_to_Foam_owner_nonFoam_pathIDs": 885,
+    "material_direct_Foam_Shader_PPtr_candidates": 0,
+    "original_foam_Material_CB0_Upload_verified": false,
+    "Adreno_water_pixels_verified": false
+  },
+  "rejected_hypothesis": "A direct Material.m_Shader PPtr to original sharedassets0 Foam PathID2420 exists in any of these 40 source-original sharedassets: 0/1392 originals parsed; not found.",
+  "limitations": [
+    "Does not inspect non-Material script references, components, scenes, prefabs or runtime Shader.Find/Material allocation.",
+    "Foreign owner local PathID2420 does not resolve to original Foam Shader.",
+    "External basename matching is not Unity GUID/runtime proof.",
+    "Original source-only SHA verification is not a new Android water implementation; trial-build vote remains NO.",
+    "Never claim 0 candidate Material PPtrs proves no runtime Foam usage."
+  ],
+  "status": "completed",
+  "evidence_doc": "docs/T2_FOAM_ORIGINAL_40_SHAREDASSETS_MATERIAL_HOST_2026-11-06.md",
+  "trial_round": "trial-20261106-r1",
+  "T2_trial_vote": "لا يحتاج",
+  "T2_vote_commit": "93e8e2c38e512b53f94a26e808b11254c29338c3",
+  "next_step": "Inspect original water/Spectrum/Foam MonoBehaviour and code runtime Material/Shader assignment, otherwise original scenes/bundles, with source SHA provenance; integrate original ShaderLab/CB0 and test Unity before requesting phone. Preserve T2 no vote until substantial integrated patch.",
+  "updated_at": "2026-11-06T17:49:32.269Z"
+}
