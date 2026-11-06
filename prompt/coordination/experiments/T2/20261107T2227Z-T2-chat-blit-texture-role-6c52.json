@@ -33,16 +33,21 @@
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-resultflow.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42305522855",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42305522855/artifacts/13545388075"
+  ],
   "budget": "Existing <=20min no Unity/LFS source-original CPU workflow",
-  "status": "waiting_ci",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Original SHA-pinned workflow 42305522855 SUCCESS: Python 63 +6 synthetic controls and C# Cecil selftest. Two exact original Foam public Graphics.Blit sites (pass0/pass1). One directly typed RenderTexture source, one unknown source; one directly typed RenderTexture destination, one unknown destination; zero null destinations. No per-pass mapping or runtime phone proof.",
+  "rejected_hypotheses": [
+    "Neither original Foam Blit source nor destination is statically traceable to a typed RenderTexture from immediate source-only IL"
+  ],
   "limitations": [
     "only immediate typed producers, not actual object identity or RenderTexture allocation/ownership",
     "static original IL cannot prove on-device execution",
     "missing/ambiguous producer stays unknown; original CB0 mismatch unchanged"
   ],
   "integration_commit": "681c239c29959e420829b48ba24c4ab203ce9ca5",
-  "next_step": "Inspect 42305522855: safe Python and Cecil selftest, exact original authenticated texture source and render target direct IL producer categories; if PASS document observed counts and limitations, if FAIL patch without weakening. Continue T5 native independently."
+  "next_step": "Correlate exact direct Texture/RenderTexture source and destination producer categories with original Blit pass literal 0 vs 1 (per-site), without publishing original names/IL. Then investigate unknown producer privately; T5 authorised Unity runtime only.",
+  "artifact_digest": "sha256:b9358da551f1977e71ada7ea2bc84361229719c825070b234167b488b086ab4b"
 }
