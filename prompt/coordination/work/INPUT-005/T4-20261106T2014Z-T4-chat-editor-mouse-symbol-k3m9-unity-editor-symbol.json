@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "track": "Unity2021-Editor-original-mouse-bridge-symbol-cs0234",
+  "status": "active",
+  "base_sha": "6341b40cb59e6770914a0c918a2abb82602585ca",
+  "approach": "Owner-direct native CI42281310905 first fatal compile reports missing RaftAndroid.Platform.AndroidPhysicalMouseCapture (CS0234 x10), because platform bridge entire type compiled only UNITY_ANDROID && !UNITY_EDITOR but patched original C# references shim in Unity Editor. Build original Unity2021 ABI editor-symbol negative fixture (RED) and add platform-inert fallback class for Editor/non-Android targets (GREEN), preserving actual Android View capture class unchanged. Do not touch native workflow or dispatch full Unity build.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj",
+    "android-port/Tests/PhysicalMouse/UnityEditorBridgeUsage.cs",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml"
+  ],
+  "experiment_key": "T4-Unity2021-Editor-AndroidPhysicalMouseCapture-CS0234-native42281310905-source-d6924001-pinned-ABI",
+  "resource_key": "T4-synthetic-Unity2021-Editor-mouse-ABI-only",
+  "related_work": [
+    "20261106T2008Z-T4-chat-save-exception-proof-m5r8",
+    "20261106T1943Z-T4-scheduled-r6k2"
+  ],
+  "concurrent_work": "No active overlapping T4/T5 file scope seen; T5 owns native build. Owner-directed run42281310905 completed FAILURE at Unity Editor first fatal CS0234; T1–T3 other tests untouched.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281310905"
+  ],
+  "updated_at": "2026-11-06T20:14:00Z",
+  "next_step": "First publish pinned Unity2021 Editor symbol fixture workflow, capture expected CS0234 RED. Then implement conditional no-op fallback and obtain GREEN actual original Unity2021 refs compile and existing Android bridge compile. T5 later decides whether to rerun native after source recovery and independent gates."
+}
