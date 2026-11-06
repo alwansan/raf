@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261106T170532Z-T1-chat-variant-declarations-7c4e",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "67f20cf7fe5ae8619f4f084348333a9b81f6c2fe",
-  "updated_at": "2026-11-06T17:05:32Z",
+  "updated_at": "2026-11-06T17:09:06Z",
   "resumed_from_sessions": [
     "20261106T163833Z-T1-chat-selector-alias-5e8b",
     "20261106T163310Z-T1-chat-real-fft-pair-d91e",
@@ -28,7 +28,25 @@
   "resource_key": "source-only-authored-fft-staging-no-original-source",
   "concurrency_checked": "20261106T163310Z-T1-chat-real-fft-pair-d91e owns private original-vs-HLSL Vulkan fixture, completed 42254539826 but work still marked active; no shared trace files or workflow modified.",
   "source_pin": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add fail-closed keyword declaration set validation, check unity runtime enabled keyword state, execute existing lightweight YAML source CI, record results and guard limitations."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42258787510",
+    "https://github.com/alwansan/raf/actions/runs/42258825614"
+  ],
+  "result": {
+    "scope": "source-only declared FFT keyword set and Editor activation guard",
+    "source_commits": [
+      "5a9f925afdb01ca90167c5acc858a90a395a27fc",
+      "479b16853bb537f469b78cc1386f2eeb79476b84",
+      "ec89ec09e590fbb6a3b2174acc7ccf2e1fa0f239"
+    ],
+    "final_ci_run": 42258825614,
+    "final_ci_result": "success",
+    "synthetic_tests_passed": 11,
+    "synthetic_tests_total": 11,
+    "unity_editor_compiled": false,
+    "other_original_vulkan_actual_pair_positive_run": 42254539826,
+    "other_work_untouched": true,
+    "android_water_verified": false
+  },
+  "next_step": "Isolate Unity OpenGLCore source-derived compute divergence from proven same-Mesa-Vulkan parity; use private keyed GPU readback or verified Vulkan Unity backend, keep original assets private."
 }
