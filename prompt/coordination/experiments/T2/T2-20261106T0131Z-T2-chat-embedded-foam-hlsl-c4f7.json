@@ -1,0 +1,65 @@
+{
+  "owner": "T2",
+  "session_id": "20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "SHAOriginalFoam-PrivateShaderLabEmbeddedHLSL4StageCompile-v1",
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_owner_bytes": 115978112,
+    "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "foam_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "source_commits": [
+    "9cafaf41c6965a35ac6184c4648154175990b597",
+    "797174cc02e14aef3f115a5917730a4068623c75"
+  ],
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42143981891",
+    "https://github.com/alwansan/raf/actions/runs/42144036981"
+  ],
+  "toolchain": {
+    "runner": "ubuntu-24.04",
+    "UnityPy": "1.25.4",
+    "vkd3d-compiler": "ubuntu24 apt",
+    "glslangValidator": "ubuntu24 apt",
+    "spirv-val": "vulkan1.1"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_candidate_embedded_validation.py' -v",
+    "python3 -m scripts.t2_foam_private_shaderlab_candidate --source ... --packet ... --manifest ... --private-dest $RUNNER_TEMP/t2-authentic-foam-private.shader --out $RUNNER_TEMP/t2-foam-candidate-safe.json",
+    "python3 -m scripts.t2_foam_candidate_embedded_validation --candidate $RUNNER_TEMP/t2-authentic-foam-private.shader --scratch $RUNNER_TEMP --out $RUNNER_TEMP/t2-foam-embedded-safe.json"
+  ],
+  "negative_controls": [
+    "extra/fake Pass outside original two",
+    "missing ENDHLSL",
+    "invalid fragment/vertex pragma",
+    "unsupported Shader Model pragma",
+    "duplicate shader target pragma",
+    "missing stage guard",
+    "missing private candidate or oversized source",
+    "fake compiler success without output SPIR-V",
+    "only safe bounded category on compiler failure"
+  ],
+  "result": {
+    "original_SHA_original_owner_verified": true,
+    "source_original_2pass_shaderlab_structural_candidate_bytes": 9731,
+    "completed_shaderlab_program_bodies_extracted": 2,
+    "embedded_program_stage_variants_compiled_and_spirv_val_validated": 4,
+    "spirv_validation_target": "vulkan1.1",
+    "source_free_existing_tests_passed": 17,
+    "source_free_new_tests_passed": 10,
+    "actual_original_DXBC_profiles_verified": 4,
+    "original_stage_order_preserved": true,
+    "unity_2021_shaderlab_import_verified": false,
+    "original_CB0_material_texture_sampler_upload_verified": false,
+    "Adreno_game_pixels_verified": false,
+    "original_shader_artifacts_published": false
+  },
+  "limitations": [
+    "HLSLPROGRAM extraction is not Unity ShaderLab importer acceptance.",
+    "Original four non-authored texture setters in managed source do not prove real object contents or material receiver.",
+    "CB0 resource runtime binding and Adreno numeric pixels not tested."
+  ]
+}

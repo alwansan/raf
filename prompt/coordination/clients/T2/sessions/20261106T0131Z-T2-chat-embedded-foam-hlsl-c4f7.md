@@ -1,6 +1,6 @@
 # T2 session 20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7
 - origin: chat
-- status: active
+- status: completed
 - scope: WATER-001 original full private ShaderLab embedded VS/PS HLSL verification.
 - baseline_sha: abb6c9ada4245c2844ac3914c778ca2002d97386
 - experiment_key: SHAOriginalFoam-PrivateShaderLabEmbeddedHLSL4StageCompile-v1
@@ -11,3 +11,11 @@
 - Planned: independent two-pass HLSLPROGRAM parser with strict source boundaries, four actual stage compiler+spirv-val calls in private CI scratch, negative source-free parser and process-output tests; only safe booleans/counts published.
 - No original source/ShaderLab/bytecode in GitHub output, game assets, GUID or .meta changes, other agent files, Unity build or actions cancellation.
 - Next: new test and actual SHA original CI then record outcome, WATER-001 OPEN.
+
+## Original embedded ShaderLab HLSL Vulkan validation — 2026-11-06T01:30Z
+- Added independent `scripts/t2_foam_candidate_embedded_validation.py` and 10 source-free adversarial tests `tests/test_t2_foam_candidate_embedded_validation.py`, plus new isolated step in the existing T2 private source-authentic workflow. Source commits [9cafaf41](https://github.com/alwansan/raf/commit/9cafaf41c6965a35ac6184c4648154175990b597) and import-path correction [797174cc](https://github.com/alwansan/raf/commit/797174cc02e14aef3f115a5917730a4068623c75).
+- Original private [CI42143981891](https://github.com/alwansan/raf/actions/runs/42143981891), job 127650887245, **SUCCESS**; new amended [CI42144036981](https://github.com/alwansan/raf/actions/runs/42144036981), job 127651076737, **SUCCESS**.
+- Both authenticate exact ZIP2 original Foam owner/Shader raw bytes, original four source-derived DXBC stage models, one Texture+one Vector authored property and genuine two pass states. Original private final `9731`-byte ShaderLab candidate was assembled. Then the *completed private ShaderLab source* itself was parsed for exactly two scoped HLSLPROGRAM bodies; each real embedded Vertex+Fragment variant was privately recompiled through `glslangValidator` and validated with `spirv-val --target-env vulkan1.1`. **2/2 embedded pass programs, 4/4 compiled+validated Vulkan stage variants**; stage order exact.
+- 17 prior + 10 newly added source-free negative controls PASS. No binary output, private ShaderLab, original source text, stage source, shader bytes or decoder names published. All scratch programs and original source deleted on success/failure; only sanitized JSON counters remained.
+- The original renderer is **NOT recovered** by this test: `unity_2021_shaderlab_import_verified=false`, `runtime_cb0_and_material_texture_sampler_upload_verified=false`, `original_gpu_or_android_pixels_verified=false`. Private candidate not installed; no game `.shader`, `.meta`, GUID, scene, audio, Settings, deferred input/touch, other T agents or native Unity Actions modified/canceled.
+- Work `prompt/coordination/work/WATER-001/T2-20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.json` completed; experiment `prompt/coordination/experiments/T2/T2-20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.json`, event `prompt/coordination/B_TEAM/events/T2/20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7-result.json`, resource `prompt/coordination/B_TEAM/resources/T2-foam-original-private-two-pass-ShaderLab-candidate.json`, memo `docs/T2_FOAM_PRIVATE_SHADERLAB_EMBEDDED_HLSL_VULKAN_2026-11-06.md` recorded. Follow-up requires genuine Unity 2021 ShaderLab importer and authentic CB0/Material runtime binding, then Adreno pixel comparison with T1/T5. **WATER-001 OPEN**, NOT_READY.

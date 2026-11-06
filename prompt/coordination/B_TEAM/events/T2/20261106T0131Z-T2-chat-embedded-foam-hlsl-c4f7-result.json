@@ -1,0 +1,13 @@
+{
+  "id": "20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7-result",
+  "owner": "T2",
+  "session_id": "20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-pinned two-pass Foam private 9731B ShaderLab actual embedded HLSLPROGRAM bodies, after original authored properties/states assembled, have been recompiled and validated 4/4 stage variants with Vulkan1.1 SPIR-V. 27 source-free synthetic tests pass. CI42143981891 and CI42144036981 SUCCESS. No Unity importer or original runtime CB0/material/Adreno proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42143981891",
+    "https://github.com/alwansan/raf/actions/runs/42144036981"
+  ],
+  "at": "2026-11-06T01:30:00Z"
+}

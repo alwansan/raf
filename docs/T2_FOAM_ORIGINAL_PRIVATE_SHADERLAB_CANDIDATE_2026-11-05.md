@@ -15,3 +15,8 @@ Private ShaderLab, original assets, HLSL, SPIR-V and identifiers remained in tem
 Source-authentic complete structural candidate is **not** actual Unity2021 ShaderLab importer success, runtime CB0 constant-buffer alias/data upload, Material/texture/sampler delivery, numerical pixel parity, Android/Adreno rendering, or phone acceptance. No Unity game build was launched in this scope.
 
 **WATER-001 OPEN / game water NOT_READY.** Next T2: original CB0 and dynamic non-authored textures runtime binding, then controlled Unity import and device water test with T1/T5.
+
+## Source-authentic embedded program compilation — 2026-11-06
+[Original CI42143981891](https://github.com/alwansan/raf/actions/runs/42143981891) and corrected-import-path [CI42144036981](https://github.com/alwansan/raf/actions/runs/42144036981) **SUCCESS**. The **completed private 9731-byte, two-pass ShaderLab source** was parsed to extract each of its original HLSLPROGRAM sections. Each extracted section was actually compiled as both Vertex and Fragment with `glslangValidator -V -D`, and all **4 of 4** resulting stage SPIR-V files passed `spirv-val --target-env vulkan1.1`. Original program stage order unchanged; exact ZIP2 original shader and four stage model pins maintained; **17 existing + 10 new** source-free integrity tests passed.
+
+This is a stricter observation than testing the standalone stage-pair text before ShaderLab construction. It remains **NOT an actual Unity2021 ShaderLab import**, original CB0 runtime alias/data upload, Material texture/sampler delivery, numeric GPU pixel result or Adreno/phone validation. All source, original assets, private HLSL and SPIR-V were deleted before sanitized aggregate upload; game shader/.meta/GUID assets untouched. WATER-001 remains OPEN.

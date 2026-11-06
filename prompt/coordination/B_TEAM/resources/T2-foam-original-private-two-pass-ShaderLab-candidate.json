@@ -6,9 +6,9 @@
   "stages": {
     "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
     "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
-    "reconstruction": "PRIVATE_SHADERLAB_9731_BYTES_TWO_COMPLETE_PASSES_ORIGINAL_DXBC_SOURCE_TARGET_MODELS",
+    "reconstruction": "PRIVATE_SHADERLAB_9731_BYTES_TWO_COMPLETE_PASSES_SOURCE_DXBC_TARGET;_EMBEDDED_HLSL_ACTUAL_FOUR_STAGES_VULKAN11_VALID",
     "binding": "ORIGINAL_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_UNVERIFIED",
-    "integration": "CI42125000030_CI42125847863_SUCCESS_UNITY_IMPORT_UNTESTED",
+    "integration": "SHA_ORIGINAL_CI42143981891_AND_42144036981_SUCCESS_27_SYNTHETIC_CONTROLS;_SHADERLAB_UNITY_EDITOR_IMPORT_NOT_TESTED",
     "device": "NOT_TESTED"
   },
   "observed": {
@@ -21,14 +21,18 @@
     "original_render_states": 2,
     "exact_original_DXBC_shader_models_verified": 4,
     "private_candidate_bytes": 9731,
-    "source_free_tests_passed": 17,
+    "source_free_tests_passed": 27,
     "Unity2021_import_verified": false,
     "CB0_and_original_Material_sampler_upload_verified": false,
-    "Android_Adreno_pixels_verified": false
+    "Android_Adreno_pixels_verified": false,
+    "embedded_programs_extracted_from_full_private_ShaderLab": 2,
+    "embedded_program_stages_compiled_vulkan11": 4
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42125000030",
-    "https://github.com/alwansan/raf/actions/runs/42125847863"
+    "https://github.com/alwansan/raf/actions/runs/42125847863",
+    "https://github.com/alwansan/raf/actions/runs/42143981891",
+    "https://github.com/alwansan/raf/actions/runs/42144036981"
   ],
-  "next_step": "Recover original CB0 uploads and four non-authored Foam dynamic sampler/textures, then coordinate Unity2021/Adreno with T1 and T5."
+  "next_step": "Full private original Foam ShaderLab embedded HLSL recompiled 4/4 Vulkan1.1. Real blocker now Unity2021 ShaderLab actual importer+CB0/resolved sampler/Material runtime upload. With T1 FFT and T5 integration, run controlled Unity shader import and device test; do not claim water ready. WATER-001 OPEN."
 }

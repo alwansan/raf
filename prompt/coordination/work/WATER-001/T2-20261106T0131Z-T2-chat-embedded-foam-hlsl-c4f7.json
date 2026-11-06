@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "abb6c9ada4245c2844ac3914c778ca2002d97386",
   "experiment_key": "SHAOriginalFoam-PrivateShaderLabEmbeddedHLSL4StageCompile-v1",
   "track": "shaderlab-private-original-embedded-pass-compilation",
@@ -30,7 +30,30 @@
     "prompt/coordination/experiments/T2/T2-20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7.json",
     "prompt/coordination/B_TEAM/events/T2/20261106T0131Z-T2-chat-embedded-foam-hlsl-c4f7-result.json"
   ],
-  "run_urls": [],
-  "next_step": "New private candidate embedded full-program extraction validation with negative controls, source-authentic workflow on exact ZIP2 provider; do not modify game shader/metadata or run native Unity.",
-  "last_verified": "Source-authentic CI42125847863 successful authentic private 2-pass ShaderLab candidate 9731B and four source-derived Shader Model tokens; 17 synthetic tests. Prior CI42121817207 validated pair HLSL before ShaderLab embedding. CB0 and actual Unity import/Android pixels still open."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42143981891",
+    "https://github.com/alwansan/raf/actions/runs/42144036981"
+  ],
+  "next_step": "Full private original Foam ShaderLab embedded HLSL recompiled 4/4 Vulkan1.1. Real blocker now Unity2021 ShaderLab actual importer+CB0/resolved sampler/Material runtime upload. With T1 FFT and T5 integration, run controlled Unity shader import and device test; do not claim water ready. WATER-001 OPEN.",
+  "last_verified": "Source-authentic CI42125847863 successful authentic private 2-pass ShaderLab candidate 9731B and four source-derived Shader Model tokens; 17 synthetic tests. Prior CI42121817207 validated pair HLSL before ShaderLab embedding. CB0 and actual Unity import/Android pixels still open.",
+  "updated_at": "2026-11-06T01:30:00Z",
+  "source_commits": [
+    "9cafaf41c6965a35ac6184c4648154175990b597",
+    "797174cc02e14aef3f115a5917730a4068623c75"
+  ],
+  "result": {
+    "original_SHA_original_owner_verified": true,
+    "source_original_2pass_shaderlab_structural_candidate_bytes": 9731,
+    "completed_shaderlab_program_bodies_extracted": 2,
+    "embedded_program_stage_variants_compiled_and_spirv_val_validated": 4,
+    "spirv_validation_target": "vulkan1.1",
+    "source_free_existing_tests_passed": 17,
+    "source_free_new_tests_passed": 10,
+    "actual_original_DXBC_profiles_verified": 4,
+    "original_stage_order_preserved": true,
+    "unity_2021_shaderlab_import_verified": false,
+    "original_CB0_material_texture_sampler_upload_verified": false,
+    "Adreno_game_pixels_verified": false,
+    "original_shader_artifacts_published": false
+  }
 }
