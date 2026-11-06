@@ -7,6 +7,7 @@ from unittest.mock import patch
 from scripts.b24_original_foam_stage_translation import TARGET
 from scripts.t2_foam_private_cb0_managed_targets import (
     _name, build_private_target_set, _owner_catalog_from_rows,
+    OWNER, PINS, fingerprint,
 )
 
 
@@ -63,6 +64,11 @@ class OriginalCb0NameTargetTests(unittest.TestCase):
             hashlib.sha256(TARGET.encode("utf8")).hexdigest())
         self.assertNotIn(TARGET, str(data))
         self.assertEqual(len(data["original_Foam_Shader_mName_SHA256_private"]), 64)
+
+    def test_original_owner_census_pin_dependencies_are_bound(self):
+        self.assertEqual(OWNER, "Raft_Data/sharedassets0.assets")
+        self.assertIn(OWNER, PINS)
+        self.assertTrue(callable(fingerprint))
 
     def test_owner_census_original_material_ref_requires_same_file(self):
         result = _owner_catalog_from_rows(
