@@ -93,7 +93,7 @@ class GateTests(unittest.TestCase):
     def test_bounded_descriptor_rejects_invalid_utf8(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'evidence.json'
-            path.write_bytes(b'\\xff')
+            path.write_bytes(bytes([255]))
             with self.assertRaises(UnicodeError):
                 read_sanitized_evidence(path)
 
