@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-06T13:07:26.541Z",
+  "summary": "REAL source-authenticated owner Android CI 42058825739 artifact ZIP envelopes successfully read over HTTP 206 ranges: delivery 12 members, checkpoint 2, actual delivery.json versionCode 89 with APK 672853870B, OBB 2301256312B, XAPK 2974111434B; signed checkpoint central APK+OBB uncompressed sizes match. 3468 bytes downloaded total, 11 synthetic plus live ZIP probe passed CI42222494746. Inner SHA/APK certificate/OBB runtime/GUID and device unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42222494746",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_ARTIFACT_ZIP_RANGE_2026-11-06.md"
+  ],
+  "limits": "Real outer ZIP metadata and small manifest only; original inner APK/OBB/XAPK signature/content not authenticated, game readiness unchanged.",
+  "next_step": "Bounded nested ZIP central directory inspect for real checkpoint APK/OBB without bulk download."
+}
