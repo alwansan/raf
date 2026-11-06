@@ -6604,6 +6604,21 @@
       "_record_path": "../B_TEAM/events/T1/20261106T133640Z-T1-chat-nested-phi-8d31.json"
     },
     {
+      "id": "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
+      "session_id": "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
+      "origin": "scheduled",
+      "issue_id": "WATER-001",
+      "event": "paired_fft_capture_missing",
+      "evidence_runs": [
+        42228497335,
+        42228404633,
+        42227795780
+      ],
+      "result": "structural_loop_carried_phi_verified; numeric_parity_unverified; paired capture artifacts absent",
+      "next_step": "Create private same-dispatch capture pair and run strict SHA gate; avoid duplicate provenance workflow.",
+      "_record_path": "../B_TEAM/events/T1/20261106T1408Z-T1-scheduled-pair-input-readiness-v3.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -9198,6 +9213,24 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1351Z-T4-chat-rgd-snapshot-whitespace-p6q2.json"
     },
     {
+      "id": "20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2",
+      "owner": "T4",
+      "session_id": "20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "at": "2026-11-06T14:04:06.710Z",
+      "summary": "Source-free world-save JSONL verifier now rejects ambiguous duplicate JSON object members (incl nested) and Python json.loads nonstandard NaN/Infinity without leaking owner details. Exact final CI42230233069 source 74607f8 successful 27 parser+2 overflow =29/29. No Android/Unity/game-world device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/74607f816ab4bd6dd35686f928fe3d81bbb60494",
+        "https://github.com/alwansan/raf/actions/runs/42230233069"
+      ],
+      "device_confirmed": false,
+      "world_save_durability_proven": false,
+      "source_only": true,
+      "_record_path": "../B_TEAM/events/T4/20261106T1359Z-T4-chat-jsonl-duplicate-keys-r7m2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9875,6 +9908,42 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1330Z-T5-chat-signed-apk-auth-f7b2.json"
     },
     {
+      "id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
+      "owner": "T5",
+      "session_id": "20261106T1358Z-T5-chat-obb-fullsha-7e39",
+      "origin": "chat",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T14:10:39.487Z",
+      "summary": "REAL owner-tested signed main OBB from source run42058825739, full 2301256312 bytes read over 549 strict HTTP206 range requests; full SHA-256 MATCH actual original delivery.json original SHA (safe prefix 660b6c0909ae), whole OBB CRC32 MATCH original signed checkpoint ZIP_STORED central directory. Isolated CI42230326050 COMPLETED SUCCESS, 9/9 synthetic tests, no disk OBB upload. Prior original APK CI42228262902 SHA/signature/v89 passed. Unity OBB GUID, phone mount, actual device hashes, water/FFT/graphics CURRENT branch not verified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42230326050",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_OBB_SHA_2026-11-06.md",
+        "https://github.com/alwansan/raf/actions/runs/42228262902"
+      ],
+      "limits": "Old owner-tested source artifact SHA vs its own delivery reference only, no independent publisher-signed manifest, no new phone or OBB GUID and Unity resource read proof; NOT_READY 0/3.",
+      "next_step": "Investigate OBB GUID warnings and actual Android mounted OBB resource paths, and plan current-branch performance/graphics validation after T1–T3 patches.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1358Z-T5-chat-obb-fullsha-7e39.json"
+    },
+    {
+      "id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
+      "issue_id": "COORD-001",
+      "type": "result",
+      "at": "2026-11-06T14:14:57.637Z",
+      "summary": "CI42231823163 strict canonical index failed Missing record identity on T1 scheduled paired FFT evidence 20261106T1408Z; added only explicit id equal unchanged session_id, preserved all seven original T1 keys/values using CAS commit9dd0316b. Strict parser unchanged. Original signed OBB full SHA and CRC remain SUCCESS CI42230326050; this is index hygiene only.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42231823163",
+        "https://github.com/alwansan/raf/commit/9dd0316b5713b894929d2fd6f61428d0150aba50",
+        "https://github.com/alwansan/raf/actions/runs/42230326050"
+      ],
+      "limitations": "No change to T1 WATER-001 computation, FFT parity or original test results; no OBB mount, Unity pixel shader or phone validation.",
+      "next_step": "Run strict live full T5 source-only index again and verify original OBB event included; no force.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1413Z-T5-chat-ledger-t1id-7b42.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9903,7 +9972,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "c59ba3920ef703b7b5bf9a849097b5477b37be6c025fa769af4eacb7b5d036e2",
+  "source_input_sha256": "6c7416291c96cbfa83a9fa5178d30987b0125aa63409a0b18454e9f6ea8f6054",
   "generation": "T-2026-11-05",
-  "input_sha256": "2423d24e3d2d88243ba36c91195b95c6b6869a46912a84af7f215ecdc83ebc86"
+  "input_sha256": "d4ae92a86dcd49e9c864acbbe3a6e16068401e9f0fa394ce354c31318fbb7cee"
 }
