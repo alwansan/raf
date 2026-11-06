@@ -393,6 +393,11 @@ internal static class Program
         int materialWriterMethodsContainingRendererGetter = 0;
         var originalMaterialStoreImmediateSources =
             new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var exactOriginalMaterialStoreStackSources =
+            new SortedDictionary<string, int>(StringComparer.Ordinal);
+        var exactOriginalMaterialConstructorShaderOrigins =
+            new SortedDictionary<string, int>(StringComparer.Ordinal);
+        int sourceOriginalMaterialStoreBasicBlockScannedInstructions = 0;
         var originalReceiverMaterialFieldsWithStfld = new HashSet<string>(StringComparer.Ordinal);
         foreach (var definition in Walk(assembly.MainModule.Types))
         foreach (var method in definition.Methods)
@@ -423,6 +428,22 @@ internal static class Program
                         originalInstructions,i,method);
                     originalMaterialStoreImmediateSources[origin] =
                         originalMaterialStoreImmediateSources.GetValueOrDefault(origin)+1;
+                    var stackEvidence=MaterialStoreValueTrace.Trace(
+                        originalInstructions,i,method);
+                    exactOriginalMaterialStoreStackSources[stackEvidence.ValueOrigin] =
+                        exactOriginalMaterialStoreStackSources.GetValueOrDefault(
+                            stackEvidence.ValueOrigin)+1;
+                    sourceOriginalMaterialStoreBasicBlockScannedInstructions +=
+                        stackEvidence.BasicBlockInstructions;
+                    if (stackEvidence.ValueOrigin is
+                        "exact_Material_ctor_with_Shader_formal" or
+                        "exact_Material_ctor_other_formals")
+                    {
+                        exactOriginalMaterialConstructorShaderOrigins[
+                            stackEvidence.ShaderInputOrigin] =
+                            exactOriginalMaterialConstructorShaderOrigins.GetValueOrDefault(
+                                stackEvidence.ShaderInputOrigin)+1;
+                    }
                 }
             }
             if (methodHasStore) methodsWithStoreToExactOriginalFields++;
@@ -519,6 +540,14 @@ internal static class Program
                 originalExactReceiverMaterialWriterMethodCount,
             original_source_name_exact_receiver_Material_store_immediate_producer_buckets =
                 originalMaterialStoreImmediateSources,
+            original_source_name_exact_receiver_Material_stfld_value_stack_origin_buckets =
+                exactOriginalMaterialStoreStackSources,
+            original_source_name_exact_receiver_Material_ctor_Shader_formal_origin_buckets =
+                exactOriginalMaterialConstructorShaderOrigins,
+            original_source_name_exact_receiver_Material_store_block_instructions_examined =
+                sourceOriginalMaterialStoreBasicBlockScannedInstructions,
+            compiled_Material_store_Shader_is_original_Foam_verified = false,
+            compiled_Material_store_value_original_runtime_executed_verified = false,
             original_source_name_exact_receiver_Material_writer_methods_with_Shader_Find =
                 materialWriterMethodsContainingShaderFind,
             original_source_name_exact_receiver_Material_writer_methods_with_Material_ctor =
@@ -562,6 +591,7 @@ internal static class Program
                        "System.Single") != null)
             throw new InvalidOperationException("Setter negative schema");
         Cb0ExactFirstFormal.SelfTest();
+        MaterialStoreValueTrace.SelfTest();
         using (var module = ModuleDefinition.CreateModule(
             "public-material-writer-fixture", ModuleKind.Dll))
         {
