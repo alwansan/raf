@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "original-savegame-snapshot-per-call-cardinality",
-  "status": "active",
+  "status": "completed",
   "base_sha": "60c1b859e86c83d73c556dcdf1b0e9cfdf8f7f0f",
   "approach": "Make immutable CL original SaveGame stage evidence fail closed when duplicate Save.argumentFileSnapshot markers occur in a single Save() call, or when another Save() call exits without its own snapshot. Source-only synthetic tests plus authenticated pinned owner JSONL workflow, no world data readback and no game/Unity change.",
   "intended_files": [
@@ -20,7 +20,13 @@
     "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2"
   ],
   "concurrent_work": "T4 20261106T1957Z profile first-create fsync owns LocalProfileStore.cs and OfflineSessionIdentity/Program.cs ONLY; T5 native run42281310905 remains in progress; no overlap or duplicate workflow dispatch.",
-  "run_urls": [],
-  "updated_at": "2026-11-06T19:59:00Z",
-  "next_step": "Commit adversarial source-only regression first and obtain expected RED; add minimal per-Save call snapshot cardinality guard then get GREEN 5-Nov pinned real owner evidence in automatic T4 YAML."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42284566838",
+    "https://github.com/alwansan/raf/actions/runs/42284677227"
+  ],
+  "updated_at": "2026-11-06T20:03:00Z",
+  "next_step": "Owned source files released. T4 next cycle should focus different original world/save blocker or pending profile work; T5 later coordinates SHA-attested owner phone device candidate; do not repeat immutable CL baseline workflow.",
+  "result": "RED CI42284566838: 2 synthetic false positive failures with 15 pre-existing methods passing. GREEN CI42284677227 job128122303358: 16/16 synthetic tests plus immutable original CL 5-Nov 7/7 ordered SaveGame cycles each Save() with exactly one nonzero snapshot, 7/7 original LoadT traces. Source-only interpreter; no game fix or phone acceptance.",
+  "integration_commit": "4f7e8d4c084d60580def38cb0d74431d82be8230",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261106T1959Z-T4-chat-save-snapshot-cardinality-k8p4.md"
 }
