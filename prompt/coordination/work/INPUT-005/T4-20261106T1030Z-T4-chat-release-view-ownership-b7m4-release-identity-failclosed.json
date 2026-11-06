@@ -2,9 +2,9 @@
   "session_id": "20261106T1030Z-T4-chat-release-view-ownership-b7m4",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d8bf08a9fe4305dadea4948c2079962669292a86",
-  "updated_at": "2026-11-06T10:30:00Z",
+  "updated_at": "2026-11-06T10:42:00Z",
   "resumed_from_sessions": [
     "20261106T1014Z-T4-chat-owner-world-wire-parity-n7q3",
     "20261106T0946Z-T4-chat-pointer-view-ci-q4r8",
@@ -24,5 +24,14 @@
   ],
   "nonoverlap": "T4 scheduled q7n4 concluded read-only release-target audit. Current chat addresses wrong-target release safety ONLY, not old View release across JNI. No T1/T2/T3, T5 packaging, touch layout, original SaveAndLoad, assets or Unity build changes.",
   "safety": "Never retain Java View wrapper across JNI threads; capture int identity before reset, compare current focus identity on Android UI thread, retain epoch and requested guard, skip unrelated view. Source/ABI validation; Android device still UNKNOWN.",
-  "next_step": "Atomic two-file source+test commit with HEAD lease; existing bounded T4 mouse CI auto-trigger; verify exact job log."
+  "next_step": "No more duplicate source CI. One exact T5 signed matching APK+OBB then owner real physical mouse/keyboard + camera focus release/return; same-world save/full-process-exit/reopen .rgd and preserve water/shader status. Current device result UNKNOWN.",
+  "final_source_commit": "cb86cdcd8baf462f35c4217758a0a9e19fd56d4e",
+  "result": "Source wrong-View release guarded with old release epoch and no JNI cross-thread reference. CI42204448436 complete success 46/46 Python tests incl 6/6 identity tests, actual original Unity2021 managed ABI compilation. Platform CI42204354877 succeeded on identical production source; no Android phone runtime test.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42204140756",
+    "https://github.com/alwansan/raf/actions/runs/42204361104",
+    "https://github.com/alwansan/raf/actions/runs/42204448436",
+    "https://github.com/alwansan/raf/actions/runs/42204354877"
+  ],
+  "ci_status": "completed_success"
 }
