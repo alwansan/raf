@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8",
+  "origin": "scheduled",
+  "owner": "T1",
+  "issue": "WATER-001",
+  "baseline_sha": "ce9044546d19948c7c3e64c4ae811229c403955f",
+  "status": "in_progress",
+  "hypothesis": "Unity OpenGLCore float subnormal carrier path diverges only in materialization contexts; actual original FFT Unity binding remains unverified",
+  "experiment_key": "T1-UNITY-CARRIER-CONTEXT-20261106-m4k8",
+  "files": [
+    "prompt/coordination/work/WATER-001/20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1808Z-T1-scheduled-unity-carrier-gate-m4k8.md"
+  ],
+  "shared_resource": "none; no Unity/GPU CI requested",
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261106T175623Z-T1-chat-float-carrier-context-b82c.md"
+  ],
+  "next_step": "Inspect actual available Unity workflow execution route without changing existing shared workflow; no repeated experiment until fixture compiled and executed."
+}
