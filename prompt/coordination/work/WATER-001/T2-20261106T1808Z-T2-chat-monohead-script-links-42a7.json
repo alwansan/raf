@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "T2-20261106T1808Z-T2-chat-monohead-script-links-42a7",
+  "owner": "T2",
+  "client": "T2",
+  "session_id": "20261106T1808Z-T2-chat-monohead-script-links-42a7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "e234bc8eeafd7957299e17755feaa08beb178951",
+  "round_id": "trial-20261106-r1",
+  "vote": "لا يحتاج",
+  "track": "Original opaque scene MonoBehaviour header and script PPtr material/Shader lineage",
+  "approach": "Follow original SHA-pinned 40 level scene CI: 55,328 non-parsed components, distinguish true MonoBehaviour opaque vs other types, independently parse built-in MonoBehaviour header to recover m_Script PPtr without synthetic generated typetree; SHA-original stage sharedassets0 and resolve MonoScript typed local/external records. Report only finite category counts, no names/GUIDs/scene source bytes. Do not assert shader runtime binding from MonoScript pointer alone.",
+  "experiment_key": "zip2-15964-40level-sourceSHA-opaque-MonoBehaviour-primitive-header-m_Script-PPtr-original-sharedassets0-MonoScript-resolve-v1",
+  "resource_key": "ZIP2-original-40-levels-233237972B-and-sharedassets0-115978112B-private-readonly",
+  "intended_files": [
+    "scripts/t2_original_opaque_monoscript_head.py",
+    "tests/test_t2_original_opaque_monoscript_head.py",
+    ".github/workflows/raft-t2-original-opaque-monoscript-head.yml",
+    "prompt/coordination/clients/T2/sessions/20261106T1808Z-T2-chat-monohead-script-links-42a7.md",
+    "prompt/coordination/work/WATER-001/T2-20261106T1808Z-T2-chat-monohead-script-links-42a7.json",
+    "prompt/coordination/experiments/T2/20261106T1808Z-T2-chat-monohead-script-links-42a7.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1808Z-T2-chat-monohead-script-links-42a7-result.json",
+    "docs/T2_ORIGINAL_OPAQUE_MONOSCRIPT_HEAD_2026-11-06.md"
+  ],
+  "resumed_from": [
+    "20261106T1753Z-T2-chat-original-levels-component-671a",
+    "20261106T1743Z-T2-chat-trial-vote-foam-host-83a2"
+  ],
+  "hypothesis": "Source-original 55,328 opaque component records may be recoverable at least through exact MonoBehaviour base header m_Script pointer and original MonoScript typed owner references; this helps reconstruct custom types without guessing missing typetrees.",
+  "source_provenance": [
+    "CI42266263645 original SHA 40 scenes, 240961 components, 55328 unparsed",
+    "CI42264851712 original SHA sharedassets0 and all 40 sharedassets Materials"
+  ],
+  "notes": "UnityPy1.25.4 generated MonoBehaviour typetree may have wrong m_Script header alignment; use original Unity class database header, never auto-generated full node without controlled layout check. Opaque component identifiers/names/private hashes never exported.",
+  "updated_at": "2026-11-06T18:07:02.677Z",
+  "next_step": "Implement conservative per-type opaque census and verified m_Script PPtr via built-in header parser. Reuse exact ZIP2 pins, isolate 350MB source scratch and run one original CI, then decide next custom Mono field reconstruction. T2 NO vote unchanged; no phone build."
+}
