@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9",
+  "issue_id": "RENDER-002",
+  "track": "shader48 structural gate regressions",
+  "approach": "Complement latest scheduled Shader48 comment parser source change with isolated GitHub Actions source-free Python tests; do not edit the scheduled source or .shader assets.",
+  "status": "active",
+  "base_sha": "bf5780450314dd000612783a6e9fba0cc1ddfba4",
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9.json",
+    ".github/workflows/raft-t3-shader48-syntax-regression.yml",
+    "prompt/coordination/clients/T3/sessions/20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9.md",
+    "prompt/coordination/experiments/T3/20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9.json"
+  ],
+  "hypothesis": "The most recent source-only block-comment/empty-declaration Shader48 link gate and its 10 synthetic regression fixtures run cleanly under pinned ubuntu-24.04 and avoid previous syntax/runtime failures.",
+  "experiment_key": "T3-Shader48-sourcefree-gate-tests-sha4bdd1959d016dcf634eab0dba41528dfc33504d2-testsf21c6b66729127eb04a65e56d9b3cb78e3ff6532-py311-ubuntu2404-v1",
+  "resource_key": "T3-Shader48-small-sourcefree-only",
+  "related_work": [
+    "20261106T0930Z-T3-scheduled-blockcomment-2d7f"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T0930Z-T3-scheduled-blockcomment-2d7f.md",
+    "prompt/coordination/clients/T3/sessions/20261106T0825Z-T3-scheduled-empty-shader-gate-7c2a.md",
+    "prompt/coordination/clients/T3/sessions/20261106T014652Z-T3-chat-particle108-authoredsem-1f83.md"
+  ],
+  "experiment_ids": [
+    "20261106T0944Z-T3-chat-shader48-syntax-ci-b8d9"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Commit isolated gated workflow for exact synthetic Python syntax and behavior tests, read actual Actions conclusion, record evidence and limits; no Unity export or phone claim.",
+  "updated_at": "2026-11-06T09:44:00Z"
+}
