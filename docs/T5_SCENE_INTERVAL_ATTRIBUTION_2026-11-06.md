@@ -47,3 +47,16 @@ Enhanced existing `scripts/t5_cl_unity_surface_bridge.py` and `tests/test_t5_cl_
 ## Required later game verification
 
 After a coordinated signed Android test build, inspect a five-second performance window that spans Menu → MainScene and additive scene loads. Require the six new provenance fields; check the preserved frame count/FPS/p95 and true counts of active/content scene events. Then ensure new performance comparisons **exclude** mixed loading windows while retaining those windows separately for load-time performance analysis. Repeat with the same signed APK/OBB and identical world/graphics settings before making any numerical performance claim. This fixes source-side attribution only until actual Unity/phone observation is recorded.
+
+## Final real-source parser integration and validated CI
+
+[CI42150565706](https://github.com/alwansan/raf/actions/runs/42150565706), job `127672528981`, original-source inputs unchanged, exact source commit `1b57ba06bbde77121654ec74d4adabc9d1659341`: **COMPLETED SUCCESS**. All **23/23** synthetic legacy/modern scene, malformed-flag and timestamp alignment controls passed (0.008s); original four CL Git blob hashes were authenticated again. Existing exact original UTC/presentation measurements remained unchanged (36/116 Unity intervals, 62 in 105-stale-SF sample range).
+
+The analyzer explicitly reports **36 and 116 `legacy_unlabeled`** qualified intervals for the two original owner phone logs, with **zero `tagged_stable_content`** claims. This is not a lack of scene stability; the old build simply did not emit the new fields and therefore the historical intervals must remain unverified for benchmark purity. New synthetically consistent tagged intervals are separately classified stable or mixed; mismatched source flags fail closed.
+
+Final code commits:
+- Production frame provenance initial `089f451abf91cf79d717027ed737d6426bb57637`; static callback-compatible correction `78c5c36aed8e32e9bc1f9164b32645c7f7220897`.
+- Existing platform policy extension `9fb807f6cf45743c1bffd9d61b7aa9a42e3f7d0e`, final static-callback test correction `6284b099eefbd36c6ab6bd0fe7c8b374b1416e69`.
+- Reader scene provenance implementation `9e1cc2ecaa96e90530b9ca7d0aeb4eaf262f7f2d`, 8 new tests `e50abe7c36759117a0c5092ab90ba90500dff653`; source-pinned CI `1b57ba06bbde77121654ec74d4adabc9d1659341`.
+
+Reaffirmed CI: [Platform 42150116695](https://github.com/alwansan/raf/actions/runs/42150116695) SUCCESS, [B12 42150086078](https://github.com/alwansan/raf/actions/runs/42150086078) SUCCESS, [T5 reader 42150565706](https://github.com/alwansan/raf/actions/runs/42150565706) SUCCESS. No subsequent native Unity build or phone device session proves the six fields at runtime yet. Original owner-confirmed gameplay/save and working audio/settings remain separate evidence, no readiness upgrade.
