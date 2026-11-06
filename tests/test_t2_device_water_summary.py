@@ -62,6 +62,28 @@ class TestDeviceWaterSummary(unittest.TestCase):
             path.write_text(json.dumps(fixture()), encoding="utf-8")
             self.assertEqual(read(path)["water_pass_errors"], 23884)
 
+    def test_reject_boolean_schema(self):
+        for invalid in (True, False, 1.0, "1", None):
+            s = fixture()
+            s["schema"] = invalid
+            with self.subTest(invalid=invalid), self.assertRaisesRegex(ValueError, "unsupported_session_schema"):
+                classify(s)
+
+    def test_reject_nonfinite_json_at_any_depth(self):
+        valid = json.dumps(fixture())
+        for payload in (
+            valid.replace('"schema": 1', '"schema": NaN'),
+            valid.replace('"foam_global": 15400', '"foam_global": Infinity'),
+            valid.replace('"foam_global": 15400', '"foam_global": -Infinity'),
+            valid.replace('"schema": 1', '"schema": 1, "unrelated": NaN'),
+        ):
+            with self.subTest(payload=payload[:70]):
+                with tempfile.TemporaryDirectory() as folder:
+                    path = Path(folder) / "summary.json"
+                    path.write_text(payload, encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "nonfinite_json_number"):
+                        read(path)
+
     def test_reject_category_root_mismatch(self):
         s = fixture()
         s["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"] += 1
