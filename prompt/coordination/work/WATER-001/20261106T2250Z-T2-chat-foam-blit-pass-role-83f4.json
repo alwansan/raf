@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2250Z-T2-chat-foam-blit-pass-role-83f4",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "44938b3eab546ec9744bd721f27bf2e91684b9c0",
+  "updated_at": "2026-11-06T22:50:31.000Z",
+  "resumed_from_sessions": [
+    "20261107T2227Z-T2-chat-blit-texture-role-6c52",
+    "20261106T2218Z-T2-scheduled-blit-pass-provenance-q8f3"
+  ],
+  "hypothesis": "Original Foam pass0 and pass1 typed Blit sites can have their direct source/destination IL producer category correlated with each *same site* pass literal, avoiding unsupported association from separate aggregate counts; refuse mixed/multiple/indirect sites.",
+  "experiment_key": "T2-original-ZIP2SHA-Foam-two-GraphicsBlit-perpass-source-destination-pairing-v1",
+  "resource_key": "Existing SHA-pinned T2 Mono.Cecil source-only workflow; Unity native builder independent",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamShaderFindResultFlow/Program.cs",
+    "scripts/t2_foam_shaderfind_return_report.py",
+    "tests/test_t2_foam_shaderfind_return_report.py",
+    "prompt/coordination/work/WATER-001/20261106T2250Z-T2-chat-foam-blit-pass-role-83f4.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2250Z-T2-chat-foam-blit-pass-role-83f4.md",
+    "prompt/coordination/experiments/T2/20261106T2250Z-T2-chat-foam-blit-pass-role-83f4.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2250Z-T2-chat-foam-blit-pass-role-83f4-result.json"
+  ],
+  "excluded_files": [
+    ".github/raft-native-build-request.json",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "original Unity assets, shaders, .meta GUIDs",
+    "T1/T3/T4/T5 files"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42305522855",
+    "https://github.com/alwansan/raf/actions/runs/42303756960"
+  ],
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Add per-literal0/per-literal1 source and destination categories to existing C# scanner, strict per-pass partition and conservation checks to JSON validator, synthetic controls; run original SHA-pinned CI; record results and limitations without leaking private symbols."
+}
