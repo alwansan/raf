@@ -27,7 +27,8 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r.update(consumer_exact_original_managed_Shader_field_definitions_resolved=1,
                  consumer_return_original_shader_field_load_instructions=12,
                  consumer_return_original_shader_field_reading_methods=3,
-                 consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor=1)
+                 consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor=1,
+                 consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments=1)
         self.assertTrue(validate(r))
     def test_valid_local(self):
         r=baseline("shader_local")
@@ -44,6 +45,25 @@ class ReturnConsumerSafeReportTests(unittest.TestCase):
         r=baseline();r["consumer_exact_original_managed_Shader_field_definitions_resolved"]=1;self.rejects(r)
     def test_false_field_load_rejected(self):
         r=baseline();r["consumer_return_original_shader_field_load_instructions"]=1;self.rejects(r)
+    def test_false_direct_material_argument_rejected(self):
+        r=baseline()
+        r["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"]=1
+        self.rejects(r)
+    def test_direct_material_argument_overflows_reads(self):
+        r=baseline("instance_shader_field")
+        r["consumer_exact_original_managed_Shader_field_definitions_resolved"]=1
+        r["consumer_return_original_shader_field_load_instructions"]=1
+        r["consumer_return_original_shader_field_reading_methods"]=1
+        r["consumer_return_original_shader_field_reading_methods_with_Material_Shader_constructor"]=1
+        r["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"]=2
+        self.rejects(r)
+    def test_direct_material_argument_without_ctor_method(self):
+        r=baseline("instance_shader_field")
+        r["consumer_exact_original_managed_Shader_field_definitions_resolved"]=1
+        r["consumer_return_original_shader_field_load_instructions"]=1
+        r["consumer_return_original_shader_field_reading_methods"]=1
+        r["consumer_return_original_shader_field_loads_direct_Material_Shader_constructor_arguments"]=1
+        self.rejects(r)
     def test_false_local_load_rejected(self):
         r=baseline();r["consumer_return_original_shader_local_loads_same_method"]=1;self.rejects(r)
     def test_clamped_method_partition(self):
