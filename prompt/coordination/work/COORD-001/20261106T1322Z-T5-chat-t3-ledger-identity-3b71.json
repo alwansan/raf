@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1322Z-T5-chat-t3-ledger-identity-3b71",
+  "issue_id": "COORD-001",
+  "status": "active",
+  "base_sha": "8094f937da92aa5357604f7dc3a2f3f57a1195e2",
+  "updated_at": "2026-11-06T13:21:01.009Z",
+  "resumed_from_sessions": [
+    "20261106T1316Z-T5-chat-nested-zip-c53a.md",
+    "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md"
+  ],
+  "experiment_key": "T5-canonical-live-ledger-T3-20261106T1308-missing-explicit-id-CI42224618618-v1",
+  "resource_key": "Single existing T3 postvendor source-only event JSON; immutable session_id, no changes to T3 source work or workflow",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42224618618"
+  ],
+  "root_cause": "Strict inherited event index refuses one T3 source-only event without explicit id/event_id, despite exact documented session_id; complete T5 Bteam/Tteam 11+3 tests passed but live index failed.",
+  "intended_files": [
+    "prompt/coordination/B_TEAM/events/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json",
+    "prompt/coordination/work/COORD-001/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.md",
+    "prompt/coordination/experiments/T5/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1322Z-T5-chat-t3-ledger-identity-3b71.json",
+    ".github/workflows/raft-t5-ledger-refresh.yml"
+  ],
+  "coordination": "T3 latest 1311Z event exists and no T3 active CI at scope; add only canonical id to 1308Z T3 event equal to authored session_id; CAS blob and preserve all authored fields. T2 jobs unrelated, no touch.",
+  "next_step": "Surgical explicit id field then strict ledger index refresh; avoid parser heuristic or dropping events."
+}
