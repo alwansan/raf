@@ -61,10 +61,18 @@ def _private_reloc_module(module,stage):
     # Existing strict binary SPV parser verifies exact VS/FS EntryPoint,
     # bounded IDs, descriptor shape, and unique decorations.
     _,decorations,_,variables=spv._private_program(module,stage)
-    if not variables or set(decorations)!=set(variables):
+    # Real graphics modules also contain Input/Output/Private OpVariable IDs.
+    # They are not resource descriptors and MUST NOT be required to have
+    # DescriptorSet/Binding. Conversely, any descriptor attached to such an
+    # interface variable remains invalid and fails the exact set check.
+    resource_variables={var:(ptr,storage) for var,(ptr,storage) in variables.items()
+                        if storage in (spv.STORAGE_UNIFORM_CONSTANT,
+                                       spv.STORAGE_UNIFORM,
+                                       spv.STORAGE_STORAGE_BUFFER)}
+    if not resource_variables or set(decorations)!=set(resource_variables):
         raise ValueError("T3_PRIVATE_EXPLICIT_SPV_BINDING_COVERAGE")
     by_variable={}
-    for var in variables:
+    for var in resource_variables:
         x=decorations[var]
         if set(x)!={spv.DECORATION_SET,spv.DECORATION_BINDING}:
             raise ValueError("T3_PRIVATE_EXPLICIT_SPV_BINDING_PAIRS")
@@ -79,7 +87,7 @@ def _private_reloc_module(module,stage):
         opcode=words[i]&0xffff
         if opcode==spv.OP_DECORATE and n==4 and words[i+2] in (
             spv.DECORATION_SET,spv.DECORATION_BINDING):
-            if words[i+1] not in variables:
+            if words[i+1] not in resource_variables:
                 raise ValueError("T3_PRIVATE_EXPLICIT_DECORATION_NOT_VARIABLE")
             words[i+3]=0
         i+=n
