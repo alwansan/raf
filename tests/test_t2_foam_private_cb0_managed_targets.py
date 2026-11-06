@@ -87,7 +87,7 @@ class OriginalCb0NameTargetTests(unittest.TestCase):
             [(2420, "WRONG_FOAM")],
             [(2420, "PRIVATE_FOAM"), (2420, "PRIVATE_FOAM")],
             [(3000, "PRIVATE_OTHER")],
-            [(2420, "PRIVATE_FOAM"), (3000, "has\\x00invalid")],
+            [(2420, "PRIVATE_FOAM"), (3000, "has"+chr(0)+"invalid")],
         ):
             with self.subTest(shaders=shaders), self.assertRaises(ValueError):
                 _owner_catalog_from_rows(shaders, [], "PRIVATE_FOAM", 2420)
