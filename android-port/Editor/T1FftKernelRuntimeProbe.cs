@@ -3,6 +3,7 @@
 // serialized original compiled candidate slots are NOT proven runtime indices.
 // Never upload the private manifest or authored compute source to public CI.
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using UnityEditor;
@@ -60,6 +61,7 @@ public static class T1FftKernelRuntimeProbe
             throw new InvalidOperationException("T1 Unity probe graphics device lacks compute support");
 
         var visited = new bool[20];
+        var declaredSelectors = new HashSet<string>(StringComparer.Ordinal);
         int observed = 0;
         int mismatches = 0;
         foreach (var row in manifest.rows)
@@ -78,6 +80,20 @@ public static class T1FftKernelRuntimeProbe
             if (row.compiled_slot != ((n - 5) * 2) + row.bank * 10 + row.pass_index)
                 throw new InvalidOperationException("T1 original source selector/compiled position mismatch");
             var keywords = row.keywords ?? new string[0];
+            if (keywords.Length > 16)
+                throw new InvalidOperationException("T1 authored FFT selector keyword count invalid");
+            // Canonicalize the keyword SET: ordering must not create a fake
+            // distinction between two original compiled-slot declarations.
+            var canonicalKeywords = (string[])keywords.Clone();
+            Array.Sort(canonicalKeywords, StringComparer.Ordinal);
+            foreach (var keyword in canonicalKeywords)
+                if (String.IsNullOrEmpty(keyword) || keyword.IndexOf('\u001f') >= 0)
+                    throw new InvalidOperationException("T1 authored FFT selector keyword invalid");
+            if (row.kernel_name.IndexOf('\u001f') >= 0)
+                throw new InvalidOperationException("T1 authored FFT kernel selector name invalid");
+            string declaredSelector = row.kernel_name + "\u001f" + String.Join("\u001f", canonicalKeywords);
+            if (!declaredSelectors.Add(declaredSelector))
+                throw new InvalidOperationException("T1 indistinguishable authored FFT selector alias");
             try
             {
                 foreach (var keyword in keywords)
