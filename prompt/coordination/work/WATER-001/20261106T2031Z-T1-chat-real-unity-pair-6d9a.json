@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T2031Z-T1-chat-real-unity-pair-6d9a",
+  "issue_id": "WATER-001",
+  "track": "Opt-in SHA-original FFT SPIR-V Vulkan versus Unity2021 OpenGLCore same seed19 keyed GPU capture",
+  "status": "active",
+  "base_sha": "3d6ed8f1a42a3a05d7feb8e8365820703ba92df4",
+  "updated_at": "2026-11-06T20:31:00Z",
+  "resumed_from_sessions": [
+    "20261106T2017Z-T1-chat-private-producer-gate-8f31",
+    "20261106T2015Z-T1-scheduled-native-fft-gate-x4q9",
+    "20261106T195959Z-T1-chat-ci-log-pin-7b42"
+  ],
+  "experiment_key": "original-zip2-15964ea8-vulkan-direct-SPIRV-invocation-64-256-64-vs-unity2021-3-45f2-openglcore-hlsl-slot0-1-candidate-same-1024x32-seed19-input-actual-shas-private-bridge-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port (opt-in Unity test mutex shared, no native build request)",
+  "hypothesis": "Actual private original-SPIRV and Unity2021 GPU keyed Butterfly site1.x traces differ or match on identical source/butterfly image blobs, with original-derived slot0 trace SHA, real Unity CopyInput, completion stage, candidate0/1 SHA; this can separate a reproducible renderer/translation numerical bug from static evidence alone.",
+  "scope": "Explicit one-shot opt-in T1 Unity GPU test through existing workflow; no gameplay sources or shader assets changed, no native request, no cancel. Preserve original SHA and privacy.",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    "prompt/coordination/work/WATER-001/20261106T2031Z-T1-chat-real-unity-pair-6d9a.json",
+    "prompt/coordination/experiments/T1/20261106T2031Z-T1-chat-real-unity-pair-6d9a.json",
+    "prompt/coordination/clients/T1/sessions/20261106T2031Z-T1-chat-real-unity-pair-6d9a.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T2031Z-T1-chat-real-unity-pair-6d9a.json"
+  ],
+  "native_conflict_preflight": "At reserve 20:30Z no queued/in_progress Unity/native jobs, only CI compatibility guard; T5 working source-only Unity ABI preflight.",
+  "zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "trial_vote": "لا يحتاج",
+  "next_step": "Use existing immutable opt-in workflow once; monitor job status and classify earliest failure or real private safe numeric result. If long-running save waiting_ci and do not cancel/duplicate."
+}
