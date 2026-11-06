@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T2252Z-T3-chat-keyword-routed-61e9",
+  "issue_id": "RENDER-002",
+  "status": "PRIVATE_PROVISIONAL_SOURCE_AUTHENTIC_4_WAY_SHADERLAB_8_OF_8_VULKAN11_VALID",
+  "experiment_key": "SHA15964-T3-Shader48-4-pairs-2-source-keyword-index-names-one-private-provisional-HLSLPROGRAM-8-combo-compile-v1",
+  "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "code_sha": "d38559b4f3abd09bcdb2c8a143e4b9f9202a0694",
+  "terminal_run": {
+    "id": 42308586115,
+    "url": "https://github.com/alwansan/raf/actions/runs/42308586115",
+    "job_id": 128204124928,
+    "conclusion": "success"
+  },
+  "intermediate_runs": [
+    {
+      "id": 42308363626,
+      "conclusion": "failure",
+      "reason": "one synthetic expected overwrite-guard path before glob discovery; fixed before original test"
+    },
+    {
+      "id": 42308450871,
+      "conclusion": "failure",
+      "reason": "extra CLI output argument in previous name-table workflow step; corrected without original data read by new step"
+    }
+  ],
+  "original_authenticated": {
+    "scenes": 6,
+    "shader_owners": 4,
+    "source_stage_program_table_records": 16,
+    "source_exact_vertex_fragment_pairs": 4,
+    "serialized_keyword_names": 9,
+    "serialized_keyword_flags": 9,
+    "toggle_dimensions": 2,
+    "source_anonymous_keyword_sets_exact_two_switches": true,
+    "private_onepass_fourway_shaderlab_generated": true
+  },
+  "tests": {
+    "new_synthetic_negative_and_positive": 9,
+    "macro_selected_stage_vulkan11_validations": 8
+  },
+  "not_proven": [
+    "Original flags to Unity pragma/global/local scope semantics",
+    "Unity2021.3 ShaderLab actual importer variant compilation",
+    "Original Material keyword state/texture resource ABI binding",
+    "Original DXBC numerical parity Vulkan",
+    "Android Adreno white hand/raft/smoke or water/fire fixes"
+  ],
+  "original_names_indices_hlsl_spv_shader_source_or_paths_published": false,
+  "private_runner_cleanup_completed": true,
+  "original_game_resources_or_guid_meta_modified": false,
+  "native_build_started_or_cancelled_by_T3": false,
+  "owner_native_run_42296450023": "in_progress at 2026-11-06T22:59Z",
+  "trial_vote": "لا يحتاج",
+  "render_issue": "OPEN_NOT_READY",
+  "next_step": "Private original Material keyword states + original serialized flag semantics or isolated real Unity2021.3 import once owner native job permits; do not integrate until binding proven."
+}
