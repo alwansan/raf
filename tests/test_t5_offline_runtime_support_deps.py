@@ -27,6 +27,18 @@ class OfflineRuntimeCompileDependencies(unittest.TestCase):
             with self.subTest(filename=filename):
                 self.assertTrue((RUNTIME / filename).is_file())
 
+    def test_existing_t4_staging_policy_contract_literals(self):
+        # Native and managed staging share these exact filename pairs.
+        # Preserve T4's existing source-free lexical ABI without changing
+        # its mouse/immersive device code or its test ownership.
+        tool = (ROOT / 'scripts' / 'verify_android_offline_candidate.py').read_text()
+        for adjacent in (
+            "'AndroidPhysicalMouseCapture.cs', 'PhysicalMouseDeltaAccumulator.cs'",
+            "'AndroidImmersiveSystemBars.cs', 'AndroidSystemBarPolicy.cs'",
+        ):
+            with self.subTest(adjacent=adjacent):
+                self.assertIn(adjacent, tool)
+
     def test_copies_all_bounded_synthetic_sources_byte_for_byte(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
