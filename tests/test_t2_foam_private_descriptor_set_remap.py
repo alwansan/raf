@@ -7,6 +7,7 @@ import unittest
 from scripts.t2_foam_private_descriptor_set_remap import (
     scan_binary_decorations, reflected_ids, relocate_fragment_sets,
     compare_before_after_reflection, source_preserving_stage_set,
+    relocate_conflicting_only, verify_selective_reflection,
 )
 from scripts.t2_foam_embedded_descriptor_layout import (
     compare_cross_stage_descriptors,
@@ -150,6 +151,53 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             relocate_fragment_sets(once,after(),1)
 
+
+    def test_selective_remap_only_changes_conflicting_sampler_keeps_cb0(self):
+        patched,collisions=relocate_conflicting_only(binary(),vertex(),old(),1)
+        a,bindings,original_sets,sites=scan_binary_decorations(binary())
+        b,after_bindings,after_sets,_=scan_binary_decorations(patched)
+        self.assertEqual(len(collisions),1)
+        self.assertEqual(sum(x!=y for x,y in zip(a,b)),1)
+        self.assertEqual(bindings,after_bindings)
+        self.assertEqual(after_sets[6],1)  # changed conflicting Sampler
+        self.assertEqual(after_sets[7],0)  # unchanged source CB0
+        report={
+            "entryPoints":[{"name":"main","mode":"frag"}],
+            "separate_samplers":[{"id":6,"set":1,"binding":1}],
+            "ubos":[{"id":7,"set":0,"binding":0,"block_size":128}]
+        }
+        self.assertTrue(verify_selective_reflection(old(),report,collisions,1))
+        self.assertEqual(compare_cross_stage_descriptors(vertex(),report)[
+            "shared_CB_buffer_extent_difference_count"],1)
+        self.assertEqual(compare_cross_stage_descriptors(vertex(),report)[
+            "shared_descriptor_class_conflict_count"],0)
+
+    def test_selective_reflection_cb0_wrong_set_or_extent_rejected(self):
+        patched,conflicts=relocate_conflicting_only(binary(),vertex(),old(),1)
+        x=after();x["ubos"][0]["block_size"]=128
+        with self.assertRaises(ValueError):
+            verify_selective_reflection(old(),x,conflicts,1)
+        x={
+            "entryPoints":[{"name":"main","mode":"frag"}],
+            "separate_samplers":[{"id":6,"set":1,"binding":1}],
+            "ubos":[{"id":7,"set":0,"binding":0,"block_size":256}]
+        }
+        with self.assertRaises(ValueError):
+            verify_selective_reflection(old(),x,conflicts,1)
+
+    def test_selective_used_target_or_reflection_mismatch_rejected(self):
+        with self.assertRaises(ValueError):
+            relocate_conflicting_only(binary(),vertex(),old(),0)
+        changed=old();changed["separate_samplers"][0]["binding"]=3
+        with self.assertRaises(ValueError):
+            relocate_conflicting_only(binary(),vertex(),changed,1)
+
+    def test_selective_without_actual_conflict_not_accepted(self):
+        match={"entryPoints":[{"name":"main","mode":"vert"}],
+               "separate_samplers":[{"set":0,"binding":1}],
+               "ubos":[{"set":0,"binding":0,"block_size":96}]}
+        with self.assertRaises(ValueError):
+            relocate_conflicting_only(binary(),match,old(),1)
 
 if __name__=="__main__":
     unittest.main()

@@ -200,6 +200,11 @@ jobs:
           assert r["original_compiled_descriptor_type_conflicts"]>0
           assert r["private_descriptor_type_conflicts_after_relocation"]==0
           assert r["all_original_non_descriptor_SPIRV_words_unchanged"] is True
+          assert r["selective_fragment_conflicting_descriptors_only_relocated"]==4
+          assert r["selective_remaining_resource_type_conflicts"]==0
+          assert r["selective_original_same_type_CB_links_retained"]==2
+          assert r["selective_CB_extent_differences_still_unresolved"]==2
+          assert r["selective_private_relocated_fragment_variants_validated"]==2
           assert r["real_Unity_ShaderLab_import_or_descriptor_upload_verified"] is False
           assert r["original_CB0_and_material_texture_sampler_delivery_verified"] is False
           assert r["original_Adreno_water_pixels_verified"] is False

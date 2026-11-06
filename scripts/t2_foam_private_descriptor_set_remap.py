@@ -58,6 +58,16 @@ SAFE_FAILURE_CODES = frozenset((
     "reflection_mismatch_after_descriptor_relocation",
     "private_original_candidate_or_scratch_invalid",
     "unsafe_numeric_output",
+    "no_conflicting_original_resource_type",
+    "selective_target_descriptor_set_not_free",
+    "selective_spirv_reflection_conflict_join_invalid",
+    "selective_spirv_other_words_changed",
+    "selective_original_resource_ids_or_bindings_changed",
+    "selective_reflection_descriptor_count_changed",
+    "selective_reflection_signature_or_CB0_changed",
+    "selective_reflection_resource_id_changed",
+    "selective_spirv_val_failed",
+    "selective_unmodified_CB0_interface_not_retained",
 ))
 
 
@@ -223,6 +233,56 @@ def source_preserving_stage_set(vertex):
     raise ValueError("no_unused_private_fragment_descriptor_set")
 
 
+def relocate_conflicting_only(blob, vertex, fragment, target_set):
+    """Move only type/array-conflicting Fragment descriptors; retain shared CB0."""
+    vs=reflected_descriptor_map(vertex,mode="vert")
+    fs=reflected_descriptor_map(fragment,mode="frag")
+    conflict={coord for coord in set(vs)&set(fs) if vs[coord][:2]!=fs[coord][:2]}
+    if not conflict:
+        raise ValueError("no_conflicting_original_resource_type")
+    occupied={coord[0] for coord in vs}|{coord[0] for coord in fs}
+    if type(target_set) is not int or target_set not in range(1,16) or target_set in occupied:
+        raise ValueError("selective_target_descriptor_set_not_free")
+    words, bindings, sets, sites=scan_binary_decorations(blob)
+    id_to_coord=reflected_ids(fragment,bindings,sets,mode="frag")
+    moved={ident for ident,coord in id_to_coord.items() if coord in conflict}
+    if len(moved)!=len(conflict):
+        raise ValueError("selective_spirv_reflection_conflict_join_invalid")
+    revised=words[:]
+    for ident in moved:
+        revised[sites[ident]]=target_set
+    diff={i for i,(a,b) in enumerate(zip(words,revised)) if a!=b}
+    if diff!={sites[i] for i in moved} or len(diff)!=len(conflict):
+        raise ValueError("selective_spirv_other_words_changed")
+    output=struct.pack("<%dI"%len(revised),*revised)
+    _,check_bindings,check_sets,_=scan_binary_decorations(output)
+    if check_bindings!=bindings or any(
+        check_sets[i]!=(target_set if i in moved else sets[i]) for i in bindings
+    ):
+        raise ValueError("selective_original_resource_ids_or_bindings_changed")
+    return output,conflict
+
+
+def verify_selective_reflection(before, after, conflicts, target_set):
+    original=reflected_descriptor_map(before,mode="frag")
+    revised=reflected_descriptor_map(after,mode="frag")
+    if len(original)!=len(revised):
+        raise ValueError("selective_reflection_descriptor_count_changed")
+    expected={(target_set,k[1]) if k in conflicts else k:v for k,v in original.items()}
+    if revised!=expected or len(expected)!=len(original):
+        raise ValueError("selective_reflection_signature_or_CB0_changed")
+    # Reflection's optional ID is verified where reported. Actual SPIR-V ID
+    # identity is guaranteed by exact non-DescriptorSet word equality.
+    for category in CATEGORIES:
+        old_rows=before.get(category,[])
+        new_rows=after.get(category,[])
+        if (len(old_rows)!=len(new_rows) or
+            {x["binding"]:x.get("id") for x in old_rows}!=
+            {x["binding"]:x.get("id") for x in new_rows}):
+            raise ValueError("selective_reflection_resource_id_changed")
+    return True
+
+
 def test_original_candidate(candidate, scratch, *, invoke=_invoke,
                             reflect=reflect_stage):
     candidate, scratch = Path(candidate).absolute(), Path(scratch).absolute()
@@ -279,7 +339,44 @@ def test_original_candidate(candidate, scratch, *, invoke=_invoke,
                     or post["shared_descriptor_class_conflict_count"] != 0
                     or not post["same_type_pipeline_descriptor_set_layout_possible"]):
                 raise ValueError("remapped_shader_still_has_cross_stage_collision")
+            # Second, more conservative experiment: move only the colliding
+            # fragment resources, leaving the original same-class CB0 shared
+            # coordinate untouched. This does not prove CB0 upload semantics.
+            old_vs=reflected_descriptor_map(reports[1],mode="vert")
+            old_fs=reflected_descriptor_map(reports[0],mode="frag")
+            occupied={x[0] for x in old_vs}|{x[0] for x in old_fs}
+            selective_set=next((i for i in range(1,16) if i not in occupied),None)
+            if selective_set is None:
+                raise ValueError("selective_target_descriptor_set_not_free")
+            minimal,conflicts=relocate_conflicting_only(
+                old_binary,reports[1],reports[0],selective_set)
+            only_patch=temp/("pass%d-stage0-conflict-only.spv"%pass_id)
+            only_patch.write_bytes(minimal)
+            if not _physical(only_patch) or not invoke(
+                ["spirv-val","--target-env","vulkan1.1",str(only_patch)]
+            ):
+                raise ValueError("selective_spirv_val_failed")
+            only_report=reflect(only_patch)
+            verify_selective_reflection(reports[0],only_report,conflicts,selective_set)
+            only_post=compare_cross_stage_descriptors(reports[1],only_report)
+            if (only_post["shared_descriptor_class_conflict_count"]!=0 or
+                only_post["shared_descriptor_array_shape_mismatch_count"]!=0 or
+                only_post["shared_same_descriptor_type_count"]!=
+                   pre["shared_same_descriptor_type_count"] or
+                only_post["shared_numeric_set_binding_count"]!=
+                   pre["shared_same_descriptor_type_count"] or
+                only_post["shared_CB_buffer_extent_difference_count"]!=
+                   pre["shared_CB_buffer_extent_difference_count"]):
+                raise ValueError("selective_unmodified_CB0_interface_not_retained")
             summary.append({
+                "original_conflicting_only_descriptors_relocated":len(conflicts),
+                "selective_post_class_conflicts":
+                    only_post["shared_descriptor_class_conflict_count"],
+                "selective_shared_same_type_CB_links_retained":
+                    only_post["shared_same_descriptor_type_count"],
+                "selective_CB_extent_differences_still_unresolved":
+                    only_post["shared_CB_buffer_extent_difference_count"],
+                "selective_original_other_SPIRV_words_unchanged":True,
                 "original_cross_stage_descriptor_class_conflicts":
                     pre["shared_descriptor_class_conflict_count"],
                 "original_shared_UBO_extent_differences":
@@ -304,6 +401,15 @@ def test_original_candidate(candidate, scratch, *, invoke=_invoke,
             r["post_relocation_descriptor_class_conflicts"] for r in summary),
         "total_fragment_descriptor_decorations_relocated": sum(
             r["fragment_descriptors_relocated"] for r in summary),
+        "selective_fragment_conflicting_descriptors_only_relocated":sum(
+            r["original_conflicting_only_descriptors_relocated"] for r in summary),
+        "selective_remaining_resource_type_conflicts":sum(
+            r["selective_post_class_conflicts"] for r in summary),
+        "selective_original_same_type_CB_links_retained":sum(
+            r["selective_shared_same_type_CB_links_retained"] for r in summary),
+        "selective_CB_extent_differences_still_unresolved":sum(
+            r["selective_CB_extent_differences_still_unresolved"] for r in summary),
+        "selective_private_relocated_fragment_variants_validated":len(summary),
         "all_original_non_descriptor_SPIRV_words_unchanged": all(
             r["SPIRV_non_descriptor_words_and_original_Binding_unchanged"]
             for r in summary),
