@@ -18,8 +18,14 @@ from scripts.t1_fft_local_store_writers import (
 MAX_BLOCKS = 512
 MAX_OPERATIONS = 60000
 MAX_STORES = 64
-UNKNOWN = -2
 UNINITIALIZED = -1
+HAZARDS = {
+    -2: "alias_store",
+    -3: "pointer_escape",
+    -4: "copy_memory_target",
+    -5: "function_call_pointer",
+    -6: "atomic_pointer",
+}
 TERMINATORS = {"OpBranch", "OpBranchConditional", "OpSwitch", "OpReturn",
                "OpReturnValue", "OpKill", "OpUnreachable", "OpTerminateInvocation"}
 EXIT_OPS = {"OpReturn", "OpReturnValue", "OpKill", "OpUnreachable", "OpTerminateInvocation"}
@@ -146,15 +152,19 @@ def store_transfer(op, args, state, pointer, values, ordinal_by_instruction,
     if op == "OpStore" and len(args) >= 2:
         if args[0] == pointer:
             return {ordinal_by_instruction[location]}
-        if aliases(args[0], pointer, values) or aliases(args[1], pointer, values):
-            return set(state) | {UNKNOWN}
+        if aliases(args[0], pointer, values):
+            return set(state) | {-2}
+        if aliases(args[1], pointer, values):
+            # The local pointer escaped as data; subsequent indirect writes are unmodeled.
+            return set(state) | {-3}
     elif op in ("OpCopyMemory", "OpCopyMemorySized") and len(args) >= 2:
-        if aliases(args[0], pointer, values) or aliases(args[1], pointer, values):
-            return set(state) | {UNKNOWN}
+        # Copying FROM the local does not modify it; copying TO it can.
+        if aliases(args[0], pointer, values):
+            return set(state) | {-4}
     elif op == "OpFunctionCall" and any(aliases(v, pointer, values) for v in args[1:]):
-        return set(state) | {UNKNOWN}
+        return set(state) | {-5}
     elif op.startswith("OpAtomic") and any(aliases(v, pointer, values) for v in args[:1]):
-        return set(state) | {UNKNOWN}
+        return set(state) | {-6}
     return state
 
 
@@ -236,9 +246,11 @@ def analyze_load(load_id, functions, values, types):
             "writer_opcodes": dict(sorted(opcode_counts.items())),
             "writer_numeric_kinds": dict(sorted(kind_counts.items())),
             "uninitialized_path_possible": UNINITIALIZED in state,
-            "unknown_alias_or_side_effect_path": UNKNOWN in state,
+            "unknown_alias_or_side_effect_path": any(code in state for code in HAZARDS),
+            "unknown_path_categories": sorted(HAZARDS[code] for code in HAZARDS if code in state),
             "unique_direct_store_if_no_unmodeled_aliases": (
-                len(ids) == 1 and UNINITIALIZED not in state and UNKNOWN not in state),
+                len(ids) == 1 and UNINITIALIZED not in state
+                and not any(code in state for code in HAZARDS)),
             "integer_coordinate_origin_proven": False,
         }
     return {"status": "load_not_in_function"}
