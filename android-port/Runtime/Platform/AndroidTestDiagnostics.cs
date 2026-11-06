@@ -158,8 +158,9 @@ namespace RaftAndroid.Platform
         // Keep transition frames (and their real stalls), but never mislabel a
         // mixed loading interval as a stable gameplay scene benchmark.
         private string frameWindowStartScene = "";
-        private int activeSceneTransitionsInWindow;
+        private int frameWindowStartActiveSceneRevision;
         private int frameWindowStartSceneRevision;
+        private static int activeSceneRevision;
         private static int sceneContentRevision;
         private float nextGraphicsMemoryProbe;
         private string lastAndroidGraphicsKb = "unavailable";
@@ -210,6 +211,7 @@ namespace RaftAndroid.Platform
                 Number(frameSamples[Math.Min(sampleCount - 1, (int)Math.Ceiling(sampleCount * p) - 1)]);
             uint available = FrameTimingManager.GetLatestTimings(1, timings);
             string endScene = SceneManager.GetActiveScene().name;
+            int activeSceneTransitionsInWindow = Math.Max(0, activeSceneRevision - frameWindowStartActiveSceneRevision);
             int sceneContentEvents = Math.Max(0, sceneContentRevision - frameWindowStartSceneRevision);
             bool stableActiveScene = activeSceneTransitionsInWindow == 0 &&
                 string.Equals(frameWindowStartScene, endScene, StringComparison.Ordinal);
@@ -243,7 +245,7 @@ namespace RaftAndroid.Platform
                 "; scene=" + endScene;
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
             frameWindowStartScene = "";
-            activeSceneTransitionsInWindow = 0;
+            frameWindowStartActiveSceneRevision = activeSceneRevision;
             frameWindowStartSceneRevision = sceneContentRevision;
             return report;
         }
@@ -599,9 +601,9 @@ namespace RaftAndroid.Platform
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "unloaded",
                 scene.name + "; " + GraphicsMemoryAtBoundary(), true);
         }
-        private void ActiveSceneChanged(Scene before, Scene after)
+        private static void ActiveSceneChanged(Scene before, Scene after)
         {
-            if (intervalFrames > 0) activeSceneTransitionsInWindow++;
+            activeSceneRevision++;
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "active_changed", before.name + " -> " + after.name, true);
         }
         private void OnApplicationPause(bool paused)
@@ -609,7 +611,7 @@ namespace RaftAndroid.Platform
             if (!paused) EnforceLandscape();
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
             frameWindowStartScene = "";
-            activeSceneTransitionsInWindow = 0;
+            frameWindowStartActiveSceneRevision = activeSceneRevision;
             frameWindowStartSceneRevision = sceneContentRevision;
             skipNextFrame = true;
             // Persist the transition itself before flushing: the previous order
@@ -640,6 +642,7 @@ namespace RaftAndroid.Platform
             if (intervalFrames == 0)
             {
                 frameWindowStartScene = SceneManager.GetActiveScene().name;
+                frameWindowStartActiveSceneRevision = activeSceneRevision;
                 frameWindowStartSceneRevision = sceneContentRevision;
             }
             float delta = Time.unscaledDeltaTime;
