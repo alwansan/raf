@@ -189,5 +189,56 @@ OpBranch %join
         self.assertNotIn("%", out.getvalue())
 
 
+    def test_vector_phi_selected_x_lane_preserves_signed_bitcast(self):
+        flow = (FLOW.replace(
+            "%bits = OpBitcast %float %i1",
+            "%ivec = OpCompositeConstruct %v2i %i1 %i1\n"
+            "%bits = OpBitcast %v2f %ivec")
+                .replace("%sum = OpFAdd %float %f0 %f1",
+                         "%sum = OpCompositeConstruct %v2f %f0 %f1")
+                .replace("%phi = OpPhi %float", "%phi = OpPhi %v2f"))
+        end = END.replace(
+            "%coordf = OpCompositeConstruct %v2f %phi %f0",
+            "%coordf = OpCopyObject %v2f %phi")
+        result = report(flow=flow, end=end)
+        self.assertEqual(result["phi_result_kind"], "float32_vector")
+        self.assertEqual(result["selected_phi_component"], "x")
+        self.assertEqual([s["value_type"] for s in result["incoming_sources"]],
+                         ["float32_vector", "float32_vector"])
+        self.assertEqual(result["incoming_sources"][0]["bounded_component_chain"]["cast_kinds"],
+                         ["sint32_bits_to_float32"])
+        self.assertEqual(result["incoming_sources"][1]["bounded_component_chain"]["status"],
+                         "constant_boundary")
+
+    def test_vector_shuffle_selects_nonfirst_phi_component(self):
+        flow = (FLOW.replace(
+            "%bits = OpBitcast %float %i1",
+            "%ivec = OpCompositeConstruct %v2i %i1 %i1\n"
+            "%bits = OpBitcast %v2f %ivec")
+                .replace("%sum = OpFAdd %float %f0 %f1",
+                         "%sum = OpCompositeConstruct %v2f %f0 %f1")
+                .replace("%phi = OpPhi %float", "%phi = OpPhi %v2f"))
+        end = END.replace(
+            "%coordf = OpCompositeConstruct %v2f %phi %f0",
+            "%coordf = OpVectorShuffle %v2f %phi %phi 1 0")
+        result = report(flow=flow, end=end)
+        self.assertEqual(result["selected_phi_component"], "y")
+        self.assertEqual(result["incoming_sources"][0]["bounded_component_chain"]["cast_kinds"],
+                         ["sint32_bits_to_float32"])
+        self.assertFalse(result["runtime_branch_truth_proven"])
+
+    def test_vector_phi_input_type_mismatch_rejected(self):
+        flow = (FLOW.replace(
+            "%bits = OpBitcast %float %i1",
+            "%ivec = OpCompositeConstruct %v2i %i1 %i1\n"
+            "%bits = OpBitcast %v2f %ivec")
+                .replace("%phi = OpPhi %float", "%phi = OpPhi %v2f"))
+        end = END.replace(
+            "%coordf = OpCompositeConstruct %v2f %phi %f0",
+            "%coordf = OpCopyObject %v2f %phi")
+        with self.assertRaises(ValueError):
+            report(flow=flow, end=end)
+
+
 if __name__ == "__main__":
     unittest.main()
