@@ -23,13 +23,13 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42222687053",
   "artifact_urls": [],
   "budget": "existing 15min source-only workflow, no Unity native/player build",
-  "status": "waiting_ci",
-  "observed_result": null,
+  "status": "completed_source_managed_ci_success_device_unverified",
+  "observed_result": "Exact CI42222687053 source SHA0f6632cd SUCCESS (48/48 source, 48 executable C# delta, original Unity2021 ABI compile, private original DLL+ILSpy); platform CI42222686931 SUCCESS. No Android device test.",
   "rejected_hypotheses": [],
   "limitations": [
     "Static regression checks and original Unity2021 C# ABI compile cannot exercise actual Android Activity teardown, JNI View, cursor, device mouse or game world.",
     "No new phone APK+OBB or owner device logs."
   ],
   "integration_commit": "0f6632cded44cd2e40ede00d6cd8d93d0bf0f1f1",
-  "next_step": "Await exact SHA42222687053 T4 compile+ABI tests and 42222686931 platform CI; if failure, inspect job steps and fix; if pass, document source-only result and hand off device test to T5."
+  "next_step": "T5 signed candidate APK+OBB, owner hardware mouse and saved world regression; no duplicate CI without new source."
 }
