@@ -76,12 +76,33 @@ class SignedApkAuthenticityTests(unittest.TestCase):
         self.assertTrue(result["apksigner_crypto_verified"])
         self.assertTrue(result["apksigner_signature_schemes_verified"]["v2"])
         self.assertFalse(result["apksigner_signature_schemes_verified"]["v3"])
-        self.assertEqual(result["apksigner_signer_count"], 1)
-        self.assertEqual(result["apksigner_certificate_sha256_prefix_12"], "a" * 12)
+        self.assertIsNone(result["apksigner_signer_count_reported_by_tool"])
+        self.assertTrue(result["apksigner_certificate_digest_metadata_available"])
+        self.assertEqual(result["apksigner_certificate_sha256_prefixes_12_if_reported"],
+                         ["a" * 12])
 
-    def test_signer_fails_without_real_verifies_marker_or_cert(self):
-        for output in ("", "Verified using v2 scheme (APK Signature Scheme v2): true\n",
-                       "Verifies\nVerified using v2 scheme (APK Signature Scheme v2): true\n"):
+    def test_signer_without_optional_cert_digest_is_unknown_not_fabricated(self):
+        signed = ("Verifies\n"
+                  "Verified using v2 scheme (APK Signature Scheme v2): true\n"
+                  "Number of signers: 1\n")
+        value = parse_apksigner(signed)
+        self.assertTrue(value["apksigner_crypto_verified"])
+        self.assertFalse(value["apksigner_certificate_digest_metadata_available"])
+        self.assertEqual(value["apksigner_certificate_sha256_prefixes_12_if_reported"], [])
+        self.assertEqual(value["apksigner_signer_count_reported_by_tool"], 1)
+
+    def test_multiple_genuine_signer_digest_metadata_not_reduced_to_one(self):
+        multi = example_signer().replace(
+            "Number of signers: 1", "Number of signers: 2")
+        multi += "Signer #2 certificate SHA-256 digest: " + "b" * 64 + "\n"
+        data = parse_apksigner(multi)
+        self.assertTrue(data["apksigner_certificate_digest_metadata_available"])
+        self.assertEqual(data["apksigner_signer_count_reported_by_tool"], 2)
+        self.assertEqual(data["apksigner_certificate_sha256_prefixes_12_if_reported"],
+                         ["a" * 12, "b" * 12])
+
+    def test_signer_fails_without_real_verifies_marker(self):
+        for output in ("", "Verified using v2 scheme (APK Signature Scheme v2): true\n"):
             with self.subTest(value=output), self.assertRaises(ProbeError):
                 parse_apksigner(output)
 
