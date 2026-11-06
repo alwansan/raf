@@ -1,0 +1,47 @@
+// T1 WATER-001 PUBLIC synthetic Unity OpenGLCore float-carrier context discriminator.
+// Not an original Raft FFT shader or original game asset.
+#pragma kernel T1CarrierContext
+Texture2D<float4> T1Image;
+StructuredBuffer<uint2> T1Coordinates;
+RWStructuredBuffer<uint> T1Observed;
+float T1Scale;
+
+static float T1ThreadCarrier;
+
+float PreserveCarrier(float value)
+{
+    return value;
+}
+float ApplyScale(float value)
+{
+    return value * T1Scale;
+}
+int DecodeThreadCarrier()
+{
+    return asint(T1ThreadCarrier);
+}
+
+[numthreads(64,1,1)]
+void T1CarrierContext(uint3 dispatch : SV_DispatchThreadID)
+{
+    uint i = dispatch.x;
+    uint2 coord = T1Coordinates[i];
+    uint x = coord.x;
+    uint y = coord.y;
+    float xCarrier = asfloat(x);
+    float yCarrier = asfloat(y);
+    float normalCarrier = asfloat(0x3f800000u | x);
+    T1ThreadCarrier = PreserveCarrier(xCarrier);
+
+    uint baseIndex = 10u * i;
+    T1Observed[baseIndex + 0u] = x;
+    T1Observed[baseIndex + 1u] = asuint(xCarrier);
+    T1Observed[baseIndex + 2u] = asuint(ApplyScale(xCarrier));
+    T1Observed[baseIndex + 3u] = asuint(ApplyScale(normalCarrier));
+    T1Observed[baseIndex + 4u] = asuint(T1Image.Load(int3(int(x), int(y), 0)).x);
+    T1Observed[baseIndex + 5u] = asuint(T1Image.Load(int3(asint(xCarrier), int(y), 0)).x);
+    T1Observed[baseIndex + 6u] = asuint(T1Image.Load(int3(asint(ApplyScale(xCarrier)), int(y), 0)).x);
+    T1Observed[baseIndex + 7u] = asuint(T1Image.Load(int3(asint(ApplyScale(xCarrier)), asint(ApplyScale(yCarrier)), 0)).x);
+    T1Observed[baseIndex + 8u] = asuint(T1Image.Load(int3(DecodeThreadCarrier(), int(y), 0)).x);
+    T1Observed[baseIndex + 9u] = asuint(xCarrier + asfloat(0u));
+}
