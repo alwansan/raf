@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T1734Z-T3-scheduled-crosscontract-a71c",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "baseline_sha": "f05b516d1d91b722803298dd53b167539cb0f7f5",
+  "scope": "Independent source-only cross-contract audit: DXBC RDEF input families versus SPIR-V reflected descriptor categories; no source modifications",
+  "files": [
+    "prompt/coordination/work/RENDER-002/20261106T1734Z-T3-scheduled-crosscontract-a71c.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1734Z-T3-scheduled-crosscontract-a71c.md"
+  ],
+  "hypothesis": "Existing source-register cardinality evidence cannot establish per-keyword Vulkan descriptor parity without a typed stage-wise join.",
+  "experiment_key": "T3-RDEF-SPIRV-crosscontract-20261106",
+  "shared_resource": "none; read-only GitHub source and CI",
+  "taken_over_from": [
+    "T3 chat 20261106T1730Z-T3-chat-primary-index-4d8c",
+    "T3 scheduled 20261106T1630Z-T3-scheduled-rdef-cardinality-c7e2"
+  ],
+  "next_step": "Inspect RDEF vs SPIR-V resource family and stage mapping, then design synthetic-only fixture without exposing private identifiers."
+}
