@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "track": "source-authentic Foam private ShaderLab transient Unity install safety (distinct from active original Foam Material→Renderer CIL scanner)",
+  "base_sha": "0ddcbf943e333c8ca19ae4f8ceb08017a10283eb",
+  "updated_at": "2026-11-06T20:01:03.753Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T2-20261106T2000Z-T2-chat-foam-private-installer-a4c7.json",
+    "prompt/coordination/clients/T2/sessions/20261106T2000Z-T2-chat-foam-private-installer-a4c7.md",
+    "scripts/t2_foam_private_installer.py",
+    "tests/test_t2_foam_private_installer.py",
+    ".github/workflows/raft-t2-foam-private-installer-sourceonly.yml",
+    "docs/T2_FOAM_PRIVATE_INSTALLER_PREFLIGHT_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T2000Z-T2-chat-foam-private-installer-a4c7.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T2000Z-T2-chat-foam-private-installer-a4c7-result.json"
+  ],
+  "experiment_key": "source-auth-Foam-2pass-ShaderLab-private-candidate-to-unique-Unity-exported-Shader-GUID-transactional-installer-synthetic-v1",
+  "resource_key": "isolated source-free synthetic Python; no shared native Unity runner or original asset staging",
+  "hypothesis": "A private source-authenticated Foam two-pass ShaderLab can be installed only over uniquely matching exported Shader identity and its original .meta via atomic transaction with external backup and rollback; fail closed on malformed/colliding identity, candidate digest or topology mismatch.",
+  "resumed_from_sessions": [
+    "20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7",
+    "20261106T1923Z-T2-chat-foam-shaderfind-resultflow-b7d4"
+  ],
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261106T1942Z-T2-chat-foam-material-return-to-renderer-c9b7.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement own isolated Foam staged installer and rigorous synthetic failure tests; do not change shared native workflow while 42281310905 is running.",
+  "trial_vote": "لا يحتاج"
+}
