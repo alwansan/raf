@@ -3,7 +3,7 @@
 - session_id: 20261106T174500Z-T1-chat-phimerge-opengl-g6k2
 - origin: chat
 - issue: WATER-001 OPEN / NOT_READY 0/3
-- status: waiting_ci
+- status: completed (Unity sourcefree Phi/CFG GPU result, not WATER-001 closure)
 - base_sha: 99658d34f59ce64a8f961e942c641882c0750110
 - resumed_from_sessions: 20261106T172258Z-T1-chat-bitcarrier-textureload-c4e9; 20261106T1714Z-T1-scheduled-vulkan-unity-gap-q8n4; 20261106T171240Z-T1-chat-unity-keyword-runtime-9f3a
 - new owner policy: [TRIAL_BUILD_POLICY_AR.md](../../../T_TEAM/TRIAL_BUILD_POLICY_AR.md)
@@ -39,3 +39,11 @@ Published code commits: `cf838948d986f8c209a4d57e2f3f7c48bb24ae0f`, `93f14b17ca2
 At checkpoint [42264618337](https://github.com/alwansan/raf/actions/runs/42264618337) has started and actual Unity test is pending. Read terminal job and exact `RAFT_T1_PHI_MERGE_TEXTURE_COUNTS` and `RAFT_T1_PHI_MERGE_NUNIT`; if nonzero synthetic OpenGLCore site count but direct controls pass, narrow compiler CFG hypothesis. If zero, reject basic nested Phi alone as sufficient cause; actual original SSA arithmetic/unresolved alias and Unity binding remain. Preserve source-only vs actual Unity vs device levels of proof.
 
 No work performed on other T clients' files or credentials. No build, no change to full readiness, no all-five consensus claim. **T1 vote remains لا يحتاج** until proven integrated major game change needs new phone test.
+
+
+## Final Unity result — 2026-11-06T17:48Z
+
+- [CI42264618337](https://github.com/alwansan/raf/actions/runs/42264618337) job `128053163170`: **COMPLETED SUCCESS**, actual Unity2021.3.45f2 OpenGLCore GPU EditMode and cleanup success. 7/7 public source tests and exact one NUnit case passed.
+- Actual `RAFT_T1_PHI_MERGE_TEXTURE_COUNTS`: `capture_reached=true`; `first_direct=0`, `second_direct=0`, `single_branch_phi=0`, `nested_branch_phi=0`, `dynamic_loop_phi=0` mismatches across 64 real sampled image GPU reads per site, **320/320 exact**. Strict NUnit 1/1.
+- This disproves a *simple synthetic* nested branch/dynamic loop bitcarrier fetch divergence for the given input; it **does not** prove that the actual original FFT's optimized `OpPhi`/CFG path or resource bindings are correct. Original Unity/OpenGLCore vs Vulkan butterfly address drift remains. No original Raft assets, no phone GPU or new APK.
+- T1 vote for `trial-20261106-r1` remains **لا يحتاج** under [new policy](../../../T_TEAM/TRIAL_BUILD_POLICY_AR.md); sourcefree GPU proof is not a substantial integrated original FFT water fix. No T5 building or other worker votes changed. Next: independently source-authenticated original Unity keyed butterfly coordinate compare (actual Phi operand lineage / binding / arithmetic), not speculative original shader edits. WATER-001 OPEN, NOT_READY 0/3.
