@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T1717Z-T5-chat-native-managed-parity-4ae2",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "T5-full-real-managed-17-native-17-runtime-compile-source-staging-equality-prebuild-fail-closed-v1",
+  "hypothesis": "Private original-managed compile and full Unity native pipeline independently enumerate platform runtime compile units. A mismatch may pass managed CI and fail Unity, so run strict exact source parity plus adversarial controls on both real lists.",
+  "source_commit": "cf580caf30b25f55eb601b6026b46fa10467bdf0",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "ubuntu-24.04 runner Python3",
+    "dotnet": "10.0.x",
+    "ilspycmd": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_runtime_staging_parity.py -v",
+    "python3 -m scripts.t5_validate_runtime_staging_parity",
+    "python3 -m scripts.verify_android_offline_candidate --source $RUNNER_TEMP/original --managed Raft/Raft_Data/Managed --runtime android-port/Runtime/Platform --output $RUNNER_TEMP/offline-check",
+    "dotnet build $RUNNER_TEMP/original/Candidate.csproj --configuration Release --nologo -v:q"
+  ],
+  "negative_controls": [
+    "missing source in Unity source copy list",
+    "duplicate Unity source copy entry",
+    "native shell metacharacter or parent directory escape",
+    "wrong Unity destination",
+    "missing or dynamically constructed original-managed manifest",
+    "missing regular runtime source file",
+    "second duplicate native copy loop"
+  ],
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42260528639",
+  "artifact_urls": [],
+  "budget": "one ordinary existing CPU original-managed CI run on source-only push, no native Unity/LFS/APK or runner cost escalation",
+  "status": "completed",
+  "observed_result": {
+    "run_id": 42260528639,
+    "job_id": 128038965418,
+    "conclusion": "success",
+    "original_managed_source_files": 17,
+    "native_unity_copied_source_files": 17,
+    "source_membership": "exact_set_match",
+    "runtime_files_regular": true,
+    "new_adversarial_tests": "8/8 PASS",
+    "local_rpc_identity": "PASS",
+    "original_managed_compile_exit_code": 0,
+    "original_managed_compile_error_codes": {},
+    "device_verified": false
+  },
+  "rejected_hypotheses": [
+    "The two current native/managed Android runtime source copy lists are divergent at source cf580caf30 (rejected)"
+  ],
+  "limitations": [
+    "Source manifest identity and managed .NET compilation do not prove Unity Editor2021 ARM64 IL2CPP compile or runtime",
+    "Does not prove actual phone installed OBB assets, shader/kernel correctness, GPU pixels, water, FPS or device acceptance",
+    "Validator matches pinned native copy shape and fails if workflow rewrites loop; must consciously update guard on intended new syntax"
+  ],
+  "integration_commit": "cf580caf30b25f55eb601b6026b46fa10467bdf0",
+  "next_step": "Keep automatic native-workflow path trigger and real source parity as guard. Gather signed exact-version Android device OBB ZIP first-byte probe and team water/rendering real Unity evidence separately; no duplicate native job."
+}
