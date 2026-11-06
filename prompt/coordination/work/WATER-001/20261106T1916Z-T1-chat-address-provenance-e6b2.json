@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1916Z-T1-chat-address-provenance-e6b2",
+  "generation": "T-2026-11-05",
+  "status": "active",
+  "issue_id": "WATER-001",
+  "track": "Unity sourcefree FFT carrier address provenance",
+  "base_sha": "e718c98ff98c6f3f31de589b082aab52360972a2",
+  "updated_at": "2026-11-06T19:16:00Z",
+  "resumed_from_sessions": [
+    "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
+    "20261106T1907Z-T1-scheduled-report-shape-n8v2",
+    "20261106T175623Z-T1-chat-float-carrier-context-b82c"
+  ],
+  "experiment_key": "T1-WATER-001-shift-add-masked-computed-vs-buffered-uint-address-precise-vs-nonprecise-float-carrier-one-shared-Unity2021.3.45f2-OpenGLCore-dispatch-64x1x1-v1",
+  "resource_key": "raft-native-engine-${{github.ref}} (licensed isolated test only, mutex/cancel-in-progress false)",
+  "hypothesis": "Prior synthetic Unity canary 42129683073 had 63/64 float cast mismatches with computed shift-add-mask address and precise/static-global source, while latest 42276235955 had 0/640 with structured-buffer coordinates and normal float. Build single-dispatch 16-category provenance x precision x Texture2D.Load matrix to distinguish data origin and precision instead of comparing different shaders/jobs.",
+  "scope": "New independent sourcefree C#/Compute fixture + strict Python report gate/test + isolated CI workflow; no original Raft assets or APK, no other workers' files, do not edit current carrier fixtures or report-shape scripts of T1 scheduled.",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftAddressProvenance.compute",
+    "android-port/Experiments/T1/T1FftAddressProvenanceTests.cs",
+    "scripts/t1_fft_address_provenance_gate.py",
+    "tests/test_t1_fft_address_provenance_gate.py",
+    ".github/workflows/raft-t1-fft-address-provenance.yml",
+    "prompt/coordination/work/WATER-001/20261106T1916Z-T1-chat-address-provenance-e6b2.json",
+    "prompt/coordination/experiments/T1/20261106T1916Z-T1-chat-address-provenance-e6b2.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1916Z-T1-chat-address-provenance-e6b2.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T1916Z-T1-chat-address-provenance-e6b2.json"
+  ],
+  "related_work": [
+    "20261106T190131Z-T1-chat-carrier-real-gpu-3c8f",
+    "20261106T1907Z-T1-scheduled-report-shape-n8v2"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write strict differential fixture; run private Unity2021 OpenGLCore one dispatch with 16 output lanes per thread; release work after verified CI."
+}
