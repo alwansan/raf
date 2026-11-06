@@ -4,10 +4,10 @@
   "origin": "chat",
   "session_id": "20261106T1243Z-T5-chat-zip-local-headers-9e2a",
   "issue_id": "INTEGRATION-001",
-  "status": "completed_source_fix_ci_32_synthetic_verified",
+  "status": "completed_source_ci_and_ledger_index_verified",
   "track": "Signed APK/OBB ZIP structural integrity and usability",
   "base_sha": "06b3d07b2961466a4ae186a7ea22c087829ed87b",
-  "updated_at": "2026-11-06T12:50:03.810Z",
+  "updated_at": "2026-11-06T12:51:33.840Z",
   "resumed_from_sessions": [
     "20261106T1234Z-T5-chat-ledger-t1-identity-8d4a.md",
     "20261106T1151Z-T5-scheduled-artifact-envelope-r4c.md"
@@ -57,5 +57,7 @@
     "real_signed_files_checked": false,
     "phone_tested": false,
     "full_game_ready": false
-  }
+  },
+  "index_url": "https://github.com/alwansan/raf/actions/runs/42220765488",
+  "index_summary": "CI success: 381 events, B-team 11 tests, T-team 3 tests; fast-forward push, no force."
 }
