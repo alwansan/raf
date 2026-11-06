@@ -87,7 +87,7 @@ def compare_unity_obb_guid(apk: zipfile.ZipFile, obb: zipfile.ZipFile):
     }
 
 
-def inspect_checkpoint(parent: LimitedRangeIO):
+def inspect_checkpoint(parent: LimitedRangeIO, *, expected_apk_bytes=APK_BYTES, expected_obb_bytes=OBB_BYTES):
     try:
         with zipfile.ZipFile(parent, "r", allowZip64=True) as archive:
             entries = archive.infolist()
@@ -102,8 +102,8 @@ def inspect_checkpoint(parent: LimitedRangeIO):
                 members[kind] = entry
             if set(members) != {"apk", "obb"}:
                 raise ProbeError("outer_signed_checkpoint_missing_member")
-            if (members["apk"].file_size != APK_BYTES or
-                    members["obb"].file_size != OBB_BYTES):
+            if (members["apk"].file_size != expected_apk_bytes or
+                    members["obb"].file_size != expected_obb_bytes):
                 raise ProbeError("outer_original_signed_file_size_drift")
             bounds = {}
             for kind, entry in members.items():
@@ -113,9 +113,9 @@ def inspect_checkpoint(parent: LimitedRangeIO):
                     bounds["obb"][1] <= bounds["apk"][0]):
                 raise ProbeError("outer_original_signed_regions_overlap")
             with zipfile.ZipFile(
-                MemberSliceIO(parent, bounds["apk"][0], APK_BYTES), "r"
+                MemberSliceIO(parent, bounds["apk"][0], expected_apk_bytes), "r"
             ) as apk, zipfile.ZipFile(
-                MemberSliceIO(parent, bounds["obb"][0], OBB_BYTES), "r"
+                MemberSliceIO(parent, bounds["obb"][0], expected_obb_bytes), "r"
             ) as obb:
                 answer = compare_unity_obb_guid(apk, obb)
             return {
