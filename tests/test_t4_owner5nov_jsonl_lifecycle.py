@@ -80,7 +80,8 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         self.assertNotIn(str(self.root), rendered)
         self.assertNotIn("durable_RGD_unverified", rendered)
 
-    def _savegame_cycle(self, swapped=False, user_snapshot=True):
+    def _savegame_cycle(self, swapped=False, user_snapshot=True,
+                        repeated_world_snapshot=False, unchecked_extra_save=False):
         # An original SaveGame event-count parity is not evidence of authored
         # SaveWorld -> SaveUser order: each completed phase must have its own
         # nonzero Save.argumentFileSnapshot before reporting a full cycle.
@@ -88,10 +89,17 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         events = [("SaveGame.enter", "")]
         for phase in order:
             events.append((phase + ".enter", ""))
+            if phase == "SaveWorld" and unchecked_extra_save:
+                # An unrelated Save() exit cannot borrow a later Save() snapshot.
+                events.extend([("Save.enter", ""), ("Save.exit", "")])
             events.append(("Save.enter", ""))
             if phase == "SaveWorld" or user_snapshot:
                 events.append(("Save.argumentFileSnapshot",
                                "exists_at_filename_argument=True; length_class=nonzero; durable_RGD_unverified=true"))
+                if phase == "SaveWorld" and repeated_world_snapshot:
+                    # Equal SaveGame/phase counts do not guarantee per-call trace integrity.
+                    events.append(("Save.argumentFileSnapshot",
+                                   "exists_at_filename_argument=True; length_class=nonzero; durable_RGD_unverified=true"))
             events.append(("Save.exit", ""))
             events.append((phase + ".exit", ""))
         events.append(("SaveGame.exit", ""))
@@ -125,6 +133,20 @@ class OwnerWorldLifecycleEvidenceTests(unittest.TestCase):
         self.assertEqual(stage["original_operation_counts"]["saveuser_enter"], 1)
         self.assertEqual(stage["fully_traced_original_savegame_cycles"], 0)
         self.assertFalse(stage["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
+
+    def test_savegame_per_save_call_requires_exactly_one_snapshot(self):
+        # Existing stage-level booleans can be satisfied by a duplicate
+        # snapshot from one call or a second Save() call without any snapshot.
+        for fault in ("repeated_world_snapshot", "unchecked_extra_save"):
+            with self.subTest(fault=fault):
+                record = analyze([self._savegame_cycle(**{fault: True})])["sessions"][0]
+                self.assertEqual(record["original_operation_counts"]["savegame_enter"], 1)
+                self.assertEqual(record["original_operation_counts"]["savegame_exit"], 1)
+                self.assertEqual(record["original_operation_counts"]["saveworld_exit"], 1)
+                self.assertEqual(record["original_operation_counts"]["saveuser_exit"], 1)
+                self.assertEqual(record["fully_traced_original_savegame_cycles"], 0)
+                self.assertGreater(record["incomplete_or_misordered_savegame_cycles"], 0)
+                self.assertFalse(record["all_savegame_cycles_have_ordered_world_and_user_snapshots"])
 
     def _loadt_trace(self, operations):
         return self.put("loadt.jsonl", [
