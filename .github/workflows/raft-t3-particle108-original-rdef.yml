@@ -1,11 +1,6 @@
 name: T3 RENDER-002 authentic original Particle108 D3D11 DXBC RDEF register contract
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/android-native-port
-    paths:
-      - prompt/coordination/requests/t3-rdef-eightstage-20261106-9f28.trigger
 permissions:
   contents: read
 concurrency:
