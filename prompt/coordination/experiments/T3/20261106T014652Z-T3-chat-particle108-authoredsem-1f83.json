@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T014652Z-T3-chat-particle108-authoredsem-1f83",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "hypothesis": "Original high-use Particle108 one-pass Shader48 source four DXBC pairs have authentic input/output compiled semantic+index/component mask/type signatures, so source 4/4 stage compatibility can be proved without relying on SPIRV-Cross HLSL renamed variable names.",
+  "source_commit": "1ed58e7beab792c877edeaeab163a78c5ba23303",
+  "original_source": [
+    "immutable ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "6 original scene and 4 original Shader/Material owner SHA verified",
+    "one .resS source provider full SHA verified three image ranges"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_original_particle108_dxbc_semantic_join.py -v",
+    "python3 -m scripts.t3_original_particle108_dxbc_semantic_join --original $RUNNER_TEMP/t3-original-six-scene --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-particle108-DXBC-semantic-aggregate-safe.json"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "DXBC_parser": "scripts.t3_original_921_dxbc_semantic_join.read_original_dxbc_signatures",
+    "test_runner": "ubuntu-24.04"
+  },
+  "negative_controls": [
+    "strict original compiled DXBC chunk bounds, only one signature per input/output side; serialized source semantic names never published",
+    "one-to-one original user semantic+index VS→FS join and fragment mask subset of output mask, component type equality",
+    "source fragment semantic absent or changed mask+type never silently succeeds",
+    "duplicate register component ownership and malformed stage table fail closed",
+    "real source 108-slot Particle Shader48 selected by six-scene private owner/PathID and 4 keyword pair contract"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42146385054",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42146385054/artifacts"
+  ],
+  "budget": "28 minute original SHA-only runner, no Unity native Android build",
+  "observed_result": {
+    "source_original_particle_renderers": 54,
+    "source_original_particle_material_slots": 108,
+    "genuine_original_DXBC_stage_programs_read": 8,
+    "original_authored_DXBC_keyword_pairs": 4,
+    "source_original_ISGN_chunks": 8,
+    "source_original_OSGN_chunks": 8,
+    "source_original_vertex_user_output_semantics": 16,
+    "source_original_fragment_user_input_semantics": 16,
+    "source_matched_semantic_records": 16,
+    "source_matched_component_lanes": 58,
+    "unmatched_original_fragment_semantics": 0,
+    "missing_original_fragment_component_lanes": 0,
+    "original_type_mismatches": 0,
+    "all_original_semantic_mask_type_compatible_pairs": 4,
+    "source_free_tests_passed": 147,
+    "original_semantic_to_hlsl_spirv_location_mapping_proven": false,
+    "Android_emitter_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "The original PC Particle108 Shader48 four DXBC vertex/fragment keyword pairs lack matching authored semantic+type+component masks",
+    "The 2/4 mismatching HLSL-roundtrip Stage IO problem necessarily existed in authored original VS/FS signature pairs"
+  ],
+  "limitations": [
+    "No source DXBC signature register to SPIRV compiler-Location or actual HLSL semantics map",
+    "No Unity Android shader import or GPU execution; actual phone fire/smoke emitter identity unknown"
+  ],
+  "integration_commit": "1ed58e7beab792c877edeaeab163a78c5ba23303",
+  "next_step": "Next distinct original shader interface repair experiment: map original DXBC authored ISGN/OSGN semantic/index/component mask/register to source vkd3d SPIR-V Location and recovered SPIRV-Cross HLSL SV_*/TEXCOORD* declarations for all 4 exact keyword pairs. Reject missing system values, duplicate same-type ambiguous varyings and mismatched binding. Only then test disposable shader location patch with spirv-val and all four VSFS pair interfaces. T5 post-restorer/Android phone emitter still needs corroboration."
+}
