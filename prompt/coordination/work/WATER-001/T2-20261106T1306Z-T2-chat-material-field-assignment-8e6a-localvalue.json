@@ -1,0 +1,24 @@
+{
+  "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "c09331fd08a516acd737ce3aaf273d9ad132b759",
+  "updated_at": "2026-11-06T13:09:00Z",
+  "resumed_from_experiment": "prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a.json",
+  "experiment_key": "ZIP2-Foam-original-exact-Material-Field-stfld-immediate-typed-local-or-parameter-resolution-v1",
+  "resource_key": "T2-original-managed-Cecil-unique-typed-Material-field-assignment",
+  "hypothesis": "The only original Material stfld immediate producer might be a typed local load/argument load, currently classified unknown. Add guarded typed local/argument resolution; do not infer constructor-to-field ownership without an exact reaching definition.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1306Z-T2-chat-material-field-assignment-8e6a.md",
+    "prompt/coordination/experiments/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue.json",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md"
+  ],
+  "baseline_ci": "https://github.com/alwansan/raf/actions/runs/42222313603",
+  "sourcefree_test_plan": "Synthetic typed local material, invalid local, wrong-type local, method-parameter Material, untyped method argument plus branch to store, recheck exact SHA original DLL with public typed aggregate only.",
+  "active_resource_overlap": "No T2 same workflow running at registration, T1 FFT in separate workflow ignored; no native Unity."
+}
