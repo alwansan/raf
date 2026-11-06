@@ -60,6 +60,7 @@ jobs:
             scripts
             tests
             android-port/Experiments/T1
+            .github/workflows/raft-t1-fft-unity-input-identity.yml
       - name: Validate private XML fail-closed controls and public SHA-pinned staging
         shell: bash
         run: |
