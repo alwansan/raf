@@ -17,7 +17,7 @@ def _parse(line, path, number):
             out[key] = value
         return out
     obj = json.loads(line, object_pairs_hook=pairs)
-    if not isinstance(obj, dict) or any(k not in obj for k in FIELDS):
+    if not isinstance(obj, dict) or set(obj) != set(FIELDS):
         raise ValueError(f"{path}:{number}: incomplete record")
     for field in ("source_sha", "fixture_sha256", "input_sha256", "kernel"):
         if not isinstance(obj[field], str) or not obj[field]:
