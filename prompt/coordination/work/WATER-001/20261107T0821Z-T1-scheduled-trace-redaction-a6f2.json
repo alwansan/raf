@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T0821Z-T1-scheduled-trace-redaction-a6f2",
+  "origin": "scheduled",
+  "owner": "T1",
+  "issue": "WATER-001",
+  "base_sha": "b543fb0a042904c6a60cbc8b71e3f25c12d51ef2",
+  "hypothesis": "FFT trace comparison leaks private raw values and coordinates in CLI JSON output on mismatches; report status/key only.",
+  "files": [
+    "scripts/t1_fft_trace_first_divergence_7c3a.py",
+    "tests/test_t1_fft_trace_first_divergence_7c3a.py",
+    "prompt/coordination/clients/T1/sessions/20261107T0821Z-T1-scheduled-trace-redaction-a6f2.md"
+  ],
+  "experiment_key": "fft-trace-safe-output-a6f2",
+  "shared_resource": "none",
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261107T0710Z-T1-scheduled-schema-5e2a.md"
+  ],
+  "constraints": "No raw shader, pixels, or proprietary data in Actions logs; no CI build or other client files.",
+  "status": "planned"
+}
