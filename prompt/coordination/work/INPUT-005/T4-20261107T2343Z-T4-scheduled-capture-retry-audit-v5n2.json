@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T2343Z-T4-scheduled-capture-retry-audit-v5n2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "bbfecbc418a81d44dd7c178405beba374eb432f5",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261107T2343Z-T4-scheduled-capture-retry-audit-v5n2.json",
+    "prompt/coordination/clients/T4/sessions/20261107T2343Z-T4-scheduled-capture-retry-audit-v5n2.md"
+  ],
+  "experiment_key": "source-audit-pointer-capture-retry-epoch-view-3475a642d582-20261108",
+  "resource_key": null,
+  "hypothesis": "When a capture request is pending, the 1.5s retry increments epoch and reinstalls a listener; inspect whether this is an actual lifecycle risk without changing runtime behavior absent device evidence.",
+  "updated_at": "2026-11-07T23:43:10Z",
+  "taken_over_from": "prompt/coordination/clients/T4/sessions/20261107T2241Z-T4-scheduled-evidence-gap-k9v3.md"
+}
