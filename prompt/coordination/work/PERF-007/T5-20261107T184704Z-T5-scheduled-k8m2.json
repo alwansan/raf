@@ -2,7 +2,7 @@
   "session_id": "20261107T184704Z-T5-scheduled-k8m2",
   "origin": "scheduled",
   "issue_id": "PERF-007",
-  "status": "active",
+  "status": "waiting_ci",
   "intended_files": [
     "scripts/t5_unity_interval_epoch.py",
     "tests/test_t5_unity_interval_epoch.py"
@@ -10,6 +10,8 @@
   "experiment_key": "t5-explicit-session-label-single-file-jsonl-v1",
   "resource_key": null,
   "hypothesis": "Legacy CL JSONL rows have no session_id; explicitly label a single input file to prevent cross-session grouping without inferring device identity.",
-  "updated_at": "2026-11-07T18:47:04Z",
-  "base_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; prior T5 interval analyzer; no Unity or T4 overlap"
+  "updated_at": "2026-11-07T18:52:00Z",
+  "base_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; prior T5 interval analyzer; no Unity or T4 overlap",
+  "result": "Source patch 68f6160 and tests 0417d98 committed; CI not run; no Unity build",
+  "next_step": "Run Python unit tests and label CL JSONL per verified session; verify APK/OBB manifest"
 }
