@@ -53,7 +53,9 @@ def load(path):
     anchor_key = min(rows)
     anchor = rows[anchor_key]
     for key in sorted(rows):
-        for field in PROVENANCE:
+        # Different backends may compile different programs, but a single
+        # capture must never splice records from multiple program binaries.
+        for field in ("source_sha", *PROVENANCE):
             if rows[key][field] != anchor[field]:
                 raise ValueError(f"{path}: inconsistent {field} at {key}; baseline {anchor_key}")
     return rows
