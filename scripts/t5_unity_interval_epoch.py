@@ -65,11 +65,14 @@ def analyze_rows(rows, minimum_frames=30):
         height = numeric(data, "height", integer=True)
         if not (1 <= refresh <= 360 and fps <= 1000 and p50 <= p95 <= 60000):
             raise ValueError("Implausible frame statistics")
-        key = (scene, refresh, width, height)
+        session_id = row.get("session_id")
+        if session_id is not None and (not isinstance(session_id, str) or not session_id.strip() or len(session_id) > 128):
+            raise ValueError("Invalid session_id")
+        key = (session_id, scene, refresh, width, height)
         if key != last_key:
             epoch += 1
             last_key = key
-        bucket = cohorts.setdefault(epoch, {"scene": scene, "refresh_hz": refresh,
+        bucket = cohorts.setdefault(epoch, {"session_id": session_id, "scene": scene, "refresh_hz": refresh,
                                             "width": width, "height": height,
                                             "total_intervals": 0, "startup_excluded": 0,
                                             "_fps": [], "_p95": []})
