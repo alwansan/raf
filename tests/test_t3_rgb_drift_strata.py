@@ -57,6 +57,18 @@ class TestStrata(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
             classify({"pairs": items}, require_drift_metadata=True)
 
+    def test_unknown_format_sentinel_cannot_bypass_drift_guard(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        for item in items:
+            item["source_srgb"] = False
+        for sentinel in ("UNKNOWN", "unknown", "Unknown"):
+            items[0]["format"] = sentinel
+            result = classify({"pairs": items})
+            self.assertEqual(result["rgb_drift_metadata_coverage"]["format"], 29)
+            self.assertEqual(result["strata"]["format"]["UNKNOWN"]["rgb_drift"], 1)
+            with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
+                classify({"pairs": items}, require_drift_metadata=True)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
