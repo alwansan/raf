@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T204503Z-T5-scheduled-n6q2",
+  "origin": "scheduled",
+  "issue_id": "PERF-007",
+  "baseline_sha": "af8ee90ad71abea8804ed2a6bed042fadd191414",
+  "intended_files": [
+    "prompt/coordination/work/PERF-007/20261107T204503Z-T5-scheduled-ci-verdict-n6q2.json",
+    "prompt/coordination/clients/T5/sessions/20261107T204503Z-T5-scheduled-n6q2.md",
+    "prompt/coordination/B_TEAM/events/T5/20261107T204503Z-interval-ci-verdict-n6q2.json"
+  ],
+  "hypothesis": "The newly introduced source-only interval regression completed successfully and clears the specific waiting_ci checkpoint without claiming phone FPS or APK provenance.",
+  "experiment_key": "t5-interval-ci-verdict-0e3d102984477763005a908386bb188a9f8e3875-42408172119",
+  "resource_key": null,
+  "status": "active",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42408172119",
+  "updated_at": "2026-11-07T20:45:03Z"
+}
