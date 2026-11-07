@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "worker": "T4",
   "issue": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5c7e44ef5f130525edcb33d0f8adf0ce78413b97",
   "files": [
     "scripts/t4_classify_mouse_capture_log.py",
@@ -13,5 +13,8 @@
   "shared_resource": "none; source-only Python",
   "hypothesis": "CI 42412029098 16/17 pass: superseding authored_lock incorrectly classified as capture release; classify release only for explicit release/unlock/escape.",
   "evidence": "https://github.com/alwansan/raf/actions/runs/42412029098",
-  "preserve": "owner phone world/save success artifact 42058825739; keyboard .rgd untouched"
+  "preserve": "owner phone world/save success artifact 42058825739; keyboard .rgd untouched",
+  "fix_commit": "95ac67c2a2e42359b9f315598cd171bf2578f370",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42416699458",
+  "result": "SUCCESS source-only 17/17; no phone evidence"
 }
