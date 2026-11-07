@@ -76,9 +76,9 @@ def compare(left, right, atol=0.0):
     for key in sorted(a):
         x, y = a[key], b[key]
         if x["coordinate"] != y["coordinate"]:
-            return {"status": "coordinate_mismatch", "key": key, "left": x["coordinate"], "right": y["coordinate"]}
+            return {"status": "coordinate_mismatch", "key": key}
         if len(x["value"]) != len(y["value"]) or any(abs(i-j) > atol for i,j in zip(x["value"], y["value"])):
-            return {"status": "numeric_mismatch", "key": key, "left": x["value"], "right": y["value"]}
+            return {"status": "numeric_mismatch", "key": key}
     return {"status": "matched", "count": len(a)}
 
 if __name__ == "__main__":
