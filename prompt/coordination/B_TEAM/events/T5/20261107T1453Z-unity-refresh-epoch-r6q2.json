@@ -1,0 +1,16 @@
+{
+  "id": "T5-20261107T1453Z-unity-refresh-epoch-r6q2",
+  "issue_id": "PERF-007",
+  "owner": "T5",
+  "origin": "scheduled",
+  "timestamp_utc": "2026-11-07T14:53:00Z",
+  "status": "DIAGNOSTIC_EVIDENCE",
+  "source": "alwansan/CL@520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+  "baseline_sha": "ffa2309de8d3e2d15630d394b2f5b1ee6a3e828b",
+  "evidence": [
+    "prompt/coordination/clients/T5/sessions/20261107T1453Z-T5-scheduled-unity-refresh-epoch-r6q2.md",
+    "prompt/coordination/work/PERF-007/20261107T1453Z-T5-scheduled-unity-refresh-epoch-r6q2.md"
+  ],
+  "finding": "Unity game-internal telemetry 115 interval samples across two original CL logs: second session reports refresh 120 to 60Hz at 19:13:00.731684Z, while 2400x1080 Landscape stays constant; scene and refresh epoch separation required.",
+  "limits": "Not GPU busy, not render-scale proof, no APK/OBB match or newer device test. Third log not read."
+}
