@@ -25,6 +25,28 @@ class TestStrata(unittest.TestCase):
         self.assertEqual(classify({"pairs": items}, require_metadata=True)
                          ["metadata_coverage"]["source_srgb"], 106)
 
+    def test_drift_only_metadata_guard(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        for item in items[30:]:
+            item["source_srgb"] = True
+        result = classify({"pairs": items}, require_metadata=True)
+        self.assertEqual(result["metadata_coverage"]["source_srgb"], 76)
+        self.assertEqual(result["rgb_drift_metadata_coverage"]["source_srgb"], 0)
+        with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
+            classify({"pairs": items}, require_drift_metadata=True)
+        for item in items[:30]:
+            item["source_srgb"] = False
+        self.assertEqual(classify({"pairs": items}, require_drift_metadata=True)
+                         ["rgb_drift_metadata_coverage"]["source_srgb"], 30)
+
+    def test_partial_drift_metadata_rejected(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        for item in items:
+            item["source_srgb"] = False
+        items[0]["source_srgb"] = None
+        with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
+            classify({"pairs": items}, require_drift_metadata=True)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
