@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T0416Z-T2-scheduled-original-pass-evidence-a6d2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261107T0416Z-T2-scheduled-original-pass-evidence-a6d2.json",
+    "prompt/coordination/clients/T2/sessions/20261107T0416Z-T2-scheduled-original-pass-evidence-a6d2.md",
+    "docs/T2_FOAM_PASS_ROLE_AUTHENTIC_2026-11-07.md"
+  ],
+  "experiment_key": "foam-original-blit-pass-roles:run42308583977:artifact13547696649:sha256-e4a31957a9637656dba391582f21a9513d1fc03786723694793731d23233c22f",
+  "resource_key": "read-only-original-safe-artifact-13547696649",
+  "hypothesis": "Original per-pass typed IL counters resolve pass0 roles but leave pass1 unknown; distinguish observed per-pass evidence from aggregate ambiguity.",
+  "taken_over_from": [
+    "T2 20261107T0321Z scheduled pass matrix",
+    "T2 20261107T0215Z pass role correlation"
+  ],
+  "baseline_sha": "4e5f4d24e0049518928b0fe47db8adfa3b853db7 (artifact source; not asserted current HEAD)",
+  "updated_at": "2026-11-07T04:16:00Z"
+}
