@@ -2,7 +2,7 @@
   "session_id": "20261107T1638Z-T4-scheduled-unlock-boundary-m8q4",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "42ec26d8c8621b4a869586d3eb48f8b8cfe3977f",
   "intended_files": [
     "scripts/t4_classify_mouse_capture_log.py",
@@ -13,5 +13,9 @@
   "resource_key": null,
   "hypothesis": "An authored_unlock after capture request must terminate the valid relative-motion observation window; otherwise a later event can falsely imply capture survived menu transition.",
   "taken_over_from": "20261107T1541Z-T4-scheduled-mouse-release-boundary-n6r2",
-  "updated_at": "2026-11-07T16:38:00Z"
+  "updated_at": "2026-11-07T16:42:00Z",
+  "code_sha": "1a450e859e8ec10c07493155264dd4f2cb0f1c3d",
+  "test_sha": "0ad5bba0fdbac0694110b553f87a4adbede89393",
+  "verification": "Source reviewed; 11 tests defined, not executed; no CI on new SHA",
+  "next_step": "Run python3 -m unittest tests/test_t4_classify_mouse_capture_log.py and inspect new CL physical mouse events"
 }
