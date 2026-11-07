@@ -44,4 +44,21 @@ class TraceTests(unittest.TestCase):
             self.assertEqual(result["status"], "provenance_mismatch")
             self.assertEqual(result["key"], (0,0,1))
             self.assertEqual(result["field"], "input_sha256")
+    def test_intra_trace_mixed_inputs_rejected_even_when_both_sides_match(self):
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d)/"a", Path(d)/"b"
+            rows = [{**BASE, "read_site":0},
+                    {**BASE, "read_site":1, "input_sha256":"other"}]
+            for path in (a, b):
+                path.write_text("".join(json.dumps(row)+"\n" for row in rows))
+            with self.assertRaisesRegex(ValueError, "inconsistent input_sha256"):
+                compare(a, b)
+    def test_intra_trace_dispatch_drift_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d)/"trace"
+            rows = [{**BASE, "read_site":0},
+                    {**BASE, "read_site":1, "dispatch":[2,1,1]}]
+            p.write_text("".join(json.dumps(row)+"\n" for row in rows))
+            with self.assertRaisesRegex(ValueError, "inconsistent dispatch"):
+                load(p)
 if __name__=="__main__": unittest.main()

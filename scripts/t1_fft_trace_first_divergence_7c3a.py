@@ -48,6 +48,14 @@ def load(path):
         rows[key] = obj
     if not rows:
         raise ValueError(f"{path}: empty trace")
+    # A capture must describe one immutable experiment, not a concatenation
+    # of records from different inputs or kernel dispatch configurations.
+    anchor_key = min(rows)
+    anchor = rows[anchor_key]
+    for key in sorted(rows):
+        for field in PROVENANCE:
+            if rows[key][field] != anchor[field]:
+                raise ValueError(f"{path}: inconsistent {field} at {key}; baseline {anchor_key}")
     return rows
 
 def compare(left, right, atol=0.0):
