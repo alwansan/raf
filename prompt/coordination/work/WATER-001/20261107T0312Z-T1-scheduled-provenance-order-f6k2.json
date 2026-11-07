@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T0312Z-T1-scheduled-provenance-order-f6k2",
+  "origin": "scheduled",
+  "owner": "T1",
+  "issue": "WATER-001",
+  "base_sha": "480c3285b3f66e571cc453e50dda9ce5706165aa",
+  "scope": "Fix fail-closed provenance check across all keyed FFT trace rows before comparing coordinate/value; add adversarial test",
+  "files": [
+    "scripts/t1_fft_trace_first_divergence_7c3a.py",
+    "tests/test_t1_fft_trace_first_divergence_7c3a.py"
+  ],
+  "hypothesis": "An early coordinate mismatch currently masks later mismatched input/fixture/kernel/dispatch provenance",
+  "experiment_key": "t1-fft-provenance-preflight-f6k2",
+  "shared_resource": "none; source-only",
+  "taken_over_from": "T1 session 20261107T0211Z-T1-scheduled-fft-trace-7c3a",
+  "status": "in_progress"
+}
