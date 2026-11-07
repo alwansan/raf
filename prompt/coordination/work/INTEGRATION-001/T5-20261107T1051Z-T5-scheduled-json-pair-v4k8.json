@@ -3,7 +3,7 @@
   "session_id": "20261107T1051Z-T5-scheduled-json-pair-v4k8",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "2e026ea817116051dd5298e8984f43cb69a40ce6",
   "intended_files": [
     "scripts/t5_verify_apk_obb_pair.py",
@@ -13,5 +13,11 @@
   "resource_key": null,
   "hypothesis": "Local APK/OBB companion verifier currently accepts duplicate JSON keys, allowing ambiguous package/version/part metadata; reject duplicate keys at every nesting level before comparing signed APK/OBB.",
   "taken_over_from": "T5 previous retained archive duplicate JSON hardening 80349ac; separate pair checker remains unguarded",
-  "updated_at": "2026-11-07T10:51:00Z"
+  "updated_at": "2026-11-07T10:57:00Z",
+  "commits": [
+    "8ee7bd64ef99c3893c2138d2503bceb776bcd7ad",
+    "477c62f9834ba9863f1fb14ef0a2aae4fc5e478f"
+  ],
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42365731144",
+  "ci_limitation": "Run was triggered on 8ee7bd64 before test commit 477c62f; cannot validate added tests. Check post-test run before claiming green."
 }
