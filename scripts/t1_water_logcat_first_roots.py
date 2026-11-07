@@ -42,8 +42,16 @@ def scan(paths):
         seen.add((stat.st_dev, stat.st_ino))
         total += stat.st_size
         with path.open('rb') as stream:
-            for raw in stream:
+            while True:
+                # readline(limit) prevents allocating an entire malformed giant line.
+                raw = stream.readline(32769)
+                if not raw:
+                    break
                 if len(raw) > 32768:
+                    # Drop the rest of this physical line: never classify its tail
+                    # as an independent Logcat record.
+                    while raw and not raw.endswith(b'\n'):
+                        raw = stream.readline(32769)
                     continue
                 line = raw.decode('utf-8', 'replace')
                 kind = classify(line)
