@@ -1,0 +1,18 @@
+{
+  "session_id": "20261107T1610Z-T1-scheduled-bounded-logline-c7d2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "baseline_sha": "548905d9090630dc0799daeba23aac9917a1ea7c",
+  "status": "active",
+  "intended_files": [
+    "scripts/t1_water_logcat_first_roots.py",
+    "tests/test_t1_water_logcat_first_roots.py",
+    "prompt/coordination/clients/T1/sessions/20261107T1610Z-T1-scheduled-bounded-logline-c7d2.md"
+  ],
+  "experiment_key": "logcat-bounded-line-read-32768-500MB-CL-42058825739",
+  "resource_key": null,
+  "hypothesis": "Python binary iteration buffers an entire unbounded line before length rejection; enforce bounded reads without changing classified records",
+  "updated_at": "2026-11-07T16:10:00Z",
+  "resumed_from": "20261107T1515Z-T1-scheduled-logcat-order-6f2c",
+  "taken_over_from": "T1 prior classifier commits f28c4e9,5cca885; CL pinned 520c4cf"
+}
