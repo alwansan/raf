@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T1623Z-T2-scheduled-role-gate-b7c4",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "base_sha": "1e2f2023a3959efd18f4e3c9a2cf63764c37e2c0",
+  "status": "active",
+  "experiment_key": "T2-safe-pass-role-gate-v1",
+  "files": [
+    "scripts/t2_foam_pass_role_gate.py",
+    "tests/test_t2_foam_pass_role_gate.py"
+  ],
+  "hypothesis": "Strict per-pass aggregate report schema catches swapped, duplicated, or identity-leaking source-only Foam roles before producer reporting; does not prove Unity resources.",
+  "shared_resource": "none; local source-only tests",
+  "taken_over_from": "T2 original CI 42308583977 and 20261107T1518Z scheduled checkpoint",
+  "no_native_ci": true
+}
