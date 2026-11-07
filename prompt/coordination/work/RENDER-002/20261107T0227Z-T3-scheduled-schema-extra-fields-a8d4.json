@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "identity": "T3",
   "issue": "RENDER-002",
-  "status": "IN_PROGRESS",
+  "status": "SOURCE_FIXED_PENDING_TEST",
   "base_sha": "546fe71aad5981befbed8115789104678a54f816",
   "hypothesis": "Unexpected register/set fields in otherwise schema-compliant DX or SPV reflection rows can cause KeyError before deterministic diagnostics; reject ambiguous field families before indexing.",
   "files": [
@@ -16,5 +16,11 @@
     "20261107T0125Z-T3-scheduled-ci-proof-n6c2",
     "20261106T2252Z-T3-chat-keyword-routed-61e9"
   ],
-  "constraints": "synthetic only; no Unity, game assets, raw source or Actions; T4/T5 unaffected"
+  "constraints": "synthetic only; no Unity, game assets, raw source or Actions; T4/T5 unaffected",
+  "commits": [
+    "f54dfca4ad540c5af283cac695761fbe1634962a",
+    "b7f5c1aa27717b31277f5e9d97320728a0f34872",
+    "2cf8ddc68394cca93b31f3b431d0760e1893c492"
+  ],
+  "next": "Run python3 -m unittest discover -s tests -p 'test_t3_dxbc_spirv_contract_join*.py' -v on immutable SHA; then inspect original private Shader48 resource mapping without publishing proprietary assets."
 }
