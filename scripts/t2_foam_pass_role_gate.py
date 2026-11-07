@@ -28,11 +28,20 @@ def validate(report):
             raise ValueError("invalid destination role")
     return {site["pass"]: (site["source"], site["destination"]) for site in sites}
 
+def unique_keys(pairs):
+    """Reject duplicate JSON members before a role can be overwritten."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate_json_key")
+        result[key] = value
+    return result
+
 def main():
     if len(sys.argv) != 2:
         raise SystemExit("usage: t2_foam_pass_role_gate.py safe_report.json")
     with open(sys.argv[1], encoding="utf-8") as handle:
-        roles = validate(json.load(handle))
+        roles = validate(json.load(handle, object_pairs_hook=unique_keys))
     print(json.dumps({"pass0": list(roles[0]), "pass1": list(roles[1]),
                       "classification_only": True}, sort_keys=True))
 
