@@ -41,7 +41,7 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
             else:
                 if value is not None and (not isinstance(value, str) or not value.strip()):
                     raise ValueError("invalid format")
-                bucket = value if value is not None else "UNKNOWN"
+                bucket = value.strip() if value is not None else "UNKNOWN"
                 if len(bucket) > 64 or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+-." for c in bucket):
                     raise ValueError("unsafe format category")
                 # The literal sentinel is not authenticated format metadata.
