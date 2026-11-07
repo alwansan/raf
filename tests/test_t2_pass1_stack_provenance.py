@@ -27,5 +27,27 @@ class Pass1StackTests(unittest.TestCase):
         with self.assertRaises(Unresolved): trace([("ldarg", (0, "Unknown"))])
     def test_bad_shape(self):
         with self.assertRaises(Unresolved): trace([("ldarg",)])
+    def test_malformed_identifiers_fail_closed(self):
+        cases = [
+            [("ldloc", [])],
+            [("ldarg", (True, "Texture"))],
+            [("ldarg", (-1, "Texture"))],
+            [("ldarg", ("secret", "Texture"))],
+            [("ldnull", "unexpected")],
+            [("dup", "unexpected")],
+            [("ldnull", None), ("pop", "unexpected")],
+            [("ldnull", None), ("stloc", True)],
+        ]
+        for instructions in cases:
+            with self.subTest(instructions=instructions):
+                with self.assertRaises(Unresolved):
+                    trace(instructions)
+
+    def test_invalid_step_budgets_fail_closed(self):
+        for budget in (True, 0, -1, "128"):
+            with self.subTest(budget=budget):
+                with self.assertRaises(Unresolved):
+                    trace([], max_steps=budget)
+
 if __name__ == "__main__":
     unittest.main()
