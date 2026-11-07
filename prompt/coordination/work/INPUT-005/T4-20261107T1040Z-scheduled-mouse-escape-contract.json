@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T1040Z-T4-scheduled-mouse-escape-h7k2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "3710f1858655fc86aff2c9a450839ca582c747c8",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261107T1040Z-scheduled-mouse-escape-contract.json",
+    "prompt/coordination/clients/T4/sessions/20261107T1040Z-T4-scheduled-mouse-escape-h7k2.md"
+  ],
+  "experiment_key": "android15-physical-mouse-escape-recapture-2021.3.45f2-source-boundary",
+  "resource_key": null,
+  "hypothesis": "Escape releases pointer capture; subsequent gameplay must reassert original lock intent while keyboard remains unaffected",
+  "owner_device_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; world-save-reopen succeeded only on older artifact",
+  "updated_at": "2026-11-07T10:40:00Z"
+}
