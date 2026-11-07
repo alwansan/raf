@@ -30,8 +30,13 @@ def classify(lines):
             # Each authored lock creates a distinct attempt. A release or
             # unlock ends that attempt; a later lock may start a new one.
             attempts = []
-            for lock in subsequent_locks:
-                boundary = min([n for n in unlocks + escapes + releases if lock < n < end], default=end)
+            for lock_index, lock in enumerate(subsequent_locks):
+                # A newer authored lock supersedes the previous attempt.
+                # Do not borrow its request/relative evidence for an older lock.
+                next_lock = (subsequent_locks[lock_index + 1]
+                             if lock_index + 1 < len(subsequent_locks) else end)
+                boundary = min([n for n in unlocks + escapes + releases
+                                if lock < n < end] + [next_lock])
                 attempt_requests = [n for n in requests if lock < n < boundary]
                 for request in attempt_requests:
                     attempts.append((request, boundary))
