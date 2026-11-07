@@ -15,7 +15,7 @@ class Value:
     origin: str
 
 def trace(instructions, max_steps=128):
-    if not isinstance(instructions, (list, tuple)) or len(instructions) > max_steps:
+    if type(max_steps) is not int or max_steps < 1 or not isinstance(instructions, (list, tuple)) or len(instructions) > max_steps:
         raise Unresolved("invalid or oversized block")
     stack, locals_ = [], {}
     for index, instruction in enumerate(instructions):
@@ -23,22 +23,23 @@ def trace(instructions, max_steps=128):
             raise Unresolved("malformed instruction")
         op, arg = instruction
         if op == "ldarg":
-            if not isinstance(arg, (tuple, list)) or len(arg) != 2 or arg[1] not in ("Texture", "RenderTexture"):
+            if not isinstance(arg, (tuple, list)) or len(arg) != 2 or type(arg[0]) is not int or arg[0] < 0 or arg[1] not in ("Texture", "RenderTexture"):
                 raise Unresolved("untyped argument")
             stack.append(Value(arg[1], "arg:" + str(arg[0])))
         elif op == "ldnull":
+            if arg is not None: raise Unresolved("invalid null operand")
             stack.append(Value("NULL", "null"))
         elif op == "dup":
-            if not stack: raise Unresolved("stack underflow")
+            if arg is not None or not stack: raise Unresolved("invalid dup")
             stack.append(stack[-1])
         elif op == "stloc":
-            if not stack or not isinstance(arg, int) or arg < 0: raise Unresolved("invalid local store")
+            if not stack or type(arg) is not int or arg < 0: raise Unresolved("invalid local store")
             locals_[arg] = stack.pop()
         elif op == "ldloc":
-            if arg not in locals_: raise Unresolved("uninitialized local")
+            if type(arg) is not int or arg < 0 or arg not in locals_: raise Unresolved("uninitialized local")
             stack.append(locals_[arg])
         elif op == "pop":
-            if not stack: raise Unresolved("stack underflow")
+            if arg is not None or not stack: raise Unresolved("stack underflow")
             stack.pop()
         else:
             # Includes branch targets, call/callvirt, ldfld, castclass, phi/merges.
