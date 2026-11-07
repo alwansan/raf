@@ -1,0 +1,14 @@
+{
+  "session_id": "20261107T1541Z-T4-scheduled-mouse-release-boundary-n6r2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "c666daea3b33ceb421c317e44f7f080a90d43a52",
+  "intended_files": [
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py"
+  ],
+  "experiment_key": "t4-mouse-release-boundary-classifier-v2-source-ffa2309d",
+  "hypothesis": "Relative movement after release must not count as capture success.",
+  "updated_at": "2026-11-07T15:41:00Z"
+}
