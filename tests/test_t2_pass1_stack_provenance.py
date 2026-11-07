@@ -43,6 +43,13 @@ class Pass1StackTests(unittest.TestCase):
                 with self.assertRaises(Unresolved):
                     trace(instructions)
 
+    def test_conflicting_argument_type_rejected(self):
+        with self.assertRaises(Unresolved):
+            trace([("ldarg", (3, "Texture")), ("pop", None), ("ldarg", (3, "RenderTexture"))])
+
+    def test_consistent_argument_type_repeated(self):
+        self.assertEqual(trace([("ldarg", (3, "Texture")), ("pop", None), ("ldarg", (3, "Texture"))]), (Value("Texture", "arg:3"),))
+
     def test_invalid_step_budgets_fail_closed(self):
         for budget in (True, 0, -1, "128"):
             with self.subTest(budget=budget):
