@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T1440Z-T4-scheduled-mouse-trace-classifier-p8q3",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue": "INPUT-005",
+  "status": "active",
+  "baseline_head": "ed55b61401ae92337b455765e2f2a9c5d99584b2",
+  "hypothesis": "A bounded log classifier can distinguish authored lock missing from Android capture request failure without changing input behavior",
+  "files": [
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py"
+  ],
+  "experiment_key": "T4-MOUSE-TRACE-CLASSIFIER-20261107T1440Z",
+  "shared_resource": "none; CPU-only offline test",
+  "constraints": "Preserve keyboard, Raft cursor, original .rgd, touch, sound, Settings. No native build.",
+  "source_evidence": "owner report docs/DEVICE_FEEDBACK_42058825739_AR.md; CI42373576554 success source-only; world/save/reopen device-confirmed on artifact42058825739"
+}
