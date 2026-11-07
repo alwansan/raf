@@ -1,0 +1,21 @@
+{
+  "session_id": "20261107T0740Z-T4-scheduled-mouse-bridge-boundary-q9r2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "base_sha": "f89296d58efec8b1e55e7b50b085144564e664f8",
+  "updated_at": "2026-11-07T07:40:42Z",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261107T0740Z-T4-scheduled-mouse-bridge-boundary-q9r2.json",
+    "prompt/coordination/clients/T4/sessions/20261107T0740Z-T4-scheduled-mouse-bridge-boundary-q9r2.md"
+  ],
+  "experiment_key": "t4-existing-authenticated-legacy-mouse-bridge-source-vs-device-proof-20261107",
+  "resource_key": null,
+  "hypothesis": "Existing authenticated original legacy-axis adapter may already address camera axes; do not add duplicate injection until Android pointer-capture lifecycle and real mouse path are proven.",
+  "taken_over_from": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "scripts/t4_adapt_original_mouse_axes.py",
+    "scripts/t4_original_mouse_routing.py"
+  ],
+  "notes": "Read-only source audit; no Unity/native job or shared code edit. T5 owns buttons and Resolution. Preserve world/.rgd success."
+}
