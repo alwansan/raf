@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T2252Z-T5-scheduled-scene-transition-k7m4",
+  "origin": "scheduled",
+  "issue_id": "PERF-007",
+  "status": "active",
+  "updated_at": "2026-11-07T22:52:00Z",
+  "intended_files": [
+    "scripts/t5_unity_interval_epoch.py",
+    "prompt/coordination/clients/T5/sessions/20261107T2252Z-T5-scheduled-scene-transition-k7m4.md"
+  ],
+  "experiment_key": "T5-scene-boundary-all-rows-performance-interval-v1",
+  "resource_key": null,
+  "hypothesis": "Non-performance scene transition records do not reset performance epochs and may pool return-to-scene samples",
+  "taken_over_from": "T5 prior 2026-11-08 scene-transition reproduction; no production fix yet",
+  "constraints": "No Unity/native build; T4 mouse untouched; no original game assets"
+}
