@@ -1,0 +1,12 @@
+# T2 — scheduled per-pass Foam evidence gate
+- session_id: 20261107T0321Z-T2-scheduled-pass-matrix-7b4e
+- origin: scheduled
+- baseline_sha: ec68af48b58b59548c422428d74f9733895e366a
+- owner device evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md; 42058825739 artifact enters/saves/reopens world, water/FFT still failing.
+- resumed_from: 20261107T0215Z-T2-scheduled-pass-role-correlation-a7e4 and 20261107T2227Z-T2-chat-blit-texture-role-6c52.
+- scope: scripts/t2_foam_pass_role_matrix.py and tests/test_t2_foam_pass_role_matrix.py, separate from chat Mono.Cecil analyzer.
+- hypothesis: two per-pass rows must conserve the already reported source/destination aggregate, with no private names or IL allowed.
+- result: strict source-free Python gate; 9 local synthetic tests passed; no original per-pass artifact was generated in this run. A schema-consistent result does NOT establish true original pass identities, resource allocation, CB0 upload, ShaderLab or Android pixels.
+- CI: no new run requested. T3 source-only run 42329314154 succeeded; T2 original run 42308583977 succeeded, but aggregates cannot identify which pass has each known RenderTexture.
+- current work: prompt/coordination/work/WATER-001/20261107T0321Z-T2-scheduled-pass-matrix-7b4e.json.
+- next_step: generate per-pass evidence on pinned original privately, validate against this schema, publish only safe aggregates; coordinate T1 FFT and T3 FX. WATER-001 OPEN; no new phone build vote.

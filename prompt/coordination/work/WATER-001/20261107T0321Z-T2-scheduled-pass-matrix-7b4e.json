@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T0321Z-T2-scheduled-pass-matrix-7b4e",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "baseline_sha": "ec68af48b58b59548c422428d74f9733895e366a",
+  "status": "completed_source_only",
+  "experiment_key": "T2-Foam-per-pass-role-privacy-gate-v1",
+  "resource_key": "none; isolated Python consumer",
+  "scope": [
+    "scripts/t2_foam_pass_role_matrix.py",
+    "tests/test_t2_foam_pass_role_matrix.py"
+  ],
+  "hypothesis": "Strict per-pass evidence conservation prevents aggregate-to-pass false inference and rejects leaked original identifiers.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261107T0215Z-T2-scheduled-pass-role-correlation-a7e4.md",
+    "prompt/coordination/clients/T2/sessions/20261107T2227Z-T2-chat-blit-texture-role-6c52.md"
+  ],
+  "test": "9 synthetic tests passed in isolated local prototype; published implementation not yet CI validated",
+  "next_step": "Produce privacy-safe original pinned per-pass rows and run validator; no pass identity claims from aggregate only."
+}
