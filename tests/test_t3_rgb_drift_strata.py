@@ -87,6 +87,21 @@ class TestStrata(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "unverified identity/dimensions/alpha parity"):
                     classify({"pairs": [candidate]}, strict_baseline=False)
 
+    def test_joint_strata_partition_and_unknown(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        items[0]["format"] = "BC7"
+        items[0]["source_srgb"] = True
+        result = classify({"pairs": items})
+        self.assertEqual(sum(x["exact"] for x in result["joint_strata"]), 76)
+        self.assertEqual(sum(x["rgb_drift"] for x in result["joint_strata"]), 30)
+        self.assertEqual(len(result["joint_strata"]), 2)
+        self.assertIn({"format": "BC7", "source_srgb": "true",
+                       "importer_srgb": "true", "exact": 0, "rgb_drift": 1},
+                      result["joint_strata"])
+        self.assertIn({"format": "DXT5", "source_srgb": "UNKNOWN",
+                       "importer_srgb": "true", "exact": 76, "rgb_drift": 29},
+                      result["joint_strata"])
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
