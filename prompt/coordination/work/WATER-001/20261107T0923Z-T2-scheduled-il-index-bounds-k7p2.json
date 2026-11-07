@@ -1,0 +1,18 @@
+{
+  "session_id": "20261107T0923Z-T2-scheduled-il-index-bounds-k7p2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "3b95730f006c816b70c2dcd96c90eddf7c9f2442",
+  "hypothesis": "Synthetic IL provenance accepts unbounded argument/local indexes, despite CLI metadata index bounds; reject oversized indexes before formatting origins.",
+  "intended_files": [
+    "scripts/t2_pass1_stack_provenance.py",
+    "tests/test_t2_pass1_stack_provenance.py"
+  ],
+  "experiment_key": "T2-synthetic-IL-arg-local-ushort-index-boundary-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "20261107T0824Z-T2-scheduled-arg-type-consistency-d6e2"
+  ],
+  "updated_at": "2026-11-07T09:23:00Z"
+}
