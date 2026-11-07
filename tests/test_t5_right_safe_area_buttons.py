@@ -32,6 +32,29 @@ class RightSideDiagnosticButtons(unittest.TestCase):
         self.assertIn("safeRoot.anchorMin = new Vector2(safe.xMin / Screen.width", s)
         self.assertIn("safeRoot.anchorMax = new Vector2(safe.xMax / Screen.width", s)
 
+    def test_button_geometry_does_not_overlap_hud_or_each_other(self):
+        # Static contract only: screen-space correctness still needs device proof.
+        # Coordinates are relative to the safe-area top-right corner, in UI units.
+        buttons = re.findall(
+            r'AddRightButton\(safeRoot,\s*"(Show Xbox|Xbox layout|Test report)",'
+            r'\s*(\d+),\s*(\d+),\s*(\d+),', self.source)
+        self.assertEqual(len(buttons), 3)
+        geometry = [(name, int(inset), int(y), int(width))
+                    for name, inset, y, width in buttons]
+        self.assertEqual([name for name, *_ in geometry],
+                         ["Show Xbox", "Xbox layout", "Test report"])
+        self.assertIn('Node(caption, parent, 0, y, width, 42)', self.source)
+        # HUD touch blocker occupies the first 70 units below the safe-area top.
+        self.assertIn('Node("HudTouchBlocker", safeRoot, 0, 0, 1920, 70)', self.source)
+        for name, inset, y, width in geometry:
+            with self.subTest(button=name):
+                self.assertGreaterEqual(inset, 0)
+                self.assertGreaterEqual(y, 70)
+                self.assertGreater(width, 0)
+                self.assertLessEqual(width + inset, 320)  # avoid excessive menu occlusion
+        for first, second in zip(geometry, geometry[1:]):
+            self.assertGreaterEqual(second[2] - first[2], 42)
+
     def test_buttons_preserve_original_callbacks(self):
         s = self.source
         self.assertIn("gamepad.SetVisible(!gamepad.Visible)", s)
