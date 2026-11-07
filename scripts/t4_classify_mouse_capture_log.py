@@ -27,16 +27,17 @@ def classify(lines):
         if not subsequent_locks:
             state = "NO_REARM_OBSERVED"
         else:
-            lock = subsequent_locks[0]
-            # A later request cannot satisfy a lock intent already cancelled
-            # by an authored unlock or another Escape. Treat it as a new
-            # sequence only after a fresh authored_lock event.
-            next_boundary = min([n for n in unlocks + escapes if lock < n < end], default=end)
-            subsequent_requests = [n for n in requests if lock < n < next_boundary]
-            if not subsequent_requests:
+            # Only a request within a still-active authored lock may count.
+            # A cancelled lock cannot borrow a later request, but a fresh
+            # lock following an unlock may legitimately rearm the mouse.
+            eligible = []
+            for lock in subsequent_locks:
+                next_boundary = min([n for n in unlocks + escapes if lock < n < end], default=end)
+                eligible.extend(n for n in requests if lock < n < next_boundary)
+            if not eligible:
                 state = "LOCK_WITHOUT_REQUEST_OBSERVED"
             else:
-                request = subsequent_requests[0]
+                request = min(eligible)
                 first_release = min([n for n in releases + unlocks if request < n < end], default=end)
                 if any(request < n < first_release for n in relative):
                     state = "RELATIVE_AFTER_REARM_OBSERVED"
