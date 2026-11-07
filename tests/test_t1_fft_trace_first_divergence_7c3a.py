@@ -32,4 +32,16 @@ class TraceTests(unittest.TestCase):
             a.write_text("".join(json.dumps(x)+"\n" for x in rows))
             b.write_text("".join(json.dumps({**x,"coordinate":[9,9]})+"\n" for x in rows))
             self.assertEqual(compare(a,b)["key"][0],2)
+    def test_late_provenance_conflict_precedes_early_coordinate_mismatch(self):
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d)/"a", Path(d)/"b"
+            left = [{**BASE, "read_site":0}, {**BASE, "read_site":1}]
+            right = [{**BASE, "read_site":0, "coordinate":[9,9]},
+                     {**BASE, "read_site":1, "input_sha256":"different"}]
+            a.write_text("".join(json.dumps(row)+"\n" for row in left))
+            b.write_text("".join(json.dumps(row)+"\n" for row in right))
+            result = compare(a,b)
+            self.assertEqual(result["status"], "provenance_mismatch")
+            self.assertEqual(result["key"], (0,0,1))
+            self.assertEqual(result["field"], "input_sha256")
 if __name__=="__main__": unittest.main()
