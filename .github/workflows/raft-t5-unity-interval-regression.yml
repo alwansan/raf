@@ -1,0 +1,43 @@
+name: T5 PERF-007 Unity interval session isolation regression
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t5-unity-interval-regression.yml'
+      - 'scripts/t5_unity_interval_epoch.py'
+      - 'tests/test_t5_unity_interval_epoch.py'
+permissions:
+  contents: read
+concurrency:
+  group: t5-unity-interval-regression-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-only-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run isolated real parser and CLI regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t5_unity_interval_epoch.py tests/test_t5_unity_interval_epoch.py
+          python3 -m unittest discover -s tests -p 'test_t5_unity_interval_epoch.py' -v
+          tmp="$(mktemp)"
+          trap 'rm -f "$tmp"' EXIT
+          printf '%s\n' '{"area":"performance","operation":"sample","detail":"scene=MainScene;refresh_hz=120;frame_samples=40;fps=24;frame_p50_ms=30;frame_p95_ms=60;width=2400;height=1080"}' > "$tmp"
+          python3 scripts/t5_unity_interval_epoch.py "$tmp" --session-id CL-220911 > "$RUNNER_TEMP/t5-result.json"
+          python3 - "$RUNNER_TEMP/t5-result.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          data=json.loads(Path(sys.argv[1]).read_text())
+          assert data["performance_intervals"] == 1
+          assert data["epochs"][0]["session_id"] == "CL-220911"
+          assert data["epochs"][0]["median_interval_fps"] == 24
+          assert data["gpu_time_inferred"] is False
+          print("T5_INTERVAL_CLI_PASS source_only=true device_proof=false")
+          PY
