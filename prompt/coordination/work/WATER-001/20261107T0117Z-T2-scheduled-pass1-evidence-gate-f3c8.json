@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T0117Z-T2-scheduled-pass1-evidence-gate-f3c8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "completed_sourcefree",
+  "baseline_sha": "ce57a58ab5ee996efed89d212e376222b96cf160",
+  "experiment_key": "T2-Foam-pass1-countonly-evidence-gate-v1",
+  "resource_key": "none; local sourcefree Python only",
+  "files": [
+    "scripts/t2_foam_pass1_gate.py",
+    "tests/test_t2_foam_pass1_gate.py"
+  ],
+  "hypothesis": "The safe report must never equate unknown pass1 source/destination with missing resource, nor type-only with runtime identity.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261107T0020Z-T2-scheduled-pass1-boundary-n8c4.md",
+    "prompt/coordination/clients/T2/sessions/20261107T2227Z-T2-chat-blit-texture-role-6c52.md"
+  ],
+  "result": "Six local sourcefree synthetic unittest cases passed. Not yet wired into CI; no original artifact was fed.",
+  "next_step": "Apply gate to pinned safe aggregate artifact after checking latest T2 chat work; build a bounded private pass1 IL producer slice only on nonoverlapping files."
+}
