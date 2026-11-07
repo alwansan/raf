@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T0716Z-T2-scheduled-stack-hardening-f2a8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "491c18157ac9724e7d0d1516c43f738b3304a9e9",
+  "intended_files": [
+    "scripts/t2_pass1_stack_provenance.py",
+    "tests/test_t2_pass1_stack_provenance.py",
+    "prompt/coordination/clients/T2/sessions/20261107T0716Z-T2-scheduled-stack-hardening-f2a8.md"
+  ],
+  "experiment_key": "synthetic-stack-input-validation-v2-no-original-bytes",
+  "resource_key": null,
+  "hypothesis": "Malformed local indexes and typed argument identifiers currently escape Unresolved via TypeError or allow bool/string aliases; reject fail-closed.",
+  "updated_at": "2026-11-07T07:16:00Z",
+  "device_baseline": "42058825739: world/save/reopen confirmed; water/FFT unresolved"
+}
