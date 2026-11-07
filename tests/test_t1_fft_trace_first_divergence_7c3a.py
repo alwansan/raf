@@ -78,4 +78,22 @@ class TraceTests(unittest.TestCase):
             p.write_text(json.dumps({**BASE, "raw_shader_bytes": "must-not-appear"})+"\n")
             with self.assertRaisesRegex(ValueError, "incomplete record"):
                 load(p)
+    def test_coordinate_mismatch_does_not_expose_private_coordinates(self):
+        with tempfile.TemporaryDirectory() as d:
+            a,b=Path(d)/"a",Path(d)/"b"
+            a.write_text(json.dumps({**BASE, "coordinate":[111,222]})+"\n")
+            b.write_text(json.dumps({**BASE, "coordinate":[333,444]})+"\n")
+            result=compare(a,b)
+            self.assertEqual(result, {"status":"coordinate_mismatch","key":(0,0,0)})
+            self.assertNotIn("111", json.dumps(result))
+            self.assertNotIn("333", json.dumps(result))
+    def test_numeric_mismatch_does_not_expose_private_values(self):
+        with tempfile.TemporaryDirectory() as d:
+            a,b=Path(d)/"a",Path(d)/"b"
+            a.write_text(json.dumps({**BASE, "value":[1234567.0]})+"\n")
+            b.write_text(json.dumps({**BASE, "value":[7654321.0]})+"\n")
+            result=compare(a,b)
+            self.assertEqual(result, {"status":"numeric_mismatch","key":(0,0,0)})
+            self.assertNotIn("1234567", json.dumps(result))
+            self.assertNotIn("7654321", json.dumps(result))
 if __name__=="__main__": unittest.main()
