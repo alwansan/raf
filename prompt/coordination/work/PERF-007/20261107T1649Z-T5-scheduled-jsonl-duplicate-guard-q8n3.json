@@ -1,0 +1,19 @@
+{
+  "session_id": "20261107T1649Z-T5-scheduled-jsonl-duplicate-guard-q8n3",
+  "origin": "scheduled",
+  "issue_id": "PERF-007",
+  "status": "active",
+  "baseline_sha": "5b4c0aaf65c8334ee53fe15879293064819ed036",
+  "intended_files": [
+    "scripts/t5_unity_interval_epoch.py",
+    "tests/test_t5_unity_interval_epoch.py"
+  ],
+  "experiment_key": "unity-jsonl-duplicate-keys-rejection-v1:eb004ce:synthetic",
+  "resource_key": null,
+  "hypothesis": "Python json.loads silently accepts duplicate keys, allowing ambiguous Unity interval metrics; reject duplicate JSONL object keys without touching performance cohort semantics",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261107T1552Z-T5-scheduled-unity-epoch-p7n4.md"
+  ],
+  "updated_at": "2026-11-07T16:49:00Z",
+  "no_unity_build": true
+}
