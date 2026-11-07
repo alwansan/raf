@@ -1,0 +1,15 @@
+{
+  "session_id": "20261107T1349Z-T5-scheduled-right-geometry-k9p4",
+  "origin": "scheduled",
+  "issue_id": "DISPLAY-003",
+  "baseline_sha": "19df5e53984925bf3fd991aa5539ad7d99e12e5a",
+  "status": "active",
+  "intended_files": [
+    "tests/test_t5_right_safe_area_buttons.py"
+  ],
+  "experiment_key": "right-safe-area-geometry-static-v2-19df5e5",
+  "resource_key": null,
+  "hypothesis": "Three right-aligned diagnostic buttons must remain separated, below HUD, inside safe area on narrow landscape layouts; existing static contract checks anchors but not geometry.",
+  "taken_over_from": "prompt/coordination/clients/T5/sessions/20261107T1246Z-T5-scheduled-ui-right-regression-m8q2.md",
+  "updated_at": "2026-11-07T13:49:00Z"
+}
