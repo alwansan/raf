@@ -1,5 +1,7 @@
 import unittest
-from scripts.t5_unity_interval_epoch import analyze_rows, parse_detail
+import tempfile
+from pathlib import Path
+from scripts.t5_unity_interval_epoch import analyze_rows, parse_detail, load
 
 def sample(scene="MainScene", refresh=120, frames=40, fps=24, p95=60, width=2400):
     return {"area":"performance", "operation":"sample",
@@ -26,6 +28,26 @@ class EpochTests(unittest.TestCase):
         with self.assertRaises(ValueError): analyze_rows([{"area":"performance","operation":"sample","detail":"fps=10"}])
     def test_other_area_ignored(self):
         self.assertEqual(analyze_rows([{"area":"scene","operation":"sample"}])["performance_intervals"],0)
+    def test_duplicate_jsonl_top_level_key_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "perf.jsonl"
+            path.write_text('{"area":"performance","area":"scene","operation":"sample"}' + chr(10), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Duplicate JSONL key"):
+                load(path)
+
+    def test_duplicate_jsonl_nested_key_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "perf.jsonl"
+            path.write_text('{"area":"scene","extra":{"fps":20,"fps":100}}' + chr(10), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Duplicate JSONL key"):
+                load(path)
+
+    def test_distinct_jsonl_keys_still_load(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "perf.jsonl"
+            path.write_text('{"area":"scene","operation":"sample"}' + chr(10), encoding="utf-8")
+            self.assertEqual(len(load(path)), 1)
+
     def test_resolution_change_is_epoch(self):
         self.assertEqual(len(analyze_rows([sample(),sample(width=1920)])["epochs"]),2)
 
