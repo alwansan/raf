@@ -16,6 +16,7 @@ def classify(lines):
                 hits[event].append((number, line.strip()[:500]))
     locks = [n for n, s in hits[EVENTS[0]] if "authored_lock" in s]
     escapes = [n for n, s in hits[EVENTS[0]] if "escape_release" in s]
+    unlocks = [n for n, s in hits[EVENTS[0]] if "authored_unlock" in s]
     requests = [n for n, _ in hits[EVENTS[1]]]
     relative = [n for n, _ in hits[EVENTS[2]]]
     releases = [n for n, _ in hits[EVENTS[3]]]
@@ -32,7 +33,7 @@ def classify(lines):
                 state = "LOCK_WITHOUT_REQUEST_OBSERVED"
             else:
                 request = subsequent_requests[0]
-                first_release = next((n for n in releases if request < n < end), end)
+                first_release = min([n for n in releases + unlocks if request < n < end], default=end)
                 if any(request < n < first_release for n in relative):
                     state = "RELATIVE_AFTER_REARM_OBSERVED"
                 elif first_release < end:
