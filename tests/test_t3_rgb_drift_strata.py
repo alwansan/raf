@@ -13,6 +13,18 @@ class TestStrata(unittest.TestCase):
         self.assertEqual((result["exact"], result["rgb_drift"]), (76, 30))
         self.assertEqual(result["strata"]["source_srgb"]["UNKNOWN"]["rgb_drift"], 30)
 
+    def test_coverage_and_metadata_guard(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        result = classify({"pairs": items})
+        self.assertEqual(result["metadata_coverage"],
+                         {"format": 106, "source_srgb": 0, "importer_srgb": 106})
+        with self.assertRaisesRegex(ValueError, "missing per-pair metadata"):
+            classify({"pairs": items}, require_metadata=True)
+        for item in items:
+            item["source_srgb"] = False
+        self.assertEqual(classify({"pairs": items}, require_metadata=True)
+                         ["metadata_coverage"]["source_srgb"], 106)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
