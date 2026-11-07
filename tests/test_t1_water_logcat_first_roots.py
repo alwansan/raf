@@ -37,6 +37,19 @@ class FirstRootsTests(unittest.TestCase):
             self.assertEqual(forward['first_by_category']['pass_spectrum'], '11-05 22:09:11.003')
             self.assertEqual(forward['root_line_counts']['kernel_index_6'], 3)
 
+    def test_oversized_physical_line_tail_never_classified(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / 'oversized.log'
+            # The tail contains a valid-looking record, but it belongs to an
+            # oversized physical line and must not become a second record.
+            p.write_bytes(b'X' * 32769 +
+                          b'11-05 22:09:11.001 E Unity: Invalid compute kernel index 6\\n' +
+                          b'11-05 22:09:11.002 E Unity: Invalid compute kernel index 6\\n')
+            result = scan([p])
+            self.assertEqual(result['root_line_counts'], {'kernel_index_6': 1})
+            self.assertEqual(result['first_by_category']['kernel_index_6'],
+                             '11-05 22:09:11.002')
+
     def test_symlink_and_duplicate_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / 'a'; p.write_text('test')
