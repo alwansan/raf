@@ -47,6 +47,13 @@ def analyze_rows(rows, minimum_frames=30):
     for row in rows:
         if not isinstance(row, dict):
             raise ValueError("Invalid JSONL object")
+        # Scene lifecycle events delimit epochs even without an intermediate FPS sample.
+        # Without this, A -> B -> A silently pools two distinct visits to scene A.
+        if row.get("area") == "scene" and row.get("operation") in (
+            "loaded", "unloaded", "changed", "scene_loaded", "scene_unloaded",
+        ):
+            last_key = None
+            continue
         if row.get("area") != "performance" or row.get("operation") != "sample":
             continue
         count += 1
