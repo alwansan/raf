@@ -71,5 +71,30 @@ class EpochTests(unittest.TestCase):
     def test_resolution_change_is_epoch(self):
         self.assertEqual(len(analyze_rows([sample(),sample(width=1920)])["epochs"]),2)
 
+    def test_legacy_input_can_be_explicitly_labeled(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "legacy.jsonl"
+            import json
+            path.write_text(json.dumps(sample()) + "\n", encoding="utf-8")
+            rows = load(path, session_id="CL-220911")
+            self.assertEqual(analyze_rows(rows)["epochs"][0]["session_id"], "CL-220911")
+
+    def test_explicit_label_rejects_conflicting_existing_id(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "labeled.jsonl"
+            import json
+            row = sample()
+            row["session_id"] = "CL-230108"
+            path.write_text(json.dumps(row) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Conflicting session_id"):
+                load(path, session_id="CL-220911")
+
+    def test_empty_explicit_label_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "empty.jsonl"
+            path.write_text('{"area":"scene"}\\n', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Invalid session_id"):
+                load(path, session_id=" ")
+
 if __name__=="__main__":
     unittest.main()
