@@ -50,6 +50,24 @@ class Pass1StackTests(unittest.TestCase):
     def test_consistent_argument_type_repeated(self):
         self.assertEqual(trace([("ldarg", (3, "Texture")), ("pop", None), ("ldarg", (3, "Texture"))]), (Value("Texture", "arg:3"),))
 
+    def test_cli_index_bounds_fail_closed(self):
+        # CLI argument/local indexes are 16-bit unsigned metadata indexes.
+        for instructions in (
+            [("ldarg", (65536, "Texture"))],
+            [("ldarg", (10 ** 100, "RenderTexture"))],
+            [("ldnull", None), ("stloc", 65536)],
+            [("ldloc", 65536)],
+        ):
+            with self.subTest(instructions=instructions):
+                with self.assertRaises(Unresolved):
+                    trace(instructions)
+
+    def test_cli_max_index_still_accepted(self):
+        self.assertEqual(
+            trace([("ldarg", (65535, "Texture")), ("stloc", 65535), ("ldloc", 65535)]),
+            (Value("Texture", "arg:65535"),),
+        )
+
     def test_invalid_step_budgets_fail_closed(self):
         for budget in (True, 0, -1, "128"):
             with self.subTest(budget=budget):
