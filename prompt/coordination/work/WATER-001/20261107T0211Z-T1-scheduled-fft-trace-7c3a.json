@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T0211Z-T1-scheduled-fft-trace-7c3a",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_commit": "9b89f62772c2c61f6269fd2249f8560af1522892",
+  "intended_files": [
+    "scripts/t1_fft_trace_first_divergence_7c3a.py",
+    "tests/test_t1_fft_trace_first_divergence_7c3a.py",
+    "prompt/coordination/clients/T1/sessions/20261107T0211Z-T1-scheduled-fft-trace-7c3a.md"
+  ],
+  "experiment_key": "fft-trace-first-divergence-sanitized-jsonl-v2-20261107-7c3a",
+  "resource_key": null,
+  "hypothesis": "Reject mismatched capture provenance and identify first per-dispatch coordinate or numeric divergence without conflating Vulkan and Unity program hashes",
+  "taken_over_from": [
+    "T1 20261107T0106Z local checkpoint",
+    "CI 42307656709"
+  ],
+  "updated_at": "2026-11-07T02:11:00Z"
+}
