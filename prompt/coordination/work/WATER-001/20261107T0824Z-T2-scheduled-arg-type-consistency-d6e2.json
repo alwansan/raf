@@ -2,7 +2,7 @@
   "session_id": "20261107T0824Z-T2-scheduled-arg-type-consistency-d6e2",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "46a591e780e3ff97f16503052637ecee0bb6f2a9",
   "intended_files": [
     "scripts/t2_pass1_stack_provenance.py",
@@ -16,5 +16,11 @@
   "taken_over_from": [
     "20261107T0716Z-T2-scheduled-stack-hardening-f2a8"
   ],
-  "updated_at": "2026-11-07T08:24:00Z"
+  "updated_at": "2026-11-07T08:29:00Z",
+  "result_commits": [
+    "992310903a8e382a48e3ece2206f168ad762bec5",
+    "e8d0b8932a2ce94d9263843808dc9a986923598c",
+    "f35cef89a9376d55953d9ace009728b42b39590d"
+  ],
+  "validation": "2 focused tests PASS on reconstructed local source; exact repository test suite and authentic IL not executed"
 }
