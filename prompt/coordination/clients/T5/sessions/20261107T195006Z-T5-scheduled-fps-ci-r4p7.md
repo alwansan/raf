@@ -1,0 +1,12 @@
+# T5 scheduled — 20261107T195006Z-T5-scheduled-fps-ci-r4p7
+- origin: scheduled
+- baseline HEAD: 017cd17612729a63ed6a82232e468e02084183c4
+- owner device report: docs/DEVICE_FEEDBACK_42058825739_AR.md. World/save/reentry is phone evidence only for 42058825739.
+- restored from: prompt/coordination/clients/T5/sessions/20261107T184704Z-T5-scheduled-k8m2.md and PERF-007 script/tests.
+- work scope: prompt/coordination/work/PERF-007/20261107T195006Z-T5-scheduled-fps-ci-r4p7.json (registered at de09957d6042625a9f2fef7ef97554e4b38ad177).
+- changed: .github/workflows/raft-t5-unity-interval-regression.yml at 0e3d102984477763005a908386bb188a9f8e3875.
+- evidence: workflow runs Python unittest discovery for 16 interval tests, py_compile, and a direct CLI --session-id smoke assertion. Cheap source-only runner, no Unity/Android or CL raw assets, no overlap with T4.
+- state: waiting_ci until GitHub Actions result is verified. Workflow creation is not test success.
+- build vote: trial-20261106-r1 still lacks 5/5. Do not start duplicate Unity.
+- limits: APK/OBB on owner device not cryptographically matched; no new FPS measurement; Resolution and mouse device acceptance open. Existing LogRaft comparisons must remain per-session and per-display cohort.
+- next: check Actions for commit 0e3d102 and repair if failing; use pinned CL samples and signed manifest only after hashes verified; coordinate Resolution work with live T5 chat scope.
