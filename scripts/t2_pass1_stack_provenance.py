@@ -17,7 +17,7 @@ class Value:
 def trace(instructions, max_steps=128):
     if type(max_steps) is not int or max_steps < 1 or not isinstance(instructions, (list, tuple)) or len(instructions) > max_steps:
         raise Unresolved("invalid or oversized block")
-    stack, locals_ = [], {}
+    stack, locals_, arg_types = [], {}, {}
     for index, instruction in enumerate(instructions):
         if not isinstance(instruction, (tuple, list)) or len(instruction) != 2:
             raise Unresolved("malformed instruction")
@@ -25,6 +25,10 @@ def trace(instructions, max_steps=128):
         if op == "ldarg":
             if not isinstance(arg, (tuple, list)) or len(arg) != 2 or type(arg[0]) is not int or arg[0] < 0 or arg[1] not in ("Texture", "RenderTexture"):
                 raise Unresolved("untyped argument")
+            previous_type = arg_types.get(arg[0])
+            if previous_type is not None and previous_type != arg[1]:
+                raise Unresolved("conflicting argument type")
+            arg_types[arg[0]] = arg[1]
             stack.append(Value(arg[1], "arg:" + str(arg[0])))
         elif op == "ldnull":
             if arg is not None: raise Unresolved("invalid null operand")
