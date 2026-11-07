@@ -1,0 +1,18 @@
+{
+  "session_id": "20261107T0615Z-T1-scheduled-source-sha-4c8f",
+  "origin": "scheduled",
+  "owner": "T1",
+  "status": "active",
+  "baseline_sha": "d41b218e999bcee051a95ff0610f26f95ec0fb35",
+  "issue": "WATER-001",
+  "files": [
+    "scripts/t1_fft_trace_first_divergence_7c3a.py",
+    "tests/test_t1_fft_trace_first_divergence_7c3a.py"
+  ],
+  "hypothesis": "Mixed source_sha within one capture may be accepted despite each capture requiring one immutable compiled program; cross-backend source_sha may differ.",
+  "experiment_key": "T1-FFT-INTRATRACE-SOURCE-SHA",
+  "shared_resource": "none",
+  "taken_over_from": "T1 9112265c and earlier first-divergence tool",
+  "device_baseline": "42058825739",
+  "scope": "source-only trace integrity; no game shader edits, Unity or build"
+}
