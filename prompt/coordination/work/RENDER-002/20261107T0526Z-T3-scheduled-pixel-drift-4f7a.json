@@ -1,0 +1,23 @@
+{
+  "session_id": "20261107T0526Z-T3-scheduled-pixel-drift-4f7a",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "status": "in_progress",
+  "base_sha": "08bb6820bfa327ab60cf1a9bdb443890b30c5f6a",
+  "experiment_key": "T3-original-texture-rgb-drift-metadata-classification",
+  "files": [
+    "prompt/coordination/work/RENDER-002/20261107T0526Z-T3-scheduled-pixel-drift-4f7a.json",
+    "prompt/coordination/clients/T3/sessions/20261107T0526Z-T3-scheduled-pixel-drift-4f7a.md"
+  ],
+  "hypothesis": "30/106 RGB_DRIFT original-vs-export pairs may cluster by source texture format or color-space decode rather than lost GUIDs or geometry; must distinguish using SHA-authenticated private source metadata before modifying textures.",
+  "shared_resource": "none; no CI dispatched",
+  "taken_over_from": [
+    "T3 20261105T0529Z pixel drift run 41968665857",
+    "B05 original material texenv work",
+    "T3 20261105T0028Z external pointer run 41942377246"
+  ],
+  "non_overlap": "No shader candidate, Unity, T1/T2 water, T4 mouse, T5 UI or shared vote file edits.",
+  "next": "Classify 30 drift cases by original texture format/sRGB/alpha and exported importer metadata in private SHA-pinned experiment; compare decoded pixels with controlled transforms; no guessed gamma fix.",
+  "device_claim": false
+}
