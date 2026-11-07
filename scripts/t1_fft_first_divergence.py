@@ -6,6 +6,8 @@ import math
 from pathlib import Path
 
 MAX_CAPTURE_BYTES = 64 * 1024 * 1024
+MAX_TOTAL_CAPTURE_BYTES = 128 * 1024 * 1024
+MAX_PASSES = 32
 
 
 def read_private_capture(root: Path, relative: str) -> bytes:
@@ -67,13 +69,22 @@ def main():
         if args.manifest.is_symlink() or args.manifest.stat().st_size > 1024 * 1024:
             raise ValueError("manifest is symlinked or oversized")
         entries = json.loads(args.manifest.read_text(encoding="utf-8"))
-        if not isinstance(entries, list):
-            raise ValueError("manifest must be a list")
+        if not isinstance(entries, list) or not 1 <= len(entries) <= MAX_PASSES:
+            raise ValueError("manifest must contain 1..32 passes")
         pairs = []
+        total_bytes = 0
         manifest_dir = args.manifest.resolve().parent
         for entry in entries:
             if not isinstance(entry, dict) or set(entry) != {"name", "reference", "observed"}:
                 raise ValueError("invalid pass entry")
+            # Budget cumulative input bytes before reading either capture.
+            for key in ("reference", "observed"):
+                relative = entry[key]
+                if not isinstance(relative, str) or not relative or Path(relative).is_absolute() or ".." in Path(relative).parts:
+                    raise ValueError("invalid capture path")
+                total_bytes += (manifest_dir / relative).stat().st_size
+                if total_bytes > MAX_TOTAL_CAPTURE_BYTES:
+                    raise ValueError("aggregate private capture budget exceeded")
             pairs.append((entry["name"], read_private_capture(manifest_dir, entry["reference"]),
                           read_private_capture(manifest_dir, entry["observed"])))
         report = compare_passes(pairs, atol=args.atol, rtol=args.rtol)
