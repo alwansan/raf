@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "event_id": "20261107T204503Z-T5-interval-ci-verdict-n6q2",
+  "agent": "T5",
+  "origin": "scheduled",
+  "issue_id": "PERF-007",
+  "status": "SOURCE_TEST_PASS",
+  "source_sha": "0e3d102984477763005a908386bb188a9f8e3875",
+  "run_id": 42408172119,
+  "job_id": 128510300333,
+  "conclusion": "success",
+  "scope": "Source-only Python regression and --session-id CLI smoke; no Android runtime validation",
+  "session_id": "20261107T204503Z-T5-scheduled-n6q2",
+  "updated_at": "2026-11-07T20:45:03Z"
+}
