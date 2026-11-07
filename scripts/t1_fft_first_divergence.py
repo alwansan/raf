@@ -4,6 +4,31 @@ import argparse
 import json
 import math
 from pathlib import Path
+
+MAX_CAPTURE_BYTES = 64 * 1024 * 1024
+
+
+def read_private_capture(root: Path, relative: str) -> bytes:
+    """Read only bounded regular files directly beneath the private manifest directory."""
+    if not isinstance(relative, str) or not relative or "\\x00" in relative:
+        raise ValueError("invalid private capture path")
+    candidate = Path(relative)
+    if candidate.is_absolute() or ".." in candidate.parts or candidate.parts == (".",):
+        raise ValueError("capture path must remain relative to manifest directory")
+    target = root / candidate
+    if target.is_symlink() or any(p.is_symlink() for p in target.parents if p != root and root in p.parents):
+        raise ValueError("symlink capture path rejected")
+    resolved = target.resolve(strict=True)
+    if not resolved.is_relative_to(root) or not resolved.is_file():
+        raise ValueError("capture escapes private manifest directory")
+    size = resolved.stat().st_size
+    if size == 0 or size > MAX_CAPTURE_BYTES or size % 16:
+        raise ValueError("capture size invalid or exceeds private limit")
+    with resolved.open("rb") as stream:
+        data = stream.read(MAX_CAPTURE_BYTES + 1)
+    if len(data) != size:
+        raise ValueError("capture changed during bounded read")
+    return data
 from scripts.t1_fft_rgba_error_signature import signature
 
 def compare_passes(pairs, *, atol=1e-5, rtol=1e-4):
@@ -39,7 +64,9 @@ def main():
     parser.add_argument("--rtol", type=float, default=1e-4)
     args = parser.parse_args()
     try:
-        entries = json.loads(args.manifest.read_text())
+        if args.manifest.is_symlink() or args.manifest.stat().st_size > 1024 * 1024:
+            raise ValueError("manifest is symlinked or oversized")
+        entries = json.loads(args.manifest.read_text(encoding="utf-8"))
         if not isinstance(entries, list):
             raise ValueError("manifest must be a list")
         pairs = []
@@ -47,8 +74,8 @@ def main():
         for entry in entries:
             if not isinstance(entry, dict) or set(entry) != {"name", "reference", "observed"}:
                 raise ValueError("invalid pass entry")
-            pairs.append((entry["name"], (manifest_dir / entry["reference"]).read_bytes(),
-                          (manifest_dir / entry["observed"]).read_bytes()))
+            pairs.append((entry["name"], read_private_capture(manifest_dir, entry["reference"]),
+                          read_private_capture(manifest_dir, entry["observed"])))
         report = compare_passes(pairs, atol=args.atol, rtol=args.rtol)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.exit(2, "Invalid private FFT pass manifest or capture: " + type(exc).__name__ + "\n")
