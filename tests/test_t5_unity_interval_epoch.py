@@ -48,6 +48,26 @@ class EpochTests(unittest.TestCase):
             path.write_text('{"area":"scene","operation":"sample"}' + chr(10), encoding="utf-8")
             self.assertEqual(len(load(path)), 1)
 
+    def test_explicit_session_ids_never_merge_identical_display_cohorts(self):
+        a = sample()
+        b = sample()
+        a["session_id"] = "LogRaft-220911"
+        b["session_id"] = "LogRaft-230108"
+        epochs = analyze_rows([a, b])["epochs"]
+        self.assertEqual(len(epochs), 2)
+        self.assertEqual([e["session_id"] for e in epochs], ["LogRaft-220911", "LogRaft-230108"])
+
+    def test_legacy_rows_without_session_id_remain_compatible(self):
+        epochs = analyze_rows([sample(), sample()])["epochs"]
+        self.assertEqual(len(epochs), 1)
+        self.assertIsNone(epochs[0]["session_id"])
+
+    def test_invalid_session_id_rejected(self):
+        row = sample()
+        row["session_id"] = []
+        with self.assertRaisesRegex(ValueError, "Invalid session_id"):
+            analyze_rows([row])
+
     def test_resolution_change_is_epoch(self):
         self.assertEqual(len(analyze_rows([sample(),sample(width=1920)])["epochs"]),2)
 
