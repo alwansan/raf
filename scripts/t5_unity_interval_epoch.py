@@ -92,6 +92,15 @@ def analyze_rows(rows, minimum_frames=30):
             "frame_p95_semantics": "median of interval p95 values, not pooled per-frame p95",
             "gpu_time_inferred": False}
 
+def unique_json_object(pairs):
+    """Reject ambiguous duplicate JSONL object keys at any nesting level."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate JSONL key: " + key)
+        result[key] = value
+    return result
+
 def load(path):
     if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= MAX_BYTES:
         raise ValueError("Unsafe or oversized JSONL")
@@ -100,7 +109,7 @@ def load(path):
         for line in f:
             if not line.strip():
                 raise ValueError("Blank JSONL row")
-            rows.append(json.loads(line))
+            rows.append(json.loads(line, object_pairs_hook=unique_json_object))
             if len(rows) > MAX_ROWS:
                 raise ValueError("Too many JSONL rows")
     return rows
