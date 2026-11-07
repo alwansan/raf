@@ -45,7 +45,7 @@ def classify(lines):
             elif any(any(request < n < boundary for n in relative)
                      for request, boundary in attempts):
                 state = "RELATIVE_AFTER_REARM_OBSERVED"
-            elif all(boundary < end for _, boundary in attempts):
+            elif all(boundary in (unlocks + escapes + releases) for _, boundary in attempts):
                 state = "RELEASED_BEFORE_RELATIVE_OBSERVED"
             else:
                 state = "REQUEST_WITHOUT_RELATIVE_OBSERVED"
