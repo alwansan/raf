@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "session_id": "20261107T2221Z-T2-scheduled-original-pass-role-reconcile-m8q4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "ec3bb5a4a383675ec60a863c9992ba8e219d5a2d",
+  "updated_at": "2026-11-07T22:21:50Z",
+  "resumed_from_sessions": [
+    "20261107T2227Z-T2-chat-blit-texture-role-6c52",
+    "20261107T2117Z-T2-scheduled-foam-cross-evidence-k6p2"
+  ],
+  "hypothesis": "The existing authentic original Foam role report is aggregate-only; pass-specific assignment remains unknown until original per-site output is independently validated. Avoid falsely treating independent aggregate totals as pass0/pass1 evidence.",
+  "experiment_key": "T2-original-Foam-two-pass-roles-aggregate-vs-site-reconciliation-681c239c-42305522855",
+  "resource_key": "read-only authenticated CI 42305522855",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261107T2221Z-T2-scheduled-original-pass-role-reconcile-m8q4.json",
+    "prompt/coordination/clients/T2/sessions/20261107T2221Z-T2-scheduled-original-pass-role-reconcile-m8q4.md"
+  ],
+  "evidence": {
+    "source_commit": "681c239c29959e420829b48ba24c4ab203ce9ca5",
+    "original_run": "https://github.com/alwansan/raf/actions/runs/42305522855",
+    "source_role_counts": {
+      "Texture": 0,
+      "RenderTexture": 1,
+      "unknown": 1
+    },
+    "destination_role_counts": {
+      "RenderTexture": 1,
+      "null": 0,
+      "unknown": 1
+    },
+    "per_pass_original_role_proven": false,
+    "latest_branch_head_at_review": "ec3bb5a4a383675ec60a863c9992ba8e219d5a2d"
+  },
+  "result": "No new source mutation: original report remains aggregate-only and source-free 81-case crosscheck does not replace a second original per-pass attestation. Existing source-only run succeeded. Local original git checkout blocked by DNS; no duplicate CI dispatched.",
+  "next_step": "Coordinate with T2 chat owner of Program.cs: produce independently SHA-pinned sanitized per-pass role report, feed both actual reports to crosscheck, then consider ShaderLab only after original binding proof."
+}
