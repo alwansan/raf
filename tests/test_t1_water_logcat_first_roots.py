@@ -43,8 +43,8 @@ class FirstRootsTests(unittest.TestCase):
             # The tail contains a valid-looking record, but it belongs to an
             # oversized physical line and must not become a second record.
             p.write_bytes(b'X' * 32769 +
-                          b'11-05 22:09:11.001 E Unity: Invalid compute kernel index 6\\n' +
-                          b'11-05 22:09:11.002 E Unity: Invalid compute kernel index 6\\n')
+                          b'11-05 22:09:11.001 E Unity: Invalid compute kernel index 6\n' +
+                          b'11-05 22:09:11.002 E Unity: Invalid compute kernel index 6\n')
             result = scan([p])
             self.assertEqual(result['root_line_counts'], {'kernel_index_6': 1})
             self.assertEqual(result['first_by_category']['kernel_index_6'],
