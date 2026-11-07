@@ -1,0 +1,15 @@
+{
+  "session_id": "20261107T1329Z-T3-scheduled-format-sentinel-r5c8",
+  "origin": "scheduled",
+  "track": "RENDER-002",
+  "base_sha": "717bacf220119cb1508b9fe08723e7bdc199902b",
+  "hypothesis": "format string UNKNOWN is accepted as a known bucket by drift metadata coverage, allowing missing private original format metadata to bypass --require-drift-metadata",
+  "files": [
+    "scripts/t3_rgb_drift_strata.py",
+    "tests/test_t3_rgb_drift_strata.py"
+  ],
+  "experiment_key": "T3-rgb-drift-format-sentinel-20261107",
+  "shared_resource": "none; source-only no CI dispatched",
+  "coordination": "T3 only; no Unity or other team files; prior T3 latest session 20261107T1233Z",
+  "status": "planned"
+}
