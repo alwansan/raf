@@ -69,6 +69,24 @@ class TestStrata(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
                 classify({"pairs": items}, require_drift_metadata=True)
 
+    def test_rejects_nonboolean_srgb_metadata(self):
+        item = row(False)
+        for key in ("source_srgb", "importer_srgb"):
+            for invalid in ("false", 0, 1, [], {}):
+                candidate = dict(item)
+                candidate[key] = invalid
+                with self.subTest(key=key, invalid=repr(invalid)):
+                    with self.assertRaisesRegex(ValueError, "invalid srgb flag"):
+                        classify({"pairs": [candidate]}, strict_baseline=False)
+
+    def test_rejects_unverified_alpha_and_dimensions(self):
+        for key in ("alpha_equal", "dimensions_ok"):
+            candidate = row(False)
+            candidate[key] = False
+            with self.subTest(key=key):
+                with self.assertRaisesRegex(ValueError, "unverified identity/dimensions/alpha parity"):
+                    classify({"pairs": [candidate]}, strict_baseline=False)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
