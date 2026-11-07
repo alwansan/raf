@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "INPUT-005",
   "base_sha": "9ace8ce8627adcbb4fe01e5cf88b0939f9660064",
-  "status": "active",
+  "status": "waiting_ci",
   "intended_files": [
     ".github/workflows/raft-t4-mouse-trace-classifier.yml",
     "prompt/coordination/clients/T4/sessions/20261107T2038Z-T4-scheduled-classifier-ci-v7q2.md",
@@ -12,6 +12,9 @@
   "experiment_key": "t4-mouse-trace-classifier-17-unittests-current-head-20261107",
   "resource_key": "lightweight-python-only",
   "hypothesis": "The 17 committed classifier regression tests have never been executed on the current source; a bounded Python-only CI can validate or falsify that implementation without a Unity build.",
-  "updated_at": "2026-11-07T20:38:00Z",
-  "owner_evidence": "42058825739 world-save-reopen owner-confirmed; not mouse device success"
+  "updated_at": "2026-11-07T20:40:00Z",
+  "owner_evidence": "42058825739 world-save-reopen owner-confirmed; not mouse device success",
+  "delivered_commit": "b1b3d66a6d14859d2c82a033d8dbca4f00202e7d",
+  "result": "Workflow created; Actions run not yet visible in latest 30 at checkpoint; 17 tests unverified.",
+  "next_step": "Check Actions for classifier workflow at delivered commit; debug if failing; analyze fresh device mouse logs."
 }
