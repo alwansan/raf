@@ -60,7 +60,8 @@ def classify(doc, strict_baseline=True, require_metadata=False):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("private_manifest")\n    parser.add_argument("--require-metadata", action="store_true", help="reject missing whole-field metadata")
+    parser.add_argument("private_manifest")
+    parser.add_argument("--require-metadata", action="store_true", help="reject missing whole-field metadata")
     args = parser.parse_args()
     with open(args.private_manifest, encoding="utf-8") as stream:
         doc = json.load(stream)
