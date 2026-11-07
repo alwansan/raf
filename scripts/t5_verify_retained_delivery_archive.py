@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import re
+import stat
 import zipfile
 
 PACKAGE = "com.alwansan.raft.androidtest"
@@ -48,6 +49,17 @@ def _reject_duplicate_json_keys(pairs):
     return result
 
 
+def _regular_zip_member(member: zipfile.ZipInfo) -> bool:
+    """Reject explicit Unix symlink/device/directory types in retained payloads."""
+    if member.is_dir():
+        return False
+    if member.create_system == 3:
+        file_type = stat.S_IFMT(member.external_attr >> 16)
+        if file_type not in (0, stat.S_IFREG):
+            return False
+    return True
+
+
 def _record(value, label: str) -> dict:
     if type(value) is not dict:
         raise ValueError("Invalid " + label)
@@ -75,7 +87,8 @@ def verify_archive(path: Path, *, expected_size: int, expected_sha: str,
         names = [z.filename for z in entries]
         if (not 5 <= len(names) <= MAX_ZIP_ENTRIES
                 or len(set(names)) != len(names)
-                or any(not _safe_file(x) for x in names)):
+                or any(not _safe_file(x) for x in names)
+                or any(not _regular_zip_member(x) for x in entries)):
             raise ValueError("Archive member count, duplicate or path unsafe")
         info_by_name = {e.filename: e for e in entries}
         for name, limit in SMALL.items():
