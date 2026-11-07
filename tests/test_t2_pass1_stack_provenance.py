@@ -74,5 +74,22 @@ class Pass1StackTests(unittest.TestCase):
                 with self.assertRaises(Unresolved):
                     trace([], max_steps=budget)
 
+    def test_nonstring_opcode_and_kind_rejected_without_equality(self):
+        class Poison:
+            def __eq__(self, other):
+                raise AssertionError("untrusted equality invoked")
+            def __str__(self):
+                raise AssertionError("untrusted string conversion invoked")
+
+        for instructions in (
+            [(Poison(), None)],
+            [("ldarg", (0, Poison()))],
+            [(None, None)],
+            [("ldarg", (0, 123))],
+        ):
+            with self.subTest(case=type(instructions[0][0]).__name__):
+                with self.assertRaises(Unresolved):
+                    trace(instructions)
+
 if __name__ == "__main__":
     unittest.main()
