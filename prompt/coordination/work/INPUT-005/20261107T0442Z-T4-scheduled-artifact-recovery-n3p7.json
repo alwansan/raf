@@ -1,0 +1,26 @@
+{
+  "session_id": "20261107T0442Z-T4-scheduled-artifact-recovery-n3p7",
+  "origin": "scheduled",
+  "owner": "T4",
+  "status": "active",
+  "base_sha": "b1c6df98d14dccc02741007906e4e0238442cc7b",
+  "scope": "Read-only evidence and reproducible signed-artifact retention verification; no Unity rebuild, release publishing, or source changes",
+  "files": [
+    "prompt/coordination/work/INPUT-005/20261107T0442Z-T4-scheduled-artifact-recovery-n3p7.json",
+    "prompt/coordination/clients/T4/sessions/20261107T0442Z-T4-scheduled-artifact-recovery-n3p7.md"
+  ],
+  "hypothesis": "Existing signed checkpoint and delivery artifacts remain recoverable until 2026-11-09; preserve exact SHA provenance and prevent duplicate build",
+  "experiment_key": "T4-42296450023-artifact-retention-20261107",
+  "shared_resource": "GitHub Actions artifacts read-only",
+  "dependencies": [
+    "T5 delivery/release authorization",
+    "owner physical mouse acceptance"
+  ],
+  "evidence": {
+    "run": 42296450023,
+    "source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+    "signed_artifact": 13550196498,
+    "delivery_artifact": 13549514149
+  },
+  "next_step": "Coordinate T5 export of signed APK/OBB and delivery bundle before expiry, check manifest/versionCode/signature/sha256; device mouse relative capture and world reopen remain untested"
+}
