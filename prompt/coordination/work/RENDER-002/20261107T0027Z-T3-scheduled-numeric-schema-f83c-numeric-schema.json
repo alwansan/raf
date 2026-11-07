@@ -1,0 +1,13 @@
+{
+  "session_id": "20261107T0027Z-T3-scheduled-numeric-schema-f83c",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "status": "SOURCE_FIXED_PENDING_TEST",
+  "baseline_head": "e96d36f50d44aa92600df1e7b8fedbeb8a1808e5",
+  "scope": ["scripts/t3_dxbc_spirv_contract_join.py", "tests/test_t3_dxbc_spirv_contract_join.py"],
+  "hypothesis": "Literal backslash-n escapes and unhashable numeric reflection values prevent the contract verifier from reaching a diagnostic result.",
+  "experiment_key": "T3-DXBC-SPIRV-NUMERIC-SCHEMA-20261107",
+  "shared_resource": "none; no CI dispatched",
+  "commits": ["33ad23c92aaf337c1f3a34180992d6a2f563825f", "55b39631c870e4328ce2b9beb83ac352c47b71d0"],
+  "next": "Run Python unittest for contract join and malformed tests; then SHA-pinned Shader48 source reflection join without publishing raw assets."
+}
