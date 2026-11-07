@@ -1,0 +1,19 @@
+{
+  "session_id": "20261107T0020Z-T2-scheduled-pass1-boundary-n8c4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "80302ef52d2a3766e46f5e4cd9e473ca699bf284",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261107T0020Z-T2-scheduled-pass1-boundary-n8c4.json",
+    "prompt/coordination/clients/T2/sessions/20261107T0020Z-T2-scheduled-pass1-boundary-n8c4.md"
+  ],
+  "hypothesis": "The remaining pass1 unknown producer is not evidence of absent RenderTexture; first isolate exact dataflow boundary and avoid repeating successful same-site pass attribution.",
+  "experiment_key": "T2-ZIP2-15964ea8-pass1-unknown-IL-producer-boundary-review-v1",
+  "resource_key": "read-only source-original T2 Foam evidence; no Unity shared runner",
+  "taken_over_from": [
+    "20261106T2250Z-T2-chat-foam-blit-pass-role-83f4",
+    "20261106T2320Z-T2-scheduled-summary-gate-c8f1"
+  ],
+  "updated_at": "2026-11-07T00:20:00Z"
+}
