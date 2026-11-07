@@ -23,7 +23,7 @@ def trace(instructions, max_steps=128):
             raise Unresolved("malformed instruction")
         op, arg = instruction
         if op == "ldarg":
-            if not isinstance(arg, (tuple, list)) or len(arg) != 2 or type(arg[0]) is not int or arg[0] < 0 or arg[1] not in ("Texture", "RenderTexture"):
+            if not isinstance(arg, (tuple, list)) or len(arg) != 2 or type(arg[0]) is not int or not 0 <= arg[0] <= 65535 or arg[1] not in ("Texture", "RenderTexture"):
                 raise Unresolved("untyped argument")
             previous_type = arg_types.get(arg[0])
             if previous_type is not None and previous_type != arg[1]:
@@ -37,10 +37,10 @@ def trace(instructions, max_steps=128):
             if arg is not None or not stack: raise Unresolved("invalid dup")
             stack.append(stack[-1])
         elif op == "stloc":
-            if not stack or type(arg) is not int or arg < 0: raise Unresolved("invalid local store")
+            if not stack or type(arg) is not int or not 0 <= arg <= 65535: raise Unresolved("invalid local store")
             locals_[arg] = stack.pop()
         elif op == "ldloc":
-            if type(arg) is not int or arg < 0 or arg not in locals_: raise Unresolved("uninitialized local")
+            if type(arg) is not int or not 0 <= arg <= 65535 or arg not in locals_: raise Unresolved("uninitialized local")
             stack.append(locals_[arg])
         elif op == "pop":
             if arg is not None or not stack: raise Unresolved("stack underflow")
