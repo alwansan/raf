@@ -43,5 +43,17 @@ class MouseCaptureTraceTests(unittest.TestCase):
                   "physical_mouse_capture_requested", "physical_mouse_capture_released"]
         self.assertEqual(classify(events)["findings"][0]["classification"], "RELEASED_BEFORE_RELATIVE_OBSERVED")
 
+    def test_authored_unlock_ends_valid_relative_window(self):
+        events = ["physical_mouse_lock_intent escape_release", "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_requested", "physical_mouse_lock_intent authored_unlock",
+                  "physical_mouse_relative"]
+        self.assertEqual(classify(events)["findings"][0]["classification"], "RELEASED_BEFORE_RELATIVE_OBSERVED")
+
+    def test_relative_before_authored_unlock_remains_observed(self):
+        events = ["physical_mouse_lock_intent escape_release", "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_requested", "physical_mouse_relative",
+                  "physical_mouse_lock_intent authored_unlock"]
+        self.assertEqual(classify(events)["findings"][0]["classification"], "RELATIVE_AFTER_REARM_OBSERVED")
+
 if __name__ == "__main__":
     unittest.main()
