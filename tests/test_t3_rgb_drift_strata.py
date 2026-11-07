@@ -47,6 +47,16 @@ class TestStrata(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
             classify({"pairs": items}, require_drift_metadata=True)
 
+    def test_drift_format_missing_even_when_exact_complete(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        for item in items:
+            item["source_srgb"] = False
+        items[0]["format"] = None
+        self.assertEqual(classify({"pairs": items}, require_metadata=True)
+                         ["metadata_coverage"]["format"], 105)
+        with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
+            classify({"pairs": items}, require_drift_metadata=True)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
