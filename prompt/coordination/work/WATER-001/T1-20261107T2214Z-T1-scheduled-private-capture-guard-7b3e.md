@@ -9,4 +9,9 @@ shared_resource: none; no Unity/CI run requested
 owner baseline: device feedback 42058825739 world/save/reopen confirmed; water kernel6 and Spectrum/Foam errors open.
 prior evidence: T1 20261107T2110Z-T1-scheduled-fft-evidence-a4d9; no authentic paired captures yet.
 planned validation: synthetic isolated manifests for in-directory regular files, traversal, absolute paths, symlinks, oversized input; no game resources.
-status: scoped
+status: source_fixed_unverified_tests
+source_commit: 0b2c6b187ea40cd4fcb45b886563e8989baf7e8f
+test_commit: 197e40d7d1ca9d97d08eff689943b7260df51ee7
+session_commit: c723147732521178095f425ae3a86877bee13ea2
+validation: tests committed but not executed; local checkout unavailable due DNS; no GPU/device claims
+next_step: execute regression suite on a checkout; then authentic paired Unity/Vulkan FFT capture
