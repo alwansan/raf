@@ -2,9 +2,9 @@
   "session_id": "20261107T1742Z-T4-scheduled-rearm-boundary-q7m4",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_unverified",
   "base_sha": "ef45764c6531688833bb20bc32db951926486427",
-  "updated_at": "2026-11-07T17:42:00Z",
+  "updated_at": "2026-11-07T17:48:00Z",
   "intended_files": [
     "scripts/t4_classify_mouse_capture_log.py",
     "tests/test_t4_classify_mouse_capture_log.py",
@@ -14,5 +14,12 @@
   "experiment_key": "T4-rearm-unlock-before-request-719e197df3c3-6ce2531a97a2",
   "resource_key": null,
   "owner_success": "42058825739 world/save/reopen preserved; no gameplay code touched",
-  "next": "Add negative test and conservative lock-to-request window; run tests."
+  "next": "Execute 13 unittest cases and analyze owner mouse log; issue remains open.",
+  "commits": [
+    "685eac00",
+    "5ccae513",
+    "82ac197b",
+    "048e6719"
+  ],
+  "tests": "13 tests in source, no CI on latest commit; no device test"
 }
