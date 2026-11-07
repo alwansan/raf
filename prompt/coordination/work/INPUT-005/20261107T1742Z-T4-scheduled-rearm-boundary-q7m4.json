@@ -1,0 +1,18 @@
+{
+  "session_id": "20261107T1742Z-T4-scheduled-rearm-boundary-q7m4",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "ef45764c6531688833bb20bc32db951926486427",
+  "updated_at": "2026-11-07T17:42:00Z",
+  "intended_files": [
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py",
+    "prompt/coordination/clients/T4/sessions/20261107T1742Z-T4-scheduled-rearm-boundary-q7m4.md"
+  ],
+  "hypothesis": "A stale authored_lock followed by authored_unlock can borrow a later capture request, falsely classifying rearm after Escape.",
+  "experiment_key": "T4-rearm-unlock-before-request-719e197df3c3-6ce2531a97a2",
+  "resource_key": null,
+  "owner_success": "42058825739 world/save/reopen preserved; no gameplay code touched",
+  "next": "Add negative test and conservative lock-to-request window; run tests."
+}
