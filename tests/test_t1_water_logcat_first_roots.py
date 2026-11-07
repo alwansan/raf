@@ -21,6 +21,22 @@ class FirstRootsTests(unittest.TestCase):
         self.assertEqual(classify('Invalid kernel index 7'), 'kernel_other')
         self.assertEqual(classify('Kernel at index (6) is invalid'), 'kernel_index_6')
         self.assertEqual(classify("Shader Ultimate Water/Spectrum does not have a pass 0"), 'pass_spectrum')
+    def test_earliest_timestamp_independent_of_segment_order(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            late = Path(tmp) / 'late.log'
+            early = Path(tmp) / 'early.log'
+            late.write_text('E Unity: Invalid compute kernel index 6\\n'
+                            '11-05 23:09:11.005 E Unity: Invalid compute kernel index 6\\n'
+                            '11-05 23:09:11.006 E Unity: Ultimate Water Spectrum invalid pass\\n')
+            early.write_text('11-05 22:09:11.002 E Unity: Invalid compute kernel index 6\\n'
+                             '11-05 22:09:11.003 E Unity: Ultimate Water Spectrum invalid pass\\n')
+            forward = scan([late, early])
+            backward = scan([early, late])
+            self.assertEqual(forward['first_by_category'], backward['first_by_category'])
+            self.assertEqual(forward['first_by_category']['kernel_index_6'], '11-05 22:09:11.002')
+            self.assertEqual(forward['first_by_category']['pass_spectrum'], '11-05 22:09:11.003')
+            self.assertEqual(forward['root_line_counts']['kernel_index_6'], 3)
+
     def test_symlink_and_duplicate_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / 'a'; p.write_text('test')
