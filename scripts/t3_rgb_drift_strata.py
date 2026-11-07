@@ -19,6 +19,7 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
     if not isinstance(pairs, list):
         raise ValueError("pairs must be an array")
     groups = defaultdict(Counter)
+    joint_groups = Counter()
     counts = Counter()
     for row in pairs:
         if not isinstance(row, dict):
@@ -30,6 +31,7 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
             raise ValueError("unverified identity/dimensions/alpha parity")
         label = "exact" if row["rgb_equal"] else "rgb_drift"
         counts[label] += 1
+        joint_key = []
         for key in ("format", "source_srgb", "importer_srgb"):
             value = row.get(key)
             if key.endswith("srgb"):
@@ -47,6 +49,8 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
                 if bucket.upper() == "UNKNOWN":
                     bucket = "UNKNOWN"
             groups[(key, bucket)][label] += 1
+            joint_key.append(bucket)
+        joint_groups[(*joint_key, label)] += 1
     coverage = {key: sum(1 for (k, bucket), values in groups.items()
                          if k == key and bucket != "UNKNOWN"
                          for _ in range(values["exact"] + values["rgb_drift"]))
@@ -61,7 +65,12 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
     if strict_baseline and (len(pairs) != EXPECTED_TOTAL or counts["rgb_drift"] != EXPECTED_DRIFT):
         raise ValueError("baseline count mismatch; verify input provenance")
     return {"total": len(pairs), "exact": counts["exact"], "rgb_drift": counts["rgb_drift"],
-            "metadata_coverage": coverage, "rgb_drift_metadata_coverage": drift_coverage, "strata": {key: {bucket: {"exact": groups[(key, bucket)]["exact"],
+            "metadata_coverage": coverage, "rgb_drift_metadata_coverage": drift_coverage,
+            "joint_strata": [{"format": f, "source_srgb": s, "importer_srgb": i,
+                              "exact": joint_groups[(f, s, i, "exact")],
+                              "rgb_drift": joint_groups[(f, s, i, "rgb_drift")]}
+                             for f, s, i in sorted({key[:3] for key in joint_groups})],
+            "strata": {key: {bucket: {"exact": groups[(key, bucket)]["exact"],
                                       "rgb_drift": groups[(key, bucket)]["rgb_drift"]}
                              for k, bucket in sorted(groups) if k == key}
                        for key in ("format", "source_srgb", "importer_srgb")}}
