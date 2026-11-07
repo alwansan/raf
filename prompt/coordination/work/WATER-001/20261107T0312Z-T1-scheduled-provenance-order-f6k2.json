@@ -13,5 +13,11 @@
   "experiment_key": "t1-fft-provenance-preflight-f6k2",
   "shared_resource": "none; source-only",
   "taken_over_from": "T1 session 20261107T0211Z-T1-scheduled-fft-trace-7c3a",
-  "status": "in_progress"
+  "status": "source_fixed_unverified",
+  "commits": [
+    "8b41b84b745331b5984871b246eb4c58e431de98",
+    "58b8c0d7950f89610050847be24a45e20071aed9"
+  ],
+  "verification": "Code review only; Python test not yet run in CI or local exact checkout",
+  "next": "Run 10 unittest cases on exact branch, obtain paired authentic FFT captures, prove Unity FindKernel/SetTexture/Dispatch"
 }
