@@ -42,6 +42,10 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
                 bucket = value if value is not None else "UNKNOWN"
                 if len(bucket) > 64 or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+-." for c in bucket):
                     raise ValueError("unsafe format category")
+                # The literal sentinel is not authenticated format metadata.
+                # Do not count it as known in the drift-coverage gate.
+                if bucket.upper() == "UNKNOWN":
+                    bucket = "UNKNOWN"
             groups[(key, bucket)][label] += 1
     coverage = {key: sum(1 for (k, bucket), values in groups.items()
                          if k == key and bucket != "UNKNOWN"
