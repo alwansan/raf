@@ -1,0 +1,23 @@
+{
+  "session_id": "20261107T2241Z-T4-scheduled-evidence-gap-k9v3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "base_sha": "c2c6ea5ac4697fc469fb632f1e892956cd8a416e",
+  "status": "active",
+  "updated_at": "2026-11-07T22:41:30Z",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261107T2241Z-T4-scheduled-evidence-gap-k9v3.json",
+    "prompt/coordination/clients/T4/sessions/20261107T2241Z-T4-scheduled-evidence-gap-k9v3.md"
+  ],
+  "experiment_key": "mouse-capture-evidence-availability:artifact42058825739:CL520c4cf4:source95ac67c2",
+  "resource_key": null,
+  "hypothesis": "Owner 5 Nov logs predate physical_mouse_lock_intent instrumentation; source classifier success cannot diagnose the owner artifact's missing physical mouse capture. Determine evidence compatibility before attempting runtime changes.",
+  "read_only_inputs": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py",
+    "CI 42416699458"
+  ],
+  "acceptance": "Document exact evidence provenance and next discriminating device trace without claiming phone proof.",
+  "owner_preservation": "Owner-confirmed world entry/save/reopen remains valid for artifact 42058825739; no save/schema/keyboard/touch/Settings modifications."
+}
