@@ -1,0 +1,13 @@
+{
+  "session_id": "20261107T195006Z-T5-scheduled-fps-ci-r4p7",
+  "origin": "scheduled",
+  "scope": "PERF-007",
+  "baseline_sha": "017cd17612729a63ed6a82232e468e02084183c4",
+  "files": [".github/workflows/raft-t5-unity-interval-regression.yml"],
+  "hypothesis": "The newly added explicit CL session labeling and JSONL guards have no executable CI proof; a cheap isolated test job can validate them without Unity or touching T4 mouse files.",
+  "experiment_key": "t5-unity-interval-regression-20261107T195006Z-T5-scheduled-fps-ci-r4p7",
+  "shared_resource": "none; source-only GitHub Actions runner",
+  "taken_over_from": ["prompt/coordination/clients/T5/sessions/20261107T184704Z-T5-scheduled-k8m2.md"],
+  "status": "planned",
+  "next": "Add isolated workflow, check branch head and Actions, then record actual CI result separately."
+}
