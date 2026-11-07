@@ -28,7 +28,11 @@ def classify(lines):
             state = "NO_REARM_OBSERVED"
         else:
             lock = subsequent_locks[0]
-            subsequent_requests = [n for n in requests if lock < n < end]
+            # A later request cannot satisfy a lock intent already cancelled
+            # by an authored unlock or another Escape. Treat it as a new
+            # sequence only after a fresh authored_lock event.
+            next_boundary = min([n for n in unlocks + escapes if lock < n < end], default=end)
+            subsequent_requests = [n for n in requests if lock < n < next_boundary]
             if not subsequent_requests:
                 state = "LOCK_WITHOUT_REQUEST_OBSERVED"
             else:
