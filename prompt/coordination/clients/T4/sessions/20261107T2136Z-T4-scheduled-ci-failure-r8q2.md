@@ -8,3 +8,6 @@
 - Fix: [95ac67c2](https://github.com/alwansan/raf/commit/95ac67c2a2e42359b9f315598cd171bf2578f370) requires explicit release/unlock/escape boundary for RELEASED_BEFORE_RELATIVE_OBSERVED; supersession alone stays REQUEST_WITHOUT_RELATIVE_OBSERVED. The 17th regression test already exists and is the direct negative control.
 - Validation: GitHub CI had not yet reported a new run at final read; status waiting_ci. Do not claim 17/17 or phone success until observed. No Unity build or cancellation.
 - Shared-resource coordination: only T4 classifier source modified, no T5 UI/Resolution files, no touch/keyboard, FMOD, Settings, .meta, .rgd, scene changes. Follow-up: read fresh Actions run and apply classifier to fresh CL logs containing explicit lock/release/relative markers; distinguish log gaps from runtime defects. Preserve mouse cursor menu and keyboard behavior.
+
+## Final CI verification
+- [CI 42416699458](https://github.com/alwansan/raf/actions/runs/42416699458) **SUCCESS**, source `95ac67c2a2e42359b9f315598cd171bf2578f370`. 17/17 Python regression tests source-only; not Unity/Android/device. Work completed, INPUT-005 remains OPEN.
