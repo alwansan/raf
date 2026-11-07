@@ -114,6 +114,19 @@ class TestStrata(unittest.TestCase):
                        "importer_srgb": "true", "exact": 76, "rgb_drift": 29},
                       result["joint_strata"])
 
+    def test_wrong_cohort_precedes_metadata_diagnosis(self):
+        # One unpaired RGB-drift sample must fail provenance first, even if
+        # source_srgb is absent and a strict metadata gate was requested.
+        items = [row(False) for _ in range(29)] + [row() for _ in range(76)]
+        with self.assertRaisesRegex(ValueError, "baseline count mismatch"):
+            classify({"pairs": items}, require_drift_metadata=True,
+                     require_metadata=True)
+        # Exploratory cohorts remain permitted only with the explicit
+        # non-baseline API flag; the metadata error then remains meaningful.
+        with self.assertRaisesRegex(ValueError, "RGB-drift pairs"):
+            classify({"pairs": items}, strict_baseline=False,
+                     require_drift_metadata=True)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
