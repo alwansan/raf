@@ -12,6 +12,20 @@ class JoinTests(unittest.TestCase):
                               self.spv if spv is None else spv,
                               self.mapping if mapping is None else mapping)
 
+
+    def test_malformed_numeric_reflection_fails_closed(self):
+        for group_index, field in ((0, "register"), (0, "count"),
+                                   (1, "set"), (1, "binding"), (1, "count"),
+                                   (2, "register"), (2, "set"), (2, "binding"),
+                                   (2, "count")):
+            for invalid in ([], {}, None, True):
+                groups = [[dict(x) for x in group]
+                          for group in (self.dx, self.spv, self.mapping)]
+                groups[group_index][0][field] = invalid
+                with self.subTest(group=group_index, field=field, invalid=invalid):
+                    expected = "invalid_count" if field == "count" else "invalid_coordinate"
+                    self.assertEqual([expected], check_contract(*groups))
+
     def test_explicit_nonidentity_remap(self):
         self.assertEqual([], self.check())
 
