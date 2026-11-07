@@ -104,7 +104,10 @@ def unique_json_object(pairs):
         result[key] = value
     return result
 
-def load(path):
+def load(path, *, session_id=None):
+    """Load one log file; a caller-supplied label identifies legacy session rows."""
+    if session_id is not None and (not isinstance(session_id, str) or not session_id.strip() or len(session_id) > 128):
+        raise ValueError("Invalid session_id")
     if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= MAX_BYTES:
         raise ValueError("Unsafe or oversized JSONL")
     with path.open(encoding="utf-8") as f:
@@ -112,7 +115,14 @@ def load(path):
         for line in f:
             if not line.strip():
                 raise ValueError("Blank JSONL row")
-            rows.append(json.loads(line, object_pairs_hook=unique_json_object))
+            row = json.loads(line, object_pairs_hook=unique_json_object)
+            if session_id is not None:
+                if not isinstance(row, dict):
+                    raise ValueError("Invalid JSONL object")
+                if "session_id" in row and row["session_id"] != session_id:
+                    raise ValueError("Conflicting session_id")
+                row["session_id"] = session_id
+            rows.append(row)
             if len(rows) > MAX_ROWS:
                 raise ValueError("Too many JSONL rows")
     return rows
@@ -120,5 +130,6 @@ def load(path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("jsonl", type=Path)
+    parser.add_argument("--session-id", help="Explicit identifier for this one input file; never inferred from filename")
     args = parser.parse_args()
-    print(json.dumps(analyze_rows(load(args.jsonl)), ensure_ascii=False, sort_keys=True))
+    print(json.dumps(analyze_rows(load(args.jsonl, session_id=args.session_id)), ensure_ascii=False, sort_keys=True))
