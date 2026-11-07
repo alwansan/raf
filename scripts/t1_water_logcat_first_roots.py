@@ -47,7 +47,10 @@ def scan(paths):
                 raw = stream.readline(32769)
                 if not raw:
                     break
-                if len(raw) > 32768:
+                if len(raw) > 32768 or (len(raw) == 32768 and not raw.endswith(b'\n')):
+                    # A full-sized unterminated chunk may be only the prefix of
+                    # a longer physical line. Reject it rather than count a
+                    # plausible-looking truncated error as a complete record.
                     # Drop the rest of this physical line: never classify its tail
                     # as an independent Logcat record.
                     while raw and not raw.endswith(b'\n'):
