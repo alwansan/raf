@@ -2,7 +2,7 @@
   "session_id": "20261108T0019Z-T2-scheduled-original-role-validation-v2c7",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5fa3fc5f3deb5d13d71573df2aee365b70afa615",
   "intended_files": [
     "prompt/coordination/clients/T2/sessions/20261108T0019Z-T2-scheduled-original-role-validation-v2c7.md",
@@ -15,5 +15,7 @@
     "20261107T2227Z-T2-chat-blit-texture-role-6c52",
     "20261107T2221Z-T2-scheduled-original-pass-role-reconcile-m8q4"
   ],
-  "updated_at": "2026-11-07T23:19:00Z"
+  "updated_at": "2026-11-07T23:23:00Z",
+  "result": "CI42308583977 already proves same-site original pass0 RenderTexture/RenderTexture, pass1 unknown/unknown; no duplicate experiment.",
+  "result_commit": "5a6d6b3ea3832004fca66cc0abb9f30f7b749f6b"
 }
