@@ -1,0 +1,14 @@
+# T2 — isolated pass1 synthetic suite verification (reconstructed copy)
+
+- session_id: 20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4
+- origin: scheduled; issue_id: WATER-001; status: completed
+- base_sha: 1c5d26af91f891d783dcffa657391762398e2117
+- scope reservation: [8b607990](https://github.com/alwansan/raf/commit/8b6079905919efc5087155525f2e5b43766e35d1)
+- resumed_from: 20261107T1016Z-T2-scheduled-il-operand-type-f8c2; 20261107T2227Z-T2-chat-blit-texture-role-6c52 (its embedded actual evidence is dated 6 Nov UTC).
+- owner report: [42058825739](https://github.com/alwansan/raf/actions/runs/42058825739) confirms world/save/reopen on its old artifact, but failed publish. Water passes and FFT remain open; APK86 older evidence is superseded.
+- Checked live branch HEAD 1c5d26af91f891d783dcffa657391762398e2117 before reservation; latest visible Actions included T5 paired-file [42365737052](https://github.com/alwansan/raf/actions/runs/42365737052) SUCCESS and T3 [42333961072](https://github.com/alwansan/raf/actions/runs/42333961072) SUCCESS. No duplicate native/source workflow started.
+- Original Foam proof [42308583977](https://github.com/alwansan/raf/actions/runs/42308583977): pass 0 source and destination typed RenderTexture; pass 1 source and destination UNKNOWN. Neither establishes actual texture identity, CB0 binding, ShaderLab import or Android pixels.
+- Local experiment: manually transcribed **reconstructed copies** of the current `scripts/t2_pass1_stack_provenance.py` and `tests/test_t2_pass1_stack_provenance.py` contents returned by GitHub connector (blob SHAs b89ba82f3b395ace744d02a851658fbcf93db7a0 and ff19af1b95c0be8a84425b27856f7c163398cda1). Command `python -m unittest tests/test_t2_pass1_stack_provenance.py -v` in isolated /tmp/t2test: **19 tests passed** (0.001 s). **Important:** these were manually reconstructed copies, NOT byte-identical repository checkout. This cannot be called an exact-source CI pass; the outstanding exact-checkout validation remains.
+- Cross-checked failed canonical evidence summary [42308935364](https://github.com/alwansan/raf/actions/runs/42308935364): old job raised `Missing record identity` for T3 event with `event_id`. Live `scripts/refresh_b_team.py` already normalizes explicit event_id, so do not reapply stale fix or rerun blindly.
+- No game source, shaders, .meta, GUID, .rgd, native requests, other team scopes or original CL modified. No new material/phone result; WATER-001 OPEN, NOT_READY 0/3; T2 vote remains «لا يحتاج».
+- Next: run exact repository test via an existing isolated source-only runner, then connect pass1 IL producer tracing to authenticated Mono.Cecil analysis, preserving UNKNOWN on unsupported chains. Coordinate T3 particle effects, T4 mouse, T5 Resolution and delivery; no duplicate Unity build.

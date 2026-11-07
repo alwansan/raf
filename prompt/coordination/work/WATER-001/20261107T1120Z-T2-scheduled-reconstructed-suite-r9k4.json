@@ -3,17 +3,19 @@
   "session_id": "20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1c5d26af91f891d783dcffa657391762398e2117",
+  "scope_commit": "8b6079905919efc5087155525f2e5b43766e35d1",
   "intended_files": [
     "prompt/coordination/work/WATER-001/20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4.json",
     "prompt/coordination/clients/T2/sessions/20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4.md"
   ],
-  "hypothesis": "Check whether previously committed synthetic pass1 stack guard tests actually pass, without touching chat-owned Mono.Cecil integration; distinguish reconstructed local execution from exact checkout.",
+  "hypothesis": "Verify existing source-free synthetic pass1 stack provenance tests, without touching the chat-owned original Mono.Cecil parser.",
   "experiment_key": "T2-pass1-synthetic-stack-source-reconstructed-19-controls-20261107",
-  "resource_key": "local Python 3 source-only; no Unity or CI",
-  "taken_over_from": [
-    "prompt/coordination/clients/T2/sessions/20261107T1016Z-T2-scheduled-il-operand-type-f8c2.md"
-  ],
-  "updated_at": "2026-11-07T11:20:10Z"
+  "resource_key": "local Python 3 source-only",
+  "validation": "19/19 local unittest functions passed on manually transcribed/reconstructed copies; NOT exact repository checkout, byte-for-byte equivalence unverified",
+  "original_evidence": "CI42308583977 authenticated Foam pass0 RenderTexture source/dest, pass1 unknown",
+  "limits": "No authentic Mono.Cecil pass1 producer proof, CB0/ShaderLab integration, Unity import or phone water evidence; no native build dispatched.",
+  "next_step": "Run exact Git checkout test in existing source-only CI or connected runner, then connect safe typed pass1 IL producer to pinned Mono.Cecil original artifact; do not repeat synthetic-only hardening.",
+  "updated_at": "2026-11-07T11:24:00Z"
 }
