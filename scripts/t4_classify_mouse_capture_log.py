@@ -18,6 +18,7 @@ def classify(lines):
     escapes = [n for n, s in hits[EVENTS[0]] if "escape_release" in s]
     requests = [n for n, _ in hits[EVENTS[1]]]
     relative = [n for n, _ in hits[EVENTS[2]]]
+    releases = [n for n, _ in hits[EVENTS[3]]]
     findings = []
     for index, escape in enumerate(escapes):
         end = escapes[index + 1] if index + 1 < len(escapes) else float("inf")
@@ -29,10 +30,15 @@ def classify(lines):
             subsequent_requests = [n for n in requests if lock < n < end]
             if not subsequent_requests:
                 state = "LOCK_WITHOUT_REQUEST_OBSERVED"
-            elif not any(subsequent_requests[0] < n < end for n in relative):
-                state = "REQUEST_WITHOUT_RELATIVE_OBSERVED"
             else:
-                state = "RELATIVE_AFTER_REARM_OBSERVED"
+                request = subsequent_requests[0]
+                first_release = next((n for n in releases if request < n < end), end)
+                if any(request < n < first_release for n in relative):
+                    state = "RELATIVE_AFTER_REARM_OBSERVED"
+                elif first_release < end:
+                    state = "RELEASED_BEFORE_RELATIVE_OBSERVED"
+                else:
+                    state = "REQUEST_WITHOUT_RELATIVE_OBSERVED"
         findings.append({"escape_line": escape, "classification": state})
     if not escapes:
         findings.append({"classification": "NO_ESCAPE_SEQUENCE_OBSERVED"})
