@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T1138Z-T4-scheduled-capture-rearm-v4n8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "44162b6c33f19aeb8e01d70594c065584228e6ef",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261107T1138Z-T4-scheduled-capture-rearm-v4n8.json",
+    "prompt/coordination/clients/T4/sessions/20261107T1138Z-T4-scheduled-capture-rearm-v4n8.md"
+  ],
+  "experiment_key": "physical-mouse-escape-rearm-source-control-flow-v1@44162b6c",
+  "resource_key": null,
+  "approach": "Source-only audit of original cursor-lock rearm preconditions; no shared Unity build or source edits",
+  "updated_at": "2026-11-07T11:38:00Z",
+  "taken_over_from": "20261107T1040Z-T4-scheduled-mouse-escape-h7k2",
+  "owner_phone_world_save_reopen": "confirmed only on 42058825739; not new APK"
+}
