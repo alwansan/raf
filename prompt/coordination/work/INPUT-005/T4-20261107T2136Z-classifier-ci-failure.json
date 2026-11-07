@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T2136Z-T4-scheduled-ci-failure-r8q2",
+  "origin": "scheduled",
+  "worker": "T4",
+  "issue": "INPUT-005",
+  "status": "active",
+  "base_sha": "5c7e44ef5f130525edcb33d0f8adf0ce78413b97",
+  "files": [
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py"
+  ],
+  "experiment_key": "t4-mouse-classifier-supersession-ci-42412029098",
+  "shared_resource": "none; source-only Python",
+  "hypothesis": "CI 42412029098 16/17 pass: superseding authored_lock incorrectly classified as capture release; classify release only for explicit release/unlock/escape.",
+  "evidence": "https://github.com/alwansan/raf/actions/runs/42412029098",
+  "preserve": "owner phone world/save success artifact 42058825739; keyboard .rgd untouched"
+}
