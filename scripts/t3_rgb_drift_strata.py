@@ -58,12 +58,13 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
     drift_coverage = {key: sum(values["rgb_drift"] for (k, bucket), values in groups.items()
                                if k == key and bucket != "UNKNOWN")
                       for key in ("format", "source_srgb", "importer_srgb")}
+    # Validate cohort provenance before diagnosing missing metadata.
+    if strict_baseline and (len(pairs) != EXPECTED_TOTAL or counts["rgb_drift"] != EXPECTED_DRIFT):
+        raise ValueError("baseline count mismatch; verify input provenance")
     if require_drift_metadata and any(drift_coverage[key] != counts["rgb_drift"] for key in drift_coverage):
         raise ValueError("missing metadata for RGB-drift pairs; cannot infer drift strata")
     if require_metadata and any(coverage[key] == 0 for key in coverage):
         raise ValueError("missing per-pair metadata coverage; aggregate-only or unknown manifest")
-    if strict_baseline and (len(pairs) != EXPECTED_TOTAL or counts["rgb_drift"] != EXPECTED_DRIFT):
-        raise ValueError("baseline count mismatch; verify input provenance")
     return {"total": len(pairs), "exact": counts["exact"], "rgb_drift": counts["rgb_drift"],
             "metadata_coverage": coverage, "rgb_drift_metadata_coverage": drift_coverage,
             "joint_strata": [{"format": f, "source_srgb": s, "importer_srgb": i,
