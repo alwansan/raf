@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "INPUT-005",
   "base_sha": "c2c6ea5ac4697fc469fb632f1e892956cd8a416e",
-  "status": "active",
+  "status": "completed",
   "updated_at": "2026-11-07T22:41:30Z",
   "intended_files": [
     "prompt/coordination/work/INPUT-005/T4-20261107T2241Z-T4-scheduled-evidence-gap-k9v3.json",
@@ -19,5 +19,8 @@
     "CI 42416699458"
   ],
   "acceptance": "Document exact evidence provenance and next discriminating device trace without claiming phone proof.",
-  "owner_preservation": "Owner-confirmed world entry/save/reopen remains valid for artifact 42058825739; no save/schema/keyboard/touch/Settings modifications."
+  "owner_preservation": "Owner-confirmed world entry/save/reopen remains valid for artifact 42058825739; no save/schema/keyboard/touch/Settings modifications.",
+  "result": "Verified provenance gap: 5 Nov phone artifact predates physical_mouse_lock_intent instrumentation; 17/17 CI only synthetic. No safe device-root-cause inference from old logs.",
+  "session_commit": "0a43490c2711c6644ec2e4e9acce25106ba7becb",
+  "next_step": "Obtain post-instrumentation device trace and compare installed APK/OBB manifest before any runtime fix."
 }
