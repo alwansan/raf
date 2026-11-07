@@ -39,6 +39,16 @@ def _sha(path: Path) -> tuple[int, str]:
     return size, h.hexdigest()
 
 
+def _unique_json_pairs(pairs):
+    """Reject duplicate keys at every level of an unauthenticated delivery manifest."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate delivery JSON key")
+        result[key] = value
+    return result
+
+
 def _row(obj, what: str) -> dict:
     if type(obj) is not dict:
         raise ValueError("Invalid " + what)
@@ -179,7 +189,7 @@ def verify_pair(delivery: Path, apk: Path, obb: Path, badging: str) -> dict:
     _valid_file(obb)
     if delivery.name != "delivery.json" or apk.name != APK_NAME:
         raise ValueError("Input filename disagrees with native delivery convention")
-    data = _row(json.loads(delivery.read_text(encoding="utf8")), "delivery JSON")
+    data = _row(json.loads(delivery.read_text(encoding="utf8"), object_pairs_hook=_unique_json_pairs), "delivery JSON")
     code = data.get("version_code")
     if (data.get("schema") != 1 or data.get("package") != PACKAGE
             or type(code) is not str or not re.fullmatch(r"[1-9][0-9]*", code)
