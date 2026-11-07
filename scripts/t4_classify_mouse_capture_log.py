@@ -27,24 +27,23 @@ def classify(lines):
         if not subsequent_locks:
             state = "NO_REARM_OBSERVED"
         else:
-            # Only a request within a still-active authored lock may count.
-            # A cancelled lock cannot borrow a later request, but a fresh
-            # lock following an unlock may legitimately rearm the mouse.
-            eligible = []
+            # Each authored lock creates a distinct attempt. A release or
+            # unlock ends that attempt; a later lock may start a new one.
+            attempts = []
             for lock in subsequent_locks:
-                next_boundary = min([n for n in unlocks + escapes if lock < n < end], default=end)
-                eligible.extend(n for n in requests if lock < n < next_boundary)
-            if not eligible:
+                boundary = min([n for n in unlocks + escapes + releases if lock < n < end], default=end)
+                attempt_requests = [n for n in requests if lock < n < boundary]
+                for request in attempt_requests:
+                    attempts.append((request, boundary))
+            if not attempts:
                 state = "LOCK_WITHOUT_REQUEST_OBSERVED"
+            elif any(any(request < n < boundary for n in relative)
+                     for request, boundary in attempts):
+                state = "RELATIVE_AFTER_REARM_OBSERVED"
+            elif all(boundary < end for _, boundary in attempts):
+                state = "RELEASED_BEFORE_RELATIVE_OBSERVED"
             else:
-                request = min(eligible)
-                first_release = min([n for n in releases + unlocks if request < n < end], default=end)
-                if any(request < n < first_release for n in relative):
-                    state = "RELATIVE_AFTER_REARM_OBSERVED"
-                elif first_release < end:
-                    state = "RELEASED_BEFORE_RELATIVE_OBSERVED"
-                else:
-                    state = "REQUEST_WITHOUT_RELATIVE_OBSERVED"
+                state = "REQUEST_WITHOUT_RELATIVE_OBSERVED"
         findings.append({"escape_line": escape, "classification": state})
     if not escapes:
         findings.append({"classification": "NO_ESCAPE_SEQUENCE_OBSERVED"})
