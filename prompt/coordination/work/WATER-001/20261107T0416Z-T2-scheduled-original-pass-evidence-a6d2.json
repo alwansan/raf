@@ -2,7 +2,7 @@
   "session_id": "20261107T0416Z-T2-scheduled-original-pass-evidence-a6d2",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "intended_files": [
     "prompt/coordination/work/WATER-001/20261107T0416Z-T2-scheduled-original-pass-evidence-a6d2.json",
     "prompt/coordination/clients/T2/sessions/20261107T0416Z-T2-scheduled-original-pass-evidence-a6d2.md",
@@ -16,5 +16,9 @@
     "T2 20261107T0215Z pass role correlation"
   ],
   "baseline_sha": "4e5f4d24e0049518928b0fe47db8adfa3b853db7 (artifact source; not asserted current HEAD)",
-  "updated_at": "2026-11-07T04:16:00Z"
+  "updated_at": "2026-11-07T04:16:00Z",
+  "result": "Authenticated safe artifact downloaded and per-pass roles reconciled: pass0 RenderTexture->RenderTexture; pass1 UNKNOWN->UNKNOWN; source-only count conservation PASS",
+  "evidence_commit": "d95cc92ab1dcc2bff4c310b74ae113e538fe46c9",
+  "session_commit": "1f7bcc8142062b5629e4d6af6568820e210174c7",
+  "next_step": "Bounded pass1 IL argument producer tracing; no new CI until unique hypothesis."
 }
