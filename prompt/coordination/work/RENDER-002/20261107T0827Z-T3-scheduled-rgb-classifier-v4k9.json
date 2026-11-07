@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "work_id": "20261107T0827Z-T3-scheduled-rgb-classifier-v4k9",
+  "client": "T3",
+  "origin": "scheduled",
+  "track": "RENDER-002",
+  "status": "in_progress",
+  "base_sha": "0378d00750c55eae809809acfe1b71a97fb14dbe",
+  "hypothesis": "RGB drift in 30/106 same-export Texture2D pairs may correlate with source format or sRGB importer flags; preserve UNKNOWN and never infer device repair",
+  "files": [
+    "scripts/t3_rgb_drift_strata.py",
+    "tests/test_t3_rgb_drift_strata.py",
+    "prompt/coordination/clients/T3/sessions/20261107T0827Z-T3-scheduled-rgb-classifier-v4k9.md"
+  ],
+  "experiment_key": "T3-RGB30-STRATA-20261107",
+  "shared_resource": "none; local source-only test",
+  "taken_over_from": [
+    "T3 real pixel run 41968665857",
+    "T3 20261107T0726Z-T3-scheduled-rgb30-classifier-p7x2"
+  ],
+  "constraints": "No game assets, no Unity build, no raw pixels in public logs; avoid T4/T5 mouse/display scope"
+}
