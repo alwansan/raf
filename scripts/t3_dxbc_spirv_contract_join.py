@@ -34,7 +34,24 @@ def check_contract(dx_resources, spv_resources, provenance):
         not isinstance(item, dict) or not required.issubset(item)
         for item in group) for group, required in schemas):
         return ["invalid_schema"]
-    # Reflection JSON may contain arrays/objects instead of scalar stage/family.\n    # Validate before constructing hash keys or Counter dictionaries.\n    if any(type(item["stage"]) is not str or type(item["family"]) is not str\n           for group in (dx_resources, spv_resources, provenance) for item in group):\n        return ["invalid_schema"]\n    errors = []\n    dx_keys = [_key(x) for x in dx_resources]
+    # Reflection JSON may contain arrays/objects instead of scalar stage/family.
+    # Validate before constructing hash keys or Counter dictionaries.
+    if any(type(item["stage"]) is not str or type(item["family"]) is not str
+           for group in (dx_resources, spv_resources, provenance) for item in group):
+        return ["invalid_schema"]
+    # Validate coordinates before constructing hash-based keys. Reflection input
+    # may contain arrays/objects in numeric fields; fail closed without TypeError.
+    for group in (dx_resources, spv_resources, provenance):
+        for item in group:
+            if type(item["count"]) is not int or item["count"] <= 0:
+                return ["invalid_count"]
+            coordinates = ("register",) if "register" in item else ("set", "binding")
+            if "set" in item and "register" in item:
+                coordinates = ("register", "set", "binding")
+            if any(not _nonnegative_int(item[field]) for field in coordinates):
+                return ["invalid_coordinate"]
+    errors = []
+    dx_keys = [_key(x) for x in dx_resources]
     spv_keys = [(x["stage"], x["family"], x["set"], x["binding"]) for x in spv_resources]
     map_keys = [_key(x) for x in provenance]
     targets = [(x["stage"], x["family"], x["set"], x["binding"]) for x in provenance]
