@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "WATER-001",
   "baseline_sha": "2ef5b6213802ba7c48ffd973fc3357e6fece3d88",
-  "status": "active",
+  "status": "completed_unverified_tests",
   "scope": [
     "scripts/t2_foam_pass_role_gate.py",
     "tests/test_t2_foam_pass_role_duplicate_json.py",
@@ -13,5 +13,10 @@
   "experiment_key": "T2-foam-role-gate-duplicate-keys-v1",
   "resource": "source-only no Unity; no T3 files",
   "taken_over_from": "T2 role gate 52d54e73; chat original Blit 681c239c",
-  "next_step": "Add strict JSON duplicate-key rejection and source-free regression; do not alter original IL pipeline"
+  "next_step": "Run original-checkout unittest; inspect strict JSON use at report producer; original pass1 remains unknown",
+  "commits": [
+    "da7ac14e0e5ad59a7149e782f37ee6b2f15e70c4",
+    "c4c59046b7495415a26aaf7a24eda025183251a4",
+    "8bf8f603e69286ed5c630edf8bd5d79ea00c715c"
+  ]
 }
