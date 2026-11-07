@@ -3,8 +3,8 @@
   "origin": "scheduled",
   "issue_id": "INPUT-005",
   "base_sha": "f89296d58efec8b1e55e7b50b085144564e664f8",
-  "updated_at": "2026-11-07T07:40:42Z",
-  "status": "active",
+  "updated_at": "2026-11-07T07:47:00Z",
+  "status": "completed",
   "intended_files": [
     "prompt/coordination/work/INPUT-005/20261107T0740Z-T4-scheduled-mouse-bridge-boundary-q9r2.json",
     "prompt/coordination/clients/T4/sessions/20261107T0740Z-T4-scheduled-mouse-bridge-boundary-q9r2.md"
@@ -17,5 +17,7 @@
     "scripts/t4_adapt_original_mouse_axes.py",
     "scripts/t4_original_mouse_routing.py"
   ],
-  "notes": "Read-only source audit; no Unity/native job or shared code edit. T5 owns buttons and Resolution. Preserve world/.rgd success."
+  "notes": "Read-only source audit; no Unity/native job or shared code edit. T5 owns buttons and Resolution. Preserve world/.rgd success.",
+  "result": "Verified existing Android pointer capture, mouse delta source classifier, immersive system bars, and authenticated original legacy-axis adapter; no duplicate implementation. Device/staging verification remains open.",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261107T0740Z-T4-scheduled-mouse-bridge-boundary-q9r2.md"
 }
