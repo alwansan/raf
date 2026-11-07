@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "session_id": "20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "1c5d26af91f891d783dcffa657391762398e2117",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4.json",
+    "prompt/coordination/clients/T2/sessions/20261107T1120Z-T2-scheduled-reconstructed-suite-r9k4.md"
+  ],
+  "hypothesis": "Check whether previously committed synthetic pass1 stack guard tests actually pass, without touching chat-owned Mono.Cecil integration; distinguish reconstructed local execution from exact checkout.",
+  "experiment_key": "T2-pass1-synthetic-stack-source-reconstructed-19-controls-20261107",
+  "resource_key": "local Python 3 source-only; no Unity or CI",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261107T1016Z-T2-scheduled-il-operand-type-f8c2.md"
+  ],
+  "updated_at": "2026-11-07T11:20:10Z"
+}
