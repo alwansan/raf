@@ -1,0 +1,18 @@
+{
+  "id": "20261107T0125Z-T3-scheduled-ci-proof-n6c2",
+  "owner": "T3",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "status": "in_progress",
+  "baseline_sha": "9fe564149c06e8bfc542908da998212782ceadac",
+  "hypothesis": "Previously pending synthetic contract validation is now executed by source-only CI; distinguish passing tests from original Shader48 proof.",
+  "files": [
+    "prompt/coordination/work/RENDER-002/20261107T0125Z-T3-scheduled-ci-proof-n6c2.json",
+    "prompt/coordination/clients/T3/sessions/20261107T0125Z-T3-scheduled-ci-proof-n6c2.md"
+  ],
+  "experiment_key": "T3-contract-join-ci-42318375479",
+  "shared_resource": "none",
+  "taken_over_from": "T3 scheduled 20261107T0027Z; T3 chat 20261106T2252Z",
+  "ci": "https://github.com/alwansan/raf/actions/runs/42318375479",
+  "next": "Check CI job step and source SHA, record exact scope and limitations; no game resource edit."
+}
