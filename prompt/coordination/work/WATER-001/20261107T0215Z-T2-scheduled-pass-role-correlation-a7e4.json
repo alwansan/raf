@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T0215Z-T2-scheduled-pass-role-correlation-a7e4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "1733498f85e74f093f474645ea0d7f69244fe407",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261107T0215Z-T2-scheduled-pass-role-correlation-a7e4.json",
+    "prompt/coordination/clients/T2/sessions/20261107T0215Z-T2-scheduled-pass-role-correlation-a7e4.md"
+  ],
+  "hypothesis": "Published aggregate producer counts cannot establish which original Graphics.Blit pass owns the known RenderTexture role; require per-pass privacy-safe 2x2 count matrix before any ShaderLab binding inference.",
+  "experiment_key": "T2-foam-original-blit-pass-literal-x-direct-producer-type-matrix-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "T2 chat 20261107T2227Z-T2-chat-blit-texture-role-6c52",
+    "T2 scheduled 20261107T0117Z-T2-scheduled-pass1-evidence-gate-f3c8"
+  ],
+  "updated_at": "2026-11-07T02:15:00Z",
+  "next_step": "Read latest original count-only artifact and generate pass-index keyed producer matrix in independent checker without touching active T2 scanner; fail closed on unpaired totals."
+}
