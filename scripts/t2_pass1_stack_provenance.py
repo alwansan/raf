@@ -22,8 +22,10 @@ def trace(instructions, max_steps=128):
         if not isinstance(instruction, (tuple, list)) or len(instruction) != 2:
             raise Unresolved("malformed instruction")
         op, arg = instruction
+        if type(op) is not str:
+            raise Unresolved("non-string opcode")
         if op == "ldarg":
-            if not isinstance(arg, (tuple, list)) or len(arg) != 2 or type(arg[0]) is not int or not 0 <= arg[0] <= 65535 or arg[1] not in ("Texture", "RenderTexture"):
+            if not isinstance(arg, (tuple, list)) or len(arg) != 2 or type(arg[0]) is not int or not 0 <= arg[0] <= 65535 or type(arg[1]) is not str or arg[1] not in ("Texture", "RenderTexture"):
                 raise Unresolved("untyped argument")
             previous_type = arg_types.get(arg[0])
             if previous_type is not None and previous_type != arg[1]:
