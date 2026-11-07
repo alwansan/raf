@@ -1,0 +1,15 @@
+{
+  "session_id": "20261107T0635Z-T4-scheduled-owner-artifact-priority-r8m2",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "f050bc49a5f33da3caebf1300def070e1a044dd3",
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/20261107T0635Z-T4-scheduled-owner-artifact-priority-r8m2.json",
+    "prompt/coordination/clients/T4/sessions/20261107T0635Z-T4-scheduled-owner-artifact-priority-r8m2.md"
+  ],
+  "experiment_key": "artifact-retention-priority:42110297871:13454900880:2026-11-08T21:12:40Z",
+  "resource_key": null,
+  "hypothesis": "The owner-tested candidate's rescued delivery expires earlier than the newer untested delivery; preserve tested evidence first.",
+  "updated_at": "2026-11-07T06:35:51Z"
+}
