@@ -38,6 +38,16 @@ def _safe_file(name: str) -> bool:
             and name not in (".", "..") and PurePosixPath(name).name == name)
 
 
+def _reject_duplicate_json_keys(pairs):
+    """Reject ambiguous delivery manifests instead of accepting last-key-wins."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate delivery JSON key")
+        result[key] = value
+    return result
+
+
 def _record(value, label: str) -> dict:
     if type(value) is not dict:
         raise ValueError("Invalid " + label)
@@ -73,7 +83,7 @@ def verify_archive(path: Path, *, expected_size: int, expected_sha: str,
             if member is None or not 0 < member.file_size <= limit:
                 raise ValueError("Missing/oversize small release metadata " + name)
         try:
-            delivery = _record(json.loads(archive.read("delivery.json")), "delivery")
+            delivery = _record(json.loads(archive.read("delivery.json"), object_pairs_hook=_reject_duplicate_json_keys), "delivery")
             sums = archive.read("SHA256SUMS").decode("ascii")
         except (UnicodeError, json.JSONDecodeError) as exc:
             raise ValueError("Malformed delivery.json or SHA256SUMS") from exc
