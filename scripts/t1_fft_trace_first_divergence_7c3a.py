@@ -56,11 +56,15 @@ def compare(left, right, atol=0.0):
     a, b = load(left), load(right)
     if set(a) != set(b):
         return {"status": "unpaired", "left_only": len(a.keys()-b.keys()), "right_only": len(b.keys()-a.keys())}
+    # Validate the complete paired dataset before reporting any numeric/coordinate
+    # divergence: an early mismatch must never hide a later provenance conflict.
     for key in sorted(a):
         x, y = a[key], b[key]
         for field in PROVENANCE:
             if x[field] != y[field]:
                 return {"status": "provenance_mismatch", "key": key, "field": field}
+    for key in sorted(a):
+        x, y = a[key], b[key]
         if x["coordinate"] != y["coordinate"]:
             return {"status": "coordinate_mismatch", "key": key, "left": x["coordinate"], "right": y["coordinate"]}
         if len(x["value"]) != len(y["value"]) or any(abs(i-j) > atol for i,j in zip(x["value"], y["value"])):
