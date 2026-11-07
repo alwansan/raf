@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T1915Z-T2-scheduled-pass1-origin-d8e1",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "f00b91129325c1683e029637ffdf55e94fc95308",
+  "updated_at": "2026-11-07T19:15:24Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261107T1915Z-T2-scheduled-pass1-origin-d8e1.json",
+    "prompt/coordination/clients/T2/sessions/20261107T1915Z-T2-scheduled-pass1-origin-d8e1.md"
+  ],
+  "experiment_key": "T2-original-Foam-pass1-unknown-IL-producer-correlation-review-v1",
+  "resource_key": null,
+  "hypothesis": "Pass1 unknown reflects bounded immediate-IL parser limit, not proof of missing texture; inspect authentic per-pass evidence and identify next nonoverlapping producer trace",
+  "constraints": "No CI duplication, no original assets or raw IL, no T3 or game shader changes"
+}
