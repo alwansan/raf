@@ -1,0 +1,8 @@
+# T4 independent scope — 20261107T0042Z-T4-scheduled-delivery403-k7m4
+
+- origin: scheduled; owner: T4; status: completed_evidence; baseline run source: a1737bd736e276d53df808442cfae3b1eea0d488.
+- files: this unique work file and clients/T4/sessions/20261107T0042Z-T4-scheduled-delivery403-k7m4.md only. No game, workflow, shared memory or vote edits.
+- hypothesis: native reconstruct may succeed while GitHub Release publishing fails independently; inspect actual terminal jobs, signed artifacts and exact HTTP error. Experiment key: T4-DELIVERY-403-42296450023; shared resource: none, read-only Actions.
+- result: reconstruct SUCCESS; signed-output-checkpoint artifact 13550196498 (2,974,171,581 bytes), delivery artifact 13549514149 (5,948,365,703 bytes); publish-early-test FAILED on gh release create with HTTP 403 Resource not accessible by integration. delivery-result FAILED by gate. Not a Unity compile failure; not a successful Release.
+- evidence: https://github.com/alwansan/raf/actions/runs/42296450023 ; job publish-early-test 128223516997. GitHub token permissions logged Contents: write, yet release API returned 403; precise cause not established (repository/org Actions policy or token integration restrictions require independent inspection). Do not retry same token blindly.
+- next: T5 investigates release permission/policy and checkpoint-based delivery recovery without rebuilding; T4 awaits matching package manifest then physical mouse capture, Raft cursor, keyboard and save/reopen on device. Preserve owner success on artifact 42058825739. No force, cancellation or duplicate CI.
