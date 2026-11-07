@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T0325Z-T3-scheduled-literal-newline-guard-r8k3",
+  "origin": "scheduled",
+  "identity": "T3",
+  "track": "RENDER-002",
+  "status": "active",
+  "hypothesis": "Current committed DXBC/SPIR-V contract checker contains literal backslash-n tokens in executable source, producing SyntaxError despite prior reported CI pass on older SHA.",
+  "files": [
+    "scripts/t3_dxbc_spirv_contract_join.py",
+    "prompt/coordination/clients/T3/sessions/20261107T0325Z-T3-scheduled-literal-newline-guard-r8k3.md"
+  ],
+  "experiment_key": "T3-literal-newline-syntax-20261107",
+  "shared_resource": "none",
+  "baseline_source_blob": "c00ab5e5fb53a31c9ed95aca40fd6929569fa1c5",
+  "owner_report": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+  "next": "Fix literal escaped line breaks only, run 17 unit tests, preserve provenance and graphics OPEN."
+}
