@@ -34,7 +34,14 @@ def check_contract(dx_resources, spv_resources, provenance):
         not isinstance(item, dict) or not required.issubset(item)
         for item in group) for group, required in schemas):
         return ["invalid_schema"]
-    # A row must belong to exactly one coordinate namespace. Extra keys from\n    # the other namespace can otherwise reach missing-field indexing paths.\n    for group, forbidden in ((dx_resources, {"set", "binding"}),\n                             (spv_resources, {"register"}),\n                             (provenance, set())):\n        if any(forbidden.intersection(item) for item in group):\n            return ["invalid_schema"]\n    # Reflection JSON may contain arrays/objects instead of scalar stage/family.
+    # A row must belong to exactly one coordinate namespace. Extra keys from
+    # the other namespace can otherwise reach missing-field indexing paths.
+    for group, forbidden in ((dx_resources, {"set", "binding"}),
+                             (spv_resources, {"register"}),
+                             (provenance, set())):
+        if any(forbidden.intersection(item) for item in group):
+            return ["invalid_schema"]
+    # Reflection JSON may contain arrays/objects instead of scalar stage/family.
     # Validate before constructing hash keys or Counter dictionaries.
     if any(type(item["stage"]) is not str or type(item["family"]) is not str
            for group in (dx_resources, spv_resources, provenance) for item in group):
