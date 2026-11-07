@@ -53,6 +53,17 @@ class TraceTests(unittest.TestCase):
                 path.write_text("".join(json.dumps(row)+"\n" for row in rows))
             with self.assertRaisesRegex(ValueError, "inconsistent input_sha256"):
                 compare(a, b)
+    def test_intra_trace_mixed_compiled_sources_rejected(self):
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d)/"a", Path(d)/"b"
+            left = [{**BASE, "read_site":0},
+                    {**BASE, "read_site":1, "source_sha":"different-program"}]
+            right = [{**row, "source_sha":("unity" if i == 0 else "unity-other")}
+                     for i, row in enumerate(left)]
+            for path, rows in ((a, left), (b, right)):
+                path.write_text("".join(json.dumps(row)+"\n" for row in rows))
+            with self.assertRaisesRegex(ValueError, "inconsistent source_sha"):
+                compare(a, b)
     def test_intra_trace_dispatch_drift_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d)/"trace"
