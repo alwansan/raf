@@ -14,16 +14,24 @@ EXPECTED_TOTAL = 106
 EXPECTED_DRIFT = 30
 
 
-def classify(doc, strict_baseline=True, require_metadata=False, require_drift_metadata=False):
+def classify(doc, strict_baseline=True, require_metadata=False, require_drift_metadata=False, require_unique_pairs=False):
     pairs = doc.get("pairs") if isinstance(doc, dict) else None
     if not isinstance(pairs, list):
         raise ValueError("pairs must be an array")
+    seen_pair_ordinals = set()
     groups = defaultdict(Counter)
     joint_groups = Counter()
     counts = Counter()
     for row in pairs:
         if not isinstance(row, dict):
             raise ValueError("pair must be an object")
+        if require_unique_pairs:
+            ordinal = row.get("pair_ordinal")
+            if type(ordinal) is not int or ordinal < 0 or ordinal >= EXPECTED_TOTAL:
+                raise ValueError("missing/invalid private pair ordinal")
+            if ordinal in seen_pair_ordinals:
+                raise ValueError("duplicate private pair ordinal")
+            seen_pair_ordinals.add(ordinal)
         for key in ("identity_ok", "dimensions_ok", "rgb_equal", "alpha_equal"):
             if type(row.get(key)) is not bool:
                 raise ValueError("missing/invalid required boolean: " + key)
@@ -61,6 +69,8 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
     # Validate cohort provenance before diagnosing missing metadata.
     if strict_baseline and (len(pairs) != EXPECTED_TOTAL or counts["rgb_drift"] != EXPECTED_DRIFT):
         raise ValueError("baseline count mismatch; verify input provenance")
+    if require_unique_pairs and strict_baseline and len(seen_pair_ordinals) != EXPECTED_TOTAL:
+        raise ValueError("incomplete private pair ordinal coverage")
     if require_drift_metadata and any(drift_coverage[key] != counts["rgb_drift"] for key in drift_coverage):
         raise ValueError("missing metadata for RGB-drift pairs; cannot infer drift strata")
     if require_metadata and any(coverage[key] == 0 for key in coverage):
@@ -83,11 +93,14 @@ def main():
     parser.add_argument("--require-metadata", action="store_true", help="reject missing whole-field metadata")
     parser.add_argument("--require-drift-metadata", action="store_true",
                         help="reject unknown metadata for any RGB-drift pair")
+    parser.add_argument("--require-unique-pairs", action="store_true",
+                        help="require private unique pair_ordinal 0..105 without printing identifiers")
     args = parser.parse_args()
     with open(args.private_manifest, encoding="utf-8") as stream:
         doc = json.load(stream)
     print(json.dumps(classify(doc, require_metadata=args.require_metadata,
-                              require_drift_metadata=args.require_drift_metadata), sort_keys=True, ensure_ascii=True))
+                              require_drift_metadata=args.require_drift_metadata,
+                              require_unique_pairs=args.require_unique_pairs), sort_keys=True, ensure_ascii=True))
 
 
 if __name__ == "__main__":
