@@ -1,0 +1,18 @@
+{
+  "session_id": "20261107T0841Z-T4-scheduled-immutable-mouse-stage-r6p2",
+  "origin": "scheduled",
+  "issue": "INPUT-005",
+  "status": "active",
+  "base_sha": "3ce3cedd2fa4aa3e4ce1bfce9b3e534d654f3096",
+  "scope": "Read-only immutable native-build staging proof for physical mouse bridge; no gameplay, touch, T5 UI or shared workflow edits",
+  "files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "scripts/t4_adapt_original_mouse_axes.py",
+    ".github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "experiment_key": "T4-immutable-a1737bd7-mouse-stage-proof",
+  "shared_resource": "none",
+  "hypothesis": "Successful Unity reconstruct at a1737bd7 contains the Android pointer capture bridge and SHA-gated axis adapter; source presence is not device acceptance",
+  "owner_test": "42058825739 world/save/reopen owner confirmed, source e9c358e; no regression inferred",
+  "next": "Verify immutable source files and workflow staging then document boundary; coordinate T5 for signed package manifest/device mouse test"
+}
