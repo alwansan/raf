@@ -145,6 +145,24 @@ class TestStrata(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "missing/invalid private pair ordinal"):
             classify({"pairs": items}, require_unique_pairs=True)
 
+    def test_all_pair_metadata_gate_rejects_sparse_and_partial_coverage(self):
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        # Legacy require_metadata only checks whether a field has any coverage.
+        items[0]["source_srgb"] = True
+        self.assertEqual(classify({"pairs": items}, require_metadata=True)
+                         ["metadata_coverage"]["source_srgb"], 1)
+        with self.assertRaisesRegex(ValueError, "one or more pairs"):
+            classify({"pairs": items}, require_all_metadata=True)
+        for item in items:
+            item["source_srgb"] = False
+        items[-1]["format"] = " UNKNOWN "
+        with self.assertRaisesRegex(ValueError, "one or more pairs"):
+            classify({"pairs": items}, require_all_metadata=True)
+        items[-1]["format"] = "DXT5"
+        result = classify({"pairs": items}, require_all_metadata=True)
+        self.assertEqual(result["metadata_coverage"],
+                         {"format": 106, "source_srgb": 106, "importer_srgb": 106})
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
