@@ -47,7 +47,12 @@ def classify(doc, strict_baseline=True, require_metadata=False, require_drift_me
                          if k == key and bucket != "UNKNOWN"
                          for _ in range(values["exact"] + values["rgb_drift"]))
                 for key in ("format", "source_srgb", "importer_srgb")}
-    drift_coverage = {key: sum(values["rgb_drift"] for (k, bucket), values in groups.items()\n                               if k == key and bucket != "UNKNOWN")\n                      for key in ("format", "source_srgb", "importer_srgb")}\n    if require_drift_metadata and any(drift_coverage[key] != counts["rgb_drift"] for key in drift_coverage):\n        raise ValueError("missing metadata for RGB-drift pairs; cannot infer drift strata")\n    if require_metadata and any(coverage[key] == 0 for key in coverage):
+    drift_coverage = {key: sum(values["rgb_drift"] for (k, bucket), values in groups.items()
+                               if k == key and bucket != "UNKNOWN")
+                      for key in ("format", "source_srgb", "importer_srgb")}
+    if require_drift_metadata and any(drift_coverage[key] != counts["rgb_drift"] for key in drift_coverage):
+        raise ValueError("missing metadata for RGB-drift pairs; cannot infer drift strata")
+    if require_metadata and any(coverage[key] == 0 for key in coverage):
         raise ValueError("missing per-pair metadata coverage; aggregate-only or unknown manifest")
     if strict_baseline and (len(pairs) != EXPECTED_TOTAL or counts["rgb_drift"] != EXPECTED_DRIFT):
         raise ValueError("baseline count mismatch; verify input provenance")
@@ -62,10 +67,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("private_manifest")
     parser.add_argument("--require-metadata", action="store_true", help="reject missing whole-field metadata")
-    parser.add_argument("--require-drift-metadata", action="store_true",\n                        help="reject unknown metadata for any RGB-drift pair")\n    args = parser.parse_args()
+    parser.add_argument("--require-drift-metadata", action="store_true",
+                        help="reject unknown metadata for any RGB-drift pair")
+    args = parser.parse_args()
     with open(args.private_manifest, encoding="utf-8") as stream:
         doc = json.load(stream)
-    print(json.dumps(classify(doc, require_metadata=args.require_metadata,\n                              require_drift_metadata=args.require_drift_metadata), sort_keys=True, ensure_ascii=True))
+    print(json.dumps(classify(doc, require_metadata=args.require_metadata,
+                              require_drift_metadata=args.require_drift_metadata), sort_keys=True, ensure_ascii=True))
 
 
 if __name__ == "__main__":
