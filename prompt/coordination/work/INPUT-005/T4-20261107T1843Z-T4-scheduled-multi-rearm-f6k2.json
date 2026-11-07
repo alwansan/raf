@@ -1,0 +1,21 @@
+{
+  "session_id": "20261107T1843Z-T4-scheduled-multi-rearm-f6k2",
+  "origin": "scheduled",
+  "status": "active",
+  "base_sha": "79669c6f8ecfa1f2863971b47df3543c7becad4b",
+  "track": "INPUT-005",
+  "files": [
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py"
+  ],
+  "hypothesis": "Multiple valid rearm attempts in one Escape cycle: classifier selects earliest request, falsely reports failure if a later attempt succeeds.",
+  "experiment_key": "T4-multi-rearm-20261107",
+  "shared_resource": "none; source-only; no Unity/CI",
+  "preserve": [
+    "keyboard",
+    "rgd",
+    "Settings",
+    "audio"
+  ],
+  "owner_phone_success": "42058825739 world save reopen confirmed; mouse unconfirmed"
+}
