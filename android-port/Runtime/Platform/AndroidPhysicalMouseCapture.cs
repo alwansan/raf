@@ -132,9 +132,23 @@ namespace RaftAndroid.Platform
         {
             // Preserve the original authored cursor-lock assignment exactly.
             Cursor.lockState = mode;
-            Interlocked.Exchange(ref originalLockIntent,
-                mode == CursorLockMode.Locked ? 1 : 0);
+            int nextIntent = mode == CursorLockMode.Locked ? 1 : 0;
+            int priorIntent = Interlocked.Exchange(ref originalLockIntent, nextIntent);
+            if (priorIntent != nextIntent)
+                LogLockIntent(nextIntent == 1 ? "authored_lock" : "authored_unlock");
             return mode;
+        }
+
+        private static void LogLockIntent(string transition)
+        {
+            // Only state transitions, never per-frame motion or keyboard text.
+            // Logging must not change authored cursor/keyboard behavior.
+            try
+            {
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_lock_intent", "transition=" + transition);
+            }
+            catch (Exception) { /* Diagnostics must remain nonblocking. */ }
         }
 
         public static float GetAxis(string axis) { return Axis(axis, false); }
@@ -189,8 +203,9 @@ namespace RaftAndroid.Platform
             if (!supported) return;
             // Escape offers an immediate physical exit even if original pause
             // transition sets cursor state on a subsequent frame.
-            if (Input.GetKeyDown(KeyCode.Escape))
-                Interlocked.Exchange(ref originalLockIntent, 0);
+            if (Input.GetKeyDown(KeyCode.Escape) &&
+                Interlocked.Exchange(ref originalLockIntent, 0) != 0)
+                LogLockIntent("escape_release");
             bool shouldCapture = !paused && focused &&
                 Volatile.Read(ref originalLockIntent) == 1 && PhysicalMousePresent();
             if (!shouldCapture)
