@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T2038Z-T4-scheduled-classifier-ci-v7q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "base_sha": "9ace8ce8627adcbb4fe01e5cf88b0939f9660064",
+  "status": "active",
+  "intended_files": [
+    ".github/workflows/raft-t4-mouse-trace-classifier.yml",
+    "prompt/coordination/clients/T4/sessions/20261107T2038Z-T4-scheduled-classifier-ci-v7q2.md",
+    "prompt/coordination/work/INPUT-005/20261107T2038Z-T4-scheduled-classifier-ci-v7q2.json"
+  ],
+  "experiment_key": "t4-mouse-trace-classifier-17-unittests-current-head-20261107",
+  "resource_key": "lightweight-python-only",
+  "hypothesis": "The 17 committed classifier regression tests have never been executed on the current source; a bounded Python-only CI can validate or falsify that implementation without a Unity build.",
+  "updated_at": "2026-11-07T20:38:00Z",
+  "owner_evidence": "42058825739 world-save-reopen owner-confirmed; not mouse device success"
+}
