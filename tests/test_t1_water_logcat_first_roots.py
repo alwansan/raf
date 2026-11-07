@@ -25,11 +25,11 @@ class FirstRootsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             late = Path(tmp) / 'late.log'
             early = Path(tmp) / 'early.log'
-            late.write_text('E Unity: Invalid compute kernel index 6\\n'
-                            '11-05 23:09:11.005 E Unity: Invalid compute kernel index 6\\n'
-                            '11-05 23:09:11.006 E Unity: Ultimate Water Spectrum invalid pass\\n')
-            early.write_text('11-05 22:09:11.002 E Unity: Invalid compute kernel index 6\\n'
-                             '11-05 22:09:11.003 E Unity: Ultimate Water Spectrum invalid pass\\n')
+            late.write_text('E Unity: Invalid compute kernel index 6\n'
+                            '11-05 23:09:11.005 E Unity: Invalid compute kernel index 6\n'
+                            '11-05 23:09:11.006 E Unity: Ultimate Water Spectrum invalid pass\n')
+            early.write_text('11-05 22:09:11.002 E Unity: Invalid compute kernel index 6\n'
+                             '11-05 22:09:11.003 E Unity: Ultimate Water Spectrum invalid pass\n')
             forward = scan([late, early])
             backward = scan([early, late])
             self.assertEqual(forward['first_by_category'], backward['first_by_category'])
