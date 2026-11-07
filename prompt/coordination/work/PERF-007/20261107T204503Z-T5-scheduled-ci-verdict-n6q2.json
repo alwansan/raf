@@ -11,7 +11,11 @@
   "hypothesis": "The newly introduced source-only interval regression completed successfully and clears the specific waiting_ci checkpoint without claiming phone FPS or APK provenance.",
   "experiment_key": "t5-interval-ci-verdict-0e3d102984477763005a908386bb188a9f8e3875-42408172119",
   "resource_key": null,
-  "status": "active",
+  "status": "completed",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42408172119",
-  "updated_at": "2026-11-07T20:45:03Z"
+  "updated_at": "2026-11-07T20:45:03Z",
+  "validation": "GitHub Actions 42408172119 completed success; job 128510300333 success; source-only parser Python unittest/py_compile/CLI smoke",
+  "session_commit": "c82d176a39b21858cc6d8a457d0c770ed81c0dd9",
+  "event_commit": "2f50265ae24b1b3b3f5c2b5f0fbf50c019ccb719",
+  "next_step": "Pinned CL intervals + signed APK/OBB provenance, Resolution device proof; no duplicate native build"
 }
