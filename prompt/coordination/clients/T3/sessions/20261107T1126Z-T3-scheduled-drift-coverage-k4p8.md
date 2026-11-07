@@ -1,0 +1,11 @@
+# T3 session 20261107T1126Z-T3-scheduled-drift-coverage-k4p8
+origin=scheduled; track=RENDER-002; status=SOURCE_FIXED_PENDING_CI; session_id=20261107T1126Z-T3-scheduled-drift-coverage-k4p8
+
+## Baseline and owner evidence
+Started HEAD 9e74072faf383c6ca395ad759e9efae4dfeb0925 (2026-11-07 11:21 UTC); read DEVICE_FEEDBACK_42058825739_AR, AGENTS/owner instructions, T_TEAM policy, T3 memory/state and trial votes. Owner phone test run 42058825739 demonstrated world save/reentry, not graphics. CL snapshot linked in owner report. Prior T3 real-export run 41968665857: 106 pairs, 30 RGB drift, 76 exact; aggregate artifact lacks per-pair source/importer sRGB metadata. Recent listed CI42365737052 and CI42365731144 succeeded on earlier source SHAs; no CI proof for this patch.
+
+## Scope and change
+Plan: prompt/coordination/work/RENDER-002/20261107T1126Z-T3-scheduled-drift-coverage-k4p8.md, baseline lease published at 460a570b. Identified analytical false-confidence risk: existing --require-metadata accepts a field when it is known on exact textures only, even if all 30 RGB-drift textures have UNKNOWN. Added explicit --require-drift-metadata and rgb_drift_metadata_coverage per field, rejecting partial or zero coverage in the drift cohort. Source commits a238bff4, newline correction 732e8062; two regression tests commit 145c9307. This is an opt-in strict validation and does not alter old CLI behavior. No raw asset data printed, no Unity/Android files changed.
+
+## Verification limits and continuation
+Fetched updated script via GitHub connector and visually verified Python block and CLI formatting. New tests not yet run in GitHub Actions; local git network DNS failed (Could not resolve host github.com). Do not call this tested or an Android pixel repair. Next: run python -m unittest discover -s tests -p test_t3_rgb_drift_strata.py with PYTHONPATH=scripts against current branch, then extract authenticated per-pair metadata in private export and run --require-drift-metadata. Follow drift results to ParticleRenderer/material/shader/light and phone screenshots. Do not launch duplicate Unity jobs or modify T4 mouse/T5 Resolution. RENDER-002 OPEN / NOT_READY; T3 trial vote unchanged (no integrated graphics fix).
