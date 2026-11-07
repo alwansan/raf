@@ -1,0 +1,14 @@
+# T5 scheduled — scene lifecycle boundaries
+- session_id: 20261107T2252Z-T5-scheduled-scene-transition-k7m4
+- origin: scheduled
+- UTC: 2026-11-07T22:52Z
+- base_sha: scope reservation 5ffaf06965a13642fd3530b685dd1290123ec506
+- resumed_from: previous T5 scheduled 2026-11-08 scene-transition reproduction (24/12 FPS combined to 18); earlier analyzer CLI --session-id CI42408172119 source-only PASS
+- owner phone evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md; owner confirmed world/save/reopen on artifact 42058825739, source e9c358eda01785b65e4eb14f18723da426635628, NOT on this HEAD.
+- scope: scripts/t5_unity_interval_epoch.py, scripts/test_t5_scene_epoch_boundary.py; no T4 physical mouse files, no Unity resources.
+- fix: explicit scene lifecycle rows (area=scene; operation=loaded/unloaded/changed/scene_loaded/scene_unloaded) reset last_key; next performance sample starts fresh epoch even if same scene/refresh/size.
+- commits: 00dead1b77a59cdc7d87a3c9f26fbaa68fc27b40, d96229b1a52fe4022291c7b3f54c20ff8bb91866.
+- test: new unittest cases A->B->A with 24/12 FPS, unrelated row, unload. **Not yet CI validated**. Synthetic schema must be checked against real CL event names before claiming coverage of original logs.
+- build policy: trial-20261106-r1 not unanimous; no Unity/native dispatch. Existing owner-direct run42281310905 failed; source-only test does not imply phone validation.
+- open: APK/OBB manifest hashes not verified; CL complete logs not reanalyzed; Resolution remains open; LogRaft device performance not newly measured.
+- next: run python3 -m unittest discover -s scripts -p 'test_t5_scene_epoch_boundary.py' and existing analyzer regression suite; inspect actual CL scene event schema, adjust only if proven; compare FPS only with verified APK/OBB.
