@@ -129,6 +129,21 @@ class PairTests(unittest.TestCase):
         self.write_manifest(lambda d: d.update(version_code="../86"))
         self.rejected("Delivery package/version")
 
+    def test_duplicate_top_level_package_rejected(self):
+        raw = self.delivery.read_text(encoding="utf8")
+        self.delivery.write_text(raw.replace('"package":', '"package":"com.invalid", "package":', 1), encoding="utf8")
+        self.rejected("Duplicate delivery JSON key")
+
+    def test_duplicate_nested_obb_sha_rejected(self):
+        raw = self.delivery.read_text(encoding="utf8")
+        self.delivery.write_text(raw.replace('"sha256":', '"sha256":"' + "0" * 64 + '", "sha256":', 1), encoding="utf8")
+        self.rejected("Duplicate delivery JSON key")
+
+    def test_duplicate_transport_part_size_rejected(self):
+        raw = self.delivery.read_text(encoding="utf8")
+        self.delivery.write_text(raw.replace('"parts": [{"name":', '"parts": [{"bytes": 1, "name":', 1), encoding="utf8")
+        self.rejected("Duplicate delivery JSON key")
+
     def test_duplicate_logical_names(self):
         self.write_manifest(lambda d: d["files"].__setitem__(2, copy.deepcopy(d["files"][0])))
         self.rejected("repeated logical")
