@@ -7,9 +7,9 @@ class FirstRootsTests(unittest.TestCase):
     def test_classification_no_raw_data(self):
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / 'part.log'
-            p.write_text('11-05 22:09:11.002 E Unity: Invalid compute kernel index 6 SECRET_TOKEN\\n'
-                         '11-05 22:09:11.004 E Unity: Ultimate Water Spectrum invalid pass SECRET_TOKEN\\n'
-                         '11-05 22:09:11.005 E Unity: Ultimate Water Foam Global invalid pass\\n')
+            p.write_text('11-05 22:09:11.002 E Unity: Invalid compute kernel index 6 SECRET_TOKEN\n'
+                         '11-05 22:09:11.004 E Unity: Ultimate Water Spectrum invalid pass SECRET_TOKEN\n'
+                         '11-05 22:09:11.005 E Unity: Ultimate Water Foam Global invalid pass\n')
             result = scan([p])
             self.assertEqual(result['root_line_counts'], {'kernel_index_6': 1, 'pass_spectrum': 1, 'pass_foam_global': 1})
             self.assertEqual(result['first_by_category']['kernel_index_6'], '11-05 22:09:11.002')

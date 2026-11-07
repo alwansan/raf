@@ -6,12 +6,12 @@ import json
 import re
 from pathlib import Path
 
-STAMP = re.compile(r'(?<!\\d)(\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d{3})(?!\\d)')
-KERNEL = re.compile(r'\\b(?:invalid\\s+(?:compute\\s+)?kernel\\s+(?:index\\s*)?|kernel\\s+index\\s+invalid\\s*[:=]?\\s*)(\\d{1,4})\\b', re.I)
-KERNEL_ALT = re.compile(r'\\bkernel\\s+(?:at\\s+)?index\\s*\\(?([0-9]{1,4})\\)?\\s+is\\s+invalid\\b', re.I)
-PASS = re.compile(r'\\b(?:invalid\\s+pass|pass\\s+is\\s+invalid|invalid\\s+shader\\s+pass|does\\s+not\\s+have\\s+(?:a\\s+)?pass)\\b', re.I)
-MATERIAL = {'spectrum': re.compile(r'\\bspectrum\\b', re.I),
-            'foam_global': re.compile(r'\\bfoam[ _-]+global\\b', re.I)}
+STAMP = re.compile(r'(?<!\d)(\d\d-\d\d \d\d:\d\d:\d\d\.\d{3})(?!\d)')
+KERNEL = re.compile(r'\b(?:invalid\s+(?:compute\s+)?kernel\s+(?:index\s*)?|kernel\s+index\s+invalid\s*[:=]?\s*)(\d{1,4})\b', re.I)
+KERNEL_ALT = re.compile(r'\bkernel\s+(?:at\s+)?index\s*\(?([0-9]{1,4})\)?\s+is\s+invalid\b', re.I)
+PASS = re.compile(r'\b(?:invalid\s+pass|pass\s+is\s+invalid|invalid\s+shader\s+pass|does\s+not\s+have\s+(?:a\s+)?pass)\b', re.I)
+MATERIAL = {'spectrum': re.compile(r'\bspectrum\b', re.I),
+            'foam_global': re.compile(r'\bfoam[ _-]+global\b', re.I)}
 
 def classify(line):
     if len(line) > 32768:
@@ -19,7 +19,7 @@ def classify(line):
     m = KERNEL.search(line) or KERNEL_ALT.search(line)
     if m:
         return 'kernel_index_6' if int(m.group(1)) == 6 else 'kernel_other'
-    if PASS.search(line) and re.search(r'ultimate\\s*water|spectrum|foam', line, re.I):
+    if PASS.search(line) and re.search(r'ultimate\s*water|spectrum|foam', line, re.I):
         for key, regex in MATERIAL.items():
             if regex.search(line):
                 return 'pass_' + key
