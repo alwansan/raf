@@ -72,4 +72,10 @@ class TraceTests(unittest.TestCase):
             p.write_text("".join(json.dumps(row)+"\n" for row in rows))
             with self.assertRaisesRegex(ValueError, "inconsistent dispatch"):
                 load(p)
+    def test_unexpected_field_rejected_to_prevent_private_payload_leak(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d)/"trace"
+            p.write_text(json.dumps({**BASE, "raw_shader_bytes": "must-not-appear"})+"\n")
+            with self.assertRaisesRegex(ValueError, "incomplete record"):
+                load(p)
 if __name__=="__main__": unittest.main()
