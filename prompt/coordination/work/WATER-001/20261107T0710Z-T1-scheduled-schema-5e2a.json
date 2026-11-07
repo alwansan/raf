@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T0710Z-T1-scheduled-schema-5e2a",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "base_head": "456299b789a82888b247dfa2262ad9cc530c44ba",
+  "scope": [
+    "scripts/t1_fft_trace_first_divergence_7c3a.py",
+    "tests/test_t1_fft_trace_first_divergence_7c3a.py"
+  ],
+  "hypothesis": "Unknown JSONL fields can carry unreviewed private data and make trace schema ambiguous; reject unknown keys.",
+  "experiment_key": "T1-FFT-TRACE-STRICT-SCHEMA-5e2a",
+  "shared_resource": "none",
+  "overlap": "Independent strict-schema guard; latest T1 source_sha scope preserved; no native CI",
+  "owner_feedback": "42058825739 world save/re-entry confirmed, water FFT errors open",
+  "status": "planned"
+}
