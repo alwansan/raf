@@ -1,0 +1,16 @@
+{
+  "session_id": "20261107T0335Z-T4-scheduled-artifact-retention-v8q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "base_sha": "a8af80674302b9418c753916c9d8afe8b6f5a4a2",
+  "status": "active",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261107T0335Z-T4-scheduled-artifact-retention-v8q2.json",
+    "prompt/coordination/clients/T4/sessions/20261107T0335Z-T4-scheduled-artifact-retention-v8q2.md"
+  ],
+  "hypothesis": "Latest native build produced signed artifacts retained despite release HTTP403; expiry is a concrete recovery deadline and device mouse test must bind to source SHA.",
+  "experiment_key": "delivery-retention-42296450023-a1737bd7-13549514149-13550196498",
+  "resource_key": "native-signed-artifacts-42296450023",
+  "updated_at": "2026-11-07T03:35:00Z",
+  "overlap": "Read-only artifacts metadata; no native build, no T5 delivery edits; distinct work file."
+}
