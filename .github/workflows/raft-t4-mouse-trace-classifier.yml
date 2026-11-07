@@ -1,0 +1,35 @@
+name: T4 INPUT-005 mouse trace classifier Python regression
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_classify_mouse_capture_log.py'
+      - 'tests/test_t4_classify_mouse_capture_log.py'
+      - '.github/workflows/raft-t4-mouse-trace-classifier.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-mouse-trace-classifier-python
+  cancel-in-progress: false
+jobs:
+  classifier-source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_classify_mouse_capture_log.py
+            /tests/test_t4_classify_mouse_capture_log.py
+      - name: Verify source-only classifier regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_classify_mouse_capture_log.py tests/test_t4_classify_mouse_capture_log.py
+          python3 -m unittest discover -s tests -p 'test_t4_classify_mouse_capture_log.py' -v
+          test ! -d Raft
+          echo 'T4_MOUSE_CLASSIFIER source_only=true device_verified=false'
