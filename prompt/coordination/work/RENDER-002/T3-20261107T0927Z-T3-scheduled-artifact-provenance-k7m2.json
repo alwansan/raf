@@ -2,18 +2,20 @@
   "session_id": "20261107T0927Z-T3-scheduled-artifact-provenance-k7m2",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bc3beac4215832a05da9295f977470b094e903db",
-  "updated_at": "2026-11-07T09:27:00Z",
+  "updated_at": "2026-11-07T09:30:00Z",
   "intended_files": [
     "prompt/coordination/work/RENDER-002/T3-20261107T0927Z-T3-scheduled-artifact-provenance-k7m2.json",
-    "prompt/coordination/clients/T3/sessions/20261107T0927Z-T3-scheduled-artifact-provenance-k7m2.md"
+    "prompt/coordination/clients/T3/sessions/20261107T0927Z-T3-scheduled-artifact-provenance-k7m2.md",
+    "prompt/coordination/work/experiments/T3-20261107T0927Z-T3-scheduled-artifact-provenance-k7m2-artifact-audit.md"
   ],
   "experiment_key": "T3-41968665857-artifact-13389400444-aggregate-manifest-provenance-v1",
   "resource_key": null,
-  "hypothesis": "Artifact 13389400444 contains only aggregate evidence, not authenticated 106-row private format/sRGB metadata; determine whether existing classifier can legitimately run without original re-extraction.",
+  "observed": "Artifact contains 3 safe aggregate JSON files, no pairs array. 106 total, 76 exact, 30 RGB drift; 106 GUID closure; sampler fields 0 mismatches.",
+  "outcome": "PROVENANCE_AUDITED_PRIVATE_PAIR_METADATA_MISSING",
+  "next_step": "Generate private authenticated 106-row format/sRGB manifest from same-export source; run existing classifier privately, publish only aggregate strata.",
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261107T0827Z-T3-scheduled-rgb-classifier-v4k9.md"
-  ],
-  "limits": "Read-only artifact audit; no native build, game assets, or other T scopes."
+  ]
 }
