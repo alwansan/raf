@@ -2,9 +2,9 @@
   "session_id": "20261107T0416Z-T1-scheduled-intratrace-k9v3",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_unverified",
   "base_sha": "dacaef28c0d1ac028c19b1c6134b5786bbb1560e",
-  "updated_at": "2026-11-07T04:16:00Z",
+  "updated_at": "2026-11-07T04:19:00Z",
   "intended_files": [
     "scripts/t1_fft_trace_first_divergence_7c3a.py",
     "tests/test_t1_fft_trace_first_divergence_7c3a.py",
@@ -14,5 +14,8 @@
   "experiment_key": "t1-fft-jsonl-intratrace-provenance-consistency-7c3a-v1",
   "resource_key": null,
   "taken_over_from": "prompt/coordination/clients/T1/sessions/20261107T0312Z-T1-scheduled-provenance-order-f6k2.md",
-  "no_native_build": true
+  "no_native_build": true,
+  "result_commit": "9112265c119232d569c8344792bcada2cc2f2072",
+  "verification": "Two adversarial regressions added; not yet executed. No native/Unity/GPU claims.",
+  "next_step": "Run unittest for 7c3a trace comparator (12 cases), then capture paired authentic Vulkan/Unity traces and test FindKernel/Dispatch."
 }
