@@ -1,0 +1,18 @@
+{
+  "session_id": "20261107T2030Z-T3-scheduled-unique-pair-v2k7",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ddd9a65ab76f0a6c93ecf3fffe41c562bdd8e01e",
+  "intended_files": [
+    "scripts/t3_rgb_drift_strata.py",
+    "tests/test_t3_rgb_drift_strata.py",
+    "prompt/coordination/clients/T3/sessions/20261107T2030Z-T3-scheduled-unique-pair-v2k7.md"
+  ],
+  "hypothesis": "106/30 aggregate baseline can pass with duplicate original/export pairs; enforce private unique pair ordinal when explicitly requested",
+  "experiment_key": "t3-unique-pair-ordinal-106-30-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-07T20:30:00Z",
+  "taken_over_from": "20261107T1929Z-T3-scheduled-drift-provenance-f8q4",
+  "note": "No raw identity or hashes printed; T4/T5/T1/T2 scopes untouched."
+}
