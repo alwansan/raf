@@ -15,7 +15,7 @@ class Value:
     origin: str
 
 def trace(instructions, max_steps=128):
-    if type(max_steps) is not int or max_steps < 1 or not isinstance(instructions, (list, tuple)) or len(instructions) > max_steps:
+    if type(max_steps) is not int or not 1 <= max_steps <= 128 or not isinstance(instructions, (list, tuple)) or len(instructions) > max_steps:
         raise Unresolved("invalid or oversized block")
     stack, locals_, arg_types = [], {}, {}
     for index, instruction in enumerate(instructions):
