@@ -50,9 +50,13 @@ def scan(paths):
                 if kind is None:
                     continue
                 counts[kind] = counts.get(kind, 0) + 1
-                if kind not in first:
-                    stamp = STAMP.search(line)
-                    first[kind] = stamp.group(1) if stamp else None
+                stamp = STAMP.search(line)
+                if stamp:
+                    candidate = stamp.group(1)
+                    if kind not in first or first[kind] is None or candidate < first[kind]:
+                        first[kind] = candidate
+                elif kind not in first:
+                    first[kind] = None
     return {'first_by_category': first, 'root_line_counts': counts,
             'original_kernel_name_proven': False, 'findkernel_dispatch_proven': False,
             'raw_text_disclosed': False, 'input_segments': len(paths),
