@@ -1,0 +1,17 @@
+{
+  "session_id": "20261107T0135Z-T4-scheduled-release403-a6q9",
+  "origin": "scheduled",
+  "owner": "T4",
+  "status": "completed",
+  "base_sha": "db7b14afeeb08c3b653604280222a26d1d3928c3",
+  "scope": "Read-only Release 403 authorization audit, no shared workflow or runtime edits",
+  "files": [
+    "prompt/coordination/work/INPUT-005/20261107T0135Z-T4-scheduled-release403-a6q9.json",
+    "prompt/coordination/clients/T4/sessions/20261107T0135Z-T4-scheduled-release403-a6q9.md"
+  ],
+  "hypothesis": "Release authorization rather than Unity compilation blocks delivery",
+  "experiment_key": "T4-release403-42296450023",
+  "shared_resource": "none",
+  "evidence": "Run 42296450023 reconstruct success, publish failure; delivery artifact 13549514149, signed checkpoint 13550196498; workflow publish job contents:write and GH_TOKEN secrets.RAFT_RELEASE_TOKEN || github.token",
+  "next": "T5 verify effective token permissions, repository Actions policy and release rulesets; reuse artifacts"
+}
