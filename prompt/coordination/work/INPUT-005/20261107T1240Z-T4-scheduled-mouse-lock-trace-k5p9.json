@@ -1,0 +1,20 @@
+{
+  "session_id": "20261107T1240Z-T4-scheduled-mouse-lock-trace-k5p9",
+  "origin": "scheduled",
+  "owner": "T4",
+  "baseline_sha": "adfc52f314188a2f955028dd197b803a44f6d549",
+  "issue": "INPUT-005",
+  "scope": "Android physical mouse lock intent transition diagnostic; no touch/layout/resolution modifications",
+  "files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "prompt/coordination/work/INPUT-005/20261107T1240Z-T4-scheduled-mouse-lock-trace-k5p9.json",
+    "prompt/coordination/clients/T4/sessions/20261107T1240Z-T4-scheduled-mouse-lock-trace-k5p9.md"
+  ],
+  "hypothesis": "Escape clears originalLockIntent; missing authored re-lock after menu return indistinguishable without explicit transition telemetry",
+  "experiment_key": "t4-mouse-lock-intent-transitions-20261107",
+  "shared_resource": "none; no CI dispatch",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261107T1138Z-T4-scheduled-capture-rearm-v4n8.md"
+  ],
+  "status": "planned"
+}
