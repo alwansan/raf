@@ -17,7 +17,7 @@ class RightSideDiagnosticButtons(unittest.TestCase):
 
     def test_three_buttons_use_right_helper_once(self):
         for label in ("Show Xbox", "Xbox layout", "Test report"):
-            pattern = r'AddRightButton\\(safeRoot,\\s*"' + re.escape(label) + r'"'
+            pattern = r'AddRightButton\(safeRoot,\s*"' + re.escape(label) + r'"'
             self.assertEqual(len(re.findall(pattern, self.source)), 1, label)
 
     def test_helper_anchors_right_inside_safe_root(self):
