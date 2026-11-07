@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "session_id": "20261107T0620Z-T2-scheduled-pass1-stack-boundary-c4e9",
+  "origin": "scheduled",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "baseline_sha": "bed4ca38d9313ed238b815a7090e8b184253e904",
+  "status": "active",
+  "experiment_key": "T2-pass1-stack-provenance-synthetic-v1",
+  "scope": [
+    "scripts/t2_pass1_stack_provenance.py",
+    "tests/test_t2_pass1_stack_provenance.py"
+  ],
+  "hypothesis": "A bounded, fail-closed straight-line IL producer tracer can distinguish simple ldloc/dup from branch/alias ambiguity without claiming runtime resource identity.",
+  "resource": "source-only Python; no shared Mono.Cecil workflow or Unity",
+  "taken_over_from": [
+    "docs/T2_FOAM_PASS_ROLE_AUTHENTIC_2026-11-07.md",
+    "prompt/coordination/clients/T2/sessions/20261107T0519Z-T2-scheduled-pass1-producer-a91f.md"
+  ],
+  "next_step": "Implement isolated synthetic tracer and tests; do not run duplicate CI."
+}
