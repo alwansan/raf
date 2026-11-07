@@ -1,0 +1,30 @@
+{
+  "owner": "T1",
+  "origin": "scheduled",
+  "session_id": "20261107T0011Z-T1-scheduled-q8n4",
+  "issue": "WATER-001",
+  "status": "analysis_scoped",
+  "files": [
+    "prompt/coordination/work/WATER-001/20261107T0011Z-T1-scheduled-q8n4-computed-address-provenance.json",
+    "prompt/coordination/clients/T1/sessions/20261107T0011Z-T1-scheduled-q8n4.md"
+  ],
+  "hypothesis": "Unity OpenGLCore FFT coordinate drift follows computed-address SSA provenance rather than generic floating-point precision; test exact original-derived per-invocation traces before touching authored shader.",
+  "experiment_key": "T1-fft-computed-provenance-original-join-20261107-q8n4",
+  "shared_resource": "none; no Unity/CI dispatched",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/commit/9b89f62772c2c61f6269fd2249f8560af1522892",
+    "https://github.com/alwansan/raf/actions/runs/42307656709"
+  ],
+  "observations": {
+    "owner_device": "42058825739 world/save/reopen confirmed by owner only; water kernel failures remain",
+    "unity_synthetic": "42278153683 computed-address 63/64 mismatch for 5 categories, buffered 0/64 for 5; precise not a fix",
+    "vulkan_phi": "42307656709 64 invocations enter, four loopbacks per invocation; no Unity numerical parity"
+  },
+  "next": "Collect exact keyed original SPIR-V vs Unity candidate per-invocation Phi, image coordinates and resource identity on same dispatch; verify FindKernel and bindings before source edits.",
+  "constraints": [
+    "No APK request without T5 coordination",
+    "Do not overwrite other T1 sessions",
+    "No original asset export",
+    "No claim of water/device fix"
+  ]
+}
