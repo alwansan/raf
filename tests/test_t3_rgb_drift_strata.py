@@ -127,6 +127,24 @@ class TestStrata(unittest.TestCase):
             classify({"pairs": items}, strict_baseline=False,
                      require_drift_metadata=True)
 
+    def test_private_unique_pair_ordinals_reject_duplicate_cohort(self):
+        # 106 rows and 30 RGB drifts alone cannot prove 106 distinct pairs.
+        items = [row(False) for _ in range(30)] + [row() for _ in range(76)]
+        for index, item in enumerate(items):
+            item["pair_ordinal"] = index
+        result = classify({"pairs": items}, require_unique_pairs=True)
+        self.assertEqual((result["total"], result["rgb_drift"]), (106, 30))
+        self.assertNotIn("pair_ordinal", str(result))
+        items[105]["pair_ordinal"] = 104
+        with self.assertRaisesRegex(ValueError, "duplicate private pair ordinal"):
+            classify({"pairs": items}, require_unique_pairs=True)
+        items[105]["pair_ordinal"] = True
+        with self.assertRaisesRegex(ValueError, "missing/invalid private pair ordinal"):
+            classify({"pairs": items}, require_unique_pairs=True)
+        items[105].pop("pair_ordinal")
+        with self.assertRaisesRegex(ValueError, "missing/invalid private pair ordinal"):
+            classify({"pairs": items}, require_unique_pairs=True)
+
     def test_wrong_baseline(self):
         with self.assertRaises(ValueError):
             classify({"pairs": [row()]})
