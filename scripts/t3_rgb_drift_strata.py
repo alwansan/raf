@@ -14,7 +14,7 @@ EXPECTED_TOTAL = 106
 EXPECTED_DRIFT = 30
 
 
-def classify(doc, strict_baseline=True):
+def classify(doc, strict_baseline=True, require_metadata=False):
     pairs = doc.get("pairs") if isinstance(doc, dict) else None
     if not isinstance(pairs, list):
         raise ValueError("pairs must be an array")
@@ -43,10 +43,16 @@ def classify(doc, strict_baseline=True):
                 if len(bucket) > 64 or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+-." for c in bucket):
                     raise ValueError("unsafe format category")
             groups[(key, bucket)][label] += 1
+    coverage = {key: sum(1 for (k, bucket), values in groups.items()
+                         if k == key and bucket != "UNKNOWN"
+                         for _ in range(values["exact"] + values["rgb_drift"]))
+                for key in ("format", "source_srgb", "importer_srgb")}
+    if require_metadata and any(coverage[key] == 0 for key in coverage):
+        raise ValueError("missing per-pair metadata coverage; aggregate-only or unknown manifest")
     if strict_baseline and (len(pairs) != EXPECTED_TOTAL or counts["rgb_drift"] != EXPECTED_DRIFT):
         raise ValueError("baseline count mismatch; verify input provenance")
     return {"total": len(pairs), "exact": counts["exact"], "rgb_drift": counts["rgb_drift"],
-            "strata": {key: {bucket: {"exact": groups[(key, bucket)]["exact"],
+            "metadata_coverage": coverage, "strata": {key: {bucket: {"exact": groups[(key, bucket)]["exact"],
                                       "rgb_drift": groups[(key, bucket)]["rgb_drift"]}
                              for k, bucket in sorted(groups) if k == key}
                        for key in ("format", "source_srgb", "importer_srgb")}}
@@ -54,11 +60,11 @@ def classify(doc, strict_baseline=True):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("private_manifest")
+    parser.add_argument("private_manifest")\n    parser.add_argument("--require-metadata", action="store_true", help="reject missing whole-field metadata")
     args = parser.parse_args()
     with open(args.private_manifest, encoding="utf-8") as stream:
         doc = json.load(stream)
-    print(json.dumps(classify(doc), sort_keys=True, ensure_ascii=True))
+    print(json.dumps(classify(doc, require_metadata=args.require_metadata), sort_keys=True, ensure_ascii=True))
 
 
 if __name__ == "__main__":
