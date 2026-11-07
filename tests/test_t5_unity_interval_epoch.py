@@ -96,5 +96,31 @@ class EpochTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Invalid session_id"):
                 load(path, session_id=" ")
 
+    def test_scene_lifecycle_revisit_without_intermediate_fps(self):
+        rows = [sample(fps=24),
+                {"area":"scene","operation":"unloaded","detail":"scene=MainScene"},
+                {"area":"scene","operation":"loaded","detail":"scene=MainMenuScene"},
+                {"area":"scene","operation":"unloaded","detail":"scene=MainMenuScene"},
+                {"area":"scene","operation":"loaded","detail":"scene=MainScene"},
+                sample(fps=12)]
+        epochs = analyze_rows(rows)["epochs"]
+        self.assertEqual(len(epochs), 2)
+        self.assertEqual([e["median_interval_fps"] for e in epochs], [24, 12])
+
+    def test_unrelated_event_does_not_split_scene_epoch(self):
+        rows = [sample(fps=24),
+                {"area":"audio","operation":"loaded","detail":"bank=Master"},
+                sample(fps=12)]
+        epochs = analyze_rows(rows)["epochs"]
+        self.assertEqual(len(epochs), 1)
+        self.assertEqual(epochs[0]["median_interval_fps"], 18)
+
+    def test_scene_unload_alone_delimits_epoch(self):
+        rows = [sample(fps=24),
+                {"area":"scene","operation":"unloaded","detail":"scene=MainScene"},
+                sample(fps=12)]
+        epochs = analyze_rows(rows)["epochs"]
+        self.assertEqual(len(epochs), 2)
+
 if __name__=="__main__":
     unittest.main()
