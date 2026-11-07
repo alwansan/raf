@@ -2,7 +2,7 @@
   "session_id": "20261107T1016Z-T2-scheduled-il-operand-type-f8c2",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "91e41cd0963d80d2815e2ea8d9ff4aa06af2dd93",
   "intended_files": [
     "scripts/t2_pass1_stack_provenance.py",
@@ -13,5 +13,9 @@
   "hypothesis": "Malformed non-string opcodes and non-string texture kind objects must fail closed without invoking attacker-defined equality or string conversion; synthetic provenance must never be mistaken for original Mono.Cecil.",
   "experiment_key": "T2-synthetic-IL-nonstring-op-kind-failclosed-v1",
   "resource_key": "none; source-only; no native CI",
-  "updated_at": "2026-11-07T10:16:24Z"
+  "updated_at": "2026-11-07T10:20:00Z",
+  "source_commit": "634ddd80358fa4b0f9dacf3246c1bdc7693237ad",
+  "session_path": "prompt/coordination/clients/T2/sessions/20261107T1016Z-T2-scheduled-il-operand-type-f8c2.md",
+  "validation": "not_executed; committed adversarial regression tests; no CI",
+  "next_step": "Execute repository unittest, then authenticated original Mono.Cecil pass1 producer trace"
 }
