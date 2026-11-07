@@ -23,6 +23,20 @@ class Pass1StackTests(unittest.TestCase):
         with self.assertRaises(Unresolved): trace([("dup", None)])
     def test_budget(self):
         with self.assertRaises(Unresolved): trace([("ldnull", None)] * 129)
+    def test_budget_override_cannot_bypass_hard_ceiling(self):
+        # 129 pops are stack-neutral; the limit must reject before execution.
+        block = [("ldnull", None), ("pop", None)] * 65
+        with self.assertRaises(Unresolved):
+            trace(block, max_steps=260)
+        with self.assertRaises(Unresolved):
+            trace([], max_steps=129)
+
+    def test_explicit_valid_budget_and_boundary(self):
+        self.assertEqual(trace([("ldnull", None), ("pop", None)] * 64, max_steps=128), ())
+        self.assertEqual(trace([("ldnull", None)], max_steps=1), (Value("NULL", "null"),))
+        with self.assertRaises(Unresolved):
+            trace([("ldnull", None), ("pop", None)], max_steps=1)
+
     def test_bad_type(self):
         with self.assertRaises(Unresolved): trace([("ldarg", (0, "Unknown"))])
     def test_bad_shape(self):
