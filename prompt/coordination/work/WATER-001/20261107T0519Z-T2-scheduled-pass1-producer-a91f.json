@@ -1,0 +1,10 @@
+{
+  "session_id":"20261107T0519Z-T2-scheduled-pass1-producer-a91f","origin":"scheduled","issue_id":"WATER-001","status":"scoped_read_only",
+  "base_sha":"55d3186086cb83177cc6c6818b2d59ea374a1e3d","experiment_key":"T2-FOAM-PASS1-IL-STACK-UNKNOWN-PRODUCER-V1",
+  "hypothesis":"The pass-1 UNKNOWN source/destination are unresolved immediate IL producers; bounded basic-block stack tracing may resolve types without inventing instance identity.",
+  "files":["prompt/coordination/work/WATER-001/20261107T0519Z-T2-scheduled-pass1-producer-a91f.json","prompt/coordination/clients/T2/sessions/20261107T0519Z-T2-scheduled-pass1-producer-a91f.md"],
+  "shared_resource":"none; existing T2 Mono.Cecil analyzer and Unity native workflow untouched",
+  "taken_over_from":["docs/T2_FOAM_PASS_ROLE_AUTHENTIC_2026-11-07.md","prompt/coordination/clients/T2/sessions/20261107T2227Z-T2-chat-blit-texture-role-6c52.md"],
+  "conflict_check":"No analyzer edit; no CI dispatch; T3 particle shaders and T4 mouse/T5 resolution excluded.",
+  "next_step":"Read current Mono.Cecil exact call-site logic; add a separate fail-closed pass-1 intra-basic-block stack producer trace with branch/phi/call barriers and authentic ZIP2 SHA-pinned CI only if distinct from ongoing work."
+}
