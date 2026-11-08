@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "WATER-001",
   "base_sha": "efe39f647208dbe1d8f62d5f47a3d8922481187f",
-  "status": "waiting_ci",
+  "status": "completed",
   "hypothesis": "The numeric trace axis classifier labels identical reference/observed coordinates as uniform_translation; this creates a false positive root-cause hint even when there is no coordinate drift.",
   "intended_files": [
     "scripts/t1_fft_trace_compare.py",
@@ -14,10 +14,11 @@
   "experiment_key": "fft-axis-identity-v1-synthetic-invocation-traces",
   "resource_key": null,
   "resumed_from": "20261108T1836Z-T1-chat-water-startup-order-c5e7",
-  "updated_at": "2026-11-08T19:12:00Z",
+  "updated_at": "2026-11-08T19:13:00Z",
   "result": "Patched identity address classification and added two regression tests; no Unity/Adreno/original FFT claims.",
   "code_commit": "a12076184214b348eaa8d1435730cde0f46a33da",
   "test_commit": "fd558046592baba6af9c40bcb92bac80a45a31c8",
   "ci_run": "https://github.com/alwansan/raf/actions/runs/42513642491",
-  "next_step": "Inspect run 42513642491; if green close this diagnostic scope; otherwise fix its exact failure. Continue authored Unity FFT binding/first numeric divergence separately."
+  "next_step": "Inspect run 42513642491; if green close this diagnostic scope; otherwise fix its exact failure. Continue authored Unity FFT binding/first numeric divergence separately.",
+  "ci_result": "42513642491 completed success at fd558046592baba6af9c40bcb92bac80a45a31c8"
 }
