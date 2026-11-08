@@ -2,7 +2,7 @@
   "session_id": "20261108T1039Z-T4-scheduled-epoch-classifier-v6k2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "7e1aced7b7086e659dadfe12abe079ff9d00dd57",
   "intended_files": [
     "scripts/t4_classify_mouse_capture_log.py",
@@ -14,5 +14,12 @@
   "experiment_key": "t4-classifier-epoch-matching-7e1aced7",
   "resource_key": null,
   "taken_over_from": "T4 20261108T0840Z epoch telemetry; CI 42468530415 source success",
-  "updated_at": "2026-11-08T10:39:00Z"
+  "updated_at": "2026-11-08T10:43:00Z",
+  "result": "Epoch-aware matching added to trace classifier; 3 regression cases added; no Unity/runtime changes.",
+  "commits": [
+    "ff432b057f8348d90848f3395bec554205898645",
+    "e1e7ac93cdb64af5efdf8a819b74157dfcb71497"
+  ],
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42472339258",
+  "next_step": "Check CI outcome, review epoch matching on real new-device logs; maintain owner-confirmed world save/reopen and keyboard."
 }
