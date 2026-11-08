@@ -34,6 +34,20 @@ class ParticleRendererAuditTests(unittest.TestCase):
             self.assertEqual(result["invalid_negative_fileid_slots"], 1)
             self.assertEqual(result["local_material_slots"], 1)
 
+    def test_null_fileid_with_nonzero_guid_is_not_valid_null(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "effect.prefab").write_text(
+                "--- !u!199 &2\nParticleSystemRenderer:\n"
+                "  m_Materials:\n"
+                "  - {fileID: 0, guid: " + "a"*32 + ", type: 2}\n"
+                "  - {fileID: 0}\n"
+                "  - {fileID: 0, guid: " + "0"*32 + ", type: 2}\n",
+                encoding="utf-8")
+            result = audit_module.audit(tmp)
+            self.assertEqual(result["material_slots"], 3)
+            self.assertEqual(result["invalid_null_fileid_with_guid_slots"], 1)
+            self.assertEqual(result["null_material_slots"], 2)
+
     def test_empty_and_malformed(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "effect.prefab").write_text(
