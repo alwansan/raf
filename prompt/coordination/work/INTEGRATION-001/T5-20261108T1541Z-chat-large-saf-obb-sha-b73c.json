@@ -26,7 +26,7 @@
   "hypothesis": "T5 file_sha256 case currently fails >64MiB even though OBB >2GiB; stream digest off Android main thread with bounded memory/progress and retain image size protection. No APK or installed identity claimed from source.",
   "overlap": "Checked T4 work 20261108T1540Z-chat-mini-lab-c6p4: T4 builds current host without modifying shared host; T5 will not modify T4 request/README or trigger competing mini-lab run.",
   "expected": "synthetic JDK/Python regression and future Android host compile; device SAF confirmation required",
-  "updated_at": "2026-11-08T15:53:15Z",
+  "updated_at": "2026-11-08T15:58:00Z",
   "implementation_commits": [
     "ceb6c1f74087f3d2d837e2251f3cb2709c5c731a",
     "2af36bddca757444084c59b09b973719e12da9fa",
@@ -64,7 +64,10 @@
       "application_id": "com.alwansan.raft.lab.t5",
       "version_name": "0.1.0-source-prototype",
       "version_code": 1,
-      "artifact_expires_at": "2026-11-15T15:53:09Z"
+      "artifact_expires_at": "2026-11-15T15:53:09Z",
+      "apk_size_bytes": 38113,
+      "artifact_zip_integrity": "verified: zip SHA256 matched GitHub artifact digest and extracted app-debug.apk SHA256 matched build log; APK archive CRC successful",
+      "testpack_sha256": "167ed76d18c4882528845bf6cb4c3e426f08b1b210a76e82d501ceef68ee4243"
     }
   },
   "next": "Wait for actual owner Android15 tested log with selected-file digest, compare hashes to source/provenance and installed package separately; if permission denial use safe user-owned copy; no duplicate build until changed hypothesis or code.",
