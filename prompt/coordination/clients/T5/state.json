@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1945Z-T5-chat-portrait-arabic-owner-cl-m7r4",
-  "resumed_from_session": "20261108T1930Z-T5-chat-owner-manual-test-guide-u3c7",
-  "status": "completed_build_verified_device_pending",
-  "base_sha": "a44d5257a9700f23ae31afab2a1c2800421f17c6",
-  "last_commit": "f0a2325cb47daf72c97a4ed580a400aa66e68e64",
-  "updated_at": "2026-11-08T19:58:00Z",
+  "session_id": "20261108T2010Z-T5-chat-t3-surface-pixelcopy-r8n2",
+  "resumed_from_session": "20261108T1945Z-T5-chat-portrait-arabic-owner-cl-m7r4",
+  "status": "completed_ci_verified_device_pending",
+  "base_sha": "abba9d1e2399574b2b63509aab9a9207ca92c793",
+  "last_commit": "341cd25f1cbbf2831bc6b38236e2f0ff74b2254d",
+  "updated_at": "2026-11-08T20:26:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001",
@@ -59,8 +59,11 @@
     "https://github.com/alwansan/raf/actions/runs/42512390472",
     "https://github.com/alwansan/raf/actions/runs/42516899166",
     "https://github.com/alwansan/raf/actions/runs/42516908881",
-    "https://github.com/alwansan/raf/actions/runs/42517104924"
+    "https://github.com/alwansan/raf/actions/runs/42517104924",
+    "https://github.com/alwansan/raf/actions/runs/42519126545",
+    "https://github.com/alwansan/raf/actions/runs/42519487402"
   ],
-  "next_step": "Owner export prior v9 lab logs, uninstall due signer mismatch, install 0.2.10 Arabic/portrait Mini SHA256 0f469cc650182370b570d96c8e92e3f9c686f6b4417ae10e22d3c35b0084fd42, run tests and upload JSONL/summary to CL/test. T1-T4 read shared owner directive for child UI localization/evidence. T5 r3 NO_BUILD, game NOT_READY 0/3.",
-  "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
+  "next_step": "Owner export v10 logs, uninstall previous lab due debug certificate mismatch, install shared v13 screenshot-fidelity Mini APK SHA256 6a41002cee345c48413ef56b0820211fb4ae73292229ec33ce830e82897194a7, run AUTO T3 and inspect T3 PNGs vs owner screenshots. Upload to CL/test; no phone PASS yet. T3 informed, r4 NO_BUILD, Unity full game unchanged NOT_READY 0/3.",
+  "memory_path": "prompt/coordination/clients/T5/MEMORY.md",
+  "origin": "chat"
 }
