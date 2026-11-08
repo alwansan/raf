@@ -15,7 +15,10 @@ class MouseRetryTelemetryContract(unittest.TestCase):
         self.assertIn("int attempt = ++captureRequestAttempts;", self.source)
 
     def test_retries_are_power_of_two_throttled(self):
-        self.assertIn("attempt > 1 && (attempt & (attempt - 1)) == 0", self.source)
+        # The first request is logged in its own if branch. Retries are
+        # necessarily >1 in the else-if branch, and use the same power-of-two gate.
+        self.assertIn("if (attempt == 1)", self.source)
+        self.assertIn("else if ((attempt & (attempt - 1)) == 0)", self.source)
         self.assertIn('"physical_mouse_capture_retry"', self.source)
         observed = [n for n in range(1, 1001) if n > 1 and (n & (n - 1)) == 0]
         self.assertEqual(observed, [2, 4, 8, 16, 32, 64, 128, 256, 512])
