@@ -10,3 +10,7 @@ updated_at: 2026-11-08T07:50:09Z
 hypothesis: preserved signed artifact may still be available, but GitHub artifact metadata cannot establish SHA of device-installed APK/OBB.
 previous: clients/T5/sessions/20261108T0650Z-T5-scheduled-ci-provenance-91ac.md
 scope: inspect artifact retention, names, sizes and build identity without modifying T4 mouse or shared Unity files. No build request.
+
+status: completed
+result: rescue artifact 13454900880 remains available (5,948,243,834 bytes) but expires 2026-11-08T21:12:40Z; original run delivery artifact not in current listing. No binary identity proof. Session clients/T5/sessions/20261108T0750Z-T5-scheduled-artifact-provenance-a83c.md
+ended_at: 2026-11-08T07:53:00Z
