@@ -67,7 +67,11 @@ public final class T3LabActivity extends Activity {
     Painter painter;
     TextView instructions, status;
     EditText note;
-    int caseIndex=0;
+    volatile int caseIndex=0;
+    volatile int renderSequence=0, lastRenderedSequence=-1, lastRenderedCase=-1;
+    volatile int lastRenderedError=GLES30.GL_INVALID_OPERATION;
+    volatile boolean lastRenderedAssertion=false;
+    volatile String lastRenderedNote="No GLES frame yet";
 
     TextView text(String value) { TextView t=new TextView(this); t.setText(value);
         t.setTextSize(15);t.setPadding(6,4,6,4);return t; }
@@ -121,10 +125,34 @@ public final class T3LabActivity extends Activity {
         int idx=Integer.parseInt(id.substring(4))-1;
         new Handler(Looper.getMainLooper()).postDelayed(()->{
             select(idx);
-            new Handler(Looper.getMainLooper()).postDelayed(()->captureSharedEvidence(id),1000);
+            final int sequence=renderSequence;
+            waitForSharedRender(id,idx,sequence,SystemClock.elapsedRealtime()+8000);
         },850);
     }
+    /** Only capture a rendered and CPU-read-back frame of this exact case/revision. */
+    void waitForSharedRender(String id,int idx,int sequence,long deadline){
+        if(lastRenderedSequence==sequence && lastRenderedCase==idx){
+            if(!lastRenderedAssertion || lastRenderedError!=GLES30.GL_NO_ERROR){
+                finishSharedEvidence(id,"FAIL",null,"GLES case assertion failed: "+lastRenderedNote);
+            }else{
+                // Allow EGL buffer swap/composition before copying our own window.
+                new Handler(Looper.getMainLooper()).postDelayed(()->captureSharedEvidence(id),180);
+            }
+            return;
+        }
+        if(SystemClock.elapsedRealtime()>=deadline){
+            finishSharedEvidence(id,"FAIL",null,"No matching GLES frame within timeout; never use stale pixels");
+            return;
+        }
+        new Handler(Looper.getMainLooper()).postDelayed(
+            ()->waitForSharedRender(id,idx,sequence,deadline),80);
+    }
     void captureSharedEvidence(String id){
+        int expected=Integer.parseInt(id.substring(4))-1;
+        if(lastRenderedSequence!=renderSequence || lastRenderedCase!=expected ||
+           caseIndex!=expected || !lastRenderedAssertion){
+            finishSharedEvidence(id,"FAIL",null,"Case changed or GLES assertion lost before PixelCopy");return;
+        }
         android.view.View decor=getWindow().getDecorView();
         if(decor==null||decor.getWidth()<=0||decor.getHeight()<=0){
             finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"No window pixels yet");return;
@@ -167,7 +195,8 @@ public final class T3LabActivity extends Activity {
         setResult(RESULT_OK,reply);finish();
     }
     void select(int index){
-        caseIndex=index;testId="CASE0"+(index+1);
+        synchronized(lock){caseIndex=index;renderSequence++;lastRenderedSequence=-1;}
+        testId="CASE0"+(index+1);
         JSONObject override=packOverrides.optJSONObject(testId);
         String step=override==null?STEPS[index]:override.optString("instructions",STEPS[index]);
         String expected=override==null?EXPECTED[index]:override.optString("expected",EXPECTED[index]);
@@ -268,7 +297,7 @@ public final class T3LabActivity extends Activity {
            +"void main(){frag=color*(useTex==1?texture(imageTex,texCoord):vec4(1.0));}";
         int program=0,vbo=0,plain=0,srgb=0,smoke=0,width=1,height=1;
         int useTexLocation=-1;
-        boolean negativeChecked=false;
+        boolean negativeChecked=false,negativeRejected=false;
         int compile(int type,String source,String label){
             int shader=GLES30.glCreateShader(type);
             GLES30.glShaderSource(shader,source);GLES30.glCompileShader(shader);
@@ -292,6 +321,7 @@ public final class T3LabActivity extends Activity {
             return out[0];
         }
         @Override public void onSurfaceCreated(GL10 gl,EGLConfig config) {
+            negativeChecked=false;negativeRejected=false;
             log("gles_context","vendor="+GLES30.glGetString(GLES30.GL_VENDOR)
                 +" renderer="+GLES30.glGetString(GLES30.GL_RENDERER)
                 +" version="+GLES30.glGetString(GLES30.GL_VERSION)
@@ -336,18 +366,41 @@ public final class T3LabActivity extends Activity {
             GLES30.glActiveTexture(GLES30.GL_TEXTURE0);GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,tex);
             GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP,0,4);
         }
-        void pixel(String name,int x,int y) {
+        int[] pixel(String name,int x,int y) {
             ByteBuffer buffer=ByteBuffer.allocateDirect(4);
             GLES30.glReadPixels(x,y,1,1,GLES30.GL_RGBA,GLES30.GL_UNSIGNED_BYTE,buffer);
-            log("pixel_rgba",name+"="+(buffer.get(0)&255)+","+(buffer.get(1)&255)+","
-                +(buffer.get(2)&255)+","+(buffer.get(3)&255));
+            int[] rgba={buffer.get(0)&255,buffer.get(1)&255,buffer.get(2)&255,buffer.get(3)&255};
+            log("pixel_rgba",name+"="+rgba[0]+","+rgba[1]+","+rgba[2]+","+rgba[3]);
+            return rgba;
+        }
+        boolean pixelContract(int id,int[] left,int[] right){
+            switch(id){
+                case 0: return left[0]>190 && left[1]<55 && left[2]<55 &&
+                    right[2]>190 && right[0]<55 && right[1]<55;
+                case 1: return Math.abs(left[1]-right[1])>20 &&
+                    !(left[0]>245 && left[1]>245 && left[2]>245);
+                case 2: return left[0]>45 && left[2]>35 && left[2]<230;
+                case 3: return Math.abs(left[0]-right[0])<=18 &&
+                    Math.abs(left[1]-right[1])<=18 && Math.abs(left[2]-right[2])<=18;
+                case 4: return left[0]>right[0]+20 && left[1]>right[1]+20 &&
+                    left[2]>right[2]+20;
+                case 5: return negativeChecked && negativeRejected &&
+                    left[2]>left[1] && left[1]>left[0];
+                default: return false;
+            }
         }
         @Override public void onDrawFrame(GL10 gl) {
+            final int current,generation;
+            synchronized(lock){current=caseIndex;generation=renderSequence;}
             GLES30.glDisable(GLES30.GL_BLEND);GLES30.glClearColor(0.07f,0.07f,0.10f,1f);
             GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
-            if(program==0)return;
+            if(program==0){
+                lastRenderedNote="GLES shader program unavailable";
+                lastRenderedError=GLES30.GL_INVALID_OPERATION;
+                lastRenderedAssertion=false;lastRenderedCase=current;lastRenderedSequence=generation;
+                return;
+            }
             GLES30.glUseProgram(program);GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"imageTex"),0);
-            int current=caseIndex;
             switch(current) {
                 case 0:
                     quad(-1,-1,-.34f,1,1,0,0,1,0);
@@ -386,7 +439,8 @@ public final class T3LabActivity extends Activity {
                         negativeChecked=true;
                         int bad=compile(GLES30.GL_FRAGMENT_SHADER,
                             "#version 300 es\nprecision mediump float;out vec4 x;void main(){x = INVALID_TOKEN;}","expected_negative");
-                        if(bad==0)log("negative_control","PASS invalid shader rejected");
+                        if(bad==0){negativeRejected=true;
+                            log("negative_control","PASS invalid shader rejected");}
                         else{log("negative_control","FAIL invalid shader compiled unexpectedly");
                             GLES30.glDeleteShader(bad);}
                     }
@@ -394,9 +448,20 @@ public final class T3LabActivity extends Activity {
                     break;
                 default:break;
             }
-            pixel("left_center",width/4,height/2);pixel("right_center",3*width/4,height/2);
-            log("render","case=CASE0"+(current+1)+" gl_error=0x"+Integer.toHexString(GLES30.glGetError())
-                +" viewport="+width+"x"+height);
+            int[] left=pixel("left_center",width/4,height/2);
+            int[] right=pixel("right_center",3*width/4,height/2);
+            int glError=GLES30.glGetError();
+            boolean colors=pixelContract(current,left,right);
+            String observed="case=CASE0"+(current+1)+" frame="+generation+
+                " left="+java.util.Arrays.toString(left)+" right="+java.util.Arrays.toString(right)+
+                " contract="+colors+" gl_error=0x"+Integer.toHexString(glError)+
+                " viewport="+width+"x"+height;
+            log("render",observed);
+            lastRenderedNote=observed;
+            lastRenderedError=glError;
+            lastRenderedAssertion=colors && glError==GLES30.GL_NO_ERROR;
+            lastRenderedCase=current;
+            lastRenderedSequence=generation;
         }
     }
 }
