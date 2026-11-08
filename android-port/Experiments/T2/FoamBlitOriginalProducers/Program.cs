@@ -249,6 +249,49 @@ internal static class Program
         }
         return new("unknown","unknown");
     }
+    static bool DirectMaterialBlit(MethodDefinition m,int callIndex,FieldDefinition field)
+    {
+        var il=m.Body.Instructions;
+        int p=Previous(il,callIndex-1);
+        if(p<0 || Literal(il[p]) is not (0 or 1))return false;
+        int material=Previous(il,p-1);
+        if(material<0 || !SameField(il[material],field,true))return false;
+        int start=material;
+        if(il[material].OpCode.Code==Code.Ldfld)
+        {
+            start=Previous(il,material-1);
+            if(start<0 || !Receiver(il[start]))return false;
+        }
+        return !UnsafeFlow(m,start,callIndex);
+    }
+    static bool OriginalMaterialLocalAliasBlit(MethodDefinition m,int callIndex,FieldDefinition field)
+    {
+        var il=m.Body.Instructions;
+        int p=Previous(il,callIndex-1);
+        if(p<0 || Literal(il[p]) is not (0 or 1))return false;
+        int load=Previous(il,p-1);
+        if(load<0)return false;
+        int idx=LocalIndex(il[load],false);
+        if(idx<0 || idx>=m.Body.Variables.Count ||
+           m.Body.Variables[idx].VariableType.FullName!=Material)return false;
+        // A bounded same-block, definite nearest store from the exact Foam
+        // Material field is required. No other prior/stale local write is
+        // accepted, and any branch into the region fails closed.
+        for(int store=load-1;store>=0 && load-store<=MaxTrace;store--)
+        {
+            if(LocalIndex(il[store],true)!=idx)continue;
+            int value=Previous(il,store-1);
+            if(value<0 || !SameField(il[value],field,true))return false;
+            int start=value;
+            if(il[value].OpCode.Code==Code.Ldfld)
+            {
+                start=Previous(il,value-1);
+                if(start<0 || !Receiver(il[start]))return false;
+            }
+            return !UnsafeFlow(m,start,callIndex);
+        }
+        return false;
+    }
     static Site? DirectFieldBlit(MethodDefinition m,int callIndex,FieldDefinition field)
     {
         var il=m.Body.Instructions;
@@ -324,6 +367,8 @@ internal static class Program
             materialField=MaterialFieldFromCtor(ctorSites[0].Method,ctorSites[0].At);
         var candidates=new Dictionary<int,List<Site>>{{0,new()},{1,new()}};
         int allBlits=0,allPass0=0,allPass1=0,allOther=0,linked=0;
+        var exactMaterialDirect=new int[2];
+        var exactMaterialLocalAlias=new int[2];
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -337,6 +382,9 @@ internal static class Program
                     else if(lit==1)allPass1++;
                     else allOther++;
                     if(materialField is null || lit is not (0 or 1))continue;
+                    if(DirectMaterialBlit(m,i,materialField))exactMaterialDirect[lit.Value]++;
+                    else if(OriginalMaterialLocalAliasBlit(m,i,materialField))
+                        exactMaterialLocalAlias[lit.Value]++;
                     var match=DirectFieldBlit(m,i,materialField);
                     if(match is not null){candidates[lit.Value].Add(match);linked++;}
                 }
@@ -362,6 +410,14 @@ internal static class Program
             original_direct_material_field_and_typed_image_linked_Blit_calls=linked,
             original_pass0_direct_link_candidates=candidates[0].Count,
             original_pass1_direct_link_candidates=candidates[1].Count,
+            original_pass0_exact_Material_field_argument_calls=exactMaterialDirect[0],
+            original_pass1_exact_Material_field_argument_calls=exactMaterialDirect[1],
+            original_pass0_exact_Material_local_alias_calls=exactMaterialLocalAlias[0],
+            original_pass1_exact_Material_local_alias_calls=exactMaterialLocalAlias[1],
+            original_pass0_linked_Material_image_producers_unresolved=
+                exactMaterialDirect[0]-candidates[0].Count,
+            original_pass1_linked_Material_image_producers_unresolved=
+                exactMaterialDirect[1]-candidates[1].Count,
             pass0_source=pass0?.Source??"unknown",
             pass0_destination=pass0?.Destination??"unknown",
             pass0_source_producer=pass0?.SourceProducer??"unknown",
