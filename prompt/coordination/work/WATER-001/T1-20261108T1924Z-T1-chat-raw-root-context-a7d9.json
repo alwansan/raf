@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1924Z-T1-chat-raw-root-context-a7d9",
+  "resumed_from_sessions": [
+    "20261108T1910Z-T1-scheduled-axis-identity-f4c8",
+    "20261108T1836Z-T1-chat-water-startup-order-c5e7"
+  ],
+  "issue_id": "WATER-001",
+  "track": "original owner-device Logcat first kernel6 root contextual attribution (read-only)",
+  "approach": "Read source-pinned first 33.5MB CL game-UID log segment privately in bounded CI, authenticate exact Git blob, compare first water and index6 roots to source-pinned session summary; publish only presence/absence of allowlisted token hints in immediate same thread/time neighborhood; never turn adjacency into Unity kernel name proof.",
+  "status": "active",
+  "base_sha": "81846a83eb9466b7d93a61966aaf3085b015afcb",
+  "intended_files": [
+    "scripts/t1_water_first_raw_context.py",
+    "tests/test_t1_water_first_raw_context.py",
+    ".github/workflows/raft-t1-water-first-raw-context.yml",
+    "docs/T1_WATER_FIRST_RAW_KERNEL_CONTEXT_2026-11-08.md",
+    "prompt/coordination/work/WATER-001/T1-20261108T1924Z-T1-chat-raw-root-context-a7d9.json",
+    "prompt/coordination/clients/T1/sessions/20261108T1924Z-T1-chat-raw-root-context-a7d9.md",
+    "prompt/coordination/experiments/T1/20261108T1924Z-T1-chat-raw-root-context-a7d9.json",
+    "prompt/coordination/B_TEAM/events/T1/20261108T1930Z-first-raw-kernel-context-a7d9.json",
+    "prompt/coordination/clients/T1/MEMORY.md"
+  ],
+  "experiment_key": "raw-first-logcat-kernel6-nearest-callsite-v1-CL61f71c-bf5db260",
+  "resource_key": "CL/git-blob/bf5db2607e3b46165d39142aa28f6596ed0715d4",
+  "hypothesis": "The first owner-recorded kernel-index6 error may have a same-line or same-thread immediate source-class/ComputeShader.Dispatch stack hint; need direct raw root evidence rather than attributing FFT from category/time-only summary.",
+  "input_provenance": {
+    "cl_commit": "61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8",
+    "first_segment_git_blob_sha1": "bf5db2607e3b46165d39142aa28f6596ed0715d4",
+    "first_segment_bytes": 33549006,
+    "summary_sha256": "941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7"
+  },
+  "run_urls": [],
+  "result": null,
+  "next_step": "Verify original raw first log thread/time and redacted context evidence; if no direct stack, mark unsupported and escalate actual original Unity C# Dispatch instrumentation without asserting identity. Keep no APK build.",
+  "updated_at": "2026-11-08T19:24:00Z"
+}
