@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T0155Z-T5-scheduled-lograft-sf-v7k2",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "intended_files": [
+    "scripts/t5_lograft_presented_fps.py",
+    "tests/test_t5_lograft_presented_fps.py",
+    "prompt/coordination/clients/T5/sessions/20261108T0155Z-T5-scheduled-lograft-sf-v7k2.md"
+  ],
+  "experiment_key": "T5-lograft-surfaceflinger-flat-jsonl-explicit-session-validity-sourceonly-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-08T01:55:00Z",
+  "hypothesis": "An isolated fail-closed parser can prevent treating SurfaceFlinger estimates as Unity frame timing; actual CL schema adapter remains unverified.",
+  "base_ref": "feature/android-native-port",
+  "no_unity": true
+}
