@@ -1,0 +1,19 @@
+{
+  "session_id": "20261108T1326Z-T3-scheduled-audit-ci-n4q8",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "8c5aa7ac694cc8772229382b801b8a6f34f5d0aa",
+  "resumed_from_sessions": [
+    "20261108T1233Z-T3-scheduled-empty-shader-p7x2"
+  ],
+  "intended_files": [
+    ".github/workflows/raft-t3-native-material-shader-quality.yml",
+    "prompt/coordination/work/RENDER-002/20261108T1326Z-T3-scheduled-audit-ci-n4q8.json",
+    "prompt/coordination/clients/T3/sessions/20261108T1326Z-T3-scheduled-audit-ci-n4q8.md"
+  ],
+  "experiment_key": "t3-material-shader-link-audit-python8-source-regressions-20261108",
+  "resource_key": "github-actions-source-only-small",
+  "hypothesis": "Previous eight source-only Material Shader GUID regressions were committed without executable CI; include them in existing T3 source-only shader quality job rather than launching a new heavy Unity build.",
+  "updated_at": "2026-11-08T13:26:32Z"
+}
