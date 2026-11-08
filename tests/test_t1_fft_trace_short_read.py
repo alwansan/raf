@@ -35,7 +35,7 @@ class TraceExactReadTests(unittest.TestCase):
                 nonlocal truncated
                 if not truncated:
                     truncated = True
-                    os.ftruncate(fd, 1)
+                    path.write_bytes(b"[")
                 return original_read(fd, size)
 
             with patch("scripts.t1_fft_trace_consistency.os.read", side_effect=truncate_on_first_read):
