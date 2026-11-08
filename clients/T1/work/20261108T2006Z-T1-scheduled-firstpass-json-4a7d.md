@@ -9,3 +9,12 @@ shared_resource: none; no CI launch.
 owner_baseline: 42058825739 phone world save/reentry succeeded from Artifact; water/kernel failures persist; publication failed.
 prior: T1 axis identity fix a12076184214b348eaa8d1435730cde0f46a33da; 42513642491 success.
 status: planned
+
+## Outcome
+source_fix_commit: 3ee2e1ac5727f29485d14db28b846540576058bf
+test_commit: a9e5b9bd9efd2862bd28f515824c4f665b984aab
+observed_head_before_close: 09eada01575a640d1e0cabf6bdaa23e3d82e90f7
+status: source_fixed_test_pending
+validation: source review only; local runner cannot resolve raw.githubusercontent.com; no new CI launched. Existing test workflow may run on push; verify live Actions next cycle.
+limits: prevents ambiguous JSON capture references; not evidence of actual Unity FindKernel/Dispatch or Vulkan numeric parity.
+next: execute python -m unittest scripts.test_t1_fft_firstpass_manifest_duplicate_keys; then obtain original resource GUID/kernel/dispatch and paired GPU captures.
