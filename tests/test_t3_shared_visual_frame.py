@@ -15,7 +15,7 @@ class T3SharedFramePolicy(unittest.TestCase):
         c=self.code
         self.assertIn('lastRenderedSequence==sequence && lastRenderedCase==idx',c)
         self.assertIn('waitForSharedRender(id,idx,sequence,deadline)',c)
-        self.assertIn('lastRenderedSequence!=renderSequence',c)
+        self.assertIn('renderSequence==generation&&lastRenderedSequence==generation',c)
         self.assertIn('GLES frame changed during SurfaceView PixelCopy',c)
         self.assertIn('sameRenderedFrame(expected,generation)',c)
         self.assertNotIn('postDelayed(()->captureSharedEvidence(id),1000)',c)
