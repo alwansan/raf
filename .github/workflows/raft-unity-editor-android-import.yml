@@ -668,6 +668,14 @@ jobs:
             --original-dll "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --backup "$RUNNER_TEMP/original-physical-mouse-source" --apply
+          # T4: a separate exact original 12-button/8-wheel Legacy Input patch.
+          # Captured native button/wheel is only a fallback where Unity's
+          # authored Legacy Input returns no event. Desktop Editor stubs retain
+          # Unity Input exactly; per-frame button edges are never double queued.
+          python3 -m scripts.t4_adapt_original_mouse_buttons_wheel \
+            --original-dll "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-mouse-button-wheel-source" --apply
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
           for name in AndroidStreamingAssets.cs AndroidExpansionArchiveProbe.cs TouchPointerGesture.cs TouchPointerButtons.cs AndroidTouchPointer.cs AndroidPhysicalMouseCapture.cs PhysicalMouseDeltaAccumulator.cs PhysicalMouseMotionSource.cs AndroidImmersiveSystemBars.cs AndroidSystemBarPolicy.cs AndroidTouchUiPanel.cs LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
             cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
