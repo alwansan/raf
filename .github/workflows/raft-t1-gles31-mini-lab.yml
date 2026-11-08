@@ -1,0 +1,72 @@
+name: T1 WATER-001 Android GLES 3.1 compute mini-lab (isolated)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'apk-for-testing/workers/T1/build-request.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-t1-gles31-mini-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  android-gles31:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 2
+      - name: Validate T1-only isolated request
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          p=Path('apk-for-testing/workers/T1/build-request.json')
+          q=json.loads(p.read_text(encoding='utf-8'))
+          assert set(q)=={'schema_version','worker','request_id','reason'}, q.keys()
+          assert q['schema_version']==1 and q['worker']=='T1'
+          assert isinstance(q['reason'],str) and 20<=len(q['reason'])<=800
+          assert re.fullmatch(r'[A-Za-z0-9._-]{8,80}',q['request_id'])
+          print('Isolated T1 source-only host; request:',q['request_id'])
+          PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate data-only testpack schema and regression
+        run: |
+          python3 scripts/validate_android_testpack.py apk-for-testing/examples/t4-mouse-testpack.json
+          python3 -m unittest discover -s tests -p test_android_testpack.py -v
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Compile only independent T1 Android GPU test APK, not Unity or Raft
+        run: |
+          gradle -p apk-for-testing/host --no-daemon :app:assembleDebug -Pworker=T1
+          test -s apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
+          printf 'SOURCE_SHA=%s\n' "${GITHUB_SHA}"
+          sha256sum apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk | tee mini-lab-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: raft-t1-gles31-mini-${{ github.sha }}
+          path: |
+            apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
+            mini-lab-sha256.txt
+          retention-days: 7
+          if-no-files-found: error
