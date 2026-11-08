@@ -86,12 +86,13 @@ final class T1ComputeProbe {
             final String id=selected.optString("id");
             activity.log("t1_gpu_begin",id);
             view.queueEvent(()->{
-                final String observation;
+                String observed;
                 try {
-                    observation=execute(id);
+                    observed=execute(id);
                 } catch(Throwable t) {
-                    observation="FAIL exception="+t.getClass().getSimpleName()+": "+String.valueOf(t.getMessage());
+                    observed="FAIL exception="+t.getClass().getSimpleName()+": "+String.valueOf(t.getMessage());
                 }
+                final String observation=observed;
                 activity.runOnUiThread(()->{
                     activity.log("t1_gpu_observed",id+" "+observation);
                     activity.caption.setText("GPU "+id+" — "+observation+
