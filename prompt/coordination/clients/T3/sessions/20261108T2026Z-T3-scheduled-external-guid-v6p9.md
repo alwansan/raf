@@ -1,0 +1,15 @@
+# T3 — 20261108T2026Z-T3-scheduled-external-guid-v6p9
+- identity: T3
+- origin: scheduled
+- issue: RENDER-002 (OPEN / NOT_READY)
+- resumed_from_sessions: 20261108T1930Z-T3-scheduled-crlf-renderer-b7q2; 20261108T1852Z-T3-chat-png-integrity-k8m2
+- owner evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md; phone world/save/re-entry proven for artifact 42058825739, graphics not proven.
+- baseline: repository recent commit search 9b89f62772c2c61f6269fd2249f8560af1522892 (not asserted to be branch HEAD).
+- work scope: prompt/coordination/work/RENDER-002/20261108T2026Z-T3-scheduled-external-guid-v6p9.md; scope commit 44e92bae6fcbcf773ca0a3d689426d9c8a80bcdd.
+- new isolated read-only script: scripts/t3_particle_external_material_resolution.py, commit f4f1e1f5c04e4d32b70b0e6fd4b9196af6a1cd4e.
+- new synthetic regression: tests/test_t3_particle_external_material_resolution.py, commit 68dffe3c8af6e0cd18de27d30f04825d55110400.
+- method: count external ParticleSystemRenderer PPtrs by GUID against .mat.meta within a supplied export tree; distinguish unique, duplicate and absent GUID owner. Output aggregate counts only; no GUID/path/raw content. BOM+CRLF synthetic fixture, three distinct outcomes. An equivalent isolated Python fixture was executed locally and passed 1/1; repository test not yet run in Actions.
+- interpretation: absent metadata is *not* proof of missing material if source/export tree is partial; unique .mat.meta does not prove shader/texture/Android visual fidelity. This is a targeted missing-link triage step, not a graphics fix.
+- source audit preceding this session: existing scripts/t3_particle_renderer_yaml_audit.py includes utf-8-sig BOM handling and anchor resolution. Prior 42515392649 was waiting_ci at last known checkpoint; current conclusion not independently confirmed here. No duplicate CI dispatched.
+- No ZIP2 raw assets acquired; no CL screenshot pixel extraction; no Unity/mini APK/XAPK, GUID/meta/game assets/Settings/audio/save edits. Shared mini APK policy read, T5 build ownership preserved. T4 mouse and T5 Resolution remain independent.
+- next: verify new unit test on repository SHA, read CI result 42515392649, authenticate complete ZIP2/export source tree and run new aggregate audit alongside existing particle audit. Follow any absent/duplicate external GUID to material Shader PPtr/texture and original device screenshot, without assuming missing owner from partial exports.
