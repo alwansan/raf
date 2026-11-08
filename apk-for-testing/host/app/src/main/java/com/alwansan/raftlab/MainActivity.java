@@ -35,6 +35,17 @@ public final class MainActivity extends Activity {
         String fromIntent=getIntent()==null?null:getIntent().getStringExtra("mini_worker");
         return fromIntent!=null&&fromIntent.matches("T[1-5]")?fromIntent:BuildConfig.LAB_WORKER;
     }
+    int physicalMouseButtons=0,physicalMouseScrolls=0;
+    void finishSharedManualMouse(){
+        String id=getIntent().getStringExtra("manual_case_id");
+        if(id==null||!id.matches("T4-0[1-9]"))return;
+        Intent reply=new Intent();
+        reply.putExtra("case_id",id);
+        reply.putExtra("status",(physicalMouseButtons>0||physicalMouseScrolls>0)?"EVIDENCE_READY":"NEEDS_INPUT");
+        reply.putExtra("observed","physical_button_events="+physicalMouseButtons+" scroll_events="+physicalMouseScrolls+"; see raw JSONL callbacks");
+        log("manual_mouse_summary",id+" buttons="+physicalMouseButtons+" scroll="+physicalMouseScrolls);
+        export();setResult(RESULT_OK,reply);finish();
+    }
     void runSharedAutoCase(){
         String caseId=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
         if(caseId==null||!caseId.matches("T1-0[1-4]")||t1Probe==null)return;
@@ -89,6 +100,9 @@ public final class MainActivity extends Activity {
         events=txt("INPUT EVENTS:");root.addView(events);
         addButton(root,"Pick image or file / SHA256",v->filePicker(PICK_ASSET,"*/*"));
         addButton(root,"Recover older session logs",v->recoverPreviousLog());
+        String manual=getIntent()==null?null:getIntent().getStringExtra("manual_case_id");
+        if(manual!=null&&manual.matches("T4-0[1-9]"))
+            addButton(root,"RETURN TO TEAM LAB — save observed mouse evidence",v->finishSharedManualMouse());
         preview=new ImageView(this);preview.setAdjustViewBounds(true);root.addView(preview,new LinearLayout.LayoutParams(-1,260));
         if("T1".equals(activeWorker())) t1Probe=T1ComputeProbe.install(this,root);
         setContentView(sc);
@@ -117,6 +131,11 @@ public final class MainActivity extends Activity {
         return super.dispatchTouchEvent(e);}
     @Override public boolean dispatchGenericMotionEvent(MotionEvent e){mouse("activity_generic",e);return super.dispatchGenericMotionEvent(e);}
     void mouse(String route,MotionEvent e){int a=e.getActionMasked();
+        if((e.getSource()&InputDevice.SOURCE_MOUSE)==InputDevice.SOURCE_MOUSE){
+            if(a==MotionEvent.ACTION_DOWN||a==MotionEvent.ACTION_UP||
+               a==MotionEvent.ACTION_BUTTON_PRESS||a==MotionEvent.ACTION_BUTTON_RELEASE)physicalMouseButtons++;
+            if(a==MotionEvent.ACTION_SCROLL)physicalMouseScrolls++;
+        }
         if(a==MotionEvent.ACTION_MOVE||a==MotionEvent.ACTION_HOVER_MOVE){long t=SystemClock.elapsedRealtime();
             if(t-lastMove<120)return;lastMove=t;}
         String s="route="+route+" action="+MotionEvent.actionToString(a)+" source=0x"+Integer.toHexString(e.getSource())
