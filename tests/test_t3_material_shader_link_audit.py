@@ -87,12 +87,12 @@ class MaterialShaderAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             guid = "f" * 32
-            (root / "Known.shader").write_text('Shader "Test/Known" {}\\n')
-            (root / "Known.shader.meta").write_text("guid: " + guid + "\\n")
+            (root / "Known.shader").write_text('Shader "Test/Known" {}\n')
+            (root / "Known.shader.meta").write_text("guid: " + guid + "\n")
             (root / "ambiguous.mat").write_text(
-                "Material:\\n"
-                "  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid
-                + "  m_Shader: malformed\\n"
+                "Material:\n"
+                "  m_Shader: {fileID: 4800000, guid: %s, type: 3}\n" % guid
+                + "  m_Shader: malformed\n"
             )
             result = audit(root)
             self.assertEqual(result["material_shader_pointer_unparsed"], 1)
