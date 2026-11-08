@@ -1,0 +1,47 @@
+name: T5 T3 shared SurfaceView screenshot fidelity gate (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t5-shared-surface-screenshot.yml'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/SharedSurfacePixelPolicy.java'
+      - 'apk-for-testing/unified/app/build.gradle'
+      - 'tests/test_t5_shared_surface_screenshot_contract.py'
+      - 'tests/java/com/alwansan/raftlab/SharedSurfacePixelPolicyTest.java'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: t5-t3-surface-screenshot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-shared-screenshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Assert true SurfaceView capture, fail-closed PNG and preserved GL renderer
+        run: |
+          python3 -m unittest discover -s tests -p 'test_t5_shared_surface_screenshot_contract.py' -v
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - name: Verify actual surface pixel policy against owner black-vs-RGB scenario
+        run: |
+          mkdir -p /tmp/shared-screenshot-classes
+          javac -d /tmp/shared-screenshot-classes \
+            apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/SharedSurfacePixelPolicy.java \
+            tests/java/com/alwansan/raftlab/SharedSurfacePixelPolicyTest.java
+          java -cp /tmp/shared-screenshot-classes com.alwansan.raftlab.SharedSurfacePixelPolicyTest
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Compile unified Android app with real PixelCopy SurfaceView calls, no APK
+        run: gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA" -PversionCode=1
