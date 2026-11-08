@@ -1,3 +1,6 @@
+<!-- OWNER_SHARED_MINI_LAB_20261108 -->
+> **قرار المالك الأحدث — 8 نوفمبر 2026 (19:31 بغداد):** صار نظام التجارب **APK مختبر واحد فقط لكل T1–T5، وحزمة team-testpack.json واحدة** بدلاً من خمسة تطبيقات. المرجع الجديد [UNIFIED_LAB_POLICY_AR.md](apk-for-testing/UNIFIED_LAB_POLICY_AR.md) و[SHARED_BUILD_READINESS.md](apk-for-testing/SHARED_BUILD_READINESS.md) و[TEST_CENTER.md](apk-for-testing/TEST_CENTER.md)، و[برومبت الاستعادة الكامل الجديد](prompt/coordination/T_TEAM/RESTORE_SHARED_LAB_AR.md). يُبني mini APK عند حاجة عامل واحد مثبتة يراجعها T5؛ تصويت XAPK اللعبة الكامل 5/5 لا يتغير. أتمتة T1/T2/T3 حسب الإثبات، وT4/T5 يحتاجان تدخلاً واقعياً لبعض الاختبارات؛ صور نافذة التطبيق عبر PixelCopy أو طلب داخلي، لا نجاح وهمياً. **التعليمات القديمة عن إنتاج خمس APK منفصلة أصبحت تاريخية.**
+
 > **اختبارات Android المصغرة T1–T5:** [مركز APK for Testing](apk-for-testing/TEST_CENTER.md) — لكل عامل روابط نسخ APK وملفات اختبار وlogs عند جاهزيتها؛ [التعاريف](apk-for-testing/LAB_PROTOCOL_AR.md) و[رسالة الاستعادة الجديدة](prompt/coordination/T_TEAM/RESTORE_WITH_ANDROID_LAB_AR.md). مستقل عن تصويت بناء اللعبة الكامل.
 
 # Raft Android — Native Port Research (work in progress)
