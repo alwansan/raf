@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "session_id": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "aed5beb86c035789ef81a4a642d4ac412dfc9b29",
+  "resumed_from_session": "20261108T1852Z-T3-chat-png-integrity-k8m2",
+  "scope": "User-confirmed T3-01..06 nonlaunch: make tapped T3 request and RUN selected open a persistent T3 visual preview; capture on explicit button then return evidence; localize T3 UI and shared owner-facing UI to Arabic without mutating 29-case pack, and defer Android portrait manifest switch to T5 as requested.",
+  "files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ArabicTestText.java",
+    "tests/test_t3_shared_visual_frame.py",
+    "tests/test_t3_shared_arabic_manual_launch.py",
+    "docs/T3_SHARED_ARABIC_MANUAL_LAUNCH_2026-11-08.md"
+  ],
+  "resource_key": "T3VisualPreviewAndHostScopedBridge",
+  "conflict_avoidance": "Edit only T3-specific host bridge and Arabic display strings, avoid T5 source integrity/store/SAF, keep unified schema v2 unchanged; leave portrait manifest to T5. No native Mini build request except T5.",
+  "next_step": "Patch source, source regression checks; inform T5 in own event and own row vote NEED_BUILD only if actual new user-facing driver code."
+}
