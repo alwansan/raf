@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261108T2010Z-T5-chat-t3-surface-pixelcopy-r8n2",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_ci_verified_device_pending",
   "base_sha": "abba9d1e2399574b2b63509aab9a9207ca92c793",
   "scope": "Owner-proven T3 captured PNG lacks all visible GLES colors while owner physical screenshot shows RGB. Fix shared Mini T3 screenshot PixelCopy source/validation, T5-only screenshot policy/test integration and T3's minimal capture bridge under owner instruction; coordinate T3 ownership. No Unity/game/CL changes.",
   "evidence": [
@@ -21,5 +21,28 @@
   ],
   "experiment_key": "t3-surface-layer-PixelCopy-RGB-black-reject@v10",
   "resource_key": "shared-mini-t3-screenshot",
-  "next_step": "Add evidence and T3 notice, patch capture only with Surface pixel matching, compile test, consider one mini APK build if verified. No fake PASS."
+  "next_step": "Owner exports logs from v0.2.10, uninstalls old lab due DEBUG signer mismatch, installs v0.2.13, runs AUTO T3 / Force Auto, checks actual T3 images and uploads PNG, summary, events to alwansan/CL:test. T3 reviews screenshot capture; T5 analyzes actual device result. No Mini repeat while waiting.",
+  "updated_at": "2026-11-08T20:24:00Z",
+  "source_fix_commit": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
+  "policy_commit": "4ffd2029e97055e4f48c39eac4f960a990d9d7ed",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42519126545",
+    "https://github.com/alwansan/raf/actions/runs/42519487402"
+  ],
+  "result": {
+    "source_jdk_android_ci": "success",
+    "apk_ci": "success",
+    "apk_version": "0.2.13-shared",
+    "apk_size": 93910,
+    "apk_sha256": "6a41002cee345c48413ef56b0820211fb4ae73292229ec33ce830e82897194a7",
+    "signature_sha256": "1b47e47c4e4a170a8b6a7f31c9718c8bd9be4a20a77b72a08edf65b3e754e3e6",
+    "signature_changed_from_v10": true,
+    "artifact_id": 13632379139,
+    "artifact_zip_sha256": "65ff60992b96a71f65da1f34ed06fee93bf02d1359e273a18f5c466f6bcb4f3d",
+    "request_commit": "15d146f441554818b59fbd0eb917474c01cefd3a",
+    "request_parent_source": "e7a6248b0d0c14b9772bd52f3bbdc5cf22fa9b9a",
+    "real_device_capture": "unverified_pending_owner",
+    "pack_unchanged": true,
+    "full_game_unchanged": true
+  }
 }
