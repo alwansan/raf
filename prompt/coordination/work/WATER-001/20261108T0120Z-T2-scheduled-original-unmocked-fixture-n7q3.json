@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "worker": "T2",
   "issue": "WATER-001",
-  "status": "active",
+  "status": "completed_source_test_unexecuted",
   "baseline_sha": "65005a4ef1cd662759d7c16b0590c590cda8b50f",
   "experiment_key": "T2-FOAM-ORIGINAL-VALIDATOR-UNMOCKED-SYNTHETIC-V1",
   "hypothesis": "Full schema-safe synthetic original Foam report passes real validate_original plus per-pass join; invalid auth and count fail closed",
@@ -17,5 +17,11 @@
     "20261108T0019Z-T2-scheduled-original-role-validation-v2c7"
   ],
   "device_baseline": "42058825739 world/save/reenter yes; water/FFT errors open",
-  "next_step": "Add unmocked full-schema synthetic fixture; run source tests when original checkout available."
+  "next_step": "Run unmocked source-free full-schema test on checkout, then trace pass1 producer; no CI duplicate.",
+  "result_commits": [
+    "610e4517c1260aea1bc6abd2722118e9bcbd4779",
+    "5e8636a7ea935899524e93ef3ae23d90be8a40f3",
+    "f2a2c110540cb66964aa542b38f24a22ad826851"
+  ],
+  "test_status": "not_executed_dns_blocked"
 }
