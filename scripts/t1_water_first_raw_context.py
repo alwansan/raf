@@ -241,7 +241,28 @@ def main():
         phase = "raw-root-classification"
         raw_report = classify_first_roots(a.first_segment)
         phase = "raw-summary-crosscheck"
-        report = combine(raw_report, summary, checksum)
+        try:
+            report = combine(raw_report, summary, checksum)
+        except ValueError:
+            # Failure diagnostics contain only fixed category names, observed
+            # numeric timestamps and counters; absolutely no original lines,
+            # private stack frames, game paths, or raw identifier strings.
+            redacted = {
+                "observed_first_unix_ms": {
+                    name: entry["unix_ms"] for name, entry in raw_report["first"].items()
+                },
+                "root_counts": raw_report["observed_first_segment_category_counts"],
+                "unparseable_first_root_lines": raw_report["unparseable_first_root_lines"],
+                "expected_water_unix_ms":
+                    summary["final_error_category_breakdown"]
+                           ["ultimate_water_invalid_pass"]["first_observed_unix_ms"],
+                "expected_kernel_unix_ms":
+                    summary["final_error_category_breakdown"]
+                           ["water_fft_invalid_compute_kernel"]["first_observed_unix_ms"],
+            }
+            print("RAFT_T1_SAFE_RAW_SUMMARY_MISMATCH " +
+                  json.dumps(redacted, sort_keys=True))
+            raise
     except (OSError, ValueError, UnicodeError, TypeError) as exc:
         # Report only a fixed-phase name and generic exception class, NEVER
         # original proprietary log body or a private stack trace.
