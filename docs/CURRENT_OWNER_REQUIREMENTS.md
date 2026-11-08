@@ -1,3 +1,6 @@
+<!-- OWNER_SHARED_MINI_LAB_20261108 -->
+> **توجيه المالك الأحدث — 8 نوفمبر 2026:** [نظام mini APK موحد T1–T5](../apk-for-testing/UNIFIED_LAB_POLICY_AR.md)، [جاهزية بناء Mini](../apk-for-testing/SHARED_BUILD_READINESS.md)، [مركز تحميل واحد](../apk-for-testing/TEST_CENTER.md)، [استعادة كاملة جديدة](../prompt/coordination/T_TEAM/RESTORE_SHARED_LAB_AR.md). APK واحد/ملف testpack واحد، مع Auto All وتسجيل وصور حسب الحاجة. بناء Mini عند حاجة عامل واحد ذات دليل يتولى T5 مراجعتها؛ لا يتغير نظام تصويت XAPK 5/5 الأصلي أو NOT_READY 0/3.
+
 <!-- OWNER_MINILAB_20261108 -->
 > **توجيه المالك الأحدث — 8 نوفمبر 2026:** تسجيل هاتف CL جديد: camera mouse capture يعمل لكن left/right/middle click وwheel لا تعمل؛ الماء والألوان والنار/الإضاءة ما تزال بها عوائق. أُضيفت [مختبرات APK الصغيرة](../apk-for-testing/LAB_PROTOCOL_AR.md) و[مركز الاختبارات T1–T5](../apk-for-testing/TEST_CENTER.md) و[استعادة إضافية كاملة](../prompt/coordination/T_TEAM/RESTORE_WITH_ANDROID_LAB_AR.md). يمكن لكل عامل بناء مختبر معزول صغير أو testpack دون إجماع الخمسة؛ لا يتغير تصويت XAPK الكامل أو NOT_READY/3 مراجعات، ولا يُلغى عمل آخر. راجع [التقرير](../apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md) قبل اختيار التجربة.
 
