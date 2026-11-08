@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "event_id": "20261108T1832Z-T5-chat-shared-team-lab-verified-a6d4",
+  "agent": "T5",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "SOURCE_BUILD_PASS_DEVICE_PENDING",
+  "source_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+  "run_id": 42509945996,
+  "job_id": 128820613185,
+  "conclusion": "success",
+  "artifact_id": 13628828717,
+  "artifact_expires_at": "2026-11-22T18:26:36Z",
+  "apk_sha256": "cee2df1b3bb2a1a3c8e9ab757f520040d36c5bf16d711587f7e2bc537f917472",
+  "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
+  "signer_certificate_sha256": "cd2b1f9875dce958ef4ac5f6a08737174d60870df6562afb5636b7fe377cc259",
+  "scope": "One unified Android mini-lab build, 20/20 JVM evidence policy, actual Gradle APK, verified ZIP members+hashes+APK v2 signer/package; no device/Unity/game XAPK proof, no public direct Release APK URL",
+  "session_id": "20261108T1818Z-T5-chat-unified-evidence-cache-a6d4",
+  "updated_at": "2026-11-08T18:32:45Z"
+}
