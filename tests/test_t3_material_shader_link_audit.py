@@ -35,9 +35,9 @@ class MaterialShaderAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             guid = "c" * 32
-            (root / "Orphan.shader.meta").write_text("fileFormatVersion: 2\\nguid: " + guid + "\\n")
+            (root / "Orphan.shader.meta").write_text("fileFormatVersion: 2\nguid: " + guid + "\n")
             (root / "orphan.mat").write_text(
-                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+                "Material:\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\n" % guid)
             result = audit(root)
             self.assertEqual(result["shader_meta_without_source"], 1)
             self.assertEqual(result["shader_guid_unresolved_in_scan"], 1)
