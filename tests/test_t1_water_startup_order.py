@@ -136,7 +136,7 @@ class StartupOrderTests(unittest.TestCase):
         self.assertEqual(len(result["summary_sha256"]), 64)
 
     def test_duplicate_authoritative_evidence_rejected(self):
-        raw = json.dumps(fixture())[:-1] + ', "final_shader_pass_errors_total": 1}'
+        raw = json.dumps(fixture())[:-1] + ', "session": "forged-session"}'
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "duplicate.json"
             path.write_text(raw, encoding="utf-8")
