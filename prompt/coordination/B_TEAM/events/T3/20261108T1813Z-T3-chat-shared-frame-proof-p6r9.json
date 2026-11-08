@@ -1,0 +1,30 @@
+{
+  "event_id": "T3-20261108T1813Z-shared-visual-frame",
+  "session_id": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "event_type": "SOURCE_DIAGNOSTIC_FIX",
+  "summary": "Shared mini T3-01..06 previously called PixelCopy on fixed 1s timer without authenticated same-case GLES draw. Now acknowledges exact frame generation with glReadPixels, negative shader/GL error controls and PixelCopy async case checks; keeps visual judgment human.",
+  "files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java",
+    "tests/test_t3_shared_visual_frame.py",
+    "apk-for-testing/SHARED_BUILD_READINESS.md"
+  ],
+  "commits": [
+    "204dabb9c18b7122550c7aa30a51fdc385de6f45",
+    "6bb0b165f5849c84b1210eed0c7d8eba00468b2f",
+    "99e3ee5c7d3d107d7f5ab197a8ea4e19383562a7",
+    "c0a2213bc97d594a3c04c42d956cb51b3c3a291e",
+    "2e3ce81b3a092e7823eedb8aafe1d0bc6e3f2c3c"
+  ],
+  "evidence": {
+    "source_invariant_scan": "26/26 + 1 blank-panel guard, live fetched source",
+    "new_android_compile": "UNVERIFIED",
+    "phone": "UNVERIFIED",
+    "old_prepatch_ci": "https://github.com/alwansan/raf/actions/runs/42504045625"
+  },
+  "mini_vote": "T3 NEED_BUILD only; T5 to decide after source CI/signature/Actions",
+  "full_game": "NOT_READY 0/3; RENDER-002/WATER-001 OPEN",
+  "next_step": "T5 compile and package one shared Mini if warranted; T3 verify actual Adreno screenshots and correlate with genuine Raft shaders separately."
+}
