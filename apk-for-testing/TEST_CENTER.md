@@ -1,17 +1,37 @@
-# Raft — مركز APK الاختبارات الصغيرة T1–T5
+# Raft — ONE TEAM LAB APK / T1–T5
 
-[تعليمات المختبرات](LAB_PROTOCOL_AR.md) | [نتائج المالك 8 نوفمبر](OWNER_FEEDBACK_2026-11-08_AR.md) | [صيغة testpack](TESTPACK_FORMAT.md) | [تصويت الـXAPK الكامل المستقل](../prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md)
+**8 نوفمبر 2026 — نظام جديد:** تطبيق Android واحد وحزمة `team-testpack.json` واحدة لجميع T1–T5؛ لا حاجة لتحميل خمسة APKات. [تعليمات التعاون](UNIFIED_LAB_POLICY_AR.md) · [جاهزية بناء المختبر فقط](SHARED_BUILD_READINESS.md) · [مصدر التطبيق الواحد](unified/README.md) · [برومبت الاستعادة المحسن](../prompt/coordination/T_TEAM/RESTORE_SHARED_LAB_AR.md).
 
-**المسار المطلوب للـlogs:** `/storage/emulated/0/Download/Games/cl/test/<worker>-<lab>-<session>/` باستخدام MediaStore على Android 15.
+## روابط المستخدم
 
-| العامل | التخصص | حالة المختبر | تحميل APK حقيقي | حزمة ملفات/اختبارات | تعليمات |
-|---|---|---|---|---|---|
-| T1 | FFT / GPU / compute | **READY_TO_TEST** — GLES3.1 GPU 4 CASEs, **v0.1.1**/versionCode 2; [CI 42497767712 SUCCESS](https://github.com/alwansan/raf/actions/runs/42497767712), source `37182f0e9d38c0c38f3e78e7e5c21463eeaac8d9` | [APK ZIP Artifact #13624141881](https://github.com/alwansan/raf/actions/runs/42497767712/artifacts/13624141881) (expires 2026-11-15 UTC); APK SHA256 `d177634c7ee7d71117005000fa904db03e825a43ba63dbe921ddf43cc077d0b7` | 4 embedded GPU CASEs; no testpack needed; previous v0.1.0 kept in README | [T1: launch T1-01..04; expected PASS, export JSONL to raft log/test, send screenshots](workers/T1/README.md) |
-| T2 | Foam / Spectrum / Blur | **READY_TO_TEST** — GLES3 v0.1.0, device pending | [Real APK Artifact 13624290449, CI 42496746941](https://github.com/alwansan/raf/actions/runs/42496746941/artifacts/13624290449) — APK SHA256 `8254743c8514d4a808135f931d1fc560af54c40a7dd03bac3670c81ce4f5b4c1`, source `1eb3e880e65a6f239be9b3cfbe1ff761851091eb`, package `com.alwansan.raft.lab.t2`, versionCode 1, expires 2026-11-15 15:50 UTC | [6-case declarative plan](examples/t2-water-render-testpack.json) | [T2 four real GPU case instructions, expected results/logs](workers/T2/README.md) |
-| T3 | colors / materials / fire / lighting | READY_TO_TEST — GLES3 synthetic v0.1.0; DEVICE_PENDING | [CI 42496427649 — verified APK Artifact (ZIP)](https://github.com/alwansan/raf/actions/runs/42496427649) | [6-case safe testpack](workers/T3/testpack.json) | [T3 instructions, SHA256, limits](workers/T3/README.md) |
-| T4 | mouse left/right/middle/scroll/capture | **READY_TO_TEST** (CI Android APK 0.1.0-source-prototype code 1; device pending) | [Real APK Artifact 13623563385 at CI 42496622364](https://github.com/alwansan/raf/actions/runs/42496622364) — APK SHA256 `a5a42b89642c75946f7d3fd5e46fab83b1f16ee800cbd7c2056a7ab74f3e2849`, source `1beab49d26aa31a6cc4765f0c6020c2d552cce7b`, expires 2026-11-15 15:49 UTC | [Nine CASE tests at pinned source](https://github.com/alwansan/raf/blob/1beab49d26aa31a6cc4765f0c6020c2d552cce7b/apk-for-testing/examples/t4-mouse-testpack.json), SHA256 `0d708913a7274507798843c27a10e2005844d33c7890663cd0ec055c8ef8702a` | [T4 instructions, expected capture/scroll callbacks, export and limits](workers/T4/README.md) |
-| T5 | host / delivery / OBB / telemetry | **READY_TO_TEST** — Android mini APK v0.1.0-source-prototype (code 1), device pending | [Real APK Artifact 13624380481, CI 42496945089](https://github.com/alwansan/raf/actions/runs/42496945089/artifacts/13624380481) — actual APK **38,113 bytes**, SHA256 `494f52199d215fd25c6b29283bc3b1733746a1180bb409c83491c055a5fe112d`, source `7800e28583679d5e23825818b0ea5120b9d8b33f`, package `com.alwansan.raft.lab.t5`, expires 2026-11-15 15:53 UTC | [6-case safe T5 testpack](examples/t5-package-telemetry-testpack.json) | [T5 steps: >2 GiB SAF SHA/OBB, telemetry, logs and expected results](workers/T5/README.md) |
+| الملف | رابط مباشر | الحالة |
+|---|---|---|
+| **Raft Team Lab.apk** — تطبيق واحد لجميع العملاء | **غير منشور بعد** — لا تدّع وجود رابط APK حتى يُرفع الأصل الفعلي ويتحقق T5 من الرابط والتوقيع وSHA256 | SOURCE_IN_PROGRESS |
+| **team-testpack.json** — حزمة واحدة، 29 اختباراً | [تنزيل مباشر لملف JSON](https://raw.githubusercontent.com/alwansan/raf/feature/android-native-port/apk-for-testing/unified/pack/team-testpack.json) | SOURCE_READY — يحتاج APK يدعم schema v2 |
+| **صور ونتائج الاختبارات** | `/storage/emulated/0/Download/Games/cl/test/shared-<session>/` بواسطة MediaStore | ينتجها التطبيق عند التشغيل/التصدير |
+| **الأدلة والتطبيقات القديمة** | [سجل الإصدارات الخمسة السابقة](LEGACY_INDIVIDUAL_APKS.md) | HISTORICAL ONLY، لا تختبر الخمسة الآن |
 
-**الصفوف أعلاه ليست روابط تنزيل متخيلة.** عندما يصدر العامل APK فعلياً يغيّر صفه وحده إلى READY_TO_TEST ويثبت link وversionCode وSHA256 والـsource SHA وCI وموعد انتهاء Artifact إن وجد. يجب أن تكون الملفات متاحة ومجربة بنيوياً قبل مطالبة المالك باختبار جديد. يُحفظ سجل الإصدارات السابقة بصفحة العامل.
+**رابط APK المباشر** يجب أن يكون رابط أصل APK حقيقي منشور، مثلاً أصل Release بعد فحص فتحه ومحتواه، لا صفحة `actions/runs` أو ملف ZIP Artifact موصوف خطأ كـAPK مباشر. إذا تعذر Release، اذكر رابط ZIP بوضوح كحل مؤقت، ولا تخترع الرابط.
 
-**طريقة الاختبار:** افتح رابط APK عند READY_TO_TEST، ثبت التطبيق المختبر فقط دون حذف Raft، اختر CASE01..، جرّب baseline/test، سجّل PASS/FAIL/UNEXPECTED والملاحظات، استخدم اختيار ملف أو مجلد لحزم بيانات جديدة، اضغط Export Logs وشارك ملفات المجلد المحدد وصوراً عند الحاجة. تجميع LogRaft اختياري منفصل. لا تخلط بيانات اختبار المختبر مع نتائج اللعبة الكاملة.
+## العملاء الخمسة في واجهة التطبيق الموحد
+
+| العامل | اختبارات موجودة في الحزمة الموحّدة | نوع الإثبات |
+|---|---|---|
+| **T1** | T1-01..04 — GLES3.1، Compute، SSBO، negative compiler | GPU auto/الحصول على نتيجة أصلية للاختبارات الاصطناعية |
+| **T2** | T2-01..04 — GLES3، FBO multi-pass، two negative controls | GPU auto/لا يثبت Raft Foam الأصلي |
+| **T3** | T3-01..06 — الألوان، vertex، alpha/sRGB، shader negative | عرض GLES فعلي + PixelCopy لصورة نافذة التطبيق، ثم مراجعة بصرية |
+| **T4** | T4-01..09 — Left/Right/Middle/Scroll/capture/keyboard | يحتاج ماوس فعلي؛ طلب داخل التطبيق حتى يؤكده المالك |
+| **T5** | T5-01..06 — package identity/SAF full SHA/OBB/perf/controls | الهوية آلية؛ الاختبارات التي تحتاج ملفاً أو لعبة تظل manual |
+
+## تجربة واحدة بدلاً من خمسة
+
+افتح التطبيق الواحد، اختر **AUTO ALL** لتشغيل كل ما يمكن قياسه فعلياً، أو **AUTO T1..T5** لاختبارات عامل واحد. ليس كل اختبار يقبل التنفيذ الصامت؛ الحالات التي تحتاج ضغط ماوس أو فتح ملف أو حكم بصري تظهر في **قائمة طلبات داخل التطبيق**. اختر الطلب لتشغيله/إرفاق صورته، ثم **NEXT** و**FINISH**؛ لا تُزال الحالة حتى تحفظ نتائجها الحقيقية ودليل الصورة المطلوب.
+
+تعاد الحالة عند تغيّر محتوى الحالة أو مصدر برنامجها، أو فقدان الصورة المطلوبة؛ غير المتغيّرة لا تعاد لمجرد تغير إصدار APK. تسجّل البيانات في JSONL وملف summary وصور الحالة في مجلد الجلسة. **لقطات الشاشة التلقائية تخص نافذة مختبرنا فقط**، وليس لعبة Raft خارج التطبيق.
+
+## أين يضع العمال آخر حالة؟
+
+- كل عامل يعدل **صفه وحده** في [جاهزية المختبر المشترك](SHARED_BUILD_READINESS.md)، ويقدم التغييرات/الحالات عبر ملفات العمل والجلسات.
+- **T5 وحده** يصدر طلب بناء واحد إذا كان هناك **NEED_BUILD واحد على الأقل** بدليل حقيقي ويتطلب تغيير native driver، بعد التحقق من الحالات الخمس والجولة وActions وملف الحزمة.
+- حزمة JSON فقط جديدة؟ حدّث الرابط/الحزمة الواحدة دون بناء جديد إذا كان driver موجوداً في APK السابق.
+- تصويت اللعبة الكاملة XAPK الأصلي **مستمر دون تغيير** في [ملف 5/5](../prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md).
