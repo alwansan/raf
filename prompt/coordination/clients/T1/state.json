@@ -2,22 +2,24 @@
   "schema_version": 1,
   "username": "T1",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1811Z-T1-chat-gles-gate-9d3f",
-  "resumed_from_session": "20261105T002850Z-T1-bank1-isolated",
+  "session_id": "20261108T1836Z-T1-chat-water-startup-order-c5e7",
+  "resumed_from_session": "20261108T1811Z-T1-chat-gles-gate-9d3f",
   "status": "paused",
-  "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
-  "last_commit": "09bfcb9824f0c083f170cbc9d8cfe98ad24c677f",
-  "updated_at": "2026-11-08T18:22:00Z",
+  "base_sha": "d11d383f8bd222c7873f50a97d348d955998f44c",
+  "last_commit": "625ddb140f034d51f232e0bdd49c2309ecbe8807",
+  "updated_at": "2026-11-08T19:07:00Z",
   "tracks": [
     "WATER-001: SHA-pinned authored .compute Unity Editor runtime kernel probing; original FFT runtime mapping unverified",
     "WATER-001: original FFT bank1 Vulkan failure isolation; authentic Unity ComputeShader integration unproven",
-    "Shared Mini T1 GLES context startup gate: compiled Java CI success; NEED_BUILD vote, T5 single shared APK; device not tested"
+    "Shared Mini T1 GLES context startup gate: compiled Java CI success; NEED_BUILD vote, T5 single shared APK; device not tested",
+    "WATER-001: CL pinned first water/FFT root event observed ~64.5s before world-loaded log, source-only CI PASS; original Unity kernel identity and shader pixels unverified"
   ],
   "work_ids": [
     "T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance",
     "T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe",
     "T1-20261105T002850Z-T1-bank1-isolated-bank1-validator",
-    "20261108T1811Z-T1-chat-gles-gate-9d3f-shared-context-gate"
+    "20261108T1811Z-T1-chat-gles-gate-9d3f-shared-context-gate",
+    "T1-20261108T1836Z-T1-chat-water-startup-order-c5e7-preworld-log-sequence"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939314440",
@@ -28,8 +30,9 @@
     "https://github.com/alwansan/raf/actions/runs/41941716641",
     "https://github.com/alwansan/raf/actions/runs/41942024538",
     "https://github.com/alwansan/raf/actions/runs/41942366020",
-    "https://github.com/alwansan/raf/actions/runs/42509359669"
+    "https://github.com/alwansan/raf/actions/runs/42509359669",
+    "https://github.com/alwansan/raf/actions/runs/42513165405"
   ],
-  "next_step": "T5 to review T1 NEED_BUILD and produce one shared Mini only if appropriate; owner Auto T1 GLES 3.1 T1-01..04 evidence. Authentic Unity FFT FindKernel and Adreno water remain WATER-001 OPEN; full game NOT_READY 0/3.",
+  "next_step": "Authenticated early-startup Unity water kernel name/FindKernel/Dispatch and original Spectrum/Foam ShaderLab mapping, then numeric parity and real Adreno. Keep WATER-001 OPEN, full game NOT_READY 0/3, T1 shared Mini NO_BUILD r2 unless actual compiled driver change.",
   "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
 }
