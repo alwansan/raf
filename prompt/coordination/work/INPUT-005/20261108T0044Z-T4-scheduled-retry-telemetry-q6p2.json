@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "baseline_sha": "5a6c1d26c27a701febbc68579ab6dae87e64ff2d",
   "issue": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_change_pending_ci_and_device",
   "scope": "Bounded retry-attempt telemetry in AndroidPhysicalMouseCapture.RequestCapture; preserve behavior, keyboard and .rgd",
   "files": [
     "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
@@ -16,5 +16,12 @@
   "taken_over_from": [
     "prompt/coordination/clients/T4/sessions/20261107T2343Z-T4-scheduled-capture-retry-audit-v5n2.md"
   ],
-  "constraints": "no touch/layout changes, no build, no other agent files"
+  "constraints": "no touch/layout changes, no build, no other agent files",
+  "result": {
+    "code_commit": "86a4b488ac533ccf2429776e166edf9a02df6a79",
+    "tests_commit": "d835bd7c0db43aa4d4d52993a4485b3473a99011",
+    "checks": "source assertions only; new unittest not executed by CI yet",
+    "limits": "No Android native capture confirmation, no Unity build or device test",
+    "next_step": "Run test_t4_mouse_retry_telemetry_contract.py via cheap CI and inspect retry markers from newer device build; preserve keyboard and menu cursor"
+  }
 }
