@@ -2,7 +2,7 @@
   "worker": "T5",
   "session_id": "20261108T1945Z-T5-chat-portrait-arabic-owner-cl-m7r4",
   "origin": "chat",
-  "status": "active",
+  "status": "completed_build_verified_device_pending",
   "issue_id": "INTEGRATION-001",
   "base_sha": "a44d5257a9700f23ae31afab2a1c2800421f17c6",
   "scope": "Owner-requested unified Mini APK portrait orientation, Arabic main UI and all 29 case title/instructions/expected while preserving canonical pack fields and evidence SHA, plus shared guidance notifying T1–T5 that test uploads are https://github.com/alwansan/CL/tree/main/test. Build one Mini APK only after source CI and T5 vote; do not touch Raft full game or other workers' original Java.",
@@ -19,5 +19,31 @@
   "resource_key": "shared-mini-apk",
   "owner_request": "portrait UI; Arabic test descriptions; notify workers CL/test",
   "build_readiness": "source patch and isolated compile first, one authorized Mini APK after evidence",
-  "next_step": "Implement UI, verify APK compile and manifest; announce owner upload path to T1–T5 via canonical shared directive."
+  "next_step": "Owner exports old logs then uninstalls 0.2.9, installs Arabic 0.2.10 APK, runs AUTO ALL and manual T5-02 using a small APK, uploads JSONL/summary to CL/test; analyze new evidence, coordinate child driver Arabic localization; no duplicate Mini/full Unity build.",
+  "updated_at": "2026-11-08T19:56:00Z",
+  "last_source_sha": "93e32950c521d9890ce845eb8213cd6704cd7f98",
+  "build_request_commit": "c5100411c50ec3b663fa9262eb68c49c95180f3e",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42516899166",
+    "https://github.com/alwansan/raf/actions/runs/42516908881",
+    "https://github.com/alwansan/raf/actions/runs/42517104924"
+  ],
+  "result": {
+    "apk_version": "0.2.10-shared",
+    "apk_size": 90058,
+    "apk_sha256": "0f469cc650182370b570d96c8e92e3f9c686f6b4417ae10e22d3c35b0084fd42",
+    "artifact_id": 13631588625,
+    "artifact_zip_sha256": "f7f3bf586ebcfc61c55495ba037d5cdaead377a917441b84306977c2c75de0dc",
+    "embedded_pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
+    "portrait_activities": 4,
+    "arabic_case_descriptions": 29,
+    "compile_ci": "success",
+    "build_ci": "success",
+    "new_cert_sha256": "7e3a8c74414403e1ebded585b2e1da918de8d797a394cf154ea5f56c527836b9",
+    "old_cert_sha256": "cd2b1f9875dce958ef4ac5f6a08737174d60870df6562afb5636b7fe377cc259",
+    "signer_change_requires_uninstall": true,
+    "android15_on_device": "pending",
+    "other_workers_notified_via_shared_prompt": true,
+    "other_workers_received_immediately": "not proven"
+  }
 }
