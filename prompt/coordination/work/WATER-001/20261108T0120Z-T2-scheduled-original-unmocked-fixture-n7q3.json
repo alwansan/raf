@@ -1,0 +1,21 @@
+{
+  "session_id": "20261108T0120Z-T2-scheduled-original-unmocked-fixture-n7q3",
+  "origin": "scheduled",
+  "worker": "T2",
+  "issue": "WATER-001",
+  "status": "active",
+  "baseline_sha": "65005a4ef1cd662759d7c16b0590c590cda8b50f",
+  "experiment_key": "T2-FOAM-ORIGINAL-VALIDATOR-UNMOCKED-SYNTHETIC-V1",
+  "hypothesis": "Full schema-safe synthetic original Foam report passes real validate_original plus per-pass join; invalid auth and count fail closed",
+  "files": [
+    "tests/test_t2_foam_pass_crosscheck_original_integration.py",
+    "prompt/coordination/clients/T2/sessions/20261108T0120Z-T2-scheduled-original-unmocked-fixture-n7q3.md"
+  ],
+  "resource": "source-only test; no Unity CI",
+  "taken_over_from": [
+    "20261108T0016Z-T2-scheduled-original-schema-gap-k6p2",
+    "20261108T0019Z-T2-scheduled-original-role-validation-v2c7"
+  ],
+  "device_baseline": "42058825739 world/save/reenter yes; water/FFT errors open",
+  "next_step": "Add unmocked full-schema synthetic fixture; run source tests when original checkout available."
+}
