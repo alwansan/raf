@@ -22,3 +22,7 @@ Earlier T3 activity selected T3-01..06, slept a fixed 1000 ms, then called Pixel
 - [204dabb9](https://github.com/alwansan/raf/commit/204dabb9c18b7122550c7aa30a51fdc385de6f45) frame matching and GPU readback
 - [6bb0b165](https://github.com/alwansan/raf/commit/6bb0b165f5849c84b1210eed0c7d8eba00468b2f) PixelCopy async guard and GLES context reset
 - [c0a2213b](https://github.com/alwansan/raf/commit/c0a2213bc97d594a3c04c42d956cb51b3c3a291e) source-only tests
+
+## Follow-up: reject an empty but equal alpha comparison
+
+[99e3ee5c](https://github.com/alwansan/raf/commit/99e3ee5c7d3d107d7f5ab197a8ea4e19383562a7) adds independent red/blue positive-channel thresholds to T3-04, so two matching blank black outputs cannot pass merely because their channel differences are small. [2e3ce81b](https://github.com/alwansan/raf/commit/2e3ce81b3a092e7823eedb8aafe1d0bc6e3f2c3c) locks that invariant in the source-only tests. Final live source audit also checked 14 invariants and all 29 unified testpack cases on current HEAD, including six T3 visual cases, but **new Android Java compile/device remains unverified**.
