@@ -8,7 +8,7 @@
 **experiment_key:** `water-first-error-preworld-v1-CL-61f71ceb`
 **resource_key:** `CL/61f71ceb/raft log/lf/LogRaft-20261108-164850-270/session-summary.json`
 **run_urls:** https://github.com/alwansan/raf/actions/runs/42512589682 (FAILED), https://github.com/alwansan/raf/actions/runs/42512805526 (FAILED at intermediate source before fixture update), https://github.com/alwansan/raf/actions/runs/42512840042 (latest)
-**status:** WAITING_CI for pinned actual CL agreement, after repairing schema mismatch.
+**status:** COMPLETED — authentic pinned summary digest and chronology verified by CI.
 
 ## Observations from authentic CL summary
 
@@ -26,3 +26,13 @@
 - No interference with T2 Foam/T3 ShaderLab/T4 Mouse/T5 packaging; no native game build request modified or duplicate shared Mini dispatched.
 
 **next_step:** inspect latest source-only CI 42512840042 and classify first failing actual gate if any; only after validated source result record experiment/event and T1 checkpoint. WATER-001 remains OPEN / full game NOT_READY 0/3.
+
+## Final source evidence checkpoint — 2026-11-08T19:05Z
+
+- [CI 42512986569](https://github.com/alwansan/raf/actions/runs/42512986569) **SUCCESS**: 13/13 regression tests and independently fetched actual pinned CL JSON, exact 64,486/64,484 ms timing and 74,359/11,165 counts, `summary_sha256=941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7`, no artifact.
+- Tightened the workflow to **assert** the exact observed 64-digit SHA256 before accepting the result [f2e39a3](https://github.com/alwansan/raf/commit/f2e39a3288189fb928a427083f52c7bd21e00862). The final independently triggered [CI 42513165405](https://github.com/alwansan/raf/actions/runs/42513165405) **COMPLETED SUCCESS** (13/13 and authenticated CL SHA pinned); no new APK or Unity.
+- Conclusive sanitized source report: [T1 WATER pre-world evidence](../../../../docs/T1_WATER_PREWORLD_ERROR_TIMELINE_2026-11-08.md). Primary positive claims ONLY observed first-message ordering and final counts. The report explicitly distinguishes SurfaceFlinger FPS / KGSL busy from Unity performance, and leaves all original shader/compute binding evidence open.
+- New canonical event: `prompt/coordination/B_TEAM/events/T1/20261108T1903Z-preworld-water-fft-chronology-c5e7.json`; experiment `prompt/coordination/experiments/T1/20261108T1836Z-T1-chat-water-startup-order-c5e7.json`; work `prompt/coordination/work/WATER-001/T1-20261108T1836Z-T1-chat-water-startup-order-c5e7-preworld-log-sequence.json` completed. Source/test commits 4133ef8, c422143, 087b765, 2328a7d, fbfe06b; workflow 5b4e8db, f2e39a3. Earlier failed CI still recorded for transparent provenance.
+- T1 Mini vote **NO_BUILD** for round r2: the one existing shared APK includes previous GLES correction; all changes this session are Python/CI/metadata, no T1 Android Java/GLSL driver or pack changes. Device trials T1-01..04 remain pending.
+- Known coordination limitation: T_TEAM regenerated SUMMARY/snapshot not automatically refreshed as part of this source-only workflow; previous T2 ledger refresh jobs failed before T3-owned event correction. Read B_TEAM canonical T1 event even if shared snapshot stale; do not forge a source-only CI run as game acceptance.
+- **next_step:** coordinate a private original-derived Unity 2021.3.45f2 `HasKernel/FindKernel/Dispatch` trace at first water initialization, pinned to same game build as original-derived FFT controls, and compare first numerical mismatch. This chronology only rejects a hypothesis that the first logged failure requires world-loaded gameplay. WATER-001 OPEN; full Raft NOT_READY 0/3.
