@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "event_id": "20261108T1817Z-T2-chat-fbo-contrast-92d4-result",
+  "worker": "T2",
+  "session_id": "20261108T1817Z-T2-chat-fbo-contrast-92d4",
+  "origin": "chat",
+  "resource_key": "WATER-001",
+  "experiment_key": "T2-FBO-CONTRAST-20261108",
+  "status": "SOURCE_PATCHED_DEVICE_UNTESTED",
+  "base_sha": "6d8f2df68b04aa6c072db9777b5bda8293bc29d9",
+  "commit": "73924c998d91eb64be33c883d9922d44981accd4",
+  "test": "7/7 source checks + host expected pixel model; no new Java CI or device",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/73924c998d91eb64be33c883d9922d44981accd4",
+    "https://github.com/alwansan/raf/actions/runs/42504045625"
+  ],
+  "limitations": "Synthetic GLES3 FBO not original Raft water; baseline CI pre-dates fix.",
+  "next_step": "T5 verify updated unified javac and handle single shared mini build/device evidence; T2 resume original Foam producer/binding gate."
+}
