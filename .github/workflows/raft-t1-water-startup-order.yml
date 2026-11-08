@@ -45,6 +45,7 @@ jobs:
           python3 - "$PRIVATE_REPORT" <<'PY'
           import json,sys
           x=json.load(open(sys.argv[1],encoding="utf-8"))
+          assert x["summary_sha256"]=="941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7"
           assert x["first_errors_observed_before_world_loaded"] is True
           assert x["timing_ms"]["first_water_before_world_loaded"]==64486
           assert x["timing_ms"]["first_fft_before_world_loaded"]==64484
