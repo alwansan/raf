@@ -3,7 +3,7 @@
 import argparse
 import json
 
-EVENTS = ("physical_mouse_lock_intent", "physical_mouse_capture_requested",
+EVENTS = ("physical_mouse_lock_intent", "physical_mouse_capture_requested", "physical_mouse_capture_retry",
           "physical_mouse_relative", "physical_mouse_capture_released",
           "physical_mouse_capture_release_outcome")
 
@@ -17,9 +17,10 @@ def classify(lines):
     locks = [n for n, s in hits[EVENTS[0]] if "authored_lock" in s]
     escapes = [n for n, s in hits[EVENTS[0]] if "escape_release" in s]
     unlocks = [n for n, s in hits[EVENTS[0]] if "authored_unlock" in s]
-    requests = [n for n, _ in hits[EVENTS[1]]]
-    relative = [n for n, _ in hits[EVENTS[2]]]
-    releases = [n for n, _ in hits[EVENTS[3]]]
+    requests = sorted(n for event in ("physical_mouse_capture_requested", "physical_mouse_capture_retry")
+                      for n, _ in hits[event])
+    relative = [n for n, _ in hits["physical_mouse_relative"]]
+    releases = [n for n, _ in hits["physical_mouse_capture_released"]]
     findings = []
     for index, escape in enumerate(escapes):
         end = escapes[index + 1] if index + 1 < len(escapes) else float("inf")
