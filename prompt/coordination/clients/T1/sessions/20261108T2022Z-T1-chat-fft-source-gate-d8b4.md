@@ -5,7 +5,7 @@
 **base_sha:** `fa3d282481c5ac499decf5dd30b89cb6d1acbbb1`  
 **scope:** repair a proven T1 FFT source regression; audit the exact original managed Raft CSharp FFT first/second Dispatch numeric selector for the LogRaft index-6 hypothesis. **No original shader/Unity/device/APK change.**  
 **work:** `prompt/coordination/work/WATER-001/T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4.json`  
-**experiment_key:** `fft-original-index-source-binding-v1-original-Dx11FFT-sourceSHA-and-Unity-serialized-FFT-objectSHA`  
+**experiment_key:** `fft-original-numeric-index6-managed-v1-assemblyblob-fc9d4ba9-dx11-8aa32937-gpufft-2f866cbe`  
 **resource_key:** original SHA-pinned `Assembly-CSharp.dll` + original ILSpy `Dx11FFT` and `GpuFFT`; source-only Actions runner (not T5 native Unity mutex).
 
 ## Restored team context
