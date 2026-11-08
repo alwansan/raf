@@ -1,0 +1,36 @@
+name: Raft unified mini-lab source compile check (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/raft-unified-mini-compile-request.json'
+
+permissions: {contents: read}
+concurrency:
+  group: raft-unified-mini-compile-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  verify-unified-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: |
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+          python3 -m unittest discover -s tests -p test_unified_testpack.py -v
+          python3 -m unittest discover -s tests -p test_shared_lab_votes.py -v
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Compile Java classes of shared app only, no APK or release
+        run: |
+          gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA" -PversionCode=1
