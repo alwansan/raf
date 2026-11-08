@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "worker": "T5",
+  "pack_id": "t5-signed-package-telemetry-v1",
+  "title": "T5 Signed APK/OBB identity and telemetry evidence",
+  "version": "1.0.0",
+  "source_sha": null,
+  "tests": [
+    {
+      "id": "T5-01",
+      "type": "file_sha256",
+      "title": "Select original signed APK via SAF",
+      "instructions": "Use Android file picker to select the actual signed APK file retained from the tested build, not a ZIP wrapper or guessed file. Record displayed filename, size, SHA-256, versionCode and signing certificate digest separately if obtainable with an APK parser. Do not claim this is the installed APK solely from selection.",
+      "expected": "SHA-256 and byte size for selected APK recorded; installed identity remains unverified until package-manager evidence matches."
+    },
+    {
+      "id": "T5-02",
+      "type": "file_sha256",
+      "title": "Select main OBB via SAF",
+      "instructions": "Select the exact main.<versionCode>.<package>.obb file from the tested signed pair, not a patch OBB or a GitHub artifact wrapper. Record name, size, SHA-256 and expected APK versionCode. If SAF cannot access the file, mark NOT_ACCESSIBLE rather than PASS.",
+      "expected": "Main OBB hash and byte size recorded, or explicit access failure; no assumption about actual Android OBB mount."
+    },
+    {
+      "id": "T5-03",
+      "type": "note",
+      "title": "Distinguish patch OBB warnings",
+      "instructions": "Read log timestamps and exact warning path for obb_guid_load_failed. Classify main.<code> versus optional patch.<code> only when full path is available. Record package/version and whether asset read succeeded.",
+      "expected": "Exact warning path and type, or UNKNOWN; optional patch warning alone is not proof of broken main OBB."
+    },
+    {
+      "id": "T5-04",
+      "type": "note",
+      "title": "Frame-time and resolution baseline",
+      "instructions": "Record device, scene, screen size, Unity render resolution/scale, refresh Hz, and quality preset. Capture HUD FPS, p50/p95 frame time, session interval and timestamp. Label SurfaceFlinger estimates as display estimates, not Unity FPS or GPU frame time.",
+      "expected": "Timestamped matched scene/resolution with separate HUD and SurfaceFlinger values and no inferred equivalence."
+    },
+    {
+      "id": "T5-05",
+      "type": "note",
+      "title": "GPU busy and error flood correlation",
+      "instructions": "Record LogRaft session id, package identity, GPU busy source and sampling interval, memory PSS/RSS, and delta of water FFT/pass errors during the SAME gameplay interval. Report unavailable GPU counters as unavailable.",
+      "expected": "Correlated intervals with per-source labels; GPU busy is not per-game GPU utilization and cumulative errors are not frame rates."
+    },
+    {
+      "id": "T5-06",
+      "type": "note",
+      "title": "Resolution and right-side controls acceptance",
+      "instructions": "In the same landscape session, inspect Show Xbox, Xbox layout and Test report at right safe area in menu and world. Change an existing Settings Resolution option, return to menu and world, reopen settings, and note actual render-size change versus physical display mode.",
+      "expected": "Three controls remain inside safe area without overlap; resolution preference and aspect survive transitions, or exact failures are recorded."
+    }
+  ]
+}
