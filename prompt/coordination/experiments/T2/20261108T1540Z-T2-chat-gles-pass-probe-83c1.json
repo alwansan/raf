@@ -5,7 +5,9 @@
   "issue_id": "WATER-001",
   "hypothesis": "Genuine Adreno GLES3 offscreen RGBA8 two-pass pixel readback + explicit FBO and shader negatives separate basic GPU pipeline capability from original Raft invalid pass failures.",
   "source_commit": "1eb3e880e65a6f239be9b3cfbe1ff761851091eb",
-  "input_hashes": [],
+  "input_hashes": [
+    "apk-sha256:8254743c8514d4a808135f931d1fc560af54c40a7dd03bac3670c81ce4f5b4c1"
+  ],
   "tool_versions": {
     "GLES": "Android GLES30 actual GPU driver determined by app",
     "AGP": "8.7.3",
@@ -20,15 +22,17 @@
   ],
   "workflow_path": ".github/workflows/raft-android-mini-lab.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42496746941",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42496746941/artifacts/13624290449"
+  ],
   "budget": "One T2 mini APK; no full Unity or proprietary assets",
-  "status": "waiting_ci",
-  "observed_result": "Actual build requested; no device observation yet",
+  "status": "completed_ci_device_pending",
+  "observed_result": "Actual mini APK CI SUCCESS; extracted 38113-byte APK SHA256 8254743c8514d4a808135f931d1fc560af54c40a7dd03bac3670c81ce4f5b4c1 matches embedded SHA and CI; owner GPU runtime not tested.",
   "rejected_hypotheses": [],
   "limitations": [
     "Diagnostic shaders synthetic, not original Foam Spectrum or Blur",
     "Generic GLES3 success does not prove Unity ShaderLab or Raft fidelity"
   ],
   "integration_commit": "623ee02df9c52c4fe6a4a0be8254b383a4252480",
-  "next_step": "Verify actual APK artifact, SHA256, then seek device tests"
+  "next_step": "Receive case01..04 real Adreno results and exported JSONL; original Foam ShaderLab authenticity remains separate."
 }

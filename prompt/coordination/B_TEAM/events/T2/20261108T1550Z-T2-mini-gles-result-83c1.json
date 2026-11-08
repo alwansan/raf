@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261108T1550Z-mini-gles-result-83c1",
+  "owner": "T2",
+  "session_id": "20261108T1540Z-T2-chat-gles-pass-probe-83c1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Actual real T2 GLES3 4-case mini-lab APK compiled and independently SHA verified; Android device pass unknown, no Raft original water fix.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42496746941",
+    "https://github.com/alwansan/raf/actions/runs/42496746941/artifacts/13624290449",
+    "https://github.com/alwansan/raf/commit/1eb3e880e65a6f239be9b3cfbe1ff761851091eb"
+  ],
+  "at": "2026-11-08T15:52:00Z"
+}

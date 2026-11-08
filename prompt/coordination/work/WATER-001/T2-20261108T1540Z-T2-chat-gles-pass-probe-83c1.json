@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "Foam/Spectrum/Blur Android GLES render-pass diagnostics",
   "approach": "A genuine compiled GLES3 two-pass RGBA8 FBO roundtrip and explicit negative controls, isolated to T2 lab with no proprietary water shader or Unity integration",
-  "status": "active",
+  "status": "completed",
   "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
   "experiment_key": "t2-gles3-rgba8-two-pass-offscreen+negative-fbo-and-shader-api35-v1",
   "resource_key": "mini-lab-host-t2",
@@ -24,9 +24,13 @@
   ],
   "hypothesis": "Confirm Adreno GLES3 RGBA8 FBO completeness, fragment-program readback and explicit failure modes independently of unresolved authentic original Foam/Spectrum ShaderLab",
   "related_work": [],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement + source inspect T2-only GPU lab, run mini-lab CI on fresh SHA after conflict checks, record real APK artifact or compile error; never claim original Raft shader repair",
-  "updated_at": "2026-11-08T15:40:15.152Z"
+  "experiment_ids": [
+    "20261108T1540Z-T2-chat-gles-pass-probe-83c1"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42496746941"
+  ],
+  "result": "T2 real GLES3 diagnostic source built SUCCESS in CI42496746941, artifact13624290449 expires 2026-11-15T15:50:42Z; extracted APK 38113 bytes sha256 8254743c8514d4a808135f931d1fc560af54c40a7dd03bac3670c81ce4f5b4c1; device pending, not original shader repair.",
+  "next_step": "Await 4 CASE results+JSONL from owner, continue original Spectrum/Foam/Blur ShaderLab/CB0 binding investigation.",
+  "updated_at": "2026-11-08T15:52:00Z"
 }

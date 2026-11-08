@@ -2,9 +2,9 @@
 
 **المسؤول: T2 | النطاق: Spectrum / Foam / Blur / CB0.**
 
-- الحالة: NOT_PREPARED — لا APK حتى الآن.
-- APK/versionCode/applicationId/SHA256: **لا ملف تنزيل موثق بعد**.
-- المصدر SHA + CI: لا يوجد بناء مختبر Android فعلي مثبت حتى الآن.
+- الحالة الحالية: **READY_TO_TEST** (real debug APK verified, device test pending).
+- APK bytes **38,113**; package `com.alwansan.raft.lab.t2`; versionCode **1** / versionName `0.1.0-source-prototype`; SHA256 `8254743c8514d4a808135f931d1fc560af54c40a7dd03bac3670c81ce4f5b4c1`.
+- source SHA `1eb3e880e65a6f239be9b3cfbe1ff761851091eb`, [CI 42496746941 SUCCESS](https://github.com/alwansan/raf/actions/runs/42496746941), [Artifact 13624290449](https://github.com/alwansan/raf/actions/runs/42496746941/artifacts/13624290449) expires 2026-11-15T15:50:42Z.
 - testpack: يحدد عند حاجة حقيقية؛ ليس إلزامياً الآن.
 - مسار السجل: `/storage/emulated/0/Download/Games/cl/test/t2-<lab>-<session>/`.
 - المطلوب قبل READY_TO_TEST: 2–10 حالات واضحة، baseline والمتوقع، وصف تجربة المالك، رابط APK/Artifact موجود وصالح، SHA256/size/package/version/source SHA، logs/screenshots المطلوبة.
@@ -26,4 +26,12 @@
 - CASE04: intentionally invalid fragment GLSL is rejected by driver.
 - Four numbered cases with observed and expected, manual PASS/FAIL/UNEXPECTED notes, timestamped append-only private JSONL and MediaStore export under `Download/Games/cl/test/t2-gles-pass-<session>/`.
 - No original game shader or proprietary assets. Positive result proves only a generic GLES3 two-pass diagnostic, **not** original Foam/Spectrum/Blur ABI, ShaderLab, FFT or final Raft rendering.
-- Status SOURCE_READY. No verified T2 APK/CI/artifact/SHA256 yet; do not mark READY_TO_TEST before real build.
+- At initial source checkpoint: SOURCE_READY. Superseded by verified build below.
+
+## Actual verified T2 GLES3 lab APK — CI42496746941
+
+- **Authentic build:** [GitHub Actions 42496746941](https://github.com/alwansan/raf/actions/runs/42496746941) SUCCESS, pinned source `1eb3e880e65a6f239be9b3cfbe1ff761851091eb`, debug package `com.alwansan.raft.lab.t2` vCode=1, vName=`0.1.0-source-prototype`. Actual 38,113-byte APK SHA256 `8254743c8514d4a808135f931d1fc560af54c40a7dd03bac3670c81ce4f5b4c1`, independently extracted/checked vs CI. [Artifact 13624290449](https://github.com/alwansan/raf/actions/runs/42496746941/artifacts/13624290449) (35,402-byte ZIP), expires **2026-11-15 15:50:42 UTC**.
+- **Install:** install only T2 lab, leave full Raft APK and original worlds untouched. Tap **OPEN T2 REAL GLES3 WATER PASS LAB**; select each numbered CASE, read Expected/Observed, mark PASS/FAIL/UNEXPECTED and add observed notes.
+- **CASE01** real GPU renderer/GLES version/MAX_TEXTURE_SIZE. **CASE02** genuine two-pass RGBA8 offscreen framebuffer/sample/readback checks pixel **[32,96,159,255] ±2**. **CASE03** empty FBO must report missing attachment incomplete status. **CASE04** invalid GLSL must fail compilation. Failures are useful diagnostics; do not mark PASS without observation.
+- **Return**: screenshots of all four Expected/Observed case displays, especially failures; tap **EXPORT LOGS** and share `/storage/emulated/0/Download/Games/cl/test/t2-gles-pass-<session>/t2-gles-<session>.jsonl`. App-private JSONL preserves logs. New debug signature could require uninstalling **only an older T2 lab**, not Raft.
+- **Evidence boundary:** compiled CI APK does **not** establish phone GPU PASS; built-in shaders are test patterns, **not original Foam, Spectrum, Blur, ShaderLab/CB0, FFT**, or Raft pixels. WATER-001 OPEN; Raft NOT_READY 0/3, full XAPK vote unchanged.
