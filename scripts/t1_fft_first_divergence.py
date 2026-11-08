@@ -76,6 +76,9 @@ def main():
     parser.add_argument("--rtol", type=float, default=1e-4)
     args = parser.parse_args()
     try:
+        # Reject invalid numeric thresholds before opening any private GPU captures.
+        if not all(math.isfinite(x) and x >= 0 for x in (args.atol, args.rtol)):
+            raise ValueError("invalid tolerances")
         if args.manifest.is_symlink() or args.manifest.stat().st_size > 1024 * 1024:
             raise ValueError("manifest is symlinked or oversized")
         entries = json.loads(
