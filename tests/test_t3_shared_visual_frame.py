@@ -2,7 +2,10 @@
 from pathlib import Path
 import unittest
 
-SRC=(Path(__file__).resolve().parents[1]/"apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java")
+ROOT=Path(__file__).resolve().parents[1]
+SRC=ROOT/"apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java"
+HOST=ROOT/"apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java"
+MANIFEST=ROOT/"apk-for-testing/unified/app/src/main/AndroidManifest.xml"
 
 class T3SharedFramePolicy(unittest.TestCase):
     @classmethod
@@ -80,5 +83,41 @@ class T3SharedFramePolicy(unittest.TestCase):
         self.assertIn('MediaStore.Downloads.RELATIVE_PATH',c)
         self.assertIn('dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v)',c)
         self.assertIn('if(dest==null)throw new IOException',c)
+
+    def test_manual_t3_preview_is_explicit_arabic_and_keeps_screen_open(self):
+        c=self.code
+        self.assertIn('manualPreviewCase=getIntent()==null?',c)
+        self.assertIn('manualPreviewCase.matches("T3-0[1-6]")',c)
+        self.assertIn('if(manualPreviewCase!=null)scroll.setVisibility(View.GONE)',c)
+        self.assertIn('button(actions,"📷 التقاط صورة هذا الاختبار والعودة إلى النتائج"',c)
+        self.assertIn('void captureManualPreview()',c)
+        self.assertIn('if(manualPreviewCase==null||manualCaptureStarted)return;',c)
+        self.assertIn('waitForSharedRender(manualPreviewCase,idx,sequence,',c)
+        self.assertIn('if(manualPreviewCase!=null){\n            select(',c)
+        self.assertIn('شاهد الرسم الآن',c)
+        self.assertNotIn('finishSharedEvidence(id,"PASS"',c)
+
+    def test_host_t3_tap_and_manual_run_launch_real_preview(self):
+        host=HOST.read_text(encoding="utf-8")
+        self.assertIn('T3_VISUAL_PREVIEW=406',host)
+        self.assertIn('void launchT3VisualCase(JSONObject c)',host)
+        self.assertIn('intent.putExtra("manual_case_id",id)',host)
+        self.assertIn('intent.putExtra("shared_session",session)',host)
+        self.assertIn('startActivityForResult(intent,T3_VISUAL_PREVIEW)',host)
+        self.assertIn('launchT3VisualCase(c);',host)
+        self.assertIn('launchT3VisualCase(currentManual);',host)
+        self.assertIn('if(req==T3_VISUAL_PREVIEW)',host)
+        self.assertIn('!expected.equals(data.getStringExtra("case_id"))',host)
+        self.assertIn('if("EVIDENCE_READY".equals(verdict)&&!screenshotValid(uri))',host)
+        self.assertIn('store(currentManual,verdict,',host)
+        self.assertNotIn('store(currentManual,"PASS"',host)
+
+    def test_portrait_owner_change_and_arabic_ui_are_not_replaced(self):
+        host=HOST.read_text(encoding="utf-8")
+        manifest=MANIFEST.read_text(encoding="utf-8")
+        self.assertIn('android:screenOrientation="portrait"',manifest)
+        self.assertIn('ArabicLabStrings.title(',host)
+        self.assertIn('مختبر رافت الموحد',host)
+        self.assertIn('النتيجة المتوقعة',self.code)
 
 if __name__=="__main__":unittest.main()
