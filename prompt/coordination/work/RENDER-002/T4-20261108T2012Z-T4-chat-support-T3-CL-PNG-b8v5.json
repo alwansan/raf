@@ -7,7 +7,7 @@
     "T3",
     "T5"
   ],
-  "status": "active",
+  "status": "completed",
   "base_sha": "cb948f3bbcc2747bfd0bff3568f8d8cbbc9c987c",
   "experiment_key": "T4-support-T3-immutable-CL-real-PNG-image-color-coverage-v1",
   "resource_key": "CL@f401b7ffe3b6ead9038f3b35273599dcf8286e68:image-six-png-hexblob",
@@ -19,5 +19,12 @@
     "prompt/coordination/clients/T4/sessions/20261108T2012Z-T4-chat-support-T3-CL-PNG-b8v5.md"
   ],
   "test_source": "alwansan/CL main@f401b7ffe3b6ead9038f3b35273599dcf8286e68; two six-PNG upload directories; T3-01 red green blue as independent GPU expected.",
-  "next_step": "Source-only secure PNG decoder/regression and pinned CL CI; hand off numeric-only evidence to T3/T5 with SurfaceView PixelCopy recommendation. Do not mutate T3 code."
+  "next_step": "T3/T5 test next justified one signed mini after f60355a49, require screenshot_pixel_match and actual RGB capture; defer RENDER-002 GPU claims until original game test.",
+  "result": "Actual CI42519251690 SUCCESS; 8 synthetic controls + all 6 original CL/T3 PNG verified exact Git blob and CRC: each 1600x900, central RGB saturated red/green/blue 0.000%, nearblack 79.111%, whole image RGB neutral 100%. Second 6 PNG upload byte-identical (not new samples). Existing T5↔T3 fix f60355a49 PixelCopy SurfaceView and two-pixel match postdates Arabic v0.2.10; not owner phone-tested. Coordination events and report delivered; no source/mini/full game build changes.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42519251690"
+  ],
+  "report": "docs/T4_SUPPORT_T3_REAL_CL_PNG_BLACK_FRAME_EVIDENCE_2026-11-08.md",
+  "handoff_event": "prompt/coordination/B_TEAM/events/T4/20261108T2017Z-T4-support-T3-original-CL-visual-black-b8v5.json",
+  "completed_at": "2026-11-08T20:18:00Z"
 }
