@@ -91,9 +91,9 @@ class FirstRawLogcatContextTest(unittest.TestCase):
         self.assertEqual(combine(r, summary())["first_kernel_after_first_water_ms_from_raw_segment"], 2)
 
     def test_real_lograf_iso_date_without_pid_does_not_invent_thread_identity(self):
-        raw = (b"2026-11-08 16:49:17.579 E SomeTag: Ultimate Water/Spectrum invalid pass\\n"
-               b"2026-11-08 16:49:17.581 E SomeTag: Kernel at index (6) is invalid\\n"
-               b"2026-11-08 16:49:17.582 E SomeTag: Dx11FFT / ComputeShader.Dispatch\\n")
+        raw = (b"2026-11-08 16:49:17.579 E SomeTag: Ultimate Water/Spectrum invalid pass\n"
+               b"2026-11-08 16:49:17.581 E SomeTag: Kernel at index (6) is invalid\n"
+               b"2026-11-08 16:49:17.582 E SomeTag: Dx11FFT / ComputeShader.Dispatch\n")
         r = self.read(raw)
         self.assertEqual(r["first"]["pass_spectrum"]["unix_ms"], BASE + 27_579)
         self.assertEqual(r["first"]["kernel_index_6"]["unix_ms"], BASE + 27_581)
@@ -102,8 +102,8 @@ class FirstRawLogcatContextTest(unittest.TestCase):
         self.assertFalse(r["actual_original_unity_dispatch_caller_proven"])
 
     def test_first_segment_can_have_water_without_raw_kernel_and_not_fake_mapping(self):
-        raw = (b"2026-11-08 16:49:17.579 E SomeTag: Ultimate Water/Spectrum invalid pass\\n"
-               b"2026-11-08 16:49:17.580 E SomeTag: Dx11FFT.SomeMethod\\n")
+        raw = (b"2026-11-08 16:49:17.579 E SomeTag: Ultimate Water/Spectrum invalid pass\n"
+               b"2026-11-08 16:49:17.580 E SomeTag: Dx11FFT.SomeMethod\n")
         r = self.read(raw)
         report = combine(r, summary())
         self.assertFalse(report["first_segment_kernel_root_seen"])
@@ -113,8 +113,8 @@ class FirstRawLogcatContextTest(unittest.TestCase):
         self.assertFalse(report["interpretation"]["absence_of_kernel_text_in_this_segment_proves_no_kernel_error"])
 
     def test_foamglobal_no_separator_is_named_foam_not_generic(self):
-        raw = (b"2026-11-08 16:49:17.579 E SomeTag: Ultimate Water/FoamGlobal invalid pass\\n"
-               b"2026-11-08 16:49:17.581 E SomeTag: Kernel at index (6) is invalid\\n")
+        raw = (b"2026-11-08 16:49:17.579 E SomeTag: Ultimate Water/FoamGlobal invalid pass\n"
+               b"2026-11-08 16:49:17.581 E SomeTag: Kernel at index (6) is invalid\n")
         r = self.read(raw)
         self.assertEqual(r["observed_first_segment_category_counts"]["pass_foam_global"], 1)
         self.assertEqual(r["observed_first_segment_category_counts"]["pass_other_water"], 0)
