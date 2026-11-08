@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-EVIDENCE-20261108T1825Z-a6d4",
+  "request_id": "T5-SHARED-ARABIC-PORTRAIT-20261108T1952Z-m7r4",
   "target": "SHARED",
-  "requested_from_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8b",
+  "requested_from_sha": "93e32950c521d9890ce845eb8213cd6704cd7f98",
   "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
-  "reason": "First unified T1-T5 mini APK for Android15 device verification after T5 genuine Java host changes: retain file SHA EVIDENCE_READY, keep FAIL/BLOCKED visible without false PASS, explicit diagnostic rerun, and verified signer/package identity. JVM evidence policy passed 20/20 locally; independent full Unity XAPK vote remains not met. Debug-only artifact ZIP, not a stable signed direct APK.",
+  "reason": "Owner directly requested portrait screen orientation and Arabic RTL unified lab interface/test descriptions, now compiled into shared Android Java and manifest with 29 verified Arabic case mappings. Current CL/test phone evidence shows the manual UI navigation caused confusion. Adds existing bounded StreamSha256 fix and new worker-only source repairs; isolated CI42516899166 passed Python/JDK/Android Java source compile. One SHARED Mini APK; never Unity XAPK or five worker APKs. Debug certificate may change; direct release not assumed.",
   "publish": false
 }
