@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1924Z-T1-chat-raw-root-context-a7d9",
+  "issue_id": "WATER-001",
+  "experiment_key": "raw-first-logcat-kernel6-nearest-callsite-v1-CL61f71c-bf5db260",
+  "resource_key": "CL/git-blob/bf5db2607e3b46165d39142aa28f6596ed0715d4",
+  "hypothesis": "The first original owner-device kernel-index6 error can be explicitly linked to a raw Dx11FFT/ComputeShader context; compare direct raw root against first-water collector time with distinct event clock paths.",
+  "input_hashes": {
+    "original_cl_commit": "61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8",
+    "original_log_git_blob_sha1": "bf5db2607e3b46165d39142aa28f6596ed0715d4",
+    "original_raw_size": 33549006,
+    "session_summary_sha256": "941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7"
+  },
+  "tools": [
+    "Python 3.12 on GitHub ubuntu-24.04",
+    "scripts/t1_water_first_raw_context.py",
+    "tests/test_t1_water_first_raw_context.py",
+    ".github/workflows/raft-t1-water-first-raw-context.yml"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42516813516",
+  "result": {
+    "status": "SOURCE_ONLY_SUCCESS",
+    "tests_passed": "15/15",
+    "first_raw_spectrum_epoch_ms": 1794145757552,
+    "first_collector_water_epoch_ms": 1794145757579,
+    "first_raw_other_water_epoch_ms": 1794145757609,
+    "raw_collector_delta_ms": 27,
+    "correlation_bound_ms": 250,
+    "first_collector_kernel6_epoch_ms": 1794145757581,
+    "first_raw_segment_kernel6_root_seen": false,
+    "first_raw_segment_dx11fft_token_lines": 2024,
+    "first_raw_segment_compute_shader_token_lines": 0,
+    "first_segment_spectrum_classified_messages": 4048,
+    "first_segment_other_water_classified_messages": 8096,
+    "canonical_android_threadtime_id_present": false,
+    "original_unity_findkernel_name_proven": false,
+    "raw_source_or_logs_exported": false,
+    "device_gpu_test": false
+  },
+  "negative_controls": [
+    "Exact original 33.5MB Git blob mismatch rejected",
+    "Summary JSON SHA256 mismatch rejected",
+    "Wrong source size, symlink or FIFO rejected",
+    "High precision LogRaft ISO timestamps truncated to ms, no rounding",
+    "Synthetic malformed >9 fractional digits rejected",
+    "Wrong-thread stack hints not bound as source caller",
+    "Raw collector timestamp skew >250ms fails closed",
+    "First-segment kernel absent preserved as unknown, never faked as indexed root"
+  ],
+  "historical_ci_failures": [
+    "42515408435 initial false same-line vs nearby test",
+    "42515443222 original date/source format mismatch",
+    "42516050610 actual high precision discovery, no original kernel root",
+    "42516774064 obsolete exact timestamp equality workflow assertion"
+  ],
+  "status": "completed",
+  "conclusion": "Owner original Logcat first water warning appears before world-loaded; source-private ISO time 16:49:17.552 versus collector 16:49:17.579 (+27ms). The first raw segment includes Dx11FFT lexical hits but no literal kernel/ComputeShader, so it cannot map collector index6 warning to a named original Unity program or Dispatch. WATER-001 OPEN; no game/APK/Adreno claim.",
+  "report": "docs/T1_WATER_FIRST_RAW_KERNEL_CONTEXT_2026-11-08.md",
+  "next_step": "Capture SHA-pinned original Unity runtime FindKernel and Dispatch identity, actual resource binding and first numeric divergence; T2 independently inspect Spectrum/Foam materials."
+}
