@@ -240,7 +240,10 @@ namespace RaftAndroid.Platform
                     "lostTransitions=" + losses + "; legacyFallback=true");
             }
             int received = deltas.ReceivedCount;
-            if (received >= lastLoggedCount + 120)
+            // Emit one marker for a short real-mouse movement sequence; the
+            // old 120-event-only gate hid all evidence in brief tests.
+            // Thereafter retain the original 120-event logging interval.
+            if (received > 0 && (lastLoggedCount == 0 || received >= lastLoggedCount + 120))
             {
                 lastLoggedCount = received;
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
