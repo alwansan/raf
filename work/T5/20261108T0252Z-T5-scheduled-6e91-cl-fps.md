@@ -1,7 +1,9 @@
 # T5 work 20261108T0252Z-T5-scheduled-6e91
 origin: scheduled
 issue_id: PERF-LogRaft-CL-identity
-status: active
+status: completed
+result_commit: 3bb823a3d87af86af09c3ac6d6be2cdfb8884fb7
+result: original CL metrics are flat; 71 rows, 57 valid SurfaceFlinger FPS estimates; median 23.87
 base_sha: 2c8a1de3b97e8ceca752119051a03146075b5642
 intended_files: work/T5/20261108T0252Z-T5-scheduled-6e91-cl-fps.md; clients/T5/sessions/20261108T0252Z-T5-scheduled-6e91.md
 experiment_key: CL@520c4cf4/LogRaft-20261105-220911-559/metrics-00001@bb24dda68503897cf4e2a5e4e2d8aef3e71777b8/SurfaceFlinger-fps-validity
