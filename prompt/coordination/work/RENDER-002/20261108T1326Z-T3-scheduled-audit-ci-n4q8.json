@@ -2,7 +2,7 @@
   "session_id": "20261108T1326Z-T3-scheduled-audit-ci-n4q8",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "8c5aa7ac694cc8772229382b801b8a6f34f5d0aa",
   "resumed_from_sessions": [
     "20261108T1233Z-T3-scheduled-empty-shader-p7x2"
@@ -15,8 +15,16 @@
   "experiment_key": "t3-material-shader-link-audit-python8-source-regressions-20261108",
   "resource_key": "github-actions-source-only-small",
   "hypothesis": "Previous eight source-only Material Shader GUID regressions were committed without executable CI; include them in existing T3 source-only shader quality job rather than launching a new heavy Unity build.",
-  "updated_at": "2026-11-08T13:27:40Z",
+  "updated_at": "2026-11-08T13:29:00Z",
   "implementation_sha": "95e555abd9a27dc1f853dc6b0bf0c9a23ef75819",
-  "ci_run": "https://github.com/alwansan/raf/actions/runs/42485049910",
-  "next_step": "Read CI 42485049910 final result; if red inspect exact Python traceback and repair in own scope; if green record 8 tests executed; then prioritize authentic ParticleSystemRenderer -> Material -> Shader -> Texture source/export chain."
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42485092438",
+  "next_step": "Read CI 42485049910 final result; if red inspect exact Python traceback and repair in own scope; if green record 8 tests executed; then prioritize authentic ParticleSystemRenderer -> Material -> Shader -> Texture source/export chain.",
+  "ci_conclusion": "success",
+  "test_counts": {
+    "native_shader_quality": 16,
+    "material_shader_link_audit": 8,
+    "w1_export_material_shaders": 8,
+    "b49_shaderlab_pass_contract": 8,
+    "total": 40
+  }
 }
