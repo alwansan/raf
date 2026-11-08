@@ -1,0 +1,16 @@
+{
+  "id": "20261108T1951Z-T1-auth-raw-water-context-a7d9",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1924Z-T1-chat-raw-root-context-a7d9",
+  "issue_id": "WATER-001",
+  "kind": "experiment_result",
+  "status": "completed",
+  "summary": "Authentic first 33,549,006B owner CL raw Logcat exact Git blob first water Spectrum 16:49:17.552 Baghdad, 27ms earlier than collector first water 16:49:17.579; 2,024 lines mention Dx11FFT, but zero literal kernel or ComputeShader tokens and no original FindKernel/Dispatch mapping in this segment. 15/15 tests and full original raw+JSON hashes PASS in CI42516813516. Kernel index6 from full-session summary remains separately observed, NOT sourced to named Unity kernel. No APK/Unity/GPU shader repair; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42516813516",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_WATER_FIRST_RAW_KERNEL_CONTEXT_2026-11-08.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261108T1924Z-T1-chat-raw-root-context-a7d9.md"
+  ],
+  "at": "2026-11-08T19:51:00Z"
+}
