@@ -110,10 +110,9 @@ internal static class Program
     static int FixedStackCount(string name, string prefix)
     {
         if(name==prefix+"0") return 0;
-        if(!name.StartsWith(prefix,StringComparison.Ordinal) || name==prefix+"ref" || name==prefix+"i")
-            return -1;
-        if(name==prefix+"1" || name==prefix+"i" || name==prefix+"ref") return 1;
-        if(name=="Var"+prefix.ToLowerInvariant()) return -1;
+        if(!name.StartsWith(prefix,StringComparison.Ordinal)) return -1;
+        if(name==prefix+"1" || name==prefix+"i" || name==prefix+"ref"
+            || name==prefix+"r4" || name==prefix+"r8") return 1;
         // Cecil enums include Pop1_pop1 / Popref_popi_pop1 etc.
         if(name.Contains('_')) return name.Split('_').Length;
         return -1;
@@ -219,7 +218,7 @@ internal static class Program
                 ? new(m.Body.Variables[loc].VariableType.FullName,"typed_local")
                 : new("unknown","unknown");
         }
-        if(i.OpCode.Code is Code.Ldsfld or Code.Ldfld &&
+        if((i.OpCode.Code is Code.Ldsfld or Code.Ldfld) &&
            i.Operand is FieldReference f)
         {
             // A typed field proves only a declared TYPE, not texture instance identity.
@@ -299,7 +298,7 @@ internal static class Program
             var (m,at)=findSites[0];
             var il=m.Body.Instructions;
             int next=Next(il,at+1);
-            if(next>=0 && il[next].OpCode.Code is Code.Stfld or Code.Stsfld &&
+            if(next>=0 && (il[next].OpCode.Code is Code.Stfld or Code.Stsfld) &&
                il[next].Operand is FieldReference fr && fr.FieldType.FullName==Shader)
             {
                 try{var f=fr.Resolve();if(f is not null && f.Module==m.Module)shaderField=f;}
@@ -397,10 +396,19 @@ internal static class Program
         b.Name="Other";
         if(Blit(Instruction.Create(OpCodes.Call,b)))
             throw new InvalidOperationException("impostor_method_accepted");
-        if(TypedValue(mod.Types.First().Methods.FirstOrDefault()!,new List<Instruction>(),ref UnsafeIndex()) is not null)
-            throw new InvalidOperationException("should_never_be_reachable");
+        var owner=new TypeDefinition("Fixture","Owner",Mono.Cecil.TypeAttributes.Public|Mono.Cecil.TypeAttributes.Class,mod.TypeSystem.Object);
+        mod.Types.Add(owner);
+        var method=new MethodDefinition("Fixture",Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,mod.TypeSystem.Void);
+        owner.Methods.Add(method);
+        method.Parameters.Add(new ParameterDefinition(tex));
+        method.Body.Variables.Add(new VariableDefinition(rt));
+        var instructions=new List<Instruction>{Instruction.Create(OpCodes.Ldarg_0),Instruction.Create(OpCodes.Ldloc_0),Instruction.Create(OpCodes.Ldnull)};
+        int at=2;
+        if(TypedValue(method,instructions,ref at).Type!="null"||at!=1||
+           TypedValue(method,instructions,ref at).Type!=RenderTexture||at!=0||
+           TypedValue(method,instructions,ref at).Type!=Texture||at!=-1)
+            throw new InvalidOperationException("typed_fixture_order");
     }
-    static ref int UnsafeIndex() => throw new InvalidOperationException();
 
     public static int Main(string[] args)
     {
