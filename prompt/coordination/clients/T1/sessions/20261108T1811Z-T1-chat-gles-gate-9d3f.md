@@ -37,3 +37,7 @@ Actual [42509359669](https://github.com/alwansan/raf/actions/runs/42509359669) *
 - **Work:** `prompt/coordination/work/WATER-001/20261108T1811Z-T1-chat-gles-gate-9d3f-shared-context-gate.json` completed; experiment and B_TEAM event recorded by T1. No other worker's source/identity edited.
 - **Critical limitation:** root water FFT remains WATER-001 OPEN; no proof `FindKernel`, `Dispatch` or corrected GPU pixels in Raft.
 - **next_step:** T5 determine whether a single shared Mini build is now needed and whether one equivalent exists, respecting signing/fingerprint. Then real phone Auto T1 and exported JSONL; independently continue Unity FFT original-source comparison.
+
+## Coordination after CI
+
+T2 canonical T_TEAM summary refresh [42509789222](https://github.com/alwansan/raf/actions/runs/42509789222) FAILED before updating snapshot: `refresh_b_team.py` rejects T3 event `20261106T1959Z-T3-chat-original-stage-probe-9f24.json` for missing explicit stable `id`/`event_id`. Did **not** modify T3-owned event, loosen generator, or rerun equivalent failed workflow. Requested T3 to correct original identity in [T1 handoff discussion](../../../../discussions/RENDER-002/20261108T1824Z-T1-t3-event-id-ledger-blocker-9d3f.md), then T2 reruns once. T-team summary is stale until that identity is corrected; the T1 event itself is valid.
