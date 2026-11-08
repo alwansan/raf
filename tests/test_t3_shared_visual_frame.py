@@ -16,7 +16,8 @@ class T3SharedFramePolicy(unittest.TestCase):
         self.assertIn('lastRenderedSequence==sequence && lastRenderedCase==idx',c)
         self.assertIn('waitForSharedRender(id,idx,sequence,deadline)',c)
         self.assertIn('lastRenderedSequence!=renderSequence',c)
-        self.assertIn('Case changed during PixelCopy',c)
+        self.assertIn('GLES frame changed during SurfaceView PixelCopy',c)
+        self.assertIn('sameRenderedFrame(expected,generation)',c)
         self.assertNotIn('postDelayed(()->captureSharedEvidence(id),1000)',c)
 
     def test_no_placeholder_success_on_gl_failure_or_timeout(self):
@@ -39,14 +40,16 @@ class T3SharedFramePolicy(unittest.TestCase):
 
     def test_evidence_not_called_visual_pass(self):
         c=self.code
-        self.assertIn('finishSharedEvidence(id,"EVIDENCE_READY",uri,',c)
+        self.assertIn('finishSharedEvidence(id,"EVIDENCE_READY",dest.toString(),',c)
         self.assertIn('png_sha256=',c)
         self.assertIn('String gpu=lastRenderedNote;',c)
         self.assertIn('if(gpu==null||gpu.length()<30||gpu.length()>700)',c)
         self.assertIn('"GLES synthetic frame; "+gpu+"; png_bytes="',c)
         self.assertIn('visual review still required',c)
         self.assertIn('"NEEDS_SCREENSHOT"',c)
-        self.assertIn('PixelCopy.request(getWindow(),bmp',c)
+        self.assertIn('PixelCopy.request(surface,gpu,result->',c)
+        self.assertIn('PixelCopy.request(getWindow(),window,code->',c)
+        self.assertIn('canvas.drawBitmap(gpu,',c)
         self.assertNotIn('finishSharedEvidence(id,"PASS"',c)
 
     def test_select_and_render_snapshot_have_shared_lock(self):
@@ -65,11 +68,31 @@ class T3SharedFramePolicy(unittest.TestCase):
         visible=region.index('visible.put(MediaStore.MediaColumns.IS_PENDING,0)')
         publish=region.index('getContentResolver().update(dest,visible,null,null)!=1')
         second_check=region.index('verifyPngReadback(dest,png.length,sha)',first_check+1)
-        accepted=region.index('finishSharedEvidence(id,"EVIDENCE_READY",uri,')
+        accepted=region.index('finishSharedEvidence(id,"EVIDENCE_READY",dest.toString(),')
         self.assertTrue(issued<write<first_check<visible<publish<second_check<accepted)
         self.assertIn('getContentResolver().delete(dest,null,null)',region)
         self.assertIn('finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,',region)
         self.assertNotIn('finishSharedEvidence(id,"PASS"',region)
+
+    def test_cl_owner_black_window_capture_cannot_pass_fidelity(self):
+        c=self.code
+        policy=(ROOT/"apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/SharedSurfacePixelPolicy.java").read_text(encoding="utf-8")
+        self.assertIn('PixelCopy.request(surface,gpu,result->',c)
+        self.assertIn('SharedSurfacePixelPolicy.bitmapPixelToRgba(gpu.getPixel(sw/4,sh/2))',c)
+        self.assertIn('SharedSurfacePixelPolicy.bitmapPixelToRgba(gpu.getPixel(3*sw/4,sh/2))',c)
+        self.assertIn('SharedSurfacePixelPolicy.validate(gpuLeft,gpuRight,photoLeft,photoRight)',c)
+        self.assertIn('if(mismatch!=null)',c)
+        self.assertIn('retryOrManual(id,attempt,mismatch)',c)
+        self.assertIn('if(attempt<2)',c)
+        self.assertIn('finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,',c)
+        self.assertIn('canvas.drawBitmap(gpu,',c)
+        self.assertIn('"verified-GLSurfaceView-overlay-on-window"',c)
+        self.assertIn('"verified-surface-only"',c)
+        self.assertIn('verified_surface_pixels=true',c)
+        self.assertIn('MAX_RGB_DELTA = 18',policy)
+        self.assertIn('if(dark(imageLeft)&&dark(imageRight))',policy)
+        self.assertIn('if(!close(gpuLeft,imageLeft)||!close(gpuRight,imageRight))',policy)
+        self.assertNotIn('PixelCopy.request(getWindow(),bmp',c)
 
     def test_png_digest_envelope_and_stalled_stream_fail_closed(self):
         c=self.code
