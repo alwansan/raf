@@ -1,6 +1,6 @@
 {
-  "request_id": "t2-real-gles3-two-pass-83c1-20261108",
-  "worker": "T2",
-  "requested_from_sha": "9eefaeda92409e15e3b718a01cf0396d55999f15",
-  "reason": "Owner Android15 Adreno730 session shows 29,700 Spectrum plus 44,659 Foam invalid pass errors. Build a minimal compiled GLES3 offscreen RGBA8 two-pass draw/sample/readback and explicit incomplete-FBO and invalid-GLSL controls, collecting timestamped device logs. This is a source-faithful diagnostic boundary, not proprietary Raft shader or XAPK build."
+  "request_id": "t1-gles31-ssbo-20261108-7e4a-01",
+  "worker": "T1",
+  "requested_from_sha": "0bd6d39f7b6dc88f55c46f39bb761c7f5759fb4a",
+  "reason": "Owner Android15 Adreno730 log has 11165 WATER-001 invalid compute kernel 6 roots; source-only CI cannot determine actual GPU compute capability. Build one separate T1 OpenGL ES3.1 mini APK with exact 16-word one- and two-dispatch SSBO GPU readbacks plus deliberately invalid GLSL negative control. No original Raft game assets, no full Unity/XAPK build."
 }
