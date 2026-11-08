@@ -3,7 +3,7 @@
   "origin": "chat",
   "worker": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_only_CI_unverified",
   "resumed_from_session": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
   "base_sha": "d03d8053088dd5b715705d31675cbad4bae41ae9",
   "scope": "Correct T3 PixelCopy PNG evidence lifecycle: use MediaStore pending-state, encode real PNG with content digest, read-back exact bytes/sha before EVIDENCE_READY; cleanup partial images on failures without modifying shared host/pack.",
@@ -17,12 +17,28 @@
   ],
   "experiment_key": "T3-shared-png-pending-digest-readback-v1",
   "resource_key": "T3SharedVisualActivity",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42509945996 (prior completed shared Mini, not postpatch)"
+  ],
   "no_touch": [
     ".github/raft-native-build-request.json",
     ".github/raft-mini-lab-build-request.json",
     "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
     "apk-for-testing/unified/pack/team-testpack.json"
   ],
-  "next_step": "Implement digest verified MediaStore single owned PNG; source tests; no APK rebuild until T5 review."
+  "next_step": "Obtain verified Actions job/CI conclusion for cheap source-only compile. T5 will decide next ONE Mini on combined new substantial driver/phone feedback; T3 genuine graphics ShaderLab repair stays OPEN.",
+  "updated_at": "2026-11-08T19:04:00Z",
+  "result": "Integrated owned MediaStore PNG pending/encoding/bytes+SHA readback before and after publication; automatic cleanup on error; actual GLES readback returned to shared host. 7 source-only Python tests committed, 14/14 live source invariants; specific CI run and Android device remain UNVERIFIED.",
+  "source_commits": [
+    "03151ea4b60f87576f8e5abf9235edbc53e12fdd",
+    "a9ad5f77df2548a1adee109e1cacb51ad4a190aa",
+    "0a449ab7ce3b3551c42fb6d9a11b1da0c32da519"
+  ],
+  "test_commits": [
+    "a7c9c06059aacf3454d3e8370b5855b74ac0d8a0",
+    "cd5d10576acbb74bc631d34ec336a1c6711ab27e",
+    "e65427eda01c9e7970c20551c627c65228aad50f"
+  ],
+  "ci_source_only_workflow_commit": "503398ac767001df4dfec11d2d99bf882d3cb55d",
+  "mini_vote": "NO_BUILD round shared-20261108-r2; older APK remains first test baseline; later source will need future Mini only after T5 decision."
 }
