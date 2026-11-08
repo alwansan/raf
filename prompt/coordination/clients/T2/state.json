@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T2",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1925Z-T2-chat-original-blit-cecil-v2",
-  "resumed_from_session": "20261108T1922Z-T2-scheduled-original-il-boundary-p7q4",
+  "session_id": "20261108T1956Z-T2-chat-pass1-source-kind-4d6a",
+  "resumed_from_session": "20261108T1925Z-T2-chat-original-blit-cecil-v2",
   "status": "paused",
-  "base_sha": "6c787ca8436dea3d3a52537577642345f76de0ad",
-  "last_commit": "dc04f43c7239d0b5b025052cf3540f96297dde2e",
-  "updated_at": "2026-11-08T19:45:00Z",
+  "base_sha": "41bda606b7f7c7fc0b397e7e5d07dd66807ea707",
+  "last_commit": "908968de720b750a7a6a7eaf6ab7c2458e0e2569",
+  "updated_at": "2026-11-08T20:16:00Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -19,7 +19,9 @@
     "T2-FOAM-BLIT-NORMALIZED-20261108",
     "shared-mini-r1-delivered",
     "T2-FOAM-SHA-ORIGINAL-BLIT-20261108",
-    "WATER-001-original-pass1-source"
+    "WATER-001-original-pass1-source",
+    "WATER-001-original-pass1-bounded-CFG",
+    "shared-T2-Android15-device-4-of-4-PASS"
   ],
   "work_ids": [
     "T2-20261104T2354Z-foam-member-abi",
@@ -27,7 +29,8 @@
     "T2-20261105T0023Z-T2-foam-texture-identity-texture-identity",
     "20261108T1817Z-T2-chat-fbo-contrast-92d4",
     "20261108T1853Z-T2-chat-blit-normalized-g9d3",
-    "20261108T1925Z-T2-chat-original-blit-cecil-v2"
+    "20261108T1925Z-T2-chat-original-blit-cecil-v2",
+    "20261108T1956Z-T2-chat-pass1-source-kind-4d6a"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937996942",
@@ -44,8 +47,16 @@
     "https://github.com/alwansan/raf/actions/runs/42512807487",
     "https://github.com/alwansan/raf/actions/runs/42515921184",
     "https://github.com/alwansan/raf/actions/runs/42516309771",
-    "https://github.com/alwansan/raf/actions/runs/42516516391"
+    "https://github.com/alwansan/raf/actions/runs/42516516391",
+    "https://github.com/alwansan/raf/actions/runs/42517639783",
+    "https://github.com/alwansan/raf/actions/runs/42517790825",
+    "https://github.com/alwansan/raf/actions/runs/42518080217",
+    "https://github.com/alwansan/raf/actions/runs/42518334396",
+    "https://github.com/alwansan/raf/actions/runs/42518579252",
+    "https://github.com/alwansan/raf/actions/runs/42518726576",
+    "https://github.com/alwansan/raf/actions/runs/42519122764",
+    "https://github.com/alwansan/raf/actions/runs/42517104924"
   ],
-  "next_step": "Original pinned ZIP2 Cecil Foam material field reaches Graphics.Blit pass0 AND pass1 (CI42516516391 SUCCESS, 14/14; actual original source SHA). Pass0 typed RenderTexture→RenderTexture, pass1 source first unresolved; no actual texture instance equality, CB0, samplers, ShaderLab or Android pixels. WATER-001 OPEN. Next: authentic pass1 source expression def-use across typed calls/fields/locals/branches fail-closed; shared Mini r2 NO_BUILD, CI42509945996 already includes T2 driver.",
+  "next_step": "Actual owner CL/test shared r2 Android15 Adreno730 Mini T2-01..04 all PASS (CL f401b7ffe3b6ead9038f3b35273599dcf8286e68; docs/T2_GLES_DEVICE_EVIDENCE_2026-11-08.md), T2 r3 NO_BUILD. Authentic ZIP2 original Foam CIL CI42519122764 SUCCESS/17 Python + C# selftest: pass0 source RenderTexture typed_field steps6, pass1 source Texture typed_call_result steps21 after one void call, resolved original managed callee with branch/conditional/throw-class flow. Direct pass1 source adjacent still unknown, actual RenderTexture instance equality/CB0/samplers/ShaderLab/Unity water pixels unverified; WATER-001 OPEN. Next authenticated original source method CFG/receiver/return join fail closed, then crosspass instance binding; no new Mini or Unity build without owner/T5 gates.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
