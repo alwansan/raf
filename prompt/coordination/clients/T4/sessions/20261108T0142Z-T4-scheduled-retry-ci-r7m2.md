@@ -1,0 +1,11 @@
+# T4 scheduled — 20261108T0142Z-T4-scheduled-retry-ci-r7m2
+
+- origin: scheduled; branch: feature/android-native-port; starting HEAD ca6bdc3b5b525fc42679719d95ec938fd824eb74.
+- Read owner 5 November phone feedback, AGENTS, owner requirements, STATUS, T_TEAM live protocol/operating model, previous T4 scheduled 20261108T0044Z, T4 state and MEMORY (historical), and current Actions.
+- Preserve phone owner-confirmed world enter/save/exit/reenter on Artifact 42058825739 source e9c358eda01785b65e4eb14f18723da426635628. Publication failure is separate. This does not establish current mouse capture or new phone test.
+- Prior evidence: classifier CI 42416699458 SUCCESS (17 tests on older source); authentic mouse bridge CI 42431115086 SUCCESS on 86a4b488; newly added 3 source-contract retry tests at d835bd7c had no dedicated CI execution.
+- Scope registered first: prompt/coordination/work/INPUT-005/20261108T0142Z-T4-scheduled-retry-ci-r7m2.json, commit bf671f259f951b7f955a12d014d60b8ec6479314. No overlap with T5 three buttons or Resolution.
+- Implementation: commit 6e6554a7c72442aaaf0422d32a2d21df8dccff3c updates ONLY .github/workflows/raft-t4-mouse-trace-classifier.yml to sparse-checkout AndroidPhysicalMouseCapture.cs and tests/test_t4_mouse_retry_telemetry_contract.py; executes both existing 17 classifier tests and 3 new retry-contract tests. Adds scoped push path triggers for the retry contract and Android capture source. Python only, 5-minute timeout, no Unity, no game assets, no native build request.
+- Validation: GitHub accepted workflow update with expected previous blob SHA 6d9e6909d11e03cac8a0cdcbf3aa4eec0d651fb0; source-only CI result for updated workflow not yet observed. State waiting_ci. Do not claim 20/20 PASS until workflow completes. No new mouse phone proof.
+- Evidence boundary: no CL file or screenshot modified; owner-linked CL immutable snapshot 520c4cf409aa20a4db54ff80ed87d8807d9cba57. Physical mouse pointer capture, Raft in-game cursor, edge/system-bar behavior remain INPUT-005 OPEN. Keyboard, .rgd, audio, Settings and touch unchanged.
+- Next: inspect GitHub Actions run for workflow at 6e6554a7, resolve failures without touching T5 scope, then correlate new retry markers with actual phone build whose source includes d835bd7c and device mouse testing. No equivalent workflow rerun if already queued.
