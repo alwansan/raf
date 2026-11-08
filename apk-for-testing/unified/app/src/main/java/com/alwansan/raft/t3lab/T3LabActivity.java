@@ -196,7 +196,8 @@ public final class T3LabActivity extends Activity {
     void exportLogs() {
         if(Build.VERSION.SDK_INT<29){status.setText("Use Android 10+ MediaStore for export");return;}
         try {
-            String folder="Games/cl/test/t3-gles-material-"+session+"/";
+            String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
+            String folder=parent!=null&&parent.matches("[A-Za-z0-9._-]{6,90}")?"Games/cl/test/shared-"+parent+"/":"Games/cl/test/t3-gles-material-"+session+"/";
             ContentValues cv=new ContentValues();
             cv.put(MediaStore.Downloads.DISPLAY_NAME,logfile.getName());
             cv.put(MediaStore.Downloads.MIME_TYPE,"application/x-ndjson");
