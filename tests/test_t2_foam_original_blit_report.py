@@ -1,0 +1,128 @@
+"""Adversarial SOURCE-FREE controls for authentic-IL report boundary."""
+import unittest
+from copy import deepcopy
+from scripts.t2_foam_original_blit_report import validate, unique_keys
+
+
+def fixture():
+    return {
+        "status": "original_foam_typed_blit_producer_audit",
+        "immutable_original_zip2_sha_verified": True,
+        "original_Assembly_CSharp_sha_verified": True,
+        "original_Foam_Shader_name_sha_verified": True,
+        "original_compiled_methods_scanned": 19118,
+        "original_typed_Shader_Find_calls": 81,
+        "exact_original_Foam_direct_Find_sites": 1,
+        "original_Shader_field_resolved": True,
+        "original_direct_Material_constructor_sites": 1,
+        "original_Material_field_uniquely_resolved": True,
+        "original_exact_static_four_arg_Blit_calls": 2,
+        "original_explicit_pass0_literal_Blit_calls": 1,
+        "original_explicit_pass1_literal_Blit_calls": 1,
+        "original_other_or_dynamic_pass_Blit_calls": 0,
+        "original_direct_material_field_and_typed_image_linked_Blit_calls": 2,
+        "original_pass0_direct_link_candidates": 1,
+        "original_pass1_direct_link_candidates": 1,
+        "pass0_source": "Texture",
+        "pass0_destination": "RenderTexture",
+        "pass0_source_producer": "typed_field",
+        "pass0_destination_producer": "typed_local",
+        "pass1_source": "RenderTexture",
+        "pass1_destination": "null",
+        "pass1_source_producer": "typed_local",
+        "pass1_destination_producer": "literal_null",
+        "original_shader_to_blit_direct_field_types_confirmed": True,
+        "original_texture_instance_identity_proven": False,
+        "original_crosspass_destination_to_source_identity_proven": False,
+        "original_CB0_sampler_binding_verified": False,
+        "original_ShaderLab_Unity_or_Android_pixels_verified": False,
+        "private_names_IL_methods_fields_pathids_or_bytecode_exported": False,
+    }
+
+
+class FoamOriginalBlitReportTests(unittest.TestCase):
+    def test_valid_types_are_not_texture_object_identity(self):
+        r = validate(fixture())
+        self.assertTrue(r["proven_direct_typed_pass_roles_only"])
+        self.assertFalse(r["crosspass_texture_instance_identity_proven"])
+        self.assertFalse(r["CB0_and_Unity_device_evidence_proven"])
+
+    def test_unknown_both_passes_is_allowed_but_never_proved(self):
+        r = fixture()
+        r.update(original_Material_field_uniquely_resolved=False,
+                 original_shader_to_blit_direct_field_types_confirmed=False,
+                 original_direct_material_field_and_typed_image_linked_Blit_calls=0,
+                 original_pass0_direct_link_candidates=0,
+                 original_pass1_direct_link_candidates=0)
+        for p in (0, 1):
+            for key in ("source", "destination", "source_producer", "destination_producer"):
+                r[f"pass{p}_{key}"] = "unknown"
+        self.assertFalse(validate(r)["proven_direct_typed_pass_roles_only"])
+
+    def test_ambiguous_candidates_cannot_emit_sole_role(self):
+        r = fixture()
+        r["original_pass0_direct_link_candidates"] = 2
+        r["original_direct_material_field_and_typed_image_linked_Blit_calls"] = 3
+        r["original_shader_to_blit_direct_field_types_confirmed"] = False
+        r["original_explicit_pass0_literal_Blit_calls"] = 2
+        r["original_exact_static_four_arg_Blit_calls"] = 3
+        with self.assertRaisesRegex(ValueError, "false_ambiguous"):validate(r)
+
+    def test_must_have_original_provenance_flags(self):
+        for field in ("immutable_original_zip2_sha_verified",
+                      "original_Assembly_CSharp_sha_verified",
+                      "original_Foam_Shader_name_sha_verified"):
+            r = fixture()
+            r[field] = False
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                validate(r)
+
+    def test_private_names_or_device_claims_rejected(self):
+        for field in ("private_names_IL_methods_fields_pathids_or_bytecode_exported",
+                      "original_texture_instance_identity_proven",
+                      "original_crosspass_destination_to_source_identity_proven",
+                      "original_CB0_sampler_binding_verified",
+                      "original_ShaderLab_Unity_or_Android_pixels_verified"):
+            r = fixture()
+            r[field] = True
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                validate(r)
+
+    def test_no_private_extra_fields(self):
+        r = fixture()
+        r["method_name"] = "PRIVATE"
+        with self.assertRaises(ValueError):validate(r)
+
+    def test_reject_noninteger_counts_and_bad_partition(self):
+        for count in (True, -1, 2.2, "2"):
+            r = fixture()
+            r["original_exact_static_four_arg_Blit_calls"] = count
+            with self.subTest(count=count), self.assertRaises(ValueError):validate(r)
+        r = fixture()
+        r["original_explicit_pass0_literal_Blit_calls"] = 5
+        with self.assertRaisesRegex(ValueError, "partition"):validate(r)
+
+    def test_no_field_no_link_even_with_fabricated_roles(self):
+        r = fixture()
+        r["original_Material_field_uniquely_resolved"] = False
+        with self.assertRaises(ValueError):validate(r)
+
+    def test_null_source_and_wrong_destination_rejected(self):
+        for key, value in (("pass0_source", "null"), ("pass0_destination", "Texture"),
+                           ("pass1_source_producer", "private_field_name")):
+            r = fixture()
+            r[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):validate(r)
+
+    def test_null_requires_literal_null_producer(self):
+        r = fixture()
+        r["pass1_destination_producer"] = "typed_local"
+        with self.assertRaisesRegex(ValueError, "null_producer"):validate(r)
+
+    def test_duplicate_report_keys_rejected(self):
+        with self.assertRaisesRegex(ValueError,"duplicate_json_key"):
+            unique_keys([("pass0_source", "Texture"), ("pass0_source", "unknown")])
+
+
+if __name__ == "__main__":
+    unittest.main()
