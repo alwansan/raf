@@ -88,10 +88,15 @@ def main():
         # This avoids loading early passes only to reject a later oversized pass.
         planned = []
         total_bytes = 0
+        seen_names = set()
         manifest_dir = args.manifest.resolve().parent
         for entry in entries:
             if not isinstance(entry, dict) or set(entry) != {"name", "reference", "observed"}:
                 raise ValueError("invalid pass entry")
+            name = entry["name"]
+            if not isinstance(name, str) or not name or name in seen_names:
+                raise ValueError("pass names must be nonempty and unique")
+            seen_names.add(name)
             for key in ("reference", "observed"):
                 relative = entry[key]
                 if not isinstance(relative, str) or not relative or "\x00" in relative:
