@@ -166,7 +166,12 @@ namespace RaftAndroid.Platform
                     // Stage only authentic captured mouse actions. The Unity
                     // main thread exposes one immutable per-frame snapshot;
                     // no InputSystem events or touch callbacks are injected.
-                    buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal);
+                    // A generation-bound OnCapturedPointerListener callback
+                    // itself is native capture evidence even without any MOVE.
+                    // Do not require camera motion before a button-only click
+                    // or wheel-only gesture may supplement missing Legacy Input.
+                    if (buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal))
+                        nativeCaptured = true;
                 }
             }
         }
