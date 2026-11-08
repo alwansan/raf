@@ -2,21 +2,30 @@
   "session_id": "20261108T1540Z-T3-chat-gles-material-lab-6b2a",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-08T15:40:00Z",
+  "status": "completed_source_apk_verified_waiting_device",
+  "updated_at": "2026-11-08T15:52:00Z",
   "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
   "resumed_from_sessions": [
     "20261108T1529Z-T3-scheduled-neg-fileid-q7m2",
     "20261108T1430Z-T3-scheduled-particle-yaml-k6d2"
   ],
-  "intended_files": [
-    "apk-for-testing/workers/T3/gles-lab/**",
-    ".github/workflows/raft-t3-gles-material-mini-lab.yml",
-    "apk-for-testing/workers/T3/README.md",
-    "prompt/coordination/clients/T3/sessions/20261108T1540Z-T3-chat-gles-material-lab-6b2a.md"
-  ],
+  "intended_files": [],
   "experiment_key": "t3-gles3-adreno730-rgba-srgb-alpha-blend-device-differential-20261108",
-  "resource_key": "isolated-T3-GLES-mini-lab-no-Unity",
+  "resource_key": null,
   "hypothesis": "A bounded GLES3 on-device diagnostic can distinguish driver-level alpha/sRGB/blend and shader compile behavior from missing Unity Raft resource/variant links for white surfaces and square particles.",
-  "limits": "Independent synthetic GLES3 test only. No Raft assets, shader recovery, Unity, original GPU pixels, or real gameplay. No READY/DEVICE_PASS claim."
+  "limits": "Independent synthetic GLES3 test only. No Raft assets, shader recovery, Unity, original GPU pixels, or real gameplay. No READY/DEVICE_PASS claim.",
+  "result": {
+    "lab_source_commit": "1147eca961eddd2dd46edae8c7b8771bffba72fc",
+    "ci_sdk_fix_commit": "a4578ff4cd7f7d7928038abdb1d076d514096da8",
+    "first_failure_run": "https://github.com/alwansan/raf/actions/runs/42496333650",
+    "successful_build_run": "https://github.com/alwansan/raf/actions/runs/42496427649",
+    "artifact_id": 13623309536,
+    "artifact_expires": "2026-11-15T15:46:28Z",
+    "apk_package": "com.alwansan.raft.lab.t3.gles",
+    "apk_size_bytes": 20425,
+    "apk_sha256": "c6396bc89548eeb55fc85d354a47a5fa77b98dfb7a79218af2dbc2a902615078",
+    "device": "PENDING",
+    "session_checkpoint": "prompt/coordination/clients/T3/sessions/20261108T1540Z-T3-chat-gles-material-lab-6b2a.md"
+  },
+  "next_step": "Collect owner device CASE01..CASE06 results and screenshots/JSONL; compare GLES control evidence with authentic Raft material and particle chain, never assume Unity corrected."
 }
