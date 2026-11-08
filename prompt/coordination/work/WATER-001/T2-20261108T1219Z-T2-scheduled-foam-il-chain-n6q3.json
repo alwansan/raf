@@ -1,0 +1,27 @@
+{
+  "session_id": "20261108T1219Z-T2-scheduled-foam-il-chain-n6q3",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "blocked",
+  "base_sha_candidate": "9b89f62772c2c61f6269fd2249f8560af1522892",
+  "base_sha_verified_branch": false,
+  "intended_files": [
+    "scripts/t2_pass1_stack_provenance.py (read-only)",
+    "scripts/t2_foam_pass_crosscheck.py (read-only)"
+  ],
+  "experiment_key": "foam-pass1-original-IL-def-use-CB0-render-target-pinned-zip2-15964ea8",
+  "resource_key": "original-foam-IL-zip2-15964ea8",
+  "hypothesis": "Existing synthetic stack model cannot prove pass1 Blit source/destination or CB0 upload identity; need original Mono.Cecil method body with branch-aware def-use",
+  "taken_over_from": [
+    "B20 original four-stage Foam",
+    "T2 prior Foam ABI and role gate"
+  ],
+  "evidence": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "scripts/t2_pass1_stack_provenance.py",
+    "scripts/t2_foam_pass_crosscheck.py"
+  ],
+  "blocker": "Local git network DNS unavailable; original IL payload not available in current runtime. No defensible shader edit without original def-use and material upload evidence.",
+  "next_step": "Acquire verified original assembly from ZIP2 into private CI scratch; extract method tokens and sanitized branch-aware def-use classifications for both Foam Blits; prove CB0 and texture producer identity; keep raw IL private. Coordinate T3 material linkage.",
+  "updated_at": "2026-11-08T12:19:00Z"
+}
