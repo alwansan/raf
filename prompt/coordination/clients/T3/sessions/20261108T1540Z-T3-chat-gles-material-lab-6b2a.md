@@ -19,7 +19,7 @@
 3. Fixed isolated workflow in commit `a4578ff4cd7f7d7928038abdb1d076d514096da8`: use preinstalled Android 35 SDK/build tools or install explicit Android 35 packages, no obsolete `tools`.
 4. [CI 42496427649](https://github.com/alwansan/raf/actions/runs/42496427649) **SUCCESS**: Android SDK check, Gradle assembleDebug, aapt package verification, and Artifact upload. Source SHA **`a4578ff4cd7f7d7928038abdb1d076d514096da8`**. Downloaded real artifact ID `13623309536`; extracted APK; verified ZIP contents, valid APK ZIP and signed APK Signing Block and SHA256.
 5. APK identity: package `com.alwansan.raft.lab.t3.gles`, versionCode **1**, version `0.1.0-t3-gles`, size **20,425 bytes**, SHA256 **`c6396bc89548eeb55fc85d354a47a5fa77b98dfb7a79218af2dbc2a902615078`**. Artifact ZIP 17,532 bytes, expires **2026-11-15T15:46:28Z**. Run page [42496427649](https://github.com/alwansan/raf/actions/runs/42496427649). Debug APK is available for owner testing; user can download directly from the conversation or Actions Artifact. Do not invent a GitHub release APK.
-6. Six-case data-only `testpack.json` committed `29af263b20cf205b15e1aacc1a57eaea3b4032ca` (all `note` types, no code), T3-only center row `7617826d`, detailed [worker README](../../../../apk-for-testing/workers/T3/README.md) `9eefaeda`.
+6. Six-case data-only `testpack.json` committed `29af263b20cf205b15e1aacc1a57eaea3b4032ca` (all `note` types, no code), T3-only center row `7617826d`, detailed [worker README](../../../../../apk-for-testing/workers/T3/README.md) `9eefaeda`.
 
 ## Evidence distinction and limitations
 
