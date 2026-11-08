@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d77667b7ef439d97c167be94f53e2ea4c96cdda7",
   "resumed_from_sessions": [
     "20261108T1850Z-T4-chat-original-mouse-buttons-g7p4",
@@ -21,7 +21,17 @@
   "scope": "Read-only external CL real device JSONL provenance + phase/button action dedup; no compiled Java or Unity changes. Fail closed on lack of capture, bad event source and missing owner actions.",
   "expected_result": "Document native Android physical mouse LEFT and VSCROLL without capture, distinguish DUPLICATE route events, block T4-09 game comparison fake acceptance.",
   "build_impact": "NO_BUILD (source-only)",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42516377494"
+  ],
   "status_details": "Not a device gameplay fix",
-  "next_step": "Run CI actual pinned external CL log gate, update T4 evidence, request phone captured ON T4-02/03/04/05 with observable transitions."
+  "next_step": "Owner physically presses Capture ON in mini T4-02 child, verifies route=captured captured=true and left/right/middle/vertical wheel with/without capture. Update evidence from CL/test; no new APK needed, existing mini adequate.",
+  "source_commits": [
+    "c34f3ca008491b7bfaeba498ad8b5278ec5334a3",
+    "2061581299cb052dcd8af6215998bec71f94fd69",
+    "1866520de0673496bb3591cf85828c1368662da8",
+    "a44d5257a9700f23ae31afab2a1c2800421f17c6"
+  ],
+  "result": "Real owner shared T4 Android device input: 413 raw SOURCE_MOUSE callbacks, 40 Activity/View duplicates, 373 unique, 13 LEFT press/release pairs, 55 unique VSCROLL (36 negative, 19 positive), no right/middle or HSCROLL proof, zero capture_request ON/OFF and zero captured=true/captured route. T4-09 EVIDENCE_READY is false acceptance for game comparison. CI 42516377494 SUCCESS 9 synthetic + exact CL blob gates. No game or device captured input proof.",
+  "updated_at": "2026-11-08T19:45:00Z"
 }
