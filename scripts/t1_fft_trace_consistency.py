@@ -12,6 +12,7 @@ def check(observations):
     if not isinstance(observations, list) or not 1 <= len(observations) <= MAX_OBSERVATIONS:
         raise ValueError("expected 1..128 observations")
     identities = {}
+    reverse_identities = {}
     sessions = set()
     for entry in observations:
         if not isinstance(entry, dict) or set(entry) != {
@@ -27,6 +28,10 @@ def check(observations):
         idx = entry["find_kernel_index"]
         if key in identities and identities[key] != idx:
             raise ValueError("kernel index drift for same session/GUID/name")
+        reverse_key = (session, validated["compute_shader_guid"], idx)
+        if reverse_key in reverse_identities and reverse_identities[reverse_key] != validated["kernel_name"]:
+            raise ValueError("kernel index alias for same session/GUID")
+        reverse_identities[reverse_key] = validated["kernel_name"]
         identities[key] = idx
         sessions.add(session)
     return {
