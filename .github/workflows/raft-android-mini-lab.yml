@@ -1,4 +1,5 @@
-name: Raft Android mini-lab host (manual, not full game)
+name: Raft Android mini-lab host (isolated request or manual when available)
+
 on:
   workflow_dispatch:
     inputs:
@@ -7,12 +8,19 @@ on:
         type: choice
         options: [T1, T2, T3, T4, T5]
         default: T4
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/raft-mini-lab-build-request.json'
+
 permissions:
   contents: read
+
 concurrency:
-  group: raft-android-mini-lab-${{ inputs.worker }}-${{ github.ref }}
+  group: raft-android-mini-lab-${{ github.ref }}
   cancel-in-progress: false
   queue: max
+
 jobs:
   host:
     if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
@@ -20,27 +28,62 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-        with: {persist-credentials: false, lfs: false}
+        with:
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 2
+      - name: Validate explicit mini-lab request, not Raft full-build request
+        id: request
+        env:
+          EVENT_TYPE: ${{ github.event_name }}
+          MANUAL_WORKER: ${{ inputs.worker || '' }}
+          PUSH_MESSAGE: ${{ github.event.head_commit.message || '' }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess
+          event=os.environ['EVENT_TYPE']
+          if event=='push':
+              assert '[raft-mini-lab]' in os.environ['PUSH_MESSAGE'], 'commit marker required'
+              with open('.github/raft-mini-lab-build-request.json', encoding='utf-8') as f: item=json.load(f)
+              assert set(item)=={'request_id','worker','requested_from_sha','reason'}
+              assert re.fullmatch('[A-Za-z0-9._-]{6,96}',item['request_id'])
+              assert re.fullmatch('[a-f0-9]{40}',item['requested_from_sha'])
+              assert isinstance(item['reason'],str) and 15<=len(item['reason'].strip())<=800
+              parent=subprocess.check_output(['git','rev-parse','HEAD^'],text=True).strip()
+              assert parent==item['requested_from_sha'], 'pin previous HEAD before request commit'
+              worker=item['worker']
+          else:
+              assert event=='workflow_dispatch'
+              worker=os.environ['MANUAL_WORKER']
+          assert worker in ('T1','T2','T3','T4','T5')
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as f: f.write('worker='+worker+'\n')
+          print('Valid mini-lab worker:',worker)
+          PY
       - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
-      - name: Verify imported-data contracts
+        with:
+          python-version: '3.12'
+      - name: Check safe testpack manifests
         run: |
           python3 scripts/validate_android_testpack.py apk-for-testing/examples/t4-mouse-testpack.json
           python3 -m unittest discover -s tests -p test_android_testpack.py -v
       - uses: actions/setup-java@v4
-        with: {distribution: temurin, java-version: '17'}
+        with:
+          distribution: temurin
+          java-version: '17'
       - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
-        with: {gradle-version: '8.10.2'}
-      - name: Build independent debug APK
-        env: {WORKER: "${{ inputs.worker }}"}
+        with:
+          gradle-version: '8.10.2'
+      - name: Assemble independent debug APK — no Unity or game assets
+        env:
+          WORKER: ${{ steps.request.outputs.worker }}
         run: |
           gradle -p apk-for-testing/host --no-daemon :app:assembleDebug -Pworker="$WORKER"
           test -s apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
           sha256sum apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk | tee mini-lab-sha256.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: raft-mini-lab-${{ inputs.worker }}-${{ github.sha }}
+          name: raft-mini-lab-${{ steps.request.outputs.worker }}-${{ github.sha }}
           path: |
             apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
             mini-lab-sha256.txt
