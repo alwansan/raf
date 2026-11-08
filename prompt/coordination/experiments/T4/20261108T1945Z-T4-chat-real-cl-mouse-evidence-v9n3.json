@@ -1,0 +1,47 @@
+{
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3",
+  "issue_id": "INPUT-005",
+  "experiment_key": "T4-CL-actual-shared-mouse-20261108-223341-bitmask-capture-proof-v1",
+  "hypothesis": "The uploaded unified mini trace may prove physical mouse button and wheel callbacks under Android pointer capture; avoid assuming manual EVIDENCE_READY equals gameplay PASS.",
+  "source_paths": [
+    "scripts/t4_verify_cl_shared_mouse_evidence.py",
+    "tests/test_t4_verify_cl_shared_mouse_evidence.py",
+    ".github/workflows/raft-t4-cl-shared-mouse-evidence.yml"
+  ],
+  "source_shas": [
+    "c34f3ca008491b7bfaeba498ad8b5278ec5334a3",
+    "2061581299cb052dcd8af6215998bec71f94fd69",
+    "1866520de0673496bb3591cf85828c1368662da8",
+    "a44d5257a9700f23ae31afab2a1c2800421f17c6"
+  ],
+  "input_repo": "alwansan/CL",
+  "input_commit": "4680f5dc26127938e7696f932b2d9a80dc703937",
+  "input_git_blob_shas": {
+    "child": "7c337320a1593ff8d9f9fd63e55ec30ed62cd202",
+    "parent": "6d702c231aa95386ace9fe85b25e244a6ce8bf8c"
+  },
+  "CI_URL": "https://github.com/alwansan/raf/actions/runs/42516377494",
+  "ci_result": "success",
+  "synthetic_tests": 9,
+  "actual_callbacks": 413,
+  "unique_android_events": 373,
+  "duplicate_activity_view_callbacks": 40,
+  "left_press": 13,
+  "left_release": 13,
+  "vertical_scroll_negative": 36,
+  "vertical_scroll_positive": 19,
+  "horizontal_scroll": 0,
+  "captured_true": 0,
+  "route_captured": 0,
+  "capture_on_requests": 0,
+  "conclusion": "Android un-captured left and vertical scroll native callbacks exist; no captured pointer proof. Right/middle absence not proof of failure because attempt not observed. Mini T4-09 EVIDENCE_READY is weak/invalid for full Raft comparison.",
+  "limits": [
+    "No live Unity player active during child mini callbacks",
+    "Existing source analysis only, no original Raft compiled runtime bridge test",
+    "No fake Android callback injections or proprietary log release"
+  ],
+  "next_step": "Compare capture ON/ OFF on physical phone in existing unified mini, then next signed game candidate exact SHA.",
+  "build_vote": "NO_BUILD"
+}
