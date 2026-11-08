@@ -22,6 +22,7 @@ public final class MainActivity extends Activity {
     final int PICK_PACK=101,PICK_TREE=102,PICK_ASSET=103,SAVE_AS=104;
     final ArrayList<JSONObject> cases=new ArrayList<>();
     JSONObject selected;
+    T1ComputeProbe t1Probe;
     LinearLayout entries; TextView caption,events,exportStatus,pad; EditText note; ImageView preview;
     File privateLog; Uri output; String packId="builtin-mouse",session;
     long lastMove=0;
@@ -65,8 +66,9 @@ public final class MainActivity extends Activity {
         addButton(root,"Pick image or file / SHA256",v->filePicker(PICK_ASSET,"*/*"));
         addButton(root,"Recover older session logs",v->recoverPreviousLog());
         preview=new ImageView(this);preview.setAdjustViewBounds(true);root.addView(preview,new LinearLayout.LayoutParams(-1,260));
+        if("T1".equals(BuildConfig.LAB_WORKER)) t1Probe=T1ComputeProbe.install(this,root);
         setContentView(sc);
-        try{
+        if(!"T1".equals(BuildConfig.LAB_WORKER)) try{
             for(int k=1;k<=3;k++)cases.add(new JSONObject().put("id","T4-0"+k).put("type","mouse")
                 .put("title",new String[]{"uncaptured clicks and wheel","captured clicks and wheel","compare with Raft game"}[k-1])
                 .put("instructions","Press LEFT/RIGHT/MIDDLE and wheel, observe captured and uncaptured callbacks")
@@ -198,6 +200,7 @@ public final class MainActivity extends Activity {
         }catch(Exception ex){log("recover_error",ex.getClass().getSimpleName());exportStatus.setText("Could not recover; private files kept");}
     }
 
-    @Override protected void onPause(){super.onPause();if(pad!=null&&pad.hasPointerCapture())pad.releasePointerCapture();log("activity","pause");}
+    @Override protected void onResume(){super.onResume();if(t1Probe!=null)t1Probe.onResume();}
+    @Override protected void onPause(){if(t1Probe!=null)t1Probe.onPause();super.onPause();if(pad!=null&&pad.hasPointerCapture())pad.releasePointerCapture();log("activity","pause");}
     @Override protected void onStop(){super.onStop();export();}
 }
