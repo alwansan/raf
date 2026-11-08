@@ -19,10 +19,11 @@
   "experiment_key": "T3-shared-visual-case-frame-handshake-rgba-readback-v1",
   "resource_key": "T3SharedVisualActivity",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42504045625 (pre-patch CI only)"
+    "https://github.com/alwansan/raf/actions/runs/42504045625 (older pre-patch source CI)",
+    "https://github.com/alwansan/raf/actions/runs/42509945996 (T5 complete shared Mini source cbe7a038)"
   ],
-  "next_step": "T5 compile unified project on post-patch source, inspect queued/in_progress Actions, sign/build single shared APK if appropriate, and obtain actual T3 PixelCopy PNG plus human visual verdict. No full XAPK request.",
-  "updated_at": "2026-11-08T18:30:00Z",
+  "next_step": "Use existing shared APK ZIP to test T3 synthetic PixelCopy on Adreno; compare original Raft rendering evidence independently. Rebuild only with material new driver/device evidence via T5.",
+  "updated_at": "2026-11-08T18:34:00Z",
   "result": "Exact-case GLES frame/generation/glReadPixels/GL error/negative-shader source verification added; PixelCopy only after own synthetic frame proof, visual user review remains pending.",
   "source_commits": [
     "204dabb9c18b7122550c7aa30a51fdc385de6f45",
@@ -34,5 +35,14 @@
     "2e3ce81b3a092e7823eedb8aafe1d0bc6e3f2c3c"
   ],
   "validation": "26/26 remote JS source policy assertions; Python suite newly committed but not executed or verified in Actions; Android Java compilation and device not checked.",
-  "mini_vote": "T3 NEED_BUILD recorded, T5 is sole integration/CI/build owner."
+  "mini_vote": "NO_BUILD after T5's existing shared APK run42509945996 at source cbe7a038; T3 core fixes included. Later small blank-alpha patch not included, deferred pending phone testing; no duplicate.",
+  "shared_mini": {
+    "run_id": 42509945996,
+    "conclusion": "success",
+    "artifact_id": 13628828717,
+    "source_parent_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+    "apk_in_artifact": true,
+    "direct_release_apk": false,
+    "phone_verdict": "NOT_TESTED"
+  }
 }
