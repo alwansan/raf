@@ -1,6 +1,6 @@
 {
-  "request_id": "t4-mouse-compile-postfix-20261108-c6p4",
+  "request_id": "t4-mouse-post-t1-javac-20261108-c6p4",
   "worker": "T4",
-  "requested_from_sha": "a4578ff4cd7f7d7928038abdb1d076d514096da8",
-  "reason": "T4 mini-lab 42496238418 reached Gradle but failed javac on invalid multi-character escaped newline in shared host MainActivity.java. T5 independently corrected it in db8f507a after previous pinned source. Build one T4 physical mouse pointer capture/button/wheel callback APK from corrected integrated source; no game assets or Unity."
+  "requested_from_sha": "ae450f1f84ef4956f577df29cb21214517a8f065",
+  "reason": "Pinned T4 mini-lab CI 42496449259 reached javac but failed T1ComputeProbe.java on final observation definite-assignment. T1 has fixed the precise Java error in ae450f1f; T5 fixed the earlier newline escape in db8f507a, and SDK legacy tools setup is corrected in 6ab0990. Compile a fresh one-off Android 15 mouse button/scroll capture diagnostic from all integrated fixes."
 }
