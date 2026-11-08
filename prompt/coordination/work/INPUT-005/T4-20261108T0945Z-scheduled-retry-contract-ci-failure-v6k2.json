@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "owner": "T4",
   "track": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_only",
   "base_sha": "4450a5bb58f0251083762455d3e44761fe9f100b",
   "experiment_key": "t4-retry-contract-source-20261108-v6k2",
   "files": [
@@ -15,5 +15,12 @@
     "https://github.com/alwansan/raf/actions/runs/42463928346",
     "https://github.com/alwansan/raf/actions/runs/42463928344"
   ],
-  "owner_device_success": "Artifact 42058825739 world enter/save/exit/reopen owner-confirmed; not proof of mouse"
+  "owner_device_success": "Artifact 42058825739 world enter/save/exit/reopen owner-confirmed; not proof of mouse",
+  "implementation_sha": "08a3f0a92cfce05ff1f30e592e7ad8f29252898c",
+  "verification": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42468530415",
+    "status": "success",
+    "head_sha": "08a3f0a92cfce05ff1f30e592e7ad8f29252898c",
+    "limit": "source-only; no Unity/device confirmation"
+  }
 }
