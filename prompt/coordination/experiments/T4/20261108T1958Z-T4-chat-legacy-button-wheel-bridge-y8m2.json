@@ -1,0 +1,50 @@
+{
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2",
+  "issue_id": "INPUT-005",
+  "experiment_key": "T4-physical-pointer-captured-legacy-button-wheel-frame-fallback-v1",
+  "source_file_paths": [
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "scripts/t4_adapt_original_mouse_buttons_wheel.py",
+    "tests/test_t4_adapt_original_mouse_buttons_wheel.py",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml"
+  ],
+  "baseline_cl": "alwansan/CL@4680f5dc26127938e7696f932b2d9a80dc703937",
+  "original_source_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "expected_original_sites": {
+    "down": 4,
+    "held": 6,
+    "up": 2,
+    "wheel_axis": 6,
+    "scroll_delta": 2
+  },
+  "source_sha": "0e9437b0137566dc1ddd377c3396ae18e4c0b058",
+  "verification": {
+    "dotnet_csharp": 111,
+    "python_synthetic": 9,
+    "original_source_files_modified_privately": 12,
+    "original_managed_Unity2021_android_compile": "SUCCESS",
+    "original_managed_Unity2021_editor_compile": "SUCCESS",
+    "source_ci": "https://github.com/alwansan/raf/actions/runs/42518143297",
+    "offline_ci": "https://github.com/alwansan/raf/actions/runs/42518143291",
+    "unity_full_player_build": null,
+    "android_device_proof": null
+  },
+  "source_control_policy": [
+    "No touch mouse SOURCE_TOUCHSCREEN event injection",
+    "Current captured native View epoch required",
+    "Unity Legacy native read preferred before physical fallback",
+    "A button edge may not replay twice inside Unity Time.frameCount",
+    "Non-finite/abs>1000 wheel rejected; bounded frame delta",
+    "Lost capture clears pending, held and sampled input",
+    "Auth original byte hash/cardinality required; atomic private backup/rollback",
+    "Mouse X/Y camera path retained and only original 20 button/wheel call-sites patched",
+    "Editor/Windows uses Unity Legacy unchanged"
+  ],
+  "status": "SOURCE_VERIFIED_DEVICE_PENDING",
+  "next_step": "Authorized same-SHA signed full Raft game XAPK on physical POCO Android15; test LEFT/RIGHT/MIDDLE/wheel V/H while captured with camera/menu/touch/keyboard and world/save; if source card drifts in project staging, fail closed and investigate."
+}
