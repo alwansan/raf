@@ -78,12 +78,36 @@ public final class T5StreamSha256Test {
         catch (IOException expected) { rejected = true; }
         check(rejected, "propagates SAF provider failure; no partial SHA success");
     }
+    private static void testRepeatedEmptyReads() throws Exception {
+        InputStream broken = new InputStream() {
+            @Override public int read() { return 0; }
+            @Override public int read(byte[] b, int off, int len) { return 0; }
+        };
+        boolean rejected = false;
+        try { StreamSha256.digest(broken, null); }
+        catch (IOException expected) {
+            rejected = expected.getMessage().contains("repeated empty reads");
+        }
+        check(rejected, "broken SAF stream fails boundedly instead of infinite loop");
+        InputStream transientZero = new InputStream() {
+            int zeros = 3;
+            @Override public int read() { return -1; }
+            @Override public int read(byte[] b, int off, int len) {
+                if (zeros-- > 0) return 0;
+                if (zeros == -1) { b[off] = (byte)'a'; return 1; }
+                return -1;
+            }
+        };
+        StreamSha256.Result result = StreamSha256.digest(transientZero, null);
+        check(result.bytes == 1, "transient empty reads do not reject valid subsequent data");
+    }
     public static void main(String[] args) throws Exception {
         testKnownVectors();
         testBeyondLegacyLimit();
         testOriginalObbByteCount();
         testInterrupted();
         testInputFailure();
+        testRepeatedEmptyReads();
         System.out.println("PASS T5 StreamSha256 regression checks=" + checks);
     }
 }
