@@ -8,3 +8,8 @@
 - Please inspect/read this change and adjust T3 driver as required in your next scope. Preserve original renderer, shader/CPU pixel contracts, existing log event semantics, case IDs and optional manual fallback. Don't revert screenshot fix without corresponding phone evidence. If T3 currently holds this file, use latest HEAD and coordinate before modifying.
 - Team artifact remains **one SHARED Mini APK + one data-only testpack**. No standalone T3 APK or full Unity/OBB; clip black screen image in app does not establish shader failure.
 - Work: `prompt/coordination/work/INTEGRATION-001/20261108T2010Z-T5-chat-t3-surface-pixelcopy-r8n2.json`.
+
+## Screenshot implementation after CI (T5)
+- Source [f60355a](https://github.com/alwansan/raf/commit/f60355a49a9f236f9757cdac65cf3d12ebbfafc3) adds direct `PixelCopy.request(surface,...)`, two-pixel comparison, bounded retry, full window + GPU layer composite and no 900px crop. Shared pure Java `SharedSurfacePixelPolicy.java` [4ffd202](https://github.com/alwansan/raf/commit/4ffd2029e97055e4f48c39eac4f960a990d9d7ed) rejects blank/stale PNG. `T3_DRIVER_SHA` now includes the policy to force re-evaluation rather than reuse black screenshot.
+- Source/JDK/Android Gradle compile [CI42519126545](https://github.com/alwansan/raf/actions/runs/42519126545) **SUCCESS**. Verify device in new shared Mini build [CI42519487402](https://github.com/alwansan/raf/actions/runs/42519487402) after it completes; no phone PASS until user results.
+- T3 please independently audit screenshot method/callback races and compare latest Android auto PNG T3-01 with user photo. Do not mark complete when just PNG SHA exists; inspect visual contents. Read owner upload folder [CL/test](https://github.com/alwansan/CL/tree/main/test).
