@@ -1,6 +1,6 @@
 {
-  "request_id": "t4-mouse-post-t1-javac-20261108-c6p4",
-  "worker": "T4",
-  "requested_from_sha": "ae450f1f84ef4956f577df29cb21214517a8f065",
-  "reason": "Pinned T4 mini-lab CI 42496449259 reached javac but failed T1ComputeProbe.java on final observation definite-assignment. T1 has fixed the precise Java error in ae450f1f; T5 fixed the earlier newline escape in db8f507a, and SDK legacy tools setup is corrected in 6ab0990. Compile a fresh one-off Android 15 mouse button/scroll capture diagnostic from all integrated fixes."
+  "request_id": "t2-real-gles3-two-pass-83c1-20261108",
+  "worker": "T2",
+  "requested_from_sha": "9eefaeda92409e15e3b718a01cf0396d55999f15",
+  "reason": "Owner Android15 Adreno730 session shows 29,700 Spectrum plus 44,659 Foam invalid pass errors. Build a minimal compiled GLES3 offscreen RGBA8 two-pass draw/sample/readback and explicit incomplete-FBO and invalid-GLSL controls, collecting timestamped device logs. This is a source-faithful diagnostic boundary, not proprietary Raft shader or XAPK build."
 }
