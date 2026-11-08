@@ -44,5 +44,34 @@ class CaptureBudgetTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(json.loads(result.stdout)["all_match"])
 
+    def test_reject_parent_traversal_before_capture_read(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            result = self.run_manifest([{"name": "fft", "reference": "../outside.bin",
+                                         "observed": "missing.bin"}], root)
+            self.assertEqual(result.returncode, 2)
+            self.assertNotIn("Traceback", result.stderr)
+
+    def test_reject_symlinked_capture(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "original.bin").write_bytes(bytes(16))
+            (root / "alias.bin").symlink_to(root / "original.bin")
+            result = self.run_manifest([{"name": "fft", "reference": "alias.bin",
+                                         "observed": "original.bin"}], root)
+            self.assertEqual(result.returncode, 2)
+            self.assertNotIn("Traceback", result.stderr)
+
+    def test_accept_nested_regular_capture(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "nested").mkdir()
+            (root / "nested" / "capture.bin").write_bytes(bytes(16))
+            result = self.run_manifest([{"name": "fft",
+                                         "reference": "nested/capture.bin",
+                                         "observed": "nested/capture.bin"}], root)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(json.loads(result.stdout)["all_match"])
+
 if __name__ == "__main__":
     unittest.main()
