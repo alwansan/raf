@@ -10,3 +10,12 @@ resource_key: none; source-only, no Unity/CI dispatch
 owner_evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md; 42058825739 world save/reentry from Artifact confirmed; water/kernel errors remain.
 resumed_from: clients/T1/sessions/20261108T2006Z-T1-scheduled-firstpass-json-4a7d.md and prompt/coordination/clients/T1/sessions/20261108T2022Z-T1-chat-fft-source-gate-d8b4.md
 status: active
+
+## Outcome
+source_commit: 9ac294ff37bb5f34f7190058d45189f15d91c093
+test_commit: 8eebe992e6d6802a064f83e19b07f85b6f6694a2
+observed_ci: https://github.com/alwansan/raf/actions/runs/42523525581 (in_progress at inspection, source SHA 9ac294ff, so cannot cover new test commit)
+status: source_fixed_test_pending
+validation: static review; local curl raw.githubusercontent.com DNS failure. New unittest not yet executed. No CI duplicate launched.
+limits: input manifest label preflight only; not Unity runtime kernel identity or FFT pixel parity.
+next: execute python -m unittest tests.test_t1_fft_pass_label_preflight in available runner; then capture original same-build Unity FFT shader GUID, numeric selector, SetTexture and Dispatch.
