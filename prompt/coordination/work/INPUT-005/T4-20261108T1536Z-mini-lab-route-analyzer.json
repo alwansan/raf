@@ -1,0 +1,16 @@
+{
+  "worker": "T4",
+  "origin": "scheduled",
+  "session_id": "20261108T1536Z-T4-scheduled-route-analyzer-n8q4",
+  "issue": "INPUT-005",
+  "experiment_key": "T4-MOUSE-ROUTE-DIFF-20261108",
+  "base_sha": "77837352fb8855c1c81c985dca951d3d2941a7c1",
+  "files": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py"
+  ],
+  "hypothesis": "Compare capture ON/OFF callback routes, buttons and wheel to distinguish Android dispatch loss from Unity bridge loss; no device claim.",
+  "shared_resource": "none; source-only",
+  "taken_over_from": "T4 previous epoch classifier; owner 2026-11-08 new button/wheel evidence",
+  "status": "active"
+}
