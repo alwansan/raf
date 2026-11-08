@@ -63,9 +63,19 @@ def read_trace_manifest(path):
         info = os.fstat(fd)
         if not stat.S_ISREG(info.st_mode) or info.st_size > MAX_MANIFEST:
             raise ValueError("invalid manifest")
-        raw = os.read(fd, MAX_MANIFEST + 1)
-        if len(raw) > MAX_MANIFEST:
-            raise ValueError("invalid manifest")
+        # A regular-file read is allowed to return fewer bytes than requested.
+        # Consume exactly the stat-verified length; reject truncation or growth.
+        chunks = []
+        remaining = info.st_size
+        while remaining:
+            chunk = os.read(fd, remaining)
+            if not chunk:
+                raise ValueError("truncated manifest")
+            chunks.append(chunk)
+            remaining -= len(chunk)
+        if os.read(fd, 1):
+            raise ValueError("manifest changed during read")
+        raw = b"".join(chunks)
         return json.loads(raw.decode("utf-8", errors="strict"),
                           object_pairs_hook=reject_duplicate_keys)
     finally:
