@@ -57,7 +57,7 @@ class CaptureBudgetTests(unittest.TestCase):
                        {"name": "late", "reference": "big.bin", "observed": "big.bin"}]
             manifest = root / "manifest.json"
             manifest.write_text(json.dumps(entries), encoding="utf-8")
-            with patch.object(sys, "argv", ["comparator", str(manifest)]), \\
+            with patch.object(sys, "argv", ["comparator", str(manifest)]), \
                  patch.object(comparator, "read_private_capture") as read:
                 with self.assertRaises(SystemExit) as error:
                     comparator.main()
