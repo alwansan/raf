@@ -28,6 +28,9 @@ def audit(root):
             c["unreadable"] += 1
             continue
         docs = list(DOC.finditer(data))
+        anchors = {}
+        for doc in docs:
+            anchors.setdefault(int(doc.group(2)), []).append(int(doc.group(1)))
         for i, d in enumerate(docs):
             if d.group(1) != "199":
                 continue
@@ -65,6 +68,15 @@ def audit(root):
                     c["external_material_slots"] += 1
                 elif not guid:
                     c["local_material_slots"] += 1
+                    targets = anchors.get(fid, [])
+                    if not targets:
+                        c["local_material_target_missing"] += 1
+                    elif len(targets) != 1:
+                        c["local_material_target_ambiguous"] += 1
+                    elif targets[0] != 21:
+                        c["local_material_target_wrong_class"] += 1
+                    else:
+                        c["local_material_target_valid"] += 1
                 else:
                     c["ambiguous_zero_guid_slots"] += 1
     return dict(sorted(c.items()))
