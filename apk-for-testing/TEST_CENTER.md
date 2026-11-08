@@ -23,6 +23,8 @@
 - AndroidManifest binary decoded locally: package `com.alwansan.raft.lab.shared`, versionCode **9**, versionName `0.2.9-shared`, target platform Android 15/compile SDK 35, main Activity exported. Actual APK signing block **v2** present; certificate DER SHA256 `cd2b1f9875dce958ef4ac5f6a08737174d60870df6562afb5636b7fe377cc259`; issuer **Android Debug**, not established as stable across future builds. ZIP CRC and member hashes passed; no device installation or functional GPU/input/screenshot/SAF test yet.
 - **Limitations:** no publicly hosted APK Release asset yet, so no verified public direct APK URL. The actual Android APK is available to owner by extracting the Actions Artifact ZIP (or via this conversation's file attachment); do not mistake ZIP for APK. Package is experimental and does not prove Raft Unity shader, water, mouse or graphics fixes. Full-game XAPK 5/5 vote and 0/3 release-ready gates are unchanged.
 
+> **للمالك الذي استخدم Auto All ولم يعرف تشغيل T5:** راجع [خطوات T5 على الهاتف، وأدلة CL/test الموجودة](unified/T5_OWNER_TEST_GUIDE_AR.md). 29 اختباراً تعمل من pack المضمن بلا استيراد؛ AUTO T5 ينفذ T5-01 فقط، بينما T5-02..06 تحتاج فتح سطر الطلب في **IN-APP REQUESTS** قرب أسفل شاشة التطبيق. لا تضع PASS بلا ملاحظة. سجلات CL/test لليوم تثبت 9 PASS + 6 EVIDENCE_READY + 14 NEEDS_INPUT، وليس تعطّل التشغيل التلقائي. إصلاح T5-02 للـOBB الضخم `6f2cf77` أحدث من أول APK.
+
 ## العملاء الخمسة في واجهة التطبيق الموحد
 
 | العامل | اختبارات موجودة في الحزمة الموحّدة | نوع الإثبات |
