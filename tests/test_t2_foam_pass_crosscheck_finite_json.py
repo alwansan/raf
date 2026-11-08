@@ -22,6 +22,31 @@ class FoamFiniteJsonIngressTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "nonfinite_json"):
             finite_float("1e999")
 
+    def test_nonzero_underflow_rejected(self):
+        with self.assertRaisesRegex(ValueError, "nonfinite_json"):
+            finite_float("1e-9999")
+
+    def test_exact_zero_exponent_allowed(self):
+        self.assertEqual(finite_float("0e-9999"), 0.0)
+
+    def test_smallest_binary_subnormal_allowed(self):
+        self.assertGreater(finite_float("5e-324"), 0.0)
+
+    def test_cli_rejects_underflow_in_role_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            original = Path(tmp) / "original.json"
+            roles = Path(tmp) / "roles.json"
+            original.write_text(json.dumps(full_safe_fixture()), encoding="utf-8")
+            role_data = json.dumps(sites("RenderTexture", "unknown",
+                                         "RenderTexture", "unknown"))
+            # Unknown numeric field must not silently become zero at JSON ingress.
+            role_data = role_data.replace('"pass": 0', '"pass": 1e-9999', 1)
+            self.assertIn("1e-9999", role_data)
+            roles.write_text(role_data, encoding="utf-8")
+            with patch.object(sys, "argv", ["crosscheck", str(original), str(roles)]):
+                with self.assertRaisesRegex(ValueError, "nonfinite_json"):
+                    main()
+
     def test_finite_float_remains_finite(self):
         self.assertEqual(finite_float("1.25e2"), 125.0)
 
