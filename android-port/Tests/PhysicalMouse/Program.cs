@@ -122,6 +122,43 @@ static class Program
         Check(PhysicalMouseMotionSource.Classify(4098, trackpadSources | 4098) ==
             PhysicalMouseMotionSource.Kind.Ignore, "Composite touchscreen stays separate");
 
+
+        // Captured callback proof is intentionally separate from Unity input.
+        var actions=new PhysicalMouseActionEvidence();
+        Check(!actions.Record(11,4098,1,1,0,0),"Touchscreen is not a mouse click");
+        Check(actions.Read().Count==0,"Rejected touchscreen left no evidence");
+        Check(actions.Record(11,131076,1,1,0,0),"Mouse0 press callback");
+        Check(actions.Record(12,131076,1,0,0,0),"Mouse0 release callback");
+        Check(actions.Record(11,8194,2,2,0,0),"Mouse1 press callback");
+        Check(actions.Record(12,8194,2,0,0,0),"Mouse1 release callback");
+        Check(actions.Record(11,1048584,4,4,0,0),"Mouse2 press callback");
+        var read=actions.Read();
+        Check(read.PressMask==7 && read.ReleaseMask==3 &&
+              read.Presses==3 && read.Releases==2,"Button masks from explicit edges only");
+        Check(actions.Record(0,8194,1,1,0,0) && actions.Record(1,8194,1,0,0,0),
+            "DOWN/UP are observed as ambiguous, not identified presses");
+        read=actions.Read();
+        Check(read.AmbiguousDownUp==2 && read.ReleaseMask==3,
+            "Undefined DOWN/UP actionButton cannot invent named edges");
+        Check(!actions.Record(2,131076,0,0,1,1),"Move axis values are not scroll");
+        Check(!actions.Record(8,131076,0,0,0,0),"Zero scroll is not wheel evidence");
+        Check(!actions.Record(8,131076,0,0,float.NaN,1),"NaN scroll rejected");
+        Check(!actions.Record(8,131076,0,0,1001,1),"Huge scroll rejected");
+        Check(actions.Record(8,131076,0,0,-1,0),"Vertical scroll callback");
+        Check(actions.Record(8,131076,0,0,0,2),"Horizontal scroll callback");
+        Check(actions.Record(8,8194,0,0,1,-1),"Dual-axis scroll callback");
+        read=actions.Read();
+        Check(read.Count==10 && read.Vertical==2 && read.Horizontal==2,
+            "Count ten bounded actions, two of each scroll axis");
+        Check(PhysicalMouseActionEvidence.VScroll==9 &&
+              PhysicalMouseActionEvidence.HScroll==10 &&
+              !PhysicalMouseActionEvidence.IsAction(2) &&
+              PhysicalMouseActionEvidence.IsAction(8),"Android action/axis constants");
+        actions.Reset();
+        read=actions.Read();
+        Check(read.Count==0 && read.PressMask==0 && read.Vertical==0,
+            "Release resets captured action evidence");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;

@@ -17,6 +17,8 @@ namespace RaftAndroid.Platform
         private static int originalLockIntent;
 
         private readonly PhysicalMouseDeltaAccumulator deltas = new PhysicalMouseDeltaAccumulator();
+        private readonly PhysicalMouseActionEvidence actionEvidence = new PhysicalMouseActionEvidence();
+        private int lastActionReport;
         private CapturedListener listener;
         private bool focused = true, paused, supported;
         private volatile bool nativeHasMotion, requested, nativeCaptured;
@@ -43,9 +45,30 @@ namespace RaftAndroid.Platform
                 try
                 {
                     if (!PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch,
-                            Volatile.Read(ref owner.epoch), owner.requested) ||
-                        motionEvent.Call<int>("getActionMasked") != 2)
-                        return false; // ACTION_MOVE only and current generation.
+                            Volatile.Read(ref owner.epoch), owner.requested))
+                        return false;
+                    int action = motionEvent.Call<int>("getActionMasked");
+                    if (action != PhysicalMouseMotionSource.ActionMove)
+                    {
+                        // Never consume button or scroll: the original View/Unity
+                        // route remains the only input route. Record callback
+                        // delivery, NOT successful input inside Raft.
+                        if (PhysicalMouseActionEvidence.IsAction(action))
+                        {
+                            int eventSource = motionEvent.Call<int>("getSource");
+                            // Android getActionButton is defined only for 11/12.
+                            int changed = action == PhysicalMouseActionEvidence.Press ||
+                                          action == PhysicalMouseActionEvidence.Release
+                                ? motionEvent.Call<int>("getActionButton") : 0;
+                            int held = motionEvent.Call<int>("getButtonState");
+                            float v = action == PhysicalMouseActionEvidence.Scroll
+                                ? motionEvent.Call<float>("getAxisValue", PhysicalMouseActionEvidence.VScroll) : 0f;
+                            float h = action == PhysicalMouseActionEvidence.Scroll
+                                ? motionEvent.Call<float>("getAxisValue", PhysicalMouseActionEvidence.HScroll) : 0f;
+                            owner.RecordCapturedAction(listenerEpoch,action,eventSource,changed,held,v,h);
+                        }
+                        return false;
+                    }
                     int source = motionEvent.Call<int>("getSource");
                     int deviceSources = 0;
                     // Android touchpad MotionEvent.getSource() normally reports
@@ -127,6 +150,31 @@ namespace RaftAndroid.Platform
                 nativeCaptured = nativeHasMotion = true;
                 return true;
             }
+        }
+
+
+        private void RecordCapturedAction(int listenerEpoch,int action,int source,
+            int changedButton,int heldButton,float vertical,float horizontal)
+        {
+            // Android UI event thread: no Unity APIs and no per-event logging.
+            lock(captureGate)
+            {
+                if (PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch,epoch,requested))
+                    actionEvidence.Record(action,source,changedButton,heldButton,vertical,horizontal);
+            }
+        }
+
+        private void LogCapturedActions(string operation,PhysicalMouseActionEvidence.Snapshot s)
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",operation,
+                "epoch="+Volatile.Read(ref epoch)+
+                "; capturedCallbackEvents="+s.Count+
+                "; pressCallbacks="+s.Presses+"; releaseCallbacks="+s.Releases+
+                "; pressMask="+s.PressMask+"; releaseMask="+s.ReleaseMask+
+                "; heldMask="+s.HeldMask+"; verticalScrollCallbacks="+s.Vertical+
+                "; horizontalScrollCallbacks="+s.Horizontal+
+                "; undefinedActionDownUp="+s.AmbiguousDownUp+
+                "; nonMoveConsumed=false; unityButtonsAndWheelVerified=false");
         }
 
         public static CursorLockMode ApplyCursorLock(CursorLockMode mode)
@@ -240,6 +288,13 @@ namespace RaftAndroid.Platform
                     "physical_mouse_capture_lost",
                     "lostTransitions=" + losses + "; legacyFallback=true");
             }
+            var actions=actionEvidence.Read();
+            int last=Volatile.Read(ref lastActionReport);
+            if(actions.Count>0 && (last==0 || actions.Count>=last+16))
+            {
+                Volatile.Write(ref lastActionReport,actions.Count);
+                LogCapturedActions("physical_mouse_captured_action_callbacks",actions);
+            }
             int received = deltas.ReceivedCount;
             // Emit one marker for a short real-mouse movement sequence; the
             // old 120-event-only gate hid all evidence in brief tests.
@@ -282,6 +337,8 @@ namespace RaftAndroid.Platform
                 {
                     nativeHasMotion = false;
                     deltas.Reset();
+                    actionEvidence.Reset();
+                    Volatile.Write(ref lastActionReport,0);
                 }
                 if (lost) Interlocked.Increment(ref captureLossCount);
             }
@@ -417,6 +474,9 @@ namespace RaftAndroid.Platform
                     "physical_mouse_capture_released",
                     "focus=" + focused + "; paused=" + paused +
                     "; requested=" + requested + "; relativeEvents=" + deltas.ReceivedCount);
+            var finalActions=actionEvidence.Read();
+            if(finalActions.Count>Volatile.Read(ref lastActionReport))
+                LogCapturedActions("physical_mouse_captured_action_callbacks_final",finalActions);
             int releaseViewIdentity;
             lock (captureGate)
             {
@@ -427,7 +487,9 @@ namespace RaftAndroid.Platform
                 requested = nativeHasMotion = nativeCaptured = false;
                 Volatile.Write(ref captureViewIdentity, 0);
                 deltas.Reset();
+                actionEvidence.Reset();
             }
+            Volatile.Write(ref lastActionReport,0);
             lastLoggedCount = 0;
             captureRequestAttempts = 0;
             nextProbeTime = 0f;

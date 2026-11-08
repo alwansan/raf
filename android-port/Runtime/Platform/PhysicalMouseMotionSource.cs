@@ -64,4 +64,69 @@ namespace RaftAndroid.Platform
                    (x != 0f || y != 0f);
         }
     }
+
+    // Captured physical mouse callback observations only: never synthesize a
+    // legacy Unity Input result or claim that a game button was delivered.
+    public sealed class PhysicalMouseActionEvidence
+    {
+        public const int Down=0, Up=1, Scroll=8, Press=11, Release=12;
+        public const int VScroll=9, HScroll=10;
+        private readonly object gate = new object();
+        private int count, presses, releases, pressMask, releaseMask, heldMask;
+        private int vertical, horizontal, ambiguousDownUp;
+        public struct Snapshot
+        {
+            public readonly int Count, Presses, Releases, PressMask, ReleaseMask;
+            public readonly int HeldMask, Vertical, Horizontal, AmbiguousDownUp;
+            public Snapshot(int count,int presses,int releases,int pressMask,int releaseMask,
+                int heldMask,int vertical,int horizontal,int ambiguousDownUp)
+            {
+                Count=count;Presses=presses;Releases=releases;PressMask=pressMask;
+                ReleaseMask=releaseMask;HeldMask=heldMask;Vertical=vertical;
+                Horizontal=horizontal;AmbiguousDownUp=ambiguousDownUp;
+            }
+        }
+        public static bool IsAction(int a)
+        {
+            return a==Down || a==Up || a==Scroll || a==Press || a==Release;
+        }
+        public bool Record(int action,int source,int actionButton,int buttonState,float v,float h)
+        {
+            if (source!=PhysicalMouseMotionSource.Mouse &&
+                source!=PhysicalMouseMotionSource.MouseRelative &&
+                source!=PhysicalMouseMotionSource.Touchpad) return false;
+            if (!IsAction(action)) return false;
+            if (action==Scroll && (float.IsNaN(v)||float.IsNaN(h)||
+                float.IsInfinity(v)||float.IsInfinity(h)||
+                Math.Abs(v)>1000f||Math.Abs(h)>1000f||(v==0f&&h==0f))) return false;
+            lock(gate)
+            {
+                if (count==int.MaxValue) return false;
+                count++;
+                heldMask=buttonState&7;
+                if (action==Press) { presses++; pressMask|=actionButton&7; }
+                else if (action==Release) { releases++; releaseMask|=actionButton&7; }
+                else if (action==Scroll)
+                {
+                    if (v!=0f) vertical++;
+                    if (h!=0f) horizontal++;
+                }
+                else ambiguousDownUp++; // getActionButton is UNDEFINED on DOWN/UP.
+                return true;
+            }
+        }
+        public Snapshot Read()
+        {
+            lock(gate) return new Snapshot(count,presses,releases,pressMask,releaseMask,
+                heldMask,vertical,horizontal,ambiguousDownUp);
+        }
+        public void Reset()
+        {
+            lock(gate)
+            {
+                count=presses=releases=pressMask=releaseMask=heldMask=0;
+                vertical=horizontal=ambiguousDownUp=0;
+            }
+        }
+    }
 }
