@@ -2,7 +2,7 @@
   "session_id": "20261108T0442Z-T4-scheduled-first-relative-m7q2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "778a885eeeefeb8a2cab49315d3f7491dac8c3b5",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
@@ -11,6 +11,13 @@
   "hypothesis": "Current 120-event threshold hides all relative movement for short device mouse tests; log the first accepted relative event then retain 120-event throttling.",
   "experiment_key": "T4-first-relative-observation-778a885-1-120",
   "resource_key": null,
-  "updated_at": "2026-11-08T04:42:00Z",
-  "guardrails": "No changes to keyboard, touch, RGD, audio, Settings or T5 UI; source-only validation, no native build."
+  "updated_at": "2026-11-08T04:48:00Z",
+  "guardrails": "No changes to keyboard, touch, RGD, audio, Settings or T5 UI; source-only validation, no native build.",
+  "source_commit": "8d52dd6ea6cd011986956f94afd029b6da9b77c6",
+  "test_commit": "125efe37c834fa521cfabc289c01d72b6e42757c",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261108T0442Z-T4-scheduled-first-relative-m7q2.md",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42447918736",
+    "https://github.com/alwansan/raf/actions/runs/42447918743"
+  ]
 }
