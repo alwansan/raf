@@ -75,6 +75,13 @@ def read_trace_manifest(path):
             remaining -= len(chunk)
         if os.read(fd, 1):
             raise ValueError("manifest changed during read")
+        # A same-length in-place rewrite can otherwise escape the EOF check.
+        # Reject descriptor metadata changes observed during the read.
+        after = os.fstat(fd)
+        if (after.st_size != info.st_size or
+                after.st_mtime_ns != info.st_mtime_ns or
+                after.st_ctime_ns != info.st_ctime_ns):
+            raise ValueError("manifest changed during read")
         raw = b"".join(chunks)
         return json.loads(raw.decode("utf-8", errors="strict"),
                           object_pairs_hook=reject_duplicate_keys)
