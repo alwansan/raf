@@ -2,6 +2,8 @@
 """Check consistency of recorded Unity FFT kernel identity; not proof of original identity."""
 import argparse
 import json
+import os
+import stat
 from pathlib import Path
 from scripts.t1_fft_dispatch_coverage import validate
 
@@ -49,16 +51,34 @@ def check(observations):
         "original_identity_proven": False, "gpu_execution_proven": False
     }
 
+def read_trace_manifest(path):
+    """Read one bounded regular file descriptor; never follow a swapped symlink."""
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0)
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    elif path.is_symlink():
+        raise ValueError("invalid manifest")
+    fd = os.open(path, flags)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_size > MAX_MANIFEST:
+            raise ValueError("invalid manifest")
+        raw = os.read(fd, MAX_MANIFEST + 1)
+        if len(raw) > MAX_MANIFEST:
+            raise ValueError("invalid manifest")
+        return json.loads(raw.decode("utf-8", errors="strict"),
+                          object_pairs_hook=reject_duplicate_keys)
+    finally:
+        os.close(fd)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
     args = parser.parse_args()
     try:
-        p = args.manifest
-        if p.is_symlink() or not p.is_file() or p.stat().st_size > MAX_MANIFEST:
-            raise ValueError("invalid manifest")
-        report = check(json.loads(p.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys))
-    except (OSError, ValueError, TypeError) as exc:
+        report = check(read_trace_manifest(args.manifest))
+    except (OSError, UnicodeError, ValueError, TypeError) as exc:
         parser.exit(2, "Invalid FFT trace: " + type(exc).__name__ + "\n")
     print(json.dumps(report, sort_keys=True))
 
