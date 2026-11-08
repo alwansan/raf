@@ -1,0 +1,28 @@
+{
+  "session_id": "20261108T1852Z-T3-chat-png-integrity-k8m2",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "resumed_from_session": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
+  "base_sha": "d03d8053088dd5b715705d31675cbad4bae41ae9",
+  "scope": "Correct T3 PixelCopy PNG evidence lifecycle: use MediaStore pending-state, encode real PNG with content digest, read-back exact bytes/sha before EVIDENCE_READY; cleanup partial images on failures without modifying shared host/pack.",
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java",
+    "tests/test_t3_shared_visual_frame.py",
+    "docs/T3_SHARED_VISUAL_FRAME_PROOF_2026-11-08.md",
+    "prompt/coordination/clients/T3/sessions/20261108T1852Z-T3-chat-png-integrity-k8m2.md",
+    "prompt/coordination/clients/T3/state.json",
+    "prompt/coordination/clients/T3/MEMORY.md"
+  ],
+  "experiment_key": "T3-shared-png-pending-digest-readback-v1",
+  "resource_key": "T3SharedVisualActivity",
+  "run_urls": [],
+  "no_touch": [
+    ".github/raft-native-build-request.json",
+    ".github/raft-mini-lab-build-request.json",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "apk-for-testing/unified/pack/team-testpack.json"
+  ],
+  "next_step": "Implement digest verified MediaStore single owned PNG; source tests; no APK rebuild until T5 review."
+}
