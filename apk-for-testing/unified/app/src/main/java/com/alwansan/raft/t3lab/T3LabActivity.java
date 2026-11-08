@@ -384,7 +384,8 @@ public final class T3LabActivity extends Activity {
                 case 1: return Math.abs(left[1]-right[1])>20 &&
                     !(left[0]>245 && left[1]>245 && left[2]>245);
                 case 2: return left[0]>45 && left[2]>35 && left[2]<230;
-                case 3: return Math.abs(left[0]-right[0])<=18 &&
+                case 3: return left[0]>45 && left[2]>30 && right[0]>45 &&
+                    Math.abs(left[0]-right[0])<=18 &&
                     Math.abs(left[1]-right[1])<=18 && Math.abs(left[2]-right[2])<=18;
                 case 4: return left[0]>right[0]+20 && left[1]>right[1]+20 &&
                     left[2]>right[2]+20;
