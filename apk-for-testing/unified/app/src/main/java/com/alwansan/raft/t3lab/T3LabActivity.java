@@ -161,6 +161,10 @@ public final class T3LabActivity extends Activity {
         final Bitmap bmp=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
         try{
             PixelCopy.request(getWindow(),bmp,result->{
+                if(lastRenderedSequence!=renderSequence || lastRenderedCase!=expected ||
+                   caseIndex!=expected || !lastRenderedAssertion){
+                    bmp.recycle();finishSharedEvidence(id,"FAIL",null,"Case changed during PixelCopy");return;
+                }
                 if(result!=PixelCopy.SUCCESS){
                     bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"PixelCopy code "+result);return;
                 }
@@ -321,7 +325,7 @@ public final class T3LabActivity extends Activity {
             return out[0];
         }
         @Override public void onSurfaceCreated(GL10 gl,EGLConfig config) {
-            negativeChecked=false;negativeRejected=false;
+            program=0;negativeChecked=false;negativeRejected=false;
             log("gles_context","vendor="+GLES30.glGetString(GLES30.GL_VENDOR)
                 +" renderer="+GLES30.glGetString(GLES30.GL_RENDERER)
                 +" version="+GLES30.glGetString(GLES30.GL_VERSION)
