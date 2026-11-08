@@ -1,3 +1,5 @@
+> **تحديث مثبت 2026-11-08 18:26 UTC:** تم بناء أول APK موحد **CI SUCCESS** [run 42509945996](https://github.com/alwansan/raf/actions/runs/42509945996), artifact ZIP ID 13628828717. Verified APK package `com.alwansan.raft.lab.shared`, versionCode 9, 78806 bytes, sha256 `cee2df1b3bb2a1a3c8e9ab757f520040d36c5bf16d711587f7e2bc537f917472`; 20/20 Java contract tests + shared pack validation passed. ZIP contains APK, JSON, SHA256SUMS; NOT direct public APK Release, debug certificate not proven stable, NOT Android device PASS. See [TEST_CENTER](TEST_CENTER.md).
+
 # حالة تنفيذ المختبر المشترك — سجل هندسي لا دعوى نجاح
 - **سياق:** آخر مراجعة 2026-11-08؛ خمسة APKات منفصلة ناجحة في CI مع رابط ZIP Artifact لكل منها. هذا ليس APK مشتركاً واحداً، ونجاح CI لا يعني نجاح Android device.
 - **الهدف:** package ثابت، embedded team pack، Auto All وAuto Tn، نتائج ولقطات مع fingerprint، قائمة مهام تصوير داخل التطبيق، رابط APK مباشر موثوق وحزمة pack واحدة. [تعريفات](UNIFIED_LAB_POLICY_AR.md) و[تصويت المختبر](SHARED_BUILD_READINESS.md).
