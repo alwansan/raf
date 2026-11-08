@@ -125,6 +125,23 @@ final class T1ComputeProbe {
         }catch(Exception ignored){}
         return new T1ComputeProbe(a,root);
     }
+    // Reuse the same compiled original diagnostic controls for the SHARED APK.
+    // Only return actual observed PASS/FAIL, never inferred from source-only CI.
+    void runAutomated(String caseId, java.util.function.Consumer<String> callback) {
+        if(!caseId.matches("T1-0[1-4]")) {callback.accept("FAIL unknown test");return;}
+        view.queueEvent(()->{
+            String value;
+            try { value=execute(caseId); }
+            catch(Throwable ex){ value="FAIL exception="+ex.getClass().getSimpleName()+": "+ex.getMessage(); }
+            final String observed=value;
+            activity.runOnUiThread(()->{
+                activity.log("t1_gpu_auto_observed",caseId+" "+observed);
+                callback.accept(observed);
+            });
+        });
+        view.requestRender();
+    }
+
     void onPause(){ready=false;view.onPause();}
     void onResume(){view.onResume();}
     private static int integer(int property) {
