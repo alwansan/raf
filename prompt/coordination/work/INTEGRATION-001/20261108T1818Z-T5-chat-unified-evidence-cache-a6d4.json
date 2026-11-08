@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "worker": "T5",
+  "session_id": "20261108T1818Z-T5-chat-unified-evidence-cache-a6d4",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
+  "resumed_from": [
+    "20261108T1652Z-T5-scheduled-saf-zero-read-f4c9",
+    "20261108T1541Z-T5-chat-large-saf-obb-sha-b73c"
+  ],
+  "scope": "UnifiedLabActivity result-cache and in-app requests correctness: preserve screenshotless file SHA evidence, keep FAIL/USER_FAIL visible, provide deliberate diagnostic rerun without touching independent worker drivers.",
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "tests/test_unified_lab_evidence_contract.py",
+    "apk-for-testing/SHARED_BUILD_READINESS.md",
+    "prompt/coordination/clients/T5/sessions/20261108T1818Z-T5-chat-unified-evidence-cache-a6d4.md"
+  ],
+  "experiment_key": "unified-lab-evidence-cache-v1@7bb7b045:PASS-FAIL-EVIDENCE_READY+force-rerun",
+  "resource_key": "android-unified-mini-lab-host",
+  "run_urls": [],
+  "next_step": "Patch source, verify tests, vote T5 only; build only on legitimate NEED_BUILD and no equivalent run."
+}
