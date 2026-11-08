@@ -31,6 +31,27 @@ public final class MainActivity extends Activity {
     final ArrayList<String> recent=new ArrayList<>();
     TextView txt(String s){TextView v=new TextView(this);v.setText(s);v.setTextSize(15);v.setPadding(8,6,8,6);return v;}
     void addButton(LinearLayout p,String name,View.OnClickListener click){Button b=new Button(this);b.setText(name);b.setOnClickListener(click);p.addView(b);}
+    String activeWorker(){
+        String fromIntent=getIntent()==null?null:getIntent().getStringExtra("mini_worker");
+        return fromIntent!=null&&fromIntent.matches("T[1-5]")?fromIntent:BuildConfig.LAB_WORKER;
+    }
+    void runSharedAutoCase(){
+        String caseId=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
+        if(caseId==null||!caseId.matches("T1-0[1-4]")||t1Probe==null)return;
+        for(JSONObject x:cases)if(caseId.equals(x.optString("id"))){selected=x;break;}
+        final String id=caseId;
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->{
+            t1Probe.runAutomated(id,value->{
+                Intent data=new Intent();
+                data.putExtra("case_id",id);
+                data.putExtra("observed",value);
+                data.putExtra("status",value.startsWith("PASS")?"PASS":"FAIL");
+                log("shared_auto_result",id+" "+value);
+                setResult(RESULT_OK,data);
+                finish();
+            });
+        },1000);
+    }
     @Override public void onCreate(Bundle b){
         super.onCreate(b);
         session=new SimpleDateFormat("yyyyMMdd-HHmmss",Locale.US).format(new Date())+"-"+SystemClock.elapsedRealtime();
@@ -38,8 +59,8 @@ public final class MainActivity extends Activity {
         privateLog=new File(folder,"events-"+session+".jsonl");
         ScrollView sc=new ScrollView(this);LinearLayout root=new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);root.setPadding(8,8,8,20);sc.addView(root);
-        root.addView(txt("RAFT MINI LAB — "+BuildConfig.LAB_WORKER+" — data-only testpacks, not full Raft"));
-        if("T2".equals(BuildConfig.LAB_WORKER)) addButton(root,"OPEN T2 REAL GLES3 WATER PASS LAB",v->startActivity(new Intent(this,T2GpuActivity.class)));
+        root.addView(txt("RAFT MINI LAB — "+activeWorker()+" — data-only testpacks, not full Raft"));
+        if("T2".equals(activeWorker())) addButton(root,"OPEN T2 REAL GLES3 WATER PASS LAB",v->startActivity(new Intent(this,T2GpuActivity.class)));
         LinearLayout tools=new LinearLayout(this);root.addView(tools);
         addButton(tools,"Pick testpack",v->filePicker(PICK_PACK,"application/json"));
         addButton(tools,"Pick folder",v->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
@@ -69,15 +90,16 @@ public final class MainActivity extends Activity {
         addButton(root,"Pick image or file / SHA256",v->filePicker(PICK_ASSET,"*/*"));
         addButton(root,"Recover older session logs",v->recoverPreviousLog());
         preview=new ImageView(this);preview.setAdjustViewBounds(true);root.addView(preview,new LinearLayout.LayoutParams(-1,260));
-        if("T1".equals(BuildConfig.LAB_WORKER)) t1Probe=T1ComputeProbe.install(this,root);
+        if("T1".equals(activeWorker())) t1Probe=T1ComputeProbe.install(this,root);
         setContentView(sc);
-        if(!"T1".equals(BuildConfig.LAB_WORKER)) try{
+        if(!"T1".equals(activeWorker())) try{
             for(int k=1;k<=3;k++)cases.add(new JSONObject().put("id","T4-0"+k).put("type","mouse")
                 .put("title",new String[]{"uncaptured clicks and wheel","captured clicks and wheel","compare with Raft game"}[k-1])
                 .put("instructions","Press LEFT/RIGHT/MIDDLE and wheel, observe captured and uncaptured callbacks")
                 .put("expected","Real input event visible in JSONL; compare game bridge"));
         }catch(Exception ignored){}
         render();
+        runSharedAutoCase();
         log("startup","AndroidAPI="+Build.VERSION.SDK_INT+" device="+Build.MANUFACTURER+"/"+Build.MODEL+" ABI="+Build.SUPPORTED_ABIS[0]);
     }
     void filePicker(int code,String type){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -204,7 +226,7 @@ public final class MainActivity extends Activity {
     }
     void log(String kind,String info){try{JSONObject j=new JSONObject();
         j.put("unix_ms",System.currentTimeMillis());j.put("elapsed_ms",SystemClock.elapsedRealtime());
-        j.put("worker",BuildConfig.LAB_WORKER);j.put("package",getPackageName());
+        j.put("worker",activeWorker());j.put("package",getPackageName());
         j.put("app_version",BuildConfig.VERSION_NAME);j.put("app_version_code",BuildConfig.VERSION_CODE);
         j.put("session",session);
         j.put("pack_id",packId);j.put("test_id",selected==null?JSONObject.NULL:selected.optString("id"));
@@ -213,9 +235,9 @@ public final class MainActivity extends Activity {
         }catch(Exception ex){android.util.Log.e("RaftMiniLab","Private log failed",ex);}}
     void copy(InputStream in,OutputStream out)throws IOException{byte[] buf=new byte[16384];int n;
         while((n=in.read(buf))>=0)out.write(buf,0,n);out.flush();}
-    String folder(){return (BuildConfig.LAB_WORKER+"-"+packId+"-"+session).toLowerCase(Locale.US).replaceAll("[^a-z0-9._-]","-");}
-    String logRelativeRoot(){return Environment.DIRECTORY_DOWNLOADS+("T1".equals(BuildConfig.LAB_WORKER)?"/Games/cl/raft log/test/":"/Games/cl/test/");}
-    String logDisplayRoot(){return "T1".equals(BuildConfig.LAB_WORKER)?"Download/Games/cl/raft log/test/":"Download/Games/cl/test/";}
+    String folder(){return (activeWorker()+"-"+packId+"-"+session).toLowerCase(Locale.US).replaceAll("[^a-z0-9._-]","-");}
+    String logRelativeRoot(){return Environment.DIRECTORY_DOWNLOADS+("T1".equals(activeWorker())?"/Games/cl/raft log/test/":"/Games/cl/test/");}
+    String logDisplayRoot(){return "T1".equals(activeWorker())?"Download/Games/cl/raft log/test/":"Download/Games/cl/test/";}
     void export(){log("log_export","MediaStore.Downloads");
         if(Build.VERSION.SDK_INT<29){exportStatus.setText("Use Save As for Android 9");return;}
         try{
