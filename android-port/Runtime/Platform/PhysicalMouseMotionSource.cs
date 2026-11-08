@@ -129,4 +129,149 @@ namespace RaftAndroid.Platform
             }
         }
     }
+
+    // Fail-closed physical pointer-capture fallback for the original game's
+    // Unity Legacy Input mouse button/wheel readers. This is frame-latched:
+    // Android View callbacks run off Unity's main thread, and a quick click
+    // may press+release entirely between two Unity frames. A single frame
+    // exposes each observed edge at most once, regardless of how many original
+    // scripts ask. Nothing is synthesized for touchscreen or unknown sources.
+    public sealed class PhysicalMouseButtonWheelFrame
+    {
+        private readonly object gate = new object();
+        private const float WheelScale = 0.1f; // one Android detent -> Unity scroll unit
+        private const float MaxWheelFrame = 20f;
+        private int pendingDown, pendingUp, held, frameDown, frameUp, frameHeld;
+        private int frame = int.MinValue, totalAccepted;
+        private float pendingV, pendingH, frameV, frameH;
+
+        public struct Snapshot
+        {
+            public readonly int DownMask, UpMask, HeldMask;
+            public readonly float Vertical, Horizontal;
+            public Snapshot(int down, int up, int held, float v, float h)
+            {
+                DownMask = down; UpMask = up; HeldMask = held;
+                Vertical = v; Horizontal = h;
+            }
+            public bool Down(int button) { return InMask(DownMask, button); }
+            public bool Up(int button) { return InMask(UpMask, button); }
+            public bool Held(int button) { return InMask(HeldMask, button); }
+            private static bool InMask(int mask, int button)
+            {
+                return button >= 0 && button <= 2 && (mask & (1 << button)) != 0;
+            }
+        }
+
+        private static bool SourceIsPhysical(int source)
+        {
+            if (source < 0) return false;
+            return (source & PhysicalMouseMotionSource.MouseRelative)
+                     == PhysicalMouseMotionSource.MouseRelative ||
+                   (source & PhysicalMouseMotionSource.Touchpad)
+                     == PhysicalMouseMotionSource.Touchpad ||
+                   (source & PhysicalMouseMotionSource.Mouse)
+                     == PhysicalMouseMotionSource.Mouse;
+        }
+
+        private static float Bounded(float n)
+        {
+            return n > MaxWheelFrame ? MaxWheelFrame :
+                   n < -MaxWheelFrame ? -MaxWheelFrame : n;
+        }
+
+        // actionButton is defined only for ACTION_BUTTON_PRESS/RELEASE. DOWN
+        // has no valid actionButton but on Android mice does denote primary
+        // button down when buttonState has BUTTON_PRIMARY. UP uses the prior
+        // held primary state; no phantom release without observed press.
+        // PRESS and DOWN for one gesture are coalesced by bitwise edge masks.
+        public bool Record(int action, int source, int actionButton,
+            int buttonState, float vertical, float horizontal)
+        {
+            if (!SourceIsPhysical(source)) return false;
+            if (action != PhysicalMouseActionEvidence.Press &&
+                action != PhysicalMouseActionEvidence.Release &&
+                action != PhysicalMouseActionEvidence.Down &&
+                action != PhysicalMouseActionEvidence.Up &&
+                action != PhysicalMouseActionEvidence.Scroll) return false;
+            if (action == PhysicalMouseActionEvidence.Scroll &&
+                (float.IsNaN(vertical) || float.IsInfinity(vertical) ||
+                 float.IsNaN(horizontal) || float.IsInfinity(horizontal) ||
+                 Math.Abs(vertical) > 1000f || Math.Abs(horizontal) > 1000f ||
+                 (vertical == 0f && horizontal == 0f))) return false;
+            lock (gate)
+            {
+                int state = buttonState & 7;
+                if (action == PhysicalMouseActionEvidence.Press)
+                {
+                    int changed = actionButton & 7;
+                    if (changed != 1 && changed != 2 && changed != 4) return false;
+                    pendingDown |= changed;
+                    held = state | changed;
+                }
+                else if (action == PhysicalMouseActionEvidence.Release)
+                {
+                    int changed = actionButton & 7;
+                    if (changed != 1 && changed != 2 && changed != 4) return false;
+                    // A release without an observed press is still an actual
+                    // Android BUTTON_RELEASE callback, but not an invented DOWN.
+                    pendingUp |= changed;
+                    held = state & ~changed;
+                }
+                else if (action == PhysicalMouseActionEvidence.Down)
+                {
+                    if ((state & 1) != 0) pendingDown |= 1;
+                    held = state;
+                }
+                else if (action == PhysicalMouseActionEvidence.Up)
+                {
+                    if ((held & 1) != 0) pendingUp |= 1;
+                    held = state;
+                }
+                else
+                {
+                    pendingV = Bounded(pendingV + vertical * WheelScale);
+                    pendingH = Bounded(pendingH + horizontal * WheelScale);
+                }
+                if (totalAccepted != int.MaxValue) totalAccepted++;
+                return true;
+            }
+        }
+
+        public Snapshot Sample(int unityFrame)
+        {
+            lock (gate)
+            {
+                if (frame != unityFrame)
+                {
+                    frame = unityFrame;
+                    frameDown = pendingDown;
+                    frameUp = pendingUp;
+                    frameHeld = held;
+                    frameV = pendingV;
+                    frameH = pendingH;
+                    pendingDown = pendingUp = 0;
+                    pendingV = pendingH = 0f;
+                }
+                return new Snapshot(frameDown, frameUp, frameHeld, frameV, frameH);
+            }
+        }
+
+        public int AcceptedCount
+        {
+            get { lock (gate) return totalAccepted; }
+        }
+
+        public void Reset()
+        {
+            lock (gate)
+            {
+                pendingDown = pendingUp = held = frameDown = frameUp = frameHeld = 0;
+                pendingV = pendingH = frameV = frameH = 0f;
+                frame = int.MinValue;
+                totalAccepted = 0;
+            }
+        }
+    }
+
 }
