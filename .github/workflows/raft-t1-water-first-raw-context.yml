@@ -1,0 +1,67 @@
+name: T1 WATER-001 authentic first raw kernel6 Logcat context (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t1_water_first_raw_context.py'
+      - 'tests/test_t1_water_first_raw_context.py'
+      - '.github/workflows/raft-t1-water-first-raw-context.yml'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: t1-raw-first-kernel-source-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  authenticated-raw-first-context:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 11
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: First raw Logcat contextual security and falsification tests
+        run: python3 -m unittest discover -s tests -p test_t1_water_first_raw_context.py -v
+      - name: Read pinned original owner CL raw log without publishing any source text
+        shell: bash
+        run: |
+          set -euo pipefail
+          CL=61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8
+          RAW="$RUNNER_TEMP/first-raw-logcat-original.txt"
+          SUMMARY="$RUNNER_TEMP/session-summary-original.json"
+          REPORT="$RUNNER_TEMP/sanitized-first-kernel-context.json"
+          trap 'rm -f "$RAW" "$SUMMARY" "$REPORT"' EXIT
+          curl --fail --location --silent --show-error --max-time 90 --retry 2 \
+            --max-filesize 35000000 \
+            "https://raw.githubusercontent.com/alwansan/CL/$CL/raft%20log/lf/LogRaft-20261108-164850-270/raft-20261108-164850-270-00001.log.txt" \
+            -o "$RAW"
+          curl --fail --location --silent --show-error --max-time 30 --retry 2 \
+            --max-filesize 131072 \
+            "https://raw.githubusercontent.com/alwansan/CL/$CL/raft%20log/lf/LogRaft-20261108-164850-270/session-summary.json" \
+            -o "$SUMMARY"
+          python3 -m scripts.t1_water_first_raw_context "$RAW" "$SUMMARY" > "$REPORT"
+          python3 - "$REPORT" <<'PY'
+          import json,sys
+          with open(sys.argv[1],encoding="utf-8") as stream:
+              raw = stream.read()
+          label = "RAFT_T1_FIRST_RAW_LOGCAT_CONTEXT "
+          assert raw.startswith(label)
+          d = json.loads(raw[len(label):])
+          assert d["raw_first_segment_git_blob_sha1_verified"] is True
+          assert d["pinned_summary_sha256_verified"] is True
+          assert d["first_water_unix_ms"] == 1794145757579
+          assert d["first_kernel6_unix_ms"] == 1794145757581
+          assert d["first_kernel_after_first_water_ms"] == 2
+          assert d["interpretation"]["on_phone_runtime_dispatch_proven"] is False
+          assert d["context"]["raw_root_text_exported"] is False
+          assert d["context"]["actual_original_unity_findkernel_proven"] is False
+          print("RAFT_T1_AUTHENTIC_SOURCE_ONLY_FIRST_ROOT="+json.dumps(d,sort_keys=True))
+          PY
+          echo "GIT_BLOB_EXPECTED=bf5db2607e3b46165d39142aa28f6596ed0715d4"
+          echo "NO_RAW_LOG_UPLOADED=true"
+          echo "NO_UNITY_OR_ANDROID_APK_EXECUTED=true"
