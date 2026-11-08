@@ -1,0 +1,20 @@
+{
+  "session_id": "20261108T0044Z-T4-scheduled-retry-telemetry-q6p2",
+  "origin": "scheduled",
+  "baseline_sha": "5a6c1d26c27a701febbc68579ab6dae87e64ff2d",
+  "issue": "INPUT-005",
+  "status": "active",
+  "scope": "Bounded retry-attempt telemetry in AndroidPhysicalMouseCapture.RequestCapture; preserve behavior, keyboard and .rgd",
+  "files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "prompt/coordination/work/INPUT-005/20261108T0044Z-T4-scheduled-retry-telemetry-q6p2.json",
+    "prompt/coordination/clients/T4/sessions/20261108T0044Z-T4-scheduled-retry-telemetry-q6p2.md"
+  ],
+  "hypothesis": "Capture retries each 1.5s generate new epochs but only first attempt emits requested marker; bounded attempts allow distinguishing missing native capture from no request.",
+  "experiment_key": "T4-physical-mouse-retry-telemetry-20261108",
+  "shared_resource": "none; no Unity/native build",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261107T2343Z-T4-scheduled-capture-retry-audit-v5n2.md"
+  ],
+  "constraints": "no touch/layout changes, no build, no other agent files"
+}
