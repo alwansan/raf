@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import re
 
-DOC = re.compile(r"(?m)^--- !u!(\d+) &[-\d]+(?:\s.*)?$")
+DOC = re.compile(r"(?m)^--- !u!(\d+) &(-?\d+)(?:\s.*)?$")
 FIELD = re.compile(r"(?m)^  m_Materials:[ \t]*(.*)$")
 ITEM = re.compile(r"^\s*-\s*\{fileID:\s*(-?\d+)(?:,\s*guid:\s*([0-9a-fA-F]{32}),\s*type:\s*\d+)?\s*\}\s*$")
 
