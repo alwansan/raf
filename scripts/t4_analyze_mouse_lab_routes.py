@@ -2,12 +2,27 @@
 """Classify T4 mini-lab mouse callback coverage without claiming Unity/device success."""
 import argparse
 import json
+import math
 import re
 from collections import defaultdict
 
 ROUTES = ("activity_touch", "activity_generic", "view_touch", "view_generic", "captured")
 BUTTONS = {"left": 1, "right": 2, "middle": 4}
 PATTERN = re.compile(r"([A-Za-z]+)=([^ ]+)")
+# Android InputDevice: SOURCE_MOUSE=0x2002, SOURCE_MOUSE_RELATIVE=0x20004.
+# Class bits must match too; touchscreen SOURCE_TOUCHSCREEN=0x1002 is not a mouse.
+MOUSE_SOURCES = (0x2002, 0x20004)
+
+def physical_mouse_source(value):
+    if value is None:
+        return False
+    source = int(value, 0)
+    return any(source & mask == mask for mask in MOUSE_SOURCES)
+
+def nonzero_scroll(value):
+    number = float(value)
+    return math.isfinite(number) and number != 0
+
 
 def analyze(lines):
     phase = "unknown"
@@ -30,7 +45,7 @@ def analyze(lines):
                 continue
             fields = dict(PATTERN.findall(detail))
             route = fields.get("route")
-            if route not in ROUTES:
+            if route not in ROUTES or not physical_mouse_source(fields.get("source")):
                 rejected += 1
                 continue
             captured = fields.get("captured")
@@ -49,9 +64,9 @@ def analyze(lines):
                     group["button_presses"].add(name)
                 if action in ("ACTION_UP", "ACTION_BUTTON_RELEASE") and action_button & bit:
                     group["button_releases"].add(name)
-            if action == "ACTION_SCROLL" and float(fields.get("vscroll", "0")) != 0:
+            if action == "ACTION_SCROLL" and nonzero_scroll(fields.get("vscroll", "0")):
                 group["wheel_v"] += 1
-            if action == "ACTION_SCROLL" and float(fields.get("hscroll", "0")) != 0:
+            if action == "ACTION_SCROLL" and nonzero_scroll(fields.get("hscroll", "0")):
                 group["wheel_h"] += 1
         except (ValueError, TypeError, json.JSONDecodeError):
             rejected += 1
@@ -68,7 +83,7 @@ def analyze(lines):
         }
     return {"phases": result, "rejected_records": rejected,
             "device_success_proven": False,
-            "note": "No button evidence is not proof of failure unless corresponding actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
+            "note": "Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
