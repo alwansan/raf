@@ -2,8 +2,8 @@
   "session_id": "20261108T1529Z-T3-scheduled-neg-fileid-q7m2",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-08T15:29:00Z",
+  "status": "completed_source_change_unverified_tests",
+  "updated_at": "2026-11-08T15:36:00Z",
   "intended_files": [
     "scripts/t3_particle_renderer_yaml_audit.py",
     "tests/test_t3_particle_renderer_yaml_audit.py",
@@ -13,5 +13,13 @@
   "resource_key": null,
   "hypothesis": "Negative Unity material fileID must not be classified as a valid local material reference; current parser counts it as local.",
   "taken_over_from": "T3 particle audit ee023697 and dedddfbe; Nov 8 owner feedback; synthetic source-only check",
-  "limits": "No original assets, Unity, APK or phone validation."
+  "limits": "No original assets, Unity, APK or phone validation.",
+  "commits": [
+    "8fce0e65bbce68a8c73b806503da58038cb23af8",
+    "b4f7d645589399ec6f1d6e354f66064b697c2928",
+    "f73d066c95656a24e546a81fe412a2ded9aa946a",
+    "3825975d59cb62f0ff8dd6c6338e67ab4fdf38a5",
+    "706925cb13b15d47ed81a6e8ff3c16daf5911edf"
+  ],
+  "next_step": "Run isolated Python regression and authenticated ZIP2 particle chain audit; no phone claim."
 }
