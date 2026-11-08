@@ -1,0 +1,16 @@
+{
+  "session_id": "20261108T0016Z-T2-scheduled-original-schema-gap-k6p2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "intended_files": [
+    "tests/test_t2_foam_pass_crosscheck.py",
+    "scripts/t2_foam_shaderfind_return_report.py"
+  ],
+  "experiment_key": "foam-crosscheck-unmocked-original-schema-authentic-42058825739-20261108",
+  "resource_key": null,
+  "hypothesis": "81-case crosscheck matrix mocks original schema validator; need a real authenticated safe fixture before interpreting full pipeline as tested",
+  "source_run": "42308583977",
+  "base_checkpoint": "618fdff09190d22cf41245c93b24fa00ac029336",
+  "updated_at": "2026-11-08T00:16:00Z"
+}
