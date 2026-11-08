@@ -79,9 +79,11 @@ def count_events(events, summary=None):
     # Count a matching observed Android event once, but retain route context.
     unique = {}
     for f in inputs:
+        # View-local x/y differ from Activity/global coordinates for the
+        # very same MotionEvent; including them would fail route dedup.
         key = tuple(f.get(z) for z in ("eventTime", "action", "source",
                     "buttonState", "actionButton", "vscroll", "hscroll",
-                    "x", "y", "captured"))
+                    "captured"))
         unique.setdefault(key, {"event": f, "routes": set()})["routes"].add(f["route"])
 
     actions_raw = Counter(f["action"] for f in inputs)
