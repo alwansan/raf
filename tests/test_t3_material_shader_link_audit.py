@@ -116,9 +116,9 @@ class MaterialShaderAuditTests(unittest.TestCase):
             root = Path(tmp)
             guid = "2" * 32
             (root / "Empty.shader").write_bytes(b"")
-            (root / "Empty.shader.meta").write_text("guid: " + guid + "\\n")
+            (root / "Empty.shader.meta").write_text("guid: " + guid + "\n")
             (root / "empty.mat").write_text(
-                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+                "Material:\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\n" % guid)
             result = audit(root)
             self.assertEqual(result["shader_source_empty"], 1)
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
