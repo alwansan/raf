@@ -38,7 +38,15 @@ def audit(root):
             # Reject symlink targets as well: this audit must not follow external source trees.
             shader_source = meta.with_suffix("")
             if shader_source.is_file() and not shader_source.is_symlink():
-                shader_guid_counts[match.group(1).lower()] += 1
+                try:
+                    # An empty shader file cannot define any Unity ShaderLab source.
+                    # This does not attempt to detect nonempty dummy/pass-through shaders.
+                    if shader_source.stat().st_size == 0:
+                        counters["shader_source_empty"] += 1
+                    else:
+                        shader_guid_counts[match.group(1).lower()] += 1
+                except OSError:
+                    counters["shader_source_unreadable"] += 1
             else:
                 counters["shader_meta_without_source"] += 1
         else:
@@ -77,7 +85,7 @@ def audit(root):
         "shader_pointer_builtin_or_null", "shader_pointer_null",
         "shader_guid_resolved_in_scan", "shader_guid_ambiguous_in_scan", "shader_guid_unresolved_in_scan",
         "shader_meta_seen", "shader_meta_unreadable", "shader_meta_symlink_skipped", "shader_meta_without_guid",
-        "shader_meta_without_source", "duplicate_shader_guid_entries")}
+        "shader_meta_without_source", "shader_source_empty", "shader_source_unreadable", "duplicate_shader_guid_entries")}
 
 def main():
     parser = argparse.ArgumentParser()
