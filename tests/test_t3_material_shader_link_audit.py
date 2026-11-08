@@ -102,10 +102,10 @@ class MaterialShaderAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             guid = "1" * 32
-            (root / "Known.shader").write_text('Shader "Test/Known" {}\\n')
-            (root / "Known.shader.meta").write_text("guid: " + guid + "\\n")
+            (root / "Known.shader").write_text('Shader "Test/Known" {}\n')
+            (root / "Known.shader.meta").write_text("guid: " + guid + "\n")
             (root / "stale-null.mat").write_text(
-                "Material:\\n  m_Shader: {fileID: 0, guid: %s, type: 3}\\n" % guid)
+                "Material:\n  m_Shader: {fileID: 0, guid: %s, type: 3}\n" % guid)
             result = audit(root)
             self.assertEqual(result["shader_pointer_null"], 1)
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
