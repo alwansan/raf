@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "agent": "T5",
+  "origin": "chat",
+  "session_id": "20261108T2010Z-T5-chat-t3-surface-pixelcopy-r8n2",
+  "issue_id": "INTEGRATION-001",
+  "status": "CI_BUILT_DEVICE_PENDING",
+  "evidence": "https://github.com/alwansan/CL/tree/main/test",
+  "difference": "v10 T3 PNG black render area, owner Android screenshot displays red green blue with valid GPU glReadPixels",
+  "cause": "Window PixelCopy omitted independently composed GLSurfaceView; screenshot cropped 900px; SHA integrity did not prove visual integrity",
+  "fix": "SurfaceView PixelCopy + pixel parity against GLES same-case readback + retry/fail-closed NEEDS_SCREENSHOT + full-height window composite",
+  "source_sha": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
+  "source_ci": 42519126545,
+  "apk_ci": 42519487402,
+  "apk_artifact_id": 13632379139,
+  "apk_sha256": "6a41002cee345c48413ef56b0820211fb4ae73292229ec33ce830e82897194a7",
+  "apk_version": "0.2.13-shared",
+  "human_phone_result": "pending",
+  "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
+  "other_worker_coordination": "prompt/coordination/T_TEAM/T5_TO_T3_20261108T2010Z-T5-chat-t3-surface-pixelcopy-r8n2.md",
+  "full_game": "NOT_READY_0_3_unchanged"
+}
