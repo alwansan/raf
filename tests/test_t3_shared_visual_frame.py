@@ -75,6 +75,7 @@ class T3SharedFramePolicy(unittest.TestCase):
         self.assertIn('if(count>expectedBytes)throw new IOException',c)
         self.assertIn('if(++zeroReads>3)throw new IOException',c)
         self.assertIn('MediaStore.Downloads.RELATIVE_PATH',c)
-        self.assertNotIn('getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);\n                    if(dest==null)',c)
+        self.assertIn('dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v)',c)
+        self.assertIn('if(dest==null)throw new IOException',c)
 
 if __name__=="__main__":unittest.main()
