@@ -1,6 +1,6 @@
 {
-  "request_id": "t5-android15-saf-obb-sha256-20261108-b73c",
-  "worker": "T5",
-  "requested_from_sha": "8279feb79b959610a9792890413db7a3c6a57b47",
-  "reason": "Validate Android 15 SAF provider streaming SHA-256 of actual user-selected signed APK and >2 GiB main OBB, with progress and MediaStore log export. JDK regression proves bytes and digest but cannot establish Android URI permissions, UI responsiveness or selected-file identity."
+  "request_id": "t1-gles31-ssbo-20261108-7e4a-04",
+  "worker": "T1",
+  "requested_from_sha": "d85431732461d2a9114dc3f7c677596da7e8c7f8",
+  "reason": "Owner 8 November Adreno730 Android15 has 11165 WATER-001 invalid compute kernel 6 errors, unknown whether imported Unity kernel or GPU compute. Build independent T1 GLES31 mini APK with exact one/two-pass SSBO dispatch/readback and deliberately invalid GLSL negative control; no Raft assets or Unity native build. Prior attempt 42496880833 failed the source parent gate before any Gradle build."
 }
