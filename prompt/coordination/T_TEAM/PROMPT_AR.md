@@ -1,3 +1,6 @@
+<!-- OWNER_SHARED_MINI_LAB_20261108 -->
+> **توجيه المالك الجديد — 8 نوفمبر 2026:** توحيد الـmini APK: **تطبيق واحد للفريق كله وحزمة واحدة**. اقرأ [برومبت الاستعادة الجديد الكامل](RESTORE_SHARED_LAB_AR.md) و[البروتوكول الموحد](../../../apk-for-testing/UNIFIED_LAB_POLICY_AR.md) و[مركز التحميل](../../../apk-for-testing/TEST_CENTER.md) و[جاهزية بناء Mini منفصلة](../../../apk-for-testing/SHARED_BUILD_READINESS.md). العامل T5 يراجع طلباً حديثاً من **عامل واحد على الأقل** ويُصدر بناء واحداً عند تغيّر driver فعلي، ولا يبني بسبب JSON فقط؛ تصويت XAPK الكامل 5/5 يبقى كما هو. احتفظ بالـmini APKات المنفصلة السابقة كأدلة تاريخية، ولا تطلب من المالك اختبارها الخمسة بعد اليوم.
+
 <!-- OWNER_MINILAB_20261108 -->
 > **إضافة المالك 8 نوفمبر 2026 — APK Mini Lab:** اقرأ [مركز APK الاختبارات](../../../apk-for-testing/TEST_CENTER.md) و[نظام المختبرات](../../../apk-for-testing/LAB_PROTOCOL_AR.md) و[تقرير الهاتف](../../../apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md) و[رسالة الاستعادة الموسعة](RESTORE_WITH_ANDROID_LAB_AR.md). لا تغيّر أصل الاستعادة RESTORE_AR.md ولا تصويت XAPK الكامل؛ بناء mini APK أو تحديث testpack مستقل للعميل المختص، ولا يحتاج 5/5. T4 مسؤول عن left/right/middle/scroll تحت pointer capture. استخدم MediaStore/SAF على Android15، وضع logs في Download/Games/cl/test، وحدّث صفك وحده وروابط تنزيل فعلية فقط.
 
