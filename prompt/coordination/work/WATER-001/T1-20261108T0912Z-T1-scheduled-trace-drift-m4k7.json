@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T0912Z-T1-scheduled-trace-drift-m4k7",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "status": "active",
+  "experiment_key": "fft-trace-index-drift-m4k7",
+  "files": [
+    "scripts/t1_fft_trace_consistency.py",
+    "prompt/coordination/clients/T1/sessions/20261108T0912Z-T1-scheduled-trace-drift-m4k7.md"
+  ],
+  "hypothesis": "Same session, same ComputeShader GUID and kernel name must not resolve to different indices across observations; drift is a diagnostic anomaly, not proof of original kernel identity.",
+  "shared_resource": "none",
+  "owner_device_source": "42058825739",
+  "constraints": "No native build, no original assets, no changes to T4/T5 scopes",
+  "test": "local synthetic 4 checks",
+  "next": "publish tool and session; require actual trace for original proof"
+}
