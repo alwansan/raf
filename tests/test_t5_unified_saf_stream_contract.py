@@ -32,7 +32,7 @@ class UnifiedSafStreamContract(unittest.TestCase):
     def test_broken_input_is_blocked_not_passed(self):
         self.assertIn('store(c,"EVIDENCE_READY",observed,null)', self.hash_file)
         self.assertIn('store(c,"BLOCKED","No digest: "+error,null)', self.hash_file)
-        self.assertIn('show("SHA-256 failed; no file hash claimed:', self.hash_file)
+        self.assertIn('show("فشل حساب SHA256؛ لا يمكن اعتماد بصمة غير مكتملة: "+error)', self.hash_file)
         self.assertIn("fileDigestThread.interrupt()", self.activity)
 
     def test_pack_and_image_picker_reject_zero_progress(self):
