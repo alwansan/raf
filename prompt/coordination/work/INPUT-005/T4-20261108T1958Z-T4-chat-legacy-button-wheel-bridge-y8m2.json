@@ -3,7 +3,7 @@
   "session_id": "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2",
   "origin": "chat",
   "issue": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "246f30133ef362628e6c03485885604b572e1f46",
   "resumed_from": [
     "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3",
@@ -21,5 +21,17 @@
     ".github/workflows/raft-t4-mouse-capture-bridge.yml"
   ],
   "build_impact": "Unity managed source/CI only; r2 Mini vote NO_BUILD",
-  "next_step": "Add source+tests, bounded original immutable ZIP2 plan and original Unity2021 ABI CI; document device acceptance limitation."
+  "next_step": "Await next authorized same-SHA signed Raft XAPK and physical Android mouse pointer capture test; verify LEFT/RIGHT/MIDDLE, horizontal/vertical wheel, camera, menus, keyboard/touch, save/.rgd and settings. No source-only CI can prove Unity gameplay acceptance.",
+  "completed_at": "2026-11-08T20:07:00Z",
+  "result": "SOURCE_INTEGRATED_AND_CI_VERIFIED; original 20 C# Unity Legacy button/wheel readers rewired Android captured-only native-first fallback under unique epoch/Unity frame; device/game not verified. Final 111 C# + 9 Python PASS, original Unity2021 Android+Editor managed compile PASS; authentic ZIP2 20 sites from 12 files only; output original assets not published.",
+  "result_sha": "0e9437b0137566dc1ddd377c3396ae18e4c0b058",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42517738583",
+    "https://github.com/alwansan/raf/actions/runs/42517839498",
+    "https://github.com/alwansan/raf/actions/runs/42518143297",
+    "https://github.com/alwansan/raf/actions/runs/42518143291"
+  ],
+  "applied_in_full_game_workflow": true,
+  "full_game_build_triggered": false,
+  "summary_path": "prompt/coordination/clients/T4/sessions/20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2.md"
 }
