@@ -57,6 +57,8 @@ def audit(root):
                 fid, guid = int(m.group(1)), m.group(2)
                 if fid < 0:
                     c["invalid_negative_fileid_slots"] += 1
+                elif fid == 0 and guid and guid.lower() != "0"*32:
+                    c["invalid_null_fileid_with_guid_slots"] += 1
                 elif fid == 0:
                     c["null_material_slots"] += 1
                 elif guid and guid.lower() != "0"*32:
