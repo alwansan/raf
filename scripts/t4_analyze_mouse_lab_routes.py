@@ -49,9 +49,9 @@ def analyze(lines):
                     group["button_presses"].add(name)
                 if action in ("ACTION_UP", "ACTION_BUTTON_RELEASE") and action_button & bit:
                     group["button_releases"].add(name)
-            if float(fields.get("vscroll", "0")) != 0:
+            if action == "ACTION_SCROLL" and float(fields.get("vscroll", "0")) != 0:
                 group["wheel_v"] += 1
-            if float(fields.get("hscroll", "0")) != 0:
+            if action == "ACTION_SCROLL" and float(fields.get("hscroll", "0")) != 0:
                 group["wheel_h"] += 1
         except (ValueError, TypeError, json.JSONDecodeError):
             rejected += 1
