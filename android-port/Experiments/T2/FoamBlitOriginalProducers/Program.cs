@@ -314,6 +314,138 @@ internal static class Program
         if(start<0 || UnsafeFlow(method,start,callIndex))return "control_flow";
         return "none";
     }
+    private sealed record StackSourceTrace(string Role,string Kind,string Reason,int Steps,int VoidCalls);
+
+    static StackSourceTrace BacktraceBlitSource(MethodDefinition method,int blitIndex)
+    {
+        // Backwards CIL stack accounting for the FOURTH value below the
+        // Blit call (source). A preceding void call contributes zero pushes
+        // but consumes its typed arguments; its own return is never source.
+        // Proves at most static declared TYPE on a bounded straight-line
+        // original method path, never texture INSTANCE or shader equivalence.
+        StackSourceTrace Blocked(string why,int steps,int voids) =>
+            new("unknown","unknown",why,steps,voids);
+        if(method.Body.HasExceptionHandlers || blitIndex<1 ||
+            blitIndex>=method.Body.Instructions.Count || !Blit(method.Body.Instructions[blitIndex]))
+            return Blocked("not_straight_line",0,0);
+        var il=method.Body.Instructions;
+        int depth=3,voidCalls=0,steps=0;
+        int min=Math.Max(0,blitIndex-96);
+        for(int at=blitIndex-1;at>=min;at--)
+        {
+            var ins=il[at];
+            if(ins.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
+                or FlowControl.Return or FlowControl.Throw)
+                return Blocked("control_flow_boundary",steps,voidCalls);
+            steps++;
+            int pops=0,pushes=0;
+            string type="unknown",kind="unknown";
+            var op=ins.OpCode.Code;
+            if(op==Code.Nop)continue;
+            if(op is Code.Call or Code.Callvirt or Code.Newobj)
+            {
+                if(ins.Operand is not MethodReference call || call.Parameters.Count>16)
+                    return Blocked("unsupported_call_signature",steps,voidCalls);
+                pops=call.Parameters.Count+(op!=Code.Newobj && call.HasThis ? 1:0);
+                pushes=op==Code.Newobj || call.ReturnType.FullName!="System.Void" ? 1:0;
+                if(pushes==0)voidCalls++;
+                type=op==Code.Newobj?call.DeclaringType.FullName:call.ReturnType.FullName;
+                kind=op==Code.Newobj?"constructor_result":"typed_call_result";
+            }
+            else if(op is Code.Ldfld or Code.Ldsfld)
+            {
+                if(ins.Operand is not FieldReference field)
+                    return Blocked("unsupported_field_signature",steps,voidCalls);
+                pops=op==Code.Ldfld?1:0;pushes=1;
+                type=field.FieldType.FullName;kind="typed_field";
+            }
+            else if(op is Code.Stfld or Code.Stsfld)
+            {
+                pops=op==Code.Stfld?2:1;
+            }
+            else if(op==Code.Ldnull){pushes=1;type="null";kind="literal_null";}
+            else if(op==Code.Ldstr){pushes=1;type="System.String";kind="string_literal";}
+            else if(Literal(ins).HasValue){pushes=1;type="System.Int32";kind="int_literal";}
+            else if(op==Code.Pop){pops=1;}
+            else if(op==Code.Dup)
+            {
+                // Both copies represent the same underlying value. Continue
+                // toward the original; do not treat DUP as a texture producer.
+                if(depth<2){depth=0;continue;}
+                pops=1;pushes=2;
+            }
+            else if(LocalIndex(ins,true)>=0){pops=1;}
+            else if(LocalIndex(ins,false)>=0)
+            {
+                int local=LocalIndex(ins,false);
+                if(local>=method.Body.Variables.Count)
+                    return Blocked("bad_local_type",steps,voidCalls);
+                pushes=1;
+                type=method.Body.Variables[local].VariableType.FullName;
+                kind="typed_local";
+            }
+            else if(op is Code.Ldarg_0 or Code.Ldarg_1 or Code.Ldarg_2 or Code.Ldarg_3
+                    or Code.Ldarg or Code.Ldarg_S)
+            {
+                int argument=op switch {
+                    Code.Ldarg_0=>0, Code.Ldarg_1=>1, Code.Ldarg_2=>2, Code.Ldarg_3=>3,
+                    Code.Ldarg or Code.Ldarg_S when ins.Operand is ParameterDefinition p=>
+                        p.Index + (method.HasThis?1:0),
+                    _=>-1
+                };
+                if(argument<0)return Blocked("bad_argument_type",steps,voidCalls);
+                pushes=1;kind="typed_argument";
+                int index=argument-(method.HasThis?1:0);
+                type=index<0?method.DeclaringType.FullName:
+                    index<method.Parameters.Count?method.Parameters[index].ParameterType.FullName:
+                    "unknown";
+            }
+            else if(op is Code.Castclass or Code.Isinst)
+            {
+                if(ins.Operand is not TypeReference cast)
+                    return Blocked("bad_cast_type",steps,voidCalls);
+                pops=1;pushes=1;type=cast.FullName;kind="typed_cast";
+            }
+            else if(op==Code.Ldelem_Ref)
+            {
+                pops=2;pushes=1;kind="array_element";
+            }
+            else if(op==Code.Ldind_Ref)
+            {
+                pops=1;pushes=1;kind="indirect_reference";
+            }
+            else if(op is Code.Ldloca or Code.Ldloca_S or Code.Ldarga or Code.Ldarga_S
+                    or Code.Ldsflda)
+            {
+                pushes=1;kind="address_load";
+            }
+            else if(op==Code.Ldflda)
+            {
+                pops=1;pushes=1;kind="address_load";
+            }
+            else if(op==Code.Ldelema)
+            {
+                pops=2;pushes=1;kind="address_load";
+            }
+            else return Blocked("unsupported_cil_opcode",steps,voidCalls);
+            if(depth<pushes)
+            {
+                if(UnsafeFlow(method,at,blitIndex))
+                    return Blocked("inbound_branch_or_exception",steps,voidCalls);
+                string role=type switch{
+                    RenderTexture=>"RenderTexture",
+                    Texture=>"Texture",
+                    _=>"unknown"
+                };
+                return new(role,kind,role=="unknown"?"producer_type_not_base_texture":
+                    "static_type_only_no_instance_proof",steps,voidCalls);
+            }
+            depth=depth-pushes+pops;
+            if(depth>32)return Blocked("stack_depth_budget",steps,voidCalls);
+        }
+        return Blocked("trace_budget_or_no_producer",steps,voidCalls);
+    }
+
     static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
     {
         // Public type-family only. In particular a preceding void call is
@@ -495,6 +627,7 @@ internal static class Program
         var originalFirstBlockers=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         var originalSourceHeadKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         var originalSourceReturnKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
+        var originalBacktraces=new Dictionary<int,List<StackSourceTrace>>{{0,new()},{1,new()}};
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -514,6 +647,7 @@ internal static class Program
                         originalFirstBlockers[lit.Value].Add(FirstUnresolvedImageOperand(m,i,materialField));
                         originalSourceHeadKinds[lit.Value].Add(SourceHeadClass(m,i,materialField));
                         originalSourceReturnKinds[lit.Value].Add(SourceAdjacentCallReturnFamily(m,i,materialField));
+                        originalBacktraces[lit.Value].Add(BacktraceBlitSource(m,i));
                     }
                     else if(OriginalMaterialLocalAliasBlit(m,i,materialField))
                         exactMaterialLocalAlias[lit.Value]++;
@@ -561,6 +695,31 @@ internal static class Program
             throw new InvalidOperationException("unsafe_original_return_type_family");
         Console.WriteLine("T2_FOAM_PASS0_ADJACENT_RETURN_FAMILY "+ret0);
         Console.WriteLine("T2_FOAM_PASS1_ADJACENT_RETURN_FAMILY "+ret1);
+        var back0=originalBacktraces[0].Count==1?originalBacktraces[0][0]:
+            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0);
+        var back1=originalBacktraces[1].Count==1?originalBacktraces[1][0]:
+            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0);
+        var safeStackKinds=new HashSet<string>{
+            "unknown","typed_field","typed_local","typed_argument","typed_call_result",
+            "typed_cast","constructor_result","array_element","indirect_reference",
+            "literal_null","string_literal","int_literal","address_load"
+        };
+        var safeStackReasons=new HashSet<string>{
+            "not_straight_line","control_flow_boundary","unsupported_call_signature",
+            "unsupported_field_signature","bad_local_type","bad_argument_type",
+            "bad_cast_type","unsupported_cil_opcode","inbound_branch_or_exception",
+            "producer_type_not_base_texture","static_type_only_no_instance_proof",
+            "stack_depth_budget","trace_budget_or_no_producer","ambiguous_or_missing"
+        };
+        foreach(var tr in new[]{back0,back1})
+            if(tr.Role is not ("unknown" or "Texture" or "RenderTexture") ||
+               !safeStackKinds.Contains(tr.Kind)||!safeStackReasons.Contains(tr.Reason)||
+               tr.Steps<0||tr.Steps>96||tr.VoidCalls<0||tr.VoidCalls>tr.Steps)
+                throw new InvalidOperationException("private_or_invalid_stack_trace_tag");
+        Console.WriteLine("T2_FOAM_PASS0_BACKTRACE "+back0.Role+" "+back0.Kind+" "+back0.Reason+
+            " steps="+back0.Steps+" void_calls="+back0.VoidCalls);
+        Console.WriteLine("T2_FOAM_PASS1_BACKTRACE "+back1.Role+" "+back1.Kind+" "+back1.Reason+
+            " steps="+back1.Steps+" void_calls="+back1.VoidCalls);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -671,6 +830,39 @@ internal static class Program
             throw new InvalidOperationException("array_must_not_be_forged_call_return");
         if(SourceHeadClass(fixtureMethod,4,fixtureMatField)!="array_element")
             throw new InvalidOperationException("array_result_not_kind");
+        // Backtrace a genuinely void call that consumes one argument:
+        // src field, int argument, void call, dst field, mat field, pass, Blit.
+        var sideEffect=new MethodReference("SyntheticVoidSideEffect",
+            mod.TypeSystem.Void,owner){HasThis=false};
+        sideEffect.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Int32));
+        stream.Clear();
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField)); // original source
+        stream.Add(Instruction.Create(OpCodes.Ldc_I4_7)); // void call input
+        stream.Add(Instruction.Create(OpCodes.Call,sideEffect)); // NO return
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField)); // destination
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureMatField));
+        stream.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        stream.Add(Instruction.Create(OpCodes.Call,b));
+        var traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="RenderTexture" || traced.Kind!="typed_field" ||
+           traced.Reason!="static_type_only_no_instance_proof" ||
+           traced.VoidCalls!=1 || traced.Steps!=6)
+            throw new InvalidOperationException("void_call_stack_did_not_reach_original_source");
+        sideEffect.ReturnType=rt;
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="RenderTexture" || traced.Kind!="typed_call_result" ||
+           traced.VoidCalls!=0)
+            throw new InvalidOperationException("typed_call_return_stack_misclassified");
+        sideEffect.ReturnType=mod.TypeSystem.Void;
+        stream[1]=Instruction.Create(OpCodes.Br_S,stream[2]);
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="unknown"||traced.Reason!="control_flow_boundary")
+            throw new InvalidOperationException("synthetic_branch_must_block_source_proof");
+        stream[1]=Instruction.Create(OpCodes.Ldc_I4_7);
+        stream[0]=Instruction.Create(OpCodes.Ldstr,"untyped_source");
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="unknown" || traced.Reason!="producer_type_not_base_texture")
+            throw new InvalidOperationException("non_texture_stack_value_must_not_pass");
     }
 
     public static int Main(string[] args)
