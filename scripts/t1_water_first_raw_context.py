@@ -41,7 +41,7 @@ HINTS = {
 BAGHDAD = timezone(timedelta(hours=3))
 # LogRaft's own ISO-date lines often omit canonical Android PID/TID fields.
 # Parse their timestamp without inventing a thread identity.
-ISO_DATE = re.compile(rb"(?<!\d)2026-11-08[T ](\d\d:\d\d:\d\d\.\d{3})(?!\d)")
+ISO_DATE = re.compile(rb"(?<!\d)2026-11-08[T ](\d\d:\d\d:\d\d)\.(\d{3})(?:\d{0,6})(?!\d)")
 
 # Coarse format and keyword PRESENCE counters only; no extracted raw text.
 FORMAT_PROBES = {
@@ -136,7 +136,7 @@ def _metadata(line):
     iso = ISO_DATE.search(line[:1024])
     if iso:
         # PID/TID unknown, therefore any nearby stack mention remains unpaired.
-        return _stamp_ms(b"11-08 " + iso.group(1)), None, None
+        return _stamp_ms(b"11-08 " + iso.group(1) + b"." + iso.group(2)), None, None
     return None
 
 
