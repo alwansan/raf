@@ -1,0 +1,47 @@
+name: T5 shared mini Arabic portrait source gate (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t5-shared-portrait-arabic-source.yml'
+      - 'apk-for-testing/unified/app/src/main/AndroidManifest.xml'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ArabicLabStrings.java'
+      - 'tests/test_t5_arabic_portrait.py'
+      - 'tests/java/com/alwansan/raftlab/ArabicLabStringsTest.java'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: t5-shared-portrait-arabic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-arabic-portrait:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Check Arabic 29-case mapping, safe pack, portrait manifest and evidence UX
+        run: |
+          python3 -m unittest discover -s tests -p test_t5_arabic_portrait.py -v
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - name: Run actual ArabicLabStrings JVM tests
+        run: |
+          mkdir -p /tmp/arabic-team-lab
+          javac -d /tmp/arabic-team-lab \
+            apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ArabicLabStrings.java \
+            tests/java/com/alwansan/raftlab/ArabicLabStringsTest.java
+          java -cp /tmp/arabic-team-lab com.alwansan.raftlab.ArabicLabStringsTest
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Compile unified Android Java (no APK or game)
+        run: gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA" -PversionCode=1
