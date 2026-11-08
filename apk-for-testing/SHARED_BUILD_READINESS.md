@@ -6,7 +6,7 @@
 | العامل | القرار | لماذا؟ وما الاختبارات/التغييرات؟ | evidence SHA/CI | وقت UTC | الجولة |
 |---|---|---|---|---|---|
 | T1 | WAITING_MERGE | T1-01..04 are declared and routed to MainActivity via auto_case_id; actual per-case GPU result contract, unified APK integration and phone evidence remain unverified. No T1 driver delta or independent APK request. | source audit 927eb65674db8d7c288d14ec2f0ed54d7562e3ad; historical CI 42497767712 | 2026-11-08T18:07:00Z | shared-20261108-r1 |
-| T2 | WAITING_MERGE | T2-01..04 GLES FBO synthetic controls mapped in unified pack and auto bridge source; unified APK build/device verification not established. No new T2 driver change this cycle; T5 must validate integration before NEED_BUILD. WATER-001 remains OPEN. | T2 historical CI 42496746941; audit 6eac6129368a5b348a6843657886bfee7a60d492 | 2026-11-08T17:15:00Z | shared-20261108-r1 |
+| T2 | NEED_BUILD | Compiled T2-02 GLES FBO probe now asserts two distinct spatial regions with actual pixel readbacks from both FBO stages; prior single-color check could not detect spatial sample collapse. Requires unified javac gate, then one T5-reviewed shared APK/device check of T2-01..04. No independent T2 APK request; WATER-001 original ShaderLab remains OPEN. | source 73924c998d91eb64be33c883d9922d44981accd4; source/host-model 7/7 checks PASS; shared javac CI 42504045625 is older than patch (NOT new verification) | 2026-11-08T18:19:00Z | shared-20261108-r1 |
 | T3 | NOT_REVIEWED | يبدأ T3 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
 | T4 | NOT_REVIEWED | يبدأ T4 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
 | T5 | NOT_REVIEWED | يبدأ T5 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
