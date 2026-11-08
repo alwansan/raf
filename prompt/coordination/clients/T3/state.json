@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T3",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T0024Z-T3-keyword-real-export",
-  "resumed_from_session": "20261104T2354Z-T3-render-harness",
+  "session_id": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
+  "resumed_from_session": "20261105T0024Z-T3-keyword-real-export",
   "status": "completed",
-  "base_sha": "80cfbe55f2ef647f8c71089ad6115c8d03d317a4",
-  "last_commit": "6940ccf0161a3ea4a52c083702692de74c0c64be",
-  "updated_at": "2026-11-05T00:30:00Z",
+  "base_sha": "73924c998d91eb64be33c883d9922d44981accd4",
+  "last_commit": "a212d88d41ebb47df0d9bdc67fc5b41823b02e36",
+  "updated_at": "2026-11-08T18:27:14Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -16,7 +16,8 @@
     "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture",
     "T3-20261104T2354Z-T3-render-harness-real-texenv-export",
     "T3-20261104T2354Z-T3-render-harness-real-material-color-export",
-    "T3-20261105T0024Z-T3-keyword-real-export-keyword-authentic-parity"
+    "T3-20261105T0024Z-T3-keyword-real-export-keyword-authentic-parity",
+    "T3-20261108T1813Z-chat-shared-frame-proof-p6r9"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
@@ -29,6 +30,20 @@
     "https://github.com/alwansan/raf/actions/runs/41940350604",
     "https://github.com/alwansan/raf/actions/runs/41941363661"
   ],
-  "next_step": "T3 scoped RENDER-002 keyword+disabled-pass original→true-export 41/41 match CI41941363661 (9 SHA-proven ZIP2 inputs). Next priority Material original Shader PPtr → actual export ShaderLab GUID/pass/subprogram or external texture 25 and Unity GPU visuals; no APK/device claim. RENDER-002 OPEN and NOT_READY.",
-  "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
+  "next_step": "T5 integrate and verify unified Android Java compilation and one Mini build if warranted; only then test T3-01..06 actual GLES/PixelCopy PNG on device. Synthetic diagnostics do not close RENDER-002 or WATER-001.",
+  "memory_path": "prompt/coordination/clients/T3/MEMORY.md",
+  "origin": "chat",
+  "latest_source_evidence": {
+    "scope": "T3-01..06 shared synthetic GLES exact-frame evidence",
+    "source_commits": [
+      "204dabb9c18b7122550c7aa30a51fdc385de6f45",
+      "6bb0b165f5849c84b1210eed0c7d8eba00468b2f"
+    ],
+    "tests_commit": "c0a2213bc97d594a3c04c42d956cb51b3c3a291e",
+    "source_invariant_checks": "26/26 via live source scan",
+    "compile": "UNVERIFIED on post-patch SHA",
+    "device": "UNVERIFIED",
+    "readiness": "NEED_BUILD for shared Mini only",
+    "full_game": "NOT_READY 0/3"
+  }
 }
