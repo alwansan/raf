@@ -39,6 +39,9 @@ HINTS = {
     "foam_global": re.compile(rb"\bFoam[ _-]*Global\b", re.I),
 }
 BAGHDAD = timezone(timedelta(hours=3))
+# LogRaft's own ISO-date lines often omit canonical Android PID/TID fields.
+# Parse their timestamp without inventing a thread identity.
+ISO_DATE = re.compile(rb"(?<!\d)2026-11-08[T ](\d\d:\d\d:\d\d\.\d{3})(?!\d)")
 
 # Coarse format and keyword PRESENCE counters only; no extracted raw text.
 FORMAT_PROBES = {
@@ -124,9 +127,13 @@ def _stamp_ms(stamp):
 
 def _metadata(line):
     match = THREAD_LINE.search(line[:256])
-    if not match:
-        return None
-    return _stamp_ms(match.group(1)), int(match.group(2)), int(match.group(3))
+    if match:
+        return _stamp_ms(match.group(1)), int(match.group(2)), int(match.group(3))
+    iso = ISO_DATE.search(line[:256])
+    if iso:
+        # PID/TID unknown, therefore any nearby stack mention remains unpaired.
+        return _stamp_ms(b"11-08 " + iso.group(1)), None, None
+    return None
 
 
 def _hintset(line):
@@ -168,13 +175,16 @@ def classify_first_roots(path, expected_size=SEGMENT_SIZE):
                     hints = _hintset(raw)
                     for entry in found.values():
                         delta = stamp - entry["_unix_ms"]
-                        if (0 <= total - entry["_source_line"] <= NEARBY_LINES and
+                        if (pid is not None and tid is not None and
+                                0 <= total - entry["_source_line"] <= NEARBY_LINES and
                                 0 <= delta <= NEARBY_MS and pid == entry["_pid"] and tid == entry["_tid"]):
                             entry["_nearby"].update(hints)
                             if hints:
                                 entry["_nearby_lines"] += 1
                 # Reuse the existing classifier; do not invent FFT ownership.
                 kind = classify(raw.decode("utf-8", "replace"))
+                if kind == "pass_other_water" and HINTS["foam_global"].search(raw):
+                    kind = "pass_foam_global"
                 if kind not in counters:
                     continue
                 counters[kind] += 1
@@ -196,6 +206,7 @@ def classify_first_roots(path, expected_size=SEGMENT_SIZE):
         "first": {key: {
             "unix_ms": data["_unix_ms"],
             "first_root_line_number": data["_source_line"],
+            "android_thread_id_proven": data["_pid"] is not None and data["_tid"] is not None,
             "direct_same_logcat_line_allowlist_hints": {
                 hint: hint in data["_direct"] for hint in HINTS
             },
