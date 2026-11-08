@@ -1,14 +1,13 @@
-# كيف يطلق العامل بناء mini APK من الفرع feature/android-native-port
+# بناء مختبر Android واحد للفريق T1–T5 — T5 فقط
 
-**لا تنسخ هذا المثال إلى طلب حي دون دليل.** يحتاج إنشاء/تحديث ملف واحد فقط `.github/raft-mini-lab-build-request.json`، وليس `.github/raft-native-build-request.json` الخاص باللعبة.
+**المرجع الحي:** apk-for-testing/UNIFIED_LAB_POLICY_AR.md وapk-for-testing/SHARED_BUILD_READINESS.md وapk-for-testing/TEST_CENTER.md. بناء اللعبة الكاملة XAPK له تصويت 5/5 مستقل لا يتغير.
 
-1. اجعل مصدر المختبر وtestpack جاهزين، وحدّث مستند العامل مع أسئلة الاختبار، ثم تحقق من نجاح اختبارات source المجدية. افحص أي workflow مختبر مماثل قيد التشغيل/queued أو Artifact موجود؛ لا تكرار بلا تغيير.
-2. اقرأ **HEAD الحالي** قبل إنشاء الطلب واحفظه في `requested_from_sha` (40 lowercase SHA). نسق ملفات زملائك، واصنع commit مستقل يغير **فقط** `.github/raft-mini-lab-build-request.json`، بحيث يكون requested_from_sha هو الأب المباشر لذلك commit.
-3. schema صريح من [المثال](BUILD_REQUEST_EXAMPLE.json): `request_id` فريد، `worker` واحد من T1..T5، `requested_from_sha` من HEAD قبل الطلب، `reason` سؤال اختبار جهاز محدد بين 15 و800 حرف. لا تستخدم صفر المثال الحقيقي.
-4. **رسالة commit يجب أن تحتوي `[raft-mini-lab]`** حتى يجيز workflow طلب البناء من push. الـworkflow [raft-android-mini-lab.yml](../.github/workflows/raft-android-mini-lab.yml) لا يعمل من تعديل ملفات المصدر العادي أو التصويت، ولا يمس Unity أو طلب XAPK الكامل.
-5. اطلع على run الحقيقي: source tests ثم Gradle/JDK17/AndroidSDK35 وبناء `app-debug.apk` منفصل باسم تطبيق العامل. إن نجح، ثبت link Artifact الفعلي (والصلاحية 7 أيام) والـSHA256 والـpackage/version في صفك في [TEST_CENTER.md](TEST_CENTER.md). لا تقل READY قبل ذلك.
-6. انتبه: `workflow_dispatch` لا يعمل مباشرة إذا workflow موجود فقط على فرع غير افتراضي؛ **push request المحدد أعلاه هو مسار التشغيل المعتمد حالياً**. لا تعدل `main`. لا تنشئ أكثر من request أو تعدّله أثناء job جارٍ. لا تستخدم `GITHUB_TOKEN` لتنفيذ self-trigger دون فهم سياسة GitHub.
-7. إذا أردت تجربة renderer خاصة تحتاج Unity/GL/Vulkan، استخدم workflow مستقل ومحدود واسم APK ونطاق وsource SHA وتوقيع مناسب، واحفظ جميع الملفات والـlinks في صفحة العامل. لا ترفع أصول ZIP2 الخام أو أسراراً.
-8. إذا تعذر التوقيع الدائم، debug APK قد يحتاج uninstall لتطبيق المختبر السابق فقط بسبب تغير شهادة debug؛ لا تمس تطبيق Raft أو حفظه.
-
-هذه آلية بناء للمختبر الصغير **اختيارية عند حاجة الإثبات**، ولا تعني أن اللعبة جاهزة أو أن إجماع 5/5 تحقق.
+1. لا تبن خمسة APKات ولا تختر اسم عامل واحد للتطبيق؛ الحزمة الوحيدة الجديدة com.alwansan.raft.lab.shared من apk-for-testing/unified/.
+2. افحص live HEAD وCI وActions queued/in_progress وأقدم الحزم الموقّعة. يكفي **عامل واحد NEED_BUILD** بقرار حديث خلال 48 ساعة ودليل تغيير Java/driver فعلي يحتاج اختبار الهاتف، بعد مراجعة T5. لا يلزم إجماع الخمسة للميني. استخدم python3 scripts/check_shared_lab_votes.py --require-need قبل البناء.
+3. إذا تغيّرت بيانات team-testpack.json فقط ويمكن استيرادها في APK الموجود، صدّر حزمة واحدة جديدة بدون إعادة APK. لا تكرر CI/بناء مكلف لتعديل توثيق أو صورة.
+4. بناء حقيقي يحتاج تغيير الطلب المشترك الوحيد .github/raft-mini-lab-build-request.json في commit مستقل يغيّر هذا الملف فقط، برسالة تحتوي [raft-mini-lab]، مع requested_from_sha = SHA الأب المباشر الذي يحتوي كل التحسينات المنجزة. احسب SHA256 لملف apk-for-testing/unified/pack/team-testpack.json (لا تكتب SHA متوقع).
+5. شكل الطلب: request_id فريد، target يساوي SHARED، requested_from_sha صحيح، pack_sha256 صحيح، reason يشرح السيناريو، publish false. اقرأ [المثال](BUILD_REQUEST_EXAMPLE.json) ولا تستعمل SHA الأصفار. لا تعدّل .github/raft-native-build-request.json الخاص بلعبة Raft.
+6. workflow .github/workflows/raft-android-mini-lab.yml يتأكد من بيانات الطلب والـpack وتصويت العامل وتختبر Python، ثم يجمع APK واحداً عبر Gradle بدون Unity. لا تلغِ عمل الآخرين ولا تبدأ طلباً مكرراً أثناء تشغيل مشابه.
+7. ناتج GitHub Actions هو ZIP يحتوي Raft-Team-Lab-debug.apk وteam-testpack.json وSHA256SUMS.txt — **ليس APK مباشر**. تحقق من APK bytes وapplicationId/versionCode وsha256 وشهادة التوقيع والأداء. التوقيع المؤقت للـdebug في runner قد يختلف؛ يجب تجهيز stable dedicated signing key آمنة قبل اعتماد تحديثات تحتفظ بالنتائج. لا تنشر مفتاحاً خاصاً أو كلمات مروره في المستودع.
+8. إن احتاج المالك رابط تحميل APK مباشر، لا تضعه في TEST_CENTER.md حتى تنشر APK فعلياً على Release/مصدر تنزيل مباشر وتتحقق من الرابط والـSHA. إن فشل رفع Releases HTTP403 احتفظ بـArtifact ZIP وصرح بأنه ZIP، ولا تخترع رابط APK.
+9. حدّث حالة البناء والإصدار والمصدر وpack SHA والرابط والنتيجة في SHARED_BUILD_READINESS.md وTEST_CENTER.md، وواصل عملك المعتاد أثناء تشغيل البناء. لا تقرّب نتائج mini lab من READY اللعبة إلا بدليل دمج واختبار Raft.
