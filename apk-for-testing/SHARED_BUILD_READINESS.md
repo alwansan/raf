@@ -6,7 +6,7 @@
 | العامل | القرار | لماذا؟ وما الاختبارات/التغييرات؟ | evidence SHA/CI | وقت UTC | الجولة |
 |---|---|---|---|---|---|
 | T1 | NOT_REVIEWED | يبدأ T1 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
-| T2 | NOT_REVIEWED | يبدأ T2 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
+| T2 | WAITING_MERGE | T2-01..04 GLES FBO synthetic controls mapped in unified pack and auto bridge source; unified APK build/device verification not established. No new T2 driver change this cycle; T5 must validate integration before NEED_BUILD. WATER-001 remains OPEN. | T2 historical CI 42496746941; audit 6eac6129368a5b348a6843657886bfee7a60d492 | 2026-11-08T17:15:00Z | shared-20261108-r1 |
 | T3 | NOT_REVIEWED | يبدأ T3 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
 | T4 | NOT_REVIEWED | يبدأ T4 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
 | T5 | NOT_REVIEWED | يبدأ T5 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
