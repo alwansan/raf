@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261108T1540Z-T2-chat-gles-pass-probe-83c1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "Foam/Spectrum/Blur Android GLES render-pass diagnostics",
+  "approach": "A genuine compiled GLES3 two-pass RGBA8 FBO roundtrip and explicit negative controls, isolated to T2 lab with no proprietary water shader or Unity integration",
+  "status": "active",
+  "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
+  "experiment_key": "t2-gles3-rgba8-two-pass-offscreen+negative-fbo-and-shader-api35-v1",
+  "resource_key": "mini-lab-host-t2",
+  "intended_files": [
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T2GpuActivity.java",
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java (one T2-only launch button)",
+    "apk-for-testing/host/app/src/main/AndroidManifest.xml (T2 activity declaration)",
+    "apk-for-testing/workers/T2/README.md",
+    "prompt/coordination/clients/T2/sessions/20261108T1540Z-T2-chat-gles-pass-probe-83c1.md"
+  ],
+  "resumed_from_sessions": [
+    "20261108T1524Z-T2-scheduled-water-lab-c8f2",
+    "20261108T1417Z-T2-scheduled-original-il-source-g7m2"
+  ],
+  "hypothesis": "Confirm Adreno GLES3 RGBA8 FBO completeness, fragment-program readback and explicit failure modes independently of unresolved authentic original Foam/Spectrum ShaderLab",
+  "related_work": [],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement + source inspect T2-only GPU lab, run mini-lab CI on fresh SHA after conflict checks, record real APK artifact or compile error; never claim original Raft shader repair",
+  "updated_at": "2026-11-08T15:40:15.152Z"
+}
