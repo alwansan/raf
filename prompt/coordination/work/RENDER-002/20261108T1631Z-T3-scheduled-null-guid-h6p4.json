@@ -1,0 +1,18 @@
+{
+  "session_id": "20261108T1631Z-T3-scheduled-null-guid-h6p4",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "status": "active",
+  "base_sha": "52c5a0213193e441b930146f3f02ccbdeaab850f",
+  "resumed_from": "20261108T1556Z-T3-chat-particle-ci-c83f",
+  "experiment_key": "t3-particle-material-null-fileid-nonzero-guid-failclosed",
+  "files": [
+    "scripts/t3_particle_renderer_yaml_audit.py",
+    "tests/test_t3_particle_renderer_yaml_audit.py",
+    "prompt/coordination/work/RENDER-002/20261108T1631Z-T3-scheduled-null-guid-h6p4.json",
+    "prompt/coordination/clients/T3/sessions/20261108T1631Z-T3-scheduled-null-guid-h6p4.md"
+  ],
+  "hypothesis": "fileID 0 with nonzero guid currently counted as null even though contradictory PPtr; fail closed and count independently; no game asset modifications",
+  "shared_resource": "none; source-only tests via existing workflow",
+  "evidence": "owner 2026-11-05 and 2026-11-08 reports; 43/43 source-only CI42496973989 before this change"
+}
