@@ -18,7 +18,7 @@ class MaterialShaderAuditTests(unittest.TestCase):
                 ("null", 0, "0" * 32),
             ]:
                 (root / (name + ".mat")).write_text(
-                    "%YAML 1.1\nMaterial:\n  m_Shader: {fileID: %d, guid: %s, type: 3}\n" % (fid, guid))
+                    "%%YAML 1.1\nMaterial:\n  m_Shader: {fileID: %d, guid: %s, type: 3}\n" % (fid, guid))
             (root / "invalid.mat").write_text("Material:\n  m_Shader: malformed\n")
             result = audit(root)
             self.assertEqual(result["material_seen"], 5)
