@@ -1,0 +1,23 @@
+# T3 chat cycle — CL authentic GPU/PNG discrepancy, SurfaceView policy verification
+
+- **session_id:** `20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8`; `origin=chat`; worker T3; issue RENDER-002.
+- **base_sha:** `f60355a49a9f236f9757cdac65cf3d12ebbfafc3` (before own reservation commit `acaa575d`). `resumed_from_session:` `20261108T1940Z-T3-chat-arabic-manual-visual-v4c8`.
+- **user request:** read `alwansan/CL/main/test`, determine real on-phone T3 findings, resume safe engineering. No need to ask for reupload; exact logs/screens already present.
+
+## True device findings
+- Latest owner session `CL/test/shared-20261108-230157-466487336` confirms package version `0.2.10-shared`, source `93e32950c521d9890ce845eb8213cd6704cd7f98`, API35 and 29-case pack. T3-01..06 real GPU checks `contract=true`, `gl_error=0x0`, actual left/right RGBA samples, six cases `EVIDENCE_READY`.
+- Directly inspected six exported PNG files: despite valid SHA/MediaStore and visually acceptable headers/buttons, their GLES scene regions are BLACK. Separate seven owner JPG screenshots in `CL/test/سكرينشوت من المالك` show *on-screen* colorful red/green/blue bars, gradient, smoke blend, matching alpha, sRGB brightness delta, fallback blue GLSL. These are **synthetic** GLES controls, not Unity shader restoration.
+- Independent T4 CI42519251690 strict original 0.2.9 six-PNG audit measured RGB center red/green/blue all 0%, center nearly black 79.111%; exact numeric percentage applies only to those older six pinned PNGs, not all newer images. Original 0.2.10 black problem directly inspected with images and logs.
+- Root source cause: `PixelCopy(Window)` captured UI layer but not separate `GLSurfaceView`; therefore `EVIDENCE_READY` was **false visual evidence** even though GL readback was true. Never mark USER_PASS automatically.
+
+## Shared remedy and own test work
+- T5 independently/cooperatively integrated `PixelCopy.request(surface,gpu,..)`, same-case two-pixel GPU↔PixelCopy check, 18-channel tolerance, bounded 3 tries, verified surface composite over full window or surface-only; reject black/mismatch as `NEEDS_SCREENSHOT`. Source [f60355a](https://github.com/alwansan/raf/commit/f60355a49a9f236f9757cdac65cf3d12ebbfafc3). T5 pure Java/Android compile [CI42519126545 SUCCESS](https://github.com/alwansan/raf/actions/runs/42519126545).
+- T3 read live source immediately, **did not overwrite T5's independent fix**. Repaired old `tests/test_t3_shared_visual_frame.py` to new SurfaceView path and added a 11th negative black-photo regression in [2ce778cd](https://github.com/alwansan/raf/commit/2ce778cdba2aef49f7d0eb69a9ae1fe58b0f9adc). CI42519283987 failed **one stale literal assertion** for `lastRenderedSequence!=renderSequence`; corrected to the new verified generation guard in [bb6b5835](https://github.com/alwansan/raf/commit/bb6b583591bd4b36c96afb3943bed7d895c261c2). [CI42519345065 SUCCESS](https://github.com/alwansan/raf/actions/runs/42519345065): 11/11 Python test methods, pack/host tests and Gradle Java compilation (no APK).
+- Own permanent analysis [docs/T3_CL_BLACK_PNG_PIXELCOPY_SURFACE_2026-11-08.md](../../../../docs/T3_CL_BLACK_PNG_PIXELCOPY_SURFACE_2026-11-08.md), committed [889600cea8](https://github.com/alwansan/raf/commit/889600cea808e43873c6f82c8665f249c6c39ce0).
+
+## Shared delivery and next actual acceptance
+- T5 sole shared Mini R3 builder: first two attempts CI42519334082 and CI42519420353 failed strict parent SHA gate due concurrent branch writes, not Android compile. Final CAS-pinned [CI42519487402](https://github.com/alwansan/raf/actions/runs/42519487402) **SUCCESS**: all build/upload steps passed; Artifact ZIP ID `13632379139`, expires 2026-11-22T20:20:05Z. This is a ZIP, **not direct APK URL**, source parent `e7a6248b0d0c14b9772bd52f3bbdc5cf22fa9b9a`. No Android15 validation of R3 yet.
+- Own T3 row [shared r3 readiness](../../../../apk-for-testing/SHARED_BUILD_READINESS.md) `NO_BUILD` (one shared Mini already delivered by CI; no duplicate). T5 alone verifies raw APK SHA/signing and gives user actual file/link.
+- **Next:** owner installs verified R3 APK, repeats six T3 screens, exports six *new* PNGs and JSONL/summary. Accept `EVIDENCE_READY` only if `verified_surface_pixels=true`, `capture=verified-GLSurfaceView-overlay-on-window` or `verified-surface-only`, and visibly actual content. If `NEEDS_SCREENSHOT`, retain reason and request actual screenshot; no forced PASS. Full Unity Raft water/fire/shader and trial XAPK remain NOT_READY 0/3.
+
+**State:** source repair and regression CI verified, shared Mini build CI verified; on-device fixed version unverified. Work scope closed for now.
