@@ -111,6 +111,20 @@ class MaterialShaderAuditTests(unittest.TestCase):
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
             self.assertEqual(result["shader_guid_unresolved_in_scan"], 0)
 
+    def test_empty_shader_source_cannot_resolve_guid(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            guid = "2" * 32
+            (root / "Empty.shader").write_bytes(b"")
+            (root / "Empty.shader.meta").write_text("guid: " + guid + "\\n")
+            (root / "empty.mat").write_text(
+                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+            result = audit(root)
+            self.assertEqual(result["shader_source_empty"], 1)
+            self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
+            self.assertEqual(result["shader_guid_unresolved_in_scan"], 1)
+            self.assertEqual(result["shader_meta_without_source"], 0)
+
     def test_nonexistent_root_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError):
