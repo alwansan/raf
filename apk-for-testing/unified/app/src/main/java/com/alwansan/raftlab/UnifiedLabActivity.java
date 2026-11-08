@@ -31,7 +31,7 @@ public final class UnifiedLabActivity extends Activity {
     private final ArrayList<JSONObject> schedule=new ArrayList<>();
     private final Handler handler=new Handler(Looper.getMainLooper());
     private SharedPreferences state;
-    private LinearLayout content,workerButtons,pendingButtons;
+    private LinearLayout content,workerButtons,pendingButtons,t3CaseButtons;
     private TextView title,summary,caseDetail;
     private EditText comment;
     private JSONObject currentManual, activeAuto;
@@ -89,6 +89,11 @@ public final class UnifiedLabActivity extends Activity {
         workerButtons.setOrientation(LinearLayout.VERTICAL);
         workerButtons.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         content.addView(workerButtons);
+        content.addView(text("اختبارات الرسوميات T3 — اضغط اسم الاختبار لفتح شاشة الرسم مباشرة:"));
+        t3CaseButtons=new LinearLayout(this);
+        t3CaseButtons.setOrientation(LinearLayout.VERTICAL);
+        t3CaseButtons.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content.addView(t3CaseButtons);
         content.addView(text("طلبات تحتاج تدخلك — اضغط اسم الاختبار أدناه لفتح تعليماته:"));
         pendingButtons=new LinearLayout(this);
         pendingButtons.setOrientation(LinearLayout.VERTICAL);
@@ -250,6 +255,7 @@ public final class UnifiedLabActivity extends Activity {
     }
     void drawHome(){
         refreshPending();workerButtons.removeAllViews();pendingButtons.removeAllViews();
+        if(t3CaseButtons!=null)t3CaseButtons.removeAllViews();
         show("الحزمة: "+packId+" — عدد الاختبارات "+tests.size()+" — تحتاج تدخلك: "+pending.size()+"؛ النتائج السابقة تُحفظ ولا تُعدّ نجاحًا بلا دليل.");
         for(int i=1;i<=5;i++){
             String worker="T"+i;int n=0,done=0;
@@ -260,6 +266,11 @@ public final class UnifiedLabActivity extends Activity {
             LinearLayout row=new LinearLayout(this);workerButtons.addView(row);
             addButton(row,"فريق "+w+" ("+done+"/"+n+" ناجح)",v->showWorker(w));
             addButton(row,"تشغيل "+w+" تلقائيًا",v->autoRun(w));
+        }
+        for(JSONObject c:tests)if("T3".equals(c.optString("worker"))&&t3CaseButtons!=null){
+            String id=c.optString("id");
+            addButton(t3CaseButtons,"▶ فتح "+id+" — "+ArabicLabStrings.title(id,c.optString("title")),
+                v->openPending(c));
         }
         for(JSONObject c:pending){
             String id=c.optString("id");String label=id+" — "+ArabicLabStrings.title(id,c.optString("title"))+" ["+ArabicLabStrings.status(saved(c).optString("status"))+"]";
