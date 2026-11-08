@@ -1,0 +1,22 @@
+{
+  "session_id": "20261108T1540Z-T3-chat-gles-material-lab-6b2a",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-08T15:40:00Z",
+  "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
+  "resumed_from_sessions": [
+    "20261108T1529Z-T3-scheduled-neg-fileid-q7m2",
+    "20261108T1430Z-T3-scheduled-particle-yaml-k6d2"
+  ],
+  "intended_files": [
+    "apk-for-testing/workers/T3/gles-lab/**",
+    ".github/workflows/raft-t3-gles-material-mini-lab.yml",
+    "apk-for-testing/workers/T3/README.md",
+    "prompt/coordination/clients/T3/sessions/20261108T1540Z-T3-chat-gles-material-lab-6b2a.md"
+  ],
+  "experiment_key": "t3-gles3-adreno730-rgba-srgb-alpha-blend-device-differential-20261108",
+  "resource_key": "isolated-T3-GLES-mini-lab-no-Unity",
+  "hypothesis": "A bounded GLES3 on-device diagnostic can distinguish driver-level alpha/sRGB/blend and shader compile behavior from missing Unity Raft resource/variant links for white surfaces and square particles.",
+  "limits": "Independent synthetic GLES3 test only. No Raft assets, shader recovery, Unity, original GPU pixels, or real gameplay. No READY/DEVICE_PASS claim."
+}
