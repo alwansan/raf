@@ -49,6 +49,15 @@ public final class T5StreamSha256Test {
             prev = n;
         }
     }
+    private static void testOriginalObbByteCount() throws Exception {
+        // Synthetic zero stream of the known 2,301,256,312-byte OBB size;
+        // no original assets and no multi-GiB memory/disk allocation.
+        final long size = 2301256312L;
+        StreamSha256.Result r = StreamSha256.digest(new ZeroStream(size), null);
+        check(r.bytes == size && r.bytes > Integer.MAX_VALUE, "long byte counter > 2GiB");
+        check(r.hex.equals("fca7c0f70c873f1e0b0b17bc96ecfdfa3fde05b7da982e7098455f1dad7a698d"),
+            "2.3GB synthetic zero stream SHA-256 digest");
+    }
     private static void testInterrupted() throws Exception {
         Thread.currentThread().interrupt();
         boolean rejected = false;
@@ -72,6 +81,7 @@ public final class T5StreamSha256Test {
     public static void main(String[] args) throws Exception {
         testKnownVectors();
         testBeyondLegacyLimit();
+        testOriginalObbByteCount();
         testInterrupted();
         testInputFailure();
         System.out.println("PASS T5 StreamSha256 regression checks=" + checks);
