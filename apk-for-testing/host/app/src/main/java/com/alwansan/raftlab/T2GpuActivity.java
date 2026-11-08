@@ -103,7 +103,29 @@ public final class T2GpuActivity extends Activity {
     String id=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
     if(id==null||!id.matches("T2-0[1-4]"))return;
     final int index=Integer.parseInt(id.substring(4))-1;
-    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->runCase(index),1000);
+    // GLSurfaceView initializes asynchronously. A fixed delay can turn a slow
+    // context creation into a false negative for an otherwise valid GPU case.
+    final android.os.Handler handler=new android.os.Handler(android.os.Looper.getMainLooper());
+    final long deadline=SystemClock.elapsedRealtime()+7000L;
+    final Runnable[] waitForContext=new Runnable[1];
+    waitForContext[0]=()->{
+      if(isFinishing()||isDestroyed())return;
+      if(probe.ready){runCase(index);return;}
+      if(SystemClock.elapsedRealtime()<deadline){
+        handler.postDelayed(waitForContext[0],100);
+      }else{
+        String observed="FAIL: GLES3 context not ready within 7000ms";
+        logForCase("gl_observed",observed,index);
+        Intent data=new Intent();
+        data.putExtra("case_id",id);
+        data.putExtra("observed",observed);
+        data.putExtra("status","FAIL");
+        setResult(RESULT_OK,data);
+        export();
+        finish();
+      }
+    };
+    handler.post(waitForContext[0]);
   }
   void runCase(int id) {
     selected=id;notes.setText("");
