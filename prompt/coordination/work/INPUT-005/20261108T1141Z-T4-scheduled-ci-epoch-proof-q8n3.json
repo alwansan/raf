@@ -1,0 +1,18 @@
+{
+  "session_id": "20261108T1141Z-T4-scheduled-ci-epoch-proof-q8n3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "base_sha": "745c8577183c17ed2d6de7e3b0bf7b1f0a469f8d",
+  "status": "completed",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261108T1141Z-T4-scheduled-ci-epoch-proof-q8n3.json",
+    "prompt/coordination/clients/T4/sessions/20261108T1141Z-T4-scheduled-ci-epoch-proof-q8n3.md"
+  ],
+  "experiment_key": "epoch-classifier-source-ci:e1e7ac93:42472339258",
+  "resource_key": null,
+  "hypothesis": "New epoch-aware classifier regression must pass source-only CI on exact test SHA; no device claim",
+  "result": "CI 42472339258 completed success on e1e7ac93cdb64af5efdf8a819b74157dfcb71497; original phone test success preserved; no new Android runtime verification",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42472339258",
+  "updated_at": "2026-11-08T11:41:20Z",
+  "next_step": "Use new Android device capture logs containing epoch, relative, release and focus transitions; diagnose runtime capture/cursor rather than repeating source tests"
+}
