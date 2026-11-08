@@ -36,7 +36,7 @@ public final class UnifiedLabActivity extends Activity {
     private EditText comment;
     private JSONObject currentManual, activeAuto;
     private int at=0;
-    private boolean running=false,waitingForChild=false;
+    private boolean running=false,waitingForChild=false,forceRerun=false;
     private String session,packId="unloaded",packSha="unknown";
     private File privateLog;
     private Uri logExport,summaryExport;
@@ -66,6 +66,7 @@ public final class UnifiedLabActivity extends Activity {
         summary=text("Embedded team tests / JSONL evidence");content.addView(summary);
         LinearLayout controls=new LinearLayout(this);content.addView(controls);
         addButton(controls,"AUTO ALL",v->autoRun(null));
+        addButton(controls,"FORCE AUTO RERUN",v->autoRun(null,true));
         addButton(controls,"Import TEAM pack",v->pick(LOAD_PACK,"application/json"));
         addButton(controls,"Export logs",v->export());
         workerButtons=new LinearLayout(this);workerButtons.setOrientation(LinearLayout.VERTICAL);content.addView(workerButtons);
@@ -160,13 +161,10 @@ public final class UnifiedLabActivity extends Activity {
     }
     boolean screenshotRequired(JSONObject c){return Arrays.asList("auto","manual").contains(c.optString("screenshot"));}
     boolean reusable(JSONObject c){
-        JSONObject old=saved(c);String status=old.optString("status"),uri=old.optString("image_uri");
-        if(!fingerprint(c).equals(old.optString("fingerprint")))return false;
-        boolean evidence=screenRequiredValid(c,uri);
-        if(!evidence)return false;
-        if(status.equals("PASS")||status.equals("USER_PASS")||status.equals("USER_FAIL"))return true;
-        // Captured visual evidence is reusable without claiming pixel correctness.
-        return status.equals("EVIDENCE_READY")&&screenshotValid(uri);
+        JSONObject old=saved(c);
+        return UnifiedResultPolicy.reusable(old.optString("status"),
+            fingerprint(c).equals(old.optString("fingerprint")),
+            screenshotRequired(c),screenshotValid(old.optString("image_uri")));
     }
     boolean screenRequiredValid(JSONObject c,String uri){
         return !screenshotRequired(c)||screenshotValid(uri);
@@ -185,13 +183,8 @@ public final class UnifiedLabActivity extends Activity {
     void refreshPending(){
         pending.clear();
         for(JSONObject c:tests){
-            if(reusable(c)){
-                if(saved(c).optString("status").equals("EVIDENCE_READY"))pending.add(c);
-                continue;
-            }
             String status=saved(c).optString("status");
-            if(c.optString("mode").equals("manual")||status.equals("NEEDS_SCREENSHOT")||
-               status.equals("EVIDENCE_READY")||status.equals("FAIL")||status.equals("BLOCKED"))
+            if(UnifiedResultPolicy.pending(c.optString("mode"),status,reusable(c)))
                 pending.add(c);
         }
     }
@@ -200,7 +193,9 @@ public final class UnifiedLabActivity extends Activity {
         show("Pack "+packId+" / "+tests.size()+" cases, pending "+pending.size()+" / cache respects case+driver+device+image");
         for(int i=1;i<=5;i++){
             String worker="T"+i;int n=0,done=0;
-            for(JSONObject c:tests)if(worker.equals(c.optString("worker"))){n++;if(reusable(c))done++;}
+            for(JSONObject c:tests)if(worker.equals(c.optString("worker"))){
+                n++;if(UnifiedResultPolicy.passed(saved(c).optString("status"),reusable(c)))done++;
+            }
             final String w=worker;
             LinearLayout row=new LinearLayout(this);workerButtons.addView(row);
             addButton(row,w+" ("+done+"/"+n+")",v->showWorker(w));
@@ -220,18 +215,24 @@ public final class UnifiedLabActivity extends Activity {
         }
         caseDetail.setText(s.toString());
     }
-    void autoRun(String worker){
+    void autoRun(String worker){autoRun(worker,false);}
+    void autoRun(String worker,boolean force){
         if(running||waitingForChild){show("An automated test is already running");return;}
         schedule.clear();
         for(JSONObject c:tests)if(worker==null||worker.equals(c.optString("worker")))schedule.add(c);
-        at=0;running=true;log("auto_start","worker="+(worker==null?"ALL":worker)+" total="+schedule.size());
+        at=0;running=true;forceRerun=force;
+        log("auto_start","worker="+(worker==null?"ALL":worker)+" total="+schedule.size()+" force="+force);
         runNext();
     }
     void runNext(){
         if(!running)return;
-        if(at>=schedule.size()){running=false;activeAuto=null;log("auto_complete","count="+schedule.size());export();drawHome();return;}
+        if(at>=schedule.size()){running=false;forceRerun=false;activeAuto=null;log("auto_complete","count="+schedule.size());export();drawHome();return;}
         JSONObject c=schedule.get(at++);
-        if(reusable(c)){log("auto_reuse",c.optString("id")+" "+fingerprint(c));runNext();return;}
+        // Forced GPU/visual reruns must not erase already reviewed manual/file evidence.
+        if(reusable(c)&&(!forceRerun||"manual".equals(c.optString("mode")))){
+            log("auto_reuse",c.optString("id")+" status="+saved(c).optString("status")+" "+fingerprint(c));
+            runNext();return;
+        }
         String id=c.optString("id"),driver=c.optString("driver");
         activeAuto=c;
         show("AUTO "+at+"/"+schedule.size()+" — "+id+" "+c.optString("title"));
@@ -240,9 +241,12 @@ public final class UnifiedLabActivity extends Activity {
             store(c,"NEEDS_INPUT","User action, mouse/file or judgment is required",null);runNext();return;
         }
         if(driver.equals("system_identity")){
+            String signer=signerSha256();
             String observed="package="+getPackageName()+" version="+BuildConfig.VERSION_NAME+
+                " versionCode="+BuildConfig.VERSION_CODE+" signingCertSha256="+signer+
                 " api="+Build.VERSION.SDK_INT+" abi="+Build.SUPPORTED_ABIS[0];
-            store(c,"PASS",observed,null);runNext();return;
+            boolean valid="com.alwansan.raft.lab.shared".equals(getPackageName())&&signer.matches("[a-f0-9]{64}");
+            store(c,valid?"PASS":"FAIL",observed,null);runNext();return;
         }
         Intent i;
         if(driver.equals("t1_compute")){i=new Intent(this,MainActivity.class);i.putExtra("mini_worker","T1");}
@@ -338,12 +342,30 @@ public final class UnifiedLabActivity extends Activity {
         if(currentManual==null){show("Select an in-app request first");return;}
         JSONObject old=saved(currentManual);
         String uri=old.optString("image_uri");
-        if(screenshotRequired(currentManual)&&!screenshotValid(uri)){
+        if("USER_PASS".equals(decision)&&screenshotRequired(currentManual)&&!screenshotValid(uri)){
             show("Required screenshot missing. Attach a real image; request remains pending.");return;
         }
-        String observation=comment.getText().toString();if(observation.length()>900)observation=observation.substring(0,900);
-        store(currentManual,decision,"OWNER_REPORTED: "+observation,uri);
+        String observation=comment.getText().toString().trim();
+        if(observation.isEmpty()){show("Describe actual observation/error before recording a result.");return;}
+        if(observation.length()>900)observation=observation.substring(0,900);
+        store(currentManual,decision,"OWNER_REPORTED: "+observation+"; driver_observed="+old.optString("observed"),uri);
         export();nextPending();
+    }
+    String signerSha256(){
+        try{
+            android.content.pm.PackageInfo p;
+            android.content.pm.Signature[] certs;
+            if(Build.VERSION.SDK_INT>=28){
+                p=getPackageManager().getPackageInfo(getPackageName(),
+                    android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES);
+                certs=p.signingInfo==null?null:p.signingInfo.getApkContentsSigners();
+            }else{
+                p=getPackageManager().getPackageInfo(getPackageName(),
+                    android.content.pm.PackageManager.GET_SIGNATURES);
+                certs=p.signatures;
+            }
+            return certs!=null&&certs.length>0?digest(certs[0].toByteArray()):"unavailable";
+        }catch(Exception e){log("signer_error",e.getClass().getSimpleName());return "unavailable";}
     }
     void pick(int request,String type){
         Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
