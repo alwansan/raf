@@ -48,10 +48,10 @@ class MaterialShaderAuditTests(unittest.TestCase):
             root = Path(tmp)
             guid = "d" * 32
             for name in ("One", "Two"):
-                (root / (name + ".shader")).write_text('Shader "Test/' + name + '" {}\\n')
-                (root / (name + ".shader.meta")).write_text("guid: " + guid + "\\n")
+                (root / (name + ".shader")).write_text('Shader "Test/' + name + '" {}\n')
+                (root / (name + ".shader.meta")).write_text("guid: " + guid + "\n")
             (root / "duplicate.mat").write_text(
-                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+                "Material:\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\n" % guid)
             result = audit(root)
             self.assertEqual(result["shader_guid_ambiguous_in_scan"], 1)
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
