@@ -71,22 +71,38 @@ def main():
         entries = json.loads(args.manifest.read_text(encoding="utf-8"))
         if not isinstance(entries, list) or not 1 <= len(entries) <= MAX_PASSES:
             raise ValueError("manifest must contain 1..32 passes")
-        pairs = []
+        # Validate every capture path and aggregate size before reading any pixel data.
+        # This avoids loading early passes only to reject a later oversized pass.
+        planned = []
         total_bytes = 0
         manifest_dir = args.manifest.resolve().parent
         for entry in entries:
             if not isinstance(entry, dict) or set(entry) != {"name", "reference", "observed"}:
                 raise ValueError("invalid pass entry")
-            # Budget cumulative input bytes before reading either capture.
             for key in ("reference", "observed"):
                 relative = entry[key]
-                if not isinstance(relative, str) or not relative or Path(relative).is_absolute() or ".." in Path(relative).parts:
+                if not isinstance(relative, str) or not relative or "\\x00" in relative:
                     raise ValueError("invalid capture path")
-                total_bytes += (manifest_dir / relative).stat().st_size
+                candidate = Path(relative)
+                if candidate.is_absolute() or ".." in candidate.parts:
+                    raise ValueError("invalid capture path")
+                # Use the same path confinement and symlink rules as the reader.
+                target = manifest_dir / candidate
+                if target.is_symlink() or any(p.is_symlink() for p in target.parents
+                                              if p != manifest_dir and manifest_dir in p.parents):
+                    raise ValueError("symlink capture path rejected")
+                resolved = target.resolve(strict=True)
+                if not resolved.is_relative_to(manifest_dir) or not resolved.is_file():
+                    raise ValueError("capture escapes private manifest directory")
+                size = resolved.stat().st_size
+                if size == 0 or size > MAX_CAPTURE_BYTES or size % 16:
+                    raise ValueError("capture size invalid or exceeds private limit")
+                total_bytes += size
                 if total_bytes > MAX_TOTAL_CAPTURE_BYTES:
                     raise ValueError("aggregate private capture budget exceeded")
-            pairs.append((entry["name"], read_private_capture(manifest_dir, entry["reference"]),
-                          read_private_capture(manifest_dir, entry["observed"])))
+            planned.append(entry)
+        pairs = [(entry["name"], read_private_capture(manifest_dir, entry["reference"]),
+                  read_private_capture(manifest_dir, entry["observed"])) for entry in planned]
         report = compare_passes(pairs, atol=args.atol, rtol=args.rtol)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.exit(2, "Invalid private FFT pass manifest or capture: " + type(exc).__name__ + "\n")
