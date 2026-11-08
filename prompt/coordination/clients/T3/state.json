@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T3",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1852Z-T3-chat-png-integrity-k8m2",
-  "resumed_from_session": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
-  "status": "completed_source_only_validation_pending",
-  "base_sha": "d03d8053088dd5b715705d31675cbad4bae41ae9",
-  "last_commit": "1b2b8fddd01334d57129eb21027598755a2f2564",
-  "updated_at": "2026-11-08T19:02:50Z",
+  "session_id": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
+  "resumed_from_session": "20261108T1852Z-T3-chat-png-integrity-k8m2",
+  "status": "source_integrated_T5_shared_minibuild_needed_device_pending",
+  "base_sha": "aed5beb86c035789ef81a4a642d4ac412dfc9b29",
+  "last_commit": "87357d72df2e61c1cbe8d776c86a043773648506",
+  "updated_at": "2026-11-08T19:37:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -18,7 +18,8 @@
     "T3-20261104T2354Z-T3-render-harness-real-material-color-export",
     "T3-20261105T0024Z-T3-keyword-real-export-keyword-authentic-parity",
     "T3-20261108T1813Z-chat-shared-frame-proof-p6r9",
-    "T3-20261108T1852Z-chat-png-integrity-k8m2"
+    "T3-20261108T1852Z-chat-png-integrity-k8m2",
+    "T3-20261108T1940Z-chat-arabic-manual-visual-v4c8"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
@@ -31,29 +32,31 @@
     "https://github.com/alwansan/raf/actions/runs/41940350604",
     "https://github.com/alwansan/raf/actions/runs/41941363661"
   ],
-  "next_step": "Check independent T3 source-only compile workflow, then use latest integrated shared Mini only upon T5 decision to validate real GLES/PixelCopy/MediaStore PNG+SHA on device. Resume authentic Particle108 ShaderLab/material binding effort. No current new APK request.",
+  "next_step": "T5 review/compile integration and decide ONE shared Mini build with Arabic portrait and T3 tap-to-open; run actual device T3-01..06, image+JSONL export. No individual APK/Unity XAPK.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md",
   "origin": "chat",
   "latest_source_evidence": {
-    "scope": "T3 shared mini PNG provenance/durable MediaStore readback and true GLES pixel payload",
-    "commits": [
-      "03151ea4b60f87576f8e5abf9235edbc53e12fdd",
-      "a9ad5f77df2548a1adee109e1cacb51ad4a190aa",
-      "0a449ab7ce3b3551c42fb6d9a11b1da0c32da519",
-      "e65427eda01c9e7970c20551c627c65228aad50f"
+    "scope": "User-proven T3 tap-to-open blocked; Arabic RTL portrait T3 one-tap preview six cases and captured evidence integration",
+    "source_commits": [
+      "389b0779d6ad106503b3566c0aa0e1d129903421",
+      "7a03a2773b0c5953a85453632e5cc6a43a94d9ec",
+      "bef7f88ff98797f7aa0532e64cb4cc7a01922b44"
     ],
-    "workflow": "raft-t3-shared-png-source-gate.yml",
-    "workflow_run": "NOT_VERIFIED",
-    "source_contract_checks": "14/14 scanned on GitHub",
-    "source_tests": "7 methods committed; runtime not yet independently observed",
-    "android_compile": "UNVERIFIED on this newer SHA",
-    "android_device": "UNVERIFIED",
-    "last_shared_apk": {
+    "tests": [
+      "55d8908f1a4ccb814b67063f743f03d433842f14",
+      "5e387f086d64a13db84df0daa6aa80449b30ade1"
+    ],
+    "source_invariants": "18/18 live GitHub direct code checks (not Python/Java/Android)",
+    "source_test_methods": "10 committed, execution not verified",
+    "ci": "UNVERIFIED",
+    "android_phone": "UNVERIFIED",
+    "portrait": "T5 Arabic host and portrait Manifest integrated and preserved",
+    "t3_r2_vote": "NEED_BUILD; ONLY T5 can request shared Mini",
+    "old_apk": {
       "run": 42509945996,
-      "source": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
-      "includes_later_png_fix": false
+      "source_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+      "includes_new_navigation": false
     },
-    "mini_vote": "NO_BUILD, existing one shared APK already; no source-only duplicate",
     "full_game": "NOT_READY 0/3"
   }
 }
