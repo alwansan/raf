@@ -43,6 +43,22 @@ class MaterialShaderAuditTests(unittest.TestCase):
             self.assertEqual(result["shader_guid_unresolved_in_scan"], 1)
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
 
+    def test_duplicate_shader_guid_is_ambiguous_not_resolved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            guid = "d" * 32
+            for name in ("One", "Two"):
+                (root / (name + ".shader")).write_text('Shader "Test/' + name + '" {}\\n')
+                (root / (name + ".shader.meta")).write_text("guid: " + guid + "\\n")
+            (root / "duplicate.mat").write_text(
+                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+            result = audit(root)
+            self.assertEqual(result["shader_guid_ambiguous_in_scan"], 1)
+            self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
+            self.assertEqual(result["shader_guid_unresolved_in_scan"], 0)
+            self.assertEqual(result["duplicate_shader_guid_entries"], 1)
+            self.assertNotIn(guid, str(result))
+
     def test_nonexistent_root_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError):
