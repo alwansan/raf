@@ -1,0 +1,12 @@
+# T3 scheduled — contradictory null material PPtr guard
+
+- session_id: `20261108T1631Z-T3-scheduled-null-guid-h6p4`; origin: `scheduled`; issue: RENDER-002 OPEN / NOT_READY.
+- resumed_from: `20261108T1556Z-T3-chat-particle-ci-c83f` (43/43 source-only tests) and `20261108T1540Z-T3-chat-gles-material-lab-6b2a` (signed mini APK; no phone proof).
+- initial HEAD: `52c5a0213193e441b930146f3f02ccbdeaab850f`; latest inspected HEAD after patch: `16d8e190fcaf2f29192f57b0060f50599fef79ca`.
+- work: `prompt/coordination/work/RENDER-002/20261108T1631Z-T3-scheduled-null-guid-h6p4.json`, registered first at `f3180c8f`.
+- hypothesis: a ParticleSystemRenderer m_Materials PPtr with fileID=0 and nonzero GUID is contradictory; old audit incorrectly counted it as a valid null. Preserve normal null and zero-GUID null semantics; flag contradiction separately.
+- code: `a8326299` adds `invalid_null_fileid_with_guid_slots`; test: `16d8e190` adds a three-case fixture (nonzero GUID contradiction, absent GUID null, zero GUID null).
+- existing CI workflow auto-triggered run [42500300234](https://github.com/alwansan/raf/actions/runs/42500300234) on source commit `a8326299` and was **in_progress** when checked. It predates the new test commit and must not be counted as proof of the new fixture. Do not cancel or launch equivalent CI. Recheck for subsequent test-triggered run and confirm its exact head SHA and test count.
+- owner 5 Nov [device feedback](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/DEVICE_FEEDBACK_42058825739_AR.md): actual world enter/save/reopen succeeds on artifact 42058825739; white hand/raft and square smoke persist. Owner 8 Nov [update](https://github.com/alwansan/raf/blob/feature/android-native-port/apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md): camera mouse capture improved, clicks/wheel still broken; new CL water/FFT floods. T4 owns mouse, T1/T2 water, T5 resolution/delivery.
+- scope boundary: source-only classification and synthetic fixture, **not** original ZIP2 particle chain, Shader/Texture/Blend diagnosis, Android pixel result, Unity build or repaired graphics. No .meta/GUID, game assets, saves or other clients' files modified.
+- next: confirm CI after fixture SHA, apply audit to authenticated actual post-restore prefab export; correlate material pointers with shader and texture, alpha blend and image evidence; prioritize phone mini-lab results when owner provides them.
