@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1811Z-T1-chat-gles-gate-9d3f",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-shared-gles-context-readiness-v1-20261108",
+  "resource_key": "T1ComputeProbe.java",
+  "hypothesis": "Shared auto GLES compute case can execute before GLSurfaceView EGL initialization; bounded readiness handshake separates startup race from GPU numerical result.",
+  "source_commit": "695daa697b0ccc0e53ed0533f43b2d267e0036f5",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "3.12 (GitHub Actions)",
+    "gradle": "8.10.2",
+    "java": "Temurin JDK17",
+    "android": "compileSdk35"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_compute_context_gate.py -v",
+    "python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json",
+    "python3 -m unittest discover -s tests -p test_unified_testpack.py -v",
+    "gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha=$GITHUB_SHA -PversionCode=1"
+  ],
+  "negative_controls": [
+    "Compilers do NOT run Android EGL/Adreno; T1-04 intentionally invalid GLSL is not asserted here",
+    "Not-ready path returns FAIL SETUP_CONTEXT_TIMEOUT (no compute dispatch attempted), never PASS",
+    "Source guard rejects unknown T1 case IDs and hardens data-only pack route"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-shared-compute-source.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42509359669",
+  "artifact_urls": [],
+  "budget": "Light Android Java-source-only compile; no APK/Unity/native build",
+  "status": "completed",
+  "observed_result": "CI 42509359669 SUCCESS: 5/5 source contract tests, 7/7 unified testpack tests, shared Gradle Java compile BUILD SUCCESSFUL in 34s; no APK, no phone execution.",
+  "rejected_hypotheses": [
+    "Source-only verification or Java compile proves native GLES numerical or authentic Unity FFT correctness"
+  ],
+  "limitations": [
+    "The original 1s delay may be sufficient on many devices; no measured failure reproduction on POCO F5 Pro yet.",
+    "EGL initialization bounded wait is a startup reliability fix, not a GPU numerical or Water shader fix.",
+    "Shared application is not published or device tested; source SHA does not represent an installed APK."
+  ],
+  "integration_commit": "d83a4e4379fb8677daebea81da203281a1d89e82",
+  "next_step": "T5 evaluates single shared mini APK after NEED_BUILD T1 vote and checks signer/pack SHA; user executes Auto T1 on Adreno and shares real log. WATER-001 remains OPEN."
+}
