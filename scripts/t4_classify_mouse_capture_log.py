@@ -2,6 +2,22 @@
 """Conservative read-only analysis of Android physical mouse event sequences."""
 import argparse
 import json
+import re
+
+EPOCH = re.compile(r'(?<![A-Za-z_])epoch=(\d+)\b')
+
+
+def epoch_of(line):
+    match = EPOCH.search(line)
+    return match.group(1) if match else None
+
+
+def same_generation(request_line, relative_line):
+    # Legacy untagged logs are kept usable, but mixed/contradictory epochs
+    # cannot establish that a callback belongs to this capture attempt.
+    request_epoch, relative_epoch = epoch_of(request_line), epoch_of(relative_line)
+    return (request_epoch is None and relative_epoch is None) or (
+        request_epoch is not None and request_epoch == relative_epoch)
 
 EVENTS = ("physical_mouse_lock_intent", "physical_mouse_capture_requested", "physical_mouse_capture_retry",
           "physical_mouse_relative", "physical_mouse_capture_released",
@@ -17,9 +33,9 @@ def classify(lines):
     locks = [n for n, s in hits[EVENTS[0]] if "authored_lock" in s]
     escapes = [n for n, s in hits[EVENTS[0]] if "escape_release" in s]
     unlocks = [n for n, s in hits[EVENTS[0]] if "authored_unlock" in s]
-    requests = sorted(n for event in ("physical_mouse_capture_requested", "physical_mouse_capture_retry")
-                      for n, _ in hits[event])
-    relative = [n for n, _ in hits["physical_mouse_relative"]]
+    requests = sorted((n, s) for event in ("physical_mouse_capture_requested", "physical_mouse_capture_retry")
+                      for n, s in hits[event])
+    relative = hits["physical_mouse_relative"]
     releases = [n for n, _ in hits["physical_mouse_capture_released"]]
     findings = []
     for index, escape in enumerate(escapes):
@@ -38,15 +54,16 @@ def classify(lines):
                              if lock_index + 1 < len(subsequent_locks) else end)
                 boundary = min([n for n in unlocks + escapes + releases
                                 if lock < n < end] + [next_lock])
-                attempt_requests = [n for n in requests if lock < n < boundary]
-                for request in attempt_requests:
-                    attempts.append((request, boundary))
+                attempt_requests = [(n, s) for n, s in requests if lock < n < boundary]
+                for request, request_line in attempt_requests:
+                    attempts.append((request, request_line, boundary))
             if not attempts:
                 state = "LOCK_WITHOUT_REQUEST_OBSERVED"
-            elif any(any(request < n < boundary for n in relative)
-                     for request, boundary in attempts):
+            elif any(any(request < n < boundary and same_generation(request_line, relative_line)
+                     for n, relative_line in relative)
+                     for request, request_line, boundary in attempts):
                 state = "RELATIVE_AFTER_REARM_OBSERVED"
-            elif all(boundary in (unlocks + escapes + releases) for _, boundary in attempts):
+            elif all(boundary in (unlocks + escapes + releases) for _, _, boundary in attempts):
                 state = "RELEASED_BEFORE_RELATIVE_OBSERVED"
             else:
                 state = "REQUEST_WITHOUT_RELATIVE_OBSERVED"
