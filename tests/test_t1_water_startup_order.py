@@ -15,7 +15,7 @@ def fixture():
     def event(first, last, n=1):
         return {"count": n, "first_observed_unix_ms": BASE + first,
                 "last_observed_unix_ms": BASE + last}
-    return {
+    result = {
         "schema": 1,
         "session": "20261108-164850-270",
         "target_package": "com.alwansan.raft.androidtest",
@@ -39,13 +39,18 @@ def fixture():
                 "index_6": 11_165, "other_index": 0,
             }
         },
-        "final_shader_pass_errors_total": 74_359,
-        "final_compute_kernel_errors_total": 11_165,
         "performance_statistics": {
             "shader_pass_errors_total_at_last_sample": 73_663,
             "compute_kernel_errors_total_at_last_sample": 11_049,
         },
     }
+    result["stop_time_android_process_exit_info"] = {
+        "final_shader_pass_errors_total": 74_359,
+        "final_compute_kernel_errors_total": 11_165,
+        "final_error_groups": result["final_error_category_breakdown"],
+        "final_render_failure_breakdown": result["final_render_failure_breakdown"],
+    }
+    return result
 
 
 class StartupOrderTests(unittest.TestCase):
@@ -72,8 +77,8 @@ class StartupOrderTests(unittest.TestCase):
         for mutate in (
             lambda d: d["final_render_failure_breakdown"]["ultimate_water_invalid_pass_by_material"].update(spectrum=1),
             lambda d: d["final_render_failure_breakdown"]["invalid_kernel_index_root_lines"].update(other_index=1),
-            lambda d: d.update(final_shader_pass_errors_total=1),
-            lambda d: d.update(final_compute_kernel_errors_total=1),
+            lambda d: d["stop_time_android_process_exit_info"].update(final_shader_pass_errors_total=1),
+            lambda d: d["stop_time_android_process_exit_info"].update(final_compute_kernel_errors_total=1),
         ):
             data = fixture()
             mutate(data)
@@ -148,6 +153,32 @@ class StartupOrderTests(unittest.TestCase):
         result = analyze(parsed, ignored_last_sample_duplicates=ignored, input_sha256=checksum)
         self.assertNotIn("NEVER_EXPORT_THIS", json.dumps(result))
         self.assertNotIn("private_device_identifier", json.dumps(result))
+
+    def test_stop_time_groups_must_match_final_category_groups(self):
+        data = fixture()
+        data["stop_time_android_process_exit_info"]["final_error_groups"] = {
+            **data["final_error_category_breakdown"],
+            "water_fft_invalid_compute_kernel": {
+                **data["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"],
+                "count": 11_164,
+            },
+        }
+        with self.assertRaisesRegex(ValueError, "stop-time root groups inconsistent"):
+            analyze(data)
+
+    def test_reject_root_totals_without_stop_time_counts(self):
+        data = fixture()
+        data.pop("stop_time_android_process_exit_info")
+        data["final_shader_pass_errors_total"] = 74_359
+        data["final_compute_kernel_errors_total"] = 11_165
+        with self.assertRaisesRegex(ValueError, "stop_time_android_process_exit_info"):
+            analyze(data)
+
+    def test_bool_schema_must_not_alias_integer_one(self):
+        data = fixture()
+        data["schema"] = True
+        with self.assertRaisesRegex(ValueError, "schema"):
+            analyze(data)
 
     def test_noninteger_or_tampered_event_time_rejected(self):
         for mutate in (
