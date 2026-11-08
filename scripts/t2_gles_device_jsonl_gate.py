@@ -84,6 +84,32 @@ def verify(lines, expected_case):
     }
     if any(token not in detail for token in markers[expected_case]):
         raise ValueError("missing_expected_probe_measurement")
+    if expected_case == "CASE02":
+        # Marker presence alone can disguise contradictory FBO readbacks.
+        # This validates only self-consistency of the exported text, not GPU pixels.
+        arrays = {}
+        for name in ("sourceLeft", "sourceRight", "finalBaseline", "finalContrast"):
+            match = re.search(r"(?<![A-Za-z])" + name +
+                              r"=\\[([^\\]]+)\\]", detail)
+            if not match:
+                raise ValueError("missing_rgba_readback")
+            components = match.group(1).split(",")
+            if len(components) != 4 or any(
+                    re.fullmatch(r"\\s*(?:0|[1-9][0-9]{0,2})\\s*", c) is None
+                    for c in components):
+                raise ValueError("invalid_rgba_readback")
+            values = tuple(int(c) for c in components)
+            if any(c > 255 for c in values):
+                raise ValueError("invalid_rgba_channel")
+            arrays[name] = values
+        if (any(abs(a - b) > 2 for a, b in
+                zip(arrays["sourceLeft"], arrays["finalBaseline"])) or
+                any(abs(a - b) > 2 for a, b in
+                    zip(arrays["sourceRight"], arrays["finalContrast"]))):
+            raise ValueError("inconsistent_fbo_readbacks")
+        if all(abs(a - b) <= 2 for a, b in
+               zip(arrays["finalBaseline"], arrays["finalContrast"])):
+            raise ValueError("missing_fbo_contrast")
     return {"case": expected_case, "synthetic_gles_log_consistent": True,
             "original_raft_water_verified": False}
 
