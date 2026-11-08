@@ -79,6 +79,9 @@ jobs:
           assert r["original_derived_source_sha256_verified"]=="8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0"
           assert r["original_inherited_source_sha256_verified"]=="2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704"
           assert r["source_dispatch_calls"]==2 and r["source_settexture_calls"]==6
+          # Authentic CSharp9 Dx11FFT contains no FindKernel lookup; a
+          # Logcat integer six must not be claimed as Unity runtime lookup.
+          assert r["original_source_findkernel_call_count_in_Dx11FFT"]==0
           assert r["source_two_pass_affine_offsets"]==[0,1]
           assert r["compatible_source_numeric_cases"]==[{
               "assumed_power_of_two_size":256, "assumed_bank_flag":0,
