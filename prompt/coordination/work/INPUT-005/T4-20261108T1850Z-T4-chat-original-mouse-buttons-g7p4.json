@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "track": "physical-mouse-original-routing",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e8ea84e8bb9b4b32e3bea8d9c285794450815516",
   "experiment_key": "T4-authentic-original-button-wheel-callsite-census-zip2-sha-15964ea8",
   "resource_key": "original-ZIP2-3.2MB-managed-DLL-CPU-only",
@@ -14,7 +14,8 @@
     "scripts/t4_original_button_wheel_routing.py",
     "tests/test_t4_original_button_wheel_routing.py",
     ".github/workflows/raft-t4-original-button-wheel-routing.yml",
-    "prompt/coordination/clients/T4/sessions/20261108T1850Z-T4-chat-original-mouse-buttons-g7p4.md"
+    "prompt/coordination/clients/T4/sessions/20261108T1850Z-T4-chat-original-mouse-buttons-g7p4.md",
+    "docs/T4_AUTHENTIC_ORIGINAL_MOUSE_BUTTON_WHEEL_ROUTING_2026-11-08.md"
   ],
   "hypothesis": "Original Raft may read physical buttons and scroll through legacy Input APIs different from captured Android callbacks; classify authentic call-sites before selecting an injection or binding strategy.",
   "related_work": [
@@ -25,8 +26,15 @@
     "prompt/coordination/clients/T4/sessions/20261108T1835Z-T4-scheduled-source-filter-k7m2.md",
     "prompt/coordination/clients/T4/sessions/20261108T1819Z-T4-chat-captured-actions-f4n8.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded source-only authentic original ZIP2 button/wheel API census and synthetic negative controls, run unique CI and document safe integration plan. Do not edit game runtime or shared mini host without new evidence.",
-  "updated_at": "2026-11-08T18:50:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42512688990"
+  ],
+  "result": "Authentic original ZIP2 compiled managed DLL SHA/size verified, private 2395-file ILSpy lexical census: Legacy button down=4 held=6 up=2, mouse wheel GetAxis=6 mouseScrollDelta=2, one dynamic button argument; no direct MyInput or Mouse.current references. CI SUCCESS with six synthetic tests. No device/game Unity click or scroll proof.",
+  "next_step": "Analyze one shared lab physical-mouse T4-01..09 Android15 JSONL, then exact signed game capture callback and Unity input evidence; only then consider Android-only legacy shim for 12+8 authentic reference sites. Maintain no-double-click, touch, camera, keyboard, .rgd.",
+  "updated_at": "2026-11-08T19:03:00Z",
+  "source_commits": [
+    "aa71a13841e1f763133ee0176c632aa347ca344f",
+    "4480e0f2f33a653d32f7dc636eaa2f7b634cdf1c",
+    "65c32c9aebb79079439975eed323cc8f0a61f641"
+  ]
 }
