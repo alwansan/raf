@@ -7,6 +7,8 @@ on:
       - '.github/workflows/raft-t5-unity-interval-regression.yml'
       - 'scripts/t5_unity_interval_epoch.py'
       - 'tests/test_t5_unity_interval_epoch.py'
+      - 'scripts/t5_lograft_presented_fps.py'
+      - 'tests/test_t5_lograft_presented_fps.py'
 permissions:
   contents: read
 concurrency:
@@ -27,6 +29,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t5_unity_interval_epoch.py tests/test_t5_unity_interval_epoch.py
           python3 -m unittest discover -s tests -p 'test_t5_unity_interval_epoch.py' -v
+          python3 -m py_compile scripts/t5_lograft_presented_fps.py tests/test_t5_lograft_presented_fps.py
+          python3 -m unittest discover -s tests -p 'test_t5_lograft_presented_fps.py' -v
           tmp="$(mktemp)"
           trap 'rm -f "$tmp"' EXIT
           printf '%s\n' '{"area":"performance","operation":"sample","detail":"scene=MainScene;refresh_hz=120;frame_samples=40;fps=24;frame_p50_ms=30;frame_p95_ms=60;width=2400;height=1080"}' > "$tmp"
@@ -40,4 +44,29 @@ jobs:
           assert data["epochs"][0]["median_interval_fps"] == 24
           assert data["gpu_time_inferred"] is False
           print("T5_INTERVAL_CLI_PASS source_only=true device_proof=false")
+          PY
+
+      - name: Verify LogRaft CLI native provenance and legacy compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp)"
+          trap 'rm -f "$tmp"' EXIT
+          printf '%s\n' \
+            '{"source":"lograf_shell","package":"com.alwansan.raft.androidtest","presented_fps_estimate":24,"fps_quality":"surface_presentation_estimate","fps_tracking_status":"valid_surface_presentation_estimate","main_process_pid_verified":true,"frame_telemetry_stale":false,"fps_surface":"SurfaceView[com.alwansan.raft.androidtest]"}' \
+            '{"source":"lograf_shell","package":"com.other.app","presented_fps_estimate":100,"fps_quality":"surface_presentation_estimate","fps_tracking_status":"valid_surface_presentation_estimate","main_process_pid_verified":true,"frame_telemetry_stale":false,"fps_surface":"SurfaceView[com.other.app]"}' \
+            '{"source":"lograf_shell","package":"com.alwansan.raft.androidtest","presented_fps_estimate":120,"fps_quality":"unavailable","fps_tracking_status":"unverified","main_process_pid_verified":false,"frame_telemetry_stale":true,"fps_surface":""}' \
+            '{"presented_fps_estimate":30}' > "$tmp"
+          python3 scripts/t5_lograft_presented_fps.py "$tmp" --session-id T5-SYNTHETIC > "$RUNNER_TEMP/t5-lograft-result.json"
+          python3 - "$RUNNER_TEMP/t5-lograft-result.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          data=json.loads(Path(sys.argv[1]).read_text())
+          assert data["rows"] == 4
+          assert data["valid_estimates"] == 2
+          assert data["median_presented_fps_estimate"] == 27
+          assert data["rejected"]["wrong_game_package"] == 1
+          assert data["rejected"]["unverified_surface_estimate"] == 1
+          assert data["gpu_frame_ms"] is None
+          print("T5_LOGRAFT_CLI_PASS synthetic=true unity_fps=false device_proof=false")
           PY
