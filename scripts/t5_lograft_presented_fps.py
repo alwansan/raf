@@ -37,6 +37,17 @@ def summarize(rows, *, expected_session):
         if type(val) not in (int, float) or not math.isfinite(val) or val <= 0 or val > 360:
             rejected["invalid_estimate"] = rejected.get("invalid_estimate", 0) + 1
             continue
+        # Native LogRaft rows carry provenance and validity fields. A plausible
+        # number is not enough when the sampled surface or PID is unverified.
+        if row.get("source") == "lograf_shell":
+            if (row.get("fps_quality") != "surface_presentation_estimate"
+                    or row.get("fps_tracking_status") != "valid_surface_presentation_estimate"
+                    or row.get("main_process_pid_verified") is not True
+                    or row.get("frame_telemetry_stale") is not False
+                    or not isinstance(row.get("fps_surface"), str)
+                    or not row["fps_surface"].strip()):
+                rejected["unverified_surface_estimate"] = rejected.get("unverified_surface_estimate", 0) + 1
+                continue
         values.append(float(val))
     ordered = sorted(values)
     def percentile(p):
