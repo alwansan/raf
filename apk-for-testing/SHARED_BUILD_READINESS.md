@@ -1,7 +1,7 @@
 # جاهزية بناء APK المختبر المشترك — T1–T5
 **مختلفة تماماً عن** `prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md` الذي يخص XAPK لعبة Raft الكاملة. اقرأ [السياسة](UNIFIED_LAB_POLICY_AR.md).
 **shared_round_id:** shared-20261108-r1
-**build_decision:** NOT_REQUESTED — لم يراجع T5 الأصوات بعد. أي صوت من العامل **لا يُنشئ طلب بناء تلقائياً**.
+**build_decision:** T5_REVIEWING — صوت T5 واحد NEED_BUILD بسبب تغيير host Java حقيقي؛ لم يُطلب CI بعد. بناء Mini واحد فقط بعد تأكيد عدم التكرار.
 
 | العامل | القرار | لماذا؟ وما الاختبارات/التغييرات؟ | evidence SHA/CI | وقت UTC | الجولة |
 |---|---|---|---|---|---|
@@ -9,7 +9,7 @@
 | T2 | NEED_BUILD | Compiled T2-02 GLES FBO probe now asserts two distinct spatial regions with actual pixel readbacks from both FBO stages; prior single-color check could not detect spatial sample collapse. Requires unified javac gate, then one T5-reviewed shared APK/device check of T2-01..04. No independent T2 APK request; WATER-001 original ShaderLab remains OPEN. | source 73924c998d91eb64be33c883d9922d44981accd4; source/host-model 7/7 checks PASS; shared javac CI 42504045625 is older than patch (NOT new verification) | 2026-11-08T18:19:00Z | shared-20261108-r1 |
 | T3 | NOT_REVIEWED | يبدأ T3 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
 | T4 | NOT_REVIEWED | يبدأ T4 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
-| T5 | NOT_REVIEWED | يبدأ T5 بالمراجعة بنفسه | — | — | shared-20261108-r1 |
+| T5 | NEED_BUILD | Unified host Java fix: file SHA EVIDENCE_READY retained, FAIL/BLOCKED remain pending, force rerun explicit; certificate SHA256 and package assertion added. First shared APK still unbuilt. Need one Android15 device trial of T5-01..02 and UI state persistence, not Unity evidence. | https://github.com/alwansan/raf/commit/f6cb665f01770778c7e2f699e0f132ec57e9a334 ; JVM 20/20 local, regression source https://github.com/alwansan/raf/commit/6145c7231d6dd7afb63b07f520920b87c366ccc2 | 2026-11-08T18:24:32Z | shared-20261108-r1 |
 
 ## T5 — سجل قرار بناء المختبر فقط
 - **latest_shared_apk_sha256:** لا يوجد منشور موحد حتى الآن.
