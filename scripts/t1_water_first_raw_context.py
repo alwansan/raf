@@ -48,6 +48,10 @@ FORMAT_PROBES = {
     "threadtime": THREAD_LINE,
     "mmdd_clock": re.compile(rb"11-08\s+\d\d:\d\d:\d\d\.\d{3}"),
     "yyyy_mm_dd": re.compile(rb"2026[-/]11[-/]08"),
+    "iso_milliseconds_any_position": ISO_DATE,
+    "iso_milliseconds_first256": re.compile(rb"^.{0,256}2026-11-08[T ]\d\d:\d\d:\d\d\.\d{3}"),
+    "mmdd_clock_first256": re.compile(rb"^.{0,256}11-08\s+\d\d:\d\d:\d\d\.\d{3}"),
+    "iso_clock_with_comma_milliseconds": re.compile(rb"2026-11-08[T ]\d\d:\d\d:\d\d,\d{3}"),
     "date_hyphen": re.compile(rb"2026-11-08"),
     "date_slash": re.compile(rb"2026/11/08"),
     "date_hms_within_40": re.compile(rb"2026[-/]11[-/]08.{0,40}\d\d:\d\d:\d\d"),
@@ -129,7 +133,7 @@ def _metadata(line):
     match = THREAD_LINE.search(line[:256])
     if match:
         return _stamp_ms(match.group(1)), int(match.group(2)), int(match.group(3))
-    iso = ISO_DATE.search(line[:256])
+    iso = ISO_DATE.search(line[:1024])
     if iso:
         # PID/TID unknown, therefore any nearby stack mention remains unpaired.
         return _stamp_ms(b"11-08 " + iso.group(1)), None, None
