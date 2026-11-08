@@ -1,0 +1,19 @@
+{
+  "session_id": "20261108T1524Z-T2-scheduled-water-lab-c8f2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "baseline_sha": "e174c4e080d49ef655691a4bbaf7df5a41f09ea5",
+  "status": "active",
+  "intended_files": [
+    "apk-for-testing/examples/t2-water-render-testpack.json",
+    "apk-for-testing/workers/T2/README.md",
+    "prompt/coordination/clients/T2/sessions/20261108T1524Z-T2-scheduled-water-lab-c8f2.md"
+  ],
+  "experiment_key": "t2-water-mini-lab-protocol-v1-no-renderer-20261108",
+  "resource_key": null,
+  "hypothesis": "A data-only mini lab testpack can define reproducible positive/negative GPU pass/FFT controls without falsely claiming the generic host executes GPU shaders; real GPU tests require compiled renderer.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/sessions/20261108T1417Z-T2-scheduled-original-il-source-g7m2.md"
+  ],
+  "updated_at": "2026-11-08T15:24:00Z"
+}
