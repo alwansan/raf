@@ -19,7 +19,7 @@ def audit(root):
     root = Path(root)
     if not root.is_dir():
         raise ValueError("scan root must be a directory")
-    shader_guids = set()
+    shader_guid_counts = Counter()
     counters = Counter()
     for meta in root.rglob("*.shader.meta"):
         counters["shader_meta_seen"] += 1
@@ -34,11 +34,12 @@ def audit(root):
             # Reject symlink targets as well: this audit must not follow external source trees.
             shader_source = meta.with_suffix("")
             if shader_source.is_file() and not shader_source.is_symlink():
-                shader_guids.add(match.group(1).lower())
+                shader_guid_counts[match.group(1).lower()] += 1
             else:
                 counters["shader_meta_without_source"] += 1
         else:
             counters["shader_meta_without_guid"] += 1
+    counters["duplicate_shader_guid_entries"] = sum(n - 1 for n in shader_guid_counts.values() if n > 1)
     for mat in root.rglob("*.mat"):
         counters["material_seen"] += 1
         try:
@@ -55,16 +56,18 @@ def audit(root):
         if guid == ZERO:
             counters["shader_pointer_builtin_or_null"] += 1 if int(file_id) else 0
             counters["shader_pointer_null"] += 1 if not int(file_id) else 0
-        elif guid in shader_guids:
+        elif shader_guid_counts[guid] > 1:
+            counters["shader_guid_ambiguous_in_scan"] += 1
+        elif shader_guid_counts[guid] == 1:
             counters["shader_guid_resolved_in_scan"] += 1
         else:
             counters["shader_guid_unresolved_in_scan"] += 1
     return {key: counters[key] for key in (
         "material_seen", "material_unreadable", "material_shader_pointer_unparsed",
         "shader_pointer_builtin_or_null", "shader_pointer_null",
-        "shader_guid_resolved_in_scan", "shader_guid_unresolved_in_scan",
+        "shader_guid_resolved_in_scan", "shader_guid_ambiguous_in_scan", "shader_guid_unresolved_in_scan",
         "shader_meta_seen", "shader_meta_unreadable", "shader_meta_without_guid",
-        "shader_meta_without_source")}
+        "shader_meta_without_source", "duplicate_shader_guid_entries")}
 
 def main():
     parser = argparse.ArgumentParser()
