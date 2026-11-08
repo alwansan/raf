@@ -1,0 +1,16 @@
+{
+  "session_id": "20261108T2131Z-T3-scheduled-orphan-material-m8q4",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "178c29b33236bc69d2cd730d84ef398c3e0a05b7",
+  "intended_files": [
+    "scripts/t3_particle_external_material_resolution.py",
+    "tests/test_t3_particle_external_material_resolution.py"
+  ],
+  "hypothesis": "A GUID matched by orphan .mat.meta is currently counted as resolved even when the corresponding .mat asset is missing; this creates false coverage evidence.",
+  "experiment_key": "T3-orphan-mat-meta-paired-asset-v1",
+  "resource_key": null,
+  "taken_over_from": "T3 scheduled external GUID audit f4f1e1f5 and 68dffe3c; same tool, new disjoint edge case",
+  "updated_at": "2026-11-08T21:31:00Z"
+}
