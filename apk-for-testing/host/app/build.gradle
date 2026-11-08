@@ -8,8 +8,8 @@ android {
         applicationId "com.alwansan.raft.lab.${worker.toLowerCase()}"
         minSdk 26
         targetSdk 35
-        versionCode 1
-        versionName '0.1.0-source-prototype'
+        versionCode (worker == 'T1' ? 2 : 1)
+        versionName (worker == 'T1' ? '0.1.1-t1-export-path' : '0.1.0-source-prototype')
         buildConfigField 'String', 'LAB_WORKER', '"' + worker + '"'
     }
     buildFeatures { buildConfig true }
