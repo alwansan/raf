@@ -1,0 +1,11 @@
+# T3 scheduled — 20261108T1930Z-T3-scheduled-crlf-renderer-b7q2
+- identity: T3; origin: scheduled; track: RENDER-002; baseline HEAD: d1f6635838df341d88a832ffe2b6bf4943847f31.
+- owner evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md, original world/save/reentry on 42058825739 remains phone-confirmed only for that build; graphics open.
+- resumed from: clients/T3/sessions/20261108T1852Z-T3-chat-png-integrity-k8m2.md and 20261108T1826Z-T3-scheduled-ledger-id-r4c9.md. Shared mini one-APK rule read. T4 physical mouse and T5 resolution/three controls remain independent.
+- scope: prompt/coordination/work/RENDER-002/20261108T1930Z-T3-scheduled-crlf-renderer-b7q2.md (0bf97d962813e61a01d000ece7ebac2688eabc99).
+- hypothesis test: CRLF alone DOES NOT break original DOC regex; rejected after reproduction. UTF-8 BOM DOES prevent matching first YAML document; before 0 vs after 1 using pinned sample.
+- source fix: scripts/t3_particle_renderer_yaml_audit.py reads UTF-8 with BOM stripping (utf-8-sig), commit eff0e67f8e5a2ab3a23e8e975871507e170269ad.
+- regression: tests/test_t3_particle_renderer_yaml_audit.py new BOM+CRLF first-document renderer test, commit 21c07e7027f176ae31d7e68f584973aff056c201.
+- validation: standalone Python regex reproduction before=0 after=1; Actions 42515385023 success on source-only fix SHA; 42515392649 in_progress at last inspection on regression SHA, so waiting_ci; no test success claim for newer SHA yet.
+- scope updated 2160a631b41f8e478d46b64306501848193392f2. No actual original Raft assets, shader, GUID, scene, OBB, save, or device changed. No Unity/mini APK requested.
+- next: inspect 42515392649 conclusion, then authenticate ZIP2 original particle prefab/material/shader/texture chain and compare real export to CL screenshots. RENDER-002 OPEN / NOT_READY. Shared mini source proof does not prove original game pixels.
