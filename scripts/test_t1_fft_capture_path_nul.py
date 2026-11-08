@@ -19,7 +19,7 @@ class PrivateCaptureNulPathTests(unittest.TestCase):
             self.skipTest("POSIX filename semantics required")
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            filename = r"capture\\x00.rgba32f"
+            filename = r"capture\x00.rgba32f"
             payload = bytes(16)
             (root / filename).write_bytes(payload)
             self.assertEqual(read_private_capture(root, filename), payload)
