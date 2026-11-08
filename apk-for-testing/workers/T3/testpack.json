@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "pack_id": "t3-gles3-material-controls-v1",
+  "title": "T3 Android GLES3 color / alpha / sRGB device checks",
+  "version": "1.0.0",
+  "source_sha": null,
+  "tests": [
+    {
+      "id": "CASE01",
+      "type": "note",
+      "title": "Driver and baseline RGB",
+      "instructions": "Launch on the POCO F5 Pro. Select CASE01 and verify distinct red, green, blue columns. Record screenshot and export logs; no Raft game assets are used.",
+      "expected": "Three opaque RGB columns and GLES_VENDOR/RENDERER/VERSION in exported JSONL."
+    },
+    {
+      "id": "CASE02",
+      "type": "note",
+      "title": "Vertex colors",
+      "instructions": "Select CASE02; inspect four corners and gradient center. Record whether any area is unexpectedly solid white.",
+      "expected": "A smooth four-corner vertex-color gradient, not a uniformly white card."
+    },
+    {
+      "id": "CASE03",
+      "type": "note",
+      "title": "Straight alpha smoke",
+      "instructions": "Select CASE03; examine red smoke-like translucent overlay against blue background. Capture the area and compare with square smoke in Raft screenshot as a qualitative reference only.",
+      "expected": "Blue background remains visible beneath red layer; no unintended opaque rectangular particle."
+    },
+    {
+      "id": "CASE04",
+      "type": "note",
+      "title": "Premultiplied alpha contract",
+      "instructions": "Select CASE04; compare left straight-alpha panel with right premultiplied-alpha panel, both over blue. Note any obvious brightness discrepancy.",
+      "expected": "Panels look approximately equal when GL blend factors match the supplied alpha encoding."
+    },
+    {
+      "id": "CASE05",
+      "type": "note",
+      "title": "Texture sRGB decode",
+      "instructions": "Select CASE05; compare equal 128-encoded gray textures sampled with UNORM on left and sRGB on right.",
+      "expected": "sRGB half on right is visibly darker; recorded left/right pixels differ. This is not Unity color-space validation."
+    },
+    {
+      "id": "CASE06",
+      "type": "note",
+      "title": "GLSL compile negative control",
+      "instructions": "Select CASE06; export logs and find negative_control; verify deliberately malformed shader failed to compile while a valid blue background still displays.",
+      "expected": "negative_control PASS invalid shader rejected; fallback draws and no unexpected GL error."
+    }
+  ]
+}
