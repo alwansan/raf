@@ -248,6 +248,7 @@ namespace RaftAndroid.Platform
                 lastLoggedCount = received;
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
                     "physical_mouse_relative", "events=" + received +
+                    "; epoch=" + Volatile.Read(ref epoch) +
                     "; legacyAxes=true; deviceDirectionVerified=false");
             }
         }
@@ -336,14 +337,6 @@ namespace RaftAndroid.Platform
             // powers of two so a device that never grants capture cannot flood logs.
             // Attempts count requests, not Android acceptance or mouse motion.
             int attempt = ++captureRequestAttempts;
-            if (!requested)
-                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
-                    "physical_mouse_capture_requested",
-                    "androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
-            else if (attempt > 1 && (attempt & (attempt - 1)) == 0)
-                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
-                    "physical_mouse_capture_retry",
-                    "attempt=" + attempt + "; nativeAccepted=unknown; requiresDeviceConfirmation=true");
             int currentEpoch;
             lock (captureGate)
             {
@@ -352,6 +345,18 @@ namespace RaftAndroid.Platform
                 // A new generation must not inherit the prior focused View.
                 Volatile.Write(ref captureViewIdentity, 0);
             }
+            // Correlate bounded request/retry events with the exact generation
+            // used by the listener. These markers do not imply OS acceptance.
+            if (attempt == 1)
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_requested",
+                    "epoch=" + currentEpoch +
+                    "; androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
+            else if ((attempt & (attempt - 1)) == 0)
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_retry",
+                    "epoch=" + currentEpoch + "; attempt=" + attempt +
+                    "; nativeAccepted=unknown; requiresDeviceConfirmation=true");
             // Do not reuse one listener across release/reacquire. Its token is
             // captured at install time, not read from a later active request.
             var requestListener = new CapturedListener(this, currentEpoch);
