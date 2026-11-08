@@ -457,14 +457,21 @@ internal static class Program
         var sourceInstruction=trace.SourceInstruction;
         if(sourceInstruction is null || sourceInstruction.Operand is not MethodReference callee)
             return "missing_call_reference";
-        if(sourceInstruction.OpCode.Code==Code.Callvirt)
-            return "virtual_dispatch_unresolved";
+        // C# can emit CALLVIRT for nonvirtual instance methods merely for the
+        // receiver null-check. Do not equate opcode CALLVIRT with dynamic
+        // dispatch without checking the exact ORIGINAL MethodDefinition flags.
         MethodDefinition? original=null;
         try { original=callee.Resolve(); }
         catch(AssemblyResolutionException) {return "external_or_unresolved_method";}
         catch(ResolutionException) {return "external_or_unresolved_method";}
         if(original is null || original.Module!=sourceModule)
             return "external_or_unresolved_method";
+        if(sourceInstruction.OpCode.Code==Code.Callvirt)
+        {
+            if(!original.HasThis)return "callvirt_receiver_signature_invalid";
+            if(original.IsVirtual && !original.IsFinal)
+                return "virtual_dispatch_unresolved";
+        }
         if(!original.HasBody)return "original_method_without_body";
         var il=original.Body.Instructions;
         if(original.Body.HasExceptionHandlers || il.Count>128 ||
@@ -771,7 +778,7 @@ internal static class Program
         string methodKind1=OriginalTextureReturnBodyFamily(back1,asm.MainModule);
         var permittedReturnBodies=new HashSet<string>{
             "not_call_return_source", "missing_call_reference", "virtual_dispatch_unresolved",
-            "external_or_unresolved_method", "original_method_without_body",
+            "callvirt_receiver_signature_invalid", "external_or_unresolved_method", "original_method_without_body",
             "original_method_complex_flow", "original_method_multiple_or_missing_returns",
             "original_method_return_producer_unknown", "original_method_static_field_return",
             "original_method_instance_field_return_receiver_unproved",
@@ -954,6 +961,21 @@ internal static class Program
         getter.Body.Instructions.Insert(0,Instruction.Create(OpCodes.Ret));
         if(OriginalTextureReturnBodyFamily(traced,mod)!="original_method_multiple_or_missing_returns")
             throw new InvalidOperationException("multiple_returns_must_remain_unresolved");
+        // CALLVIRT with an ORIGINAL NONVIRTUAL instance method has a fixed
+        // static body (null-check), unlike a genuinely virtual method.
+        var instanceGetter=new MethodDefinition("SourceFreeNonvirtualGetter",
+            Mono.Cecil.MethodAttributes.Public,tex);
+        owner.Methods.Add(instanceGetter);
+        instanceGetter.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        instanceGetter.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        stream[2]=Instruction.Create(OpCodes.Callvirt,instanceGetter);
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="Texture" ||
+           OriginalTextureReturnBodyFamily(traced,mod)!="original_method_static_field_return")
+            throw new InvalidOperationException("callvirt_nonvirtual_body_must_be_statically_traceable");
+        instanceGetter.IsVirtual=true;
+        if(OriginalTextureReturnBodyFamily(traced,mod)!="virtual_dispatch_unresolved")
+            throw new InvalidOperationException("virtual_dispatch_must_not_pick_a_body");
     }
 
     public static int Main(string[] args)
