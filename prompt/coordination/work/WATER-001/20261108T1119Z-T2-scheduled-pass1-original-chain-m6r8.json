@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "WATER-001",
   "baseline_sha": "3cc8f4052ea925fd22781995d4e004d96d4b2b4c",
-  "status": "active",
+  "status": "blocked",
   "intended_files": [
     "clients/T2/sessions/20261108T1119Z-T2-scheduled-pass1-original-chain-m6r8.md",
     "work/experiments/20261108T1119Z-T2-scheduled-pass1-original-chain-m6r8.md"
@@ -15,5 +15,8 @@
     "clients/T2/sessions/20261108T0420Z-T2-scheduled-finite-json-7c2e.md",
     "scripts/t2_pass1_stack_provenance.py"
   ],
-  "updated_at": "2026-11-08T11:19:00Z"
+  "updated_at": "2026-11-08T11:19:00Z",
+  "blocker": "Original managed assembly typed IL def-use producer chain not yet traced; synthetic stack model cannot prove pass1 source/destination",
+  "next_step": "Run pinned private original Mono.Cecil trace and publish only sanitized aggregate classifications",
+  "result_commit": "884518507d7a957a6eb1dc4468b30c0bae96a60a"
 }
