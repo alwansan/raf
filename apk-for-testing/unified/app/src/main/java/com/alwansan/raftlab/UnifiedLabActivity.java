@@ -24,7 +24,7 @@ import java.util.*;
  * A mouse click, another app's screenshot, or visual correctness cannot be simulated.
  */
 public final class UnifiedLabActivity extends Activity {
-    private static final int LOAD_PACK=401, PICK_SCREENSHOT=402, PICK_FILE=403, AUTO_CASE=404, MANUAL_CASE=405;
+    private static final int LOAD_PACK=401, PICK_SCREENSHOT=402, PICK_FILE=403, AUTO_CASE=404, MANUAL_CASE=405, T3_VISUAL_PREVIEW=406;
     private static final int MAX_PACK=262144;
     private final ArrayList<JSONObject> tests=new ArrayList<>();
     private final ArrayList<JSONObject> pending=new ArrayList<>();
@@ -343,6 +343,30 @@ public final class UnifiedLabActivity extends Activity {
             }
             activeAuto=null;runNext();return;
         }
+        if(req==T3_VISUAL_PREVIEW){
+            // A user-selected T3 image is evidence only; never auto-mark visual PASS.
+            if(currentManual==null||!"t3_visual".equals(currentManual.optString("driver")))return;
+            if(result!=RESULT_OK||data==null){
+                show("عدت من شاشة T3 دون تسجيل اختبار جديد. يمكنك فتحه مرة أخرى.");
+                return;
+            }
+            String expected=currentManual.optString("id");
+            if(!expected.equals(data.getStringExtra("case_id"))){
+                show("اختبار T3 المُعاد لا يطابق الاختبار الذي فتحته؛ لم نحفظ نتيجة غير موثوقة.");
+                return;
+            }
+            String verdict=data.getStringExtra("status");
+            String observed=data.getStringExtra("observed");
+            String uri=data.getStringExtra("screenshot_uri");
+            if(!Arrays.asList("FAIL","EVIDENCE_READY","NEEDS_SCREENSHOT").contains(verdict))
+                verdict="NEEDS_SCREENSHOT";
+            if("EVIDENCE_READY".equals(verdict)&&!screenshotValid(uri))
+                verdict="NEEDS_SCREENSHOT";
+            store(currentManual,verdict,observed==null?"لم يرجع وصف فحص GPU":observed,uri);
+            show("سجّلنا نتيجة T3: "+ArabicLabStrings.status(verdict)+
+                "؛ راجع الرسم أو الصورة، ثم اكتب ما شاهدته واضغط نجاح أو فشل حسب المشاهدة.");
+            return;
+        }
         if(req==MANUAL_CASE){
             if(currentManual!=null&&data!=null&&currentManual.optString("id").equals(data.getStringExtra("case_id"))){
                 String observed=data.getStringExtra("observed");
@@ -363,6 +387,22 @@ public final class UnifiedLabActivity extends Activity {
             else if(req==PICK_FILE)hashFile(uri);
         }catch(Exception e){log("picker_error",e.toString());show("خطأ قراءة الملف: "+e.getMessage());}
     }
+    void launchT3VisualCase(JSONObject c){
+        if(c==null||!"t3_visual".equals(c.optString("driver")))return;
+        if(running||waitingForChild){
+            show("انتظر انتهاء الاختبارات التلقائية قبل فتح اختبار T3 يدويًا.");
+            return;
+        }
+        String id=c.optString("id");
+        if(!id.matches("T3-0[1-6]")){
+            show("رقم اختبار T3 غير صالح؛ لا يمكن تشغيل ملف اختبارات قديم.");
+            return;
+        }
+        Intent intent=new Intent().setClassName(this,"com.alwansan.raft.t3lab.T3LabActivity");
+        intent.putExtra("manual_case_id",id);
+        intent.putExtra("shared_session",session);
+        startActivityForResult(intent,T3_VISUAL_PREVIEW);
+    }
     void openPending(JSONObject c){
         currentManual=c;comment.setText("");
         String pic=screenshotRequired(c)?"صورة الدليل مطلوبة":"الصورة اختيارية";
@@ -371,11 +411,11 @@ public final class UnifiedLabActivity extends Activity {
             "\nالخطوات: "+ArabicLabStrings.instructions(id,c.optString("instructions"))+
             "\nالمتوقع: "+ArabicLabStrings.expected(id,c.optString("expected"))+
             "\n"+pic+"\nالحالة السابقة: "+ArabicLabStrings.status(saved(c).optString("status")));
-        if("file_sha256".equals(c.optString("driver"))){
+        if("t3_visual".equals(c.optString("driver"))){
+            show("سيفتح رسم T3 الآن. شاهد الألوان ثم اضغط زر التقاط الصورة والعودة داخل شاشة الاختبار.");
+            launchT3VisualCase(c);
+        }else if("file_sha256".equals(c.optString("driver"))){
             pick(PICK_FILE,"*/*");
-        }else if("t3_visual".equals(c.optString("driver"))&&
-                "NEEDS_SCREENSHOT".equals(saved(c).optString("status"))){
-            show("فشل التقاط صورة T3. أرفق لقطة حقيقية من نافذة المختبر أو أعد تشغيل فحوص T3 الآلية.");
         }else show("اقرأ الخطوات أعلاه؛ اكتب ما شاهدته، وأرفق الصورة إذا كانت مطلوبة، ثم اختر نجاحًا أو فشلًا حقيقيًا.");
     }
     void nextPending(){
@@ -396,7 +436,7 @@ public final class UnifiedLabActivity extends Activity {
             startActivityForResult(intent,MANUAL_CASE);
         }else if(driver.equals("file_sha256"))pick(PICK_FILE,"*/*");
         else if(driver.equals("t3_visual")){
-            show("شغّل فحص T3 الآلي مجددًا للحصول على صورة حقيقية أو أرفق صورة التقطتها.");
+            launchT3VisualCase(currentManual);
         }else {
             show("هذا الاختبار يحتاج تشغيل اللعبة أو قراءة ملف أو مشاهدة حالة فعلية؛ اكتب الأدلة في الملاحظة.");
         }
