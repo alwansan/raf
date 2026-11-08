@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T2",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1817Z-T2-chat-fbo-contrast-92d4",
-  "resumed_from_session": "20261108T171538Z-T2-scheduled-fbo-audit",
+  "session_id": "20261108T1853Z-T2-chat-blit-normalized-g9d3",
+  "resumed_from_session": "20261108T1822Z-T2-scheduled-gl-ready-k8p3",
   "status": "paused",
-  "base_sha": "6d8f2df68b04aa6c072db9777b5bda8293bc29d9",
-  "last_commit": "73924c998d91eb64be33c883d9922d44981accd4",
-  "updated_at": "2026-11-08T18:21:00Z",
+  "base_sha": "21ae71a828d55da9337fa252f38c8b39b7a6395c",
+  "last_commit": "3a0f82bccc1f44b8f2862fe2f618f01748ec0cdc",
+  "updated_at": "2026-11-08T18:56:00Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -15,13 +15,16 @@
     "Blur",
     "foam-texture-symbol-identity",
     "T2-FBO-CONTRAST-20261108",
-    "shared-mini-lab-T2-02"
+    "shared-mini-lab-T2-02",
+    "T2-FOAM-BLIT-NORMALIZED-20261108",
+    "shared-mini-r1-delivered"
   ],
   "work_ids": [
     "T2-20261104T2354Z-foam-member-abi",
     "T2-20261105T0013Z-foam-resource-interface",
     "T2-20261105T0023Z-T2-foam-texture-identity-texture-identity",
-    "20261108T1817Z-T2-chat-fbo-contrast-92d4"
+    "20261108T1817Z-T2-chat-fbo-contrast-92d4",
+    "20261108T1853Z-T2-chat-blit-normalized-g9d3"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937996942",
@@ -33,8 +36,9 @@
     "https://github.com/alwansan/raf/actions/runs/41939553448",
     "https://github.com/alwansan/raf/actions/runs/41941354379",
     "https://github.com/alwansan/raf/actions/runs/42504045625",
-    "https://github.com/alwansan/raf/actions/runs/42496746941"
+    "https://github.com/alwansan/raf/actions/runs/42496746941",
+    "https://github.com/alwansan/raf/actions/runs/42509945996"
   ],
-  "next_step": "T2-02 dual-region FBO test source-patched (73924c998d91eb64be33c883d9922d44981accd4), 7/7 static/host oracle checks only. T2 own shared readiness NEED_BUILD; T5 to verify post-change unified javac and decide one shared Mini APK. No device GL proof. WATER-001 actual original Foam pass/CB0 source remains OPEN; resume private original operand-producer path without exposing assets.",
+  "next_step": "Unified team lab r1 APK SUCCESS CI42509945996 includes T2 current driver; T2 shared r2 NO_BUILD; no duplicate build. 10/10 source-free normalized typed Blit operand gate tests pass (e98e0d + 3a0f82), NOT original IL evidence. Next: private ZIP2 managed assembly authentication and actual Mono.Cecil Foam Graphics.Blit pass0/1 stack producer chain (field/branch alias fail-closed), original CB0/samplers and Unity pass binding; device T2-01..04 output pending. WATER-001 OPEN.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
