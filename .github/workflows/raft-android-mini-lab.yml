@@ -1,0 +1,48 @@
+name: Raft Android mini-lab host (manual, not full game)
+on:
+  workflow_dispatch:
+    inputs:
+      worker:
+        description: Independent mini APK package
+        type: choice
+        options: [T1, T2, T3, T4, T5]
+        default: T4
+permissions:
+  contents: read
+concurrency:
+  group: raft-android-mini-lab-${{ inputs.worker }}-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  host:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify imported-data contracts
+        run: |
+          python3 scripts/validate_android_testpack.py apk-for-testing/examples/t4-mouse-testpack.json
+          python3 -m unittest discover -s tests -p test_android_testpack.py -v
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Build independent debug APK
+        env: {WORKER: "${{ inputs.worker }}"}
+        run: |
+          gradle -p apk-for-testing/host --no-daemon :app:assembleDebug -Pworker="$WORKER"
+          test -s apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
+          sha256sum apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk | tee mini-lab-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: raft-mini-lab-${{ inputs.worker }}-${{ github.sha }}
+          path: |
+            apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
+            mini-lab-sha256.txt
+          retention-days: 7
+          if-no-files-found: error
