@@ -1,0 +1,148 @@
+name: T2 WATER-001 SHA-original Foam Blit CIL operand provenance (safe only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T2/FoamBlitOriginalProducers/**'
+      - 'scripts/t2_foam_original_blit_report.py'
+      - 'tests/test_t2_foam_original_blit_report.py'
+      - '.github/workflows/raft-t2-foam-original-blit-producers.yml'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: t2-original-foam-blit-producer-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  authenticate-and-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout source-only tools, no raw game files
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t2_foam_original_blit_report.py
+            /scripts/t2_original_foam_shaderfind_name.py
+            /scripts/t2_foam_original_manifest_pptr.py
+            /scripts/w1_stage_zip2_owners.py
+            /tests/test_t2_foam_original_blit_report.py
+            /android-port/Experiments/T2/FoamBlitOriginalProducers/
+
+      - name: Source-free privacy and typed-role regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_original_blit_report.py tests/test_t2_foam_original_blit_report.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_blit_report.py' -v
+          python3 -c 'import shutil; assert shutil.disk_usage(".").free > 3*1024**3'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Compile independent Cecil original probe and synthetic controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish android-port/Experiments/T2/FoamBlitOriginalProducers/FoamBlitOriginalProducers.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t2-foam-blit-tool" \
+            > "$RUNNER_TEMP/t2-foam-blit-build.log" 2>&1 || {
+              python3 - <<'PY'
+          import collections,os,re
+          from pathlib import Path
+          txt=(Path(os.environ['RUNNER_TEMP'])/'t2-foam-blit-build.log').read_text(errors='replace')
+          print('T2_ORIGINAL_FOAM_BLIT_COMPILER_SAFE_CODES',
+                dict(collections.Counter(re.findall(r'error\\s+((?:CS|NU|NETSDK)[0-9]+)',txt))))
+          print('T2_ORIGINAL_FOAM_BLIT_COMPILER_SAFE_LINES',
+                re.findall(r'Program.cs\\((\\d+),(\\d+)\\):\\s*error\\s+(CS\\d+)',txt)[:15])
+          PY
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/t2-foam-blit-tool/FoamBlitOriginalProducers.dll" --selftest
+
+      - name: Checkout immutable ZIP2 original Shader owner and managed Assembly only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-foam-blit-zip2
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+
+      - name: Authenticate exact original DLL and reconstruct original Shader owner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage,fingerprint
+          repo=Path('t2-original-foam-blit-zip2')
+          assert subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          rows=parse_original_manifest(repo/'RAFT_FILE_MANIFEST.tsv')
+          dlls=[x for x in rows if x['path']=='Raft_Data/Managed/Assembly-CSharp.dll']
+          assert len(dlls)==1 and dlls[0]['kind']=='plain' and dlls[0]['bytes']==3211776
+          assert fingerprint(repo/'Raft'/dlls[0]['path'])==(3211776,dlls[0]['sha256'])
+          original=Path(os.environ['RUNNER_TEMP'])/'t2-foam-blit-original-owner'
+          src=stage(repo,original,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert src['provider_sha']==ZIP2_SHA and src['verified_bytes']==115978112 and src['lfs_used'] is False
+          (Path(os.environ['RUNNER_TEMP'])/'t2-foam-blit-dll-sha-private.txt').write_text(dlls[0]['sha256'])
+          print('T2_FOAM_BLIT_SOURCE_SHA_PASS original_dll_bytes=3211776 owner_bytes=115978112 lfs=false')
+          PY
+
+      - name: Extract original Foam Shader name to private runner scratch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check 'UnityPy==1.25.4' -q
+          timeout 160s python3 -m scripts.t2_original_foam_shaderfind_name \
+            --source "$RUNNER_TEMP/t2-foam-blit-original-owner" \
+            --private-out "$RUNNER_TEMP/t2-private-foam-blit-shader-name.txt"
+
+      - name: Scan SHA-original typed Graphics.Blit sites, emit safe aggregate only
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_sha="$(cat "$RUNNER_TEMP/t2-foam-blit-dll-sha-private.txt")"
+          timeout 180s dotnet "$RUNNER_TEMP/t2-foam-blit-tool/FoamBlitOriginalProducers.dll" \
+            "t2-original-foam-blit-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            "$RUNNER_TEMP/t2-private-foam-blit-shader-name.txt" \
+            "$RUNNER_TEMP/t2-foam-blit-original-safe.json" "$expected_sha"
+          python3 -m scripts.t2_foam_original_blit_report "$RUNNER_TEMP/t2-foam-blit-original-safe.json"
+          test "$(stat -c '%s' "$RUNNER_TEMP/t2-foam-blit-original-safe.json")" -le 4096
+
+      - name: Purge original source and private symbols BEFORE upload
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$GITHUB_WORKSPACE/t2-original-foam-blit-zip2" \
+            "$RUNNER_TEMP/t2-foam-blit-original-owner" \
+            "$RUNNER_TEMP/t2-private-foam-blit-shader-name.txt" \
+            "$RUNNER_TEMP/t2-foam-blit-dll-sha-private.txt" \
+            "$RUNNER_TEMP/t2-foam-blit-build.log"
+
+      - name: Publish safe finite counts and type roles only
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: t2-original-foam-blit-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-blit-original-safe.json
+          retention-days: 7
+          if-no-files-found: error
