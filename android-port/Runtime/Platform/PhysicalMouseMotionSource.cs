@@ -92,9 +92,7 @@ namespace RaftAndroid.Platform
         }
         public bool Record(int action,int source,int actionButton,int buttonState,float v,float h)
         {
-            if (source!=PhysicalMouseMotionSource.Mouse &&
-                source!=PhysicalMouseMotionSource.MouseRelative &&
-                source!=PhysicalMouseMotionSource.Touchpad) return false;
+            if (!PhysicalMouseButtonWheelFrame.SourceIsPhysical(source)) return false;
             if (!IsAction(action)) return false;
             if (action==Scroll && (float.IsNaN(v)||float.IsNaN(h)||
                 float.IsInfinity(v)||float.IsInfinity(h)||
@@ -163,7 +161,7 @@ namespace RaftAndroid.Platform
             }
         }
 
-        private static bool SourceIsPhysical(int source)
+        public static bool SourceIsPhysical(int source)
         {
             if (source < 0) return false;
             return (source & PhysicalMouseMotionSource.MouseRelative)
