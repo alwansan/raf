@@ -29,6 +29,18 @@ def fixture():
         "original_pass1_exact_Material_local_alias_calls": 0,
         "original_pass0_linked_Material_image_producers_unresolved": 0,
         "original_pass1_linked_Material_image_producers_unresolved": 0,
+        "original_pass0_bounded_stack_source_type": "Texture",
+        "original_pass1_bounded_stack_source_type": "RenderTexture",
+        "original_pass0_bounded_stack_source_kind": "typed_field",
+        "original_pass1_bounded_stack_source_kind": "typed_local",
+        "original_pass0_bounded_stack_reason": "static_type_only_no_instance_proof",
+        "original_pass1_bounded_stack_reason": "static_type_only_no_instance_proof",
+        "original_pass0_bounded_stack_steps": 6,
+        "original_pass1_bounded_stack_steps": 9,
+        "original_pass0_bounded_stack_void_calls": 0,
+        "original_pass1_bounded_stack_void_calls": 1,
+        "original_bounded_stack_static_type_only": True,
+        "original_bounded_stack_texture_instance_equality_verified": False,
         "pass0_source": "Texture",
         "pass0_destination": "RenderTexture",
         "pass0_source_producer": "typed_field",
@@ -65,6 +77,11 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         for p in (0, 1):
             for key in ("source", "destination", "source_producer", "destination_producer"):
                 r[f"pass{p}_{key}"] = "unknown"
+            r[f"original_pass{p}_bounded_stack_source_type"] = "unknown"
+            r[f"original_pass{p}_bounded_stack_source_kind"] = "unknown"
+            r[f"original_pass{p}_bounded_stack_reason"] = "ambiguous_or_missing"
+            r[f"original_pass{p}_bounded_stack_steps"] = 0
+            r[f"original_pass{p}_bounded_stack_void_calls"] = 0
         self.assertFalse(validate(r)["proven_direct_typed_pass_roles_only"])
 
     def test_ambiguous_candidates_cannot_emit_sole_role(self):
@@ -134,16 +151,27 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         r["original_direct_material_field_and_typed_image_linked_Blit_calls"] = 1
         r["original_pass1_linked_Material_image_producers_unresolved"] = 1
         r["original_shader_to_blit_direct_field_types_confirmed"] = False
+        r["original_pass1_bounded_stack_source_type"] = "Texture"
+        r["original_pass1_bounded_stack_source_kind"] = "typed_call_result"
+        r["original_pass1_bounded_stack_steps"] = 21
+        r["original_pass1_bounded_stack_void_calls"] = 1
         for key in ("source", "destination", "source_producer", "destination_producer"):
             r[f"pass1_{key}"] = "unknown"
         result = validate(r)
         self.assertFalse(result["proven_direct_typed_pass_roles_only"])
         self.assertEqual(result["pass1"], ("unknown", "unknown"))
+        self.assertEqual(result["pass1_bounded_stack_source_type"], "Texture")
+        self.assertFalse(result["crosspass_texture_instance_identity_proven"])
 
     def test_original_material_local_alias_does_not_prove_image_types(self):
         r = fixture()
         r["original_pass1_exact_Material_field_argument_calls"] = 0
         r["original_pass1_exact_Material_local_alias_calls"] = 1
+        r["original_pass1_bounded_stack_source_type"] = "unknown"
+        r["original_pass1_bounded_stack_source_kind"] = "unknown"
+        r["original_pass1_bounded_stack_reason"] = "ambiguous_or_missing"
+        r["original_pass1_bounded_stack_steps"] = 0
+        r["original_pass1_bounded_stack_void_calls"] = 0
         r["original_pass1_direct_link_candidates"] = 0
         r["original_direct_material_field_and_typed_image_linked_Blit_calls"] = 1
         r["original_shader_to_blit_direct_field_types_confirmed"] = False
@@ -161,6 +189,35 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
             r[key] = value
             with self.subTest(field=key), self.assertRaisesRegex(ValueError, "partition"):
                 validate(r)
+
+    def test_bounded_stack_cannot_forge_device_or_instance_identity(self):
+        for flag in ("original_bounded_stack_texture_instance_equality_verified",
+                     "original_CB0_sampler_binding_verified"):
+            r=fixture()
+            r[flag]=True
+            with self.subTest(flag=flag), self.assertRaises(ValueError):
+                validate(r)
+
+    def test_reject_misleading_bounded_stack_type_or_budget(self):
+        modifications=(
+            ("original_pass1_bounded_stack_source_type", "Texture"),
+            ("original_pass1_bounded_stack_source_kind", "private_method"),
+            ("original_pass1_bounded_stack_reason", "original_private_instruction"),
+            ("original_pass1_bounded_stack_steps", 97),
+            ("original_pass1_bounded_stack_void_calls", 999),
+            ("original_pass0_bounded_stack_source_type", "RenderTexture"),
+        )
+        for key,value in modifications:
+            r=fixture()
+            r[key]=value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                validate(r)
+
+    def test_unique_material_path_required_for_stack_proof(self):
+        r=fixture()
+        r["original_pass1_exact_Material_field_argument_calls"]=0
+        r["original_pass1_exact_Material_local_alias_calls"]=1
+        with self.assertRaises(ValueError):validate(r)
 
     def test_duplicate_report_keys_rejected(self):
         with self.assertRaisesRegex(ValueError,"duplicate_json_key"):

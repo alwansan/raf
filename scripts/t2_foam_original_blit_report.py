@@ -24,11 +24,14 @@ NUMBERS = {
     "original_pass1_exact_Material_local_alias_calls",
     "original_pass0_linked_Material_image_producers_unresolved",
     "original_pass1_linked_Material_image_producers_unresolved",
+    "original_pass0_bounded_stack_steps", "original_pass1_bounded_stack_steps",
+    "original_pass0_bounded_stack_void_calls", "original_pass1_bounded_stack_void_calls",
 }
 TRUE_FLAGS = {
     "immutable_original_zip2_sha_verified",
     "original_Assembly_CSharp_sha_verified",
     "original_Foam_Shader_name_sha_verified",
+    "original_bounded_stack_static_type_only",
 }
 BOOLEAN_FLAGS = {
     "original_Shader_field_resolved", "original_Material_field_uniquely_resolved",
@@ -40,12 +43,28 @@ FALSE_FLAGS = {
     "original_CB0_sampler_binding_verified",
     "original_ShaderLab_Unity_or_Android_pixels_verified",
     "private_names_IL_methods_fields_pathids_or_bytecode_exported",
+    "original_bounded_stack_texture_instance_equality_verified",
 }
 ROLES = {"Texture", "RenderTexture", "null", "unknown"}
 PRODUCERS = {"typed_argument", "typed_local", "typed_field", "literal_null", "unknown"}
 ROLE_KEYS = {f"pass{p}_{v}" for p in (0, 1) for v in
              ("source", "destination", "source_producer", "destination_producer")}
-EXPECTED = {"status"} | NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS | ROLE_KEYS
+STACK_ROLES = {"Texture", "RenderTexture", "unknown"}
+STACK_KINDS = {
+    "unknown", "typed_field", "typed_local", "typed_argument",
+    "typed_call_result", "typed_cast", "constructor_result", "array_element",
+    "indirect_reference", "literal_null", "string_literal", "int_literal", "address_load",
+}
+STACK_REASONS = {
+    "not_straight_line", "control_flow_boundary", "unsupported_call_signature",
+    "unsupported_field_signature", "bad_local_type", "bad_argument_type",
+    "bad_cast_type", "unsupported_cil_opcode", "inbound_branch_or_exception",
+    "producer_type_not_base_texture", "static_type_only_no_instance_proof",
+    "stack_depth_budget", "trace_budget_or_no_producer", "ambiguous_or_missing",
+}
+STACK_KEYS = {f"original_pass{p}_bounded_stack_{term}" for p in (0, 1) for term in
+              ("source_type", "source_kind", "reason")}
+EXPECTED = {"status"} | NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS | ROLE_KEYS | STACK_KEYS
 
 
 def unique_keys(pairs):
@@ -129,6 +148,29 @@ def validate(report):
                 raise ValueError("unsupported_producer_class")
             if (dst == "null") != (dst_producer == "literal_null"):
                 raise ValueError("null_producer_disagreement")
+    # A reverse stack trace can recover a type even when its producer is not
+    # adjacent to the Blit call, but it does NOT establish resource identity.
+    for index in (0, 1):
+        role = report[f"original_pass{index}_bounded_stack_source_type"]
+        kind = report[f"original_pass{index}_bounded_stack_source_kind"]
+        reason = report[f"original_pass{index}_bounded_stack_reason"]
+        steps = report[f"original_pass{index}_bounded_stack_steps"]
+        voids = report[f"original_pass{index}_bounded_stack_void_calls"]
+        direct = report[f"original_pass{index}_exact_Material_field_argument_calls"]
+        if (role not in STACK_ROLES or kind not in STACK_KINDS or reason not in STACK_REASONS or
+                not 0 <= steps <= 96 or voids > steps):
+            raise ValueError("unsafe_bounded_stack_tag_or_budget")
+        if direct != 1 and (role, kind, reason, steps, voids) != (
+                "unknown", "unknown", "ambiguous_or_missing", 0, 0):
+            raise ValueError("stack_producer_without_unique_Foam_Material_call")
+        if (role in ("Texture", "RenderTexture")) != (
+                reason == "static_type_only_no_instance_proof"):
+            raise ValueError("stack_type_reason_inconsistent")
+        if role in ("Texture", "RenderTexture") and kind == "unknown":
+            raise ValueError("typed_stack_producer_unresolved")
+        if report[f"original_pass{index}_direct_link_candidates"] == 1 and (
+                role != report[f"pass{index}_source"]):
+            raise ValueError("direct_source_disagrees_with_bounded_stack")
     # Explicit boundaries: NEVER claim that pass1 samples the same actual RT
     # object written by pass0 just because their declared types are equal.
     return {
@@ -137,6 +179,9 @@ def validate(report):
         "proven_direct_typed_pass_roles_only": proof,
         "pass0": (report["pass0_source"], report["pass0_destination"]),
         "pass1": (report["pass1_source"], report["pass1_destination"]),
+        "pass0_bounded_stack_source_type": report["original_pass0_bounded_stack_source_type"],
+        "pass1_bounded_stack_source_type": report["original_pass1_bounded_stack_source_type"],
+        "pass1_bounded_stack_producer": report["original_pass1_bounded_stack_source_kind"],
         "crosspass_texture_instance_identity_proven": False,
         "CB0_and_Unity_device_evidence_proven": False,
     }
