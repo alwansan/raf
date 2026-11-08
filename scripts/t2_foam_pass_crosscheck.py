@@ -3,7 +3,16 @@
 This is static IL provenance only, not evidence of rendered water.
 """
 import json
+import math
 import sys
+
+
+def finite_float(value):
+    """Reject JSON exponent overflow before aggregate schema validation."""
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError("nonfinite_json")
+    return parsed
 from scripts.t2_foam_pass_role_gate import validate as validate_roles, unique_keys
 from scripts.t2_foam_pass_aggregate_consistency import check_counts
 from scripts.t2_foam_shaderfind_return_report import validate as validate_original
@@ -30,10 +39,10 @@ def main():
     if len(sys.argv) != 3:
         raise SystemExit("usage: python -m scripts.t2_foam_pass_crosscheck original_safe.json per_pass_safe.json")
     with open(sys.argv[1], encoding="utf-8") as f:
-        original = json.load(f, object_pairs_hook=unique_keys,
+        original = json.load(f, object_pairs_hook=unique_keys, parse_float=finite_float,
                              parse_constant=lambda value: (_ for _ in ()).throw(ValueError("nonfinite_json")))
     with open(sys.argv[2], encoding="utf-8") as f:
-        roles = json.load(f, object_pairs_hook=unique_keys,
+        roles = json.load(f, object_pairs_hook=unique_keys, parse_float=finite_float,
                           parse_constant=lambda value: (_ for _ in ()).throw(ValueError("nonfinite_json")))
     print(json.dumps(reconcile(original, roles), sort_keys=True))
 
