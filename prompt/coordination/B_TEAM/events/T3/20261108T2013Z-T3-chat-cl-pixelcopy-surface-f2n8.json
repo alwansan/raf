@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8",
+  "issue_id": "RENDER-002",
+  "event_type": "OWNER_REAL_CL_PNG_BLACK_VS_GLES_CORRECT_SAME_SURFACE_FIX_CI",
+  "source_of_truth": {
+    "repo": "alwansan/CL",
+    "branch": "main",
+    "folder": "test/shared-20261108-230157-466487336",
+    "app_version": "0.2.10-shared",
+    "apk_source_sha": "93e32950c521d9890ce845eb8213cd6704cd7f98",
+    "t3_cases": 6,
+    "gl_assertions": "six contract=true gl_error=0x0",
+    "captured_png_visual": "six black GLES regions despite successful SHA and EVIDENCE_READY",
+    "real_owner_system_screenshots": "all six synthetic colored cases visible"
+  },
+  "root_cause": "PixelCopy Window omitted separate SurfaceView; false evidence; not an original Raft GPU shader failure.",
+  "t5_preexisting_repair_commit": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
+  "t5_source_ci_success": "https://github.com/alwansan/raf/actions/runs/42519126545",
+  "t3_test_commits": [
+    "2ce778cdba2aef49f7d0eb69a9ae1fe58b0f9adc",
+    "bb6b583591bd4b36c96afb3943bed7d895c261c2"
+  ],
+  "t3_final_source_ci_success": "https://github.com/alwansan/raf/actions/runs/42519345065",
+  "shared_r3_build": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42519487402",
+    "status": "CI_SUCCESS_WITH_ARTIFACT_ZIP_NOT_DEVICE",
+    "artifact_zip_id": 13632379139,
+    "source_parent": "e7a6248b0d0c14b9772bd52f3bbdc5cf22fa9b9a"
+  },
+  "t3_vote": "NO_BUILD after successful one r3 Mini",
+  "full_game": "RENDER-002/WATER-001 OPEN, NOT_READY 0/3",
+  "report": "docs/T3_CL_BLACK_PNG_PIXELCOPY_SURFACE_2026-11-08.md",
+  "next_step": "Wait for owner phone R3 raw screenshot and case/GL readback matches; do not claim Unity gameplay pixels nor create duplicate Mini."
+}
