@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T3",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
-  "resumed_from_session": "20261108T1852Z-T3-chat-png-integrity-k8m2",
-  "status": "shared_mini_CI_SUCCESS_device_pending",
-  "base_sha": "aed5beb86c035789ef81a4a642d4ac412dfc9b29",
-  "last_commit": "87357d72df2e61c1cbe8d776c86a043773648506",
-  "updated_at": "2026-11-08T20:00:00Z",
+  "session_id": "20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8",
+  "resumed_from_session": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
+  "status": "shared_r3_APK_CI_SUCCESS_device_png_pending",
+  "base_sha": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
+  "last_commit": "ac3c58a8c8cf89ef7a40e481efd4ae443241fbf1",
+  "updated_at": "2026-11-08T20:27:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -19,7 +19,8 @@
     "T3-20261105T0024Z-T3-keyword-real-export-keyword-authentic-parity",
     "T3-20261108T1813Z-chat-shared-frame-proof-p6r9",
     "T3-20261108T1852Z-chat-png-integrity-k8m2",
-    "T3-20261108T1940Z-chat-arabic-manual-visual-v4c8"
+    "T3-20261108T1940Z-chat-arabic-manual-visual-v4c8",
+    "T3-20261108T2013Z-chat-cl-pixelcopy-surface-f2n8"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
@@ -31,40 +32,52 @@
     "https://github.com/alwansan/raf/actions/runs/41940116028",
     "https://github.com/alwansan/raf/actions/runs/41940350604",
     "https://github.com/alwansan/raf/actions/runs/41941363661",
-    "https://github.com/alwansan/raf/actions/runs/42517104924"
+    "https://github.com/alwansan/raf/actions/runs/42517104924",
+    "https://github.com/alwansan/raf/actions/runs/42519345065",
+    "https://github.com/alwansan/raf/actions/runs/42519487402"
   ],
-  "next_step": "Owner test APK v0.2.10: export/delete old due debug signing, install new, AUTO T3 then tap T3-01..06 pending list, preview/capture/visual review, export summary/jsonl/PNG. Later source six T3 home buttons not yet built; do not repeat Mini solely for buttons. Original game RENDER-002 OPEN.",
+  "next_step": "Owner installs T5 0.2.13 after exporting old logs/uninstall due debug signer change; re-run T3-01..06, ensure actual colored PNG and verified_surface_pixels=true; upload CL/test screenshots+summary+events. No separate T3 Mini or original game XAPK.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md",
   "origin": "chat",
   "latest_source_evidence": {
-    "scope": "User-proven T3 tap-to-open blocked; Arabic RTL portrait T3 one-tap preview six cases and captured evidence integration",
-    "source_commits": [
-      "389b0779d6ad106503b3566c0aa0e1d129903421",
-      "7a03a2773b0c5953a85453632e5cc6a43a94d9ec",
-      "bef7f88ff98797f7aa0532e64cb4cc7a01922b44"
-    ],
-    "tests": [
-      "55d8908f1a4ccb814b67063f743f03d433842f14",
-      "5e387f086d64a13db84df0daa6aa80449b30ade1"
-    ],
-    "source_invariants": "18/18 live GitHub direct code checks (not Python/Java/Android)",
-    "source_test_methods": "10 committed, execution not verified",
-    "ci": "UNVERIFIED",
-    "android_phone": "UNVERIFIED",
-    "portrait": "T5 Arabic host and portrait Manifest integrated and preserved",
-    "t3_r2_vote": "NEED_BUILD; ONLY T5 can request shared Mini",
+    "scope": "Real CL Android15 T3 colored GLES glReadPixels success but six false black Window PNG screenshots; exact SurfaceView color-matched capture R3",
+    "cl_session": "https://github.com/alwansan/CL/tree/main/test/shared-20261108-230157-466487336",
+    "cl_owner_photos": "https://github.com/alwansan/CL/tree/main/test/%D8%B3%D9%83%D8%B1%D9%8A%D9%86%D8%B4%D9%88%D8%AA%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D8%A7%D9%84%D9%83",
     "old_apk": {
-      "run": 42509945996,
-      "source_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
-      "includes_new_navigation": false
+      "version": "0.2.10-shared",
+      "source_sha": "93e32950c521d9890ce845eb8213cd6704cd7f98",
+      "t3_cases": 6,
+      "gpu_contract_true": 6,
+      "gl_error_zero": 6,
+      "auto_exported_pngs_black": true,
+      "visual_pass": false
     },
-    "full_game": "NOT_READY 0/3",
-    "shared_build_result": "T5 real CI42517104924 SUCCESS; artifact ZIP13631588625; APK v0.2.10",
-    "pinned_source": "93e32950c521d9890ce845eb8213cd6704cd7f98",
-    "preview_in_built_apk": true,
-    "tap_to_open_pending_in_built_apk": true,
-    "six_always_visible_home_buttons_in_built_apk": false,
-    "t3_round_r2_vote": "NO_BUILD after successful shared Mini",
-    "device": "UNVERIFIED"
+    "t5_surface_fix": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
+    "t3_test_commits": [
+      "2ce778cdba2aef49f7d0eb69a9ae1fe58b0f9adc",
+      "bb6b583591bd4b36c96afb3943bed7d895c261c2"
+    ],
+    "source_regression_ci": {
+      "run": 42519345065,
+      "status": "SUCCESS",
+      "tests": "11/11 source tests + Gradle Java compile, not device"
+    },
+    "t5_compile_ci": {
+      "run": 42519126545,
+      "status": "SUCCESS",
+      "jvm_pixel_policy_tests": true
+    },
+    "new_shared_apk": {
+      "run": 42519487402,
+      "ci": "SUCCESS",
+      "artifact_zip_id": 13632379139,
+      "version": "0.2.13-shared",
+      "version_code": 13,
+      "apk_sha256": "6a41002cee345c48413ef56b0820211fb4ae73292229ec33ce830e82897194a7",
+      "device": "UNVERIFIED",
+      "zip_not_direct_apk": true
+    },
+    "t3_vote": "NO_BUILD after T5 real shared R3 built, no duplicate",
+    "full_game": "RENDER-002 and WATER-001 still OPEN; NOT_READY 0/3"
   }
 }
