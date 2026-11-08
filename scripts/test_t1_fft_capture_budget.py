@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-SCRIPT = Path(__file__).resolve().parents[1] / "t1_fft_first_divergence.py"
+SCRIPT = Path(__file__).resolve().parent / "t1_fft_first_divergence.py"
 
 class CaptureBudgetTests(unittest.TestCase):
     def run_manifest(self, entries, root):
