@@ -241,7 +241,7 @@ final class T1ComputeProbe {
             return (passed?"PASS":"FAIL")+" matched="+(mismatch<0?16:"mismatch_at_"+mismatch)+
                 (mismatch<0?"":" actual="+found+" expected="+want)+
                 " unmap="+unmapped+" gl_error=0x"+Integer.toHexString(endError)+
-                " preexisting_errors="+drainedValueNotUsed();
+                " checked_words="+N;
         }finally{
             GLES20.glUseProgram(0);
             GLES31.glBindBufferBase(GLES31.GL_SHADER_STORAGE_BUFFER,0,0);
@@ -252,5 +252,4 @@ final class T1ComputeProbe {
         }
     }
     // Do not report GPU elapsed time from Java wall-clock timings.
-    private static int drainedValueNotUsed(){return 0;}
 }
