@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261108T1556Z-T3-chat-particle-ci-c83f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "event_type": "scheduled_negative_material_fileid_regression_added_to_CI_and_verified",
+  "status": "SOURCE_ONLY_SYNTHETIC_43_43_PASS",
+  "updated_at": "2026-11-08T15:54:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42496973989",
+  "tested_sha": "8e92718a2855c65b00a17a661504f5149c229170",
+  "tests_passed": 43,
+  "particle_tests_passed": 3,
+  "negative_material_fileid_case": "PASS",
+  "source_original_YAML_scan": false,
+  "unity_import_proven": false,
+  "Android_visuals_proven": false,
+  "render_issue": "OPEN_NOT_READY",
+  "next": "Original authenticated particle renderer material-shader-texture chain and T3 GLES on-device CASE results."
+}
