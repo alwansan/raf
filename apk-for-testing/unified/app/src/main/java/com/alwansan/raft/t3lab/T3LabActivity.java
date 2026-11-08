@@ -1,6 +1,8 @@
 package com.alwansan.raft.t3lab;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.view.PixelCopy;
 import com.alwansan.raftlab.BuildConfig;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -108,6 +110,56 @@ public final class T3LabActivity extends Activity {
             +" device="+Build.MANUFACTURER+"/"+Build.MODEL+" api="+Build.VERSION.SDK_INT
             +" abi="+Build.SUPPORTED_ABIS[0]);
         select(0);
+        runSharedAutoT3();
+    }
+    void runSharedAutoT3(){
+        String id=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
+        if(id==null||!id.matches("T3-0[1-6]"))return;
+        int idx=Integer.parseInt(id.substring(4))-1;
+        new Handler(Looper.getMainLooper()).postDelayed(()->{
+            select(idx);
+            new Handler(Looper.getMainLooper()).postDelayed(()->captureSharedEvidence(id),1000);
+        },850);
+    }
+    void captureSharedEvidence(String id){
+        android.view.View decor=getWindow().getDecorView();
+        if(decor==null||decor.getWidth()<=0||decor.getHeight()<=0){
+            finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"No window pixels yet");return;
+        }
+        int width=Math.min(decor.getWidth(),1600),height=Math.min(decor.getHeight(),900);
+        final Bitmap bmp=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+        try{
+            PixelCopy.request(getWindow(),bmp,result->{
+                if(result!=PixelCopy.SUCCESS){
+                    bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"PixelCopy code "+result);return;
+                }
+                String uri=null;
+                try{
+                    ContentValues v=new ContentValues();
+                    v.put(MediaStore.Downloads.DISPLAY_NAME,id+"-"+System.currentTimeMillis()+".png");
+                    v.put(MediaStore.Downloads.MIME_TYPE,"image/png");
+                    v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+session+"/");
+                    Uri dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
+                    if(dest==null)throw new IOException("Could not write PNG");
+                    try(OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
+                        if(out==null||!bmp.compress(Bitmap.CompressFormat.PNG,100,out))throw new IOException("Bitmap compress failed");
+                        out.flush();
+                    }
+                    uri=dest.toString();log("pixelcopy_png","id="+id+" uri="+uri);
+                    finishSharedEvidence(id,"EVIDENCE_READY",uri,"GLES synthetic frame, visual review still required");
+                }catch(Exception e){log("screenshot_error",e.toString());
+                    finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());}
+                finally{bmp.recycle();}
+            },new Handler(Looper.getMainLooper()));
+        }catch(Exception e){
+            bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());
+        }
+    }
+    void finishSharedEvidence(String id,String verdict,String uri,String observed){
+        Intent reply=new Intent();reply.putExtra("case_id",id);reply.putExtra("status",verdict);
+        reply.putExtra("observed",observed);if(uri!=null)reply.putExtra("screenshot_uri",uri);
+        log("shared_auto_result",id+" "+verdict+" "+observed);
+        setResult(RESULT_OK,reply);finish();
     }
     void select(int index){
         caseIndex=index;testId="CASE0"+(index+1);
