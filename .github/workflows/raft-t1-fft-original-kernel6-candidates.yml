@@ -1,0 +1,98 @@
+name: T1 WATER-001 original managed FFT numeric index6 candidates (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t1_fft_original_kernel6_candidates.py'
+      - 'tests/test_t1_fft_original_kernel6_candidates.py'
+      - '.github/workflows/raft-t1-fft-original-kernel6-candidates.yml'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: t1-water-original-fft-index6-source-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  original-authenticated-numeric-selector:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Test source-free selector inversion and original CSharp reading guards
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_original_kernel6_candidates.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_kernel_callsites.py -v
+          python3 -m py_compile scripts/t1_fft_original_kernel6_candidates.py scripts/t1_fft_first_divergence.py
+      - name: Pin original tracked Assembly-CSharp.dll Git blob before decompilation
+        shell: bash
+        run: |
+          set -euo pipefail
+          file=Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test -f "$file"
+          test "$(stat -c '%s' "$file")" = 3211776
+          test "$(git hash-object "$file")" = fc9d4ba920a178fdb89c970d9d772a01051dadc6
+          echo "T1_ORIGINAL_MANAGED_GIT_BLOB_MATCH=true"
+      - name: Recover original private ILSpy CSharp9 inside temporary workspace only
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t1-ilspy" > "$RUNNER_TEMP/t1-ilspy-install.log" 2>&1
+          mkdir -p "$RUNNER_TEMP/t1-private-source"
+          timeout 300s "$RUNNER_TEMP/t1-ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/t1-private-source" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/t1-ilspy-decompile.log" 2>&1
+          echo "T1_ORIGINAL_MANAGED_PRIVATE_DECOMPILE_COMPLETED=true"
+      - name: Validate exact-authored managed FFT numeric-index6 possibilities without publishing CSharp
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/t1-source-only-kernel6.json"
+          trap 'rm -f "$report"; rm -rf "$RUNNER_TEMP/t1-private-source" "$RUNNER_TEMP/t1-ilspy" "$RUNNER_TEMP/t1-ilspy-decompile.log" "$RUNNER_TEMP/t1-ilspy-install.log"' EXIT
+          python3 -m scripts.t1_fft_original_kernel6_candidates \
+            --original-managed "$RUNNER_TEMP/t1-private-source" \
+            --reported-index 6 > "$report"
+          python3 - "$report" <<'PY'
+          import json,sys
+          with open(sys.argv[1], encoding="utf-8") as f:
+              raw=f.read()
+          prefix="RAFT_T1_AUTHENTIC_FFT_NUMERIC_INDEX_CANDIDATES "
+          assert raw.startswith(prefix)
+          r=json.loads(raw[len(prefix):])
+          assert r["original_derived_source_sha256_verified"]=="8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0"
+          assert r["original_inherited_source_sha256_verified"]=="2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704"
+          assert r["source_dispatch_calls"]==2 and r["source_settexture_calls"]==6
+          assert r["source_two_pass_affine_offsets"]==[0,1]
+          assert r["compatible_source_numeric_cases"]==[{
+              "assumed_power_of_two_size":256, "assumed_bank_flag":0,
+              "source_pass_offset":0, "source_numeric_argument":6
+          }]
+          for flag in ("actual_original_resolution_or_bank_at_error_observed",
+                       "actual_Unity_Mathf_log_float_result_on_device_observed",
+                       "Unity_FindKernel_runtime_id_mapped",
+                       "original_serialized_compiled_slot_index_mapped_to_runtime_id",
+                       "same_ComputeShader_asset_at_owner_error_verified",
+                       "Android_GLES_or_Vulkan_dispatch_executed",
+                       "FFT_water_rendering_fixed"):
+              assert r[flag] is False
+          print("RAFT_T1_ORIGINAL_FFT_INDEX6_SOURCE_AUDIT "+json.dumps(r,sort_keys=True))
+          PY
+          echo "NO_ORIGINAL_MANAGED_SOURCE_EXPORTED=true"
+          echo "NO_ANDROID_APK_OR_UNITY_EXECUTED=true"
