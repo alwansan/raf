@@ -38,6 +38,9 @@ class T3SharedFramePolicy(unittest.TestCase):
         c=self.code
         self.assertIn('finishSharedEvidence(id,"EVIDENCE_READY",uri,',c)
         self.assertIn('png_sha256=',c)
+        self.assertIn('String gpu=lastRenderedNote;',c)
+        self.assertIn('if(gpu==null||gpu.length()<30||gpu.length()>700)',c)
+        self.assertIn('"GLES synthetic frame; "+gpu+"; png_bytes="',c)
         self.assertIn('visual review still required',c)
         self.assertIn('"NEEDS_SCREENSHOT"',c)
         self.assertIn('PixelCopy.request(getWindow(),bmp',c)
