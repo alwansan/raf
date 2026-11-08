@@ -1,6 +1,6 @@
 {
-  "request_id": "t1-gles31-ssbo-20261108-7e4a-01",
-  "worker": "T1",
-  "requested_from_sha": "0bd6d39f7b6dc88f55c46f39bb761c7f5759fb4a",
-  "reason": "Owner Android15 Adreno730 log has 11165 WATER-001 invalid compute kernel 6 roots; source-only CI cannot determine actual GPU compute capability. Build one separate T1 OpenGL ES3.1 mini APK with exact 16-word one- and two-dispatch SSBO GPU readbacks plus deliberately invalid GLSL negative control. No original Raft game assets, no full Unity/XAPK build."
+  "request_id": "t5-android15-saf-obb-sha256-20261108-b73c",
+  "worker": "T5",
+  "requested_from_sha": "8279feb79b959610a9792890413db7a3c6a57b47",
+  "reason": "Validate Android 15 SAF provider streaming SHA-256 of actual user-selected signed APK and >2 GiB main OBB, with progress and MediaStore log export. JDK regression proves bytes and digest but cannot establish Android URI permissions, UI responsiveness or selected-file identity."
 }
