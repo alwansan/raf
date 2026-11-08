@@ -8,7 +8,7 @@
 |---|---|---|---|---|---|
 | T1 | FFT / GPU / compute | NOT_PREPARED | — | — | [T1](workers/T1/README.md) |
 | T2 | Foam / Spectrum / Blur | NOT_PREPARED | — | — | [T2](workers/T2/README.md) |
-| T3 | colors / materials / fire / lighting | NOT_PREPARED | — | — | [T3](workers/T3/README.md) |
+| T3 | colors / materials / fire / lighting | READY_TO_TEST — GLES3 synthetic v0.1.0; DEVICE_PENDING | [CI 42496427649 — verified APK Artifact (ZIP)](https://github.com/alwansan/raf/actions/runs/42496427649) | [6-case safe testpack](workers/T3/testpack.json) | [T3 instructions, SHA256, limits](workers/T3/README.md) |
 | T4 | mouse left/right/middle/scroll/capture | SOURCE_READY (host فقط؛ لا APK) | — | [مثال 9 اختبارات](examples/t4-mouse-testpack.json) | [T4](workers/T4/README.md) |
 | T5 | host / delivery / OBB / telemetry | SOURCE_READY (host فقط؛ لا APK) | — | — | [T5](workers/T5/README.md) |
 
