@@ -4,7 +4,7 @@
   "origin": "chat",
   "worker": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_integrated_T5_build_pending",
   "base_sha": "aed5beb86c035789ef81a4a642d4ac412dfc9b29",
   "resumed_from_session": "20261108T1852Z-T3-chat-png-integrity-k8m2",
   "scope": "User-confirmed T3-01..06 nonlaunch: make tapped T3 request and RUN selected open a persistent T3 visual preview; capture on explicit button then return evidence; localize T3 UI and shared owner-facing UI to Arabic without mutating 29-case pack, and defer Android portrait manifest switch to T5 as requested.",
@@ -18,5 +18,17 @@
   ],
   "resource_key": "T3VisualPreviewAndHostScopedBridge",
   "conflict_avoidance": "Edit only T3-specific host bridge and Arabic display strings, avoid T5 source integrity/store/SAF, keep unified schema v2 unchanged; leave portrait manifest to T5. No native Mini build request except T5.",
-  "next_step": "Patch source, source regression checks; inform T5 in own event and own row vote NEED_BUILD only if actual new user-facing driver code."
+  "next_step": "T5 compiles new host+portrait+T3 and coordinates ONE shared Mini build; user validates on phone; original game graphics unchanged.",
+  "updated_at": "2026-11-08T19:40:00Z",
+  "result": "Real T3 tap-to-launch source defect corrected; Arabic portrait preview holds until explicit capture; six direct case buttons; screenshots are evidence not PASS. T5 UI/portrait source preserved. 18/18 source invariants PASS; CI/java/Android build remains UNVERIFIED.",
+  "source_commits": [
+    "389b0779d6ad106503b3566c0aa0e1d129903421",
+    "7a03a2773b0c5953a85453632e5cc6a43a94d9ec",
+    "bef7f88ff98797f7aa0532e64cb4cc7a01922b44"
+  ],
+  "test_commits": [
+    "55d8908f1a4ccb814b67063f743f03d433842f14",
+    "5e387f086d64a13db84df0daa6aa80449b30ade1"
+  ],
+  "owner_request": "T3 NEED_BUILD r2 after user Android test revealed inaccessible cases"
 }
