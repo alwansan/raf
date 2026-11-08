@@ -26,6 +26,10 @@ def audit(root):
             counts["meta_unreadable"] += 1
             continue
         if m:
+            material = p.with_suffix("")
+            if material.is_symlink() or not material.is_file():
+                counts["orphan_mat_meta"] += 1
+                continue
             owners[m.group(1).lower()] += 1
         else:
             counts["meta_without_guid"] += 1
