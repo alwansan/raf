@@ -1,0 +1,22 @@
+{
+  "owner": "T4",
+  "origin": "scheduled",
+  "session_id": "20261108T1835Z-T4-scheduled-source-filter-k7m2",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-08T18:35:00Z",
+  "hypothesis": "Mouse route analyzer currently treats touchscreen input as physical mouse evidence because source is never validated; prevent false button/wheel positives before owner Android15 device logs.",
+  "intended_files": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py",
+    "prompt/coordination/clients/T4/sessions/20261108T1835Z-T4-scheduled-source-filter-k7m2.md"
+  ],
+  "experiment_key": "T4-android15-mouse-source-filter-20261108-v1",
+  "resource_key": null,
+  "resumed_from_sessions": [
+    "20261108T1819Z-T4-chat-captured-actions-f4n8",
+    "20261108T1746Z-T4-scheduled-scroll-action-p8v3"
+  ],
+  "constraints": "source-only; no Unity/game changes; preserve world .rgd, camera, keyboard, touch; shared mini build T5 only",
+  "evidence": "Existing analyzer accepts route=activity_touch source=0x1002 ACTION_DOWN buttonState=1 as mouse left observed; this is touchscreen, not mouse. Test currently enshrines false positive."
+}
