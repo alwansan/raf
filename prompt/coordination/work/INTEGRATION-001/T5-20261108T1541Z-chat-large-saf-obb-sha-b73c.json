@@ -3,7 +3,7 @@
   "owner": "T5",
   "origin": "chat",
   "session_id": "20261108T1541Z-T5-chat-large-saf-obb-sha-b73c",
-  "status": "active_T5_mini_apk_build_request",
+  "status": "completed_source_build__waiting_owner_device_SAF",
   "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
   "resumed_from_sessions": [
     "20261108T1453Z-T5-scheduled-obb-telemetry-k8p2",
@@ -11,7 +11,7 @@
   ],
   "issue": "INTEGRATION-001 / DELIVERY-013",
   "experiment_key": "t5-mini-lab-saf-file-sha-2gb-obb-asynchronous-android15-v1",
-  "resource_key": "raft-android-mini-lab-workflow-T5 after T4 run42496622364 and T2 run42496746941 completed SUCCESS; no mini lab active at scope check",
+  "resource_key": "none; T5 independent mini APK build completed, no live T5 resource held",
   "intended_files": [
     "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java",
     "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java",
@@ -26,7 +26,7 @@
   "hypothesis": "T5 file_sha256 case currently fails >64MiB even though OBB >2GiB; stream digest off Android main thread with bounded memory/progress and retain image size protection. No APK or installed identity claimed from source.",
   "overlap": "Checked T4 work 20261108T1540Z-chat-mini-lab-c6p4: T4 builds current host without modifying shared host; T5 will not modify T4 request/README or trigger competing mini-lab run.",
   "expected": "synthetic JDK/Python regression and future Android host compile; device SAF confirmation required",
-  "updated_at": "2026-11-08T15:51:00Z",
+  "updated_at": "2026-11-08T15:53:15Z",
   "implementation_commits": [
     "ceb6c1f74087f3d2d837e2251f3cb2709c5c731a",
     "2af36bddca757444084c59b09b973719e12da9fa",
@@ -47,9 +47,33 @@
       "https://github.com/alwansan/raf/actions/runs/42496238418",
       "https://github.com/alwansan/raf/actions/runs/42496449259"
     ],
-    "status": "both failed at Java compile; initial T5 newline-escape issue fixed by db8f507; subsequent T1ComputeProbe final observation error fixed in T1 ae450f1; await next isolated T4 build before T5 run",
+    "status": "T4 CI42496622364 successfully compiled shared host, then T5 CI42496945089 succeeded on exact pinned request SHA",
     "t4_success": "CI42496622364 completed success, artifact 13623563385, worker T4 only",
-    "t2_success": "CI42496746941 completed success; independent worker T2 only"
+    "t2_success": "CI42496746941 completed success; independent worker T2 only",
+    "t5_success": {
+      "run_id": 42496945089,
+      "url": "https://github.com/alwansan/raf/actions/runs/42496945089",
+      "source_sha": "7800e28583679d5e23825818b0ea5120b9d8b33f",
+      "status": "completed",
+      "conclusion": "success",
+      "artifact_id": 13624380481,
+      "artifact_name": "raft-mini-lab-T5-7800e28583679d5e23825818b0ea5120b9d8b33f",
+      "artifact_archive_size_bytes": 35397,
+      "artifact_archive_sha256": "b61e55b129321d2614781b196d97546c9f035886c18a941b960022b37254684f",
+      "apk_sha256": "494f52199d215fd25c6b29283bc3b1733746a1180bb409c83491c055a5fe112d",
+      "application_id": "com.alwansan.raft.lab.t5",
+      "version_name": "0.1.0-source-prototype",
+      "version_code": 1,
+      "artifact_expires_at": "2026-11-15T15:53:09Z"
+    }
   },
-  "next": "Submit one pinned T5 mini request [raft-mini-lab], verify artifact, update T5 row only"
+  "next": "Wait for actual owner Android15 tested log with selected-file digest, compare hashes to source/provenance and installed package separately; if permission denial use safe user-owned copy; no duplicate build until changed hypothesis or code.",
+  "test_center_commit": "7a457685b506e60d3100a7d7d19273219fdfbf54",
+  "owner_expected": "Android15 pick testpack, T5-01 signed APK or T5 APK known digest, T5-02 accessible main OBB >64MiB and ideally >2GiB, display progress and final long-count+SHA, MediaStore export JSONL. Record SAF denial precisely, not a FAIL of mounted OBB without access.",
+  "limitations": [
+    "not device validated",
+    "not proof installed Raft APK or mounted OBB",
+    "no full-game XAPK initiated",
+    "no ZIP2 proprietary original asset published"
+  ]
 }
