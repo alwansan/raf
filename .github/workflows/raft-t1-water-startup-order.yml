@@ -1,0 +1,64 @@
+name: T1 WATER-001 pinned CL pre-world event chronology (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t1_water_startup_order.py'
+      - 'tests/test_t1_water_startup_order.py'
+      - '.github/workflows/raft-t1-water-startup-order.yml'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: raft-t1-water-startup-order-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  evidence-chronology:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Source-free adversarial event chronology regression
+        run: python3 -m unittest discover -s tests -p test_t1_water_startup_order.py -v
+      - name: Verify pinned public CL summary counts and first milestone order only
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_COMMIT=61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8
+          PRIVATE_SUMMARY="$RUNNER_TEMP/t1-cl-session-summary.json"
+          PRIVATE_REPORT="$RUNNER_TEMP/t1-cl-sanitized-report.json"
+          trap 'rm -f "$PRIVATE_SUMMARY" "$PRIVATE_REPORT"' EXIT
+          curl --fail --location --silent --show-error --max-time 30 \
+            --max-filesize 131072 --retry 2 \
+            "https://raw.githubusercontent.com/alwansan/CL/$SOURCE_COMMIT/raft%20log/lf/LogRaft-20261108-164850-270/session-summary.json" \
+            -o "$PRIVATE_SUMMARY"
+          python3 scripts/t1_water_startup_order.py "$PRIVATE_SUMMARY" \
+            --session 20261108-164850-270 \
+            --source-commit "$SOURCE_COMMIT" > "$PRIVATE_REPORT"
+          python3 - "$PRIVATE_REPORT" <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1],encoding="utf-8"))
+          assert x["first_errors_observed_before_world_loaded"] is True
+          assert x["timing_ms"]["first_water_before_world_loaded"]==64486
+          assert x["timing_ms"]["first_fft_before_world_loaded"]==64484
+          assert x["timing_ms"]["fft_first_after_water_first"]==2
+          assert x["last_sample_underreports_final_by"]=={
+              "water_invalid_pass":696,"fft_invalid_compute_kernel":116}
+          assert x["root_counts"]["water_invalid_pass"]==74359
+          assert x["root_counts"]["fft_invalid_compute_kernel"]==11165
+          assert x["root_counts"]["materials"]["spectrum"]==29700
+          assert x["root_counts"]["materials"]["foam_global"]==44659
+          assert x["root_counts"]["invalid_kernel_indices"]["index_6"]==11165
+          assert x["limits"]["unity_findkernel_dispatch_proven"] is False
+          assert x["limits"]["full_preworld_error_count_known"] is False
+          print("RAFT_T1_FIRST_WATER_PREWORLD_SOURCE_AUDIT="+json.dumps(x,sort_keys=True))
+          PY
+          echo "PRIVATE_CL_LOG_BYTES_EXPORTED=false"
+          echo "NO_ANDROID_APK_OR_UNITY_EXECUTED=true"
