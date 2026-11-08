@@ -9,7 +9,7 @@
 - **resource_key:** `T1ComputeProbe.java` only; no T2/T3/T4/T5 code ownership.
 - **intended_files:** `apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java`, `tests/test_t1_compute_context_gate.py`, `.github/workflows/raft-t1-shared-compute-source.yml`, this session, own work/experiment/event, T1 MEMORY and T1 shared readiness row.
 - **run_urls:** https://github.com/alwansan/raf/actions/runs/42509359669 (source-only compile/testing; do not describe as APK).
-- **status:** WAITING_CI at initial checkpoint.
+- **status:** COMPLETED (source gate), pending T5 Mini build and owner GPU test.
 
 ## Live evidence
 
@@ -26,6 +26,14 @@ Shared Java host invoked `T1ComputeProbe.runAutomated` after a fixed 1-second UI
 
 ## Outstanding acceptance
 
-Wait for actual Java compiler run conclusion and inspect first failing step if any. If PASS, T1 may record **NEED_BUILD for the shared Mini only** because a compiled T1 driver changed; T5 alone decides whether one shared APK is warranted, checks real signature/source, then delivers one APK via TEST_CENTER. Do not rebuild historical standalone T1 app. No immediate owner action until T5 publishes the actual shared APK. Future device case T1-01..04 results require true Adreno assertions; original Unity water remains WATER-001 OPEN, full game NOT_READY 0/3.
+Actual [42509359669](https://github.com/alwansan/raf/actions/runs/42509359669) **SUCCESS** at SHA `695daa697b0ccc0e53ed0533f43b2d267e0036f5`: **5/5** T1 static source contracts and **7/7** unified pack tests, shared Java compile `BUILD SUCCESSFUL in 34s`. T1 has recorded **NEED_BUILD for the shared Mini only** because a compiled T1 driver changed; T5 alone decides whether one shared APK is warranted, checks real signature/source, then delivers one APK via TEST_CENTER. Do not rebuild historical standalone T1 app. No immediate owner action until T5 publishes the actual shared APK. Future device case T1-01..04 results require true Adreno assertions; original Unity water remains WATER-001 OPEN, full game NOT_READY 0/3.
 
 **next_step:** inspect [CI42509359669](https://github.com/alwansan/raf/actions/runs/42509359669); update own shared readiness row, work, experiment/event and memory with exact result; coordinate T5 single Mini build. Keep T1 worker identity and origin in next scheduled/chat cycle.
+
+## Final checkpoint — after source CI
+
+- **Run:** [42509359669](https://github.com/alwansan/raf/actions/runs/42509359669) COMPLETED SUCCESS; one job, all steps passed; pure source/Java compile, zero APK artifacts and no EGL/phone/Unity execution. Source-level tests 5/5, unified pack tests 7/7.
+- **T1 shared Mini vote:** NEED_BUILD, only T1 row updated in `apk-for-testing/SHARED_BUILD_READINESS.md` at commit `1d3536f34856491229abe5298738177b5632cd7c`. No vote on full-game XAPK, and T5 build_request untouched.
+- **Work:** `prompt/coordination/work/WATER-001/20261108T1811Z-T1-chat-gles-gate-9d3f-shared-context-gate.json` completed; experiment and B_TEAM event recorded by T1. No other worker's source/identity edited.
+- **Critical limitation:** root water FFT remains WATER-001 OPEN; no proof `FindKernel`, `Dispatch` or corrected GPU pixels in Raft.
+- **next_step:** T5 determine whether a single shared Mini build is now needed and whether one equivalent exists, respecting signing/fingerprint. Then real phone Auto T1 and exported JSONL; independently continue Unity FFT original-source comparison.
