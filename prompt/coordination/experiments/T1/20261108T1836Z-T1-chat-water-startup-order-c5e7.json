@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261108T1836Z-T1-chat-water-startup-order-c5e7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "experiment_key": "water-first-error-preworld-v1-CL-61f71ceb",
+  "resource_key": "CL/61f71ceb/raft log/lf/LogRaft-20261108-164850-270/session-summary.json",
+  "hypothesis": "Owner CL first recorded water invalid pass and kernel index6 message precede world_loaded milestone within the same immutable logger session, so the first observed faults cannot require post-world-loaded gameplay.",
+  "source_commit": "f2e39a3288189fb928a427083f52c7bd21e00862",
+  "input_hashes": [
+    "CL commit:61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8",
+    "session-summary.json SHA256:941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7",
+    "CL Git blob:18a125b1753182974a5905280f03ebdc96687b33"
+  ],
+  "tool_versions": {
+    "python": "3.12.16",
+    "origin": "GitHub Actions ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_water_startup_order.py -v",
+    "curl -fLsS --max-filesize 131072 https://raw.githubusercontent.com/alwansan/CL/61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8/raft%20log/lf/LogRaft-20261108-164850-270/session-summary.json -o \"$RUNNER_TEMP/t1-cl-session-summary.json\"",
+    "python3 scripts/t1_water_startup_order.py \"$RUNNER_TEMP/t1-cl-session-summary.json\" --session 20261108-164850-270 --source-commit 61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8"
+  ],
+  "negative_controls": [
+    "Wrong JSON schema/target app/session/root count or stop-time count rejected",
+    "Source-free forged duplicate authoritative JSON keys rejected",
+    "Symlink/FIFO/oversize/truncated source rejected",
+    "Actual first faults after world_loaded produce false pre-world verdict",
+    "Raw private fields not carried to sanitized output",
+    "Kernel-index-6 numerical label is not original Unity kernel identity"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-water-startup-order.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42512986569",
+  "artifact_urls": [],
+  "budget": "1 Python-only CI job, CL summary 18,598 bytes from pinned public CL commit; no Unity/APK/OBB, no output asset",
+  "status": "completed",
+  "observed_result": "13/13 source-free tests PASS; pinned authentic CL source summary audit PASS: first water 64486 ms before world_loaded, FFT 64484 ms before; 74359 pass roots = 29700 spectrum+44659 foam; 11165 invalid index6 warnings, last sample undercounts by 696/116. Exact SHA256 941d37d4... captured. Extra CI 42513165405 enforces this digest.",
+  "rejected_hypotheses": [
+    "Invalid pass/kernel messages can arise only after world_loaded milestone in this observed session",
+    "Last sampled metrics totals equal session final root counters",
+    "Index 6 message alone proves a particular original FFT kernel or actual GPU dispatch"
+  ],
+  "limitations": [
+    "Only first timestamps and final category totals; cannot infer number of errors before world_loaded",
+    "Logger may miss Logcat data; temporal evidence cannot prove direct cause",
+    "No device shader repair, Unity actual FindKernel or numeric parity measured",
+    "CL public JSON is already collected by owner; raw game log segments are not redistributed"
+  ],
+  "integration_commit": "4133ef856deb80c031b4d006a1f1a8e38bf72302",
+  "next_step": "T1 trace original water startup renderer and private authenticated Unity ComputeShader FindKernel/Dispatch index6 with same-source binding; T2 verify Spectrum/Foam authored passes. Wait for T5 first APK user device evidence, do not duplicate Mini build."
+}
