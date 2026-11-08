@@ -314,6 +314,53 @@ internal static class Program
         if(start<0 || UnsafeFlow(method,start,callIndex))return "control_flow";
         return "none";
     }
+    static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
+    {
+        // Public type-family only. In particular a preceding void call is
+        // NOT the Blit source producer; typed call-return is still NOT an
+        // authenticated texture *instance*. Never export private type names.
+        if(!DirectMaterialBlit(method,callIndex,field))return "material_not_direct";
+        var il=method.Body.Instructions;
+        int p=Previous(il,callIndex-1), mat=Previous(il,p-1);
+        int at=mat-1;
+        if(il[mat].OpCode.Code==Code.Ldfld)
+        {
+            at=Previous(il,at);
+            if(at<0 || !Receiver(il[at]))return "material_not_direct";
+            at--;
+        }
+        var dst=TypedValue(method,il,ref at);
+        if(dst.Type is not (RenderTexture or "null"))return "destination_not_direct";
+        int preceding=Previous(il,at);
+        if(preceding<0)return "no_adjacent_opcode";
+        var inst=il[preceding];
+        if(inst.OpCode.Code is not (Code.Call or Code.Callvirt) ||
+           inst.Operand is not MethodReference m)return "not_typed_call";
+        return m.ReturnType.FullName switch
+        {
+            "System.Void"=>"void",
+            "UnityEngine.Texture"=>"texture",
+            "UnityEngine.RenderTexture"=>"render_texture",
+            "UnityEngine.Texture2D"=>"texture2d",
+            "UnityEngine.Texture3D"=>"texture3d",
+            "UnityEngine.Texture2DArray"=>"texture2d_array",
+            "UnityEngine.Cubemap"=>"cubemap",
+            "UnityEngine.CubemapArray"=>"cubemap_array",
+            "UnityEngine.CustomRenderTexture"=>"custom_render_texture",
+            "UnityEngine.SparseTexture"=>"sparse_texture",
+            "UnityEngine.Object"=>"unity_object",
+            "System.Object"=>"system_object",
+            "UnityEngine.Material"=>"material",
+            "System.Int32" or "System.Int64" or "System.Boolean" or
+                "System.Single" or "System.Double"=>"primitive",
+            var full when full.StartsWith("UnityEngine.",StringComparison.Ordinal)=>
+                "other_unity_type",
+            var full when full.StartsWith("System.",StringComparison.Ordinal)=>
+                "other_system_type",
+            _=>"opaque_nonpublic_or_external_type"
+        };
+    }
+
     static string SourceHeadClass(MethodDefinition method, int callIndex, FieldDefinition field)
     {
         // Classify the *immediately preceding CIL opcode family* once the
@@ -447,6 +494,7 @@ internal static class Program
         var exactMaterialLocalAlias=new int[2];
         var originalFirstBlockers=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         var originalSourceHeadKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
+        var originalSourceReturnKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -465,6 +513,7 @@ internal static class Program
                         exactMaterialDirect[lit.Value]++;
                         originalFirstBlockers[lit.Value].Add(FirstUnresolvedImageOperand(m,i,materialField));
                         originalSourceHeadKinds[lit.Value].Add(SourceHeadClass(m,i,materialField));
+                        originalSourceReturnKinds[lit.Value].Add(SourceAdjacentCallReturnFamily(m,i,materialField));
                     }
                     else if(OriginalMaterialLocalAliasBlit(m,i,materialField))
                         exactMaterialLocalAlias[lit.Value]++;
@@ -499,6 +548,19 @@ internal static class Program
             throw new InvalidOperationException("private_CIL_source_head_not_allowed");
         Console.WriteLine("T2_FOAM_PASS0_SOURCE_HEAD_CLASS "+head0);
         Console.WriteLine("T2_FOAM_PASS1_SOURCE_HEAD_CLASS "+head1);
+        string ret0=originalSourceReturnKinds[0].Count==1?originalSourceReturnKinds[0][0]:"ambiguous_or_missing";
+        string ret1=originalSourceReturnKinds[1].Count==1?originalSourceReturnKinds[1][0]:"ambiguous_or_missing";
+        var safeReturns=new HashSet<string>{
+            "material_not_direct","destination_not_direct","no_adjacent_opcode","not_typed_call",
+            "void","texture","render_texture","texture2d","texture3d","texture2d_array",
+            "cubemap","cubemap_array","custom_render_texture","sparse_texture","unity_object",
+            "system_object","material","primitive","other_unity_type","other_system_type",
+            "opaque_nonpublic_or_external_type","ambiguous_or_missing"
+        };
+        if(!safeReturns.Contains(ret0)||!safeReturns.Contains(ret1))
+            throw new InvalidOperationException("unsafe_original_return_type_family");
+        Console.WriteLine("T2_FOAM_PASS0_ADJACENT_RETURN_FAMILY "+ret0);
+        Console.WriteLine("T2_FOAM_PASS1_ADJACENT_RETURN_FAMILY "+ret1);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -597,10 +659,16 @@ internal static class Program
            SourceHeadClass(fixtureMethod,4,fixtureMatField)!="call_returns_render_texture")
             throw new InvalidOperationException("synthetic_call_head_not_classified");
         producerCall.ReturnType=mod.TypeSystem.Void;
+        if(SourceAdjacentCallReturnFamily(fixtureMethod,4,fixtureMatField)!="void")
+            throw new InvalidOperationException("void_return_must_not_be_texture");
         if(SourceHeadClass(fixtureMethod,4,fixtureMatField)!="call_returns_other")
             throw new InvalidOperationException("void_call_not_texture");
         producerCall.ReturnType=rt;
+        if(SourceAdjacentCallReturnFamily(fixtureMethod,4,fixtureMatField)!="render_texture")
+            throw new InvalidOperationException("typed_public_RT_return_family");
         stream[0]=Instruction.Create(OpCodes.Ldelem_Ref);
+        if(SourceAdjacentCallReturnFamily(fixtureMethod,4,fixtureMatField)!="not_typed_call")
+            throw new InvalidOperationException("array_must_not_be_forged_call_return");
         if(SourceHeadClass(fixtureMethod,4,fixtureMatField)!="array_element")
             throw new InvalidOperationException("array_result_not_kind");
     }
