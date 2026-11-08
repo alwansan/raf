@@ -1,0 +1,14 @@
+{
+  "id": "20261108T1903Z-T4-authentic-original-mouse-button-wheel-g7p4",
+  "owner": "T4",
+  "session_id": "20261108T1850Z-T4-chat-original-mouse-buttons-g7p4",
+  "issue_id": "INPUT-005",
+  "type": "discovery",
+  "summary": "Immutable original ZIP2 CLR mouse input reference census authentic SHA: original compiled Assembly-CSharp.dll private ILSpy across 2395 files yields Legacy Input.GetMouseButton Down=4, held=6, Up=2, scroll GetAxis=6, mouseScrollDelta=2. Source-only CI PASS 6 tests. Does not prove game legacy callback/Android device input.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42512688990",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_AUTHENTIC_ORIGINAL_MOUSE_BUTTON_WHEEL_ROUTING_2026-11-08.md",
+    "https://github.com/alwansan/raf/commit/65c32c9aebb79079439975eed323cc8f0a61f641"
+  ],
+  "at": "2026-11-08T19:03:00Z"
+}
