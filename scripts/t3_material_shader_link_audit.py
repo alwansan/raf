@@ -13,6 +13,7 @@ import re
 
 GUID = re.compile(r"(?m)^guid:\s*([0-9a-fA-F]{32})\s*$")
 SHADER = re.compile(r"(?m)^\s*m_Shader:\s*\{\s*fileID:\s*(-?\d+)\s*,\s*guid:\s*([0-9a-fA-F]{32})\s*,\s*type:\s*\d+\s*\}")
+SHADER_FIELD = re.compile(r"(?m)^\s*m_Shader\s*:")
 ZERO = "0" * 32
 
 def audit(root):
@@ -54,7 +55,7 @@ def audit(root):
             counters["material_unreadable"] += 1
             continue
         matches = SHADER.findall(content)
-        if len(matches) != 1:
+        if len(matches) != 1 or len(SHADER_FIELD.findall(content)) != 1:
             counters["material_shader_pointer_unparsed"] += 1
             continue
         file_id, guid = matches[0]
