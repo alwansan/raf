@@ -140,7 +140,9 @@ public final class T3LabActivity extends Activity {
                     ContentValues v=new ContentValues();
                     v.put(MediaStore.Downloads.DISPLAY_NAME,id+"-"+System.currentTimeMillis()+".png");
                     v.put(MediaStore.Downloads.MIME_TYPE,"image/png");
-                    v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+session+"/");
+                    String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
+                    if(parent==null||!parent.matches("[A-Za-z0-9._-]{6,90}"))parent=session;
+                    v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+parent+"/");
                     Uri dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
                     if(dest==null)throw new IOException("Could not write PNG");
                     try(OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
