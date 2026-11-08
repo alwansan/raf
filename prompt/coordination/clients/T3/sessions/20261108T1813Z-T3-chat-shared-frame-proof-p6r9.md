@@ -15,7 +15,7 @@
 1. [204dabb9](https://github.com/alwansan/raf/commit/204dabb9c18b7122550c7aa30a51fdc385de6f45) replaced 1s blind PixelCopy with exact same-case generation handshake and six GLES `glReadPixels` numeric/negative controls; GL errors/timeouts fail closed, do not PASS.
 2. [6bb0b165](https://github.com/alwansan/raf/commit/6bb0b165f5849c84b1210eed0c7d8eba00468b2f) enforces case/provenance inside async PixelCopy callback, resets GL program and compiler-negative control across EGL context recreation.
 3. [c0a2213b](https://github.com/alwansan/raf/commit/c0a2213bc97d594a3c04c42d956cb51b3c3a291e) added five source-only regression methods. Separate current remote-file invariant scan saw **26/26** source checkpoints, 0 old blind timers and 0 T3 synthetic automatic PASS calls. These are **not** actual phone/Gradle test results.
-4. [T3 technical report](../../../..//docs/T3_SHARED_VISUAL_FRAME_PROOF_2026-11-08.md) documents limits. Earlier [unified source compile CI42504045625](https://github.com/alwansan/raf/actions/runs/42504045625) **SUCCESS only for pre-patch source**; not proof this patch compiles.
+4. [T3 technical report](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_SHARED_VISUAL_FRAME_PROOF_2026-11-08.md) documents limits. Earlier [unified source compile CI42504045625](https://github.com/alwansan/raf/actions/runs/42504045625) **SUCCESS only for pre-patch source**; not proof this patch compiles.
 5. Updated **T3 row only** in `apk-for-testing/SHARED_BUILD_READINESS.md` to **NEED_BUILD** for `shared-20261108-r1`, because native Java driver changes require one new shared APK rather than imported JSON. The T5 integration/signature/queued Actions decision is independent; no full Unity/XAPK request, no other vote changed.
 
 ## Limits
@@ -23,3 +23,6 @@ Actual T3 synthetic GLES pixels on the POCO device, PixelCopy storage, stable ce
 
 ## Next
 T5 to run unified Java compile and source-only tests on post-patch SHA, check live Actions/signature/version, integrate single shared Mini if warranted. Then owner checks T3-01..06 images and reports results via one testpack / shared session export. T3 should compare actual pixels and original game errors separately; avoid inferring white materials or fire fixes from synthetic colored quads.
+
+## Supplemental validation
+- [99e3ee5c](https://github.com/alwansan/raf/commit/99e3ee5c7d3d107d7f5ab197a8ea4e19383562a7) rejects matching blank alpha panels (positive nonzero RGB channels); [2e3ce81b](https://github.com/alwansan/raf/commit/2e3ce81b3a092e7823eedb8aafe1d0bc6e3f2c3c) guards it in source-only tests. Rechecked 14 follow-up source/pack invariants: 14/14; current team pack still 29 tests including six T3 assisted/auto-screenshot entries. No post-fix compiled Java/Android proof.
