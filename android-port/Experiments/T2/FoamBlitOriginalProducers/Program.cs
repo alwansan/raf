@@ -314,7 +314,8 @@ internal static class Program
         if(start<0 || UnsafeFlow(method,start,callIndex))return "control_flow";
         return "none";
     }
-    private sealed record StackSourceTrace(string Role,string Kind,string Reason,int Steps,int VoidCalls);
+    private sealed record StackSourceTrace(string Role,string Kind,string Reason,int Steps,int VoidCalls,
+        Instruction? SourceInstruction);
 
     static StackSourceTrace BacktraceBlitSource(MethodDefinition method,int blitIndex)
     {
@@ -324,7 +325,7 @@ internal static class Program
         // Proves at most static declared TYPE on a bounded straight-line
         // original method path, never texture INSTANCE or shader equivalence.
         StackSourceTrace Blocked(string why,int steps,int voids) =>
-            new("unknown","unknown",why,steps,voids);
+            new("unknown","unknown",why,steps,voids,null);
         if(method.Body.HasExceptionHandlers || blitIndex<1 ||
             blitIndex>=method.Body.Instructions.Count || !Blit(method.Body.Instructions[blitIndex]))
             return Blocked("not_straight_line",0,0);
@@ -438,12 +439,58 @@ internal static class Program
                     _=>"unknown"
                 };
                 return new(role,kind,role=="unknown"?"producer_type_not_base_texture":
-                    "static_type_only_no_instance_proof",steps,voidCalls);
+                    "static_type_only_no_instance_proof",steps,voidCalls,ins);
             }
             depth=depth-pushes+pops;
             if(depth>32)return Blocked("stack_depth_budget",steps,voidCalls);
         }
         return Blocked("trace_budget_or_no_producer",steps,voidCalls);
+    }
+
+    static string OriginalTextureReturnBodyFamily(StackSourceTrace trace,ModuleDefinition sourceModule)
+    {
+        // Only the STATIC return-statement family of a resolvable original
+        // managed method definition. No private class/member name, IL index,
+        // token or string is printed. Calls through callvirt may dispatch to
+        // a different implementation at runtime and are rejected.
+        if(trace.Kind!="typed_call_result")return "not_call_return_source";
+        var sourceInstruction=trace.SourceInstruction;
+        if(sourceInstruction is null || sourceInstruction.Operand is not MethodReference callee)
+            return "missing_call_reference";
+        if(sourceInstruction.OpCode.Code==Code.Callvirt)
+            return "virtual_dispatch_unresolved";
+        MethodDefinition? original=null;
+        try { original=callee.Resolve(); }
+        catch(AssemblyResolutionException) {return "external_or_unresolved_method";}
+        catch(ResolutionException) {return "external_or_unresolved_method";}
+        if(original is null || original.Module!=sourceModule)
+            return "external_or_unresolved_method";
+        if(!original.HasBody)return "original_method_without_body";
+        var il=original.Body.Instructions;
+        if(original.Body.HasExceptionHandlers || il.Count>128 ||
+            il.Any(x=>x.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
+                or FlowControl.Throw))
+            return "original_method_complex_flow";
+        var returns=il.Select((v,i)=>(Instruction:v,Index:i))
+            .Where(x=>x.Instruction.OpCode.Code==Code.Ret).ToArray();
+        if(returns.Length!=1)return "original_method_multiple_or_missing_returns";
+        int preceding=Previous(il,returns[0].Index-1);
+        if(preceding<0)return "original_method_return_producer_unknown";
+        var predecessor=il[preceding];
+        if(predecessor.OpCode.Code==Code.Ldsfld)
+            return "original_method_static_field_return";
+        if(predecessor.OpCode.Code==Code.Ldfld)
+            return "original_method_instance_field_return_receiver_unproved";
+        if(LocalIndex(predecessor,false)>=0)
+            return "original_method_local_return_untraced";
+        if(predecessor.OpCode.Code is Code.Ldarg_0 or Code.Ldarg_1 or Code.Ldarg_2
+           or Code.Ldarg_3 or Code.Ldarg or Code.Ldarg_S)
+            return "original_method_argument_return_untraced";
+        if(predecessor.OpCode.Code is Code.Call or Code.Callvirt)
+            return "original_method_nested_call_return_untraced";
+        if(predecessor.OpCode.Code==Code.Ldnull)
+            return "original_method_null_return";
+        return "original_method_return_producer_unknown";
     }
 
     static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
@@ -696,9 +743,9 @@ internal static class Program
         Console.WriteLine("T2_FOAM_PASS0_ADJACENT_RETURN_FAMILY "+ret0);
         Console.WriteLine("T2_FOAM_PASS1_ADJACENT_RETURN_FAMILY "+ret1);
         var back0=originalBacktraces[0].Count==1?originalBacktraces[0][0]:
-            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0);
+            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0,null);
         var back1=originalBacktraces[1].Count==1?originalBacktraces[1][0]:
-            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0);
+            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0,null);
         var safeStackKinds=new HashSet<string>{
             "unknown","typed_field","typed_local","typed_argument","typed_call_result",
             "typed_cast","constructor_result","array_element","indirect_reference",
@@ -720,6 +767,23 @@ internal static class Program
             " steps="+back0.Steps+" void_calls="+back0.VoidCalls);
         Console.WriteLine("T2_FOAM_PASS1_BACKTRACE "+back1.Role+" "+back1.Kind+" "+back1.Reason+
             " steps="+back1.Steps+" void_calls="+back1.VoidCalls);
+        string methodKind0=OriginalTextureReturnBodyFamily(back0,asm.MainModule);
+        string methodKind1=OriginalTextureReturnBodyFamily(back1,asm.MainModule);
+        var permittedReturnBodies=new HashSet<string>{
+            "not_call_return_source", "missing_call_reference", "virtual_dispatch_unresolved",
+            "external_or_unresolved_method", "original_method_without_body",
+            "original_method_complex_flow", "original_method_multiple_or_missing_returns",
+            "original_method_return_producer_unknown", "original_method_static_field_return",
+            "original_method_instance_field_return_receiver_unproved",
+            "original_method_local_return_untraced",
+            "original_method_argument_return_untraced",
+            "original_method_nested_call_return_untraced", "original_method_null_return"
+        };
+        if(!permittedReturnBodies.Contains(methodKind0) ||
+           !permittedReturnBodies.Contains(methodKind1))
+            throw new InvalidOperationException("private_return_method_info_forbidden");
+        Console.WriteLine("T2_FOAM_PASS0_CALLEE_BODY_FAMILY "+methodKind0);
+        Console.WriteLine("T2_FOAM_PASS1_CALLEE_BODY_FAMILY "+methodKind1);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -875,6 +939,21 @@ internal static class Program
         traced=BacktraceBlitSource(fixtureMethod,6);
         if(traced.Role!="unknown" || traced.Reason!="producer_type_not_base_texture")
             throw new InvalidOperationException("non_texture_stack_value_must_not_pass");
+        // An original-module method with a single direct static field return
+        // is type-classifiable without proving any runtime texture identity.
+        var getter=new MethodDefinition("SourceFreeSyntheticGetter",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,tex);
+        owner.Methods.Add(getter);
+        getter.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        getter.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        stream[2]=Instruction.Create(OpCodes.Call,getter);
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="Texture" ||
+           OriginalTextureReturnBodyFamily(traced,mod)!="original_method_static_field_return")
+            throw new InvalidOperationException("original_module_return_lineage_not_bounded");
+        getter.Body.Instructions.Insert(0,Instruction.Create(OpCodes.Ret));
+        if(OriginalTextureReturnBodyFamily(traced,mod)!="original_method_multiple_or_missing_returns")
+            throw new InvalidOperationException("multiple_returns_must_remain_unresolved");
     }
 
     public static int Main(string[] args)
