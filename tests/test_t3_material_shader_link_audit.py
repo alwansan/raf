@@ -67,9 +67,9 @@ class MaterialShaderAuditTests(unittest.TestCase):
             external = root / "external"
             external.mkdir()
             guid = "e" * 32
-            (external / "External.shader.meta").write_text("guid: " + guid + "\\n")
+            (external / "External.shader.meta").write_text("guid: " + guid + "\n")
             (external / "External.mat").write_text(
-                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+                "Material:\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\n" % guid)
             try:
                 (scan / "External.shader.meta").symlink_to(external / "External.shader.meta")
                 (scan / "External.mat").symlink_to(external / "External.mat")
