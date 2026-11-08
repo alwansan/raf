@@ -2,6 +2,9 @@ package com.alwansan.raft.t3lab;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import com.alwansan.raftlab.SharedSurfacePixelPolicy;
 import android.view.PixelCopy;
 import com.alwansan.raftlab.BuildConfig;
 import android.content.ContentValues;
@@ -74,6 +77,7 @@ public final class T3LabActivity extends Activity {
     volatile int lastRenderedError=GLES30.GL_INVALID_OPERATION;
     volatile boolean lastRenderedAssertion=false;
     volatile String lastRenderedNote="لم يكتمل رسم إطار GLES بعد";
+    volatile int[] lastRenderedLeft=null, lastRenderedRight=null;
     boolean manualCaptureStarted=false;
     String manualPreviewCase=null;
 
@@ -182,82 +186,158 @@ public final class T3LabActivity extends Activity {
         new Handler(Looper.getMainLooper()).postDelayed(
             ()->waitForSharedRender(id,idx,sequence,deadline),80);
     }
+    /** Capture the actual independent GLES SurfaceView layer, not only the Window.
+     *  Owner proof: window PixelCopy PNG was black while Android screenshot showed RGB.
+     *  A byte-valid PNG is not a faithful image; verify two pixels vs glReadPixels.
+     */
     void captureSharedEvidence(String id){
-        int expected=Integer.parseInt(id.substring(4))-1;
-        if(lastRenderedSequence!=renderSequence || lastRenderedCase!=expected ||
-           caseIndex!=expected || !lastRenderedAssertion){
-            finishSharedEvidence(id,"FAIL",null,"Case changed or GLES assertion lost before PixelCopy");return;
+        captureSharedEvidence(id,0);
+    }
+    void captureSharedEvidence(String id,int attempt){
+        final int expected=Integer.parseInt(id.substring(4))-1;
+        final int generation=renderSequence;
+        if(!sameRenderedFrame(expected,generation)){
+            finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"Case changed/GLES assertion unavailable before SurfaceView capture");return;
         }
-        android.view.View decor=getWindow().getDecorView();
-        if(decor==null||decor.getWidth()<=0||decor.getHeight()<=0){
-            finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"No window pixels yet");return;
+        if(surface==null||surface.getWidth()<16||surface.getHeight()<16||
+           surface.getWidth()>4096||surface.getHeight()>4096 ||
+           (long)surface.getWidth()*surface.getHeight()>12000000L){
+            finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"GLES SurfaceView not sized for screenshot");return;
         }
-        int width=Math.min(decor.getWidth(),1600),height=Math.min(decor.getHeight(),900);
-        final Bitmap bmp=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+        final int sw=surface.getWidth(),sh=surface.getHeight();
+        final Bitmap gpu=Bitmap.createBitmap(sw,sh,Bitmap.Config.ARGB_8888);
         try{
-            PixelCopy.request(getWindow(),bmp,result->{
-                if(lastRenderedSequence!=renderSequence || lastRenderedCase!=expected ||
-                   caseIndex!=expected || !lastRenderedAssertion){
-                    bmp.recycle();finishSharedEvidence(id,"FAIL",null,"Case changed during PixelCopy");return;
+            PixelCopy.request(surface,gpu,result->{
+                if(!sameRenderedFrame(expected,generation)){
+                    gpu.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"GLES frame changed during SurfaceView PixelCopy");return;
                 }
                 if(result!=PixelCopy.SUCCESS){
-                    bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"PixelCopy code "+result);return;
+                    gpu.recycle();retryOrManual(id,attempt,"SurfaceView PixelCopy code="+result);return;
                 }
-                Uri dest=null;
+                int[] gpuLeft=lastRenderedLeft,gpuRight=lastRenderedRight;
+                int[] photoLeft=SharedSurfacePixelPolicy.bitmapPixelToRgba(gpu.getPixel(sw/4,sh/2));
+                int[] photoRight=SharedSurfacePixelPolicy.bitmapPixelToRgba(gpu.getPixel(3*sw/4,sh/2));
+                String mismatch=SharedSurfacePixelPolicy.validate(gpuLeft,gpuRight,photoLeft,photoRight);
+                if(mismatch!=null){
+                    log("screenshot_pixel_mismatch","id="+id+" attempt="+attempt+" reason="+mismatch+
+                        " surface="+sw+"x"+sh+
+                        " photoLeft="+java.util.Arrays.toString(photoLeft)+
+                        " photoRight="+java.util.Arrays.toString(photoRight));
+                    gpu.recycle();retryOrManual(id,attempt,mismatch);return;
+                }
+                log("screenshot_pixel_match","id="+id+" attempt="+attempt+" surface="+sw+"x"+sh+
+                    " left="+java.util.Arrays.toString(photoLeft)+
+                    " right="+java.util.Arrays.toString(photoRight));
+                // Capture UI chrome separately, then replace its possibly black
+                // SurfaceView hole with the verified, independently copied GPU layer.
+                final View decor=getWindow().getDecorView();
+                final int dw=decor==null?0:decor.getWidth(),dh=decor==null?0:decor.getHeight();
+                if(dw<16||dh<16||dw>4096||dh>4096||(long)dw*dh>12000000L){
+                    publishVerifiedScreenshot(id,expected,generation,gpu,"verified-surface-only");
+                    gpu.recycle();return;
+                }
+                final Bitmap window=Bitmap.createBitmap(dw,dh,Bitmap.Config.ARGB_8888);
                 try{
-                    if(Build.VERSION.SDK_INT<29)
-                        throw new IOException("MediaStore PNG export requires Android 10+");
-                    // Encode a real PNG before writing any visible MediaStore item.
-                    // Digest and byte count are captured from the exact PNG payload.
-                    ByteArrayOutputStream encoded=new ByteArrayOutputStream(64*1024);
-                    if(!bmp.compress(Bitmap.CompressFormat.PNG,100,encoded))
-                        throw new IOException("Bitmap PNG encoding failed");
-                    byte[] png=encoded.toByteArray();
-                    if(!isCompletePng(png))throw new IOException("Incomplete PNG envelope");
-                    String sha=hexDigest(png);
-                    ContentValues v=new ContentValues();
-                    v.put(MediaStore.Downloads.DISPLAY_NAME,id+"-"+System.currentTimeMillis()+".png");
-                    v.put(MediaStore.Downloads.MIME_TYPE,"image/png");
-                    String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
-                    if(parent==null||!parent.matches("[A-Za-z0-9._-]{6,90}"))parent=session;
-                    v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+parent+"/");
-                    v.put(MediaStore.MediaColumns.IS_PENDING,1);
-                    dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
-                    if(dest==null)throw new IOException("Could not allocate pending PNG");
-                    try(OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
-                        if(out==null)throw new IOException("Could not open pending PNG");
-                        out.write(png);out.flush();
-                    }
-                    // An owned MediaStore URI may have been truncated or fail to reopen.
-                    // Never claim visual evidence until the entire stored file matches.
-                    verifyPngReadback(dest,png.length,sha);
-                    ContentValues visible=new ContentValues();
-                    visible.put(MediaStore.MediaColumns.IS_PENDING,0);
-                    if(getContentResolver().update(dest,visible,null,null)!=1)
-                        throw new IOException("Could not publish verified PNG");
-                    verifyPngReadback(dest,png.length,sha);
-                    String uri=dest.toString();
-                    log("pixelcopy_png","id="+id+" uri="+uri+" bytes="+png.length+" sha256="+sha);
-                    // Return the actual GPU pixel samples to the shared host log,
-                    // not just the PNG URI. A screen image is not a GL readback.
-                    String gpu=lastRenderedNote;
-                    if(gpu==null||gpu.length()<30||gpu.length()>700)
-                        throw new IOException("Missing bounded GPU readback record");
-                    finishSharedEvidence(id,"EVIDENCE_READY",uri,
-                        "GLES synthetic frame; "+gpu+"; png_bytes="+png.length+
-                        " png_sha256="+sha+"; visual review still required");
-                }catch(Exception e){
-                    if(dest!=null){
-                        try{getContentResolver().delete(dest,null,null);}
-                        catch(Exception cleanup){log("screenshot_cleanup_error",cleanup.getClass().getSimpleName());}
-                    }
-                    log("screenshot_error",e.getClass().getSimpleName());
-                    finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());
+                    PixelCopy.request(getWindow(),window,code->{
+                        if(!sameRenderedFrame(expected,generation)){
+                            window.recycle();gpu.recycle();
+                            finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"GLES case changed during window composition");return;
+                        }
+                        if(code==PixelCopy.SUCCESS){
+                            int[] at=new int[2],origin=new int[2];
+                            surface.getLocationInWindow(at);
+                            decor.getLocationInWindow(origin);
+                            Canvas canvas=new Canvas(window);
+                            canvas.drawBitmap(gpu,(float)(at[0]-origin[0]),
+                                (float)(at[1]-origin[1]),new Paint(Paint.FILTER_BITMAP_FLAG));
+                            publishVerifiedScreenshot(id,expected,generation,window,
+                                "verified-GLSurfaceView-overlay-on-window");
+                        }else{
+                            log("screenshot_window_fallback","id="+id+" windowCopy="+code+
+                                " using verified SurfaceView only");
+                            publishVerifiedScreenshot(id,expected,generation,gpu,"verified-surface-only");
+                        }
+                        window.recycle();gpu.recycle();
+                    },new Handler(Looper.getMainLooper()));
+                }catch(Exception ex){
+                    window.recycle();
+                    log("screenshot_window_fallback","id="+id+" error="+ex.getClass().getSimpleName());
+                    publishVerifiedScreenshot(id,expected,generation,gpu,"verified-surface-only");
+                    gpu.recycle();
                 }
-                finally{bmp.recycle();}
             },new Handler(Looper.getMainLooper()));
         }catch(Exception e){
-            bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());
+            gpu.recycle();retryOrManual(id,attempt,"SurfaceView PixelCopy exception "+e.getClass().getSimpleName());
+        }
+    }
+    boolean sameRenderedFrame(int expected,int generation){
+        return caseIndex==expected&&lastRenderedCase==expected&&
+            renderSequence==generation&&lastRenderedSequence==generation&&
+            lastRenderedAssertion&&lastRenderedError==GLES30.GL_NO_ERROR;
+    }
+    void retryOrManual(String id,int attempt,String reason){
+        if(attempt<2){
+            log("screenshot_retry","id="+id+" next="+(attempt+1)+" reason="+reason);
+            surface.requestRender();
+            new Handler(Looper.getMainLooper()).postDelayed(
+                ()->captureSharedEvidence(id,attempt+1),280);
+            return;
+        }
+        finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,
+            "No faithful SurfaceView PNG after 3 tries: "+reason+
+            "; attach an actual owner screenshot or retry.");
+    }
+    void publishVerifiedScreenshot(String id,int expected,int generation,
+                                   Bitmap bmp,String captureMethod){
+        Uri dest=null;
+        try{
+            if(!sameRenderedFrame(expected,generation))
+                throw new IOException("Rendered GLES case changed before PNG publication");
+            if(Build.VERSION.SDK_INT<29)
+                throw new IOException("MediaStore PNG export requires Android 10+");
+            ByteArrayOutputStream encoded=new ByteArrayOutputStream(64*1024);
+            if(!bmp.compress(Bitmap.CompressFormat.PNG,100,encoded))
+                throw new IOException("Bitmap PNG encoding failed");
+            byte[] png=encoded.toByteArray();
+            if(!isCompletePng(png))throw new IOException("Incomplete PNG envelope");
+            String sha=hexDigest(png);
+            ContentValues v=new ContentValues();
+            v.put(MediaStore.Downloads.DISPLAY_NAME,id+"-"+System.currentTimeMillis()+".png");
+            v.put(MediaStore.Downloads.MIME_TYPE,"image/png");
+            String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
+            if(parent==null||!parent.matches("[A-Za-z0-9._-]{6,90}"))parent=session;
+            v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+parent+"/");
+            v.put(MediaStore.MediaColumns.IS_PENDING,1);
+            dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
+            if(dest==null)throw new IOException("Could not allocate pending PNG");
+            try(OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
+                if(out==null)throw new IOException("Could not open pending PNG");
+                out.write(png);out.flush();
+            }
+            verifyPngReadback(dest,png.length,sha);
+            ContentValues visible=new ContentValues();
+            visible.put(MediaStore.MediaColumns.IS_PENDING,0);
+            if(getContentResolver().update(dest,visible,null,null)!=1)
+                throw new IOException("Could not publish verified PNG");
+            verifyPngReadback(dest,png.length,sha);
+            if(!sameRenderedFrame(expected,generation))
+                throw new IOException("GLES case changed before screenshot could be accepted");
+            String gpu=lastRenderedNote;
+            if(gpu==null||gpu.length()<30||gpu.length()>700)
+                throw new IOException("Missing bounded GPU readback record");
+            log("pixelcopy_png","id="+id+" method="+captureMethod+" uri="+dest+
+                " bytes="+png.length+" sha256="+sha+" image="+bmp.getWidth()+"x"+bmp.getHeight()+
+                " surface_match=true");
+            finishSharedEvidence(id,"EVIDENCE_READY",dest.toString(),
+                "GLES synthetic frame; "+gpu+"; png_bytes="+png.length+
+                " png_sha256="+sha+" capture="+captureMethod+
+                " verified_surface_pixels=true; human visual review still required");
+        }catch(Exception e){
+            if(dest!=null)try{getContentResolver().delete(dest,null,null);}
+                catch(Exception cleanup){log("screenshot_cleanup_error",cleanup.getClass().getSimpleName());}
+            log("screenshot_error",id+" "+e.getClass().getSimpleName()+": "+e.getMessage());
+            finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,
+                "Verified SurfaceView capture could not be saved: "+e.getClass().getSimpleName());
         }
     }
     /** PNG signature + terminal IEND; Bitmap.compress is the trusted encoder. */
@@ -567,6 +647,8 @@ public final class T3LabActivity extends Activity {
                 " viewport="+width+"x"+height;
             log("render",observed);
             lastRenderedNote=observed;
+            lastRenderedLeft=left;
+            lastRenderedRight=right;
             lastRenderedError=glError;
             lastRenderedAssertion=colors && glError==GLES30.GL_NO_ERROR;
             lastRenderedCase=current;
