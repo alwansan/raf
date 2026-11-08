@@ -81,7 +81,7 @@ def main():
                 raise ValueError("invalid pass entry")
             for key in ("reference", "observed"):
                 relative = entry[key]
-                if not isinstance(relative, str) or not relative or "\\x00" in relative:
+                if not isinstance(relative, str) or not relative or "\x00" in relative:
                     raise ValueError("invalid capture path")
                 candidate = Path(relative)
                 if candidate.is_absolute() or ".." in candidate.parts:
