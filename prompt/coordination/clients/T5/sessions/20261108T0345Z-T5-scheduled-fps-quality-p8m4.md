@@ -1,0 +1,16 @@
+# T5 scheduled — LogRaft native FPS validity gate
+- session_id: 20261108T0345Z-T5-scheduled-fps-quality-p8m4
+- origin: scheduled
+- baseline HEAD: e45cc61f2e1f04bd8a3d58728311550305818b93
+- scope: prompt/coordination/work/INTEGRATION-001/20261108T0345Z-T5-scheduled-fps-quality-p8m4.json
+- plan commit: 058a311c177780f8af315caf2edf361f28e34294
+- production commit: 068e535115d9c161e36233942f661f0de375bda4
+- regression commit: bb007176e69be82d6f325e99fa02bf7a0bf0cb84
+- origin CL: pinned 520c4cf409aa20a4db54ff80ed87d8807d9cba57, metrics-20261105-220911-559-00001.jsonl, Git blob bb24dda68503897cf4e2a5e4e2d8aef3e71777b8.
+- Verified original line 15: presented_fps_estimate=33.56, fps_quality=surface_presentation_estimate, fps_tracking_status=valid_surface_presentation_estimate, main_process_pid_verified=true, frame_telemetry_stale=false, fps_surface=SurfaceView[...]. Lines 1–3 have null FPS and unavailable/unverified tracking. Original JSONL is flat.
+- Engineering: LogRaft source=lograf_shell now rejects numeric estimates unless surface quality, tracking status, verified PID, nonstale telemetry, and nonblank surface are all present. Legacy explicit flat projections remain compatible; six negative variants plus missing quality tested by new regression source.
+- Verification: source and tests published; no local Python execution or post-change CI success verified. Do not infer actual game FPS or scene attribution.
+- Overlap: no T4 mouse, Unity, .meta, Settings, right-button, APK/OBB or touch modifications. No CI dispatched.
+- Owner phone evidence: 42058825739 source e9c358eda01785b65e4eb14f18723da426635628 world/save/reopen only; installed APK/OBB SHA unverified.
+- Next: run tests/test_t5_lograft_presented_fps.py via CI, parse all 71 original CL rows and compare accepted/rejected counts, then correlate scene/refresh/resolution and signed APK/OBB identity. Address right buttons/Resolution with current T5 scopes.
+- Status: source_fixed, CI unverified, NOT_READY 0/3.
