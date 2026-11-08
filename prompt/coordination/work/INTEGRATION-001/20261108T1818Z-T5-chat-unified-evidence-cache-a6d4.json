@@ -4,7 +4,7 @@
   "session_id": "20261108T1818Z-T5-chat-unified-evidence-cache-a6d4",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_source_build_device_pending",
   "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
   "resumed_from": [
     "20261108T1652Z-T5-scheduled-saf-zero-read-f4c9",
@@ -19,6 +19,21 @@
   ],
   "experiment_key": "unified-lab-evidence-cache-v1@7bb7b045:PASS-FAIL-EVIDENCE_READY+force-rerun",
   "resource_key": "android-unified-mini-lab-host",
-  "run_urls": [],
-  "next_step": "Patch source, verify tests, vote T5 only; build only on legitimate NEED_BUILD and no equivalent run."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42509945996"
+  ],
+  "next_step": "Owner install first shared APK, AUTO ALL, import/attach T5 SAF OBB only via app, export logs; retain debug-signing limitation; no repeated build until driver delta.",
+  "updated_at": "2026-11-08T18:32:45Z",
+  "result": {
+    "build": "success",
+    "source_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+    "request_sha": "3555bafae757bb0523e00e171582530ab4193b32",
+    "artifact_id": 13628828717,
+    "artifact_zip_sha256": "f98d32f6a78e49ba319e250234cca5ed3eb48853a760c4ec6c78950227648fa6",
+    "apk_sha256": "cee2df1b3bb2a1a3c8e9ab757f520040d36c5bf16d711587f7e2bc537f917472",
+    "apk_bytes": 78806,
+    "certificate_sha256": "cd2b1f9875dce958ef4ac5f6a08737174d60870df6562afb5636b7fe377cc259",
+    "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
+    "tests": "20/20 JVM assertions; CI gate Gradle all success; device not tested"
+  }
 }
