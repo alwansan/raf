@@ -61,37 +61,87 @@ public final class UnifiedLabActivity extends Activity {
     }
 
     void makeUi(){
+        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         ScrollView scroll=new ScrollView(this);
-        content=new LinearLayout(this);content.setOrientation(LinearLayout.VERTICAL);content.setPadding(14,12,14,16);
+        scroll.setFillViewport(true);
+        scroll.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content=new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content.setPadding(18,16,18,30);
         scroll.addView(content);
-        title=text("RAFT TEAM LAB — ONE APK / T1–T5");content.addView(title);
-        summary=text("Embedded team tests / JSONL evidence");content.addView(summary);
-        LinearLayout controls=new LinearLayout(this);content.addView(controls);
-        addButton(controls,"AUTO ALL",v->autoRun(null));
-        addButton(controls,"FORCE AUTO RERUN",v->autoRun(null,true));
-        addButton(controls,"Import TEAM pack",v->pick(LOAD_PACK,"application/json"));
-        addButton(controls,"Export logs",v->export());
-        workerButtons=new LinearLayout(this);workerButtons.setOrientation(LinearLayout.VERTICAL);content.addView(workerButtons);
-        caseDetail=text("Select worker or a request below");content.addView(caseDetail);
-        comment=new EditText(this);comment.setHint("Your observation, errors or screenshot description");
+        title=text("مختبر رافت الموحد — T1 إلى T5");
+        title.setTextSize(21);
+        content.addView(title);
+        summary=text("الاختبارات محفوظة داخل التطبيق؛ لا تحتاج استيراد ملف قديم.");
+        content.addView(summary);
+        content.addView(text("١) اضغط «تشغيل الاختبارات التلقائية» للفحوص الممكنة. ٢) اختر اختبارًا يدويًا من «طلبات تحتاج تدخلك». ٣) اكتب ما شاهدته ثم احفظ النتيجة. ٤) صدّر الملفات وارفعها إلى GitHub: alwansan/CL → test."));
+        content.addView(text("الأزرار التالية خاصة بمختبر الاختبار فقط، ولا تتحكم تلقائيًا بلعبة Raft الخارجية."));
+        LinearLayout controls=new LinearLayout(this);
+        controls.setOrientation(LinearLayout.VERTICAL);
+        content.addView(controls);
+        addButton(controls,"▶ تشغيل الاختبارات التلقائية لكل الفريق",v->autoRun(null));
+        addButton(controls,"↻ إعادة الاختبارات التلقائية بالقوة",v->autoRun(null,true));
+        addButton(controls,"استيراد حزمة الاختبارات (اختياري)",v->pick(LOAD_PACK,"application/json"));
+        addButton(controls,"📤 تصدير السجلات والنتائج",v->export());
+        content.addView(text("اختبارات الفرق — اضغط اسم الفريق لعرض الحالات أو «تشغيل» للفحص الآلي:"));
+        workerButtons=new LinearLayout(this);
+        workerButtons.setOrientation(LinearLayout.VERTICAL);
+        workerButtons.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content.addView(workerButtons);
+        content.addView(text("طلبات تحتاج تدخلك — اضغط اسم الاختبار أدناه لفتح تعليماته:"));
+        pendingButtons=new LinearLayout(this);
+        pendingButtons.setOrientation(LinearLayout.VERTICAL);
+        pendingButtons.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content.addView(pendingButtons);
+        content.addView(text("الاختبار المحدد وتعليماته:"));
+        caseDetail=text("اختر اختبارًا من قائمة الطلبات بالأعلى لعرض الخطوات بالعربية.");
+        content.addView(caseDetail);
+        comment=new EditText(this);
+        comment.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        comment.setHint("اكتب ما شاهدته فعلًا، أو الخطأ الذي ظهر، أو وصف الصورة");
+        comment.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
+        comment.setMinLines(2);
         content.addView(comment);
-        LinearLayout actions=new LinearLayout(this);content.addView(actions);
-        addButton(actions,"RUN selected test",v->launchManualCase());
-        addButton(actions,"PASS (user observed)",v->manualResult("USER_PASS"));
-        addButton(actions,"FAIL (user observed)",v->manualResult("USER_FAIL"));
-        addButton(actions,"Attach screenshot",v->{
-            if(currentManual==null){show("Choose an in-app request first");return;}
+        LinearLayout actions=new LinearLayout(this);
+        actions.setOrientation(LinearLayout.VERTICAL);
+        content.addView(actions);
+        addButton(actions,"▶ تنفيذ الاختبار الذي اخترته",v->launchManualCase());
+        addButton(actions,"✔ نجاح حسب مشاهدتي (بعد كتابة ملاحظة)",v->manualResult("USER_PASS"));
+        addButton(actions,"✖ فشل حسب مشاهدتي (بعد كتابة ملاحظة)",v->manualResult("USER_FAIL"));
+        addButton(actions,"إرفاق صورة دليل من الهاتف",v->{
+            if(currentManual==null){show("اختر اختبارًا من قائمة الطلبات أولًا");return;}
             screenshotCase=currentManual.optString("id");pick(PICK_SCREENSHOT,"image/*");
         });
-        LinearLayout nav=new LinearLayout(this);content.addView(nav);
-        addButton(nav,"NEXT",v->nextPending());
-        addButton(nav,"FINISH",v->{currentManual=null;drawHome();});
-        pendingButtons=new LinearLayout(this);pendingButtons.setOrientation(LinearLayout.VERTICAL);
-        content.addView(text("IN-APP REQUESTS (no Android notifications):"));content.addView(pendingButtons);
+        LinearLayout nav=new LinearLayout(this);
+        nav.setOrientation(LinearLayout.VERTICAL);
+        content.addView(nav);
+        addButton(nav,"الانتقال إلى الاختبار التالي",v->nextPending());
+        addButton(nav,"الإنهاء والعودة إلى قائمة الاختبارات",v->{currentManual=null;drawHome();});
+        content.addView(text("مكان رفع نتائج الاختبار بعد التصدير: github.com/alwansan/CL/tree/main/test"));
         setContentView(scroll);
     }
-    TextView text(String s){TextView t=new TextView(this);t.setTextSize(15);t.setPadding(6,6,6,6);t.setText(s);return t;}
-    void addButton(LinearLayout bar,String label,View.OnClickListener f){Button btn=new Button(this);btn.setText(label);bar.addView(btn);btn.setOnClickListener(f);}
+    TextView text(String s){
+        TextView t=new TextView(this);
+        t.setTextSize(16);
+        t.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
+        t.setGravity(android.view.Gravity.RIGHT);
+        t.setPadding(8,12,8,12);
+        t.setText(s);
+        return t;
+    }
+    void addButton(LinearLayout bar,String label,View.OnClickListener f){
+        Button btn=new Button(this);
+        btn.setAllCaps(false);
+        btn.setTextSize(14);
+        btn.setText(label);
+        LinearLayout.LayoutParams params=bar.getOrientation()==LinearLayout.VERTICAL
+            ?new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+            :new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1f);
+        params.setMargins(1,2,1,2);
+        bar.addView(btn,params);
+        btn.setOnClickListener(f);
+    }
     void show(String m){summary.setText(m);}
     byte[] readLimited(InputStream stream)throws IOException{
         ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] block=new byte[8192];int n,emptyReads=0;
@@ -200,7 +250,7 @@ public final class UnifiedLabActivity extends Activity {
     }
     void drawHome(){
         refreshPending();workerButtons.removeAllViews();pendingButtons.removeAllViews();
-        show("Pack "+packId+" / "+tests.size()+" cases, pending "+pending.size()+" / cache respects case+driver+device+image");
+        show("الحزمة: "+packId+" — عدد الاختبارات "+tests.size()+" — تحتاج تدخلك: "+pending.size()+"؛ النتائج السابقة تُحفظ ولا تُعدّ نجاحًا بلا دليل.");
         for(int i=1;i<=5;i++){
             String worker="T"+i;int n=0,done=0;
             for(JSONObject c:tests)if(worker.equals(c.optString("worker"))){
@@ -208,26 +258,26 @@ public final class UnifiedLabActivity extends Activity {
             }
             final String w=worker;
             LinearLayout row=new LinearLayout(this);workerButtons.addView(row);
-            addButton(row,w+" ("+done+"/"+n+")",v->showWorker(w));
-            addButton(row,"AUTO "+w,v->autoRun(w));
+            addButton(row,"فريق "+w+" ("+done+"/"+n+" ناجح)",v->showWorker(w));
+            addButton(row,"تشغيل "+w+" تلقائيًا",v->autoRun(w));
         }
         for(JSONObject c:pending){
-            String id=c.optString("id");String label=id+" — "+c.optString("title");
+            String id=c.optString("id");String label=id+" — "+ArabicLabStrings.title(id,c.optString("title"))+" ["+ArabicLabStrings.status(saved(c).optString("status"))+"]";
             addButton(pendingButtons,label,v->openPending(c));
         }
-        if(pending.isEmpty())pendingButtons.addView(text("No pending screenshot/manual requests"));
+        if(pending.isEmpty())pendingButtons.addView(text("لا توجد طلبات معلّقة حاليًا؛ الفحوص الآلية قد تنتهي دون الحاجة لتدخل."));
     }
     void showWorker(String worker){
-        StringBuilder s=new StringBuilder(worker+" — test cases:\n");
+        StringBuilder s=new StringBuilder("الفريق "+worker+" — الاختبارات:\n");
         for(JSONObject c:tests)if(worker.equals(c.optString("worker"))){
-            s.append(c.optString("id")).append(": ").append(c.optString("title"))
-             .append(" / ").append(saved(c).optString("status","not run")).append('\n');
+            s.append(c.optString("id")).append(": ").append(ArabicLabStrings.title(c.optString("id"),c.optString("title")))
+             .append(" / ").append(ArabicLabStrings.status(saved(c).optString("status"))).append('\n');
         }
         caseDetail.setText(s.toString());
     }
     void autoRun(String worker){autoRun(worker,false);}
     void autoRun(String worker,boolean force){
-        if(running||waitingForChild){show("An automated test is already running");return;}
+        if(running||waitingForChild){show("يوجد اختبار تلقائي يعمل بالفعل؛ لا تبدأ تنفيذًا ثانيًا الآن");return;}
         schedule.clear();
         for(JSONObject c:tests)if(worker==null||worker.equals(c.optString("worker")))schedule.add(c);
         at=0;running=true;forceRerun=force;
@@ -245,7 +295,7 @@ public final class UnifiedLabActivity extends Activity {
         }
         String id=c.optString("id"),driver=c.optString("driver");
         activeAuto=c;
-        show("AUTO "+at+"/"+schedule.size()+" — "+id+" "+c.optString("title"));
+        show("جارٍ الفحص التلقائي "+at+"/"+schedule.size()+" — "+id+" "+ArabicLabStrings.title(id,c.optString("title")));
         log("auto_case_start",id+" driver="+driver);
         if(c.optString("mode").equals("manual")){
             store(c,"NEEDS_INPUT","User action, mouse/file or judgment is required",null);runNext();return;
@@ -311,19 +361,22 @@ public final class UnifiedLabActivity extends Activity {
                 loadPack(readLimited(in));drawHome();}}
             else if(req==PICK_SCREENSHOT)attachScreenshot(uri);
             else if(req==PICK_FILE)hashFile(uri);
-        }catch(Exception e){log("picker_error",e.toString());show("Input error: "+e.getMessage());}
+        }catch(Exception e){log("picker_error",e.toString());show("خطأ قراءة الملف: "+e.getMessage());}
     }
     void openPending(JSONObject c){
-        currentManual=c;comment.setText("");String pic=screenshotRequired(c)?"Screenshot REQUIRED":"Screenshot optional";
-        caseDetail.setText(c.optString("id")+" / "+c.optString("title")+"\n"+c.optString("instructions")+
-            "\nEXPECTED: "+c.optString("expected")+"\n"+pic+
-            "\nCached: "+saved(c).optString("status","none"));
+        currentManual=c;comment.setText("");
+        String pic=screenshotRequired(c)?"صورة الدليل مطلوبة":"الصورة اختيارية";
+        String id=c.optString("id");
+        caseDetail.setText(id+" — "+ArabicLabStrings.title(id,c.optString("title"))+
+            "\nالخطوات: "+ArabicLabStrings.instructions(id,c.optString("instructions"))+
+            "\nالمتوقع: "+ArabicLabStrings.expected(id,c.optString("expected"))+
+            "\n"+pic+"\nالحالة السابقة: "+ArabicLabStrings.status(saved(c).optString("status")));
         if("file_sha256".equals(c.optString("driver"))){
             pick(PICK_FILE,"*/*");
         }else if("t3_visual".equals(c.optString("driver"))&&
                 "NEEDS_SCREENSHOT".equals(saved(c).optString("status"))){
-            show("T3 PixelCopy failed; attach actual app screenshot or rerun case in AUTO T3.");
-        }else show("Review test; if screenshot required, Attach screenshot before marking complete.");
+            show("فشل التقاط صورة T3. أرفق لقطة حقيقية من نافذة المختبر أو أعد تشغيل فحوص T3 الآلية.");
+        }else show("اقرأ الخطوات أعلاه؛ اكتب ما شاهدته، وأرفق الصورة إذا كانت مطلوبة، ثم اختر نجاحًا أو فشلًا حقيقيًا.");
     }
     void nextPending(){
         refreshPending();
@@ -333,7 +386,7 @@ public final class UnifiedLabActivity extends Activity {
         openPending(pending.get(i+1));
     }
     void launchManualCase(){
-        if(currentManual==null){show("Choose an in-app test request first");return;}
+        if(currentManual==null){show("اختر اختبارًا من قسم الطلبات أولًا");return;}
         String driver=currentManual.optString("driver");
         if(driver.equals("mouse_manual")){
             Intent intent=new Intent(this,MainActivity.class);
@@ -343,20 +396,20 @@ public final class UnifiedLabActivity extends Activity {
             startActivityForResult(intent,MANUAL_CASE);
         }else if(driver.equals("file_sha256"))pick(PICK_FILE,"*/*");
         else if(driver.equals("t3_visual")){
-            show("Use AUTO T3 to regenerate a real image if needed, or attach screenshot.");
+            show("شغّل فحص T3 الآلي مجددًا للحصول على صورة حقيقية أو أرفق صورة التقطتها.");
         }else {
-            show("This case requires the real application/file/device context described. Record observations and evidence.");
+            show("هذا الاختبار يحتاج تشغيل اللعبة أو قراءة ملف أو مشاهدة حالة فعلية؛ اكتب الأدلة في الملاحظة.");
         }
     }
     void manualResult(String decision){
-        if(currentManual==null){show("Select an in-app request first");return;}
+        if(currentManual==null){show("اختر اختبارًا من قائمة الطلبات أولًا");return;}
         JSONObject old=saved(currentManual);
         String uri=old.optString("image_uri");
         if("USER_PASS".equals(decision)&&screenshotRequired(currentManual)&&!screenshotValid(uri)){
-            show("Required screenshot missing. Attach a real image; request remains pending.");return;
+            show("الصورة المطلوبة غير موجودة؛ أرفق صورة حقيقية قبل اعتماد النجاح.");return;
         }
         String observation=comment.getText().toString().trim();
-        if(observation.isEmpty()){show("Describe actual observation/error before recording a result.");return;}
+        if(observation.isEmpty()){show("اكتب أولًا ما شاهدته فعليًا أو رسالة الخطأ قبل تسجيل النتيجة.");return;}
         if(observation.length()>900)observation=observation.substring(0,900);
         store(currentManual,decision,"OWNER_REPORTED: "+observation+"; driver_observed="+old.optString("observed"),uri);
         export();nextPending();
@@ -411,33 +464,33 @@ public final class UnifiedLabActivity extends Activity {
         Uri own=writeMedia(name,png?"image/png":jpeg?"image/jpeg":"image/webp",bytes);
         JSONObject old=saved(currentManual);
         store(currentManual,"EVIDENCE_READY",old.optString("observed")+" screenshot_sha256="+digest(bytes),own.toString());
-        show("Screenshot attached; review PASS/FAIL, then NEXT");
+        show("تم إرفاق الصورة. راجعها ثم اختر نجاحًا أو فشلًا واضغط التالي.");
     }
     void hashFile(Uri input){
         if(currentManual==null||!"file_sha256".equals(currentManual.optString("driver")))return;
-        if(fileDigestBusy){show("SHA-256 already running; finish this file first");return;}
+        if(fileDigestBusy){show("حساب بصمة الملف يعمل بالفعل؛ أكمله قبل اختيار ملف آخر.");return;}
         fileDigestBusy=true;
         final JSONObject c=currentManual;
         log("file_sha_start","case="+c.optString("id"));
-        show("Calculating streamed SHA-256 (up to 16 GiB) in background; keep the app open...");
+        show("يجري حساب بصمة SHA256 للملف في الخلفية (حتى 16 GiB). أبقِ التطبيق مفتوحًا.");
         fileDigestThread=new Thread(()->{
             try(InputStream in=getContentResolver().openInputStream(input)){
                 StreamSha256.Result result=StreamSha256.digest(in,bytes->{
                     final long mib=bytes/(1024L*1024L);
-                    runOnUiThread(()->show("SHA-256 reading "+mib+" MiB; keep the app open"));
+                    runOnUiThread(()->show("جارٍ حساب SHA256: "+mib+" ميغابايت — أبقِ التطبيق مفتوحًا"));
                 });
                 final String observed="bytes="+result.bytes+" sha256="+result.hex;
                 runOnUiThread(()->{
                     store(c,"EVIDENCE_READY",observed,null);
                     fileDigestBusy=false;
-                    show(observed+" — compare with the actual expected file; then review PASS/FAIL");
+                    show(observed+" — قارن البصمة ببصمة مرجعية لنفس الملف، ثم سجّل نجاحًا أو فشلًا");
                 });
             }catch(Exception ex){
                 final String error=ex.getClass().getSimpleName()+": "+ex.getMessage();
                 runOnUiThread(()->{
                     store(c,"BLOCKED","No digest: "+error,null);
                     fileDigestBusy=false;
-                    show("SHA-256 failed; no file hash claimed: "+error);
+                    show("فشل حساب SHA256؛ لا يمكن اعتماد بصمة غير مكتملة: "+error);
                 });
             }
         },"team-file-sha256");
@@ -484,9 +537,9 @@ public final class UnifiedLabActivity extends Activity {
             byte[] json=(sum.toString(2)+"\n").getBytes(StandardCharsets.UTF_8);
             if(summaryExport==null)summaryExport=writeMedia("summary-"+session+".json","application/json",json);
             else try(OutputStream out=getContentResolver().openOutputStream(summaryExport,"wt")){out.write(json);out.flush();}
-            show("Exported events.jsonl and summary.json under Download/Games/cl/test/shared-"+session+"/");
+            show("تم حفظ events.jsonl وsummary.json داخل Download/Games/cl/test/shared-"+session+"/");
         }catch(Exception e){log("export_error",e.toString());
-            show("Export failed; private log and preferences preserved. "+e.getClass().getSimpleName());}
+            show("تعذر تصدير السجلات؛ بقيت البيانات محفوظة داخل التطبيق. "+e.getClass().getSimpleName());}
     }
     static byte[] readFile(File f)throws IOException{
         try(InputStream in=new FileInputStream(f);ByteArrayOutputStream out=new ByteArrayOutputStream()){
