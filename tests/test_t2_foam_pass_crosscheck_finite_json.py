@@ -1,6 +1,7 @@
 """Source-free Foam CLI ingress regression: JSON exponent overflow is not parse_constant."""
 import contextlib
 import io
+import importlib.util
 import json
 import sys
 import tempfile
@@ -9,7 +10,11 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.t2_foam_pass_crosscheck import finite_float, main
-from tests.test_t2_foam_pass_crosscheck_original_integration import full_safe_fixture, sites
+_fixture_path = Path(__file__).with_name("test_t2_foam_pass_crosscheck_original_integration.py")
+_spec = importlib.util.spec_from_file_location("_t2_foam_original_fixture", _fixture_path)
+_fixture = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_fixture)
+full_safe_fixture, sites = _fixture.full_safe_fixture, _fixture.sites
 
 
 class FoamFiniteJsonIngressTests(unittest.TestCase):
