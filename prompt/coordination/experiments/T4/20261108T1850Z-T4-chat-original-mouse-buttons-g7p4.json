@@ -1,0 +1,43 @@
+{
+  "owner": "T4",
+  "session_id": "20261108T1850Z-T4-chat-original-mouse-buttons-g7p4",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Original Raft 1.1.01 reads physical button and scroll via Unity Legacy Input calls, explaining a potential Android captured pointer callback-to-Unity legacy boundary.",
+  "source_commit": "65c32c9aebb79079439975eed323cc8f0a61f641",
+  "input_hashes": [
+    "sha256:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050",
+    "dotnet": "8.0.x",
+    "python": "3.12 GitHub runner"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_original_button_wheel_routing.py -v",
+    "python3 -m scripts.t4_original_button_wheel_routing --original-dll <sha-pinned-original> --source-root <private-decompile>"
+  ],
+  "negative_controls": [
+    "String and comment syntax cannot count as real call sites",
+    "Unrelated input and fake wrappers rejected",
+    "Invalid original DLL and symlinked decompiled file fail closed",
+    "Missing/unbounded original source population rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-original-button-wheel-routing.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42512688990",
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04 15min, CPU/3.2MiB pinned original, no Unity APK/OBB source publication",
+  "status": "completed",
+  "observed_result": "CI SUCCESS six source-free tests; original private 2395 CSharp files, 12 Legacy button call-site syntax (4 Down/6 held/2 Up), 8 Legacy wheel (6 Axis/2 scrollDelta), one dynamic button argument, no MyInput or direct InputSystem Mouse.current. Lexical-only.",
+  "rejected_hypotheses": [
+    "All original direct physical mouse click/wheel consumers must be Unity InputSystem Mouse.current",
+    "No original direct Legacy button or scroll reader exists"
+  ],
+  "limitations": [
+    "Lexical caller census only (not runtime call graph)",
+    "Input events have not been replayed on owner POCO",
+    "No current signed Raft game APK contains this census outcome or proves button/wheel behavior",
+    "No proprietary raw code or original asset published"
+  ],
+  "integration_commit": null,
+  "next_step": "Collect unified mini T4 physical mouse actual ON/OFF JSONL and later signed game callback evidence; only then stage fail-closed real Legacy Input adapters."
+}
