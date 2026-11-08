@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T0840Z-T4-scheduled-epoch-correlation-p4k8",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue": "INPUT-005",
+  "status": "active",
+  "baseline": "b7a9c614",
+  "files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_mouse_epoch_telemetry.py"
+  ],
+  "hypothesis": "Bounded pointer-capture telemetry lacks request epoch, preventing matching retries to relative motion; add generation tokens without changing native capture state.",
+  "experiment_key": "T4-mouse-epoch-correlation-20261108T0840Z",
+  "shared_resource": "none; no Unity/Actions dispatch",
+  "taken_over_from": "T4 20261108T0737Z-T4-scheduled-epoch-telemetry-c9m4",
+  "constraints": "Preserve keyboard, touch, original world/.rgd, T5 controls/resolution; no native build"
+}
