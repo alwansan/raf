@@ -40,6 +40,22 @@ HINTS = {
 }
 BAGHDAD = timezone(timedelta(hours=3))
 
+# Coarse format and keyword PRESENCE counters only; no extracted raw text.
+FORMAT_PROBES = {
+    "threadtime": THREAD_LINE,
+    "mmdd_clock": re.compile(rb"11-08\\s+\\d\\d:\\d\\d:\\d\\d\\.\\d{3}"),
+    "yyyy_mm_dd": re.compile(rb"2026[-/]11[-/]08"),
+    "epoch_unix_ms": re.compile(rb"17941457\\d{5}"),
+    "iso_clock": re.compile(rb"\\d{4}-\\d\\d-\\d\\d[T ]\\d\\d:\\d\\d:\\d\\d"),
+    "kernel_word": re.compile(rb"\\bkernel\\b", re.I),
+    "invalid_word": re.compile(rb"\\binvalid\\b", re.I),
+    "kernel_and_invalid": re.compile(rb"(?=.*\\bkernel\\b)(?=.*\\binvalid\\b)", re.I),
+    "index_and_six": re.compile(rb"\\bindex\\W{0,12}6(?:\\D|$)", re.I),
+    "dx11fft_token": re.compile(rb"\\bDx11FFT\\b", re.I),
+    "compute_shader_token": re.compile(rb"\\bComputeShader\\b", re.I),
+}
+
+
 
 def _regular_fd(path, expected_size):
     path = Path(path)
@@ -122,6 +138,7 @@ def classify_first_roots(path, expected_size=SEGMENT_SIZE):
     malformed_roots = 0
     oversize_lines = 0
     total = 0
+    formats = {name: 0 for name in FORMAT_PROBES}
     try:
         with os.fdopen(fd, "rb", buffering=1024 * 128) as stream:
             fd = -1
@@ -132,6 +149,9 @@ def classify_first_roots(path, expected_size=SEGMENT_SIZE):
                         raw = stream.readline(MAX_LINE + 1)
                     continue
                 total += 1
+                for name, pattern in FORMAT_PROBES.items():
+                    if pattern.search(raw):
+                        formats[name] += 1
                 metadata = _metadata(raw)
                 # Find source-independent, finite adjacency of previously
                 # observed root lines on the same Android Logcat thread.
@@ -180,6 +200,7 @@ def classify_first_roots(path, expected_size=SEGMENT_SIZE):
         "bounded_logcat_lines_examined": total,
         "oversize_physical_lines_skipped": oversize_lines,
         "unparseable_first_root_lines": malformed_roots,
+        "raw_format_token_presence": formats,
         "raw_root_text_exported": False,
         "actual_original_unity_findkernel_proven": False,
         "actual_original_unity_dispatch_caller_proven": False,
@@ -253,6 +274,7 @@ def main():
                     name: entry["unix_ms"] for name, entry in raw_report["first"].items()
                 },
                 "root_counts": raw_report["observed_first_segment_category_counts"],
+                "raw_format_token_presence": raw_report["raw_format_token_presence"],
                 "unparseable_first_root_lines": raw_report["unparseable_first_root_lines"],
                 "expected_water_unix_ms":
                     summary["final_error_category_breakdown"]
