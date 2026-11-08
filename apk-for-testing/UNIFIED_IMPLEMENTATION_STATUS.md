@@ -1,0 +1,11 @@
+# حالة تنفيذ المختبر المشترك — سجل هندسي لا دعوى نجاح
+- **سياق:** آخر مراجعة 2026-11-08؛ خمسة APKات منفصلة ناجحة في CI مع رابط ZIP Artifact لكل منها. هذا ليس APK مشتركاً واحداً، ونجاح CI لا يعني نجاح Android device.
+- **الهدف:** package ثابت، embedded team pack، Auto All وAuto Tn، نتائج ولقطات مع fingerprint، قائمة مهام تصوير داخل التطبيق، رابط APK مباشر موثوق وحزمة pack واحدة. [تعريفات](UNIFIED_LAB_POLICY_AR.md) و[تصويت المختبر](SHARED_BUILD_READINESS.md).
+- **مهم:** حتى تثبت CI لنسخة التطبيق المشتركة، الحالة SOURCE_IN_PROGRESS وليست READY_TO_TEST؛ لا تطلب من المالك تنزيل تطبيق مشترك غير موجود. لا ترفع ملفات game raw إلى public artifact.
+- **T1:** أصل مصدر compute موجود في `host/app/src/main/java/.../T1ComputeProbe.java`; واجبات GPU يجب إثباتها على GLES Adreno، ولا تُعتبر Unity FFT recovered.
+- **T2:** `T2GpuActivity.java` اختبار GLES synthetic FBO؛ لا تثبت Foam original.
+- **T3:** `workers/T3/gles-lab/.../T3LabActivity.java` synthetic color/alpha/sRGB baseline؛ يدمج لاحقاً ضمن APK مشترك. يظل فحص بصرياً بحاجة screenshot/review.
+- **T4:** الأزرار physical left/right/middle/wheel لا تعمل داخل Raft رغم حركة الكاميرا؛ يحتاج callbacks فعلية وبناء مقارنة مع bridge.
+- **T5:** package hash/OBB/SAF/UI والتسليم؛ لا يدعي إثبات OBB mounted أو game FPS من نسخة مختبر.
+- **فشل شائع ينبغي منعه:** 5×APK مختلفة، ZIP Artifact يوصف direct APK، أصوات/نتائج قديمة، بناء heavy full game، انتحال screenshots أو PASS synthetic، إفلات stale refs عند overwrite ملف مشترك، missing screenshot after background crash.
+- **تاريخ CL 8Nov:** 74,359 water invalid pass، 11,165 FFT invalid kernel و7,372 cursor format warnings من تلك الجلسة فقط؛ لا تثبت علتها المباشرة أو إصلاحها.
