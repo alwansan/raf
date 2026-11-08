@@ -1,0 +1,15 @@
+{
+  "id": "20261108T1945Z-T4-owner-cl-real-mouse-v9n3",
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3",
+  "issue_id": "INPUT-005",
+  "type": "real_device_evidence",
+  "source_repository": "alwansan/CL",
+  "source_commit": "4680f5dc26127938e7696f932b2d9a80dc703937",
+  "original_raw_log_git_blob_sha": "7c337320a1593ff8d9f9fd63e55ec30ed62cd202",
+  "ci_run_url": "https://github.com/alwansan/raf/actions/runs/42516377494",
+  "summary": "413 raw SOURCE_MOUSE mouse callback logs; 40 Activity/View duplicate routes; 373 unique; 13 true left presses and 13 releases; 55 vertical scroll (36 negative, 19 positive). NO capture requests/captured callbacks. No proof for right/middle/HSCROLL attempted. T4-09 EVIDENCE_READY from mini does not imply game comparison or Unity input. INPUT-005 OPEN.",
+  "action": "Use existing unified mini and finger press Capture ON in child T4-02. Record route=captured captured=true, then exact game source callback; no new mini build and no Raft XAPK.",
+  "created_at": "2026-11-08T19:45:00Z"
+}
