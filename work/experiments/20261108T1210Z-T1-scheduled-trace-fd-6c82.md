@@ -1,7 +1,7 @@
 session_id: 20261108T1210Z-T1-scheduled-trace-fd-6c82
 origin: scheduled
 issue_id: WATER-001
-status: active
+status: completed_source_unverified
 base_sha: 8111fcc11b5c91fa8eabb3b7892610b143c8d1c7
 intended_files:
   - scripts/t1_fft_trace_consistency.py
@@ -13,3 +13,9 @@ hypothesis: Current is_symlink/stat/read_text sequence can open a replaced symli
 owner_feedback: docs/DEVICE_FEEDBACK_42058825739_AR.md; owner world/save/re-entry confirmed, water errors unresolved.
 non_overlap: standalone trace file reader hardening; no Unity, T4/T5 input, or water shader writes.
 next: implement bounded fd read and isolated regressions; avoid declaring original kernel mapping or device success.
+
+implementation_commit: 84580c9e9928230057f56e5094a177a848f65978
+test_commit: 3b0b67751368921bae17c7bf7b1214accb8086ec
+session_commit: 465ecac9ad2f568eb39dfe37495220314e840e37
+verification: GitHub writes succeeded; git ls-remote failed DNS; tests not executed.
+next: run unittest in CI/checkout, then resume original Unity/Vulkan trace acquisition.
