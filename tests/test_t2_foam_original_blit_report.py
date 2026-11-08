@@ -23,6 +23,12 @@ def fixture():
         "original_direct_material_field_and_typed_image_linked_Blit_calls": 2,
         "original_pass0_direct_link_candidates": 1,
         "original_pass1_direct_link_candidates": 1,
+        "original_pass0_exact_Material_field_argument_calls": 1,
+        "original_pass1_exact_Material_field_argument_calls": 1,
+        "original_pass0_exact_Material_local_alias_calls": 0,
+        "original_pass1_exact_Material_local_alias_calls": 0,
+        "original_pass0_linked_Material_image_producers_unresolved": 0,
+        "original_pass1_linked_Material_image_producers_unresolved": 0,
         "pass0_source": "Texture",
         "pass0_destination": "RenderTexture",
         "pass0_source_producer": "typed_field",
@@ -53,7 +59,9 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
                  original_shader_to_blit_direct_field_types_confirmed=False,
                  original_direct_material_field_and_typed_image_linked_Blit_calls=0,
                  original_pass0_direct_link_candidates=0,
-                 original_pass1_direct_link_candidates=0)
+                 original_pass1_direct_link_candidates=0,
+                 original_pass0_exact_Material_field_argument_calls=0,
+                 original_pass1_exact_Material_field_argument_calls=0)
         for p in (0, 1):
             for key in ("source", "destination", "source_producer", "destination_producer"):
                 r[f"pass{p}_{key}"] = "unknown"
@@ -62,6 +70,7 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
     def test_ambiguous_candidates_cannot_emit_sole_role(self):
         r = fixture()
         r["original_pass0_direct_link_candidates"] = 2
+        r["original_pass0_exact_Material_field_argument_calls"] = 2
         r["original_direct_material_field_and_typed_image_linked_Blit_calls"] = 3
         r["original_shader_to_blit_direct_field_types_confirmed"] = False
         r["original_explicit_pass0_literal_Blit_calls"] = 2
@@ -118,6 +127,40 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         r = fixture()
         r["pass1_destination_producer"] = "typed_local"
         with self.assertRaisesRegex(ValueError, "null_producer"):validate(r)
+
+    def test_original_material_field_with_indirect_pass1_image_remains_unknown(self):
+        r = fixture()
+        r["original_pass1_direct_link_candidates"] = 0
+        r["original_direct_material_field_and_typed_image_linked_Blit_calls"] = 1
+        r["original_pass1_linked_Material_image_producers_unresolved"] = 1
+        r["original_shader_to_blit_direct_field_types_confirmed"] = False
+        for key in ("source", "destination", "source_producer", "destination_producer"):
+            r[f"pass1_{key}"] = "unknown"
+        result = validate(r)
+        self.assertFalse(result["proven_direct_typed_pass_roles_only"])
+        self.assertEqual(result["pass1"], ("unknown", "unknown"))
+
+    def test_original_material_local_alias_does_not_prove_image_types(self):
+        r = fixture()
+        r["original_pass1_exact_Material_field_argument_calls"] = 0
+        r["original_pass1_exact_Material_local_alias_calls"] = 1
+        r["original_pass1_direct_link_candidates"] = 0
+        r["original_direct_material_field_and_typed_image_linked_Blit_calls"] = 1
+        r["original_shader_to_blit_direct_field_types_confirmed"] = False
+        for key in ("source", "destination", "source_producer", "destination_producer"):
+            r[f"pass1_{key}"] = "unknown"
+        self.assertFalse(validate(r)["proven_direct_typed_pass_roles_only"])
+
+    def test_reject_material_count_overreach(self):
+        for key, value in (
+            ("original_pass0_exact_Material_field_argument_calls", 2),
+            ("original_pass1_linked_Material_image_producers_unresolved", 1),
+            ("original_pass1_exact_Material_local_alias_calls", 1),
+        ):
+            r = fixture()
+            r[key] = value
+            with self.subTest(field=key), self.assertRaisesRegex(ValueError, "partition"):
+                validate(r)
 
     def test_duplicate_report_keys_rejected(self):
         with self.assertRaisesRegex(ValueError,"duplicate_json_key"):
