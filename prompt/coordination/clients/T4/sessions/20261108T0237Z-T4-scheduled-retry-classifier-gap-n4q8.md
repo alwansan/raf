@@ -1,0 +1,14 @@
+# T4 scheduled checkpoint — retry-only classifier
+- session_id: 20261108T0237Z-T4-scheduled-retry-classifier-gap-n4q8
+- origin: scheduled
+- resumed_from_sessions: 20261108T0142Z-T4-scheduled-retry-ci-r7m2; 20261107T2343Z-T4-scheduled-capture-retry-audit-v5n2
+- owner artifact: 42058825739; source e9c358eda01785b65e4eb14f18723da426635628; world entry/save/exit/reopen OWNER_CONFIRMED only on this artifact.
+- initial scope commit: 5c35cd79c1a234f3572518875deb6cf957da0b5f.
+- code commit: 4e80e76225fc4800e6765e5e7ccc1ebfb841b0f9.
+- regression commit: 8e7fc89a4b4b73fadf42239bf3f63309ab4d7433.
+- hypothesis: retry-only physical_mouse_capture_retry markers are real request attempts but the classifier previously ignored them and could report LOCK_WITHOUT_REQUEST_OBSERVED. They are not native acceptance evidence.
+- change: add retry to event counts and request attempt windows; keep release/unlock/new-lock boundaries. Add two source-only tests for retry-only and retry-after-release.
+- touched files: scripts/t4_classify_mouse_capture_log.py; tests/test_t4_classify_mouse_capture_log.py; own work/session files only.
+- validation: source review only. No local test runner and no confirmed new CI run at checkpoint; do not report tests passed. Existing workflow triggers on both changed paths, cancel-in-progress=false. Inspect Actions before dispatching anything.
+- limitations: no phone test, no native mouse confirmation; physical pointer/black Android cursor still OPEN. CL snapshot from owner report is older than retry telemetry. No .rgd, keyboard, audio, Settings, touch, T5 buttons/Resolution edits.
+- next: check automatic workflow run for commit 8e7fc89a and count 19 classifier + 3 telemetry tests; if green inspect Android capture callback and test with later instrumented phone build.
