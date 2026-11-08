@@ -1,0 +1,57 @@
+name: T5 mini-lab SAF multi-GiB SHA256 regression (JDK only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t5-mini-lab-saf-sha.yml'
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java'
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'
+      - 'apk-for-testing/examples/t5-package-telemetry-testpack.json'
+      - 'tests/java/T5StreamSha256Test.java'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-mini-lab-saf-sha-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Validate declarative T5 testpack
+        run: python3 scripts/validate_android_testpack.py apk-for-testing/examples/t5-package-telemetry-testpack.json
+      - name: Compile and execute actual streamed SHA256 (no Android emulator)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raft-t5-sha-test
+          javac -d /tmp/raft-t5-sha-test \
+            apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java \
+            tests/java/T5StreamSha256Test.java
+          java -cp /tmp/raft-t5-sha-test com.alwansan.raftlab.T5StreamSha256Test
+      - name: Check Android host async SAF handoff statically
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path("apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java").read_text()
+          assert "if(req==PICK_ASSET)startAssetDigest(uri);" in s
+          assert "new Thread(()->{" in s
+          assert "StreamSha256.digest(in,bytes->" in s
+          assert "assetDigestBusy" in s
+          assert "if(imageCase&&r.bytes<=64L*1024*1024)" in s
+          assert "if(size>64L*1024*1024)" not in s
+          print("PASS T5 host asynchronous wiring smoke; Android compile/device proof still required")
+          PY
