@@ -17,8 +17,7 @@ android {
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
     sourceSets {
         main {
-            java.srcDirs += ['../../host/app/src/main/java',
-                             '../../workers/T3/gles-lab/app/src/main/java']
+            java.srcDirs += ['../../host/app/src/main/java']
             assets.srcDirs += ['../pack']
         }
     }
