@@ -204,9 +204,14 @@ public final class T3LabActivity extends Activity {
                     verifyPngReadback(dest,png.length,sha);
                     String uri=dest.toString();
                     log("pixelcopy_png","id="+id+" uri="+uri+" bytes="+png.length+" sha256="+sha);
+                    // Return the actual GPU pixel samples to the shared host log,
+                    // not just the PNG URI. A screen image is not a GL readback.
+                    String gpu=lastRenderedNote;
+                    if(gpu==null||gpu.length()<30||gpu.length()>700)
+                        throw new IOException("Missing bounded GPU readback record");
                     finishSharedEvidence(id,"EVIDENCE_READY",uri,
-                        "GLES synthetic frame; png_bytes="+png.length+" png_sha256="+sha+
-                        "; visual review still required");
+                        "GLES synthetic frame; "+gpu+"; png_bytes="+png.length+
+                        " png_sha256="+sha+"; visual review still required");
                 }catch(Exception e){
                     if(dest!=null){
                         try{getContentResolver().delete(dest,null,null);}
