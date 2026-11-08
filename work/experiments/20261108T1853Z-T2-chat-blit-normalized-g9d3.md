@@ -33,3 +33,8 @@ Existing `scripts/t2_pass1_stack_provenance.py` models ldarg/ldloc/stloc/dup/pop
 1. Privately authenticate ZIP2 managed assembly byte SHA and real Mono.Cecil typed `Graphics.Blit` callsites (exact signature and pass constants), then normalize actual producers from field/branch paths or report Unresolved; protect private IDs.
 2. Cross-check original Foam pass0/1 argument roles with strict independent aggregate, actual source-to-destination resource lineage, original CB0 offsets, samplers, pass states, material and shader binding before real Unity compile and device pixels.
 3. Ask T5 to use existing shared APK for first device pass; do NOT reissue a build for this Python-only tool.
+
+## Post-commit source-only CI (2026-11-08 19:00 UTC)
+- New isolated workflow [fccd2826c46c6cf508d242ff70156df82fc684f3](https://github.com/alwansan/raf/commit/fccd2826c46c6cf508d242ff70156df82fc684f3): `.github/workflows/raft-t2-foam-blit-operand-sourcefree.yml`, only source-free Python scripts/test paths, 8-minute cap, checkout LFS=false, no Unity/native or package trigger.
+- **[Actions 42512807487](https://github.com/alwansan/raf/actions/runs/42512807487) COMPLETED SUCCESS** on workflow SHA `fccd2826c46c6cf508d242ff70156df82fc684f3`, job `128829337626`. Logs: `py_compile` PASS, `Ran 10 tests in 0.002s`, `OK`; no original private DLL/GPU/device check.
+- Original Foam source/destination instance identity and actual ShaderLab integration remain **unproved**; this run is NOT a Raft water acceptance test and does not justify another unified APK.
