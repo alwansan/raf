@@ -45,20 +45,21 @@ import javax.microedition.khronos.opengles.GL10;
 
 /** No Raft assets or executable testpacks. Synthetic GLES3 diagnostics, not Unity proof. */
 public final class T3LabActivity extends Activity {
-    static final String[] TITLES = {"GLES3 / driver baseline","vertex colors and interpolation",
-        "straight alpha smoke overlay","straight versus premultiplied alpha",
-        "UNORM versus sRGB texture decode","bad shader must fail compilation"};
-    static final String[] EXPECTED = {"Red, green, blue fields; GPU info in log",
-        "Interpolated four-corner colors, not white","Blue background visible through red smoke overlay",
-        "Two halves appear approximately equal when blend contracts match",
-        "sRGB-decoded half is darker than UNORM half for encoded 128",
-        "Deliberately invalid shader is rejected, valid fallback remains visible"};
-    static final String[] STEPS = {"Select CASE01 and take a screenshot.",
-        "Select CASE02; inspect corners and center.",
-        "Select CASE03; check transparency and absence of opaque squares.",
-        "Select CASE04; compare two panels visually.",
-        "Select CASE05; compare left and right brightness.",
-        "Select CASE06; check log for expected shader compile failure."};
+    static final String[] TITLES = {"الألوان الأساسية وبطاقة الرسوميات","تدرّج ألوان الزوايا",
+        "دخان أحمر شفاف فوق الأزرق","مقارنة طريقتين للشفافية",
+        "اختبار الإضاءة بين UNORM وsRGB","التحقق من رفض شيدر خاطئ"};
+    static final String[] EXPECTED = {"ثلاثة أعمدة واضحة: أحمر وأخضر وأزرق. معلومات المعالج الرسومي في السجل.",
+        "تدرّج ملون بين الزوايا، وليس بطاقة بيضاء بالكامل.",
+        "ظهور الخلفية الزرقاء من خلال الطبقة الحمراء الشفافة؛ دون مربع أحمر معتم.",
+        "ظهور لوحتين متقاربتين في اللون وليستا سوداوين.",
+        "الجزء الأيمن أغمق من الجزء الأيسر عند فك ترميز sRGB.",
+        "رفض الشيدر غير الصالح مع استمرار ظهور شاشة زرقاء مرئية."};
+    static final String[] STEPS = {"انظر إلى الألوان الثلاثة ثم التقط الصورة.",
+        "انظر إلى الأطراف والمنتصف؛ هل التدرج طبيعي؟",
+        "تأكد أن اللون الأحمر شفاف فوق الخلفية الزرقاء.",
+        "قارن لون اللوحتين، وتحقق من عدم اختفاء الألوان.",
+        "قارن السطوع: يسار الصورة أكثر إضاءة من يمينها.",
+        "يجب أن يظهر رسم احتياطي أزرق رغم رفض الشيدر الخاطئ."};
     static final int PICK_TESTPACK=61;
     final Object lock=new Object();
     File logfile;
@@ -72,7 +73,9 @@ public final class T3LabActivity extends Activity {
     volatile int renderSequence=0, lastRenderedSequence=-1, lastRenderedCase=-1;
     volatile int lastRenderedError=GLES30.GL_INVALID_OPERATION;
     volatile boolean lastRenderedAssertion=false;
-    volatile String lastRenderedNote="No GLES frame yet";
+    volatile String lastRenderedNote="لم يكتمل رسم إطار GLES بعد";
+    boolean manualCaptureStarted=false;
+    String manualPreviewCase=null;
 
     TextView text(String value) { TextView t=new TextView(this); t.setText(value);
         t.setTextSize(15);t.setPadding(6,4,6,4);return t; }
@@ -86,14 +89,19 @@ public final class T3LabActivity extends Activity {
         File dir=new File(getFilesDir(),"sessions");if(!dir.exists()&&!dir.mkdirs())
             throw new IllegalStateException("Cannot create app-private log directory");
         logfile=new File(dir,"events-"+session+".jsonl");
+        manualPreviewCase=getIntent()==null?null:getIntent().getStringExtra("manual_case_id");
+        if(manualPreviewCase!=null&&!manualPreviewCase.matches("T3-0[1-6]"))manualPreviewCase=null;
         LinearLayout page=new LinearLayout(this);page.setOrientation(LinearLayout.VERTICAL);
+        page.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        page.setPadding(10,10,10,10);
         setContentView(page);
-        page.addView(text("T3 GLES MATERIAL LAB 0.1.0 | "+BuildConfig.SOURCE_SHA.substring(0,Math.min(10,BuildConfig.SOURCE_SHA.length()))
-            +" | synthetic GLES3 ≠ Unity/Raft"));
+        page.addView(text("مختبر رسوميات T3 | اختبار اصطناعي للألوان، وليس لعبة Raft | "+
+            BuildConfig.SOURCE_SHA.substring(0,Math.min(10,BuildConfig.SOURCE_SHA.length()))));
         HorizontalScrollView scroll=new HorizontalScrollView(this);
         LinearLayout choices=new LinearLayout(this);
         for(int i=0;i<6;i++){final int index=i;button(choices,"CASE0"+(i+1),v->select(index));}
         scroll.addView(choices);page.addView(scroll);
+        if(manualPreviewCase!=null)scroll.setVisibility(View.GONE);
         instructions=text("");page.addView(instructions);
         surface=new GLSurfaceView(this);surface.setEGLContextClientVersion(3);
         surface.getHolder().setFormat(PixelFormat.RGBA_8888);
@@ -101,18 +109,29 @@ public final class T3LabActivity extends Activity {
         surface.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         page.addView(surface,new LinearLayout.LayoutParams(-1,0,1));
         note=new EditText(this);note.setSingleLine(true);
-        note.setHint("Observed result / notes (max 800 chars)");page.addView(note);
-        LinearLayout actions=new LinearLayout(this);page.addView(actions);
-        button(actions,"PASS",v->result("PASS"));
-        button(actions,"FAIL",v->result("FAIL"));
-        button(actions,"UNEXPECTED",v->result("UNEXPECTED"));
-        button(actions,"Import JSON",v->{
-            Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("application/json");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);startActivityForResult(intent,PICK_TESTPACK);
-        });
-        button(actions,"Export logs",v->exportLogs());
-        status=text("App-private logging active; export to Download/Games/cl/test/");
+        note.setHint("ملاحظتك عن الرسم (حتى 800 حرف)");
+        LinearLayout actions=new LinearLayout(this);
+        actions.setOrientation(LinearLayout.VERTICAL);
+        if(manualPreviewCase!=null){
+            page.addView(actions);
+            button(actions,"📷 التقاط صورة هذا الاختبار والعودة إلى النتائج",v->captureManualPreview());
+            button(actions,"↩ رجوع دون حفظ نتيجة",v->finish());
+        }else{
+            page.addView(note);
+            page.addView(actions);
+            button(actions,"نجاح في المشاهدة",v->result("PASS"));
+            button(actions,"فشل في المشاهدة",v->result("FAIL"));
+            button(actions,"نتيجة غير متوقعة",v->result("UNEXPECTED"));
+            button(actions,"استيراد ملف T3 القديم (اختياري)",v->{
+                Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/json");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(intent,PICK_TESTPACK);
+            });
+            button(actions,"تصدير سجل T3",v->exportLogs());
+        }
+        status=text("اعرض الألوان على الشاشة ثم التقط الدليل؛ لا يُعلن النجاح دون مراجعتك.");
         page.addView(status);
         log("startup","package="+getPackageName()+" version=0.1.0 source="+BuildConfig.SOURCE_SHA
             +" device="+Build.MANUFACTURER+"/"+Build.MODEL+" api="+Build.VERSION.SDK_INT
@@ -121,6 +140,11 @@ public final class T3LabActivity extends Activity {
         runSharedAutoT3();
     }
     void runSharedAutoT3(){
+        if(manualPreviewCase!=null){
+            select(Integer.parseInt(manualPreviewCase.substring(4))-1);
+            status.setText("شاهد الرسم الآن، ثم اضغط «التقاط صورة هذا الاختبار» عندما تكون مستعداً.");
+            return;
+        }
         String id=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
         if(id==null||!id.matches("T3-0[1-6]"))return;
         int idx=Integer.parseInt(id.substring(4))-1;
@@ -129,6 +153,16 @@ public final class T3LabActivity extends Activity {
             final int sequence=renderSequence;
             waitForSharedRender(id,idx,sequence,SystemClock.elapsedRealtime()+8000);
         },850);
+    }
+    /** Manual preview must be user-triggered and must never silently mark visual PASS. */
+    void captureManualPreview(){
+        if(manualPreviewCase==null||manualCaptureStarted)return;
+        manualCaptureStarted=true;
+        int idx=Integer.parseInt(manualPreviewCase.substring(4))-1;
+        select(idx);
+        status.setText("جارٍ التحقق من إطار GPU والتقاط الصورة. ستعود إلى قائمة النتائج.");
+        final int sequence=renderSequence;
+        waitForSharedRender(manualPreviewCase,idx,sequence,SystemClock.elapsedRealtime()+8000);
     }
     /** Only capture a rendered and CPU-read-back frame of this exact case/revision. */
     void waitForSharedRender(String id,int idx,int sequence,long deadline){
@@ -274,7 +308,7 @@ public final class T3LabActivity extends Activity {
         JSONObject override=packOverrides.optJSONObject(testId);
         String step=override==null?STEPS[index]:override.optString("instructions",STEPS[index]);
         String expected=override==null?EXPECTED[index]:override.optString("expected",EXPECTED[index]);
-        instructions.setText(testId+" — "+TITLES[index]+"\nDO: "+step+"\nEXPECTED: "+expected);
+        instructions.setText(testId+" — "+TITLES[index]+"\nالمطلوب: "+step+"\nالنتيجة المتوقعة: "+expected);
         note.setText("");
         log("case_start","index="+index+" pack="+packId);
         if(surface!=null)surface.requestRender();
@@ -283,7 +317,7 @@ public final class T3LabActivity extends Activity {
         String observed=note.getText().toString().replace('\n',' ');
         if(observed.length()>800)observed=observed.substring(0,800);
         log("case_result",testId+"="+verdict+" observed="+observed);
-        status.setText(testId+" "+verdict+" — saved privately. Tap Export logs.");
+        status.setText(testId+" — تم تسجيل الملاحظة: "+verdict+"، ويمكن تصدير السجل.");
     }
     synchronized void log(String event,String value) {
         try {
@@ -298,7 +332,7 @@ public final class T3LabActivity extends Activity {
         }catch(Exception e){android.util.Log.e("T3Lab","Log write failed",e);}
     }
     void exportLogs() {
-        if(Build.VERSION.SDK_INT<29){status.setText("Use Android 10+ MediaStore for export");return;}
+        if(Build.VERSION.SDK_INT<29){status.setText("تصدير الملفات يحتاج أندرويد 10 أو أحدث");return;}
         try {
             String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
             String folder=parent!=null&&parent.matches("[A-Za-z0-9._-]{6,90}")?"Games/cl/test/shared-"+parent+"/":"Games/cl/test/t3-gles-material-"+session+"/";
@@ -313,9 +347,9 @@ public final class T3LabActivity extends Activity {
                 if(out==null)throw new IllegalStateException("MediaStore stream failed");
                 byte[] bytes=new byte[16384];int n;while((n=input.read(bytes))!=-1)out.write(bytes,0,n);
             }
-            status.setText("Exported: Download/"+folder+logfile.getName());
+            status.setText("تم حفظ السجل: Download/"+folder+logfile.getName());
         }catch(Exception e){log("export_error",e.getClass().getSimpleName()+": "+e.getMessage());
-            status.setText("Export failed; private logs remain: "+e.getMessage());}
+            status.setText("تعذّر التصدير، والسجل محفوظ داخل التطبيق: "+e.getMessage());}
     }
     @Override protected void onActivityResult(int request,int result,Intent data) {
         super.onActivityResult(request,result,data);
