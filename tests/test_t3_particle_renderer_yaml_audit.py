@@ -9,6 +9,16 @@ audit_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(audit_module)
 
 class ParticleRendererAuditTests(unittest.TestCase):
+    def test_bom_and_crlf_first_document_renderer(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "effect.prefab"
+            path.write_bytes(("\ufeff--- !u!199 &2\r\nParticleSystemRenderer:\r\n"
+                              "  m_Materials:\r\n  - {fileID: 0}\r\n").encode("utf-8"))
+            result = audit_module.audit(tmp)
+            self.assertEqual(result["particle_renderers"], 1)
+            self.assertEqual(result["material_slots"], 1)
+            self.assertEqual(result["null_material_slots"], 1)
+
     def test_three_pointer_types(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "effect.prefab").write_text(
