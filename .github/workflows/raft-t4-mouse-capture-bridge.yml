@@ -9,7 +9,9 @@ on:
       - 'android-port/Runtime/Platform/PhysicalMouseMotionSource.cs'
       - 'android-port/Tests/PhysicalMouse/**'
       - 'scripts/t4_adapt_original_mouse_axes.py'
+      - 'scripts/t4_adapt_original_mouse_buttons_wheel.py'
       - 'tests/test_t4_adapt_original_mouse_axes.py'
+      - 'tests/test_t4_adapt_original_mouse_buttons_wheel.py'
       - 'tests/test_t4_android_pointer_capture_policy.py'
       - 'tests/test_t4_physical_mouse_presence_policy.py'
       - 'tests/test_t4_pointer_view_identity_contract.py'
@@ -38,8 +40,10 @@ jobs:
           sparse-checkout: |
             /scripts/t4_original_mouse_routing.py
             /scripts/t4_adapt_original_mouse_axes.py
+            /scripts/t4_adapt_original_mouse_buttons_wheel.py
             /tests/test_t4_original_mouse_routing.py
             /tests/test_t4_adapt_original_mouse_axes.py
+            /tests/test_t4_adapt_original_mouse_buttons_wheel.py
             /tests/test_t4_android_pointer_capture_policy.py
             /tests/test_t4_physical_mouse_presence_policy.py
             /tests/test_t4_pointer_view_identity_contract.py
@@ -60,6 +64,7 @@ jobs:
           python3 -m py_compile scripts/t4_original_mouse_routing.py scripts/t4_adapt_original_mouse_axes.py tests/test_t4_original_mouse_routing.py tests/test_t4_adapt_original_mouse_axes.py
           python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v
           python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v
+          python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_buttons_wheel.py -v
           python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v
           python3 -m unittest discover -s tests -p test_t4_physical_mouse_presence_policy.py -v
           # Source-only post-446bc1f0 regression, not Android View/device acceptance.
@@ -145,5 +150,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 120s python3 -m scripts.t4_adapt_original_mouse_axes --original-dll t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source-root "$RUNNER_TEMP/t4-mouse-private-src" --backup "$RUNNER_TEMP/t4-original-mouse-backup" --apply
+          # T4: exact original 12 Legacy mouse button + 8 scroll sites only.
+          timeout 120s python3 -m scripts.t4_adapt_original_mouse_buttons_wheel --original-dll t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source-root "$RUNNER_TEMP/t4-mouse-private-src" --backup "$RUNNER_TEMP/t4-original-button-wheel-backup" --apply
           echo 'T4_MOUSE_BRIDGE authored_runtime_input_verified=false android_device_verified=false'
           # No DLL, .rgd, source, original assets or private compiler logs are uploaded.
