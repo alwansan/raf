@@ -1,0 +1,6 @@
+{
+  "request_id": "T4-mouse-buttons-example-only",
+  "worker": "T4",
+  "requested_from_sha": "0000000000000000000000000000000000000000",
+  "reason": "Example only: replace SHA with the exact HEAD before the one-commit isolated mini lab build request."
+}
