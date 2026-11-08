@@ -112,5 +112,24 @@ class MouseCaptureTraceTests(unittest.TestCase):
         self.assertEqual(classify(events)["findings"][0]["classification"],
                          "RELEASED_BEFORE_RELATIVE_OBSERVED")
 
+    def test_retry_only_after_new_lock_is_attempt_not_proof(self):
+        events = ["physical_mouse_lock_intent escape_release",
+                  "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_retry attempt=2"]
+        result = classify(events)
+        self.assertEqual(result["findings"][0]["classification"],
+                         "REQUEST_WITHOUT_RELATIVE_OBSERVED")
+        self.assertEqual(result["counts"]["physical_mouse_capture_retry"], 1)
+        self.assertFalse(result["device_success_proven"])
+
+    def test_retry_after_release_cannot_borrow_relative(self):
+        events = ["physical_mouse_lock_intent escape_release",
+                  "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_retry attempt=2",
+                  "physical_mouse_capture_released",
+                  "physical_mouse_relative"]
+        self.assertEqual(classify(events)["findings"][0]["classification"],
+                         "RELEASED_BEFORE_RELATIVE_OBSERVED")
+
 if __name__ == "__main__":
     unittest.main()
