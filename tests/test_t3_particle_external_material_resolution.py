@@ -38,5 +38,20 @@ class ExternalParticleAuditTests(unittest.TestCase):
             self.assertEqual(result["external_guid_not_in_mat_meta_tree"], 1)
             self.assertNotIn("external_guid_unique_mat_meta", result)
 
+    def test_empty_material_does_not_resolve_guid(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            guid = "e" * 32
+            (root / "empty.mat.meta").write_text("guid: " + guid + "\n")
+            (root / "empty.mat").write_bytes(b"")
+            (root / "effect.prefab").write_text(
+                "--- !u!199 &1\nParticleSystemRenderer:\n  m_Materials:\n"
+                "  - {fileID: 2100000, guid: " + guid + ", type: 2}\n"
+            )
+            result = module.audit(root)
+            self.assertEqual(result["empty_mat_source"], 1)
+            self.assertEqual(result["external_guid_not_in_mat_meta_tree"], 1)
+            self.assertNotIn("external_guid_unique_mat_meta", result)
+
 if __name__ == "__main__":
     unittest.main()
