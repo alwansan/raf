@@ -37,6 +37,8 @@ public final class UnifiedLabActivity extends Activity {
     private JSONObject currentManual, activeAuto;
     private int at=0;
     private boolean running=false,waitingForChild=false,forceRerun=false;
+    private boolean fileDigestBusy=false;
+    private Thread fileDigestThread;
     private String session,packId="unloaded",packSha="unknown";
     private File privateLog;
     private Uri logExport,summaryExport;
@@ -92,8 +94,16 @@ public final class UnifiedLabActivity extends Activity {
     void addButton(LinearLayout bar,String label,View.OnClickListener f){Button btn=new Button(this);btn.setText(label);bar.addView(btn);btn.setOnClickListener(f);}
     void show(String m){summary.setText(m);}
     byte[] readLimited(InputStream stream)throws IOException{
-        ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] block=new byte[8192];int n;
-        while((n=stream.read(block))>=0){if(bytes.size()+n>MAX_PACK)throw new IOException("Pack over 256KiB");bytes.write(block,0,n);}
+        ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] block=new byte[8192];int n,emptyReads=0;
+        while((n=stream.read(block))!=-1){
+            if(n==0){
+                if(++emptyReads>=16)throw new IOException("Pack provider returned repeated empty reads");
+                continue;
+            }
+            emptyReads=0;
+            if(bytes.size()+n>MAX_PACK)throw new IOException("Pack over 256KiB");
+            bytes.write(block,0,n);
+        }
         return bytes.toByteArray();
     }
     static String digest(byte[] a){
@@ -379,8 +389,16 @@ public final class UnifiedLabActivity extends Activity {
         byte[] bytes;
         try(InputStream in=getContentResolver().openInputStream(picked)){
             if(in==null)throw new IOException("Unreadable screenshot");
-            ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n;
-            while((n=in.read(buf))>=0){if(out.size()+n>20*1024*1024)throw new IOException("Image over 20MiB");out.write(buf,0,n);}
+            ByteArrayOutputStream out=new ByteArrayOutputStream();byte[] buf=new byte[8192];int n,emptyReads=0;
+            while((n=in.read(buf))!=-1){
+                if(n==0){
+                    if(++emptyReads>=16)throw new IOException("Image provider returned repeated empty reads");
+                    continue;
+                }
+                emptyReads=0;
+                if(out.size()+n>20*1024*1024)throw new IOException("Image over 20MiB");
+                out.write(buf,0,n);
+            }
             bytes=out.toByteArray();
         }
         // Validate recognizable PNG/JPEG/WEBP header; do not accept arbitrary executable data.
@@ -396,18 +414,34 @@ public final class UnifiedLabActivity extends Activity {
         show("Screenshot attached; review PASS/FAIL, then NEXT");
     }
     void hashFile(Uri input){
-        if(currentManual==null)return;
-        final JSONObject c=currentManual;show("Calculating streamed SHA-256 in background; please do not close...");
-        new Thread(()->{
+        if(currentManual==null||!"file_sha256".equals(currentManual.optString("driver")))return;
+        if(fileDigestBusy){show("SHA-256 already running; finish this file first");return;}
+        fileDigestBusy=true;
+        final JSONObject c=currentManual;
+        log("file_sha_start","case="+c.optString("id"));
+        show("Calculating streamed SHA-256 (up to 16 GiB) in background; keep the app open...");
+        fileDigestThread=new Thread(()->{
             try(InputStream in=getContentResolver().openInputStream(input)){
-                if(in==null)throw new IOException("Not readable");
-                MessageDigest md=MessageDigest.getInstance("SHA-256");long total=0;byte[] block=new byte[1024*1024];int n;
-                while((n=in.read(block))!=-1){total+=n;md.update(block,0,n);}
-                StringBuilder sha=new StringBuilder();for(byte x:md.digest())sha.append(String.format(Locale.US,"%02x",x&255));
-                String observed="bytes="+total+" sha256="+sha;
-                runOnUiThread(()->{store(c,"EVIDENCE_READY",observed,null);show(observed+" — review against expected file");});
-            }catch(Exception ex){runOnUiThread(()->store(c,"BLOCKED",ex.toString(),null));}
-        },"team-file-sha256").start();
+                StreamSha256.Result result=StreamSha256.digest(in,bytes->{
+                    final long mib=bytes/(1024L*1024L);
+                    runOnUiThread(()->show("SHA-256 reading "+mib+" MiB; keep the app open"));
+                });
+                final String observed="bytes="+result.bytes+" sha256="+result.hex;
+                runOnUiThread(()->{
+                    store(c,"EVIDENCE_READY",observed,null);
+                    fileDigestBusy=false;
+                    show(observed+" — compare with the actual expected file; then review PASS/FAIL");
+                });
+            }catch(Exception ex){
+                final String error=ex.getClass().getSimpleName()+": "+ex.getMessage();
+                runOnUiThread(()->{
+                    store(c,"BLOCKED","No digest: "+error,null);
+                    fileDigestBusy=false;
+                    show("SHA-256 failed; no file hash claimed: "+error);
+                });
+            }
+        },"team-file-sha256");
+        fileDigestThread.start();
     }
     Uri writeMedia(String name,String mime,byte[] bytes)throws Exception{
         if(Build.VERSION.SDK_INT<29)throw new IOException("Use Android10+ MediaStore");
@@ -459,4 +493,8 @@ public final class UnifiedLabActivity extends Activity {
             byte[] b=new byte[16384];int n;while((n=in.read(b))!=-1)out.write(b,0,n);return out.toByteArray();}
     }
     @Override protected void onStop(){super.onStop();export();}
+    @Override protected void onDestroy(){
+        if(fileDigestThread!=null&&fileDigestThread.isAlive())fileDigestThread.interrupt();
+        super.onDestroy();
+    }
 }
