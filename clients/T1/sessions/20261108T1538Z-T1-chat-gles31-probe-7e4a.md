@@ -1,0 +1,40 @@
+# T1 chat — authentic Android GPU capability boundary for WATER-001
+
+session_id: 20261108T1538Z-T1-chat-gles31-probe-7e4a
+origin: chat
+resumed_from_sessions:
+- clients/T1/sessions/20261108T1506Z-T1-scheduled-trace-ci-8f2c.md
+- prompt/coordination/clients/T1/sessions/20261108T1410Z-T1-scheduled-trace-mutation-c9e4.md
+base_sha: 77837352fb8855c1c81c985dca951d3d2941a7c1
+issue_id: WATER-001
+work_id: clients/T1/work/20261108T1538Z-T1-chat-gles31-probe-7e4a.md
+experiment_key: t1-gles31-ssbo-linear-and-two-pass-built-in-shaders-v1
+status: source_ready_build_pending
+planned_files:
+- apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java
+- apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java (T1-only wiring)
+- apk-for-testing/workers/T1/README.md
+- clients/T1/work/20261108T1538Z-T1-chat-gles31-probe-7e4a.md
+- this session
+- .github/raft-mini-lab-build-request.json only after resolving T4's build-queue conflict
+
+## Live evidence restored
+- HEAD at start 77837352fb8855c1c81c985dca951d3d2941a7c1; current branch may advance as T4/T2/T3 work.
+- T1 paired source diagnostic [run42493143730](https://github.com/alwansan/raf/actions/runs/42493143730) SUCCESS on 11b69e69cc31608316949e30e76b32877c130ffd; prior T1 session recorded queued and needed this terminal result.
+- Latest owner CL `LogRaft-20261108-164850-270`: 11165 invalid compute kernels; 74359 invalid water passes, 7372 cursor warnings, all from one named logging session. Android15 owner mouse physical movement works while buttons scroll fail (T4 scope).
+- Owner phone previous World/save/reenter tested from APK [run42058825739](https://github.com/alwansan/raf/actions/runs/42058825739), not current HEAD.
+- T4 mini-lab [run42496084526](https://github.com/alwansan/raf/actions/runs/42496084526) at 7ba0068 failed early in android-actions/setup-android@v3: removed SDK package `tools` (`Failed to find package 'tools'`). Therefore did **not** compile any mini APK; T4 immediately patched shared workflow in 6ab099095d3fdca135214c8c01f8fb85e3b2ad44; do not overwrite or cancel.
+
+## Implemented source
+- [1a0c7c2](https://github.com/alwansan/raf/commit/1a0c7c2abdd0e829e49d6df755f0a57e687db86e) adds `T1ComputeProbe` with 4 case controls. Later T1 fix [767dba9](https://github.com/alwansan/raf/commit/767dba9847f7c81093c78c53698995abddc5531f) eliminates fake `preexisting_errors=0` metric from GPU success response.
+- [f91f934](https://github.com/alwansan/raf/commit/f91f934410baf3f38cef4fc79fd2947a02fa0cff) T1-only host wiring; T4's worker package retains existing mouse cases and callbacks.
+- [4621a03](https://github.com/alwansan/raf/commit/4621a036065c7372bc1636b530354ac3de86741f) T1 lab README explains exact cases, expected hashes/mappings, logs and device evidence boundaries.
+- Built-in GLSL 310 ES in APK only; no externally imported shader execution. Case1 GL version/caps. Case2 SSBO one dispatch 16-word exact readback. Case3 two dispatches shader-storage barrier and exact readback. Case4 compile-invalid negative.
+- No private ZIP2 data, Unity import, original compute translation, Raft save modifications or full APK.
+- Device/CI verification for T1 APK: **NONE YET**. Do not ask owner to install / mark READY_TO_TEST until compiled APK exists, SHA256 and artifact verified.
+
+## Next action
+1. Check active mini workflow and T4 request on HEAD, avoid replacing an in-flight request.
+2. Build T1 using source-complete current branch and corrected SDK setup, diagnose compiler error if any.
+3. Verify actual run success and downloadable APK / SHA256. Update T1 TEST_CENTER row and README with specific immutable source and artifact.
+4. Device comparison distinguishes generic GLES compute from Unity-specific imported original FFT kernel. PASS in mini-lab is not WATER-001 closure.
