@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.*;
 import android.database.Cursor;
 import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.*;
 import android.provider.*;
 import android.view.*;
@@ -20,7 +22,7 @@ public final class MainActivity extends Activity {
     final int PICK_PACK=101,PICK_TREE=102,PICK_ASSET=103,SAVE_AS=104;
     final ArrayList<JSONObject> cases=new ArrayList<>();
     JSONObject selected;
-    LinearLayout entries; TextView caption,events,exportStatus,pad; EditText note;
+    LinearLayout entries; TextView caption,events,exportStatus,pad; EditText note; ImageView preview;
     File privateLog; Uri output; String packId="builtin-mouse",session;
     long lastMove=0;
     final ArrayList<String> recent=new ArrayList<>();
@@ -61,6 +63,7 @@ public final class MainActivity extends Activity {
         pad.setOnCapturedPointerListener((v,e)->{mouse("captured",e);return true;});
         events=txt("INPUT EVENTS:");root.addView(events);
         addButton(root,"Pick image or file / SHA256",v->filePicker(PICK_ASSET,"*/*"));
+        preview=new ImageView(this);preview.setAdjustViewBounds(true);root.addView(preview,new LinearLayout.LayoutParams(-1,260));
         setContentView(sc);
         try{
             for(int k=1;k<=3;k++)cases.add(new JSONObject().put("id","T4-0"+k).put("type","mouse")
@@ -112,7 +115,17 @@ public final class MainActivity extends Activity {
                 try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Unreadable");
                     int n;while((n=in.read(buf))>=0){size+=n;if(size>64L*1024*1024)throw new IOException("File exceeds 64MiB");md.update(buf,0,n);}}
                 StringBuilder sha=new StringBuilder();for(byte x:md.digest())sha.append(String.format(Locale.US,"%02x",x&255));
-                caption.setText("File "+size+" bytes SHA256="+sha);log("asset_sha256","bytes="+size+" sha256="+sha);}
+                caption.setText("File "+size+" bytes SHA256="+sha);log("asset_sha256","bytes="+size+" sha256="+sha);
+                preview.setImageDrawable(null);
+                if(selected!=null&&"image_preview".equals(selected.optString("type"))){
+                    BitmapFactory.Options opts=new BitmapFactory.Options();opts.inJustDecodeBounds=true;
+                    try(InputStream in=getContentResolver().openInputStream(uri)){BitmapFactory.decodeStream(in,null,opts);}
+                    if(opts.outWidth>0&&opts.outHeight>0&&opts.outWidth<=32768&&opts.outHeight<=32768){
+                        int sample=1;while(opts.outWidth/sample>1600||opts.outHeight/sample>1600)sample*=2;
+                        BitmapFactory.Options small=new BitmapFactory.Options();small.inSampleSize=sample;small.inPreferredConfig=Bitmap.Config.RGB_565;
+                        try(InputStream in=getContentResolver().openInputStream(uri)){preview.setImageBitmap(BitmapFactory.decodeStream(in,null,small));}
+                    }
+                }}
             if(req==SAVE_AS){try(InputStream in=new FileInputStream(privateLog);OutputStream out=getContentResolver().openOutputStream(uri,"wt")){
                     if(out==null)throw new IOException("Save stream unavailable");copy(in,out);}exportStatus.setText("Log saved via picker");}
         }catch(Exception ex){log("picker_error",ex.toString());Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();}
