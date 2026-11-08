@@ -7,6 +7,7 @@ BRIDGE = (ROOT / "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs")
 DELTA = (ROOT / "android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs").read_text()
 BOOTSTRAP = (ROOT / "android-port/Runtime/Platform/AndroidTestDiagnostics.cs").read_text()
 INPUT_PATCH = (ROOT / "scripts/t4_adapt_original_mouse_axes.py").read_text()
+BUTTON_PATCH = (ROOT / "scripts/t4_adapt_original_mouse_buttons_wheel.py").read_text()
 NATIVE = (ROOT / ".github/workflows/raft-unity-editor-android-import.yml").read_text()
 COMPILER = (ROOT / "scripts/verify_android_offline_candidate.py").read_text()
 TOUCH = (ROOT / "android-port/Runtime/Platform/AndroidTouchPointer.cs").read_text()
@@ -29,6 +30,26 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertIn("--original-dll \"$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll\"", NATIVE)
         self.assertLess(NATIVE.index("python3 -m scripts.instrument_android_runtime_operations"),
                         NATIVE.index("python3 -m scripts.t4_adapt_original_mouse_axes"))
+
+    def test_original_legacy_button_wheel_sites_are_exactly_staged(self):
+        # Authentic immutable ZIP2 call census: four Down, six Held, two Up,
+        # six Mouse ScrollWheel axis and two mouseScrollDelta property reads.
+        self.assertIn('EXPECTED = {"down": 4, "held": 6, "up": 2, "wheel_axis": 6, "scroll_delta": 2}', BUTTON_PATCH)
+        self.assertIn("assert_original(original_dll)", BUTTON_PATCH)
+        self.assertIn("if count != EXPECTED or not replacements:", BUTTON_PATCH)
+        self.assertEqual(NATIVE.count("python3 -m scripts.t4_adapt_original_mouse_buttons_wheel"), 1)
+        self.assertLess(NATIVE.index("python3 -m scripts.t4_adapt_original_mouse_axes"),
+                        NATIVE.index("python3 -m scripts.t4_adapt_original_mouse_buttons_wheel"))
+        for api in ("GetMouseButton(int index)", "GetMouseButtonDown(int index)",
+                    "GetMouseButtonUp(int index)", "GetMouseScrollDelta()"):
+            self.assertIn("public static " + ("Vector2 " if api == "GetMouseScrollDelta()" else "bool ") + api, BRIDGE)
+        self.assertIn('axis == "Mouse ScrollWheel"', BRIDGE)
+        self.assertIn("return TryCapturedFrame(out frame) && frame.Down(index);", BRIDGE)
+        self.assertIn("if (legacy) return true;", BRIDGE)
+        self.assertIn("if (legacy.x != 0f || legacy.y != 0f) return legacy;", BRIDGE)
+        self.assertIn("buttonWheel.Reset();", BRIDGE)
+        self.assertNotIn("InputSystem.QueueStateEvent", BRIDGE)
+        self.assertIn("buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal);", BRIDGE)
 
     def test_pointer_capture_only_on_android_API26_and_gameplay_lock(self):
         self.assertIn('version.GetStatic<int>("SDK_INT") >= 26', BRIDGE)
