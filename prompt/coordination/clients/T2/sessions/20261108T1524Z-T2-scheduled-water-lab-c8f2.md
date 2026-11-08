@@ -1,0 +1,12 @@
+# T2 scheduled — 20261108T1524Z-T2-scheduled-water-lab-c8f2
+
+- origin: scheduled; baseline HEAD: e174c4e080d49ef655691a4bbaf7df5a41f09ea5; issue WATER-001 OPEN; readiness NOT_READY.
+- resumed_from: 20261108T1417Z-T2-scheduled-original-il-source-g7m2 and earlier T2 chat/scheduled records; state.json is historical.
+- Owner evidence read: docs/DEVICE_FEEDBACK_42058825739_AR.md and linked CL screenshot/log references. Owner entered/saved/re-entered world from run 42058825739 artifact; publication failed. Also read 2026-11-08 owner mini-lab feedback: 74,359 invalid water passes, 11,165 invalid FFT kernels in session LogRaft-20261108-164850-270, mouse camera movement improved but clicks/wheel still broken. Counts are per-session and not equivalent to GPU fidelity.
+- Read AGENTS.md, docs/CURRENT_OWNER_REQUIREMENTS.md, prompt/STATUS.md, T_TEAM protocol/prompt/model, LAB_PROTOCOL_AR.md, TEST_CENTER.md, T2 MEMORY/state, latest session, and current work directories. Baseline branch HEAD verified via git ref API.
+- Scope published before edits: prompt/coordination/work/WATER-001/T2-20261108T1524Z-T2-scheduled-water-lab-c8f2.json at c9d6c563583dfed2a5499a25a537f3767dd40a19.
+- New source-only diagnostic protocol: apk-for-testing/examples/t2-water-render-testpack.json (d19f8d999a213acf7ee04c197caf4f32d4441ef8) contains six declarative note cases: environment, positive offscreen roundtrip, invalid pass negative, original Spectrum/Foam/Blur binding, FFT positive/negative with T1, and full artifact provenance.
+- Updated apk-for-testing/workers/T2/README.md (a5688860f1cf05f9f332938628229344ad19d7f4) to state explicitly the generic host cannot run shaders and this is **not** a GPU test or ready APK. No new native workflow, Unity run, game shader, private game asset, T3/T4/T5 file, or trial vote modified.
+- Validation scope: JSON authored against documented TESTPACK_FORMAT v1: schema_version 1, worker T2, safe pack_id, six note tests, source_sha null. Repo validator/CI was not executed in this run; no claim of test pass.
+- Evidence limitation: no original Mono.Cecil producer graph or original CB0 linkage established; no GPU pixel evidence; WATER-001 OPEN. Do not promote this pack to READY_TO_TEST.
+- Next: implement small **compiled** offscreen two-pass renderer only after inspecting shared T1/T3/T5 mini lab work and CI resource overlap; use authentic private source verification, explicit positive and negative controls, then check Android GPU and integrated Raft separately.
