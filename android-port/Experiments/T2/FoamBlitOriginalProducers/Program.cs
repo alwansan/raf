@@ -292,6 +292,28 @@ internal static class Program
         }
         return false;
     }
+    static string FirstUnresolvedImageOperand(MethodDefinition method,int callIndex,FieldDefinition field)
+    {
+        // Report ONLY one of five source-free reason tags, never raw CIL.
+        var il=method.Body.Instructions;
+        if(!DirectMaterialBlit(method,callIndex,field))return "material_not_direct";
+        int p=Previous(il,callIndex-1);
+        int material=Previous(il,p-1);
+        int at=material-1;
+        if(il[material].OpCode.Code==Code.Ldfld)
+        {
+            at=Previous(il,at);
+            if(at<0 || !Receiver(il[at]))return "material_not_direct";
+            at--;
+        }
+        var dst=TypedValue(method,il,ref at);
+        if(dst.Type is not (RenderTexture or "null"))return "destination_not_direct";
+        var src=TypedValue(method,il,ref at);
+        if(src.Type is not (Texture or RenderTexture))return "source_not_direct";
+        int start=Previous(il,at+1);
+        if(start<0 || UnsafeFlow(method,start,callIndex))return "control_flow";
+        return "none";
+    }
     static Site? DirectFieldBlit(MethodDefinition m,int callIndex,FieldDefinition field)
     {
         var il=m.Body.Instructions;
@@ -369,6 +391,7 @@ internal static class Program
         int allBlits=0,allPass0=0,allPass1=0,allOther=0,linked=0;
         var exactMaterialDirect=new int[2];
         var exactMaterialLocalAlias=new int[2];
+        var originalFirstBlockers=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -382,7 +405,11 @@ internal static class Program
                     else if(lit==1)allPass1++;
                     else allOther++;
                     if(materialField is null || lit is not (0 or 1))continue;
-                    if(DirectMaterialBlit(m,i,materialField))exactMaterialDirect[lit.Value]++;
+                    if(DirectMaterialBlit(m,i,materialField))
+                    {
+                        exactMaterialDirect[lit.Value]++;
+                        originalFirstBlockers[lit.Value].Add(FirstUnresolvedImageOperand(m,i,materialField));
+                    }
                     else if(OriginalMaterialLocalAliasBlit(m,i,materialField))
                         exactMaterialLocalAlias[lit.Value]++;
                     var match=DirectFieldBlit(m,i,materialField);
@@ -391,6 +418,16 @@ internal static class Program
         }
         var pass0=candidates[0].Count==1?candidates[0][0]:null;
         var pass1=candidates[1].Count==1?candidates[1][0]:null;
+        // The one-step numeric-safe diagnosis runs on authenticated original
+        // IL, but never claims a private source/target object's identity.
+        string tag0=originalFirstBlockers[0].Count==1?originalFirstBlockers[0][0]:"ambiguous_or_missing";
+        string tag1=originalFirstBlockers[1].Count==1?originalFirstBlockers[1][0]:"ambiguous_or_missing";
+        var allowed=new HashSet<string>{"none","destination_not_direct","source_not_direct",
+            "control_flow","material_not_direct","ambiguous_or_missing"};
+        if(!allowed.Contains(tag0) || !allowed.Contains(tag1))
+            throw new InvalidOperationException("unsafe_original_diagnostic_tag");
+        Console.WriteLine("T2_FOAM_PASS0_FIRST_IMAGE_OPERAND "+tag0);
+        Console.WriteLine("T2_FOAM_PASS1_FIRST_IMAGE_OPERAND "+tag1);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
