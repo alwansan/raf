@@ -1,7 +1,7 @@
 # جاهزية بناء APK المختبر المشترك — T1–T5
 **مختلفة تماماً عن** `prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md` الذي يخص XAPK لعبة Raft الكاملة. اقرأ [السياسة](UNIFIED_LAB_POLICY_AR.md).
-**shared_round_id:** shared-20261108-r1
-**build_decision:** T5_REVIEWING — صوت T5 واحد NEED_BUILD بسبب تغيير host Java حقيقي؛ لم يُطلب CI بعد. بناء Mini واحد فقط بعد تأكيد عدم التكرار.
+**shared_round_id:** shared-20261108-r2
+**build_decision:** R1_DELIVERED_ARTIFACT_ZIP — first unified build successful CI 42509945996, now r2 awaiting fresh worker votes and actual phone evidence; do not duplicate r1.
 
 | العامل | القرار | لماذا؟ وما الاختبارات/التغييرات؟ | evidence SHA/CI | وقت UTC | الجولة |
 |---|---|---|---|---|---|
@@ -9,13 +9,17 @@
 | T2 | NEED_BUILD | Compiled T2-02 GLES FBO probe now asserts two distinct spatial regions with actual pixel readbacks from both FBO stages; prior single-color check could not detect spatial sample collapse. Requires unified javac gate, then one T5-reviewed shared APK/device check of T2-01..04. No independent T2 APK request; WATER-001 original ShaderLab remains OPEN. | source 73924c998d91eb64be33c883d9922d44981accd4; source/host-model 7/7 checks PASS; shared javac CI 42504045625 is older than patch (NOT new verification) | 2026-11-08T18:19:00Z | shared-20261108-r1 |
 | T3 | NEED_BUILD | Compiled shared T3 GLES driver now validates exact same-case frame/readback/GL errors and PixelCopy generation for T3-01..06; this is NOT deliverable by JSON pack alone. Source-only 26/26 checks pass; new Java compile, Android screenshots, Unity/Raft visual acceptance still unverified. T5 only may evaluate ONE shared Mini APK after CI/signature/Actions review. | T3 commits 204dabb9, 6bb0b165, c0a2213b; source audit 26/26; old CI42504045625 predates fix | 2026-11-08T18:24:00Z | shared-20261108-r1 |
 | T4 | NO_BUILD | T4 integrated source-only read-only captured mouse button/scroll callbacks for Raft native View; no shared mini Java driver/host/pack change from T4 and no basis for a T4-only APK. Existing T4-01..09 in the ONE shared testpack still require physical-mouse Android logs. Game Mouse0/1/2/wheel remain unverified and INPUT-005 OPEN. | game source b89ccb9b2247f7c22937dca30a600619b7dfe8f4; T4 managed/source CI 42510026195 SUCCESS on 3be65eb53427359abeeb4950685699e7dc2979a1 | 2026-11-08T18:28:00Z | shared-20261108-r1 |
-| T5 | NEED_BUILD | Unified host Java fix: file SHA EVIDENCE_READY retained, FAIL/BLOCKED remain pending, force rerun explicit; certificate SHA256 and package assertion added. First shared APK still unbuilt. Need one Android15 device trial of T5-01..02 and UI state persistence, not Unity evidence. | https://github.com/alwansan/raf/commit/f6cb665f01770778c7e2f699e0f132ec57e9a334 ; JVM 20/20 local, regression source https://github.com/alwansan/raf/commit/6145c7231d6dd7afb63b07f520920b87c366ccc2 | 2026-11-08T18:24:32Z | shared-20261108-r1 |
+| T5 | NO_BUILD | Round r1 unified host change delivered in artifact ZIP run 42509945996; no new source change since proven APK, so do not rebuild unless another worker integrates a genuine driver delta/new phone question. On-device tests T5-01..02 pending. | https://github.com/alwansan/raf/actions/runs/42509945996 ; APK sha256 cee2df1b3bb2a1a3c8e9ab757f520040d36c5bf16d711587f7e2bc537f917472 | 2026-11-08T18:29:00Z | shared-20261108-r2 |
 
 ## T5 — سجل قرار بناء المختبر فقط
-- **latest_shared_apk_sha256:** لا يوجد منشور موحد حتى الآن.
-- **candidate_source_sha:** لم يثبت بعد.
-- **pack_sha256:** لم يثبت بعد.
-- **native mini request/run:** لا طلب بهذه الجولة؛ افحص Actions حياً.
-- **direct APK URL / direct pack URL:** لا تضع رابطاً تخمينياً، ولا تعتبر صفحة ZIP رابطاً APK مباشراً.
-- **delivery verdict:** WAITING_FOR_WORKER_REVIEW.
+- **latest_shared_apk_sha256:** `cee2df1b3bb2a1a3c8e9ab757f520040d36c5bf16d711587f7e2bc537f917472` — built APK inside ZIP artifact, **not public direct APK Release**.
+- **candidate_source_sha:** `cbe7a038bad2c7ca5ad587b242e8baf7128ecb8` — explicitly embedded in APK BuildConfig; request commit `3555bafae757bb0523e00e171582530ab4193b32`.
+- **pack_sha256:** `6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f` — checked from artifact and APK asset, 9384 bytes.
+- **native mini request/run:** one SHARED request [3555baf](https://github.com/alwansan/raf/commit/3555bafae757bb0523e00e171582530ab4193b32), [CI 42509945996](https://github.com/alwansan/raf/actions/runs/42509945996) SUCCESS, artifact ID `13628828717` (expires 2026-11-22T18:26:36Z). No new r2 request.
+- **direct APK URL / direct pack URL:** **no public direct APK**; [Actions artifact ZIP page](https://github.com/alwansan/raf/actions/runs/42509945996), not APK. Single pack URL: https://raw.githubusercontent.com/alwansan/raf/feature/android-native-port/apk-for-testing/unified/pack/team-testpack.json.
+- **delivery verdict:** `CI_BUILT_ARTIFACT_ZIP_ONLY`; Android 15 installation, driver behavior, images, SAF and mouse cases pending. APK 78806 bytes; package `com.alwansan.raft.lab.shared`, versionCode `9`, signer cert SHA256 `cd2b1f9875dce958ef4ac5f6a08737174d60870df6562afb5636b7fe377cc259` (temporary DEBUG).
 - في حالة **NEED_BUILD واحد على الأقل** مع تغيّر driver/host حقيقي، راجع كلفة وتجارب CI وبناء واحد فقط. إن تغيّر testpack فقط، صدّره للاستخدام في APK الموجود دون إعادة build. أصوات «NO_BUILD» لا تمنع الحاجة المبررة لعامل آخر.
+
+## r1 decision history (T5 only)
+- 2026-11-08T18:24:32Z: T5 genuinely voted NEED_BUILD after changing unified Java host evidence retention and signer assertion; existing T1/T2 WAITING_MERGE and T3/T4 NOT_REVIEWED were not changed. Initial CI success was not promised before actual run.
+- 2026-11-08T18:26:42Z: T5-only request run 42509945996 SUCCESS, one APK and one pack, debug-signed ZIP artifact. After verification, T5 opened r2 with NO_BUILD to prevent duplicate delivery; other workers' r1 rows are intentionally untouched for each worker to refresh on their own.
