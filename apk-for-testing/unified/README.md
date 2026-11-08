@@ -1,3 +1,6 @@
+<!-- T5_R2_ARABIC_PORTRAIT -->
+> **تحديث 8 نوفمبر 2026:** الإصدار التجريبي المشترك الجديد `0.2.10-shared` بواجهة عربية RTL، أربعة Activities عمودية Portrait، و29 وصف/خطوات/توقع بالعربية عبر `ArabicLabStrings.java` **دون تغيير ملف JSON أو معرّفات الاختبارات**. [CI42517104924](https://github.com/alwansan/raf/actions/runs/42517104924) SUCCESS، artifact ZIP ID `13631588625`، APK 90,058 bytes SHA256 `0f469cc650182370b570d96c8e92e3f9c686f6b4417ae10e22d3c35b0084fd42`; لا توجد نسخة GitHub Release APK مباشرة مؤكدة، ولا تحقق على الهاتف بعد. **شهادة Debug جديدة مختلفة عن 0.2.9**، لذا يجب تصدير نتائج القديم وحذفه قبل تثبيت الجديد. توجيه المالك لجميع العمال في [OWNER_ARABIC_PORTRAIT_CL_UPLOADS_20261108](../../../prompt/coordination/T_TEAM/OWNER_ARABIC_PORTRAIT_CL_UPLOADS_20261108.md)، ورفع اختبارات الهاتف إلى https://github.com/alwansan/CL/tree/main/test.
+
 # APK موحّد واحد للفريق الخماسي
 تطبيق `com.alwansan.raft.lab.shared` يحتوي على T1 GLES Compute، T2 GLES FBO، T3 GLES مواد/ألوان، واختبارات إدخال T4 وT5/SAF، **ولا يحتوي لعبة Raft أو كامل assets**.
 
