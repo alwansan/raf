@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T1430Z-T3-scheduled-particle-yaml-k6d2",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "7355730d3cd131aee17af7fe9f506d5230035b6c",
+  "intended_files": [
+    "scripts/t3_particle_renderer_yaml_audit.py",
+    "tests/test_t3_particle_renderer_yaml_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261108T1430Z-T3-scheduled-particle-yaml-k6d2.md",
+    "prompt/coordination/work/RENDER-002/20261108T1430Z-T3-scheduled-particle-yaml-k6d2.json"
+  ],
+  "hypothesis": "A source-only bounded prefab ParticleSystemRenderer Material PPtr census can distinguish null/ambiguous renderer links from shader/blend problems without exposing asset identities",
+  "experiment_key": "particle-renderer-yaml-pptr-aggregate-v1-source-only",
+  "resource_key": null,
+  "updated_at": "2026-11-08T14:30:00Z"
+}
