@@ -4,17 +4,18 @@
   "origin": "chat",
   "session_id": "20261108T1540Z-T4-chat-mini-lab-c6p4",
   "issue": "INPUT-005",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5e2020b135adf3b7c989337c256d72278e90eca7",
   "intended_files": [
     ".github/raft-mini-lab-build-request.json",
     "apk-for-testing/workers/T4/README.md",
     "apk-for-testing/TEST_CENTER.md",
-    "prompt/coordination/clients/T4/sessions/20261108T1540Z-T4-chat-mini-lab-c6p4.md"
+    "prompt/coordination/clients/T4/sessions/20261108T1540Z-T4-chat-mini-lab-c6p4.md",
+    ".github/workflows/raft-android-mini-lab.yml"
   ],
   "experiment_key": "T4-android-physical-mouse-button-scroll-host-0.1.0-capture-on-off",
   "resource_key": "raft-android-mini-lab-workflow-T4",
-  "updated_at": "2026-11-08T15:40:00Z",
+  "updated_at": "2026-11-08T15:43:40Z",
   "hypothesis": "Android Activity/View captured-ptr and generic dispatch can distinguish left/right/middle/scroll callback visibility versus Raft Unity input bridge loss while existing relative camera movement remains untouched.",
   "related_work": [
     "20261108T1536Z-T4-scheduled-route-analyzer-n8q4",
@@ -24,5 +25,17 @@
   "experiment_ids": [
     "T4-MOUSE-CAPTURE-BUTTONS-SCROLL-20261108"
   ],
-  "result": null
+  "result": {
+    "first_run": "42496084526 FAILED",
+    "cause": "android-actions/setup-android@v3 default sdkmanager tools removed by upstream; request/testpack/source checks successful, Gradle not reached",
+    "workflow_fix": "6ab099095d3fdca135214c8c01f8fb85e3b2ad44",
+    "second_trigger": "7069e9db0c433c894eb5781eda045bd0e04ecffe",
+    "second_run": "42496238418 in_progress",
+    "device_proof": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42496084526",
+    "https://github.com/alwansan/raf/actions/runs/42496238418"
+  ],
+  "next_step": "Inspect 42496238418 Gradle compile and artifact SHA; no READY_TO_TEST until real APK file and hash confirmed."
 }
