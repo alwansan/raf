@@ -10,6 +10,16 @@ MAX_TOTAL_CAPTURE_BYTES = 128 * 1024 * 1024
 MAX_PASSES = 32
 
 
+def reject_duplicate_manifest_keys(pairs):
+    """A duplicate pass/capture key must not silently replace private evidence."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate private FFT manifest key")
+        result[key] = value
+    return result
+
+
 def read_private_capture(root: Path, relative: str) -> bytes:
     """Read only bounded regular files directly beneath the private manifest directory."""
     if not isinstance(relative, str) or not relative or "\x00" in relative:
@@ -68,7 +78,7 @@ def main():
     try:
         if args.manifest.is_symlink() or args.manifest.stat().st_size > 1024 * 1024:
             raise ValueError("manifest is symlinked or oversized")
-        entries = json.loads(args.manifest.read_text(encoding="utf-8"))
+        entries = json.loads(args.manifest.read_text(encoding="utf-8"),\n                             object_pairs_hook=reject_duplicate_manifest_keys)
         if not isinstance(entries, list) or not 1 <= len(entries) <= MAX_PASSES:
             raise ValueError("manifest must contain 1..32 passes")
         # Validate every capture path and aggregate size before reading any pixel data.
