@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261108T1850Z-T4-chat-original-mouse-buttons-g7p4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "track": "physical-mouse-original-routing",
+  "status": "active",
+  "base_sha": "e8ea84e8bb9b4b32e3bea8d9c285794450815516",
+  "experiment_key": "T4-authentic-original-button-wheel-callsite-census-zip2-sha-15964ea8",
+  "resource_key": "original-ZIP2-3.2MB-managed-DLL-CPU-only",
+  "intended_files": [
+    "scripts/t4_original_button_wheel_routing.py",
+    "tests/test_t4_original_button_wheel_routing.py",
+    ".github/workflows/raft-t4-original-button-wheel-routing.yml",
+    "prompt/coordination/clients/T4/sessions/20261108T1850Z-T4-chat-original-mouse-buttons-g7p4.md"
+  ],
+  "hypothesis": "Original Raft may read physical buttons and scroll through legacy Input APIs different from captured Android callbacks; classify authentic call-sites before selecting an injection or binding strategy.",
+  "related_work": [
+    "T4-20261108T1819Z-T4-chat-captured-actions-f4n8",
+    "T4-20261108T1835Z-T4-scheduled-source-filter-k7m2"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261108T1835Z-T4-scheduled-source-filter-k7m2.md",
+    "prompt/coordination/clients/T4/sessions/20261108T1819Z-T4-chat-captured-actions-f4n8.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded source-only authentic original ZIP2 button/wheel API census and synthetic negative controls, run unique CI and document safe integration plan. Do not edit game runtime or shared mini host without new evidence.",
+  "updated_at": "2026-11-08T18:50:00Z"
+}
