@@ -1,6 +1,6 @@
 {
-  "request_id": "t4-mouse-capture-buttons-scroll-20261108-c6p4",
+  "request_id": "t4-mouse-sdktools-retry-20261108-c6p4",
   "worker": "T4",
-  "requested_from_sha": "767dba9847f7c81093c78c53698995abddc5531f",
-  "reason": "Phone 2026-11-08 confirms relative mouse camera movement under pointer capture, but left/right/middle click and wheel fail in Raft. Build one isolated Android T4 host APK to record capture ON/OFF Activity/View motion callbacks, actionButton/buttonState and vertical/horizontal scroll; do not touch Unity full build."
+  "requested_from_sha": "6ab099095d3fdca135214c8c01f8fb85e3b2ad44",
+  "reason": "CI 42496084526 passed request and testpack checks but android-actions/setup-android@v3 failed because Google retired sdkmanager package `tools`. Commit 6ab0990 uses packages: platform-tools only. Rebuild once to produce an independent APK that records real physical mouse button and scroll callbacks capture ON/OFF."
 }
