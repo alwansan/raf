@@ -1,0 +1,11 @@
+# T4 scheduled — 2026-11-08T15:36Z
+- origin: scheduled; session_id: 20261108T1536Z-T4-scheduled-route-analyzer-n8q4
+- Owner evidence 2026-11-05: artifact 42058825739 successfully entered/saved/reopened world; LOCAL-005 remains open, preserve original .rgd.
+- Newer owner evidence 2026-11-08: camera pointer capture works on phone, but left/right/middle and scroll do not. This supersedes older conclusion that all physical mouse capture fails. CL LogRaft-20261108-164850-270 summary cannot prove callback delivery.
+- Scope: INPUT-005, source-only callback route analyzer, independent from T5 shared host and resolution/buttons layout.
+- Starting HEAD: 77837352fb8855c1c81c985dca951d3d2941a7c1; scope commit 13b2a761c08f28a2b61d342f47c74e4264260574; implementation de43abc8f3a577e3dab78c5456a838ca0c942546; test file 8378530ee4b39576537a6735ea18b3ec20d5b164.
+- Work: prompt/coordination/work/INPUT-005/T4-20261108T1536Z-mini-lab-route-analyzer.json
+- Deliverable: scripts/t4_analyze_mouse_lab_routes.py parses mini-lab JSONL and groups callback routes/actions/button bits/scroll by captured phase. tests/test_t4_analyze_mouse_lab_routes.py contains three regression cases.
+- Validation boundary: tests added but not yet run in CI; no Android APK produced, no game runtime modified, no device success claim. No Unity CI repeated or cancelled.
+- Usage after actual T4 mini-lab APK is available: python3 scripts/t4_analyze_mouse_lab_routes.py exported.jsonl; compare capture on/off callbacks with Unity game logs. No observed button is INCONCLUSIVE unless action attempted.
+- Next: run regression tests and integrate route analysis with genuine T4 mini-lab exported JSONL; if Android receives buttons but Raft does not, isolate Unity bridge. Preserve keyboard and camera capture; coordinate host edits with T5.
