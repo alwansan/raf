@@ -11,7 +11,7 @@ def sourcePaths = [
     't2': ['../../host/app/src/main/java/com/alwansan/raftlab/T2GpuActivity.java'],
     't3': ['src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java'],
     't4': ['../../host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'],
-    't5': ['../../host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java','src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java','src/main/java/com/alwansan/raftlab/UnifiedResultPolicy.java']
+    't5': ['../../host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java','src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java','src/main/java/com/alwansan/raftlab/UnifiedResultPolicy.java','src/main/java/com/alwansan/raftlab/ArabicLabStrings.java']
 ]
 def buildNumber = (project.findProperty('versionCode') ?: '1').toString().toInteger()
 if (buildNumber < 1) throw new GradleException('versionCode must be positive')
