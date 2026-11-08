@@ -2,7 +2,7 @@
   "session_id": "20261108T0050Z-T5-scheduled-lograft-schema-audit-v6p2",
   "origin": "scheduled",
   "issue_id": "PERF-007",
-  "status": "active",
+  "status": "completed",
   "base_sha": "9412a624464034600981f026046c95aceea218fb",
   "intended_files": [
     "prompt/coordination/clients/T5/sessions/20261108T0050Z-T5-scheduled-lograft-schema-audit-v6p2.md"
@@ -10,5 +10,7 @@
   "experiment_key": "lograft-shell-metrics-schema-v1-CL-520c4cf4-220911-vs-t5-unity-interval-epoch",
   "resource_key": null,
   "hypothesis": "LogRaft shell metrics JSONL is not the Unity internal performance sample schema; must not feed directly into Unity interval analyzer",
-  "updated_at": "2026-11-08T00:50:10Z"
+  "updated_at": "2026-11-08T00:54:00Z",
+  "result": "Original CL lograf_shell metrics JSONL incompatible with Unity area=performance interval parser; source-only scene regression CI42426715134 SUCCESS",
+  "session_commit": "dbcc359ca487d41b1499ffa03b19dc08ffff5029"
 }
