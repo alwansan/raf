@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261108T1540Z-T4-chat-mini-lab-c6p4",
   "issue": "INPUT-005",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "5e2020b135adf3b7c989337c256d72278e90eca7",
   "intended_files": [
     ".github/raft-mini-lab-build-request.json",
@@ -15,7 +15,7 @@
   ],
   "experiment_key": "T4-android-physical-mouse-button-scroll-host-0.1.0-capture-on-off",
   "resource_key": "raft-android-mini-lab-workflow-T4",
-  "updated_at": "2026-11-08T15:46:10Z",
+  "updated_at": "2026-11-08T15:53:00Z",
   "hypothesis": "Android Activity/View captured-ptr and generic dispatch can distinguish left/right/middle/scroll callback visibility versus Raft Unity input bridge loss while existing relative camera movement remains untouched.",
   "related_work": [
     "20261108T1536Z-T4-scheduled-route-analyzer-n8q4",
@@ -26,19 +26,27 @@
     "T4-MOUSE-CAPTURE-BUTTONS-SCROLL-20261108"
   ],
   "result": {
-    "first_run": "42496084526 FAILED",
-    "cause": "android-actions/setup-android@v3 default sdkmanager tools removed by upstream; request/testpack/source checks successful, Gradle not reached",
-    "workflow_fix": "6ab099095d3fdca135214c8c01f8fb85e3b2ad44",
-    "second_trigger": "7069e9db0c433c894eb5781eda045bd0e04ecffe",
-    "second_run": "42496238418 FAILED at javac MainActivity.java line 137 invalid '\\\\n' and '\\\\r' char literals; T5 fix db8f507af7b1 was merged later than pinned 7069e9db; no game source change.",
+    "first_run": "42496084526 FAILED setup-android@v3 retired tools package",
+    "workflow_fix_sha": "6ab099095d3fdca135214c8c01f8fb85e3b2ad44",
+    "second_run": "42496238418 FAILED Java newline literals, T5 independently fixed db8f507a",
+    "third_run": "42496449259 FAILED Java definite assignment T1ComputeProbe, T1 independently fixed ae450f1f",
+    "fourth_run": "42496622364 SUCCESS (Android build + artifact uploaded)",
+    "source_sha": "1beab49d26aa31a6cc4765f0c6020c2d552cce7b",
+    "artifact_id": 13623563385,
+    "artifact_zip_bytes": 35398,
+    "artifact_expires_at": "2026-11-15T15:49:08Z",
+    "apk_sha256": "a5a42b89642c75946f7d3fd5e46fab83b1f16ee800cbd7c2056a7ab74f3e2849",
+    "zip_sha256": "4f356e648b29a35db8a22fdba049cd1ee83d1fe1e9c648bd261a7e213b1bc0a3",
+    "package": "com.alwansan.raft.lab.t4",
+    "version_code": 1,
     "device_proof": false,
-    "third_trigger": "dd9a5de9225d4330e0c7513564879615dd9d481d",
-    "third_run": "42496449259 in_progress"
+    "app_log_path": "Download/Games/cl/test (owner restore message adds 'raft log' segment; unresolved)"
   },
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42496084526",
     "https://github.com/alwansan/raf/actions/runs/42496238418",
-    "https://github.com/alwansan/raf/actions/runs/42496449259"
+    "https://github.com/alwansan/raf/actions/runs/42496449259",
+    "https://github.com/alwansan/raf/actions/runs/42496622364"
   ],
-  "next_step": "Await pinned source dd9a5de9 Gradle compile, verify artifact and exact sha256 before linking Test Center. Do not rerun T5's independent host fix."
+  "next_step": "Collect physical Android15 9-case exported JSONL/screenshot. Use T4 scheduled route analyzer to discriminate capture ON/OFF button/wheel dispatch. Coordinate T5 host log path mismatch and integrate game Mouse0/Mouse1/Mouse2/scroll only after device evidence; preserve working relative camera."
 }
