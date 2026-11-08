@@ -30,6 +30,13 @@ def audit(root):
             if material.is_symlink() or not material.is_file():
                 counts["orphan_mat_meta"] += 1
                 continue
+            try:
+                if material.stat().st_size == 0:
+                    counts["empty_mat_source"] += 1
+                    continue
+            except OSError:
+                counts["material_stat_unreadable"] += 1
+                continue
             owners[m.group(1).lower()] += 1
         else:
             counts["meta_without_guid"] += 1
