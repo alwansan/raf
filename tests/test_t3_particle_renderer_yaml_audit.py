@@ -26,9 +26,9 @@ class ParticleRendererAuditTests(unittest.TestCase):
     def test_negative_fileid_is_not_valid_local_material(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "effect.prefab").write_text(
-                "--- !u!199 &2\\nParticleSystemRenderer:\\n"
-                "  m_Materials:\\n  - {fileID: -2100000}\\n"
-                "  - {fileID: 2100000}\\n", encoding="utf-8")
+                "--- !u!199 &2\nParticleSystemRenderer:\n"
+                "  m_Materials:\n  - {fileID: -2100000}\n"
+                "  - {fileID: 2100000}\n", encoding="utf-8")
             result = audit_module.audit(tmp)
             self.assertEqual(result["material_slots"], 2)
             self.assertEqual(result["invalid_negative_fileid_slots"], 1)
