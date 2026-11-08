@@ -2,7 +2,7 @@
   "session_id": "20261108T0630Z-T3-scheduled-parser-boundary-f4c9",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_only_tests_pending",
   "base_sha": "9c11fdf4349373573eff3cd925dc3db00e0524c6",
   "intended_files": [
     "scripts/t3_material_shader_link_audit.py",
@@ -13,5 +13,11 @@
   "experiment_key": "material-shader-yaml-parser-indentation-and-ptr-shape-synthetic-v1",
   "resource_key": null,
   "hypothesis": "Audit may misclassify Unity Material YAML shader pointers with flexible field spacing or embedded additional m_Shader keys; test fail-closed on ambiguous references without exposing game assets.",
-  "updated_at": "2026-11-08T06:30:00Z"
+  "updated_at": "2026-11-08T06:34:00Z",
+  "result_commits": [
+    "8aba711d5b6708175fdca13b4c3f999ddf559bb3",
+    "4d3e1f323d9bb6ded3f07b0280707cdb96ced7f2",
+    "8126f86648ec9be35a9f803e8c9d0cd74ae34e3a"
+  ],
+  "next_step": "Run published unit tests; audit full authenticated export, not only synthetic fixtures."
 }
