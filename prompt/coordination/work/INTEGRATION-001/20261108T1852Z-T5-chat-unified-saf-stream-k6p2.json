@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261108T1852Z-T5-chat-unified-saf-stream-k6p2",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed_source_ci_device_pending",
   "resumed_from": [
     "20261108T1818Z-T5-chat-unified-evidence-cache-a6d4",
     "20261108T1846Z-T5-scheduled-shared-artifact-retention-q7m2"
@@ -18,6 +18,19 @@
   ],
   "experiment_key": "unified-T5-02-SAF-stream-guard@a3d885d:16GiB-zero-read-ui-progress",
   "resource_key": "android-unified-mini-host",
-  "run_urls": [],
-  "next_step": "Patch T5-owned activity only; test source and existing StreamSha256 Java tests, CI isolated, update own session and MEMORY. No trial request without fresh shared round need."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42512390472"
+  ],
+  "next_step": "Observe owner device testing of existing unified artifact, preserve source fix for next justified shared APK; no mini/full game duplicate. Review Android SAF provider and MediaStore evidence from exported logs.",
+  "updated_at": "2026-11-08T18:58:00Z",
+  "result": {
+    "source_commit": "6f2cf77ece6609ee3155750a729aef259a743cef",
+    "ci_run": 42512390472,
+    "ci_conclusion": "success",
+    "python_contract": "4/4",
+    "real_jdk_sha256_checks": "16/16",
+    "android_java": "BUILD SUCCESSFUL",
+    "shared_apk_built": false,
+    "prior_apk_source": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8"
+  }
 }
