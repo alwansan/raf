@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "RENDER-002",
   "base_sha": "e5645936c05723eaf037d09475aec6a3288f5990",
-  "status": "active",
+  "status": "completed_source_only",
   "intended_files": [
     "scripts/t3_material_shader_link_audit.py",
     "tests/test_t3_material_shader_link_audit.py",
@@ -13,5 +13,11 @@
   "hypothesis": "A zero-byte .shader paired with valid .meta is currently counted as resolved; reject provably empty shader source without claiming to identify semantic dummy passes.",
   "experiment_key": "t3-zero-byte-shader-source-negative-control-v1",
   "resource_key": null,
-  "updated_at": "2026-11-08T12:33:00Z"
+  "updated_at": "2026-11-08T12:39:00Z",
+  "result": "Guard + regression committed; test not executed due to local github.com DNS failure. RENDER-002 remains OPEN; no device/export proof.",
+  "commits": [
+    "da1524bbd4497bc042a2609c69782817f64020fd",
+    "bd2dd2b0e8505e72adeaaaedcfad71e80250847a",
+    "3196b407936349bbea8e476f700fcb282805fcae"
+  ]
 }
