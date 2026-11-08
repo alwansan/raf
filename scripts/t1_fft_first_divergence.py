@@ -78,7 +78,10 @@ def main():
     try:
         if args.manifest.is_symlink() or args.manifest.stat().st_size > 1024 * 1024:
             raise ValueError("manifest is symlinked or oversized")
-        entries = json.loads(args.manifest.read_text(encoding="utf-8"),\n                             object_pairs_hook=reject_duplicate_manifest_keys)
+        entries = json.loads(
+            args.manifest.read_text(encoding="utf-8"),
+            object_pairs_hook=reject_duplicate_manifest_keys,
+        )
         if not isinstance(entries, list) or not 1 <= len(entries) <= MAX_PASSES:
             raise ValueError("manifest must contain 1..32 passes")
         # Validate every capture path and aggregate size before reading any pixel data.
