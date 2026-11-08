@@ -1,0 +1,23 @@
+{
+  "session_id": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "resumed_from": [
+    "prompt/coordination/clients/T3/MEMORY.md",
+    "apk-for-testing/UNIFIED_IMPLEMENTATION_STATUS.md"
+  ],
+  "base_sha": "73924c998d91eb64be33c883d9922d44981accd4",
+  "scope": "Make shared T3-01..06 capture depend on actual same-case GLES frame/readback and shader negative control, not fixed timer. Keep visual judgment pending and no full-game claims.",
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java",
+    "tests/test_t3_shared_frame_contract.py",
+    "apk-for-testing/SHARED_BUILD_READINESS.md",
+    "prompt/coordination/clients/T3/sessions/20261108T1813Z-T3-chat-shared-frame-proof-p6r9.md"
+  ],
+  "experiment_key": "T3-shared-visual-case-frame-handshake-rgba-readback-v1",
+  "resource_key": "T3SharedVisualActivity",
+  "run_urls": [],
+  "next_step": "Surgical source modification, regression policy tests, source-only compile CI and T3 mini build vote based on actual engine change."
+}
