@@ -31,12 +31,7 @@ jobs:
           lfs: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /scripts/t2_foam_original_blit_report.py
-            /scripts/t2_original_foam_shaderfind_name.py
-            /scripts/t2_foam_original_manifest_pptr.py
-            /scripts/t2_external_pptr_manifest_resolver.py
-            /scripts/t2_foam_original_external_pptr_graph.py
-            /scripts/w1_stage_zip2_owners.py
+            /scripts/
             /tests/test_t2_foam_original_blit_report.py
             /android-port/Experiments/T2/FoamBlitOriginalProducers/
 
