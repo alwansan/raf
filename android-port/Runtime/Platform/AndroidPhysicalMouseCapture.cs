@@ -18,6 +18,7 @@ namespace RaftAndroid.Platform
 
         private readonly PhysicalMouseDeltaAccumulator deltas = new PhysicalMouseDeltaAccumulator();
         private readonly PhysicalMouseActionEvidence actionEvidence = new PhysicalMouseActionEvidence();
+        private readonly PhysicalMouseButtonWheelFrame buttonWheel = new PhysicalMouseButtonWheelFrame();
         private int lastActionReport;
         private CapturedListener listener;
         private bool focused = true, paused, supported;
@@ -160,7 +161,13 @@ namespace RaftAndroid.Platform
             lock(captureGate)
             {
                 if (PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch,epoch,requested))
+                {
                     actionEvidence.Record(action,source,changedButton,heldButton,vertical,horizontal);
+                    // Stage only authentic captured mouse actions. The Unity
+                    // main thread exposes one immutable per-frame snapshot;
+                    // no InputSystem events or touch callbacks are injected.
+                    buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal);
+                }
             }
         }
 
@@ -174,6 +181,7 @@ namespace RaftAndroid.Platform
                 "; heldMask="+s.HeldMask+"; verticalScrollCallbacks="+s.Vertical+
                 "; horizontalScrollCallbacks="+s.Horizontal+
                 "; undefinedActionDownUp="+s.AmbiguousDownUp+
+                "; legacyFrameInputBuffered="+buttonWheel.AcceptedCount+
                 "; nonMoveConsumed=false; unityButtonsAndWheelVerified=false");
         }
 
@@ -203,8 +211,65 @@ namespace RaftAndroid.Platform
         public static float GetAxis(string axis) { return Axis(axis, false); }
         public static float GetAxisRaw(string axis) { return Axis(axis, true); }
 
+        // Original Raft reads the Legacy Input mouse API directly. Preserve
+        // it whenever the platform reports a value; only supplement a missing
+        // value after the same current Android View has real pointer capture.
+        // OR of boolean edge states cannot double-fire one Unity frame.
+        private static bool TryCapturedFrame(out PhysicalMouseButtonWheelFrame.Snapshot result)
+        {
+            result = default(PhysicalMouseButtonWheelFrame.Snapshot);
+            var current = instance;
+            if (current == null) return false;
+            lock (current.captureGate)
+            {
+                if (!current.requested || !current.nativeCaptured) return false;
+                result = current.buttonWheel.Sample(Time.frameCount);
+                return true;
+            }
+        }
+
+        public static bool GetMouseButton(int index)
+        {
+            bool legacy = Input.GetMouseButton(index);
+            if (legacy) return true;
+            PhysicalMouseButtonWheelFrame.Snapshot frame;
+            return TryCapturedFrame(out frame) && frame.Held(index);
+        }
+
+        public static bool GetMouseButtonDown(int index)
+        {
+            bool legacy = Input.GetMouseButtonDown(index);
+            if (legacy) return true;
+            PhysicalMouseButtonWheelFrame.Snapshot frame;
+            return TryCapturedFrame(out frame) && frame.Down(index);
+        }
+
+        public static bool GetMouseButtonUp(int index)
+        {
+            bool legacy = Input.GetMouseButtonUp(index);
+            if (legacy) return true;
+            PhysicalMouseButtonWheelFrame.Snapshot frame;
+            return TryCapturedFrame(out frame) && frame.Up(index);
+        }
+
+        public static Vector2 GetMouseScrollDelta()
+        {
+            Vector2 legacy = Input.mouseScrollDelta;
+            if (legacy.x != 0f || legacy.y != 0f) return legacy;
+            PhysicalMouseButtonWheelFrame.Snapshot frame;
+            return TryCapturedFrame(out frame)
+                ? new Vector2(frame.Horizontal, frame.Vertical) : legacy;
+        }
+
         private static float Axis(string axis, bool raw)
         {
+            if (axis == "Mouse ScrollWheel")
+            {
+                float legacy = raw ? Input.GetAxisRaw(axis) : Input.GetAxis(axis);
+                if (legacy != 0f) return legacy;
+                PhysicalMouseButtonWheelFrame.Snapshot capturedFrame;
+                return TryCapturedFrame(out capturedFrame) ? capturedFrame.Vertical : legacy;
+            }
             var current = instance;
             if (current != null && (axis == "Mouse X" || axis == "Mouse Y"))
             {
@@ -338,6 +403,7 @@ namespace RaftAndroid.Platform
                     nativeHasMotion = false;
                     deltas.Reset();
                     actionEvidence.Reset();
+                    buttonWheel.Reset();
                     Volatile.Write(ref lastActionReport,0);
                 }
                 if (lost) Interlocked.Increment(ref captureLossCount);
@@ -488,6 +554,7 @@ namespace RaftAndroid.Platform
                 Volatile.Write(ref captureViewIdentity, 0);
                 deltas.Reset();
                 actionEvidence.Reset();
+                buttonWheel.Reset();
             }
             Volatile.Write(ref lastActionReport,0);
             lastLoggedCount = 0;
@@ -595,6 +662,10 @@ namespace RaftAndroid.Platform
         {
             return Input.GetAxisRaw(axis);
         }
+        public static bool GetMouseButton(int button) { return Input.GetMouseButton(button); }
+        public static bool GetMouseButtonDown(int button) { return Input.GetMouseButtonDown(button); }
+        public static bool GetMouseButtonUp(int button) { return Input.GetMouseButtonUp(button); }
+        public static Vector2 GetMouseScrollDelta() { return Input.mouseScrollDelta; }
     }
 }
 #endif
