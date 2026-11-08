@@ -48,6 +48,19 @@ class TestLogRaft(unittest.TestCase):
         self.assertEqual(probe.summarize([row], expected_session="a")["valid_estimates"], 0)
         self.assertEqual(probe.summarize([{"presented_fps_estimate": 30}], expected_session="a")["valid_estimates"], 1)
 
+    def test_native_lograft_wrong_package_cannot_be_attributed_to_raft(self):
+        valid = {"source": "lograf_shell", "package": "com.alwansan.raft.androidtest",
+                 "presented_fps_estimate": 24,
+                 "fps_quality": "surface_presentation_estimate",
+                 "fps_tracking_status": "valid_surface_presentation_estimate",
+                 "main_process_pid_verified": True,
+                 "frame_telemetry_stale": False,
+                 "fps_surface": "SurfaceView[com.alwansan.raft.androidtest]"}
+        other = {**valid, "package": "com.example.other"}
+        result = probe.summarize([valid, other], expected_session="a")
+        self.assertEqual(result["valid_estimates"], 1)
+        self.assertEqual(result["rejected"]["wrong_game_package"], 1)
+
     def test_empty_samples_not_fabricated(self):
         out = probe.summarize([{}], expected_session="a")
         self.assertIsNone(out["median_presented_fps_estimate"])
