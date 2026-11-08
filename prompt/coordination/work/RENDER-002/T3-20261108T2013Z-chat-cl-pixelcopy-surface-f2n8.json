@@ -4,7 +4,7 @@
   "origin": "chat",
   "worker": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_CI_success_r3_builded_device_png_pending",
   "base_sha": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
   "resumed_from_session": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
   "evidence_path": "alwansan/CL/main/test/shared-20261108-230157-466487336",
@@ -26,5 +26,32 @@
     ".github/raft-native-build-request.json",
     "apk-for-testing/unified/pack/team-testpack.json"
   ],
-  "next_step": "Patch T3 renderer PixelCopy and verify bitmap pixel contract, regression tests, T5 build vote; actual phone proof pending."
+  "next_step": "Owner uploads latest v0.2.13 T3 PNG+summary+events to CL/test. Verify no black surface and verified_surface_pixels=true. Do not create another duplicate Mini or full Unity build.",
+  "updated_at": "2026-11-08T20:28:00Z",
+  "result": "Authenticated owner CL v0.2.10 six colored real GLES readbacks vs black exported PNG, root Window PixelCopy ignored SurfaceView. T5 had concurrently integrated fix f60355a, so avoided competing changes. T3 hardened 11 regression tests and CI42519345065 SUCCESS; one T5 shared R3 Mini CI42519487402 SUCCESS, extracted APK 0.2.13 SHA 6a41002cee345c48413ef56b0820211fb4ae73292229ec33ce830e82897194a7; phone repeat pending.",
+  "source_commits_other_worker": [
+    "f60355a49a9f236f9757cdac65cf3d12ebbfafc3"
+  ],
+  "t3_test_commits": [
+    "2ce778cdba2aef49f7d0eb69a9ae1fe58b0f9adc",
+    "bb6b583591bd4b36c96afb3943bed7d895c261c2"
+  ],
+  "runs": [
+    {
+      "id": 42519126545,
+      "status": "SUCCESS",
+      "scope": "T5 pixel gate+compile"
+    },
+    {
+      "id": 42519345065,
+      "status": "SUCCESS",
+      "scope": "T3 11 Python tests+Gradle Java compile no APK"
+    },
+    {
+      "id": 42519487402,
+      "status": "SUCCESS",
+      "scope": "one R3 shared Mini Artifact ZIP 13632379139"
+    }
+  ],
+  "t3_vote": "NO_BUILD R3 shared Mini already built; phone output acceptance pending"
 }
