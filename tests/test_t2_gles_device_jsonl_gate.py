@@ -71,5 +71,26 @@ class TestEvidenceGate(unittest.TestCase):
             verify(encoded(rows), "CASE02")
 
 
+    def test_reject_negative_or_backwards_clock(self):
+        for field, value in (("unix_ms", -1), ("elapsed_ms", -1),
+                             ("unix_ms", 9999), ("elapsed_ms", 0)):
+            rows = records()
+            rows[4][field] = value
+            with self.subTest(field=field, value=value):
+                with self.assertRaises(ValueError):
+                    verify(encoded(rows), "CASE02")
+
+    def test_reject_mixed_apk_version(self):
+        rows = records()
+        rows[4]["version"] = "0.1.2"
+        with self.assertRaisesRegex(ValueError, "mixed_sessions"):
+            verify(encoded(rows), "CASE02")
+
+    def test_allow_equal_timestamps(self):
+        rows = records()
+        rows[4]["unix_ms"] = rows[3]["unix_ms"]
+        rows[4]["elapsed_ms"] = rows[3]["elapsed_ms"]
+        self.assertTrue(verify(encoded(rows), "CASE02")["synthetic_gles_log_consistent"])
+
 if __name__ == "__main__":
     unittest.main()
