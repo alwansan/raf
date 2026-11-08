@@ -36,7 +36,9 @@ class T3SharedFramePolicy(unittest.TestCase):
 
     def test_evidence_not_called_visual_pass(self):
         c=self.code
-        self.assertIn('"EVIDENCE_READY",uri,"GLES synthetic frame, visual review still required"',c)
+        self.assertIn('finishSharedEvidence(id,"EVIDENCE_READY",uri,',c)
+        self.assertIn('png_sha256=',c)
+        self.assertIn('visual review still required',c)
         self.assertIn('"NEEDS_SCREENSHOT"',c)
         self.assertIn('PixelCopy.request(getWindow(),bmp',c)
         self.assertNotIn('finishSharedEvidence(id,"PASS"',c)
@@ -46,5 +48,33 @@ class T3SharedFramePolicy(unittest.TestCase):
         self.assertIn('synchronized(lock){caseIndex=index;renderSequence++;lastRenderedSequence=-1;}',c)
         self.assertIn('synchronized(lock){current=caseIndex;generation=renderSequence;}',c)
         self.assertIn('lastRenderedSequence=generation;',c)
+
+    def test_png_not_published_until_readback_verified(self):
+        c=self.code
+        region=c.split('void captureSharedEvidence(String id){',1)[1].split(
+            '/** PNG signature + terminal IEND;',1)[0]
+        issued=region.index('v.put(MediaStore.MediaColumns.IS_PENDING,1)')
+        write=region.index('out.write(png);out.flush()')
+        first_check=region.index('verifyPngReadback(dest,png.length,sha)')
+        visible=region.index('visible.put(MediaStore.MediaColumns.IS_PENDING,0)')
+        publish=region.index('getContentResolver().update(dest,visible,null,null)!=1')
+        second_check=region.index('verifyPngReadback(dest,png.length,sha)',first_check+1)
+        accepted=region.index('finishSharedEvidence(id,"EVIDENCE_READY",uri,')
+        self.assertTrue(issued<write<first_check<visible<publish<second_check<accepted)
+        self.assertIn('getContentResolver().delete(dest,null,null)',region)
+        self.assertIn('finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,',region)
+        self.assertNotIn('finishSharedEvidence(id,"PASS"',region)
+
+    def test_png_digest_envelope_and_stalled_stream_fail_closed(self):
+        c=self.code
+        self.assertIn('if(!isCompletePng(png))throw new IOException',c)
+        self.assertIn('static boolean isCompletePng(byte[] bytes)',c)
+        self.assertIn('static String hexDigest(byte[] bytes)',c)
+        self.assertIn('void verifyPngReadback(Uri uri,int expectedBytes,String expectedSha)',c)
+        self.assertIn('if(count!=expectedBytes||!hash.toString().equals(expectedSha))',c)
+        self.assertIn('if(count>expectedBytes)throw new IOException',c)
+        self.assertIn('if(++zeroReads>3)throw new IOException',c)
+        self.assertIn('MediaStore.Downloads.RELATIVE_PATH',c)
+        self.assertNotIn('getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);\n                    if(dest==null)',c)
 
 if __name__=="__main__":unittest.main()
