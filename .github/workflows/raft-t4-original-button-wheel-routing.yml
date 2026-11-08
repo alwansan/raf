@@ -1,0 +1,65 @@
+name: T4 INPUT-005 original button and wheel routing (no APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_original_button_wheel_routing.py'
+      - 'tests/test_t4_original_button_wheel_routing.py'
+      - '.github/workflows/raft-t4-original-button-wheel-routing.yml'
+
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-original-button-wheel-readonly
+  cancel-in-progress: false
+
+jobs:
+  original-sha-pinned-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout T4 source-only tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_original_button_wheel_routing.py
+            /tests/test_t4_original_button_wheel_routing.py
+      - name: Execute synthetic mouse routing negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t4_original_button_wheel_routing.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Checkout immutable original managed DLL
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Verify original SHA and decompile in runner private temp only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          dll=t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test ! -L "$dll"
+          test "$(stat -c %s "$dll")" = 3211776
+          echo "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  $dll" | sha256sum -c --status
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 600000
+          mkdir -p "$RUNNER_TEMP/t4-private-ilspy" "$RUNNER_TEMP/t4-private-src"
+          timeout 140s dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-private-ilspy" > "$RUNNER_TEMP/t4-tool.log" 2>&1 || { echo T4_PRIVATE_ILSPY_INSTALL_FAILED; exit 1; }
+          timeout 360s "$RUNNER_TEMP/t4-private-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-private-src" "$dll" > "$RUNNER_TEMP/t4-decompile.log" 2>&1 || { echo T4_PRIVATE_DECOMPILE_FAILED; exit 1; }
+          python3 -m scripts.t4_original_button_wheel_routing --original-dll "$dll" --source-root "$RUNNER_TEMP/t4-private-src"
+          echo 'T4 original input audit=lexical only, source=no-publish, Android phone=not-tested'
+          # No binary, decompiled source, private logs, or game assets uploaded.
