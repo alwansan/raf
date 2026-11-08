@@ -24,7 +24,7 @@ import java.util.*;
  * A mouse click, another app's screenshot, or visual correctness cannot be simulated.
  */
 public final class UnifiedLabActivity extends Activity {
-    private static final int LOAD_PACK=401, PICK_SCREENSHOT=402, PICK_FILE=403, AUTO_CASE=404;
+    private static final int LOAD_PACK=401, PICK_SCREENSHOT=402, PICK_FILE=403, AUTO_CASE=404, MANUAL_CASE=405;
     private static final int MAX_PACK=262144;
     private final ArrayList<JSONObject> tests=new ArrayList<>();
     private final ArrayList<JSONObject> pending=new ArrayList<>();
@@ -73,6 +73,7 @@ public final class UnifiedLabActivity extends Activity {
         comment=new EditText(this);comment.setHint("Your observation, errors or screenshot description");
         content.addView(comment);
         LinearLayout actions=new LinearLayout(this);content.addView(actions);
+        addButton(actions,"RUN selected test",v->launchManualCase());
         addButton(actions,"PASS (user observed)",v->manualResult("USER_PASS"));
         addButton(actions,"FAIL (user observed)",v->manualResult("USER_FAIL"));
         addButton(actions,"Attach screenshot",v->{
@@ -278,6 +279,16 @@ public final class UnifiedLabActivity extends Activity {
             }
             activeAuto=null;runNext();return;
         }
+        if(req==MANUAL_CASE){
+            if(currentManual!=null&&data!=null&&currentManual.optString("id").equals(data.getStringExtra("case_id"))){
+                String observed=data.getStringExtra("observed");
+                String st=data.getStringExtra("status");
+                if(!"EVIDENCE_READY".equals(st))st="NEEDS_INPUT";
+                store(currentManual,st,observed==null?"No event":observed,null);
+                show("Input evidence captured. Review the result and mark PASS/FAIL if appropriate.");
+            }
+            return;
+        }
         if(result!=RESULT_OK||data==null||data.getData()==null)return;
         Uri uri=data.getData();
         try{
@@ -306,6 +317,22 @@ public final class UnifiedLabActivity extends Activity {
         int i=currentManual==null?-1:pending.indexOf(currentManual);
         if(i<0||i+1>=pending.size()){currentManual=null;drawHome();return;}
         openPending(pending.get(i+1));
+    }
+    void launchManualCase(){
+        if(currentManual==null){show("Choose an in-app test request first");return;}
+        String driver=currentManual.optString("driver");
+        if(driver.equals("mouse_manual")){
+            Intent intent=new Intent(this,MainActivity.class);
+            intent.putExtra("mini_worker","T4");
+            intent.putExtra("manual_case_id",currentManual.optString("id"));
+            intent.putExtra("shared_session",session);
+            startActivityForResult(intent,MANUAL_CASE);
+        }else if(driver.equals("file_sha256"))pick(PICK_FILE,"*/*");
+        else if(driver.equals("t3_visual")){
+            show("Use AUTO T3 to regenerate a real image if needed, or attach screenshot.");
+        }else {
+            show("This case requires the real application/file/device context described. Record observations and evidence.");
+        }
     }
     void manualResult(String decision){
         if(currentManual==null){show("Select an in-app request first");return;}
