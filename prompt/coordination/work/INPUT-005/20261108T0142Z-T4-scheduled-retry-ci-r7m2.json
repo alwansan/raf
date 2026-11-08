@@ -1,0 +1,18 @@
+{
+  "session_id": "20261108T0142Z-T4-scheduled-retry-ci-r7m2",
+  "origin": "scheduled",
+  "track": "INPUT-005",
+  "status": "active",
+  "baseline_head": "ca6bdc3b5b525fc42679719d95ec938fd824eb74",
+  "hypothesis": "The three retry telemetry contract tests are not included in the existing cheap T4 classifier workflow, leaving the newly added Android logging contract unverified by CI.",
+  "files": [
+    ".github/workflows/raft-t4-mouse-trace-classifier.yml",
+    "prompt/coordination/clients/T4/sessions/20261108T0142Z-T4-scheduled-retry-ci-r7m2.md"
+  ],
+  "experiment_key": "T4-INPUT-005-retry-contract-ci-20261108",
+  "shared_resource": "none; source-only Python GitHub Actions",
+  "coordination": "T4-only workflow; do not edit T5 buttons/Resolution, native build requests, or runtime mouse code",
+  "owner_phone_result": "Artifact 42058825739 world entered/saved/reentered, package publication failed; mouse not verified",
+  "prior_evidence": "42416699458 classifier 17 tests success; 42431115086 mouse bridge source-only success on 86a4b488; retry tests introduced at d835bd7c",
+  "next_step": "Extend existing cheap T4 classifier workflow to execute three retry source contract tests; observe new CI result."
+}
