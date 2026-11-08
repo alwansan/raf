@@ -29,3 +29,8 @@ Prior case T2-02 used FBO0 fragment output with a CONSTANT RGBA value, then FBO1
 
 ## Next step
 T5: updated unified Java compile gate followed (if passing) by T5-reviewed one shared Mini APK delivery with stable signing; record source SHA/package/bytes/sha256; device T2-02 expected 4 pixels in output JSONL. T2: continue authentic original Foam pass0/1 producer -> destination + CB0/sampler binding before changing Raft ShaderLab. Avoid fake PASS and retain T1/T3/T4/T5 other cases.
+
+## CI/event-ledger follow-up (18:24 UTC)
+- Automatic T2 inherited-ledger summary runs [42509557131](https://github.com/alwansan/raf/actions/runs/42509557131) and [42509789222](https://github.com/alwansan/raf/actions/runs/42509789222) FAILED at pre-existing `scripts/refresh_b_team.py::read_records`. Precise first traceback: `ValueError: Missing record identity: prompt/coordination/B_TEAM/events/T3/20261106T1959Z-T3-chat-original-stage-probe-9f24.json`; T3 historical JSON has `session_id` but neither `id` nor `event_id`. This is a strict inherited-event-index validation failure, NOT a shader/device/Java compile failure or proof about T2 driver.
+- The new T2 result event is explicitly `event_id`-identified and now includes `owner/issue_id/summary/at` (metadata commit `1a2d73179616f36fbfb33f867bb5955e7f93ef68`); leave T3's file untouched to respect worker ownership. Notify T3 to add an explicit stable ID with CAS and rerun index only after that source defect is corrected; do not weaken `refresh_b_team.py` to derive event identities automatically.
+- At 18:24 UTC other worker Actions are QUEUED (T4 mouse and T5 source-only); do not cancel, duplicate or interfere. Updated unified Java compile after T2 source `73924c9` is STILL NOT proven.
