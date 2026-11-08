@@ -1,0 +1,19 @@
+{
+  "session_id": "20261108T0552Z-T5-scheduled-lograft-ci-m6q8",
+  "origin": "scheduled",
+  "owner": "T5",
+  "base_sha": "648358631cf2287a8c464841d0d28ae7097048ab",
+  "issue": "PERF-007",
+  "status": "IN_PROGRESS",
+  "hypothesis": "New LogRaft quality and package gates are published but not executed in CI; existing isolated T5 regression workflow can validate both without Unity or private CL.",
+  "files": [
+    ".github/workflows/raft-t5-unity-interval-regression.yml",
+    "prompt/coordination/clients/T5/sessions/20261108T0552Z-T5-scheduled-lograft-ci-m6q8.md",
+    "prompt/coordination/work/INTEGRATION-001/20261108T0552Z-T5-scheduled-lograft-ci-m6q8.json"
+  ],
+  "experiment_key": "t5-lograft-quality-package-ci-20261108",
+  "shared_resource": "none; source-only ubuntu-24.04",
+  "overlap": "No T4 mouse, T1/T2 water, T3 shader, or Unity changes. Extend T5-owned isolated workflow.",
+  "expected_head": "648358631cf2287a8c464841d0d28ae7097048ab",
+  "next": "Add isolated parser tests and native/legacy CLI controls; verify Actions result."
+}
