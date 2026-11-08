@@ -23,3 +23,5 @@
 5. عدم اعتبار نجاح مختبر بمفرده علاجاً للعبة الكاملة حتى يُدمج ويُختبر على نسخة Raft حقيقية.
 
 ملاحظات تجربة 8 نوفمبر في OWNER_FEEDBACK_2026-11-08_AR.md. صيغة بيانات الاختبار في TESTPACK_FORMAT.md.
+## إطلاق Workflow من فرع غير افتراضي
+اقرأ [BUILD_REQUEST_AR.md](BUILD_REQUEST_AR.md). الإطلاق الآمن يكون commit مستقل لتغيير `.github/raft-mini-lab-build-request.json` برسالة `[raft-mini-lab]` وبصمة HEAD الأب، لأن GitHub `workflow_dispatch` قد لا يظهر لـworkflow لم يُنشر في default branch. لا تنشئ request لمجرد إنشاء صفحات/تعريفات ولا تتجاوز فحص التداخل والـSHA.
