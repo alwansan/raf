@@ -1,0 +1,15 @@
+{
+  "id": "20261108T1903Z-T1-preworld-water-fft-chronology-c5e7",
+  "owner": "T1",
+  "session_id": "20261108T1836Z-T1-chat-water-startup-order-c5e7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "summary": "Pinned CL real phone summary shows first UltimateWater invalid pass at 16:49:17.579 Baghdad, first invalid-kernel6 at 16:49:17.581, both 64.486/64.484s before first world_loaded log. Final 74359 pass roots (29700 Spectrum, 44659 Foam) and 11165 index6 roots; last 3s sample undercounts by 696 and 116. 13 controls + actual CL source audit CI42512986569 SUCCESS; original Unity FFT resource/FindKernel identity and shader correctness NOT_PROVEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42512986569",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_WATER_PREWORLD_ERROR_TIMELINE_2026-11-08.md",
+    "https://github.com/alwansan/CL/blob/61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8/raft%20log/lf/LogRaft-20261108-164850-270/session-summary.json"
+  ],
+  "at": "2026-11-08T19:03:00Z"
+}
