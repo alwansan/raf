@@ -21,7 +21,7 @@ namespace RaftAndroid.Platform
         private bool focused = true, paused, supported;
         private volatile bool nativeHasMotion, requested, nativeCaptured;
         private readonly object captureGate = new object();
-        private int epoch, lastLoggedCount, captureLossCount, loggedLossCount, captureRequestAttempts;
+        private int epoch, lastMotionEpoch, lastLoggedCount, captureLossCount, loggedLossCount, captureRequestAttempts;
         private int captureViewIdentity, mismatchedViewEpoch, loggedMismatchedViewEpoch;
         private float nextRequestTime, nextProbeTime;
 
@@ -123,6 +123,7 @@ namespace RaftAndroid.Platform
                     !PhysicalMouseMotionSource.ValidDelta(dx, dy))
                     return false;
                 deltas.Push(dx, dy);
+                Volatile.Write(ref lastMotionEpoch, listenerEpoch);
                 nativeCaptured = nativeHasMotion = true;
                 return true;
             }
@@ -248,7 +249,7 @@ namespace RaftAndroid.Platform
                 lastLoggedCount = received;
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
                     "physical_mouse_relative", "events=" + received +
-                    "; epoch=" + Volatile.Read(ref epoch) +
+                    "; epoch=" + Volatile.Read(ref lastMotionEpoch) +
                     "; legacyAxes=true; deviceDirectionVerified=false");
             }
         }
