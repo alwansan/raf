@@ -1,0 +1,25 @@
+{
+  "owner": "T4",
+  "session_id": "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2",
+  "origin": "chat",
+  "issue": "INPUT-005",
+  "status": "active",
+  "base_sha": "246f30133ef362628e6c03485885604b572e1f46",
+  "resumed_from": [
+    "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3",
+    "20261108T1850Z-T4-chat-original-mouse-buttons-g7p4"
+  ],
+  "experiment_key": "T4-physical-pointer-captured-legacy-button-wheel-frame-fallback-v1",
+  "resource_key": "T4-game-source-only-bounded",
+  "scope": "Develop opt-in captured native button/wheel-to-Unity Legacy Input fallback for original 12 direct button and 8 scroll source sites; preserve camera, touch, keyboard and original Windows semantics. Do not edit T5 Mini APK/host or initiate full game build without separate owner policy.",
+  "intended_files": [
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "scripts/t4_adapt_original_mouse_buttons_wheel.py",
+    "tests/test_t4_adapt_original_mouse_buttons_wheel.py",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml"
+  ],
+  "build_impact": "Unity managed source/CI only; r2 Mini vote NO_BUILD",
+  "next_step": "Add source+tests, bounded original immutable ZIP2 plan and original Unity2021 ABI CI; document device acceptance limitation."
+}
