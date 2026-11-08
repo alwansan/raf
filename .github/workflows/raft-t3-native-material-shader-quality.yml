@@ -5,8 +5,10 @@ on:
     paths:
       - scripts/t3_audit_exported_material_programs.py
       - scripts/t3_material_shader_link_audit.py
+      - scripts/t3_particle_renderer_yaml_audit.py
       - tests/test_t3_audit_exported_material_programs.py
       - tests/test_t3_material_shader_link_audit.py
+      - tests/test_t3_particle_renderer_yaml_audit.py
       - .github/workflows/raft-t3-native-material-shader-quality.yml
   workflow_dispatch:
 permissions:
@@ -32,9 +34,10 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_material_shader_link_audit.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle_renderer_yaml_audit.py' -v
           python3 -m unittest discover -s tests -p 'test_w1_export_material_shaders.py' -v
           python3 -m unittest discover -s tests -p 'test_b49_shaderlab_pass_contract.py' -v
       - name: Run syntax and static named module checks
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t3_audit_exported_material_programs.py tests/test_t3_audit_exported_material_programs.py scripts/t3_material_shader_link_audit.py tests/test_t3_material_shader_link_audit.py
+          python3 -m py_compile scripts/t3_audit_exported_material_programs.py tests/test_t3_audit_exported_material_programs.py scripts/t3_material_shader_link_audit.py tests/test_t3_material_shader_link_audit.py scripts/t3_particle_renderer_yaml_audit.py tests/test_t3_particle_renderer_yaml_audit.py
