@@ -26,6 +26,8 @@ public final class MainActivity extends Activity {
     LinearLayout entries; TextView caption,events,exportStatus,pad; EditText note; ImageView preview;
     File privateLog; Uri output; String packId="builtin-mouse",session;
     long lastMove=0;
+    volatile boolean assetDigestBusy=false;
+    Thread assetDigestThread;
     final ArrayList<String> recent=new ArrayList<>();
     TextView txt(String s){TextView v=new TextView(this);v.setText(s);v.setTextSize(15);v.setPadding(8,6,8,6);return v;}
     void addButton(LinearLayout p,String name,View.OnClickListener click){Button b=new Button(this);b.setText(name);b.setOnClickListener(click);p.addView(b);}
@@ -81,10 +83,10 @@ public final class MainActivity extends Activity {
         i.addCategory(Intent.CATEGORY_OPENABLE);i.setType(type);
         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);startActivityForResult(i,code);}
     void render(){entries.removeAllViews();for(JSONObject t:cases){String id=t.optString("id"),name=t.optString("title");
-        addButton(entries,id+": "+name,v->{selected=t;note.setText("");
+        addButton(entries,id+": "+name,v->{if(assetDigestBusy){Toast.makeText(this,"Wait for SHA-256",Toast.LENGTH_SHORT).show();return;}selected=t;note.setText("");
             caption.setText("TEST "+id+"\n"+t.optString("instructions")+"\nEXPECTED: "+t.optString("expected"));
             log("test_begin",id);});}}
-    void finish(String result){if(selected==null){Toast.makeText(this,"Select test first",Toast.LENGTH_SHORT).show();return;}
+    void finish(String result){if(assetDigestBusy){Toast.makeText(this,"Finish after SHA-256 completes",Toast.LENGTH_SHORT).show();return;}if(selected==null){Toast.makeText(this,"Select test first",Toast.LENGTH_SHORT).show();return;}
         String n=note.getText().toString().replace('\n',' ');if(n.length()>800)n=n.substring(0,800);
         log("result",selected.optString("id")+"="+result+" observed="+n);export();}
     @Override public boolean dispatchTouchEvent(MotionEvent e){
@@ -114,25 +116,69 @@ public final class MainActivity extends Activity {
                         file=DocumentsContract.buildDocumentUriUsingTree(uri,c.getString(1));break;}}
                 if(file==null)throw new IOException("Folder has no testpack.json; pick JSON file directly");
                 loadPack(file);}
-            if(req==PICK_ASSET){MessageDigest md=MessageDigest.getInstance("SHA-256");long size=0;byte[] buf=new byte[16384];
-                try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Unreadable");
-                    int n;while((n=in.read(buf))>=0){size+=n;if(size>64L*1024*1024)throw new IOException("File exceeds 64MiB");md.update(buf,0,n);}}
-                StringBuilder sha=new StringBuilder();for(byte x:md.digest())sha.append(String.format(Locale.US,"%02x",x&255));
-                caption.setText("File "+size+" bytes SHA256="+sha);log("asset_sha256","bytes="+size+" sha256="+sha);
-                preview.setImageDrawable(null);
-                if(selected!=null&&"image_preview".equals(selected.optString("type"))){
-                    BitmapFactory.Options opts=new BitmapFactory.Options();opts.inJustDecodeBounds=true;
-                    try(InputStream in=getContentResolver().openInputStream(uri)){BitmapFactory.decodeStream(in,null,opts);}
-                    if(opts.outWidth>0&&opts.outHeight>0&&opts.outWidth<=32768&&opts.outHeight<=32768){
-                        int sample=1;while(opts.outWidth/sample>1600||opts.outHeight/sample>1600)sample*=2;
-                        BitmapFactory.Options small=new BitmapFactory.Options();small.inSampleSize=sample;small.inPreferredConfig=Bitmap.Config.RGB_565;
-                        try(InputStream in=getContentResolver().openInputStream(uri)){preview.setImageBitmap(BitmapFactory.decodeStream(in,null,small));}
-                    }
-                }}
+            if(req==PICK_ASSET)startAssetDigest(uri);
             if(req==SAVE_AS){try(InputStream in=new FileInputStream(privateLog);OutputStream out=getContentResolver().openOutputStream(uri,"wt")){
                     if(out==null)throw new IOException("Save stream unavailable");copy(in,out);}exportStatus.setText("Log saved via picker");}
         }catch(Exception ex){log("picker_error",ex.toString());Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();}
     }
+    /**
+     * Multi-GiB SAF APK/OBB reads must not run in onActivityResult/UI thread.
+     * A 64 MiB ceiling is retained only for image decoding, not hashing.
+     */
+    void startAssetDigest(Uri uri) {
+        if(assetDigestBusy){Toast.makeText(this,"SHA-256 already running",Toast.LENGTH_SHORT).show();return;}
+        assetDigestBusy=true;
+        final String caseId=selected==null?"none":selected.optString("id");
+        final boolean imageCase=selected!=null&&"image_preview".equals(selected.optString("type"));
+        String displayName="selected file";
+        try(Cursor c=getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME},null,null,null)){
+            if(c!=null&&c.moveToFirst()&&!c.isNull(0))displayName=c.getString(0);
+        }catch(Exception ignored){}
+        final String fileName=displayName.replace('\\n',' ').replace('\\r',' ').substring(0,Math.min(128,displayName.length()));
+        caption.setText("Calculating SHA-256 off the UI thread for "+fileName+"...");
+        log("asset_sha256_started","case="+caseId+" file="+fileName);
+        assetDigestThread=new Thread(()->{
+            try(InputStream in=getContentResolver().openInputStream(uri)){
+                final long started=SystemClock.elapsedRealtime();
+                StreamSha256.Result r=StreamSha256.digest(in,bytes->{
+                    long mb=bytes/(1024L*1024L);
+                    runOnUiThread(()->caption.setText("SHA-256 reading "+fileName+": "+mb+" MiB; keep app open"));
+                });
+                Bitmap bitmap=null;
+                if(imageCase&&r.bytes<=64L*1024*1024){
+                    BitmapFactory.Options opts=new BitmapFactory.Options();opts.inJustDecodeBounds=true;
+                    try(InputStream pic=getContentResolver().openInputStream(uri)){
+                        if(pic!=null)BitmapFactory.decodeStream(pic,null,opts);
+                    }
+                    if(opts.outWidth>0&&opts.outHeight>0&&opts.outWidth<=32768&&opts.outHeight<=32768){
+                        int sample=1;
+                        while(opts.outWidth/sample>1600||opts.outHeight/sample>1600)sample*=2;
+                        BitmapFactory.Options small=new BitmapFactory.Options();small.inSampleSize=sample;
+                        small.inPreferredConfig=Bitmap.Config.RGB_565;
+                        try(InputStream pic=getContentResolver().openInputStream(uri)){
+                            if(pic!=null)bitmap=BitmapFactory.decodeStream(pic,null,small);
+                        }
+                    }
+                }
+                final Bitmap image=bitmap;
+                final long elapsed=SystemClock.elapsedRealtime()-started;
+                log("asset_sha256","case="+caseId+" file="+fileName+" bytes="+r.bytes+" sha256="+r.hex+" elapsed_ms="+elapsed);
+                runOnUiThread(()->{
+                    if(image!=null)preview.setImageBitmap(image);else preview.setImageDrawable(null);
+                    caption.setText("File: "+fileName+"\\nBytes: "+r.bytes+"\\nSHA-256: "+r.hex
+                        +(imageCase&&r.bytes>64L*1024*1024?"\\nImage preview skipped (>64MiB)":""));
+                });
+            }catch(Exception ex){
+                log("asset_sha256_error","case="+caseId+" error="+ex.getClass().getSimpleName()+": "+ex.getMessage());
+                runOnUiThread(()->{
+                    caption.setText("SHA-256 failed: "+ex.getClass().getSimpleName()+": "+ex.getMessage());
+                    Toast.makeText(this,"SHA-256 failed; no digest claimed",Toast.LENGTH_LONG).show();
+                });
+            }finally{assetDigestBusy=false;}
+        },"raft-lab-stream-sha256");
+        assetDigestThread.start();
+    }
+
     void loadPack(Uri uri)throws Exception{byte[] b=new byte[65537];int length=0;
         try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Unreadable pack");
             while(length<b.length){int n=in.read(b,length,b.length-length);if(n<0)break;length+=n;}}
@@ -203,4 +249,5 @@ public final class MainActivity extends Activity {
     @Override protected void onResume(){super.onResume();if(t1Probe!=null)t1Probe.onResume();}
     @Override protected void onPause(){if(t1Probe!=null)t1Probe.onPause();super.onPause();if(pad!=null&&pad.hasPointerCapture())pad.releasePointerCapture();log("activity","pause");}
     @Override protected void onStop(){super.onStop();export();}
+    @Override protected void onDestroy(){if(assetDigestThread!=null)assetDigestThread.interrupt();super.onDestroy();}
 }
