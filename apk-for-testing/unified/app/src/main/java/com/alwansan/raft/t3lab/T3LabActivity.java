@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -168,29 +169,89 @@ public final class T3LabActivity extends Activity {
                 if(result!=PixelCopy.SUCCESS){
                     bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,"PixelCopy code "+result);return;
                 }
-                String uri=null;
+                Uri dest=null;
                 try{
+                    if(Build.VERSION.SDK_INT<29)
+                        throw new IOException("MediaStore PNG export requires Android 10+");
+                    // Encode a real PNG before writing any visible MediaStore item.
+                    // Digest and byte count are captured from the exact PNG payload.
+                    ByteArrayOutputStream encoded=new ByteArrayOutputStream(64*1024);
+                    if(!bmp.compress(Bitmap.CompressFormat.PNG,100,encoded))
+                        throw new IOException("Bitmap PNG encoding failed");
+                    byte[] png=encoded.toByteArray();
+                    if(!isCompletePng(png))throw new IOException("Incomplete PNG envelope");
+                    String sha=hexDigest(png);
                     ContentValues v=new ContentValues();
                     v.put(MediaStore.Downloads.DISPLAY_NAME,id+"-"+System.currentTimeMillis()+".png");
                     v.put(MediaStore.Downloads.MIME_TYPE,"image/png");
                     String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
                     if(parent==null||!parent.matches("[A-Za-z0-9._-]{6,90}"))parent=session;
                     v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+parent+"/");
-                    Uri dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
-                    if(dest==null)throw new IOException("Could not write PNG");
+                    v.put(MediaStore.MediaColumns.IS_PENDING,1);
+                    dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
+                    if(dest==null)throw new IOException("Could not allocate pending PNG");
                     try(OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
-                        if(out==null||!bmp.compress(Bitmap.CompressFormat.PNG,100,out))throw new IOException("Bitmap compress failed");
-                        out.flush();
+                        if(out==null)throw new IOException("Could not open pending PNG");
+                        out.write(png);out.flush();
                     }
-                    uri=dest.toString();log("pixelcopy_png","id="+id+" uri="+uri);
-                    finishSharedEvidence(id,"EVIDENCE_READY",uri,"GLES synthetic frame, visual review still required");
-                }catch(Exception e){log("screenshot_error",e.toString());
-                    finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());}
+                    // An owned MediaStore URI may have been truncated or fail to reopen.
+                    // Never claim visual evidence until the entire stored file matches.
+                    verifyPngReadback(dest,png.length,sha);
+                    ContentValues visible=new ContentValues();
+                    visible.put(MediaStore.MediaColumns.IS_PENDING,0);
+                    if(getContentResolver().update(dest,visible,null,null)!=1)
+                        throw new IOException("Could not publish verified PNG");
+                    verifyPngReadback(dest,png.length,sha);
+                    String uri=dest.toString();
+                    log("pixelcopy_png","id="+id+" uri="+uri+" bytes="+png.length+" sha256="+sha);
+                    finishSharedEvidence(id,"EVIDENCE_READY",uri,
+                        "GLES synthetic frame; png_bytes="+png.length+" png_sha256="+sha+
+                        "; visual review still required");
+                }catch(Exception e){
+                    if(dest!=null){
+                        try{getContentResolver().delete(dest,null,null);}
+                        catch(Exception cleanup){log("screenshot_cleanup_error",cleanup.getClass().getSimpleName());}
+                    }
+                    log("screenshot_error",e.getClass().getSimpleName());
+                    finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());
+                }
                 finally{bmp.recycle();}
             },new Handler(Looper.getMainLooper()));
         }catch(Exception e){
             bmp.recycle();finishSharedEvidence(id,"NEEDS_SCREENSHOT",null,e.getClass().getSimpleName());
         }
+    }
+    /** PNG signature + terminal IEND; Bitmap.compress is the trusted encoder. */
+    static boolean isCompletePng(byte[] bytes){
+        if(bytes==null||bytes.length<68||bytes.length>8*1024*1024)return false;
+        int[] magic={137,80,78,71,13,10,26,10};
+        for(int i=0;i<magic.length;i++)if((bytes[i]&255)!=magic[i])return false;
+        int n=bytes.length;
+        return bytes[n-8]=='I'&&bytes[n-7]=='E'&&bytes[n-6]=='N'&&bytes[n-5]=='D';
+    }
+    static String hexDigest(byte[] bytes)throws Exception{
+        byte[] hash=MessageDigest.getInstance("SHA-256").digest(bytes);
+        StringBuilder hex=new StringBuilder(hash.length*2);
+        for(byte b:hash)hex.append(String.format(Locale.US,"%02x",b&255));
+        return hex.toString();
+    }
+    void verifyPngReadback(Uri uri,int expectedBytes,String expectedSha)throws Exception{
+        MessageDigest md=MessageDigest.getInstance("SHA-256");
+        long count=0;
+        try(InputStream in=getContentResolver().openInputStream(uri)){
+            if(in==null)throw new IOException("PNG readback unavailable");
+            byte[] buffer=new byte[16384];int n;
+            while((n=in.read(buffer))!=-1){
+                if(n==0)continue;
+                count+=n;
+                if(count>expectedBytes)throw new IOException("PNG readback exceeded encoded bytes");
+                md.update(buffer,0,n);
+            }
+        }
+        StringBuilder hash=new StringBuilder(64);
+        for(byte b:md.digest())hash.append(String.format(Locale.US,"%02x",b&255));
+        if(count!=expectedBytes||!hash.toString().equals(expectedSha))
+            throw new IOException("PNG readback bytes/SHA256 mismatch");
     }
     void finishSharedEvidence(String id,String verdict,String uri,String observed){
         Intent reply=new Intent();reply.putExtra("case_id",id);reply.putExtra("status",verdict);
