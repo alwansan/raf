@@ -9,14 +9,17 @@
   "issue_id": "WATER-001",
   "track": "shared Android GLES Compute diagnostic (synthetic, NOT Unity FFT)",
   "approach": "Bounded GL-context readiness handshake before T1-01..04 auto dispatch; preserve actual PASS/FAIL and avoid timing-only false failures.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
   "intended_files": [
     "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java",
     "tests/test_t1_compute_probe_context_gate.py",
     "prompt/coordination/clients/T1/sessions/20261108T1811Z-T1-chat-gles-gate-9d3f.md",
     "prompt/coordination/clients/T1/MEMORY.md",
-    "apk-for-testing/SHARED_BUILD_READINESS.md"
+    "apk-for-testing/SHARED_BUILD_READINESS.md",
+    "prompt/coordination/experiments/T1/20261108T1811Z-T1-chat-gles-gate-9d3f.json",
+    "prompt/coordination/B_TEAM/events/T1/20261108T1819Z-shared-gles-context-ready-9d3f.json",
+    ".github/workflows/raft-t1-shared-compute-source.yml"
   ],
   "experiment_key": "t1-shared-gles-context-readiness-v1-20261108",
   "resource_key": "T1ComputeProbe.java",
@@ -25,9 +28,19 @@
     "prompt/coordination/clients/T1/sessions/20261108T1714Z-T1-scheduled-fft-shared-lab-b6d2.md"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42504045625"
+    "https://github.com/alwansan/raf/actions/runs/42509359669"
   ],
-  "result": null,
-  "next_step": "Patch T1-owned compute probe, run source regression + Android compile gate without launching APK, coordinate single mini build with T5.",
-  "updated_at": "2026-11-08T18:11:00Z"
+  "result": {
+    "code_commits": [
+      "d83a4e4379fb8677daebea81da203281a1d89e82",
+      "2f26cd2e241a584fbd44d8d9343d2736584fc956",
+      "695daa697b0ccc0e53ed0533f43b2d267e0036f5"
+    ],
+    "ci": "SUCCESS",
+    "assertions": "5/5 T1 static source tests, 7/7 unified pack tests, Gradle shared Java compile PASS",
+    "evidence_class": "SOURCE_ONLY; DEVICE_NOT_TESTED; UNITY_FFT_UNVERIFIED; NO_APK",
+    "mini_readiness": "T1 NEED_BUILD only; T5 controls request"
+  },
+  "next_step": "T5 reviews NEED_BUILD and sole shared mini build/signature; then owner runs T1-01..04 Auto T1 on Adreno. Continue authentic Unity FFT source provenance/FindKernel validation separately.",
+  "updated_at": "2026-11-08T18:20:00Z"
 }
