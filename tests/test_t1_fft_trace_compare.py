@@ -85,6 +85,24 @@ class InvocationTraceTests(unittest.TestCase):
         self.assertEqual(result["sites"][0]["coordinate_axis_mismatches"],
                          {"x": 0, "y": 1, "mip": 1})
 
+    def test_identity_coordinates_are_not_reported_as_translation(self):
+        mapping = axis_mapping([(1, 1), (2, 2), (3, 3)])
+        self.assertTrue(mapping["varied_reference"])
+        self.assertFalse(mapping["uniform_translation"])
+        self.assertFalse(mapping["uniform_reflection"])
+        self.assertFalse(mapping["constant_observed"])
+
+    def test_identical_invocation_coordinates_do_not_claim_address_shift(self):
+        first = (0, 3, 0, 0, 0, 1, 2, 0, 10, 0, 0, 0)
+        second = (0, 4, 0, 0, 0, 2, 2, 0, 20, 0, 0, 0)
+        rows = [first, second, *INVOCATIONS[1:]]
+        result = compare_invocations(invocation_trace(rows), invocation_trace(rows))
+        self.assertTrue(result["match"])
+        mapping = result["sites"][0]["coordinate_axis_mapping"]["x"]
+        self.assertTrue(mapping["varied_reference"])
+        self.assertFalse(mapping["uniform_translation"])
+        self.assertFalse(mapping["uniform_reflection"])
+
     def test_axis_mapping_discriminates_address_shapes(self):
         for name, pairs in (
             ("uniform_translation", [(1, 4), (2, 5), (3, 6)]),
