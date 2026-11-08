@@ -9,7 +9,7 @@
     "20261108T1910Z-T1-scheduled-axis-identity-f4c8"
   ],
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fa3d282481c5ac499decf5dd30b89cb6d1acbbb1",
   "scope": "Repair proven first-divergence Python syntax regression and produce falsifiable original C# FFT dispatch-shape/FindKernel source gate using SHA-pinned managed source; never map Logcat index6 without runtime identity.",
   "intended_files": [
@@ -22,7 +22,10 @@
     "prompt/coordination/clients/T1/sessions/20261108T2022Z-T1-chat-fft-source-gate-d8b4.md",
     "prompt/coordination/experiments/T1/20261108T2022Z-T1-chat-fft-source-gate-d8b4.json",
     "prompt/coordination/B_TEAM/events/T1/20261108T2022Z-T1-fft-original-dispatch-d8b4.json",
-    "prompt/coordination/work/WATER-001/T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4.json"
+    "prompt/coordination/work/WATER-001/T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4.json",
+    "docs/T1_FFT_ORIGINAL_KERNEL6_SOURCE_CASE_2026-11-08.md",
+    ".github/workflows/raft-t1-fft-original-kernel6-candidates.yml",
+    "apk-for-testing/SHARED_BUILD_READINESS.md"
   ],
   "experiment_key": "fft-original-index-source-binding-v1-original-Dx11FFT-sourceSHA-and-Unity-serialized-FFT-objectSHA",
   "resource_key": "Original managed Dx11FFT.cs SHA-pinned source derived from zip2 PC data; existing synthetic T1 paired CI",
@@ -31,6 +34,37 @@
     "CL raw first segment T1 CI42516813516 confirmed no literal kernel root; collector index6 not runtime ID proof"
   ],
   "decision": "source-only test and authentic managed C# callsite evidence; no new APK or full XAPK",
-  "updated_at": "2026-11-08T20:22:00Z",
-  "next_step": "Fix CI syntax; source-authenticate original FFT C# caller and record source-only two-pass Dispatch relationship, runtime FindKernel/index still UNPROVEN"
+  "updated_at": "2026-11-08T20:26:00Z",
+  "next_step": "Instrument original actual Android Unity imported ComputeShader resource/callsite and record runtime fft size/bank/index and shader GUID metadata at first failure; validate name/FindKernel and compiled program mapping, then real pixel parity. No repeat source-only re-run without new hypothesis.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42518408573",
+    "https://github.com/alwansan/raf/actions/runs/42519336164",
+    "https://github.com/alwansan/raf/actions/runs/42519731107",
+    "https://github.com/alwansan/raf/actions/runs/42519853981"
+  ],
+  "result": {
+    "first_divergence_syntax_fixed_at": "90b0ebe915f1d6594089dfc7ca683c24f878132b",
+    "first_divergence_ci": 42519336164,
+    "first_divergence_ci_status": "success",
+    "source_gate_ci": 42519853981,
+    "source_gate_sha": "f51c4e26d340a5db3f9b8781506e3e53dc180e2e",
+    "source_gate_status": "success",
+    "tests": "30/30 source-only + SHA-pinned original DLL/ILSpy real original CSharp",
+    "original_dll_git_blob": "fc9d4ba920a178fdb89c970d9d772a01051dadc6",
+    "original_derived_source_sha256": "8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0",
+    "original_inherited_source_sha256": "2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704",
+    "numeric_index6_source_candidate": {
+      "assumed_size": 256,
+      "assumed_bank": 0,
+      "pass": 0
+    },
+    "next_pass_index": 7,
+    "source_dispatch_calls": 2,
+    "source_settexture_calls": 6,
+    "source_findkernel_calls_in_Dx11FFT": 0,
+    "original_runtime_ComputeShader_id_proven": false,
+    "owner_device_size_bank_observed": false,
+    "android_water_fixed": false,
+    "private_original_code_exported": false
+  }
 }
