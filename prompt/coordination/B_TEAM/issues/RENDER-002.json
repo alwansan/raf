@@ -160,7 +160,10 @@
     "https://github.com/alwansan/raf/actions/runs/42226905270",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-private-original-propstate.json",
     "https://github.com/alwansan/raf/actions/runs/42243130856",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-five-material-rgba-scalar-parity.json"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-five-material-rgba-scalar-parity.json",
+    "https://github.com/alwansan/raf/actions/runs/42519251690",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_SUPPORT_T3_REAL_CL_PNG_BLACK_FRAME_EVIDENCE_2026-11-08.md",
+    "https://github.com/alwansan/raf/commit/f60355a49a9f236f9757cdac65cf3d12ebbfafc3"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -210,13 +213,15 @@
     "T3 SHA-original Shader48 exact 4 PS programs CI42073397586: DXBC ISGN 22 original input user semantics allocate 75 scalar mask lanes but ReadWriteMask actually reads 44 (31 unread, 8 whole semantic rows unused). Same four original PS programs source and derived SPIR-V each have 14 user input rows /44 scalar components, DXBC read-mask and both SPIR-V reflection input counts equal for each Pass 4/4. This resolves 75-vs-44 aggregate cardinality gap, NOT original DXBC SemanticNameIndex/register to SPIR-V Location mapping, interpolated values, missing white colors, pixel/device graphics or remaining variants. No gameplay asset changes.",
     "T1 direct instruction-level SPIR-V OpEntryPoint/OpDecorate/typed numeric component validator integrated by T3 on genuine SHA-original Shader48 four V/F Pass pairs CI42076083800: 75 VS output and 44 PS input lanes each source/roundtrip, 0 missing, 0 scalar type mismatches, 31 unused VS components, 4/4 per-Pass numeric compatible both. Crosschecked original DXBC ISGN PS used-mask 44/75. T1 tool and credit preserved, no original semantic-to-Location mapping, stage numeric value/interpolation, authored ShaderLab, native Unity Adreno colors or device proof. Prior inconclusive attempts were local PosixPath type gate bug, now fixed. RENDER-002 stays OPEN.",
     "T3 SHA-original six scenes/four Shader owners CI42080105181: top 921 original Renderer-slot Shader48 has 35 original declared properties; across 43 true source-linked Material objects every declared name has saved correct family (1505/1505), 0 absent/mistyped-only. 258 original saved TexEnvs: 144 bound and 114 genuinely null; 875 extra original saved names plus one original name across two families (3 renderer slots) observed, NOT evidence of Android export corruption. Prior bounded same-export CI42044249541 found this 921-use Shader still Dummy after 3 vendors; real current native ShaderLab/program/Adreno still unknown. RENDER-002 OPEN.",
-    "T3 re-read actual full native post-builtin/TMP/PostFX/volumetric/Depth/Blur temporary Unity export from T5 CI42058825739 reconstruct job 127354763134 (16:09 UTC log; artifact 13431142944): 142 ShaderLab files, 110 retain literal DummyShaderTextExporter; 1536 Material docs, 750 Unity builtins, 786 custom, 770 custom reference Dummy, 16 custom non-Dummy, 0 broken/null; 64 distinct custom GUID targets, 60 referenced Dummy. This IS post-full-restorer actual transient export but NOT final APK, device pixels, or source original 921-use Shader identity. Existing source SHA 921-use Shader48 remained Dummy in bounded three-vendor export CI42044249541, but no verified native top-source GUID linkage yet. New T3 fail-closed source SHA→W1 native private trace→current ShaderLab program exact-GUID read-only probe source-free CI42083469621 PASS45/45; prepared for a future authorized native exporter, not executed on current private native workspace, no active native workflow modifications. RENDER-002 OPEN / NOT_READY."
+    "T3 re-read actual full native post-builtin/TMP/PostFX/volumetric/Depth/Blur temporary Unity export from T5 CI42058825739 reconstruct job 127354763134 (16:09 UTC log; artifact 13431142944): 142 ShaderLab files, 110 retain literal DummyShaderTextExporter; 1536 Material docs, 750 Unity builtins, 786 custom, 770 custom reference Dummy, 16 custom non-Dummy, 0 broken/null; 64 distinct custom GUID targets, 60 referenced Dummy. This IS post-full-restorer actual transient export but NOT final APK, device pixels, or source original 921-use Shader identity. Existing source SHA 921-use Shader48 remained Dummy in bounded three-vendor export CI42044249541, but no verified native top-source GUID linkage yet. New T3 fail-closed source SHA→W1 native private trace→current ShaderLab program exact-GUID read-only probe source-free CI42083469621 PASS45/45; prepared for a future authorized native exporter, not executed on current private native workspace, no active native workflow modifications. RENDER-002 OPEN / NOT_READY.",
+    "CL 8 Nov T3 original visual screenshots were 100% neutral/no RGB despite mini 'EVIDENCE_READY'; do not declare GPU/graphics proof. Verify T5↔T3 SurfaceView PixelCopy + exact photo-vs-glReadPixels red/blue parity in next justified signed single mini build, check owner screenshot real RGB. Distinct from original Unity game's white material/FX issue."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "T3",
-  "updated_at": "2026-11-06T15:33:25.001Z"
+  "updated_by": "T4",
+  "updated_at": "2026-11-08T20:18:00Z",
+  "latest_T4_to_T3_screen_capture": "CL immutable phone originals: six T3 PNG screenshots 1600x900 all 100% grayscale/neutral, saturated RGB 0, center nearly black 79.111%; 6 second uploads are byte-identical. T4 source-only CI42519251690 PASS 8 synthetic + actual SHA-pinned 6 PNGs. These are unreliable visual capture evidence, not original game graphics verdict. T5↔T3 post-v10 source f60355a49 direct SurfaceView PixelCopy + pixel parity exists, not phone tested."
 }
