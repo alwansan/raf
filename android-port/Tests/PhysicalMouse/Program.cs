@@ -236,6 +236,18 @@ static class Program
             "Pending right press before thread batch");
         Check(legacyMouse.Sample(111).Down(1), "Right press survives concurrent frame gate");
         Check(legacyMouse.Sample(112).Held(1), "Held right persists until release");
+        const int mouseComposite = 131076 | 0x400000;
+        Check(PhysicalMouseButtonWheelFrame.SourceIsPhysical(mouseComposite),
+            "Android composite SOURCE_MOUSE_RELATIVE retains physical source class");
+        Check(!PhysicalMouseButtonWheelFrame.SourceIsPhysical(4098) &&
+              !PhysicalMouseButtonWheelFrame.SourceIsPhysical(-1),
+            "SOURCE_TOUCHSCREEN and unknown negative cannot inject buttons");
+        Check(actions.Record(11,mouseComposite,1,1,0f,0f),
+            "Captured action telemetry accepts composite physical mouse source");
+        Check(legacyMouse.Record(12,mouseComposite,2,0,0f,0f),
+            "Captured frame accepts matching composite source and releases right");
+        Check(legacyMouse.Sample(113).Up(1),
+            "Composite-source physical right release is delivered once");
 
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
