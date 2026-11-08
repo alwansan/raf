@@ -1,3 +1,5 @@
+> **اختبارات Android المصغرة T1–T5:** [مركز APK for Testing](apk-for-testing/TEST_CENTER.md) — لكل عامل روابط نسخ APK وملفات اختبار وlogs عند جاهزيتها؛ [التعاريف](apk-for-testing/LAB_PROTOCOL_AR.md) و[رسالة الاستعادة الجديدة](prompt/coordination/T_TEAM/RESTORE_WITH_ANDROID_LAB_AR.md). مستقل عن تصويت بناء اللعبة الكامل.
+
 # Raft Android — Native Port Research (work in progress)
 
 **This is not a working Android game/APK.** This repository branch contains static research and build tooling for evaluating a native Android port. The source is compiled Windows Unity game data, **not** an original Unity Editor project.
