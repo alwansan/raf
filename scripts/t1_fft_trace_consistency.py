@@ -8,6 +8,15 @@ from scripts.t1_fft_dispatch_coverage import validate
 MAX_OBSERVATIONS = 128
 MAX_MANIFEST = 65536
 
+def reject_duplicate_keys(pairs):
+    """Do not allow JSON to silently overwrite captured kernel identity fields."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON object key")
+        result[key] = value
+    return result
+
 def check(observations):
     if not isinstance(observations, list) or not 1 <= len(observations) <= MAX_OBSERVATIONS:
         raise ValueError("expected 1..128 observations")
@@ -48,7 +57,7 @@ def main():
         p = args.manifest
         if p.is_symlink() or not p.is_file() or p.stat().st_size > MAX_MANIFEST:
             raise ValueError("invalid manifest")
-        report = check(json.loads(p.read_text(encoding="utf-8")))
+        report = check(json.loads(p.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys))
     except (OSError, ValueError, TypeError) as exc:
         parser.exit(2, "Invalid FFT trace: " + type(exc).__name__ + "\n")
     print(json.dumps(report, sort_keys=True))
