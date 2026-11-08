@@ -2,7 +2,7 @@
   "session_id": "20261108T1321Z-T2-scheduled-role-proof-gate-q4n7",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_only_unverified_tests",
   "base_sha": "1b706c8bfab2220ea8e7aba5f53df3956acda7f7",
   "intended_files": [
     "scripts/t2_foam_pass_role_gate.py",
@@ -13,5 +13,6 @@
   "hypothesis": "Existing source-only role validator accepts unknown roles; add explicit optional strict proof gate so downstream cannot accidentally promote unknown classifications.",
   "experiment_key": "foam-role-unknown-strict-gate-sourceonly-v1",
   "resource_key": null,
-  "updated_at": "2026-11-08T13:21:00Z"
+  "updated_at": "2026-11-08T13:27:00Z",
+  "result_commit": "c1dacb1becbd1b1f0c692927a5f892d4deba0f81"
 }
