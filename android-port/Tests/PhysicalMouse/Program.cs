@@ -159,6 +159,84 @@ static class Program
         Check(read.Count==0 && read.PressMask==0 && read.Vertical==0,
             "Release resets captured action evidence");
 
+
+        // Pointer capture fallback must not lose a click between Unity frames
+        // or re-emit a down edge for each original script reading in one frame.
+        var legacyMouse = new PhysicalMouseButtonWheelFrame();
+        Check(!legacyMouse.Record(11,4098,1,1,0f,0f), "No touchscreen mouse injection");
+        Check(!legacyMouse.Record(8,0,0,0,1f,0f), "Unknown-source wheel rejected");
+        Check(legacyMouse.Record(11,131076,1,1,0f,0f), "Captured Mouse0 press");
+        Check(legacyMouse.Record(12,131076,1,0,0f,0f), "Captured Mouse0 release");
+        var frame1 = legacyMouse.Sample(100);
+        Check(frame1.Down(0) && frame1.Up(0) && !frame1.Held(0),
+            "Press+release between Unity frames must preserve both edges");
+        Check(legacyMouse.Sample(100).Down(0) && legacyMouse.Sample(100).Up(0),
+            "Multiple same-frame authored callers share latched buttons");
+        Check(!legacyMouse.Sample(101).Down(0) && !legacyMouse.Sample(101).Up(0),
+            "Edges consumed at next frame without repeating");
+        Check(legacyMouse.Record(0,8194,0,1,0f,0f), "Physical primary DOWN");
+        Check(legacyMouse.Record(11,8194,1,1,0f,0f), "Coincident explicit primary PRESS");
+        Check(legacyMouse.Sample(102).Down(0) && legacyMouse.Sample(102).Held(0),
+            "ACTION_DOWN and BUTTON_PRESS coalesce to one held primary edge");
+        Check(!legacyMouse.Sample(102).Down(-1) && !legacyMouse.Sample(102).Held(3),
+            "Invalid indices cannot read physical buttons");
+        Check(legacyMouse.Record(1,8194,0,0,0f,0f), "Physical primary UP");
+        Check(legacyMouse.Record(12,8194,1,0,0f,0f), "Coincident explicit primary RELEASE");
+        Check(legacyMouse.Sample(103).Up(0) && !legacyMouse.Sample(103).Held(0),
+            "ACTION_UP and BUTTON_RELEASE coalesce to one primary release edge");
+        Check(legacyMouse.Record(11,131076,2,2,0f,0f), "Physical right PRESSED");
+        Check(legacyMouse.Record(11,131076,4,6,0f,0f), "Physical middle PRESSED");
+        var frame2 = legacyMouse.Sample(104);
+        Check(frame2.Down(1) && frame2.Down(2) &&
+              frame2.Held(1) && frame2.Held(2), "Right and middle independent");
+        Check(legacyMouse.Record(12,131076,2,4,0f,0f) &&
+              legacyMouse.Record(12,131076,4,0,0f,0f),
+            "Independent right and middle release");
+        Check(legacyMouse.Sample(105).Up(1) && legacyMouse.Sample(105).Up(2),
+            "Both physical release edges visible in next frame");
+        Check(!legacyMouse.Record(11,131076,3,3,0f,0f),
+            "Unknown multi-button changed mask cannot invent two presses");
+        Check(!legacyMouse.Record(8,131076,0,0,float.NaN,1f),
+            "NaN captured VScroll rejected");
+        Check(!legacyMouse.Record(8,131076,0,0,0f,0f),
+            "Zero scroll rejected");
+        Check(!legacyMouse.Record(2,131076,0,0,0.4f,0.1f),
+            "MOVE axis values cannot masquerade as scroll");
+        Check(legacyMouse.Record(8,131076,0,0,1f,-2f),
+            "Physical vertical+horizontal wheel accepted");
+        Check(legacyMouse.Record(8,1048584,0,0,-2f,3f),
+            "Touchpad scroll accepted without touching camera");
+        var wheelFrame = legacyMouse.Sample(106);
+        Check(Math.Abs(wheelFrame.Vertical + 0.1f) < 1e-5f &&
+              Math.Abs(wheelFrame.Horizontal - 0.1f) < 1e-5f,
+            "Android ±wheel deltas scaled and accumulated per frame");
+        Check(Math.Abs(legacyMouse.Sample(106).Vertical + 0.1f) < 1e-5f,
+            "Repeated Mouse ScrollWheel readers cannot double consume deltas");
+        Check(legacyMouse.Sample(107).Vertical == 0f &&
+              legacyMouse.Sample(107).Horizontal == 0f,
+            "No stale wheel event after frame boundary");
+        Check(legacyMouse.Record(11,131076,1,1,0f,0f),
+            "Pre-release accepted callback");
+        Check(legacyMouse.Sample(108).Held(0), "Pre-release held state");
+        legacyMouse.Reset();
+        Check(!legacyMouse.Sample(108).Held(0) &&
+              !legacyMouse.Sample(108).Down(0) &&
+              !legacyMouse.Sample(109).Up(0),
+            "Native capture release clears held and all same-frame stale edges");
+        Check(legacyMouse.AcceptedCount == 0, "Reset clears diagnostic counter");
+        Check(legacyMouse.Record(8,131076,0,0,999f,-999f),
+            "Bounded wheel axis source accepts sub-1000 input");
+        wheelFrame=legacyMouse.Sample(110);
+        Check(Math.Abs(wheelFrame.Vertical-20f)<1e-5f &&
+              Math.Abs(wheelFrame.Horizontal+20f)<1e-5f,
+            "Per-frame wheel accumulation clamps excessive magnitude");
+        Check(!legacyMouse.Record(8,131076,0,0,1001f,0f),
+            "Outlier wheel cannot inject into legacy scroll");
+        Check(legacyMouse.Record(11,131076,2,2,0f,0f),
+            "Pending right press before thread batch");
+        Check(legacyMouse.Sample(111).Down(1), "Right press survives concurrent frame gate");
+        Check(legacyMouse.Sample(112).Held(1), "Held right persists until release");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;
