@@ -10,7 +10,7 @@
   "issue_id": "WATER-001",
   "track": "authenticated CL phone-event ordering / FFT pre-world diagnostic",
   "approach": "Fail-closed, source-pinned summary parser cross-checking first water/FFT timestamps against same-session world_loaded and source root counts; no raw log emission.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d11d383f8bd222c7873f50a97d348d955998f44c",
   "intended_files": [
     "scripts/t1_water_startup_order.py",
@@ -19,7 +19,10 @@
     "prompt/coordination/work/WATER-001/T1-20261108T1836Z-T1-chat-water-startup-order-c5e7-preworld-log-sequence.json",
     "prompt/coordination/clients/T1/sessions/20261108T1836Z-T1-chat-water-startup-order-c5e7.md",
     "prompt/coordination/clients/T1/MEMORY.md",
-    "apk-for-testing/SHARED_BUILD_READINESS.md"
+    "apk-for-testing/SHARED_BUILD_READINESS.md",
+    "docs/T1_WATER_PREWORLD_ERROR_TIMELINE_2026-11-08.md",
+    "prompt/coordination/experiments/T1/20261108T1836Z-T1-chat-water-startup-order-c5e7.json",
+    "prompt/coordination/B_TEAM/events/T1/20261108T1903Z-preworld-water-fft-chronology-c5e7.json"
   ],
   "experiment_key": "water-first-error-preworld-v1-CL-61f71ceb",
   "resource_key": "CL/main/raft log/lf/LogRaft-20261108-164850-270/session-summary.json",
@@ -27,8 +30,29 @@
   "related_work": [
     "prompt/coordination/clients/T1/sessions/20261108T1714Z-T1-scheduled-fft-shared-lab-b6d2.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Create deterministic independent validator and negative controls, pin CL commit and GitHub Actions source-only CI; maintain WATER-001 OPEN and no new Mini APK.",
-  "updated_at": "2026-11-08T18:36:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42512589682",
+    "https://github.com/alwansan/raf/actions/runs/42512840042",
+    "https://github.com/alwansan/raf/actions/runs/42512986569",
+    "https://github.com/alwansan/raf/actions/runs/42513165405"
+  ],
+  "result": {
+    "source_gate": "SUCCESS",
+    "run_id": 42513165405,
+    "ci_source_sha": "f2e39a3288189fb928a427083f52c7bd21e00862",
+    "tests": "13/13 PASS and actual CL SHA256-pinned summary crosschecks PASS",
+    "cl_source_commit": "61f71ceb3b9e6f16c8fb300656f6e6baf32b33e8",
+    "cl_summary_sha256": "941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7",
+    "first_water_before_world_ms": 64486,
+    "first_kernel_before_world_ms": 64484,
+    "final_water_roots": 74359,
+    "final_invalid_kernel_roots": 11165,
+    "lagging_last_sample_delta": {
+      "water": 696,
+      "kernel": 116
+    },
+    "proof_scope": "observed Logcat chronology / source-only; NO Unity FFT identity, GPU dispatch, actual water rendering, or new APK"
+  },
+  "next_step": "Trace original source and runtime first water initialized shader and FindKernel/Dispatch at identical game SHA; T2 check Spectrum/Foam passes; coordinate T5 shared Mini phone-only trial; no repeat source gate or builds.",
+  "updated_at": "2026-11-08T19:05:00Z"
 }
