@@ -1,0 +1,14 @@
+# T5 scheduled — conservative LogRaft presented FPS boundary
+- session_id: 20261108T0155Z-T5-scheduled-lograft-sf-v7k2
+- origin: scheduled
+- issue_id: INTEGRATION-001
+- resumed_from_sessions: 20261106T1541Z-T5-chat-obb-routes-b8a1; prior T5 2026-11-08 source-only scene-epoch handoff; T5 LogRaft-20261105-220911-559 CL investigation.
+- scope: prompt/coordination/work/INTEGRATION-001/20261108T0155Z-T5-scheduled-lograft-sf-v7k2.json
+- base checkpoint before plan: existing branch (live per-file read); plan commit fa87df8234471b9b298d34710ba5e52579bfc808.
+- commits: ab35162b9f8bdaf6e4fd9799646811a573f8083a (script), eb22c880624f168daec701847eee7b63c193181f (tests).
+- Test: local Python unittest prototype five checks PASS; published repository tests have NOT yet been confirmed by GitHub CI. Input schema is deliberately a **flat projection** with numeric presented_fps_estimate and optional session_id, not the original CL nested LogRaft schema. No original CL session has been parsed by this new script; zero device FPS conclusions.
+- Engineering result: rejects absent/invalid/nonfinite SurfaceFlinger FPS, refuses mismatched session, duplicate JSON keys, unsafe symlinks and oversize files, never substitutes display refresh or Unity fps, and never emits invented Unity p95/GPU time. Estimates are sample-level quantiles, not frame quantiles.
+- Owner report: docs/DEVICE_FEEDBACK_42058825739_AR.md, tested source e9c358eda01785b65e4eb14f18723da426635628. Owner world/save/reopen confirmed for that artifact only; OBB installed hash unverified.
+- CL evidence: LogRaft-20261105-220911-559 prior T5 analysis reports first four samples invalid; SurfaceFlinger is not Unity FPS. No new raw CL bytes copied or distributed.
+- Boundaries: no native Unity job; no mouse/T4 overlap, no changes to three right buttons, Settings Resolution, .meta/GUID/.rgd, audio or touch. No new build request. Full readiness NOT_READY 0/3.
+- Next: inspect real original LogRaft JSONL schema (nested validity, timestamps, surface identity), implement strictly verified projection without guessing; test on immutable CL snapshot. Then correlate APK/OBB hashes, scene, resolution, refresh and actual on-device measurements. Separately prioritize right-side buttons/Resolution after checking current owner files and concurrent T5 chat scope.
