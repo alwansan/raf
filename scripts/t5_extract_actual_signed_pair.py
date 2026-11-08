@@ -136,7 +136,26 @@ def extract_pair(source_zip: Path, target_dir: Path, *, expected_bytes: int,
             # No-clobber local publication on GitHub Ubuntu ext4. If a competing
             # target appears, fail rather than overwrite a separately signed file.
             for temporary, final in staged:
-                os.link(temporary, final)
+                try:
+                    os.link(temporary, final)
+                except (AttributeError, NotImplementedError):
+                    # Android/Termux filesystems may not expose hard links.
+                    # 'xb' preserves no-clobber semantics; never use os.replace.
+                    with temporary.open("rb") as source, final.open("xb") as output:
+                        shutil.copyfileobj(source, output, BUF)
+                        output.flush()
+                        os.fsync(output.fileno())
+                except OSError as exc:
+                    # EXDEV/EPERM/EOPNOTSUPP on shared storage: copy only when
+                    # the source is verified and the destination is absent.
+                    import errno
+                    if exc.errno not in (errno.EXDEV, errno.EPERM, errno.EOPNOTSUPP,
+                                         errno.ENOSYS, errno.EACCES):
+                        raise
+                    with temporary.open("rb") as source, final.open("xb") as output:
+                        shutil.copyfileobj(source, output, BUF)
+                        output.flush()
+                        os.fsync(output.fileno())
                 temporary.unlink()
         except BaseException:
             # The extraction directory was exclusively created by this function.
