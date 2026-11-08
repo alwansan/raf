@@ -9,3 +9,8 @@
 - **T5:** package hash/OBB/SAF/UI والتسليم؛ لا يدعي إثبات OBB mounted أو game FPS من نسخة مختبر.
 - **فشل شائع ينبغي منعه:** 5×APK مختلفة، ZIP Artifact يوصف direct APK، أصوات/نتائج قديمة، بناء heavy full game، انتحال screenshots أو PASS synthetic، إفلات stale refs عند overwrite ملف مشترك، missing screenshot after background crash.
 - **تاريخ CL 8Nov:** 74,359 water invalid pass، 11,165 FFT invalid kernel و7,372 cursor format warnings من تلك الجلسة فقط؛ لا تثبت علتها المباشرة أو إصلاحها.
+
+## فحص تجميع Java الموحّد — 8 نوفمبر 2026
+- فشل الفحص المصدر الأول [CI42503889895](https://github.com/alwansan/raf/actions/runs/42503889895) بسبب `IOException` import مفقود في T3 PixelCopy، وتم إصلاحه في [88131a3](https://github.com/alwansan/raf/commit/88131a3732b86909b5060eaa2ce31eca27ec6594).
+- **الفحص الثاني [CI42504045625](https://github.com/alwansan/raf/actions/runs/42504045625) COMPLETED SUCCESS**: اختبار manifest/ready + Gradle `:app:compileDebugJavaWithJavac` للمشروع الموحد. هذا **ليس assembleDebug APK**، ولم يُنتج ملف تنزيل APK جديداً، ولا يثبت أداء الهاتف أو الصور/الأزرار.
+- بعد الفحص المصدر لا يزال T5 مطالباً بالمراجعة في SHARED_BUILD_READINESS.md (NEED_BUILD من عامل واحد مع دليل فعلي) ثم طلب بناء APK واحد على SHA محدد؛ لا تكرر خمس عمليات بناء.
