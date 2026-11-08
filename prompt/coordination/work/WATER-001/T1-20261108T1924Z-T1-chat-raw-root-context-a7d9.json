@@ -10,7 +10,7 @@
   "issue_id": "WATER-001",
   "track": "original owner-device Logcat first kernel6 root contextual attribution (read-only)",
   "approach": "Read source-pinned first 33.5MB CL game-UID log segment privately in bounded CI, authenticate exact Git blob, compare first water and index6 roots to source-pinned session summary; publish only presence/absence of allowlisted token hints in immediate same thread/time neighborhood; never turn adjacency into Unity kernel name proof.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "81846a83eb9466b7d93a61966aaf3085b015afcb",
   "intended_files": [
     "scripts/t1_water_first_raw_context.py",
@@ -32,8 +32,31 @@
     "first_segment_bytes": 33549006,
     "summary_sha256": "941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7"
   },
-  "run_urls": [],
-  "result": null,
-  "next_step": "Verify original raw first log thread/time and redacted context evidence; if no direct stack, mark unsupported and escalate actual original Unity C# Dispatch instrumentation without asserting identity. Keep no APK build.",
-  "updated_at": "2026-11-08T19:24:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42516813516"
+  ],
+  "result": {
+    "source_only_ci": "SUCCESS",
+    "run_id": 42516813516,
+    "sha": "643ff64766efe84d82c4e063c93ef4b6fc86e57f",
+    "synthetic_tests": "15/15 PASS",
+    "original_raw_verified": true,
+    "original_log_git_blob_sha1": "bf5db2607e3b46165d39142aa28f6596ed0715d4",
+    "original_raw_bytes": 33549006,
+    "summary_sha256": "941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7",
+    "first_spectrum_raw_unix_ms": 1794145757552,
+    "first_other_water_raw_unix_ms": 1794145757609,
+    "first_water_collector_unix_ms": 1794145757579,
+    "ingest_skew_ms": 27,
+    "first_kernel6_collector_unix_ms": 1794145757581,
+    "first_kernel6_raw_segment_present": false,
+    "first_segment_dx11fft_token_lines": 2024,
+    "first_segment_water_classified_lines": 12144,
+    "raw_logs_exported": false,
+    "original_unity_kernel_name_proven": false,
+    "gpu_adreno_proven": false,
+    "source_report": "docs/T1_WATER_FIRST_RAW_KERNEL_CONTEXT_2026-11-08.md"
+  },
+  "next_step": "Read exact source-authentic original Unity Dx11FFT caller and runtime ComputeShader GUID plus HasKernel/FindKernel/Dispatch with same game SHA; no invented kernel6 identity. Coordinate T2 Spectrum/Foam; T5 Mini round r2 NO_BUILD, full-game NOT_READY0/3.",
+  "updated_at": "2026-11-08T19:50:00Z"
 }
