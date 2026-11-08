@@ -21,6 +21,22 @@ class MouseRouteTests(unittest.TestCase):
         self.assertEqual(r["phases"]["off"]["buttons_observed"], ["left"])
         self.assertEqual(r["rejected_records"], 1)
 
+    def test_held_state_is_not_button_press_or_release(self):
+        lines = [
+            event("input", "route=captured action=ACTION_MOVE buttonState=0x1 actionButton=0x0 captured=true"),
+            event("input", "route=captured action=ACTION_BUTTON_PRESS buttonState=0x2 actionButton=0x2 captured=true"),
+            event("input", "route=captured action=ACTION_BUTTON_RELEASE buttonState=0x0 actionButton=0x2 captured=true"),
+        ]
+        group = analyze(lines)["phases"]["on"]
+        self.assertEqual(group["buttons_observed"], ["left", "right"])
+        self.assertEqual(group["button_presses_observed"], ["right"])
+        self.assertEqual(group["button_releases_observed"], ["right"])
+
+    def test_action_button_zero_does_not_invent_edge(self):
+        group = analyze([event("input", "route=activity_touch action=ACTION_DOWN buttonState=0x1 actionButton=0 captured=false")])["phases"]["off"]
+        self.assertEqual(group["buttons_observed"], ["left"])
+        self.assertEqual(group["button_presses_observed"], [])
+
     def test_no_events_is_not_pass(self):
         r = analyze([event("capture_request", "ON")])
         self.assertEqual(r["phases"], {})
