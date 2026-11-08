@@ -240,9 +240,13 @@ public final class T3LabActivity extends Activity {
         long count=0;
         try(InputStream in=getContentResolver().openInputStream(uri)){
             if(in==null)throw new IOException("PNG readback unavailable");
-            byte[] buffer=new byte[16384];int n;
+            byte[] buffer=new byte[16384];int n,zeroReads=0;
             while((n=in.read(buffer))!=-1){
-                if(n==0)continue;
+                if(n==0){
+                    if(++zeroReads>3)throw new IOException("PNG readback stalled");
+                    continue;
+                }
+                zeroReads=0;
                 count+=n;
                 if(count>expectedBytes)throw new IOException("PNG readback exceeded encoded bytes");
                 md.update(buffer,0,n);
