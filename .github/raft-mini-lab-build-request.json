@@ -1,6 +1,8 @@
 {
-  "request_id": "t1-gles31-ssbo-20261108-7e4a-04",
-  "worker": "T1",
-  "requested_from_sha": "d85431732461d2a9114dc3f7c677596da7e8c7f8",
-  "reason": "Owner 8 November Adreno730 Android15 has 11165 WATER-001 invalid compute kernel 6 errors, unknown whether imported Unity kernel or GPU compute. Build independent T1 GLES31 mini APK with exact one/two-pass SSBO dispatch/readback and deliberately invalid GLSL negative control; no Raft assets or Unity native build. Prior attempt 42496880833 failed the source parent gate before any Gradle build."
+  "request_id": "T5-SHARED-EVIDENCE-20261108T1825Z-a6d4",
+  "target": "SHARED",
+  "requested_from_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8b",
+  "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
+  "reason": "First unified T1-T5 mini APK for Android15 device verification after T5 genuine Java host changes: retain file SHA EVIDENCE_READY, keep FAIL/BLOCKED visible without false PASS, explicit diagnostic rerun, and verified signer/package identity. JVM evidence policy passed 20/20 locally; independent full Unity XAPK vote remains not met. Debug-only artifact ZIP, not a stable signed direct APK.",
+  "publish": false
 }
