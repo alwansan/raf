@@ -1,0 +1,23 @@
+{
+  "session_id": "20261108T1746Z-T4-scheduled-scroll-action-p8v3",
+  "origin": "scheduled",
+  "worker": "T4",
+  "issue": "INPUT-005",
+  "baseline_sha": "b02ff5022f5e29968b69bbf94e49a0402c460f07",
+  "scope": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py"
+  ],
+  "hypothesis": "Scroll axes on non-ACTION_SCROLL events must not be counted as wheel dispatch; false positives obscure device diagnosis.",
+  "experiment_key": "T4-scroll-action-gating-20261108",
+  "shared_resource": "none; source-only",
+  "taken_over_from": [
+    "20261108T1640Z-T4-scheduled-button-edges-m7q2"
+  ],
+  "device_gate": "physical Android15 logs still required",
+  "constraints": [
+    "do not modify Raft runtime or keyboard",
+    ".rgd save compatibility",
+    "T5 owns UI buttons and Resolution"
+  ]
+}
