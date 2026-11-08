@@ -125,16 +125,45 @@ final class T1ComputeProbe {
         }catch(Exception ignored){}
         return new T1ComputeProbe(a,root);
     }
-    // Reuse the same compiled original diagnostic controls for the SHARED APK.
-    // Only return actual observed PASS/FAIL, never inferred from source-only CI.
+    // The unified host launches this child with a fixed UI delay. EGL/GLSurfaceView
+    // startup is asynchronous, so a queued GL task may run before onSurfaceCreated.
+    // Bound setup waiting separately from GPU execution; never treat an absent
+    // context as a passing compute assertion or spin on the UI/GL threads.
+    private static final long AUTO_CONTEXT_TIMEOUT_MS = 7000L;
+    private static final long AUTO_CONTEXT_POLL_MS = 100L;
+
+    // Reuse compiled-in synthetic controls only. Unity FFT is not exercised here.
     void runAutomated(String caseId, java.util.function.Consumer<String> callback) {
-        if(!caseId.matches("T1-0[1-4]")) {callback.accept("FAIL unknown test");return;}
+        if(caseId==null||!caseId.matches("T1-0[1-4]")) {
+            callback.accept("FAIL unknown test");
+            return;
+        }
+        waitForAutoContext(caseId,callback,android.os.SystemClock.elapsedRealtime());
+    }
+
+    private void waitForAutoContext(String caseId, java.util.function.Consumer<String> callback,
+                                   long startedElapsedMs) {
+        if(!ready){
+            long elapsed=android.os.SystemClock.elapsedRealtime()-startedElapsedMs;
+            if(activity.isFinishing()||activity.isDestroyed())return;
+            if(elapsed<AUTO_CONTEXT_TIMEOUT_MS){
+                view.postDelayed(()->waitForAutoContext(caseId,callback,startedElapsedMs),
+                    AUTO_CONTEXT_POLL_MS);
+                return;
+            }
+            String observed="FAIL SETUP_CONTEXT_TIMEOUT no GL context after "+
+                elapsed+"ms (no compute dispatch attempted)";
+            activity.log("t1_gpu_auto_context_timeout",caseId+" "+observed);
+            callback.accept(observed);
+            return;
+        }
         view.queueEvent(()->{
             String value;
             try { value=execute(caseId); }
             catch(Throwable ex){ value="FAIL exception="+ex.getClass().getSimpleName()+": "+ex.getMessage(); }
             final String observed=value;
             activity.runOnUiThread(()->{
+                if(activity.isFinishing()||activity.isDestroyed())return;
                 activity.log("t1_gpu_auto_observed",caseId+" "+observed);
                 callback.accept(observed);
             });
