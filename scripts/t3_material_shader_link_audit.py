@@ -23,6 +23,9 @@ def audit(root):
     counters = Counter()
     for meta in root.rglob("*.shader.meta"):
         counters["shader_meta_seen"] += 1
+        if meta.is_symlink():
+            counters["shader_meta_symlink_skipped"] += 1
+            continue
         try:
             text = meta.read_text(encoding="utf-8")
         except (UnicodeError, OSError):
@@ -42,6 +45,9 @@ def audit(root):
     counters["duplicate_shader_guid_entries"] = sum(n - 1 for n in shader_guid_counts.values() if n > 1)
     for mat in root.rglob("*.mat"):
         counters["material_seen"] += 1
+        if mat.is_symlink():
+            counters["material_symlink_skipped"] += 1
+            continue
         try:
             content = mat.read_text(encoding="utf-8")
         except (UnicodeError, OSError):
@@ -63,10 +69,10 @@ def audit(root):
         else:
             counters["shader_guid_unresolved_in_scan"] += 1
     return {key: counters[key] for key in (
-        "material_seen", "material_unreadable", "material_shader_pointer_unparsed",
+        "material_seen", "material_unreadable", "material_symlink_skipped", "material_shader_pointer_unparsed",
         "shader_pointer_builtin_or_null", "shader_pointer_null",
         "shader_guid_resolved_in_scan", "shader_guid_ambiguous_in_scan", "shader_guid_unresolved_in_scan",
-        "shader_meta_seen", "shader_meta_unreadable", "shader_meta_without_guid",
+        "shader_meta_seen", "shader_meta_unreadable", "shader_meta_symlink_skipped", "shader_meta_without_guid",
         "shader_meta_without_source", "duplicate_shader_guid_entries")}
 
 def main():
