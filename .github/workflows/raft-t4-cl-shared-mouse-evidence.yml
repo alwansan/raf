@@ -1,0 +1,61 @@
+name: T4 INPUT-005 pinned real CL mouse callbacks audit (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_verify_cl_shared_mouse_evidence.py'
+      - 'tests/test_t4_verify_cl_shared_mouse_evidence.py'
+      - '.github/workflows/raft-t4-cl-shared-mouse-evidence.yml'
+
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-cl-real-mouse-static-evidence
+  cancel-in-progress: false
+
+jobs:
+  real-cl-owner-mouse-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout only public T4 source/tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_verify_cl_shared_mouse_evidence.py
+            /tests/test_t4_verify_cl_shared_mouse_evidence.py
+      - name: Synthetic route/false-success negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t4_verify_cl_shared_mouse_evidence.py -v
+      - name: Checkout immutable owner uploaded CL test files only (READ ONLY)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/CL
+          ref: 4680f5dc26127938e7696f932b2d9a80dc703937
+          path: cl-test
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /test/shared-20261108-223228-464718661/events-20261108-223341-464791801.jsonl
+            /test/shared-20261108-223228-464718661/summary-20261108-223228-464718661.json
+      - name: Prove CL owner source and exact uploaded trace fingerprint
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C cl-test rev-parse HEAD)" = "4680f5dc26127938e7696f932b2d9a80dc703937"
+          root=cl-test/test/shared-20261108-223228-464718661
+          test "$(git hash-object "$root/events-20261108-223341-464791801.jsonl")" = "7c337320a1593ff8d9f9fd63e55ec30ed62cd202"
+          test "$(git hash-object "$root/summary-20261108-223228-464718661.json")" = "6d702c231aa95386ace9fe85b25e244a6ce8bf8c"
+          python3 -m scripts.t4_verify_cl_shared_mouse_evidence \
+            --events "$root/events-20261108-223341-464791801.jsonl" \
+            --summary "$root/summary-20261108-223228-464718661.json" \
+            --assert-owner-snapshot
+          echo "T4 CL real input: Android uncaptured LEFT + vertical wheel observable; captured/gameplay proof NO; no Unity/OBB build."
+          # No uploaded private logs or screenshots are copied into artifacts.
