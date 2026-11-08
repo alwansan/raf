@@ -119,6 +119,24 @@ class FirstRawLogcatContextTest(unittest.TestCase):
         self.assertEqual(r["observed_first_segment_category_counts"]["pass_foam_global"], 1)
         self.assertEqual(r["observed_first_segment_category_counts"]["pass_other_water"], 0)
 
+    def test_lograf_high_precision_fraction_truncates_not_rounds(self):
+        # Source-private LogRaft uses >3 fractional digits. The session
+        # summary records integer milliseconds; do not round 999999 up.
+        raw = (b"2026-11-08 16:49:17.579999 E SomeTag: Ultimate Water/Spectrum invalid pass\n"
+               b"2026-11-08 16:49:17.581999999 E SomeTag: Kernel at index (6) is invalid\n")
+        report = combine(self.read(raw), summary())
+        self.assertEqual(report["first_water_unix_ms"], BASE + 27_579)
+        self.assertEqual(report["first_kernel6_unix_ms_from_raw_segment"], BASE + 27_581)
+        self.assertTrue(report["kernel_raw_root_vs_summary_verified"])
+
+    def test_long_malformed_fraction_does_not_forge_timestamp(self):
+        raw = (b"2026-11-08 16:49:17.5791234567 E SomeTag: Ultimate Water/Spectrum invalid pass\n"
+               b"2026-11-08 16:49:17.581 E SomeTag: Kernel at index (6) is invalid\n")
+        report = self.read(raw)
+        self.assertEqual(report["unparseable_first_root_lines"], 1)
+        with self.assertRaisesRegex(ValueError, "missing first original water"):
+            combine(report, summary())
+
     def test_different_thread_must_not_join_stack_hint(self):
         r = self.read(synthetic_raw(include_context=False))
         self.assertFalse(r["first"]["kernel_index_6"]
