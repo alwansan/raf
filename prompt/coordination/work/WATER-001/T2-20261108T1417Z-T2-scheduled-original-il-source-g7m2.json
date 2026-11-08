@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "id": "20261108T1417Z-T2-scheduled-original-il-source-g7m2",
+  "client": "T2",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "status": "blocked_original_il",
+  "base_sha": "451e5981d5cf1b6a79c49b8a4ad7fedd79e7936a",
+  "files": [
+    "prompt/coordination/work/WATER-001/T2-20261108T1417Z-T2-scheduled-original-il-source-g7m2.json",
+    "prompt/coordination/clients/T2/sessions/20261108T1417Z-T2-scheduled-original-il-source-g7m2.md"
+  ],
+  "hypothesis": "Foam pass1 source/destination identity cannot be proven by synthetic stack classifications; original branch-aware IL producer chain required",
+  "experiment_key": "foam-original-il-producer-chain-v1",
+  "shared_resource": "none; no native build or private original asset extraction",
+  "evidence": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "prompt/coordination/clients/T2/sessions/20261108T1219Z-T2-scheduled-foam-il-chain-n6q3.md"
+  ],
+  "next_step": "Obtain pinned ZIP2 assembly in authorized private scratch and execute branch-aware Cecil dataflow; compare T3 material/texture binding; do not integrate ShaderLab without source proof"
+}
