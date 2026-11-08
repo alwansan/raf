@@ -38,3 +38,9 @@ planned_files:
 2. Build T1 using source-complete current branch and corrected SDK setup, diagnose compiler error if any.
 3. Verify actual run success and downloadable APK / SHA256. Update T1 TEST_CENTER row and README with specific immutable source and artifact.
 4. Device comparison distinguishes generic GLES compute from Unity-specific imported original FFT kernel. PASS in mini-lab is not WATER-001 closure.
+
+## CI build request chronology / concurrency
+- T2 independent host [42496746941](https://github.com/alwansan/raf/actions/runs/42496746941) SUCCESS; request marker and parent pinned.
+- T1 request commit [42067327](https://github.com/alwansan/raf/commit/42067327d54c2a7f5f160ee7c3bb14287a6f1e95) triggered [42496880833](https://github.com/alwansan/raf/actions/runs/42496880833), but **FAILED pre-build request gate**: declared previous head `0bd6d39f...` vs actual parent `8550519e44566bd4bfc58ff38bb1f1082a333a21`, due concurrent commit while publishing. Zero Gradle/Android work in that run; no APK. Do not bypass parent gate.
+- T5 then published independent mini build request [42496945089](https://github.com/alwansan/raf/actions/runs/42496945089) and owns shared host; defer T1 retry until it finishes and a fresh HEAD/request collision check. Do not overwrite the T5 request while in_progress.
+- Need new request id, actual HEAD parent (verified immediately after commit), source SHA and run, then sha256 artifact before marking owner READY_TO_TEST.
