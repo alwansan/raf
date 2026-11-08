@@ -2,8 +2,8 @@
   "session_id": "20261108T1733Z-T3-scheduled-local-material-resolve-n5q8",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-08T17:33:00Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-08T17:37:00Z",
   "base_sha": "2af4d80f7509f90f8c4d20b5ac80f4f598f1e499",
   "intended_files": [
     "scripts/t3_particle_renderer_yaml_audit.py",
@@ -14,5 +14,8 @@
   "hypothesis": "Positive local Material PPtrs in ParticleSystemRenderer may refer to missing or wrong-class same-file YAML objects; existing audit counts them as local without resolving document anchors.",
   "experiment_key": "t3-particle-local-material-pptr-anchor-class-resolution-sourceonly-v1",
   "resource_key": "none; Python source-only",
-  "non_goals": "No raw assets, Unity build, mini APK, graphics fix, other clients' files."
+  "non_goals": "No raw assets, Unity build, mini APK, graphics fix, other clients' files.",
+  "last_source_sha": "506b9324a5f9c3e730a452e19a9d61775eaa94e8",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42505587548",
+  "note": "Earlier source/test intermediate commits failed because regex anchor group was not yet captured; corrected at 506b9324. Do not duplicate queued CI. No source/device acceptance until exact run succeeds."
 }
