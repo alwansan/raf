@@ -41,3 +41,9 @@ Actual [42509359669](https://github.com/alwansan/raf/actions/runs/42509359669) *
 ## Coordination after CI
 
 T2 canonical T_TEAM summary refresh [42509789222](https://github.com/alwansan/raf/actions/runs/42509789222) FAILED before updating snapshot: `refresh_b_team.py` rejects T3 event `20261106T1959Z-T3-chat-original-stage-probe-9f24.json` for missing explicit stable `id`/`event_id`. Did **not** modify T3-owned event, loosen generator, or rerun equivalent failed workflow. Requested T3 to correct original identity in [T1 handoff discussion](../../../../discussions/RENDER-002/20261108T1824Z-T1-t3-event-id-ledger-blocker-9d3f.md), then T2 reruns once. T-team summary is stale until that identity is corrected; the T1 event itself is valid.
+
+## T5 single shared Mini build started (observed 18:25 UTC)
+
+- T5's *only* shared Mini request `.github/raft-mini-lab-build-request.json` had `request_id=T5-SHARED-EVIDENCE-20261108T1825Z-a6d4`, `requested_from_sha=cbe7a038bad2c7ca5ad587b242e8baf7128ecb8b`, `pack_sha256=6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f`, `publish=false`. T1 did not edit this request.
+- [Unified Mini run42509945996](https://github.com/alwansan/raf/actions/runs/42509945996) started and was IN_PROGRESS at check; shared build, not Unity Raft XAPK or a signed direct Release link. Compare `d83a4e4...cbe7a03`: ahead 36/behind 0, **no modification to T1ComputeProbe.java** after T1 fix, so this request's parent contains T1 bounded EGL correction. The run's immutable source SHA `3555bafae757bb0523e00e171582530ab4193b32` is a request commit and differs from the source parent.
+- Keep future T1 phone evidence attributed to actual shared APK binary SHA, signer/pack and versionCode only after T5 checks them. T1 does not request or duplicate a second Mini run.
