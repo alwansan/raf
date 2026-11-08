@@ -1,0 +1,15 @@
+{
+  "id": "20261108T1819Z-T1-shared-gles-context-ready-9d3f",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1811Z-T1-chat-gles-gate-9d3f",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "Bounded real GLSurfaceView context readiness wait added to shared T1 GLES compute driver (no artificial PASS), CI 5 source guards + 7 unified testpack guards + shared Java compile success; T1 NEED_BUILD vote for one Mini APK, not Unity game XAPK. WATER-001 and original FFT remain unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/d83a4e4379fb8677daebea81da203281a1d89e82",
+    "https://github.com/alwansan/raf/actions/runs/42509359669",
+    "https://github.com/alwansan/raf/commit/1d3536f34856491229abe5298738177b5632cd7c"
+  ],
+  "at": "2026-11-08T18:19:51Z"
+}
