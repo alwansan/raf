@@ -15,9 +15,9 @@
   "intended_files": [
     "scripts/t1_fft_first_divergence.py",
     "tests/test_t1_fft_first_divergence.py",
-    "scripts/t1_fft_original_kernel_dispatch_contract.py",
-    "tests/test_t1_fft_original_kernel_dispatch_contract.py",
-    ".github/workflows/raft-t1-fft-original-kernel-contract.yml",
+    "scripts/t1_fft_original_kernel6_candidates.py",
+    "tests/test_t1_fft_original_kernel6_candidates.py",
+    ".github/workflows/raft-t1-fft-original-kernel6-candidates.yml",
     "docs/T1_FFT_ORIGINAL_KERNEL_DISPATCH_AUDIT_2026-11-08.md",
     "prompt/coordination/clients/T1/sessions/20261108T2022Z-T1-chat-fft-source-gate-d8b4.md",
     "prompt/coordination/experiments/T1/20261108T2022Z-T1-chat-fft-source-gate-d8b4.json",
@@ -27,8 +27,8 @@
     ".github/workflows/raft-t1-fft-original-kernel6-candidates.yml",
     "apk-for-testing/SHARED_BUILD_READINESS.md"
   ],
-  "experiment_key": "fft-original-index-source-binding-v1-original-Dx11FFT-sourceSHA-and-Unity-serialized-FFT-objectSHA",
-  "resource_key": "Original managed Dx11FFT.cs SHA-pinned source derived from zip2 PC data; existing synthetic T1 paired CI",
+  "experiment_key": "fft-original-numeric-index6-managed-v1-assemblyblob-fc9d4ba9-dx11-8aa32937-gpufft-2f866cbe",
+  "resource_key": "Original tracked Assembly-CSharp.dll Git blob fc9d4ba920a178fdb89c970d9d772a01051dadc6; SHA-pinned ILSpy CSharp9 Dx11FFT/GpuFFT managed source (NOT serialized shader object)",
   "observations": [
     "GitHub CI42518408573 failed on line 81 literal backslash-n in first-divergence parser; no Unity job run",
     "CL raw first segment T1 CI42516813516 confirmed no literal kernel root; collector index6 not runtime ID proof"
