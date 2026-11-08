@@ -26,5 +26,16 @@
   },
   "mini_vote": "T3 NEED_BUILD only; T5 to decide after source CI/signature/Actions",
   "full_game": "NOT_READY 0/3; RENDER-002/WATER-001 OPEN",
-  "next_step": "T5 compile and package one shared Mini if warranted; T3 verify actual Adreno screenshots and correlate with genuine Raft shaders separately."
+  "next_step": "T5 compile and package one shared Mini if warranted; T3 verify actual Adreno screenshots and correlate with genuine Raft shaders separately.",
+  "followup": {
+    "time_utc": "2026-11-08T18:34:00Z",
+    "mini_vote": "NO_BUILD supersedes provisional NEED_BUILD after actual shared Mini already built",
+    "shared_run": "https://github.com/alwansan/raf/actions/runs/42509945996",
+    "artifact_id": 13628828717,
+    "source_parent": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+    "included_core_t3_fixes": true,
+    "excluded_small_later_patch": "99e3ee5c",
+    "device": "UNVERIFIED",
+    "direct_apk": "NONE"
+  }
 }
