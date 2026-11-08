@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261108T1819Z-T4-chat-captured-actions-f4n8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "track": "physical-mouse",
+  "status": "active",
+  "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Runtime/Platform/PhysicalMouseActionEvidence.cs",
+    "android-port/Tests/PhysicalMouse/PhysicalMouse.csproj",
+    "android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj",
+    "android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "prompt/coordination/clients/T4/sessions/20261108T1819Z-T4-chat-captured-actions-f4n8.md"
+  ],
+  "hypothesis": "Android captured-pointer listener can see buttons and ACTION_SCROLL while legacy Unity mapping fails; record bounded, epoch-correct read-only evidence before considering synthesis, preserving camera and original input",
+  "experiment_key": "T4-captured-button-scroll-callback-contract-android15-20261108",
+  "resource_key": "none-source-only",
+  "related_work": [
+    "T4-20261108T1746Z-T4-scheduled-scroll-action-p8v3"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261108T1746Z-T4-scheduled-scroll-action-p8v3.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement independent C# action evidence helper, instrument listener non-consumingly, run source/Unity managed compilation, record evidence gaps.",
+  "updated_at": "2026-11-08T18:19:00Z"
+}
