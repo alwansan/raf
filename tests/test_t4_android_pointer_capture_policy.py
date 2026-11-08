@@ -49,7 +49,9 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertIn("if (legacy.x != 0f || legacy.y != 0f) return legacy;", BRIDGE)
         self.assertIn("buttonWheel.Reset();", BRIDGE)
         self.assertNotIn("InputSystem.QueueStateEvent", BRIDGE)
-        self.assertIn("buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal);", BRIDGE)
+        self.assertIn("if (buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal))", BRIDGE)
+        self.assertIn("nativeCaptured = true;", BRIDGE)
+        self.assertIn("PhysicalMouseButtonWheelFrame.SourceIsPhysical(source)", DELTA if False else (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text())
 
     def test_pointer_capture_only_on_android_API26_and_gameplay_lock(self):
         self.assertIn('version.GetStatic<int>("SDK_INT") >= 26', BRIDGE)
