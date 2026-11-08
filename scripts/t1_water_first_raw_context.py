@@ -245,8 +245,13 @@ def combine(root_report, summary, summary_checksum=SUMMARY_SHA256):
     expected_water = summary["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["first_observed_unix_ms"]
     expected_kernel = summary["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"]["first_observed_unix_ms"]
     actual_water = min(m["unix_ms"] for m in matched)
-    if actual_water != expected_water:
-        raise ValueError("first raw water root disagrees with pinned whole-session summary")
+    # Raw Logcat event timestamp and collector's first-observed event time
+    # have distinct capture paths. 27 ms is observed in this authentic CL
+    # session. This ±250ms bound is a falsifiable CORRELATION gate, never
+    # proof of exact event identity or a calibrated logger-clock offset.
+    water_ingest_delta_ms = expected_water - actual_water
+    if abs(water_ingest_delta_ms) > 250:
+        raise ValueError("first raw water timestamp too far from collector summary")
     if kernel is not None and kernel["unix_ms"] != expected_kernel:
         raise ValueError("first raw kernel root disagrees with pinned whole-session summary")
     return {
@@ -256,6 +261,12 @@ def combine(root_report, summary, summary_checksum=SUMMARY_SHA256):
         "raw_first_segment_expected_sha1": SEGMENT_SHA1,
         "pinned_summary_sha256_verified": True,
         "first_water_unix_ms": actual_water,
+        "first_water_collector_summary_unix_ms": expected_water,
+        "first_water_collector_minus_raw_ms": water_ingest_delta_ms,
+        "raw_water_correlates_with_collector_within_250ms": True,
+        "first_raw_water_before_world_loaded_ms":
+            (summary["final_game_milestones"]["world_loaded_message_observed"]["first_observed_unix_ms"]
+             - actual_water),
         "first_kernel6_unix_ms_from_raw_segment": kernel["unix_ms"] if kernel else None,
         "first_kernel6_unix_ms_from_pinned_summary_only": expected_kernel,
         "first_kernel_after_first_water_ms_from_raw_segment":
@@ -267,6 +278,8 @@ def combine(root_report, summary, summary_checksum=SUMMARY_SHA256):
         "context": root_report,
         "interpretation": {
             "context_tokens_allowlist_only": True,
+            "logger_clock_alignment_proven": False,
+            "raw_log_and_collector_same_exact_record_proven": False,
             "first_error_hints_are_not_original_kernel_names": True,
             "raw_log_line_neighborhood_not_proof_of_shared_callsite": True,
             "unity_shaders_restored": False,
