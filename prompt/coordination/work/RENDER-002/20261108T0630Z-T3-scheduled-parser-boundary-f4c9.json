@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T0630Z-T3-scheduled-parser-boundary-f4c9",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "9c11fdf4349373573eff3cd925dc3db00e0524c6",
+  "intended_files": [
+    "scripts/t3_material_shader_link_audit.py",
+    "tests/test_t3_material_shader_link_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261108T0630Z-T3-scheduled-parser-boundary-f4c9.md",
+    "prompt/coordination/work/RENDER-002/20261108T0630Z-T3-scheduled-parser-boundary-f4c9.json"
+  ],
+  "experiment_key": "material-shader-yaml-parser-indentation-and-ptr-shape-synthetic-v1",
+  "resource_key": null,
+  "hypothesis": "Audit may misclassify Unity Material YAML shader pointers with flexible field spacing or embedded additional m_Shader keys; test fail-closed on ambiguous references without exposing game assets.",
+  "updated_at": "2026-11-08T06:30:00Z"
+}
