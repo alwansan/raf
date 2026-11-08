@@ -1,0 +1,28 @@
+{
+  "id": "20261108T2017Z-T4-support-T3-original-CL-visual-black-b8v5",
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261108T2012Z-T4-chat-support-T3-CL-PNG-b8v5",
+  "issue_id": "RENDER-002",
+  "audience": [
+    "T3",
+    "T5"
+  ],
+  "type": "external_owner_device_evidence_handoff",
+  "input_repo": "alwansan/CL",
+  "input_sha": "f401b7ffe3b6ead9038f3b35273599dcf8286e68",
+  "input_path": "test/shared-20261108-214145-461675491/",
+  "second_upload_path": "test/shared-20261108-214548-461919098/",
+  "conclusion": "Authentic six owner screenshots T3-01..T3-06 PNG 1600x900 show ZERO saturated red/green/blue pixels anywhere, central almost-black 79.111% and neutralRGB 100%; all six second-directory PNGs Git-blob byte-identical duplicates. These are not faithful expected visual test output even though previously EVIDENCE_READY. Synthetic GLReadPixels result alone does not prove captured screenshot.",
+  "source_workflow_url": "https://github.com/alwansan/raf/actions/runs/42519251690",
+  "test_result": "SUCCESS 8 source-only synthetic tests, 6 authentic Git blob and PNG CRC/deflate audits, 6 duplicate SHA assertions",
+  "handoff": "T5↔T3 post-v10 source commit f60355a49 already switches PixelCopy to GLSurfaceView surface and checks photo vs GL readback. Preserve it; on next justified single T5 Mini build test actual Android screenshot. Existing v0.2.10 was pinned before fix. RENDER-002 OPEN; no game colour success claimed.",
+  "report": "docs/T4_SUPPORT_T3_REAL_CL_PNG_BLACK_FRAME_EVIDENCE_2026-11-08.md",
+  "no_changes_to": [
+    "T3LabActivity.java",
+    "T5 shared Mini driver",
+    "CL/test",
+    "Unity game"
+  ],
+  "at": "2026-11-08T20:17:00Z"
+}
