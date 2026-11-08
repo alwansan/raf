@@ -1,0 +1,22 @@
+{
+  "session_id": "20261108T0644Z-T4-scheduled-k7m2",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue": "INPUT-005",
+  "status": "completed_read_only_evidence_review",
+  "base_head": "32a1c0f114c3f7cc3c6d397213f3bb4fdb21ef0b",
+  "files": [
+    "prompt/coordination/work/INPUT-005/20261108T0644Z-T4-scheduled-k7m2-ci-and-device-gate.json",
+    "prompt/coordination/clients/T4/sessions/20261108T0644Z-T4-scheduled-k7m2.md"
+  ],
+  "hypothesis": "New classifier CI verifies first-relative-packet source contract but cannot establish actual Android capture or Raft cursor behavior; avoid duplicate CI and premature runtime changes.",
+  "experiment_key": "T4-INPUT-005-ci-vs-device-20261108T0644Z",
+  "shared_resource": "none",
+  "evidence": {
+    "classifier_ci": "42447922773 SUCCESS source 125efe37",
+    "bridge_ci": "42447918743 SUCCESS source 8d52dd6e",
+    "owner_phone": "42058825739 source e9c358ed save/reopen confirmed",
+    "CL": "520c4cf409aa20a4db54ff80ed87d8807d9cba57"
+  },
+  "next": "Acquire newer phone trace with retry, first relative packet, epoch, capture release, Escape/menu and keyboard; classify against build SHA before runtime correction."
+}
