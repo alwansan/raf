@@ -30,7 +30,13 @@ def audit(root):
             continue
         match = GUID.search(text)
         if match:
-            shader_guids.add(match.group(1).lower())
+            # A dangling .shader.meta is not evidence that the Shader source survived export.
+            # Reject symlink targets as well: this audit must not follow external source trees.
+            shader_source = meta.with_suffix("")
+            if shader_source.is_file() and not shader_source.is_symlink():
+                shader_guids.add(match.group(1).lower())
+            else:
+                counters["shader_meta_without_source"] += 1
         else:
             counters["shader_meta_without_guid"] += 1
     for mat in root.rglob("*.mat"):
@@ -57,7 +63,8 @@ def audit(root):
         "material_seen", "material_unreadable", "material_shader_pointer_unparsed",
         "shader_pointer_builtin_or_null", "shader_pointer_null",
         "shader_guid_resolved_in_scan", "shader_guid_unresolved_in_scan",
-        "shader_meta_seen", "shader_meta_unreadable", "shader_meta_without_guid")}
+        "shader_meta_seen", "shader_meta_unreadable", "shader_meta_without_guid",
+        "shader_meta_without_source")}
 
 def main():
     parser = argparse.ArgumentParser()
