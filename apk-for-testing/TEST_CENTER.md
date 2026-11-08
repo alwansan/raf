@@ -14,6 +14,8 @@
 
 **رابط APK المباشر** يجب أن يكون رابط أصل APK حقيقي منشور، مثلاً أصل Release بعد فحص فتحه ومحتواه، لا صفحة `actions/runs` أو ملف ZIP Artifact موصوف خطأ كـAPK مباشر. إذا تعذر Release، اذكر رابط ZIP بوضوح كحل مؤقت، ولا تخترع الرابط.
 
+> **تحديث T5 للمصدر بعد بناء APK (8 نوفمبر 2026، 18:56 UTC):** نجح [CI42512390472](https://github.com/alwansan/raf/actions/runs/42512390472) في إصلاح مسار SHA256 الموحّد لاختيار APK/OBB عبر SAF مع حدود 16GiB وحماية تكرار القراءة الصفرية والاحتفاظ بالنتائج. **هذا التغيير (commit 6f2cf77) ليس داخل APK المبني في CI42509945996**؛ نتيجة CI الجديدة تجميع Java وفحوص مصدر فقط، وليست APK ثانياً أو إثبات هاتف. لا يلزم تنزيل تطبيق آخر الآن؛ أي إصدار أحدث يجب أن يخضع لقرار Mini جديد وفحص توقيع/Artifact مستقل.
+
 ## فحص T5 الفعلي — 8 نوفمبر 2026، 18:26 UTC
 
 - Unified build request commit [3555baf](https://github.com/alwansan/raf/commit/3555bafae757bb0523e00e171582530ab4193b32), embedded source parent SHA `cbe7a038bad2c7ca5ad587b242e8baf7128ecb8`. [Actions run #42509945996](https://github.com/alwansan/raf/actions/runs/42509945996) **SUCCESS**: Python validation, 20/20 pure-Java evidence-policy assertions, Gradle `:app:assembleDebug` and upload-artifact completed.
