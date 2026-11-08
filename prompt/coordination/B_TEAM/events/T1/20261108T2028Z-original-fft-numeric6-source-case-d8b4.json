@@ -1,0 +1,24 @@
+{
+  "id": "20261108T2028Z-T1-original-fft-numeric6-source-case-d8b4",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T2022Z-T1-chat-fft-source-gate-d8b4",
+  "issue_id": "WATER-001",
+  "kind": "experiment_result",
+  "status": "completed",
+  "at": "2026-11-08T20:28:00Z",
+  "summary": "SHA-authenticated original Raft Assembly-CSharp.dll/ILSpy CSharp9 Dx11FFT+GpuFFT prove source numeric Dispatch argument 6 is compatible ONLY with hypothetical FFTsize256 bank0 pass0 (next7) in original 20-slot source domain. Original class source has 2 Dispatch, 6 SetTexture, 0 FindKernel calls. Actual owner Android runtime size/bank/ComputeShader registration or compiled slot6 mapping remains UNPROVEN; no water fix. Fixed separate FFT first_divergence SyntaxError. CI42519853981 SUCCESS 30/30 source-only tests + genuine original DLL; CI42519336164 paired FFT regression SUCCESS.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42519853981",
+    "https://github.com/alwansan/raf/actions/runs/42519336164",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_KERNEL6_SOURCE_CASE_2026-11-08.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261108T2022Z-T1-chat-fft-source-gate-d8b4.md"
+  ],
+  "limits": [
+    "Source numeric argument and actual Unity FindKernel runtime ID differ in evidence level",
+    "Owner session 11,165 kernel6 log errors do not identify caller",
+    "No Android gameplay rebuild, not device graphics acceptance",
+    "Private managed CSharp source not published"
+  ],
+  "next_step": "Original next full-game runtime inspect FFT size/bank and exact failing ComputeShader index binding; T5 coordinate native build after independent gate; WATER-001 OPEN."
+}
