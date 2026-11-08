@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T2",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1853Z-T2-chat-blit-normalized-g9d3",
-  "resumed_from_session": "20261108T1822Z-T2-scheduled-gl-ready-k8p3",
+  "session_id": "20261108T1925Z-T2-chat-original-blit-cecil-v2",
+  "resumed_from_session": "20261108T1922Z-T2-scheduled-original-il-boundary-p7q4",
   "status": "paused",
-  "base_sha": "21ae71a828d55da9337fa252f38c8b39b7a6395c",
-  "last_commit": "3a0f82bccc1f44b8f2862fe2f618f01748ec0cdc",
-  "updated_at": "2026-11-08T19:01:00Z",
+  "base_sha": "6c787ca8436dea3d3a52537577642345f76de0ad",
+  "last_commit": "dc04f43c7239d0b5b025052cf3540f96297dde2e",
+  "updated_at": "2026-11-08T19:45:00Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -17,14 +17,17 @@
     "T2-FBO-CONTRAST-20261108",
     "shared-mini-lab-T2-02",
     "T2-FOAM-BLIT-NORMALIZED-20261108",
-    "shared-mini-r1-delivered"
+    "shared-mini-r1-delivered",
+    "T2-FOAM-SHA-ORIGINAL-BLIT-20261108",
+    "WATER-001-original-pass1-source"
   ],
   "work_ids": [
     "T2-20261104T2354Z-foam-member-abi",
     "T2-20261105T0013Z-foam-resource-interface",
     "T2-20261105T0023Z-T2-foam-texture-identity-texture-identity",
     "20261108T1817Z-T2-chat-fbo-contrast-92d4",
-    "20261108T1853Z-T2-chat-blit-normalized-g9d3"
+    "20261108T1853Z-T2-chat-blit-normalized-g9d3",
+    "20261108T1925Z-T2-chat-original-blit-cecil-v2"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937996942",
@@ -38,8 +41,11 @@
     "https://github.com/alwansan/raf/actions/runs/42504045625",
     "https://github.com/alwansan/raf/actions/runs/42496746941",
     "https://github.com/alwansan/raf/actions/runs/42509945996",
-    "https://github.com/alwansan/raf/actions/runs/42512807487"
+    "https://github.com/alwansan/raf/actions/runs/42512807487",
+    "https://github.com/alwansan/raf/actions/runs/42515921184",
+    "https://github.com/alwansan/raf/actions/runs/42516309771",
+    "https://github.com/alwansan/raf/actions/runs/42516516391"
   ],
-  "next_step": "T2 source-only typed normalized Graphics.Blit two-pass fixture gate PASS CI42512807487 (10/10 py_compile) at fccd2826; no original managed IL authentication. Existing shared Mini APK CI42509945996 includes current T2 driver and r2 vote NO_BUILD; device JSONL T2-01..04 still pending. Next engineering: private ZIP2 SHA-confirmed original Mono.Cecil two explicit Foam pass sites, trace field/local/branch producers with fail-closed unknown, then CB0/ShaderLab/Unity. WATER-001 OPEN.",
+  "next_step": "Original pinned ZIP2 Cecil Foam material field reaches Graphics.Blit pass0 AND pass1 (CI42516516391 SUCCESS, 14/14; actual original source SHA). Pass0 typed RenderTexture→RenderTexture, pass1 source first unresolved; no actual texture instance equality, CB0, samplers, ShaderLab or Android pixels. WATER-001 OPEN. Next: authentic pass1 source expression def-use across typed calls/fields/locals/branches fail-closed; shared Mini r2 NO_BUILD, CI42509945996 already includes T2 driver.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
