@@ -73,6 +73,13 @@ jobs:
           python3 scripts/check_shared_lab_votes.py --require-need
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
+      - name: Assert cached evidence and failure policy (pure JVM)
+        run: |
+          mkdir -p /tmp/raft-team-evidence-classes
+          javac -d /tmp/raft-team-evidence-classes \
+            apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedResultPolicy.java \
+            tests/java/com/alwansan/raftlab/UnifiedResultPolicyTest.java
+          java -cp /tmp/raft-team-evidence-classes com.alwansan.raftlab.UnifiedResultPolicyTest
       - uses: android-actions/setup-android@v3
         with: {packages: 'platform-tools'}
       - uses: gradle/actions/setup-gradle@v4
