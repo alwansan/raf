@@ -1,0 +1,58 @@
+{
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261108T2012Z-T4-chat-support-T3-CL-PNG-b8v5",
+  "issue_id": "RENDER-002",
+  "supports": [
+    "T3",
+    "T5"
+  ],
+  "experiment_key": "T4-support-T3-immutable-CL-real-PNG-image-color-coverage-v1",
+  "source_commits": [
+    "16665ef14d7bbdf9d8469647a92c35af47e466e1",
+    "fa3d282481c5ac499decf5dd30b89cb6d1acbbb1",
+    "91f9e6c0f8a515ec07995ad985a9ef205a319607"
+  ],
+  "source_files": [
+    "scripts/t4_support_t3_visual_png_audit.py",
+    "tests/test_t4_support_t3_visual_png_audit.py",
+    ".github/workflows/raft-t4-support-t3-cl-png-audit.yml"
+  ],
+  "authenticated_input": "alwansan/CL@f401b7ffe3b6ead9038f3b35273599dcf8286e68",
+  "t3_case_blobs": [
+    "33572d9228164650713a6387dc762ffa9836d1c5",
+    "fc2793cfed8a7597c6f70cb8cddf6257fa72dd65",
+    "b62832a39a3e6ff169bf475b6f96513c610149f2",
+    "f6eaecd9263c41767f036569587df57c634ca34e",
+    "8e81eb539f5fea2212b3bc928c05bbc9cecaf384",
+    "614b6a28eb12a1e5ce2d4d4fb581c9b5957d204e"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42519251690",
+  "conclusion": "SUCCESS",
+  "test_count": 8,
+  "number_original_png_verified": 6,
+  "number_second_upload_byte_identical": 6,
+  "pixel_output_stats": {
+    "all_six_width": 1600,
+    "all_six_height": 900,
+    "whole_neutral_percentage": 100,
+    "center_nearblack_percentage": 79.111,
+    "whole_nearblack_percentage": 39.572,
+    "whole_RGB_saturated_coverage_percent": 0,
+    "center_RGB_saturated_coverage_percent": 0
+  },
+  "tested_negative_controls": [
+    "Black PNG vs RGB stripe PNG",
+    "PNG RGB/RGBA/filters/sub/up",
+    "CRC invalid/truncated data",
+    "Symlink refused",
+    "Original Git blob hash mismatch",
+    "No raw pixels emitted"
+  ],
+  "interpretation": "PixelCopy window screenshots not faithful to synthetic GLSurfaceView colours; cannot attribute original Raft GPU cause. Post-v10 source T5↔T3 f60355a49 already routes SurfaceView PixelCopy and compares GPU pixels; device and next signed APK still required.",
+  "independent_of_shared_sources": true,
+  "output_source_published": false,
+  "apk_build_triggered": false,
+  "status": "completed_source_only",
+  "next_step": "T3/T5 phone re-test T3-01..06 on next justified single signed Mini containing f60355a49; verify screenshot_pixel_match and RGB coverage before EVIDENCE_READY."
+}
