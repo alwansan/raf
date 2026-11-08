@@ -63,6 +63,7 @@ public final class MainActivity extends Activity {
         pad.setOnCapturedPointerListener((v,e)->{mouse("captured",e);return true;});
         events=txt("INPUT EVENTS:");root.addView(events);
         addButton(root,"Pick image or file / SHA256",v->filePicker(PICK_ASSET,"*/*"));
+        addButton(root,"Recover older session logs",v->recoverPreviousLog());
         preview=new ImageView(this);preview.setAdjustViewBounds(true);root.addView(preview,new LinearLayout.LayoutParams(-1,260));
         setContentView(sc);
         try{
@@ -174,6 +175,29 @@ public final class MainActivity extends Activity {
                 if(out==null)throw new IOException("Export stream unavailable");copy(in,out);}
             exportStatus.setText("Exported: Download/Games/cl/test/"+folder()+"/"+privateLog.getName());
         }catch(Exception ex){log("export_error",ex.toString());exportStatus.setText("Export failed; private logs preserved. Use Save As.");}}
+
+    /** Export the newest previous append-only log after an unexpected app exit. */
+    void recoverPreviousLog(){
+        File dir=new File(getFilesDir(),"sessions");
+        File[] old=dir.listFiles((d,name)->name.startsWith("events-")&&name.endsWith(".jsonl")&&!name.equals(privateLog.getName()));
+        if(old==null||old.length==0){Toast.makeText(this,"No older logs",Toast.LENGTH_SHORT).show();return;}
+        File latestFile=old[0];for(File x:old)if(x.lastModified()>latestFile.lastModified())latestFile=x;
+        if(Build.VERSION.SDK_INT<29){exportStatus.setText("Use Android file picker to save older log");return;}
+        try{
+            ContentValues values=new ContentValues();
+            values.put(MediaStore.Downloads.DISPLAY_NAME,latestFile.getName());
+            values.put(MediaStore.Downloads.MIME_TYPE,"application/x-ndjson");
+            values.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/"+folder()+"-recovered/");
+            Uri dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,values);
+            if(dest==null)throw new IOException("Download entry unavailable");
+            try(InputStream in=new FileInputStream(latestFile);OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
+                if(out==null)throw new IOException("Log export unavailable");copy(in,out);
+            }
+            log("recovered_log","file="+latestFile.getName());
+            exportStatus.setText("Recovered old session: "+latestFile.getName()+" in Download/Games/cl/test/"+folder()+"-recovered/");
+        }catch(Exception ex){log("recover_error",ex.getClass().getSimpleName());exportStatus.setText("Could not recover; private files kept");}
+    }
+
     @Override protected void onPause(){super.onPause();if(pad!=null&&pad.hasPointerCapture())pad.releasePointerCapture();log("activity","pause");}
     @Override protected void onStop(){super.onStop();export();}
 }
