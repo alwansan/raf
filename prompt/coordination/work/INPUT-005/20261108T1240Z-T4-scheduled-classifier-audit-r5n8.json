@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T1240Z-T4-scheduled-classifier-audit-r5n8",
+  "origin": "scheduled",
+  "base_sha": "d79bc3d703530e40733e3dc0afa8a5e03c4a0fb1",
+  "status": "active",
+  "scope": "Independent read-only audit of source classifier and latest CI, no runtime or shared code edits",
+  "files": [
+    "prompt/coordination/work/INPUT-005/20261108T1240Z-T4-scheduled-classifier-audit-r5n8.json",
+    "prompt/coordination/clients/T4/sessions/20261108T1240Z-T4-scheduled-classifier-audit-r5n8.md"
+  ],
+  "hypothesis": "Source-only epoch correlation success does not establish pointer capture on Android; identify remaining evidence gap and avoid duplicate CI",
+  "experiment_key": "INPUT-005-T4-epoch-device-evidence-20261108",
+  "shared_resource": "none",
+  "owner_device_evidence": "42058825739 world save reopen proven; mouse unproven",
+  "ci": "42472339258 success",
+  "next": "Seek a device log from an APK containing epoch events; do not claim runtime repair"
+}
