@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "worker": "T2",
+  "pack_id": "t2-water-pass-fft-diagnostic-plan-v1",
+  "title": "T2 Water Spectrum Foam Blur diagnostic protocol (non-executable)",
+  "version": "1.0.0",
+  "source_sha": null,
+  "tests": [
+    {
+      "id": "T2-01",
+      "type": "note",
+      "title": "Baseline device GPU and shader capability",
+      "instructions": "Record Android API, renderer/driver, GLES/Vulkan version, render target formats, and whether this is the standalone lab or full Raft. Do not infer game behavior from capabilities.",
+      "expected": "Environment metadata recorded; no PASS for shader fidelity."
+    },
+    {
+      "id": "T2-02",
+      "type": "note",
+      "title": "Positive control: known-good two-pass texture roundtrip",
+      "instructions": "Requires a future compiled GPU renderer. Render a known RGBA test pattern to an offscreen target, sample it in a second pass, and compare pixel values with format/sRGB/tolerance logged.",
+      "expected": "Known-good two-pass result agrees within declared tolerance; otherwise lab setup invalid."
+    },
+    {
+      "id": "T2-03",
+      "type": "note",
+      "title": "Negative control: invalid render pass index",
+      "instructions": "Requires a future compiled renderer. Request an intentionally out-of-range pass on a disposable diagnostic material; never modify Raft assets.",
+      "expected": "Failure is detected and attributed to pass selection; never silently report success."
+    },
+    {
+      "id": "T2-04",
+      "type": "note",
+      "title": "Spectrum/Foam/Blur original binding check",
+      "instructions": "Only after authorized original-faithful ShaderLab and verified CB0/resource/sampler layout are compiled into a lab APK. Log per-pass material identity, pass index, target format, sampler and CB bindings; avoid proprietary names/data in public exports.",
+      "expected": "Every binding is resolved from authenticated evidence; unresolved values reported UNKNOWN rather than guessed."
+    },
+    {
+      "id": "T2-05",
+      "type": "note",
+      "title": "FFT compute positive and negative controls",
+      "instructions": "Requires compiled GPU compute support and coordination with T1. Run known-good bounded dispatch, then deliberately invalid kernel lookup in isolated test code. Record distinct error categories and GPU backend.",
+      "expected": "Known-good dispatch completes; invalid lookup fails explicitly; neither establishes Raft kernel correctness."
+    },
+    {
+      "id": "T2-06",
+      "type": "note",
+      "title": "Device comparison and provenance",
+      "instructions": "After a real lab APK exists, compare the same device and settings against a specific full Raft artifact; record both source SHA/versionCode and separate error counters, never combine sessions.",
+      "expected": "Reproducible bounded comparison; final water repair remains unconfirmed until integrated Raft device test."
+    }
+  ]
+}
