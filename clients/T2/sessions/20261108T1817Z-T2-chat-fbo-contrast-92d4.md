@@ -2,7 +2,7 @@
 session_id: 20261108T1817Z-T2-chat-fbo-contrast-92d4
 origin: chat
 resumed_from: clients/T2/sessions/20261108T171538Z-T2-scheduled-fbo-audit.md; prompt/coordination/clients/T2/MEMORY.md (historical)
-base_sha: 6d8f2df68b (live branch commit 2026-11-08T18:15:26Z; full SHA resolve at final checkpoint)
+base_sha: 6d8f2df68b04aa6c072db9777b5bda8293bc29d9
 branch: feature/android-native-port
 scope: T2-02 compiled-in GLES3 offscreen FBO positive control; no proprietary Raft assets, game XAPK, or T5 shared UI changes.
 intended_files: apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T2GpuActivity.java; this session; own T2 work/experiment; only T2 readiness row after meaningful merge.
@@ -16,5 +16,12 @@ The current two-pass FBO test draws a spatially constant source color, so the se
 
 ## Initial limits
 CI compile or synthetic GLES tests cannot confirm original Raft Foam/Spectrum/Blur/ShaderLab, pass bindings/CB0, authentic Unity, or Adreno runtime. Build of the unified APK is T5's decision.
-status: IN_PROGRESS
-next_step: Apply isolated T2 activity diff, perform static/differential validation and any appropriate CI, then record exact commit and T2-only readiness update.
+status: SOURCE_PATCHED_DEVICE_UNTESTED
+source_commit: 73924c998d91eb64be33c883d9922d44981accd4
+readiness_commit: 55ab1c80547a319b2809d2dea4bd66185cc927fa
+work_path: work/experiments/20261108T1817Z-T2-chat-fbo-contrast-92d4.md
+event_path: prompt/coordination/B_TEAM/events/T2/20261108T1817Z-T2-chat-fbo-contrast-92d4-result.json
+validation: 7/7 source/linkage checks PASS and four expected RGBA values confirmed by host mathematical oracle. NO post-patch javac/real device evidence.
+run_urls: CI 42504045625 shared javac PASS on older source; CI 42496746941 standalone T2 APK PASS historical; zero queued/running/pending at 18:16 UTC (point-in-time).
+scope_boundary: T2GpuActivity.java was the sole Android driver file edited; no shared UI, shared pack, full game/XAPK/OBB or original shader/raw source modified.
+next_step: T5 to run updated unified Java compile gate and review one shared mini build under SHARED_BUILD_READINESS. Await T2-02 4-pixel phone JSONL and continue original Foam two-pass operand/binding proof without synthetic-to-Unity false equivalence.
