@@ -1,0 +1,18 @@
+{
+  "session_id": "20261108T1130Z-T3-scheduled-particle-evidence-r8n3",
+  "origin": "scheduled",
+  "track": "RENDER-002",
+  "status": "investigating",
+  "base_sha": "149c069628ec5c103cbc8ff5a3bb45d6e0ca9b5a",
+  "scope": [
+    "evidence-only material/particle source chain",
+    "no modifications to production shader, assets, input or display"
+  ],
+  "hypothesis": "Square smoke requires inspecting particle material alpha/blend and source shader variant; material GUID presence alone cannot establish cause",
+  "experiment_key": "T3-particle-source-to-export-20261108-r8n3",
+  "shared_resource": "none; no Unity or CI dispatch",
+  "source": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+  "prior": "20261108T0932Z-T3-scheduled-particle-chain-m8q5",
+  "notes": "Existing 7 synthetic tests do not validate ParticleSystemRenderer; inspect original producer and actual exported material before any graphics patch.",
+  "next_step": "Acquire pinned ZIP2 original and actual export evidence, derive prefab->renderer->material->shader->texture with alpha/blend/vertex stream parity; inspect CL pixels."
+}
