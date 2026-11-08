@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "scheduled",
+  "session_id": "20261108T1312Z-T1-scheduled-trace-shortread-q8m3",
+  "issue": "WATER-001",
+  "status": "IN_PROGRESS",
+  "base_sha": "ac6208be78505fdee102dd5445056fe0e185da6d",
+  "experiment_key": "T1-FFT-TRACE-SHORT-READ-20261108",
+  "files": [
+    "scripts/t1_fft_trace_consistency.py",
+    "tests/test_t1_fft_trace_short_read.py",
+    "prompt/coordination/clients/T1/sessions/20261108T1312Z-T1-scheduled-trace-shortread-q8m3.md"
+  ],
+  "hypothesis": "One os.read on a regular trace file may return fewer bytes than fstat size, leading to truncated JSON or acceptance of an incomplete manifest. Use bounded exact-length reads and detect changed file size.",
+  "shared_resource": "none; no Unity/GPU/CI dispatch",
+  "taken_over_from": "T1 20261108T1109Z trace JSON identity; owner 42058825739",
+  "limits": "synthetic source-only; no original kernel/Adreno proof"
+}
