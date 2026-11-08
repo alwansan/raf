@@ -14,7 +14,7 @@ class CaptureBudgetTests(unittest.TestCase):
     def run_manifest(self, entries, root):
         manifest = root / "manifest.json"
         manifest.write_text(json.dumps(entries), encoding="utf-8")
-        return subprocess.run([sys.executable, str(SCRIPT), str(manifest)],
+        return subprocess.run([sys.executable, "-m", "scripts.t1_fft_first_divergence", str(manifest)],
                               capture_output=True, text=True, timeout=15)
 
     def test_reject_too_many_passes_before_file_reads(self):
