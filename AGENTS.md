@@ -1,3 +1,6 @@
+<!-- OWNER_SHARED_MINI_LAB_20261108 -->
+> **قرار المالك الأحدث — 8 نوفمبر 2026 (19:31 بغداد):** صار نظام التجارب **APK مختبر واحد فقط لكل T1–T5، وحزمة team-testpack.json واحدة** بدلاً من خمسة تطبيقات. المرجع الجديد [UNIFIED_LAB_POLICY_AR.md](apk-for-testing/UNIFIED_LAB_POLICY_AR.md) و[SHARED_BUILD_READINESS.md](apk-for-testing/SHARED_BUILD_READINESS.md) و[TEST_CENTER.md](apk-for-testing/TEST_CENTER.md)، و[برومبت الاستعادة الكامل الجديد](prompt/coordination/T_TEAM/RESTORE_SHARED_LAB_AR.md). يُبني mini APK عند حاجة عامل واحد مثبتة يراجعها T5؛ تصويت XAPK اللعبة الكامل 5/5 لا يتغير. أتمتة T1/T2/T3 حسب الإثبات، وT4/T5 يحتاجان تدخلاً واقعياً لبعض الاختبارات؛ صور نافذة التطبيق عبر PixelCopy أو طلب داخلي، لا نجاح وهمياً. **التعليمات القديمة عن إنتاج خمس APK منفصلة أصبحت تاريخية.**
+
 <!-- OWNER_MINILAB_20261108 -->
 > **توجيه المالك 8 نوفمبر 2026 — مختبرات APK صغيرة:** نظام جديد موازٍ لتصويت الـXAPK الكامل. [مركز T1–T5 للتنزيل والاختبار](apk-for-testing/TEST_CENTER.md) · [بروتوكول المختبرات](apk-for-testing/LAB_PROTOCOL_AR.md) · [استعادة كاملة مع الإضافة دون تغيير الأصل](prompt/coordination/T_TEAM/RESTORE_WITH_ANDROID_LAB_AR.md). يحق لكل عامل إعداد mini APK أو testpack صغير عند حاجة إثبات الهاتف؛ لا ينتظر إجماع 5/5 إلا لبناء لعبة Raft الكاملة، ولا يزاحم Unity الثقيلة. المالك أبلغ بتحسن حركة كاميرا الماوس لكن فشل جميع click/scroll، وبقاء أخطاء الألوان والماء والنار.
 
