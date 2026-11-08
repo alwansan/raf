@@ -74,11 +74,13 @@ def decode_invocations(data):
 def axis_mapping(pairs):
     """Classify address mappings without exposing coordinates or offsets."""
     varied_reference = len({before for before, _ in pairs}) >= 2
+    # An identity mapping is not evidence of a shifted or reflected address.
+    changed = any(before != after for before, after in pairs)
     return {
         "varied_reference": varied_reference,
         "constant_observed": varied_reference and len({after for _, after in pairs}) == 1,
-        "uniform_translation": varied_reference and len({after - before for before, after in pairs}) == 1,
-        "uniform_reflection": varied_reference and len({after + before for before, after in pairs}) == 1,
+        "uniform_translation": varied_reference and changed and len({after - before for before, after in pairs}) == 1,
+        "uniform_reflection": varied_reference and changed and len({after + before for before, after in pairs}) == 1,
     }
 
 
