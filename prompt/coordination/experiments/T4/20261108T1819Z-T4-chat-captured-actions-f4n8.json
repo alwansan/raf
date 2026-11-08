@@ -1,0 +1,41 @@
+{
+  "owner": "T4",
+  "session_id": "20261108T1819Z-T4-chat-captured-actions-f4n8",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Captured View callback sees button/wheel actions, while Unity game input may miss them; read-only observations can distinguish callback absence from downstream mapping.",
+  "source_commit": "3be65eb53427359abeeb4950685699e7dc2979a1",
+  "tool_versions": {
+    "dotnet": "8.0.x/10.0.x GitHub Actions",
+    "unity": "2021.3 original managed ABI"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v",
+    "dotnet run --project android-port/Tests/PhysicalMouse/PhysicalMouse.csproj -c Release",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=<verified-original-managed>",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityEditorBridgeCompile.csproj -c Release -p:OriginalManagedDir=<verified-original-managed>"
+  ],
+  "negative_controls": [
+    "Touchscreen source never accepts physical-button evidence",
+    "Unchanged actionButton on ACTION_DOWN/UP never creates named edges",
+    "Non-scroll motion axis never counted as scroll",
+    "Non-MOVE callback must return false rather than consume Unity input",
+    "Bad axis values rejected; release clears callback evidence"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42510026195",
+  "artifact_urls": [],
+  "budget": "existing source-only workflow, 15min timeout, no Unity full build",
+  "status": "completed",
+  "observed_result": "21 Python and 68 C# assertions pass; original managed Unity2021 Android+Editor bridge compiled and exact mouse source staging succeeded; no game/device input behavior proven.",
+  "rejected_hypotheses": [
+    "Static source integration necessarily breaks if callback handles non-MOVE without consuming it"
+  ],
+  "limitations": [
+    "No direct Android callback device evidence",
+    "Unity input buttons and wheel remain unverified",
+    "No full signed game XAPK built",
+    "Independent shared lab device status is separate"
+  ],
+  "integration_commit": "b89ccb9b2247f7c22937dca30a600619b7dfe8f4",
+  "next_step": "Compare actual device native View action callbacks, unified T4 test log, and game Unity button consumption before designing no-double-input fix."
+}

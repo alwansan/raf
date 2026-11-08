@@ -1,0 +1,14 @@
+{
+  "id": "20261108T1828Z-T4-chat-mouse-captured-callbacks-f4n8",
+  "owner": "T4",
+  "session_id": "20261108T1819Z-T4-chat-captured-actions-f4n8",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "summary": "Source-only native captured physical mouse button/scroll callback observer integrated without input consumption; original managed Unity2021 Android/Editor source gate green 21 Python +68 C#; Android game click/wheel remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/b89ccb9b2247f7c22937dca30a600619b7dfe8f4",
+    "https://github.com/alwansan/raf/commit/3be65eb53427359abeeb4950685699e7dc2979a1",
+    "https://github.com/alwansan/raf/actions/runs/42510026195"
+  ],
+  "at": "2026-11-08T18:28:00Z"
+}
