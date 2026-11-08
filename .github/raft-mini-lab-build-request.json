@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-SURFACE-FIDELITY-REPIN-20261108T2023Z-r8n2",
+  "request_id": "T5-SHARED-SURFACE-LEASE-R3-20261108T2025Z-1",
   "target": "SHARED",
-  "requested_from_sha": "fa813e0f48dd7eb463a6d6653ca6442fc3ccbec2",
+  "requested_from_sha": "e7a6248b0d0c14b9772bd52f3bbdc5cf22fa9b9a",
   "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
-  "reason": "Owner-proven black automatically captured T3 PNG despite RGB visible in manual screenshot and readPixels values; T5/T3 coordinated SurfaceView direct PixelCopy, faithful full-height composite, fail-closed RGB parity and retries. Source/JVM/Android CI42519126545 SUCCESS. This re-pins current branch SHA after first request gate correctly rejected a concurrently changed parent; build one shared APK only. No proprietary assets, Unity game or five APKs.",
+  "reason": "Owner-proven Android15 black T3 screenshot despite RGB shown by real device. Direct PixelCopy from GLSurfaceView, pixel parity with GLES readback, bounded retries, full-window composite with verified Surface layer, fail-closed NEEDS_SCREENSHOT and no false PASS. T3 notified. Source/JDK/Android compiled CI42519126545 SUCCESS; a previous request was rejected by branch concurrency and no APK was produced. One Mini shared APK only; original game and pack unchanged.",
   "publish": false
 }
