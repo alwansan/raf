@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "event_id": "T3-20261108T1852Z-shared-png-evidence",
+  "session_id": "20261108T1852Z-T3-chat-png-integrity-k8m2",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "event_type": "SOURCE_INTEGRITY_FIX",
+  "summary": "Repair synthetic T3 PixelCopy evidence: encode PNG and SHA before MediaStore, IS_PENDING then full readback/count/SHA, publish then recheck, delete partial on fail; return actual GLES pixel vectors to shared host. No source-to-Android graphics claim.",
+  "source_commits": [
+    "03151ea4b60f87576f8e5abf9235edbc53e12fdd",
+    "a9ad5f77df2548a1adee109e1cacb51ad4a190aa",
+    "0a449ab7ce3b3551c42fb6d9a11b1da0c32da519"
+  ],
+  "test_commits": [
+    "a7c9c06059aacf3454d3e8370b5855b74ac0d8a0",
+    "cd5d10576acbb74bc631d34ec336a1c6711ab27e",
+    "e65427eda01c9e7970c20551c627c65228aad50f"
+  ],
+  "source_compile_workflow_commit": "503398ac767001df4dfec11d2d99bf882d3cb55d",
+  "source_checks": "14/14 JS content guards; not Python/Java CI",
+  "ci_conclusion": "UNVERIFIED",
+  "android_device": "UNVERIFIED",
+  "last_shared_mini": {
+    "run_id": 42509945996,
+    "source": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+    "includes_this_change": false,
+    "download": "Artifact ZIP only"
+  },
+  "mini_vote": "T3 NO_BUILD (r2)",
+  "full_game": "NOT_READY 0/3; RENDER-002/WATER-001 OPEN",
+  "evidence_report": "docs/T3_SHARED_PNG_EVIDENCE_INTEGRITY_2026-11-08.md",
+  "next_step": "Inspect source-only workflow actual result and wait for T5 coordinated shared mini integration to test Android PNG/MediaStore; do not duplicate APK."
+}
