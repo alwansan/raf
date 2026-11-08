@@ -55,8 +55,16 @@ jobs:
           assert d["raw_first_segment_git_blob_sha1_verified"] is True
           assert d["pinned_summary_sha256_verified"] is True
           assert d["first_water_unix_ms"] == 1794145757579
-          assert d["first_kernel6_unix_ms"] == 1794145757581
-          assert d["first_kernel_after_first_water_ms"] == 2
+          # The pinned whole-session summary saw kernel6 2ms later. Its root
+          # presence in this first raw SEGMENT is a separate empirical question.
+          assert d["first_kernel6_unix_ms_from_pinned_summary_only"] == 1794145757581
+          assert d["first_kernel_before_world_loaded_ms"] == 64484
+          if d["first_segment_kernel_root_seen"]:
+              assert d["kernel_raw_root_vs_summary_verified"] is True
+              assert d["first_kernel_after_first_water_ms_from_raw_segment"] == 2
+          else:
+              assert d["kernel_raw_root_vs_summary_verified"] is False
+              assert d["first_kernel6_unix_ms_from_raw_segment"] is None
           assert d["interpretation"]["on_phone_runtime_dispatch_proven"] is False
           assert d["context"]["raw_root_text_exported"] is False
           assert d["context"]["actual_original_unity_findkernel_proven"] is False
