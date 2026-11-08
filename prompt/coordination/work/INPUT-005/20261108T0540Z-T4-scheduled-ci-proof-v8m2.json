@@ -2,19 +2,23 @@
   "session_id": "20261108T0540Z-T4-scheduled-ci-proof-v8m2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1ea871e42bbfc562ddd787306e2d726884037ce1",
-  "updated_at": "2026-11-08T05:40:00Z",
+  "scope_commit": "d419727beeaaa1c2d4340257ebb3c10c64a3ddba",
+  "updated_at": "2026-11-08T05:43:00Z",
   "intended_files": [
     "prompt/coordination/work/INPUT-005/20261108T0540Z-T4-scheduled-ci-proof-v8m2.json",
-    "prompt/coordination/clients/T4/sessions/20261108T0540Z-T4-scheduled-ci-proof-v8m2.md"
+    "prompt/coordination/clients/T4/sessions/20261108T0540Z-T4-scheduled-ci-proof-v8m2.md",
+    "prompt/coordination/B_TEAM/events/T4/20261108T0540Z-T4-scheduled-ci-proof-v8m2.json"
   ],
   "experiment_key": "verify-first-relative-event-source-contract-125efe37-run42447922773",
   "resource_key": null,
-  "hypothesis": "CI run 42447922773 on exact source 125efe37 validates newly added first-relative-event regression; this is not device acceptance",
+  "result": "CI 42447922773 success at exact test commit 125efe37c834fa521cfabc289c01d72b6e42757c; classifier-source-only job and Verify source-only classifier regression suite step succeeded.",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42447922773",
+  "limits": "Source-only, no physical mouse, Raft cursor, camera or Unity/IL2CPP device acceptance.",
+  "next_step": "Obtain device logs from APK containing physical_mouse_capture_retry and first relative packet instrumentation; correlate lock/retry/relative/release and Escape/focus; preserve T5 button/Resolution scope.",
+  "owner_phone_baseline": "42058825739 / e9c358eda01785b65e4eb14f18723da426635628",
   "taken_over_from": [
     "prompt/coordination/clients/T4/sessions/20261108T0442Z-T4-scheduled-first-relative-m7q2.md"
-  ],
-  "owner_phone_baseline": "42058825739 / e9c358eda01785b65e4eb14f18723da426635628",
-  "coordination": "T5 retains button placement and Resolution; no Unity or native build."
+  ]
 }

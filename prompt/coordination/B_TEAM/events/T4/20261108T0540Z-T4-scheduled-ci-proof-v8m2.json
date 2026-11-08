@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "event_id": "20261108T0540Z-T4-scheduled-ci-proof-v8m2",
+  "actor": "T4",
+  "issue_id": "INPUT-005",
+  "kind": "verification",
+  "status": "SOURCE_FIXED",
+  "origin": "scheduled",
+  "source_sha": "125efe37c834fa521cfabc289c01d72b6e42757c",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42447922773",
+  "result": "classifier-source-only / Verify source-only classifier regression suite SUCCESS including first relative packet regression",
+  "device_confirmed": false,
+  "session_path": "prompt/coordination/clients/T4/sessions/20261108T0540Z-T4-scheduled-ci-proof-v8m2.md"
+}
