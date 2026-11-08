@@ -131,5 +131,31 @@ class MouseCaptureTraceTests(unittest.TestCase):
         self.assertEqual(classify(events)["findings"][0]["classification"],
                          "RELEASED_BEFORE_RELATIVE_OBSERVED")
 
+    def test_cross_epoch_relative_does_not_prove_rearm(self):
+        events = ["physical_mouse_lock_intent escape_release",
+                  "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_requested epoch=10",
+                  "physical_mouse_capture_retry epoch=11 attempt=2",
+                  "physical_mouse_relative epoch=9 events=1"]
+        self.assertEqual(classify(events)["findings"][0]["classification"],
+                         "REQUEST_WITHOUT_RELATIVE_OBSERVED")
+
+    def test_matching_retry_epoch_is_observed(self):
+        events = ["physical_mouse_lock_intent escape_release",
+                  "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_requested epoch=10",
+                  "physical_mouse_capture_retry epoch=11 attempt=2",
+                  "physical_mouse_relative epoch=11 events=1"]
+        self.assertEqual(classify(events)["findings"][0]["classification"],
+                         "RELATIVE_AFTER_REARM_OBSERVED")
+
+    def test_mixed_tagged_untagged_does_not_claim_correlation(self):
+        events = ["physical_mouse_lock_intent escape_release",
+                  "physical_mouse_lock_intent authored_lock",
+                  "physical_mouse_capture_requested epoch=10",
+                  "physical_mouse_relative events=1"]
+        self.assertEqual(classify(events)["findings"][0]["classification"],
+                         "REQUEST_WITHOUT_RELATIVE_OBSERVED")
+
 if __name__ == "__main__":
     unittest.main()
