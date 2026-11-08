@@ -7,6 +7,8 @@ import tempfile
 import unittest
 import warnings
 import zipfile
+from unittest.mock import patch
+import errno
 
 from scripts.t5_extract_actual_signed_pair import extract_pair, PACKAGE, APK, XAPK
 
@@ -78,6 +80,29 @@ class ActualPairExtractionTests(unittest.TestCase):
         self.assertFalse(report["apk_signature_verified"])
         self.assertFalse(report["obb_guid_validated"])
         self.assertFalse((self.target / XAPK).exists())
+
+    def test_android_without_os_link_copies_exclusively(self):
+        with patch("scripts.t5_extract_actual_signed_pair.os.link",
+                   side_effect=AttributeError("os.link unavailable")):
+            report = self.call()
+        self.assertTrue(report["signed_apk_and_obb_sha256_verified"])
+        self.assertEqual((self.target / APK).read_bytes(), self.blobs[APK])
+        self.assertEqual((self.target / OBB).read_bytes(),
+                         self.blobs[OBB+".part001"] + self.blobs[OBB+".part002"])
+        self.assertFalse((self.target / (APK+".staging")).exists())
+
+    def test_android_unsupported_hardlinks_copy_exclusively(self):
+        with patch("scripts.t5_extract_actual_signed_pair.os.link",
+                   side_effect=OSError(errno.EOPNOTSUPP, "no hardlinks")):
+            self.call()
+        self.assertEqual((self.target / APK).read_bytes(), self.blobs[APK])
+
+    def test_unexpected_hardlink_error_fails_closed_and_cleans(self):
+        with patch("scripts.t5_extract_actual_signed_pair.os.link",
+                   side_effect=OSError(errno.EIO, "storage failure")):
+            with self.assertRaises(OSError):
+                self.call()
+        self.assertFalse(self.target.exists())
 
     def test_wrong_zip_sha_refused_before_writing(self):
         with self.assertRaisesRegex(ValueError, "ZIP SHA256 mismatch"):
