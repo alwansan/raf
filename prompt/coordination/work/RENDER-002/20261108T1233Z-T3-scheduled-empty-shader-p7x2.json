@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T1233Z-T3-scheduled-empty-shader-p7x2",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "base_sha": "e5645936c05723eaf037d09475aec6a3288f5990",
+  "status": "active",
+  "intended_files": [
+    "scripts/t3_material_shader_link_audit.py",
+    "tests/test_t3_material_shader_link_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261108T1233Z-T3-scheduled-empty-shader-p7x2.md",
+    "prompt/coordination/work/RENDER-002/20261108T1233Z-T3-scheduled-empty-shader-p7x2.json"
+  ],
+  "hypothesis": "A zero-byte .shader paired with valid .meta is currently counted as resolved; reject provably empty shader source without claiming to identify semantic dummy passes.",
+  "experiment_key": "t3-zero-byte-shader-source-negative-control-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-08T12:33:00Z"
+}
