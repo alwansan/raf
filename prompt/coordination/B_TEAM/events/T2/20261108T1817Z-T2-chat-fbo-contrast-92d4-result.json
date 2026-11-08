@@ -15,5 +15,10 @@
     "https://github.com/alwansan/raf/actions/runs/42504045625"
   ],
   "limitations": "Synthetic GLES3 FBO not original Raft water; baseline CI pre-dates fix.",
-  "next_step": "T5 verify updated unified javac and handle single shared mini build/device evidence; T2 resume original Foam producer/binding gate."
+  "next_step": "T5 verify updated unified javac and handle single shared mini build/device evidence; T2 resume original Foam producer/binding gate.",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-08T18:19:00Z",
+  "summary": "Compiled T2 synthetic GLES3 FBO positive control now checks two contrasting pixels at both pass0 and pass1; 7/7 source checks, new Java/device proof pending. WATER-001 OPEN."
 }
