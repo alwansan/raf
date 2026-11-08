@@ -1,0 +1,166 @@
+package com.alwansan.raftlab;
+
+import android.app.Activity;
+import android.content.*;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.*;
+import android.provider.*;
+import android.view.*;
+import android.widget.*;
+import org.json.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/** Isolated Android mouse/input and data-only testpack logger; never loads code from packs. */
+public final class MainActivity extends Activity {
+    final int PICK_PACK=101,PICK_TREE=102,PICK_ASSET=103,SAVE_AS=104;
+    final ArrayList<JSONObject> cases=new ArrayList<>();
+    JSONObject selected;
+    LinearLayout entries; TextView caption,events,exportStatus,pad; EditText note;
+    File privateLog; Uri output; String packId="builtin-mouse",session;
+    long lastMove=0;
+    final ArrayList<String> recent=new ArrayList<>();
+    TextView txt(String s){TextView v=new TextView(this);v.setText(s);v.setTextSize(15);v.setPadding(8,6,8,6);return v;}
+    void addButton(LinearLayout p,String name,View.OnClickListener click){Button b=new Button(this);b.setText(name);b.setOnClickListener(click);p.addView(b);}
+    @Override public void onCreate(Bundle b){
+        super.onCreate(b);
+        session=new SimpleDateFormat("yyyyMMdd-HHmmss",Locale.US).format(new Date())+"-"+SystemClock.elapsedRealtime();
+        File folder=new File(getFilesDir(),"sessions");if(!folder.exists())folder.mkdirs();
+        privateLog=new File(folder,"events-"+session+".jsonl");
+        ScrollView sc=new ScrollView(this);LinearLayout root=new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);root.setPadding(8,8,8,20);sc.addView(root);
+        root.addView(txt("RAFT MINI LAB — "+BuildConfig.LAB_WORKER+" — data-only testpacks, not full Raft"));
+        LinearLayout tools=new LinearLayout(this);root.addView(tools);
+        addButton(tools,"Pick testpack",v->filePicker(PICK_PACK,"application/json"));
+        addButton(tools,"Pick folder",v->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);startActivityForResult(i,PICK_TREE);});
+        addButton(tools,"Export logs",v->export());
+        addButton(tools,"Save As",v->{Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/x-ndjson");
+            i.putExtra(Intent.EXTRA_TITLE,privateLog.getName());startActivityForResult(i,SAVE_AS);});
+        exportStatus=txt("Logs saved privately; export to Download/Games/cl/test/...");root.addView(exportStatus);
+        entries=new LinearLayout(this);entries.setOrientation(LinearLayout.VERTICAL);root.addView(entries);
+        caption=txt("Select numbered test");root.addView(caption);
+        LinearLayout result=new LinearLayout(this);root.addView(result);
+        addButton(result,"PASS",v->finish("PASS"));addButton(result,"FAIL",v->finish("FAIL"));
+        addButton(result,"UNEXPECTED",v->finish("UNEXPECTED"));
+        note=new EditText(this);note.setHint("Observed result / problem; avoid private data");root.addView(note);
+        LinearLayout capture=new LinearLayout(this);root.addView(capture);
+        addButton(capture,"Capture ON",v->{pad.requestFocus();pad.requestPointerCapture();log("capture_request","ON");});
+        addButton(capture,"Capture OFF",v->{pad.releasePointerCapture();log("capture_request","OFF");});
+        pad=txt("INPUT PAD — click LEFT/RIGHT/MIDDLE, move and scroll here");
+        pad.setBackgroundColor(0xffdce6fa);pad.setMinimumHeight(100);
+        pad.setFocusable(true);pad.setFocusableInTouchMode(true);pad.setClickable(true);
+        root.addView(pad);
+        pad.setOnTouchListener((v,e)->{mouse("view_touch",e);return true;});
+        pad.setOnGenericMotionListener((v,e)->{mouse("view_generic",e);return true;});
+        pad.setOnCapturedPointerListener((v,e)->{mouse("captured",e);return true;});
+        events=txt("INPUT EVENTS:");root.addView(events);
+        addButton(root,"Pick image or file / SHA256",v->filePicker(PICK_ASSET,"*/*"));
+        setContentView(sc);
+        try{
+            for(int k=1;k<=3;k++)cases.add(new JSONObject().put("id","T4-0"+k).put("type","mouse")
+                .put("title",new String[]{"uncaptured clicks and wheel","captured clicks and wheel","compare with Raft game"}[k-1])
+                .put("instructions","Press LEFT/RIGHT/MIDDLE and wheel, observe captured and uncaptured callbacks")
+                .put("expected","Real input event visible in JSONL; compare game bridge"));
+        }catch(Exception ignored){}
+        render();
+        log("startup","AndroidAPI="+Build.VERSION.SDK_INT+" device="+Build.MANUFACTURER+"/"+Build.MODEL+" ABI="+Build.SUPPORTED_ABIS[0]);
+    }
+    void filePicker(int code,String type){Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);i.setType(type);
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);startActivityForResult(i,code);}
+    void render(){entries.removeAllViews();for(JSONObject t:cases){String id=t.optString("id"),name=t.optString("title");
+        addButton(entries,id+": "+name,v->{selected=t;note.setText("");
+            caption.setText("TEST "+id+"\n"+t.optString("instructions")+"\nEXPECTED: "+t.optString("expected"));
+            log("test_begin",id);});}}
+    void finish(String result){if(selected==null){Toast.makeText(this,"Select test first",Toast.LENGTH_SHORT).show();return;}
+        String n=note.getText().toString().replace('\n',' ');if(n.length()>800)n=n.substring(0,800);
+        log("result",selected.optString("id")+"="+result+" observed="+n);export();}
+    @Override public boolean dispatchTouchEvent(MotionEvent e){
+        if((e.getSource()&InputDevice.SOURCE_MOUSE)==InputDevice.SOURCE_MOUSE)mouse("activity_touch",e);
+        return super.dispatchTouchEvent(e);}
+    @Override public boolean dispatchGenericMotionEvent(MotionEvent e){mouse("activity_generic",e);return super.dispatchGenericMotionEvent(e);}
+    void mouse(String route,MotionEvent e){int a=e.getActionMasked();
+        if(a==MotionEvent.ACTION_MOVE||a==MotionEvent.ACTION_HOVER_MOVE){long t=SystemClock.elapsedRealtime();
+            if(t-lastMove<120)return;lastMove=t;}
+        String s="route="+route+" action="+MotionEvent.actionToString(a)+" source=0x"+Integer.toHexString(e.getSource())
+           +" buttonState=0x"+Integer.toHexString(e.getButtonState())+" actionButton=0x"+Integer.toHexString(e.getActionButton())
+           +" vscroll="+e.getAxisValue(MotionEvent.AXIS_VSCROLL)+" hscroll="+e.getAxisValue(MotionEvent.AXIS_HSCROLL)
+           +" eventTime="+e.getEventTime()+" x="+e.getX()+" y="+e.getY()
+           +" captured="+pad.hasPointerCapture();
+        log("input",s);recent.add(s);if(recent.size()>10)recent.remove(0);
+        if(events!=null)events.setText("INPUT EVENTS:\n"+android.text.TextUtils.join("\n",recent));}
+    @Override protected void onActivityResult(int req,int status,Intent data){super.onActivityResult(req,status,data);
+        if(status!=RESULT_OK||data==null||data.getData()==null)return;
+        Uri uri=data.getData();
+        try{
+            if(req==PICK_PACK)loadPack(uri);
+            if(req==PICK_TREE){int flags=data.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                if(flags!=0)getContentResolver().takePersistableUriPermission(uri,flags);
+                Uri children=DocumentsContract.buildChildDocumentsUriUsingTree(uri,DocumentsContract.getTreeDocumentId(uri));
+                Uri file=null;try(Cursor c=getContentResolver().query(children,new String[]{DocumentsContract.Document.COLUMN_DISPLAY_NAME,DocumentsContract.Document.COLUMN_DOCUMENT_ID},null,null,null)){
+                    if(c!=null)for(int i=0;i<200&&c.moveToNext();i++)if("testpack.json".equals(c.getString(0))){
+                        file=DocumentsContract.buildDocumentUriUsingTree(uri,c.getString(1));break;}}
+                if(file==null)throw new IOException("Folder has no testpack.json; pick JSON file directly");
+                loadPack(file);}
+            if(req==PICK_ASSET){MessageDigest md=MessageDigest.getInstance("SHA-256");long size=0;byte[] buf=new byte[16384];
+                try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Unreadable");
+                    int n;while((n=in.read(buf))>=0){size+=n;if(size>64L*1024*1024)throw new IOException("File exceeds 64MiB");md.update(buf,0,n);}}
+                StringBuilder sha=new StringBuilder();for(byte x:md.digest())sha.append(String.format(Locale.US,"%02x",x&255));
+                caption.setText("File "+size+" bytes SHA256="+sha);log("asset_sha256","bytes="+size+" sha256="+sha);}
+            if(req==SAVE_AS){try(InputStream in=new FileInputStream(privateLog);OutputStream out=getContentResolver().openOutputStream(uri,"wt")){
+                    if(out==null)throw new IOException("Save stream unavailable");copy(in,out);}exportStatus.setText("Log saved via picker");}
+        }catch(Exception ex){log("picker_error",ex.toString());Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();}
+    }
+    void loadPack(Uri uri)throws Exception{byte[] b=new byte[65537];int length=0;
+        try(InputStream in=getContentResolver().openInputStream(uri)){if(in==null)throw new IOException("Unreadable pack");
+            while(length<b.length){int n=in.read(b,length,b.length-length);if(n<0)break;length+=n;}}
+        if(length>65536)throw new IOException("Pack over 64KiB");
+        JSONObject p=new JSONObject(new String(b,0,length,StandardCharsets.UTF_8));
+        if(p.length()!=7||p.getInt("schema_version")!=1||!p.getString("worker").matches("T[1-5]"))throw new IOException("Invalid pack schema");
+        String id=p.getString("pack_id");if(!id.matches("[a-z0-9][a-z0-9._-]{0,79}"))throw new IOException("Unsafe pack id");
+        if(!p.isNull("source_sha")&&!p.getString("source_sha").matches("[a-f0-9]{40}"))throw new IOException("Bad source SHA");
+        JSONArray ts=p.getJSONArray("tests");if(ts.length()<1||ts.length()>20)throw new IOException("Invalid case count");
+        ArrayList<JSONObject> newCases=new ArrayList<>();HashSet<String> names=new HashSet<>();
+        for(int i=0;i<ts.length();i++){JSONObject t=ts.getJSONObject(i);
+            String tid=t.getString("id"),type=t.getString("type");
+            if(t.length()<5||t.length()>7||!tid.matches("[A-Za-z0-9][A-Za-z0-9._-]{0,63}")||!names.add(tid))throw new IOException("Invalid case");
+            if(!Arrays.asList("note","mouse","file_sha256","image_preview").contains(type))throw new IOException("Executable type forbidden");
+            if(t.has("asset")){String name=t.getString("asset");if(name.startsWith("/")||name.contains("\\")||name.contains("://")||name.length()>180)throw new IOException("Unsafe asset");
+                for(String part:name.split("/",-1))if(part.isEmpty()||part.equals(".")||part.equals(".."))throw new IOException("Traversal");}
+            if(t.has("sha256")&&!t.getString("sha256").matches("[a-f0-9]{64}"))throw new IOException("Bad asset SHA");
+            for(String key:new String[]{"title","instructions","expected"})if(t.getString(key).isEmpty()||t.getString(key).length()>1500)throw new IOException("Invalid case text");
+            newCases.add(t);}
+        packId=id;selected=null;cases.clear();cases.addAll(newCases);render();
+        caption.setText("Pack "+p.getString("title")+"; tests="+cases.size());log("pack_loaded",id+" tests="+cases.size());
+    }
+    void log(String kind,String info){try{JSONObject j=new JSONObject();
+        j.put("unix_ms",System.currentTimeMillis());j.put("elapsed_ms",SystemClock.elapsedRealtime());
+        j.put("worker",BuildConfig.LAB_WORKER);j.put("package",getPackageName());j.put("session",session);
+        j.put("pack_id",packId);j.put("test_id",selected==null?JSONObject.NULL:selected.optString("id"));
+        j.put("event",kind);j.put("detail",info);
+        try(FileOutputStream out=new FileOutputStream(privateLog,true)){out.write((j.toString()+"\n").getBytes(StandardCharsets.UTF_8));}
+        }catch(Exception ex){android.util.Log.e("RaftMiniLab","Private log failed",ex);}}
+    void copy(InputStream in,OutputStream out)throws IOException{byte[] buf=new byte[16384];int n;
+        while((n=in.read(buf))>=0)out.write(buf,0,n);out.flush();}
+    String folder(){return (BuildConfig.LAB_WORKER+"-"+packId+"-"+session).toLowerCase(Locale.US).replaceAll("[^a-z0-9._-]","-");}
+    void export(){log("log_export","MediaStore.Downloads");
+        if(Build.VERSION.SDK_INT<29){exportStatus.setText("Use Save As for Android 9");return;}
+        try{
+            if(output==null){ContentValues v=new ContentValues();
+                v.put(MediaStore.Downloads.DISPLAY_NAME,privateLog.getName());v.put(MediaStore.Downloads.MIME_TYPE,"application/x-ndjson");
+                v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/"+folder()+"/");
+                output=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
+                if(output==null)throw new IOException("MediaStore refused file");}
+            try(InputStream in=new FileInputStream(privateLog);OutputStream out=getContentResolver().openOutputStream(output,"wt")){
+                if(out==null)throw new IOException("Export stream unavailable");copy(in,out);}
+            exportStatus.setText("Exported: Download/Games/cl/test/"+folder()+"/"+privateLog.getName());
+        }catch(Exception ex){log("export_error",ex.toString());exportStatus.setText("Export failed; private logs preserved. Use Save As.");}}
+    @Override protected void onPause(){super.onPause();if(pad!=null&&pad.hasPointerCapture())pad.releasePointerCapture();log("activity","pause");}
+    @Override protected void onStop(){super.onStop();export();}
+}
