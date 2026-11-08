@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "session_id": "20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "f60355a49a9f236f9757cdac65cf3d12ebbfafc3",
+  "resumed_from_session": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
+  "evidence_path": "alwansan/CL/main/test/shared-20261108-230157-466487336",
+  "evidence_device": "Android API35 / POCO F5 Pro",
+  "scope": "Repair synthetic T3 evidence: uploaded PixelCopy(window) PNGs black in GL region while user-owned screen JPGs show actual GLES colors and glReadPixels pass. Capture SurfaceView's own Surface and assert PNG bitmap samples match GLES readbacks before EVIDENCE_READY; preserve T5 Arabic portrait and shared host.",
+  "allowed_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java",
+    "tests/test_t3_shared_visual_frame.py",
+    "docs/T3_CL_BLACK_PNG_PIXELCOPY_SURFACE_2026-11-08.md",
+    "prompt/coordination/clients/T3/sessions/20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8.md",
+    "prompt/coordination/clients/T3/state.json",
+    "prompt/coordination/clients/T3/MEMORY.md",
+    "apk-for-testing/SHARED_BUILD_READINESS.md"
+  ],
+  "no_touch": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "apk-for-testing/unified/app/src/main/AndroidManifest.xml",
+    ".github/raft-mini-lab-build-request.json",
+    ".github/raft-native-build-request.json",
+    "apk-for-testing/unified/pack/team-testpack.json"
+  ],
+  "next_step": "Patch T3 renderer PixelCopy and verify bitmap pixel contract, regression tests, T5 build vote; actual phone proof pending."
+}
