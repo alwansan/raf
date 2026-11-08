@@ -59,6 +59,30 @@ class MaterialShaderAuditTests(unittest.TestCase):
             self.assertEqual(result["duplicate_shader_guid_entries"], 1)
             self.assertNotIn(guid, str(result))
 
+    def test_symlinked_inputs_are_skipped_without_reading_outside_tree(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            scan = root / "scan"
+            scan.mkdir()
+            external = root / "external"
+            external.mkdir()
+            guid = "e" * 32
+            (external / "External.shader.meta").write_text("guid: " + guid + "\\n")
+            (external / "External.mat").write_text(
+                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+            try:
+                (scan / "External.shader.meta").symlink_to(external / "External.shader.meta")
+                (scan / "External.mat").symlink_to(external / "External.mat")
+            except (OSError, NotImplementedError):
+                self.skipTest("symlinks unsupported on this filesystem")
+            result = audit(scan)
+            self.assertEqual(result["shader_meta_symlink_skipped"], 1)
+            self.assertEqual(result["material_symlink_skipped"], 1)
+            self.assertEqual(result["shader_meta_seen"], 1)
+            self.assertEqual(result["material_seen"], 1)
+            self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
+            self.assertEqual(result["shader_guid_unresolved_in_scan"], 0)
+
     def test_nonexistent_root_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError):
