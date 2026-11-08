@@ -17,3 +17,6 @@ First live CI 42485049910 failed **after 16/16 existing shader-program tests pas
 
 ## Boundaries / next
 This is source-only test execution and fixture correction. No actual ZIP2 shader export, Android GPU pixels, CL image pixel processing, ParticleSystemRenderer, OBB or game resource edits. Do not infer white material or square smoke repaired. Next: read the new CI result, then authenticate original prefab particle chain → renderer → Material → Shader → Texture with keywords/Blend/Alpha and compare with Android import. Keep T1/T2 shader scopes, T4 physical mouse, T5 UI/Resolution/delivery untouched. RENDER-002 OPEN, NOT_READY.
+
+## Final validation — 2026-11-08 13:28 UTC
+[CI 42485092438](https://github.com/alwansan/raf/actions/runs/42485092438) on exact fix SHA `2ba593a4966c0267a08cf1eb73f653e84e4d7ba8` **SUCCESS**: 16 native shader quality + 8 Material Shader link audit + 8 W1 shader export + 8 B49 pass contract = **40/40** source-only tests, plus Python `py_compile` of four modules. First red CI 42485049910 retained as evidence of the fixture defect. Work completed; no Unity/Android/pixel evidence.
