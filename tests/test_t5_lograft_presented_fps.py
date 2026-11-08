@@ -23,6 +23,31 @@ class TestLogRaft(unittest.TestCase):
             p.write_text('{"presented_fps_estimate":20,"presented_fps_estimate":30}\n')
             with self.assertRaises(ValueError):
                 list(probe.load(p))
+    def test_original_lograft_quality_gate(self):
+        original = {"source": "lograf_shell", "presented_fps_estimate": 33.56,
+                    "fps_quality": "surface_presentation_estimate",
+                    "fps_tracking_status": "valid_surface_presentation_estimate",
+                    "main_process_pid_verified": True,
+                    "frame_telemetry_stale": False,
+                    "fps_surface": "SurfaceView[com.alwansan.raft.androidtest]"}
+        good = probe.summarize([original], expected_session="a")
+        self.assertEqual(good["valid_estimates"], 1)
+        for changes in ({"fps_quality": "unavailable"},
+                        {"fps_tracking_status": "pid_tracking_unverified"},
+                        {"main_process_pid_verified": False},
+                        {"frame_telemetry_stale": True},
+                        {"fps_surface": None},
+                        {"fps_surface": " "}):
+            with self.subTest(changes=changes):
+                bad = probe.summarize([{**original, **changes}], expected_session="a")
+                self.assertEqual(bad["valid_estimates"], 0)
+                self.assertEqual(bad["rejected"]["unverified_surface_estimate"], 1)
+
+    def test_lograft_requires_quality_fields_not_just_numeric_fps(self):
+        row = {"source": "lograf_shell", "presented_fps_estimate": 30}
+        self.assertEqual(probe.summarize([row], expected_session="a")["valid_estimates"], 0)
+        self.assertEqual(probe.summarize([{"presented_fps_estimate": 30}], expected_session="a")["valid_estimates"], 1)
+
     def test_empty_samples_not_fabricated(self):
         out = probe.summarize([{}], expected_session="a")
         self.assertIsNone(out["median_presented_fps_estimate"])
