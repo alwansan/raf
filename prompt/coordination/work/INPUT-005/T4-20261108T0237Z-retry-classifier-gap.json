@@ -2,8 +2,8 @@
   "session_id": "20261108T0237Z-T4-scheduled-retry-classifier-gap-n4q8",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
-  "updated_at": "2026-11-08T02:37:51Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-08T02:41:00Z",
   "intended_files": [
     "scripts/t4_classify_mouse_capture_log.py",
     "tests/test_t4_classify_mouse_capture_log.py"
@@ -11,5 +11,13 @@
   "experiment_key": "retry-only-after-authored-lock-classification-v1; source scripts/t4_classify_mouse_capture_log.py sha fc54d5621bcc04e7a8a4817bdccee4036bbf5d26",
   "resource_key": null,
   "hypothesis": "Retry events after authored lock are ignored by classifier; classify as missing request despite an actual retry. Source-only regression must distinguish retry evidence from native capture success.",
-  "base_evidence": "owner phone artifact 42058825739 predates retry telemetry; source classifier EVENTS excludes physical_mouse_capture_retry; retry telemetry source contract tests do not cover classifier."
+  "base_evidence": "owner phone artifact 42058825739 predates retry telemetry; source classifier EVENTS excludes physical_mouse_capture_retry; retry telemetry source contract tests do not cover classifier.",
+  "commits": [
+    "5c35cd79",
+    "4e80e762",
+    "8e7fc89a",
+    "6e13736d"
+  ],
+  "validation": "Not yet executed/verified. Existing workflow auto-trigger paths include both changed files. Avoid duplicate dispatch.",
+  "next": "Check Actions run for 8e7fc89a; then phone capture logs from newer candidate."
 }
