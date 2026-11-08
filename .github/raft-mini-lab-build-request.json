@@ -1,6 +1,6 @@
 {
-  "request_id": "t4-mouse-sdktools-retry-20261108-c6p4",
+  "request_id": "t4-mouse-compile-postfix-20261108-c6p4",
   "worker": "T4",
-  "requested_from_sha": "6ab099095d3fdca135214c8c01f8fb85e3b2ad44",
-  "reason": "CI 42496084526 passed request and testpack checks but android-actions/setup-android@v3 failed because Google retired sdkmanager package `tools`. Commit 6ab0990 uses packages: platform-tools only. Rebuild once to produce an independent APK that records real physical mouse button and scroll callbacks capture ON/OFF."
+  "requested_from_sha": "a4578ff4cd7f7d7928038abdb1d076d514096da8",
+  "reason": "T4 mini-lab 42496238418 reached Gradle but failed javac on invalid multi-character escaped newline in shared host MainActivity.java. T5 independently corrected it in db8f507a after previous pinned source. Build one T4 physical mouse pointer capture/button/wheel callback APK from corrected integrated source; no game assets or Unity."
 }
