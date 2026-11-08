@@ -1,0 +1,47 @@
+name: T1 shared GLES compute context source gate (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java'
+      - 'tests/test_t1_compute_context_gate.py'
+      - '.github/workflows/raft-t1-shared-compute-source.yml'
+  workflow_dispatch:
+
+permissions: {contents: read}
+concurrency:
+  group: raft-t1-shared-compute-source-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  source-compile:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: T1 context lifecycle and unified pack regression
+        run: |
+          python3 -m unittest discover -s tests -p test_t1_compute_context_gate.py -v
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+          python3 -m unittest discover -s tests -p test_unified_testpack.py -v
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Compile shared Java app only (no APK, no Unity)
+        run: |
+          gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA" -PversionCode=1
+      - name: Record proof limits
+        run: |
+          echo "SHA=$GITHUB_SHA"
+          echo "SOURCE_COMPILE_ONLY=true"
+          echo "GL_DEVICE_DISPATCH_VERIFIED=false"
+          echo "UNITY_FFT_FIXED=false"
