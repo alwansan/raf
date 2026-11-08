@@ -28,6 +28,15 @@ def validate(report):
             raise ValueError("invalid destination role")
     return {site["pass"]: (site["source"], site["destination"]) for site in sites}
 
+def require_classified(roles):
+    """Reject unresolved categories; this is NOT original producer/identity proof."""
+    if set(roles) != {0, 1}:
+        raise ValueError("missing Foam pass")
+    for source, destination in roles.values():
+        if source == "unknown" or destination == "unknown":
+            raise ValueError("unresolved Foam role")
+    return roles
+
 def unique_keys(pairs):
     """Reject duplicate JSON members before a role can be overwritten."""
     result = {}
@@ -38,10 +47,12 @@ def unique_keys(pairs):
     return result
 
 def main():
-    if len(sys.argv) != 2:
-        raise SystemExit("usage: t2_foam_pass_role_gate.py safe_report.json")
+    if len(sys.argv) not in (2, 3) or (len(sys.argv) == 3 and sys.argv[2] != "--require-classified"):
+        raise SystemExit("usage: t2_foam_pass_role_gate.py safe_report.json [--require-classified]")
     with open(sys.argv[1], encoding="utf-8") as handle:
         roles = validate(json.load(handle, object_pairs_hook=unique_keys))
+    if len(sys.argv) == 3:
+        require_classified(roles)
     print(json.dumps({"pass0": list(roles[0]), "pass1": list(roles[1]),
                       "classification_only": True}, sort_keys=True))
 
