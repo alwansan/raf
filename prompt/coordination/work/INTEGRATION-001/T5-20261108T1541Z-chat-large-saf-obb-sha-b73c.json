@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261108T1541Z-T5-chat-large-saf-obb-sha-b73c",
+  "status": "active",
+  "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
+  "resumed_from_sessions": [
+    "20261108T1453Z-T5-scheduled-obb-telemetry-k8p2",
+    "20261108T1350Z-T5-scheduled-android-link-fallback-r7m4"
+  ],
+  "issue": "INTEGRATION-001 / DELIVERY-013",
+  "experiment_key": "t5-mini-lab-saf-file-sha-2gb-obb-asynchronous-android15-v1",
+  "resource_key": "apk-for-testing/host/MainActivity.java (T4 mini-host build reads baseline only)",
+  "intended_files": [
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java",
+    "tests/test_t5_mini_lab_sha_source.py",
+    "apk-for-testing/workers/T5/README.md",
+    "prompt/coordination/clients/T5/sessions/20261108T1541Z-T5-chat-large-saf-obb-sha-b73c.md",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261108T1541Z-chat-large-saf-obb-sha-b73c.json"
+  ],
+  "hypothesis": "T5 file_sha256 case currently fails >64MiB even though OBB >2GiB; stream digest off Android main thread with bounded memory/progress and retain image size protection. No APK or installed identity claimed from source.",
+  "overlap": "Checked T4 work 20261108T1540Z-chat-mini-lab-c6p4: T4 builds current host without modifying shared host; T5 will not modify T4 request/README or trigger competing mini-lab run.",
+  "expected": "synthetic JDK/Python regression and future Android host compile; device SAF confirmation required",
+  "updated_at": "2026-11-08T15:41:00Z"
+}
