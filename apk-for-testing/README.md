@@ -9,3 +9,4 @@
 - [رسالة الاستعادة الموسعة](../prompt/coordination/T_TEAM/RESTORE_WITH_ANDROID_LAB_AR.md).
 
 هذا النظام لا يغيّر التصويت على إنتاج XAPK اللعبة الكامل: [الملف الأصلي](../prompt/coordination/T_TEAM/TRIAL_BUILD_READINESS.md).
+- [طريقة تشغيل بناء مختبر APK من فرع العمل](BUILD_REQUEST_AR.md) — طلب مستقل مضبوط دون تعديل main أو بناء اللعبة، مع [مثال](BUILD_REQUEST_EXAMPLE.json).
