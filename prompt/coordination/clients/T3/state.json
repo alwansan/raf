@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
   "resumed_from_session": "20261108T1852Z-T3-chat-png-integrity-k8m2",
-  "status": "source_integrated_T5_shared_minibuild_needed_device_pending",
+  "status": "shared_mini_CI_SUCCESS_device_pending",
   "base_sha": "aed5beb86c035789ef81a4a642d4ac412dfc9b29",
   "last_commit": "87357d72df2e61c1cbe8d776c86a043773648506",
-  "updated_at": "2026-11-08T19:37:00Z",
+  "updated_at": "2026-11-08T20:00:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -30,9 +30,10 @@
     "https://github.com/alwansan/raf/actions/runs/41939404454",
     "https://github.com/alwansan/raf/actions/runs/41940116028",
     "https://github.com/alwansan/raf/actions/runs/41940350604",
-    "https://github.com/alwansan/raf/actions/runs/41941363661"
+    "https://github.com/alwansan/raf/actions/runs/41941363661",
+    "https://github.com/alwansan/raf/actions/runs/42517104924"
   ],
-  "next_step": "T5 review/compile integration and decide ONE shared Mini build with Arabic portrait and T3 tap-to-open; run actual device T3-01..06, image+JSONL export. No individual APK/Unity XAPK.",
+  "next_step": "Owner test APK v0.2.10: export/delete old due debug signing, install new, AUTO T3 then tap T3-01..06 pending list, preview/capture/visual review, export summary/jsonl/PNG. Later source six T3 home buttons not yet built; do not repeat Mini solely for buttons. Original game RENDER-002 OPEN.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md",
   "origin": "chat",
   "latest_source_evidence": {
@@ -57,6 +58,13 @@
       "source_sha": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
       "includes_new_navigation": false
     },
-    "full_game": "NOT_READY 0/3"
+    "full_game": "NOT_READY 0/3",
+    "shared_build_result": "T5 real CI42517104924 SUCCESS; artifact ZIP13631588625; APK v0.2.10",
+    "pinned_source": "93e32950c521d9890ce845eb8213cd6704cd7f98",
+    "preview_in_built_apk": true,
+    "tap_to_open_pending_in_built_apk": true,
+    "six_always_visible_home_buttons_in_built_apk": false,
+    "t3_round_r2_vote": "NO_BUILD after successful shared Mini",
+    "device": "UNVERIFIED"
   }
 }
