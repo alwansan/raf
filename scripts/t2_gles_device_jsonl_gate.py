@@ -43,6 +43,7 @@ def verify(lines, expected_case):
         if (obj["worker"] != "T2" or
                 obj["event"] not in EVENTS or
                 type(obj["unix_ms"]) is not int or type(obj["elapsed_ms"]) is not int or
+                obj["unix_ms"] < 0 or obj["elapsed_ms"] < 0 or
                 not isinstance(obj["detail"], str) or len(obj["detail"]) > 1200 or
                 not isinstance(obj["session"], str) or
                 not re.fullmatch(r"[0-9]{8}-[0-9]{6}-[0-9]{3,12}", obj["session"]) or
@@ -52,9 +53,12 @@ def verify(lines, expected_case):
                 obj["case"] not in (None, expected_case)):
             raise ValueError("unsafe_or_mixed_record")
         parsed.append(obj)
-    if len({r["session"] for r in parsed}) != 1 or len({r["package"] for r in parsed}) != 1:
+    if (len({r["session"] for r in parsed}) != 1 or
+            len({r["package"] for r in parsed}) != 1 or
+            len({r["version"] for r in parsed}) != 1):
         raise ValueError("mixed_sessions")
-    if any(b["elapsed_ms"] < a["elapsed_ms"] for a, b in zip(parsed, parsed[1:])):
+    if any(b["elapsed_ms"] < a["elapsed_ms"] or b["unix_ms"] < a["unix_ms"]
+           for a, b in zip(parsed, parsed[1:])):
         raise ValueError("nonmonotonic_elapsed_time")
     def one(event):
         found = [i for i, row in enumerate(parsed) if row["event"] == event]
