@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "username": "T4",
+  "session_id": "20261108T1338Z-T4-scheduled-device-gate-f3q7",
+  "origin": "scheduled",
+  "status": "active",
+  "base_sha": "389825143647a7768f84020b0033e4962a915739",
+  "scope": "Independent physical-mouse phone acceptance evidence gate and signed-candidate provenance; no runtime/Resolution/UI edits",
+  "files": [
+    "prompt/coordination/work/INPUT-005/20261108T1338Z-T4-scheduled-device-gate-f3q7.json",
+    "prompt/coordination/clients/T4/sessions/20261108T1338Z-T4-scheduled-device-gate-f3q7.md"
+  ],
+  "hypothesis": "Source-only epoch classifier success cannot establish device pointer capture; next discriminating evidence requires post-epoch signed APK manifest plus synchronized phone log",
+  "experiment_key": "INPUT-005-T4-device-gate-20261108",
+  "shared_resource": "none; read-only Actions and CL",
+  "taken_over_from": "20261108T1240Z-T4-scheduled-classifier-audit-r5n8",
+  "next_step": "Check signed candidate availability and matching epoch telemetry; if absent, preserve blocker and avoid redundant CI"
+}
