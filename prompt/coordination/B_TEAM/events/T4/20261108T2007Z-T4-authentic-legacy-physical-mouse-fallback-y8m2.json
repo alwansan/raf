@@ -1,0 +1,19 @@
+{
+  "id": "20261108T2007Z-T4-authentic-legacy-physical-mouse-fallback-y8m2",
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2",
+  "issue_id": "INPUT-005",
+  "type": "source_integration",
+  "summary": "Captured physical mouse button/vertical+horizontal scroll fallback now staged for original Android Unity workflow, 20 exact original Legacy Input call sites. Native-first behavior, frame-latched threadsafe events, source+epoch+capture validity, Editor/Windows unchanged. CI SUCCESS 111 C# +9 Python and original Unity ABI, 12 original CSharp files source patched privately. Phone still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42518143297",
+    "https://github.com/alwansan/raf/actions/runs/42518143291",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_CAPTURED_LEGACY_BUTTON_WHEEL_BRIDGE_2026-11-08.md"
+  ],
+  "original_cl_owner_capture_evidence": "CL shared-20261108-223228 raw un-captured only; do not claim actual captured Unity gameplay.",
+  "status": "SOURCE_INTEGRATED_DEVICE_PENDING",
+  "full_game_build_triggered": false,
+  "mini_build_triggered": false,
+  "updated_at": "2026-11-08T20:07:00Z"
+}
