@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T2022Z-T1-chat-fft-source-gate-d8b4",
+  "issue_id": "WATER-001",
+  "experiment_key": "fft-original-index-source-binding-v1-original-Dx11FFT-sourceSHA-and-Unity-serialized-FFT-objectSHA",
+  "resource_key": "exact original tracked Assembly-CSharp.dll and pinned ILSpy CSharp9 original Dx11FFT/GpuFFT",
+  "hypothesis": "Owner CL invalid kernel index6 might be emitted as a numeric Dispatch argument from original Dx11FFT source; test an exact original-derived selector/inherited seed and show its source-conditional cases, not runtime Unity FindKernel/compiled-slot identity.",
+  "inputs": {
+    "tracked_original_dll_git_blob_sha1": "fc9d4ba920a178fdb89c970d9d772a01051dadc6",
+    "tracked_original_dll_bytes": 3211776,
+    "original_Dx11FFT_csharp9_sha256": "8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0",
+    "original_GpuFFT_csharp9_sha256": "2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704",
+    "original_CSharp_decompiler": "ilspycmd 11.2.0.10050",
+    "original_LogRaft_first_kernel_timestamp_milliseconds": 1794145757581
+  },
+  "tool_versions": {
+    "python": "Ubuntu 24.04 GitHub Actions Python 3",
+    "dotnet": "10.0.x",
+    "decompiler": "ilspycmd 11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_original_kernel6_candidates.py -v",
+    "python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v",
+    "python3 -m unittest discover -s tests -p test_probe_original_fft_kernel_callsites.py -v",
+    "git hash-object Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "ilspycmd -p -lv CSharp9_0 -o $RUNNER_TEMP/t1-private-source Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "python3 -m scripts.t1_fft_original_kernel6_candidates --original-managed $RUNNER_TEMP/t1-private-source --reported-index 6"
+  ],
+  "negative_controls": [
+    "Wrong original class SHA or inherited base SHA rejected",
+    "Changed bank stride or base log denominator with recomputed SHA still fails contract",
+    "Second Dispatch +2 or altered SetTexture selected pass rejected",
+    "Mixed source ComputeShader receiver rejected",
+    "Additional hardcoded Dispatch(6) rejected",
+    "All 20 mathematical selector cases are distinct including no index alias",
+    "Boolean index/negative/outside domain rejected",
+    "Even synthetic FindKernel(name) call does not prove runtime index",
+    "Original class private names or decompiled code not emitted"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42518408573",
+    "https://github.com/alwansan/raf/actions/runs/42519336164",
+    "https://github.com/alwansan/raf/actions/runs/42519731107",
+    "https://github.com/alwansan/raf/actions/runs/42519853981"
+  ],
+  "final_verified_ci_run": 42519853981,
+  "final_source_sha": "f51c4e26d340a5db3f9b8781506e3e53dc180e2e",
+  "status": "completed",
+  "result": {
+    "outcome": "SOURCE_ONLY_GENUINE_MANAGED_EVIDENCE",
+    "source_test_count": 30,
+    "source_test_failures": 0,
+    "authentic_dll_git_blob_verified": true,
+    "private_ilspy_source_sha_verified": true,
+    "source_dispatch_calls": 2,
+    "source_settexture_calls": 6,
+    "source_findkernel_calls_in_Dx11FFT": 0,
+    "original_two_pass_numeric_relative_offsets": [
+      0,
+      1
+    ],
+    "numeric6_unique_scenario_in_integer_domain": {
+      "hypothetical_fft_size": 256,
+      "hypothetical_bank": 0,
+      "pass_offset": 0
+    },
+    "numeric_next_pass": 7,
+    "original_Unity_FindKernel_runtime_id_proven": false,
+    "actual_owner_device_fft_size_or_bank_observed": false,
+    "real_compiled_slot6_to_Unity_kernel6_mapping_proven": false,
+    "actual_Android_water_restored": false,
+    "private_game_source_or_bytecode_exported": false
+  },
+  "limits": [
+    "Source decompilation contains no live Android instance or actual Unity imported ComputeShader runtime registry",
+    "Unity Mathf float log/truncation on actual Adreno not verified",
+    "A Logcat rejected integer6 may originate from another shader/caller than Dx11FFT",
+    "Prior private Unity Editor attempts blocked by licensing on source-free preflight; this CI does not activate Editor"
+  ],
+  "report": "docs/T1_FFT_ORIGINAL_KERNEL6_SOURCE_CASE_2026-11-08.md",
+  "next_step": "Coordinate owner/T5 source-authentic runtime trace of original FFT size/bank, first ComputeShader asset/registered names and Dispatch, then compare numeric first divergent stage and phone water pixels."
+}
