@@ -1,0 +1,27 @@
+{
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "d77667b7ef439d97c167be94f53e2ea4c96cdda7",
+  "resumed_from_sessions": [
+    "20261108T1850Z-T4-chat-original-mouse-buttons-g7p4",
+    "20261108T1835Z-T4-scheduled-source-filter-k7m2"
+  ],
+  "experiment_key": "T4-CL-actual-shared-mouse-20261108-223341-bitmask-capture-proof-v1",
+  "resource_key": "alwansan/CL@4680f5dc26127938e7696f932b2d9a80dc703937:test/shared-20261108-223228-464718661/",
+  "intended_files": [
+    "scripts/t4_verify_cl_shared_mouse_evidence.py",
+    "tests/test_t4_verify_cl_shared_mouse_evidence.py",
+    ".github/workflows/raft-t4-cl-shared-mouse-evidence.yml",
+    "docs/T4_DEVICE_MOUSE_EVIDENCE_CL_20261108.md",
+    "prompt/coordination/clients/T4/sessions/20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3.md"
+  ],
+  "scope": "Read-only external CL real device JSONL provenance + phase/button action dedup; no compiled Java or Unity changes. Fail closed on lack of capture, bad event source and missing owner actions.",
+  "expected_result": "Document native Android physical mouse LEFT and VSCROLL without capture, distinguish DUPLICATE route events, block T4-09 game comparison fake acceptance.",
+  "build_impact": "NO_BUILD (source-only)",
+  "run_urls": [],
+  "status_details": "Not a device gameplay fix",
+  "next_step": "Run CI actual pinned external CL log gate, update T4 evidence, request phone captured ON T4-02/03/04/05 with observable transitions."
+}
