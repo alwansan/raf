@@ -236,13 +236,15 @@ def combine(root_report, summary, summary_checksum=SUMMARY_SHA256):
     kernel = first.get("kernel_index_6")
     materials = [first.get(name) for name in ("pass_spectrum", "pass_foam_global", "pass_other_water")]
     matched = [m for m in materials if m is not None]
-    if kernel is None or not matched:
-        raise ValueError("missing first original kernel or water root in first segment")
+    if not matched:
+        raise ValueError("missing first original water root in first segment")
     expected_water = summary["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["first_observed_unix_ms"]
     expected_kernel = summary["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"]["first_observed_unix_ms"]
     actual_water = min(m["unix_ms"] for m in matched)
-    if actual_water != expected_water or kernel["unix_ms"] != expected_kernel:
-        raise ValueError("first raw roots disagree with pinned whole-session summary")
+    if actual_water != expected_water:
+        raise ValueError("first raw water root disagrees with pinned whole-session summary")
+    if kernel is not None and kernel["unix_ms"] != expected_kernel:
+        raise ValueError("first raw kernel root disagrees with pinned whole-session summary")
     return {
         "schema": 1,
         "cl_commit": CL_COMMIT,
@@ -250,8 +252,12 @@ def combine(root_report, summary, summary_checksum=SUMMARY_SHA256):
         "raw_first_segment_expected_sha1": SEGMENT_SHA1,
         "pinned_summary_sha256_verified": True,
         "first_water_unix_ms": actual_water,
-        "first_kernel6_unix_ms": kernel["unix_ms"],
-        "first_kernel_after_first_water_ms": kernel["unix_ms"] - actual_water,
+        "first_kernel6_unix_ms_from_raw_segment": kernel["unix_ms"] if kernel else None,
+        "first_kernel6_unix_ms_from_pinned_summary_only": expected_kernel,
+        "first_kernel_after_first_water_ms_from_raw_segment":
+            (kernel["unix_ms"] - actual_water) if kernel else None,
+        "first_segment_kernel_root_seen": kernel is not None,
+        "kernel_raw_root_vs_summary_verified": kernel is not None,
         "first_water_before_world_loaded_ms": source["timing_ms"]["first_water_before_world_loaded"],
         "first_kernel_before_world_loaded_ms": source["timing_ms"]["first_fft_before_world_loaded"],
         "context": root_report,
@@ -261,6 +267,7 @@ def combine(root_report, summary, summary_checksum=SUMMARY_SHA256):
             "raw_log_line_neighborhood_not_proof_of_shared_callsite": True,
             "unity_shaders_restored": False,
             "on_phone_runtime_dispatch_proven": False,
+            "absence_of_kernel_text_in_this_segment_proves_no_kernel_error": False,
         },
     }
 
