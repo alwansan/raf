@@ -474,10 +474,10 @@ internal static class Program
         }
         if(!original.HasBody)return "original_method_without_body";
         var il=original.Body.Instructions;
-        if(original.Body.HasExceptionHandlers || il.Count>128 ||
-            il.Any(x=>x.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
-                or FlowControl.Throw))
-            return "original_method_complex_flow";
+        if(original.Body.HasExceptionHandlers)return "original_method_exception_regions";
+        if(il.Count>128)return "original_method_budget_exceeded";
+        if(il.Any(x=>x.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch
+                or FlowControl.Throw))return "original_method_branch_flow";
         var returns=il.Select((v,i)=>(Instruction:v,Index:i))
             .Where(x=>x.Instruction.OpCode.Code==Code.Ret).ToArray();
         if(returns.Length!=1)return "original_method_multiple_or_missing_returns";
@@ -779,7 +779,8 @@ internal static class Program
         var permittedReturnBodies=new HashSet<string>{
             "not_call_return_source", "missing_call_reference", "virtual_dispatch_unresolved",
             "callvirt_receiver_signature_invalid", "external_or_unresolved_method", "original_method_without_body",
-            "original_method_complex_flow", "original_method_multiple_or_missing_returns",
+            "original_method_exception_regions", "original_method_budget_exceeded",
+            "original_method_branch_flow", "original_method_multiple_or_missing_returns",
             "original_method_return_producer_unknown", "original_method_static_field_return",
             "original_method_instance_field_return_receiver_unproved",
             "original_method_local_return_untraced",
@@ -976,6 +977,10 @@ internal static class Program
         instanceGetter.IsVirtual=true;
         if(OriginalTextureReturnBodyFamily(traced,mod)!="virtual_dispatch_unresolved")
             throw new InvalidOperationException("virtual_dispatch_must_not_pick_a_body");
+        instanceGetter.IsVirtual=false;
+        instanceGetter.Body.Instructions.Insert(0,Instruction.Create(OpCodes.Br_S,instanceGetter.Body.Instructions[0]));
+        if(OriginalTextureReturnBodyFamily(traced,mod)!="original_method_branch_flow")
+            throw new InvalidOperationException("branchy_body_must_remain_unresolved");
     }
 
     public static int Main(string[] args)
