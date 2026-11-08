@@ -60,9 +60,12 @@ def audit(root):
             continue
         file_id, guid = matches[0]
         guid = guid.lower()
-        if guid == ZERO:
-            counters["shader_pointer_builtin_or_null"] += 1 if int(file_id) else 0
-            counters["shader_pointer_null"] += 1 if not int(file_id) else 0
+        # Unity PPtr fileID=0 is null even if a stale nonzero GUID remains.
+        # Never promote such a pointer to a resolved Shader asset.
+        if int(file_id) == 0:
+            counters["shader_pointer_null"] += 1
+        elif guid == ZERO:
+            counters["shader_pointer_builtin_or_null"] += 1
         elif shader_guid_counts[guid] > 1:
             counters["shader_guid_ambiguous_in_scan"] += 1
         elif shader_guid_counts[guid] == 1:
