@@ -1,0 +1,25 @@
+{
+  "worker": "T5",
+  "origin": "chat",
+  "session_id": "20261108T2010Z-T5-chat-t3-surface-pixelcopy-r8n2",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "abba9d1e2399574b2b63509aab9a9207ca92c793",
+  "scope": "Owner-proven T3 captured PNG lacks all visible GLES colors while owner physical screenshot shows RGB. Fix shared Mini T3 screenshot PixelCopy source/validation, T5-only screenshot policy/test integration and T3's minimal capture bridge under owner instruction; coordinate T3 ownership. No Unity/game/CL changes.",
+  "evidence": [
+    "alwansan/CL:test/shared-20261108-230157-466487336/T3-01-1794168401966.png (black Surface)",
+    "alwansan/CL:test/سكرينشوت من المالك/Screenshot_٢٠٢٦-١١-٠٨-٢٣-٠٦-٣٩-٧٩٢_com.alwansan.raft.lab.shared.jpg (RGB visible)",
+    "alwansan/CL:test/shared-20261108-230157-466487336/summary-20261108-230157-466487336.json (EVIDENCE_READY despite blank picture)"
+  ],
+  "hypothesis": "PixelCopy.request(Window) excludes SurfaceView composition on this device, plus 900px screenshot height cap; must copy SurfaceView and verify actual color against GL readback prior to publishing PNG.",
+  "planned_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java (capture method only; coordinate T3)",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/SharedSurfacePixelPolicy.java",
+    "tests/java/com/alwansan/raftlab/SharedSurfacePixelPolicyTest.java",
+    "tests/test_t5_shared_surface_screenshot_contract.py",
+    ".github/workflows/raft-t5-shared-surface-screenshot.yml"
+  ],
+  "experiment_key": "t3-surface-layer-PixelCopy-RGB-black-reject@v10",
+  "resource_key": "shared-mini-t3-screenshot",
+  "next_step": "Add evidence and T3 notice, patch capture only with Surface pixel matching, compile test, consider one mini APK build if verified. No fake PASS."
+}
