@@ -51,16 +51,16 @@ class ParticleRendererAuditTests(unittest.TestCase):
     def test_local_material_anchor_resolution(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "effect.prefab").write_text(
-                "--- !u!21 &2100000\\nMaterial:\\n"
-                "--- !u!1 &3000000\\nGameObject:\\n"
-                "--- !u!21 &4000000\\nMaterial:\\n"
-                "--- !u!1 &4000000\\nGameObject:\\n"
-                "--- !u!199 &2\\nParticleSystemRenderer:\\n"
-                "  m_Materials:\\n"
-                "  - {fileID: 2100000}\\n"
-                "  - {fileID: 9999999}\\n"
-                "  - {fileID: 3000000}\\n"
-                "  - {fileID: 4000000}\\n",
+                "--- !u!21 &2100000\nMaterial:\n"
+                "--- !u!1 &3000000\nGameObject:\n"
+                "--- !u!21 &4000000\nMaterial:\n"
+                "--- !u!1 &4000000\nGameObject:\n"
+                "--- !u!199 &2\nParticleSystemRenderer:\n"
+                "  m_Materials:\n"
+                "  - {fileID: 2100000}\n"
+                "  - {fileID: 9999999}\n"
+                "  - {fileID: 3000000}\n"
+                "  - {fileID: 4000000}\n",
                 encoding="utf-8")
             result = audit_module.audit(tmp)
             self.assertEqual(result["local_material_slots"], 4)
