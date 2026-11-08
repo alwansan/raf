@@ -1,0 +1,20 @@
+{
+  "session_id": "20261108T0737Z-T4-scheduled-epoch-telemetry-c9m4",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "6b9c3ef69146b0babb1a8e90424586ab02f9c8de",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261108T0737Z-T4-scheduled-epoch-telemetry-c9m4.json",
+    "prompt/coordination/clients/T4/sessions/20261108T0737Z-T4-scheduled-epoch-telemetry-c9m4.md"
+  ],
+  "hypothesis": "First-relative telemetry and retry telemetry cannot be correlated to a capture generation because markers omit epoch; audit source behavior and specify discriminating device capture without modifying runtime until verified.",
+  "experiment_key": "t4-mouse-epoch-marker-audit-6b9c3ef6-source-readonly",
+  "resource_key": null,
+  "updated_at": "2026-11-08T07:37:00Z",
+  "taken_over_from": [
+    "20261108T0644Z-T4-scheduled-k7m2"
+  ],
+  "owner_confirmed": "42058825739 world/save/exit/reopen",
+  "notes": "No native build or modifications to T5-owned controls/resolution."
+}
