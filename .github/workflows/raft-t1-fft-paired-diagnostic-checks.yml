@@ -18,6 +18,10 @@ on:
       - tests/test_t1_fft_manifest_relative_paths.py
       - scripts/t1_fft_trace_compare.py
       - tests/test_t1_fft_trace_compare.py
+      - scripts/test_t1_fft_capture_budget.py
+      - scripts/test_t1_fft_capture_path_nul.py
+      - scripts/test_t1_fft_dispatch_coverage.py
+      - scripts/t1_fft_dispatch_coverage.py
       - .github/workflows/raft-t1-fft-unity-input-identity.yml
 
 permissions:
@@ -49,4 +53,5 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_spatial_diagnostic.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_first_pass_channel_diagnostic.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          python3 -m unittest scripts.test_t1_fft_capture_budget scripts.test_t1_fft_capture_path_nul scripts.test_t1_fft_dispatch_coverage -v
           ruby -ryaml -e 'YAML.load_file(ARGV.fetch(0))' .github/workflows/raft-t1-fft-unity-input-identity.yml
