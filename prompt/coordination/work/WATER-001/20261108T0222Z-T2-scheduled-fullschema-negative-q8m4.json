@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "worker": "T2",
   "issue": "WATER-001",
-  "status": "active",
+  "status": "completed_source_test_unexecuted",
   "baseline_head": "442759a8a66781c56df399107e396bedb04c4517",
   "scope": "Synthetic full-schema original Foam validator regression: material field API count and pass source/destination partitions; no shader or original assets",
   "files": [
@@ -18,5 +18,8 @@
     "20261108T0120Z-T2-scheduled-original-unmocked-fixture-n7q3",
     "42308583977"
   ],
-  "limits": "source-only synthetic tests; no Unity/device proof; no CI dispatch"
+  "limits": "source-only synthetic tests; no Unity/device proof; no CI dispatch",
+  "code_commit": "235dd727d0a4bddc02094012c1fc2201d926140b",
+  "session_commit": "556d47307eda27a6cb78dcfac184f3eb09be9b4f",
+  "next": "Run original checkout unittest, then authentic pass1 producer/CB0 investigation; WATER-001 remains OPEN"
 }
