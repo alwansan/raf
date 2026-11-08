@@ -9,7 +9,7 @@ base_sha: 77837352fb8855c1c81c985dca951d3d2941a7c1
 issue_id: WATER-001
 work_id: clients/T1/work/20261108T1538Z-T1-chat-gles31-probe-7e4a.md
 experiment_key: t1-gles31-ssbo-linear-and-two-pass-built-in-shaders-v1
-status: source_ready_build_pending
+status: lab_apk_ready_to_test_device_pending
 planned_files:
 - apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java
 - apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java (T1-only wiring)
@@ -44,3 +44,11 @@ planned_files:
 - T1 request commit [42067327](https://github.com/alwansan/raf/commit/42067327d54c2a7f5f160ee7c3bb14287a6f1e95) triggered [42496880833](https://github.com/alwansan/raf/actions/runs/42496880833), but **FAILED pre-build request gate**: declared previous head `0bd6d39f...` vs actual parent `8550519e44566bd4bfc58ff38bb1f1082a333a21`, due concurrent commit while publishing. Zero Gradle/Android work in that run; no APK. Do not bypass parent gate.
 - T5 then published independent mini build request [42496945089](https://github.com/alwansan/raf/actions/runs/42496945089) and owns shared host; defer T1 retry until it finishes and a fresh HEAD/request collision check. Do not overwrite the T5 request while in_progress.
 - Need new request id, actual HEAD parent (verified immediately after commit), source SHA and run, then sha256 artifact before marking owner READY_TO_TEST.
+
+## Final verified Android APK deliverable (same chat session)
+- Created independent path-scoped `.github/workflows/raft-t1-gles31-mini-lab.yml` and one-shot `apk-for-testing/workers/T1/build-request.json` to avoid the shared request's immediate-parent hash race in concurrent team commits, **without disabling or changing the original request security gate**.
+- [42497238594](https://github.com/alwansan/raf/actions/runs/42497238594) **SUCCESS** on immutable source `2980d378e37a678feedc3584530bde71212fbd9f`: schema test and Gradle `assembleDebug -Pworker=T1` passed; `test -s` proved APK nonempty; SHA256 printed and 2-file upload succeeded.
+- [Actual Artifact #13624351093](https://github.com/alwansan/raf/actions/runs/42497238594/artifacts/13624351093), ZIP 35,404 bytes, expires 2026-11-15T15:56:34Z. Inside: `apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk` and `mini-lab-sha256.txt`. APK package `com.alwansan.raft.lab.t1`, versionCode=1, SHA256 `d87dc468ab39ea2ac67fe09fe1e02b34052c84f09ab3ad9bd8d22d24d18449a6`.
+- Previous shared-host requests [42496880833](https://github.com/alwansan/raf/actions/runs/42496880833) and [42497135091](https://github.com/alwansan/raf/actions/runs/42497135091) failed immediate-parent gate before Gradle due concurrent changes; preserve as failed, no repeated identical Gradle build.
+- Changed only T1 TEST_CENTER row and T1 README to READY_TO_TEST; actual owner phone tests CASE T1-01, T1-02, T1-03, T1-04 and JSONL/screenshot pending. **WATER-001 OPEN, full game NOT_READY 0/3**; generic GLES31 diagnostics do not prove original Unity FFT kernel index 6 FindKernel/dispatch or restored water.
+- No full Unity game APK/OBB/XAPK build, no changes to shared native request, no other worker's vote or scheduled task.
