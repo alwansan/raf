@@ -2,7 +2,7 @@
   "session_id": "20261108T1430Z-T3-scheduled-particle-yaml-k6d2",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed_source_tool_pending_authentic_run",
   "base_sha": "7355730d3cd131aee17af7fe9f506d5230035b6c",
   "intended_files": [
     "scripts/t3_particle_renderer_yaml_audit.py",
@@ -13,5 +13,11 @@
   "hypothesis": "A source-only bounded prefab ParticleSystemRenderer Material PPtr census can distinguish null/ambiguous renderer links from shader/blend problems without exposing asset identities",
   "experiment_key": "particle-renderer-yaml-pptr-aggregate-v1-source-only",
   "resource_key": null,
-  "updated_at": "2026-11-08T14:30:00Z"
+  "updated_at": "2026-11-08T14:36:00Z",
+  "result": "Two local synthetic tests PASS; scanner and tests committed; authentic prefab export and pixel correlation not yet tested",
+  "commits": [
+    "ee023697f7a47bfdedef712c835e309d5dd4f1ab",
+    "dedddfbea53b23002b3fad90b643454cb121fc08",
+    "42d9e7859bbd97882d0dcb0c36f0ce68310c3743"
+  ]
 }
