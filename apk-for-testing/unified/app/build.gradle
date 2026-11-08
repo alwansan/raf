@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+def sha = (project.findProperty('sourceSha') ?: System.getenv('GITHUB_SHA') ?: 'unknown').toString()
+if (!(sha == 'unknown' || sha ==~ /[a-f0-9]{40}/)) throw new GradleException('sourceSha must be a SHA40')
+android {
+    namespace 'com.alwansan.raftlab'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.alwansan.raft.lab.shared'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '0.2.0-shared-prototype'
+        buildConfigField 'String', 'LAB_WORKER', '"SHARED"'
+        buildConfigField 'String', 'SOURCE_SHA', '"' + sha + '"'
+    }
+    buildFeatures { buildConfig true }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    sourceSets {
+        main {
+            java.srcDirs += ['../../host/app/src/main/java',
+                             '../../workers/T3/gles-lab/app/src/main/java']
+            assets.srcDirs += ['../pack']
+        }
+    }
+}
