@@ -9,6 +9,7 @@ class MaterialShaderAuditTests(unittest.TestCase):
             root = Path(tmp)
             good = "a" * 32
             absent = "b" * 32
+            (root / "Known.shader").write_text('Shader "Test/Known" {}\n')
             (root / "Known.shader.meta").write_text("fileFormatVersion: 2\nguid: " + good + "\n")
             for name, fid, guid in [
                 ("known", 4800000, good),
@@ -29,6 +30,18 @@ class MaterialShaderAuditTests(unittest.TestCase):
             self.assertEqual(result["shader_meta_seen"], 1)
             self.assertNotIn(good, str(result))
             self.assertNotIn(absent, str(result))
+
+    def test_dangling_shader_meta_is_not_resolved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            guid = "c" * 32
+            (root / "Orphan.shader.meta").write_text("fileFormatVersion: 2\\nguid: " + guid + "\\n")
+            (root / "orphan.mat").write_text(
+                "Material:\\n  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid)
+            result = audit(root)
+            self.assertEqual(result["shader_meta_without_source"], 1)
+            self.assertEqual(result["shader_guid_unresolved_in_scan"], 1)
+            self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
 
     def test_nonexistent_root_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
