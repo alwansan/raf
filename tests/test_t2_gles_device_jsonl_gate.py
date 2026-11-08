@@ -86,6 +86,31 @@ class TestEvidenceGate(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "mixed_sessions"):
             verify(encoded(rows), "CASE02")
 
+    def test_case02_rejects_inconsistent_numeric_pixels(self):
+        changes = (
+            ("finalBaseline=[32, 96, 159, 255]", "finalBaseline=[99, 96, 159, 255]"),
+            ("finalContrast=[223, 32, 64, 255]", "finalContrast=[32, 96, 159, 255]"),
+            ("sourceLeft=[32, 96, 159, 255]", "sourceLeft=[256, 96, 159, 255]"),
+            ("sourceRight=[223, 32, 64, 255]", "sourceRight=[223, 32, 64]"),
+        )
+        for original, replacement in changes:
+            rows = records()
+            for row in rows:
+                if row["event"] in ("gl_observed", "shared_auto_result"):
+                    row["detail"] = row["detail"].replace(original, replacement)
+            with self.subTest(replacement=replacement):
+                with self.assertRaises(ValueError):
+                    verify(encoded(rows), "CASE02")
+
+    def test_case02_allows_tolerance_two(self):
+        rows = records()
+        for row in rows:
+            if row["event"] in ("gl_observed", "shared_auto_result"):
+                row["detail"] = row["detail"].replace(
+                    "finalBaseline=[32, 96, 159, 255]",
+                    "finalBaseline=[34, 94, 160, 255]")
+        self.assertTrue(verify(encoded(rows), "CASE02")["synthetic_gles_log_consistent"])
+
     def test_allow_equal_timestamps(self):
         rows = records()
         rows[4]["unix_ms"] = rows[3]["unix_ms"]
