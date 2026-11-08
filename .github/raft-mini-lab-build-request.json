@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-SURFACE-FIDELITY-20261108T2020Z-r8n2",
+  "request_id": "T5-SHARED-SURFACE-FIDELITY-REPIN-20261108T2023Z-r8n2",
   "target": "SHARED",
-  "requested_from_sha": "9893526c3d2ba9e2640ded758ab4075f9be35d04",
+  "requested_from_sha": "fa813e0f48dd7eb463a6d6653ca6442fc3ccbec2",
   "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
-  "reason": "Owner Android15 evidence CL/test proves T3 PixelCopy Window-produced black PNG despite real RGB stripes in owner screenshot and real GLES glReadPixels assertion, leading to false EVIDENCE_READY. One genuine shared Mini change makes T3 screenshot PixelCopy target actual GLSurfaceView, validates two observed surface colors against same-case GL readbacks, composes into full height window without 900px crop, and refuses blank/mismatched PNG with NEEDS_SCREENSHOT and bounded retries. T3 notified via T_TEAM. Isolated source/JDK/Android CI42519126545 SUCCESS. Preserve 29-case pack, Arabic portrait, no proprietary game assets, no full Unity or multiple APKs.",
+  "reason": "Owner-proven black automatically captured T3 PNG despite RGB visible in manual screenshot and readPixels values; T5/T3 coordinated SurfaceView direct PixelCopy, faithful full-height composite, fail-closed RGB parity and retries. Source/JVM/Android CI42519126545 SUCCESS. This re-pins current branch SHA after first request gate correctly rejected a concurrently changed parent; build one shared APK only. No proprietary assets, Unity game or five APKs.",
   "publish": false
 }
