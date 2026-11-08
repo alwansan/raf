@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261108T1940Z-T3-chat-arabic-manual-visual-v4c8",
+  "issue_id": "RENDER-002",
+  "event_type": "USER_CONFIRMED_T3_MANUAL_LAUNCH_BUG_FIXED_SOURCE_BUILD_NEEDED",
+  "base_sha": "aed5beb86c035789ef81a4a642d4ac412dfc9b29",
+  "user_report": "Tapping any T3 test in existing app did not open graphical test or another page; owner explicitly requested all-Arabic UI and portrait (T5 owns portrait).",
+  "verified_source_root_cause": "Before patch UnifiedLabActivity.openPending only displayed title and instructions; launchManualCase for t3_visual just told user AUTO T3.",
+  "source_commits": [
+    "389b0779d6ad106503b3566c0aa0e1d129903421",
+    "7a03a2773b0c5953a85453632e5cc6a43a94d9ec",
+    "bef7f88ff98797f7aa0532e64cb4cc7a01922b44"
+  ],
+  "test_commits": [
+    "55d8908f1a4ccb814b67063f743f03d433842f14",
+    "5e387f086d64a13db84df0daa6aa80449b30ade1"
+  ],
+  "real_device": "UNVERIFIED, new APK not built",
+  "synthetic_source_checks": "18/18 direct source invariants pass, not Python CI/Java compile",
+  "build_request_to": "T5 sole shared Mini coordinator; T3 vote NEED_BUILD in r2",
+  "portrait": "T5 concurrent RTL Arabic host/ArabicLabStrings and portrait AndroidManifest preserved; do not revert",
+  "testpack": "same one schema-v2 pack 29 total, six T3, no pack schema change",
+  "full_unity": "NOT_READY 0/3, no full Unity XAPK trial request",
+  "test_instructions": "After T5 compiles one shared Mini, tap dedicated T3-01..06 button, preview stays open, press capture-and-return, visually review image and mark result, export JSONL+summary+PNG.",
+  "report_path": "docs/T3_SHARED_ARABIC_MANUAL_LAUNCH_2026-11-08.md",
+  "next_step": "T5 compile/check new integrated shared host+T3+portrait, decide one Mini build; needs user phone acceptance. Do not duplicate build request."
+}
