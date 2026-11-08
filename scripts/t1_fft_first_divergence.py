@@ -12,7 +12,7 @@ MAX_PASSES = 32
 
 def read_private_capture(root: Path, relative: str) -> bytes:
     """Read only bounded regular files directly beneath the private manifest directory."""
-    if not isinstance(relative, str) or not relative or "\\x00" in relative:
+    if not isinstance(relative, str) or not relative or "\x00" in relative:
         raise ValueError("invalid private capture path")
     candidate = Path(relative)
     if candidate.is_absolute() or ".." in candidate.parts or candidate.parts == (".",):
