@@ -1,6 +1,20 @@
 plugins { id 'com.android.application' }
 def sha = (project.findProperty('sourceSha') ?: System.getenv('GITHUB_SHA') ?: 'unknown').toString()
 if (!(sha == 'unknown' || sha ==~ /[a-f0-9]{40}/)) throw new GradleException('sourceSha must be a SHA40')
+def sourceHash = { paths ->
+    def md = java.security.MessageDigest.getInstance('SHA-256')
+    paths.each { rel -> md.update(file(rel).bytes) }
+    return md.digest().encodeHex().toString()
+}
+def sourcePaths = [
+    't1': ['../../host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java','../../host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'],
+    't2': ['../../host/app/src/main/java/com/alwansan/raftlab/T2GpuActivity.java'],
+    't3': ['src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java'],
+    't4': ['../../host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'],
+    't5': ['../../host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java','src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java']
+]
+def buildNumber = (project.findProperty('versionCode') ?: '1').toString().toInteger()
+if (buildNumber < 1) throw new GradleException('versionCode must be positive')
 android {
     namespace 'com.alwansan.raftlab'
     compileSdk 35
@@ -8,8 +22,13 @@ android {
         applicationId 'com.alwansan.raft.lab.shared'
         minSdk 26
         targetSdk 35
-        versionCode 1
-        versionName '0.2.0-shared-prototype'
+        versionCode buildNumber
+        versionName "0.2."+buildNumber+"-shared"
+        buildConfigField 'String', 'T1_DRIVER_SHA', '"'+sourceHash(sourcePaths.t1)+'"'
+        buildConfigField 'String', 'T2_DRIVER_SHA', '"'+sourceHash(sourcePaths.t2)+'"'
+        buildConfigField 'String', 'T3_DRIVER_SHA', '"'+sourceHash(sourcePaths.t3)+'"'
+        buildConfigField 'String', 'T4_DRIVER_SHA', '"'+sourceHash(sourcePaths.t4)+'"'
+        buildConfigField 'String', 'T5_DRIVER_SHA', '"'+sourceHash(sourcePaths.t5)+'"'
         buildConfigField 'String', 'LAB_WORKER', '"SHARED"'
         buildConfigField 'String', 'SOURCE_SHA', '"' + sha + '"'
     }
