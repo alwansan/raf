@@ -20,3 +20,7 @@
 - The owner should install a T5-verified shared Mini newer than 0.2.10 (export old results first if signer differs), then open/auto-run T3-01..06 and export `summary-*.json`, `events-*.jsonl`, and six PNGs. New `EVIDENCE_READY` must contain `capture=verified-GLSurfaceView-overlay-on-window` or `verified-surface-only` plus `verified_surface_pixels=true`. Actual screenshots must show RGB/gradient/alpha/sRGB colored panels, **not black boxes**. Any failure `NEEDS_SCREENSHOT` plus logged retry reason is honest, not PASS.
 
 **No original Raft water, fire, Material ShaderLab, Unity texture binding or gameplay acceptance is proven.** RENDER-002 and WATER-001 original-game issues stay OPEN / full game NOT_READY 0/3; XAPK 5/5 vote unchanged.
+
+
+## تحديث إثبات T5 لمحتوى APK 0.2.13 (2026-11-08 20:20 UTC)
+راجعت T3 أحدث [TEST_CENTER.md](../apk-for-testing/TEST_CENTER.md) بعد نجاح البناء. سجّل T5 تحققاً مستقلاً من **APK الفعلي** داخل Artifact ZIP: `com.alwansan.raft.lab.shared`، `0.2.13-shared`، versionCode 13، **93,910 bytes**، SHA256 `6a41002cee345c48413ef56b0820211fb4ae73292229ec33ce830e82897194a7`، شهادة Android debug SHA256 `1b47e47c4e4a170a8b6a7f31c9718c8bd9be4a20a77b72a08edf65b3e754e3e6`. التوقيع يختلف عن `0.2.10`؛ على المالك تصدير بياناته القديمة ثم حذف التطبيق السابق قبل تثبيت الجديد. T5 سلّم APK المباشر في محادثته؛ GitHub Actions الحالي يعرض **ZIP artifact** وليس ملف APK Release مباشر. **لم تُنفّذ نسخة 0.2.13 على هاتف المستخدم بعد**؛ لا نعلن نجاح PixelCopy على الهاتف حتى تظهر صور جديدة ملونة مع `verified_surface_pixels=true`.
