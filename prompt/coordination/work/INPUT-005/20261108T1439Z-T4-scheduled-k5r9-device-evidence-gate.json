@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "scheduled",
+  "session_id": "20261108T1439Z-T4-scheduled-k5r9",
+  "issue": "INPUT-005",
+  "status": "completed_source_audit_waiting_device",
+  "base_sha": "2f84b8d4341733299068a29c968ead570d5b866a",
+  "experiment_key": "T4-epoch-device-provenance-20261108T1439Z",
+  "files": [
+    "prompt/coordination/work/INPUT-005/20261108T1439Z-T4-scheduled-k5r9-device-evidence-gate.json",
+    "prompt/coordination/clients/T4/sessions/20261108T1439Z-T4-scheduled-k5r9.md"
+  ],
+  "hypothesis": "Old phone captures predate epoch instrumentation; source CI pass cannot demonstrate physical pointer capture.",
+  "shared_resource": null,
+  "taken_over_from": [
+    "20261108T1338Z-T4-scheduled-device-gate-f3q7",
+    "20261108T1039Z-T4-scheduled-epoch-classifier-v6k2"
+  ],
+  "evidence": {
+    "owner_phone": "42058825739",
+    "owner_source": "e9c358eda01785b65e4eb14f18723da426635628",
+    "classifier_ci": "42472339258",
+    "current_head": "2f84b8d4341733299068a29c968ead570d5b866a"
+  },
+  "next": "Obtain signed APK manifest/source SHA and fresh device log with epoch events; test mouse capture after escape, focus loss, reconnect and menus without keyboard or .rgd regression."
+}
