@@ -117,6 +117,18 @@ class OriginalFFTIndexSixEvidenceTests(unittest.TestCase):
             self.proof(d=d.replace("   cs.Dispatch(kernel + 1, 1, 4, 1);",
                                    "   cs.Dispatch(6, 1, 4, 1);\n   cs.Dispatch(kernel + 1, 1, 4, 1);"))
 
+    def test_findkernel_mention_in_source_never_proves_original_runtime_index(self):
+        derived, base = source_fixture()
+        derived = derived.replace(
+            " public void Run() {",
+            ' public void Run() { int nameIndex = cs.FindKernel("SyntheticName");'
+        )
+        report = self.proof(d=derived, b=base)
+        self.assertEqual(report["original_source_findkernel_call_count_in_Dx11FFT"], 1)
+        self.assertFalse(report["Unity_FindKernel_runtime_id_mapped"])
+        self.assertFalse(report["original_serialized_compiled_slot_index_mapped_to_runtime_id"])
+        self.assertNotIn("SyntheticName", json.dumps(report))
+
     def test_drift_second_dispatch_offset_rejected(self):
         d, _ = source_fixture()
         with self.assertRaises(ValueError):
