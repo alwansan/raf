@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1836Z-T1-chat-water-startup-order-c5e7",
+  "resumed_from_sessions": [
+    "20261108T1811Z-T1-chat-gles-gate-9d3f",
+    "20261108T1714Z-T1-scheduled-fft-shared-lab-b6d2"
+  ],
+  "issue_id": "WATER-001",
+  "track": "authenticated CL phone-event ordering / FFT pre-world diagnostic",
+  "approach": "Fail-closed, source-pinned summary parser cross-checking first water/FFT timestamps against same-session world_loaded and source root counts; no raw log emission.",
+  "status": "active",
+  "base_sha": "d11d383f8bd222c7873f50a97d348d955998f44c",
+  "intended_files": [
+    "scripts/t1_water_startup_order.py",
+    "tests/test_t1_water_startup_order.py",
+    ".github/workflows/raft-t1-water-startup-order.yml",
+    "prompt/coordination/work/WATER-001/T1-20261108T1836Z-T1-chat-water-startup-order-c5e7-preworld-log-sequence.json",
+    "prompt/coordination/clients/T1/sessions/20261108T1836Z-T1-chat-water-startup-order-c5e7.md",
+    "prompt/coordination/clients/T1/MEMORY.md",
+    "apk-for-testing/SHARED_BUILD_READINESS.md"
+  ],
+  "experiment_key": "water-first-error-preworld-v1-CL-61f71ceb",
+  "resource_key": "CL/main/raft log/lf/LogRaft-20261108-164850-270/session-summary.json",
+  "hypothesis": "Session-authoritative first root errors occur ~64.5s before first world_loaded marker, consistent with a preworld renderer/FFT failure stage, not exclusively player world scene rendering.",
+  "related_work": [
+    "prompt/coordination/clients/T1/sessions/20261108T1714Z-T1-scheduled-fft-shared-lab-b6d2.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create deterministic independent validator and negative controls, pin CL commit and GitHub Actions source-only CI; maintain WATER-001 OPEN and no new Mini APK.",
+  "updated_at": "2026-11-08T18:36:00Z"
+}
