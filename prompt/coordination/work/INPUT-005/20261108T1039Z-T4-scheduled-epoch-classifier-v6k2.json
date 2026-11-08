@@ -1,0 +1,18 @@
+{
+  "session_id": "20261108T1039Z-T4-scheduled-epoch-classifier-v6k2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "7e1aced7b7086e659dadfe12abe079ff9d00dd57",
+  "intended_files": [
+    "scripts/t4_classify_mouse_capture_log.py",
+    "tests/test_t4_classify_mouse_capture_log.py",
+    "prompt/coordination/clients/T4/sessions/20261108T1039Z-T4-scheduled-epoch-classifier-v6k2.md",
+    "prompt/coordination/work/INPUT-005/20261108T1039Z-T4-scheduled-epoch-classifier-v6k2.json"
+  ],
+  "hypothesis": "Existing classifier pairs any relative marker with any retry request in a lock interval, even when epoch differs; avoid false attribution.",
+  "experiment_key": "t4-classifier-epoch-matching-7e1aced7",
+  "resource_key": null,
+  "taken_over_from": "T4 20261108T0840Z epoch telemetry; CI 42468530415 source success",
+  "updated_at": "2026-11-08T10:39:00Z"
+}
