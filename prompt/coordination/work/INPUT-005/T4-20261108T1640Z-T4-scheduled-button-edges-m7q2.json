@@ -1,0 +1,21 @@
+{
+  "session_id": "20261108T1640Z-T4-scheduled-button-edges-m7q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "1ed64d0394ddc1b063067431468cbc5b8a537197",
+  "resumed_from_sessions": [
+    "20261108T1540Z-T4-chat-mini-lab-c6p4",
+    "20261108T1536Z-T4-scheduled-route-analyzer-n8q4"
+  ],
+  "intended_files": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py",
+    "prompt/coordination/clients/T4/sessions/20261108T1640Z-T4-scheduled-button-edges-m7q2.md"
+  ],
+  "hypothesis": "Existing analyzer reports button presence from held state during motion, not actual press/release edges. Separate action edge evidence to avoid false positives.",
+  "experiment_key": "T4-input005-mouse-button-edge-classifier-v1-source-only",
+  "resource_key": null,
+  "updated_at": "2026-11-08T16:40:00Z",
+  "owner_evidence": "camera relative works, left/right/middle/wheel fail in game; mini APK 42496622364 successful but not tested on phone"
+}
