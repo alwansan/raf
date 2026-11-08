@@ -23,7 +23,7 @@ def audit(root):
             c["symlink_skipped"] += 1
             continue
         try:
-            data = p.read_text(encoding="utf-8")
+            data = p.read_text(encoding="utf-8-sig")
         except (UnicodeError, OSError):
             c["unreadable"] += 1
             continue
