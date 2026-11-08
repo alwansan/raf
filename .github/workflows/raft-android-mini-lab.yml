@@ -71,6 +71,9 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
+        with:
+          # The v3 default includes removed SDK package `tools`; only platform-tools is needed.
+          packages: 'platform-tools'
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
