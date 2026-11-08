@@ -42,8 +42,22 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
 
     def test_input_events_preserve_touch_and_physical_mouse_clicks(self):
         self.assertIn('base("android.view.View$OnCapturedPointerListener")', BRIDGE)
-        self.assertIn('getActionMasked") != 2', BRIDGE)
-        self.assertIn("return false; // ACTION_MOVE only and current generation.", BRIDGE)
+        self.assertIn('int action = motionEvent.Call<int>("getActionMasked");', BRIDGE)
+        # Mouse movement still enters the original relative-delta path only.
+        self.assertIn("if (action != PhysicalMouseMotionSource.ActionMove)", BRIDGE)
+        # Button/wheel callbacks are observed, never consumed or converted to
+        # synthetic Unity mouse button/scroll state in this diagnostic change.
+        listener = BRIDGE.split("public bool onCapturedPointer(", 1)[1].split(
+            "private bool RecordCapturedMotion", 1
+        )[0]
+        nonmove = listener.split("if (action != PhysicalMouseMotionSource.ActionMove)", 1)[1].split(
+            "int source = motionEvent.Call<int>(\"getSource\");", 1
+        )[0]
+        self.assertIn("PhysicalMouseActionEvidence.IsAction(action)", nonmove)
+        self.assertIn("owner.RecordCapturedAction(", nonmove)
+        self.assertIn("return false;", nonmove)
+        self.assertNotIn("QueueStateEvent", nonmove)
+        self.assertNotIn("deltas.Push", nonmove)
         self.assertIn("return false; // Fail open to Unity", BRIDGE)
         self.assertIn('mouse.name != VirtualTouchMouse', BRIDGE)
         self.assertIn('Input.simulateMouseWithTouches = false;', TOUCH)
