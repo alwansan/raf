@@ -23,3 +23,8 @@ run_urls: https://github.com/alwansan/raf/actions/runs/42509945996 (SUCCESS; sha
 limitations: normalized fixture method call descriptor is not a verified original Mono.Cecil callsite; no field alias/control-flow model or original Assembly SHA proof; WATER-001 remains OPEN, Raft NOT_READY and no phone pixels established.
 next_step: verify original ZIP2 Assembly-CSharp SHA privately, implement authentic typed callsite and field/branch producer emitter feeding this gate, keep unknown unresolved; T5/owner device T2-01..04 via already-built unified APK. No duplicate Mini or Unity full build request.
 ledger_note: automatic inherited B_TEAM summary CI blocked by historical T3 record lacking explicit event identity; do not generate a new event-triggered CI until schema is restored by responsible owner.
+
+## Post-commit source-only CI (2026-11-08 19:00 UTC)
+- New isolated workflow [fccd2826c46c6cf508d242ff70156df82fc684f3](https://github.com/alwansan/raf/commit/fccd2826c46c6cf508d242ff70156df82fc684f3): `.github/workflows/raft-t2-foam-blit-operand-sourcefree.yml`, only source-free Python scripts/test paths, 8-minute cap, checkout LFS=false, no Unity/native or package trigger.
+- **[Actions 42512807487](https://github.com/alwansan/raf/actions/runs/42512807487) COMPLETED SUCCESS** on workflow SHA `fccd2826c46c6cf508d242ff70156df82fc684f3`, job `128829337626`. Logs: `py_compile` PASS, `Ran 10 tests in 0.002s`, `OK`; no original private DLL/GPU/device check.
+- Original Foam source/destination instance identity and actual ShaderLab integration remain **unproved**; this run is NOT a Raft water acceptance test and does not justify another unified APK.
