@@ -40,6 +40,9 @@ def summarize(rows, *, expected_session):
         # Native LogRaft rows carry provenance and validity fields. A plausible
         # number is not enough when the sampled surface or PID is unverified.
         if row.get("source") == "lograf_shell":
+            if "package" in row and row["package"] != "com.alwansan.raft.androidtest":
+                rejected["wrong_game_package"] = rejected.get("wrong_game_package", 0) + 1
+                continue
             if (row.get("fps_quality") != "surface_presentation_estimate"
                     or row.get("fps_tracking_status") != "valid_surface_presentation_estimate"
                     or row.get("main_process_pid_verified") is not True
