@@ -18,3 +18,6 @@ Latest CI run 42457872783 queued at 2026-11-08T07:13Z; 42457864030 in_progress, 
 
 ## Next
 Inspect CI failure details on final SHA d056bd5f; fix only proven issue. Continue authentic ComputeShader GUID/FindKernel/Dispatch mapping and paired Vulkan/Unity numeric captures; structure tests are not device evidence. NOT_READY 0/3. Read this session before resuming.
+
+## 07:14Z evidence update
+Final earlier CI 42457872783 failed with 7 subprocess cases, all due to ModuleNotFoundError: No module named 'scripts' when running comparator by absolute script path. Other 9 tests passed, including NUL path and Dispatch coverage. Job log ID 128660656875. Fixed subprocess invocation to python -m scripts.t1_fft_first_divergence in commit a29329608e1ec4e5378f222ce427a25e8a5fe742. Waiting for new CI at this SHA; no duplicate dispatch. This is an import/CI fix, not FFT numeric parity or water device confirmation.
