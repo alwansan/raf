@@ -1,0 +1,21 @@
+{
+  "session_id": "20261108T1556Z-T3-chat-particle-ci-c83f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-08T15:56:00Z",
+  "base_sha": "7800e28583679d5e23825818b0ea5120b9d8b33f",
+  "resumed_from_sessions": [
+    "20261108T1529Z-T3-scheduled-neg-fileid-q7m2",
+    "20261108T1540Z-T3-chat-gles-material-lab-6b2a"
+  ],
+  "intended_files": [
+    ".github/workflows/raft-t3-native-material-shader-quality.yml",
+    "prompt/coordination/clients/T3/sessions/20261108T1556Z-T3-chat-particle-ci-c83f.md"
+  ],
+  "experiment_key": "t3-particle-renderer-negative-material-fileid-postpatch-python-regression-ci",
+  "resource_key": null,
+  "hypothesis": "After scheduled T3 negative fileID patch, existing CI green 40/40 predates that patch; adding the exact three source-only regression tests to T3's existing lightweight pipeline should distinguish parser implementation failure from untested status.",
+  "limits": "Source-only synthetic Python tests, not actual Unity YAML export nor Adreno/Unity pixels.",
+  "concurrent": "0 queued or active Actions at scope start; no T4 or T5 files modified."
+}
