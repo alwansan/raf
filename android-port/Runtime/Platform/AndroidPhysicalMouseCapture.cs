@@ -21,7 +21,7 @@ namespace RaftAndroid.Platform
         private bool focused = true, paused, supported;
         private volatile bool nativeHasMotion, requested, nativeCaptured;
         private readonly object captureGate = new object();
-        private int epoch, lastLoggedCount, captureLossCount, loggedLossCount;
+        private int epoch, lastLoggedCount, captureLossCount, loggedLossCount, captureRequestAttempts;
         private int captureViewIdentity, mismatchedViewEpoch, loggedMismatchedViewEpoch;
         private float nextRequestTime, nextProbeTime;
 
@@ -329,10 +329,18 @@ namespace RaftAndroid.Platform
 
         private void RequestCapture()
         {
+            // Report first request as before. Retry telemetry is bounded to
+            // powers of two so a device that never grants capture cannot flood logs.
+            // Attempts count requests, not Android acceptance or mouse motion.
+            int attempt = ++captureRequestAttempts;
             if (!requested)
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
                     "physical_mouse_capture_requested",
                     "androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
+            else if (attempt > 1 && (attempt & (attempt - 1)) == 0)
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_retry",
+                    "attempt=" + attempt + "; nativeAccepted=unknown; requiresDeviceConfirmation=true");
             int currentEpoch;
             lock (captureGate)
             {
@@ -412,6 +420,7 @@ namespace RaftAndroid.Platform
                 deltas.Reset();
             }
             lastLoggedCount = 0;
+            captureRequestAttempts = 0;
             nextProbeTime = 0f;
             // Preserve the original release-epoch checkpoint and queued
             // callback guard. An unrelated View must still never be released.
