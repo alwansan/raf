@@ -83,6 +83,21 @@ class MaterialShaderAuditTests(unittest.TestCase):
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
             self.assertEqual(result["shader_guid_unresolved_in_scan"], 0)
 
+    def test_duplicate_shader_field_with_one_valid_pointer_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            guid = "f" * 32
+            (root / "Known.shader").write_text('Shader "Test/Known" {}\\n')
+            (root / "Known.shader.meta").write_text("guid: " + guid + "\\n")
+            (root / "ambiguous.mat").write_text(
+                "Material:\\n"
+                "  m_Shader: {fileID: 4800000, guid: %s, type: 3}\\n" % guid
+                + "  m_Shader: malformed\\n"
+            )
+            result = audit(root)
+            self.assertEqual(result["material_shader_pointer_unparsed"], 1)
+            self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
+
     def test_nonexistent_root_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError):
