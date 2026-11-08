@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "worker": "T5",
+  "origin": "chat",
+  "session_id": "20261108T1852Z-T5-chat-unified-saf-stream-k6p2",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "resumed_from": [
+    "20261108T1818Z-T5-chat-unified-evidence-cache-a6d4",
+    "20261108T1846Z-T5-scheduled-shared-artifact-retention-q7m2"
+  ],
+  "base_sha": "a3d885df188fd16daa5981ab1754948361670d40",
+  "scope": "Unify shared T5-02 SAF file digest with previously proven StreamSha256; reject repeated zero reads, enforce 16GiB bound, expose bounded progress, no overlapping digests; protect uploaded pack/image import against zero-progress providers. No new mini/full game build.",
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "tests/test_unified_saf_stream_contract.py",
+    "prompt/coordination/clients/T5/sessions/20261108T1852Z-T5-chat-unified-saf-stream-k6p2.md"
+  ],
+  "experiment_key": "unified-T5-02-SAF-stream-guard@a3d885d:16GiB-zero-read-ui-progress",
+  "resource_key": "android-unified-mini-host",
+  "run_urls": [],
+  "next_step": "Patch T5-owned activity only; test source and existing StreamSha256 Java tests, CI isolated, update own session and MEMORY. No trial request without fresh shared round need."
+}
