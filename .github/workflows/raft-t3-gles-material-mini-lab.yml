@@ -1,0 +1,51 @@
+name: T3 RENDER-002 independent GLES3 material and particle mini-lab
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'apk-for-testing/workers/T3/gles-lab/**'
+      - '.github/workflows/raft-t3-gles-material-mini-lab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-gles-mini-lab-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-and-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            apk-for-testing/workers/T3/gles-lab
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Build isolated GLES3 APK, never Unity or Raft game assets
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          gradle -p apk-for-testing/workers/T3/gles-lab --no-daemon :app:assembleDebug -PsourceSha="$SOURCE_SHA"
+          APK=apk-for-testing/workers/T3/gles-lab/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          sha256sum "$APK" | tee t3-gles-apk-sha256.txt
+          "${ANDROID_HOME}/build-tools/35.0.0/aapt" dump badging "$APK" | grep -E "^package:|^uses-feature:"
+          cp "$APK" t3-gles-material-lab-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: t3-gles-material-lab-${{ github.sha }}
+          path: |
+            t3-gles-material-lab-debug.apk
+            t3-gles-apk-sha256.txt
+          retention-days: 7
+          if-no-files-found: error
