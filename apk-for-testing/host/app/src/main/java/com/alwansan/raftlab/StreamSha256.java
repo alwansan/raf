@@ -38,11 +38,20 @@ public final class StreamSha256 {
         long total = 0;
         long notified = 0;
         int n;
+        int consecutiveEmptyReads = 0;
         while ((n = input.read(buffer)) != -1) {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedIOException("SHA-256 cancelled");
             }
-            if (n == 0) continue;
+            if (n == 0) {
+                // A non-empty read should not return zero. Bound broken SAF providers
+                // rather than spinning forever with no progress or usable digest.
+                if (++consecutiveEmptyReads >= 16) {
+                    throw new IOException("Selected file provider returned repeated empty reads");
+                }
+                continue;
+            }
+            consecutiveEmptyReads = 0;
             if (total > MAX_BYTES - n) throw new IOException("Selected file exceeds 16 GiB safety limit");
             md.update(buffer, 0, n);
             total += n;
