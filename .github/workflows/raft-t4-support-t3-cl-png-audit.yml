@@ -1,0 +1,63 @@
+name: T4 supporting T3 real CL screenshot pixel content audit (no APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_support_t3_visual_png_audit.py'
+      - 'tests/test_t4_support_t3_visual_png_audit.py'
+      - '.github/workflows/raft-t4-support-t3-cl-png-audit.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-support-t3-original-cl-png-audit
+  cancel-in-progress: false
+
+jobs:
+  owner-original-t3-png-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout T4 independent helper only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_support_t3_visual_png_audit.py
+            /tests/test_t4_support_t3_visual_png_audit.py
+      - name: Test parser and black-vs-RGB controls (no device/Unity)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t4_support_t3_visual_png_audit.py -v
+      - name: Checkout owner CL six original PNGs at immutable commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/CL
+          ref: f401b7ffe3b6ead9038f3b35273599dcf8286e68
+          path: owner-cl
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /test/shared-20261108-214145-461675491/
+            /test/shared-20261108-214548-461919098/
+      - name: Verify original CL image blobs and output numeric-only visual diagnostic
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C owner-cl rev-parse HEAD)" = f401b7ffe3b6ead9038f3b35273599dcf8286e68
+          a=owner-cl/test/shared-20261108-214145-461675491
+          b=owner-cl/test/shared-20261108-214548-461919098
+          for case in 01 02 03 04 05 06; do
+            first="$(find "$a" -maxdepth 1 -name "T3-$case-*.png" -type f -print -quit)"
+            second="$(find "$b" -maxdepth 1 -name "T3-$case-*.png" -type f -print -quit)"
+            test -n "$first" && test -n "$second"
+            test "$(git hash-object "$first")" = "$(git hash-object "$second")"
+          done
+          echo 'T4_SUPPORT_T3 duplicate_later_CL_PNGs=6/6 git_blob_identical=true'
+          python3 -m scripts.t4_support_t3_visual_png_audit --dir "$a" --assert-owner-snapshot
+          echo 'T4_SUPPORT_T3: image content only; not proof original Raft graphics or owner visual approval.'
+          # No original screenshots, pixel arrays, source assets or Android APK uploaded.
