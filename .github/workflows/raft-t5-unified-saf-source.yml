@@ -1,0 +1,54 @@
+name: T5 unified SAF source contract (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t5-unified-saf-source.yml'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java'
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java'
+      - 'tests/test_t5_unified_saf_stream_contract.py'
+      - 'tests/java/T5StreamSha256Test.java'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-unified-saf-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  unified-saf-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assert shared Android host calls proven SAF stream
+        run: python3 -m unittest discover -s tests -p 'test_t5_unified_saf_stream_contract.py' -v
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Run real Java StreamSha256 with broken SAF and 2GiB+ synthetic inputs
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raft-t5-stream-classes
+          javac -d /tmp/raft-t5-stream-classes \
+            apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java \
+            tests/java/T5StreamSha256Test.java
+          java -cp /tmp/raft-t5-stream-classes com.alwansan.raftlab.T5StreamSha256Test
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Compile actual unified Java classes (without APK or Unity)
+        run: gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA" -PversionCode=1
