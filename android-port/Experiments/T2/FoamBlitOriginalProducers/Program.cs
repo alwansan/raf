@@ -314,6 +314,60 @@ internal static class Program
         if(start<0 || UnsafeFlow(method,start,callIndex))return "control_flow";
         return "none";
     }
+    static string SourceHeadClass(MethodDefinition method, int callIndex, FieldDefinition field)
+    {
+        // Classify the *immediately preceding CIL opcode family* once the
+        // typed destination has been consumed. This is NOT the identity or
+        // stack producer of a texture; keep unrelated private IL out of logs.
+        if(!DirectMaterialBlit(method,callIndex,field))return "not_direct_material";
+        var il=method.Body.Instructions;
+        int pass=Previous(il,callIndex-1);
+        int mat=Previous(il,pass-1);
+        int at=mat-1;
+        if(il[mat].OpCode.Code==Code.Ldfld)
+        {
+            at=Previous(il,at);
+            if(at<0||!Receiver(il[at]))return "not_direct_material";
+            at--;
+        }
+        var dst=TypedValue(method,il,ref at);
+        if(dst.Type is not (RenderTexture or "null"))return "destination_not_direct";
+        int srcIndex=Previous(il,at);
+        if(srcIndex<0)return "source_head_missing";
+        var inst=il[srcIndex];
+        if(inst.OpCode.Code is Code.Call or Code.Callvirt)
+        {
+            if(inst.Operand is not MethodReference call)return "call_signature_unavailable";
+            return call.ReturnType.FullName switch
+            {
+                RenderTexture=>"call_returns_render_texture",
+                Texture=>"call_returns_texture",
+                _=>"call_returns_other"
+            };
+        }
+        if(inst.OpCode.Code==Code.Newobj)return "constructor_result";
+        if(inst.OpCode.Code is Code.Castclass or Code.Isinst)
+        {
+            if(inst.Operand is not TypeReference type)return "cast_type_unavailable";
+            return type.FullName switch
+            {
+                RenderTexture=>"cast_to_render_texture",
+                Texture=>"cast_to_texture",
+                _=>"cast_to_other"
+            };
+        }
+        if(inst.OpCode.Code==Code.Ldelem_Ref)return "array_element";
+        if(inst.OpCode.Code==Code.Ldind_Ref)return "indirect_reference";
+        if(inst.OpCode.Code is Code.Ldloca or Code.Ldloca_S or Code.Ldarga or
+            Code.Ldarga_S or Code.Ldflda or Code.Ldsflda or Code.Ldelema)
+            return "address_load";
+        if(inst.OpCode.Code is Code.Ldfld or Code.Ldsfld)return "field_load_complex";
+        if(inst.OpCode.Code==Code.Dup)return "stack_duplicate";
+        if(inst.OpCode.FlowControl is FlowControl.Branch or FlowControl.Cond_Branch)
+            return "control_flow";
+        return "other_opcode_family";
+    }
+
     static Site? DirectFieldBlit(MethodDefinition m,int callIndex,FieldDefinition field)
     {
         var il=m.Body.Instructions;
@@ -392,6 +446,7 @@ internal static class Program
         var exactMaterialDirect=new int[2];
         var exactMaterialLocalAlias=new int[2];
         var originalFirstBlockers=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
+        var originalSourceHeadKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -409,6 +464,7 @@ internal static class Program
                     {
                         exactMaterialDirect[lit.Value]++;
                         originalFirstBlockers[lit.Value].Add(FirstUnresolvedImageOperand(m,i,materialField));
+                        originalSourceHeadKinds[lit.Value].Add(SourceHeadClass(m,i,materialField));
                     }
                     else if(OriginalMaterialLocalAliasBlit(m,i,materialField))
                         exactMaterialLocalAlias[lit.Value]++;
@@ -428,6 +484,21 @@ internal static class Program
             throw new InvalidOperationException("unsafe_original_diagnostic_tag");
         Console.WriteLine("T2_FOAM_PASS0_FIRST_IMAGE_OPERAND "+tag0);
         Console.WriteLine("T2_FOAM_PASS1_FIRST_IMAGE_OPERAND "+tag1);
+        string head0=originalSourceHeadKinds[0].Count==1?originalSourceHeadKinds[0][0]:"ambiguous_or_missing";
+        string head1=originalSourceHeadKinds[1].Count==1?originalSourceHeadKinds[1][0]:"ambiguous_or_missing";
+        var safeHeadTags=new HashSet<string>{
+            "not_direct_material", "destination_not_direct", "source_head_missing",
+            "call_signature_unavailable", "call_returns_render_texture",
+            "call_returns_texture", "call_returns_other", "constructor_result",
+            "cast_type_unavailable", "cast_to_render_texture", "cast_to_texture",
+            "cast_to_other", "array_element", "indirect_reference", "address_load",
+            "field_load_complex", "stack_duplicate", "control_flow",
+            "other_opcode_family", "ambiguous_or_missing"
+        };
+        if(!safeHeadTags.Contains(head0)||!safeHeadTags.Contains(head1))
+            throw new InvalidOperationException("private_CIL_source_head_not_allowed");
+        Console.WriteLine("T2_FOAM_PASS0_SOURCE_HEAD_CLASS "+head0);
+        Console.WriteLine("T2_FOAM_PASS1_SOURCE_HEAD_CLASS "+head1);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -501,6 +572,37 @@ internal static class Program
            TypedValue(method,instructions,ref at).Type!=RenderTexture||at!=0||
            TypedValue(method,instructions,ref at).Type!=Texture||at!=-1)
             throw new InvalidOperationException("typed_fixture_order");
+        // Test a nested call-producing source value: the last CIL opcode
+        // is a typed call, but the actual returned texture *instance* is NOT
+        // deducible from its public return-type declaration.
+        var fixtureMatField=new FieldDefinition("MaterialFixture",
+            Mono.Cecil.FieldAttributes.Private|Mono.Cecil.FieldAttributes.Static,mat);
+        var fixtureRtField=new FieldDefinition("TargetFixture",
+            Mono.Cecil.FieldAttributes.Private|Mono.Cecil.FieldAttributes.Static,rt);
+        owner.Fields.Add(fixtureMatField);
+        owner.Fields.Add(fixtureRtField);
+        var fixtureMethod=new MethodDefinition("HeadFixture",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,mod.TypeSystem.Void);
+        owner.Methods.Add(fixtureMethod);
+        var producerCall=new MethodReference("PrivateSyntheticProducer",rt,owner){HasThis=false};
+        var stream=fixtureMethod.Body.Instructions;
+        stream.Add(Instruction.Create(OpCodes.Call,producerCall)); // source
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField)); // destination
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureMatField)); // Foam material
+        stream.Add(Instruction.Create(OpCodes.Ldc_I4_1)); // pass
+        stream.Add(Instruction.Create(OpCodes.Call,b)); // Blit, name restored next
+        b.Name="Blit";
+        if(!DirectMaterialBlit(fixtureMethod,4,fixtureMatField) ||
+           FirstUnresolvedImageOperand(fixtureMethod,4,fixtureMatField)!="source_not_direct" ||
+           SourceHeadClass(fixtureMethod,4,fixtureMatField)!="call_returns_render_texture")
+            throw new InvalidOperationException("synthetic_call_head_not_classified");
+        producerCall.ReturnType=mod.TypeSystem.Void;
+        if(SourceHeadClass(fixtureMethod,4,fixtureMatField)!="call_returns_other")
+            throw new InvalidOperationException("void_call_not_texture");
+        producerCall.ReturnType=rt;
+        stream[0]=Instruction.Create(OpCodes.Ldelem_Ref);
+        if(SourceHeadClass(fixtureMethod,4,fixtureMatField)!="array_element")
+            throw new InvalidOperationException("array_result_not_kind");
     }
 
     public static int Main(string[] args)
