@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1852Z-T5-chat-unified-saf-stream-k6p2",
-  "resumed_from_session": "20261108T1846Z-T5-scheduled-shared-artifact-retention-q7m2",
-  "status": "completed_source_ci_device_pending",
-  "base_sha": "a3d885df188fd16daa5981ab1754948361670d40",
-  "last_commit": "6e19f0c178995a851040ee80efa353a9f7f7c224",
-  "updated_at": "2026-11-08T18:59:00Z",
+  "session_id": "20261108T1945Z-T5-chat-portrait-arabic-owner-cl-m7r4",
+  "resumed_from_session": "20261108T1930Z-T5-chat-owner-manual-test-guide-u3c7",
+  "status": "completed_build_verified_device_pending",
+  "base_sha": "a44d5257a9700f23ae31afab2a1c2800421f17c6",
+  "last_commit": "f0a2325cb47daf72c97a4ed580a400aa66e68e64",
+  "updated_at": "2026-11-08T19:58:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001",
@@ -56,8 +56,11 @@
     "https://github.com/alwansan/raf/actions/runs/42019514287",
     "https://github.com/alwansan/raf/actions/runs/42020924863",
     "https://github.com/alwansan/raf/actions/runs/42509945996",
-    "https://github.com/alwansan/raf/actions/runs/42512390472"
+    "https://github.com/alwansan/raf/actions/runs/42512390472",
+    "https://github.com/alwansan/raf/actions/runs/42516899166",
+    "https://github.com/alwansan/raf/actions/runs/42516908881",
+    "https://github.com/alwansan/raf/actions/runs/42517104924"
   ],
-  "next_step": "Unified SAF T5-02 source fix 6f2cf77 passed CI42512390472 (4/4 Python, 16 Java engine checks, Android Java compile). This source is newer than shared APK from CI42509945996 and NOT in that APK. Wait for owner phone evidence, avoid duplicate APK, T5 shared r2 NO_BUILD. Full game NOT_READY 0/3.",
+  "next_step": "Owner export prior v9 lab logs, uninstall due signer mismatch, install 0.2.10 Arabic/portrait Mini SHA256 0f469cc650182370b570d96c8e92e3f9c686f6b4417ae10e22d3c35b0084fd42, run tests and upload JSONL/summary to CL/test. T1-T4 read shared owner directive for child UI localization/evidence. T5 r3 NO_BUILD, game NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
