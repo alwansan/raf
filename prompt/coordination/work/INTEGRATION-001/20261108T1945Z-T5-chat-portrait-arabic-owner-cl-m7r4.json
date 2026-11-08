@@ -1,0 +1,23 @@
+{
+  "worker": "T5",
+  "session_id": "20261108T1945Z-T5-chat-portrait-arabic-owner-cl-m7r4",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "INTEGRATION-001",
+  "base_sha": "a44d5257a9700f23ae31afab2a1c2800421f17c6",
+  "scope": "Owner-requested unified Mini APK portrait orientation, Arabic main UI and all 29 case title/instructions/expected while preserving canonical pack fields and evidence SHA, plus shared guidance notifying T1–T5 that test uploads are https://github.com/alwansan/CL/tree/main/test. Build one Mini APK only after source CI and T5 vote; do not touch Raft full game or other workers' original Java.",
+  "touched": [
+    "apk-for-testing/unified/app/src/main/AndroidManifest.xml",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ArabicLabStrings.java",
+    "tests/test_unified_arabic_portrait.py",
+    "prompt/coordination/T_TEAM/OWNER_TEST_UPLOADS_AR.md",
+    "prompt/coordination/T_TEAM/PROMPT_AR.md",
+    "apk-for-testing/TEST_CENTER.md"
+  ],
+  "experiment_key": "T5-portrait-Arabic-29cases-CL-upload-v1",
+  "resource_key": "shared-mini-apk",
+  "owner_request": "portrait UI; Arabic test descriptions; notify workers CL/test",
+  "build_readiness": "source patch and isolated compile first, one authorized Mini APK after evidence",
+  "next_step": "Implement UI, verify APK compile and manifest; announce owner upload path to T1–T5 via canonical shared directive."
+}
