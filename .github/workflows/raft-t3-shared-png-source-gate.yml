@@ -1,0 +1,49 @@
+name: T3 unified visual PNG integrity source gate (NO APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java'
+      - 'tests/test_t3_shared_visual_frame.py'
+      - '.github/workflows/raft-t3-shared-png-source-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-shared-png-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-only-no-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            apk-for-testing/unified
+            apk-for-testing/host
+            scripts
+            tests
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: T3 exact-frame and pending-PNG source guards
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_shared_visual_frame.py' -v
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+          python3 -m unittest discover -s tests -p 'test_unified_testpack.py' -v
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Compile shared T3 Java in unified host, no APK creation
+        run: |
+          set -euo pipefail
+          gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA"
+          test ! -f apk-for-testing/unified/app/build/outputs/apk/debug/app-debug.apk
+          echo 'COMPILE_ONLY: no APK/OBB/XAPK, no Unity game, no direct Release claim.'
