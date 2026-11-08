@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "worker": "T4",
+  "pack_id": "t4-physical-mouse-capture-v1",
+  "title": "Raft T4 Physical Mouse Lab",
+  "version": "1.0.0",
+  "source_sha": null,
+  "tests": [
+    {
+      "id": "T4-01",
+      "type": "mouse",
+      "title": "Left click without pointer capture",
+      "instructions": "Capture OFF; press and release left on input pad",
+      "expected": "BUTTON_PRIMARY press/release or correlated DOWN/UP"
+    },
+    {
+      "id": "T4-02",
+      "type": "mouse",
+      "title": "Left click with pointer capture",
+      "instructions": "Capture ON; press and release left while moving",
+      "expected": "Button events survive relative camera movement"
+    },
+    {
+      "id": "T4-03",
+      "type": "mouse",
+      "title": "Right click with capture",
+      "instructions": "Capture ON; press and release right",
+      "expected": "BUTTON_SECONDARY recorded"
+    },
+    {
+      "id": "T4-04",
+      "type": "mouse",
+      "title": "Middle click with capture",
+      "instructions": "Capture ON; press and release middle",
+      "expected": "BUTTON_TERTIARY recorded"
+    },
+    {
+      "id": "T4-05",
+      "type": "mouse",
+      "title": "Vertical wheel",
+      "instructions": "Rotate wheel forward and backward, capture ON/OFF",
+      "expected": "AXIS_VSCROLL nonzero"
+    },
+    {
+      "id": "T4-06",
+      "type": "mouse",
+      "title": "Horizontal wheel",
+      "instructions": "Use tilt wheel if device supports",
+      "expected": "AXIS_HSCROLL nonzero or NOT_SUPPORTED"
+    },
+    {
+      "id": "T4-07",
+      "type": "mouse",
+      "title": "Capture transition and focus",
+      "instructions": "Release/reacquire capture, leave/reenter app",
+      "expected": "No stale input or stuck buttons"
+    },
+    {
+      "id": "T4-08",
+      "type": "mouse",
+      "title": "Keyboard and touchscreen",
+      "instructions": "After capture toggle try keyboard and touch",
+      "expected": "No regression"
+    },
+    {
+      "id": "T4-09",
+      "type": "note",
+      "title": "Compare with full Raft",
+      "instructions": "Repeat same physical mouse actions in current Raft APK",
+      "expected": "Distinguish Android callback availability vs Unity bridge loss"
+    }
+  ]
+}
