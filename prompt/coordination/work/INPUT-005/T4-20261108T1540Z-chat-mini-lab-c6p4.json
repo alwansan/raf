@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261108T1540Z-T4-chat-mini-lab-c6p4",
+  "issue": "INPUT-005",
+  "status": "active",
+  "base_sha": "5e2020b135adf3b7c989337c256d72278e90eca7",
+  "intended_files": [
+    ".github/raft-mini-lab-build-request.json",
+    "apk-for-testing/workers/T4/README.md",
+    "apk-for-testing/TEST_CENTER.md",
+    "prompt/coordination/clients/T4/sessions/20261108T1540Z-T4-chat-mini-lab-c6p4.md"
+  ],
+  "experiment_key": "T4-android-physical-mouse-button-scroll-host-0.1.0-capture-on-off",
+  "resource_key": "raft-android-mini-lab-workflow-T4",
+  "updated_at": "2026-11-08T15:40:00Z",
+  "hypothesis": "Android Activity/View captured-ptr and generic dispatch can distinguish left/right/middle/scroll callback visibility versus Raft Unity input bridge loss while existing relative camera movement remains untouched.",
+  "related_work": [
+    "20261108T1536Z-T4-scheduled-route-analyzer-n8q4",
+    "20261108T1439Z-T4-scheduled-k5r9"
+  ],
+  "plan": "Do not edit shared host or game until baseline T4 mini-lab real APK/source compile proves instrumentation. Check mini-lab run duplication; submit only one isolated request with pinned parent SHA and [raft-mini-lab]. If build succeeds, record actual artifact metadata before READY_TO_TEST.",
+  "experiment_ids": [
+    "T4-MOUSE-CAPTURE-BUTTONS-SCROLL-20261108"
+  ],
+  "result": null
+}
