@@ -1,0 +1,17 @@
+plugins { id 'com.android.application' }
+def worker = (project.findProperty('worker') ?: 'T4').toString().toUpperCase()
+if (!(worker in ['T1','T2','T3','T4','T5'])) throw new GradleException('worker must be T1..T5')
+android {
+    namespace 'com.alwansan.raftlab'
+    compileSdk 35
+    defaultConfig {
+        applicationId "com.alwansan.raft.lab.${worker.toLowerCase()}"
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0-source-prototype'
+        buildConfigField 'String', 'LAB_WORKER', '"' + worker + '"'
+    }
+    buildFeatures { buildConfig true }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
