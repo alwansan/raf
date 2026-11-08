@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T1811Z-T1-chat-gles-gate-9d3f",
+  "resumed_from_sessions": [
+    "20261108T1714Z-T1-scheduled-fft-shared-lab-b6d2"
+  ],
+  "issue_id": "WATER-001",
+  "track": "shared Android GLES Compute diagnostic (synthetic, NOT Unity FFT)",
+  "approach": "Bounded GL-context readiness handshake before T1-01..04 auto dispatch; preserve actual PASS/FAIL and avoid timing-only false failures.",
+  "status": "active",
+  "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
+  "intended_files": [
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java",
+    "tests/test_t1_compute_probe_context_gate.py",
+    "prompt/coordination/clients/T1/sessions/20261108T1811Z-T1-chat-gles-gate-9d3f.md",
+    "prompt/coordination/clients/T1/MEMORY.md",
+    "apk-for-testing/SHARED_BUILD_READINESS.md"
+  ],
+  "experiment_key": "t1-shared-gles-context-readiness-v1-20261108",
+  "resource_key": "T1ComputeProbe.java",
+  "hypothesis": "A fixed 1 s delay in host launches auto tests before GLSurfaceView.onSurfaceCreated on slow devices; false FAIL no active GLES context.",
+  "related_work": [
+    "prompt/coordination/clients/T1/sessions/20261108T1714Z-T1-scheduled-fft-shared-lab-b6d2.md"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42504045625"
+  ],
+  "result": null,
+  "next_step": "Patch T1-owned compute probe, run source regression + Android compile gate without launching APK, coordinate single mini build with T5.",
+  "updated_at": "2026-11-08T18:11:00Z"
+}
