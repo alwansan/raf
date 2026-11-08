@@ -7,4 +7,4 @@
 
 زر Auto All وAuto Tn يشغل فقط الحالات التي تمتلك driver فعلياً ويمكن قياسها. حالات ماوس مادي أو حكم بصري لا يجوز إعلان PASS تلقائي لها؛ تظهر في قائمة المتابعة، مع شاشة خطوة تالية/إنهاء وإرفاق screenshot. صور تطبيقنا يمكن محاولة التقاطها عبر PixelCopy؛ التطبيقات الأخرى تحتاج مشاركة المستخدم.
 
-البناء: `gradle -p apk-for-testing/unified :app:assembleDebug -PsourceSha=<HEAD_SHA>`. **لم يتم تأكيد بناء/تثبيت هذه النسخة بعد**؛ اقرأ CI والرابط الحقيقي في TEST_CENTER.md. النسخ القديمة الخمس تاريخية للاحتفاظ بالأدلة فقط.
+البناء: `gradle -p apk-for-testing/unified :app:assembleDebug -PsourceSha=<HEAD_SHA>`. **أُكّد بناء Gradle APK واحد بنجاح** في [CI42509945996](https://github.com/alwansan/raf/actions/runs/42509945996) على parent SHA `cbe7a038bad2c7ca5ad587b242e8baf7128ecb8`؛ artifact ZIP ID `13628828717` يحوي APK وJSON، وليس رابط APK مباشر. شهادة Debug غير مثبتة عبر تحديثات، ولم يُتحقق من التثبيت/الاختبارات على الهاتف؛ اقرأ TEST_CENTER.md. النسخ القديمة الخمس تاريخية للاحتفاظ بالأدلة فقط.
