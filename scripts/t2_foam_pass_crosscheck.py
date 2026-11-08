@@ -5,12 +5,13 @@ This is static IL provenance only, not evidence of rendered water.
 import json
 import math
 import sys
+from decimal import Decimal
 
 
 def finite_float(value):
     """Reject JSON exponent overflow before aggregate schema validation."""
     parsed = float(value)
-    if not math.isfinite(parsed):
+    if not math.isfinite(parsed) or (parsed == 0.0 and not Decimal(value).is_zero()):
         raise ValueError("nonfinite_json")
     return parsed
 from scripts.t2_foam_pass_role_gate import validate as validate_roles, unique_keys
