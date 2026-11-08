@@ -3,8 +3,8 @@
   "origin": "scheduled",
   "session_id": "20261108T1835Z-T4-scheduled-source-filter-k7m2",
   "issue_id": "INPUT-005",
-  "status": "active",
-  "updated_at": "2026-11-08T18:35:00Z",
+  "status": "completed_source_pending_ci",
+  "updated_at": "2026-11-08T18:42:00Z",
   "hypothesis": "Mouse route analyzer currently treats touchscreen input as physical mouse evidence because source is never validated; prevent false button/wheel positives before owner Android15 device logs.",
   "intended_files": [
     "scripts/t4_analyze_mouse_lab_routes.py",
@@ -18,5 +18,13 @@
     "20261108T1746Z-T4-scheduled-scroll-action-p8v3"
   ],
   "constraints": "source-only; no Unity/game changes; preserve world .rgd, camera, keyboard, touch; shared mini build T5 only",
-  "evidence": "Existing analyzer accepts route=activity_touch source=0x1002 ACTION_DOWN buttonState=1 as mouse left observed; this is touchscreen, not mouse. Test currently enshrines false positive."
+  "evidence": "Existing analyzer accepts route=activity_touch source=0x1002 ACTION_DOWN buttonState=1 as mouse left observed; this is touchscreen, not mouse. Test currently enshrines false positive.",
+  "result": {
+    "scope_commit": "64faef26647b4d84436f1d868e5964d72233bbcf",
+    "source_commit": "5d6cd77c1be3048c3d42da06bf231db168c10785",
+    "test_commit": "59563ad1a2b965727e75450d95aac8cadb257a2e",
+    "session_commit": "09db39d196b4abca6b3579e21718af06bf2fe311",
+    "verification": "source edits committed; exact SHA CI and device not verified",
+    "next": "Run tests.test_t4_analyze_mouse_lab_routes and inspect unified mini T4-01..09 physical mouse logs"
+  }
 }
