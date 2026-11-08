@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T1146Z-T5-platform-smoke-diff",
-  "resumed_from_session": "20261105T1115Z-T5-filemanager-runtime-sandbox",
-  "status": "completed",
-  "base_sha": "ae7a98b870c2ddc3faf2e7a734278be01ff67433",
-  "last_commit": "ebb6583208c3c0ac673ac976ad4e236f5e1c6d96",
-  "updated_at": "2026-11-05T11:51:00Z",
+  "session_id": "20261108T1818Z-T5-chat-unified-evidence-cache-a6d4",
+  "resumed_from_session": "20261108T1652Z-T5-scheduled-saf-zero-read-f4c9",
+  "status": "completed_source_build_device_pending",
+  "base_sha": "7bb7b0452d56f05dbb39d02d400a39729feaa49b",
+  "last_commit": "58dc0ae845d04fcb9f5d66ac1dd3f9f5e716e463",
+  "updated_at": "2026-11-08T18:33:30Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001",
@@ -29,7 +29,8 @@
     "T5-20261105T1021Z-sourcefree-managed-unity",
     "T5-20261105T1025Z-filemanager-call-resolver",
     "T5-20261105T1115Z-original-managed-file-io",
-    "T5-20261105T1146Z-platform-smoke-forensics"
+    "T5-20261105T1146Z-platform-smoke-forensics",
+    "T5-20261108T1818Z-unified-evidence-cache"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -52,8 +53,9 @@
     "https://github.com/alwansan/raf/actions/runs/42018332386",
     "https://github.com/alwansan/raf/actions/runs/42018587431",
     "https://github.com/alwansan/raf/actions/runs/42019514287",
-    "https://github.com/alwansan/raf/actions/runs/42020924863"
+    "https://github.com/alwansan/raf/actions/runs/42020924863",
+    "https://github.com/alwansan/raf/actions/runs/42509945996"
   ],
-  "next_step": "Platform smoke CI42020924863 failed despite unchanged platform sources vs CI42020751210; exact FAIL assertion missing because job logs unavailable. Obtain logs before deciding on deterministic fixture patch. T4 managed FileManager original evidence is not Android durable .rgd. NOT_READY 0/3.",
+  "next_step": "T5 shared lab CI42509945996 success artifact ZIP 13628828717, APK sha256 cee2df1b3bb2a1a3c8e9ab757f520040d36c5bf16d711587f7e2bc537f917472 package com.alwansan.raft.lab.shared versionCode9; Android phone validation, SAF/MediaStore/screenshots and stable signing pending. Shared r2 T5 NO_BUILD; do not repeat. Full game NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
