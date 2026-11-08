@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "issue_id": "WATER-001",
   "baseline_sha": "e174c4e080d49ef655691a4bbaf7df5a41f09ea5",
-  "status": "active",
+  "status": "completed",
   "intended_files": [
     "apk-for-testing/examples/t2-water-render-testpack.json",
     "apk-for-testing/workers/T2/README.md",
@@ -15,5 +15,12 @@
   "taken_over_from": [
     "prompt/coordination/clients/T2/sessions/20261108T1417Z-T2-scheduled-original-il-source-g7m2.md"
   ],
-  "updated_at": "2026-11-08T15:24:00Z"
+  "updated_at": "2026-11-08T15:29:00Z",
+  "result": "Six-note-case data-only testpack published; JSON parsed and shape checked, 2937 bytes. No GPU renderer, APK, shader fidelity or device proof.",
+  "commits": [
+    "c9d6c563583dfed2a5499a25a537f3767dd40a19",
+    "d19f8d999a213acf7ee04c197caf4f32d4441ef8",
+    "a5688860f1cf05f9f332938628229344ad19d7f4",
+    "699998ad78c92450ab39a1136c5c7d63149a9f12"
+  ]
 }
