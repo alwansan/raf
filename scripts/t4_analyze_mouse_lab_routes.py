@@ -12,7 +12,8 @@ PATTERN = re.compile(r"([A-Za-z]+)=([^ ]+)")
 def analyze(lines):
     phase = "unknown"
     groups = defaultdict(lambda: {"routes": set(), "actions": set(), "buttons": set(),
-                                  "wheel_v": 0, "wheel_h": 0, "samples": 0})
+                                  "wheel_v": 0, "wheel_h": 0, "samples": 0,
+                                  "button_presses": set(), "button_releases": set()})
     rejected = 0
     for line in lines:
         try:
@@ -44,6 +45,10 @@ def analyze(lines):
             for name, bit in BUTTONS.items():
                 if (state | action_button) & bit:
                     group["buttons"].add(name)
+                if action in ("ACTION_DOWN", "ACTION_BUTTON_PRESS") and action_button & bit:
+                    group["button_presses"].add(name)
+                if action in ("ACTION_UP", "ACTION_BUTTON_RELEASE") and action_button & bit:
+                    group["button_releases"].add(name)
             if float(fields.get("vscroll", "0")) != 0:
                 group["wheel_v"] += 1
             if float(fields.get("hscroll", "0")) != 0:
@@ -55,6 +60,8 @@ def analyze(lines):
         result[phase] = {
             "samples": group["samples"], "routes": sorted(group["routes"]),
             "actions": sorted(group["actions"]), "buttons_observed": sorted(group["buttons"]),
+            "button_presses_observed": sorted(group["button_presses"]),
+            "button_releases_observed": sorted(group["button_releases"]),
             "vertical_scroll_events": group["wheel_v"],
             "horizontal_scroll_events": group["wheel_h"],
             "missing_button_evidence": sorted(set(BUTTONS) - group["buttons"]),
