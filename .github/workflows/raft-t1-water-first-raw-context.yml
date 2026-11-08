@@ -54,7 +54,12 @@ jobs:
           d = json.loads(raw[len(label):])
           assert d["raw_first_segment_git_blob_sha1_verified"] is True
           assert d["pinned_summary_sha256_verified"] is True
-          assert d["first_water_unix_ms"] == 1794145757579
+          assert d["first_water_unix_ms"] == 1794145757552
+          assert d["first_water_collector_summary_unix_ms"] == 1794145757579
+          assert d["first_water_collector_minus_raw_ms"] == 27
+          assert d["raw_water_correlates_with_collector_within_250ms"] is True
+          assert d["first_raw_water_before_world_loaded_ms"] == 64513
+          assert d["interpretation"]["raw_log_and_collector_same_exact_record_proven"] is False
           # The pinned whole-session summary saw kernel6 2ms later. Its root
           # presence in this first raw SEGMENT is a separate empirical question.
           assert d["first_kernel6_unix_ms_from_pinned_summary_only"] == 1794145757581
