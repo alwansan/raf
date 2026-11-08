@@ -39,6 +39,7 @@ public final class MainActivity extends Activity {
         ScrollView sc=new ScrollView(this);LinearLayout root=new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);root.setPadding(8,8,8,20);sc.addView(root);
         root.addView(txt("RAFT MINI LAB — "+BuildConfig.LAB_WORKER+" — data-only testpacks, not full Raft"));
+        if("T2".equals(BuildConfig.LAB_WORKER)) addButton(root,"OPEN T2 REAL GLES3 WATER PASS LAB",v->startActivity(new Intent(this,T2GpuActivity.class)));
         LinearLayout tools=new LinearLayout(this);root.addView(tools);
         addButton(tools,"Pick testpack",v->filePicker(PICK_PACK,"application/json"));
         addButton(tools,"Pick folder",v->{Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
