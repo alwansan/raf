@@ -153,6 +153,22 @@ class FirstRawLogcatContextTest(unittest.TestCase):
         self.assertFalse(r["first"]["kernel_index_6"]["nearby_same_pid_tid_100ms_12lines_unattributed_hints"]["dx11fft"])
         self.assertFalse(r["actual_original_unity_findkernel_proven"])
 
+    def test_small_raw_collector_timestamp_skew_is_reported_not_hidden(self):
+        data = summary()
+        data["final_error_category_breakdown"]["ultimate_water_invalid_pass"] = event(27_606, 291_986, 74_359)
+        data["stop_time_android_process_exit_info"]["final_error_groups"] = data["final_error_category_breakdown"]
+        result = combine(self.read(synthetic_raw()), data)
+        self.assertEqual(result["first_water_collector_minus_raw_ms"], 27)
+        self.assertTrue(result["raw_water_correlates_with_collector_within_250ms"])
+        self.assertFalse(result["interpretation"]["raw_log_and_collector_same_exact_record_proven"])
+
+    def test_large_raw_collector_timestamp_skew_rejected(self):
+        data = summary()
+        data["final_error_category_breakdown"]["ultimate_water_invalid_pass"] = event(27_830, 291_986, 74_359)
+        data["stop_time_android_process_exit_info"]["final_error_groups"] = data["final_error_category_breakdown"]
+        with self.assertRaisesRegex(ValueError, "too far"):
+            combine(self.read(synthetic_raw()), data)
+
     def test_summary_timestamp_mismatch_rejected(self):
         data = summary()
         data["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"] = event(27_583, 291_983, 11_165)
