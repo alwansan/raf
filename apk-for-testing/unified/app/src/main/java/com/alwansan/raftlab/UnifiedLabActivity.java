@@ -135,9 +135,17 @@ public final class UnifiedLabActivity extends Activity {
         refreshPending();
     }
     String fingerprint(JSONObject t){
-        String driver=t.optString("driver");
-        String input=t.toString()+"|driver-v1|"+BuildConfig.VERSION_CODE+"|"+BuildConfig.SOURCE_SHA+
-          "|"+android.os.Build.FINGERPRINT+"|"+driver;
+        String driver=t.optString("driver"),worker=t.optString("worker");
+        String driverSha="unknown";
+        if(worker.equals("T1"))driverSha=BuildConfig.T1_DRIVER_SHA;
+        if(worker.equals("T2"))driverSha=BuildConfig.T2_DRIVER_SHA;
+        if(worker.equals("T3"))driverSha=BuildConfig.T3_DRIVER_SHA;
+        if(worker.equals("T4"))driverSha=BuildConfig.T4_DRIVER_SHA;
+        if(worker.equals("T5"))driverSha=BuildConfig.T5_DRIVER_SHA;
+        // A package version bump or another worker's unrelated change does NOT
+        // invalidate existing case evidence; changing this worker's source DOES.
+        String input=t.toString()+"|driver-sha="+driverSha+
+          "|device="+android.os.Build.FINGERPRINT+"|type="+driver;
         return digest(input.getBytes(StandardCharsets.UTF_8));
     }
     JSONObject saved(JSONObject c){
