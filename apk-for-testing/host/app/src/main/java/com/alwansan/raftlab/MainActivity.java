@@ -204,7 +204,9 @@ public final class MainActivity extends Activity {
     }
     void log(String kind,String info){try{JSONObject j=new JSONObject();
         j.put("unix_ms",System.currentTimeMillis());j.put("elapsed_ms",SystemClock.elapsedRealtime());
-        j.put("worker",BuildConfig.LAB_WORKER);j.put("package",getPackageName());j.put("session",session);
+        j.put("worker",BuildConfig.LAB_WORKER);j.put("package",getPackageName());
+        j.put("app_version",BuildConfig.VERSION_NAME);j.put("app_version_code",BuildConfig.VERSION_CODE);
+        j.put("session",session);
         j.put("pack_id",packId);j.put("test_id",selected==null?JSONObject.NULL:selected.optString("id"));
         j.put("event",kind);j.put("detail",info);
         try(FileOutputStream out=new FileOutputStream(privateLog,true)){out.write((j.toString()+"\n").getBytes(StandardCharsets.UTF_8));}
