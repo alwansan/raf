@@ -1,0 +1,18 @@
+{
+  "session_id": "20261108T1910Z-T1-scheduled-axis-identity-f4c8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "base_sha": "efe39f647208dbe1d8f62d5f47a3d8922481187f",
+  "status": "active",
+  "hypothesis": "The numeric trace axis classifier labels identical reference/observed coordinates as uniform_translation; this creates a false positive root-cause hint even when there is no coordinate drift.",
+  "intended_files": [
+    "scripts/t1_fft_trace_compare.py",
+    "tests/test_t1_fft_trace_compare.py",
+    "prompt/coordination/clients/T1/sessions/20261108T1910Z-T1-scheduled-axis-identity-f4c8.md",
+    "prompt/coordination/work/WATER-001/T1-20261108T1910Z-T1-scheduled-axis-identity-f4c8-axis-identity.json"
+  ],
+  "experiment_key": "fft-axis-identity-v1-synthetic-invocation-traces",
+  "resource_key": null,
+  "resumed_from": "20261108T1836Z-T1-chat-water-startup-order-c5e7",
+  "updated_at": "2026-11-08T19:10:00Z"
+}
