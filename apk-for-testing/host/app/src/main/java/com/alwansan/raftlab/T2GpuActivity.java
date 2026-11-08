@@ -147,8 +147,10 @@ public final class T2GpuActivity extends Activity {
         ContentValues v=new ContentValues();
         v.put(MediaStore.Downloads.DISPLAY_NAME,logFile.getName());
         v.put(MediaStore.Downloads.MIME_TYPE,"application/x-ndjson");
+        String parent=getIntent()==null?null:getIntent().getStringExtra("shared_session");
+        String folder=parent!=null&&parent.matches("[A-Za-z0-9._-]{6,90}")?"shared-"+parent:"t2-gles-pass-"+session;
         v.put(MediaStore.Downloads.RELATIVE_PATH,
-            Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/t2-gles-pass-"+session+"/");
+            Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/"+folder+"/");
         exported=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
         if(exported==null)throw new IOException("MediaStore insert returned null");
       }
