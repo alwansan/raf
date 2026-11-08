@@ -11,8 +11,8 @@ from collections import Counter
 from pathlib import Path
 import re
 
-GUID = re.compile(r"(?m)^guid:\\s*([0-9a-fA-F]{32})\\s*$")
-SHADER = re.compile(r"(?m)^\\s*m_Shader:\\s*\\{\\s*fileID:\\s*(-?\\d+)\\s*,\\s*guid:\\s*([0-9a-fA-F]{32})\\s*,\\s*type:\\s*\\d+\\s*\\}")
+GUID = re.compile(r"(?m)^guid:\s*([0-9a-fA-F]{32})\s*$")
+SHADER = re.compile(r"(?m)^\s*m_Shader:\s*\{\s*fileID:\s*(-?\d+)\s*,\s*guid:\s*([0-9a-fA-F]{32})\s*,\s*type:\s*\d+\s*\}")
 ZERO = "0" * 32
 
 def audit(root):
