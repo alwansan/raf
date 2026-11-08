@@ -5,6 +5,20 @@
 
 # Raft — ONE TEAM LAB APK / T1–T5
 
+<!-- T5_ARABIC_PORTRAIT_CI42517104924_VERIFIED -->
+## ✅ نسخة المختبر العربية العمودية الجديدة — 8 نوفمبر 2026، 19:52 UTC
+
+**أحدث Mini APK واحد T1–T5:** [GitHub Actions run #42517104924](https://github.com/alwansan/raf/actions/runs/42517104924) **COMPLETED SUCCESS**. Artifact ZIP ID `13631588625` (ينتهي **22 نوفمبر 2026، 19:52 UTC**) يحوي APK فعليًا وحزمة JSON و`SHA256SUMS.txt`. **هذا ZIP Artifact وليس رابط APK مباشر من GitHub Releases**؛ تم استخراج الـAPK والتحقق من الهاش وتسليمه للمالك كملف مباشر في محادثة T5، دون نشره في Releases.
+
+- **Raft-Team-Lab-debug.apk:** حجم `90,058` بايت، SHA256 `0f469cc650182370b570d96c8e92e3f9c686f6b4417ae10e22d3c35b0084fd42`, package `com.alwansan.raft.lab.shared`, version `0.2.10-shared`, versionCode `10`.
+- **AndroidManifest الفعلي داخل APK:** أربع Activities كلّها `screenOrientation=portrait`، عنوان التطبيق `مختبر اختبارات رافت`، Android target 35. الواجهة الرئيسية عربية RTL، وعناوين/خطوات/نتائج متوقعة لكل الاختبارات الـ**29** بالعربية عبر `ArabicLabStrings.java`.
+- **نفس الحزمة بلا تعديل:** `team-testpack.json` SHA256 `6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f`. المصادقة في التطبيق تعالج نفس الـ29 IDs؛ لا يُعلن نجاح أي اختبارات يدوية دون المستخدم.
+- **تحذير تحديث مهم:** توقيع Android Debug لهذا الإصدار SHA256 `7e3a8c74414403e1ebded585b2e1da918de8d797a394cf154ea5f56c527836b9` **يختلف** عن توقيع الإصدار الأول `cd2b1f9875dce958ef4ac5f6a08737174d60870df6562afb5636b7fe377cc259`. **صدّر نتائج 0.2.9 أولًا** ثم احذف تطبيق المختبر القديم وأعد تثبيت APK العربي؛ لا تضمن تحديثًا فوقه أو استمرار تفضيلات التطبيق المحلية. لا تحذف ملفات CL/test المرفوعة.
+- **طريقة الاستخدام:** بعد التثبيت اختر «▶ تشغيل الاختبارات التلقائية لكل الفريق»، ثم قسم «طلبات تحتاج تدخلك» للاختبارات T4/T5 اليدوية. اختبار T5-02 يفتح منتقي SAF؛ والبقية تتطلب تجربة أو دليلًا. صدّر السجلات وارفعها إلى **[CL/test](https://github.com/alwansan/CL/tree/main/test)**. اقرأ [دليل T5 العربي](unified/T5_OWNER_TEST_GUIDE_AR.md). لم تُختبر هذه النسخة على Android 15 فعلياً بعد.
+- **الأدلة:** source-only Arabic/portrait [CI42516899166](https://github.com/alwansan/raf/actions/runs/42516899166) و[CI42516908881](https://github.com/alwansan/raf/actions/runs/42516908881) SUCCESS؛ full shared mini [CI42517104924](https://github.com/alwansan/raf/actions/runs/42517104924) SUCCESS. Embedded source parent `93e32950c521d9890ce845eb8213cd6704cd7f98`, build request commit `c5100411c50ec3b663fa9262eb68c49c95180f3e`. **هذه ليست لعبة Raft الكاملة** ولا تغييرًا على تصويت XAPK 5/5 أو NOT_READY 0/3.
+
+
+
 **8 نوفمبر 2026 — نظام جديد:** تطبيق Android واحد وحزمة `team-testpack.json` واحدة لجميع T1–T5؛ لا حاجة لتحميل خمسة APKات. [تعليمات التعاون](UNIFIED_LAB_POLICY_AR.md) · [جاهزية بناء المختبر فقط](SHARED_BUILD_READINESS.md) · [مصدر التطبيق الواحد](unified/README.md) · [برومبت الاستعادة المحسن](../prompt/coordination/T_TEAM/RESTORE_SHARED_LAB_AR.md).
 
 ## روابط المستخدم
