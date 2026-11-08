@@ -2,23 +2,26 @@
   "schema_version": 1,
   "username": "T2",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T0023Z-T2-foam-texture-identity",
-  "resumed_from_session": "20261104T2354Z-T2-foamabi01",
+  "session_id": "20261108T1817Z-T2-chat-fbo-contrast-92d4",
+  "resumed_from_session": "20261108T171538Z-T2-scheduled-fbo-audit",
   "status": "paused",
-  "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": "5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
-  "updated_at": "2026-11-05T00:30:26.660Z",
+  "base_sha": "6d8f2df68b04aa6c072db9777b5bda8293bc29d9",
+  "last_commit": "73924c998d91eb64be33c883d9922d44981accd4",
+  "updated_at": "2026-11-08T18:21:00Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
     "Spectrum",
     "Blur",
-    "foam-texture-symbol-identity"
+    "foam-texture-symbol-identity",
+    "T2-FBO-CONTRAST-20261108",
+    "shared-mini-lab-T2-02"
   ],
   "work_ids": [
     "T2-20261104T2354Z-foam-member-abi",
     "T2-20261105T0013Z-foam-resource-interface",
-    "T2-20261105T0023Z-T2-foam-texture-identity-texture-identity"
+    "T2-20261105T0023Z-T2-foam-texture-identity-texture-identity",
+    "20261108T1817Z-T2-chat-fbo-contrast-92d4"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937996942",
@@ -28,8 +31,10 @@
     "https://github.com/alwansan/raf/actions/runs/41940279771",
     "https://github.com/alwansan/raf/actions/runs/41940321740",
     "https://github.com/alwansan/raf/actions/runs/41939553448",
-    "https://github.com/alwansan/raf/actions/runs/41941354379"
+    "https://github.com/alwansan/raf/actions/runs/41941354379",
+    "https://github.com/alwansan/raf/actions/runs/42504045625",
+    "https://github.com/alwansan/raf/actions/runs/42496746941"
   ],
-  "next_step": "Current CI 41941354379 authentic Foam texture names 0/6 equal translated image names; probe numeric original m_Index/m_SamplerIndex to active translated sample and Unity material alias before ShaderLab/Adreno. WATER-001 OPEN; do not repeat CI without new hypothesis.",
+  "next_step": "T2-02 dual-region FBO test source-patched (73924c998d91eb64be33c883d9922d44981accd4), 7/7 static/host oracle checks only. T2 own shared readiness NEED_BUILD; T5 to verify post-change unified javac and decide one shared Mini APK. No device GL proof. WATER-001 actual original Foam pass/CB0 source remains OPEN; resume private original operand-producer path without exposing assets.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
