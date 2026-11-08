@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-ARABIC-PORTRAIT-20261108T1952Z-m7r4",
+  "request_id": "T5-SHARED-SURFACE-FIDELITY-20261108T2020Z-r8n2",
   "target": "SHARED",
-  "requested_from_sha": "93e32950c521d9890ce845eb8213cd6704cd7f98",
+  "requested_from_sha": "9893526c3d2ba9e2640ded758ab4075f9be35d04",
   "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
-  "reason": "Owner directly requested portrait screen orientation and Arabic RTL unified lab interface/test descriptions, now compiled into shared Android Java and manifest with 29 verified Arabic case mappings. Current CL/test phone evidence shows the manual UI navigation caused confusion. Adds existing bounded StreamSha256 fix and new worker-only source repairs; isolated CI42516899166 passed Python/JDK/Android Java source compile. One SHARED Mini APK; never Unity XAPK or five worker APKs. Debug certificate may change; direct release not assumed.",
+  "reason": "Owner Android15 evidence CL/test proves T3 PixelCopy Window-produced black PNG despite real RGB stripes in owner screenshot and real GLES glReadPixels assertion, leading to false EVIDENCE_READY. One genuine shared Mini change makes T3 screenshot PixelCopy target actual GLSurfaceView, validates two observed surface colors against same-case GL readbacks, composes into full height window without 900px crop, and refuses blank/mismatched PNG with NEEDS_SCREENSHOT and bounded retries. T3 notified via T_TEAM. Isolated source/JDK/Android CI42519126545 SUCCESS. Preserve 29-case pack, Arabic portrait, no proprietary game assets, no full Unity or multiple APKs.",
   "publish": false
 }
