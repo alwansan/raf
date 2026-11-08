@@ -111,7 +111,7 @@ def analyze(data, session=DEFAULT_SESSION, source_commit=SOURCE_CL_COMMIT,
         raise ValueError("bad expected session")
     if not re.fullmatch(r"[0-9a-f]{40}", source_commit):
         raise ValueError("bad source commit")
-    if data.get("schema") != 1 or data.get("session") != session:
+    if type(data.get("schema")) is not int or data.get("schema") != 1 or data.get("session") != session:
         raise ValueError("wrong summary schema/session")
     if data.get("target_package") != DEFAULT_PACKAGE:
         raise ValueError("wrong app package")
@@ -146,9 +146,21 @@ def analyze(data, session=DEFAULT_SESSION, source_commit=SOURCE_CL_COMMIT,
     kernel_indices = {name: count(kernels, name) for name in ("index_6", "other_index")}
     if sum(counts.values()) != water_count or sum(kernel_indices.values()) != kernel_count:
         raise ValueError("final root breakdown inconsistent")
-    if (count(data, "final_shader_pass_errors_total") != water_count or
-            count(data, "final_compute_kernel_errors_total") != kernel_count):
-        raise ValueError("final session totals inconsistent")
+    # Real CL summaries store immutable stop-time counters and a second copy
+    # of the final groups under stop_time_android_process_exit_info, not root.
+    # Require the two independent published views to agree before reporting.
+    stop = section(data, "stop_time_android_process_exit_info")
+    stopped_groups = section(stop, "final_error_groups")
+    stopped_render = section(stop, "final_render_failure_breakdown")
+    for name, expected in zip(
+            ("ultimate_water_invalid_pass", "water_fft_invalid_compute_kernel"), errors):
+        if section(stopped_groups, name) != expected:
+            raise ValueError("stop-time root groups inconsistent")
+    if stopped_render != render:
+        raise ValueError("stop-time render breakdown inconsistent")
+    if (count(stop, "final_shader_pass_errors_total") != water_count or
+            count(stop, "final_compute_kernel_errors_total") != kernel_count):
+        raise ValueError("stop-time session totals inconsistent")
 
     sampled_water = count(performance, "shader_pass_errors_total_at_last_sample")
     sampled_kernel = count(performance, "compute_kernel_errors_total_at_last_sample")
