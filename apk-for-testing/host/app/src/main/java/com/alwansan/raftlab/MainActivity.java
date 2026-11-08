@@ -134,7 +134,7 @@ public final class MainActivity extends Activity {
         try(Cursor c=getContentResolver().query(uri,new String[]{OpenableColumns.DISPLAY_NAME},null,null,null)){
             if(c!=null&&c.moveToFirst()&&!c.isNull(0))displayName=c.getString(0);
         }catch(Exception ignored){}
-        final String fileName=displayName.replace('\\n',' ').replace('\\r',' ').substring(0,Math.min(128,displayName.length()));
+        final String fileName=displayName.replace('\n',' ').replace('\r',' ').substring(0,Math.min(128,displayName.length()));
         caption.setText("Calculating SHA-256 off the UI thread for "+fileName+"...");
         log("asset_sha256_started","case="+caseId+" file="+fileName);
         assetDigestThread=new Thread(()->{
@@ -165,8 +165,8 @@ public final class MainActivity extends Activity {
                 log("asset_sha256","case="+caseId+" file="+fileName+" bytes="+r.bytes+" sha256="+r.hex+" elapsed_ms="+elapsed);
                 runOnUiThread(()->{
                     if(image!=null)preview.setImageBitmap(image);else preview.setImageDrawable(null);
-                    caption.setText("File: "+fileName+"\\nBytes: "+r.bytes+"\\nSHA-256: "+r.hex
-                        +(imageCase&&r.bytes>64L*1024*1024?"\\nImage preview skipped (>64MiB)":""));
+                    caption.setText("File: "+fileName+"\nBytes: "+r.bytes+"\nSHA-256: "+r.hex
+                        +(imageCase&&r.bytes>64L*1024*1024?"\nImage preview skipped (>64MiB)":""));
                 });
             }catch(Exception ex){
                 log("asset_sha256_error","case="+caseId+" error="+ex.getClass().getSimpleName()+": "+ex.getMessage());
