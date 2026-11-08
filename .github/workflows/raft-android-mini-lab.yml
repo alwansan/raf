@@ -1,13 +1,12 @@
-name: Raft Android mini-lab host (isolated request or manual when available)
+name: Raft unified mini-lab T1-T5 (one APK and one pack)
 
 on:
   workflow_dispatch:
     inputs:
-      worker:
-        description: Independent mini APK package
-        type: choice
-        options: [T1, T2, T3, T4, T5]
-        default: T4
+      publish:
+        description: Advisory only; direct release requires verified stable signer
+        type: boolean
+        default: false
   push:
     branches: [feature/android-native-port]
     paths:
@@ -17,78 +16,85 @@ permissions:
   contents: read
 
 concurrency:
-  group: raft-android-mini-lab-${{ github.ref }}
+  group: raft-unified-mini-lab-${{ github.ref }}
   cancel-in-progress: false
   queue: max
 
 jobs:
-  host:
+  shared-team-lab:
     if: ${{ github.ref == 'refs/heads/feature/android-native-port' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
           lfs: false
           fetch-depth: 2
-      - name: Validate explicit mini-lab request, not Raft full-build request
-        id: request
+      - name: Validate T5 shared build request and source
+        id: gate
         env:
           EVENT_TYPE: ${{ github.event_name }}
-          MANUAL_WORKER: ${{ inputs.worker || '' }}
-          PUSH_MESSAGE: ${{ github.event.head_commit.message || '' }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message || '' }}
         run: |
           python3 - <<'PY'
-          import json, os, re, subprocess
+          import hashlib,json,os,re,subprocess
           event=os.environ['EVENT_TYPE']
+          pack='apk-for-testing/unified/pack/team-testpack.json'
+          actual=hashlib.sha256(open(pack,'rb').read()).hexdigest()
           if event=='push':
-              assert '[raft-mini-lab]' in os.environ['PUSH_MESSAGE'], 'commit marker required'
-              with open('.github/raft-mini-lab-build-request.json', encoding='utf-8') as f: item=json.load(f)
-              assert set(item)=={'request_id','worker','requested_from_sha','reason'}
-              assert re.fullmatch('[A-Za-z0-9._-]{6,96}',item['request_id'])
-              assert re.fullmatch('[a-f0-9]{40}',item['requested_from_sha'])
-              assert isinstance(item['reason'],str) and 15<=len(item['reason'].strip())<=800
+              assert '[raft-mini-lab]' in os.environ['COMMIT_MESSAGE'], 'mini build marker required'
+              data=json.load(open('.github/raft-mini-lab-build-request.json',encoding='utf-8'))
+              assert set(data)=={'request_id','target','requested_from_sha','pack_sha256','reason','publish'}
+              assert data['target']=='SHARED', 'not five APK variants'
+              assert re.fullmatch('[a-zA-Z0-9._-]{6,96}',data['request_id'])
+              assert re.fullmatch('[a-f0-9]{40}',data['requested_from_sha'])
+              assert data['pack_sha256']==actual, 'pack changed after request'
+              assert isinstance(data['reason'],str) and 15<=len(data['reason'].strip())<=800
+              assert type(data['publish']) is bool
               parent=subprocess.check_output(['git','rev-parse','HEAD^'],text=True).strip()
-              assert parent==item['requested_from_sha'], 'pin previous HEAD before request commit'
-              worker=item['worker']
+              assert data['requested_from_sha']==parent, 'pin pre-request commit'
           else:
               assert event=='workflow_dispatch'
-              worker=os.environ['MANUAL_WORKER']
-          assert worker in ('T1','T2','T3','T4','T5')
-          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as f: f.write('worker='+worker+'\n')
-          print('Valid mini-lab worker:',worker)
+              parent=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as output:
+              output.write('pack_sha='+actual+'\n')
+              output.write('source_sha='+parent+'\n')
+          print('SHARED pack sha256',actual,'source SHA',parent)
           PY
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Check safe testpack manifests
+        with: {python-version: '3.12'}
+      - name: Validate shared pack and readiness
         run: |
-          python3 scripts/validate_android_testpack.py apk-for-testing/examples/t4-mouse-testpack.json
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+          python3 -m unittest discover -s tests -p test_unified_testpack.py -v
+          python3 -m unittest discover -s tests -p test_shared_lab_votes.py -v
           python3 -m unittest discover -s tests -p test_android_testpack.py -v
+          python3 scripts/check_shared_lab_votes.py --require-need
       - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+        with: {distribution: temurin, java-version: '17'}
       - uses: android-actions/setup-android@v3
-        with:
-          # The v3 default includes removed SDK package `tools`; only platform-tools is needed.
-          packages: 'platform-tools'
+        with: {packages: 'platform-tools'}
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.10.2'
-      - name: Assemble independent debug APK — no Unity or game assets
+        with: {gradle-version: '8.10.2'}
+      - name: Build one shared debug APK, no Unity
         env:
-          WORKER: ${{ steps.request.outputs.worker }}
+          SOURCE_SHA: ${{ steps.gate.outputs.source_sha }}
         run: |
-          gradle -p apk-for-testing/host --no-daemon :app:assembleDebug -Pworker="$WORKER"
-          test -s apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
-          sha256sum apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk | tee mini-lab-sha256.txt
+          gradle -p apk-for-testing/unified --no-daemon :app:assembleDebug -PsourceSha="$SOURCE_SHA" -PversionCode="$GITHUB_RUN_NUMBER"
+          test -s apk-for-testing/unified/app/build/outputs/apk/debug/app-debug.apk
+          mkdir -p delivery
+          cp apk-for-testing/unified/app/build/outputs/apk/debug/app-debug.apk delivery/Raft-Team-Lab-debug.apk
+          cp apk-for-testing/unified/pack/team-testpack.json delivery/team-testpack.json
+          (cd delivery && sha256sum Raft-Team-Lab-debug.apk team-testpack.json > SHA256SUMS.txt)
       - uses: actions/upload-artifact@v4
         with:
-          name: raft-mini-lab-${{ steps.request.outputs.worker }}-${{ github.sha }}
-          path: |
-            apk-for-testing/host/app/build/outputs/apk/debug/app-debug.apk
-            mini-lab-sha256.txt
-          retention-days: 7
+          name: Raft-Team-Lab-${{ github.sha }}
+          path: delivery/
+          retention-days: 14
           if-no-files-found: error
+      - name: Delivery limitation
+        run: |
+          echo 'Artifact is a ZIP containing APK, not a direct APK URL.'
+          echo 'T5 supplies a verified direct Release APK URL only after stable signing and successful publication.'
+          echo 'Do not mistake this for a signed full-game XAPK.'
