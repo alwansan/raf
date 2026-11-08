@@ -37,6 +37,17 @@ class MouseRouteTests(unittest.TestCase):
         self.assertEqual(group["buttons_observed"], ["left"])
         self.assertEqual(group["button_presses_observed"], [])
 
+    def test_non_scroll_motion_axis_does_not_prove_wheel(self):
+        lines = [
+            event("input", "route=captured action=ACTION_MOVE buttonState=0 actionButton=0 vscroll=1 hscroll=-1 captured=true"),
+            event("input", "route=captured action=ACTION_SCROLL buttonState=0 actionButton=0 vscroll=-1 hscroll=2 captured=true"),
+            event("input", "route=captured action=ACTION_SCROLL buttonState=0 actionButton=0 vscroll=0 hscroll=0 captured=true"),
+        ]
+        group = analyze(lines)["phases"]["on"]
+        self.assertEqual(group["vertical_scroll_events"], 1)
+        self.assertEqual(group["horizontal_scroll_events"], 1)
+        self.assertFalse(analyze(lines)["device_success_proven"])
+
     def test_no_events_is_not_pass(self):
         r = analyze([event("capture_request", "ON")])
         self.assertEqual(r["phases"], {})
