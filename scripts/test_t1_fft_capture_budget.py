@@ -64,6 +64,17 @@ class CaptureBudgetTests(unittest.TestCase):
                 self.assertEqual(error.exception.code, 2)
                 read.assert_not_called()
 
+    def test_reject_actual_nul_during_manifest_preflight(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "small.bin").write_bytes(bytes(16))
+            result = self.run_manifest([{"name": "fft",
+                                         "reference": "small.bin\\x00".replace("\\x00", "\x00"),
+                                         "observed": "small.bin"}], root)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("Invalid private FFT", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
+
     def test_reject_parent_traversal_before_capture_read(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
