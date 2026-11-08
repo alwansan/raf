@@ -1,0 +1,47 @@
+name: T2 WATER-001 Foam JSON evidence ingress regression (source-only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_pass_crosscheck.py
+      - scripts/t2_foam_pass_role_gate.py
+      - scripts/t2_foam_shaderfind_return_report.py
+      - tests/test_t2_foam_crosscheck_cli_json_boundary.py
+      - tests/test_t2_foam_json_product_guard.py
+      - tests/test_t2_foam_pass_crosscheck.py
+      - tests/test_t2_foam_pass_crosscheck_finite_json.py
+      - tests/test_t2_foam_pass_crosscheck_original_integration.py
+      - tests/test_t2_foam_pass_role_duplicate_json.py
+      - .github/workflows/raft-t2-foam-crosscheck-json-regression.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-json-sourceonly-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-evidence-schema:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout exact source without private LFS assets
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Compile and execute committed Foam schema and CLI regressions
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_pass_crosscheck.py scripts/t2_foam_pass_role_gate.py scripts/t2_foam_shaderfind_return_report.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_pass_crosscheck*.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_crosscheck_cli_json_boundary.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_pass_role_duplicate_json.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_json_product_guard.py' -v
+      - name: Evidence boundary
+        run: echo 'SYNTHETIC_JSON_ONLY; original_shader_binding=UNKNOWN; unity_gpu=UNKNOWN; android_water=UNKNOWN'
