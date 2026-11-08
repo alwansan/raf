@@ -3,7 +3,7 @@
   "origin": "chat",
   "worker": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "resumed_from": [
     "prompt/coordination/clients/T3/MEMORY.md",
     "apk-for-testing/UNIFIED_IMPLEMENTATION_STATUS.md"
@@ -18,6 +18,21 @@
   ],
   "experiment_key": "T3-shared-visual-case-frame-handshake-rgba-readback-v1",
   "resource_key": "T3SharedVisualActivity",
-  "run_urls": [],
-  "next_step": "Surgical source modification, regression policy tests, source-only compile CI and T3 mini build vote based on actual engine change."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42504045625 (pre-patch CI only)"
+  ],
+  "next_step": "T5 compile unified project on post-patch source, inspect queued/in_progress Actions, sign/build single shared APK if appropriate, and obtain actual T3 PixelCopy PNG plus human visual verdict. No full XAPK request.",
+  "updated_at": "2026-11-08T18:30:00Z",
+  "result": "Exact-case GLES frame/generation/glReadPixels/GL error/negative-shader source verification added; PixelCopy only after own synthetic frame proof, visual user review remains pending.",
+  "source_commits": [
+    "204dabb9c18b7122550c7aa30a51fdc385de6f45",
+    "6bb0b165f5849c84b1210eed0c7d8eba00468b2f",
+    "99e3ee5c7d3d107d7f5ab197a8ea4e19383562a7"
+  ],
+  "test_commits": [
+    "c0a2213bc97d594a3c04c42d956cb51b3c3a291e",
+    "2e3ce81b3a092e7823eedb8aafe1d0bc6e3f2c3c"
+  ],
+  "validation": "26/26 remote JS source policy assertions; Python suite newly committed but not executed or verified in Actions; Android Java compilation and device not checked.",
+  "mini_vote": "T3 NEED_BUILD recorded, T5 is sole integration/CI/build owner."
 }
