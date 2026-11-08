@@ -254,8 +254,12 @@ public final class MainActivity extends Activity {
         }catch(Exception ex){android.util.Log.e("RaftMiniLab","Private log failed",ex);}}
     void copy(InputStream in,OutputStream out)throws IOException{byte[] buf=new byte[16384];int n;
         while((n=in.read(buf))>=0)out.write(buf,0,n);out.flush();}
-    String folder(){return (activeWorker()+"-"+packId+"-"+session).toLowerCase(Locale.US).replaceAll("[^a-z0-9._-]","-");}
-    String logRelativeRoot(){return Environment.DIRECTORY_DOWNLOADS+("T1".equals(activeWorker())?"/Games/cl/raft log/test/":"/Games/cl/test/");}
+    String folder(){
+        String shared=getIntent()==null?null:getIntent().getStringExtra("shared_session");
+        if("SHARED".equals(BuildConfig.LAB_WORKER)&&shared!=null&&shared.matches("[A-Za-z0-9._-]{6,90}"))return "shared-"+shared;
+        return (activeWorker()+"-"+packId+"-"+session).toLowerCase(Locale.US).replaceAll("[^a-z0-9._-]","-");
+    }
+    String logRelativeRoot(){return Environment.DIRECTORY_DOWNLOADS+("SHARED".equals(BuildConfig.LAB_WORKER)?"/Games/cl/test/":"T1".equals(activeWorker())?"/Games/cl/raft log/test/":"/Games/cl/test/");}
     String logDisplayRoot(){return "T1".equals(activeWorker())?"Download/Games/cl/raft log/test/":"Download/Games/cl/test/";}
     void export(){log("log_export","MediaStore.Downloads");
         if(Build.VERSION.SDK_INT<29){exportStatus.setText("Use Save As for Android 9");return;}
