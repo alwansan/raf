@@ -38,7 +38,8 @@ public final class T2GpuActivity extends Activity {
   Uri exported;
   String session;
   volatile int selected = -1;
-  synchronized void log(String kind, String info) {
+  synchronized void log(String kind, String info) { logForCase(kind,info,selected); }
+  synchronized void logForCase(String kind, String info, int caseId) {
     try {
       JSONObject j = new JSONObject();
       j.put("unix_ms",System.currentTimeMillis());
@@ -47,7 +48,7 @@ public final class T2GpuActivity extends Activity {
       j.put("package",getPackageName());
       j.put("version","0.1.0");
       j.put("session",session);
-      j.put("case",selected<0?JSONObject.NULL:"CASE0"+(selected+1));
+      j.put("case",caseId<0?JSONObject.NULL:"CASE0"+(caseId+1));
       j.put("event",kind);
       j.put("detail",info);
       try(FileOutputStream out = new FileOutputStream(logFile,true)) {
@@ -105,9 +106,11 @@ public final class T2GpuActivity extends Activity {
       try { result=probe.check(id); }
       catch(Throwable e){ result="FAIL: "+e.getClass().getSimpleName()+": "+e.getMessage(); }
       final String observed=result.length()>1200?result.substring(0,1200):result;
-      log("gl_observed",observed);
-      runOnUiThread(()->status.setText(TITLES[id]+"\nExpected: "+EXPECTED[id]+
-          "\nObserved: "+observed+"\nMark PASS/FAIL/UNEXPECTED, then export JSONL."));
+      logForCase("gl_observed",observed,id);
+      runOnUiThread(()->{
+        if(selected==id)status.setText(TITLES[id]+"\nExpected: "+EXPECTED[id]+
+            "\nObserved: "+observed+"\nMark PASS/FAIL/UNEXPECTED, then export JSONL.");
+      });
     });
     surface.requestRender();
   }
@@ -147,6 +150,7 @@ public final class T2GpuActivity extends Activity {
 
   final class Probe implements GLSurfaceView.Renderer {
     volatile boolean ready=false;
+    int surfaceWidth=1, surfaceHeight=1;
     static final String V="#version 300 es\n"
         +"void main(){float x=gl_VertexID==1?3.0:-1.0;"
         +"float y=gl_VertexID==2?3.0:-1.0;gl_Position=vec4(x,y,0.,1.);}";
@@ -163,10 +167,12 @@ public final class T2GpuActivity extends Activity {
           " version="+GLES30.glGetString(GLES30.GL_VERSION));
     }
     @Override public void onSurfaceChanged(javax.microedition.khronos.opengles.GL10 gl,int w,int h){
+      surfaceWidth=w;surfaceHeight=h;
       log("surface","w="+w+" h="+h);
     }
     @Override public void onDrawFrame(javax.microedition.khronos.opengles.GL10 gl){
       GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER,0);
+      GLES30.glViewport(0,0,surfaceWidth,surfaceHeight);
       GLES30.glClearColor(.04f,.08f,.12f,1f);
       GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT);
     }
@@ -251,7 +257,9 @@ public final class T2GpuActivity extends Activity {
         }
         return "OK 2-pass RGBA8 FBO sample; pixel="+Arrays.toString(actual)+" tolerance=2";
       }finally{
-        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER,0);GLES30.glUseProgram(0);
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER,0);
+        GLES30.glViewport(0,0,surfaceWidth,surfaceHeight);
+        GLES30.glUseProgram(0);
         GLES30.glBindVertexArray(0);
         if(p0!=0)GLES30.glDeleteProgram(p0);if(p1!=0)GLES30.glDeleteProgram(p1);
         GLES30.glDeleteVertexArrays(1,vao,0);
