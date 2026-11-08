@@ -30,6 +30,7 @@ class T3SharedFramePolicy(unittest.TestCase):
         self.assertIn('int[] right=pixel(',c)
         for i in range(6):self.assertIn('case '+str(i)+': return',c)
         self.assertIn('left[0]>right[0]+20',c)
+        self.assertIn('case 3: return left[0]>45',c)
         self.assertIn('Math.abs(left[0]-right[0])<=18',c)
         self.assertIn('negativeChecked && negativeRejected',c)
 
