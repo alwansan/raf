@@ -1,0 +1,56 @@
+name: T2 WATER-001 source-free typed Foam Blit operand gate
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t2_foam_blit_operand_gate.py'
+      - 'tests/test_t2_foam_blit_operand_gate.py'
+      - '.github/workflows/raft-t2-foam-blit-operand-sourcefree.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-blit-operand-sourcefree-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  normalized-fixtures-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout source-only scripts/tests without Unity, LFS or assets
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/t2_foam_blit_operand_gate.py
+            tests/test_t2_foam_blit_operand_gate.py
+
+      - name: Validate strict synthetic callsite gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 --version
+          python3 -m py_compile scripts/t2_foam_blit_operand_gate.py tests/test_t2_foam_blit_operand_gate.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_blit_operand_gate.py' -v 2>&1 | tee /tmp/t2-blit-gate.log
+          grep -Eq '^Ran [0-9]+ tests in ' /tmp/t2-blit-gate.log
+          grep -qx 'OK' /tmp/t2-blit-gate.log
+
+      - name: Explicit source-only acceptance boundary
+        if: success()
+        shell: bash
+        run: |
+          {
+            echo '### T2 synthetic Foam typed Blit operand gate'
+            echo 'PASS means normalized synthetic CIL fixtures only.'
+            echo 'No private original Assembly-CSharp bytes or proprietary Raft IL/assets loaded.'
+            echo 'Typed descriptor authenticity, Foam source/destination instance identity,'
+            echo 'ShaderLab binding, Unity runtime and Android pixels remain unverified.'
+          } >> "$GITHUB_STEP_SUMMARY"
