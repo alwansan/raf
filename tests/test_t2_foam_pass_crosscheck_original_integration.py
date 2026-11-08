@@ -97,5 +97,27 @@ class UnmockedOriginalFoamIntegrationTests(unittest.TestCase):
                                       "RenderTexture", "unknown"))
 
 
+    def test_original_material_field_read_census_mismatch_fails_closed(self):
+        original = full_safe_fixture()
+        original["field_api_exact_original_material_field_sites_scanned"] = 1
+        with self.assertRaisesRegex(ValueError, "source_exact_original_material_field_API_sites_partial"):
+            reconcile(original, sites("RenderTexture", "unknown",
+                                      "RenderTexture", "unknown"))
+
+    def test_original_pass0_role_partition_mismatch_fails_closed(self):
+        original = full_safe_fixture()
+        original["field_api_Graphics_Blit_pass0_source_RenderTexture"] = 0
+        with self.assertRaisesRegex(ValueError, "Blit_pass_specific_role_partition_incomplete"):
+            reconcile(original, sites("RenderTexture", "unknown",
+                                      "RenderTexture", "unknown"))
+
+    def test_original_global_role_partition_mismatch_fails_closed(self):
+        original = full_safe_fixture()
+        original["field_api_Graphics_Blit_explicit_destination_unknown"] = 0
+        with self.assertRaisesRegex(ValueError, "Blit_direct_source_destination_partition_inconsistent"):
+            reconcile(original, sites("RenderTexture", "unknown",
+                                      "RenderTexture", "unknown"))
+
+
 if __name__ == "__main__":
     unittest.main()
