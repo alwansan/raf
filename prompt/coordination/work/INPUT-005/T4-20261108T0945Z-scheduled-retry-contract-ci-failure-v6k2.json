@@ -1,0 +1,19 @@
+{
+  "session_id": "20261108T0945Z-T4-scheduled-retry-contract-v6k2",
+  "origin": "scheduled",
+  "owner": "T4",
+  "track": "INPUT-005",
+  "status": "active",
+  "base_sha": "4450a5bb58f0251083762455d3e44761fe9f100b",
+  "experiment_key": "t4-retry-contract-source-20261108-v6k2",
+  "files": [
+    "tests/test_t4_mouse_retry_telemetry_contract.py"
+  ],
+  "hypothesis": "CI42463928346 fails because test expects former combined attempt >1 predicate but production uses if(attempt==1) else if(power of two). Update source contract to verify equivalent branch structure, preserving native behavior.",
+  "shared_resource": "none; no Unity/CI dispatch",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42463928346",
+    "https://github.com/alwansan/raf/actions/runs/42463928344"
+  ],
+  "owner_device_success": "Artifact 42058825739 world enter/save/exit/reopen owner-confirmed; not proof of mouse"
+}
