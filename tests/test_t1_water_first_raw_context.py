@@ -102,7 +102,8 @@ class FirstRawLogcatContextTest(unittest.TestCase):
                b"11-08 16:49:17.581 123 124 E Unity: Dx11FFT: Kernel at index (6) is invalid\n")
         r = self.read(raw)
         self.assertTrue(r["first"]["kernel_index_6"]["direct_same_logcat_line_allowlist_hints"]["dx11fft"])
-        self.assertTrue(r["first"]["kernel_index_6"]["nearby_same_pid_tid_100ms_12lines_unattributed_hints"]["dx11fft"])
+        # Same-line evidence is NOT counted again as a following-line hint.
+        self.assertFalse(r["first"]["kernel_index_6"]["nearby_same_pid_tid_100ms_12lines_unattributed_hints"]["dx11fft"])
         self.assertFalse(r["actual_original_unity_findkernel_proven"])
 
     def test_summary_timestamp_mismatch_rejected(self):
