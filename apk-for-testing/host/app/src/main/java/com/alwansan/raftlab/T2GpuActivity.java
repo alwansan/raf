@@ -96,6 +96,13 @@ public final class T2GpuActivity extends Activity {
     setContentView(scroll);
     log("startup","api="+Build.VERSION.SDK_INT+" model="+Build.MODEL+" abi="+Build.SUPPORTED_ABIS[0]);
     surface.requestRender();
+    scheduleSharedAutoT2();
+  }
+  void scheduleSharedAutoT2(){
+    String id=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
+    if(id==null||!id.matches("T2-0[1-4]"))return;
+    final int index=Integer.parseInt(id.substring(4))-1;
+    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->runCase(index),1000);
   }
   void runCase(int id) {
     selected=id;notes.setText("");
@@ -110,6 +117,17 @@ public final class T2GpuActivity extends Activity {
       runOnUiThread(()->{
         if(selected==id)status.setText(TITLES[id]+"\nExpected: "+EXPECTED[id]+
             "\nObserved: "+observed+"\nMark PASS/FAIL/UNEXPECTED, then export JSONL.");
+        String automated=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
+        if(automated!=null&&automated.equals("T2-0"+(id+1))){
+            Intent data=new Intent();
+            data.putExtra("case_id",automated);
+            data.putExtra("observed",observed);
+            data.putExtra("status",observed.startsWith("OK ")?"PASS":"FAIL");
+            logForCase("shared_auto_result",observed,id);
+            setResult(RESULT_OK,data);
+            export();
+            finish();
+        }
       });
     });
     surface.requestRender();
