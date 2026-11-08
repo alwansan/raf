@@ -11,6 +11,7 @@ import json
 import os
 import re
 import stat
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -261,7 +262,7 @@ def main():
                            ["water_fft_invalid_compute_kernel"]["first_observed_unix_ms"],
             }
             print("RAFT_T1_SAFE_RAW_SUMMARY_MISMATCH " +
-                  json.dumps(redacted, sort_keys=True))
+                  json.dumps(redacted, sort_keys=True), file=sys.stderr)
             raise
     except (OSError, ValueError, UnicodeError, TypeError) as exc:
         # Report only a fixed-phase name and generic exception class, NEVER
