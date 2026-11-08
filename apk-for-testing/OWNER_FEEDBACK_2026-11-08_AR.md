@@ -1,0 +1,11 @@
+# تقرير المالك: 8 نوفمبر 2026 — إدخال الماوس والرسوم
+
+**مشاهدة مباشرة من المالك:** الماوس الفعلي صار يحرك الكاميرا داخل العالم مع pointer capture دون خروج غير مقصود إلى واجهة Android، لكن **LEFT / RIGHT / MIDDLE CLICK والـSCROLL WHEEL لا يعملون داخل اللعبة إطلاقاً**. هذا عطل INPUT-005 مستقل عن تحسن حركة الكاميرا؛ لا تُعلن إصلاح الماوس بالكامل. الألوان/الخامات والماء والنار والإضاءة والمؤثرات ما زالت ناقصة.
+
+**أحدث سجل متاح:** [LogRaft-20261108-164850-270](https://github.com/alwansan/CL/blob/main/raft%20log/lf/LogRaft-20261108-164850-270/session-summary.json) من [CL](https://github.com/alwansan/CL/tree/main/raft%20log)، جهاز Android 15. العدادات النهائية للجلسة: **74,359** خطأ ultimate_water_invalid_pass، **11,165** water_fft_invalid_compute_kernel، **7,372** unity_cursor_rgba32_required، وتحذيرا obb_guid_load_failed. يوجد missing MonoScript واحد وduplicate EventSystem واحد. 83 عينة تقدير SurfaceFlinger للـFPS متوسطها **47.90** وليست FPS الداخلي لـUnity؛ قراءة GPU busy لها 88 عينة متوسطها **71.43%**، لا تعني GPU اللعبة وحدها. لا تجمع أعداد هذه الجلسة مع عدادات آخر عينة ولا تعممها على إصدارات أخرى.
+
+**حدود الدليل:** لا تظهر أزرار الماوس مباشرة في session-summary؛ عدم وجود input error لا يثبت وصول click أو scroll. جلسة 7 نوفمبر توقفت فيها مراقبة Shizuku، وهذا ليس إثبات crash للعبة.
+
+**المطلوب من T4:** مقارنة input callbacks داخل تطبيق اختبار صغير على الهاتف (capture ON/OFF) مع Android game bridge؛ سجّل routes: dispatchTouchEvent/dispatchGenericMotionEvent/onCapturedPointerEvent، actionDown/actionUp/BUTTON_PRESS/BUTTON_RELEASE، getButtonState/getActionButton، AXIS_VSCROLL/HSCROLL، المصدر والجهاز والإحداثيات، وأثر release/reacquire. اختبر أزرار left/right/middle والتمرير، كيبورد/لمس، وانعكاسها إلى Mouse0/Mouse1/Mouse2 وscroll الحقيقي في اللعبة. لا تحل المشكلة بتعطيل pointer capture الذي نجح للكاميرا دون إثبات.
+
+**T1 وT2:** اعزلوا FFT/water compute/pass errors على GPU الحقيقي في مختبر صغير مؤلف من برامج/موارد لازمة؛ **T3:** مختبر مقارنة texture/material/particle/colors/fire/light في مشهد صغير موثق؛ **T5:** دعم build/distribution/MediaStore/logs وقياس الأداء. الحسم النهائي يتطلب دمج الحل في Raft واختبار النسخة الكاملة.
