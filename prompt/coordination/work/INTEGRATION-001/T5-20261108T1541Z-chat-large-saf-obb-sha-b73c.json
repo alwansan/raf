@@ -3,7 +3,7 @@
   "owner": "T5",
   "origin": "chat",
   "session_id": "20261108T1541Z-T5-chat-large-saf-obb-sha-b73c",
-  "status": "active",
+  "status": "waiting_android_host_build",
   "base_sha": "615b19729e20af76df0f326a1959d20cd88188e5",
   "resumed_from_sessions": [
     "20261108T1453Z-T5-scheduled-obb-telemetry-k8p2",
@@ -11,10 +11,12 @@
   ],
   "issue": "INTEGRATION-001 / DELIVERY-013",
   "experiment_key": "t5-mini-lab-saf-file-sha-2gb-obb-asynchronous-android15-v1",
-  "resource_key": "apk-for-testing/host/MainActivity.java (T4 mini-host build reads baseline only)",
+  "resource_key": "Shared host source modified; no concurrent T5 or Unity build. T4 owns next mini-lab build request.",
   "intended_files": [
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java",
     "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java",
-    "tests/test_t5_mini_lab_sha_source.py",
+    "tests/java/T5StreamSha256Test.java",
+    ".github/workflows/raft-t5-mini-lab-saf-sha.yml",
     "apk-for-testing/workers/T5/README.md",
     "prompt/coordination/clients/T5/sessions/20261108T1541Z-T5-chat-large-saf-obb-sha-b73c.md",
     "prompt/coordination/work/INTEGRATION-001/T5-20261108T1541Z-chat-large-saf-obb-sha-b73c.json"
@@ -22,5 +24,27 @@
   "hypothesis": "T5 file_sha256 case currently fails >64MiB even though OBB >2GiB; stream digest off Android main thread with bounded memory/progress and retain image size protection. No APK or installed identity claimed from source.",
   "overlap": "Checked T4 work 20261108T1540Z-chat-mini-lab-c6p4: T4 builds current host without modifying shared host; T5 will not modify T4 request/README or trigger competing mini-lab run.",
   "expected": "synthetic JDK/Python regression and future Android host compile; device SAF confirmation required",
-  "updated_at": "2026-11-08T15:41:00Z"
+  "updated_at": "2026-11-08T15:48:00Z",
+  "implementation_commits": [
+    "ceb6c1f74087f3d2d837e2251f3cb2709c5c731a",
+    "2af36bddca757444084c59b09b973719e12da9fa",
+    "db8f507af7b14d54201e6e83d228ebd9cbbeed0d",
+    "03141f693112cc44c02bb66542af1ecf67aa3aec",
+    "9ada5e8f9f1fbe4014f691903524dbcb755978f5",
+    "905185fd7ffe73dd4738ec3f81bb936b798badf8"
+  ],
+  "source_test": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42496378895",
+    "conclusion": "success",
+    "checks": 14,
+    "testpack_cases": 6,
+    "scope": "JDK byte stream and static wiring, not Android APK"
+  },
+  "android_build_observation": {
+    "t4_runs": [
+      "https://github.com/alwansan/raf/actions/runs/42496238418",
+      "https://github.com/alwansan/raf/actions/runs/42496449259"
+    ],
+    "status": "both failed at Java compile; initial T5 newline-escape issue fixed by db8f507; subsequent T1ComputeProbe final observation error fixed in T1 ae450f1; await next isolated T4 build before T5 run"
+  }
 }
