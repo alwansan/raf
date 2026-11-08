@@ -20,7 +20,10 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_AUTHENTIC_ORIGINAL_MOUSE_BUTTON_WHEEL_ROUTING_2026-11-08.md",
     "https://github.com/alwansan/CL/tree/4680f5dc26127938e7696f932b2d9a80dc703937/test/shared-20261108-223228-464718661",
     "https://github.com/alwansan/raf/actions/runs/42516377494",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_MOUSE_EVIDENCE_CL_20261108.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_MOUSE_EVIDENCE_CL_20261108.md",
+    "https://github.com/alwansan/raf/actions/runs/42518143297",
+    "https://github.com/alwansan/raf/actions/runs/42518143291",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_CAPTURED_LEGACY_BUTTON_WHEEL_BRIDGE_2026-11-08.md"
   ],
   "remaining": [
     "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
@@ -32,18 +35,20 @@
     "On-device verify old captured MotionEvent callback cannot move camera after rapid release/reacquire and show requested/lost/relative/released diagnostic state; no device proof yet.",
     "Device acceptance: validate captured trackpad MotionEvent SOURCE_MOUSE and InputDevice SOURCE_TOUCHPAD pairing, camera X/Y, physical mouse vs touchscreen, focus/release/cursor/system bars, keyboard/touch, and world/save/full-reopen on same signed Android source.",
     "8 Nov T4 authenticated original legacy API census found 12 Input.GetMouseButton*(...) and 8 legacy wheel references (6 GetAxis Mouse ScrollWheel +2 mouseScrollDelta) on original immutable CLR; these are static lexical calls, not Android device proof. Use native captured callbacks vs game Legacy Input evidence to decide safe targeted bridge; no injection before device demonstration.",
-    "8 Nov 22:32 owner CL test exported T4-09 without any capture_request=ON; repeat focused actual T4-02 Capture ON using finger → check route=captured/captured=true + physical buttons and V/H wheel, then compare with exact newer signed game's Unity Legacy Input path. No duplicate mini app needed."
+    "8 Nov 22:32 owner CL test exported T4-09 without any capture_request=ON; repeat focused actual T4-02 Capture ON using finger → check route=captured/captured=true + physical buttons and V/H wheel, then compare with exact newer signed game's Unity Legacy Input path. No duplicate mini app needed.",
+    "8Nov captured physical mouse native->Unity Legacy button/wheel fallback source now integrated with original Android Unity build stage: 20 exact original static callers (4 Down,6 held,2 Up,6 ScrollWheel Axis,2 mouseScrollDelta). Source-only CI42518143297 PASS 111 C# and 9 Python, authentic compiled Unity2021 ABI, original source patch 12 files; game signed Android phone Mouse0/1/2 V/H wheel and world/save yet untested."
   ],
   "acceptance": [
     "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-08T19:46:00Z",
-  "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
+  "updated_at": "2026-11-08T20:07:00Z",
+  "source_status": "SOURCE_INTEGRATED_ORIGINAL_CI_VERIFIED_DEVICE_UNCONFIRMED",
   "latest_T4_source_proof": "SOURCE_INTEGRATED_CI42121598304: API26 relative mouse getX/Y, captured touchpad AXIS_RELATIVE_X/Y, 0..64 historical samples; 28 Python +30 CSharp + original Unity2021 compile PASS; Android physical device unverified",
   "latest_T4_immersive_source": "SOURCE_INTEGRATED_CI42124859112: API30+ WindowInsetsController systemBars transient OS swipes; API26-29 additive legacy IMMERSIVE_STICKY flags; 7 Python and 18 CSharp policy checks; authentic original Unity2021 AndroidJNI/Core compile; NO DEVICE ACCEPTANCE",
   "latest_T4_listener_epoch_source": "SOURCE_CI_VERIFIED_42126395609: per-request Android captured listener epoch prevents stale prior-capture MOVE after release and reacquire. 32 Python +36 .NET + original Unity2021 managed compile, device unverified.",
   "latest_T4_trackpad_source": "SOURCE_INTEGRATED_SUCCESS_CI42144434260: source=MOUSE + event InputDevice.getSources touchpad capability, API docs proven; 40/40 Python, 48/48 dotnet, original Unity2021 ABI compile. Not verified on Android device.",
   "latest_T4_original_mouse_button_wheel_source": "CI42512688990 SUCCESS; 6 Python synthetic + pinned source 2395 CSharp; direct legacy button 4Down+6Held+2Up, wheel 6Axis+2Delta; zero direct MyInput/InputSystem Mouse.current, runtime/device UNKNOWN",
-  "latest_T4_owner_CL_mouse_device_evidence": "CI42516377494 SUCCESS: owner Xiaomi Android15 uploaded CL source source SHA cbe7a038, 413 raw mouse input callbacks source0x2002, 40 route duplicate lines, 373 unique event signatures, 13 distinct left press/release pairs, 55 vertical scroll events. All captured=false, no capture_request, route=captured 0. No right/middle/hscroll proof (not necessarily attempted). T4-09 EVIDENCE_READY is not GAME comparison or Mouse0/1/2 success."
+  "latest_T4_owner_CL_mouse_device_evidence": "CI42516377494 SUCCESS: owner Xiaomi Android15 uploaded CL source source SHA cbe7a038, 413 raw mouse input callbacks source0x2002, 40 route duplicate lines, 373 unique event signatures, 13 distinct left press/release pairs, 55 vertical scroll events. All captured=false, no capture_request, route=captured 0. No right/middle/hscroll proof (not necessarily attempted). T4-09 EVIDENCE_READY is not GAME comparison or Mouse0/1/2 success.",
+  "latest_T4_legacy_button_wheel_bridge": "SOURCE_INTEGRATED_CI42518143297 SUCCESS at SHA 0e9437b0137566dc1ddd377c3396ae18e4c0b058; native-first frame-latched physical mouse captured source+20 original Input legacy call sites in next Unity build stage; same SHA offline CI42518143291 SUCCESS; Android signed Raft gameplay not device proven."
 }
