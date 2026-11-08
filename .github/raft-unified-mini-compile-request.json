@@ -1,6 +1,7 @@
 {
-  "reason": "One-off source compilation of new shared T1–T5 lab, no APK or release",
-  "source_before_request": "dce23c370efeec3650f792ccda1b10f91ca09833",
+  "reason": "Re-run isolated Java compiler after fixing T3 PixelCopy IOException import; no APK build",
+  "source_before_request": "88131a3732b86909b5060eaa2ce31eca27ec6594",
   "requested_by": "user coordinator",
-  "kind": "java-source-only"
+  "kind": "java-source-only",
+  "revision": 2
 }
