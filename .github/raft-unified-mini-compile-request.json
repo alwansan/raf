@@ -1,0 +1,6 @@
+{
+  "reason": "One-off source compilation of new shared T1–T5 lab, no APK or release",
+  "source_before_request": "dce23c370efeec3650f792ccda1b10f91ca09833",
+  "requested_by": "user coordinator",
+  "kind": "java-source-only"
+}
