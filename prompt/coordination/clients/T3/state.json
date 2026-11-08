@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T3",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
-  "resumed_from_session": "20261105T0024Z-T3-keyword-real-export",
-  "status": "completed",
-  "base_sha": "73924c998d91eb64be33c883d9922d44981accd4",
-  "last_commit": "fcdbfe18da9d0da1c4c915b8e3dcb43cae5e0cff",
-  "updated_at": "2026-11-08T18:34:00Z",
+  "session_id": "20261108T1852Z-T3-chat-png-integrity-k8m2",
+  "resumed_from_session": "20261108T1813Z-T3-chat-shared-frame-proof-p6r9",
+  "status": "completed_source_only_validation_pending",
+  "base_sha": "d03d8053088dd5b715705d31675cbad4bae41ae9",
+  "last_commit": "1b2b8fddd01334d57129eb21027598755a2f2564",
+  "updated_at": "2026-11-08T19:02:50Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -17,7 +17,8 @@
     "T3-20261104T2354Z-T3-render-harness-real-texenv-export",
     "T3-20261104T2354Z-T3-render-harness-real-material-color-export",
     "T3-20261105T0024Z-T3-keyword-real-export-keyword-authentic-parity",
-    "T3-20261108T1813Z-chat-shared-frame-proof-p6r9"
+    "T3-20261108T1813Z-chat-shared-frame-proof-p6r9",
+    "T3-20261108T1852Z-chat-png-integrity-k8m2"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
@@ -30,27 +31,29 @@
     "https://github.com/alwansan/raf/actions/runs/41940350604",
     "https://github.com/alwansan/raf/actions/runs/41941363661"
   ],
-  "next_step": "Use existing shared mini APK from Actions artifact ZIP for real T3 GLES/PixelCopy and owner visual inspection; do not request duplicate Mini for minor later positive threshold. Keep separate actual Raft materials/fire/water shader restoration open.",
+  "next_step": "Check independent T3 source-only compile workflow, then use latest integrated shared Mini only upon T5 decision to validate real GLES/PixelCopy/MediaStore PNG+SHA on device. Resume authentic Particle108 ShaderLab/material binding effort. No current new APK request.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md",
   "origin": "chat",
   "latest_source_evidence": {
-    "scope": "T3-01..06 shared synthetic GLES exact-frame readback",
-    "included_in_built_apk_source": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
-    "core_source_commits": [
-      "204dabb9c18b7122550c7aa30a51fdc385de6f45",
-      "6bb0b165f5849c84b1210eed0c7d8eba00468b2f"
+    "scope": "T3 shared mini PNG provenance/durable MediaStore readback and true GLES pixel payload",
+    "commits": [
+      "03151ea4b60f87576f8e5abf9235edbc53e12fdd",
+      "a9ad5f77df2548a1adee109e1cacb51ad4a190aa",
+      "0a449ab7ce3b3551c42fb6d9a11b1da0c32da519",
+      "e65427eda01c9e7970c20551c627c65228aad50f"
     ],
-    "newer_not_in_apk": [
-      "99e3ee5c7d3d107d7f5ab197a8ea4e19383562a7",
-      "2e3ce81b3a092e7823eedb8aafe1d0bc6e3f2c3c"
-    ],
-    "shared_mini_run": "https://github.com/alwansan/raf/actions/runs/42509945996",
-    "shared_mini_status": "CI_SUCCESS / ARTIFACT_ZIP_ONLY / NOT_DEVICE_TESTED",
-    "artifact_id": 13628828717,
-    "java_compilation": "PASS for cbe7a038 via T5 shared CI42509945996; later T3 positive threshold uncompiled",
-    "t3_readiness_vote": "NO_BUILD after existing shared mini success",
-    "source_assertions": "26/26 source checks + 14/14 follow-up source/pack checks",
-    "device": "UNVERIFIED",
+    "workflow": "raft-t3-shared-png-source-gate.yml",
+    "workflow_run": "NOT_VERIFIED",
+    "source_contract_checks": "14/14 scanned on GitHub",
+    "source_tests": "7 methods committed; runtime not yet independently observed",
+    "android_compile": "UNVERIFIED on this newer SHA",
+    "android_device": "UNVERIFIED",
+    "last_shared_apk": {
+      "run": 42509945996,
+      "source": "cbe7a038bad2c7ca5ad587b242e8baf7128ecb8",
+      "includes_later_png_fix": false
+    },
+    "mini_vote": "NO_BUILD, existing one shared APK already; no source-only duplicate",
     "full_game": "NOT_READY 0/3"
   }
 }
