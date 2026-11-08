@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "20261108T1956Z-T5-owner-arabic-portrait-cl-build-m7r4",
+  "agent": "T5",
+  "origin": "chat",
+  "session_id": "20261108T1945Z-T5-chat-portrait-arabic-owner-cl-m7r4",
+  "issue_id": "INTEGRATION-001",
+  "status": "APK_CI_BUILT_DEVICE_PENDING",
+  "owner_request": "Portrait + Arabic unified Mini app and 29 test cases; tell T1..T5 owner uploads evidence to CL/test",
+  "evidence_source": "https://github.com/alwansan/CL/tree/main/test",
+  "build_run": "https://github.com/alwansan/raf/actions/runs/42517104924",
+  "artifact_id": 13631588625,
+  "pack_sha256": "6e19b05c697334be6ee7740846f2817f29fdcb185a118c8f5d36bbd06b04066f",
+  "apk_sha256": "0f469cc650182370b570d96c8e92e3f9c686f6b4417ae10e22d3c35b0084fd42",
+  "apk_bytes": 90058,
+  "version": "0.2.10-shared",
+  "portrait_activities": 4,
+  "arabic_cases": 29,
+  "signer_cert_changed": true,
+  "device_result": "pending",
+  "unity_full_game": "not built",
+  "full_game_ready": "NOT_READY_0_OF_3"
+}
