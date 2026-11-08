@@ -4,20 +4,24 @@
 
 ## Current status: READY_TO_TEST — one real APK built and uploaded (Android device results pending)
 
-**Verified release candidate 2026-11-08 / Mini Lab T1 v0.1.0-source-prototype:**
-- **Download:** [actual GitHub Actions artifact #13624351093](https://github.com/alwansan/raf/actions/runs/42497238594/artifacts/13624351093) (ZIP containing `app-debug.apk` and `mini-lab-sha256.txt`).
-- **CI:** [42497238594](https://github.com/alwansan/raf/actions/runs/42497238594) — SUCCESS; `assembleDebug -Pworker=T1`, nonempty APK, SHA256 logged, 2-file artifact upload SUCCESS.
-- **Immutable source SHA:** `2980d378e37a678feedc3584530bde71212fbd9f`.
-- **Package / version:** `com.alwansan.raft.lab.t1`, `versionCode=1`, `versionName=0.1.0-source-prototype`.
-- **SHA256 for extracted `app-debug.apk`:** `d87dc468ab39ea2ac67fe09fe1e02b34052c84f09ab3ad9bd8d22d24d18449a6`.
-- **Artifact ZIP size:** 35,404 bytes; **Artifact expiry:** 2026-11-15 15:56:34 UTC (seven-day retention), not an indefinite public release.
-- **Expected outcome on owner Adreno730:** CASE T1-01..04 should report PASS for supported ES3.1 compute; any FAIL, exception or UNEXPECTED is useful evidence. A PASS is *not* evidence of restored Unity FindKernel/FFT/UltimateWater.
+**Latest verified APK: T1 v0.1.1-t1-export-path (8 Nov 2026)**
+
+- **Download:** [GitHub Actions Artifact #13624141881](https://github.com/alwansan/raf/actions/runs/42497767712/artifacts/13624141881), ZIP with `app-debug.apk` and `mini-lab-sha256.txt`.
+- **Build:** [run 42497767712](https://github.com/alwansan/raf/actions/runs/42497767712) — **SUCCESS**; `assembleDebug -Pworker=T1`, nonempty APK, SHA256 and uploaded archive verified.
+- **Source SHA:** `37182f0e9d38c0c38f3e78e7e5c21463eeaac8d9`.
+- **Package / version:** `com.alwansan.raft.lab.t1`, `versionCode=2`, `versionName=0.1.1-t1-export-path`.
+- **APK SHA256:** `d177634c7ee7d71117005000fa904db03e825a43ba63dbe921ddf43cc077d0b7`.
+- **Artifact ZIP:** 35,583 bytes; expires `2026-11-15T16:03:00Z` (7 days).
+- **Log export (latest owner requirement):** `/storage/emulated/0/Download/Games/cl/raft log/test/t1-builtin-t1-gles31-<session>/`. Events include actual `app_version` and `app_version_code`.
+- **Expected on Adreno730:** T1-01..04 should all PASS if genuine ES3.1 compute/SSBO are functional. Any FAIL/UNEXPECTED plus logs/screenshots is diagnostic; a PASS cannot prove Unity FindKernel or water restoration.
+
+**Previous build retained for provenance (superseded, do not install for new tests):** v0.1.0, source `2980d378e37a678feedc3584530bde71212fbd9f`, [run 42497238594](https://github.com/alwansan/raf/actions/runs/42497238594), [artifact 13624351093](https://github.com/alwansan/raf/actions/runs/42497238594/artifacts/13624351093), APK SHA256 `d87dc468ab39ea2ac67fe09fe1e02b34052c84f09ab3ad9bd8d22d24d18449a6`. Old APK exported to `Download/Games/cl/test`; superseded solely to meet latest explicit owner log path/version request.
 
 - The built-in GPU Java source is `apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java`.
 - `MainActivity` installs it **only with** `-Pworker=T1`; all shader text is compiled into the APK, and user-imported testpacks cannot supply/execute shaders, scripts, dex or native code.
-- Package when built: `com.alwansan.raft.lab.t1`, versionCode `1`, ephemeral debug signature; uninstall the earlier T1 lab before an incompatible debug-key upgrade, but **never uninstall Raft**.
+- Package when built: `com.alwansan.raft.lab.t1`, versionCode `2`, ephemeral debug signature; uninstall the earlier T1 lab before an incompatible debug-key upgrade, but **never uninstall Raft**.
 - Main T1 paired FFT source-only workflow [42493143730](https://github.com/alwansan/raf/actions/runs/42493143730) is SUCCESS, but is **not** the mini APK build and does not constitute Android GPU evidence.
-- Logs remain append-only inside app-private storage during the run; export via MediaStore to `/storage/emulated/0/Download/Games/cl/test/t1-builtin-t1-gles31-<session>/`. No root, all-files access, or Shizuku required.
+- Logs remain append-only inside app-private storage during the run; export via MediaStore to `/storage/emulated/0/Download/Games/cl/raft log/test/t1-builtin-t1-gles31-<session>/`. No root, all-files access, or Shizuku required.
 
 ## Four immutable CASEs (not configurable through imported files)
 
