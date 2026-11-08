@@ -229,17 +229,24 @@ def main():
     p.add_argument("first_segment", type=Path)
     p.add_argument("summary", type=Path)
     a = p.parse_args()
+    phase = "raw-auth"
     try:
         authenticate_raw(a.first_segment)
+        phase = "summary-auth"
         summary, ignored, checksum = load_summary(a.summary)
         if checksum != SUMMARY_SHA256:
             raise ValueError("unknown session summary")
         if ignored:
             raise ValueError("non-authoritative summary duplicate changed")
+        phase = "raw-root-classification"
         raw_report = classify_first_roots(a.first_segment)
+        phase = "raw-summary-crosscheck"
         report = combine(raw_report, summary, checksum)
     except (OSError, ValueError, UnicodeError, TypeError) as exc:
-        p.exit(2, "T1 first original root context unavailable: " + type(exc).__name__ + "\n")
+        # Report only a fixed-phase name and generic exception class, NEVER
+        # original proprietary log body or a private stack trace.
+        p.exit(2, "T1 first original root context unavailable at " + phase +
+               ": " + type(exc).__name__ + "\n")
     print("RAFT_T1_FIRST_RAW_LOGCAT_CONTEXT " + json.dumps(report, sort_keys=True))
 
 
