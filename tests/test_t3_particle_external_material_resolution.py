@@ -15,6 +15,7 @@ class ExternalParticleAuditTests(unittest.TestCase):
             a, b, c = "a"*32, "b"*32, "c"*32
             for name, guid in [("one", a), ("two", b), ("three", b)]:
                 (root / (name + ".mat.meta")).write_text("guid: " + guid + "\n")
+                (root / (name + ".mat")).write_text("%YAML 1.1\n")
             lines = "".join("  - {fileID: 2100000, guid: " + g + ", type: 2}\r\n" for g in (a,b,c))
             (root / "effect.prefab").write_bytes(("\ufeff--- !u!199 &1\r\nParticleSystemRenderer:\r\n  m_Materials:\r\n" + lines).encode("utf-8"))
             result = module.audit(root)
@@ -22,6 +23,20 @@ class ExternalParticleAuditTests(unittest.TestCase):
             self.assertEqual(result["external_guid_unique_mat_meta"], 1)
             self.assertEqual(result["external_guid_duplicate_mat_meta"], 1)
             self.assertEqual(result["external_guid_not_in_mat_meta_tree"], 1)
+
+    def test_orphan_metadata_does_not_resolve_missing_material(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            guid = "d" * 32
+            (root / "orphan.mat.meta").write_text("guid: " + guid + "\n")
+            (root / "effect.prefab").write_text(
+                "--- !u!199 &1\nParticleSystemRenderer:\n  m_Materials:\n"
+                "  - {fileID: 2100000, guid: " + guid + ", type: 2}\n"
+            )
+            result = module.audit(root)
+            self.assertEqual(result["orphan_mat_meta"], 1)
+            self.assertEqual(result["external_guid_not_in_mat_meta_tree"], 1)
+            self.assertNotIn("external_guid_unique_mat_meta", result)
 
 if __name__ == "__main__":
     unittest.main()
