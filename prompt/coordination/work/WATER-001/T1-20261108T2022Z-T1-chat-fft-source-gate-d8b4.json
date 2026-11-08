@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261108T2022Z-T1-chat-fft-source-gate-d8b4",
+  "resumed_from_sessions": [
+    "20261108T1924Z-T1-chat-raw-root-context-a7d9",
+    "20261108T1910Z-T1-scheduled-axis-identity-f4c8"
+  ],
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "fa3d282481c5ac499decf5dd30b89cb6d1acbbb1",
+  "scope": "Repair proven first-divergence Python syntax regression and produce falsifiable original C# FFT dispatch-shape/FindKernel source gate using SHA-pinned managed source; never map Logcat index6 without runtime identity.",
+  "intended_files": [
+    "scripts/t1_fft_first_divergence.py",
+    "tests/test_t1_fft_first_divergence.py",
+    "scripts/t1_fft_original_kernel_dispatch_contract.py",
+    "tests/test_t1_fft_original_kernel_dispatch_contract.py",
+    ".github/workflows/raft-t1-fft-original-kernel-contract.yml",
+    "docs/T1_FFT_ORIGINAL_KERNEL_DISPATCH_AUDIT_2026-11-08.md",
+    "prompt/coordination/clients/T1/sessions/20261108T2022Z-T1-chat-fft-source-gate-d8b4.md",
+    "prompt/coordination/experiments/T1/20261108T2022Z-T1-chat-fft-source-gate-d8b4.json",
+    "prompt/coordination/B_TEAM/events/T1/20261108T2022Z-T1-fft-original-dispatch-d8b4.json",
+    "prompt/coordination/work/WATER-001/T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4.json"
+  ],
+  "experiment_key": "fft-original-index-source-binding-v1-original-Dx11FFT-sourceSHA-and-Unity-serialized-FFT-objectSHA",
+  "resource_key": "Original managed Dx11FFT.cs SHA-pinned source derived from zip2 PC data; existing synthetic T1 paired CI",
+  "observations": [
+    "GitHub CI42518408573 failed on line 81 literal backslash-n in first-divergence parser; no Unity job run",
+    "CL raw first segment T1 CI42516813516 confirmed no literal kernel root; collector index6 not runtime ID proof"
+  ],
+  "decision": "source-only test and authentic managed C# callsite evidence; no new APK or full XAPK",
+  "updated_at": "2026-11-08T20:22:00Z",
+  "next_step": "Fix CI syntax; source-authenticate original FFT C# caller and record source-only two-pass Dispatch relationship, runtime FindKernel/index still UNPROVEN"
+}
