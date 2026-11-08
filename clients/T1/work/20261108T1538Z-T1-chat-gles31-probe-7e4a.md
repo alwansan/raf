@@ -15,3 +15,9 @@ collision_check: no in_progress Actions at check; T5 latest scoped work source-o
 hypothesis: Distinguish Adreno OpenGL ES 3.1 general compute dispatch/SSBO vs unavailable compute, without claiming original Unity FindKernel or original water shader support.
 negative_control: deliberately invalid compute GLSL must be rejected by compiler. Positive controls require exact CPU-known output readback, not just GL_NO_ERROR.
 acceptance: a signed mini APK must be built and hash/Artifact URL verified before owner is invited to test. Until then SOURCE_READY, not READY_TO_TEST.
+
+## 2026-11-08 update — compile validation and shared request collision
+- T1 compile defect in run [42496449259](https://github.com/alwansan/raf/actions/runs/42496449259) (Javac definite assignment of final observation) fixed in [ae450f1](https://github.com/alwansan/raf/commit/ae450f1f84ef4956f577df29cb21214517a8f065).
+- T4 mini host [42496622364](https://github.com/alwansan/raf/actions/runs/42496622364) subsequently **SUCCESS** including shared Java source; artifact belongs to worker **T4**, not T1. T1 GPU tests remain unexecuted on device.
+- Attempted T1 build request with expected blob SHA was rejected 409: concurrent T2 updated `.github/raft-mini-lab-build-request.json` on 1eb3e880e65a6f239be9b3cfbe1ff761851091eb and started [42496746941](https://github.com/alwansan/raf/actions/runs/42496746941). **Respected conflict; do not override T2 request or duplicate queued build**. Recheck live Actions/request after T2 completes; only then dispatch one T1 build using fresh HEAD parent.
+status: waiting_shared_mini_queue
