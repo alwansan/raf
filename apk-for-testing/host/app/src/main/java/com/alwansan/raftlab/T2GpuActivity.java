@@ -21,13 +21,13 @@ import java.util.*;
 public final class T2GpuActivity extends Activity {
   static final String[] TITLES = {
     "CASE01 - GLES driver and capabilities",
-    "CASE02 - two-pass RGBA8 FBO pixel roundtrip",
+    "CASE02 - two-pass RGBA8 FBO spatial pixel roundtrip",
     "CASE03 - incomplete FBO negative control",
     "CASE04 - invalid shader compile negative control"
   };
   static final String[] EXPECTED = {
     "Real GLES3 renderer/version and maximum texture size",
-    "Two complete RGBA8 FBOs, final pixel (32,96,159,255) +/-2",
+    "Two complete RGBA8 FBOs, source and final pixels: baseline (32,96,159,255) and contrast (223,32,64,255) +/-2",
     "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT detected",
     "GL_COMPILE_STATUS=0 for deliberately invalid GLSL"
   };
@@ -47,7 +47,7 @@ public final class T2GpuActivity extends Activity {
       j.put("elapsed_ms",SystemClock.elapsedRealtime());
       j.put("worker","T2");
       j.put("package",getPackageName());
-      j.put("version","0.1.0");
+      j.put("version","0.1.1");
       j.put("session",session);
       j.put("case",caseId<0?JSONObject.NULL:"CASE0"+(caseId+1));
       j.put("event",kind);
@@ -70,7 +70,7 @@ public final class T2GpuActivity extends Activity {
     root.setOrientation(LinearLayout.VERTICAL);
     scroll.addView(root);
     TextView header = new TextView(this);
-    header.setText("T2 GLES3 WATER PASS PROBE 0.1.0\nActual driver, synthetic shaders only.\nNOT proof of original Foam/Spectrum/Blur, ShaderLab or Raft.");
+    header.setText("T2 GLES3 WATER PASS PROBE 0.1.1\nActual driver, synthetic shaders only.\nNOT proof of original Foam/Spectrum/Blur, ShaderLab or Raft.");
     header.setTextSize(17);root.addView(header);
     status = new TextView(this);status.setText("Select a numbered case");
     status.setTextSize(16);status.setPadding(8,12,8,12);root.addView(status);
@@ -176,7 +176,9 @@ public final class T2GpuActivity extends Activity {
         +"void main(){float x=gl_VertexID==1?3.0:-1.0;"
         +"float y=gl_VertexID==2?3.0:-1.0;gl_Position=vec4(x,y,0.,1.);}";
     static final String F0="#version 300 es\nprecision highp float;"
-        +"out vec4 col;void main(){col=vec4(0.125,0.375,0.625,1.0);}";
+        +"out vec4 col;void main(){"
+        +"col=gl_FragCoord.x < 5.0 ? vec4(0.125,0.375,0.625,1.0)"
+        +": vec4(0.875,0.125,0.25,1.0);}";
     static final String F1="#version 300 es\nprecision highp float;"
         +"uniform sampler2D image0;out vec4 col;"
         +"void main(){col=texture(image0,gl_FragCoord.xy/vec2(8.0));}";
@@ -235,6 +237,21 @@ public final class T2GpuActivity extends Activity {
       }
       return p;
     }
+    int[] checkedPixel(String stage,int x,int y,int[] expected){
+      ByteBuffer pixel=ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
+      GLES30.glReadPixels(x,y,1,1,GLES30.GL_RGBA,GLES30.GL_UNSIGNED_BYTE,pixel);
+      int error=GLES30.glGetError();
+      if(error!=GLES30.GL_NO_ERROR)
+        throw new IllegalStateException(stage+" GL error=0x"+Integer.toHexString(error));
+      int[] actual=new int[4];
+      for(int channel=0;channel<4;channel++){
+        actual[channel]=pixel.get(channel)&255;
+        if(Math.abs(actual[channel]-expected[channel])>2)
+          throw new IllegalStateException(stage+" pixel mismatch actual="+Arrays.toString(actual)+
+              " expected="+Arrays.toString(expected)+" tolerance=2");
+      }
+      return actual;
+    }
     String twoPass(){
       int[] tex=new int[2],fb=new int[2],vao={0};int p0=0,p1=0;
       try{
@@ -258,25 +275,26 @@ public final class T2GpuActivity extends Activity {
         p0=program(F0);p1=program(F1);
         GLES30.glDisable(GLES30.GL_BLEND);GLES30.glDisable(GLES30.GL_DEPTH_TEST);
         GLES30.glDisable(GLES30.GL_SCISSOR_TEST);GLES30.glViewport(0,0,8,8);
+        int[] baseline={32,96,159,255},contrast={223,32,64,255};
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER,fb[0]);
         GLES30.glUseProgram(p0);GLES30.glDrawArrays(GLES30.GL_TRIANGLES,0,3);
+        // Assert that the first render target actually contains two distinct source regions.
+        int[] sourceLeft=checkedPixel("pass0 left",2,4,baseline);
+        int[] sourceRight=checkedPixel("pass0 right",6,4,contrast);
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER,fb[1]);
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0);GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,tex[0]);
         GLES30.glUseProgram(p1);
         int loc=GLES30.glGetUniformLocation(p1,"image0");
         if(loc<0)throw new IllegalStateException("sampler uniform optimized out");
         GLES30.glUniform1i(loc,0);GLES30.glDrawArrays(GLES30.GL_TRIANGLES,0,3);
-        ByteBuffer pixel=ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
-        GLES30.glReadPixels(4,4,1,1,GLES30.GL_RGBA,GLES30.GL_UNSIGNED_BYTE,pixel);
-        int error=GLES30.glGetError();
-        if(error!=GLES30.GL_NO_ERROR)throw new IllegalStateException("GL error 0x"+Integer.toHexString(error));
-        int[] actual=new int[4],expected={32,96,159,255};
-        for(int i=0;i<4;i++){
-          actual[i]=pixel.get(i)&255;
-          if(Math.abs(actual[i]-expected[i])>2)
-            throw new IllegalStateException("pixel mismatch actual="+Arrays.toString(actual));
-        }
-        return "OK 2-pass RGBA8 FBO sample; pixel="+Arrays.toString(actual)+" tolerance=2";
+        // Preserve the original 4,4 baseline assertion; a second output pixel
+        // proves the sampler did not merely output the baseline constant.
+        int[] finalBaseline=checkedPixel("pass1 baseline",4,4,baseline);
+        int[] finalContrast=checkedPixel("pass1 contrast",6,4,contrast);
+        return "OK 2-pass RGBA8 FBO; sourceLeft="+Arrays.toString(sourceLeft)+
+            " sourceRight="+Arrays.toString(sourceRight)+
+            " finalBaseline="+Arrays.toString(finalBaseline)+
+            " finalContrast="+Arrays.toString(finalContrast)+" tolerance=2";
       }finally{
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER,0);
         GLES30.glViewport(0,0,surfaceWidth,surfaceHeight);
