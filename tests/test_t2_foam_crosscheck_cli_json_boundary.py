@@ -6,7 +6,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tests.test_t2_foam_pass_crosscheck_original_integration import full_safe_fixture, sites
+import importlib.util
+
+_fixture_path = Path(__file__).with_name("test_t2_foam_pass_crosscheck_original_integration.py")
+_spec = importlib.util.spec_from_file_location("t2_original_fixture", _fixture_path)
+_fixture = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_fixture)
+full_safe_fixture, sites = _fixture.full_safe_fixture, _fixture.sites
 
 
 class FoamCrosscheckCLIJsonBoundary(unittest.TestCase):
