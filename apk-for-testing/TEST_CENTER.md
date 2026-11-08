@@ -1,3 +1,8 @@
+<!-- OWNER_T5_ARABIC_PORTRAIT_20261108 -->
+> **توجيه المالك الجديد — واجهة عمودية وعربية:** طلب المالك تحويل **تطبيق المختبر T1–T5 فقط** من Landscape إلى Portrait وتعريب أزرار واجهته و**عناوين وتعليمات ونتائج التوقع** لكل الـ29 حالة. لا يغيّر ذلك وضع عرض لعبة Raft الكاملة (أفقي). تغييرات المصدر: `apk-for-testing/unified/app/src/main/AndroidManifest.xml` و`UnifiedLabActivity.java` وقاموس `ArabicLabStrings.java`، مع بقاء `team-testpack.json` ومعرفاته الأصلية دون تعديل. **هذه التغييرات لا تظهر في APK السابق 0.2.9**؛ لا توصف بأنها موجودة في التطبيق على هاتف المالك إلا بعد بناء وفحص APK جديد. تعليمات الفريق في [البلاغ المشترك](../prompt/coordination/T_TEAM/OWNER_ARABIC_PORTRAIT_CL_UPLOADS_20261108.md).
+
+> **مصدر نتائج الهاتف الأساسي:** المالك يرفع ملفات الاختبارات في [CL/test](https://github.com/alwansan/CL/tree/main/test). اقرأ أحدث `shared-*` وملفات العملاء (وبالأخص `shared-20261108-223228-464718661`) قبل أي تشخيص. ذلك مجلد أدلة **مختلف عن** `CL/raft log`. ثبت T4 ملف mouse كبير في أحدث رفع، وبقي `T5-02..06` بحاجة لإدخال فعلي؛ `T5-01 PASS`. لا تنشر ملفات اللعبة الخاصة إلى CL/test.
+
 # Raft — ONE TEAM LAB APK / T1–T5
 
 **8 نوفمبر 2026 — نظام جديد:** تطبيق Android واحد وحزمة `team-testpack.json` واحدة لجميع T1–T5؛ لا حاجة لتحميل خمسة APKات. [تعليمات التعاون](UNIFIED_LAB_POLICY_AR.md) · [جاهزية بناء المختبر فقط](SHARED_BUILD_READINESS.md) · [مصدر التطبيق الواحد](unified/README.md) · [برومبت الاستعادة المحسن](../prompt/coordination/T_TEAM/RESTORE_SHARED_LAB_AR.md).
