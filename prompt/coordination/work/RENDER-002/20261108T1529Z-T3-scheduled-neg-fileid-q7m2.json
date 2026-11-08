@@ -1,0 +1,17 @@
+{
+  "session_id": "20261108T1529Z-T3-scheduled-neg-fileid-q7m2",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-08T15:29:00Z",
+  "intended_files": [
+    "scripts/t3_particle_renderer_yaml_audit.py",
+    "tests/test_t3_particle_renderer_yaml_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261108T1529Z-T3-scheduled-neg-fileid-q7m2.md"
+  ],
+  "experiment_key": "t3-particle-yaml-negative-fileid-pptr-fail-closed-v1",
+  "resource_key": null,
+  "hypothesis": "Negative Unity material fileID must not be classified as a valid local material reference; current parser counts it as local.",
+  "taken_over_from": "T3 particle audit ee023697 and dedddfbe; Nov 8 owner feedback; synthetic source-only check",
+  "limits": "No original assets, Unity, APK or phone validation."
+}
