@@ -98,6 +98,19 @@ class MaterialShaderAuditTests(unittest.TestCase):
             self.assertEqual(result["material_shader_pointer_unparsed"], 1)
             self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
 
+    def test_zero_fileid_with_nonzero_guid_is_null_not_resolved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            guid = "1" * 32
+            (root / "Known.shader").write_text('Shader "Test/Known" {}\\n')
+            (root / "Known.shader.meta").write_text("guid: " + guid + "\\n")
+            (root / "stale-null.mat").write_text(
+                "Material:\\n  m_Shader: {fileID: 0, guid: %s, type: 3}\\n" % guid)
+            result = audit(root)
+            self.assertEqual(result["shader_pointer_null"], 1)
+            self.assertEqual(result["shader_guid_resolved_in_scan"], 0)
+            self.assertEqual(result["shader_guid_unresolved_in_scan"], 0)
+
     def test_nonexistent_root_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError):
