@@ -48,7 +48,7 @@ public final class MainActivity extends Activity {
         addButton(tools,"Save As",v->{Intent i=new Intent(Intent.ACTION_CREATE_DOCUMENT);
             i.addCategory(Intent.CATEGORY_OPENABLE);i.setType("application/x-ndjson");
             i.putExtra(Intent.EXTRA_TITLE,privateLog.getName());startActivityForResult(i,SAVE_AS);});
-        exportStatus=txt("Logs saved privately; export to Download/Games/cl/test/...");root.addView(exportStatus);
+        exportStatus=txt("Logs saved privately; export to "+logDisplayRoot()+"...");root.addView(exportStatus);
         entries=new LinearLayout(this);entries.setOrientation(LinearLayout.VERTICAL);root.addView(entries);
         caption=txt("Select numbered test");root.addView(caption);
         LinearLayout result=new LinearLayout(this);root.addView(result);
@@ -212,17 +212,19 @@ public final class MainActivity extends Activity {
     void copy(InputStream in,OutputStream out)throws IOException{byte[] buf=new byte[16384];int n;
         while((n=in.read(buf))>=0)out.write(buf,0,n);out.flush();}
     String folder(){return (BuildConfig.LAB_WORKER+"-"+packId+"-"+session).toLowerCase(Locale.US).replaceAll("[^a-z0-9._-]","-");}
+    String logRelativeRoot(){return Environment.DIRECTORY_DOWNLOADS+("T1".equals(BuildConfig.LAB_WORKER)?"/Games/cl/raft log/test/":"/Games/cl/test/");}
+    String logDisplayRoot(){return "T1".equals(BuildConfig.LAB_WORKER)?"Download/Games/cl/raft log/test/":"Download/Games/cl/test/";}
     void export(){log("log_export","MediaStore.Downloads");
         if(Build.VERSION.SDK_INT<29){exportStatus.setText("Use Save As for Android 9");return;}
         try{
             if(output==null){ContentValues v=new ContentValues();
                 v.put(MediaStore.Downloads.DISPLAY_NAME,privateLog.getName());v.put(MediaStore.Downloads.MIME_TYPE,"application/x-ndjson");
-                v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/"+folder()+"/");
+                v.put(MediaStore.Downloads.RELATIVE_PATH,logRelativeRoot()+folder()+"/");
                 output=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
                 if(output==null)throw new IOException("MediaStore refused file");}
             try(InputStream in=new FileInputStream(privateLog);OutputStream out=getContentResolver().openOutputStream(output,"wt")){
                 if(out==null)throw new IOException("Export stream unavailable");copy(in,out);}
-            exportStatus.setText("Exported: Download/Games/cl/test/"+folder()+"/"+privateLog.getName());
+            exportStatus.setText("Exported: "+logDisplayRoot()+folder()+"/"+privateLog.getName());
         }catch(Exception ex){log("export_error",ex.toString());exportStatus.setText("Export failed; private logs preserved. Use Save As.");}}
 
     /** Export the newest previous append-only log after an unexpected app exit. */
@@ -236,14 +238,14 @@ public final class MainActivity extends Activity {
             ContentValues values=new ContentValues();
             values.put(MediaStore.Downloads.DISPLAY_NAME,latestFile.getName());
             values.put(MediaStore.Downloads.MIME_TYPE,"application/x-ndjson");
-            values.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/"+folder()+"-recovered/");
+            values.put(MediaStore.Downloads.RELATIVE_PATH,logRelativeRoot()+folder()+"-recovered/");
             Uri dest=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,values);
             if(dest==null)throw new IOException("Download entry unavailable");
             try(InputStream in=new FileInputStream(latestFile);OutputStream out=getContentResolver().openOutputStream(dest,"wt")){
                 if(out==null)throw new IOException("Log export unavailable");copy(in,out);
             }
             log("recovered_log","file="+latestFile.getName());
-            exportStatus.setText("Recovered old session: "+latestFile.getName()+" in Download/Games/cl/test/"+folder()+"-recovered/");
+            exportStatus.setText("Recovered old session: "+latestFile.getName()+" in "+logDisplayRoot()+folder()+"-recovered/");
         }catch(Exception ex){log("recover_error",ex.getClass().getSimpleName());exportStatus.setText("Could not recover; private files kept");}
     }
 
