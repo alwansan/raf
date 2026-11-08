@@ -6,8 +6,37 @@ import unittest
 from copy import deepcopy
 
 from scripts.t2_foam_pass_crosscheck import reconcile
-from tests.test_t2_foam_shaderfind_return_report import baseline
-from tests.test_t2_foam_pass_crosscheck import aggregate, sites
+from scripts.t2_foam_shaderfind_return_report import NUMERIC, MATERIAL_NUMERIC, FLAGS_TRUE, FLAGS_FALSE, KINDS, MATERIAL_KINDS, STATUS
+
+def baseline():
+    r = {k: 0 for k in NUMERIC + MATERIAL_NUMERIC}
+    r.update({k: True for k in FLAGS_TRUE})
+    r.update({k: False for k in FLAGS_FALSE})
+    r.update({"status": STATUS, "original_compiled_method_bodies_scanned": 19118,
+              "original_compiled_IL_instructions_scanned": 491490,
+              "original_typed_Shader_Find_calls": 81,
+              "exact_source_Foam_name_direct_typed_Shader_Find_calls": 1,
+              "original_Foam_source_field_to_Material_ctor_sites": 1})
+    r.update({"return_consumer_" + k: int(k == "unproved") for k in KINDS})
+    r.update({"material_result_consumer_" + k: int(k == "unproved") for k in MATERIAL_KINDS})
+    return r
+
+def aggregate(s0, s1, d0, d1):
+    p = "field_api_Graphics_Blit_"
+    r = {p + "explicit_sites_pass_" + k: int(k in ("literal0", "literal1"))
+         for k in ("literal0", "literal1", "other_literal", "unknown", "mixed")}
+    for role, categories, a, b in (("source", ("Texture", "RenderTexture", "unknown"), s0, s1),
+                                    ("destination", ("RenderTexture", "null", "unknown"), d0, d1)):
+        for k in categories:
+            r[p + "explicit_" + role + "_" + k] = int(a == k) + int(b == k)
+            r[p + "pass0_" + role + "_" + k] = int(a == k)
+            r[p + "pass1_" + role + "_" + k] = int(b == k)
+    return r
+
+def sites(s0, s1, d0, d1):
+    return {"sites": [{"pass": 0, "source": s0, "destination": d0},
+                      {"pass": 1, "source": s1, "destination": d1}]}
+
 
 
 def full_safe_fixture():
