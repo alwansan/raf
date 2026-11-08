@@ -18,6 +18,12 @@ NUMBERS = {
     "original_other_or_dynamic_pass_Blit_calls",
     "original_direct_material_field_and_typed_image_linked_Blit_calls",
     "original_pass0_direct_link_candidates", "original_pass1_direct_link_candidates",
+    "original_pass0_exact_Material_field_argument_calls",
+    "original_pass1_exact_Material_field_argument_calls",
+    "original_pass0_exact_Material_local_alias_calls",
+    "original_pass1_exact_Material_local_alias_calls",
+    "original_pass0_linked_Material_image_producers_unresolved",
+    "original_pass1_linked_Material_image_producers_unresolved",
 }
 TRUE_FLAGS = {
     "immutable_original_zip2_sha_verified",
@@ -92,6 +98,14 @@ def validate(report):
         raise ValueError("Blit_material_link_partition")
     if (not report["original_Material_field_uniquely_resolved"] and (c0 or c1)):
         raise ValueError("Blit_link_without_original_material")
+    for pass_id, literal_total, classified in ((0, p0, c0), (1, p1, c1)):
+        direct = report[f"original_pass{pass_id}_exact_Material_field_argument_calls"]
+        alias = report[f"original_pass{pass_id}_exact_Material_local_alias_calls"]
+        unclassified = report[f"original_pass{pass_id}_linked_Material_image_producers_unresolved"]
+        if (direct + alias > literal_total or classified > direct or
+                unclassified != direct - classified or
+                ((direct or alias) and not report["original_Material_field_uniquely_resolved"])):
+            raise ValueError("original_Material_argument_to_image_role_partition")
     proof = c0 == c1 == 1 and report["original_Material_field_uniquely_resolved"]
     if report["original_shader_to_blit_direct_field_types_confirmed"] is not proof:
         raise ValueError("false_or_missing_two_pass_role_flag")
