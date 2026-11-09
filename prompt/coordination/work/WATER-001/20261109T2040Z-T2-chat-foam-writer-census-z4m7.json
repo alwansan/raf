@@ -1,0 +1,27 @@
+{
+  "session_id": "20261109T2040Z-T2-chat-foam-writer-census-z4m7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "c85b46697df05eb5ba1e75e2c34295a44440a0ad",
+  "resumed_from_sessions": [
+    "20261109T2020Z-T2-chat-foam-onehop-return-r8c5",
+    "20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4"
+  ],
+  "experiment_key": "original-Foam-pass0-managed-destination-FieldDefinition-CIL-store-census-plus-pass0-pass1-lexical-colocation-v1",
+  "resource_key": "T2-original-FoamBlitOriginalProducers-Cecil-source-only",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamBlitOriginalProducers/Program.cs",
+    "scripts/t2_foam_original_blit_report.py",
+    "tests/test_t2_foam_original_blit_report.py",
+    "prompt/coordination/work/WATER-001/20261109T2040Z-T2-chat-foam-writer-census-z4m7.json",
+    "prompt/coordination/clients/T2/sessions/20261109T2040Z-T2-chat-foam-writer-census-z4m7.md",
+    "prompt/coordination/experiments/T2/20261109T2040Z-T2-chat-foam-writer-census-z4m7.json",
+    "prompt/coordination/B_TEAM/events/T2/20261109T2040Z-T2-chat-foam-writer-census-z4m7.json",
+    "docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
+  ],
+  "hypothesis": "Original managed IL may show direct stfld/stsfld writes to exact pass0 Foam RenderTexture destination declared field and syntactic writer adjacency, and determine lexical relative placement of pass0/pass1 Foam Blit sites. This narrows writer/alias lifecycle investigation, without proving runtime field assignment, same receiver, same frame, object alias, null execution or device pixels.",
+  "safety": "Use original SHA-pinned private Cecil workflow, emit finite categories only; do not reveal original symbol names, metadata tokens, paths, IL, private bytes. No game/Unity content edits, no shared mini/full APK, no other worker files or forced branch updates.",
+  "next_step": "Add bounded direct original CIL writer census and pass-site lexical co-location with isolated synthetic positives/negatives, strict safe JSON schema and original pinned CI.",
+  "updated_at": "2026-11-09T20:40:00Z"
+}
