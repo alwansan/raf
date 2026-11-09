@@ -104,15 +104,15 @@ namespace RaftGraphicsLabEditor
 
             Bounds bounds = renderers[0].bounds;
             for (int i=1;i<renderers.Count;i++) bounds.Encapsulate(renderers[i].bounds);
-            if (bounds.size.y < .00001f || !float.IsFinite(bounds.size.y))
+            if (bounds.size.y < .00001f || (float.IsNaN(bounds.size.y) || float.IsInfinity(bounds.size.y)))
                 throw new InvalidOperationException("GFXLAB_STOP: model bounds not valid");
             float scale = Mathf.Clamp(1.8f / bounds.size.y, .0001f, 1000f);
             rootGo.transform.localScale=Vector3.one*scale;
             rootGo.transform.position= new Vector3(-bounds.center.x*scale,
                 -bounds.min.y*scale + .08f, -bounds.center.z*scale);
-            if (!float.IsFinite(rootGo.transform.position.x) ||
-                !float.IsFinite(rootGo.transform.position.y) ||
-                !float.IsFinite(rootGo.transform.position.z))
+            if ((float.IsNaN(rootGo.transform.position.x) || float.IsInfinity(rootGo.transform.position.x)) ||
+                (float.IsNaN(rootGo.transform.position.y) || float.IsInfinity(rootGo.transform.position.y)) ||
+                (float.IsNaN(rootGo.transform.position.z) || float.IsInfinity(rootGo.transform.position.z)))
                 throw new InvalidOperationException("GFXLAB_STOP: nonfinite model transform");
 
             var floor=GameObject.CreatePrimitive(PrimitiveType.Cylinder);
