@@ -128,6 +128,97 @@ namespace RaftAndroid.Platform
         }
     }
 
+
+    // Read-only metrics for ORIGINAL game's patched Unity Legacy Input readers.
+    // Counts reflect getter INVOCATIONS, not unique clicks or gameplay actions.
+    // No Unity API, Android JNI, input event injection or disk I/O.
+    public sealed class PhysicalMouseLegacyReaderEvidence
+    {
+        public const int Held=0, Down=1, Up=2, ScrollAxis=3, ScrollVector=4;
+        private readonly object gate = new object();
+        private readonly int[] calls = new int[11], legacy = new int[11], fallback = new int[11];
+        private static readonly string[] names = {
+            "held0", "held1", "held2", "down0", "down1", "down2",
+            "up0", "up1", "up2", "scrollAxis", "scrollVector"
+        };
+        private long total, legacyHits, fallbackHits, edgeHits, scrollHits;
+
+        public struct Snapshot
+        {
+            public readonly long Calls, Legacy, Fallback, Edges, Scroll;
+            public Snapshot(long calls, long legacy, long fallback, long edges, long scroll)
+            {
+                Calls=calls; Legacy=legacy; Fallback=fallback; Edges=edges; Scroll=scroll;
+            }
+        }
+        private static int Slot(int operation, int button)
+        {
+            if (operation >= Held && operation <= Up)
+                return button >= 0 && button <= 2 ? operation * 3 + button : -1;
+            if (operation == ScrollAxis) return button == -1 ? 9 : -1;
+            if (operation == ScrollVector) return button == -1 ? 10 : -1;
+            return -1;
+        }
+        // A getter cannot return both native Legacy and captured fallback:
+        // original adapter always prefers nonzero Legacy Input.
+        public bool Record(int operation, int button, bool nativePositive, bool fallbackPositive)
+        {
+            int slot = Slot(operation, button);
+            if (slot < 0 || (nativePositive && fallbackPositive)) return false;
+            lock (gate)
+            {
+                if (calls[slot] < int.MaxValue) calls[slot]++;
+                if (total < long.MaxValue) total++;
+                if (nativePositive)
+                {
+                    if (legacy[slot] < int.MaxValue) legacy[slot]++;
+                    if (legacyHits < long.MaxValue) legacyHits++;
+                }
+                if (fallbackPositive)
+                {
+                    if (fallback[slot] < int.MaxValue) fallback[slot]++;
+                    if (fallbackHits < long.MaxValue) fallbackHits++;
+                }
+                if ((nativePositive || fallbackPositive) &&
+                    (operation == Down || operation == Up) && edgeHits < long.MaxValue) edgeHits++;
+                if ((nativePositive || fallbackPositive) &&
+                    (operation == ScrollAxis || operation == ScrollVector) &&
+                    scrollHits < long.MaxValue) scrollHits++;
+                return true;
+            }
+        }
+        public Snapshot Read()
+        {
+            lock (gate) return new Snapshot(total, legacyHits, fallbackHits, edgeHits, scrollHits);
+        }
+        // Only called when report is due, not on each read or every Unity frame.
+        public string Report()
+        {
+            lock (gate)
+            {
+                var b = new System.Text.StringBuilder(340);
+                for (int i=0; i<names.Length; i++)
+                {
+                    if (i>0) b.Append("; ");
+                    b.Append(names[i]).Append("Calls=").Append(calls[i]);
+                    b.Append(",legacy=").Append(legacy[i]);
+                    b.Append(",fallback=").Append(fallback[i]);
+                }
+                return b.ToString();
+            }
+        }
+        public void Reset()
+        {
+            lock (gate)
+            {
+                Array.Clear(calls, 0, calls.Length);
+                Array.Clear(legacy, 0, legacy.Length);
+                Array.Clear(fallback, 0, fallback.Length);
+                total=legacyHits=fallbackHits=edgeHits=scrollHits=0;
+            }
+        }
+    }
+
     // Fail-closed physical pointer-capture fallback for the original game's
     // Unity Legacy Input mouse button/wheel readers. This is frame-latched:
     // Android View callbacks run off Unity's main thread, and a quick click
