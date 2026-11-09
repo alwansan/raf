@@ -2,9 +2,9 @@
 session_id: 20261109T1946Z-T4-chat-mouse-counter-invariants-r8q6
 origin: chat
 issue_id: INPUT-005
-status: active
+status: completed
 created_at: 2026-11-09T19:46:00Z
-updated_at: 2026-11-09T19:46:00Z
+updated_at: 2026-11-09T19:51:00Z
 base_sha: 4a26329f0cc8edd0961b832feeab761869cf6540
 resumed_from_sessions:
 - 20261109T1939Z-T4-scheduled-reader-poison-q8m5
@@ -21,3 +21,5 @@ intended_files:
 hypothesis: Syntactically valid but impossible counter combinations can be misclassified as same-epoch positive evidence. Authored PhysicalMouseActionEvidence.Record increments exactly one callback Count; pressed/released are mutually exclusive; V/H may co-occur on a single scroll. Authored PhysicalMouseLegacyReaderEvidence.Record increments at most one native/fallback per getter, and edge/scroll categories are disjoint subsets of positive results.
 plan: Add fail-closed structural checks with adversarial positive and negative source tests; run existing lightweight T4 GitHub Actions only, confirm result and preserve source-only NOT_DEVICE_PASS.
 coordination: At reservation live HEAD checked and queued/in_progress Actions both zero; last T4 scheduled run CI42685509815 completed SUCCESS. No Unity or unified APK or team-owned files, no XAPK request. Recheck shared HEAD before code edits and publishing.
+## Verified handoff
+Source gate commits: 5bd28cdc10 (producer-side invariant checks), c4cb698143 (five regression cases), 01a062ab0 (fix an impossible native-only synthetic fixture). Full final [CI42687110814](https://github.com/alwansan/raf/actions/runs/42687110814) **SUCCESS, 30/30** at job 129396759476. Intermediate CI42686865448 / CI42686942143 failures were from previous native-only fixture declaring edge/scroll positives but zero positive native/fallback; corrected, no game defects claimed. Owned experiment/event published on source branch; no shared Unity or Mini build. INPUT-005 remains OPEN, no device PASS; resource_key none; owned source paths released. Next: independent signed-game one-process owner mouse acceptance test when available.
