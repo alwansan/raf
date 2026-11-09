@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "unified-lab-manual-image-evidence",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f97c9462194dd22c5c09e0f5342cff0a79a0c830",
   "experiment_key": "T5_manual_SAF_image_png_crc_container_decode_bounds_v1",
   "resource_key": "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
@@ -28,8 +28,11 @@
   "related_work": [
     "T3 independent CL decoded pixel audit; T4 physical mouse capture"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add policy, tests and compile gate; check owner CL and CI; preserve current SHARED_BUILD_READINESS r4 NO_BUILD.",
-  "updated_at": "2026-11-09T02:09:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42549767288",
+    "https://github.com/alwansan/raf/actions/runs/42549793939"
+  ],
+  "result": "Commit e53523b source-only CI42549793939 SUCCESS: Python SAF source contract, real Java SHA, bounded image policy CRC/RIFF JDK tests, and unified Android javac passed. No APK, no Android phone evidence.",
+  "next_step": "At next justified shared Mini APK build, test SAF corrupt and valid screenshots on Android15. No build from JSON alone; existing v13 does not include fix.",
+  "updated_at": "2026-11-09T02:16:41Z"
 }
