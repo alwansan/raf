@@ -1,0 +1,156 @@
+name: T3 RENDER-002 SHA-original Particle108 emitter label bridge (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-particle-emitter-semantics.yml
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-particle-emitter-semantics-20261109
+  cancel-in-progress: false
+
+jobs:
+  original-emitter-semantics:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout only T3 scripts and source-free tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Negative and semantic privacy fixture regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_particle_emitter_semantics.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_emitter_semantics.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
+
+      - name: Checkout immutable original ZIP2 6 scenes
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+
+      - name: Sparse restore only four pinned original shader-material owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: Verify six original scene hashes and four original owner hashes
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+
+          zip2 = Path("zip2-source")
+          dest = Path(os.environ["RUNNER_TEMP"]) / "t3-original-emitter"
+          selected = {"Raft_Data/" + n: SHADER_OWNERS[n] for n in SHADER_OWNERS_SELECTED}
+          report = stage(zip2, dest, selected)
+          assert len(report["owners"]) == 4
+          assert report["verified_bytes"] == 269007288
+          assert report["lfs_used"] is False
+          for name, pin in PIN.items():
+              src = zip2 / "Raft" / "Raft_Data" / name
+              verify_source(src, pin)
+              target = dest / "Raft_Data" / name
+              with src.open("rb") as infile, target.open("xb") as outfile:
+                  while chunk := infile.read(1024 * 1024):
+                      outfile.write(chunk)
+              verify_source(target, pin)
+          assert len(PIN) == 6
+          print("SHA_ORIGINAL_SIX_SCENES_FOUR_OWNERS_VERIFIED true")
+          PY
+
+      - name: Link exact 108-slot ParticleShader48 material to original scene emitter names privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_original_particle_emitter_semantics \
+            --original "$RUNNER_TEMP/t3-original-emitter" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-emitter-safe-report.json"
+
+      - name: Assert only name-hint counts without original identifiers
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path(os.environ["RUNNER_TEMP"]) / "t3-original-emitter-safe-report.json"
+          report = json.loads(path.read_text(encoding="utf-8"))
+          assert report["status"] == "SHA_ORIGINAL_PARTICLE108_EMITTER_NAME_HINTS_CLASSIFIED"
+          assert report["original_six_scene_SHA_verified"] is True
+          assert report["original_four_shader_Material_owner_SHA_verified"] is True
+          assert report["source_selected_particle_shader_material_slot_use"] == 108
+          assert report["source_selected_particle_shader_renderer_objects"] == 54
+          assert report["original_names_guids_PathIDs_or_private_shader_identifiers_published"] is False
+          assert report["name_hint_is_not_onscreen_smoke_emitter_identity"] is True
+          assert report["original_game_device_pixels_verified"] is False
+          for group in ("selected", "other"):
+              n = report[f"{group}_renderer_objects"] if group == "selected" else report["source_other_particle_renderer_objects"]
+              assert report[f"{group}_GameObject_name_resolved"] + report[f"{group}_GameObject_name_unresolved"] == n
+          rows = [
+              "## T3 original Particle108 emitter GameObject source bridge",
+              "",
+              "Source: SHA-verified ZIP2 six original scenes + four original shader/material owners.",
+              "Scope: 108 authentic Material slots / 54 source ParticleSystemRenderers.",
+              "Keyword categories are predeclared and heuristic; **do not identify the phone square-smoke emitter**.",
+              "",
+              "| Source group | Renderers | Name resolved | Smoke-like | Fire-like | Water-like |",
+              "|---|---:|---:|---:|---:|---:|",
+          ]
+          for group in ("selected", "other"):
+              n = report["source_selected_particle_shader_renderer_objects"] if group=="selected" else report["source_other_particle_renderer_objects"]
+              rows.append(f"| {group} | {n} | {report[group+'_GameObject_name_resolved']} | {report[group+'_smoke_like_GameObject_names']} | {report[group+'_fire_like_GameObject_names']} | {report[group+'_water_like_GameObject_names']} |")
+          rows += ["", "**Only aggregate statistics uploaded.** No original object names, shader or texture payloads, GUID/PathIDs, photos or private scene identity appear in this report.",
+                   "**RENDER-002 remains OPEN; no Android graphics fix or visual PASS.**"]
+          text = "\n".join(rows)+"\n"
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+              f.write(text)
+          print(text)
+          PY
+
+      - name: Publish bounded counts only, never original assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle-emitter-name-hints-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-emitter-safe-report.json
+          if-no-files-found: ignore
+          retention-days: 7
