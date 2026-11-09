@@ -1,0 +1,18 @@
+{
+  "session_id": "20261109T0407Z-T1-scheduled-dispatch-pair-fsm-c2e9",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "base_sha": "feae14e52bfc4e8e92f00b2716ba3556230e1f6a",
+  "files": [
+    "scripts/t1_fft_dispatch_pair_audit.py",
+    "tests/test_t1_fft_dispatch_pair_audit.py",
+    "prompt/coordination/clients/T1/sessions/20261109T0407Z-T1-scheduled-dispatch-pair-fsm-c2e9.md"
+  ],
+  "hypothesis": "Existing pair auditor treats an AfterDispatch occurring before BeforeDispatch as valid if same sequence appears later; duplicate BeforeDispatch overwrites pending. Enforce chronological state machine and regression tests.",
+  "experiment_key": "t1-fft-dispatch-pair-chronological-fsm-v1",
+  "shared_resource": null,
+  "scope": "isolated T1 source-only; no CI or game build",
+  "resumed_from": "20261109T0306Z-T1-scheduled-runtime-hook-review-q6m2",
+  "owner_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+  "status": "active"
+}
