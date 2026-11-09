@@ -667,6 +667,35 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         v = gate.triage([request, release] + flood + [late_action, late_reader])
         self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
 
+    def test_release_malformed_final_poisons_pending_snapshot(self):
+        wrong = actions(115).replace(
+            "physical_mouse_captured_action_callbacks",
+            "physical_mouse_captured_action_callbacks_final").replace(
+            "epoch=115", "epoch=115junk")
+        corrected = actions(115).replace(
+            "physical_mouse_captured_action_callbacks",
+            "physical_mouse_captured_action_callbacks_final")
+        reader = readers(115).replace(
+            "physical_mouse_legacy_reader_evidence",
+            "physical_mouse_legacy_reader_evidence_final")
+        v = gate.triage([req(115), "physical_mouse_capture_released focus=True",
+                         wrong, corrected, reader])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_release_wrong_epoch_final_poisons_even_earlier_valid_callback(self):
+        correct = actions(116)
+        unrelated_final = readers(117).replace(
+            "physical_mouse_legacy_reader_evidence",
+            "physical_mouse_legacy_reader_evidence_final")
+        corrected_final = readers(116).replace(
+            "physical_mouse_legacy_reader_evidence",
+            "physical_mouse_legacy_reader_evidence_final")
+        v = gate.triage([req(116), correct, "physical_mouse_capture_released focus=True",
+                         unrelated_final, corrected_final])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
     def test_mixed_process_risk_stays_disclosed(self):
         v = gate.triage([])
         self.assertFalse(v["device_pass"])
