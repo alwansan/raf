@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261109T0209Z-T5-chat-manual-image-r7c4",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "Header-only manual screenshot attachment can mark corrupt PNG/JPEG/WebP evidence ready without real decodable pixels.",
+  "source_commit": "e53523b900c0d1c3512cf8ec38339887426138f8",
+  "input_hashes": [],
+  "tool_versions": {
+    "Java": "17",
+    "Android": "API26-35 BitmapFactory",
+    "Gradle": "8.10.2",
+    "Python": "3.12"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t5_unified_saf_stream_contract.py' -v",
+    "javac -d /tmp/raft-t5-image-classes apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ManualImageEvidencePolicy.java tests/java/ManualImageEvidencePolicyTest.java",
+    "java -cp /tmp/raft-t5-image-classes com.alwansan.raftlab.ManualImageEvidencePolicyTest",
+    "gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha=$GITHUB_SHA -PversionCode=1"
+  ],
+  "negative_controls": [
+    "Signature-only PNG rejected; corrupt CRC/IEND/trailing bytes rejected",
+    "Dimensions >40MP or width >16384 rejected",
+    "WebP RIFF length mismatch rejected; JPEG missing EOI rejected",
+    "Actual Android BitmapFactory bounded sampled pixel decode required"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-unified-saf-source.yml",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42549793939",
+    "https://github.com/alwansan/raf/actions/runs/42549767288"
+  ],
+  "artifact_urls": [],
+  "budget": "Source-only no APK/Unity",
+  "status": "waiting_ci",
+  "observed_result": "Commits: 0d88f66 policy, a9cc587 Android decode, 2268ff1 Java controls, ea6eace T5 SHA, f554804 Python guards, e53523b CI. Await final source run.",
+  "limitations": [
+    "JDK container checks cannot prove JPEG/WebP pixel decode; Android BitmapFactory is mandatory",
+    "No new APK or device installation, no visual Raft acceptance"
+  ],
+  "integration_commit": "e53523b900c0d1c3512cf8ec38339887426138f8",
+  "next_step": "Inspect CI42549793939; if green document source evidence; future shared Mini build only under existing team build rule."
+}
