@@ -76,6 +76,7 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
                          "field_token_match_plus_other", "field_token_match_plus_null_and_other"):
             with self.subTest(relation=relation):
                 r["original_crosspass_declared_field_return_relation"] = relation
+                r["original_crosspass_onehop_declared_field_return_relation"] = relation
                 safe = validate(r)
                 self.assertEqual(safe["crosspass_declared_field_relation"], relation)
                 self.assertFalse(safe["crosspass_texture_instance_identity_proven"])
