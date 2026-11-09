@@ -6,6 +6,7 @@ on:
       - '.github/workflows/raft-t4-ledger-identity-audit.yml'
       - 'scripts/t4_audit_team_event_identities.py'
       - 'tests/test_t4_audit_team_event_identities.py'
+      - 'prompt/coordination/B_TEAM/events/T4/*.json'
   workflow_dispatch:
 permissions:
   contents: read
