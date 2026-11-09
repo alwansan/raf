@@ -3,7 +3,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "status": "completed_source_only_device_pending",
-  "updated_at": "2026-11-09T19:04:00Z",
+  "updated_at": "2026-11-09T19:05:00Z",
   "base_sha": "7e4ae3efca1da18b2a042e09c1cfd75aca08444e",
   "resumed_from_sessions": [
     "20261109T1836Z-T4-scheduled-capture-provenance-k7d2",
@@ -25,11 +25,12 @@
     "Unity game runtime and original ZIP2 adapter"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42679181503"
+    "https://github.com/alwansan/raf/actions/runs/42679181503",
+    "https://github.com/alwansan/raf/actions/runs/42679768824"
   ],
   "limits": "No fresh captured=true owner CL/test, no device gameplay, no signed Raft XAPK. Never claim PASS from source counters.",
-  "result": "14/14 source-only Python regression tests pass; callback/Legacy getter same-epoch triage ready, device acceptance not proven",
-  "source_sha": "14a5d794ee5409d0f1ba32fb0436e480b4467230",
+  "result": "16/16 final hardened source-only Python regressions PASS; exact job 129370913540. No device acceptance, gameplay status OPEN.",
+  "source_sha": "b73773ccba74cf49ecf97d740b4abec911ae299c",
   "report": "docs/T4_MOUSE_SAME_EPOCH_CORRELATION_2026-11-09.md",
   "session_path": "prompt/coordination/clients/T4/sessions/20261109T1858Z-T4-chat-epoch-evidence-p6m4.md",
   "next_step": "When signed same-source Raft XAPK and true captured physical mouse CL/game logs available, correlate process-local callbacks + getter evidence, then test actual gameplay without regressing .rgd/camera/audio."
