@@ -30,6 +30,22 @@ class PairAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "bounded"):
             audit([row(BEFORE, 17)])
 
+    def test_return_before_start_does_not_mask_missing_return(self):
+        result = audit([row(AFTER, 4), row(BEFORE, 4)])
+        self.assertIn("return_without_before:4", result["errors"])
+        self.assertEqual(result["missing_return_sequences"], [4])
+
+    def test_orphan_return_followed_by_valid_pair_still_reports_orphan(self):
+        result = audit([row(AFTER, 5), row(BEFORE, 5), row(AFTER, 5)])
+        self.assertIn("return_without_before:5", result["errors"])
+        self.assertIn("duplicate_event:5", result["errors"])
+        self.assertEqual(result["missing_return_sequences"], [5])
+
+    def test_duplicate_before_cannot_erase_valid_pair(self):
+        result = audit([row(BEFORE, 6), row(BEFORE, 6), row(AFTER, 6)])
+        self.assertIn("duplicate_event:6", result["errors"])
+        self.assertEqual(result["missing_return_sequences"], [])
+
     def test_other_events_ignored(self):
         self.assertEqual(audit([{"event": "unrelated"}])["before_count"], 0)
 
