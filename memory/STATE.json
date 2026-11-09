@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-avatar-001-42702078254",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-avatar-001-42702078254.md",
-  "status": "GFX_AVATAR_001_UNITY_ANDROID_BUILD_PASS_OWNER_VISUAL_PENDING",
+  "latest_session": "20261110-GFX-chat-shears-textures-42707671345",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-shears-textures-42707671345.md",
+  "status": "GFX_SHEARS_004_REAL_SOURCE_TEXTURES_DECODED_GFX_SHEARS_005_UNITY_BUILD_RUNNING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "After owner tests white Mesh on phone: group all exact original player hierarchy SkinnedMeshRenderer parts+bindposes, and only afterward restore authored Material/Shader48/texture.",
+  "next_experiment": "Verify CI42707671345, deliver signed APK on success, owner screenshot+COPY LOG four modes. Then original Shader48 2-subshader/7-pass faithful recovery, verify before port team patch.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": false,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -67,5 +67,53 @@
     "artifact_url": "https://github.com/alwansan/raf/actions/runs/42702078254/artifacts/13711903486",
     "package_name": "com.alwansan.raft.graphicslab",
     "status": "signed_APK_source_original_one_skinned_part_owner_test_pending"
+  },
+  "owner_test": {
+    "experiment": "GFX-AVATAR-001",
+    "device": "Xiaomi 23013PC75G",
+    "gpu": "Adreno 730 OpenGLES3",
+    "unity": "2021.3.45f2",
+    "mesh_vertices": 375,
+    "triangles": 420,
+    "renderers": 1,
+    "errors": 0,
+    "visual": "original Shears scissors model white as designed, not player character",
+    "device_geometry_verified": true,
+    "source_shader_restored": false
+  },
+  "original_shears_source": {
+    "sha_source": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "material_count": 1,
+    "shader_class48_count": 1,
+    "original_shader_subshaders": 2,
+    "original_shader_passes": 7,
+    "original_color_properties": 2,
+    "texenv_slots": 9,
+    "bound_texture2d": 3,
+    "texenv_null": 6,
+    "original_normals": 375,
+    "original_uvs": 375,
+    "bones": 3,
+    "original_texture_semantics": [
+      "basecolor",
+      "normal",
+      "metallic"
+    ],
+    "source_stream_chunks": 3,
+    "stream_chunk_bytes": 141557760,
+    "original_texture_extraction_ci": "https://github.com/alwansan/raf/actions/runs/42707235695",
+    "original_shader_restored": false
+  },
+  "new_colored_build": {
+    "ci": "https://github.com/alwansan/raf/actions/runs/42707671345",
+    "status": "IN_PROGRESS_NOT_DEVICE_VERIFIED",
+    "package": "com.alwansan.raft.graphicslab.shears",
+    "modes": [
+      "LIT_WHITE",
+      "UNLIT_WHITE",
+      "SOURCE_ALBEDO_STANDARD_DIAGNOSTIC",
+      "SOURCE_TEXTURE_PBR_STANDARD_APPROX"
+    ],
+    "source_shader_restored": false
   }
 }
