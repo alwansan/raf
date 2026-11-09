@@ -7,7 +7,7 @@ def sourceHash = { paths ->
     return md.digest().encodeHex().toString()
 }
 def sourcePaths = [
-    't1': ['../../host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java','../../host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'],
+    't1': ['../../host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java','../../host/app/src/main/java/com/alwansan/raftlab/T1FftButterflyProbe.java','../../host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'],
     't2': ['../../host/app/src/main/java/com/alwansan/raftlab/T2GpuActivity.java'],
     't3': ['src/main/java/com/alwansan/raft/t3lab/T3LabActivity.java','src/main/java/com/alwansan/raftlab/SharedSurfacePixelPolicy.java'],
     't4': ['../../host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'],
