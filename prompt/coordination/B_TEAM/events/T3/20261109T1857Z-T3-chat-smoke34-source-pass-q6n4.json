@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1857Z-T3-chat-smoke34-source-pass-q6n4",
+  "issue_id": "RENDER-002",
+  "event_type": "SHA_ORIGINAL_SMOKE34_ALPHA_RGB_COLORMASK_PASS_VERIFIED",
+  "source_sha_authenticated": true,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42679312674",
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42679312674/artifacts/13702410264",
+  "measured": {
+    "identity_selection": "private_pointer_identity_not_equal_anonymous_rank",
+    "smoke_renderer_count": 17,
+    "material_slots": 34,
+    "fire_34_rank_distinct": true,
+    "subshader_count": 1,
+    "normal_pass_count": 1,
+    "color_blend": "ALPHA_DEPENDENT",
+    "alpha_blend": "ALPHA_DEPENDENT",
+    "color_mask": "RGB",
+    "zwrite": "OFF",
+    "ztest": "ENABLED_NUMERIC",
+    "cull": "OFF",
+    "alpha_to_coverage": "OFF",
+    "rt_separate_blend": false,
+    "default_translator_accepted": false,
+    "selective_colormask_opt_in_accepted": true
+  },
+  "limits": "Original SHA source-only fixed-function Pass metadata. Same export/compiled ShaderLab, texture alpha and Raft on-device smoke are unverified; no APK or asset edits.",
+  "report": "docs/T3_ORIGINAL_SMOKE34_PASS_ALPHA_2026-11-09_AR.md",
+  "next": "Private bounded same-identity original vs same-instance exported ShaderLab Pass/alpha/RGB ColorMask analysis, then target only an authenticated mismatch and require real game phone pixels. RENDER-002 OPEN NOT_READY 0/3.",
+  "readiness": "RENDER-002 OPEN / NOT_READY 0/3"
+}
