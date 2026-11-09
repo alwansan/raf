@@ -1,0 +1,27 @@
+{
+  "session_id": "20261109T0142Z-T1-chat-fft-kernel-index-r4c8",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-09T01:42:00Z",
+  "base_sha": "6fe95344909bd919dc8bc08cc245bda640e1155e",
+  "resumed_from_sessions": [
+    "20261109T0114Z-T1-scheduled-runtime-identity-h7q4",
+    "20261108T2022Z-T1-chat-fft-source-gate-d8b4"
+  ],
+  "hypothesis": "The sanitized Unity evidence gate currently accepts contradictory shader_guid+kernel_name to FindKernel index or shader_guid+index to name mappings across successive dispatches, so an internally inconsistent trace can be incorrectly marked binding_contract_complete.",
+  "intended_files": [
+    "scripts/t1_fft_runtime_evidence_gate.py",
+    "tests/test_t1_fft_runtime_bijection_r4c8.py",
+    ".github/workflows/raft-t1-fft-runtime-evidence-regression.yml",
+    "prompt/coordination/clients/T1/sessions/20261109T0142Z-T1-chat-fft-kernel-index-r4c8.md"
+  ],
+  "experiment_key": "t1-water-fft-runtime-named-index-bijection-gate-v1-6fe95344",
+  "resource_key": null,
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261109T0114Z-T1-scheduled-runtime-identity-h7q4.md",
+    "prompt/coordination/work/WATER-001/20261109T0114Z-T1-scheduled-runtime-identity-h7q4-runtime-identity.json"
+  ],
+  "planned_test": "Run earlier seven unexecuted identity tests and new contradictory/repeated-dispatch controls in isolated lightweight GitHub Actions. No original/private binaries, GPU/Unity APK, CL edits, native request, shared mini host, other worker source.",
+  "note": "At scope claim active/queued workflow runs=0 for feature/android-native-port. Source changes never mean successful phone water."
+}
