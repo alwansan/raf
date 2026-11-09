@@ -57,8 +57,13 @@ def reconcile(summary: dict, *, expected_session: str | None = None) -> dict:
         raise EvidenceError("summary_not_object")
     session = summary.get("session")
     rows = summary.get("results")
+    # CL's folder is shared-<session>, but summary.session deliberately
+    # contains only <session>. Validate either exact ID or this one prefix.
+    folder_session = (expected_session.removeprefix("shared-")
+                      if type(expected_session) is str else expected_session)
     if (type(session) is not str or SESSION.fullmatch(session) is None or
-            (expected_session is not None and session != expected_session) or
+            (expected_session is not None and session != folder_session
+             and session != expected_session) or
             type(rows) is not list or not 1 <= len(rows) <= 100):
         raise EvidenceError("invalid_session_or_cases")
     selected = [row for row in rows if type(row) is dict and row.get("case_id") == "T5-02"]
