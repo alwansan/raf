@@ -63,6 +63,22 @@ class PairAuditTests(unittest.TestCase):
         self.assertEqual(result["missing_return_sequences"], [2])
         self.assertFalse(result["gpu_execution_proven"])
 
+    def test_failed_return_and_identity_mismatch_both_reported(self):
+        result = audit([row(BEFORE, 1, ";kernel=6"),
+                        row(AFTER, 1, ";kernel=7;result=exception")])
+        self.assertIn("identity_mismatch:1:kernel", result["errors"])
+        self.assertIn("dispatch_result_failure:1", result["errors"])
+        self.assertEqual(result["failed_return_sequences"], [1])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertEqual(result["missing_return_sequences"], [1])
+
+    def test_successful_return_with_mismatched_kernel_not_paired(self):
+        result = audit([row(BEFORE, 2, ";kernel=6"),
+                        row(AFTER, 2, ";kernel=7;result=returned")])
+        self.assertIn("identity_mismatch:2:kernel", result["errors"])
+        self.assertEqual(result["failed_return_sequences"], [])
+        self.assertEqual(result["paired_count"], 0)
+
     def test_other_events_ignored(self):
         self.assertEqual(audit([{"event": "unrelated"}])["before_count"], 0)
 
