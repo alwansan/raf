@@ -21,6 +21,7 @@ def validate_png(raw):
     offset = len(SIGNATURE)
     seen_ihdr = False
     seen_idat = False
+    idat_ended = False
     seen_iend = False
     idat_chunks = []
     width = height = 0
@@ -50,7 +51,11 @@ def validate_png(raw):
             seen_ihdr = True
         elif name == b"IHDR":
             raise ValueError("duplicate IHDR")
+        if seen_idat and name != b"IDAT":
+            idat_ended = True
         if name == b"IDAT":
+            if idat_ended:
+                raise ValueError("noncontiguous PNG IDAT chunks")
             seen_idat = True
             idat_chunks.append(data)
         if name == b"IEND":
