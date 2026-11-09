@@ -47,8 +47,15 @@ def decode_record(line):
         fields = ("session", "sequence", "utc", "thread")
         if any(key in line for key in fields):
             session, seq = line.get("session"), line.get("sequence")
+            # Attributed evidence must carry the complete original JSONL
+            # envelope, not merely caller-supplied session/sequence labels.
             valid = (isinstance(session, str) and 1 <= len(session) <= 128
-                     and type(seq) is int and 0 < seq < 2**63)
+                     and type(seq) is int and 0 < seq < 2**63
+                     and isinstance(line.get("utc"), str)
+                     and bool(line["utc"].strip())
+                     and type(line.get("thread")) is int
+                     and line["thread"] >= 0
+                     and line.get("area") == "input")
             scope = ("jsonl", session) if valid else ("invalid", "")
             seq = seq if valid else None
         else:
