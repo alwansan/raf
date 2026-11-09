@@ -1361,6 +1361,15 @@ internal static class Program
         traced=BacktraceBlitSource(fixtureMethod,6);
         if(traced.Role!="unknown" || traced.Reason!="dup_alias_ambiguous")
             throw new InvalidOperationException("dup_null_alias_must_fail_closed");
+        // Restore the prior synthetic call layout for downstream getter tests.
+        stream.Clear();
+        stream.Add(Instruction.Create(OpCodes.Ldstr,"untyped_source"));
+        stream.Add(Instruction.Create(OpCodes.Ldc_I4_7));
+        stream.Add(Instruction.Create(OpCodes.Call,sideEffect));
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureMatField));
+        stream.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        stream.Add(Instruction.Create(OpCodes.Call,b));
         // An original-module method with a single direct static field return
         // is type-classifiable without proving any runtime texture identity.
         var getter=new MethodDefinition("SourceFreeSyntheticGetter",
