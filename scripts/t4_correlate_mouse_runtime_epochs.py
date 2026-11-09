@@ -157,6 +157,11 @@ def parse_callback_masks(detail, callbacks):
 def triage(lines):
     attempts = []
     active = None
+    # Real ReleaseCapture() logs the release marker FIRST, then at most one
+    # action _final and one Legacy reader _final BEFORE epoch++ and reset.
+    # Preserve only this narrow terminal tail, never ordinary post-release
+    # callbacks or readers, and never a next capture's epoch.
+    pending_final = None
     unpaired = 0
     invalid = 0
     provenance_mismatches = 0
@@ -179,13 +184,27 @@ def triage(lines):
             # session transition, so close the prior open capture attempt.
             provenance_mismatches += 1
             active = None
+        if pending_final is not None and scope != pending_final["attempt"]["scope"]:
+            # Never join the final snapshot to another app logger session.
+            provenance_mismatches += 1
+            pending_final = None
         if not valid:
+            pending_final = None
             if op is not None:
                 invalid += 1
             continue
         if not op:
+            if pending_final is not None:
+                # Unrelated logger threads can interleave between C# release
+                # and its final snapshots; bound this to prevent late joins.
+                pending_final["interleaving"] += 1
+                if pending_final["interleaving"] > 8:
+                    pending_final = None
             continue
         if op == "physical_mouse_capture_released":
+            pending_final = ({"attempt": active, "seen_actions": False,
+                              "seen_readers": False, "interleaving": 0}
+                             if active is not None else None)
             active = None
             continue
         epochs = EPOCH_RE.findall(detail)
@@ -199,14 +218,44 @@ def triage(lines):
         if op in OPS[:2]:
             # Retried capture supersedes an earlier generation, even if it
             # had unread evidence. Preserve it as a separate attempt.
+            pending_final = None
             active = {"epoch": epoch, "scope": scope,
                       "callbacks": None, "readers": None,
                       "invalid": False, "operation": op}
             attempts.append(active)
             continue
-        if active is None or active["epoch"] != epoch:
-            unpaired += 1
-            continue
+        if op.endswith("_final"):
+            # These two *exact* operation names can follow the release in
+            # original C#, but normal callbacks/readers cannot. Action final
+            # must precede reader final if both are emitted. Missing one is OK.
+            if (pending_final is None or
+                    pending_final["attempt"]["epoch"] != epoch or
+                    pending_final["attempt"]["scope"] != scope):
+                unpaired += 1
+                continue
+            if op == "physical_mouse_captured_action_callbacks_final":
+                accepted_final = (not pending_final["seen_actions"] and
+                                  not pending_final["seen_readers"])
+                pending_final["seen_actions"] = True
+            elif op == "physical_mouse_legacy_reader_evidence_final":
+                accepted_final = not pending_final["seen_readers"]
+                pending_final["seen_readers"] = True
+            else:
+                accepted_final = False
+            if not accepted_final:
+                pending_final["attempt"]["invalid"] = True
+                invalid += 1
+                pending_final = None
+                continue
+            target = pending_final["attempt"]
+        else:
+            # Non-final operations after ReleaseCapture are not part of its
+            # terminal snapshot; close the limited final-only opportunity.
+            pending_final = None
+            if active is None or active["epoch"] != epoch:
+                unpaired += 1
+                continue
+            target = active
         if op.startswith("physical_mouse_captured_action_callbacks"):
             wanted = ("capturedCallbackEvents", "pressCallbacks", "releaseCallbacks",
                       "verticalScrollCallbacks", "horizontalScrollCallbacks")
@@ -221,27 +270,27 @@ def triage(lines):
                         data["horizontalScrollCallbacks"]) >
                     data["capturedCallbackEvents"] or
                     "unityButtonsAndWheelVerified=false" not in detail):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
                 continue
             masks, invalid_masks = parse_callback_masks(detail, data)
             if invalid_masks:
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
                 continue
             data["masks"] = masks
-            old = active["callbacks"]
+            old = target["callbacks"]
             if old is not None and any(data[key] < old[key] for key in wanted):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
             elif (old is not None and old["masks"] is not None and
                   masks is not None and
                   ((old["masks"]["press"] & masks["press"]) != old["masks"]["press"] or
                    (old["masks"]["release"] & masks["release"]) != old["masks"]["release"])):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
             else:
-                active["callbacks"] = data
+                target["callbacks"] = data
         elif op.startswith("physical_mouse_legacy_reader_evidence"):
             wanted = ("getterCalls", "positiveLegacy", "positiveFallback",
                       "positiveEdges", "positiveScroll")
@@ -251,7 +300,7 @@ def triage(lines):
                     parse_bool(detail, "captureObserved") is not True or
                     parse_bool(detail, "unityGameplayVerified") is not False or
                     parse_bool(detail, "countersAreGetterCallsNotClicks") is not True):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
                 continue
             # One original getter reports at most one positive path;
@@ -260,27 +309,27 @@ def triage(lines):
                     data["getterCalls"] or
                     data["positiveEdges"] + data["positiveScroll"] >
                     data["positiveFallback"] + data["positiveLegacy"]):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
                 continue
             slots, invalid_slots = parse_reader_slots(detail, data)
             if invalid_slots:
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
                 continue
             data["slots"] = slots
-            old = active["readers"]
+            old = target["readers"]
             if old is not None and any(data[key] < old[key] for key in wanted):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
             elif (old is not None and old["slots"] is not None and
                   slots is not None and
                   any(slots[name][key] < old["slots"][name][key]
                       for name in SLOT_NAMES for key in ("calls", "legacy", "fallback"))):
-                active["invalid"] = True
+                target["invalid"] = True
                 invalid += 1
             else:
-                active["readers"] = data
+                target["readers"] = data
 
     eligible = [a for a in attempts if not a["invalid"] and
                 a["scope"] not in poisoned_logger_sessions]
