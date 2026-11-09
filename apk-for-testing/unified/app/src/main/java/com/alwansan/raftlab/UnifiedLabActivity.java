@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.*;
 import android.provider.MediaStore;
@@ -505,14 +507,29 @@ public final class UnifiedLabActivity extends Activity {
             }
             bytes=out.toByteArray();
         }
-        // Validate recognizable PNG/JPEG/WEBP header; do not accept arbitrary executable data.
-        boolean png=bytes.length>8&&(bytes[0]&255)==137&&bytes[1]==80&&bytes[2]==78&&bytes[3]==71;
-        boolean jpeg=bytes.length>3&&(bytes[0]&255)==255&&(bytes[1]&255)==216;
-        boolean webp=bytes.length>12&&new String(bytes,0,4,StandardCharsets.US_ASCII).equals("RIFF")&&
-            new String(bytes,8,4,StandardCharsets.US_ASCII).equals("WEBP");
-        if(!png&&!jpeg&&!webp)throw new IOException("Expected PNG/JPEG/WEBP");
-        String name=currentManual.optString("id")+"-attached-"+System.currentTimeMillis()+(png?".png":jpeg?".jpg":".webp");
-        Uri own=writeMedia(name,png?"image/png":jpeg?"image/jpeg":"image/webp",bytes);
+        // Container authenticity is not proved by four PNG/JPEG/WebP magic bytes.
+        // Enforce bounded structure, then require Android to decode actual pixels.
+        ManualImageEvidencePolicy.Info info=ManualImageEvidencePolicy.inspect(bytes);
+        BitmapFactory.Options bounds=new BitmapFactory.Options();
+        bounds.inJustDecodeBounds=true;
+        BitmapFactory.decodeByteArray(bytes,0,bytes.length,bounds);
+        long pixels=(long)bounds.outWidth*bounds.outHeight;
+        if(bounds.outWidth<=0||bounds.outHeight<=0
+                ||bounds.outWidth>ManualImageEvidencePolicy.MAX_DIMENSION
+                ||bounds.outHeight>ManualImageEvidencePolicy.MAX_DIMENSION
+                ||pixels>ManualImageEvidencePolicy.MAX_PIXELS)
+            throw new IOException("Screenshot dimensions invalid or too large");
+        BitmapFactory.Options sample=new BitmapFactory.Options();
+        sample.inPreferredConfig=Bitmap.Config.RGB_565;
+        sample.inSampleSize=1;
+        while(bounds.outWidth/sample.inSampleSize>2048
+                ||bounds.outHeight/sample.inSampleSize>2048)
+            sample.inSampleSize*=2;
+        Bitmap decoded=BitmapFactory.decodeByteArray(bytes,0,bytes.length,sample);
+        if(decoded==null)throw new IOException("Screenshot pixels could not be decoded");
+        decoded.recycle();
+        String name=currentManual.optString("id")+"-attached-"+System.currentTimeMillis()+info.suffix;
+        Uri own=writeMedia(name,info.mime,bytes);
         JSONObject old=saved(currentManual);
         store(currentManual,"EVIDENCE_READY",old.optString("observed")+" screenshot_sha256="+digest(bytes),own.toString());
         show("تم إرفاق الصورة. راجعها ثم اختر نجاحًا أو فشلًا واضغط التالي.");
