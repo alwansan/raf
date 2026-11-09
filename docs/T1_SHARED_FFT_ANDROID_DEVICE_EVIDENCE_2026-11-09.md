@@ -1,0 +1,13 @@
+# T1 — Android15/Adreno730 synthetic FFT device evidence (2026-11-09)
+
+**Pinned owner upload:** https://github.com/alwansan/CL/tree/1dc0bf53303c1486afdb5a812d8597d682292589/test/shared-20261109-225506-552476830
+
+- App `0.2.14-shared` code14, source `2d7c268248b505e4dd9ad1daa9491787df07665c`; pack SHA256 `9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6`. These match T5 single R4 Mini [CI42686652150](https://github.com/alwansan/raf/actions/runs/42686652150).
+- Original uploaded `summary-20261109-225506-552476830 (1).json` and `events-20261109-225506-552476830.jsonl (1)`: fresh auto start + per-case launch and result for **T1-01..05 = five PASS**, all same session/source/pack. Later `AUTO ALL` includes five `auto_reuse`; do not count these as new GPU executions.
+- T1-05 actual device self-report: `fft_synthetic_two_pass_local512`; `checked_floats=1024`; `max_abs_error=2.3841858E-7` <= tolerance `3.0E-5`; `first_mismatch=-1`; `unmap=true`; `gl_error=0x0`; `original_raft_compute_executed=false`. Android API35, GLES3.2 Adreno730.
+- The new [identity and numeric auditor](../scripts/t1_shared_fft_device_evidence.py) rejects missing fresh case launches, cross-build/pack mixing, mutated result/status, numeric mismatch or fake original kernel proof; [13 adversarial regression tests](../tests/test_t1_shared_fft_device_evidence.py).
+- **[CI42690809051](https://github.com/alwansan/raf/actions/runs/42690809051) SUCCESS** on commit `7dfcdb7cb23ced5805d8045de273bcde02cc44ba`: 13/13 Python tests plus fetching real **CL commit `1dc0bf53303c1486afdb5a812d8597d682292589`** and reading both files; verdict `PASS_SYNTHETIC_DEVICE_GLES_ONLY`, maxabs `2.3841858e-07`, `ORIGINAL_RAFT_FFT_PROVEN=false`.
+- Reproduce after downloading those exact two files: `python3 scripts/t1_shared_fft_device_evidence.py 'summary-20261109-225506-552476830 (1).json' 'events-20261109-225506-552476830.jsonl (1)'`.
+- The audit only checks **app-authored evidence consistency**, not cryptographic device attestation or independent raw GPU-byte replay. T2 cases are owned by T2; T3 `EVIDENCE_READY` remains subject to visual review; T4/T5 `NEEDS_INPUT` stays unresolved.
+
+**Bounded conclusion:** This synthetic GLES3.1 SSBO 512-local FFT-like two-stage exercise works on the tested Adreno730, refuting only the blanket claim that such mobile GPU compute is impossible. Original Raft Unity/D3D11 shader variants, `FindKernel` registration, bindings, original water pixels remain unproved. `WATER-001 OPEN`, `NOT_READY 0/3`. No Mini/XAPK rebuild requested. Next: correlate source-matched full-game original `Dx11FFT` before/returned runtime identity + GPU evidence.

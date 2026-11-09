@@ -1,0 +1,21 @@
+{
+  "session_id": "20261109T2002Z-T1-chat-cl-t105-proof-6e8a",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed_synthetic_device_only",
+  "experiment_key": "t1-cl-shared-r4-android15-local512-ssbo-gpu-numeric-evidence-provenance-gate-v1",
+  "source_commit": "7dfcdb7cb23ced5805d8045de273bcde02cc44ba",
+  "cl_commit": "1dc0bf53303c1486afdb5a812d8597d682292589",
+  "cl_session": "20261109-225506-552476830",
+  "source": "2d7c268248b505e4dd9ad1daa9491787df07665c",
+  "pack": "9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6",
+  "t1_fresh_pass": 5,
+  "t105_max_abs_error": 2.3841858e-7,
+  "checked_floats": 1024,
+  "tolerance": 0.00003,
+  "original_raft_fft_proven": false,
+  "water_001_closed": false,
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42690809051",
+  "ci_conclusion": "success",
+  "unit_tests_passed": 13
+}
