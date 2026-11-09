@@ -1,0 +1,110 @@
+name: T3 RENDER-002 pinned CL R3 PNG pixel evidence (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/raft-t3-cl-r3-png-evidence.yml'
+permissions:
+  contents: read
+concurrency:
+  group: t3-r3-cl-png-readonly-20261109
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout audited raf sources
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Verify synthetic decoder negative controls
+        run: python3 -m unittest discover -s tests -p test_t3_cl_png_pixel_audit.py -v
+
+      - name: Download six immutable CL PNG blobs and verify git object identities
+        env:
+          CL_COMMIT: 24a677fc8fa4749c0bcf8a3cac01fa80b1641c86
+          CL_SESSION: shared-20261108-232759-468049775
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+
+          images = {
+              "T3-01-1794169703638.png": (119360, "4bed7a13b85667d1f51cd63acb4a08e75004053c"),
+              "T3-02-1794169726019.png": (210904, "114c2bc63ad1bd7d3a31684adeee64b593b8ea43"),
+              "T3-03-1794169727538.png": (162232, "c5509b375762f7af7e3a83664a512816710444af"),
+              "T3-04-1794169729040.png": (149557, "715dfa8796ea9579a32ddfbdb55622f9f09001d0"),
+              "T3-05-1794169730516.png": (154489, "72ecc44a111e21c8889dd827da49896b085c979a"),
+              "T3-06-1794169731995.png": (158584, "796dc3198e15d34b99815936de69aedacb135728"),
+          }
+          target = Path(os.environ["RUNNER_TEMP"]) / "t3-cl-png"
+          target.mkdir(parents=True, exist_ok=True)
+          commit = os.environ["CL_COMMIT"]
+          session = os.environ["CL_SESSION"]
+          for name, (size, expected_blob) in images.items():
+              url = f"https://raw.githubusercontent.com/alwansan/CL/{commit}/test/{session}/{name}"
+              request = Request(url, headers={"User-Agent": "T3-CL-R3-png-audit"})
+              with urlopen(request, timeout=40) as response:
+                  raw = response.read(size + 1)
+              if len(raw) != size:
+                  raise RuntimeError(f"{name}: file size mismatch")
+              calculated = hashlib.sha1(b"blob " + str(size).encode() + b"\0" + raw).hexdigest()
+              if calculated != expected_blob:
+                  raise RuntimeError(f"{name}: pinned Git blob SHA-1 mismatch")
+              (target / name).write_bytes(raw)
+              print(f"PIN_VERIFIED {name} size={size} gitblob={expected_blob}")
+          assert len(list(target.glob("T3-*.png"))) == 6
+          PY
+
+      - name: Decode actual PNG pixels and summarize spatial regions
+        run: |
+          python3 scripts/t3_cl_png_pixel_audit.py \
+            "$RUNNER_TEMP"/t3-cl-png/T3-*.png \
+            --output "$RUNNER_TEMP/t3-cl-r3-png-summary.json"
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          report = Path(os.environ["RUNNER_TEMP"]) / "t3-cl-r3-png-summary.json"
+          data = json.loads(report.read_text(encoding="utf-8"))
+          assert len(data["files"]) == 6, "Unexpected number of files in audit"
+          lines = [
+              "## T3 R3 authentic CL PNG pixel distributions",
+              "",
+              "Input: alwansan/CL @ 24a677fc8fa4749c0bcf8a3cac01fa80b1641c86",
+              "Session: shared-20261108-232759-468049775",
+              "",
+              "| Case | Width x height | Center black fraction | Center unique RGB | Full black fraction |",
+              "|---|---:|---:|---:|---:|",
+          ]
+          for row in data["files"]:
+              if "error" in row:
+                  raise RuntimeError(f"Unsupported or corrupt PNG {row['file']}: {row['error']}")
+              r = row["result"]
+              full = r["regions"]["full"]
+              center = r["regions"]["center"]
+              lines.append(f"| {row['file'][:5]} | {r['width']} x {r['height']} | {center['black_fraction']} | {center['unique_rgb']} | {full['black_fraction']} |")
+          lines += [
+              "",
+              "**Scope:** observed pixel diversity only, not a human screenshot verdict, Raft Unity shader/material restoration, or 3/3 release readiness.",
+              "All PNGs verified against immutable CL Git blob identities before analysis.",
+          ]
+          output = "\n".join(lines) + "\n"
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as fh:
+              fh.write(output)
+          print(output)
+          PY
+
+      - name: Publish only aggregate PNG statistics (never raw captures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-cl-r3-png-aggregate-only
+          path: ${{ runner.temp }}/t3-cl-r3-png-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
