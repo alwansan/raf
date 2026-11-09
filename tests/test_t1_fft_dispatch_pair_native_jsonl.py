@@ -12,7 +12,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.t1_fft_dispatch_pair_audit import AFTER, BEFORE, MAX_LOG_BYTES, audit, main
+from scripts.t1_fft_dispatch_pair_audit import AFTER, BEFORE, THREW, MAX_LOG_BYTES, audit, main
 
 
 def native(event, seq=1, session="20261109T000000000-abcd1234", log_seq=90,
@@ -28,6 +28,14 @@ def native(event, seq=1, session="20261109T000000000-abcd1234", log_seq=90,
             "; frame=199; realtime_s=64.050"
             "; original_runtime_mapping=unverified; gpu_result=unverified"
             + before_suffix
+        )
+    elif event == THREW:
+        detail = (
+            f"sequence={seq}; managed_dispatch_threw=true"
+            "; exception_kind=argument"
+            "; original_runtime_mapping=unverified"
+            "; gpu_result=unverified; water_rendering=unverified"
+            + after_suffix
         )
     else:
         detail = (
@@ -149,6 +157,40 @@ class NativeLoggerContract(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "4 MiB"):
                     main()
 
+
+    def test_persisted_original_exception_is_classified_as_synchronous_failure(self):
+        r = audit([native(BEFORE, log_seq=20), native(THREW, log_seq=21)])
+        self.assertEqual(r["synchronous_thrown_sequences"], [1])
+        self.assertEqual(r["returned_count"], 0)
+        self.assertEqual(r["unresolved_no_terminal_sequences"], [])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertFalse(r["gpu_execution_proven"])
+
+    def test_real_thrown_marker_prevents_fabricated_exception_text_or_kind(self):
+        for suffix in ("; exception_kind=OriginalClassName",
+                       "; managed_dispatch_threw=false",
+                       "; gpu_result=pass",
+                       "; original_runtime_mapping=verified"):
+            with self.subTest(suffix=suffix):
+                bad = native(THREW)
+                bad["detail"] += suffix
+                with self.assertRaisesRegex(ValueError, "duplicate trace field"):
+                    audit([native(BEFORE), bad])
+        bad = native(THREW)
+        bad["detail"] = bad["detail"].replace("exception_kind=argument",
+                                               "exception_kind=CustomNativeShaderException")
+        with self.assertRaisesRegex(ValueError, "thrown marker"):
+            audit([native(BEFORE), bad])
+
+    def test_real_thrown_wrong_area_or_session_rejected(self):
+        thrown = native(THREW)
+        thrown["area"] = "diagnostics"
+        with self.assertRaisesRegex(ValueError, "logger area"):
+            audit([native(BEFORE), thrown])
+        thrown = native(THREW, session="other")
+        r = audit([native(BEFORE), thrown])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertIn("cross_session_provenance:session_id:1", r["errors"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -15,6 +15,9 @@ BEFORE = "t1_original_fft_dispatch.before"
 # Legacy sequence-only traces remain parseable but never prove GPU execution.
 IDENTITY_FIELDS = ("kernel", "kernel_name", "kernel_index", "find_kernel_result", "dispatch_kernel", "shader", "shader_name", "resource", "fft_length", "fft_size", "bank", "pass_index", "groups_x", "groups_y", "groups_z", "session_id", "build_sha", "shader_guid", "resource_guid", "__trace_schema")
 AFTER = "t1_original_fft_dispatch.returned"
+THREW = "t1_original_fft_dispatch.threw"
+# These are fixed emitted categories, not exception type names or private messages.
+ALLOWED_THROW_KINDS = frozenset({"argument", "invalid_operation", "null_reference", "other"})
 # PersistentDiagnosticLog defaults to one 4 MiB on-device JSONL segment.
 MAX_LOG_BYTES = 4 * 1024 * 1024
 
@@ -25,6 +28,8 @@ def audit(records):
     paired = set()
     invalid_sequences = set()
     failed_returns = set()
+    synchronous_thrown = set()
+    terminal = {}
     # One JSONL input represents one runtime session/build, not a merge of runs.
     provenance = {}
     provenance_presence = {}
@@ -39,7 +44,7 @@ def audit(records):
         if native and legacy:
             raise ValueError("mixed trace envelopes")
         event = row.get("operation") if native else row.get("event")
-        if event not in (BEFORE, AFTER):
+        if event not in (BEFORE, AFTER, THREW):
             continue
         message = row.get("detail") if native else row.get("message")
         if not isinstance(message, str):
@@ -100,9 +105,17 @@ def audit(records):
                         raise ValueError("invalid original FFT before X/Z groups")
                 except ValueError:
                     raise ValueError("invalid original FFT before group_xyz")
-            elif (fields.get("managed_dispatch_call_returned") != "true"
-                  or fields.get("gpu_result") != "unverified"):
-                raise ValueError("invalid original FFT returned marker")
+            elif event == AFTER:
+                if (fields.get("managed_dispatch_call_returned") != "true"
+                        or fields.get("gpu_result") != "unverified"):
+                    raise ValueError("invalid original FFT returned marker")
+            elif event == THREW:
+                if (fields.get("managed_dispatch_threw") != "true"
+                        or fields.get("exception_kind") not in ALLOWED_THROW_KINDS
+                        or fields.get("original_runtime_mapping") != "unverified"
+                        or fields.get("gpu_result") != "unverified"
+                        or fields.get("water_rendering") != "unverified"):
+                    raise ValueError("invalid original FFT synchronous thrown marker")
         seq = fields.get("sequence", "")
         if not seq.isascii() or not seq.isdecimal() or not 1 <= int(seq) <= 16 or str(int(seq)) != seq:
             raise ValueError("invalid bounded sequence")
@@ -131,11 +144,21 @@ def audit(records):
             invalid_sequences.add(seq)
             paired.discard(seq)
         seen.add(key)
+        if event != BEFORE:
+            # Normal return and synchronous exception are mutually exclusive.
+            # Contradictory terminals cannot validate a successful Dispatch.
+            if seq in terminal:
+                errors.append("conflicting_dispatch_terminal:" + str(seq))
+                invalid_sequences.add(seq)
+                paired.discard(seq)
+            else:
+                terminal[seq] = event
         if event == BEFORE:
             if not duplicate:
                 pending[seq] = fields
         elif seq not in pending:
-            errors.append("return_without_before:" + str(seq))
+            errors.append(("throw_without_before:" if event == THREW
+                           else "return_without_before:") + str(seq))
         elif not duplicate:
             before = pending[seq]
             mismatched = [name for name in IDENTITY_FIELDS
@@ -143,12 +166,17 @@ def audit(records):
                           or (name in before and before[name] != fields[name])]
             if mismatched:
                 errors.append("identity_mismatch:" + str(seq) + ":" + ",".join(mismatched))
-            if "result" in fields and fields["result"] != "returned":
-                # Report explicit failure independently of an identity mismatch:
-                # both observations matter when investigating a broken dispatch.
+            if event == THREW:
+                synchronous_thrown.add(seq)
+                failed_returns.add(seq)
+                errors.append("dispatch_synchronous_exception:" + str(seq))
+            elif "result" in fields and fields["result"] != "returned":
+                # Report legacy explicit failure separately from the new
+                # authenticated synchronous exception event.
                 errors.append("dispatch_result_failure:" + str(seq))
                 failed_returns.add(seq)
-            if not mismatched and seq not in failed_returns and seq not in invalid_sequences:
+            if (event == AFTER and not mismatched and
+                    seq not in failed_returns and seq not in invalid_sequences):
                 paired.add(seq)
     # A foreign trace can arrive after an earlier pair was counted; no pair
     # from a mixed-provenance file may be used as a positive result.
@@ -160,6 +188,10 @@ def audit(records):
             "missing_return_sequences": missing,
             "paired_count": len(paired),
             "failed_return_sequences": sorted(failed_returns),
+            "synchronous_thrown_sequences": sorted(synchronous_thrown),
+            "synchronous_thrown_count": len(synchronous_thrown),
+            "unresolved_no_terminal_sequences": sorted(seq for seq in pending
+                                                       if seq not in terminal),
             "errors": errors,
             "runtime_kernel_identity_proven": False,
             "gpu_execution_proven": False}

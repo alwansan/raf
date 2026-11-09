@@ -1,5 +1,5 @@
 import unittest
-from scripts.t1_fft_dispatch_pair_audit import audit, BEFORE, AFTER
+from scripts.t1_fft_dispatch_pair_audit import audit, BEFORE, AFTER, THREW
 
 
 def row(event, seq, extra=""):
@@ -129,6 +129,42 @@ class PairAuditTests(unittest.TestCase):
     def test_other_events_ignored(self):
         self.assertEqual(audit([{"event": "unrelated"}])["before_count"], 0)
 
+
+    def test_synthetic_thrown_marks_managed_failure_without_gpu_proof(self):
+        r = audit([row(BEFORE, 1), row(THREW, 1)])
+        self.assertEqual(r["synchronous_thrown_sequences"], [1])
+        self.assertEqual(r["synchronous_thrown_count"], 1)
+        self.assertEqual(r["failed_return_sequences"], [1])
+        self.assertEqual(r["unresolved_no_terminal_sequences"], [])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertIn("dispatch_synchronous_exception:1", r["errors"])
+        self.assertFalse(r["gpu_execution_proven"])
+
+    def test_no_terminal_is_not_synchronous_exception(self):
+        r = audit([row(BEFORE, 1)])
+        self.assertEqual(r["synchronous_thrown_sequences"], [])
+        self.assertEqual(r["unresolved_no_terminal_sequences"], [1])
+
+    def test_thrown_then_return_cannot_create_successful_pair(self):
+        r = audit([row(BEFORE, 1), row(THREW, 1), row(AFTER, 1)])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertIn("conflicting_dispatch_terminal:1", r["errors"])
+
+    def test_return_then_thrown_invalidates_earlier_positive_pair(self):
+        r = audit([row(BEFORE, 1), row(AFTER, 1), row(THREW, 1)])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertIn("conflicting_dispatch_terminal:1", r["errors"])
+
+    def test_thrown_event_without_before_is_orphan_not_proof(self):
+        r = audit([row(THREW, 1)])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertIn("throw_without_before:1", r["errors"])
+
+    def test_thrown_mixed_provenance_never_creates_gpu_success(self):
+        r = audit([row(BEFORE, 1, ";session_id=a"),
+                   row(THREW, 1, ";session_id=b")])
+        self.assertEqual(r["paired_count"], 0)
+        self.assertIn("cross_session_provenance:session_id:1", r["errors"])
 
 if __name__ == "__main__":
     unittest.main()
