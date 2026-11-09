@@ -29,3 +29,11 @@ origin_verified_prior: CI42548419872 original ZIP2/DLL authentic, pass1 cfg_mixe
 - No other in-progress/queued Actions at scope registration; other T workers' subsequent runs do not overlap this path.
 
 next_step: Examine actual original-value category. If mixed/unknown, identify smallest unsupported CIL flow or return-producer class without leaking original IL; if category-only field/null, do NOT infer exact instance alias. Then examine crosspass pass0 destination ↔ pass1 source instance lineage, CB0/sampler/ShaderLab and real Unity/Adreno water pixels; WATER-001 remains OPEN.
+
+## Authenticated final result and handoff
+
+- [CI42549568993](https://github.com/alwansan/raf/actions/runs/42549568993) **SUCCESS** at source commit `4c8af56a580264df92a98375a7fd30ae87a10a21`, job `128941879761`. 17/17 Python PASS, Mono.Cecil synthetic PASS, original exact ZIP2/DLL/Shader-owner SHA pass, original scan and private cleanup pass.
+- New original safe output: `T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_or_joined` (prior syntax-only `cfg_mixed_syntactic_return_predecessors` unchanged). Pass0 source remains `RenderTexture typed_field`, pass1 source declared `Texture typed_call_result`; **no source pass0 ↔ pass1 object instance equality proven**.
+- Scope `work/experiments/20261109T0212Z-T2-chat-return-value-flow-n7x3.md` completed **only** the new original-source return-value category audit. Report `docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md` committed at `c06464a2027d519eaf5a684c1d771b6ef0ef65aa`.
+- Continue by testing original pass1 receiver and per-path texture origin including field-token lineage/constructors in **private SHA-pinned scratch**, never publishing actual names or private IL. Unknown/virtual/exception path must fail closed. Next validate same RenderTexture *instance* across pass0 destination and pass1 source and binding to Foam material/CB0/samplers, then real Unity/Adreno water pixels.
+- **Boundaries:** old owner Mini T2-01..04 synthetic phone GLES4/4 PASS distinct from original water. No APK/XAPK requested, no audio/Settings/input changes, no shared Mini or T3 ledger edits. T2 NO_BUILD; WATER-001 OPEN and game NOT_READY.
