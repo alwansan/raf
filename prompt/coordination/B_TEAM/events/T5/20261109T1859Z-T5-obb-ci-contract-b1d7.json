@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261109T1859Z-obb-ci-contract-b1d7",
+  "owner": "T5",
+  "session_id": "20261109T1855Z-T5-chat-obb-contract-b1d7",
+  "origin": "chat",
+  "issue_id": "OBB-GUID-CLASSIFICATION-REGRESSION",
+  "type": "verification",
+  "at": "2026-11-09T18:59:00Z",
+  "summary": "Independent source-only GitHub Actions CI executed previously unrun OBB GUID exact-root and duplicate delivery.json-key regressions. Both suites succeeded (10/10 newer + 16/16 existing = 26/26), Python compilation PASS. Only workflow, unique work/session/event files changed; signed APK/OBB, exact installed manifest and Android15 device mounting still unverified. Do not repeat this CI without changed inputs.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42678868120",
+    "https://github.com/alwansan/raf/commit/0b2510460e6c54c519a6b494add5b0b0b103cda8",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/clients/T5/sessions/20261109T1855Z-T5-chat-obb-contract-b1d7.md"
+  ]
+}
