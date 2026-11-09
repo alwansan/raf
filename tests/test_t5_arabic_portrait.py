@@ -28,7 +28,8 @@ class ArabicPortraitLabContract(unittest.TestCase):
         expected={x["id"] for x in self.pack["tests"]}
         actual=set(re.findall(r'\bm\.put\("(T[1-5]-\d{2,3})", new String\[\]',self.translations))
         self.assertEqual(actual,expected)
-        self.assertEqual(len(expected),29)
+        self.assertEqual(len(expected),30)
+        self.assertIn('T1-05',expected)
         for line in self.translations.splitlines():
             if "m.put(" in line:
                 self.assertRegex(line,"[\u0600-\u06ff]")
@@ -46,7 +47,7 @@ class ArabicPortraitLabContract(unittest.TestCase):
     def test_original_machine_drivers_and_pack_schema_stable(self):
         self.assertEqual(self.pack["schema_version"],2)
         self.assertEqual(self.pack["pack_id"],"raft-shared-t1-t5-v1")
-        self.assertEqual(self.pack["revision"],1)
+        self.assertEqual(self.pack["revision"],2)
         self.assertTrue(all(t["id"].startswith(t["worker"]+"-") for t in self.pack["tests"]))
         self.assertIn('"EVIDENCE_READY"',self.activity)
         self.assertIn('"BLOCKED"',self.activity)
