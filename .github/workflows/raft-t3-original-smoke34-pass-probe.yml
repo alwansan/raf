@@ -1,0 +1,146 @@
+name: T3 RENDER-002 authenticated original smoke34 Pass state (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-smoke34-pass-probe.yml
+      - scripts/t3_original_smoke34_pass_probe.py
+      - tests/test_t3_original_smoke34_pass_probe.py
+permissions:
+  contents: read
+concurrency:
+  group: t3-smoke34-original-pass-source-20261109
+  cancel-in-progress: false
+
+jobs:
+  source-smoke34-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout T3 source-free scripts and tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Source-free identity, privacy and Pass-state tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_smoke34_pass_probe.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_pass_probe.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
+
+      - name: Checkout immutable original ZIP2 provider
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+
+      - name: Sparse hydrate only authenticated four original shader/material owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: SHA-verify private source scope with no exported assets
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+
+          src = Path("zip2-source")
+          dest = Path(os.environ["RUNNER_TEMP"]) / "t3-original-smoke34-private"
+          selected = {"Raft_Data/" + n: SHADER_OWNERS[n] for n in SHADER_OWNERS_SELECTED}
+          out = stage(src, dest, selected)
+          assert len(out["owners"]) == 4
+          assert out["verified_bytes"] == 269007288
+          assert out["lfs_used"] is False
+          for name, pin in PIN.items():
+              original_path = src / "Raft" / "Raft_Data" / name
+              verify_source(original_path, pin)
+              target = dest / "Raft_Data" / name
+              with original_path.open("rb") as f, target.open("xb") as g:
+                  while chunk := f.read(1024 * 1024):
+                      g.write(chunk)
+              verify_source(target, pin)
+          assert len(PIN) == 6
+          print("T3_SHA_VERIFIED_SIX_SCENES_FOUR_OWNERS true")
+          PY
+
+      - name: Inspect genuine smoke-linked Shader48 parsed Pass states privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_original_smoke34_pass_probe \
+            --original "$RUNNER_TEMP/t3-original-smoke34-private" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-smoke34-safe-pass-summary.json"
+
+      - name: Verify safe bounded report and no device/ShaderLab claim
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          p = Path(os.environ["RUNNER_TEMP"]) / "t3-smoke34-safe-pass-summary.json"
+          obj = json.loads(p.read_text(encoding="utf-8"))
+          assert obj["status"] == "SHA_ORIGINAL_SMOKE34_PASS_STATE_CLASSIFIED"
+          assert obj["original_six_scene_SHA_verified"] is True
+          assert obj["original_four_shader_Material_owner_SHA_verified"] is True
+          assert obj["original_smoke_like_renderer_objects"] == 17
+          assert obj["original_smoke_like_material_slots"] == 34
+          assert obj["original_smoke_Shader48_private_identity_uniquely_linked"] is True
+          assert obj["shader_source_names_guids_PathIDs_bytecode_published"] is False
+          assert obj["postvendor_same_instance_export_state_verified"] is False
+          assert obj["original_program_variant_or_texture_alpha_verified"] is False
+          assert obj["Android_phone_smoke_pixels_or_game_fix_verified"] is False
+          assert 1 <= obj["original_normal_pass_count"] <= 64
+          print("T3_ORIGINAL_SMOKE34_PASS_CATEGORIES_VERIFIED (source only, no APK)")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+              f.write("### T3 original smoke-name Shader48\n\n")
+              f.write("Six original SHA-verified scenes; 17 named smoke-like renderers / 34 material slots linked to one source Shader48.\n\n")
+              f.write("Original Pass categories captured safely. Not same-export ShaderLab parity or Android phone visual evidence. RENDER-002 OPEN / NOT_READY.\n")
+          PY
+
+      - name: Upload only bounded generic JSON, never source assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-smoke34-pass-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-smoke34-safe-pass-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
