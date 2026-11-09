@@ -245,6 +245,51 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         self.assertEqual(v["matched_jsonl_scoped_attempts"], 1)
         self.assertFalse(v["device_pass"])
 
+    def test_producer_impossible_press_release_exceed_callbacks(self):
+        # C# Record increments Count once per accepted callback; press and
+        # release cannot originate from the same Android action.
+        v = gate.triage([
+            req(42), actions(42, events=2, press=2, release=1, v=0, h=0),
+            readers(42),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertEqual(v["status"], "INVALID_OR_INCOMPLETE_CAPTURE_PROVENANCE")
+        self.assertFalse(v["device_pass"])
+
+    def test_producer_impossible_scroll_axis_count(self):
+        # Count is per ACTION_SCROLL, each axis cannot exceed that count.
+        v = gate.triage([
+            req(43), actions(43, events=1, press=0, release=0, v=2, h=0),
+            readers(43),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_biaxial_scroll_one_callback_is_valid(self):
+        # One ACTION_SCROLL can have vertical and horizontal nonzero together:
+        # require max(V,H), not V+H, when checking event budget.
+        v = gate.triage([
+            req(44), actions(44, events=1, press=0, release=0, v=1, h=1),
+            readers(44),
+        ])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+        self.assertFalse(v["device_pass"])
+
+    def test_producer_impossible_reader_edge_scroll_subtotals(self):
+        # In C# one getter has at most one native/fallback positive; Down/Up
+        # and ScrollAxis/ScrollVector are mutually exclusive call categories.
+        forged = readers(45, calls=5, fallback=2).replace(
+            "positiveEdges=1", "positiveEdges=2")
+        v = gate.triage([req(45), actions(45), forged])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertEqual(v["status"], "INVALID_OR_INCOMPLETE_CAPTURE_PROVENANCE")
+
+    def test_zero_positive_getters_cannot_have_positive_edges(self):
+        forged = readers(46, calls=5, fallback=0)
+        v = gate.triage([req(46), actions(46), forged])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
     def test_mixed_process_risk_stays_disclosed(self):
         v = gate.triage([])
         self.assertFalse(v["device_pass"])
