@@ -15,7 +15,7 @@ import re
 PACKAGE = "com.alwansan.raft.androidtest"
 WARN = re.compile(r"Unable to load GUID for '([^'\r\n]+)'")
 OBB = re.compile(
-    r"(?:^|/)Android/obb/([^/]+)/(?:(main|patch))\.([1-9][0-9]*)\.([^/]+)\.obb\Z")
+    r"\A(?:/storage/emulated/[0-9]+|/sdcard)/Android/obb/([^/]+)/(?:(main|patch))\.([1-9][0-9]*)\.([^/]+)\.obb\Z")
 SAFE = re.compile(r"[a-z0-9][a-z0-9._]*\Z")
 CODE = re.compile(r"[1-9][0-9]*\Z")
 
