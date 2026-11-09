@@ -36,6 +36,8 @@ def analyze(lines):
     for line in lines:
         try:
             obj = json.loads(line)
+            if not isinstance(obj, dict):
+                raise ValueError("JSONL record must be an object")
             kind = obj.get("event")
             detail = obj.get("detail", "")
             if not isinstance(detail, str):
@@ -52,6 +54,9 @@ def analyze(lines):
                 rejected += 1
                 continue
             captured = fields.get("captured")
+            if captured is not None and captured not in ("true", "false"):
+                rejected += 1
+                continue
             # A capture request is not proof that Android granted capture.
             # Never label callbacks without an explicit captured=true as captured.
             key = "on" if captured == "true" else "off" if captured == "false" else "unknown"
