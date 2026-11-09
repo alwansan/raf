@@ -1,0 +1,85 @@
+name: T1 SHA-authentic original Dx11FFT Android Dispatch hook preflight (NO APK)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t1_stage_original_fft_dispatch_trace.py'
+      - 'tests/test_t1_stage_original_fft_dispatch_trace.py'
+      - 'android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs'
+      - '.github/workflows/raft-t1-original-runtime-hook-source.yml'
+      - '.github/workflows/raft-unity-editor-android-import.yml'
+
+permissions: {contents: read}
+concurrency:
+  group: t1-original-fft-dispatch-hook-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authenticated-source-hook:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs
+            Raft/Raft_Data/Managed
+      - name: Check synthetic mutation and no-FindKernel safeguards
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t1_stage_original_fft_dispatch_trace.py' -v
+          python3 -m py_compile scripts/t1_stage_original_fft_dispatch_trace.py
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate tracked original managed DLL before private CSharp9
+        run: |
+          set -euo pipefail
+          dll=Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test -f "$dll"
+          test "$(stat -c '%s' "$dll")" = 3211776
+          test "$(git hash-object "$dll")" = fc9d4ba920a178fdb89c970d9d772a01051dadc6
+          echo "ORIGINAL_MANAGED_BLOB_VERIFIED=true"
+      - name: Read original game CSharp9 privately without exporting source
+        run: |
+          set -euo pipefail
+          umask 077
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t1-ilspy" > "$RUNNER_TEMP/ilspy-install.private.log" 2>&1
+          mkdir -p "$RUNNER_TEMP/original-managed-private"
+          timeout 300s "$RUNNER_TEMP/t1-ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/original-managed-private" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/ilspy-decompile.private.log" 2>&1
+          echo "ORIGINAL_PRIVATE_DECOMPILE_VERIFIED=true"
+      - name: Prove real original source hooks against exact lifetime overlay
+        run: |
+          set -euo pipefail
+          trap 'rm -rf "$RUNNER_TEMP/original-managed-private" "$RUNNER_TEMP/t1-ilspy" "$RUNNER_TEMP/ilspy-install.private.log" "$RUNNER_TEMP/ilspy-decompile.private.log"' EXIT
+          python3 - <<'PY'
+          import pathlib,os
+          from scripts.t1_stage_original_fft_dispatch_trace import rewrite
+          from scripts.adapt_android_render_lifetimes import adapt
+          root=pathlib.Path(os.environ["RUNNER_TEMP"])/"original-managed-private"
+          def unique(name):
+              files=list(root.rglob(name+".cs"))
+              assert len(files)==1 and not files[0].is_symlink()
+              return files[0].read_text(encoding="utf-8-sig").replace("\r\n","\n")
+          original=unique("Dx11FFT")
+          base=unique("GpuFFT")
+          adapted=adapt("Dx11FFT",original).replace("\r\n","\n")
+          patched=rewrite(original,adapted,base)
+          assert patched.count("T1FftDirectDispatchTrace.BeforeDispatch(")==2
+          assert patched.count("T1FftDirectDispatchTrace.AfterDispatch(")==2
+          assert patched.count("FindKernel(")==adapted.count("FindKernel(")==0
+          print("ORIGINAL_SHA_MATCH=true")
+          print("ORIGINAL_DISPATCH_CALLS_PRESERVED=2")
+          print("ANDROID_ONLY_PASSIVE_PRE_POST_HOOKS=2")
+          print("ORIGINAL_UNITY_KERNEL_NAME_LOOKUP_PROVEN=false")
+          print("ORIGINAL_SOURCE_EXPORTED=false")
+          print("ANDROID_APK_OR_UNITY_RUN=false")
+          PY
