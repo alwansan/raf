@@ -53,8 +53,8 @@ def analyze(lines):
             # A capture request is not proof that Android granted capture.
             # Never label callbacks without an explicit captured=true as captured.
             key = "on" if captured == "true" else "off" if captured == "false" else "unknown"
-            if captured == "true" and route != "captured":
-                # A contradictory route/flag pair cannot establish captured delivery.
+            if (captured == "true" and route != "captured") or (captured == "false" and route == "captured"):
+                # Contradictory route/flag pairs cannot establish either captured or uncaptured delivery.
                 capture_route_conflicts += 1
                 rejected += 1
                 continue
@@ -92,7 +92,7 @@ def analyze(lines):
     return {"phases": result, "rejected_records": rejected,
             "capture_route_conflicts": capture_route_conflicts,
             "device_success_proven": False,
-            "note": "Capture request ON alone does not establish captured=true; contradictory captured=true on noncaptured routes is rejected; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
+            "note": "Capture request ON alone does not establish captured=true; contradictory capture flags and routes are rejected; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
