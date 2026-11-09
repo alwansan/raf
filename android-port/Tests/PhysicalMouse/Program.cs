@@ -313,6 +313,45 @@ static class Program
         Check(acrossFrames.Sample(213).Down(0),
             "Missing identity does not silently discard a click");
 
+
+        // Source-only positive/negative controls for the real original patched
+        // Unity getter ledger (call counts are NOT gameplay clicks).
+        var readerProof = new PhysicalMouseLegacyReaderEvidence();
+        Check(!readerProof.Record(PhysicalMouseLegacyReaderEvidence.Down, 3, false, true),
+            "Out-of-range original reader index rejected");
+        Check(!readerProof.Record(PhysicalMouseLegacyReaderEvidence.ScrollAxis, 0, true, false),
+            "Scroll axis must have no button index");
+        Check(!readerProof.Record(PhysicalMouseLegacyReaderEvidence.Up, 0, true, true),
+            "One read cannot be both Legacy and fallback");
+        Check(readerProof.Read().Calls == 0, "Invalid read cannot increment counters");
+        Check(readerProof.Record(PhysicalMouseLegacyReaderEvidence.Held, 0, false, false),
+            "Held false remains an observed reader call");
+        Check(readerProof.Record(PhysicalMouseLegacyReaderEvidence.Held, 1, true, false),
+            "Right held Legacy reader positive");
+        Check(readerProof.Record(PhysicalMouseLegacyReaderEvidence.Down, 2, false, true),
+            "Middle down captured fallback reader positive");
+        Check(readerProof.Record(PhysicalMouseLegacyReaderEvidence.Up, 0, true, false),
+            "Left release Legacy reader positive");
+        Check(readerProof.Record(PhysicalMouseLegacyReaderEvidence.ScrollAxis, -1, false, true),
+            "Captured scroll axis fallback positive");
+        Check(readerProof.Record(PhysicalMouseLegacyReaderEvidence.ScrollVector, -1, true, false),
+            "Legacy wheel vector positive");
+        var readProof = readerProof.Read();
+        Check(readProof.Calls == 6 && readProof.Legacy == 3 &&
+              readProof.Fallback == 2 && readProof.Edges == 2 &&
+              readProof.Scroll == 2,
+            "Counts distinguish 6 calls, 3 Legacy hits, 2 fallback and 2 edge/scroll");
+        var summary = readerProof.Report();
+        Check(summary.Contains("held0Calls=1,legacy=0,fallback=0") &&
+              summary.Contains("down2Calls=1,legacy=0,fallback=1") &&
+              summary.Contains("scrollAxisCalls=1,legacy=0,fallback=1"),
+            "Per-button and scroll source counters retained in diagnostic");
+        readerProof.Reset();
+        readProof=readerProof.Read();
+        Check(readProof.Calls==0 && readProof.Legacy==0 &&
+              readProof.Fallback==0 && readProof.Edges==0 && readProof.Scroll==0,
+            "Old capture reader proof must reset on release");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;
