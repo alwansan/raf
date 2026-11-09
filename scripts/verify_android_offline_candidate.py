@@ -172,6 +172,7 @@ RUNTIME_COMPILE_SUPPORT_FILES = (
     'AndroidTouchGamepadOverlay.cs',
     'PersistentDiagnosticLog.cs',
     'AndroidRuntimeLog.cs',
+    'T1FftDirectDispatchTrace.cs',
 )
 
 
