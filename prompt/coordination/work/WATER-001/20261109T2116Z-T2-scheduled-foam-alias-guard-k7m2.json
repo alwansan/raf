@@ -1,0 +1,21 @@
+{
+  "session_id": "20261109T2116Z-T2-scheduled-foam-alias-guard-k7m2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "5104609fe5fdc5f27ea7f698077197f3ad738e6d",
+  "intended_files": [
+    "scripts/t2_foam_alias_dataflow.py",
+    "tests/test_t2_foam_alias_dataflow.py",
+    "prompt/coordination/clients/T2/sessions/20261109T2116Z-T2-scheduled-foam-alias-guard-k7m2.md",
+    "prompt/coordination/work/WATER-001/20261109T2116Z-T2-scheduled-foam-alias-guard-k7m2.json"
+  ],
+  "experiment_key": "T2-FOAM-SOURCEFREE-CFG-ALIAS-JOIN-20261109-v1",
+  "resource_key": null,
+  "hypothesis": "Two CIL fields or calls cannot establish cross-pass RenderTexture instance equality; model allocation-site identity and conservative join, including null, reassignment and divergent branches; never infer original source identity from synthetic proof.",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42690309016",
+    "https://github.com/alwansan/raf/commit/9fde426cf491517d152b1cfc7810280f888fd38d"
+  ],
+  "updated_at": "2026-11-09T21:16:35Z"
+}
