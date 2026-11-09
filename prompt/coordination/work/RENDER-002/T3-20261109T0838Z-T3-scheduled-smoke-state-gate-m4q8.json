@@ -1,0 +1,18 @@
+{
+  "session_id": "20261109T0838Z-T3-scheduled-smoke-state-gate-m4q8",
+  "origin": "scheduled",
+  "baseline_sha": "2e430b47cdfa7f201aaf0ac454b0e4a086745b8e",
+  "status": "IN_PROGRESS",
+  "issue": "RENDER-002",
+  "experiment_key": "smoke34:metadata-only-state-gate:v1",
+  "hypothesis": "Existing 34-use smoke shader identity must be checked before interpreting pass-state mismatches; fail closed on unknown fields and 108-use fire shader",
+  "files": [
+    "scripts/t3_smoke_render_state_gate.py",
+    "tests/test_t3_smoke_render_state_gate.py"
+  ],
+  "shared_resource": "none",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42549246777"
+  ],
+  "constraints": "No original shaders or game assets, no Unity, no APK, no CL writes; this tool cannot prove device graphics."
+}
