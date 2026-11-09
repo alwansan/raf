@@ -4,7 +4,7 @@
   "origin": "chat",
   "worker": "T2",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "965afcc1710e62ffa90d159c0516efc72e4214a7",
   "resumed_from_sessions": [
     "20261109T1616Z-T2-scheduled-stage-key-guard-v7q2",
@@ -18,7 +18,7 @@
   ],
   "experiment_key": "T2_WATER001_foam_resource_report_copy_isolation_py312_test_42664209077",
   "resource_key": "T2_source_only_report_validation",
-  "updated_at": "2026-11-09T18:57:00Z",
+  "updated_at": "2026-11-09T18:59:00Z",
   "hypothesis": "The original_numeric_table_rows field in combine() aliases the original profiles dictionary, so subtest mutations contaminate later calls to combine and yield four unexpected errors.",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42664209077",
@@ -34,6 +34,25 @@
     "https://github.com/alwansan/raf/actions/runs/42678552250",
     "https://github.com/alwansan/raf/actions/runs/42678582388"
   ],
-  "waiting_on": "Confirm CI42678582388 source-free regression and pinned-original private steps; keep WATER-001 OPEN until gameplay pixels verified.",
-  "session_path": "prompt/coordination/clients/T2/sessions/20261109T1854Z-T2-chat-foam-report-alias-b8e7.md"
+  "waiting_on": null,
+  "session_path": "prompt/coordination/clients/T2/sessions/20261109T1854Z-T2-chat-foam-report-alias-b8e7.md",
+  "result": "FIX_VERIFIED_SOURCE_AND_PRIVATE_ORIGINAL_CI",
+  "authoritative_run": "https://github.com/alwansan/raf/actions/runs/42678582388",
+  "validation": {
+    "conclusion": "success",
+    "job_id": 129366587680,
+    "test_batches": [
+      20,
+      23,
+      20
+    ],
+    "total_assertion_tests": 63,
+    "source_sha_authenticated": true,
+    "source_bytes": 115978112,
+    "original_resource_stages": 4,
+    "original_descriptor_rows": 6,
+    "compiled_non_cb_resource_rows": 12,
+    "unity_or_device_verified": false
+  },
+  "next_step": "Original Foam cross-pass receiver/return identity and CB0/ShaderLab upload; separate game pixel evidence, no repeat CI absent input/code change. WATER-001 overall OPEN."
 }
