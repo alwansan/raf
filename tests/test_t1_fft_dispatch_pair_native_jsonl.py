@@ -127,7 +127,7 @@ class NativeLoggerContract(unittest.TestCase):
             json.dumps(native(BEFORE, log_seq=16001)),
             json.dumps(native(AFTER, log_seq=16005)),
         ]
-        payload = "\\n".join(lines) + "\\n"
+        payload = "\n".join(lines) + "\n"
         self.assertGreater(len(payload.encode("utf-8")), 1 * 1024 * 1024)
         self.assertLess(len(payload.encode("utf-8")), MAX_LOG_BYTES)
         with tempfile.TemporaryDirectory() as temp:
