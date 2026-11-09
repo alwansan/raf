@@ -49,9 +49,14 @@ def same_instance_proven(a: Value, b: Value) -> bool:
             len(a.tokens) == len(b.tokens) == 1 and a.tokens == b.tokens)
 
 def different_instance_proven(a: Value, b: Value) -> bool:
-    """Disjoint single proven identities (never a claim about null/unknown)."""
+    """Conservative non-alias gate: SSA value inequality is not object inequality.
+
+    Two distinct SSA values may both reference the same RenderTexture, including
+    through separate field loads, method returns, and CFG joins. The current
+    lattice tracks value provenance only; it does not carry allocation
+    freshness, escape analysis, or proven object inequality. Therefore no
+    non-alias conclusion is sound from these tokens alone.
+    """
     if not isinstance(a, Value) or not isinstance(b, Value):
         raise ValueError("Values required")
-    return (not a.unknown and not b.unknown and
-            not a.may_be_null and not b.may_be_null and
-            len(a.tokens) == len(b.tokens) == 1 and a.tokens.isdisjoint(b.tokens))
+    return False
