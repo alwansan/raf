@@ -33,3 +33,14 @@ Commit [5b9adfbc](https://github.com/alwansan/raf/commit/5b9adfbc82160f1e8bc6a00
 ## Handoff
 
 Check CI final job logs for compilation, bounded selftest and authenticated original pass1 safe `T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW`. If it remains `value_mixed_with_explicit_null_literal`, source-null remains only conservative possibility; next distinct problem is source-private path predicate/receiver and crosspass same-instance RenderTexture proof, not repetitive synthetic-only guards. Do not call shader/device parity, Foam restored, or WATER-001 closed. No Mini/Unity/XAPK requested; T5 handles shared Mini builds and full XAPK vote independently.
+
+## Authenticated completed CI — 2026-11-09T19:49Z
+
+- [CI42686782993](https://github.com/alwansan/raf/actions/runs/42686782993) **COMPLETED SUCCESS**, source SHA `5b9adfbc82160f1e8bc6a00713577e7fb3549ed4`, job `129395615815`.
+- Actual log: **17/17 Python OK**; **`T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`** verifies new `ceq`, `beq`, `bne.un`, false-edge and nonzero-class ambiguity controls. Authentic source: `T2_FOAM_BLIT_SOURCE_SHA_PASS original_dll_bytes=3211776 owner_bytes=115978112 lfs=false`. Private scratch purge and safe finite outputs succeeded.
+- Authentic original still yields `T2_FOAM_PASS0_CALLEE_RETURN_VALUE_FLOW not_call_return_source`, `T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_with_explicit_null_literal`. Pass0 source: `RenderTexture typed_field steps=6 void_calls=0`; pass1 source: `Texture typed_call_result steps=21 void_calls=1`.
+- Separate [Android platform CI42686783004](https://github.com/alwansan/raf/actions/runs/42686783004) **COMPLETED SUCCESS**, job `129395609766`, no original Foam shader pixels.
+- Existing T5 shared mini-app [42686652150](https://github.com/alwansan/raf/actions/runs/42686652150) **COMPLETED SUCCESS**. T2 did not trigger, modify, cancel or duplicate T5's build.
+- Safe documentation: `docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md`, commit `026da1730a707b43a56a74ce3a7deda6c7f8c364`.
+
+**Result:** T2 equality predicate control validated on genuine SHA-pinned Foam original; original null-literal category remains conservatively reachable and is **not** a proven runtime null or causal diagnosis. The completed narrow scope is CIL equality feasibility only; WATER-001 remains OPEN / NOT_READY 0/3. Next isolated original experiment should track actual receiver state and object allocation/alias per matched frame, or record an unprovable boundary instead of manufacturing a positive. Do not publish protected source or describe source CI as Android pixel proof.
