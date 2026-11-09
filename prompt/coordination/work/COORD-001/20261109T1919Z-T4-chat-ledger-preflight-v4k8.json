@@ -2,8 +2,8 @@
   "session_id": "20261109T1919Z-T4-chat-ledger-preflight-v4k8",
   "origin": "chat",
   "issue_id": "COORD-001",
-  "status": "active",
-  "updated_at": "2026-11-09T19:19:00Z",
+  "status": "completed_source_only",
+  "updated_at": "2026-11-09T19:25:00Z",
   "resumed_from_sessions": [
     "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
     "20261109T1909Z-T2-chat-event-ledger-repair-n6q8"
@@ -29,5 +29,13 @@
     "T4 mouse bridge"
   ],
   "ci": "dedicated 5-minute source-only regression and public inherited ledger audit",
-  "device": "none"
+  "device": "none",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42682466747",
+    "https://github.com/alwansan/raf/actions/runs/42682900051"
+  ],
+  "report": "docs/T4_SUPPORT_T2_TEAM_LEDGER_AUDIT_2026-11-09.md",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261109T1919Z-T4-chat-ledger-preflight-v4k8.md",
+  "result": "595→596 events; 22→20 missing IDs with new T3 event, T4 zero, T3 15, T5 5; 10/10 audit tests.",
+  "next_step": "T3/T5 owners repair 20 remaining missing identities with CAS; T2 owns canonical summary regeneration. No Unity/game readiness inference."
 }
