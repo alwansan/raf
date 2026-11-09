@@ -1721,6 +1721,68 @@ internal static class Program
         opaqueGetter.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
         if(ReachableReturnValueFlow(opaqueGetter)!="value_nested_call_untraced")
             throw new InvalidOperationException("nested_call_not_instance_proof");
+        // Independent, source-free CROSSPASS FIELD-TOKEN fixture.
+        // A declared field token equality is deliberately weaker than receiver
+        // / heap instance / frame equality; never promote it into pixel proof.
+        var otherRtField=new FieldDefinition("UnrelatedSourceFreeTarget",
+            Mono.Cecil.FieldAttributes.Private|Mono.Cecil.FieldAttributes.Static,rt);
+        owner.Fields.Add(otherRtField);
+        var fieldGetter=new MethodDefinition("SyntheticCrosspassFieldGetter",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,tex);
+        fieldGetter.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Boolean));
+        owner.Methods.Add(fieldGetter);
+        var fg=fieldGetter.Body.Instructions;
+        fg.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        fg.Add(Instruction.Create(OpCodes.Ret));
+        var crossCaller=new MethodDefinition("SyntheticCrosspassCaller",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        crossCaller.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Boolean));
+        owner.Methods.Add(crossCaller);
+        var cross=crossCaller.Body.Instructions;
+        cross.Add(Instruction.Create(OpCodes.Ldarg_0));
+        cross.Add(Instruction.Create(OpCodes.Call,fieldGetter)); // pass1 source
+        cross.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField)); // pass0 dest
+        cross.Add(Instruction.Create(OpCodes.Ldsfld,fixtureMatField));
+        cross.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        cross.Add(Instruction.Create(OpCodes.Call,b));
+        var crossSource=BacktraceBlitSource(crossCaller,5);
+        var crossDestination=BacktraceBlitSource(crossCaller,5,2);
+        if(crossSource.Kind!="typed_call_result" ||
+           crossDestination.Kind!="typed_field" ||
+           crossDestination.Role!="RenderTexture" ||
+           OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
+               !="field_token_match_only")
+            throw new InvalidOperationException("same_original_declared_field_token_must_be_classified");
+        fg[0]=Instruction.Create(OpCodes.Ldsfld,otherRtField);
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
+           !="field_no_direct_match")
+            throw new InvalidOperationException("different_unassigned_Cecil_RID0_fields_must_not_match");
+        fg[0]=Instruction.Create(OpCodes.Ldnull);
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
+           !="field_null_only")
+            throw new InvalidOperationException("null_return_must_not_forge_same_field");
+        fg.Clear();
+        var sameField=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
+        fg.Add(Instruction.Create(OpCodes.Ldarg_0)); // unknown runtime predicate
+        fg.Add(Instruction.Create(OpCodes.Brtrue_S,sameField));
+        fg.Add(Instruction.Create(OpCodes.Ldnull));
+        fg.Add(Instruction.Create(OpCodes.Ret));
+        fg.Add(sameField);
+        fg.Add(Instruction.Create(OpCodes.Ret));
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
+           !="field_token_match_plus_null")
+            throw new InvalidOperationException("field_token_plus_null_abstract_cfg_must_preserve_both");
+        // Simply reading a field and discarding it must not count as a
+        // field-sourced return even if the token appears in the same method.
+        fg.Clear();
+        fg.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        fg.Add(Instruction.Create(OpCodes.Pop));
+        fg.Add(Instruction.Create(OpCodes.Ldnull));
+        fg.Add(Instruction.Create(OpCodes.Ret));
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
+           !="field_null_only")
+            throw new InvalidOperationException("field_read_without_return_is_not_field_provenance");
 
     }
 

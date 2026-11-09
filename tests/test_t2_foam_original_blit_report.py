@@ -41,6 +41,9 @@ def fixture():
         "original_pass1_bounded_stack_void_calls": 1,
         "original_bounded_stack_static_type_only": True,
         "original_bounded_stack_texture_instance_equality_verified": False,
+        "original_crosspass_declared_field_token_not_heap_identity": True,
+        "original_pass0_destination_declared_field_trace": False,
+        "original_crosspass_declared_field_return_relation": "field_pass0_destination_untraced",
         "pass0_source": "Texture",
         "pass0_destination": "RenderTexture",
         "pass0_source_producer": "typed_field",
@@ -64,6 +67,39 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         self.assertTrue(r["proven_direct_typed_pass_roles_only"])
         self.assertFalse(r["crosspass_texture_instance_identity_proven"])
         self.assertFalse(r["CB0_and_Unity_device_evidence_proven"])
+
+    def test_crosspass_same_field_token_is_not_heap_identity(self):
+        r = fixture()
+        r["original_pass0_destination_declared_field_trace"] = True
+        for relation in ("field_token_match_only", "field_token_match_plus_null",
+                         "field_token_match_plus_other", "field_token_match_plus_null_and_other"):
+            with self.subTest(relation=relation):
+                r["original_crosspass_declared_field_return_relation"] = relation
+                safe = validate(r)
+                self.assertEqual(safe["crosspass_declared_field_relation"], relation)
+                self.assertFalse(safe["crosspass_texture_instance_identity_proven"])
+                self.assertFalse(safe["CB0_and_Unity_device_evidence_proven"])
+
+    def test_crosspass_field_token_bad_shape_fails_closed(self):
+        for relation in ("private_field_name", 17, None, False, "", "field_token_match_secret"):
+            r = fixture()
+            r["original_pass0_destination_declared_field_trace"] = True
+            r["original_crosspass_declared_field_return_relation"] = relation
+            with self.subTest(relation=relation), self.assertRaisesRegex(ValueError, "field_token_category"):
+                validate(r)
+        for rel, traced in (("field_token_match_only", False),
+                            ("field_pass0_destination_untraced", True)):
+            r = fixture()
+            r["original_crosspass_declared_field_return_relation"] = rel
+            r["original_pass0_destination_declared_field_trace"] = traced
+            with self.subTest(rel=rel,traced=traced), self.assertRaisesRegex(ValueError, "inconsistent"):
+                validate(r)
+        r = fixture()
+        r["original_crosspass_declared_field_token_not_heap_identity"] = False
+        with self.assertRaisesRegex(ValueError, "authentication_missing"):validate(r)
+        r = fixture()
+        r["original_pass0_destination_declared_field_trace"] = 1
+        with self.assertRaisesRegex(ValueError, "proof_flag"):validate(r)
 
     def test_unknown_both_passes_is_allowed_but_never_proved(self):
         r = fixture()

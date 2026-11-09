@@ -32,10 +32,12 @@ TRUE_FLAGS = {
     "original_Assembly_CSharp_sha_verified",
     "original_Foam_Shader_name_sha_verified",
     "original_bounded_stack_static_type_only",
+    "original_crosspass_declared_field_token_not_heap_identity",
 }
 BOOLEAN_FLAGS = {
     "original_Shader_field_resolved", "original_Material_field_uniquely_resolved",
     "original_shader_to_blit_direct_field_types_confirmed",
+    "original_pass0_destination_declared_field_trace",
 }
 FALSE_FLAGS = {
     "original_texture_instance_identity_proven",
@@ -64,7 +66,24 @@ STACK_REASONS = {
 }
 STACK_KEYS = {f"original_pass{p}_bounded_stack_{term}" for p in (0, 1) for term in
               ("source_type", "source_kind", "reason")}
-EXPECTED = {"status"} | NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS | ROLE_KEYS | STACK_KEYS
+# A finite, privacy-safe taxonomy. No field names, tokens, IL or hashes from
+# proprietary code may be emitted. Exact declared FIELD token != heap object.
+FIELD_RELATIONS = {
+    "field_pass0_destination_untraced","field_destination_unresolved",
+    "field_pass1_callee_untraced","field_callee_unresolved",
+    "field_bad_receiver_signature","field_virtual_dispatch_unknown",
+    "field_token_match_plus_null_and_other","field_token_match_plus_null",
+    "field_token_match_plus_other","field_token_match_only",
+    "field_no_match_with_null","field_null_only","field_no_direct_match",
+    "value_no_body","value_exception_regions","value_wrong_return_type",
+    "value_budget","value_bad_target","value_unsupported_opcode",
+    "value_unsupported_branch","value_bad_local","value_invalid_stack",
+    "value_invalid_return_stack","value_invalid_join_stack",
+    "value_no_reachable_return",
+}
+EXPECTED = ({"status", "original_crosspass_declared_field_return_relation"} |
+            NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS |
+            ROLE_KEYS | STACK_KEYS)
 
 
 def unique_keys(pairs):
@@ -171,6 +190,19 @@ def validate(report):
         if report[f"original_pass{index}_direct_link_candidates"] == 1 and (
                 role != report[f"pass{index}_source"]):
             raise ValueError("direct_source_disagrees_with_bounded_stack")
+    # Field-token results are PRIVATE original-CIL analysis of the producer's
+    # return stack through locals and CFG. A matching DECLARED field token
+    # cannot prove matching receiver, intervening writes, same frame or object.
+    relation = report["original_crosspass_declared_field_return_relation"]
+    dest_traced = report["original_pass0_destination_declared_field_trace"]
+    if type(relation) is not str or relation not in FIELD_RELATIONS:
+        raise ValueError("unsafe_crosspass_field_token_category")
+    if dest_traced and report["original_pass0_exact_Material_field_argument_calls"] != 1:
+        raise ValueError("field_destination_without_unique_direct_Blit")
+    if (dest_traced and relation == "field_pass0_destination_untraced") or (
+        not dest_traced and relation != "field_pass0_destination_untraced"
+    ):
+        raise ValueError("crosspass_field_trace_relation_inconsistent")
     # Explicit boundaries: NEVER claim that pass1 samples the same actual RT
     # object written by pass0 just because their declared types are equal.
     return {
@@ -182,6 +214,7 @@ def validate(report):
         "pass0_bounded_stack_source_type": report["original_pass0_bounded_stack_source_type"],
         "pass1_bounded_stack_source_type": report["original_pass1_bounded_stack_source_type"],
         "pass1_bounded_stack_producer": report["original_pass1_bounded_stack_source_kind"],
+        "crosspass_declared_field_relation": relation,
         "crosspass_texture_instance_identity_proven": False,
         "CB0_and_Unity_device_evidence_proven": False,
     }
