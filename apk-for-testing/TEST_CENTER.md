@@ -1,3 +1,18 @@
+<!-- T5_R5_OWNER_DOWNLOAD_LOGS_SAF_20261109 -->
+## ✅ أحدث APK المختبر الواحد T1–T5 — فتح مجلد Download/logs (9 نوفمبر 2026)
+
+**CI:** [42691609924](https://github.com/alwansan/raf/actions/runs/42691609924) **COMPLETED SUCCESS**، مصدر الطلب [97014d9](https://github.com/alwansan/raf/commit/97014d9b7b579480af37ae254de89080ce29f78f) وSHA الأب المربوط 731d7a68bb3826b348d0314f694737b522e92976. **APK فعلي واحد** مع 30 اختبارًا T1–T5 وحزمة JSON واحدة، بلا Unity وبلا Raft XAPK كاملة.
+
+- **APK:** `0.2.17-shared` / versionCode **17** / package `com.alwansan.raft.lab.shared` / **110042** بايت / SHA256 `272d4ce9a199c5876b179926c9f27ed0d7a8c4db34b2a3993de2c44a94e323cf`.
+- **Android Manifest ثنائي مفحوص:** 4/4 Activity Portrait، اسم التطبيق `مختبر اختبارات رافت`، targetSdk35، التطبيق عربي RTL.
+- **APK Signature Scheme v2:** شهادة **Android Debug** SHA256 `1ce4e4c53eb8a48a1d0639dadba8bf70eae556911214b10babb20b08e283f20d`، تختلف عن شهادة إصدار 0.2.14 `a60c8608...`؛ **صدّر السجلات، احذف نسخة المختبر السابقة فقط، ثم ثبّت الجديدة**.
+- **pack المضمّن والمرفق متطابقان:** 7454 بايت، revision2، 30 حالة، SHA256 `9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6`؛ محرك T1FftButterflyProbe وLocalOwnerBundleScanner وLocalOwnerLogEvidence موجودة في APK.
+- **Artifact ZIP لا APK مباشر من Releases:** ID `13707257362`، SHA256 `e76a63126b3a431bab097b5410e905ad08febe53f2c5861f97f09af4757d43d0`، ينتهي 2026-11-23T20:18:56Z. يحتوي APK+pack+SHA256SUMS. APK المستخرج متاح من **محادثة T5** كرابط ملف مباشر؛ لم يُنشر GitHub Release عام بتوقيع مستقر.
+- **الميزة الجديدة:** 📂 اختيار `Download/logs` عبر منتقي Android SAF؛ جرد APK/OBB91/manifest والحزم القديمة، وزر صريح لحساب SHA256 لكل APK/OBB (لا قراءة OBB تلقائية)، وزر تلخيص 4MiB من سجل BlackBox *دون نسخ السطور*، مع حماية JSON أقدم/غير متوافق. [دليل المالك](OWNER_LOCAL_LOGS_GUIDE_AR.md).
+- **الدليل:** [CI42690234266](https://github.com/alwansan/raf/actions/runs/42690234266) JVM tests + Android SDK35 compile SUCCESS؛ [CI42691609924](https://github.com/alwansan/raf/actions/runs/42691609924) APK SUCCESS. إخفاقات طلبات R5 السابقة [42690937486](https://github.com/alwansan/raf/actions/runs/42690937486) (pin الأب) و[42691251220](https://github.com/alwansan/raf/actions/runs/42691251220) (evidence URL gate) **قبل بناء APK**، وتم إصلاحهما؛ لم تُصدَّر APK مكررة.
+- **حد الدليل:** لا توجد بعد نتيجة هاتف لهذا APK؛ لا تخلط EVIDENCE_READY مع PASS، ولا تفترض OBB مثبت أو سليم من وجود ملف. لعبة Raft تبقى ببوابات readiness/XAPK المنفصلة.
+
+---
 <!-- OWNER_T5_ARABIC_PORTRAIT_20261108 -->
 
 <!-- T5_SHARED_R4_T1_05_20261109 -->
