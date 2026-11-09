@@ -4,17 +4,19 @@
   "origin": "chat",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6fe95344909bd919dc8bc08cc245bda640e1155e",
-  "updated_at": "2026-11-09T01:42:06Z",
+  "updated_at": "2026-11-09T01:46:00Z",
   "intended_files": [
     ".github/workflows/raft-t3-cl-r3-png-evidence.yml",
     "prompt/coordination/clients/T3/sessions/20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4.md",
     "prompt/coordination/work/RENDER-002/T3-20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4-raw-png-ci.json",
-    "prompt/coordination/B_TEAM/events/T3/20261109T0142Z-T3-chat-cl-r3-png-ci-p8r4.json"
+    "prompt/coordination/B_TEAM/events/T3/20261109T0142Z-T3-chat-cl-r3-png-ci-p8r4.json",
+    "docs/T3_CL_R3_PIXEL_EVIDENCE_2026-11-09.md",
+    "prompt/coordination/experiments/T3/20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4-r3-png-proof.json"
   ],
   "experiment_key": "t3-r3-cl-png-six-raw-pixels:CL@24a677fc8fa4749c0bcf8a3cac01fa80b1641c86:shared-20261108-232759-468049775:six-blob-shas:stdlib-decode-v1",
-  "resource_key": "github-actions-ubuntu-24.04-lightweight-io",
+  "resource_key": "released",
   "scope": "Independent CI harness to fetch six commit-pinned CL R3 PNGs, verify exact Git blob SHAs, execute T3 scheduled script's existing source-free tests and inspect pixel distributions; DO NOT change T3 scheduled script or tests or shared APK",
   "hypothesis": "A commit-pinned, source-free GitHub Actions audit can separate black/flat screenshot captures from non-black sampled device PNGs, without treating EVIDENCE_READY as visual/game PASS.",
   "resumed_from_sessions": [
@@ -24,5 +26,13 @@
   ],
   "constraints": "CL read-only; no raw captures in public artifacts; no proprietary game assets, Unity, APK, OBB or T5 app source; no automatic device PASS",
   "planned_test": "Push path-scoped isolated Actions workflow; check synthetic unittest and six raw CL PNG CRC decoding and aggregate distributions; save CI link/results in session",
-  "status_detail": "scope reservation before source implementation"
+  "status_detail": "Own independent CI scope completed; no device/Unity game visual acceptance claimed.",
+  "experiment_run": "https://github.com/alwansan/raf/actions/runs/42547145230",
+  "workflow_commit": "e839d4e3e54b761a95a421f48e1ce70593751725",
+  "ci_conclusion": "success",
+  "tests": "synthetic Python unittest PASS; six pinned git blobs PASS; six actual 1080x2400 PNG CRC/pixel decoding PASS",
+  "evidence": "six R3 real saved center regions nonblack: 0..0.000043 black fraction; 3,81448,332,332,331,330 center unique colors",
+  "report": "docs/T3_CL_R3_PIXEL_EVIDENCE_2026-11-09.md",
+  "artifact_id": 13644076425,
+  "next_step": "Original Raft smoke prefab->material->shader->texture/alpha authentic ZIP2 audit, coordinate scope with scheduled T3; no duplicate mini APK."
 }
