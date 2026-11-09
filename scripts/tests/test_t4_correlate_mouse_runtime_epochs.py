@@ -29,6 +29,35 @@ def readers(epoch, calls=5, fallback=2, captured="true"):
             f"countersAreGetterCallsNotClicks=true; unityGameplayVerified=false")
 
 
+def full_actions(epoch, press=0, release=0, v=0, h=0,
+                 press_mask=0, release_mask=0):
+    n = max(1, press + release + max(v, h))
+    result = actions(epoch, events=n, press=press, release=release, v=v, h=h)
+    return result.replace(
+        "unityButtonsAndWheelVerified=false",
+        f"pressMask={press_mask}; releaseMask={release_mask}; "
+        "unityButtonsAndWheelVerified=false")
+
+
+def full_reader(epoch, fallback=None):
+    """Actual C# 11 named slots, consistent snapshot sums, no native hits."""
+    fallback = fallback or {}
+    names = gate.SLOT_NAMES
+    slots = []
+    for name in names:
+        v = fallback.get(name, 0)
+        slots.append(f"{name}Calls={v},legacy=0,fallback={v}")
+    total = sum(fallback.values())
+    edge = sum(fallback.get(name, 0) for name in names[3:9])
+    wheel = sum(fallback.get(name, 0) for name in names[9:])
+    return (f"physical_mouse_legacy_reader_evidence epoch={epoch}; "
+            "captureRequested=true; captureObserved=true; "
+            f"getterCalls={total}; positiveLegacy=0; positiveFallback={total}; "
+            f"positiveEdges={edge}; positiveScroll={wheel}; " +
+            "; ".join(slots) +
+            "; countersAreGetterCallsNotClicks=true; unityGameplayVerified=false")
+
+
 class RuntimeMouseEpochTests(unittest.TestCase):
     def test_same_epoch_both_is_observation_only(self):
         v = gate.triage([req(8), actions(8), readers(8)])
@@ -291,6 +320,96 @@ class RuntimeMouseEpochTests(unittest.TestCase):
     def test_zero_positive_getters_cannot_have_positive_edges(self):
         forged = readers(46, calls=5, fallback=0)
         v = gate.triage([req(46), actions(46), forged])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_per_channel_left_down_up_co_observed_not_gameplay(self):
+        v = gate.triage([req(60),
+                         full_actions(60, press=1, release=1,
+                                      press_mask=1, release_mask=1),
+                         full_reader(60, {"down0": 1, "up0": 1})])
+        self.assertEqual(v["complete_per_channel_scoped_attempts"], 1)
+        self.assertEqual(v["captured_press_with_matching_fallback_down"]["left"], 1)
+        self.assertEqual(v["captured_release_with_matching_fallback_up"]["left"], 1)
+        self.assertFalse(v["device_pass"])
+        self.assertFalse(v["unity_gameplay_verified"])
+
+    def test_left_callback_cannot_claim_right_fallback(self):
+        v = gate.triage([req(61),
+                         full_actions(61, press=1, press_mask=1),
+                         full_reader(61, {"down1": 1})])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+        self.assertEqual(v["complete_per_channel_scoped_attempts"], 1)
+        self.assertEqual(sum(v["captured_press_with_matching_fallback_down"].values()), 0)
+
+    def test_right_button_independent_channel_candidate(self):
+        v = gate.triage([req(62), full_actions(62, press=1, press_mask=2),
+                         full_reader(62, {"down1": 1})])
+        self.assertEqual(v["captured_press_with_matching_fallback_down"]["right"], 1)
+        self.assertEqual(v["captured_press_with_matching_fallback_down"]["left"], 0)
+
+    def test_middle_button_independent_channel_candidate(self):
+        v = gate.triage([req(63),
+                         full_actions(63, press=1, release=1,
+                                      press_mask=4, release_mask=4),
+                         full_reader(63, {"down2": 1, "up2": 1})])
+        self.assertEqual(v["captured_press_with_matching_fallback_down"]["middle"], 1)
+        self.assertEqual(v["captured_release_with_matching_fallback_up"]["middle"], 1)
+
+    def test_vertical_wheel_axis_coobserved_only(self):
+        v = gate.triage([req(64), full_actions(64, v=1),
+                         full_reader(64, {"scrollAxis": 1})])
+        self.assertEqual(v["captured_vertical_wheel_with_fallback_scroll_axis_attempts"], 1)
+        self.assertEqual(v["captured_wheel_with_fallback_scroll_vector_attempts"], 0)
+        self.assertFalse(v["device_pass"])
+
+    def test_horizontal_only_vector_cannot_claim_horizontal_axis_delivery(self):
+        v = gate.triage([req(65), full_actions(65, h=1),
+                         full_reader(65, {"scrollVector": 1})])
+        self.assertEqual(v["captured_wheel_with_fallback_scroll_vector_attempts"], 1)
+        self.assertFalse(v["horizontal_wheel_getter_independently_proven"])
+        self.assertEqual(v["captured_vertical_wheel_with_fallback_scroll_axis_attempts"], 0)
+
+    def test_abbreviated_legacy_reader_does_not_claim_channel(self):
+        v = gate.triage([req(66), full_actions(66, press=1, press_mask=1),
+                         readers(66)])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+        self.assertEqual(v["complete_per_channel_scoped_attempts"], 0)
+
+    def test_complete_slot_ledger_sum_disagreement_invalidates_attempt(self):
+        forged = full_reader(67, {"down0": 1}).replace(
+            "positiveFallback=1", "positiveFallback=2")
+        v = gate.triage([req(67), full_actions(67, press=1, press_mask=1),
+                         forged])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+        self.assertEqual(v["status"], "INVALID_OR_INCOMPLETE_CAPTURE_PROVENANCE")
+
+    def test_full_slot_duplicate_refuses_channel_and_attempt(self):
+        forged = full_reader(68, {"down0": 1}) + "; down0Calls=1,legacy=0,fallback=1"
+        v = gate.triage([req(68), full_actions(68, press=1, press_mask=1),
+                         forged])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_reader_slot_cannot_return_more_fallback_than_calls(self):
+        forged = full_reader(69, {"down0": 1}).replace(
+            "down0Calls=1,legacy=0,fallback=1", "down0Calls=0,legacy=0,fallback=1")
+        v = gate.triage([req(69), full_actions(69, press=1, press_mask=1),
+                         forged])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_mask_cannot_be_nonzero_without_press_callback(self):
+        v = gate.triage([req(70), full_actions(70, v=1, press_mask=2),
+                         full_reader(70, {"scrollAxis": 1})])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_mask_cannot_lose_bit_within_same_capture_epoch(self):
+        v = gate.triage([req(71),
+                         full_actions(71, press=1, press_mask=1),
+                         full_actions(71, press=2, press_mask=2),
+                         full_reader(71, {"down0": 1})])
         self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
         self.assertGreater(v["invalid_markers"], 0)
 
