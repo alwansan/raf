@@ -1,7 +1,7 @@
 # T3 RENDER-002 — private same-instance smoke34 Shader48 export study
 session_id=20261109T1913Z-T3-chat-smoke34-sameexport-v5m8
 origin=chat
-status=waiting_ci
+status=completed; source-export classified SUCCESS, original ShaderLab DUMMY; exporter resource released
 issue_id=RENDER-002
 base_sha=fd8cd4603f77c0f80560afc232875db200db58dd
 updated_at=2026-11-09T19:13:00Z
@@ -18,3 +18,10 @@ next=Inspect in-progress CI42681908313 one-instance private export and real Shad
 - CI source-free syntax/identity/quality tests PASS, pinned AssetRipperCLI checkout/compile PASS, ZIP2 six scenes + six owners SHA staging PASS.
 - Actual bounded original source export `in_progress` [CI42681908313](https://github.com/alwansan/raf/actions/runs/42681908313), runner job 129378377402.
 - Preserve the resource lease until export finishes; no raw artifacts uploaded. No native game/PASS claim.
+
+## Verified completed 2026-11-09T19:19Z
+- [CI42681908313](https://github.com/alwansan/raf/actions/runs/42681908313) **SUCCESS** on 78826ae4: source-free tests, W1+B02 public tool compile, SHA 12 providers, one real AssetRipper instance, original Shader48 exact PPtr→same export .shader.meta, quality checks.
+- Artifact https://github.com/alwansan/raf/actions/runs/42681908313/artifacts/13702312921 (safe only).
+- Genuine selected original smoke-name Shader48: 17 renderers, 34 slots, separate from other fire 34. Same-instance export CLASSIFIED actual custom shader **ACTUAL_DUMMY_SHADER_TEXT_EXPORTER**; one superficially programmed Pass and balanced braces, no lexical ColorMask RGB, no compiled-program equivalence.
+- Real original Pass alpha-dependent color/alpha, ColorMask RGB, ZWrite OFF. Dummy marker is proven lost ShaderLab in this restricted export, NOT proven phone's actual square-smoke shader or installed game ShaderLab.
+- Own bounded export finished, resource released. Safe report docs/T3_SMOKE34_SAMEEXPORT_DUMMY_2026-11-09_AR.md; experiment and event own ID recorded. Next **new** question: postvendor restore vs same original Shader identity and current Android native source. No duplicate same-export dispatch, no APK built.
