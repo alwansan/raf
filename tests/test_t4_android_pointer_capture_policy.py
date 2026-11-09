@@ -49,7 +49,11 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertIn("if (legacy.x != 0f || legacy.y != 0f) return legacy;", BRIDGE)
         self.assertIn("buttonWheel.Reset();", BRIDGE)
         self.assertNotIn("InputSystem.QueueStateEvent", BRIDGE)
-        self.assertIn("if (buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal))", BRIDGE)
+        self.assertIn("if (buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal,eventTimeMs,deviceId))", BRIDGE)
+        self.assertIn('motionEvent.Call<long>("getEventTime")', BRIDGE)
+        self.assertIn('motionEvent.Call<int>("getDeviceId")', BRIDGE)
+        self.assertIn("implicitDown.Matches(eventTimeMs, source, deviceId)", MOTION)
+        self.assertIn("implicitUp.Matches(eventTimeMs, source, deviceId)", MOTION)
         self.assertIn("nativeCaptured = true;", BRIDGE)
         self.assertIn("PhysicalMouseButtonWheelFrame.SourceIsPhysical(source)", (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text())
 

@@ -66,7 +66,11 @@ namespace RaftAndroid.Platform
                                 ? motionEvent.Call<float>("getAxisValue", PhysicalMouseActionEvidence.VScroll) : 0f;
                             float h = action == PhysicalMouseActionEvidence.Scroll
                                 ? motionEvent.Call<float>("getAxisValue", PhysicalMouseActionEvidence.HScroll) : 0f;
-                            owner.RecordCapturedAction(listenerEpoch,action,eventSource,changed,held,v,h);
+                            // Android eventTime is uptime milliseconds; deviceId
+                            // prevents two physical mice from aliasing on same ms.
+                            long eventTimeMs = motionEvent.Call<long>("getEventTime");
+                            int deviceId = motionEvent.Call<int>("getDeviceId");
+                            owner.RecordCapturedAction(listenerEpoch,action,eventSource,changed,held,v,h,eventTimeMs,deviceId);
                         }
                         return false;
                     }
@@ -155,7 +159,7 @@ namespace RaftAndroid.Platform
 
 
         private void RecordCapturedAction(int listenerEpoch,int action,int source,
-            int changedButton,int heldButton,float vertical,float horizontal)
+            int changedButton,int heldButton,float vertical,float horizontal,long eventTimeMs,int deviceId)
         {
             // Android UI event thread: no Unity APIs and no per-event logging.
             lock(captureGate)
@@ -170,7 +174,7 @@ namespace RaftAndroid.Platform
                     // itself is native capture evidence even without any MOVE.
                     // Do not require camera motion before a button-only click
                     // or wheel-only gesture may supplement missing Legacy Input.
-                    if (buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal))
+                    if (buttonWheel.Record(action,source,changedButton,heldButton,vertical,horizontal,eventTimeMs,deviceId))
                         nativeCaptured = true;
                 }
             }

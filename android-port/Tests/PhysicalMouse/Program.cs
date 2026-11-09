@@ -249,6 +249,70 @@ static class Program
         Check(legacyMouse.Sample(113).Up(1),
             "Composite-source physical right release is delivered once");
 
+
+        // Owner CL (pinned 4680f5dc): all 13 primary ACTION_DOWN/UP
+        // actionButton=0 correlate to 13 BUTTON_PRESS/RELEASE with the SAME
+        // Android eventTime. Unity may sample between those two callbacks.
+        var acrossFrames = new PhysicalMouseButtonWheelFrame();
+        Check(acrossFrames.Record(0,8194,0,1,0f,0f,1001L,17),
+            "Implicit DOWN from known physical device");
+        Check(acrossFrames.Sample(200).Down(0),
+            "Primary down delivered before separate explicit callback");
+        Check(acrossFrames.Record(11,8194,1,1,0f,0f,1001L,17),
+            "Subsequent explicit PRESS carries same real Android eventTime");
+        Check(!acrossFrames.Sample(201).Down(0) && acrossFrames.Sample(201).Held(0),
+            "Same physical click cannot fire again in next Unity frame");
+        Check(acrossFrames.Record(1,8194,0,0,0f,0f,1002L,17),
+            "Implicit UP from known device");
+        Check(acrossFrames.Sample(202).Up(0),
+            "Primary release delivered before separate explicit callback");
+        Check(acrossFrames.Record(12,8194,1,0,0f,0f,1002L,17),
+            "Subsequent explicit RELEASE carries same real Android eventTime");
+        Check(!acrossFrames.Sample(203).Up(0),
+            "Same physical release cannot re-fire next Unity frame");
+
+        acrossFrames.Reset();
+        Check(acrossFrames.Record(11,8194,1,1,0f,0f,2010L,17),
+            "Explicit PRESS can be first callback");
+        Check(acrossFrames.Sample(204).Down(0), "First explicit press delivered");
+        Check(acrossFrames.Record(0,8194,0,1,0f,0f,2010L,17),
+            "Implicit DOWN after explicit PRESS");
+        Check(!acrossFrames.Sample(205).Down(0),
+            "Reverse callback order also cannot double-fire");
+        Check(acrossFrames.Record(12,8194,1,0,0f,0f,2011L,17),
+            "Explicit RELEASE first callback");
+        Check(acrossFrames.Sample(206).Up(0), "First explicit release delivered");
+        Check(acrossFrames.Record(1,8194,0,0,0f,0f,2011L,17),
+            "Subsequent UP never invents another release");
+        Check(!acrossFrames.Sample(207).Up(0),
+            "Reverse UP after RELEASE is not another click");
+
+        acrossFrames.Reset();
+        Check(acrossFrames.Record(0,8194,0,1,0f,0f,3000L,17),
+            "Physical mouse A implicit DOWN");
+        Check(acrossFrames.Sample(208).Down(0), "Mouse A first down visible");
+        Check(acrossFrames.Record(11,8194,1,1,0f,0f,3000L,18),
+            "Different physical mouse B at same time");
+        Check(acrossFrames.Sample(209).Down(0),
+            "Different device cannot suppress distinct explicit event");
+        acrossFrames.Reset();
+        Check(acrossFrames.Record(0,8194,0,1,0f,0f,4000L,17),
+            "Implicit DOWN with known device before epoch reset");
+        Check(acrossFrames.Sample(210).Down(0), "Pre-reset click visible");
+        acrossFrames.Reset();
+        Check(acrossFrames.Record(11,8194,1,1,0f,0f,4000L,17),
+            "First explicit press on new capture epoch");
+        Check(acrossFrames.Sample(211).Down(0),
+            "Capture Reset invalidates old eventTime/source/device token");
+        acrossFrames.Reset();
+        Check(acrossFrames.Record(0,8194,0,1,0f,0f),
+            "Unstamped implicit DOWN still accepted");
+        Check(acrossFrames.Sample(212).Down(0), "Unstamped down visible");
+        Check(acrossFrames.Record(11,8194,1,1,0f,0f),
+            "Unstamped explicit PRESS remains fail-open");
+        Check(acrossFrames.Sample(213).Down(0),
+            "Missing identity does not silently discard a click");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;

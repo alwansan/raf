@@ -143,6 +143,29 @@ namespace RaftAndroid.Platform
         private int frame = int.MinValue, totalAccepted;
         private float pendingV, pendingH, frameV, frameH;
 
+        // Android can deliver DOWN + BUTTON_PRESS (or UP + BUTTON_RELEASE)
+        // with one physical eventTime while Unity samples between callbacks.
+        // A per-frame bit mask alone would replay a single click twice. Match
+        // only an explicit/implicit primary edge from the exact same physical
+        // device/source/time; missing IDs never suppress an event.
+        private struct EdgeToken
+        {
+            public long EventTimeMs;
+            public int Source, DeviceId;
+            public bool Valid;
+            public bool Matches(long timeMs, int source, int deviceId)
+            {
+                return Valid && timeMs > 0 && deviceId >= 0 &&
+                       EventTimeMs == timeMs && Source == source && DeviceId == deviceId;
+            }
+            public static EdgeToken Make(long timeMs, int source, int deviceId)
+            {
+                return new EdgeToken { EventTimeMs = timeMs, Source = source,
+                    DeviceId = deviceId, Valid = timeMs > 0 && deviceId >= 0 };
+            }
+        }
+        private EdgeToken implicitDown, explicitDown, implicitUp, explicitUp;
+
         public struct Snapshot
         {
             public readonly int DownMask, UpMask, HeldMask;
@@ -182,9 +205,13 @@ namespace RaftAndroid.Platform
         // has no valid actionButton but on Android mice does denote primary
         // button down when buttonState has BUTTON_PRIMARY. UP uses the prior
         // held primary state; no phantom release without observed press.
-        // PRESS and DOWN for one gesture are coalesced by bitwise edge masks.
+        // PRESS and DOWN for one gesture are coalesced by bitwise edge masks
+        // and by Android eventTime + physical device across Unity frame edges.
+        // Optional arguments keep older internal ABI callers source-compatible,
+        // but no timestamp/device ID means no cross-frame deduplication.
         public bool Record(int action, int source, int actionButton,
-            int buttonState, float vertical, float horizontal)
+            int buttonState, float vertical, float horizontal,
+            long eventTimeMs = -1, int deviceId = -1)
         {
             if (!SourceIsPhysical(source)) return false;
             if (action != PhysicalMouseActionEvidence.Press &&
@@ -204,7 +231,10 @@ namespace RaftAndroid.Platform
                 {
                     int changed = actionButton & 7;
                     if (changed != 1 && changed != 2 && changed != 4) return false;
-                    pendingDown |= changed;
+                    if (changed != 1 || !implicitDown.Matches(eventTimeMs, source, deviceId))
+                        pendingDown |= changed;
+                    if (changed == 1)
+                        explicitDown = EdgeToken.Make(eventTimeMs, source, deviceId);
                     held = state | changed;
                 }
                 else if (action == PhysicalMouseActionEvidence.Release)
@@ -213,17 +243,30 @@ namespace RaftAndroid.Platform
                     if (changed != 1 && changed != 2 && changed != 4) return false;
                     // A release without an observed press is still an actual
                     // Android BUTTON_RELEASE callback, but not an invented DOWN.
-                    pendingUp |= changed;
+                    if (changed != 1 || !implicitUp.Matches(eventTimeMs, source, deviceId))
+                        pendingUp |= changed;
+                    if (changed == 1)
+                        explicitUp = EdgeToken.Make(eventTimeMs, source, deviceId);
                     held = state & ~changed;
                 }
                 else if (action == PhysicalMouseActionEvidence.Down)
                 {
-                    if ((state & 1) != 0) pendingDown |= 1;
+                    if ((state & 1) != 0)
+                    {
+                        if (!explicitDown.Matches(eventTimeMs, source, deviceId))
+                            pendingDown |= 1;
+                        implicitDown = EdgeToken.Make(eventTimeMs, source, deviceId);
+                    }
                     held = state;
                 }
                 else if (action == PhysicalMouseActionEvidence.Up)
                 {
-                    if ((held & 1) != 0) pendingUp |= 1;
+                    if ((held & 1) != 0)
+                    {
+                        if (!explicitUp.Matches(eventTimeMs, source, deviceId))
+                            pendingUp |= 1;
+                        implicitUp = EdgeToken.Make(eventTimeMs, source, deviceId);
+                    }
                     held = state;
                 }
                 else
@@ -267,6 +310,7 @@ namespace RaftAndroid.Platform
                 pendingDown = pendingUp = held = frameDown = frameUp = frameHeld = 0;
                 pendingV = pendingH = frameV = frameH = 0f;
                 frame = int.MinValue;
+                implicitDown = explicitDown = implicitUp = explicitUp = default(EdgeToken);
                 totalAccepted = 0;
             }
         }
