@@ -2,9 +2,9 @@
   "session_id": "20261109T0143Z-T4-scheduled-capture-phase-j6r2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_pending_ci",
   "base_sha": "cf764d7671efb58dc57f5952bd1c2875e97ec504",
-  "updated_at": "2026-11-09T01:43:40Z",
+  "updated_at": "2026-11-09T01:44:30Z",
   "intended_files": [
     "scripts/t4_analyze_mouse_lab_routes.py",
     "prompt/coordination/clients/T4/sessions/20261109T0143Z-T4-scheduled-capture-phase-j6r2.md"
@@ -12,5 +12,13 @@
   "hypothesis": "Missing captured flag is currently inferred from capture_request ON, falsely classifying events as captured.",
   "experiment_key": "t4-capture-phase-missing-captured-strict-source-20261109",
   "resource_key": null,
-  "coordination": "No Unity, Mini APK, T5 UI/Resolution, keyboard, world/.rgd or CL writes; T5 SAF CI 42547068324 in progress."
+  "coordination": "No Unity, Mini APK, T5 UI/Resolution, keyboard, world/.rgd or CL writes; T5 SAF CI 42547068324 in progress.",
+  "commits": [
+    "08ab1aaf",
+    "acedf826",
+    "659ef28b",
+    "cf0ae7ab"
+  ],
+  "validation": "Regression added but not yet executed in CI/device; no success claim.",
+  "next": "python -m unittest test_t4_capture_phase_evidence; acquire captured=true physical mouse phone log"
 }
