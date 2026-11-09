@@ -20,6 +20,20 @@ SAFE = re.compile(r"[a-z0-9][a-z0-9._]*\Z")
 CODE = re.compile(r"[1-9][0-9]*\Z")
 
 
+def _unique_json_pairs(pairs):
+    """Fail closed on ambiguous delivery metadata at every JSON nesting level."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate delivery JSON key")
+        result[key] = value
+    return result
+
+
+def load_delivery_json(raw: str) -> dict:
+    return json.loads(raw, object_pairs_hook=_unique_json_pairs)
+
+
 def _manifest(manifest):
     if (type(manifest) is not dict or manifest.get("package") != PACKAGE
             or type(manifest.get("version_code")) is not str
@@ -101,7 +115,7 @@ def main():
     if (args.delivery.is_symlink() or not args.delivery.is_file()
             or not 0 < args.delivery.stat().st_size < 100_000):
         raise ValueError("Missing or unsafe source delivery.json")
-    data = json.loads(args.delivery.read_text(encoding="utf8"))
+    data = load_delivery_json(args.delivery.read_text(encoding="utf8"))
     inputs = []
     try:
         for path in args.log:
