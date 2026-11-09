@@ -1,0 +1,47 @@
+{
+  "session_id": "20261109T1946Z-T4-chat-mouse-counter-invariants-r8q6",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "experiment_key": "T4-INPUT005-Unity2021-mouse-action-reader-counter-structural-invariants-v1",
+  "baseline_sha": "4a26329f0cc8edd0961b832feeab761869cf6540",
+  "scope_commit": "2d7c268248b505e4dd9ad1daa9491787df07665c",
+  "implementation_commits": [
+    "5bd28cdc10eff1dfccddd478a16d66aedac3c883",
+    "c4cb6981434aca7b4764e9d208b3df45bbaba206",
+    "01a062ab0be26c665c5226337ad0e3f143b7e5f3"
+  ],
+  "source_file": "scripts/t4_correlate_mouse_runtime_epochs.py",
+  "regression_file": "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py",
+  "producer_contract": "PhysicalMouseActionEvidence.Record Count increments per accepted action; press/release mutually exclusive; V+H scroll may co-occur on a single action. PhysicalMouseLegacyReaderEvidence.Record edge and scroll positive getter categories are disjoint subsets of native plus fallback positives.",
+  "tests": {
+    "added": 5,
+    "total": 30,
+    "passed": 30,
+    "negative_controls": [
+      "press + release > captured Count",
+      "vertical scroll > captured Count",
+      "positiveEdges + positiveScroll > positiveLegacy + positiveFallback",
+      "zero positive getters but positive edge/scroll"
+    ],
+    "positive_control": "one biaxial scroll callback counts both V/H"
+  },
+  "ci_run_id": 42687110814,
+  "ci_job_id": 129396759476,
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42687110814",
+  "intermediate_failed_runs": [
+    42686865448,
+    42686942143
+  ],
+  "intermediate_failure_explanation": "Synthetic native-only fixture reported positive edges and scroll but zero native/fallback hits; corrected fixture to producer-valid positiveLegacy=2.",
+  "result": {
+    "status": "SOURCE_ONLY_SUCCESS",
+    "tests_passed": 30,
+    "tests_total": 30,
+    "android_device_accepted": false,
+    "unity_gameplay_proven": false
+  },
+  "next_step": "Keep INPUT-005 OPEN; when T5 releases signed authentic same-source full Raft XAPK, obtain one-process JSONL and test LEFT/RIGHT/MIDDLE, V/H scroll, Unity getter evidence and actual gameplay, plus camera/focus/keyboard/touch, local world and .rgd save regression.",
+  "constraints": "No Unity or full game build; no mini build by T4; no changes to other worker files, original game assets, OBB, package, camera or save.",
+  "status": "completed_source_only_device_pending",
+  "full_game_not_ready": "0/3"
+}
