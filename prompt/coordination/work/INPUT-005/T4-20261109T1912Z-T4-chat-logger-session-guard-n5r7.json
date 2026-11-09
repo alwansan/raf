@@ -1,0 +1,32 @@
+{
+  "session_id": "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-09T19:12:00Z",
+  "base_sha": "e36012258e1cb2fd0e35d1b93fa05210200fe755",
+  "resumed_from_sessions": [
+    "20261109T1858Z-T4-chat-epoch-evidence-p6m4",
+    "20261109T1836Z-T4-scheduled-capture-provenance-k7d2"
+  ],
+  "scope": "Harden own T4 source-only mouse capture correlation parser against cross-PersistentDiagnosticLog.session and out-of-order JSONL.sequence with actual Unity logger schema; report independent T2 ledger CI blocker without editing T2/T3.",
+  "intended_files": [
+    "scripts/t4_correlate_mouse_runtime_epochs.py",
+    "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py",
+    "docs/T4_MOUSE_PERSISTENT_LOG_PROVENANCE_2026-11-09.md",
+    "prompt/coordination/clients/T4/sessions/20261109T1912Z-T4-chat-logger-session-guard-n5r7.md",
+    "prompt/coordination/work/INPUT-005/T4-20261109T1912Z-T4-chat-logger-session-guard-n5r7.json",
+    "prompt/coordination/experiments/T4/20261109T1912Z-T4-chat-logger-session-guard-n5r7.json",
+    "prompt/coordination/B_TEAM/events/T4/20261109T1912Z-T4-chat-logger-session-guard-n5r7.json"
+  ],
+  "experiment_key": "T4-INPUT005-Unity2021-PersistentDiagnosticLog-session-sequence-provenance-gate-jsonl-v2",
+  "resource_key": null,
+  "overlap_avoid": [
+    "T2 refresh_t_team workflow and B_TEAM event files",
+    "T3 shader/PNG and raw assets",
+    "T5 OBB/SAF UI and APK",
+    "T4 previous completed source epoch workflow"
+  ],
+  "ci_proposed": "Existing T4 per-epoch lightweight path-filtered workflow triggers via script+test changes",
+  "phone_gate": "No owner captured=true Raft same-SHA device trace; device acceptance open"
+}
