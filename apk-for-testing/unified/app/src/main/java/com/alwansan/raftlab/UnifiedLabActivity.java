@@ -26,20 +26,21 @@ import java.util.*;
  * A mouse click, another app's screenshot, or visual correctness cannot be simulated.
  */
 public final class UnifiedLabActivity extends Activity {
-    private static final int LOAD_PACK=401, PICK_SCREENSHOT=402, PICK_FILE=403, AUTO_CASE=404, MANUAL_CASE=405, T3_VISUAL_PREVIEW=406;
+    private static final int LOAD_PACK=401, PICK_SCREENSHOT=402, PICK_FILE=403, AUTO_CASE=404, MANUAL_CASE=405, T3_VISUAL_PREVIEW=406, PICK_OWNER_FOLDER=407;
     private static final int MAX_PACK=262144;
     private final ArrayList<JSONObject> tests=new ArrayList<>();
     private final ArrayList<JSONObject> pending=new ArrayList<>();
     private final ArrayList<JSONObject> schedule=new ArrayList<>();
     private final Handler handler=new Handler(Looper.getMainLooper());
     private SharedPreferences state;
-    private LinearLayout content,workerButtons,pendingButtons,t3CaseButtons;
-    private TextView title,summary,caseDetail;
+    private LinearLayout content,workerButtons,pendingButtons,t3CaseButtons,ownerFileButtons;
+    private TextView title,summary,caseDetail,ownerFolderInfo;
     private EditText comment;
     private JSONObject currentManual, activeAuto;
     private int at=0;
     private boolean running=false,waitingForChild=false,forceRerun=false;
-    private boolean fileDigestBusy=false;
+    private boolean fileDigestBusy=false,ownerFolderScanning=false;
+    private Uri ownerTreeUri;
     private Thread fileDigestThread;
     private String session,packId="unloaded",packSha="unknown";
     private File privateLog;
@@ -86,6 +87,15 @@ public final class UnifiedLabActivity extends Activity {
         addButton(controls,"↻ إعادة الاختبارات التلقائية بالقوة",v->autoRun(null,true));
         addButton(controls,"استيراد حزمة الاختبارات (اختياري)",v->pick(LOAD_PACK,"application/json"));
         addButton(controls,"📤 تصدير السجلات والنتائج",v->export());
+        addButton(controls,"📂 اختيار مجلد Download/logs (ملفات الاختبار)",v->pickOwnerFolder());
+        addButton(controls,"↻ إعادة فحص المجلد المختار",v->restoreOwnerFolder());
+        ownerFolderInfo=text("الملفات التي وضعتها في Download/logs لا تُقرأ دون اختيار المجلد من نافذة Android. هذه خطوة منفصلة عن تشغيل الاختبارات.\n"
+            +"T1 وT2 يعملان عبر GPU داخل التطبيق؛ T3 يحتاج مراجعة الصورة؛ T4 يحتاج ماوسًا حقيقيًا؛ T5 يحتاج اختيار الملفات وأدلة اللعبة.");
+        content.addView(ownerFolderInfo);
+        ownerFileButtons=new LinearLayout(this);
+        ownerFileButtons.setOrientation(LinearLayout.VERTICAL);
+        ownerFileButtons.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        content.addView(ownerFileButtons);
         content.addView(text("اختبارات الفرق — اضغط اسم الفريق لعرض الحالات أو «تشغيل» للفحص الآلي:"));
         workerButtons=new LinearLayout(this);
         workerButtons.setOrientation(LinearLayout.VERTICAL);
@@ -337,6 +347,23 @@ public final class UnifiedLabActivity extends Activity {
     }
     @Override protected void onActivityResult(int req,int result,Intent data){
         super.onActivityResult(req,result,data);
+        if(req==PICK_OWNER_FOLDER){
+            if(result!=RESULT_OK||data==null||data.getData()==null){
+                show("لم يُختر مجلد؛ لا صلاحية للوصول إلى ملفات Download/logs دون اختيارك.");return;
+            }
+            Uri selected=data.getData();
+            int flags=data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+            try{
+                getContentResolver().takePersistableUriPermission(selected,flags);
+                state.edit().putString("owner_logs_tree_uri",selected.toString()).apply();
+            }catch(SecurityException e){
+                state.edit().remove("owner_logs_tree_uri").apply();
+                log("owner_tree_not_persisted",e.getClass().getSimpleName());
+            }
+            ownerTreeUri=selected;
+            scanOwnerFolder(selected);
+            return;
+        }
         if(req==AUTO_CASE){
             if(!waitingForChild)return;
             waitingForChild=false;
@@ -399,6 +426,120 @@ public final class UnifiedLabActivity extends Activity {
             else if(req==PICK_SCREENSHOT)attachScreenshot(uri);
             else if(req==PICK_FILE)hashFile(uri);
         }catch(Exception e){log("picker_error",e.toString());show("خطأ قراءة الملف: "+e.getMessage());}
+    }
+    void pickOwnerFolder(){
+        if(ownerFolderScanning||fileDigestBusy){
+            show("هناك فحص مجلد أو حساب SHA256 جارٍ؛ أكمله أولًا.");return;
+        }
+        Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        startActivityForResult(i,PICK_OWNER_FOLDER);
+    }
+    void restoreOwnerFolder(){
+        if(ownerTreeUri==null){
+            String savedUri=state.getString("owner_logs_tree_uri","");
+            if(!savedUri.isEmpty())ownerTreeUri=Uri.parse(savedUri);
+        }
+        if(ownerTreeUri==null){show("اختر مجلد Download/logs أولًا بزر 📂، ثم اضغط إعادة الفحص.");return;}
+        scanOwnerFolder(ownerTreeUri);
+    }
+    void scanOwnerFolder(Uri selected){
+        if(ownerFolderScanning||fileDigestBusy){
+            show("انتظر انتهاء الفحص أو حساب SHA256 الحالي.");return;
+        }
+        ownerFolderScanning=true;
+        ownerFileButtons.removeAllViews();
+        ownerFolderInfo.setText("يجري جرد ملفات المجلد المختار للقراءة فقط، دون فتح OBB الكبير...");
+        new Thread(()->{
+            try{
+                LocalOwnerBundleScanner.Snapshot snapshot=
+                    LocalOwnerBundleScanner.inspect(getContentResolver(),selected);
+                runOnUiThread(()->{
+                    ownerFolderScanning=false;
+                    ownerFolderInfo.setText(snapshot.report);
+                    for(LocalOwnerBundleScanner.Entry file:snapshot.files){
+                        if(LocalOwnerBundlePolicy.isHashCandidate(file.kind)){
+                            addButton(ownerFileButtons,"🔎 حساب SHA256 للملف: "+file.name,
+                                v->hashOwnerFile(file));
+                        }else if("TEAM_PACK".equals(file.kind)){
+                            addButton(ownerFileButtons,"📄 مراجعة واستيراد team-testpack.json (إن كان أحدث ومتوافقًا)",
+                                v->importOwnerTeamPack(file));
+                        }else if("BLACKBOX_LOG".equals(file.kind)){
+                            addButton(ownerFileButtons,"📑 تلخيص تحذيرات السجل دون نقل نصوصه",
+                                v->inspectOwnerLog(file));
+                        }
+                    }
+                    log("owner_bundle_inventory","classified="+snapshot.files.size()+
+                        " found_apk="+containsKind(snapshot,"GAME_APK")+
+                        " found_main_obb="+containsKind(snapshot,"MAIN_OBB")+
+                        " found_manifest="+containsKind(snapshot,"MANIFEST"));
+                    show("اكتمل فحص المجلد. اقرأ التقرير واضغط ملفًا محددًا إذا أردت SHA256، أو افتح اختبارات العملاء في الأسفل.");
+                });
+            }catch(Exception e){
+                String error=e.getClass().getSimpleName();
+                runOnUiThread(()->{
+                    ownerFolderScanning=false;
+                    ownerFolderInfo.setText("تعذر فحص المجلد عبر SAF: "+error+
+                        ". جرّب اختيار الملفات منفردة في T5-02، ولا تعتبر ذلك فشل OBB.");
+                    log("owner_bundle_scan_blocked",error);
+                });
+            }
+        },"t5-owner-saf-tree-inventory").start();
+    }
+    static boolean containsKind(LocalOwnerBundleScanner.Snapshot s,String kind){
+        for(LocalOwnerBundleScanner.Entry f:s.files)if(kind.equals(f.kind))return true;
+        return false;
+    }
+    void hashOwnerFile(LocalOwnerBundleScanner.Entry file){
+        JSONObject c=null;
+        for(JSONObject t:tests)if("T5-02".equals(t.optString("id"))){c=t;break;}
+        if(c==null){show("حزمة الاختبارات الحالية لا تتضمن T5-02.");return;}
+        currentManual=c;
+        caseDetail.setText("T5-02 — "+ArabicLabStrings.title("T5-02",c.optString("title"))+
+            "\nالملف المختار: "+file.name+"\nوجود الملف أو حساب بصمته ليس دليل تركيب OBB أو فسادها.");
+        hashFile(file.uri);
+    }
+    void importOwnerTeamPack(LocalOwnerBundleScanner.Entry file){
+        if(ownerFolderScanning||fileDigestBusy||running||waitingForChild){
+            show("انتظر انتهاء الاختبار الآخر أولًا.");return;
+        }
+        try(InputStream in=getContentResolver().openInputStream(file.uri)){
+            if(in==null)throw new IOException("SAF did not open pack");
+            byte[] bytes=readLimited(in);
+            JSONObject json=new JSONObject(new String(bytes,StandardCharsets.UTF_8));
+            if(json.optInt("schema_version")!=2||
+               !"raft-shared-t1-t5-v1".equals(json.optString("pack_id")))
+                throw new IOException("ليست حزمة مختبر T1–T5 الموحدة ذات schema v2");
+            JSONArray loaded=json.getJSONArray("tests");
+            if(loaded.length()<tests.size())throw new IOException(
+                "الحزمة المحلية أقدم ("+loaded.length()+") من الحزمة المدمجة ("+tests.size()+"). لن نخسر T1-05.");
+            loadPack(bytes);
+            drawHome();
+            show("استُوردت حزمة بيانات موحدة "+loaded.length()+" اختبارًا؛ لم يُنفّذ شيدر أو كود خارجي.");
+        }catch(Exception e){
+            show("لم نستورد JSON غير المتوافق أو الأقدم: "+e.getMessage());
+            log("owner_team_pack_not_imported",e.getClass().getSimpleName());
+        }
+    }
+    void inspectOwnerLog(LocalOwnerBundleScanner.Entry file){
+        if(ownerFolderScanning||fileDigestBusy){show("فحص آخر جارٍ.");return;}
+        ownerFolderScanning=true;
+        new Thread(()->{
+            try(InputStream in=getContentResolver().openInputStream(file.uri)){
+                String report=LocalOwnerLogEvidence.summarize(in);
+                runOnUiThread(()->{
+                    ownerFolderScanning=false;
+                    ownerFolderInfo.setText(report);
+                    log("owner_blackbox_aggregate","bounded_sanitized_counts_only");
+                    show("تمت قراءة عدّادات مجمّعة من السجل. لا PASS للعبة دون مطابقة المصدر والزمن.");
+                });
+            }catch(Exception e){
+                runOnUiThread(()->{
+                    ownerFolderScanning=false;
+                    show("تعذر تلخيص السجل: "+e.getClass().getSimpleName());
+                });
+            }
+        },"t5-owner-log-aggregate").start();
     }
     void launchT3VisualCase(JSONObject c){
         if(c==null||!"t3_visual".equals(c.optString("driver")))return;
@@ -539,7 +680,14 @@ public final class UnifiedLabActivity extends Activity {
         if(fileDigestBusy){show("حساب بصمة الملف يعمل بالفعل؛ أكمله قبل اختيار ملف آخر.");return;}
         fileDigestBusy=true;
         final JSONObject c=currentManual;
-        log("file_sha_start","case="+c.optString("id"));
+        String fileName="(unknown)";
+        try(Cursor cursor=getContentResolver().query(input,
+                new String[]{android.provider.OpenableColumns.DISPLAY_NAME},null,null,null)){
+            if(cursor!=null&&cursor.moveToFirst())
+                fileName=LocalOwnerBundlePolicy.safeLabel(cursor.getString(0));
+        }catch(Exception ignored){}
+        final String selectedFileName=fileName;
+        log("file_sha_start","case="+c.optString("id")+" file="+selectedFileName);
         show("يجري حساب بصمة SHA256 للملف في الخلفية (حتى 16 GiB). أبقِ التطبيق مفتوحًا.");
         fileDigestThread=new Thread(()->{
             try(InputStream in=getContentResolver().openInputStream(input)){
@@ -547,7 +695,8 @@ public final class UnifiedLabActivity extends Activity {
                     final long mib=bytes/(1024L*1024L);
                     runOnUiThread(()->show("جارٍ حساب SHA256: "+mib+" ميغابايت — أبقِ التطبيق مفتوحًا"));
                 });
-                final String observed="bytes="+result.bytes+" sha256="+result.hex;
+                final String observed="selected_file="+selectedFileName+" bytes="+result.bytes+" sha256="+result.hex+
+                    " verified_against_independent_same_version_manifest=false";
                 runOnUiThread(()->{
                     store(c,"EVIDENCE_READY",observed,null);
                     fileDigestBusy=false;
