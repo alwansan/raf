@@ -69,6 +69,8 @@ jobs:
           root=Path(os.environ["RUNNER_TEMP"])
           d=json.loads((root/"gfxlab-multi-safe.json").read_text())
           assert d["model_count"]==6 and d["additional_models"]==5
+          assert all(x["source_uvs"]>0 and x["topology_preserved"] for x in d["model_summaries"])
+          print("GFX_MULTI_ORIGINAL_NORMALS_DIAGNOSTIC_GENERATED="+str(sum(bool(x["normals_generated_for_unity"]) for x in d["model_summaries"])))
           assert len(d["model_summaries"])==6
           for i in range(6):
               m=root/"gfxlab-multi-generated-assets"/f"M{i:02d}"
