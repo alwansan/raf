@@ -1,0 +1,57 @@
+name: T1 pinned CL Android15 T1-05 synthetic FFT evidence (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t1_shared_fft_device_evidence.py'
+      - 'tests/test_t1_shared_fft_device_evidence.py'
+      - '.github/workflows/raft-t1-cl-shared-fft-evidence.yml'
+permissions:
+  contents: read
+concurrency:
+  group: t1-cl-shared-fft-evidence
+  cancel-in-progress: false
+jobs:
+  pinned-phone-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Synthetic adversarial provenance tests
+        run: python3 -m unittest discover -s tests -p 'test_t1_shared_fft_device_evidence.py' -v
+      - name: Pinned public owner CL/test result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import tempfile, urllib.request
+          from pathlib import Path
+          from scripts.t1_shared_fft_device_evidence import audit, read_json, read_events
+          url = ('https://raw.githubusercontent.com/alwansan/CL/'
+                 '1dc0bf53303c1486afdb5a812d8597d682292589/'
+                 'test/shared-20261109-225506-552476830/')
+          names = ['summary-20261109-225506-552476830%20(1).json',
+                   'events-20261109-225506-552476830.jsonl%20(1)']
+          with tempfile.TemporaryDirectory() as tmp:
+              paths = []
+              for i, name in enumerate(names):
+                  req = urllib.request.Request(url+name, headers={'User-Agent': 'T1-CL-evidence-gate'})
+                  with urllib.request.urlopen(req, timeout=20) as rsp:
+                      data = rsp.read(4*1024*1024+1)
+                  if len(data) > 4*1024*1024:
+                      raise ValueError('CL size limit')
+                  path = Path(tmp)/('summary.json' if i == 0 else 'events.jsonl')
+                  path.write_bytes(data)
+                  paths.append(path)
+              r = audit(read_json(paths[0]), read_events(paths[1]))
+              print('DEVICE_SYNTHETIC_VERDICT='+r['verdict'])
+              print('NUMERIC_MAX_ABS_ERROR='+str(r['max_abs_error']))
+              print('ORIGINAL_RAFT_FFT_PROVEN=false')
+              print('WATER_001_CLOSED=false')
+          PY
