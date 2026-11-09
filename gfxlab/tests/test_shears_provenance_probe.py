@@ -24,11 +24,12 @@ class ShearsSourceLinks(unittest.TestCase):
         self.assertIsNone(owner_basename(""))
         self.assertEqual(owner_basename("sharedassets0.assets"),"sharedassets0.assets")
     def test_source_texenv_array(self):
-        rows=texture_slot_rows([{"first":"secret-private-key","second":{"m_Texture":{"m_FileID":0,"m_PathID":3}}}])
+        rows=texture_slot_rows([{"m_First":"secret-private-key","m_Second":{"m_Texture":{"m_FileID":0,"m_PathID":3}}}])
         self.assertEqual(len(rows),1)
         self.assertEqual(rows[0]["m_Texture"]["m_PathID"],3)
-    def test_source_texenv_map(self):
-        self.assertEqual(len(texture_slot_rows({"_MainTex":{"m_Texture":{"m_FileID":0,"m_PathID":4}}})),1)
+    def test_original_map_is_not_source_array(self):
+        with self.assertRaises(ValueError):
+            texture_slot_rows({"_MainTex":{"m_Texture":{"m_FileID":0,"m_PathID":4}}})
     def test_reject_bad_texenv(self):
         with self.assertRaises(ValueError):
             texture_slot_rows([{"not_the_right_key":1}])
