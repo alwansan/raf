@@ -1,7 +1,7 @@
 {
-  "request_id": "owner-direct-20261107-unity-cs0234-fixed-latest-xapk-42281310905-02",
-  "reason": "Owner direct continuation, 7 Nov 2026: run one latest integrated signed experimental APK+OBB+XAPK build after run 42281310905 failed Unity Editor C# CS0234 (10 unresolved AndroidPhysicalMouseCapture sites); fix commit f554e8b provides noncapturing Unity Editor branch while preserving Android JNI capture. Preserve original data, water, signatures, packaging and failure gates. If Release POST HTTP403 persists, keep complete install artifact and do not mislabel release success.",
-  "requested_from_sha": "40784db4e4072e419f04ac92efee36ec4f441131",
+  "request_id": "owner-direct-T5-20261109-latest-team-integrated-full-5f28",
+  "reason": "Owner requests one fresh full Unity2021 ARM64 APK+OBB+XAPK from latest feature branch with T1 FFT hook, T4 Android physical mouse fixes, T2/T3 verified recovery stages, T5 package checks. Prior full #42296450023 rebuilt OK but Release HTTP403; retain full Actions delivery artifact if publishing denied. No claims of water/pixels/gameplay readiness.",
+  "requested_from_sha": "f66277c0572065e6fde495a52468542851124281",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -10,7 +10,10 @@
     "water_compute_source_candidate"
   ],
   "owner_direct_request": true,
-  "owner_instruction": "Direct order to inspect and fix failing workflow and complete a new trial build. No messaging other workers, do not cancel jobs or alter their votes.",
-  "previous_run_id": 42281310905,
-  "fix_commit_sha": "f554e8b6757e46aa037603ed592a04acc2bf7a61"
+  "owner_instruction": "2026-11-09 latest owner direct request: inspect last full result, include all already merged T1-T5 fixes and original ZIP2 resource staging, build one full native APK+OBB+XAPK. Preserve 5/5 vote unchanged and authenticity gates; record release HTTP403 honestly. No other runs cancelled.",
+  "previous_run_id": 42296450023,
+  "previous_build_source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+  "previous_failed_unity_run_id": 42281310905,
+  "fix_commit_sha": "f554e8b6757e46aa037603ed592a04acc2bf7a61",
+  "linked_session_id": "20261109T2045Z-T5-chat-native-owner-rerun-5f28"
 }
