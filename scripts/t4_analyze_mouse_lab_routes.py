@@ -49,7 +49,9 @@ def analyze(lines):
                 rejected += 1
                 continue
             captured = fields.get("captured")
-            # A capture request is not proof that Android granted capture.\n            # Never label callbacks without an explicit captured=true as captured.\n            key = "on" if captured == "true" else "off" if captured == "false" else "unknown"
+            # A capture request is not proof that Android granted capture.
+            # Never label callbacks without an explicit captured=true as captured.
+            key = "on" if captured == "true" else "off" if captured == "false" else "unknown"
             group = groups[key]
             group["samples"] += 1
             group["routes"].add(route)
