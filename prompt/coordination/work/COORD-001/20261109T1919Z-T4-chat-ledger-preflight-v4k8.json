@@ -1,0 +1,33 @@
+{
+  "session_id": "20261109T1919Z-T4-chat-ledger-preflight-v4k8",
+  "origin": "chat",
+  "issue_id": "COORD-001",
+  "status": "active",
+  "updated_at": "2026-11-09T19:19:00Z",
+  "resumed_from_sessions": [
+    "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
+    "20261109T1909Z-T2-chat-event-ledger-repair-n6q8"
+  ],
+  "base_sha": "7de6d68b428e7e9243f34232a1bb97a79e19dc4f",
+  "experiment_key": "T4-COORD001-all-inherited-event-ids-nonmutating-enumeration-v1",
+  "resource_key": null,
+  "scope": "Read-only independent full ledger identity census for T2/T3 so canonical summary fixes are batched; no edits to T2/T3 event/refresh scripts or shared summary.",
+  "intended_files": [
+    "scripts/t4_audit_team_event_identities.py",
+    "tests/test_t4_audit_team_event_identities.py",
+    ".github/workflows/raft-t4-ledger-identity-audit.yml",
+    "docs/T4_SUPPORT_T2_TEAM_LEDGER_AUDIT_2026-11-09.md",
+    "prompt/coordination/clients/T4/sessions/20261109T1919Z-T4-chat-ledger-preflight-v4k8.md",
+    "prompt/coordination/work/COORD-001/20261109T1919Z-T4-chat-ledger-preflight-v4k8.json",
+    "prompt/coordination/experiments/T4/20261109T1919Z-T4-chat-ledger-preflight-v4k8.json",
+    "prompt/coordination/B_TEAM/events/T4/20261109T1919Z-T4-chat-ledger-preflight-v4k8.json"
+  ],
+  "overlap_avoid": [
+    "T2 COORD-001 events and refresh scripts",
+    "T3 historical event record and Shader files",
+    "T5 shared release/lab",
+    "T4 mouse bridge"
+  ],
+  "ci": "dedicated 5-minute source-only regression and public inherited ledger audit",
+  "device": "none"
+}
