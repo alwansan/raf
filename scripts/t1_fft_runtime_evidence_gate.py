@@ -38,7 +38,7 @@ def validate(record):
         for key in ("find_kernel_result", "dispatch_kernel", "fft_size", "bank", "pass_index"):
             if type(row[key]) is not int or row[key] < 0:
                 raise ValueError(f"dispatch {index}: invalid {key}")
-        if row["find_kernel_result"] != row["dispatch_kernel"]:
+        # FFT length is a nonzero radix-2 domain, not an arbitrary integer.\n        # Reject malformed evidence before accepting any runtime binding claim.\n        n = row["fft_size"]\n        if n < 2 or n & (n - 1):\n            raise ValueError(f"dispatch {index}: invalid radix-2 FFT size")\n        if row["find_kernel_result"] != row["dispatch_kernel"]:
             raise ValueError(f"dispatch {index}: FindKernel/Dispatch mismatch")
         if not isinstance(row["groups"], list) or len(row["groups"]) != 3 or any(
             type(v) is not int or v < 1 for v in row["groups"]
