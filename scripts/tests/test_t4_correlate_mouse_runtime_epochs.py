@@ -535,6 +535,138 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
         self.assertGreater(v["invalid_markers"], 0)
 
+    def test_source_order_release_then_two_finals_same_jsonl_scope(self):
+        # Original C# ReleaseCapture logs RELEASE before both _final snapshots
+        # and increments epoch/reset only after those two source records.
+        session = "20261109T2042Z-T4-release-jsonl"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested",
+                        req(101).split(" ", 1)[1], session, 1),
+            self.logger("physical_mouse_capture_released",
+                        "focus=True; paused=False; requested=True; relativeEvents=0",
+                        session, 2),
+            self.logger("physical_mouse_captured_action_callbacks_final",
+                        full_actions(101, press=1, press_mask=1).split(" ", 1)[1],
+                        session, 3),
+            self.logger("physical_mouse_legacy_reader_evidence_final",
+                        full_reader(101, {"down0": 1}).split(" ", 1)[1]
+                        .replace("captureRequested=true", "captureRequested=True")
+                        .replace("captureObserved=true", "captureObserved=True"),
+                        session, 4),
+        ])
+        self.assertEqual(v["status"],
+                         "SAME_EPOCH_CAPTURED_CALLBACK_AND_FALLBACK_GETTER")
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+        self.assertEqual(v["captured_press_with_matching_fallback_down"]["left"], 1)
+        self.assertEqual(v["matched_jsonl_scoped_attempts"], 1)
+        self.assertFalse(v["device_pass"])
+
+    def test_release_reader_final_closes_previously_logged_action(self):
+        v = gate.triage([req(102), actions(102),
+                         "physical_mouse_capture_released focus=True",
+                         readers(102).replace("physical_mouse_legacy_reader_evidence",
+                                              "physical_mouse_legacy_reader_evidence_final")])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+
+    def test_release_action_final_closes_previously_logged_reader(self):
+        v = gate.triage([req(103), readers(103),
+                         "physical_mouse_capture_released focus=True",
+                         actions(103).replace("physical_mouse_captured_action_callbacks",
+                                              "physical_mouse_captured_action_callbacks_final")])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+
+    def test_release_never_accepts_ordinary_postrelease_getter(self):
+        v = gate.triage([req(104), actions(104),
+                         "physical_mouse_capture_released focus=True",
+                         readers(104)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_release_never_accepts_ordinary_postrelease_callback(self):
+        v = gate.triage([req(105), readers(105),
+                         "physical_mouse_capture_released focus=True",
+                         actions(105)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_no_final_before_release_may_claim_original_release_order(self):
+        v = gate.triage([req(106),
+                         actions(106).replace("physical_mouse_captured_action_callbacks",
+                                              "physical_mouse_captured_action_callbacks_final"),
+                         readers(106).replace("physical_mouse_legacy_reader_evidence",
+                                              "physical_mouse_legacy_reader_evidence_final")])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_release_terminal_tail_cannot_borrow_from_next_request(self):
+        v = gate.triage([req(107), "physical_mouse_capture_released focus=True",
+                         req(108),
+                         actions(107).replace("physical_mouse_captured_action_callbacks",
+                                              "physical_mouse_captured_action_callbacks_final"),
+                         readers(107).replace("physical_mouse_legacy_reader_evidence",
+                                              "physical_mouse_legacy_reader_evidence_final")])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_release_terminal_tail_cannot_borrow_another_logger_session(self):
+        a = "T4-original-logger-A"
+        b = "T4-other-logger-B"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", req(109).split(" ", 1)[1], a, 1),
+            self.logger("physical_mouse_capture_released", "focus=True", a, 2),
+            self.logger("physical_mouse_captured_action_callbacks_final",
+                        actions(109).split(" ", 1)[1], b, 1),
+            self.logger("physical_mouse_legacy_reader_evidence_final",
+                        readers(109).split(" ", 1)[1], b, 2),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["provenance_scope_mismatches"], 0)
+
+    def test_release_wrong_epoch_finals_cannot_join(self):
+        v = gate.triage([req(110), "physical_mouse_capture_released focus=True",
+                         actions(111).replace("physical_mouse_captured_action_callbacks",
+                                              "physical_mouse_captured_action_callbacks_final"),
+                         readers(111).replace("physical_mouse_legacy_reader_evidence",
+                                              "physical_mouse_legacy_reader_evidence_final")])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_release_repeated_final_is_poisoned_not_double_counted(self):
+        action = actions(112).replace("physical_mouse_captured_action_callbacks",
+                                      "physical_mouse_captured_action_callbacks_final")
+        reader = readers(112).replace("physical_mouse_legacy_reader_evidence",
+                                       "physical_mouse_legacy_reader_evidence_final")
+        v = gate.triage([req(112), "physical_mouse_capture_released focus=True",
+                         action, action, reader])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_release_reader_final_before_action_final_not_source_order(self):
+        action = actions(113).replace("physical_mouse_captured_action_callbacks",
+                                      "physical_mouse_captured_action_callbacks_final")
+        reader = readers(113).replace("physical_mouse_legacy_reader_evidence",
+                                       "physical_mouse_legacy_reader_evidence_final")
+        v = gate.triage([req(113), "physical_mouse_capture_released focus=True",
+                         reader, action])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_release_terminal_unrelated_logger_interleaving_is_bounded(self):
+        session = "T4-original-bounded-interleaving"
+        release = self.logger("physical_mouse_capture_released", "focus=True", session, 2)
+        action = self.logger("physical_mouse_captured_action_callbacks_final",
+                             actions(114).split(" ", 1)[1], session, 4)
+        reader = self.logger("physical_mouse_legacy_reader_evidence_final",
+                             readers(114).split(" ", 1)[1], session, 5)
+        request = self.logger("physical_mouse_capture_requested",
+                              req(114).split(" ", 1)[1], session, 1)
+        unrelated = self.logger("other_nonmouse_diagnostic", "world_log", session, 3)
+        v = gate.triage([request, release, unrelated, action, reader])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+        flood = [self.logger("other_nonmouse_diagnostic", "world_log", session, i)
+                 for i in range(3, 12)]
+        late_action = self.logger("physical_mouse_captured_action_callbacks_final",
+                                  actions(114).split(" ", 1)[1], session, 12)
+        late_reader = self.logger("physical_mouse_legacy_reader_evidence_final",
+                                  readers(114).split(" ", 1)[1], session, 13)
+        v = gate.triage([request, release] + flood + [late_action, late_reader])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+
     def test_mixed_process_risk_stays_disclosed(self):
         v = gate.triage([])
         self.assertFalse(v["device_pass"])
