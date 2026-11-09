@@ -30,9 +30,9 @@ def validate(original, reflected, mapping):
         m = [tuple(x) for x in mapping]
         if any(not isinstance(s, str) or not s or not isinstance(c, int) or isinstance(c, bool) or c not in range(4) for s,c in o):
             return result
-        if any(not isinstance(l, int) or isinstance(l, bool) or l < 0 or not isinstance(c, int) or isinstance(c, bool) or c not in range(4) for l,c in r):
+        if any(not isinstance(l, int) or isinstance(l, bool) or (l < 0 or l > 0xffffffff) or not isinstance(c, int) or isinstance(c, bool) or c not in range(4) for l,c in r):
             return result
-        if any(not isinstance(s, str) or not s or not isinstance(c, int) or isinstance(c, bool) or c not in range(4) or not isinstance(l, int) or isinstance(l, bool) or l < 0 or not isinstance(d, int) or isinstance(d, bool) or d not in range(4) for s,c,l,d in m):
+        if any(not isinstance(s, str) or not s or not isinstance(c, int) or isinstance(c, bool) or c not in range(4) or not isinstance(l, int) or isinstance(l, bool) or (l < 0 or l > 0xffffffff) or not isinstance(d, int) or isinstance(d, bool) or d not in range(4) for s,c,l,d in m):
             return result
         result.update(original_lanes=len(o), reflected_lanes=len(r), mapped_lanes=len(m))
         if not o or not r or not m:
