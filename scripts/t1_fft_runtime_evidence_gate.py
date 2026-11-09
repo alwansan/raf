@@ -14,7 +14,9 @@ def validate(record):
         raise ValueError("invalid evidence envelope")
     if not isinstance(record["build_sha"], str) or not SHA.fullmatch(record["build_sha"]):
         raise ValueError("missing immutable build SHA")
-    if not isinstance(record["device_session"], str) or not 1 <= len(record["device_session"]) <= 128:
+    if (not isinstance(record["device_session"], str) or not 1 <= len(record["device_session"]) <= 128
+            or not record["device_session"].strip() or record["device_session"] != record["device_session"].strip()
+            or any(ord(ch) < 32 or ord(ch) == 127 for ch in record["device_session"])):
         raise ValueError("missing device session")
     entries = record["dispatches"]
     if not isinstance(entries, list) or not 1 <= len(entries) <= 128:
@@ -26,7 +28,9 @@ def validate(record):
             raise ValueError(f"dispatch {index}: incomplete runtime identity")
         if not isinstance(row["shader_guid"], str) or not GUID.fullmatch(row["shader_guid"]):
             raise ValueError(f"dispatch {index}: invalid shader GUID")
-        if not isinstance(row["kernel_name"], str) or not 1 <= len(row["kernel_name"]) <= 128:
+        if (not isinstance(row["kernel_name"], str) or not 1 <= len(row["kernel_name"]) <= 128
+                or not row["kernel_name"].strip() or row["kernel_name"] != row["kernel_name"].strip()
+                or any(ord(ch) < 32 or ord(ch) == 127 for ch in row["kernel_name"])):
             raise ValueError(f"dispatch {index}: missing named Unity kernel")
         for key in ("find_kernel_result", "dispatch_kernel", "fft_size", "bank", "pass_index"):
             if type(row[key]) is not int or row[key] < 0:
