@@ -27,6 +27,15 @@ class ShearsSourceLinks(unittest.TestCase):
         rows=texture_slot_rows([{"m_First":"secret-private-key","m_Second":{"m_Texture":{"m_FileID":0,"m_PathID":3}}}])
         self.assertEqual(len(rows),1)
         self.assertEqual(rows[0]["m_Texture"]["m_PathID"],3)
+    def test_source_pair_list(self):
+        v={"m_Texture":{"m_FileID":0,"m_PathID":5}}
+        self.assertEqual(texture_slot_rows([["_MainTex",v]])[0],v)
+    def test_source_singleton_dict_entry(self):
+        v={"m_Texture":{"m_FileID":0,"m_PathID":6}}
+        self.assertEqual(texture_slot_rows([{"_MainTex":v}])[0],v)
+    def test_source_reject_missing_texture_pointer(self):
+        with self.assertRaises(ValueError):
+            texture_slot_rows([{"_MainTex":{}}])
     def test_original_map_is_not_source_array(self):
         with self.assertRaises(ValueError):
             texture_slot_rows({"_MainTex":{"m_Texture":{"m_FileID":0,"m_PathID":4}}})
