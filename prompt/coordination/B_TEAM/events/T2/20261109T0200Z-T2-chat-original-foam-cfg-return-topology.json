@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "event_id": "20261109T0200Z-T2-chat-original-foam-cfg-return-topology",
+  "worker": "T2",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261109T0155Z-T2-chat-original-cfg-topology-a8f5",
+  "type": "result",
+  "issue_id": "WATER-001",
+  "resource_key": "WATER-001",
+  "experiment_key": "T2-ORIGINAL-FOAM-PASS1-CALLEE-REACHABLE-RET-PREDECESSOR-CFG-SHA15964EA8-20261109",
+  "at": "2026-11-09T02:00:10Z",
+  "status": "ORIGINAL_CFG_MIXED_SYNTACTIC_RET_PRODUCER_UNRESOLVED_INSTANCE",
+  "summary": "SHA-original Foam Pass1 resolved callee CFG shows mixed syntactic predecessor families at reachable return sites; T2 original Cecil CI42548419872 PASS 17/17 + SHA original. Not texture instance or water rendering proof.",
+  "commit": "615e8981c909b981a1afad7caf4087ec5ab9dc16",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42548419872",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_SHA_ORIGINAL_RETURN_CFG_2026-11-09.md"
+  ],
+  "limitations": "Structural/syntactic original CIL only; crosspass Texture instance alias, CB0/samplers, ShaderLab/Unity/Adreno water pixels unverified; full game NOT_READY; no APK build.",
+  "next_step": "Private path-sensitive return stack/local/receiver CFG-join analysis; then actual crosspass RenderTexture instance equality, CB0/samplers, authentic ShaderLab and Unity/device."
+}
