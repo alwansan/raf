@@ -1,0 +1,23 @@
+{
+  "session_id": "20261109T1922Z-T4-chat-own-eventid-repair-z6q4",
+  "origin": "chat",
+  "issue_id": "COORD-001",
+  "status": "active",
+  "base_sha": "dbfdcdd515577a1244d368b1e6eefd4bd84ed0a2",
+  "updated_at": "2026-11-09T19:22:00Z",
+  "resumed_from_sessions": [
+    "20261109T1919Z-T4-chat-ledger-preflight-v4k8"
+  ],
+  "scope": "Add explicit unique event_id only to three T4-owned historical event records confirmed by source-only full 595 event audit; preserve all original fields/values and do not touch T3/T5.",
+  "intended_files": [
+    "prompt/coordination/B_TEAM/events/T4/20261106T2222Z-T4-owner-jsonl-single-read-n7b4.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T2231Z-T4-original-runtime-operation-stage-drift-c6p2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T2254Z-T4-runtime-postinstall-safe-rollback-p9v3.json",
+    "prompt/coordination/clients/T4/sessions/20261109T1922Z-T4-chat-own-eventid-repair-z6q4.md",
+    "prompt/coordination/work/COORD-001/20261109T1922Z-T4-chat-own-eventid-repair-z6q4.json"
+  ],
+  "experiment_key": "T4-COORD001-3-historical-event-id-additive-CAS-source-audit-v1",
+  "resource_key": null,
+  "validation": "Read-only T4 auditor; canonical shared summary remains dependent on T3/T5 records; don't rerun unchanged T2 workflow.",
+  "other_owner_write": false
+}
