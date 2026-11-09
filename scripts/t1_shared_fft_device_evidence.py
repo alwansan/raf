@@ -84,7 +84,7 @@ def audit(summary, events):
             r = json.loads(detail, object_pairs_hook=no_duplicates)
             case = r.get("id")
             if case in IDS:
-                if case not in starts or case in fresh or idx <= starts[case][0]:
+                if completed or case not in starts or case in fresh or idx <= starts[case][0]:
                     raise ValueError("result not fresh")
                 if r != saved[case] or r.get("status") != "PASS" or r.get("worker") != "T1" or r.get("pack_sha256") != PACK:
                     raise ValueError("summary/event result mismatch")
@@ -97,8 +97,8 @@ def audit(summary, events):
         elif kind == "auto_reuse":
             case = detail.split(" ", 1)[0]
             if case in IDS:
-                if case not in fresh:
-                    raise ValueError("reuse without fresh execution")
+                if not completed or case not in fresh:
+                    raise ValueError("reuse before completion or without fresh execution")
                 reused.add(case)
         elif kind == "auto_complete" and detail == "count=5":
             if not begun or completed or set(fresh) != IDS:
