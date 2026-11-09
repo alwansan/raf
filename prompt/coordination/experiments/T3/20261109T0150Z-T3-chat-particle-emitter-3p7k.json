@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "session_id": "20261109T0150Z-T3-chat-particle-emitter-3p7k",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "status": "source_scope_complete",
+  "experiment_key": "t3-private-original-smoke-name-Shader48-rank-bridge-6scene4owner-v2",
+  "inputs": {
+    "source_repo": "alwansan/raf",
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_scenes": 6,
+    "original_shader_material_owners": 4,
+    "original_owner_assembled_bytes": 269007288,
+    "source_kind": "genuine original private Unity assets",
+    "names_private": true
+  },
+  "source_test_runs": [
+    {
+      "run_id": 42548907189,
+      "conclusion": "success",
+      "what": "six-source-scene original GameObject name linkage"
+    },
+    {
+      "run_id": 42549246777,
+      "conclusion": "success",
+      "what": "same authentic source Shader48 rank linkage and 215 typed slots"
+    },
+    {
+      "run_id": 42549491342,
+      "conclusion": "success",
+      "what": "source-free synthetic 34-rank disambiguation negative controls"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13644781433,
+      "run": 42548907189,
+      "contains": "safe source counts only"
+    },
+    {
+      "id": 13645145119,
+      "run": 42549246777,
+      "contains": "safe source rank tuples only"
+    }
+  ],
+  "source_scoped_result": {
+    "selected_108_shader": {
+      "renderers": 54,
+      "material_slots": 108,
+      "name_resolved": 54,
+      "smoke_like": 0,
+      "fire_like": 25,
+      "water_like": 0
+    },
+    "other_shader_renderers": {
+      "renderers": 56,
+      "name_resolved": 56,
+      "smoke_like": 17,
+      "fire_like": 17,
+      "water_like": 0
+    },
+    "typed_particle_shader_material_slots_rejoined": 215,
+    "smoke_like_shaders": [
+      {
+        "original_source_rank": 34,
+        "matched_smoke_renderer_objects": 17,
+        "matched_smoke_material_slots": 34
+      }
+    ],
+    "fire_like_shaders": [
+      {
+        "original_source_rank": 108,
+        "matched_fire_renderer_objects": 25,
+        "matched_fire_material_slots": 50
+      },
+      {
+        "original_source_rank": 34,
+        "matched_fire_renderer_objects": 17,
+        "matched_fire_material_slots": 34
+      }
+    ],
+    "fire_34_shader_is_distinct_from_smoke_34_shader": true
+  },
+  "limits": "Names indicate only semantic hints and selected original six-scene class199→GameObject links, not exact Android smoke emitter or visual shader/pixel cause. No original class48 source, shader label or GUID leaked. No Android/Unity build.",
+  "files": [
+    "scripts/t3_original_particle_emitter_semantics.py",
+    "tests/test_t3_original_particle_emitter_semantics.py",
+    "tests/test_t3_original_particle_smoke_rank.py",
+    ".github/workflows/raft-t3-original-particle-emitter-semantics.yml",
+    ".github/workflows/raft-t3-original-smoke-rank-source-tests.yml"
+  ],
+  "safe_document": "docs/T3_ORIGINAL_PARTICLE_SMOKE_SHADER_RANK_2026-11-09.md",
+  "next_step": "SHA-authenticated exact smoke 34 source Shader48 m_ParsedForm state+texture/keyword pass inventory, compare to same export ShaderLab dummy status and then Android device scene. Preserve originals and do not substitute 108 fire shader."
+}
