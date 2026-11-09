@@ -1,0 +1,25 @@
+{
+  "session_id": "20261109T1922Z-T4-chat-own-eventid-repair-z6q4",
+  "origin": "chat",
+  "issue_id": "COORD-001",
+  "status": "completed_owner_only",
+  "experiment_key": "T4-COORD001-3-historical-event-id-additive-CAS-source-audit-v1",
+  "source_ci": "https://github.com/alwansan/raf/actions/runs/42682900051",
+  "changed_files": [
+    "prompt/coordination/B_TEAM/events/T4/20261106T2222Z-T4-owner-jsonl-single-read-n7b4.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T2231Z-T4-original-runtime-operation-stage-drift-c6p2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261106T2254Z-T4-runtime-postinstall-safe-rollback-p9v3.json"
+  ],
+  "change": "Only add a unique owner-chosen event_id; preserve every existing record field; no edits to T3/T5.",
+  "commits": [
+    "2b41ea0da3976cb3f9815677d45acdd3390492dd",
+    "891027dbbd040c87df29d0d9264f779e6e362068",
+    "a41c46ef9e5369129dc6e65eae17be274dbfd871"
+  ],
+  "initial_t4_missing": 3,
+  "verified_final_t4_missing": 0,
+  "verified_team_remaining": 20,
+  "canonical_summary_pass": false,
+  "game_ready": false,
+  "next_step": "T3/T5 owner-only id fixes. Input device pending signed Raft build."
+}
