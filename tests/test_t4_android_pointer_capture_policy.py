@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BRIDGE = (ROOT / "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs").read_text()
 DELTA = (ROOT / "android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs").read_text()
+MOTION = (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text()
 BOOTSTRAP = (ROOT / "android-port/Runtime/Platform/AndroidTestDiagnostics.cs").read_text()
 INPUT_PATCH = (ROOT / "scripts/t4_adapt_original_mouse_axes.py").read_text()
 BUTTON_PATCH = (ROOT / "scripts/t4_adapt_original_mouse_buttons_wheel.py").read_text()
