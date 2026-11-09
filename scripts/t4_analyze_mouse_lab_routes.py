@@ -27,7 +27,7 @@ def nonzero_scroll(value):
 
 
 def analyze(lines):
-    phase = "unknown"
+    capture_requests = {"on": 0, "off": 0}
     groups = defaultdict(lambda: {"routes": set(), "actions": set(), "buttons": set(),
                                   "wheel_v": 0, "wheel_h": 0, "samples": 0,
                                   "button_presses": set(), "button_releases": set()})
@@ -44,7 +44,7 @@ def analyze(lines):
                 raise ValueError("detail must be string")
             if kind == "capture_request":
                 if detail in ("ON", "OFF"):
-                    phase = detail.lower()
+                    capture_requests[detail.lower()] += 1
                 continue
             if kind != "input":
                 continue
@@ -99,10 +99,12 @@ def analyze(lines):
             "horizontal_scroll_events": group["wheel_h"],
             "missing_button_evidence": sorted(set(BUTTONS) - group["buttons"]),
         }
-    return {"phases": result, "rejected_records": rejected,
+    return {"phases": result, "capture_requests": capture_requests,
+            "capture_requested_but_no_confirmed_callbacks": capture_requests["on"] > 0 and "on" not in result,
+            "rejected_records": rejected,
             "capture_route_conflicts": capture_route_conflicts,
             "device_success_proven": False,
-            "note": "Capture request ON alone does not establish captured=true; contradictory capture flags and routes are rejected; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
+            "note": "Capture request ON alone does not establish captured=true; request counts measure attempts, not grants; contradictory capture flags and routes are rejected; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
