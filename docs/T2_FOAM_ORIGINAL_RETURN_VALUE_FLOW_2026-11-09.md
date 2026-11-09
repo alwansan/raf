@@ -49,3 +49,20 @@ The real owner phone Mini r2 [CL/test shared session](https://github.com/alwansa
 **النتيجة الأصلية بقيت `value_mixed_with_explicit_null_literal`.** ولذلك فإن الفئة السابقة لا تختفي بإزالة الفروع التي يستحيل الوصول إليها بمجرد شرط CIL عددي ثابت؛ لكن تحليلًا محافظًا لمُدخل مجهول قد يشمل مسارًا لا يحدث في حالة تشغيل معينة. كذلك `ldnull` قد يكون إرجاعًا مقصودًا أو اختياريًا في تصميم اللعبة، وليس خطأً بمفرده. لا تستنتج أن `null` هو سبب الخطأ المائي أو أن مصدر pass1 يساوي وجهة pass0. لا توجد شهادة على مخرجات ShaderLab/CB0 أو بكسلات الماء على Android. `WATER-001` ما زال **OPEN**.
 
 نقطة الاستكمال المعلّمة: `prompt/coordination/clients/T2/sessions/20261109T1916Z-T2-chat-foam-constant-branch-p8v6.md`.
+
+## Original follow-up — 2026-11-09 19:49 UTC: exact equality control
+
+Registered isolated T2 work before source edits at `prompt/coordination/work/WATER-001/20261109T1946Z-T2-chat-foam-equality-predicate-m4q9.json`. Commit [5b9adfbc](https://github.com/alwansan/raf/commit/5b9adfbc82160f1e8bc6a00713577e7fb3549ed4) extends the bounded Mono.Cecil predicate evaluator, with sound *known-constant-only* folding for `ceq`, `beq[.s]`, and `bne.un[.s]`. Exact zero/zero and null/null are equal; a known integer zero and a known nonzero are unequal. Crucial negative control: two abstract `nonzero` families (e.g. 1 vs 2) are **not** treated as equal. Joined/unrecognized values still explore both successors.
+
+The original-data workflow [42686782993](https://github.com/alwansan/raf/actions/runs/42686782993) on exact source `5b9adfbc82160f1e8bc6a00713577e7fb3549ed4` completed **SUCCESS**; 17/17 source-free privacy Python tests, C# Mono.Cecil synthetic selftests, source owner/dll authentication, private scratch purge and safe publishing all passed. Log evidence: `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`, `T2_FOAM_BLIT_SOURCE_SHA_PASS original_dll_bytes=3211776 owner_bytes=115978112 lfs=false`, `T2_CECIL_ORIGINAL_BLIT_SAFE_RESULT_READY private_content_not_printed=true`.
+
+Authentic original classification remains unchanged after this independently guarded comparison semantics:
+
+```text
+T2_FOAM_PASS0_BACKTRACE RenderTexture typed_field static_type_only_no_instance_proof steps=6 void_calls=0
+T2_FOAM_PASS1_BACKTRACE Texture typed_call_result static_type_only_no_instance_proof steps=21 void_calls=1
+T2_FOAM_PASS0_CALLEE_RETURN_VALUE_FLOW not_call_return_source
+T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_with_explicit_null_literal
+```
+
+Separately triggered Android platform adapter [42686783004](https://github.com/alwansan/raf/actions/runs/42686783004) completed **SUCCESS**; it does not render authentic Foam pixels. A safe original-CIL return-family classification is not proof of actual Android `null`, same-frame source/destination heap identity, Foam ShaderLab installation, proper CB0 upload, or water rendering. `WATER-001` stays **OPEN / NOT_READY 0/3**. Next genuinely different original-source question: prove or reject pass0-destination ↔ pass1-source runtime object continuity under matched receiver, state and frame; be explicit when the available static evidence cannot decide. No full XAPK or Mini request.
