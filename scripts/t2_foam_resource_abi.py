@@ -150,6 +150,18 @@ def verify_genuine_texture_sampler_pair_count(report):
                 ORIGINAL_TEXTURES_PER_STAGE[key] or
                 fields.get("m_Samplers") != 0 or fields.get("m_UAVParams") != 0):
             raise ValueError("Authentic original Foam source resource table drift")
+        # A caller may pass a deserialized or mutated report, not combine() output.
+        # Revalidate source metadata before accepting the numeric ABI evidence.
+        descriptor_rows = row.get("original_descriptor_rows")
+        digest = row.get("original_numeric_descriptor_sha256")
+        if (set(fields) != {"m_TextureParams", "m_Samplers", "m_UAVParams"} or
+                any(type(value) is not int or value < 0 or value > 256
+                    for value in fields.values()) or
+                type(descriptor_rows) is not int or
+                descriptor_rows != sum(fields.values()) or
+                not isinstance(digest, str) or len(digest) != 64 or
+                any(char not in "0123456789abcdef" for char in digest)):
+            raise ValueError("Malformed original Foam source metadata")
         bindings = row.get("translated_resource_bindings")
         if not isinstance(bindings, list):
             raise ValueError("Compiled Foam texture/sampler bindings unavailable")
