@@ -29,6 +29,8 @@ def decode_rgb(path):
         pos = end
         if typ == b"IEND":
             break
+    if not chunks or chunks[-1][0] != b"IEND" or pos != len(data):
+        raise ValueError("missing_iend_or_trailing_data")
     ihdr = next((b for t,b in chunks if t == b"IHDR"), None)
     if ihdr is None or len(ihdr) != 13:
         raise ValueError("bad_ihdr")
