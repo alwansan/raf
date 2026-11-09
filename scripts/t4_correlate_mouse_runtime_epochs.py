@@ -186,7 +186,8 @@ def triage(lines):
                               not a["readers"]) for a in eligible)
     reader_only = sum(bool(a["readers"] and
                            a["readers"]["getterCalls"] > 0 and
-                           not a["callbacks"]) for a in attempts if not a["invalid"])
+                           not a["callbacks"]) for a in attempts if not a["invalid"] and
+                      a["scope"] not in poisoned_logger_sessions)
     if matching_fallback:
         status = "SAME_EPOCH_CAPTURED_CALLBACK_AND_FALLBACK_GETTER"
     elif matched:
