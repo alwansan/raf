@@ -12,6 +12,7 @@ from collections import defaultdict
 
 from gfxlab.tools.original_model_probe import ZIP2_SHA, OWNERS, discover, export_one, sha_size, stage_originals
 from gfxlab.tools.multi_source_select import selected_five
+from gfxlab.tools.obj_normalize import normalize_exported_obj
 from gfxlab.tools.shears_provenance_probe import resolve_pptr
 from gfxlab.tools.shears_texture_readiness import pairs,select_exact_renderer,classify_standard
 from gfxlab.tools.shears_stream_transport import (
@@ -169,6 +170,9 @@ def export_private_pack(source:Path,out:Path,plan:dict):
         if mesh is None or mesh.type.name!="Mesh":raise ValueError("original model mesh missing after stream rehydration")
         data,v,f=export_one(mesh)
         if entry["id"]=="M00" and (v,f)!=(375,420):raise ValueError("Shears source geometry drift")
+        data,normals=normalize_exported_obj(data)
+        if (normals["source_vertices"],normals["triangles"])!=(v,f):
+            raise ValueError("OBJ original topology changed during normalization")
         (dest/"model.obj").write_text(data)
         public={"id":entry["id"],"category":entry["category"],"geometry_type":entry["kind"],
                 "source_bones":entry["source_bones"],"skin_animation_restored":False,
@@ -196,7 +200,9 @@ def export_private_pack(source:Path,out:Path,plan:dict):
             "faces":f,"materials":len(entry["materials"]),
             "texture_count":sum(len(m["textures"]) for m in entry["materials"]),
             "source_bones":entry["source_bones"],"source_geometry_verified":True,
-            "source_images_decoded":True,"exact_original_shader_restored":False})
+            "source_images_decoded":True,"exact_original_shader_restored":False,
+            "normals_generated_for_unity":normals["normals_generated_for_unity"],
+            "source_uvs":normals["source_uvs"],"topology_preserved":normals["topology_preserved"]})
     summary={**plan["safe"],"model_summaries":safe,"private_original_asset_bytes_published":False,
              "unity_import_verified":False,"android_gpu_verified":False}
     return summary
