@@ -1,0 +1,33 @@
+name: T2 Foam alias reference regression (source-free)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T2/alias_identity_reference_test.py'
+      - '.github/workflows/t2-foam-alias-reference.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-alias-reference-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-free-alias-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact triggering source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run eight conservative alias fixtures
+        run: python3 -m unittest -v android-port/Experiments/T2/alias_identity_reference_test.py
+      - name: Clarify evidence boundary
+        if: always()
+        run: |
+          echo 'This source-free fixture tests abstract alias rules only.'
+          echo 'It does not establish original Foam texture identity, Unity pixels, or device water readiness.'
