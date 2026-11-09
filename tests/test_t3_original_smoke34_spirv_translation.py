@@ -71,7 +71,8 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
             return t3.evaluate(self.pair(), Path(temp),
                                translator=kwargs.get("translator", translate),
                                reflector=kwargs.get("reflector", reflect),
-                               checker=kwargs.get("checker", lambda _v, _f: True))
+                               checker=kwargs.get("checker", lambda _v, _f: True),
+                               io_classifier=kwargs.get("io_classifier", t3.classify_stage_io))
 
     def test_exact_two_original_keyword_pairs_not_array_position(self):
         pairs = self.pair()
@@ -161,6 +162,8 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
         self.assertEqual(result["counts"]["original_stage_pairs_compatible"], 2)
         self.assertEqual(result["counts"]["roundtrip_stage_pairs_compatible"], 0)
         self.assertEqual(result["counts"]["original_roundtrip_io_equal"], 2)
+        self.assertEqual(result["counts"]["io_drift_inputs_location_only_remap_candidate"], 2)
+        self.assertEqual(result["counts"]["io_drift_inputs_same_location_type_changes"], 0)
 
     def test_invalid_reflected_per_program_private_metadata_not_published(self):
         def wrong(path):
@@ -171,6 +174,24 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
         result = self.evaluate(reflector=wrong)
         self.assertEqual(result["counts"]["roundtrip_stage_reflection_valid"], 0)
         self.assertNotIn("internal_secret", json.dumps(result))
+
+    def test_private_io_classifier_rejects_unknown_labels_and_negative_counts(self):
+        with self.assertRaisesRegex(ValueError, "drift_category_shape"):
+            self.evaluate(io_classifier=lambda a, b: {"private_name": "secret"})
+        def wrong_value(a, b):
+            result = t3.classify_stage_io(a, b)
+            result["inputs_removed_locations"] = -1
+            return result
+        with self.assertRaisesRegex(ValueError, "drift_category_value"):
+            self.evaluate(io_classifier=wrong_value)
+
+    def test_safe_aggregated_io_counts_when_reflection_equivalent(self):
+        result = self.evaluate()
+        counters = result["counts"]
+        self.assertEqual(counters["io_drift_inputs_identical"], 4)
+        self.assertEqual(counters["io_drift_outputs_identical"], 4)
+        self.assertEqual(counters["io_drift_inputs_location_only_remap_candidate"], 0)
+        self.assertEqual(counters["io_drift_outputs_location_only_remap_candidate"], 0)
 
     def test_untrusted_interface_checker_is_not_trusted(self):
         with self.assertRaisesRegex(ValueError, "invalid_private_stage_interface_check"):

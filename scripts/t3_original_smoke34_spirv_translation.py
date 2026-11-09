@@ -24,7 +24,9 @@ from scripts.w1_recover_graphics_programs import decoded_platforms, records, tra
 from scripts.w1_recover_depth_passes import (
     linked_program, stage_variants, variant_key, reflection, interfaces_match,
 )
-from scripts.t3_original_particle108_spirv_translation import _validate_reflection
+from scripts.t3_original_particle108_spirv_translation import (
+    _validate_reflection, IO_KEYS, IO_BOOLEAN,
+)
 from scripts.t3_stage_io_drift import classify_stage_io
 
 STATUS = "SHA_ORIGINAL_SMOKE34_TWO_KEYWORD_PAIRS_SPIRV_CPU_CLASSIFIED"
@@ -40,6 +42,10 @@ COUNT_KEYS = (
     "original_stage_pairs_interfaces_compared", "original_stage_pairs_compatible",
     "roundtrip_stage_pairs_interfaces_compared", "roundtrip_stage_pairs_compatible",
     "pairs_both_original_spirv_valid", "pairs_both_roundtrip_spirv_valid",
+)
+IO_COUNT_KEYS = tuple(
+    "io_drift_" + side + "_" + key
+    for side in ("inputs", "outputs") for key in IO_KEYS
 )
 SAFE_FALSE = {
     "native_Unity_Android_Adreno_pixels_verified": False,
@@ -104,7 +110,8 @@ def exact_two_pairs(parsed, table, *, linker=linked_program):
 
 
 def evaluate(pairs, temporary, *, translator=translate,
-             reflector=reflection, checker=interfaces_match):
+             reflector=reflection, checker=interfaces_match,
+             io_classifier=classify_stage_io):
     """Only non-private aggregate counters, never per-program translator output."""
     if (type(pairs) is not list or len(pairs) != PAIRS or
         not isinstance(temporary, Path) or not temporary.is_dir() or
@@ -154,6 +161,17 @@ def evaluate(pairs, temporary, *, translator=translate,
                     for side in ("inputs", "outputs"))
                 counts["original_roundtrip_resource_shapes_equal"] += (
                     a["resource_slots"] == b["resource_slots"])
+                classified = io_classifier(a, b)
+                expected = {side + "_" + key
+                            for side in ("inputs", "outputs") for key in IO_KEYS}
+                if type(classified) is not dict or set(classified) != expected:
+                    raise ValueError("smoke34_invalid_private_io_drift_category_shape")
+                for name, amount in classified.items():
+                    category = name.split("_", 1)[1]
+                    limit = 1 if category in IO_BOOLEAN else 256
+                    if type(amount) is not int or not 0 <= amount <= limit:
+                        raise ValueError("smoke34_invalid_private_io_drift_category_value")
+                    counts["io_drift_" + name] += amount
             stages[stage] = {"flags": details, "reflection": reflected}
         vert, frag = stages[1], stages[0]
         for key, prefix in (("original", "original"), ("roundtrip", "roundtrip")):
@@ -181,7 +199,7 @@ def evaluate(pairs, temporary, *, translator=translate,
         "source_original_pass_RGB_ColorMask": True,
         "source_original_pass_alpha_dependent_color_and_alpha": True,
         "source_original_pass_ZWrite_OFF": True,
-        "counts": {key: int(counts[key]) for key in COUNT_KEYS},
+        "counts": {key: int(counts[key]) for key in COUNT_KEYS + IO_COUNT_KEYS},
         **SAFE_FALSE,
     }
 
