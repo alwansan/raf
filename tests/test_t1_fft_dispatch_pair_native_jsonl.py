@@ -3,9 +3,16 @@
 This is a source-contract test of the T1 hook's emitted JSONL shape; NO Unity,
 GPU or Android phone execution is claimed.
 """
+import io
+import json
+import sys
+import tempfile
 import unittest
+from contextlib import redirect_stdout
+from pathlib import Path
+from unittest.mock import patch
 
-from scripts.t1_fft_dispatch_pair_audit import AFTER, BEFORE, audit
+from scripts.t1_fft_dispatch_pair_audit import AFTER, BEFORE, MAX_LOG_BYTES, audit, main
 
 
 def native(event, seq=1, session="20261109T000000000-abcd1234", log_seq=90,
@@ -110,6 +117,37 @@ class NativeLoggerContract(unittest.TestCase):
         before["event"] = BEFORE
         with self.assertRaisesRegex(ValueError, "mixed trace envelopes"):
             audit([before])
+
+
+    def test_cli_accepts_real_logger_segment_over_legacy_one_mib(self):
+        # Persisted Raft segments rotate at 4 MiB, not the former 1 MiB
+        # command-line audit limit. Unrelated log rows must be ignored.
+        unrelated = json.dumps({"operation": "unrelated", "detail": "x" * 40})
+        lines = [unrelated] * 16000 + [
+            json.dumps(native(BEFORE, log_seq=16001)),
+            json.dumps(native(AFTER, log_seq=16005)),
+        ]
+        payload = "\\n".join(lines) + "\\n"
+        self.assertGreater(len(payload.encode("utf-8")), 1 * 1024 * 1024)
+        self.assertLess(len(payload.encode("utf-8")), MAX_LOG_BYTES)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "raft-one-session.jsonl"
+            path.write_text(payload, encoding="utf-8")
+            with patch.object(sys, "argv", ["audit", str(path)]):
+                output = io.StringIO()
+                with redirect_stdout(output):
+                    main()
+        result = json.loads(output.getvalue())
+        self.assertEqual(result["paired_count"], 1)
+        self.assertFalse(result["gpu_execution_proven"])
+
+    def test_cli_rejects_segment_larger_than_logger_four_mib_limit(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "oversized.jsonl"
+            path.write_bytes(b"x" * (MAX_LOG_BYTES + 1))
+            with patch.object(sys, "argv", ["audit", str(path)]):
+                with self.assertRaisesRegex(ValueError, "4 MiB"):
+                    main()
 
 
 if __name__ == "__main__":
