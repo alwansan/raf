@@ -3,9 +3,9 @@
   "session_id": "20261109T0209Z-T4-chat-unity-legacy-readers-w7q5",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f97c9462194dd22c5c09e0f5342cff0a79a0c830",
-  "updated_at": "2026-11-09T02:09:00Z",
+  "updated_at": "2026-11-09T02:18:00Z",
   "resumed_from_sessions": [
     "20261109T0157Z-T4-chat-crossframe-click-e4p8",
     "20261109T0143Z-T4-scheduled-capture-phase-j6r2"
@@ -25,5 +25,11 @@
   "experiment_key": "T4-Unity2021-Legacy-20-original-mouse-readers-source-routed-counters-nonblocking-v1",
   "resource_key": "T4-Unity2021-source-only-android-bridge",
   "team_conflict_scan": "T4 last scheduled source work was capture-phase analyzer 20261109T0143Z; own 0157Z source work completed. Team T1/T2/T3/T5 CI active source research only; no same file or heavy Unity build. New CL/test unchanged; do not touch T5 Mini.",
-  "next_step": "Implement source telemetry and controls; run existing T4 source-only CI (original DLL SHA and Editor+Android Unity2021 compile) then save result."
+  "next_step": "Owner actual T4-02 captured mouse proof + signed Raft game source with original Unity getter evidence/camera/save regression. No Mini rebuild.",
+  "completed_at": "2026-11-09T02:18:00Z",
+  "result": "Source-only Unity real getter instrumentation; 66 Python and 152 C# assertions, authentic original Unity2021 managed ABI Android+Editor CI SUCCESS. Android game device not tested.",
+  "result_sha": "b376e00a66ba06a593de8cc52398d6cfff7bb85d",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42549986761"
+  ]
 }
