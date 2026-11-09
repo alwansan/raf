@@ -9,13 +9,13 @@ def raw(x):return json.dumps(x,ensure_ascii=False).encode("utf-8")
 class UnifiedManifestTests(unittest.TestCase):
     def test_provided_pack(self):
         out=audit(P.read_bytes())
-        self.assertEqual(out["cases"],29)
-        self.assertEqual(out["per_worker"],{"T1":4,"T2":4,"T3":6,"T4":9,"T5":6})
+        self.assertEqual(out["cases"],30)
+        self.assertEqual(out["per_worker"],{"T1":5,"T2":4,"T3":6,"T4":9,"T5":6})
     def test_no_injected_driver(self):
         x=json.loads(json.dumps(BASE));x["tests"][0]["driver"]="execute_dex"
         with self.assertRaisesRegex(ValueError,"routing"):audit(raw(x))
     def test_mouse_no_silent_auto(self):
-        x=json.loads(json.dumps(BASE));x["tests"][14]["mode"]="auto"
+        x=json.loads(json.dumps(BASE));x["tests"][15]["mode"]="auto"
         with self.assertRaises(ValueError):audit(raw(x))
     def test_duplicate_id(self):
         x=json.loads(json.dumps(BASE));x["tests"][1]["id"]=x["tests"][0]["id"]
