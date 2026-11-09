@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "T3-20261109T0150Z-T3-chat-particle-emitter-3p7k",
+  "session_id": "20261109T0150Z-T3-chat-particle-emitter-3p7k",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "base_sha": "80d128223fbe79bb27305bba9efdf2304ffd1df5",
+  "updated_at": "2026-11-09T01:50:00Z",
+  "status": "active",
+  "intended_files": [
+    "scripts/t3_original_particle_emitter_semantics.py",
+    "tests/test_t3_original_particle_emitter_semantics.py",
+    ".github/workflows/raft-t3-original-particle-emitter-semantics.yml",
+    "prompt/coordination/work/RENDER-002/T3-20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
+    "prompt/coordination/clients/T3/sessions/20261109T0150Z-T3-chat-particle-emitter-3p7k.md",
+    "prompt/coordination/experiments/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
+    "prompt/coordination/B_TEAM/events/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
+    "docs/T3_ORIGINAL_PARTICLE_EMITTER_SEMANTICS_2026-11-09.md"
+  ],
+  "experiment_key": "t3-original-six-scene-original-particle108-emitter-gameobject-name-link:ZIP2@15964ea8:SHA-six-scenes-four-owners:gameobject-hierarchy-v1",
+  "resource_key": "ZIP2 six-scene four-owner private stage + ubuntu-24.04 original UnityPy CPU (exclusive new workflow)",
+  "scope": "Distinct RENDER-002 gap: relate exact 108-use source ParticleShader48 (5 selected Material21 and 54 ParticleSystemRenderers) to original GameObject names, count smoke/fire/water semantic hints versus other particle renderers, only safe aggregate. No raw names or game assets published.",
+  "hypothesis": "Semantic source GameObject link will reveal whether verified 108-use shader's 54 ParticleSystemRenderers include smoke-named objects, helping prioritize (not prove) the on-phone square-smoke symptom.",
+  "resumed_from_sessions": [
+    "20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4",
+    "20261108T1733Z-T3-scheduled-local-material-resolve-n5q8",
+    "20261106T1337Z-T3-chat-particle108-propstate-62fb"
+  ],
+  "taken_over_from": [
+    "T3 original Shader48 108 render slots private source identity and dummy export CI42223071341",
+    "T3 same-export 5M/3T results CI42243130856"
+  ],
+  "test_plan": "Source-free synthetic role/negative pointer controls then isolated source SHA-pinned six-scene real UnityPy read in GitHub Actions; no Unity APK build, no replacement ShaderLab.",
+  "limits": "Name hints are NOT on-screen identity proof; no original names, shader bytes, GUID, ids, or scene names released."
+}
