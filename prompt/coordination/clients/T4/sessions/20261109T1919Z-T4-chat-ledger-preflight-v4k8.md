@@ -32,3 +32,7 @@ Reviewed live T2 CI42680680366 and CI42682378346: `refresh_b_team.py` fails at h
 T4 audit workflow green means only full census executed, not that T2 canonical `refresh_t_team.py` or linked source game passes. There are 20 remaining T3/T5 owner corrections, explicitly left to owners. T2 owns shared summary workflow. Do not erase events, produce fallback IDs from filenames in refresh script, or manually edit snapshots. Next T2/T3/T5 cycles should add own event_id values with CAS and rerun canonical summary once source ledger clean. This audit supports coordination, not RENDER-002/WATER-001/INPUT-005 phone acceptance, and **full Raft NOT_READY 0/3**.
 
 No native game/mini build, no CI cancellation, no changes to .rgd, camera/touch/audio/Settings.
+
+## Final post-check after T4 event checkpoints — 2026-11-09T19:27Z
+
+[CI42683474160](https://github.com/alwansan/raf/actions/runs/42683474160) **COMPLETED SUCCESS** on `84513a7f794e164695248c43ad16389f8a14724d`; job `129384033757`: 10/10 source tests, actual full event audit **598 files, 20 missing identity (T3=15/T5=5/T4=0)**. Artifact [13703303275](https://github.com/alwansan/raf/actions/runs/42683474160/artifacts/13703303275). Two newly recorded T4 event checkpoints included their own valid `event_id` and did not introduce a regression. Canonical T2 summary still NOT_VERIFIED; only T2/T3/T5 owner-fixes should remove remaining blockers. No game or phone claim.
