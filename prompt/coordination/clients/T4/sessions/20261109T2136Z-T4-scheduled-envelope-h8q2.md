@@ -19,3 +19,6 @@ Original owner Artifact 42058825739 on source e9c358eda01785b65e4eb14f18723da426
 
 ## Continuation
 Confirm workflow run on fae88f7f and investigate any failures, then correlate genuine captured=true source callbacks with original Unity getters on same signed game build and gameplay effects. If CI fails, correct only T4 files. INPUT-005 OPEN, game NOT_READY 0/3.
+
+## CI checkpoint
+Initial CI42704077957 on 0c966c6f FAILED two existing tests because startup non-input records were excluded from session sequence provenance. Corrected at 3a8faa8777f83ffcadb1d769db8c1c93e5aedee0: retain sequence validation for complete non-input logger records while rejecting non-input *mouse* markers. [CI42704145152](https://github.com/alwansan/raf/actions/runs/42704145152) COMPLETED SUCCESS for existing 71 tests on 3a8faa87. Added new test file to workflow discovery and path trigger at 92cdcb601d0a11be4ae76627d2e22f0417e124b3; awaiting CI for all 77 tests, no device acceptance claim.
