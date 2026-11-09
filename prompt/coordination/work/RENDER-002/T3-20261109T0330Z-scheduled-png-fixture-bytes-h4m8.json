@@ -1,0 +1,16 @@
+{
+  "id": "T3-20261109T0330Z-scheduled-png-fixture-bytes-h4m8",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "baseline_sha": "b1cfd6e169587bc1adad6423f9ff05f90b3a4c01",
+  "files": [
+    "tests/test_t3_cl_png_pixel_audit.py"
+  ],
+  "hypothesis": "Two PNG negative tests use literal backslash-x bytes instead of zero scanline bytes; tests may pass for wrong reason or miss intended zlib edge cases.",
+  "experiment_key": "t3-png-negative-fixture-byte-correctness",
+  "shared_resource": "none; no CI or Unity launch",
+  "overlap": "distinct test-only change; re-read test blob before update",
+  "status": "active",
+  "next": "correct fixture literals and run source-free tests; preserve gameplay assets"
+}
