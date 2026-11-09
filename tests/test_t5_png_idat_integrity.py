@@ -22,7 +22,7 @@ def png(payload):
 
 class TestIdatIntegrity(unittest.TestCase):
     def test_valid_zlib_payload(self):
-        self.assertEqual(module.validate_png(png(zlib.compress(b"\\x00\\xff\\x00\\x00"))), (1, 1))
+        self.assertEqual(module.validate_png(png(zlib.compress(bytes((0, 255, 0, 0))))), (1, 1))
 
     def test_invalid_zlib_payload_even_with_valid_crc(self):
         with self.assertRaisesRegex(ValueError, "IDAT"):
@@ -30,11 +30,11 @@ class TestIdatIntegrity(unittest.TestCase):
 
     def test_truncated_zlib_stream(self):
         with self.assertRaisesRegex(ValueError, "IDAT"):
-            module.validate_png(png(zlib.compress(b"\\x00\\xff\\x00\\x00")[:-2]))
+            module.validate_png(png(zlib.compress(bytes((0, 255, 0, 0)))[:-2]))
 
     def test_trailing_zlib_payload(self):
         with self.assertRaisesRegex(ValueError, "IDAT"):
-            module.validate_png(png(zlib.compress(b"\\x00\\xff\\x00\\x00") + b"junk"))
+            module.validate_png(png(zlib.compress(bytes((0, 255, 0, 0))) + b"junk"))
 
 
 if __name__ == "__main__":
