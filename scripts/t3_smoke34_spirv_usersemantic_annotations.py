@@ -174,7 +174,9 @@ def classify_original_and_spirv(source_rows, reflected, data):
                 ("index", "system_value", "type", "register", "mask", "used_mask", "stream"))
             or type(row["semantic"]) is not str or
             not _NAME_PATTERN.fullmatch(row["semantic"]) or
-            not 0 <= row["index"] <= 4095 or not 0 <= row["register"] <= 4095 or
+            not 0 <= row["index"] <= 4095 or
+            (not 0 <= row["register"] <= 4095 and
+             not (row["system_value"] and row["register"] == 0xffffffff)) or
             row["type"] not in (1, 2, 3) or
             not 1 <= row["mask"] <= 15 or
             not 0 <= row["used_mask"] <= 15 or
