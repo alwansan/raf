@@ -16,7 +16,7 @@ Prior `export()` called `openOutputStream(logExport,"wt")` and `openOutputStream
 
 - **Source fix:** [db261619](https://github.com/alwansan/raf/commit/db261619408a8553d61ecfe211749231d27b4a45) always writes a fresh complete events log and summary through guarded `writeMedia`; only after both new writes return success does it replace `logExport/summaryExport` and delete their prior valid URIs. If the second write fails, it deletes the newly inserted event log and retains both previous URIs. Delete failure is logged and shows user a duplicate-old-file warning; it does not destroy new files.
 - **Regression tests:** [f2609b07](https://github.com/alwansan/raf/commit/f2609b07d59cf3444ea65d6547f6bef38ea59a7b) source assertions reject in-place public URI overwrite, check both new writes precede retirement, check rollback and cleanup error reporting.
-- **Source-only CI** [42548237907](https://github.com/alwansan/raf/actions/runs/42548237907) **SUCCESS** and [42548237886](https://github.com/alwansan/raf/actions/runs/42548237886) **SUCCESS** for source commit db261619. [42548284041](https://github.com/alwansan/raf/actions/runs/42548284041) (new regression commit f2609b07) **IN_PROGRESS** at initial checkpoint. Check latest run result before claiming the new tests passed.
+- **Source-only CI** [42548237907](https://github.com/alwansan/raf/actions/runs/42548237907) **SUCCESS** and [42548237886](https://github.com/alwansan/raf/actions/runs/42548237886) **SUCCESS** for source commit db261619. [42548284041](https://github.com/alwansan/raf/actions/runs/42548284041) (new regression commit f2609b07) **COMPLETED SUCCESS** on 2026-11-09 01:59:55Z. Python export safety assertions, JVM StreamSha256 controls, and Gradle Android Java compile succeeded.
 - **Experiment:** `prompt/coordination/experiments/T5/20261109T0155Z-T5-chat-atomic-reexport-c3a8-paired-export.json`.
 
 ## Limitations
@@ -28,3 +28,7 @@ This is not a cross-file atomic visibility transaction: the two distinct newly p
 1. Inspect CI42548284041 (Python source regression, Java StreamSha256 and Gradle unified source compile); if failing, fix only owned scope and record actual errors.
 2. Keep T5 shared Mini r4 NO_BUILD until new driver need and single-build coordination under `SHARED_BUILD_READINESS.md`; don't claim current installed v13 contains this change.
 3. At a later legitimate shared Mini build, test interrupted provider writes and repeated exports on Android15; inspect uploaded `CL/test/shared-...` JSONL + summary, ensure complete files and only warn if old ones remain. Do not recast EVIDENCE_READY as game visual PASS.
+
+## Final CI verification
+- [CI42548284041](https://github.com/alwansan/raf/actions/runs/42548284041) **COMPLETED SUCCESS** at source and test commit `f2609b07d59cf3444ea65d6547f6bef38ea59a7b`: Python contract assertions passed, Java SHA stress controls passed, Android `:app:compileDebugJavaWithJavac` passed. No APK was produced.
+- Scope completed **source-only**. Device validation and full game readiness are unchanged. Old URI replacement can still briefly expose the newly published log before its paired summary; this is not an atomic two-file publication guarantee.
