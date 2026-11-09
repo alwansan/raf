@@ -1,0 +1,140 @@
+name: T3 RENDER-002 source smoke34 original D3D11 stage feasibility (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-smoke34-dxbc-inventory.yml
+      - scripts/t3_original_smoke34_dxbc_program_inventory.py
+      - tests/test_t3_original_smoke34_dxbc_program_inventory.py
+permissions:
+  contents: read
+concurrency:
+  group: t3-source-original-smoke34-D3D11-6scene-4owner-20261109
+  cancel-in-progress: false
+
+jobs:
+  original-smoke34-d3d11-inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout source-only T3 scanner and tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Verify synthetic negative controls first
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_smoke34_dxbc_program_inventory.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_dxbc_program_inventory.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_pass_probe.py' -v
+
+      - name: Checkout immutable original ZIP2 six scenes and four shader owners
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+
+      - name: Select only SHA-pinned split owners in original ZIP2
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: Stage exactly six original scenes plus four authenticated shader owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          zip2=Path("zip2-source")
+          target=Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-dxbc-private"
+          only={"Raft_Data/"+n: SHADER_OWNERS[n] for n in SHADER_OWNERS_SELECTED}
+          result=stage(zip2,target,only)
+          assert len(result["owners"])==4
+          assert result["verified_bytes"]==269007288
+          assert result["lfs_used"] is False
+          for name,pin in PIN.items():
+              original=zip2/"Raft"/"Raft_Data"/name
+              verify_source(original,pin)
+              output=target/"Raft_Data"/name
+              with original.open("rb") as f, output.open("xb") as g:
+                  while chunk := f.read(1024*1024):
+                      g.write(chunk)
+              verify_source(output,pin)
+          assert len(PIN)==6
+          print("T3_ORIGINAL_SMOKE34_STAGE_SIX_SCENES_FOUR_OWNERS_SHA_VERIFIED=true")
+          PY
+
+      - name: Inspect real D3D11 vertex and fragment program permutation links privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_original_smoke34_dxbc_program_inventory \
+            --original "$RUNNER_TEMP/t3-smoke34-dxbc-private" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-smoke34-dxbc-safe.json"
+
+      - name: Classify bounded stage counts without claiming Android shader repair
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-dxbc-safe.json").read_text())
+          assert d["status"] in {
+             "SOURCE_SHA_ORIGINAL_SMOKE34_D3D11_STAGES_CLASSIFIED",
+             "SOURCE_SHA_ORIGINAL_SMOKE34_D3D11_PLATFORM_MISSING"}
+          assert d["source_original_six_scenes_SHA_verified"] is True
+          assert d["source_original_four_shader_owners_SHA_verified"] is True
+          assert d["original_shader_role"]=="smoke_named_17_renderers_34_slots"
+          assert d["original_source_RGB_ColorMask_verified"] is True
+          assert d["original_source_AlphaDependent_color_and_alpha_verified"] is True
+          assert d["source_original_program_bytes_hashes_or_private_IDs_published"] is False
+          assert d["same_source_programs_compiled_for_Android_verified"] is False
+          assert d["native_game_device_smoke_pixels_verified"] is False
+          print("T3_SHA_ORIGINAL_SMOKE34_D3D11_CATEGORY="+d["status"])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+              f.write("## Original smoke34 D3D11 program feasibility\n\n")
+              f.write("SHA-source verified original 17 renderers / 34 slots. D3D11 result **"+d["status"]+"**.\n")
+              f.write("No raw original shader programs or IDs, no ShaderLab recovery, no Android pixels.\n")
+          PY
+
+      - name: Upload only generic source program count categories
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-smoke34-D3D11-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-smoke34-dxbc-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
