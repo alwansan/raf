@@ -29,7 +29,7 @@ def audit(raw:bytes):
         seen.add(id);by[w]+=1
         if type(c["revision"]) is not int or c["revision"]<1:raise ValueError("case revision")
         if d not in DRIVERS or c["mode"] not in MODE or c["screenshot"] not in SCREEN:raise ValueError("case routing")
-        if d=="t1_compute" and not (re.fullmatch("T1-0[1-4]",id) and c["mode"]=="auto"):raise ValueError("invalid T1 executable mapping")
+        if d=="t1_compute" and not (re.fullmatch("T1-0[1-5]",id) and c["mode"]=="auto"):raise ValueError("invalid T1 executable mapping")
         if d=="t2_gles" and not (re.fullmatch("T2-0[1-4]",id) and c["mode"]=="auto"):raise ValueError("invalid T2 executable mapping")
         if d=="t3_visual" and not (re.fullmatch("T3-0[1-6]",id) and c["mode"]=="assisted"):raise ValueError("invalid T3 executable mapping")
         if d=="mouse_manual" and (w!="T4" or c["mode"]!="manual"):raise ValueError("mouse must require real input")
