@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-LOCAL-LOGS-R5-20261109T2014Z-6d27",
+  "request_id": "T5-SHARED-LOCAL-LOGS-R5-20261109T2016Z-CAS6D27",
   "target": "SHARED",
-  "requested_from_sha": "2e8d173d1c68de7e94b9d065bd8ec80841f9518a",
+  "requested_from_sha": "f46f792b5bb7cc17228d52a67b1ff950870aa831",
   "pack_sha256": "9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6",
-  "reason": "Owner Download/logs Android15 new compiled host SAF tree scanner UI, explicit APK/OBB v91 SHA256 action, bounded private BlackBox log counts, legacy pack distinction, import only compatible non-older unified JSON; preserve T1-05 local512 and 30 cases. Source CI42690234266 SDK35 and JVM SUCCESS. New driver code requires a single R5 unified Mini APK; no full Raft XAPK, no gameplay PASS claimed.",
+  "reason": "CAS-pinned retry after CI42690937486 parent lease rejection (NO APK). Owner Download/logs Android15 SAF tree scanner, guarded APK+OBB v91 SHA256, bounded BlackBox log counts, safe pack import, Arabic UI; keep compiled T1-05 and all 30 cases. Source CI42690234266 SUCCESS. One shared Mini R5 Android build only; no full game XAPK or fabricated phone pass.",
   "publish": false
 }
