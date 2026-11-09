@@ -413,6 +413,128 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
         self.assertGreater(v["invalid_markers"], 0)
 
+    def test_genuine_csharp_bool_tostring_captured_reader(self):
+        # AndroidPhysicalMouseCapture.cs concatenates C# bool requested and
+        # nativeCaptured => "True"/"False", unlike lowercase literal flags.
+        session = "20261109T202400123-csharp"
+        requested = req(80).split(" ", 1)[1]
+        actions_detail = full_actions(80, press=1, press_mask=1).split(" ", 1)[1]
+        reader_detail = (full_reader(80, {"down0": 1}).split(" ", 1)[1]
+                         .replace("captureRequested=true", "captureRequested=True")
+                         .replace("captureObserved=true", "captureObserved=True"))
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", requested, session, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions_detail, session, 2),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        reader_detail, session, 3),
+        ])
+        self.assertEqual(v["matched_jsonl_scoped_attempts"], 1)
+        self.assertEqual(v["captured_press_with_matching_fallback_down"]["left"], 1)
+        self.assertFalse(v["device_pass"])
+
+    def test_genuine_csharp_false_capture_observed_rejects_reader(self):
+        raw = full_reader(81, {"down0": 1}).replace(
+            "captureObserved=true", "captureObserved=False")
+        v = gate.triage([req(81), full_actions(81, press=1, press_mask=1), raw])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_csharp_boolean_suffix_or_uppercase_invalid(self):
+        for spelling in ("TRUE", "true9", "Truejunk", "Falsejunk"):
+            with self.subTest(spelling=spelling):
+                raw = readers(82).replace("captureRequested=true",
+                                           "captureRequested=" + spelling)
+                v = gate.triage([req(82), actions(82), raw])
+                self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+                self.assertGreater(v["invalid_markers"], 0)
+
+    def test_malformed_epoch_suffix_does_not_reuse_generation(self):
+        for value in ("83junk", "83.0", "83x", "83/0"):
+            with self.subTest(epoch=value):
+                v = gate.triage([req(83).replace("epoch=83", "epoch="+value),
+                                 actions(83), readers(83)])
+                self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+                self.assertGreater(v["invalid_markers"], 0)
+
+    def test_repeated_epoch_key_malformed_second_is_invalid(self):
+        v = gate.triage([req(84) + "; epoch=not_a_number",
+                         actions(84), readers(84)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_invalid_numeric_grammar_never_claims_getter(self):
+        for value in ("5tail", "5.0", "5+1", "+5", "5extra", "５"):
+            with self.subTest(value=value):
+                corrupt = readers(85).replace("getterCalls=5",
+                                               "getterCalls=" + value)
+                v = gate.triage([req(85), actions(85), corrupt])
+                self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+                self.assertGreater(v["invalid_markers"], 0)
+
+    def test_duplicate_numeric_counter_even_with_malformed_copy_rejected(self):
+        reader = readers(86) + "; getterCalls=bogus"
+        v = gate.triage([req(86), actions(86), reader])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_absurdly_long_epoch_does_not_crash_or_claim_capture(self):
+        huge = "9" * 5500
+        v = gate.triage([req(87).replace("epoch=87", "epoch=" + huge),
+                         actions(87), readers(87)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_absurdly_long_counter_does_not_crash_or_claim_reader(self):
+        huge = "8" * 5500
+        bad = readers(88).replace("getterCalls=5", "getterCalls=" + huge)
+        v = gate.triage([req(88), actions(88), bad])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_absurdly_long_slot_does_not_crash_or_claim_channel(self):
+        huge = "7" * 5500
+        bad = full_reader(89, {"down0": 1}).replace(
+            "down0Calls=1", "down0Calls=" + huge)
+        v = gate.triage([req(89), full_actions(89, press=1, press_mask=1), bad])
+        self.assertEqual(v["complete_per_channel_scoped_attempts"], 0)
+        self.assertFalse(v["device_pass"])
+
+    def test_epoch_source_int32_overflow_is_invalid(self):
+        v = gate.triage([req(90).replace("epoch=90", "epoch=2147483648"),
+                         actions(90), readers(90)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_csharp_counter_boundary_guard(self):
+        self.assertEqual(gate.parse_counter("getterCalls=9223372036854775807",
+                                            "getterCalls"), gate.MAX_INT64)
+        self.assertIsNone(gate.parse_counter("getterCalls=9223372036854775808",
+                                             "getterCalls"))
+        self.assertIsNone(gate.parse_counter("getterCalls=" + "8" * 5000,
+                                             "getterCalls"))
+
+    def test_callback_counter_must_fit_original_int32(self):
+        raw = full_actions(91, press=1, press_mask=1).replace(
+            "capturedCallbackEvents=1", "capturedCallbackEvents=2147483648")
+        v = gate.triage([req(91), raw, full_reader(91, {"down0": 1})])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_numeric_press_mask_suffix_not_accepted(self):
+        raw = full_actions(92, press=1, press_mask=1).replace(
+            "pressMask=1", "pressMask=1extra")
+        v = gate.triage([req(92), raw, full_reader(92, {"down0": 1})])
+        self.assertEqual(v["complete_per_channel_scoped_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_per_slot_int32_overflow_fails_closed(self):
+        raw = full_reader(93, {"down0": 1}).replace(
+            "down0Calls=1", "down0Calls=2147483648")
+        v = gate.triage([req(93), full_actions(93, press=1, press_mask=1), raw])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
     def test_mixed_process_risk_stays_disclosed(self):
         v = gate.triage([])
         self.assertFalse(v["device_pass"])
