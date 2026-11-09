@@ -22,6 +22,8 @@ def audit(records):
     paired = set()
     invalid_sequences = set()
     failed_returns = set()
+    # One JSONL input represents one runtime session/build, not a merge of runs.
+    provenance = {}
     errors = []
     for row in records:
         if not isinstance(row, dict):
@@ -50,6 +52,14 @@ def audit(records):
         if not seq.isascii() or not seq.isdecimal() or not 1 <= int(seq) <= 16 or str(int(seq)) != seq:
             raise ValueError("invalid bounded sequence")
         seq = int(seq)
+        for name in ("session_id", "build_sha"):
+            if name in fields:
+                if name in provenance and provenance[name] != fields[name]:
+                    errors.append("cross_session_provenance:" + name + ":" + str(seq))
+                    invalid_sequences.add(seq)
+                    paired.discard(seq)
+                else:
+                    provenance[name] = fields[name]
         key = (event, seq)
         duplicate = key in seen
         if duplicate:
@@ -78,6 +88,10 @@ def audit(records):
                 failed_returns.add(seq)
             if not mismatched and seq not in failed_returns and seq not in invalid_sequences:
                 paired.add(seq)
+    # A foreign trace can arrive after an earlier pair was counted; no pair
+    # from a mixed-provenance file may be used as a positive result.
+    if any(error.startswith("cross_session_provenance:") for error in errors):
+        paired.clear()
     missing = sorted(seq for seq in pending if seq not in paired)
     return {"before_count": len(pending),
             "returned_count": len([k for k in seen if k[0] == AFTER]),
