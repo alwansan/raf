@@ -500,6 +500,132 @@ internal static class Program
         return "original_method_return_producer_unknown";
     }
 
+    // Independent CFG topology AUDIT ONLY. An adjacent return predecessor is
+    // syntax, never an object-instance or evaluation-stack provenance proof.
+    // Inspect only source-original managed method identities in runner scratch.
+    static string ReachableReturnTopology(MethodDefinition method)
+    {
+        if(!method.HasBody)return "cfg_missing_body";
+        if(method.Body.HasExceptionHandlers)return "cfg_exception_regions";
+        var il=method.Body.Instructions;
+        if(il.Count==0 || il.Count>128)return "cfg_instruction_budget";
+        var indices=new Dictionary<Instruction,int>();
+        for(int i=0;i<il.Count;i++)
+            if(!indices.TryAdd(il[i],i))return "cfg_malformed_graph";
+        var queue=new Queue<int>();
+        var reached=new HashSet<int>();
+        var incoming=new Dictionary<int,HashSet<int>>();
+        var returns=new List<int>();
+        queue.Enqueue(0);
+        while(queue.Count>0)
+        {
+            int at=queue.Dequeue();
+            if(at<0 || at>=il.Count)return "cfg_malformed_graph";
+            if(!reached.Add(at))continue;
+            if(reached.Count>128)return "cfg_instruction_budget";
+            var instruction=il[at];
+            var flow=instruction.OpCode.FlowControl;
+            var targets=new List<int>();
+            if(flow==FlowControl.Return)
+            {
+                if(instruction.OpCode.Code!=Code.Ret)return "cfg_unsupported_flow";
+                returns.Add(at);
+                continue;
+            }
+            if(flow==FlowControl.Throw)
+                continue; // Throw terminates this route; no inferred return.
+            if(flow is FlowControl.Branch or FlowControl.Cond_Branch)
+            {
+                if(instruction.OpCode.Code==Code.Switch)
+                {
+                    if(instruction.Operand is not Instruction[] jumpTable || jumpTable.Length>128)
+                        return "cfg_malformed_graph";
+                    foreach(var target in jumpTable)
+                    {
+                        if(!indices.TryGetValue(target,out int dest))return "cfg_malformed_graph";
+                        targets.Add(dest);
+                    }
+                }
+                else
+                {
+                    if(instruction.Operand is not Instruction jump ||
+                       !indices.TryGetValue(jump,out int dest))
+                        return "cfg_malformed_graph";
+                    targets.Add(dest);
+                }
+                if(flow==FlowControl.Cond_Branch)
+                {
+                    if(at+1>=il.Count)return "cfg_fallthrough_past_end";
+                    targets.Add(at+1);
+                }
+            }
+            else if(flow is FlowControl.Next or FlowControl.Call or FlowControl.Meta or FlowControl.Break)
+            {
+                if(at+1>=il.Count)return "cfg_fallthrough_past_end";
+                targets.Add(at+1);
+            }
+            else return "cfg_unsupported_flow";
+            foreach(int target in targets.Distinct())
+            {
+                if(!incoming.TryGetValue(target,out var parents))
+                    incoming[target]=parents=new HashSet<int>();
+                parents.Add(at);
+                if(!reached.Contains(target))queue.Enqueue(target);
+            }
+        }
+        if(returns.Count==0)return "cfg_no_reachable_returns";
+        var families=new HashSet<string>();
+        foreach(int ret in returns)
+        {
+            if(!incoming.TryGetValue(ret,out var parents) || parents.Count!=1)
+                return "cfg_multiple_or_entry_return_predecessors";
+            int predecessor=parents.Single();
+            // An unconditional branch entering a ret may carry a value
+            // loaded elsewhere; never treat the prior textual instruction
+            // as the actual producer in that situation.
+            if(predecessor!=ret-1)return "cfg_nonadjacent_return_predecessor";
+            var source=il[predecessor];
+            string family=source.OpCode.Code switch
+            {
+                Code.Ldsfld when source.Operand is FieldReference f &&
+                    f.FieldType.FullName is Texture or RenderTexture =>
+                    "cfg_syntactic_static_texture_field",
+                Code.Ldfld when source.Operand is FieldReference f &&
+                    f.FieldType.FullName is Texture or RenderTexture =>
+                    "cfg_syntactic_instance_texture_field_receiver_unproved",
+                Code.Ldnull=>"cfg_syntactic_null",
+                Code.Call or Code.Callvirt =>"cfg_syntactic_nested_call_untraced",
+                Code.Ldloc or Code.Ldloc_S or Code.Ldloc_0 or
+                    Code.Ldloc_1 or Code.Ldloc_2 or Code.Ldloc_3=>
+                    "cfg_syntactic_local_untraced",
+                Code.Ldarg or Code.Ldarg_S or Code.Ldarg_0 or
+                    Code.Ldarg_1 or Code.Ldarg_2 or Code.Ldarg_3=>
+                    "cfg_syntactic_argument_untraced",
+                _=>"cfg_syntactic_other_untraced"
+            };
+            families.Add(family);
+        }
+        return families.Count==1?families.Single():"cfg_mixed_syntactic_return_predecessors";
+    }
+
+    static string OriginalTextureReturnCfgTopology(StackSourceTrace trace,ModuleDefinition sourceModule)
+    {
+        if(trace.Kind!="typed_call_result")return "not_call_return_source";
+        var source=trace.SourceInstruction;
+        if(source?.Operand is not MethodReference reference)return "cfg_missing_call_reference";
+        MethodDefinition? original=null;
+        try {original=reference.Resolve();}
+        catch(AssemblyResolutionException){return "cfg_external_or_unresolved";}
+        catch(ResolutionException){return "cfg_external_or_unresolved";}
+        if(original is null || original.Module!=sourceModule)return "cfg_external_or_unresolved";
+        if(source.OpCode.Code==Code.Callvirt)
+        {
+            if(!original.HasThis)return "cfg_invalid_callvirt_receiver";
+            if(original.IsVirtual && !original.IsFinal)return "cfg_dynamic_dispatch_unresolved";
+        }
+        return ReachableReturnTopology(original);
+    }
+
     static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
     {
         // Public type-family only. In particular a preceding void call is
@@ -792,6 +918,24 @@ internal static class Program
             throw new InvalidOperationException("private_return_method_info_forbidden");
         Console.WriteLine("T2_FOAM_PASS0_CALLEE_BODY_FAMILY "+methodKind0);
         Console.WriteLine("T2_FOAM_PASS1_CALLEE_BODY_FAMILY "+methodKind1);
+        var topo0=OriginalTextureReturnCfgTopology(back0,asm.MainModule);
+        var topo1=OriginalTextureReturnCfgTopology(back1,asm.MainModule);
+        var permittedCfg=new HashSet<string>{
+            "not_call_return_source","cfg_missing_call_reference","cfg_external_or_unresolved",
+            "cfg_invalid_callvirt_receiver","cfg_dynamic_dispatch_unresolved","cfg_missing_body",
+            "cfg_exception_regions","cfg_instruction_budget","cfg_malformed_graph",
+            "cfg_unsupported_flow","cfg_fallthrough_past_end","cfg_no_reachable_returns",
+            "cfg_multiple_or_entry_return_predecessors","cfg_nonadjacent_return_predecessor",
+            "cfg_syntactic_static_texture_field",
+            "cfg_syntactic_instance_texture_field_receiver_unproved",
+            "cfg_syntactic_null","cfg_syntactic_nested_call_untraced",
+            "cfg_syntactic_local_untraced","cfg_syntactic_argument_untraced",
+            "cfg_syntactic_other_untraced","cfg_mixed_syntactic_return_predecessors"
+        };
+        if(!permittedCfg.Contains(topo0)||!permittedCfg.Contains(topo1))
+            throw new InvalidOperationException("private_cfg_return_info_forbidden");
+        Console.WriteLine("T2_FOAM_PASS0_CALLEE_CFG_TOPOLOGY "+topo0);
+        Console.WriteLine("T2_FOAM_PASS1_CALLEE_CFG_TOPOLOGY "+topo1);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -981,6 +1125,48 @@ internal static class Program
         instanceGetter.Body.Instructions.Insert(0,Instruction.Create(OpCodes.Br_S,instanceGetter.Body.Instructions[0]));
         if(OriginalTextureReturnBodyFamily(traced,mod)!="original_method_branch_flow")
             throw new InvalidOperationException("branchy_body_must_remain_unresolved");
+        // Reachability is stronger than a text-only predecessor guess:
+        // two controlled branches can both end in typed static source loads.
+        var branchGetter=new MethodDefinition("SourceFreeBranchGetter",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,tex);
+        owner.Methods.Add(branchGetter);
+        var branchBody=branchGetter.Body.Instructions;
+        var sideA=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
+        var retA=Instruction.Create(OpCodes.Ret);
+        var sideB=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
+        var retB=Instruction.Create(OpCodes.Ret);
+        branchBody.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        branchBody.Add(Instruction.Create(OpCodes.Brtrue_S,sideB));
+        branchBody.Add(sideA);branchBody.Add(retA);branchBody.Add(sideB);branchBody.Add(retB);
+        if(ReachableReturnTopology(branchGetter)!="cfg_syntactic_static_texture_field")
+            throw new InvalidOperationException("branch_return_static_predecessors_not_detected");
+        branchBody[4]=Instruction.Create(OpCodes.Ldnull);
+        // Update the conditional target to the replaced instruction.
+        branchBody[1].Operand=branchBody[4];
+        if(ReachableReturnTopology(branchGetter)!="cfg_mixed_syntactic_return_predecessors")
+            throw new InvalidOperationException("branch_mixed_return_predecessor_not_rejected");
+        var jumpToRet=Instruction.Create(OpCodes.Br_S,retB);
+        branchBody[4]=jumpToRet;
+        branchBody[1].Operand=jumpToRet;
+        if(ReachableReturnTopology(branchGetter)!="cfg_multiple_or_entry_return_predecessors")
+            throw new InvalidOperationException("direct_ret_branch_must_not_forge_producer");
+        branchBody[4]=Instruction.Create(OpCodes.Br_S,Instruction.Create(OpCodes.Nop));
+        branchBody[1].Operand=branchBody[4];
+        if(ReachableReturnTopology(branchGetter)!="cfg_malformed_graph")
+            throw new InvalidOperationException("detached_target_must_be_rejected");
+        branchBody[4]=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
+        branchBody[1].Operand=branchBody[4];
+        var switchBranch=Instruction.Create(OpCodes.Switch,new[]{branchBody[4]});
+        branchBody[1]=switchBranch;
+        if(ReachableReturnTopology(branchGetter)!="cfg_syntactic_static_texture_field")
+            throw new InvalidOperationException("switch_return_paths_not_counted");
+        switchBranch.Operand=new[]{Instruction.Create(OpCodes.Nop)};
+        if(ReachableReturnTopology(branchGetter)!="cfg_malformed_graph")
+            throw new InvalidOperationException("detached_switch_target_not_rejected");
+        // A synthetic exception region remains blocked regardless of returns.
+        branchGetter.Body.ExceptionHandlers.Add(new ExceptionHandler(ExceptionHandlerType.Finally));
+        if(ReachableReturnTopology(branchGetter)!="cfg_exception_regions")
+            throw new InvalidOperationException("exception_return_paths_must_remain_unresolved");
     }
 
     public static int Main(string[] args)
