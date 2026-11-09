@@ -6,7 +6,10 @@ on:
     paths:
       - '.github/workflows/raft-t5-unified-saf-source.yml'
       - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ManualImageEvidencePolicy.java'
+      - 'apk-for-testing/unified/app/build.gradle'
       - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java'
+      - 'tests/java/ManualImageEvidencePolicyTest.java'
       - 'tests/test_t5_unified_saf_stream_contract.py'
       - 'tests/java/T5StreamSha256Test.java'
   workflow_dispatch:
@@ -44,6 +47,14 @@ jobs:
             apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/StreamSha256.java \
             tests/java/T5StreamSha256Test.java
           java -cp /tmp/raft-t5-stream-classes com.alwansan.raftlab.T5StreamSha256Test
+      - name: Validate actual Java PNG CRC, image bounds and WebP/JPEG container controls
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/raft-t5-image-classes
+          javac -d /tmp/raft-t5-image-classes \
+            apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ManualImageEvidencePolicy.java \
+            tests/java/ManualImageEvidencePolicyTest.java
+          java -cp /tmp/raft-t5-image-classes com.alwansan.raftlab.ManualImageEvidencePolicyTest
       - uses: android-actions/setup-android@v3
         with:
           packages: 'platform-tools'
