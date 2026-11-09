@@ -27,3 +27,11 @@ At start 2026-11-09 19:10 UTC latest 25 Actions had no running same-export smoke
 
 ## Safety / next steps
 Monitor current 42681908313 job steps. If successful, take bounded report `export_shader_status` (ACTUAL_DUMMY_SHADER_TEXT_EXPORTER vs PROGRAMMED_STRUCTURAL_PASS_NOT_AUTHENTICITY etc.), number of real ShaderLab Passes, lexical ColorMask presence with active Pass still UNKNOWN, compare evidence to actual original pass. If export fails, record exact stage without raw error/asset paths, then adjust only own script/workflow if warranted. Preserve installed shared lab and full Unity game; do not publish original shader or guess repair. Save final status in this session + experiment + B_TEAM event; mark work completed/waiting_ci appropriately for scheduled T3 pickup.
+
+## Final verified result — 2026-11-09 19:19 UTC
+- [CI42681908313](https://github.com/alwansan/raf/actions/runs/42681908313) **SUCCESS** on 78826ae4333b0b401c7170350a7aeaa67b13583d. Source-free tests, W1+B02 exporter compile, 12 SHA-original provider stage and one real original AssetRipper export passed. Artifact 13702312921: https://github.com/alwansan/raf/actions/runs/42681908313/artifacts/13702312921
+- Actual private original class48 linkage was identity-bound via same export_instance W1+B02 to .shader.meta GUID and exact output .shader. Exactly 17 smoke-name renderers/34 original Material slots; fire34 identity distinct.
+- **ACTUAL_DUMMY_SHADER_TEXT_EXPORTER=true** for selected custom shader. Output has one Pass/one superficial program block but dummy marker takes precedence; exported lexical ColorMask RGB=false versus original real fixed RGB ColorMask, Alpha-dependent Color/Alpha Blend, ZWrite OFF. No actual program/active Pass equivalence or on-device pixel proof.
+- Safe report: docs/T3_SMOKE34_SAMEEXPORT_DUMMY_2026-11-09_AR.md; experiment/event same session_id; work marked completed and exporter resource released.
+- This proves Dummy in **one original bounded pinned export**, not Android installed game, not exact identity of square smoke on phone, not a fix. RENDER-002 OPEN NOT_READY 0/3. No native Raft assets/OBB/APK changed.
+- Next independent work: authentic source→postvendor/restorer comparison for this private smoke34 Shader48; do not rerun equivalent original one-instance export or infer 108 fire shader.
