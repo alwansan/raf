@@ -28,3 +28,10 @@
 
 ## قرار منهجي
 `RENDER-002/WATER-001` ما زالت OPEN؛ اللعبة NOT_READY 0/3. أول تجربة GFX-01 exact 921-use/white renderer original→postrestorer GUID→program/Pass. لا APK جديد قبل تكافؤ وتجربة Android مبررة. حافظ على صوت/Settings ودخول العالم الموثق؛ لا تتعارض مع الفريق. اقرأ [خارطة التجارب](../docs/EXPERIMENT_ROADMAP_AR.md).
+
+## Actual first lab — GFX-AVATAR-001 (2026-11-10 checkpoint)
+**CI real pass:** [42702078254](https://github.com/alwansan/raf/actions/runs/42702078254), Unity2021.3.45f2 Android IL2CPP ARM64 / GLES3, actual original ZIP2 three SHA owner files, one source player-like SkinnedMeshRenderer Mesh extracted as OBJ (375 vertices, 420 faces; **probably only one component, not proven entire player**), Unity import and build PASS, APK signature checked. [APK artifact](https://github.com/alwansan/raf/actions/runs/42702078254/artifacts/13711903486), bytes 9686808, SHA256 `727a0ad7174d720629d0fa5cd8723a810319ba224c92b4793a392cd1baf7bc3f`, package `com.alwansan.raft.graphicslab`. Standalone APK delivered directly in chat; user's device **not yet tested**. No OBB, no game-level shaders restored, no complete avatar proven.
+
+**Runtime UI:** white Standard vs Unlit white, drag/pinch orbit, spin/reset, COPY LOG (clipboard JSON), persistentDataPath/gfxlab/report.json, original model category and mesh/GPU counters. Keep evidence stage distinct (source import success != Android device pixels). Detailed state/session: `memory/sessions/20261110-GFX-chat-avatar-001-42702078254.md`.
+
+**Next:** owner checks the APK and reports screen/clipboard. Then group same-root SkinnedMeshRenderer parts and transforms/bindposes to build full character, verify source identity, recover actual material/shader/colors with T3 coordination. Do not run another heavy Unity build for minor source-only changes or mislabel a one-part mesh as whole player.
