@@ -23,5 +23,15 @@
   "hypothesis": "Original managed IL may show direct stfld/stsfld writes to exact pass0 Foam RenderTexture destination declared field and syntactic writer adjacency, and determine lexical relative placement of pass0/pass1 Foam Blit sites. This narrows writer/alias lifecycle investigation, without proving runtime field assignment, same receiver, same frame, object alias, null execution or device pixels.",
   "safety": "Use original SHA-pinned private Cecil workflow, emit finite categories only; do not reveal original symbol names, metadata tokens, paths, IL, private bytes. No game/Unity content edits, no shared mini/full APK, no other worker files or forced branch updates.",
   "next_step": "Add bounded direct original CIL writer census and pass-site lexical co-location with isolated synthetic positives/negatives, strict safe JSON schema and original pinned CI.",
-  "updated_at": "2026-11-09T20:40:00Z"
+  "updated_at": "2026-11-09T20:46:00Z",
+  "followup_hypothesis": "With original pass0 destination field writers located outside pass0 Blit method and pass0/pass1 in distinct methods, determine specifically whether any direct stfld/stsfld writer is co-located in the unique original pass1 Blit method. This is only CIL method identity, never same-frame execution or image alias.",
+  "followup_scope": "Same T2 Program.cs and strict report/tests already reserved. New finite label only, fail closed when original pass1 site ambiguous.",
+  "verified_initial_ci": "https://github.com/alwansan/raf/actions/runs/42695789057",
+  "initial_result": {
+    "python_tests_passed": 24,
+    "cecil_selftest": "PASS",
+    "original_pass0_field_store_class": "multiple_resolved_direct_stores",
+    "store_placement": "stores_only_in_other_methods",
+    "pass0_pass1_blit_relation": "blit_sites_in_distinct_methods"
+  }
 }
