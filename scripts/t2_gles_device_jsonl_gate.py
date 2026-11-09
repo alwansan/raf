@@ -89,11 +89,11 @@ def verify(lines, expected_case):
         # This validates only self-consistency of the exported text, not GPU pixels.
         arrays = {}
         for name in ("sourceLeft", "sourceRight", "finalBaseline", "finalContrast"):
-            match = re.search(r"(?<![A-Za-z])" + name +
-                              r"=\[([^\]]+)\]", detail)
-            if not match:
-                raise ValueError("missing_rgba_readback")
-            components = match.group(1).split(",")
+            matches = re.findall(r"(?<![A-Za-z0-9_])" + name +
+                                 r"=\[([^\]]*)\]", detail)
+            if len(matches) != 1:
+                raise ValueError("missing_or_duplicate_rgba_readback")
+            components = matches[0].split(",")
             if len(components) != 4 or any(
                     re.fullmatch(r"\s*(?:0|[1-9][0-9]{0,2})\s*", c) is None
                     for c in components):
