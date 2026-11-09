@@ -1,0 +1,28 @@
+{
+  "id": "T3-20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4-raw-png-ci",
+  "session_id": "20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "6fe95344909bd919dc8bc08cc245bda640e1155e",
+  "updated_at": "2026-11-09T01:42:06Z",
+  "intended_files": [
+    ".github/workflows/raft-t3-cl-r3-png-evidence.yml",
+    "prompt/coordination/clients/T3/sessions/20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4.md",
+    "prompt/coordination/work/RENDER-002/T3-20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4-raw-png-ci.json",
+    "prompt/coordination/B_TEAM/events/T3/20261109T0142Z-T3-chat-cl-r3-png-ci-p8r4.json"
+  ],
+  "experiment_key": "t3-r3-cl-png-six-raw-pixels:CL@24a677fc8fa4749c0bcf8a3cac01fa80b1641c86:shared-20261108-232759-468049775:six-blob-shas:stdlib-decode-v1",
+  "resource_key": "github-actions-ubuntu-24.04-lightweight-io",
+  "scope": "Independent CI harness to fetch six commit-pinned CL R3 PNGs, verify exact Git blob SHAs, execute T3 scheduled script's existing source-free tests and inspect pixel distributions; DO NOT change T3 scheduled script or tests or shared APK",
+  "hypothesis": "A commit-pinned, source-free GitHub Actions audit can separate black/flat screenshot captures from non-black sampled device PNGs, without treating EVIDENCE_READY as visual/game PASS.",
+  "resumed_from_sessions": [
+    "20261109T0134Z-T3-scheduled-cl-png-pixel-audit-k7m2",
+    "20261108T2326Z-T3-scheduled-cl-r3-proof-j7k4",
+    "20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8"
+  ],
+  "constraints": "CL read-only; no raw captures in public artifacts; no proprietary game assets, Unity, APK, OBB or T5 app source; no automatic device PASS",
+  "planned_test": "Push path-scoped isolated Actions workflow; check synthetic unittest and six raw CL PNG CRC decoding and aggregate distributions; save CI link/results in session",
+  "status_detail": "scope reservation before source implementation"
+}
