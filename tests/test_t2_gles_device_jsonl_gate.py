@@ -153,6 +153,17 @@ class TestEvidenceGate(unittest.TestCase):
                 row["detail"] = "OK rejects unattached FBO: 0x8cd7"
         self.assertTrue(verify(encoded(rows), "CASE03")["synthetic_gles_log_consistent"])
 
+    def test_case03_rejects_conflicting_second_status(self):
+        for status in ("0x8cd7 0x8cd6", "0x8cd6 0x8cd7",
+                       "0x8cd7 0x8cd70", "0x8cd7 0X8CD6"):
+            rows = records("CASE03")
+            for row in rows:
+                if row["event"] in ("gl_observed", "shared_auto_result"):
+                    row["detail"] = "OK rejects unattached FBO: " + status
+            with self.subTest(status=status):
+                with self.assertRaises(ValueError):
+                    verify(encoded(rows), "CASE03")
+
     def test_allow_equal_timestamps(self):
         rows = records()
         rows[4]["unix_ms"] = rows[3]["unix_ms"]
