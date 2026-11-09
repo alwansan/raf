@@ -86,10 +86,11 @@ class OriginalSmokeUserSemanticProbeTests(unittest.TestCase):
                 (folder/filename).write_bytes(module(
                     extension=True, annotations=True, locations=tuple(range(3+i))))
             return result
-        c = self.evaluate(translator=annotating)["counts"]
+        report = self.evaluate(translator=annotating)
+        c = report["counts"]
         self.assertEqual(c["original_spv_explicit_semantic_matches_original"], 7)
         self.assertEqual(c["roundtrip_spv_explicit_semantic_matches_original"], 7)
-        self.assertFalse(self.evaluate()["original_DXBC_semantics_to_SPIRV_instruction_dataflow_proven"])
+        self.assertFalse(report["original_DXBC_semantics_to_SPIRV_instruction_dataflow_proven"])
 
     def test_untrusted_ambiguous_private_classifier_data_cannot_leak(self):
         def leak(_src, _ref, _parsed):
