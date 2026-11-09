@@ -656,6 +656,18 @@ internal static class Program
         static string JoinOrigins(string a,string b) =>
             string.Join("|",a.Split('|').Concat(b.Split('|'))
                 .Distinct(StringComparer.Ordinal).OrderBy(x=>x,StringComparer.Ordinal));
+        // Prove only exact, single-family constant equalities; the coarse
+        // 'nonzero' class deliberately cannot prove equality with itself.
+        // No heap/reference aliases or input-dependent values are folded.
+        static bool? ExactConstantEquality(string left,string right)
+        {
+            if(left.Contains('|')||right.Contains('|'))return null;
+            if(left=="null"&&right=="null")return true;
+            if(left=="literal_i4_zero"&&right=="literal_i4_zero")return true;
+            if((left=="literal_i4_zero"&&right=="literal_i4_nonzero")||
+               (left=="literal_i4_nonzero"&&right=="literal_i4_zero"))return false;
+            return null;
+        }
         int visits=0;
         while(queue.Count>0)
         {
@@ -669,6 +681,7 @@ internal static class Program
             var op=ins.OpCode.Code;
             var flow=ins.OpCode.FlowControl;
             string? branchSelector=null;
+            bool? knownBranchTaken=null;
             string Pop()
             {
                 if(stack.Count==0)throw new InvalidOperationException("abstract_stack_underflow");
@@ -697,8 +710,15 @@ internal static class Program
                     {
                         if(op is Code.Brtrue or Code.Brtrue_S or Code.Brfalse or
                             Code.Brfalse_S or Code.Switch)branchSelector=Pop();
-                        else if(op is Code.Beq or Code.Beq_S or Code.Bne_Un or Code.Bne_Un_S or
-                            Code.Bge or Code.Bge_S or Code.Bge_Un or Code.Bge_Un_S or
+                        else if(op is Code.Beq or Code.Beq_S or Code.Bne_Un or Code.Bne_Un_S)
+                        {
+                            string right=Pop(),left=Pop();
+                            bool? eq=ExactConstantEquality(left,right);
+                            if(eq.HasValue)
+                                knownBranchTaken=(op is Code.Beq or Code.Beq_S) ?
+                                    eq.Value : !eq.Value;
+                        }
+                        else if(op is Code.Bge or Code.Bge_S or Code.Bge_Un or Code.Bge_Un_S or
                             Code.Bgt or Code.Bgt_S or Code.Bgt_Un or Code.Bgt_Un_S or
                             Code.Ble or Code.Ble_S or Code.Ble_Un or Code.Ble_Un_S or
                             Code.Blt or Code.Blt_S or Code.Blt_Un or Code.Blt_Un_S)
@@ -774,7 +794,14 @@ internal static class Program
                 {Pop();Pop();stack.Add("opaque");}
                 else if(op is Code.Ldind_Ref or Code.Ldlen)
                 {Pop();stack.Add("opaque");}
-                else if(op is Code.Ceq or Code.Cgt or Code.Cgt_Un or Code.Clt or
+                else if(op==Code.Ceq)
+                {
+                    string right=Pop(),left=Pop();
+                    bool? equal=ExactConstantEquality(left,right);
+                    stack.Add(equal.HasValue ? (equal.Value ? "literal_i4_nonzero" :
+                        "literal_i4_zero") : "opaque");
+                }
+                else if(op is Code.Cgt or Code.Cgt_Un or Code.Clt or
                     Code.Clt_Un or Code.Add or Code.Sub or Code.Mul)
                 {Pop();Pop();stack.Add("opaque");}
                 else if(op==Code.Initobj)Pop();
@@ -807,27 +834,19 @@ internal static class Program
                 }
                 if(flow==FlowControl.Cond_Branch)
                 {
-                    // Only branch instructions on an exactly known CIL
-                    // constant/null predicate may discard an impossible edge.
-                    // All computed, joined, call or argument values explore
-                    // BOTH successors. Never infer game runtime input values.
-                    bool isTruthy=branchSelector=="literal_i4_nonzero";
+                    // Prune only exactly established CIL constants/equalities.
+                    // Joined categories, unknown args, and computed values
+                    // still explore BOTH successors; never infer device state.
                     if((op is Code.Brtrue or Code.Brtrue_S or Code.Brfalse or Code.Brfalse_S)
                        && (branchSelector is "literal_i4_zero" or "literal_i4_nonzero" or "null"))
                     {
-                        bool takesJump=(op is Code.Brtrue or Code.Brtrue_S) ? isTruthy : !isTruthy;
-                        if(takesJump)successors.Clear(); // will add exact target below
-                        // The branch target was the only successor so far.
-                        // Preserve that target when jumping, never keep fallthrough.
-                        // For the false case replace it with fallthrough.
-                        // (Implemented without guessing runtime conditions.)
-                        if(takesJump)
-                            successors.Add(ix[(Instruction)ins.Operand]);
-                        else
-                        {
-                            successors.Clear();
-                            successors.Add(at+1);
-                        }
+                        bool truth=branchSelector=="literal_i4_nonzero";
+                        knownBranchTaken=(op is Code.Brtrue or Code.Brtrue_S)?truth:!truth;
+                    }
+                    if(knownBranchTaken.HasValue)
+                    {
+                        successors.Clear();
+                        successors.Add(knownBranchTaken.Value ? ix[(Instruction)ins.Operand] : at+1);
                     }
                     else successors.Add(at+1);
                 }
@@ -1551,8 +1570,52 @@ internal static class Program
         v[0]=Instruction.Create(OpCodes.Ldc_I4_1);
         if(ReachableReturnValueFlow(valueGetter)!="value_null_only")
             throw new InvalidOperationException("brfalse_nonzero_must_take_fallthrough");
-        v[0]=Instruction.Create(OpCodes.Ldarg_0);
-        v[1]=Instruction.Create(OpCodes.Brtrue_S,ifTrue);
+        // Constant comparison path controls. Same 'nonzero' abstract tag
+        // is NOT exact integer equality: 1==2 must stay indeterminate.
+        v.Clear();
+        v.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        v.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        v.Add(Instruction.Create(OpCodes.Ceq));
+        v.Add(Instruction.Create(OpCodes.Brtrue_S,ifTrue));
+        v.Add(Instruction.Create(OpCodes.Ldnull));
+        v.Add(Instruction.Create(OpCodes.Ret));
+        v.Add(ifTrue);
+        v.Add(Instruction.Create(OpCodes.Ret));
+        if(ReachableReturnValueFlow(valueGetter)!="value_null_only")
+            throw new InvalidOperationException("ceq_distinct_constants_must_prune_true_edge");
+        v[1]=Instruction.Create(OpCodes.Ldc_I4_0);
+        if(ReachableReturnValueFlow(valueGetter)!="value_static_field_category_only")
+            throw new InvalidOperationException("ceq_equal_zero_constants_must_prune_false_edge");
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_1);
+        v[1]=Instruction.Create(OpCodes.Ldc_I4_2);
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_with_explicit_null_literal")
+            throw new InvalidOperationException("ceq_nonzero_classes_must_not_invent_exact_equality");
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_0);
+        v[1]=Instruction.Create(OpCodes.Ldc_I4_1);
+        v[2]=Instruction.Create(OpCodes.Beq_S,ifTrue);
+        v.RemoveAt(3); // direct beq consumes both stack values
+        if(ReachableReturnValueFlow(valueGetter)!="value_null_only")
+            throw new InvalidOperationException("beq_distinct_constants_must_take_fallthrough");
+        v[1]=Instruction.Create(OpCodes.Ldc_I4_0);
+        if(ReachableReturnValueFlow(valueGetter)!="value_static_field_category_only")
+            throw new InvalidOperationException("beq_equal_zero_constants_must_take_target");
+        v[2]=Instruction.Create(OpCodes.Bne_Un_S,ifTrue);
+        if(ReachableReturnValueFlow(valueGetter)!="value_null_only")
+            throw new InvalidOperationException("bne_equal_zero_must_take_fallthrough");
+        v[1]=Instruction.Create(OpCodes.Ldc_I4_1);
+        if(ReachableReturnValueFlow(valueGetter)!="value_static_field_category_only")
+            throw new InvalidOperationException("bne_distinct_constants_must_take_target");
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_1);
+        v[1]=Instruction.Create(OpCodes.Ldc_I4_2);
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_with_explicit_null_literal")
+            throw new InvalidOperationException("bne_nonzero_classes_must_preserve_both_paths");
+        v.Clear();
+        v.Add(Instruction.Create(OpCodes.Ldarg_0));
+        v.Add(Instruction.Create(OpCodes.Brtrue_S,ifTrue));
+        v.Add(Instruction.Create(OpCodes.Ldnull));
+        v.Add(Instruction.Create(OpCodes.Ret));
+        v.Add(ifTrue);
+        v.Add(Instruction.Create(OpCodes.Ret));
         v[1].Operand=Instruction.Create(OpCodes.Nop);
         if(ReachableReturnValueFlow(valueGetter)!="value_bad_target")
             throw new InvalidOperationException("return_bad_branch_target_not_rejected");
