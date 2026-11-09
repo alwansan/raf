@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "role": "GFX-LAB",
+  "owner_scope": "Raft Android graphics root-cause investigation",
+  "origin": "chat",
+  "branch": "experiment/android-graphics-rootcause",
+  "created_from_branch": "main",
+  "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
+  "source_project_branch": "feature/android-native-port",
+  "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "latest_session": "20261109-GFX-chat-bootstrap-9b89",
+  "latest_session_path": "memory/sessions/20261109-GFX-chat-bootstrap-9b89.md",
+  "status": "bootstrap_evidence_review_completed_experiments_pending",
+  "issues": [
+    {
+      "id": "RENDER-002",
+      "status": "OPEN",
+      "readiness": "NOT_READY_0/3"
+    },
+    {
+      "id": "WATER-001",
+      "status": "OPEN",
+      "readiness": "NOT_READY_0/3"
+    }
+  ],
+  "last_evidence_review": "2026-11-09",
+  "last_verified_native_run": 42058825739,
+  "source_native_build_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+  "important_counts": {
+    "postrestorer_shader_files": 142,
+    "postrestorer_dummy_shaders": 110,
+    "postrestorer_material_docs": 1536,
+    "postrestorer_dummy_bound_docs": 770,
+    "original_materials": 1556,
+    "original_shaders": 165,
+    "original_texture2d": 4050
+  },
+  "next_experiment": "GFX-01 exact original 921-use Shader48 to current native same-export ShaderLab/Unity import status; do not infer device pixels",
+  "build_requested": false,
+  "android_device_test_done_by_this_lab": false,
+  "write_policy": "only this branch; all T branches and CL read-only",
+  "documentation": [
+    "docs/ROOT_CAUSE_REVIEW_AR.md",
+    "docs/EXPERIMENT_ROADMAP_AR.md",
+    "prompt/graphics-lab/RESTORE_AR.md"
+  ],
+  "caveat": "STATE is a hint. Latest individual sessions and CI override stale summary."
+}
