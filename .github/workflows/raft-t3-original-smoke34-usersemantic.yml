@@ -1,0 +1,170 @@
+name: T3 RENDER-002 SHA-original smoke34 SPIR-V explicit UserSemantic annotation census (NO APK)
+# Unique source question: explicit SPV_GOOGLE_hlsl_functionality1 UserSemantic decorations; no inferred mapping.
+# Original program bytes/names are held only under disposable RUNNER_TEMP.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-smoke34-usersemantic.yml
+      - scripts/t3_original_smoke34_usersemantic_probe.py
+      - tests/test_t3_original_smoke34_usersemantic_probe.py
+permissions:
+  contents: read
+concurrency:
+  group: t3-smoke34-UserSemantic-metadata-availability-original-sha15964
+  cancel-in-progress: false
+
+jobs:
+  original-smoke34-usermetadata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout source-only scripts and regression controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Test source-free SPIR-V opcode parser, authentic annotation and semantic-mapping negative gates
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_smoke34_spirv_usersemantic_annotations.py scripts/t3_original_smoke34_usersemantic_probe.py tests/test_t3_smoke34_spirv_usersemantic_annotations.py tests/test_t3_original_smoke34_usersemantic_probe.py
+          python3 -m unittest discover -s tests -p 'test_t3_smoke34_spirv_usersemantic_annotations.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_usersemantic_probe.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_smoke34_location_provenance_gate.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_921_dxbc_semantic_join.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_dxbc_program_inventory.py' -v
+
+      - name: Checkout SHA-immutable ZIP2 original source without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+
+      - name: Select exact SHA-original four Shader owners and six scenes
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: Reassemble authenticated six original scenes and four serialized owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          zip2=Path("zip2-source")
+          target=Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-original-UserSemantic-private"
+          only={"Raft_Data/"+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          report=stage(zip2,target,only)
+          assert len(report["owners"]) == 4
+          assert report["verified_bytes"] == 269007288
+          assert report["lfs_used"] is False
+          for scene,pin in PIN.items():
+              source=zip2/"Raft"/"Raft_Data"/scene
+              verify_source(source,pin)
+              destination=target/"Raft_Data"/scene
+              if destination.exists() or destination.is_symlink():
+                  raise ValueError("private_source_stage_collision")
+              with source.open("rb") as src,destination.open("xb") as dst:
+                  while chunk := src.read(1024*1024):
+                      dst.write(chunk)
+              verify_source(destination,pin)
+          assert len(PIN)==6
+          print("T3_ORIGINAL_SMOKE34_USERSEMANTIC_SOURCES_SHA_VERIFIED=true")
+          PY
+
+      - name: Install original source-only shader translation and reflection dependencies
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+
+      - name: Inspect binary UserSemantic annotation provenance on both exact original PS and roundtrip SPIR-V stages
+        run: |
+          set -euo pipefail
+          timeout 570s python3 -m scripts.t3_original_smoke34_usersemantic_probe \
+            --original "$RUNNER_TEMP/t3-smoke34-original-UserSemantic-private" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-smoke34-UserSemantic-safe.json"
+
+      - name: Validate private-source-only count report without inferring DXBC semantic dataflow
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.t3_original_smoke34_usersemantic_probe import COUNTERS,STATUS
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-UserSemantic-safe.json").read_text())
+          assert r["schema_version"]==1 and r["status"]==STATUS
+          assert r["source_sha_pinned_scenes"]==6 and r["source_sha_pinned_owners"]==4
+          assert r["original_exact_keyword_matched_fragment_pairs"]==2
+          c=r["counts"]
+          assert set(c)==set(COUNTERS)
+          assert all(type(v) is int and 0<=v<=512 for v in c.values())
+          assert c["genuine_fragment_pairs_examined"]==2
+          assert c["original_original_dx_user_input_records"]==7
+          assert c["roundtrip_original_dx_user_input_records"]==7
+          assert c["original_original_dx_declared_lanes"]==28
+          assert c["roundtrip_original_dx_declared_lanes"]==28
+          assert c["original_reflected_spirv_declared_lanes"]==28
+          assert c["roundtrip_reflected_spirv_declared_lanes"]==28
+          assert c["original_spv_explicit_semantic_matches_original"]<=7
+          assert c["roundtrip_spv_explicit_semantic_matches_original"]<=7
+          assert c["original_source_semantics_without_explicit_spv_label"] + c["original_spv_explicit_semantic_matches_original"] == 7
+          assert c["roundtrip_source_semantics_without_explicit_spv_label"] + c["roundtrip_spv_explicit_semantic_matches_original"] == 7
+          assert r["original_source_semantics_compiler_decorations_censused"] is True
+          for key in ("original_DXBC_semantics_to_SPIRV_instruction_dataflow_proven",
+                      "numerical_register_Location_coincidence_is_provenance",
+                      "source_roundtrip_semantic_value_equivalence_proven",
+                      "authored_original_ShaderLab_restored",
+                      "Android_Adreno_smoke_pixels_verified",
+                      "private_semantics_shader_bytes_ids_hashes_or_locations_published",
+                      "game_assets_modified"):
+              assert r[key] is False
+          print("T3_SMOKE34_SHA_ORIGINAL_SPV_USERSEMANTIC_CENSUS_SAFE=true")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as out:
+              out.write("## T3 authentic SPIR-V semantic annotation availability\\n\\n")
+              out.write("Explicit compiler decorations counted without exporting names. ")
+              out.write("Numeric register/Location coincidence is not provenance or device/ShaderLab proof.\\n")
+          PY
+
+      - name: Upload only safe semantic decoration presence and structural numeric counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-smoke34-UserSemantic-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-smoke34-UserSemantic-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
