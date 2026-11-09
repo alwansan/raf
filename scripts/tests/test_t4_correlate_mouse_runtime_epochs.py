@@ -95,7 +95,21 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         v = gate.triage([req(20), actions(20, events=12), actions(20, events=3),
                          readers(20)])
         self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
-        self.assertGreater(v["invalid_markers"] + int(v["attempts"] > 0), 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_native_and_fallback_combined_cannot_exceed_getters(self):
+        impossible = readers(22, calls=5, fallback=2).replace(
+            "positiveLegacy=0", "positiveLegacy=4")
+        v = gate.triage([req(22), actions(22), impossible])
+        self.assertEqual(v["status"], "INVALID_OR_INCOMPLETE_CAPTURE_PROVENANCE")
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_reader_snapshot_decrease_invalidates_generation(self):
+        v = gate.triage([req(23), actions(23),
+                         readers(23, calls=8, fallback=2),
+                         readers(23, calls=5, fallback=1)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
 
     def test_missing_epoch_rejected(self):
         v = gate.triage([req(21), actions(21).replace("epoch=21", "epoch=bad"),
