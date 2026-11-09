@@ -1,0 +1,2 @@
+# Original model is never checked in here
+The CI job imports only a SHA-pinned original ZIP2 mesh into this folder at runtime (`Part00.obj`, ...), and generates `evidence.json` in-place. A full model export or Unity raw project is not committed. The resulting APK is for the owner's private device-only evaluation. If no authentic mesh can be identified/exported, the build fails rather than silently rendering a synthetic capsule.
