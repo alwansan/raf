@@ -69,6 +69,18 @@ class MouseRouteTests(unittest.TestCase):
         self.assertEqual(r["phases"]["on"]["vertical_scroll_events"], 0)
         self.assertEqual(r["phases"]["on"]["horizontal_scroll_events"], 0)
 
+    def test_capture_request_does_not_assign_unknown_events_to_on(self):
+        lines = [
+            event("capture_request", "ON"),
+            event("input", "route=activity_generic source=0x2002 action=ACTION_MOVE buttonState=0 actionButton=0"),
+            event("input", "route=activity_generic source=0x2002 action=ACTION_MOVE captured=false"),
+            event("input", "route=captured source=0x20004 action=ACTION_MOVE captured=true"),
+        ]
+        phases = analyze(lines)["phases"]
+        self.assertEqual(phases["unknown"]["samples"], 1)
+        self.assertEqual(phases["off"]["samples"], 1)
+        self.assertEqual(phases["on"]["samples"], 1)
+
     def test_no_events_is_not_pass(self):
         r = analyze([event("capture_request", "ON")])
         self.assertEqual(r["phases"], {})
