@@ -36,6 +36,19 @@ class ObbGuidContract(unittest.TestCase):
                          code=CODE, logical_files={MAIN}),
                          'foreign_or_different_version_obb_guid_warning')
 
+    def test_spoofed_non_android_root_not_attributed_to_main(self):
+        fake = "/tmp/Android/obb/" + PACKAGE + "/" + MAIN
+        self.assertEqual(classify_line("Unable to load GUID for '" + fake + "'",
+                         code=CODE, logical_files={MAIN}), "other_guid_warning")
+        fake2 = "/data/local/tmp/storage/emulated/0/Android/obb/" + PACKAGE + "/" + MAIN
+        self.assertEqual(classify_line("Unable to load GUID for '" + fake2 + "'",
+                         code=CODE, logical_files={MAIN}), "other_guid_warning")
+
+    def test_sdcard_alias_is_android_obb(self):
+        path = "/sdcard/Android/obb/" + PACKAGE + "/" + MAIN
+        self.assertEqual(classify_line("Unable to load GUID for '" + path + "'",
+                         code=CODE, logical_files={MAIN}), "declared_main_obb_guid_warning")
+
     def test_unrelated_warning_not_counted_as_main(self):
         self.assertEqual(classify_line("Unable to load GUID for '/tmp/test.bin'",
                          code=CODE, logical_files={MAIN}), 'other_guid_warning')
