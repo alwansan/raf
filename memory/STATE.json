@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-shears-textures-42707671345",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-shears-textures-42707671345.md",
-  "status": "GFX_SHEARS_004_REAL_SOURCE_TEXTURES_DECODED_GFX_SHEARS_005_UNITY_BUILD_RUNNING",
+  "status": "GFX_SHEARS_005_ANDROID_UNITY_BUILD_PASS_OWNER_DEVICE_COLOR_PENDING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Verify CI42707671345, deliver signed APK on success, owner screenshot+COPY LOG four modes. Then original Shader48 2-subshader/7-pass faithful recovery, verify before port team patch.",
+  "next_experiment": "Owner installs side-by-side v0.2, photographs ALBEDO and PBR modes, supplies COPY LOG. Then original 2SubShader/7Pass recovery, original sampler and normal DXT5 semantic compare; no source-to-port patch yet.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": false,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -106,7 +106,12 @@
   },
   "new_colored_build": {
     "ci": "https://github.com/alwansan/raf/actions/runs/42707671345",
-    "status": "IN_PROGRESS_NOT_DEVICE_VERIFIED",
+    "ci_conclusion": "COMPLETED_SUCCESS",
+    "artifact_id": 13714487772,
+    "artifact_link": "https://github.com/alwansan/raf/actions/runs/42707671345/artifacts/13714487772",
+    "expires_at": "2026-11-16T22:06:20Z",
+    "apk_size_bytes": 10887469,
+    "apk_sha256": "f50f59f547a9d1dcdd934f0993df825a1df57e0312aa20f8a63e3bba1f0b1af2",
     "package": "com.alwansan.raft.graphicslab.shears",
     "modes": [
       "LIT_WHITE",
@@ -114,6 +119,18 @@
       "SOURCE_ALBEDO_STANDARD_DIAGNOSTIC",
       "SOURCE_TEXTURE_PBR_STANDARD_APPROX"
     ],
-    "source_shader_restored": false
+    "validation": {
+      "zip_crc": true,
+      "arm64_unity": true,
+      "ci_apk_signature": true,
+      "source_gitsplit": true,
+      "source_pngs": 3,
+      "actual_unity_android_build": true,
+      "owner_device_color": false
+    },
+    "original_shader_passes": 7,
+    "original_shader_restored": false,
+    "source_colors_tint_verified": true,
+    "status": "signed_APK_delivered_to_current_chat_device_test_pending"
   }
 }
