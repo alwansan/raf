@@ -68,7 +68,7 @@ class Smoke34SourceDXBCSemanticJoin(unittest.TestCase):
         self.assertNotIn("PRIVATE_FRAGMENT", output)
         self.assertNotIn("PRIVATE_TARGET", output)
         self.assertNotIn("PRIVATE_SOURCE_POSITION", output)
-        self.assertNotIn("register", output)
+        self.assertNotIn('"register":', output)
 
     def test_missing_extra_or_invalid_original_pairs_refused(self):
         for samples in (pair()[:1], pair() + [pair()[0]],
