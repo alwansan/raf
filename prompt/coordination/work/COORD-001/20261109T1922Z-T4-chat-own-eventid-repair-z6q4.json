@@ -2,9 +2,9 @@
   "session_id": "20261109T1922Z-T4-chat-own-eventid-repair-z6q4",
   "origin": "chat",
   "issue_id": "COORD-001",
-  "status": "active",
+  "status": "completed_source_only",
   "base_sha": "dbfdcdd515577a1244d368b1e6eefd4bd84ed0a2",
-  "updated_at": "2026-11-09T19:22:00Z",
+  "updated_at": "2026-11-09T19:25:00Z",
   "resumed_from_sessions": [
     "20261109T1919Z-T4-chat-ledger-preflight-v4k8"
   ],
@@ -19,5 +19,13 @@
   "experiment_key": "T4-COORD001-3-historical-event-id-additive-CAS-source-audit-v1",
   "resource_key": null,
   "validation": "Read-only T4 auditor; canonical shared summary remains dependent on T3/T5 records; don't rerun unchanged T2 workflow.",
-  "other_owner_write": false
+  "other_owner_write": false,
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42682466747",
+    "https://github.com/alwansan/raf/actions/runs/42682900051"
+  ],
+  "report": "docs/T4_SUPPORT_T2_TEAM_LEDGER_AUDIT_2026-11-09.md",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261109T1922Z-T4-chat-own-eventid-repair-z6q4.md",
+  "result": "T4-only 3 historical event IDs added with CAS; postcheck proves T4 missing identity 0; canonical summary still T3/T5 blocked.",
+  "next_step": "T3/T5 owners repair 20 remaining missing identities with CAS; T2 owns canonical summary regeneration. No Unity/game readiness inference."
 }
