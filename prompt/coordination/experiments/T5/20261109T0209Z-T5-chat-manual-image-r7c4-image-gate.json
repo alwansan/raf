@@ -27,17 +27,19 @@
   ],
   "workflow_path": ".github/workflows/raft-t5-unified-saf-source.yml",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42549793939",
-    "https://github.com/alwansan/raf/actions/runs/42549767288"
+    "https://github.com/alwansan/raf/actions/runs/42549767288",
+    "https://github.com/alwansan/raf/actions/runs/42549793939"
   ],
   "artifact_urls": [],
   "budget": "Source-only no APK/Unity",
-  "status": "waiting_ci",
-  "observed_result": "Commits: 0d88f66 policy, a9cc587 Android decode, 2268ff1 Java controls, ea6eace T5 SHA, f554804 Python guards, e53523b CI. Await final source run.",
+  "status": "completed_source_only",
+  "observed_result": "CI42549793939 COMPLETE SUCCESS at e53523b; Python source contracts, real Java image container positive/negative controls and StreamSha256 controls, Android javac. Synthetic/compile only.",
   "limitations": [
     "JDK container checks cannot prove JPEG/WebP pixel decode; Android BitmapFactory is mandatory",
     "No new APK or device installation, no visual Raft acceptance"
   ],
   "integration_commit": "e53523b900c0d1c3512cf8ec38339887426138f8",
-  "next_step": "Inspect CI42549793939; if green document source evidence; future shared Mini build only under existing team build rule."
+  "next_step": "Owner Android15 SAF screenshot validation when legitimately bundled into one future Mini; check JPEG/WebP actual decode and PNG CRC refusal.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42549793939",
+  "updated_at": "2026-11-09T02:16:41Z"
 }
