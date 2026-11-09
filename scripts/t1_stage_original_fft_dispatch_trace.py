@@ -105,7 +105,6 @@ def rewrite(original, adapted, base):
             indent + "#if UNITY_ANDROID && !UNITY_EDITOR\n"
             + indent + "int " + token + " = " + MARKER + ".BeforeDispatch("
             + params + ");\n"
-            + indent + "#endif\n"
             + indent + "try\n"
             + indent + "{\n"
             + indent + "#endif\n"

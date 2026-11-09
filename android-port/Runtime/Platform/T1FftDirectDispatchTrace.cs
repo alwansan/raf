@@ -65,7 +65,7 @@ namespace RaftAndroid.Diagnostics
 
         // Called only if the original ComputeShader.Dispatch synchronously throws.
         // The caller still rethrows the EXACT original exception with a bare throw.
-        // Never log exception.Message, stack, ComputeShader bytes or Unity objects.
+        // Never log exception details, stacks, shader bytes or Unity objects.
         public static void DispatchThrew(int sequence, Exception exception)
         {
             if (sequence <= 0 || sequence > MaxCalls) return;
