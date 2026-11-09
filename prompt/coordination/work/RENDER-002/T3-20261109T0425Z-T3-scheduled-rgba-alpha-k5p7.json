@@ -1,0 +1,18 @@
+{
+  "session_id": "20261109T0425Z-T3-scheduled-rgba-alpha-k5p7",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "base_sha": "6b2c4991865fda2077c45350bc130b10311eca33",
+  "status": "active",
+  "intended_files": [
+    "scripts/t3_cl_png_pixel_audit.py",
+    "tests/test_t3_cl_png_pixel_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261109T0425Z-T3-scheduled-rgba-alpha-k5p7.md",
+    "prompt/coordination/work/RENDER-002/T3-20261109T0425Z-T3-scheduled-rgba-alpha-k5p7.json"
+  ],
+  "hypothesis": "RGBA screenshots with fully transparent colored pixels can be incorrectly counted as visually colorful because RGB is counted without alpha compositing",
+  "experiment_key": "t3-png-rgba-transparent-pixel-visibility-sourcefree-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-09T04:25:00Z"
+}
