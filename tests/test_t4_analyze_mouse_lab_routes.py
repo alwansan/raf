@@ -94,6 +94,25 @@ class MouseRouteTests(unittest.TestCase):
         self.assertEqual(result["phases"]["on"]["samples"], 1)
         self.assertFalse(result["device_success_proven"])
 
+    def test_captured_route_explicitly_false_is_conflict_not_off_proof(self):
+        lines = [
+            event("capture_request", "ON"),
+            event("input", "route=captured source=0x20004 action=ACTION_BUTTON_PRESS buttonState=1 actionButton=1 captured=false"),
+            event("input", "route=activity_generic source=0x2002 action=ACTION_BUTTON_PRESS buttonState=2 actionButton=2 captured=false"),
+        ]
+        result = analyze(lines)
+        self.assertEqual(result["capture_route_conflicts"], 1)
+        self.assertEqual(result["rejected_records"], 1)
+        self.assertEqual(result["phases"]["off"]["samples"], 1)
+        self.assertEqual(result["phases"]["off"]["button_presses_observed"], ["right"])
+        self.assertNotIn("on", result["phases"])
+        self.assertFalse(result["device_success_proven"])
+
+    def test_captured_route_missing_flag_stays_unknown(self):
+        result = analyze([event("input", "route=captured source=0x20004 action=ACTION_MOVE")])
+        self.assertEqual(result["phases"]["unknown"]["samples"], 1)
+        self.assertEqual(result["capture_route_conflicts"], 0)
+
     def test_no_events_is_not_pass(self):
         r = analyze([event("capture_request", "ON")])
         self.assertEqual(r["phases"], {})
