@@ -125,7 +125,7 @@ def lexical_colormask_scope(shaderlab: str):
     if type(shaderlab) is not str or len(shaderlab) > MAX_SHADER_BYTES:
         raise ValueError("invalid_exported_shaderlab_text_scope")
     clean = remove_comments(shaderlab)
-    tokens = re.findall(r"(?im)(?:^|\\{)[ \\t]*ColorMask[ \\t]+(RGB|RGBA|0|[RGBA]{1,4})(?=[ \\t]*(?:$|\\}))", clean)
+    tokens = re.findall(r"(?im)(?:^|\{)[ \t]*ColorMask[ \t]+(RGB|RGBA|0|[RGBA]{1,4})(?=[ \t]*(?:$|\}))", clean)
     # Mask directives inside HLSL or alternate SubShaders remain ambiguous.
     upper = [v.upper() for v in tokens]
     return {
