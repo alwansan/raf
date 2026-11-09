@@ -1,0 +1,22 @@
+{
+  "id": "20261109T0142Z-T1-chat-fft-kernel-index-r4c8",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T0142Z-T1-chat-fft-kernel-index-r4c8",
+  "issue_id": "WATER-001",
+  "kind": "experiment_result",
+  "status": "completed",
+  "at": "2026-11-09T01:47:00Z",
+  "summary": "T1 runtime evidence validator now rejects conflicting same-GUID named Unity kernel indices across dispatches and hidden control chars in resource names. Exact source CI42547313000 SUCCESS: seven previously unexecuted + eight new = 15/15 tests. This only verifies synthetic/source evidence checking, NOT original Unity shader registration, Adreno FFT output or water rendering; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a6b88ddcd5677a8b1a13303f398402366b9f6908",
+    "https://github.com/alwansan/raf/actions/runs/42547313000",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261109T0142Z-T1-chat-fft-kernel-index-r4c8.md"
+  ],
+  "limits": [
+    "No original game/runtime binding probe in this CI",
+    "No Android device/Unity original water graphics acceptance",
+    "No full XAPK build; readiness unchanged"
+  ],
+  "next_step": "Capture real original Unity named ComputeShader and FindKernel/Dispatch/resource trace and test numeric first divergence."
+}

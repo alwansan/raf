@@ -2,8 +2,8 @@
   "session_id": "20261109T0142Z-T1-chat-fft-kernel-index-r4c8",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-09T01:42:00Z",
+  "status": "completed_source_ci_verified",
+  "updated_at": "2026-11-09T01:47:00Z",
   "base_sha": "6fe95344909bd919dc8bc08cc245bda640e1155e",
   "resumed_from_sessions": [
     "20261109T0114Z-T1-scheduled-runtime-identity-h7q4",
@@ -23,5 +23,16 @@
     "prompt/coordination/work/WATER-001/20261109T0114Z-T1-scheduled-runtime-identity-h7q4-runtime-identity.json"
   ],
   "planned_test": "Run earlier seven unexecuted identity tests and new contradictory/repeated-dispatch controls in isolated lightweight GitHub Actions. No original/private binaries, GPU/Unity APK, CL edits, native request, shared mini host, other worker source.",
-  "note": "At scope claim active/queued workflow runs=0 for feature/android-native-port. Source changes never mean successful phone water."
+  "note": "At scope claim active/queued workflow runs=0 for feature/android-native-port. Source changes never mean successful phone water.",
+  "result": {
+    "source_commit": "a6b88ddcd5677a8b1a13303f398402366b9f6908",
+    "workflow_run": "https://github.com/alwansan/raf/actions/runs/42547313000",
+    "workflow_head_sha": "a6b88ddcd5677a8b1a13303f398402366b9f6908",
+    "test_status": "SUCCESS",
+    "prior_identity_cases_passed": 7,
+    "new_consistency_cases_passed": 8,
+    "actual_unity_runtime_evidence": false,
+    "android_water_restored": false
+  },
+  "next_step": "Capture authentic same-build Raft Unity ComputeShader GUID, FindKernel(name) index, actual Dispatch index, group counts, resources, FFT size and bank; compare first FFT pass to pinned original Vulkan path. WATER-001 OPEN; NOT_READY 0/3. No repeat APK."
 }

@@ -12,6 +12,17 @@ conflict_check: T3/T5 lightweight source Actions running; T4 recent changes in o
 hypothesis: one named kernel of one shader_guid cannot have two observed FindKernel indices, and one index cannot describe two names.
 change: validate bidirectional consistency across dispatches and reject C1/control chars in resource labels and identities.
 test_plan: run seven older unexecuted identity controls and eight new contradictory/valid cases in no-APK workflow.
-status: SOURCE_PATCHED_PENDING_CI; original Unity runtime bindings and Android device evidence still missing.
+status at initial commit: SOURCE_PATCHED_PENDING_CI; original Unity runtime bindings and Android device evidence still missing.
 next: inspect immutable Actions result and store run; get authentic same-build Unity FindKernel/Dispatch/binding trace, then first-pass comparison.
 limits: No original/private game binaries, no CL writes, no APK, no water fix proof; WATER-001 OPEN / NOT_READY 0/3.
+
+## Proven CI checkpoint — 2026-11-09T01:46:29Z
+- commit: https://github.com/alwansan/raf/commit/a6b88ddcd5677a8b1a13303f398402366b9f6908
+- run: https://github.com/alwansan/raf/actions/runs/42547313000
+- job: check-runtime-evidence (128934982791), completed SUCCESS on exact commit SHA.
+- original seven T1 identity regressions: **7/7 PASS** (the earlier scheduled unexecuted controls are now actually exercised).
+- eight new cross-dispatch runtime name↔index and hidden control character checks: **8/8 PASS**.
+- TOTAL: **15/15** source-only tests, no game assets, no Unity Editor, no GPU, no Android APK/XAPK, no CL writes.
+- No evidence of actual original runtime FindKernel result, and old source numeric 6 remains hypothetical, NOT equivalent to device kernel index6.
+- work closure: completed_source_ci_verified; issue WATER-001 still OPEN; project readiness NOT_READY 0/3.
+- follow-up for next T1 chat/scheduled session: obtain original same-build private trace with genuine shader GUID, name, FindKernel result, Dispatch index, groups, texture bindings, bank/pass/FFT size; only then correlate bad kernel and first divergent output. Do not request another shared mini APK for this script-only fix.

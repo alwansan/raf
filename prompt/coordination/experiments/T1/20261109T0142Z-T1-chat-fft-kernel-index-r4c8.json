@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T0142Z-T1-chat-fft-kernel-index-r4c8",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-water-fft-runtime-named-index-bijection-gate-v1-6fe95344",
+  "resource_key": null,
+  "hypothesis": "The sanitized Unity evidence gate currently accepts contradictory shader_guid+kernel_name to FindKernel index or shader_guid+index to name mappings across successive dispatches, so an internally inconsistent trace can be incorrectly marked binding_contract_complete.",
+  "inputs": {
+    "base_head_sha": "687d181d63c48cc2811e38948942a93d06a0a385",
+    "original_source_file_blob": "f148cd120c697a180edea7116c2771dd85c942e7",
+    "no_original_game_data": true
+  },
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "testing": "python3 unittest",
+    "workflow": ".github/workflows/raft-t1-fft-runtime-evidence-regression.yml"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t1_fft_runtime_identity_h7q4.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t1_fft_runtime_bijection_r4c8.py' -v"
+  ],
+  "negative_controls": [
+    "One GUID/name maps to two numerical indices -> reject",
+    "One GUID/index maps to two kernel names -> reject",
+    "C0/C1 controls inside resource binding name -> reject",
+    "C1 controls in device_session/kernel_name -> reject"
+  ],
+  "positive_controls": [
+    "Repeated pass may use same shader/name/index",
+    "Distinct kernel names with distinct indices permitted",
+    "Other shader GUID may reuse an index",
+    "Other shader GUID may reuse kernel name with another index"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42547313000",
+    "https://github.com/alwansan/raf/actions/runs/42547312921"
+  ],
+  "final_verified_ci_run": 42547313000,
+  "final_source_sha": "a6b88ddcd5677a8b1a13303f398402366b9f6908",
+  "status": "completed",
+  "result": {
+    "outcome": "SOURCE_ONLY_RUNTIME_EVIDENCE_GATE",
+    "prior_regressions_passed": 7,
+    "new_regressions_passed": 8,
+    "total_passed": 15,
+    "total_failed": 0,
+    "actual_unity_findkernel_observed": false,
+    "actual_device_water_restored": false
+  },
+  "limits": [
+    "Proof covers evidence validation of simulated records only; cannot identify live original Raft kernel6",
+    "Does not recover `.compute` original or resolve UltimateWater rendering",
+    "No phone gameplay or GPU test, and no new APK was generated"
+  ],
+  "next_step": "Capture original same-build ComputeShader GUID+FindKernel+Dispatch+bindings+FFT size/bank/pass and test original first FFT stage without assuming compiled index6 is runtime index6."
+}
