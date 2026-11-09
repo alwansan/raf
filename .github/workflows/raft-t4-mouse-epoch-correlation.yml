@@ -1,0 +1,23 @@
+name: T4 same-epoch Unity mouse runtime evidence (source only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t4-mouse-epoch-correlation.yml'
+      - 'scripts/t4_correlate_mouse_runtime_epochs.py'
+      - 'scripts/tests/test_t4_correlate_mouse_runtime_epochs.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t4-epoch-correlation-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  correlate-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 --version
+      - name: Validate source-only capture epoch correlation fail-closed controls
+        run: python3 -m unittest discover -s scripts/tests -p 'test_t4_correlate_mouse_runtime_epochs.py' -v
