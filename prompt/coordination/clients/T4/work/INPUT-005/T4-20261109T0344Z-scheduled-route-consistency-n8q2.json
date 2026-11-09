@@ -1,0 +1,15 @@
+{
+  "session_id": "20261109T0344Z-T4-scheduled-route-consistency-n8q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "3f3fbf7214fbe98f8b9ab92c2fd099617e218f3c",
+  "intended_files": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "prompt/coordination/clients/T4/sessions/20261109T0344Z-T4-scheduled-route-consistency-n8q2.md"
+  ],
+  "hypothesis": "A callback marked captured=true on an ordinary activity/view route should be flagged as inconsistent rather than counted as captured-route proof; diagnostic only.",
+  "experiment_key": "T4-route-captured-flag-consistency-v1-analyzer-9231ebc",
+  "resource_key": null,
+  "updated_at": "2026-11-09T03:44:39Z"
+}
