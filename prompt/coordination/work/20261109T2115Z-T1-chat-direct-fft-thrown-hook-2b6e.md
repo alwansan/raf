@@ -12,3 +12,8 @@ hypothesis: existing source-authenticated Android-only BeforeDispatch and AfterD
 observed: Latest CL/test/shared-20261109-233132-554663211 repeats synthetic R4 T1-05 PASS on source 731d7a68... but no full game Dx11FFT runtime evidence; T5 R5 Mini CI42691609924 SUCCESS, not a new original XAPK.
 team_overlap: scheduled T1 latest 2016 evidence-order owns Mini T1 auditor, separate files. T2 Foam and T3 smoke/T4 mouse/T5 labs unaffected; native game build request remains T5-owned.
 next_step: implement, run isolated CSharp9 ABI + syntactic source gates + authenticated original private overlay CI, document boundaries.
+## Follow-up parser scope (after CI42695722354 SUCCESS)
+status: in_progress_trace_parser
+additional_intended_files: scripts/t1_fft_dispatch_pair_audit.py; tests/test_t1_fft_dispatch_pair_audit.py; tests/test_t1_fft_dispatch_pair_native_jsonl.py
+hypothesis: original paired JSONL audit currently ignores the newly emitted t1_original_fft_dispatch.threw event, causing an actual synchronous exception to be misclassified as an unexplained missing return. Add fail-closed separate synchronous exception terminal while retaining all earlier paired-record semantics and gpu_execution_proven=false.
+ci_plan: existing isolated .github/workflows/raft-t1-fft-dispatch-pair-audit.yml triggers only Python; preserve original hook CI separately, no game APK.
