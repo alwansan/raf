@@ -45,7 +45,7 @@ def audit(records):
                 raise ValueError("duplicate trace field")
             fields[k] = v.strip()
         seq = fields.get("sequence", "")
-        if not seq.isdecimal() or not 1 <= int(seq) <= 16:
+        if not seq.isascii() or not seq.isdecimal() or not 1 <= int(seq) <= 16 or str(int(seq)) != seq:
             raise ValueError("invalid bounded sequence")
         seq = int(seq)
         key = (event, seq)
