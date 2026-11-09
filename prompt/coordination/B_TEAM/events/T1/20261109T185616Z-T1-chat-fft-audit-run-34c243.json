@@ -14,12 +14,23 @@
     "https://github.com/alwansan/raf/commit/de2c5d3ffc69a387cabb24c0337e1172ced4142b",
     "https://github.com/alwansan/raf/actions/runs/42679722775",
     "https://github.com/alwansan/raf/actions/runs/42679673190",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261109T185616Z-T1-chat-fft-audit-run-34c243.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261109T185616Z-T1-chat-fft-audit-run-34c243.md",
+    "https://github.com/alwansan/CL/blob/main/test/shared-20261108-232759-468049775/events-20261108-232759-468049775.jsonl",
+    "https://github.com/alwansan/CL/blob/main/test/shared-20261108-232759-468049775/summary-20261108-232759-468049775.json"
   ],
   "limits": [
     "Source-only synthetic contract; no original on-device before/returned observed",
     "Return from managed Dispatch not GPU completion, numeric 6 not proven Unity ID6",
     "Intermediate 1/36 test failure was a malformed fixture newline, corrected and transparently retained"
   ],
-  "next_step": "T5 next authorized full game build should retain T1 hooks; then T1 audit one real single-launch <=4MiB raft JSONL and correlate first water error/actual shader identity, preserving all original shader authenticity gates."
+  "next_step": "T5 next authorized full game build should retain T1 hooks; then T1 audit one real single-launch <=4MiB raft JSONL and correlate first water error/actual shader identity, preserving all original shader authenticity gates.",
+  "device_mini_reconciliation": {
+    "session_id": "20261108-232759-468049775",
+    "apk": "0.2.13-shared",
+    "source": "e7a6248b0d0c14b9772bd52f3bbdc5cf22fa9b9a",
+    "T1_01_04": "all PASS with fresh auto_case_start/case_result",
+    "scope": "mini Adreno GLES 3.2 tests ONLY; original Raft Unity water/FFT NOT tested",
+    "events_blob": "9f5a46505c91b1e62f96c13871da846b8811f506",
+    "summary_blob": "a4f2255e49039fbdd96df1aec8c0ca424d24c36f"
+  }
 }
