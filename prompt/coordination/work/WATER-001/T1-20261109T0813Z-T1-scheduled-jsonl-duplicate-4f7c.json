@@ -1,0 +1,18 @@
+{
+  "session_id": "20261109T0813Z-T1-scheduled-jsonl-duplicate-4f7c",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-09T08:13:00Z",
+  "intended_files": [
+    "scripts/t1_fft_dispatch_pair_audit.py",
+    "tests/test_t1_fft_dispatch_pair_jsonl.py",
+    "prompt/coordination/clients/T1/sessions/20261109T0813Z-T1-scheduled-jsonl-duplicate-4f7c.md"
+  ],
+  "experiment_key": "T1-FFT-JSONL-duplicate-object-keys-input-hardening-v1",
+  "resource_key": null,
+  "hypothesis": "Python json.loads silently accepts duplicate keys, making passive trace evidence ambiguous; reject duplicates before audit.",
+  "baseline_file_sha": "905e4270c067fca51a51eb191bccf25571314f86",
+  "owner_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md",
+  "limitations": "No original GPU execution, Unity build or phone proof."
+}
