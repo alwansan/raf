@@ -16,11 +16,11 @@
 
 ## الدليل
 
-- **CI [42679181503](https://github.com/alwansan/raf/actions/runs/42679181503) SUCCESS** (النسخة الأولية 14/14). **النسخة المشددة:** [42679768824](https://github.com/alwansan/raf/actions/runs/42679768824)، المصدر `b73773ccba74cf49ecf97d740b4abec911ae299c`، 16 اختباراً (تحقق نتيجة Actions قبل اعتماد PASS) على SHA `14a5d794ee5409d0f1ba32fb0436e480b4467230`؛ خطوة `Validate source-only capture epoch correlation fail-closed controls` نجحت (16 unittest).
+- **CI [42679181503](https://github.com/alwansan/raf/actions/runs/42679181503) SUCCESS** (النسخة الأولية 14/14). **النسخة المشددة:** [42679768824](https://github.com/alwansan/raf/actions/runs/42679768824)، المصدر `b73773ccba74cf49ecf97d740b4abec911ae299c`، **16/16 PASS**، job `129370913540` وفق سجل CI على SHA `14a5d794ee5409d0f1ba32fb0436e480b4467230`؛ خطوة `Validate source-only capture epoch correlation fail-closed controls` نجحت (16 unittest).
 - تجربة المصدر الأسبق **CI [42549986761](https://github.com/alwansan/raf/actions/runs/42549986761)** أثبتت على مستوى المصدر فقط ربط 20 قارئاً أصلياً، وعدّاد `PhysicalMouseLegacyReaderEvidence`، ونجاح compile في Android/Editor؛ هذا لا يساوي تجربة الهاتف.
 - سجل المالك CL/test المقروء حتى `alwansan/CL@24a677fc8fa4749c0bcf8a3cac01fa80b1641c86` يحوي جلسات 8 نوفمبر؛ أحدث `shared-20261108-232759-468049775` يركز على T3 ولا يضيف دليلاً جديداً لـ T4 capture=true. سجل T4 الأصلي `CL@4680f5dc` لا يحتوي `capture_request ON` أو `captured=true`؛ كانت أزرار LEFT وعجلة V في مسار uncaptured فقط.
 
-**تشديد إضافي بتاريخ 9 نوفمبر:** ترفض نسخة المصدر `66865b4a8` مجموع `positiveLegacy+positiveFallback` إذا تجاوز عدد `getterCalls`، وتعدّ تراجع snapshot خطأً صريحاً بدلاً من رفض صامت؛ اختبارات المصدر الجديدة `b73773ccb` تغطي الحالتين. نتيجة التشغيل النهائي تُحدَّث أدناه.
+**تشديد إضافي بتاريخ 9 نوفمبر:** ترفض نسخة المصدر `66865b4a8` مجموع `positiveLegacy+positiveFallback` إذا تجاوز عدد `getterCalls`، وتعدّ تراجع snapshot خطأً صريحاً بدلاً من رفض صامت؛ اختبارات المصدر الجديدة `b73773ccb` تغطي الحالتين. نتيجة التشغيل النهائي مثبتة أدناه.
 
 ## معيار الحسم وحدود الدليل
 
