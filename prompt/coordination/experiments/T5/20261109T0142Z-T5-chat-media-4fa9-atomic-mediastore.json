@@ -29,8 +29,8 @@
   ],
   "artifact_urls": [],
   "budget": "source-only Android compile and small Python/JVM checks; no APK or Unity",
-  "status": "waiting_ci",
-  "observed_result": "Source fix commit cf764d7, regression controls commit a71ef5f; CI in progress / pending when recorded.",
+  "status": "completed_source_only",
+  "observed_result": "Run 42547097683 COMPLETED SUCCESS on a71ef5f: shared SAF Python source contract tests (including new MediaStore tests), Java StreamSha256 synthetic error/2GiB+ controls, and actual unified Android Java compile; tests are not device MediaStore fault injection.",
   "rejected_hypotheses": [],
   "limitations": [
     "Not yet tested on Android15 MediaStore provider",
@@ -38,5 +38,7 @@
     "No game APK/OBB identity or gameplay acceptance proof."
   ],
   "integration_commit": "a71ef5fdd37d58a184e7ce5573be586f4267d964",
-  "next_step": "Read CI 42547097683 (new test source); if successful, await Android screenshot/export test and decide whether to harden rewrite path separately."
+  "next_step": "Next legitimately requested Mini release, inspect media insert/overwrite behavior on Android15; keep older URI overwrite atomicity as separate issue.",
+  "updated_at": "2026-11-09T01:46:12Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42547097683"
 }
