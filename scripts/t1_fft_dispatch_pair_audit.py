@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 
 BEFORE = "t1_original_fft_dispatch.before"
+# Identity keys must not change between the entry and return of one call.
+IDENTITY_FIELDS = ("kernel", "kernel_name", "shader", "shader_name", "resource", "fft_length", "groups_x", "groups_y", "groups_z")
 AFTER = "t1_original_fft_dispatch.returned"
 
 
@@ -35,6 +37,8 @@ def audit(records):
                 raise ValueError("malformed trace field")
             k, v = part.split("=", 1)
             k = k.strip()
+            if not k or not v.strip():
+                raise ValueError("empty trace field")
             if k in fields:
                 raise ValueError("duplicate trace field")
             fields[k] = v.strip()
@@ -53,7 +57,14 @@ def audit(records):
         elif seq not in pending:
             errors.append("return_without_before:" + str(seq))
         elif not duplicate:
-            paired.add(seq)
+            before = pending[seq]
+            mismatched = [name for name in IDENTITY_FIELDS
+                          if name in before and name in fields
+                          and before[name] != fields[name]]
+            if mismatched:
+                errors.append("identity_mismatch:" + str(seq) + ":" + ",".join(mismatched))
+            else:
+                paired.add(seq)
     missing = sorted(seq for seq in pending if seq not in paired)
     return {"before_count": len(pending),
             "returned_count": len([k for k in seen if k[0] == AFTER]),
