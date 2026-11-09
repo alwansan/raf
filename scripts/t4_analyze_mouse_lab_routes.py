@@ -30,6 +30,7 @@ def analyze(lines):
                                   "wheel_v": 0, "wheel_h": 0, "samples": 0,
                                   "button_presses": set(), "button_releases": set()})
     rejected = 0
+    capture_route_conflicts = 0
     for line in lines:
         try:
             obj = json.loads(line)
@@ -52,6 +53,11 @@ def analyze(lines):
             # A capture request is not proof that Android granted capture.
             # Never label callbacks without an explicit captured=true as captured.
             key = "on" if captured == "true" else "off" if captured == "false" else "unknown"
+            if captured == "true" and route != "captured":
+                # A contradictory route/flag pair cannot establish captured delivery.
+                capture_route_conflicts += 1
+                rejected += 1
+                continue
             group = groups[key]
             group["samples"] += 1
             group["routes"].add(route)
@@ -84,8 +90,9 @@ def analyze(lines):
             "missing_button_evidence": sorted(set(BUTTONS) - group["buttons"]),
         }
     return {"phases": result, "rejected_records": rejected,
+            "capture_route_conflicts": capture_route_conflicts,
             "device_success_proven": False,
-            "note": "Capture request ON alone does not establish captured=true; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
+            "note": "Capture request ON alone does not establish captured=true; contradictory captured=true on noncaptured routes is rejected; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
