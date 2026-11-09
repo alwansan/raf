@@ -20,8 +20,19 @@ def triage(report):
     if captured is None:
         return {"status": "NEEDS_CAPTURED_CALLBACKS", "android": {}, "unity": "UNVERIFIED",
                 "device_pass": False}
-    if not isinstance(captured, dict) or "captured" not in captured.get("routes", []):
+    if not isinstance(captured, dict):
+        raise ValueError("on phase must be an object")
+    routes = captured.get("routes")
+    if not isinstance(routes, list) or not all(isinstance(route, str) for route in routes) or "captured" not in routes:
         raise ValueError("on phase must contain captured route")
+    for field in ("button_presses_observed", "button_releases_observed"):
+        values = captured.get(field, [])
+        if not isinstance(values, list) or not all(isinstance(v, str) and v in BUTTONS for v in values):
+            raise ValueError(f"{field} must be a list of known mouse buttons")
+    for field in ("vertical_scroll_events", "horizontal_scroll_events"):
+        count = captured.get(field, 0)
+        if type(count) is not int or count < 0:
+            raise ValueError(f"{field} must be a nonnegative integer")
     presses = set(captured.get("button_presses_observed", []))
     releases = set(captured.get("button_releases_observed", []))
     result = {button: ("CALLBACK_PAIR_ONLY" if button in presses and button in releases
