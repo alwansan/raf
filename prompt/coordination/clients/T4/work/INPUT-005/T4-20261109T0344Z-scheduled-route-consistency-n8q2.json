@@ -2,7 +2,7 @@
   "session_id": "20261109T0344Z-T4-scheduled-route-consistency-n8q2",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_change_pending_ci",
   "base_sha": "3f3fbf7214fbe98f8b9ab92c2fd099617e218f3c",
   "intended_files": [
     "scripts/t4_analyze_mouse_lab_routes.py",
@@ -11,5 +11,11 @@
   "hypothesis": "A callback marked captured=true on an ordinary activity/view route should be flagged as inconsistent rather than counted as captured-route proof; diagnostic only.",
   "experiment_key": "T4-route-captured-flag-consistency-v1-analyzer-9231ebc",
   "resource_key": null,
-  "updated_at": "2026-11-09T03:44:39Z"
+  "updated_at": "2026-11-09T03:50:00Z",
+  "result_commits": [
+    "301fa001114f5fe17504ed94c63d1b04d7ade3bd",
+    "7fe3ff379399d5ad06463a79679ef7e8d8f6c2cb",
+    "030da504e162123f8fd5b42d676bfb86ed8be45c"
+  ],
+  "next_step": "Execute unit regression in existing cheap CI; do not infer phone success."
 }
