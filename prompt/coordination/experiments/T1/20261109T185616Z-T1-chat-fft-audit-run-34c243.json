@@ -58,5 +58,11 @@
   ],
   "status": "completed_source_ci_verified",
   "limitations": "Synthetic values modeled from authentic logger source, NOT an observed original Raft device trace, kernel identity, GPU success or water fix; no game/asset/shader source published.",
-  "next_step": "At next T5/owner authorized full Raft build, correlate real same-build Android raft-logs before/returned with first original kernel error; SHA-pin trace build and test named Unity FindKernel/shader identity and first Vulkan-vs-Unity numeric divergence independently. WATER-001 OPEN / NOT_READY 0/3."
+  "next_step": "At next T5/owner authorized full Raft build, correlate real same-build Android raft-logs before/returned with first original kernel error; SHA-pin trace build and test named Unity FindKernel/shader identity and first Vulkan-vs-Unity numeric divergence independently. WATER-001 OPEN / NOT_READY 0/3.",
+  "phone_mini_evidence": {
+    "source": "CL/test/shared-20261108-232759-468049775",
+    "t1_cases": "T1-01,T1-02,T1-03,T1-04",
+    "evidence": "fresh auto_case_start/case_result each PASS",
+    "scope": "shared Mini GLES 3.2 Adreno only; not original FFT or source parser phone runtime"
+  }
 }
