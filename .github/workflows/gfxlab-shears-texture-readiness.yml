@@ -1,0 +1,90 @@
+name: GFX-SHEARS-003 SHA-original shears texture decode readiness (no APK)
+on:
+  push:
+    branches:
+      - experiment/android-graphics-rootcause
+    paths:
+      - '.github/workflows/gfxlab-shears-texture-readiness.yml'
+      - 'gfxlab/tools/shears_texture_readiness.py'
+      - 'gfxlab/tests/test_shears_texture_readiness.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-shears003-source-only-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-texture-readiness:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout GFX-LAB source tools only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Sourcefree source strict-link regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - name: Checkout immutable ZIP2 SHA-pinned selected original source owners
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Verify real original 3 textures material and read streamed image metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.shears_texture_readiness \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-shears03-private" \
+            --out "$RUNNER_TEMP/gfxlab-shears03-safe.json"
+      - name: Validate safe evidence and no premature Android or original Shader claims
+        run: |
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gfxlab-shears03-safe.json').read_text())
+          assert d['source_original_mesh_verified']
+          assert d['original_texenv_bound']==3
+          assert d['original_shader_passes']==7
+          assert d['original_shader_subshaders']==2
+          assert d['original_texture_dimension_verified']==3
+          assert not d['colored_android_device_proven']
+          assert not d['original_shader_restored']
+          assert not d['material_colors_exported']
+          assert sum(d.get(k,0) for k in ('original_texture_stream_required','original_texture_inline_decode_ok','original_texture_inline_decode_failed'))==3
+          print('GFX_SHEARS003_SAFE_GATE_PASS=1')
+          PY
+      - name: Upload only aggregate texture readiness counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-shears003-texture-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/gfxlab-shears03-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Purge original assets and any decoded pixels
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-shears03-private"
+          echo GFX_SHEARS003_SOURCE_PURGED=true
