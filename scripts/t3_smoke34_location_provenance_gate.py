@@ -7,7 +7,7 @@ from collections import Counter
 
 
 def validate(original, reflected, mapping):
-    """Return safe aggregate result; malformed/unproven inputs are INCONCLUSIVE.
+    """Return safe aggregate result; malformed/unproven inputs are INCONCLUSIVE.\n\n    Used DXBC lanes may be a strict subset of declared SPIR-V lanes;\n    unmatched declared lanes are not automatically evidence of data loss.
 
     original: iterable of (opaque_semantic_id, component) used original lanes
     reflected: iterable of (location, component) reflected SPIR-V lanes
@@ -39,14 +39,14 @@ def validate(original, reflected, mapping):
             result["reason"] = "missing_provenance"
         elif any(v != 1 for v in Counter(o).values()) or any(v != 1 for v in Counter(r).values()):
             result["reason"] = "duplicate_source_lane"
-        elif len(m) != len(o) or len(m) != len(r):
+        elif len(m) != len(o) or len(m) > len(r):
             result["reason"] = "incomplete_coverage"
         elif Counter((s,c) for s,c,_,_ in m) != Counter(o):
             result["reason"] = "source_mismatch_or_ambiguous"
-        elif Counter((l,d) for _,_,l,d in m) != Counter(r):
+        elif any(count > Counter(r)[key] for key, count in Counter((l,d) for _,_,l,d in m).items()):
             result["reason"] = "location_mismatch_or_ambiguous"
         else:
-            result.update(status="STRUCTURAL_BIJECTION_ONLY", reason="requires_authentic_provenance")
+            result.update(status="STRUCTURAL_INJECTION_ONLY", reason="requires_authentic_provenance_and_unused_lane_audit", unused_reflected_lanes=len(r)-len(m))
         return result
     except (TypeError, ValueError):
         return result
