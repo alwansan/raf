@@ -1,0 +1,62 @@
+name: T5 local owner Download-logs SAF source gate (no APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/LocalOwnerBundle*.java'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/LocalOwnerLogEvidence.java'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java'
+      - 'tests/java/com/alwansan/raftlab/LocalOwnerBundlePolicyTest.java'
+      - '.github/workflows/raft-t5-local-owner-bundle-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t5-owner-local-bundle-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  compile-and-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false, lfs: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify original 30-case team pack and UI wiring
+        run: |
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          base=Path('apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab')
+          ui=(base/'UnifiedLabActivity.java').read_text()
+          assert 'ACTION_OPEN_DOCUMENT_TREE' in ui
+          assert 'PICK_OWNER_FOLDER' in ui
+          assert 'takePersistableUriPermission' in ui
+          assert 'LocalOwnerBundleScanner.inspect' in ui
+          assert 'LocalOwnerLogEvidence.summarize' in ui
+          assert 'hashOwnerFile(file)' in ui
+          assert 'MAX_PACK=262144' in ui
+          pack=json.loads(Path('apk-for-testing/unified/pack/team-testpack.json').read_text())
+          assert len(pack['tests'])==30
+          assert 'T1-05' in [x['id'] for x in pack['tests']]
+          print('T5 source integration & 30-case pack PASS')
+          PY
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - name: Pure-Java policies and bounded redacted log aggregate
+        run: |
+          mkdir -p /tmp/t5-owner-tests
+          javac -d /tmp/t5-owner-tests \
+            apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/LocalOwnerBundlePolicy.java \
+            apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/LocalOwnerLogEvidence.java \
+            tests/java/com/alwansan/raftlab/LocalOwnerBundlePolicyTest.java
+          java -cp /tmp/t5-owner-tests com.alwansan.raftlab.LocalOwnerBundlePolicyTest
+      - uses: android-actions/setup-android@v3
+        with: {packages: 'platform-tools'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.10.2'}
+      - name: Actual Android SDK 35 Java compilation, without publishing APK
+        run: |
+          gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA" -PversionCode=16
