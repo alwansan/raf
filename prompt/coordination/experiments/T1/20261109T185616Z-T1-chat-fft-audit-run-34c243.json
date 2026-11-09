@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T185616Z-T1-chat-fft-audit-run-34c243",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-original-fft-real-androidruntime-jsonl-operation-detail-session-compat-v1-a6a2a725-66418d43",
+  "resource_key": null,
+  "hypothesis": "Original Raft PersistentDiagnosticLog emits operation/detail/session and 4MiB files, while previous FFT audit reads event/message and 1MiB. Validate the actual source envelope and reject cross-session or mixed synthetic/native records without GPU success claims.",
+  "source_contract": {
+    "PersistentDiagnosticLog.cs": "4MiB segments; top-level operation/detail/session/global sequence",
+    "T1FftDirectDispatchTrace.cs": "original Android-only before/returned; separate detail sequence 1..16; derived source sha prefix 8aa32937d423",
+    "original_gpu_execution_proven": false
+  },
+  "code_commits": [
+    "899bafac1a3330a27d270d57c94eb4daef0b8867",
+    "cd2f658114fa25675fc3775485802b49cc104537",
+    "921ba077c63e961067d485445fb994f35ef2546f",
+    "12afc03210e99ebfd3058fc2a16e7b6efb114531",
+    "512e19a799acd273cf2b5b481db7c004ecd40f02",
+    "b34b00623acd66deb3332c2b32b162a9ffe8a077",
+    "de2c5d3ffc69a387cabb24c0337e1172ced4142b"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42679132823",
+    "https://github.com/alwansan/raf/actions/runs/42679611071",
+    "https://github.com/alwansan/raf/actions/runs/42679673190",
+    "https://github.com/alwansan/raf/actions/runs/42679722775"
+  ],
+  "verification": {
+    "final_run_id": 42679722775,
+    "final_conclusion": "success",
+    "final_source_sha": "de2c5d3ffc69a387cabb24c0337e1172ced4142b",
+    "python_test_count": 36,
+    "python_test_passed": 36,
+    "python_compile": true,
+    "first_source_gate_test_count": 34,
+    "intermediate_failure_run_id": 42679673190,
+    "intermediate_failure_cause": "test fixture literal escaped newline, corrected in de2c5d3",
+    "real_device_trace_executed": false,
+    "unity_editor_executed": false,
+    "gpu_numeric_comparison_executed": false
+  },
+  "negative_controls": [
+    "native operation/detail previously silently skipped",
+    "synthetic after cannot close native before",
+    "top-level session mismatched or absent",
+    "source marker/GPU-unverified drift",
+    "invalid group XYZ",
+    "mixed event/message and operation/detail envelopes",
+    "real 4MiB logger segment limit accepts >1MiB, rejects >4MiB",
+    "duplicate JSON keys and mixed build identities from earlier test suites"
+  ],
+  "files": [
+    "scripts/t1_fft_dispatch_pair_audit.py",
+    "tests/test_t1_fft_dispatch_pair_native_jsonl.py",
+    ".github/workflows/raft-t1-fft-dispatch-pair-audit.yml"
+  ],
+  "status": "completed_source_ci_verified",
+  "limitations": "Synthetic values modeled from authentic logger source, NOT an observed original Raft device trace, kernel identity, GPU success or water fix; no game/asset/shader source published.",
+  "next_step": "At next T5/owner authorized full Raft build, correlate real same-build Android raft-logs before/returned with first original kernel error; SHA-pin trace build and test named Unity FindKernel/shader identity and first Vulkan-vs-Unity numeric divergence independently. WATER-001 OPEN / NOT_READY 0/3."
+}
