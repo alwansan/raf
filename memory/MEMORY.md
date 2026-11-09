@@ -50,3 +50,23 @@
 
 ### GFX-SHEARS-005 confirmed real APK (latest)
 [GitHub Actions 42707671345](https://github.com/alwansan/raf/actions/runs/42707671345) COMPLETED SUCCESS. Actual Editor Unity2021.3.45f2 Android ARM64 IL2CPP build signed and audited. [Artifact 13714487772](https://github.com/alwansan/raf/actions/runs/42707671345/artifacts/13714487772) expires 2026-11-16 22:06 UTC. APK **10,887,469 B**, SHA256 **f50f59f547a9d1dcdd934f0993df825a1df57e0312aa20f8a63e3bba1f0b1af2**, app id com.alwansan.raft.graphicslab.shears. Direct APK current chat delivery. Original user-confirmed Shears model source 375v/420t, exact original Albedo+Normal+Metallic and tint imported; Unity Standard white/albedo/PBR approximate modes. **No original 7-pass shader restored, no on-device v0.2 pixels proven.** Next owner tests four modes + COPY LOG. Detailed checkpoint memory/sessions/20261110-GFX-chat-shears-textures-42707671345.md and gfxlab/SHEARS_OWNER_TEST_GUIDE_AR.md.
+
+
+## GFX-MULTI-001–003 — ستة موديلات أصلية (جلسة 10 نوفمبر 2026)
+**دليل المالك الحديث:** الصور الثلاث وJSON من Shears v0.2 على Xiaomi 23013PC75G/Adreno730/OpenGLES3/Linear أظهرت ألوان BaseColor وNormal/Metallic مشهودة دون مشاكل بصرية واضحة؛ `errors=0` في جميع JSON الثلاثة، `originalShaderRestored=false`, `runtimeColoredPixelsVerified=false`. لا تعني نتيجة جميلة أن Shader7Pass الأصلي استُعيد؛ استخدام Unity Standard fallback كان مقصوداً ويجب الحفاظ على هذه التفرقة.
+
+**نتيجة مصدر ثابتة:** [GFX-MULTI-001 CI42711514279](https://github.com/alwansan/raf/actions/runs/42711514279) SUCCESS. جرد SHA-original لـ1973 links renderer/mesh مع 824 typed Material→Shader chains؛ اختير 5 إضافية غير مكررة عن Shears:
+- `M01`: 5095 vertices, skinned source مع 100 bones، category person من اسم source leaf + rig وليس إثبات شخصية اللاعب كاملة؛ داخل النسخة OBJ pose ثابت **ليس skinning أصلياً**.
+- `M02`: static large_prop 1598 vertices, 1 material/3 images.
+- `M03`: static large_mesh 5093 vertices, 1 material/3 images.
+- `M04`: static tool 6514 vertices, 1 material/3 images.
+- `M05`: static multi-material 2163 vertices, 2 materials/6 images.
+- `M00`: Shears مقص المالك 375 vertices، مرجع baseline.
+
+**الإخراج المصدر:** [GFX-MULTI-002 CI42712118731](https://github.com/alwansan/raf/actions/runs/42712118731) SUCCESS. ستة OBJ أصلية وسبع مواد و21 Texture2D مفكوكة فعلياً داخل Actions، 16 immutable Git chunks لإعادة إمداد .resS مجموعها 754,974,720 byte؛ لم تُرفع الصور ولا أسماء/معرفات source خاصة. اختبار source ≠ استيراد Unity ≠ هاتف.
+
+**المختبر الحديث:** `gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs` + `Assets/Editor/GfxMultiAndroidBuilder.cs`, يتيح اختيار 6 من شريط جانبي وأربعة أوضاع WhiteLit/WhiteUnlit/SourceAlbedoStandard/SourcePBRStandardApprox، تدوير/تكبير، إخفاء القاعدة، COPY LOG لكل موديل مع `modelId` و`sourceBones` و`originalShaderRestored`. يحاول بناء Unity 2021.3.45f2/Android GLES3/ARM64 مستقل `com.alwansan.raft.graphicslab.multi`.
+
+**CI بناء حقيقي:** [GFX-MULTI-003 Actions 42712833407](https://github.com/alwansan/raf/actions/runs/42712833407). *لا تفترض نجاحه؛ اقرأ التشغيل الحالي والتوقيع والـartifact أولاً*. معايير قبول المرحلة هي Unity import actual six, 7 submesh slots, 21 original textures, signed APK, ثم المالك يختبره. `originalShaderRestored=false` و`originalAnimationRestored=false` حتى يثبت لاحقاً تكافؤ Shader48/rig الحقيقي.
+
+**استعادة/دليل:** `prompt/graphics-lab/RESTORE_AR.md` أعيدت كتابته لتضمين آخر 3 تجارب؛ `gfxlab/MULTI_OWNER_TEST_GUIDE_AR.md` يشرح فحص M00–M05 وCOPY LOG. لا تعدل `main` أو فرع الفريق أو ZIP2 أو CL. لكل دورة ملف جلسة مستقل + STATE تحديث. 
