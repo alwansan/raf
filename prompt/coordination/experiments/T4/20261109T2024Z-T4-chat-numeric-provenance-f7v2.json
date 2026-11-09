@@ -1,0 +1,47 @@
+{
+  "session_id": "20261109T2024Z-T4-chat-numeric-provenance-f7v2",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "experiment_key": "T4-INPUT005-PersistentDiagnosticLog-int32-epoch-long-counter-malformed-token-overflow-failclosed-v1",
+  "base_sha": "0c7d349845d2b7c1678acd2cb0e7e86bbf929294",
+  "scope_commit": "a734c7087a621cc9cd95d2f4101343e7303d2287",
+  "scope_addendum_commit": "8badbf83f22dbf441ae21b2cbdecaa3f8a3eaaaf",
+  "source_commit": "6f3df6bf68921ca2a80106192724b7dbb94bb3a0",
+  "test_commit": "29cba2a3344df64094c9409a3117f167d5b1717d",
+  "report_commit": "5d25681ed3919a3d08fbe558ee64915d7e51ac02",
+  "source_files": [
+    "scripts/t4_correlate_mouse_runtime_epochs.py",
+    "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py"
+  ],
+  "hypothesis": "System.Boolean.ToString concatenation yields True/False, while the old parser only recognized lowercase; strict numeric token boundaries and finite C# primitive widths are also required to avoid malformed-epoch misassociation or crashing on giant integers.",
+  "original_csharp_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs"
+  ],
+  "result": {
+    "status": "SOURCE_ONLY_SUCCESS_DEVICE_PENDING",
+    "ci_run": "https://github.com/alwansan/raf/actions/runs/42693129361",
+    "ci_run_id": 42693129361,
+    "ci_job_id": 129417825568,
+    "pre_tests_ci": "https://github.com/alwansan/raf/actions/runs/42692994798",
+    "tests_total": 57,
+    "tests_passed": 57,
+    "new_tests": 15,
+    "csharp_boolean_literal_positive": true,
+    "malformed_numeric_cases_rejected": true,
+    "huge_numeric_crash_prevented": true,
+    "device_pass": false,
+    "unity_gameplay_verified": false,
+    "gameplay_source_modified": false,
+    "full_game_not_ready": "0/3"
+  },
+  "owner_cl_latest": {
+    "url": "https://github.com/alwansan/CL/tree/main/test/shared-20261109-225506-552476830",
+    "mini_version": "0.2.14-shared",
+    "t4_needs_input": 9,
+    "captured_fullgame_evidence": false
+  },
+  "report": "docs/T4_MOUSE_NUMERIC_PROVENANCE_BOUNDARY_2026-11-09.md",
+  "next_step": "Pin new signed same-source full Raft XAPK only when separately authorized; obtain one-process real PersistentDiagnosticLog with native captured callbacks and original 11-slot Unity reader markers, compare phone LEFT/RIGHT/MIDDLE V/H scroll and true gameplay, monitor world/.rgd, camera/focus/keyboard/touch, audio/Settings. Never treat source-only CI as device PASS.",
+  "updated_at": "2026-11-09T20:28:00Z"
+}
