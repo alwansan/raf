@@ -1,0 +1,25 @@
+{
+  "session_id": "20261109T1949Z-T5-scheduled-r4-review-e7b2",
+  "origin": "scheduled",
+  "owner": "T5",
+  "issue": "INTEGRATION-001",
+  "status": "in_progress",
+  "scope": [
+    "apk-for-testing/SHARED_BUILD_READINESS.md",
+    "T1-05 new GLES driver evidence",
+    "shared Mini request deduplication"
+  ],
+  "files_to_edit": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261109T1949Z-scheduled-t1-mini-r4-review.json",
+    "prompt/coordination/clients/T5/sessions/20261109T1949Z-T5-scheduled-r4-review-e7b2.md"
+  ],
+  "hypothesis": "T1's newly compiled T1-05 driver may justify a single shared mini APK; ensure no equivalent build already exists and preserve full-game 5/5 vote.",
+  "resource": "shared mini APK pipeline; do not launch without current-run deduplication",
+  "evidence": [
+    "CI42682971944",
+    "T1 commit 2f627cb",
+    "pack b642215",
+    "r3 Mini CI42519487402"
+  ],
+  "next": "Check newest T1 source and existing requests; coordinate one build only if missing."
+}
