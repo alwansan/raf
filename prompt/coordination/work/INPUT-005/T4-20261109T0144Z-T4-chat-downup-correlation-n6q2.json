@@ -1,0 +1,28 @@
+{
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0144Z-T4-chat-downup-correlation-n6q2",
+  "status": "active",
+  "issue_id": "INPUT-005",
+  "base_sha": "cf764d7671efb58dc57f5952bd1c2875e97ec504",
+  "updated_at": "2026-11-09T01:44:00Z",
+  "resumed_from_sessions": [
+    "20261109T0036Z-T4-scheduled-capture-evidence-q4m8",
+    "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2",
+    "20261108T1945Z-T4-chat-real-cl-mouse-evidence-v9n3"
+  ],
+  "scope": "Correlate actual owner CL Android physical ACTION_DOWN/UP actionButton=0 with ACTION_BUTTON_PRESS/RELEASE at same eventTime, prevent double count or invented Unity success; build source-only regression against pinned genuine trace.",
+  "intended_files": [
+    "scripts/t4_verify_cl_shared_mouse_evidence.py",
+    "tests/test_t4_verify_cl_shared_mouse_evidence.py",
+    "docs/T4_ANDROID_ACTION_DOWN_UP_CORRELATION_2026-11-09.md",
+    "prompt/coordination/experiments/T4/20261109T0144Z-T4-chat-downup-correlation-n6q2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261109T0144Z-T4-chat-downup-correlation-n6q2.json",
+    "prompt/coordination/clients/T4/sessions/20261109T0144Z-T4-chat-downup-correlation-n6q2.md",
+    "prompt/coordination/work/INPUT-005/T4-20261109T0144Z-T4-chat-downup-correlation-n6q2.json"
+  ],
+  "experiment_key": "T4-CL-4680f5dc-a0-actionButton0-downup-press-release-same-eventTime-v1",
+  "resource_key": "T4-source-only-CL-immutable-evidence-no-Unity",
+  "active_conflict_check": "Latest scheduled T4 session 20261109T0036Z only saved evidence; other T4 gameplay source stages completed; no new gameplay/mini source ownership; latest GitHub runs list all completed.",
+  "next_step": "Implement isolated recorded-edge dedup with explicit/actionButton0 candidate separation, tests, CI; do not change game runtime or T5 shared Mini."
+}
