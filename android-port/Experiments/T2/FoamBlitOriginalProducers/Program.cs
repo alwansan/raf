@@ -649,6 +649,13 @@ internal static class Program
         var queue=new Queue<int>();
         queue.Enqueue(0);
         var returns=new Dictionary<int,string>();
+        // Preserve every abstract producer family across CFG joins, including
+        // an explicit ldnull path. A shared *family* never means a shared
+        // texture instance; the presence/absence of ldnull proves neither
+        // runtime non-null nor cross-pass texture equality.
+        static string JoinOrigins(string a,string b) =>
+            string.Join("|",a.Split('|').Concat(b.Split('|'))
+                .Distinct(StringComparer.Ordinal).OrderBy(x=>x,StringComparer.Ordinal));
         int visits=0;
         while(queue.Count>0)
         {
@@ -673,7 +680,8 @@ internal static class Program
                 if(op==Code.Ret)
                 {
                     if(stack.Count!=1)return "value_invalid_return_stack";
-                    returns[at]=stack[0];
+                    returns[at]=returns.TryGetValue(at,out var prior)
+                        ? JoinOrigins(prior,stack[0]) : stack[0];
                     continue;
                 }
                 if(op==Code.Throw)
@@ -808,7 +816,7 @@ internal static class Program
                     if(previous.Stack.Length!=candidate.Stack.Length ||
                        previous.Locals.Length!=candidate.Locals.Length)
                         return "value_invalid_join_stack";
-                    string Merge(string a,string b)=>a==b?a:"mixed";
+                    string Merge(string a,string b)=>JoinOrigins(a,b);
                     var newStack=previous.Stack.Zip(candidate.Stack,Merge).ToArray();
                     var newLocals=previous.Locals.Zip(candidate.Locals,Merge).ToArray();
                     if(!newStack.SequenceEqual(previous.Stack) ||
@@ -826,8 +834,12 @@ internal static class Program
             }
         }
         if(returns.Count==0)return "value_no_reachable_return";
-        var categories=returns.Values.Distinct().ToArray();
-        if(categories.Length!=1 || categories[0]=="mixed")return "value_mixed_or_joined";
+        var categories=returns.Values.SelectMany(x=>x.Split('|'))
+            .Distinct(StringComparer.Ordinal).ToArray();
+        if(categories.Length!=1)
+            return categories.Contains("null",StringComparer.Ordinal)
+                ? "value_mixed_with_explicit_null_literal"
+                : "value_mixed_without_explicit_null_literal";
         return categories[0] switch
         {
             "null"=>"value_null_only",
@@ -1178,7 +1190,8 @@ internal static class Program
             "value_bad_target","value_unsupported_opcode","value_unsupported_branch",
             "value_bad_local","value_invalid_stack","value_invalid_return_stack",
             "value_invalid_join_stack","value_no_reachable_return",
-            "value_mixed_or_joined","value_null_only",
+            "value_mixed_or_joined","value_mixed_with_explicit_null_literal",
+            "value_mixed_without_explicit_null_literal","value_null_only",
             "value_static_field_category_only","value_instance_field_receiver_unknown",
             "value_argument_untraced","value_nested_call_untraced",
             "value_constructed_untraced","value_opaque_untraced"
@@ -1476,8 +1489,13 @@ internal static class Program
             throw new InvalidOperationException("return_value_local_join_must_preserve_category");
         v[6]=Instruction.Create(OpCodes.Ldnull);
         v[3].Operand=v[6];
-        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_or_joined")
-            throw new InvalidOperationException("return_value_mixed_paths_must_not_claim_field");
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_with_explicit_null_literal")
+            throw new InvalidOperationException("return_value_explicit_null_path_not_preserved");
+        var newRt=new MethodReference(".ctor",mod.TypeSystem.Void,rt){HasThis=true};
+        v[6]=Instruction.Create(OpCodes.Newobj,newRt);
+        v[3].Operand=v[6];
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_without_explicit_null_literal")
+            throw new InvalidOperationException("return_value_nonliteral_mixed_path_not_preserved");
         v[6]=Instruction.Create(OpCodes.Ldloc_0);
         v[3].Operand=v[6];
         var sharedRet=Instruction.Create(OpCodes.Ret);
@@ -1489,8 +1507,8 @@ internal static class Program
         v.Add(Instruction.Create(OpCodes.Br_S,sharedRet));
         v.Add(ifTrue);
         v.Add(sharedRet);
-        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_or_joined")
-            throw new InvalidOperationException("return_stack_phi_must_not_be_proven_same");
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_with_explicit_null_literal")
+            throw new InvalidOperationException("return_stack_phi_explicit_null_must_remain_visible");
         v[1].Operand=Instruction.Create(OpCodes.Nop);
         if(ReachableReturnValueFlow(valueGetter)!="value_bad_target")
             throw new InvalidOperationException("return_bad_branch_target_not_rejected");
