@@ -45,6 +45,10 @@ def fixture():
         "original_pass0_destination_declared_field_trace": False,
         "original_crosspass_declared_field_return_relation": "field_pass0_destination_untraced",
         "original_crosspass_onehop_declared_field_return_relation": "field_pass0_destination_untraced",
+        "original_pass0_dest_field_cil_store_class": "field_not_traced",
+        "original_pass0_dest_field_cil_store_placement": "store_placement_untraced",
+        "original_pass0_dest_field_single_store_adjacent": "store_predecessor_untraced",
+        "original_pass0_pass1_Blit_lexical_relation": "blit_sites_ambiguous_or_missing",
         "pass0_source": "Texture",
         "pass0_destination": "RenderTexture",
         "pass0_source_producer": "typed_field",
@@ -133,6 +137,61 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         r = fixture()
         r["original_crosspass_onehop_declared_field_return_relation"] = "field_onehop_token_match_only"
         with self.assertRaisesRegex(ValueError,"inconsistent"):validate(r)
+
+    def test_original_field_store_cil_lexical_census_bounded_categories(self):
+        r = fixture()
+        r["original_pass0_destination_declared_field_trace"] = True
+        r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
+        r["original_crosspass_onehop_declared_field_return_relation"] = "field_no_direct_match"
+        for cls, placement, adjacent in (
+            ("no_resolved_direct_store","store_placement_none","store_predecessor_not_unique"),
+            ("one_resolved_direct_store","stores_only_in_other_methods","adjacent_ldnull"),
+            ("one_resolved_direct_store","stores_only_in_pass0_method","adjacent_field_load"),
+            ("multiple_resolved_direct_stores","stores_in_pass0_and_other_methods",
+             "store_predecessor_not_unique"),
+        ):
+            with self.subTest(cls=cls, placement=placement):
+                r["original_pass0_dest_field_cil_store_class"] = cls
+                r["original_pass0_dest_field_cil_store_placement"] = placement
+                r["original_pass0_dest_field_single_store_adjacent"] = adjacent
+                out = validate(r)
+                self.assertEqual(out["pass0_dest_field_cil_store_class"],cls)
+                self.assertFalse(out["crosspass_texture_instance_identity_proven"])
+
+    def test_field_store_disallows_unknown_private_or_inconsistent_shape(self):
+        for key,bad in (("original_pass0_dest_field_cil_store_class","private_field"),
+                        ("original_pass0_dest_field_cil_store_placement","private_owner"),
+                        ("original_pass0_dest_field_single_store_adjacent","unknown_method"),
+                        ("original_pass0_pass1_Blit_lexical_relation","private_token")):
+            r = fixture(); r[key] = bad
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError,"unsafe_private"):
+                validate(r)
+        for cls,placement,adjacent in (
+            ("one_resolved_direct_store","store_placement_none","adjacent_ldnull"),
+            ("no_resolved_direct_store","stores_only_in_other_methods","adjacent_call"),
+            ("multiple_resolved_direct_stores","stores_only_in_other_methods","adjacent_null"),
+        ):
+            r=fixture(); r["original_pass0_destination_declared_field_trace"]=True
+            r["original_crosspass_declared_field_return_relation"]="field_no_direct_match"
+            r["original_crosspass_onehop_declared_field_return_relation"]="field_no_direct_match"
+            r["original_pass0_dest_field_cil_store_class"]=cls
+            r["original_pass0_dest_field_cil_store_placement"]=placement
+            r["original_pass0_dest_field_single_store_adjacent"]=adjacent
+            with self.subTest(cls=cls), self.assertRaises(ValueError):validate(r)
+
+    def test_lexical_co_location_is_not_runtime_order(self):
+        for category in ("blit_sites_in_distinct_methods",
+                         "same_method_pass0_precedes_pass1_in_il",
+                         "same_method_pass1_precedes_pass0_in_il"):
+            r=fixture()
+            r["original_pass0_pass1_Blit_lexical_relation"]=category
+            out=validate(r)
+            self.assertEqual(out["pass0_pass1_Blit_lexical_relation"],category)
+            self.assertFalse(out["crosspass_texture_instance_identity_proven"])
+        r=fixture()
+        r["original_pass0_exact_Material_field_argument_calls"]=0
+        r["original_pass0_pass1_Blit_lexical_relation"]="blit_sites_in_distinct_methods"
+        with self.assertRaises(ValueError):validate(r)
 
     def test_unknown_both_passes_is_allowed_but_never_proved(self):
         r = fixture()

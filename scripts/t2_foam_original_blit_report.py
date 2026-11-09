@@ -84,8 +84,32 @@ FIELD_RELATIONS = {
     "value_invalid_return_stack","value_invalid_join_stack",
     "value_no_reachable_return",
 }
+STORE_CLASSES = {
+    "field_not_traced","field_unresolved","no_resolved_direct_store",
+    "one_resolved_direct_store","multiple_resolved_direct_stores",
+}
+STORE_PLACEMENTS = {
+    "store_placement_untraced","store_placement_none",
+    "stores_only_in_pass0_method","stores_only_in_other_methods",
+    "stores_in_pass0_and_other_methods",
+}
+STORE_ADJACENT = {
+    "store_predecessor_untraced","store_predecessor_not_unique",
+    "adjacent_ldnull","adjacent_field_load","adjacent_call",
+    "adjacent_newobj","adjacent_argument_or_local","adjacent_other",
+}
+BLIT_SITE_LEXICAL = {
+    "blit_sites_ambiguous_or_missing","blit_sites_in_distinct_methods",
+    "same_method_pass0_precedes_pass1_in_il",
+    "same_method_pass1_precedes_pass0_in_il",
+    "blit_site_same_il_index_invalid",
+}
 EXPECTED = ({"status", "original_crosspass_declared_field_return_relation",
-             "original_crosspass_onehop_declared_field_return_relation"} |
+             "original_crosspass_onehop_declared_field_return_relation",
+             "original_pass0_dest_field_cil_store_class",
+             "original_pass0_dest_field_cil_store_placement",
+             "original_pass0_dest_field_single_store_adjacent",
+             "original_pass0_pass1_Blit_lexical_relation"} |
             NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS |
             ROLE_KEYS | STACK_KEYS)
 
@@ -217,6 +241,40 @@ def validate(report):
         onehop in ("field_no_direct_match","field_no_match_with_null",
                    "field_null_only")):
         raise ValueError("crosspass_onehop_lost_direct_field_provenance")
+    # Original CIL STORE sites and method co-location are only lexical facts.
+    # Even a one-store direct assignment does not prove its runtime execution,
+    # retained value, the receiver object, or the pass1 sampled texture.
+    store = report["original_pass0_dest_field_cil_store_class"]
+    placement = report["original_pass0_dest_field_cil_store_placement"]
+    adjacent = report["original_pass0_dest_field_single_store_adjacent"]
+    lexical = report["original_pass0_pass1_Blit_lexical_relation"]
+    if (type(store) is not str or store not in STORE_CLASSES or
+        type(placement) is not str or placement not in STORE_PLACEMENTS or
+        type(adjacent) is not str or adjacent not in STORE_ADJACENT or
+        type(lexical) is not str or lexical not in BLIT_SITE_LEXICAL):
+        raise ValueError("unsafe_private_field_write_or_lexical_tag")
+    if store in ("field_not_traced","field_unresolved"):
+        if placement!="store_placement_untraced" or adjacent!="store_predecessor_untraced":
+            raise ValueError("field_writer_untraced_category_inconsistent")
+    elif store=="no_resolved_direct_store":
+        if placement!="store_placement_none" or adjacent!="store_predecessor_not_unique":
+            raise ValueError("field_writer_empty_category_inconsistent")
+    elif store=="multiple_resolved_direct_stores":
+        if adjacent!="store_predecessor_not_unique" or placement in (
+            "store_placement_untraced","store_placement_none"):
+            raise ValueError("field_writer_multiple_category_inconsistent")
+    else:
+        if adjacent in ("store_predecessor_untraced","store_predecessor_not_unique") or (
+            placement in ("store_placement_untraced","store_placement_none")
+        ):
+            raise ValueError("field_writer_one_store_category_inconsistent")
+    if not dest_traced and store!="field_not_traced":
+        raise ValueError("field_writer_without_traced_destination")
+    if lexical!="blit_sites_ambiguous_or_missing" and (
+        report["original_pass0_exact_Material_field_argument_calls"]!=1 or
+        report["original_pass1_exact_Material_field_argument_calls"]!=1
+    ):
+        raise ValueError("lexical_sites_without_unique_Foam_Blit_calls")
     # Explicit boundaries: NEVER claim that pass1 samples the same actual RT
     # object written by pass0 just because their declared types are equal.
     return {
@@ -230,6 +288,10 @@ def validate(report):
         "pass1_bounded_stack_producer": report["original_pass1_bounded_stack_source_kind"],
         "crosspass_declared_field_relation": relation,
         "crosspass_onehop_declared_field_relation": onehop,
+        "pass0_dest_field_cil_store_class": store,
+        "pass0_dest_field_cil_store_placement": placement,
+        "pass0_dest_field_single_store_adjacent": adjacent,
+        "pass0_pass1_Blit_lexical_relation": lexical,
         "crosspass_texture_instance_identity_proven": False,
         "CB0_and_Unity_device_evidence_proven": False,
     }

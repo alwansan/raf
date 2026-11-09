@@ -1138,6 +1138,78 @@ internal static class Program
         return "other_opcode_family";
     }
 
+    private sealed record StoreCilFootprint(string CountFamily,string PlacementFamily,
+        string ImmediatePredecessorFamily);
+    static StoreCilFootprint DestinationFieldStoreCilFootprint(
+        StackSourceTrace pass0Destination,IEnumerable<MethodDefinition> originalMethods,
+        ModuleDefinition originalModule,MethodDefinition? pass0BlitMethod)
+    {
+        // Exact DECLARED field CIL stfld/stsfld census in original assembly,
+        // NOT a dynamic assignment trace or heap alias analysis. No private
+        // original method/field/token/IL leaves the runner.
+        StoreCilFootprint Blocked(string reason) =>
+            new(reason,"store_placement_untraced","store_predecessor_untraced");
+        if(pass0Destination.Role!= "RenderTexture" ||
+           pass0Destination.Kind!="typed_field" ||
+           pass0Destination.SourceInstruction?.Operand is not FieldReference reference)
+            return Blocked("field_not_traced");
+        FieldDefinition? target;
+        try{target=reference.Resolve();}
+        catch(AssemblyResolutionException){return Blocked("field_unresolved");}
+        catch(ResolutionException){return Blocked("field_unresolved");}
+        if(target is null || target.Module!=originalModule)
+            return Blocked("field_unresolved");
+        var stores=new List<(MethodDefinition Method,int Index)>();
+        foreach(var method in originalMethods)
+        {
+            if(!method.HasBody||method.Module!=originalModule)continue;
+            var il=method.Body.Instructions;
+            for(int i=0;i<il.Count;i++)
+                if(il[i].OpCode.Code is Code.Stfld or Code.Stsfld &&
+                   SameField(il[i],target,false))
+                    stores.Add((method,i));
+        }
+        if(stores.Count==0)return new("no_resolved_direct_store",
+            "store_placement_none","store_predecessor_not_unique");
+        bool same=pass0BlitMethod is not null &&
+            stores.Any(x=>ReferenceEquals(x.Method,pass0BlitMethod));
+        bool other=stores.Any(x=>!ReferenceEquals(x.Method,pass0BlitMethod));
+        string placement=pass0BlitMethod is null?"store_placement_untraced":
+            same && other?"stores_in_pass0_and_other_methods":
+            same?"stores_only_in_pass0_method":"stores_only_in_other_methods";
+        string count=stores.Count==1?"one_resolved_direct_store":
+            "multiple_resolved_direct_stores";
+        if(stores.Count!=1)return new(count,placement,"store_predecessor_not_unique");
+        var single=stores[0];
+        var il1=single.Method.Body.Instructions;
+        int before=Previous(il1,single.Index-1);
+        // Preceding opcode may be a complex expression's last instruction;
+        // classify syntactic adjacency ONLY, not assignment-value origin.
+        string prior=before<0?"adjacent_other":il1[before].OpCode.Code switch
+        {
+            Code.Ldnull=>"adjacent_ldnull",
+            Code.Ldfld or Code.Ldsfld=>"adjacent_field_load",
+            Code.Call or Code.Callvirt=>"adjacent_call",
+            Code.Newobj=>"adjacent_newobj",
+            Code.Ldarg or Code.Ldarg_S or Code.Ldarg_0 or Code.Ldarg_1 or
+            Code.Ldarg_2 or Code.Ldarg_3 or Code.Ldloc or Code.Ldloc_S or
+            Code.Ldloc_0 or Code.Ldloc_1 or Code.Ldloc_2 or Code.Ldloc_3=>
+                "adjacent_argument_or_local",
+            _=>"adjacent_other"
+        };
+        return new(count,placement,prior);
+    }
+    static string OriginalFoamBlitLexicalSiteRelation(
+        IReadOnlyList<(MethodDefinition Method,int At)> pass0,
+        IReadOnlyList<(MethodDefinition Method,int At)> pass1)
+    {
+        if(pass0.Count!=1||pass1.Count!=1)return "blit_sites_ambiguous_or_missing";
+        if(!ReferenceEquals(pass0[0].Method,pass1[0].Method))
+            return "blit_sites_in_distinct_methods";
+        if(pass0[0].At<pass1[0].At)return "same_method_pass0_precedes_pass1_in_il";
+        if(pass0[0].At>pass1[0].At)return "same_method_pass1_precedes_pass0_in_il";
+        return "blit_site_same_il_index_invalid";
+    }
     static Site? DirectFieldBlit(MethodDefinition m,int callIndex,FieldDefinition field)
     {
         var il=m.Body.Instructions;
@@ -1220,6 +1292,8 @@ internal static class Program
         var originalSourceReturnKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         var originalBacktraces=new Dictionary<int,List<StackSourceTrace>>{{0,new()},{1,new()}};
         var originalDestBacktraces=new Dictionary<int,List<StackSourceTrace>>{{0,new()},{1,new()}};
+        var originalMaterialBlitSites=new Dictionary<int,List<(MethodDefinition Method,int At)>>
+            {{0,new()},{1,new()}};
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -1236,6 +1310,7 @@ internal static class Program
                     if(DirectMaterialBlit(m,i,materialField))
                     {
                         exactMaterialDirect[lit.Value]++;
+                        originalMaterialBlitSites[lit.Value].Add((m,i));
                         originalFirstBlockers[lit.Value].Add(FirstUnresolvedImageOperand(m,i,materialField));
                         originalSourceHeadKinds[lit.Value].Add(SourceHeadClass(m,i,materialField));
                         originalSourceReturnKinds[lit.Value].Add(SourceAdjacentCallReturnFamily(m,i,materialField));
@@ -1394,6 +1469,40 @@ internal static class Program
             throw new InvalidOperationException("private_crosspass_field_relation_forbidden");
         Console.WriteLine("T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION "+crosspassField);
         Console.WriteLine("T2_FOAM_CROSSPASS_ONEHOP_FIELD_RETURN_RELATION "+crosspassOneHop);
+        var writer=DestinationFieldStoreCilFootprint(dest0,methods,
+            asm.MainModule,originalMaterialBlitSites[0].Count==1 ?
+                originalMaterialBlitSites[0][0].Method:null);
+        string siteRelation=OriginalFoamBlitLexicalSiteRelation(
+            originalMaterialBlitSites[0],originalMaterialBlitSites[1]);
+        var permittedStoreCounts=new HashSet<string>{
+            "field_not_traced","field_unresolved","no_resolved_direct_store",
+            "one_resolved_direct_store","multiple_resolved_direct_stores"
+        };
+        var permittedStorePlacements=new HashSet<string>{
+            "store_placement_untraced","store_placement_none",
+            "stores_only_in_pass0_method","stores_only_in_other_methods",
+            "stores_in_pass0_and_other_methods"
+        };
+        var permittedStoreAdjacent=new HashSet<string>{
+            "store_predecessor_untraced","store_predecessor_not_unique",
+            "adjacent_ldnull","adjacent_field_load","adjacent_call",
+            "adjacent_newobj","adjacent_argument_or_local","adjacent_other"
+        };
+        var permittedSiteRelations=new HashSet<string>{
+            "blit_sites_ambiguous_or_missing","blit_sites_in_distinct_methods",
+            "same_method_pass0_precedes_pass1_in_il",
+            "same_method_pass1_precedes_pass0_in_il",
+            "blit_site_same_il_index_invalid"
+        };
+        if(!permittedStoreCounts.Contains(writer.CountFamily) ||
+           !permittedStorePlacements.Contains(writer.PlacementFamily) ||
+           !permittedStoreAdjacent.Contains(writer.ImmediatePredecessorFamily) ||
+           !permittedSiteRelations.Contains(siteRelation))
+            throw new InvalidOperationException("private_original_field_writer_info_forbidden");
+        Console.WriteLine("T2_FOAM_PASS0_DEST_FIELD_CIL_STORE_CLASS "+writer.CountFamily);
+        Console.WriteLine("T2_FOAM_PASS0_DEST_FIELD_CIL_STORE_PLACEMENT "+writer.PlacementFamily);
+        Console.WriteLine("T2_FOAM_PASS0_DEST_FIELD_SINGLE_STORE_ADJACENT "+writer.ImmediatePredecessorFamily);
+        Console.WriteLine("T2_FOAM_PASS0_PASS1_BLIT_LEXICAL_RELATION "+siteRelation);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -1445,6 +1554,10 @@ internal static class Program
                 dest0.Kind=="typed_field",
             original_crosspass_declared_field_return_relation=crosspassField,
             original_crosspass_onehop_declared_field_return_relation=crosspassOneHop,
+            original_pass0_dest_field_cil_store_class=writer.CountFamily,
+            original_pass0_dest_field_cil_store_placement=writer.PlacementFamily,
+            original_pass0_dest_field_single_store_adjacent=writer.ImmediatePredecessorFamily,
+            original_pass0_pass1_Blit_lexical_relation=siteRelation,
             original_crosspass_declared_field_token_not_heap_identity=true,
             original_shader_to_blit_direct_field_types_confirmed=pass0 is not null && pass1 is not null,
             original_texture_instance_identity_proven=false,
@@ -1889,6 +2002,59 @@ internal static class Program
         if(virtualTag.StartsWith("field_onehop_token_match",StringComparison.Ordinal) ||
            virtualTag.StartsWith("field_token_match",StringComparison.Ordinal))
             throw new InvalidOperationException("virtual_nested_leaf_must_remain_opaque");
+        // Independent source-free ORIGINAL field writer CIL census fixture:
+        // writing to the exact field definition is not proof the Blit uses
+        // that written runtime texture, even when a store shares a method.
+        var fixtures=new List<MethodDefinition>{crossCaller};
+        var emptyWrite=DestinationFieldStoreCilFootprint(
+            crossDestination,fixtures,mod,crossCaller);
+        if(emptyWrite.CountFamily!="no_resolved_direct_store" ||
+           emptyWrite.PlacementFamily!="store_placement_none")
+            throw new InvalidOperationException("writer_empty_fixture");
+        var syntheticWriter=new MethodDefinition("SyntheticFieldWriter",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,
+            mod.TypeSystem.Void);
+        owner.Methods.Add(syntheticWriter);
+        syntheticWriter.Body.Instructions.Add(Instruction.Create(OpCodes.Ldnull));
+        syntheticWriter.Body.Instructions.Add(Instruction.Create(OpCodes.Stsfld,fixtureRtField));
+        syntheticWriter.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        fixtures.Add(syntheticWriter);
+        var singleWrite=DestinationFieldStoreCilFootprint(
+            crossDestination,fixtures,mod,crossCaller);
+        if(singleWrite.CountFamily!="one_resolved_direct_store" ||
+           singleWrite.PlacementFamily!="stores_only_in_other_methods" ||
+           singleWrite.ImmediatePredecessorFamily!="adjacent_ldnull")
+            throw new InvalidOperationException("writer_single_synthetic_fixture");
+        syntheticWriter.Body.Instructions.Insert(2,Instruction.Create(OpCodes.Ldnull));
+        syntheticWriter.Body.Instructions.Insert(3,
+            Instruction.Create(OpCodes.Stsfld,fixtureRtField));
+        var multipleWrite=DestinationFieldStoreCilFootprint(
+            crossDestination,fixtures,mod,crossCaller);
+        if(multipleWrite.CountFamily!="multiple_resolved_direct_stores" ||
+           multipleWrite.PlacementFamily!="stores_only_in_other_methods" ||
+           multipleWrite.ImmediatePredecessorFamily!="store_predecessor_not_unique")
+            throw new InvalidOperationException("writer_multiple_synthetic_fixture");
+        // Distinct field tokens, including separate unsaved RID0 fields,
+        // must never become phantom writes to the target field.
+        syntheticWriter.Body.Instructions[1]=Instruction.Create(OpCodes.Stsfld,otherRtField);
+        syntheticWriter.Body.Instructions[3]=Instruction.Create(OpCodes.Stsfld,otherRtField);
+        if(DestinationFieldStoreCilFootprint(crossDestination,fixtures,mod,crossCaller)
+           .CountFamily!="no_resolved_direct_store")
+            throw new InvalidOperationException("writer_distinct_field_fixture");
+        var pass0Fake=new List<(MethodDefinition Method,int At)>{(crossCaller,2)};
+        var pass1Fake=new List<(MethodDefinition Method,int At)>{(crossCaller,5)};
+        if(OriginalFoamBlitLexicalSiteRelation(pass0Fake,pass1Fake)
+            !="same_method_pass0_precedes_pass1_in_il")
+            throw new InvalidOperationException("lexical_pass_order_synthetic_fixture");
+        pass0Fake.Clear();
+        pass0Fake.Add((syntheticWriter,1));
+        if(OriginalFoamBlitLexicalSiteRelation(pass0Fake,pass1Fake)
+            !="blit_sites_in_distinct_methods")
+            throw new InvalidOperationException("lexical_distinct_methods_fixture");
+        pass0Fake.Add((crossCaller,2));
+        if(OriginalFoamBlitLexicalSiteRelation(pass0Fake,pass1Fake)
+            !="blit_sites_ambiguous_or_missing")
+            throw new InvalidOperationException("lexical_ambiguous_sites_fixture");
 
     }
 
