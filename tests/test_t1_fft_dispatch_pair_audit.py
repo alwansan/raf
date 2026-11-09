@@ -104,6 +104,28 @@ class PairAuditTests(unittest.TestCase):
         self.assertEqual(result["paired_count"], 2)
         self.assertEqual(result["errors"], [])
 
+    def test_missing_session_provenance_invalidates_all_pairs(self):
+        result = audit([row(BEFORE, 1, ";session_id=alpha"),
+                        row(AFTER, 1, ";session_id=alpha"),
+                        row(BEFORE, 2), row(AFTER, 2)])
+        self.assertIn("cross_session_provenance_presence:session_id:2", result["errors"])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertEqual(result["missing_return_sequences"], [1, 2])
+
+    def test_late_build_provenance_invalidates_legacy_pair(self):
+        result = audit([row(BEFORE, 1), row(AFTER, 1),
+                        row(BEFORE, 2, ";build_sha=abc"),
+                        row(AFTER, 2, ";build_sha=abc")])
+        self.assertIn("cross_session_provenance_presence:build_sha:2", result["errors"])
+        self.assertEqual(result["paired_count"], 0)
+
+    def test_all_legacy_rows_remain_parseable(self):
+        result = audit([row(BEFORE, 1), row(AFTER, 1),
+                        row(BEFORE, 2), row(AFTER, 2)])
+        self.assertEqual(result["paired_count"], 2)
+        self.assertEqual(result["errors"], [])
+        self.assertFalse(result["gpu_execution_proven"])
+
     def test_other_events_ignored(self):
         self.assertEqual(audit([{"event": "unrelated"}])["before_count"], 0)
 
