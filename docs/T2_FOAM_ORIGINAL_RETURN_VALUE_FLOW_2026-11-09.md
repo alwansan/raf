@@ -66,3 +66,20 @@ T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_with_explicit_null_literal
 ```
 
 Separately triggered Android platform adapter [42686783004](https://github.com/alwansan/raf/actions/runs/42686783004) completed **SUCCESS**; it does not render authentic Foam pixels. A safe original-CIL return-family classification is not proof of actual Android `null`, same-frame source/destination heap identity, Foam ShaderLab installation, proper CB0 upload, or water rendering. `WATER-001` stays **OPEN / NOT_READY 0/3**. Next genuinely different original-source question: prove or reject pass0-destination ↔ pass1-source runtime object continuity under matched receiver, state and frame; be explicit when the available static evidence cannot decide. No full XAPK or Mini request.
+
+## SHA-original crosspass declared field audit — 2026-11-09 20:13 UTC
+
+T2 registered the separate `20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4` work before implementation. C# Mono.Cecil now traces the authenticated original Foam Blit **pass0 destination** stack slot (depth2) independently of the **pass1 source** (depth3), then compares the pass0 destination's original *declared field token* privately with the possible field-origin return values of the original pass1 managed callee, across bounded CIL stack/local CFG joins. The real field token is never logged or published. A field equality would still not prove same receiver, frame, intervening writes, RenderTexture heap instance or Android pixels.
+
+Initial source commit `c780271d7689e2b0ce8327183b590aef864db3b0` produced [CI42689721185](https://github.com/alwansan/raf/actions/runs/42689721185) **FAILURE** at the strict report-schema step: the additional safe keys were not yet allowed, so that run is not treated as verified. Follow-up atomic source commit [6f09eddc](https://github.com/alwansan/raf/commit/6f09eddcf788050035a767d21999c75a6ebebdc1) added Python schema safety and source-free synthetic C# tests for exact same/different original declared field token, direct null return, guarded field/null returns, and reading/discarding a field without returning it. Also fixed false comparison of separate Cecil fixture fields whose metadata RID is 0.
+
+Verified [CI42690309016](https://github.com/alwansan/raf/actions/runs/42690309016) **COMPLETED SUCCESS** on `6f09eddc`: **19/19** Python tests, `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`, original ZIP2 assembly 3,211,776 bytes and shader owner 115,978,112 bytes authenticated, private scratch purge and safe artifact publication. Genuine original output:
+
+```text
+T2_FOAM_PASS0_BACKTRACE RenderTexture typed_field static_type_only_no_instance_proof steps=6 void_calls=0
+T2_FOAM_PASS1_BACKTRACE Texture typed_call_result static_type_only_no_instance_proof steps=21 void_calls=1
+T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_with_explicit_null_literal
+T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION field_no_match_with_null
+```
+
+**Negative structural result:** within the analyzed original pass1 callee return paths, a value directly loaded from the exact same DECLARED field token as the pass0 destination was **not** found; an explicit null-family path remains conservatively reachable. This does **not** refute indirect aliases via other fields, receivers, nested getters, allocation or same-frame runtime state. The null path is not proven to execute. Separate [platform CI42690309050](https://github.com/alwansan/raf/actions/runs/42690309050) SUCCESS is CPU/offline smoke only. Original Foam ShaderLab/CB0 and Adreno730 water pixels remain **unverified**, WATER-001 **OPEN / NOT_READY 0/3**. Next distinct engineering step: original managed caller/receiver and indirect alias path, not more duplicate direct token checks.
