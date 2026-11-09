@@ -149,9 +149,21 @@ def verify_genuine_texture_sampler_pair_count(report):
         bindings = row.get("translated_resource_bindings")
         if not isinstance(bindings, list):
             raise ValueError("Compiled Foam texture/sampler bindings unavailable")
+        # Reports are untrusted even when claiming authenticated sources.
+        # Reject malformed or duplicated slots before any parity assertion.
+        if any(not isinstance(r, dict) or
+               r.get("category") not in ("separate_images", "separate_samplers") or
+               type(r.get("set")) is not int or
+               type(r.get("binding")) is not int or
+               not (0 <= r["set"] <= MAX_BOUND_INDEX) or
+               not (0 <= r["binding"] <= MAX_BOUND_INDEX)
+               for r in bindings):
+            raise ValueError("Malformed translated Foam binding")
         numeric = tuple(sorted(
             (r["category"], r["set"], r["binding"]) for r in bindings
         ))
+        if len(set(numeric)) != len(numeric):
+            raise ValueError("Duplicate translated Foam binding")
         if numeric != COMPILED_NUMERIC_RESOURCE_BINDINGS[key]:
             raise ValueError("Translated Foam sampled image/sampler numeric ABI drift")
         count = ORIGINAL_TEXTURES_PER_STAGE[key]
