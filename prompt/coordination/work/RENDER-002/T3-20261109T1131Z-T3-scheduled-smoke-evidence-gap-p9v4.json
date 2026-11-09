@@ -1,0 +1,17 @@
+{
+  "session_id": "20261109T1131Z-T3-scheduled-smoke-evidence-gap-p9v4",
+  "origin": "scheduled",
+  "owner": "T3",
+  "track": "RENDER-002",
+  "status": "active_evidence_gap",
+  "baseline_head": "4ad84778c6d51e24e67d042233e2937672b8e4ba",
+  "experiment_key": "T3-SMOKE34-PASS-FACTORS-20261109",
+  "files": [
+    "prompt/coordination/work/RENDER-002/T3-20261109T1131Z-T3-scheduled-smoke-evidence-gap-p9v4.json",
+    "prompt/coordination/clients/T3/sessions/20261109T1131Z-T3-scheduled-smoke-evidence-gap-p9v4.md"
+  ],
+  "shared_resource": "none; no Unity/CI",
+  "hypothesis": "Smoke state gate checks four booleans but not blend factors, pass order, alpha texture or shader keywords; SCOPED_STATE_MATCH alone cannot rule out square smoke.",
+  "next_step": "Acquire SHA-pinned original shader48 and actual same-instance export metadata; compare per-pass SrcBlend/DstBlend/ZWrite/Cull/ColorMask, texture alpha channel and material keywords.",
+  "device_proof": false
+}
