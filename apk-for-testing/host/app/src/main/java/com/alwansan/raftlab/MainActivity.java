@@ -48,7 +48,7 @@ public final class MainActivity extends Activity {
     }
     void runSharedAutoCase(){
         String caseId=getIntent()==null?null:getIntent().getStringExtra("auto_case_id");
-        if(caseId==null||!caseId.matches("T1-0[1-4]")||t1Probe==null)return;
+        if(caseId==null||!caseId.matches("T1-0[1-5]")||t1Probe==null)return;
         for(JSONObject x:cases)if(caseId.equals(x.optString("id"))){selected=x;break;}
         final String id=caseId;
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(()->{
