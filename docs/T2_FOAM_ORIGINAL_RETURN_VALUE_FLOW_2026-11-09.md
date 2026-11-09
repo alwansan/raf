@@ -101,3 +101,29 @@ T2_FOAM_CROSSPASS_ONEHOP_FIELD_RETURN_RELATION field_no_match_with_null
 ```
 
 **Bounded negative result:** allowing one statically resolvable nested Texture helper does not reveal any *new directly linked same declared field token* in the original pass1 source return. This is **not a complete proof of no indirect alias**: deeper nesting, different fields referring to one heap RenderTexture, receiver identity, runtime predicate selection and frame/lifecycle continuity remain unresolved. No Unity ShaderLab binding, CB0, Adreno 730 water pixels or device parity were tested. `WATER-001` **OPEN / NOT_READY 0/3**; no Mini/full game XAPK requested. Next T2 original-source hypothesis should examine receiver and object alias lineage without repeating a one-hop source-free test unless inputs differ.
+
+## T2 — SHA-original Foam pass0 RenderTexture declared-field managed CIL writer footprint (2026-11-09)
+
+Chat session `20261109T2040Z-T2-chat-foam-writer-census-z4m7` / `origin=chat` reserved its T2-only work scope before editing (commit `7410282dc45bb9d9b7e0afabf6303d697a19ccf5`). The precise question differs from prior direct and one-hop pass1 return provenance: *which managed methods contain CIL field-store opcodes to the exact declared field that supplies the pass0 Blit destination? Do the two Foam Blit calls occupy the same managed method, and is the destination field written in the pass1 Blit method?*
+
+Implementation:
+- C# Mono.Cecil (commit `a3a63adc197271cc798de3c7a0bbe06bf3617ecf`) scans the SHA-original 3,211,776-byte `Assembly-CSharp.dll` privately for exact declared `stfld`/`stsfld` references matching the original pass0 destination's already resolved `FieldDefinition`; classifies store count **zero/one/multiple**, method placement relative to the **pass0** Blit, and relative pass0/pass1 method co-location. A one-store "adjacent predecessor" is only an opcode family, not a proven right-hand-side value.
+- A follow-up (commit `57b8f10be4f91af7b37b0b8eeec73c7e9b775b0c`) additionally scans the unique original **pass1** Blit managed method for the exact field store and classifies only literal CIL instruction order (before/after/both/none). The source-free privacy report's schema and adversarial fixtures were extended; malformed/private tags, mutually impossible store counts and fictitious crosspass heap identity remain rejected.
+- First follow-up [CI42696515826](https://github.com/alwansan/raf/actions/runs/42696515826) failed in a new synthetic Python negative fixture because a pre-existing return-field consistency guard correctly fired earlier than the expected later guard; the source-original stage was not executed. Fixed the *test input only* at `fbe24922a60b895f88fd1ef0e4a2ed15a67a6a2d`.
+
+Two **completed successful SHA-original** runs:
+- [CI42695789057](https://github.com/alwansan/raf/actions/runs/42695789057), source `a3a63adc`, job `129427157145`: **24/24** Python tests, C# Cecil synthetic PASS; original assembly and shader owner `115978112` bytes SHA-authenticated; private scratch purged, safe report only.
+- [CI42696649931](https://github.com/alwansan/raf/actions/runs/42696649931), source `fbe24922`, job `129430174641`: **26/26** Python, C# Cecil synthetic PASS, original ZIP2 authentication and private scratch purge PASS.
+
+**Original structural evidence** (finite-safe stdout, no field names/tokens or private IL):
+```text
+T2_FOAM_PASS0_DEST_FIELD_CIL_STORE_CLASS multiple_resolved_direct_stores
+T2_FOAM_PASS0_DEST_FIELD_CIL_STORE_PLACEMENT stores_only_in_other_methods
+T2_FOAM_PASS0_DEST_FIELD_SINGLE_STORE_ADJACENT store_predecessor_not_unique
+T2_FOAM_PASS0_PASS1_BLIT_LEXICAL_RELATION blit_sites_in_distinct_methods
+T2_FOAM_PASS0_DEST_FIELD_WRITES_VS_PASS1_BLIT_IL pass1_method_no_direct_field_store
+```
+
+**Interpretation:** SHA-authenticated managed code contains **multiple resolved direct field store opcodes** to the same *declared pass0 RenderTexture destination field*. All recognized CIL stores are in **other managed methods than pass0 Blit**. The Foam pass1 Blit resides in a different managed method, and that pass1 method contains **no direct CIL store opcode to the exact pass0 destination field**. Thus observed explicit managed CIL field writes occur outside *both* Foam pass Blit methods. It does **not** prove when or whether writes execute, resource allocation identity, initialization order, equality of receivers/fields' stored objects, indirect aliases through other fields/getters, native/reflection writes, explicit null branch execution, ShaderLab/CB0 binding or Android GPU pixels. No original content changed and no full XAPK/mini APK requested by T2.
+
+Suggested next distinct original-source investigation: the actual **writer methods' RHS expression/receiver object** and any unique CIL call edges feeding them from the two Foam paths, privately and with conservative abstract alias tracking. Keep exact symbol names/tokens/IL inside authenticated runner; release only finite source-safe categories, avoid asserting a runtime execution path without on-device evidence. Overall `WATER-001` remains **OPEN / NOT_READY 0/3**.
