@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T2012Z-T3-chat-smoke34-dxbc-semantics-j8m4",
+  "issue_id": "RENDER-002",
+  "status": "sha_original_DXBC_semantic_mask_pairs_source_verified",
+  "experiment_key": "t3-original-sha15964-smoke34-private-2keyword-dxbc-isgn-osgn-semantic-index-register-mask-join-only-v1",
+  "run": {
+    "id": 42691211652,
+    "commit": "f46f792b5bb7cc17228d52a67b1ff950870aa831",
+    "conclusion": "success",
+    "artifact_id": 13707545897,
+    "expires": "2026-11-16T20:15:53Z"
+  },
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_scenes_sha_verified": 6,
+    "owners_sha_verified": 4,
+    "renderers": 17,
+    "material_slots": 34
+  },
+  "tests": {
+    "new": 10,
+    "inherited_semantic": 21,
+    "inherited_stage_inventory": 7
+  },
+  "result": {
+    "vertex_fragment_pairs": 2,
+    "programs": 4,
+    "semantic_pairs_matched": 7,
+    "user_fragment_inputs": 7,
+    "user_vertex_outputs": 7,
+    "missing_fragment_semantics": 0,
+    "unmatched_fragment_components": 0,
+    "matched_missing_output_components": 0,
+    "matched_type_mismatches": 0,
+    "fragment_input_component_masks": 28,
+    "vertex_output_component_masks": 28
+  },
+  "limits": {
+    "source_dx_to_spirv_location_map_proven": false,
+    "roundtrip_semantic_equivalence_proven": false,
+    "shaderlab_integrated": false,
+    "Android_pixels_verified": false,
+    "original_semantic_names_published": false,
+    "game_assets_modified": false
+  },
+  "next": "Read true DXBC fragment ReadMask vs source SPIR-V input component coverage, then establish source semantic-to-SPIR-V location uniqueness."
+}

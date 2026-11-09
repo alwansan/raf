@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T2012Z-T3-chat-smoke34-dxbc-semantics-j8m4",
+  "issue_id": "RENDER-002",
+  "type": "genuine_original_smoke34_DXBC_signature_join",
+  "status": "ORIGINAL_DXBC_SOURCE_VF_SEMANTIC_MATCH__SPIRV_LOCATION_UNKNOWN",
+  "timestamp_utc": "2026-11-09T20:16:00Z",
+  "run_id": 42691211652,
+  "artifact_id": 13707545897,
+  "verified": {
+    "exact_keyword_pairs": 2,
+    "semantic_records_matched": 7,
+    "missing_fragment_semantics": 0,
+    "missing_component_lanes": 0,
+    "semantic_type_mismatches": 0
+  },
+  "device_pixel_fix_verified": false,
+  "source_to_SPIRV_semantic_location_verified": false
+}
