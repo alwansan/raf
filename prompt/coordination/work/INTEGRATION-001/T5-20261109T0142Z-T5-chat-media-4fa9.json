@@ -6,17 +6,29 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "unified-mini-media-export-integrity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6fe95344909bd919dc8bc08cc245bda640e1155e",
   "experiment_key": "T5_MediaStore_IS_PENDING_transactional_export_android29plus_source-v1",
   "resource_key": "apk-for-testing/unified/UnifiedLabActivity.java",
-  "intended_files": ["apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java", "tests/test_t5_unified_saf_stream_contract.py"],
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "tests/test_t5_unified_saf_stream_contract.py"
+  ],
   "approach": "Use IS_PENDING until a complete write, publish atomically, delete on failure; add source regression tests and reuse T5 source-only Android compile workflow.",
   "hypothesis": "Without MediaStore IS_PENDING and rollback, a failed write leaves a visible partial image or log that could be misinterpreted as valid evidence.",
-  "resumed_from_sessions": ["20261109T0052Z-T5-scheduled-cl-gate-a6d2", "20261108T2351Z-T5-scheduled-r3-device-4e7c"],
-  "related_work": ["T3 independently owns CL PNG pixel audit; T4 owns physical mouse/capture"],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement guarded MediaStore write, add regression tests, verify Actions source-only compile and document limits.",
-  "updated_at": "2026-11-09T01:42:00Z"
+  "resumed_from_sessions": [
+    "20261109T0052Z-T5-scheduled-cl-gate-a6d2",
+    "20261108T2351Z-T5-scheduled-r3-device-4e7c"
+  ],
+  "related_work": [
+    "T3 independently owns CL PNG pixel audit; T4 owns physical mouse/capture"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42547068324",
+    "https://github.com/alwansan/raf/actions/runs/42547068346",
+    "https://github.com/alwansan/raf/actions/runs/42547097683"
+  ],
+  "result": "Source fix cf764d7 + new tests a71ef5f; latest run 42547097683 completed SUCCESS; Python source contract, real Java StreamSha256 controls and unified Android javac all succeeded. No APK, no phone MediaStore fault injection.",
+  "next_step": "Keep Mini r4 NO_BUILD. Validate actual Android15 MediaStore once legitimately bundled; separately scope non-atomic overwrite of existing exports.",
+  "updated_at": "2026-11-09T01:46:12Z"
 }
