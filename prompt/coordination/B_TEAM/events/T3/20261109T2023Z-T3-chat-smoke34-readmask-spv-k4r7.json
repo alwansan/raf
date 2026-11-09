@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T2023Z-T3-chat-smoke34-readmask-spv-k4r7",
+  "issue_id": "RENDER-002",
+  "type": "sha_original_smoke34_DXBC_ps_used_lanes_vs_spv_declared_lanes",
+  "timestamp_utc": "2026-11-09T20:27:00Z",
+  "status": "ORIGINAL_PS_READMASK_SOURCE_ONLY_CLASSIFIED_NOT_DEVICE_PROOF",
+  "run_id": 42692895633,
+  "artifact_id": 13708091567,
+  "source": {
+    "dxbc_ps_declared": 28,
+    "dxbc_ps_used": 22,
+    "unused_declared": 6,
+    "spv_original_declared": 28,
+    "spv_roundtrip_declared": 28
+  },
+  "original_to_spirv_semantic_mapping_proven": false,
+  "phone_smoke_verified": false
+}

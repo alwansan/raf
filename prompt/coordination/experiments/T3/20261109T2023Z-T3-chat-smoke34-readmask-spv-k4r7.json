@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "session_id": "20261109T2023Z-T3-chat-smoke34-readmask-spv-k4r7",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "t3-sha15964-smoke34-2keyword-original-private-dxbc-ps-readmask-vs-spv-original-roundtrip-reflected-input-lanes-v1",
+  "status": "SHA_ORIGINAL_SMOKE34_PS_READMASK_VS_SOURCE_ROUNDTRIP_SPV_LANES_CLASSIFIED",
+  "git_commit": "c2f00ec6137eeb2736a7c6cbf6bb28d196e96e58",
+  "run_id": 42692895633,
+  "run_conclusion": "success",
+  "artifact_id": 13708091567,
+  "artifact_expiry_utc": "2026-11-16T20:26:49Z",
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_scene_count": 6,
+    "original_owner_count": 4,
+    "smoke_name_renderer_count": 17,
+    "material_slot_count": 34,
+    "keyword_matched_pairs": 2
+  },
+  "tests": {
+    "new_synthetic": 14,
+    "inherited_semantic_parser": 21,
+    "inherited_original_inventory": 7
+  },
+  "result": {
+    "original_dx_fragment_inputs": 7,
+    "original_dx_declared_lanes": 28,
+    "original_dx_read_lanes": 22,
+    "original_dx_declared_but_unread_lanes": 6,
+    "original_partial_read_semantics": 4,
+    "original_complete_unread_semantics": 0,
+    "original_vertex_missing_read_lanes": 0,
+    "original_spv_fragment_input_vectors": 7,
+    "original_spv_declared_input_lanes": 28,
+    "roundtrip_spv_fragment_input_vectors": 7,
+    "roundtrip_spv_declared_input_lanes": 28,
+    "source_roundtrip_lane_count_equal_pairs": 2,
+    "dx_readmask_source_spv_lane_count_equal_pairs": 0,
+    "dx_readmask_roundtrip_spv_lane_count_equal_pairs": 0,
+    "dx_readmask_to_spv_source_absolute_lane_difference": 6,
+    "dx_readmask_to_spv_roundtrip_absolute_lane_difference": 6
+  },
+  "interpretation": "DXBC read lanes and SPIR-V reflected declaration widths measure different things; a cardinality mismatch does not establish functional shader corruption or semantic mismatch.",
+  "limits": {
+    "semantic_to_location_mapping_proven": false,
+    "source_to_roundtrip_semantic_preservation_proven": false,
+    "original_ShaderLab_restored": false,
+    "Android_pixels_verified": false,
+    "game_assets_modified": false,
+    "private_names_published": false
+  },
+  "next": "Explicit DXBC semantic-register-component ↔ SPIR-V Location+Component provenance, then controlled Unity/Android pixel validation."
+}

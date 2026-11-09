@@ -5,8 +5,8 @@ origin: chat
 base_sha: 5016e372792c31a343fde6b25eeb904531181888
 resumed_from_sessions: 20261109T2012Z-T3-chat-smoke34-dxbc-semantics-j8m4; 20261109T2003Z-T3-chat-smoke34-name-anchors-n7c2
 issue_id: RENDER-002
-status: active
-updated_at: 2026-11-09T20:23:00Z
+status: completed
+updated_at: 2026-11-09T20:27:00Z
 experiment_key: t3-sha15964-smoke34-2keyword-original-private-dxbc-ps-readmask-vs-spv-original-roundtrip-reflected-input-lanes-v1
 resource_key: t3-readonly-zip2-6scene4owner-smoke34-private-isgn-spirv-ps-lane-2pairs
 intended_files:
@@ -21,3 +21,9 @@ intended_files:
 At 20:21 UTC HEAD 5016e372; no queued/in_progress same smoke34 T3 original source job in last GitHub Actions. T1 WATER-001, T2 foam, T4 input, T5 unified mini occupy separate source files and resource. Recent CI42691211652 SUCCESS verified 2 exact authentic source DXBC pairs with 7 matched original VS/FS user semantic-index records and 28 declared fragment input/vertex output channels, 0 mismatches. CI42689814110 SUCCESS 4/4 genuine DXBC→SPIR-V CPU and roundtrip, 2/2 VS/FS SPV compatible, but 0/13 source→roundtrip compiler input name matches and 0/9 output name matches. Need not replay the previous experiment without new hypothesis.
 
 This cycle computes **used** channels from original DXBC PS ISGN/ISG1 ReadWriteMask, checks used subset of declaration, matches genuine original VS output mask privately, translates ONLY two exact SHA-original compiled PS stages and privately reflects source and roundtrip SPIR-V input scalar lane cardinalities. Classifies equality/differences as aggregate counters; count equality is NOT DXBC semantic-to-Location proof. Fail closed on unsupported types, source mismatch, malformed program stages or untrusted translator, refuse private name/code/GUID/PathID artifacts. No game asset/APK/OBB/main/other-agent modifications, no redundant heavy Unity CI or competing zip2 checkout, isolated workflow cancel:false. Release scope after CI and journal.
+
+## Completed, source-only scope released
+
+- CI [42692895633](https://github.com/alwansan/raf/actions/runs/42692895633) SUCCESS, sha-pinned authentic original six scenes/four owners, two keyword paired compiled smoke34 PS permutations; 14+21+7 = 42 tests passed.
+- Original DXBC PS ISGN declared channels **28**, actually read channels **22**, declared-but-unread **6**, partly unread records **4/7**, totally unread **0**; source original VS stages cover all actually read lanes. Both original and roundtrip SPIR-V interfaces reflect **28** declared fragment-input lanes and **7** input variables each. Original-to-roundtrip reflected lane width equality 2/2; DXBC-used-vs-SPIRV-reflected equality 0/2, aggregate delta 6 lanes due to declared-vs-used distinction; **not compiler numerical error or semantic mismatch proof**.
+- Artifact 13708091567 (count-only JSON), expiry 2026-11-16T20:26:49Z. True semantic-to-Location pairing, Unity ShaderLab, actual smoke pixels not checked. Resource released; RENDER-002 stays OPEN/NOT_READY 0/3.
