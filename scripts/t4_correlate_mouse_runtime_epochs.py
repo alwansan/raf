@@ -209,10 +209,19 @@ def triage(lines):
             continue
         epochs = EPOCH_RE.findall(detail)
         if len(epochs) != 1 or len(EPOCH_KEY_RE.findall(detail)) != 1:
+            # An invalid final record from the just-released logger cannot
+            # be followed by a different well-formed final that restores
+            # trust in this terminal snapshot.
+            if pending_final is not None and op.endswith("_final"):
+                pending_final["attempt"]["invalid"] = True
+                pending_final = None
             invalid += 1
             continue
         epoch = int(epochs[0])
         if epoch > MAX_INT32:
+            if pending_final is not None and op.endswith("_final"):
+                pending_final["attempt"]["invalid"] = True
+                pending_final = None
             invalid += 1
             continue
         if op in OPS[:2]:
@@ -228,9 +237,14 @@ def triage(lines):
             # These two *exact* operation names can follow the release in
             # original C#, but normal callbacks/readers cannot. Action final
             # must precede reader final if both are emitted. Missing one is OK.
-            if (pending_final is None or
-                    pending_final["attempt"]["epoch"] != epoch or
+            if pending_final is None:
+                unpaired += 1
+                continue
+            if (pending_final["attempt"]["epoch"] != epoch or
                     pending_final["attempt"]["scope"] != scope):
+                pending_final["attempt"]["invalid"] = True
+                pending_final = None
+                invalid += 1
                 unpaired += 1
                 continue
             if op == "physical_mouse_captured_action_callbacks_final":
