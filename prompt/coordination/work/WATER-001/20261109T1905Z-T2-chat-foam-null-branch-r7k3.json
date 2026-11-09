@@ -4,7 +4,7 @@
   "session_id": "20261109T1905Z-T2-chat-foam-null-branch-r7k3",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "be444d85cec8f0d3df9f526242442be5db14e01d",
   "resumed_from_sessions": [
     "20261109T1854Z-T2-chat-foam-report-alias-b8e7",
@@ -22,8 +22,27 @@
   ],
   "experiment_key": "T2_WATER001_SHA_original_Foam_pass1_return_CFG_null-vs-nonnull_mayset",
   "resource_key": "T2-Cecil-source-only-foam-blit-original-producer",
-  "updated_at": "2026-11-09T19:05:00Z",
+  "updated_at": "2026-11-09T19:07:00Z",
   "hypothesis": "Original Foam pass1 callee return is mixed/phi; replace lossy union with category-mask CFG join to determine whether null is a feasible return without inferring heap identity. CI42607763178 shows value_mixed_or_joined.",
   "plan": "Add fail-closed bounded source-free Cecil may-origin CFG value domain and synthetic null/mixed/non-null fixtures; feed SHA-pinned private original DLL via existing T2 workflow, report finite category tag only. No raw CIL, Unity, game changes, other T worker files or duplicates.",
-  "limits": "Tagged source-null possibility is not proof of actual null execution or crosspass instance equality."
+  "limits": "Explicit CIL ldnull occurs on a conservatively reachable original callee return path; constant conditions and runtime arguments not proven, no cross-pass instance/CB0/ShaderLab/Unity or phone parity.",
+  "result": "PASS_SHA_ORIGINAL_CIL_EXPLICIT_NULL_LITERAL_ABSTRACT_ROUTE",
+  "change_commit": "62a89888d2109d3a95d50d89c2b2ccd9acb20f44",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42680030121",
+  "ci_conclusion": "success",
+  "job_id": 129371745099,
+  "evidence": {
+    "original_dll_bytes": 3211776,
+    "original_shader_owner_bytes": 115978112,
+    "source_free_python_tests": 17,
+    "cecil_selftest": "PASS",
+    "pass0_callee_category": "not_call_return_source",
+    "pass1_previous_category": "value_mixed_or_joined",
+    "pass1_new_category": "value_mixed_with_explicit_null_literal",
+    "private_cleanup": "success",
+    "original_source_sha_authenticated": true,
+    "actual_runtime_null_observed": false,
+    "device_water_pixels_verified": false
+  },
+  "next_step": "In separate new scope inspect whether pass1 original callee null route is guarded by constant-vs-opaque condition, then crosspass source/destination receiver+instance identity; do not assume non-null nor trigger APK."
 }
