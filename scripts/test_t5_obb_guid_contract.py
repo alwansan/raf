@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Regression checks for the existing read-only LogRaft OBB warning classifier."""
 import unittest
-from scripts.t5_classify_obb_guid_logs import PACKAGE, classify_line, classify_streams, _manifest
+from scripts.t5_classify_obb_guid_logs import PACKAGE, classify_line, classify_streams, _manifest, load_delivery_json
 
 CODE = '101'
 MAIN = f'main.{CODE}.{PACKAGE}.obb'
@@ -53,6 +53,19 @@ class ObbGuidContract(unittest.TestCase):
         self.assertEqual(classify_line("Unable to load GUID for '/tmp/test.bin'",
                          code=CODE, logical_files={MAIN}), 'other_guid_warning')
         self.assertIsNone(classify_line('No OBB warning', code=CODE, logical_files={MAIN}))
+
+    def test_duplicate_delivery_keys_rejected_at_all_levels(self):
+        for raw in (
+            '{"package":"one","package":"two","version_code":"101","files":[]}',
+            '{"package":"one","version_code":"101","files":[{"name":"a","name":"b"}]}',
+        ):
+            with self.subTest(raw=raw):
+                with self.assertRaisesRegex(ValueError, "Duplicate delivery JSON key"):
+                    load_delivery_json(raw)
+
+    def test_unique_delivery_json_still_accepted(self):
+        import json
+        self.assertEqual(load_delivery_json(json.dumps(delivery())), delivery())
 
     def test_invalid_delivery_fails_closed(self):
         with self.assertRaises(ValueError):
