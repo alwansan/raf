@@ -139,6 +139,7 @@ jobs:
           # default-Dummy ShaderLab program after partial restoration.
           python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_t1_stage_original_fft_dispatch_trace.py -v
           python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
           python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
@@ -647,6 +648,20 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.adapt_android_render_lifetimes --source "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-render-lifetimes"
+      - name: Add SHA-authentic original FFT direct Dispatch metadata hooks (Android only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Genuine original Dx11FFT/GpuFFT are checked again against their
+          # immutable ILSpy source SHA. Source-only CI42550062087 passed.
+          # Only instrument managed callsites after existing lifetime fixes.
+          # No original Dispatch expression, .meta GUID, shader data or kernel
+          # lookup is replaced. No additional native build is requested.
+          python3 -m scripts.t1_stage_original_fft_dispatch_trace \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --original-backup "$RUNNER_TEMP/original-render-lifetimes" \
+            --managed-original "$RUNNER_TEMP/ilspy-src" \
+            --backup "$RUNNER_TEMP/original-fft-dispatch-trace"
       - name: Adapt original local startup and RGD paths without replacing game serialization
         shell: bash
         run: |
@@ -677,7 +692,7 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --backup "$RUNNER_TEMP/original-mouse-button-wheel-source" --apply
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
-          for name in AndroidStreamingAssets.cs AndroidExpansionArchiveProbe.cs TouchPointerGesture.cs TouchPointerButtons.cs AndroidTouchPointer.cs AndroidPhysicalMouseCapture.cs PhysicalMouseDeltaAccumulator.cs PhysicalMouseMotionSource.cs AndroidImmersiveSystemBars.cs AndroidSystemBarPolicy.cs AndroidTouchUiPanel.cs LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
+          for name in AndroidStreamingAssets.cs AndroidExpansionArchiveProbe.cs TouchPointerGesture.cs TouchPointerButtons.cs AndroidTouchPointer.cs AndroidPhysicalMouseCapture.cs PhysicalMouseDeltaAccumulator.cs PhysicalMouseMotionSource.cs AndroidImmersiveSystemBars.cs AndroidSystemBarPolicy.cs AndroidTouchUiPanel.cs LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs T1FftDirectDispatchTrace.cs; do
             cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
           done
       - name: Preserve asset-owned meshes during original Editor collector cleanup
