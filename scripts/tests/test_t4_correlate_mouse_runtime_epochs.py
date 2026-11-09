@@ -117,10 +117,125 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
         self.assertGreater(v["invalid_markers"], 0)
 
+    @staticmethod
+    def logger(operation, detail, session, sequence, area="input"):
+        # Faithful subset of actual PersistentDiagnosticLog JSONL:
+        # utc/session/sequence/thread/area/operation/detail.
+        return {"utc": "2026-11-09T19:12:00+00:00", "session": session,
+                "sequence": sequence, "thread": 1, "area": area,
+                "operation": operation, "detail": detail}
+
+    def test_real_logger_one_session_same_epoch(self):
+        name = "20261109T191200123-abcdef12"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=30", name, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(30).split(" ", 1)[1], name, 6),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(30).split(" ", 1)[1], name, 9),
+        ])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+        self.assertEqual(v["matched_jsonl_scoped_attempts"], 1)
+        self.assertEqual(v["logger_sessions_scanned"], 1)
+        self.assertFalse(v["device_pass"])
+
+    def test_restart_with_reused_epoch_not_a_join(self):
+        a, b = "20261109T191200123-aaaabbbb", "20261109T191201123-ccccdddd"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=31", a, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(31).split(" ", 1)[1], a, 2),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(31).split(" ", 1)[1], b, 1),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["provenance_scope_mismatches"], 0)
+
+    def test_valid_second_logger_only_not_borrow_first(self):
+        a, b = "20261109T191200123-aaaabbbb", "20261109T191201123-ccccdddd"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=32", a, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(32).split(" ", 1)[1], a, 2),
+            self.logger("physical_mouse_capture_requested", "epoch=32", b, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(32).split(" ", 1)[1], b, 2),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(32).split(" ", 1)[1], b, 3),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 1)
+        self.assertEqual(v["matched_jsonl_scoped_attempts"], 1)
+        self.assertEqual(v["logger_sessions_scanned"], 2)
+
+    def test_duplicate_startup_segment_sequence_poison_session(self):
+        name = "20261109T191200123-aabbccdd"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=33", name, 3),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(33).split(" ", 1)[1], name, 4),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(33).split(" ", 1)[1], name, 5),
+            # Startup replay was appended out of order from another copy.
+            self.logger("logger.ready", "version=1", name, 1, "startup"),
+        ])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+        self.assertEqual(v["poisoned_logger_sessions"], 1)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_missing_or_invalid_logger_sequence_cannot_borrow(self):
+        name = "20261109T191200123-aabbccdd"
+        bad = self.logger("physical_mouse_legacy_reader_evidence",
+                          readers(34).split(" ", 1)[1], name, 3)
+        bad["sequence"] = True  # bool is not a valid integer sequence.
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=34", name, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(34).split(" ", 1)[1], name, 2),
+            bad,
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_unattributed_legacy_record_cannot_complete_jsonl(self):
+        name = "20261109T191200123-aabbccdd"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=35", name, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(35).split(" ", 1)[1], name, 2),
+            readers(35),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_unity_area_imitating_mouse_operation_is_not_input(self):
+        name = "20261109T191200123-aabbccdd"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=36", name, 1),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(36).split(" ", 1)[1], name, 2, "unity"),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(36).split(" ", 1)[1], name, 3),
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_serialized_real_jsonl_strings_are_recognized(self):
+        import json
+        name = "20261109T191200123-aabbccdd"
+        rows = [
+            self.logger("physical_mouse_capture_requested", "epoch=37", name, 1),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(37).split(" ", 1)[1], name, 2),
+            self.logger("physical_mouse_captured_action_callbacks",
+                        actions(37).split(" ", 1)[1], name, 3),
+        ]
+        v = gate.triage([json.dumps(row) for row in rows])
+        self.assertEqual(v["matched_jsonl_scoped_attempts"], 1)
+        self.assertFalse(v["device_pass"])
+
     def test_mixed_process_risk_stays_disclosed(self):
         v = gate.triage([])
         self.assertFalse(v["device_pass"])
         self.assertIn("epoch may repeat across", v["limitations"])
+        self.assertFalse(v["device_pass"])
 
 
 if __name__ == "__main__":
