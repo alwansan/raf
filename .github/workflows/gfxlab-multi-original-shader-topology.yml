@@ -57,6 +57,7 @@ jobs:
           assert d["source_model_count"]==6 and d["source_material_count"]==7
           assert d["all_source_shader48_types_verified"]
           assert not d["native_Unity_shader_programs_restored"]
+          assert all(type(row["source_shader_is_named_unity_standard"]) is bool for m in d["models"] for row in m["original_shaders"])
           assert not d["Android_device_exact_shader_pixels_verified"]
           assert all(sum(row["passes"] for row in m["original_shaders"])>=1 for m in d["models"])
           print("GFX_MULTI004_SOURCE_SHADER_PASS_MAP_PASS=true")
