@@ -20,6 +20,7 @@ def audit(records):
     pending = {}
     seen = set()
     paired = set()
+    failed_returns = set()
     errors = []
     for row in records:
         if not isinstance(row, dict):
@@ -68,12 +69,15 @@ def audit(records):
             elif "result" in fields and fields["result"] != "returned":
                 # An exception/error marker is not a normal Dispatch API return.
                 errors.append("dispatch_result_failure:" + str(seq))
+                failed_returns.add(seq)
             else:
                 paired.add(seq)
     missing = sorted(seq for seq in pending if seq not in paired)
     return {"before_count": len(pending),
             "returned_count": len([k for k in seen if k[0] == AFTER]),
             "missing_return_sequences": missing,
+            "paired_count": len(paired),
+            "failed_return_sequences": sorted(failed_returns),
             "errors": errors,
             "runtime_kernel_identity_proven": False,
             "gpu_execution_proven": False}
