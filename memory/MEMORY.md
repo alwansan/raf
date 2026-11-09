@@ -35,3 +35,15 @@
 **Runtime UI:** white Standard vs Unlit white, drag/pinch orbit, spin/reset, COPY LOG (clipboard JSON), persistentDataPath/gfxlab/report.json, original model category and mesh/GPU counters. Keep evidence stage distinct (source import success != Android device pixels). Detailed state/session: `memory/sessions/20261110-GFX-chat-avatar-001-42702078254.md`.
 
 **Next:** owner checks the APK and reports screen/clipboard. Then group same-root SkinnedMeshRenderer parts and transforms/bindposes to build full character, verify source identity, recover actual material/shader/colors with T3 coordination. Do not run another heavy Unity build for minor source-only changes or mislabel a one-part mesh as whole player.
+
+
+## تصحيح هوية الموديل وتعافيه — Shears (10 نوفمبر 2026)
+**تصحيح نتيجة v0.1:** المستخدم شغّل APK الأبيض على Xiaomi 23013PC75G / Adreno 730 / OpenGL ES3.2 / Linear / Unity2021.3.45f2؛ رأى **Shears (مقص قص الصوف)**، لا اللاعب الكامل. GPU shader white Standard/Unlit مدعوم، 375 vertex/420 triangle، 1 renderer، errors=0. تصنيف المصدر `original_player_like_skinned` كان بسبب GameObject أب يحمل اسم Player، وهو **ليس** برهان هوية Mesh نفسها؛ لا تكرر هذا الوصف.
+
+**تحقق المصدر الأصلي:** [GFX-SHEARS-002 CI42705610994](https://github.com/alwansan/raf/actions/runs/42705610994) SUCCESS، Mesh→SkinnedMeshRenderer→Material21→Shader48 كلّها نفس الأصل SHA، Material واحد، shader فيه **2 SubShaders / 7 Passes**، خانتا color، 9 TexEnv: ثلاث bound (Texture2D28 حقيقية) وست null أصلية، 3 bone pointers/root bone، 375 UV وNormal.
+
+**أصل الصور:** [GFX-SHEARS-003 CI42706123513](https://github.com/alwansan/raf/actions/runs/42706123513) SUCCESS: albedo/basecolor + normal + metallic ثلاثة Texture2D، 3,145,728 original pixels في موارد .resS خارجية. [GFX-SHEARS-004 CI42707235695](https://github.com/alwansan/raf/actions/runs/42707235695) SUCCESS: استعادة PNG الثلاث داخل runner مؤقتاً مع exact Git-object SHA لثلاث قطع فقط 141,557,760 بايت من مورد resS واحد، واسترجاع source albedo tint الأصلي، دون تحميل 1.779GB كاملة أو نشر الصور المفردة.
+
+**الفصل العلمي:** الأبيض في v0.1 قُصد به اختبار هندسة فقط. بيانات BaseColor الأصلية **موجودة**، ولم يكن غيابها إثباتاً لعيب GLES. تجربة GFX-SHEARS-005 تضع الألوان/normal/metallic في Unity Standard **تشخيصياً**، وليس استعادة shader الأصلي المعقد 7-Pass. [الـActions الحالي](https://github.com/alwansan/raf/actions/runs/42707671345)؛ لا تعلن APK/نجاح بكسلات حتى اكتمال الـCI وتجربة الهاتف. الحزمة الجديدة `com.alwansan.raft.graphicslab.shears` مستقلة عن البيضاء وتدعم أربعة أوضاع للمقارنة.
+
+**خطوة الاستعادة التالية:** تحقق من نتيجة CI GFX-SHEARS-005 وسجلها في أحدث session، ثم APK فعلي وصورة + JSON من هاتف المالك عند النجاح. بعد ذلك فقط اعزل shader7-pass الحقيقي، ومختلف blend/z/cull/keywords/CB/input/output وتحويل D3D11→Unity Android، وقارن مع مرجع واقعي قبل اقتراح نقل الإصلاح إلى T3 في feature.
