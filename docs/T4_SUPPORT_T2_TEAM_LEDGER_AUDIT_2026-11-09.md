@@ -39,3 +39,7 @@
 نجاح workflow الخاص بمدقق T4 = **اكتمل المسح فقط**؛ `canonical_summary_generation_proven=false` حتى عندما لا توجد مشكلات. لا يدل على نجاح `refresh_t_team.py` أو جاهزية الماء أو XAPK. الملف الموروث باقٍ لدى T3/T5 لإضافة الهوية بأنفسهم بالتنسيق مع T2. لا تكرر فشل workflow التحديث المشترك قبل معالجة جميع السجلات الناقصة. لا تعدل أي scene/shader/OBB أو APK.
 
 **فحص لاحق مثبت:** [42682900051](https://github.com/alwansan/raf/actions/runs/42682900051) **COMPLETED SUCCESS** على SHA `81c43f0b48365c18eb28a61e4f6bf26668c6e2ea`; job `129381898864`، `Ran 10 tests; OK`، **596 ملفًا، 20 MISSING_RECORD_ID**: **T3=15، T5=5، T4=0**. زاد عدد سجلات T3 بواحد منذ المسح الأول، وهو `T3/20261109T1913Z-T3-chat-smoke34-sameexport-v5m8.json`، ولذلك بقي 20 بدلاً من التوقع الرياضي 19. Artifact جديد: [13702214952](https://github.com/alwansan/raf/actions/runs/42682900051/artifacts/13702214952). **الملخص القانوني ما زال غير ناجح بسبب ملفات T3/T5.**
+
+## التحقق النهائي بعد إضافة أحداث التسليم الخاصة بـT4
+
+[CI42683474160](https://github.com/alwansan/raf/actions/runs/42683474160) **SUCCESS**؛ job `129384033757`؛ **10/10 اختبارات؛ 598 ملفًا؛ 20 MISSING_RECORD_ID، T3=15 / T5=5 / T4=0**، والملف الآمن [Artifact13703303275](https://github.com/alwansan/raf/actions/runs/42683474160/artifacts/13703303275). هذا يؤكد أن أحداث T4 الجديدة أيضًا تحمل هوية مناسبة. لا يعني أن T2 summary أصبح ناجحًا؛ لا تزال 20 هوية تحتاج إصلاح مالكيها.
