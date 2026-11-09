@@ -1,0 +1,94 @@
+name: GFX-SHEARS-004 SHA-original 3 texture stream sparse extraction (NO APK)
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-shears-exact-stream-extract.yml'
+      - 'gfxlab/tools/shears_stream_transport.py'
+      - 'gfxlab/tests/test_shears_stream_transport.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-shears004-exact-zip2-stream-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authenticated-source-textures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      PYTHONUNBUFFERED: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Check small sourcefree regressions
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - name: Checkout SHA-pinned ZIP2 owners (no stream yet)
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Read exact 3 original streaming ranges, select ONLY needed split Git chunks
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.shears_stream_transport plan \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-shears04-original" \
+            --plan "$RUNNER_TEMP/shears04-private-plan.json" \
+            --paths "$RUNNER_TEMP/shears04-private-checkout.txt"
+          test -s "$RUNNER_TEMP/shears04-private-plan.json"
+          test -s "$RUNNER_TEMP/shears04-private-checkout.txt"
+      - name: Checkout exact selected Git blobs only and regenerate streamed texture pixels
+        run: |
+          set -euo pipefail
+          git -C source-zip2 sparse-checkout set --no-cone --stdin < "$RUNNER_TEMP/shears04-private-checkout.txt"
+          python3 -m gfxlab.tools.shears_stream_transport extract \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-shears04-original" \
+            --plan "$RUNNER_TEMP/shears04-private-plan.json" \
+            --images "$RUNNER_TEMP/gfxlab-shears04-images" \
+            --safe-report "$RUNNER_TEMP/gfxlab-shears04-safe.json"
+          test "$(find "$RUNNER_TEMP/gfxlab-shears04-images" -maxdepth 1 -type f -name '*.png' | wc -l)" -eq 3
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gfxlab-shears04-safe.json').read_text())
+          assert d['source_original_sha_verified'] and d['texture_extracted_success']
+          assert d['source_textures']==3 and d['source_geometry_verified']
+          assert d['original_shader_passes']==7 and not d['actual_shader_restored']
+          assert not d['android_pixels_proven']
+          assert d['selected_git_chunks']>=1
+          print('GFX_SHEARS004_AUTHENTIC_COLOR_IMAGE_GATE=PASS')
+          PY
+      - name: Upload tiny safe results only — NEVER loose game PNGs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-shears004-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/gfxlab-shears04-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Purge original stream, private plan, images and inputs
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-shears04-original" "$RUNNER_TEMP/gfxlab-shears04-images"
+          rm -f "$RUNNER_TEMP/shears04-private-plan.json" "$RUNNER_TEMP/shears04-private-checkout.txt"
+          echo GFX_SHEARS004_RAW_SOURCE_PURGED=true
