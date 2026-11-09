@@ -161,5 +161,23 @@ class T2FoamResourceAbiTests(unittest.TestCase):
             verify_genuine_texture_sampler_pair_count(combine(profile, resources))
 
 
+    def test_tampered_report_binding_types_fail_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        for replacement in (True, "6", 6.0, -1, 256, None):
+            with self.subTest(binding=replacement):
+                report = combine(profile, resources)
+                report["rows"][1]["translated_resource_bindings"][0]["binding"] = replacement
+                with self.assertRaises(ValueError):
+                    verify_genuine_texture_sampler_pair_count(report)
+
+    def test_tampered_report_duplicate_binding_fails_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        report = combine(profile, resources)
+        first = dict(report["rows"][1]["translated_resource_bindings"][0])
+        report["rows"][1]["translated_resource_bindings"].append(first)
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(report)
+
+
 if __name__ == "__main__":
     unittest.main()
