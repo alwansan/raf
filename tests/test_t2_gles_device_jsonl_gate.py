@@ -102,6 +102,21 @@ class TestEvidenceGate(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(encoded(rows), "CASE02")
 
+    def test_case02_rejects_duplicate_rgba_markers(self):
+        # A first valid RGBA value must not conceal a second contradictory value.
+        for extra in (
+            " sourceLeft=[0, 0, 0, 0]",
+            " finalContrast=[0, 0, 0, 0]",
+            " sourceRight=[223, 32, 64, 255]",
+        ):
+            rows = records()
+            for row in rows:
+                if row["event"] in ("gl_observed", "shared_auto_result"):
+                    row["detail"] += extra
+            with self.subTest(extra=extra):
+                with self.assertRaisesRegex(ValueError, "missing_or_duplicate_rgba_readback"):
+                    verify(encoded(rows), "CASE02")
+
     def test_case02_allows_tolerance_two(self):
         rows = records()
         for row in rows:
