@@ -22,6 +22,7 @@ def validate_png(raw):
     seen_ihdr = False
     seen_idat = False
     seen_iend = False
+    idat_chunks = []
     width = height = 0
     while offset < len(raw):
         if len(raw) - offset < 12:
@@ -45,6 +46,7 @@ def validate_png(raw):
             raise ValueError("duplicate IHDR")
         if name == b"IDAT":
             seen_idat = True
+            idat_chunks.append(data)
         if name == b"IEND":
             if length or not seen_idat or seen_iend:
                 raise ValueError("invalid IEND")
@@ -56,6 +58,20 @@ def validate_png(raw):
             break
     if not seen_iend:
         raise ValueError("missing IEND")
+    # Chunk CRC alone does not prove that the encoded image is decodable.
+    # Limit expansion to avoid decompression bombs in untrusted uploads.
+    compressed = b"".join(idat_chunks)
+    decoder = zlib.decompressobj()
+    limit = 128 * 1024 * 1024
+    try:
+        decoded = decoder.decompress(compressed, limit + 1)
+        if len(decoded) > limit or decoder.unconsumed_tail:
+            raise ValueError("PNG inflated image exceeds safety limit")
+        decoded += decoder.flush(limit + 1 - len(decoded))
+    except zlib.error as exc:
+        raise ValueError("invalid PNG IDAT zlib stream") from exc
+    if not decoder.eof or decoder.unused_data or not decoded:
+        raise ValueError("incomplete or trailing PNG IDAT zlib data")
     return width, height
 
 
