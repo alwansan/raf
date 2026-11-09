@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-shears-textures-42707671345",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-shears-textures-42707671345.md",
-  "status": "GFX_SHEARS_005_ANDROID_UNITY_BUILD_PASS_OWNER_DEVICE_COLOR_PENDING",
+  "latest_session": "20261110-GFX-chat-multi-six-42712833407",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-multi-six-42712833407.md",
+  "status": "GFX_MULTI_002_ALL_SIX_SOURCE_GEOMETRY_7_MATERIALS_21_TEXTURES_AUTHENTIC_GFX_MULTI_003_UNITY_BUILD_RUNNING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,14 +35,15 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Owner installs side-by-side v0.2, photographs ALBEDO and PBR modes, supplies COPY LOG. Then original 2SubShader/7Pass recovery, original sampler and normal DXT5 semantic compare; no source-to-port patch yet.",
+  "next_experiment": "Finish real Unity GFX-MULTI-003 run 42712833407. On successful signed APK, owner tests M00-M05 + COPY LOG; handle exact shader and 100-bone skinning as separate future proof, not successful on source-only.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": false,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
     "docs/ROOT_CAUSE_REVIEW_AR.md",
     "docs/EXPERIMENT_ROADMAP_AR.md",
-    "prompt/graphics-lab/RESTORE_AR.md"
+    "prompt/graphics-lab/RESTORE_AR.md",
+    "gfxlab/MULTI_OWNER_TEST_GUIDE_AR.md"
   ],
   "caveat": "STATE is a hint. Latest individual sessions and CI override stale summary.",
   "last_verified_lab_run": 42702078254,
@@ -132,5 +133,51 @@
     "original_shader_restored": false,
     "source_colors_tint_verified": true,
     "status": "signed_APK_delivered_to_current_chat_device_test_pending"
+  },
+  "owner_shears_device_test": {
+    "model": "Shears M00",
+    "gpu": "Adreno 730 OpenGLES3",
+    "unity": "2021.3.45f2",
+    "modes": [
+      "SOURCE_ALBEDO_STANDARD_DIAGNOSTIC",
+      "SOURCE_TEXTURE_PBR_STANDARD_APPROX"
+    ],
+    "errors": 0,
+    "source_texture_chain_verified": true,
+    "original_shader_restored": false,
+    "user_visual_acceptance": "colored Shears looked correct visually; no visible artifacts in submitted screenshots"
+  },
+  "latest_multi_test": {
+    "source_runs": [
+      "https://github.com/alwansan/raf/actions/runs/42711514279",
+      "https://github.com/alwansan/raf/actions/runs/42712118731"
+    ],
+    "build_run": "https://github.com/alwansan/raf/actions/runs/42712833407",
+    "build_status": "IN_PROGRESS_CHECK_LIVE",
+    "source_original_meshes": 6,
+    "additional_source_models": 5,
+    "source_material_slots": 7,
+    "source_image_textures": 21,
+    "git_source_stream_chunks": 16,
+    "git_stream_chunk_bytes": 754974720,
+    "model_categories": [
+      "shears_verified_device",
+      "person",
+      "large_prop",
+      "large_mesh",
+      "tool",
+      "multi_material"
+    ],
+    "model_vertices": [
+      375,
+      5095,
+      1598,
+      5093,
+      6514,
+      2163
+    ],
+    "original_shader_equivalence_verified": false,
+    "original_animation_restored": false,
+    "new_device_pixels_verified": false
   }
 }
