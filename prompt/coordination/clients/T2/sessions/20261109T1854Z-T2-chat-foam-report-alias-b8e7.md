@@ -33,3 +33,11 @@ Source change and regression published via optimistic blob SHA. **Do not claim P
 1. Check final run `42678582388` and its source-free adversarial step, then authenticated private source steps and artifact cleanup, recording exact conclusion and failure location. If failure, fetch the failing job log; do not rerun blindly.
 2. If green, keep the report isolation as a verified guard. Continue original Foam cross-pass instance binding and CB0/ShaderLab evidence independently of T1 FFT/T3 material work; no new full Unity or Mini build without respective gates.
 3. Update this session's own file, or append a separate new session from the scheduler; do not overwrite other sessions. Honor CL/test phone evidence and device acceptance limits.
+
+## Verified final CI result — 2026-11-09T18:58Z
+
+- CI `42678552250`: **completed/success**, all member ABI, resource ABI, authentic source verification, texture identity and cleanup steps successful.
+- CI `42678582388`: **completed/success**, source commit `63efef7bf925f1222783163fce32aef56695ff94`, job `129366587680`.
+- Final logs show **20 member + 23 resource + 20 texture** source-free Python tests, all OK, **0 fail/error**. Original source SHA pin stage reported **115,978,112 bytes, LFS false**. Original resource safe status `original_foam_resource_interface_observed` / four stages / six original descriptor rows / 12 translated non-CB descriptor rows. Texture literal identity audit had `literal_name_matches=0` (do not infer identity equivalence). Private cleanup and safe artifact publishing steps passed.
+- The observed alias regression is repaired and CI-verified. WATER-001 remains open for real ShaderLab, source texture/sampler binding, CB0, Unity and Android water pixels. No device PASS or full XAPK build is implied.
+- The work record for this isolated task may be marked completed; the broader WATER-001 issue remains OPEN.
