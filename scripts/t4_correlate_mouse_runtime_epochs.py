@@ -20,7 +20,13 @@ OPS = (
     "physical_mouse_legacy_reader_evidence_final",
 )
 OP_RE = re.compile(r"(?<![A-Za-z_])(" + "|".join(OPS) + r")(?![A-Za-z_])")
-EPOCH_RE = re.compile(r"(?<![A-Za-z_])epoch=(\d+)(?!\d)")
+# Unity's epoch is a signed C# int, callback counters are C# int, and
+# aggregate Legacy getter counters use C# long. Numeric spelling in the
+# original logger is ASCII decimal, terminated by ';', ',' or whitespace.
+EPOCH_RE = re.compile(r"(?<![A-Za-z0-9_])epoch=([0-9]{1,10})(?=$|[;,\s])")
+EPOCH_KEY_RE = re.compile(r"(?<![A-Za-z0-9_])epoch=")
+MAX_INT32 = 2**31 - 1
+MAX_INT64 = 2**63 - 1
 MAX_BYTES = 16 * 1024 * 1024
 MAX_LINES = 200000
 SLOT_NAMES = ("held0", "held1", "held2", "down0", "down1", "down2",
@@ -75,17 +81,27 @@ def decode(line):
 
 
 def parse_counter(detail, field):
-    matches = re.findall(r"(?<![A-Za-z_])" + re.escape(field) +
-                         r"=(\d+)(?!\d)", detail)
-    if len(matches) != 1:
+    # Bound before int(): a multi-thousand-digit JSONL token must become
+    # invalid evidence, not an interpreter ValueError or giant integer.
+    prefix = r"(?<![A-Za-z0-9_])" + re.escape(field) + r"="
+    if len(re.findall(prefix, detail)) != 1:
         return None
-    return int(matches[0])
+    match = re.search(prefix + r"([0-9]{1,19})(?=$|[;,\s])", detail)
+    if match is None:
+        return None
+    value = int(match.group(1))
+    return value if value <= MAX_INT64 else None
 
 
 def parse_bool(detail, field):
-    matches = re.findall(r"(?<![A-Za-z_])" + re.escape(field) +
-                         r"=(true|false)(?![A-Za-z_])", detail)
-    return matches[0] == "true" if len(matches) == 1 else None
+    # Actual C# Boolean.ToString() emits True/False for concatenated
+    # runtime fields; the original source's *literal* flags are lowercase.
+    # Accept only those two source spellings, with strict token boundaries.
+    prefix = r"(?<![A-Za-z0-9_])" + re.escape(field) + r"="
+    if len(re.findall(prefix, detail)) != 1:
+        return None
+    match = re.search(prefix + r"(True|False|true|false)(?=$|[;,\s])", detail)
+    return match.group(1) in ("True", "true") if match else None
 
 
 def parse_reader_slots(detail, totals):
@@ -96,15 +112,19 @@ def parse_reader_slots(detail, totals):
     """
     result = {}
     for name in SLOT_NAMES:
-        pattern = (r"(?<![A-Za-z_])" + re.escape(name) +
-                   r"Calls=(\d+),legacy=(\d+),fallback=(\d+)(?!\d)")
-        matches = re.findall(pattern, detail)
-        if len(matches) > 1:
+        prefix = r"(?<![A-Za-z0-9_])" + re.escape(name) + r"Calls="
+        occurrences = len(re.findall(prefix, detail))
+        if occurrences > 1:
             return None, True
-        if not matches:
+        if not occurrences:
             return None, False
+        pattern = (prefix + r"([0-9]{1,10}),legacy=([0-9]{1,10}),"
+                   r"fallback=([0-9]{1,10})(?=$|[;,\s])")
+        matches = re.findall(pattern, detail)
+        if len(matches) != 1:
+            return None, True
         values = tuple(int(item) for item in matches[0])
-        if any(v > 2**31 - 1 for v in values) or values[1] + values[2] > values[0]:
+        if any(v > MAX_INT32 for v in values) or values[1] + values[2] > values[0]:
             return None, True
         result[name] = {"calls": values[0], "legacy": values[1],
                         "fallback": values[2]}
@@ -169,10 +189,13 @@ def triage(lines):
             active = None
             continue
         epochs = EPOCH_RE.findall(detail)
-        if len(epochs) != 1:
+        if len(epochs) != 1 or len(EPOCH_KEY_RE.findall(detail)) != 1:
             invalid += 1
             continue
         epoch = int(epochs[0])
+        if epoch > MAX_INT32:
+            invalid += 1
+            continue
         if op in OPS[:2]:
             # Retried capture supersedes an earlier generation, even if it
             # had unread evidence. Preserve it as a separate attempt.
@@ -191,7 +214,8 @@ def triage(lines):
             # Per ORIGINAL PhysicalMouseActionEvidence.Record, every
             # press/release is one distinct callback. Vertical and horizontal
             # scroll can co-occur on ONE ACTION_SCROLL, hence max not sum.
-            if (any(value is None for value in data.values()) or
+            if (any(value is None or value > MAX_INT32
+                    for value in data.values()) or
                     data["pressCallbacks"] + data["releaseCallbacks"] +
                     max(data["verticalScrollCallbacks"],
                         data["horizontalScrollCallbacks"]) >
