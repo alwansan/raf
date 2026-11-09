@@ -2,7 +2,7 @@
   "session_id": "20261109T2020Z-T2-chat-foam-onehop-return-r8c5",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "746353c0f54f559154ec4f52dcba4229f49ab174",
   "resumed_from_sessions": [
     "20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4",
@@ -22,7 +22,32 @@
   ],
   "hypothesis": "Original pass1 managed Texture-returning callee may return nested private Texture-returning helper result that directly loads the declared field used as pass0 destination; a single statically resolved nested call may refine conservative direct field_no_match_with_null. Ambiguous calls, dispatch or cycles remain opaque, and field match never proves actual receiver/heap/frame or Android pixels.",
   "safety": "T2 source-only original ZIP2 CI and synthetic controls; never print proprietary IL/symbols/tokens, never modify Unity assets, shader binaries, shared Android mini, release or other workers' files.",
-  "run_urls": [],
-  "next_step": "Bounded one-hop private nested-callee return flow with explicit safe taxonomy and negative fixture controls, strict schema; verify on SHA-authenticated original workflow.",
-  "updated_at": "2026-11-09T20:20:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42693501006",
+    "https://github.com/alwansan/raf/actions/runs/42693500903"
+  ],
+  "next_step": "Check original caller receiver and indirect alias/field writes through multiple objects or lifecycle, keeping original source private. No repeated one-hop CI without changed hypothesis.",
+  "updated_at": "2026-11-09T20:32:00Z",
+  "scope_status": "completed",
+  "issue_status": "OPEN",
+  "code_commit": "b61e2acf1bae1ea09e2f7bbece07e2f971dd2701",
+  "code_commits": [
+    "99c1f1c40b978c92e67f558a1ef89dcd983c84b9",
+    "0408e76db8950935b9eb02a7c11645f7442e8250",
+    "5fc56b532d41fb207cd9d703bcc100f0ac78c23d",
+    "b61e2acf1bae1ea09e2f7bbece07e2f971dd2701"
+  ],
+  "original_provenance": "SHA-original ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_assembly_bytes": 3211776,
+  "original_shader_owner_bytes": 115978112,
+  "python_tests_passed": 21,
+  "cecil_selftest": "PASS",
+  "original_direct_field_return_relation": "field_no_match_with_null",
+  "original_onehop_field_return_relation": "field_no_match_with_null",
+  "original_pass1_null_literal_flow": "value_mixed_with_explicit_null_literal",
+  "original_onehop_result": "one_hop_no_new_declared_field_token_match",
+  "original_runtime_heap_identity_proven": false,
+  "indirect_alias_disproved": false,
+  "android_water_pixels_verified": false,
+  "private_original_data_published": false
 }
