@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261109T0155Z-T5-chat-atomic-reexport-c3a8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "shared-mini-evidence-export-replacement",
+  "status": "active",
+  "base_sha": "044296d60d7eb03d52334de305450aa10fdc76dd",
+  "experiment_key": "T5_export_two_file_publish_new_then_retire_previous_android29_source-v1",
+  "resource_key": "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "tests/test_t5_unified_saf_stream_contract.py"
+  ],
+  "hypothesis": "Export() overwrites previously public log/summary URIs in place; provider failure truncates prior valid evidence. Publish new log/summary first, then replace previous references and retire old entries without destructive overwrite.",
+  "approach": "Source-level two-file replacement contract: generate both new complete media, retain old pair on error with cleanup of new partial pair, retire old only after new pair succeeds; add fail-closed source regressions, validate with T5 source-only CI.",
+  "resumed_from_sessions": [
+    "clients/T5/sessions/20261109T0142Z-T5-chat-media-4fa9.md",
+    "prompt/coordination/clients/T5/sessions/20261109T0153Z-T5-scheduled-evidence-token-p6m2.md"
+  ],
+  "related_work": [
+    "T3: CL PNG pixel contents (separate scope)",
+    "T4: physical mouse capture bridge (separate scope)",
+    "T5 scheduled: strict screenshot evidence validator (separate files)"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement without changes to Mini build request/pack, verify source and JDK compile CI, preserve Android15 runtime/device boundary.",
+  "updated_at": "2026-11-09T01:56:08.107Z"
+}
