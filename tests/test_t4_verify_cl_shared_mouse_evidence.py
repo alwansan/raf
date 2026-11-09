@@ -62,6 +62,7 @@ class ClRealEvidenceTests(unittest.TestCase):
         self.assertEqual(r["press_edges_action_button"], {"right": 1})
         self.assertTrue(r["device_input_capture_verified"])
         self.assertFalse(r["unity_legacy_mouse_delivery_proven"])
+        self.assertIn("Captured Android callbacks exist", r["limitations"])
 
     def test_touchscreen_events_rejected(self):
         r = count_events([item("ACTION_BUTTON_PRESS", "activity_touch",
