@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "event_id": "20261109T1916Z-T2-chat-foam-constant-branch-p8v6",
+  "owner": "T2",
+  "worker": "T2",
+  "origin": "chat",
+  "session_id": "20261109T1916Z-T2-chat-foam-constant-branch-p8v6",
+  "issue_id": "WATER-001",
+  "resource_key": "WATER-001",
+  "experiment_key": "T2_WATER001_original_SHA15964_Cecil_explicit_null_path_constant_branch_pruning",
+  "type": "result",
+  "status": "SOURCE_ORIGINAL_CI_VERIFIED",
+  "at": "2026-11-09T19:18:15Z",
+  "commit": "cc4e2519c35506c4a4a134b2428ee65c11269928",
+  "summary": "Source-original Mono.Cecil branch feasibility analysis prunes only literal-constant zero/nonzero brtrue/brfalse paths. CI42681948189 succeeded 17 Python tests, C# Cecil synthetic selftests, SHA-pinned original DLL/owner authentication and private cleanup. Original pass1 return remains value_mixed_with_explicit_null_literal. Static possible ldnull is NOT observed Android runtime null nor proof of water rendering cause.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42681948189",
+    "https://github.com/alwansan/raf/commit/cc4e2519c35506c4a4a134b2428ee65c11269928",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
+  ],
+  "limits": "Cross-pass texture instance identity, runtime branch predicates, CB0/sampler upload, Unity ShaderLab integration, and Android pixels unverified. WATER-001 OPEN; no XAPK or Mini build.",
+  "next_step": "Investigate SHA-original callable condition inputs/receiver and per-frame actual texture equality in a separate private evidence scope."
+}
