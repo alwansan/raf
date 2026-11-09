@@ -228,7 +228,7 @@ def count_events(events, summary=None):
         "gameplay_fixed": False,
         "device_input_capture_verified": captured_callback_count > 0,
         "provenance": provenance,
-        "limitations": "No captured=true callbacks or game Unity Input state in this CL snapshot; test result EVIDENCE_READY is not Raft gameplay PASS.",
+        "limitations": ("No captured=true callbacks in this trace; Unity/gameplay remains unverified." if captured_callback_count == 0 else "Captured Android callbacks exist, but Unity Legacy Input/gameplay remains unverified."),
     }
 
 
