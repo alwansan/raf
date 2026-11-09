@@ -15,6 +15,21 @@ T3 = {f"T3-{i:02d}" for i in range(1, 7)}
 CAPTURE = "capture=verified-GLSurfaceView-overlay-on-window"
 PIXELS = "verified_surface_pixels=true"
 
+def capture_tokens(observed):
+    """Exact whitespace-delimited key/value evidence; reject duplicate keys."""
+    if not isinstance(observed, str):
+        return None
+    tokens = {}
+    for token in observed.split():
+        if "=" not in token:
+            continue
+        key, value = token.split("=", 1)
+        if key in tokens:
+            return None
+        tokens[key] = value
+    return tokens
+
+
 
 def verify(data):
     errors = []
@@ -55,13 +70,15 @@ def verify(data):
             observed = result.get("observed", "")
             if result.get("status") != "EVIDENCE_READY":
                 errors.append(f"{key} no captured evidence")
-            if not isinstance(observed, str) or not all(
-                marker in observed for marker in (CAPTURE, PIXELS, "gl_error=0x0", "contract=true")
+            tokens = capture_tokens(observed)
+            required = (CAPTURE, PIXELS, "gl_error=0x0", "contract=true")
+            if tokens is None or not all(
+                tokens.get(k) == v for k, v in (item.split("=", 1) for item in required)
             ):
                 errors.append(f"{key} capture/readback parity unverified")
-            if not isinstance(observed, str) or not re.search(
-                r"\bpng_bytes=([1-9][0-9]*)\b", observed
-            ) or not re.search(r"\bpng_sha256=[0-9a-f]{64}\b", observed):
+            if tokens is None or not re.fullmatch(
+                r"[1-9][0-9]*", tokens.get("png_bytes", "")
+            ) or not HEX64.fullmatch(tokens.get("png_sha256", "")):
                 errors.append(f"{key} PNG metadata missing")
             if not result.get("image_uri"):
                 errors.append(f"{key} image URI missing")
