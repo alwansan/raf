@@ -1,0 +1,148 @@
+name: T3 RENDER-002 genuine smoke34 DXBC semantic signature join (NO APK)
+# Independent authentic source question: original ISGN/OSGN semantic/mask pairs.
+# Original program bytes/names are held only under disposable RUNNER_TEMP.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-smoke34-dxbc-semantic-join.yml
+      - scripts/t3_original_smoke34_dxbc_semantic_join.py
+      - tests/test_t3_original_smoke34_dxbc_semantic_join.py
+permissions:
+  contents: read
+concurrency:
+  group: t3-authentic-smoke34-source-signatures-sha15964-two-pairs
+  cancel-in-progress: false
+
+jobs:
+  original-smoke34-dxbc-signatures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout source-only scripts and regression controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Test synthetic private signature parsing and join first
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_smoke34_dxbc_semantic_join.py tests/test_t3_original_smoke34_dxbc_semantic_join.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_dxbc_semantic_join.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_921_dxbc_semantic_join.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_dxbc_program_inventory.py' -v
+
+      - name: Checkout SHA-immutable ZIP2 original source without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+
+      - name: Select exact SHA-original four Shader owners and six scenes
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: Reassemble authenticated six original scenes and four serialized owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          zip2=Path("zip2-source")
+          target=Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-original-signatures-private"
+          only={"Raft_Data/"+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          report=stage(zip2,target,only)
+          assert len(report["owners"]) == 4
+          assert report["verified_bytes"] == 269007288
+          assert report["lfs_used"] is False
+          for scene,pin in PIN.items():
+              source=zip2/"Raft"/"Raft_Data"/scene
+              verify_source(source,pin)
+              destination=target/"Raft_Data"/scene
+              if destination.exists() or destination.is_symlink():
+                  raise ValueError("private_source_stage_collision")
+              with source.open("rb") as src,destination.open("xb") as dst:
+                  while chunk := src.read(1024*1024):
+                      dst.write(chunk)
+              verify_source(destination,pin)
+          assert len(PIN)==6
+          print("T3_ORIGINAL_SMOKE34_SIGNATURE_SOURCES_SHA_VERIFIED=true")
+          PY
+
+      - name: Classify two authentic compiled source DXBC signature and channel mask pairs
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          timeout 420s python3 -m scripts.t3_original_smoke34_dxbc_semantic_join \
+            --original "$RUNNER_TEMP/t3-smoke34-original-signatures-private" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-smoke34-original-dxbc-signatures-safe.json"
+
+      - name: Verify original-signature report contract without deriving false graphics PASS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.t3_original_smoke34_dxbc_semantic_join import COUNT_KEYS,STATUS
+          row=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-original-dxbc-signatures-safe.json").read_text())
+          assert row["schema_version"]==1 and row["status"]==STATUS
+          assert row["sha_original_scene_count"]==6
+          assert row["sha_original_shader_owner_count"]==4
+          assert row["exact_original_keyword_vertex_fragment_pairs"]==2
+          assert row["counts"]["original_programs_read"]==4
+          assert set(row["counts"]) == set(COUNT_KEYS)
+          assert all(type(value) is int and value >= 0 for value in row["counts"].values())
+          assert row["source_original_compiled_DXBC_semantic_pairs_checked"] is True
+          assert row["source_original_DXBC_to_SPIRV_location_semantic_map_proven"] is False
+          assert row["private_original_semantic_names_registers_program_bytes_published"] is False
+          assert row["source_original_ShaderLab_restore_verified"] is False
+          assert row["Android_Raft_device_pixel_fix_verified"] is False
+          assert row["game_assets_modified"] is False
+          print("T3_GENUINE_SMOKE34_SOURCE_DXBC_SIGNATURE_CLASSIFIED_SAFE=true")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as output:
+              output.write("## T3 authentic original smoke34 DXBC signatures\n\n")
+              output.write("Two exact keyword-paired source VS/FS signatures checked. ")
+              output.write("This is source semantic/mask evidence only: **not SPIR-V mapping or Android pixel proof**.\n")
+          PY
+
+      - name: Upload only source-safe aggregate semantic mask counters
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-smoke34-original-dxbc-signatures-only-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-smoke34-original-dxbc-signatures-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
