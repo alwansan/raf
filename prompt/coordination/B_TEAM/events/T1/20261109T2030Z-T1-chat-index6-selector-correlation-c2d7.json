@@ -1,0 +1,12 @@
+{
+  "session_id": "20261109T2030Z-T1-chat-index6-selector-correlation-c2d7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "event_type": "source_only_original_direct_dispatch_index6_attribution_gate_hardened",
+  "source_commit": "b78a2fa719e94974e20e31efa6d9b414223ec3b3",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42692853532",
+  "ci_result": "success",
+  "tests_passed": 28,
+  "proof": "source-only negative evidence gate; not real Unity/Adreno FFT",
+  "water_001_closed": false
+}

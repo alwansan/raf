@@ -1,0 +1,25 @@
+{
+  "session_id": "20261109T2030Z-T1-chat-index6-selector-correlation-c2d7",
+  "origin": "chat",
+  "status": "completed_source_ci_verified",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-original-dx11fft-event6-correlated-index-selector-consistency-tristate-no-findkernel-v1",
+  "source_commit": "b78a2fa719e94974e20e31efa6d9b414223ec3b3",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42692853532",
+  "ci_conclusion": "success",
+  "passed_unit_tests": 28,
+  "new_adversarial_tests": 7,
+  "evidence_type": "source_only_structural",
+  "hypothesis": "matching invalid index6 and Dispatch6 can be misleading when original numeric selector drifts",
+  "fixed": [
+    "selector_argument_drift",
+    "fft_size_exponent_drift",
+    "bank_selector_drift",
+    "missing_compute_preconditions",
+    "ambiguous_numeric_original_proof"
+  ],
+  "original_runtime_mapping_proven": false,
+  "android_water_fixed": false,
+  "readiness": "NOT_READY_0/3",
+  "next_step": "same-build original Dx11FFT numeric dispatch call correlation"
+}
