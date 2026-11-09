@@ -4,7 +4,11 @@ origin: scheduled
 issue_id: WATER-001
 base_sha: e983fbb5f7dad184a67bd90e790b4e9563591867
 updated_at: 2026-11-09T21:08:40Z
-status: active
+status: completed
+completed_at: 2026-11-09T21:08:55Z
+result: verified 42691034311 success, including synthetic adversarial provenance tests; no original GPU claim.
+experiment: work/experiments/20261109T2108Z-T1-scheduled-ci-closure-4c8a.md
+session: clients/T1/sessions/20261109T2108Z-T1-scheduled-ci-closure-4c8a.md
 intended_files: clients/T1/work/20261109T2108Z-T1-scheduled-ci-closure-4c8a.md; clients/T1/sessions/20261109T2108Z-T1-scheduled-ci-closure-4c8a.md; work/experiments/20261109T2108Z-T1-scheduled-ci-closure-4c8a.md
 experiment_key: t1-fft-device-evidence-order-ci-final-0e63f88-42691034311
 resource_key: none
