@@ -34,3 +34,23 @@ At scope start GitHub Actions 42678552250 was in progress for T2 Foam ABI; it en
 
 ## Initial checkpoint
 source test stage PASS; authentic original SHA shader Pass probe **WAITING_CI** at 42679312674. No device PASS/Unity build/release claimed.
+
+## Verified FINAL — 2026-11-09 19:04 UTC
+- [CI 42679312674](https://github.com/alwansan/raf/actions/runs/42679312674) **COMPLETED SUCCESS** on `e7494f1e07a9bca158e95a394986087e47c3b2ed`; all source-free tests, original ZIP2 SHA/staging, authentic m_ParsedForm inspection, safe report assertions and artifact upload success.
+- Artifact 13702410264: https://github.com/alwansan/raf/actions/runs/42679312674/artifacts/13702410264 ; raw job log included only bounded aggregate classification, no private names/PathIDs/GUIDs/bytecode.
+- Real original selected smoke-name **17 ParticleSystemRenderers, 34 Material slots to one private Shader48**, distinct source identity from the fire-like other rank-34 Shader48. Source six scenes/four owners SHA verified.
+- Exactly **one SubShader and one NORMAL Pass** in original `m_ParsedForm`:
+  `original_pass_color_blend_category=ALPHA_DEPENDENT`;
+  `original_pass_alpha_channel_blend_category=ALPHA_DEPENDENT`;
+  `original_pass_color_mask_shaderlab_channels=RGB`;
+  `original_pass_depth_write_category=OFF`;
+  `original_pass_depth_test_category=ENABLED_NUMERIC`;
+  `original_pass_culling_category=OFF`;
+  `original_pass_alpha_to_coverage_category=OFF`;
+  `original_pass_rt_separate_blend=false`;
+  `original_pass_fixed_function_state_translator_accepted=false`;
+  `original_pass_opt_in_selective_colormask_translator_accepted=true`.
+- This gives an actionable **source-side** test target: one true smoke-linked Shader48 uses selective RGB ColorMask and alpha-dependent color/alpha blending. The ordinary W1 fixed pass renderer rejects partial masks; selective-opt-in renderer accepts. Whether the real same-instance exporter or Android game loses the state is **UNKNOWN**; no on-device smoke identity or repair proven.
+- Final record: `docs/T3_ORIGINAL_SMOKE34_PASS_ALPHA_2026-11-09_AR.md`, `prompt/coordination/experiments/T3/20261109T1857Z-T3-chat-smoke34-source-pass-q6n4.json`, `prompt/coordination/B_TEAM/events/T3/20261109T1857Z-T3-chat-smoke34-source-pass-q6n4.json`.
+- Own work `prompt/coordination/work/RENDER-002/20261109T1857Z-T3-chat-smoke34-source-pass-q6n4.md` marked `completed`; source-runner resource released. Current next action is **new source→same-export** scoped study of authentic shader (not repeat of source scan). No game assets, Unity, Audio, Save, mouse, shared mini, full XAPK changed.
+- **T3 result: genuine-original source PASS / export parity UNKNOWN / phone Raft smoke UNKNOWN. RENDER-002 OPEN, NOT_READY 0/3.**
