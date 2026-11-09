@@ -42,6 +42,26 @@ class GateTests(unittest.TestCase):
         a = fixture()
         a["results"][0]["result"]["observed"] = a["results"][0]["result"]["observed"].replace("png_bytes=123", "png_bytes=0")
         self.assertTrue(any("PNG metadata" in e for e in verify(a)))
+    def test_embedded_false_markers(self):
+        a = fixture()
+        a["results"][0]["result"]["observed"] = (
+            "not_capture=verified-GLSurfaceView-overlay-on-window "
+            "unverified_surface_pixels=true not_gl_error=0x0 "
+            "not_contract=true png_bytes=123 png_sha256=" + "c"*64
+        )
+        self.assertTrue(any("unverified" in e for e in verify(a)))
+
+    def test_duplicate_conflicting_markers(self):
+        a = fixture()
+        a["results"][0]["result"]["observed"] += " verified_surface_pixels=false"
+        self.assertTrue(any("unverified" in e for e in verify(a)))
+
+    def test_png_bytes_trailing_garbage(self):
+        a = fixture()
+        a["results"][0]["result"]["observed"] = a["results"][0]["result"]["observed"].replace(
+            "png_bytes=123", "png_bytes=123junk")
+        self.assertTrue(any("PNG metadata" in e for e in verify(a)))
+
     def test_wrong_identity(self):
         a = fixture()
         a["results"][0]["result"]["id"] = "T3-99"
