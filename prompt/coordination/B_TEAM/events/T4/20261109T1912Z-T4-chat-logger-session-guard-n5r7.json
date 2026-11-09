@@ -1,0 +1,21 @@
+{
+  "event_id": "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
+  "owner": "T4",
+  "origin": "chat",
+  "at": "2026-11-09T19:15:00Z",
+  "session_id": "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
+  "issue_id": "INPUT-005",
+  "type": "source_only_evidence_gate",
+  "event_type": "real_logger_session_and_sequence_fail_closed_provenance",
+  "summary": "T4 corroborated actual Android PersistentDiagnosticLog JSONL schema and hardened same-epoch captured callback ↔ original Unity Legacy getter triage against logger-session crossover, duplicate startup/replayed/out-of-order sequence and cross-format evidence. 24/24 CI source-only PASS, phone gameplay still unverified.",
+  "source_commits": [
+    "a8e475613ccc2e438fb4c71e7c76aab04aac4149",
+    "abf1ede6bbea3b9073c9ab20b826be46dd486c93"
+  ],
+  "evidence": "https://github.com/alwansan/raf/actions/runs/42681491521",
+  "status": "SOURCE_ONLY_SUCCESS_DEVICE_PENDING",
+  "device_pass": false,
+  "full_game_not_ready": true,
+  "report": "docs/T4_MOUSE_PERSISTENT_LOG_PROVENANCE_2026-11-09.md",
+  "resumed_from_session": "20261109T1858Z-T4-chat-epoch-evidence-p6m4"
+}
