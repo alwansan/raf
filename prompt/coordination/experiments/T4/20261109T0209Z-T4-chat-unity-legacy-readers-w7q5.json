@@ -1,0 +1,35 @@
+{
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0209Z-T4-chat-unity-legacy-readers-w7q5",
+  "issue_id": "INPUT-005",
+  "status": "SOURCE_VERIFIED_DEVICE_PENDING",
+  "experiment_key": "T4-Unity2021-Legacy-20-original-mouse-readers-source-routed-counters-nonblocking-v1",
+  "source_base": "f97c9462194dd22c5c09e0f5342cff0a79a0c830",
+  "source_commits": [
+    "67753be5ea18d8dc6af07023b4fb36d4518116f1",
+    "b2fdb28e08cd8f210264a704d83fbbdfc101cd16",
+    "201c1b61f7059e1a1553d95ca9105b88004a3004",
+    "b376e00a66ba06a593de8cc52398d6cfff7bb85d"
+  ],
+  "code_paths": [
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "tests/test_t4_android_pointer_capture_policy.py"
+  ],
+  "hypothesis": "Captured native callbacks do not prove Unity game's original button/wheel getters were polled. Record only actual Unity reader calls and whether value originated in Legacy Input or captured fallback.",
+  "source_ci": "https://github.com/alwansan/raf/actions/runs/42549986761",
+  "verification": {
+    "python_tests": 66,
+    "csharp_assertions": 152,
+    "original_dll_sha_verified": true,
+    "unity2021_android_managed_compile": true,
+    "unity2021_editor_managed_compile": true,
+    "original_input_sites_authenticated": 20,
+    "full_Unity_IL2CPP_build": false,
+    "Android_device_proof": false
+  },
+  "limitations": "Counts getter invocations not unique clicks or gameplay success. Latest CL/test lacks captured=true owner T4-02. No Mini source changed; cannot request Mini rebuild.",
+  "next_step": "T4-02 captured=true CL evidence and signed full Raft source same-SHA native-callback vs Unity-reader telemetry plus actual game acceptance."
+}
