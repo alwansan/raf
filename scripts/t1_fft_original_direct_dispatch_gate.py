@@ -126,16 +126,44 @@ def validate(record):
         dispatch_mismatches += row["source_numeric_kernel_arg"] != row["dispatch_kernel_arg"]
         out_of_candidate_domain += not (5 <= exponent <= 9)
         size_exponent_disagreements += size.bit_length() - 1 != exponent
-        events[event] = row["dispatch_kernel_arg"]
+        # The event-index match alone does NOT prove original source arithmetic.
+        # Preserve the claimed row's own selector/domain/precondition predicates
+        # so a mismatched or unsupported dispatch can never be called consistent.
+        events[event] = {
+            "dispatch_index": row["dispatch_kernel_arg"],
+            "selector_consistent": (
+                row["source_numeric_kernel_arg"] == expected_arg
+                and row["source_numeric_kernel_arg"] == row["dispatch_kernel_arg"]
+            ),
+            "source_context_consistent": (
+                5 <= exponent <= 9 and size.bit_length() - 1 == exponent
+            ),
+            "dispatch_preconditions": (
+                row["compute_shader_present"] and row["supports_compute"]
+                and all(group > 0 for group in groups) and bool(bindings)
+            ),
+        }
 
+    correlated_selector_consistent = False
     if correlated is None:
         correlation = "unattributed"
     elif correlated not in events:
         raise ValueError("referenced error event was not captured")
-    elif events[correlated] != reported:
-        correlation = "same_event_index_disagreement"
     else:
-        correlation = "same_event_numeric_argument_match_only"
+        entry = events[correlated]
+        correlated_selector_consistent = (
+            entry["selector_consistent"] and entry["source_context_consistent"]
+        )
+        if entry["dispatch_index"] != reported:
+            correlation = "same_event_index_disagreement"
+        elif not entry["selector_consistent"]:
+            correlation = "same_event_number_matches_but_source_selector_mismatch"
+        elif not entry["source_context_consistent"]:
+            correlation = "same_event_number_matches_but_source_context_unverified"
+        elif not entry["dispatch_preconditions"]:
+            correlation = "same_event_number_matches_but_dispatch_preconditions_unverified"
+        else:
+            correlation = "same_event_numeric_argument_match_only"
 
     # NEVER elevate source arithmetic or a caller-supplied correlation ID to
     # original Unity imported-program identity / on-device shader success.
@@ -148,6 +176,8 @@ def validate(record):
         "fft_size_observed_exponent_disagreement_count": size_exponent_disagreements,
         "observations_without_binding_names": incomplete_bindings,
         "reported_error_correlation": correlation,
+        "correlated_event_source_selector_consistent": correlated_selector_consistent,
+        "correlated_event_numerical_match_is_runtime_identity_proof": False,
         "actual_runtime_trace_independently_attested": False,
         "named_unity_kernel_mapping_proven": False,
         "android_water_rendering_fixed": False,

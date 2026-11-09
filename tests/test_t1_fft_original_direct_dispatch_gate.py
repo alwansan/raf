@@ -160,5 +160,73 @@ class OriginalDirectNumericGateTests(unittest.TestCase):
             with self.subTest(key=key), self.assertRaisesRegex(ValueError, "non-original"):
                 validate(d)
 
+    def test_correlated_index_six_with_wrong_source_argument_is_not_consistent(self):
+        d = fixture()
+        d["correlated_event_id"] = "first-fft-call"
+        d["dispatches"][0]["source_numeric_kernel_arg"] = 5
+        r = validate(d)
+        self.assertEqual(r["reported_error_correlation"],
+                         "same_event_number_matches_but_source_selector_mismatch")
+        self.assertEqual(r["source_selector_mismatch_count"], 1)
+        self.assertEqual(r["source_to_dispatch_mismatch_count"], 1)
+        self.assertFalse(r["correlated_event_source_selector_consistent"])
+
+    def test_correlated_index_six_with_wrong_exponent_formula_rejected_as_match(self):
+        d = fixture()
+        d["correlated_event_id"] = "first-fft-call"
+        d["dispatches"][0].update(fft_size=512, mathf_log2_truncated=9)
+        r = validate(d)
+        self.assertEqual(r["reported_error_correlation"],
+                         "same_event_number_matches_but_source_selector_mismatch")
+        self.assertFalse(r["correlated_event_source_selector_consistent"])
+
+    def test_correlated_index_six_with_wrong_bank_selector_not_matched(self):
+        d = fixture()
+        d["correlated_event_id"] = "first-fft-call"
+        d["dispatches"][0]["bank_flag"] = True
+        self.assertEqual(validate(d)["reported_error_correlation"],
+                         "same_event_number_matches_but_source_selector_mismatch")
+
+    def test_correlated_exponent_and_fft_size_disagreement_is_not_consistent(self):
+        d = fixture()
+        d["correlated_event_id"] = "first-fft-call"
+        d["dispatches"][0]["fft_size"] = 128
+        r = validate(d)
+        self.assertEqual(r["reported_error_correlation"],
+                         "same_event_number_matches_but_source_context_unverified")
+        self.assertFalse(r["correlated_event_source_selector_consistent"])
+
+    def test_correlated_compute_not_supported_does_not_prove_dispatch_preconditions(self):
+        for key in ("compute_shader_present", "supports_compute"):
+            d = fixture()
+            d["correlated_event_id"] = "first-fft-call"
+            d["dispatches"][0][key] = False
+            with self.subTest(key=key):
+                r = validate(d)
+                self.assertEqual(r["reported_error_correlation"],
+                                 "same_event_number_matches_but_dispatch_preconditions_unverified")
+                self.assertTrue(r["correlated_event_source_selector_consistent"])
+                self.assertFalse(r["correlated_event_numerical_match_is_runtime_identity_proof"])
+
+    def test_correlated_missing_binding_or_zero_groups_not_full_numeric_match(self):
+        for key, value in (("binding_names", []), ("groups", [0, 8, 1])):
+            d = fixture()
+            d["correlated_event_id"] = "first-fft-call"
+            d["dispatches"][0][key] = value
+            with self.subTest(key=key):
+                r = validate(d)
+                self.assertEqual(r["reported_error_correlation"],
+                                 "same_event_number_matches_but_dispatch_preconditions_unverified")
+
+    def test_correlated_clean_numeric_argument_remains_weak_evidence_only(self):
+        d = fixture()
+        d["correlated_event_id"] = "first-fft-call"
+        r = validate(d)
+        self.assertEqual(r["reported_error_correlation"],
+                         "same_event_numeric_argument_match_only")
+        self.assertTrue(r["correlated_event_source_selector_consistent"])
+        self.assertFalse(r["correlated_event_numerical_match_is_runtime_identity_proof"])
+        self.assertFalse(r["actual_runtime_trace_independently_attested"])
+
 if __name__ == "__main__":
     unittest.main()
