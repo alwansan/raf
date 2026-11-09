@@ -1,0 +1,73 @@
+name: T2 WATER-001 pinned owner CL GLES JSONL source-free verification (NO APK)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t2-gles-cl-evidence-gate.yml'
+      - 'scripts/t2_gles_device_jsonl_gate.py'
+      - 'tests/test_t2_gles_device_jsonl_gate.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-gles-cl-fourcase-evidence-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  pinned-owner-evidence-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      CL_COMMIT: f401b7ffe3b6ead9038f3b35273599dcf8286e68
+      CL_SESSION: shared-20261108-230157-466487336
+    steps:
+      - name: Checkout only source-free T2 gate and regression
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/t2_gles_device_jsonl_gate.py
+            tests/test_t2_gles_device_jsonl_gate.py
+
+      - name: Run source-free adversarial regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t2_gles_device_jsonl_gate.py' -v
+
+      - name: Fetch original CL/test bytes at fixed commit and verify each Git blob
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          tmp="$(mktemp -d)"
+          trap 'rm -rf -- "$tmp"' EXIT
+          records=(
+            'CASE01|t2-gles-20261108-230235-466525434.jsonl|9019ac477d1cec28c0d237224bfaed9f868b14b1'
+            'CASE02|t2-gles-20261108-230235-466525675.jsonl|0f01e5ce66299f94868b37e81990ad338bf29eb8'
+            'CASE03|t2-gles-20261108-230235-466525949.jsonl|b271f1c5419927524393118a1406c4ccb420f909'
+            'CASE04|t2-gles-20261108-230236-466526243.jsonl|11c44c8700ab661efa8129b98cf4ce8731172959'
+          )
+          for record in "${records[@]}"; do
+            IFS='|' read -r case file expected_blob <<< "$record"
+            target="$tmp/$file"
+            curl -fsSL --max-time 45 --retry 2 --retry-delay 3 \
+              "https://raw.githubusercontent.com/alwansan/CL/$CL_COMMIT/test/$CL_SESSION/$file" \
+              -o "$target"
+            [ "$(wc -c < "$target")" -le 131072 ] || { echo "oversize source file: $case" >&2; exit 1; }
+            observed_blob="$(git hash-object -- "$target")"
+            [ "$observed_blob" = "$expected_blob" ] || { echo "Git blob integrity failure: $case" >&2; exit 1; }
+            python3 -m scripts.t2_gles_device_jsonl_gate "$case" "$target"
+          done
+          {
+            echo '### T2 original owner CL/test JSONL source-free gate'
+            echo '- 4/4 immutable original CL Git blob identities checked at pinned CL commit.'
+            echo '- Python adversarial controls + exported four per-case logs passed.'
+            echo '- Evidence boundary: synthetic GLES log text consistency only; not independent pixel authenticity or Raft original water rendering.'
+            echo '- No APK, original asset, Unity, GPU dispatch, native build, or secrets were used.'
+          } >> "$GITHUB_STEP_SUMMARY"
