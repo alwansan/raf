@@ -1,0 +1,28 @@
+{
+  "session_id": "20261109T2020Z-T2-chat-foam-onehop-return-r8c5",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "746353c0f54f559154ec4f52dcba4229f49ab174",
+  "resumed_from_sessions": [
+    "20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4",
+    "20261109T1946Z-T2-chat-foam-equality-predicate-m4q9"
+  ],
+  "experiment_key": "original-Foam-pass1-Cecil-one-hop-nested-texture-return-field-token-safe-20261109-v1",
+  "resource_key": "T2-original-FoamBlitOriginalProducers-Cecil-source-only",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamBlitOriginalProducers/Program.cs",
+    "scripts/t2_foam_original_blit_report.py",
+    "tests/test_t2_foam_original_blit_report.py",
+    "prompt/coordination/work/WATER-001/20261109T2020Z-T2-chat-foam-onehop-return-r8c5.json",
+    "prompt/coordination/clients/T2/sessions/20261109T2020Z-T2-chat-foam-onehop-return-r8c5.md",
+    "prompt/coordination/experiments/T2/20261109T2020Z-T2-chat-foam-onehop-return-r8c5.json",
+    "prompt/coordination/B_TEAM/events/T2/20261109T2020Z-T2-chat-foam-onehop-return-r8c5.json",
+    "docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
+  ],
+  "hypothesis": "Original pass1 managed Texture-returning callee may return nested private Texture-returning helper result that directly loads the declared field used as pass0 destination; a single statically resolved nested call may refine conservative direct field_no_match_with_null. Ambiguous calls, dispatch or cycles remain opaque, and field match never proves actual receiver/heap/frame or Android pixels.",
+  "safety": "T2 source-only original ZIP2 CI and synthetic controls; never print proprietary IL/symbols/tokens, never modify Unity assets, shader binaries, shared Android mini, release or other workers' files.",
+  "run_urls": [],
+  "next_step": "Bounded one-hop private nested-callee return flow with explicit safe taxonomy and negative fixture controls, strict schema; verify on SHA-authenticated original workflow.",
+  "updated_at": "2026-11-09T20:20:00Z"
+}
