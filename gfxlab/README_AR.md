@@ -20,3 +20,16 @@
 3. UNITY: imported .obj وبرنامج `Standard` مع scene+mesh/renderer، BuildPipeline actual Android output.
 4. DEVICE: المالك يفتح ويشاهد **مجسم كامل**، يتأكد ألا يكون جزءًا منفصلاً فقط، يدور ويكبر، ويجرب LIT/UNLIT، ثم COPY LOG ويرسل تقرير JSON مع لقطة شاشة. لا ترتقي مصدر إلى DEVICE قبل اختباره.
 5. بعد نجاح الشاهد البصري فقط نبدأ restore Materials وTexture2D وShader48 الأصلية، قبل تعميم الأداة إلى بقية اللعبة.
+
+
+## GFX-SHEARS-002..005 — المصدر الأصلي والألوان (10 نوفمبر 2026)
+
+**هوية الهاتف:** الموديل ذو 375 vertices / 420 triangles هو مقص Shears ظاهر في لقطة المالك؛ اسم `original_player_like_skinned` في APK0.1 كان نتيجة تصنيف اسم أحد الآباء، وليس تعريف الجسم نفسه. من فضلك لا تستنتج أن هذا هو نموذج جسم اللاعب.
+
+- [GFX-002 Actions 42705610994](https://github.com/alwansan/raf/actions/runs/42705610994) نجح SHA-source Renderer→Material→Shader→Texture: 1 original Material، 2 SubShader و7 Passes، 9 Texture slots، ثلاث bound وثلاثة bones، normals وUV حقيقية.
+- [GFX-003 Actions 42706123513](https://github.com/alwansan/raf/actions/runs/42706123513) أثبت ثلاث صور اصلية: Albedo / Normal / Metallic، جميعها في external resS.
+- [GFX-004 Actions 42707235695](https://github.com/alwansan/raf/actions/runs/42707235695) قرأ فقط ثلاث قطع SHA/Git أصلية مجموعها 141,557,760 byte وأعاد بناء ثلاثة PNG أصلية **داخل runner الخاص فقط**، دون نشرها منفردة. قيمة tint أصلية موثقة في runner.
+- [GFX-005 Unity colored build](https://github.com/alwansan/raf/actions/runs/42707671345) يختبر 4 حالات: WHITE LIT، WHITE UNLIT، SOURCE ALBEDO على Unity Standard، SOURCE ALBEDO+NORMAL+METALLIC على Unity Standard تقريبي. **لا تعلن APK حتى نجاح BuildPipeline + توقيع + artifact.**
+- APK GFX-005 (إن نجح) حزمة منفصلة `com.alwansan.raft.graphicslab.shears`، تنصب بجانب white v0.1 ولا تحذفها.
+
+**حدود قبول:** مجرد عودة لون المعدن/المقبض بواسطة Standard لا يعيد shader الأصلي ذي 7 Passes. ظلاله/اللمعان/depth/culling/compiled variants ما زالت تحتاج استعادة ومقارنة مستقلة بمرجع أصلي. لا توجّه T3 لتغيير shaders الفريق بناء على هذه التجربة دون إثبات مكافأة.
