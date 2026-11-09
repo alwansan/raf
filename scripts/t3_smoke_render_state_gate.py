@@ -5,6 +5,7 @@ Input JSON is a metadata-only report; never pass proprietary shader sources.
 """
 import argparse
 import json
+import re
 from pathlib import Path
 
 FIELDS = ('blend_enabled', 'alpha_test', 'alpha_blend', 'program_present')
@@ -16,9 +17,9 @@ def audit(data):
     for side in (original, exported):
         if side.get('identity_role') != 'smoke_linked_34_use_shader48':
             raise ValueError('wrong_shader_identity')
-        if side.get('smoke_named_renderer_count') != 17 or side.get('material_slot_count') != 34:
+        if type(side.get('smoke_named_renderer_count')) is not int or type(side.get('material_slot_count')) is not int or side['smoke_named_renderer_count'] != 17 or side['material_slot_count'] != 34:
             raise ValueError('graph_count_not_verified')
-        if not side.get('source_sha256') or len(side['source_sha256']) != 64:
+        if not isinstance(side.get('source_sha256'), str) or not re.fullmatch(r'[0-9a-fA-F]{64}', side['source_sha256']):
             raise ValueError('missing_source_fingerprint')
         for key in FIELDS:
             if type(side.get(key)) is not bool:
