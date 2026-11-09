@@ -1,0 +1,16 @@
+{
+  "session_id": "20261109T0748Z-T4-scheduled-json-envelope-p5k2",
+  "origin": "scheduled",
+  "status": "in_progress",
+  "issue": "INPUT-005",
+  "base_sha": "db95391aecfd7d73d5a4dad8bab1f506d10df533",
+  "scope": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py"
+  ],
+  "hypothesis": "A syntactically valid JSONL array/string/null causes AttributeError on obj.get, aborting the complete physical-mouse evidence report; malformed explicit captured values should never be counted as known/unknown device evidence.",
+  "experiment_key": "T4-JSONL-ENVELOPE-20261109",
+  "shared_resource": "none; no Unity build",
+  "owner_success": "Artifact 42058825739 phone world/save/reopen confirmed; preserve .rgd",
+  "next": "Add fail-closed JSON object/field guards and regression tests; avoid T5 mini edits."
+}
