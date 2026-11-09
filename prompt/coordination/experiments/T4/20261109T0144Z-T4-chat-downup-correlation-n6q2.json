@@ -1,0 +1,44 @@
+{
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0144Z-T4-chat-downup-correlation-n6q2",
+  "issue_id": "INPUT-005",
+  "status": "SOURCE_ONLY_VERIFIED_DEVICE_PENDING",
+  "experiment_key": "T4-CL-4680f5dc-a0-actionButton0-downup-press-release-same-eventTime-v1",
+  "source_file_paths": [
+    "scripts/t4_verify_cl_shared_mouse_evidence.py",
+    "tests/test_t4_verify_cl_shared_mouse_evidence.py"
+  ],
+  "source_cl": {
+    "repo": "alwansan/CL",
+    "pinned_commit": "4680f5dc26127938e7696f932b2d9a80dc703937",
+    "events_path": "test/shared-20261108-223228-464718661/events-20261108-223341-464791801.jsonl",
+    "events_blob": "7c337320a1593ff8d9f9fd63e55ec30ed62cd202",
+    "summary_blob": "6d702c231aa95386ace9fe85b25e244a6ce8bf8c"
+  },
+  "hypothesis": "ACTION_DOWN/UP actionButton=0 duplicate corresponding explicit ACTION_BUTTON_PRESS/RELEASE on the same Android eventTime, not extra physical clicks.",
+  "verified": {
+    "raw_callbacks": 413,
+    "unique_events": 373,
+    "duplicate_callback_records": 40,
+    "explicit_left_press": 13,
+    "explicit_left_release": 13,
+    "down_actionbutton0": 13,
+    "up_actionbutton0": 13,
+    "pairs_down_explicit_left": 13,
+    "pairs_up_explicit_left": 13,
+    "implicit_unpaired": 0,
+    "additional_clicks_inferred": 0,
+    "captured_events": 0,
+    "gameplay_or_unity_proven": false
+  },
+  "controls": {
+    "python_tests": 13,
+    "pinned_real_cl": true,
+    "source_ci": "https://github.com/alwansan/raf/actions/runs/42547368125",
+    "original_stage_ci": "https://github.com/alwansan/raf/actions/runs/42518143297",
+    "signed_game_device_test": null
+  },
+  "limits": "No deviceId in older log; eventTime/source/captured correlation only; only uncaptured Mini old v0.2.9; no right/middle/horizontal gesture established as attempted; cannot validate Unity input bridge.",
+  "next_step": "Wait for genuine captured=true T4-02 owner trace and same signed full game candidate; do not build Mini for a source-only diagnostic."
+}
