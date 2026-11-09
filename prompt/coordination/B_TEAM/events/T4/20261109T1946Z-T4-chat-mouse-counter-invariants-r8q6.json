@@ -1,0 +1,27 @@
+{
+  "event_id": "20261109T1946Z-T4-chat-mouse-counter-invariants-r8q6",
+  "owner": "T4",
+  "origin": "chat",
+  "at": "2026-11-09T19:50:20Z",
+  "session_id": "20261109T1946Z-T4-chat-mouse-counter-invariants-r8q6",
+  "issue_id": "INPUT-005",
+  "type": "result",
+  "event_type": "mouse_capture_reader_producer_counter_invariant_gate",
+  "summary": "Original Unity2021 C# physical mouse callback/getter producer constraints now rejected by T4 source-only epoch analyzer: distinct press/release counts and dual-axis scroll budget, and mutually exclusive positive edge vs scroll getter subtotals. Five new positive/negative tests, old impossible native-only fixture repaired. CI42687110814 SUCCESS 30/30; no device proof or game APK.",
+  "source_commits": [
+    "5bd28cdc10eff1dfccddd478a16d66aedac3c883",
+    "c4cb6981434aca7b4764e9d208b3df45bbaba206",
+    "01a062ab0be26c665c5226337ad0e3f143b7e5f3"
+  ],
+  "evidence": "https://github.com/alwansan/raf/actions/runs/42687110814",
+  "ci_job_id": 129396759476,
+  "tests_passed": 30,
+  "tests_total": 30,
+  "status": "SOURCE_ONLY_SUCCESS_DEVICE_PENDING",
+  "device_pass": false,
+  "unity_gameplay_verified": false,
+  "full_game_not_ready": true,
+  "experiment": "prompt/coordination/experiments/T4/20261109T1946Z-T4-chat-mouse-counter-invariants-r8q6.json",
+  "scope": "prompt/coordination/clients/T4/work/20261109T1946Z-T4-chat-mouse-counter-invariants-r8q6.md",
+  "next_step": "One-process signed modern Raft mouse+Unity gameplay device proof on LEFT/RIGHT/MIDDLE and V/H wheel, retain .rgd/focus/camera regressions. No T4 XAPK or mini build."
+}
