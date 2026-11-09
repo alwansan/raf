@@ -34,3 +34,22 @@ Read finished CI's complete phases: 21 Python tests, `T2_CECIL_ORIGINAL_BLIT_SYN
 Next commit `5fc56b532d41fb207cd9d703bcc100f0ac78c23d` handles in-memory synthetic `Mono.Cecil.MethodDefinition` directly (rather than relying on an original-assembly MethodReference resolver) and adds a tightly finite failure marker for only five new source-free synthetic cases. It never prints arbitrary exception messages, actual field names or tokens. Original managed references still undergo resolver and module-identity checks.
 
 Automatic [CI42693196369](https://github.com/alwansan/raf/actions/runs/42693196369) source `5fc56b53` was observed **IN_PROGRESS** with Cecil selftest pending; platform adapter [CI42693196347](https://github.com/alwansan/raf/actions/runs/42693196347) separately auto-triggered. Verify final logs before drawing conclusions, then only if original succeeded archive safe original one-hop label. Never claim original data tested from a failing synthetic-only gate.
+
+## Authenticated final result — 2026-11-09T20:33Z
+
+All original source-invariant checks completed at [CI42693501006](https://github.com/alwansan/raf/actions/runs/42693501006), final source `b61e2acf1bae1ea09e2f7bbece07e2f971dd2701`, job `129419155294`, **COMPLETED SUCCESS**. Full **21/21** source-free Python tests, Mono.Cecil `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`, SHA original ZIP2 3,211,776-byte assembly and 115,978,112-byte shader owner, finite-safe output and private scratch purge PASS. Separate [platform CI42693500903](https://github.com/alwansan/raf/actions/runs/42693500903) **COMPLETED SUCCESS**, no actual original Foam GPU rendering.
+
+Original source-only direct and one-hop results remain equally negative:
+```text
+T2_FOAM_PASS0_BACKTRACE RenderTexture typed_field static_type_only_no_instance_proof steps=6 void_calls=0
+T2_FOAM_PASS1_BACKTRACE Texture typed_call_result static_type_only_no_instance_proof steps=21 void_calls=1
+T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_with_explicit_null_literal
+T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION field_no_match_with_null
+T2_FOAM_CROSSPASS_ONEHOP_FIELD_RETURN_RELATION field_no_match_with_null
+```
+
+**Conclusion:** bounded one nested statically resolved Texture helper did not expose new directly matched declared field-token provenance; not a comprehensive proof that all indirect aliases are absent. Explicit null is a conservatively reachable CIL category, **not actual runtime null**. Separate receivers, other fields, deeper calls, frame state, CB0/ShaderLab and Android Adreno water pixels remain open.
+
+All original protected data stayed private. No Unity source, game shaders/assets, shared mini APK, full XAPK or other workers' files touched. The narrow T2 scope completed, broader WATER-001 **OPEN / NOT_READY 0/3**. Scoped work `prompt/coordination/work/WATER-001/20261109T2020Z-T2-chat-foam-onehop-return-r8c5.json` completed commit `a7e918651905d5d62ab14549007827b07a5e74e0`; safe report commit `f423f73bcfad7467a65fe17385ca66147fc6b671`; independent experiment commit `e1f0972b6239963e7e1f279abf7bd84fa5176eee`; canonical event commit `178ff5be69fefecdd7512ef442f7c5179e5da1bd`.
+
+**Resume next time** by reviewing live HEAD and Actions first, choosing a distinct original caller receiver/indirect alias or allocation/write path question. Do not repeat unchanged one-hop CIL tests or overclaim gameplay parity. T3 legacy event ledger identity remains external; T2's canonical event includes explicit event_id/owner/at/type.
