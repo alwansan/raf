@@ -1,0 +1,16 @@
+{
+  "id": "T5-20261109T1911Z-real-cl-saf-obb-evidence-f4c2",
+  "owner": "T5",
+  "session_id": "20261109T1922Z-T5-chat-cl-obb-evidence-f4c2",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "device-evidence-analysis",
+  "at": "2026-11-09T19:11:00Z",
+  "summary": "Authentic CL/test T5-02 EVIDENCE_READY selected bytes 2,301,280,507, SHA prefix 911a53bc1dd4; original version89 signed OBB is 2,301,256,312 with SHA prefix 660b6c0909ae. Different chosen bytes (+24,195) but no selected filename/location or installed version proof; NOT corrupted OBB. Follow-on latest CL report T5-02 NEEDS_INPUT; not a new measurement. Real pinned CL blob SHA checks +16/16 Python source-free controls PASS CI42680745095 after fixing shared-folder vs summary.session mismatch. Owner steps in Arabic guide. No APK/OBB copied, built or uploaded; READY unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42680745095",
+    "https://github.com/alwansan/CL/blob/main/test/shared-20261108-230157-466487336/summary-20261108-230157-466487336.json",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_OWNER_OBB_DEVICE_CHECK_2026-11-09_AR.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/clients/T5/sessions/20261109T1922Z-T5-chat-cl-obb-evidence-f4c2.md"
+  ]
+}
