@@ -1,0 +1,19 @@
+{
+  "id": "T3-20261109T0230Z-scheduled-png-inflate-guard-q6m2",
+  "agent": "T3",
+  "origin": "scheduled",
+  "status": "IN_PROGRESS",
+  "base_sha": "05d3e1d61d6b4aa82ba473002465179890ccd5b6",
+  "scope": [
+    "scripts/t3_cl_png_pixel_audit.py",
+    "tests/test_t3_cl_png_pixel_audit.py"
+  ],
+  "hypothesis": "PNG decoder currently uses unrestricted zlib.decompress before checking expected dimensions; compressed hostile input may allocate unbounded memory, invalid PNG may be misdiagnosed. Fail closed with exact bounded decompression and explicit regression.",
+  "experiment_key": "T3-PNG-INFLATE-BOUND-20261109",
+  "shared_resource": "none; no CI dispatch, no Unity",
+  "taken_over_from": [
+    "T3 20261109T0134Z scheduled PNG audit",
+    "CL shared-20261108-232759-468049775"
+  ],
+  "constraints": "Only diagnostic script and tests; no original assets, GUID, game code, or releases."
+}
