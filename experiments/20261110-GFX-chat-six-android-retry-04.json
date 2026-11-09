@@ -15,7 +15,9 @@
       42712833407,
       42714952065,
       42718266273
-    ]
+    ],
+    "unity_build_success": 42720920391,
+    "apk_artifact": 13721725242
   },
   "controls": [
     "same original source SHA pins",
@@ -35,5 +37,19 @@
     "artifact SHA256 audited",
     "owner six-model on-device only if signed"
   ],
-  "status": "triggered_build_result_pending"
+  "status": "unity_android_build_and_signed_artifact_success_owner_device_pending",
+  "outcome": {
+    "build": "UNITY2021_ANDROID_IL2CPP_ARM64_SUCCESS",
+    "apk_signed": true,
+    "aapt_package_verified": true,
+    "sha256": "ef2b86b9384144fc3dd13c93d9b3a4e98cc07bfba3493b6a5c59b52d8db13f6c",
+    "apk_bytes": 24098726,
+    "source_models": 6,
+    "material_slots": 7,
+    "source_textures": 21,
+    "original_shader_equivalence": false,
+    "original_animation_restored": false,
+    "device_pixels_verified": false,
+    "owner_acceptance": false
+  }
 }

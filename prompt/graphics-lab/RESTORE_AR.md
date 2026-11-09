@@ -32,7 +32,13 @@
 - [GFX-MULTI-001 المعدل 42719663373](https://github.com/alwansan/raf/actions/runs/42719663373) **SUCCESS**: فحص float32 الحقيقي لإحداثيات source OBJ استبعد 12 مرشحًا غير صالح للعرض، واختار خمسة موديلات موثقة جديدة. المصدر ZIP2 نفسه لا يتغير.
 - **ترتيب الاختيار الجديد (يلغي وصف M02–M05 القديم عند اختبار APK جديد):** M01 person/skinned 5095v/100bones؛ M02 tool/skinned 1666v/8bones؛ M03 multi_material/static 2163v/**مادتان**؛ M04 complex_skinned_unidentified/skinned 2445v/100bones؛ M05 generic/skinned 4452v/2bones؛ M00 Shears 375v.
 - **إعادة الاختبارات اكتملت الآن:** [GFX-MULTI-002 CI42720399689](https://github.com/alwansan/raf/actions/runs/42720399689) **SUCCESS**: six original Mesh/7 Materials/21 Texture PNG، و15 chunks/707788800 bytes داخل runner فقط. [GFX-MULTI-004 CI42720400057](https://github.com/alwansan/raf/actions/runs/42720400057) **SUCCESS**: هوية Shader48 واحد أصلي مشترك باثنين SubShader و7 Passes (4+3)، إثبات source-only لا Android ShaderLab.
-- الحالة المرجعية: `ORIGINAL_SOURCE_SELECTION=PASS`؛ `SOURCE_PACK_NEW=PASS`؛ `UNITY_APK_NEW=BUILD_RETRY_PENDING`؛ `ANDROID_SIX_DEVICE=NOT_TESTED`. M01/M04 وغيرها Skinned OBJ ثابتة وليست أصل Animation/Rig؛ shad​​er الأصل غير مستعاد.
+- الحالة المرجعية: `ORIGINAL_SOURCE_SELECTION=PASS`؛ `SOURCE_PACK_NEW=PASS`؛ `UNITY_APK_NEW=SIGNED_SUCCESS_OWNER_TEST_PENDING`؛ `ANDROID_SIX_DEVICE=NOT_TESTED`. M01/M04 وغيرها Skinned OBJ ثابتة وليست أصل Animation/Rig؛ shad​​er الأصل غير مستعاد.
+
+## أحدث نتيجة مثبتة — ستة موديلات APK Android فعلي
+- **[GFX-MULTI-003 Actions 42720920391](https://github.com/alwansan/raf/actions/runs/42720920391) COMPLETED SUCCESS** على Commit `ee96e4d86dd6679be6814e4116368a664362b12a` بعد اختيار M02 بديل ذي هندسة صالحة. Unity 2021.3.45f2 Android IL2CPP ARM64 OpenGLES3 نجح بإدخال الستة، 7 Materials، 21 Textures، ومطابقة عدد المثلثات، وM03 بمادتين.
+- **[تحميل GitHub Artifact 13721725242](https://github.com/alwansan/raf/actions/runs/42720920391/artifacts/13721725242)** (انتهاء 2026-11-16T23:39:48Z UTC). ملف APK نفسه 24098726 بايت، SHA256 `ef2b86b9384144fc3dd13c93d9b3a4e98cc07bfba3493b6a5c59b52d8db13f6c`، `com.alwansan.raft.graphicslab.multi`. التوقيع واسم الحزمة تم التحقق منهما في CI، والـSHA256/CRC/ARM64 IL2CPP فُحصت بشكل مستقل بعد تنزيل Artifact. لا OBB أو بناء لعبة كاملة.
+- اختبار المالك **مطلوب ولم يحصل بعد** للستة: صورة واحدة + COPY LOG JSON من `SOURCE_PBR_STANDARD_APPROX` لكل M00–M05. عند ظهور خلل أضف صورة `SOURCE_ALBEDO_STANDARD`. راجع **M03 مادتين** و**M01/M04 Skinned static OBJ** خاصة.
+- لا تغيّر الحقيقة السلبية: `originalShaderRestored=false` و`originalAnimationRestored=false` و`runtimeColoredPixelsVerified=false` على الستة حتى فحص الهاتف؛ نتائج Shears v0.2 السابقة باقية مستقلة. `RENDER-002/WATER-001 OPEN`.
 
 ## ما التالي عند الاستعادة؟
 - إذا GFX-MULTI-003 نجح: تحقّق من SHA/APK والتوقيع والحزمة، سلّم المستخدم رابط التحميل، واطلب صورة وCOPY LOG لكل موديل وخصوصاً M01 وM03 وM04، مع مقارنة بصور Raft PC عند توفرها.

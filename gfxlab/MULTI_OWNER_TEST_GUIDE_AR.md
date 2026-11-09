@@ -1,6 +1,6 @@
 # GFX-MULTI-003 — دليل تجربة ستة مجسمات على هاتف Android
 
-**الحزمة المستقلة (إذا أثبت GitHub Actions نجاح بناء APK والتوقيع):** `com.alwansan.raft.graphicslab.multi`. لا تحذف مختبر المقص `com.alwansan.raft.graphicslab.shears` أو لعبة Raft الكاملة. Unity 2021.3.45f2، IL2CPP ARM64، OpenGLES3، Linear.
+**الحزمة المستقلة، وقد ثبت بناء APK والتوقيع فعلياً:** `com.alwansan.raft.graphicslab.multi`. لا تحذف مختبر المقص `com.alwansan.raft.graphicslab.shears` أو لعبة Raft الكاملة. Unity 2021.3.45f2، IL2CPP ARM64، OpenGLES3، Linear.
 
 ## واجهة التطبيق
 - القائمة الجانبية تحتوي **M00–M05**: **M00 Shears** (المقص الذي قبلته بصرياً)، M01 person/100 bones، M02 tool/skinned/8 bones، M03 multi_material/static بمادتين، M04 complex_skinned_unidentified/100 bones، M05 generic/skinned/2 bones. **جميع نماذج Skinned تُعرض كـOBJ ثابت بلا rig أو Animation**. هذه تسميات فئات مُثبتة من الـGameObject/Mesh في المصدر وليست تأكيداً لأسماء العناصر داخل اللعبة؛ تحديد M01 بأنه لاعب كامل يتطلب مشهداً/ريغاً موثقاً.
@@ -29,7 +29,12 @@
 ## الوثائق التقنية
 - مصدر الاختيار القديم: [GFX-MULTI-001 القديم](https://github.com/alwansan/raf/actions/runs/42711514279). **الاختيار الجديد المعتمد بعد استبعاد 12 هندسة غير صالحة:** [GFX-MULTI-001 الجديد](https://github.com/alwansan/raf/actions/runs/42719663373).
 - استخراج الستة للترتيب القديم فقط: [GFX-MULTI-002](https://github.com/alwansan/raf/actions/runs/42712118731). **الإعادة نجحت:** [GFX-MULTI-002 الجديد](https://github.com/alwansan/raf/actions/runs/42720399689) ستة Mesh/7 مواد/21 صورة.
-- بناء Unity السابق [GFX-MULTI-003 الأول](https://github.com/alwansan/raf/actions/runs/42712833407) و[المحاولة الثالثة](https://github.com/alwansan/raf/actions/runs/42718266273) **فشلا قبل APK**. لا تثبّت نسخة الستة إلا بعد بناء جديد ناجح وتحقق التوقيع.
+- المحاولتان القديمتان [الأولى](https://github.com/alwansan/raf/actions/runs/42712833407) و[الثالثة](https://github.com/alwansan/raf/actions/runs/42718266273) **فشلتا قبل APK**. نجحت النسخة الجديدة: [CI 42720920391](https://github.com/alwansan/raf/actions/runs/42720920391)، [Artifact 13721725242](https://github.com/alwansan/raf/actions/runs/42720920391/artifacts/13721725242). حجم APK 24098726 بايت، SHA256 `ef2b86b9384144fc3dd13c93d9b3a4e98cc07bfba3493b6a5c59b52d8db13f6c`، التوقيع واسم الحزمة مؤكدان من CI. **لا تحتاج OBB؛ هذه ليست لعبة Raft الكاملة.**
 - رسالة الاستعادة: [RESTORE_AR.md](../prompt/graphics-lab/RESTORE_AR.md).
 
 - تحليل المصدر الجديد [GFX-MULTI-004](https://github.com/alwansan/raf/actions/runs/42720400057): Shader48 واحد مشترك في 7 Material slots باثنين SubShaders و7 Passes، لكنه ليس Shader Android مستعادًا.
+
+## دليل التنزيل واختبار المالك الحالي
+- تنزيل [GitHub Artifact 13721725242](https://github.com/alwansan/raf/actions/runs/42720920391/artifacts/13721725242) من Actions يتطلب أحيانًا تسجيل الدخول إلى GitHub؛ الملف ZIP يحوي `GfxLab-Multi-Six-Original.apk` وتقارير JSON آمنة، فك الضغط وثبّت APK. يمكن استخدام APK مباشر من رسالة الدردشة التي سلّمت الإصدار؛ رابط Artifact هو المرجع المستديم حتى وقت انتهاء الاحتفاظ.
+- لا تحذف Raft ولا مختبر Shears السابق، فاسم الحزمة مختلف. افتح التطبيق في الوضع الأفقي، واختر M00..M05، واضغط NEXT MATERIAL حتى SOURCE_PBR_STANDARD_APPROX، واضغط COPY LOG وأرسل السجل مع صورة واحدة لكل موديل؛ قارن SOURCE_ALBEDO_STANDARD إذا ظهر خلل. ركز على M03 بمواد متعددة وM01/M04 مع وضعية OBJ الثابتة.
+- لم يجر اختبار هذه الستة على هاتف المالك بعد؛ لا تعتبر Shader48 الأصلي أو تحريك الريغ مستعادًا من نجاح Unity Standard fallback.
