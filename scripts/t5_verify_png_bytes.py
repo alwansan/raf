@@ -79,9 +79,11 @@ def validate_png(raw):
     if not decoder.eof or decoder.unused_data or not decoded:
         raise ValueError("incomplete or trailing PNG IDAT zlib data")
     # A valid zlib stream can still contain truncated scanlines or invalid
-    # per-row filter bytes. Check the exact payload for non-interlaced PNGs.
-    # Adam7 images require pass-specific row calculations and are not claimed
-    # to have scanline-level verification here.
+    # per-row filter bytes. Adam7 requires seven pass-specific row layouts;
+    # reject it rather than report a structurally verified image without
+    # actually validating those passes. Android capture PNGs are noninterlaced.
+    if interlace != 0:
+        raise ValueError("interlaced PNG requires Adam7 scanline validation")
     if interlace == 0:
         channels = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[color_type]
         stride = (width * channels * bit_depth + 7) // 8
