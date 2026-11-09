@@ -36,5 +36,25 @@ class CaptureAcceptanceGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             triage({"phases": {"on": {"routes": ["activity_generic"]}}})
 
+    def test_rejects_string_routes(self):
+        with self.assertRaises(ValueError):
+            triage({"phases": {"on": {"routes": "captured"}}})
+
+    def test_rejects_string_button_list(self):
+        with self.assertRaises(ValueError):
+            triage({"phases": {"on": {"routes": ["captured"], "button_presses_observed": "left"}}})
+
+    def test_rejects_unknown_button(self):
+        with self.assertRaises(ValueError):
+            triage({"phases": {"on": {"routes": ["captured"], "button_releases_observed": ["unknown"]}}})
+
+    def test_rejects_negative_scroll(self):
+        with self.assertRaises(ValueError):
+            triage({"phases": {"on": {"routes": ["captured"], "vertical_scroll_events": -1}}})
+
+    def test_rejects_boolean_scroll(self):
+        with self.assertRaises(ValueError):
+            triage({"phases": {"on": {"routes": ["captured"], "horizontal_scroll_events": True}}})
+
 if __name__ == "__main__":
     unittest.main()
