@@ -1,0 +1,22 @@
+{
+  "session_id": "20261109T0237Z-T4-scheduled-analyzer-comment-v3q7",
+  "origin": "scheduled",
+  "worker": "T4",
+  "issue": "INPUT-005",
+  "status": "in_progress",
+  "base_sha": "34d758899e8e2ac0794461846334b51ad2b7e2ae",
+  "hypothesis": "Two literal backslash-n sequences embedded in an inline comment swallow the key assignment; analyze() raises NameError on first valid physical mouse event, defeating classification.",
+  "experiment_key": "T4-analyzer-literal-escaped-newline-runtime-regression-v1",
+  "resource_key": "T4-Python-analyzer-only-no-Unity-CI",
+  "files": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py",
+    "prompt/coordination/clients/T4/sessions/20261109T0237Z-T4-scheduled-analyzer-comment-v3q7.md"
+  ],
+  "constraints": [
+    "No game input modifications",
+    "No CI duplication",
+    "No T5 mini build",
+    "Preserve .rgd and keyboard"
+  ]
+}
