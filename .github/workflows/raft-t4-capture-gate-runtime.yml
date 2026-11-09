@@ -1,0 +1,24 @@
+name: T4 physical mouse acceptance gate runtime (source only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t4-capture-gate-runtime.yml'
+      - 'scripts/t4_capture_acceptance_gate.py'
+      - 'scripts/tests/test_t4_capture_acceptance_gate_runtime.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t4-capture-gate-runtime-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  acceptance-gate-regressions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python version
+        run: python3 --version
+      - name: Run all eight previously unexecuted fail-closed gate regressions
+        run: python3 -m unittest discover -s scripts/tests -p 'test_t4_capture_acceptance_gate_runtime.py' -v
