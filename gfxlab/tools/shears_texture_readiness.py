@@ -34,7 +34,7 @@ def pairs(entries):
         elif isinstance(e,dict) and set(e)=={"m_First","m_Second"}:name,val=e["m_First"],e["m_Second"]
         elif isinstance(e,dict) and len(e)==1: name,val=next(iter(e.items()))
         else:raise ValueError("unsupported material pair shape")
-        if not isinstance(name,str) or not name or name in names:
+        if not isinstance(name,str) or not name or name in names or not isinstance(val,dict):
             raise ValueError("missing/duplicate material property label")
         names.add(name)
         result.append((name,val))
