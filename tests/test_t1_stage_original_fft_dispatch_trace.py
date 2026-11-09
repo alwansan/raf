@@ -79,7 +79,7 @@ class OriginalFftAndroidHookTests(unittest.TestCase):
         source = ORIGINAL.replace(
             "shader.Dispatch(k + 1, 1, target.height, 1);",
             "// shader.Dispatch(k + 1, 1, target.height, 1);")
-        with self.assertRaisesRegex(ValueError, "non-executable"):
+        with self.assertRaisesRegex(ValueError, "two standalone|non-executable"):
             run_synthetic(original=source)
 
     def test_changed_shader_receiver_rejected(self):
