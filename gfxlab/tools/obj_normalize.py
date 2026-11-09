@@ -108,8 +108,7 @@ def normalize_exported_obj(data:str):
                 bits=token.split("/")
                 p=_index(bits[0],len(verts))
                 t=_index(bits[1],len(tex)) if len(bits)>1 and bits[1] else None
-                n=_index(bits[2],len(norm)) if len(bits)>2 and bits[2] else None
-                if not has_normals:n=p
+                n=_index(bits[2],len(norm)) if has_normals and len(bits)>2 and bits[2] else p
                 corners.append((p,t,n))
             for i in range(1,len(corners)-1):
                 tri=(corners[0],corners[i],corners[i+1])
