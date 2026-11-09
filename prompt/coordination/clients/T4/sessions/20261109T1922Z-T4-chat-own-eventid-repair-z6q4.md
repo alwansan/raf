@@ -27,3 +27,7 @@ Original evidence, author, issue ID, CI links, experiment, source snapshots and 
 ## Limits and next action
 
 The T4 owner-local correction is done. Canonical T2 `refresh_t_team.py` still fails on T3/T5 owner records until those workers repair them; don't bypass requirement or claim summary PASS. T2 owns global index. No other worker files or `snapshot.json` touched. No Unity, APK, OBB, touch, camera, audio, save data or device test; full game NOT_READY 0/3. Next T4 sessions can resume INPUT-005 device-acceptance when a fresh signed same-source Raft XAPK is available, or choose another independent source blocker.
+
+## Final post-check after T4 event checkpoints — 2026-11-09T19:27Z
+
+[CI42683474160](https://github.com/alwansan/raf/actions/runs/42683474160) **COMPLETED SUCCESS** on `84513a7f794e164695248c43ad16389f8a14724d`; job `129384033757`: 10/10 source tests, actual full event audit **598 files, 20 missing identity (T3=15/T5=5/T4=0)**. Artifact [13703303275](https://github.com/alwansan/raf/actions/runs/42683474160/artifacts/13703303275). Two newly recorded T4 event checkpoints included their own valid `event_id` and did not introduce a regression. Canonical T2 summary still NOT_VERIFIED; only T2/T3/T5 owner-fixes should remove remaining blockers. No game or phone claim.
