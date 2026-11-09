@@ -1,0 +1,69 @@
+name: T1 WATER-001 shared Mini 512-thread FFT-like GPU source gate (NO APK)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1FftButterflyProbe.java'
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java'
+      - 'apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java'
+      - 'apk-for-testing/unified/app/build.gradle'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java'
+      - 'apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ArabicLabStrings.java'
+      - 'apk-for-testing/unified/pack/team-testpack.json'
+      - 'scripts/validate_unified_testpack.py'
+      - 'tests/test_unified_testpack.py'
+      - 'tests/test_t1_mini_fft_butterfly_source.py'
+      - '.github/workflows/raft-t1-mini-butterfly-source.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-mini-local512-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  t1-mini-compile-and-boundaries:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            apk-for-testing
+            scripts
+            tests
+      - name: Safe manifest, prior 29 cases and 10 new T1-05 source regressions
+        run: |
+          set -euo pipefail
+          python3 scripts/validate_unified_testpack.py apk-for-testing/unified/pack/team-testpack.json
+          python3 -m unittest discover -s tests -p 'test_unified_testpack.py' -v
+          python3 -m unittest discover -s tests -p 'test_t1_mini_fft_butterfly_source.py' -v
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Compile actual unified Android Java Activities and T1 GLES driver, no APK
+        run: |
+          set -euo pipefail
+          gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha="$GITHUB_SHA"
+      - name: Evidence scope
+        run: |
+          echo "COMPILED_T1_MINI_GLES_DRIVER=true"
+          echo "FFT_SAMPLE_COUNT=512"
+          echo "FFT_LOCAL_GROUP_INVOCATIONS=512"
+          echo "CPU_FLOAT_COMPARISON_IN_SOURCE=true"
+          echo "ORIGINAL_RAFT_SHADER_EXECUTED=false"
+          echo "ANDROID_DEVICE_TESTED=false"
+          echo "APK_BUILT=false"
+          echo "WATER_001_FIXED=false"
