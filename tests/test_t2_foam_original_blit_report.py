@@ -246,6 +246,8 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"requires_traced_destination"):validate(r)
         r=fixture()
         r["original_pass0_destination_declared_field_trace"] = True
+        r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
+        r["original_crosspass_onehop_declared_field_return_relation"] = "field_no_direct_match"
         with self.assertRaisesRegex(ValueError,"traced_destination"):validate(r)
 
     def test_unknown_both_passes_is_allowed_but_never_proved(self):
