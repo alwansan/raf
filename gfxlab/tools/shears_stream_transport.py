@@ -150,7 +150,7 @@ def fill_sparse_authenticated_streams(zip2:Path,source:Path,plan:dict):
                 blob=zip2/part["path"]
                 if not blob.is_file() or blob.is_symlink() or blob.stat().st_size!=part["size"]:
                     raise ValueError("selected original stream git chunk absent")
-                if subprocess.check_output(["git","-C",str(zip2),"hash-object",str(blob)],text=True).strip()!=part["git_blob_oid"]:
+                if subprocess.check_output(["git","-C",str(zip2),"hash-object",str(blob.resolve())],text=True).strip()!=part["git_blob_oid"]:
                     raise ValueError("original stream Git blob identity mismatch")
                 with blob.open("rb") as f:
                     for sp in stream["spans"]:
