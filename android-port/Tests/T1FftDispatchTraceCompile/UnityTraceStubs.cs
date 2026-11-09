@@ -73,7 +73,37 @@ internal static class T1TraceCompileSmoke
         Need(AndroidRuntimeLog.Entries.Count == 6);
         AndroidRuntimeLog.FailWrites = false;
 
-        // The remaining 12 calls reach the hard limit, then stop recording.
+        // Original error identity is preserved and the passive helper never
+        // logs the exception message, which could contain sensitive source text.
+        Exception actualError = new ArgumentException("DO_NOT_EXPORT_PRIVATE_DETAILS");
+        int errorSequence = T1FftDirectDispatchTrace.BeforeDispatch(shader, 6, 1, 256, 1, 8, 0);
+        bool caughtOriginal = false;
+        try
+        {
+            try { throw actualError; }
+            catch (Exception ex)
+            {
+                T1FftDirectDispatchTrace.DispatchThrew(errorSequence, ex);
+                throw;
+            }
+        }
+        catch (Exception caught)
+        {
+            caughtOriginal = Object.ReferenceEquals(caught, actualError);
+        }
+        Need(caughtOriginal);
+        Need(AndroidRuntimeLog.Entries.Count == 8);
+        Need(AndroidRuntimeLog.Entries[7].Contains("t1_original_fft_dispatch.threw"));
+        Need(AndroidRuntimeLog.Entries[7].Contains("managed_dispatch_threw=true"));
+        Need(AndroidRuntimeLog.Entries[7].Contains("exception_kind=argument"));
+        Need(AndroidRuntimeLog.Entries[7].Contains("gpu_result=unverified"));
+        Need(!AndroidRuntimeLog.Entries[7].Contains("DO_NOT_EXPORT_PRIVATE_DETAILS"));
+        AndroidRuntimeLog.FailWrites = true;
+        T1FftDirectDispatchTrace.DispatchThrew(errorSequence, actualError);
+        AndroidRuntimeLog.FailWrites = false;
+        Need(AndroidRuntimeLog.Entries.Count == 8);
+
+        // The remaining bounded calls reach the hard limit, then stop recording.
         for (int n = 0; n < 30; n++)
         {
             int sequence = T1FftDirectDispatchTrace.BeforeDispatch(

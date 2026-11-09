@@ -106,14 +106,26 @@ def rewrite(original, adapted, base):
             + indent + "int " + token + " = " + MARKER + ".BeforeDispatch("
             + params + ");\n"
             + indent + "#endif\n"
+            + indent + "try\n"
+            + indent + "{\n"
+            + indent + "#endif\n"
             + original_line + "\n"
             + indent + "#if UNITY_ANDROID && !UNITY_EDITOR\n"
-            + indent + MARKER + ".AfterDispatch(" + token + ");\n"
+            + indent + "    " + MARKER + ".AfterDispatch(" + token + ");\n"
+            + indent + "}\n"
+            + indent + "catch (System.Exception __raftT1FftDispatchException" + str(i) + ")\n"
+            + indent + "{\n"
+            + indent + "    " + MARKER + ".DispatchThrew(" + token
+            + ", __raftT1FftDispatchException" + str(i) + ");\n"
+            + indent + "    throw;\n"
+            + indent + "}\n"
             + indent + "#endif"
         )
         output = output[:match.start()] + replacement + output[match.end():]
     if (output.count(MARKER + ".BeforeDispatch(") != 2
             or output.count(MARKER + ".AfterDispatch(") != 2
+            or output.count(MARKER + ".DispatchThrew(") != 2
+            or output.count("catch (System.Exception __raftT1FftDispatchException") != 2
             or len(DIRECT.findall(output)) != 2):
         raise ValueError("Incomplete original dispatch trace hook placement")
     return output

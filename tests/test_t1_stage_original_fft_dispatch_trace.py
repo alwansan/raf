@@ -122,6 +122,52 @@ class OriginalFftAndroidHookTests(unittest.TestCase):
                  patch.object(hooks, "BASE_SHA256", sha(BASE)):
                 hooks.rewrite(ORIGINAL, ORIGINAL, BASE + " changed")
 
+    def test_generated_android_only_try_catch_rethrows_without_dispatch_substitution(self):
+        source = run_synthetic()
+        self.assertEqual(source.count("DispatchThrew("), 2)
+        self.assertEqual(source.count("catch (System.Exception __raftT1FftDispatchException"), 2)
+        self.assertEqual(source.count("    throw;"), 2)
+        self.assertEqual(source.count("try\n"), 2)
+        self.assertEqual(source.count("shader.Dispatch("), 2)
+        for passnum in (0, 1):
+            key = "__raftT1FftBeforeDispatch" + str(passnum)
+            exception = "__raftT1FftDispatchException" + str(passnum)
+            self.assertIn("AfterDispatch(" + key + ");", source)
+            self.assertIn("DispatchThrew(" + key + ", " + exception + ");", source)
+            self.assertIn("catch (System.Exception " + exception + ")", source)
+
+    def test_editor_preprocessor_removes_all_android_wrapping(self):
+        # All wrapper statements are Android-only. The original statements
+        # persist unconditionally with unchanged argument expressions.
+        source = run_synthetic()
+        parts = source.splitlines()
+        without_android = []
+        active = False
+        for line in parts:
+            if line.strip() == "#if UNITY_ANDROID && !UNITY_EDITOR":
+                self.assertFalse(active)
+                active = True
+                continue
+            if line.strip() == "#endif" and active:
+                active = False
+                continue
+            if not active:
+                without_android.append(line)
+        self.assertFalse(active)
+        expected = [line.strip() for line in ORIGINAL.splitlines() if line.strip()]
+        actual = [line.strip() for line in without_android if line.strip()]
+        self.assertEqual(actual, expected)
+
+    def test_synchronous_exception_log_is_safe_and_never_swallows(self):
+        from pathlib import Path
+        body = Path("android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs").read_text()
+        self.assertIn("public static void DispatchThrew(int sequence, Exception exception)", body)
+        self.assertIn("managed_dispatch_threw=true", body)
+        self.assertIn('exception_kind=', body)
+        self.assertNotIn("exception.Message", body)
+        self.assertNotIn("exception.StackTrace", body)
+        self.assertNotIn("exception.ToString()", body)
+
     def test_android_helper_has_bounded_nonintrusive_log_contract(self):
         from pathlib import Path
         source = Path("android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs").read_text()

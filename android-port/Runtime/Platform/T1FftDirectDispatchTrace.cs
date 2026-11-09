@@ -62,6 +62,29 @@ namespace RaftAndroid.Diagnostics
             }
             catch (Exception) { }
         }
+
+        // Called only if the original ComputeShader.Dispatch synchronously throws.
+        // The caller still rethrows the EXACT original exception with a bare throw.
+        // Never log exception.Message, stack, ComputeShader bytes or Unity objects.
+        public static void DispatchThrew(int sequence, Exception exception)
+        {
+            if (sequence <= 0 || sequence > MaxCalls) return;
+            try
+            {
+                string kind = exception is ArgumentException ? "argument" :
+                    exception is InvalidOperationException ? "invalid_operation" :
+                    exception is NullReferenceException ? "null_reference" :
+                    "other";
+                AndroidRuntimeLog.Write("water", "t1_original_fft_dispatch.threw",
+                    "sequence=" + sequence +
+                    "; managed_dispatch_threw=true" +
+                    "; exception_kind=" + kind +
+                    "; original_runtime_mapping=unverified" +
+                    "; gpu_result=unverified; water_rendering=unverified", true);
+            }
+            catch (Exception) { }
+        }
+
     }
 }
 #endif
