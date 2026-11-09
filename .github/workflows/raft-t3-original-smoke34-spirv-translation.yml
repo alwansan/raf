@@ -1,0 +1,163 @@
+name: T3 RENDER-002 authentic smoke34 original DXBC 2-pair SPIRV CPU (NO APK)
+# T3 session 20261109T1943Z-T3-chat-smoke34-dxbc-translation-c4m8
+# Real original shader bytes and regenerated HLSL live only under RUNNER_TEMP.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-smoke34-spirv-translation.yml
+      - scripts/t3_original_smoke34_spirv_translation.py
+      - tests/test_t3_original_smoke34_spirv_translation.py
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-smoke34-two-pair-spv-sha15964-20261109
+  cancel-in-progress: false
+
+jobs:
+  smoke34-source-only-cpu-translation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout source-only project tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+
+      - name: Run source-free synthetic two-pair and original-pointer guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_smoke34_spirv_translation.py tests/test_t3_original_smoke34_spirv_translation.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_spirv_translation.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_dxbc_program_inventory.py' -v
+
+      - name: Checkout immutable ZIP2 original six scenes only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+
+      - name: Restrict checkout to SHA-known original Shader owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: SHA-authenticate four original Shader owners plus six scenes privately
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          zip2 = Path('zip2-source')
+          target = Path(os.environ['RUNNER_TEMP'])/'t3-smoke34-spv-private'
+          pins = {'Raft_Data/'+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED}
+          result = stage(zip2, target, pins)
+          assert len(result['owners']) == 4
+          assert result['verified_bytes'] == 269007288
+          assert result['lfs_used'] is False
+          for scene, pin in PIN.items():
+              source = zip2/'Raft'/'Raft_Data'/scene
+              verify_source(source, pin)
+              dest = target/'Raft_Data'/scene
+              if dest.exists() or dest.is_symlink():
+                  raise ValueError('source_destination_collision')
+              with source.open('rb') as src, dest.open('xb') as dst:
+                  while chunk := src.read(1024 * 1024):
+                      dst.write(chunk)
+              verify_source(dest, pin)
+          assert len(PIN) == 6
+          print('T3_SMOKE34_PRIVATE_SIX_SCENE_FOUR_OWNER_SHA_VERIFIED=true')
+          PY
+
+      - name: Install original CPU translation and reflection packages
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+
+      - name: Translate exactly both SHA-original keyword-matched VS/FS pairs privately
+        run: |
+          set -euo pipefail
+          timeout 600s python3 -m scripts.t3_original_smoke34_spirv_translation \
+            --original "$RUNNER_TEMP/t3-smoke34-spv-private" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-smoke34-spv-cpu-aggregate-safe.json"
+
+      - name: Check public report is category-only, not Android or Unity acceptance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          doc = json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-smoke34-spv-cpu-aggregate-safe.json').read_text())
+          assert doc['status'] == 'SHA_ORIGINAL_SMOKE34_TWO_KEYWORD_PAIRS_SPIRV_CPU_CLASSIFIED'
+          assert doc['original_sha_pinned_scenes'] == 6
+          assert doc['original_sha_pinned_shader_material_owners'] == 4
+          assert doc['original_keyword_matched_vertex_fragment_pairs'] == 2
+          assert doc['counts']['translation_attempts'] == 4
+          assert doc['original_shader_programs_hashes_ids_or_private_names_published'] is False
+          assert doc['native_Unity_Android_Adreno_pixels_verified'] is False
+          assert doc['authored_original_ShaderLab_restored'] is False
+          assert doc['unity_game_assets_modified'] is False
+          allowed = {'schema_version','status','original_source_shader_role',
+                     'original_sha_pinned_scenes','original_sha_pinned_shader_material_owners',
+                     'original_d3d11_table_records','original_keyword_matched_vertex_fragment_pairs',
+                     'source_original_pass_RGB_ColorMask',
+                     'source_original_pass_alpha_dependent_color_and_alpha',
+                     'source_original_pass_ZWrite_OFF','counts',
+                     'native_Unity_Android_Adreno_pixels_verified',
+                     'authored_original_ShaderLab_restored',
+                     'original_smoke_identity_equals_phone_square_verified',
+                     'original_shader_programs_hashes_ids_or_private_names_published',
+                     'unity_game_assets_modified'}
+          assert set(doc) == allowed
+          print('T3_SMOKE34_CPU_SPIRV_CLASSIFICATION_SAFE=true')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as summary:
+              summary.write('## T3 original smoke34 two-pair CPU Vulkan probe\\n\\n')
+              summary.write('Original source SHA verified; exact two keyword pairs scanned. ')
+              summary.write('Shader CPU translation classified, NOT Unity ShaderLab or Android pixels.\\n')
+          PY
+
+      - name: Upload only safe aggregate categories, no compiled shader
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-smoke34-two-pair-spv-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-smoke34-spv-cpu-aggregate-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
