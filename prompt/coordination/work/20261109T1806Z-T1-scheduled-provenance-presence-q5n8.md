@@ -2,7 +2,7 @@
 session_id: 20261109T1806Z-T1-scheduled-provenance-presence-q5n8
 origin: scheduled
 issue_id: WATER-001
-status: active
+status: completed_source_only
 base_sha: 87ad14f48e6b11ec18232caa577c58e62125dca3
 intended_files: scripts/t1_fft_dispatch_pair_audit.py; tests/test_t1_fft_dispatch_pair_audit.py (if present)
 experiment_key: fft-pair-provenance-presence-v1-source-87ad14f
@@ -11,3 +11,6 @@ hypothesis: mixed records with missing session_id/build_sha can be accepted as p
 taken_over_from: T1 20261109T1705Z-T1-scheduled-session-boundary-p8n4
 owner_feedback: docs/DEVICE_FEEDBACK_42058825739_AR.md; newer 8-Nov CL session remains separate.
 T4 owns physical mouse; T5 owns Resolution and packaging. No overlap with those files.
+
+result: commit f85d715fd638876a23488c7bae1d5a0523f9f155 + tests deba2d29eaa56c546508aa3b56a8a58ce24e385a
+verification: static source review; Python tests NOT executed, no Unity/device/CI. next: run python -m unittest tests.test_t1_fft_dispatch_pair_audit and inspect authentic single-build trace.
