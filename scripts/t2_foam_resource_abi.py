@@ -87,7 +87,7 @@ def combine(profiles, compiled):
             raise ValueError("Original descriptor census inconsistent")
         rows.append({
             "pass": pi, "stage_code": stage,
-            "original_numeric_table_rows": original["table_rows"],
+            "original_numeric_table_rows": dict(original["table_rows"]),
             "original_numeric_descriptor_sha256": original["numeric_descriptor_sha256"],
             "original_descriptor_rows": original["descriptor_rows"],
             "translated_non_cb_resource_count": len(translated),
