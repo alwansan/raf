@@ -1,0 +1,75 @@
+name: GFX-MULTI-004 six original Shader48 pass topology (no APK)
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-original-shader-topology.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi-original-shader-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  typed-original-shader-pass-counts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Static controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Read genuine six-model typed Shader48 original pass topology
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_original_shader_audit \
+            --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfxlab-multi004-private" \
+            --safe-report "$RUNNER_TEMP/gfxlab-multi004-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gfxlab-multi004-safe.json').read_text())
+          assert d["source_model_count"]==6 and d["source_material_count"]==7
+          assert d["all_source_shader48_types_verified"]
+          assert not d["native_Unity_shader_programs_restored"]
+          assert not d["Android_device_exact_shader_pixels_verified"]
+          assert all(sum(row["passes"] for row in m["original_shaders"])>=1 for m in d["models"])
+          print("GFX_MULTI004_SOURCE_SHADER_PASS_MAP_PASS=true")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gfxlab-multi004-original-shader-counts-${{ github.run_id }}
+          path: ${{ runner.temp }}/gfxlab-multi004-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Remove original shader identities and source bytes
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi004-private"
+          echo GFX_MULTI004_ORIGINAL_SHADER_BYTES_PURGED=true
