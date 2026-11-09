@@ -175,7 +175,7 @@ def export_private_pack(source:Path,out:Path,plan:dict):
                 "original_shader_equivalence":False,"vertex_count":v,"face_count":f,
                 "materials":[]}
         for mi,material in enumerate(entry["materials"]):
-            record={"tint":material["tint"],"original_shader_restored":False,"roles":{}}
+            record={"tint":material["tint"],"original_shader_restored":False,"textures":[]}
             for role,link in material["textures"].items():
                 target=objmaps[link["owner"]].get(link["pid"])
                 if target is None or target.type.name!="Texture2D":
@@ -188,8 +188,8 @@ def export_private_pack(source:Path,out:Path,plan:dict):
                     raise ValueError("original streamed texture dimensions changed")
                 name=f"S{mi:02d}_{role}.png"
                 im.convert("RGBA").save(dest/name,format="PNG")
-                record["roles"][role]={"file":name,"scale":link["uv_scale"],
-                    "offset":link["uv_offset"]}
+                record["textures"].append({"role":role,"file":name,
+                    "scale":link["uv_scale"],"offset":link["uv_offset"]})
             public["materials"].append(record)
         (dest/"config.json").write_text(json.dumps(public,sort_keys=True))
         safe.append({"id":entry["id"],"category":entry["category"],"vertices":v,
