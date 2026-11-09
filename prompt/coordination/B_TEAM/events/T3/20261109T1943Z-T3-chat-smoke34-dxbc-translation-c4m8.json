@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1943Z-T3-chat-smoke34-dxbc-translation-c4m8",
+  "issue_id": "RENDER-002",
+  "event_type": "authentic_original_smoke34_cpu_translation_proof",
+  "status": "SOURCE_TRANSLATION_CLASSIFIED__DEVICE_NOT_PROVEN",
+  "timestamp_utc": "2026-11-09T19:56:00Z",
+  "result_ref": "prompt/coordination/experiments/T3/20261109T1943Z-T3-chat-smoke34-dxbc-translation-c4m8.json",
+  "evidence_run_ids": [
+    42687117806,
+    42687834153
+  ],
+  "evidence_artifacts": [
+    13704513572,
+    13705233370
+  ],
+  "source_truth": "two original exact keyword matched VS/FS pairs, four original DXBC stages valid Vulkan 1.1 SPIR-V and roundtrip",
+  "differential_truth": "IO type multisets unchanged all four stages; location-only remap candidate 2 input and 2 output stages; semantic mapping not proven",
+  "phone_visual_verified": false,
+  "unity_shaderlab_integrated": false,
+  "issue_remains_open": true
+}

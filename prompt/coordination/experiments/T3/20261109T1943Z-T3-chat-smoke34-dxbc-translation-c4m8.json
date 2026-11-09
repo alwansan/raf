@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1943Z-T3-chat-smoke34-dxbc-translation-c4m8",
+  "issue_id": "RENDER-002",
+  "experiment_key": "t3-authentic-smoke34-two-keyword-paired-dxbc-vs-fs-private-vulkan11-spirv-roundtrip-sha15964-v1",
+  "status": "source_SHA_original_CPU_translation_and_location_only_candidate_drift_classified",
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_scenes_verified": 6,
+    "original_shader_material_owners_verified": 4,
+    "smoke_renderers": 17,
+    "material_slots": 34,
+    "original_d3d11_table_entries": 8,
+    "matched_keyword_pairs": 2
+  },
+  "runs": [
+    {
+      "id": 42687117806,
+      "commit": "40ed30bd352eb37661e3f93f0891b59ee8bf38dd",
+      "conclusion": "success",
+      "artifact_id": 13704513572,
+      "synthetic_controls_passed": 10
+    },
+    {
+      "id": 42687834153,
+      "commit": "7bc1b5430ca29eb5578bc8fb284e17b6107c3d4f",
+      "conclusion": "success",
+      "artifact_id": 13705233370,
+      "synthetic_controls_passed": 12,
+      "source_inventory_controls_passed": 7
+    }
+  ],
+  "original_stages_spirv_valid": 4,
+  "roundtrip_stages_spirv_valid": 4,
+  "hlsl_recovered": 4,
+  "source_vs_fs_pairs_compatible": 2,
+  "roundtrip_vs_fs_pairs_compatible": 2,
+  "source_roundtrip_resource_shapes_equal": 4,
+  "io_identical_stages": 0,
+  "input_drift": {
+    "unchanged_stages": 2,
+    "remap_candidate_stages": 2,
+    "location_additions_total": 2,
+    "location_removals_total": 2,
+    "same_location_type_changes": 0,
+    "type_multiset_equal_stages": 4
+  },
+  "output_drift": {
+    "unchanged_stages": 2,
+    "remap_candidate_stages": 2,
+    "location_additions_total": 2,
+    "location_removals_total": 2,
+    "same_location_type_changes": 0,
+    "type_multiset_equal_stages": 4
+  },
+  "limits": {
+    "original_shader_code_published": false,
+    "actual_stage_semantic_remap_proven": false,
+    "ShaderLab_restored": false,
+    "native_phone_graphics_verified": false,
+    "game_assets_modified": false
+  },
+  "report": "docs/T3_SMOKE34_AUTHENTIC_SPIRV_TRANSLATION_2026-11-09_AR.md",
+  "next": "Build private source-to-roundtrip stage-location AND semantic uniqueness gate before ShaderLab/Unity; owner phone only for actual smoke visual."
+}
