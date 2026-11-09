@@ -2,7 +2,7 @@
   "session_id": "20261109T0114Z-T1-scheduled-runtime-identity-h7q4",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_unverified_tests",
   "updated_at": "2026-11-09T01:14:38Z",
   "intended_files": [
     "scripts/t1_fft_runtime_evidence_gate.py",
@@ -18,5 +18,11 @@
     "docs/DEVICE_FEEDBACK_42058825739_AR.md",
     "apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md"
   ],
-  "notes": "Isolated validation-only change; no Unity build, device run, original assets, T4 mouse or T5 resolution touched."
+  "notes": "Isolated validation-only change; no Unity build, device run, original assets, T4 mouse or T5 resolution touched.",
+  "result_commits": [
+    "a989615ca843039a284851b2352bec3ff24a22db",
+    "8269cd96c2d1bc3c89d09cda5812093029264639",
+    "703048c655204c25028793e4588bda8070d6014a"
+  ],
+  "next_step": "Run seven regression tests and collect same-build real Unity FindKernel/Dispatch binding evidence; WATER-001 OPEN."
 }
