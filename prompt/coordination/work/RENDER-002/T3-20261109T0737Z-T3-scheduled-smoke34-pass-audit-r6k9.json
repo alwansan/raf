@@ -1,0 +1,20 @@
+{
+  "session_id": "20261109T0737Z-T3-scheduled-smoke34-pass-audit-r6k9",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "bda76353b4401d5707b6a21596b023e91a87c1d8",
+  "hypothesis": "Smoke-linked original 34-use Shader48 is distinct from postvendor dummy 108-use shader; its parsed render state must be independently verified before material repair",
+  "experiment_key": "ZIP2@15964ea8:original-six-scenes:smoke-linked-34-use-Shader48:parsedform-pass-blend-alpha-v1",
+  "resource_key": null,
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/T3-20261109T0737Z-T3-scheduled-smoke34-pass-audit-r6k9.json",
+    "prompt/coordination/clients/T3/sessions/20261109T0737Z-T3-scheduled-smoke34-pass-audit-r6k9.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42549246777",
+    "https://github.com/alwansan/raf/actions/runs/42549491342"
+  ],
+  "updated_at": "2026-11-09T07:37:35Z",
+  "next": "Inspect existing pinned Shader48 private exporter workflow and establish safe aggregate Pass/Blend/Alpha comparison; do not patch shader based on 108-use dummy"
+}
