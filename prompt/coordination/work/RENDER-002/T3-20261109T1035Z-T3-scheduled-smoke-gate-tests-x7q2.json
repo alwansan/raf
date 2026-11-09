@@ -1,0 +1,15 @@
+{
+  "session_id": "20261109T1035Z-T3-scheduled-smoke-gate-tests-x7q2",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "68b05db76ecd2941094bd09696e51cd2e4e7006b",
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/T3-20261109T1035Z-T3-scheduled-smoke-gate-tests-x7q2.json",
+    "prompt/coordination/clients/T3/sessions/20261109T1035Z-T3-scheduled-smoke-gate-tests-x7q2.md"
+  ],
+  "experiment_key": "T3-smoke34-gate-v1-eight-tests-source-68b05db",
+  "resource_key": null,
+  "hypothesis": "Previously unexecuted smoke gate tests should pass; test actual source and report constraints without claiming original shader state",
+  "updated_at": "2026-11-09T10:35:00Z"
+}
