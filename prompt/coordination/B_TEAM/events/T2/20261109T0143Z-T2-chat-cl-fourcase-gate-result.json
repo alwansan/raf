@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "event_id": "20261109T0143Z-T2-chat-cl-fourcase-gate-result",
+  "worker": "T2",
+  "session_id": "20261109T0141Z-T2-chat-cl-fourcase-ci-r6p2",
+  "origin": "chat",
+  "resource_key": "WATER-001",
+  "experiment_key": "T2-CL-f401b7ffe3b6-SHARED-230157-CASE01-04-REAL-JSONL-GATE-v1",
+  "status": "SOURCE_FREE_CL_DEVICE_EXPORT_GATE_CI_VERIFIED_NOT_WATER",
+  "base_sha": "6fe95344909bd919dc8bc08cc245bda640e1155e",
+  "commit": "edf1cd6a0ba1cdc6a791f8c43763942a0ad1c428",
+  "test": "15/15 Python unittest, 4/4 immutable CL original JSONL Git blob matches, 4/4 case synthetic_gles_log_consistent true; original_raft_water_verified false. CI 42547038822 success.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42547038822",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/clients/T2/sessions/20261109T0141Z-T2-chat-cl-fourcase-ci-r6p2.md"
+  ],
+  "limitations": "Source-free consistency and phone-export Git object integrity only. Not original Raft water shader/pixel/GPU-independent truth, Unity, crosspass instance equality or CB0. No new Mini APK / XAPK.",
+  "next_step": "Original Foam pass1 returned Texture CFG join and crosspass instance/CB0 proof, then ShaderLab/Unity pixels. Maintain T2 shared Mini NO_BUILD.",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-09T01:43:30Z",
+  "summary": "Verified owner CL/test 4 T2 synthetic GLES logs at pinned source with 15 regression tests and four SHA authenticated runs in CI42547038822. Evidence integrity gap closed, WATER-001 OPEN."
+}
