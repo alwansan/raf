@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T1915Z-T1-chat-mini-butterfly-a9f3",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-shared-mini-ssbo-butterfly-two-pass-local512-source-only-android15-adreno730-v1",
+  "resource_key": "shared-mini-testpack:released_to_T5",
+  "hypothesis": "Real Adreno730 GLES3.1 512-local two-pass complex SSBO arithmetic and barrier may succeed/fail independently of Unity FFT shader binding; compare all 1024 GPU float components against separate CPU reference.",
+  "inputs": {
+    "original_raft_shader_included": false,
+    "original_game_assets_included": false,
+    "synthetic_samples": 512,
+    "complex_float_components": 1024,
+    "local_group_x": 512,
+    "dispatches": 2,
+    "shader_sources": "fixed GLSL310 embedded in app",
+    "fft_like_twiddle": 0.70710678,
+    "tolerance": 0.00003,
+    "android_device_status": "NOT_TESTED"
+  },
+  "files": [
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1FftButterflyProbe.java",
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/T1ComputeProbe.java",
+    "apk-for-testing/host/app/src/main/java/com/alwansan/raftlab/MainActivity.java",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ArabicLabStrings.java",
+    "apk-for-testing/unified/app/build.gradle",
+    "apk-for-testing/unified/pack/team-testpack.json",
+    "scripts/validate_unified_testpack.py",
+    "tests/test_unified_testpack.py",
+    "tests/test_t1_mini_fft_butterfly_source.py",
+    "tests/test_t1_compute_context_gate.py",
+    "tests/test_t5_arabic_portrait.py",
+    "tests/java/com/alwansan/raftlab/ArabicLabStringsTest.java",
+    ".github/workflows/raft-t1-mini-butterfly-source.yml"
+  ],
+  "commits": {
+    "new_probe": "2f627cb415422a5f0fba8e5e5232db4f4c83d78c",
+    "probe_route": "c11097e6f8754f46163740a529e151ec04a31b2d",
+    "embedded_pack": "b6422154140b8ed53635b4bbd8bc29967946476e",
+    "isolated_workflow": "63c0ccf084ec040bfd751d408250db9f4a5f2ece",
+    "vote": "f3ded4d7934a9741734fedb7841491e85038cedb",
+    "t1_regression_correction": "507f8baa86cd6e09e545bafee3cf2ff6acfaa743",
+    "arabic_jvm_correction": "0fdae55b8fe6078f27ce0c93cc930b46247acd88"
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42682971944",
+    "https://github.com/alwansan/raf/actions/runs/42683061084",
+    "https://github.com/alwansan/raf/actions/runs/42683658745",
+    "https://github.com/alwansan/raf/actions/runs/42682527399",
+    "https://github.com/alwansan/raf/actions/runs/42682659801",
+    "https://github.com/alwansan/raf/actions/runs/42683569390"
+  ],
+  "verification": {
+    "new_mini_source_ci": 42682971944,
+    "python_existing_pack_tests_passed": 7,
+    "new_source_tests_passed": 10,
+    "android_compile_success": true,
+    "legacy_t1_context_ci": 42683061084,
+    "legacy_t1_context_success": true,
+    "t5_arabic_ci": 42683658745,
+    "t5_arabic_success": true,
+    "t5_arabic_jvm_coverage": 30,
+    "actual_apk_assembled": false,
+    "phone_gpu_executed": false,
+    "original_unity_kernel_tested": false
+  },
+  "negative_controls": [
+    "Imported glsl field rejected by pack validator",
+    "T1-06 executable route rejected",
+    "Missing SSBO barrier rejected",
+    "Unexpected local group size rejected",
+    "Missing all-float check rejected",
+    "Fake original Raft compute success marker rejected",
+    "T1 worker source fingerprint must include new Java class",
+    "Intermediate CI failed on stale 4-case / 29-case assertions, corrected not ignored"
+  ],
+  "status": "integrated_source_ci_verified_waiting_T5_one_mini_build",
+  "limitations": "No actual on-device T1-05 results yet; this is synthetic GLES, not real Raft original shader or source-authenticated Unity FindKernel/Dispatch/pixel comparison; no APK direct link",
+  "next_step": "T5 owns one shared Mini APK build from actual request SHA and signing verification; once published owner installs, runs T1-05, uploads CL/test; T1 audits genuine case_result. Full XAPK vote separate; do not request just for this test."
+}
