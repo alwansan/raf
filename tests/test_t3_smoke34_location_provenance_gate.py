@@ -46,6 +46,21 @@ class ProvenanceGateTests(unittest.TestCase):
     def test_reject_malformed(self):
         self.assertEqual(validate(self.o, self.r, [["oops"]])["status"], "INCONCLUSIVE")
 
+    def test_reject_reflected_location_above_spirv_uint32(self):
+        bad = [(0x100000000, 0), (3, 1)]
+        self.assertEqual(validate(self.o, bad, self.m)["reason"], "invalid_input")
+
+    def test_reject_mapping_location_above_spirv_uint32(self):
+        bad = [("opaque0", 0, 0x100000000, 0), self.m[1]]
+        self.assertEqual(validate(self.o, self.r, bad)["reason"], "invalid_input")
+
+    def test_accept_max_spirv_location_as_structural_only(self):
+        maximum = 0xffffffff
+        original = [("opaque0", 0)]
+        reflected = [(maximum, 0)]
+        mapping = [("opaque0", 0, maximum, 0)]
+        self.assertEqual(validate(original, reflected, mapping)["status"], "STRUCTURAL_INJECTION_ONLY")
+
     def test_no_private_ids_in_output(self):
         self.assertNotIn("opaque0", str(validate(self.o, self.r, self.m)))
 
