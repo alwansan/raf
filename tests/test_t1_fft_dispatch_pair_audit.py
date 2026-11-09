@@ -46,6 +46,23 @@ class PairAuditTests(unittest.TestCase):
         self.assertIn("duplicate_event:6", result["errors"])
         self.assertEqual(result["missing_return_sequences"], [])
 
+    def test_failed_return_not_counted_as_successful_pair(self):
+        result = audit([row(BEFORE, 1), row(AFTER, 1, ";result=exception")])
+        self.assertEqual(result["returned_count"], 1)
+        self.assertEqual(result["paired_count"], 0)
+        self.assertEqual(result["failed_return_sequences"], [1])
+        self.assertEqual(result["missing_return_sequences"], [1])
+        self.assertIn("dispatch_result_failure:1", result["errors"])
+
+    def test_success_and_failure_outcomes_are_distinct(self):
+        result = audit([row(BEFORE, 1), row(AFTER, 1, ";result=returned"),
+                        row(BEFORE, 2), row(AFTER, 2, ";result=error")])
+        self.assertEqual(result["returned_count"], 2)
+        self.assertEqual(result["paired_count"], 1)
+        self.assertEqual(result["failed_return_sequences"], [2])
+        self.assertEqual(result["missing_return_sequences"], [2])
+        self.assertFalse(result["gpu_execution_proven"])
+
     def test_other_events_ignored(self):
         self.assertEqual(audit([{"event": "unrelated"}])["before_count"], 0)
 
