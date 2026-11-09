@@ -1,0 +1,17 @@
+{
+  "session_id": "20261109T1225Z-T3-scheduled-smoke-pass-v2-n4r7",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "cb7ade4e2aba6211e20e6a7dc98656867a5f48bf",
+  "hypothesis": "Existing v1 four booleans permit false render-state equivalence; a separate v2 per-pass strict contract can reject blend factor, order and alpha mismatches.",
+  "intended_files": [
+    "scripts/t3_smoke_pass_state_gate_v2.py",
+    "tests/test_t3_smoke_pass_state_gate_v2.py",
+    "prompt/coordination/clients/T3/sessions/20261109T1225Z-T3-scheduled-smoke-pass-v2-n4r7.md"
+  ],
+  "experiment_key": "smoke34-pass-v2-contract-synthetic-20261109",
+  "resource_key": null,
+  "updated_at": "2026-11-09T12:25:44Z",
+  "taken_over_from": "prompt/coordination/clients/T3/sessions/20261109T1131Z-T3-scheduled-smoke-evidence-gap-p9v4.md"
+}
