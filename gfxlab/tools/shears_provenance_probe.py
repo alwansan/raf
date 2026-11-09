@@ -41,17 +41,20 @@ def resolve_pptr(p, owning, externals):
     return ("external_staged", (owner,pid))
 
 def texture_slot_rows(texenv):
-    # Original 2019-2021 Unity versions use an array of key/value pairs; exporters may
-    # serialize a mapping. This is original source, not exported YAML.
-    if isinstance(texenv,dict):
-        return list(texenv.values())
+    # The SHA-original Unity Material typetree uses m_First/m_Second pairs,
+    # verified independently in the project's B05 original source parser.
+    # Do NOT normalize a malformed raw source to apparent parity.
     if not isinstance(texenv,list):
-        raise ValueError("unsupported original texture container")
+        raise ValueError("original material texture slots must be a list")
     out=[]
     for entry in texenv:
-        if not isinstance(entry,dict) or "second" not in entry:
+        if (not isinstance(entry,dict) or set(entry)!={"m_First","m_Second"}
+            or not isinstance(entry["m_First"],str) or not entry["m_First"]):
             raise ValueError("bad original texture entry")
-        out.append(entry["second"])
+        val=entry["m_Second"]
+        if not isinstance(val,dict) or "m_Texture" not in val:
+            raise ValueError("bad original texture value")
+        out.append(val)
     return out
 
 def source_asset_graph(stage:Path, report_reference:dict):
