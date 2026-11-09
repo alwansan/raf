@@ -80,10 +80,20 @@ def audit(path):
     # Center excludes screenshot borders; quadrants expose flat/black capture.
     regions = {"full":Counter(), "center":Counter(), "top_left":Counter(),
                "top_right":Counter(), "bottom_left":Counter(), "bottom_right":Counter()}
+    visible = Counter()
+    transparent_pixels = 0
+    translucent_pixels = 0
     for y,row in enumerate(rows):
         for x in range(width):
             idx=x*channels
             rgb=tuple(row[idx:idx+3])
+            if channels == 4:
+                alpha = row[idx+3]
+                if alpha == 0: transparent_pixels += 1
+                elif alpha < 255: translucent_pixels += 1
+                else: visible[rgb] += 1
+            else:
+                visible[rgb] += 1
             regions["full"][rgb]+=1
             if width//4 <= x < 3*width//4 and height//4 <= y < 3*height//4:
                 regions["center"][rgb]+=1
@@ -93,7 +103,11 @@ def audit(path):
         return {"pixels":n,"unique_rgb":len(c),
                 "black_fraction":round(sum(v for k,v in c.items() if max(k)<=8)/n,6) if n else None,
                 "dominant_fraction":round(max(c.values())/n,6) if n else None}
-    return {"width":width,"height":height,"regions":{k:summary(v) for k,v in regions.items()},
+    return {"width":width,"height":height,
+            "alpha_zero_fraction":round(transparent_pixels/(width*height),6),
+            "alpha_partial_fraction":round(translucent_pixels/(width*height),6),
+            "opaque_unique_rgb":len(visible),
+            "regions":{k:summary(v) for k,v in regions.items()},
             "evidence":"pixel_distribution_only_not_game_visual_acceptance"}
 
 def main():
