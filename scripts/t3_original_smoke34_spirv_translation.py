@@ -28,6 +28,12 @@ from scripts.t3_original_particle108_spirv_translation import (
     _validate_reflection, IO_KEYS, IO_BOOLEAN,
 )
 from scripts.t3_stage_io_drift import classify_stage_io
+from scripts.t3_spirv_interface_name_drift import (
+    FIELDS as REFLECTED_NAME_FIELDS,
+    BOOLEAN_FIELDS as REFLECTED_NAME_BOOLEAN,
+    read_reflection as private_named_reflection,
+    classify_reflected_names,
+)
 
 STATUS = "SHA_ORIGINAL_SMOKE34_TWO_KEYWORD_PAIRS_SPIRV_CPU_CLASSIFIED"
 TOOLS = ("vkd3d-compiler", "spirv-val", "spirv-cross", "glslangValidator")
@@ -47,7 +53,13 @@ IO_COUNT_KEYS = tuple(
     "io_drift_" + side + "_" + key
     for side in ("inputs", "outputs") for key in IO_KEYS
 )
+NAME_COUNT_KEYS = tuple(
+    "name_anchor_" + side + "_" + field
+    for side in ("inputs", "outputs") for field in REFLECTED_NAME_FIELDS
+)
 SAFE_FALSE = {
+    "source_DXBC_semantic_register_mapping_verified": False,
+    "compiler_generated_names_are_original_semantics_verified": False,
     "native_Unity_Android_Adreno_pixels_verified": False,
     "authored_original_ShaderLab_restored": False,
     "original_smoke_identity_equals_phone_square_verified": False,
@@ -111,7 +123,9 @@ def exact_two_pairs(parsed, table, *, linker=linked_program):
 
 def evaluate(pairs, temporary, *, translator=translate,
              reflector=reflection, checker=interfaces_match,
-             io_classifier=classify_stage_io):
+             io_classifier=classify_stage_io,
+             named_reflector=private_named_reflection,
+             name_classifier=classify_reflected_names):
     """Only non-private aggregate counters, never per-program translator output."""
     if (type(pairs) is not list or len(pairs) != PAIRS or
         not isinstance(temporary, Path) or not temporary.is_dir() or
@@ -172,6 +186,23 @@ def evaluate(pairs, temporary, *, translator=translate,
                     if type(amount) is not int or not 0 <= amount <= limit:
                         raise ValueError("smoke34_invalid_private_io_drift_category_value")
                     counts["io_drift_" + name] += amount
+                # Private reflected variable names are compiler hints, not DXBC
+                # register semantics. No names, GUIDs or per-stage IDs exit CI.
+                named_source = named_reflector(folder / "original.spv")
+                named_derived = named_reflector(folder / "roundtrip.spv")
+                named = name_classifier(named_source, named_derived, a, b)
+                allowed_names = {side + "_" + field
+                                 for side in ("inputs", "outputs")
+                                 for field in REFLECTED_NAME_FIELDS}
+                if type(named) is not dict or set(named) != allowed_names:
+                    raise ValueError("smoke34_untrusted_private_name_anchor_schema")
+                for key, value in named.items():
+                    field = key.split("_", 1)[1]
+                    limit = 1 if field in REFLECTED_NAME_BOOLEAN else 256
+                    if type(value) is not int or not 0 <= value <= limit:
+                        raise ValueError("smoke34_untrusted_private_name_anchor_count")
+                    counts["name_anchor_" + key] += value
+                counts["stages_name_anchor_classified"] += 1
             stages[stage] = {"flags": details, "reflection": reflected}
         vert, frag = stages[1], stages[0]
         for key, prefix in (("original", "original"), ("roundtrip", "roundtrip")):
@@ -199,7 +230,9 @@ def evaluate(pairs, temporary, *, translator=translate,
         "source_original_pass_RGB_ColorMask": True,
         "source_original_pass_alpha_dependent_color_and_alpha": True,
         "source_original_pass_ZWrite_OFF": True,
-        "counts": {key: int(counts[key]) for key in COUNT_KEYS + IO_COUNT_KEYS},
+        "counts": {key: int(counts[key]) for key in
+                   COUNT_KEYS + IO_COUNT_KEYS + NAME_COUNT_KEYS +
+                   ("stages_name_anchor_classified",)},
         **SAFE_FALSE,
     }
 

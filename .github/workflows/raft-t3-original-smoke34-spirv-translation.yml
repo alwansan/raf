@@ -134,6 +134,16 @@ jobs:
           assert doc['native_Unity_Android_Adreno_pixels_verified'] is False
           assert doc['authored_original_ShaderLab_restored'] is False
           assert doc['unity_game_assets_modified'] is False
+          assert doc['source_DXBC_semantic_register_mapping_verified'] is False
+          assert doc['compiler_generated_names_are_original_semantics_verified'] is False
+          assert doc['counts']['stages_name_anchor_classified'] == 4
+          assert set(doc['counts']) == set(__import__('scripts.t3_original_smoke34_spirv_translation',
+                                                     fromlist=['COUNT_KEYS']).COUNT_KEYS +
+                                         __import__('scripts.t3_original_smoke34_spirv_translation',
+                                                    fromlist=['IO_COUNT_KEYS']).IO_COUNT_KEYS +
+                                         __import__('scripts.t3_original_smoke34_spirv_translation',
+                                                    fromlist=['NAME_COUNT_KEYS']).NAME_COUNT_KEYS +
+                                         ('stages_name_anchor_classified',))
           allowed = {'schema_version','status','original_source_shader_role',
                      'original_sha_pinned_scenes','original_sha_pinned_shader_material_owners',
                      'original_d3d11_table_records','original_keyword_matched_vertex_fragment_pairs',
@@ -144,6 +154,8 @@ jobs:
                      'authored_original_ShaderLab_restored',
                      'original_smoke_identity_equals_phone_square_verified',
                      'original_shader_programs_hashes_ids_or_private_names_published',
+                     'source_DXBC_semantic_register_mapping_verified',
+                     'compiler_generated_names_are_original_semantics_verified',
                      'unity_game_assets_modified'}
           assert set(doc) == allowed
           print('T3_SMOKE34_CPU_SPIRV_CLASSIFICATION_SAFE=true')

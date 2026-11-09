@@ -61,6 +61,14 @@ def reflect(path):
     return {"inputs": [{"location": 0, "type": "vec4"}],
             "outputs": [], "resource_slots": {"textures": [[0, 1]]}}
 
+def named_reflect(path):
+    # Synthetic only; actual source uses spirv-cross --reflect privately.
+    record = reflect(path)
+    for side in ("inputs", "outputs"):
+        for row in record[side]:
+            row["name"] = "PRIVATE_STABLE_NAME_NEVER_UPLOAD"
+    return record
+
 
 class SyntheticPrivateSmoke34(unittest.TestCase):
     def pair(self):
@@ -72,7 +80,9 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
                                translator=kwargs.get("translator", translate),
                                reflector=kwargs.get("reflector", reflect),
                                checker=kwargs.get("checker", lambda _v, _f: True),
-                               io_classifier=kwargs.get("io_classifier", t3.classify_stage_io))
+                               io_classifier=kwargs.get("io_classifier", t3.classify_stage_io),
+                               named_reflector=kwargs.get("named_reflector", named_reflect),
+                               name_classifier=kwargs.get("name_classifier", t3.classify_reflected_names))
 
     def test_exact_two_original_keyword_pairs_not_array_position(self):
         pairs = self.pair()
@@ -132,6 +142,11 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
             self.assertNotIn(value, text)
         self.assertFalse(result["native_Unity_Android_Adreno_pixels_verified"])
         self.assertFalse(result["authored_original_ShaderLab_restored"])
+        self.assertFalse(result["source_DXBC_semantic_register_mapping_verified"])
+        self.assertNotIn("PRIVATE_STABLE_NAME_NEVER_UPLOAD", text)
+        self.assertEqual(counters["stages_name_anchor_classified"], 4)
+        self.assertEqual(counters["name_anchor_inputs_name_type_complete_preservation"], 4)
+        self.assertEqual(counters["name_anchor_outputs_name_type_complete_preservation"], 4)
 
     def test_failed_fragment_cpu_translation_is_not_vulkan_pair_success(self):
         def partial(code, stage, folder):
@@ -192,6 +207,76 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
         self.assertEqual(counters["io_drift_outputs_identical"], 4)
         self.assertEqual(counters["io_drift_inputs_location_only_remap_candidate"], 0)
         self.assertEqual(counters["io_drift_outputs_location_only_remap_candidate"], 0)
+
+    def test_private_name_anchor_relocation_only_candidate_not_DXBC_semantic(self):
+        def shifted(path):
+            data = reflect(path)
+            if path.name == "roundtrip.spv":
+                for side in ("inputs", "outputs"):
+                    for row in data[side]:
+                        row["location"] = 5
+            return data
+        def named_shifted(path):
+            data = shifted(path)
+            for side in ("inputs", "outputs"):
+                for row in data[side]:
+                    row["name"] = "SYNTHETIC_PRIVATE_COMPILER_NAME"
+            return data
+        result = self.evaluate(reflector=shifted, named_reflector=named_shifted)
+        counts = result["counts"]
+        self.assertEqual(counts["name_anchor_inputs_source_name_type_relocated"], 2)
+        self.assertEqual(counts["name_anchor_outputs_source_name_type_relocated"], 2)
+        self.assertEqual(counts["name_anchor_inputs_name_type_relocation_only_candidate"], 2)
+        self.assertEqual(counts["name_anchor_outputs_name_type_relocation_only_candidate"], 2)
+        self.assertFalse(result["source_DXBC_semantic_register_mapping_verified"])
+        self.assertNotIn("SYNTHETIC_PRIVATE_COMPILER_NAME", json.dumps(result))
+
+    def test_renamed_compiler_variable_is_not_a_trusted_anchor(self):
+        def renamed(path):
+            data = named_reflect(path)
+            if path.name == "roundtrip.spv":
+                for side in ("inputs", "outputs"):
+                    for row in data[side]:
+                        row["name"] = "DERIVED_COMPILER_NAME_CHANGED"
+            return data
+        result = self.evaluate(named_reflector=renamed)
+        counts = result["counts"]
+        self.assertEqual(counts["name_anchor_inputs_source_name_type_matches"], 0)
+        self.assertEqual(counts["name_anchor_outputs_source_name_type_matches"], 0)
+        self.assertEqual(counts["name_anchor_inputs_source_only_names"], 2)
+        self.assertEqual(counts["name_anchor_outputs_source_only_names"], 2)
+        self.assertNotIn("DERIVED_COMPILER_NAME_CHANGED", json.dumps(result))
+
+    def test_private_name_classifier_injection_and_bool_counter_rejected(self):
+        with self.assertRaisesRegex(ValueError, "private_name_anchor_schema"):
+            self.evaluate(name_classifier=lambda a,b,c,d: {"PRIVATE": "LEAK"})
+        def wrong_bool(a,b,c,d):
+            result = t3.classify_reflected_names(a,b,c,d)
+            result["inputs_name_type_complete_preservation"] = True
+            return result
+        with self.assertRaisesRegex(ValueError, "private_name_anchor_count"):
+            self.evaluate(name_classifier=wrong_bool)
+
+    def test_raw_and_safe_reflection_disagreement_fails_closed(self):
+        def mismatch(path):
+            data = named_reflect(path)
+            if path.name == "roundtrip.spv":
+                for side in ("inputs", "outputs"):
+                    for row in data[side]:
+                        row["location"] = 44
+            return data
+        with self.assertRaisesRegex(ValueError, "disagrees_with_safe_IO_baseline"):
+            self.evaluate(named_reflector=mismatch)
+
+    def test_unsafe_reflection_name_rejected_and_never_exposed(self):
+        def invalid_name(path):
+            data = named_reflect(path)
+            for side in ("inputs", "outputs"):
+                for row in data[side]:
+                    row["name"] = "PRIVATE\\nSECRET"
+            return data
+        with self.assertRaisesRegex(ValueError, "invalid_or_duplicate_private_spirv_reflection_name"):
+            self.evaluate(named_reflector=invalid_name)
 
     def test_untrusted_interface_checker_is_not_trusted(self):
         with self.assertRaisesRegex(ValueError, "invalid_private_stage_interface_check"):
