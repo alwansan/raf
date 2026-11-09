@@ -94,6 +94,10 @@ def verify(lines, expected_case):
     if expected_case == "CASE03":
         if len(re.findall(r"(?<![A-Za-z0-9_])0x8cd7(?![0-9A-Fa-f])", detail)) != 1:
             raise ValueError("invalid_or_duplicate_fbo_status")
+        # A valid status must not mask a second, contradictory GL status.
+        statuses = re.findall(r"(?<![A-Za-z0-9_])0[xX][0-9A-Fa-f]+(?![0-9A-Za-z_])", detail)
+        if statuses != ["0x8cd7"]:
+            raise ValueError("conflicting_fbo_status")
     if expected_case == "CASE02":
         # Marker presence alone can disguise contradictory FBO readbacks.
         # This validates only self-consistency of the exported text, not GPU pixels.
