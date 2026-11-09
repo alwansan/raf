@@ -9,7 +9,19 @@ class ProvenanceGateTests(unittest.TestCase):
         self.m = [("opaque0", 0, 3, 0), ("opaque0", 1, 3, 1)]
 
     def test_structural_only_not_ready(self):
-        self.assertEqual(validate(self.o, self.r, self.m)["status"], "STRUCTURAL_BIJECTION_ONLY")
+        self.assertEqual(validate(self.o, self.r, self.m)["status"], "STRUCTURAL_INJECTION_ONLY")
+
+    def test_declared_unused_spirv_lanes_are_not_false_missing(self):
+        extra = self.r + [(3, 2), (3, 3)]
+        result = validate(self.o, extra, self.m)
+        self.assertEqual(result["status"], "STRUCTURAL_INJECTION_ONLY")
+        self.assertEqual(result["unused_reflected_lanes"], 2)
+        self.assertEqual(result["reason"], "requires_authentic_provenance_and_unused_lane_audit")
+
+    def test_mapping_cannot_reference_undeclared_lane(self):
+        extra = self.r + [(4, 0)]
+        bad = [self.m[0], ("opaque0", 1, 9, 0)]
+        self.assertEqual(validate(self.o, extra, bad)["reason"], "location_mismatch_or_ambiguous")
 
     def test_missing_mapping(self):
         self.assertEqual(validate(self.o, self.r, [])["reason"], "missing_provenance")
