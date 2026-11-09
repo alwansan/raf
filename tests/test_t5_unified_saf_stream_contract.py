@@ -119,5 +119,29 @@ class UnifiedSafStreamContract(unittest.TestCase):
                         export.index('deleteExportMedia(newLog,"rollback-log")'))
 
 
+    def test_manual_screenshot_is_decoded_before_evidence_published(self):
+        attachment = self.activity.split("    void attachScreenshot(Uri picked)", 1)[1].split(
+            "    void hashFile(", 1
+        )[0]
+        self.assertIn("ManualImageEvidencePolicy.inspect(bytes)", attachment)
+        self.assertIn("bounds.inJustDecodeBounds=true", attachment)
+        self.assertIn("BitmapFactory.decodeByteArray(bytes,0,bytes.length,bounds)", attachment)
+        self.assertIn("pixels>ManualImageEvidencePolicy.MAX_PIXELS", attachment)
+        self.assertIn("BitmapFactory.decodeByteArray(bytes,0,bytes.length,sample)", attachment)
+        self.assertIn('if(decoded==null)throw new IOException(', attachment)
+        self.assertIn("decoded.recycle()", attachment)
+        self.assertLess(attachment.index("ManualImageEvidencePolicy.inspect(bytes)"),
+                        attachment.index("BitmapFactory.decodeByteArray(bytes,0,bytes.length,sample)"))
+        self.assertLess(attachment.index("BitmapFactory.decodeByteArray(bytes,0,bytes.length,sample)"),
+                        attachment.index("Uri own=writeMedia("))
+        self.assertNotIn("boolean png=bytes.length>8", attachment)
+
+    def test_image_policy_changes_invalidate_only_t5_driver_evidence(self):
+        gradle = (ROOT / "apk-for-testing/unified/app/build.gradle").read_text(encoding="utf-8")
+        self.assertIn("'src/main/java/com/alwansan/raftlab/ManualImageEvidencePolicy.java'", gradle)
+        self.assertIn("'t5': [", gradle)
+        self.assertIn("buildConfigField 'String', 'T5_DRIVER_SHA'", gradle)
+
+
 if __name__ == "__main__":
     unittest.main()
