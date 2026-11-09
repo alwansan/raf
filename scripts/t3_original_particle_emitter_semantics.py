@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""T3 source-only emitter-semantic bridge: six SHA-original scenes to Particle108.
+
+This is NOT identification of the on-phone square smoke effect. Private original
+GameObject names, scene names, PathIDs and Material PPtrs remain runner-private.
+Only bounded counts from a fixed public keyword taxonomy are exported.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+import json
+from pathlib import Path, PurePosixPath
+import re
+
+from scripts import t3_original_renderer_shader_impact as source
+from scripts.b03_original_renderer_materials import pointer_shape
+from scripts.b21_scene_lightmap_links import verify_source
+
+STATUS = "SHA_ORIGINAL_PARTICLE108_EMITTER_NAME_HINTS_CLASSIFIED"
+EXPECTED_RANKS = [108, 34, 34, 20, 16, 3]
+# These are predeclared generic semantic hints, never extracted private names.
+TOKENS = {
+    "smoke_like": frozenset(("smoke", "smoky", "steam", "fume", "fumes", "dust", "ash")),
+    "fire_like": frozenset(("fire", "flame", "flames", "ember", "embers", "spark", "sparks")),
+    "water_like": frozenset(("water", "foam", "splash", "spray", "bubble", "bubbles")),
+}
+
+
+def hint_categories(name: str | None) -> set[str]:
+    if name is None or not isinstance(name, str) or not name or len(name) > 4096:
+        return set()
+    # Handle CamelCase and common Unity punctuation without emitting strings.
+    readable = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", name)
+    words = set(re.findall(r"[a-z]+", readable.casefold()))
+    return {category for category, tokens in TOKENS.items() if words & tokens}
+
+
+def safe_aggregate(rows: list, *, expected_selected_slots: int = 108,
+                   expected_selected_renderers: int = 54) -> dict:
+    """Rows are private tuples: (is_selected, slot_matches, GameObject name|None).
+
+    No caller-provided label, hash, renderer/path ID or source owner is returned.
+    """
+    if (type(rows) is not list
+        or type(expected_selected_slots) is not int or expected_selected_slots <= 0
+        or type(expected_selected_renderers) is not int or expected_selected_renderers <= 0
+        or len(rows) > 100000):
+        raise ValueError("untrusted_particle_emitter_aggregate_scope")
+    count = Counter()
+    selected_slots = 0
+    for row in rows:
+        if (type(row) is not tuple or len(row) != 3
+            or type(row[0]) is not bool or type(row[1]) is not int
+            or row[1] < 0 or row[1] > 256
+            or (row[0] and row[1] == 0) or (not row[0] and row[1] != 0)
+            or (row[2] is not None and type(row[2]) is not str)):
+            raise ValueError("invalid_source_particle_renderer_record")
+        selected, slots, name = row
+        group = "selected" if selected else "other"
+        selected_slots += slots
+        count[group + "_renderer_objects"] += 1
+        if name is None or not name:
+            count[group + "_GameObject_name_unresolved"] += 1
+        else:
+            count[group + "_GameObject_name_resolved"] += 1
+            hints = hint_categories(name)
+            for tag in TOKENS:
+                count[group + "_" + tag + "_GameObject_names"] += int(tag in hints)
+            count[group + "_no_semantic_keyword_match"] += int(not hints)
+    if (selected_slots != expected_selected_slots
+        or count["selected_renderer_objects"] != expected_selected_renderers):
+        raise ValueError("source_original_selected_108_particle_scope_changed")
+    result = {
+        "schema_version": 1, "status": STATUS,
+        "source_selected_particle_shader_renderer_objects": count["selected_renderer_objects"],
+        "source_selected_particle_shader_material_slot_use": selected_slots,
+        "source_other_particle_renderer_objects": count["other_renderer_objects"],
+    }
+    for group in ("selected", "other"):
+        for key in ("GameObject_name_resolved", "GameObject_name_unresolved",
+                    "smoke_like_GameObject_names", "fire_like_GameObject_names",
+                    "water_like_GameObject_names", "no_semantic_keyword_match"):
+            result[group + "_" + key] = count[group + "_" + key]
+        if (result[group + "_GameObject_name_resolved"]
+              + result[group + "_GameObject_name_unresolved"]
+              != result[group + "_renderer_objects"]
+              if group == "selected" else
+              result[group + "_GameObject_name_resolved"]
+              + result[group + "_GameObject_name_unresolved"]
+              != count["other_renderer_objects"]):
+            raise ValueError("source_GameObject_join_accounting_mismatch")
+    result.update({
+        "original_names_guids_PathIDs_or_private_shader_identifiers_published": False,
+        "name_hint_is_not_onscreen_smoke_emitter_identity": True,
+        "original_game_device_pixels_verified": False,
+        "actual_android_ShaderLab_pass_recovered": False,
+    })
+    return result
+
+
+def local_gameobject_name(renderer_tree: dict, by_id: dict):
+    pointer = renderer_tree.get("m_GameObject")
+    if (not isinstance(pointer, dict)
+        or type(pointer.get("m_FileID")) is not int
+        or type(pointer.get("m_PathID")) is not int):
+        return None
+    file_id, path_id = pointer["m_FileID"], pointer["m_PathID"]
+    if file_id != 0 or path_id <= 0:
+        return None
+    target = by_id.get(path_id)
+    if target is None or target.type.name != "GameObject":
+        return None
+    obj = target.read_typetree(check_read=False)
+    if not isinstance(obj, dict):
+        return None
+    name = obj.get("m_Name")
+    return name if isinstance(name, str) and 0 < len(name) <= 4096 else None
+
+
+def scan_original(original: Path, manifest: Path) -> dict:
+    import UnityPy
+
+    private_slot_counts = {}
+    private_materials = {}
+    original_report = source.load_original(
+        original, manifest,
+        private_particle_slot_counts=private_slot_counts,
+        private_particle_materials=private_materials,
+    )
+    if (original_report.get("status") != source.STATUS
+        or original_report.get("six_original_scenes_sha_verified") is not True
+        or original_report.get("original_particle_Shader48_ranked_material_slot_use_no_identity") != EXPECTED_RANKS
+        or original_report.get("original_particle_highest_Shader48_unique") is not True
+        or original_report.get("original_particle_highest_Shader48_nonparticle_renderer_slots") != 0):
+        raise ValueError("untrusted_authenticated_original_particle108_source")
+    targets = [k for k, n in private_slot_counts.items() if n == 108]
+    if len(targets) != 1 or targets[0] not in private_materials:
+        raise ValueError("ambiguous_private_original_particle108_material_targets")
+    selected_materials = private_materials[targets[0]]
+    if len(selected_materials) != 5:
+        raise ValueError("original_particle108_selected_Material21_count_changed")
+    records = []
+    for scene, pin in source.SCENE_PINS.items():
+        scene_path = original / "Raft_Data" / scene
+        if scene_path.is_symlink():
+            raise ValueError("unsafe_original_scene_symlink")
+        verify_source(scene_path, pin)
+        file = UnityPy.load(str(scene_path)).file
+        by_id = {obj.path_id: obj for obj in file.objects.values()}
+        external_paths = [row.path for row in file.externals]
+        for obj in file.objects.values():
+            if obj.type.name != "ParticleSystemRenderer":
+                continue
+            tree = obj.read_typetree(check_read=False)
+            if not isinstance(tree, dict) or not isinstance(tree.get("m_Materials"), list):
+                raise ValueError("unreadable_original_particle_renderer_materials")
+            selected_slots = 0
+            for ptr in tree["m_Materials"]:
+                state, fid, pid = pointer_shape(
+                    ptr, {k: v.type.name for k, v in by_id.items()}, len(external_paths))
+                if state == "null_material_slot":
+                    continue
+                if state != "external_target_unverified":
+                    raise ValueError("unexpected_original_particle_local_material_source")
+                material_owner = PurePosixPath(external_paths[fid-1].replace("\\", "/")).name
+                selected_slots += int((material_owner, pid) in selected_materials)
+            records.append((bool(selected_slots), selected_slots, local_gameobject_name(tree, by_id)))
+    result = safe_aggregate(
+        records,
+        expected_selected_slots=108,
+        expected_selected_renderers=original_report["original_particle_highest_Shader48_distinct_particle_renderers"],
+    )
+    result["original_six_scene_SHA_verified"] = True
+    result["original_four_shader_Material_owner_SHA_verified"] = True
+    result["original_source_selected_five_Material21_verified"] = True
+    return result
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    for key in ("original", "manifest", "out"):
+        ap.add_argument("--" + key, required=True, type=Path)
+    args = ap.parse_args(argv)
+    if (args.out.is_symlink() or args.out.exists()
+        or args.out.resolve().is_relative_to(args.original.resolve())):
+        raise ValueError("unsafe_original_emitter_semantic_report_destination")
+    try:
+        out = scan_original(args.original, args.manifest)
+    except Exception as exc:
+        # Never format private error strings, original file identities or names.
+        out = {"schema_version": 1, "status": "INCONCLUSIVE",
+               "failure_type": type(exc).__name__,
+               "original_names_guids_PathIDs_or_private_shader_identifiers_published": False,
+               "original_game_device_pixels_verified": False}
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(out, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    print("T3_ORIGINAL_PARTICLE_EMITTER_HINTS " + json.dumps(out, sort_keys=True))
+    return 0 if out["status"] == STATUS else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
