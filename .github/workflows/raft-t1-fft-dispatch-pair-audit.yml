@@ -1,0 +1,46 @@
+name: T1 WATER-001 original Android FFT JSONL schema and pair audit (source only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t1_fft_dispatch_pair_audit.py'
+      - 'tests/test_t1_fft_dispatch_pair_audit.py'
+      - 'tests/test_t1_fft_dispatch_pair_jsonl.py'
+      - 'tests/test_t1_fft_dispatch_pair_native_jsonl.py'
+      - '.github/workflows/raft-t1-fft-dispatch-pair-audit.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-real-jsonl-schema-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-only-jsonl-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/t1_fft_dispatch_pair_audit.py
+            tests/test_t1_fft_dispatch_pair_audit.py
+            tests/test_t1_fft_dispatch_pair_jsonl.py
+            tests/test_t1_fft_dispatch_pair_native_jsonl.py
+      - name: Python compile
+        run: python3 -m py_compile scripts/t1_fft_dispatch_pair_audit.py tests/test_t1_fft_dispatch_pair_*.py
+      - name: Synthetic legacy and actual persisted Android JSONL regression
+        run: python3 -m unittest discover -s tests -p 'test_t1_fft_dispatch_pair_*.py' -v
+      - name: Explicit evidence boundary
+        run: |
+          echo 'ORIGINAL_ANDROID_RUNTIME_LOG_SCHEMA_CHECKED=true'
+          echo 'SOURCE_ONLY_TEST=true'
+          echo 'UNITY_ORIGINAL_FFT_RUNTIME_KERNEL_ID_PROVEN=false'
+          echo 'GPU_EXECUTION_PROVEN=false'
+          echo 'WATER_001_FIXED=false'
