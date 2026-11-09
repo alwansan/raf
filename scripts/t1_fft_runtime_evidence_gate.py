@@ -41,6 +41,10 @@ def validate(record):
             not isinstance(v, str) or not 1 <= len(v) <= 128 for v in row["bindings"]
         ):
             raise ValueError(f"dispatch {index}: missing resource binding names")
+        if any(not v.strip() or v != v.strip() for v in row["bindings"]):
+            raise ValueError(f"dispatch {index}: blank or padded resource binding name")
+        if len(set(row["bindings"])) != len(row["bindings"]):
+            raise ValueError(f"dispatch {index}: duplicate resource binding name")
     return {"runtime_dispatches": len(entries), "binding_contract_complete": True,
             "device_session": record["device_session"], "build_sha": record["build_sha"]}
 
