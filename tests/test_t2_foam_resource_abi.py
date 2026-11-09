@@ -179,5 +179,17 @@ class T2FoamResourceAbiTests(unittest.TestCase):
             verify_genuine_texture_sampler_pair_count(report)
 
 
+    def test_tampered_report_stage_identifier_types_fail_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        for field, value in (("pass", False), ("pass", 0.0),
+                             ("stage_code", False), ("stage_code", 0.0),
+                             ("stage_code", True), ("stage_code", 1.0)):
+            with self.subTest(field=field, value=value):
+                report = combine(profile, resources)
+                report["rows"][1][field] = value
+                with self.assertRaises(ValueError):
+                    verify_genuine_texture_sampler_pair_count(report)
+
+
 if __name__ == "__main__":
     unittest.main()
