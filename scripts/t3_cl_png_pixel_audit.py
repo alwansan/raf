@@ -41,9 +41,13 @@ def decode_rgb(path):
         raise ValueError("unsupported_png_format")
     channels = 3 if kind == 2 else 4
     stride = width*channels
-    raw = zlib.decompress(b"".join(b for t,b in chunks if t == b"IDAT"))
-    if len(raw) != (stride+1)*height:
-        raise ValueError("invalid_scanline_size")
+    # Bound output during inflation; malformed IDAT must not allocate unlimited RAM.
+    expected = (stride + 1) * height
+    decoder = zlib.decompressobj()
+    raw = decoder.decompress(b"".join(b for t,b in chunks if t == b"IDAT"), expected + 1)
+    if (len(raw) != expected or not decoder.eof or decoder.unconsumed_tail
+            or decoder.unused_data):
+        raise ValueError("invalid_scanline_size_or_zlib_stream")
     rows = []
     previous = bytearray(stride)
     offset = 0
