@@ -15,5 +15,6 @@
   "boundaries": "Source log interpretation only, no Unity/IL2CPP, original RGD restart, phone world acceptance, signed package SHA or game readiness; native 42296450023 belongs T5 and remains independent.",
   "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
   "readiness": "NOT_READY 0/3",
-  "vote": "T4 trial-20261106-r1 unchanged needs physical mouse testing"
+  "vote": "T4 trial-20261106-r1 unchanged needs physical mouse testing",
+  "event_id": "T4-20261106T2222Z-T4-owner-jsonl-single-read-n7b4"
 }
