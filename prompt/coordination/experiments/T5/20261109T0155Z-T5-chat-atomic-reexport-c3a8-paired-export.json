@@ -32,8 +32,8 @@
   ],
   "artifact_urls": [],
   "budget": "source-only CI with compile and JDK tests; no full Unity, APK, Android device",
-  "status": "waiting_ci",
-  "observed_result": "Paired non-destructive re-export fix db261619; regression tests f2609b07; automatically triggered source workflows in-progress/pending at checkpoint.",
+  "status": "completed_source_only",
+  "observed_result": "CI42548284041 COMPLETED SUCCESS at f2609b07: Python source integration/rollback contracts, actual Java SHA engine controls and unified Android Gradle Java compile. Source green only, no device fault injection.",
   "limitations": [
     "MediaStore cannot make two distinct public URIs appear in a single atomic operation; rollback closes the failure window but does not guarantee zero transient visibility.",
     "Old-file retirement failure can leave two valid copies; user is warned.",
@@ -41,5 +41,7 @@
     "No actual device fault injection or full game acceptance."
   ],
   "integration_commit": "f2609b07d59cf3444ea65d6547f6bef38ea59a7b",
-  "next_step": "Inspect run 42548284041; if green, update handoff and await one policy-justified shared Mini with actual Android15 export tests."
+  "next_step": "Android15 first/repeated export and failure simulation after an authorized shared Mini build; monitor duplicate file warning.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42548284041",
+  "updated_at": "2026-11-09T01:59:55Z"
 }
