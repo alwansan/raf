@@ -217,14 +217,25 @@ class T2FoamResourceAbiTests(unittest.TestCase):
                              ("m_Unknown", 0)):
             with self.subTest(field=field, value=value):
                 report = combine(profile, resources)
-                # combine() preserves the original table dict by reference.
-                # Isolate this adversarial report so one subtest cannot
-                # contaminate the source profile for the next iteration.
-                report["rows"][1]["original_numeric_table_rows"] = dict(
-                    report["rows"][1]["original_numeric_table_rows"])
                 report["rows"][1]["original_numeric_table_rows"][field] = value
                 with self.assertRaises(ValueError):
                     verify_genuine_texture_sampler_pair_count(report)
+
+
+    def test_report_isolation_from_original_source_profiles(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        baseline = dict(profile[(0, 0)]["table_rows"])
+        first = combine(profile, resources)
+        first["rows"][1]["original_numeric_table_rows"]["m_TextureParams"] = 99
+        self.assertEqual(profile[(0, 0)]["table_rows"], baseline)
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(first)
+        # A later audit of the exact same source profile must not inherit a
+        # malicious or accidental mutation of an earlier JSON report.
+        second = verify_genuine_texture_sampler_pair_count(combine(profile, resources))
+        self.assertTrue(second["original_to_compiled_resource_cardinality_verified"])
+        self.assertEqual(second["rows"][1]["original_numeric_table_rows"], baseline)
+
 
 
 if __name__ == "__main__":
