@@ -84,6 +84,16 @@ def verify(lines, expected_case):
     }
     if any(token not in detail for token in markers[expected_case]):
         raise ValueError("missing_expected_probe_measurement")
+    # Numeric probe markers must be complete tokens, not prefixes of larger values.
+    # `tolerance=20` and `0x8cd70` previously passed substring matching.
+    if expected_case == "CASE02":
+        if len(re.findall(r"(?<![A-Za-z0-9_])tolerance=2(?![0-9A-Za-z_.])", detail)) != 1:
+            raise ValueError("invalid_or_duplicate_tolerance")
+        if re.search(r"(?<![A-Za-z0-9_])tolerance=(?!2(?![0-9A-Za-z_.]))", detail):
+            raise ValueError("conflicting_tolerance")
+    if expected_case == "CASE03":
+        if len(re.findall(r"(?<![A-Za-z0-9_])0x8cd7(?![0-9A-Fa-f])", detail)) != 1:
+            raise ValueError("invalid_or_duplicate_fbo_status")
     if expected_case == "CASE02":
         # Marker presence alone can disguise contradictory FBO readbacks.
         # This validates only self-consistency of the exported text, not GPU pixels.
