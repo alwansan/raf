@@ -91,6 +91,26 @@ class PngAuditTests(unittest.TestCase):
         result=self.check(payload)
         self.assertEqual(result["alpha_partial_fraction"],1)
         self.assertEqual(result["opaque_unique_rgb"],0)
+    def test_critical_chunk_order_rejected(self):
+        ihdr=struct.pack(">IIBBBBB",1,1,8,2,0,0,0)
+        scan=zlib.compress(bytes((0,1,2,3)))
+        cases={
+            "ihdr_not_first": chunk(b"tEXt",b"hello")+chunk(b"IHDR",ihdr)+chunk(b"IDAT",scan),
+            "duplicate_ihdr": chunk(b"IHDR",ihdr)+chunk(b"IHDR",ihdr)+chunk(b"IDAT",scan),
+            "noncontiguous_idat": chunk(b"IHDR",ihdr)+chunk(b"IDAT",scan)+chunk(b"tEXt",b"x")+chunk(b"IDAT",b""),
+            "nonempty_iend": chunk(b"IHDR",ihdr)+chunk(b"IDAT",scan)+chunk(b"IEND",b"x"),
+            "missing_idat": chunk(b"IHDR",ihdr),
+        }
+        for reason,body in cases.items():
+            with self.subTest(reason=reason):
+                payload=audit_module.SIGNATURE+body
+                if reason!="nonempty_iend":
+                    payload+=chunk(b"IEND",b"")
+                with tempfile.TemporaryDirectory() as tmp:
+                    path=Path(tmp)/"bad.png"
+                    path.write_bytes(payload)
+                    with self.assertRaisesRegex(ValueError,reason):
+                        audit_module.audit(path)
     def test_crc_failure(self):
         bad=bytearray(png(8,8,lambda x,y:(0,0,0)))
         bad[-5]^=1
