@@ -1,0 +1,27 @@
+name: T5 PNG byte regression (source only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t5-png-byte-regression.yml'
+      - 'scripts/t5_verify_png_bytes.py'
+      - 'scripts/tests/test_t5_png_*.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t5-png-bytes-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  png-byte-unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python standard-library PNG regression tests
+        run: |
+          python3 -m unittest discover -s scripts/tests -p 'test_t5_png_*.py' -v
+      - name: Explicit scope boundary
+        run: echo 'SOURCE-ONLY unit regression; no CL PNG bytes, visual/device/GPU acceptance, or Unity game build.'
