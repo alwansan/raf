@@ -113,6 +113,26 @@ class MouseRouteTests(unittest.TestCase):
         self.assertEqual(result["phases"]["unknown"]["samples"], 1)
         self.assertEqual(result["capture_route_conflicts"], 0)
 
+    def test_valid_json_nonobject_records_are_rejected_without_aborting(self):
+        lines = ['[]', 'null', '"string"', '42', 'true',
+                 event("input", "route=captured source=0x20004 action=ACTION_BUTTON_PRESS buttonState=1 actionButton=1 captured=true")]
+        result = analyze(lines)
+        self.assertEqual(result["rejected_records"], 5)
+        self.assertEqual(result["phases"]["on"]["button_presses_observed"], ["left"])
+        self.assertFalse(result["device_success_proven"])
+
+    def test_invalid_explicit_capture_flags_fail_closed(self):
+        lines = [
+            event("input", "route=captured source=0x20004 action=ACTION_BUTTON_PRESS buttonState=1 actionButton=1 captured=TRUE"),
+            event("input", "route=activity_generic source=0x2002 action=ACTION_SCROLL vscroll=1 captured=garbage"),
+            event("input", "route=activity_generic source=0x2002 action=ACTION_MOVE"),
+        ]
+        result = analyze(lines)
+        self.assertEqual(result["rejected_records"], 2)
+        self.assertNotIn("on", result["phases"])
+        self.assertEqual(result["phases"]["unknown"]["samples"], 1)
+        self.assertFalse(result["device_success_proven"])
+
     def test_no_events_is_not_pass(self):
         r = analyze([event("capture_request", "ON")])
         self.assertEqual(r["phases"], {})
