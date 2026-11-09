@@ -1,8 +1,8 @@
 # T4 independent source-only numeric provenance scope
 session_id: 20261109T2024Z-T4-chat-numeric-provenance-f7v2
 origin: chat
-status: active
-updated_at: 2026-11-09T20:24:00Z
+status: completed
+updated_at: 2026-11-09T20:29:00Z
 issue_id: INPUT-005
 base_sha: 0c7d349845d2b7c1678acd2cb0e7e86bbf929294
 resumed_from_sessions:
@@ -25,3 +25,9 @@ next_step: Publish guarded source tests, await path-triggered T4 lightweight CI 
 
 ## Additive source-contract finding before implementation
 Actual `AndroidPhysicalMouseCapture.cs` lines 205/212 concatenate C# bool values `requested` and `nativeCaptured`, whose `System.Boolean.ToString()` emits `True`/`False` (capitalized), while `unityGameplayVerified=false` and `countersAreGetterCallsNotClicks=true` are explicit lowercase source literals. The existing `parse_bool` accepts lowercase only, so even a genuine captured=true original Unity Legacy reader telemetry marker is rejected. This is part of the same numeric/token grammar provenance scope. Extend intended source/tests to accept exact C# casing + existing lowercase while rejecting malformed suffix/uppercase nonsense. No runtime/game code edit.
+
+## Completed and released scope
+- Confirmed actual C# `captureRequested=True; captureObserved=True` source flag casing. Fixed Python Boolean parser, numeric boundaries, int32/long overflow and ill-formed duplicate tokens. `scripts/t4_correlate_mouse_runtime_epochs.py` commit 6f3df6bf68921ca2a80106192724b7dbb94bb3a0.
+- Added 15 genuine-source shape and malicious numeric negative controls. `scripts/tests/test_t4_correlate_mouse_runtime_epochs.py` commit 29cba2a3344df64094c9409a3117f167d5b1717d. Source test CI42692994798 SUCCESS 42/42, final [CI42693129361](https://github.com/alwansan/raf/actions/runs/42693129361) **COMPLETED SUCCESS 57/57**, job 129417825568.
+- Report `docs/T4_MOUSE_NUMERIC_PROVENANCE_BOUNDARY_2026-11-09.md`, experiment `prompt/coordination/experiments/T4/20261109T2024Z-T4-chat-numeric-provenance-f7v2.json`, event `prompt/coordination/B_TEAM/events/T4/20261109T2024Z-T4-chat-numeric-provenance-f7v2.json`, own session `prompt/coordination/clients/T4/sessions/20261109T2024Z-T4-chat-numeric-provenance-f7v2.md`.
+- No queued heavy work/resource remaining; leased source files released. T4 INPUT-005 OPEN, full-game NOT_READY 0/3. Owner CL newest mini 0.2.14 T4-01..09 NEEDS_INPUT. This gate fixes **evidence recognition**, not Raft gameplay. No APK/XAPK or other-worker files modified.
