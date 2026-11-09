@@ -2,7 +2,7 @@
   "session_id": "20261109T2040Z-T2-chat-foam-writer-census-z4m7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c85b46697df05eb5ba1e75e2c34295a44440a0ad",
   "resumed_from_sessions": [
     "20261109T2020Z-T2-chat-foam-onehop-return-r8c5",
@@ -22,8 +22,8 @@
   ],
   "hypothesis": "Original managed IL may show direct stfld/stsfld writes to exact pass0 Foam RenderTexture destination declared field and syntactic writer adjacency, and determine lexical relative placement of pass0/pass1 Foam Blit sites. This narrows writer/alias lifecycle investigation, without proving runtime field assignment, same receiver, same frame, object alias, null execution or device pixels.",
   "safety": "Use original SHA-pinned private Cecil workflow, emit finite categories only; do not reveal original symbol names, metadata tokens, paths, IL, private bytes. No game/Unity content edits, no shared mini/full APK, no other worker files or forced branch updates.",
-  "next_step": "Add bounded direct original CIL writer census and pass-site lexical co-location with isolated synthetic positives/negatives, strict safe JSON schema and original pinned CI.",
-  "updated_at": "2026-11-09T20:46:00Z",
+  "next_step": "Source-original code private writer methods RHS/receiver identity with bounded abstract alias/callgraph, or on-device frame-level evidence. No assumption of executed CIL stores, same texture or runtime non-null.",
+  "updated_at": "2026-11-09T20:52:00Z",
   "followup_hypothesis": "With original pass0 destination field writers located outside pass0 Blit method and pass0/pass1 in distinct methods, determine specifically whether any direct stfld/stsfld writer is co-located in the unique original pass1 Blit method. This is only CIL method identity, never same-frame execution or image alias.",
   "followup_scope": "Same T2 Program.cs and strict report/tests already reserved. New finite label only, fail closed when original pass1 site ambiguous.",
   "verified_initial_ci": "https://github.com/alwansan/raf/actions/runs/42695789057",
@@ -33,5 +33,33 @@
     "original_pass0_field_store_class": "multiple_resolved_direct_stores",
     "store_placement": "stores_only_in_other_methods",
     "pass0_pass1_blit_relation": "blit_sites_in_distinct_methods"
-  }
+  },
+  "scope_status": "completed",
+  "issue_status": "OPEN",
+  "source_code_commits": [
+    "a3a63adc197271cc798de3c7a0bbe06bf3617ecf",
+    "57b8f10be4f91af7b37b0b8eeec73c7e9b775b0c",
+    "fbe24922a60b895f88fd1ef0e4a2ed15a67a6a2d"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42695789057",
+    "https://github.com/alwansan/raf/actions/runs/42696649931"
+  ],
+  "initial_verified_original_ci": "https://github.com/alwansan/raf/actions/runs/42695789057",
+  "final_verified_original_ci": "https://github.com/alwansan/raf/actions/runs/42696649931",
+  "failed_synthetic_only_fixture_ci": "https://github.com/alwansan/raf/actions/runs/42696515826",
+  "final_python_tests_passed": 26,
+  "cecil_selftest": "PASS",
+  "original_Assembly_CSharp_bytes": 3211776,
+  "original_shader_owner_bytes": 115978112,
+  "original_pass0_dest_field_store_class": "multiple_resolved_direct_stores",
+  "original_pass0_dest_field_store_placement": "stores_only_in_other_methods",
+  "original_pass0_dest_field_single_store_adjacent": "store_predecessor_not_unique",
+  "original_pass0_pass1_Blit_lexical_relation": "blit_sites_in_distinct_methods",
+  "original_pass0_dest_field_writes_vs_pass1_Blit_il": "pass1_method_no_direct_field_store",
+  "original_runtime_field_writes_executed_proven": false,
+  "original_pass0_pass1_texture_heap_identity_proven": false,
+  "original_indirect_alias_absence_proven": false,
+  "original_shaderlab_sampler_or_Adreno_pixels_proven": false,
+  "private_source_or_symbols_exported": false
 }
