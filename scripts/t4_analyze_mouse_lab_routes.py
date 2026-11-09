@@ -17,6 +17,8 @@ def physical_mouse_source(value):
     if value is None:
         return False
     source = int(value, 0)
+    if source < 0:
+        return False
     return any(source & mask == mask for mask in MOUSE_SOURCES)
 
 def nonzero_scroll(value):
@@ -65,6 +67,11 @@ def analyze(lines):
             group["actions"].add(action)
             state = int(fields.get("buttonState", "0"), 0)
             action_button = int(fields.get("actionButton", "0"), 0)
+            if state < 0 or action_button < 0:
+                rejected += 1
+                group["samples"] -= 1
+                group["routes"].discard(route) if group["samples"] == 0 else None
+                continue
             for name, bit in BUTTONS.items():
                 if (state | action_button) & bit:
                     group["buttons"].add(name)
