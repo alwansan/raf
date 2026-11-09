@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "session_id": "20261109T1854Z-T2-chat-foam-report-alias-b8e7",
+  "origin": "chat",
+  "worker": "T2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "965afcc1710e62ffa90d159c0516efc72e4214a7",
+  "resumed_from_sessions": [
+    "20261109T1616Z-T2-scheduled-stage-key-guard-v7q2",
+    "20261109T1528Z-T2-scheduled-resource-report-guard-k8m2"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_resource_abi.py",
+    "tests/test_t2_foam_resource_abi.py",
+    "prompt/coordination/clients/T2/sessions/20261109T1854Z-T2-chat-foam-report-alias-b8e7.md",
+    "prompt/coordination/work/WATER-001/20261109T1854Z-T2-chat-foam-report-alias-b8e7.json"
+  ],
+  "experiment_key": "T2_WATER001_foam_resource_report_copy_isolation_py312_test_42664209077",
+  "resource_key": "T2_source_only_report_validation",
+  "updated_at": "2026-11-09T18:54:00Z",
+  "hypothesis": "The original_numeric_table_rows field in combine() aliases the original profiles dictionary, so subtest mutations contaminate later calls to combine and yield four unexpected errors.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42664209077",
+    "https://github.com/alwansan/raf/actions/runs/42664186862"
+  ],
+  "plan": "Use defensive copy for table_rows during combine; add regression proving mutation isolation; run source-only tests before considering original-data CI. No private asset, Unity, game, testpack, common native request, or other worker files.",
+  "limits": "Source-only checker integrity, not device water rendering."
+}
