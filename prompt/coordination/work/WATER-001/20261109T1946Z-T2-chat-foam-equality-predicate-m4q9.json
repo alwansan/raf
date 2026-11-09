@@ -2,7 +2,7 @@
   "session_id": "20261109T1946Z-T2-chat-foam-equality-predicate-m4q9",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "65e7b9c353c07927a63e405aaa8b49cd2a424460",
   "resumed_from_sessions": [
     "20261109T1916Z-T2-chat-foam-constant-branch-p8v6",
@@ -18,7 +18,20 @@
   "resource_key": "T2-original-FoamBlitOriginalProducers-Cecil-source-only",
   "hypothesis": "Ceq and Beq/Bne_Un of provably known zero/nonzero/null CIL constants can distinguish truly unreachable null-return edges; uncertain/merged/data-dependent predicates must remain 2-way. This is source CFG only, never real heap identity or Android texture proof.",
   "scope": "T2 original Foam only; no Unity/XAPK/mini, no T1 T3 T4 T5 files; prepare source-free synthetic positive/negative controls and rely on path-filter original authenticated CI",
-  "run_urls": [],
-  "updated_at": "2026-11-09T19:46:00Z",
-  "next_step": "Publish local C# interpreter improvement plus synthetic cases; inspect SHA-pinned original run result, compare prior value_mixed_with_explicit_null_literal; publish safe session evidence."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42686782993",
+    "https://github.com/alwansan/raf/actions/runs/42686783004"
+  ],
+  "updated_at": "2026-11-09T19:49:00Z",
+  "next_step": "Independent original-runtime receiver/alias between pass0 destination and pass1 source; current categories cannot prove heap identity, and original explicit-null path remains only statically possible.",
+  "scope_status": "completed",
+  "issue_status": "OPEN",
+  "code_commit": "5b9adfbc82160f1e8bc6a00713577e7fb3549ed4",
+  "result": "source_original_ci_verified_unmodified_null_category",
+  "original_result": "value_mixed_with_explicit_null_literal",
+  "python_tests": 17,
+  "cecil_selftest": "PASS",
+  "android_pixels_proven": false,
+  "crosspass_heap_identity_proven": false,
+  "safe_report": "docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
 }
