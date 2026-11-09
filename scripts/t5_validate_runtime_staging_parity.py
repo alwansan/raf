@@ -114,7 +114,14 @@ def verify_staged_runtime_bytes(
         raise ValueError("Linked runtime candidate source")
     staged_cs = {path.name for path in listed if path.suffix.lower() == ".cs"}
     if staged_cs != set(names):
-        raise ValueError("Missing or unexpected staged Android runtime source")
+        missing = sorted(set(names) - staged_cs)
+        unexpected = sorted(staged_cs - set(names))
+        # Only filenames from the Android-owned Platform folder are exposed;
+        # never print original Raft bytes or Unity asset content.
+        raise ValueError(
+            "Missing or unexpected staged Android runtime source: "
+            + "missing=" + repr(missing) + " unexpected=" + repr(unexpected)
+        )
     for name in names:
         original, staged = runtime_dir / name, platform / name
         if (original.is_symlink() or staged.is_symlink()
@@ -123,7 +130,7 @@ def verify_staged_runtime_bytes(
         if original.stat().st_size > 2 * 1024 * 1024 or staged.stat().st_size > 2 * 1024 * 1024:
             raise ValueError("Oversized staged Android runtime source")
         if staged.read_bytes() != original.read_bytes():
-            raise ValueError("Staged Android runtime bytes changed")
+            raise ValueError("Staged Android runtime bytes changed: " + name)
     return tuple(sorted(names))
 
 
