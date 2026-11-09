@@ -2,7 +2,7 @@
   "session_id": "20261109T2116Z-T2-scheduled-foam-alias-guard-k7m2",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_only_tests_pending",
   "base_sha": "5104609fe5fdc5f27ea7f698077197f3ad738e6d",
   "intended_files": [
     "scripts/t2_foam_alias_dataflow.py",
@@ -17,5 +17,12 @@
     "https://github.com/alwansan/raf/actions/runs/42690309016",
     "https://github.com/alwansan/raf/commit/9fde426cf491517d152b1cfc7810280f888fd38d"
   ],
-  "updated_at": "2026-11-09T21:16:35Z"
+  "updated_at": "2026-11-09T21:23:00Z",
+  "commits": [
+    "3dfb7ac2a4cbcda006a47d781ceb39ac3dee0dbb",
+    "3a1d9beabe476ae431e94ed43688626bfab25869",
+    "c951573985f3c173670f561124fff7f4f5690e5b"
+  ],
+  "verification": "Nine source-free unittest cases added but not executed in CI. No original-data or device proof.",
+  "next_step": "Run Python unittest, then original Cecil CFG/receiver proof; no ShaderLab integration yet."
 }
