@@ -1,0 +1,37 @@
+{
+  "session_id": "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Real C# PersistentDiagnosticLog session and strictly increasing sequence must constrain Android callback ↔ Unity reader epoch association, even when exact epoch repeats after reinitialize.",
+  "baseline_sha": "e36012258e1cb2fd0e35d1b93fa05210200fe755",
+  "scope_commit": "ed7e8cdb0ad9de9622c3a078ff1749315cf31978",
+  "implementation_commits": [
+    "a8e475613ccc2e438fb4c71e7c76aab04aac4149",
+    "abf1ede6bbea3b9073c9ab20b826be46dd486c93"
+  ],
+  "source_file": "scripts/t4_correlate_mouse_runtime_epochs.py",
+  "regression_file": "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42681491521",
+  "ci_run_id": 42681491521,
+  "ci_job_id": 129376929867,
+  "result": {
+    "status": "SOURCE_ONLY_SUCCESS",
+    "tests_passed": 24,
+    "tests_total": 24,
+    "android_device_accepted": false,
+    "unity_gameplay_proven": false
+  },
+  "accepted_source_schema": "PersistentDiagnosticLog JSONL utc,session,sequence,thread,area,operation,detail",
+  "deterministic_negative_controls": [
+    "cross-session same epoch",
+    "duplicate startup sequence",
+    "boolean sequence",
+    "mixed unattributed text and JSONL",
+    "false area=unity",
+    "different valid session"
+  ],
+  "other_workers": "Reviewed T5 CI 42680745095 repaired by T5; T2 42680680366 blocked T3 historical missing event identity, T2 owns coordination, no cross-worker file edit",
+  "next_step": "Analyze authentic single-process signed Raft game log with true captured mouse clicks/wheels and compare actual gameplay before any phone acceptance.",
+  "status": "completed_source_only_device_pending",
+  "not_ready": "INPUT-005 OPEN / full game NOT_READY 0/3"
+}
