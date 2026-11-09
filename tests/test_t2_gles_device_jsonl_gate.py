@@ -126,6 +126,33 @@ class TestEvidenceGate(unittest.TestCase):
                     "finalBaseline=[34, 94, 160, 255]")
         self.assertTrue(verify(encoded(rows), "CASE02")["synthetic_gles_log_consistent"])
 
+    def test_case02_rejects_nonexact_tolerance_tokens(self):
+        for replacement in ("tolerance=20", "tolerance=2.5",
+                            "tolerance=2 tolerance=2",
+                            "tolerance=2 tolerance=20"):
+            rows = records()
+            for row in rows:
+                if row["event"] in ("gl_observed", "shared_auto_result"):
+                    row["detail"] = row["detail"].replace("tolerance=2", replacement)
+            with self.subTest(replacement=replacement):
+                with self.assertRaises(ValueError):
+                    verify(encoded(rows), "CASE02")
+
+    def test_case03_rejects_hex_status_prefix_and_duplicate(self):
+        for status in ("0x8cd70", "0x8cd7 0x8cd7", "0x8cd7f"):
+            rows = records("CASE03")
+            for row in rows:
+                if row["event"] in ("gl_observed", "shared_auto_result"):
+                    row["detail"] = "OK rejects unattached FBO: " + status
+            with self.subTest(status=status):
+                with self.assertRaises(ValueError):
+                    verify(encoded(rows), "CASE03")
+        rows = records("CASE03")
+        for row in rows:
+            if row["event"] in ("gl_observed", "shared_auto_result"):
+                row["detail"] = "OK rejects unattached FBO: 0x8cd7"
+        self.assertTrue(verify(encoded(rows), "CASE03")["synthetic_gles_log_consistent"])
+
     def test_allow_equal_timestamps(self):
         rows = records()
         rows[4]["unix_ms"] = rows[3]["unix_ms"]
