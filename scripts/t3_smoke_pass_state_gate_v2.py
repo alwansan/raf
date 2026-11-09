@@ -40,9 +40,11 @@ def _validate(side):
         names.add(name)
         if set(p) != set(FIELDS) | {"name"}:
             raise ValueError("incomplete_pass_state")
-        if p["src_blend"] not in BLEND or p["dst_blend"] not in BLEND:
+        if (not isinstance(p["src_blend"], str) or not isinstance(p["dst_blend"], str)
+                or p["src_blend"] not in BLEND or p["dst_blend"] not in BLEND):
             raise ValueError("invalid_blend_factor")
-        if p["blend_op"] not in OPS or p["cull"] not in CULL:
+        if (not isinstance(p["blend_op"], str) or not isinstance(p["cull"], str)
+                or p["blend_op"] not in OPS or p["cull"] not in CULL):
             raise ValueError("invalid_render_enum")
         for key in ("zwrite", "alpha_clip", "program_present"):
             if type(p[key]) is not bool:
@@ -54,6 +56,8 @@ def _validate(side):
 def audit(data):
     if not isinstance(data, dict) or data.get("schema") != "t3-smoke-pass-state-v2":
         raise ValueError("unsupported_schema")
+    if "original" not in data or "exported" not in data:
+        raise ValueError("missing_original_or_exported")
     original, exported = data["original"], data["exported"]
     a, b = _validate(original), _validate(exported)
     if a != b:
