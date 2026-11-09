@@ -4,7 +4,7 @@ origin: chat
 base_sha: be69f74c1f4d902e7c731e4a17cc4bd3c7609ff0
 resumed_from: 20261109T1946Z-T5-chat-shared-mini512-73bc; 20261109T1922Z-T5-chat-cl-obb-evidence-f4c2
 work: work/T5/20261109T2002Z-T5-chat-owner-local-logs-6d27.md
-status: active
+status: completed
 scope: Implement guarded Android15 SAF tree selection for owner Download/logs, identify APK / OBB v91 / manifest / pack / BlackBox logs and improve guided T1–T5 UI without modifying their drivers or asserting false Android game PASS.
 intended_files: unified T5 Java UI and T5-only scanner/policy; JVM tests, source CI and owner guide; isolated T5 work/session; build request after evidence.
 experiment_key: t5-owner-android15-saf-tree-download-logs-apk-obb-91-recon-v1:api35:30cases-no-external-code
@@ -12,3 +12,19 @@ resource_key: t5-shared-mini-ui-bridge-source
 user-provided-file-shape: Download/logs/Raft-Android-Test/{Android/obb/com.alwansan.raft.androidtest/main.91.com.alwansan.raft.androidtest.obb, com.alwansan.raft.androidtest.apk, manifest.json}, plus team-testpack.json, T3.json, t2-water-render-testpack.json, t4-mouse-testpack.json and top.niunaijun.blackbox_logcat.txt. Not accessible in this remote environment.
 baseline: new T1-05 packed 30-case mini APK v0.2.14 CI42686652150 SUCCESS artifact 13705307079; debug cert temporary; user must export evidence before uninstall.
 next: create a user-triggered, scoped SAF tree scan, no auto file hashes or auto PASS, evidence-aligned guided controls, compile source CI, request one build after gates.
+
+## Engineering result — 2026-11-09 20:22 UTC
+- Implemented T5-owned Android15 SAF local Download/logs scanner, guarded classification and bounded read-only manifest preview in `LocalOwnerBundleScanner.java` + `LocalOwnerBundlePolicy.java` (commits c74a4b1,46a23cf). Includes explicit hash buttons only for APK/OBB, current T5-02 hash observation now includes selected filename and full streaming digest. No implicit PASS, no read of multi-GB OBB merely on folder scan.
+- Added `LocalOwnerLogEvidence.java` bounded 4 MiB BlackBox keyword counters, no raw lines/path logging; pure JVM tests `LocalOwnerBundlePolicyTest.java` include privacy and zero-read controls. Shared Arabic Portrait `UnifiedLabActivity.java` adds folder picker, persisted read grant, rescan, guided safe team pack only; T1,T2,T3,T4 native/driver Java source not touched.
+- Added isolated workflow `.github/workflows/raft-t5-local-owner-bundle-source.yml`. [CI42690234266](https://github.com/alwansan/raf/actions/runs/42690234266) COMPLETED SUCCESS: 30-case pack, JVM controls, actual Android35 Java compile.
+- First R5 [CI42690937486](https://github.com/alwansan/raf/actions/runs/42690937486) failed *before build* at CAS parent gate due concurrent T1/T3 updates; second [CI42691251220](https://github.com/alwansan/raf/actions/runs/42691251220) failed *before build* because T5 readiness evidence cell lacked full GitHub URL (corrected with commit 041cabed); neither generated an APK.
+- Final CAS-pinned single R5 request commit [97014d9](https://github.com/alwansan/raf/commit/97014d9b7b579480af37ae254de89080ce29f78f), immediate parent 731d7a68bb3826b348d0314f694737b522e92976. [CI42691609924](https://github.com/alwansan/raf/actions/runs/42691609924) **COMPLETED SUCCESS**; artifact ZIP ID 13707257362 expires 2026-11-23T20:18:56Z, ZIP SHA256 e76a63126b3a431bab097b5410e905ad08febe53f2c5861f97f09af4757d43d0.
+- Extracted and verified APK 110042 bytes SHA256 272d4ce9a199c5876b179926c9f27ed0d7a8c4db34b2a3993de2c44a94e323cf. Manifest com.alwansan.raft.lab.shared versionName 0.2.17-shared versionCode17 4/4 Portrait, Arabic label. v2 **DEBUG** signing certificate SHA256 1ce4e4c53eb8a48a1d0639dadba8bf70eae556911214b10babb20b08e283f20d differs prior v14. Embedded team pack and attached JSON 7454 bytes SHA256 9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6, 30 cases, T1FftButterflyProbe and LocalOwnerBundleScanner/LocalOwnerLogEvidence class markers in DEX.
+- Updated apk-for-testing/TEST_CENTER.md, OWNER_LOCAL_LOGS_GUIDE_AR.md, and only T5 shared readiness row to R5 delivered NO_BUILD, other workers' rows intact. Team handoff `prompt/coordination/T_TEAM/T5_TO_T1_T4_20261109T2021Z_SHARED_MINI_LOCAL_FILES_R5_AR.md`. XAPK/Unity and CL unchanged.
+- Delivered direct extracted APK in T5 chat at /mnt/data/Raft-Team-Lab-DownloadLogs-v0.2.17.apk (chat file, **not** GitHub Release direct). GitHub Actions artifact is ZIP, not direct APK URL. Do not add sandbox path to repo as permanent URL.
+
+## Evidence limits and restart
+- Owner supplied paths/listing but *not the actual manifest/APK/OBB/BlackBox bytes*; no device filesystem is available to Actions. No assertion that main.91 is valid, installed, mounted or matches manifest; legacy T2/T3/T4 files are not executable drivers. Android15 SAF tree provider may refuse nested folder; manual file picker remains fallback.
+- No real Android15 v17 test event/summary or T1-05 GPU numerical PASS yet. Export existing logs first and **uninstall old Mini app only** before installing v17 due different debug signing cert. Full Raft game stays installed. Stage owner uploads in CL/test for review after real test.
+- Next T5 scheduled/chat: inspect the newest CL/test owner session from 0.2.17, confirm file tree enumeration and T5-02 full digest for **version91** with same-version manifest/attestation; confirm T3 PixelCopy screenshots and T4 physical mouse separately, and T1-05 floats. If SAF provider fails, capture error class and selected tree depth; do not infer OBB corruption. Keep R5 NO_BUILD unless source driver changes.
+status: completed
