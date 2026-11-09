@@ -1,0 +1,29 @@
+{
+  "session_id": "20261109T2115Z-T1-chat-direct-fft-thrown-hook-2b6e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed_source_ci_verified",
+  "experiment_key": "original-authenticated-dx11fft-2-direct-dispatch-synchronous-throw-safe-trace-v1",
+  "source_commits": [
+    "d414abd1f30de5362d3ec4324d982a8deaa35be2",
+    "f66277c0572065e6fde495a52468542851124281"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42695722354",
+    "https://github.com/alwansan/raf/actions/runs/42696197130"
+  ],
+  "ci_conclusions": [
+    "success",
+    "success"
+  ],
+  "python_source_tests": 17,
+  "jsonl_parser_tests": 45,
+  "csharp9_compiled": true,
+  "original_managed_sha_verified": true,
+  "original_dispatch_calls_preserved": 2,
+  "source_only": true,
+  "original_unity_device_proven": false,
+  "original_gpu_proven": false,
+  "water_001_closed": false,
+  "next_step": "same-source full-game Android FFT raw log before/returned/threw correlated to error events"
+}

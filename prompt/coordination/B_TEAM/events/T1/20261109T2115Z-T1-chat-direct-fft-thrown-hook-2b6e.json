@@ -1,0 +1,21 @@
+{
+  "session_id": "20261109T2115Z-T1-chat-direct-fft-thrown-hook-2b6e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "event_type": "source-authentic-original-fft-dispatch-synchronous-exception-observation_integrated",
+  "commits": [
+    "d414abd1f30de5362d3ec4324d982a8deaa35be2",
+    "f66277c0572065e6fde495a52468542851124281"
+  ],
+  "ci": [
+    "https://github.com/alwansan/raf/actions/runs/42695722354",
+    "https://github.com/alwansan/raf/actions/runs/42696197130"
+  ],
+  "verified": [
+    "17 Python tests",
+    "CSharp9 ABI synthetic compile and rethrow identity",
+    "SHA-authentic original Dx11FFT private decompile",
+    "45 JSONL parser tests"
+  ],
+  "limitations": "no full-game device run; no original GPU kernel/name proof; WATER-001 OPEN NOT_READY 0/3"
+}
