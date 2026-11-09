@@ -12,6 +12,10 @@ namespace RaftGraphicsLab
         public Renderer[] modelRenderers = new Renderer[0];
         public Material whiteLit;
         public Material whiteUnlit;
+        public Material originalAlbedo;
+        public Material originalPbr;
+        public bool originalTextureChainVerified;
+        public bool originalShaderRestored;  // Must remain false for this fallback experiment.
         public int meshCount;
         public int vertexCount;
         public int triangleCount;
@@ -21,6 +25,7 @@ namespace RaftGraphicsLab
         private float pitch = 12f;
         private float distance = 3.8f;
         private bool unlit;
+        private int modeIndex;
         private bool spin;
         private int reportCopies;
         private int logErrors;
@@ -51,6 +56,11 @@ namespace RaftGraphicsLab
             public int errors;
             public string firstError;
             public string mode;
+            public bool originalAlbedoPresent;
+            public bool originalPbrPresent;
+            public bool sourceTextureChainVerified;
+            public bool originalShaderRestored;
+            public bool runtimeColoredPixelsVerified;
             public string utc;
         }
 
@@ -113,10 +123,24 @@ namespace RaftGraphicsLab
             sceneCamera.transform.LookAt(center);
         }
 
-        private void SetMode(bool newUnlit)
+        private string ModeName()
         {
-            unlit = newUnlit;
-            var selected = unlit ? whiteUnlit : whiteLit;
+            if (modeIndex == 1) return "UNLIT_WHITE";
+            if (modeIndex == 2) return "SOURCE_ALBEDO_STANDARD_DIAGNOSTIC";
+            if (modeIndex == 3) return "SOURCE_TEXTURE_PBR_STANDARD_APPROX";
+            return "LIT_WHITE";
+        }
+
+        private void SetMode(int nextIndex)
+        {
+            int total = originalTextureChainVerified ? 4 : 2;
+            modeIndex = ((nextIndex % total) + total) % total;
+            unlit = modeIndex == 1;
+            Material selected = whiteLit;
+            if (modeIndex == 1) selected = whiteUnlit;
+            if (modeIndex == 2) selected = originalAlbedo;
+            if (modeIndex == 3) selected = originalPbr;
+            if (selected == null) throw new InvalidOperationException("Texture mode missing authenticated Unity material");
             foreach (Renderer renderer in modelRenderers)
             {
                 if (renderer == null) continue;
@@ -132,7 +156,7 @@ namespace RaftGraphicsLab
         {
             var r = new Report
             {
-                experiment = "GFX-AVATAR-001", sourceCategory = sourceCategory,
+                experiment = originalTextureChainVerified ? "GFX-SHEARS-004" : "GFX-AVATAR-001", sourceCategory = sourceCategory,
                 deviceModel = SystemInfo.deviceModel,
                 gfxDevice = SystemInfo.graphicsDeviceName, gfxApi = SystemInfo.graphicsDeviceType.ToString(),
                 gfxVersion = SystemInfo.graphicsDeviceVersion, unity = Application.unityVersion,
@@ -142,7 +166,12 @@ namespace RaftGraphicsLab
                 originalGeometry = meshCount > 0 && vertexCount > 0, meshCount = meshCount,
                 vertices = vertexCount, triangles = triangleCount, renderers = modelRenderers.Length,
                 errors = logErrors, firstError = firstError,
-                mode = unlit ? "UNLIT_WHITE" : "LIT_WHITE",
+                mode = ModeName(),
+                originalAlbedoPresent = originalAlbedo != null && originalAlbedo.mainTexture != null,
+                originalPbrPresent = originalPbr != null && originalPbr.mainTexture != null,
+                sourceTextureChainVerified = originalTextureChainVerified,
+                originalShaderRestored = originalShaderRestored,
+                runtimeColoredPixelsVerified = false,
                 utc = DateTime.UtcNow.ToString("o")
             };
             return JsonUtility.ToJson(r, true);
@@ -174,13 +203,15 @@ namespace RaftGraphicsLab
             float panelHeight = 145f * s;
             GUI.Box(new Rect(12, 12, Screen.width - 24, panelHeight), "");
             GUI.Label(new Rect(24, 18, Screen.width - 35, 30*s),
-                "RAFT Graphics Lab — ORIGINAL MESH (white material)", style);
+                originalTextureChainVerified ? "RAFT GFX Lab — SHEARS (source textures / Standard fallback)" : "RAFT Graphics Lab — ORIGINAL MESH (white material)", style);
             GUI.Label(new Rect(24, 47*s, Screen.width - 35, 30*s),
-                "Model: " + sourceCategory + "   Parts: " + meshCount + "   Vertices: " + vertexCount, style);
+                "Model: " + sourceCategory + "   Vertices: " + vertexCount + "   Mode: " + ModeName(), style);
             GUI.Label(new Rect(24, 76*s, Screen.width - 35, 30*s),
                 "GPU: " + SystemInfo.graphicsDeviceName + "   " + SystemInfo.graphicsDeviceType, style);
             float y = 107f*s; float w = (Screen.width-48)/4f;
-            if (GUI.Button(new Rect(20, y, w, 42*s), unlit ? "LIT WHITE" : "UNLIT WHITE", btn)) SetMode(!unlit);
+            if (GUI.Button(new Rect(20, y, w, 42*s),
+                originalTextureChainVerified ? "NEXT MATERIAL" : (unlit ? "LIT WHITE" : "UNLIT WHITE"), btn))
+                SetMode(modeIndex + 1);
             if (GUI.Button(new Rect(25+w, y, w, 42*s), spin ? "STOP SPIN" : "SPIN", btn)) spin = !spin;
             if (GUI.Button(new Rect(30+2*w, y, w, 42*s), "RESET VIEW", btn)) { yaw = -25f; pitch = 12f; distance = 3.8f; }
             if (GUI.Button(new Rect(35+3*w, y, w, 42*s), "COPY LOG", btn))
