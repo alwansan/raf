@@ -3,7 +3,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "status": "active",
-  "updated_at": "2026-11-09T02:10:00Z",
+  "updated_at": "2026-11-09T02:19:00Z",
   "base_sha": "4ba06e08894e5b7a1267c9b408b354e625f66a96",
   "resumed_from_sessions": [
     "20261109T0155Z-T1-chat-direct-dispatch-f7a2",
@@ -16,7 +16,9 @@
     "android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs",
     ".github/workflows/raft-t1-original-runtime-hook-source.yml",
     ".github/workflows/raft-unity-editor-android-import.yml",
-    "prompt/coordination/clients/T1/sessions/20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4.md"
+    "prompt/coordination/clients/T1/sessions/20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4.md",
+    "android-port/Tests/T1FftDispatchTraceCompile/TraceCompile.csproj",
+    "android-port/Tests/T1FftDispatchTraceCompile/UnityTraceStubs.cs"
   ],
   "experiment_key": "t1-original-source-dx11fft-runtime-before-after-sha8aa32937-v1",
   "resource_key": null,
@@ -41,5 +43,6 @@
     "CL read-only",
     "no original proprietary data upload"
   ],
-  "limits": "Tool adds logging only to the next explicitly authorized native game rebuild; no currently installed-device claim."
+  "limits": "Tool adds logging only to the next explicitly authorized native game rebuild; no currently installed-device claim.",
+  "notes": "Source-authenticated ILSpy CI42550189294 SUCCESS; before closure additionally compile and execute C# Android trace helper on synthetic Unity stubs, preventing late Unity Editor compile regressions."
 }
