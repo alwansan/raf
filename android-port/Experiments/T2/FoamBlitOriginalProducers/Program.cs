@@ -1342,6 +1342,25 @@ internal static class Program
         traced=BacktraceBlitSource(fixtureMethod,6);
         if(traced.Role!="unknown" || traced.Reason!="producer_type_not_base_texture")
             throw new InvalidOperationException("non_texture_stack_value_must_not_pass");
+        // A DUP can alias the same stack object. Reverse-only accounting must
+        // fail closed instead of inventing a unique Texture producer.
+        stream.Clear();
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        stream.Add(Instruction.Create(OpCodes.Dup));
+        stream.Add(Instruction.Create(OpCodes.Pop));
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        stream.Add(Instruction.Create(OpCodes.Ldsfld,fixtureMatField));
+        stream.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        stream.Add(Instruction.Create(OpCodes.Call,b));
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="unknown" || traced.Reason!="dup_alias_ambiguous")
+            throw new InvalidOperationException("dup_alias_must_fail_closed");
+        // The same DUP must not be accepted merely because its first
+        // operand was statically typed as a Texture.
+        stream[0]=Instruction.Create(OpCodes.Ldnull);
+        traced=BacktraceBlitSource(fixtureMethod,6);
+        if(traced.Role!="unknown" || traced.Reason!="dup_alias_ambiguous")
+            throw new InvalidOperationException("dup_null_alias_must_fail_closed");
         // An original-module method with a single direct static field return
         // is type-classifiable without proving any runtime texture identity.
         var getter=new MethodDefinition("SourceFreeSyntheticGetter",
