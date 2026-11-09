@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T2003Z-T3-chat-smoke34-name-anchors-n7c2",
+  "issue_id": "RENDER-002",
+  "type": "original_private_compiler_name_drift_evidence",
+  "status": "COMPILER_REFLECTED_NAMES_NOT_RETAINED__PIXELS_NOT_PROVEN",
+  "timestamp_utc": "2026-11-09T20:08:00Z",
+  "run": 42689814110,
+  "artifact_id": 13706885671,
+  "source_name_type_matches": {
+    "inputs": 0,
+    "outputs": 0
+  },
+  "source_named": {
+    "inputs": 13,
+    "outputs": 9
+  },
+  "conclusion": "Compiler-generated names cannot safely anchor original→HLSL roundtrip location remap.",
+  "original_DXBC_semantic_mapping_verified": false,
+  "phone_device_fix_verified": false
+}

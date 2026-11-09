@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "session_id": "20261109T2003Z-T3-chat-smoke34-name-anchors-n7c2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "source_sha_original_compiler_name_anchor_missing",
+  "experiment_key": "t3-sha15964-original-smoke34-two-keyword-vsfs-spirv-source-roundtrip-name-type-anchor-evidence-gate-v1",
+  "run": {
+    "id": 42689814110,
+    "conclusion": "success",
+    "sha": "837022d50bdaa22abcf7537775fe33e4ed137114",
+    "artifact_id": 13706885671
+  },
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "scenes_sha_checked": 6,
+    "owners_sha_checked": 4,
+    "original_shader_role": "smoke-17-renderers-34-slots"
+  },
+  "checks": {
+    "synthetic_pass": 17,
+    "inherited_pass": 7,
+    "original_stages_spirv_valid": 4,
+    "roundtrip_stages_valid": 4,
+    "original_vs_fs_compatible_pairs": 2,
+    "roundtrip_vs_fs_compatible_pairs": 2,
+    "input_names_original": 13,
+    "input_names_roundtrip": 13,
+    "input_name_type_matches": 0,
+    "output_names_original": 9,
+    "output_names_roundtrip": 9,
+    "output_name_type_matches": 0,
+    "all_stages_name_checked": 4
+  },
+  "limits": {
+    "original_DXBC_semantics_verified": false,
+    "compiler_names_are_original_semantics": false,
+    "shaderlab_restored": false,
+    "phone_pixels_verified": false,
+    "game_assets_modified": false,
+    "private_names_published": false
+  },
+  "next": "Match true original DXBC signature semantic-index-register-component masks for both paired source stages, then compare anonymous SPIR-V component coverage."
+}

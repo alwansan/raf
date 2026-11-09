@@ -5,8 +5,8 @@ origin: chat
 base_sha: be69f74c1f4d902e7c731e4a17cc4bd3c7609ff0
 resumed_from_sessions: 20261109T1943Z-T3-chat-smoke34-dxbc-translation-c4m8; 20261109T1935Z-T3-scheduled-dxbc-handoff-k7m4
 issue_id: RENDER-002
-status: active
-updated_at: 2026-11-09T20:03:00Z
+status: completed
+updated_at: 2026-11-09T20:08:00Z
 experiment_key: t3-sha15964-original-smoke34-two-keyword-vsfs-spirv-source-roundtrip-name-type-anchor-evidence-gate-v1
 resource_key: original-zip2-6scene4owner-private-CPU-spirv-names-T3
 intended_files:
@@ -21,3 +21,9 @@ Scope checked at 20:01 UTC: latest 30 GitHub Actions no in-progress T3 stage or 
 
 New independent hypothesis: can exact *compiler reflected name + type* across same original and derived SPIR-V identify unique candidate anchors for the moved locations, or does missing/renamed compiler metadata prevent even a compiler-name map? Reuse existing strict t3_spirv_interface_name_drift.py classifier with private spirv-cross --reflect from the *same* guarded exact-original translation; allow-list only aggregate counts and flags. Reject duplicate/missing/untrusted raw names, disagreement with safe I/O baselines, wrong classifier schema, bool-as-int, or private identity leakage. Preserve user source and any other T agents' work. Compiler-generated names are NOT original DXBC semantic proof. Existing CI success does not settle this new question.
 No APK/OBB/Unity or game source changes, and no repeated source-only census. New code can run on the same dedicated isolated workflow, cancel-in-progress:false.
+
+## Verified result
+- New named compiler reflection source gate [CI42689814110](https://github.com/alwansan/raf/actions/runs/42689814110) success 17+7 tests, six SHA scenes/four source owners, real D3D11-to-SPIR-V private stage 4/4.
+- Source→roundtrip compiler name-type correspondence: 0/13 input rows and 0/9 output rows; all named but 13 source-only and 13 derived-only input; 9 source-only and 9 derived-only output.
+- Source-compiled variable names are **NOT** durable anchors, nor original DXBC semantics. No Unity shaders, APK or phone fix; report artifact13706885671 expires 2026-11-16 UTC.
+- Scope completed; release reserved original-zip2 shader CPU resource. Next check genuine DXBC semantic/signature and component coverage.
