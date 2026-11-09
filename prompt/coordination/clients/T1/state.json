@@ -2,19 +2,20 @@
   "schema_version": 1,
   "username": "T1",
   "generation": "T-2026-11-05",
-  "session_id": "20261108T2022Z-T1-chat-fft-source-gate-d8b4",
-  "resumed_from_session": "20261108T1924Z-T1-chat-raw-root-context-a7d9",
+  "session_id": "20261109T2115Z-T1-chat-direct-fft-thrown-hook-2b6e",
+  "resumed_from_session": "20261109T2030Z-T1-chat-index6-selector-correlation-c2d7",
   "status": "paused",
-  "base_sha": "fa3d282481c5ac499decf5dd30b89cb6d1acbbb1",
-  "last_commit": "e7ced1be9008c0ba2822a3ce9f5de256be0cbf9a",
-  "updated_at": "2026-11-08T20:30:00Z",
+  "base_sha": "d8da9a55fab4722aca0ff02cb4ea77c9a860265c",
+  "last_commit": "acd40bfe101a3523fcee34f8600172f4085c0211",
+  "updated_at": "2026-11-09T20:49:50Z",
   "tracks": [
     "WATER-001: SHA-pinned authored .compute Unity Editor runtime kernel probing; original FFT runtime mapping unverified",
     "WATER-001: original FFT bank1 Vulkan failure isolation; authentic Unity ComputeShader integration unproven",
     "Shared Mini T1 GLES context startup gate: compiled Java CI success; NEED_BUILD vote, T5 single shared APK; device not tested",
     "WATER-001: CL pinned first water/FFT root event observed ~64.5s before world-loaded log, source-only CI PASS; original Unity kernel identity and shader pixels unverified",
     "WATER-001: authenticated original CL raw first 33.5MB Git blob shows Spectrum 16:49:17.552, collector first water 16:49:17.579 (+27ms), 2024 Dx11FFT token lines but NO raw kernel/ComputeShader literal; original Unity named kernel identity STILL UNKNOWN; CI42516813516 SUCCESS 15/15; no APK build",
-    "WATER-001: original SHA-verified Dx11FFT source numeric Dispatch argument6 hypothetical only for FFTsize256 bank0 first pass, next7; actual Unity kernel6/phone state UNPROVEN. Source-only CI42519853981 30/30 SUCCESS; fixed first_divergence SyntaxError CI42519336164 SUCCESS."
+    "WATER-001: original SHA-verified Dx11FFT source numeric Dispatch argument6 hypothetical only for FFTsize256 bank0 first pass, next7; actual Unity kernel6/phone state UNPROVEN. Source-only CI42519853981 30/30 SUCCESS; fixed first_divergence SyntaxError CI42519336164 SUCCESS.",
+    "WATER-001: authenticated original Dx11FFT Android-only direct Dispatch synchronous throw catcher preserves original exception, emits safe marker, and JSONL parser distinguishes returned/threw/no terminal; source CI42695722354 CSharp9+original ILSpy PASS17, parser CI42696197130 PASS45. No original device/GPU proof; NOT_READY 0/3."
   ],
   "work_ids": [
     "T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance",
@@ -23,7 +24,8 @@
     "20261108T1811Z-T1-chat-gles-gate-9d3f-shared-context-gate",
     "T1-20261108T1836Z-T1-chat-water-startup-order-c5e7-preworld-log-sequence",
     "T1-20261108T1924Z-T1-chat-raw-root-context-a7d9",
-    "T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4"
+    "T1-20261108T2022Z-T1-chat-fft-source-gate-d8b4",
+    "20261109T2115Z-T1-chat-direct-fft-thrown-hook-2b6e"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939314440",
@@ -38,8 +40,10 @@
     "https://github.com/alwansan/raf/actions/runs/42513165405",
     "https://github.com/alwansan/raf/actions/runs/42516813516",
     "https://github.com/alwansan/raf/actions/runs/42519336164",
-    "https://github.com/alwansan/raf/actions/runs/42519853981"
+    "https://github.com/alwansan/raf/actions/runs/42519853981",
+    "https://github.com/alwansan/raf/actions/runs/42695722354",
+    "https://github.com/alwansan/raf/actions/runs/42696197130"
   ],
-  "next_step": "Coordinate actual original Raft Unity runtime first FFT failure instrumentation same build: size/bank/n numeric arg, ComputeShader instance GUID/name/index, SetTexture/Dispatch group sizes and first difference; T2 separate Spectrum/Foam. WATER-001 OPEN/NOT_READY0/3; Mini r4 T1 NO_BUILD.",
+  "next_step": "At separately authorized full-game same-build Unity Android run, inspect T1 original Dx11FFT before/returned/threw events and match kernel6 source numeric and Unity error under one trace session; new hook not present in last owner installed game. WATER-001 OPEN NOT_READY 0/3, no Mini build.",
   "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
 }
