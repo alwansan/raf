@@ -1,0 +1,14 @@
+{
+  "session_id": "20261109T1035Z-T3-scheduled-smoke-gate-tests-x7q2",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "intended_files": [
+    "scripts/t3_smoke_render_state_gate.py",
+    "tests/test_t3_smoke_render_state_gate.py"
+  ],
+  "experiment_key": "T3-SMOKE34-HEX-CASE-SAME-DIGEST-V1",
+  "resource_key": null,
+  "hypothesis": "Same SHA256 digest with uppercase/lowercase hex should be accepted, different digest rejected",
+  "updated_at": "2026-11-09T10:35:00Z"
+}
