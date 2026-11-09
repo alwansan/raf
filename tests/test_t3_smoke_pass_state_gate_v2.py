@@ -39,5 +39,15 @@ class PassStateTests(unittest.TestCase):
         d=self.sample();d["exported"]["source_sha256"]="b"*64
         with self.assertRaisesRegex(ValueError,"different_original_source"):audit(d)
 
+    def test_unhashable_blend_array_fails_closed(self):
+        d=self.sample();d["exported"]["passes"][0]["src_blend"]=["SrcAlpha"]
+        with self.assertRaisesRegex(ValueError,"invalid_blend_factor"):audit(d)
+    def test_unhashable_cull_dict_fails_closed(self):
+        d=self.sample();d["original"]["passes"][0]["cull"]={"value":"Off"}
+        with self.assertRaisesRegex(ValueError,"invalid_render_enum"):audit(d)
+    def test_missing_side_fails_closed(self):
+        d=self.sample();del d["exported"]
+        with self.assertRaisesRegex(ValueError,"missing_original_or_exported"):audit(d)
+
 if __name__ == "__main__":
     unittest.main()
