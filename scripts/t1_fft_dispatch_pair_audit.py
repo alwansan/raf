@@ -10,7 +10,9 @@ from pathlib import Path
 
 BEFORE = "t1_original_fft_dispatch.before"
 # Identity keys must not change between the entry and return of one call.
-IDENTITY_FIELDS = ("kernel", "kernel_name", "shader", "shader_name", "resource", "fft_length", "groups_x", "groups_y", "groups_z")
+# Optional provenance, when present, must agree on BOTH sides of a call.
+# Legacy sequence-only traces remain parseable but never prove GPU execution.
+IDENTITY_FIELDS = ("kernel", "kernel_name", "shader", "shader_name", "resource", "fft_length", "groups_x", "groups_y", "groups_z", "session_id", "build_sha", "shader_guid", "resource_guid")
 AFTER = "t1_original_fft_dispatch.returned"
 
 
