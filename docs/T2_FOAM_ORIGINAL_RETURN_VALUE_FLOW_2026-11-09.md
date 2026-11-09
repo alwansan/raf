@@ -39,3 +39,13 @@ T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_or_joined
 4. Compile original integrated Unity assets/shaders, compare actual pixels on Adreno730 and close WATER-001 only after device evidence.
 
 The real owner phone Mini r2 [CL/test shared session](https://github.com/alwansan/CL/tree/main/test/shared-20261108-230157-466487336) passed T2 synthetic GLES FBO controls; this does not confirm original Raft water. No new Mini APK (T2 NO_BUILD) or full Raft XAPK requested. Audio, settings, mouse, original assets and other T clients' source were untouched.
+
+## تحديث لاحق موثّق — 9 نوفمبر 2026 (19:18 UTC)، T2
+
+آخر دليل مُثبت بعد نتيجة `value_mixed_or_joined` التاريخية: [CI42680030121](https://github.com/alwansan/raf/actions/runs/42680030121) أعاد تصنيف مصدر تمريرة Foam الثانية إلى `value_mixed_with_explicit_null_literal` بعدما صارت أداة CIL تحتفظ بفئات المنتج على الفروع وعند نقاط الجمع. تشير الفئة إلى ظهور `ldnull` في مسار إرجاع *محافظ*، ولا تثبت تنفيذ المسار على الهاتف.
+
+نفّذت تجربة مستقلة تُميز الشروط العددية الثابتة `ldc.i4=0` و`ldc.i4!=0` عند `brtrue`/`brfalse`؛ المسار المستحيل تحت الشرط الثابت يُستبعد بينما تظل جميع فروع الوسائط والاستدعاءات والشروط المجهولة محتملة. أنشأت selftests لثابت 0/غير صفر، وللشرط المجهول، ولـ shared-return phi. التعديل [`cc4e2519`](https://github.com/alwansan/raf/commit/cc4e2519c35506c4a4a134b2428ee65c11269928) واجتاز [CI42681948189](https://github.com/alwansan/raf/actions/runs/42681948189) **SUCCESS**، بما فيه 17 اختبار Python وMono.Cecil synthetic selftest والمصدر الأصلي SHA-pinned (DLL بحجم 3,211,776 بايت وShader owner بحجم 115,978,112 بايت) وتنظيف المصدر الخاص.
+
+**النتيجة الأصلية بقيت `value_mixed_with_explicit_null_literal`.** ولذلك فإن الفئة السابقة لا تختفي بإزالة الفروع التي يستحيل الوصول إليها بمجرد شرط CIL عددي ثابت؛ لكن تحليلًا محافظًا لمُدخل مجهول قد يشمل مسارًا لا يحدث في حالة تشغيل معينة. كذلك `ldnull` قد يكون إرجاعًا مقصودًا أو اختياريًا في تصميم اللعبة، وليس خطأً بمفرده. لا تستنتج أن `null` هو سبب الخطأ المائي أو أن مصدر pass1 يساوي وجهة pass0. لا توجد شهادة على مخرجات ShaderLab/CB0 أو بكسلات الماء على Android. `WATER-001` ما زال **OPEN**.
+
+نقطة الاستكمال المعلّمة: `prompt/coordination/clients/T2/sessions/20261109T1916Z-T2-chat-foam-constant-branch-p8v6.md`.
