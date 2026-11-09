@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "experiment_key": "t3-r3-cl-png-six-raw-pixels:CL@24a677fc8fa4749c0bcf8a3cac01fa80b1641c86:shared-20261108-232759-468049775:six-blob-shas:stdlib-decode-v1",
+  "session_id": "20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4",
+  "origin": "chat",
+  "worker": "T3",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Six real R3 CL stored screenshots contain nonblack actual GPU colors in the center, unlike misleading all-black GLES regions in earlier shared 0.2.10 PNG captures.",
+  "runner": "ubuntu-24.04",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42547145230",
+  "source_commit": "e839d4e3e54b761a95a421f48e1ce70593751725",
+  "cl_commit": "24a677fc8fa4749c0bcf8a3cac01fa80b1641c86",
+  "cl_path": "test/shared-20261108-232759-468049775",
+  "input_identity": "exact six CL PNG git blob SHA1 + file length pinned in workflow",
+  "tests": {
+    "synthetic_decoder_unittest": "PASS",
+    "six_raw_blob_identity": "PASS",
+    "six_raw_png_crc_pixel_decode": "PASS",
+    "job": "success",
+    "completed_at": "2026-11-09T01:45:11Z"
+  },
+  "measurements": [
+    {
+      "id": "T3-01",
+      "center_unique_rgb": 3,
+      "center_black_fraction": 0,
+      "full_black_fraction": 0.000162
+    },
+    {
+      "id": "T3-02",
+      "center_unique_rgb": 81448,
+      "center_black_fraction": 0.000043,
+      "full_black_fraction": 0.000062
+    },
+    {
+      "id": "T3-03",
+      "center_unique_rgb": 332,
+      "center_black_fraction": 0.000043,
+      "full_black_fraction": 0.000062
+    },
+    {
+      "id": "T3-04",
+      "center_unique_rgb": 332,
+      "center_black_fraction": 0.000043,
+      "full_black_fraction": 0.000062
+    },
+    {
+      "id": "T3-05",
+      "center_unique_rgb": 331,
+      "center_black_fraction": 0.000043,
+      "full_black_fraction": 0.000062
+    },
+    {
+      "id": "T3-06",
+      "center_unique_rgb": 330,
+      "center_black_fraction": 0.000043,
+      "full_black_fraction": 0.000062
+    }
+  ],
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42547145230/artifacts/13644076425",
+  "result": "CONCLUSIVE_PNGS_NOT_BLACK_CENTER_ONLY",
+  "limits": "No per-pixel owner-phone alignment, T3 human visual PASS, Raft Unity asset rendering, alpha/sRGB equivalence or NOT_READY clearance. All metrics on synthetic GLES lab capture.",
+  "docs": "docs/T3_CL_R3_PIXEL_EVIDENCE_2026-11-09.md",
+  "next_step": "Trace original Raft smoke prefab->material->shader->texture and cross-check owner actual in-game screenshots; T3-scheduled script remains unmodified. No duplicate APK."
+}
