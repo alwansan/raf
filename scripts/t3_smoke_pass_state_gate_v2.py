@@ -73,11 +73,25 @@ def audit(data):
             "mismatches": mismatches, "device_pixels_proven": False,
             "texture_alpha_proven": False, "shader_program_authenticity_proven": False}
 
+def _unique_object_pairs(pairs):
+    """Reject ambiguous JSON objects before provenance/state validation."""
+    obj = {}
+    for key, value in pairs:
+        if key in obj:
+            raise ValueError("duplicate_json_key:" + key)
+        obj[key] = value
+    return obj
+
+
+def load_metadata(text):
+    return json.loads(text, object_pairs_hook=_unique_object_pairs)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("metadata_json", type=Path)
     args = parser.parse_args()
-    print(json.dumps(audit(json.loads(args.metadata_json.read_text())), sort_keys=True))
+    print(json.dumps(audit(load_metadata(args.metadata_json.read_text())), sort_keys=True))
 
 if __name__ == "__main__":
     main()
