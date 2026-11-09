@@ -4,7 +4,7 @@
   "origin": "chat",
   "worker": "T2",
   "issue_id": "COORD-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "be08fb8f6f46e59dae97391404c2fea2fbcb8c29",
   "originating_session_id": "20261109T1905Z-T2-chat-foam-null-branch-r7k3",
   "resumed_from_sessions": [
@@ -15,15 +15,29 @@
     "prompt/coordination/B_TEAM/events/T2/20261109T1859Z-T2-chat-foam-report-alias-ci-b8e7.json",
     "prompt/coordination/B_TEAM/events/T2/20261109T1905Z-T2-chat-foam-null-branch-r7k3.json",
     "prompt/coordination/clients/T2/sessions/20261109T1909Z-T2-chat-event-ledger-repair-n6q8.md",
-    "prompt/coordination/work/COORD-001/20261109T1909Z-T2-chat-event-ledger-repair-n6q8.json"
+    "prompt/coordination/work/COORD-001/20261109T1909Z-T2-chat-event-ledger-repair-n6q8.json",
+    "prompt/coordination/discussions/COORD-001/20261109T1911Z-T2-chat-T3-event-identity-n6q8.md"
   ],
   "experiment_key": "T2_CANONICAL_LEDGER_EVENT_IDENTITY_REFRESH_42678885368",
   "resource_key": "coord-canonical-inherited-ledger",
-  "updated_at": "2026-11-09T19:09:00Z",
+  "updated_at": "2026-11-09T19:12:00Z",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42678885368"
   ],
   "hypothesis": "T2-owned events omit canonical event_id/id; refresh_b_team.read_records raises Missing record identity, blocking team index refresh.",
   "plan": "Add unique event_id and owner/at compatible with canonical records to T2 two event JSON documents with CAS, no workflow/global schema edits, then validate refresh in existing CI or source-only runner.",
-  "limits": "Index repair only, does not change issue readiness."
+  "limits": "Index repair only, does not change issue readiness.",
+  "scope_result": "T2_EVENT_SCHEMA_REPAIRED_INDEX_BLOCKED_BY_T3_EVENT",
+  "commits": [
+    "881095625f7c852aef50c8948014edd18aea735b",
+    "d9c150f620620e083f89170e056d753a62bf6ce1"
+  ],
+  "ci_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42680673144",
+    "https://github.com/alwansan/raf/actions/runs/42680680366"
+  ],
+  "actual_summary_status": "BLOCKED_EXTERNAL_T3_EVENT_ID",
+  "blocker_path": "prompt/coordination/B_TEAM/events/T3/20261106T2007Z-T3-chat-explicit-original-d52e.json",
+  "session_file": "prompt/coordination/clients/T2/sessions/20261109T1909Z-T2-chat-event-ledger-repair-n6q8.md",
+  "next_step": "T3 must repair its own event identity, then auto summary refresh; T2 not to bypass ledger schema."
 }
