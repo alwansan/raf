@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261109T0155Z-T5-chat-atomic-reexport-c3a8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "Reusing exported MediaStore content URIs with openOutputStream(uri,'wt') can destroy a previously published log/summary if a later write is interrupted.",
+  "source_commit": "f2609b07d59cf3444ea65d6547f6bef38ea59a7b",
+  "input_hashes": [],
+  "tool_versions": {
+    "AndroidAPI": "29+",
+    "Python": "3.12",
+    "Java": "17",
+    "Gradle": "8.10.2"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t5_unified_saf_stream_contract.py' -v",
+    "java -cp /tmp/raft-t5-stream-classes com.alwansan.raftlab.T5StreamSha256Test",
+    "gradle -p apk-for-testing/unified --no-daemon :app:compileDebugJavaWithJavac -PsourceSha=$GITHUB_SHA -PversionCode=1"
+  ],
+  "negative_controls": [
+    "Reject destructive openOutputStream(logExport, wt) / openOutputStream(summaryExport, wt)",
+    "Keep old export URIs until both new writeMedia calls succeed",
+    "Rollback first newly published log if second summary write fails",
+    "Warn if retiring complete old MediaStore URI fails"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-unified-saf-source.yml",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42548237907",
+    "https://github.com/alwansan/raf/actions/runs/42548237886",
+    "https://github.com/alwansan/raf/actions/runs/42548284041"
+  ],
+  "artifact_urls": [],
+  "budget": "source-only CI with compile and JDK tests; no full Unity, APK, Android device",
+  "status": "waiting_ci",
+  "observed_result": "Paired non-destructive re-export fix db261619; regression tests f2609b07; automatically triggered source workflows in-progress/pending at checkpoint.",
+  "limitations": [
+    "MediaStore cannot make two distinct public URIs appear in a single atomic operation; rollback closes the failure window but does not guarantee zero transient visibility.",
+    "Old-file retirement failure can leave two valid copies; user is warned.",
+    "New private in-memory/current activity URIs are not persisted across process restarts.",
+    "No actual device fault injection or full game acceptance."
+  ],
+  "integration_commit": "f2609b07d59cf3444ea65d6547f6bef38ea59a7b",
+  "next_step": "Inspect run 42548284041; if green, update handoff and await one policy-justified shared Mini with actual Android15 export tests."
+}
