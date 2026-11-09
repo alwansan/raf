@@ -1,0 +1,29 @@
+{
+  "session_id": "20261109T1858Z-T4-chat-epoch-evidence-p6m4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-09T18:58:00Z",
+  "base_sha": "7e4ae3efca1da18b2a042e09c1cfd75aca08444e",
+  "resumed_from_sessions": [
+    "20261109T1836Z-T4-scheduled-capture-provenance-k7d2",
+    "20261109T0209Z-T4-chat-unity-legacy-readers-w7q5"
+  ],
+  "scope": "Independent read-only same-epoch Android captured mouse callback vs Unity Legacy getter provenance gate; synthetic negative controls only.",
+  "intended_files": [
+    "scripts/t4_correlate_mouse_runtime_epochs.py",
+    "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py",
+    ".github/workflows/raft-t4-mouse-epoch-correlation.yml",
+    "docs/T4_MOUSE_SAME_EPOCH_CORRELATION_2026-11-09.md",
+    "prompt/coordination/clients/T4/sessions/20261109T1858Z-T4-chat-epoch-evidence-p6m4.md"
+  ],
+  "experiment_key": "T4-INPUT005-unity-getter-captured-epoch-matching-logged-counters-negative-controls-v1",
+  "resource_key": null,
+  "overlap_avoided": [
+    "scheduled scripts/t4_capture_acceptance_gate.py",
+    "T5 shared lab, mini, testpack",
+    "Unity game runtime and original ZIP2 adapter"
+  ],
+  "run_urls": [],
+  "limits": "No fresh captured=true owner CL/test, no device gameplay, no signed Raft XAPK. Never claim PASS from source counters."
+}
