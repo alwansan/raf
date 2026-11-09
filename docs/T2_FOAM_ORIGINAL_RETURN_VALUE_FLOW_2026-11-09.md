@@ -83,3 +83,21 @@ T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION field_no_match_with_null
 ```
 
 **Negative structural result:** within the analyzed original pass1 callee return paths, a value directly loaded from the exact same DECLARED field token as the pass0 destination was **not** found; an explicit null-family path remains conservatively reachable. This does **not** refute indirect aliases via other fields, receivers, nested getters, allocation or same-frame runtime state. The null path is not proven to execute. Separate [platform CI42690309050](https://github.com/alwansan/raf/actions/runs/42690309050) SUCCESS is CPU/offline smoke only. Original Foam ShaderLab/CB0 and Adreno730 water pixels remain **unverified**, WATER-001 **OPEN / NOT_READY 0/3**. Next distinct engineering step: original managed caller/receiver and indirect alias path, not more duplicate direct token checks.
+
+## T2 one-hop nested Texture callee test — 2026-11-09 20:31 UTC
+
+Previous SHA-original direct pass0 destination → pass1 callee return-field audit `field_no_match_with_null` left nested helper return origins opaque. T2 reserved independent chat session `20261109T2020Z-T2-chat-foam-onehop-return-r8c5` BEFORE source edits. The updated Cecil check follows **at most one** original in-module, statically resolved, nonvirtual/final nested Texture-returning callee, tracking its own return value through the already bounded CFG+stack+local interpreter. Unknown/virtual, original external, exceptional, recursive and unsupported paths remain opaque and cannot be promoted to matching field evidence. Exact declared field token matches, if found, remain weaker than actual receiver/heap/frame identity.
+
+Code commits [99c1f1c4](https://github.com/alwansan/raf/commit/99c1f1c40b978c92e67f558a1ef89dcd983c84b9), `0408e76d`, `5fc56b53`, and final [b61e2acf](https://github.com/alwansan/raf/commit/b61e2acf1bae1ea09e2f7bbece07e2f971dd2701) touched only T2 original-source analyser, strict source-free report validator, and regression tests; no protected original IL/field/token, raw asset or private data was published. The two intermediate attempts [CI42692810846](https://github.com/alwansan/raf/actions/runs/42692810846) and [CI42692872122](https://github.com/alwansan/raf/actions/runs/42692872122) failed on synthetic-only fixtures; [CI42693196369](https://github.com/alwansan/raf/actions/runs/42693196369) also failed synthetic recursion negative-control. Those failures did **not** execute the original stage; the fixture issues were fixed without relaxing the positive original evidence gate.
+
+The final SHA-pinned [CI42693501006](https://github.com/alwansan/raf/actions/runs/42693501006), job `129419155294`, **COMPLETED SUCCESS**. Strict report Python **21/21 PASS**; source-free Mono.Cecil `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`; original ZIP2 SHA authenticated using 3,211,776-byte `Assembly-CSharp.dll` and 115,978,112-byte original Shader owner; private source purged before publishing safe finite results. Original stdout:
+
+```text
+T2_FOAM_PASS0_BACKTRACE RenderTexture typed_field static_type_only_no_instance_proof steps=6 void_calls=0
+T2_FOAM_PASS1_BACKTRACE Texture typed_call_result static_type_only_no_instance_proof steps=21 void_calls=1
+T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW value_mixed_with_explicit_null_literal
+T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION field_no_match_with_null
+T2_FOAM_CROSSPASS_ONEHOP_FIELD_RETURN_RELATION field_no_match_with_null
+```
+
+**Bounded negative result:** allowing one statically resolvable nested Texture helper does not reveal any *new directly linked same declared field token* in the original pass1 source return. This is **not a complete proof of no indirect alias**: deeper nesting, different fields referring to one heap RenderTexture, receiver identity, runtime predicate selection and frame/lifecycle continuity remain unresolved. No Unity ShaderLab binding, CB0, Adreno 730 water pixels or device parity were tested. `WATER-001` **OPEN / NOT_READY 0/3**; no Mini/full game XAPK requested. Next T2 original-source hypothesis should examine receiver and object alias lineage without repeating a one-hop source-free test unless inputs differ.
