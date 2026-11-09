@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "client": "T3",
+  "session_id": "20261109T0932Z-T3-scheduled-smoke-provenance-n8q3",
+  "origin": "scheduled",
+  "status": "IN_PROGRESS",
+  "base_sha": "407503111d09e45a9ba5b33f6ca5fb140da270ff",
+  "issue": "RENDER-002",
+  "scope": "Smoke34 original-versus-export render-state evidence and CL image correlation; documentation-only bounded investigation",
+  "files": [
+    "prompt/coordination/work/RENDER-002/T3-20261109T0932Z-T3-scheduled-smoke-provenance-n8q3.json",
+    "prompt/coordination/clients/T3/sessions/20261109T0932Z-T3-scheduled-smoke-provenance-n8q3.md"
+  ],
+  "hypothesis": "Smoke rectangular output may be alpha/blend or missing particle texture; source shader identity and render pass must be proven before patch",
+  "experiment_key": "T3-SMOKE34-PROVENANCE-20261109",
+  "shared_resource": "none; no Unity/ZIP2 run",
+  "conflict_policy": "do not touch T1/T2 water shaders or T4 input or T5 display; no raw assets",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42549246777",
+    "https://github.com/alwansan/CL/tree/main/test/shared-20261108-232759-468049775"
+  ],
+  "next_step": "Read exact smoke shader GUID/path ID from source trace; compare original and exported Pass/Blend/Alpha and particle material texture GUID; fail closed on mismatched identity"
+}
