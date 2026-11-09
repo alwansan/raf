@@ -1,0 +1,45 @@
+{
+  "session_id": "20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-09T02:10:00Z",
+  "base_sha": "4ba06e08894e5b7a1267c9b408b354e625f66a96",
+  "resumed_from_sessions": [
+    "20261109T0155Z-T1-chat-direct-dispatch-f7a2",
+    "20261109T0142Z-T1-chat-fft-kernel-index-r4c8"
+  ],
+  "hypothesis": "Source authentic original Dx11FFT direct numeric Dispatch executed on device cannot currently be attributed to a specific runtime shader/index failure. Attach bounded Android-only callsite pre/returned metadata on exact original managed source SHA, without changing original dispatch or lifting water authenticity gates.",
+  "intended_files": [
+    "scripts/t1_stage_original_fft_dispatch_trace.py",
+    "tests/test_t1_stage_original_fft_dispatch_trace.py",
+    "android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs",
+    ".github/workflows/raft-t1-original-runtime-hook-source.yml",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "prompt/coordination/clients/T1/sessions/20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4.md"
+  ],
+  "experiment_key": "t1-original-source-dx11fft-runtime-before-after-sha8aa32937-v1",
+  "resource_key": null,
+  "observed_nonterminal_runs": [
+    {
+      "id": 42549491098,
+      "name": "Raft CI runner compatibility guard (Ubuntu 26.04 transition)",
+      "sha": "4ba06e08894e5b7a1267c9b408b354e625f66a96"
+    },
+    {
+      "id": 42549491342,
+      "name": "T3 RENDER-002 original smoke Shader48 anonymous rank source controls (NO APK)",
+      "sha": "4ba06e08894e5b7a1267c9b408b354e625f66a96"
+    }
+  ],
+  "planned_evidence": "Authenticated CSharp9 original source SHA in separate source-only Actions; stage exact Android callsite without altering original C# Dispatch expressions or Unity compute assets; tests and native staging lint. No native/Unity APK request.",
+  "excluded": [
+    "T2 Spectrum/Foam",
+    "T3 render/pixels",
+    "T4 mouse",
+    "T5 unified mini and release",
+    "CL read-only",
+    "no original proprietary data upload"
+  ],
+  "limits": "Tool adds logging only to the next explicitly authorized native game rebuild; no currently installed-device claim."
+}
