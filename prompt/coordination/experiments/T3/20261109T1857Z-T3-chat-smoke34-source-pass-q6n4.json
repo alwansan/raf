@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1857Z-T3-chat-smoke34-source-pass-q6n4",
+  "issue_id": "RENDER-002",
+  "status": "authenticated_original_pass_source_verified",
+  "experiment_key": "T3-smoke-34-unique-original-Shader48-Pass-state-SHA15964ea8-six-scenes-four-owners-17renderers34slots-v1",
+  "source": {
+    "original_zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six_scenes_SHA_verified": true,
+    "four_owners_SHA_verified": true
+  },
+  "run": {
+    "id": 42679312674,
+    "conclusion": "success",
+    "commit": "e7494f1e07a9bca158e95a394986087e47c3b2ed",
+    "safe_artifact": 13702410264
+  },
+  "measured": {
+    "private_smoke_candidate_mat_slots": 34,
+    "smoke_name_renderers": 17,
+    "distinct_equal_rank_fire_shader": true,
+    "subshaders": 1,
+    "passes": 1,
+    "color_blend": "ALPHA_DEPENDENT",
+    "alpha_blend": "ALPHA_DEPENDENT",
+    "color_mask": "RGB",
+    "zwrite": "OFF",
+    "ztest": "ENABLED_NUMERIC",
+    "cull": "OFF",
+    "alpha_to_mask": "OFF",
+    "selective_colormask_translator_accepted": true,
+    "default_translator_accepted": false
+  },
+  "limits": "Genuine original SHA source-only Pass state, no same-instance export identity, no program/texture/Android device proof; no asset or APK modification. RENDER-002 OPEN NOT_READY 0/3",
+  "report": "docs/T3_ORIGINAL_SMOKE34_PASS_ALPHA_2026-11-09_AR.md",
+  "next_step": "Original private 34-slot Shader48 to same-instance ShaderLab Pass/Blend/ColorMask parity, then verify on Android Raft smoke pixels."
+}
