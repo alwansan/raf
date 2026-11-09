@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T0150Z-T3-chat-particle-emitter-3p7k",
+  "issue_id": "RENDER-002",
+  "event_type": "AUTHENTIC_ORIGINAL_SMOKE_NAME_PRIVATE_SHADER48_DISTINCT_34_SLOT_RANK_VERIFIED",
+  "source": "ZIP2 original alwansan/raf@15964ea8f246b6e076ce26b60931ee2e1a9a2385 six SHA scenes/four SHA shader/material owners",
+  "verified_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42548907189",
+    "https://github.com/alwansan/raf/actions/runs/42549246777",
+    "https://github.com/alwansan/raf/actions/runs/42549491342"
+  ],
+  "measured": {
+    "selected_108_shader_slots": 108,
+    "selected_108_renderers": 54,
+    "selected_smoke_names": 0,
+    "selected_fire_names": 25,
+    "other_renderers": 56,
+    "other_smoke_names": 17,
+    "other_fire_names": 17,
+    "smoke_source_unique_Shader48_rank": 34,
+    "smoke_source_Shader48_mat_slots": 34,
+    "smoke_source_Shader48_renderers": 17,
+    "fire_other_distinct_source_Shader48_rank": 34,
+    "fire_other_distinct_shader_slots": 34,
+    "smoke_and_fire_same_rank_Shaders_distinct_source_identities": true,
+    "original_typed_particle_slots_rejoined": 215
+  },
+  "limits": "Class199 and class1 semantic name linkage in six original scenes, not phone square-smoke identity, Unity compiled/native ShaderLab fix or device PASS. Source identities and names remain private.",
+  "report": "docs/T3_ORIGINAL_PARTICLE_SMOKE_SHADER_RANK_2026-11-09.md",
+  "next": "Inspect original smoke-specific 34-use Shader48 parsed Pass/Blend/Texture/keyword with source SHA and actual bounded export; avoid blindly treating 108-use fire shader as smoke shader.",
+  "readiness": "RENDER-002 OPEN / game NOT_READY 0/3; no APK built"
+}
