@@ -35,7 +35,10 @@ def audit(source:Path):
                 if not isinstance(ps,list):raise ValueError("Malformed original shader pass array")
                 passes.append(len(ps))
             if sum(passes)<1:raise ValueError("Original source pass count zero")
+            name=d.get("m_Name",parsed.get("m_Name",""))
+            family_standard=(name=="Standard")
             rows.append({"subshaders":len(sub),"passes":sum(passes),
+                "source_shader_is_named_unity_standard":family_standard,
                 "passes_by_subshader":passes,
                 "original_type_verified":True,
                 "source_real_shader_to_android_program_mapped":False,
