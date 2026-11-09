@@ -11,14 +11,16 @@
 ## التنفيذ المحصور
 
 - `scripts/t4_correlate_mouse_runtime_epochs.py`: يقبل سجلاً نصياً أو JSONL بترتيب زمني **لعملية لعبة واحدة فقط**، ويقسمه عند `physical_mouse_capture_requested/retry` و`physical_mouse_capture_released`. يقبل مؤشرات `epoch` المتطابقة وحدها، ولا يدمج أحداثاً قبل الطلب أو بعد التحرير. يرفض العدّادات غير الصالحة، والعدّادات الراجعة، وحالة `captureObserved=false`، ويشترط حارسَي المصدر `countersAreGetterCallsNotClicks=true` و`unityGameplayVerified=false`.
-- `scripts/tests/test_t4_correlate_mouse_runtime_epochs.py`: أربعة عشر فحصاً لمطابقة الجيل، اختلافه، تغيير ترتيب الطباعة داخل Unity Update، مصدر JSONL، التحرير، إعادة الطلب، أحداث callbacks فقط، getters فقط، fallback صفر، capture=false، العدّادات المستحيلة، التراجع العددي، فقد معرف الجيل والحدود.
+- `scripts/tests/test_t4_correlate_mouse_runtime_epochs.py`: ستة عشر فحصاً لمطابقة الجيل، اختلافه، تغيير ترتيب الطباعة داخل Unity Update، مصدر JSONL، التحرير، إعادة الطلب، أحداث callbacks فقط، getters فقط، fallback صفر، capture=false، العدّادات المستحيلة، التراجع العددي، فقد معرف الجيل والحدود.
 - `.github/workflows/raft-t4-mouse-epoch-correlation.yml`: CI خفيف باسم T4، Python فقط، Ubuntu 24.04، مهلة خمس دقائق، دون Unity player أو إنشاء APK، و`cancel-in-progress: false`.
 
 ## الدليل
 
-- **CI [42679181503](https://github.com/alwansan/raf/actions/runs/42679181503) SUCCESS** على SHA `14a5d794ee5409d0f1ba32fb0436e480b4467230`؛ خطوة `Validate source-only capture epoch correlation fail-closed controls` نجحت (14 unittest).
+- **CI [42679181503](https://github.com/alwansan/raf/actions/runs/42679181503) SUCCESS** (النسخة الأولية 14/14). **النسخة المشددة:** [42679768824](https://github.com/alwansan/raf/actions/runs/42679768824)، المصدر `b73773ccba74cf49ecf97d740b4abec911ae299c`، 16 اختباراً (تحقق نتيجة Actions قبل اعتماد PASS) على SHA `14a5d794ee5409d0f1ba32fb0436e480b4467230`؛ خطوة `Validate source-only capture epoch correlation fail-closed controls` نجحت (16 unittest).
 - تجربة المصدر الأسبق **CI [42549986761](https://github.com/alwansan/raf/actions/runs/42549986761)** أثبتت على مستوى المصدر فقط ربط 20 قارئاً أصلياً، وعدّاد `PhysicalMouseLegacyReaderEvidence`، ونجاح compile في Android/Editor؛ هذا لا يساوي تجربة الهاتف.
 - سجل المالك CL/test المقروء حتى `alwansan/CL@24a677fc8fa4749c0bcf8a3cac01fa80b1641c86` يحوي جلسات 8 نوفمبر؛ أحدث `shared-20261108-232759-468049775` يركز على T3 ولا يضيف دليلاً جديداً لـ T4 capture=true. سجل T4 الأصلي `CL@4680f5dc` لا يحتوي `capture_request ON` أو `captured=true`؛ كانت أزرار LEFT وعجلة V في مسار uncaptured فقط.
+
+**تشديد إضافي بتاريخ 9 نوفمبر:** ترفض نسخة المصدر `66865b4a8` مجموع `positiveLegacy+positiveFallback` إذا تجاوز عدد `getterCalls`، وتعدّ تراجع snapshot خطأً صريحاً بدلاً من رفض صامت؛ اختبارات المصدر الجديدة `b73773ccb` تغطي الحالتين. نتيجة التشغيل النهائي تُحدَّث أدناه.
 
 ## معيار الحسم وحدود الدليل
 
