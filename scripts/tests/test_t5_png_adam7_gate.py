@@ -23,19 +23,19 @@ def png(interlace, pixels):
 
 class Adam7GateTests(unittest.TestCase):
     def test_noninterlaced_one_pixel_valid(self):
-        self.assertEqual(module.validate_png(png(0, b"\\x00\\xff\\x00\\x00\\xff")), (1, 1))
+        self.assertEqual(module.validate_png(png(0, b"\x00\xff\x00\x00\xff")), (1, 1))
 
     def test_interlaced_one_pixel_must_not_claim_verified(self):
         with self.assertRaisesRegex(ValueError, "Adam7"):
-            module.validate_png(png(1, b"\\x00\\xff\\x00\\x00\\xff"))
+            module.validate_png(png(1, b"\x00\xff\x00\x00\xff"))
 
     def test_interlaced_truncated_pixel_must_not_claim_verified(self):
         with self.assertRaises(ValueError):
-            module.validate_png(png(1, b"\\x00"))
+            module.validate_png(png(1, b"\x00"))
 
     def test_noninterlaced_truncated_pixel_rejected(self):
         with self.assertRaisesRegex(ValueError, "scanline payload size"):
-            module.validate_png(png(0, b"\\x00"))
+            module.validate_png(png(0, b"\x00"))
 
 
 if __name__ == "__main__":
