@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-original-source-dx11fft-runtime-before-after-sha8aa32937-v1",
+  "resource_key": null,
+  "hypothesis": "Source authentic original Dx11FFT direct numeric Dispatch executed on device cannot currently be attributed to a specific runtime shader/index failure. Attach bounded Android-only callsite pre/returned metadata on exact original managed source SHA, without changing original dispatch or lifting water authenticity gates.",
+  "pins": {
+    "original_assembly_blob_sha1": "fc9d4ba920a178fdb89c970d9d772a01051dadc6",
+    "original_derived_source_sha256": "8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0",
+    "original_inherited_source_sha256": "2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704",
+    "original_dispatch_calls": 2,
+    "original_findkernel_calls": 0
+  },
+  "tools": {
+    "python": "3.x ubuntu-24.04 GitHub Actions",
+    "dotnet": "10.0.x with CSharp9",
+    "ilspycmd": "11.2.0.10050",
+    "unity_editor": "NOT RUN",
+    "rea": "Not needed; SHA-pinned ILSpy provenance available"
+  },
+  "files": [
+    "scripts/t1_stage_original_fft_dispatch_trace.py",
+    "tests/test_t1_stage_original_fft_dispatch_trace.py",
+    "android-port/Runtime/Platform/T1FftDirectDispatchTrace.cs",
+    ".github/workflows/raft-t1-original-runtime-hook-source.yml",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "prompt/coordination/clients/T1/sessions/20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4.md",
+    "android-port/Tests/T1FftDispatchTraceCompile/TraceCompile.csproj",
+    "android-port/Tests/T1FftDispatchTraceCompile/UnityTraceStubs.cs"
+  ],
+  "source_commits": {
+    "original_stage": "2bc4bcf5994c5f29f6853c51ec0074a4130bd773",
+    "runtime_helper": "04661db224e5cbd740b1893bbcd76040ef394910",
+    "native_workflow_integration": "ec5bf2f4568cc8baba247b709588860bd85d56de",
+    "cs_abi_smoke": "41559e96324b96293457ff578d5e069fe5a8bf53"
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42549999984",
+    "https://github.com/alwansan/raf/actions/runs/42550062087",
+    "https://github.com/alwansan/raf/actions/runs/42550189294",
+    "https://github.com/alwansan/raf/actions/runs/42550454734"
+  ],
+  "verified": {
+    "original_private_source_fingerprint_valid": true,
+    "actual_original_source_class_hook_placement_verified": true,
+    "csharp9_stub_abi_compiled": true,
+    "csharp9_stub_abi_runtime_smoke_passed": true,
+    "source_only_python_tests_passed": 14,
+    "android_log_budget": 16,
+    "original_managed_dispatch_callsite_count": 2,
+    "original_shader_compute_content_changed": false,
+    "original_dispatch_logic_changed": false,
+    "non_Android_build_behavior_unchanged_by_compilation_guard": true
+  },
+  "negative_controls": [
+    "mock original mismatched",
+    "unexpected 3rd Dispatch",
+    "comment fake Dispatch",
+    "side-effect index",
+    "unexpected dispatch Y/X count",
+    "multiple receiver",
+    "bad numeric pass relation",
+    "marker already injected",
+    "CSharp stub logger faults do not throw",
+    "hard count limit 16"
+  ],
+  "status": "completed_source_ci_verified",
+  "limits": [
+    "Not real Unity native compile or original GPU result; CSharp helper compiled against synthetic Unity API stub only",
+    "Next original full Unity build must pass its authentic water/source/resource gates and owner build permission",
+    "Trace cannot infer FindKernel name, true bank bool, original output texture pixels or GPU dispatch success; timeout and persistentDataPath logger availability apply"
+  ],
+  "next_step": "T5 preserve T1 native build stage and helper copy at next authorized full Unity import. After owner installs matching APK inspect bounded water:t1_original_fft_dispatch.before + .returned and Unity invalid kernel6 event within same session. Correlate exact raw selector, inherited exponent, group counts, shader instance and call chronology; do not infer runtime kernel name/actual bank or GPU success. Test Unity2021 Editor integration and phone after permitted native build; WATER-001 OPEN/NOT_READY0/3."
+}

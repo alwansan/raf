@@ -2,8 +2,8 @@
   "session_id": "20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-09T02:19:00Z",
+  "status": "completed_source_ci_verified",
+  "updated_at": "2026-11-09T02:24:00Z",
   "base_sha": "4ba06e08894e5b7a1267c9b408b354e625f66a96",
   "resumed_from_sessions": [
     "20261109T0155Z-T1-chat-direct-dispatch-f7a2",
@@ -44,5 +44,28 @@
     "no original proprietary data upload"
   ],
   "limits": "Tool adds logging only to the next explicitly authorized native game rebuild; no currently installed-device claim.",
-  "notes": "Source-authenticated ILSpy CI42550189294 SUCCESS; before closure additionally compile and execute C# Android trace helper on synthetic Unity stubs, preventing late Unity Editor compile regressions."
+  "notes": "Source-authenticated ILSpy CI42550189294 SUCCESS; before closure additionally compile and execute C# Android trace helper on synthetic Unity stubs, preventing late Unity Editor compile regressions.",
+  "result": {
+    "source_commits": {
+      "original_stage": "2bc4bcf5994c5f29f6853c51ec0074a4130bd773",
+      "runtime_helper": "04661db224e5cbd740b1893bbcd76040ef394910",
+      "native_workflow_integration": "ec5bf2f4568cc8baba247b709588860bd85d56de",
+      "cs_abi_smoke": "41559e96324b96293457ff578d5e069fe5a8bf53"
+    },
+    "source_ci_authenticated": "https://github.com/alwansan/raf/actions/runs/42550062087",
+    "source_ci_integrated": "https://github.com/alwansan/raf/actions/runs/42550189294",
+    "final_source_ci": "https://github.com/alwansan/raf/actions/runs/42550454734",
+    "final_ci_sha": "41559e96324b96293457ff578d5e069fe5a8bf53",
+    "final_ci_status": "SUCCESS",
+    "source_free_regressions_passed": 14,
+    "real_original_managed_source_auth_verified": true,
+    "android_only_helper_compiled_csharp9": true,
+    "helper_behavior_bounded_and_nonintrusive_synthetic": true,
+    "original_dispatch_calls_unchanged": 2,
+    "original_findkernel_calls_unchanged": 0,
+    "native_workflow_hooked_next_authorized_build": true,
+    "new_android_game_apk_built": false,
+    "real_game_device_fft_observed": false
+  },
+  "next_step": "T5 preserve T1 native build stage and helper copy at next authorized full Unity import. After owner installs matching APK inspect bounded water:t1_original_fft_dispatch.before + .returned and Unity invalid kernel6 event within same session. Correlate exact raw selector, inherited exponent, group counts, shader instance and call chronology; do not infer runtime kernel name/actual bank or GPU success. Test Unity2021 Editor integration and phone after permitted native build; WATER-001 OPEN/NOT_READY0/3."
 }

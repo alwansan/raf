@@ -1,0 +1,24 @@
+{
+  "id": "20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4",
+  "issue_id": "WATER-001",
+  "kind": "source_integration",
+  "status": "completed_source_ci_verified",
+  "at": "2026-11-09T02:24:00Z",
+  "summary": "T1 staged SHA-original Dx11FFT Android-only passive pre/post Dispatch source instrumentation in NEXT native Unity import, preserving both original Dispatch and no FindKernel; source preflight CI42550454734 SUCCESS 14/14 Python plus CSharp9 ABI stub behavior and authentic original ILSpy. Logs first16 with actual numeric argument, inherited exponent, group counts and local instance ID. No actual Unity/device run or APK, water remains OPEN and NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/ec5bf2f4568cc8baba247b709588860bd85d56de",
+    "https://github.com/alwansan/raf/actions/runs/42550062087",
+    "https://github.com/alwansan/raf/actions/runs/42550189294",
+    "https://github.com/alwansan/raf/actions/runs/42550454734",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261109T0210Z-T1-chat-fft-dispatch-hooks-b6e4.md"
+  ],
+  "limits": [
+    "Only SHA-original SOURCE preflight and synthetic CSharp9 stub, no game Editor/device execution",
+    "Android logger may not have retained all startup calls; 16-call bounded, not full-session",
+    "No asset/shader authenticity status changed or GPU water fixed"
+  ],
+  "next_step": "T5 preserve T1 native build stage and helper copy at next authorized full Unity import. After owner installs matching APK inspect bounded water:t1_original_fft_dispatch.before + .returned and Unity invalid kernel6 event within same session. Correlate exact raw selector, inherited exponent, group counts, shader instance and call chronology; do not infer runtime kernel name/actual bank or GPU success. Test Unity2021 Editor integration and phone after permitted native build; WATER-001 OPEN/NOT_READY0/3."
+}
