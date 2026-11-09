@@ -552,13 +552,28 @@ public final class UnifiedLabActivity extends Activity {
         ContentValues v=new ContentValues();v.put(MediaStore.Downloads.DISPLAY_NAME,name);
         v.put(MediaStore.Downloads.MIME_TYPE,mime);
         v.put(MediaStore.Downloads.RELATIVE_PATH,Environment.DIRECTORY_DOWNLOADS+"/Games/cl/test/shared-"+session+"/");
+        // Do not expose a zero-byte or truncated screenshot/log while the provider is writing.
+        v.put(MediaStore.MediaColumns.IS_PENDING,1);
         Uri uri=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,v);
         if(uri==null)throw new IOException("MediaStore insert refused");
-        try(OutputStream out=getContentResolver().openOutputStream(uri,"wt")){
-            if(out==null)throw new IOException("MediaStore stream refused");
-            out.write(bytes);out.flush();
+        boolean published=false;
+        try{
+            try(OutputStream out=getContentResolver().openOutputStream(uri,"wt")){
+                if(out==null)throw new IOException("MediaStore stream refused");
+                out.write(bytes);out.flush();
+            }
+            ContentValues ready=new ContentValues();
+            ready.put(MediaStore.MediaColumns.IS_PENDING,0);
+            if(getContentResolver().update(uri,ready,null,null)!=1)
+                throw new IOException("MediaStore failed to publish completed file");
+            published=true;
+            return uri;
+        }finally{
+            if(!published){
+                try{getContentResolver().delete(uri,null,null);}
+                catch(Exception cleanup){log("media_cleanup_error",cleanup.getClass().getSimpleName());}
+            }
         }
-        return uri;
     }
     void log(String event,String payload){
         try{
