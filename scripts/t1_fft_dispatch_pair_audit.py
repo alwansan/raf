@@ -20,6 +20,7 @@ def audit(records):
     pending = {}
     seen = set()
     paired = set()
+    invalid_sequences = set()
     failed_returns = set()
     errors = []
     for row in records:
@@ -53,6 +54,10 @@ def audit(records):
         duplicate = key in seen
         if duplicate:
             errors.append("duplicate_event:" + str(seq))
+            # A duplicated trace event invalidates the entire sequence even if
+            # an earlier return was already counted as a valid pair.
+            invalid_sequences.add(seq)
+            paired.discard(seq)
         seen.add(key)
         if event == BEFORE:
             if not duplicate:
@@ -71,7 +76,7 @@ def audit(records):
                 # both observations matter when investigating a broken dispatch.
                 errors.append("dispatch_result_failure:" + str(seq))
                 failed_returns.add(seq)
-            if not mismatched and seq not in failed_returns:
+            if not mismatched and seq not in failed_returns and seq not in invalid_sequences:
                 paired.add(seq)
     missing = sorted(seq for seq in pending if seq not in paired)
     return {"before_count": len(pending),
