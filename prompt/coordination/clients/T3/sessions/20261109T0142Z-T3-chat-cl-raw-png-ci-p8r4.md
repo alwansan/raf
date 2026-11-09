@@ -1,0 +1,15 @@
+# T3 — pinned CL R3 PNG image evidence CI
+- **session_id:** `20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4`
+- **origin:** `chat`
+- **issue:** RENDER-002 / NOT_READY
+- **base_sha (before reservation):** `6fe95344909bd919dc8bc08cc245bda640e1155e`
+- **scope reservation commit:** `96fe36f1f50601015420ee35ccba466a291c6f5b`
+- **work:** `prompt/coordination/work/RENDER-002/T3-20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4-raw-png-ci.json`
+- **resumed_from_sessions:** `20261109T0134Z-T3-scheduled-cl-png-pixel-audit-k7m2`, `20261108T2326Z-T3-scheduled-cl-r3-proof-j7k4`, `20261108T2013Z-T3-chat-cl-pixelcopy-surface-f2n8`
+- **planned owned files:** `.github/workflows/raft-t3-cl-r3-png-evidence.yml` plus this session, independent T3 work/event; no edits to scheduled T3 Python scripts/tests.
+- **reason:** scheduled T3 generated a synthetic PNG decoder and tests but could not access raw CL binary PNG in current environment. New chat scope is a pinned lightweight hosted CI audit, separate from scheduled source work.
+- **CL input:** `alwansan/CL@24a677fc8fa4749c0bcf8a3cac01fa80b1641c86`, `test/shared-20261108-232759-468049775` six PNG blob SHAs from GitHub API, R3 shared APK `0.2.13-shared`.
+- **baseline evidence:** 6/6 real T3 GLES events report `verified_surface_pixels=true`, GL error 0, but still `EVIDENCE_READY` not human visual PASS. Earlier `0.2.10` Window PixelCopy saved black GLES content; `0.2.13` uses SurfaceView PixelCopy matching.
+- **CI status:** pending implementation, no CI run claimed.
+- **limits:** Synthetic GPU lab screenshot is not Raft Unity scene/white hand/smoke/material restoration. CL read-only. No proprietary files in artifacts.
+- **next:** add isolated path-triggered workflow, run Python synthetic controls + pinned raw PNG pixel distribution audit in hosted runner, analyze and document genuine run result; release scope.
