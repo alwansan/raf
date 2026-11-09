@@ -23,6 +23,9 @@ OP_RE = re.compile(r"(?<![A-Za-z_])(" + "|".join(OPS) + r")(?![A-Za-z_])")
 EPOCH_RE = re.compile(r"(?<![A-Za-z_])epoch=(\d+)(?!\d)")
 MAX_BYTES = 16 * 1024 * 1024
 MAX_LINES = 200000
+SLOT_NAMES = ("held0", "held1", "held2", "down0", "down1", "down2",
+              "up0", "up1", "up2", "scrollAxis", "scrollVector")
+BUTTON_NAMES = ("left", "right", "middle")
 
 
 def decode_record(line):
@@ -83,6 +86,52 @@ def parse_bool(detail, field):
     matches = re.findall(r"(?<![A-Za-z_])" + re.escape(field) +
                          r"=(true|false)(?![A-Za-z_])", detail)
     return matches[0] == "true" if len(matches) == 1 else None
+
+
+def parse_reader_slots(detail, totals):
+    """Verify the complete original C# Report() ledger; never infer missing slots.
+
+    Returns (slots, invalid). Old abbreviated logs stay eligible for aggregate
+    triage, but can never produce channel-specific correlation.
+    """
+    result = {}
+    for name in SLOT_NAMES:
+        pattern = (r"(?<![A-Za-z_])" + re.escape(name) +
+                   r"Calls=(\d+),legacy=(\d+),fallback=(\d+)(?!\d)")
+        matches = re.findall(pattern, detail)
+        if len(matches) > 1:
+            return None, True
+        if not matches:
+            return None, False
+        values = tuple(int(item) for item in matches[0])
+        if any(v > 2**31 - 1 for v in values) or values[1] + values[2] > values[0]:
+            return None, True
+        result[name] = {"calls": values[0], "legacy": values[1],
+                        "fallback": values[2]}
+    if (sum(v["calls"] for v in result.values()) != totals["getterCalls"] or
+            sum(v["legacy"] for v in result.values()) != totals["positiveLegacy"] or
+            sum(v["fallback"] for v in result.values()) != totals["positiveFallback"] or
+            sum(result[n][k] for n in SLOT_NAMES[3:9]
+                for k in ("legacy", "fallback")) != totals["positiveEdges"] or
+            sum(result[n][k] for n in SLOT_NAMES[9:]
+                for k in ("legacy", "fallback")) != totals["positiveScroll"]):
+        return None, True
+    return result, False
+
+
+def parse_callback_masks(detail, callbacks):
+    """Optional exact press/release masks emitted by the real Android logger."""
+    present = ("pressMask=" in detail, "releaseMask=" in detail)
+    if not any(present):
+        return None, False
+    press = parse_counter(detail, "pressMask")
+    release = parse_counter(detail, "releaseMask")
+    if press is None or release is None or press > 7 or release > 7:
+        return None, True
+    if ((callbacks["pressCallbacks"] == 0 and press != 0) or
+            (callbacks["releaseCallbacks"] == 0 and release != 0)):
+        return None, True
+    return {"press": press, "release": release}, False
 
 
 def triage(lines):
@@ -151,8 +200,20 @@ def triage(lines):
                 active["invalid"] = True
                 invalid += 1
                 continue
+            masks, invalid_masks = parse_callback_masks(detail, data)
+            if invalid_masks:
+                active["invalid"] = True
+                invalid += 1
+                continue
+            data["masks"] = masks
             old = active["callbacks"]
             if old is not None and any(data[key] < old[key] for key in wanted):
+                active["invalid"] = True
+                invalid += 1
+            elif (old is not None and old["masks"] is not None and
+                  masks is not None and
+                  ((old["masks"]["press"] & masks["press"]) != old["masks"]["press"] or
+                   (old["masks"]["release"] & masks["release"]) != old["masks"]["release"])):
                 active["invalid"] = True
                 invalid += 1
             else:
@@ -178,8 +239,20 @@ def triage(lines):
                 active["invalid"] = True
                 invalid += 1
                 continue
+            slots, invalid_slots = parse_reader_slots(detail, data)
+            if invalid_slots:
+                active["invalid"] = True
+                invalid += 1
+                continue
+            data["slots"] = slots
             old = active["readers"]
             if old is not None and any(data[key] < old[key] for key in wanted):
+                active["invalid"] = True
+                invalid += 1
+            elif (old is not None and old["slots"] is not None and
+                  slots is not None and
+                  any(slots[name][key] < old["slots"][name][key]
+                      for name in SLOT_NAMES for key in ("calls", "legacy", "fallback"))):
                 active["invalid"] = True
                 invalid += 1
             else:
@@ -193,6 +266,29 @@ def triage(lines):
     matching_fallback = [
         a for a in matched if a["readers"]["positiveFallback"] > 0
     ]
+    # Channel co-observation is weaker than causal delivery or gameplay. A
+    # primary ACTION_DOWN may buffer an edge without an explicit pressMask;
+    # never manufacture an explicit press or infer horizontal scroll from a
+    # ScrollVector getter (the vector may be vertical-only).
+    channel = [a for a in matched if a["callbacks"]["masks"] is not None and
+               a["readers"]["slots"] is not None]
+    down = {name: 0 for name in BUTTON_NAMES}
+    up = {name: 0 for name in BUTTON_NAMES}
+    for a in channel:
+        for idx, name in enumerate(BUTTON_NAMES):
+            if (a["callbacks"]["masks"]["press"] & (1 << idx) and
+                    a["readers"]["slots"]["down" + str(idx)]["fallback"] > 0):
+                down[name] += 1
+            if (a["callbacks"]["masks"]["release"] & (1 << idx) and
+                    a["readers"]["slots"]["up" + str(idx)]["fallback"] > 0):
+                up[name] += 1
+    vertical_axis = sum(a["callbacks"]["verticalScrollCallbacks"] > 0 and
+                        a["readers"]["slots"]["scrollAxis"]["fallback"] > 0
+                        for a in channel)
+    wheel_vector = sum((a["callbacks"]["verticalScrollCallbacks"] > 0 or
+                        a["callbacks"]["horizontalScrollCallbacks"] > 0) and
+                       a["readers"]["slots"]["scrollVector"]["fallback"] > 0
+                       for a in channel)
     callbacks_only = sum(bool(a["callbacks"] and
                               a["callbacks"]["capturedCallbackEvents"] > 0 and
                               not a["readers"]) for a in eligible)
@@ -230,13 +326,22 @@ def triage(lines):
         "matched_unattributed_legacy_attempts": sum(
             a["scope"][0] == "legacy" for a in matched),
         "epochs_with_both": sorted({a["epoch"] for a in matched}),
+        "complete_per_channel_scoped_attempts": len(channel),
+        "captured_press_with_matching_fallback_down": down,
+        "captured_release_with_matching_fallback_up": up,
+        "captured_vertical_wheel_with_fallback_scroll_axis_attempts": vertical_axis,
+        "captured_wheel_with_fallback_scroll_vector_attempts": wheel_vector,
+        "horizontal_wheel_getter_independently_proven": False,
         "unity_gameplay_verified": False,
         "device_pass": False,
         "limitations": ("Single chronological app-process log only; epoch may repeat across "
                         "launches. PersistentDiagnosticLog session plus strictly increasing "
                         "sequence prevents cross-logger false positives but does not prove "
                         "process identity, APK signature or gameplay. Counters are getter "
-                        "invocations, not unique physical clicks; device acceptance unverified."),
+                        "invocations, not unique physical clicks. Per-channel "
+                        "fields are only same-epoch co-observation, not gesture "
+                        "causality, horizontal-only scroll, Unity gameplay or "
+                        "device acceptance."),
     }
 
 
