@@ -1,0 +1,57 @@
+name: T4 inherited event identity census for T2/T3 (audit only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t4-ledger-identity-audit.yml'
+      - 'scripts/t4_audit_team_event_identities.py'
+      - 'tests/test_t4_audit_team_event_identities.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t4-ledger-identity-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-only-full-ledger-identity-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout only public event metadata and T4 audit
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_audit_team_event_identities.py
+            /tests/test_t4_audit_team_event_identities.py
+            /prompt/coordination/B_TEAM/events/
+      - name: Run synthetic source-only audit controls
+        run: python3 -m unittest -v tests.test_t4_audit_team_event_identities
+      - name: Enumerate every inherited event identity without mutating the ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/t4_audit_team_event_identities.py --root prompt/coordination/B_TEAM/events --output "$RUNNER_TEMP/t4-ledger-identity.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          j=json.loads((Path(os.environ['RUNNER_TEMP'])/'t4-ledger-identity.json').read_text())
+          print('T4_LEDGER_AUDIT audit_completed=true snapshot_read_only=true canonical_summary_verified=false')
+          print('files=', j['event_files_examined'], 'finding_count=', j['finding_count'])
+          print('categories=', j['finding_categories'])
+          for item in j['findings'][:30]:
+              print('ISSUE', item['code'], item['path'])
+          if len(j['findings'])>30: print('Additional findings are in safe JSON artifact')
+          PY
+          test ! -e Raft
+      - name: Upload read-only file-path identity census
+        uses: actions/upload-artifact@v4
+        with:
+          name: t4-public-ledger-identity-${{ github.run_id }}
+          path: ${{ runner.temp }}/t4-ledger-identity.json
+          retention-days: 7
+      - name: Explicit readiness boundary
+        if: always()
+        run: echo 'Audit executed; does not repair T2/T3 records or prove the canonical team snapshot passed.' >> "$GITHUB_STEP_SUMMARY"
