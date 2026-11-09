@@ -41,8 +41,9 @@ class T1ComputeContextGateTests(unittest.TestCase):
         self.assertIn("activity.isFinishing()||activity.isDestroyed()", PROBE)
 
     def test_only_known_compiled_cases_and_no_fake_gpu_success(self):
-        self.assertIn('caseId.matches("T1-0[1-4]")', PROBE)
+        self.assertIn('caseId.matches("T1-0[1-5]")', PROBE)
         self.assertIn("glDispatchCompute(4,1,1)", PROBE)
+        self.assertIn('if(id.equals("T1-05"))return T1FftButterflyProbe.run();', PROBE)
         self.assertIn("glMapBufferRange(", PROBE)
         self.assertIn("glMemoryBarrier(", PROBE)
         self.assertIn("glGetShaderiv(shader,GLES20.GL_COMPILE_STATUS", PROBE)
