@@ -66,11 +66,12 @@ def audit(records):
                           or (name in before and before[name] != fields[name])]
             if mismatched:
                 errors.append("identity_mismatch:" + str(seq) + ":" + ",".join(mismatched))
-            elif "result" in fields and fields["result"] != "returned":
-                # An exception/error marker is not a normal Dispatch API return.
+            if "result" in fields and fields["result"] != "returned":
+                # Report explicit failure independently of an identity mismatch:
+                # both observations matter when investigating a broken dispatch.
                 errors.append("dispatch_result_failure:" + str(seq))
                 failed_returns.add(seq)
-            else:
+            if not mismatched and seq not in failed_returns:
                 paired.add(seq)
     missing = sorted(seq for seq in pending if seq not in paired)
     return {"before_count": len(pending),
