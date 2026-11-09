@@ -1,0 +1,18 @@
+{
+  "id": "20261109T0202Z-T4-chat-crossframe-button-identity-e4p8",
+  "origin": "chat",
+  "worker": "T4",
+  "session_id": "20261109T0157Z-T4-chat-crossframe-click-e4p8",
+  "issue_id": "INPUT-005",
+  "type": "source_fix",
+  "summary": "Frame-latched Android primary mouse duplicate DOWN/PRESS and UP/RELEASE edge guarded by exact source/deviceId/eventTime across Unity frames. Original private Unity2021 managed compilation, 139 C# +66 Python controls SUCCESS. Not tested on signed Raft Android device.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42548512179",
+    "https://github.com/alwansan/raf/commit/b5f9e60d991ff3d6d998e2f2b91e2e7ea1a30fcf",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_MOUSE_CROSSFRAME_EDGE_DEDUP_2026-11-09.md"
+  ],
+  "status": "SOURCE_INTEGRATED_DEVICE_PENDING",
+  "mini_build_triggered": false,
+  "full_unity_build_triggered": false,
+  "updated_at": "2026-11-09T02:02:00Z"
+}

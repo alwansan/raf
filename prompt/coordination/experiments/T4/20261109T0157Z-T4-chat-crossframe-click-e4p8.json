@@ -1,0 +1,38 @@
+{
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0157Z-T4-chat-crossframe-click-e4p8",
+  "issue_id": "INPUT-005",
+  "status": "SOURCE_CI_VERIFIED_DEVICE_PENDING",
+  "experiment_key": "T4-real-CL-13-same-eventtime-click-crossframe-native-dedup-Unity2021-source-v1",
+  "source_commit": "b5f9e60d991ff3d6d998e2f2b91e2e7ea1a30fcf",
+  "policy_fix_commit": "435665c85b32f67eb745ce9a0c25e0384dd4e8bd",
+  "root_cause_hypothesis": "A single primary DOWN+BUTTON_PRESS or UP+BUTTON_RELEASE with same Android eventTime can straddle different Unity frames, bypassing prior same-frame bitmask dedup.",
+  "owner_evidence": {
+    "repo": "alwansan/CL",
+    "commit": "4680f5dc26127938e7696f932b2d9a80dc703937",
+    "event_blob": "7c337320a1593ff8d9f9fd63e55ec30ed62cd202",
+    "down_up_pairs": 13,
+    "paired_explicit_left": 13,
+    "captured_true": 0
+  },
+  "code_paths": [
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "tests/test_t4_android_pointer_capture_policy.py"
+  ],
+  "verification": {
+    "ci": "https://github.com/alwansan/raf/actions/runs/42548512179",
+    "conclusion": "SUCCESS",
+    "python_assertions": 66,
+    "csharp_assertions": 139,
+    "unity2021_managed_android_compile": "SUCCESS",
+    "unity2021_managed_editor_compile": "SUCCESS",
+    "full_game_android_build": null,
+    "device_mouse_proof": null
+  },
+  "failed_ci": "https://github.com/alwansan/raf/actions/runs/42548460164",
+  "scope_limits": "Only explicit same physical source+deviceId+eventTime primary implicit/explicit cross-frame edge dedup; no gameplay success, no new mini/XAPK; preserve touch/camera/Settings/audio/world.",
+  "next_step": "Owner T4-02 captured=true physical button/wheel trace and same signed Raft Android Unity Legacy Input consumption."
+}

@@ -2,10 +2,10 @@
   "owner": "T4",
   "origin": "chat",
   "session_id": "20261109T0157Z-T4-chat-crossframe-click-e4p8",
-  "status": "active",
+  "status": "completed",
   "issue_id": "INPUT-005",
   "base_sha": "80d128223fbe79bb27305bba9efdf2304ffd1df5",
-  "updated_at": "2026-11-09T01:57:35Z",
+  "updated_at": "2026-11-09T02:02:00Z",
   "resumed_from_sessions": [
     "20261109T0144Z-T4-chat-downup-correlation-n6q2",
     "20261109T0143Z-T4-scheduled-capture-phase-j6r2",
@@ -27,5 +27,12 @@
   "resource_key": "T4-PhysicalMouseButtonWheelFrame-runtime-source-only-authenticated-Unity2021",
   "current_team_check": "T4 scheduled scope capture-phase JSONL analyzer; separate file. T5 owns shared Mini. Other agents' recent Actions source-only; no heavy Unity game build active.",
   "tests": "Existing T4 source workflow .github/workflows/raft-t4-mouse-capture-bridge.yml on path change; authentic original DLL/Unity2021 compile, dotnet C# controls; no full Unity/XAPK.",
-  "next_step": "First lock source and add cross-frame duplicate regressions; then build with pinned original Unity managed ABI and validate no camera source modification."
+  "next_step": "T4-02 real physical captured=true controls and same-SHA signed Raft Unity Legacy Input phone acceptance.",
+  "completed_at": "2026-11-09T02:02:00Z",
+  "result_sha": "435665c85b32f67eb745ce9a0c25e0384dd4e8bd",
+  "source_commit": "b5f9e60d991ff3d6d998e2f2b91e2e7ea1a30fcf",
+  "result": "Source-integrated cross-frame primary mouse duplicate prevention; 139 C# and 66 Python, Unity2021 original ABI Android/Editor CI SUCCESS; DEVICE_PENDING.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42548512179"
+  ]
 }
