@@ -95,6 +95,50 @@ def safe_aggregate(rows: list, *, expected_selected_slots: int = 108,
     return result
 
 
+
+def safe_ranked_semantic_hints(source_shader_ranks: dict, tagged_slots: list) -> dict:
+    """Collapse private (Shader owner/ID, scene object ID) into anonymous ranks.
+
+    tagged_slots are (fixed category, private shader key, private renderer key, count).
+    Only total SOURCE particle material use rank and semantic matched counts leave.
+    """
+    if (type(source_shader_ranks) is not dict or not source_shader_ranks
+        or type(tagged_slots) is not list or len(tagged_slots) > 100000
+        or any(type(n) is not int or n < 1 for n in source_shader_ranks.values())):
+        raise ValueError("invalid_original_private_Shader48_rank_scope")
+    slots = Counter()
+    renderers = {}
+    for row in tagged_slots:
+        if (type(row) is not tuple or len(row) != 4
+            or row[0] not in TOKENS or row[1] not in source_shader_ranks
+            or not isinstance(row[2], tuple) or len(row[2]) != 2
+            or type(row[3]) is not int or not 0 < row[3] <= 256):
+            raise ValueError("invalid_private_original_semantic_Shader48_slot")
+        tag, shader, renderer, n = row
+        key = (tag, shader)
+        slots[key] += n
+        renderers.setdefault(key, set()).add(renderer)
+        if slots[key] > source_shader_ranks[shader]:
+            raise ValueError("semantic_Shader48_slots_exceed_original_source_rank")
+    result = {}
+    for tag in TOKENS:
+        safe = []
+        for (label, shader), n in slots.items():
+            if label == tag:
+                safe.append({
+                    "original_source_particle_Shader48_total_material_use_rank": source_shader_ranks[shader],
+                    "matched_semantic_material_slots": n,
+                    "matched_semantic_renderer_objects": len(renderers[(label, shader)]),
+                })
+        safe.sort(key=lambda x: (
+            -x["matched_semantic_material_slots"],
+            -x["original_source_particle_Shader48_total_material_use_rank"],
+            -x["matched_semantic_renderer_objects"],
+        ))
+        result[tag + "_anonymous_source_Shader48_candidates"] = safe
+    return result
+
+
 def local_gameobject_name(renderer_tree: dict, by_id: dict):
     pointer = renderer_tree.get("m_GameObject")
     if (not isinstance(pointer, dict)
@@ -136,7 +180,17 @@ def scan_original(original: Path, manifest: Path) -> dict:
     selected_materials = private_materials[targets[0]]
     if len(selected_materials) != 5:
         raise ValueError("original_particle108_selected_Material21_count_changed")
+    material_to_shader = {}
+    for shader, material_set in private_materials.items():
+        if shader not in private_slot_counts or not isinstance(material_set, set):
+            raise ValueError("original_source_particle_Shader48_Material_join_incomplete")
+        for material in material_set:
+            if material in material_to_shader:
+                raise ValueError("original_source_Material_has_multiple_Shader48_targets")
+            material_to_shader[material] = shader
     records = []
+    tagged_shader_slots = []
+    typed_source_slots = 0
     for scene, pin in source.SCENE_PINS.items():
         scene_path = original / "Raft_Data" / scene
         if scene_path.is_symlink():
@@ -153,6 +207,8 @@ def scan_original(original: Path, manifest: Path) -> dict:
             if not isinstance(tree, dict) or not isinstance(tree.get("m_Materials"), list):
                 raise ValueError("unreadable_original_particle_renderer_materials")
             selected_slots = 0
+            name = local_gameobject_name(tree, by_id)
+            tags = hint_categories(name)
             for ptr in tree["m_Materials"]:
                 state, fid, pid = pointer_shape(
                     ptr, local_types, len(external_paths))
@@ -161,13 +217,24 @@ def scan_original(original: Path, manifest: Path) -> dict:
                 if state != "external_target_unverified":
                     raise ValueError("unexpected_original_particle_local_material_source")
                 material_owner = PurePosixPath(external_paths[fid-1].replace("\\", "/")).name
-                selected_slots += int((material_owner, pid) in selected_materials)
-            records.append((bool(selected_slots), selected_slots, local_gameobject_name(tree, by_id)))
+                material_key = (material_owner, pid)
+                selected_slots += int(material_key in selected_materials)
+                source_shader = material_to_shader.get(material_key)
+                if source_shader is not None:
+                    typed_source_slots += 1
+                    for tag in tags:
+                        tagged_shader_slots.append(
+                            (tag, source_shader, (scene, obj.path_id), 1))
+            records.append((bool(selected_slots), selected_slots, name))
+    if typed_source_slots != original_report["original_particle_typed_Shader48_material_slots"]:
+        raise ValueError("original_particle_verified_typed_Shader48_slot_join_incomplete")
     result = safe_aggregate(
         records,
         expected_selected_slots=108,
         expected_selected_renderers=original_report["original_particle_highest_Shader48_distinct_particle_renderers"],
     )
+    result.update(safe_ranked_semantic_hints(private_slot_counts, tagged_shader_slots))
+    result["source_original_typed_particle_Shader48_slots_rejoined"] = typed_source_slots
     result["original_six_scene_SHA_verified"] = True
     result["original_four_shader_Material_owner_SHA_verified"] = True
     result["original_source_selected_five_Material21_verified"] = True
