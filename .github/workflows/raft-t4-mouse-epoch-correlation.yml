@@ -6,6 +6,7 @@ on:
       - '.github/workflows/raft-t4-mouse-epoch-correlation.yml'
       - 'scripts/t4_correlate_mouse_runtime_epochs.py'
       - 'scripts/tests/test_t4_correlate_mouse_runtime_epochs.py'
+      - 'scripts/tests/test_t4_correlate_mouse_runtime_envelope.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,4 +21,4 @@ jobs:
       - uses: actions/checkout@v4
       - run: python3 --version
       - name: Validate source-only capture epoch correlation fail-closed controls
-        run: python3 -m unittest discover -s scripts/tests -p 'test_t4_correlate_mouse_runtime_epochs.py' -v
+        run: python3 -m unittest discover -s scripts/tests -p 'test_t4_correlate_mouse_runtime_*.py' -v
