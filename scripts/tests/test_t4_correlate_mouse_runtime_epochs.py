@@ -182,6 +182,20 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         self.assertEqual(v["poisoned_logger_sessions"], 1)
         self.assertGreater(v["invalid_markers"], 0)
 
+    def test_poisoned_logger_reader_only_cannot_claim_getter(self):
+        name = "20261109T193900123-poisoned"
+        v = gate.triage([
+            self.logger("physical_mouse_capture_requested", "epoch=41", name, 4),
+            self.logger("physical_mouse_legacy_reader_evidence",
+                        readers(41).split(" ", 1)[1], name, 5),
+            # A duplicate/out-of-order record poisons the entire logger.
+            self.logger("logger.ready", "version=1", name, 2, "startup"),
+        ])
+        self.assertEqual(v["poisoned_logger_sessions"], 1)
+        self.assertEqual(v["getter_only_attempts"], 0)
+        self.assertEqual(v["status"], "INVALID_OR_INCOMPLETE_CAPTURE_PROVENANCE")
+        self.assertFalse(v["device_pass"])
+
     def test_missing_or_invalid_logger_sequence_cannot_borrow(self):
         name = "20261109T191200123-aabbccdd"
         bad = self.logger("physical_mouse_legacy_reader_evidence",
