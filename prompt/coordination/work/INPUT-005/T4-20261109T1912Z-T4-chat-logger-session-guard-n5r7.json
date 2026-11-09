@@ -2,8 +2,8 @@
   "session_id": "20261109T1912Z-T4-chat-logger-session-guard-n5r7",
   "origin": "chat",
   "issue_id": "INPUT-005",
-  "status": "active",
-  "updated_at": "2026-11-09T19:12:00Z",
+  "status": "completed_source_only_device_pending",
+  "updated_at": "2026-11-09T19:16:00Z",
   "base_sha": "e36012258e1cb2fd0e35d1b93fa05210200fe755",
   "resumed_from_sessions": [
     "20261109T1858Z-T4-chat-epoch-evidence-p6m4",
@@ -28,5 +28,16 @@
     "T4 previous completed source epoch workflow"
   ],
   "ci_proposed": "Existing T4 per-epoch lightweight path-filtered workflow triggers via script+test changes",
-  "phone_gate": "No owner captured=true Raft same-SHA device trace; device acceptance open"
+  "phone_gate": "No owner captured=true Raft same-SHA device trace; device acceptance open",
+  "ci_run": "https://github.com/alwansan/raf/actions/runs/42681491521",
+  "ci_job": 129376929867,
+  "ci_status": "COMPLETED_SUCCESS",
+  "source_commits": [
+    "a8e475613ccc2e438fb4c71e7c76aab04aac4149",
+    "abf1ede6bbea3b9073c9ab20b826be46dd486c93"
+  ],
+  "result": "24/24 source-only tests PASS actual log; cross-logger and duplicated-sequence mismatches rejected. Device mouse/genuine Unity/gameplay still unverified.",
+  "session_path": "prompt/coordination/clients/T4/sessions/20261109T1912Z-T4-chat-logger-session-guard-n5r7.md",
+  "report_path": "docs/T4_MOUSE_PERSISTENT_LOG_PROVENANCE_2026-11-09.md",
+  "next_step": "Single authentic signed full-game process-local Raft log with captured physical LEFT/RIGHT/MIDDLE and V/H scroll, verify actual Unity mouse consumers/gameplay alongside world/save."
 }
