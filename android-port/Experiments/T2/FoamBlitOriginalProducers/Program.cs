@@ -372,7 +372,8 @@ internal static class Program
             {
                 // Both copies represent the same underlying value. Continue
                 // toward the original; do not treat DUP as a texture producer.
-                if(depth<2){depth=0;continue;}
+                if(depth<2)
+                    return Blocked("dup_alias_ambiguous",steps,voidCalls);
                 pops=1;pushes=2;
             }
             else if(LocalIndex(ins,true)>=0){pops=1;}
