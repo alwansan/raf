@@ -80,8 +80,11 @@ class NativeLoggerContract(unittest.TestCase):
         self.assertIn("identity_mismatch:1:__trace_schema", report["errors"])
 
     def test_original_derived_sha_marker_is_checked(self):
+        before = native(BEFORE)
+        before["detail"] = before["detail"].replace("source_sha_prefix=8aa32937d423",
+                                                      "source_sha_prefix=abcdef123456")
         with self.assertRaisesRegex(ValueError, "source marker drift"):
-            audit([native(BEFORE, before_suffix=";source_sha_prefix=abcdef123456")])
+            audit([before])
 
     def test_missing_original_logger_session_fails_closed(self):
         before = native(BEFORE)
