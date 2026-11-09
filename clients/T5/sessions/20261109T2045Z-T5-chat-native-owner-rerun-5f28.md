@@ -23,3 +23,9 @@ next_step: verify source gate, reserve immutable source SHA, issue one native re
 - Publish job already has contents:write and GH_TOKEN optional RAFT_RELEASE_TOKEN || github.token. If 403 persists this is effective GitHub app/token authorization, cannot be fixed by falsely treating artifacts as a successful Release.
 - No active full native workflow or native experiment detected immediately before request, no other work cancelled, no branch other than feature/android-native-port written.
 - Work state: waiting_ci; next: inspect first failed CI step after actual run concludes; if reconstruct SUCCESS audit signed APK/OBB/XAPK hashes, package/version/signature and artifact ZIP, distinguish Release permission failure and preserve exact download details. No duplicate heavy native run. Full game NOT_READY 0/3.
+
+## Additional owner phone evidence, read-only pinned CL
+- CL main current folder: test/shared-20261109-233132-554663211/summary-20261109-233132-554663211 (1).json, Git blob SHA 26b67f1873df8bfb120a3ff2a56878f9acebfe31. This is Mini v0.2.17 source 731d7a68, NOT full Raft.
+- Genuine T1-05 synthetic GLES3.1 local512 GPU phone result PASS: checked_floats=1024, max_abs_error=2.3841858e-7, tolerance=3.0e-5, first_mismatch=-1, gl_error=0x0, original_raft_compute_executed=false. Does not validate original Unity FFT.
+- Genuine selected T5-02 file has name main.91.com.alwansan.raft.androidtest.obb, full 2,301,280,507-byte SAF hash with status EVIDENCE_READY only; not independently matched to installed v91 package or actual game mount. Other T5 manual cases NEEDS_INPUT.
+- Do not confuse current #42696228231 full game Unity run with Mini v0.2.17 or app_source fields in CL/test.
