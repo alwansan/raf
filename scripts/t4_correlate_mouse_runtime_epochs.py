@@ -25,23 +25,50 @@ MAX_BYTES = 16 * 1024 * 1024
 MAX_LINES = 200000
 
 
-def decode(line):
-    """Accept the original text log or AndroidRuntimeLog JSONL fields."""
+def decode_record(line):
+    """Decode a source marker and its PersistentDiagnosticLog provenance.
+
+    The actual C# sink emits JSONL session + sequence for *every* record.
+    An older text excerpt without those fields remains legacy/unattributed;
+    it cannot combine with an attributed logger record. No session ID leaks.
+    """
     if isinstance(line, dict):
         op = line.get("operation")
         detail = line.get("detail", "")
-        if isinstance(op, str) and op in OPS and isinstance(detail, str):
-            return op, detail
-        return None, ""
+        fields = ("session", "sequence", "utc", "thread")
+        if any(key in line for key in fields):
+            session, seq = line.get("session"), line.get("sequence")
+            valid = (isinstance(session, str) and 1 <= len(session) <= 128
+                     and type(seq) is int and 0 < seq < 2**63)
+            scope = ("jsonl", session) if valid else ("invalid", "")
+            seq = seq if valid else None
+        else:
+            valid = True
+            scope = ("legacy", "")
+            seq = None
+        if op not in OPS:
+            return None, "", scope, seq, valid
+        if (not isinstance(detail, str) or
+                ("area" in line and line["area"] != "input")):
+            return op, "", scope, seq, False
+        return op, detail, scope, seq, valid
     if not isinstance(line, str):
-        return None, ""
+        return None, "", ("invalid", ""), None, False
     if line.lstrip().startswith("{"):
         try:
-            return decode(json.loads(line))
+            return decode_record(json.loads(line))
         except (json.JSONDecodeError, TypeError, ValueError):
-            return None, ""
+            return None, "", ("invalid", ""), None, False
     hits = OP_RE.findall(line)
-    return (hits[0], line) if len(hits) == 1 else (None, "")
+    if len(hits) == 1:
+        return hits[0], line, ("legacy", ""), None, True
+    return None, "", ("legacy", ""), None, True
+
+
+def decode(line):
+    """Legacy two-value decoder retained for existing read-only callers."""
+    op, detail, _, _, valid = decode_record(line)
+    return (op, detail) if valid else (None, "")
 
 
 def parse_counter(detail, field):
@@ -63,8 +90,30 @@ def triage(lines):
     active = None
     unpaired = 0
     invalid = 0
+    provenance_mismatches = 0
+    last_sequence = {}
+    poisoned_logger_sessions = set()
     for raw in lines:
-        op, detail = decode(raw)
+        op, detail, scope, sequence, valid = decode_record(raw)
+        if scope[0] == "jsonl" and valid:
+            # One actual logger session has strictly increasing sequence IDs
+            # even across rotated segments; duplicated startup/raft records
+            # or mixed app-process logs must never become one proof.
+            prior = last_sequence.get(scope)
+            if prior is not None and sequence <= prior:
+                poisoned_logger_sessions.add(scope)
+                invalid += 1
+            else:
+                last_sequence[scope] = sequence
+        if active is not None and scope != active["scope"]:
+            # Even unrelated JSONL operations can mark an app-logger
+            # session transition, so close the prior open capture attempt.
+            provenance_mismatches += 1
+            active = None
+        if not valid:
+            if op is not None:
+                invalid += 1
+            continue
         if not op:
             continue
         if op == "physical_mouse_capture_released":
@@ -78,7 +127,8 @@ def triage(lines):
         if op in OPS[:2]:
             # Retried capture supersedes an earlier generation, even if it
             # had unread evidence. Preserve it as a separate attempt.
-            active = {"epoch": epoch, "callbacks": None, "readers": None,
+            active = {"epoch": epoch, "scope": scope,
+                      "callbacks": None, "readers": None,
                       "invalid": False, "operation": op}
             attempts.append(active)
             continue
@@ -123,7 +173,9 @@ def triage(lines):
             else:
                 active["readers"] = data
 
-    matched = [a for a in attempts if not a["invalid"] and a["callbacks"] is not None
+    eligible = [a for a in attempts if not a["invalid"] and
+                a["scope"] not in poisoned_logger_sessions]
+    matched = [a for a in eligible if a["callbacks"] is not None
                and a["readers"] is not None and a["callbacks"]["capturedCallbackEvents"] > 0
                and a["readers"]["getterCalls"] > 0]
     matching_fallback = [
@@ -131,7 +183,7 @@ def triage(lines):
     ]
     callbacks_only = sum(bool(a["callbacks"] and
                               a["callbacks"]["capturedCallbackEvents"] > 0 and
-                              not a["readers"]) for a in attempts if not a["invalid"])
+                              not a["readers"]) for a in eligible)
     reader_only = sum(bool(a["readers"] and
                            a["readers"]["getterCalls"] > 0 and
                            not a["callbacks"]) for a in attempts if not a["invalid"])
@@ -157,12 +209,21 @@ def triage(lines):
         "getter_only_attempts": reader_only,
         "unpaired_epoch_markers": unpaired,
         "invalid_markers": invalid,
+        "logger_sessions_scanned": len(last_sequence),
+        "poisoned_logger_sessions": len(poisoned_logger_sessions),
+        "provenance_scope_mismatches": provenance_mismatches,
+        "matched_jsonl_scoped_attempts": sum(
+            a["scope"][0] == "jsonl" for a in matched),
+        "matched_unattributed_legacy_attempts": sum(
+            a["scope"][0] == "legacy" for a in matched),
         "epochs_with_both": sorted({a["epoch"] for a in matched}),
         "unity_gameplay_verified": False,
         "device_pass": False,
-        "limitations": ("Single app-process chronological log only; epoch may repeat across "
-                        "launches. Counters count getter invocations, not clicks; no APK "
-                        "signature, gameplay or device acceptance can be proven here."),
+        "limitations": ("Single chronological app-process log only; epoch may repeat across "
+                        "launches. PersistentDiagnosticLog session plus strictly increasing "
+                        "sequence prevents cross-logger false positives but does not prove "
+                        "process identity, APK signature or gameplay. Counters are getter "
+                        "invocations, not unique physical clicks; device acceptance unverified."),
     }
 
 
