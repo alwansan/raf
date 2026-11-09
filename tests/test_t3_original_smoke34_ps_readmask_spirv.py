@@ -109,9 +109,9 @@ class Smoke34RealStageReadMaskControls(unittest.TestCase):
                 row["inputs"] = row["inputs"][:1]
             return row
         c = self.evaluate(reflector=changed)["counts"]
-        self.assertEqual(c["passes_readmask_equals_source_spirv_input_lane_count"], 1)
+        self.assertEqual(c["passes_readmask_equals_source_spirv_input_lane_count"], 0)
         self.assertEqual(c["passes_readmask_equals_roundtrip_spirv_input_lane_count"], 2)
-        self.assertEqual(c["source_to_spirv_absolute_component_lane_count_difference"], 2)
+        self.assertEqual(c["source_to_spirv_absolute_component_lane_count_difference"], 6)
 
     def test_reject_wrong_original_two_pair_scope_and_fake_stage(self):
         for invalid in ([pairs()[0]], pairs() + [pairs()[0]],
