@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-LOCAL-LOGS-R5-20261109T2016Z-CAS6D27",
+  "request_id": "T5-LOCAL-LOGS-R5-20261109T2018Z-CAS6D27",
   "target": "SHARED",
-  "requested_from_sha": "f46f792b5bb7cc17228d52a67b1ff950870aa831",
+  "requested_from_sha": "731d7a68bb3826b348d0314f694737b522e92976",
   "pack_sha256": "9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6",
-  "reason": "CAS-pinned retry after CI42690937486 parent lease rejection (NO APK). Owner Download/logs Android15 SAF tree scanner, guarded APK+OBB v91 SHA256, bounded BlackBox log counts, safe pack import, Arabic UI; keep compiled T1-05 and all 30 cases. Source CI42690234266 SUCCESS. One shared Mini R5 Android build only; no full game XAPK or fabricated phone pass.",
+  "reason": "One R5 shared Mini APK (new Android15 scoped SAF Download/logs reader, APK/OBB v91 hash, bounded BlackBox keyword aggregate, safe non-older team pack, Arabic help; preserve T1-05 and 30 cases). Source CI42690234266 SUCCESS. Earlier CI42690937486 rejected parent and CI42691251220 rejected missing evidence URL, both generated no APK. Fixed T5 row. No Raft game XAPK or device PASS claimed.",
   "publish": false
 }
