@@ -259,7 +259,7 @@ def main(argv=None):
     a = p.parse_args(argv)
     if (a.out.exists() or a.out.is_symlink()
         or a.out.resolve().is_relative_to(a.original.resolve())
-        or a.out.resolve().is_relative_to(a.project.resolve()):
+        or a.out.resolve().is_relative_to(a.project.resolve())):
         raise ValueError("unsafe_private_smoke_export_report_destination")
     try:
         safe = run(a.original, a.manifest, a.project, a.w1_trace, a.b02_trace)
