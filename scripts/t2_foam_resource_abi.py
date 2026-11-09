@@ -137,7 +137,11 @@ def verify_genuine_texture_sampler_pair_count(report):
     for row in report["rows"]:
         if not isinstance(row, dict):
             raise ValueError("Invalid original resource stage")
-        key = row.get("pass"), row.get("stage_code")
+        # bool and integral floats compare equal to int tuple keys in Python.
+        # A report must preserve the exact serialized stage identifier types.
+        if type(row.get("pass")) is not int or type(row.get("stage_code")) is not int:
+            raise ValueError("Malformed original Foam stage identifier")
+        key = row["pass"], row["stage_code"]
         if key not in ORIGINAL_TEXTURES_PER_STAGE or key in seen:
             raise ValueError("Original Foam pass/stage duplicate or unknown")
         seen.add(key)
