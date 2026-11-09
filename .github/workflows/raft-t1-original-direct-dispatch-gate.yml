@@ -1,0 +1,40 @@
+name: T1 WATER-001 original managed direct numeric Dispatch evidence gate (no APK)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t1_fft_original_direct_dispatch_gate.py
+      - tests/test_t1_fft_original_direct_dispatch_gate.py
+      - .github/workflows/raft-t1-original-direct-dispatch-gate.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-original-numeric-dispatch-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test-direct-numeric-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/t1_fft_original_direct_dispatch_gate.py
+            tests/test_t1_fft_original_direct_dispatch_gate.py
+      - name: Check original-authenticated direct numeric callsite evidence rules
+        run: python3 -m unittest discover -s tests -p 'test_t1_fft_original_direct_dispatch_gate.py' -v
+      - name: Protect proof boundary
+        run: |
+          echo "AUTHENTIC_ORIGINAL_SOURCE_PREVIOUS_CI=42519853981"
+          echo "ORIGINAL_DX11FFT_FINDKERNEL_CALLS=0"
+          echo "UNTRUSTED_TRACE_STRUCTURAL_CHECK_ONLY=true"
+          echo "ACTUAL_UNITY_KERNEL_INDEX_MAPPING_PROVEN=false"
+          echo "GAME_NATIVE_ANDROID_BUILD=false"
