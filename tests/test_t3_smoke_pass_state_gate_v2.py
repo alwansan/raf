@@ -1,6 +1,6 @@
 import copy
 import unittest
-from t3_smoke_pass_state_gate_v2 import audit
+from t3_smoke_pass_state_gate_v2 import audit, load_metadata
 
 class PassStateTests(unittest.TestCase):
     def sample(self):
@@ -12,6 +12,23 @@ class PassStateTests(unittest.TestCase):
                  source_sha256="a"*64, passes=[p])
         return dict(schema="t3-smoke-pass-state-v2", original=s,
                     exported=copy.deepcopy(s))
+    def test_nested_duplicate_state_rejected(self):
+        d = self.sample()
+        import json
+        raw = json.dumps(d).replace('"src_blend": "SrcAlpha"',
+                                    '"src_blend": "One", "src_blend": "SrcAlpha"', 1)
+        with self.assertRaisesRegex(ValueError, "duplicate_json_key:src_blend"):
+            load_metadata(raw)
+
+    def test_top_level_duplicate_side_rejected(self):
+        with self.assertRaisesRegex(ValueError, "duplicate_json_key:original"):
+            load_metadata('{"original": {}, "original": {}, "exported": {}}')
+
+    def test_valid_json_metadata_accepted(self):
+        import json
+        self.assertEqual(audit(load_metadata(json.dumps(self.sample())))["status"],
+                         "SCOPED_PASS_STATE_MATCH")
+
     def test_match(self):
         self.assertEqual(audit(self.sample())["status"], "SCOPED_PASS_STATE_MATCH")
     def test_blend_factor_mismatch(self):
