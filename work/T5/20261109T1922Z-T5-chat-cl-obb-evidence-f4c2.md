@@ -19,3 +19,17 @@ observed_t5_02=EVIDENCE_READY bytes2301280507 SHA256_prefix911a53bc1dd4 ; filena
 original_v89_obb=main.89.com.alwansan.raft.androidtest.obb bytes2301256312 validated SHA256_prefix660b6c0909ae
 hypothesis=Owner SAF selected bytes do not match immutable v89 OBB, but selection filename/version/location missing so no corruption claim.
 next=Run isolated source-only GitHub Actions with source-free tests and authenticated pinned CL blob, report strictly bounded fields, publish Arabic owner steps.
+
+## Executed results and release of scope
+status=completed
+real_ci_first=https://github.com/alwansan/raf/actions/runs/42680558991 (failure due to CL summary.session lacking shared- folder prefix; 14 synthetic tests and both pinned Git blob hashes PASS)
+root_cause=CL summary session id is 20261108-230157-466487336, directory is shared-20261108-230157-466487336. Reconciler now checks both without losing strict folder binding.
+fix_commit=384fef37b8250a74ff5d985a5a635dd007bef7d6
+latest_test_commit=fd8cd4603f77c0f80560afc232875db200db58dd
+latest_real_ci=https://github.com/alwansan/raf/actions/runs/42680745095 SUCCESS (16/16 tests; 2 authenticated real CL/test summaries)
+actual_observed_first=EVIDENCE_READY bytes2301280507 SHA-prefix911a53bc1dd4, +24195 bytes vs old v89 OBB2301256312 SHA-prefix660b6c0909ae: DIFFERENT_FROM_OLD_REFERENCE; filename/location unknown; no corruption proven.
+actual_observed_later=T5-02 NEEDS_INPUT, NO_COMPLETED_DIGEST; does not undo previous evidence.
+owner_guide=docs/T5_OWNER_OBB_DEVICE_CHECK_2026-11-09_AR.md
+phone_step=Get selected file basename/location and installed versionCode for older SHA; if unknown, optionally use latest shared Arabic portrait Mini T5-02 SAF on known file, export only summary/events JSON to CL/test. Do not send 2GB OBB/game assets, no new Unity/mini build.
+limits=No real Android installed OBB mount, no comparison against same-version reference for unknown OBB, no new device install. Full XAPK NOT_READY 0/3.
+finished_at_utc=2026-11-09T19:11Z
