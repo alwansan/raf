@@ -73,5 +73,51 @@ class UnifiedSafStreamContract(unittest.TestCase):
         self.assertLess(method.index("published=true"), method.index("return uri;"))
 
 
+    def test_reexport_never_truncates_previously_published_uris(self):
+        export = self.activity.split("    void export(){", 1)[1].split(
+            "    static byte[] readFile(", 1
+        )[0]
+        self.assertNotIn('openOutputStream(logExport', export)
+        self.assertNotIn('openOutputStream(summaryExport', export)
+        self.assertIn('newLog=writeMedia(privateLog.getName(),"application/x-ndjson",events)', export)
+        self.assertIn('newSummary=writeMedia("summary-"+session+".json","application/json",json)', export)
+
+    def test_reexport_retains_previous_pair_until_two_new_writes_succeed(self):
+        export = self.activity.split("    void export(){", 1)[1].split(
+            "    static byte[] readFile(", 1
+        )[0]
+        self.assertIn("Uri newLog=null,newSummary=null", export)
+        self.assertIn("boolean committed=false", export)
+        self.assertIn("Uri previousLog=logExport,previousSummary=summaryExport", export)
+        self.assertIn("logExport=newLog;summaryExport=newSummary", export)
+        self.assertIn("committed=true", export)
+        self.assertIn('deleteExportMedia(previousLog,"previous-log")', export)
+        self.assertIn('deleteExportMedia(previousSummary,"previous-summary")', export)
+        self.assertLess(export.index("newLog=writeMedia"),
+                        export.index("newSummary=writeMedia"))
+        self.assertLess(export.index("newSummary=writeMedia"),
+                        export.index("logExport=newLog"))
+        self.assertLess(export.index("committed=true"),
+                        export.index('deleteExportMedia(previousLog,"previous-log")'))
+
+    def test_reexport_second_write_failure_rolls_back_without_erasing_prior(self):
+        export = self.activity.split("    void export(){", 1)[1].split(
+            "    static byte[] readFile(", 1
+        )[0]
+        delete = self.activity.split("    boolean deleteExportMedia(", 1)[1].split(
+            "    void export(){", 1
+        )[0]
+        self.assertIn("if(!committed)", export)
+        self.assertIn('deleteExportMedia(newSummary,"rollback-summary")', export)
+        self.assertIn('deleteExportMedia(newLog,"rollback-log")', export)
+        self.assertIn('log("export_error",e.toString())', export)
+        self.assertIn('if(uri==null)return true', delete)
+        self.assertIn("getContentResolver().delete(uri,null,null)==1", delete)
+        self.assertIn('log("media_delete_error"', delete)
+        self.assertIn("تعذر حذف نسخة قديمة", export)
+        self.assertLess(export.index("if(!committed)"),
+                        export.index('deleteExportMedia(newLog,"rollback-log")'))
+
+
 if __name__ == "__main__":
     unittest.main()
