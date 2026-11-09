@@ -12,7 +12,7 @@ BEFORE = "t1_original_fft_dispatch.before"
 # Identity keys must not change between the entry and return of one call.
 # Optional provenance, when present, must agree on BOTH sides of a call.
 # Legacy sequence-only traces remain parseable but never prove GPU execution.
-IDENTITY_FIELDS = ("kernel", "kernel_name", "kernel_index", "find_kernel_result", "dispatch_kernel", "shader", "shader_name", "resource", "fft_length", "fft_size", "bank", "pass_index", "groups_x", "groups_y", "groups_z", "session_id", "build_sha", "shader_guid", "resource_guid")
+IDENTITY_FIELDS = ("kernel", "kernel_name", "kernel_index", "find_kernel_result", "dispatch_kernel", "shader", "shader_name", "resource", "fft_length", "fft_size", "bank", "pass_index", "groups_x", "groups_y", "groups_z", "session_id", "build_sha", "shader_guid", "resource_guid", "__trace_schema")
 AFTER = "t1_original_fft_dispatch.returned"
 
 
@@ -29,10 +29,16 @@ def audit(records):
     for row in records:
         if not isinstance(row, dict):
             raise ValueError("trace row must be object")
-        event = row.get("event")
+        # Actual PersistentDiagnosticLog.jsonl rows have operation/detail,
+        # NOT the earlier synthetic event/message fixture envelope.
+        native = "operation" in row or "detail" in row
+        legacy = "event" in row or "message" in row
+        if native and legacy:
+            raise ValueError("mixed trace envelopes")
+        event = row.get("operation") if native else row.get("event")
         if event not in (BEFORE, AFTER):
             continue
-        message = row.get("message")
+        message = row.get("detail") if native else row.get("message")
         if not isinstance(message, str):
             raise ValueError("missing trace message")
         fields = {}
@@ -49,6 +55,51 @@ def audit(records):
             if k in fields:
                 raise ValueError("duplicate trace field")
             fields[k] = v.strip()
+        # Internal marker prevents a synthetic return being paired with an
+        # authentic AndroidRuntimeLog before event (or vice versa).
+        if "__trace_schema" in fields:
+            raise ValueError("reserved trace schema field")
+        fields["__trace_schema"] = "native" if native else "legacy"
+        if native:
+            # The logger's top-level "sequence" is a GLOBAL log counter,
+            # distinct from the bounded call sequence inside "detail".
+            if row.get("area") != "water":
+                raise ValueError("invalid original FFT logger area")
+            session = row.get("session")
+            if not isinstance(session, str) or not session.strip():
+                raise ValueError("missing original logger session")
+            if "session_id" in fields and fields["session_id"] != session:
+                raise ValueError("conflicting original logger session")
+            fields["session_id"] = session
+            if event == BEFORE:
+                # Verify only the source hook schema, not GPU execution.
+                required = {
+                    "source_sha_prefix": "8aa32937d423",
+                    "original_findkernel_callsite_present": "false",
+                    "original_runtime_mapping": "unverified",
+                    "gpu_result": "unverified",
+                }
+                if any(fields.get(k) != v for k, v in required.items()):
+                    raise ValueError("original FFT before source marker drift")
+                for k in ("numeric_kernel_argument", "original_exponent",
+                          "shader_instance_session_local", "pass_offset"):
+                    try:
+                        int(fields[k])
+                    except (KeyError, ValueError, TypeError):
+                        raise ValueError("invalid original FFT before numeric field: " + k)
+                if fields["pass_offset"] not in ("0", "1"):
+                    raise ValueError("invalid original FFT before pass offset")
+                groups = fields.get("group_xyz", "").split(",")
+                if len(groups) != 3:
+                    raise ValueError("invalid original FFT before group_xyz")
+                try:
+                    if [int(x) for x in groups][::2] != [1, 1]:
+                        raise ValueError("invalid original FFT before X/Z groups")
+                except ValueError:
+                    raise ValueError("invalid original FFT before group_xyz")
+            elif (fields.get("managed_dispatch_call_returned") != "true"
+                  or fields.get("gpu_result") != "unverified"):
+                raise ValueError("invalid original FFT returned marker")
         seq = fields.get("sequence", "")
         if not seq.isascii() or not seq.isdecimal() or not 1 <= int(seq) <= 16 or str(int(seq)) != seq:
             raise ValueError("invalid bounded sequence")
