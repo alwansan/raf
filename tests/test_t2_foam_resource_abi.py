@@ -217,6 +217,11 @@ class T2FoamResourceAbiTests(unittest.TestCase):
                              ("m_Unknown", 0)):
             with self.subTest(field=field, value=value):
                 report = combine(profile, resources)
+                # combine() preserves the original table dict by reference.
+                # Isolate this adversarial report so one subtest cannot
+                # contaminate the source profile for the next iteration.
+                report["rows"][1]["original_numeric_table_rows"] = dict(
+                    report["rows"][1]["original_numeric_table_rows"])
                 report["rows"][1]["original_numeric_table_rows"][field] = value
                 with self.assertRaises(ValueError):
                     verify_genuine_texture_sampler_pair_count(report)
