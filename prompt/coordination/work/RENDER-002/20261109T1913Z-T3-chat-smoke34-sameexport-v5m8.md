@@ -1,7 +1,7 @@
 # T3 RENDER-002 — private same-instance smoke34 Shader48 export study
 session_id=20261109T1913Z-T3-chat-smoke34-sameexport-v5m8
 origin=chat
-status=active
+status=waiting_ci
 issue_id=RENDER-002
 base_sha=fd8cd4603f77c0f80560afc232875db200db58dd
 updated_at=2026-11-09T19:13:00Z
@@ -12,4 +12,9 @@ intended_files=scripts/t3_smoke34_sameexport_shaderlab.py; tests/test_t3_smoke34
 scope=Compare SHA original selected smoke-name 17 renderers/34 material slots/one Source Shader48 to exact W1+B02 same-instance .shader.meta and ShaderLab in bounded AssetRipper. Classify Dummy/no subprogram/Pass structural coverage and source RGB ColorMask disposition. No game/Unity/OBB/APK or old source code changes.
 coordination=All 25 latest Actions at 2026-11-09T19:10Z show no running smoke34 same-export. T3 scheduled last 18:29 contract only, previous 19:01 source probe CI42679312674 SUCCESS completed. T1 FFT / T2 Foam / T4 mouse / T5 packaging on distinct scopes; shared exporter resource not seen active, avoid overlapping heavy runner. No competing modifications expected.
 falsifiers=missing SHA, nonunique 34 rank target, W1+B02 different export_instance, missing/duplicate Class48 W1 source trace, absent genuine shader META GUID, DummyShaderTextExporter/unprogrammed source, unsupported parsed geometry. Status source-export CLASSIFIED does not assert Android visual success.
-next=Implement source-free guards, bounded one-time export, inspect Actions, preserve no private names/IDs/raw shader payload, store result; RENDER-002 remains OPEN NOT_READY 0/3.
+next=Inspect in-progress CI42681908313 one-instance private export and real ShaderLab classification; do not start a second identical export. Then classify result and release asset-ripper-source-export-T3-smoke34-12-provider-readonly-standalone. RENDER-002 OPEN NOT_READY 0/3.
+
+## Live CI checkpoint 2026-11-09T19:18Z
+- CI source-free syntax/identity/quality tests PASS, pinned AssetRipperCLI checkout/compile PASS, ZIP2 six scenes + six owners SHA staging PASS.
+- Actual bounded original source export `in_progress` [CI42681908313](https://github.com/alwansan/raf/actions/runs/42681908313), runner job 129378377402.
+- Preserve the resource lease until export finishes; no raw artifacts uploaded. No native game/PASS claim.
