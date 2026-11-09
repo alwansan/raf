@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261109T0209Z-T5-chat-manual-image-r7c4",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "unified-lab-manual-image-evidence",
+  "status": "active",
+  "base_sha": "f97c9462194dd22c5c09e0f5342cff0a79a0c830",
+  "experiment_key": "T5_manual_SAF_image_png_crc_container_decode_bounds_v1",
+  "resource_key": "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+  "intended_files": [
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/ManualImageEvidencePolicy.java",
+    "apk-for-testing/unified/app/src/main/java/com/alwansan/raftlab/UnifiedLabActivity.java",
+    "apk-for-testing/unified/app/build.gradle",
+    "tests/java/ManualImageEvidencePolicyTest.java",
+    "tests/test_t5_unified_saf_stream_contract.py",
+    ".github/workflows/raft-t5-unified-saf-source.yml"
+  ],
+  "approach": "Validate manual SAF image bytes by CRC-checked PNG structural parse or bounded JPEG/WebP container, then use Android BitmapFactory bounds + sampled decode before publishing evidence. Add JDK controls and source-contract/Android javac in existing T5 workflow.",
+  "hypothesis": "Current manual screenshot accepts 4-byte signatures and marks EVIDENCE_READY even for truncated image-like bytes; reject such evidence without changing T3 GPU screenshot implementation.",
+  "resumed_from_sessions": [
+    "clients/T5/sessions/20261109T0142Z-T5-chat-media-4fa9.md",
+    "prompt/coordination/clients/T5/sessions/20261109T0155Z-T5-chat-atomic-reexport-c3a8.md",
+    "prompt/coordination/clients/T5/sessions/20261109T0153Z-T5-scheduled-evidence-token-p6m2.md"
+  ],
+  "related_work": [
+    "T3 independent CL decoded pixel audit; T4 physical mouse capture"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add policy, tests and compile gate; check owner CL and CI; preserve current SHARED_BUILD_READINESS r4 NO_BUILD.",
+  "updated_at": "2026-11-09T02:09:00Z"
+}
