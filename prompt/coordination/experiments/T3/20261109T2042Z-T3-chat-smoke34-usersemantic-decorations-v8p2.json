@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T2042Z-T3-chat-smoke34-usersemantic-decorations-v8p2",
+  "issue_id": "RENDER-002",
+  "experiment_key": "t3-sha15964-smoke34-two-keyword-private-fragment-dxbc-to-original-and-roundtrip-spv-explicit-UserSemanticGOOGLE-availability-v1",
+  "status": "SOURCE_AUTHENTIC_SPV_USERSEMANTIC_ABSENT_NUMERIC_ALIGNMENT_ONLY",
+  "run": {
+    "id": 42696526193,
+    "conclusion": "success",
+    "sha": "0ab78d56f9d8bc50fb5e6adf5601a7b2e7a5df63",
+    "artifact_id": 13710355183,
+    "artifact_expiry_utc": "2026-11-16T20:49:42Z"
+  },
+  "original": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "scenes_sha_verified": 6,
+    "owners_sha_verified": 4,
+    "emitter_renderers": 17,
+    "material_slots": 34,
+    "exact_ps_pairs": 2
+  },
+  "tests": {
+    "opcode_synthetic": 12,
+    "private_pipeline_synthetic": 8,
+    "scheduled_failclosed_gate": 9,
+    "dxbc_parser_inherited": 21,
+    "original_inventory": 7
+  },
+  "counts": {
+    "source_original_dx_user_input_records": 7,
+    "source_spv_input_records": 7,
+    "roundtrip_spv_input_records": 7,
+    "source_spv_input_lanes": 28,
+    "roundtrip_spv_input_lanes": 28,
+    "original_explicit_hlsl_semantic_matches": 0,
+    "roundtrip_explicit_hlsl_semantic_matches": 0,
+    "original_hlsl_semantic_extension_present": 0,
+    "roundtrip_hlsl_semantic_extension_present": 0,
+    "original_numeric_register_location_matches": 7,
+    "roundtrip_numeric_register_location_matches": 5,
+    "original_numeric_type_width_candidates": 7,
+    "roundtrip_numeric_type_width_candidates": 5
+  },
+  "limits": {
+    "compiler_semantic_decorations_present": false,
+    "register_location_numeric_match_is_provenance": false,
+    "semantic_to_spv_dataflow_proven": false,
+    "shaderlab_restored": false,
+    "android_smoke_pixel_proof": false,
+    "game_assets_modified": false,
+    "private_names_or_programs_published": false
+  },
+  "next": "Recover explicit instruction/dataflow DXBC input-register to SPIR-V Location/Component provenance, connect only if independently authenticated; then Unity and phone graphics."
+}

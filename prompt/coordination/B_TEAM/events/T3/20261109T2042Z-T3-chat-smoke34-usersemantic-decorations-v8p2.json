@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T2042Z-T3-chat-smoke34-usersemantic-decorations-v8p2",
+  "issue_id": "RENDER-002",
+  "type": "original_smoke34_SPIRV_HlslSemanticGOOGLE_annotation_availability",
+  "status": "SOURCE_SPV_NO_EXPLICIT_USERSEMANTIC_NUMERIC_ONLY_NOT_PROVENANCE",
+  "timestamp_utc": "2026-11-09T20:51:00Z",
+  "run_id": 42696526193,
+  "artifact_id": 13710355183,
+  "source_spv_explicit_matches": 0,
+  "derived_spv_explicit_matches": 0,
+  "source_numeric_register_location_matches": 7,
+  "derived_numeric_register_location_matches": 5,
+  "semantic_instruction_dataflow_verified": false,
+  "android_device_fix_verified": false
+}
