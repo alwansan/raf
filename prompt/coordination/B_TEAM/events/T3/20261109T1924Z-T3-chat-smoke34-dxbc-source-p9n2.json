@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1924Z-T3-chat-smoke34-dxbc-source-p9n2",
+  "issue_id": "RENDER-002",
+  "event_type": "SOURCE_SHA_ORIGINAL_SMOKE34_TWO_D3D11_VERTEX_FRAGMENT_PERMUTATIONS_VERIFIED",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42683328646",
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42683328646/artifacts/13703831211",
+  "measured": {
+    "d3d11_platform_present": true,
+    "original_d3d11_table_records": 8,
+    "genuine_d3d11_vertex_stage_variant_records": 2,
+    "genuine_d3d11_fragment_stage_variant_records": 2,
+    "distinct_linked_original_d3d11_programs": 4,
+    "matched_vertex_fragment_permutation_pairs": 2,
+    "unmatched_vertex_permutations": 0,
+    "unmatched_fragment_permutations": 0,
+    "stage_variants_with_keywords": 2,
+    "normal_passes_with_matched_pair": 1,
+    "source_original_RGB_color_mask": true,
+    "source_original_alpha_dependent_color_and_alpha": true,
+    "source_original_zwrite_off": true
+  },
+  "limitations": "Original D3D11 stage feasibility is not ShaderLab restoration or Android pixel proof; source keys/compiled program bytes and hashes private.",
+  "readiness": "RENDER-002 OPEN NOT_READY 0/3",
+  "report": "docs/T3_SMOKE34_ORIGINAL_D3D11_PROGRAM_FEASIBILITY_2026-11-09_AR.md",
+  "next": "Isolated private DXBC→SPIRV/GLSL source-pair translation with stage I/O and Keyword permutation validation; source, Unity and phone fidelity must be tested before game repair."
+}
