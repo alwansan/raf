@@ -59,8 +59,8 @@ def audit(records):
         elif not duplicate:
             before = pending[seq]
             mismatched = [name for name in IDENTITY_FIELDS
-                          if name in before and name in fields
-                          and before[name] != fields[name]]
+                          if (name in before) != (name in fields)
+                          or (name in before and before[name] != fields[name])]
             if mismatched:
                 errors.append("identity_mismatch:" + str(seq) + ":" + ",".join(mismatched))
             else:
