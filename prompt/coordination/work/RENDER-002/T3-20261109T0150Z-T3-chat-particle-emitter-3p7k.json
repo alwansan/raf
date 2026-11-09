@@ -6,8 +6,8 @@
   "owner": "T3",
   "issue_id": "RENDER-002",
   "base_sha": "80d128223fbe79bb27305bba9efdf2304ffd1df5",
-  "updated_at": "2026-11-09T02:06:00Z",
-  "status": "active",
+  "updated_at": "2026-11-09T02:10:00Z",
+  "status": "completed",
   "intended_files": [
     "scripts/t3_original_particle_emitter_semantics.py",
     "tests/test_t3_original_particle_emitter_semantics.py",
@@ -17,10 +17,13 @@
     "prompt/coordination/experiments/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
     "prompt/coordination/B_TEAM/events/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
     "docs/T3_ORIGINAL_PARTICLE_EMITTER_SEMANTICS_2026-11-09.md",
+    "docs/T3_ORIGINAL_PARTICLE_SMOKE_SHADER_RANK_2026-11-09.md",
+    "tests/test_t3_original_particle_smoke_rank.py",
+    ".github/workflows/raft-t3-original-smoke-rank-source-tests.yml",
     "docs/T3_ORIGINAL_PARTICLE_SMOKE_SHADER_RANK_2026-11-09.md"
   ],
   "experiment_key": "t3-original-six-scene-original-particle108-emitter-gameobject-name-link:ZIP2@15964ea8:SHA-six-scenes-four-owners:gameobject-hierarchy-v1",
-  "resource_key": "ZIP2 six-scene four-owner private stage + ubuntu-24.04 original UnityPy CPU (exclusive new workflow)",
+  "resource_key": "released",
   "scope": "Distinct RENDER-002 gap: relate exact 108-use source ParticleShader48 (5 selected Material21 and 54 ParticleSystemRenderers) to original GameObject names, count smoke/fire/water semantic hints versus other particle renderers, only safe aggregate. No raw names or game assets published.",
   "hypothesis": "Semantic source GameObject link will reveal whether verified 108-use shader's 54 ParticleSystemRenderers include smoke-named objects, helping prioritize (not prove) the on-phone square-smoke symptom.",
   "resumed_from_sessions": [
@@ -41,5 +44,16 @@
   },
   "phase_2_scope": "Independently join original smoke-labelled (17) ParticleSystemRenderer Material PPtrs to private SHA-authenticated Shader48 identities and report anonymous shader material-slot rank buckets. No game modifications or names.",
   "experiment_key_v2": "t3-private-origin-smoke-name-to-authentic-Shader48-anonymous-rank:ZIP2@15964ea8:6scenes4owners",
-  "status_detail": "Phase 1 CI passed; before phase2 source edits, extending same owned source/test/workflow file scope with no concurrent T3 scheduled conflict."
+  "status_detail": "Phase 1 CI passed; before phase2 source edits, extending same owned source/test/workflow file scope with no concurrent T3 scheduled conflict.",
+  "completed_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42548907189",
+    "https://github.com/alwansan/raf/actions/runs/42549246777",
+    "https://github.com/alwansan/raf/actions/runs/42549491342"
+  ],
+  "source_report": "docs/T3_ORIGINAL_PARTICLE_SMOKE_SHADER_RANK_2026-11-09.md",
+  "experiment_record": "prompt/coordination/experiments/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
+  "event_record": "prompt/coordination/B_TEAM/events/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
+  "result": "Original 6 SHA-authenticated scenes identify 17 smoke-like ParticleSystemRenderers (34 slots) joined to ONE source Shader48 ranked 34; 17 fire-like use a DISTINCT other Shader48 rank34; 25 additional fire-like use rank108. Verified 215 typed particle Material slots; not phone smoke identity.",
+  "boundaries": "No original asset modification, ShaderLab recovery, compiled Unity/Adreno pixel acceptance or Android APK; semantic name hints only.",
+  "next_step": "Private SHA-original source 34-use smoke Shader48 parsed pass/blend/texture/keyword, compare exact same-export ShaderLab dummy and native import; device actual smoke region needed."
 }
