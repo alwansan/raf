@@ -1,0 +1,37 @@
+name: T5 OBB GUID and delivery JSON regression (source only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t5-obb-guid-contract-regression.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-obb-guid-contract-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-regression:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[t5-obb-contract-verify]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Compile classifier and tests without game assets
+        run: |
+          python3 -m py_compile scripts/t5_classify_obb_guid_logs.py scripts/test_t5_obb_guid_contract.py
+      - name: Run latest OBB path + duplicate JSON delivery contract tests
+        run: |
+          python3 -m unittest -v scripts.test_t5_obb_guid_contract
+      - name: Run previous OBB GUID classifier controls
+        run: |
+          python3 -m unittest discover -s tests -p 'test_t5_classify_obb_guid_logs.py' -v
+      - name: State precise evidence boundary
+        if: always()
+        run: |
+          echo 'T5 OBB GUID contract: source-only synthetic regression; signed delivery identity and phone mounting are NOT tested.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Branch ref: ${{ github.ref }}' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Commit: ${{ github.sha }}' >> "$GITHUB_STEP_SUMMARY"
