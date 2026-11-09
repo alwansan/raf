@@ -24,7 +24,7 @@ def audit(data):
         for key in FIELDS:
             if type(side.get(key)) is not bool:
                 raise ValueError('unknown_render_state:' + key)
-    if original['source_sha256'] != exported['source_sha256']:
+    if original['source_sha256'].lower() != exported['source_sha256'].lower():
         raise ValueError('different_original_source')
     mismatches = [key for key in FIELDS if original[key] != exported[key]]
     return {'status': 'STATE_MISMATCH' if mismatches else 'SCOPED_STATE_MATCH',
