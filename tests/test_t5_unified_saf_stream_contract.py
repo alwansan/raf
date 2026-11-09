@@ -43,5 +43,35 @@ class UnifiedSafStreamContract(unittest.TestCase):
         self.assertIn('throw new IOException("Image over 20MiB")', self.activity)
 
 
+    def test_media_store_file_is_private_until_full_write_finishes(self):
+        # The new image/log is not made public before the stream is closed.
+        method = self.activity.split("    Uri writeMedia(", 1)[1].split(
+            "    void log(", 1
+        )[0]
+        self.assertIn("if(Build.VERSION.SDK_INT<29)", method)
+        self.assertIn("v.put(MediaStore.MediaColumns.IS_PENDING,1)", method)
+        self.assertIn('openOutputStream(uri,"wt")', method)
+        self.assertIn("out.write(bytes);out.flush()", method)
+        self.assertIn("ready.put(MediaStore.MediaColumns.IS_PENDING,0)", method)
+        self.assertLess(method.index("IS_PENDING,1"), method.index("insert("))
+        self.assertLess(method.index("out.write(bytes);out.flush()"),
+                        method.index("IS_PENDING,0"))
+        self.assertLess(method.index("IS_PENDING,0"), method.index("update(uri,ready"))
+
+    def test_media_store_failure_rolls_back_incomplete_media(self):
+        method = self.activity.split("    Uri writeMedia(", 1)[1].split(
+            "    void log(", 1
+        )[0]
+        self.assertIn("boolean published=false", method)
+        self.assertIn('throw new IOException("MediaStore failed to publish completed file")', method)
+        self.assertIn("if(getContentResolver().update(uri,ready,null,null)!=1)", method)
+        self.assertIn("published=true", method)
+        self.assertIn("finally{", method)
+        self.assertIn("if(!published)", method)
+        self.assertIn("getContentResolver().delete(uri,null,null)", method)
+        self.assertLess(method.index("update(uri,ready"), method.index("published=true"))
+        self.assertLess(method.index("published=true"), method.index("return uri;"))
+
+
 if __name__ == "__main__":
     unittest.main()
