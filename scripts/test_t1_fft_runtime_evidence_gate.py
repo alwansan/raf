@@ -56,6 +56,23 @@ class RuntimeGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "blank or padded"):
             validate(d)
 
+    def test_zero_fft_size_rejected(self):
+        d = sample()
+        d["dispatches"][0]["fft_size"] = 0
+        with self.assertRaisesRegex(ValueError, "radix-2 FFT size"):
+            validate(d)
+
+    def test_non_power_of_two_fft_size_rejected(self):
+        d = sample()
+        d["dispatches"][0]["fft_size"] = 300
+        with self.assertRaisesRegex(ValueError, "radix-2 FFT size"):
+            validate(d)
+
+    def test_small_radix_two_fft_size_accepted(self):
+        d = sample()
+        d["dispatches"][0]["fft_size"] = 2
+        self.assertEqual(validate(d)["runtime_dispatches"], 1)
+
     def test_duplicate_json_keys(self):
         with self.assertRaises(ValueError):
             no_duplicate_keys([("build_sha", "a"), ("build_sha", "b")])
