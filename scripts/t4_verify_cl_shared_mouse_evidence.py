@@ -46,6 +46,68 @@ def finite_axis(value):
     return n if math.isfinite(n) else 0.0
 
 
+
+def correlate_implicit_down_up(unique):
+    """Match ACTION_DOWN/UP actionButton=0 to explicit edges at the SAME time.
+
+    This reports duplicated Android callbacks, not additional clicks. A
+    buttonState transition alone is only ambiguous candidate evidence.
+    Multi-device identity is absent in this older log, so no Unity success
+    or inferred click may be claimed from a correlated pair.
+    """
+    explicit = {}
+    for rec in unique.values():
+        f = rec["event"]
+        act = f.get("action")
+        if act not in EDGE_ACTIONS:
+            continue
+        try:
+            bit = int(f.get("actionButton", "0"), 0)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Invalid explicit actionButton mask") from exc
+        if bit not in BUTTON_BITS or not f.get("eventTime"):
+            continue
+        edge = "press" if act == "ACTION_BUTTON_PRESS" else "release"
+        key = (f["eventTime"], f.get("source"), f.get("captured"), edge)
+        explicit.setdefault(key, set()).add(bit)
+
+    matched = Counter()
+    ambiguous = Counter()
+    zero = Counter()
+    for rec in unique.values():
+        f = rec["event"]
+        act = f.get("action")
+        if act not in ("ACTION_DOWN", "ACTION_UP"):
+            continue
+        try:
+            action_bit = int(f.get("actionButton", "0"), 0)
+            state = int(f.get("buttonState", "0"), 0)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Invalid implicit button state") from exc
+        if action_bit != 0:
+            continue
+        edge = "press" if act == "ACTION_DOWN" else "release"
+        zero[edge] += 1
+        time = f.get("eventTime")
+        key = (time, f.get("source"), f.get("captured"), edge)
+        bits = explicit.get(key, set()) if time else set()
+        # Pair only a unique named explicit button; never infer button
+        # identity from ACTION_UP state=0 or from a MOVE held state.
+        if len(bits) == 1:
+            bit = next(iter(bits))
+            if (edge == "press" and (state & bit)) or (
+                    edge == "release" and not (state & bit)):
+                matched[edge + "_" + BUTTON_BITS[bit]] += 1
+                continue
+        ambiguous[edge] += 1
+    return {
+        "actionbutton_zero": dict(sorted(zero.items())),
+        "matched_to_explicit_same_eventtime": dict(sorted(matched.items())),
+        "unpaired_ambiguous_not_click_proof": dict(sorted(ambiguous.items())),
+        "additional_clicks_inferred": 0,
+        "unity_delivery_proven": False,
+    }
+
 def count_events(events, summary=None):
     """Return strictly aggregate proof, deduplicating a MotionEvent across routes.
 
@@ -151,6 +213,7 @@ def count_events(events, summary=None):
         "input_route_counts_unique": dict(sorted(routes.items())),
         "action_counts_raw": dict(sorted(actions_raw.items())),
         "action_counts_unique": dict(sorted(actions_unique.items())),
+        "implicit_down_up_correlation": correlate_implicit_down_up(unique),
         "press_edges_action_button": dict(sorted(press.items())),
         "release_edges_action_button": dict(sorted(release.items())),
         "scroll_axes_unique": dict(sorted(wheel.items())),
@@ -197,6 +260,13 @@ def main():
         assert result["raw_physical_mouse_callback_records"] == 413
         assert result["unique_android_motion_events"] == 373
         assert result["press_edges_action_button"] == {"left": 13}
+        assert result["implicit_down_up_correlation"] == {
+            "actionbutton_zero": {"press": 13, "release": 13},
+            "matched_to_explicit_same_eventtime": {"press_left": 13, "release_left": 13},
+            "unpaired_ambiguous_not_click_proof": {},
+            "additional_clicks_inferred": 0,
+            "unity_delivery_proven": False,
+        }
         assert result["release_edges_action_button"] == {"left": 13}
         assert sum(result["scroll_axes_unique"].get(k, 0) for k in
                    ("vertical_positive", "vertical_negative")) == 55
