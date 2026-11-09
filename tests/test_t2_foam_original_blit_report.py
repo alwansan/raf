@@ -44,6 +44,7 @@ def fixture():
         "original_crosspass_declared_field_token_not_heap_identity": True,
         "original_pass0_destination_declared_field_trace": False,
         "original_crosspass_declared_field_return_relation": "field_pass0_destination_untraced",
+        "original_crosspass_onehop_declared_field_return_relation": "field_pass0_destination_untraced",
         "pass0_source": "Texture",
         "pass0_destination": "RenderTexture",
         "pass0_source_producer": "typed_field",
@@ -100,6 +101,37 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         r = fixture()
         r["original_pass0_destination_declared_field_trace"] = 1
         with self.assertRaisesRegex(ValueError, "proof_flag"):validate(r)
+
+    def test_onehop_nested_field_is_only_declared_token_provenance(self):
+        r = fixture()
+        r["original_pass0_destination_declared_field_trace"] = True
+        r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
+        for onehop in ("field_onehop_token_match_only",
+                       "field_onehop_token_match_plus_null",
+                       "field_onehop_token_match_plus_other",
+                       "field_onehop_token_match_plus_null_and_other"):
+            with self.subTest(onehop=onehop):
+                r["original_crosspass_onehop_declared_field_return_relation"] = onehop
+                safe = validate(r)
+                self.assertEqual(safe["crosspass_onehop_declared_field_relation"], onehop)
+                self.assertFalse(safe["crosspass_texture_instance_identity_proven"])
+
+    def test_onehop_bad_category_and_lost_direct_proof_rejected(self):
+        r = fixture()
+        r["original_pass0_destination_declared_field_trace"] = True
+        r["original_crosspass_declared_field_return_relation"] = "field_token_match_only"
+        r["original_crosspass_onehop_declared_field_return_relation"] = "field_no_direct_match"
+        with self.assertRaisesRegex(ValueError,"lost_direct"):validate(r)
+        for bad in ("private_field", 77, None, False, "field_onehop_runtime_heap_identity"):
+            r = fixture()
+            r["original_pass0_destination_declared_field_trace"] = True
+            r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
+            r["original_crosspass_onehop_declared_field_return_relation"] = bad
+            with self.subTest(bad=bad), self.assertRaisesRegex(ValueError,"field_token_category"):
+                validate(r)
+        r = fixture()
+        r["original_crosspass_onehop_declared_field_return_relation"] = "field_onehop_token_match_only"
+        with self.assertRaisesRegex(ValueError,"inconsistent"):validate(r)
 
     def test_unknown_both_passes_is_allowed_but_never_proved(self):
         r = fixture()

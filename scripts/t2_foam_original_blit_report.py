@@ -75,13 +75,17 @@ FIELD_RELATIONS = {
     "field_token_match_plus_null_and_other","field_token_match_plus_null",
     "field_token_match_plus_other","field_token_match_only",
     "field_no_match_with_null","field_null_only","field_no_direct_match",
+    "field_onehop_token_match_only","field_onehop_token_match_plus_null",
+    "field_onehop_token_match_plus_other",
+    "field_onehop_token_match_plus_null_and_other",
     "value_no_body","value_exception_regions","value_wrong_return_type",
     "value_budget","value_bad_target","value_unsupported_opcode",
     "value_unsupported_branch","value_bad_local","value_invalid_stack",
     "value_invalid_return_stack","value_invalid_join_stack",
     "value_no_reachable_return",
 }
-EXPECTED = ({"status", "original_crosspass_declared_field_return_relation"} |
+EXPECTED = ({"status", "original_crosspass_declared_field_return_relation",
+             "original_crosspass_onehop_declared_field_return_relation"} |
             NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS |
             ROLE_KEYS | STACK_KEYS)
 
@@ -194,15 +198,25 @@ def validate(report):
     # return stack through locals and CFG. A matching DECLARED field token
     # cannot prove matching receiver, intervening writes, same frame or object.
     relation = report["original_crosspass_declared_field_return_relation"]
+    onehop = report["original_crosspass_onehop_declared_field_return_relation"]
     dest_traced = report["original_pass0_destination_declared_field_trace"]
-    if type(relation) is not str or relation not in FIELD_RELATIONS:
+    if any(type(tag) is not str or tag not in FIELD_RELATIONS
+           for tag in (relation, onehop)):
         raise ValueError("unsafe_crosspass_field_token_category")
     if dest_traced and report["original_pass0_exact_Material_field_argument_calls"] != 1:
         raise ValueError("field_destination_without_unique_direct_Blit")
-    if (dest_traced and relation == "field_pass0_destination_untraced") or (
-        not dest_traced and relation != "field_pass0_destination_untraced"
+    if (dest_traced and "field_pass0_destination_untraced" in (relation,onehop)) or (
+        not dest_traced and (relation,onehop) !=
+            ("field_pass0_destination_untraced",)*2
     ):
         raise ValueError("crosspass_field_trace_relation_inconsistent")
+    # A one-hop scan must not erase a previously attested direct same-token
+    # return path. It may additionally discover a nested token path, never
+    # turn a previous positive into a negative structural assertion.
+    if relation.startswith("field_token_match") and (
+        onehop in ("field_no_direct_match","field_no_match_with_null",
+                   "field_null_only")):
+        raise ValueError("crosspass_onehop_lost_direct_field_provenance")
     # Explicit boundaries: NEVER claim that pass1 samples the same actual RT
     # object written by pass0 just because their declared types are equal.
     return {
@@ -215,6 +229,7 @@ def validate(report):
         "pass1_bounded_stack_source_type": report["original_pass1_bounded_stack_source_type"],
         "pass1_bounded_stack_producer": report["original_pass1_bounded_stack_source_kind"],
         "crosspass_declared_field_relation": relation,
+        "crosspass_onehop_declared_field_relation": onehop,
         "crosspass_texture_instance_identity_proven": False,
         "CB0_and_Unity_device_evidence_proven": False,
     }

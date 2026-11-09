@@ -639,8 +639,21 @@ internal static class Program
     // through branches, not merely the opcode adjacent to ret. This is only
     // a category-level structural diagnostic, NEVER instance equality.
     private sealed record ReturnFlowState(string[] Stack,string[] Locals);
+    static string OneHopOriginFromSafeFieldTag(string tag) => tag switch
+    {
+        // The nested helper is statically resolved and bounded. Its field
+        // declarations are *not* heap identities or actual non-null values.
+        "field_token_match_only"=>"onehop_same_declared_field_token",
+        "field_token_match_plus_null"=>"onehop_same_declared_field_token|null",
+        "field_token_match_plus_other"=>"onehop_same_declared_field_token|onehop_other",
+        "field_token_match_plus_null_and_other"=>
+            "onehop_same_declared_field_token|null|onehop_other",
+        "field_null_only"=>"null",
+        "field_no_match_with_null"=>"onehop_other|null",
+        _=>"onehop_other" // external/virtual/EH/unknown => never a positive
+    };
     static string ReachableReturnValueFlow(MethodDefinition method,
-        FieldDefinition? checkField=null)
+        FieldDefinition? checkField=null,int nestedBudget=0)
     {
         if(!method.HasBody)return "value_no_body";
         if(method.Body.HasExceptionHandlers)return "value_exception_regions";
@@ -791,7 +804,30 @@ internal static class Program
                     if(op!=Code.Newobj && call.HasThis)Pop();
                     if(op==Code.Newobj)stack.Add("constructed_untraced");
                     else if(call.ReturnType.FullName!="System.Void")
-                        stack.Add("nested_call_untraced");
+                    {
+                        string nestedOrigin="nested_call_untraced";
+                        if(checkField is not null && nestedBudget>0 &&
+                           call.ReturnType.FullName is Texture or RenderTexture)
+                        {
+                            // Only one statically resolved in-module body, no
+                            // virtual dispatch, no recursive cycles. Unknown
+                            // receiver/heap aliases stay unproved.
+                            MethodDefinition? nested=null;
+                            try{nested=call.Resolve();}
+                            catch(AssemblyResolutionException){}
+                            catch(ResolutionException){}
+                            if(nested is not null && nested.Module==method.Module &&
+                               !ReferenceEquals(nested,method) &&
+                               (op==Code.Call || (op==Code.Callvirt &&
+                                nested.HasThis && (!nested.IsVirtual || nested.IsFinal))))
+                            {
+                                string inner=ReachableReturnValueFlow(nested,checkField,0);
+                                nestedOrigin=OneHopOriginFromSafeFieldTag(inner);
+                            }
+                            else nestedOrigin="onehop_other";
+                        }
+                        stack.Add(nestedOrigin);
+                    }
                 }
                 else if(op is Code.Castclass or Code.Isinst or Code.Box or Code.Unbox_Any)
                 {
@@ -904,9 +940,18 @@ internal static class Program
             // A positive token match is NEVER runtime heap identity.
             bool match=categories.Contains("same_declared_field_token_receiver_unproved",
                 StringComparer.Ordinal);
+            bool nestedMatch=categories.Contains("onehop_same_declared_field_token",
+                StringComparer.Ordinal);
             bool explicitNull=categories.Contains("null",StringComparer.Ordinal);
             bool other=categories.Any(x=>x is not
-                ("same_declared_field_token_receiver_unproved" or "null"));
+                ("same_declared_field_token_receiver_unproved" or
+                 "onehop_same_declared_field_token" or "null"));
+            if(nestedMatch)
+                return explicitNull ?
+                    (other?"field_onehop_token_match_plus_null_and_other":
+                     "field_onehop_token_match_plus_null"):
+                    (other?"field_onehop_token_match_plus_other":
+                     "field_onehop_token_match_only");
             if(match)
                 return explicitNull ?
                     (other?"field_token_match_plus_null_and_other":"field_token_match_plus_null"):
@@ -951,7 +996,7 @@ internal static class Program
 
     static string OriginalCrosspassDeclaredFieldReturnRelation(
         StackSourceTrace pass0Destination,StackSourceTrace pass1Source,
-        ModuleDefinition sourceModule)
+        ModuleDefinition sourceModule,bool oneHop=false)
     {
         // The ONLY asserted relationship here is exact declared FieldDefinition
         // identity across an original pass0 destination load and original
@@ -982,7 +1027,7 @@ internal static class Program
             if(!callee.HasThis)return "field_bad_receiver_signature";
             if(callee.IsVirtual&&!callee.IsFinal)return "field_virtual_dispatch_unknown";
         }
-        return ReachableReturnValueFlow(callee,field);
+        return ReachableReturnValueFlow(callee,field,oneHop?1:0);
     }
 
     static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
@@ -1320,20 +1365,28 @@ internal static class Program
         Console.WriteLine("T2_FOAM_PASS0_CALLEE_RETURN_VALUE_FLOW "+value0);
         Console.WriteLine("T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW "+value1);
         string crosspassField=OriginalCrosspassDeclaredFieldReturnRelation(dest0,back1,asm.MainModule);
+        string crosspassOneHop=OriginalCrosspassDeclaredFieldReturnRelation(
+            dest0,back1,asm.MainModule,true);
         var permittedFieldTags=new HashSet<string>{
             "field_pass0_destination_untraced","field_destination_unresolved",
             "field_pass1_callee_untraced","field_callee_unresolved",
             "field_bad_receiver_signature","field_virtual_dispatch_unknown",
             "field_token_match_plus_null_and_other","field_token_match_plus_null",
             "field_token_match_plus_other","field_token_match_only",
-            "field_no_match_with_null","field_null_only","field_no_direct_match"
+            "field_no_match_with_null","field_null_only","field_no_direct_match",
+            "field_onehop_token_match_only","field_onehop_token_match_plus_null",
+            "field_onehop_token_match_plus_other",
+            "field_onehop_token_match_plus_null_and_other"
         };
         // Reuse the fail-closed value interpreter's established finite
         // rejection categories, not names/methods/tokens from private CIL.
-        if(!permittedFieldTags.Contains(crosspassField) &&
-           !safeValueTags.Contains(crosspassField))
+        if((!permittedFieldTags.Contains(crosspassField) &&
+            !safeValueTags.Contains(crosspassField)) ||
+           (!permittedFieldTags.Contains(crosspassOneHop) &&
+            !safeValueTags.Contains(crosspassOneHop)))
             throw new InvalidOperationException("private_crosspass_field_relation_forbidden");
         Console.WriteLine("T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION "+crosspassField);
+        Console.WriteLine("T2_FOAM_CROSSPASS_ONEHOP_FIELD_RETURN_RELATION "+crosspassOneHop);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -1384,6 +1437,7 @@ internal static class Program
             original_pass0_destination_declared_field_trace=dest0.Role=="RenderTexture" &&
                 dest0.Kind=="typed_field",
             original_crosspass_declared_field_return_relation=crosspassField,
+            original_crosspass_onehop_declared_field_return_relation=crosspassOneHop,
             original_crosspass_declared_field_token_not_heap_identity=true,
             original_shader_to_blit_direct_field_types_confirmed=pass0 is not null && pass1 is not null,
             original_texture_instance_identity_proven=false,
@@ -1783,6 +1837,45 @@ internal static class Program
         if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
            !="field_null_only")
             throw new InvalidOperationException("field_read_without_return_is_not_field_provenance");
+        // One-hop nested original-CIL fixture: direct caller has no field
+        // origin, but its in-module nonvirtual helper returns the field.
+        var leaf=new MethodDefinition("SyntheticBoundedNestedLeaf",
+            Mono.Cecil.MethodAttributes.Static|Mono.Cecil.MethodAttributes.Public,tex);
+        owner.Methods.Add(leaf);
+        leaf.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        leaf.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        fg.Clear();
+        fg.Add(Instruction.Create(OpCodes.Call,leaf));
+        fg.Add(Instruction.Create(OpCodes.Ret));
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod)
+            !="field_no_direct_match")
+            throw new InvalidOperationException("nested_field_must_not_forge_direct_field_evidence");
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod,true)
+            !="field_onehop_token_match_only")
+            throw new InvalidOperationException("static_onehop_nested_field_not_detected");
+        leaf.Body.Instructions[0]=Instruction.Create(OpCodes.Ldsfld,otherRtField);
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod,true)
+            !="field_no_direct_match")
+            throw new InvalidOperationException("nested_different_field_must_fail_closed");
+        // Self-recursive helper is opaque, never a proven reference alias.
+        fg[0]=Instruction.Create(OpCodes.Call,fieldGetter);
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod,true)
+            !="field_no_direct_match")
+            throw new InvalidOperationException("nested_cycle_must_not_prove_alias");
+        // Runtime virtual dispatch is deliberately not unfolded, even when
+        // one possible implementation directly returns a matching field.
+        var virtualLeaf=new MethodDefinition("SyntheticVirtualLeaf",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,tex);
+        owner.Methods.Add(virtualLeaf);
+        virtualLeaf.Body.Instructions.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        virtualLeaf.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        fg.Clear();
+        fg.Add(Instruction.Create(OpCodes.Ldnull));
+        fg.Add(Instruction.Create(OpCodes.Callvirt,virtualLeaf));
+        fg.Add(Instruction.Create(OpCodes.Ret));
+        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod,true)
+            !="field_no_direct_match")
+            throw new InvalidOperationException("virtual_nested_leaf_must_remain_opaque");
 
     }
 
