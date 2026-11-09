@@ -81,6 +81,19 @@ class MouseRouteTests(unittest.TestCase):
         self.assertEqual(phases["off"]["samples"], 1)
         self.assertEqual(phases["on"]["samples"], 1)
 
+    def test_contradictory_capture_flag_cannot_prove_captured_click(self):
+        lines = [
+            event("capture_request", "ON"),
+            event("input", "route=activity_generic source=0x2002 action=ACTION_BUTTON_PRESS buttonState=1 actionButton=1 captured=true"),
+            event("input", "route=captured source=0x20004 action=ACTION_BUTTON_PRESS buttonState=2 actionButton=2 captured=true"),
+        ]
+        result = analyze(lines)
+        self.assertEqual(result["capture_route_conflicts"], 1)
+        self.assertEqual(result["rejected_records"], 1)
+        self.assertEqual(result["phases"]["on"]["button_presses_observed"], ["right"])
+        self.assertEqual(result["phases"]["on"]["samples"], 1)
+        self.assertFalse(result["device_success_proven"])
+
     def test_no_events_is_not_pass(self):
         r = analyze([event("capture_request", "ON")])
         self.assertEqual(r["phases"], {})
