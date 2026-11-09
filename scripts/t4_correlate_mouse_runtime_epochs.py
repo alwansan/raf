@@ -139,7 +139,14 @@ def triage(lines):
             wanted = ("capturedCallbackEvents", "pressCallbacks", "releaseCallbacks",
                       "verticalScrollCallbacks", "horizontalScrollCallbacks")
             data = {key: parse_counter(detail, key) for key in wanted}
-            if any(value is None for value in data.values()) or (
+            # Per ORIGINAL PhysicalMouseActionEvidence.Record, every
+            # press/release is one distinct callback. Vertical and horizontal
+            # scroll can co-occur on ONE ACTION_SCROLL, hence max not sum.
+            if (any(value is None for value in data.values()) or
+                    data["pressCallbacks"] + data["releaseCallbacks"] +
+                    max(data["verticalScrollCallbacks"],
+                        data["horizontalScrollCallbacks"]) >
+                    data["capturedCallbackEvents"] or
                     "unityButtonsAndWheelVerified=false" not in detail):
                 active["invalid"] = True
                 invalid += 1
@@ -162,7 +169,12 @@ def triage(lines):
                 active["invalid"] = True
                 invalid += 1
                 continue
-            if data["positiveFallback"] + data["positiveLegacy"] > data["getterCalls"]:
+            # One original getter reports at most one positive path;
+            # edge and scroll are disjoint subsets of those positives.
+            if (data["positiveFallback"] + data["positiveLegacy"] >
+                    data["getterCalls"] or
+                    data["positiveEdges"] + data["positiveScroll"] >
+                    data["positiveFallback"] + data["positiveLegacy"]):
                 active["invalid"] = True
                 invalid += 1
                 continue
