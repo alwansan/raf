@@ -1,0 +1,16 @@
+{
+  "session_id": "20261109T0542Z-T4-scheduled-route-flag-k8m3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "52638314d4fb9151e3fce0639d27457379808aa4",
+  "intended_files": [
+    "scripts/t4_analyze_mouse_lab_routes.py",
+    "tests/test_t4_analyze_mouse_lab_routes.py"
+  ],
+  "hypothesis": "route=captured with captured=false is contradictory and should not count as uncaptured proof; unknown capture flag remains unknown",
+  "experiment_key": "T4-route-flag-bidirectional-contradiction-20261109",
+  "resource_key": null,
+  "updated_at": "2026-11-09T05:42:00Z",
+  "owner": "T4"
+}
