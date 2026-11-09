@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T0142Z-T3-chat-cl-raw-png-ci-p8r4",
+  "issue_id": "RENDER-002",
+  "event_type": "CL_R3_ACTUAL_PNG_PIXELS_PINNED_SIX_FILES_CI_VERIFIED",
+  "at_utc": "2026-11-09T01:45:11Z",
+  "source_of_truth": {
+    "repo": "alwansan/CL",
+    "commit": "24a677fc8fa4749c0bcf8a3cac01fa80b1641c86",
+    "folder": "test/shared-20261108-232759-468049775",
+    "app_version": "0.2.13-shared",
+    "files": 6
+  },
+  "source_commit": "e839d4e3e54b761a95a421f48e1ce70593751725",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42547145230",
+  "run_conclusion": "success",
+  "proof": "All 6 PNG lengths and exact Git blob SHA1 identities verified; real 1080x2400 PNG CRC/filters decoded; center black 0..0.000043; center unique RGB 3, 81448, 332, 332, 331, 330",
+  "artifact_id": 13644076425,
+  "report": "docs/T3_CL_R3_PIXEL_EVIDENCE_2026-11-09.md",
+  "result": "OLDER_BLACK_GLES_CAPTURE_SYMPTOM_NOT_PRESENT_IN_SIX_R3_PNG_CENTERS",
+  "boundaries": "EVIDENCE_READY not phone visual PASS. No exact per-color visual alignment, original Raft render changes, or full game XAPK 3/3.",
+  "next_step": "Use bounded authentic ZIP2 particle prefab/material/shader reference chain for in-game white/square smoke issue. T3 scheduled decoder and T5 unified activity remain untouched."
+}
