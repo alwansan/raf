@@ -79,7 +79,11 @@ class RuntimeMouseEpochTests(unittest.TestCase):
         self.assertEqual(v["status"], "CAPTURED_CALLBACK_WITHOUT_SAME_EPOCH_GETTER")
 
     def test_positive_native_without_fallback_not_claimed_as_fallback(self):
-        v = gate.triage([req(17), actions(17), readers(17, fallback=0)])
+        # The producer cannot report positive edges/scroll with zero hits:
+        # native-positive getters must increment positiveLegacy.
+        native = readers(17, fallback=0).replace(
+            "positiveLegacy=0", "positiveLegacy=2")
+        v = gate.triage([req(17), actions(17), native])
         self.assertEqual(v["status"], "SAME_EPOCH_CALLBACK_AND_GETTER_NO_FALLBACK")
 
     def test_capture_observed_false_cannot_prove_legacy_bridge(self):
