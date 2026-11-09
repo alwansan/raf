@@ -1,0 +1,220 @@
+name: T3 RENDER-002 smoke34 SAME export ShaderLab (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-smoke34-sameexport.yml
+      - scripts/t3_smoke34_sameexport_shaderlab.py
+      - tests/test_t3_smoke34_sameexport_shaderlab.py
+permissions:
+  contents: read
+concurrency:
+  group: t3-smoke34-single-private-sameexport-20261109
+  cancel-in-progress: false
+
+jobs:
+  same-instance-smoke34-source-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 43
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout T3 source and verified shared exporter helpers
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/ExportLineage
+
+      - name: Source-free privacy, W1 B02 and original smoke34 negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_smoke34_sameexport_shaderlab.py
+          python3 -m unittest discover -s tests -p 'test_t3_smoke34_sameexport_shaderlab.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_pass_probe.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_shaderlab_export_quality.py' -v
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Checkout immutable public AssetRipperCLI helper source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Source
+
+      - name: Compile bounded W1 and B02 same-instance lineage exporter
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t3-smoke34-helper"
+          python3 -m scripts.b21_stage_light_lineage \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --destination "$RUNNER_TEMP/t3-smoke34-helper/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper "$RUNNER_TEMP/t3-smoke34-helper/RaftExportLineage.cs"
+          if ! timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/t3-smoke34-tool" \
+            > "$RUNNER_TEMP/t3-smoke34-private-tool-build.log" 2>&1; then
+            echo "::error::Bounded public exporter helper compile failed; private log suppressed"
+            exit 2
+          fi
+          dotnet "$RUNNER_TEMP/t3-smoke34-tool/ExportLineage.dll" --probe-tool >/dev/null
+
+      - name: Checkout immutable ZIP2 six scenes and authenticated small owner providers
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/globalgamemanagers
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets6.assets
+
+      - name: Select exact plain/multipart source paths and verify immutable provider
+        run: |
+          set -euo pipefail
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/globalgamemanagers' \
+            '/Raft/Raft_Data/globalgamemanagers.assets' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: Reconstruct and SHA-verify original six scenes plus six runtime owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA, stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN
+          from scripts.b04_restore_original_color_settings import ORIGINAL_SIZE, ORIGINAL_SHA256
+          dest=Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-original"
+          pins={"Raft_Data/"+name:value for name,value in PIN.items()}
+          pins.update({"Raft_Data/"+name: SHADER_OWNERS[name] for name in (
+              "resources.assets","sharedassets0.assets","sharedassets1.assets",
+              "sharedassets6.assets","globalgamemanagers.assets")})
+          pins["Raft_Data/globalgamemanagers"]=(ORIGINAL_SIZE,ORIGINAL_SHA256)
+          report=stage(Path("zip2-original"),dest,pins)
+          assert len(report["owners"])==12 and report["lfs_used"] is False
+          print("T3_SHA_ORIGINAL_SMOKE34_SIX_SCENE_FOUR_SHADER_OWNERS_AND_GLOBALS_VERIFIED=true")
+          PY
+
+      - name: Export exact SHA-pinned original graph with private W1 B02 trace
+        env:
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/t3-smoke34-w1-private.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/t3-smoke34-b02-private.json
+          RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE: ${{ runner.temp }}/t3-smoke34-light-private.json
+        run: |
+          set -euo pipefail
+          if ! timeout 720s dotnet "$RUNNER_TEMP/t3-smoke34-tool/ExportLineage.dll" \
+            "$RUNNER_TEMP/t3-smoke34-original" \
+            "$RUNNER_TEMP/t3-smoke34-export" \
+            > "$RUNNER_TEMP/t3-smoke34-private-export.log" 2>&1; then
+            python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          safe={"schema_version":1,"status":"INCONCLUSIVE",
+                "phase":"actual_bounded_export",
+                "w1_trace_created":(root/"t3-smoke34-w1-private.json").is_file(),
+                "b02_trace_created":(root/"t3-smoke34-b02-private.json").is_file(),
+                "android_game_device_smoke_pixels_verified":False}
+          (root/"t3-smoke34-safe-quality.json").write_text(
+            json.dumps(safe,sort_keys=True)+"\n")
+          print("T3_SMOKE34_EXPORT_INCONCLUSIVE "+json.dumps(safe,sort_keys=True))
+          PY
+            exit 2
+          fi
+          test -s "$RAFT_PRIVATE_EXPORT_LINEAGE"
+          test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE"
+          test -d "$RUNNER_TEMP/t3-smoke34-export/ExportedProject/Assets"
+
+      - name: Privately verify real original smoke34 identity to one same-instance ShaderLab
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_smoke34_sameexport_shaderlab \
+            --original "$RUNNER_TEMP/t3-smoke34-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/t3-smoke34-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/t3-smoke34-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/t3-smoke34-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-smoke34-safe-quality.json"
+
+      - name: Assert evidence class not phone readiness
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          data=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-smoke34-safe-quality.json").read_text())
+          assert data["status"]=="T3_SHA_SMOKE34_SAME_INSTANCE_SHADERLAB_CLASSIFIED"
+          assert data["same_instance_w1_b02_trace_verified"] is True
+          assert data["original_six_scene_SHA_verified"] is True
+          assert data["original_four_owner_SHA_verified"] is True
+          assert data["original_smoke_renderers"]==17
+          assert data["original_smoke_material_slots"]==34
+          assert data["original_private_shader_name_ID_guid_programs_published"] is False
+          assert data["original_shader_program_same_export_equivalence_proven"] is False
+          assert data["exported_active_pass_equivalence_proven"] is False
+          assert data["android_game_device_smoke_pixels_verified"] is False
+          assert data["export_shader_status"] in {
+             "UNITY_BUILTIN_REFERENCE_NO_CUSTOM_SHADERLAB",
+             "CUSTOM_SHADER_META_MISSING",
+             "CUSTOM_SHADER_TEXT_MISSING",
+             "ACTUAL_DUMMY_SHADER_TEXT_EXPORTER",
+             "NO_PROGRAM_SUBPROGRAMS_EXPORTED",
+             "INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER",
+             "PROGRAMMED_STRUCTURAL_PASS_NOT_AUTHENTICITY"}
+          print("T3_SMOKE34_SAME_INSTANCE_SHADERLAB_CLASSIFICATION="+data["export_shader_status"])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+              f.write("## T3 SHA-original smoke34 same-instance ShaderLab\n\n")
+              f.write("17 authentic smoke-name renderers / 34 source Material slots, distinct from fire34.\n\n")
+              f.write("Export status: **"+data["export_shader_status"]+"**. Exact same-instance W1/B02 trace.\n\n")
+              f.write("No compiled shader equivalence/Android pixel/game fix; RENDER-002 remains OPEN.\n")
+          PY
+
+      - name: Upload only safe classification, never original assets/traces/shader text
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-smoke34-sha-original-sameexport-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-smoke34-safe-quality.json
+          if-no-files-found: ignore
+          retention-days: 7
