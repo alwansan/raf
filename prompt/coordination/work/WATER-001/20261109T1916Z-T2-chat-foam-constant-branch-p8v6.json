@@ -4,7 +4,7 @@
   "origin": "chat",
   "worker": "T2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "abf1ede6bbea3b9073c9ab20b826be46dd486c93",
   "resumed_from_sessions": [
     "20261109T1905Z-T2-chat-foam-null-branch-r7k3",
@@ -19,10 +19,31 @@
     "prompt/coordination/B_TEAM/events/T2/20261109T1916Z-T2-chat-foam-constant-branch-p8v6.json"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/42680030121"
+    "https://github.com/alwansan/raf/actions/runs/42681948189",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
   ],
   "hypothesis": "CIL forward analysis pessimistically explores both sides of constant brtrue/brfalse; a previously reported original pass1 explicit-null return may be structurally unreachable if guarded by constant branch conditions. Preserve opaque/unknown control flow conservatively.",
   "plan": "Implement bounded constant 0/nonzero branch feasibility solely in original-source-safe Cecil analysis, add synthetic test for known true/false vs opaque both paths, automatically run existing pinned-original SHA workflow; publish aggregate enums without private IL; no game/ShaderLab, shared APK, T1/T3/T4/T5 edits.",
   "limits": "No proof of runtime nonnull or pass0 pass1 instance equality, no pixel claim.",
-  "updated_at": "2026-11-09T19:16:00Z"
+  "updated_at": "2026-11-09T19:19:00Z",
+  "outcome": "PASS_SHA_ORIGINAL_BRANCH_FEASIBILITY_NULL_CATEGORY_RETAINS",
+  "source_commit": "cc4e2519c35506c4a4a134b2428ee65c11269928",
+  "validation": {
+    "run_id": 42681948189,
+    "conclusion": "success",
+    "job_id": 129378522996,
+    "source_free_python_tests": 17,
+    "cecil_selftest": "PASS",
+    "source_sha_authenticated": true,
+    "original_assembly_bytes": 3211776,
+    "original_shader_owner_bytes": 115978112,
+    "original_pass1_return_category": "value_mixed_with_explicit_null_literal",
+    "private_source_cleanup": "success",
+    "android_runtime_null_observed": false,
+    "android_water_pixels_verified": false
+  },
+  "completed_scope_only": true,
+  "parent_issue_status": "OPEN",
+  "next_step": "Separate original private-data experiment on predicate conditions and receiver instance joins; do not treat ldnull path as executed or pixel cause.",
+  "session_file": "prompt/coordination/clients/T2/sessions/20261109T1916Z-T2-chat-foam-constant-branch-p8v6.md"
 }
