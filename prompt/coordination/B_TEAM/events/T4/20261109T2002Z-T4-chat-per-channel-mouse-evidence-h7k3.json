@@ -1,0 +1,26 @@
+{
+  "event_id": "20261109T2002Z-T4-chat-per-channel-mouse-evidence-h7k3",
+  "owner": "T4",
+  "origin": "chat",
+  "at": "2026-11-09T20:08:00Z",
+  "session_id": "20261109T2002Z-T4-chat-per-channel-mouse-evidence-h7k3",
+  "issue_id": "INPUT-005",
+  "type": "source_only_evidence_gate",
+  "event_type": "mouse_channel_specific_callback_and_legacy_getter_correlation",
+  "summary": "T4 added conservative original captured mouse pressMask/releaseMask ↔ Unity Legacy 11-slot getter co-observation (LEFT/RIGHT/MIDDLE, scrollAxis, scrollVector) and per-slot producer consistency guards. 12 new regression tests; CI42689914245 SUCCESS 42/42. Fresh owner CL shared-20261109-225506-552476830 mini v0.2.14 shows T4-01..09 NEEDS_INPUT, not phone button PASS. Device/game acceptance still open.",
+  "source_commits": [
+    "9aab2f7f7ec4445382c1a335616627a8f2341a69",
+    "efbbd593f0f390e4bc220e759f618c76f2b4b016"
+  ],
+  "source_ci": "https://github.com/alwansan/raf/actions/runs/42689914245",
+  "ci_job_id": 129406623136,
+  "tests_passed": 42,
+  "tests_total": 42,
+  "status": "SOURCE_ONLY_SUCCESS_DEVICE_PENDING",
+  "device_pass": false,
+  "unity_gameplay_verified": false,
+  "full_game_not_ready": true,
+  "report": "docs/T4_MOUSE_ORIGINAL_CHANNEL_CORRELATION_2026-11-09.md",
+  "experiment": "prompt/coordination/experiments/T4/20261109T2002Z-T4-chat-per-channel-mouse-evidence-h7k3.json",
+  "next_step": "Test signed current-source game LEFT/RIGHT/MIDDLE press/release and V/H wheel and actual gameplay with one process JSONL; preserve camera, focus, world/save, audio and settings. No XAPK dispatched by T4."
+}
