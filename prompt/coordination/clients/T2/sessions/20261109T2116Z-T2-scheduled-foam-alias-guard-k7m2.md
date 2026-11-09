@@ -1,0 +1,13 @@
+# T2 session 20261109T2116Z-T2-scheduled-foam-alias-guard-k7m2
+- origin: scheduled
+- date_utc: 2026-11-09T21:16:35Z
+- baseline_head: 5104609fe5fdc5f27ea7f698077197f3ad738e6d
+- resumed_from_sessions: 20261109T2020Z-T2-scheduled-crosspass-receiver-gate-r8v3; 20261108T1956Z-T2-chat-pass1-source-kind-4d6a
+- scope: WATER-001 / independent source-free alias dataflow control, no overlap with T3 assets, T1 FFT, T4 mouse, T5 resolution/build.
+- inherited: owner device report docs/DEVICE_FEEDBACK_42058825739_AR.md, run 42058825739 and CL screenshots/logs. Owner's world load/save/re-entry succeeded on artifact; rendering/FFT still broken. Shared mini r2 T2-01..04 Adreno730 tests passed; they do not prove original water.
+- source evidence: original Foam pass0 typed field RenderTexture and pass1 typed call result Texture (CI42519122764); crosspass actual runtime identity still unknown. Prior Foam CI42690309016 reported success. T2 source-only guard does not replace original CIL tracing.
+- experiment_key: T2-FOAM-SOURCEFREE-CFG-ALIAS-JOIN-20261109-v1
+- changes: scripts/t2_foam_alias_dataflow.py and tests/test_t2_foam_alias_dataflow.py, nine synthetic cases covering SSA same/different values, joins, null, unknown, reassignment and repeated allocation site.
+- commits: 26d4f10834648a509c90c010746aba8405e38c1e (work), 3dfb7ac2a4cbcda006a47d781ceb39ac3dee0dbb (source), 3a1d9beabe476ae431e94ed43688626bfab25869 (tests).
+- verification: source/test files published; tests NOT RUN in CI or original ZIP2. No Unity/ShaderLab/phone test, no new build requested. Never pass field name, method signature or allocation site as SSA identity.
+- next: run python -m unittest tests.test_t2_foam_alias_dataflow against pinned HEAD; integrate guard into actual Mono.Cecil return/receiver CFG only after proving SSA value provenance, loops and exception edges; then compare pass0 and pass1 actual instance path. WATER-001 OPEN, NOT_READY.
