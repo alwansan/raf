@@ -1,0 +1,33 @@
+name: T3 RENDER-002 original smoke Shader48 anonymous rank source controls (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-original-smoke-rank-source-tests.yml
+permissions:
+  contents: read
+concurrency:
+  group: t3-smoke-shader-rank-sourceonly-20261109
+  cancel-in-progress: false
+jobs:
+  source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout scripts and unit tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify two independent 34-slot Shader48 identities, privacy and rank bounds
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_particle_emitter_semantics.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_emitter_semantics.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_smoke_rank.py' -v
+          echo "SOURCE_ONLY_T3_SMOKE_SHADER_RANK_NEGATIVE_CONTROLS=PASS"
+          echo "No ZIP2 or Android device inputs used in this small CI" >> "$GITHUB_STEP_SUMMARY"
