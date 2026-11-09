@@ -41,19 +41,25 @@ def resolve_pptr(p, owning, externals):
     return ("external_staged", (owner,pid))
 
 def texture_slot_rows(texenv):
-    # The SHA-original Unity Material typetree uses m_First/m_Second pairs,
-    # verified independently in the project's B05 original source parser.
-    # Do NOT normalize a malformed raw source to apparent parity.
+    # UnityPy source pairs vary in representation. Require each slot to carry a typed
+    # m_Texture field; never invent a shader/texture on a missing original pointer.
     if not isinstance(texenv,list):
-        raise ValueError("original material texture slots must be a list")
+        raise ValueError("original texture container is not array")
     out=[]
+    names=set()
     for entry in texenv:
-        if (not isinstance(entry,dict) or set(entry)!={"m_First","m_Second"}
-            or not isinstance(entry["m_First"],str) or not entry["m_First"]):
-            raise ValueError("bad original texture entry")
-        val=entry["m_Second"]
-        if not isinstance(val,dict) or "m_Texture" not in val:
-            raise ValueError("bad original texture value")
+        if isinstance(entry,(tuple,list)) and len(entry)==2:
+            name,val=entry
+        elif isinstance(entry,dict) and set(entry)=={"m_First","m_Second"}:
+            name,val=entry["m_First"],entry["m_Second"]
+        elif isinstance(entry,dict) and len(entry)==1:
+            name,val=next(iter(entry.items()))
+        else:
+            raise ValueError("bad original texture entry shape")
+        if (not isinstance(name,str) or not name or name in names
+            or not isinstance(val,dict) or "m_Texture" not in val):
+            raise ValueError("bad original named texture value")
+        names.add(name)
         out.append(val)
     return out
 
