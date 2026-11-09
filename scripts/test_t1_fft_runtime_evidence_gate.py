@@ -38,6 +38,24 @@ class RuntimeGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate(d)
 
+    def test_duplicate_resource_binding_names(self):
+        d = sample()
+        d["dispatches"][0]["bindings"] = ["Input", "Input"]
+        with self.assertRaisesRegex(ValueError, "duplicate resource binding"):
+            validate(d)
+
+    def test_whitespace_only_resource_binding(self):
+        d = sample()
+        d["dispatches"][0]["bindings"] = ["Input", "   "]
+        with self.assertRaisesRegex(ValueError, "blank or padded"):
+            validate(d)
+
+    def test_padded_resource_binding(self):
+        d = sample()
+        d["dispatches"][0]["bindings"] = [" Input", "Output"]
+        with self.assertRaisesRegex(ValueError, "blank or padded"):
+            validate(d)
+
     def test_duplicate_json_keys(self):
         with self.assertRaises(ValueError):
             no_duplicate_keys([("build_sha", "a"), ("build_sha", "b")])
