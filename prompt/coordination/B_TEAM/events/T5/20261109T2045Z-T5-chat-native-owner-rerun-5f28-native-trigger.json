@@ -1,0 +1,41 @@
+{
+  "event_id": "20261109T2045Z-T5-chat-native-owner-rerun-5f28-native-trigger",
+  "client": "T5",
+  "origin": "chat",
+  "session_id": "20261109T2045Z-T5-chat-native-owner-rerun-5f28",
+  "created_at_utc": "2026-11-09T20:48:00Z",
+  "kind": "owner_direct_full_native_request",
+  "base_candidate_source_sha": "f66277c0572065e6fde495a52468542851124281",
+  "request_commit_sha": "6316f457dd7587db47469ebd29ec0cbc849584dd",
+  "workflow_run_id": 42696228231,
+  "workflow_url": "https://github.com/alwansan/raf/actions/runs/42696228231",
+  "first_live_status": "queued reconstruct after native-request-gate success and unity-license-preflight success",
+  "previous_full_run_id": 42296450023,
+  "previous_full_reconstruct": "success",
+  "previous_delivery_error": "HTTP 403 Resource not accessible by integration on GitHub Releases POST",
+  "previous_native_csharp_error_run": 42281310905,
+  "prior_native_csharp_fix_commit": "f554e8b6757e46aa037603ed592a04acc2bf7a61",
+  "prebuild_source_gates": [
+    {
+      "run": 42695722354,
+      "result": "success",
+      "scope": "T1 original FFT source hook"
+    },
+    {
+      "run": 42695722198,
+      "result": "success",
+      "scope": "offline platform adapter"
+    },
+    {
+      "run": 42695755986,
+      "result": "success",
+      "scope": "T4 mouse evidence"
+    }
+  ],
+  "full_game_ready": false,
+  "final_readiness": "NOT_READY 0/3",
+  "votes": "trial-20261106-r1 remains 1/5, not changed; explicit owner request permitted as separate one build",
+  "water_contract": "strict first; exact five documented limitations if unmet; no fake kernel/ShaderLab proof",
+  "delivery_boundary": "Only reconstruct+release gate success constitutes complete published delivery; artifact-only delivery can be offered separately with accurate label and verified bytes",
+  "next_step": "Inspect https://github.com/alwansan/raf/actions/runs/42696228231 for reconstruct first failure or signed + delivery artifact; if failed classify stage/first error. Do not dispatch another until completed. If reconstruct succeeds but release HTTP403, preserve artifacts and tell owner RAFT_RELEASE_TOKEN/permissions are external gate; do not mark full workflow SUCCESS."
+}
