@@ -49,6 +49,29 @@ class PngAuditTests(unittest.TestCase):
             with self.subTest(filt=filt):
                 result=self.check(png(8,8,lambda x,y:(x*10,y*10,80),filt))
                 self.assertEqual(result["regions"]["full"]["unique_rgb"],64)
+    def test_inflate_overrun_rejected(self):
+        # Valid CRC, valid IEND, but inflated data exceeds IHDR dimensions.
+        ihdr=struct.pack(">IIBBBBB",2,2,8,2,0,0,0)
+        oversized=b"\\x00"*10000
+        payload=(audit_module.SIGNATURE+chunk(b"IHDR",ihdr)
+                 +chunk(b"IDAT",zlib.compress(oversized))+chunk(b"IEND",b""))
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"oversized.png"
+            path.write_bytes(payload)
+            with self.assertRaisesRegex(ValueError,"invalid_scanline_size"):
+                audit_module.audit(path)
+    def test_trailing_zlib_stream_rejected(self):
+        ihdr=struct.pack(">IIBBBBB",2,2,8,2,0,0,0)
+        scan=b"\\x00"+b"\\x00"*6
+        scan*=2
+        payload=(audit_module.SIGNATURE+chunk(b"IHDR",ihdr)
+                 +chunk(b"IDAT",zlib.compress(scan)+b"extra")
+                 +chunk(b"IEND",b""))
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"trailing.png"
+            path.write_bytes(payload)
+            with self.assertRaisesRegex(ValueError,"invalid_scanline_size"):
+                audit_module.audit(path)
     def test_crc_failure(self):
         bad=bytearray(png(8,8,lambda x,y:(0,0,0)))
         bad[-5]^=1
