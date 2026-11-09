@@ -1,0 +1,31 @@
+{
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0157Z-T4-chat-crossframe-click-e4p8",
+  "status": "active",
+  "issue_id": "INPUT-005",
+  "base_sha": "80d128223fbe79bb27305bba9efdf2304ffd1df5",
+  "updated_at": "2026-11-09T01:57:35Z",
+  "resumed_from_sessions": [
+    "20261109T0144Z-T4-chat-downup-correlation-n6q2",
+    "20261109T0143Z-T4-scheduled-capture-phase-j6r2",
+    "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2"
+  ],
+  "scope": "Fix real captured native primary button duplicate DOWN/PRESS and UP/RELEASE across Unity frame boundaries by matching same Android eventTime + source + deviceId within active capture epoch. Unit control fails without fix; no new UI/Mini/Unity build.",
+  "intended_files": [
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "tests/test_t4_android_pointer_capture_policy.py",
+    "docs/T4_ANDROID_MOUSE_CROSSFRAME_EDGE_DEDUP_2026-11-09.md",
+    "prompt/coordination/experiments/T4/20261109T0157Z-T4-chat-crossframe-click-e4p8.json",
+    "prompt/coordination/clients/T4/sessions/20261109T0157Z-T4-chat-crossframe-click-e4p8.md",
+    "prompt/coordination/B_TEAM/events/T4/20261109T0157Z-T4-chat-crossframe-click-e4p8.json",
+    "prompt/coordination/work/INPUT-005/T4-20261109T0157Z-T4-chat-crossframe-click-e4p8.json"
+  ],
+  "experiment_key": "T4-real-CL-13-same-eventtime-click-crossframe-native-dedup-Unity2021-source-v1",
+  "resource_key": "T4-PhysicalMouseButtonWheelFrame-runtime-source-only-authenticated-Unity2021",
+  "current_team_check": "T4 scheduled scope capture-phase JSONL analyzer; separate file. T5 owns shared Mini. Other agents' recent Actions source-only; no heavy Unity game build active.",
+  "tests": "Existing T4 source workflow .github/workflows/raft-t4-mouse-capture-bridge.yml on path change; authentic original DLL/Unity2021 compile, dotnet C# controls; no full Unity/XAPK.",
+  "next_step": "First lock source and add cross-frame duplicate regressions; then build with pinned original Unity managed ABI and validate no camera source modification."
+}
