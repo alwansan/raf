@@ -41,6 +41,12 @@ def validate_png(raw):
             width, height = struct.unpack_from(">II", data)
             if not width or not height:
                 raise ValueError("zero PNG dimensions")
+            bit_depth, color_type, compression, filter_method, interlace = struct.unpack_from(">BBBBB", data, 8)
+            valid_depths = {0: (1, 2, 4, 8, 16), 2: (8, 16), 3: (1, 2, 4, 8), 4: (8, 16), 6: (8, 16)}
+            if bit_depth not in valid_depths.get(color_type, ()):
+                raise ValueError("invalid PNG color type / bit depth")
+            if compression != 0 or filter_method != 0 or interlace not in (0, 1):
+                raise ValueError("unsupported PNG IHDR encoding")
             seen_ihdr = True
         elif name == b"IHDR":
             raise ValueError("duplicate IHDR")
@@ -72,6 +78,19 @@ def validate_png(raw):
         raise ValueError("invalid PNG IDAT zlib stream") from exc
     if not decoder.eof or decoder.unused_data or not decoded:
         raise ValueError("incomplete or trailing PNG IDAT zlib data")
+    # A valid zlib stream can still contain truncated scanlines or invalid
+    # per-row filter bytes. Check the exact payload for non-interlaced PNGs.
+    # Adam7 images require pass-specific row calculations and are not claimed
+    # to have scanline-level verification here.
+    if interlace == 0:
+        channels = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[color_type]
+        stride = (width * channels * bit_depth + 7) // 8
+        expected_size = height * (stride + 1)
+        if expected_size > limit or len(decoded) != expected_size:
+            raise ValueError("PNG scanline payload size mismatch")
+        for row in range(height):
+            if decoded[row * (stride + 1)] > 4:
+                raise ValueError("invalid PNG scanline filter")
     return width, height
 
 
