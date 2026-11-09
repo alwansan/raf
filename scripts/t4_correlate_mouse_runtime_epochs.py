@@ -21,7 +21,6 @@ OPS = (
 )
 OP_RE = re.compile(r"(?<![A-Za-z_])(" + "|".join(OPS) + r")(?![A-Za-z_])")
 EPOCH_RE = re.compile(r"(?<![A-Za-z_])epoch=(\d+)(?!\d)")
-FIELD_RE = re.compile(r"(?<![A-Za-z_])([A-Za-z]+)=(\d+|true|false)(?![A-Za-z_])")
 MAX_BYTES = 16 * 1024 * 1024
 MAX_LINES = 200000
 
@@ -98,6 +97,7 @@ def triage(lines):
             old = active["callbacks"]
             if old is not None and any(data[key] < old[key] for key in wanted):
                 active["invalid"] = True
+                invalid += 1
             else:
                 active["callbacks"] = data
         elif op.startswith("physical_mouse_legacy_reader_evidence"):
@@ -112,14 +112,14 @@ def triage(lines):
                 active["invalid"] = True
                 invalid += 1
                 continue
-            if data["positiveFallback"] > data["getterCalls"] or (
-                    data["positiveLegacy"] > data["getterCalls"]):
+            if data["positiveFallback"] + data["positiveLegacy"] > data["getterCalls"]:
                 active["invalid"] = True
                 invalid += 1
                 continue
             old = active["readers"]
             if old is not None and any(data[key] < old[key] for key in wanted):
                 active["invalid"] = True
+                invalid += 1
             else:
                 active["readers"] = data
 
