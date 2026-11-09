@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "experiment_id": "GFX-01",
+  "owner": "GFX-LAB",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "planned_no_ci_dispatched",
+  "experiment_key": "original-zip2-15964ea8-scene-921-class48-to-native-exact-guid-program-status",
+  "baseline_source_ref": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "observed_native_ref": "actions/42058825739@e9c358eda01785b65e4eb14f18723da426635628",
+  "independent_reference_workflow": "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_POSTRESTORER_DUMMY_EVIDENCE_2026-11-05.md",
+  "question": "Is exact original 921-slot high-use Shader48 still a DummyShaderTextExporter inside the real native after all shader restorers, and has the Unity 2021 imported binary faithfully compiled the exact original 4-pass/33 VS-FS pair variants?",
+  "required_provenance": [
+    "SHA-locked six scenes and original class48 shader owner",
+    "source original Renderer->Material->Shader48 identity",
+    "same export-instance private Shader48 trace and exported shader.meta GUID",
+    "actual native after ALL restorers pre-Unity source",
+    "Unity compiled variant evidence separate from syntax"
+  ],
+  "safe_counts_to_publish": [
+    "selected_original_count",
+    "source_join_proven",
+    "actual_native_shader_dummy",
+    "original_vs_exported_pass_count_match",
+    "linked_stage_permutations_verified",
+    "compiled_variants_verified",
+    "isSupported_known",
+    "water_or_android_pixels_proven"
+  ],
+  "fail_closed_if": [
+    "source GUID only name-guessed",
+    "trace originated from different export invocation",
+    "source original SHA mismatch",
+    "ShaderLab dummy marker despite a CGPROGRAM block",
+    "compiled Unity/Android state unknown but claimed passed",
+    "private original GUID/PathID names or shader/pixel bits would appear in public logs"
+  ],
+  "resource_key": "none until coordinated reuse of existing T5 native artifact or T3 bounded same-instance export",
+  "next_step": "Inspect newest T3 exact original-to-native results; reuse existing actual native export safe tool or request next already-authorized pipeline capture; no new APK",
+  "android_result": "UNVERIFIED",
+  "build_requested": false
+}
