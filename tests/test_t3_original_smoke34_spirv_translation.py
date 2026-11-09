@@ -173,7 +173,14 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
             return result
         def compare(v, f):
             return v["outputs"] == f["inputs"]
-        result = self.evaluate(reflector=drift, checker=compare)
+        def named_drift(path):
+            data = drift(path)
+            for side in ("inputs", "outputs"):
+                for row in data[side]:
+                    row["name"] = "SYNTHETIC_REFLECTED_NAME"
+            return data
+        result = self.evaluate(reflector=drift, checker=compare,
+                               named_reflector=named_drift)
         self.assertEqual(result["counts"]["original_stage_pairs_compatible"], 2)
         self.assertEqual(result["counts"]["roundtrip_stage_pairs_compatible"], 0)
         self.assertEqual(result["counts"]["original_roundtrip_io_equal"], 2)
@@ -273,7 +280,7 @@ class SyntheticPrivateSmoke34(unittest.TestCase):
             data = named_reflect(path)
             for side in ("inputs", "outputs"):
                 for row in data[side]:
-                    row["name"] = "PRIVATE\\nSECRET"
+                    row["name"] = "PRIVATE" + chr(10) + "SECRET"
             return data
         with self.assertRaisesRegex(ValueError, "invalid_or_duplicate_private_spirv_reflection_name"):
             self.evaluate(named_reflector=invalid_name)
