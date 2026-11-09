@@ -6,7 +6,7 @@
   "owner": "T3",
   "issue_id": "RENDER-002",
   "base_sha": "80d128223fbe79bb27305bba9efdf2304ffd1df5",
-  "updated_at": "2026-11-09T01:50:00Z",
+  "updated_at": "2026-11-09T02:06:00Z",
   "status": "active",
   "intended_files": [
     "scripts/t3_original_particle_emitter_semantics.py",
@@ -16,7 +16,8 @@
     "prompt/coordination/clients/T3/sessions/20261109T0150Z-T3-chat-particle-emitter-3p7k.md",
     "prompt/coordination/experiments/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
     "prompt/coordination/B_TEAM/events/T3/20261109T0150Z-T3-chat-particle-emitter-3p7k.json",
-    "docs/T3_ORIGINAL_PARTICLE_EMITTER_SEMANTICS_2026-11-09.md"
+    "docs/T3_ORIGINAL_PARTICLE_EMITTER_SEMANTICS_2026-11-09.md",
+    "docs/T3_ORIGINAL_PARTICLE_SMOKE_SHADER_RANK_2026-11-09.md"
   ],
   "experiment_key": "t3-original-six-scene-original-particle108-emitter-gameobject-name-link:ZIP2@15964ea8:SHA-six-scenes-four-owners:gameobject-hierarchy-v1",
   "resource_key": "ZIP2 six-scene four-owner private stage + ubuntu-24.04 original UnityPy CPU (exclusive new workflow)",
@@ -32,5 +33,13 @@
     "T3 same-export 5M/3T results CI42243130856"
   ],
   "test_plan": "Source-free synthetic role/negative pointer controls then isolated source SHA-pinned six-scene real UnityPy read in GitHub Actions; no Unity APK build, no replacement ShaderLab.",
-  "limits": "Name hints are NOT on-screen identity proof; no original names, shader bytes, GUID, ids, or scene names released."
+  "limits": "Name hints are NOT on-screen identity proof; no original names, shader bytes, GUID, ids, or scene names released.",
+  "phase_1_proof": {
+    "run_id": 42548907189,
+    "status": "success",
+    "aggregate": "54 selected renderers: 25 fire-labelled, 0 smoke-labelled; 56 other: 17 fire-labelled,17 smoke-labelled. Names are hints, not on-phone identity."
+  },
+  "phase_2_scope": "Independently join original smoke-labelled (17) ParticleSystemRenderer Material PPtrs to private SHA-authenticated Shader48 identities and report anonymous shader material-slot rank buckets. No game modifications or names.",
+  "experiment_key_v2": "t3-private-origin-smoke-name-to-authentic-Shader48-anonymous-rank:ZIP2@15964ea8:6scenes4owners",
+  "status_detail": "Phase 1 CI passed; before phase2 source edits, extending same owned source/test/workflow file scope with no concurrent T3 scheduled conflict."
 }
