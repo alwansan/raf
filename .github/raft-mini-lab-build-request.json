@@ -1,8 +1,8 @@
 {
-  "request_id": "T5-SHARED-T1-05-512-20261109T1947Z-73bc",
+  "request_id": "T5-SHARED-LOCAL-LOGS-R5-20261109T2014Z-6d27",
   "target": "SHARED",
-  "requested_from_sha": "2d7c268248b505e4dd9ad1daa9491787df07665c",
+  "requested_from_sha": "2e8d173d1c68de7e94b9d065bd8ec80841f9518a",
   "pack_sha256": "9dd272a183548443813b5046f8a1f44115626ad8eca316df30692f35b12ec9f6",
-  "reason": "T1-05 new compiled fixed GLES3.1 local_size_x=512 two-pass SSBO compute driver, CPU check 1024 floats and Arabic UI. T1 NEED_BUILD shared r4; CI42682971944, CI42683061084 and CI42683658745 SUCCESS. New 30-case pack revision2 SHA pinned. One unified Mini APK only for owner Adreno730 Android15 device result; no original Raft/Unity FFT claim and no full XAPK.",
+  "reason": "Owner Download/logs Android15 new compiled host SAF tree scanner UI, explicit APK/OBB v91 SHA256 action, bounded private BlackBox log counts, legacy pack distinction, import only compatible non-older unified JSON; preserve T1-05 local512 and 30 cases. Source CI42690234266 SDK35 and JVM SUCCESS. New driver code requires a single R5 unified Mini APK; no full Raft XAPK, no gameplay PASS claimed.",
   "publish": false
 }
