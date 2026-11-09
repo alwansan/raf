@@ -1,0 +1,191 @@
+name: GFX-SHEARS-005 REAL original Shears texture Unity2021 Android APK
+on:
+  push:
+    branches:
+      - experiment/android-graphics-rootcause
+    paths:
+      - '.github/workflows/gfxlab-shears-colored-unity-apk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-shears005-colored-unity-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-shears-texture-android:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 90
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Checkout isolated GFX-LAB source not game team
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 1
+      - name: Authored source-free negative controls and project structure
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          test -f gfxlab/unity/Assets/Editor/GfxLabAndroidBuilder.cs
+          test -f gfxlab/unity/Assets/Scripts/GfxLabViewer.cs
+          echo 'GFX_SHEARS005_SOURCEFREE_GATES_PASS=1'
+      - name: Checkout immutable ZIP2 exactly three original asset owners only
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Export previously owner-confirmed exact original 375v 420t Shears model
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.original_model_probe \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-shears05-private" \
+            --model-output gfxlab/unity/Assets/OriginalModel \
+            --report "$RUNNER_TEMP/gfxlab05-model-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gfxlab05-model-safe.json'
+          d=json.loads(p.read_text())
+          assert d['part_count']==1 and d['vertices']==375 and d['faces']==420
+          assert d['source_pinned'] and d['original_geometry_exported']
+          PY
+      - name: Plan exactly original Shears three StreamData ranges without complete stream downloads
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.shears_stream_transport plan \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-shears05-private" \
+            --plan "$RUNNER_TEMP/shears05-private-plan.json" \
+            --paths "$RUNNER_TEMP/shears05-private-parts.txt"
+      - name: Checkout verified Git blob chunks and recover three real Texture2D
+        run: |
+          set -euo pipefail
+          git -C source-zip2 sparse-checkout set --no-cone --stdin < "$RUNNER_TEMP/shears05-private-parts.txt"
+          python3 -m gfxlab.tools.shears_stream_transport extract \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-shears05-private" \
+            --plan "$RUNNER_TEMP/shears05-private-plan.json" \
+            --images gfxlab/unity/Assets/OriginalModel \
+            --safe-report "$RUNNER_TEMP/gfxlab05-textures-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          source=Path(os.environ['RUNNER_TEMP'])
+          m=json.loads((source/'gfxlab05-model-safe.json').read_text())
+          t=json.loads((source/'gfxlab05-textures-safe.json').read_text())
+          assert m['original_geometry_exported'] and t['texture_extracted_success']
+          assert t['source_textures']==3 and t['source_geometry_verified']
+          assert t['original_shader_passes']==7 and not t['actual_shader_restored']
+          assert t['selected_git_chunks']==3
+          assert all((Path('gfxlab/unity/Assets/OriginalModel')/n).stat().st_size>200
+                     for n in ('ShearsBaseColor.png','ShearsNormal.png','ShearsMetallic.png'))
+          merged={**m,**t,'source_pinned':True,'original_geometry_exported':True,'part_count':1,
+                  'vertices':375,'faces':420,'model_category':'original_shears_texture_fallback'}
+          Path('gfxlab/unity/Assets/OriginalModel/evidence.json').write_text(json.dumps(merged,sort_keys=True))
+          print('GFX_SHEARS005_REAL_ORIGINAL_TEXTURES_READY=true original_shader_ported=false')
+          PY
+      - name: Verify Unity license availability without disclosing secrets
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'GFX_SHEARS005_NO_UNITY_LICENSE'
+            exit 1
+          fi
+          echo 'GFX_SHEARS005_UNITY_PREFLIGHT_READY'
+      - name: Preserve room for Unity2021 Android IL2CPP image
+        run: |
+          sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/system-images /opt/hostedtoolcache/CodeQL || true
+          df -h /
+          test "$(df -Pk . | awk 'NR==2{print $4}')" -gt 9437184
+      - name: Import actual shears geometry and textures, build white/albedo/PBR mode APK
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: gfxlab/unity
+          unityVersion: 2021.3.45f2
+          targetPlatform: Android
+          buildMethod: RaftGraphicsLabEditor.GfxLabAndroidBuilder.Build
+          buildName: GfxLab-Shears-Source-Textures
+          buildsPath: gfxlab-builds
+          versioning: None
+          androidVersionCode: 2
+          androidExportType: androidPackage
+          customParameters: -job-worker-count 2
+      - name: Inspect actual Android ARM64 package, certificate and stable package identity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          from zipfile import ZipFile
+          found=list(Path('.').rglob('GfxLab-Shears-Source-Textures.apk'))
+          assert len(found)==1,'Expected exactly one actual GFX SHEARS APK'
+          p=found[0]
+          assert p.stat().st_size>=1024*1024
+          with ZipFile(p) as z:
+            names=set(z.namelist())
+            assert 'AndroidManifest.xml' in names
+            assert 'classes.dex' in names
+            assert 'lib/arm64-v8a/libunity.so' in names
+            assert z.testzip() is None
+          digest=hashlib.sha256(p.read_bytes()).hexdigest()
+          result={'schema':1,'sha256':digest,'apk_bytes':p.stat().st_size,
+                  'source_original_shears_3_textures':True,
+                  'material_modes':['white_lit','white_unlit','original_albedo_unity_standard','original_albedo_normal_metallic_unity_standard_approx'],
+                  'original_7_pass_shader_restored':False,'device_pixels_verified':False,
+                  'expected_app_id':'com.alwansan.raft.graphicslab.shears'}
+          Path(os.environ['RUNNER_TEMP'],'gfxlab05-apk-safe.json').write_text(json.dumps(result,indent=2)+'\n')
+          print('GFX_SHEARS005_APK_VERIFIED '+json.dumps(result,sort_keys=True))
+          PY
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer="$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -n 1)"
+          apk="$(find . -type f -name 'GfxLab-Shears-Source-Textures.apk' -print -quit)"
+          test -n "$signer" && test -x "$signer"
+          "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/gfxlab05-signature-private.txt"
+          aapt="$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name aapt -type f | sort -V | tail -n 1)"
+          if [ -n "$aapt" ]; then
+             "$aapt" dump badging "$apk" | grep -F "name='com.alwansan.raft.graphicslab.shears'" > "$RUNNER_TEMP/gfxlab05-appid-private.txt"
+          fi
+          echo 'GFX_SHEARS005_SIGNATURE_PASS=true'
+      - name: Deliver signed original Shears colored diagnostic mini APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-shears005-colored-android-apk-${{ github.run_id }}
+          path: |
+            **/GfxLab-Shears-Source-Textures.apk
+            ${{ runner.temp }}/gfxlab05-apk-safe.json
+            ${{ runner.temp }}/gfxlab05-textures-safe.json
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - name: Remove original serialized data/loose images/private colors
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-shears05-private" gfxlab/unity/Assets/OriginalModel/Part*.obj
+          rm -f gfxlab/unity/Assets/OriginalModel/{ShearsBaseColor.png,ShearsNormal.png,ShearsMetallic.png,shears-private-material.json,evidence.json}
+          rm -f "$RUNNER_TEMP/shears05-private-plan.json" "$RUNNER_TEMP/shears05-private-parts.txt"
+          echo 'GFX_SHEARS005_PRIVATE_ORIGINALS_CLEARED=true'
