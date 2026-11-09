@@ -668,6 +668,7 @@ internal static class Program
             var ins=il[at];
             var op=ins.OpCode.Code;
             var flow=ins.OpCode.FlowControl;
+            string? branchSelector=null;
             string Pop()
             {
                 if(stack.Count==0)throw new InvalidOperationException("abstract_stack_underflow");
@@ -695,7 +696,7 @@ internal static class Program
                     if(flow==FlowControl.Cond_Branch)
                     {
                         if(op is Code.Brtrue or Code.Brtrue_S or Code.Brfalse or
-                            Code.Brfalse_S or Code.Switch)Pop();
+                            Code.Brfalse_S or Code.Switch)branchSelector=Pop();
                         else if(op is Code.Beq or Code.Beq_S or Code.Bne_Un or Code.Bne_Un_S or
                             Code.Bge or Code.Bge_S or Code.Bge_Un or Code.Bge_Un_S or
                             Code.Bgt or Code.Bgt_S or Code.Bgt_Un or Code.Bgt_Un_S or
@@ -709,7 +710,9 @@ internal static class Program
                 }
                 else if(op==Code.Nop){}
                 else if(op==Code.Ldnull)stack.Add("null");
-                else if(op==Code.Ldstr || Literal(ins).HasValue ||
+                else if(Literal(ins) is int integer)
+                    stack.Add(integer==0 ? "literal_i4_zero":"literal_i4_nonzero");
+                else if(op==Code.Ldstr ||
                         op is Code.Ldc_I8 or Code.Ldc_R4 or Code.Ldc_R8)
                     stack.Add("opaque");
                 else if(op is Code.Ldsfld or Code.Ldfld)
@@ -802,7 +805,32 @@ internal static class Program
                         return "value_bad_target";
                     successors.Add(dest);
                 }
-                if(flow==FlowControl.Cond_Branch)successors.Add(at+1);
+                if(flow==FlowControl.Cond_Branch)
+                {
+                    // Only branch instructions on an exactly known CIL
+                    // constant/null predicate may discard an impossible edge.
+                    // All computed, joined, call or argument values explore
+                    // BOTH successors. Never infer game runtime input values.
+                    bool isTruthy=branchSelector=="literal_i4_nonzero";
+                    if((op is Code.Brtrue or Code.Brtrue_S or Code.Brfalse or Code.Brfalse_S)
+                       && (branchSelector is "literal_i4_zero" or "literal_i4_nonzero" or "null"))
+                    {
+                        bool takesJump=(op is Code.Brtrue or Code.Brtrue_S) ? isTruthy : !isTruthy;
+                        if(takesJump)successors.Clear(); // will add exact target below
+                        // The branch target was the only successor so far.
+                        // Preserve that target when jumping, never keep fallthrough.
+                        // For the false case replace it with fallthrough.
+                        // (Implemented without guessing runtime conditions.)
+                        if(takesJump)
+                            successors.Add(ix[(Instruction)ins.Operand]);
+                        else
+                        {
+                            successors.Clear();
+                            successors.Add(at+1);
+                        }
+                    }
+                    else successors.Add(at+1);
+                }
             }
             else if(flow is FlowControl.Next or FlowControl.Call or FlowControl.Meta)
                 successors.Add(at+1);
@@ -1474,12 +1502,13 @@ internal static class Program
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,tex);
         owner.Methods.Add(valueGetter);
         valueGetter.Body.Variables.Add(new VariableDefinition(tex));
+        valueGetter.Parameters.Add(new ParameterDefinition(mod.TypeSystem.Boolean));
         var v=valueGetter.Body.Instructions;
         var vloadA=Instruction.Create(OpCodes.Ldloc_0);
         var vloadB=Instruction.Create(OpCodes.Ldloc_0);
         v.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
         v.Add(Instruction.Create(OpCodes.Stloc_0));
-        v.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        v.Add(Instruction.Create(OpCodes.Ldarg_0)); // unknown runtime predicate
         v.Add(Instruction.Create(OpCodes.Brtrue_S,vloadB));
         v.Add(vloadA);
         v.Add(Instruction.Create(OpCodes.Ret));
@@ -1500,7 +1529,7 @@ internal static class Program
         v[3].Operand=v[6];
         var sharedRet=Instruction.Create(OpCodes.Ret);
         v.Clear();
-        v.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        v.Add(Instruction.Create(OpCodes.Ldarg_0)); // unknown predicate keeps both paths
         var ifTrue=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
         v.Add(Instruction.Create(OpCodes.Brtrue_S,ifTrue));
         v.Add(Instruction.Create(OpCodes.Ldnull));
@@ -1509,6 +1538,21 @@ internal static class Program
         v.Add(sharedRet);
         if(ReachableReturnValueFlow(valueGetter)!="value_mixed_with_explicit_null_literal")
             throw new InvalidOperationException("return_stack_phi_explicit_null_must_remain_visible");
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_0);
+        if(ReachableReturnValueFlow(valueGetter)!="value_null_only")
+            throw new InvalidOperationException("false_constant_must_prune_nonnull_branch");
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_1);
+        if(ReachableReturnValueFlow(valueGetter)!="value_static_field_category_only")
+            throw new InvalidOperationException("true_constant_must_prune_null_branch");
+        v[1]=Instruction.Create(OpCodes.Brfalse_S,ifTrue);
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_0);
+        if(ReachableReturnValueFlow(valueGetter)!="value_static_field_category_only")
+            throw new InvalidOperationException("brfalse_zero_must_take_target");
+        v[0]=Instruction.Create(OpCodes.Ldc_I4_1);
+        if(ReachableReturnValueFlow(valueGetter)!="value_null_only")
+            throw new InvalidOperationException("brfalse_nonzero_must_take_fallthrough");
+        v[0]=Instruction.Create(OpCodes.Ldarg_0);
+        v[1]=Instruction.Create(OpCodes.Brtrue_S,ifTrue);
         v[1].Operand=Instruction.Create(OpCodes.Nop);
         if(ReachableReturnValueFlow(valueGetter)!="value_bad_target")
             throw new InvalidOperationException("return_bad_branch_target_not_rejected");
