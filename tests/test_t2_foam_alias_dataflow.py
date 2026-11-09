@@ -14,7 +14,14 @@ class AliasTests(unittest.TestCase):
     def test_different_allocations(self):
         a, b = fresh_value("allocation-A-instance"), fresh_value("allocation-B-instance")
         self.assertFalse(same_instance_proven(a, b))
-        self.assertTrue(different_instance_proven(a, b))
+        self.assertFalse(different_instance_proven(a, b))
+
+    def test_distinct_ssa_tokens_can_alias_same_object(self):
+        # Two independent loads from a field can return one RenderTexture.
+        first_load = fresh_value("load-field-at-il-12")
+        second_load = fresh_value("load-field-at-il-42")
+        self.assertFalse(same_instance_proven(first_load, second_load))
+        self.assertFalse(different_instance_proven(first_load, second_load))
 
     def test_branch_phi_distinct(self):
         a, b = fresh_value("a"), fresh_value("b")
