@@ -72,7 +72,8 @@ def one_material(envs,types,owner,pid):
             "uv_scale":uv_pair(val,"m_Scale",[1.0,1.0]),
             "uv_offset":uv_pair(val,"m_Offset",[0.0,0.0])}
     if "basecolor" not in roles:raise ValueError("no original basecolor source texture")
-    return {"tint":tint,"original_shader_verified":True,"textures":roles}
+    return {"tint":tint,"original_shader_verified":True,"shader_owner":shader_key[0],
+            "shader_pid":shader_key[1],"textures":roles}
 
 def all_model_entries(source:Path):
     import UnityPy
