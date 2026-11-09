@@ -14,3 +14,15 @@ actions_at_start=2026-11-09T18:55Z branch queued=0 in_progress=0 pending=0; newe
 plan=Add isolated lightweight source-only Actions workflow to execute 10 recent tests plus pre-existing legacy contract tests and py_compile; assess actual test output before any change.
 source_only=true; phone_proof=false; signed_delivery_proof=false
 updated_at=2026-11-09T18:55:00Z
+
+## CI result — 2026-11-09T18:58:49Z
+status=completed
+run_url=https://github.com/alwansan/raf/actions/runs/42678868120
+run_id=42678868120
+run_head_sha=0b2510460e6c54c519a6b494add5b0b0b103cda8
+run_conclusion=success
+assertions=10/10 latest path/duplicate JSON +16/16 legacy classifier=26/26 PASS; py_compile PASS
+job_id=129367641103
+proof_boundary=Source-only synthetic logs/manifests on Ubuntu-24.04. No signed delivery.json bytes, no real APK/OBB pairing, no Android15 device mount test. T1-T4/shared code untouched; no APK/Unity.
+next_step=Obtain exact signed delivery.json from installed 42058825739 downstream artifact and classify original LogRaft segments. Re-test only if classifier/tests change.
+updated_at=2026-11-09T18:59:00Z
