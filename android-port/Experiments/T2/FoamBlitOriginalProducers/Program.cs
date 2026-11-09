@@ -1148,8 +1148,16 @@ internal static class Program
         var jumpToRet=Instruction.Create(OpCodes.Br_S,retB);
         branchBody[4]=jumpToRet;
         branchBody[1].Operand=jumpToRet;
-        if(ReachableReturnTopology(branchGetter)!="cfg_multiple_or_entry_return_predecessors")
+        if(ReachableReturnTopology(branchGetter)!="cfg_mixed_syntactic_return_predecessors")
             throw new InvalidOperationException("direct_ret_branch_must_not_forge_producer");
+        // Both a direct jump and a second incoming edge reach the same ret.
+        // A textual predecessor must never be reported as unique here.
+        branchBody[4]=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
+        branchBody[3]=Instruction.Create(OpCodes.Br_S,retB);
+        branchBody[1].Operand=retB;
+        if(ReachableReturnTopology(branchGetter)!="cfg_multiple_or_entry_return_predecessors")
+            throw new InvalidOperationException("return_phi_must_remain_unresolved");
+        branchBody[3]=retA;
         branchBody[4]=Instruction.Create(OpCodes.Br_S,Instruction.Create(OpCodes.Nop));
         branchBody[1].Operand=branchBody[4];
         if(ReachableReturnTopology(branchGetter)!="cfg_malformed_graph")
