@@ -1,0 +1,32 @@
+{
+  "session_id": "20261109T1919Z-T4-chat-ledger-preflight-v4k8",
+  "origin": "chat",
+  "issue_id": "COORD-001",
+  "status": "completed_source_audit",
+  "experiment_key": "T4-COORD001-all-inherited-event-ids-nonmutating-enumeration-v1",
+  "hypothesis": "Canonical summary fails fast, obscuring multiple missing identities in inherited event ledger; read-only exhaustive scan can expose all owner-specific blockers without mutating events.",
+  "source_sha": "ad197f28c03fe9b5db66d088a74094e7c749aa26",
+  "later_source_sha": "81c43f0b48365c18eb28a61e4f6bf26668c6e2ea",
+  "initial_ci": "https://github.com/alwansan/raf/actions/runs/42682466747",
+  "initial_source_event_files": 595,
+  "initial_missing_record_id": 22,
+  "initial_by_worker": {
+    "T3": 14,
+    "T4": 3,
+    "T5": 5
+  },
+  "verified_post_t4_ci": "https://github.com/alwansan/raf/actions/runs/42682900051",
+  "post_t4_event_files": 596,
+  "post_t4_missing_record_id": 20,
+  "post_t4_by_worker": {
+    "T3": 15,
+    "T4": 0,
+    "T5": 5
+  },
+  "tests_passed": 10,
+  "artifact_id": 13702214952,
+  "other_worker_modifications": false,
+  "canonical_summary_pass": false,
+  "reason_for_new_record": "One new T3 event appeared between full census snapshots; never describe 22-3 as final 19.",
+  "next_step": "T3/T5 add owner-chosen event_id with CAS, T2 rerun canonical summary after all 20 repaired."
+}
