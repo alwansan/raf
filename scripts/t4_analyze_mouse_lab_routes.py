@@ -49,7 +49,7 @@ def analyze(lines):
                 rejected += 1
                 continue
             captured = fields.get("captured")
-            key = "on" if captured == "true" else "off" if captured == "false" else phase
+            # A capture request is not proof that Android granted capture.\n            # Never label callbacks without an explicit captured=true as captured.\n            key = "on" if captured == "true" else "off" if captured == "false" else "unknown"
             group = groups[key]
             group["samples"] += 1
             group["routes"].add(route)
@@ -83,7 +83,7 @@ def analyze(lines):
         }
     return {"phases": result, "rejected_records": rejected,
             "device_success_proven": False,
-            "note": "Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
+            "note": "Capture request ON alone does not establish captured=true; missing capture flag stays unknown. Only source-identified physical mouse callbacks count; rejected includes nonmouse/unknown-source events. Missing button evidence is not proof of failure unless actions were attempted; callbacks do not prove Unity Mouse0/1/2."}
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
