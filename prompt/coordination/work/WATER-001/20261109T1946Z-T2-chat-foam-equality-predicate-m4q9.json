@@ -1,0 +1,24 @@
+{
+  "session_id": "20261109T1946Z-T2-chat-foam-equality-predicate-m4q9",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "65e7b9c353c07927a63e405aaa8b49cd2a424460",
+  "resumed_from_sessions": [
+    "20261109T1916Z-T2-chat-foam-constant-branch-p8v6",
+    "20261109T1616Z-T2-scheduled-stage-key-guard-v7q2"
+  ],
+  "intended_files": [
+    "android-port/Experiments/T2/FoamBlitOriginalProducers/Program.cs",
+    "prompt/coordination/clients/T2/sessions/20261109T1946Z-T2-chat-foam-equality-predicate-m4q9.md",
+    "prompt/coordination/work/WATER-001/20261109T1946Z-T2-chat-foam-equality-predicate-m4q9.json",
+    "docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
+  ],
+  "experiment_key": "T2-original-ZIP2-Foam-pass1-callee-CIL-constant-equality-branch-fold-3211776-no-private-symbols-v1",
+  "resource_key": "T2-original-FoamBlitOriginalProducers-Cecil-source-only",
+  "hypothesis": "Ceq and Beq/Bne_Un of provably known zero/nonzero/null CIL constants can distinguish truly unreachable null-return edges; uncertain/merged/data-dependent predicates must remain 2-way. This is source CFG only, never real heap identity or Android texture proof.",
+  "scope": "T2 original Foam only; no Unity/XAPK/mini, no T1 T3 T4 T5 files; prepare source-free synthetic positive/negative controls and rely on path-filter original authenticated CI",
+  "run_urls": [],
+  "updated_at": "2026-11-09T19:46:00Z",
+  "next_step": "Publish local C# interpreter improvement plus synthetic cases; inspect SHA-pinned original run result, compare prior value_mixed_with_explicit_null_literal; publish safe session evidence."
+}
