@@ -24,6 +24,9 @@ class SmokeStateTests(unittest.TestCase):
     def test_wrong_graph_fails(self):
         d=self.sample();d['original']['material_slot_count']=108
         with self.assertRaisesRegex(ValueError,'graph_count_not_verified'):audit(d)
+    def test_same_digest_different_hex_case_matches(self):
+        d=self.sample();d['exported']['source_sha256']='A'*64
+        self.assertEqual(audit(d)['status'], 'SCOPED_STATE_MATCH')
     def test_nonhex_source_fails(self):
         d=self.sample();d['original']['source_sha256']='z'*64
         with self.assertRaisesRegex(ValueError,'missing_source_fingerprint'):audit(d)
