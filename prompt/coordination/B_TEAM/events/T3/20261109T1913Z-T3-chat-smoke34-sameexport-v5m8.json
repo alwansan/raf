@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1913Z-T3-chat-smoke34-sameexport-v5m8",
+  "issue_id": "RENDER-002",
+  "event_type": "SHA_ORIGINAL_SMOKE34_SAME_INSTANCE_SHADERLAB_DUMMY_EXPORT_VERIFIED",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42681908313",
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42681908313/artifacts/13702312921",
+  "status": "source_authenticated_export_dummy",
+  "measured": {
+    "smoke_name_original_renderer_count": 17,
+    "smoke_name_original_material_slots": 34,
+    "source_private_shader_id_distinct_from_equal_rank_fire": true,
+    "w1_b02_same_instance_verified": true,
+    "exported_custom_shader": true,
+    "export_status": "ACTUAL_DUMMY_SHADER_TEXT_EXPORTER",
+    "selected_shaderlab_dummy_exporter_marker": true,
+    "selected_shaderlab_no_subprogram_marker": false,
+    "exported_pass_count": 1,
+    "exported_complete_program_block_count": 1,
+    "exported_lexical_colormask_RGB_seen": false,
+    "original_ColorMask": "RGB",
+    "original_color_blend": "ALPHA_DEPENDENT",
+    "original_alpha_blend": "ALPHA_DEPENDENT",
+    "original_zwrite": "OFF"
+  },
+  "original_shader_ID_private": true,
+  "not_device_proof": true,
+  "readiness": "RENDER-002 OPEN NOT_READY 0/3",
+  "report": "docs/T3_SMOKE34_SAMEEXPORT_DUMMY_2026-11-09_AR.md",
+  "next": "Private source-identity anchored postvendor/restorer differential to determine if native Android import still Dummy; then restore real program and verify Unity/device. RENDER-002 OPEN NOT_READY 0/3."
+}
