@@ -1,0 +1,80 @@
+name: GFX-MULTI-001 original five-model source selection (no APK)
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi-source-selection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi001-source-probe-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-five-candidates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free invariant tests (no Unity)
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - name: Checkout ONLY immutable original three source providers
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Select five distinct typed-original Mesh+Material+Shader+ColorTexture chains
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_source_select \
+            --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfxlab-multi-private" \
+            --private-selection "$RUNNER_TEMP/multi-original-private.json" \
+            --safe-report "$RUNNER_TEMP/multi-selected-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'multi-selected-safe.json').read_text())
+          assert d["source_verified"] and d["selected_count"]==5
+          assert len({row["id"] for row in d["selected"]})==5
+          assert all(x["texture_count"]>=1 and x["material_slots"]>=1 for x in d["selected"])
+          assert not d["android_pixels_verified"] and not d["original_shader_equivalence_verified"]
+          print("GFX_MULTI_SOURCE_FIVE_VERIFIED=PASS")
+          PY
+      - name: Archive only safe abstract model category/count manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi001-source-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/multi-selected-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Remove all raw original/private object ID selection
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi-private"
+          rm -f "$RUNNER_TEMP/multi-original-private.json"
+          echo GFX_MULTI_PRIVATE_SOURCE_PURGED=true
