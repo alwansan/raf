@@ -1,0 +1,16 @@
+{
+  "id": "T5-20261109T0217Z-manual-image-r7c4",
+  "owner": "T5",
+  "session_id": "20261109T0209Z-T5-chat-manual-image-r7c4",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-09T02:16:41Z",
+  "summary": "Manual SAF screenshot evidence now uses bounded PNG CRC/chunk/IEND checks and JPEG/WebP envelope, then real sampled BitmapFactory decode before MediaStore EVIDENCE_READY; T5 fingerprint includes policy. CI42549793939 SUCCESS (JDK negative controls, Python source checks, Android javac). No APK/device test; full-game readiness unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0d88f66661e9f14330b30c019d8302ac18a49bc4",
+    "https://github.com/alwansan/raf/commit/a9cc58799ec6353929a3f5c6ab0bcfd47d3b76e9",
+    "https://github.com/alwansan/raf/commit/e53523b900c0d1c3512cf8ec38339887426138f8",
+    "https://github.com/alwansan/raf/actions/runs/42549793939"
+  ]
+}
