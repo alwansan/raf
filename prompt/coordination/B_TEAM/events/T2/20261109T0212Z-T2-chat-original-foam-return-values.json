@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "event_id": "20261109T0212Z-T2-chat-original-foam-return-values",
+  "owner": "T2",
+  "worker": "T2",
+  "origin": "chat",
+  "session_id": "20261109T0212Z-T2-chat-return-value-flow-n7x3",
+  "issue_id": "WATER-001",
+  "resource_key": "WATER-001",
+  "experiment_key": "T2-FOAM-SHA15964-CFG-RETURN-VALUE-ABSTRACT-20261109",
+  "type": "result",
+  "status": "ORIGINAL_RETURN_VALUE_MIXED_NO_INSTANCE_PROOF",
+  "at": "2026-11-09T02:12:30Z",
+  "commit": "4c8af56a580264df92a98375a7fd30ae87a10a21",
+  "summary": "CI42549568993 original ZIP2/DLL auth pass; Foam pass1 Texture callee CIL forward stack/local CFG join value_mixed_or_joined. This is not a runtime texture instance alias or water pixels proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42549568993",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
+  ],
+  "limitations": "Synthetic unit 17/17 and SHA-original source-auth CIL only, pass0-to-pass1 same object identity, CB0, samplers, ShaderLab and Adreno water pixels not verified; T2 Mini NO_BUILD; WATER-001 OPEN.",
+  "next_step": "Private SHA-original instance lineage/receiver/field identity analysis then crosspass binding and Unity/device proof. Keep fallback unknown."
+}
