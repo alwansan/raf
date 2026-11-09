@@ -1,0 +1,18 @@
+{
+  "session_id": "20261109T1501Z-T4-scheduled-gate-integrity-n7c2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-09T15:01:06Z",
+  "intended_files": [
+    "scripts/t4_capture_acceptance_gate.py",
+    "tests/test_t4_capture_acceptance_gate.py",
+    "prompt/coordination/clients/T4/sessions/20261109T1501Z-T4-scheduled-gate-integrity-n7c2.md"
+  ],
+  "experiment_key": "T4-capture-gate-malformed-android-evidence-v2",
+  "resource_key": null,
+  "hypothesis": "Malformed captured route/button/scroll evidence may be incorrectly accepted by the gate; reject malformed inputs before callback-only classification.",
+  "baseline": "20261109T1344Z-T4-scheduled-capture-gate-c8r1",
+  "owner_device_success": "42058825739 world/save/reopen; mouse click still unverified",
+  "notes": "Independent gate input validation; no Unity build, no T5 UI/Resolution changes."
+}
