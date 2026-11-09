@@ -60,8 +60,8 @@ def verify(data):
             ):
                 errors.append(f"{key} capture/readback parity unverified")
             if not isinstance(observed, str) or not re.search(
-                r"\\bpng_bytes=([1-9][0-9]*)\\b", observed
-            ) or not re.search(r"\\bpng_sha256=[0-9a-f]{64}\\b", observed):
+                r"\bpng_bytes=([1-9][0-9]*)\b", observed
+            ) or not re.search(r"\bpng_sha256=[0-9a-f]{64}\b", observed):
                 errors.append(f"{key} PNG metadata missing")
             if not result.get("image_uri"):
                 errors.append(f"{key} image URI missing")
