@@ -1,0 +1,55 @@
+{
+  "session_id": "20261109T2002Z-T4-chat-per-channel-mouse-evidence-h7k3",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "experiment_key": "T4-INPUT005-genuine-Android-pressMask-unity-reader-channel-correlation-v1-Unity2021",
+  "baseline_sha": "99c25340edb45bbd18d4a33ed9937d0679e7114f",
+  "scope_commit": "3853a4929f65f21f18977783142682f3c683b337",
+  "implementation_commits": [
+    "9aab2f7f7ec4445382c1a335616627a8f2341a69",
+    "efbbd593f0f390e4bc220e759f618c76f2b4b016"
+  ],
+  "source_file": "scripts/t4_correlate_mouse_runtime_epochs.py",
+  "regression_file": "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py",
+  "source_contract": "AndroidPhysicalMouseCapture.LogCapturedActions emits pressMask/releaseMask and v/h callback counters. PhysicalMouseLegacyReaderEvidence.Report emits 11 slots held/down/up 0..2 plus scrollAxis and scrollVector; sum of per-slot count/legacy/fallback and edge/scroll sub-totals checked.",
+  "negative_controls": [
+    "LEFT captured versus RIGHT fallback not channel-paired",
+    "missing 11-slot ledger not promoted",
+    "complete ledger sum mismatch invalid",
+    "duplicate slot invalid",
+    "fallback > per-slot calls invalid",
+    "nonzero mask with zero press invalid",
+    "mask rollback in same epoch invalid",
+    "horizontal vector cannot claim independent horizontal-axis proof"
+  ],
+  "positive_controls": [
+    "LEFT down/up",
+    "RIGHT down",
+    "MIDDLE down/up",
+    "VERTICAL axis",
+    "HORIZONTAL callback + vector only"
+  ],
+  "status": "completed_source_only_device_pending",
+  "results": {
+    "source_only": true,
+    "device_pass": false,
+    "unity_gameplay_verified": false,
+    "tests_passed": 42,
+    "tests_total": 42,
+    "new_tests": 12,
+    "pre_change_ci_success": "https://github.com/alwansan/raf/actions/runs/42687110814",
+    "source_regression_ci": "https://github.com/alwansan/raf/actions/runs/42689746931",
+    "final_ci": "https://github.com/alwansan/raf/actions/runs/42689914245",
+    "ci_job_id": 129406623136
+  },
+  "latest_owner_cl": {
+    "url": "https://github.com/alwansan/CL/tree/main/test/shared-20261109-225506-552476830",
+    "mini_version": "0.2.14-shared",
+    "cases": 30,
+    "t4_needs_input": 9,
+    "mouse_phone_proof": false
+  },
+  "report": "docs/T4_MOUSE_ORIGINAL_CHANNEL_CORRELATION_2026-11-09.md",
+  "next_step": "On separate signed current full Raft game, compare one-process captured mouse press/release and wheel against original Unity getter channels and actual in-game response; do not count generic aggregate cooccurrence as gameplay. Preserve world/.rgd, keyboard, touch, camera and audio/Settings.",
+  "full_game_not_ready": "0/3"
+}
