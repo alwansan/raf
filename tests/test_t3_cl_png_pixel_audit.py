@@ -72,6 +72,25 @@ class PngAuditTests(unittest.TestCase):
             path.write_bytes(payload)
             with self.assertRaisesRegex(ValueError,"invalid_scanline_size"):
                 audit_module.audit(path)
+    def test_rgba_transparent_rgb_not_opaque_evidence(self):
+        ihdr=struct.pack(">IIBBBBB",2,1,8,6,0,0,0)
+        # Invisible red and visible blue: raw RGB diversity is not visual proof.
+        scan=b"\x00"+bytes((255,0,0,0, 0,0,255,255))
+        payload=(audit_module.SIGNATURE+chunk(b"IHDR",ihdr)
+                 +chunk(b"IDAT",zlib.compress(scan))+chunk(b"IEND",b""))
+        result=self.check(payload)
+        self.assertEqual(result["regions"]["full"]["unique_rgb"],2)
+        self.assertEqual(result["alpha_zero_fraction"],0.5)
+        self.assertEqual(result["alpha_partial_fraction"],0)
+        self.assertEqual(result["opaque_unique_rgb"],1)
+    def test_rgba_partial_alpha_not_opaque_evidence(self):
+        ihdr=struct.pack(">IIBBBBB",1,1,8,6,0,0,0)
+        payload=(audit_module.SIGNATURE+chunk(b"IHDR",ihdr)
+                 +chunk(b"IDAT",zlib.compress(b"\x00"+bytes((255,0,0,128))))
+                 +chunk(b"IEND",b""))
+        result=self.check(payload)
+        self.assertEqual(result["alpha_partial_fraction"],1)
+        self.assertEqual(result["opaque_unique_rgb"],0)
     def test_crc_failure(self):
         bad=bytearray(png(8,8,lambda x,y:(0,0,0)))
         bad[-5]^=1
