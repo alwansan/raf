@@ -1,0 +1,18 @@
+{
+  "id": "20261109T0149Z-T4-chat-android-downup-real-cl-n6q2",
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0144Z-T4-chat-downup-correlation-n6q2",
+  "issue_id": "INPUT-005",
+  "type": "real_device_callback_correlation",
+  "summary": "Immutable owner Android15 Mini trace has 13 LEFT ACTION_DOWN/UP with actionButton=0, exactly paired to 13 explicit LEFT press/release same eventTime/source/capture. New source-only adapter auditor counts 0 extra inferred clicks, holds unmatched ambiguous, distinguishes captured callback limits; 13/13 Python CI plus authentic Git blob pass. This does NOT establish Raft Unity gameplay or captured buttons.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42547368125",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_ACTION_DOWN_UP_CORRELATION_2026-11-09.md"
+  ],
+  "status": "SOURCE_DIAGNOSTIC_VERIFIED_INPUT005_OPEN_DEVICE_PENDING",
+  "game_source_modified": false,
+  "mini_build_triggered": false,
+  "full_game_build_triggered": false,
+  "updated_at": "2026-11-09T01:49:00Z"
+}
