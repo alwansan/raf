@@ -1,0 +1,113 @@
+"""Source-only safety regressions for original-game T4 epoch correlation."""
+import importlib.util
+from pathlib import Path
+import unittest
+
+SCRIPT = Path(__file__).resolve().parents[1] / "t4_correlate_mouse_runtime_epochs.py"
+spec = importlib.util.spec_from_file_location("t4_runtime_epoch", SCRIPT)
+gate = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(gate)
+
+
+def req(epoch):
+    return f"physical_mouse_capture_requested epoch={epoch}; nativeAccepted=unknown"
+
+
+def actions(epoch, events=3, press=1, release=1, v=1, h=0):
+    return (f"physical_mouse_captured_action_callbacks epoch={epoch}; "
+            f"capturedCallbackEvents={events}; pressCallbacks={press}; "
+            f"releaseCallbacks={release}; verticalScrollCallbacks={v}; "
+            f"horizontalScrollCallbacks={h}; unityButtonsAndWheelVerified=false")
+
+
+def readers(epoch, calls=5, fallback=2, captured="true"):
+    return (f"physical_mouse_legacy_reader_evidence epoch={epoch}; "
+            f"captureRequested=true; captureObserved={captured}; "
+            f"getterCalls={calls}; positiveLegacy=0; positiveFallback={fallback}; "
+            f"positiveEdges=1; positiveScroll=1; "
+            f"down0Calls=2,legacy=0,fallback=1; "
+            f"countersAreGetterCallsNotClicks=true; unityGameplayVerified=false")
+
+
+class RuntimeMouseEpochTests(unittest.TestCase):
+    def test_same_epoch_both_is_observation_only(self):
+        v = gate.triage([req(8), actions(8), readers(8)])
+        self.assertEqual(v["status"], "SAME_EPOCH_CAPTURED_CALLBACK_AND_FALLBACK_GETTER")
+        self.assertEqual(v["epochs_with_both"], [8])
+        self.assertFalse(v["device_pass"])
+        self.assertFalse(v["unity_gameplay_verified"])
+
+    def test_reader_log_before_action_log_same_update_is_valid(self):
+        # Unity Update writes reader marker before callback marker.
+        v = gate.triage([req(9), readers(9), actions(9)])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 1)
+
+    def test_same_line_json_log_envelope_supported(self):
+        v = gate.triage([
+            {"operation": "physical_mouse_capture_requested", "detail": "epoch=10"},
+            {"operation": "physical_mouse_captured_action_callbacks",
+             "detail": actions(10).split(" ", 1)[1]},
+            {"operation": "physical_mouse_legacy_reader_evidence",
+             "detail": readers(10).split(" ", 1)[1]},
+        ])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 1)
+
+    def test_epoch_drift_cannot_borrow_reader(self):
+        v = gate.triage([req(11), actions(11), req(12), readers(12)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertEqual(v["status"], "CAPTURED_CALLBACK_WITHOUT_SAME_EPOCH_GETTER")
+
+    def test_pre_request_cannot_be_reused(self):
+        v = gate.triage([actions(13), req(13), readers(13)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertEqual(v["unpaired_epoch_markers"], 1)
+
+    def test_release_delimits_generation(self):
+        v = gate.triage([req(14), actions(14),
+                         "physical_mouse_capture_released focus=true",
+                         readers(14)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_retries_with_same_epoch_do_not_merge_snapshots(self):
+        v = gate.triage([req(15), actions(15),
+                         "physical_mouse_capture_retry epoch=15; attempt=2",
+                         readers(15)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+
+    def test_callback_only_not_unity(self):
+        v = gate.triage([req(16), actions(16)])
+        self.assertEqual(v["status"], "CAPTURED_CALLBACK_WITHOUT_SAME_EPOCH_GETTER")
+
+    def test_positive_native_without_fallback_not_claimed_as_fallback(self):
+        v = gate.triage([req(17), actions(17), readers(17, fallback=0)])
+        self.assertEqual(v["status"], "SAME_EPOCH_CALLBACK_AND_GETTER_NO_FALLBACK")
+
+    def test_capture_observed_false_cannot_prove_legacy_bridge(self):
+        v = gate.triage([req(18), actions(18), readers(18, captured="false")])
+        self.assertEqual(v["same_epoch_positive_fallback_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_impossible_count_rejected(self):
+        v = gate.triage([req(19), actions(19), readers(19, calls=2, fallback=3)])
+        self.assertEqual(v["status"], "INVALID_OR_INCOMPLETE_CAPTURE_PROVENANCE")
+
+    def test_rollback_counter_invalidates_attempt(self):
+        v = gate.triage([req(20), actions(20, events=12), actions(20, events=3),
+                         readers(20)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"] + int(v["attempts"] > 0), 0)
+
+    def test_missing_epoch_rejected(self):
+        v = gate.triage([req(21), actions(21).replace("epoch=21", "epoch=bad"),
+                         readers(21)])
+        self.assertEqual(v["same_epoch_callback_and_getter_attempts"], 0)
+        self.assertGreater(v["invalid_markers"], 0)
+
+    def test_mixed_process_risk_stays_disclosed(self):
+        v = gate.triage([])
+        self.assertFalse(v["device_pass"])
+        self.assertIn("epoch may repeat across", v["limitations"])
+
+
+if __name__ == "__main__":
+    unittest.main()
