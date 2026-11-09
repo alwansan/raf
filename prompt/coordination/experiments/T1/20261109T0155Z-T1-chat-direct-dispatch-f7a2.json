@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T0155Z-T1-chat-direct-dispatch-f7a2",
+  "issue_id": "WATER-001",
+  "experiment_key": "t1-auth-original-managed-dx11fft-direct-numeric-dispatch-v1-fc9d4ba9",
+  "resource_key": null,
+  "hypothesis": "Authenticated original Dx11FFT has zero FindKernel callsites; named FindKernel evidence gate cannot represent its direct numeric Dispatch. Build a separate bounded source-selector/record-validation path preserving that origin distinction, without claiming actual runtime mapping.",
+  "source_provenance": {
+    "original_dll_git_blob_sha1": "fc9d4ba920a178fdb89c970d9d772a01051dadc6",
+    "original_dx11fft_csharp9_sha256": "8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0",
+    "authentic_prior_ci": "https://github.com/alwansan/raf/actions/runs/42519853981",
+    "original_static_callsites": {
+      "dispatch": 2,
+      "settexture": 6,
+      "findkernel": 0
+    }
+  },
+  "input_is_actual_device_fft_trace": false,
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t1_fft_original_direct_dispatch_gate.py' -v"
+  ],
+  "ci_source_sha": "6dc13ace9c8c0f28775ac34742a5fd43bb929c03",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42548645389"
+  ],
+  "ci": {
+    "run_id": 42548645389,
+    "job_id": 128939050488,
+    "conclusion": "SUCCESS",
+    "tests_passed": 21,
+    "tests_failed": 0
+  },
+  "positive_controls": [
+    "n8 bank0 pass0 yields numeric argument6",
+    "n8 bank0 pass1 yields7",
+    "n8 bank1 pass0 yields16",
+    "two original dispatch events are distinct",
+    "same-event metadata correlation remains numeric-only"
+  ],
+  "negative_controls": [
+    "wrong original SHA rejected",
+    "foreign caller or FindKernel mode rejected",
+    "unobserved correlated event rejected",
+    "incorrect numeric arg discrepancy disclosed",
+    "observed exponent/size disagreement disclosed",
+    "out-of-20-candidate range flagged",
+    "control chars and malformed timing rejected"
+  ],
+  "cl_owner_evidence": {
+    "summary_git_blob_sha1": "a4f2255e49039fbdd96df1aec8c0ca424d24c36f",
+    "session": "shared-20261108-232759-468049775",
+    "T1_synthetic_GLES_cases": [
+      "T1-01 PASS",
+      "T1-02 PASS",
+      "T1-03 PASS",
+      "T1-04 PASS"
+    ],
+    "original_raft_water_or_fft_pass": false
+  },
+  "status": "completed_source_ci_verified",
+  "result": {
+    "outcome": "SOURCE_ONLY_ORIGINAL_NUMERIC_DISPATCH_TRACE_SCHEMA",
+    "runtime_direct_callsite_attested": false,
+    "named_unity_kernel_mapping_proven": false,
+    "android_water_fixed": false
+  },
+  "limits": [
+    "No actual Unity runtime trace supplied/independently verified by this CI",
+    "Synthetic mini-lab GLES on device does not prove original Unity compute kernel dispatch",
+    "Compiled DXBC slot and Unity runtime index6 must not be equated",
+    "No private source/shader/binary shipped or full game build triggered"
+  ],
+  "next_step": "In next authorized real game source build, attach SHA-authentic original Dx11FFT direct Dispatch trace at original callsites capturing size, observed Mathf exponent, bank, pass, index, resource binding and event correlation without inventing FindKernel; classify first correlated invalid kernel6 and compare shader instance/import/first numeric FFT stage."
+}

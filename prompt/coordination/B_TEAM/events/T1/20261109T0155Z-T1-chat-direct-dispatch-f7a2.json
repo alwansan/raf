@@ -1,0 +1,24 @@
+{
+  "id": "20261109T0155Z-T1-chat-direct-dispatch-f7a2",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261109T0155Z-T1-chat-direct-dispatch-f7a2",
+  "issue_id": "WATER-001",
+  "kind": "experiment_result",
+  "status": "completed",
+  "at": "2026-11-09T02:04:00Z",
+  "summary": "Original SHA-authenticated managed Dx11FFT has direct numeric Dispatch and 0 FindKernel in source, so T1 added an independent direct numeric observation gate (not a fabricated named lookup); CI42548645389 at 6dc13ace PASS 21/21 synthetic structural tests. Latest actual CL phone T1-01..04 PASS for separate mini GLES capabilities only. No same-build original caller trace, Unity kernel mapping or water fix; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/6dc13ace9c8c0f28775ac34742a5fd43bb929c03",
+    "https://github.com/alwansan/raf/actions/runs/42548645389",
+    "https://github.com/alwansan/raf/actions/runs/42519853981",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261109T0155Z-T1-chat-direct-dispatch-f7a2.md",
+    "https://github.com/alwansan/CL/blob/main/test/shared-20261108-232759-468049775/summary-20261108-232759-468049775.json"
+  ],
+  "limits": [
+    "21/21 new checks are synthetically generated; source provenance was attested in earlier CI only",
+    "No actual Unity FindKernel/Dx11FFT Dispatch on owner phone is recorded",
+    "Android water shader/FFT remains faulty/unproven; READY0/3"
+  ],
+  "next_step": "In next authorized real game source build, attach SHA-authentic original Dx11FFT direct Dispatch trace at original callsites capturing size, observed Mathf exponent, bank, pass, index, resource binding and event correlation without inventing FindKernel; classify first correlated invalid kernel6 and compare shader instance/import/first numeric FFT stage."
+}
