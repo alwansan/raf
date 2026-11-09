@@ -1,0 +1,19 @@
+{
+  "session_id": "20261109T1239Z-T4-scheduled-device-gate-h6r2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-09T12:39:00Z",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261109T1239Z-T4-scheduled-device-gate-h6r2.json",
+    "prompt/coordination/clients/T4/sessions/20261109T1239Z-T4-scheduled-device-gate-h6r2.md"
+  ],
+  "experiment_key": "T4-device-captured-mouse-to-unity-evidence-gate-42058825739-v0.2.13",
+  "resource_key": null,
+  "assumption": "Do not infer physical captured click/scroll from uncaptured callbacks or source CI.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/MEMORY.md",
+    "docs/T4_ANDROID_CAPTURED_LEGACY_BUTTON_WHEEL_BRIDGE_2026-11-08.md"
+  ],
+  "next": "Confirm latest CL captured=true and Unity Legacy Input same signed game build; preserve keyboard and .rgd."
+}
