@@ -812,10 +812,17 @@ internal static class Program
                             // Only one statically resolved in-module body, no
                             // virtual dispatch, no recursive cycles. Unknown
                             // receiver/heap aliases stay unproved.
-                            MethodDefinition? nested=null;
-                            try{nested=call.Resolve();}
-                            catch(AssemblyResolutionException){}
-                            catch(ResolutionException){}
+                            // A MethodDefinition is already the exact
+                            // in-memory target in source-free fixtures.
+                            // Original compiled CIL uses MethodReference and
+                            // must still resolve within the original module.
+                            MethodDefinition? nested=call as MethodDefinition;
+                            if(nested is null)
+                            {
+                                try{nested=call.Resolve();}
+                                catch(AssemblyResolutionException){}
+                                catch(ResolutionException){}
+                            }
                             if(nested is not null && nested.Module==method.Module &&
                                !ReferenceEquals(nested,method) &&
                                (op==Code.Call || (op==Code.Callvirt &&
@@ -1884,7 +1891,22 @@ internal static class Program
         if(args.Length==1 && args[0]=="--selftest")
         {
             try{ SelfTest(); Console.WriteLine("T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS"); return 0; }
-            catch { Console.WriteLine("T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_BLOCKED");return 2;}
+            catch(Exception ex)
+            {
+                // Selftest contains only synthetic source-free fixtures.
+                // Never print arbitrary exception text or source identifiers.
+                var marker=ex is InvalidOperationException ? ex.Message switch
+                {
+                    "static_onehop_nested_field_not_detected"=>"onehop_static",
+                    "nested_different_field_must_fail_closed"=>"onehop_other_field",
+                    "nested_cycle_must_not_prove_alias"=>"onehop_cycle",
+                    "virtual_nested_leaf_must_remain_opaque"=>"onehop_virtual",
+                    "nested_field_must_not_forge_direct_field_evidence"=>"onehop_direct_boundary",
+                    _=>"other_synthetic"
+                } : "other_synthetic";
+                Console.WriteLine("T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_BLOCKED marker="+marker);
+                return 2;
+            }
         }
         try
         {
