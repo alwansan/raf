@@ -15,12 +15,26 @@ def decode_rgb(path):
         raise ValueError("not_png")
     pos = 8
     chunks = []
+    seen_idat = False
+    ended_idat = False
     while pos + 12 <= len(data):
         size = struct.unpack_from(">I", data, pos)[0]
         typ = data[pos+4:pos+8]
         end = pos + 12 + size
         if end > len(data):
             raise ValueError("truncated_chunk")
+        if not chunks and typ != b"IHDR":
+            raise ValueError("ihdr_not_first")
+        if typ == b"IHDR" and chunks:
+            raise ValueError("duplicate_ihdr")
+        if typ == b"IDAT":
+            if ended_idat:
+                raise ValueError("noncontiguous_idat")
+            seen_idat = True
+        elif seen_idat:
+            ended_idat = True
+        if typ == b"IEND" and size:
+            raise ValueError("nonempty_iend")
         body = data[pos+8:pos+8+size]
         crc = struct.unpack_from(">I", data, pos+8+size)[0]
         if zlib.crc32(typ + body) & 0xffffffff != crc:
@@ -29,6 +43,8 @@ def decode_rgb(path):
         pos = end
         if typ == b"IEND":
             break
+    if not seen_idat:
+        raise ValueError("missing_idat")
     if not chunks or chunks[-1][0] != b"IEND" or pos != len(data):
         raise ValueError("missing_iend_or_trailing_data")
     ihdr = next((b for t,b in chunks if t == b"IHDR"), None)
