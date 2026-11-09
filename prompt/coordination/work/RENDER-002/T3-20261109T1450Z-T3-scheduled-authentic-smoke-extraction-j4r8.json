@@ -1,0 +1,22 @@
+{
+  "session_id": "20261109T1450Z-T3-scheduled-authentic-smoke-extraction-j4r8",
+  "origin": "scheduled",
+  "identity": "T3",
+  "baseline_head": "ee84f051a294330ad73452b1d89eadbee8735e40",
+  "status": "active_evidence_gap",
+  "scope": "Metadata-only provenance assessment and reproducible ZIP2 Shader48 pass extraction plan; no Unity/game asset edits",
+  "files": [
+    "prompt/coordination/work/RENDER-002/T3-20261109T1450Z-T3-scheduled-authentic-smoke-extraction-j4r8.json",
+    "prompt/coordination/clients/T3/sessions/20261109T1450Z-T3-scheduled-authentic-smoke-extraction-j4r8.md"
+  ],
+  "hypothesis": "Existing synthetic pass-state comparison cannot diagnose square smoke without authenticated source and same-instance exported pass metadata; 17/34 counts are self-declared input, not independently verified by the gate.",
+  "experiment_key": "T3-SMOKE48-AUTH-PASS-20261109",
+  "shared_resource": "none; do not dispatch duplicate ZIP2 heavy export or Unity",
+  "evidence": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "scripts/t3_smoke_pass_state_gate_v2.py",
+    "tests/test_t3_smoke_pass_state_gate_v2.py",
+    "prompt/coordination/clients/T3/sessions/20261109T1333Z-T3-scheduled-pass-typeguard-q7m2.md"
+  ],
+  "next": "Reuse verified original ZIP2 Shader48 identity from CI42549246777, extract sanitized m_ParsedForm per-pass render state and same-instance export, require independent original pathID and source SHA evidence; only then feed gate; inspect CL owner square-smoke pixels. No asset edits until mismatch."
+}
