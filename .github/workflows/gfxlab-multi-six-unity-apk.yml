@@ -35,6 +35,8 @@ jobs:
           python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
           test -f gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
           test -f gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          test -f gfxlab/unity/Assets/Editor/GfxOriginalObjImporter.cs
+          python3 -m py_compile gfxlab/tools/obj_normalize.py
           echo GFX_MULTI003_SOURCEFREE_PASS=true
       - name: Checkout only SHA-pinned original ZIP2 owner assets
         uses: actions/checkout@v4
