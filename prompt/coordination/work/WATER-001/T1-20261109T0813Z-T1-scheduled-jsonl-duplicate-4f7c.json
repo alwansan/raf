@@ -2,7 +2,7 @@
   "session_id": "20261109T0813Z-T1-scheduled-jsonl-duplicate-4f7c",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_only_tests_pending",
   "updated_at": "2026-11-09T08:13:00Z",
   "intended_files": [
     "scripts/t1_fft_dispatch_pair_audit.py",
@@ -14,5 +14,11 @@
   "hypothesis": "Python json.loads silently accepts duplicate keys, making passive trace evidence ambiguous; reject duplicates before audit.",
   "baseline_file_sha": "905e4270c067fca51a51eb191bccf25571314f86",
   "owner_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md",
-  "limitations": "No original GPU execution, Unity build or phone proof."
+  "limitations": "No original GPU execution, Unity build or phone proof.",
+  "result_commits": [
+    "38bae453c14998e7eeb495dad21a0430d34246a6",
+    "a54f48243b9873027683ac458c3b19c7ccf414d4",
+    "1b2618d626f7e5d62a10fca45866deca86eb32c0"
+  ],
+  "next_step": "Run four unittest controls in checkout/CI; compare real CL JSONL and original FFT runtime kernel binding; no GPU proof"
 }
