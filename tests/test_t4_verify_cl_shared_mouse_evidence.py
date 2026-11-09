@@ -99,6 +99,72 @@ class ClRealEvidenceTests(unittest.TestCase):
         self.assertFalse(r["t4_09_game_bridge_accepted"])
         self.assertFalse(r["gameplay_fixed"])
 
+    def test_real_style_same_clock_down_up_are_not_extra_clicks(self):
+        rows = [
+            item("ACTION_HOVER_MOVE", event_time=99, button_state="0x0"),
+            item("ACTION_DOWN", route="activity_touch", event_time=100,
+                 button_state="0x1", action_button="0x0"),
+            item("ACTION_BUTTON_PRESS", route="activity_generic", event_time=100,
+                 button_state="0x1", action_button="0x1"),
+            item("ACTION_BUTTON_RELEASE", route="activity_generic", event_time=200,
+                 button_state="0x0", action_button="0x1"),
+            item("ACTION_UP", route="activity_touch", event_time=200,
+                 button_state="0x0", action_button="0x0"),
+        ]
+        result = count_events(rows)
+        corr = result["implicit_down_up_correlation"]
+        self.assertEqual(result["press_edges_action_button"], {"left": 1})
+        self.assertEqual(result["release_edges_action_button"], {"left": 1})
+        self.assertEqual(corr["actionbutton_zero"], {"press": 1, "release": 1})
+        self.assertEqual(corr["matched_to_explicit_same_eventtime"],
+                         {"press_left": 1, "release_left": 1})
+        self.assertEqual(corr["unpaired_ambiguous_not_click_proof"], {})
+        self.assertEqual(corr["additional_clicks_inferred"], 0)
+        self.assertFalse(corr["unity_delivery_proven"])
+
+    def test_implicit_without_explicit_or_different_clock_is_ambiguous(self):
+        rows = [
+            item("ACTION_DOWN", event_time=100, button_state="0x1"),
+            item("ACTION_BUTTON_PRESS", event_time=101, button_state="0x1",
+                 action_button="0x1"),
+            item("ACTION_UP", event_time=200, button_state="0x0"),
+            item("ACTION_BUTTON_RELEASE", event_time=201, button_state="0x0",
+                 action_button="0x1"),
+        ]
+        corr = count_events(rows)["implicit_down_up_correlation"]
+        self.assertEqual(corr["matched_to_explicit_same_eventtime"], {})
+        self.assertEqual(corr["unpaired_ambiguous_not_click_proof"],
+                         {"press": 1, "release": 1})
+        self.assertEqual(corr["additional_clicks_inferred"], 0)
+
+    def test_implicit_captured_mismatch_and_conflicting_edge_fail_closed(self):
+        rows = [
+            item("ACTION_DOWN", event_time=10, button_state="0x1",
+                 captured="true", route="captured"),
+            item("ACTION_BUTTON_PRESS", event_time=10, button_state="0x1",
+                 action_button="0x1", captured="false"),
+            item("ACTION_UP", event_time=20, button_state="0x0",
+                 captured="true", route="captured"),
+            item("ACTION_BUTTON_RELEASE", event_time=20, button_state="0x0",
+                 action_button="0x1", captured="false"),
+        ]
+        corr = count_events(rows)["implicit_down_up_correlation"]
+        self.assertEqual(corr["matched_to_explicit_same_eventtime"], {})
+        self.assertEqual(corr["unpaired_ambiguous_not_click_proof"],
+                         {"press": 1, "release": 1})
+        self.assertFalse(corr["unity_delivery_proven"])
+
+    def test_sourceless_and_bad_action_button_never_infer_edges(self):
+        rows = [item("ACTION_DOWN", event_time=100, button_state="0x1")]
+        rows[0]["detail"] = rows[0]["detail"].replace("eventTime=100 ", "")
+        corr = count_events(rows)["implicit_down_up_correlation"]
+        self.assertEqual(corr["unpaired_ambiguous_not_click_proof"], {"press": 1})
+        self.assertEqual(corr["additional_clicks_inferred"], 0)
+        bad = item("ACTION_DOWN", event_time=100)
+        bad["detail"] = bad["detail"].replace("buttonState=0x0", "buttonState=nope")
+        with self.assertRaises(ValueError):
+            count_events([bad])
+
     def test_local_jsonl_parser_bounds_and_content(self):
         with tempfile.TemporaryDirectory() as t:
             p = Path(t) / "events.jsonl"
