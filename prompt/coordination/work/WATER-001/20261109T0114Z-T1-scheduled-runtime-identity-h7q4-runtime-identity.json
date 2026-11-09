@@ -1,0 +1,22 @@
+{
+  "session_id": "20261109T0114Z-T1-scheduled-runtime-identity-h7q4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-09T01:14:38Z",
+  "intended_files": [
+    "scripts/t1_fft_runtime_evidence_gate.py",
+    "tests/test_t1_fft_runtime_identity_h7q4.py",
+    "prompt/coordination/clients/T1/sessions/20261109T0114Z-T1-scheduled-runtime-identity-h7q4.md"
+  ],
+  "hypothesis": "Whitespace-only or padded runtime kernel and session identifiers can pass the evidence gate, falsely implying traceability of real Unity FindKernel/Dispatch.",
+  "experiment_key": "t1-runtime-identity-sanitize-v1-gate-63d2004f",
+  "resource_key": null,
+  "base_file_blob_sha": "63d2004f7b96057a19430932c5f96ec71265a64e",
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/state.json",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "apk-for-testing/OWNER_FEEDBACK_2026-11-08_AR.md"
+  ],
+  "notes": "Isolated validation-only change; no Unity build, device run, original assets, T4 mouse or T5 resolution touched."
+}
