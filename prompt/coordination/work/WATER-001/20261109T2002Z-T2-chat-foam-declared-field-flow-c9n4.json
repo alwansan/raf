@@ -2,7 +2,7 @@
   "session_id": "20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "be69f74c1f4d902e7c731e4a17cc4bd3c7609ff0",
   "resumed_from_sessions": [
     "20261109T1946Z-T2-chat-foam-equality-predicate-m4q9",
@@ -22,7 +22,24 @@
   "resource_key": "T2-original-FoamBlitOriginalProducers-Cecil-source-only",
   "hypothesis": "The pass0 Blit destination might be a direct typed RenderTexture field, whose declared field token can be compared PRIVATELY to field-origin values returned from the original pass1 Texture-producing callee along conservatively reachable CIL return paths. Even exact declared token equality will not establish same receiver or same frame heap object; no synthetic positive may be misrepresented as original.",
   "scope": "T2 standalone original ZIP2 Cecil source checker, source-free synthetic positive/negative field-token controls. Do not modify original game, shaders, APK, shared mini, T1 T3 T4 T5 work, or heavy Unity resources. Strict T2-only Python report shape and source-free tests added after inspecting exact report schema, before modifying those files.",
-  "run_urls": [],
-  "updated_at": "2026-11-09T20:06:00Z",
-  "next_step": "Add bounded field-token-preserving return flow/Blit destination trace and synthetic controls. Let existing source-only pinned-original workflow run, classify original relationship and uncertainty, then archive evidence."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42690309016",
+    "https://github.com/alwansan/raf/actions/runs/42690309050"
+  ],
+  "updated_at": "2026-11-09T20:13:00Z",
+  "next_step": "Original managed pass1 indirect producer/caller receiver alias: field token mismatch rules out only direct same declared field return; cannot rule out different fields/receivers referring to same runtime RenderTexture.",
+  "scope_status": "completed",
+  "issue_status": "OPEN",
+  "code_commit": "6f09eddcf788050035a767d21999c75a6ebebdc1",
+  "first_incomplete_ci": "https://github.com/alwansan/raf/actions/runs/42689721185",
+  "verified_ci": "https://github.com/alwansan/raf/actions/runs/42690309016",
+  "verified_platform_ci": "https://github.com/alwansan/raf/actions/runs/42690309050",
+  "python_tests_passed": 19,
+  "cecil_selftest": "PASS",
+  "result": "field_no_match_with_null",
+  "original_pass1_return": "value_mixed_with_explicit_null_literal",
+  "original_source_authenticated": true,
+  "indirect_alias_disproved": false,
+  "crosspass_heap_identity_verified": false,
+  "android_water_pixels_verified": false
 }
