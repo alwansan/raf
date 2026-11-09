@@ -626,6 +626,237 @@ internal static class Program
         return ReachableReturnTopology(original);
     }
 
+    // Forward abstract CIL evaluation: follows reachable stack/local VALUES
+    // through branches, not merely the opcode adjacent to ret. This is only
+    // a category-level structural diagnostic, NEVER instance equality.
+    private sealed record ReturnFlowState(string[] Stack,string[] Locals);
+    static string ReachableReturnValueFlow(MethodDefinition method)
+    {
+        if(!method.HasBody)return "value_no_body";
+        if(method.Body.HasExceptionHandlers)return "value_exception_regions";
+        if(method.ReturnType.FullName is not (Texture or RenderTexture))
+            return "value_wrong_return_type";
+        var il=method.Body.Instructions;
+        if(il.Count is <1 or >128 || method.Body.Variables.Count>32)
+            return "value_budget";
+        var ix=new Dictionary<Instruction,int>();
+        for(int i=0;i<il.Count;i++)
+            if(!ix.TryAdd(il[i],i))return "value_bad_target";
+        var initial=new ReturnFlowState(Array.Empty<string>(),
+            Enumerable.Repeat("opaque",method.Body.Variables.Count).ToArray());
+        var input=new Dictionary<int,ReturnFlowState>{{0,initial}};
+        var queue=new Queue<int>();
+        queue.Enqueue(0);
+        var returns=new Dictionary<int,string>();
+        int visits=0;
+        while(queue.Count>0)
+        {
+            if(++visits>2048)return "value_budget";
+            int at=queue.Dequeue();
+            if(!input.TryGetValue(at,out var state)||at<0||at>=il.Count)
+                return "value_bad_target";
+            var stack=state.Stack.ToList();
+            var locals=state.Locals.ToArray();
+            var ins=il[at];
+            var op=ins.OpCode.Code;
+            var flow=ins.OpCode.FlowControl;
+            string Pop()
+            {
+                if(stack.Count==0)throw new InvalidOperationException("abstract_stack_underflow");
+                string v=stack[^1];
+                stack.RemoveAt(stack.Count-1);
+                return v;
+            }
+            try
+            {
+                if(op==Code.Ret)
+                {
+                    if(stack.Count!=1)return "value_invalid_return_stack";
+                    returns[at]=stack[0];
+                    continue;
+                }
+                if(op==Code.Throw)
+                {
+                    Pop(); // Throw path cannot reach a normal return.
+                    continue;
+                }
+                if(op==Code.Rethrow)return "value_exception_regions";
+                if(flow is FlowControl.Branch or FlowControl.Cond_Branch)
+                {
+                    if(flow==FlowControl.Cond_Branch)
+                    {
+                        if(op is Code.Brtrue or Code.Brtrue_S or Code.Brfalse or
+                            Code.Brfalse_S or Code.Switch)Pop();
+                        else if(op is Code.Beq or Code.Beq_S or Code.Bne_Un or Code.Bne_Un_S or
+                            Code.Bge or Code.Bge_S or Code.Bge_Un or Code.Bge_Un_S or
+                            Code.Bgt or Code.Bgt_S or Code.Bgt_Un or Code.Bgt_Un_S or
+                            Code.Ble or Code.Ble_S or Code.Ble_Un or Code.Ble_Un_S or
+                            Code.Blt or Code.Blt_S or Code.Blt_Un or Code.Blt_Un_S)
+                        {Pop();Pop();}
+                        else return "value_unsupported_branch";
+                    }
+                    else if(op is not (Code.Br or Code.Br_S))
+                        return "value_unsupported_branch";
+                }
+                else if(op==Code.Nop){}
+                else if(op==Code.Ldnull)stack.Add("null");
+                else if(op==Code.Ldstr || Literal(ins).HasValue ||
+                        op is Code.Ldc_I8 or Code.Ldc_R4 or Code.Ldc_R8)
+                    stack.Add("opaque");
+                else if(op is Code.Ldsfld or Code.Ldfld)
+                {
+                    if(ins.Operand is not FieldReference field)return "value_unsupported_opcode";
+                    if(op==Code.Ldfld)Pop(); // Receiver identity is NOT known.
+                    stack.Add(field.FieldType.FullName is Texture or RenderTexture ?
+                        (op==Code.Ldsfld?"static_field_category":"instance_field_receiver_unknown"):
+                        "opaque");
+                }
+                else if(op is Code.Stsfld or Code.Stfld)
+                {
+                    if(ins.Operand is not FieldReference)return "value_unsupported_opcode";
+                    Pop();
+                    if(op==Code.Stfld)Pop();
+                }
+                else if(LocalIndex(ins,false)>=0)
+                {
+                    int local=LocalIndex(ins,false);
+                    if(local>=locals.Length)return "value_bad_local";
+                    stack.Add(locals[local]);
+                }
+                else if(LocalIndex(ins,true)>=0)
+                {
+                    int local=LocalIndex(ins,true);
+                    if(local>=locals.Length)return "value_bad_local";
+                    locals[local]=Pop();
+                }
+                else if(op is Code.Ldarg_0 or Code.Ldarg_1 or Code.Ldarg_2 or
+                    Code.Ldarg_3 or Code.Ldarg or Code.Ldarg_S)
+                    stack.Add("argument_untraced");
+                else if(op==Code.Dup)
+                {
+                    string top=Pop();
+                    stack.Add(top);stack.Add(top);
+                }
+                else if(op==Code.Pop)Pop();
+                else if(op is Code.Call or Code.Callvirt or Code.Newobj)
+                {
+                    if(ins.Operand is not MethodReference call || call.Parameters.Count>16)
+                        return "value_unsupported_opcode";
+                    for(int i=0;i<call.Parameters.Count;i++)Pop();
+                    if(op!=Code.Newobj && call.HasThis)Pop();
+                    if(op==Code.Newobj)stack.Add("constructed_untraced");
+                    else if(call.ReturnType.FullName!="System.Void")
+                        stack.Add("nested_call_untraced");
+                }
+                else if(op is Code.Castclass or Code.Isinst or Code.Box or Code.Unbox_Any)
+                {
+                    Pop();
+                    stack.Add("opaque"); // No receiver/alias promotion by a cast.
+                }
+                else if(op is Code.Ldloca or Code.Ldloca_S or Code.Ldarga or
+                    Code.Ldarga_S or Code.Ldsflda)
+                    stack.Add("opaque");
+                else if(op==Code.Ldflda)
+                {Pop();stack.Add("opaque");}
+                else if(op==Code.Ldelem_Ref || op==Code.Ldelema)
+                {Pop();Pop();stack.Add("opaque");}
+                else if(op is Code.Ldind_Ref or Code.Ldlen)
+                {Pop();stack.Add("opaque");}
+                else if(op is Code.Ceq or Code.Cgt or Code.Cgt_Un or Code.Clt or
+                    Code.Clt_Un or Code.Add or Code.Sub or Code.Mul)
+                {Pop();Pop();stack.Add("opaque");}
+                else if(op==Code.Initobj)Pop();
+                else if(op==Code.Stind_Ref){Pop();Pop();}
+                else return "value_unsupported_opcode";
+            }
+            catch(InvalidOperationException)
+            {
+                return "value_invalid_stack";
+            }
+            if(stack.Count>32)return "value_budget";
+            var successors=new List<int>();
+            if(flow is FlowControl.Branch or FlowControl.Cond_Branch)
+            {
+                if(op==Code.Switch)
+                {
+                    if(ins.Operand is not Instruction[] options || options.Length>128)
+                        return "value_bad_target";
+                    foreach(var target in options)
+                    {
+                        if(!ix.TryGetValue(target,out int dest))return "value_bad_target";
+                        successors.Add(dest);
+                    }
+                }
+                else
+                {
+                    if(ins.Operand is not Instruction target || !ix.TryGetValue(target,out int dest))
+                        return "value_bad_target";
+                    successors.Add(dest);
+                }
+                if(flow==FlowControl.Cond_Branch)successors.Add(at+1);
+            }
+            else if(flow is FlowControl.Next or FlowControl.Call or FlowControl.Meta)
+                successors.Add(at+1);
+            else return "value_unsupported_opcode";
+            foreach(int target in successors.Distinct())
+            {
+                if(target<0||target>=il.Count)return "value_bad_target";
+                var candidate=new ReturnFlowState(stack.ToArray(),locals.ToArray());
+                if(input.TryGetValue(target,out var previous))
+                {
+                    if(previous.Stack.Length!=candidate.Stack.Length ||
+                       previous.Locals.Length!=candidate.Locals.Length)
+                        return "value_invalid_join_stack";
+                    string Merge(string a,string b)=>a==b?a:"mixed";
+                    var newStack=previous.Stack.Zip(candidate.Stack,Merge).ToArray();
+                    var newLocals=previous.Locals.Zip(candidate.Locals,Merge).ToArray();
+                    if(!newStack.SequenceEqual(previous.Stack) ||
+                       !newLocals.SequenceEqual(previous.Locals))
+                    {
+                        input[target]=new ReturnFlowState(newStack,newLocals);
+                        queue.Enqueue(target);
+                    }
+                }
+                else
+                {
+                    input[target]=candidate;
+                    queue.Enqueue(target);
+                }
+            }
+        }
+        if(returns.Count==0)return "value_no_reachable_return";
+        var categories=returns.Values.Distinct().ToArray();
+        if(categories.Length!=1 || categories[0]=="mixed")return "value_mixed_or_joined";
+        return categories[0] switch
+        {
+            "null"=>"value_null_only",
+            "static_field_category"=>"value_static_field_category_only",
+            "instance_field_receiver_unknown"=>"value_instance_field_receiver_unknown",
+            "argument_untraced"=>"value_argument_untraced",
+            "nested_call_untraced"=>"value_nested_call_untraced",
+            "constructed_untraced"=>"value_constructed_untraced",
+            _=>"value_opaque_untraced"
+        };
+    }
+
+    static string OriginalTextureReturnValueFlow(StackSourceTrace trace,ModuleDefinition sourceModule)
+    {
+        if(trace.Kind!="typed_call_result")return "not_call_return_source";
+        if(trace.SourceInstruction?.Operand is not MethodReference method)
+            return "value_missing_call_reference";
+        MethodDefinition? callee;
+        try{callee=method.Resolve();}
+        catch(AssemblyResolutionException){return "value_external_or_unresolved";}
+        catch(ResolutionException){return "value_external_or_unresolved";}
+        if(callee is null||callee.Module!=sourceModule)return "value_external_or_unresolved";
+        if(trace.SourceInstruction.OpCode.Code==Code.Callvirt)
+        {
+            if(!callee.HasThis)return "value_bad_receiver_signature";
+            if(callee.IsVirtual&&!callee.IsFinal)return "value_dynamic_dispatch_unresolved";
+        }
+        return ReachableReturnValueFlow(callee);
+    }
+
     static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
     {
         // Public type-family only. In particular a preceding void call is
@@ -936,6 +1167,25 @@ internal static class Program
             throw new InvalidOperationException("private_cfg_return_info_forbidden");
         Console.WriteLine("T2_FOAM_PASS0_CALLEE_CFG_TOPOLOGY "+topo0);
         Console.WriteLine("T2_FOAM_PASS1_CALLEE_CFG_TOPOLOGY "+topo1);
+        var value0=OriginalTextureReturnValueFlow(back0,asm.MainModule);
+        var value1=OriginalTextureReturnValueFlow(back1,asm.MainModule);
+        var safeValueTags=new HashSet<string>{
+            "not_call_return_source","value_missing_call_reference",
+            "value_external_or_unresolved","value_bad_receiver_signature",
+            "value_dynamic_dispatch_unresolved","value_no_body",
+            "value_exception_regions","value_wrong_return_type","value_budget",
+            "value_bad_target","value_unsupported_opcode","value_unsupported_branch",
+            "value_bad_local","value_invalid_stack","value_invalid_return_stack",
+            "value_invalid_join_stack","value_no_reachable_return",
+            "value_mixed_or_joined","value_null_only",
+            "value_static_field_category_only","value_instance_field_receiver_unknown",
+            "value_argument_untraced","value_nested_call_untraced",
+            "value_constructed_untraced","value_opaque_untraced"
+        };
+        if(!safeValueTags.Contains(value0)||!safeValueTags.Contains(value1))
+            throw new InvalidOperationException("unsafe_original_value_flow_category");
+        Console.WriteLine("T2_FOAM_PASS0_CALLEE_RETURN_VALUE_FLOW "+value0);
+        Console.WriteLine("T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW "+value1);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -1175,6 +1425,58 @@ internal static class Program
         branchGetter.Body.ExceptionHandlers.Add(new ExceptionHandler(ExceptionHandlerType.Finally));
         if(ReachableReturnTopology(branchGetter)!="cfg_exception_regions")
             throw new InvalidOperationException("exception_return_paths_must_remain_unresolved");
+        // Independent forward abstract stack+local dataflow synthetic fixtures.
+        // Same family across two original CIL return paths is NOT proof of
+        // identical field tokens, heap objects or crosspass texture instances.
+        var valueGetter=new MethodDefinition("SyntheticValueReturnJoin",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,tex);
+        owner.Methods.Add(valueGetter);
+        valueGetter.Body.Variables.Add(new VariableDefinition(tex));
+        var v=valueGetter.Body.Instructions;
+        var vloadA=Instruction.Create(OpCodes.Ldloc_0);
+        var vloadB=Instruction.Create(OpCodes.Ldloc_0);
+        v.Add(Instruction.Create(OpCodes.Ldsfld,fixtureRtField));
+        v.Add(Instruction.Create(OpCodes.Stloc_0));
+        v.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        v.Add(Instruction.Create(OpCodes.Brtrue_S,vloadB));
+        v.Add(vloadA);
+        v.Add(Instruction.Create(OpCodes.Ret));
+        v.Add(vloadB);
+        v.Add(Instruction.Create(OpCodes.Ret));
+        if(ReachableReturnValueFlow(valueGetter)!="value_static_field_category_only")
+            throw new InvalidOperationException("return_value_local_join_must_preserve_category");
+        v[6]=Instruction.Create(OpCodes.Ldnull);
+        v[3].Operand=v[6];
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_or_joined")
+            throw new InvalidOperationException("return_value_mixed_paths_must_not_claim_field");
+        v[6]=Instruction.Create(OpCodes.Ldloc_0);
+        v[3].Operand=v[6];
+        var sharedRet=Instruction.Create(OpCodes.Ret);
+        v.Clear();
+        v.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        var ifTrue=Instruction.Create(OpCodes.Ldsfld,fixtureRtField);
+        v.Add(Instruction.Create(OpCodes.Brtrue_S,ifTrue));
+        v.Add(Instruction.Create(OpCodes.Ldnull));
+        v.Add(Instruction.Create(OpCodes.Br_S,sharedRet));
+        v.Add(ifTrue);
+        v.Add(sharedRet);
+        if(ReachableReturnValueFlow(valueGetter)!="value_mixed_or_joined")
+            throw new InvalidOperationException("return_stack_phi_must_not_be_proven_same");
+        v[1].Operand=Instruction.Create(OpCodes.Nop);
+        if(ReachableReturnValueFlow(valueGetter)!="value_bad_target")
+            throw new InvalidOperationException("return_bad_branch_target_not_rejected");
+        v[1].Operand=ifTrue;
+        valueGetter.Body.ExceptionHandlers.Add(new ExceptionHandler(ExceptionHandlerType.Finally));
+        if(ReachableReturnValueFlow(valueGetter)!="value_exception_regions")
+            throw new InvalidOperationException("return_eh_region_must_not_be_traced");
+        var opaqueGetter=new MethodDefinition("OpaqueNestedSyntheticCall",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,tex);
+        owner.Methods.Add(opaqueGetter);
+        opaqueGetter.Body.Instructions.Add(Instruction.Create(OpCodes.Call,getter));
+        opaqueGetter.Body.Instructions.Add(Instruction.Create(OpCodes.Ret));
+        if(ReachableReturnValueFlow(opaqueGetter)!="value_nested_call_untraced")
+            throw new InvalidOperationException("nested_call_not_instance_proof");
+
     }
 
     public static int Main(string[] args)
