@@ -69,13 +69,13 @@ final class T1ComputeProbe {
         view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         root.addView(view,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,48));
         Button run=new Button(a);
-        run.setText("Run selected T1 GPU CASE (compiled-in shaders only)");
+        run.setText("تشغيل الاختبار المحدد باستخدام شيدر GPU مضمّن وآمن");
         root.addView(run);
         run.setOnClickListener(v->{
             final JSONObject selected=activity.selected;
-            if(selected==null||!selected.optString("id").matches("T1-0[1-4]")){
-                activity.log("t1_gpu_reject","Select built-in T1-01..04");
-                activity.caption.setText("Select one of T1-01..04 before running GPU test.");
+            if(selected==null||!selected.optString("id").matches("T1-0[1-5]")){
+                activity.log("t1_gpu_reject","Select built-in T1-01..05");
+                activity.caption.setText("اختر اختبار T1 من 01 إلى 05 ثم شغله.");
                 return;
             }
             if(!"builtin-t1-gles31".equals(activity.packId)){
@@ -108,13 +108,15 @@ final class T1ComputeProbe {
             "GLES context and compute limits",
             "16-word one-pass SSBO dispatch/readback",
             "two dispatches with shader storage barrier/readback",
-            "negative control: invalid GLSL must not compile"
+            "negative control: invalid GLSL must not compile",
+            "synthetic FFT-like complex butterfly, local512, two-pass CPU readback"
         };
         String[] expected={
             "GLES >=3.1 with compute workgroup limit >=4 and local size >=4",
             "Exact 16 integers v[i] = i*3+7, no GL error",
             "Exact 16 integers v[i] = 2*(i+10)+1, no GL error",
-            "Compiler rejects non-existent GLSL function"
+            "Compiler rejects non-existent GLSL function",
+            "512 local GPU invocations, 1024 float CPU reference; not original Raft"
         };
         for(int i=0;i<names.length;i++)try {
             a.cases.add(new JSONObject()
@@ -134,7 +136,7 @@ final class T1ComputeProbe {
 
     // Reuse compiled-in synthetic controls only. Unity FFT is not exercised here.
     void runAutomated(String caseId, java.util.function.Consumer<String> callback) {
-        if(caseId==null||!caseId.matches("T1-0[1-4]")) {
+        if(caseId==null||!caseId.matches("T1-0[1-5]")) {
             callback.accept("FAIL unknown test");
             return;
         }
@@ -222,6 +224,7 @@ final class T1ComputeProbe {
                     (compiler==null?0:compiler.length());
             } finally { GLES20.glDeleteShader(shader); }
         }
+        if(id.equals("T1-05"))return T1FftButterflyProbe.run();
         return dispatch(id.equals("T1-03"));
     }
     private static int compileProgram(String source) {
