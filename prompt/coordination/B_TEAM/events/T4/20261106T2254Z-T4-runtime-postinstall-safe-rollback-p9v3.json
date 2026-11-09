@@ -16,5 +16,6 @@
   "experiment": "prompt/coordination/experiments/T4/20261106T2250Z-runtime-postinstall-foreign-rollback-p9v3.json",
   "result": "RED 2 foreign epoch rollback subcases; GREEN 19/19 runtime operation tests, 14/14 B22 transaction controls, authentic original source adapted managed C# compile exit=0. When post-install .cs or .meta is changed by another writer, retain foreign data and complete original backup instead of restoring stale bytes.",
   "limit": "Source staging only; no full interprocess lock, original gameplay changes, new native build, owner phone save/relaunch proof, or RGD/Unity acceptance. T5 owns in-progress 42296450023.",
-  "project_state": "LOCAL-005 OPEN; NOT_READY 0/3; T4 trial r1 unchanged."
+  "project_state": "LOCAL-005 OPEN; NOT_READY 0/3; T4 trial r1 unchanged.",
+  "event_id": "T4-20261106T2254Z-T4-runtime-postinstall-safe-rollback-p9v3"
 }
