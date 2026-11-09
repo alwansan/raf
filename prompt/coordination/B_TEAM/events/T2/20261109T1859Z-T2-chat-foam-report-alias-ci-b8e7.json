@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "worker": "T2",
+  "session_id": "20261109T1854Z-T2-chat-foam-report-alias-b8e7",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "event_type": "source_guard_regression_fixed",
+  "status": "verified_source_only",
+  "created_at": "2026-11-09T18:59:00Z",
+  "commits": [
+    "7b4874874691b8c07ac2841f56623367ba0e4fa5",
+    "63efef7bf925f1222783163fce32aef56695ff94"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42664209077",
+    "https://github.com/alwansan/raf/actions/runs/42678552250",
+    "https://github.com/alwansan/raf/actions/runs/42678582388"
+  ],
+  "summary": "Defensive copy of original Foam numeric resource table in combine() prevents report mutation corrupting subsequent authenticated profile audits. CI tested 20 member + 23 resource + 20 texture source-only tests, all passed, plus original SHA-pinned data audit and cleanup.",
+  "scope_conclusion": "completed",
+  "issue_conclusion": "OPEN",
+  "source_only": true,
+  "device_pixels_verified": false,
+  "shaderlab_verified": false,
+  "private_source_published": false,
+  "session_file": "prompt/coordination/clients/T2/sessions/20261109T1854Z-T2-chat-foam-report-alias-b8e7.md"
+}
