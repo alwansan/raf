@@ -1,0 +1,18 @@
+# T3 scheduled session — 2026-11-09T01:34Z
+- session_id: 20261109T0134Z-T3-scheduled-cl-png-pixel-audit-k7m2
+- origin: scheduled
+- issue: RENDER-002 OPEN / NOT_READY
+- initial HEAD: bef7d96ee97d1df86dfd3acc9a6814ea781dad13
+- scope: prompt/coordination/work/RENDER-002/T3-20261109T0134Z-scheduled-cl-png-pixel-audit-k7m2.json
+- initial scope commit: 28da2dfe4befeae948c43ecff0011715057e9ba3
+- code commits: 4925e29eb5104bf2ca7ebc6f8f5e3623b6da583c, 1c2932c3f41ea25b99e553a2ce822368b23e8ae0
+- synthetic regression commit: 14dae75c8197d520362729617a989f3b6c75e3e3
+- read owner report: docs/DEVICE_FEEDBACK_42058825739_AR.md; source e9c358eda01785b65e4eb14f18723da426635628; phone world/save/reentry succeeds but rendering failures persist.
+- prior source proof: genuine 41 material/227 TexEnv/150 color same-export parity; no evidence that those source values were lost.
+- CL input: https://github.com/alwansan/CL/tree/main/test/shared-20261108-232759-468049775 ; six T3 PNG files (119360,210904,162232,149557,154489,158584 bytes). Their presence does not prove correct captured pixels.
+- new tool: scripts/t3_cl_png_pixel_audit.py; standard-library-only, read-only CRC-validated PNG RGB/RGBA, PNG filter reconstruction, black/dominant/unique color per full/center/quadrants. Fail closed on unsupported formats, CRC and truncation. No raw image content in report.
+- tests: tests/test_t3_cl_png_pixel_audit.py; black, two-color, Sub/Up filters, CRC, truncated PNG. **Not executed**: runtime container cannot resolve raw.githubusercontent.com, and GitHub fetch rejects binary PNG. Do not claim test PASS.
+- Actions: existing CI run 42529039014 success (T1 FFT diagnostic); no duplicate native/mini/Unity CI launched.
+- outcome: source/test committed; device PNG measurements remain unverified, because raw PNG bytes inaccessible in this runtime. No game assets, shaders, .meta, GUID, save or input changed.
+- next: run `python -m unittest discover -s tests -p test_t3_cl_png_pixel_audit.py`; obtain CL six PNGs from pinned CL revision and run `python scripts/t3_cl_png_pixel_audit.py T3-*.png --output t3-pixel-summary.json`. Compare center/quadrants with GLES expected and actual owner photos separately. Do not infer Raft restoration from synthetic lab colors.
+- no conflicts with T1/T2 water, T4 mouse/world or T5 shared APK/Resolution. Stay in Chat.
