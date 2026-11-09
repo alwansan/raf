@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261109T0200Z-atomic-reexport-c3a8",
+  "owner": "T5",
+  "session_id": "20261109T0155Z-T5-chat-atomic-reexport-c3a8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "T5 shared Mini export() no longer overwrites previously published MediaStore log and summary URIs in place. Both new complete media published before previous references retired; rollback first new log on second-file failure; old valid pair retained. CI42548284041 SUCCESS (Python/Java/Android javac); source-only, no new APK and Android15 fault injection pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/db261619408a8553d61ecfe211749231d27b4a45",
+    "https://github.com/alwansan/raf/commit/f2609b07d59cf3444ea65d6547f6bef38ea59a7b",
+    "https://github.com/alwansan/raf/actions/runs/42548284041"
+  ],
+  "at": "2026-11-09T01:59:55Z"
+}
