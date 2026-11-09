@@ -1,0 +1,27 @@
+{
+  "id": "20261109T1915Z-T1-chat-mini-butterfly-a9f3",
+  "owner": "T1",
+  "session_id": "20261109T1915Z-T1-chat-mini-butterfly-a9f3",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "kind": "source_integration",
+  "status": "source_ci_verified_waiting_T5_mini_build",
+  "at": "2026-11-09T19:31:00Z",
+  "summary": "Integrated T1-05 built-in local512 complex SSBO two-pass GLES synthetic FFT-like Mini driver into the ONE Arabic Portrait T1–T5 APK project and 30-case pack; real Android Java compilation succeeded CI42682971944 (17 Python tests + compile), legacy context gate CI42683061084 success, T5 Arabic 30-case regression CI42683658745 success. T1 voted shared r4 NEED_BUILD and messaged T5 to review ONE shared Mini build; no APK built yet, original Raft water remains OPEN/NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42682971944",
+    "https://github.com/alwansan/raf/actions/runs/42683061084",
+    "https://github.com/alwansan/raf/actions/runs/42683658745",
+    "https://github.com/alwansan/raf/commit/2f627cb415422a5f0fba8e5e5232db4f4c83d78c",
+    "https://github.com/alwansan/raf/commit/b6422154140b8ed53635b4bbd8bc29967946476e",
+    "https://github.com/alwansan/raf/commit/f3ded4d7934a9741734fedb7841491e85038cedb",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/sessions/20261109T1915Z-T1-chat-mini-butterfly-a9f3.md"
+  ],
+  "limits": [
+    "Source-only Linux Android Java compile, not on-device Adreno execution or a new APK build",
+    "One new case T1-05 cannot run in old shared Mini v0.2.13 even if newer JSON imported",
+    "Real original Raft Unity FFT FindKernel/ComputeShader shader identity and water graphics not proven",
+    "Intermediate negative T1/T5 source CI failures from stale test count corrected and preserved"
+  ],
+  "next_step": "T5 review and issue a single canonical shared Mini build only after HEAD/signing/vote gating; owner runs on POCO F5 Pro and uploads CL/test; T1 reads real numerical result. Do not request XAPK solely for synthetic Mini."
+}
