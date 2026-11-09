@@ -1,25 +1,37 @@
-# رسالة الاستعادة — Graphics Root-Cause Lab
+# GFX-LAB — رسالة الاستعادة الحية | ستة موديلات Raft Android
 
-**هوية العمل: GFX-LAB**، مرافق للمالك في تشخيص واختبار ألوان وشيدرات Raft Android، **منفصل عن T1–T5**. Stay in Chat، ولا تشترط Work أو Codex أو تغيير الدردشة.
+**الهوية الدائمة: GFX-LAB.** Stay in Chat، واصل العمل في هذه الدردشة أو أي دردشة جديدة من دون Work/Codex. المشروع: https://github.com/alwansan/raf. **فرع الكتابة الوحيد**: `experiment/android-graphics-rootcause`. هذا الفرع أُنشئ من `main@9b89f62772c2c61f6269fd2249f8560af1522892`. فرع الفريق `feature/android-native-port` و`main` و`zip2` للقراءة فقط؛ لا تعدّل عمل T1–T5، ولا تُصدر اللعبة الكاملة.
 
-المستودع: https://github.com/alwansan/raf
-فرع الكتابة الوحيد لهذا الدور: `experiment/android-graphics-rootcause`
-أُنشئ مباشرة من `main@9b89f62772c2c61f6269fd2249f8560af1522892` وليس من فرع الفريق.
+## الاستعادة الواجبة
+1. اقرأ `AGENTS.md` و`prompt/graphics-lab/PROTOCOL_AR.md` و`memory/MEMORY.md` و`memory/STATE.json` وأحدث ملفات `memory/sessions/` و`gfxlab/README_AR.md` و`docs/SHEARS_GFX_RESTORATION_HANDOFF_AR.md`. إن ظهرت نتيجة أحدث من STATE في CI أو جلسة مستقلة، اعتمد دليلها الأعلى.
+2. تحقق مباشرة من HEAD هذا الفرع ومن تشغيلات `gfxlab-*` الجارية، خصوصاً `GFX-MULTI-001`, `002`, `003`. اعتمد المصدر الأصلي ZIP2 المثبت SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`، ولا تنسخ من عميل آخر أصولاً أو تغييرات غير متحققة.
+3. أنشئ `session_id` فريداً، وسجّل `origin=chat` و`resumed_from` و`base_sha` و`experiment_key` و`scope` و`runs`. وثّق أدلة نجاح/فشل كل مرحلة ونتيجة فحص المالك. لا تحتفظ بـsource GUID/PPtr أو صور أصلية منفردة في Git العام؛ الاستخراج داخل runner فقط.
+4. أكمل تجربة صغيرة مثبتة ثم حدث `memory/sessions/<session_id>.md` و`memory/STATE.json` و`memory/MEMORY.md`. لا تُعلن نجاح Android قبل تشغيل الجهاز، ولا shader أصلي قبل تكافؤه.
 
-## الاستعادة بالترتيب
-1. تحقق من HEAD في فرعنا، واقرأ **كلّ** `AGENTS.md` و`prompt/graphics-lab/PROTOCOL_AR.md` و`memory/MEMORY.md` و`memory/STATE.json` و`docs/ROOT_CAUSE_REVIEW_AR.md` و`docs/EXPERIMENT_ROADMAP_AR.md`.
-2. اقرأ **كل ملفات الجلسات الأحدث ذات الصلة** من `memory/sessions/` ونتائج `experiments/`؛ قد تكون نتائج أحدث من STATE. لا تختزل الاستعادة إلى آخر ملف بالاسم وحده.
-3. تحقق من الفرع العامل `feature/android-native-port` ومن أحدث Actions ذات العلاقة RENDER-002 وWATER-001 وT3/T2/T1؛ اقرأ آخر أدلة CL للهاتف ونسخة APK/OBB المقابلة قبل أي مقارنة. لا تنقل HEAD الفريق أو أصوله إلى فرعنا.
-4. أنشئ `session_id` فريداً و`origin=chat` وسجل `resumed_from` و`base_sha` و`scope` و`experiment_key` وأي مشاركة موارد؛ اختر تجربة صغيرة واحدة تفصل بين فرضيتين مع نتيجة قابلة للدحض.
-5. نفذ قراءة/أداة/اختباراً مستقلاً فقط، مع مصدر آمن وأدلة ذات مرحلة محددة. لا تكرر تشغيل CI موجوداً ولا تتداخل مع تغييرات الفريق، ولا تعلن إصلاح المظهر أو الهاتف بناء على مصدر فقط.
-6. سجل النتيجة والقيود والروابط وSHA والاختبار والخطوة التالية في جلسة مستقلة ثم حدّث STATE وMEMORY. إن لم تثبت الفرضية اكتب `inconclusive` أو `rejected` بدلاً من نجاح وهمي.
+## نجاح الهاتف المثبت — Shears v0.2
+- أرسل المالك لقطات شاشة حقيقية للمقص في وضعي **SOURCE_ALBEDO_STANDARD_DIAGNOSTIC** و**SOURCE_TEXTURE_PBR_STANDARD_APPROX** على Xiaomi 23013PC75G / Adreno 730 / OpenGLES3 / Unity2021.3.45f2 / Linear.
+- لوغات GFX-SHEARS-004: `errors=0`, `firstError=""`, `originalGeometry=true`, `originalAlbedoPresent=true`, `originalPbrPresent=true`, `sourceTextureChainVerified=true`. المستخدم قبل ألوان المقص بصرياً. راصد PNG المؤتمت لم يقارن ببكسلات PC.
+- **تحذير أساسي:** `originalShaderRestored=false`، `runtimeColoredPixelsVerified=false`. النجاح البصري يثبت مسار الهندسة والصور على الهاتف وليس استعادة Shader48 الأصلي (2 SubShaders و7 Passes) أو الريغ.
+- مشروع اللعبة الكامل لا يزال `RENDER-002/WATER-001 OPEN`، ولا يجوز تحويل نجاح مختبر المقص إلى إصلاح شامل للماء والنار.
 
-## صورة العمل عند الإنشاء
-- أصل المشكلة الأكبر المثبت في تصدير حقيقي: `110/142` ملف ShaderLab يحمل Dummy، و`770/1536` وثيقة Material تشير إليه **بعد restorer وقبل Unity** ضمن CI42058825739؛ **لا يثبت** عدد الأجسام البيضاء على الجهاز.
-- النسخة 89 أنتجت الهاتف صور يد/طوف بيضاء ومؤثر مربع؛ سجلاتها تحوي أخطاء تمريرات ماء/FFT، لكن الدخول والحفظ نجحا في اختبار المالك.
-- المصدر الأصلي يحوي `1556` Material و`4050` Texture2D و`165` Shader، وملاحظة مصدر Linear وتقسيم sRGB/Linear؛ نتائج 41 Material و106 Texture2D محدودة أثبتت سلامة جوانب من القيم/النقل ولا تثبت بكسلات Android.
-- الدخان Shader48/34 المصدر مرتبط بـ17 Renderer و34 Material slots؛ same-export ظل Dummy، وقد ثبتت إمكانية تحويل 4 مراحل DXBC إلى SPIR-V CPU فقط، مع فجوة Stage IO ودون Pixel test.
-- المشروع الأساسي RENDER-002/WATER-001 OPEN، NOT_READY 0/3؛ لا APK جديد نتيجة عمل فرعنا.
+## تجربة الموديلات الجديدة
+- [GFX-MULTI-001 CI42711514279](https://github.com/alwansan/raf/actions/runs/42711514279) **SUCCESS**: مسح 1,973 ربط Renderer→Mesh، و824 سلاسل مواد+شيدرات موثقة؛ اختير خمسة موديلات أصلية مستقلة، لا تخمين بالأسماء:
+  - M01 نموذج skinned من فئة الشخصيات، 5,095 vertex / 100 bones (ليس بعد دليل اللاعب الكامل).
+  - M02 مجسم static/facility ذو 1,598 vertex.
+  - M03 مجسم static أكبر ذو 5,093 vertex.
+  - M04 Tool ذو 6,514 vertex.
+  - M05 مجسم static بمادتين ذو 2,163 vertex.
+- [GFX-MULTI-002 CI42712118731](https://github.com/alwansan/raf/actions/runs/42712118731) **SUCCESS**: ستة Mesh أصلية مع Shears M00، سبع مواد، 21 صورة أصلية، و16 ZIP2 Git blob chunks (754,974,720 byte) سحبت فقط عند الحاجة. المصدر خاص داخل runner؛ لا ترفع OBJ/PNG منفردة.
+- [GFX-MULTI-003 Actions 42712833407](https://github.com/alwansan/raf/actions/runs/42712833407) تشغيل بناء Unity Android بنظام IL2CPP/ARM64 للمختبر الجديد. **اقرأ الحالة الحية**، ولا تفترض أنه نجح أو صدرت منه APK حتى تثبت خطوات Unity/import/signature/artifact.
+- الكود: `gfxlab/tools/multi_source_select.py`، `multi_model_transport.py`، `gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs`، `gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs`، `.github/workflows/gfxlab-multi-six-unity-apk.yml`.
+- حزمة الاختبار الجديدة مستقلة `com.alwansan.raft.graphicslab.multi`. تختار M00–M05 من القائمة الجانبية؛ لكل واحد أربعة أوضاع WHITE_LIT / WHITE_UNLIT / SOURCE_ALBEDO_STANDARD / SOURCE_PBR_STANDARD_APPROX، وكاميرا تدوير وتكبير وCOPY LOG. هذه أوضاع فحص لموارد أصلية مع Unity Standard، **وليس** shader Raft كامل.
+- M01 rig أصلي فيه 100 bone، لكن العرض الحالي OBJ bind/static pose فقط؛ `originalAnimationRestored=false`. M05 مستخدم لاختبار مادتين مقابل submeshes، ويتوقف build عند mismatch بدلاً من تلويث الصورة.
 
-**نص الاستعادة المختصر في دردشة جديدة:**
-> استعد دور GFX-LAB من https://github.com/alwansan/raf/blob/experiment/android-graphics-rootcause/prompt/graphics-lab/RESTORE_AR.md، واقرأ بروتوكول الذاكرة وأحدث الجلسات وActions، وأكمل التجربة التالية في نفس الفرع فقط.
+## ما التالي عند الاستعادة؟
+- إذا GFX-MULTI-003 نجح: تحقّق من SHA/APK والتوقيع والحزمة، سلّم المستخدم رابط التحميل، واطلب صورة وCOPY LOG لكل موديل وخصوصاً M01 وM05، مع مقارنة بصور Raft PC عند توفرها.
+- إذا فشل: اقرأ خطوة الفشل وتفاصيل Unity Editor، أصلح المصدر **فقط في فرعنا**، وأعد تجربة واحدة محددة؛ لا تنسبه إلى Adreno قبل هاتف.
+- بعد رؤية الستة على الهاتف: فصل مرحلة **Shader/Pass/Keywords/CB/sampler/Blend/Normal DXT5nm/rig** لكل موديل عن حالة Standard fallback، ثم مطابقة source→Unity→GPU→الهاتف قبل أي تسليم إصلاح إلى T3 أو المنتج.
+- راجع `docs/ROOT_CAUSE_REVIEW_AR.md` لعيوب Dummy/Water/FFT القديمة، و`docs/TEAM_HANDOFF_AR.md` لتوزيع العمل دون تداخل.
+
+**النص المختصر لإعادة التشغيل في أي محادثة جديدة:**
+> اسمك GFX-LAB. ابقَ في Chat واستعد التعليمات الحية من https://github.com/alwansan/raf/blob/experiment/android-graphics-rootcause/prompt/graphics-lab/RESTORE_AR.md، واقرأ أحدث ملفات الذاكرة والجلسات ونتائج GitHub Actions، ثم أكمل GFX-MULTI في فرع experiment/android-graphics-rootcause فقط من آخر نتيجة مثبتة.
