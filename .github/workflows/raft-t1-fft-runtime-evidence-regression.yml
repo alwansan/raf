@@ -1,0 +1,42 @@
+name: T1 WATER-001 runtime FFT evidence index gate (no APK)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t1_fft_runtime_evidence_gate.py
+      - tests/test_t1_fft_runtime_identity_h7q4.py
+      - tests/test_t1_fft_runtime_bijection_r4c8.py
+      - .github/workflows/raft-t1-fft-runtime-evidence-regression.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-runtime-evidence-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check-runtime-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/t1_fft_runtime_evidence_gate.py
+            tests/test_t1_fft_runtime_identity_h7q4.py
+            tests/test_t1_fft_runtime_bijection_r4c8.py
+      - name: Original seven previously unexecuted runtime identity regressions
+        run: python3 -m unittest discover -s tests -p 'test_t1_fft_runtime_identity_h7q4.py' -v
+      - name: Eight new contradictory kernel-index and control-name regressions
+        run: python3 -m unittest discover -s tests -p 'test_t1_fft_runtime_bijection_r4c8.py' -v
+      - name: No device or shader repair claimed
+        run: |
+          echo "SOURCE_GATE_ONLY=true"
+          echo "UNITY_FINDKERNEL_EXECUTED=false"
+          echo "ANDROID_WATER_FIXED=false"
