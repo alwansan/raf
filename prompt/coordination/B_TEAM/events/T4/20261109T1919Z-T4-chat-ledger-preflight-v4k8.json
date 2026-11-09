@@ -1,0 +1,16 @@
+{
+  "event_id": "20261109T1919Z-T4-chat-ledger-preflight-v4k8",
+  "owner": "T4",
+  "origin": "chat",
+  "at": "2026-11-09T19:24:00Z",
+  "session_id": "20261109T1919Z-T4-chat-ledger-preflight-v4k8",
+  "issue_id": "COORD-001",
+  "event_type": "exhaustive_inherited_event_identity_audit",
+  "type": "result",
+  "status": "completed_source_audit",
+  "summary": "Full public inherited event audit 595→596 files, missing event identity 22→20 after T4-only fixes; T3 15, T5 5, T4 0; workflow passes 10 source-only tests; canonical team summary remains blocked by T3/T5.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42682900051",
+  "artifact_id": 13702214952,
+  "canonical_summary_pass": false,
+  "phone_game_not_ready": true
+}
