@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "worker": "T3",
+  "origin": "chat",
+  "session_id": "20261109T1913Z-T3-chat-smoke34-sameexport-v5m8",
+  "issue_id": "RENDER-002",
+  "status": "genuine_original_same_instance_shaderlab_classified",
+  "experiment_key": "t3-authentic-smoke34-unique-private-shader48-w1b02-sameinstance-shaderlab-quality-sha15964ea8-6scenes4owners-v1",
+  "source": {
+    "zip2_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "assetRipperCLI_pin": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "source_six_scenes_SHA_verified": true,
+    "source_four_shader_owners_SHA_verified": true
+  },
+  "run": {
+    "id": 42681908313,
+    "sha": "78826ae4333b0b401c7170350a7aeaa67b13583d",
+    "conclusion": "success",
+    "artifact_id": 13702312921
+  },
+  "measured": {
+    "smoke_name_original_renderer_count": 17,
+    "smoke_name_original_material_slots": 34,
+    "source_private_shader_id_distinct_from_equal_rank_fire": true,
+    "w1_b02_same_instance_verified": true,
+    "exported_custom_shader": true,
+    "export_status": "ACTUAL_DUMMY_SHADER_TEXT_EXPORTER",
+    "selected_shaderlab_dummy_exporter_marker": true,
+    "selected_shaderlab_no_subprogram_marker": false,
+    "exported_pass_count": 1,
+    "exported_complete_program_block_count": 1,
+    "exported_lexical_colormask_RGB_seen": false,
+    "original_ColorMask": "RGB",
+    "original_color_blend": "ALPHA_DEPENDENT",
+    "original_alpha_blend": "ALPHA_DEPENDENT",
+    "original_zwrite": "OFF"
+  },
+  "not_proven": {
+    "authentic_compiled_program": true,
+    "active_pass_render_state_equivalence": true,
+    "texture_alpha_variant": true,
+    "android_game_phone_pixels": true,
+    "actual_square_smoke_emitter_identity": true,
+    "asset_restoration_finished": true
+  },
+  "note": "Dummy marker takes precedence over superficially complete CGPROGRAM pass. Lexical missing ColorMask does not prove active Pass, output is not actual Android installed game. No proprietary bytes disclosed.",
+  "report": "docs/T3_SMOKE34_SAMEEXPORT_DUMMY_2026-11-09_AR.md",
+  "next": "Private source-identity anchored postvendor/restorer differential to determine if native Android import still Dummy; then restore real program and verify Unity/device. RENDER-002 OPEN NOT_READY 0/3."
+}
