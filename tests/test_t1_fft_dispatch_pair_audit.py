@@ -44,7 +44,7 @@ class PairAuditTests(unittest.TestCase):
     def test_duplicate_before_cannot_erase_valid_pair(self):
         result = audit([row(BEFORE, 6), row(BEFORE, 6), row(AFTER, 6)])
         self.assertIn("duplicate_event:6", result["errors"])
-        self.assertEqual(result["missing_return_sequences"], [])
+        self.assertEqual(result["missing_return_sequences"], [6])
 
     def test_failed_return_not_counted_as_successful_pair(self):
         result = audit([row(BEFORE, 1), row(AFTER, 1, ";result=exception")])
@@ -78,6 +78,31 @@ class PairAuditTests(unittest.TestCase):
         self.assertIn("identity_mismatch:2:kernel", result["errors"])
         self.assertEqual(result["failed_return_sequences"], [])
         self.assertEqual(result["paired_count"], 0)
+
+    def test_cross_session_pairs_not_counted(self):
+        result = audit([row(BEFORE, 1, ";session_id=alpha;build_sha=aaa"),
+                        row(AFTER, 1, ";session_id=alpha;build_sha=aaa"),
+                        row(BEFORE, 2, ";session_id=beta;build_sha=aaa"),
+                        row(AFTER, 2, ";session_id=beta;build_sha=aaa")])
+        self.assertIn("cross_session_provenance:session_id:2", result["errors"])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertEqual(result["missing_return_sequences"], [1, 2])
+
+    def test_cross_build_pairs_not_counted(self):
+        result = audit([row(BEFORE, 1, ";build_sha=aaa"),
+                        row(AFTER, 1, ";build_sha=aaa"),
+                        row(BEFORE, 2, ";build_sha=bbb"),
+                        row(AFTER, 2, ";build_sha=bbb")])
+        self.assertIn("cross_session_provenance:build_sha:2", result["errors"])
+        self.assertEqual(result["paired_count"], 0)
+
+    def test_single_session_multiple_sequences_still_paired(self):
+        result = audit([row(BEFORE, 1, ";session_id=alpha;build_sha=aaa"),
+                        row(AFTER, 1, ";session_id=alpha;build_sha=aaa"),
+                        row(BEFORE, 2, ";session_id=alpha;build_sha=aaa"),
+                        row(AFTER, 2, ";session_id=alpha;build_sha=aaa")])
+        self.assertEqual(result["paired_count"], 2)
+        self.assertEqual(result["errors"], [])
 
     def test_other_events_ignored(self):
         self.assertEqual(audit([{"event": "unrelated"}])["before_count"], 0)
