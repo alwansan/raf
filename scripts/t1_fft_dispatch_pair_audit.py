@@ -15,6 +15,7 @@ AFTER = "t1_original_fft_dispatch.returned"
 def audit(records):
     pending = {}
     seen = set()
+    paired = set()
     errors = []
     for row in records:
         if not isinstance(row, dict):
@@ -42,14 +43,18 @@ def audit(records):
             raise ValueError("invalid bounded sequence")
         seq = int(seq)
         key = (event, seq)
-        if key in seen:
+        duplicate = key in seen
+        if duplicate:
             errors.append("duplicate_event:" + str(seq))
         seen.add(key)
         if event == BEFORE:
-            pending[seq] = fields
+            if not duplicate:
+                pending[seq] = fields
         elif seq not in pending:
             errors.append("return_without_before:" + str(seq))
-    missing = sorted(seq for seq in pending if (AFTER, seq) not in seen)
+        elif not duplicate:
+            paired.add(seq)
+    missing = sorted(seq for seq in pending if seq not in paired)
     return {"before_count": len(pending),
             "returned_count": len([k for k in seen if k[0] == AFTER]),
             "missing_return_sequences": missing,
