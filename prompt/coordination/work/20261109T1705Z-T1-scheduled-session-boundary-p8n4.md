@@ -2,7 +2,11 @@
 session_id: 20261109T1705Z-T1-scheduled-session-boundary-p8n4
 origin: scheduled
 issue_id: WATER-001
-status: active
+status: completed_source_only
+source_commit: 4580a939c981150a75242f29c5a82a7ed7a84f8b
+test_commit: e5d267b793f80f1f4fc3cbf39c3ebb1749f10a10
+validation: static source inspection only; Python tests not executed because local GitHub DNS unavailable; no CI dispatched
+next: run python -m unittest tests.test_t1_fft_dispatch_pair_audit; then collect real single-build original FFT trace
 base_sha: 64bb0c80bfbd0edeece98d59115021b6ab74918e
 resumed_from_sessions: 20261109T1521Z-T1-scheduled-trace-result-allowlist-b3e8; 20261109T0155Z-T1-chat-direct-dispatch-f7a2
 experiment_key: t1-fft-jsonl-cross-sequence-session-contamination-v1
