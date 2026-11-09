@@ -1,8 +1,9 @@
 """Audit bounded T1 FFT passive trace pairs without claiming GPU success.
 
-Input: UTF-8 JSONL objects with event and message keys, exported from a single
-AndroidRuntimeLog session. Only this narrow diagnostic contract is accepted.
-No original game data or shaders are required.
+Input: UTF-8 JSONL operation/detail objects persisted by PersistentDiagnosticLog,
+or legacy event/message synthetic fixtures, from a single logger session.
+The logger rotates regular segments at 4 MiB. This is passive metadata only;
+no original game data or shaders are required.
 """
 import argparse
 import json
@@ -14,6 +15,8 @@ BEFORE = "t1_original_fft_dispatch.before"
 # Legacy sequence-only traces remain parseable but never prove GPU execution.
 IDENTITY_FIELDS = ("kernel", "kernel_name", "kernel_index", "find_kernel_result", "dispatch_kernel", "shader", "shader_name", "resource", "fft_length", "fft_size", "bank", "pass_index", "groups_x", "groups_y", "groups_z", "session_id", "build_sha", "shader_guid", "resource_guid", "__trace_schema")
 AFTER = "t1_original_fft_dispatch.returned"
+# PersistentDiagnosticLog defaults to one 4 MiB on-device JSONL segment.
+MAX_LOG_BYTES = 4 * 1024 * 1024
 
 
 def audit(records):
@@ -176,8 +179,8 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("jsonl", type=Path)
     a = p.parse_args()
-    if not a.jsonl.is_file() or a.jsonl.stat().st_size > 1048576:
-        raise ValueError("bounded trace JSONL required (<=1 MiB)")
+    if not a.jsonl.is_file() or a.jsonl.stat().st_size > MAX_LOG_BYTES:
+        raise ValueError("bounded trace JSONL required (<=4 MiB)")
     rows = [json.loads(line, object_pairs_hook=reject_duplicate_json_keys)
             for line in a.jsonl.read_text(encoding="utf-8").splitlines() if line.strip()]
     print(json.dumps(audit(rows), sort_keys=True))
