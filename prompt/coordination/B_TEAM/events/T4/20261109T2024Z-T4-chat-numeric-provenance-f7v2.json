@@ -1,0 +1,27 @@
+{
+  "event_id": "20261109T2024Z-T4-chat-numeric-provenance-f7v2",
+  "owner": "T4",
+  "origin": "chat",
+  "at": "2026-11-09T20:28:00Z",
+  "session_id": "20261109T2024Z-T4-chat-numeric-provenance-f7v2",
+  "issue_id": "INPUT-005",
+  "type": "result",
+  "event_type": "original_mouse_csharp_boolean_and_numeric_provenance_fix",
+  "status": "SOURCE_ONLY_SUCCESS_DEVICE_PENDING",
+  "summary": "T4 verified original AndroidPhysicalMouseCapture concatenates C# Boolean.True/False while earlier source analyzer parsed only lowercase, rejecting authentic reader logs. Added source parser acceptance for exact canonical C# casing plus literal flags and bounded int32/long numeric field parsing; malformed suffix/duplicates and 5500-digit tokens fail closed, preventing spurious epoch correlation and overflow crashes. 15 new tests; CI42693129361 SUCCESS 57/57 (source-only). No game or phone PASS.",
+  "source_commits": [
+    "6f3df6bf68921ca2a80106192724b7dbb94bb3a0",
+    "29cba2a3344df64094c9409a3117f167d5b1717d"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42693129361",
+  "ci_job_id": 129417825568,
+  "source_only": true,
+  "tests_total": 57,
+  "tests_passed": 57,
+  "device_pass": false,
+  "unity_gameplay_verified": false,
+  "full_game_not_ready": true,
+  "experiment": "prompt/coordination/experiments/T4/20261109T2024Z-T4-chat-numeric-provenance-f7v2.json",
+  "report": "docs/T4_MOUSE_NUMERIC_PROVENANCE_BOUNDARY_2026-11-09.md",
+  "next_step": "Actual single-process signed game captured physical LEFT/RIGHT/MIDDLE V/H plus Unity getter and owner gameplay validation; no mini or XAPK built by T4."
+}
