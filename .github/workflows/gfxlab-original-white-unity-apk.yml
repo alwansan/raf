@@ -1,0 +1,192 @@
+name: GFX-LAB original white mesh - Unity2021 Android APK
+on:
+  push:
+    branches:
+      - experiment/android-graphics-rootcause
+    paths:
+      - '.github/workflows/gfxlab-original-white-unity-apk.yml'
+      - 'gfxlab/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-original-white-mesh-unity2021-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-geometry-to-android:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 85
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Checkout ONLY independent GFX-LAB branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 1
+
+      - name: Static source-free geometry and path controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/original_model_probe.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('gfxlab/unity/Packages/manifest.json')
+          data=json.loads(p.read_text())
+          assert 'dependencies' in data
+          assert 'Raft' not in str(data)
+          assert Path('gfxlab/unity/Assets/Scripts/GfxLabViewer.cs').is_file()
+          assert Path('gfxlab/unity/Assets/Editor/GfxLabAndroidBuilder.cs').is_file()
+          print('GFXLAB_STATIC_CHECKS_PASS sourcefree=true')
+          PY
+
+      - name: Checkout immutable ZIP2 providers - sparse, no LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gfxlab-original-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+
+      - name: Authenticate source original SHA and export only bounded mesh OBJ
+        id: model
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C gfxlab-original-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.original_model_probe \
+            --zip2 gfxlab-original-zip2 \
+            --stage "$RUNNER_TEMP/gfxlab-original-providers" \
+            --model-output gfxlab/unity/Assets/OriginalModel \
+            --report "$RUNNER_TEMP/gfxlab-model-safe.json"
+          cp "$RUNNER_TEMP/gfxlab-model-safe.json" gfxlab/unity/Assets/OriginalModel/evidence.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('gfxlab/unity/Assets/OriginalModel/evidence.json').read_text())
+          assert r['source_pinned'] and r['original_geometry_exported']
+          assert r['part_count'] >= 1 and r['vertices']>=16 and r['faces']>0
+          print('GFXLAB_SOURCE_GEOMETRY_GATE authentic=true parts='+str(r['part_count'])+' model_category='+r['model_category'])
+          PY
+
+      - name: Preserve ONLY anonymous original source selection report even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-original-model-diagnostic-${{ github.run_id }}
+          path: ${{ runner.temp }}/gfxlab-model-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Verify Unity activation input without printing credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'GFXLAB_UNITY_BLOCKED license_not_accessible=true'
+            exit 1
+          fi
+          echo 'GFXLAB_UNITY_PREFLIGHT secrets_present=true not_disclosed=true'
+
+      - name: Remove unused Android SDKs to leave room for a SMALL Unity Android image
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Preserve host build-tools for APK signing verification.
+          sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/system-images /opt/hostedtoolcache/CodeQL || true
+          df -h /
+          test "$(df -Pk . | awk 'NR==2{print $4}')" -gt 9437184
+          echo 'GFXLAB_UNITY_STORAGE_GATE passed=true'
+
+      - name: Real Unity 2021.3.45f2 import + IL2CPP ARM64 APK build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: gfxlab/unity
+          unityVersion: 2021.3.45f2
+          targetPlatform: Android
+          buildMethod: RaftGraphicsLabEditor.GfxLabAndroidBuilder.Build
+          buildName: GfxLab-Original-White
+          buildsPath: gfxlab-builds
+          versioning: None
+          androidVersionCode: 1
+          androidExportType: androidPackage
+          customParameters: -job-worker-count 2
+
+      - name: Audit actual signed APK ZIP and separate package identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import hashlib,json,os
+          files=list(Path('.').rglob('GfxLab-Original-White.apk'))
+          assert len(files)==1,'Expected exactly one actual APK'
+          p=files[0]
+          assert p.stat().st_size>1024*1024
+          with ZipFile(p) as z:
+              names=set(z.namelist())
+              assert 'AndroidManifest.xml' in names
+              assert any(n.startswith('lib/arm64-v8a/libunity.so') for n in names)
+              assert 'classes.dex' in names
+              assert 'lib/armeabi-v7a/libunity.so' not in names
+              z.testzip() is None or (_ for _ in ()).throw(AssertionError('CRC failure'))
+          digest=hashlib.sha256(p.read_bytes()).hexdigest()
+          print('GFXLAB_ANDROID_APK_AUDIT apk_bytes='+str(p.stat().st_size)+' sha256='+digest+' arm64=true source_geometry_verified=true owner_device_test=false')
+          Path(os.environ['RUNNER_TEMP'],'gfxlab-apk-safe.json').write_text(json.dumps({
+              'schema':1,'sha256':digest,'bytes':p.stat().st_size,'arm64':True,
+              'owner_device_verified':False,'source_geometry_verified':True,'unity_android_built':True,
+              'apk_name':p.name
+          },indent=2)+'\n')
+          PY
+          apk="$(find . -name 'GfxLab-Original-White.apk' -type f -print -quit)"
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer="$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -n 1)"
+          test -n "$signer" && test -x "$signer"
+          "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/gfxlab-signature-private.txt"
+          echo 'GFXLAB_ANDROID_SIGNATURE verified=true'
+
+      - name: Deliver ONE signed original-model mini APK for owner testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-android-original-white-apk-${{ github.run_id }}
+          path: |
+            **/GfxLab-Original-White.apk
+            ${{ runner.temp }}/gfxlab-apk-safe.json
+            ${{ runner.temp }}/gfxlab-model-safe.json
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+      - name: Forget temporary ORIGINAL serialized providers after experiment
+        if: always()
+        shell: bash
+        run: |
+          sudo rm -rf gfxlab-original-zip2 "$RUNNER_TEMP/gfxlab-original-providers"
+          sudo rm -rf gfxlab/unity/Assets/OriginalModel/Part*.obj
+          rm -f gfxlab/unity/Assets/OriginalModel/evidence.json
+          echo 'GFXLAB_PRIVATE_ORIGINALS_CLEARED=true'
