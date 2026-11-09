@@ -1,0 +1,25 @@
+{
+  "session_id": "20261110-GFX-chat-reselected-sourcepack-03",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-multi-source-geometry-02",
+  "base_sha": "b21b16c6f9937060a64ce7b3835d867cd576b7bd",
+  "branch": "experiment/android-graphics-rootcause",
+  "experiment_key": "gfx-multi-reselected-sourcepack-and-shader-audit",
+  "scope": "original material/texture 7/21 and Shader48 source-only re-verification, Unity APK strictly later",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "runs": {
+    "selection_approved": 42719663373,
+    "pack_old": 42712118731,
+    "shader_old": 42715492781,
+    "failed_build_latest": 42718266273
+  },
+  "control": "do not disclose original art and ids; no shader equivalence, APK, device or player rig claims",
+  "planned_tests": [
+    "6 SHA-authenticated OBJ",
+    "7 material slots",
+    "21 original images",
+    "M03 exactly 2 source material slots",
+    "source Shader48 counts for reselected six"
+  ],
+  "status": "source_ci_dispatched_pending"
+}

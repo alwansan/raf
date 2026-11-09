@@ -10,6 +10,8 @@
 - evidence_level: ORIGINAL_SOURCE chain previously PASS, spatial source M02 FAIL; UNITY_IMPORT_COMPILE incomplete; GPU/device not tested.
 - control: source-verified typed original materials/shader/texture links, 7 material slots/21 original textures, strict finite/nonzero float32 OBJ spatial span and package mode not modified.
 - work: extend source selector to try next verified original candidate, unit-test spatial validation and reject degenerate geometry pre-Unity.
-- source_test_status: new CI to be verified, do not call this a fix until it passes.
+- source_test_status: **PASS** GitHub Actions 42719663373: 12 original OBJ candidates rejected for unusable float32 spatial extent; 5 selected with 7 original Material slots /21 bound semantic image roles. Full decode/Unity still PENDING.
 - owner_screen: no six-model APK or Android device screenshots; prior Shears accepted only.
 - next_step: verify GFX-MULTI-001 source selection, follow with pack test and APK only if audited.
+
+- selected new M01=person/5095v/100 bones, M02=tool/1666v/8 bones, M03=multi_material/2163v/2 materials, M04=complex_skinned_unidentified/2445v/100 bones, M05=generic/4452v/2 bones. No original animation.

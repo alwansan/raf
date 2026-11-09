@@ -25,10 +25,17 @@
 - [GFX-MULTI-003 Actions 42712833407](https://github.com/alwansan/raf/actions/runs/42712833407) تشغيل بناء Unity Android بنظام IL2CPP/ARM64 للمختبر الجديد. **اقرأ الحالة الحية**، ولا تفترض أنه نجح أو صدرت منه APK حتى تثبت خطوات Unity/import/signature/artifact.
 - الكود: `gfxlab/tools/multi_source_select.py`، `multi_model_transport.py`، `gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs`، `gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs`، `.github/workflows/gfxlab-multi-six-unity-apk.yml`.
 - حزمة الاختبار الجديدة مستقلة `com.alwansan.raft.graphicslab.multi`. تختار M00–M05 من القائمة الجانبية؛ لكل واحد أربعة أوضاع WHITE_LIT / WHITE_UNLIT / SOURCE_ALBEDO_STANDARD / SOURCE_PBR_STANDARD_APPROX، وكاميرا تدوير وتكبير وCOPY LOG. هذه أوضاع فحص لموارد أصلية مع Unity Standard، **وليس** shader Raft كامل.
-- M01 rig أصلي فيه 100 bone، لكن العرض الحالي OBJ bind/static pose فقط؛ `originalAnimationRestored=false`. M05 مستخدم لاختبار مادتين مقابل submeshes، ويتوقف build عند mismatch بدلاً من تلويث الصورة.
+- M01 rig أصلي فيه 100 bone، لكن العرض الحالي OBJ bind/static pose فقط؛ `originalAnimationRestored=false`. **كان M05 في الاختيار التاريخي** مستخدمًا لاختبار مادتين مقابل submeshes، وأصبح **M03** في الاختيار الجديد، ويتوقف build عند mismatch بدلاً من تلويث الصورة.
+
+## تحديث مثبت — اختيار هندسة جديدة بعد إخفاق Unity
+- [GFX-MULTI-003 المحاولة الأولى 42712833407](https://github.com/alwansan/raf/actions/runs/42712833407) فشلت عند استيراد M02؛ [المحاولة الثانية 42714952065](https://github.com/alwansan/raf/actions/runs/42714952065) أعادت بناء OBJ الأصلي 1598 رأسًا/2095 مثلثًا ثم فشلت Bounds؛ [المحاولة الثالثة 42718266273](https://github.com/alwansan/raf/actions/runs/42718266273) حددت `GFX_MULTI_DEGENERATE_SOURCE_VERTEX_BOUNDS_M02`. **لا APK** لهذه المحاولات.
+- [GFX-MULTI-001 المعدل 42719663373](https://github.com/alwansan/raf/actions/runs/42719663373) **SUCCESS**: فحص float32 الحقيقي لإحداثيات source OBJ استبعد 12 مرشحًا غير صالح للعرض، واختار خمسة موديلات موثقة جديدة. المصدر ZIP2 نفسه لا يتغير.
+- **ترتيب الاختيار الجديد (يلغي وصف M02–M05 القديم عند اختبار APK جديد):** M01 person/skinned 5095v/100bones؛ M02 tool/skinned 1666v/8bones؛ M03 multi_material/static 2163v/**مادتان**؛ M04 complex_skinned_unidentified/skinned 2445v/100bones؛ M05 generic/skinned 4452v/2bones؛ M00 Shears 375v.
+- **إعادة GFX-MULTI-002 و004 للاختيار الجديد قيد الاختبار المصدرّي**؛ لا تنسب أرقام الـ16 stream chunks / 754974720 bytes أو هوية Shader48 المشتركة للاختيار الجديد دون إعادة نتائج CI. المواد/الصور المتوقعة 7/21، لكنها ليست فحص decode جديدًا حتى ينجح GFX-MULTI-002.
+- الحالة المرجعية: `ORIGINAL_SOURCE_SELECTION=PASS`؛ `SOURCE_PACK_NEW=NOT_YET_PROVEN`؛ `UNITY_APK_NEW=NOT_BUILT`؛ `ANDROID_SIX_DEVICE=NOT_TESTED`. M01/M04 وغيرها Skinned OBJ ثابتة وليست أصل Animation/Rig؛ shad​​er الأصل غير مستعاد.
 
 ## ما التالي عند الاستعادة؟
-- إذا GFX-MULTI-003 نجح: تحقّق من SHA/APK والتوقيع والحزمة، سلّم المستخدم رابط التحميل، واطلب صورة وCOPY LOG لكل موديل وخصوصاً M01 وM05، مع مقارنة بصور Raft PC عند توفرها.
+- إذا GFX-MULTI-003 نجح: تحقّق من SHA/APK والتوقيع والحزمة، سلّم المستخدم رابط التحميل، واطلب صورة وCOPY LOG لكل موديل وخصوصاً M01 وM03 وM04، مع مقارنة بصور Raft PC عند توفرها.
 - إذا فشل: اقرأ خطوة الفشل وتفاصيل Unity Editor، أصلح المصدر **فقط في فرعنا**، وأعد تجربة واحدة محددة؛ لا تنسبه إلى Adreno قبل هاتف.
 - بعد رؤية الستة على الهاتف: فصل مرحلة **Shader/Pass/Keywords/CB/sampler/Blend/Normal DXT5nm/rig** لكل موديل عن حالة Standard fallback، ثم مطابقة source→Unity→GPU→الهاتف قبل أي تسليم إصلاح إلى T3 أو المنتج.
 - راجع `docs/ROOT_CAUSE_REVIEW_AR.md` لعيوب Dummy/Water/FFT القديمة، و`docs/TEAM_HANDOFF_AR.md` لتوزيع العمل دون تداخل.

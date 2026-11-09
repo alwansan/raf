@@ -69,6 +69,13 @@ jobs:
           root=Path(os.environ["RUNNER_TEMP"])
           d=json.loads((root/"gfxlab-multi-safe.json").read_text())
           assert d["model_count"]==6 and d["additional_models"]==5
+          # Current geometry-screened selection must preserve the exact 7/21
+          # authenticated source topology; hard-fail on any drift.
+          assert d["materials"]==7 and d["textures"]==21
+          assert [m["id"] for m in d["model_summaries"]]==["M00","M01","M02","M03","M04","M05"]
+          assert d["model_summaries"][3]["materials"]==2
+          assert d["model_summaries"][3]["texture_count"]==6
+          assert all(m["source_geometry_verified"] and m["source_images_decoded"] for m in d["model_summaries"])
           assert all(x["source_uvs"]>0 and x["topology_preserved"] for x in d["model_summaries"])
           print("GFX_MULTI_ORIGINAL_NORMALS_DIAGNOSTIC_GENERATED="+str(sum(bool(x["normals_generated_for_unity"]) for x in d["model_summaries"])))
           assert len(d["model_summaries"])==6

@@ -55,6 +55,10 @@ jobs:
           from pathlib import Path
           d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gfxlab-multi004-safe.json').read_text())
           assert d["source_model_count"]==6 and d["source_material_count"]==7
+          # Re-run against updated float32-authenticated original M01–M05,
+          # not the older M02-degenerate selection.
+          assert [m["id"] for m in d["models"]]==["M00","M01","M02","M03","M04","M05"]
+          assert d["models"][3]["source_material_slots"]==2
           assert d["all_source_shader48_types_verified"]
           assert not d["native_Unity_shader_programs_restored"]
           assert all(type(row["source_shader_is_named_unity_standard"]) is bool for m in d["models"] for row in m["original_shaders"])

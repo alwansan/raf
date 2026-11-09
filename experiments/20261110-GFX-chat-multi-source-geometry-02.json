@@ -20,13 +20,15 @@
     "source GFX-MULTI-002 7/21 decode next",
     "Unity APK only after source passes"
   ],
-  "status": "source_selection_patch_submitted_outcome_pending",
+  "status": "source_float32_selection_pass_pack_source_pending",
   "runs": {
     "failed_builds": [
       42712833407,
       42714952065,
       42718266273
     ],
-    "latest_shader_source": 42715492781
-  }
+    "latest_shader_source": 42715492781,
+    "new_selection_success": 42719663373
+  },
+  "outcome": "GFX-MULTI-001 42719663373 PASS; 12 unusable source meshes filtered; candidate set changed. Source images export/Unity not yet retested."
 }

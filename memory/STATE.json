@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-multi-source-geometry-02",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-multi-source-geometry-02.md",
-  "status": "GFX_MULTI_003_ORIGINAL_M02_SPATIAL_DEGENERACY_CONFIRMED_SELECTION_FILTER_SOURCE_TEST_PENDING",
+  "latest_session": "20261110-GFX-chat-reselected-sourcepack-03",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-reselected-sourcepack-03.md",
+  "status": "GFX_MULTI_001_RESELECTED_FLOAT32_SOURCE_PASS_SOURCE_PACK_AND_SHADER_RECHECK_RUNNING_OR_QUEUED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Finish real Unity GFX-MULTI-003 run 42712833407. On successful signed APK, owner tests M00-M05 + COPY LOG; handle exact shader and 100-bone skinning as separate future proof, not successful on source-only.",
+  "next_experiment": "Verify GFX-MULTI-002 7 materials /21 original textures source pack and GFX-MULTI-004 Shader48 topology for the reselected M00–M05; only then start new signed six-model Unity APK build. Retain old failure evidence and no device claims.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": false,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -150,38 +150,49 @@
   "latest_multi_test": {
     "source_runs": [
       "https://github.com/alwansan/raf/actions/runs/42711514279",
-      "https://github.com/alwansan/raf/actions/runs/42712118731"
+      "https://github.com/alwansan/raf/actions/runs/42712118731",
+      "https://github.com/alwansan/raf/actions/runs/42719663373"
     ],
     "build_run": "https://github.com/alwansan/raf/actions/runs/42712833407",
-    "build_status": "FAILED_42718266273_PRE_APK",
+    "build_status": "PREVIOUS_BUILDS_FAILED_NEW_SOURCE_SELECTION_UNBUILT",
     "source_original_meshes": 6,
     "additional_source_models": 5,
     "source_material_slots": 7,
     "source_image_textures": 21,
-    "git_source_stream_chunks": 16,
-    "git_stream_chunk_bytes": 754974720,
+    "git_source_stream_chunks": null,
+    "git_stream_chunk_bytes": null,
     "model_categories": [
       "shears_verified_device",
       "person",
-      "large_prop",
-      "large_mesh",
       "tool",
-      "multi_material"
+      "multi_material",
+      "complex_skinned_unidentified",
+      "generic"
     ],
     "model_vertices": [
       375,
       5095,
-      1598,
-      5093,
-      6514,
-      2163
+      1666,
+      2163,
+      2445,
+      4452
     ],
     "original_shader_equivalence_verified": false,
     "original_animation_restored": false,
     "new_device_pixels_verified": false,
     "last_failed_run": 42718266273,
     "last_failure": "GFX_MULTI_DEGENERATE_SOURCE_VERTEX_BOUNDS_M02_AFTER_AUTHENTIC_1598_VERTEX_FALLBACK",
-    "fix_scope": "Fail-closed float32 original OBJ vertex extent filtering for five candidates with 7-material/21-texture profile, no synthetic geometry"
+    "fix_scope": "Fail-closed float32 original OBJ vertex extent filtering for five candidates with 7-material/21-texture profile, no synthetic geometry",
+    "new_selection_run": 42719663373,
+    "new_selection_status": "SUCCESS_SOURCE_FLOAT32_SPAN_SCREENED_12_REJECTED",
+    "source_pack_new_status": "NOT_YET_RECHECKED_7_MATERIALS_21_TEXTURES_EXPECTED",
+    "shader_topology_new_status": "NOT_YET_RECHECKED_OLD_RUN_IS_OLD_MODEL_SELECTION",
+    "prior_selection_stream_stats": {
+      "chunks": 16,
+      "bytes": 754974720,
+      "run": 42712118731
+    },
+    "source_geometry_screen_rejected_candidates": 12
   },
   "latest_source_shader_audit": {
     "run": 42715492781,
