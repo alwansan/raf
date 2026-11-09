@@ -1,0 +1,21 @@
+{
+  "session_id": "20261109T0630Z-T3-scheduled-smoke-target-h6q2",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "status": "investigation_scope",
+  "baseline_head": "1bb1e6b1511e516128c9253d45249e3d5cd474b1",
+  "experiment_key": "t3-original-smoke34-shader48-parsedform-export-gap-v1",
+  "hypothesis": "34-use smoke-associated Shader48 is distinct from 108-use postvendor dummy; inspect authentic parsed form and actual export before attributing square smoke.",
+  "files": [
+    "prompt/coordination/work/RENDER-002/T3-20261109T0630Z-T3-scheduled-smoke-target-h6q2.json",
+    "prompt/coordination/clients/T3/sessions/20261109T0630Z-T3-scheduled-smoke-target-h6q2.md"
+  ],
+  "shared_resource": "none",
+  "overlap": "T3 chat emitter and scheduled PNG prior scopes completed",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42549246777",
+    "https://github.com/alwansan/raf/actions/runs/42549491342"
+  ],
+  "next_step": "SHA-verify original ZIP2 Shader48 owner, inspect 34-use smoke-linked shader parsedform Pass/Blend/Alpha and actual same-export program; compare Android material mapping."
+}
