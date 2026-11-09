@@ -15,5 +15,6 @@
   "experiment": "prompt/coordination/experiments/T4/20261106T2226Z-runtime-stage-prewrite-drift-c6p2.json",
   "native_build": "https://github.com/alwansan/raf/actions/runs/42296450023",
   "boundaries": "Instrumenter source staging guard only; not full interprocess lock, post-install race still possible. No changes to .rgd, Steam, assets, .meta GUID bytes, audio, Settings, touch, native workflow or request.",
-  "readiness": "LOCAL-005 OPEN; game NOT_READY 0/3; T4 trial vote unchanged."
+  "readiness": "LOCAL-005 OPEN; game NOT_READY 0/3; T4 trial vote unchanged.",
+  "event_id": "T4-20261106T2231Z-T4-original-runtime-operation-stage-drift-c6p2"
 }
