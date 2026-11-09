@@ -144,8 +144,24 @@ namespace RaftGraphicsLabEditor
             var root=OriginalInstance(folder,id);
             int importedFaces=0;
             int importedVertices=MeshVertexCount(root,out importedFaces);
-            if(importedVertices<=0||importedFaces<=0)
-                throw new InvalidOperationException("GFX_MULTI_SOURCE_GEOMETRY_NOT_IMPORTED_"+id);
+            int importedMaterialSlots=0;
+            foreach(var flt in root.GetComponentsInChildren<MeshFilter>(true))
+                if(flt.sharedMesh!=null)importedMaterialSlots+=Math.Max(1,flt.sharedMesh.subMeshCount);
+            if(importedVertices<=0||importedFaces<=0 ||
+               importedMaterialSlots!=config.materials.Length)
+            {
+                // Unity 2021's OBJ ModelImporter emitted zero mesh for some original
+                // static meshes (CI42712833407 M02). Use the same source v/vt/vn/f
+                // to build an actual typed UnityEngine.Mesh without replacing art.
+                Debug.LogWarning("GFX_MULTI_IMPORTER_FALLBACK model="+id+
+                    " obj_imported_vertices="+importedVertices+
+                    " obj_imported_submesh_slots="+importedMaterialSlots);
+                UnityEngine.Object.DestroyImmediate(root);
+                root=GfxOriginalObjImporter.Load(folder+"/model.obj",id);
+                importedVertices=MeshVertexCount(root,out importedFaces);
+                if(importedVertices<=0||importedFaces<=0)
+                    throw new InvalidOperationException("GFX_MULTI_SOURCE_GEOMETRY_NOT_IMPORTED_"+id);
+            }
             Renderer[] renderers=root.GetComponentsInChildren<Renderer>(true);
             if(renderers.Length==0)
                 throw new InvalidOperationException("GFX_MULTI_RENDERER_IMPORT_ZERO_"+id);
