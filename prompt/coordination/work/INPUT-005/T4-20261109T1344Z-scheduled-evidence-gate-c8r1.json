@@ -1,0 +1,16 @@
+{
+  "session_id": "20261109T1344Z-T4-scheduled-capture-gate-c8r1",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-09T13:44:55Z",
+  "intended_files": [
+    "scripts/t4_capture_acceptance_gate.py",
+    "prompt/coordination/clients/T4/sessions/20261109T1344Z-T4-scheduled-capture-gate-c8r1.md"
+  ],
+  "experiment_key": "T4-INPUT005-captured-android-vs-unity-evidence-gate-v1",
+  "resource_key": null,
+  "hypothesis": "Native captured callback evidence and Unity consumption must be independently present before marking a physical mouse button PASS",
+  "baseline": "owner game artifact 42058825739; source CI42518143297; CL 4680f5dc captured=false",
+  "constraints": "No native build; T5 owns shared Mini/Resolution; no game source changes"
+}
