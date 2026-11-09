@@ -1866,8 +1866,12 @@ internal static class Program
             throw new InvalidOperationException("nested_different_field_must_fail_closed");
         // Self-recursive helper is opaque, never a proven reference alias.
         fg[0]=Instruction.Create(OpCodes.Call,fieldGetter);
-        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod,true)
-            !="field_no_direct_match")
+        string cycleTag=OriginalCrosspassDeclaredFieldReturnRelation(
+            crossDestination,crossSource,mod,true);
+        // A recursive body can conservatively block with any finite
+        // non-positive tag; it must never forge a matching field origin.
+        if(cycleTag.StartsWith("field_onehop_token_match",StringComparison.Ordinal) ||
+           cycleTag.StartsWith("field_token_match",StringComparison.Ordinal))
             throw new InvalidOperationException("nested_cycle_must_not_prove_alias");
         // Runtime virtual dispatch is deliberately not unfolded, even when
         // one possible implementation directly returns a matching field.
@@ -1880,8 +1884,10 @@ internal static class Program
         fg.Add(Instruction.Create(OpCodes.Ldnull));
         fg.Add(Instruction.Create(OpCodes.Callvirt,virtualLeaf));
         fg.Add(Instruction.Create(OpCodes.Ret));
-        if(OriginalCrosspassDeclaredFieldReturnRelation(crossDestination,crossSource,mod,true)
-            !="field_no_direct_match")
+        string virtualTag=OriginalCrosspassDeclaredFieldReturnRelation(
+            crossDestination,crossSource,mod,true);
+        if(virtualTag.StartsWith("field_onehop_token_match",StringComparison.Ordinal) ||
+           virtualTag.StartsWith("field_token_match",StringComparison.Ordinal))
             throw new InvalidOperationException("virtual_nested_leaf_must_remain_opaque");
 
     }
