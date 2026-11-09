@@ -5,6 +5,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - .github/workflows/raft-t3-original-particle-emitter-semantics.yml
+      - scripts/t3_original_particle_emitter_semantics.py
+      - tests/test_t3_original_particle_emitter_semantics.py
 permissions:
   contents: read
 concurrency:
