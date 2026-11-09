@@ -7,7 +7,7 @@ from scripts.t5_reconcile_owner_saf_obb import (
 )
 
 
-def sample(observed=None, status="EVIDENCE_READY", session="shared-20261108-230157-466487336"):
+def sample(observed=None, status="EVIDENCE_READY", session="20261108-230157-466487336"):
     if observed is None:
         observed = "bytes=2301280507 sha256=" + "911a53bc1dd4" + "0" * 52
     return {
@@ -27,6 +27,16 @@ class T5OwnerSafProvenanceTests(unittest.TestCase):
         self.assertFalse(report["phone_corruption_proven"])
         self.assertFalse(report["installed_obb_mount_verified"])
 
+    def test_real_cl_folder_shared_prefix_is_normalized(self):
+        actual = sample()
+        report = reconcile(actual, expected_session="shared-20261108-230157-466487336")
+        self.assertEqual(report["owner_session"], "20261108-230157-466487336")
+        self.assertEqual(report["comparison"], "DIFFERENT_FROM_OLD_REFERENCE")
+
+    def test_shared_prefix_does_not_accept_other_session(self):
+        with self.assertRaisesRegex(EvidenceError, "invalid_session"):
+            reconcile(sample(), expected_session="shared-20261108-232759-468049775")
+
     def test_same_size_same_safe_prefix_is_not_full_match(self):
         v = sample("bytes=" + str(REFERENCE_OBB_BYTES) + " sha256=" + REFERENCE_SHA_PREFIX + "0"*52)
         report = reconcile(v)
@@ -40,7 +50,7 @@ class T5OwnerSafProvenanceTests(unittest.TestCase):
 
     def test_pending_newer_summary_does_not_erase_older_evidence(self):
         v = sample("User action, mouse/file or judgment is required", "NEEDS_INPUT",
-                   "shared-20261108-232759-468049775")
+                   "20261108-232759-468049775")
         report = reconcile(v)
         self.assertEqual(report["comparison"], "NO_COMPLETED_DIGEST")
         self.assertIsNone(report["selected_file_bytes"])
