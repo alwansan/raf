@@ -23,5 +23,11 @@
   "device_pixels_verified": false,
   "shaderlab_verified": false,
   "private_source_published": false,
-  "session_file": "prompt/coordination/clients/T2/sessions/20261109T1854Z-T2-chat-foam-report-alias-b8e7.md"
+  "session_file": "prompt/coordination/clients/T2/sessions/20261109T1854Z-T2-chat-foam-report-alias-b8e7.md",
+  "event_id": "20261109T1859Z-T2-chat-foam-report-alias-ci-b8e7",
+  "owner": "T2",
+  "at": "2026-11-09T18:59:00Z",
+  "type": "result",
+  "resource_key": "WATER-001",
+  "experiment_key": "T2_FOAM_REPORT_ALIAS_ISOLATION_CI"
 }
