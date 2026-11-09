@@ -1,0 +1,90 @@
+name: T5 owner SAF OBB evidence against old signed v89 (source only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t5-owner-saf-obb-provenance.yml
+      - scripts/t5_reconcile_owner_saf_obb.py
+      - tests/test_t5_reconcile_owner_saf_obb.py
+permissions:
+  contents: read
+concurrency:
+  group: t5-owner-saf-obb-v89-cl-pinned-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  real-cl-source-evidence:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[t5-owner-saf]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      CL_COMMIT: 24a677fc8fa4749c0bcf8a3cac01fa80b1641c86
+    steps:
+      - name: Checkout exact source-only test components
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t5_reconcile_owner_saf_obb.py
+            /tests/test_t5_reconcile_owner_saf_obb.py
+      - name: Run local source-only negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m py_compile scripts/t5_reconcile_owner_saf_obb.py tests/test_t5_reconcile_owner_saf_obb.py
+          python3 -m unittest -v tests.test_t5_reconcile_owner_saf_obb
+          test ! -e Raft
+      - name: Authenticate precisely two real owner CL/test summaries by Git blob SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t5-cl"
+          while read -r session blob; do
+            target="$RUNNER_TEMP/t5-cl/$session.json"
+            curl -fsSL --retry 2 --connect-timeout 15 --max-time 60 \
+              "https://raw.githubusercontent.com/alwansan/CL/$CL_COMMIT/test/$session/summary-${session#shared-}.json" -o "$target"
+            test "$(git hash-object "$target")" = "$blob" || { echo 'Pinned CL source changed'; exit 1; }
+          done <<'ROWS'
+          shared-20261108-230157-466487336 3a5bdc24f365259ba6753f133205ee7c7432f48a
+          shared-20261108-232759-468049775 a4f2255e49039fbdd96df1aec8c0ca424d24c36f
+          ROWS
+          echo 'T5_CL_PINNED actual_phone_json_blob_auth=true count=2'
+      - name: Compare real v0.2.10 T5-02 SHA with older v89 original OBB reference
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t5_reconcile_owner_saf_obb \
+            --summary "$RUNNER_TEMP/t5-cl/shared-20261108-230157-466487336.json" \
+            --expected-session shared-20261108-230157-466487336 | tee "$RUNNER_TEMP/observed.jsonl"
+          python3 -m scripts.t5_reconcile_owner_saf_obb \
+            --summary "$RUNNER_TEMP/t5-cl/shared-20261108-232759-468049775.json" \
+            --expected-session shared-20261108-232759-468049775 | tee "$RUNNER_TEMP/latest.jsonl"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          base=Path(os.environ['RUNNER_TEMP'])
+          def result(file):
+              line=(base/file).read_text().strip()
+              assert line.startswith('T5_OWNER_SAF_OBB ')
+              return json.loads(line.removeprefix('T5_OWNER_SAF_OBB '))
+          prior=result('observed.jsonl')
+          newer=result('latest.jsonl')
+          assert prior['comparison']=='DIFFERENT_FROM_OLD_REFERENCE'
+          assert prior['byte_difference']==24195 and prior['source_case_status']=='EVIDENCE_READY'
+          assert newer['comparison']=='NO_COMPLETED_DIGEST' and newer['source_case_status']=='NEEDS_INPUT'
+          for item in (prior,newer):
+              assert not item['phone_corruption_proven']
+              assert not item['installed_obb_mount_verified']
+              assert not item['phone_selected_file_location_recorded']
+              assert not item['full_reference_sha256_equality_proven']
+          print('T5_OWNER_SAF_REAL_CL evidence_reproduced=true prior_bytes_different=true later_digest_pending=true phone_corruption_not_proven=true')
+          PY
+      - name: Report rigorous limits without original APK or OBB
+        if: always()
+        shell: bash
+        run: |
+          echo 'Read two pinned CL/test JSON summaries only, no original game APK/OBB, Unity build, screenshot or Android device run.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'T5-02 chosen SAF bytes differ from old main.89 reference; this is NOT proof of damaged installed OBB because selected path/name/version not recorded.' >> "$GITHUB_STEP_SUMMARY"
