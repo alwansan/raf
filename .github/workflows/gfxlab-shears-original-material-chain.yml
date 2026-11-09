@@ -1,0 +1,92 @@
+name: GFX-SHEARS-002 original shears Material Shader Texture lineage (source only)
+on:
+  push:
+    branches:
+      - experiment/android-graphics-rootcause
+    paths:
+      - '.github/workflows/gfxlab-shears-original-material-chain.yml'
+      - 'gfxlab/tools/shears_provenance_probe.py'
+      - 'gfxlab/tests/test_shears_provenance_probe.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-shears002-source-only-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-material-chain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout GFX-LAB scanner and sourcefree tests only
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Run negative controls before touching original source
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/original_model_probe.py gfxlab/tools/shears_provenance_probe.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo 'GFX_SHEARS_SOURCEFREE_GATES_PASS=true'
+      - name: Checkout only three original ZIP2 SHA-pinned asset owners
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Source-original renderer to material shader and texture proof
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.shears_provenance_probe \
+            --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfxlab-shears-private" \
+            --out "$RUNNER_TEMP/gfxlab-shears002-safe.json"
+      - name: Validate public result contains strictly safe aggregate keys
+        run: |
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gfxlab-shears002-safe.json'
+          d=json.loads(p.read_text())
+          permitted={'schema','status','original_source_verified','source_revision','reproduces_owner_tested_mesh_375_420',
+              'user_visual_identification','original_renderer_class','source_original_name_or_ptr_leaked',
+              'source_material_shader_textures_privately_linked','material_tint_exported','original_texture_exported',
+              'original_shader_restored','android_colored_pixels_verified'}
+          permitted.update(k for k in d if k.startswith(('original_','renderer_','material_','texture_','mesh_','source_mesh_')))
+          assert set(d) <= permitted
+          assert not d['source_original_name_or_ptr_leaked']
+          assert d['reproduces_owner_tested_mesh_375_420'] and d['original_source_verified']
+          assert d['source_mesh_vertices']==375 and d['source_mesh_faces']==420
+          assert not d['original_texture_exported'] and not d['original_shader_restored']
+          print('GFX_SHEARS002_SOURCE_ONLY strict_safe_aggregate=true 3d_visible_on_device_prior_apk=true colored_original_not_proven=true')
+          PY
+      - name: Upload ONLY source graph safe counts, no original textures or Mesh
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-shears002-source-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/gfxlab-shears002-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Destroy source private geometry, Shader and Material staging
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-shears-private"
+          echo 'GFX_SHEARS002_ORIGINAL_SOURCE_PURGED=true'
