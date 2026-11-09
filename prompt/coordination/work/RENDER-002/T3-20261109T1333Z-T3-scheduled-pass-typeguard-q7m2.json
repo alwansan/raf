@@ -1,0 +1,15 @@
+{
+  "session_id": "20261109T1333Z-T3-scheduled-pass-typeguard-q7m2",
+  "origin": "scheduled",
+  "issue": "RENDER-002",
+  "baseline_head": "6c62aa6d4a8e445feecc39825ac8b015f6ec7577",
+  "files": [
+    "scripts/t3_smoke_pass_state_gate_v2.py",
+    "tests/test_t3_smoke_pass_state_gate_v2.py"
+  ],
+  "hypothesis": "Malformed JSON arrays/dicts in pass enum fields currently cause TypeError (unhashable) rather than fail-closed ValueError; missing original/exported causes KeyError.",
+  "experiment_key": "T3-PASS-V2-MALFORMED-TYPES-20261109",
+  "shared_resource": "none; CPU-only synthetic tests",
+  "coordination": "No Unity/Actions; no shader resources; independent malformed metadata validation",
+  "status": "planned"
+}
