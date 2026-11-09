@@ -125,7 +125,7 @@ jobs:
           assert report["name_hint_is_not_onscreen_smoke_emitter_identity"] is True
           assert report["original_game_device_pixels_verified"] is False
           for group in ("selected", "other"):
-              n = report[f"{group}_renderer_objects"] if group == "selected" else report["source_other_particle_renderer_objects"]
+              n = report["source_selected_particle_shader_renderer_objects"] if group == "selected" else report["source_other_particle_renderer_objects"]
               assert report[f"{group}_GameObject_name_resolved"] + report[f"{group}_GameObject_name_unresolved"] == n
           rows = [
               "## T3 original Particle108 emitter GameObject source bridge",
