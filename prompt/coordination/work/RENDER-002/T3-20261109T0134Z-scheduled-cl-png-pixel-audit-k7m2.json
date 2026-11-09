@@ -1,0 +1,21 @@
+{
+  "id": "T3-20261109T0134Z-scheduled-cl-png-pixel-audit-k7m2",
+  "session_id": "20261109T0134Z-T3-scheduled-cl-png-pixel-audit-k7m2",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "baseline_sha": "bef7d96ee97d1df86dfd3acc9a6814ea781dad13",
+  "status": "IN_PROGRESS",
+  "scope": [
+    "scripts/t3_cl_png_pixel_audit.py",
+    "tests/test_t3_cl_png_pixel_audit.py"
+  ],
+  "hypothesis": "CL six PNG file presence and EVIDENCE_READY alone cannot prove spatially meaningful color; deterministic PNG pixel diversity and region checks can distinguish black captures and flat placeholders from genuine patterns.",
+  "experiment_key": "t3-cl-png-pixel-audit-k7m2",
+  "shared_resource": "none; CPU only",
+  "inputs": "CL/test/shared-20261108-232759-468049775 PNG files, read-only; no original assets",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261109T0032Z-T3-scheduled-cl-capture-a9f2.md"
+  ],
+  "acceptance": "Local synthetic tests; actual CL binary audit only when PNG bytes available; no GPU/game claim"
+}
