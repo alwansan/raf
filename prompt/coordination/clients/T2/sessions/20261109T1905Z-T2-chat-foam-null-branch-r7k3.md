@@ -33,3 +33,18 @@ No duplicate manual workflow dispatch, APK, XAPK or owner phone test requested. 
 Read final `42680030121` job logs and verify `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS` and `T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW` safe category, original DLL SHA, and private scratch purge; if failed, diagnose exact source-only error before retry. If successful, integrate the **limited** explicit-null-path result into WATER-001 evidence and decide next based on *original* result. Next engineering gap remains passing source/destination **instance** equality (callee receiver/field identity, alias across calls) and actual CB0/ShaderLab/phone water visuals.
 
 Existing original CI is a provenance experiment, not approval of water pixels or of a game package.
+
+## Verified source-original result — 2026-11-09T19:06Z
+
+Final [CI42680030121](https://github.com/alwansan/raf/actions/runs/42680030121) **COMPLETED/SUCCESS** at source commit `62a89888d2109d3a95d50d89c2b2ccd9acb20f44` (job `129371745099`).
+
+- 17 Python report/privacy checks: OK.
+- C# Cecil compiled, `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`.
+- Authenticated immutable original Assembly-CSharp.dll **3,211,776 bytes** and Shader owner **115,978,112 bytes**, without LFS.
+- Original pass0: `not_call_return_source` (unchanged).
+- **Original pass1: `value_mixed_with_explicit_null_literal`** (new); before correction this same SHA-original callee was only `value_mixed_or_joined`. The abstract CFG now exposes an explicit `ldnull` producer category on at least one conservatively reached return path.
+- `T2_CECIL_ORIGINAL_BLIT_SAFE_RESULT_READY private_content_not_printed=true`; original owner/symbol purge and safe artifact publishing steps succeeded. No code, original token, branch predicates or shader data published.
+
+**Interpretation:** the original managed pass1 producer is not an unconditional proven non-null texture source. The tool conservatively treats conditional branches as potentially taking either successor; *it has not proved the null branch actually executes under device input/state*. Likewise a field/category shared between paths is not a shared object reference. This is a new source-original diagnostic distinguishing path families, not pixel improvement. WATER-001 remains OPEN / NOT_READY 0/3.
+
+Scoped work `prompt/coordination/work/WATER-001/20261109T1905Z-T2-chat-foam-null-branch-r7k3.json` marked completed. The next independent experiment should classify conditional feasibility with original operand/receiver provenance (without exporting proprietary IL) and examine pass0 destination vs pass1 call result object continuity. T1 FFT, T3 effects, T4 mouse, T5 UI/build unchanged.
