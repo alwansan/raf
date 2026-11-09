@@ -1199,6 +1199,42 @@ internal static class Program
         };
         return new(count,placement,prior);
     }
+    static string OriginalPass0FieldStoreVsPass1BlitLexical(
+        StackSourceTrace pass0Destination,ModuleDefinition originalModule,
+        IReadOnlyList<(MethodDefinition Method,int At)> pass1Sites)
+    {
+        // Only the exact original FieldDefinition and a unique pass1 Blit
+        // method are compared. Instruction order does NOT establish runtime
+        // execution, receiver identity, or which RenderTexture is sampled.
+        if(pass0Destination.Role!="RenderTexture" ||
+           pass0Destination.Kind!="typed_field" ||
+           pass0Destination.SourceInstruction?.Operand is not FieldReference reference)
+            return "pass0_field_not_traced";
+        FieldDefinition? target;
+        try{target=reference.Resolve();}
+        catch(AssemblyResolutionException){return "pass0_field_unresolved";}
+        catch(ResolutionException){return "pass0_field_unresolved";}
+        if(target is null || target.Module!=originalModule)
+            return "pass0_field_unresolved";
+        if(pass1Sites.Count!=1)return "pass1_site_ambiguous";
+        var (method,at)=pass1Sites[0];
+        if(!method.HasBody || method.Module!=originalModule ||
+           at<0 || at>=method.Body.Instructions.Count ||
+           !Blit(method.Body.Instructions[at]))
+            return "pass1_site_ambiguous";
+        bool before=false,after=false;
+        for(int i=0;i<method.Body.Instructions.Count;i++)
+        {
+            if(method.Body.Instructions[i].OpCode.Code is not (Code.Stfld or Code.Stsfld) ||
+               !SameField(method.Body.Instructions[i],target,false))continue;
+            if(i<at)before=true;
+            if(i>at)after=true;
+        }
+        if(before&&after)return "pass1_method_writes_before_and_after_blit_il";
+        if(before)return "pass1_method_write_precedes_blit_il";
+        if(after)return "pass1_method_write_follows_blit_il";
+        return "pass1_method_no_direct_field_store";
+    }
     static string OriginalFoamBlitLexicalSiteRelation(
         IReadOnlyList<(MethodDefinition Method,int At)> pass0,
         IReadOnlyList<(MethodDefinition Method,int At)> pass1)
@@ -1474,6 +1510,8 @@ internal static class Program
                 originalMaterialBlitSites[0][0].Method:null);
         string siteRelation=OriginalFoamBlitLexicalSiteRelation(
             originalMaterialBlitSites[0],originalMaterialBlitSites[1]);
+        string pass1WriterRelation=OriginalPass0FieldStoreVsPass1BlitLexical(
+            dest0,asm.MainModule,originalMaterialBlitSites[1]);
         var permittedStoreCounts=new HashSet<string>{
             "field_not_traced","field_unresolved","no_resolved_direct_store",
             "one_resolved_direct_store","multiple_resolved_direct_stores"
@@ -1494,7 +1532,15 @@ internal static class Program
             "same_method_pass1_precedes_pass0_in_il",
             "blit_site_same_il_index_invalid"
         };
-        if(!permittedStoreCounts.Contains(writer.CountFamily) ||
+        var permittedPass1WriterRelations=new HashSet<string>{
+            "pass0_field_not_traced","pass0_field_unresolved","pass1_site_ambiguous",
+            "pass1_method_no_direct_field_store",
+            "pass1_method_write_precedes_blit_il",
+            "pass1_method_write_follows_blit_il",
+            "pass1_method_writes_before_and_after_blit_il"
+        };
+        if(!permittedPass1WriterRelations.Contains(pass1WriterRelation) ||
+           !permittedStoreCounts.Contains(writer.CountFamily) ||
            !permittedStorePlacements.Contains(writer.PlacementFamily) ||
            !permittedStoreAdjacent.Contains(writer.ImmediatePredecessorFamily) ||
            !permittedSiteRelations.Contains(siteRelation))
@@ -1503,6 +1549,7 @@ internal static class Program
         Console.WriteLine("T2_FOAM_PASS0_DEST_FIELD_CIL_STORE_PLACEMENT "+writer.PlacementFamily);
         Console.WriteLine("T2_FOAM_PASS0_DEST_FIELD_SINGLE_STORE_ADJACENT "+writer.ImmediatePredecessorFamily);
         Console.WriteLine("T2_FOAM_PASS0_PASS1_BLIT_LEXICAL_RELATION "+siteRelation);
+        Console.WriteLine("T2_FOAM_PASS0_DEST_FIELD_WRITES_VS_PASS1_BLIT_IL "+pass1WriterRelation);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -1558,6 +1605,7 @@ internal static class Program
             original_pass0_dest_field_cil_store_placement=writer.PlacementFamily,
             original_pass0_dest_field_single_store_adjacent=writer.ImmediatePredecessorFamily,
             original_pass0_pass1_Blit_lexical_relation=siteRelation,
+            original_pass0_dest_field_writes_vs_pass1_Blit_il=pass1WriterRelation,
             original_crosspass_declared_field_token_not_heap_identity=true,
             original_shader_to_blit_direct_field_types_confirmed=pass0 is not null && pass1 is not null,
             original_texture_instance_identity_proven=false,
@@ -2055,6 +2103,31 @@ internal static class Program
         if(OriginalFoamBlitLexicalSiteRelation(pass0Fake,pass1Fake)
             !="blit_sites_ambiguous_or_missing")
             throw new InvalidOperationException("lexical_ambiguous_sites_fixture");
+        // A pass1 CIL field write in the same method is only a lexical site.
+        // It does not prove execution order or the sampled texture identity.
+        var exactPass1=new List<(MethodDefinition Method,int At)>{(crossCaller,5)};
+        if(OriginalPass0FieldStoreVsPass1BlitLexical(crossDestination,mod,exactPass1)
+            !="pass1_method_no_direct_field_store")
+            throw new InvalidOperationException("pass1_writer_absent_fixture");
+        crossCaller.Body.Instructions.Add(Instruction.Create(OpCodes.Ldnull));
+        crossCaller.Body.Instructions.Add(Instruction.Create(OpCodes.Stsfld,fixtureRtField));
+        if(OriginalPass0FieldStoreVsPass1BlitLexical(crossDestination,mod,exactPass1)
+            !="pass1_method_write_follows_blit_il")
+            throw new InvalidOperationException("pass1_writer_after_fixture");
+        crossCaller.Body.Instructions.Insert(0,Instruction.Create(OpCodes.Ldnull));
+        crossCaller.Body.Instructions.Insert(1,Instruction.Create(OpCodes.Stsfld,fixtureRtField));
+        exactPass1[0]=(crossCaller,7);
+        if(OriginalPass0FieldStoreVsPass1BlitLexical(crossDestination,mod,exactPass1)
+            !="pass1_method_writes_before_and_after_blit_il")
+            throw new InvalidOperationException("pass1_writer_both_sides_fixture");
+        crossCaller.Body.Instructions[9]=Instruction.Create(OpCodes.Stsfld,otherRtField);
+        if(OriginalPass0FieldStoreVsPass1BlitLexical(crossDestination,mod,exactPass1)
+            !="pass1_method_write_precedes_blit_il")
+            throw new InvalidOperationException("pass1_writer_other_field_is_not_same_target");
+        exactPass1.Clear();
+        if(OriginalPass0FieldStoreVsPass1BlitLexical(crossDestination,mod,exactPass1)
+            !="pass1_site_ambiguous")
+            throw new InvalidOperationException("pass1_writer_ambiguous_fixture");
 
     }
 

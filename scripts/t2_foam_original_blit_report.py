@@ -104,12 +104,20 @@ BLIT_SITE_LEXICAL = {
     "same_method_pass1_precedes_pass0_in_il",
     "blit_site_same_il_index_invalid",
 }
+PASS1_WRITER_RELATIONS = {
+    "pass0_field_not_traced","pass0_field_unresolved","pass1_site_ambiguous",
+    "pass1_method_no_direct_field_store",
+    "pass1_method_write_precedes_blit_il",
+    "pass1_method_write_follows_blit_il",
+    "pass1_method_writes_before_and_after_blit_il",
+}
 EXPECTED = ({"status", "original_crosspass_declared_field_return_relation",
              "original_crosspass_onehop_declared_field_return_relation",
              "original_pass0_dest_field_cil_store_class",
              "original_pass0_dest_field_cil_store_placement",
              "original_pass0_dest_field_single_store_adjacent",
-             "original_pass0_pass1_Blit_lexical_relation"} |
+             "original_pass0_pass1_Blit_lexical_relation",
+             "original_pass0_dest_field_writes_vs_pass1_Blit_il"} |
             NUMBERS | TRUE_FLAGS | BOOLEAN_FLAGS | FALSE_FLAGS |
             ROLE_KEYS | STACK_KEYS)
 
@@ -248,6 +256,9 @@ def validate(report):
     placement = report["original_pass0_dest_field_cil_store_placement"]
     adjacent = report["original_pass0_dest_field_single_store_adjacent"]
     lexical = report["original_pass0_pass1_Blit_lexical_relation"]
+    pass1_writer=report["original_pass0_dest_field_writes_vs_pass1_Blit_il"]
+    if type(pass1_writer) is not str or pass1_writer not in PASS1_WRITER_RELATIONS:
+        raise ValueError("unsafe_original_pass1_writer_relation")
     if (type(store) is not str or store not in STORE_CLASSES or
         type(placement) is not str or placement not in STORE_PLACEMENTS or
         type(adjacent) is not str or adjacent not in STORE_ADJACENT or
@@ -270,6 +281,31 @@ def validate(report):
             raise ValueError("field_writer_one_store_category_inconsistent")
     if not dest_traced and store!="field_not_traced":
         raise ValueError("field_writer_without_traced_destination")
+    if dest_traced and store=="field_not_traced":
+        raise ValueError("traced_destination_cannot_have_untraced_writer_census")
+    if store=="field_not_traced":
+        if pass1_writer!="pass0_field_not_traced":
+            raise ValueError("pass1_writer_requires_traced_destination")
+    elif store=="field_unresolved":
+        if pass1_writer!="pass0_field_unresolved":
+            raise ValueError("pass1_writer_requires_resolved_destination")
+    elif report["original_pass1_exact_Material_field_argument_calls"]!=1:
+        if pass1_writer!="pass1_site_ambiguous":
+            raise ValueError("pass1_writer_requires_unique_pass1_method")
+    else:
+        if pass1_writer in (
+            "pass0_field_not_traced","pass0_field_unresolved","pass1_site_ambiguous"
+        ):
+            raise ValueError("pass1_writer_relation_unexpected_blocker")
+        if store=="no_resolved_direct_store" and (
+            pass1_writer!="pass1_method_no_direct_field_store"
+        ):
+            raise ValueError("pass1_writer_without_any_resolved_store")
+        if pass1_writer!="pass1_method_no_direct_field_store" and (
+            placement=="stores_only_in_pass0_method" and
+            lexical=="blit_sites_in_distinct_methods"
+        ):
+            raise ValueError("pass1_writer_contradicts_only_pass0_method")
     if lexical!="blit_sites_ambiguous_or_missing" and (
         report["original_pass0_exact_Material_field_argument_calls"]!=1 or
         report["original_pass1_exact_Material_field_argument_calls"]!=1
@@ -292,6 +328,7 @@ def validate(report):
         "pass0_dest_field_cil_store_placement": placement,
         "pass0_dest_field_single_store_adjacent": adjacent,
         "pass0_pass1_Blit_lexical_relation": lexical,
+        "pass0_dest_field_writes_vs_pass1_Blit_il": pass1_writer,
         "crosspass_texture_instance_identity_proven": False,
         "CB0_and_Unity_device_evidence_proven": False,
     }

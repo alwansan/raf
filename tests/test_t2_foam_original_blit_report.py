@@ -49,6 +49,7 @@ def fixture():
         "original_pass0_dest_field_cil_store_placement": "store_placement_untraced",
         "original_pass0_dest_field_single_store_adjacent": "store_predecessor_untraced",
         "original_pass0_pass1_Blit_lexical_relation": "blit_sites_ambiguous_or_missing",
+        "original_pass0_dest_field_writes_vs_pass1_Blit_il": "pass0_field_not_traced",
         "pass0_source": "Texture",
         "pass0_destination": "RenderTexture",
         "pass0_source_producer": "typed_field",
@@ -76,6 +77,10 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
     def test_crosspass_same_field_token_is_not_heap_identity(self):
         r = fixture()
         r["original_pass0_destination_declared_field_trace"] = True
+        r["original_pass0_dest_field_cil_store_class"] = "no_resolved_direct_store"
+        r["original_pass0_dest_field_cil_store_placement"] = "store_placement_none"
+        r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+        r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_no_direct_field_store"
         for relation in ("field_token_match_only", "field_token_match_plus_null",
                          "field_token_match_plus_other", "field_token_match_plus_null_and_other"):
             with self.subTest(relation=relation):
@@ -90,6 +95,10 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         for relation in ("private_field_name", 17, None, False, "", "field_token_match_secret"):
             r = fixture()
             r["original_pass0_destination_declared_field_trace"] = True
+            r["original_pass0_dest_field_cil_store_class"] = "no_resolved_direct_store"
+            r["original_pass0_dest_field_cil_store_placement"] = "store_placement_none"
+            r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+            r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_no_direct_field_store"
             r["original_crosspass_declared_field_return_relation"] = relation
             with self.subTest(relation=relation), self.assertRaisesRegex(ValueError, "field_token_category"):
                 validate(r)
@@ -110,6 +119,10 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
     def test_onehop_nested_field_is_only_declared_token_provenance(self):
         r = fixture()
         r["original_pass0_destination_declared_field_trace"] = True
+        r["original_pass0_dest_field_cil_store_class"] = "no_resolved_direct_store"
+        r["original_pass0_dest_field_cil_store_placement"] = "store_placement_none"
+        r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+        r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_no_direct_field_store"
         r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
         for onehop in ("field_onehop_token_match_only",
                        "field_onehop_token_match_plus_null",
@@ -124,12 +137,20 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
     def test_onehop_bad_category_and_lost_direct_proof_rejected(self):
         r = fixture()
         r["original_pass0_destination_declared_field_trace"] = True
+        r["original_pass0_dest_field_cil_store_class"] = "no_resolved_direct_store"
+        r["original_pass0_dest_field_cil_store_placement"] = "store_placement_none"
+        r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+        r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_no_direct_field_store"
         r["original_crosspass_declared_field_return_relation"] = "field_token_match_only"
         r["original_crosspass_onehop_declared_field_return_relation"] = "field_no_direct_match"
         with self.assertRaisesRegex(ValueError,"lost_direct"):validate(r)
         for bad in ("private_field", 77, None, False, "field_onehop_runtime_heap_identity"):
             r = fixture()
             r["original_pass0_destination_declared_field_trace"] = True
+            r["original_pass0_dest_field_cil_store_class"] = "no_resolved_direct_store"
+            r["original_pass0_dest_field_cil_store_placement"] = "store_placement_none"
+            r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+            r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_no_direct_field_store"
             r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
             r["original_crosspass_onehop_declared_field_return_relation"] = bad
             with self.subTest(bad=bad), self.assertRaisesRegex(ValueError,"field_token_category"):
@@ -141,6 +162,10 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
     def test_original_field_store_cil_lexical_census_bounded_categories(self):
         r = fixture()
         r["original_pass0_destination_declared_field_trace"] = True
+        r["original_pass0_dest_field_cil_store_class"] = "no_resolved_direct_store"
+        r["original_pass0_dest_field_cil_store_placement"] = "store_placement_none"
+        r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+        r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_no_direct_field_store"
         r["original_crosspass_declared_field_return_relation"] = "field_no_direct_match"
         r["original_crosspass_onehop_declared_field_return_relation"] = "field_no_direct_match"
         for cls, placement, adjacent in (
@@ -192,6 +217,36 @@ class FoamOriginalBlitReportTests(unittest.TestCase):
         r["original_pass0_exact_Material_field_argument_calls"]=0
         r["original_pass0_pass1_Blit_lexical_relation"]="blit_sites_in_distinct_methods"
         with self.assertRaises(ValueError):validate(r)
+
+    def test_pass1_method_writer_lexical_relation_is_not_image_identity(self):
+        r=fixture()
+        r["original_pass0_destination_declared_field_trace"] = True
+        r["original_pass0_dest_field_cil_store_class"] = "multiple_resolved_direct_stores"
+        r["original_pass0_dest_field_cil_store_placement"] = "stores_only_in_other_methods"
+        r["original_pass0_dest_field_single_store_adjacent"] = "store_predecessor_not_unique"
+        r["original_crosspass_declared_field_return_relation"] = "field_no_match_with_null"
+        r["original_crosspass_onehop_declared_field_return_relation"] = "field_no_match_with_null"
+        r["original_pass0_pass1_Blit_lexical_relation"] = "blit_sites_in_distinct_methods"
+        for tag in ("pass1_method_no_direct_field_store",
+                    "pass1_method_write_precedes_blit_il",
+                    "pass1_method_write_follows_blit_il",
+                    "pass1_method_writes_before_and_after_blit_il"):
+            with self.subTest(tag=tag):
+                r["original_pass0_dest_field_writes_vs_pass1_Blit_il"]=tag
+                result=validate(r)
+                self.assertEqual(result["pass0_dest_field_writes_vs_pass1_Blit_il"],tag)
+                self.assertFalse(result["crosspass_texture_instance_identity_proven"])
+
+    def test_pass1_writer_fails_closed_on_untraced_or_private(self):
+        r=fixture()
+        r["original_pass0_dest_field_writes_vs_pass1_Blit_il"]="private_field_token"
+        with self.assertRaisesRegex(ValueError,"unsafe_original_pass1"):validate(r)
+        r=fixture()
+        r["original_pass0_dest_field_writes_vs_pass1_Blit_il"] = "pass1_method_write_precedes_blit_il"
+        with self.assertRaisesRegex(ValueError,"requires_traced_destination"):validate(r)
+        r=fixture()
+        r["original_pass0_destination_declared_field_trace"] = True
+        with self.assertRaisesRegex(ValueError,"traced_destination"):validate(r)
 
     def test_unknown_both_passes_is_allowed_but_never_proved(self):
         r = fixture()
