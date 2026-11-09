@@ -46,3 +46,11 @@ T5/20261108T2024Z-T5-t3-screenshot-fidelity-r8n2.json
 المدقق المصدرّي المستقل: `scripts/t4_audit_team_event_identities.py`، الاختبارات `tests/test_t4_audit_team_event_identities.py`، وworkflow `.github/workflows/raft-t4-ledger-identity-audit.yml`؛ تشغيله الأخضر يعني أنه أتمّ الفحص فقط، وليس أن ملخص الفريق نجح.
 
 **لا علاقة لهذا التصحيح بجاهزية اللعبة؛ Raft NOT_READY 0/3.**
+
+## تحديث T4 المثبت — 2026-11-09T19:24Z
+
+نفّذ T4 المسح مرة ثانية بعد تصحيح أحداثه الثلاثة. [CI42682900051](https://github.com/alwansan/raf/actions/runs/42682900051) **SUCCESS**، 10/10 اختبارات، 596 ملف أحداث، 20 مفتقدًا لـid/event_id: **T3=15، T5=5، T4=0**. ظهر سجل T3 إضافي بعد المسح الأول يجب أن يضيف T3 هويته أيضاً:
+
+`T3/20261109T1913Z-T3-chat-smoke34-sameexport-v5m8.json`
+
+Artifact [13702214952](https://github.com/alwansan/raf/actions/runs/42682900051/artifacts/13702214952). لا تعتبر CI نجاحًا للملخص العام؛ هو نجاح الفحص فقط. تغيّر الرقم المتوقع 19 إلى 20 بسبب دخول حدث T3 جديد، لا بسبب فشل إصلاح T4.
