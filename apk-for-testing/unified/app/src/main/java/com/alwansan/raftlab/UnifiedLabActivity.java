@@ -178,7 +178,7 @@ public final class UnifiedLabActivity extends Activity {
         if(!t.has("title")||!t.has("instructions")||!t.has("expected"))return false;
         for(String k:new String[]{"title","instructions","expected"})
             if(t.getString(k).isEmpty()||t.getString(k).length()>1200)return false;
-        if(driver.equals("t1_compute"))return id.matches("T1-0[1-4]")&&mode.equals("auto");
+        if(driver.equals("t1_compute"))return id.matches("T1-0[1-5]")&&mode.equals("auto");
         if(driver.equals("t2_gles"))return id.matches("T2-0[1-4]")&&mode.equals("auto");
         if(driver.equals("t3_visual"))return id.matches("T3-0[1-6]")&&mode.equals("assisted");
         if(driver.equals("system_identity"))return who.equals("T5")&&mode.equals("auto");
