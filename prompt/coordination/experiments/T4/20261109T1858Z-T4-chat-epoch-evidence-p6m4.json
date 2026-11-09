@@ -1,0 +1,36 @@
+{
+  "experiment_key": "T4-INPUT005-unity-getter-captured-epoch-matching-logged-counters-negative-controls-v1",
+  "session_id": "20261109T1858Z-T4-chat-epoch-evidence-p6m4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Android captured callbacks and Unity original Legacy getter hits may be misjoined across capture epochs. Require request/epoch/reader authenticity and fail closed.",
+  "baseline_sha": "7e4ae3efca1da18b2a042e09c1cfd75aca08444e",
+  "source_sha": "14a5d794ee5409d0f1ba32fb0436e480b4467230",
+  "evidence": "https://github.com/alwansan/raf/actions/runs/42679181503",
+  "checks": {
+    "python_unittest": 14,
+    "completed": "success",
+    "job_id": 129368771496
+  },
+  "produced_files": [
+    "scripts/t4_correlate_mouse_runtime_epochs.py",
+    "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py",
+    ".github/workflows/raft-t4-mouse-epoch-correlation.yml",
+    "docs/T4_MOUSE_SAME_EPOCH_CORRELATION_2026-11-09.md"
+  ],
+  "controls": [
+    "epochs differ",
+    "pre-request marker",
+    "release boundary",
+    "retry same epoch",
+    "captureObserved=false",
+    "impossible fallback count",
+    "decrementing counters",
+    "no epoch",
+    "JSONL and update order"
+  ],
+  "device_status": "NO_NEW_CAPTURED_OWNER_TRACE",
+  "game_status": "INPUT-005 OPEN; NOT_READY 0/3",
+  "conclusion": "Source-only same-epoch evidence correlation triage operational; no Unity gameplay or APK validity inferred.",
+  "next_step": "On signed same-build Raft game trial, analyze one process-local chronological game log and confirm physical mouse gameplay, .rgd save/reopen and camera."
+}
