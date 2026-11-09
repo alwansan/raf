@@ -26,3 +26,11 @@ Current SHA-bound source-only [CI42692872122](https://github.com/alwansan/raf/ac
 ## Handoff
 
 Read finished CI's complete phases: 21 Python tests, `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_PASS`, original DLL=3211776 and Shader owner=115978112 SHA pin, purge, strict JSON validator and `T2_FOAM_CROSSPASS_ONEHOP_FIELD_RETURN_RELATION`. Do not call validated until source-original CI succeeds. If successful, compare onehop label to prior direct `field_no_match_with_null` (a positive only means declared token lineage through one nested callee and may have null/other branches). Document independent safe result, mark scope complete and send next-step receiver/heap alias gap to schedule. All game acceptance remains open; no device photo or new APK needed for source-only work.
+
+## Independent synthetic-Cecil issue and corrected continuation
+
+[CI42692872122](https://github.com/alwansan/raf/actions/runs/42692872122) from fixture correction `0408e76d`: all **21/21** strict Python tests passed but C# `--selftest` reported `T2_CECIL_ORIGINAL_BLIT_SYNTHETIC_BLOCKED`, before original source authentication. It is **not** an original Foam result.
+
+Next commit `5fc56b532d41fb207cd9d703bcc100f0ac78c23d` handles in-memory synthetic `Mono.Cecil.MethodDefinition` directly (rather than relying on an original-assembly MethodReference resolver) and adds a tightly finite failure marker for only five new source-free synthetic cases. It never prints arbitrary exception messages, actual field names or tokens. Original managed references still undergo resolver and module-identity checks.
+
+Automatic [CI42693196369](https://github.com/alwansan/raf/actions/runs/42693196369) source `5fc56b53` was observed **IN_PROGRESS** with Cecil selftest pending; platform adapter [CI42693196347](https://github.com/alwansan/raf/actions/runs/42693196347) separately auto-triggered. Verify final logs before drawing conclusions, then only if original succeeded archive safe original one-hop label. Never claim original data tested from a failing synthetic-only gate.
