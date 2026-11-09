@@ -1,0 +1,13 @@
+# GFX-LAB — 20261110-GFX-chat-six-android-retry-04
+- session_id: 20261110-GFX-chat-six-android-retry-04; origin: chat
+- resumed_from: 20261110-GFX-chat-reselected-sourcepack-03
+- base_sha: dbab83c120d248a2d4c55b368adc4291e1c84586
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- experiment_key: gfx-multi-003-real-six-android-apk-source-reselected
+- scope: only GFX-LAB standalone Unity2021.3.45f2 Android IL2CPP ARM64; no game or T-Team writes.
+- runs: new source selection 42719663373 SUCCESS; new source pack 42720399689 SUCCESS; new shader audit 42720400057 SUCCESS; past Unity failed 42712833407,42714952065,42718266273.
+- original source proof: M00 Shears375v, M01 person5095v/100 bones, M02 tool1666v/8, M03 static two-mat2163v, M04 skinned2445v/100, M05 skinned4452v/2. 7 material slots and 21 original PNG decodes. 15 pinned stream chunks =707788800 bytes. Original Shader48 common 2 SubShaders /7 passes, **Android original shader not restored**.
+- work: safeguard exact source triangles count during Unity imported OBJ or original-source fallback; require real signed APK SHA, aapt exact package and apksigner. Trigger exactly one real six-model Unity build workflow by workflow edit.
+- evidence levels: ORIGINAL_SOURCE PASS; source shader topology PASS; UNITY_IMPORT_COMPILE/Android build **PENDING**; GPU/device model pixels **NOT_TESTED**; OWNER_ACCEPTANCE only previous Shears v0.2.
+- negative_controls: no source IDs/loose textures in Git; M01+M04 original bones but OBJ static; no full-game APK/OBB; 0 fabricated original ShaderLab.
+- outcome at authoring: build dispatch initiated; verify actual workflow run/job/artifact before changing status or owner instruction.

@@ -11,7 +11,9 @@
     "selection_approved": 42719663373,
     "pack_old": 42712118731,
     "shader_old": 42715492781,
-    "failed_build_latest": 42718266273
+    "failed_build_latest": 42718266273,
+    "new_source_pack": 42720399689,
+    "new_shader_audit": 42720400057
   },
   "control": "do not disclose original art and ids; no shader equivalence, APK, device or player rig claims",
   "planned_tests": [
@@ -21,5 +23,6 @@
     "M03 exactly 2 source material slots",
     "source Shader48 counts for reselected six"
   ],
-  "status": "source_ci_dispatched_pending"
+  "status": "source_selection_pack_shader_all_pass_no_android_claims",
+  "outcome": "PASS: new selection original 6 meshes, 7 materials, 21 PNG, 15 stream chunks (707788800 bytes) all inside private runner; original shader48 common 2 subshaders/7 passes; no compiled Android Shader48 or device pixels."
 }

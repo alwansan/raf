@@ -28,6 +28,8 @@
 
 ## الوثائق التقنية
 - مصدر الاختيار القديم: [GFX-MULTI-001 القديم](https://github.com/alwansan/raf/actions/runs/42711514279). **الاختيار الجديد المعتمد بعد استبعاد 12 هندسة غير صالحة:** [GFX-MULTI-001 الجديد](https://github.com/alwansan/raf/actions/runs/42719663373).
-- استخراج الستة للترتيب القديم فقط: [GFX-MULTI-002](https://github.com/alwansan/raf/actions/runs/42712118731). **إعادة استخراج الاختيار الجديد ما زالت بحاجة إلى CI جديد.**
+- استخراج الستة للترتيب القديم فقط: [GFX-MULTI-002](https://github.com/alwansan/raf/actions/runs/42712118731). **الإعادة نجحت:** [GFX-MULTI-002 الجديد](https://github.com/alwansan/raf/actions/runs/42720399689) ستة Mesh/7 مواد/21 صورة.
 - بناء Unity السابق [GFX-MULTI-003 الأول](https://github.com/alwansan/raf/actions/runs/42712833407) و[المحاولة الثالثة](https://github.com/alwansan/raf/actions/runs/42718266273) **فشلا قبل APK**. لا تثبّت نسخة الستة إلا بعد بناء جديد ناجح وتحقق التوقيع.
 - رسالة الاستعادة: [RESTORE_AR.md](../prompt/graphics-lab/RESTORE_AR.md).
+
+- تحليل المصدر الجديد [GFX-MULTI-004](https://github.com/alwansan/raf/actions/runs/42720400057): Shader48 واحد مشترك في 7 Material slots باثنين SubShaders و7 Passes، لكنه ليس Shader Android مستعادًا.

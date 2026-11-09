@@ -1,0 +1,39 @@
+{
+  "session_id": "20261110-GFX-chat-six-android-retry-04",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-reselected-sourcepack-03",
+  "base_sha": "dbab83c120d248a2d4c55b368adc4291e1c84586",
+  "branch": "experiment/android-graphics-rootcause",
+  "experiment_key": "gfx-multi-003-real-six-android-apk-source-reselected",
+  "scope": "One real Unity 2021 Android IL2CPP ARM64 build from verified six source models, 7 materials, 21 original textures",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "runs": {
+    "selection": 42719663373,
+    "pack": 42720399689,
+    "shader_source": 42720400057,
+    "older_build_failures": [
+      42712833407,
+      42714952065,
+      42718266273
+    ]
+  },
+  "controls": [
+    "same original source SHA pins",
+    "Unity imported triangle parity or source-typed fallback",
+    "APK signature verification",
+    "aapt exact package verification",
+    "no private original raw art uploaded",
+    "no original Shader48 equivalence claim",
+    "no device owner test claimed"
+  ],
+  "planned_tests": [
+    "sourcefree preflight",
+    "source original verified 6+7+21",
+    "Unity scene builds real ARM64 IL2CPP Android package",
+    "apksigner verify",
+    "aapt exact package",
+    "artifact SHA256 audited",
+    "owner six-model on-device only if signed"
+  ],
+  "status": "triggered_build_result_pending"
+}

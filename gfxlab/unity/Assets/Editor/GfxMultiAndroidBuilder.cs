@@ -176,7 +176,7 @@ namespace RaftGraphicsLabEditor
             int importedMaterialSlots=0;
             foreach(var flt in root.GetComponentsInChildren<MeshFilter>(true))
                 if(flt.sharedMesh!=null)importedMaterialSlots+=Math.Max(1,flt.sharedMesh.subMeshCount);
-            if(importedVertices<=0||importedFaces<=0 ||
+            if(importedVertices<=0||importedFaces!=config.face_count ||
                importedMaterialSlots!=config.materials.Length)
             {
                 // Unity 2021's OBJ ModelImporter emitted zero mesh for some original
@@ -188,8 +188,8 @@ namespace RaftGraphicsLabEditor
                 UnityEngine.Object.DestroyImmediate(root);
                 root=GfxOriginalObjImporter.Load(folder+"/model.obj",id);
                 importedVertices=MeshVertexCount(root,out importedFaces);
-                if(importedVertices<=0||importedFaces<=0)
-                    throw new InvalidOperationException("GFX_MULTI_SOURCE_GEOMETRY_NOT_IMPORTED_"+id);
+                if(importedVertices<=0||importedFaces!=config.face_count)
+                    throw new InvalidOperationException("GFX_MULTI_SOURCE_TRIANGLE_PARITY_FAIL_"+id);
             }
             Renderer[] renderers=root.GetComponentsInChildren<Renderer>(true);
             if(renderers.Length==0)
