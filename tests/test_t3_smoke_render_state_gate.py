@@ -24,4 +24,10 @@ class SmokeStateTests(unittest.TestCase):
     def test_wrong_graph_fails(self):
         d=self.sample();d['original']['material_slot_count']=108
         with self.assertRaisesRegex(ValueError,'graph_count_not_verified'):audit(d)
+    def test_nonhex_source_fails(self):
+        d=self.sample();d['original']['source_sha256']='z'*64
+        with self.assertRaisesRegex(ValueError,'missing_source_fingerprint'):audit(d)
+    def test_boolean_graph_count_fails(self):
+        d=self.sample();d['original']['smoke_named_renderer_count']=True
+        with self.assertRaisesRegex(ValueError,'graph_count_not_verified'):audit(d)
 if __name__=='__main__':unittest.main()
