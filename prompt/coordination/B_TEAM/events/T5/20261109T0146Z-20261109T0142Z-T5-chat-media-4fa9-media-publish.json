@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261109T0142Z-T5-chat-media-4fa9-media-publish",
+  "owner": "T5",
+  "session_id": "20261109T0142Z-T5-chat-media-4fa9",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "T5 patched shared Mini MediaStore new-image/log exports with IS_PENDING publication only after complete write, cleanup on failure; source-only Python/Java/Android compilation CI42547097683 SUCCESS; no APK or phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/cf764d7671efb58dc57f5952bd1c2875e97ec504",
+    "https://github.com/alwansan/raf/commit/a71ef5fdd37d58a184e7ce5573be586f4267d964",
+    "https://github.com/alwansan/raf/actions/runs/42547097683"
+  ],
+  "at": "2026-11-09T01:46:12Z"
+}
