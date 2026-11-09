@@ -1,11 +1,5 @@
 name: GFX-LAB original white mesh - Unity2021 Android APK
 on:
-  push:
-    branches:
-      - experiment/android-graphics-rootcause
-    paths:
-      - '.github/workflows/gfxlab-original-white-unity-apk.yml'
-      - 'gfxlab/**'
   workflow_dispatch:
 permissions:
   contents: read
