@@ -1,0 +1,59 @@
+{
+  "session_id": "20261109T2042Z-T4-chat-release-final-window-q6n4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_only_device_pending",
+  "updated_at": "2026-11-09T20:48:00Z",
+  "experiment_key": "T4-INPUT005-original-ReleaseCapture-post-release-final-marker-order-v1",
+  "base_sha": "a4c05fbdd9c796252d7933c86b0cac495d5a7078",
+  "scope_commit": "88eacae111725cda8dee57bfbbc1645ec4621841",
+  "source_ground_truth": "Original AndroidPhysicalMouseCapture.ReleaseCapture() emits physical_mouse_capture_released BEFORE physical_mouse_captured_action_callbacks_final and physical_mouse_legacy_reader_evidence_final; epoch increment/reset occurs AFTER both final records.",
+  "files_changed": [
+    "scripts/t4_correlate_mouse_runtime_epochs.py",
+    "scripts/tests/test_t4_correlate_mouse_runtime_epochs.py"
+  ],
+  "commits": [
+    "20efd8020d68bca166a2a23a24e8d4f03163bc6d",
+    "5c43c3a20b397fa6e9bfaabd7c5a96d067b492ab",
+    "8e5db658a8b597697a907eb39ea0834f15feae12",
+    "4e7ac40839328bc1e7688f41c0a645ca3a54bb46"
+  ],
+  "safety_guards": [
+    "accept only two source-authentic final operations after release and before next request",
+    "same PersistentDiagnosticLog session and same capture epoch",
+    "action final precedes reader final if both",
+    "duplicates/order inversion invalidate attempt",
+    "regular post-release callbacks/readers cannot join",
+    "bound unrelated logger interleaving to eight",
+    "invalid/wrong epoch final poisons attempt",
+    "prior poison/counter/boolean validators preserved"
+  ],
+  "ci_results": [
+    {
+      "run_id": 42695937421,
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 69,
+      "job_id": 129427666265,
+      "sha": "5c43c3a20b397fa6e9bfaabd7c5a96d067b492ab"
+    },
+    {
+      "run_id": 42696168324,
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 71,
+      "job_id": 129428503951,
+      "sha": "4e7ac40839328bc1e7688f41c0a645ca3a54bb46"
+    }
+  ],
+  "device_result": {
+    "device_pass": false,
+    "unity_gameplay_verified": false,
+    "full_game_not_ready": "0/3",
+    "cl_url": "https://github.com/alwansan/CL/tree/main/test/shared-20261109-233132-554663211",
+    "cl_app_source": "731d7a68bb3826b348d0314f694737b522e92976",
+    "t4_needs_input": 9
+  },
+  "report": "docs/T4_RELEASE_FINAL_ORIGINAL_MOUSE_EVIDENCE_2026-11-09.md",
+  "next_step": "Check original signed current game JSONL for legitimate release-before-final pairs and actual in-game LEFT/RIGHT/MIDDLE and V/H scroll; one process/session/epoch; maintain world/save camera audio settings regressions. Do not launch Mini or full XAPK from this source-only gate."
+}
