@@ -1,0 +1,17 @@
+{
+  "id": "20261109T0217Z-T4-chat-legacy-reader-source-evidence-w7q5",
+  "worker": "T4",
+  "origin": "chat",
+  "session_id": "20261109T0209Z-T4-chat-unity-legacy-readers-w7q5",
+  "issue_id": "INPUT-005",
+  "type": "source_diagnostic_integration",
+  "status": "SOURCE_VERIFIED_DEVICE_PENDING",
+  "summary": "Original Unity Legacy Input 20-site button/wheel reader calls now record bounded per-button attempts, native positive vs captured fallback positive, without changing inputs or camera; 66 Python, 152 C# and original Unity2021 Android+Editor ABI CI SUCCESS; no Android gameplay PASS.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42549986761",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_MOUSE_UNITY_LEGACY_READERS_TELEMETRY_2026-11-09.md"
+  ],
+  "updated_at": "2026-11-09T02:17:00Z",
+  "mini_build_triggered": false,
+  "full_game_build_triggered": false
+}
