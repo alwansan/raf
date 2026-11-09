@@ -1,0 +1,26 @@
+{
+  "session_id": "20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "be69f74c1f4d902e7c731e4a17cc4bd3c7609ff0",
+  "resumed_from_sessions": [
+    "20261109T1946Z-T2-chat-foam-equality-predicate-m4q9",
+    "20261109T1916Z-T2-chat-foam-constant-branch-p8v6"
+  ],
+  "intended_files": [
+    "android-port/Experiments/T2/FoamBlitOriginalProducers/Program.cs",
+    "prompt/coordination/clients/T2/sessions/20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4.md",
+    "prompt/coordination/work/WATER-001/20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4.json",
+    "prompt/coordination/experiments/T2/20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4.json",
+    "prompt/coordination/B_TEAM/events/T2/20261109T2002Z-T2-chat-foam-declared-field-flow-c9n4.json",
+    "docs/T2_FOAM_ORIGINAL_RETURN_VALUE_FLOW_2026-11-09.md"
+  ],
+  "experiment_key": "foam-original-managed-crosspass-destination-field-token-vs-pass1-return-value-flow-null-opaque-20261109-v1",
+  "resource_key": "T2-original-FoamBlitOriginalProducers-Cecil-source-only",
+  "hypothesis": "The pass0 Blit destination might be a direct typed RenderTexture field, whose declared field token can be compared PRIVATELY to field-origin values returned from the original pass1 Texture-producing callee along conservatively reachable CIL return paths. Even exact declared token equality will not establish same receiver or same frame heap object; no synthetic positive may be misrepresented as original.",
+  "scope": "T2 standalone original ZIP2 Cecil source checker, source-free synthetic positive/negative field-token controls. Do not modify original game, shaders, APK, shared mini, T1 T3 T4 T5 work, or heavy Unity resources.",
+  "run_urls": [],
+  "updated_at": "2026-11-09T20:02:00Z",
+  "next_step": "Add bounded field-token-preserving return flow/Blit destination trace and synthetic controls. Let existing source-only pinned-original workflow run, classify original relationship and uncertainty, then archive evidence."
+}
