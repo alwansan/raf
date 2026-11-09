@@ -36,6 +36,8 @@ jobs:
           test -f gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
           test -f gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
           test -f gfxlab/unity/Assets/Editor/GfxOriginalObjImporter.cs
+          # This retry verifies the real-vertex bounds guard before Unity build.
+          grep -Fq 'GFX_MULTI_GEOMETRY_BOUNDS_FINITE' gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
           python3 -m py_compile gfxlab/tools/obj_normalize.py
           echo GFX_MULTI003_SOURCEFREE_PASS=true
       - name: Checkout only SHA-pinned original ZIP2 owner assets

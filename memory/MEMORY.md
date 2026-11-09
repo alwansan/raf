@@ -70,3 +70,8 @@
 **CI بناء حقيقي:** [GFX-MULTI-003 Actions 42712833407](https://github.com/alwansan/raf/actions/runs/42712833407). *لا تفترض نجاحه؛ اقرأ التشغيل الحالي والتوقيع والـartifact أولاً*. معايير قبول المرحلة هي Unity import actual six, 7 submesh slots, 21 original textures, signed APK, ثم المالك يختبره. `originalShaderRestored=false` و`originalAnimationRestored=false` حتى يثبت لاحقاً تكافؤ Shader48/rig الحقيقي.
 
 **استعادة/دليل:** `prompt/graphics-lab/RESTORE_AR.md` أعيدت كتابته لتضمين آخر 3 تجارب؛ `gfxlab/MULTI_OWNER_TEST_GUIDE_AR.md` يشرح فحص M00–M05 وCOPY LOG. لا تعدل `main` أو فرع الفريق أو ZIP2 أو CL. لكل دورة ملف جلسة مستقل + STATE تحديث. 
+
+## GFX-MULTI-003 bounded mesh viewport retry (20261110-GFX-chat-multi-bounds-source-01)
+Two Unity Editor build attempts **failed before APK**: [42712833407](https://github.com/alwansan/raf/actions/runs/42712833407) at M02 empty Unity OBJ importer, and [42714952065](https://github.com/alwansan/raf/actions/runs/42714952065) after authentic OBJ fallback emitted M02 1598 vertices/2095 triangles but `GFX_MULTI_BAD_ORIGINAL_BOUNDS`. Both signed-APK and upload stages were skipped. [GFX-MULTI-004 42715492781](https://github.com/alwansan/raf/actions/runs/42715492781) source shader-topology study succeeded without APK or shader-equivalence proof.
+
+Next focused fix uses actual original MeshFilter vertex positions and double-safe spatial range for viewer normalization instead of unrendered Renderer.bounds; still hard-fails genuinely degenerate/nonfinite/unrepresentable geometry. No change to original OBJ, PNG, Shader48 identity or T1–T5. Next CI status must be verified; do not announce an APK or device success without independent audit.

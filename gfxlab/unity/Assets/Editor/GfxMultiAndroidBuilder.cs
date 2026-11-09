@@ -117,18 +117,47 @@ namespace RaftGraphicsLabEditor
             }
             return vertices;
         }
-        private static void NormalizePosition(GameObject root,Renderer[] renderers)
+        // Use actual source mesh vertices: Renderer.bounds can be empty in
+        // batchmode before a freshly constructed fallback MeshRenderer renders.
+        // No geometry is substituted or invented. Only viewer transform changes.
+        private static void NormalizePosition(GameObject root,Renderer[] renderers,string id)
         {
             if(renderers==null||renderers.Length==0)
-                throw new InvalidOperationException("GFX_MULTI_RENDERER_EMPTY");
-            Bounds b=renderers[0].bounds;
-            for(int i=1;i<renderers.Length;i++)b.Encapsulate(renderers[i].bounds);
-            float extent=Mathf.Max(b.size.x,Mathf.Max(b.size.y,b.size.z));
-            if(float.IsNaN(extent)||float.IsInfinity(extent)||extent<.00001f)
-                throw new InvalidOperationException("GFX_MULTI_BAD_ORIGINAL_BOUNDS");
-            float scale=Mathf.Clamp(1.8f/extent,.0001f,1000f);
-            root.transform.localScale=Vector3.one*scale;
-            root.transform.position=new Vector3(-b.center.x*scale,1f-b.center.y*scale,-b.center.z*scale);
+                throw new InvalidOperationException("GFX_MULTI_RENDERER_EMPTY_"+id);
+            double minX=double.PositiveInfinity,minY=double.PositiveInfinity,minZ=double.PositiveInfinity;
+            double maxX=double.NegativeInfinity,maxY=double.NegativeInfinity,maxZ=double.NegativeInfinity;
+            int n=0;
+            foreach(var f in root.GetComponentsInChildren<MeshFilter>(true))
+            {
+                if(f.sharedMesh==null)continue;
+                foreach(Vector3 v in f.sharedMesh.vertices)
+                {
+                    Vector3 p=f.transform.TransformPoint(v);
+                    if(float.IsNaN(p.x)||float.IsNaN(p.y)||float.IsNaN(p.z)||
+                       float.IsInfinity(p.x)||float.IsInfinity(p.y)||float.IsInfinity(p.z))
+                        throw new InvalidOperationException("GFX_MULTI_NONFINITE_SOURCE_VERTEX_"+id);
+                    minX=Math.Min(minX,p.x);maxX=Math.Max(maxX,p.x);
+                    minY=Math.Min(minY,p.y);maxY=Math.Max(maxY,p.y);
+                    minZ=Math.Min(minZ,p.z);maxZ=Math.Max(maxZ,p.z);
+                    n++;
+                }
+            }
+            if(n==0)throw new InvalidOperationException("GFX_MULTI_NO_SOURCE_VERTICES_"+id);
+            double extent=Math.Max(maxX-minX,Math.Max(maxY-minY,maxZ-minZ));
+            if(double.IsNaN(extent)||double.IsInfinity(extent)||extent<=1e-12)
+                throw new InvalidOperationException("GFX_MULTI_DEGENERATE_SOURCE_VERTEX_BOUNDS_"+id);
+            double scale=1.8d/extent;
+            if(double.IsInfinity(scale)||double.IsNaN(scale)||scale<1e-10||scale>1e10)
+                throw new InvalidOperationException("GFX_MULTI_UNREPRESENTABLE_VIEW_SCALE_"+id);
+            double cx=minX+(maxX-minX)*0.5d,cy=minY+(maxY-minY)*0.5d,cz=minZ+(maxZ-minZ)*0.5d;
+            double px=-cx*scale,py=1d-cy*scale,pz=-cz*scale;
+            if(double.IsNaN(px)||double.IsNaN(py)||double.IsNaN(pz)||
+               Math.Abs(px)>1e30||Math.Abs(py)>1e30||Math.Abs(pz)>1e30)
+                throw new InvalidOperationException("GFX_MULTI_UNREPRESENTABLE_VIEW_CENTER_"+id);
+            root.transform.localScale=Vector3.one*(float)scale;
+            root.transform.position=new Vector3((float)px,(float)py,(float)pz);
+            Debug.Log("GFX_MULTI_GEOMETRY_BOUNDS_FINITE model="+id+
+                " vertices="+n+" source_geometry_preserved=true viewport_normalized=true");
         }
         private static GfxMultiViewer.Model BuildModel(int index)
         {
@@ -236,7 +265,7 @@ namespace RaftGraphicsLabEditor
             if(totalUnitySlots!=config.materials.Length)
                 throw new InvalidOperationException("GFX_MULTI_SOURCE_MATERIAL_SUBMESH_MISMATCH_"+id+
                     "_source="+config.materials.Length+"_unity="+totalUnitySlots);
-            NormalizePosition(root,renderers);
+            NormalizePosition(root,renderers,id);
             root.SetActive(false);
             Debug.Log("GFX_MULTI_UNITY_ORIGINAL_MODEL_IMPORTED model="+id+
                 " geometry_imported=true original_textures="+textures+
