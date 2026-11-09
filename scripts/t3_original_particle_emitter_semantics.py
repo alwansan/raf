@@ -84,11 +84,7 @@ def safe_aggregate(rows: list, *, expected_selected_slots: int = 108,
             result[group + "_" + key] = count[group + "_" + key]
         if (result[group + "_GameObject_name_resolved"]
               + result[group + "_GameObject_name_unresolved"]
-              != result[group + "_renderer_objects"]
-              if group == "selected" else
-              result[group + "_GameObject_name_resolved"]
-              + result[group + "_GameObject_name_unresolved"]
-              != count["other_renderer_objects"]):
+              != count[group + "_renderer_objects"]):
             raise ValueError("source_GameObject_join_accounting_mismatch")
     result.update({
         "original_names_guids_PathIDs_or_private_shader_identifiers_published": False,
@@ -149,6 +145,7 @@ def scan_original(original: Path, manifest: Path) -> dict:
         file = UnityPy.load(str(scene_path)).file
         by_id = {obj.path_id: obj for obj in file.objects.values()}
         external_paths = [row.path for row in file.externals]
+        local_types = {key: value.type.name for key, value in by_id.items()}
         for obj in file.objects.values():
             if obj.type.name != "ParticleSystemRenderer":
                 continue
@@ -158,7 +155,7 @@ def scan_original(original: Path, manifest: Path) -> dict:
             selected_slots = 0
             for ptr in tree["m_Materials"]:
                 state, fid, pid = pointer_shape(
-                    ptr, {k: v.type.name for k, v in by_id.items()}, len(external_paths))
+                    ptr, local_types, len(external_paths))
                 if state == "null_material_slot":
                     continue
                 if state != "external_target_unverified":
