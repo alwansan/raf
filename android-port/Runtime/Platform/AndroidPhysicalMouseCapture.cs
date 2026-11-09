@@ -19,6 +19,8 @@ namespace RaftAndroid.Platform
         private readonly PhysicalMouseDeltaAccumulator deltas = new PhysicalMouseDeltaAccumulator();
         private readonly PhysicalMouseActionEvidence actionEvidence = new PhysicalMouseActionEvidence();
         private readonly PhysicalMouseButtonWheelFrame buttonWheel = new PhysicalMouseButtonWheelFrame();
+        private readonly PhysicalMouseLegacyReaderEvidence readerEvidence = new PhysicalMouseLegacyReaderEvidence();
+        private long lastReaderLogCalls, lastReaderLogEdges, lastReaderLogScroll;
         private int lastActionReport;
         private CapturedListener listener;
         private bool focused = true, paused, supported;
@@ -194,6 +196,22 @@ namespace RaftAndroid.Platform
                 "; nonMoveConsumed=false; unityButtonsAndWheelVerified=false");
         }
 
+        private void LogLegacyReaderEvidence(string operation,
+            PhysicalMouseLegacyReaderEvidence.Snapshot counts)
+        {
+            // Purely observed Unity getter calls; no claim of in-game actions.
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", operation,
+                "epoch=" + Volatile.Read(ref epoch) +
+                "; captureRequested=" + requested + "; captureObserved=" + nativeCaptured +
+                "; getterCalls=" + counts.Calls +
+                "; positiveLegacy=" + counts.Legacy +
+                "; positiveFallback=" + counts.Fallback +
+                "; positiveEdges=" + counts.Edges +
+                "; positiveScroll=" + counts.Scroll +
+                "; " + readerEvidence.Report() +
+                "; countersAreGetterCallsNotClicks=true; unityGameplayVerified=false");
+        }
+
         public static CursorLockMode ApplyCursorLock(CursorLockMode mode)
         {
             // Preserve the original authored cursor-lock assignment exactly.
@@ -237,37 +255,72 @@ namespace RaftAndroid.Platform
             }
         }
 
+        // Collect original patched Legacy Input reads only while capture
+        // requested. Never write logs or call JNI in these hot-path readers.
+        private static void RecordLegacyReader(int operation, int button,
+            bool nativePositive, bool fallbackPositive)
+        {
+            var current = instance;
+            if (current != null && current.requested)
+                current.readerEvidence.Record(operation, button, nativePositive, fallbackPositive);
+        }
+
         public static bool GetMouseButton(int index)
         {
             bool legacy = Input.GetMouseButton(index);
-            if (legacy) return true;
+            if (legacy)
+            {
+                RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.Held, index, true, false);
+                return true;
+            }
             PhysicalMouseButtonWheelFrame.Snapshot frame;
-            return TryCapturedFrame(out frame) && frame.Held(index);
+            bool fallback = TryCapturedFrame(out frame) && frame.Held(index);
+            RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.Held, index, false, fallback);
+            return fallback;
         }
 
         public static bool GetMouseButtonDown(int index)
         {
             bool legacy = Input.GetMouseButtonDown(index);
-            if (legacy) return true;
+            if (legacy)
+            {
+                RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.Down, index, true, false);
+                return true;
+            }
             PhysicalMouseButtonWheelFrame.Snapshot frame;
-            return TryCapturedFrame(out frame) && frame.Down(index);
+            bool fallback = TryCapturedFrame(out frame) && frame.Down(index);
+            RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.Down, index, false, fallback);
+            return fallback;
         }
 
         public static bool GetMouseButtonUp(int index)
         {
             bool legacy = Input.GetMouseButtonUp(index);
-            if (legacy) return true;
+            if (legacy)
+            {
+                RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.Up, index, true, false);
+                return true;
+            }
             PhysicalMouseButtonWheelFrame.Snapshot frame;
-            return TryCapturedFrame(out frame) && frame.Up(index);
+            bool fallback = TryCapturedFrame(out frame) && frame.Up(index);
+            RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.Up, index, false, fallback);
+            return fallback;
         }
 
         public static Vector2 GetMouseScrollDelta()
         {
             Vector2 legacy = Input.mouseScrollDelta;
-            if (legacy.x != 0f || legacy.y != 0f) return legacy;
+            if (legacy.x != 0f || legacy.y != 0f)
+            {
+                RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.ScrollVector, -1, true, false);
+                return legacy;
+            }
             PhysicalMouseButtonWheelFrame.Snapshot frame;
-            return TryCapturedFrame(out frame)
+            Vector2 value = TryCapturedFrame(out frame)
                 ? new Vector2(frame.Horizontal, frame.Vertical) : legacy;
+            RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.ScrollVector, -1,
+                false, value.x != 0f || value.y != 0f);
+            return value;
         }
 
         private static float Axis(string axis, bool raw)
@@ -275,9 +328,15 @@ namespace RaftAndroid.Platform
             if (axis == "Mouse ScrollWheel")
             {
                 float legacy = raw ? Input.GetAxisRaw(axis) : Input.GetAxis(axis);
-                if (legacy != 0f) return legacy;
+                if (legacy != 0f)
+                {
+                    RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.ScrollAxis, -1, true, false);
+                    return legacy;
+                }
                 PhysicalMouseButtonWheelFrame.Snapshot capturedFrame;
-                return TryCapturedFrame(out capturedFrame) ? capturedFrame.Vertical : legacy;
+                float value = TryCapturedFrame(out capturedFrame) ? capturedFrame.Vertical : legacy;
+                RecordLegacyReader(PhysicalMouseLegacyReaderEvidence.ScrollAxis, -1, false, value != 0f);
+                return value;
             }
             var current = instance;
             if (current != null && (axis == "Mouse X" || axis == "Mouse Y"))
@@ -361,6 +420,20 @@ namespace RaftAndroid.Platform
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
                     "physical_mouse_capture_lost",
                     "lostTransitions=" + losses + "; legacyFallback=true");
+            }
+            var readerCounts = readerEvidence.Read();
+            // First reader, new positive edge/scroll, or once per 512 polls.
+            // Held true across many frames cannot flood persistent logs.
+            if (readerCounts.Calls > 0 &&
+                (lastReaderLogCalls == 0 ||
+                 readerCounts.Calls - lastReaderLogCalls >= 512 ||
+                 readerCounts.Edges > lastReaderLogEdges ||
+                 readerCounts.Scroll > lastReaderLogScroll))
+            {
+                lastReaderLogCalls = readerCounts.Calls;
+                lastReaderLogEdges = readerCounts.Edges;
+                lastReaderLogScroll = readerCounts.Scroll;
+                LogLegacyReaderEvidence("physical_mouse_legacy_reader_evidence", readerCounts);
             }
             var actions=actionEvidence.Read();
             int last=Volatile.Read(ref lastActionReport);
@@ -552,6 +625,9 @@ namespace RaftAndroid.Platform
             var finalActions=actionEvidence.Read();
             if(finalActions.Count>Volatile.Read(ref lastActionReport))
                 LogCapturedActions("physical_mouse_captured_action_callbacks_final",finalActions);
+            var finalReaderCounts = readerEvidence.Read();
+            if (finalReaderCounts.Calls > lastReaderLogCalls)
+                LogLegacyReaderEvidence("physical_mouse_legacy_reader_evidence_final", finalReaderCounts);
             int releaseViewIdentity;
             lock (captureGate)
             {
@@ -564,7 +640,9 @@ namespace RaftAndroid.Platform
                 deltas.Reset();
                 actionEvidence.Reset();
                 buttonWheel.Reset();
+                readerEvidence.Reset();
             }
+            lastReaderLogCalls = lastReaderLogEdges = lastReaderLogScroll = 0;
             Volatile.Write(ref lastActionReport,0);
             lastLoggedCount = 0;
             captureRequestAttempts = 0;
