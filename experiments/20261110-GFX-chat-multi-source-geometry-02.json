@@ -1,0 +1,32 @@
+{
+  "session_id": "20261110-GFX-chat-multi-source-geometry-02",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-multi-bounds-source-01",
+  "base_sha": "4839bdcef377d07c4aa47eea9357d05fd942e748",
+  "branch": "experiment/android-graphics-rootcause",
+  "experiment_key": "gfx-multi-source-float32-spatial-span-select",
+  "scope": "Avoid zero-extent original model by verified replacement candidate, source-only CI first; do not change T team or original ZIP2.",
+  "issue_id": "RENDER-002",
+  "source_ref": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42718266273"
+  ],
+  "question": "Can source-authenticated model selection reject an OBJ with valid topology but collapsed float32 positions and select a real substitute from the same locked original assets?",
+  "hypothesis": "One source candidate has an unsupported/degenerate vertex decode; choose a different original Render→Mesh chain with strictly checked finite nonzero float32 vertex span.",
+  "control": "No synthetic mesh, no arbitrary model guessed from filename, no raw original coordinates in repo or logs; same 7 material /21 image layout and original Shader48 typed chain.",
+  "planned_tests": [
+    "unit tests for float32 span and degeneracy",
+    "source GFX-MULTI-001 with SHA lock",
+    "source GFX-MULTI-002 7/21 decode next",
+    "Unity APK only after source passes"
+  ],
+  "status": "source_selection_patch_submitted_outcome_pending",
+  "runs": {
+    "failed_builds": [
+      42712833407,
+      42714952065,
+      42718266273
+    ],
+    "latest_shader_source": 42715492781
+  }
+}

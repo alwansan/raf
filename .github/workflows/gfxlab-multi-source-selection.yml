@@ -61,6 +61,9 @@ jobs:
           assert d["source_verified"] and d["selected_count"]==5
           assert len({row["id"] for row in d["selected"]})==5
           assert all(x["texture_count"]>=1 and x["material_slots"]>=1 for x in d["selected"])
+          # Exact-original float32 source span checked before accepting each source model.
+          assert all(x['material_slots'] in (1,2) and x['texture_count']==3*x['material_slots'] for x in d['selected'])
+          assert d['rejected_unusable_original_geometry']>=0
           assert not d["android_pixels_verified"] and not d["original_shader_equivalence_verified"]
           print("GFX_MULTI_SOURCE_FIVE_VERIFIED=PASS")
           PY

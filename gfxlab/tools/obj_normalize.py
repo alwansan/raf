@@ -9,6 +9,35 @@ This is a diagnostic approximation, NOT original exact authored normal semantics
 """
 from __future__ import annotations
 import math
+import struct
+
+def source_vertex_span_valid(vertices):
+    """True only for finite, nondegenerate ORIGINAL OBJ vertex span in Unity float32.
+    Coordinates are never logged or persisted. Independent of triangle count.
+    """
+    if not vertices:return False
+    low=[float("inf")]*3
+    high=[float("-inf")]*3
+    for xyz in vertices:
+        if len(xyz)!=3:return False
+        for k,value in enumerate(xyz):
+            try:
+                v=struct.unpack("<f",struct.pack("<f",float(value)))[0]
+            except (OverflowError,ValueError,TypeError,struct.error):
+                return False
+            if not math.isfinite(v):return False
+            low[k]=min(low[k],v)
+            high[k]=max(high[k],v)
+    span=max(high[k]-low[k] for k in range(3))
+    if not math.isfinite(span) or span<=1e-12:return False
+    scale=1.8/span
+    if not 1e-10<=scale<=1e10:return False
+    for k in range(3):
+        center=low[k]+(high[k]-low[k])*0.5
+        if not math.isfinite(center*scale) or abs(center*scale)>1e30:
+            return False
+    return True
+
 
 def _index(text,count):
     if not text:raise ValueError("OBJ corner required position index")
@@ -68,6 +97,8 @@ def normalize_exported_obj(data:str):
         else:
             # No unsafe extension or original private shader data copied.
             continue
+    if not source_vertex_span_valid(verts):
+        raise ValueError("OBJ original positions are degenerate in Unity float32 or unrepresentable")
     if not 128<=len(verts)<=140000 or not triangles:
         raise ValueError("OBJ has no valid bounded source topology")
     if not tex:

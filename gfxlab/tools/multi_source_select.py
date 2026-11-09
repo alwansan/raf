@@ -10,6 +10,8 @@ from pathlib import Path, PurePosixPath
 from gfxlab.tools.original_model_probe import OWNERS, ZIP2_SHA, inspect_owner, ptr, sha_size, stage_originals
 from gfxlab.tools.shears_provenance_probe import resolve_pptr
 from gfxlab.tools.shears_texture_readiness import pairs, classify_standard
+from gfxlab.tools.original_model_probe import export_one
+from gfxlab.tools.obj_normalize import source_vertex_span_valid
 
 ROLE_KEEP=frozenset(("basecolor","normal","metallic","emission","occlusion","specular"))
 STREAM_ALLOW=frozenset(("sharedassets0.assets.resS","resources.assets.resS","sharedassets6.assets.resS"))
@@ -185,23 +187,58 @@ def selected_five(original:Path):
         bonus+=350 if x["category"]=="person" else 0
         return min(x["vertices"],20000)/20+bonus+len(roles)*30+min(x["bones"],90)*2
     valid.sort(key=lambda x:(-quality(x),x["owner"],x["mesh_pid"]))
-    # Select distinct source geometry + renderers. Prefer diversity, but don't label generic as player.
+    # Do not select an OBJ whose original vertex coordinates collapse to a
+    # point in Unity float32. M02 from CI42718266273 had valid source topology
+    # counts but zero spatial extent after export. Avoid fabricating geometry.
+    # Keep the proven 1x3 or 2x3 material/texture profile (7/21 total).
+    probed={}
+    rejected=0
+    def qualified(x):
+        nonlocal rejected
+        key=(x["owner"],x["mesh_pid"])
+        if key in probed:return probed[key]
+        mats=x["materials"]
+        layout=(len(mats) in (1,2) and x["submeshes"]==len(mats)
+                and all(set(m["texture_roles"])=={"basecolor","normal","metallic"} for m in mats))
+        if not layout:
+            probed[key]=False
+            return False
+        try:
+            obj=types[x["owner"]][x["mesh_pid"]]
+            data,vertices,faces=export_one(obj)
+            xyz=[]
+            for line in data.splitlines():
+                if line.startswith("v "):
+                    tokens=line.split()
+                    if len(tokens)<4:raise ValueError("incomplete exported vertex")
+                    xyz.append(tuple(float(value) for value in tokens[1:4]))
+            ready=(len(xyz)==vertices and faces>0 and source_vertex_span_valid(xyz))
+        except Exception:
+            ready=False
+        probed[key]=ready
+        if not ready:rejected+=1
+        return ready
     result=[];used_mesh=set()
     order=("person","animal","large_prop","large_mesh","tool","multi_material","complex_skinned_unidentified","generic")
     for desired in order:
-        matches=[x for x in valid if x["category"]==desired and (x["owner"],x["mesh_pid"]) not in used_mesh]
-        if matches and len(result)<5:
-            x=matches[0];result.append(x);used_mesh.add((x["owner"],x["mesh_pid"]))
+        if len(result)==5:break
+        for x in valid:
+            key=(x["owner"],x["mesh_pid"])
+            if x["category"]==desired and key not in used_mesh and qualified(x):
+                result.append(x);used_mesh.add(key)
+                break
     for x in valid:
         if len(result)==5:break
-        key=x["owner"],x["mesh_pid"]
-        if key not in used_mesh:result.append(x);used_mesh.add(key)
+        key=(x["owner"],x["mesh_pid"])
+        if key not in used_mesh and qualified(x):
+            result.append(x);used_mesh.add(key)
     if len(result)!=5:raise RuntimeError("unable to select five separate verified meshes")
     private={"schema":1,"source_sha":ZIP2_SHA,"selected":result}
     safe={"schema":1,"source_sha_locked":True,"source_owners":len(OWNERS),
           "scanned_original_renderer_mesh_links":len(mesh_candidates),
           "verified_material_and_shader_chains":counts["valid_original_typed_links"],
           "candidate_inspection_errors":counts["candidate_inspection_errors"],
+          "rejected_unusable_original_geometry":rejected,
           "selected_count":len(result),"source_verified":True,
           "unity_imported":False,"android_pixels_verified":False,
           "original_shader_equivalence_verified":False,

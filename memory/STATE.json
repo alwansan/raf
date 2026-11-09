@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-multi-bounds-source-01",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-multi-bounds-source-01.md",
-  "status": "GFX_MULTI_003_UNITY_SOURCE_VERTEX_BOUNDS_PATCH_CI_PENDING",
+  "latest_session": "20261110-GFX-chat-multi-source-geometry-02",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-multi-source-geometry-02.md",
+  "status": "GFX_MULTI_003_ORIGINAL_M02_SPATIAL_DEGENERACY_CONFIRMED_SELECTION_FILTER_SOURCE_TEST_PENDING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -153,7 +153,7 @@
       "https://github.com/alwansan/raf/actions/runs/42712118731"
     ],
     "build_run": "https://github.com/alwansan/raf/actions/runs/42712833407",
-    "build_status": "FAILED_42712833407_42714952065_NEXT_CI_PENDING",
+    "build_status": "FAILED_42718266273_PRE_APK",
     "source_original_meshes": 6,
     "additional_source_models": 5,
     "source_material_slots": 7,
@@ -179,9 +179,9 @@
     "original_shader_equivalence_verified": false,
     "original_animation_restored": false,
     "new_device_pixels_verified": false,
-    "last_failed_run": 42714952065,
-    "last_failure": "UNITY_EDITOR_GFX_MULTI_BAD_ORIGINAL_BOUNDS_M02",
-    "fix_scope": "Normalize using authentic MeshFilter vertices; finite and nondegenerate checks; no invented bounds or geometry"
+    "last_failed_run": 42718266273,
+    "last_failure": "GFX_MULTI_DEGENERATE_SOURCE_VERTEX_BOUNDS_M02_AFTER_AUTHENTIC_1598_VERTEX_FALLBACK",
+    "fix_scope": "Fail-closed float32 original OBJ vertex extent filtering for five candidates with 7-material/21-texture profile, no synthetic geometry"
   },
   "latest_source_shader_audit": {
     "run": 42715492781,
