@@ -82,7 +82,7 @@ class ParticleEmitterNameHints(unittest.TestCase):
         result = module.safe_aggregate(
             [(True, 2, "Smoke_SecretPath_112"), (True, 2, "Smoke_SecretPath_112")],
             expected_selected_slots=4, expected_selected_renderers=2)
-        self.assertEqual(result["selected_smoke_like_GameObject_names"], 1 if False else 0)
+        self.assertEqual(result["selected_smoke_like_GameObject_names"], 2)
         self.assertNotIn("SecretPath", str(result))
 
 
