@@ -191,5 +191,36 @@ class T2FoamResourceAbiTests(unittest.TestCase):
                     verify_genuine_texture_sampler_pair_count(report)
 
 
+    def test_tampered_source_descriptor_metadata_fails_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        mutations = (
+            ("original_descriptor_rows", True),
+            ("original_descriptor_rows", 5.0),
+            ("original_descriptor_rows", 999),
+            ("original_numeric_descriptor_sha256", "bad"),
+            ("original_numeric_descriptor_sha256", "G" * 64),
+            ("original_numeric_descriptor_sha256", None),
+        )
+        for field, value in mutations:
+            with self.subTest(field=field, value=value):
+                report = combine(profile, resources)
+                report["rows"][1][field] = value
+                with self.assertRaises(ValueError):
+                    verify_genuine_texture_sampler_pair_count(report)
+
+    def test_tampered_source_table_types_and_extra_fields_fail_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        for field, value in (("m_TextureParams", True),
+                             ("m_TextureParams", 5.0),
+                             ("m_Samplers", False),
+                             ("m_UAVParams", 0.0),
+                             ("m_Unknown", 0)):
+            with self.subTest(field=field, value=value):
+                report = combine(profile, resources)
+                report["rows"][1]["original_numeric_table_rows"][field] = value
+                with self.assertRaises(ValueError):
+                    verify_genuine_texture_sampler_pair_count(report)
+
+
 if __name__ == "__main__":
     unittest.main()
