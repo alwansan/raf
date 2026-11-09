@@ -1,0 +1,29 @@
+{
+  "event_id": "20261109T2042Z-T4-chat-release-final-window-q6n4",
+  "owner": "T4",
+  "origin": "chat",
+  "at": "2026-11-09T20:48:00Z",
+  "session_id": "20261109T2042Z-T4-chat-release-final-window-q6n4",
+  "issue_id": "INPUT-005",
+  "type": "result",
+  "event_type": "source_only_original_release_after_final_mouse_provenance",
+  "summary": "Original AndroidPhysicalMouseCapture.ReleaseCapture logs released before _final action and Legacy reader snapshots (epoch changes only after). Previous T4 analyzer discarded final-only mouse evidence by clearing active at release. Added bounded 2-record final-only window respecting logger session, epoch, canonical order, single use, eight unrelated records max, and invalidation after malformed or wrong-epoch finals. 14 new tests; CI42696168324 SUCCESS 71/71. No owner game/button PASS.",
+  "status": "SOURCE_ONLY_SUCCESS_DEVICE_PENDING",
+  "full_game_not_ready": true,
+  "device_pass": false,
+  "unity_gameplay_verified": false,
+  "commits": [
+    "20efd8020d68bca166a2a23a24e8d4f03163bc6d",
+    "5c43c3a20b397fa6e9bfaabd7c5a96d067b492ab",
+    "8e5db658a8b597697a907eb39ea0834f15feae12",
+    "4e7ac40839328bc1e7688f41c0a645ca3a54bb46"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42696168324",
+  "job_id": 129428503951,
+  "tests_passed": 71,
+  "tests_total": 71,
+  "experiment": "prompt/coordination/experiments/T4/20261109T2042Z-T4-chat-release-final-window-q6n4.json",
+  "report": "docs/T4_RELEASE_FINAL_ORIGINAL_MOUSE_EVIDENCE_2026-11-09.md",
+  "owner_cl": "https://github.com/alwansan/CL/tree/main/test/shared-20261109-233132-554663211",
+  "next_step": "With separately authorized source-matched signed full game, validate captured mouse and authored Unity receiver and actual game response; no T4 APK dispatch."
+}
