@@ -108,3 +108,16 @@ class TestDeviceEvidence(unittest.TestCase):
     def test_missing_worker_completion(self):
         s, e = fixture()
         self.reject(s, [x for x in e if x["event"] != "auto_complete"])
+
+    def test_result_after_auto_complete_rejected(self):
+        s, e = fixture()
+        result = next(x for x in e if x["event"] == "case_result" and '"T1-05"' in x["detail"])
+        e.remove(result)
+        e.append(dict(result, time_ms=1800))
+        self.reject(s, e)
+
+    def test_reuse_before_auto_complete_rejected(self):
+        s, e = fixture()
+        reuse = e.pop()
+        e.insert(-1, dict(reuse, time_ms=1600))
+        self.reject(s, e)
