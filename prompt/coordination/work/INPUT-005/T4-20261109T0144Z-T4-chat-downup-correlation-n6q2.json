@@ -2,10 +2,10 @@
   "owner": "T4",
   "origin": "chat",
   "session_id": "20261109T0144Z-T4-chat-downup-correlation-n6q2",
-  "status": "active",
+  "status": "completed",
   "issue_id": "INPUT-005",
   "base_sha": "cf764d7671efb58dc57f5952bd1c2875e97ec504",
-  "updated_at": "2026-11-09T01:44:00Z",
+  "updated_at": "2026-11-09T01:50:00Z",
   "resumed_from_sessions": [
     "20261109T0036Z-T4-scheduled-capture-evidence-q4m8",
     "20261108T1958Z-T4-chat-legacy-button-wheel-bridge-y8m2",
@@ -24,5 +24,12 @@
   "experiment_key": "T4-CL-4680f5dc-a0-actionButton0-downup-press-release-same-eventTime-v1",
   "resource_key": "T4-source-only-CL-immutable-evidence-no-Unity",
   "active_conflict_check": "Latest scheduled T4 session 20261109T0036Z only saved evidence; other T4 gameplay source stages completed; no new gameplay/mini source ownership; latest GitHub runs list all completed.",
-  "next_step": "Implement isolated recorded-edge dedup with explicit/actionButton0 candidate separation, tests, CI; do not change game runtime or T5 shared Mini."
+  "next_step": "Next CL/test physical T4-02 capture ON owner result and next signed game Unity Mouse0/1/2 V/H scroll comparison; no game/mini build from source-only correlation.",
+  "completed_at": "2026-11-09T01:50:00Z",
+  "outcome": "SOURCE_ONLY_VERIFIED_REAL_OWNER_CALLBACK_CORRELATION; 13/13 matched DOWN/UP with explicit LEFT button edges, zero inferred extra clicks; Android captured/gameplay still DEVICE_PENDING.",
+  "result_sha": "d511887c43f178e8e0189180b75849984d34df16",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42547259000",
+    "https://github.com/alwansan/raf/actions/runs/42547368125"
+  ]
 }
