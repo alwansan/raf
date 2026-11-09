@@ -74,13 +74,24 @@ def audit(records):
             "gpu_execution_proven": False}
 
 
+def reject_duplicate_json_keys(pairs):
+    """Do not let JSON parser silently overwrite trace evidence fields."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON trace key: " + key)
+        result[key] = value
+    return result
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("jsonl", type=Path)
     a = p.parse_args()
     if not a.jsonl.is_file() or a.jsonl.stat().st_size > 1048576:
         raise ValueError("bounded trace JSONL required (<=1 MiB)")
-    rows = [json.loads(line) for line in a.jsonl.read_text(encoding="utf-8").splitlines() if line.strip()]
+    rows = [json.loads(line, object_pairs_hook=reject_duplicate_json_keys)
+            for line in a.jsonl.read_text(encoding="utf-8").splitlines() if line.strip()]
     print(json.dumps(audit(rows), sort_keys=True))
 
 
