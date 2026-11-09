@@ -584,15 +584,21 @@ public final class UnifiedLabActivity extends Activity {
                 out.write((j.toString()+"\n").getBytes(StandardCharsets.UTF_8));}
         }catch(Exception e){android.util.Log.e("RaftTeamLab","Log failed",e);}
     }
+    // Retire only URIs created by our own completed exports. A failed deletion
+    // leaves an extra complete old copy, never a truncated replacement.
+    boolean deleteExportMedia(Uri uri,String reason){
+        if(uri==null)return true;
+        try{
+            if(getContentResolver().delete(uri,null,null)==1)return true;
+            log("media_delete_unconfirmed",reason);
+        }catch(Exception e){log("media_delete_error",reason+" "+e.getClass().getSimpleName());}
+        return false;
+    }
     void export(){
+        Uri newLog=null,newSummary=null;
+        boolean committed=false;
         try{
             log("export_start","session="+session);
-            if(logExport==null){
-                byte[] bytes=readFile(privateLog);logExport=writeMedia(privateLog.getName(),"application/x-ndjson",bytes);
-            }else{try(InputStream in=new FileInputStream(privateLog);OutputStream out=getContentResolver().openOutputStream(logExport,"wt")){
-                if(out==null)throw new IOException("No output stream");byte[] buf=new byte[16384];int n;
-                while((n=in.read(buf))>=0)out.write(buf,0,n);out.flush();}
-            }
             JSONObject sum=new JSONObject();sum.put("session",session);sum.put("pack_id",packId);
             sum.put("pack_sha256",packSha);sum.put("app_source",BuildConfig.SOURCE_SHA);
             JSONArray cases=new JSONArray();for(JSONObject c:tests){
@@ -601,11 +607,29 @@ public final class UnifiedLabActivity extends Activity {
             }
             sum.put("results",cases);
             byte[] json=(sum.toString(2)+"\n").getBytes(StandardCharsets.UTF_8);
-            if(summaryExport==null)summaryExport=writeMedia("summary-"+session+".json","application/json",json);
-            else try(OutputStream out=getContentResolver().openOutputStream(summaryExport,"wt")){out.write(json);out.flush();}
-            show("تم حفظ events.jsonl وsummary.json داخل Download/Games/cl/test/shared-"+session+"/");
-        }catch(Exception e){log("export_error",e.toString());
-            show("تعذر تصدير السجلات؛ بقيت البيانات محفوظة داخل التطبيق. "+e.getClass().getSimpleName());}
+            // Never overwrite a published URI: provider failure could destroy the
+            // last complete owner export. Write both new files before retiring either.
+            byte[] events=readFile(privateLog);
+            newLog=writeMedia(privateLog.getName(),"application/x-ndjson",events);
+            newSummary=writeMedia("summary-"+session+".json","application/json",json);
+            Uri previousLog=logExport,previousSummary=summaryExport;
+            logExport=newLog;summaryExport=newSummary;
+            committed=true;
+            boolean removedLog=deleteExportMedia(previousLog,"previous-log");
+            boolean removedSummary=deleteExportMedia(previousSummary,"previous-summary");
+            if(removedLog&&removedSummary)
+                show("تم حفظ events.jsonl وsummary.json داخل Download/Games/cl/test/shared-"+session+"/");
+            else show("تم حفظ ملفات جديدة مكتملة؛ تعذر حذف نسخة قديمة، فراجع تكرار الملفات في مجلد الاختبار.");
+        }catch(Exception e){
+            // If the second file fails, keep BOTH previously published files;
+            // remove the just-created new log instead of exposing a mismatched pair.
+            if(!committed){
+                deleteExportMedia(newSummary,"rollback-summary");
+                deleteExportMedia(newLog,"rollback-log");
+            }
+            log("export_error",e.toString());
+            show("تعذر تصدير السجلات؛ بقيت البيانات محفوظة داخل التطبيق. "+e.getClass().getSimpleName());
+        }
     }
     static byte[] readFile(File f)throws IOException{
         try(InputStream in=new FileInputStream(f);ByteArrayOutputStream out=new ByteArrayOutputStream()){
