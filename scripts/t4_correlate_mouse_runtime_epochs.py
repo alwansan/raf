@@ -55,7 +55,7 @@ def decode_record(line):
                      and bool(line["utc"].strip())
                      and type(line.get("thread")) is int
                      and line["thread"] >= 0
-                     and line.get("area") == "input")
+                     and (op not in OPS or line.get("area") == "input"))
             scope = ("jsonl", session) if valid else ("invalid", "")
             seq = seq if valid else None
         else:
