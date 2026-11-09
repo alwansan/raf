@@ -90,8 +90,13 @@ internal static class Program
         try
         {
             var resolved = reference.Resolve();
-            return resolved is not null && resolved.Module==field.Module &&
-                resolved.MetadataToken==field.MetadataToken;
+            // In-memory Cecil selftest fields have RID=0. Zero is NOT a
+            // globally unique field identity. Original compiled fields have
+            // real RIDs; reference identity is the safe source-free fallback.
+            return resolved is not null && (ReferenceEquals(resolved,field) ||
+                (resolved.Module==field.Module && resolved.MetadataToken.RID!=0 &&
+                 field.MetadataToken.RID!=0 &&
+                 resolved.MetadataToken==field.MetadataToken));
         }
         catch(AssemblyResolutionException) {return false;}
         catch(ResolutionException) {return false;}
@@ -317,7 +322,8 @@ internal static class Program
     private sealed record StackSourceTrace(string Role,string Kind,string Reason,int Steps,int VoidCalls,
         Instruction? SourceInstruction);
 
-    static StackSourceTrace BacktraceBlitSource(MethodDefinition method,int blitIndex)
+    static StackSourceTrace BacktraceBlitSource(MethodDefinition method,int blitIndex,
+        int depthFromTop=3)
     {
         // Backwards CIL stack accounting for the FOURTH value below the
         // Blit call (source). A preceding void call contributes zero pushes
@@ -326,11 +332,13 @@ internal static class Program
         // original method path, never texture INSTANCE or shader equivalence.
         StackSourceTrace Blocked(string why,int steps,int voids) =>
             new("unknown","unknown",why,steps,voids,null);
-        if(method.Body.HasExceptionHandlers || blitIndex<1 ||
+        if(depthFromTop is not (2 or 3) || method.Body.HasExceptionHandlers || blitIndex<1 ||
             blitIndex>=method.Body.Instructions.Count || !Blit(method.Body.Instructions[blitIndex]))
             return Blocked("not_straight_line",0,0);
         var il=method.Body.Instructions;
-        int depth=3,voidCalls=0,steps=0;
+        // Blit(source, destination, material, pass): reverse CIL stack slots
+        // source=3, destination=2. These are TYPE/declared-field traces only.
+        int depth=depthFromTop,voidCalls=0,steps=0;
         int min=Math.Max(0,blitIndex-96);
         for(int at=blitIndex-1;at>=min;at--)
         {
@@ -631,7 +639,8 @@ internal static class Program
     // through branches, not merely the opcode adjacent to ret. This is only
     // a category-level structural diagnostic, NEVER instance equality.
     private sealed record ReturnFlowState(string[] Stack,string[] Locals);
-    static string ReachableReturnValueFlow(MethodDefinition method)
+    static string ReachableReturnValueFlow(MethodDefinition method,
+        FieldDefinition? checkField=null)
     {
         if(!method.HasBody)return "value_no_body";
         if(method.Body.HasExceptionHandlers)return "value_exception_regions";
@@ -740,7 +749,11 @@ internal static class Program
                     if(ins.Operand is not FieldReference field)return "value_unsupported_opcode";
                     if(op==Code.Ldfld)Pop(); // Receiver identity is NOT known.
                     stack.Add(field.FieldType.FullName is Texture or RenderTexture ?
-                        (op==Code.Ldsfld?"static_field_category":"instance_field_receiver_unknown"):
+                        (checkField is null ?
+                            (op==Code.Ldsfld?"static_field_category":"instance_field_receiver_unknown"):
+                            (SameField(ins,checkField,true) ?
+                                "same_declared_field_token_receiver_unproved":
+                                "different_declared_field_token")):
                         "opaque");
                 }
                 else if(op is Code.Stsfld or Code.Stfld)
@@ -883,6 +896,25 @@ internal static class Program
         if(returns.Count==0)return "value_no_reachable_return";
         var categories=returns.Values.SelectMany(x=>x.Split('|'))
             .Distinct(StringComparer.Ordinal).ToArray();
+        if(checkField is not null)
+        {
+            // Compare ONLY the declared original field token. The pass0
+            // destination and pass1 source may be loaded from different
+            // instances (ldfld), overwritten or rebound between frames.
+            // A positive token match is NEVER runtime heap identity.
+            bool match=categories.Contains("same_declared_field_token_receiver_unproved",
+                StringComparer.Ordinal);
+            bool explicitNull=categories.Contains("null",StringComparer.Ordinal);
+            bool other=categories.Any(x=>x is not
+                ("same_declared_field_token_receiver_unproved" or "null"));
+            if(match)
+                return explicitNull ?
+                    (other?"field_token_match_plus_null_and_other":"field_token_match_plus_null"):
+                    (other?"field_token_match_plus_other":"field_token_match_only");
+            if(explicitNull)
+                return other?"field_no_match_with_null":"field_null_only";
+            return "field_no_direct_match";
+        }
         if(categories.Length!=1)
             return categories.Contains("null",StringComparer.Ordinal)
                 ? "value_mixed_with_explicit_null_literal"
@@ -915,6 +947,42 @@ internal static class Program
             if(callee.IsVirtual&&!callee.IsFinal)return "value_dynamic_dispatch_unresolved";
         }
         return ReachableReturnValueFlow(callee);
+    }
+
+    static string OriginalCrosspassDeclaredFieldReturnRelation(
+        StackSourceTrace pass0Destination,StackSourceTrace pass1Source,
+        ModuleDefinition sourceModule)
+    {
+        // The ONLY asserted relationship here is exact declared FieldDefinition
+        // identity across an original pass0 destination load and original
+        // pass1 callee CIL return-value provenance (through locals/CFG).
+        // It cannot establish the receiver identity, allocation, intervening
+        // writes, same-frame state, or the actual RenderTexture heap object.
+        if(pass0Destination.Kind!="typed_field" ||
+           pass0Destination.Role!="RenderTexture" ||
+           pass0Destination.SourceInstruction?.Operand is not FieldReference destRef)
+            return "field_pass0_destination_untraced";
+        FieldDefinition? field;
+        try{field=destRef.Resolve();}
+        catch(AssemblyResolutionException){return "field_destination_unresolved";}
+        catch(ResolutionException){return "field_destination_unresolved";}
+        if(field is null || field.Module!=sourceModule)
+            return "field_destination_unresolved";
+        if(pass1Source.Kind!="typed_call_result" ||
+           pass1Source.SourceInstruction?.Operand is not MethodReference method)
+            return "field_pass1_callee_untraced";
+        MethodDefinition? callee;
+        try{callee=method.Resolve();}
+        catch(AssemblyResolutionException){return "field_callee_unresolved";}
+        catch(ResolutionException){return "field_callee_unresolved";}
+        if(callee is null || callee.Module!=sourceModule)
+            return "field_callee_unresolved";
+        if(pass1Source.SourceInstruction.OpCode.Code==Code.Callvirt)
+        {
+            if(!callee.HasThis)return "field_bad_receiver_signature";
+            if(callee.IsVirtual&&!callee.IsFinal)return "field_virtual_dispatch_unknown";
+        }
+        return ReachableReturnValueFlow(callee,field);
     }
 
     static string SourceAdjacentCallReturnFamily(MethodDefinition method,int callIndex,FieldDefinition field)
@@ -1099,6 +1167,7 @@ internal static class Program
         var originalSourceHeadKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         var originalSourceReturnKinds=new Dictionary<int,List<string>>{{0,new()},{1,new()}};
         var originalBacktraces=new Dictionary<int,List<StackSourceTrace>>{{0,new()},{1,new()}};
+        var originalDestBacktraces=new Dictionary<int,List<StackSourceTrace>>{{0,new()},{1,new()}};
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -1119,6 +1188,7 @@ internal static class Program
                         originalSourceHeadKinds[lit.Value].Add(SourceHeadClass(m,i,materialField));
                         originalSourceReturnKinds[lit.Value].Add(SourceAdjacentCallReturnFamily(m,i,materialField));
                         originalBacktraces[lit.Value].Add(BacktraceBlitSource(m,i));
+                        originalDestBacktraces[lit.Value].Add(BacktraceBlitSource(m,i,2));
                     }
                     else if(OriginalMaterialLocalAliasBlit(m,i,materialField))
                         exactMaterialLocalAlias[lit.Value]++;
@@ -1169,6 +1239,8 @@ internal static class Program
         var back0=originalBacktraces[0].Count==1?originalBacktraces[0][0]:
             new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0,null);
         var back1=originalBacktraces[1].Count==1?originalBacktraces[1][0]:
+            new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0,null);
+        var dest0=originalDestBacktraces[0].Count==1?originalDestBacktraces[0][0]:
             new StackSourceTrace("unknown","unknown","ambiguous_or_missing",0,0,null);
         var safeStackKinds=new HashSet<string>{
             "unknown","typed_field","typed_local","typed_argument","typed_call_result",
@@ -1247,6 +1319,21 @@ internal static class Program
             throw new InvalidOperationException("unsafe_original_value_flow_category");
         Console.WriteLine("T2_FOAM_PASS0_CALLEE_RETURN_VALUE_FLOW "+value0);
         Console.WriteLine("T2_FOAM_PASS1_CALLEE_RETURN_VALUE_FLOW "+value1);
+        string crosspassField=OriginalCrosspassDeclaredFieldReturnRelation(dest0,back1,asm.MainModule);
+        var permittedFieldTags=new HashSet<string>{
+            "field_pass0_destination_untraced","field_destination_unresolved",
+            "field_pass1_callee_untraced","field_callee_unresolved",
+            "field_bad_receiver_signature","field_virtual_dispatch_unknown",
+            "field_token_match_plus_null_and_other","field_token_match_plus_null",
+            "field_token_match_plus_other","field_token_match_only",
+            "field_no_match_with_null","field_null_only","field_no_direct_match"
+        };
+        // Reuse the fail-closed value interpreter's established finite
+        // rejection categories, not names/methods/tokens from private CIL.
+        if(!permittedFieldTags.Contains(crosspassField) &&
+           !safeValueTags.Contains(crosspassField))
+            throw new InvalidOperationException("private_crosspass_field_relation_forbidden");
+        Console.WriteLine("T2_FOAM_CROSSPASS_DECLARED_FIELD_RETURN_RELATION "+crosspassField);
         // Correct original field role proof remains separate from image instance continuity.
         return new {
             status="original_foam_typed_blit_producer_audit",
@@ -1294,6 +1381,10 @@ internal static class Program
             original_pass1_bounded_stack_void_calls=back1.VoidCalls,
             original_bounded_stack_static_type_only=true,
             original_bounded_stack_texture_instance_equality_verified=false,
+            original_pass0_destination_declared_field_trace=dest0.Role=="RenderTexture" &&
+                dest0.Kind=="typed_field",
+            original_crosspass_declared_field_return_relation=crosspassField,
+            original_crosspass_declared_field_token_not_heap_identity=true,
             original_shader_to_blit_direct_field_types_confirmed=pass0 is not null && pass1 is not null,
             original_texture_instance_identity_proven=false,
             original_crosspass_destination_to_source_identity_proven=false,
