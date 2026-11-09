@@ -6,15 +6,17 @@
   "issue_id": "INPUT-005",
   "type": "source_only_gate_tested",
   "status": "completed_source_only",
-  "summary": "New independent process-local capture-epoch correlation parser separates Android native captured callbacks from original Unity Legacy getter fallback; rejects mixed epochs, release boundaries, malformed evidence.",
+  "summary": "New independent process-local capture-epoch correlation parser separates Android native captured callbacks from original Unity Legacy getter fallback; rejects mixed epochs, release boundaries, malformed evidence. Hardened counter validation on subsequent commit; final 16/16 CI passed.",
   "branch": "feature/android-native-port",
-  "source_ci_run": "https://github.com/alwansan/raf/actions/runs/42679181503",
-  "source_sha": "14a5d794ee5409d0f1ba32fb0436e480b4467230",
-  "tests": "14/14 source-only Python unittest PASS",
+  "source_ci_run": "https://github.com/alwansan/raf/actions/runs/42679768824",
+  "source_sha": "b73773ccba74cf49ecf97d740b4abec911ae299c",
+  "tests": "16/16 source-only Python unittest PASS (runner log 129370913540)",
   "device_pass": false,
   "gameplay_verified": false,
   "no_new_signed_xapk": true,
   "report": "docs/T4_MOUSE_SAME_EPOCH_CORRELATION_2026-11-09.md",
   "session": "prompt/coordination/clients/T4/sessions/20261109T1858Z-T4-chat-epoch-evidence-p6m4.md",
-  "next": "Await true captured physical-button and wheel device evidence on same-source signed Raft game candidate; preserve camera/world/save/audio."
+  "next": "Await true captured physical-button and wheel device evidence on same-source signed Raft game candidate; preserve camera/world/save/audio.",
+  "initial_source_ci_run": "https://github.com/alwansan/raf/actions/runs/42679181503",
+  "updated_at": "2026-11-09T19:05:00Z"
 }
