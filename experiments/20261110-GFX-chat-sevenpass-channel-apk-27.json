@@ -27,7 +27,7 @@
       "status": "IN_PROGRESS_Unity"
     }
   ],
-  "status": "SOURCE_STATE_SUCCESS_APK_BUILD_IN_PROGRESS",
+  "status": "SIGNED_APK_SUCCESS_OWNER_TEST_PENDING",
   "controls": [
     "No proprietary DXBC/GLSL/PNG/OBJ loose asset committed",
     "Original source payload only in Github runner",
@@ -37,5 +37,21 @@
   ],
   "next_step": "Audit pass states, compile six model channel-viewer APK, run CI, verify artifact, update all restore/memory files.",
   "originalShaderRestored": false,
-  "ownerAndroidPixelsVerified": false
+  "ownerAndroidPixelsVerified": false,
+  "apk": {
+    "run": 42748792585,
+    "artifact_id": 13733300521,
+    "url": "https://github.com/alwansan/raf/actions/runs/42748792585/artifacts/13733300521",
+    "expires_at_utc": "2026-11-17T03:32:17Z",
+    "filename": "GfxLab-Multi-Six-Channel-Probe.apk",
+    "size_bytes": 65963109,
+    "sha256": "8fef68d82748cd214b1f5f5f9c0b3903a80f343513ccb15fc35e12649c02ad52",
+    "package": "com.alwansan.raft.graphicslab.channels",
+    "source_free_tests": 150,
+    "source_models": 6,
+    "source_texture_links": 21,
+    "unity_build_succeeded": true,
+    "signature_verified": true,
+    "private_source_purged": true
+  }
 }
