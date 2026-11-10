@@ -51,3 +51,25 @@ def classify_rhs(opcodes: Sequence[str], *, call_returns_value: bool = False) ->
     if any(op == "castclass" for op in ops[:producer_index]):
         return "UNKNOWN"
     return _ORIGINS[producers[0]]
+
+
+def classify_verified_rhs(
+    opcodes: Sequence[str], *, complete_slice: bool = False,
+    receiver_verified: bool = False, call_returns_value: bool = False
+) -> str:
+    """Strict evidence gate for original-IL consumers, not an alias proof.
+
+    The legacy classify_rhs accepts pre-normalized synthetic slices. Original
+    Mono.Cecil callers must first prove slice completeness and (for ldfld)
+    that the receiver stack operand is valid. A method signature must prove
+    a non-void return for call/callvirt. None proves runtime texture identity.
+    """
+    if not all(isinstance(flag, bool) for flag in
+               (complete_slice, receiver_verified, call_returns_value)):
+        return "UNKNOWN"
+    if not complete_slice:
+        return "UNKNOWN"
+    category = classify_rhs(opcodes, call_returns_value=call_returns_value)
+    if category == "FIELD_READ" and not receiver_verified:
+        return "UNKNOWN"
+    return category
