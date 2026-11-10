@@ -1,0 +1,20 @@
+{
+  "session_id": "20261110-GFX-chat-stage-relative-to-SPV-index-shape-46",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-072",
+  "resumed_from": "GFX-MULTI-071 CI42887830590 SUCCESS, 515 tests, 427 authenticated real CB SPV index root operators: 350 OpIAdd, 77 OpBitcast",
+  "base_sha": "5d08f083ce6830b39f6348ba9358f7b3a6ee129a",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Across 157 genuine Shader48 class representative VS/FS pairs, do per-original-stage original DXBC CB source direct-relative (77 total) and immediate32-plus-relative (350 total) counts match real loaded SPV UBO dynamic vec index OpBitcast / OpIAdd root counts, and do SPV IAdds include a literal offset plus Bitcast(OpLoad)?",
+  "controls": [
+    "311 source CB-authenticated stages, 3 source CB-free, 314 Vulkan1.1 valid SPV stages",
+    "Independent GFX067 DXBC parser count per source stage",
+    "Actual OpLoad pointer to authenticated source original CB b global and reflected vec4 layout",
+    "No fake operation-level mapping, SSA root or numeric equality on stage histogram match",
+    "Offset value/sign kept anonymous, original DXBC/SPV purged"
+  ],
+  "run": "https://github.com/alwansan/raf/actions/runs/42888662350",
+  "status": "CI_RUNNING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
