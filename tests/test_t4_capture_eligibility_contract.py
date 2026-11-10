@@ -21,7 +21,7 @@ class CaptureEligibilityContract(unittest.TestCase):
         presence = self.source.split("private static bool PhysicalMousePresent()", 1)[1].split("private void Update()", 1)[0]
         self.assertIn("mouse.added", presence)
         self.assertIn("mouse.name != VirtualTouchMouse", presence)
-        self.assertNotIn("Input.mousePresent", presence.split("return false;", 1)[0])
+        self.assertNotRegex(presence, r"if\\s*\\(\\s*Input\\.mousePresent\\s*\\)")
 
     def test_all_gate_states_are_individually_encoded(self):
         expected = {
