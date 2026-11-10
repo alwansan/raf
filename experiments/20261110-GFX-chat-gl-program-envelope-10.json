@@ -25,6 +25,26 @@
     "No actual Android Shader48 APK without authentic G7–G11 program/state/binding/GPU proofs",
     "No writes outside experiment/android-graphics-rootcause"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_SOURCE_ONLY_ORIGINAL_SINGLE_D3D11_PLATFORM_GL_ENTRIES_UNLINKED",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42812057156",
+    "https://github.com/alwansan/raf/actions/runs/42812151086",
+    "https://github.com/alwansan/raf/actions/runs/42812385346",
+    "https://github.com/alwansan/raf/actions/runs/42812418402"
+  ],
+  "results": {
+    "tests": 223,
+    "original_source_platform": "kShaderCompPlatformD3D11",
+    "compiled_programs": 1656,
+    "linked_unique_dx11_stages": 1275,
+    "unlinked_gles": 139,
+    "unlinked_glcore": 120,
+    "matching_original_compiler_platform": 0,
+    "comparable_keyword_entries": 0,
+    "gles_unique_code_payloads": 115,
+    "glcore_unique_code_payloads": 96,
+    "authentic_android_shader48_restored": false,
+    "source_purged": true
+  },
+  "next_step": "GFX-MULTI-037 original 1275 linked DXBC chunks alternate reflection/debug census for resource metadata before independent PC capture"
 }
