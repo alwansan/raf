@@ -1,0 +1,39 @@
+name: GFX-MULTI-042 original-free GPU full-frame barycentric private ZIP audit tests
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi042-affine-fullframe-audit.yml'
+      - 'gfxlab/tools/affine_fullframe_owner_zip_audit.py'
+      - 'gfxlab/tests/test_affine_fullframe_owner_zip_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi042-fullframe-png-reference
+  cancel-in-progress: false
+jobs:
+  source-free-fullframe-math:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab
+      - name: Strict 256x256 RGBA PNG decode and all-pixel CPU analytical regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/affine_fullframe_owner_zip_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI042_ALL_PIXEL_ORIGINAL_FREE_UNIT_TESTS_PASS=true
+      - name: Confirm no private device ZIP or original game source accessed
+        if: always()
+        run: |
+          if [ -d source-zip2 ]; then
+            echo GFX_MULTI042_PRIVATE_SOURCE_FOUND_UNEXPECTEDLY
+            exit 1
+          fi
+          echo GFX_MULTI042_OWNER_PRIVATE_IMAGES_AND_RAFT_SHADER_ASSETS_NOT_ACCESSED=true
