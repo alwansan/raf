@@ -15,3 +15,6 @@
 - limitations: A local same-block SPV store is only a bounded **candidate**, not whole-CFG dominance or absence of pointer alias; neither a source original DXBC temp register/component→SPV index SSA identity nor numeric value equality. Original Material property→DXBC register/CB byte semantics remain GFX054 blocked. Original Shader48 Android GPU, PC↔Adreno pixel parity and owner acceptance remain FALSE.
 - negative claims: `originalShaderRestored=false`, `phase_closed=false`.
 - next: inspect CI logs/artifact/purge and any failure, fix only in this branch, update this session and all five persistent restore files. Then consider narrower source DXBC def-use and SPV memory SSA/CFG proof (GFX075) only after current gate is validated.
+
+### GFX074 CI availability check — 2026-11-10T20:27:12Z UTC
+GitHub Actions latest branch runs endpoint still lists GFX073 CI42890357390 as newest, with NO GFX074 run visible. Thus code and YAML commits exist but GFX074 real/source-free test result is **NOT_VERIFIED; run_id=null** (not a test failure). Use GitHub Actions workflow_dispatch for `.github/workflows/gfxlab-multi074-SPV-dynamic-CB-index-memory-writer.yml` on `experiment/android-graphics-rootcause`, or wait for a genuine new Actions run event, then inspect its result. Never fabricate a CI run number.
