@@ -1,0 +1,20 @@
+{
+  "session_id": "20261110-GFX-chat-sevenpass-channel-apk-27",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-secondary-color-alias-26",
+  "base_sha": "ed85119c78897f2631f6cf8dc1e9c6384292261f",
+  "experiment_key": "GFX-MULTI-026-original-sevenpass-states-and-six-model-android-gpu-channel-apk",
+  "issue_id": "RENDER-002",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "scope": "First audit source Shader48 seven Pass render state and seven Material slots; then package the six original models with additional GLES3 texture-channel diagnostic. Keep Standard fallback and never claim original shader restored. No full game APK/OBB.",
+  "runs": [],
+  "status": "PREPARING",
+  "controls": [
+    "No proprietary DXBC/GLSL/PNG/OBJ loose asset committed",
+    "Original source payload only in Github runner",
+    "OriginalShaderRestored=false, skinnedAnimationRestored=false",
+    "APK must pass real Unity IL2CPP ARM64 build, signature, manifest check",
+    "Owner device logs and GPU pixel parity remain pending"
+  ],
+  "next_step": "Audit pass states, compile six model channel-viewer APK, run CI, verify artifact, update all restore/memory files."
+}
