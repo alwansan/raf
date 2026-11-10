@@ -20,6 +20,29 @@
     "No claim of GLES runtime or PC-Adreno pixels",
     "No source proprietary shader bytes or register operands exposed"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_ALL_1275_SHDR_INPUT_INTERPOLATION_AND_RESOURCE_DECLS_SOURCE_ONLY",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42815863927"
+  ],
+  "results": {
+    "python_tests": 245,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "unique_vertex": 620,
+    "unique_pixel": 655,
+    "original_pairs": 524,
+    "pixel_interpolation": {
+      "linear": 3405,
+      "constant": 76,
+      "linear_noperspective": 16,
+      "other": 0
+    },
+    "pixel_resource_declarations": 3247,
+    "pixel_sampler_declarations": 3095,
+    "pixel_cb_declarations": 2556,
+    "vertex_cb_declarations": 3168,
+    "original_shader48_runtime": false,
+    "private_purge": true
+  },
+  "safe_report": "gfxlab/evidence/20261110_gfx039_shdr_interpolation_safe_counts.json",
+  "next_step": "Do not build an original Shader48 APK until authentic Material register/CB binding and pass/runtime/PC pixel evidence. Candidate GFX-MULTI-040: acquire genuine PC ShaderLab/material reflection or plan controlled Android interpolation test without original code."
 }
