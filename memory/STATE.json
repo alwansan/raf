@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-integer-literal-80-53",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-integer-literal-80-53.md",
-  "status": "GFX_MULTI_080_VERIFIED_SUCCESS_679_TESTS_12_SPV_OPIMUL_LITERAL_NONPOWER2_47_CFG_BLOCK_DOMINATES_SOURCE_DXBC_SSA_GPU_NOT_PROVEN",
+  "latest_session": "20261111-GFX-chat-imul-dynamic-operand-54",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-imul-dynamic-operand-54.md",
+  "status": "GFX_MULTI_081_VERIFIED_SUCCESS_713_TESTS_12_NONPOWER_SPV_OPIMUL_DYNAMIC_INPUT_BITCAST_FUNCTION_OPLOAD_ORIGINAL_DXBC_SSA_AND_GPU_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-081: probe source-private 12 actual SPV OpIMul (nonpower2 literal) other operand SSA and original DXBC temp/component writer shape with branch/PHI/Select/alias barriers. Do not invent symbolic source-to-SSA or publish private numeric literals. GFX054 original Unity Material binding/CB byte semantics BLOCKED, shader GPU/PC Android visual parity OPEN.",
+  "next_experiment": "GFX-MULTI-082 classify source-private actual OpIMul dynamic-input Function-literal OpLoad read-time preceding equivalent address OpStore within same basic block, outside block, or not observed; CFG only for cross-block candidate; no reaching-value, original DXBC temp SSA, shader Material CB byte or Adreno GPU pixel proof.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2252,5 +2252,26 @@
     "originalShaderRestored": false,
     "phase_closed": false,
     "private_source_and_SPV_purge_verified": true
+  },
+  "latest_gfx081": {
+    "experiment": "GFX-MULTI-081",
+    "status": "SUCCESS_AUTHENTIC_SOURCE_SPV_CPU_MEMORY_READ_ORIGIN_ONLY",
+    "origin": "chat",
+    "run_id": 42906064603,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42906064603",
+    "run_sha": "892bfae984a3dd8a3e87891efe1b7c0cf105072b",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 713,
+    "original_joint_pairs": 157,
+    "stages": 314,
+    "CB_stages": 311,
+    "authenticated_SPV_CB_dynamic_index_reads": 427,
+    "nonpower_OpIMul_dynamic_input_direct_OpBitcast": 12,
+    "nonpower_OpIMul_dynamic_input_terminal_OpLoad": 12,
+    "nonpower_OpIMul_dynamic_input_Function_literal_path": 12,
+    "safe_artifact_id": 13805166792,
+    "private_source_purged": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
   }
 }
