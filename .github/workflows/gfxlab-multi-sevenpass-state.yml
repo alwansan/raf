@@ -24,6 +24,7 @@ jobs:
           sparse-checkout: |
             gfxlab/tools
             gfxlab/tests
+      # GFX-MULTI-026S retry: sparse source-only suite skips Unity-only asset contract tests.
       - name: Source-free regression tests
         run: |
           set -euo pipefail
