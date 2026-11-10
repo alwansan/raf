@@ -1,0 +1,33 @@
+{
+  "session_id": "20261111-GFX-chat-spv-unknown-families-52",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-079",
+  "issue_id": "RENDER-002",
+  "question": "Which publicly standardized SPIR-V opcode families account for 12 unresolved bounded Store-value SSA ancestry terminals in source-authenticated Shader48 representatives?",
+  "hypothesis": "The twelve may be float/integer/bitwise/conversion/composite instructions omitted from the narrow GFX078 terminal whitelist, and any result is descriptive only.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42902805887",
+    "memory/sessions/20261111-GFX-chat-ssa-unknown-cfg-51.md"
+  ],
+  "control": [
+    "public family integer/float math, bitwise, conversion, composite, memory/control and unlisted op",
+    "no source/temp/CB/register/SPV ID exposure",
+    "strict CFG block-only relation remains not effective memory SSA"
+  ],
+  "planned_tests": [
+    "full source-free regression with synthetics for OpFMul/OpIMul/OpConvertFToU/OpBitFieldUExtract/vendor",
+    "original source SHA-locked 157 VS+FS joint pairs /314 stages",
+    "427 real loaded dynamic CB SPV index root verification",
+    "count-only 12 family partition and 47 CFG block partition",
+    "private source purge"
+  ],
+  "resource_key": "gfxlab-multi079-private-spv-terminal-family",
+  "status": "CI_PENDING",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "resumed_from": "20261111-GFX-chat-ssa-unknown-cfg-51",
+  "base_sha": "f2351bee4f5385f70364f507f7698ad6886380ef",
+  "evidence_level": "PENDING_SOURCE_AUTHENTICATED_TRANSLATED_SPV_CPU_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
