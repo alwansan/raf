@@ -12,7 +12,7 @@ import math
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from gfxlab.tools.original_model_probe import stage_originals, ZIP2_SHA
+from gfxlab.tools.original_model_probe import stage_originals, ZIP2_SHA, OWNERS, sha_size
 from gfxlab.tools.multi_model_transport import (
     model_plan, fill_sparse_authenticated_streams, all_model_entries,
 )
@@ -313,8 +313,8 @@ def main():
     parser.add_argument("--paths",type=Path)
     parser.add_argument("--out",type=Path)
     args=parser.parse_args()
-    source=stage_originals(args.zip2,args.stage)
     if args.command=="plan":
+        source=stage_originals(args.zip2,args.stage)
         plan=model_plan(args.zip2,source)
         if len(plan["entries"])!=6 or plan["safe"]["materials"]!=7 or plan["safe"]["textures"]!=21:
             raise ValueError("ORIGINAL_SOURCE_PLAN_COUNTS_DRIFT")
@@ -330,6 +330,15 @@ def main():
     plan=json.loads(args.private_plan.read_text())
     if plan.get("source_sha")!=ZIP2_SHA:
         raise ValueError("PRIVATE_SOURCE_PLAN_SHA_MISMATCH")
+    # Sparse checkout now contains only selected Git stream chunks. Reuse
+    # the SHA-verified owner containers staged during the plan phase; do not
+    # re-read the manifest, which is intentionally outside sparse checkout.
+    source=args.stage/"Raft_Data"
+    if not source.is_dir():
+        raise ValueError("STAGED_ORIGINAL_ASSET_DIRECTORY_MISSING")
+    for owner,pin in OWNERS.items():
+        if sha_size(source/owner)!=pin:
+            raise ValueError("STAGED_ORIGINAL_OWNER_SHA_MISMATCH")
     fill_sparse_authenticated_streams(args.zip2,source,plan)
     report=audit_source(source,plan)
     args.out.parent.mkdir(parents=True,exist_ok=True)
