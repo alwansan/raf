@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-imul-input-writer-value-56",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-imul-input-writer-value-56.md",
-  "status": "GFX_MULTI_083_SUCCESS_800_TESTS_12_SPV_NONPOWER_OPIMUL_INPUT_SAMEBLOCK_PRIOR_STORE_VALUE_BITCAST_12_SHIFT_ANCESTRY_UNKNOWN_DXBC_SSA_GPU_OPEN",
+  "latest_session": "20261111-GFX-chat-bitcast-inner-57",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-bitcast-inner-57.md",
+  "status": "GFX_MULTI_084_VERIFIED_SUCCESS_809_TESTS_12_OF_12_SPV_IMUL_INPUT_PRIOR_STORE_BITCAST_INNER_OPIADD_SOURCE_DXBC_SSA_MEMORY_AND_GPU_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-084 trace underlying SPV SSA op behind the 12 input prior Store values immediate OpBitcast, distinguish composite/lane extraction, second memory loads, arithmetic and control merge; preserve exact original Shader48 source SHA and pass/CB binding uncertainty, no original DXBC SSA or GPU parity until independently proved.",
+  "next_experiment": "GFX-MULTI-085: source-private classify two OpIAdd SSA operands under prior Store Bitcast feeding the 12 SPV nonpower OpIMul input reads: immediate producer and constant/dynamic shape, bounded transparent unary and memory/control negative gates; no original DXBC temp-to-SPV SSA or GPU parity claims.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2317,5 +2317,23 @@
     "original_Shader48_Adreno_pixels_verified": false,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx084": {
+    "experiment": "GFX-MULTI-084",
+    "status": "SUCCESS_SOURCE_AUTHENTICATED_TRANSLATED_SPV_CPU_OPCODE_ONLY",
+    "run_id": 42908576921,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42908576921",
+    "run_sha": "201f33ec1a7cd63b0cc60227728b5fbba1901ea0",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 809,
+    "source_original_pairs": 157,
+    "original_stage_instances": 314,
+    "source_CB_stages": 311,
+    "authenticated_SPV_dynamic_CB_reads": 427,
+    "prior_Store_value_Bitcast_inner_OpIAdd": 12,
+    "safe_artifact_id": 13806491541,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "private_source_purge_verified": true
   }
 }
