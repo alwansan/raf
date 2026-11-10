@@ -1,0 +1,22 @@
+{
+  "session_id": "20261111-GFX-chat-phase-one-input-lanes-65",
+  "origin": "chat",
+  "resumed_from": "20261111-GFX-chat-signature-component-width-64",
+  "base_sha": "dcdb17e2253d1bcad5a386f6e39796c983d39ed5",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-092",
+  "question": "Do the 12 actual input loads have independently evidenced original component-lane usage and explicit translated Component provenance?",
+  "hypothesis": "Signature scalar width does not by itself establish component lane; inspect original bounded ALU source operands.",
+  "reference_refs": [
+    "GFX091 CI42917010667",
+    "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md"
+  ],
+  "control": "synthetic nonzero lane, mismatched selection, absent Component, unsupported opcode, malformed signature",
+  "planned_tests": [
+    "source-free negative tests",
+    "private pinned original-source 157-pair audit"
+  ],
+  "resource_key": "gfxlab-original-input-lanes092",
+  "status": "planned",
+  "phase_closed": false
+}

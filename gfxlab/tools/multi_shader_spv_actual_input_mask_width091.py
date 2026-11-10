@@ -21,7 +21,7 @@ BLOCK_BARRIERS=frozenset({"OpBranch","OpBranchConditional","OpSwitch","OpKill",
     "OpCopyMemory","OpCopyMemorySized","OpSelectionMerge","OpLoopMerge"})
 MAX_DEPTH=12
 
-def authenticated_spv_CB_index_actual_input_component_width091(dis:bytes,authenticated:dict,source_shdr:bytes,source_cb:dict,source_dxbc:bytes,source_stage:str)->dict:
+def authenticated_spv_CB_index_actual_input_component_width091(dis:bytes,authenticated:dict,source_shdr:bytes,source_cb:dict,source_dxbc:bytes,source_stage:str, *, private_input_observer=None)->dict:
     if not isinstance(source_dxbc,bytes) or source_stage not in ("vertex","fragment"):
         raise ValueError("GFX091_BAD_ORIGINAL_SOURCE_DXBC_OR_STAGE")
     if (not isinstance(source_shdr,bytes) or len(source_shdr)<8 or
@@ -951,6 +951,10 @@ def authenticated_spv_CB_index_actual_input_component_width091(dis:bytes,authent
                         if inner=="OpIAdd":
                             operand_shape,lhs,rhs,type_class=source_inner_iadd_operands(writer_value)
                             left_id,right_id=iadd_operand_read_roots(writer_value)
+                            if private_input_observer is not None:
+                                private_input_observer(left_id, defs, decorations,
+                                    exact_source_signature_register_mask_private,
+                                    actual_spv_input_type_width_private)
                             mask_count091,compare091,component091=private_actual_iadd_component_mask_class091(left_id)
                             for field,value in (("source_ISGN_component_mask_popcount",mask_count091),
                                                 ("source_mask_vs_SPV_pointee_width",compare091),
