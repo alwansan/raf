@@ -229,3 +229,8 @@ Source-only, pinned ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, **154 uni
 - 381 original Shader48 compiled programs outside the 1,275 linked entries in GFX022; source-only bounded stage/RDEF table census `gfxlab/tools/multi_shader_unreferenced_reflection.py`, workflow [CI42807637443](https://github.com/alwansan/raf/actions/runs/42807637443).
 - If unused RDEF present: report as **unlinked candidate metadata only**; still need independent source Pass/variant relationship and property→register matching. If absent: explicit `UNREFERENCED_RDEF_BRIDGE_NOT_FOUND`, request exact PC/ShaderLab/RenderDoc reference instead of filling gaps by inferred order.
 - No new APK, work limited to source-private CI; retain phase G7–G12 blocked.
+
+## GFX-MULTI-032 SUCCESS — exhaust remainder of Shader48 compiled table
+- [CI42807637443](https://github.com/alwansan/raf/actions/runs/42807637443) SUCCESS 198 tests. Unused compiled Shader48 records: 381 = **112 empty** + **269 non-DX11 typed** + **0 DX11 with valid DXBC/RDEF**. This is not evidence that 269 non-DX11 programs are authentic Android Shader48 variants: all selected seven Passes and 524 exact variant pairs link to previously reviewed DX11 programs.
+- P0 next **GFX-MULTI-033**: bounded non-DX11 candidate format census and search for *authentic* metadata links to an exact source Pass/keyword/tier. Keep unlinked type labels as unverified; no fabricated mapping or Android APK.
+- P0 external dependency if no source program/Material binding emerges: genuine PC shader/material reflection or original ShaderLab with exact b/t/s + constant-buffer layout and pass-state information, plus reproducible matched capture.
