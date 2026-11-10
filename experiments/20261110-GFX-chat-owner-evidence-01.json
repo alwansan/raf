@@ -1,0 +1,33 @@
+{
+  "session_id": "20261110-GFX-chat-owner-evidence-01",
+  "origin": "chat",
+  "base_sha": "5e9b48312d3be4e6226d92b8e637db716cbf955d",
+  "resumed_from": "20261110-GFX-chat-passstate-material-binding-29",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-OWNER-001-user-provided-Android-six-model-channel-evidence-and-closure-gates",
+  "question": "Do user screenshots/logs verify six original models and Android channel probes; what prevents closing authentic Shader48 restoration and creating a reusable recovery worker?",
+  "hypothesis": "Original six-model source art and Standard-rendered phone geometry/color are credible, but original Shader48 GPU/PC parity, source material GPU bindings and per-channel logs are missing.",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "target_apk_sha256": "8fef68d82748cd214b1f5f5f9c0b3903a80f343513ccb15fc35e12649c02ad52",
+  "owner_archive_sha256": "adc08713ad67a987d0b30ac01b1b6e9004342b359aeb97ed1ee61866fecc4238",
+  "reference_refs": [
+    "GFX026-CI42748792585",
+    "GFX029S-CI42750996280",
+    "GFX025-CI42746455458"
+  ],
+  "scope": "Owner-uploaded 16 screenshots, 13 COPY LOG snapshots, latest app report, 10 Android UnityShaderCache compressed entries; compare shader actual provenance and source import semantics, no user images or raw shader code committed.",
+  "control": "Keep original archive privately in conversation, publish aggregate counts, visual observations and source code fingerprints only. No original model images/PPtrs/GUIDs/private ShaderCache binaries in Git. Do not claim originalShaderRestored until authoritative GL/GPU/PC parity.",
+  "planned_tests": [
+    "owner ZIP integrity and counted media/JSON parse",
+    "six model-mode logs and error-count coverage",
+    "diagnostic role/channel/sampling/surface logging gaps",
+    "source PBR Metallic serialized color-space vs builder import setting",
+    "source actual seven-pass shader path vs Standard/ChannelProbe fallback",
+    "closure-gate checklist and bounded next experiments"
+  ],
+  "resource_key": "gfxlab-owner001-source-safe-user-evidence-no-private-upload",
+  "status": "PREPARING_SAFE_REVIEW",
+  "next_step": "Build owner evidence safe auditor and source-free CI, write phase closure document, update SESSION/RESTORE/OPEN_WORK/MEMORY/STATE; do not change concurrent GFX029 code or T-Team.",
+  "original_shader_restored": false,
+  "phase_closed": false
+}
