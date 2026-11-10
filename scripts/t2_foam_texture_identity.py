@@ -98,6 +98,29 @@ def compare_private_names(original_rows, reflected_names):
         raise ValueError("Invalid original/translated texture symbols")
     if len(original_rows) != len(reflected_names):
         raise ValueError("Texture identity cardinality mismatch")
+    # Validate untrusted report shapes before dereferencing private fields.
+    # A malformed row must fail closed without exposing a private source symbol.
+    for row in original_rows:
+        if not isinstance(row, dict) or set(row) != {
+                "_private_name", "_field_presence", "_private_numeric_pair",
+                "_multisample_present"}:
+            raise ValueError("Malformed original texture identity row")
+        if (not isinstance(row["_private_name"], str)
+                or not 0 < len(row["_private_name"]) <= MAX_NAME
+                or type(row["_multisample_present"]) is not bool):
+            raise ValueError("Malformed original texture identity value")
+        presence = row["_field_presence"]
+        if (not isinstance(presence, dict)
+                or set(presence) != {"m_Index", "m_SamplerIndex", "m_Dim", "m_ArraySize"}
+                or any(type(value) is not bool for value in presence.values())):
+            raise ValueError("Malformed original texture field presence")
+        pair = row["_private_numeric_pair"]
+        if (not isinstance(pair, tuple) or len(pair) != 2
+                or any(value is not None and type(value) is not int for value in pair)):
+            raise ValueError("Malformed original texture numeric pair")
+    if any(not isinstance(name, str) or not 0 < len(name) <= MAX_NAME
+           for name in reflected_names):
+        raise ValueError("Malformed translated image identity")
     source_names = [x["_private_name"] for x in original_rows]
     if len(source_names) != len(set(source_names)) or len(reflected_names) != len(set(reflected_names)):
         raise ValueError("Texture symbol identity ambiguous")
