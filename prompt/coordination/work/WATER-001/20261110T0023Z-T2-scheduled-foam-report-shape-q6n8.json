@@ -2,8 +2,8 @@
   "session_id": "20261110T0023Z-T2-scheduled-foam-report-shape-q6n8",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-10T00:23:00Z",
+  "status": "completed_source_unverified",
+  "updated_at": "2026-11-10T00:28:00Z",
   "intended_files": [
     "scripts/t2_foam_texture_identity.py",
     "tests/test_t2_foam_texture_identity.py",
@@ -14,5 +14,11 @@
   "hypothesis": "Malformed nested original texture rows currently cause raw KeyError/TypeError instead of explicit ValueError; strengthen fail-closed report shape without changing authenticated original count",
   "base_reference": "20261109T2323Z-T2-scheduled-writer-rhs-scope-m7q2",
   "owner_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
-  "scope": "source-only validation; no game shader, no T3/T4/T5 files, no Unity build"
+  "scope": "source-only validation; no game shader, no T3/T4/T5 files, no Unity build",
+  "result_commits": [
+    "86a19cab5e53c3cde067b535d5bb0b5db06679b2",
+    "df11e0e3fc36c7d053756e34d820b8e1519be88a",
+    "7393dd23cf7fc2517a771f4fde217e86304adb56"
+  ],
+  "next_step": "Execute tests/test_t2_foam_texture_identity.py on immutable SHA; then authenticated Mono.Cecil writer RHS classification"
 }
