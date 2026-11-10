@@ -19,7 +19,7 @@ namespace RaftGraphicsLab
         private static void AddFile(ZipArchive zip,string path,string entryName)
         {
             if(!File.Exists(path))return;
-            var entry=zip.CreateEntry(entryName,CompressionLevel.Optimal);
+            var entry=zip.CreateEntry(entryName,System.IO.Compression.CompressionLevel.Optimal);
             using(var input=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite))
             using(var output=entry.Open())
                 input.CopyTo(output);
@@ -54,7 +54,7 @@ namespace RaftGraphicsLab
                     added++;
                 }
                 AddFile(zip,Path.Combine(root,"multi-report.json"),"latest/multi-report.json");
-                var guide=zip.CreateEntry("README.txt",CompressionLevel.Optimal);
+                var guide=zip.CreateEntry("README.txt",System.IO.Compression.CompressionLevel.Optimal);
                 using(var w=new StreamWriter(guide.Open(),new UTF8Encoding(false)))
                 {
                     w.WriteLine("GFX-LAB automatic session diagnostics export v1");
