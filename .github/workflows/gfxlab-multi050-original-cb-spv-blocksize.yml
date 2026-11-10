@@ -1,0 +1,101 @@
+name: GFX-MULTI-050 original Shader48 DXBC CB dcl vector count vs SPIRV UBO block size
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi050-original-cb-spv-blocksize.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_spv_blocksize.py'
+      - 'gfxlab/tests/test_multi_shader_original_cb_spv_blocksize.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi050-private-original-cb-vs-spv-block-size
+  cancel-in-progress: false
+jobs:
+  independent-original-dxbc-cb-size-vs-spv:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Original-free CB memory-boundary and reflection negative guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_spv_blocksize.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX050_SOURCE_FREE_CB_TESTS_SUCCESS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install private offline DXBC SPIRV reflection tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Compare authenticated DXBC CB dcl vectors to translated SPIRV reflected UBO sizes privately
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_spv_blocksize \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi050-private" \
+            --out gfxlab-multi050-safe-original-cb-spv-blocksize-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi050-safe-original-cb-spv-blocksize-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-050"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_source_passes"]==7
+          assert d["original_source_stage_programs"]==14
+          assert len(d["per_pass"])==7
+          s=d["source_CB_to_translated_UBO_safe_aggregate"]
+          assert s["source_stage_comparisons"]==14
+          assert s["total_source_dxbc_constant_buffer_declarations"]>0
+          assert s["source_dcl_to_translated_ubo_exact_block_size_matches"]<=s["total_source_dxbc_constant_buffer_declarations"]
+          for row in d["per_pass"]:
+            for v in row["original_source_CB_block_size_evidence"].values():
+              assert not v["equal_byte_size_proves_member_layout_or_Material_property_semantics"]
+              assert not v["original_b_register_indices_or_CB_byte_sizes_exported"]
+          for name in ("all_524_variants_covered","source_Material_Shader_property_to_original_CB_register_mapping_proven",
+             "original_constantbuffer_individual_member_byte_offsets_proven",
+             "original_shader48_Unity_Android_GPU_runtime_proven",
+             "original_PC_vs_Adreno_pixels_proven","originalShaderRestored",
+             "source_private_shader_code_registers_names_or_CB_sizes_exported","phase_closed"):
+            assert d[name] is False,name
+          print("GFX050_ORIGINAL_CB_BLOCK_SIZE_DIAGNOSTIC_NOT_MEMBER_OFFSETS_OR_GPU=true")
+          PY
+      - name: Publish counts only, no confidential CB sizes or shaders
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi050-safe-original-cb-vs-spv-blocksize-counts
+          path: gfxlab-multi050-safe-original-cb-spv-blocksize-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2 and private translated DXBC SPIR-V/CB reflection intermediates
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi050-private"
+          echo GFX050_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true

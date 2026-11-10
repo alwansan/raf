@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "session_id": "20261110-GFX-chat-cb-dcl-spv-byte-sizes-24",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-58-profile-spirv-check-23",
+  "base_sha": "b63f83d2634fa425aad2711944bd3f1b88b0f780",
+  "experiment_key": "GFX-MULTI-050",
+  "issue_id": "RENDER-002",
+  "resource_key": "source-private-original-DXBC-constant-buffer-size-vs-SPV-UBO",
+  "question": "Do original Shader48 DXBC dcl_constant_buffer vector counts match vkd3d-translated SPIRV reflected UBO block_size bytes, without assuming member offsets?",
+  "hypothesis": "Authentic DXBC original CB total byte size is source-anchored and independently comparable to translated UBO reflection",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "negative_controls": [
+    "unknown shader CB name",
+    "missing block_size",
+    "incorrect length",
+    "duplicate reflected binding",
+    "name suffix mismatch",
+    "no CB not positive",
+    "member-layout false even if size matched"
+  ],
+  "planned_tests": [
+    "full source-free Python suite",
+    "7 original matched VS/FS source-pair CB vector lengths",
+    "private Vulkan SPIRV translated UBO reflection",
+    "safe aggregate counters only",
+    "purge all original source"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
