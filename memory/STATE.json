@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-imul-dynamic-operand-54",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-imul-dynamic-operand-54.md",
-  "status": "GFX_MULTI_081_VERIFIED_SUCCESS_713_TESTS_12_NONPOWER_SPV_OPIMUL_DYNAMIC_INPUT_BITCAST_FUNCTION_OPLOAD_ORIGINAL_DXBC_SSA_AND_GPU_OPEN",
+  "latest_session": "20261111-GFX-chat-imul-input-readtime-store-55",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-imul-input-readtime-store-55.md",
+  "status": "GFX_MULTI_082_SUCCESS_754_TESTS_12_OF_12_NONPOWER_OPIMUL_INPUT_OPLOAD_SAMEBLOCK_PRIOR_STORE_PATH_SYNTAX_DXBC_SSA_GPU_UNPROVEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-082 classify source-private actual OpIMul dynamic-input Function-literal OpLoad read-time preceding equivalent address OpStore within same basic block, outside block, or not observed; CFG only for cross-block candidate; no reaching-value, original DXBC temp SSA, shader Material CB byte or Adreno GPU pixel proof.",
+  "next_experiment": "GFX-MULTI-083: source-private trace prior sameblock Function-literal-path OpStore stored SSA value producer for 12 OpIMul dynamic-input reads; validate bounded shift/arithmetic ancestry and account for alias/calls/Volatile as unknown. Never claim original DXBC temporary equivalence or actual memory reached value without independent proof.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2271,6 +2271,26 @@
     "nonpower_OpIMul_dynamic_input_Function_literal_path": 12,
     "safe_artifact_id": 13805166792,
     "private_source_purged": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
+  },
+  "latest_gfx082": {
+    "experiment": "GFX-MULTI-082",
+    "origin": "chat",
+    "status": "SUCCESS_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_PRECEDING_STORE_SYNTAX_ONLY",
+    "run_id": 42906841182,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42906841182",
+    "run_sha": "bd437a177c29a3945117fa52057450396ef515b3",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "tests_passed": 754,
+    "original_pairs": 157,
+    "stage_instances": 314,
+    "source_CB_stages": 311,
+    "authenticated_dynamic_CB_index_loads": 427,
+    "nonpower_imul_input_Function_OpLoad_sameblock_matching_prior_Store_candidates": 12,
+    "safe_artifact_id": 13804518589,
+    "runner_source_SPV_purge": true,
+    "original_shader_parity_proven": false,
     "originalShaderRestored": false,
     "phase_closed": false
   }
