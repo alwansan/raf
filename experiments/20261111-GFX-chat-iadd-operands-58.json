@@ -1,0 +1,40 @@
+{
+  "session_id": "20261111-GFX-chat-iadd-operands-58",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-085",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-bitcast-inner-57",
+  "base_sha": "f0f6a33ac316703d7d466306d025960ac03301b3",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "For each of 12 source-authenticated SPV nonpower OpIMul input Store values Bitcast(OpIAdd), what are anonymous left/right OpIAdd SSA result producer opcodes and constant/dynamic classifications?",
+  "hypothesis": "One input to OpIAdd may be a private 32-bit integer literal and the other derived from OpLoad or arithmetic; opcode/constant syntax alone cannot prove original DXBC temp equivalence or actual SPV memory reaching value.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42908576921",
+    "memory/sessions/20261111-GFX-chat-bitcast-inner-57.md"
+  ],
+  "control": [
+    "one dynamic OpLoad and one nonzero integer literal",
+    "zero constant",
+    "two dynamic OpLoad/OpSelect",
+    "both constants",
+    "bad 32-bit scalar type fail-closed",
+    "unknown SSA opcode generic",
+    "later Store not read-time writer",
+    "no originalShaderRestored/phase_closed"
+  ],
+  "planned_tests": [
+    "source-free regression suite all pre-084/085",
+    "SHA-pinned source ZIP2 157 original VS+FS representative programs/314 stages/311 source CB stages",
+    "427 source-authenticated original-b dynamic CB OpLoads",
+    "12 prior Store Bitcast inner OpIAdd with exactly 12 LHS, RHS, source and operand shape partition entries",
+    "private source SPV DXBC purge, count-only 7-day artifact"
+  ],
+  "resource_key": "gfxlab-multi085-source-private-spv-iadd-input-operand-shapes",
+  "status": "CI_QUEUED",
+  "run_id": 42909279235,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42909279235",
+  "evidence_level": "PENDING_AUTHENTIC_SOURCE_TRANSLATED_SPV_CPU_SSA_INPUT_OPERAND_SYNTAX_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
