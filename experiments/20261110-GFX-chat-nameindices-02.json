@@ -1,0 +1,23 @@
+{
+  "session_id": "20261110-GFX-chat-nameindices-02",
+  "origin": "chat",
+  "base_sha": "3fe1f4a1b36f665cf64bc654f3af5260e1983fbf",
+  "resumed_from": "20261110-GFX-chat-owner-evidence-01",
+  "experiment_key": "GFX-MULTI-030S-original-Shader48-dynamic-pass-names-to-NameIndices-bridge",
+  "issue_id": "RENDER-002",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can previously unresolved original Shader48 named Cull/ZTest/AlphaToMask/ZWrite state references be matched to pass m_NameIndices, independently declared Shader properties, or valid source keywords?",
+  "hypothesis": "Original same-pass m_NameIndices may carry authentic name-indices bridge for dynamic states that are absent from serialized Material floats.",
+  "control": "Only exact string matches (case-sensitive) in SHA-verified original metadata; no numeric hashes, no guessed enums/array order, no shader/texture pixels or private names exported; no APK.",
+  "planned_tests": [
+    "fail-closed bounded nested name-index token extraction",
+    "exact per-pass source state label membership",
+    "material valid keyword and original property membership negative controls",
+    "distinct field-metadata existence vs effective GPU state",
+    "all 7 original Shader48 pass coverage"
+  ],
+  "resource_key": "gfxlab-multi030s-shader48-pass-nameindices-private-source",
+  "status": "PREPARED_CI_PENDING",
+  "originalShaderRestored": false,
+  "phaseClosed": false
+}
