@@ -84,5 +84,27 @@ class NativeTraceContractTests(unittest.TestCase):
         self.assertEqual(result["paired_count"], 0)
         self.assertTrue(any("conflicting_dispatch_terminal" in e for e in result["errors"]))
 
+    def test_native_return_cannot_claim_verified_findkernel(self):
+        before = native(BEFORE, BASE + "group_xyz=1,8,1")
+        after = native(AFTER, "sequence=1;managed_dispatch_call_returned=true;"
+                       "gpu_result=unverified;original_runtime_mapping=verified")
+        with self.assertRaisesRegex(ValueError, "contradictory original FFT evidence marker"):
+            audit([before, after])
+
+    def test_native_throw_cannot_claim_water_rendering_success(self):
+        before = native(BEFORE, BASE + "group_xyz=1,8,1")
+        threw = native(THREW, "sequence=1;managed_dispatch_threw=true;"
+                       "exception_kind=other;original_runtime_mapping=unverified;"
+                       "gpu_result=unverified;water_rendering=verified")
+        with self.assertRaisesRegex(ValueError, "synchronous thrown marker"):
+            audit([before, threw])
+
+    def test_native_return_cannot_claim_findkernel_callsite_present(self):
+        before = native(BEFORE, BASE + "group_xyz=1,8,1")
+        after = native(AFTER, "sequence=1;managed_dispatch_call_returned=true;"
+                       "gpu_result=unverified;original_findkernel_callsite_present=true")
+        with self.assertRaisesRegex(ValueError, "contradictory original FFT evidence marker"):
+            audit([before, after])
+
 if __name__ == "__main__":
     unittest.main()
