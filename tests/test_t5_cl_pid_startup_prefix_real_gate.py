@@ -51,6 +51,16 @@ class RealCLStartupBoundaryTests(unittest.TestCase):
         self.assertEqual(audit(rows)["process_epoch_count"], 3)
         self.assertFalse(audit(rows)["safe_to_aggregate_entire_session"])
 
+    def test_unknown_state_after_verified_pid_is_not_startup_prefix(self):
+        # The startup exception is valid only BEFORE the first verified PID.
+        # Unknown process state after verification may hide a stop/restart,
+        # even if Android later reuses the same numeric PID.
+        rows = [row(1), row(2, "game_process_state_unknown"), row(3)]
+        state = audit(rows)
+        self.assertEqual(state["process_epoch_count"], 3)
+        self.assertFalse(state["safe_to_aggregate_entire_session"])
+        self.assertIsNone(analyze(rows, "synthetic")["fresh_surface_fps_all"])
+
     def test_never_verified_process_is_not_eligible(self):
         state = audit([row(1, "game_process_state_unknown")])
         self.assertFalse(state["safe_to_aggregate_entire_session"])
