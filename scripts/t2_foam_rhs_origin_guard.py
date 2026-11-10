@@ -35,4 +35,9 @@ def classify_rhs(opcodes: Sequence[str]) -> str:
     if len(producers) != 1 or any(op not in _ORIGINS and op not in _ALLOWED
                                   for op in ops):
         return "UNKNOWN"
-    # castclass consumes a value: it cannot precede the only producer.\n    # dup is deliberately unsupported without explicit stack simulation.\n    producer_index = ops.index(producers[0])\n    if any(op == "castclass" for op in ops[:producer_index]):\n        return "UNKNOWN"\n    return _ORIGINS[producers[0]]
+    # castclass consumes a value: it cannot precede the only producer.
+    # dup is deliberately unsupported without explicit stack simulation.
+    producer_index = ops.index(producers[0])
+    if any(op == "castclass" for op in ops[:producer_index]):
+        return "UNKNOWN"
+    return _ORIGINS[producers[0]]
