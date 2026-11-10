@@ -1,5 +1,7 @@
 import unittest
-from scripts.t3_render_state_pair_diff import compare, FIELDS
+import tempfile
+from pathlib import Path
+from scripts.t3_render_state_pair_diff import compare, FIELDS, load_summary
 
 class StateDiffTests(unittest.TestCase):
     def setUp(self):
@@ -35,6 +37,27 @@ class StateDiffTests(unittest.TestCase):
         result = compare(a, b)
         self.assertEqual(result["status"], "INCONCLUSIVE")
         self.assertEqual(result["changed_fields"], [])
+
+    def test_duplicate_json_key_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "states.json"
+            path.write_text('{"blend_src":"one","blend_src":"zero"}', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "duplicate_json_field"):
+                load_summary(path)
+
+    def test_nonfinite_json_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "states.json"
+            path.write_text('{"blend_src":NaN}', encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "nonfinite_json_value"):
+                load_summary(path)
+
+    def test_valid_summary_file(self):
+        import json
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "states.json"
+            path.write_text(json.dumps(self.a), encoding="utf-8")
+            self.assertEqual(compare(load_summary(path), self.a)["status"], "MATCH")
 
     def test_private_extra_rejected(self):
         with self.assertRaises(ValueError):
