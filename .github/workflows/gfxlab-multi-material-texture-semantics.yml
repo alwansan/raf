@@ -56,6 +56,7 @@ jobs:
           if [ -s "$RUNNER_TEMP/gfxlab-multi023-private-parts.txt" ]; then
             git -C source-zip2 sparse-checkout set --no-cone --stdin < "$RUNNER_TEMP/gfxlab-multi023-private-parts.txt"
           fi
+          echo GFX_MULTI023_STAGED_OWNER_ASSETS_RETAINED=true
           python3 -m gfxlab.tools.multi_material_texture_semantics audit \
             --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi023-private" \
             --private-plan "$RUNNER_TEMP/gfxlab-multi023-private-plan.json" \
