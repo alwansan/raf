@@ -1,0 +1,31 @@
+name: T3 smoke34 SPIR-V provenance synthetic regression
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-smoke34-provenance-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-smoke34-provenance-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  provenance-source-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Compile and execute source-only smoke34 provenance controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_smoke34_location_provenance_gate.py tests/test_t3_smoke34_location_provenance_gate.py
+          python3 -m unittest discover -s tests -p 'test_t3_smoke34_location_provenance_gate.py' -v
+          echo 'T3_SMOKE34_PROVENANCE_SYNTHETIC_ONLY=PASS' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This does not authenticate DXBC mappings or prove shader, Unity, GPU, or phone rendering.' >> "$GITHUB_STEP_SUMMARY"
