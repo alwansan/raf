@@ -21,7 +21,20 @@
   "original_scope": "SOURCE_ONLY original DXBC syntax; no Android APK, original shader runtime or GPU pixels",
   "writes_only_branch": "experiment/android-graphics-rootcause",
   "workflow_run": "https://github.com/alwansan/raf/actions/runs/42882730895",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_CI42882730895_ORIGINAL_SOURCE_ONLY_AST_427_SSA_BRIDGE_BLOCKED",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "actual": {
+    "tests": 482,
+    "run": 42882730895,
+    "artifact_id": 13793648550,
+    "private_original_source_purged": true,
+    "original_relative_CB_index_operands": 427,
+    "source_temporary_single_component_indices": 427,
+    "direct_relative": 77,
+    "immediate32_plus_relative": 350,
+    "stage_local_distinct_original_AST_keys_sum": 409,
+    "SPV_SSA_exact_expressions_proven": 0,
+    "originalShaderRestored": false
+  }
 }

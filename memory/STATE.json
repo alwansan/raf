@@ -1966,5 +1966,30 @@
     "original_material_to_DXBC_CB_member_mapping_proven": false,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx067_original_Shader48_relative_CB_AST_grammar": {
+    "status": "SUCCESS_SOURCE_ONLY_NESTED_DXBC_RELATIVE_OPERAND_GRAMMAR_NOT_SPV_SSA_PARITY",
+    "run": 42882730895,
+    "tests": 482,
+    "artifact_id": 13793648550,
+    "artifact_expires_at_utc": "2026-11-17T19:11:53Z",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_exact_pairs_censused": 524,
+    "original_unique_compiled_source_stages": 936,
+    "source_pass_joint_class_representatives": 157,
+    "source_stage_instances": 314,
+    "total_CB_operand_occurrences_9_arithmetic_opcode_families": 7990,
+    "source_static_CB_operand_occurrences": 7563,
+    "original_CB_relative_vec_index_operand_occurrences": 427,
+    "original_direct_relative_vec4_index_occurrences": 77,
+    "original_immediate32_plus_relative_vec4_index_occurrences": 350,
+    "private_stage_local_distinct_relative_expression_keys_sum": 409,
+    "all_source_relative_index_nested_types_temp_single_component": 427,
+    "original_CB_relative_index_nested_relative_source_occurrences": 0,
+    "original_relative_CB_operand_to_SPV_SSA_index_expression_parity_proven_count": 0,
+    "authentic_original_Material_property_to_b_t_s_CB_semantics_proven": false,
+    "source_private_purged": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
   }
 }
