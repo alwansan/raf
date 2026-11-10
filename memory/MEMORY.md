@@ -94,3 +94,8 @@
 المالك سلّم 14 صورة و12 سجل JSON للموديلات الستة على Adreno730 GLES3؛ جميعها errors=0 مع originalShaderRestored=false وoriginalAnimationRestored=false. كود الاختبار يستخدم Unity Standard fallback وليس Shader48 الأصلي. عدد رؤوس M01 وM04 في Unity أقل من المصدر ويلزم vertex-stream parity. تجربة GFX-MULTI-005 مصدرية لتعداد بيانات Pass الأصلية، ولا تغلق Shader/rig. سجل: memory/sessions/20261110-GFX-chat-owner-six-shader-gap-05.md، المعايير: gfxlab/PHASE_CLOSURE_GATES_AR.md.
 
 GFX-MULTI-005 CI42725841763 SUCCESS: 48 tests; original Shader48 source one linked object for 7 slots, 2 subshaders/7 passes, and all 7 have render-state, vertex, fragment and program-mask metadata. **This is SOURCE ONLY, not Android shader parity.** No full-stage closure. Next exact stage code/variant/CB/sampler audit.
+
+## GFX-MULTI-006 and GFX-MULTI-007 — verified 2026-11-10
+- [006 CI42726999353](https://github.com/alwansan/raf/actions/runs/42726999353) PASS, 52 tests: Unity2021 m_PlayerSubPrograms contains 7-pass original VS/FS source variant metadata; source compiled-platform metadata=1, compression-metadata=1. There are substantive original variants with source blob indexes and keyword metadata, but not Android equivalents.
+- [007 CI42727286357](https://github.com/alwansan/raf/actions/runs/42727286357) PASS, 54 tests: all OBJ original vertices used in triangles, so Unity M01 and M04 374-vertex delta and M02 4-vertex delta are NOT caused by unused OBJ indices. Test 008 pending tests float32 attribute identical dedup.
+- Exact original Shader48 Android runtime remains FALSE; rig and PC parity remain open.

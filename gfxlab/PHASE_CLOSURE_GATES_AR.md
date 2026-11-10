@@ -25,3 +25,7 @@ GfxMultiAndroidBuilder.cs يستعمل Shader.Find("Standard") وShader.Find("Un
 
 ## GFX-MULTI-006 (فحص نسخ برنامج الشيدر)
 التشغيل الأول 42726475369: source-only SUCCESS، وجد metadata لمنصة مترجمة واحدة وكتلة ضغط واحدة، لكن لم يرَ أي SubPrograms بالطريقة القديمة. **هذه ليست نتيجة فقدان shader**؛ Unity 2021.3 serializedVersion3 يمكن أن يستخدم m_PlayerSubPrograms بدل m_SubPrograms. عُدّل الفاحص لدعم الصيغتين وتشغيل اختبار جديد. لا يزال برنامج Android الأصلي غير مستعاد.
+
+## GFX-MULTI-006/007 تحديثات مؤكدة
+[006](https://github.com/alwansan/raf/actions/runs/42726999353): all seven source passes contain original m_PlayerSubPrograms source stage variants and keyword/blob index metadata, source COMPRESSED platform structure exists. This does not prove an Android GLSL executable.
+[007](https://github.com/alwansan/raf/actions/runs/42727286357): every original OBJ vertex index is used (zero unreferenced) in six models, including M01/M04; source-vs-Unity 374 vertex delta NOT explained by unused source vertices. [008](https://github.com/alwansan/raf/actions/workflows/gfxlab-multi-obj-attribute-parity.yml) tests whether distinct source indices share identical float32 position/UV/normal attributes which Unity may merge. No claim of exact parity until CI and device independent evidence.

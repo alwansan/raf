@@ -1,0 +1,12 @@
+# 20261110-GFX-chat-obj-duplicate-attribute-parity-08
+- session_id: 20261110-GFX-chat-obj-duplicate-attribute-parity-08; origin: chat
+- resumed_from: 20261110-GFX-chat-original-obj-index-parity-07
+- base_sha: 010089bba8cb2af2a0d6697674bd07f1b7cfe8f1
+- experiment_key: GFX-MULTI-008-source-float32-attribute-dedup
+- scope: source-only, measure duplicate original OBJ position/UV/normal tuples in float32 as possible cause for Unity-import 374 duplicate-merging vertex delta. No game build or shader source export.
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- runs: GFX-MULTI-006 revised CI42726999353 SUCCESS; GFX-MULTI-007 CI42727286357 SUCCESS; new CI pending.
+- GFX-MULTI-006 result: 7 Passes contain source variants within Unity2021 m_PlayerSubPrograms: P0 192VS/152FS, P1 156/169, P2 32/32, P3 96/152; Subshader1 P0 96/76, P1 120/130, P2 16/16. Keyword metadata and BlobIndex present, no original Android execution. 52 tests passed, private source purged.
+- GFX-MULTI-007 result: all source OBJ v/vt/vn referenced, zero unused vertices in all 6; M01 374, M04 374, M02 4 unexplained by unused vertices, needs attribute dedup investigation. 54 tests passed, private source purged.
+- unknowns: original shaders not compiled/semantically mapped on Adreno, original rig/animation absent, PC comparison absent. Pass/variant counts are source only.
+- controls: duplicate key exact float32 position/UV/normal, no private attributes or model OBJ published.

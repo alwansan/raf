@@ -1,0 +1,15 @@
+{
+  "session_id": "20261110-GFX-chat-obj-duplicate-attribute-parity-08",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-008",
+  "issue_id": "RENDER-002",
+  "scope": "SOURCE_ONLY",
+  "question": "Are OBJ faces using distinct indices with identical float32 position/UV/normal tuples so Unity may merge precisely 374 vertices?",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "unique source indices",
+    "unique float32 attribute tuples",
+    "no original values public"
+  ],
+  "status": "CI_PENDING"
+}

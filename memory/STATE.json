@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-original-obj-index-parity-07",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-original-obj-index-parity-07.md",
+  "latest_session": "20261110-GFX-chat-obj-duplicate-attribute-parity-08",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-obj-duplicate-attribute-parity-08.md",
   "status": "GFX_MULTI_005_SOURCE_METADATA_SUCCESS_OWNER_STANDARD_FALLBACK_ACCEPTED_FULL_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Analyze both Unity2021 m_SubPrograms and m_PlayerSubPrograms stage variant arrays; require verified runtime GLES semantic equivalence before original shader closure",
+  "next_experiment": "Check GFX-MULTI-008 vertex float32 duplicate attribute audit and Shader48 v3 m_PlayerSubPrograms coded bytecode/variant/CB/sampler semantics before Android shader pilot.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -296,19 +296,27 @@
   },
   "latest_shader_variant_feasibility": {
     "experiment": "GFX-MULTI-006",
-    "first_run": 42726475369,
-    "first_run_result": "SUCCESS_PARSER_V2_NO_VARIANTS_COMPRESSION_METADATA_ONE",
-    "status": "RETRY_V3_PLAYER_SUBPROGRAMS_PENDING",
-    "source_only": true,
-    "original_shader_restored": false
+    "run": 42726999353,
+    "status": "SUCCESS_SOURCE_UNITY2021_PLAYER_SUBPROGRAMS",
+    "source_passes": 7,
+    "all_passes_have_both_stage_variants": true,
+    "original_android_shader_restored": false,
+    "pc_shader_semantic_parity": false
   },
   "latest_obj_vertex_reference_audit": {
-    "key": "GFX-MULTI-007",
+    "experiment": "GFX-MULTI-007",
+    "run": 42727286357,
+    "status": "SUCCESS_SOURCE_ALL_6_REFERENCED_VERTEX_COUNTS",
+    "all_six_original_obj_vertices_referenced": true,
+    "m01_source_delta": 374,
+    "m04_source_delta": 374,
+    "m02_source_delta": 4,
+    "unreferenced_vertices_explain_difference": false,
+    "original_vertex_stream_parity": false
+  },
+  "latest_obj_attribute_dedup_audit": {
+    "experiment": "GFX-MULTI-008",
     "status": "CI_PENDING",
-    "device_m01_v": 4721,
-    "source_m01_v": 5095,
-    "device_m04_v": 2071,
-    "source_m04_v": 2445,
-    "original_shader_restored": false
+    "scope": "source float32 attribute equivalence only"
   }
 }

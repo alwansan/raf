@@ -1,0 +1,69 @@
+name: GFX-MULTI-008 original OBJ attribute dedup counts / source only
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-obj-attribute-parity.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi008-source-obj
+  cancel-in-progress: false
+jobs:
+  original-obj-float32-attribute-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Pure tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_obj_attribute_parity.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Count source float32 attribute-identical corners privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_obj_attribute_parity --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi008-private" --out gfxlab-multi008-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('gfxlab-multi008-safe-summary.json'))
+          assert d['source_models']==6
+          assert [m['model'] for m in d['models']]==['M00','M01','M02','M03','M04','M05']
+          assert not d['exact_original_vertex_stream_parity_proven']
+          print('GFX_MULTI008_DUPLICATE_FLOAT32_ATTRIBUTE_COUNTS_ONLY')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi008-safe-attribute-counts
+          path: gfxlab-multi008-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original source
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi008-private"
+          echo GFX_MULTI008_ORIGINAL_SOURCE_PURGED=true
