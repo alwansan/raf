@@ -16,3 +16,11 @@
 
 ## First CI attempt failed in a pure test fixture
 - [CI42739322749](https://github.com/alwansan/raf/actions/runs/42739322749) FAILED before reading ZIP2: test_empty_groups_complete_but_not_semantically_proven supplied [] instead of set() to strict source slot guard. A genuine parser type guard correctly rejected list input. Fixed test only; re-triggered workflow. No original shader resource conclusion from this failed run. `originalShaderRestored=false`.
+
+## Verified GFX-MULTI-019 outcome
+- First CI [42739322749](https://github.com/alwansan/raf/actions/runs/42739322749) FAILED **only synthetic test** because empty slot group was a list, not strict set. Fixed fixture, no Raft source inspected in failed run.
+- [GFX-MULTI-019 CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) COMPLETED SUCCESS: **98 tests**; original Shader48 7 Passes with one exact VS/FS source pair per Pass translated privately by vkd3d to Vulkan1.1 SPIRV and reflected by SPIRV-Cross.
+- All **29/29 source DX11 resource register slots t#** and **27/27 source DX11 sampler slots s#** matched strictly anchored vkd3d generated names and had a distinct SPIRV descriptor set/binding. All **56 of 56** t#/s# mappings numerically renumbered by compiler; **0 unmatched/unknown source t/s names**.
+- **66/66 source Constant Buffer names UNRECOGNIZED** under tested vkd3d output regex grammar, so broad all-resource symbolic map remains **FALSE**: 28/42 source resource groups complete (14 true empty vertex resource/sampler groups plus 14 nonempty fragment resource/sampler groups); 56/122 named resources mapped, 66 CB unmapped by names. Numeric CB binding-set parity across 14 stages separately established in GFX-MULTI-018.
+- Source and converted bytecode purged from runner. No original private OpName or register slot value published.
+- Source shader per-pass metadata `m_TextureParams/m_Samplers/m_ConstantBufferBindings` may provide independent property-index↔register-slot connection; next experiment investigate it to bridge original Material m_TexEnvs and t#/s# without assuming property order. Original Shader48 Android shader/restored FALSE.

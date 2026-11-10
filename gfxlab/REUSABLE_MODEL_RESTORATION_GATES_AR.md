@@ -28,3 +28,7 @@
 
 ## التجربة التالية المحددة
 **GFX-MULTI-014**: فحص binding ضمن Pass واحد من Shader48 الأصلي: DXBC registers ↔ SPIR-V descriptor set/binding ↔ original Unity Material textures + CB offsets + normal/tangent/swizzle، مع تقرير عددي خاص لا يُخرج shader code. فقط بعد اكتمال هذا يُسمح بمختبر Android منفصل، ولا يُدمج شيء في T3/فرع المنتج قبل دليل الهاتف.
+
+
+## 2026-11-10 — Binding reconstruction stage
+GFX-MULTI-019 [CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) links original t/s registers (29 t,27 s) to compiler-generated SPIR-V names and actual descriptor bindings privately with complete 56/56 coverage; **all descriptor numbers differ from original source t/s numbers**. CB 66 names remain unrecognized; no material texture-role → t# register association. GFX-MULTI-020 must check original `SerializedSubProgram` m_TextureParams / name indices / sampler declarations ↔ original `Material.m_SavedProperties.m_TexEnvs`, and CB byte offsets before closing any item shader stage. This diagnostic is not original shader running on Android.

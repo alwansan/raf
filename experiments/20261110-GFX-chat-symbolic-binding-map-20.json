@@ -18,5 +18,23 @@
     "safe resource group counts only"
   ],
   "resource_key": "gfxlab-multi019-private-symbolic-vkd3d",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_AUTHENTIC_TEXTURE_SAMPLER_OPNAME_DESCRIPTOR_MAP_CB_UNKNOWN",
+  "first_failed_run": 42739322749,
+  "verified_run": 42739427552,
+  "outcome": {
+    "unit_tests": 98,
+    "source_passes": 7,
+    "source_program_stages": 14,
+    "original_texture_register_names_matched": 29,
+    "original_sampler_register_names_matched": 27,
+    "total_original_texture_sampler_registers_matched": 56,
+    "original_cb_register_names_unrecognized": 66,
+    "numerically_renumbered_texture_sampler_resource_mappings": 56,
+    "all_resource_group_symbolic_mapping_complete": false,
+    "full_generated_name_groups": 28,
+    "total_groups": 42,
+    "cb_numeric_binding_parity_prior_run": 42738042943,
+    "original_material_texenv_parity": false,
+    "original_android_shader_restored": false
+  }
 }

@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-symbolic-binding-map-20",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-symbolic-binding-map-20.md",
-  "status": "GFX_MULTI_019_VKD3D_SOURCE_REGISTER_SYMBOL_BINDING_PROBE_CI_PENDING",
+  "status": "GFX_MULTI_019_TRUE_T_S_SYMBOLIC_REGISTER_MAP_56_OF_56_CB_METADATA_AND_MATERIAL_LINK_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Read GFX-MULTI-019 strict vkd3d OpName source register->SPIRV descriptor mapping coverage; distinguish compiler-generated names from independent source Material TexEnv / DX11 CB layout semantics before Android GPU.",
+  "next_experiment": "GFX-MULTI-020 inspect Unity original source Shader48 SerializedSubProgram m_TextureParams/m_Samplers/m_ConstantBufferBindings metadata, link source original property indices to DX11 t/s registers and original Material m_TexEnvs with strict source identity, then CB byte layouts. Do not assume Texture role names imply shader slots.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -475,8 +475,17 @@
   },
   "latest_symbolic_register_mapping": {
     "experiment": "GFX-MULTI-019",
-    "status": "CI_PENDING",
-    "original_shader_restored": false,
+    "run": 42739427552,
+    "status": "SUCCESS_SOURCE_TO_SPV_T_AND_S_SYMBOLS_56_OF_56",
+    "source_texture_registers_matched": 29,
+    "source_sampler_registers_matched": 27,
+    "source_cb_opnames_unrecognized": 66,
+    "all_generated_register_groups_verified": 28,
+    "total_stage_resource_groups": 42,
+    "numeric_renumbered_texture_sampler": 56,
+    "original_material_texenv_binding_equivalence": false,
+    "source_cb_name_mapping_verified": false,
+    "android_original_shader_restored": false,
     "original_shader_bytes_exported": false
   }
 }

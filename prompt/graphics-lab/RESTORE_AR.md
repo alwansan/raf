@@ -105,3 +105,7 @@
 - جلسة `20261110-GFX-chat-symbolic-binding-map-20` origin=chat، resumed_from=`20261110-GFX-chat-source-vs-spirv-binding-19`، base_sha=`3686ec91b4b940ba36393e15d54545ee7ec546b9`.
 - فحص source-only حقيقي لـ 14 stage من Shader48، تستخرج سجلات b/t/s من SHDR وتفحص ما إذا كانت أسماء SPIRV-Cross المشتقة من vkd3d `tN/sN/cbN_size` تتطابق مع مصدر DX11 و`set/binding`. النشر أعداد أسماء صحيحة/مفقودة ومعدّلة فقط؛ قيم الأصل وأسماء shader تبقى سرية.
 - أداة `gfxlab/tools/multi_shader_vkd3d_symbolic_register_map.py` وworkflow `gfxlab-multi-vkd3d-symbolic-binding.yml`. حل compiler binding لا يثبت ارتباط Material TexEnv أو Color/Normal/Metallic أو CB byte offsets. استعادة Shader48 على Android=false. بعد CI حدّث الجلسة وRESTORE/STATE/MEMORY/OPEN_WORK وتحقق من commit.
+
+
+## أحدث نجاح GFX-MULTI-019 — source t/s → SPIRV OpName
+[GFX-MULTI-019 CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) SUCCESS، 98 اختبارًا؛ شيدر Shader48 الأصلي، 7 Passes/14 Stage ممثلة: 29/29 Texture/Resource `t#` و27/27 Sampler `s#` تطابقت أسماء vkd3d المصدرية مع `set/binding` في SPIR-V، وجميعها أعاد المترجم ترقيمها. 66 Constant Buffer أسماء غير معروفة في grammar الحالية، رغم التطابق الرقمي السابق. عدد المجموعات المكتملة بالاسم 28/42 فقط (14 مجموعة Vertex فارغة +14 Fragment t/s حقيقية). لا Material TexEnv mapping، ولا original Android shader. آخر جلسة `memory/sessions/20261110-GFX-chat-symbolic-binding-map-20.md`؛ التالي GFX-MULTI-020 لاستكشاف `SerializedSubProgram.m_TextureParams / m_Samplers / m_ConstantBufferBindings` الأصلية وربطها بMaterial ومعاني الـRegisters.
