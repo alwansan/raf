@@ -1,0 +1,76 @@
+name: GFX-MULTI-031 verify signed Android APK packaged MediaStore Java bridge / no rebuild
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi031-dex-bridge-audit.yml']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+concurrency:
+  group: gfxlab-multi031-apk-dex-bridge-audit
+  cancel-in-progress: false
+jobs:
+  inspect-built-signed-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download already signed GFX-MULTI-031 APK without rebuilding source
+        run: |
+          set -euo pipefail
+          gh run download 42802005319 \
+            --repo alwansan/raf \
+            --name gfxlab-multi031-auto-logs-gles3-apk-42802005319 \
+            --dir "$RUNNER_TEMP/gfxlab-multi031-package"
+      - name: Verify exact APK SHA, Java JNI bridge in DEX and desired destination string
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          from zipfile import ZipFile
+          p=Path(os.environ["RUNNER_TEMP"])/"gfxlab-multi031-package"/"GfxLab-Multi-Six-AutoLogs.apk"
+          assert p.is_file() and p.stat().st_size==66162049,"EXPECTED_SIGNED_ANDROID_APK_ABSENT"
+          with p.open("rb") as stream:
+              digest=hashlib.file_digest(stream,"sha256").hexdigest()
+          assert digest=="a2466155b87d8c34ec22955a22bc6c7c741f691063e9a9f7f79a58ca9465c1f5","APK_SHA256_DIFFERS_CI"
+          with ZipFile(p) as z:
+              names=z.namelist()
+              dex=[name for name in names if name.startswith("classes") and name.endswith(".dex")]
+              assert dex,"NO_SIGNED_ANDROID_CLASSES_DEX"
+              assert z.testzip() is None,"SIGNED_ANDROID_APK_ZIP_CRC_FAILED"
+              bridge=any(b"GfxDownloadsBridge" in z.read(name) for name in dex)
+              method=any(b"exportZip" in z.read(name) for name in dex)
+              target=any(b"Download/Games/cl/test/g/" in z.read(name) for name in dex)
+              print("GFX_MULTI031_JAVA_BRIDGE_IN_SIGNED_APK="+str(bridge).lower())
+              print("GFX_MULTI031_JAVA_EXPORT_METHOD_IN_DEX="+str(method).lower())
+              print("GFX_MULTI031_JAVA_DESTINATION_IN_DEX="+str(target).lower())
+              assert bridge and method and target,"SIGNED_APK_MISSING_MEDIASTORE_EXPORT_CODE"
+          report={
+            "schema":1,"source_build_run":42802005319,
+            "apk_sha256":digest,"apk_bytes":p.stat().st_size,
+            "signed_apk_has_gfx_downloads_bridge":bridge,
+            "signed_apk_has_export_zip_method":method,
+            "signed_apk_has_requested_relative_path":target,
+            "android_mediastore_write_tested_on_owner_device":False,
+            "original_shader48_restored":False,
+            "user_owned_apk_binary_redistributed_by_this_audit":False
+          }
+          Path(os.environ["RUNNER_TEMP"],"gfxlab-multi031-dex-safe.json").write_text(
+            json.dumps(report,sort_keys=True,indent=2)+"\n")
+          print("GFX_MULTI031_DEX_BRIDGE_SAFE_PASS=true")
+          PY
+      - name: Publish aggregate-only proof, no APK payload
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi031-dex-bridge-safe-proof
+          path: ${{ runner.temp }}/gfxlab-multi031-dex-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge downloaded APK from source-free runner
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/gfxlab-multi031-package"
+          echo GFX_MULTI031_AUDIT_APK_TEMP_PURGED=true
