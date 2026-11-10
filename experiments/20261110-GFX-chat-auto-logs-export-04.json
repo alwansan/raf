@@ -14,7 +14,34 @@
     "APK signature and package verification",
     "owner device confirms MediaStore path and ZIP contents"
   ],
-  "status": "PREPARING",
+  "status": "SOURCEFREE_ZIP_PARSER_191_TESTS_SUCCESS_REAL_UNITY_BUILD_IN_PROGRESS",
   "originalShaderRestored": false,
-  "phaseClosed": false
+  "phaseClosed": false,
+  "runs": [
+    {
+      "run": 42800909094,
+      "status": "FAILED_SOURCEFREE_OLD_CONTRACT"
+    },
+    {
+      "run": 42800994512,
+      "status": "FAILED_SOURCEFREE_OLD_CONTRACT"
+    },
+    {
+      "run": 42801247423,
+      "status": "FAILED_REAL_UNITY_CS0104_COMPRESSIONLEVEL_AMBIGUITY"
+    },
+    {
+      "run": 42801864098,
+      "status": "SUCCESS_ZIP_PARSER_TESTS_191",
+      "source_private": false
+    },
+    {
+      "run": 42802005319,
+      "status": "IN_PROGRESS_REAL_UNITY_ARM64_BUILD",
+      "head_sha": "e4498b71320f96d6df8a75ea090620ec88a9a8bd"
+    }
+  ],
+  "runtime_stage": "Unity2021.3.45f2 Android IL2CPP ARM64 source assets imported; build pending",
+  "owner_device_mediastore_exact_path_verified": false,
+  "automatic_test_log_coverage": "every state transition and Unity threaded logging source wired; owner run pending"
 }
