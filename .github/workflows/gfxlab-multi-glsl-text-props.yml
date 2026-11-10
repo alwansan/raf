@@ -2,7 +2,10 @@ name: GFX-MULTI-034 original unlinked GLES GLSL text to Shader48 property source
 on:
   push:
     branches: [experiment/android-graphics-rootcause]
-    paths: ['.github/workflows/gfxlab-multi-glsl-text-props.yml']
+    paths:
+      - '.github/workflows/gfxlab-multi-glsl-text-props.yml'
+      - 'gfxlab/tools/multi_shader_glsl_text_property_evidence.py'
+      - 'gfxlab/tests/test_multi_shader_glsl_text_property_evidence.py'
   workflow_dispatch:
 permissions:
   contents: read
