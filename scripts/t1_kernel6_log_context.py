@@ -54,11 +54,12 @@ def scan(path, session, before=8, after=8, max_hits=30, errors_only=False):
                     markers.append(marker)
             markers.extend("pass:" + p.lower().replace(" ", "_") for p in PASS.findall(line))
             compact = {"line": lineno, "markers": sorted(set(markers))}
-            if markers:
-                for end, event in pending:
-                    if lineno > event["line"] and lineno <= end:
-                        event["after"].append(compact)
-                prior.append(compact)
+            # Physical-line proximity: non-diagnostic lines must also age the
+            # look-behind window. Emit only diagnostic markers, never raw text.
+            for end, event in pending:
+                if markers and lineno > event["line"] and lineno <= end:
+                    event["after"].append(compact)
+            prior.append(compact)
             pending = [(end, event) for end, event in pending if lineno < end]
     return {"session_id": session, "source_sha256": sha.hexdigest(),
             "counts": counts, "sampled_hits": len(events), "sample_errors_only": bool(errors_only), "events": events,
