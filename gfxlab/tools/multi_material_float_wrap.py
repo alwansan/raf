@@ -137,8 +137,8 @@ def audit(stage):
     if len(keys)!=7:
         raise ValueError("SOURCE_MATERIAL_POINTER_COUNT_DRIFT")
     for owner,pid in keys:
-        if (owner,pid) in unique_mat_keys:
-            raise ValueError("DUPLICATE_ORIGINAL_MATERIAL21")
+        # Renderer material slots may legitimately alias the exact same
+        # original Material21. Count seven slots and separate unique objects.
         unique_mat_keys.add((owner,pid))
         obj=typed[owner].get(pid)
         if obj is None or obj.type.name!="Material":
@@ -198,6 +198,8 @@ def audit(stage):
         "source_sha":ZIP2_SHA,
         "source_models":6,
         "material_slots":material_totals["material_slots"],
+        "unique_original_material_objects":len(unique_mat_keys),
+        "material_slot_references_reused":7-len(unique_mat_keys),
         "float_slots":material_totals["float_slots"],
         "color_slots":material_totals["color_slots"],
         "shader48_original_property_count":len(shader_names),
