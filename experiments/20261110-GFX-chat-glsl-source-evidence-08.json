@@ -14,6 +14,33 @@
     "Separate GLES from GLCore and preserve original 7-Pass link negative gate",
     "Run source-free contract unit suite + SHA-pinned source CI and purge"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_SOURCE_GLES_PROPERTY_TEXT_ONLY_NO_SHADER",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42809825046",
+    "https://github.com/alwansan/raf/actions/runs/42809913702"
+  ],
+  "results": {
+    "tests": 210,
+    "gles": {
+      "entries": 139,
+      "utf8_decoded": 54,
+      "invalid_utf8": 85,
+      "embedded_null": 115,
+      "programs_with_exact_property_tokens": 6,
+      "unique_property_tokens": 3,
+      "unique_bound_material_property_tokens": 1,
+      "verified_uniform_bindings": 0
+    },
+    "glcore": {
+      "entries": 120,
+      "utf8_decoded": 33,
+      "invalid_utf8": 87,
+      "embedded_null": 106,
+      "verified_uniform_bindings": 0
+    },
+    "authentic_pass_link": false,
+    "android_shader_restored": false,
+    "private_source_purged": true
+  },
+  "next_step": "GFX-MULTI-035 private bounded byte-window source markers / framing for 259 unlinked GL typed programs"
 }
