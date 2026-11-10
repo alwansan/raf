@@ -1,6 +1,6 @@
 """GFX-MULTI-050 synthetic original-free DXBC CB DCL vs reflected UBO byte size."""
 import unittest
-from gfxlab.tools.multi_shader_original_cb_spv_blocksize import cb_size_evidence
+from gfxlab.tools.multi_shader_original_cb_spv_blocksize import cb_size_evidence, numeric_cb_coordinate_candidate
 
 class TestOriginalCBByteSizeComparison(unittest.TestCase):
     def test_exact_real_block_size_equality_does_not_prove_member_offsets(self):
@@ -53,4 +53,32 @@ class TestOriginalCBByteSizeComparison(unittest.TestCase):
             cb_size_evidence([],[])
         with self.assertRaisesRegex(ValueError,"ROW_NOT_OBJECT"):
             cb_size_evidence({1:1},[None])
+
+    def test_numeric_same_slot_candidate_is_not_semantic_CB_proof(self):
+        d=numeric_cb_coordinate_candidate({0:4,3:16},[
+            {"name":"OpaqueUno","set":0,"binding":0,"block_size":64},
+            {"name":"OpaqueDos","set":0,"binding":3,"block_size":256}])
+        self.assertTrue(d["all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only"])
+        self.assertEqual(d["numeric_b_binding_candidate_same_byte_sizes"],2)
+        self.assertFalse(d["numeric_descriptor_equality_proves_original_CB_identity"])
+        self.assertFalse(d["numeric_descriptor_equality_proves_original_CB_member_offsets"])
+        self.assertFalse(d["private_register_numbers_or_UBO_sizes_exported"])
+
+    def test_numeric_wrong_set_or_size_never_claimed(self):
+        a=numeric_cb_coordinate_candidate({0:4},[{"set":1,"binding":0,"block_size":64}])
+        self.assertEqual(a["nonzero_descriptor_set_excluded_from_numeric_identity_candidate"],1)
+        self.assertFalse(a["all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only"])
+        b=numeric_cb_coordinate_candidate({0:4},[{"set":0,"binding":0,"block_size":48}])
+        self.assertEqual(b["numeric_b_binding_candidate_different_byte_sizes"],1)
+        self.assertFalse(b["all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only"])
+
+    def test_numeric_duplicate_and_missing_size_rejected(self):
+        a=numeric_cb_coordinate_candidate({0:4},[{"binding":0,"block_size":64},
+            {"binding":0,"block_size":64}])
+        self.assertEqual(a["duplicate_or_invalid_reflected_descriptor_coordinate"],1)
+        self.assertFalse(a["all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only"])
+        b=numeric_cb_coordinate_candidate({0:4},[{"binding":0}])
+        self.assertEqual(b["numeric_b_binding_candidate_missing_block_size"],1)
+        self.assertFalse(b["all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only"])
+
 if __name__=="__main__":unittest.main()

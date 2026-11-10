@@ -111,6 +111,77 @@ def cb_size_evidence(original_cb_vectors,reflected_ubos):
         "original_b_register_indices_or_CB_byte_sizes_exported":False,
     }
 
+def numeric_cb_coordinate_candidate(original_cb_vectors,reflected_ubos):
+    """Provisional same-numeric-binding CB size check, NOT source-slot identity.
+
+    Previous GFX018 found that source b# numbers and translated UBO bindings
+    can coincide; GFX019 explicitly could not authenticate original CB names.
+    Therefore only descriptor_set==0 + binding==original b# is a candidate.
+    Never set a semantic resource mapping flag on this evidence.
+    """
+    if not isinstance(original_cb_vectors,dict) or not isinstance(reflected_ubos,list):
+        raise ValueError("GFX050_NUMERIC_CB_WRONG_INPUT")
+    if len(original_cb_vectors)>MAX_UBO_ROWS or len(reflected_ubos)>MAX_UBO_ROWS:
+        raise ValueError("GFX050_NUMERIC_CB_UNBOUNDED")
+    if any(type(k) is not int or not 0<=k<=65535 or type(v) is not int or
+           not 0<v<=MAX_CB_VECTORS for k,v in original_cb_vectors.items()):
+        raise ValueError("GFX050_NUMERIC_CB_SOURCE_INVALID")
+    matched=set();seen=set()
+    count=Counter({
+        "numeric_b_binding_candidate_matches":0,
+        "numeric_b_binding_candidate_same_byte_sizes":0,
+        "numeric_b_binding_candidate_different_byte_sizes":0,
+        "numeric_b_binding_candidate_missing_block_size":0,
+        "nonzero_descriptor_set_excluded_from_numeric_identity_candidate":0,
+        "reflected_numeric_binding_outside_source_slots":0,
+        "duplicate_or_invalid_reflected_descriptor_coordinate":0,
+        "source_cb_slots_without_numeric_candidate":0,
+    })
+    for row in reflected_ubos:
+        if not isinstance(row,dict):
+            raise ValueError("GFX050_NUMERIC_CB_BAD_REFLECTED_ROW")
+        b=row.get("binding");descriptor_set=row.get("set",0)
+        if type(b) is not int or type(descriptor_set) is not int or b<0 or descriptor_set<0:
+            count["duplicate_or_invalid_reflected_descriptor_coordinate"]+=1
+            continue
+        if (descriptor_set,b) in seen:
+            count["duplicate_or_invalid_reflected_descriptor_coordinate"]+=1
+            continue
+        seen.add((descriptor_set,b))
+        if descriptor_set!=0:
+            count["nonzero_descriptor_set_excluded_from_numeric_identity_candidate"]+=1
+            continue
+        if b not in original_cb_vectors:
+            count["reflected_numeric_binding_outside_source_slots"]+=1
+            continue
+        matched.add(b)
+        count["numeric_b_binding_candidate_matches"]+=1
+        size=row.get("block_size")
+        if type(size) is not int or not 0<size<=MAX_BLOCK_BYTES:
+            count["numeric_b_binding_candidate_missing_block_size"]+=1
+        elif original_cb_vectors[b]*16==size:
+            count["numeric_b_binding_candidate_same_byte_sizes"]+=1
+        else:
+            count["numeric_b_binding_candidate_different_byte_sizes"]+=1
+    count["source_cb_slots_without_numeric_candidate"]=len(set(original_cb_vectors)-matched)
+    candidate_complete=(
+        bool(original_cb_vectors)
+        and len(matched)==len(original_cb_vectors)==len(reflected_ubos)
+        and count["numeric_b_binding_candidate_same_byte_sizes"]==len(matched)
+        and not any(count[k] for k in (
+            "numeric_b_binding_candidate_different_byte_sizes",
+            "numeric_b_binding_candidate_missing_block_size",
+            "nonzero_descriptor_set_excluded_from_numeric_identity_candidate",
+            "reflected_numeric_binding_outside_source_slots",
+            "duplicate_or_invalid_reflected_descriptor_coordinate")))
+    return {
+        **dict(count),
+        "all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only":bool(candidate_complete),
+        "numeric_descriptor_equality_proves_original_CB_identity":False,
+        "numeric_descriptor_equality_proves_original_CB_member_offsets":False,
+        "private_register_numbers_or_UBO_sizes_exported":False,
+    }
+
 def audit(stage):
     source_programs,passes=source_pair(stage)
     if len(passes)!=7 or any(not p["pairs"] for p in passes):
@@ -140,7 +211,15 @@ def audit(stage):
                 if not isinstance(reflect,dict):
                     raise ValueError("GFX050_REFLECTION_NOT_OBJECT")
                 c=cb_size_evidence(source_sizes[kind],reflect.get("ubos",[]))
+                numeric=numeric_cb_coordinate_candidate(source_sizes[kind],reflect.get("ubos",[]))
+                c["numeric_binding_candidate_evidence"]=numeric
                 stage_summary[kind]=c
+                totals["numeric_candidate_source_b_to_spv_ubo_matched"]+=numeric["numeric_b_binding_candidate_matches"]
+                totals["numeric_candidate_equal_block_byte_sizes"]+=numeric["numeric_b_binding_candidate_same_byte_sizes"]
+                totals["numeric_candidate_different_block_byte_sizes"]+=numeric["numeric_b_binding_candidate_different_byte_sizes"]
+                totals["numeric_candidate_missing_UBO_block_byte_sizes"]+=numeric["numeric_b_binding_candidate_missing_block_size"]
+                totals["stages_with_all_numeric_coordinate_CB_bytes_candidate_equal"]+=int(
+                    numeric["all_original_b_numbers_match_spirv_ubo_numeric_binding_and_block_byte_size_as_candidate_only"])
                 totals["total_source_dxbc_constant_buffer_declarations"]+=c["source_original_dxbc_constant_buffer_declarations"]
                 totals["total_translated_spirv_reflected_ubos"]+=c["translated_spirv_reflected_ubo_entries"]
                 totals["source_dcl_to_translated_ubo_exact_block_size_matches"]+=c["source_dcl_vec4_times_16_equals_translated_spirv_block_size"]
@@ -165,6 +244,8 @@ def audit(stage):
         "source_CB_to_translated_UBO_safe_aggregate":dict(totals),
         "per_pass":perpass,
         "all_14_stages_CB_byte_size_equality_proven":totals["stages_with_all_CB_block_byte_sizes_matched"]==14,
+        "all_14_stages_numeric_binding_candidate_block_size_matched":totals["stages_with_all_numeric_coordinate_CB_bytes_candidate_equal"]==14,
+        "numeric_binding_candidate_is_original_CB_semantic_identity":False,
         "all_524_variants_covered":False,
         "source_Material_Shader_property_to_original_CB_register_mapping_proven":False,
         "original_constantbuffer_individual_member_byte_offsets_proven":False,
