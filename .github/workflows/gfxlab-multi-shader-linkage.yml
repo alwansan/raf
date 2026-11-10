@@ -70,3 +70,5 @@ jobs:
         run: |
           sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi010-private"
           echo GFX_MULTI010_SOURCE_BYTES_PURGED=true
+
+# Re-run GFX-MULTI-010 after explicit-zero fail-closed counter fix.

@@ -36,7 +36,14 @@ def count_variant_links(pass_tree,programs):
         if not isinstance(d,dict):raise ValueError("MISSING_SOURCE_PROGRAM_STAGE")
         rows.extend([(stage,r) for r in (_find_subprogram_rows(d.get("m_SubPrograms"))+
                                          _find_subprogram_rows(d.get("m_PlayerSubPrograms")))])
-    out=Counter();used=set();types=Counter();families=Counter()
+    # Keep explicit zero counters: failures must be reported, not missing keys.
+    out=Counter({"source_variant_links":0,"valid_source_blob_index_links":0,
+                 "invalid_source_blob_index_links":0,
+                 "metadata_program_type_present":0,
+                 "metadata_program_type_equal":0,
+                 "metadata_program_type_mismatch":0,
+                 "metadata_program_type_unreadable":0})
+    used=set();types=Counter();families=Counter()
     for stage,row in rows:
         out["source_variant_links"]+=1
         idx=row.get("m_BlobIndex")
