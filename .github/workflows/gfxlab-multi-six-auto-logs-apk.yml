@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 # GFX-MULTI-031: repeatable Android APK build with all-events scoped ZIP export
 # Retry 3: source-free contracts now accept versioned automatic-log package without unsafe-permission false positives
+# Retry 4: resolve System.IO.Compression.CompressionLevel ambiguity proven by Unity compiler CI42801247423
 permissions:
   contents: read
 concurrency:
