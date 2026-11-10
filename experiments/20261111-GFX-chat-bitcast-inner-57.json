@@ -30,10 +30,21 @@
     "private DXBC/SPV/ZIP2 runner purge, safe artifact only"
   ],
   "resource_key": "gfxlab-multi084-private-spv-imul-Store-Bitcast-inner",
-  "status": "CI_QUEUED",
+  "status": "SUCCESS_12_OF_12_SPV_NONPOWER_IMUL_PRIOR_STORE_BITCAST_INNER_OPIADD_809_TESTS",
   "run_id": 42908576921,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42908576921",
-  "evidence_level": "PENDING_AUTHENTIC_SOURCE_SPV_CPU_BITCAST_INNER_SSA_ONLY",
+  "evidence_level": "SOURCE_AUTHENTICATED_TRANSLATED_SPV_CPU_IMMEDIATE_INNER_OPCODE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "201f33ec1a7cd63b0cc60227728b5fbba1901ea0",
+  "source_free_tests": 809,
+  "authentic_original_pairs": 157,
+  "original_source_stage_instances": 314,
+  "original_source_CB_stages": 311,
+  "authenticated_SPV_CB_index_loads": 427,
+  "nonpower_OpIMul_input_prior_Store_Bitcast_inner_OpIAdd_count": 12,
+  "nonpower_OpIMul_input_prior_Store_Bitcast_inner_arithmetic_count": 12,
+  "safe_artifact_id": 13806491541,
+  "artifact_expires_utc": "2026-11-17T21:49:27Z",
+  "private_source_purge_verified": true
 }
