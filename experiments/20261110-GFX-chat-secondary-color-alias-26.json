@@ -22,8 +22,45 @@
     "shader48 original Color name membership and exact seven slot/21 texture chain guard"
   ],
   "resource_key": "gfxlab-multi025-original-source-color-alias-only",
-  "status": "PREPARED_CI_PENDING",
+  "status": "SUCCESS_SOURCE_ONLY_146_TESTS",
   "workflow": ".github/workflows/gfxlab-multi-secondary-color-alias.yml",
   "original_shader_restored": false,
-  "android_pixels_verified": false
+  "android_pixels_verified": false,
+  "verified_run": 42746455458,
+  "workflow_sha": "abda9eb66f80066c274e6dd5bef81a2062e67290",
+  "tests_passed": 146,
+  "material_alias_census": {
+    "slots": 7,
+    "unique": 6,
+    "group_histogram": {
+      "1": 5,
+      "2": 1
+    },
+    "shared_across_models": 1
+  },
+  "texture_alias_census": {
+    "slots": 21,
+    "unique": 18,
+    "group_histogram": {
+      "1": 15,
+      "2": 3
+    },
+    "shared_across_models": 3,
+    "shared_across_roles": 0
+  },
+  "color_census": {
+    "saved_colors": 14,
+    "shader48_name_matches": 14,
+    "base_tint_white_rgba": 7,
+    "emission_named_rgb_black_alpha_one": 7,
+    "nonzero_emissive_rgb": 0
+  },
+  "safe_artifact": {
+    "id": 13730829715,
+    "url": "https://github.com/alwansan/raf/actions/runs/42746455458/artifacts/13730829715",
+    "expires_utc": "2026-11-17T03:00:31Z"
+  },
+  "private_source_purged": true,
+  "phase_closed": false,
+  "next_step": "GFX-MULTI-026: seven-pass original Shader48 render-state and Material render queue/keywords census, exact SHA-source only"
 }
