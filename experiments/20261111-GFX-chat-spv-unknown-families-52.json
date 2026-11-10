@@ -23,11 +23,21 @@
     "private source purge"
   ],
   "resource_key": "gfxlab-multi079-private-spv-terminal-family",
-  "status": "CI_PENDING",
+  "status": "SUCCESS_12_OF_12_SPV_INTEGER_MATH_TERMINALS_47_CFG_BLOCK_DOMINATORS_CPU_ONLY",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "resumed_from": "20261111-GFX-chat-ssa-unknown-cfg-51",
   "base_sha": "f2351bee4f5385f70364f507f7698ad6886380ef",
-  "evidence_level": "PENDING_SOURCE_AUTHENTICATED_TRANSLATED_SPV_CPU_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_TERMINAL_OPCODE_FAMILY_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_id": 42903748363,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42903748363",
+  "run_sha": "41964eb0731d6ed19b6b38fa9408547da2a4e4ce",
+  "tests_passed": 652,
+  "source_joint_pairs": 157,
+  "source_spv_CB_index_loads": 427,
+  "unknown_store_value_terminal_integer_math_count": 12,
+  "CFG_prior_writer_block_dominates": 47,
+  "artifact_id": 13803772379,
+  "private_purge_verified": true
 }
