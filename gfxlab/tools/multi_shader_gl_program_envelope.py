@@ -142,11 +142,12 @@ def inspect_candidates(programs,linked,shader_compiler_platform):
     keyword_nonempty_sets={f:set() for f in FAMILIES}
     for index,p in enumerate(programs):
         if index in linked:continue
-        family=program_family(p.m_ProgramType.name)
-        if family not in FAMILIES:continue
+        # Bound every unlinked source code payload, including the non-GL
+        # remainder: an oversized buffer must never silently bypass audit.
         code=bytes(p.m_ProgramCode)
-        if not code:continue
         if len(code)>MAX_CODE:raise ValueError("ORIGINAL_GL_CODE_TOO_LARGE")
+        family=program_family(p.m_ProgramType.name)
+        if family not in FAMILIES or not code:continue
         totals[family]["candidate_entries"]+=1
         sizes[family][length_bucket(len(code))]+=1
         ratios[family][ascii_bucket(code)]+=1
