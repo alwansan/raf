@@ -65,6 +65,15 @@ class GuidAuditContract(unittest.TestCase):
             ".mat": 1, ".prefab": 1, ".unity": 1,
         })
 
+    def test_multiline_inline_yaml_reference_and_non_stitching(self):
+        self.put("Assets/known.shader.meta", "fileFormatVersion: 2\nguid: " + A + "\n")
+        self.put("Assets/smoke.mat", "m_Shader: {\n  guid: " + A + ",\n  fileID: 4800000,\n  type: 3\n}\n"
+                 "m_Bad: {\n  fileID: 2100000\n}\n"
+                 "m_Other: {\n  guid: " + B + "\n}\n")
+        result = audit.inspect(self.root)
+        self.assertEqual(result["reference_counts"], {"resolved_in_supplied_tree": 1})
+        self.assertEqual(result["unresolved_by_source_extension"], {})
+
     def test_non_yaml_and_oversized_skipped(self):
         self.put("Assets/notes.txt", "{fileID: 1, guid: " + B + "}")
         self.put("Assets/small.mat", "{fileID: 1, guid: " + B + "}")
