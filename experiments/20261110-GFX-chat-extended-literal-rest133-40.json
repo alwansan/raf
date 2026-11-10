@@ -1,0 +1,27 @@
+{
+  "session_id": "20261110-GFX-chat-extended-literal-rest133-40",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-066",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "reference_refs": [
+    "GFX065 CI42879705849",
+    "GFX064 CI42876582659"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42880727817",
+  "question": "Are source-stage-local extended literal CB b/vec4 read ranges across remaining 133 Shader48 original source representative VS/FS pairs present in translated SPV OpLoad?",
+  "hypothesis": "The remaining 133 representatives may match static read-range presence, without source-operand numeric equivalence.",
+  "negative_controls": [
+    "Missing source CB vec4 range",
+    "Wrong b register",
+    "Relative source CB index",
+    "Nonoverlap with first 24 original representative classes",
+    "Source-private purge"
+  ],
+  "expected_class_slice": [
+    24,
+    157
+  ],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
