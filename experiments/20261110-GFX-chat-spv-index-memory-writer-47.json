@@ -1,0 +1,30 @@
+{
+  "session_id": "20261110-GFX-chat-spv-index-memory-writer-47",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-074",
+  "question": "For the 427 authenticated SPIR-V UBO dynamic CB index reads, is the index source OpLoad fed by a conservatively identified local same-basic-block Function-variable OpStore, and if so is there a bounded SPIR-V shift ancestor?",
+  "hypothesis": "Local store provenance may be classified for a subset, but cannot establish original DXBC temp-to-SPV SSA mapping, CFG dominance, or Unity Material semantics.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42890357390",
+    "memory/sessions/20261110-GFX-chat-source-ISHL-SPV-ancestry-44.md"
+  ],
+  "source_ref": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "control": [
+    "same-block OpStore; no store; branch barrier; function call barrier; unknown pointer alias; Volatile load; wrong UBO root; duplicate load; malformed SPV layout; OpSelect index"
+  ],
+  "planned_tests": [
+    "All source-free Python regression tests",
+    "private SHA-locked 157 original class pairs / 314 SPV stages",
+    "Source-authenticated b-register and UBO layout recheck",
+    "427 original/SPV dynamic index multiset audit",
+    "count-only local writer taxonomy; private source purged"
+  ],
+  "resource_key": "gfxlab-multi074-private-cb-index-memory-writer",
+  "status": "CI_PENDING",
+  "evidence_level": "PLANNED_SOURCE_AND_TRANSLATED_SPV_CPU_ONLY",
+  "requires_GPU_or_owner_test": false,
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
