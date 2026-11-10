@@ -1,0 +1,26 @@
+{
+  "session_id": "20261110-GFX-chat-material-texture-semantics-24",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-variant-reflection-sweep-23",
+  "base_sha": "253a2981fc246b810965ece4637a33516382be6e",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-023-original-material-texture-semantic-and-channel-census",
+  "question": "What original Material and Texture2D metadata, UV transforms, tint slots, texture formats, mip/color-space settings, and decoded channel patterns are present across the six selected models' seven materials and 21 bound textures?",
+  "hypothesis": "The source Material/Texture2D chain may provide reliable texture import and channel-packing clues even though original Shader48 property-to-DX11 register metadata is absent. Role-specific channel patterns must remain diagnostic candidates, not semantic shader proof.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42720399689",
+    "CI42743017021"
+  ],
+  "control": "Use exact existing six-model selection and Material/Texture2D pointers; authenticate only sparse Git blob stream chunks; validate every decoded image against source dimensions; publish aggregate role/code/channel counts only. Never export source names, IDs, paths, raw pixel values, images, OBJ or shader bytes.",
+  "planned_tests": [
+    "source-free tests for Unity name/value pair parsing and duplicate rejection",
+    "source-free UV identity and enum-code guards",
+    "source-free RGBA channel variability tests",
+    "private source plan and sparse stream hydration using existing SHA-pinned transport",
+    "decode all 21 original Texture2D objects and compare exact dimensions",
+    "audit all seven Material saved-property slots and 63 TexEnv entries"
+  ],
+  "resource_key": "gfxlab-multi023-private-material-texture-semantic-census",
+  "status": "PREPARED_CI_PENDING"
+}
