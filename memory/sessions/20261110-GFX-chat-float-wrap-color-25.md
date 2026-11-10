@@ -8,7 +8,7 @@
 - experiment_key: `GFX-MULTI-024-material-float-color-wrap-format-census`
 - scope: Seven exact original Materials (112 floats, 14 colors) and 21 bound Texture2D serialized settings, properties cross-referenced privately to one authentic Shader48 (27 properties), official Unity 2021.3 enums; no pixel decode, no Android APK.
 - workflow: `.github/workflows/gfxlab-multi-material-float-wrap.yml`
-- status: `PREPARED_CI_PENDING`
+- status: `SUCCESS_SOURCE_ONLY_GFX_MULTI_024`
 
 ## Baseline and controls
 
