@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-shdr-interpolation-13",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-shdr-interpolation-13.md",
-  "status": "GFX_MULTI_039_SUCCESS_ALL_1275_SOURCE_SHDR_INTERPOLATION_DECLARATIONS_ORIGINAL_SHADER48_RUNTIME_AND_MATERIAL_CB_BLOCKED",
+  "latest_session": "20261110-GFX-chat-android-interpolation-probe-14",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-android-interpolation-probe-14.md",
+  "status": "GFX_MULTI_040_SYNTHETIC_ANDROID_GPU_PROBE_REAL_UNITY_BUILD_PROVEN_SIGNATURE_ARTIFACT_CI_PENDING_NO_ORIGINAL_SHADER",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-040 prioritize genuine Material/constant-buffer resource name-to-register mapping and/or diagnostic-only Android flat/noperspective GPU test with auto logs; never substitute synthetic shader for authentic Shader48.",
+  "next_experiment": "Finish and verify signed synthetic-only GFX-MULTI-040 diagnostic APK, provide download and owner instructions; inspect user Adreno GPU ZIP. Real Material/CB shader mapping and original Shader48 restoration remain blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1144,5 +1144,26 @@
     "vertex_cb_declarations": 3168,
     "source_private_purged": true,
     "original_shader48_restored": false
+  },
+  "latest_synthetic_probe": {
+    "experiment": "GFX-MULTI-040",
+    "origin": "chat",
+    "source_original_assets_in_apk": false,
+    "package": "com.alwansan.raft.graphicslab.interpolation",
+    "modes": [
+      "Linear",
+      "Flat",
+      "NoPerspective"
+    ],
+    "apk_build_first_compiled_run": 42818589985,
+    "apk_build_first_bytes": 8475684,
+    "apk_build_first_sha256": "cfc096398f44db664f901aaaf537a94ed631b6c63b51eb937ac449022e7823f9",
+    "initial_final_verification_failure": "SHELL_REDIRECT_SYNTAX_NOT_UNITY_COMPILATION",
+    "running_signed_apk_ci": 42819553601,
+    "zip_parser_success_run": 42819452951,
+    "zip_parser_python_tests": 256,
+    "original_shader_restored": false,
+    "device_gpu_pixels_verified": false,
+    "owner_zip_received": false
   }
 }
