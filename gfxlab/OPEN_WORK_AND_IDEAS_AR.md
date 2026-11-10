@@ -29,3 +29,8 @@
 - احتفظ ببوابات: ORIGINAL_SOURCE / SAME_EXPORT / UNITY_IMPORT_COMPILE / GPU_EXPERIMENT / ANDROID_GAME_PIXELS / OWNER_ACCEPTANCE.
 
 **آخر جلسة توثيق:** `20261110-GFX-chat-persistent-roadmap-15`. **آخر تجربة مصدر:** GFX-MULTI-014، والتالية GFX-MULTI-015. **ZIP2 المثبت:** 15964ea8f246b6e076ce26b60931ee2e1a9a2385.
+
+
+## تقدم هذه الدورة
+- بدأت `GFX-MULTI-015` (جلسة `20261110-GFX-chat-rdef-seven-pass-source-16`) للتحقق من RDEF في 14 Stage من المصدر الحقيقي؛ الحالة `CI_PENDING` حتى يثبت التشغيل.
+- عند النجاح/الفشل، حدّث هذا البند واذكر رابط CI، ولا تختزل غياب RDEF إلى صفر CB.

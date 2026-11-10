@@ -13,3 +13,8 @@
 - outcome: persistent checklist, live restore and planning files updated; original Android shader false, phase open.
 - next_step: GFX-MULTI-015 private source-only coverage over all 7 passes and 14 stages, then independent DX11 resource map investigation.
 - open_tasks: gfxlab/OPEN_WORK_AND_IDEAS_AR.md
+
+
+## حفظ نهائي لهذه الدورة
+- Persistent changes committed as `7c0e37af4f83934264393626b77868fada53daa2` to `experiment/android-graphics-rootcause`. Live RESTORE, STATE, MEMORY, session and backlog are present.
+- Next source experiment handoff: `20261110-GFX-chat-rdef-seven-pass-source-16` / GFX-MULTI-015. No owner agent created, no code of original shader published.

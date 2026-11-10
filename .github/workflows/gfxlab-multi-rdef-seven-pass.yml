@@ -1,0 +1,77 @@
+name: GFX-MULTI-015 original Shader48 7-pass RDEF coverage no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - .github/workflows/gfxlab-multi-rdef-seven-pass.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi015-original-rdef-all-passes
+  cancel-in-progress: false
+jobs:
+  original-source-rdef-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free negative tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_rdef_seven_passes.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Count real original Shader48 Pass chunks privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_rdef_seven_passes --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi015-private" --out gfxlab-multi015-safe-report.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi015-safe-report.json"))
+          assert d["original_pass_count"]==7 and d["representative_source_stages"]==14
+          assert len(d["per_pass"])==7
+          assert d["rdef_present_source_stages"]+d["rdef_absent_source_stages"]==14
+          for p in d["per_pass"]:
+              for x in p["stages"].values():
+                  if not x["rdef_present"]:
+                      assert x["source_constant_buffer_count"] is None
+                      assert x["source_binding_descriptor_count"] is None
+          assert not d["original_shader_restored"] and not d["phase_closed"]
+          assert not d["proprietary_shader_bytes_exported"]
+          print("GFX_MULTI015_RDEF_ABSENT_COUNTS_UNKNOWN_NO_ANDROID_CLAIM")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi015-safe-original-rdef-seven-pass
+          path: gfxlab-multi015-safe-report.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge staged original sources
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi015-private"
+          echo GFX_MULTI015_ORIGINAL_SOURCE_PURGED=true

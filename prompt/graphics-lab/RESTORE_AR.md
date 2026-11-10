@@ -63,3 +63,9 @@
 
 ## فحص GFX-MULTI-014 الأخير
 [CI42733664716](https://github.com/alwansan/raf/actions/runs/42733664716) SUCCESS: DXBC أصلي لممثّل Shader48 Pass0 VS/FS بلا RDEF؛ الأعداد الأصلية للـConstant Buffers/Bindings `unknown/null` وليست 0. عدد SPIR-V resource بعد التحويل VS5 UBO، FS7 UBO/7 image/6 sampler؛ لا يعني دلالة binding مكافئة. التصحيح وفتح خارطة الدوامة بجلسة `memory/sessions/20261110-GFX-chat-persistent-roadmap-15.md`. التجربة التالية GFX-MULTI-015، راجع القائمة الدائمة.
+
+
+## جلسة حيّة جديدة — GFX-MULTI-015
+- session_id: `20261110-GFX-chat-rdef-seven-pass-source-16`; origin=chat، resumed_from=`20261110-GFX-chat-persistent-roadmap-15`، base_sha=`7c0e37af4f83934264393626b77868fada53daa2`.
+- تجربة أصلية مصدرية خاصة `GFX-MULTI-015`: فحص RDEF وجرد chunks في 14 Stage من 7 Passes حقيقية، وليس ShaderLab ولا APK.
+- اقرأ نتيجة CI من `.github/workflows/gfxlab-multi-rdef-seven-pass.yml`، وسجّلها في `memory/sessions/20261110-GFX-chat-rdef-seven-pass-source-16.md` و`gfxlab/OPEN_WORK_AND_IDEAS_AR.md` وملف الاستعادة وSTATE/MEMORY قبل انتهاء الدورة.

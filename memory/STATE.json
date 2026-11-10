@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-persistent-roadmap-15",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-persistent-roadmap-15.md",
-  "status": "GFX_ROADMAP_PERSISTENT_RDEF_ABSENT_SOURCE_UNKNOWN_NOT_ZERO",
+  "latest_session": "20261110-GFX-chat-rdef-seven-pass-source-16",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-rdef-seven-pass-source-16.md",
+  "status": "GFX_MULTI_015_SOURCE_SEVEN_PASS_RDEF_CENSUS_CI_PENDING_FULL_SHADER_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-015: original Shader48 RDEF/chunk presence per 14 authentic stage containers, then source register-to-SPIRV and material binding semantics before Android runtime.",
+  "next_experiment": "GFX-MULTI-015 read real source all-pass DXBC RDEF coverage (14 stages), then determine independent DX11 register→SPIRV descriptor mapping evidence; no GPU original shader claim yet.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -417,5 +417,13 @@
     "gfxlab/OPEN_WORK_AND_IDEAS_AR.md",
     "memory/STATE.json",
     "memory/MEMORY.md"
-  ]
+  ],
+  "latest_rdef_all_passes": {
+    "experiment": "GFX-MULTI-015",
+    "status": "CI_PENDING",
+    "source_only": true,
+    "passes": 7,
+    "stages": 14,
+    "original_shader_restored": false
+  }
 }

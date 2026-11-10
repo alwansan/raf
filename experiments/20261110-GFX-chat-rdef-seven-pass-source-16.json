@@ -1,0 +1,20 @@
+{
+  "session_id": "20261110-GFX-chat-rdef-seven-pass-source-16",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-015",
+  "question": "Are original Shader48 RDEF chunks absent from all seven genuine Passes or only the first matched variant pair?",
+  "hypothesis": "Original source DXBC program containers are likely stripped of RDEF across multiple passes; missing descriptor counts should be unknown.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42733664716"
+  ],
+  "control": "Strict DXBC chunk bounds; fail on no stage chunks; null for missing RDEF; proprietary code stays in runner; full shader flags false.",
+  "planned_tests": [
+    "synthetic DXBC negative tests",
+    "seven genuine Passes and 14 stage records",
+    "RDEF/known-chunk aggregate safe counts"
+  ],
+  "resource_key": "gfxlab-multi015-rdef-7pass-private",
+  "status": "CI_PENDING"
+}

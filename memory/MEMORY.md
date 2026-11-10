@@ -122,3 +122,7 @@ GFX-MULTI-008 [CI42727777657](https://github.com/alwansan/raf/actions/runs/42727
 
 ## 2026-11-10 GFX-LAB persistent session updates / source RDEF correct interpretation
 The owner requires updating `prompt/graphics-lab/RESTORE_AR.md`, `memory/sessions/<session_id>.md`, `memory/STATE.json`, `memory/MEMORY.md`, and `gfxlab/OPEN_WORK_AND_IDEAS_AR.md` at the end of every work cycle; this was added to live restore. GFX-MULTI-014 [CI42733664716](https://github.com/alwansan/raf/actions/runs/42733664716) SUCCESS found no RDEF in real Shader48 Pass0 VS/FS; original CB/resource counts **unknown**, not zero. Source parser corrected to JSON null on missing RDEF. Device shader still NOT restored. Next GFX-MULTI-015 count RDEF/chunk availability on all 7 passes. Latest session 20261110-GFX-chat-persistent-roadmap-15.
+
+
+## GFX-MULTI-015 selected for source-only next step (2026-11-10)
+Latest session `20261110-GFX-chat-rdef-seven-pass-source-16`, resumed after persistent roadmap. Tests original RDEF coverage for 14 stage containers from all seven Shader48 passes, one source-exact VS/FS pair each. CI pending at commit creation. RDEF missing must be JSON null/unknown, NOT zero. This is source-only, original Android shader and material/CB sampler semantic parity remain open; see `gfxlab/OPEN_WORK_AND_IDEAS_AR.md` and live restore.
