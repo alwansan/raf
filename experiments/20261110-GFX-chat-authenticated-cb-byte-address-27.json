@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "session_id": "20261110-GFX-chat-authenticated-cb-byte-address-27",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-ubo-global-symbol-provenance-26",
+  "base_sha": "e2693873dec5709b77403fed16be2307cc24e454",
+  "experiment_key": "GFX-MULTI-053",
+  "issue_id": "RENDER-002",
+  "resource_key": "gfxlab-original-DXBC-CB-b-vec-to-SPV-authenticated-UBO-byte-address",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can strictly authenticated original b#/vec4-index uses from covered DXBC opcodes be matched to SPV OpLoad-backed UBO byte addresses using real OpName and explicit reflected vec4 array member offset/stride?",
+  "hypothesis": "Source subset of CB register vector addresses remains traceable through compiler-generated SPV single-member array byte layout without guessing original Material member names",
+  "controls": [
+    "original CB global OpName provenance",
+    "block size equality",
+    "single vec4 array member and literal length",
+    "offset0 and array_stride16",
+    "actual SPV OpAccessChain+OpLoad",
+    "dynamic/out-of-range source or SPV unknown",
+    "DXBC original opcode coverage partial",
+    "private file purge"
+  ],
+  "planned_tests": [
+    "full synthetic source-free tests",
+    "7 source-real matched VS/FS Shader48 pairs 14 stages",
+    "CPU offline vkd3d Vulkan1.1 translation and SPV reflection",
+    "safe aggregate only",
+    "purge confidential source"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

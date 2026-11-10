@@ -1,0 +1,106 @@
+name: GFX-MULTI-053 SHA-authenticated DXBC CB vec4 index vs SPIRV reflected byte addresses
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi053-source-cb-byte-address.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_byte_addresses.py'
+      - 'gfxlab/tests/test_multi_shader_original_cb_byte_addresses.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi053-private-source-CB-member-byte-layout
+  cancel-in-progress: false
+jobs:
+  private-source-cb-byte-address:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Full source-free unit suite and strict byte-address controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_byte_addresses.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX053_SOURCE_FREE_SYNTHETIC_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install CPU-only authentic DXBC to Vulkan SPIRV validation tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Compare authenticated CB register and reflected UBO byte layout to source CB operands
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_byte_addresses \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi053-private" \
+            --out gfxlab-multi053-safe-cb-byte-address-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi053-safe-cb-byte-address-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-053"
+          assert d["zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_passes"]==7
+          assert d["source_stages"]==14
+          assert len(d["per_pass"])==7
+          s=d["aggregate"]
+          assert s["source_stages"]==14
+          assert s["source_dxbc_cb_registers"]==66
+          assert s["proven_name_binding_size_CB_globals"]==66
+          assert s["UBO_globals_strict_single_vec4_array_member_layout"]<=66
+          assert s["source_subset_byte_addresses_matched_in_translated_SPV"]+s["source_subset_byte_addresses_not_found_in_translated_SPV"]==s["source_subset_distinct_DXBC_CB_vec4_byte_addresses"]
+          for p in d["per_pass"]:
+            for stage in p["safe_stage_layout_and_use_counts"].values():
+              assert not stage["source_DXBC_opcode_coverage_complete"]
+              assert not stage["original_CB_member_property_name_or_value_mapping_proven"]
+              assert not stage["shader48_original_Android_GPU_pixel_parity_proven"]
+              assert not stage["source_to_translated_address_overlap_is_original_Material_member_semantics"]
+              assert not stage["private_CB_offsets_or_registers_exported"]
+          for f in ("all_524_original_variants_covered","all_source_DXBC_CB_using_opcodes_decoded",
+                "source_to_original_ShaderLab_Material_property_member_mapping_proven",
+                "original_Shader48_Android_GPU_execution_verified","PC_to_Adreno_original_pixel_parity_proven",
+                "originalShaderRestored","phase_closed",
+                "private_source_shader_CB_register_indexes_offsets_or_raw_spv_exported"):
+            assert d[f] is False,f
+          print("GFX053_SOURCE_PRIVATE_CPU_CB_BYTE_LAYOUT_DIAGNOSTIC_NOT_MATERIAL_GPU=true")
+          PY
+      - name: Upload anonymous count-only source-private evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi053-safe-source-CB-byte-address-counts
+          path: gfxlab-multi053-safe-cb-byte-address-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2 shaders and private SPIRV/DXBC intermediates
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi053-private"
+          echo GFX053_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
