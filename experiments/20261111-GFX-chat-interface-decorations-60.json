@@ -1,0 +1,42 @@
+{
+  "session_id": "20261111-GFX-chat-interface-decorations-60",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-087",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-iadd-loads-86-59",
+  "base_sha": "321a10eba817e68f228f492bc2958fb8e96d1518",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "What safe count-only SPIR-V Input Location/BuiltIn and Uniform Binding/DescriptorSet/Block/selected-member Offset annotations exist at the 12+12 original-source Shader48 OpIAdd dynamic OpLoad operands?",
+  "hypothesis": "An SPV Input direct Location or BuiltIn and Uniform descriptor block/member layout annotations may exist, but source DXBC/Unity Material CB member byte equivalence remains independently unproven.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42910330545",
+    "memory/sessions/20261111-GFX-chat-iadd-loads-86-59.md"
+  ],
+  "control": [
+    "OpDecorate Block with no numeric operands",
+    "Input Location only vs BuiltIn only vs both conflicting",
+    "Uniform Binding with/without DescriptorSet",
+    "Block vs struct_without_block",
+    "OpMemberDecorate Offset selected vs absent",
+    "dynamic member index unverified",
+    "wrong variable decoration ignored",
+    "missing pointer type fail closed",
+    "no private SPV IDs or literals",
+    "originalShaderRestored false"
+  ],
+  "planned_tests": [
+    "full source-free Python regression including new GFX087 decoration guards",
+    "SHA-pinned 157 original Shader48 joint pairs /314 stages/311 source CB stages",
+    "427 source-b authenticated dynamic SPV CB actual reads",
+    "12 each Input and Uniform 5 independent decoration-count partitions",
+    "private source/SPV/DXBC purge and safe no-raw-identifier artifact"
+  ],
+  "resource_key": "gfxlab-multi087-source-private-spv-interface-decorations",
+  "status": "CI_RUNNING",
+  "run_id": 42911732892,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42911732892",
+  "evidence_level": "PENDING_SOURCE_TRANSLATED_SPV_CPU_INTERFACE_DECORATION_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
