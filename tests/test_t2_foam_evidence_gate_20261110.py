@@ -46,6 +46,14 @@ class EvidenceGateTests(unittest.TestCase):
                 with self.assertRaises(EvidenceError):
                     parse_aggregate_json(raw.encode("utf-8"))
 
+    def test_reject_python_integer_digit_limit_without_traceback(self):
+        # Under Python 3.11+, int conversion raises ValueError at >4300 digits.
+        # This input remains below MAX_BYTES and must fail as EvidenceError.
+        raw = json.dumps(valid()).replace('"fft_kernel_errors": 3850',
+                                          '"fft_kernel_errors": ' + "9" * 5000)
+        with self.assertRaises(EvidenceError):
+            parse_aggregate_json(raw.encode("utf-8"))
+
     def test_reject_oversize_before_parse(self):
         with self.assertRaises(EvidenceError):
             parse_aggregate_json(b" " * 65537)
