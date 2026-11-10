@@ -33,10 +33,24 @@
     "private source/SPV/DXBC purge and safe no-raw-identifier artifact"
   ],
   "resource_key": "gfxlab-multi087-source-private-spv-interface-decorations",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_12_INPUT_LOCATION_12_UNIFORM_BINDING_SET_BLOCK_MEMBER_OFFSET_SPV_DECORATION_SHAPE_ONLY",
   "run_id": 42911732892,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42911732892",
-  "evidence_level": "PENDING_SOURCE_TRANSLATED_SPV_CPU_INTERFACE_DECORATION_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_INTERFACE_DECORATION_PRESENCE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "df73dc428a3beb3a2afb28dbe0eb84ca906f9d14",
+  "source_free_tests": 833,
+  "original_joint_pairs": 157,
+  "original_stage_instances": 314,
+  "original_CB_stages": 311,
+  "authenticated_SPV_dynamic_CB_index_reads": 427,
+  "Input_Location_direct_OpLoad_count": 12,
+  "Input_BuiltIn_conflicts": 0,
+  "Uniform_Binding_and_DescriptorSet_count": 12,
+  "Uniform_Block_pointee_type_count": 12,
+  "Uniform_selected_literal_member_Offset_present_count": 12,
+  "safe_artifact_id": 13807567251,
+  "artifact_expiry_utc": "2026-11-17T22:09:40Z",
+  "private_source_purge_verified": true
 }
