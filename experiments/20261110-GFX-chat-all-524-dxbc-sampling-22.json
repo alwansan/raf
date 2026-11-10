@@ -1,0 +1,26 @@
+{
+  "session_id": "20261110-GFX-chat-all-524-dxbc-sampling-22",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-independent-dxbc-sample-pairs-21",
+  "base_sha": "9ac91b8086ae4f3c75e727b93c3f5b051241499a",
+  "experiment_key": "GFX-MULTI-048",
+  "issue_id": "RENDER-002",
+  "resource_key": "authentic-DXBC-all-524-variant-sampling",
+  "question": "Do all 524 exact original Shader48 keyword/tier source pairs share sampled resource register-use signatures?",
+  "hypothesis": "The source-only DXBC census can detect variant-specific t/s sampling patterns independent of SPIRV conversion",
+  "reference_refs": [
+    "GFX047 CI42838485544",
+    "ZIP2 SHA15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "planned_tests": [
+    "full source-free unittest suite",
+    "parse original 524 pairs into strict local bounded DXBC registers",
+    "publish anonymous per-pass histograms only",
+    "purge all private source"
+  ],
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "source_register_values_published": false,
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

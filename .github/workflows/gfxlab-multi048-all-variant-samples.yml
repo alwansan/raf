@@ -1,0 +1,102 @@
+name: GFX-MULTI-048 all 524 authentic Shader48 keyword-tier DXBC source sampling signatures
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi048-all-variant-samples.yml'
+      - 'gfxlab/tools/multi_shader_all_variant_dxbc_sample_census.py'
+      - 'gfxlab/tests/test_multi_shader_all_variant_dxbc_sample_census.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi048-source-all-524-private-sampling
+  cancel-in-progress: false
+jobs:
+  inspect-private-original-dxbc-all-variants:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free original DXBC variant signature tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_all_variant_dxbc_sample_census.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX048_SOURCE_FREE_TESTS_PASSED=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install original source-private Unity object decoder
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Inspect all 524 original exact pairs without retaining any proprietary shader
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_all_variant_dxbc_sample_census \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-048-private" \
+            --out gfxlab-multi048-safe-all-variant-sampling-census.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi048-safe-all-variant-sampling-census.json"))
+          assert d["experiment"]=="GFX-MULTI-048"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_exact_keyword_tier_pair_rows"]==524
+          assert d["linked_source_stage_references"]==1048
+          assert d["original_source_shader48_passes"]==7
+          assert len(d["pass_anonymous_source_sampling_census"])==7
+          assert sum(p["exact_original_matched_variant_pairs"] for p in d["pass_anonymous_source_sampling_census"])==524
+          assert d["cached_distinct_compiled_source_stage_programs_inspected"]<=1048
+          assert d["all_524_original_exact_variant_pairs_scanned"]
+          assert d["original_source_sample_registers_independently_decoded"]
+          for p in d["pass_anonymous_source_sampling_census"]:
+            assert not p["all_variant_register_values_and_pair_fingerprints_exported"]
+            assert not p["all_variant_PC_or_Android_GPU_parity_verified"]
+          for key in ("original_material_texenv_property_to_t_s_register_binding_proven",
+                      "constant_buffer_byte_offsets_proven",
+                      "all_524_translated_SPIRV_variants_compared",
+                      "original_Shader48_Android_GPU_runtime_verified",
+                      "original_shader48_PC_to_Adreno_pixel_equivalence_verified",
+                      "originalShaderRestored",
+                      "private_source_registers_pair_signatures_keywords_shader_bytes_exported",
+                      "phase_closed"):
+            assert d[key] is False,key
+          print("GFX048_ALL_SOURCE_VARIANT_CENSUS_NOT_ANDROID_SHADER_PARITY=true")
+          PY
+      - name: Upload only safe aggregate source-private variant sampling histograms
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi048-safe-all-524-original-dxbc-sampling-census
+          path: gfxlab-multi048-safe-all-variant-sampling-census.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original ZIP2 shader source staging and private binaries
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-048-private"
+          echo GFX048_ALL_PRIVATE_SOURCE_PURGED=true
