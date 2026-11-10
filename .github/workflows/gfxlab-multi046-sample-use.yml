@@ -27,6 +27,10 @@ jobs:
           sparse-checkout: |
             gfxlab/tools
             gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
       - name: Run all source-free synthetic tests for SPIR-V sample chain
         run: |
           set -euo pipefail
