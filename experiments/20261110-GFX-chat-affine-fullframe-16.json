@@ -37,6 +37,35 @@
     "G8 exact Shader48 Material property to t/s/CB and byte offsets",
     "G7 G9 G10 G11 G12 authentic shader + render state + rig + PC pixel parity"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_REAL_OWNER_20212_FULLFRAME_AFFINE_CPU_GPU_PARITY_SOURCE_ONLY",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42825803381",
+    "https://github.com/alwansan/raf/actions/runs/42826480472"
+  ],
+  "results": {
+    "original_free_android_gpu_shader_modes": 4,
+    "owner_gpu_samples_proven": true,
+    "owner_full_image_analytic_interior_pixels": 20212,
+    "owner_events": 28,
+    "owner_snapshots": 14,
+    "unity_errors": 0,
+    "unity_warnings": 0,
+    "unity_message_drops": 0,
+    "flat_blue_interior_count": 20212,
+    "native_noperspective_matches_linear_image_exact": true,
+    "mean_abs_rgb": {
+      "smooth_vs_perspective_cpu": 0.000981208,
+      "affine_emulated_vs_affine_cpu": 0.000983381,
+      "affine_emulated_vs_wrong_perspective_cpu": 0.143924693
+    },
+    "source_free_unit_tests": 272,
+    "strict_png_decoder_security": true,
+    "final_ci": 42826480472,
+    "source_private_owner_zip_uploaded_to_repo": false,
+    "genuine_original_shader48_material_mapping": false,
+    "shader48_restored": false
+  },
+  "safe_report": "gfxlab/evidence/20261110_gfx042_owner_affine_fullframe_safe_counts.json",
+  "portability_guide": "gfxlab/SHADER48_INTERPOLATION_GLES_VULKAN_PORTABILITY_AR.md",
+  "next_step": "Return to G8: obtain truly original Shader48 Material/property binding to registers and CB bytes (trusted PC reflection/ShaderLab), then original shader Vulkan/GLES compile, pass states, model/rig and PC-vs-Adreno pixel tests. No repeated synthetic triangle APK without new semantic risk."
 }
