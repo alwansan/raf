@@ -1,0 +1,40 @@
+{
+  "session_id": "20261111-GFX-chat-imul-input-readtime-store-55",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-082",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-imul-dynamic-operand-54",
+  "base_sha": "f81438663a94def2a3fe47067a0929c05b88bd26",
+  "question": "For the 12 original Shader48 source-authenticated nonpower OpIMul dynamic operand Function-literal-path OpLoad instructions, was an equivalent-path OpStore observed at the actual load instruction time, in the same basic block or a prior block, with CFG block dominance separately classified?",
+  "hypothesis": "A subset of the twelve input local memory loads may have a syntactically preceding equivalent address-path OpStore; read-time snapshots avoid false success from later writes.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42906064603",
+    "memory/sessions/20261111-GFX-chat-imul-dynamic-operand-54.md"
+  ],
+  "control": [
+    "same block equivalent pointer path before read",
+    "later store not promoted",
+    "different literal path rejected",
+    "direct branch CFG block dominance only",
+    "diamond writer arm non-dominating",
+    "unknown-pointer Store barrier",
+    "Volatile/untrusted input OpLoad",
+    "no source DXBC SSA, alias or GPU semantic parity claims"
+  ],
+  "planned_tests": [
+    "all source-free unit tests including GFX082 read-time controls",
+    "SHA-locked 157 original VS/FS Shader48 source pairs, 314 stages, 311 original CB stages",
+    "427 real source-b-authenticated SPV CB index reads",
+    "12 nonpower OpIMul Function OpLoad input and exactly 12 read-time prior-store categories",
+    "anonymous aggregate artifact, mandatory private source/SPV purge"
+  ],
+  "resource_key": "gfxlab-multi082-source-private-imul-input-readtime-store",
+  "status": "CI_RUNNING",
+  "run_id": 42906841182,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42906841182",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "evidence_level": "PENDING_AUTHENTIC_SOURCE_AND_TRANSLATED_SPV_CPU_READ_TIME_SYNTAX_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
