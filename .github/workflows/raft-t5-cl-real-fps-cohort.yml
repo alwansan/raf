@@ -21,7 +21,6 @@ concurrency:
 
 jobs:
   source-pinned-cl-metrics:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[t5-cl-real-fps-cohort]'))
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     env:
