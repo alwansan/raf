@@ -1,0 +1,30 @@
+{
+  "session_id": "20261110T2009Z-T1-scheduled-kernel6-evidence-gate-11b8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "blocked",
+  "baseline_source": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T1-20261110T2009Z-T1-scheduled-kernel6-evidence-gate-11b8.json",
+    "prompt/coordination/clients/T1/sessions/20261110T2009Z-T1-scheduled-kernel6-evidence-gate-11b8.md"
+  ],
+  "experiment_key": "kernel6-real-CL-source-session-220911-559-230108-327-original-ComputeShader-GUID-FindKernel-Dispatch",
+  "resource_key": null,
+  "scope": "Read-only evidence correlation; no GPU/Unity build; no edits to T4/T5",
+  "hypothesis": "Index 6 may reflect runtime Unity kernel ordering, not the sixth original FFT candidate. Need same-build source GUID + FindKernel name/index + Dispatch call and CL log context.",
+  "evidence": {
+    "owner_run": "42058825739",
+    "owner_source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "CL_sha": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "session_220911": {
+      "water_pass_error_messages": 23884,
+      "kernel_error_messages": 3850
+    },
+    "session_230108": {
+      "water_pass_error_messages": 39132,
+      "kernel_error_messages": 6026
+    }
+  },
+  "limitations": "Cannot infer original Unity kernel identity from log count or synthetic checks. GitHub network inaccessible from local runtime; source tool GitHub available. No new phone proof.",
+  "next_step": "Obtain first raw kernel6 error contexts per pinned CL session; correlate with original ComputeShader GUID and runtime FindKernel/Dispatch on same build; use T1 existing diagnostic, not new redundant tool."
+}
