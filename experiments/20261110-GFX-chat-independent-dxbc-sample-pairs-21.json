@@ -1,0 +1,31 @@
+{
+  "session_id": "20261110-GFX-chat-independent-dxbc-sample-pairs-21",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-sampled-image-register-pairs-20",
+  "base_sha": "af352c61c8aefa6375927b56bb4bd3d515aa182d",
+  "experiment_key": "GFX-MULTI-047",
+  "issue_id": "RENDER-002",
+  "resource_key": "authentic-source-DXBC-tokenized-sampling",
+  "status": "CI_PENDING",
+  "question": "Do exact original DXBC sample/gather texture/sampler register pairs match vkd3d-translated SPIR-V used sample operations for representative seven Shader48 passes?",
+  "hypothesis": "Direct source tokenized program decode confirms or rejects translated sample pairs independently",
+  "control": [
+    "Microsoft opcode operand order",
+    "source declaration membership",
+    "relative/dynamic unknown fail closed",
+    "truncated/incorrect type fail closed",
+    "identical shader keyword/tier pair per pass",
+    "SPIR-V OpName symbol and use-graph validation"
+  ],
+  "planned_tests": [
+    "full source-free Python tests",
+    "private SHA-pinned ZIP2 seven-pass direct DXBC opcode analysis",
+    "private pair multiset compare to SPIR-V",
+    "safe aggregate artifact",
+    "always purge private source"
+  ],
+  "run_urls": [],
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

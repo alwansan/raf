@@ -1,0 +1,99 @@
+name: GFX-MULTI-047 original DXBC opcode t/s sample-pair versus translated SPIR-V / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi047-source-dxbc-samples.yml'
+      - 'gfxlab/tools/multi_shader_dxbc_sample_pair_parity.py'
+      - 'gfxlab/tests/test_multi_shader_dxbc_sample_pair_parity.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi047-source-independent-original-samples
+  cancel-in-progress: false
+jobs:
+  original-source-independent-sampling:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Verify all synthetic source-free DXBC sample parser guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_dxbc_sample_pair_parity.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX047_SOURCE_FREE_SYNTHETIC_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install strict offline original DXBC plus vkd3d SPIR-V reflection
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Independently compare authenticated original DXBC source t/s sample instructions
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_dxbc_sample_pair_parity \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi047-private" \
+            --out gfxlab-multi047-safe-original-dxbc-pair-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi047-safe-original-dxbc-pair-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-047"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_passes"]==7
+          assert d["source_stages_compared"]==14
+          assert len(d["pass_and_stage_aggregate_only"])==7
+          assert d["comparison_counts"]["stages_compared"]==14
+          assert d["comparison_counts"]["stages_matching_exact_private_pair_multiset"]<=14
+          for row in d["pass_and_stage_aggregate_only"]:
+            for stat in row["stages"].values():
+              assert not stat["private_source_t_s_pair_edges_or_register_ids_exported"]
+              assert not stat["original_Material_TexEnv_property_register_binding_verified"]
+              assert not stat["original_constant_buffer_offsets_verified"]
+              assert not stat["original_shader48_Android_execution_verified"]
+          for k in ("all_524_variants_checked","original_Material_property_to_DX11_resource_register_bridge_proven",
+                    "original_constant_buffer_byte_offsets_proven","original_Android_shader48_GPU_runtime_proven",
+                    "PC_to_Adreno_original_pixel_equivalence_proven","originalShaderRestored",
+                    "phase_closed","private_source_names_registers_SPIRV_ids_code_or_sample_pairs_published"):
+            assert d[k] is False,k
+          print("GFX047_DIRECT_SOURCE_DXBC_VS_COMPILER_OUTPUT_SAFE_EVIDENCE_ONLY=true")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi047-safe-original-DXBC-vs-SPIRV-pair-aggregates
+          path: gfxlab-multi047-safe-original-dxbc-pair-counts.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge private ZIP2 and all original/translated shader bytecode
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi047-private"
+          echo GFX047_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
