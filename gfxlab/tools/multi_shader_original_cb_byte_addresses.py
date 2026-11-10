@@ -136,11 +136,12 @@ def private_authenticated_ubo_layouts(dis,source_cb,reflection):
     return eligible,dict(counts)
 
 def spv_used_literal_byte_addresses(dis,authenticated):
-    """Compute real OpLoad-used literal byte addresses from strict UBO globals.
+    """Trace direct and strictly nested SPV UBO vector and component reads.
 
-    Only one-level OpAccessChain root, [struct_member=0, vector_index] are
-    supported. Index types must be 32-bit OpTypeInt and literal OpConstant.
-    Dynamic, pointer aliasing and opaque access remain UNKNOWN.
+    Distinguish exact byte loads from source vec4 *range* coverage. A scalar
+    component read at offset 4 in a vec4 is evidence of accessing the
+    corresponding vector range, not of an exact 16-byte base-address load.
+    No dynamic pointer indexing, phi/select, alias guesses or stores count.
     """
     if not isinstance(dis,bytes) or not 0<len(dis)<=MAX_TEXT:
         raise ValueError("GFX053_SPV_USE_INPUT_INVALID")
@@ -156,50 +157,104 @@ def spv_used_literal_byte_addresses(dis,authenticated):
         if not m:continue
         ident,op,raw=m.groups();args=(raw or "").split()
         if op=="OpConstant" and len(args)==2 and args[0] in typed_int:
-            try:v=int(args[1],10)
+            try:value=int(args[1],10)
             except ValueError:continue
-            if 0<=v<=65535:constants[ident]=v
+            if 0<=value<=65535:constants[ident]=value
+    # Each pointer: (layout_kind, source_b, vector_index, component, vector_count).
     pointers={}
+    exact_used=set()
+    source_vec_ranges_read=set()
     stats=Counter({
       "SPV_access_chains_from_authenticated_CB_global":0,
+      "SPV_nested_access_chains_from_authenticated_CB_pointer":0,
       "SPV_access_chains_supported_literal_layout":0,
       "SPV_access_chains_dynamic_or_unsupported":0,
       "SPV_access_chains_literal_index_out_of_bounds":0,
       "SPV_pointer_loads_from_supported_access_chains":0,
+      "SPV_vector_pointer_loads":0,
+      "SPV_scalar_component_pointer_loads":0,
       "SPV_distinct_loaded_CB_vec4_byte_addresses":0,
+      "SPV_distinct_loaded_CB_byte_addresses_including_scalar_components":0,
+      "SPV_distinct_vec4_ranges_with_real_direct_or_component_loads":0,
     })
-    addresses={}
-    loaded=set()
     for line in lines:
         m=ASSIGN.fullmatch(line.split(";",1)[0].strip())
         if not m:continue
         ident,op,raw=m.groups();args=(raw or "").split()
         if op in ("OpAccessChain","OpInBoundsAccessChain") and len(args)>=3:
             root=args[1]
-            if root not in authenticated:continue
-            stats["SPV_access_chains_from_authenticated_CB_global"]+=1
-            b,base,stride,n=authenticated[root]
-            if len(args)!=4 or args[2] not in constants or args[3] not in constants:
+            if root in authenticated:
+                stats["SPV_access_chains_from_authenticated_CB_global"]+=1
+                b,base,stride,n=authenticated[root]
+                parent=("global",b,None,None,n)
+                if base!=0 or stride!=16:
+                    raise ValueError("GFX053_INVALID_PROVEN_UBO_LAYOUT")
+            elif root in pointers:
+                stats["SPV_nested_access_chains_from_authenticated_CB_pointer"]+=1
+                parent=pointers[root]
+            else:
+                continue
+            kind,b,vec,component,n=parent
+            indices=[constants.get(x) for x in args[2:]]
+            if any(v is None for v in indices):
                 stats["SPV_access_chains_dynamic_or_unsupported"]+=1
                 continue
-            member,vector=constants[args[2]],constants[args[3]]
-            if member!=0 or vector>=n:
-                stats["SPV_access_chains_literal_index_out_of_bounds"]+=1
+            state=None
+            if kind=="global":
+                if len(indices)==1 and indices[0]==0:
+                    state=("array",b,None,None,n)
+                elif len(indices) in (2,3) and indices[0]==0:
+                    v=indices[1]
+                    if not 0<=v<n:
+                        stats["SPV_access_chains_literal_index_out_of_bounds"]+=1
+                        continue
+                    if len(indices)==2:
+                        state=("vector",b,v,None,n)
+                    elif 0<=indices[2]<4:
+                        state=("scalar",b,v,indices[2],n)
+            elif kind=="array":
+                if len(indices) in (1,2):
+                    v=indices[0]
+                    if not 0<=v<n:
+                        stats["SPV_access_chains_literal_index_out_of_bounds"]+=1
+                        continue
+                    if len(indices)==1:
+                        state=("vector",b,v,None,n)
+                    elif 0<=indices[1]<4:
+                        state=("scalar",b,v,indices[1],n)
+            elif kind=="vector" and len(indices)==1:
+                if 0<=indices[0]<4:
+                    state=("scalar",b,vec,indices[0],n)
+                else:
+                    stats["SPV_access_chains_literal_index_out_of_bounds"]+=1
+                    continue
+            if state is None:
+                stats["SPV_access_chains_dynamic_or_unsupported"]+=1
                 continue
-            addr=base+stride*vector
-            if addr!=vector*16:
-                raise ValueError("GFX053_COMPILER_BYTE_ADDRESS_DISAGREES_WITH_DXBC_VEC4")
-            pointers[ident]=(b,vector,addr)
+            pointers[ident]=state
             stats["SPV_access_chains_supported_literal_layout"]+=1
         elif op=="OpLoad" and len(args)>=2 and args[1] in pointers:
-            # Only actually loaded addresses are counted as observed.
+            kind,b,vec,component,n=pointers[args[1]]
+            if kind not in ("vector","scalar"):continue
+            address=16*vec+(0 if component is None else component*4)
+            if not 0<=address<n*16:
+                raise ValueError("GFX053_SPV_LOAD_ADDRESS_OUTSIDE_AUTHENTICATED_UBO")
+            exact_used.add((b,address))
+            source_vec_ranges_read.add((b,vec))
             stats["SPV_pointer_loads_from_supported_access_chains"]+=1
-            loaded.add(pointers[args[1]])
+            if kind=="vector":stats["SPV_vector_pointer_loads"]+=1
+            else:stats["SPV_scalar_component_pointer_loads"]+=1
         elif op=="OpCopyObject" and len(args)>=2 and args[1] in pointers:
             pointers[ident]=pointers[args[1]]
-    for b,v,addr in loaded:addresses.setdefault(b,set()).add(addr)
-    stats["SPV_distinct_loaded_CB_vec4_byte_addresses"]=len(loaded)
-    return addresses,dict(stats)
+    exact={}
+    ranges={}
+    for b,addr in exact_used:exact.setdefault(b,set()).add(addr)
+    for b,vec in source_vec_ranges_read:ranges.setdefault(b,set()).add(vec)
+    stats["SPV_distinct_loaded_CB_vec4_byte_addresses"]=sum(
+        1 for _,addr in exact_used if addr%16==0)
+    stats["SPV_distinct_loaded_CB_byte_addresses_including_scalar_components"]=len(exact_used)
+    stats["SPV_distinct_vec4_ranges_with_real_direct_or_component_loads"]=len(source_vec_ranges_read)
+    return exact,ranges,dict(stats)
 
 def compare_source_to_translated_byte_addresses(source_vectors,spv_addresses):
     """Private source b#/index map to literal offset 16*vec; publish counts."""
@@ -216,6 +271,21 @@ def compare_source_to_translated_byte_addresses(source_vectors,spv_addresses):
       "translated_SPV_byte_addresses_not_in_covered_DXBC_opcode_subset":len(got-src),
       "source_to_translated_address_overlap_is_original_Material_member_semantics":False,
       "private_CB_offsets_or_registers_exported":False,
+    }
+
+def compare_source_vec4_range_load_coverage(source_vectors,loaded_ranges):
+    """Source vec4-base use covered by loaded scalar/vec4 inside that range."""
+    if not isinstance(source_vectors,dict) or not isinstance(loaded_ranges,dict):
+        raise ValueError("GFX053_VECTOR_RANGE_MAP_INVALID")
+    original={(b,v) for b,vectors in source_vectors.items() for v in vectors}
+    translated={(b,v) for b,vectors in loaded_ranges.items() for v in vectors}
+    return {
+      "source_DXBC_subset_distinct_CB_vec4_ranges":len(original),
+      "source_DXBC_subset_CB_vec4_ranges_read_in_translated_SPV":len(original&translated),
+      "source_DXBC_subset_CB_vec4_ranges_without_observed_SPV_load":len(original-translated),
+      "translated_SPV_read_vec4_ranges_outside_covered_source_opcode_subset":len(translated-original),
+      "component_range_coverage_proves_original_Material_member_values":False,
+      "private_registers_component_offsets_or_vector_indices_exported":False,
     }
 
 def audit(stage):
@@ -250,9 +320,10 @@ def audit(stage):
                 if not auth["all_original_CB_registers_symbolically_correlated_with_actual_spv_UBO_globals"]:
                     raise ValueError("GFX053_GFX052_CB_GLOBAL_PROVENANCE_REGRESSION")
                 root,layout=private_authenticated_ubo_layouts(dis,source_cb,reflect)
-                addresses,usage=spv_used_literal_byte_addresses(dis,root)
+                addresses,loaded_ranges,usage=spv_used_literal_byte_addresses(dis,root)
                 diff=compare_source_to_translated_byte_addresses(source_vectors,addresses)
-                safe={**layout,**usage,**diff,
+                coverage=compare_source_vec4_range_load_coverage(source_vectors,loaded_ranges)
+                safe={**layout,**usage,**diff,**coverage,
                     "source_DXBC_static_CB_operand_occurrences_in_supported_9_opcodes":counts["source_static_CB_vector_accesses_in_covered_arithmetic"],
                     "source_dynamic_CB_operands_in_supported_9_opcodes":counts["source_dynamic_or_extended_CB_accesses_in_covered_arithmetic"],
                     "source_DXBC_opcode_coverage_complete":False,
@@ -273,7 +344,16 @@ def audit(stage):
                             "source_subset_byte_addresses_matched_in_translated_SPV",
                             "source_subset_byte_addresses_not_found_in_translated_SPV",
                             "translated_SPV_byte_addresses_not_in_covered_DXBC_opcode_subset",
-                            "source_dynamic_CB_operands_in_supported_9_opcodes"):
+                            "source_dynamic_CB_operands_in_supported_9_opcodes",
+                            "SPV_nested_access_chains_from_authenticated_CB_pointer",
+                            "SPV_vector_pointer_loads",
+                            "SPV_scalar_component_pointer_loads",
+                            "SPV_distinct_loaded_CB_byte_addresses_including_scalar_components",
+                            "SPV_distinct_vec4_ranges_with_real_direct_or_component_loads",
+                            "source_DXBC_subset_distinct_CB_vec4_ranges",
+                            "source_DXBC_subset_CB_vec4_ranges_read_in_translated_SPV",
+                            "source_DXBC_subset_CB_vec4_ranges_without_observed_SPV_load",
+                            "translated_SPV_read_vec4_ranges_outside_covered_source_opcode_subset"):
                     totals[key]+=safe[key]
         results.append({"subshader_public_position":passrow["subshader"],
                         "pass_public_position":passrow["pass"],
