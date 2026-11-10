@@ -8,4 +8,10 @@ experiment_key: T2-EVIDENCE-UTF8-FAILCLOSED-20261110
 shared_resource: none; no Unity/CI/GPU/build
 scope: strict input boundary; no changes to shaders or T3/T4/T5 files. Preserve NOT_READY.
 verification_plan: unittest direct API invalid UTF-8 bytes and valid aggregate; no device inference.
-status: scoped
+status: source_fixed; tests committed but not executed
+source_commit: d17862a39f6c37f177c5bd6c4f6b3fe8c63bc684
+test_commit: d7154b0db7a3b440737061feab12b9083d56beba
+result: UnicodeDecodeError is normalized to EvidenceError in parse_aggregate_json; test covers malformed byte, overlong encoding and UTF-8 surrogate sequences.
+verification: source and tests published; unittest NOT RUN in this cycle; no Unity or device validation.
+next: python -m unittest -v tests.test_t2_foam_evidence_gate_20261110 at pinned SHA; connect sanitizer to producer, then resume authentic Foam/Spectrum/Blur mapping.
+
