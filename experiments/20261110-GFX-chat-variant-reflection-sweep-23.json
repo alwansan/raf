@@ -1,0 +1,28 @@
+{
+  "session_id": "20261110-GFX-chat-variant-reflection-sweep-23",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-original-shader-text-source-22",
+  "base_sha": "df6889f4bd9178d0dd5c7b061b77e730e702d280",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-022-authentic-Shader48-all-variant-RDEF-and-parameter-metadata-sweep",
+  "question": "Do any of all 1,435 authentic Shader48 stage variant rows (not only the 14 representative stages) retain m_Parameters, texture/CB metadata, or DXBC RDEF reflection that can bridge original Material property names to DX11 registers?",
+  "hypothesis": "The 14 representative stages may not represent all 524 exact keyword/tier matched pairs or all 1,435 linked variant rows; a bounded exhaustive private sweep may find an alternate authoritative reflection record. If none exists, mark the selected source bridge blocked rather than guessing.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42736017218",
+    "CI42738042943",
+    "CI42739427552",
+    "CI42740776655",
+    "CI42741817991"
+  ],
+  "control": "Validate all blob indices and program types; inspect both legacy and Unity 2021 player subprogram rows; parse only structurally bounded DXBC; never emit shader names, keywords, GUID/PPtr, register IDs, bytecode, or property names; RDEF or m_Parameters presence is only a candidate, not semantic mapping or Android proof.",
+  "planned_tests": [
+    "source-free synthetic tests for legacy/player variant traversal and malformed rows",
+    "source-free parameter metadata array shape and null handling",
+    "private audit of all original Shader48 variant metadata rows",
+    "private bounds-checked RDEF census for every unique referenced DX11 stage program",
+    "assert 1,435 valid stage links and 524 exact keyword/tier matched pairs from the pinned source"
+  ],
+  "resource_key": "gfxlab-multi022-private-all-variant-reflection-sweep",
+  "status": "PREPARED_CI_PENDING"
+}
