@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/gfxlab-multi-six-auto-logs-apk.yml'
   workflow_dispatch:
+# GFX-MULTI-031: repeatable Android APK build with all-events scoped ZIP export
 permissions:
   contents: read
 concurrency:
