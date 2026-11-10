@@ -69,6 +69,22 @@
 - **ماء وFFT/Compute:** عائلة مختلفة `WATER-001`، 9 compute source وkernel/GLSL/GPU stages؛ ليست جزءاً من نجاح Shader48 للموديلات.
 - **دخان/نار/Particles:** شيدرات شفافية/Blend/Cull وParticle vertex streams مختلفة؛ يفتح محور جديد بعد معايير الفريق، لا يُعلن جاهزاً لمجرد أن M00 ألوانه صحيحة.
 - **إضاءة/PostFX/ظلال:** الإضاءة الأساسية لموديل Standard على استوديو ليست parity للـPostFX والإضاءة والظلال داخل مشاهد Raft.
-- **الرسوم لكل عناصر اللعبة:** هذه العينة **Shader48 واحد** لـ6 Meshes، وليست 165 Shader families أو جميع عناصر PC.
+- **الرسوم لكل عناصر اللعبة:** هذه العينة **Shader48 واحد** لـ6 Meshes، وليست 165 Shader assets أو جميع عناصر PC.
 
 **القرار النهائي الحالي: NOT CLOSED.** لا نقل إلى مرحلة أخرى بناءً على ادّعاء نجاح Shader48. استكمال العمل يجب أن يبقى على P0-A/P0-B إلى أن تتوفر الأدلة الحقيقية، وعند الحاجة إلى مرجع PC/أصل shader مفقود نصرّح بعائق المصدر بدلاً من إخفائه.
+
+
+## 6. إثباتات لاحقة بعد ملف اختبار المالك
+
+**GFX-OWNER-001** — [CI42752583864](https://github.com/alwansan/raf/actions/runs/42752583864) **171 tests success**: أداة تجميع ZIP آمنة دون حفظ لقطات الشاشة/ShaderCache، ومصفوفة الموديلات الستة/13 تقارير/16 صور/10 ملفات cache. لا تُعد لقطة shader cache دليلاً على الأصل. [Safe counts](evidence/20261110_gfx026_owner_safe_counts.json).
+
+**GFX-MULTI-030S** — [CI42753634633](https://github.com/alwansan/raf/actions/runs/42753634633) **176 tests success**: رغم وجود `m_NameIndices` ونصوص فيها 7/7 Passes، فإن **28/28 مقارنة مباشرة** لأسماء حالات Cull/ZWrite/ZTest/AlphaToMask مع m_NameIndices الخاصة بالـPass لم تطابق. مطابقة الـShaderProp/Material Float لــZWrite فقط 2/7 Pass و14 Renderer-slot values، والبقية 0/7. لا تُفسَّر dynamic state بأرقام ثابتة. `PASS_STATE_DYNAMIC_OVERRIDE_DIRECT_SOURCE_BRIDGE_BLOCKED` ما زال سارياً. [Safe artifact](https://github.com/alwansan/raf/actions/runs/42753634633/artifacts/13734278874).
+
+**GFX-OWNER-002** — [CI42754132240](https://github.com/alwansan/raf/actions/runs/42754132240) **179 tests success**: من السبعة Material Renderer slots، `_Glossiness` موجودة 7/7، و**لا تساوي القيمة المؤقتة 0.45 في 7/7**. قيم `_GlossMapScale=1` و`_BumpScale=1` و`_Metallic=0` في 7/7 من المصدر. Source Metallic sRGB=1 في 7/7 وStandard importer Metallic Linear في 7/7، إذن استيراد المصدر الحقيقي **لم يكتمل**، مع عدم جواز افتراض أن إجبار Standard على sRGB يعيد منطق Shader48. [Safe artifact](https://github.com/alwansan/raf/actions/runs/42754132240/artifacts/13735385028).
+
+### مسار Unity 2021.3 المقترح لاختبار shader الأصلي (لم يُنفّذ بعد)
+وثائق <https://docs.unity3d.com/2021.3/Documentation/Manual/SL-GLSLShaderPrograms.html> تؤكد توفر `GLSLPROGRAM` / `ENDGLSL` و`VERTEX` / `FRAGMENT` على منصات GLSL، مع التنبيه أنه مخصص للتجارب وليس المسار المعتاد. لدينا [CI42732808109](https://github.com/alwansan/raf/actions/runs/42732808109) نجاح offline لـ7/7 أزواج source DXBC الممثلة بعد SPIR-V → GLSL ES310، **لكن لا توجد حتى الآن تجربة تبني شيدر ShaderLab الحقيقي داخل Unity2021، ولا ربط كامل لـCB/samplers، ولا فحص بكسلات على PC/Adreno.**
+خطوة فنية عالية الأولوية: أنشئ في Runner الخاص **مرشحاً مؤقتاً فقط** من Stage VS/FS الأصلية في برنامج `GLSLPROGRAM`، واختبر Unity compilation وشروط VERTEX/FRAGMENT بدون تسريب GLSL، واعرضه على جهاز GLES3 **بصفة ORIGINAL-STAGE-DIAGNOSTIC لا ORIGINAL-SHADER48-RESTORED**؛ لا تصدره كإصلاح حتى تطابق binding/pass states/الكلمات الأصلية وتثبت PC/device parity. لا تستخدم Unity Standard كبديل داخل بوابة G7/G8/G9.
+
+### قرار واضح لتسليم العمل لاحقاً
+تُعدّ **استعادة الهندسة الثابتة/ألوان الـBaseColor المصدرية للعينة** مرجعاً جيداً للعميل المستقبلي، لكنها ليست «استعادة جميع الموديلات والـShaders بالكامل». كل عنصر جديد يحتاج fail-closed gate لعائلة Shader الصحيحة، وRenderer material graph وoriginal rig عند وجود SkinnedMesh. أترك صيغة إنشاء العميل وهويته للمالك كما طلب. لا ننتقل إلى الماء والنار والشيدرات الأخرى ضمن هذا التقرير حتى تصبح بوابة Shader48 مكتملة أو يتخذ المالك قرار فصل الـBLOCKED صراحةً.
