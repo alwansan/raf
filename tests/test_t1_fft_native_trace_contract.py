@@ -53,5 +53,36 @@ class NativeTraceContractTests(unittest.TestCase):
         self.assertEqual(result["paired_count"], 0)
         self.assertTrue(any("cross_session_provenance_presence:build_sha" in e for e in result["errors"]))
 
+    def test_native_synchronous_throw_never_counts_as_dispatch_success(self):
+        before = native(BEFORE, BASE + "group_xyz=1,8,1")
+        threw = native(THREW, "sequence=1;managed_dispatch_threw=true;"
+                       "exception_kind=invalid_operation;original_runtime_mapping=unverified;"
+                       "gpu_result=unverified;water_rendering=unverified")
+        result = audit([before, threw])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertEqual(result["synchronous_thrown_sequences"], [1])
+        self.assertEqual(result["failed_return_sequences"], [1])
+        self.assertFalse(result["gpu_execution_proven"])
+
+    def test_native_return_then_throw_invalidates_previous_pair(self):
+        before = native(BEFORE, BASE + "group_xyz=1,8,1")
+        after = native(AFTER, "sequence=1;managed_dispatch_call_returned=true;gpu_result=unverified")
+        threw = native(THREW, "sequence=1;managed_dispatch_threw=true;"
+                       "exception_kind=other;original_runtime_mapping=unverified;"
+                       "gpu_result=unverified;water_rendering=unverified")
+        result = audit([before, after, threw])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertTrue(any("conflicting_dispatch_terminal" in e for e in result["errors"]))
+
+    def test_native_throw_then_return_cannot_resurrect_dispatch(self):
+        before = native(BEFORE, BASE + "group_xyz=1,8,1")
+        threw = native(THREW, "sequence=1;managed_dispatch_threw=true;"
+                       "exception_kind=argument;original_runtime_mapping=unverified;"
+                       "gpu_result=unverified;water_rendering=unverified")
+        after = native(AFTER, "sequence=1;managed_dispatch_call_returned=true;gpu_result=unverified")
+        result = audit([before, threw, after])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertTrue(any("conflicting_dispatch_terminal" in e for e in result["errors"]))
+
 if __name__ == "__main__":
     unittest.main()
