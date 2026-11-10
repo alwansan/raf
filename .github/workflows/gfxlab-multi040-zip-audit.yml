@@ -1,0 +1,40 @@
+name: GFX-MULTI-040 synthetic GPU owner ZIP offline private audit unit tests
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi040-zip-audit.yml'
+      - 'gfxlab/tools/interpolation_owner_zip_audit.py'
+      - 'gfxlab/tests/test_interpolation_owner_zip_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi040-offline-owner-zip-parser
+  cancel-in-progress: false
+jobs:
+  no-device-data-source-free-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Test bounded synthetic export JSON/PNG/ZIP parser and no-private-output contracts
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/interpolation_owner_zip_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI040_OWNER_ZIP_PRIVATE_OFFLINE_PARSER_TESTS_PASS=true
+      - name: Confirm no original source or user logs downloaded
+        if: always()
+        run: |
+          if [ -d source-zip2 ]; then
+            echo GFX_MULTI040_OWNER_PARSER_UNEXPECTED_PRIVATE_ASSETS
+            exit 1
+          fi
+          echo GFX_MULTI040_NO_OWNER_ZIP_OR_ORIGINAL_RAFT_ASSETS_READ=true
