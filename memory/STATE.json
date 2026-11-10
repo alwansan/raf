@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-passstate-material-binding-29",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-passstate-material-binding-29.md",
-  "status": "GFX_MULTI_029S_ORIGINAL_ZWRITE_NAMED_MATERIAL_FLOAT_PARTIAL_CULL_ZTEST_ALPHA_UNRESOLVED",
+  "latest_session": "20261110-GFX-chat-material-delta-03",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-material-delta-03.md",
+  "status": "GFX_OWNER_PHONE_SIX_MODELS_VISUALLY_PASS_STANDARD_FALLBACK_SHADER48_ORIGINAL_NOT_CLOSED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-030S: evidence-backed dynamic render state name matching against Shader48 Pass m_NameIndices and alternative compiled metadata (no raw names). Missing matches block effective GPU state; don't hardcode Cull/ZTest/AlphaToMask; owner phone diagnostic APK GFX026 screenshots + COPY LOG still required. Maintain separate true Shader48 material→DX11 binding and PC parity gates.",
+  "next_experiment": "P0 source-authentic Shader48 runtime: resolve property-to-DX11 t/s/CB mapping (RDEF missing 1275/1275), 7-pass dynamic state names missing NameIndices matches, verify vs/fs source semantics and per variant. Use private temporary GLSLPROGRAM Unity2021.3 original stage compilation as diagnostic only if bindings safe; matched PC/Adreno GPU pixel comparison needed. No worker yet. All water/fire/PostFX separate.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -789,13 +789,15 @@
     "source_texture_links": 21,
     "signed_apk_verified": true,
     "original_shader_restored": false,
-    "owner_device_tested": false,
+    "owner_device_tested": true,
     "apk_name": "GfxLab-Multi-Six-Channel-Probe.apk",
     "apk_bytes": 65963109,
     "sha256": "8fef68d82748cd214b1f5f5f9c0b3903a80f343513ccb15fc35e12649c02ad52",
     "artifact_id": 13733300521,
     "artifact_expires_utc": "2026-11-17T03:32:17Z",
-    "device_pixels_verified": false
+    "device_pixels_verified": false,
+    "owner_phone_diagnostic_test": "six models shown, 16 images, 13 JSON",
+    "diagnostic_channel_preview_visible": true
   },
   "latest_safe_renderstate_enum_probe": {
     "experiment": "GFX-MULTI-028S",
@@ -839,5 +841,81 @@
     "original_android_shader_restored": false,
     "device_pixels_verified": false
   },
-  "dynamic_shader_state_evidence_document": "gfxlab/SHADER48_DYNAMIC_PASS_STATE_EVIDENCE_AR.md"
+  "dynamic_shader_state_evidence_document": "gfxlab/SHADER48_DYNAMIC_PASS_STATE_EVIDENCE_AR.md",
+  "latest_owner_gfx026_device_review": {
+    "experiment": "GFX-OWNER-001",
+    "owner_archive_sha256": "adc08713ad67a987d0b30ac01b1b6e9004342b359aeb97ed1ee61866fecc4238",
+    "ci_run": 42752583864,
+    "unit_tests": 171,
+    "screenshots": 16,
+    "screenshot_size": "2400x1080",
+    "copy_log_json_snapshots": 13,
+    "compacted_unity_shader_cache_programs": 10,
+    "source_models_visible": 6,
+    "albedo_snapshots": 6,
+    "standard_pbr_snapshots": 7,
+    "original_shader_restored_claims": 0,
+    "reported_errors_in_snapshots": 0,
+    "normal_metallic_gpu_preview_visible_in_screenshots": true,
+    "logged_probe_role_basecolor_rgb_source_only": 13,
+    "logged_force_linear": 0,
+    "m03_second_surface_logged": false,
+    "full_logcat_available": false,
+    "driver_shader_cache_identified_as_Shader48": false,
+    "original_shader48_gpu_pixels_verified": false,
+    "all_model_shader_phase_closed": false,
+    "aggregate_path": "gfxlab/evidence/20261110_gfx026_owner_safe_counts.json",
+    "closure_document": "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md",
+    "owner_screenshots_uploaded_to_public_git": false
+  },
+  "latest_source_nameindices_exact_bridge": {
+    "experiment": "GFX-MULTI-030S",
+    "ci_run": 42753634633,
+    "unit_tests": 176,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "shader48_passes": 7,
+    "pass_nameindices_present_and_string_atoms": 7,
+    "exact_mNameIndices_state_matches_each": {
+      "culling": 0,
+      "zWrite": 0,
+      "zTest": 0,
+      "alphaToMask": 0
+    },
+    "shader_property_dynamic_state_pass_matches": {
+      "culling": 0,
+      "zWrite": 2,
+      "zTest": 0,
+      "alphaToMask": 0
+    },
+    "source_zWrite_material_float_slot_values": 14,
+    "source_all_dynamic_pass_states_resolved": false,
+    "original_shader_restored": false,
+    "safe_artifact_id": 13734278874,
+    "artifact_expires_utc": "2026-11-17T04:07:10Z",
+    "private_source_purge_verified": true
+  },
+  "latest_source_material_import_delta": {
+    "experiment": "GFX-OWNER-002",
+    "ci_run": 42754132240,
+    "unit_tests": 179,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_material_renderer_slots": 7,
+    "original_float_slots": 112,
+    "glossiness_source_field_present": 7,
+    "glossiness_equals_fallback_0_45": 0,
+    "glossiness_differs_fallback_0_45": 7,
+    "source_metallic_srgb_links": 7,
+    "unity_standard_fallback_metallic_linear_links": 7,
+    "source_metallic_saved_float_zero_slots": 7,
+    "source_bump_scale_one_slots": 7,
+    "source_gloss_map_scale_one_slots": 7,
+    "source_vs_standard_fallback_equivalent": false,
+    "original_shader48_gpu_parity_proven": false,
+    "phase_closed": false,
+    "safe_artifact_id": 13735385028,
+    "artifact_expires_utc": "2026-11-17T04:11:15Z",
+    "private_source_purge_verified": true
+  },
+  "model_shader48_phase_closed": false,
+  "model_shader48_closure_plan_path": "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md"
 }
