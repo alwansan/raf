@@ -64,7 +64,7 @@ jobs:
       - name: Original 157 pairs and source b-authenticated SPV index OpLoad pointer origin census
         run: |
           set -euo pipefail
-          python3 -m gfxlab.tools.multi_shader_original_cb_index_private_multiset074 \
+          python3 -m gfxlab.tools.multi_shader_original_cb_index_private_multiset075 \
             --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab075-private" \
             --out gfxlab-multi075-safe-private-original-CB-SPV-pointer-origin-counts.json
           python3 - <<'PY'
