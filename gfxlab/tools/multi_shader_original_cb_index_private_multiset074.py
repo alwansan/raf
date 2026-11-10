@@ -351,7 +351,7 @@ def audit(stage):
         spv_total["source_stage_instances_with_original_local_ISHL_writer_candidates"]):
         raise ValueError("GFX074_SOURCE_STAGE_LEVEL_COEXISTENCE_PARTITION_DRIFT")
     return {
-      "experiment":"GFX-MULTI-073","source_zip2_sha":ZIP2_SHA,
+      "experiment":"GFX-MULTI-074","source_zip2_sha":ZIP2_SHA,
       "evidence_level":"ORIGINAL_SOURCE_TEMP_LOCAL_ISHL_PLUS_INDEPENDENT_SPV_DYNAMIC_CB_INDEX_ROOT_PRODUCER_OPCODE_TAXONOMY_NO_CROSS_LANGUAGE_SEMANTIC_EQUIVALENCE",
       "source_exact_original_VS_FS_pairs_censused":524,
       "source_unique_compiled_stages":len(cache),
