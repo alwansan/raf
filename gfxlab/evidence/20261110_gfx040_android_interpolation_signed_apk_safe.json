@@ -1,0 +1,32 @@
+{
+  "experiment": "GFX-MULTI-040",
+  "source_branch": "experiment/android-graphics-rootcause",
+  "build_head_sha": "6603a16b34d1fa066d6a4f4650dc3dae9b0c3bea",
+  "github_run": 42819553601,
+  "github_run_conclusion": "success",
+  "signed_apk_artifact_id": 13766780753,
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42819553601/artifacts/13766780753",
+  "artifact_expires_utc": "2026-11-17T12:58:26Z",
+  "real_signed_android_apk_bytes": 8475700,
+  "real_signed_apk_sha256": "55a3073ddd96a34338b37238a61f7e2ea070dd92281eb641c330645d003055a8",
+  "package": "com.alwansan.raft.graphicslab.interpolation",
+  "build": "Unity 2021.3.45f2 IL2CPP ARM64 GLES3 Android",
+  "isolated_synthetic_shader_modes": [
+    "Linear",
+    "Flat",
+    "NoPerspective"
+  ],
+  "python_tests_passed": 256,
+  "source_free_zip_offline_audit_run": 42819452951,
+  "original_raft_source_files_in_build": false,
+  "original_shader48_restored": false,
+  "original_material_to_register_cb_bridge_verified": false,
+  "original_pc_to_adreno_pixels_verified": false,
+  "owner_adreno_gpu_run_received": false,
+  "owner_gpu_log_zip_received": false,
+  "log_export_relative_path": "Download/Games/cl/test/g/",
+  "log_export_mechanism": "scoped Android MediaStore, ZIP of all sessions and screenshots",
+  "workflow_signature_aapt_package_abi_checks": true,
+  "owner_guidance": "gfxlab/GFX_MULTI040_OWNER_TEST_AR.md",
+  "original_shader48_phase_closed": false
+}
