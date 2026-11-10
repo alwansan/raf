@@ -45,7 +45,7 @@ def authenticated_spv_CB_index_iadd_load_interfaces087(dis:bytes,authenticated:d
     # location/binding/offset numeric values and variable IDs never leave CI.
     decorations={};member_offsets=set()
     for _,op,a in records:
-        if op=="OpDecorate" and len(a)>=3:
+        if op=="OpDecorate" and len(a)>=2:
             key=(a[0],a[1])
             values=decorations.setdefault(key,set())
             # Preserve raw private arguments only within local memory.
