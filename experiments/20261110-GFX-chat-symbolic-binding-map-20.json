@@ -1,0 +1,22 @@
+{
+  "session_id": "20261110-GFX-chat-symbolic-binding-map-20",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-019",
+  "issue_id": "RENDER-002",
+  "question": "Does translated SPIRV preserve vkd3d-generated symbolic DX11 t/s/cb register names so original register->descriptor set/binding mappings can be evidenced privately rather than guessed from mismatched numeric register sets?",
+  "hypothesis": "vkd3d OpName resource strings embed original register slot indices, enabling complete private mapping to SPIRV reflection even when descriptor numbers differ.",
+  "reference_refs": [
+    "CI42738042943",
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "https://doxygen.reactos.org/d7/dc2/spirv_8c.html"
+  ],
+  "control": "Strict vkd3d debug-name grammar; never print names, source index values, shader bytecode, materials; detect ambiguous/missing/duplicate mappings; no semantic material or Android claims",
+  "planned_tests": [
+    "pure exact generated OpName grammar tests",
+    "source vs SPIRV-Cross 14 stage reflected name coverage",
+    "descriptor duplicate detection",
+    "safe resource group counts only"
+  ],
+  "resource_key": "gfxlab-multi019-private-symbolic-vkd3d",
+  "status": "CI_PENDING"
+}

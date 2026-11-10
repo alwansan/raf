@@ -66,3 +66,8 @@
 - 14/14 CB group source register slot numerical sets تساوي SPIRV binding sets؛ **لكن Fragment Texture sets 0/7 تطابقًا رقميًا وSampler sets 0/7**. لا تنسَ أن 28/42 مجموعات تطابق رقمي تشمل 14 مجموعة فارغة في Vertex.
 - **P0 التالي GFX-MULTI-019:** استعادة خريطة DX11 `t#/s#`→SPIRV `set/binding` بشكل مثبت من سجلات المصدر/الترجمة، وربط الأصل `Material TexEnv` وSampler semantics. لا تربط الصور افتراضيًا بأرقام DX11 القديمة داخل GLSL؛ هذا خطر color/normal corruption.
 - بعدها تحقق CB bytes/offsets، DXT5nm AG/tangent، metallic/smoothness وUV/tint، قبل طلب اختبار GPU على Adreno. لا تعتبر مرحلة Shader كاملة.
+
+
+## GFX-MULTI-019 بدأ — تحويل رقم السجل إلى اسم Binding مُثبت
+- `20261110-GFX-chat-symbolic-binding-map-20`: فحص source DX11 DCL register indices مع أسماء `OpName` التي يولّدها vkd3d داخل SPIR-V، ثم تطابقها مع `spirv-cross --reflect` `set/binding`، عبر سبعة Passes و14 Stage أصلية. أسماء المصدر والفهارس الخاصة لا تُنشر. CI pending.
+- بعد استخراج mapping رمزي لا تخلطها مع مطابقة Content/CB Offset/Material TexEnv. مرجع الكود العام: `spirv_compiler_get_register_name` في vkd3d، وحفظ الأدلة السلبية للمسارات غير المعروفة.

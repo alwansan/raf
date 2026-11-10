@@ -1,0 +1,14 @@
+# GFX-LAB — 20261110-GFX-chat-symbolic-binding-map-20
+- session_id: 20261110-GFX-chat-symbolic-binding-map-20; origin: chat
+- resumed_from: 20261110-GFX-chat-source-vs-spirv-binding-19
+- base_sha: 3686ec91b4b940ba36393e15d54545ee7ec546b9
+- issue_id: RENDER-002
+- experiment_key: GFX-MULTI-019-strict-vkd3d-symbolic-original-source-to-SPIRV-descriptor-map
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- scope: one source-authentic keyword/tier matched VS+FS pair from each of Shader48's seven passes. Decode private original DCL b/t/s slots and compare SPIRV-Cross reflected descriptor names and set/binding metadata; accept only exact anchored vkd3d register grammar tN/sN/cbN_size and safe aggregate coverage.
+- baseline: GFX-MULTI-018 [CI42738042943](https://github.com/alwansan/raf/actions/runs/42738042943) SUCCESS 93 tests; 122/122 resources count-equal across 42/42 family-stage groups, but all 7 fragment texture and all 7 sampler register numeric sets differ from SPIR-V bindings; CB numeric sets equal 14/14.
+- grounded external independent format: vkd3d-shader spirv_compiler_get_register_name in Wine/ReactOS names source registers t%u, s%u and cb%u_%u, but names are not an independent proof of source material/CB/texture sampler semantics.
+- negative_controls: reject arbitrary names, out-of-source name, duplicate SPIRV bindings and missing descriptor; synthetic complete name mapping does not turn AndroidShader/Material flags true.
+- commands: GitHub Actions workflow gfxlab-multi-vkd3d-symbolic-binding.yml (CI pending).
+- evidence_level: SOURCE_TO_CPU_SPIRV_GENERATED_SYMBOL_MAPPING; Android original shader, PC visual comparison, CB layout and Material TexEnv still OPEN.
+- next_step: analyze symbolic mapping coverage. If names preserved for each resource, use private mapping for a separate source Material texture/register/properties proof. If stripped, test alternative SPIRV OpName or independent vkd3d config; do not guess.

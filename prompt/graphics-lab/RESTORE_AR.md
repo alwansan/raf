@@ -99,3 +99,9 @@
 
 ## GFX-MULTI-018 — أحدث نجاح مثبت وسبب نقص الربط
 [CI42738042943](https://github.com/alwansan/raf/actions/runs/42738042943) SUCCESS 93 اختبارًا؛ 7 Passes /14 source Shader48 stages أصلية. المصدر وSPIRV يتساويان في **عدد** مجموعات الموارد 42/42 (122/122 عنصر)، بلا missing/duplicate descriptor. source CB register numbers تطابق SPIRV binding sets في 14/14، بينما **Texture وSampler في Fragment لا يتطابقان رقميًا في 0/7 لكل نوع**. لذا لا تستخدم source t#/s# مباشرة مع SPIR-V GLSL؛ يجب استعادة mapping. التطابق الرقمي لمجموعة CB لا يثبت CB byte offsets أو semantics. آخر جلسة `memory/sessions/20261110-GFX-chat-source-vs-spirv-binding-19.md`. الخطوة الموثقة `GFX-MULTI-019` في `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`: mapping مصدر→SPIRV→Material TexEnv قبل أي Android APK. originalShaderRestored=false.
+
+
+## GFX-MULTI-019 — تجربة رموز vkd3d الجارية
+- جلسة `20261110-GFX-chat-symbolic-binding-map-20` origin=chat، resumed_from=`20261110-GFX-chat-source-vs-spirv-binding-19`، base_sha=`3686ec91b4b940ba36393e15d54545ee7ec546b9`.
+- فحص source-only حقيقي لـ 14 stage من Shader48، تستخرج سجلات b/t/s من SHDR وتفحص ما إذا كانت أسماء SPIRV-Cross المشتقة من vkd3d `tN/sN/cbN_size` تتطابق مع مصدر DX11 و`set/binding`. النشر أعداد أسماء صحيحة/مفقودة ومعدّلة فقط؛ قيم الأصل وأسماء shader تبقى سرية.
+- أداة `gfxlab/tools/multi_shader_vkd3d_symbolic_register_map.py` وworkflow `gfxlab-multi-vkd3d-symbolic-binding.yml`. حل compiler binding لا يثبت ارتباط Material TexEnv أو Color/Normal/Metallic أو CB byte offsets. استعادة Shader48 على Android=false. بعد CI حدّث الجلسة وRESTORE/STATE/MEMORY/OPEN_WORK وتحقق من commit.
