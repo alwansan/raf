@@ -25,8 +25,13 @@ def inspect(root):
     known = set()
     duplicates = Counter()
     scanned_meta = 0
+    skipped_oversized_meta = 0
+    skipped_oversized_yaml = 0
     for path in root.rglob("*.meta"):
-        if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_BYTES:
+        if path.is_symlink() or not path.is_file():
+            continue
+        if path.stat().st_size > MAX_BYTES:
+            skipped_oversized_meta += 1
             continue
         matches = GUID.findall(path.read_text(encoding="utf-8", errors="replace"))
         if matches:
@@ -41,6 +46,7 @@ def inspect(root):
         if path.suffix.lower() not in EXTENSIONS or path.is_symlink() or not path.is_file():
             continue
         if path.stat().st_size > MAX_BYTES:
+            skipped_oversized_yaml += 1
             continue
         files += 1
         text = path.read_text(encoding="utf-8", errors="replace")
@@ -61,10 +67,13 @@ def inspect(root):
         "status": "STATIC_PARTIAL_TREE_ONLY",
         "meta_files_indexed": scanned_meta,
         "yaml_files_scanned": files,
+        "oversized_meta_files_skipped": skipped_oversized_meta,
+        "oversized_yaml_files_skipped": skipped_oversized_yaml,
+        "coverage_complete_for_size_limit": not (skipped_oversized_meta or skipped_oversized_yaml),
         "duplicate_guid_groups": sum(v > 1 for v in duplicates.values()),
         "reference_counts": dict(sorted(refs.items())),
         "unresolved_by_source_extension": dict(sorted(unresolved_by_extension.items())),
-        "limitations": "External packages, built-in resources, binary assets and omitted source trees are not checked; no device or shader compilation proof."
+        "limitations": "External packages, built-in resources, binary assets, symlinks and omitted source trees are not checked; skipped oversized files make size-limited coverage incomplete; no device or shader compilation proof."
     }
 
 def main():
