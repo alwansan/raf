@@ -50,14 +50,19 @@ def public_shader_compiler_platform(platforms):
 
 
 def safe_keywords(program):
-    """Keyword names are held only in ephemeral runner-private tuples."""
+    """Return a comparable private signature or None; never invent a link.
+
+    Original subprogram keyword arrays can contain opaque/empty elements.
+    Those arrays remain source evidence, but are *not* safe keyword-equivalence
+    keys. Mark them incomparable rather than silently dropping elements.
+    """
     raw=getattr(program,"m_Keywords",None)
     if not isinstance(raw,list) or len(raw)>1024:
-        raise ValueError("ORIGINAL_PROGRAM_KEYWORD_TABLE_INVALID")
+        return None
     if any(not isinstance(x,str) or not 1<=len(x)<=256 for x in raw):
-        raise ValueError("ORIGINAL_PROGRAM_KEYWORD_INVALID")
+        return None
     if len(raw)!=len(set(raw)):
-        raise ValueError("ORIGINAL_PROGRAM_DUPLICATE_KEYWORDS")
+        return None
     return tuple(sorted(raw))
 
 
@@ -122,7 +127,9 @@ def inspect_candidates(programs,linked,shader_compiler_platform):
         raise ValueError("ORIGINAL_SHADER48_PROGRAM_LINK_TABLE_DRIFT")
     if any(type(idx) is not int or not 0<=idx<len(programs) for idx in linked):
         raise ValueError("ORIGINAL_SHADER48_LINK_INDICES_INVALID")
-    exact_linked_keywords=Counter(safe_keywords(programs[idx]) for idx in linked)
+    linked_signatures=[safe_keywords(programs[idx]) for idx in linked]
+    exact_linked_keywords=Counter(x for x in linked_signatures if x is not None)
+    linked_incomparable=sum(x is None for x in linked_signatures)
     totals={}
     for f in FAMILIES:
         totals[f]=Counter({
@@ -131,6 +138,7 @@ def inspect_candidates(programs,linked,shader_compiler_platform):
             "nonempty_keyword_signature_matches_linked_dx11":0,
             "nonempty_keyword_signature_unique_linked_match":0,
             "platform_family_matches_original_compiler_platform":0,
+            "source_keyword_signature_uncomparable_entries":0,
         })
     sizes={f:Counter({key:0 for key in SIZE_BUCKETS}) for f in FAMILIES}
     ratios={f:Counter({key:0 for key in ASCII_BUCKETS}) for f in FAMILIES}
@@ -156,7 +164,10 @@ def inspect_candidates(programs,linked,shader_compiler_platform):
             envelopes[family][key]+=int(yes)
         digest_sets[family].add(hashlib.sha256(code).digest())
         signature=safe_keywords(p)
-        keyword_sets[family].add(signature)
+        if signature is None:
+            totals[family]["source_keyword_signature_uncomparable_entries"]+=1
+        else:
+            keyword_sets[family].add(signature)
         if signature:
             keyword_nonempty_sets[family].add(signature)
             totals[family]["nonempty_keyword_signature_entries"]+=1
@@ -183,6 +194,7 @@ def inspect_candidates(programs,linked,shader_compiler_platform):
             "distinct_private_code_payload_count":len(digest_sets[family]),
             "distinct_private_keyword_signature_count":len(keyword_sets[family]),
             "distinct_nonempty_keyword_signature_count":len(keyword_nonempty_sets[family]),
+            "original_linked_keyword_uncomparable_entry_count":linked_incomparable,
             "keyword_match_proves_original_pass_or_material_binding":False,
             "raw_keyword_names_or_digest_bytes_exported":False,
         }
