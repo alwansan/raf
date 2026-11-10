@@ -49,3 +49,8 @@
 ## التجربة الجديدة — GFX-MULTI-017
 - جلسة `20261110-GFX-chat-original-register-operands-18`: استخراج مقيّد وفحص private register slot shape من أصل SHDR (CB b#, texture t#, sampler s#)، مع positive/negative controls على type/dimension/relative-index. الحالة CI_PENDING.
 - **لا تخلط استخراج رقم السجل بـMapping صحيح**: يجب بعد ذلك مطابقة DX11 registers مقابل SPIR-V descriptors وSource Material/CB layout/texture sampler semantics.
+
+
+## GFX-MULTI-017 مثبت
+- [CI42737442510](https://github.com/alwansan/raf/actions/runs/42737442510) SUCCESS 89 اختبارات: 14 stage، 66 CB register slots ذات أحجام معلنة غير صفرية، 29 Resource slots، 27 Sampler slots، بلا أي slot duplicate داخل نفس stage. الأرقام الأصلية خاصة، لا تُنشر. هذا يثبت إمكانية استخراج slot indexes فقط، **لا يثبت** ارتباطها بمواد Unity أو معاني Binding بعد التحويل.
+- **التالي GFX-MULTI-018**: مقارنة private original b#/t#/s# register set مع SPIR-V descriptor bindings التي يرجعها independent SPIRV-Cross، مع negative controls لمواضع تصادم sampler/CB. أبق النتيجة UNKNOWN إذا وجدت register remapping، ولا تُعلن Android GPU بدون اختبار.

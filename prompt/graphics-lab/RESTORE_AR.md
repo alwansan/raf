@@ -87,3 +87,7 @@
 
 ## GFX-MULTI-017 — فحص فهارس سجلات DX11 الأصلية
 جلسة `20261110-GFX-chat-original-register-operands-18`، origin=chat، resumed_from=`20261110-GFX-chat-shdr-declaration-census-17`، base SHA `eeda17d6570315b3362eb4d6685b2ce2342af509`. أداة Source-only جديدة لفحص `OperandToken0` في تعليمات SHDR الأصلية عبر 14 stage: نوع السجل، index dimension، immediate32 representation. قيم b#/t#/s# وحجم CB لا تُنشر؛ report counts only. اقرأ CI workflow `gfxlab-multi-source-register-shape.yml` ودوّن النجاح/الفشل. المصدر Shader48 ما زال غير مستعاد على Android؛ بعد التجربة حدّث كل ملفات الاستعادة والمهام الخمسة.
+
+
+## أحدث نتيجة مثبتة — GFX-MULTI-017
+[CI42737442510](https://github.com/alwansan/raf/actions/runs/42737442510) **SUCCESS** 89 اختبارًا. مصدر Shader48 الأصلي: 14 stage، أخرجنا داخليًا 66 CB register declarations ذات أحجام معلنة غير صفرية، و29 Resource و27 Sampler، بلا تكرار فهارس داخل المرحلة نفسها. فهارس b/t/s وأحجام CB لم تُنشر. لا توجد حتى الآن مطابقة source register→SPIR-V binding أو Material TexEnv/CB offsets. آخر جلسة `memory/sessions/20261110-GFX-chat-original-register-operands-18.md`، وآخر خارطة `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`. التالية GFX-MULTI-018 لمقارنة المجموعات الخاصة مع SPIRV-Cross مع منع افتراض التطابق.

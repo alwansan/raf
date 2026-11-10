@@ -12,3 +12,9 @@
 - evidence_level: ORIGINAL_SOURCE only. CB register→SPIRV descriptor, original Material/TexEnv and Android runtime parity remain FALSE.
 - run: workflow triggered on push; pending CI.
 - next_step: inspect CI and persist to live RESTORE/backlog/session/STATE/MEMORY; if source slot decoding valid, plan controlled private source-vs-SPIRV descriptor mapping experiment.
+
+## Verified outcome GFX-MULTI-017
+- [CI42737442510](https://github.com/alwansan/raf/actions/runs/42737442510) COMPLETED SUCCESS, 89 unit tests; 14 original DXBC stage declaration operand streams from source Shader48 parsed with authoritative D3D10 index dimension/type/representation checks.
+- **66** original CB declaration immediate32 register slots, all **66** have positive declared CB-size indices; **29** original Resource register declarations, **27** Sampler declarations. Within each stage, **0 duplicates** in each category. All stage reports and original bytes purged from ephemeral runner.
+- Source register indices were recovered privately by the test; *slot values were not written to public Git or CI log*. That is not proof of source register semantic mapping to SPIR-V descriptor set/binding, CB variable offsets or Material TexEnv.
+- Original Shader48 not compiled/run on Android, no original game pixels, no full variant coverage. Next GFX-MULTI-018 independent private register-to-SPIRV descriptor matching attempt with strict fail closed and no public register identifiers.
