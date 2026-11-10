@@ -12,7 +12,7 @@ KERNEL_ERROR = re.compile(r"\b(?:invalid|error|failed|failure|exception|out.of.r
 CONTEXT = re.compile(r"FindKernel|Dispatch|ComputeShader|ultimate_water_invalid_pass|water_fft_invalid_compute_kernel", re.I)
 PASS = re.compile(r"\b(?:Spectrum|Foam(?:\s+Global)?|Subsurface\s+Blur|Utility\s+Noise)\b", re.I)
 
-def scan(path, session, before=8, after=8, max_hits=30):
+def scan(path, session, before=8, after=8, max_hits=30, errors_only=False):
     if not session or not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", session):
         raise ValueError("explicit safe session identifier required")
     if not (0 <= before <= 100 and 0 <= after <= 100 and 1 <= max_hits <= 1000):
@@ -39,7 +39,7 @@ def scan(path, session, before=8, after=8, max_hits=30):
                     counts["kernel6_error_lines"] += 1
                 else:
                     counts["kernel6_nonerror_mentions"] += 1
-                if len(events) < max_hits:
+                if len(events) < max_hits and (not errors_only or KERNEL_ERROR.search(line)):
                     event = {"line": lineno, "before": list(prior), "after": [],
                              "pass_tokens": sorted(set(PASS.findall(line)))}
                     events.append(event)
@@ -61,7 +61,7 @@ def scan(path, session, before=8, after=8, max_hits=30):
                 prior.append(compact)
             pending = [(end, event) for end, event in pending if lineno < end]
     return {"session_id": session, "source_sha256": sha.hexdigest(),
-            "counts": counts, "sampled_hits": len(events), "events": events,
+            "counts": counts, "sampled_hits": len(events), "sample_errors_only": bool(errors_only), "events": events,
             "original_kernel_identity_proven": False,
             "note": "kernel6_lines includes mentions, not only errors; error_lines requires an error word on the same line. Nearby markers are not causal proof or FindKernel-to-index mapping."}
 
@@ -72,8 +72,9 @@ def main():
     p.add_argument("--before", type=int, default=8)
     p.add_argument("--after", type=int, default=8)
     p.add_argument("--max-hits", type=int, default=30)
+    p.add_argument("--errors-only", action="store_true", help="Sample only kernel-6 lines with same-line error markers")
     args = p.parse_args()
-    print(json.dumps(scan(args.log, args.session, args.before, args.after, args.max_hits),
+    print(json.dumps(scan(args.log, args.session, args.before, args.after, args.max_hits, args.errors_only),
                      ensure_ascii=False, indent=2))
 
 if __name__ == "__main__":
