@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-unreferenced-shader48-06",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-unreferenced-shader48-06.md",
-  "status": "GFX_MULTI_032_AUTHENTIC_UNREFERENCED_COMPILED_RDEF_SWEEP_IN_PROGRESS_ORIGINAL_SHADER_BLOCKED",
+  "status": "GFX_MULTI_032_SUCCESS_ALL_COMPILED_CENSUSED_ZERO_UNUSED_RDEF_ORIGINAL_SHADER_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Read GFX-MULTI-032 CI42807637443 terminal status and safe output, publish evidence and purge, then resolve missing original property-to-t#/s#/CB binding and PassState/PC pixels before any shader APK",
+  "next_experiment": "GFX-MULTI-033 original unreferenced non-DX11 program format and exact Pass link feasibility with private source only; if blocked require original PC shader reflection before full original Shader48 GLES APK",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -988,11 +988,18 @@
   "latest_shader48_unreferenced_experiment": {
     "id": "GFX-MULTI-032",
     "run": 42807637443,
-    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "compiled_program_table_entries": 1656,
-    "previously_referenced_unique": 1275,
-    "unreferenced_to_audit": 381,
-    "ci_status": "IN_PROGRESS",
-    "authentic_android_shader_restored": false
+    "status": "SUCCESS",
+    "unit_tests": 198,
+    "artifact_id": 13759565415,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "compiled_entries": 1656,
+    "referenced_unique": 1275,
+    "unused": 381,
+    "unused_empty": 112,
+    "unused_non_dx11": 269,
+    "unused_dx11_valid_dxbc": 0,
+    "unused_rdef": 0,
+    "private_source_purged": true,
+    "original_shader48_restored": false
   }
 }
