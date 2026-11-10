@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-DXBC-input-UBO-provenance-61",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-DXBC-input-UBO-provenance-61.md",
-  "status": "GFX_MULTI_088_VERIFIED_SUCCESS_843_TESTS_12_SOURCE_DXBC_INPUT_REGISTER_NUMERIC_OVERLAPS_12_ORIGINAL_CB_B_AND_MEMBER_OFFSET_COMPILER_PROVENANCE_GFX054_MATERIAL_PIXEL_UNPROVEN",
+  "latest_session": "20261111-GFX-chat-dxbc-input-signature-62",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-dxbc-input-signature-62.md",
+  "status": "GFX_MULTI_089_SUCCESS_854_TESTS_1562_STAGE_WIDE_SPV_INPUT_LOCATIONS_12_FLAT_AND_12_SOURCE_PS_CONSTANT_SEPARATELY_ONLY_PER_12_LINK_UNPROVEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-089: for the 12 DXBC numeric location overlap candidates independently parse actual original DXBC dcl_input variant (plain/SGV/SIV/PS, PS interpolation) and where possible source Input Signature chunks, compare with SPV Location/BuiltIn/flat interpolation without assuming semantic equivalence. Fail closed on missing signature/unsupported masks. GFX054 Unity Material CB member byte payload and original Shader48 Android GPU PC visual parity still BLOCKED.",
+  "next_experiment": "GFX-MULTI-090: privately narrow GFX089 stage-wide signature/dcl/Flat vs constant facts to the specific 12 authenticated original Shader48 SPV OpIAdd LHS Input OpLoads from GFX088, compare declaration type, ISGN mask/type, SPV interpolation category PER INSTANCE with fail-closed missing/ambiguous signatures; do NOT assert numerical semantic equivalence, GFX054 Unity Material CB member bytes or Adreno GPU pixels.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2421,5 +2421,31 @@
     "originalShaderRestored": false,
     "phase_closed": false,
     "private_source_SPV_DXBC_purge_verified": true
+  },
+  "latest_gfx089": {
+    "experiment": "GFX-MULTI-089",
+    "origin": "chat",
+    "status": "SUCCESS_ORIGINAL_SOURCE_DXBC_SIGNATURE_STAGE_WIDE_SPV_CPU_INPUT_CLASSES_ONLY",
+    "run_id": 42914832664,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42914832664",
+    "run_sha": "230fde324563c85a047c6f8f75e32266f790fccb",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 854,
+    "original_source_joint_pairs": 157,
+    "source_stages": 314,
+    "source_CB_stages": 311,
+    "source_b_authenticated_SPV_dynamic_CB_reads": 427,
+    "stage_wide_SPV_Input_Location_global_appearances": 1562,
+    "stage_wide_source_vertex_plain_dcl": 687,
+    "stage_wide_source_PS_plain_dcl": 875,
+    "stage_wide_ISGN_full_mask": 1004,
+    "stage_wide_ISGN_partial_mask": 558,
+    "stage_wide_SPV_flat_global": 12,
+    "stage_wide_PS_constant_interpolation": 12,
+    "per_12_OpIAdd_input_instance_semantics_proven": false,
+    "safe_artifact_id": 13807124995,
+    "source_private_cleanup_verified": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
   }
 }
