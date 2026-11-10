@@ -31,8 +31,14 @@ jobs:
           import hashlib,json,os
           from pathlib import Path
           from zipfile import ZipFile
-          p=Path(os.environ["RUNNER_TEMP"])/"gfxlab-multi031-package"/"GfxLab-Multi-Six-AutoLogs.apk"
-          assert p.is_file() and p.stat().st_size==66162049,"EXPECTED_SIGNED_ANDROID_APK_ABSENT"
+          root=Path(os.environ["RUNNER_TEMP"])/"gfxlab-multi031-package"
+          # GitHub artifact upload preserves the Unity build output subdirectories.
+          # gh run download extracts those paths; never assume the APK is at root.
+          matches=sorted(root.rglob("GfxLab-Multi-Six-AutoLogs.apk"))
+          print("GFX_MULTI031_NESTED_APK_MATCH_COUNT="+str(len(matches)))
+          assert len(matches)==1,"EXPECTED_EXACTLY_ONE_SIGNED_ANDROID_APK"
+          p=matches[0]
+          assert p.is_file() and p.stat().st_size==66162049,"EXPECTED_SIGNED_ANDROID_APK_SIZE_MISMATCH"
           with p.open("rb") as stream:
               digest=hashlib.file_digest(stream,"sha256").hexdigest()
           assert digest=="a2466155b87d8c34ec22955a22bc6c7c741f691063e9a9f7f79a58ca9465c1f5","APK_SHA256_DIFFERS_CI"
