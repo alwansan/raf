@@ -40,7 +40,7 @@ def scan(path, session, before=8, after=8, max_hits=30, errors_only=False):
                 else:
                     counts["kernel6_nonerror_mentions"] += 1
                 if len(events) < max_hits and (not errors_only or KERNEL_ERROR.search(line)):
-                    event = {"line": lineno, "before": list(prior), "after": [],
+                    event = {"line": lineno, "before": [item for item in prior if item["markers"]], "after": [],
                              "pass_tokens": sorted(set(PASS.findall(line)))}
                     events.append(event)
                     pending.append((lineno + after, event))
