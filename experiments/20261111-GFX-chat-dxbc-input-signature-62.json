@@ -31,7 +31,7 @@
     "private DXBC SPV ZIP2 purge and safe artifact"
   ],
   "resource_key": "gfxlab-multi089-stagewide-original-dxbc-signature",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_STAGE_WIDE_1562_SPV_INPUT_GLOBAL_APPEARANCES_DXBC_DCL_AND_ISGN_CLASSES_CPU_ONLY",
   "run_id": 42914832664,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42914832664",
   "failed_preflight_runs": [
@@ -39,5 +39,22 @@
   ],
   "evidence_level": "PENDING_STAGE_WIDE_ORIGINAL_DXBC_SIGNATURE_TRANSLATED_SPV_CPU_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "230fde324563c85a047c6f8f75e32266f790fccb",
+  "source_free_tests": 854,
+  "source_original_joint_pairs": 157,
+  "source_stage_instances": 314,
+  "source_CB_stage_instances": 311,
+  "authenticated_actual_SPV_CB_dynamic_index_loads": 427,
+  "stage_wide_Input_Location_globals": 1562,
+  "stage_wide_vertex_plain_dcl": 687,
+  "stage_wide_fragment_pixel_plain_dcl": 875,
+  "stage_wide_ISGN_user_semantic_full_mask": 1004,
+  "stage_wide_ISGN_user_semantic_partial_mask": 558,
+  "stage_wide_SPV_Flat": 12,
+  "stage_wide_source_PS_constant_interpolation": 12,
+  "safe_artifact_id": 13807124995,
+  "artifact_expiry_utc": "2026-11-17T22:29:19Z",
+  "source_stage_wide_counts_are_per_12_original_OpIAdd_cases": false,
+  "private_source_cleanup_verified": true
 }
