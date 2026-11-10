@@ -65,7 +65,7 @@ jobs:
             --out gfxlab-multi072-safe-stage-local-relative-CCB-SPV-index-shapes.json
           python3 - <<'PY'
           import json
-          d=json.load(open("gfxlab-multi072-safe-source-private-SPV-index-root-opcode-counts.json"))
+          d=json.load(open("gfxlab-multi072-safe-stage-local-relative-CCB-SPV-index-shapes.json"))
           assert d["experiment"]=="GFX-MULTI-072"
           assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
           assert d["source_exact_original_VS_FS_pairs_censused"]==524
@@ -122,7 +122,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gfxlab-multi072-safe-original-stage-index-relative-shapes-to-SPV-IAdd-Bitcast-counts
-          path: gfxlab-multi072-safe-source-private-SPV-index-root-opcode-counts.json
+          path: gfxlab-multi072-safe-stage-local-relative-CCB-SPV-index-shapes.json
           retention-days: 7
           if-no-files-found: error
       - name: Purge original Shader48 ZIP2, DXBC, translated SPIRV
