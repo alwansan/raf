@@ -34,3 +34,8 @@
 ## تقدم هذه الدورة
 - بدأت `GFX-MULTI-015` (جلسة `20261110-GFX-chat-rdef-seven-pass-source-16`) للتحقق من RDEF في 14 Stage من المصدر الحقيقي؛ الحالة `CI_PENDING` حتى يثبت التشغيل.
 - عند النجاح/الفشل، حدّث هذا البند واذكر رابط CI، ولا تختزل غياب RDEF إلى صفر CB.
+
+
+## التجربة الحية — GFX-MULTI-016
+- `20261110-GFX-chat-shdr-declaration-census-17`: parser fail-closed للتعليمات SHDR/SHEX لدى Shader48 الحقيقي؛ opcode indices 88/89/90/161/162 مصدرها Microsoft DirectX-Headers، 14 stage، CI pending.
+- *نتائج المصدر ليست register binding semantics*؛ لا تعتقد أن عدد DCL يكفي لإثبات CB offset أو normal/metallic Texture sampler.

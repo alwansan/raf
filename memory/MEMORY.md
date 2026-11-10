@@ -130,3 +130,7 @@ Latest session `20261110-GFX-chat-rdef-seven-pass-source-16`, resumed after pers
 
 ## GFX-MULTI-015 source RDEF all-pass coverage (2026-11-10)
 [CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) SUCCESS, 80 tests. Genuine Shader48 2 SubShaders/7 Passes, one original exact keyword/tier VS/FS per Pass (14 total): **RDEF absent in all 14**, each has SHDR and source IO signature chunks. Thus original RDEF CB/binding counts UNKNOWN, even though translated SPIRV includes resource descriptors. No Android shader restored, no full variant coverage. Next GFX-MULTI-016 strict SHDR declaration opcode inspection/independent register semantic reflection; persistent backlog updated. Latest session 20261110-GFX-chat-rdef-seven-pass-source-16.
+
+
+## Started GFX-MULTI-016 original stripped DX11 declaration inventory (2026-11-10)
+The original Shader48 per-pass selected DXBC stage chunks contain SHDR, not RDEF; [GFX-MULTI-015 CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) 14/14 RDEF absent. GFX-MULTI-016 uses authoritative Microsoft's D3D10_SB_OPCODE_TYPE enum (resource 88 / CB 89 / sampler 90 / raw 161 / structured 162) and fail-closed token stream parsing to count source declarations in all 14 stages. No original register indexes or shader bytes public; no CB/Material binding or Android GPU equivalence. Latest session 20261110-GFX-chat-shdr-declaration-census-17, backlog maintained.

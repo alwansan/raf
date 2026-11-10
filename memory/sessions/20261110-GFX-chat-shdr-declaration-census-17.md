@@ -1,0 +1,15 @@
+# GFX-LAB — 20261110-GFX-chat-shdr-declaration-census-17
+- session_id: 20261110-GFX-chat-shdr-declaration-census-17; origin: chat
+- resumed_from: 20261110-GFX-chat-rdef-seven-pass-source-16
+- base_sha: af00b6e067b07347e7937c0b90a27f51d4ba019d
+- issue_id: RENDER-002
+- experiment_key: GFX-MULTI-016-original-DXBC-SHDR-declaration-inventory
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- scope: 14 genuine DX11 SHDR stage chunks from one exact VS+FS pair per 7 Shader48 passes; count opcode declarations 88 resource, 89 constant buffer, 90 sampler, 161 raw, 162 structured. Never export program source, register indexes, keywords, GUID/PPtr or assets.
+- previous: [GFX-MULTI-015 CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) COMPLETED SUCCESS, 80 tests, 14/14 source stages RDEF absent, all 14 have SHDR and original IO signatures; original register count unknown without independent declaration parsing.
+- reference_format: Microsoft DirectX-Headers D3D12TokenizedProgramFormat.hpp D3D10_SB_OPCODE_TYPE enum and instruction length bits [30:24], special CUSTOMDATA length next DWORD.
+- negative_controls: fail if DXBC bad offsets, instruction length zero/overrun, wrong claimed token count, invalid custom length. Report aggregate counts only.
+- evidence_level: ORIGINAL_SOURCE only, not semantic register-to-Material or SPIRV/Android.
+- run: GFX-MULTI-016 workflow triggered by push, status CI_PENDING.
+- next_step: inspect CI; if counts recover correctly, decode private original register indexes and compare to independent shader reflection, then Android GPU test only after mapping proves.
+- backlog: gfxlab/OPEN_WORK_AND_IDEAS_AR.md
