@@ -71,6 +71,12 @@ class EvidenceCliBoundary(unittest.TestCase):
         self.assert_rejected(raw.encode())
 
     def test_invalid_utf8_is_rejected(self):
+        # A literal b"\\\\xff" is ASCII, not an invalid UTF-8 byte.
+        # Exercise the decoder boundary with a genuinely invalid octet.
+        self.assert_rejected(bytes([0xff]))
+
+    def test_valid_utf8_malformed_json_is_rejected(self):
+        # Keep JSON syntax rejection distinct from invalid UTF-8 coverage.
         self.assert_rejected(b"\\xff")
 
     def test_nonfinite_json_is_rejected(self):
