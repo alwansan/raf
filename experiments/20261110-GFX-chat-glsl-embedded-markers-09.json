@@ -14,6 +14,35 @@
     "Count per GLES/GLCore family and property coverage, no snippets/names",
     "SHA-pinned original ZIP2 CI + source-free fail-closed unit tests + purge"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_SOURCE_BYTES_PROPERTY_NAMES_PRESENT_NO_UNIFORM_OR_COMPILED_GLSL",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42810629895"
+  ],
+  "result": {
+    "unit_tests": 216,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "gles": {
+      "entries": 139,
+      "programs_with_source_property_byte_tokens": 82,
+      "programs_with_material_bound_property_byte_tokens": 76,
+      "unique_source_property_tokens": 14,
+      "unique_texture_property_tokens": 5,
+      "unique_material_bound_property_tokens": 3
+    },
+    "glcore": {
+      "entries": 120,
+      "programs_with_source_property_byte_tokens": 61,
+      "programs_with_material_bound_property_byte_tokens": 60,
+      "unique_source_property_tokens": 14,
+      "unique_texture_property_tokens": 5,
+      "unique_material_bound_property_tokens": 3
+    },
+    "glsl_version_or_main_markers": 0,
+    "uniform_sampler_markers": 0,
+    "printable_ascii_runs_32_or_more": 0,
+    "exact_pass_link": false,
+    "original_shader_runtime": false,
+    "private_source_purged": true
+  },
+  "next_step": "GFX-MULTI-036 study documented binary program property/resource metadata layout as possible binding bridge; never derive registers from adjacency or raw token search"
 }
