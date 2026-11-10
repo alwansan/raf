@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-float-wrap-color-25",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-float-wrap-color-25.md",
-  "status": "GFX_MULTI_024_SUCCESS_MATERIAL_SLOT_SHARED_112_FLOAT_14_COLOR_ORIGINAL_UNITY21_TEXTURE_SETTINGS",
+  "latest_session": "20261110-GFX-chat-secondary-color-alias-26",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-secondary-color-alias-26.md",
+  "status": "GFX_MULTI_025_SUCCESS_EMISSION_BLACK_AND_SOURCE_MATERIAL_TEXTURE_SHARING_PROVEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-025: classify seven nonidentity secondary original Material color slots and source Material21/Texture2D identity sharing; inspect exact known shader property categories without publishing raw proprietary names/values. Separate authored Metallic sRGB from Unity Android GPU sampling; no new APK or shader equivalence claim.",
+  "next_experiment": "GFX-MULTI-026: audit all 7 original Shader48 Pass render-state declarations, original Material render queue/keywords/instancing, and explicit source-versus-missing metadata under private SHA-pinned ZIP2. No inferred Cull/Blend/CB semantics, no Android shader or APK.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -727,6 +727,43 @@
     "source_names_values_or_ids_exported": false,
     "original_shader_restored": false,
     "original_property_to_register_mapping_verified": false,
+    "android_gpu_pixels_verified": false,
+    "phase_closed": false
+  },
+  "latest_color_material_texture_alias": {
+    "experiment": "GFX-MULTI-025",
+    "run": 42746455458,
+    "workflow_sha": "abda9eb66f80066c274e6dd5bef81a2062e67290",
+    "status": "SUCCESS_SOURCE_ONLY_146_TESTS",
+    "unit_tests": 146,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_models": 6,
+    "source_shader_properties": 27,
+    "material_slots": 7,
+    "unique_material21_objects": 6,
+    "material_alias_group_sizes": {
+      "1": 5,
+      "2": 1
+    },
+    "material_groups_shared_across_models": 1,
+    "texture_links": 21,
+    "unique_texture2d_objects": 18,
+    "texture_alias_group_sizes": {
+      "1": 15,
+      "2": 3
+    },
+    "texture_groups_shared_across_models": 3,
+    "texture_groups_shared_across_roles": 0,
+    "saved_color_slots": 14,
+    "color_name_matches_shader48": 14,
+    "base_tint_white_rgba": 7,
+    "emission_named_rgb_black_alpha_one": 7,
+    "safe_artifact_id": 13730829715,
+    "safe_artifact_expires_utc": "2026-11-17T03:00:31Z",
+    "source_purge_succeeded": true,
+    "private_values_names_or_ids_exported": false,
+    "source_pass_bindings_recovered": false,
+    "original_shader_restored": false,
     "android_gpu_pixels_verified": false,
     "phase_closed": false
   }
