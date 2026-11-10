@@ -1,0 +1,25 @@
+{
+  "session_id": "20261110-GFX-chat-source-ISHL-SPV-ancestry-44",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-070",
+  "resumed_from": "GFX-MULTI-069 CI42884845500 (68 local source ISHL candidates, 359 unresolved)",
+  "base_sha": "5d08f083ce6830b39f6348ba9358f7b3a6ee129a",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Do source-authenticated original Shader48 CB Uniform dynamic-index OpLoads in translated SPV carry real OpShiftLeftLogical SSA ancestry, and do the stage-local observations coexist with any of 68 original DXBC ISHL writer candidates?",
+  "control": "Independent strict source b global Uniform vec4 UBO reflection; OpAccessChain from authenticated root must feed real OpLoad; synthetic wrong roots, Phi, Select, unknown SSA values, out-of-bounds component, no-load pointers and duplicate result IDs reject positive claims.",
+  "planned_tests": [
+    "all gfxlab source-free tests",
+    "original 157 authentic source-class pairs/314 SPV stages Vulkan1.1",
+    "311 real source-b global Uniform reflected single vec4 array CB stages, 3 CB-free",
+    "source GFX069 427/68/359 parity to previous independent stage parser",
+    "real OpLoad from authenticated UBO with SSA shift ancestor categories",
+    "independent GFX063 SPV dynamic load count diagnostic only",
+    "source and SPV purge, count-only artifact"
+  ],
+  "workflow": "https://github.com/alwansan/raf/actions/runs/42886852291",
+  "status": "CI_RUNNING",
+  "evidence_level": "ORIGINAL_SOURCE+CPU_TRANSLATED_SPV_STRUCTURE_ONLY",
+  "source_to_SPV_SSA_correspondence_proven": 0,
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
