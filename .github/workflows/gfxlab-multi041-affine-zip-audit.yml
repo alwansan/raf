@@ -1,0 +1,39 @@
+name: GFX-MULTI-041 four-mode affine GPU owner ZIP private parser tests
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi041-affine-zip-audit.yml'
+      - 'gfxlab/tools/affine_reference_owner_zip_audit.py'
+      - 'gfxlab/tests/test_affine_reference_owner_zip_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi041-affine-safe-zip-audit
+  cancel-in-progress: false
+jobs:
+  strict-count-only-auditor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab
+      - name: Source-free unit tests, no owner ZIP or original Raft assets
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/affine_reference_owner_zip_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI041_ORIGINAL_FREE_OWNER_ZIP_AUDITOR_TESTS_SUCCESS=true
+      - name: Confirm original assets not downloaded
+        if: always()
+        run: |
+          if [ -d source-zip2 ]; then
+            echo GFX_MULTI041_PRIVATE_SOURCE_SHOULD_NOT_EXIST
+            exit 1
+          fi
+          echo GFX_MULTI041_SOURCE_PRIVATE_INPUT_NOT_USED=true
