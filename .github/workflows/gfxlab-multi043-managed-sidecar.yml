@@ -72,7 +72,11 @@ jobs:
           assert d["original_material_bound_texture_slots"]==21
           for label in ("Assembly-CSharp","Custom"):
               s=d["managed_assembly_private_literal_counts"][label]
-              assert s["managed_user_string_heap_present"]
+              # A valid managed DLL may omit the optional #US heap entirely.
+              # Record absence as *no literal evidence*, not malformed source.
+              assert type(s["managed_user_string_heap_present"]) is bool
+              if not s["managed_user_string_heap_present"]:
+                  assert s["managed_literal_entry_count"]==0
               assert s["managed_literal_entry_count"]>=0
               assert s["original_shader_property_literals_exact_count"]<=27
               assert s["original_texture_property_literals_exact_count"]<=9
