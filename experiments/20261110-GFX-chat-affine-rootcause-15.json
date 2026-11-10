@@ -35,7 +35,7 @@
     "No original source/mesh/texture/Shader48 binary in APK",
     "Only write experiment/android-graphics-rootcause"
   ],
-  "status": "AUDITOR_SUCCESS_AFFINE_SIGNED_APK_CI_BUILDING",
+  "status": "SUCCESS_SIGNED_AFFINE_GPU_DIAGNOSTIC_OWNER_FOUR_MODE_RUNTIME_PENDING",
   "ci_runs": [
     42822853848,
     42823375579
@@ -44,5 +44,25 @@
   "owner_guide": "gfxlab/GFX_MULTI041_AFFINE_OWNER_TEST_AR.md",
   "source_free_zip_auditor_ci_tests": 266,
   "device_extension_supported_or_absent_not_proven": true,
-  "original_shader48_restored": false
+  "original_shader48_restored": false,
+  "build": {
+    "run": 42822853848,
+    "status": "SUCCESS",
+    "tests": 260,
+    "apk_bytes": 8483832,
+    "sha256": "79292f8b65ba641bd35a11b303ecac6d4eb88c7aec39841c839ab924d3c43811",
+    "artifact_id": 13768320259,
+    "artifact_expires": "2026-11-17T13:21:17Z",
+    "package": "com.alwansan.raft.graphicslab.affinereference",
+    "signature_verified": true,
+    "original_shader_included": false
+  },
+  "offline_zip_audit": {
+    "run": 42823375579,
+    "status": "SUCCESS",
+    "tests": 266
+  },
+  "safe_build_report": "gfxlab/evidence/20261110_gfx041_affine_signed_apk_safe.json",
+  "actual_owner_four_mode_gpu_readback": false,
+  "next_step": "Ask owner to run independent GFX041 on Adreno and upload four-image ZIP. Only then classify affine emulator GPU vs CPU. Original Stage G8 Material/CB mapping remains external blocker."
 }
