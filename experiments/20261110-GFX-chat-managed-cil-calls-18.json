@@ -1,0 +1,22 @@
+{
+  "session_id": "20261110-GFX-chat-managed-cil-calls-18",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-managed-shader-prop-17",
+  "base_sha": "f3e9002187e072713875f620ad02447ce7048d30",
+  "experiment_key": "GFX-MULTI-044",
+  "issue_id": "RENDER-002",
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "goal": "In authentic Raft Assembly-CSharp CIL method bodies, resolve source Shader48 exact #US ldstr property references and real UnityEngine.Material/Shader/MaterialPropertyBlock memberref owner calls. Safe method-level and nearby instruction counts, not shader register mapping or dataflow proof.",
+  "private_source_limits": [
+    "No actual property name, author method name, IL offset/register, assembly code, shader code or bytecode exported",
+    "Method co-occurrence is not direct argument dataflow",
+    "Close Shader48 G8 only with source or PC proof property->register CB layout"
+  ],
+  "dependencies": [
+    "dnfile==0.18.0",
+    "dncil==1.0.2",
+    "UnityPy==1.25.4"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
