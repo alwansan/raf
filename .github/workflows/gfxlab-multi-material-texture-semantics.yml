@@ -1,0 +1,104 @@
+name: GFX-MULTI-023 original Material and Texture2D semantics / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-material-texture-semantics.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi023-material-texture-semantics
+  cancel-in-progress: false
+jobs:
+  original-material-texture-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free fail-closed unit tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_material_texture_semantics.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Build exact six-model Material and texture source plan
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_material_texture_semantics plan \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi023-private" \
+            --private-plan "$RUNNER_TEMP/gfxlab-multi023-private-plan.json" \
+            --paths "$RUNNER_TEMP/gfxlab-multi023-private-parts.txt"
+      - name: Hydrate only authenticated original texture stream chunks
+        run: |
+          set -euo pipefail
+          if [ -s "$RUNNER_TEMP/gfxlab-multi023-private-parts.txt" ]; then
+            git -C source-zip2 sparse-checkout set --no-cone --stdin < "$RUNNER_TEMP/gfxlab-multi023-private-parts.txt"
+          fi
+          python3 -m gfxlab.tools.multi_material_texture_semantics audit \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi023-private" \
+            --private-plan "$RUNNER_TEMP/gfxlab-multi023-private-plan.json" \
+            --out "$RUNNER_TEMP/gfxlab-multi023-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gfxlab-multi023-safe.json").read_text())
+          assert d["source_sha"] == "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["model_count"] == 6 and d["material_slot_count"] == 7
+          assert d["source_texture_count"] == 21 and d["decoded_texture_count"] == 21
+          assert d["material_census"]["material_slot_totals"]["texenv_slots"] == 63
+          assert d["material_census"]["material_slot_totals"]["bound_texenv_slots"] == 21
+          assert d["material_census"]["material_slot_totals"]["null_texenv_slots"] == 42
+          assert d["material_census"]["texture_role_counts"] == {"basecolor":7,"normal":7,"metallic":7}
+          assert all(d["uv_transform_counts_by_role"][r]["total"] == 7 for r in ("basecolor","normal","metallic"))
+          assert all(d["texture_metadata_and_channel_counts_by_role"][r]["textures"] == 7 for r in ("basecolor","normal","metallic"))
+          assert not d["source_material_names_or_ids_exported"]
+          assert not d["source_texture_pixels_or_files_exported"]
+          assert not d["source_shader_or_register_data_exported"]
+          assert not d["original_shader_restored"]
+          assert not d["actual_android_original_shader_pixels_verified"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI023_SAFE_SOURCE_TEXTURES_DECODED=21")
+          print("GFX_MULTI023_SAFE_MATERIAL_TEXTURE_CENSUS " + json.dumps({
+            "stream_chunks": d["sparse_stream_chunks"],
+            "stream_bytes": d["sparse_stream_bytes"],
+            "texture_roles": d["material_census"]["texture_role_counts"],
+            "material_slots": d["material_census"]["material_slot_totals"],
+            "normal_channels": d["texture_metadata_and_channel_counts_by_role"]["normal"],
+            "metallic_channels": d["texture_metadata_and_channel_counts_by_role"]["metallic"]
+          }, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi023-safe-material-texture-census
+          path: ${{ runner.temp }}/gfxlab-multi023-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private original models, textures and sparse streams
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi023-private"
+          rm -f "$RUNNER_TEMP/gfxlab-multi023-private-plan.json" "$RUNNER_TEMP/gfxlab-multi023-private-parts.txt"
+          echo GFX_MULTI023_ALL_PRIVATE_SOURCE_AND_TEXTURE_DATA_PURGED=true
