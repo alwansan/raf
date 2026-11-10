@@ -3,7 +3,7 @@ on:
   push:
     branches: [experiment/android-graphics-rootcause]
     paths:
-      - '.github/workflows/gfxlab-multi074-original-b-offset-SPV-CB-index-private-multiset.yml'
+      - '.github/workflows/gfxlab-multi074-SPV-dynamic-CB-index-memory-writer.yml'
       - 'gfxlab/tools/multi_shader_original_cb_index_private_multiset074.py'
       - 'gfxlab/tools/multi_shader_original_cb_index_b_offset073.py'
       - 'gfxlab/tests/test_multi_shader_original_cb_index_b_offset073.py'
