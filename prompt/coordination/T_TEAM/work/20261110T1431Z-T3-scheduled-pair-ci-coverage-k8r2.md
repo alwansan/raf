@@ -1,7 +1,7 @@
 # T3 scope 20261110T1431Z-T3-scheduled-pair-ci-coverage-k8r2
 origin=scheduled
 issue_id=RENDER-002
-status=active
+status=waiting_ci
 base_sha=961b8c94ee5646671bb6e3980faf8790f574bc08
 updated_at=2026-11-10T14:31:00Z
 intended_files=.github/workflows/raft-t3-render-state-pair-regression.yml; prompt/coordination/clients/T3/sessions/20261110T1431Z-T3-scheduled-pair-ci-coverage-k8r2.md; this work file
@@ -10,3 +10,8 @@ resource_key=github-actions-lightweight-t3-source-regression
 hypothesis=The current CI workflow tests only state diff and omits the new identity and source-byte verification suites; expand existing source-only regression without Unity or APK.
 taken_over_from=prompt/coordination/clients/T3/sessions/20261110T1328Z-T3-scheduled-source-byte-verify-r6n4.md
 No shared game assets, no other agents' files.
+
+source_commit=172842bd6a764b432bc830cd655eea39f40c11b8
+session=prompt/coordination/clients/T3/sessions/20261110T1431Z-T3-scheduled-pair-ci-coverage-k8r2.md
+CI=https://github.com/alwansan/raf/actions/workflows/raft-t3-render-state-pair-regression.yml
+next=Verify CI for source commit, then original/export material-pass pair.
