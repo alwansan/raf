@@ -31,10 +31,23 @@
     "private source SPV DXBC purge, count-only 7-day artifact"
   ],
   "resource_key": "gfxlab-multi085-source-private-spv-iadd-input-operand-shapes",
-  "status": "CI_QUEUED",
+  "status": "SUCCESS_12_OF_12_OPIADD_BOTH_OPERANDS_DYNAMIC_OPLOAD_32BIT_SCALAR_ORIGINAL_SOURCE_SPV_CPU_ONLY",
   "run_id": 42909279235,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42909279235",
-  "evidence_level": "PENDING_AUTHENTIC_SOURCE_TRANSLATED_SPV_CPU_SSA_INPUT_OPERAND_SYNTAX_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_INTEGER_OPERAND_SSA_OPCODE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "96ce5f0dacb90c4e4a25d185cb9857952113210e",
+  "tests_passed": 817,
+  "source_original_joint_pairs": 157,
+  "source_original_shader_stage_instances": 314,
+  "source_original_CB_stage_instances": 311,
+  "authenticated_dynamic_SPV_CB_index_loads": 427,
+  "OpIAdd_two_dynamic_operands_count": 12,
+  "OpIAdd_left_input_source_OpLoad_count": 12,
+  "OpIAdd_right_input_source_OpLoad_count": 12,
+  "OpIAdd_32bit_scalar_verified_count": 12,
+  "artifact_id": 13806970935,
+  "artifact_expires_utc": "2026-11-17T21:54:12Z",
+  "runner_source_purge_verified": true
 }
