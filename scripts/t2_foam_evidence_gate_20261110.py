@@ -76,6 +76,8 @@ def parse_aggregate_json(raw):
         parsed = json.loads(raw.decode("utf-8"),
                             object_pairs_hook=_unique_object_pairs,
                             parse_constant=_reject_nonfinite)
+    except UnicodeDecodeError as exc:
+        raise EvidenceError("invalid aggregate JSON encoding") from exc
     except ValueError as exc:
         # Python 3.11+ rejects enormous integer literals before sanitization.
         # Do not leak interpreter-dependent parse errors to callers.
