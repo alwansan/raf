@@ -1,0 +1,30 @@
+name: GFX-MULTI-031 auto logged Android ZIP offline parser regression / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-auto-log-zip-audit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi031-offline-zip-parse
+  cancel-in-progress: false
+jobs:
+  zip-parser-sourcefree:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Validate aggregate only multi-session ZIP parse and secure path
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/auto_log_zip_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI031_OWNER_ZIP_NO_RAW_PRIVATE_LOG_PUBLISHED=true
+          echo GFX_MULTI031_ORIGINAL_SHADER48_STILL_NOT_RESTORED=true
