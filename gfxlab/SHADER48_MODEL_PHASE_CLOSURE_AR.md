@@ -1,3 +1,5 @@
+> **Current correction — 11 Nov 2026:** GFX093 [CI42922411580](https://github.com/alwansan/raf/actions/runs/42922411580) SUCCESS authenticates previously omitted separate `m_ParameterBlobIndices` and `m_CommonParameters`. 381 entries are parameter records; they are not 381 unreferenced GL GPU programs. All1435 stage parameter links parse with exact record consumption. 3642 texture bindings and6562 CB bindings agree with actual original DXBC declarations;1852 property→t/s and3344 property→b/member-byte occurrences. Historical GFX054/source-binding-absence claims below are superseded. This advances G8 to source bridge PARTIAL PASS; engine/runtime payload,89 common-vs-variant CB size disagreements, render-state/rig/PC/device pixels remain OPEN. GFX094 is a compile/link-only diagnostic APK, with all offline-unavailable variants explicitly recorded; it does not close this phase.
+
 # GFX-LAB | قرار إغلاق مرحلة موديلات/ميش/ماتيريال/تكستشر/Shader48
 **10 نوفمبر 2026 — مراجعة اختبار المالك المرفوع GFX-MULTI-026 — قرار: NOT CLOSED**
 

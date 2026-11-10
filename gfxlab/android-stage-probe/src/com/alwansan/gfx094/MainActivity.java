@@ -47,7 +47,7 @@ public final class MainActivity extends Activity {
              "vendor",GLES31.glGetString(GLES31.GL_VENDOR),"GL_version",GLES31.glGetString(GLES31.GL_VERSION),
              "GLSL_version",GLES31.glGetString(GLES31.GL_SHADING_LANGUAGE_VERSION),
              "originalShaderRestored",false,"phase_closed",false,"model_rendered",false,"PC_pixel_parity",false,
-             "controlled_stage_block_and_sampler_names",true,"started_ms",System.currentTimeMillis());
+             "offline_counts",manifest.getJSONObject("offline_counts"),"controlled_stage_block_and_sampler_names",true,"started_ms",System.currentTimeMillis());
           int[] val=new int[1];GLES31.glGetIntegerv(GLES31.GL_MAX_UNIFORM_BUFFER_BINDINGS,val,0);summary.put("max_ubo_bindings",val[0]);
           GLES31.glGetIntegerv(GLES31.GL_MAX_VERTEX_UNIFORM_BLOCKS,val,0);summary.put("max_VS_ubo_blocks",val[0]);
           GLES31.glGetIntegerv(GLES31.GL_MAX_FRAGMENT_UNIFORM_BLOCKS,val,0);summary.put("max_FS_ubo_blocks",val[0]);
@@ -62,7 +62,10 @@ public final class MainActivity extends Activity {
           JSONArray pairs=manifest.getJSONArray("pairs");
           if(count>=pairs.length()){finishProbe();return;}
           JSONObject pair=pairs.getJSONObject(count);String id=pair.getString("id");
-          int vs=compile(id,"vert",GLES31.GL_VERTEX_SHADER),fs=compile(id,"frag",GLES31.GL_FRAGMENT_SHADER);
+          int vs=pair.optBoolean("vertex_available",false)?compile(id,"vert",GLES31.GL_VERTEX_SHADER):0;
+          int fs=pair.optBoolean("fragment_available",false)?compile(id,"frag",GLES31.GL_FRAGMENT_SHADER):0;
+          if(!pair.optBoolean("vertex_available",false)||!pair.optBoolean("fragment_available",false))
+            add(obj("event","CPU_translation_unavailable","pair",id,"reason",pair.optJSONObject("CPU_translation_errors")));
           boolean ok=false;int program=0;
           if(vs!=0&&fs!=0){
             program=GLES31.glCreateProgram();GLES31.glAttachShader(program,vs);GLES31.glAttachShader(program,fs);GLES31.glLinkProgram(program);
