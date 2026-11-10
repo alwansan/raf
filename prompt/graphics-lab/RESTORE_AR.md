@@ -182,3 +182,18 @@ The first attempt [CI42743969290](https://github.com/alwansan/raf/actions/runs/4
 Identify seven nonidentity second Color slots by exact shader property-name semantics without publishing original names/values; separately census shared Material21 / Texture2D identities across M00–M05. Do not infer emissive GPU behavior or convert Metallic sRGB to Linear without a controlled device/PC reference. Do not create an agent or game APK.
 
 **Latest authoritative GFX session:** `memory/sessions/20261110-GFX-chat-float-wrap-color-25.md`; GFX-MULTI-024 CI42745536309 SUCCESS; next GFX-MULTI-025. Always verify HEAD and CI before edits.
+
+## GFX-MULTI-025 — exact source secondary color and shared identity proof (2026-11-10)
+
+[CI42746455458](https://github.com/alwansan/raf/actions/runs/42746455458) **COMPLETED SUCCESS**, **146 unit tests**, source ZIP2 SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. Source-private six selected models, seven Material21 Renderer slots and 21 original Texture2D links:
+- Material alias groups: 5 single-reference groups and 1 double-reference group, **6 distinct original Material21 objects**; one material shared across models.
+- Texture alias groups: 15 single-reference groups + 3 double-reference groups, **18 distinct original Texture2D objects**; three shared across models, **zero cross-role alias groups** (no reuse between BaseColor/Normal/Metallic roles).
+- Source 14 saved Color slots match 14/14 Shader48 property names: seven known Base Tint white RGBA (RGB nonzero) and seven **`_EmissionColor` named property candidates with RGB exactly black and alpha exactly one**. Thus the seven nonidentity Color entries from GFX024 are *black emissive colors*, not failed diffuse tint. No GPU emissive-rendering equivalence has been proven.
+- Only anonymous count histograms and safe allowlisted property categories published; no source name beyond public allowlist, private PPtrs, original vectors, IDs, shaders or textures exposed.
+- Safe artifact [13730829715](https://github.com/alwansan/raf/actions/runs/42746455458/artifacts/13730829715), expires 2026-11-17T03:00:31Z UTC. All private source files purged (`GFX_MULTI025_ALL_PRIVATE_SOURCE_PURGED=true`).
+- `originalShaderRestored=false`; source Material→DX11 t/s/CB offsets unknown; `android_gpu_pixels_verified=false`, `phase_closed=false`. No APK, no game assets in public Git, no changes to T1–T5 branches or main/zip2.
+
+### GFX-MULTI-026 next
+Audit seven original Shader48 Pass render-state declarations and original Materials' render queue/keywords/instancing; map what is explicitly present in original source vs missing or undecodable, using source-only bounded coverage. Do not invent Cull/Blend/ZTest/ZWrite/ColorMask states or declare original shader parity before Android GPU/PC reference.
+
+Latest durable session: `memory/sessions/20261110-GFX-chat-secondary-color-alias-26.md`, CI42746455458 SUCCESS (146 tests); check latest branch HEAD before edits. Next GFX-MULTI-026 source Pass render-state audit; no Shader48 Android parity.
