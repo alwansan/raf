@@ -6,6 +6,7 @@ Any control flow, unknown opcode or multiple producers is UNKNOWN.
 """
 from __future__ import annotations
 
+import re
 from typing import Sequence
 
 _ALLOWED = {"nop", "castclass"}
@@ -29,6 +30,9 @@ def classify_rhs(opcodes: Sequence[str], *, call_returns_value: bool = False) ->
     if any(not isinstance(op, str) for op in opcodes):
         return "UNKNOWN"
     ops = [op.lower().strip() for op in opcodes]
+    # Only the four operand-free CIL short forms have unambiguous categories.
+    # Do not fold ldloc.s/ldarg.s (operand supplied separately) or ldloca.
+    ops = [re.sub(r"^(ldloc|ldarg)\.[0-3]$", r"\1", op) for op in ops]
     if any(op.startswith(_BRANCH_PREFIXES) or op in
            {"switch", "ret", "throw", "stfld", "stsfld", "stloc", "pop"}
            for op in ops):
