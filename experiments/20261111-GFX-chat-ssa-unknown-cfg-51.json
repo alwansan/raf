@@ -28,13 +28,24 @@
     "always-run private source and SPIR-V purge"
   ],
   "resource_key": "gfxlab-multi078-original-private-spv-cfg",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_47_OF_47_CFG_BLOCK_DOMINATES_12_TERMINAL_OTHER_CPU_ONLY",
   "run_id": 42902805887,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42902805887",
   "resumed_from": "20261110-GFX-chat-spv-store-value-producer-50",
   "base_sha": "dcf6a4a4fc39e8d8a6eb51816a20d33fe0c31a97",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_AND_TRANSLATED_SPIRV_CPU_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_AND_SPIRV_CPU_CFG_BLOCK_DOMINANCE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "192f5d848051524ede70a04d1fae7020e8c71923",
+  "tests_passed": 632,
+  "authentic_original_source_pairs": 157,
+  "authenticated_spv_index_CB_loads": 427,
+  "CFG_prior_function_store_block_dominates_count": 47,
+  "CFG_prior_function_store_block_not_dominates_count": 0,
+  "CFG_prior_function_store_block_unknown_count": 0,
+  "unknown_store_value_terminal_other_count": 12,
+  "artifact_id": 13803881242,
+  "artifact_expires_utc": "2026-11-17T21:13:49Z",
+  "private_purge_verified": true
 }
