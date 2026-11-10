@@ -1,0 +1,92 @@
+name: GFX-MULTI-037 linked original Shader48 DXBC alternative reflection chunk census
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi-linked-dxbc-debug-chunks.yml'
+      - 'gfxlab/tools/multi_shader_linked_dxbc_debug_chunks.py'
+      - 'gfxlab/tests/test_multi_shader_linked_dxbc_debug_chunks.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi037-linked-dxbc-debug
+  cancel-in-progress: false
+jobs:
+  linked-authentic-dxbc-source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Verify bounded DXBC parser and source-free regression without external assets
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_linked_dxbc_debug_chunks.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect all original linked Shader48 DXBC programs privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_linked_dxbc_debug_chunks \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi037-private" \
+            --out gfxlab-multi037-safe-dxbc-reflection-chunk-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi037-safe-dxbc-reflection-chunk-counts.json"))
+          s=d["source_linked_program_counts"]
+          c=d["public_safe_dxbc_chunk_type_counts"]
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader_compiled_platform"]=="kShaderCompPlatformD3D11"
+          assert d["source_shader48_subshaders"]==2 and d["source_shader48_passes"]==7
+          assert d["original_shader48_declared_property_count"]==27
+          assert s["stage_link_rows"]==1435
+          assert s["exact_matched_vs_fs_variant_pairs"]==524
+          assert s["unique_dx11_stage_programs"]==1275
+          assert s["vertex_unique_programs"]+s["fragment_unique_programs"]==1275
+          assert c["SHDR"]+c["SHEX"]>=1275
+          assert s["programs_with_rdef_chunk"]==c["RDEF"]
+          assert not d["debug_chunk_property_name_to_original_gpu_resource_register_mapping_verified"]
+          assert not d["source_original_material_t_s_cb_register_offsets_verified"]
+          assert not d["actual_android_original_shader48_compilation_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["pc_and_android_pixel_parity_verified"]
+          assert not d["source_private_DXBC_hlsl_property_names_identifiers_or_chunk_bytes_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI037_ALL_ORIGINAL_DXBC_CONTAINERS_COVERED=true")
+          print("GFX_MULTI037_NO_RESOURCE_BINDING_OR_ANDROID_SHADER_CLAIM=true")
+          PY
+      - name: Upload safe public DXBC chunk category counts only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi037-safe-linked-dxbc-chunk-evidence
+          path: gfxlab-multi037-safe-dxbc-reflection-chunk-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2, decoded DXBC, Shader48 and intermediate buffers
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi037-private"
+          echo GFX_MULTI037_SOURCE_AND_DXBC_PRIVATE_DATA_PURGED=true
