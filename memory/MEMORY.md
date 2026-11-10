@@ -111,3 +111,7 @@ GFX-MULTI-008 [CI42727777657](https://github.com/alwansan/raf/actions/runs/42727
 
 ## GFX-MULTI-011 exact DXBC pair CPU translation (2026-11-10)
 [CI42731898965](https://github.com/alwansan/raf/actions/runs/42731898965) SUCCESS with 65 tests. One genuine original Shader48 Pass 0 VS+FS pair with identical original keyword and hardware bucket was privately extracted; both original DXBC containers translated by vkd3d-compiler to Vulkan1.1 SPIRV and passed spirv-val. All seven Passes have >=1 exact original source stage pair (total 524 pairs across passes). This is **CPU feasibility, not shader restoration on Unity Android or PC pixel equivalence**. GFX-MULTI-012 now tests SPIRV stage interface and GLSL ES offline conversion. Session 20261110-GFX-chat-shader-gles-stage-io-12.
+
+
+## GFX-MULTI-012 original shader GLSL ES310 offline proof (2026-11-10)
+[CI42732370025](https://github.com/alwansan/raf/actions/runs/42732370025) SUCCESS with 69 tests. Exact original single DXBC VS+FS pair both Vulkan1.1 SPIRV validated and SPIRV-Cross GLSL ES 310 sources offline syntax compiled with glslangValidator. Reflect safe stage IO: seven VS outputs and seven FS inputs, all seven locations/types equal; 0 missing/type differences. Resources: fragment 7 UBO/7 separate images/6 separate samplers; vertex 5 UBO. Original Shader48 runtime on Android FALSE. GFX-MULTI-013 evaluates one exact pair for all 7 Passes; see 20261110-GFX-chat-all-seven-pass-gles-13.

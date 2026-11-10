@@ -1,0 +1,75 @@
+name: GFX-MULTI-013 all seven original Shader48 passes GLES offline / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-all-seven-offline.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi013-original-seven-source
+  cancel-in-progress: false
+jobs:
+  all-source-passes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Pure source and fail-closed tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_all_seven_offline.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install CPU-only SPIRV and GLSL ES compilers
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Test all original seven pass representative pairs privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_all_seven_offline --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi013-private" --out gfxlab-multi013-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi013-safe-summary.json"))
+          assert d["source_passes"]==7 and d["source_subshaders"]==2
+          assert all(row["source_exact_variant_pairs"]>0 for row in d["pass_results"])
+          assert not d["compiled_android_gles3_device"]
+          assert not d["original_shader_restored"] and not d["stage_closed"]
+          print("GFX_MULTI013_SOURCE_SEVEN_PASSES_DIAGNOSED_NOT_GPU_PROOF")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi013-safe-all-seven-offline
+          path: gfxlab-multi013-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Delete private original shader binary and generated code
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi013-private"
+          echo GFX_MULTI013_ALL_PRIVATE_CODE_PURGED=true

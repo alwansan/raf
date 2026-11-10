@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-shader-gles-stage-io-12",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-gles-stage-io-12.md",
+  "latest_session": "20261110-GFX-chat-all-seven-pass-gles-13",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-all-seven-pass-gles-13.md",
   "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Inspect GFX-MULTI-012 VS/FS SPIRV stage IO and GLSL ES310 offline compiler report; actual shader on Android and PC image parity still required.",
+  "next_experiment": "Analyze GFX-MULTI-013 all-seven source Shader48 CPU pass translation. If all source passes compile offline, next test original material binding CB/texture/sampler semantics before a constrained phone GLES3 proof.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -364,8 +364,21 @@
   },
   "latest_shader_gles_stage_probe": {
     "experiment": "GFX-MULTI-012",
+    "run": 42732370025,
+    "status": "SUCCESS_ONE_ORIGINAL_PAIR_GL_ES310_OFFLINE_BOTH_STAGES",
+    "vs_fs_same_location_and_type": 7,
+    "vs_outputs": 7,
+    "fs_inputs": 7,
+    "source_fragment_ubos": 7,
+    "source_fragment_separate_images": 7,
+    "source_fragment_separate_samplers": 6,
+    "original_shader_restored": false,
+    "device_tested": false
+  },
+  "latest_all_seven_original_shader_passes": {
+    "experiment": "GFX-MULTI-013",
     "status": "CI_PENDING",
-    "source_only": true,
+    "one_variant_per_pass": true,
     "original_shader_restored": false
   }
 }

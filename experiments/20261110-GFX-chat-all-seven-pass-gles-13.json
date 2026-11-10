@@ -1,0 +1,16 @@
+{
+  "session_id": "20261110-GFX-chat-all-seven-pass-gles-13",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-013",
+  "issue_id": "RENDER-002",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "previous_run": 42732370025,
+  "question": "Does the proven DX11-to-SPIRV-to-GLSL ES310 CPU path work on at least one exact original variant of every one of the seven Shader48 passes?",
+  "controls": [
+    "one actual keyword/tier matched VS/FS pair per pass",
+    "private shader bytes only",
+    "report all failures, don't synthesize passes",
+    "Android shader flag false"
+  ],
+  "status": "CI_PENDING"
+}

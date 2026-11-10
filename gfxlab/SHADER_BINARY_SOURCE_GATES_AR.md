@@ -14,3 +14,7 @@ Choose exactly matched original stage variant pair within one Pass and same orig
 
 ## GFX-MULTI-011 confirmation + next
 [CI42731898965](https://github.com/alwansan/raf/actions/runs/42731898965): successful original DXBC VS/FS (same original keyword/hardware player tier) private vkd3d Vulkan1.1 SPIRV translation+validation for 2/2 stages. 524 exact matched stage pairs among 7 original passes (80,156,32,80,40,120,16), not 524 distinct shader programs necessarily. No private source leaked, no APK. GFX-MULTI-012 adds private SPIRV-Cross reflect/output-input location/type and GLSL ES 310 syntax gate. Original shader still open pending actual compiled Unity2021 Android GLES3, resource semantics, PC parity, owner acceptance.
+
+
+## GFX-MULTI-012: actual source stage IO / offline GLSL ES
+[CI42732370025](https://github.com/alwansan/raf/actions/runs/42732370025) proved one authentic source Shader48 VS and FS pair translates and compiles offline as GLSL ES310 (69 tests). SPIRV reflect 7 VS output locations match 7 FS input locations with equal types; 0 difference. Fragment resources 7 UBO+7 separate images+6 separate samplers; vertex 5 UBO. This does not prove original register/CB/sampler mappings, interpolation semantics or Adreno runtime. GFX-MULTI-013 extends to all seven original passes, one source-authenticated pair each. Do not call phase CLOSED from offline GLSL alone.
