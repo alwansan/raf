@@ -20,8 +20,46 @@
     "24 source pair translations",
     "safe aggregate artifact and original purge"
   ],
-  "status": "CI_PENDING",
-  "run_urls": [],
+  "status": "SUCCESS_DISJOINT_SOURCE_PRIVATE_BATCH_72_96_STRICT_24_OF_24_SPV",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42863853554"
+  ],
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42863853554,
+    "unit_tests": 417,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_source_exact_VS_FS_pairs_classified": 524,
+    "unique_compiled_original_stage_programs": 936,
+    "global_bts_CB_declaration_profile_classes": 110,
+    "pass_scoped_bts_CB_declaration_profile_classes": 132,
+    "global_DXBC_t_s_sample_use_classes": 58,
+    "pass_scoped_DXBC_t_s_sample_use_classes": 80,
+    "pass_scoped_joint_classes": 157,
+    "private_selected_start_inclusive": 72,
+    "private_selected_end_exclusive": 96,
+    "current_both_stage_SPIRV_vulkan11_validated_original_source_pairs": 24,
+    "current_source_stages_vulkan11_SPV_val_passed": 48,
+    "current_source_stages_source_t_s_sample_multiset_SPV_matched": 48,
+    "current_source_stages_original_b_source_CB_real_global_and_reflected_UBO_vec4_array_validated": 48,
+    "current_source_CB_supported_static_vec4_ranges_loaded_in_SPV": 725,
+    "current_source_CB_static_vec4_ranges_unmatched": 0,
+    "current_source_CB_dynamic_extended_operands_unresolved": 251,
+    "current_source_pairs_strict_failed": 0,
+    "previous_CI_source_batches": [
+      42857815446,
+      42859754233,
+      42861618032
+    ],
+    "cumulative_strict_CPU_validated_joint_class_representatives": 96,
+    "source_joint_classes_not_yet_CPU_SPV_validated": 61,
+    "all_original_524_variants_full_shader_semantics_proven": false,
+    "original_Material_property_t_s_b_CB_member_semantics_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "source_private_purged": true,
+    "safe_artifact_id": 13786102979,
+    "artifact_expiry_utc": "2026-11-17T17:21:04Z"
+  }
 }
