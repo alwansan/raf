@@ -53,6 +53,30 @@ def sanitize(payload):
     }
 
 
+def _unique_object_pairs(pairs):
+    """Reject duplicate keys at every depth before constructing a dict."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise EvidenceError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def _reject_nonfinite(_value):
+    """Python json.loads otherwise accepts NaN and Infinity extensions."""
+    raise EvidenceError("non-finite JSON number")
+
+
+def parse_aggregate_json(raw):
+    """Strict JSON parsing before the existing allowlist-based sanitizer."""
+    if type(raw) is not bytes or len(raw) > MAX_BYTES:
+        raise EvidenceError("invalid aggregate JSON size or type")
+    return sanitize(json.loads(raw.decode("utf-8"),
+                               object_pairs_hook=_unique_object_pairs,
+                               parse_constant=_reject_nonfinite))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", help="local aggregate JSON file, never raw game log")
@@ -62,8 +86,7 @@ def main():
             raw = stream.read(MAX_BYTES + 1)
         if len(raw) > MAX_BYTES:
             raise EvidenceError("aggregate report exceeds size limit")
-        payload = json.loads(raw.decode("utf-8"))
-        result = sanitize(payload)
+        result = parse_aggregate_json(raw)
     except (OSError, UnicodeError, json.JSONDecodeError, EvidenceError) as exc:
         print("REJECTED: " + type(exc).__name__, file=sys.stderr)
         return 2
