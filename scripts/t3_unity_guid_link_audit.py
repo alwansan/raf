@@ -42,6 +42,7 @@ def inspect(root):
     refs = Counter()
     files = 0
     unresolved_by_extension = Counter()
+    unresolved_identity_by_extension = Counter()
     for path in root.rglob("*"):
         if path.suffix.lower() not in EXTENSIONS or path.is_symlink() or not path.is_file():
             continue
@@ -63,6 +64,9 @@ def inspect(root):
             else:
                 refs["unresolved_in_supplied_tree"] += 1
                 unresolved_by_extension[path.suffix.lower()] += 1
+                # A digest permits cross-file triage without publishing source GUIDs.
+                digest = hashlib.sha256(guid.encode("ascii")).hexdigest()[:16]
+                unresolved_identity_by_extension[(path.suffix.lower(), digest)] += 1
     return {
         "status": "STATIC_PARTIAL_TREE_ONLY",
         "meta_files_indexed": scanned_meta,
@@ -73,6 +77,10 @@ def inspect(root):
         "duplicate_guid_groups": sum(v > 1 for v in duplicates.values()),
         "reference_counts": dict(sorted(refs.items())),
         "unresolved_by_source_extension": dict(sorted(unresolved_by_extension.items())),
+        "unresolved_hashed_identity_by_source_extension": [
+            {"source_extension": ext, "guid_sha256_prefix16": digest, "references": count}
+            for (ext, digest), count in sorted(unresolved_identity_by_extension.items())
+        ],
         "limitations": "External packages, built-in resources, binary assets, symlinks and omitted source trees are not checked; skipped oversized files make size-limited coverage incomplete; no device or shader compilation proof."
     }
 
