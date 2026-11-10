@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-spv-index-memory-writer-47",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-index-memory-writer-47.md",
-  "status": "GFX_MULTI_074_VERIFIED_SUCCESS_545_TESTS_427_REAL_SPV_INDEX_OPLOAD_427_POINTER_PROVENANCE_UNKNOWN_GFX054_MATERIAL_CB_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-spv-pointer-origin-48",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-pointer-origin-48.md",
+  "status": "GFX_MULTI_075_SUCCESS_561_TESTS_427_SPV_INDEX_FUNC_INBOUNDS_LITERAL_POINTERS_NO_SAME_POINTER_ID_STORE_GFX054_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-075: safely census actual OpLoad index pointer definition OpVariable / OpAccessChain / OpCopyObject, pointer chain to Function/Private/other storage and same-block store patterns for original-b-authenticated Shader48 SPV 427 dynamic CB index roots. No DXBC temp→SPV SSA or GPU parity claims.",
+  "next_experiment": "GFX-MULTI-076 normalize source-private Function root + literal InBoundsAccessChain path for SPV index OpLoad and OpStore, anonymous same/cross-block predecessor syntactic counts. Do not equate with actual SSA value or CFG dominance; GFX054 Material CB bridge blocked and no Android shader parity.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2127,5 +2127,25 @@
     "artifact_id": 13800013460,
     "artifact_expires_utc": "2026-11-17T20:35:05Z",
     "runner_private_source_purged": true
+  },
+  "latest_gfx075": {
+    "origin": "chat",
+    "status": "SUCCESS_SOURCE_ORIGINAL_SPV_POINTER_SHAPE_ONLY",
+    "run": 42898149143,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42898149143",
+    "run_sha": "20cf4b53b6a257b2b21940957b332a59652f27c5",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 561,
+    "source_original_joint_pairs": 157,
+    "source_cb_stage_instances": 311,
+    "source_to_spv_b_offset_shape_multiset_matches": 427,
+    "spv_real_index_oploads": 427,
+    "spv_index_pointer_definition_OpInBoundsAccessChain": 427,
+    "spv_index_root_storage_Function": 427,
+    "spv_index_pointer_path_literal": 427,
+    "spv_prior_exact_pointer_SSA_ID_Store_candidate": 0,
+    "private_source_purge": true,
+    "artifact_id": 13802620347,
+    "original_shader_restored": false
   }
 }
