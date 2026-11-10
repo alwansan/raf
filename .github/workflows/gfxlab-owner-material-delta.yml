@@ -1,0 +1,86 @@
+name: GFX-OWNER-002 original Material glossiness and Metallic sRGB mismatch / source only
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-owner-material-delta.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-owner002-source-original-material-delta
+  cancel-in-progress: false
+jobs:
+  source-material-delta:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Strict independent source-free regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/original_material_import_delta.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Exact source Material and Texture2D delta counts
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.original_material_import_delta \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-owner002-private" \
+            --out "$RUNNER_TEMP/gfxlab-owner002-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gfxlab-owner002-safe.json").read_text())
+          assert d["experiment"]=="GFX-OWNER-002"
+          assert d["source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_models"]==6 and d["source_material_slots"]==7
+          assert d["source_texture_links"]==21
+          m=d["material_scalar_summary"]; t=d["source_vs_existing_unity_standard_importer_gamma_counts"]
+          assert m["material_renderer_slots"]==7
+          assert m["source_material_float_slot_count"]==112
+          assert m.get("glossiness_field_present",0)+m.get("glossiness_field_missing",0)==7
+          for r in ("basecolor","normal","metallic"):
+              assert t[r+"_links"]==7
+              assert t.get(r+"_source_srgb",0)+t.get(r+"_source_linear",0)+t.get(r+"_source_unknown",0)==7
+          assert d["real_shader48_glossiness_program_semantics_verified"] is False
+          assert d["original_shader48_material_to_register_link_verified"] is False
+          assert d["actual_android_source_material_shader48_pixels_verified"] is False
+          assert d["phase_closed"] is False
+          assert not d["raw_original_material_float_values_or_source_ids_exported"]
+          assert not d["raw_texture_or_shader_bytes_exported"]
+          print("GFX_OWNER002_SAFE_SOURCE_IMPORT_DELTA_VERIFIED=true")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-owner002-safe-material-import-delta
+          path: ${{ runner.temp }}/gfxlab-owner002-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Remove private original Material/Texture2D owner assets
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-owner002-private"
+          echo GFX_OWNER002_PRIVATE_SOURCE_PURGED=true
