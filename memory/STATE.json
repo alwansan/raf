@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-affine-fullframe-16",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-affine-fullframe-16.md",
-  "status": "GFX_MULTI_042_SUCCESS_OWNER_20212_INTERIOR_PIXEL_GLES_AFFINE_EMULATION_PROVEN_SYNTHETIC_ORIGINAL_SHADER48_G8_BLOCKED",
+  "latest_session": "20261110-GFX-chat-managed-shader-prop-17",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-managed-shader-prop-17.md",
+  "status": "GFX_MULTI_043_SUCCESS_10_SHADER48_MANAGED_LITERAL_PROPERTIES_2_BOUND_TEXTURE_LITERALS_NO_DX11_GPU_REGISTER_BRIDGE",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-043 only if new original Shader48 binding evidence: source-authentic Material property→DX11 t/s/CB & byte offsets, pass states, shader programs and rig/pixel parity. Future Android Vulkan path may preserve SPIR-V NoPerspective 13, but not tested on this device and requires authentic stage binding. Do not repeat solved 041 triangle experiment.",
+  "next_experiment": "GFX-MULTI-044 source-private genuine Assembly-CSharp CIL MethodDef ldstr to Unity Material/Shader API member owner calls count; never infer binding from same method alone; G8 authentic Shader48 property→t/s/b CB byte-offset mapping remains blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1222,5 +1222,25 @@
     "original_shader48_restored": false,
     "vulkan_GPU_runtime_tested": false,
     "device_GL_native_extension_tested": false
+  },
+  "latest_gfx043_managed_literal_evidence": {
+    "experiment": "GFX-MULTI-043",
+    "run": 42829505370,
+    "status": "SUCCESS",
+    "tests": 279,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "safe_report": "gfxlab/evidence/20261110_gfx043_managed_shader_property_safe_counts.json",
+    "artifact_id": 13770611847,
+    "manifest_file_count": 366,
+    "source_shader_sidecar_count": 0,
+    "original_shader48_property_count": 27,
+    "original_assembly_csharp_literal_entries": 4488,
+    "original_exact_property_literals": 10,
+    "original_exact_texture_property_literals": 3,
+    "original_bound_texture_property_literal_matches": 2,
+    "original_all_bound_texture_names": 3,
+    "original_resource_register_binding_proven": false,
+    "source_private_purge": true,
+    "original_shader48_restored": false
   }
 }
