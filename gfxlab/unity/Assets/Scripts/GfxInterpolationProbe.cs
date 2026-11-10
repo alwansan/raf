@@ -287,7 +287,8 @@ namespace RaftGraphicsLab
             exportStatus="Exporting all session logs and three GPU PNGs...";
             WriteReport("export_zip_requested");
             yield return null;
-            string publicPath,error;
+            string publicPath="";
+            string error="";
             bool ok=recorder!=null && recorder.ExportAll(out publicPath,out error);
             if(recorder==null)
             {
