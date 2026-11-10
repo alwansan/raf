@@ -21,6 +21,22 @@
     "No Unity Android shader restored claimed",
     "No gameplay APK or T-Team modifications"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_SOURCE_ONLY_RDEF_NEGATIVE",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42807637443"
+  ],
+  "result": {
+    "unit_tests_passed": 198,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "compiled_programs": 1656,
+    "referenced_unique": 1275,
+    "unused": 381,
+    "unused_empty": 112,
+    "unused_non_dx11_type": 269,
+    "unused_dx11_rdef_found": 0,
+    "source_to_material_bindings_verified": false,
+    "original_shader48_restored": false,
+    "private_purge": true
+  },
+  "next_step": "GFX-MULTI-033 classify safe non-DX11 unreferenced program family and authentic link feasibility, or acquire independent PC original Shader48 reference; never guess Material→register offset"
 }
