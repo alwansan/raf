@@ -25,19 +25,19 @@ def sample(interface, lhs="%90", rhs="%91"):
 class TestGFX087InputUniformSourceInterface(unittest.TestCase):
     def baseline(self,offset=True):
         return [
-          "%inputPtr = OpTypePointer Input %1",
-          "%uStruct = OpTypeStruct %1",
-          "%uniPtr = OpTypePointer Uniform %uStruct",
-          "OpDecorate %inputVar Location 2",
-          "OpDecorate %uniVar Binding 7",
-          "OpDecorate %uniVar DescriptorSet 0",
-          "OpDecorate %uStruct Block",
-          *(["OpMemberDecorate %uStruct 0 Offset 0"] if offset else []),
-          "%inputVar = OpVariable %inputPtr Input",
-          "%uniVar = OpVariable %uniPtr Uniform",
-          "%90 = OpLoad %1 %inputVar",
-          "%pU = OpAccessChain %ptr %uniVar %2",
-          "%91 = OpLoad %1 %pU",
+          "%101 = OpTypePointer Input %1",
+          "%102 = OpTypeStruct %1",
+          "%103 = OpTypePointer Uniform %102",
+          "OpDecorate %104 Location 2",
+          "OpDecorate %105 Binding 7",
+          "OpDecorate %105 DescriptorSet 0",
+          "OpDecorate %102 Block",
+          *(["OpMemberDecorate %102 0 Offset 0"] if offset else []),
+          "%104 = OpVariable %101 Input",
+          "%105 = OpVariable %103 Uniform",
+          "%90 = OpLoad %1 %104",
+          "%106 = OpAccessChain %ptr %105 %2",
+          "%91 = OpLoad %1 %106",
         ]
     def test_full_input_location_and_uniform_block_selected_member_offset(self):
         d=sample(self.baseline())
@@ -56,52 +56,52 @@ class TestGFX087InputUniformSourceInterface(unittest.TestCase):
 
     def test_input_builtin_conflict_never_counts_as_location_only(self):
         lines=self.baseline()
-        lines.insert(4,"OpDecorate %inputVar BuiltIn Position")
+        lines.insert(4,"OpDecorate %104 BuiltIn Position")
         d=sample(lines)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_lhs_input_location_kind_location_and_builtin_conflict"],1)
         self.assertEqual(d.get("SPV_iadd_OpLoad_interface_lhs_input_location_kind_location_only",0),0)
 
     def test_uniform_binding_without_set_is_not_binding_and_set(self):
-        lines=[x for x in self.baseline() if x!="OpDecorate %uniVar DescriptorSet 0"]
+        lines=[x for x in self.baseline() if x!="OpDecorate %105 DescriptorSet 0"]
         d=sample(lines)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_uniform_binding_kind_binding_only"],1)
 
     def test_dynamic_Uniform_index_rejects_selected_member_claim(self):
         lines=self.baseline()
-        lines=[x.replace("%pU = OpAccessChain %ptr %uniVar %2",
-                         "%pU = OpAccessChain %ptr %uniVar %80D") for x in lines]
-        lines.insert(-1,"%80D = OpIAdd %1 %3 %4")
+        lines=[x.replace("%106 = OpAccessChain %ptr %105 %2",
+                         "%106 = OpAccessChain %ptr %105 %109") for x in lines]
+        lines.insert(-1,"%109 = OpIAdd %1 %3 %4")
         d=sample(lines)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_ptr_index_shape_dynamic_indices"],1)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_uniform_member_offset_kind_unverified_dynamic_index"],1)
 
     def test_decorations_on_different_variable_not_applied(self):
         lines=[x for x in self.baseline()
-               if x not in ("OpDecorate %inputVar Location 2",
-                            "OpDecorate %uniVar Binding 7",
-                            "OpDecorate %uniVar DescriptorSet 0")]
-        lines.extend(["OpDecorate %otherInput Location 2",
-                      "OpDecorate %otherUni Binding 7",
-                      "OpDecorate %otherUni DescriptorSet 0"])
+               if x not in ("OpDecorate %104 Location 2",
+                            "OpDecorate %105 Binding 7",
+                            "OpDecorate %105 DescriptorSet 0")]
+        lines.extend(["OpDecorate %107 Location 2",
+                      "OpDecorate %108 Binding 7",
+                      "OpDecorate %108 DescriptorSet 0"])
         d=sample(lines)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_lhs_input_location_kind_no_direct_location_or_builtin"],1)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_uniform_binding_kind_no_direct_binding_or_set"],1)
 
     def test_untyped_pointers_do_not_prove_material_block(self):
-        d=sample(["%90 = OpLoad %1 %noPointer",
-                  "%91 = OpLoad %1 %unknownUniform"])
+        d=sample(["%90 = OpLoad %1 %110",
+                  "%91 = OpLoad %1 %111"])
         self.assertEqual(d["SPV_iadd_OpLoad_interface_lhs_ptr_index_shape_unresolved_pointer"],1)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_uniform_block_kind_unresolved"],1)
         self.assertFalse(d["SPV_interface_decorations_prove_original_DXBC_semantics"])
 
     def test_incomplete_OpTypePointer_is_fail_closed(self):
         d=sample([
-          "%uniVar = OpVariable %missingPTR Uniform",
-          "%inputVar = OpVariable %otherInputPtr Input",
-          "OpDecorate %inputVar Location 4",
-          "OpDecorate %uniVar Binding 9",
-          "%90 = OpLoad %1 %inputVar",
-          "%91 = OpLoad %1 %uniVar",
+          "%105 = OpVariable %112 Uniform",
+          "%104 = OpVariable %107Ptr Input",
+          "OpDecorate %104 Location 4",
+          "OpDecorate %105 Binding 9",
+          "%90 = OpLoad %1 %104",
+          "%91 = OpLoad %1 %105",
         ])
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_uniform_block_kind_unverified_pointer_type"],1)
         self.assertEqual(d["SPV_iadd_OpLoad_interface_rhs_uniform_member_offset_kind_unverified_member_path"],1)
@@ -109,7 +109,7 @@ class TestGFX087InputUniformSourceInterface(unittest.TestCase):
     def test_cannot_leak_exact_values_or_private_ssa_ids_to_counts(self):
         d=sample(self.baseline())
         txt=json.dumps(d)
-        for raw in ("%inputVar","%uniVar","%uStruct","%pU","%90","%91"):
+        for raw in ("%104","%105","%102","%106","%90","%91"):
             self.assertNotIn(raw,txt)
         self.assertFalse(d["originalShaderRestored"])
         self.assertFalse(d["phase_closed"])
