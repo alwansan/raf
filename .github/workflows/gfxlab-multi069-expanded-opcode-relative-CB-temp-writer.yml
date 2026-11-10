@@ -3,7 +3,7 @@ on:
   push:
     branches: [experiment/android-graphics-rootcause]
     paths:
-      - '.github/workflows/gfxlab-multi069-relative-CB-temp-writer-probe.yml'
+      - '.github/workflows/gfxlab-multi069-expanded-opcode-relative-CB-temp-writer.yml'
       - 'gfxlab/tools/multi_shader_original_cb_temp_writer069.py'
       - 'gfxlab/tests/test_multi_shader_original_cb_temp_writer069.py'
   workflow_dispatch:
