@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-affine-rootcause-15",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-affine-rootcause-15.md",
-  "status": "GFX_MULTI_041_SUCCESS_SIGNED_FOUR_MODE_AFFINE_ANDROID_PROBE_OWNER_ADRENO_TEST_PENDING_ORIGINAL_SHADER48_RESTORATION_BLOCKED",
+  "latest_session": "20261110-GFX-chat-affine-fullframe-16",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-affine-fullframe-16.md",
+  "status": "GFX_MULTI_042_SUCCESS_OWNER_20212_INTERIOR_PIXEL_GLES_AFFINE_EMULATION_PROVEN_SYNTHETIC_ORIGINAL_SHADER48_G8_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-042 analyze actual owner GFX041 GPU ZIP with gfxlab/tools/affine_reference_owner_zip_audit.py; if not uploaded, source-only independent original Material/CB binding evidence, and optional device GL extension query. No original Shader48 APK without G7–G12 proofs.",
+  "next_experiment": "GFX-MULTI-043 only if new original Shader48 binding evidence: source-authentic Material property→DX11 t/s/CB & byte offsets, pass states, shader programs and rig/pixel parity. Future Android Vulkan path may preserve SPIR-V NoPerspective 13, but not tested on this device and requires authentic stage binding. Do not repeat solved 041 triangle experiment.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1199,5 +1199,28 @@
     "source_free_apk_tests": 260,
     "source_free_zip_audit_tests": 266,
     "owner_new_four_mode_zip_received": false
+  },
+  "latest_affine_fullframe_proof": {
+    "experiment": "GFX-MULTI-042",
+    "owner_zip_sha256": "0f79ffd0420e379c270aaf266b083458146c9de0dc20df36824b3ab625bae173",
+    "owner_zip_kept_private": true,
+    "source_free_final_ci": 42826480472,
+    "source_free_python_tests": 272,
+    "safe_report": "gfxlab/evidence/20261110_gfx042_owner_affine_fullframe_safe_counts.json",
+    "portability_guide": "gfxlab/SHADER48_INTERPOLATION_GLES_VULKAN_PORTABILITY_AR.md",
+    "interior_pixels": 20212,
+    "flat_all_interior_blue": true,
+    "native_noperspective_png_exact_equals_linear": true,
+    "smooth_gpu_vs_analytic_perspective_error": 0.000981208,
+    "affine_gpu_vs_analytic_affine_error": 0.000983381,
+    "affine_gpu_vs_wrong_perspective_error": 0.143924693,
+    "session_events": 28,
+    "session_snapshots": 14,
+    "unity_errors": 0,
+    "unity_warnings": 0,
+    "dropped_events": 0,
+    "original_shader48_restored": false,
+    "vulkan_GPU_runtime_tested": false,
+    "device_GL_native_extension_tested": false
   }
 }
