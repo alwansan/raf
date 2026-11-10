@@ -21,6 +21,22 @@ class GuidAuditTests(unittest.TestCase):
             self.assertEqual(result["reference_counts"]["builtin_or_null"], 1)
             self.assertEqual(result["status"], "STATIC_PARTIAL_TREE_ONLY")
 
+    def test_guid_before_fileid_and_no_cross_block_pairing(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            a = "a" * 32
+            b = "b" * 32
+            (root / "shader.shader.meta").write_text("guid: " + a + "\\n")
+            (root / "sample.mat").write_text(
+                "m_Shader: {guid: " + a + ", type: 3, fileID: 4800000}\\n"
+                "m_Texture: {guid: " + b + ", fileID: 2800000, type: 3}\\n"
+                "m_OnlyGuid: {guid: " + b + "}\\n"
+                "m_OnlyFileID: {fileID: 2800000}\\n"
+            )
+            counts = inspect(root)["reference_counts"]
+            self.assertEqual(counts["resolved_in_supplied_tree"], 1)
+            self.assertEqual(counts["unresolved_in_supplied_tree"], 1)
+
     def test_duplicate_meta_guid(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
