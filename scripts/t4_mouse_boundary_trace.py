@@ -2,9 +2,9 @@
 """INPUT-005: conservative stage correlation for opt-in, sanitized mouse traces.
 
 Accepted line format:
- T4_MOUSE_STAGE frame=42 stage=android button=left
+ T4_MOUSE_STAGE session=runA frame=42 stage=android button=left
 Stages: android, unity, raft. Buttons: left, right, middle, wheel.
-The trace format is an instrumentation contract, not proof that the game emits it.
+The optional session token separates frame counters across app restarts; missing session\nuses the legacy bucket. The trace format is an instrumentation contract, not proof\nthat the game emits it.
 No raw device/game data is included. Absence never proves a missing callback.
 """
 import argparse
@@ -31,7 +31,7 @@ def analyze(lines):
         if not frame.isdecimal() or stage not in STAGES or button not in BUTTONS:
             malformed += 1
             continue
-        frames[int(frame)][button].add(stage)
+        frames[(fields.get("session", "legacy"), int(frame))][button].add(stage)
 
     result = {}
     for button in BUTTONS:
