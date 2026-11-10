@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-extended-literal-CB-loads-38",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-extended-literal-CB-loads-38.md",
-  "status": "GFX_MULTI_064_SUCCESS_763_CB_EXTENDED_LITERAL_SOURCE_OCCURRENCES_656_STAGE_LOCAL_RANGES_7_PASS_PILOT_35_OF_35_SPV_RANGE_LOADS_427_TRUE_RELATIVE_SOURCE_CB_OPERANDS_UNPROVEN_GFX054_BLOCKED",
+  "latest_session": "20261110-GFX-chat-spv-index-memory-writer-47",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-index-memory-writer-47.md",
+  "status": "GFX_MULTI_073_VERIFIED_SUCCESS_427_SOURCE_B_OFFSET_MULTISETS_MATCH_GFX_MULTI_074_SPV_LOCAL_STORE_CANDIDATES_CI_PENDING_GFX054_MATERIAL_REGISTER_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-065: authenticated source b/vec4 EXTENDED modifier type1 literal-range→real SPIR-V OpLoad across more original Shader48 Pass JOINT representatives (first [0,24) source class selection) with source-private SHA pinned ZIP2; 763 source operand occurrences 656 summed per-stage distinct ranges across 157 representatives (not globally unique), pilot only 43 occurrences and 35/35 range reads; never claim modifier semantics or 763 proven. Separate 427 genuine relative source index expressions GFX066. Original Material GFX054 and Adreno GPU proof remain blocked; originalShaderRestored=false.",
+  "next_experiment": "GFX-MULTI-074: inspect real CI for bounded same-basic-block SPV index OpLoad pointer preceding OpStore and SSA shift ancestor (not original DXBC temp/value mapping). After verified status, consider GFX-MULTI-075 original DXBC temp def-use and SPV SSA/CFG. Never claim Shader48 restored before actual Android GPU and PC parity.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2098,5 +2098,20 @@
     "source_private_purged": true,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx074": {
+    "experiment": "GFX-MULTI-074",
+    "origin": "chat",
+    "status": "CI_PENDING",
+    "resumed_from": "GFX073_CI42890357390_SUCCESS",
+    "base_sha": "27522f41c7bd68e7b4c564969f418472177dc6cb",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "session": "memory/sessions/20261110-GFX-chat-spv-index-memory-writer-47.md",
+    "workflow": ".github/workflows/gfxlab-multi074-SPV-dynamic-CB-index-memory-writer.yml",
+    "scope": "157 original source joint representative pairs, 314 translated SPV stages, 427 authenticated dynamic CB index loads verification required by CI",
+    "shader_restored": false,
+    "device_original_shader_pixels": false,
+    "original_temp_to_spv_index_ssa_value_proven": false,
+    "original_material_cb_semantic_mapping": false
   }
 }
