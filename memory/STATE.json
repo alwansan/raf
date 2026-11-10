@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-glsl-source-evidence-08",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-glsl-source-evidence-08.md",
-  "status": "GFX_MULTI_034_SUCCESS_6_UNLINKED_GLES_SOURCE_PROPERTY_TOKENS_NO_UNIFORM_LINK_OR_ANDROID_SHADER",
+  "latest_session": "20261110-GFX-chat-glsl-embedded-markers-09",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-glsl-embedded-markers-09.md",
+  "status": "GFX_MULTI_035_SUCCESS_SOURCE_BINARY_PROPERTY_TOKEN_EVIDENCE_NO_UNIFORM_GL_PROGRAM_ORIGINAL_SHADER_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-035 private bounded embedded GLSL markers in source GL-family 259 unlinked program code; if absent require independent original PC reflection / ShaderLab source before claimed original shader APK",
+  "next_experiment": "GFX-MULTI-036 original Unity GL-family compiled binary envelope / resource symbol table format audit; require independent source property-to-register/CB and exact Pass association before authentic Shader48 GLES APK",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1037,5 +1037,26 @@
     "glcore_uniform_matches": 0,
     "original_shader_restored": false,
     "private_source_purged": true
+  },
+  "latest_embedded_gl_byte_probe": {
+    "run": 42810629895,
+    "status": "SUCCESS",
+    "unit_tests": 216,
+    "artifact_id": 13762103464,
+    "original_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "gles_entries": 139,
+    "gles_programs_with_source_property_tokens": 82,
+    "gles_programs_with_bound_material_property_tokens": 76,
+    "glcore_entries": 120,
+    "glcore_programs_with_source_property_tokens": 61,
+    "glcore_programs_with_bound_material_property_tokens": 60,
+    "unique_original_shader_property_tokens": 14,
+    "unique_texture_property_tokens": 5,
+    "unique_bound_material_property_tokens": 3,
+    "glsl_markers": 0,
+    "uniform_name_bindings": 0,
+    "printable_run_32_plus": 0,
+    "original_shader_restored": false,
+    "source_purge_passed": true
   }
 }
