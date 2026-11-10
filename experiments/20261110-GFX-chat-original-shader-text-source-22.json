@@ -16,5 +16,25 @@
     "material TexEnv/Shader property name union counts"
   ],
   "resource_key": "gfxlab-multi021-shader-original-embedded-text-private",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_SOURCE_SHADER_MATERIAL_NAMES_PASS_BUT_EMBEDDED_SHADER_TEXT_ABSENT",
+  "verified_run": 42741817991,
+  "outcome": {
+    "unit_tests": 107,
+    "model_count": 6,
+    "material_slots": 7,
+    "shader_original_serialized_properties": 27,
+    "shader_original_texture_property_count": 9,
+    "material_stored_texenv_slots": 63,
+    "original_bound_texture_slots": 21,
+    "stored_texenv_property_names_declared_in_source_shader": 63,
+    "bound_texenv_property_names_declared_in_source_shader": 21,
+    "source_bound_basecolor_roles": 7,
+    "source_bound_normal_roles": 7,
+    "source_bound_metallic_roles": 7,
+    "original_embedded_script_field_present": false,
+    "original_embedded_script_bytes": 0,
+    "source_hlsl_program_markers": false,
+    "original_name_to_dx11_register_mapping_verified": false,
+    "original_android_shader_restored": false
+  }
 }

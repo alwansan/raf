@@ -94,3 +94,10 @@
 ## GFX-MULTI-021 جارٍ — تحقق Source Shader text بديل
 - `20261110-GFX-chat-original-shader-text-source-22`: فحص `Shader48.m_Script` الأصلي من ZIP2: هل يوجد أي كود أصلي CGPROGRAM/HLSLPROGRAM أو `register(t#)`؟ ومقارنة أسماء المواد المرتبطة مع 27 shader property (لا تُنشر الأسماء). CI pending.
 - **If missing**: source Text register binder BLOCKED؛ لا تحوّل أسماء shader property بالترتيب إلى t#/s#، واطلب أصل ShaderLab/PC reference ذا SHA مستقل إذا توفر؛ استمر بفحص ألوان/Normal/UV/Textures والـRig بشكل منفصل.
+
+
+## GFX-MULTI-021 — نتيجة إيجابية للـMaterial، سلبية للمصدر النصي
+- [CI42741817991](https://github.com/alwansan/raf/actions/runs/42741817991) SUCCESS 107 tests، من أصل ZIP2 SHA مثبت: Shader48 27 properties منها 9 Texture، **63/63 Material saved TexEnv keys** تطابق مصدر Shader properties، و21/21 actual bound names (7 albedo +7 normal +7 metallic). المصدر يحتوي 42 null slots أصلية، لا تُملأ بـdummy.
+- `m_Script` غائب في Shader48، 0 text bytes ولا CG/HLSL/register markers. GFX020 0/14 original parameter metadata وGFX015 14/14 representative DXBC بلا RDEF. إذن **Material property name→t#/s# register evidence BLOCKED in tested source fields**؛ رغم وجود 56/56 t/s→SPIRV map من GFX019.
+- **P0 GFX-MULTI-022**: ابحث في بقية source Shader48 variants غير الممثلة (524 matched stage pairs) عن استثناءات m_Parameters/RDEF أو مصدر ShaderLab مستقل أصلي وسليم identity. لا تدعي عدم وجوده عالمياً من 14 Stage فقط. إن غاب، اطلب reference PC أو shader source شرعي من المالك عند الحاجة؛ لا تستبدل الربط بتخمين ترتيب الصور.
+- **P1**: جهّز تجارب مستقلة لـNormal DXT5nm AG/Tangent وUV Scale/Offset وTexture sRGB/Metallic/Smoothness وCB packing/Pass State، ونموذج جديد خارج الستة؛ المياه/النار/الإضاءة منفصلة. لا تنشئ العامل العام حتى تعليمات المالك.

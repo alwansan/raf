@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-original-shader-text-source-22",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-original-shader-text-source-22.md",
-  "status": "GFX_MULTI_021_SOURCE_SHADER_SCRIPT_AND_MATERIAL_PROPERTY_EVIDENCE_CI_PENDING",
+  "status": "GFX_MULTI_021_ORIGINAL_MATERIAL_TEXTURE_SHADER_PROPERTY_NAMES_FULL_MATCH_SHADER_REGISTER_BRIDGE_SOURCE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-021 verify original Shader48 embedded m_Script/unstripped source availability and original shader property list match to 21 bound Material TexEnv names. If no text, no name->t# bridge; separate material/texture fidelity and alternative authoritative PC export.",
+  "next_experiment": "GFX-MULTI-022: sample/check additional genuine Shader48 stage variants (not only one pair per pass) for alternative RDEF/m_Parameters or corroborated same-export shader source. If all absent, keep material-name→t/s register as SOURCE_EVIDENCE_BLOCKED and do not guess mapping; plan controlled PC visual reference and isolate material texture/normal/tangent fidelity separately.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -504,7 +504,21 @@
   },
   "latest_original_shader_text_source_evidence": {
     "experiment": "GFX-MULTI-021",
-    "status": "CI_PENDING",
-    "original_shader_restored": false
-  }
+    "run": 42741817991,
+    "status": "SUCCESS_MATERIAL_NAMES_MATCH_SHADER_PROPS_NO_EMBEDDED_SHADER_TEXT",
+    "tests": 107,
+    "shader_properties": 27,
+    "shader_texture_properties": 9,
+    "material_texenv_stored": 63,
+    "material_bound_textures": 21,
+    "source_texenv_name_property_matched": 63,
+    "source_bound_names_property_matched": 21,
+    "source_bound_basecolor": 7,
+    "source_bound_normal": 7,
+    "source_bound_metallic": 7,
+    "original_shader_embedded_text_present": false,
+    "original_property_to_DX11_slot_mapping": false,
+    "original_android_shader_restored": false
+  },
+  "shader_material_binding_blocker_document": "gfxlab/SHADER48_MATERIAL_REGISTER_BRIDGE_BLOCKER_AR.md"
 }

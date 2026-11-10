@@ -123,3 +123,9 @@
 
 ## GFX-MULTI-021 — البحث عن مصدر Shader48 الأصلي المفقود
 جلسة `20261110-GFX-chat-original-shader-text-source-22`، origin=chat، resumed_from=`20261110-GFX-chat-original-material-texenv-21`، baseline `090993480abe7b4fc3f541b03357f71fa3fc1a77`. نفحص هل Shader48 الأصلي يحتفظ بـ`m_Script` حقيقي يتضمن CG/HLSL وregister syntax، ونقيس مطابقة أسماء TexEnv المرتبطة (21) لقائمة خصائص Shader48 الأصلية (27)، من دون نشر أي اسم أو نص شيدر. حتى وجود HLSL النصي لا يكفي لتأكيد property→t# mapping إلا إذا ثبت رابط صريح. workflow `gfxlab-multi-shader-text-evidence.yml`، CI pending. بعد التشغيل حدّث كل ملفات الاستعادة/المهام.
+
+
+## GFX-MULTI-021 آخر نتيجة مثبتة — أسماء الصور الأصلية صحيحة، النص الأصلي غائب
+[CI42741817991](https://github.com/alwansan/raf/actions/runs/42741817991) SUCCESS 107 اختبارات: Shader48 الأصلي عنده 27 properties (9 Texture properties). سبع Materials أصلية: **63/63 m_TexEnvs property names** موجودة في قائمة Shader48، و**21/21 bound Texture2D names** مطابقة: 7 BaseColor +7 Normal +7 Metallic. Shader48 المصدر **بلا m_Script field، 0 bytes**، ولا HLSL/CGPROGRAM أو register syntax text. مع 0/14 `m_Parameters` من GFX020 وغياب RDEF في 14/14 source pairs من GFX015، لا يوجد حتى الآن رابط موثّق `Material property name → original DX11 t/s register` من هذه الحقول. لا تستنتج عدم توفر المصدر في **جميع الـ524 variants**؛ هذه عينة ممثلة فقط. Original Shader48 Android/restored false.
+- آخر جلسة `memory/sessions/20261110-GFX-chat-original-shader-text-source-22.md`؛ دليل العائق `gfxlab/SHADER48_MATERIAL_REGISTER_BRIDGE_BLOCKER_AR.md`؛ خارطة المهام `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`.
+- التالي GFX-MULTI-022 عيّنات variants أخرى/مصادر same-export مستقلة للتحقق من RDEF/metadata بدل التخمين، وبعده PC pixel/CB/normal correctness بشكل منفصل. حدث ملفات الاستعادة بعد كل دورة.

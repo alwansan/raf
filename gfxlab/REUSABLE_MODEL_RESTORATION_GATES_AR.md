@@ -36,3 +36,7 @@ GFX-MULTI-019 [CI42739427552](https://github.com/alwansan/raf/actions/runs/42739
 
 ## GFX-MULTI-020 decisive property-to-register blocker
 [CI42740776655](https://github.com/alwansan/raf/actions/runs/42740776655) proved original six-model/seven-material sample has 63 material TextureEnv entries and 21 authentically bound textures; source Shader48 27 serialized properties and per-Pass NameIndices, but **0/14 selected compiled source program rows have `m_Parameters`**. No m_TextureParams Index/SamplerIndex ↔ property-name table available to establish true Shader48 Material→DX11 t/s binding. This is source metadata missing, not lost model colors. Before agent handoff either find same-ShA original shader source/auxiliary compile metadata or define separate PC reference/pixel proof; no guessing based on order, no Android shader parity claim.
+
+
+## GFX-MULTI-021: source Material properties are genuinely present
+[CI42741817991](https://github.com/alwansan/raf/actions/runs/42741817991) 107 tests: all 63 original material TexEnv property labels match original Shader48 27 serialized properties (9 texture-type), 21 bound (7 basecolor+7 normal+7 metallic), 42 source null. Shader48 typed object has no embedded m_Script text, no native HLSL source. Original compiled-stage rows for 14 representatives have no m_Parameters (GFX020), and DXBC variants RDEF absent in 14 representatives (GFX015), so independent property→original t/s bridge not proven. Treat visual parity and original shader recovery OPEN; check alternate source variants before concluding unavailable.
