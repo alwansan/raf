@@ -24,7 +24,68 @@
   ],
   "resource_key": "gfxlab-multi024-material-float-wrap-original-source-only",
   "workflow": ".github/workflows/gfxlab-multi-material-float-wrap.yml",
-  "status": "PREPARED_CI_PENDING",
+  "status": "SUCCESS_ORIGINAL_SOURCE_139_TESTS",
   "original_shader_restored": false,
-  "android_pixels_verified": false
+  "android_pixels_verified": false,
+  "runs": [
+    {
+      "id": 42745345599,
+      "status": "completed",
+      "conclusion": "failure",
+      "reason": "incorrect assumption 7 material slots implies 7 unique Material21 objects; private purge succeeded"
+    },
+    {
+      "id": 42745536309,
+      "status": "completed",
+      "conclusion": "success",
+      "tests": 139,
+      "source_purged": true
+    }
+  ],
+  "source_material_slots": 7,
+  "unique_original_materials": 6,
+  "texture_slots": 21,
+  "unique_original_textures": 18,
+  "scalar_shader_name_matches": {
+    "floats": 112,
+    "colors": 14,
+    "shader_properties": 27
+  },
+  "scalar_buckets": {
+    "float_zero": 33,
+    "float_one": 58,
+    "float_between_zero_one": 21,
+    "color_white_rgba": 7,
+    "color_nonidentity": 7
+  },
+  "original_texture_settings": {
+    "basecolor": {
+      "DXT1": 5,
+      "DXT5": 2,
+      "sRGB": 7
+    },
+    "normal": {
+      "DXT5": 7,
+      "Linear": 7
+    },
+    "metallic": {
+      "DXT5": 7,
+      "sRGB": 7
+    },
+    "all_roles": {
+      "U": "Repeat",
+      "V": "Repeat",
+      "W": "Repeat",
+      "filter": "Bilinear",
+      "aniso": 1,
+      "mip_bias": 0
+    }
+  },
+  "artifact": {
+    "id": 13730024662,
+    "url": "https://github.com/alwansan/raf/actions/runs/42745536309/artifacts/13730024662",
+    "expires_at_utc": "2026-11-17T02:51:51Z"
+  },
+  "next_step": "GFX-MULTI-025: inspect nonidentity secondary Color meaning and shared original Material/Texture identity groups, source-only.",
+  "phase_closed": false
 }
