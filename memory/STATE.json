@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-dxbc-input-signature-62",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-dxbc-input-signature-62.md",
-  "status": "GFX_MULTI_089_SUCCESS_854_TESTS_1562_STAGE_WIDE_SPV_INPUT_LOCATIONS_12_FLAT_AND_12_SOURCE_PS_CONSTANT_SEPARATELY_ONLY_PER_12_LINK_UNPROVEN",
+  "latest_session": "20261111-GFX-chat-per-input-DXBC-signature-63",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-per-input-DXBC-signature-63.md",
+  "status": "GFX_MULTI_090_SUCCESS_863_TESTS_12_ACTUAL_OPIADD_PS_CONSTANT_FLAT_CANDIDATES_ISGN_USER_PARTIAL_MASK_ORIGINAL_SSA_MATERIAL_CB_GPU_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-090: privately narrow GFX089 stage-wide signature/dcl/Flat vs constant facts to the specific 12 authenticated original Shader48 SPV OpIAdd LHS Input OpLoads from GFX088, compare declaration type, ISGN mask/type, SPV interpolation category PER INSTANCE with fail-closed missing/ambiguous signatures; do NOT assert numerical semantic equivalence, GFX054 Unity Material CB member bytes or Adreno GPU pixels.",
+  "next_experiment": "GFX-MULTI-091: source-private original ISGN partial-mask popcount vs translated SPV actual 12 OpIAdd Input pointee type vector width and Component decoration; per-input count-only equal/mismatch/unknown structural candidate, no semantic register or pixel parity claim. GFX054 Unity Material CB bytes, original DXBC temp SSA, Android GPU pixel parity BLOCKED.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2445,6 +2445,27 @@
     "per_12_OpIAdd_input_instance_semantics_proven": false,
     "safe_artifact_id": 13807124995,
     "source_private_cleanup_verified": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
+  },
+  "latest_gfx090": {
+    "experiment": "GFX-MULTI-090",
+    "status": "SUCCESS_SOURCE_PRIVATE_ACTUAL_INPUT_DECL_SIGNATURE_AND_INTERPOLATION_STRUCTURE_ONLY",
+    "run_id": 42915931750,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42915931750",
+    "run_sha": "089e2865d41fc719d99d3c171e15944becca16a9",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "tests_passed": 863,
+    "original_source_joint_pairs": 157,
+    "original_stages": 314,
+    "source_CB_stages": 311,
+    "authenticated_real_SPV_CB_dynamic_index_reads": 427,
+    "actual_OpIAdd_LHS_fragment_Pixel_dcl_input_ps_constant": 12,
+    "actual_OpIAdd_LHS_SPV_Flat": 12,
+    "actual_OpIAdd_LHS_original_ISGN_user_partial_component_mask": 12,
+    "per_input_numerical_component_and_pixel_parity_proven": false,
+    "artifact_id": 13809596105,
+    "source_private_purge_verified": true,
     "originalShaderRestored": false,
     "phase_closed": false
   }
