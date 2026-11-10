@@ -1,0 +1,42 @@
+{
+  "session_id": "20261110-GFX-chat-affine-fullframe-16",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-affine-rootcause-15",
+  "base_sha": "70b16e328cf27a69e6587ca88d0fceb1bcc414ff",
+  "experiment_key": "GFX-MULTI-042",
+  "issue_id": "RENDER-002",
+  "intent": "Independently verify original-free native GLES noperspective failure and smooth-only affine emulator across complete 256×256 GPU screenshots rather than three samples. Preserve owner privacy; no Raft Shader48 restored claim.",
+  "owner_source_zip_sha256": "0f79ffd0420e379c270aaf266b083458146c9de0dc20df36824b3ab625bae173",
+  "owner_source_private": true,
+  "owner_device": "Adreno 730 OpenGLES3",
+  "observed": {
+    "zip_crc_ok": true,
+    "events": 28,
+    "snapshots": 14,
+    "unity_errors": 0,
+    "unity_warnings": 0,
+    "messages_dropped": 0,
+    "linear_noperspective_png_identical": true,
+    "gpu_readback_all_four": true,
+    "final_status": "DIAGNOSTIC_NATIVE_QUALIFIER_COLLAPSED_TO_SMOOTH",
+    "three_point_linear_perspective_cpu_error": 0.00109142891597,
+    "three_point_affine_emulated_cpu_error": 0.00114199018571526,
+    "full_frame_inside_pixels_at_2pct_margin": 20212,
+    "full_frame_smooth_vs_cpu_perspective_mean_abs_rgb": 0.00098120794,
+    "full_frame_affine_vs_cpu_affine_mean_abs_rgb": 0.00098338119,
+    "full_frame_affine_vs_cpu_wrong_perspective_mean_abs_rgb": 0.14392469
+  },
+  "planned_tests": [
+    "Persist safe verified owner GFX041 aggregate report; no images/device identifiers/log text uploaded to GitHub",
+    "Implement PNG RGBA noninterlaced 256x256 standard-library decoder with CRC/filter fail closed and fullframe barycentric self-check",
+    "Run source-free synthetic regression CI comparing known smooth/affine CPU pixel references and swapped frame rejection",
+    "Verify owner all-frame evidence as independent of three-point in-game status and pass count math",
+    "Update RESTORE_AR, OPEN_WORK, MEMORY, STATE and phase closure, no original shader claim"
+  ],
+  "remaining_blockers": [
+    "G8 exact Shader48 Material property to t/s/CB and byte offsets",
+    "G7 G9 G10 G11 G12 authentic shader + render state + rig + PC pixel parity"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
