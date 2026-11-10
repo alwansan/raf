@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-material-delta-03",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-material-delta-03.md",
-  "status": "GFX_OWNER_PHONE_SIX_MODELS_VISUALLY_PASS_STANDARD_FALLBACK_SHADER48_ORIGINAL_NOT_CLOSED",
+  "latest_session": "20261110-GFX-chat-auto-logs-export-04",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-auto-logs-export-04.md",
+  "status": "GFX_MULTI_031_AUTOMATIC_LOGGING_ZIP_MEDIASTORE_IMPLEMENTED_ANDROID_APK_RETRY_BUILD",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "P0 source-authentic Shader48 runtime: resolve property-to-DX11 t/s/CB mapping (RDEF missing 1275/1275), 7-pass dynamic state names missing NameIndices matches, verify vs/fs source semantics and per variant. Use private temporary GLSLPROGRAM Unity2021.3 original stage compilation as diagnostic only if bindings safe; matched PC/Adreno GPU pixel comparison needed. No worker yet. All water/fire/PostFX separate.",
+  "next_experiment": "Complete GFX-MULTI-031 signed APK CI and verify Android Java MediaStore integration; owner tests EXPORTED ZIP destination and JSONL content once. Continue Shader48 original program/CB bindings and 7-pass states without false parity claims. Water/fire separately.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -917,5 +917,37 @@
     "private_source_purge_verified": true
   },
   "model_shader48_phase_closed": false,
-  "model_shader48_closure_plan_path": "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md"
+  "model_shader48_closure_plan_path": "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md",
+  "latest_gfx031_auto_logs": {
+    "experiment": "GFX-MULTI-031",
+    "apk_run": 42802005319,
+    "apk_run_status": "IN_PROGRESS_UNITY_BUILD",
+    "apk_workflow_head_sha": "e4498b71320f96d6df8a75ea090620ec88a9a8bd",
+    "old_failed_runs": [
+      42800909094,
+      42800994512,
+      42801247423
+    ],
+    "old_failure_root_causes": [
+      "source-free test outdated package and comment token",
+      "Unity2021 C# CompressionLevel type ambiguity"
+    ],
+    "source_free_zip_parser_run": 42801864098,
+    "source_free_zip_parser_status": "SUCCESS",
+    "package_name": "com.alwansan.raft.graphicslab.autologs",
+    "apk_filename": "GfxLab-Multi-Six-AutoLogs.apk",
+    "intended_public_path": "/storage/emulated/0/Download/Games/cl/test/g/",
+    "android_storage_api": "MediaStore.Downloads RELATIVE_PATH with IS_PENDING and post-write size/path verification",
+    "source_models": 6,
+    "source_texture_links": 21,
+    "automatic_recording_events": true,
+    "automatic_recording_state_json": true,
+    "unity_full_stack_message_capture": true,
+    "log_session_history_zip": true,
+    "owner_device_export_path_verified": false,
+    "signed_apk_verified": false,
+    "original_shader_restored": false,
+    "recovery_session_file": "memory/sessions/20261110-GFX-chat-auto-logs-export-04.md",
+    "owner_test_instructions": "gfxlab/ANDROID_AUTO_LOG_EXPORT_AR.md"
+  }
 }
