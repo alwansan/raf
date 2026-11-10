@@ -1,0 +1,25 @@
+{
+  "session_id": "20261110-GFX-chat-unused-program-platform-07",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-unreferenced-shader48-06",
+  "base_sha": "7e0e01c13bae9e331004a4e90efbce5233f5a9cb",
+  "experiment_key": "GFX-MULTI-033",
+  "issue_id": "RENDER-002",
+  "scope": "Original Shader48 269 unreferenced non-DX11 compiled entry platform/stage/container signatures and alternate authentic Pass-stage link census. Source-only, SHA-pinned, aggregate-only.",
+  "question": "Do unused non-DX11 compiled programs include original GLES/Vulkan payload candidates, and are any bound to the seven Shader48 passes through original alternate program fields?",
+  "hypothesis": "Most unused programs are likely obsolete/non-DX11 formats, and cannot be promoted to restored Android Shader48 absent an exact original pass/keyword/material binding.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42807637443",
+    "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md"
+  ],
+  "control": "No original binaries, shader text, property names, source IDs, PPtrs, caches, user screenshots or image data committed or artifacts; no guess about presence of Android GLSL from enum alone.",
+  "planned_tests": [
+    "Classify unused 269 entries by public shader platform family enum (bounded)",
+    "Count strictly recognizable SPIR-V / GLES GLSL / DXBC payload headers separately",
+    "Scan other authentic Pass program stage fields for exact index/type links",
+    "Source-free Python regressions and SHA-locked original ZIP2 CI purge"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
