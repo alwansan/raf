@@ -1,0 +1,19 @@
+{
+  "session_id": "20261110-GFX-chat-glsl-source-evidence-08",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-unused-program-platform-07",
+  "base_sha": "b43b9258dda3db785abcda7dbcf76606212960d0",
+  "experiment_key": "GFX-MULTI-034",
+  "issue_id": "RENDER-002",
+  "scope": "Source-private inspection of 139 GLES and 120 GLCore non-linked Shader48 compiled table entries as bounded UTF8 GLSL text; compare 27 original Shader48 property names/9 texture roles and original 21 Material TexEnv links strictly inside runner. Publish safe counts only.",
+  "source_sha": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "hypothesis": "UnityPy ShaderSubProgram exposes GLES/GLCore program code as UTF8; even if source property tokens appear, full stage-to-Pass/keyword/tier correspondence and original Shader48 material/CB semantics remain unproven.",
+  "planned_tests": [
+    "Bounded UTF8 strict decoding and comments-removed GLSL syntax markers",
+    "Count exact source property token and uniform-declaration overlaps without names",
+    "Separate GLES from GLCore and preserve original 7-Pass link negative gate",
+    "Run source-free contract unit suite + SHA-pinned source CI and purge"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
