@@ -1,0 +1,29 @@
+{
+  "session_id": "20261110-GFX-chat-dynamic-CB-source-shape-37",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-final-joint-class-144-157-36",
+  "base_sha": "8f56b4943d141b9bc379411771748f47a0965f3b",
+  "experiment_key": "GFX-MULTI-063",
+  "issue_id": "RENDER-002",
+  "resource_key": "Shader48-original-CB-dynamic-source-relative-operand-shape-and-authenticated-SPV-dynamic-pointer-OpLoad",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "What source DXBC relative/extended constant buffer operand representation categories constitute the 1190 unresolved uses across 157 representative original Shader48 pairs, and do real authenticated UBO SPIRV dynamic access-chain paths reach OpLoad in a seven-Pass diagnostic without pretending individual DXBC index expression parity?",
+  "hypothesis": "Independent source token taxonomy partitions the prior 1190 unknowns and compiler SPV shows some independently authentic dynamic UBO pointer-load paths while per-source operation equivalence remains unproven.",
+  "controls": [
+    "legacy covered nine DXBC arithmetic families source counts match new independent source-only taxonomy, exactly 1190 and 157 representatives",
+    "synthetic negative source CB dynamic b, vec relative, immediate32/64+relative, extended modifier, malformed / OOB",
+    "synthetic SPV dynamic OpAccessChain from original authenticated UBO global to actual OpLoad; no OpLoad, wrong member, undefined typed index, phi/select rejected",
+    "7 Pass diagnostic source VS/FS pairs, 14 stage Vulkan1.1 SPV validated with original b Uniform layout",
+    "count-only original safe artifact and complete private source purge"
+  ],
+  "planned_tests": [
+    "full source-free Python regression suite",
+    "source original SHA 524 exact variants/157 joint reps and 1190 unresolved CB operand taxonomy",
+    "seven independent real Pass pairs SPV authenticated dynamic CB pointer-load diagnostic",
+    "fail-closed accounting and safe counts-only publication"
+  ],
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

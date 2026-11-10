@@ -1,0 +1,111 @@
+name: GFX-MULTI-063 original Shader48 CB dynamic index taxonomy and source-private SPV loaded path diagnostic
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi063-source-dynamic-cb-taxonomy.yml'
+      - 'gfxlab/tools/multi_shader_original_dynamic_cb_taxonomy.py'
+      - 'gfxlab/tests/test_multi_shader_original_dynamic_cb_taxonomy.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi063-source-private-dynamic-CB-taxonomy
+  cancel-in-progress: false
+jobs:
+  source-dynamic-CB-classification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free synthetic negative and full regressions
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_dynamic_cb_taxonomy.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX063_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: CPU-only disassembly dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Original-source 157 representative dynamic CB shape census and 7 private SPV path probes
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_dynamic_cb_taxonomy \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab063-original-private" \
+            --out gfxlab-multi063-safe-original-CB-dynamic-shapes.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi063-safe-original-CB-dynamic-shapes.json"))
+          assert d["experiment"]=="GFX-MULTI-063"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_source_all_exact_pairs_rechecked"]==524
+          assert d["source_compiled_stage_programs_inspected"]==936
+          assert d["original_pass_joint_declaration_and_sampling_classes"]==157
+          assert d["source_class_representatives_classified"]==157
+          assert d["source_stage_instances_scanned"]==314
+          assert d["source_taxonomy_covered_opcode_family_count"]==9
+          t=d["source_taxonomy_safe_aggregate_counts"]
+          assert t["source_CB_unresolved_dynamic_or_extended_occurrences"]==1190
+          assert sum(t.get(k,0) for k in (
+             "dynamic_b_and_vec","dynamic_b_only","dynamic_vec_relative",
+             "dynamic_vec_immediate32_plus_relative",
+             "dynamic_vec_immediate64_plus_relative",
+             "extended_modifier_but_literal_indices",
+             "unsupported_CB_index_shape"))==1190
+          assert d["seven_original_pass_diagnostic_pair_count"]==7
+          assert d["seven_original_pass_diagnostic_stage_instances"]==14
+          spv=d["SPV_authenticated_dynamic_CB_load_diagnostic_safe_counts"]
+          assert spv["source_stage_instances_vulkan11_SPV_validated"]==14
+          assert spv["source_stage_instances_real_authenticated_CB_layout"]==14
+          assert d["prior_1190_unresolved_dynamic_source_operands_now_proven_per_operand_equivalent"]==0
+          for key in ("source_CB_dynamic_index_operand_to_SPV_expression_semantic_equivalence_proven",
+            "source_arithmetic_opcode_subset_is_complete_DXBC_CB_coverage",
+            "all_524_individual_variant_shader_programs_SPV_translated_in_this_experiment",
+            "Material_original_property_to_t_s_b_or_CB_member_mapping_proven",
+            "GPU_Adreno_original_shader_run_proven","originalShaderRestored",
+            "phase_closed","private_original_shader_register_CB_layout_source_or_SPV_exported"):
+              assert d[key] is False,key
+          print("GFX063_REAL_SOURCE_TAXONOMY_1190_CLASSIFIED_ZERO_DIRECT_DYNAMIC_INDEX_PARITY_CLAIMS=true")
+          PY
+      - name: Publish only aggregate counts, never source DXBC or SPIR-V
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi063-safe-original-CB-dynamic-shapes-157-representatives
+          path: gfxlab-multi063-safe-original-CB-dynamic-shapes.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all private original source and SPIRV intermediates
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab063-original-private"
+          echo GFX063_ALL_PRIVATE_ORIGINAL_SOURCE_AND_SPIRV_PURGED=true
