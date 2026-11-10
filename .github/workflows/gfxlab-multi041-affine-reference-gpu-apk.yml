@@ -1,0 +1,145 @@
+name: GFX-MULTI-041 GLES affine-reference GPU four-mode synthetic Android APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi041-interpolation-gpu-apk.yml'
+      - 'gfxlab/unity/Assets/Scripts/GfxAffineReferenceProbe.cs'
+      - 'gfxlab/unity/Assets/Editor/GfxAffineReferenceAndroidBuilder.cs'
+      - 'gfxlab/unity/Assets/Shaders/GfxLabInterpolation*.shader'
+      - 'gfxlab/tests/test_multi041_affine_reference.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi041-original-free-android-probe-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  signed-synthetic-interpolation-apk:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 105
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Checkout only GFX-LAB working branch (no ZIP2 original source)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run all pure Python and original-free Android test contracts
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          for f in Linear Flat NoPerspective AffineEmulated; do
+            test -s "gfxlab/unity/Assets/Shaders/GfxLabInterpolation${f}.shader"
+          done
+          test -s gfxlab/unity/Assets/Scripts/GfxAffineReferenceProbe.cs
+          test -s gfxlab/unity/Assets/Editor/GfxAffineReferenceAndroidBuilder.cs
+          test -s gfxlab/unity/Assets/Scripts/GfxDownloadsZipExporter.cs
+          test -s gfxlab/unity/Assets/Scripts/GfxSessionRecorder.cs
+          test -s gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          ! test -d gfxlab/unity/Assets/MultiModels
+          test -f gfxlab/unity/Assets/Packages.meta || true
+          echo GFX_MULTI041_ORIGINAL_FREE_STATIC_CONTRACTS_PASS=true
+      - name: Confirm Unity license credentials and free disk
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && {
+             [ -z "${UNITY_SERIAL:-}" ] ||
+             [ -z "${UNITY_EMAIL:-}" ] ||
+             [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo GFX_MULTI041_UNITY_LICENSE_MISSING
+            exit 1
+          fi
+          sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/system-images /opt/hostedtoolcache/CodeQL || true
+          df -h /
+          test "$(df -Pk . | awk 'NR==2{print $4}')" -gt 9437184
+          echo GFX_MULTI041_SOURCE_ONLY_ANDROID_BUILD_PREFLIGHT_PASS=true
+      - name: Unity 2021.3 GLES3 IL2CPP ARM64 compile and sign separate diagnostic APK
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: gfxlab/unity
+          unityVersion: 2021.3.45f2
+          targetPlatform: Android
+          buildMethod: RaftGraphicsLabEditor.GfxAffineReferenceAndroidBuilder.Build
+          buildName: GfxLab-Interpolation-GPUProbe
+          buildsPath: gfxlab-builds
+          versioning: None
+          androidVersionCode: 7
+          androidExportType: androidPackage
+          customParameters: -job-worker-count 2
+      - name: Verify actual Android signature package ABI and artifact integrity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          from zipfile import ZipFile
+          paths=list(Path(".").rglob("GfxLab-AffineReference-GPUProbe.apk"))
+          assert len(paths)==1, "GFX040_EXPECTED_EXACTLY_ONE_SIGNED_ANDROID_APK"
+          p=paths[0]
+          assert p.stat().st_size>1024*1024
+          with ZipFile(p) as z:
+              names=set(z.namelist())
+              assert {"AndroidManifest.xml","classes.dex","lib/arm64-v8a/libunity.so"} <= names
+              assert z.testzip() is None
+          safe={
+             "experiment":"GFX-MULTI-041",
+             "apk_sha256":hashlib.file_digest(p.open("rb"),"sha256").hexdigest(),
+             "apk_bytes":p.stat().st_size,
+             "expected_package":"com.alwansan.raft.graphicslab.affinereference",
+             "source_original_rafter_assets_in_apk":False,
+             "synthetic_test_modes":["Linear","Flat","NoPerspective","AffineEmulated"],
+             "user_device_gpu_parity_verified":False,
+             "original_shader48_restored":False,
+             "source_material_cb_mapping_verified":False,
+             "expected_log_export":"Download/Games/cl/test/g/",
+             "logs_exported_by_device_user":False,
+          }
+          Path(os.environ["RUNNER_TEMP"],"gfxlab-multi041-safe-apk-report.json").write_text(
+              json.dumps(safe,indent=2)+"\n")
+          print("GFX_MULTI041_SIGNED_SOURCEFREE_APK_SAFE "+json.dumps(safe,sort_keys=True))
+          PY
+          sdk="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer="$(find "$sdk/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -1)"
+          aapt="$(find "$sdk/build-tools" -mindepth 2 -maxdepth 2 -name aapt -type f | sort -V | tail -1)"
+          apk="$(find . -type f -name 'GfxLab-AffineReference-GPUProbe.apk' -print -quit)"
+          test -n "$signer" && test -x "$signer"
+          test -n "$aapt" && test -x "$aapt"
+          "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/gfx040-signer-private.txt"
+          "$aapt" dump badging "$apk" |
+            grep -F "name='com.alwansan.raft.graphicslab.affinereference'" > "$RUNNER_TEMP/gfx040-package-private.txt"
+          echo GFX_MULTI041_APK_SIGNATURE_AND_UNIQUE_PACKAGE_VERIFIED=true
+      - name: Deliver synthetic diagnostic APK + aggregate integrity proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi041-affine-reference-gpu-apk-${{ github.run_id }}
+          path: |
+            **/GfxLab-AffineReference-GPUProbe.apk
+            ${{ runner.temp }}/gfxlab-multi041-safe-apk-report.json
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
+      - name: Confirm no private ZIP2 or original shaders were fetched
+        if: always()
+        run: |
+          if [ -d source-zip2 ]; then
+            echo GFX_MULTI041_FORBIDDEN_ORIGINAL_ZIP2_ASSETS_PRESENT
+            sudo rm -rf source-zip2
+            exit 1
+          fi
+          sudo rm -rf gfxlab/unity/Assets/MultiModels || true
+          echo GFX_MULTI041_NO_ORIGINAL_SOURCE_ASSETS_ACCESSED=true
