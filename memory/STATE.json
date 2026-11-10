@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-owner-six-shader-gap-05",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-owner-six-shader-gap-05.md",
+  "latest_session": "20261110-GFX-chat-shader-variant-feasibility-06",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-variant-feasibility-06.md",
   "status": "GFX_MULTI_005_SOURCE_METADATA_SUCCESS_OWNER_STANDARD_FALLBACK_ACCEPTED_FULL_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-006: original Shader48 compiled stage/keyword/CB/sampler feasibility, pass-wise semantic equivalence; one original shader pass Android mini lab and PC reference, not Standard fallback.",
+  "next_experiment": "Inspect GFX-MULTI-006 safe pass-wise stage variant/platform counters, then design one-pass GLSL semantic parity and Android device proof",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -293,5 +293,11 @@
     "all_passes_have_program_mask": true,
     "original_shader_restored": false,
     "compiled_android_program_verified": false
+  },
+  "latest_shader_variant_feasibility": {
+    "experiment": "GFX-MULTI-006",
+    "status": "CI_PENDING",
+    "source_only": true,
+    "full_original_shader_restored": false
   }
 }

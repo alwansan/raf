@@ -1,0 +1,11 @@
+{
+  "session_id": "20261110-GFX-chat-shader-variant-feasibility-06",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-006",
+  "question": "Do seven original Shader48 passes contain compiled stage variant metadata and platform blob metadata?",
+  "reference_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "control": "No shader program bytes/labels/IDs exported, malformed subprogram fails, Android equivalence always false",
+  "scope": "SOURCE_ONLY",
+  "status": "CI_PENDING"
+}
