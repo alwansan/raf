@@ -1,0 +1,37 @@
+{
+  "session_id": "20261110-GFX-chat-cb-access-shape-25",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-cb-dcl-spv-byte-sizes-24",
+  "base_sha": "a14d3c8186755760fb70e5fcb59aa39f2a06c67d",
+  "experiment_key": "GFX-MULTI-051",
+  "issue_id": "RENDER-002",
+  "resource_key": "gfxlab-source-private-partial-DXBC-CB-use-SPV-UBO-access-shape",
+  "question": "What part of original Shader48 DXBC Constant Buffer vector index uses can be decoded from bounded known ALU opcodes, and how many SPIR-V UBO access chains reflect candidate numeric source bindings?",
+  "hypothesis": "Independent partial DXBC original operand decoding and actual SPIRV access-chain shape may reveal useful conservative candidate indices without inventing CB semantic mappings",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42843665847",
+    "https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/D3D12TokenizedProgramFormat.hpp",
+    "https://github.com/KhronosGroup/SPIRV-Cross/wiki/Reflection-API-user-guide"
+  ],
+  "control": [
+    "only known fixed-arity original opcode subset",
+    "explicit unsupported opcode counts",
+    "dynamic CB indexes unknown",
+    "CB declaration bounds",
+    "actual SPV numeric UBO global decorations",
+    "SPV literal index no inferred member byte offset",
+    "original semantic identity always false",
+    "private source purge"
+  ],
+  "planned_tests": [
+    "full synthetic source-free unittest suite",
+    "original ZIP2 pinned 14 DXBC stages",
+    "SPIRV1.1 validation and UBO reflection",
+    "private source use-candidate SPV access shape overlap",
+    "aggregate counts only; purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

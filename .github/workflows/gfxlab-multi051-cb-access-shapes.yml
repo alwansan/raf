@@ -1,0 +1,106 @@
+name: GFX-MULTI-051 bounded original Shader48 DXBC CB accesses vs SPIRV UBO access chain candidates
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi051-cb-access-shapes.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_access_shapes.py'
+      - 'gfxlab/tests/test_multi_shader_original_cb_access_shapes.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi051-original-source-private-CB-accesses
+  cancel-in-progress: false
+jobs:
+  source-private-cb-access-shapes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Run all original-source-free negative and synthetic tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_access_shapes.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX051_SOURCE_FREE_TESTS_SUCCESS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install source-private offline DXBC to SPIRV CPU tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Source-authentic original DXBC CB opcode subset and SPIRV access graph audit
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_access_shapes \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi051-private" \
+            --out gfxlab-multi051-safe-cb-access-shapes-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi051-safe-cb-access-shapes-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-051"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_source_passes"]==7
+          assert d["authentic_stages_compared"]==14
+          assert len(d["per_pass"])==7
+          assert d["fixed_arity_source_arithmetic_opcodes_covered"]==9
+          assert d["safe_aggregate"]["source_stages_compared"]==14
+          for p in d["per_pass"]:
+            for c in p["stage_safe_CB_access_shapes"].values():
+              assert not c["all_DXBC_CB_opcodes_covered"]
+              assert not c["original_CB_member_offset_identity_from_spirv_layout_proven"]
+              assert not c["original_Material_property_to_CB_member_offset_verified"]
+              assert not c["source_CB_slot_to_SpirV_UBO_identity_independently_authenticated"]
+              assert not c["spv_private_ubo_ids_or_vector_indices_exported"]
+          for k in ("full_original_DXBC_CB_instruction_access_coverage",
+             "original_CB_member_layout_independently_proven",
+             "SPIRV_numeric_descriptor_binding_is_independent_original_CB_identity",
+             "Material_original_property_to_b_register_mapping_proven",
+             "all_524_original_variants_covered",
+             "originalShaderRestored","real_Shader48_Android_GPU_verified",
+             "original_PC_to_Adreno_pixel_parity_proven",
+             "private_shader_bytes_b_registers_vector_indices_UBO_names_or_offsets_exported",
+             "phase_closed"):
+            assert d[k] is False,k
+          print("GFX051_CPU_ONLY_PARTIAL_CB_SOURCE_ACCESS_VS_CANDIDATE_SPIRV=true")
+          PY
+      - name: Upload only source-safe CB access counts, never original contents
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi051-safe-original-cb-access-shape-counts
+          path: gfxlab-multi051-safe-cb-access-shapes-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all genuine original Raft and private DXBC SPIRV binaries
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi051-private"
+          echo GFX051_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
