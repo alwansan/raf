@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
@@ -50,6 +51,7 @@ namespace RaftGraphicsLab
         public bool defaultHideHelpers = true;
         // Authored diagnostic-only material, never the original Shader48.
         public Material diagnosticChannelMaterial;
+        public GfxSessionRecorder sessionRecorder;
 
         private int modelIndex;
         private int materialMode = 3;
@@ -61,7 +63,11 @@ namespace RaftGraphicsLab
         private bool helpersVisible;
         private int loggedErrors;
         private string firstError="";
-        private const string Experiment="GFX-MULTI-026";
+        private const string Experiment="GFX-MULTI-031";
+        private bool exporting;
+        private string exportStatus="AUTO LOGS ON | Press EXPORT ZIP to save all sessions";
+        private float nextPeriodicSnapshot;
+
         private int diagnosticRole;   // BaseColor / Normal / Metallic
         private int diagnosticChannel; // RGB / R / G / B / A
         private int diagnosticSurface;
@@ -84,12 +90,12 @@ namespace RaftGraphicsLab
         private void StepDiagnosticRole()
         {
             diagnosticRole=(diagnosticRole+1)%3;
-            WriteReport();
+            WriteReport("role_changed");
         }
         private void StepDiagnosticChannel()
         {
             diagnosticChannel=(diagnosticChannel+1)%5;
-            WriteReport();
+            WriteReport("channel_changed");
         }
 
         [Serializable] private struct DeviceLog
@@ -110,6 +116,15 @@ namespace RaftGraphicsLab
             public bool originalShaderRestored;
             public bool originalAnimationRestored;
             public bool coloredPixelsAutomaticallyVerified;
+            public float cameraYaw;
+            public float cameraPitch;
+            public float cameraDistance;
+            public float frameTimeMs;
+            public float approximateFps;
+            public bool autoSpin;
+            public bool studioHelpersVisible;
+            public string autoLogSession;
+            public bool autoLogEnabled;
             public string diagnosticProbeStatus;
             public string diagnosticRole;
             public string diagnosticChannel;
@@ -132,7 +147,9 @@ namespace RaftGraphicsLab
         private void Start()
         {
             Application.logMessageReceived+=CaptureError;
+            if(sessionRecorder==null)sessionRecorder=GetComponent<GfxSessionRecorder>();
             helpersVisible=!defaultHideHelpers;
+            nextPeriodicSnapshot=Time.unscaledTime+15f;
             if(models==null || models.Length!=6)
             {
                 Debug.LogError("GFX_MULTI_STOP original_count_not_six");
@@ -147,7 +164,7 @@ namespace RaftGraphicsLab
                 }
                 models[i].root.SetActive(i==modelIndex);
             }
-            UpdateMaterials();
+            UpdateMaterials("session_started");
             if(studioFloor!=null)studioFloor.SetActive(helpersVisible);
             WriteReport();
             Debug.Log("GFX_MULTI_STARTED source_model_count=6 original_shaders_not_claimed=true");
@@ -169,7 +186,7 @@ namespace RaftGraphicsLab
                 default:return "SOURCE_PBR_STANDARD_APPROX";
             }
         }
-        private void UpdateMaterials()
+        private void UpdateMaterials(string reason="material_mode_changed")
         {
             var model=models[modelIndex];
             foreach(var slot in model.slots)
@@ -182,7 +199,7 @@ namespace RaftGraphicsLab
                     throw new InvalidOperationException("GFX_MULTI_MATERIAL_MODE_EMPTY");
                 slot.renderer.sharedMaterials=materials;
             }
-            WriteReport();
+            WriteReport(reason);
         }
         private void ChangeModel(int index)
         {
@@ -191,17 +208,22 @@ namespace RaftGraphicsLab
             for(int i=0;i<models.Length;i++)models[i].root.SetActive(i==modelIndex);
             yaw=-30f;pitch=15f;distance=3.5f;pinchPrevious=0;
             diagnosticSurface=0;
-            UpdateMaterials();
+            UpdateMaterials("model_selected");
             Debug.Log("GFX_MULTI_SELECTED model="+models[modelIndex].id+" shader_exact=false");
         }
         private void NextMaterial()
         {
             materialMode=(materialMode+1)%4;
-            UpdateMaterials();
+            UpdateMaterials("material_mode_changed");
         }
         private void Update()
         {
             if(viewingCamera==null || models==null || models.Length<1)return;
+            if(Time.unscaledTime>=nextPeriodicSnapshot)
+            {
+                nextPeriodicSnapshot=Time.unscaledTime+15f;
+                WriteReport("periodic_15s_state");
+            }
             if(spin)yaw+=Time.deltaTime*16f;
             if(Input.touchCount==1)
             {
@@ -255,6 +277,12 @@ namespace RaftGraphicsLab
                 originalShaderRestored=m.exactShaderRestored,
                 originalAnimationRestored=m.originalAnimationRestored,
                 coloredPixelsAutomaticallyVerified=false,
+                cameraYaw=yaw,cameraPitch=pitch,cameraDistance=distance,
+                frameTimeMs=Time.smoothDeltaTime*1000f,
+                approximateFps=Time.smoothDeltaTime>0.001f?1f/Time.smoothDeltaTime:0f,
+                autoSpin=spin,studioHelpersVisible=helpersVisible,
+                autoLogSession=sessionRecorder==null?"UNAVAILABLE":sessionRecorder.SessionId,
+                autoLogEnabled=sessionRecorder!=null&&string.IsNullOrEmpty(sessionRecorder.Failure),
                 diagnosticProbeStatus=ProbeStatus,
                 diagnosticRole=DiagnosticRoleNames[Mathf.Clamp(diagnosticRole,0,2)],
                 diagnosticChannel=DiagnosticChannelNames[Mathf.Clamp(diagnosticChannel,0,4)],
@@ -271,18 +299,38 @@ namespace RaftGraphicsLab
                 utc=DateTime.UtcNow.ToString("o")
             },true);
         }
-        private void WriteReport()
+        private void WriteReport(string reason="state_updated")
         {
             try
             {
+                string report=Report();
                 string d=Path.Combine(Application.persistentDataPath,"gfxlab");
                 Directory.CreateDirectory(d);
-                File.WriteAllText(Path.Combine(d,"multi-report.json"),Report());
+                File.WriteAllText(Path.Combine(d,"multi-report.json"),report);
+                if(sessionRecorder!=null)sessionRecorder.RecordState(reason,report);
             }
             catch(Exception e){Debug.LogWarning("GFX_MULTI_LOG_IO "+e.GetType().Name);}
         }
-        private void OnApplicationPause(bool paused){if(paused)WriteReport();}
-        private void OnApplicationQuit(){WriteReport();}
+        private IEnumerator ExportAllLogs()
+        {
+            if(exporting)yield break;
+            exporting=true;
+            exportStatus="Creating ZIP of ALL test sessions...";
+            WriteReport("export_all_zip_button");
+            yield return null;
+            string path,error;
+            bool ok=sessionRecorder!=null&&sessionRecorder.ExportAll(out path,out error);
+            if(sessionRecorder==null)
+            {
+                error="Session recorder is missing";
+                path="";
+            }
+            exportStatus=ok?"ZIP SAVED: "+path:"EXPORT FAILED: "+error;
+            if(sessionRecorder!=null)sessionRecorder.RecordExportResult(ok,exportStatus);
+            exporting=false;
+        }
+        private void OnApplicationPause(bool paused){if(paused)WriteReport("application_paused");}
+        private void OnApplicationQuit(){WriteReport("application_quit");}
         private void OnGUI()
         {
             if(models==null || models.Length==0)return;
@@ -310,14 +358,19 @@ namespace RaftGraphicsLab
             float buttonY=110f*scale;
             float buttonWidth=(Screen.width-40f)/5f;
             if(GUI.Button(new Rect(10,buttonY,buttonWidth,44*scale),"NEXT MATERIAL",button))NextMaterial();
-            if(GUI.Button(new Rect(13+buttonWidth,buttonY,buttonWidth,44*scale),spin?"STOP SPIN":"SPIN",button))spin=!spin;
+            if(GUI.Button(new Rect(13+buttonWidth,buttonY,buttonWidth,44*scale),spin?"STOP SPIN":"SPIN",button))
+            {spin=!spin;WriteReport("spin_toggled");}
             if(GUI.Button(new Rect(16+2*buttonWidth,buttonY,buttonWidth,44*scale),"RESET VIEW",button))
-            {yaw=-30;pitch=15;distance=3.5f;}
+            {yaw=-30;pitch=15;distance=3.5f;WriteReport("camera_reset");}
             if(GUI.Button(new Rect(19+3*buttonWidth,buttonY,buttonWidth,44*scale),
                 helpersVisible?"HIDE HELPERS":"SHOW HELPERS",button))
-            {helpersVisible=!helpersVisible;if(studioFloor!=null)studioFloor.SetActive(helpersVisible);}
-            if(GUI.Button(new Rect(22+4*buttonWidth,buttonY,buttonWidth,44*scale),"COPY LOG",button))
-            {WriteReport();GUIUtility.systemCopyBuffer=Report();}
+            {helpersVisible=!helpersVisible;if(studioFloor!=null)studioFloor.SetActive(helpersVisible);WriteReport("helpers_toggled");}
+            float lastX=22+4*buttonWidth;
+            if(GUI.Button(new Rect(lastX,buttonY,buttonWidth*.44f,44*scale),"COPY LOG",button))
+            {WriteReport("copy_log_clicked");GUIUtility.systemCopyBuffer=Report();}
+            if(GUI.Button(new Rect(lastX+buttonWidth*.46f,buttonY,buttonWidth*.54f,44*scale),
+                exporting?"EXPORTING...":"EXPORT ZIP",button) && !exporting)
+                StartCoroutine(ExportAllLogs());
 
             float rows=Screen.height-top-62*scale;
             GUI.Box(new Rect(8,top+10*scale,panelWidth,Mathf.Max(rows,260*scale)),"");
@@ -344,13 +397,13 @@ namespace RaftGraphicsLab
                 DiagnosticChannelNames[diagnosticChannel],button))StepDiagnosticChannel();
             if(GUI.Button(new Rect(px,py+78*scale,probeWidth*.48f,pbH),
                 diagnosticForceLinear?"FORCE LINEAR":"SOURCE COLORSPACE",button))
-            {diagnosticForceLinear=!diagnosticForceLinear;WriteReport();}
+            {diagnosticForceLinear=!diagnosticForceLinear;WriteReport("sampling_mode_changed");}
             var mm=models[modelIndex];
             if(GUI.Button(new Rect(px+probeWidth*.5f,py+78*scale,probeWidth*.48f,pbH),
                 "SURFACE "+(diagnosticSurface+1)+"/"+(mm.diagnosticSlots==null?0:mm.diagnosticSlots.Length),button))
             {
                 diagnosticSurface=(diagnosticSurface+1)%Mathf.Max(1,mm.diagnosticSlots==null?1:mm.diagnosticSlots.Length);
-                WriteReport();
+                WriteReport("material_surface_changed");
             }
             var tex=ActiveDiagnosticTexture();
             float previewH=Mathf.Max(30f,Mathf.Min(probeWidth*.82f,
@@ -368,8 +421,10 @@ namespace RaftGraphicsLab
             else GUI.Label(previewRect,"NO SOURCE TEXTURE / PROBE UNSUPPORTED",small);
             GUI.Label(new Rect(px,py+139*scale+previewH,probeWidth,24*scale),
                 "Not original Shader48. Copy log + screenshot.",small);
+            GUI.Label(new Rect(panelWidth+20,Screen.height-63*scale,Screen.width-panelWidth-35,27*scale),
+                exportStatus,small);
             GUI.Label(new Rect(panelWidth+20,Screen.height-39*scale,Screen.width-panelWidth-40,30*scale),
-                "Rotate: drag | Zoom: pinch | Standard modes + GPU channels | COPY LOG",small);
+                "AUTO LOG: every mode/channel/sampling/surface + full errors. EXPORT ZIP to Download/Games/cl/test/g/",small);
         }
     }
 }
