@@ -31,3 +31,7 @@ Android 10+ يستخدم `MediaStore.Downloads` عبر Java bridge مع `RELATIV
 
 ## مصادر تنفيذ التخزين
 Android Documentation: <https://developer.android.com/training/data-storage/shared/media> (التطبيق يملك الملفات التي ينشئها في MediaStore بدون إذن تخزين عام)، وUnity Java source plugin API <https://docs.unity.cn/cn/2021.3/Manual/android-java-and-kotlin-plugins-create.html>.
+
+
+## ملاحظة مهمة قبل تحديث APK في المستقبل
+قد تستخدم نسخ GitHub Actions مفاتيح توقيع Debug مختلفة. إذا طلب Android إزالة إصدار قديم لإعادة تثبيت إصدار جديد من **نفس الحزمة**، صدّر ZIP أولاً لأن إزالة التطبيق قد تمحو ملفات `persistentDataPath` وجلساته السابقة. عالجنا هذه الدورة بحزمة مستقلة `com.alwansan.raft.graphicslab.autologs` كي لا نستبدل `com.alwansan.raft.graphicslab.channels` السابقة. مصدر الـZIP الخارجي في Download يبقى بعد حذف التطبيق عادةً، لكن تحقق من وجوده قبل إلغاء التثبيت.
