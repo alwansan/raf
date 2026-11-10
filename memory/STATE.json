@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-unused-program-platform-07",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-unused-program-platform-07.md",
-  "status": "GFX_MULTI_033_SUCCESS_GLES_139_GLCORE_120_UNLINKED_ORIGINAL_SHADER_BLOCKED",
+  "latest_session": "20261110-GFX-chat-glsl-source-evidence-08",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-glsl-source-evidence-08.md",
+  "status": "GFX_MULTI_034_SUCCESS_6_UNLINKED_GLES_SOURCE_PROPERTY_TOKENS_NO_UNIFORM_LINK_OR_ANDROID_SHADER",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-034 privately inspect 139 GLES + 120 GLCore unlinked original compiled program code for bounded UTF8 GLSL and exact Shader48 Material property-name tokens; no source export/Android shader claim",
+  "next_experiment": "GFX-MULTI-035 private bounded embedded GLSL markers in source GL-family 259 unlinked program code; if absent require independent original PC reflection / ShaderLab source before claimed original shader APK",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1018,5 +1018,24 @@
     "leading_glsl_spirv_magic": 0,
     "private_source_purged": true,
     "original_shader48_restored": false
+  },
+  "latest_glsl_text_probe": {
+    "run": 42809913702,
+    "status": "SUCCESS",
+    "unit_tests": 210,
+    "artifact_id": 13760603589,
+    "gles_entries": 139,
+    "gles_strict_utf8": 54,
+    "gles_binary_or_invalid_utf8": 85,
+    "gles_programs_with_authored_property_tokens": 6,
+    "gles_distinct_source_property_tokens": 3,
+    "gles_bound_material_property_tokens": 1,
+    "gles_uniform_matches": 0,
+    "glcore_entries": 120,
+    "glcore_strict_utf8": 33,
+    "glcore_invalid_utf8": 87,
+    "glcore_uniform_matches": 0,
+    "original_shader_restored": false,
+    "private_source_purged": true
   }
 }
