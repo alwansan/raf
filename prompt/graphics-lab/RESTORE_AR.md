@@ -79,3 +79,7 @@
 - `session_id=20261110-GFX-chat-shdr-declaration-census-17`، origin=chat، resumed_from=`20261110-GFX-chat-rdef-seven-pass-source-16`، base_sha=`af00b6e067b07347e7937c0b90a27f51d4ba019d`.
 - `GFX-MULTI-016`: اقرأ تعليمات DXBC SHDR (وليس RDEF الغائب) في 14 stage، احصِ DCL_RESOURCE/CB/SAMPLER بمواصفة Microsoft وأبقي المصدر داخل runner. رابط CI بعد تشغيل workflow `gfxlab-multi-shdr-declaration-census.yml`.
 - بعد نجاح/فشل الاختبار حدّث الجلسة وRESTORE وBACKLOG وMEMORY وSTATE، ثم تحقق من commit؛ originalShaderRestored=false، ولا APK أو تعديل T-TEAM.
+
+
+## أحدث GFX-MULTI-016 — عدّ تعليمات موارد SHDR الأصلية
+[CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) SUCCESS، 85 اختبارًا، جرد source-only لبرامج Shader48 الأصلية الـ14 (ممثل VS+FS واحد لكل Pass): 66 `dcl_constant_buffer` و29 `dcl_resource` و27 `dcl_sampler` و0 Raw/Structured. كل البرامج اجتازت فحص طول token الأصلي. Pass0 VS5 CB وFS7 CB/7 Resource/6 Samplers؛ تتوافق مع أعداد SPIR-V، لكن **لا دليل على DX11 register index→SPIRV descriptor binding** بعد. آخر جلسة `memory/sessions/20261110-GFX-chat-shdr-declaration-census-17.md`، وخارطة المستقبل `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`، التالية GFX-MULTI-017.

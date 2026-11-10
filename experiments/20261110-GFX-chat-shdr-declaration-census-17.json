@@ -17,5 +17,16 @@
     "source-only safe report"
   ],
   "resource_key": "gfxlab-multi016-source-shdr-declarations",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_ALL_14_ORIGINAL_SHDR_DECLARATION_STREAMS",
+  "run": 42736745984,
+  "outcome": {
+    "unit_tests": 85,
+    "source_stage_records": 14,
+    "declaration_constant_buffers": 66,
+    "declaration_resources": 29,
+    "declaration_samplers": 27,
+    "raw_structured": 0,
+    "original_register_index_extracted": false,
+    "android_original_shader": false
+  }
 }

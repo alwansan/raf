@@ -13,3 +13,10 @@
 - run: GFX-MULTI-016 workflow triggered by push, status CI_PENDING.
 - next_step: inspect CI; if counts recover correctly, decode private original register indexes and compare to independent shader reflection, then Android GPU test only after mapping proves.
 - backlog: gfxlab/OPEN_WORK_AND_IDEAS_AR.md
+
+## CI final evidence GFX-MULTI-016
+- [CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) COMPLETED SUCCESS; **85** source-free tests. Original fixed ZIP2 Shader48 one representative exact VS/FS pair per 7 Passes (14 stage DXBC SHDR chunks) parsed with bounded Microsoft token instruction lengths, without RDEF.
+- Declarations across 14 original stages: **66 DCL_CONSTANT_BUFFER**, **29 DCL_RESOURCE (texture/resource)**, **27 DCL_SAMPLER**, **0 raw/structured**. Source register numbers not extracted.
+- Source Pass0: VS 5 constant buffers, FS 7 buffers/7 resources/6 samplers, which agrees with SPIR-V *counts* in earlier GFX-MULTI-012. All pass resource counts align with GFX-MULTI-013 safely reported per-pass reflection.
+- All 14 stage tokenized streams parsed, 0 custom blocks in representative choices. No original register slot ids/CB offsets, material binding mapping, GLES3 actual shader compile, GPU pixel validation, full 524 pair coverage. Original source purged by CI.
+- Next GFX-MULTI-017: decode original private DXBC operand index types/register slots for declarations, compare privately with SPIR-V binding sets, avoid asserting semantic equivalence from equal counts.

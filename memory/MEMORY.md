@@ -134,3 +134,7 @@ Latest session `20261110-GFX-chat-rdef-seven-pass-source-16`, resumed after pers
 
 ## Started GFX-MULTI-016 original stripped DX11 declaration inventory (2026-11-10)
 The original Shader48 per-pass selected DXBC stage chunks contain SHDR, not RDEF; [GFX-MULTI-015 CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) 14/14 RDEF absent. GFX-MULTI-016 uses authoritative Microsoft's D3D10_SB_OPCODE_TYPE enum (resource 88 / CB 89 / sampler 90 / raw 161 / structured 162) and fail-closed token stream parsing to count source declarations in all 14 stages. No original register indexes or shader bytes public; no CB/Material binding or Android GPU equivalence. Latest session 20261110-GFX-chat-shdr-declaration-census-17, backlog maintained.
+
+
+## GFX-MULTI-016 SHDR resource declarations SOURCE success (2026-11-10)
+[CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) SUCCESS 85 tests. Real Shader48 selected 14 source DXBC stage token streams: 66 original dcl_constant_buffer, 29 dcl_resource, 27 dcl_sampler, no raw/structured. Source Pass0 VS 5 CB, FS 7 CB/7 texture/6 sampler, agrees in counts with SPIRV reflect report. **Actual DX11 b/t/s register slots not yet decoded; equal counts do not prove matching material bindings, CB offsets or GPU parity.** Next GFX-MULTI-017 private register operand parsing. Session 20261110-GFX-chat-shdr-declaration-census-17, backlog persisted.

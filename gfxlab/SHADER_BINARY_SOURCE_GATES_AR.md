@@ -21,3 +21,7 @@ Choose exactly matched original stage variant pair within one Pass and same orig
 
 ## GFX-MULTI-013: 7/7 pass representative source translation proof
 [Run 42732808109](https://github.com/alwansan/raf/actions/runs/42732808109) SUCCESS: seven authentic Shader48 Passes each had one VS+FS source DXBC exact tier+keyword matched pair privately translated to valid Vulkan1.1 SPIR-V and valid offline GLSL ES 310 syntax. All reflected stage locations/types match; 0 missing fragment inputs or type mismatches. All 524 matched variants were NOT individually tested; resource bindings and authored render states are NOT verified; neither Unity Android compilation nor Adreno output is verified. Original Shader48 restored FALSE. All source bytes purged. **Do not claim full shader parity from 7/7 representative passes.**
+
+
+## GFX-MULTI-016 SHA original SHDR declaration inventory
+[CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) source-only SUCCESS, 85 tests. All 14 original DXBC stage token streams (one matched pair per 7 Passes) parsed with strict Microsoft token length validation. Source declarations total: 66 CB, 29 resources, 27 samplers; 0 raw/structured; Pass0 VS5 CB, FS7 CB/7 resource/6 sampler matches reflected SPIRV resource **counts only**. No source register ids/offsets, constant packing, sampler texture binding equivalence or original GPU proof. All private code purged.
