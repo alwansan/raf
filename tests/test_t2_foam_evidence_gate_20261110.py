@@ -57,7 +57,7 @@ class EvidenceGateTests(unittest.TestCase):
     def test_reject_malformed_utf8_via_public_parser(self):
         # Input can be under MAX_BYTES yet fail strict UTF-8 decoding.
         # The public API must fail closed using its own exception type.
-        for raw in (b"\\xff", b'{"schema":"\\xc0\\xaf"}', b"\\xed\\xa0\\x80"):
+        for raw in (b"\xff", b'{"schema":"\xc0\xaf"}', b"\xed\xa0\x80"):
             with self.subTest(raw=raw):
                 with self.assertRaises(EvidenceError):
                     parse_aggregate_json(raw)
