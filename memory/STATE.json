@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-unreferenced-shader48-06",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-unreferenced-shader48-06.md",
-  "status": "GFX_MULTI_032_SUCCESS_ALL_COMPILED_CENSUSED_ZERO_UNUSED_RDEF_ORIGINAL_SHADER_BLOCKED",
+  "latest_session": "20261110-GFX-chat-unused-program-platform-07",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-unused-program-platform-07.md",
+  "status": "GFX_MULTI_033_SUCCESS_GLES_139_GLCORE_120_UNLINKED_ORIGINAL_SHADER_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-033 original unreferenced non-DX11 program format and exact Pass link feasibility with private source only; if blocked require original PC shader reflection before full original Shader48 GLES APK",
+  "next_experiment": "GFX-MULTI-034 privately inspect 139 GLES + 120 GLCore unlinked original compiled program code for bounded UTF8 GLSL and exact Shader48 Material property-name tokens; no source export/Android shader claim",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -999,6 +999,23 @@
     "unused_non_dx11": 269,
     "unused_dx11_valid_dxbc": 0,
     "unused_rdef": 0,
+    "private_source_purged": true,
+    "original_shader48_restored": false
+  },
+  "latest_shader48_unused_platform_experiment": {
+    "run": 42808967835,
+    "status": "SUCCESS",
+    "source_tests": 205,
+    "artifact_id": 13762361127,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "gles_type": 139,
+    "glcore_type": 120,
+    "d3d9_type": 9,
+    "other_type": 1,
+    "vulkan_type": 0,
+    "alt_pass_program_fields": 28,
+    "alt_stage_rows": 0,
+    "leading_glsl_spirv_magic": 0,
     "private_source_purged": true,
     "original_shader48_restored": false
   }
