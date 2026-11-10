@@ -1,0 +1,36 @@
+{
+  "session_id": "20261110-GFX-chat-spv-pointer-origin-48",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-075",
+  "issue_id": "RENDER-002",
+  "status": "CI_RUNNING",
+  "resumed_from": "20261110-GFX-chat-spv-index-memory-writer-47",
+  "base_sha": "d58a4196d2cd9269baf2e195e14c1641eafcf2b6",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "run_id": 42897768619,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42897768619",
+  "question": "Can the 427 real original-b-authenticated SPV dynamic CB index OpLoad memory pointer definition/storage class and same-block exact pointer-ID OpStore syntax be classified without asserting source DXBC SSA or runtime alias parity?",
+  "hypothesis": "Some pointer roots are composite or storage-class-specific rather than direct Function OpVariable; anonymous actual SPV pointer categories may explain why the previous conservative direct-variable audit returned 427 unknown.",
+  "resource_key": "gfxlab-multi075-private-spv-index-pointer-origin",
+  "planned_tests": [
+    "All source-free Python tests",
+    "157 source-authenticated original pairs / 314 translated stages",
+    "427 loaded SPV CB dynamic index roots, pointer-origin anonymous histogram and exact-store candidate partition",
+    "No raw DXBC/SPV/source identifiers in artifact",
+    "runner source purge"
+  ],
+  "negative_controls": [
+    "wrong UBO",
+    "different pointer ID",
+    "block boundary",
+    "FunctionCall",
+    "Volatile",
+    "OpPhi",
+    "dynamic AccessChain",
+    "duplicate SSA"
+  ],
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_CPU",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
