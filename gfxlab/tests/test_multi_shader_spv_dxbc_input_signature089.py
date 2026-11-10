@@ -29,7 +29,7 @@ def check(shdr=None,dxbc=None,stage="vertex",lines=None):
 class TestGFX089OriginalInputSignature(unittest.TestCase):
     def test_original_plain_dcl_and_ISGN_user_semantic_mask(self):
         d=check()
-        self.assertEqual(d["source_Input_global_count"],1)
+        self.assertEqual(d["source_input_global_count"],1)
         self.assertEqual(d["source_Input_global_numeric_dcl_kind_dcl_plain"],1)
         self.assertEqual(d["source_Input_global_signature_signature_user_semantic_full_mask_ISGN"],1)
         self.assertEqual(d["source_Input_global_SPV_interpolation_class_no_interpolation_decoration"],1)
