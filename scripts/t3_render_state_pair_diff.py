@@ -23,9 +23,13 @@ def compare(original, exported):
                 raise ValueError("invalid_state_type")
             if isinstance(value, str) and (not value or len(value) > 64):
                 raise ValueError("invalid_state_value")
-    changed = sorted(k for k in FIELDS if original[k] != exported[k])
     unknown = sorted(k for k in FIELDS if original[k] is None or exported[k] is None)
-    return {"status": "INCONCLUSIVE" if unknown else ("MISMATCH" if changed else "MATCH"),
+    # A definite difference is actionable even when another field is unknown.
+    # Never report an unknown-versus-known value as a proven mismatch.
+    changed = sorted(k for k in FIELDS
+                     if k not in unknown and original[k] != exported[k])
+    status = "MISMATCH" if changed else ("INCONCLUSIVE" if unknown else "MATCH")
+    return {"status": status,
             "changed_fields": changed, "unknown_fields": unknown,
             "compared_fields": len(FIELDS) - len(unknown),
             "device_fix_proven": False, "source_authenticated_here": False}
