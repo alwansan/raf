@@ -1,0 +1,75 @@
+{
+  "schema": "gfxlab-owner-aggregate-v1",
+  "experiment": "GFX-OWNER-003",
+  "source_experiment": "GFX-MULTI-031",
+  "owner_archive_sha256": "154f2367d12bf5be258d89c0517af8fecbf0c562b11feb5c03e33226161bb26d",
+  "owner_previous_photo_archive_sha256": "adc08713ad67a987d0b30ac01b1b6e9004342b359aeb97ed1ee61866fecc4238",
+  "archive_crc_passed": true,
+  "session_count": 1,
+  "snapshot_count": 67,
+  "event_count": 77,
+  "unity_errors": 0,
+  "unity_warnings": 0,
+  "messages_dropped": 0,
+  "session_write_failures": 0,
+  "models": [
+    "M00",
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05"
+  ],
+  "per_model_snapshots": {
+    "M00": 28,
+    "M01": 6,
+    "M02": 9,
+    "M03": 6,
+    "M04": 6,
+    "M05": 12
+  },
+  "all_six_models_four_diagnostic_material_modes_covered": true,
+  "material_modes": {
+    "SOURCE_ALBEDO_STANDARD": 13,
+    "SOURCE_PBR_STANDARD_APPROX": 35,
+    "WHITE_LIT": 9,
+    "WHITE_UNLIT": 10
+  },
+  "diagnostic_role_snapshots": {
+    "BASECOLOR": 62,
+    "NORMAL": 3,
+    "METALLIC": 2
+  },
+  "diagnostic_channel_snapshots": {
+    "RGB": 63,
+    "R": 1,
+    "G": 1,
+    "B": 1,
+    "A": 1
+  },
+  "sample_mode_snapshots": {
+    "SOURCE_TEXTURE_COLORSPACE_IMPORT": 65,
+    "FORCE_LINEAR_IMPORT": 2
+  },
+  "material_surface_snapshots": {
+    "0": 67
+  },
+  "m03_surface_index_1_tested": false,
+  "separate_rgb_channels_tested_on_models": [
+    "M00"
+  ],
+  "forced_linear_sampling_tested_on_models": [
+    "M00"
+  ],
+  "package": "com.alwansan.raft.graphicslab.autologs",
+  "owner_export_to_requested_directory_proven_by_file_location": "NOT_INDEPENDENTLY_ATTESTED_FROM_ZIP_ONLY",
+  "device_log_evidence": "PASS_FOR_DIAGNOSTIC_MODES_ONLY",
+  "original_shader48_restored": false,
+  "original_animation_restored": false,
+  "authentic_shader48_gpu_pixels_verified": false,
+  "pc_vs_android_pixel_parity_verified": false,
+  "original_shader48_phase_closed": false,
+  "ci_dex_bridge_audit": "https://github.com/alwansan/raf/actions/runs/42806407666",
+  "ci_zip_parser_audit": "https://github.com/alwansan/raf/actions/runs/42806757535",
+  "original_private_logs_images_il2cpp_or_shader_cache_committed": false
+}
