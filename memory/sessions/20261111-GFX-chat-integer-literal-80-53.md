@@ -1,0 +1,11 @@
+# 20261111-GFX-chat-integer-literal-80-53 — GFX-MULTI-080
+
+- Role=GFX-LAB; origin=chat; writer only experiment/android-graphics-rootcause. Other branches/clients read-only.
+- resumed_from `20261111-GFX-chat-spv-unknown-families-52` and GFX079 verified [CI42903748363](https://github.com/alwansan/raf/actions/runs/42903748363), 652 Python tests, 12/12 previously unknown Store-value ancestry terminals are integer_math, 47/47 prior Store blocks dominate Load blocks at SPIR-V CFG block level only. Original source still not semantically equivalent to Android.
+- base_sha `b7eea0abee2463bbdca0fba1090cf6c525f8f3fa` before GFX080 code; source ZIP2 pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
+- Experiment: GFX-MULTI-080 / public core integer opcode of those 12 terminals, and private safe literal classification of 32-bit `OpIMul` (one literal power2, nonpower, zero, both constants, none, unverified type/origin), no publish of shader source, IDs or literal numeric offsets.
+- Tools: `gfxlab/tools/multi_shader_spv_integer_terminal_shapes080.py`; source-free tests `gfxlab/tests/test_multi_shader_spv_integer_terminal_shapes080.py`; 157-pair runner `gfxlab/tools/multi_shader_original_cb_index_private_multiset080.py`; workflow `.github/workflows/gfxlab-multi080-SPV-integer-terminal-multiplier-shape.yml`.
+- CI [42904629074](https://github.com/alwansan/raf/actions/runs/42904629074) in_progress on creation; result, counters, artifact, purge must be verified before closing.
+- Negative controls: non-power-of-2 and zero constants, two constants (not variable shift), no constant, wrong width, unknown variable origin, signed high-bit literal, OpIAdd vs OpIMul. Only SPIR-V arithmetic syntax; even `OpIMul` by a power2 could be equivalent to a shift modulo 2^32 for a given SPV value but original DXBC variable/SSA and runtime Store→Load reaching value not proven.
+- Original Shader48 Unity ShaderLab/Android Adreno GPU pixel parity and owner acceptance **unproven**; GFX054 Material original property↔CB byte mapping blocked; `originalShaderRestored=false`, `phase_closed=false`.
+- Next: inspect workflow outcome. If source-private data has remaining blockers, preserve them and adjust experiment in new numbered session; update RESTORE/MEMORY/roadmap/STATE on closure.
