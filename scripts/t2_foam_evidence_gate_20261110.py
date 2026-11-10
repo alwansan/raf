@@ -34,7 +34,7 @@ def sanitize(payload):
     sha = payload["source_commit"]
     if type(sha) is not str or len(sha) != 40 or any(c not in "0123456789abcdef" for c in sha):
         raise EvidenceError("invalid commit SHA")
-    if payload["status"] not in STATUSES:
+    if type(payload["status"]) is not str or payload["status"] not in STATUSES:
         raise EvidenceError("invalid status")
     counts = payload["counts"]
     if type(counts) is not dict or set(counts) != set(COUNTERS):
