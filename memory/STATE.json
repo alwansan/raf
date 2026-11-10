@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-spv-index-memory-writer-47",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-index-memory-writer-47.md",
-  "status": "GFX_MULTI_074_CODE_COMMITTED_NO_ACTIONS_RUN_VISIBLE_AS_OF_2026_11_10T20_27_12Z_GFX073_VERIFIED_SUCCESS_GFX054_BRIDGE_BLOCKED",
+  "status": "GFX_MULTI_074_VERIFIED_SUCCESS_545_TESTS_427_REAL_SPV_INDEX_OPLOAD_427_POINTER_PROVENANCE_UNKNOWN_GFX054_MATERIAL_CB_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-074: inspect real CI for bounded same-basic-block SPV index OpLoad pointer preceding OpStore and SSA shift ancestor (not original DXBC temp/value mapping). After verified status, consider GFX-MULTI-075 original DXBC temp def-use and SPV SSA/CFG. Never claim Shader48 restored before actual Android GPU and PC parity.",
+  "next_experiment": "GFX-MULTI-075: safely census actual OpLoad index pointer definition OpVariable / OpAccessChain / OpCopyObject, pointer chain to Function/Private/other storage and same-block store patterns for original-b-authenticated Shader48 SPV 427 dynamic CB index roots. No DXBC temp→SPV SSA or GPU parity claims.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2102,7 +2102,7 @@
   "latest_gfx074": {
     "experiment": "GFX-MULTI-074",
     "origin": "chat",
-    "status": "NO_RUN_VISIBLE_AS_OF_2026-11-10T20:27:12Z",
+    "status": "SUCCESS_SOURCE_SPV_CPU_ONLY_POINTER_PROVENANCE_UNRESOLVED",
     "resumed_from": "GFX073_CI42890357390_SUCCESS",
     "base_sha": "27522f41c7bd68e7b4c564969f418472177dc6cb",
     "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -2113,7 +2113,19 @@
     "device_original_shader_pixels": false,
     "original_temp_to_spv_index_ssa_value_proven": false,
     "original_material_cb_semantic_mapping": false,
-    "run_id": null,
-    "trigger_verified": false
+    "run_id": 42896574210,
+    "trigger_verified": true,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42896574210",
+    "run_sha": "c1346441bfafe7d4a63f5254eb6bf28e884baf88",
+    "source_free_tests": 545,
+    "source_original_joint_pairs": 157,
+    "source_stage_instances": 314,
+    "source_cb_stage_instances": 311,
+    "source_to_spv_b_offset_shape_multiset_matches": 427,
+    "spv_actual_index_opload_count": 427,
+    "spv_unknown_pointer_origin_count": 427,
+    "artifact_id": 13800013460,
+    "artifact_expires_utc": "2026-11-17T20:35:05Z",
+    "runner_private_source_purged": true
   }
 }
