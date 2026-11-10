@@ -6,7 +6,7 @@ The public report emits only counts, coverage and fail-closed proof flags.
 """
 from __future__ import annotations
 import argparse,json
-from collections import Counter
+from collections import Counter,defaultdict
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -60,6 +60,19 @@ def analyze(path):
         sums=[x for x in entries if x.filename.startswith("sessions/") and x.filename.endswith("/summary.json")]
         if not snaps or len(snaps)!=len(logs) or len(snaps)!=len(sums):
             raise ValueError("AUTO_ZIP_SESSION_FILE_SET_INVALID")
+        def session_ids(infos,basename):
+            out=set()
+            for info in infos:
+                parts=info.filename.split("/")
+                if len(parts)!=3 or not parts[1] or parts[2]!=basename:
+                    raise ValueError("AUTO_ZIP_SESSION_FILE_NAME_INVALID")
+                if parts[1] in out:
+                    raise ValueError("AUTO_ZIP_DUPLICATE_SESSION_ENTRY")
+                out.add(parts[1])
+            return out
+        if (session_ids(snaps,"snapshots.jsonl")!=session_ids(logs,"events.jsonl")
+                or session_ids(snaps,"snapshots.jsonl")!=session_ids(sums,"summary.json")):
+            raise ValueError("AUTO_ZIP_SESSION_FILE_SET_MISMATCH")
         models=Counter()
         roles=Counter()
         channels=Counter()
@@ -67,6 +80,11 @@ def analyze(path):
         reasons=Counter()
         modes=Counter()
         surfaces=Counter()
+        model_modes=defaultdict(set)
+        model_roles=defaultdict(set)
+        model_channels=defaultdict(set)
+        model_samplings=defaultdict(set)
+        m03_second_surface=False
         errors=Counter()
         full_stacks=0
         last_reports=0
@@ -95,6 +113,12 @@ def analyze(path):
                     samplings[data["diagnosticSampling"]]+=1
                     modes[str(data.get("materialMode","unknown"))]+=1
                     surfaces[str(data["diagnosticMaterialSurface"])]+=1
+                    model_modes[data["modelId"]].add(str(data.get("materialMode","unknown")))
+                    model_roles[data["modelId"]].add(data["diagnosticRole"])
+                    model_channels[data["modelId"]].add(data["diagnosticChannel"])
+                    model_samplings[data["modelId"]].add(data["diagnosticSampling"])
+                    if data["modelId"]=="M03" and data["diagnosticMaterialSurface"]==1:
+                        m03_second_surface=True
                     reasons[str(row.get("message","unknown"))]+=1
                     last_reports+=int(not data.get("originalShaderRestored",False))
         for info in logs:
@@ -119,6 +143,14 @@ def analyze(path):
            "all_six_models_covered":set(models)==MODELS,
            "model_snapshots":dict(sorted(models.items())),
            "mode_snapshot_counts":dict(modes),
+           "model_mode_coverage":{k:sorted(model_modes[k]) for k in sorted(models)},
+           "model_role_coverage":{k:sorted(model_roles[k]) for k in sorted(models)},
+           "model_channel_coverage":{k:sorted(model_channels[k]) for k in sorted(models)},
+           "model_sampling_coverage":{k:sorted(model_samplings[k]) for k in sorted(models)},
+           "all_six_models_four_modes_covered":all(
+               model_modes[m]=={"WHITE_LIT","WHITE_UNLIT","SOURCE_ALBEDO_STANDARD",
+                                "SOURCE_PBR_STANDARD_APPROX"} for m in MODELS),
+           "original_shader_device_parity_coverage":False,
            "role_counts":dict(roles),
            "channel_counts":dict(channels),
            "sampling_counts":dict(samplings),
@@ -132,7 +164,7 @@ def analyze(path):
            "all_roles_tested":set(roles)==ROLES,
            "all_channels_tested":set(channels)==CHANNELS,
            "both_sampling_settings_tested":set(samplings)==SAMPLING,
-           "m03_second_material_tested":"1" in surfaces and models["M03"]>0,
+           "m03_second_material_tested":m03_second_surface,
            "raw_unity_error_messages_exported_to_report":False,
            "raw_device_paths_or_shaders_exported_to_report":False,
            "original_shader48_restored":False,
