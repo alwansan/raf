@@ -31,10 +31,24 @@
     "safe CI artifact with only anonymous counts and mandatory private purge"
   ],
   "resource_key": "gfxlab-multi090-private-per-actual-input-dxbc-signature",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_12_ACTUAL_OPIADD_FRAGMENT_DCL_INPUT_PS_CONSTANT_TO_SPV_FLAT_CANDIDATES_ISGN_USER_PARTIAL_MASK_CPU_ONLY",
   "run_id": 42915931750,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42915931750",
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_PER_12_INTERFACE_SHAPE_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_SPV_CPU_PER_ACTUAL_INPUT_SIGNATURE_AND_INTERPOLATION_STRUCTURAL_CANDIDATE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "089e2865d41fc719d99d3c171e15944becca16a9",
+  "source_free_tests": 863,
+  "source_original_joint_pairs": 157,
+  "source_shader_stages": 314,
+  "source_CB_stages": 311,
+  "authentic_SPV_CB_dynamic_index_loads": 427,
+  "actual_OpIAdd_Input_fragment": 12,
+  "actual_OpIAdd_Input_source_dcl_input_ps": 12,
+  "actual_OpIAdd_Input_source_PS_constant_to_SPV_Flat_candidate": 12,
+  "actual_OpIAdd_Input_ISGN_user_semantic_partial_component_mask": 12,
+  "per_input_numerical_and_pixel_semantic_parity_proven": false,
+  "safe_artifact_id": 13809596105,
+  "artifact_expires_utc": "2026-11-17T22:36:33Z",
+  "private_source_purge_verified": true
 }
