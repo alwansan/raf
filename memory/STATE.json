@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-all-524-dxbc-sampling-22",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-all-524-dxbc-sampling-22.md",
-  "status": "GFX_MULTI_048_SUCCESS_ALL_524_SOURCE_DXBC_SAMPLE_CENSUS_58_SIGNATURE_CLASSES_936_UNIQUE_STAGE_PROGRAMS_G8_BLOCKED",
+  "latest_session": "20261110-GFX-chat-58-profile-spirv-check-23",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-58-profile-spirv-check-23.md",
+  "status": "GFX_MULTI_049_SUCCESS_58_OF_58_ORIGINAL_SOURCE_SAMPLE_PROFILES_SPV_CPU_PARITY_350_OPS_G8_MATERIAL_CB_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-049: bounded source-private representative 58 unique sampled t/s profile classes for original DXBC to vkd3d SPIRV exact paired sampling equivalence; sampling classes are not full shader equivalence. Need original property→DX11 t/s/b/CB bridge, constant-buffer offsets, full pass semantics and PC↔Adreno pixel references before restoration.",
+  "next_experiment": "GFX-MULTI-050 source-private real original DXBC CB b-register declared vec4 counts vs vkd3d translated SPIR-V reflected UBO byte-size audit; do not invent Shader48 Material name/register link or individual CB member byte offsets. Original shader Android GPU and PC↔Adreno pixels remain unverified.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1410,6 +1410,30 @@
     "original_material_to_DX11_t_s_mapping": false,
     "original_CB_byte_offsets_verified": false,
     "original_shader48_Android_GPU_runtime_verified": false,
+    "private_source_purge": true,
+    "originalShaderRestored": false
+  },
+  "latest_gfx049_original_sampling_profile_spirv": {
+    "run": 42841830832,
+    "status": "SUCCESS",
+    "unit_tests": 330,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13776926311,
+    "expires_at_utc": "2026-11-17T15:12:45Z",
+    "original_matched_variant_pairs_source_scanned": 524,
+    "unique_original_stage_programs_inspected": 936,
+    "original_sample_use_signature_classes": 58,
+    "selected_original_VS_FS_pair_representatives_translated": 58,
+    "selected_stage_instances": 116,
+    "representative_pair_t_s_sample_multisets_matched": 58,
+    "original_and_spirv_sample_ops_matched": 350,
+    "source_sampled_selected_stages": 57,
+    "source_zero_sample_selected_stages": 59,
+    "translation_failures": 0,
+    "original_source_material_property_to_gpu_register_verified": false,
+    "original_cb_member_offsets_verified": false,
+    "all_524_spirv_converted": false,
+    "real_original_shader48_gpu_android": false,
     "private_source_purge": true,
     "originalShaderRestored": false
   }

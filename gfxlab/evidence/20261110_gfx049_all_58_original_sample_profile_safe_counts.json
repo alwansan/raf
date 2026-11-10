@@ -1,0 +1,42 @@
+{
+  "experiment": "GFX-MULTI-049",
+  "status": "SUCCESS",
+  "verified_run": 42841830832,
+  "artifact_id": 13776926311,
+  "artifact_expires_at_utc": "2026-11-17T15:12:45Z",
+  "tests": 330,
+  "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_source_variant_pairs_scanned_for_selection": 524,
+  "private_distinct_source_programs_inspected": 936,
+  "sampling_source_signature_classes": 58,
+  "representative_source_keyword_tier_pairs_translated_to_spirv": 58,
+  "source_to_spirv_t_s_pair_multiset_matched": 58,
+  "source_and_spirv_sample_ops_equal": 350,
+  "representative_stages": 116,
+  "selected_stages_with_sample_ops": 57,
+  "selected_zero_sample_stages": 59,
+  "remaining_sample_pair_mismatches": 0,
+  "public_pass_order_selected_new_profile_counts": [
+    [
+      12,
+      25,
+      4,
+      5
+    ],
+    [
+      3,
+      9,
+      0
+    ]
+  ],
+  "all_524_compiled_translated": false,
+  "sampling_profile_equals_complete_shader_program": false,
+  "material_property_to_GPU_resource_register_verified": false,
+  "CB_member_byte_offsets_verified": false,
+  "original_Shader48_android_runtime_verified": false,
+  "PC_vs_Adreno_pixel_parity_verified": false,
+  "originalShaderRestored": false,
+  "phase_closed": false,
+  "original_shader_bytes_register_values_pairs_or_SPIRV_ids_public": false,
+  "private_source_purged": true
+}

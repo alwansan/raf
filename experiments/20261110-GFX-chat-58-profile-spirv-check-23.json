@@ -27,8 +27,34 @@
     "count-only private pair multiset match and report",
     "always purge ZIP2 private source"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42840578811",
+    "https://github.com/alwansan/raf/actions/runs/42841011288",
+    "https://github.com/alwansan/raf/actions/runs/42841494737",
+    "https://github.com/alwansan/raf/actions/runs/42841736438",
+    "https://github.com/alwansan/raf/actions/runs/42841830832"
+  ],
+  "status": "SUCCESS_ORIGINAL_SOURCE_58_PROFILE_CPU_SPIRV_PAIR_PARITY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "final_run": 42841830832,
+    "unit_tests": 330,
+    "all_original_exact_variant_pair_rows_scanned_for_source_profile_selection": 524,
+    "private_distinct_source_stage_programs_examined": 936,
+    "source_sample_profiles": 58,
+    "selected_source_exact_pairs_translated": 58,
+    "exact_original_DXBC_to_SPIRV_sample_pair_multiset_matched": 58,
+    "original_source_translated_sample_operations": 350,
+    "source_sampled_selected_stages": 57,
+    "source_zero_sample_selected_stages": 59,
+    "failed_translations": 0,
+    "private_purge": true,
+    "artifact_id": 13776926311,
+    "all_524_translated": false,
+    "full_original_shader_equivalent": false,
+    "material_property_to_register_verified": false,
+    "original_shader48_Android_GPU_verified": false,
+    "originalShaderRestored": false
+  }
 }

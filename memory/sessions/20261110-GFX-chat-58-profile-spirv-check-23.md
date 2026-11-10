@@ -13,3 +13,11 @@
 ## Interpretation limits
 - Selection of 58 sampled-resource usage patterns does not cover all other opcodes, CB, texture semantics, interpolation, Material property→DX11 binding, real original ShaderLab on Android or PC-to-Adreno pixels.
 - originalShaderRestored=false, phase_closed=false, original full source→GPU register property bridge remains BLOCKED.
+
+## Final verified CI and fixes
+- Final [CI42841830832](https://github.com/alwansan/raf/actions/runs/42841830832) SUCCESS, 330 synthetic Python tests; authentic original SHA-pinned ZIP2 private, runner source purge PASS.
+- All 524 original keyword/tier pair records scanned for 58 private global sampling-pattern classes. **58/58** original exact pair representatives converted and validated with Vulkan1.1 SPIR-V and original DXBC t/s sample opcode pair multiset equivalence. 116 selected stage instances, **350/350** sampled operations, no mismatch, 0 failures; 57 sampled stages, 59 zero-sample stages.
+- First CI42840578811 yielded 49/58 accepted; CI42841011288 diagnosed nine `GFX046_AMBIGUOUS_SPIRV_OPNAME` caused by non-resource duplicate debug labels. Corrected debug-only filtering to genuine UniformConstant resource globals; duplicate true globals still fail-closed. CI42841494737 Python syntax error and CI42841736438 synthetic fixture error were resolved before final success.
+- Safe aggregate artifact [13776926311](https://github.com/alwansan/raf/actions/runs/42841830832/artifacts/13776926311) expires 2026-11-17T15:12:45Z. No original source files, shader bytes, DXBC slot IDs, SPIR-V IDs, or private t/s pairs released.
+- Evidence level: ORIGINAL_SOURCE plus CPU translated program SAMPLE-USE parity for representative 58 classes only. Not all 524 variant conversions, and sample profiles NOT complete shader equivalence. Material property→GPU slot/CB member offsets, PC↔Adreno pixels, true original Shader48 Android runtime remain unproved. originalShaderRestored=false, phase_closed=false.
+- Next GFX050: source-private Shader48 D3D11 CB declaration vector count ↔ vkd3d Vulkan SPIR-V reflected UBO byte-size census; reject missing/mismatched metadata, no invented property offsets. Then genuine PC reference/HLSL for semantic bridge.
