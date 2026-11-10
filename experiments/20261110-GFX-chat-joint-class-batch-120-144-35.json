@@ -1,0 +1,37 @@
+{
+  "session_id": "20261110-GFX-chat-joint-class-batch-120-144-35",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-joint-class-batch-96-120-34",
+  "base_sha": "176e69a78591da54a3c2b8c5bbe2bc0e17153310",
+  "experiment_key": "GFX-MULTI-061",
+  "issue_id": "RENDER-002",
+  "resource_key": "Shader48-source-private-sixth-Pass-joint-declaration-and-sampling-class-batch120-144",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Do genuine original Shader48 Pass-scoped joint class representatives in private deterministic range [120,144) pass CPU DXBC→SPIRV validation and strict source resource and CB structural use checks, while preserving 120 earlier proven representatives?",
+  "hypothesis": "Identical pinned source and private class ordering permits sixth non-overlapping 24 original source pair CPU audit; genuine t/s + CB original source and SPV relation is measurable without original Material semantic map.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42857815446",
+    "https://github.com/alwansan/raf/actions/runs/42859754233",
+    "https://github.com/alwansan/raf/actions/runs/42861618032",
+    "https://github.com/alwansan/raf/actions/runs/42863853554",
+    "https://github.com/alwansan/raf/actions/runs/42865341763"
+  ],
+  "control": [
+    "original source pinned 524 matched pairs, 936 original compiled stages, 110 global/132 Pass declared b/t/s CB classes, 58 global/80 Pass sampled source t/s classes, 157 combined Pass classes",
+    "only disjoint exact private slice [120,144), negative guard start119 and six disjoint slices",
+    "48 stages vkd3d Vulkan1.1 SPV val, DXBC/SPV real t/s sampled use and original source b register reflected UBO layout",
+    "nine supported original CB arithmetic operand families actual SPV OpLoad coverage, dynamic/extended unresolved",
+    "count-only artifact and private ZIP2 and DXBC/SPV cleanup always"
+  ],
+  "planned_tests": [
+    "full source-free Python unit tests",
+    "source private 524 original exact pair class selection",
+    "24 genuine source paired VS/FS SPIRV validation",
+    "strict t/s and CB provenance checks and safe aggregate artifact",
+    "source and temporary SPV purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
