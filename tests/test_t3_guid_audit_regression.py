@@ -55,6 +55,16 @@ class GuidAuditContract(unittest.TestCase):
         self.put("Assets/a.prefab", "x: {fileID: 2100000}\ny: {guid: " + B + ", type: 2}\n")
         self.assertEqual(audit.inspect(self.root)["reference_counts"], {})
 
+    def test_unresolved_references_are_grouped_by_source_extension(self):
+        self.put("Assets/smoke.mat", "m_Shader: {fileID: 4800000, guid: " + B + ", type: 3}\n")
+        self.put("Assets/raft.prefab", "m_Material: {guid: " + C + ", fileID: 2100000, type: 2}\n")
+        self.put("Assets/scene.unity", "m_Material: {fileID: 2100000, guid: " + B + ", type: 2}\n")
+        result = audit.inspect(self.root)
+        self.assertEqual(result["reference_counts"]["unresolved_in_supplied_tree"], 3)
+        self.assertEqual(result["unresolved_by_source_extension"], {
+            ".mat": 1, ".prefab": 1, ".unity": 1,
+        })
+
     def test_non_yaml_and_oversized_skipped(self):
         self.put("Assets/notes.txt", "{fileID: 1, guid: " + B + "}")
         self.put("Assets/small.mat", "{fileID: 1, guid: " + B + "}")
