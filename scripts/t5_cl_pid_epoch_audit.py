@@ -28,6 +28,13 @@ def split_verified_pid_epochs(rows):
                     epochs.append(current)
                 current = []
             pid = new_pid
+        elif (row.get("state") == "game_process_state_unknown"
+              and pid is None and not epochs):
+            # Before the first observed verified process, LogRaft may emit
+            # unknown startup probes. They are not evidence of a stop/restart.
+            # Keep them in the initial cohort; they cannot contribute FPS.
+            current.append(row)
+            continue
         elif row.get("state") != "game_running":
             # A stopped process is a lifetime boundary, even if Android
             # later reuses its numeric PID. Do not combine FPS across it.
