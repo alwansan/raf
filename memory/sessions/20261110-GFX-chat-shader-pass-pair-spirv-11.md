@@ -1,0 +1,12 @@
+# 20261110-GFX-chat-shader-pass-pair-spirv-11
+- session_id: 20261110-GFX-chat-shader-pass-pair-spirv-11
+- origin: chat
+- resumed_from: 20261110-GFX-chat-shader-binary-variant-links-10
+- base_sha: 2aaff928f7a0f68a34172e8f47861c544150f5da
+- experiment_key: GFX-MULTI-011-authentic-DX11-one-pass-paired-SPIRV-CPU
+- scope: source-only original Shader48 strict keyword/tier bucket VS+FS match, bounded DXBC verification and private vkd3d-compiler Vulkan1.1 SPIRV translation of one matching pair; no full Unity game/APK/GPU or public proprietary code.
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- runs: GFX-MULTI-009 42728348900 SUCCESS; GFX-MULTI-010 first 42731091070 FAILED synthetic counter check then corrected 42731206453 SUCCESS; GFX-MULTI-011 CI pending.
+- source proof: GFX010 all 1,435 original VS/FS variant references valid (1435/1435) and m_GpuProgramType identical to parsed binary record (1435/1435), all referenced DX11 and valid DXBC embedded container signatures, 0 GLES linked to these seven passes. Compressed blob =163501 bytes, LZ4 payload =4338048 bytes; sum of per-program code lengths=242218471 bytes (a summation, not one decompressed segment). 62 source tests passed. Deleted original source.
+- negative controls: reject malformed/truncated DXBC, reject wrong shader keyword bucket/duplicate variant, no publishing program bytes, no ShaderLab/Android claims.
+- outcome: pending CI for one pair CPU translation; stage OPEN.

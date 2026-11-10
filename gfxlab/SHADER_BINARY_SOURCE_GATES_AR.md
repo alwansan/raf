@@ -5,3 +5,8 @@
 - Research basis: UnityPy ShaderConverter reads Unity ShaderProgram.m_SubPrograms table from compressed LZ4 blob and stage entries referenced by original parsed pass m_PlayerSubPrograms/m_BlobIndex. This experiment verifies actual links and compiled-type agreement, plus safe content-family classifications. It never exports program code.
 - Evidence ladder: source compressed program counts and typed variants SOURCE_ONLY. Unity Android original Shader48 compile, stage IO semantic, CB/samplers/keywords/render-state equivalence, GPU pixels, PC matching remain FALSE.
 - User's phone visuals: Unity Standard diagnostic only; six models and image colors visible but original Shader48 NOT executed.
+
+## GFX-MULTI-010 confirmed stage links
+[CI42731206453](https://github.com/alwansan/raf/actions/runs/42731206453) SUCCESS: 1435 of 1435 original source stage variant links to compiled original programs valid, zero type mismatches, zero bad indexes; all referenced sources are DX11 with DXBC embedded signature, none of 188 generic table GLES-type records referenced by the 7 passes. Programs must be translated with exact stage semantics and keyword/tier pair; no assumption that 188 GLES metadata records run on Android. LZ4 decompressed length=4,338,048, aggregate program-content sum 242,218,471 (these are distinct measurements). No shader restored on Adreno.
+## GFX-MULTI-011 source-only CPU pilot
+Choose exactly matched original stage variant pair within one Pass and same original keyword+hardware tier player bucket; structurally verify two DXBC containers and try vkd3d-compiler translation to SPIR-V Vulkan1.1. This is only CPU feasibility, not Unity GLES3 ShaderLab, not original PC pixel parity and not rig restoration.

@@ -1,0 +1,17 @@
+{
+  "session_id": "20261110-GFX-chat-shader-pass-pair-spirv-11",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-011",
+  "issue_id": "RENDER-002",
+  "question": "Can one authentic matching original DX11 Vertex/Fragment variant pair from Shader48 be structurally extracted and translated to valid Vulkan1.1 SPIR-V on CPU?",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "same pass and exact original keyword/tier player bucket",
+    "actual DXBC header/chunk bounds",
+    "DXBC private in runner",
+    "no Android claims",
+    "no source public"
+  ],
+  "status": "CI_PENDING",
+  "scope": "SOURCE_ONLY_CPU_PRIVATE"
+}

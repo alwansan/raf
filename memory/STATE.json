@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-shader-binary-variant-links-10",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-binary-variant-links-10.md",
+  "latest_session": "20261110-GFX-chat-shader-pass-pair-spirv-11",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-pass-pair-spirv-11.md",
   "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Inspect GFX-MULTI-010 pass-to-compiled stage variant references and sanity-check binary metadata; do not assert GLES support from names alone.",
+  "next_experiment": "Inspect GFX-MULTI-011 authentic one-pass paired DXBC to SPIRV Vulkan1.1 CPU report; then verify semantic IO and resource layout before Android GLES ShaderLab.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -340,8 +340,24 @@
   },
   "latest_compiled_shader_variant_links": {
     "experiment": "GFX-MULTI-010",
-    "status": "CI_PENDING",
-    "source_only": true,
+    "status": "SUCCESS_VALID_SOURCE_ORIGINAL_DX11_STAGE_LINKS",
+    "run": 42731206453,
+    "variants": 1435,
+    "valid_index_links": 1435,
+    "program_type_matches": 1435,
+    "mismatches": 0,
+    "invalid_indexes": 0,
+    "referenced_gles_programs": 0,
+    "all_referenced_dxbc_with_header": true,
+    "source_compressed_blob_bytes": 163501,
+    "lz4_segment_decompressed_bytes": 4338048,
+    "all_program_code_bytes_sum": 242218471,
     "original_shader_restored": false
+  },
+  "latest_original_shader_translation_pilot": {
+    "experiment": "GFX-MULTI-011",
+    "status": "CI_PENDING",
+    "scope": "CPU_ONLY_ONE_MATCHED_ORIGINAL_DXBC_PAIR",
+    "shader_restored": false
   }
 }
