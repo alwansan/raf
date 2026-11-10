@@ -1,0 +1,18 @@
+{
+  "session_id": "20261110T0633Z-T3-scheduled-known-mismatch-g8p2",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "base_sha": "0fae32d690f54b2a438d25ab1b807e3e782bca42",
+  "status": "active",
+  "updated_at": "2026-11-10T06:33:00Z",
+  "intended_files": [
+    "scripts/t3_render_state_pair_diff.py",
+    "tests/test_t3_render_state_pair_diff.py",
+    "prompt/coordination/clients/T3/sessions/20261110T0633Z-T3-scheduled-known-mismatch-g8p2.md"
+  ],
+  "experiment_key": "T3-renderstate-known-mismatch-vs-unknown-schema-v1",
+  "resource_key": null,
+  "hypothesis": "A definite mismatch in a known render state must not be masked by an unrelated unknown state; unknown fields must not be reported as confirmed differences.",
+  "taken_over_from": "T3 20261110T0527Z render-state comparator",
+  "constraints": "No original game assets, Unity/APK, or other team files."
+}
