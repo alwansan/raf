@@ -12,7 +12,7 @@ class FoamRhsOriginGuardTests(unittest.TestCase):
             ("ldloc", "LOCAL_READ"), ("ldarg", "ARGUMENT_READ")
         ]:
             with self.subTest(op=op):
-                self.assertEqual(classify_rhs(["nop", op, "castclass"]), expected)
+                self.assertEqual(classify_rhs(["nop", op, "castclass"],\n                                              call_returns_value=(op in {"call", "callvirt"})), expected)
 
     def test_ambiguous_or_control_flow_fails_closed(self):
         for ops in [
@@ -29,6 +29,16 @@ class FoamRhsOriginGuardTests(unittest.TestCase):
         ]:
             with self.subTest(ops=ops):
                 self.assertEqual(classify_rhs(ops), "UNKNOWN")
+
+    def test_calls_require_original_nonvoid_signature(self):
+        for opcode in ("call", "callvirt"):
+            with self.subTest(opcode=opcode):
+                self.assertEqual(classify_rhs([opcode]), "UNKNOWN")
+                self.assertEqual(classify_rhs([opcode], call_returns_value=False), "UNKNOWN")
+                self.assertEqual(classify_rhs([opcode], call_returns_value=True), "CALL_RESULT")
+                self.assertEqual(classify_rhs([opcode], call_returns_value="yes"), "UNKNOWN")
+        # A void call followed by a field read is not an RHS producer slice.
+        self.assertEqual(classify_rhs(["call", "ldfld"], call_returns_value=True), "UNKNOWN")
 
     def test_post_producer_cast_is_allowed_without_identity_proof(self):
         self.assertEqual(classify_rhs(["nop", "ldfld", "castclass", "nop"]), "FIELD_READ")
