@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "session_id": "20261110-GFX-chat-original-property-register-evidence-gate-28",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-authenticated-cb-byte-address-27",
+  "base_sha": "38dc5882020d6f6c1932c130a711f92eeeaf8f2c",
+  "experiment_key": "GFX-MULTI-054",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-Shader48-property-register-source-evidence-cross-gate",
+  "question": "Does authentic original ZIP2 Shader48 contain direct source Material property→DXBC t/s/b register or CB member byte offset mapping metadata when all saved properties, variant parameters, shader script, and DXBC RDEF/debug chunks are cross-validated?",
+  "hypothesis": "A strict source-private 020+021+022+037 cross-audit will identify the remaining needed original witness or confirm its absence in the checked compiled source, without mistaking string presence or numeric SPIR-V registers as direct mapping",
+  "controls": [
+    "source sha and Shader48 identity",
+    "all 524 exact variants and 1275 unique program coverage",
+    "cross-audit original shader properties and 7 materials",
+    "reject conflict in RDEF counts",
+    "reject HLSL syntax markers and debug source-name string hits as direct mapping",
+    "only source serialized parameter resource/index link can pass TexEnv edge",
+    "CB byte offsets always unknown absent independent witness",
+    "private source purge"
+  ],
+  "planned_tests": [
+    "full source-free Python tests",
+    "real 4 original source private audits",
+    "count-only proof gate and missing witness contract",
+    "always source purge"
+  ],
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

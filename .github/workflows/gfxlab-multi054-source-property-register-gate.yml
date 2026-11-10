@@ -1,0 +1,95 @@
+name: GFX-MULTI-054 source-private Shader48 property register evidence acceptance gate
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi054-source-property-register-gate.yml'
+      - 'gfxlab/tools/multi_shader_property_register_evidence_gate.py'
+      - 'gfxlab/tests/test_multi_shader_property_register_evidence_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi054-private-original-source-property-register-gate
+  cancel-in-progress: false
+jobs:
+  original-source-binding-evidence-availability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: All source-free tests including cross-evidence proof rejection guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_property_register_evidence_gate.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX054_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install private-only original Unity metadata inspector
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Cross-check all genuine linked Shader48 source property/register evidence avenues
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_property_register_evidence_gate \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi054-private" \
+            --out gfxlab-multi054-safe-source-property-register-gate.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi054-safe-source-property-register-gate.json"))
+          assert d["experiment"]=="GFX-MULTI-054"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_Shader48_serialized_property_names"]==27
+          assert d["shader48_passes"]==7
+          assert d["exact_original_keyword_tier_VS_FS_pairs"]==524
+          assert d["all_original_stage_variant_link_rows"]==1435
+          assert d["unique_linked_original_DX11_stage_programs"]==1275
+          assert d["source_linked_DXBC_RDEF_programs"]<=1275
+          assert d["original_source_material_to_DXBC_texenv_t_sampler_explicit_parameter_edges"]>=0
+          assert d["original_shader48_property_to_DXBC_t_s_binding_evidence_available"]==(
+            d["original_source_material_to_DXBC_texenv_t_sampler_explicit_parameter_edges"]>0)
+          for field in ("original_property_to_DXBC_b_register_and_individual_member_byte_offsets_proven",
+            "GFX052_053_generated_SPIRV_register_provenance_is_original_material_property_semantics",
+            "original_Shader48_source_available_for_complete_Android_ShaderLab_rebuild",
+            "original_Shader48_Android_GPU_ran","PC_to_Adreno_original_pixel_parity_proven",
+            "originalShaderRestored","phase_closed",
+            "original_property_name_register_values_hlsl_or_compiled_shaders_exported"):
+            assert d[field] is False,field
+          assert len(d["missing_evidence_capture_contract"])==6
+          print("GFX054_ONLY_AUTHENTICATED_SOURCE_DIRECT_PROPERTY_TO_REGISTER_EDGES_CAN_PASS=true")
+          PY
+      - name: Publish only safe cross-audit result and missing witness contract
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi054-safe-source-property-register-bridge-gate
+          path: gfxlab-multi054-safe-source-property-register-gate.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge ZIP2 and ephemeral private original Shader48 data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi054-private"
+          echo GFX054_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
