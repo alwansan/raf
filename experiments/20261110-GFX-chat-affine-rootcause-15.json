@@ -35,6 +35,14 @@
     "No original source/mesh/texture/Shader48 binary in APK",
     "Only write experiment/android-graphics-rootcause"
   ],
-  "status": "IN_PROGRESS",
-  "ci_runs": []
+  "status": "AUDITOR_SUCCESS_AFFINE_SIGNED_APK_CI_BUILDING",
+  "ci_runs": [
+    42822853848,
+    42823375579
+  ],
+  "owner_safe_evidence": "gfxlab/evidence/20261110_gfx040_owner_adreno_interpolation_safe.json",
+  "owner_guide": "gfxlab/GFX_MULTI041_AFFINE_OWNER_TEST_AR.md",
+  "source_free_zip_auditor_ci_tests": 266,
+  "device_extension_supported_or_absent_not_proven": true,
+  "original_shader48_restored": false
 }
