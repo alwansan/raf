@@ -1,0 +1,26 @@
+{
+  "session_id": "20261110-GFX-chat-material-delta-03",
+  "origin": "chat",
+  "base_sha": "7e15a86024491b08e7ede9967d940783f0a92cb0",
+  "resumed_from": "20261110-GFX-chat-nameindices-02",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-OWNER-002-original-Shader48-Material-gloss-and-Metallic-color-space-vs-UnityStandard-census",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Does the Unity Standard fallback's synthetic glossiness 0.45 match authenticated source Materials, and does its Metallic gamma importer match original Texture2D metadata?",
+  "hypothesis": "The fallback differs from original material scalar/metallic color-space source settings. Quantify before exact Material importer.",
+  "controls": [
+    "SHA-pinned original ZIP2",
+    "Seven source Renderer material slots separately from six original Material21 assets",
+    "Do not export raw values/names/IDs or decoded pixels",
+    "Source only; no APK and no shader equivalence claim"
+  ],
+  "planned_tests": [
+    "glossiness equality count vs 0.45",
+    "source metallic colorspace vs builder fallback importer flag",
+    "strict finite Material float checks and source SHA"
+  ],
+  "resource_key": "gfxlab-owner002-source-material-delta-private",
+  "status": "PREPARING",
+  "originalShaderRestored": false,
+  "phaseClosed": false
+}
