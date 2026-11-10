@@ -195,3 +195,9 @@ Source-only, pinned ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, **154 uni
 
 ## GFX-MULTI-029S — قيد الفحص: named Cull/ZWrite/ZTest → Material Float
 - `20261110-GFX-chat-passstate-material-binding-29`: قارن private metadata `m_State.name` مع `Shader48.m_PropInfo.m_Props` و`Material21.m_SavedProperties.m_Floats` في السبع Material slots. تحقّق من أن الرقم المخزّن ضمن enum عند وجوده دون نشره أو استخدامه كدليل GPU state. Source CI pending؛ لا تعديل لـGFX026 APK.
+
+
+## GFX-MULTI-029S — خلاصة معلّمة عدم الإغلاق
+- [CI42750996280](https://github.com/alwansan/raf/actions/runs/42750996280) SUCCESS 164 tests: source Shader48 7 Passes، dynamic named `Cull/ZWrite/ZTest/AlphaToMask` موجودة؛ matching إلى Shader property + Material Float يفشل لـCull/ZTest/AlphaToMask (0/7 each, 0 slot matches)، ونجح ZWrite فقط في 2/7 Passes مع 14 slot-value matches (2×7)، وكلها allowed enum.
+- **P0 next GFX-MULTI-030S:** تحقق من أسمائها بالـ`m_NameIndices` الحقيقي لكل Pass أو مصدر metadata مستقل (اسم خاصية/keyword مؤكد)، ولا تنسب numeric fallback إلى runtime state. إن غاب الدليل، وثّق BLOCKED_SOURCE_DYNAMIC_RENDER_STATE_BINDING، واطلب PC/Android GPU reference قبل إنشاء ShaderLab نهائي.
+- **P0 device**: نسخة GFX026 signed Android channel APK جاهزة، لكن لا يوجد log/لقطات مالك على الهاتف، وShader48 original=false. [Test handoff](https://github.com/alwansan/raf/blob/experiment/android-graphics-rootcause/gfxlab/DEVICE_TEST_GFX_MULTI026_AR.md).

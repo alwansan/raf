@@ -17,5 +17,24 @@
     "report count-only source property overlap/enum category"
   ],
   "resource_key": "gfxlab-multi029s-dynamic-state-material-floats-private",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_PARTIAL_SOURCE_ZWRITE_MATCH_OTHER_NAMED_STATES_NOT_IN_PROPERTY_FLOAT_TABLE",
+  "run": 42750996280,
+  "result": {
+    "unit_tests": 164,
+    "passes": 7,
+    "materials": 7,
+    "shader_properties": 27,
+    "source_name_parseable_each_field": 7,
+    "cull_shader_prop_matched": 0,
+    "cull_material_float_matched": 0,
+    "zTest_shader_prop_matched": 0,
+    "zTest_material_float_matched": 0,
+    "alpha_shader_prop_matched": 0,
+    "alpha_material_float_matched": 0,
+    "zWrite_shader_prop_matched": 2,
+    "zWrite_material_float_matches": 14,
+    "zWrite_enum_valid_matched_values": 14,
+    "original_shader_gpu_state_verified": false,
+    "original_shader_restored": false
+  }
 }
