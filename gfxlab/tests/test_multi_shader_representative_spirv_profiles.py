@@ -1,7 +1,7 @@
 """GFX-MULTI-049 purely synthetic 58-profile source selector guards."""
 import unittest
 from gfxlab.tools.multi_shader_representative_spirv_profiles import (
-    select_private_sample_profiles
+    select_private_sample_profiles, safe_failure_code
 )
 
 def stage(name, pairs):
@@ -70,4 +70,12 @@ class TestRepresentativeProfileSelection(unittest.TestCase):
         self.assertEqual(summary[0]["exact_source_variant_pairs_examined"],80)
         self.assertNotIn("synthetic_pairs",str(summary))
         self.assertNotIn("F",str(summary))
+
+    def test_safe_failure_category_exact_allowlist_only(self):
+        self.assertEqual(safe_failure_code(ValueError("GFX046_INCOMPLETE_AUTHENTIC_REGISTER_COVERAGE")),
+                         "GFX046_INCOMPLETE_AUTHENTIC_REGISTER_COVERAGE")
+        self.assertEqual(safe_failure_code(ValueError("GFX046_SOME_PRIVATE_NAME")), "UNCLASSIFIED_FAIL_CLOSED")
+        self.assertEqual(safe_failure_code(ValueError("GFX046_REFLECTION_SYMBOL_OUTSIDE_SOURCE t6")), "UNCLASSIFIED_FAIL_CLOSED")
+        self.assertEqual(safe_failure_code(KeyError("GFX046_REFLECTION_SYMBOL_OUTSIDE_SOURCE")), "UNCLASSIFIED_FAIL_CLOSED")
+
 if __name__=="__main__":unittest.main()

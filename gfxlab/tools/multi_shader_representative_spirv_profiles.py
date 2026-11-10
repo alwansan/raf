@@ -33,6 +33,37 @@ EXPECTED_SIGNATURE_CLASSES=58
 MAX_SELECTED_PAIRS=100
 EXPECTED_PASSES=7
 
+# Fixed public diagnostic codes only. Never export arbitrary exception text, DXBC
+# tokens, private resource names, register numbers, or original SPIR-V IDs.
+PUBLIC_STAGE_ERROR_CODES=frozenset((
+    "GFX046_REFLECTION_SYMBOL_OUTSIDE_SOURCE",
+    "GFX046_INCOMPLETE_AUTHENTIC_REGISTER_COVERAGE",
+    "GFX046_REFLECTED_NAME_NOT_IN_SPIRV_OPNAME",
+    "GFX046_AMBIGUOUS_SPIRV_OPNAME",
+    "GFX046_DUPLICATE_REFLECTED_VARIABLE_OR_REGISTER",
+    "GFX046_REFLECTED_ID_DISAGREES_WITH_SPIRV_OPNAME",
+    "GFX046_REFLECTED_ID_NOT_GLOBAL_VARIABLE",
+    "GFX046_SAMPLE_ACCOUNTING_INVALID",
+    "GFX046_DUPLICATE_RESULT_ID",
+    "GFX046_SAMPLE_WITHOUT_RESULT",
+    "GFX046_RESOURCE_VARIABLE_ID_MISSING",
+    "GFX046_INVALID_SOURCE_SLOT",
+    "GFX046_BAD_SOURCE_FAMILY",
+    "GFX047_SPIRV_DUPLICATE_RESULT_ID",
+    "GFX047_TRANSLATED_COUNTER_RECONCILIATION_FAILED",
+    "GFX047_SAMPLE_RESOURCE_OR_SAMPLER_WRONG_TYPE",
+    "GFX047_UNDECLARED_TEXTURE_SOURCE_REGISTER",
+    "GFX047_UNDECLARED_SAMPLER_SOURCE_REGISTER",
+    "GFX047_SAMPLE_OPERAND_TERMINATION_MISMATCH",
+))
+def safe_failure_code(exc):
+    """Recognize only preapproved literal parser labels, never private values."""
+    if type(exc) is ValueError and len(exc.args)==1:
+        label=exc.args[0]
+        if isinstance(label,str) and label in PUBLIC_STAGE_ERROR_CODES:
+            return label
+    return "UNCLASSIFIED_FAIL_CLOSED"
+
 def select_private_sample_profiles(passes, inspect_stage, limit=MAX_SELECTED_PAIRS):
     """Select one exact VS/FS source pair per private global sample signature.
 
@@ -164,12 +195,12 @@ def audit(stage):
                     continue
                 try:
                     result=stage_compare(originals[kind],spv,reflected,dis)
-                except (ValueError,IndexError,KeyError,TypeError):
-                    # Do not print the exception: it may contain source-private
-                    # values. Classify only by a fixed public-safe category.
+                except (ValueError,IndexError,KeyError,TypeError) as exc:
+                    # Fixed public literal label only, never arbitrary private
+                    # exception text, source tokens, resource names or IDs.
                     totals["failed_strict_source_to_spirv_pair_comparison_stages"]+=1
                     pair_ok=False
-                    failure_categories["strict_parser_rejected"]+=1
+                    failure_categories[safe_failure_code(exc)]+=1
                     continue
                 if not result["same_exact_private_original_DXBC_t_s_pair_multiset_as_translated_SPIRV"]:
                     totals["mismatched_source_translated_t_s_multiset_stages"]+=1
