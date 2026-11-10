@@ -1,0 +1,96 @@
+name: GFX-MULTI-036 authentic Shader48 compiler platform vs unlinked GL envelope source audit
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi-gl-envelope-source.yml'
+      - 'gfxlab/tools/multi_shader_gl_program_envelope.py'
+      - 'gfxlab/tests/test_multi_shader_gl_program_envelope.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi036-original-gl-envelope
+  cancel-in-progress: false
+jobs:
+  original-shader-platform-and-opaque-envelope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free strict GLSL program envelope and no-private-data regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_gl_program_envelope.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect authenticated original shader compiler platform and opaque GL program shapes privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_gl_program_envelope \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi036-private" \
+            --out gfxlab-multi036-safe-source-program-envelope.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi036-safe-source-program-envelope.json"))
+          c=d["unreferenced_original_gl_typed_programs"]
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_compiled_blob_has_exactly_one_platform"]
+          assert d["original_compiled_table_entries"]==1656
+          assert d["original_exact_linked_dx11_indices"]==1275
+          assert c["GLES"]["candidate_entries"]==139 and c["GLCORE"]["candidate_entries"]==120
+          for family,n in (("GLES",139),("GLCORE",120)):
+              s=c[family]
+              assert sum(s["source_code_byte_size_buckets"].values())==n
+              assert sum(s["source_code_printable_byte_ratio_buckets"].values())==n
+              assert sum(s["public_subprogram_version_era_buckets"].values())==n
+              assert s["distinct_private_code_payload_count"]<=n
+              assert not s["keyword_match_proves_original_pass_or_material_binding"]
+              assert not s["raw_keyword_names_or_digest_bytes_exported"]
+          assert not d["original_compiled_platform_proves_unlinked_GL_programs_usable_on_Android"]
+          assert not d["syntactic_length_magic_or_keyword_matches_are_resource_reflection"]
+          assert not d["authentic_original_gl_stage_to_pass_variant_link_verified"]
+          assert not d["material_to_original_t_s_cb_register_offsets_verified"]
+          assert not d["actual_android_original_shader48_compilation_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["pc_vs_android_original_shader_pixel_parity_verified"]
+          assert not d["raw_private_shader_bytes_names_digests_ids_or_offsets_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI036_VERIFIED_COMPILER_PLATFORM_PUBLIC_ENUM="+d["original_shader48_compiled_blob_platform_name_public_enum"])
+          print("GFX_MULTI036_ONLY_SOURCE_PLATFORM_AND_OPAQUE_PAYLOAD_EVIDENCE=true")
+          PY
+      - name: Upload only safe source structure counts (never original shader bytes)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi036-safe-gl-compiler-envelope
+          path: gfxlab-multi036-safe-source-program-envelope.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Delete all private original ZIP2 and decoded Shader48 data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi036-private"
+          echo GFX_MULTI036_ORIGINAL_SHADER_PRIVATE_DATA_PURGED=true
