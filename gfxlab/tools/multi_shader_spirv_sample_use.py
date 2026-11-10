@@ -34,26 +34,58 @@ GATHER={"OpImageGather","OpImageDrefGather","OpImageSparseGather",
         "OpImageSparseDrefGather"}
 FETCH={"OpImageFetch","OpImageSparseFetch","OpImageRead","OpImageSparseRead"}
 
-def resource_variable_ids(source_slots, reflection, family):
-    """For same validated SPIR-V, resolve only generated symbolic names to DXBC slots."""
+def disassembled_opnames(dis):
+    """Obtain private SPIR-V raw variable IDs by exact OpName; no names serialized."""
+    if not isinstance(dis,(bytes,bytearray)) or len(dis)>MAX_DISASSEMBLY_BYTES:
+        raise ValueError("GFX046_DISASSEMBLY_NAME_INPUT_INVALID")
+    try:
+        text=dis.decode("utf-8","strict")
+    except UnicodeDecodeError:
+        raise ValueError("GFX046_DISASSEMBLY_NAMES_NON_UTF8") from None
+    labels={}
+    for line in text.splitlines():
+        match=re.fullmatch(r'\s*OpName\s+(%[0-9]+)\s+"([^"]{1,100})"\s*',line)
+        if match:
+            spvid,name=match.groups()
+            if name in labels or spvid in labels.values():
+                raise ValueError("GFX046_AMBIGUOUS_SPIRV_OPNAME")
+            labels[name]=spvid
+    return labels
+
+
+def resource_variable_ids(source_slots, reflection, family, disassembly=None):
+    """Cross-check DXBC source set, SPIRV-Cross names, and actual disassembled OpName.
+
+    SPIRV-Cross --reflect builds may omit the numeric variable 'id' field;
+    never treat descriptor 'binding' as that ID. Fall back only to an exact,
+    unique SPIR-V OpName from the same validated private binary.
+    """
     if family not in ("resource","sampler") or not isinstance(source_slots,set):
         raise ValueError("GFX046_BAD_SOURCE_FAMILY")
     if not isinstance(reflection,list) or len(reflection)>MAX_REFLECTED_RESOURCES:
         raise ValueError("GFX046_REFLECTION_LIST_UNBOUNDED")
     if any(type(s) is not int or not 0<=s<=65535 for s in source_slots):
         raise ValueError("GFX046_INVALID_SOURCE_SLOT")
+    private_names=(disassembled_opnames(disassembly) if disassembly is not None else {})
     selected={};seen_slots=set()
     for record in reflection:
         if not isinstance(record,dict):
             raise ValueError("GFX046_REFLECTION_ROW_MALFORMED")
-        num=record.get("id")
-        # SPIRV-Cross reflection exposes global variable ID, not descriptor binding.
-        if type(num) is not int or num<=0:
-            raise ValueError("GFX046_RESOURCE_VARIABLE_ID_MISSING")
-        symbol=private_register_from_name(family,record.get("name"))
+        name=record.get("name")
+        symbol=private_register_from_name(family,name)
         if symbol is None or symbol not in source_slots:
             raise ValueError("GFX046_REFLECTION_SYMBOL_OUTSIDE_SOURCE")
-        key="%"+str(num)
+        num=record.get("id")
+        if num is not None and (type(num) is not int or num<=0):
+            raise ValueError("GFX046_RESOURCE_VARIABLE_ID_MISSING")
+        if num is None:
+            key=private_names.get(name)
+            if key is None:
+                raise ValueError("GFX046_REFLECTED_NAME_NOT_IN_SPIRV_OPNAME")
+        else:
+            key="%"+str(num)
+            if disassembly is not None and private_names.get(name)!=key:
+                raise ValueError("GFX046_REFLECTED_ID_DISAGREES_WITH_SPIRV_OPNAME")
         if key in selected or symbol in seen_slots:
             raise ValueError("GFX046_DUPLICATE_REFLECTED_VARIABLE_OR_REGISTER")
         selected[key]=(family,symbol)
@@ -195,12 +227,12 @@ def audit(stage):
                     raise ValueError("GFX046_PRIVATE_REFLECTION_JSON_INVALID") from None
                 if not isinstance(reflect,dict):
                     raise ValueError("GFX046_PRIVATE_REFLECTION_OBJECT_INVALID")
-                resources=resource_variable_ids(private_slots[st]["resource"],
-                          reflect.get("separate_images",[]),"resource")
-                samplers=resource_variable_ids(private_slots[st]["sampler"],
-                          reflect.get("separate_samplers",[]),"sampler")
                 ok,dis=run_quiet(["spirv-dis","--raw-id","--no-color",str(spv)])
                 if not ok:raise ValueError("GFX046_SPIRV_DISASSEMBLY_FAILED")
+                resources=resource_variable_ids(private_slots[st]["resource"],
+                          reflect.get("separate_images",[]),"resource",dis)
+                samplers=resource_variable_ids(private_slots[st]["sampler"],
+                          reflect.get("separate_samplers",[]),"sampler",dis)
                 c=spv_sample_use(dis,resources,samplers)
                 stage_counts[st]=c
                 for key in ("sampled_image_constructions","sampled_image_constructions_unresolved",

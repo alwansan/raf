@@ -90,4 +90,26 @@ class TestSourceAuthenticatedPairs(unittest.TestCase):
         """,{"%10":("resource",2)}, {})
         self.assertEqual(d["sample_or_gather_unresolved"],1)
 
+
+    def test_reflection_id_missing_resolves_unique_disassembled_opname(self):
+        dis=b"""
+        OpName %10 "t2"
+        OpName %12 "s1"
+        %10 = OpVariable %ptr UniformConstant
+        %12 = OpVariable %ptr UniformConstant
+        """
+        a=resource_variable_ids({2},[{"name":"t2","binding":77}],"resource",dis)
+        b=resource_variable_ids({1},[{"name":"s1","binding":88}],"sampler",dis)
+        self.assertEqual(a,{"%10":("resource",2)})
+        self.assertEqual(b,{"%12":("sampler",1)})
+        with self.assertRaisesRegex(ValueError,"NOT_IN_SPIRV_OPNAME"):
+            resource_variable_ids({2},[{"name":"t2"}],"resource",b"")
+        with self.assertRaisesRegex(ValueError,"DISAGREES"):
+            resource_variable_ids({2},[{"id":99,"name":"t2"}],"resource",dis)
+
+    def test_duplicate_spirv_opname_fails_closed(self):
+        dis=b'OpName %10 "t2"\nOpName %11 "t2"\n'
+        with self.assertRaisesRegex(ValueError,"AMBIGUOUS"):
+            resource_variable_ids({2},[{"name":"t2"}],"resource",dis)
+
 if __name__=="__main__":unittest.main()
