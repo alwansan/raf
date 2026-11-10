@@ -1,0 +1,97 @@
+name: GFX-MULTI-024 original Material scalars and Unity2021 TextureWrap enum (no APK)
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-material-float-wrap.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi024-original-material-float-wrap
+  cancel-in-progress: false
+jobs:
+  original-material-float-wrap:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free fail-closed unit tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_material_float_wrap.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect source Material floats, colors and 21 Texture2D sampler settings
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_material_float_wrap \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi024-private" \
+            --out "$RUNNER_TEMP/gfxlab-multi024-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gfxlab-multi024-safe.json"
+          d=json.loads(p.read_text())
+          assert d["experiment"]=="GFX-MULTI-024"
+          assert d["source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_models"]==6 and d["material_slots"]==7
+          assert d["float_slots"]==112 and d["color_slots"]==14
+          assert d["shader48_original_property_count"]==27
+          assert d["texture_links"]==21
+          assert sum(d["float_value_buckets"].values())==112
+          assert sum(d["color_value_buckets"].values())==14
+          assert sum(d["float_known_name_category_counts"].values())==112
+          for role in ("basecolor","normal","metallic"):
+              x=d["source_texture_settings_by_role"][role]
+              for k in ("format","colorspace","filter","U","V","W","mip_count","aniso_bucket","mip_bias_bucket"):
+                  assert sum(x[k].values())==7,(role,k)
+          assert d["texture_color_space_is_internal_texture_enum_not_player_color_space"]
+          assert not d["source_names_pointers_and_values_published"]
+          assert not d["original_shader_restored"]
+          assert not d["original_shader_property_to_register_mapping_verified"]
+          assert not d["android_gpu_pixels_verified"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI024_SAFE_COUNTS "+json.dumps({
+              "floats":d["float_slots"],"colors":d["color_slots"],
+              "shader_matched_float_properties":d["material_to_shader_property_name_membership"]["float_slots_declared"],
+              "shader_matched_color_properties":d["material_to_shader_property_name_membership"]["color_slots_declared"],
+              "textures":d["texture_links"],
+              "source_settings":d["source_texture_settings_by_role"],
+              "float_buckets":d["float_value_buckets"],
+              "float_categories":d["float_known_name_category_counts"],
+              "color_buckets":d["color_value_buckets"]},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi024-safe-material-float-wrap
+          path: ${{ runner.temp }}/gfxlab-multi024-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private original ZIP2 staged assets
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi024-private"
+          echo GFX_MULTI024_PRIVATE_SOURCE_PURGED=true
