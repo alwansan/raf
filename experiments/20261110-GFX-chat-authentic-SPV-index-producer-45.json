@@ -21,7 +21,17 @@
     "direct SSA index opcode/root producer histogram safe and source purge"
   ],
   "run": "https://github.com/alwansan/raf/actions/runs/42887526330",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_350_SPV_IADD_AND_77_BITCAST_REAL_CB_DYNAMIC_INDEX_ROOTS",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "actual_result": {
+    "run": 42887830590,
+    "tests": 515,
+    "artifact_id": 13795638963,
+    "artifact_expires_at_utc": "2026-11-17T19:42:48Z",
+    "verified_detail": "427 source-b authenticated real SPV dynamic CB reads: 350 OpIAdd and 77 OpBitcast root index definitions, direct OpBitcast chain from OpLoad. Initial CI42887526330 failed safe JSON filename mismatch only; repaired and rerun success 42887830590. Purge verified.",
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "source_to_SPV_SSA_per_operation_proven": false
+  }
 }
