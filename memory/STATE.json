@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-material-texture-semantics-24",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-material-texture-semantics-24.md",
-  "status": "GFX_MULTI_023_ALL_21_SOURCE_TEXTURES_DECODED_WHITE_TINT_IDENTITY_UV_CHANNEL_FINGERPRINTS_RECORDED",
+  "latest_session": "20261110-GFX-chat-float-wrap-color-25",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-float-wrap-color-25.md",
+  "status": "GFX_MULTI_024_SUCCESS_MATERIAL_SLOT_SHARED_112_FLOAT_14_COLOR_ORIGINAL_UNITY21_TEXTURE_SETTINGS",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-024: source-only semantic census of 112 original Material float slots and 14 color slots, plus TextureSettings wrap U/V/W and authoritative Unity 2021.3 TextureFormat/color-space enum interpretation. Keep property names/values private; no register inference. Then decide whether a narrow Android texture-channel GPU probe is needed.",
+  "next_experiment": "GFX-MULTI-025: classify seven nonidentity secondary original Material color slots and source Material21/Texture2D identity sharing; inspect exact known shader property categories without publishing raw proprietary names/values. Separate authored Metallic sRGB from Unity Android GPU sampling; no new APK or shader equivalence claim.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -663,6 +663,71 @@
     "artifact_expiry_utc": "2026-11-17T02:40:48Z",
     "original_shader_restored": false,
     "android_original_shader_pixels_verified": false,
+    "phase_closed": false
+  },
+  "latest_material_float_wrap_census": {
+    "experiment": "GFX-MULTI-024",
+    "run": 42745536309,
+    "first_failed_run": 42745345599,
+    "workflow_sha": "84dcbb49e97430564a07cb96780430a126a99ab4",
+    "status": "SUCCESS_SOURCE_ONLY_139_TESTS",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "unit_tests": 139,
+    "source_models": 6,
+    "material_slots": 7,
+    "distinct_material21_objects": 6,
+    "reused_material_slot_references": 1,
+    "texture_links": 21,
+    "distinct_texture2d_objects": 18,
+    "float_slots": 112,
+    "original_shader_float_name_matches": 112,
+    "color_slots": 14,
+    "original_shader_color_name_matches": 14,
+    "shader48_source_properties": 27,
+    "float_value_buckets": {
+      "zero": 33,
+      "one": 58,
+      "between_zero_one": 21
+    },
+    "color_buckets": {
+      "white_rgba": 7,
+      "non_identity_color": 7
+    },
+    "texture_formats": {
+      "basecolor": {
+        "DXT1": 5,
+        "DXT5": 2
+      },
+      "normal": {
+        "DXT5": 7
+      },
+      "metallic": {
+        "DXT5": 7
+      }
+    },
+    "texture_color_space": {
+      "basecolor": {
+        "sRGB": 7
+      },
+      "normal": {
+        "Linear": 7
+      },
+      "metallic": {
+        "sRGB": 7
+      }
+    },
+    "filter_mode_all": "Bilinear",
+    "wrap_u_v_w_all": "Repeat",
+    "aniso_all": 1,
+    "mip_bias_all": 0,
+    "unity2021_enum_reference": "https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs",
+    "safe_artifact_id": 13730024662,
+    "safe_artifact_expiry_utc": "2026-11-17T02:51:51Z",
+    "private_source_purge_succeeded": true,
+    "source_names_values_or_ids_exported": false,
+    "original_shader_restored": false,
+    "original_property_to_register_mapping_verified": false,
+    "android_gpu_pixels_verified": false,
     "phase_closed": false
   }
 }
