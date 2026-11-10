@@ -17,5 +17,19 @@
     "safe CI aggregate histogram with no source state numbers"
   ],
   "resource_key": "gfxlab-multi028s-original-private-render-state-enums",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_SOURCE_SEVEN_PASS_DYNAMIC_STATES_AND_KEYWORD_METADATA",
+  "run": 42749968983,
+  "result": {
+    "unit_tests": 159,
+    "culling_named_dynamic": 7,
+    "zWrite_named_dynamic": 7,
+    "zTest_named_dynamic": 7,
+    "alphaToMask_named_dynamic": 7,
+    "rtSeparateBlend_false": 7,
+    "source_material_valid_keywords_nonempty": 7,
+    "source_material_invalid_keywords_empty": 7,
+    "source_material_legacy_m_ShaderKeywords_absent": 7,
+    "original_shader_restored": false,
+    "owner_phone_tested": false
+  }
 }

@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-renderstate-enum-28",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-renderstate-enum-28.md",
-  "status": "GFX_MULTI_026S_SOURCE_PASS_STATE_SUCCESS_ANDROID_CHANNEL_APK_BUILD_IN_PROGRESS",
+  "status": "GFX_MULTI_028S_GENUINE_SHADER48_DYNAMIC_RENDER_STATES_PROVEN_CHANNEL_APK_SIGNED_DEVICE_GPU_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-028S: original seven-Pass state literal/dynamic enum categories and alternate Material keyword field presence. In parallel independent GFX-MULTI-026 channel Android APK CI42748792585, do not infer original Shader48 GPU parity.",
+  "next_experiment": "GFX-MULTI-029S verify original Shader48 dynamic pass state named parameters against Shader48 serialized property names and seven Material saved Floats, fail closed on unresolved; in parallel owner test signed GFX-MULTI-026 channel APK screenshots and COPY LOG. Do not treat diagnostic shader as original Shader48.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -799,9 +799,24 @@
   },
   "latest_safe_renderstate_enum_probe": {
     "experiment": "GFX-MULTI-028S",
-    "status": "CI_PENDING",
-    "source_only": true,
-    "original_shader_restored": false
+    "run": 42749968983,
+    "status": "SUCCESS_SOURCE_NAMED_DYNAMIC_PASS_STATE_7OF7",
+    "unit_tests": 159,
+    "source_shader_passes": 7,
+    "dynamic_override_fields": [
+      "culling",
+      "zWrite",
+      "zTest",
+      "alphaToMask"
+    ],
+    "each_dynamic_count": 7,
+    "material_slots_valid_keywords_nonempty": 7,
+    "material_slots_invalid_keywords_empty": 7,
+    "material_slots_legacy_m_ShaderKeywords_absent": 7,
+    "rtSeparateBlend_false": 7,
+    "direct_rtBlend_field_absent": 7,
+    "original_shader_restored": false,
+    "android_gpu_pixels_verified": false
   },
   "gfx026_owner_device_test_protocol": "gfxlab/DEVICE_TEST_GFX_MULTI026_AR.md"
 }
