@@ -1,0 +1,30 @@
+{
+  "session_id": "20261110-GFX-chat-ubo-global-symbol-provenance-26",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-cb-access-shape-25",
+  "base_sha": "741acd1ca36288371f040edd46e7e79ac117aed2",
+  "experiment_key": "GFX-MULTI-052",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-CB-b-actual-SPV-Uniform-global-OpName",
+  "question": "Does vkd3d preserve original source DXBC CB b# provenance as OpName on real SPIRV Uniform variables?",
+  "hypothesis": "Real global OpName may authenticate source register name even when SPIRV-Cross block name does not",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "ignore type/local OpName",
+    "verify Uniform real global",
+    "crosscheck source CB declaration and UBO binding/size",
+    "unknown names do not imply identity",
+    "duplicate labels/coords fail closed",
+    "source-private purge"
+  ],
+  "planned_tests": [
+    "full source-free Python suite",
+    "14 original Shader48 stages",
+    "Vulkan1.1 SPIR-V compile, reflection and raw disassembly",
+    "count-only artifact and purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
