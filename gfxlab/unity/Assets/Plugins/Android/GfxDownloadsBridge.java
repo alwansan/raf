@@ -15,7 +15,7 @@ import java.io.OutputStream;
 
 /**
  * Android 10+ scoped-storage ZIP export via MediaStore.Downloads.
- * No root, no MANAGE_EXTERNAL_STORAGE permission, no broad storage access.
+ * No root and no broad-scoped storage permission or access.
  * The MediaStore row is pending until the complete ZIP is flushed and verified.
  */
 public final class GfxDownloadsBridge {
