@@ -30,8 +30,48 @@
     "strict t/s and CB provenance checks and safe aggregate artifact",
     "source and temporary SPV purge"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42866819484"
+  ],
+  "status": "SUCCESS_DISJOINT_SIXTH_ORIGINAL_SOURCE_BATCH_120_144_STRICT_24_OF_24_CPU_SPV",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42866819484,
+    "source_free_python_tests": 427,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_exact_VS_FS_source_pairs_censused": 524,
+    "unique_compiled_original_stage_programs": 936,
+    "source_bts_CB_declaration_classes_global": 110,
+    "source_bts_CB_declaration_classes_Pass_scoped": 132,
+    "source_sample_t_s_use_classes_global": 58,
+    "source_sample_t_s_use_classes_Pass_scoped": 80,
+    "source_Pass_joint_signature_classes": 157,
+    "selected_start_inclusive": 120,
+    "selected_end_exclusive": 144,
+    "current_original_exact_pair_both_stage_vulkan11_SPV_val_success": 24,
+    "current_original_stage_SPV_val_success": 48,
+    "current_original_stage_DXBC_to_SPV_t_s_sample_use_equal": 48,
+    "current_original_CB_source_b_global_and_reflected_vec4_UBO_layout_stages": 48,
+    "current_original_supported_static_CB_vec4_ranges_with_actual_SPV_load": 865,
+    "current_original_supported_static_CB_vec4_ranges_without_SPV_load": 0,
+    "current_original_dynamic_extended_CB_operand_occurrences_unresolved": 129,
+    "current_source_strict_pair_failures": 0,
+    "previous_verified_runs": [
+      42857815446,
+      42859754233,
+      42861618032,
+      42863853554,
+      42865341763
+    ],
+    "cumulative_original_source_Pass_joint_representative_classes_strict_CPU_SPV_verified": 144,
+    "source_JOINT_classes_remaining_without_SPV_CPU_validation": 13,
+    "all_524_original_variant_full_shader_program_parity_proven": false,
+    "original_Material_to_DXBC_register_CB_member_semantics_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "original_source_private_purged": true,
+    "safe_artifact_id": 13788440771,
+    "safe_artifact_expires_at_utc": "2026-11-17T17:38:19Z"
+  }
 }
