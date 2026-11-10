@@ -35,6 +35,32 @@ class OriginalFoamTextureIdentityTests(unittest.TestCase):
         self.assertNotIn("PrivateSource", str(out))
         self.assertNotIn("GeneratedTarget", str(out))
 
+
+    def test_malformed_private_report_rows_fail_closed(self):
+        good = original_texture_rows(program([tex()]), {0: "PrivateA"}, 1)[0]
+        bad = [
+            None, [], {"_private_name": "PrivateA"},
+            {**good, "_private_name": 3},
+            {**good, "_field_presence": None},
+            {**good, "_field_presence": {**good["_field_presence"], "m_Index": 1}},
+            {**good, "_private_numeric_pair": [0, -1]},
+            {**good, "_private_numeric_pair": (True, -1)},
+            {**good, "_multisample_present": 0},
+            {**good, "extra": "PrivateSecret"},
+        ]
+        for row in bad:
+            with self.subTest(row_type=type(row).__name__):
+                with self.assertRaises(ValueError) as error:
+                    compare_private_names([row], ["CompiledA"])
+                self.assertNotIn("Private", str(error.exception))
+
+    def test_malformed_reflected_name_fail_closed(self):
+        rows = original_texture_rows(program([tex()]), {0: "PrivateA"}, 1)
+        for name in (None, 5, True, "", "x" * 257):
+            with self.subTest(name_type=type(name).__name__):
+                with self.assertRaises(ValueError):
+                    compare_private_names(rows, [name])
+
     def test_zero_literal_match_is_finding_not_binding_fix(self):
         rows = original_texture_rows(program([tex()]), {0: "OriginalTex"}, 1)
         out = compare_private_names(rows, ["CompilerGeneratedTex"])
