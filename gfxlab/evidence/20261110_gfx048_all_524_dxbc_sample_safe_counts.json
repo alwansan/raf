@@ -1,0 +1,83 @@
+{
+  "experiment": "GFX-MULTI-048",
+  "evidence_level": "ORIGINAL_SOURCE_ALL_EXACT_VARIANTS_DXBC_SAMPLE_OPCODE_CENSUS",
+  "verified_run": 42839415657,
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "unit_tests": 320,
+  "exact_variant_pairs": 524,
+  "stage_references": 1048,
+  "private_distinct_source_programs": 936,
+  "private_vs_fs_sample_use_signature_classes": 58,
+  "pass_exact_variant_pairs": [
+    [
+      80,
+      156,
+      32,
+      80
+    ],
+    [
+      40,
+      120,
+      16
+    ]
+  ],
+  "pass_distinct_fragment_sample_use_classes": [
+    [
+      12,
+      25,
+      4,
+      6
+    ],
+    [
+      9,
+      22,
+      2
+    ]
+  ],
+  "pass_fragment_samples_min_max": [
+    [
+      [
+        5,
+        11
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        7
+      ]
+    ],
+    [
+      [
+        5,
+        11
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        0,
+        1
+      ]
+    ]
+  ],
+  "vertex_sample_ops_all_zero": true,
+  "unresolved_source_sample_t_s_indices": 0,
+  "all_524_spirv_translation_tested": false,
+  "sampling_class_is_full_shader_equivalence": false,
+  "original_property_to_DX11_register_bridge": false,
+  "original_CB_byte_offsets_verified": false,
+  "original_shader48_adreno_GPU_parity": false,
+  "originalShaderRestored": false,
+  "phase_closed": false,
+  "safe_artifact_id": 13775750529,
+  "private_source_purged": true,
+  "source_register_values_pair_signatures_and_shader_bytes_exported": false
+}

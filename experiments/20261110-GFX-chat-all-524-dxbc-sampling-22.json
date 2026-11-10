@@ -18,9 +18,87 @@
     "publish anonymous per-pass histograms only",
     "purge all private source"
   ],
-  "status": "CI_PENDING",
-  "run_urls": [],
+  "status": "SUCCESS_524_EXACT_ORIGINAL_DXBC_SAMPLED_REGISTER_PROFILE_CENSUS",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42839415657"
+  ],
   "source_register_values_published": false,
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "source_free_tests": 320,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "exact_source_matched_pairs": 524,
+    "source_stage_references": 1048,
+    "unique_stage_programs_cached": 936,
+    "combined_sampling_signature_classes": 58,
+    "per_pass_exact_pair_counts": [
+      [
+        80,
+        156,
+        32,
+        80
+      ],
+      [
+        40,
+        120,
+        16
+      ]
+    ],
+    "per_pass_distinct_fragment_sampling_profiles": [
+      [
+        12,
+        25,
+        4,
+        6
+      ],
+      [
+        9,
+        22,
+        2
+      ]
+    ],
+    "per_pass_fragment_sample_count_ranges": [
+      [
+        [
+          5,
+          11
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          7
+        ]
+      ],
+      [
+        [
+          5,
+          11
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    ],
+    "source_vertex_sampling_ops": 0,
+    "dynamic_source_indices_unresolved": 0,
+    "all_524_translated_spirv_proven": false,
+    "original_gpu_runtime_proven": false,
+    "material_property_register_bridge_proven": false,
+    "originalShaderRestored": false,
+    "safe_artifact_id": 13775750529,
+    "private_source_purged": true
+  }
 }

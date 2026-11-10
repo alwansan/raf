@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-independent-dxbc-sample-pairs-21",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-independent-dxbc-sample-pairs-21.md",
-  "status": "GFX_MULTI_047_SUCCESS_INDEPENDENT_DXBC_T_S_TO_SPIRV_EXACT_37_OF_37_14_OF_14_NO_ANDROID_OR_MATERIAL_BRIDGE",
+  "latest_session": "20261110-GFX-chat-all-524-dxbc-sampling-22",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-all-524-dxbc-sampling-22.md",
+  "status": "GFX_MULTI_048_SUCCESS_ALL_524_SOURCE_DXBC_SAMPLE_CENSUS_58_SIGNATURE_CLASSES_936_UNIQUE_STAGE_PROGRAMS_G8_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-048: source-private exhaustive 524 original Shader48 matched keyword/tier variant pairs DXBC sample/gather t/s instruction census, count variant sample signatures per pass, test missing/ambiguous/dynamic registers; bounded per source. No full Unity APK, original Material→DX11 t/s/CB remains blocked.",
+  "next_experiment": "GFX-MULTI-049: bounded source-private representative 58 unique sampled t/s profile classes for original DXBC to vkd3d SPIRV exact paired sampling equivalence; sampling classes are not full shader equivalence. Need original property→DX11 t/s/b/CB bridge, constant-buffer offsets, full pass semantics and PC↔Adreno pixel references before restoration.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1365,6 +1365,52 @@
     "CB_byte_offsets_verified": false,
     "android_original_shader_gpu_verified": false,
     "source_privacy_purged": true,
+    "originalShaderRestored": false
+  },
+  "latest_gfx048_exhaustive_source_sampling": {
+    "run": 42839415657,
+    "status": "SUCCESS",
+    "unit_tests": 320,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13775750529,
+    "expires_at_utc": "2026-11-17T14:58:26Z",
+    "exact_variant_pairs": 524,
+    "stage_references": 1048,
+    "unique_source_stage_programs": 936,
+    "source_sample_pair_signature_classes": 58,
+    "per_pass_exact_pairs": [
+      [
+        80,
+        156,
+        32,
+        80
+      ],
+      [
+        40,
+        120,
+        16
+      ]
+    ],
+    "per_pass_distinct_fragment_signatures": [
+      [
+        12,
+        25,
+        4,
+        6
+      ],
+      [
+        9,
+        22,
+        2
+      ]
+    ],
+    "original_vertex_source_sample_ops": 0,
+    "unresolved_dynamic_source_sample_registers": 0,
+    "all_524_spirv_converted_or_runtime_equivalent": false,
+    "original_material_to_DX11_t_s_mapping": false,
+    "original_CB_byte_offsets_verified": false,
+    "original_shader48_Android_GPU_runtime_verified": false,
+    "private_source_purge": true,
     "originalShaderRestored": false
   }
 }
