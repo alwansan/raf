@@ -354,7 +354,9 @@ namespace RaftGraphicsLabEditor
             camera.nearClipPlane=.03f;
             camera.farClipPlane=100f;
             cameraGo.tag="MainCamera";
+            var automaticRecorder=cameraGo.AddComponent<GfxSessionRecorder>();
             var viewer=cameraGo.AddComponent<GfxMultiViewer>();
+            viewer.sessionRecorder=automaticRecorder;
             viewer.viewingCamera=camera;
             viewer.models=models;
             viewer.defaultHideHelpers=true;
@@ -384,10 +386,10 @@ namespace RaftGraphicsLabEditor
 
             PlayerSettings.companyName="alwansan";
             PlayerSettings.productName="Raft GFX Multi Model Laboratory";
-            PlayerSettings.bundleVersion="0.4.0";
-            PlayerSettings.Android.bundleVersionCode=4;
+            PlayerSettings.bundleVersion="0.5.0";
+            PlayerSettings.Android.bundleVersionCode=5;
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,
-                "com.alwansan.raft.graphicslab.channels");
+                "com.alwansan.raft.graphicslab.autologs");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.colorSpace=ColorSpace.Linear;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
@@ -400,7 +402,7 @@ namespace RaftGraphicsLabEditor
             QualitySettings.shadowDistance=20f;
             AssetDatabase.SaveAssets();
 
-            string apk="builds/Android/GfxLab-Multi-Six-Channel-Probe.apk";
+            string apk="builds/Android/GfxLab-Multi-Six-AutoLogs.apk";
             Directory.CreateDirectory(Path.GetDirectoryName(apk));
             var report=BuildPipeline.BuildPlayer(
                 new[]{new EditorBuildSettingsScene("Assets/Scenes/GfxMulti.unity",true)},
