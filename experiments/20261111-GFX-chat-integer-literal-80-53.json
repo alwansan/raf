@@ -26,13 +26,30 @@
     "private ZIP2, DXBC/SPV purge"
   ],
   "resource_key": "gfxlab-multi080-spv-private-integer-multiplier",
-  "status": "CI_RUNNING",
-  "run_id": 42904629074,
-  "run_url": "https://github.com/alwansan/raf/actions/runs/42904629074",
+  "status": "SUCCESS_12_OF_12_SPV_OPIMUL_WITH_32BIT_NONPOWER_OF_TWO_LITERAL_SOURCE_CPU_ONLY",
+  "run_id": 42904933952,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42904933952",
   "resumed_from": "20261111-GFX-chat-spv-unknown-families-52",
   "base_sha": "b7eea0abee2463bbdca0fba1090cf6c525f8f3fa",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_OPCODE_AND_LITERAL_SHAPE",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_INTEGER_OPCODE_AND_LITERAL_SHAPE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "dc26e3228f22e0215e1286b3153250d41e3aef4d",
+  "failed_preflight_runs": [
+    42904629074,
+    42904827228
+  ],
+  "tests_passed": 679,
+  "original_joint_pairs": 157,
+  "original_stages": 314,
+  "original_CB_stages": 311,
+  "authenticated_spv_index_CB_loads": 427,
+  "unproven_store_value_immediate_integer_OpIMul": 12,
+  "OpIMul_one_literal_non_power_two_count": 12,
+  "OpIMul_one_literal_power_two_count": 0,
+  "strict_CFG_prior_store_block_dominates": 47,
+  "artifact_id": 13803384787,
+  "artifact_expires_utc": "2026-11-17T21:26:45Z",
+  "private_purge_verified": true
 }
