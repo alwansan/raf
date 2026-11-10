@@ -26,8 +26,25 @@
     "closure-gate checklist and bounded next experiments"
   ],
   "resource_key": "gfxlab-owner001-source-safe-user-evidence-no-private-upload",
-  "status": "PREPARING_SAFE_REVIEW",
-  "next_step": "Build owner evidence safe auditor and source-free CI, write phase closure document, update SESSION/RESTORE/OPEN_WORK/MEMORY/STATE; do not change concurrent GFX029 code or T-Team.",
+  "status": "SUCCESS_171_UNIT_TESTS_OWNER_SIX_MODEL_EVIDENCE_REVIEW_NOT_SHADER_CLOSED",
+  "next_step": "Authentic Shader48 shader state/CB sampler mapping and Unity GLES compile, owner normalized channel matrix logs, worker handoff only after closure gates.",
   "original_shader_restored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run": 42752583864,
+  "unit_tests": 171,
+  "source_zip_sha256": "adc08713ad67a987d0b30ac01b1b6e9004342b359aeb97ed1ee61866fecc4238",
+  "evidence": {
+    "screenshots": 16,
+    "copy_json_snapshots": 13,
+    "shader_cache_entries": 10,
+    "models_logged": 6,
+    "all_model_albedo_pbr": true,
+    "logged_role_basecolor_rgb_source_only": 13,
+    "logged_errors": 0,
+    "original_shader_restored": false
+  },
+  "outcome": "All six original models shown with source textures via Standard fallback and diagnostic channel. Original Shader48 GPU stage/PC parity unproven.",
+  "originalShaderRestored": false,
+  "phaseClosed": false,
+  "private_original_shader_pixels_uploaded": false
 }
