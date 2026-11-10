@@ -184,17 +184,17 @@ class TestGFX080IntegerOperand32BitShape(unittest.TestCase):
             *idxread("%8")])
 
     def test_imul_one_literal_pow2_with_actual_dynamic_operand(self):
-        c=self.read_with_value(["%6 = OpLoad %1 %5"],
-           "%40 = OpIMul %1 %6 %4")
+        c=self.read_with_value(["%66 = OpLoad %1 %5"],
+           "%40 = OpIMul %1 %66 %4")
         self.assertEqual(c["SPV_unknown_integer_terminal_public_core_opcode_OpIMul"],1)
         self.assertEqual(c["SPV_unknown_integer_terminal_OpIMul_literal_shape_one_unsigned_power_of_two_literal"],1)
         self.assertFalse(c["SPV_OpIMul_literal_power_two_proves_original_DXBC_ISHL"])
 
     def test_imul_nonpower_and_zero_literals(self):
-        a=self.read_with_value(["%6 = OpLoad %1 %5",
-           "%70 = OpConstant %1 3"],"%40 = OpIMul %1 %6 %70")
+        a=self.read_with_value(["%66 = OpLoad %1 %5",
+           "%70 = OpConstant %1 3"],"%40 = OpIMul %1 %66 %70")
         self.assertEqual(a["SPV_unknown_integer_terminal_OpIMul_literal_shape_nonpower_of_two_literal"],1)
-        b=self.read_with_value(["%6 = OpLoad %1 %5"],"%40 = OpIMul %1 %6 %2")
+        b=self.read_with_value(["%66 = OpLoad %1 %5"],"%40 = OpIMul %1 %66 %2")
         self.assertEqual(b["SPV_unknown_integer_terminal_OpIMul_literal_shape_literal_zero"],1)
 
     def test_imul_both_literal_not_fake_variable_shift(self):
@@ -202,27 +202,27 @@ class TestGFX080IntegerOperand32BitShape(unittest.TestCase):
         self.assertEqual(c["SPV_unknown_integer_terminal_OpIMul_literal_shape_both_constant_operands"],1)
 
     def test_imul_no_literal_or_untrusted_operand_unknown(self):
-        a=self.read_with_value(["%6 = OpLoad %1 %5",
-           "%60 = OpLoad %1 %5"],"%40 = OpIMul %1 %6 %60")
+        a=self.read_with_value(["%66 = OpLoad %1 %5",
+           "%60 = OpLoad %1 %5"],"%40 = OpIMul %1 %66 %60")
         self.assertEqual(a["SPV_unknown_integer_terminal_OpIMul_literal_shape_no_proven_literal"],1)
         b=self.read_with_value([],"%40 = OpIMul %1 %unknown %4")
         self.assertEqual(b["SPV_unknown_integer_terminal_OpIMul_literal_shape_other_operand_type_or_origin_unproven"],1)
 
     def test_imul_wrong_32bit_type_not_promoted(self):
-        c=self.read_with_value(["%6 = OpLoad %1 %5"],
+        c=self.read_with_value(["%66 = OpLoad %1 %5"],
            "%40 = OpIMul %unknownType %6 %4")
         self.assertEqual(c["SPV_unknown_integer_terminal_OpIMul_literal_shape_unverified_integer_width_or_arity"],1)
 
     def test_imul_signed_highbit_literal_classified_u32_without_sign_claim(self):
-        c=self.read_with_value(["%6 = OpLoad %1 %5",
+        c=self.read_with_value(["%66 = OpLoad %1 %5",
              "%70 = OpConstant %1 -2147483648"],
-             "%40 = OpIMul %1 %6 %70")
+             "%40 = OpIMul %1 %66 %70")
         self.assertEqual(c["SPV_unknown_integer_terminal_OpIMul_literal_shape_one_unsigned_power_of_two_literal"],1)
         self.assertFalse(c["SPV_OpIMul_literal_power_two_proves_memory_Store_to_Load_value"])
 
     def test_integer_iadd_kept_separate_not_imul_literal(self):
-        c=self.read_with_value(["%6 = OpLoad %1 %5"],
-             "%40 = OpIAdd %1 %6 %4")
+        c=self.read_with_value(["%66 = OpLoad %1 %5"],
+             "%40 = OpIAdd %1 %66 %4")
         # GFX077 bounded SSA walk already knows IAdd, but root has an
         # untrusted memory-loaded operand so the ancestry is UNKNOWN.
         self.assertEqual(c["SPV_unknown_integer_terminal_public_core_opcode_OpIAdd"],1)
