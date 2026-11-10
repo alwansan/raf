@@ -1,0 +1,27 @@
+{
+  "session_id": "20261110-GFX-chat-managed-shader-prop-17",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-affine-fullframe-16",
+  "base_sha": "19e6acfe394111da9c1a5087b35d3e2fe302369b",
+  "experiment_key": "GFX-MULTI-043",
+  "issue_id": "RENDER-002",
+  "scope": "Original PC Raft ZIP2 manifest and authentic managed Assembly-CSharp.dll/Custom.dll .NET UserString heap vs 27 original Shader48 property names plus seven Material TexEnv sets; safe count-only script-side resource property evidence.",
+  "original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_files": [
+    "RAFT_FILE_MANIFEST.tsv",
+    "Raft/Custom.dll",
+    "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "Raft/Raft_Data/resources.assets",
+    "Raft/Raft_Data/sharedassets0.assets",
+    "Raft/Raft_Data/sharedassets6.assets"
+  ],
+  "goals": [
+    "Distinguish independently authored shader source sidecar paths from compiled .assets: inventory by exact extension only",
+    "Use verified SHA + .NET #US ECMA-335 typed string heap, never raw byte matching, to check source Shader48 literal property names and bound material property labels",
+    "Count Unity Material/Shader API member references only as presence, not attribute/register linkage",
+    "Fail-closed if malformed metadata, preserve private string names and assemblies on ephemeral CI only",
+    "If no authentic Material→t/s/b/CB offset proof, explicitly continue original Shader48 G8 BLOCKED; do not create original shader APK"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
