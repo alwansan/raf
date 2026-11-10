@@ -1,7 +1,7 @@
 """GFX-MULTI-049 purely synthetic 58-profile source selector guards."""
 import unittest
 from gfxlab.tools.multi_shader_representative_spirv_profiles import (
-    select_private_sample_profiles, safe_failure_code
+    select_private_sample_profiles, safe_failure_code, filter_nonresource_opnames
 )
 
 def stage(name, pairs):
@@ -77,5 +77,53 @@ class TestRepresentativeProfileSelection(unittest.TestCase):
         self.assertEqual(safe_failure_code(ValueError("GFX046_SOME_PRIVATE_NAME")), "UNCLASSIFIED_FAIL_CLOSED")
         self.assertEqual(safe_failure_code(ValueError("GFX046_REFLECTION_SYMBOL_OUTSIDE_SOURCE t6")), "UNCLASSIFIED_FAIL_CLOSED")
         self.assertEqual(safe_failure_code(KeyError("GFX046_REFLECTION_SYMBOL_OUTSIDE_SOURCE")), "UNCLASSIFIED_FAIL_CLOSED")
+
+
+    def test_duplicate_debug_name_on_nonresource_type_is_filtered_not_parity(self):
+        from gfxlab.tools.multi_shader_spirv_sample_use import resource_variable_ids
+        original=b"""
+          OpName %90 "t2"
+          OpName %10 "t2"
+          OpName %12 "s1"
+          %10 = OpVariable %100 UniformConstant
+          %12 = OpVariable %101 UniformConstant
+          %90 = OpTypeImage %float 2D 0 0 0 1 Unknown
+          %20 = OpLoad %img %10
+          %22 = OpLoad %smpl %12
+        """
+        safe=filter_nonresource_opnames(original)
+        self.assertNotIn(b'OpName %90 "t2"',safe)
+        self.assertIn(b'OpName %10 "t2"',safe)
+        self.assertIn(b"%20 = OpLoad %img %10",safe)
+        mapping=resource_variable_ids({2},[{"name":"t2","binding":55}],"resource",safe)
+        self.assertEqual(mapping,{"%10":("resource",2)})
+
+    def test_duplicate_real_resource_global_opname_must_still_fail_closed(self):
+        from gfxlab.tools.multi_shader_spirv_sample_use import resource_variable_ids
+        original=b"""
+          OpName %10 "t2"
+          OpName %11 "t2"
+          %10 = OpVariable %100 UniformConstant
+          %11 = OpVariable %100 UniformConstant
+        """
+        safe=filter_nonresource_opnames(original)
+        with self.assertRaisesRegex(ValueError,"AMBIGUOUS"):
+            resource_variable_ids({2},[{"name":"t2"}],"resource",safe)
+
+    def test_nonresource_names_dropped_without_changing_sample_instructions(self):
+        dis=b"""
+          OpName %31 "t3"
+          %31 = OpVariable %pointer Function
+          OpName %10 "t3"
+          %10 = OpVariable %pointer UniformConstant
+          %21 = OpLoad %img %10
+          %44 = OpImageSampleImplicitLod %v %30 %uv
+        """
+        out=filter_nonresource_opnames(dis)
+        self.assertNotIn(b'OpName %31 "t3"',out)
+        self.assertIn(b'OpName %10 "t3"',out)
+        self.assertIn(b"OpImageSampleImplicitLod",out)
+        with self.assertRaisesRegex(ValueError,"DISASSEMBLY_BOUNDS"):
+            filter_nonresource_opnames(b"")
 
 if __name__=="__main__":unittest.main()
