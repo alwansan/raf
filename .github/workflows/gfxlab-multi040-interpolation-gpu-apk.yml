@@ -121,8 +121,7 @@ jobs:
           test -n "$aapt" && test -x "$aapt"
           "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/gfx040-signer-private.txt"
           "$aapt" dump badging "$apk" |
-            grep -F "name='com.alwansan.raft.graphicslab.interpolation'" >
-            "$RUNNER_TEMP/gfx040-package-private.txt"
+            grep -F "name='com.alwansan.raft.graphicslab.interpolation'" > "$RUNNER_TEMP/gfx040-package-private.txt"
           echo GFX_MULTI040_APK_SIGNATURE_AND_UNIQUE_PACKAGE_VERIFIED=true
       - name: Deliver synthetic diagnostic APK + aggregate integrity proof
         uses: actions/upload-artifact@v4
