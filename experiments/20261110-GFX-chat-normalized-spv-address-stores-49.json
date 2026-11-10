@@ -1,0 +1,37 @@
+{
+  "session_id": "20261110-GFX-chat-normalized-spv-address-stores-49",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-076",
+  "issue_id": "RENDER-002",
+  "base_sha": "afd0cbbbff5557b6500b7adb84751c0fc0f54a12",
+  "resumed_from": "20261110-GFX-chat-spv-pointer-origin-48",
+  "branch": "experiment/android-graphics-rootcause",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "run_id": 42899280014,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42899280014",
+  "status": "CI_RUNNING",
+  "resource_key": "gfxlab-multi076-source-private-SPV-Function-literal-path",
+  "question": "What safe count-only prior source SPV OpStore matches the actual 427 index OpLoad Function root and constant address path, within same block vs outside it?",
+  "hypothesis": "Different SPV pointer IDs may normalize to an identical Function+literal path even where exact pointer SSA ID matching found 0; equality of path is not proof of effective memory value.",
+  "control": [
+    "different Function root",
+    "different literal path",
+    "branch boundary",
+    "unknown alias Store",
+    "FunctionCall",
+    "OpCopyObject",
+    "dynamic path",
+    "wrong UBO",
+    "volatile"
+  ],
+  "planned_tests": [
+    "full source-free unittest suite",
+    "source-private 157 authentic Shader48 pairs",
+    "427 original b authenticated SPV index OpLoads",
+    "safe anonymous path match partition",
+    "artifact and private purge"
+  ],
+  "evidence_level": "PENDING_CPU_SOURCE_PROVENANCE",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
