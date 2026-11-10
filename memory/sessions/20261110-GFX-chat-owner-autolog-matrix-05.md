@@ -19,3 +19,12 @@
 
 ## Runs / results / next step
 Pending patch + CI. Record the immutable SHA and result here before closing the cycle.
+
+## Final verified status — 2026-11-10
+- **SUCCESS** owner-uploaded GFX-MULTI-031 auto ZIP CRC with one actual Xiaomi Adreno730 diagnostic session: 77 events, 67 state snapshots, no logged Unity errors/warnings/dropped records/write failures. Six models, four fallback modes each, but Normal/Metallic/R/G/B/A/ForceLinear only M00; M03 second material index 1 NOT captured.
+- Second uploaded `test model(2).zip` SHA256 `adc08713ad67a987d0b30ac01b1b6e9004342b359aeb97ed1ee61866fecc4238` matches earlier owner screenshot archive, so it is **not a new shader-reference source**.
+- Safe aggregate published: `gfxlab/evidence/20261110_gfx031_owner_safe_counts.json` (no raw private user ZIP/screenshots/ShaderCache or IL2CPP data).
+- DEX audit initial [CI42804520804](https://github.com/alwansan/raf/actions/runs/42804520804) FAILED only due to assuming an APK at artifact extraction root. Patched recursive exact-name/unique-file lookup, retained immutable size+SHA/CRC/DEX assertions; [CI42806407666](https://github.com/alwansan/raf/actions/runs/42806407666) **SUCCESS**: 1 APK, bridge=true, method=true, destination=true, temp purge=true.
+- Improved source-free parser per-model coverage and M03-specific surface check; strict session-name pairing. [CI42806606474](https://github.com/alwansan/raf/actions/runs/42806606474) FAILED because new synthetic test used literal backslash-n, not newline. Corrected JSONL fixture; [CI42806757535](https://github.com/alwansan/raf/actions/runs/42806757535) **SUCCESS**, 193 Python tests, source-free, no new APK.
+- Level: **OWNER_ANDROID_DIAGNOSTIC_LOGS** only, **not original Shader48 execution** and **not Raft game/PC pixel parity**. Owner file proves ZIP was created and readable; ZIP alone cannot independently prove exact external storage path unless owner reports it.
+- Next: explore unused compiled Shader48 stage metadata/RDEF as source-only GFX-MULTI-032; never fabricate missing Material→t#/s#/CB offsets or declare phase 1 closed prematurely.
