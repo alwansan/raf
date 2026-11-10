@@ -9,7 +9,7 @@
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "run_id": 42899280014,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42899280014",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_128_SAME_BLOCK_47_OTHER_WINDOW_252_UNOBSERVED_GFX054_BLOCKED",
   "resource_key": "gfxlab-multi076-source-private-SPV-Function-literal-path",
   "question": "What safe count-only prior source SPV OpStore matches the actual 427 index OpLoad Function root and constant address path, within same block vs outside it?",
   "hypothesis": "Different SPV pointer IDs may normalize to an identical Function+literal path even where exact pointer SSA ID matching found 0; equality of path is not proof of effective memory value.",
@@ -31,7 +31,14 @@
     "safe anonymous path match partition",
     "artifact and private purge"
   ],
-  "evidence_level": "PENDING_CPU_SOURCE_PROVENANCE",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_POINTER_SYNTAX_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "53f3565f7b1c9f9d4d921b98aa2826066b8bd109",
+  "tests_passed": 586,
+  "spv_real_original_b_index_loads": 427,
+  "equivalent_literal_function_path_prior_same_block_candidate_count": 128,
+  "equivalent_literal_function_path_prior_outside_window_count": 47,
+  "equivalent_literal_function_path_no_prior_store_observed_count": 252,
+  "private_original_shader_purge_verified": true
 }
