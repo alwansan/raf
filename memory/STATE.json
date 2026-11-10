@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-authenticated-cb-byte-address-27",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-authenticated-cb-byte-address-27.md",
-  "status": "GFX_MULTI_053_SUCCESS_208_OF_208_AUTHENTICATED_SOURCE_CB_VEC4_RANGES_WITH_REAL_SPV_LOADS_66_UBOS_MATERIAL_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-original-property-register-evidence-gate-28",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-original-property-register-evidence-gate-28.md",
+  "status": "GFX_MULTI_054_SUCCESS_SOURCE_PROPERTY_REGISTER_BRIDGE_PROOF_GATE_BLOCKED_IN_PINNED_INPUTS_1275_NO_RDEF_NO_PARAMETERS_G8_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-054 prioritize source-private authentic Shader48 property-to-original DXBC t/s/b register or CB member-byte-offset bridge evidence gate: ShaderLab/HLSL/RDEF or genuine Windows PC runtime capture; do not assert original Material semantics from SPIRV vector range 208/208. Secondary original CB component swizzle CPU trace if source-backed, keep unsupported opcode counts and no Android APK until GPU/source parity.",
+  "next_experiment": "GFX-MULTI-055 only with NEW independently authenticated source property->original t/s/b binding or CB member byte-offset witness (same Shader48, pass, keyword/tier, original DXBC). If unavailable, preserve source semantic bridge BLOCKED and prioritize other testable shader pipeline gates without inventing mappings or building a game APK.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1535,5 +1535,30 @@
     "original_Shader48_android_GPU_proven": false,
     "private_original_source_purged": true,
     "originalShaderRestored": false
+  },
+  "latest_gfx054_original_property_register_provenance_gate": {
+    "run": 42852112971,
+    "status": "SUCCESS_SOURCE_AVAILABILITY_GATE_SEMANTIC_BRIDGE_BLOCKED",
+    "unit_tests": 377,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13781266865,
+    "artifact_expiry_utc": "2026-11-17T16:13:30Z",
+    "shader48_serialized_properties": 27,
+    "source_material_slots": 7,
+    "bound_original_material_texenv_slots": 21,
+    "original_exact_variant_pairs": 524,
+    "source_link_rows": 1435,
+    "unique_original_DXBC_linked_programs": 1275,
+    "original_variant_texture_parameter_entries": 0,
+    "original_variant_CB_binding_entries": 0,
+    "original_linked_DXBC_RDEF_programs": 0,
+    "original_alternative_debug_reflection_programs": 0,
+    "original_shaderlab_script_available": false,
+    "original_authenticated_Material_to_DXBC_resource_register_edges": 0,
+    "original_CB_member_byte_offset_semantic_bridge_proven": false,
+    "missing_evidence_specific_to_checked_source_only": true,
+    "future_new_external_PC_capture_or_authored_shader_possible": true,
+    "originalShaderRestored": false,
+    "source_private_purged": true
   }
 }

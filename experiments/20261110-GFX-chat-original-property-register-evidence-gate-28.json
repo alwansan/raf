@@ -25,8 +25,35 @@
     "count-only proof gate and missing witness contract",
     "always source purge"
   ],
-  "status": "CI_PENDING",
-  "run_urls": [],
+  "status": "SUCCESS_CROSS_AUDIT_SOURCE_SEMANTIC_BRIDGE_UNAVAILABLE_IN_PINNED_INPUTS",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42851989618",
+    "https://github.com/alwansan/raf/actions/runs/42852112971"
+  ],
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42852112971,
+    "unit_tests": 377,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_models": 6,
+    "material_slots": 7,
+    "shader_property_names": 27,
+    "bound_material_texenv_slots": 21,
+    "source_shader48_passes": 7,
+    "exact_keyword_tier_pairs": 524,
+    "source_program_link_rows": 1435,
+    "unique_linked_source_DXBC_programs": 1275,
+    "source_serialized_texture_parameter_entries": 0,
+    "source_serialized_CB_binding_entries": 0,
+    "DXBC_RDEF_programs": 0,
+    "DXBC_alternative_debug_reflection_programs": 0,
+    "original_embedded_shaderlab_script_field": false,
+    "authenticated_original_Material_property_to_DXBC_register_edges": 0,
+    "original_CB_member_byte_offsets_proven": false,
+    "other_original_source_witness_impossible": false,
+    "originalShaderRestored": false,
+    "private_original_source_purged": true,
+    "safe_artifact_id": 13781266865
+  }
 }
