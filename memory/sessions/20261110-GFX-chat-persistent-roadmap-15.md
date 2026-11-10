@@ -1,0 +1,15 @@
+# GFX-LAB — 20261110-GFX-chat-persistent-roadmap-15
+- session_id: 20261110-GFX-chat-persistent-roadmap-15
+- origin: chat
+- resumed_from: 20261110-GFX-chat-dxbc-rdef-resource-gate-14
+- base_sha: 9836ae02e4a27211a8c180caeaee9fadfe8ae7a6
+- issue_id: RENDER-002
+- experiment_key: GFX-ROADMAP-001 + GFX-MULTI-014-correction
+- scope: persistent restoration/roadmap policy; correction of false zero RDEF source counters; no Unity import, APK, shaders or other branch change.
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- runs: GFX-MULTI-014 CI42733664716 SUCCESS; new pure-unit parser test not yet confirmed by CI.
+- source_evidence: Pass0 authentic VS and FS DXBC lack RDEF; original constant-buffer/resource counts UNKNOWN; converted SPIR-V resource counts are not original semantic binding equivalence.
+- negative_controls: missing RDEF returns null, not 0; malformed RDEF still fails.
+- outcome: persistent checklist, live restore and planning files updated; original Android shader false, phase open.
+- next_step: GFX-MULTI-015 private source-only coverage over all 7 passes and 14 stages, then independent DX11 resource map investigation.
+- open_tasks: gfxlab/OPEN_WORK_AND_IDEAS_AR.md

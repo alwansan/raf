@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-dxbc-rdef-resource-gate-14",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-dxbc-rdef-resource-gate-14.md",
-  "status": "GFX_MULTI_013_SOURCE_ORIGINAL_SHADER_7_OF_7_PASS_OFFLINE_SUCCESS_FULL_SHADER_RESTORATION_OPEN",
+  "latest_session": "20261110-GFX-chat-persistent-roadmap-15",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-persistent-roadmap-15.md",
+  "status": "GFX_ROADMAP_PERSISTENT_RDEF_ABSENT_SOURCE_UNKNOWN_NOT_ZERO",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Inspect GFX-MULTI-014 actual private source RDEF counts vs SPIRV reflected resources, then implement exact register/constant-buffer/sampler/material mapping or isolate missing source metadata before Android ShaderLab proof.",
+  "next_experiment": "GFX-MULTI-015: original Shader48 RDEF/chunk presence per 14 authentic stage containers, then source register-to-SPIRV and material binding semantics before Android runtime.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -399,8 +399,23 @@
   },
   "latest_shader_resource_census": {
     "experiment": "GFX-MULTI-014",
-    "status": "CI_PENDING",
-    "source_only": true,
-    "original_shader_restored": false
-  }
+    "run": 42733664716,
+    "status": "SUCCESS_SOURCE_PASS0_RDEF_ABSENT",
+    "source_original_cb_count": "UNKNOWN",
+    "original_resource_binding_count": "UNKNOWN",
+    "converted_vs_ubo_count": 5,
+    "converted_fs_ubo_count": 7,
+    "converted_fs_image_count": 7,
+    "converted_fs_sampler_count": 6,
+    "original_shader_restored": false,
+    "source_binding_parity": false
+  },
+  "persistent_backlog": "gfxlab/OPEN_WORK_AND_IDEAS_AR.md",
+  "session_close_required": [
+    "prompt/graphics-lab/RESTORE_AR.md",
+    "memory/sessions/<session_id>.md",
+    "gfxlab/OPEN_WORK_AND_IDEAS_AR.md",
+    "memory/STATE.json",
+    "memory/MEMORY.md"
+  ]
 }

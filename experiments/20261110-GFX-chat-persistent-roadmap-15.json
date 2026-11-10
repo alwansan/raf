@@ -1,0 +1,19 @@
+{
+  "session_id": "20261110-GFX-chat-persistent-roadmap-15",
+  "origin": "chat",
+  "experiment_key": "GFX-ROADMAP-001",
+  "issue_id": "RENDER-002",
+  "question": "Can future sessions recover unresolved source-binding work and avoid false-zero RDEF assumptions?",
+  "hypothesis": "Structured persistent backlog and fail-closed missing-field interpretation prevent accidental phase closure.",
+  "reference_refs": [
+    "CI42733664716",
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "control": "No original bytecode or game data, report unknown as null, do not assert GPU parity",
+  "planned_tests": [
+    "unit test missing RDEF",
+    "manual live restore link audit"
+  ],
+  "resource_key": "gfxlab-session-persistence",
+  "status": "PERSISTENCE_COMMIT_PENDING"
+}

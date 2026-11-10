@@ -39,7 +39,7 @@ def rdef_summary(dx):
                 "rdef_structures_bounds_checked":True})
     if len(sections)>1:raise ValueError("AMBIGUOUS_MULTIPLE_RDEF_CHUNKS")
     return sections[0] if sections else dict(
-        constant_buffers=0,resource_binding_descriptors=0,
+        constant_buffers=None,resource_binding_descriptors=None,
         rdef_structures_bounds_checked=False,rdef_missing_in_source=True)
 
 def audit(stage):

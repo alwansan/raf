@@ -56,3 +56,10 @@
 - GFX-012 CI42732370025 SUCCESS: one original pair transformed to GLSL ES310 and compiled offline, VS/FS IO location/type 7/7 matched; source-only.
 - **GFX-013 CI42732808109 SUCCESS**: all seven original Shader48 passes (4+3) have one matched variant pair each converted to SPIR-V then GLSL ES310 and accepted by offline validators. 14 stage programs and per-pass VS/FS reflected location/type match. Not 524/524 variants, not ShaderLab running on Android, originalShaderRestored=false.
 - **Current stage OPEN**: source→Unity→Adreno+PC pixel parity, constant buffers/samplers/texture mapping/normal DXT5nm, source render states/keywords, rig/animation, multi-part assembly remain unverified. See `gfxlab/REUSABLE_MODEL_RESTORATION_GATES_AR.md`. Never declare restored original Shader48 or completion of all item types from CPU proof alone.
+
+
+## إلزام الاستعادة المتواصلة بناءً على طلب المالك (2026-11-10)
+بنهاية **كل دورة** يجب حفظ: (1) `memory/sessions/<session_id>.md` مع `resumed_from/base_sha/origin=chat` وروابط CI وحالة النجاح/الفشل والحدود والخطوة التالية، (2) `prompt/graphics-lab/RESTORE_AR.md` مع آخر دليل مثبت ومسار الجلسة، (3) `gfxlab/OPEN_WORK_AND_IDEAS_AR.md` بجميع الخطط والأفكار المفتوحة وأولوياتها، (4) `memory/MEMORY.md` و`memory/STATE.json`. تحقق من commit SHA قبل الادعاء بالحفظ. إذا تعذر الرفع صرّح بذلك ولا تقل إن الحالة حفظت. عند الاستئناف اقرأ الخمسة وCI قبل الكتابة. لا تُنشئ العامل العام حتى يحدد المالك قواعده.
+
+## فحص GFX-MULTI-014 الأخير
+[CI42733664716](https://github.com/alwansan/raf/actions/runs/42733664716) SUCCESS: DXBC أصلي لممثّل Shader48 Pass0 VS/FS بلا RDEF؛ الأعداد الأصلية للـConstant Buffers/Bindings `unknown/null` وليست 0. عدد SPIR-V resource بعد التحويل VS5 UBO، FS7 UBO/7 image/6 sampler؛ لا يعني دلالة binding مكافئة. التصحيح وفتح خارطة الدوامة بجلسة `memory/sessions/20261110-GFX-chat-persistent-roadmap-15.md`. التجربة التالية GFX-MULTI-015، راجع القائمة الدائمة.

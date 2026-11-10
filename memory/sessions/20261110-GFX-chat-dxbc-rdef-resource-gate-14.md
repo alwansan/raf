@@ -10,3 +10,8 @@
 - expected CI GFX-MULTI-014 after workflow push; source only; original shader phase OPEN.
 
 - CI42733550704 FAILED pure synthetic fixture only: declared 1 resource binding at offset 40 in 56-byte RDEF payload, so strict parser correctly rejected truncated binding. No original Shader48 source was read. Enlarged synthetic test payload to 84 bytes, re-triggered CI. No change to proprietary source or runtime.
+
+
+## CI final evidence / re-interpretation
+- [Run 42733664716](https://github.com/alwansan/raf/actions/runs/42733664716) COMPLETED SUCCESS: 75 unit tests; actual original Pass0 VS+FS had no RDEF; original source CB/resource counts **unknown**, not zero. SPIR-V 5 VS UBO; 7 FS UBO, 7 images, 6 samplers. No source-to-SPIRV register parity.
+- Fixed parser to output JSON null on absent RDEF, with strict negative test. Persistent plan: `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`; next session `20261110-GFX-chat-persistent-roadmap-15`.

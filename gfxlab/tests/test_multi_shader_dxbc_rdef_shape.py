@@ -26,3 +26,11 @@ class TestRdefBounds(unittest.TestCase):
         x=bytearray(synthetic_dx())
         struct.pack_into("<I",x,56,999)
         with self.assertRaises(ValueError):rdef_summary(bytes(x))
+
+    def test_missing_rdef_is_unknown_not_zero(self):
+        chunk=bytearray(synthetic_dx())
+        chunk[36:40]=b"SHEX"
+        found=rdef_summary(bytes(chunk))
+        self.assertTrue(found["rdef_missing_in_source"])
+        self.assertIsNone(found["constant_buffers"])
+        self.assertIsNone(found["resource_binding_descriptors"])
