@@ -561,6 +561,6 @@ def main():
     d=audit(stage_originals(a.zip2,a.stage))
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(d,sort_keys=True,indent=2)+"\n")
-    print("GFX088_SAFE_SOURCE_DXBC_INPUT_AND_SPV_UNIFORM_B_OFFSET_PROVENANCE_CLASSES "+json.dumps(d,sort_keys=True))
+    print("GFX089_SAFE_DXBC_INPUT_DECL_SIGNATURE_STAGE_WIDE_CLASSES "+json.dumps(d,sort_keys=True))
 
 if __name__=="__main__": main()
