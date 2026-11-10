@@ -166,3 +166,19 @@ The first attempt [CI42743969290](https://github.com/alwansan/raf/actions/runs/4
 - [CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) SUCCESS، 128 tests، 21/21 texture decoded، 15 sparse chunks / 707,788,800 bytes؛ artifact `13730562085`؛ purge ناجح.
 - النتيجة: tint أبيض 7/7 وUV identity 21/21؛ Normal R ثابت وG/B/A متغيرة، Metallic A متغيرة 7/7؛ لا تفسير نهائي لقنوات الشيدر.
 - التالية GFX-MULTI-024: Material float/color semantics + TextureSettings WrapU/V/W + authoritative Unity 2021.3 enum mapping. No APK yet.
+
+## GFX-MULTI-024 — verified result (2026-11-10)
+
+- [CI42745345599](https://github.com/alwansan/raf/actions/runs/42745345599) FAILED after 139 unit tests: an incorrect uniqueness guard assumed seven material slots meant seven distinct Material21 assets. Source purge succeeded.
+- Fixed to distinguish slot references from unique identities. [CI42745536309](https://github.com/alwansan/raf/actions/runs/42745536309) COMPLETED SUCCESS: 139 unit tests; original SHA-pinned ZIP2 source; six models, **7 renderer material slots / 6 distinct Materials**, **21 Texture2D links / 18 distinct images**. Runner private source purge succeeded.
+- Original saved properties: **112/112 Float labels and 14/14 Color labels match Shader48's 27-property declaration**; this does NOT establish any property-to-register binding/CB byte offset. Seven slots have white RGBA tint; seven other saved color slots are nonidentity (unknown semantics).
+- Float buckets: zero 33, one 58, strictly between 0 and 1: 21. Safe name categories: alpha-cutout 7, blend 14, depth 7, gloss 21, height 7, metallic 7, normal-strength 14, occlusion 7, render-mode 7, UV channel 7, unclassified 14. No raw names/values exported.
+- Original TextureFormat: BaseColor DXT1×5 + DXT5×2; Normal DXT5×7; Metallic DXT5×7. Original internal TextureColorSpace: BaseColor sRGB×7, Normal Linear×7, Metallic sRGB×7. WrapU/V/W Repeat each 21/21, FilterMode Bilinear 21/21, Aniso=1 and MipBias=0 on all 21 original image links.
+- Official Unity 2021.3 enum grounding: [UnityCsReference GraphicsEnums.cs](https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs) @ branch HEAD b052b1fe38b45d5aefa609a115c626ed2e74f3a6. Internal TextureColorSpace != PlayerSettings.ColorSpace.
+- [Safe aggregate artifact 13730024662](https://github.com/alwansan/raf/actions/runs/42745536309/artifacts/13730024662), expires 2026-11-17T02:51:51Z UTC. No raw source Shader/ID/name/value, image, GPU pixel, APK, OBB, or third-party branch changes.
+- Evidence level ORIGINAL_SOURCE. OriginalShaderRestored=false; original property→DX11 register mapping=false; Android GPU/PC pixel parity=false; rig/animation, water/FFT, smoke/fire still OPEN.
+
+## Next: GFX-MULTI-025
+Identify seven nonidentity second Color slots by exact shader property-name semantics without publishing original names/values; separately census shared Material21 / Texture2D identities across M00–M05. Do not infer emissive GPU behavior or convert Metallic sRGB to Linear without a controlled device/PC reference. Do not create an agent or game APK.
+
+**Latest authoritative GFX session:** `memory/sessions/20261110-GFX-chat-float-wrap-color-25.md`; GFX-MULTI-024 CI42745536309 SUCCESS; next GFX-MULTI-025. Always verify HEAD and CI before edits.
