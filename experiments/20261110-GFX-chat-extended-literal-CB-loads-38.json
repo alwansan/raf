@@ -1,0 +1,29 @@
+{
+  "session_id": "20261110-GFX-chat-extended-literal-CB-loads-38",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-dynamic-CB-source-shape-37",
+  "base_sha": "79c11c391c99cf8ffc9d81a0dbab592f9b85ccc4",
+  "experiment_key": "GFX-MULTI-064",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-Shader48-extended-modifier-literal-CB-b-vec4-source-range-and-SPV-OpLoad-pilot",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can 763 original DXBC CB source operand occurrences with literal b/vec4 indices and extended modifiers be partitioned independently of 427 true relative source CB uses, and do chosen seven-Pass real Vulkan1.1 SPV stages actually load the same distinct authenticated b/vec4 ranges?",
+  "hypothesis": "Extended modifiers do not change literal CB index representation, and actual authenticated SPV UBO OpLoad ranges for seven max-modifier source pairs cover measurable subset of corresponding original source b/vec4 ranges; any overlap is not per-instruction or modifier-value parity.",
+  "control": [
+    "exact original SHA 524 exact source pairs, 936 compiled stage programs, 157 Pass JOINT class representative pairs and 314 stage instances",
+    "source token operand extension types 0-3, fail invalid chain, relative rep, original declaration bounds, crosscheck GFX063 and GFX051 per stage",
+    "7 original Pass pairs 14 real Vulkan1.1 SPV stages authenticated actual b Uniform global and UBO reflected layout, real OpLoad range counts not guessed",
+    "no individual CB load/value semantics or material bindings asserted; unknown relative 427 held open",
+    "private original shader and translated SPV purge and safe aggregate only"
+  ],
+  "planned_tests": [
+    "source-free new negative operand tests and all Python regressions",
+    "source class representative census independent extended b/vec4 range counts",
+    "seven source original pair SPV val and real loaded range comparison",
+    "source-free aggregate checks and unconditional private purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
