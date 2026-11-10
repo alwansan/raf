@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "session_id": "20261110-GFX-chat-sampled-image-register-pairs-20",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-managed-cil-argflow-19",
+  "base_sha": "150a3378597daf7f10dfc11ccb0e9d97b9f5a08e",
+  "experiment_key": "GFX-MULTI-046",
+  "issue_id": "RENDER-002",
+  "resource_key": "gfxlab-source-private-spv-sample-pair",
+  "question": "Which authentic DXBC t/s registered resources form observable sample/gather pairs in vkd3d-lowered SPIR-V for seven exact original Shader48 stages?",
+  "hypothesis": "SPIRV OpSampledImage and sample use sites can be strictly traced to authenticated source register sets in a bounded subset",
+  "controls": [
+    "Source registry exact symbol coverage",
+    "synthetic dynamic access chain unresolved",
+    "missing reflection IDs fail",
+    "duplicate source id fail",
+    "no sampled operations not positive",
+    "private purge"
+  ],
+  "planned_tests": [
+    "full source-free tests",
+    "7 exact representative original matched pairs",
+    "14 SPIRV1.1 validation + reflection + disassembly",
+    "private aggregate only",
+    "private files purge"
+  ],
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

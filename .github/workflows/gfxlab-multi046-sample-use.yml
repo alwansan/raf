@@ -1,0 +1,98 @@
+name: GFX-MULTI-046 Shader48 original register to SPIRV translated sample-use edges / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi046-sample-use.yml'
+      - 'gfxlab/tools/multi_shader_spirv_sample_use.py'
+      - 'gfxlab/tests/test_multi_shader_spirv_sample_use.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi046-original-private-sampled-image
+  cancel-in-progress: false
+jobs:
+  original-source-private-vkd3d-sampler-use:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Run all source-free synthetic tests for SPIR-V sample chain
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_spirv_sample_use.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI046_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install private offline DXBC to SPIRV toolchain
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Prove only translated SPIR-V image/sampler sample-use edges against authentic DXBC
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_spirv_sample_use \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi046-private" \
+            --out gfxlab-multi046-safe-sample-use-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi046-safe-sample-use-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-046"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_pass_count"]==7
+          assert d["authentic_matched_variant_pairs_selected"]==7
+          assert d["authentic_stage_programs"]==14
+          assert len(d["per_pass"])==7
+          s=d["translated_spirv_t_s_use_aggregate"]
+          assert s["sample_or_gather_with_strict_t_s_pair"]+s["sample_or_gather_unresolved"]==s["sample_or_gather_operations"]
+          assert s["sampled_image_constructions_unresolved"]<=s["sampled_image_constructions"]
+          for row in d["per_pass"]:
+            for stage in row["translated_source_stage_sample_use_counts"].values():
+              assert not stage["source_register_numbers_or_translated_spirv_ids_exported"]
+              assert not stage["original_material_texenv_to_t_s_binding_verified"]
+              assert not stage["original_dxbc_sample_use_site_parity_independent_from_translator_verified"]
+              assert not stage["original_shader48_android_GPU_verified"]
+          for k in ("all_524_exact_source_pairs_evaluated","original_shader_source_property_to_DXBC_t_s_register_binding_verified",
+                    "source_texture2d_to_actual_gpu_sample_semantics_verified","original_constantbuffer_byte_offsets_verified",
+                    "shader48_original_android_GPU_runtime_verified","originalShaderRestored",
+                    "pc_to_adreno_original_pixel_parity","private_shader_bytes_registers_names_ids_or_pair_edges_exported","phase_closed"):
+            assert d[k] is False,k
+          print("GFX_MULTI046_SAFE_TRANSLATOR_SAMPLE_USE_NOT_MATERIAL_GPU_PARITY=true")
+          PY
+      - name: Publish count-only source-private offline sample-use artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi046-safe-translated-sample-pair-counts
+          path: gfxlab-multi046-safe-sample-use-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2 and private generated shader files
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi046-private"
+          echo GFX_MULTI046_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
