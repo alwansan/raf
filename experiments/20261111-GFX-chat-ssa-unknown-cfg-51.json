@@ -1,0 +1,40 @@
+{
+  "session_id": "20261111-GFX-chat-ssa-unknown-cfg-51",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-078",
+  "issue_id": "RENDER-002",
+  "question": "Among 12 unresolved same-block equivalent SPV Function literal path Store values, which bounded transparent SSA terminal opcodes explain the ambiguity? Among 47 cross-window matching-path Store/Load blocks, which have strict SPIR-V CFG block dominance?",
+  "hypothesis": "Some 12 may terminate in OpLoad, OpSelect, or other control/dataflow operations; some of 47 may be block-dominated without proving effective Store-to-Load memory value.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42900376410",
+    "memory/sessions/20261110-GFX-chat-spv-store-value-producer-50.md"
+  ],
+  "control": [
+    "unknown terminal OpLoad, OpSelect, CompositeExtract, direct shift",
+    "direct branch dominates",
+    "diamond alternative bypass",
+    "invalid target/CFG unknown",
+    "loop CFG",
+    "cross-function branch rejected",
+    "no leaked SPV IDs",
+    "no originalShaderRestored flag"
+  ],
+  "planned_tests": [
+    "all source-free GFX078 regression tests",
+    "authentic ZIP2 pinned 157 source Shader48 joint pairs / 314 stages / 311 CB stages",
+    "427 original-b SPIR-V UBO dynamic index reads; 128 Store candidate, 12 unknown value, 47 cross-window CFG categorization",
+    "safe anonymous counts artifact, no private shader bytes",
+    "always-run private source and SPIR-V purge"
+  ],
+  "resource_key": "gfxlab-multi078-original-private-spv-cfg",
+  "status": "CI_RUNNING",
+  "run_id": 42902805887,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42902805887",
+  "resumed_from": "20261110-GFX-chat-spv-store-value-producer-50",
+  "base_sha": "dcf6a4a4fc39e8d8a6eb51816a20d33fe0c31a97",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_AND_TRANSLATED_SPIRV_CPU_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
