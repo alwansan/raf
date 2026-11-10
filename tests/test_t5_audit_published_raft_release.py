@@ -86,6 +86,20 @@ class PublishedRaftReleaseAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "tag"):
             self.result()
 
+    def test_tag_attempt_matches_actions_run_attempt(self):
+        self.snapshot["run"]["run_attempt"] = 1
+        self.assertTrue(self.result()["published_asset_metadata_complete"])
+
+    def test_tag_attempt_mismatch_rejected(self):
+        self.snapshot["run"]["run_attempt"] = 2
+        with self.assertRaisesRegex(ValueError, "run attempt"):
+            self.result()
+
+    def test_invalid_run_attempt_rejected(self):
+        self.snapshot["run"]["run_attempt"] = True
+        with self.assertRaisesRegex(ValueError, "run attempt"):
+            self.result()
+
     def test_release_target_disagrees_with_native_source(self):
         self.release()["target_commitish"] = "a" * 40
         with self.assertRaisesRegex(ValueError, "target/body"):
