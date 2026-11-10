@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-obj-duplicate-attribute-parity-08",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-obj-duplicate-attribute-parity-08.md",
-  "status": "GFX_MULTI_005_SOURCE_METADATA_SUCCESS_OWNER_STANDARD_FALLBACK_ACCEPTED_FULL_ORIGINAL_SHADER_OPEN",
+  "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Check GFX-MULTI-008 vertex float32 duplicate attribute audit and Shader48 v3 m_PlayerSubPrograms coded bytecode/variant/CB/sampler semantics before Android shader pilot.",
+  "next_experiment": "GFX-MULTI-009: choose single original Shader48 pass and audit Shader source DXBC compression platform and field-safe register/CB/sampler semantics privately; then Android GLES pass fidelity pilot and PC visual comparison.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -316,7 +316,14 @@
   },
   "latest_obj_attribute_dedup_audit": {
     "experiment": "GFX-MULTI-008",
-    "status": "CI_PENDING",
-    "scope": "source float32 attribute equivalence only"
+    "run": 42727777657,
+    "status": "SUCCESS_SOURCE_FLOAT32_ATTRIBUTE_COUNTS_EQUAL_UNITY_ALL_SIX",
+    "test_count": 57,
+    "models_equal_6_of_6": true,
+    "delta_m01": 374,
+    "delta_m04": 374,
+    "delta_m02": 4,
+    "remapped_face_indices_identical_verified": false,
+    "original_shader_restored": false
   }
 }

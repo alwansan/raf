@@ -11,5 +11,49 @@
     "unique float32 attribute tuples",
     "no original values public"
   ],
-  "status": "CI_PENDING"
+  "status": "SUCCESS_SOURCE_ATTRIBUTE_DEDUP_MATCH_ALL_6",
+  "run": 42727777657,
+  "result": {
+    "six_of_six_attribute_float32_counts_match_unity": true,
+    "models": [
+      {
+        "id": "M00",
+        "source": 375,
+        "unique": 375,
+        "unity": 375
+      },
+      {
+        "id": "M01",
+        "source": 5095,
+        "unique": 4721,
+        "unity": 4721
+      },
+      {
+        "id": "M02",
+        "source": 1666,
+        "unique": 1662,
+        "unity": 1662
+      },
+      {
+        "id": "M03",
+        "source": 2163,
+        "unique": 2163,
+        "unity": 2163
+      },
+      {
+        "id": "M04",
+        "source": 2445,
+        "unique": 2071,
+        "unity": 2071
+      },
+      {
+        "id": "M05",
+        "source": 4452,
+        "unique": 4452,
+        "unity": 4452
+      }
+    ],
+    "renderer_assembly_proven": false,
+    "shader_original_restored": false
+  }
 }

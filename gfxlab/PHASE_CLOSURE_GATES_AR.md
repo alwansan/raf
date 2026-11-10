@@ -29,3 +29,6 @@ GfxMultiAndroidBuilder.cs يستعمل Shader.Find("Standard") وShader.Find("Un
 ## GFX-MULTI-006/007 تحديثات مؤكدة
 [006](https://github.com/alwansan/raf/actions/runs/42726999353): all seven source passes contain original m_PlayerSubPrograms source stage variants and keyword/blob index metadata, source COMPRESSED platform structure exists. This does not prove an Android GLSL executable.
 [007](https://github.com/alwansan/raf/actions/runs/42727286357): every original OBJ vertex index is used (zero unreferenced) in six models, including M01/M04; source-vs-Unity 374 vertex delta NOT explained by unused source vertices. [008](https://github.com/alwansan/raf/actions/workflows/gfxlab-multi-obj-attribute-parity.yml) tests whether distinct source indices share identical float32 position/UV/normal attributes which Unity may merge. No claim of exact parity until CI and device independent evidence.
+
+## GFX-MULTI-008 — إغلاق سؤال فرق Vertex count
+[Run 42727777657](https://github.com/alwansan/raf/actions/runs/42727777657): SUCCESS و57 اختبار. source→float32 pos+UV+Normal unique tuple يساوي Unity imported vertices في جميع الموديلات الستة. M01 وM04 الفرق 374 مفسَّر بالصفات المتطابقة، وM02 الفرق 4 كذلك؛ لا دليل فقدان faces من فرق الأعداد. **يبقى اختبار reindexed triangles وtangents/rig/scene assembly**. هذا لا يغلق الاستعادة الأصلية للشيدر.

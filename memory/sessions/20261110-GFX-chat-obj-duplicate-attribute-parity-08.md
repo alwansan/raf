@@ -10,3 +10,10 @@
 - GFX-MULTI-007 result: all source OBJ v/vt/vn referenced, zero unused vertices in all 6; M01 374, M04 374, M02 4 unexplained by unused vertices, needs attribute dedup investigation. 54 tests passed, private source purged.
 - unknowns: original shaders not compiled/semantically mapped on Adreno, original rig/animation absent, PC comparison absent. Pass/variant counts are source only.
 - controls: duplicate key exact float32 position/UV/normal, no private attributes or model OBJ published.
+
+## GFX-MULTI-008 outcome — proven from CI
+- [CI42727777657](https://github.com/alwansan/raf/actions/runs/42727777657): SUCCESS (57 tests), run on commit ed6f8ba200d7673e2e23799ebcf58a742fefe67a.
+- ZIP2 original OBJ positions/UV/normals were privately decoded as float32 composite attributes; exact unique counts equal Unity imported vertex count in **all 6/6**.
+- M01 source 5095v -> 4721 unique complete attributes -> Unity4721, exactly 374 duplicates; M04 2445 ->2071 ->Unity2071, exactly 374; M02 1666 ->1662 ->Unity1662, exactly 4; M00 375, M03 2163, M05 4452 unchanged.
+- All original index positions used (CI007). The discrepancy is fully compatible with vertex attribute dedup, not evidence of lost mesh faces. Still need index-remap/normal-map tangent fidelity and whole-object assembly; no original shader restored.
+- All original assets deleted after runner; safe aggregate-only Artifact. 
