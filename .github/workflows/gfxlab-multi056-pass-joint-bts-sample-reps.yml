@@ -1,0 +1,110 @@
+name: GFX-MULTI-056 original Shader48 524 joint bts-CB sample-use classes and first 24 SPIRV pairs
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi056-pass-joint-bts-sample-reps.yml'
+      - 'gfxlab/tools/multi_shader_pass_joint_class_selection.py'
+      - 'gfxlab/tests/test_multi_shader_pass_joint_class_selection.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi056-original-source-private-joint-class-pilot
+  cancel-in-progress: false
+jobs:
+  original-joint-class-source-and-24-CPU-pilot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Entire source-free regression suite and joint class negative tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_pass_joint_class_selection.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX056_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install offline source-private DXBC to SPIRV tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Classify all authentic 524 source pairs then translate only 24 pass-distributed representatives
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_pass_joint_class_selection \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi056-private" \
+            --budget 24 --out gfxlab-multi056-safe-first24-joint-source-class-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi056-safe-first24-joint-source-class-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-056"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_passes"]==7
+          assert d["source_original_distinct_compiled_stages_inspected"]==936
+          selection=d["source_joint_class_selection_safe_counts"]
+          assert selection["original_exact_pairs_scanned"]==524
+          assert selection["global_declaration_classes_ignoring_pass"]==110
+          assert selection["pass_scoped_declaration_classes"]==132
+          assert selection["global_sample_use_classes_ignoring_pass"]==58
+          assert selection["pass_scoped_joint_declaration_and_sample_use_classes"]>=132
+          assert selection["first_CPU_batch_budget"]==24
+          assert selection["first_CPU_batch_representative_pairs"]==24
+          assert selection["joint_classes_untranslated_in_first_batch"]==selection["pass_scoped_joint_declaration_and_sample_use_classes"]-24
+          assert sum(x["first_CPU_batch_representative_pairs"] for x in d["source_per_pass_anonymous_joint_class_counts_and_pilot"])==24
+          c=d["first_24_source_CPU_validation_counts"]
+          assert c["first_batch_pairs_attempted"]==24
+          assert c["source_stages_attempted"]==48
+          assert c["first_batch_pairs_with_all_source_SPV_checks_passing"]+c["first_batch_pairs_with_any_rejection_or_unresolved"]==24
+          assert c["source_CB_supported_opcode_vec4_ranges_with_SPV_loads"]+c["source_CB_supported_opcode_vec4_ranges_without_SPV_load"]==c["source_CB_supported_opcode_distinct_vec4_range_uses"]
+          for key in ("full_joint_class_original_CPU_SPIRV_validation_done",
+            "all_524_original_pairs_individually_SPIRV_translated",
+            "same_declaration_and_sampling_class_means_same_shader_semantics",
+            "original_material_property_to_DXBC_t_s_b_register_binding_proven",
+            "source_CB_member_byte_offsets_as_Material_properties_proven",
+            "Shader48_original_android_GPU_execution_proven",
+            "PC_to_Adreno_original_pixels_equivalent","originalShaderRestored",
+            "phase_closed","private_original_code_CB_lengths_register_slots_sample_tuples_or_keywords_exported"):
+            assert d[key] is False,key
+          print("GFX056_SOURCE_SAFE_FIRST24_JOINT_CLASSES_NOT_ALL_GPU=true")
+          PY
+      - name: Upload count-only source-safe original class coverage ledger
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi056-safe-pass-joint-524-classes-24-CPU-pilot
+          path: gfxlab-multi056-safe-first24-joint-source-class-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2 and all private source/SPV work directories
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi056-private"
+          echo GFX056_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true

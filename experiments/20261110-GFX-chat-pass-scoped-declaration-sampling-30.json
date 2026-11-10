@@ -1,0 +1,31 @@
+{
+  "session_id": "20261110-GFX-chat-pass-scoped-declaration-sampling-30",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-524-original-resource-profile-coverage-29",
+  "base_sha": "318e54b320e0bb2b09fc521cf735dba395f8d729",
+  "experiment_key": "GFX-MULTI-056",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-pass-scoped-Shader48-joint-bts-CB-sample-profile-24-CPU-pilot",
+  "question": "How many original Shader48 per-Pass joint declaration-and-sample-use signature classes exist in 524 exact VS/FS pairs, and how do 24 balanced original-source representatives validate on CPU vkd3d/SPIRV?",
+  "hypothesis": "Joint original Pass-scoped structural and true DXBC sample use classification exposes coverage gaps hidden by seven first-pair and 58 sample-only representatives",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "524 pairs/936 source compiled stages/110 global and 132 pass scoped declaration classes/58 global sampled use classes",
+    "strict SHA and exact keyword-tier source pairing",
+    "24 pass-balanced source-private joint class representative translations",
+    "original DXBC vs SPV t/s sample pairs and source b CB array/vec4 load traces",
+    "negative source free synthetic tests",
+    "anonymous failure categories only, purge"
+  ],
+  "planned_tests": [
+    "full Python source-free regression suite",
+    "original 524 class selection",
+    "24 original VS/FS pairs Vulkan1.1 SPV conversion",
+    "t/s and CB structural use proof for supported stages",
+    "safe artifact and purge"
+  ],
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
