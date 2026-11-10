@@ -1,0 +1,21 @@
+{
+  "session_id": "20261110T0121Z-T2-scheduled-foam-rhs-failclosed-k6p9",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-10T01:21:00Z",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261110T0121Z-T2-scheduled-foam-rhs-failclosed-k6p9.json",
+    "prompt/coordination/clients/T2/sessions/20261110T0121Z-T2-scheduled-foam-rhs-failclosed-k6p9.md",
+    "tests/test_t2_foam_rhs_classifier_synthetic.py"
+  ],
+  "experiment_key": "foam-rhs-source-kind-conservative-negative-controls-20261110",
+  "resource_key": null,
+  "approach": "Independent source-free negative controls for distinguishing SSA value from runtime RenderTexture identity; no edits to game assets or other T clients.",
+  "baseline": "device 42058825739 e9c358e; prior T2 86a19cab/df11e0e3 and 42696649931; read current HEAD before shared edits",
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/state.json",
+    "prompt/coordination/clients/T2/MEMORY.md"
+  ],
+  "constraints": "No native build; do not claim original or device proof."
+}
