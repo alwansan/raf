@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-interface-decorations-60",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-interface-decorations-60.md",
-  "status": "GFX_MULTI_087_SUCCESS_833_TESTS_12_INPUT_LOCATION_12_UNIFORM_BINDING_SET_BLOCK_MEMBER_OFFSET_SOURCE_SPV_CPU_ONLY_GFX054_BLOCKED",
+  "latest_session": "20261111-GFX-chat-DXBC-input-UBO-provenance-61",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-DXBC-input-UBO-provenance-61.md",
+  "status": "GFX_MULTI_088_VERIFIED_SUCCESS_843_TESTS_12_SOURCE_DXBC_INPUT_REGISTER_NUMERIC_OVERLAPS_12_ORIGINAL_CB_B_AND_MEMBER_OFFSET_COMPILER_PROVENANCE_GFX054_MATERIAL_PIXEL_UNPROVEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-088: source-private verify exact original DXBC dcl_input semantic and dcl_constantbuffer register/member link to the 12 SPV Input Location and Uniform Binding/DescriptorSet/Block selected Offset occurrences, only if source-byte provenance and stage-specific mapping exists. Fail closed unknown/ambiguous; never equate raw SPV binding or location to DXBC registers without independent proof. GFX054 Unity Material CB bytes and Android shader GPU pixel parity still blocked.",
+  "next_experiment": "GFX-MULTI-089: for the 12 DXBC numeric location overlap candidates independently parse actual original DXBC dcl_input variant (plain/SGV/SIV/PS, PS interpolation) and where possible source Input Signature chunks, compare with SPV Location/BuiltIn/flat interpolation without assuming semantic equivalence. Fail closed on missing signature/unsupported masks. GFX054 Unity Material CB member byte payload and original Shader48 Android GPU PC visual parity still BLOCKED.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2395,5 +2395,31 @@
     "private_sources_purged": true,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx088": {
+    "experiment": "GFX-MULTI-088",
+    "status": "SUCCESS_ORIGINAL_SOURCE_DXBC_INPUT_NUMERIC_CANDIDATE_AND_TRANSLATED_SPV_UBO_COMPILER_LAYOUT_ONLY",
+    "origin": "chat",
+    "run_id": 42913114233,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42913114233",
+    "run_sha": "b40028d0607712c26c996fdb5a996be0fcba17eb",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests_passed": 843,
+    "source_original_joint_pairs": 157,
+    "source_original_stage_instances": 314,
+    "original_source_CB_stages": 311,
+    "authenticated_source_b_SPV_CB_dynamic_index_loads": 427,
+    "input_location_numeric_overlap_original_DXBC_dcl_input_candidates": 12,
+    "uniform_actual_root_original_source_b_register_authenticated": 12,
+    "uniform_selected_member_offset_equal_authenticated_SPV_UBO_compiler_layout": 12,
+    "artifact_id": 13808002904,
+    "artifact_expiry_utc": "2026-11-17T22:18:22Z",
+    "original_DXBC_input_semantic_parity_proven": false,
+    "Unity_Material_property_to_CB_member_byte_proven": false,
+    "original_shader_DXBC_component_SSA_equivalent": false,
+    "original_Adreno_GPU_pixel_parity_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "private_source_SPV_DXBC_purge_verified": true
   }
 }
