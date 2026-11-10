@@ -29,10 +29,24 @@
     "private source/SPV/DXBC cleanup and safe artifact"
   ],
   "resource_key": "gfxlab-multi091-original-source-private-isgn-component-width",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_12_ACTUAL_ISGN_ONE_COMPONENT_MASK_SPV_INPUT_SCALAR_WIDTH_ONE_NO_COMPONENT_DECOR_CPU_ONLY",
   "run_id": 42917010667,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42917010667",
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_COMPONENT_WIDTH_STRUCTURAL_SHAPE_ONLY",
+  "evidence_level": "SOURCE_PRIVATE_ORIGINAL_DXBC_INPUT_COMPONENT_COUNT_VS_SPV_WIDTH_STRUCTURAL_CANDIDATE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "526ff2580fefae6ba814b576c04f2483028bcd9f",
+  "source_free_tests": 871,
+  "original_joint_pairs": 157,
+  "original_shader_stage_instances": 314,
+  "original_CB_stages": 311,
+  "source_b_authenticated_dynamic_SPV_CB_index_loads": 427,
+  "actual_OpIAdd_input_original_ISGN_component_mask_popcount_1": 12,
+  "actual_OpIAdd_input_SPV_Input_pointee_scalar_width_1": 12,
+  "source_ISGN_mask_popcount_matches_translated_SPV_pointee_width_12": 12,
+  "actual_SPV_Input_no_Component_decoration": 12,
+  "semantic_component_lane_and_gpu_numeric_parity_proven": false,
+  "safe_artifact_id": 13810760409,
+  "artifact_expires_utc": "2026-11-17T22:43:44Z",
+  "private_source_purge_verified": true
 }
