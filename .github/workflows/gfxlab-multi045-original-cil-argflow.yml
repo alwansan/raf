@@ -1,0 +1,99 @@
+name: GFX-MULTI-045 source-private original CIL property to API argument flow
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi045-original-cil-argflow.yml'
+      - 'gfxlab/tools/multi_shader_managed_cil_argflow.py'
+      - 'gfxlab/tests/test_multi_shader_managed_cil_argflow.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi045-authentic-managed-argflow
+  cancel-in-progress: false
+jobs:
+  source-private-argflow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free bounded CIL stack argument tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_managed_cil_argflow.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI045_SYNTHETIC_TESTS_PASSED=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Custom.dll
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Independently check original CIL first API argument without leaking source
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0 dncil==1.0.2
+          python3 -m gfxlab.tools.multi_shader_managed_cil_argflow \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi045-private" \
+            --out gfxlab-multi045-safe-original-cil-argflow-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi045-safe-original-cil-argflow-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-045"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["authentic_original_Shader48_property_count"]==27
+          assert d["authentic_original_bound_texture_property_count"]==3
+          s=d["CIL_argument_flow_safe_counts"]
+          assert s["parsed_methods"]>0
+          assert s["total_il_instructions"]>0
+          assert s["parse_failures"]==0
+          assert s["source_methods_with_exact_shader_property_string"]>=s["eligible_candidate_straight_line_methods"]
+          assert s["proven_CIL_Set_argument_calls"]>=0
+          assert s["source_property_literals_passed_directly"]<=27
+          assert s["source_property_literals_passed_via_PropertyToID"]<=27
+          assert s["source_bound_texture_properties_with_proven_CIL_Set_arguments"]<=3
+          assert not d["original_Material_property_to_DX11_register_mapping_verified"]
+          assert not d["original_constant_buffer_byte_offsets_verified"]
+          assert not d["Shader48_original_Android_runtime_verified"]
+          assert not d["originalShaderRestored"]
+          assert not d["pc_to_adreno_original_pixel_parity"]
+          assert not d["original_names_IL_tokens_binaries_or_shader_bytes_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI045_STRICT_SCRIPT_ARGUMENT_ONLY_G8_BLOCKED=true")
+          PY
+      - name: Publish only aggregate counts, never original .NET/Shader48
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi045-safe-original-cil-argflow-counts
+          path: gfxlab-multi045-safe-original-cil-argflow-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Delete original ZIP2 managed PE and shader/source staging
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi045-private"
+          echo GFX_MULTI045_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true

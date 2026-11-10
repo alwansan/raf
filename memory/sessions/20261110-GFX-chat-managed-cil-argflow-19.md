@@ -1,0 +1,16 @@
+# GFX-LAB 20261110-GFX-chat-managed-cil-argflow-19
+- session_id: `20261110-GFX-chat-managed-cil-argflow-19` | origin: `chat` | resumed_from: `20261110-GFX-chat-managed-cil-calls-18`
+- base_sha: `e5642fb2d968d002aed0e81ac31e1f2ff55ce736`
+- experiment_key: `GFX-MULTI-045`; issue_id: `RENDER-002`
+- scope: only `experiment/android-graphics-rootcause`, authentic source-private managed CIL script argument flow; T1–T5 and main/zip2 read-only
+- source_ref: original ZIP2 commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`
+- Prior verified run: [GFX-MULTI-044 CI42830910833](https://github.com/alwansan/raf/actions/runs/42830910833) SUCCESS, 285 tests, 14 co-presence methods; not true argument flow.
+## Hypothesis / control
+A forward 12-instruction adjacency can be false. Parse authentic MemberRef method signatures, keep only branch-free and fully-interpreted IL methods, and check that the *first actual Set* call argument* comes from source `ldstr` or a proven `Shader.PropertyToID` transform. Negative controls: wrong overload/argument, unrelated literal, branch, unknown opcode, bad signature, underflow.
+## Files / CI
+- `gfxlab/tools/multi_shader_managed_cil_argflow.py`
+- `gfxlab/tests/test_multi_shader_managed_cil_argflow.py`
+- `.github/workflows/gfxlab-multi045-original-cil-argflow.yml`
+- CI: pending after commit; actual success/failure and purge must be checked before declaring proof.
+## Limits
+Even exact script-side Set* arguments do not map Shader48 properties to source DXBC t#/s#/b#/CB byte offsets, do not restore original GLES shader, and do not prove Windows/Adreno pixel parity. No proprietary IL strings, tokens or bytes in public report. `originalShaderRestored=false`, `phase_closed=false`.

@@ -1,0 +1,23 @@
+{
+  "session_id": "20261110-GFX-chat-managed-cil-argflow-19",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-managed-cil-calls-18",
+  "base_sha": "e5642fb2d968d002aed0e81ac31e1f2ff55ce736",
+  "experiment_key": "GFX-MULTI-045",
+  "issue_id": "RENDER-002",
+  "resource_key": "gfxlab-source-private-managed-cil",
+  "question": "Does any exact source Shader48 property string or PropertyToID value reach first argument of real Unity Material/MPB Set API?",
+  "hypothesis": "At least one candidate proximity can be checked with a strict straight-line stack",
+  "control": "synthetic wrong arg / wrong overload / branch / unknown opcode / underflow / signature",
+  "planned_tests": [
+    "python source-free full suite",
+    "SHA-pinned original Assembly-CSharp CLR CIL method stack audit",
+    "only safe aggregates",
+    "private source purge"
+  ],
+  "status": "PENDING_CI",
+  "run_urls": [],
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
