@@ -1,0 +1,105 @@
+name: GFX-MULTI-043 original Shader48 managed literal and source sidecar provenance (private ZIP2)
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi043-managed-sidecar.yml'
+      - 'gfxlab/tools/multi_shader_managed_literal_sidecar.py'
+      - 'gfxlab/tests/test_multi_shader_managed_literal_sidecar.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi043-managed-source-provenance
+  cancel-in-progress: false
+jobs:
+  signed-original-source-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free 279+ tests and CLR literal parser contract
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_managed_literal_sidecar.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI043_ALL_SOURCE_FREE_TESTS_SUCCESS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Custom.dll
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Read pinned original managed PE literal heaps against typed Shader48 privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0
+          python3 -m gfxlab.tools.multi_shader_managed_literal_sidecar \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi043-private" \
+            --out gfxlab-multi043-safe-managed-property-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi043-safe-managed-property-counts.json"))
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_manifest_entries"]==366
+          assert d["standalone_shader_source_extension_candidate_files"]==0
+          assert d["authentic_managed_assemblies_checked"]==2
+          assert d["original_shader48_property_count"]==27
+          assert d["original_shader48_texture_property_count"]==9
+          assert d["original_material_texenv_slots"]==63
+          assert d["original_material_bound_texture_slots"]==21
+          for label in ("Assembly-CSharp","Custom"):
+              s=d["managed_assembly_private_literal_counts"][label]
+              assert s["managed_user_string_heap_present"]
+              assert s["managed_literal_entry_count"]>=0
+              assert s["original_shader_property_literals_exact_count"]<=27
+              assert s["original_texture_property_literals_exact_count"]<=9
+              assert not s["original_source_literals_or_managed_bytes_published"]
+              assert s["member_names_or_literals_do_not_prove_call_site"]
+          for x in d["union_across_assemblies"].values():
+              assert type(x) is int and x>=0
+          assert not d["property_name_to_DX11_t_s_cb_register_mapping_verified"]
+          assert not d["managed_string_presence_proves_material_api_call_site"]
+          assert not d["exact_shader_property_to_CB_byte_offsets_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["android_original_shader48_execution_verified"]
+          assert not d["original_pc_adreno_pixels_verified"]
+          assert not d["proprietary_source_strings_shaders_binaries_or_named_members_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI043_MANAGED_LITERAL_PROVENANCE_ONLY_NO_GPU_REGISTER_MAP=true")
+          PY
+      - name: Publish aggregate source-only original managed literal counts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi043-safe-original-managed-property-counts
+          path: gfxlab-multi043-safe-managed-property-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original managed PE and ZIP2 shader/texture assets
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi043-private"
+          echo GFX_MULTI043_PRIVATE_ORIGINAL_MANAGED_AND_SHADER_SOURCES_PURGED=true
