@@ -45,7 +45,7 @@ class TestSyntheticAndroidInterpolationProbe(unittest.TestCase):
                       "GfxDownloadsZipExporter.ExpectedPublicDirectory",
                       "originalShaderRestored=false",
                       "originalPcPixelParityVerified=false",
-                      "ORIGINAL", "INCONCLUSIVE_UNSUPPORTED_OR_NO_COLORED_PIXELS"):
+                      "originalRaftShaderBytecodeUsed=false", "INCONCLUSIVE_UNSUPPORTED_OR_NO_COLORED_PIXELS"):
             self.assertIn(token,code)
         self.assertNotIn("m_ProgramCode",code)
 
