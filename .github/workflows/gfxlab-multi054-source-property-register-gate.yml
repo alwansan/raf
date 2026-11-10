@@ -27,6 +27,10 @@ jobs:
           sparse-checkout: |
             gfxlab/tools
             gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
       - name: All source-free tests including cross-evidence proof rejection guards
         run: |
           set -euo pipefail
