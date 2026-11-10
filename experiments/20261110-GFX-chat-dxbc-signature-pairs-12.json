@@ -20,6 +20,37 @@
     "scan exact 524 authentic pairs from original SHA-pinned ZIP2 privately, aggregate only",
     "source-free unit tests, mandatory purge"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_524_OF_524_ORIGINAL_PAIR_SIGNATURE_METADATA_COMPATIBLE_NOT_SHADER_RESTORATION",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42814767180"
+  ],
+  "results": {
+    "source_free_tests": 238,
+    "exact_original_pairs": 524,
+    "pairs_with_non_system_inputs": 512,
+    "pairs_with_only_system_inputs": 12,
+    "non_system_input_entries": 3516,
+    "ordinary_semantic_type_mask_matches": 3516,
+    "pixel_system_inputs_excluded_from_strict_required_compare": 620,
+    "missing": 0,
+    "type_mismatch": 0,
+    "mask_gap": 0,
+    "ambiguous": 0,
+    "unique_vertex_programs": 464,
+    "unique_pixel_programs": 472,
+    "seven_pass_pair_counts": [
+      80,
+      156,
+      32,
+      80,
+      40,
+      120,
+      16
+    ],
+    "resource_cb_mapping": false,
+    "android_shader48_restored": false,
+    "private_purge": true
+  },
+  "safe_report": "gfxlab/evidence/20261110_gfx038_dxbc_signature_safe_counts.json",
+  "next_step": "GFX-MULTI-039 all authentic linked SHDR tokenized input and interpolation declaration coverage (source-only), prior 016 sample only; independently sourced PC shader/material reflection still required"
 }
