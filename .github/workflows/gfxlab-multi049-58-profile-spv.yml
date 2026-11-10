@@ -1,0 +1,100 @@
+name: GFX-MULTI-049 original Shader48 58 sample-use profile representatives DXBC vs SPIRV
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi049-58-profile-spv.yml'
+      - 'gfxlab/tools/multi_shader_representative_spirv_profiles.py'
+      - 'gfxlab/tests/test_multi_shader_representative_spirv_profiles.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi049-source-private-58-sampling-profiles
+  cancel-in-progress: false
+jobs:
+  source-private-original-profile-pair-validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free pure synthetic suite and bounded selector tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_representative_spirv_profiles.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX049_SOURCE_FREE_UNIT_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install CPU-only original source DXBC and Vulkan 1.1 SPIR-V verification tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Select and test source-private 58 representative sample profiles against compiler SPIR-V
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_representative_spirv_profiles \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi049-private" \
+            --out gfxlab-multi049-safe-58-profile-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi049-safe-58-profile-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-049"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_passes"]==7
+          assert d["all_524_exact_keyword_tier_pair_rows_scanned_for_selection"]
+          assert d["unique_source_t_s_sample_multiset_classes_confirmed"]==58
+          assert len(d["source_profile_representative_selection_by_original_pass_public_position"])==7
+          s=d["representative_validation_safe_counts"]
+          assert s["original_exact_keyword_tier_pairs_scanned"]==524
+          assert s["selected_original_source_sampling_profiles"]==58
+          assert s["representative_pair_translations_attempted"]==58
+          assert s["representative_pair_exact_source_to_SPIRV_t_s_pair_parity"]+s["representative_pairs_with_any_stage_failure"]==58
+          assert s["source_t_s_sample_instructions_validated_in_equal_multisets"]==s["translated_spirv_sample_instructions_validated_in_equal_multisets"]
+          for field in ("all_524_original_pairs_translated_to_SPIRV","sample_use_signature_equivalent_to_full_shader_logic",
+                        "material_texenv_property_to_original_DX11_resource_slot_mapping_proven",
+                        "original_constantbuffer_member_offsets_proven","original_shader48_Android_GPU_execution_proven",
+                        "PC_to_Adreno_original_shader_pixel_parity_proven","originalShaderRestored",
+                        "private_original_code_registers_pairs_keywords_or_identifiers_exported","phase_closed"):
+            assert d[field] is False,field
+          print("GFX049_ONLY_SOURCE_PRIVATE_CPU_SAMPLE_PROFILES_NOT_GPU_OR_MATERIAL_PROOF=true")
+          PY
+      - name: Upload only public-safe aggregate representative profile counters
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi049-safe-58-source-profile-spv-counts
+          path: gfxlab-multi049-safe-58-profile-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original ZIP2 assets and generated DXBC SPIR-V reflect intermediates
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi049-private"
+          echo GFX049_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true

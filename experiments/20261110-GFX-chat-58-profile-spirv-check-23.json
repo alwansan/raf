@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "session_id": "20261110-GFX-chat-58-profile-spirv-check-23",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-all-524-dxbc-sampling-22",
+  "base_sha": "974505be51e8ac944f0943e4f0589e8f155e4d4b",
+  "experiment_key": "GFX-MULTI-049",
+  "issue_id": "RENDER-002",
+  "resource_key": "gfxlab-original-private-58-source-sampling-profile-spv",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can one authentic DXBC original Shader48 VS/FS pair per globally unique source t/s sample-use profile be matched against vkd3d-lowered SPIR-V sampled-image use, beyond GFX047 7 first-pass pairs?",
+  "hypothesis": "58 profile representatives from 524 exact pairs can be translated and independently sample-pair matched on CPU",
+  "negative_controls": [
+    "exact source pair keyword and tier from source_pair",
+    "Source t/s declaration membership",
+    "dynamic t/s registers fail closed",
+    "source 524 and 58 class checks",
+    "private SPIRV variable OpName matching",
+    "strict sample-pair multiset counts",
+    "no source leakage",
+    "private source purge"
+  ],
+  "planned_tests": [
+    "source-free Python suite",
+    "source-private SHA-pinned original 524 pair profile selection",
+    "58 selected original VS/FS translations and SPIRV verification",
+    "count-only private pair multiset match and report",
+    "always purge ZIP2 private source"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
