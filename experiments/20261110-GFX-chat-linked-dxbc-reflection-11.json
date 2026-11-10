@@ -26,6 +26,33 @@
     "No inferred Material-to-register/CB offset from chunk presence or name token",
     "No original Android Shader48 APK or claim of PC/Adreno pixels"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_ORIGINAL_LINKED_DXBC_ONLY_ISGN_OSGN_SHDR_NO_REFLECTION_CHUNKS",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42813380416"
+  ],
+  "results": {
+    "tests": 230,
+    "original_stage_links": 1435,
+    "exact_stage_pairs": 524,
+    "unique_original_dxbc": 1275,
+    "vertex": 620,
+    "fragment": 655,
+    "chunks": {
+      "ISGN": 1275,
+      "OSGN": 1275,
+      "SHDR": 1275,
+      "RDEF": 0,
+      "SDBG": 0,
+      "SPDB": 0,
+      "ILDB": 0,
+      "RDAT": 0,
+      "SRCI": 0,
+      "STAT": 0,
+      "OTHER": 0
+    },
+    "material_resource_register_mapping": false,
+    "android_original_shader": false,
+    "source_cleanup": true
+  },
+  "next_step": "GFX-MULTI-038 authentic exact DXBC vertex output vs pixel input signature pairing source-only; independent original ShaderLab/PC resource reflection remains needed"
 }
