@@ -29,6 +29,24 @@ class AndroidSourceStagingParity(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "staging drift"):
             verify(self.managed, modified, RUNTIME_DIR)
 
+    def test_manifest_drift_names_are_actionable_and_safe(self):
+        # Only Android-owned, validated basenames appear in diagnostics.
+        missing = self.native.replace(" AndroidExpansionArchiveProbe.cs", "", 1)
+        with self.assertRaises(ValueError) as error:
+            verify(self.managed, missing, RUNTIME_DIR)
+        message = str(error.exception)
+        self.assertIn("managed_only=['AndroidExpansionArchiveProbe.cs']", message)
+        self.assertIn("native_only=[]", message)
+
+        extra = self.native.replace(
+            " AndroidExpansionArchiveProbe.cs",
+            " AndroidExpansionArchiveProbe.cs AdditionalProbe.cs", 1)
+        with self.assertRaises(ValueError) as error:
+            verify(self.managed, extra, RUNTIME_DIR)
+        message = str(error.exception)
+        self.assertIn("managed_only=[]", message)
+        self.assertIn("native_only=['AdditionalProbe.cs']", message)
+
     def test_duplicate_native_copy_entry_is_rejected(self):
         modified = self.native.replace(
             " AndroidTestDiagnostics.cs",
