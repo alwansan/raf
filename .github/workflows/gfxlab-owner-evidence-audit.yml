@@ -1,0 +1,32 @@
+name: GFX-OWNER-001 privacy-safe owner Android evidence auditor tests (no APK)
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-owner-evidence-audit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-owner001-android-log-evidence
+  cancel-in-progress: false
+jobs:
+  owner-evidence-sourcefree:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Unit test privacy-safe ZIP parser and existing source-only regressions
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/owner_device_evidence_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          test ! -e 'gfxlab/unity/Assets/MultiModels'
+          echo GFX_OWNER001_NO_PRIVATE_MODEL_ASSETS_CHECKED_OUT=true
+          echo GFX_OWNER001_USER_MEDIA_NOT_UPLOADED=true
+          echo GFX_OWNER001_ORIGINAL_SHADER48_NOT_CLAIMED=true
