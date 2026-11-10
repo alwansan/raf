@@ -1,0 +1,38 @@
+name: T2 Foam aggregate evidence CLI strict regression (source-only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_evidence_gate_20261110.py
+      - tests/test_t2_foam_evidence_cli_integration.py
+      - tests/test_t2_foam_evidence_gate_20261110.py
+      - .github/workflows/raft-t2-foam-evidence-cli-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-evidence-cli-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  strict-cli-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout exact SHA without game assets
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Compile and run aggregate ingress unit and subprocess tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_evidence_gate_20261110.py tests/test_t2_foam_evidence_cli_integration.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_evidence*.py' -v
+      - name: Non-device evidence boundary
+        run: echo 'SANITIZER_REGRESSION_ONLY; publisher_integration=UNKNOWN; original_foam=UNKNOWN; unity=UNKNOWN; android=UNKNOWN'
