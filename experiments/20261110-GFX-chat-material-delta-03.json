@@ -20,7 +20,24 @@
     "strict finite Material float checks and source SHA"
   ],
   "resource_key": "gfxlab-owner002-source-material-delta-private",
-  "status": "PREPARING",
+  "status": "SUCCESS_179_TESTS_MATERIAL_PBR_FALLBACK_SOURCE_DELTA_CONFIRMED",
   "originalShaderRestored": false,
-  "phaseClosed": false
+  "phaseClosed": false,
+  "run": 42754132240,
+  "unit_tests": 179,
+  "artifact_id": 13735385028,
+  "outcome": {
+    "source_material_slots": 7,
+    "source_glossiness_field_present": 7,
+    "original_glossiness_equals_hardcoded_045": 0,
+    "original_glossiness_differs_045": 7,
+    "source_metallic_srgb_links": 7,
+    "metallic_importer_source_mismatch_links": 7,
+    "original_metallic_float_zero_slots": 7,
+    "original_bump_scale_one_slots": 7,
+    "original_gloss_map_scale_one_slots": 7,
+    "shader48_equivalent_material_sampling_verified": false
+  },
+  "next_step": "Original Shader48 Property→CB/texture binding/ShaderLab GLES3 compile, original material source settings applied without blind Standard semantics. No new APK or worker yet.",
+  "private_original_shader_pixels_uploaded": false
 }
