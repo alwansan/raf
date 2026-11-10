@@ -12,7 +12,9 @@ from collections import Counter
 from pathlib import Path
 
 GUID = re.compile(r"(?<![0-9a-fA-F])guid:\\s*([0-9a-fA-F]{32})(?![0-9a-fA-F])")
-REF = re.compile(r"\\{[^{}]*?fileID:\\s*(-?\\d+)[^{}]*?guid:\\s*([0-9a-fA-F]{32})[^{}]*?\\}")
+REF_BLOCK = re.compile(r"\\{([^{}]*)\\}")
+REF_FILE_ID = re.compile(r"(?:^|,)\\s*fileID:\\s*(-?\\d+)\\s*(?=,|$)")
+REF_GUID = re.compile(r"(?:^|,)\\s*guid:\\s*([0-9a-fA-F]{32})\\s*(?=,|$)")
 EXTENSIONS = {".mat", ".prefab", ".unity", ".asset", ".controller", ".overridecontroller", ".playable", ".rendertexture"}
 MAX_BYTES = 32 * 1024 * 1024
 
@@ -41,8 +43,12 @@ def inspect(root):
             continue
         files += 1
         text = path.read_text(encoding="utf-8", errors="replace")
-        for file_id, guid in REF.findall(text):
-            guid = guid.lower()
+        for block in REF_BLOCK.findall(text):
+            file_match = REF_FILE_ID.search(block)
+            guid_match = REF_GUID.search(block)
+            if not file_match or not guid_match:
+                continue
+            guid = guid_match.group(1).lower()
             if guid == "0" * 32:
                 refs["builtin_or_null"] += 1
             elif guid in known:
