@@ -1,0 +1,20 @@
+{
+  "session_id": "20261110T0921Z-T2-scheduled-operand-evidence-k8p4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-10T09:21:00Z",
+  "intended_files": [
+    "scripts/t2_foam_original_operand_gate.py",
+    "tests/test_t2_foam_original_operand_gate.py",
+    "prompt/coordination/clients/T2/sessions/20261110T0921Z-T2-scheduled-operand-evidence-k8p4.md"
+  ],
+  "hypothesis": "The strict source-free CIL gate accepts operand-dependent ldloc/ldarg without evidence of their operand; original Mono.Cecil callers must reject missing operand metadata, while 0..3 short forms are self-contained.",
+  "experiment_key": "T2-CIL-OPERAND-VERIFICATION-v1-sourcefree-20261110",
+  "resource_key": null,
+  "taken_over_from": [
+    "prompt/coordination/clients/T2/state.json",
+    "https://github.com/alwansan/raf/commit/4fc93a3cb066639284064168754f1e5bcc6686bd"
+  ],
+  "constraints": "No original game source, Unity, shader, shared testpack, T3/T4/T5 files, CI or native build touched; no readiness claim."
+}
