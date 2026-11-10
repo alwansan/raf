@@ -51,6 +51,9 @@ class TestAutoLogZipAudit(unittest.TestCase):
             self.assertEqual(d["event_count"],2)
             self.assertTrue(d["both_sampling_settings_tested"])
             self.assertTrue(d["m03_second_material_tested"])
+            self.assertFalse(d["all_six_models_four_modes_covered"])
+            self.assertEqual(d["model_mode_coverage"]["M03"],["SOURCE_PBR_STANDARD_APPROX"])
+            self.assertEqual(d["model_channel_coverage"]["M03"],["G"])
             self.assertEqual(d["unity_message_type_counts"]["unity_Exception"],2)
             self.assertEqual(d["unity_error_warning_messages_with_stack_text"],2)
             self.assertNotIn("PRIVATE_STACK",str(d))
@@ -70,3 +73,35 @@ class TestAutoLogZipAudit(unittest.TestCase):
             path=Path(tmp)/"unsafe.zip"
             with ZipFile(path,"w") as z:z.writestr("../outside.txt","secret")
             with self.assertRaises(ValueError):analyze(path)
+
+    def test_surface_on_another_model_does_not_count_for_m03(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"false-positive.zip"
+            with ZipFile(path,"w") as z:
+                z.writestr("sessions/s0/summary.json",json.dumps(
+                    {"schema":"gfxlab-session-v1","messagesDropped":0,"writeFailure":""}))
+                data=[
+                    state("M00","BASECOLOR","RGB","SOURCE_TEXTURE_COLORSPACE_IMPORT",1),
+                    state("M03","NORMAL","R","FORCE_LINEAR_IMPORT",0)]
+                z.writestr("sessions/s0/snapshots.jsonl","".join(
+                    json.dumps({"kind":"state_snapshot","stateJson":json.dumps(x)})+"\\n"
+                    for x in data))
+                z.writestr("sessions/s0/events.jsonl",json.dumps(
+                    {"kind":"user_action","message":"PRIVATE"})+"\\n")
+            d=analyze(path)
+            self.assertFalse(d["m03_second_material_tested"])
+            self.assertEqual(d["surface_counts"],{"1":1,"0":1})
+            self.assertFalse(d["all_six_models_four_modes_covered"])
+
+    def test_session_parts_must_match_same_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/"mismatched.zip"
+            with ZipFile(path,"w") as z:
+                z.writestr("sessions/a/summary.json",json.dumps(
+                    {"schema":"gfxlab-session-v1"}))
+                z.writestr("sessions/b/snapshots.jsonl",json.dumps(
+                    {"kind":"state_snapshot","stateJson":json.dumps(state())})+"\\n")
+                z.writestr("sessions/c/events.jsonl",json.dumps(
+                    {"kind":"unity_Log","message":"PRIVATE"})+"\\n")
+            with self.assertRaisesRegex(ValueError,"SESSION_FILE_SET_MISMATCH"):
+                analyze(path)
