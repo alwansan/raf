@@ -44,7 +44,26 @@ class MouseBoundaryTraceTests(unittest.TestCase):
             self.assertEqual(report["buttons"][button]["stage_frames"]["android"], 1)
         self.assertEqual(report["malformed_markers"], 1)
 
-    def test_identical_frame_numbers_across_sessions_do_not_merge(self):\n        report = analyze([\n            "T4_MOUSE_STAGE session=A frame=8 stage=android button=left",\n            "T4_MOUSE_STAGE session=B frame=8 stage=unity button=left",\n            "T4_MOUSE_STAGE session=A frame=8 stage=android button=left",\n        ])\n        self.assertEqual(report["frames_with_markers"], 2)\n        self.assertEqual(report["buttons"]["left"]["observed_frames"], 2)\n        self.assertEqual(report["buttons"]["left"]["uncorrelated_same_frame"], {\n            "android_without_unity_same_frame": 1,\n            "unity_without_raft_same_frame": 1,\n        })\n        self.assertFalse(report["device_success_proven"])\n\n    def test_legacy_markers_remain_supported(self):\n        report = analyze(["T4_MOUSE_STAGE frame=8 stage=android button=middle"])\n        self.assertEqual(report["frames_with_markers"], 1)\n        self.assertEqual(report["buttons"]["middle"]["stage_frames"]["android"], 1)\n\n    def test_no_markers_is_unknown_not_success(self):
+    def test_identical_frame_numbers_across_sessions_do_not_merge(self):
+        report = analyze([
+            "T4_MOUSE_STAGE session=A frame=8 stage=android button=left",
+            "T4_MOUSE_STAGE session=B frame=8 stage=unity button=left",
+            "T4_MOUSE_STAGE session=A frame=8 stage=android button=left",
+        ])
+        self.assertEqual(report["frames_with_markers"], 2)
+        self.assertEqual(report["buttons"]["left"]["observed_frames"], 2)
+        self.assertEqual(report["buttons"]["left"]["uncorrelated_same_frame"], {
+            "android_without_unity_same_frame": 1,
+            "unity_without_raft_same_frame": 1,
+        })
+        self.assertFalse(report["device_success_proven"])
+
+    def test_legacy_markers_remain_supported(self):
+        report = analyze(["T4_MOUSE_STAGE frame=8 stage=android button=middle"])
+        self.assertEqual(report["frames_with_markers"], 1)
+        self.assertEqual(report["buttons"]["middle"]["stage_frames"]["android"], 1)
+
+    def test_no_markers_is_unknown_not_success(self):
         report = analyze(["ordinary Unity log", "physical mouse present"])
         self.assertEqual(report["frames_with_markers"], 0)
         self.assertFalse(report["device_success_proven"])
