@@ -1,0 +1,47 @@
+{
+  "experiment": "GFX-MULTI-039",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "ci_run": 42815863927,
+  "conclusion": "SUCCESS",
+  "python_tests": 245,
+  "artifact_id": 13763899734,
+  "original_compiler": "kShaderCompPlatformD3D11",
+  "stage_links": 1435,
+  "original_exact_pairs": 524,
+  "unique_original_stage_programs": 1275,
+  "vertex_programs": 620,
+  "pixel_programs": 655,
+  "pixel_interpolation_declarations": 3497,
+  "interpolation_mode_counts": {
+    "linear": 3405,
+    "constant": 76,
+    "linear_noperspective": 16,
+    "linear_centroid": 0,
+    "linear_sample": 0,
+    "linear_noperspective_centroid": 0,
+    "linear_noperspective_sample": 0,
+    "undefined": 0
+  },
+  "pixel_ordinary_input_declarations": 3481,
+  "pixel_system_interpreted_input_declarations": 16,
+  "pixel_system_generated_input_declarations": 0,
+  "source_dxbc_declaration_counts": {
+    "vertex": {
+      "constant_buffer": 3168,
+      "resource": 0,
+      "sampler": 0
+    },
+    "pixel": {
+      "constant_buffer": 2556,
+      "resource": 3247,
+      "sampler": 3095
+    }
+  },
+  "source_original_shaderlab_restored": false,
+  "original_material_resource_binding_verified": false,
+  "correct_android_interpolation_runtime_verified": false,
+  "pc_android_pixel_parity_verified": false,
+  "private_shader_source_purged": true,
+  "source_instruction_operands_or_registers_exported": false,
+  "phase_closed": false
+}
