@@ -1,5 +1,6 @@
 """Bounded private FFT capture SHA gate; emits metadata only, never pixels."""
 import hashlib
+import os
 from pathlib import Path
 from scripts.t1_fft_readback_provenance import validate_manifest
 
@@ -41,14 +42,26 @@ def verify_captures(metadata, paths, root):
                 raise ValueError("aggregate capture budget exceeded")
             digest = hashlib.sha256()
             count = 0
-            with resolved.open("rb") as stream:
+            # Pin the opened inode: path.stat() alone is vulnerable to replacement
+            # between validation and open, or while the capture is being read.
+            flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+            fd = os.open(resolved, flags)
+            with os.fdopen(fd, "rb") as stream:
+                opened = os.fstat(stream.fileno())
+                if (opened.st_dev, opened.st_ino, opened.st_size) != (stat.st_dev, stat.st_ino, size):
+                    raise ValueError("capture changed before read")
                 while count < size:
                     chunk = stream.read(min(1024 * 1024, size - count))
                     if not chunk:
                         break
                     digest.update(chunk)
                     count += len(chunk)
-            if count != size or resolved.stat().st_size != size:
+                after = os.fstat(stream.fileno())
+                if (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns) != (
+                        opened.st_dev, opened.st_ino, opened.st_size, opened.st_mtime_ns):
+                    raise ValueError("capture changed during read")
+            path_after = resolved.stat()
+            if (path_after.st_dev, path_after.st_ino, path_after.st_size) != (stat.st_dev, stat.st_ino, size) or count != size:
                 raise ValueError("capture changed during read")
             if digest.hexdigest() != item[backend + "_sha256"]:
                 raise ValueError("capture digest mismatch")
