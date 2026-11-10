@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-all-seven-pass-gles-13",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-all-seven-pass-gles-13.md",
+  "latest_session": "20261110-GFX-chat-dxbc-rdef-resource-gate-14",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-dxbc-rdef-resource-gate-14.md",
   "status": "GFX_MULTI_013_SOURCE_ORIGINAL_SHADER_7_OF_7_PASS_OFFLINE_SUCCESS_FULL_SHADER_RESTORATION_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-014: original pass CB/register/sampler/texture binding and DXT5nm/tangent/UV/material semantics fidelity, then limited real Android Shader48-like GPU test, PC pixel A/B and owner gate; do not launch general restoration agent until proven.",
+  "next_experiment": "Inspect GFX-MULTI-014 actual private source RDEF counts vs SPIRV reflected resources, then implement exact register/constant-buffer/sampler/material mapping or isolate missing source metadata before Android ShaderLab proof.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -396,5 +396,11 @@
     "real_adreno_original_shader_tested": false,
     "original_shader_restored": false,
     "stage_closed": false
+  },
+  "latest_shader_resource_census": {
+    "experiment": "GFX-MULTI-014",
+    "status": "CI_PENDING",
+    "source_only": true,
+    "original_shader_restored": false
   }
 }

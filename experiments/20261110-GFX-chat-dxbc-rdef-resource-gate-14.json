@@ -1,0 +1,16 @@
+{
+  "session_id": "20261110-GFX-chat-dxbc-rdef-resource-gate-14",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-014",
+  "issue_id": "RENDER-002",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "previous_run": 42732808109,
+  "question": "What DXBC original RDEF constant-buffer/resource counts and SPIRV converted resource counts are present for the same authentic Shader48 stage pair?",
+  "controls": [
+    "DXBC RDEF offset and length bounds checked",
+    "counts only",
+    "original register mappings not assumed equivalent",
+    "no public compiled game code"
+  ],
+  "status": "CI_PENDING"
+}
