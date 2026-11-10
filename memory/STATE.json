@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-per-input-DXBC-signature-63",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-per-input-DXBC-signature-63.md",
-  "status": "GFX_MULTI_090_SUCCESS_863_TESTS_12_ACTUAL_OPIADD_PS_CONSTANT_FLAT_CANDIDATES_ISGN_USER_PARTIAL_MASK_ORIGINAL_SSA_MATERIAL_CB_GPU_OPEN",
+  "latest_session": "20261111-GFX-chat-signature-component-width-64",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-signature-component-width-64.md",
+  "status": "GFX_MULTI_091_VERIFIED_SUCCESS_871_TESTS_12_SOURCE_ISGN_ONE_COMPONENT_MASK_MATCH_SPV_SCALAR_WIDTH_ONE_NO_SPV_COMPONENT_DECORIGINAL_COMPONENT_LANE_DXBC_SSA_GFX054_GPU_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-091: source-private original ISGN partial-mask popcount vs translated SPV actual 12 OpIAdd Input pointee type vector width and Component decoration; per-input count-only equal/mismatch/unknown structural candidate, no semantic register or pixel parity claim. GFX054 Unity Material CB bytes, original DXBC temp SSA, Android GPU pixel parity BLOCKED.",
+  "next_experiment": "GFX-MULTI-092: private actual selected component lane of 12 original ISGN masks and source DXBC v# uses vs SPV input/swizzle SSA, avoiding inference from mask popcount or missing SPV Component; separately prioritize true GFX054 original Unity Material property->CB byte payload and Android/PC GPU pixel equality. Report only anonymous structural evidence; originalShaderRestored=false until actual proof.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2466,6 +2466,28 @@
     "per_input_numerical_component_and_pixel_parity_proven": false,
     "artifact_id": 13809596105,
     "source_private_purge_verified": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
+  },
+  "latest_gfx091": {
+    "experiment": "GFX-MULTI-091",
+    "origin": "chat",
+    "status": "SUCCESS_ORIGINAL_SOURCE_ISGN_MASK_POPCOUNT_MATCH_TRANSLATED_SPV_POINTEE_WIDTH_ONLY",
+    "run_id": 42917010667,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42917010667",
+    "run_sha": "526ff2580fefae6ba814b576c04f2483028bcd9f",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests_passed": 871,
+    "original_source_joint_pairs": 157,
+    "original_stages": 314,
+    "source_CB_stages": 311,
+    "original_b_authenticated_SPV_dynamic_index_reads": 427,
+    "actual_Source_ISGN_one_component_mask_matches_SPV_scalar_width": 12,
+    "actual_SPV_Input_without_Component_decoration": 12,
+    "component_lane_identity_proven": false,
+    "shader_original_restored": false,
+    "safe_artifact_id": 13810760409,
+    "runner_private_source_purged": true,
     "originalShaderRestored": false,
     "phase_closed": false
   }
