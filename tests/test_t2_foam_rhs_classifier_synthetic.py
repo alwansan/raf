@@ -22,12 +22,12 @@ class FoamRhsOriginGuardTests(unittest.TestCase):
             ["ldloc.0"], ["ldc.i4.0"], ["ldfld", "pop"],
             ["call", "throw"], ["newobj", "leave.s"],
             ["newobj", "beq.s"], ["newobj", "unknown"],
-            [None], "newobj"
+            ["dup", "newobj"], ["newobj", "dup"],\n            ["castclass", "newobj"], ["castclass", "ldfld"],\n            ["nop", "castclass", "ldnull"],\n            [None], "newobj"
         ]:
             with self.subTest(ops=ops):
                 self.assertEqual(classify_rhs(ops), "UNKNOWN")
 
-    def test_no_object_identity_claim(self):
+    def test_post_producer_cast_is_allowed_without_identity_proof(self):\n        self.assertEqual(classify_rhs(["nop", "ldfld", "castclass", "nop"]), "FIELD_READ")\n\n    def test_no_object_identity_claim(self):
         # Two distinct SSA reads can alias the same runtime Texture.
         self.assertEqual(classify_rhs(["ldfld"]), "FIELD_READ")
         self.assertEqual(classify_rhs(["ldfld"]), "FIELD_READ")
