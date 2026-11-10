@@ -1,0 +1,36 @@
+{
+  "session_id": "20261110-GFX-chat-joint-class-batch-96-120-34",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-joint-class-batch-72-96-33",
+  "base_sha": "c124e7194172cd7da2cb7d68e9234afce19371a2",
+  "experiment_key": "GFX-MULTI-060",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-Shader48-Pass-joint-class-fifth-CPU-source-batch96-120",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can the fifth disjoint original Shader48 Pass-scoped joint signature class [96,120) representatives pass source DXBC→Vulkan1.1 SPV structural checks without rerunning first 96 previously proven class reps?",
+  "hypothesis": "Source SHA-pinned private deterministic class order with explicit start96 ensures non-overlap, and strict t/s + CB use checks measure 24 original exact source-pair representatives.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42857815446",
+    "https://github.com/alwansan/raf/actions/runs/42859754233",
+    "https://github.com/alwansan/raf/actions/runs/42861618032",
+    "https://github.com/alwansan/raf/actions/runs/42863853554"
+  ],
+  "control": [
+    "524 exact source pairs/936 stages/110 global+132 Pass bts CB declaration/58 global+80 Pass t/s sample-use/157 Pass joint class drift",
+    "non-overlap five source-private batches and invalid start95",
+    "vkd3d SPV Vulkan 1.1 stage validation and original DXBC t/s source sampled-use parity",
+    "authentic source CB b real SPV global name and strictly reflected UBO vec4 array, source supported CB vector accesses with actual OpLoad",
+    "unknown dynamic CB index not assumed",
+    "private original assets and SPV purged, anonymous safe counters only"
+  ],
+  "planned_tests": [
+    "all source-free regression unit tests",
+    "original ZIP2 524 exact pair class census",
+    "24 source VS/FS pairs SPV validator and source vs SPV resource checks",
+    "safe artifact and private purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
