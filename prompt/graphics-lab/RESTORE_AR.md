@@ -83,3 +83,7 @@
 
 ## أحدث GFX-MULTI-016 — عدّ تعليمات موارد SHDR الأصلية
 [CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) SUCCESS، 85 اختبارًا، جرد source-only لبرامج Shader48 الأصلية الـ14 (ممثل VS+FS واحد لكل Pass): 66 `dcl_constant_buffer` و29 `dcl_resource` و27 `dcl_sampler` و0 Raw/Structured. كل البرامج اجتازت فحص طول token الأصلي. Pass0 VS5 CB وFS7 CB/7 Resource/6 Samplers؛ تتوافق مع أعداد SPIR-V، لكن **لا دليل على DX11 register index→SPIRV descriptor binding** بعد. آخر جلسة `memory/sessions/20261110-GFX-chat-shdr-declaration-census-17.md`، وخارطة المستقبل `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`، التالية GFX-MULTI-017.
+
+
+## GFX-MULTI-017 — فحص فهارس سجلات DX11 الأصلية
+جلسة `20261110-GFX-chat-original-register-operands-18`، origin=chat، resumed_from=`20261110-GFX-chat-shdr-declaration-census-17`، base SHA `eeda17d6570315b3362eb4d6685b2ce2342af509`. أداة Source-only جديدة لفحص `OperandToken0` في تعليمات SHDR الأصلية عبر 14 stage: نوع السجل، index dimension، immediate32 representation. قيم b#/t#/s# وحجم CB لا تُنشر؛ report counts only. اقرأ CI workflow `gfxlab-multi-source-register-shape.yml` ودوّن النجاح/الفشل. المصدر Shader48 ما زال غير مستعاد على Android؛ بعد التجربة حدّث كل ملفات الاستعادة والمهام الخمسة.

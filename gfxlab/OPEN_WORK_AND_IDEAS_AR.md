@@ -44,3 +44,8 @@
 ## نتيجة مثبتة — GFX-MULTI-016
 - [CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) SUCCESS 85 tests: original seven-pass SHDR declarations in 14 source stages => 66 CB, 29 Resource, 27 Sampler (0 raw/structured). First pass VS 5 CB and FS 7 CB/7 Res/6 Sampler matches SPIR-V counts. **REGISTER NUMBERS, SAMPLER MAPPING AND CB LAYOUT STILL UNKNOWN**. سجل الجلسة `20261110-GFX-chat-shdr-declaration-census-17`.
 - الخطوة التالية الدقيقة: **GFX-MULTI-017** parse each original DCL operand into private DX11 register slot index and CB array-size with strict operand-type/dimension/index-representation guards; compare independently to SPIR-V descriptors and original material TexEnv, report only match/mismatch aggregates.
+
+
+## التجربة الجديدة — GFX-MULTI-017
+- جلسة `20261110-GFX-chat-original-register-operands-18`: استخراج مقيّد وفحص private register slot shape من أصل SHDR (CB b#, texture t#, sampler s#)، مع positive/negative controls على type/dimension/relative-index. الحالة CI_PENDING.
+- **لا تخلط استخراج رقم السجل بـMapping صحيح**: يجب بعد ذلك مطابقة DX11 registers مقابل SPIR-V descriptors وSource Material/CB layout/texture sampler semantics.

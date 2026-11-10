@@ -138,3 +138,7 @@ The original Shader48 per-pass selected DXBC stage chunks contain SHDR, not RDEF
 
 ## GFX-MULTI-016 SHDR resource declarations SOURCE success (2026-11-10)
 [CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) SUCCESS 85 tests. Real Shader48 selected 14 source DXBC stage token streams: 66 original dcl_constant_buffer, 29 dcl_resource, 27 dcl_sampler, no raw/structured. Source Pass0 VS 5 CB, FS 7 CB/7 texture/6 sampler, agrees in counts with SPIRV reflect report. **Actual DX11 b/t/s register slots not yet decoded; equal counts do not prove matching material bindings, CB offsets or GPU parity.** Next GFX-MULTI-017 private register operand parsing. Session 20261110-GFX-chat-shdr-declaration-census-17, backlog persisted.
+
+
+## Started GFX-MULTI-017 exact original DX11 operand source slot audit
+Following GFX-MULTI-016 [CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984), source SHDR has 66 CB/29 Resource/27 Sampler declaration entries on 14 representative stages. GFX-MULTI-017 parses operand type, index dimension and immediate32 slot numbers privately with fail-closed tests. Aggregate counts only public; not yet SPIRV binding equivalence, not Android Shader48. Session 20261110-GFX-chat-original-register-operands-18; backlog updated.

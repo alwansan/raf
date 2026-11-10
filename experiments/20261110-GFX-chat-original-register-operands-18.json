@@ -1,0 +1,21 @@
+{
+  "session_id": "20261110-GFX-chat-original-register-operands-18",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-017",
+  "question": "Can exact original Shader48 DXBC dcl_resource/constant_buffer/sampler operands be decoded as valid immediate32 private register slots with strict operand type and dimension checks across 14 stages?",
+  "hypothesis": "Source SHDR contains sufficient operand register indexes and CB array sizes even without RDEF; register indices may or may not equal SPIRV output bindings.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42736745984",
+    "https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/D3D12TokenizedProgramFormat.hpp"
+  ],
+  "control": "Private register values never published; wrong operand type/dimension/relative index fail closed; do not claim original material binding parity.",
+  "planned_tests": [
+    "synthetic immediate32 register and CB size decode",
+    "invalid type and relative negative tests",
+    "source 14 stage register shape inventory"
+  ],
+  "resource_key": "gfxlab-multi017-register-operands-private",
+  "status": "CI_PENDING"
+}
