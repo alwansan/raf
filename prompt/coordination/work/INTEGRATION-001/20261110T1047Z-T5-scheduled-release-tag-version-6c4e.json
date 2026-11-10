@@ -1,0 +1,15 @@
+{
+  "session_id": "20261110T1047Z-T5-scheduled-6c4e",
+  "origin": "scheduled",
+  "baseline_sha": "7a691996f111c6374396c31d730d0baaa7c6bb55",
+  "scope": "release transport audit tag/version consistency",
+  "files": [
+    "scripts/t5_audit_published_raft_release.py",
+    "tests/test_t5_audit_published_raft_release.py"
+  ],
+  "hypothesis": "Release tag second numeric component is unchecked against logical OBB versionCode, permitting metadata mismatch",
+  "experiment_key": "T5-RELEASE-TAG-VERSION-20261110",
+  "shared_resource": "none; CPU-only tests",
+  "coordination": "No Unity build; no T4 mouse files; preserve existing signatures and manifest verification",
+  "status": "in_progress"
+}
