@@ -12,7 +12,8 @@ class FoamRhsOriginGuardTests(unittest.TestCase):
             ("ldloc", "LOCAL_READ"), ("ldarg", "ARGUMENT_READ")
         ]:
             with self.subTest(op=op):
-                self.assertEqual(classify_rhs(["nop", op, "castclass"],\n                                              call_returns_value=(op in {"call", "callvirt"})), expected)
+                self.assertEqual(classify_rhs(["nop", op, "castclass"],
+                                              call_returns_value=(op in {"call", "callvirt"})), expected)
 
     def test_ambiguous_or_control_flow_fails_closed(self):
         for ops in [
