@@ -54,3 +54,8 @@
 ## GFX-MULTI-017 مثبت
 - [CI42737442510](https://github.com/alwansan/raf/actions/runs/42737442510) SUCCESS 89 اختبارات: 14 stage، 66 CB register slots ذات أحجام معلنة غير صفرية، 29 Resource slots، 27 Sampler slots، بلا أي slot duplicate داخل نفس stage. الأرقام الأصلية خاصة، لا تُنشر. هذا يثبت إمكانية استخراج slot indexes فقط، **لا يثبت** ارتباطها بمواد Unity أو معاني Binding بعد التحويل.
 - **التالي GFX-MULTI-018**: مقارنة private original b#/t#/s# register set مع SPIR-V descriptor bindings التي يرجعها independent SPIRV-Cross، مع negative controls لمواضع تصادم sampler/CB. أبق النتيجة UNKNOWN إذا وجدت register remapping، ولا تُعلن Android GPU بدون اختبار.
+
+
+## GFX-MULTI-018 — قيد الفحص
+- `20261110-GFX-chat-source-vs-spirv-binding-19`: مقارنة private DX11 source CB/texture/sampler register slots بـSPIRV-Cross descriptor `set/binding` في 14 stage من المصدر؛ report safe numeric group parity/overlap/duplicates فقط، لا نشر البايتات أو الأرقام الخاصة. CI pending.
+- إذا mismatch: صمم mapping مثبت بدل إعادة ترقيم عشوائية؛ إذا numeric match: لا تعلن أن material/CB/sampler semantic equivalence مثبتة قبل اختبار المصدر وGPU.

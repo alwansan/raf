@@ -1,0 +1,14 @@
+# GFX-LAB — 20261110-GFX-chat-source-vs-spirv-binding-19
+- session_id: 20261110-GFX-chat-source-vs-spirv-binding-19; origin: chat
+- resumed_from: 20261110-GFX-chat-original-register-operands-18
+- base_sha: 36fbf0fece5abb5f3e84792f09416cbb4e551e8f
+- experiment_key: GFX-MULTI-018-source-DX11-register-versus-SPIRV-descriptor-numeric-comparison
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- issue_id: RENDER-002
+- scope: private source original DX11 b/t/s register index sets from one exact original Shader48 VS+FS pair per 7 Passes (14 stages), compare numerically against SPIRV-Cross reflection descriptor sets/bindings after same-stage vkd3d translation. Report aggregate numeric match/mismatch only. Original source and converted code stay inside runner; no Android APK/game changes.
+- prior: [GFX-MULTI-017 CI42737442510](https://github.com/alwansan/raf/actions/runs/42737442510) SUCCESS 89 unit tests; 66 CB slots with nonzero CB declared sizes, 29 resources, 27 samplers, 0 duplicate register slots within stage.
+- hypothesis: despite equal resource counts, vkd3d may remap descriptor binding numbers, so equality must be measured and must not be treated as semantic parity.
+- negative_controls: equal counts but disjoint register numbers fail numeric identity; duplicate SPIRV descriptor sets and missing binding are counted; original register numeric sets never exported; explicit original material semantics=false.
+- evidence_level: SOURCE_TO_CPU_SPIRV_REFL_DIAGNOSTIC only. No Android real shader or PC pixels.
+- run: GFX-MULTI-018 auto-triggered by workflow push, status CI_PENDING.
+- next_step: inspect CI; if numeric binding sets mismatch, create explicit source register-to-SPIRV remap and matched material/CB/sampler layout experiment (not a fake ShaderLab).

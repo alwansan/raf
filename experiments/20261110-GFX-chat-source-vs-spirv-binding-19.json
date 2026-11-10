@@ -1,0 +1,22 @@
+{
+  "session_id": "20261110-GFX-chat-source-vs-spirv-binding-19",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-018",
+  "question": "For original Shader48's seven Passes, do private b#/t#/s# DX11 register sets align numerically with SPIRV descriptor binding indices of the same original DXBC stage translation?",
+  "hypothesis": "Converter may map registers to distinct SPIRV binding indices; mere matching declaration counts do not imply semantic equivalence.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42737442510",
+    "CI42732808109"
+  ],
+  "control": "Only safe aggregate numeric overlap counts; original register IDs not public; no false semantic parity; no Android shader flags.",
+  "planned_tests": [
+    "synthetic matching source/SPV numbers but semantic flag false",
+    "negative disjoint slots",
+    "real seven-pass source stage-to-SPV reflect",
+    "record missing binding/duplicate descriptor sets"
+  ],
+  "resource_key": "gfxlab-multi018-private-register-set-comparison",
+  "status": "CI_PENDING"
+}

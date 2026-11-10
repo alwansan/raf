@@ -91,3 +91,7 @@
 
 ## أحدث نتيجة مثبتة — GFX-MULTI-017
 [CI42737442510](https://github.com/alwansan/raf/actions/runs/42737442510) **SUCCESS** 89 اختبارًا. مصدر Shader48 الأصلي: 14 stage، أخرجنا داخليًا 66 CB register declarations ذات أحجام معلنة غير صفرية، و29 Resource و27 Sampler، بلا تكرار فهارس داخل المرحلة نفسها. فهارس b/t/s وأحجام CB لم تُنشر. لا توجد حتى الآن مطابقة source register→SPIR-V binding أو Material TexEnv/CB offsets. آخر جلسة `memory/sessions/20261110-GFX-chat-original-register-operands-18.md`، وآخر خارطة `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`. التالية GFX-MULTI-018 لمقارنة المجموعات الخاصة مع SPIRV-Cross مع منع افتراض التطابق.
+
+
+## GFX-MULTI-018 جارٍ — source DX11 ↔ SPIR-V binding
+جلسة `20261110-GFX-chat-source-vs-spirv-binding-19`، origin=chat، resumed_from=`20261110-GFX-chat-original-register-operands-18`، base_sha=`36fbf0fece5abb5f3e84792f09416cbb4e551e8f`. مقارنة سرية لسجلات b/t/s من SHDR الأصلي مع SPIRV-Cross `set/binding` لنفس البرامج الـ14، نشر أعداد توافق/اختلاف فقط. الفرق الرقمي قد يكون remap صادر عن المترجم، وحتى التطابق الرقمي لا يثبت Material/CB semantic mapping. اقرأ `gfxlab-multi-source-spv-bindings.yml` وحدث الجلسة وRESTORE/OPEN_WORK/MEMORY/STATE بعد CI. لا Android ShaderLab أو APK حاليا.
