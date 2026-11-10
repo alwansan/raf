@@ -29,8 +29,47 @@
     "24 source VS/FS pairs SPV validator and source vs SPV resource checks",
     "safe artifact and private purge"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42865341763"
+  ],
+  "status": "SUCCESS_DISJOINT_FIFTH_PASS_JOINT_SOURCE_BATCH_96_120_ALL_24_CPU_VALIDATED",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42865341763,
+    "source_free_tests": 422,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_original_exact_VS_FS_pairs_censused": 524,
+    "unique_compiled_source_stages": 936,
+    "global_original_bts_CB_declaration_classes": 110,
+    "pass_scoped_original_bts_CB_declaration_classes": 132,
+    "global_source_t_s_sample_use_classes": 58,
+    "pass_source_t_s_sample_use_classes": 80,
+    "pass_joint_declaration_plus_sample_use_classes": 157,
+    "batch_start_inclusive": 96,
+    "batch_end_exclusive": 120,
+    "current_source_exact_pairs_both_SPV_stage_val_pass": 24,
+    "current_original_stage_SPV_val_pass": 48,
+    "current_stage_original_DXBC_to_SPV_t_s_use_multiset_equal": 48,
+    "current_source_CB_b_global_proven_reflected_vec4_UBO_stages": 48,
+    "current_supported_static_original_CB_vec4_ranges_with_actual_SPV_load": 793,
+    "current_supported_static_original_CB_vec4_ranges_missing_SPV_load": 0,
+    "current_source_dynamic_extended_CB_access_operand_occurrences_unresolved": 224,
+    "current_strict_pair_rejections": 0,
+    "previous_source_verified_runs": [
+      42857815446,
+      42859754233,
+      42861618032,
+      42863853554
+    ],
+    "cumulative_source_JOINT_class_CPU_representatives_strict_verified": 120,
+    "remaining_source_joint_class_CPU_representatives_unverified": 37,
+    "all_524_source_variant_program_semantics_proven": false,
+    "Material_property_to_original_DXBC_register_CB_member_semantics_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "source_private_purge": true,
+    "safe_artifact_id": 13787081871,
+    "safe_artifact_expires_at_utc": "2026-11-17T17:29:35Z"
+  }
 }
