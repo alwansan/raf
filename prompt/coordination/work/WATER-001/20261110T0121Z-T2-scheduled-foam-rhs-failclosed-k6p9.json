@@ -2,8 +2,8 @@
   "session_id": "20261110T0121Z-T2-scheduled-foam-rhs-failclosed-k6p9",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-10T01:21:00Z",
+  "status": "completed_source_only_pending_test",
+  "updated_at": "2026-11-10T01:25:00Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/20261110T0121Z-T2-scheduled-foam-rhs-failclosed-k6p9.json",
     "prompt/coordination/clients/T2/sessions/20261110T0121Z-T2-scheduled-foam-rhs-failclosed-k6p9.md",
@@ -17,5 +17,14 @@
     "prompt/coordination/clients/T2/state.json",
     "prompt/coordination/clients/T2/MEMORY.md"
   ],
-  "constraints": "No native build; do not claim original or device proof."
+  "constraints": "No native build; do not claim original or device proof.",
+  "results": {
+    "implementation_commit": "dc969d1695bec11e1e582fb971c72fe6c8e8d6e1",
+    "tests_commit": "e52639eef70d0ed03add6c7bcb7741ae97577232",
+    "session_commit": "2603932c1d6e09adc4ba78886f73fdb52b220a36",
+    "tests_executed": false,
+    "ci_dispatched": false,
+    "device_proof": false
+  },
+  "next_step": "Run unittest on exact source SHA, integrate only after authentic Cecil stack-slice extraction and control-flow checks."
 }
