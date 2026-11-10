@@ -22,6 +22,12 @@
     "Python unit test suite on CI"
   ],
   "resource_key": "gfxlab-owner-003-safe-aggregate",
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_OWNER_AUTOMATIC_ZIP_REVIEW_SOURCE_FREE_AND_SIGNED_DEX_AUDIT",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42806407666",
+    "https://github.com/alwansan/raf/actions/runs/42806606474",
+    "https://github.com/alwansan/raf/actions/runs/42806757535"
+  ],
+  "safe_report": "gfxlab/evidence/20261110_gfx031_owner_safe_counts.json",
+  "next_step": "Source-only original Shader48 unreferenced compiled-program census; no APK until shader/CB/PC pixel gates"
 }
