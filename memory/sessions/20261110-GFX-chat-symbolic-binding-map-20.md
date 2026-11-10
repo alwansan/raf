@@ -12,3 +12,7 @@
 - commands: GitHub Actions workflow gfxlab-multi-vkd3d-symbolic-binding.yml (CI pending).
 - evidence_level: SOURCE_TO_CPU_SPIRV_GENERATED_SYMBOL_MAPPING; Android original shader, PC visual comparison, CB layout and Material TexEnv still OPEN.
 - next_step: analyze symbolic mapping coverage. If names preserved for each resource, use private mapping for a separate source Material texture/register/properties proof. If stripped, test alternative SPIRV OpName or independent vkd3d config; do not guess.
+
+
+## First CI attempt failed in a pure test fixture
+- [CI42739322749](https://github.com/alwansan/raf/actions/runs/42739322749) FAILED before reading ZIP2: test_empty_groups_complete_but_not_semantically_proven supplied [] instead of set() to strict source slot guard. A genuine parser type guard correctly rejected list input. Fixed test only; re-triggered workflow. No original shader resource conclusion from this failed run. `originalShaderRestored=false`.

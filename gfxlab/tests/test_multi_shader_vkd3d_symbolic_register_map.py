@@ -25,7 +25,7 @@ class TestGeneratedRegisterNames(unittest.TestCase):
         self.assertFalse(d["all_original_registers_matched_by_vkd3d_name"])
         self.assertEqual(d["out_of_source_generated_names"],1)
     def test_empty_groups_complete_but_not_semantically_proven(self):
-        d=symbolic_binding_evidence([],[],"sampler")
+        d=symbolic_binding_evidence(set(),[],"sampler")
         self.assertTrue(d["all_original_registers_matched_by_vkd3d_name"])
         self.assertFalse(d["sampler_texture_use_site_semantics_verified"] if "sampler_texture_use_site_semantics_verified" in d else d["exact_material_texture_property_parity_verified"])
     def test_duplicated_bindings_fail(self):

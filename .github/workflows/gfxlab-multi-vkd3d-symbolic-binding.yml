@@ -75,3 +75,5 @@ jobs:
         run: |
           sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi019-private"
           echo GFX_MULTI019_PRIVATE_SHADER_SOURCE_PURGED=true
+
+# Re-run after correcting pure synthetic empty-source-slot fixture from list to set.
