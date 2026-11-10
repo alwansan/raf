@@ -1,0 +1,104 @@
+name: GFX-MULTI-067 original Shader48 427 relative CB nested index AST grammar source only
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi067-relative-CB-original-expression-grammar.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_relative_expression067.py'
+      - 'gfxlab/tests/test_multi_shader_original_cb_relative_expression067.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi067-original-private-source-relative-CB-grammar
+  cancel-in-progress: false
+jobs:
+  authenticated-original-source-relative-index:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Synthetic-only DXBC nested relative index AST controls and whole suite
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_relative_expression067.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX067_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Source-private Unity 2021 metadata reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Inspect genuine Shader48 427 relative source CB AST without guessing SPV SSA roots
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_relative_expression067 \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab067-private" \
+            --out gfxlab-multi067-original-relative-source-AST-safe-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi067-original-relative-source-AST-safe-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-067"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_exact_VS_FS_source_pairs_censused"]==524
+          assert d["original_unique_compiled_source_stage_programs"]==936
+          assert d["original_Pass_joint_representative_classes"]==157
+          assert d["original_stage_instances_grammar_scanned"]==314
+          x=d["source_relative_expression_safe_aggregate"]
+          assert x["relative_original_CB_vec4_operand_occurrences"]==427
+          assert x["relative_representation_2"]==77
+          assert x["relative_representation_3"]==350
+          assert x.get("relative_representation_4",0)==0
+          assert x["static_CB_operand_occurrences"]==7563
+          assert x["covered_CB_operand_occurrences"]==7990
+          assert x["outside_nine_supported_arithmetic_opcodes"]==11297
+          assert d["original_relative_CB_operand_to_SPV_index_expression_parity_count_proven"]==0
+          assert d["source_to_SPV_SSA_provenance"]["verdict"]=="BLOCKED_NO_INDEPENDENT_DXBC_TO_SPV_SSA_ROOT"
+          for k in ("original_427_relative_CB_operand_numeric_runtime_semantics_proven",
+                    "all_524_original_shader_program_instructions_semantically_equivalent",
+                    "source_cb_arithmetic_opcode_subset_completeness_proven",
+                    "authentic_Material_property_to_b_t_s_CB_member_byte_mapping_proven",
+                    "original_Android_GPU_Shader48_pixels_verified",
+                    "originalShaderRestored","phase_closed",
+                    "source_private_DXBC_SPV_registers_nested_operands_exported"):
+              assert d[k] is False,k
+          print("GFX067_ORIGINAL_SOURCE_427_RELATIVE_NESTED_AST_CENSUSED_NO_SSA_PARITY_CLAIM=true")
+          PY
+      - name: Upload only safe aggregate source grammar counts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi067-safe-original-relative-CB-nested-AST-counts
+          path: gfxlab-multi067-original-relative-source-AST-safe-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original Shader48 ZIP2 and decoded streams
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab067-private"
+          echo GFX067_PRIVATE_ORIGINAL_SHADER_SOURCE_AND_STREAMS_PURGED=true
