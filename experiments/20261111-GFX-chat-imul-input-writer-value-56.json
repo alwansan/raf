@@ -1,0 +1,38 @@
+{
+  "session_id": "20261111-GFX-chat-imul-input-writer-value-56",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-083",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-imul-input-readtime-store-55",
+  "base_sha": "b7c19404df7a65c344717f128d62a02e9941a583",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "For the 12 source-private prior sameblock OpStore address-path matches feeding authentic SPV OpIMul dynamic operand input OpLoad, what are immediate stored-value SSA producer opcodes and bounded SPV shift ancestry types?",
+  "hypothesis": "Some preceding Function-literal-path stores may write directly from OpBitcast or arithmetic shift results; other loaded/memory SSA producers must remain unknown.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42906841182",
+    "memory/sessions/20261111-GFX-chat-imul-input-readtime-store-55.md"
+  ],
+  "control": [
+    "prior Store immediate OpShiftLeftLogical vs unary Bitcast shift ancestry",
+    "prior Store value itself OpLoad is unknown",
+    "future Store not promoted",
+    "crossblock CFG-dominating Store not treated as sameblock reaching value",
+    "full source DXBC temp-to-SPV SSA and Material bridge never inferred",
+    "no private shader or IDs exported"
+  ],
+  "planned_tests": [
+    "source-free suite with new writer-value synthetic controls",
+    "original 157 SHA-pinned Shader48 joint VS+FS pairs/314 stages",
+    "427 authentic source-b CB index loads and 12 nonpower OpIMul readtime sameblock prior Store candidates",
+    "anonymous immediate producer and shift provenance partitions sum to 12",
+    "private source/SPV cleanup and safe count-only artifact"
+  ],
+  "resource_key": "gfxlab-multi083-private-spv-imul-input-prior-store-value",
+  "status": "CI_RUNNING",
+  "run_id": 42907446542,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42907446542",
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_SPV_CPU_SSA_VALUE_SYNTAX_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
