@@ -11,3 +11,10 @@ UnityPy `ShaderSubProgram` and AssetStudio both read a typed program and an opaq
 No speculative t/s/CB offset or stage mapping from adjacency/keyword equality; no source GLSL/HLSL SPIR-V or user assets committed; other branches read-only; originalShaderRestored=false.
 ## CI
 Pending source-private workflow with tests. After result update session, RESTORE, OPEN_WORK, MEMORY, STATE and phase closure gates.
+
+## Implementation and staged CI (2026-11-10)
+- New `gfxlab/tools/multi_shader_gl_program_envelope.py` and `gfxlab/tests/test_multi_shader_gl_program_envelope.py`: source compiler platform via public UnityPy enum, GL code size/ASCII ratio/version family, private hash uniqueness, primitive length/known compression headers and nonempty keyword-signature comparisons.
+- Independent `.github/workflows/gfxlab-multi-gl-envelope-source.yml` with pinned ZIP2 and `if: always()` source purge. No original shader or private IDs exported; observations are **syntactic-only**, not reliable resource/CB binding.
+- Initial [CI42812057156](https://github.com/alwansan/raf/actions/runs/42812057156) failed source-free synthetic unbounded payload test: test inserted oversized content into an unlinked non-GL program not bounded by the first implementation; changed to bound **every** unused program before family filtering.
+- [CI42812151086](https://github.com/alwansan/raf/actions/runs/42812151086) unit tests passed, source-private probe reached original and found a `m_Keywords` array not supported by our overly strict comparator. No keyword identity proof was claimed. Updated comparator to return **incomparable** for unsupported/empty/duplicate entries rather than fabricate a normalized identity; protected by new test. Transient [CI42812385346](https://github.com/alwansan/raf/actions/runs/42812385346) reflects interim code/test mismatch.
+- [CI42812418402](https://github.com/alwansan/raf/actions/runs/42812418402) source-free tests passed, SHA-pinned source scan **in progress at this checkpoint**. Do not declare runtime shader restored or source platform conclusion before confirmed result.
