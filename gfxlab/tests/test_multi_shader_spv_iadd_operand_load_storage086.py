@@ -48,7 +48,7 @@ class TestGFX086ActualTwoIntegerAddInputLoads(unittest.TestCase):
         ])
         self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_lhs_pointer_storage_storage_Input"],1)
         self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_rhs_pointer_storage_storage_Input"],1)
-        self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_lhs_prior_store_at_read_untrusted_or_malformed"],1)
+        self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_lhs_prior_store_at_read_untrusted_path"],1)
 
     def test_volatile_lhs_load_is_untrusted_without_false_sameblock(self):
         d=case([
@@ -58,7 +58,7 @@ class TestGFX086ActualTwoIntegerAddInputLoads(unittest.TestCase):
             "%91 = OpLoad %1 %5"
         ])
         self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_lhs_pointer_storage_untrusted_or_malformed"],1)
-        self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_lhs_prior_store_at_read_untrusted_path"],1)
+        self.assertEqual(d["SPV_iadd_operand_actual_OpLoad_lhs_prior_store_at_read_untrusted_or_malformed"],1)
 
     def test_phi_lhs_not_fake_opload_proof(self):
         d=case([
