@@ -1,0 +1,30 @@
+{
+  "session_id": "20261110-GFX-chat-float-wrap-color-25",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-material-texture-semantics-24",
+  "base_sha": "904f314b00de490a39e5278b5b608087c0bd46cb",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-024-material-float-color-wrap-format-census",
+  "scope": "ORIGINAL_SOURCE only: 7 selected original Material objects / 112 Float slots / 14 Color slots and 21 bound original Texture2D settings; typed shader property name cross-match, TextureFormat/TextureColorSpace/FilterMode/WrapU/V/W. No private source output.",
+  "question": "Which original scalar/color properties match the single original Shader48 property table, what value categories and per-axis sampler modes do the 21 images use, and how do the raw codes map to Unity 2021.3 enums?",
+  "hypothesis": "Explicit source enum mapping and Material value categories may narrow texture interpretation but cannot resolve the absent Shader48 material-to-DX11 register bridge or prove Adreno rendering.",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "reference_refs": [
+    "CI42744204412",
+    "CI42743017021",
+    "Unity-Technologies/UnityCsReference@2021.3/b052b1fe38b45d5aefa609a115c626ed2e74f3a6"
+  ],
+  "control": "Validate exact original Material/Shader48/Texture2D pointer graph and ZIP2 owner hashes; publish only aggregates and allowlisted public enum labels, never proprietary names, numeric values, GUID/PPtr, pixel data, actual paths or shader text. Missing Wrap axes stay unknown.",
+  "planned_tests": [
+    "safe enum 2021.3 lookup and fail-closed unmapped codes",
+    "source-free numeric and Material slot/value shape tests",
+    "exact 112 Float + 14 Color + 21 bound Texture2D census",
+    "same Shader48 property-name membership statistics",
+    "per-axis WrapU/V/W and filter/format/source color-space counts"
+  ],
+  "resource_key": "gfxlab-multi024-material-float-wrap-original-source-only",
+  "workflow": ".github/workflows/gfxlab-multi-material-float-wrap.yml",
+  "status": "PREPARED_CI_PENDING",
+  "original_shader_restored": false,
+  "android_pixels_verified": false
+}
