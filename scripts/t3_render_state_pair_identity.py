@@ -8,7 +8,10 @@ import hashlib
 import json
 import re
 from pathlib import Path
-from t3_render_state_pair_diff import compare, _unique_object_pairs
+try:
+    from .t3_render_state_pair_diff import compare, _unique_object_pairs
+except ImportError:  # direct script execution
+    from t3_render_state_pair_diff import compare, _unique_object_pairs
 
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 GUID = re.compile(r"[0-9a-f]{32}\Z")
