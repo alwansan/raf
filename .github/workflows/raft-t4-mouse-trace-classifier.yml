@@ -7,6 +7,7 @@ on:
       - 'scripts/t4_classify_mouse_capture_log.py'
       - 'tests/test_t4_classify_mouse_capture_log.py'
       - 'tests/test_t4_mouse_retry_telemetry_contract.py'
+      - 'tests/test_t4_capture_eligibility_contract.py'
       - 'android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs'
       - '.github/workflows/raft-t4-mouse-trace-classifier.yml'
 permissions:
@@ -28,13 +29,15 @@ jobs:
             /scripts/t4_classify_mouse_capture_log.py
             /tests/test_t4_classify_mouse_capture_log.py
             /tests/test_t4_mouse_retry_telemetry_contract.py
+            /tests/test_t4_capture_eligibility_contract.py
             /android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs
       - name: Verify source-only classifier regression suite
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t4_classify_mouse_capture_log.py tests/test_t4_classify_mouse_capture_log.py tests/test_t4_mouse_retry_telemetry_contract.py
+          python3 -m py_compile scripts/t4_classify_mouse_capture_log.py tests/test_t4_classify_mouse_capture_log.py tests/test_t4_mouse_retry_telemetry_contract.py tests/test_t4_capture_eligibility_contract.py
           python3 -m unittest discover -s tests -p 'test_t4_classify_mouse_capture_log.py' -v
           python3 -m unittest discover -s tests -p 'test_t4_mouse_retry_telemetry_contract.py' -v
+          python3 -m unittest discover -s tests -p 'test_t4_capture_eligibility_contract.py' -v
           test ! -d Raft
           echo 'T4_MOUSE_CLASSIFIER_AND_RETRY_CONTRACT source_only=true device_verified=false'
