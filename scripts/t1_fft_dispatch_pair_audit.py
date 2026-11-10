@@ -101,8 +101,9 @@ def audit(records):
                 if len(groups) != 3:
                     raise ValueError("invalid original FFT before group_xyz")
                 try:
-                    if [int(x) for x in groups][::2] != [1, 1]:
-                        raise ValueError("invalid original FFT before X/Z groups")
+                    group_values = [int(x) for x in groups]
+                    if group_values[0] != 1 or group_values[2] != 1 or group_values[1] <= 0:
+                        raise ValueError("invalid original FFT before dispatch groups")
                 except ValueError:
                     raise ValueError("invalid original FFT before group_xyz")
             elif event == AFTER:
