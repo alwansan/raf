@@ -26,6 +26,16 @@ def _is_number(x):
     return type(x) in (int, float) and math.isfinite(x)
 
 
+def _reject_duplicate_json_keys(pairs):
+    """Fail closed on ambiguous telemetry fields, including nested JSON objects."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate JSON telemetry key: " + key)
+        result[key] = value
+    return result
+
+
 def load_samples(path: Path):
     if path.is_symlink() or not path.is_file() or not 0 < path.stat().st_size <= MAX_FILE:
         raise ValueError("Missing, symlinked or oversized telemetry file")
@@ -38,7 +48,7 @@ def load_samples(path: Path):
                 raise ValueError("Blank JSONL row")
             if len(rows) >= MAX_SAMPLES:
                 raise ValueError("Too many telemetry rows")
-            row = json.loads(line)
+            row = json.loads(line, object_pairs_hook=_reject_duplicate_json_keys)
             if type(row) is not dict or row.get("schema") != 1 or row.get("source") != "lograf_shell" or row.get("package") != PACKAGE:
                 raise ValueError("Unexpected telemetry schema, source or package")
             number = row.get("sample")
