@@ -1,0 +1,24 @@
+{
+  "session_id": "20261110-GFX-chat-extended-literal-batch0-24-39",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-065",
+  "reference_refs": [
+    "GFX064 CI42876582659",
+    "GFX063 CI42873734355",
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "question": "Is every source stage-local extended modifier literal CB b/vec4 range in first 24 authentic Shader48 JOINT representatives present in real translated SPV OpLoad?",
+  "hypothesis": "Range presence may corroborate static address use but not value semantics or per-source-operand matching.",
+  "control": "Missing CB range, register mismatch, malformed extension, duplicate occurrence, relative indexing.",
+  "planned_tests": [
+    "source-free all regressions",
+    "private all-157 source census",
+    "24 genuine VS/FS pairs and 48 SPV validation",
+    "source CB global+layout and real SPV OpLoad distinct-range coverage",
+    "purge"
+  ],
+  "resource_key": "GFX065-first24",
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

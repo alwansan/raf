@@ -1903,5 +1903,20 @@
     "original_Android_GPU_parity_proven": false,
     "originalShaderRestored": false,
     "source_private_purged": true
+  },
+  "latest_gfx065_original_Shader48_extended_CB_first24": {
+    "status": "CI_PENDING",
+    "session_id": "20261110-GFX-chat-extended-literal-batch0-24-39",
+    "origin": "chat",
+    "base_sha": "c3e8df433b3c521d467672fe17a6e8e9069c73e7",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "first_source_private_representatives_start": 0,
+    "end_exclusive": 24,
+    "original_all_pass_joint_representative_classes": 157,
+    "source_modifier_literal_occurrences": 763,
+    "source_extended_literal_distinct_ranges_sum_per_stage": 656,
+    "unresolved_true_relative_source_CB_occurrences": 427,
+    "originalShaderRestored": false,
+    "phase_closed": false
   }
 }
