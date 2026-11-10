@@ -78,6 +78,10 @@ def parse_aggregate_json(raw):
                             parse_constant=_reject_nonfinite)
     except UnicodeDecodeError as exc:
         raise EvidenceError("invalid aggregate JSON encoding") from exc
+    except RecursionError as exc:
+        # A deeply nested but size-bounded JSON value can exceed the decoder
+        # recursion limit before the aggregate schema validator sees it.
+        raise EvidenceError("invalid aggregate JSON nesting") from exc
     except ValueError as exc:
         # Python 3.11+ rejects enormous integer literals before sanitization.
         # Do not leak interpreter-dependent parse errors to callers.
