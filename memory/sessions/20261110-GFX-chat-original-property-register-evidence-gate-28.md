@@ -14,3 +14,7 @@
 - gfxlab/tests/test_multi_shader_property_register_evidence_gate.py
 - .github/workflows/gfxlab-multi054-source-property-register-gate.yml
 - originalShaderRestored=false; G7–G12 blocked; no game APK or T-team edits.
+
+## CI progress and negative control
+- First [GFX054 CI42851989618](https://github.com/alwansan/raf/actions/runs/42851989618) failed **before private original source auditing** because sparse checkout omitted source-free mini-lab shader/Android script fixtures required by 9 existing Python regression cases. No original source evidence was used or interpreted in that failure.
+- Workflow checkout fixed at commit `1dc6f8e346fe5155985fa7864b643b46a9ee2430` without changing proof checks or source input. Rerun [CI42852112971](https://github.com/alwansan/raf/actions/runs/42852112971) **started**; source-private cross-audits running; no correctness claim before terminal CI status, artifact and purge verified.
