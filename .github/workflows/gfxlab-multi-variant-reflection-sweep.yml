@@ -1,0 +1,93 @@
+name: GFX-MULTI-022 authentic Shader48 all-variant reflection sweep / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-variant-reflection-sweep.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi022-all-variant-reflection-sweep
+  cancel-in-progress: false
+jobs:
+  shader-variant-reflection-private:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free fail-closed tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_variant_reflection_sweep.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect every original Shader48 variant privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_variant_reflection_sweep --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi022-private" --out gfxlab-multi022-safe-variant-reflection.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi022-safe-variant-reflection.json"))
+          counts=d["all_original_variant_link_rows"]
+          assert d["source_sha"] == "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_models"] == 6 and d["material_slots"] == 7
+          assert d["distinct_original_shader48"] == 1
+          assert d["subshader_count"] == 2 and d["pass_count"] == 7
+          assert counts["variant_link_rows"] == 1435
+          assert d["exact_keyword_tier_matched_pairs"] == 524
+          assert d["unique_referenced_stage_programs"] > 0
+          assert d["all_referenced_stage_programs_are_bounded_dxbc"]
+          assert d["all_original_variant_links_and_types_valid"]
+          assert counts["rdef_present_stage_programs"] + counts["rdef_absent_stage_programs"] == d["unique_referenced_stage_programs"]
+          assert not d["source_property_to_DX11_register_map_verified"]
+          assert not d["original_android_shader_restored"]
+          assert not d["actual_android_original_shader_pixels_verified"]
+          assert not d["proprietary_shader_bytes_names_or_indices_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI022_ALL_VARIANTS_BOUNDED_AND_PRIVATE")
+          print("GFX_MULTI022_SAFE_COUNTS " + json.dumps({
+              "variant_link_rows": counts["variant_link_rows"],
+              "matched_pairs": d["exact_keyword_tier_matched_pairs"],
+              "unique_stage_programs": d["unique_referenced_stage_programs"],
+              "parameter_blocks": counts.get("parameter_blocks_present", 0),
+              "texture_parameter_entries": counts.get("texture_parameter_entries", 0),
+              "cb_binding_entries": counts.get("constant_buffer_binding_entries", 0),
+              "rdef_present": counts["rdef_present_stage_programs"],
+              "rdef_absent": counts["rdef_absent_stage_programs"],
+              "bridge_state": d["source_property_register_bridge_state"]
+          }, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi022-safe-all-variant-reflection
+          path: gfxlab-multi022-safe-variant-reflection.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private Shader48 and Material sources
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi022-private"
+          echo GFX_MULTI022_ALL_PRIVATE_SHADER_SOURCE_PURGED=true
