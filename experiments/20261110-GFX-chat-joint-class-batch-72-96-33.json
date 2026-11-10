@@ -1,0 +1,27 @@
+{
+  "session_id": "20261110-GFX-chat-joint-class-batch-72-96-33",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-joint-class-batch-48-72-32",
+  "base_sha": "d4df64554d8dc829bbfb505794f69681c96eb098",
+  "experiment_key": "GFX-MULTI-059",
+  "issue_id": "RENDER-002",
+  "resource_key": "Shader48-original-private-Pass-joint-class-batch-72-96",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Do next 24 original genuine Shader48 class representatives [72,96) pass Vulkan1.1 SPV structural source t/s and CB checks without recomputing first 72 SPV validations?",
+  "hypothesis": "SHA-pinned private source + Pass-scoped joint class ordering yields strict 24 new non-overlapping source pairs, validating real SPIRV structure while unresolved dynamic source CB remains unknown.",
+  "controls": [
+    "524 source pairs/936 programs/110 global 132 Pass declaration classes/58 global 80 Pass sampled classes/157 joint classes",
+    "start 72 budget 24; negative test 71 and four disjoint slices",
+    "real original DXBC→vkd3d Vulkan1.1 SPV stage validation; original t/s use multiset; CB b source global and reflected vec4 length, actual OpLoad ranges",
+    "only safe aggregates; purge private DXBC SPV ZIP2"
+  ],
+  "planned_tests": [
+    "full source-free Python",
+    "24 source pair translations",
+    "safe aggregate artifact and original purge"
+  ],
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
