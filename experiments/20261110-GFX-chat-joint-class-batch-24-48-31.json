@@ -1,0 +1,38 @@
+{
+  "session_id": "20261110-GFX-chat-joint-class-batch-24-48-31",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-pass-scoped-declaration-sampling-30",
+  "base_sha": "2fc415bef734a31d3b11f7aa127fcb71f0c3feca",
+  "experiment_key": "GFX-MULTI-057",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-shader48-joint-class-private-second-batch-24-48",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can the next 24 distinct original Shader48 Pass-scoped b/t/s CB plus sampling-use joint-class representatives (private deterministic order [24,48)) validate source-to-Vulkan1.1 SPV without repeating GFX056's first 24?",
+  "hypothesis": "Stable source-private full ordering plus batch start parameter will yield disjoint class representatives and validate the next bounded CPU subset without inventing Material semantic mappings",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42857815446",
+    "https://github.com/alwansan/raf/blob/experiment/android-graphics-rootcause/gfxlab/OPEN_WORK_AND_IDEAS_AR.md"
+  ],
+  "control": [
+    "sha pinned ZIP2 and original 524/936/110/132/58/157 source class census",
+    "start=24 budget=24 and bounded index guards",
+    "synthetic proof batch nonoverlap and deterministic restart",
+    "48 real source stages Vulkan1.1 SPV validity",
+    "original DXBC t/s sample-use exact translated pair multisets",
+    "source b# actual UBO real global OpName and explicit CB vec4 reflected layout",
+    "source known nine ALU opcode b/vec4 to actual SPV load ranges",
+    "source dynamic CB operands remain unknown",
+    "no private shader registers source identifiers code or SPV exported and purge"
+  ],
+  "planned_tests": [
+    "full source-free 057 and prior Python suite",
+    "private ZIP2 524-class census",
+    "only 24 original pair stage translations [24,48)",
+    "safe aggregate artifact",
+    "unconditional private purge"
+  ],
+  "status": "CI_PENDING",
+  "run_urls": [],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
