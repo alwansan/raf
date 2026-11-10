@@ -38,6 +38,25 @@ class StateDiffTests(unittest.TestCase):
         self.assertEqual(result["status"], "INCONCLUSIVE")
         self.assertEqual(result["changed_fields"], [])
 
+    def test_bool_integer_alias_not_false_match(self):
+        a = dict(self.a, zwrite=True)
+        b = dict(a, zwrite=1)
+        result = compare(a, b)
+        self.assertEqual(result["status"], "MISMATCH")
+        self.assertEqual(result["changed_fields"], ["zwrite"])
+
+    def test_equal_integer_state_matches(self):
+        a = dict(self.a, render_queue=3000)
+        self.assertEqual(compare(a, dict(a))["status"], "MATCH")
+
+    def test_type_mismatch_not_hidden_by_unknown(self):
+        a = dict(self.a, zwrite=False)
+        b = dict(a, zwrite=0, alpha_clip=None)
+        result = compare(a, b)
+        self.assertEqual(result["status"], "MISMATCH")
+        self.assertEqual(result["changed_fields"], ["zwrite"])
+        self.assertEqual(result["unknown_fields"], ["alpha_clip"])
+
     def test_duplicate_json_key_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "states.json"
