@@ -33,3 +33,7 @@
 - APK GFX-005 (إن نجح) حزمة منفصلة `com.alwansan.raft.graphicslab.shears`، تنصب بجانب white v0.1 ولا تحذفها.
 
 **حدود قبول:** مجرد عودة لون المعدن/المقبض بواسطة Standard لا يعيد shader الأصلي ذي 7 Passes. ظلاله/اللمعان/depth/culling/compiled variants ما زالت تحتاج استعادة ومقارنة مستقلة بمرجع أصلي. لا توجّه T3 لتغيير shaders الفريق بناء على هذه التجربة دون إثبات مكافأة.
+
+
+## أحدث حالة GFX-MULTI-022 — 10 نوفمبر 2026
+[CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) SUCCESS: فحص 1,435 link rows / 524 exact variant pairs / 1,275 unique referenced DXBC programs؛ 0 RDEF و0 parameter metadata و0 TextureParams/CB bindings. عائق Material property→DX11 register مثبت عبر جميع البرامج المرتبطة. لا Android shader parity. الجلسة `20261110-GFX-chat-variant-reflection-sweep-23`؛ التالية GFX-MULTI-023 لفحص Material/Texture2D/UV/tint/channel fidelity source-only.

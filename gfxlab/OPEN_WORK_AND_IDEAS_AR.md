@@ -101,3 +101,25 @@
 - `m_Script` غائب في Shader48، 0 text bytes ولا CG/HLSL/register markers. GFX020 0/14 original parameter metadata وGFX015 14/14 representative DXBC بلا RDEF. إذن **Material property name→t#/s# register evidence BLOCKED in tested source fields**؛ رغم وجود 56/56 t/s→SPIRV map من GFX019.
 - **P0 GFX-MULTI-022**: ابحث في بقية source Shader48 variants غير الممثلة (524 matched stage pairs) عن استثناءات m_Parameters/RDEF أو مصدر ShaderLab مستقل أصلي وسليم identity. لا تدعي عدم وجوده عالمياً من 14 Stage فقط. إن غاب، اطلب reference PC أو shader source شرعي من المالك عند الحاجة؛ لا تستبدل الربط بتخمين ترتيب الصور.
 - **P1**: جهّز تجارب مستقلة لـNormal DXT5nm AG/Tangent وUV Scale/Offset وTexture sRGB/Metallic/Smoothness وCB packing/Pass State، ونموذج جديد خارج الستة؛ المياه/النار/الإضاءة منفصلة. لا تنشئ العامل العام حتى تعليمات المالك.
+
+
+## GFX-MULTI-022 — exhaustive linked-variant reflection sweep (2026-11-10)
+[CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) **SUCCESS**, 119 tests; source ZIP2 SHA locked. All **1,435/1,435** original Shader48 stage-variant link rows validated, including legacy and Unity 2021 player records; **524** exact keyword/hardware-tier VS/FS pairs; **1,275** unique referenced stage programs decoded as bounded authentic DXBC. RDEF present **0/1,275**; RDEF absent **1,275/1,275**. Across all 1,435 linked rows: `m_Parameters` blocks 0, texture parameter arrays/entries 0, constant-buffer binding arrays/entries 0, top-level sampler metadata rows 0, top-level constant-buffer metadata rows 0. The first attempt [CI42742873015](https://github.com/alwansan/raf/actions/runs/42742873015) completed the source scan but failed its summary assertion because zero-valued Counter keys were omitted; explicit zero counters fixed it. Private source purge succeeded in both attempts.
+
+**Decision:** `SOURCE_PROPERTY_TO_REGISTER_BRIDGE_BLOCKED_IN_ALL_REFERENCED_VARIANTS`. This is stronger than the 14 representative-stage census, but does not include unreferenced entries in the 1,656-entry compiled table. The 56/56 DX11 t/s→SPIR-V symbolic mapping from GFX019 remains valid; the Material-property→source-register edge remains unknown. No original Shader48 Android runtime, GPU pixels, PC parity, APK, or owner acceptance. Original Shader48 restored=false.
+
+**Next GFX-MULTI-023:** source-only Material/Texture2D semantic census across seven materials and 21 bound textures: role/format/color-space/mip/stream metadata, UV scale/offset, tint/color/float metadata, and role-specific decoded-channel statistics. Use authenticated sparse ZIP2 streams and publish safe aggregates only.
+
+
+## خطة الدورة التالية — GFX-MULTI-023 (P0)
+- افحص 7 Materials أصلية و21 Texture2D مرتبطة بالـroles الثلاثة (7 BaseColor / 7 Normal / 7 Metallic) من نفس ZIP2 SHA.
+- افحص حقول Texture2D المصدرية: format، color-space metadata، mip count، dimensions، streaming flags/settings، filter/wrap/aniso. لا تفسر enum رقميًا قبل مرجع موثوق.
+- افحص Material: tint/color/floats/ints، وكل TexEnv UV scale/offset، مع حفظ أسماء الخصائص والقيم الخاصة داخل runner فقط.
+- أعد hydration لقطع Git blob الأصلية المطلوبة فقط عبر `model_plan` و`fill_sparse_authenticated_streams`; لا تنزل stream كاملًا ولا ترفع PNG/OBJ أو source IDs.
+- احسب channel variability/summary للـNormal والـMetallic (خصوصًا A/G/R/B) داخل runner. هذه إشارة إلى packing فقط، لا تثبت DXT5nm decode أو معنى smoothness دون مصدر shader أو PC reference.
+- التقرير العام: أعداد حسب role/format/mip/color-space/UV/tint/channel family، مع fail-closed guards وsource SHA. لا APK ولا claim GPU.
+
+## قرار بعد GFX-MULTI-022
+- لا مزيد من إعادة فحص الـ14 representative stages؛ GFX022 وسّع الفحص إلى جميع 1,435 link rows و1,275 unique referenced DXBC programs.
+- لا نعتبر بقية compiled table entries مستخدمة أو خالية من RDEF؛ لم تدخل في linked-variant sweep. لا نوسع هذا المسار إلا بدليل مرجعي محدد.
+- إن احتجنا shader semantics لاحقًا، نطلب PC reference ثابت أو authoritative source/sidecar من المالك؛ لا نركّب mapping بالتخمين.

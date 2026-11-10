@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-original-shader-text-source-22",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-original-shader-text-source-22.md",
-  "status": "GFX_MULTI_021_ORIGINAL_MATERIAL_TEXTURE_SHADER_PROPERTY_NAMES_FULL_MATCH_SHADER_REGISTER_BRIDGE_SOURCE_OPEN",
+  "latest_session": "20261110-GFX-chat-variant-reflection-sweep-23",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-variant-reflection-sweep-23.md",
+  "status": "GFX_MULTI_022_ALL_1435_LINKED_VARIANTS_1275_DXBC_NO_RDEF_NO_PARAMETERS_SOURCE_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-022: sample/check additional genuine Shader48 stage variants (not only one pair per pass) for alternative RDEF/m_Parameters or corroborated same-export shader source. If all absent, keep material-name→t/s register as SOURCE_EVIDENCE_BLOCKED and do not guess mapping; plan controlled PC visual reference and isolate material texture/normal/tangent fidelity separately.",
+  "next_experiment": "GFX-MULTI-023: source-only audit of seven original Material slots and 21 bound Texture2D assets: role-specific format/color-space/mip/stream metadata, UV scale/offset, tint/color/float metadata, and decoded channel statistics for Normal/Metallic maps using authenticated sparse ZIP2 stream extraction. Publish safe aggregates only; no register guessing or Android shader claim.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -520,5 +520,36 @@
     "original_property_to_DX11_slot_mapping": false,
     "original_android_shader_restored": false
   },
-  "shader_material_binding_blocker_document": "gfxlab/SHADER48_MATERIAL_REGISTER_BRIDGE_BLOCKER_AR.md"
+  "shader_material_binding_blocker_document": "gfxlab/SHADER48_MATERIAL_REGISTER_BRIDGE_BLOCKER_AR.md",
+  "latest_variant_reflection_sweep": {
+    "experiment": "GFX-MULTI-022",
+    "run": 42743017021,
+    "failed_reporting_attempt": 42742873015,
+    "commit": "32f60ca8cd39f5fd4615bbe4c364ac303a65620b",
+    "status": "SUCCESS_EXHAUSTIVE_LINKED_VARIANT_SWEEP_SOURCE_BRIDGE_BLOCKED",
+    "unit_tests": 119,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_variant_link_rows": 1435,
+    "valid_source_variant_link_rows": 1435,
+    "exact_keyword_hardware_tier_pairs": 524,
+    "unique_referenced_stage_programs": 1275,
+    "bounded_dxbc_programs": 1275,
+    "rdef_present": 0,
+    "rdef_absent": 1275,
+    "parameter_blocks_present": 0,
+    "texture_parameter_entries": 0,
+    "constant_buffer_binding_entries": 0,
+    "top_level_sampler_metadata_rows": 0,
+    "top_level_constant_buffer_metadata_rows": 0,
+    "source_embedded_script_field_present": false,
+    "source_property_to_dx11_register_map_verified": false,
+    "source_bridge_state": "SOURCE_PROPERTY_TO_REGISTER_BRIDGE_BLOCKED_IN_ALL_REFERENCED_VARIANTS",
+    "private_source_purged": true,
+    "artifact_id": 13730635053,
+    "artifact_url": "https://github.com/alwansan/raf/actions/runs/42743017021/artifacts/13730635053",
+    "artifact_expiry_utc": "2026-11-17T02:29:04Z",
+    "original_shader_restored": false,
+    "android_original_shader_pixels_verified": false,
+    "phase_closed": false
+  }
 }

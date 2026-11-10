@@ -26,3 +26,8 @@
 
 ## شروط الانتهاء/التسليم إلى T3 أو T1/T2
 تسليم أصلي بأدلة متسلسلة **source identity → same export → Unity variant → measured GPU → Android game pixels**. يُسمح بتعديل موضعي في ShaderLab فقط إذا ثبت فقد مطابق دلالياً، مع اختبار regression وعدم لمس GUID/meta/scene/saves. قبل ذلك لا إصلاح shaders على فرع الفريق ولا APK/OBB/XAPK. إن وجدنا خلاصة تقنية جديدة، نحفظها في جلسة جديدة ونرسل الرابط إلى T3 (شيدرات/لون/نار)، أو T1/T2 (ماء) أو T5 (بناء/مختبر).
+
+
+## 2026-11-10 — GFX-MULTI-022 completed; next GFX-MULTI-023
+- GFX022 [CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021): 1,435/1,435 linked variant rows valid; 524 matched keyword/tier pairs; 1,275 unique referenced DXBC stage programs; all 1,275 RDEF-absent and all 1,435 parameter/sampler/CB metadata absent. Material property→source t/s mapping remains blocked. No Android/GPU claim.
+- GFX023: source Material/Texture2D semantics and pixel-channel census for seven Materials / 21 bound textures, including UV/tint and original format/color-space/mip/stream metadata; use authenticated sparse source chunks; publish safe aggregates only.

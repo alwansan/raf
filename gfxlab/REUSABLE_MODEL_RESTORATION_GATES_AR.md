@@ -40,3 +40,10 @@ GFX-MULTI-019 [CI42739427552](https://github.com/alwansan/raf/actions/runs/42739
 
 ## GFX-MULTI-021: source Material properties are genuinely present
 [CI42741817991](https://github.com/alwansan/raf/actions/runs/42741817991) 107 tests: all 63 original material TexEnv property labels match original Shader48 27 serialized properties (9 texture-type), 21 bound (7 basecolor+7 normal+7 metallic), 42 source null. Shader48 typed object has no embedded m_Script text, no native HLSL source. Original compiled-stage rows for 14 representatives have no m_Parameters (GFX020), and DXBC variants RDEF absent in 14 representatives (GFX015), so independent property→original t/s bridge not proven. Treat visual parity and original shader recovery OPEN; check alternate source variants before concluding unavailable.
+
+
+## GFX-MULTI-022 — تغطية كل variants المرتبطة
+[CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) SUCCESS 119 tests: 1,435 linked variant metadata rows valid, 524 exact keyword/tier pairs, 1,275 unique referenced DXBC programs bounded; RDEF 0/1,275، parameters 0/1,435، TextureParams 0، CB binding metadata 0، top-level sampler/CB 0. Source property→DX11 t/s bridge blocked across the referenced set. Unreferenced compiled-table entries were not included. This is ORIGINAL_SOURCE only, not ShaderLab/GPU/Android proof.
+
+## GFX-MULTI-023 planned material fidelity gate
+Audit the seven original Materials / 21 bound Texture2D assets: texture format, source color-space metadata, mip/stream/filter/wrap flags, UV scale/offset, tint/color/floats, and per-role channel summaries. Rehydrate only authenticated sparse stream chunks; no public raw assets. Normal channel packing statistics are not DXT5nm semantic proof without shader/PC evidence.

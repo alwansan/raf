@@ -24,5 +24,45 @@
     "assert 1,435 valid stage links and 524 exact keyword/tier matched pairs from the pinned source"
   ],
   "resource_key": "gfxlab-multi022-private-all-variant-reflection-sweep",
-  "status": "PREPARED_CI_PENDING"
+  "status": "SUCCESS_SOURCE_PROPERTY_REGISTER_BRIDGE_BLOCKED_ALL_LINKED_VARIANTS",
+  "verified_run": 42743017021,
+  "initial_reporting_failure_run": 42742873015,
+  "artifact_id": 13730635053,
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42743017021/artifacts/13730635053",
+  "artifact_expiry_utc": "2026-11-17T02:29:04Z",
+  "outcome": {
+    "unit_tests": 119,
+    "source_models": 6,
+    "material_slots": 7,
+    "shader_subshaders": 2,
+    "shader_passes": 7,
+    "original_variant_link_rows": 1435,
+    "original_variant_links_valid": 1435,
+    "exact_keyword_hardware_tier_pairs": 524,
+    "unique_referenced_stage_programs": 1275,
+    "bounded_dxbc_programs": 1275,
+    "rdef_present": 0,
+    "rdef_absent": 1275,
+    "parameter_blocks_present": 0,
+    "null_parameter_blocks": 0,
+    "texture_parameter_arrays": 0,
+    "texture_parameter_entries": 0,
+    "constant_buffer_binding_arrays": 0,
+    "constant_buffer_binding_entries": 0,
+    "top_level_sampler_metadata_rows": 0,
+    "top_level_constant_buffer_metadata_rows": 0,
+    "embedded_shader_script_field_present": false,
+    "source_property_to_dx11_register_map_verified": false,
+    "source_bridge_state": "SOURCE_PROPERTY_TO_REGISTER_BRIDGE_BLOCKED_IN_ALL_REFERENCED_VARIANTS",
+    "proprietary_shader_bytes_names_or_indices_exported": false,
+    "private_source_purged": true,
+    "original_shader_restored": false,
+    "android_original_shader_pixels_verified": false
+  },
+  "limitations": [
+    "The sweep covers all 1,435 linked variant rows and 1,275 unique referenced stage binaries, not all 1,656 compiled-table entries; unreferenced entries were not inspected.",
+    "No Material-property-name to original DX11 t/s register mapping was recovered.",
+    "No Android ShaderLab, Adreno pixels, PC pixel parity, or owner acceptance was established."
+  ],
+  "next_step": "GFX-MULTI-023: audit original Material/Texture2D semantics, UV transforms, tint and role-specific texture channel metadata with authenticated sparse stream extraction; source-only, no APK."
 }

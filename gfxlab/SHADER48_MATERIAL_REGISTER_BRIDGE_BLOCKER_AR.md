@@ -46,3 +46,17 @@ Unity GLES ShaderLab + Adreno GPU + PC pixel parity                       [OPEN]
 5. لا تنشئ العامل العام الآن؛ هذه وثيقة تسليم مُعتمدة للخطط والأفكار حتى يحدد المالك صيغته لاحقًا.
 
 **استعادة الجلسة:** `memory/sessions/20261110-GFX-chat-original-shader-text-source-22.md`، `prompt/graphics-lab/RESTORE_AR.md`، `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`، `memory/STATE.json`، `memory/MEMORY.md`، وتحقق من HEAD وActions الحية قبل بدء أي دورة.
+
+
+## GFX-MULTI-022 — exhaustive linked-variant reflection sweep (2026-11-10)
+[CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) **SUCCESS**, 119 tests; source ZIP2 SHA locked. All **1,435/1,435** original Shader48 stage-variant link rows validated, including legacy and Unity 2021 player records; **524** exact keyword/hardware-tier VS/FS pairs; **1,275** unique referenced stage programs decoded as bounded authentic DXBC. RDEF present **0/1,275**; RDEF absent **1,275/1,275**. Across all 1,435 linked rows: `m_Parameters` blocks 0, texture parameter arrays/entries 0, constant-buffer binding arrays/entries 0, top-level sampler metadata rows 0, top-level constant-buffer metadata rows 0. The first attempt [CI42742873015](https://github.com/alwansan/raf/actions/runs/42742873015) completed the source scan but failed its summary assertion because zero-valued Counter keys were omitted; explicit zero counters fixed it. Private source purge succeeded in both attempts.
+
+**Decision:** `SOURCE_PROPERTY_TO_REGISTER_BRIDGE_BLOCKED_IN_ALL_REFERENCED_VARIANTS`. This is stronger than the 14 representative-stage census, but does not include unreferenced entries in the 1,656-entry compiled table. The 56/56 DX11 t/s→SPIR-V symbolic mapping from GFX019 remains valid; the Material-property→source-register edge remains unknown. No original Shader48 Android runtime, GPU pixels, PC parity, APK, or owner acceptance. Original Shader48 restored=false.
+
+**Next GFX-MULTI-023:** source-only Material/Texture2D semantic census across seven materials and 21 bound textures: role/format/color-space/mip/stream metadata, UV scale/offset, tint/color/float metadata, and role-specific decoded-channel statistics. Use authenticated sparse ZIP2 streams and publish safe aggregates only.
+
+
+## تحديث العائق بعد المسح الشامل GFX-MULTI-022
+[CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) يفحص 1,435/1,435 linked variant rows و1,275 unique referenced DXBC stage programs، لا 14 عينة فقط. 0/1,275 RDEF؛ 0 parameter blocks؛ 0 TextureParams؛ 0 ConstantBufferBindings؛ 0 top-level sampler/CB metadata. النتيجة `SOURCE_PROPERTY_TO_REGISTER_BRIDGE_BLOCKED_IN_ALL_REFERENCED_VARIANTS`.
+
+هذا لا يشمل كل 1,656 compiled table entry؛ العناصر غير المرتبطة لم تدخل المسح. لا نستنتج أنها تحتوي reflection ولا أنها صالحة. الحل لا يزال يتطلب source/sidecar موثوقًا آخر أو PC reference مضبوطًا، ولا يجوز تخمين ترتيب Material TexEnv.
