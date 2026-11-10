@@ -1,0 +1,98 @@
+name: GFX-MULTI-038 original Shader48 all 524 exact DXBC VS/PS signature pairs source audit
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi-dxbc-signature-pairs.yml'
+      - 'gfxlab/tools/multi_shader_dxbc_signature_pairs.py'
+      - 'gfxlab/tests/test_multi_shader_dxbc_signature_pairs.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi038-original-dxbc-stage-signatures
+  cancel-in-progress: false
+jobs:
+  original-dxbc-stage-signatures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Validate fail-closed signature parser and synthetic pair tests source-free
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_dxbc_signature_pairs.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Audit exact original 524 DXBC vertex to pixel semantics privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_dxbc_signature_pairs \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi038-private" \
+            --out gfxlab-multi038-safe-original-signatures.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi038-safe-original-signatures.json"))
+          t=d["original_variant_signature_pair_totals"]
+          p=d["per_original_pass_aggregate_counts"]
+          assert d["source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader_compiled_platform"]=="kShaderCompPlatformD3D11"
+          assert d["original_shader_passes"]==7 and len(p)==7
+          assert t["exact_original_keyword_tier_pairs"]==524
+          assert sum(x["exact_pairs"] for x in p)==524
+          assert t["pairs_all_non_system_inputs_signature_compatible"]<=524
+          assert t["pairs_with_non_system_fragment_inputs"]<=524
+          assert t["unique_vertex_dxbc_signatures_inspected"]<=620
+          assert t["unique_fragment_dxbc_signatures_inspected"]<=655
+          assert t["fragment_non_system_compatible_by_signature"]<=t["fragment_non_system_inputs"]
+          assert (t["fragment_non_system_compatible_by_signature"]+
+                  t["fragment_non_system_missing_output"]+
+                  t["fragment_non_system_ambiguous_output"]+
+                  t["fragment_non_system_component_type_mismatches"]+
+                  t["fragment_non_system_component_mask_gaps"] ==
+                  t["fragment_non_system_inputs"])
+          assert not d["signature_compatibility_proves_full_original_shader_execution"]
+          assert not d["original_material_to_shader_register_cb_semantics_verified"]
+          assert not d["original_unity_shaderlab_or_android_gles_compilation_verified"]
+          assert not d["original_pc_vs_adreno_pixels_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["source_private_semantics_program_bytes_keywords_ids_or_registers_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI038_ORIGINAL_524_STAGE_PAIRS_AUDITED=true")
+          print("GFX_MULTI038_NOT_ORIGINAL_SHADER48_RESTORATION=true")
+          PY
+      - name: Upload source-free aggregate stage signatures only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi038-safe-original-dxbc-signature-pairs
+          path: gfxlab-multi038-safe-original-signatures.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Remove all original ZIP2 DXBC and intermediate GPU data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi038-private"
+          echo GFX_MULTI038_ALL_PRIVATE_SOURCE_AND_DXBC_PURGED=true
