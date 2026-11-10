@@ -7,3 +7,10 @@
 - status: IMPLEMENTING
 ## Results / CI
 Pending.
+
+## GFX-MULTI-040 implementation + active build checkpoint
+- Authored three **synthetic** shaders: `gfxlab/unity/Assets/Shaders/GfxLabInterpolationLinear.shader`, `...Flat.shader`, `...NoPerspective.shader`. The latter two deliberately use HLSL `nointerpolation` and `noperspective` qualifiers, `#pragma target 4.0`. All three render the same authored colored triangle with unequal per-vertex clip W.
+- New C# GPU app `gfxlab/unity/Assets/Scripts/GfxInterpolationProbe.cs`: CommandBuffer.DrawMesh to 256×256 GPU RT, sync `ReadPixels`, sample 3 interior pixels, compute constant spread and perspective-vs-noperspective difference. Save **three PNGs** to the recorder's session directory. Record all case states+Unity errors with full stacks; `EXPORT ALL LOGS ZIP` reuses existing MediaStore bridge, target `/storage/emulated/0/Download/Games/cl/test/g/`.
+- Independent builder `gfxlab/unity/Assets/Editor/GfxInterpolationAndroidBuilder.cs`: separate package `com.alwansan.raft.graphicslab.interpolation`, ARM64 IL2CPP GLES3 landscape, never reads ZIP2, does not alter prior six-model app.
+- Source-free contracts `gfxlab/tests/test_multi040_android_interpolation_probe.py`. Initial [CI42818515662](https://github.com/alwansan/raf/actions/runs/42818515662) failed a **synthetic test only** (asserted broad uppercase `ORIGINAL` text instead of exact structured `originalRaftShaderBytecodeUsed=false` guard). Fixed.
+- Corrected [CI42818589985](https://github.com/alwansan/raf/actions/runs/42818589985) source-free **249 tests PASS**, Unity 2021.3.45f2 signed Android IL2CPP build in progress at this checkpoint. Do not claim APK built or GPU device pixel proof yet.
