@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-ubo-global-symbol-provenance-26",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-ubo-global-symbol-provenance-26.md",
-  "status": "GFX_MULTI_052_SUCCESS_66_OF_66_AUTHENTIC_SOURCE_CB_B_REGISTER_SPV_REAL_GLOBAL_OPNAME_14_STAGES_MATERIAL_CB_MEMBER_OFFSETS_BLOCKED",
+  "latest_session": "20261110-GFX-chat-authenticated-cb-byte-address-27",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-authenticated-cb-byte-address-27.md",
+  "status": "GFX_MULTI_053_SUCCESS_208_OF_208_AUTHENTICATED_SOURCE_CB_VEC4_RANGES_WITH_REAL_SPV_LOADS_66_UBOS_MATERIAL_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-053 private source original DXBC CB b#/vec4 index → vkd3d SPV original-name-authenticated actual Uniform global + explicitly reflected array stride/member offset and OpAccessChain byte-location candidate, 14 representative stages only; cannot infer Unity property/value from address or cover unsupported DXBC opcode families.",
+  "next_experiment": "GFX-MULTI-054 prioritize source-private authentic Shader48 property-to-original DXBC t/s/b register or CB member-byte-offset bridge evidence gate: ShaderLab/HLSL/RDEF or genuine Windows PC runtime capture; do not assert original Material semantics from SPIRV vector range 208/208. Secondary original CB component swizzle CPU trace if source-backed, keep unsupported opcode counts and no Android APK until GPU/source parity.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1506,5 +1506,34 @@
     "original_shader48_Adreno_GPU_runtime_verified": false,
     "originalShaderRestored": false,
     "private_source_purged": true
+  },
+  "latest_gfx053_authenticated_cb_vec4_load_ranges": {
+    "run": 42850106500,
+    "status": "SUCCESS_ORIGINAL_SOURCE_AND_COMPILER_SPV_CB_BYTE_LAYOUT_CPU_ONLY",
+    "unit_tests": 367,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13779199161,
+    "artifact_expires_at_utc": "2026-11-17T16:00:18Z",
+    "exact_VS_FS_representative_pairs": 7,
+    "source_stages": 14,
+    "original_b_source_to_real_SPV_UBO_global_layout_authenticated_instances": 66,
+    "reflected_vec4_array_offset_zero_stride_16_instances": 66,
+    "source_original_DXBC_supported_opcode_distinct_vec4_b_indices": 208,
+    "source_vec4_ranges_with_real_SPV_vector_or_component_load": 208,
+    "source_vec4_ranges_without_real_SPV_load": 0,
+    "exact_vec4_start_byte_address_with_load": 190,
+    "exact_vec4_start_byte_address_without_load": 18,
+    "authentic_SPV_direct_root_access_chain_paths": 344,
+    "authentic_SPV_nested_component_access_chain_paths": 101,
+    "actual_vector_pointer_loads": 243,
+    "actual_component_pointer_loads": 101,
+    "SPV_loaded_vec4_ranges_not_in_original_source_covered_opcode_subset": 20,
+    "original_DXBC_source_dynamic_or_extended_CB_operand_uses_unresolved": 27,
+    "all_DXBC_source_CB_opcode_families_covered": false,
+    "all_524_variants_covered": false,
+    "original_Material_property_to_CB_member_offset_map_verified": false,
+    "original_Shader48_android_GPU_proven": false,
+    "private_original_source_purged": true,
+    "originalShaderRestored": false
   }
 }

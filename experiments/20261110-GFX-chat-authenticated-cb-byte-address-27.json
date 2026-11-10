@@ -27,8 +27,37 @@
     "safe aggregate only",
     "purge confidential source"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42849224379",
+    "https://github.com/alwansan/raf/actions/runs/42850106500"
+  ],
+  "status": "SUCCESS_AUTHENTICATED_ORIGINAL_CB_UBO_VEC4_RANGE_208_OF_208_CPU_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "final_run": 42850106500,
+    "unit_tests": 367,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_stages": 14,
+    "source_original_b_register_SPV_actual_UBO_global_and_layout_proven": 66,
+    "reflected_single_member_vec4_array_offset0_stride16_extent_proven": 66,
+    "source_subset_distinct_b_vec4_ranges": 208,
+    "source_subset_distinct_b_vec4_ranges_with_actual_vector_or_component_SPV_Load": 208,
+    "source_subset_without_observed_SPV_loaded_vector_range": 0,
+    "source_subset_exact_vec4_start_byte_address_loaded": 190,
+    "source_subset_without_exact_vec4_start_byte_load": 18,
+    "SPV_direct_UBO_root_access_chains": 344,
+    "SPV_nested_component_access_chains": 101,
+    "SPV_actual_vector_loads": 243,
+    "SPV_actual_component_loads": 101,
+    "SPV_read_vec4_ranges_outside_covered_source_opcode_subset": 20,
+    "source_dynamic_or_extended_CB_operands_unresolved": 27,
+    "all_DXBC_CB_opcode_families_covered": false,
+    "material_property_to_CB_member_offsets_proven": false,
+    "all_524_variants_covered": false,
+    "Shader48_Android_GPU_verified": false,
+    "originalShaderRestored": false,
+    "private_source_purge": true,
+    "safe_artifact_id": 13779199161
+  }
 }
