@@ -26,8 +26,29 @@
     "safe aggregate counters only",
     "purge all original source"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42842984932",
+    "https://github.com/alwansan/raf/actions/runs/42843665847"
+  ],
+  "status": "SUCCESS_NUMERIC_B_BINDING_UBO_BLOCK_SIZE_CANDIDATE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "final_run": 42843665847,
+    "unit_tests": 341,
+    "original_source_cb_declarations_across_representative_stages": 66,
+    "translated_spirv_ubos_across_stages": 66,
+    "representative_original_source_stages": 14,
+    "source_named_CB_identity_matches": 0,
+    "provisional_same_numeric_b_binding_matches": 66,
+    "provisional_DXBC_vec4_times16_equals_SPV_UBO_block_size": 66,
+    "missed_size": 0,
+    "size_mismatch": 0,
+    "stages_with_all_numeric_candidates_equal": 14,
+    "all_original_CB_identity_proven": false,
+    "member_byte_offsets_proven": false,
+    "originalShaderRestored": false,
+    "private_source_purged": true,
+    "safe_artifact_id": 13775824322
+  }
 }

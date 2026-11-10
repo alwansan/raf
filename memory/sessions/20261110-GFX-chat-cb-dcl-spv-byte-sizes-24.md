@@ -11,3 +11,10 @@ Original Microsoft tokenized source `dcl_constant_buffer` registers include vect
 - Tool: `gfxlab/tools/multi_shader_original_cb_spv_blocksize.py`, tests `gfxlab/tests/test_multi_shader_original_cb_spv_blocksize.py`, workflow `.github/workflows/gfxlab-multi050-original-cb-spv-blocksize.yml`.
 - CI pending: no claim until terminal success.
 - OriginalShaderRestored=false; no device APK, Shader48 Android GPU compilation, individual CB byte-offset map, property-to-b# or pixel parity.
+
+## Final evidence / updated interpretation
+- [CI42842984932](https://github.com/alwansan/raf/actions/runs/42842984932) 338 tests success, source private purge verified; 66 DXBC source CB declarations and 66 SPV reflected UBO entries in 14 representative original stages; **0/66 name-authenticated CB-register pairs** due unrecognized UBO name grammar. Matches GFX019 CB name unresolved.
+- [CI42843665847](https://github.com/alwansan/raf/actions/runs/42843665847) SUCCESS, **341 tests**. Explicitly provisional set0 same numeric source b#→SPIRV binding candidate matches **66/66**, `original DCL vec4_count ×16 == SPV UBO block_size` for all **66/66**, no mismatches/missing sizes; 14/14 stages with full numeric candidate alignment. Name-based original CB identity remains 0/66, CB member offsets remain UNKNOWN.
+- Safe count [artifact13775824322](https://github.com/alwansan/raf/actions/runs/42843665847/artifacts/13775824322), expires 2026-11-17T15:23:27Z. All private original shaders, source and SPV staging removed; private values not logged.
+- Outcome: SUCCESS_PROVISIONAL_NUMERIC_CB_BLOCK_SIZE_66_OF_66; evidence_level ORIGINAL_SOURCE_AND_CPU_TRANSLATOR_NUMERIC_DESCRIPTOR_CANDIDATE, not named CB semantic identity. OriginalShaderRestored=false; phase_closed=false.
+- Next GFX051: source-private original DXBC b# CB access operand->SPIRV access chain/member offset evidence only if independently authenticated; no fabricated CB member layout.
