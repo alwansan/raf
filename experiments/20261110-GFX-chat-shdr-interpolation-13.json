@@ -1,0 +1,25 @@
+{
+  "session_id": "20261110-GFX-chat-shdr-interpolation-13",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-dxbc-signature-pairs-12",
+  "base_sha": "17b2b439690f0a692e0e4d2abbcd347e057a71c1",
+  "experiment_key": "GFX-MULTI-039",
+  "issue_id": "RENDER-002",
+  "source_sha": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "scope": "All 1275 authentic linked DX11 Shader48 SHDR token programs, public opcode 98/99/100 pixel input interpolation mode plus numeric resource declarations and consistency with GFX038 original pair signatures.",
+  "question": "Which original DXBC pixel input interpolation declarations actually occur in linked Shader48 programs, and can shader interface fidelity gates be specified without guessing original material register mappings?",
+  "reference_format": "Microsoft DirectX-Headers D3D12TokenizedProgramFormat.hpp: DCL_INPUT_PS=98, DCL_INPUT_PS_SGV=99, DCL_INPUT_PS_SIV=100; interpolation mode bits 11-14, modes 0-7",
+  "planned_tests": [
+    "Source-free strict token length, stage-specific interpolation mode and unsupported mode checks",
+    "Cover exactly 620 VS + 655 PS unique linked original DXBC programs",
+    "Count numeric interpolation mode categories and shader resource declarations, publish no original names/indices/bytecode",
+    "Original SHA-pinned ZIP2 Actions runner, public aggregate only, mandatory source purge"
+  ],
+  "negative_controls": [
+    "No authored Material→shader resource register CB binding inferred",
+    "No claim of GLES runtime or PC-Adreno pixels",
+    "No source proprietary shader bytes or register operands exposed"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
