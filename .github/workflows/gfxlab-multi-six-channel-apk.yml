@@ -3,7 +3,7 @@ on:
   push:
     branches: [experiment/android-graphics-rootcause]
     paths:
-      - '.github/workflows/gfxlab-multi-six-unity-apk.yml'
+      - '.github/workflows/gfxlab-multi-six-channel-apk.yml'
   workflow_dispatch:
 permissions:
   contents: read
