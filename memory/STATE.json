@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-all-seven-pass-gles-13",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-all-seven-pass-gles-13.md",
-  "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
+  "status": "GFX_MULTI_013_SOURCE_ORIGINAL_SHADER_7_OF_7_PASS_OFFLINE_SUCCESS_FULL_SHADER_RESTORATION_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Analyze GFX-MULTI-013 all-seven source Shader48 CPU pass translation. If all source passes compile offline, next test original material binding CB/texture/sampler semantics before a constrained phone GLES3 proof.",
+  "next_experiment": "GFX-MULTI-014: original pass CB/register/sampler/texture binding and DXT5nm/tangent/UV/material semantics fidelity, then limited real Android Shader48-like GPU test, PC pixel A/B and owner gate; do not launch general restoration agent until proven.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -43,7 +43,9 @@
     "docs/ROOT_CAUSE_REVIEW_AR.md",
     "docs/EXPERIMENT_ROADMAP_AR.md",
     "prompt/graphics-lab/RESTORE_AR.md",
-    "gfxlab/MULTI_OWNER_TEST_GUIDE_AR.md"
+    "gfxlab/MULTI_OWNER_TEST_GUIDE_AR.md",
+    "gfxlab/REUSABLE_MODEL_RESTORATION_GATES_AR.md",
+    "gfxlab/SHADER_BINARY_SOURCE_GATES_AR.md"
   ],
   "caveat": "STATE is a hint. Latest individual sessions and CI override stale summary.",
   "last_verified_lab_run": 42720920391,
@@ -377,8 +379,22 @@
   },
   "latest_all_seven_original_shader_passes": {
     "experiment": "GFX-MULTI-013",
-    "status": "CI_PENDING",
-    "one_variant_per_pass": true,
-    "original_shader_restored": false
+    "run": 42732808109,
+    "status": "SUCCESS_ALL_SEVEN_SOURCE_PASSES_ONE_MATCHED_VARIANT_EACH_OFFLINE_GLES310",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "subshaders": 2,
+    "passes": 7,
+    "representative_pairs_cpu_verified": 7,
+    "stage_count": 14,
+    "source_matched_variant_pairs_total": 524,
+    "full_variant_coverage": false,
+    "spirv_vulkan11_validation_pass_7of7": true,
+    "glsl_es310_offline_compile_pass_7of7": true,
+    "stage_interface_location_type_pass_7of7": true,
+    "original_sampler_cb_texture_binding_parity": false,
+    "original_shaderlab_android_built": false,
+    "real_adreno_original_shader_tested": false,
+    "original_shader_restored": false,
+    "stage_closed": false
   }
 }

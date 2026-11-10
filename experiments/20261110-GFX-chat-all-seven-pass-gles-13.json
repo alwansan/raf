@@ -12,5 +12,18 @@
     "report all failures, don't synthesize passes",
     "Android shader flag false"
   ],
-  "status": "CI_PENDING"
+  "status": "SUCCESS_7_OF_7_REPRESENTATIVE_PASSES_CPU_ONLY",
+  "run": 42732808109,
+  "result": {
+    "pass_count": 7,
+    "representative_passes_offline_translated": 7,
+    "representative_shader_stages": 14,
+    "all_spirv_vulkan11_valid": true,
+    "all_glsl_es310_syntax_valid": true,
+    "all_stage_location_type_parity": true,
+    "exact_source_pairs_total": 524,
+    "all_pairs_tested": false,
+    "original_shader_restored": false,
+    "original_android_gpu_verified": false
+  }
 }

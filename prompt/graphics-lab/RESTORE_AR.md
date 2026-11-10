@@ -48,3 +48,11 @@
 
 **النص المختصر لإعادة التشغيل في أي محادثة جديدة:**
 > اسمك GFX-LAB. ابقَ في Chat واستعد التعليمات الحية من https://github.com/alwansan/raf/blob/experiment/android-graphics-rootcause/prompt/graphics-lab/RESTORE_AR.md، واقرأ أحدث ملفات الذاكرة والجلسات ونتائج GitHub Actions، ثم أكمل GFX-MULTI في فرع experiment/android-graphics-rootcause فقط من آخر نتيجة مثبتة.
+
+## أحدث GFX-MULTI-009–013 — مراجعة المصدر والـCPU
+- GFX-009 CI42728348900 SUCCESS: original Shader48 compressed source platform D3D11 and compiled table 1656 records; raw GPU program type labels alone not Android proof.
+- GFX-010 CI42731206453 SUCCESS: 1435/1435 original pass VS/FS variant blob links valid, 0 type mismatches, all actual linked programs DX11 with embedded DXBC. General table GLES labels do not correspond to the seven referenced original passes.
+- GFX-011 CI42731898965 SUCCESS: one exact keyword/tier VS/FS source pair translated privately to Vulkan1.1 SPIR-V and validated 2/2 stages; 7/7 source passes have at least one exact matching pair, 524 matched pairs total.
+- GFX-012 CI42732370025 SUCCESS: one original pair transformed to GLSL ES310 and compiled offline, VS/FS IO location/type 7/7 matched; source-only.
+- **GFX-013 CI42732808109 SUCCESS**: all seven original Shader48 passes (4+3) have one matched variant pair each converted to SPIR-V then GLSL ES310 and accepted by offline validators. 14 stage programs and per-pass VS/FS reflected location/type match. Not 524/524 variants, not ShaderLab running on Android, originalShaderRestored=false.
+- **Current stage OPEN**: source→Unity→Adreno+PC pixel parity, constant buffers/samplers/texture mapping/normal DXT5nm, source render states/keywords, rig/animation, multi-part assembly remain unverified. See `gfxlab/REUSABLE_MODEL_RESTORATION_GATES_AR.md`. Never declare restored original Shader48 or completion of all item types from CPU proof alone.

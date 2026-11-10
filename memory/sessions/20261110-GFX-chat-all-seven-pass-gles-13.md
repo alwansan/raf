@@ -8,3 +8,11 @@
 - proven run: GFX-MULTI-012 CI42732370025 SUCCESS 69 tests. First pass VS/FS both translate and offline GLSL ES310 syntax PASS, SPIRV stage IO 7/7 locations AND types equal, no absent FS inputs or mismatched types, 5 vertex UBO, 7 fragment UBO, 7 separate images, 6 separate samplers. No actual Adreno verification or binding equivalence.
 - new run: GFX-MULTI-013 auto-trigger pending; 7 pass representative pairs CPU-only; exact source keywords and hardware tier.
 - acceptance: no original shader claim even if all seven pass syntax works: missing full 524 variants, resource bindings, semantic interpolation, original material behavior, Unity/phone GPU, PC parity, rig and animation.
+
+## CI confirmed result
+- [GFX-MULTI-013 CI42732808109](https://github.com/alwansan/raf/actions/runs/42732808109) **COMPLETED SUCCESS** on `44619cde100f3eac6595e2189c7cdf19b291c7d1`. 71 source/unit tests passed.
+- Authentic ZIP2 Shader48: 2 SubShaders and 7 Passes, each pass's exact source VS/FS pair (same original keywords and hardware bucket) privately recovered and translated via DXBC → Vulkan1.1 SPIR-V → GLSL ES310; `spirv-val` and offline `glslangValidator` passed for all **14 stage programs**.
+- Every tested VS output / FS input interface is location/type compatible; no reported missing FS input or type mismatches. PASS COVERAGE=7/7 representative variants; **not** 524/524 variants.
+- Representative per-pass safe fragment textures/samplers/CB counts vary by pass. Original binding, interpolation, source render-state, normals, metallic channels, tangent and PC visual parity NOT verified.
+- Private original DXBC/SPIR-V/GLSL files were deleted. No full-game source, OBB/XAPK, actual Android shader, or game branch writes.
+- Evidence: CPU shader compilation/research success only. Android GPU original Shader48=false; original rig/animation=false; stage **OPEN**.

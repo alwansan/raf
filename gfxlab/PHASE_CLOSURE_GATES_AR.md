@@ -32,3 +32,6 @@ GfxMultiAndroidBuilder.cs يستعمل Shader.Find("Standard") وShader.Find("Un
 
 ## GFX-MULTI-008 — إغلاق سؤال فرق Vertex count
 [Run 42727777657](https://github.com/alwansan/raf/actions/runs/42727777657): SUCCESS و57 اختبار. source→float32 pos+UV+Normal unique tuple يساوي Unity imported vertices في جميع الموديلات الستة. M01 وM04 الفرق 374 مفسَّر بالصفات المتطابقة، وM02 الفرق 4 كذلك؛ لا دليل فقدان faces من فرق الأعداد. **يبقى اختبار reindexed triangles وtangents/rig/scene assembly**. هذا لا يغلق الاستعادة الأصلية للشيدر.
+
+## 2026-11-10 — المرحلة ما زالت OPEN رغم نجاح 7/7 pass CPU
+[GFX-MULTI-013](https://github.com/alwansan/raf/actions/runs/42732808109) 7/7 source Shader48 passes have valid representative CPU DXBC→SPIR-V→GLSL ES310 stage conversion and interface location/type parity. No material/texture Register/CB/sampler binding parity, real ShaderLab implementation, full source variant coverage, Android Adreno GPU proof or PC pixel matched comparison yet. Before delegation close one exact source Material+Mesh representative end-to-end, then multi-material and skinned assembly; water/FFT, smoke/fire, dedicated lighting remain separate.
