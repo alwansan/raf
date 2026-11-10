@@ -1,0 +1,38 @@
+{
+  "session_id": "20261111-GFX-chat-integer-literal-80-53",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-080",
+  "issue_id": "RENDER-002",
+  "question": "Which public SPIR-V integer opcode and safe 32-bit literal-shape category occur in the 12 unresolved source-authenticated Shader48 CB index Store-value SSA terminal expressions?",
+  "hypothesis": "Some terminals may be 32-bit integer OpIMul with one literal power of two, a translated bit-pattern arithmetic shape (not source DXBC equivalence).",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42903748363",
+    "memory/sessions/20261111-GFX-chat-spv-unknown-families-52.md"
+  ],
+  "control": [
+    "OpIMul with dynamic input and power2 literal",
+    "negative nonpower/zero/both/no literals",
+    "untrusted widths/types",
+    "OpIAdd untrusted source",
+    "signed high-bit literal representation without signedness claim",
+    "no source/GPU success flags"
+  ],
+  "planned_tests": [
+    "source-free Python regression suite",
+    "authenticated 157 original VS+FS source joint pairs and 314 source stages",
+    "427 actual SPV b-authenticated CB index reads / 12 integer terminal count, 47 CFG relation",
+    "no source IDs or literal numeric values in safe artifact",
+    "private ZIP2, DXBC/SPV purge"
+  ],
+  "resource_key": "gfxlab-multi080-spv-private-integer-multiplier",
+  "status": "CI_RUNNING",
+  "run_id": 42904629074,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42904629074",
+  "resumed_from": "20261111-GFX-chat-spv-unknown-families-52",
+  "base_sha": "b7eea0abee2463bbdca0fba1090cf6c525f8f3fa",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_OPCODE_AND_LITERAL_SHAPE",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
