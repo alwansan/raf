@@ -27,6 +27,27 @@
     "Build signed APK via independent CI and verify package + signature + DEX and shader asset names; failures fixed within scope",
     "Update session/RESTORE/MEMORY/STATE and provide verified APK artifact link"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_SIGNED_SOURCEFREE_DIAGNOSTIC_APK_DEVICE_INTERPOLATION_PENDING",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42818515662",
+    "https://github.com/alwansan/raf/actions/runs/42818589985",
+    "https://github.com/alwansan/raf/actions/runs/42819452951",
+    "https://github.com/alwansan/raf/actions/runs/42819553601"
+  ],
+  "results": {
+    "build_status": "SUCCESS",
+    "build_sha": "6603a16b34d1fa066d6a4f4650dc3dae9b0c3bea",
+    "apk_bytes": 8475700,
+    "apk_sha256": "55a3073ddd96a34338b37238a61f7e2ea070dd92281eb641c330645d003055a8",
+    "package": "com.alwansan.raft.graphicslab.interpolation",
+    "artifact_id": 13766780753,
+    "artifact_expires": "2026-11-17T12:58:26Z",
+    "tests": 256,
+    "zip_parser_run": 42819452951,
+    "original_raft_assets_in_apk": false,
+    "actual_owner_gpu_runtime_proven": false,
+    "actual_original_shader48_restored": false
+  },
+  "safe_build_report": "gfxlab/evidence/20261110_gfx040_android_interpolation_signed_apk_safe.json",
+  "next_step": "Owner installs signed separate synthetic probe and exports full ZIP under Download/Games/cl/test/g/; validate phone GPU qualification with privacy-safe ZIP auditor, then continue authentic Material/CB resource binding research. No original Shader48 APK until phase fully closes."
 }
