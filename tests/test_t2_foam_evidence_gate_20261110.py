@@ -65,7 +65,7 @@ class EvidenceGateTests(unittest.TestCase):
     def test_reject_deeply_nested_json_without_recursion_traceback(self):
         # The decoder can hit RecursionError while input is below MAX_BYTES.
         # Nested arrays are not valid aggregate reports at any depth.
-        raw = (b"[" * 1500) + b"0" + (b"]" * 1500)
+        raw = (b"[" * 10000) + b"0" + (b"]" * 10000)
         with self.assertRaises(EvidenceError):
             parse_aggregate_json(raw)
 
