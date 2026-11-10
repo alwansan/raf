@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-gl-program-envelope-10",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-gl-program-envelope-10.md",
-  "status": "GFX_MULTI_036_SUCCESS_ONLY_SOURCE_D3D11_PLATFORM_UNLINKED_GL_NOT_ANDROID_GLES_ORIGINAL_SHADER_BLOCKED",
+  "latest_session": "20261110-GFX-chat-linked-dxbc-reflection-11",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-linked-dxbc-reflection-11.md",
+  "status": "GFX_MULTI_037_SUCCESS_ALL_1275_ORIGINAL_DXBC_ONLY_SHDR_ISGN_OSGN_NO_REFLECTION_MATERIAL_CB_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-037 authentic 1275 linked DXBC stage chunk metadata census including SDBG/SPDB/ILDB/RDAT; if no original resource names then independent PC shader capture required. No source shaders/Android game APK until real CB/pass/state/pixel parity.",
+  "next_experiment": "GFX-MULTI-038 SHA-pinned original 524 exact VS/FS DXBC ISGN/OSGN signature compatibility source-only; external genuine ShaderLab/PC reflection still needed for actual material t/s/CB offsets. No original Android shader APK until source bindings/state/pixel parity.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1074,6 +1074,34 @@
     "distinct_gles_payloads": 115,
     "distinct_glcore_payloads": 96,
     "source_purge": true,
+    "original_shader48_restored": false
+  },
+  "latest_linked_dxbc_reflection_audit": {
+    "run": 42813380416,
+    "status": "SUCCESS",
+    "unit_tests": 230,
+    "artifact_id": 13762877353,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_stage_links": 1435,
+    "original_exact_pairs": 524,
+    "unique_dxbc": 1275,
+    "vertex": 620,
+    "fragment": 655,
+    "tag_counts": {
+      "ISGN": 1275,
+      "OSGN": 1275,
+      "SHDR": 1275,
+      "RDEF": 0,
+      "SDBG": 0,
+      "SPDB": 0,
+      "ILDB": 0,
+      "RDAT": 0,
+      "SRCI": 0,
+      "STAT": 0,
+      "OTHER": 0
+    },
+    "source_cleanup": true,
+    "original_material_bindings_restored": false,
     "original_shader48_restored": false
   }
 }
