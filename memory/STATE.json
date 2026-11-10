@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-iadd-loads-86-59",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-iadd-loads-86-59.md",
-  "status": "GFX_MULTI_086_SUCCESS_824_TESTS_12_SPV_IADD_LHS_OPLOAD_INPUT_12_RHS_OPLOAD_UNIFORM_NO_DXBC_SSA_GFX054_MATERIAL_CB_OR_ADRENO_GPU_PIXEL_PROOF",
+  "latest_session": "20261111-GFX-chat-interface-decorations-60",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-interface-decorations-60.md",
+  "status": "GFX_MULTI_087_SUCCESS_833_TESTS_12_INPUT_LOCATION_12_UNIFORM_BINDING_SET_BLOCK_MEMBER_OFFSET_SOURCE_SPV_CPU_ONLY_GFX054_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-087: source-private SPV original Input location and Uniform block/member decorations of 12 OpIAdd operands, bounded anonymous counts and candidate source DXBC input/CB register links; NEVER claim GFX054 Material property→CB bytes, original DXBC temp/value parity, effective SPV memory reaching value or original Shader48 Android GPU pixels until separately proven.",
+  "next_experiment": "GFX-MULTI-088: source-private verify exact original DXBC dcl_input semantic and dcl_constantbuffer register/member link to the 12 SPV Input Location and Uniform Binding/DescriptorSet/Block selected Offset occurrences, only if source-byte provenance and stage-specific mapping exists. Fail closed unknown/ambiguous; never equate raw SPV binding or location to DXBC registers without independent proof. GFX054 Unity Material CB bytes and Android shader GPU pixel parity still blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2374,6 +2374,25 @@
     "safe_artifact_id": 13806478186,
     "source_private_purge_verified": true,
     "source_DXBC_to_SPV_SSA_semantics_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false
+  },
+  "latest_gfx087": {
+    "experiment": "GFX-MULTI-087",
+    "status": "SUCCESS_ORIGINAL_SOURCE_TRANSLATED_SPV_INTERFACE_DECORATION_PRESENCE_ONLY",
+    "run_id": 42911732892,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42911732892",
+    "run_sha": "df73dc428a3beb3a2afb28dbe0eb84ca906f9d14",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 833,
+    "authentic_original_source_pairs": 157,
+    "original_stages": 314,
+    "source_CB_stages": 311,
+    "source_b_authenticated_SPV_index_loads": 427,
+    "Input_location_direct_variable_12": 12,
+    "Uniform_Binding_Set_Block_member_Offset_count": 12,
+    "artifact_id": 13807567251,
+    "private_sources_purged": true,
     "originalShaderRestored": false,
     "phase_closed": false
   }
