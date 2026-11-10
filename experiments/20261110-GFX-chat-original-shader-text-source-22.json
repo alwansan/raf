@@ -1,0 +1,20 @@
+{
+  "session_id": "20261110-GFX-chat-original-shader-text-source-22",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-021",
+  "question": "Does authentic ZIP2 Shader48 retain source script/HLSL/program register text; how many bound Material TexEnv names correspond to serialized shader property declarations?",
+  "hypothesis": "Original precompiled Shader48 m_Script may be absent, so source Shader property->DX11 register connection needs a different source; serialized property names may still validate original material TexEnv identity.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42740776655"
+  ],
+  "control": "Original embedded text never printed; source only, no inferred register ordering; every material bound pointer checked; code marker does not equal binding parity.",
+  "planned_tests": [
+    "synthetic HLSL text marker non-equivalence tests",
+    "original typed Shader48 m_Script presence",
+    "material TexEnv/Shader property name union counts"
+  ],
+  "resource_key": "gfxlab-multi021-shader-original-embedded-text-private",
+  "status": "CI_PENDING"
+}

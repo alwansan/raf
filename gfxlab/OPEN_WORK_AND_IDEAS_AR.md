@@ -89,3 +89,8 @@
 - هذا يؤكد النقص السابق في GFX-MULTI-006. مهم: 21 Texture2D مرتبطة صحيح بالمادة؛ النقص بالـShader program parameter metadata فقط.
 - **P0 GFX-MULTI-021**: افحص إن كانت `m_Script` أو مصدر Shader غير مضغوط أو reflection/sidecar من same-export الأصلي يحوي تعريفات أسماء Texture/register، مع SHA مربوط وهوية Shader48 واضحة. إذا ما موجود، دوّن BLOCKED_SOURCE_NAME_TO_REGISTER_MAPPING ولا تخمّن ترتيب m_TexEnvs.
 - لا ترفع حالة shader restoration؛ خصائص shader runtime-setting ممكن تكون خارج m_SavedProperties وفق Unity، ويجب التمييز.
+
+
+## GFX-MULTI-021 جارٍ — تحقق Source Shader text بديل
+- `20261110-GFX-chat-original-shader-text-source-22`: فحص `Shader48.m_Script` الأصلي من ZIP2: هل يوجد أي كود أصلي CGPROGRAM/HLSLPROGRAM أو `register(t#)`؟ ومقارنة أسماء المواد المرتبطة مع 27 shader property (لا تُنشر الأسماء). CI pending.
+- **If missing**: source Text register binder BLOCKED؛ لا تحوّل أسماء shader property بالترتيب إلى t#/s#، واطلب أصل ShaderLab/PC reference ذا SHA مستقل إذا توفر؛ استمر بفحص ألوان/Normal/UV/Textures والـRig بشكل منفصل.

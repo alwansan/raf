@@ -119,3 +119,7 @@
 
 ## أحدث نتيجة GFX-MULTI-020 — TexEnv المصدر موجود، ميتاداتا الـProgram مفقودة
 [CI42740776655](https://github.com/alwansan/raf/actions/runs/42740776655) **SUCCESS**، 103 tests، 6 Mesh و7 Materials أصلية: 63 m_TexEnvs (21 Texture2D مرتبطة، 42 null)، Shader48 يحتوي 27 Serialized shader properties. لكن 14/14 source Shader48 selected stage row بلا `m_Parameters`، لذلك `m_TextureParams/m_SamplerIndex` الخاص بربط shader property إلى DX11 t/s غير قابل للفحص من هذه الـRows، وverified material-property-to-register mappings=0. هذه **فجوة البيانات المصدرية**، لا فقدان الصور؛ 56/56 t/s register→SPIRV name association من GFX019 تبقى صحيحة لكن بدون اسم المادة. كانت GFX-MULTI-006 قد سجلت 0 parameter metadata variants سابقاً. آخر جلسة `memory/sessions/20261110-GFX-chat-original-material-texenv-21.md`؛ اقرأ `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`. التالي GFX-MULTI-021 فحص m_Script/مصدر Shader أصلي بديل مع fail-closed، ثم CB/Normal/PC pixel evidence.
+
+
+## GFX-MULTI-021 — البحث عن مصدر Shader48 الأصلي المفقود
+جلسة `20261110-GFX-chat-original-shader-text-source-22`، origin=chat، resumed_from=`20261110-GFX-chat-original-material-texenv-21`، baseline `090993480abe7b4fc3f541b03357f71fa3fc1a77`. نفحص هل Shader48 الأصلي يحتفظ بـ`m_Script` حقيقي يتضمن CG/HLSL وregister syntax، ونقيس مطابقة أسماء TexEnv المرتبطة (21) لقائمة خصائص Shader48 الأصلية (27)، من دون نشر أي اسم أو نص شيدر. حتى وجود HLSL النصي لا يكفي لتأكيد property→t# mapping إلا إذا ثبت رابط صريح. workflow `gfxlab-multi-shader-text-evidence.yml`، CI pending. بعد التشغيل حدّث كل ملفات الاستعادة/المهام.

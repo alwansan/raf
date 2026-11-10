@@ -1,0 +1,13 @@
+# GFX-LAB — 20261110-GFX-chat-original-shader-text-source-22
+- session_id: 20261110-GFX-chat-original-shader-text-source-22; origin: chat
+- resumed_from: 20261110-GFX-chat-original-material-texenv-21
+- base_sha: 090993480abe7b4fc3f541b03357f71fa3fc1a77
+- issue_id: RENDER-002
+- experiment_key: GFX-MULTI-021-source-Shader48-embedded-script-evidence-and-material-property-name-identity
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- scope: check original typed Shader48 embedded m_Script/HLSL text evidence and source 27 serialized shader properties against seven original Material TexEnv lists (63 slots/21 bound). All source property names/script bytes remain in private runner and never exported.
+- previous: GFX-MULTI-020 [CI42740776655](https://github.com/alwansan/raf/actions/runs/42740776655) SUCCESS 103 tests; selected 14 source Shader48 player program rows had 0 m_Parameters, 7 original materials contain 21 actually bound Texture2D and 42 null TextEnv slots; no original name-to-t register mapping. This confirms earlier GFX-MULTI-006 param_metadata_variants zero.
+- negative_controls: marker presence alone not proof of material-to-register mapping, require real script field, bound original TexEnv subset, original Shader48 and SHA identity, never output source strings.
+- planned_run: GFX-MULTI-021 workflow on commit (CI_PENDING).
+- evidence_level: ORIGINAL_SOURCE MATERIAL PROPERTY LIST and EMBEDDED TEXT CHECK only. Original Shader48 Android renderer/PC pixels/CB layout FALSE.
+- next_step: after CI, update current session/restore/MEMORY/STATE/open work. If original embedded source absent, mark property->register mapping BLOCKED, maintain separate material/texture validation and propose same-export/manual PC reference for shader semantic proof.

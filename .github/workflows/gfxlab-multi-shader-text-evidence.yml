@@ -1,0 +1,72 @@
+name: GFX-MULTI-021 original Shader48 text-source and Material property metadata / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-shader-text-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi021-original-shader-text
+  cancel-in-progress: false
+jobs:
+  original-shader-text-private:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Pure no-source-data negative tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_text_check.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Confirm true embedded Shader48 script evidence privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_original_text_check --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi021-private" --out gfxlab-multi021-safe-source-evidence.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('gfxlab-multi021-safe-source-evidence.json'))
+          assert d['source_model_count']==6 and d['material_slots']==7
+          assert d['shader_passes']==7
+          assert not d['independently_verified_original_property_name_to_DX11_t_s_register_map']
+          assert not d['actual_android_original_shader_pixels_verified']
+          assert not d['phase_closed']
+          assert not d['proprietary_source_names_or_shader_code_exported']
+          print('GFX_MULTI021_ORIGINAL_PROPERTY_LIST_NOT_REGISTER_SEMANTIC_PROOF')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi021-safe-original-source-text
+          path: gfxlab-multi021-safe-source-evidence.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private Shader48 and Material sources
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi021-private"
+          echo GFX_MULTI021_ALL_PRIVATE_SHADER_SOURCE_PURGED=true
