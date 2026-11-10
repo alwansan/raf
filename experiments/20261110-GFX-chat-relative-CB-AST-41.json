@@ -1,0 +1,27 @@
+{
+  "session_id": "20261110-GFX-chat-relative-CB-AST-41",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-067",
+  "question": "What exact nested DXBC relative CB address expressions occur in original Shader48 427 source operands, and can an independent source-to-SPV SSA root be proven rather than assumed?",
+  "reference_refs": [
+    "GFX065 CI42879705849",
+    "GFX066 CI42880727817",
+    "GFX063 CI42873734355",
+    "ZIP2 SHA15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "hypothesis": "Strict source-private nested operand-tree parsing will partition all 427 relative uses into meaningful grammar families and reveal missing SSA provenance; equal offsets do not establish program semantics.",
+  "control": "Synthetic operands relative2, relative3, relative4, signed offsets, nested depth, duplicate expression vs occurrence, undeclared b, corrupt DXBC, missing SSA origin.",
+  "planned_tests": [
+    "all source-free tests",
+    "all 157 source representative class pairs/314 stage instances original DXBC",
+    "independent GFX063/GFX051 source operand accounting",
+    "only safe aggregate categories to artifact; purged source",
+    "assert 0 original per-operand SSA correspondence proven"
+  ],
+  "original_scope": "SOURCE_ONLY original DXBC syntax; no Android APK, original shader runtime or GPU pixels",
+  "writes_only_branch": "experiment/android-graphics-rootcause",
+  "workflow_run": "https://github.com/alwansan/raf/actions/runs/42882730895",
+  "status": "CI_RUNNING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
