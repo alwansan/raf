@@ -1,0 +1,89 @@
+name: GFX-MULTI-030S authentic Shader48 dynamic state NameIndices source bridge / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-state-nameindices.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi030s-source-exact-nameindices
+  cancel-in-progress: false
+jobs:
+  shader48-source-exact-names:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Fail-closed source-free regression tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_state_nameindices_bridge.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Exact original seven-pass NameIndices and material keyword matching
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_state_nameindices_bridge \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi030s-private" \
+            --out "$RUNNER_TEMP/gfxlab-multi030s-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gfxlab-multi030s-safe.json").read_text())
+          assert d["experiment"]=="GFX-MULTI-030S"
+          assert d["source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_model_count"]==6
+          assert d["original_material_renderer_slots"]==7
+          assert d["original_shader48_subshaders"]==2
+          assert d["original_shader48_passes"]==7
+          for field in ("culling","zWrite","zTest","alphaToMask"):
+              c=d["named_state_exact_source_matches"][field]
+              assert c["source_passes"]==7
+              assert c["name_parseable"]==7
+              for k in ("matched_exact_nameindices","matched_original_shader_property","matched_original_material_valid_keyword","unmatched_all_sources"):
+                  assert 0<=c.get(k,0)<=7
+          for k in ("source_shader_property_names_or_original_metadata_published",
+                    "source_original_keyword_or_material_float_values_published",
+                    "source_binary_or_register_ids_published","numeric_hash_name_guessing_used",
+                    "original_shaderlab_gles3_shader_compiled",
+                    "original_shader48_material_to_register_bridge_complete",
+                    "original_shader48_runtime_render_state_proven",
+                    "original_shader48_android_gpu_pixels_verified","phase_closed"):
+              assert d[k] is False,k
+          print("GFX_MULTI030S_SOURCE_ONLY_PASS=true")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi030s-private-source-safe-aggregate-only
+          path: ${{ runner.temp }}/gfxlab-multi030s-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2 owner Shader48 source
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi030s-private"
+          echo GFX_MULTI030S_PRIVATE_SOURCE_PURGED=true
