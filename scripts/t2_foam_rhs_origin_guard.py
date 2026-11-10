@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Sequence
 
-_ALLOWED = {"nop", "dup", "castclass"}
+_ALLOWED = {"nop", "castclass"}
 _ORIGINS = {"ldnull": "NULL", "newobj": "CONSTRUCTOR", "ldfld": "FIELD_READ",
             "ldsfld": "STATIC_FIELD_READ", "call": "CALL_RESULT",
             "callvirt": "CALL_RESULT", "ldloc": "LOCAL_READ",
@@ -35,4 +35,4 @@ def classify_rhs(opcodes: Sequence[str]) -> str:
     if len(producers) != 1 or any(op not in _ORIGINS and op not in _ALLOWED
                                   for op in ops):
         return "UNKNOWN"
-    return _ORIGINS[producers[0]]
+    # castclass consumes a value: it cannot precede the only producer.\n    # dup is deliberately unsupported without explicit stack simulation.\n    producer_index = ops.index(producers[0])\n    if any(op == "castclass" for op in ops[:producer_index]):\n        return "UNKNOWN"\n    return _ORIGINS[producers[0]]
