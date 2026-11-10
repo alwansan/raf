@@ -22,6 +22,26 @@
     "Fail-closed if malformed metadata, preserve private string names and assemblies on ephemeral CI only",
     "If no authentic Material→t/s/b/CB offset proof, explicitly continue original Shader48 G8 BLOCKED; do not create original shader APK"
   ],
-  "status": "IN_PROGRESS",
-  "runs": []
+  "status": "SUCCESS_ORIGINAL_CSHARP_10_OF_27_SHADER_PROPERTY_LITERALS_G8_REGISTER_BRIDGE_STILL_BLOCKED",
+  "runs": [
+    "https://github.com/alwansan/raf/actions/runs/42829197947",
+    "https://github.com/alwansan/raf/actions/runs/42829505370"
+  ],
+  "results": {
+    "unit_tests": 279,
+    "source_manifest_entries": 366,
+    "standalone_shader_source_sidecars": 0,
+    "shader_property_count": 27,
+    "original_texture_props": 9,
+    "material_texenv_entries": 63,
+    "bound_texenv_entries": 21,
+    "assembly_csharp_literal_strings": 4488,
+    "exact_assembly_shader_properties": 10,
+    "exact_assembly_texture_property_literals": 3,
+    "exact_bound_material_texture_literals": 2,
+    "source_property_to_gpu_register_map_proven": false,
+    "private_source_purged": true
+  },
+  "safe_report": "gfxlab/evidence/20261110_gfx043_managed_shader_property_safe_counts.json",
+  "next_step": "GFX-MULTI-044 source-private CIL MethodDef ldstr→actual Unity Material API MethodRef owner callsite matching; still requires authentic original shader t/s/b/CB map to close stage."
 }
