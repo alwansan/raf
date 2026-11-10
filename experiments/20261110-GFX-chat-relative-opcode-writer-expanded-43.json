@@ -1,0 +1,23 @@
+{
+  "session_id": "20261110-GFX-chat-relative-opcode-writer-expanded-43",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-069",
+  "question": "Will a fail-closed public Microsoft DXBC opcode arity whitelist (FTOU/FTOI/IADD/ISHL/ISHR/USHR/IMAD/MOVC/AND/OR/etc.) establish source-local nearest temp-component writer candidates for any of the 427 authentic Shader48 relative CB vector index uses?",
+  "hypothesis": "Some index-producing instructions are outside nine GFX068 opcode families and may yield strictly local prior writer candidates.",
+  "ref_sources": [
+    "Microsoft DirectX-Headers/include/directx/D3D12TokenizedProgramFormat.hpp main blob b95145430ffca8aed30fe57fc9d27ae70908ee05",
+    "GFX068 CI42883869947"
+  ],
+  "controls": [
+    "Wrong documented operand arity fails",
+    "Control flow IF remains barrier",
+    "Wrong temp component never matches",
+    "No CFG or SSA numerical equivalence claimed",
+    "Private owner source purged"
+  ],
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "scope": "SOURCE_ONLY_GFX069",
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
