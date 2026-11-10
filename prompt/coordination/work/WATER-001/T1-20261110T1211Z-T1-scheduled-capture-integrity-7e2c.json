@@ -1,0 +1,17 @@
+{
+  "session_id": "20261110T1211Z-T1-scheduled-capture-integrity-7e2c",
+  "origin": "scheduled",
+  "issue": "WATER-001",
+  "scope": "Private FFT capture digest integrity before numeric Vulkan/Unity comparison",
+  "files": [
+    "scripts/t1_fft_capture_integrity_gate.py",
+    "tests/test_t1_fft_capture_integrity_gate.py"
+  ],
+  "hypothesis": "Existing manifest validator checks SHA syntax and sizes but not actual private capture bytes; prevent comparing substituted captures",
+  "experiment_key": "T1-FFT-CAPTURE-SHA-20261110-7e2c",
+  "shared_resource": "none",
+  "baseline": "owner device 42058825739; Nov 8 CL water/FFT errors, original FindKernel and GPU result unproven",
+  "result": "Code commits b95c76b and 96f336b; four local synthetic tests PASS with API-compatible stub; CI and real GPU capture NOT RUN",
+  "status": "paused",
+  "next": "Run regression against repository original validator in CI; acquire same-build private GPU readbacks and kernel mapping"
+}
