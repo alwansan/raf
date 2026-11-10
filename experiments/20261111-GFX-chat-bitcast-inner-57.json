@@ -1,0 +1,39 @@
+{
+  "session_id": "20261111-GFX-chat-bitcast-inner-57",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-084",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-imul-input-writer-value-56",
+  "base_sha": "9ad8da5f1af0fda7249eb98f5deea1a19ac45cc1",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "For 12 original source Shader48 authenticated SPV OpIMul dynamic-input Function OpLoad prior sameblock Store values that are OpBitcast, what standard SPV SSA opcode is behind the Bitcast and, for composite extraction, what anonymous literal index/source opcode class is used?",
+  "hypothesis": "The underlying value may be a composite component extraction or separate memory load rather than a shift; public opcode taxonomy can narrow the missing chain without proving DXBC-to-SPV SSA or pixels.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42907446542",
+    "memory/sessions/20261111-GFX-chat-imul-input-writer-value-56.md"
+  ],
+  "control": [
+    "one/multiple literal CompositeExtract index with OpLoad/OpCompositeConstruct source",
+    "nonliteral malformed components fail closed",
+    "public OpIAdd/OpLoad/OpSelect/control origins not promoted",
+    "unknown private opcode generic, no leaked IDs",
+    "future Store not counted as previous input writer",
+    "bounded multi-Bitcast wrappers",
+    "no originalShaderRestored or phase_closed assertion"
+  ],
+  "planned_tests": [
+    "source-free regression/negative controls",
+    "SHA-pinned original source 157 Shader48 VS+FS pairs/314 stages/311 source CB stages",
+    "427 source-b authenticated dynamic CB index loads",
+    "12 OpIMul local prior Store immediate OpBitcast and exactly 12 public inner opcode/shape/source anonymous counters",
+    "private DXBC/SPV/ZIP2 runner purge, safe artifact only"
+  ],
+  "resource_key": "gfxlab-multi084-private-spv-imul-Store-Bitcast-inner",
+  "status": "CI_QUEUED",
+  "run_id": 42908576921,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42908576921",
+  "evidence_level": "PENDING_AUTHENTIC_SOURCE_SPV_CPU_BITCAST_INNER_SSA_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
