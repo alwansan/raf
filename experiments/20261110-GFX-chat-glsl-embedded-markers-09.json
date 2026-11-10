@@ -1,0 +1,19 @@
+{
+  "session_id": "20261110-GFX-chat-glsl-embedded-markers-09",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-glsl-source-evidence-08",
+  "base_sha": "e375d3c764c07b50c7bf6e61ed950755d86ccb16",
+  "experiment_key": "GFX-MULTI-035",
+  "issue_id": "RENDER-002",
+  "scope": "Bounded byte-level source-private inspection of 259 unlinked original GLES/GLCore Shader48 programs for embedded GLSL markers and source Shader48 property tokens; aggregate-only no raw byte source export.",
+  "source_sha": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "hypothesis": "Invalid whole-payload UTF8 or NUL-wrapped data may contain ASCII GLSL markers/text windows. Source marker presence cannot itself establish program-to-Pass identity or valid GLES execution.",
+  "planned_tests": [
+    "Exact byte-boundary author property and material roles matching privately",
+    "Conservative byte signature tests for #version/uniform/main/sampler and approximate ASCII span bins",
+    "Count per GLES/GLCore family and property coverage, no snippets/names",
+    "SHA-pinned original ZIP2 CI + source-free fail-closed unit tests + purge"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
