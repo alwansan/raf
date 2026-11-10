@@ -3,7 +3,7 @@ on:
   push:
     branches: [experiment/android-graphics-rootcause]
     paths:
-      - '.github/workflows/gfxlab-multi041-interpolation-gpu-apk.yml'
+      - '.github/workflows/gfxlab-multi041-affine-reference-gpu-apk.yml'
       - 'gfxlab/unity/Assets/Scripts/GfxAffineReferenceProbe.cs'
       - 'gfxlab/unity/Assets/Editor/GfxAffineReferenceAndroidBuilder.cs'
       - 'gfxlab/unity/Assets/Shaders/GfxLabInterpolation*.shader'
@@ -15,7 +15,7 @@ concurrency:
   group: gfxlab-multi041-original-free-android-probe-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  signed-synthetic-interpolation-apk:
+  signed-synthetic-affine-reference-apk:
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     timeout-minutes: 105
@@ -119,9 +119,9 @@ jobs:
           apk="$(find . -type f -name 'GfxLab-AffineReference-GPUProbe.apk' -print -quit)"
           test -n "$signer" && test -x "$signer"
           test -n "$aapt" && test -x "$aapt"
-          "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/gfx040-signer-private.txt"
+          "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/gfx041-signer-private.txt"
           "$aapt" dump badging "$apk" |
-            grep -F "name='com.alwansan.raft.graphicslab.affinereference'" > "$RUNNER_TEMP/gfx040-package-private.txt"
+            grep -F "name='com.alwansan.raft.graphicslab.affinereference'" > "$RUNNER_TEMP/gfx041-package-private.txt"
           echo GFX_MULTI041_APK_SIGNATURE_AND_UNIQUE_PACKAGE_VERIFIED=true
       - name: Deliver synthetic diagnostic APK + aggregate integrity proof
         uses: actions/upload-artifact@v4
