@@ -11,3 +11,11 @@
 - CI pending, do not infer success. No game/Unity build or mobile APK, untouched T1–T5.
 ## Limits
 - Evidence level ORIGINAL_SOURCE plus SPIR-V CPU-only structural use-shape. Source scan is **partial** by opcode family; no full CB member byte mapping, genuine ShaderLab property bindings, independent CB identity, Android GPU runtime or PC↔Adreno pixel parity. `originalShaderRestored=false`.
+
+## Final source-private CI evidence
+- [CI42845677322](https://github.com/alwansan/raf/actions/runs/42845677322) SUCCESS, 350 synthetic unit tests, 14 original source stages (7 genuine keyword/tier VS/FS pairs), ZIP2 SHA pinned, runner original source/translated SPIR-V purge verified.
+- 776 original fixed-arity arithmetic instructions decoded in nine families (partial), 0 rejected recognized parser shapes; 290 static source CB vec4 operand occurrences, 208 distinct source b#/vec4 locations by stage, 27 dynamic/extended source operand access shapes unresolved.
+- vkd3d Vulkan1.1 SPIR-V: 445 UBO numeric-binding candidate access chains, 344 literal vector candidate chains, 344 pointer loads. All 208 known source subset distinct b#/vec4 locations overlap with SPV literal candidates at numeric coordinates; 20 SPV-only literal candidate locations vs limited source opcode subset. 66 reflected UBO member offset+array stride16 records. All 14 source stages have same-numeric source b#/UBO block byte size candidates.
+- **No** authentic CB source register identity from UBO names, exact member byte-offset map, whole original DXBC opcode use coverage, real Shader48 GPU proof, or original PC pixels. G8 still blocked, `originalShaderRestored=false`.
+- [Safe artifact 13779226051](https://github.com/alwansan/raf/actions/runs/42845677322/artifacts/13779226051), expires 2026-11-17T15:34:57Z. Private b#, vec4, shader bytes and UBO offset values not published.
+- Outcome: SUCCESS_BOUNDED_SOURCE_CB_VECTOR_USE_TO_SPV_NUMERIC_ACCESS_CANDIDATES_NOT_SEMANTIC_IDENTITY. Next GFX052 authenticate SPV actual UBO global `OpName` independently from SPIRV-Cross block names, or prove no symbol bridge.

@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-cb-dcl-spv-byte-sizes-24",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-cb-dcl-spv-byte-sizes-24.md",
-  "status": "GFX_MULTI_050_SUCCESS_66_OF_66_NUMERIC_B_BINDING_CB_BLOCK_BYTES_CANDIDATE_ONLY_NAMED_CB_IDENTITY_0_OF_66_G8_BLOCKED",
+  "latest_session": "20261110-GFX-chat-cb-access-shape-25",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-cb-access-shape-25.md",
+  "status": "GFX_MULTI_051_SUCCESS_BOUNDED_DXBC_CB_ACCESS_208_OF_208_SOURCE_SUBSET_NUMERIC_SPV_LITERAL_CANDIDATES_CB_IDENTITY_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-051: source-private original Shader48 DXBC CB operand access and SPIRV UBO access-chain/member offsets audit. Do NOT claim semantic b register mapping or CB member byte offsets from same-number descriptor binding alone; original Material→CB and real Android shader runtime remain unknown.",
+  "next_experiment": "GFX-MULTI-052: private-authenticated source dcl_constant_buffer b# versus actual SPIRV OpName on Uniform global variables + UBO Binding/Set, distinguish source register symbolic provenance from reflected block type name. Report counts only and fail closed on duplicates. If unavailable, original CB identity remains unverified; source Material property→register and CB member byte offsets still blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1458,5 +1458,30 @@
     "real_original_shader48_android_gpu_verified": false,
     "source_private_purged": true,
     "originalShaderRestored": false
+  },
+  "latest_gfx051_original_cb_access_shapes": {
+    "run": 42845677322,
+    "status": "SUCCESS_CPU_ONLY_NUMERIC_CANDIDATE",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "tests": 350,
+    "artifact_id": 13779226051,
+    "artifact_expiry_utc": "2026-11-17T15:34:57Z",
+    "source_stage_count": 14,
+    "source_opcode_families_covered": 9,
+    "source_arithmetic_instructions_decoded": 776,
+    "source_cb_static_operand_occurrences": 290,
+    "source_unique_static_cb_b_vec_indices_in_supported_subset": 208,
+    "source_dynamic_or_extended_cb_operands_unresolved": 27,
+    "translated_spv_numeric_ubo_candidate_access_chains": 445,
+    "translated_spv_literal_candidate_chains": 344,
+    "source_subset_b_vec_locations_found_in_numeric_spv_candidates": 208,
+    "spv_only_literal_candidates_vs_source_subset": 20,
+    "spv_reflected_explicit_ubo_member_offset_records": 66,
+    "source_cb_identity_independent_from_numeric_bindings": false,
+    "full_CB_member_byte_offset_layout_verified": false,
+    "all_dxbc_opcode_families_covered": false,
+    "all_524_variants_covered": false,
+    "originalShaderRestored": false,
+    "private_source_purged": true
   }
 }
