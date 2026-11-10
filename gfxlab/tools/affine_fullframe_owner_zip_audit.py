@@ -83,8 +83,9 @@ def decode_rgba_png(data):
         raise ValueError("GFX042_PNG_MISSING_END_OR_TRAILING_DATA")
     try:
         decomp=zlib.decompressobj()
+        # Hard output cap: never call unrestricted flush() on attacker-owned
+        # compressed user PNG bytes; the entire stream must end within RAW_LEN.
         raw=decomp.decompress(b"".join(idat),RAW_LEN+1)
-        raw+=decomp.flush()
     except zlib.error:
         raise ValueError("GFX042_PNG_IDAT_DECOMPRESS_FAILED") from None
     if len(raw)!=RAW_LEN or not decomp.eof or decomp.unconsumed_tail or decomp.unused_data:
