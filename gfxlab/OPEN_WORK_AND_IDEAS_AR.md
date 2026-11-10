@@ -224,3 +224,8 @@ Source-only, pinned ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, **154 uni
 - P0 OPEN: Shader48 original 7-pass genuine shader program, 524 exact keyword/tier pairs and Material→source b/t/s/CB byte offsets, dynamic PassStates, rig, PC pixel matched reference. The fact that standard fallback has no Unity errors does NOT resolve them.
 - P0 next: `GFX-MULTI-032` scan **381 unreferenced** Shader48 compiled programs (1656 original table -1275 unique referenced) for independent RDEF DXBC and possible alternate metadata, with type/identity guard and aggregate-only output. If no credible source map exists, keep `BLOCKED_NO_AUTHENTIC_MATERIAL_TO_CB_MAP`, never guess property ordering.
 - P1 next owner test (only after true original shader candidate/mini GPU test): M03 surface2 and Normal/Metallic/RGBA SOURCE-vs-FORCE_LINEAR per model as separate stable logs; source Shader48, not Standard screenshot.
+
+## GFX-MULTI-032 active evidence gap closure
+- 381 original Shader48 compiled programs outside the 1,275 linked entries in GFX022; source-only bounded stage/RDEF table census `gfxlab/tools/multi_shader_unreferenced_reflection.py`, workflow [CI42807637443](https://github.com/alwansan/raf/actions/runs/42807637443).
+- If unused RDEF present: report as **unlinked candidate metadata only**; still need independent source Pass/variant relationship and property→register matching. If absent: explicit `UNREFERENCED_RDEF_BRIDGE_NOT_FOUND`, request exact PC/ShaderLab/RenderDoc reference instead of filling gaps by inferred order.
+- No new APK, work limited to source-private CI; retain phase G7–G12 blocked.
