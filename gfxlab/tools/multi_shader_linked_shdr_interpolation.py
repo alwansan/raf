@@ -81,6 +81,8 @@ def inspect_interpolation(blob,kind):
             raise ValueError("ORIGINAL_SHDR_OPCODE_OUT_OF_BOUNDS")
         out["all_instruction_tokens"]+=1
         if opcode in (DCL_INPUT_PS,DCL_INPUT_PS_SIV,DCL_INPUT_PS_SGV):
+            if n<(2 if opcode==DCL_INPUT_PS else 3):
+                raise ValueError("ORIGINAL_PIXEL_INPUT_DECLARATION_TOO_SHORT")
             if kind!="Pixel":
                 raise ValueError("ORIGINAL_VERTEX_CONTAINS_PIXEL_INPUT_DECLARATION")
             if opcode==DCL_INPUT_PS_SGV:
