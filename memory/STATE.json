@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-glsl-embedded-markers-09",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-glsl-embedded-markers-09.md",
-  "status": "GFX_MULTI_035_SUCCESS_SOURCE_BINARY_PROPERTY_TOKEN_EVIDENCE_NO_UNIFORM_GL_PROGRAM_ORIGINAL_SHADER_BLOCKED",
+  "latest_session": "20261110-GFX-chat-gl-program-envelope-10",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-gl-program-envelope-10.md",
+  "status": "GFX_MULTI_036_SUCCESS_ONLY_SOURCE_D3D11_PLATFORM_UNLINKED_GL_NOT_ANDROID_GLES_ORIGINAL_SHADER_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-036 original Unity GL-family compiled binary envelope / resource symbol table format audit; require independent source property-to-register/CB and exact Pass association before authentic Shader48 GLES APK",
+  "next_experiment": "GFX-MULTI-037 authentic 1275 linked DXBC stage chunk metadata census including SDBG/SPDB/ILDB/RDAT; if no original resource names then independent PC shader capture required. No source shaders/Android game APK until real CB/pass/state/pixel parity.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1058,5 +1058,22 @@
     "printable_run_32_plus": 0,
     "original_shader_restored": false,
     "source_purge_passed": true
+  },
+  "latest_compiler_envelope_experiment": {
+    "run": 42812418402,
+    "status": "SUCCESS",
+    "unit_tests": 223,
+    "artifact_id": 13762956185,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_compiler_platform": "kShaderCompPlatformD3D11",
+    "original_linked_dx11": 1275,
+    "unlinked_gles": 139,
+    "unlinked_glcore": 120,
+    "unlinked_matching_compiler": 0,
+    "comparable_keyword_signatures": 0,
+    "distinct_gles_payloads": 115,
+    "distinct_glcore_payloads": 96,
+    "source_purge": true,
+    "original_shader48_restored": false
   }
 }
