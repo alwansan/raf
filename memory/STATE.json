@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-normalized-spv-address-stores-49",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-normalized-spv-address-stores-49.md",
-  "status": "GFX_MULTI_076_SUCCESS_586_TESTS_427_SPV_SOURCE_B_INDEX_OPLOADS_128_SAME_BLOCK_LITERAL_FUNCTION_PATH_STORES_47_OUTSIDE_WINDOW_252_UNOBSERVED_SOURCE_SSA_BLOCKED",
+  "latest_session": "20261110-GFX-chat-spv-store-value-producer-50",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-store-value-producer-50.md",
+  "status": "GFX_MULTI_077_SUCCESS_618_TESTS_128_SPV_SAMEBLOCK_FUNCTION_ADDRESS_STORES_128_BITCAST_VALUE_116_VIA_SHIFT_12_UNKNOWN_GFX054_SOURCE_SSA_ADRENO_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-077: source-private enumerate only 128 actual same-block equivalent-function-literal-path SPV OpStore candidate values: immediate value result opcodes, bounded SSA shift/arithmetic roots, without alias/CFG/source DXBC temp equivalence. Original GFX054 Material binding and Adreno PC pixel parity remain blocked.",
+  "next_experiment": "GFX-MULTI-078: isolate the 12 unknown sameblock stored-value SSA ancestry and separately 47 cross-window equivalent Function-literal address Stores, verifying CFG dominance with loop/PHI/call/alias barriers before any source DXBC temp-to-SPV mapping. GFX054 Material property/CB member bytes, GPU Android and PC pixel parity remain BLOCKED.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2167,5 +2167,29 @@
     "private_purge_verified": true,
     "safe_artifact_id": 13801278823,
     "original_shader_restored": false
+  },
+  "latest_gfx077": {
+    "experiment": "GFX-MULTI-077",
+    "status": "SUCCESS_ORIGINAL_SOURCE_SPV_TRANSLATED_LOCAL_VALUE_SYNTAX_ONLY",
+    "origin": "chat",
+    "run_id": 42900376410,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42900376410",
+    "run_sha": "2308c0dba9e5e8ba48f7b106352f9fb5be135f2b",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "unit_tests": 618,
+    "source_joint_pairs": 157,
+    "stage_instances": 314,
+    "source_CB_stage_instances": 311,
+    "authenticated_spv_index_loads": 427,
+    "sameblock_candidate_store_values": 128,
+    "immediate_OpBitcast_value_producers": 128,
+    "via_OpShiftLeftLogical_bounded_ssa_ancestors": 116,
+    "unproven_stored_value_ancestry": 12,
+    "artifact_id": 13802886340,
+    "private_purge": true,
+    "dxbc_temp_to_spv_ssa_values_proven": false,
+    "material_property_cb_offsets_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false
   }
 }
