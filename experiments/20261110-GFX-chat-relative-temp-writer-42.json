@@ -1,0 +1,24 @@
+{
+  "session_id": "20261110-GFX-chat-relative-temp-writer-42",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-068",
+  "resumed_from": "GFX-MULTI-067 CI42882730895",
+  "base_sha": "9faf2896d44b6c64666bb5b797e8221ddcee1561",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "For original Shader48 427 relative constant-buffer vec4 index uses, can we find a preceding source temporary-register component writer inside a conservative contiguous known-ALU instruction run?",
+  "hypothesis": "Source local candidate writer may exist for a subset, but without control-flow graph dominance and vkd3d SPV SSA mapping no semantic equivalence can be accepted.",
+  "negative_controls": [
+    "different component",
+    "same-instruction read before write",
+    "unknown opcode invalidates writer cache",
+    "unrecognized temp destination invalidates cache",
+    "missing prior writer",
+    "duplicate uses not merged"
+  ],
+  "resource_key": "original-Shader48-DXBC-source-temp-writer-probe",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42883869947",
+  "status": "CI_QUEUED",
+  "evidence_gate": "ORIGINAL_SOURCE_CPU_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
