@@ -54,6 +54,12 @@ def audit(snapshot, *, expected_run_id, expected_sha):
     match = _TAG.fullmatch(tag) if type(tag) is str else None
     if not match or int(match[1]) != expected_run_id:
         raise ValueError("Release tag does not identify same native run")
+    # The second tag component is the Actions run attempt, not APK versionCode.
+    # Check it when the workflow snapshot includes that API field.
+    attempt = run.get("run_attempt")
+    if attempt is not None and (type(attempt) is not int or attempt < 1
+                                or int(match[2]) != attempt):
+        raise ValueError("Release tag does not identify same native run attempt")
     if type(release.get("prerelease")) is not bool or not release["prerelease"]:
         raise ValueError("Missing early-test prerelease identity")
     if release.get("target_commitish") != sha or release.get("source_claim") != sha:
