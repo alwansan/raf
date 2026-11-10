@@ -1,0 +1,79 @@
+name: GFX-MULTI-096 exact Unity official Standard source schema comparison
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi096-official-Standard-schema.yml'
+      - 'gfxlab/tools/multi_shader_official_standard096.py'
+      - 'gfxlab/tests/test_multi_shader_official_standard096.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi096-official-Standard-source
+  cancel-in-progress: false
+jobs:
+  original-source-binding-evidence-availability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: All source-free tests including cross-evidence proof rejection guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_official_standard096.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX054_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install bounded metadata reader
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Authenticate separate parameters plus common parameter tables against actual DXBC declarations
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_official_standard096 --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx096-private" --out gfx096-safe.json
+          python3 - <<'CHECK'
+          import json
+          d=json.load(open('gfx096-safe.json'));c=d['safe_counts']
+          assert d['official_property_count']==d['source_property_count']==27
+          assert c['name_match']==c['type_match']==c['default_value_float32_or_texture_name_equal']==27
+          assert not c['original_extra_properties']
+          assert d['source_shader_name_equals_public_builtin_Standard']
+          assert d['source_editor_equals_public_StandardShaderGUI'] and d['source_fallback_equals_public_VertexLit']
+          assert d['runtime_pass_names_match_official_after_explicit_editor_META_exclusion']
+          assert not d['original_DXBC_matches_recompiled_official_source']
+          assert not d['originalShaderRestored'] and not d['phase_closed']
+          CHECK
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gfx096-safe-original-parameter-bridge
+          path: gfx096-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original source and private data
+        if: always()
+        run: sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx096-private"
