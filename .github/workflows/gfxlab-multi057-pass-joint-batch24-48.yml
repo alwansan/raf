@@ -77,12 +77,12 @@ jobs:
           assert selection["pass_scoped_joint_declaration_and_sample_use_classes"]>=132
           assert selection["batch_start_index"]==24
           assert selection["batch_end_index_exclusive"]==48
-          assert selection["previous_second24_source_class_proof_run"]==42857815446
+          assert selection["previous_first24_source_class_proof_run"]==42857815446
           assert selection["batch_selection_disjoint_from_previous_proven_prefix"] is True
           assert selection["pass_scoped_joint_declaration_and_sample_use_classes"]==157
           assert selection["first_CPU_batch_budget"]==24
           assert selection["first_CPU_batch_representative_pairs"]==24
-          assert selection["joint_classes_untranslated_in_first_batch"]==selection["pass_scoped_joint_declaration_and_sample_use_classes"]-24
+          assert selection["joint_classes_untranslated_in_first_batch"]==selection["pass_scoped_joint_declaration_and_sample_use_classes"]-48
           assert sum(x["first_CPU_batch_representative_pairs"] for x in d["source_per_pass_anonymous_joint_class_counts_and_pilot"])==24
           c=d["first_24_source_CPU_validation_counts"]
           assert c["first_batch_pairs_attempted"]==24
@@ -100,13 +100,13 @@ jobs:
             "PC_to_Adreno_original_pixels_equivalent","originalShaderRestored",
             "phase_closed","private_original_code_CB_lengths_register_slots_sample_tuples_or_keywords_exported"):
             assert d[key] is False,key
-          print("GFX057_SOURCE_SAFE_FIRST24_JOINT_CLASSES_NOT_ALL_GPU=true")
+          print("GFX057_SAFE_DISJOINT_BATCH_24_TO_48_NOT_ALL_GPU=true")
           PY
       - name: Upload count-only source-safe original class coverage ledger
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: gfxlab-multi057-safe-pass-joint-524-classes-24-CPU-pilot
+          name: gfxlab-multi057-safe-pass-joint-524-classes-second24-CPU
           path: gfxlab-multi057-safe-second24-joint-source-class-counts.json
           retention-days: 7
           if-no-files-found: error
