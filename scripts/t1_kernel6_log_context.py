@@ -7,7 +7,7 @@ import re
 from collections import deque
 from pathlib import Path
 
-KERNEL6 = re.compile(r"kernel(?:\s+index)?\s*[:=#]?\s*6\b", re.I)
+KERNEL6 = re.compile(r"kernel(?:\s+index)?\s*(?:[:=#]\s*6\b|\(\s*6\s*\)|6\b)", re.I)
 KERNEL_ERROR = re.compile(r"\b(?:invalid|error|failed|failure|exception|out.of.range|missing)\b|\b(?:not\s+found|cannot\s+find|could\s+not\s+find)\b|water_fft_invalid_compute_kernel", re.I)
 CONTEXT = re.compile(r"FindKernel|Dispatch|ComputeShader|ultimate_water_invalid_pass|water_fft_invalid_compute_kernel", re.I)
 PASS = re.compile(r"\b(?:Spectrum|Foam(?:\s+Global)?|Subsurface\s+Blur|Utility\s+Noise)\b", re.I)
