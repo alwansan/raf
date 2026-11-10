@@ -1,0 +1,18 @@
+{
+  "session_id": "20261110T0520Z-T2-scheduled-call-return-gate-r6p4",
+  "origin": "scheduled",
+  "base_sha": "71f6fcb4dee95c269d21809b46d8015fc26e62db",
+  "issue": "WATER-001",
+  "experiment_key": "T2-FOAM-RHS-CALL-VOID-NEGATIVE-20261110",
+  "hypothesis": "Unqualified CIL call/callvirt may return void; existing source-free classifier incorrectly labels both CALL_RESULT without method signature evidence.",
+  "files": [
+    "scripts/t2_foam_rhs_origin_guard.py",
+    "tests/test_t2_foam_rhs_classifier_synthetic.py",
+    "prompt/coordination/work/WATER-001/20261110T0520Z-T2-scheduled-call-return-gate-r6p4.json",
+    "prompt/coordination/clients/T2/sessions/20261110T0520Z-T2-scheduled-call-return-gate-r6p4.md"
+  ],
+  "shared_resources": "none; no CI or Unity; no T3/T4/T5 changes",
+  "device_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md; world save/reentry confirmed, water errors unresolved",
+  "taken_over_from": "T2 previous synthetic RHS and original Mono.Cecil evidence; no B client reactivation",
+  "scope": "Require explicit proven return value for call/callvirt classification; preserve UNKNOWN by default."
+}
