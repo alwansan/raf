@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-linked-dxbc-reflection-11",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-linked-dxbc-reflection-11.md",
-  "status": "GFX_MULTI_037_SUCCESS_ALL_1275_ORIGINAL_DXBC_ONLY_SHDR_ISGN_OSGN_NO_REFLECTION_MATERIAL_CB_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-dxbc-signature-pairs-12",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-dxbc-signature-pairs-12.md",
+  "status": "GFX_MULTI_038_SUCCESS_ALL_524_SIGNATURE_PAIR_METADATA_COMPATIBLE_ORIGINAL_SHADER48_MATERIAL_CB_GATES_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-038 SHA-pinned original 524 exact VS/FS DXBC ISGN/OSGN signature compatibility source-only; external genuine ShaderLab/PC reflection still needed for actual material t/s/CB offsets. No original Android shader APK until source bindings/state/pixel parity.",
+  "next_experiment": "GFX-MULTI-039 authentic 1275 linked SHDR program declaration and interpolation mode census for all original stages, backed by source-free bounded tests; exact original Material-to-register/CB and PC/Adreno pixel parity require independent evidence.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1103,5 +1103,22 @@
     "source_cleanup": true,
     "original_material_bindings_restored": false,
     "original_shader48_restored": false
+  },
+  "latest_dxbc_signature_pairs": {
+    "run": 42814767180,
+    "status": "SUCCESS",
+    "source_free_tests": 238,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "safe_report": "gfxlab/evidence/20261110_gfx038_dxbc_signature_safe_counts.json",
+    "artifact_id": 13762474824,
+    "original_exact_pairs": 524,
+    "ordinary_input_entries": 3516,
+    "ordinary_matching_entries": 3516,
+    "pixel_system_inputs_separate": 620,
+    "pairs_with_non_system_inputs": 512,
+    "pairs_with_only_system_inputs": 12,
+    "missing_or_type_mask_mismatch": 0,
+    "original_shader48_restored": false,
+    "private_source_purged": true
   }
 }
