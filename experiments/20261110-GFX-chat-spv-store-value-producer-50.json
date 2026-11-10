@@ -1,0 +1,36 @@
+{
+  "session_id": "20261110-GFX-chat-spv-store-value-producer-50",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-077",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261110-GFX-chat-normalized-spv-address-stores-49",
+  "base_sha": "695bddcd52ee3c78ec1ec53d25b59f5d752d3699",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "status": "CI_RUNNING",
+  "run_id": 42900376410,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42900376410",
+  "resource_key": "gfxlab-multi077-source-private-SPV-Store-value-SSA",
+  "question": "How are 128 sameblock same-literal-Function address-path SPV index Store candidate values produced (immediate opcode and bounded shift ancestry)?",
+  "hypothesis": "Some original-b authenticated SPV index memory values may be composite or memory loads, not direct shift results; no DXBC SSA equivalence is assumed.",
+  "planned_tests": [
+    "source-free 076 + 077 negative tests",
+    "157 source-private authentic pairs/314 stages",
+    "427 loaded CB index roots and 128 syntactic Store candidates",
+    "bounded Store value producer count only",
+    "ZIP2 private purge",
+    "upload safe anonymous artifact"
+  ],
+  "negative_controls": [
+    "other memory load",
+    "OpPhi/OpSelect",
+    "CFG branch",
+    "alias Store",
+    "different address",
+    "bounded cycles",
+    "unknown producer"
+  ],
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
