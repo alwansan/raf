@@ -1,0 +1,120 @@
+name: GFX-MULTI-071 original Shader48 427 SPV dynamic CB index direct producer opcode classification
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi071-SPV-dynamic-CB-index-producer.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_index_root_probe071.py'
+      - 'gfxlab/tools/multi_shader_spv_index_root_taxonomy071.py'
+      - 'gfxlab/tests/test_multi_shader_spv_index_root_taxonomy071.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi071-source-private-ISHL-SPV-CB-index-SSA-diagnostic
+  cancel-in-progress: false
+jobs:
+  original-SPV-CB-index-root-source-private:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 95
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free GFX071 SPV CB index producer opcode negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_index_root_probe071.py gfxlab/tools/multi_shader_spv_index_root_taxonomy071.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX071_SOURCE_FREE_TESTS_PASSED=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install source-private CPU disassembly dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Original 157 pairs and independent authenticated SPV shifted dynamic CB loads
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_index_root_probe071 \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab071-private" \
+            --out gfxlab-multi071-safe-source-private-SPV-index-root-opcode-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi071-safe-source-local-ISHL-and-SPV-shift-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-071"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_exact_original_VS_FS_pairs_censused"]==524
+          assert d["source_unique_compiled_stages"]==936
+          assert d["original_source_pass_joint_representative_pairs"]==157
+          assert d["original_source_stage_instances"]==314
+          original=d["source_CB_relative_temp_local_candidates_safe_counts"]
+          spv=d["independent_translated_SPV_authentic_UBO_shifted_dynamic_loads_safe_counts"]
+          assert original["original_CB_true_relative_vec_index_occurrences"]==427
+          assert original["original_CB_operand_occurrences_in_supported_opcodes"]==7990
+          assert original["candidate_nearest_writer_original_opcode_41"]==68
+          assert original["relative_source_temp_component_with_no_writer_in_same_supported_ALU_run"]==359
+          assert spv["source_exact_VS_FS_pairs_translated"]==157
+          assert spv["source_original_stages_Vulkan11_SPV_validated"]==314
+          assert spv["authenticated_original_CB_source_stage_instances"]==311
+          assert spv["source_original_CB_free_stages"]==3
+          assert spv["original_local_ISHL_writer_candidate_occurrences_in_checked_stages"]==68
+          assert spv.get("SPV_authenticated_dynamic_vec_OpLoad_occurrences",0)==sum(
+            spv.get(k,0) for k in (
+              "SPV_dynamic_vec_OpLoad_index_direct_shift",
+              "SPV_dynamic_vec_OpLoad_index_via_shift_ancestor",
+              "SPV_dynamic_vec_OpLoad_index_with_no_proven_shift",
+              "SPV_dynamic_vec_OpLoad_index_unproven_expression"))
+          assert spv.get("source_stage_instances_with_original_local_ISHL_writer_candidates",0)==(
+            spv.get("original_local_ISHL_candidate_stages_with_independent_SPV_shifted_CB_loads",0)+
+            spv.get("original_local_ISHL_candidate_stages_without_observed_SPV_shifted_CB_loads",0))
+          assert sum(v for k,v in spv.items() if k.startswith("SPV_dynamic_vec_load_index_direct_def_opcode_"))==spv["SPV_authenticated_dynamic_vec_OpLoad_occurrences"]
+          assert sum(v for k,v in spv.items() if k.startswith("SPV_dynamic_vec_load_index_after_bounded_unary_wrappers_"))==spv["SPV_authenticated_dynamic_vec_OpLoad_occurrences"]
+          assert d["source_original_ISHL_to_SPV_OpShiftLeftLogical_SSA_roots_proven"]==0
+          for key in ("source_local_ISHL_stage_and_SPV_shifted_read_coexistence_establishes_same_operand_mapping",
+                      "original_427_relative_CB_source_uses_numeric_runtime_index_parity_proven",
+                      "all_524_original_variant_programs_semantically_equivalent",
+                      "original_Material_property_to_b_t_s_and_CB_member_byte_bridge_proven",
+                      "original_Shader48_Android_Adreno_GPU_pixels_verified",
+                      "originalShaderRestored","phase_closed",
+                      "original_shader_temp_ID_DXBC_SPV_or_PPtr_exported"):
+              assert d[key] is False,key
+          print("GFX071_427_AUTHENTIC_SPV_CB_INDEX_PRODUCER_ROOTS_CLASSIFIED_NO_SSA_PARITY=true")
+          PY
+      - name: Upload safe anonymous aggregate counters only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi071-safe-original-authenticated-SPV-CB-index-producer-opcodes
+          path: gfxlab-multi071-safe-source-local-ISHL-and-SPV-shift-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original Shader48 ZIP2, DXBC, translated SPIRV
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab071-private"
+          echo GFX071_ALL_PRIVATE_ORIGINAL_DXBC_AND_SPV_PURGED=true
