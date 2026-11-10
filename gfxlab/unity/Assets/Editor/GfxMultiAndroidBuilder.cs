@@ -387,7 +387,7 @@ namespace RaftGraphicsLabEditor
             PlayerSettings.bundleVersion="0.4.0";
             PlayerSettings.Android.bundleVersionCode=4;
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,
-                "com.alwansan.raft.graphicslab.multi");
+                "com.alwansan.raft.graphicslab.channels");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
             PlayerSettings.colorSpace=ColorSpace.Linear;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android,ScriptingImplementation.IL2CPP);
