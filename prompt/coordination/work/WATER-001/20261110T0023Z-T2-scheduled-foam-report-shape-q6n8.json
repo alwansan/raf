@@ -1,0 +1,18 @@
+{
+  "session_id": "20261110T0023Z-T2-scheduled-foam-report-shape-q6n8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-10T00:23:00Z",
+  "intended_files": [
+    "scripts/t2_foam_texture_identity.py",
+    "tests/test_t2_foam_texture_identity.py",
+    "prompt/coordination/clients/T2/sessions/20261110T0023Z-T2-scheduled-foam-report-shape-q6n8.md"
+  ],
+  "experiment_key": "T2-FOAM-PRIVATE-REPORT-SHAPE-FAILCLOSED-20261110",
+  "resource_key": null,
+  "hypothesis": "Malformed nested original texture rows currently cause raw KeyError/TypeError instead of explicit ValueError; strengthen fail-closed report shape without changing authenticated original count",
+  "base_reference": "20261109T2323Z-T2-scheduled-writer-rhs-scope-m7q2",
+  "owner_evidence": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+  "scope": "source-only validation; no game shader, no T3/T4/T5 files, no Unity build"
+}
