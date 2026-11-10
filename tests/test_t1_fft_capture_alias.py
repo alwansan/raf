@@ -12,7 +12,7 @@ class CaptureAliasTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        payload = b"\\x00" * 16
+        payload = bytes(16)
         for name in ("vk.bin", "unity.bin"):
             (self.root / name).write_bytes(payload)
         digest = hashlib.sha256(payload).hexdigest()
