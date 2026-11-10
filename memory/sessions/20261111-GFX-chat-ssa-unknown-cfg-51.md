@@ -1,0 +1,13 @@
+# 20261111-GFX-chat-ssa-unknown-cfg-51 — GFX-MULTI-078
+
+- **role=GFX-LAB**, **origin=chat**, writable branch=`experiment/android-graphics-rootcause` exclusively.
+- **resumed_from**: `20261110-GFX-chat-spv-store-value-producer-50`, verified GFX077 [CI42900376410](https://github.com/alwansan/raf/actions/runs/42900376410) SUCCESS 618 tests, real 427 CB index OpLoads, 128 local equivalent-path Store candidates, 116 bounded SSA shift ancestry + 12 unknown; 47 prior-path Store occurrences outside trusted window, 252 no prior.
+- **base_sha**: `dcf6a4a4fc39e8d8a6eb51816a20d33fe0c31a97` (before new GFX078 commits).
+- **source_ref** pinned ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; source assets, DXBC, SPV IDs, register numbers and literal address indexes remain CI-private, never exported.
+- **experiment_key**: GFX-MULTI-078; scope isolate 12 unknown SPV Store value SSA terminal ops (after bounded transparent unary chain), and 47 cross-window earlier Store blocks, classified using per-function strict SPIR-V branch CFG *block dominance* via reachable graph with/store-block removal. This is not memory reaching-def SSA.
+- Code: `gfxlab/tools/multi_shader_spv_cfg_dominance078.py`, `gfxlab/tools/multi_shader_spv_unknown_cfg078.py`, `gfxlab/tools/multi_shader_original_cb_index_private_multiset078.py`; tests `gfxlab/tests/test_multi_shader_spv_unknown_cfg078.py`; workflow `.github/workflows/gfxlab-multi078-SPV-unknown-value-CFG-block-dominance.yml`.
+- **run** [CI42902805887](https://github.com/alwansan/raf/actions/runs/42902805887) in_progress on launch. Verify actual steps, artifact, private purge before calling successful.
+- Negative controls include diamond bypass, invalid target CFG unknown, loop/backedge, cross-function target, malformed block terminator, OpLoad/OpSelect/CompositeExtract terminal, SSA shift vs unknown, and no originalShaderRestored claim.
+- **limitations**: SPV *block* dominance does not prove a Store's memory value reaches a Load; private original DXBC temporary/component→SPV SSA or shader Material property/CB byte mapping (GFX054) still absent. 12 unknown does not mean failed shader; 47 cross-window textual earlier Store does not automatically dominate; no Adreno shader/GPU pixel or PC parity proof.
+- **evidence_level** pending original/source private SPV CPU; `originalShaderRestored=false`, `phase_closed=false`.
+- **next**: verify GFX078 tests/CI, handle source parser failures conservatively and persist results in RESTORE/STATE/MEMORY/roadmap. Follow with GFX079 bounded memory dataflow or original DXBC temp proofs as supported, not synthetic equivalence.
