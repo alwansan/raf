@@ -83,13 +83,21 @@ jobs:
           assert first["total_samples"]==71 and second["total_samples"]==119
           # Process lifetimes, not just freshness, are now part of the
           # authorization to aggregate any SurfaceFlinger median.
-          for report in (first, second):
-              assert report["process_epoch_count"]==1
-              assert report["safe_to_aggregate_entire_session"] is True
-              assert report["fps_rows_withheld_unverified_process_epoch"]==0
-              assert report["process_epoch_diagnostic"]=="verified_one_process"
+          # The second pinned CL session begins with an unknown probe,
+          # followed by five real game_not_running samples (2..6), before
+          # the verified Raft process starts at sample 7. These are actual
+          # process-lifetime boundaries, not a reason to relax the auditor.
+          assert first["process_epoch_count"]==1
+          assert first["safe_to_aggregate_entire_session"] is True
+          assert first["fps_rows_withheld_unverified_process_epoch"]==0
+          assert first["process_epoch_diagnostic"]=="verified_one_process"
+          assert second["process_epoch_count"]==7
+          assert second["safe_to_aggregate_entire_session"] is False
+          assert second["fps_rows_withheld_unverified_process_epoch"]==2
+          assert second["process_epoch_diagnostic"]=="unsafe_mixed_or_unverified_process_epoch"
           assert first["stale_presentation_samples"]==6 and second["stale_presentation_samples"]==105
-          assert first["fresh_surface_fps_all"]["samples"]==57 and second["fresh_surface_fps_all"]["samples"]==2
+          assert first["fresh_surface_fps_all"]["samples"]==57
+          assert second["fresh_surface_fps_all"] is None
           assert first["first_observed_render_failure_sample"]==11
           assert second["first_observed_render_failure_sample"]==16
           assert first["fresh_fps_during_or_after_render_error"]["samples"]==57
@@ -98,5 +106,5 @@ jobs:
           assert compare["no_aggregate_cross_session_fps"] is True
           print(data)
           with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as f:
-              f.write("Actual CL samples from pinned commit. Session 220911: 57 fresh post-render-error FPS / 6 stale; session 230108: 2 fresh startup FPS (before error onset sample16) / 105 stale; zero fresh post-error FPS. Both pinned sessions have exactly one verified Raft PID epoch; synthetic restarts/unknown periods are rejected before FPS median reporting. DO NOT compare 120 FPS to gameplay FPS or claim GPU/Unity speedup, game freeze or root causation.\n")
+              f.write("Actual CL samples from pinned commit. Session 220911: 57 fresh post-render-error FPS / 6 stale; session 230108: 2 fresh startup FPS (before error onset sample16) / 105 stale; zero fresh post-error FPS. First pinned session has one verified Raft PID epoch; second has seven epochs including genuine pre-start stopped-process probes, so its two otherwise fresh startup FPS rows are withheld. Synthetic restarts/unknown periods are rejected before FPS median reporting. DO NOT compare 120 FPS to gameplay FPS or claim GPU/Unity speedup, game freeze or root causation.\n")
           PY
