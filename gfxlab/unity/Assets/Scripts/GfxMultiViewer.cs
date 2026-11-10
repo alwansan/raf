@@ -318,13 +318,13 @@ namespace RaftGraphicsLab
             exportStatus="Creating ZIP of ALL test sessions...";
             WriteReport("export_all_zip_button");
             yield return null;
-            string path,error;
-            bool ok=sessionRecorder!=null&&sessionRecorder.ExportAll(out path,out error);
-            if(sessionRecorder==null)
-            {
+            string path="";
+            string error="";
+            bool ok=false;
+            if(sessionRecorder!=null)
+                ok=sessionRecorder.ExportAll(out path,out error);
+            else
                 error="Session recorder is missing";
-                path="";
-            }
             exportStatus=ok?"ZIP SAVED: "+path:"EXPORT FAILED: "+error;
             if(sessionRecorder!=null)sessionRecorder.RecordExportResult(ok,exportStatus);
             exporting=false;
