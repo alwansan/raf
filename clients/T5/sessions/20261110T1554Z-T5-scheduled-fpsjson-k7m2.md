@@ -1,0 +1,8 @@
+# T5 20261110T1554Z-T5-scheduled-fpsjson-k7m2
+origin=scheduled
+baseline_sha=50b5424e44ba13cc79b6aa899f19d9e025d11cfb
+work=work/T5-20261110T1554Z-T5-scheduled-fpsjson-k7m2.md
+Owner baseline: docs/DEVICE_FEEDBACK_42058825739_AR.md; owner confirmed world enter/save/exit/reopen on run 42058825739 source e9c358eda01785b65e4eb14f18723da426635628, not full readiness. CL pinned 520c4cf409aa20a4db54ff80ed87d8807d9cba57. Historical 57 presented FPS samples avg 22.29; not Unity/GPU timing.
+Inspected current scripts/t5_cl_fps_cohort_gate.py and found json.loads silently accepts duplicate keys in telemetry; adversarial duplicate package/PID/fps could override provenance before checks. Added fail-closed object_pairs_hook including nested keys, source commit 116fc83b1e47746aa27b9c0e797700ff9f3a6020. Added isolated three-case tests commit c47854efb5d08937388f97ce755146e4e674bcb0. Scope recorded first at 4af353c874c68abfdd8bbd6ba507d265729f79b4 and updated at 5a35d81fde7411b49c11b4f18811bfdea3539b11.
+Latest observed HEAD before work 50b5424e44ba13cc79b6aa899f19d9e025d11cfb. Latest Actions observed 42846576303 and 42846576761 success; not attributed to this change. No Unity build, release, game assets or T4 pointer code touched.
+Validation status: source/test committed, CI or local execution not yet evidenced. No new APK/OBB match, Android FPS, Resolution or right-side UI proof. Next run execute python3 -m unittest scripts.test_t5_cl_fps_duplicate_keys, inspect pinned CL rows and continue UI work with T4 non-overlap. Do not confuse SurfaceFlinger estimates with Unity frame time or claim phone proof.
