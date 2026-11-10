@@ -25,7 +25,7 @@ public final class MainActivity extends Activity {
     }
   }
   synchronized void add(JSONObject e){events.put(e);}
-  void show(final String msg){runOnUiThread(()->status.setText(msg));}
+  void show(final String msg){runOnUiThread(new Runnable(){public void run(){status.setText(msg);}});}
   JSONObject obj(Object... pairs){JSONObject o=new JSONObject();try{for(int i=0;i<pairs.length;i+=2)o.put((String)pairs[i],pairs[i+1]);}catch(Exception e){throw new RuntimeException(e);}return o;}
   @Override public void onCreate(Bundle state){super.onCreate(state);
     getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -33,7 +33,7 @@ public final class MainActivity extends Activity {
     status=new TextView(this);status.setTextSize(17);status.setPadding(20,12,20,12);
     status.setText("GFX094: original Shader48 stages → GLES. Compile/link only. No model/pixel parity claim.");layout.addView(status);
     Button export=new Button(this);export.setText("EXPORT ALL LOGS ZIP → Download/Games/cl/test/g/");
-    export.setOnClickListener(v->new Thread(()->exportZip()).start());layout.addView(export);
+    export.setOnClickListener(new android.view.View.OnClickListener(){public void onClick(android.view.View v){new Thread(new Runnable(){public void run(){exportZip();}}).start();}});layout.addView(export);
     surface=new GLSurfaceView(this);surface.setEGLContextClientVersion(3);
     surface.setRenderer(new GLSurfaceView.Renderer(){
       public void onSurfaceCreated(GL10 unused,EGLConfig config){
@@ -52,7 +52,7 @@ public final class MainActivity extends Activity {
           GLES31.glGetIntegerv(GLES31.GL_MAX_VERTEX_UNIFORM_BLOCKS,val,0);summary.put("max_VS_ubo_blocks",val[0]);
           GLES31.glGetIntegerv(GLES31.GL_MAX_FRAGMENT_UNIFORM_BLOCKS,val,0);summary.put("max_FS_ubo_blocks",val[0]);
           add(obj("event","environment","data",summary));surface.requestRender();
-        }catch(Exception e){add(obj("event","fatal","message",e.toString()));complete=true;new Thread(()->exportZip()).start();show("Probe initialization failed; export logs.");}
+        }catch(Exception e){add(obj("event","fatal","message",e.toString()));complete=true;new Thread(new Runnable(){public void run(){exportZip();}}).start();show("Probe initialization failed; export logs.");}
       }
       public void onSurfaceChanged(GL10 gl,int w,int h){GLES31.glViewport(0,0,w,h);}
       public void onDrawFrame(GL10 gl){
@@ -90,7 +90,7 @@ public final class MainActivity extends Activity {
   void finishProbe(){
     if(complete)return;complete=true;running=false;
     try{summary.put("completed_pairs",count);summary.put("compiled_stages",compiled);summary.put("linked_pairs",linked);summary.put("failed_pairs",failed);summary.put("expected_pairs",manifest.getJSONArray("pairs").length());summary.put("all_pairs_tested",count==manifest.getJSONArray("pairs").length());summary.put("finished_ms",System.currentTimeMillis());}catch(Exception ignored){}
-    new Thread(()->exportZip()).start();
+    new Thread(new Runnable(){public void run(){exportZip();}}).start();
   }
   void zipEntry(ZipOutputStream z,String name,String value)throws Exception{z.putNextEntry(new ZipEntry(name));z.write(value.getBytes(StandardCharsets.UTF_8));z.closeEntry();}
   synchronized void exportZip(){
