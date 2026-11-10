@@ -43,7 +43,7 @@ class TestSourceGlslTextEvidence(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"TOO_LARGE"):
             bounded_glsl_evidence(b"x"*(16*1024*1024+1),PROPS,TEX,BOUND)
         with self.assertRaisesRegex(ValueError,"PROPERTY_SET_MISMATCH"):
-            analyze_programs([],set(),PROPS,{"_Other"},BOUND)
+            analyze_programs([None]*EXPECTED_COMPILED,set(range(EXPECTED_REFERENCED)),PROPS,{"_Other"},BOUND)
 
     def test_aggregates_do_not_disclose_names_or_bytes(self):
         p=[
