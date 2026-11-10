@@ -7,7 +7,7 @@
   "resumed_from": "20261110-GFX-chat-normalized-spv-address-stores-49",
   "base_sha": "695bddcd52ee3c78ec1ec53d25b59f5d752d3699",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_128_SPV_BITCAST_STORE_VALUES_116_BOUNDED_VIA_SHIFT_12_UNPROVEN_SOURCE_SSA_BLOCKED",
   "run_id": 42900376410,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42900376410",
   "resource_key": "gfxlab-multi077-source-private-SPV-Store-value-SSA",
@@ -30,7 +30,17 @@
     "bounded cycles",
     "unknown producer"
   ],
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_SAMEBLOCK_STORE_VALUE_SYNTAX_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "2308c0dba9e5e8ba48f7b106352f9fb5be135f2b",
+  "tests_passed": 618,
+  "authentic_source_pairs": 157,
+  "authenticated_dynamic_CB_index_loads": 427,
+  "sameblock_candidate_store_value_count": 128,
+  "store_value_immediate_producer_OpBitcast_count": 128,
+  "store_value_via_shift_bounded_SSA_count": 116,
+  "store_value_ancestry_unknown_count": 12,
+  "artifact_id": 13802886340,
+  "private_purge_verified": true
 }
