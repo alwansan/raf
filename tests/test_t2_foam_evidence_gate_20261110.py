@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Unit tests for the standalone T2 aggregate evidence publication gate."""
 import unittest
-from scripts.t2_foam_evidence_gate_20261110 import sanitize, EvidenceError
+import json
+from scripts.t2_foam_evidence_gate_20261110 import sanitize, EvidenceError, parse_aggregate_json
 
 
 def valid():
@@ -21,6 +22,34 @@ def valid():
 
 
 class EvidenceGateTests(unittest.TestCase):
+    def test_strict_json_accepts_owner_aggregate(self):
+        result = parse_aggregate_json(json.dumps(valid()).encode("utf-8"))
+        self.assertEqual(result["counts"]["fft_kernel_errors"], 3850)
+
+    def test_reject_duplicate_top_level_key(self):
+        raw = json.dumps(valid()).replace('"status": "OBSERVED"',
+                                          '"status": "UNKNOWN", "status": "OBSERVED"')
+        with self.assertRaises(EvidenceError):
+            parse_aggregate_json(raw.encode("utf-8"))
+
+    def test_reject_duplicate_nested_counter(self):
+        raw = json.dumps(valid()).replace('"fft_kernel_errors": 3850',
+                                          '"fft_kernel_errors": 1, "fft_kernel_errors": 3850')
+        with self.assertRaises(EvidenceError):
+            parse_aggregate_json(raw.encode("utf-8"))
+
+    def test_reject_nonfinite_json_extension(self):
+        for value in ("NaN", "Infinity", "-Infinity"):
+            with self.subTest(value=value):
+                raw = json.dumps(valid()).replace('"fft_kernel_errors": 3850',
+                                                  '"fft_kernel_errors": ' + value)
+                with self.assertRaises(EvidenceError):
+                    parse_aggregate_json(raw.encode("utf-8"))
+
+    def test_reject_oversize_before_parse(self):
+        with self.assertRaises(EvidenceError):
+            parse_aggregate_json(b" " * 65537)
+
     def test_owner_aggregate_passes(self):
         self.assertEqual(sanitize(valid())["counts"]["water_pass_errors"], 23884)
 
