@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-managed-shader-prop-17",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-managed-shader-prop-17.md",
-  "status": "GFX_MULTI_043_SUCCESS_10_SHADER48_MANAGED_LITERAL_PROPERTIES_2_BOUND_TEXTURE_LITERALS_NO_DX11_GPU_REGISTER_BRIDGE",
+  "latest_session": "20261110-GFX-chat-managed-cil-calls-18",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-managed-cil-calls-18.md",
+  "status": "GFX_MULTI_044_SUCCESS_ORIGINAL_CIL_PROPERTY_UNITY_API_COPRESENCE_14_METHODS_5_NEARBY_NAMES_ORIGINAL_SHADER_GPU_BINDING_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-044 source-private genuine Assembly-CSharp CIL MethodDef ldstr to Unity Material/Shader API member owner calls count; never infer binding from same method alone; G8 authentic Shader48 property→t/s/b CB byte-offset mapping remains blocked.",
+  "next_experiment": "GFX-MULTI-045 private original CIL ldstr to UnityEngine Material/Shader.Set* argument stack-flow audit; treat nearby instruction proof only as candidate until stack dataflow and source-register bridge. Stage original Shader48 G8 Material→GPU t/s/b/CB byte layout remains blocked. G7–G12 not closed.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1241,6 +1241,26 @@
     "original_all_bound_texture_names": 3,
     "original_resource_register_binding_proven": false,
     "source_private_purge": true,
+    "original_shader48_restored": false
+  },
+  "latest_gfx044_managed_CIL": {
+    "run": 42830910833,
+    "status": "SUCCESS",
+    "unit_tests": 285,
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "safe_report": "gfxlab/evidence/20261110_gfx044_managed_cil_usage_safe_counts.json",
+    "safe_artifact_id": 13772290580,
+    "parsed_managed_methods": 19118,
+    "IL_instructions": 491490,
+    "method_parse_failures": 0,
+    "original_shader_property_ldstr_names": 10,
+    "actual_UnityEngine_Material_Shader_API_call_instructions": 821,
+    "methods_with_source_property_literal_and_real_Unity_API_call": 14,
+    "distinct_literal_names_in_those_methods": 7,
+    "distinct_literal_names_followed_by_API_call_within_12_instructions": 5,
+    "real_argument_stack_dataflow_verified": false,
+    "original_shader_GPU_register_map_verified": false,
+    "private_source_purged": true,
     "original_shader48_restored": false
   }
 }
