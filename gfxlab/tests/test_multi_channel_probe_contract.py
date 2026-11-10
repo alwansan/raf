@@ -3,6 +3,12 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
 
+@unittest.skipUnless(
+    (ROOT/"gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs").exists() and
+    (ROOT/"gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs").exists() and
+    (ROOT/"gfxlab/unity/Assets/Shaders/GfxLabChannelProbe.shader").exists(),
+    "Unity Assets intentionally omitted from source-only sparse checkout"
+)
 class TestGpuChannelProbeContract(unittest.TestCase):
     def test_original_shader_never_claimed_in_probe(self):
         viewer=(ROOT/"gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs").read_text()
