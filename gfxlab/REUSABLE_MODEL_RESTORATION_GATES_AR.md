@@ -63,3 +63,14 @@ Limits: no source names, PPtrs, raw pixels, images, shader bytes or register ind
 
 ## GFX-MULTI-024 planned gate
 Inspect Material float/color semantics and TextureSettings WrapU/WrapV/WrapW; verify Unity 2021.3 enum meanings before interpreting raw texture format/color-space codes. Channel variability remains diagnostic only; do not declare DXT5nm or metallic-alpha smoothness without shader/PC/device evidence.
+
+
+## 2026-11-10 — GFX-MULTI-024 confirmed
+[CI42745536309](https://github.com/alwansan/raf/actions/runs/42745536309) SUCCESS 139 tests. Source six models have **seven Renderer Material slots but six unique Material21 objects**, and **21 Texture2D references but only 18 unique Texture2D objects**. This repairs a source accounting assumption exposed by failed [CI42745345599](https://github.com/alwansan/raf/actions/runs/42745345599). All 112 Float and 14 Color saved-property labels match the original Shader48 27-property declaration; 33 float zeros, 58 ones, 21 between 0 and 1. Colors: seven identity-white (including seven white tints) and seven nonidentity secondary colors (role unknown). Unity 2021.3 official enums show original BaseColor DXT1×5 + DXT5×2, Normal/Metallic DXT5×7 each; BaseColor/Metallic sRGB×7 each and Normal Linear×7. All 21 source texture links have Bilinear, Repeat U/V/W, Aniso=1 and MipBias=0. [Official Unity 2021.3 enums](https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs). No source-to-DX11 constant buffer offset mapping or Shader48 Android runtime. No APK. Private source purged.
+
+## GFX-MULTI-025 next
+- **P0**: inspect the seven nonidentity secondary Color slots: source property-label matches and safe semantic classification (e.g. emission candidate). No raw property strings or numerical colors in public files. Do not infer emissive GPU effects.
+- **P0**: privately map which M00–M05 Renderer Material slots share the same Material21 and which of the 21 Texture role links reference the same Texture2D; publish only anonymized pair/set-size counts, not source PPtrs/GUIDs, and preserve real identities in Unity asset transfer.
+- **P1**: establish deterministic import policy that preserves original TextureFormat/ColorSpace, sampler wrap/filter/aniso/mip, and UV/tint/secondary color values without falsely claiming Shader48 parity. Metallic sRGB is *source authored*; don't silently convert data to Linear based on common PBR assumptions.
+- **P1**: resolve original shader property→CB offsets/material→DX11 registers via independent authentic PC/reference evidence, not fabricated order. Then decide minimal GPU channel experiment; separate ORIGINAL_SOURCE/UNITY/GPU/OWNER gates.
+- **P2**: original rig/skinning, M03 dual materials, water/FFT, smoke/fire remain independent open scopes. T1–T5 and main/zip2 read-only.
