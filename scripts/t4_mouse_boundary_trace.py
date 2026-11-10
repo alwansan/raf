@@ -15,7 +15,7 @@ from pathlib import Path
 
 STAGES = ("android", "unity", "raft")
 BUTTONS = ("left", "right", "middle", "wheel")
-TOKEN = re.compile(r"(?<!\w)(frame|stage|button)=([A-Za-z0-9_-]+)\b")
+TOKEN = re.compile(r"(?<!\w)(session|frame|stage|button)=([A-Za-z0-9_-]+)\b")
 
 
 def analyze(lines):
