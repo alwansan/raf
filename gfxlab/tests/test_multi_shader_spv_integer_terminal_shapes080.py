@@ -225,8 +225,9 @@ class TestGFX080IntegerOperand32BitShape(unittest.TestCase):
              "%40 = OpIAdd %1 %66 %4")
         # GFX077 bounded SSA walk already knows IAdd, but root has an
         # untrusted memory-loaded operand so the ancestry is UNKNOWN.
-        self.assertEqual(c["SPV_unknown_integer_terminal_public_core_opcode_OpIAdd"],1)
-        self.assertEqual(c["SPV_unknown_integer_terminal_OpIMul_literal_shape_not_imul"],1)
+        self.assertEqual(c["SPV_sameblock_store_unknown_ancestry_terminal_OpIAdd"],1)
+        self.assertEqual(c.get("SPV_unknown_integer_terminal_public_core_opcode_OpIAdd",0),0)
+        self.assertEqual(c.get("SPV_unknown_integer_terminal_OpIMul_literal_shape_not_imul",0),0)
 
 if __name__=="__main__":
     unittest.main()
