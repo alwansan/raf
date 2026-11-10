@@ -38,5 +38,20 @@ class NativeTraceContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "returned marker"):
             audit([native(AFTER, "sequence=1;managed_dispatch_call_returned=true;gpu_result=success")])
 
+    def test_cross_build_native_return_is_not_accepted(self):
+        before = native(BEFORE, BASE + "build_sha=build-a;group_xyz=1,8,1")
+        after = native(AFTER, "sequence=1;build_sha=build-b;managed_dispatch_call_returned=true;gpu_result=unverified")
+        result = audit([before, after])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertFalse(result["gpu_execution_proven"])
+        self.assertTrue(any("cross_session_provenance:build_sha" in e for e in result["errors"]))
+
+    def test_native_return_cannot_drop_build_provenance(self):
+        before = native(BEFORE, BASE + "build_sha=build-a;group_xyz=1,8,1")
+        after = native(AFTER, "sequence=1;managed_dispatch_call_returned=true;gpu_result=unverified")
+        result = audit([before, after])
+        self.assertEqual(result["paired_count"], 0)
+        self.assertTrue(any("cross_session_provenance_presence:build_sha" in e for e in result["errors"]))
+
 if __name__ == "__main__":
     unittest.main()
