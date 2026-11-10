@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-rdef-seven-pass-source-16",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-rdef-seven-pass-source-16.md",
-  "status": "GFX_MULTI_015_SOURCE_SEVEN_PASS_RDEF_CENSUS_CI_PENDING_FULL_SHADER_OPEN",
+  "status": "GFX_MULTI_015_CONFIRMED_ORIGINAL_SHDR_ONLY_REPRESENTATIVES_NO_RDEF_BINDING_PARITY_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-015 read real source all-pass DXBC RDEF coverage (14 stages), then determine independent DX11 register→SPIRV descriptor mapping evidence; no GPU original shader claim yet.",
+  "next_experiment": "GFX-MULTI-016: fail-closed bounded DXBC SHDR opcode declaration inventory on seven Passes, report source-only CB/resource/sampler declaration categories then map register details with independent evidence; never synthesize original RDEF or Android ShaderLab.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -420,10 +420,14 @@
   ],
   "latest_rdef_all_passes": {
     "experiment": "GFX-MULTI-015",
-    "status": "CI_PENDING",
-    "source_only": true,
-    "passes": 7,
-    "stages": 14,
+    "status": "SUCCESS_AUTHENTIC_ONE_PAIR_PER_PASS_RDEF_ABSENT",
+    "run": 42736017218,
+    "source_shader_passes": 7,
+    "source_stage_containers_checked": 14,
+    "rdef_absent": 14,
+    "rdef_present": 0,
+    "source_original_cb_count_known": false,
+    "all_variants_tested": false,
     "original_shader_restored": false
   }
 }

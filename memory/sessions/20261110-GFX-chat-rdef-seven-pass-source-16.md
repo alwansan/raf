@@ -12,3 +12,10 @@
 - negative_controls: reject invalid DXBC size, unknown only-chunk, truncated chunk; missing RDEF returns null; source tokens/logs not exported.
 - next_step: read safe CI report, update restore + backlog + session and state. If original RDEF absent broadly, inspect DXBC SHDR/SHEX declaration tokens or trusted independent original register reflection, not inferred SPIRV binding numbers.
 - backlog: gfxlab/OPEN_WORK_AND_IDEAS_AR.md
+
+## نتيجة مثبتة GFX-MULTI-015
+- [CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) **COMPLETED SUCCESS**, 80 source-free unit tests (source itself decoded in ephemeral runner); original fixed ZIP2 Shader48 2 SubShaders, 7 Passes, 14 exact representative VS/FS DXBC containers.
+- RDEF was absent in **14/14** checked stages, present in **0/14**. Each selected stage has a bounded SHDR code chunk and an input/output signature chunk; declared DX11 resource and CB counts remain **UNKNOWN/null**.
+- This proves RDEF absence in **one authentic pair per Pass**, not all 524 possible original VS/FS variant pairs.
+- Files and original compiled program bytes purged after CI; no game/Unity Android GPU shader used, no pixel parity, no original shader restoration.
+- Next: GFX-MULTI-016 parse original SHDR token declaration opcodes (strictly bounded) or independent reflection for b#/t#/s# register types/counts; this is still NOT original CB/sampler binding semantic equivalence.

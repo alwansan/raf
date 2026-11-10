@@ -69,3 +69,7 @@
 - session_id: `20261110-GFX-chat-rdef-seven-pass-source-16`; origin=chat، resumed_from=`20261110-GFX-chat-persistent-roadmap-15`، base_sha=`7c0e37af4f83934264393626b77868fada53daa2`.
 - تجربة أصلية مصدرية خاصة `GFX-MULTI-015`: فحص RDEF وجرد chunks في 14 Stage من 7 Passes حقيقية، وليس ShaderLab ولا APK.
 - اقرأ نتيجة CI من `.github/workflows/gfxlab-multi-rdef-seven-pass.yml`، وسجّلها في `memory/sessions/20261110-GFX-chat-rdef-seven-pass-source-16.md` و`gfxlab/OPEN_WORK_AND_IDEAS_AR.md` وملف الاستعادة وSTATE/MEMORY قبل انتهاء الدورة.
+
+
+## أحدث نتيجة مثبتة — GFX-MULTI-015
+[CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) SUCCESS، 80 اختبار، 14/14 source Shader48 VS/FS DXBC Stage بلا RDEF، وجميعها تتضمن SHDR وInput/Output signature؛ مصدر CB/register binding UNKNOWN ولا يُعبّر عنه بـ0. هذا ممثل واحد من كل Pass من أصل 524 pair، لا استعادة Android أصلية. ملف الجلسة الحالي `memory/sessions/20261110-GFX-chat-rdef-seven-pass-source-16.md`. قائمة الأفكار `gfxlab/OPEN_WORK_AND_IDEAS_AR.md` محدثة. الخطوة الأولى GFX-MULTI-016 قراءة SHDR declaration tokens بحدود ومراجعة opcode رسمية؛ الفصل عن shader runtime وPC/device pixels واجب.

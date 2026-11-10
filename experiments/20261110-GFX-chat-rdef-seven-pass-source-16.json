@@ -16,5 +16,16 @@
     "RDEF/known-chunk aggregate safe counts"
   ],
   "resource_key": "gfxlab-multi015-rdef-7pass-private",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_ALL_SEVEN_PASS_SOURCE_RDEF_ABSENT_14_OF_14",
+  "run": 42736017218,
+  "outcome": {
+    "original_representative_stages": 14,
+    "source_rdef_present": 0,
+    "source_rdef_missing": 14,
+    "source_rdef_cb_count_known": false,
+    "all_passes_have_bounded_shdr": true,
+    "all_passes_have_input_output_signatures": true,
+    "source_original_android_shader_restored": false,
+    "all_original_variant_pairs_tested": false
+  }
 }

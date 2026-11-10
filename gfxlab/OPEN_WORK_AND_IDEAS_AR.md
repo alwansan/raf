@@ -11,7 +11,7 @@
 - [CI42733664716](https://github.com/alwansan/raf/actions/runs/42733664716): DXBC الأصلي لعينة Pass0 VS/FS **بلا RDEF**. أعداد CB والـBinding الأصلية غير معروفة `null` وليست صفرًا؛ SPIR-V reflected: VS5 UBO، FS7 UBO/7 images/6 samplers. لا يعني تعادل الـregisters.
 
 ## الأولويات التالية
-1. **P0، GFX-MULTI-015:** مصدر Shader48 الأصلي: افحص وجود RDEF وتصنيفات chunks في زوج واحد بكل Pass (14 Stage) لتعرف هل الغياب شامل أم خاص بزوج واحد. لا تنشر bytes.
+1. **DONE (source-only), GFX-MULTI-015:** [CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) SUCCESS 80 tests: all 14 representative authentic Shader48 stages lack RDEF; each has SHDR+input/output signatures. Counts originally undefined => null; this result is for one matched pair per Pass, not all variants.
 2. **P0، GFX-MULTI-016:** عند غياب RDEF، استخدم declaration tokens من SHDR/SHEX أو Reflection مستقل مثبت للحصول على خريطة DX11 `b# / t# / s#` وربطها بمخرجات SPIR-V، مع اختبارات سلبية؛ تجنب افتراض أن `binding=0` هو `b0`.
 3. **P0، GFX-MULTI-017:** تدقيق دلالات Material الأصلية: tint وTexEnv/UV scaling، sRGB BaseColor، DXT5nm AG Normal swizzle/tangents، metallic/smoothness alpha، sampling wrap/filter/mips، flags الخاصة بكل Pass.
 4. **P0، GFX-MULTI-018:** إثبات ShaderLab/GLES3 حقيقي بمختبر منفصل و`shader.isSupported` وPasses/Keywords/Binding، بالتنسيق قبل أي APK؛ لا تخلط Shader Standard مع Raft الأصلي.

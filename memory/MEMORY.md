@@ -126,3 +126,7 @@ The owner requires updating `prompt/graphics-lab/RESTORE_AR.md`, `memory/session
 
 ## GFX-MULTI-015 selected for source-only next step (2026-11-10)
 Latest session `20261110-GFX-chat-rdef-seven-pass-source-16`, resumed after persistent roadmap. Tests original RDEF coverage for 14 stage containers from all seven Shader48 passes, one source-exact VS/FS pair each. CI pending at commit creation. RDEF missing must be JSON null/unknown, NOT zero. This is source-only, original Android shader and material/CB sampler semantic parity remain open; see `gfxlab/OPEN_WORK_AND_IDEAS_AR.md` and live restore.
+
+
+## GFX-MULTI-015 source RDEF all-pass coverage (2026-11-10)
+[CI42736017218](https://github.com/alwansan/raf/actions/runs/42736017218) SUCCESS, 80 tests. Genuine Shader48 2 SubShaders/7 Passes, one original exact keyword/tier VS/FS per Pass (14 total): **RDEF absent in all 14**, each has SHDR and source IO signature chunks. Thus original RDEF CB/binding counts UNKNOWN, even though translated SPIRV includes resource descriptors. No Android shader restored, no full variant coverage. Next GFX-MULTI-016 strict SHDR declaration opcode inspection/independent register semantic reflection; persistent backlog updated. Latest session 20261110-GFX-chat-rdef-seven-pass-source-16.
