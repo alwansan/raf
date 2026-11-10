@@ -133,6 +133,25 @@ def verify_genuine_texture_sampler_pair_count(report):
             report.get("original_stages") != 4 or
             not isinstance(report.get("rows"), list) or len(report["rows"]) != 4):
         raise ValueError("Original resource audit prerequisite absent")
+    # Numeric ABI evidence must never launder caller-supplied readiness claims.
+    # This report is source/translation-only, not a Unity/device attestation.
+    root_unverified = (
+        "shaderlab_or_unity_import_verified",
+        "original_name_register_join_verified",
+        "private_shader_symbols_published",
+        "device_pixels_verified",
+    )
+    if any(report.get(flag) is not False for flag in root_unverified):
+        raise ValueError("Unsupported Foam resource readiness claim")
+    row_unverified = (
+        "original_to_translated_texture_sampler_name_binding_verified",
+        "original_sampler_state_verified",
+        "unity_shaderlab_or_device_verified",
+    )
+    if any(not isinstance(row, dict) or
+           any(row.get(flag) is not False for flag in row_unverified)
+           for row in report["rows"]):
+        raise ValueError("Unsupported Foam stage readiness claim")
     seen = set()
     for row in report["rows"]:
         if not isinstance(row, dict):
