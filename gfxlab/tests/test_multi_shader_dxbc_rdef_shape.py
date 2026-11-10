@@ -1,6 +1,6 @@
 import unittest,struct
 from gfxlab.tools.multi_shader_dxbc_rdef_shape import rdef_summary
-def synthetic_dx(container_len=100):
+def synthetic_dx(container_len=128):
     a=bytearray(container_len)
     a[:4]=b"DXBC"
     struct.pack_into("<I",a,24,container_len)

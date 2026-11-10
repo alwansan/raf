@@ -73,3 +73,5 @@ jobs:
         run: |
           sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi014-private"
           echo GFX_MULTI014_PRIVATE_ORIGINAL_PROGRAMS_PURGED=true
+
+# RDEF fixture correction: synthetic CB and binding tables must fit declared chunk extent.

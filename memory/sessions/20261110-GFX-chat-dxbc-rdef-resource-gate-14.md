@@ -8,3 +8,5 @@
 - previous GFX-MULTI-013 CI42732808109 SUCCESS 71 tests: all seven authentic passes representative DXBC→SPIRV→GLSL ES310 offline compile and VS/FS stage IO location/type parity; only 7 of 524 pairs exercised; original Android Shader48 false.
 - hypothesis: source DXBC RDEF resource declarations include shader globals not stored as per-Material textures, and SPIRV descriptor remaps require explicit register/CB/sampler semantic mapping rather than assuming Standard fallback binding.
 - expected CI GFX-MULTI-014 after workflow push; source only; original shader phase OPEN.
+
+- CI42733550704 FAILED pure synthetic fixture only: declared 1 resource binding at offset 40 in 56-byte RDEF payload, so strict parser correctly rejected truncated binding. No original Shader48 source was read. Enlarged synthetic test payload to 84 bytes, re-triggered CI. No change to proprietary source or runtime.
