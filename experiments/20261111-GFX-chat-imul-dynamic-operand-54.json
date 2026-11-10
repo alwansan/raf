@@ -32,10 +32,21 @@
     "7-day safe artifact without raw shader values"
   ],
   "resource_key": "gfxlab-multi081-private-spv-imul-dynamic-input",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_12_NONPOWER_OPIMUL_DYNAMIC_INPUT_BITCAST_TO_FUNCTION_OPLOAD_SOURCE_CPU_ONLY",
   "run_id": 42906064603,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42906064603",
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_SYNTAX_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_SPIRV_CPU_SSA_SYNTAX_MEMORY_READ_ORIGIN_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "892bfae984a3dd8a3e87891efe1b7c0cf105072b",
+  "tests_passed": 713,
+  "original_pairs": 157,
+  "stage_instances": 314,
+  "CB_stages": 311,
+  "authenticated_dynamic_CB_reads": 427,
+  "nonpower_OpIMul_dynamic_input_immediate_Bitcast": 12,
+  "nonpower_OpIMul_dynamic_input_terminal_OpLoad": 12,
+  "nonpower_OpIMul_dynamic_input_pointer_Function_literal_path": 12,
+  "safe_artifact_id": 13805166792,
+  "private_purge_verified": true
 }
