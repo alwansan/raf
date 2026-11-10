@@ -36,6 +36,7 @@ def inspect(root):
             scanned_meta += 1
     refs = Counter()
     files = 0
+    unresolved_by_extension = Counter()
     for path in root.rglob("*"):
         if path.suffix.lower() not in EXTENSIONS or path.is_symlink() or not path.is_file():
             continue
@@ -55,12 +56,14 @@ def inspect(root):
                 refs["resolved_in_supplied_tree"] += 1
             else:
                 refs["unresolved_in_supplied_tree"] += 1
+                unresolved_by_extension[path.suffix.lower()] += 1
     return {
         "status": "STATIC_PARTIAL_TREE_ONLY",
         "meta_files_indexed": scanned_meta,
         "yaml_files_scanned": files,
         "duplicate_guid_groups": sum(v > 1 for v in duplicates.values()),
         "reference_counts": dict(sorted(refs.items())),
+        "unresolved_by_source_extension": dict(sorted(unresolved_by_extension.items())),
         "limitations": "External packages, built-in resources, binary assets and omitted source trees are not checked; no device or shader compilation proof."
     }
 
