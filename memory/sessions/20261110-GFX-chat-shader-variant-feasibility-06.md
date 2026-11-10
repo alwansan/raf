@@ -13,3 +13,5 @@
 - First CI 42726475369 SUCCESS unit tests but **0 in legacy m_SubPrograms per pass**; one compiled platform metadata entry and one compression metadata entry. Cannot conclude absence of compiled programs from this result.
 - Unity 2021.3 serialized Shader version 3 can use m_PlayerSubPrograms tiered lists while m_SubPrograms is empty (public AssetRipper source investigation). Corrected parser to inspect both, with nested typed m_BlobIndex count and negative synthetic test. Retry triggered via workflow-file change; awaiting evidence.
 - No source bytes/keywords/IDs printed. OriginalShaderRestored remains FALSE.
+
+- GFX-MULTI-006 v3 retry CI42726874868 FAILED in the pure negative unit test (null m_SubPrograms item was ignored); never reached original source. Corrected the recursion to fail closed for explicit null entries and re-triggered the isolated workflow. No original source regression is inferred.

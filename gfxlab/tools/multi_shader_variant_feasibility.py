@@ -17,7 +17,9 @@ def _find_subprogram_rows(value):
     """
     if isinstance(value,list):
         result=[]
-        for x in value:result.extend(_find_subprogram_rows(x))
+        for x in value:
+            if x is None:raise ValueError("MALFORMED_ORIGINAL_SUBPROGRAM")
+            result.extend(_find_subprogram_rows(x))
         return result
     if isinstance(value,dict):
         if isinstance(value.get("m_BlobIndex"),int):

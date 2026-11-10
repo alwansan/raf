@@ -70,3 +70,5 @@ jobs:
           echo GFX_MULTI006_PRIVATE_SOURCE_PURGED=true
 
 # v3 compatibility: also scan original Unity2021 m_PlayerSubPrograms tiered arrays.
+
+# fail closed: reject null nested original stage metadata entries, then re-test v3 layout.
