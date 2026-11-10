@@ -32,10 +32,22 @@
     "safe anonymous artifact, private original DXBC and SPV/ZIP2 purge"
   ],
   "resource_key": "gfxlab-multi088-private-original-source-input-SPV-CB-layout",
-  "status": "CI_QUEUED",
+  "status": "SUCCESS_12_NUMERIC_SOURCE_DCL_INPUT_LOCATION_OVERLAPS_12_ORIGINAL_B_AUTH_SPV_UNIFORM_MEMBER_OFFSET_COMPILER_LAYOUT",
   "run_id": 42913114233,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42913114233",
-  "evidence_level": "PENDING_ORIGINAL_DXBC_INPUT_DECLARATIONS_AND_TRANSLATED_SPV_CPU_COMPILER_LAYOUT_ONLY",
+  "evidence_level": "ORIGINAL_DXBC_DCL_INPUT_NUMERIC_OVERLAP_AND_AUTHENTICATED_CB_COMPILER_LAYOUT_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "b40028d0607712c26c996fdb5a996be0fcba17eb",
+  "tests_passed": 843,
+  "original_joint_source_pairs": 157,
+  "source_original_stage_instances": 314,
+  "source_original_CB_stages": 311,
+  "source_b_authenticated_SPV_dynamic_CB_index_loads": 427,
+  "SPV_Location_numeric_overlap_with_original_DXBC_declared_input_count": 12,
+  "SPV_selected_Uniform_global_exact_source_b_auth_count": 12,
+  "SPV_selected_member_Offset_matches_source_authenticated_compiler_layout_count": 12,
+  "artifact_id": 13808002904,
+  "artifact_expires_utc": "2026-11-17T22:18:22Z",
+  "runner_private_purge_verified": true
 }
