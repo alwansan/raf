@@ -1,0 +1,32 @@
+{
+  "session_id": "20261110-GFX-chat-android-interpolation-probe-14",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-shdr-interpolation-13",
+  "base_sha": "72c81d4ef67cf1465723b5cc27f78008b5b2e13a",
+  "experiment_key": "GFX-MULTI-040",
+  "issue_id": "RENDER-002",
+  "scope": "Isolated synthetic original-free Android GLES3 diagnostic APK for real device perspective/flat/noperspective qualifier support, GPU readback & PNG evidence, automatic session ZIP into /storage/emulated/0/Download/Games/cl/test/g/",
+  "source_refs": [
+    "GFX-MULTI-038 run 42814767180",
+    "GFX-MULTI-039 run 42815863927",
+    "GFX-MULTI-037 run 42813380416"
+  ],
+  "rationale": "Source Shader48 GPU/material register map remains blocked (RDEF/debug absent in all 1275 true linked programs); a device-only diagnostic can test interpolation semantics separately without implying Shader48 restoration.",
+  "constraints": [
+    "Only write experiment/android-graphics-rootcause",
+    "Do not use or publish original Shader48 or zip2 shader bytes",
+    "Build new unique Android package, not overwrite six-model diagnostic APK",
+    "Use synthetic geometry/CPU-generated barycentric input only",
+    "Unity project GLES3+IL2CPP ARM64 landscape, originalShaderRestored=false",
+    "Record snapshots/errors/sample measurements/3 PNG previews and export all sessions through existing scoped MediaStore bridge",
+    "Never claim PC-vs-Adreno pixel parity from synthetic test"
+  ],
+  "planned": [
+    "Implement three independent diagnostic shader modes as source-owned shaders",
+    "Implement C# GPU readback, PASS/FAIL/INCONCLUSIVE with quantitative samples and saved screenshots",
+    "Build signed APK via independent CI and verify package + signature + DEX and shader asset names; failures fixed within scope",
+    "Update session/RESTORE/MEMORY/STATE and provide verified APK artifact link"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
