@@ -1,0 +1,18 @@
+{
+  "session_id": "20261110-GFX-chat-shader-binary-variant-links-10",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-010",
+  "issue_id": "RENDER-002",
+  "question": "Are original parsed Shader48 pass variant indexes valid links to original compiled GPU program table and do binary code signatures match reported compiler types?",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "previous_run": 42728348900,
+  "control": "Only numerical aggregates and safe code-family tokens; never source payload; no Android equality flag",
+  "status": "CI_PENDING",
+  "planned_tests": [
+    "pure mock source-variant link tests",
+    "private original pass references",
+    "binary format markers near start",
+    "compiled/decompressed sizes"
+  ],
+  "scope": "SOURCE_ONLY"
+}

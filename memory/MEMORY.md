@@ -101,3 +101,6 @@ GFX-MULTI-005 CI42725841763 SUCCESS: 48 tests; original Shader48 source one link
 - Exact original Shader48 Android runtime remains FALSE; rig and PC parity remain open.
 
 GFX-MULTI-008 [CI42727777657](https://github.com/alwansan/raf/actions/runs/42727777657) SUCCESS 57 tests: unique float32 position+UV+normal vertex attribute counts exactly match Unity import ALL six models (M01 5095→4721 delta374, M04 2445→2071 delta374, M02 1666→1662 delta4; M00/M03/M05 unchanged). All original vertex indices are referenced per CI007. Difference strongly explained by duplicate attribute merging, NOT disappearing triangles. Full face-index parity/rig/source Shader48 still open.
+
+## GFX-MULTI-009 SOURCE binary original Shader48 table (2026-11-10)
+[CI42728348900](https://github.com/alwansan/raf/actions/runs/42728348900) SUCCESS 59 tests. Original source private UnityPy parser found a compiled ShaderProgram table with 1656 entries, platform metadata D3D11 but mixed program type labels incl GLES family 188; every source payload magic classified other. compressed blob 163501 bytes, total parsed program code bytes 242218471. **Not Android shader proof; unusual mixed types/memory expansion need independent validation**. GFX-MULTI-010 audits pass variant references to binary table with no raw bytes/public source, in session 20261110-GFX-chat-shader-binary-variant-links-10.

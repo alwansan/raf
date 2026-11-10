@@ -1,0 +1,7 @@
+# GFX-MULTI-010 — Original Shader48 binary-link verification
+- Role: GFX-LAB; origin: chat; branch: experiment/android-graphics-rootcause; session_id: 20261110-GFX-chat-shader-binary-variant-links-10
+- SOURCE ZIP2: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- Previous proven GFX-MULTI-009 [CI42728348900](https://github.com/alwansan/raf/actions/runs/42728348900) completed SUCCESS with 59 tests. Reader reported one source compiler platform D3D11, 1,656 original compiled entries, mixed GPU-program type categories, 188 labelled GLES/GLES3/GLES31/AEP; all program content magic classified as other. Compressed source blob bytes=163,501; sum parsed program payload bytes=242,218,471. **Both the cross-platform category mix and size expansion require validation. They are not proof of GLES executables.**
+- Research basis: UnityPy ShaderConverter reads Unity ShaderProgram.m_SubPrograms table from compressed LZ4 blob and stage entries referenced by original parsed pass m_PlayerSubPrograms/m_BlobIndex. This experiment verifies actual links and compiled-type agreement, plus safe content-family classifications. It never exports program code.
+- Evidence ladder: source compressed program counts and typed variants SOURCE_ONLY. Unity Android original Shader48 compile, stage IO semantic, CB/samplers/keywords/render-state equivalence, GPU pixels, PC matching remain FALSE.
+- User's phone visuals: Unity Standard diagnostic only; six models and image colors visible but original Shader48 NOT executed.

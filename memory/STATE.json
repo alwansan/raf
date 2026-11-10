@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-compiled-platform-probe-09",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-compiled-platform-probe-09.md",
+  "latest_session": "20261110-GFX-chat-shader-binary-variant-links-10",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-binary-variant-links-10.md",
   "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Read GFX-MULTI-009 safe GPU compiled platform proof and then design exact per-pass program semantics transform, not global fallback.",
+  "next_experiment": "Inspect GFX-MULTI-010 pass-to-compiled stage variant references and sanity-check binary metadata; do not assert GLES support from names alone.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -328,8 +328,20 @@
   },
   "latest_compiled_shader_platform_probe": {
     "experiment": "GFX-MULTI-009",
+    "run": 42728348900,
+    "status": "SUCCESS_SOURCE_COMPRESSED_PROGRAM_TABLE_ONLY",
+    "parsed_compiled_programs": 1656,
+    "source_platform": "D3D11",
+    "gles_family_labels": 188,
+    "content_signatures": "all_other",
+    "compressed_blob_bytes": 163501,
+    "parsed_program_code_bytes_total": 242218471,
+    "original_android_shader_restored": false
+  },
+  "latest_compiled_shader_variant_links": {
+    "experiment": "GFX-MULTI-010",
     "status": "CI_PENDING",
-    "scope": "PRIVATE_SOURCE_ORIGINAL_COMPILED_PROGRAM_COUNTS_ONLY",
+    "source_only": true,
     "original_shader_restored": false
   }
 }

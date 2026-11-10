@@ -1,0 +1,72 @@
+name: GFX-MULTI-010 source original shader variant blob linkage / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-shader-linkage.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi010-original-shader-links
+  cancel-in-progress: false
+jobs:
+  typed-shader-links:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source safety and negative tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_binary_links.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Verify original source Shader48 pass-to-blob references only
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_binary_links --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi010-private" --out gfxlab-multi010-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi010-safe-summary.json"))
+          assert d["models"]==6 and d["material_slots"]==7
+          assert d["source_subshaders"]==2 and d["source_passes"]==7
+          assert d["compiled_table_entries"]==1656
+          assert d["total_source_variant_links"]["source_variant_links"]>0
+          assert not d["original_shader_restored"] and not d["phase_closed"]
+          assert not d["original_shader_bytes_exposed"]
+          print("GFX_MULTI010_SOURCE_REFERENCES_VERIFIED_NOT_ANDROID_FIDELITY")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi010-safe-original-source-linkage
+          path: gfxlab-multi010-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Remove original binary and OBJ source
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi010-private"
+          echo GFX_MULTI010_SOURCE_BYTES_PURGED=true
