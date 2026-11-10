@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-variant-reflection-sweep-23",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-variant-reflection-sweep-23.md",
-  "status": "GFX_MULTI_022_ALL_1435_LINKED_VARIANTS_1275_DXBC_NO_RDEF_NO_PARAMETERS_SOURCE_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-material-texture-semantics-24",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-material-texture-semantics-24.md",
+  "status": "GFX_MULTI_023_ALL_21_SOURCE_TEXTURES_DECODED_WHITE_TINT_IDENTITY_UV_CHANNEL_FINGERPRINTS_RECORDED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-023: source-only audit of seven original Material slots and 21 bound Texture2D assets: role-specific format/color-space/mip/stream metadata, UV scale/offset, tint/color/float metadata, and decoded channel statistics for Normal/Metallic maps using authenticated sparse ZIP2 stream extraction. Publish safe aggregates only; no register guessing or Android shader claim.",
+  "next_experiment": "GFX-MULTI-024: source-only semantic census of 112 original Material float slots and 14 color slots, plus TextureSettings wrap U/V/W and authoritative Unity 2021.3 TextureFormat/color-space enum interpretation. Keep property names/values private; no register inference. Then decide whether a narrow Android texture-channel GPU probe is needed.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -548,6 +548,119 @@
     "artifact_id": 13730635053,
     "artifact_url": "https://github.com/alwansan/raf/actions/runs/42743017021/artifacts/13730635053",
     "artifact_expiry_utc": "2026-11-17T02:29:04Z",
+    "original_shader_restored": false,
+    "android_original_shader_pixels_verified": false,
+    "phase_closed": false
+  },
+  "latest_material_texture_semantics": {
+    "experiment": "GFX-MULTI-023",
+    "run": 42744204412,
+    "failed_orchestration_attempt": 42743969290,
+    "commit": "0eadbc73f97bb8c8524c9cedc5c75d7409cfcb9a",
+    "status": "SUCCESS_ALL_21_ORIGINAL_TEXTURES_DECODED_SOURCE_ONLY",
+    "unit_tests": 128,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "model_count": 6,
+    "material_slots": 7,
+    "texenv_slots": 63,
+    "bound_texenv_slots": 21,
+    "null_texenv_slots": 42,
+    "textures": 21,
+    "decoded_textures": 21,
+    "decoded_pixels": 53477376,
+    "sparse_stream_chunks": 15,
+    "sparse_stream_bytes": 707788800,
+    "material_color_slots": 14,
+    "material_float_slots": 112,
+    "material_int_slots": 0,
+    "authored_tint_slots": 7,
+    "identity_white_tints": 7,
+    "nonwhite_tints": 0,
+    "uv_transforms_identity": 21,
+    "uv_transforms_nonidentity": 0,
+    "texture_format_codes": {
+      "basecolor": {
+        "10": 5,
+        "12": 2
+      },
+      "normal": {
+        "12": 7
+      },
+      "metallic": {
+        "12": 7
+      }
+    },
+    "texture_color_space_codes": {
+      "basecolor": {
+        "1": 7
+      },
+      "normal": {
+        "0": 7
+      },
+      "metallic": {
+        "1": 7
+      }
+    },
+    "texture_mip_count_codes": {
+      "basecolor": {
+        "11": 3,
+        "12": 4
+      },
+      "normal": {
+        "11": 3,
+        "12": 4
+      },
+      "metallic": {
+        "11": 5,
+        "12": 2
+      }
+    },
+    "filter_mode_codes": {
+      "basecolor": {
+        "1": 7
+      },
+      "normal": {
+        "1": 7
+      },
+      "metallic": {
+        "1": 7
+      }
+    },
+    "texture_settings_present": 21,
+    "anisotropy_field_present": 21,
+    "mip_bias_field_present": 21,
+    "generic_wrap_mode_field_available": false,
+    "axis_wrap_fields_inspected": false,
+    "channel_variability": {
+      "basecolor": {
+        "R": 7,
+        "G": 7,
+        "B": 7,
+        "A": 2,
+        "alpha_fully_opaque": 5
+      },
+      "normal": {
+        "R_variable": 0,
+        "R_constant": 7,
+        "G": 7,
+        "B": 7,
+        "A": 7,
+        "ag_signature_candidate": 0
+      },
+      "metallic": {
+        "A_variable": 7,
+        "R_variable": 4,
+        "G_variable": 4,
+        "B_variable": 4
+      }
+    },
+    "source_material_names_or_ids_exported": false,
+    "source_texture_pixels_or_files_exported": false,
+    "source_shader_or_register_data_exported": false,
+    "private_source_purged": true,
+    "artifact_id": 13730562085,
+    "artifact_url": "https://github.com/alwansan/raf/actions/runs/42744204412/artifacts/13730562085",
+    "artifact_expiry_utc": "2026-11-17T02:40:48Z",
     "original_shader_restored": false,
     "android_original_shader_pixels_verified": false,
     "phase_closed": false

@@ -37,3 +37,7 @@
 
 ## أحدث حالة GFX-MULTI-022 — 10 نوفمبر 2026
 [CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) SUCCESS: فحص 1,435 link rows / 524 exact variant pairs / 1,275 unique referenced DXBC programs؛ 0 RDEF و0 parameter metadata و0 TextureParams/CB bindings. عائق Material property→DX11 register مثبت عبر جميع البرامج المرتبطة. لا Android shader parity. الجلسة `20261110-GFX-chat-variant-reflection-sweep-23`؛ التالية GFX-MULTI-023 لفحص Material/Texture2D/UV/tint/channel fidelity source-only.
+
+
+## أحدث حالة GFX-MULTI-023 — 10 نوفمبر 2026
+[CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) SUCCESS: 21/21 original Texture2D decoded (53,477,376 pixels), seven materials, all tint white, all UV identity. BaseColor RGB variable; Normal R constant with G/B/A variable; Metallic Alpha variable. Raw texture codes remain uninterpreted; no Shader48/Adreno proof. الجلسة `20261110-GFX-chat-material-texture-semantics-24`؛ التالية GFX-MULTI-024.

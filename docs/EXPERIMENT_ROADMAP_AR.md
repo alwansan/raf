@@ -31,3 +31,19 @@
 ## 2026-11-10 — GFX-MULTI-022 completed; next GFX-MULTI-023
 - GFX022 [CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021): 1,435/1,435 linked variant rows valid; 524 matched keyword/tier pairs; 1,275 unique referenced DXBC stage programs; all 1,275 RDEF-absent and all 1,435 parameter/sampler/CB metadata absent. Material property→source t/s mapping remains blocked. No Android/GPU claim.
 - GFX023: source Material/Texture2D semantics and pixel-channel census for seven Materials / 21 bound textures, including UV/tint and original format/color-space/mip/stream metadata; use authenticated sparse source chunks; publish safe aggregates only.
+
+
+## GFX-MULTI-023 — original Material/Texture2D semantics and channel census (2026-11-10)
+[CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) **SUCCESS**, 128 tests. Six models, seven original Materials, 63 TexEnv slots (21 bound / 42 null), seven BaseColor + seven Normal + seven Metallic textures. All 21/21 original Texture2D images decoded with exact dimensions; 53,477,376 pixels examined privately. Only 15 authenticated stream chunks / 707,788,800 selected bytes were hydrated; safe aggregate artifact uploaded and all private source/texture/stream data purged.
+
+Material facts: 14 color slots, 112 float slots, 0 int slots; all seven authored tint slots are identity white; all 21 role-specific UV scale/offset transforms are identity. Texture format code BaseColor 10×5 + 12×2, Normal 12×7, Metallic 12×7; color-space code BaseColor 1×7, Normal 0×7, Metallic 1×7; mip-count code BaseColor 11×3/12×4, Normal 11×3/12×4, Metallic 11×5/12×2; filter-mode code 1×21. Raw codes remain uninterpreted pending Unity 2021.3 enum verification. Texture settings, anisotropy and mip-bias fields were present on all 21; generic `m_WrapMode` unavailable, axis-specific wrap fields still open.
+
+Channels: BaseColor RGB variable 7/7; A variable 2/7 and opaque 5/7. Normal R constant 7/7 while G/B/A variable 7/7; the tested conventional A+G / constant R+B signature candidate is 0/7. Metallic Alpha variable 7/7 (possible extra data only, not proof of smoothness). No original Shader48 execution or GPU pixels.
+
+First attempt [CI42743969290](https://github.com/alwansan/raf/actions/runs/42743969290) planned the 15 chunks but re-read the manifest after sparse checkout excluded it. The correction reused SHA-verified staged owners; [CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) passed and purged private data. Artifact [13730562085](https://github.com/alwansan/raf/actions/runs/42744204412/artifacts/13730562085), expires 2026-11-17T02:40:48Z UTC.
+
+Limits: no source names, PPtrs, raw pixels, images, shader bytes or register indices exported; no PC/GPU/Adreno parity, APK or owner acceptance. `originalShaderRestored=false`; `actual_android_original_shader_pixels_verified=false`; `phase_closed=false`.
+
+
+## Next GFX-MULTI-024
+Audit Material float/color property categories and axis-specific texture wrap settings; ground raw TextureFormat/color-space enum meanings in Unity 2021.3 references. Then decide whether a minimal Android GLES texture-channel viewer is needed for actual device proof.

@@ -192,3 +192,23 @@ After GFX-MULTI-020 CI42740776655 confirmed 7 material source TextureEnv tables 
 - Latest session: `20261110-GFX-chat-variant-reflection-sweep-23`; source ZIP2 remains pinned to `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; write scope remains only `experiment/android-graphics-rootcause`.
 - The 1,435 linked Shader48 variant rows / 1,275 unique referenced DXBC programs have now been surveyed. All 1,275 lack RDEF and all 1,435 rows lack parameter/sampler/CB reflection metadata. The property-name→DX11 register bridge is blocked for the full referenced set; do not guess.
 - GFX-MULTI-023 is the next source-only Material/Texture2D semantic audit. Keep shader execution, Android pixels, PC parity, rig, water/FFT, fire and smoke as separate open gates.
+
+
+## GFX-MULTI-023 — original Material/Texture2D semantics and channel census (2026-11-10)
+[CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) **SUCCESS**, 128 tests. Pinned ZIP2 source; six models, seven original Materials, 63 TexEnv slots (21 bound / 42 null), seven BaseColor + seven Normal + seven Metallic textures. All **21/21** original Texture2D images decoded with exact dimensions; 53,477,376 pixels examined privately. Only 15 authenticated stream chunks / 707,788,800 selected bytes were hydrated; safe aggregate artifact uploaded and all private source/texture/stream data purged.
+
+Material facts: 14 color slots, 112 float slots, 0 int slots; all seven authored tint slots are identity white; all 21 role-specific UV scale/offset transforms are identity. Thus non-white tint and UV transforms do not explain the current material appearance differences.
+
+Texture code distributions (raw serialized codes; do not infer color-space or format semantics from these counts alone): format code BaseColor 10×5 + 12×2, Normal 12×7, Metallic 12×7; color-space code BaseColor 1×7, Normal 0×7, Metallic 1×7; mip-count code BaseColor 11×3/12×4, Normal 11×3/12×4, Metallic 11×5/12×2; filter-mode code 1×21. Texture settings, anisotropy and mip-bias fields were present on all 21. Generic `m_WrapMode` code was unavailable in this type tree; axis-specific wrap fields still need inspection.
+
+Channel census: BaseColor R/G/B variable 7/7; Alpha variable 2/7 and fully opaque 5/7. Normal R constant 7/7 while G/B/A variable 7/7; tested A+G with constant R+B signature candidate 0/7, so the conventional DXT5nm hypothesis is not supported by this simple channel signature. Metallic Alpha variable 7/7; this is only a candidate channel for additional data such as smoothness, not proof of shader semantics.
+
+The first attempt [CI42743969290](https://github.com/alwansan/raf/actions/runs/42743969290) successfully planned the exact 15 chunks but failed when the audit re-read the manifest after sparse checkout intentionally excluded it. The correction reuses previously SHA-verified staged owner assets; [CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) then completed all steps and private purge successfully. Artifact [13730562085](https://github.com/alwansan/raf/actions/runs/42744204412/artifacts/13730562085), expires 2026-11-17T02:40:48Z UTC.
+
+**Limits:** raw numeric texture format/color-space codes are not yet semantically mapped; axis-specific wrap fields and float-property meanings remain open. No shader bytes, source names, pointers, raw pixels or image files were exported. No Shader48 execution, PC/GPU pixel parity, Adreno proof, APK or owner acceptance. `originalShaderRestored=false`; `actual_android_original_shader_pixels_verified=false`; `phase_closed=false`.
+
+
+## GFX-LAB persistent state after GFX-MULTI-023
+- Latest session: `20261110-GFX-chat-material-texture-semantics-24`; all 21 original textures were decoded privately and safely summarized, with no source image/pixel export.
+- The seven materials have white identity tint and all 21 UV transforms are identity. Source texture format/color-space/mip codes and channel variability are recorded in the session; do not interpret raw codes without an authoritative Unity 2021.3 mapping.
+- Next: GFX-MULTI-024 inspects material scalar semantics and wrap U/V/W; original Shader48 and Android GPU proof remain false.

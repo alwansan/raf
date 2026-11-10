@@ -22,5 +22,115 @@
     "audit all seven Material saved-property slots and 63 TexEnv entries"
   ],
   "resource_key": "gfxlab-multi023-private-material-texture-semantic-census",
-  "status": "PREPARED_CI_PENDING"
+  "status": "SUCCESS_ALL_21_ORIGINAL_TEXTURES_DECODED_SOURCE_ONLY",
+  "failed_orchestration_attempt": 42743969290,
+  "verified_run": 42744204412,
+  "workflow_commit": "0eadbc73f97bb8c8524c9cedc5c75d7409cfcb9a",
+  "artifact_id": 13730562085,
+  "artifact_url": "https://github.com/alwansan/raf/actions/runs/42744204412/artifacts/13730562085",
+  "artifact_expiry_utc": "2026-11-17T02:40:48Z",
+  "outcome": {
+    "unit_tests": 128,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "models": 6,
+    "materials": 7,
+    "texenv_slots": 63,
+    "bound_texenv_slots": 21,
+    "null_texenv_slots": 42,
+    "texture_roles": {
+      "basecolor": 7,
+      "normal": 7,
+      "metallic": 7
+    },
+    "decoded_textures": 21,
+    "decoded_pixels": 53477376,
+    "sparse_stream_chunks": 15,
+    "sparse_stream_bytes": 707788800,
+    "material_color_slots": 14,
+    "material_float_slots": 112,
+    "material_int_slots": 0,
+    "authored_tints": 7,
+    "identity_white_tints": 7,
+    "nonwhite_tints": 0,
+    "uv_identity": 21,
+    "uv_nonidentity": 0,
+    "format_codes": {
+      "basecolor": {
+        "10": 5,
+        "12": 2
+      },
+      "normal": {
+        "12": 7
+      },
+      "metallic": {
+        "12": 7
+      }
+    },
+    "color_space_codes": {
+      "basecolor": {
+        "1": 7
+      },
+      "normal": {
+        "0": 7
+      },
+      "metallic": {
+        "1": 7
+      }
+    },
+    "mip_count_codes": {
+      "basecolor": {
+        "11": 3,
+        "12": 4
+      },
+      "normal": {
+        "11": 3,
+        "12": 4
+      },
+      "metallic": {
+        "11": 5,
+        "12": 2
+      }
+    },
+    "filter_mode_code_1_count": 21,
+    "texture_settings_present": 21,
+    "anisotropy_field_present": 21,
+    "mip_bias_field_present": 21,
+    "generic_wrap_mode_field_available": false,
+    "axis_wrap_fields_inspected": false,
+    "channels": {
+      "basecolor": {
+        "R_variable": 7,
+        "G_variable": 7,
+        "B_variable": 7,
+        "A_variable": 2,
+        "A_fully_opaque": 5
+      },
+      "normal": {
+        "R_constant": 7,
+        "G_variable": 7,
+        "B_variable": 7,
+        "A_variable": 7,
+        "ag_candidate": 0
+      },
+      "metallic": {
+        "A_variable": 7,
+        "R_variable": 4,
+        "G_variable": 4,
+        "B_variable": 4
+      }
+    },
+    "source_material_names_or_ids_exported": false,
+    "source_texture_pixels_or_files_exported": false,
+    "source_shader_or_register_data_exported": false,
+    "private_source_purged": true,
+    "original_shader_restored": false,
+    "android_original_shader_pixels_verified": false,
+    "phase_closed": false
+  },
+  "limitations": [
+    "Texture format and color-space values are raw serialized codes; authoritative Unity 2021.3 semantics not yet verified.",
+    "TextureSettings axis-specific wrap fields and Material float property semantics remain open.",
+    "Channel variability is not proof of DXT5nm, metallic/smoothness channel semantics, Shader48 execution, or Android GPU parity."
+  ],
+  "next_step": "GFX-MULTI-024: private semantic census of 112 Material float slots and 14 color slots, TextureSettings WrapU/WrapV/WrapW, and authoritative Unity 2021.3 enum interpretation for texture format/color-space codes; safe counts only."
 }

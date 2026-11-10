@@ -145,3 +145,24 @@
 - [CI42743017021](https://github.com/alwansan/raf/actions/runs/42743017021) SUCCESS؛ artifact `13730635053`، وملفات المصدر الخاصة حُذفت من runner.
 - الحالة: property→DX11 t/s bridge blocked عبر جميع variant links المرجعية؛ لا Android Shader48 ولا GPU pixel parity.
 - التالية GFX-MULTI-023: Material/Texture2D metadata + UV/tint + role-specific channel audit باستخدام sparse authenticated stream، source-only، no APK.
+
+
+## GFX-MULTI-023 — original Material/Texture2D semantics and channel census (2026-11-10)
+[CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) **SUCCESS**, 128 tests. Pinned ZIP2 source; six models, seven original Materials, 63 TexEnv slots (21 bound / 42 null), seven BaseColor + seven Normal + seven Metallic textures. All **21/21** original Texture2D images decoded with exact dimensions; 53,477,376 pixels examined privately. Only 15 authenticated stream chunks / 707,788,800 selected bytes were hydrated; safe aggregate artifact uploaded and all private source/texture/stream data purged.
+
+Material facts: 14 color slots, 112 float slots, 0 int slots; all seven authored tint slots are identity white; all 21 role-specific UV scale/offset transforms are identity. Thus non-white tint and UV transforms do not explain the current material appearance differences.
+
+Texture code distributions (raw serialized codes; do not infer color-space or format semantics from these counts alone): format code BaseColor 10×5 + 12×2, Normal 12×7, Metallic 12×7; color-space code BaseColor 1×7, Normal 0×7, Metallic 1×7; mip-count code BaseColor 11×3/12×4, Normal 11×3/12×4, Metallic 11×5/12×2; filter-mode code 1×21. Texture settings, anisotropy and mip-bias fields were present on all 21. Generic `m_WrapMode` code was unavailable in this type tree; axis-specific wrap fields still need inspection.
+
+Channel census: BaseColor R/G/B variable 7/7; Alpha variable 2/7 and fully opaque 5/7. Normal R constant 7/7 while G/B/A variable 7/7; tested A+G with constant R+B signature candidate 0/7, so the conventional DXT5nm hypothesis is not supported by this simple channel signature. Metallic Alpha variable 7/7; this is only a candidate channel for additional data such as smoothness, not proof of shader semantics.
+
+The first attempt [CI42743969290](https://github.com/alwansan/raf/actions/runs/42743969290) successfully planned the exact 15 chunks but failed when the audit re-read the manifest after sparse checkout intentionally excluded it. The correction reuses previously SHA-verified staged owner assets; [CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) then completed all steps and private purge successfully. Artifact [13730562085](https://github.com/alwansan/raf/actions/runs/42744204412/artifacts/13730562085), expires 2026-11-17T02:40:48Z UTC.
+
+**Limits:** raw numeric texture format/color-space codes are not yet semantically mapped; axis-specific wrap fields and float-property meanings remain open. No shader bytes, source names, pointers, raw pixels or image files were exported. No Shader48 execution, PC/GPU pixel parity, Adreno proof, APK or owner acceptance. `originalShaderRestored=false`; `actual_android_original_shader_pixels_verified=false`; `phase_closed=false`.
+
+
+## الاستعادة الحية بعد GFX-MULTI-023
+- أحدث جلسة: `20261110-GFX-chat-material-texture-semantics-24`; اقرأ `memory/sessions/20261110-GFX-chat-material-texture-semantics-24.md`.
+- [CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) SUCCESS، 128 tests، 21/21 texture decoded، 15 sparse chunks / 707,788,800 bytes؛ artifact `13730562085`؛ purge ناجح.
+- النتيجة: tint أبيض 7/7 وUV identity 21/21؛ Normal R ثابت وG/B/A متغيرة، Metallic A متغيرة 7/7؛ لا تفسير نهائي لقنوات الشيدر.
+- التالية GFX-MULTI-024: Material float/color semantics + TextureSettings WrapU/V/W + authoritative Unity 2021.3 enum mapping. No APK yet.

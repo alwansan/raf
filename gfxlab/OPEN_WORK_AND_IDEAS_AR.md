@@ -123,3 +123,24 @@
 - لا مزيد من إعادة فحص الـ14 representative stages؛ GFX022 وسّع الفحص إلى جميع 1,435 link rows و1,275 unique referenced DXBC programs.
 - لا نعتبر بقية compiled table entries مستخدمة أو خالية من RDEF؛ لم تدخل في linked-variant sweep. لا نوسع هذا المسار إلا بدليل مرجعي محدد.
 - إن احتجنا shader semantics لاحقًا، نطلب PC reference ثابت أو authoritative source/sidecar من المالك؛ لا نركّب mapping بالتخمين.
+
+
+## GFX-MULTI-023 — original Material/Texture2D semantics and channel census (2026-11-10)
+[CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) **SUCCESS**, 128 tests. Pinned ZIP2 source; six models, seven original Materials, 63 TexEnv slots (21 bound / 42 null), seven BaseColor + seven Normal + seven Metallic textures. All **21/21** original Texture2D images decoded with exact dimensions; 53,477,376 pixels examined privately. Only 15 authenticated stream chunks / 707,788,800 selected bytes were hydrated; safe aggregate artifact uploaded and all private source/texture/stream data purged.
+
+Material facts: 14 color slots, 112 float slots, 0 int slots; all seven authored tint slots are identity white; all 21 role-specific UV scale/offset transforms are identity. Thus non-white tint and UV transforms do not explain the current material appearance differences.
+
+Texture code distributions (raw serialized codes; do not infer color-space or format semantics from these counts alone): format code BaseColor 10×5 + 12×2, Normal 12×7, Metallic 12×7; color-space code BaseColor 1×7, Normal 0×7, Metallic 1×7; mip-count code BaseColor 11×3/12×4, Normal 11×3/12×4, Metallic 11×5/12×2; filter-mode code 1×21. Texture settings, anisotropy and mip-bias fields were present on all 21. Generic `m_WrapMode` code was unavailable in this type tree; axis-specific wrap fields still need inspection.
+
+Channel census: BaseColor R/G/B variable 7/7; Alpha variable 2/7 and fully opaque 5/7. Normal R constant 7/7 while G/B/A variable 7/7; tested A+G with constant R+B signature candidate 0/7, so the conventional DXT5nm hypothesis is not supported by this simple channel signature. Metallic Alpha variable 7/7; this is only a candidate channel for additional data such as smoothness, not proof of shader semantics.
+
+The first attempt [CI42743969290](https://github.com/alwansan/raf/actions/runs/42743969290) successfully planned the exact 15 chunks but failed when the audit re-read the manifest after sparse checkout intentionally excluded it. The correction reuses previously SHA-verified staged owner assets; [CI42744204412](https://github.com/alwansan/raf/actions/runs/42744204412) then completed all steps and private purge successfully. Artifact [13730562085](https://github.com/alwansan/raf/actions/runs/42744204412/artifacts/13730562085), expires 2026-11-17T02:40:48Z UTC.
+
+**Limits:** raw numeric texture format/color-space codes are not yet semantically mapped; axis-specific wrap fields and float-property meanings remain open. No shader bytes, source names, pointers, raw pixels or image files were exported. No Shader48 execution, PC/GPU pixel parity, Adreno proof, APK or owner acceptance. `originalShaderRestored=false`; `actual_android_original_shader_pixels_verified=false`; `phase_closed=false`.
+
+
+## GFX-MULTI-024 — الخطوة التالية
+- افحص 112 float slots و14 color slots عبر المواد السبع، وصنّف الخصائص المعروفة داخلياً (metallic/smoothness/gloss/bump/emission/cutoff وغيرها) مع إبقاء الأسماء والقيم داخل runner. انشر counts وranges/category counts فقط.
+- افحص TextureSettings حقول WrapU/WrapV/WrapW (وليس m_WrapMode فقط)، وFilter/Aniso/MipBias، مع عدم الخلط بين field absent وfalse.
+- اربط أكواد TextureFormat وm_ColorSpace بمرجع Unity 2021.3 موثوق قبل تسميتها DXT1/DXT5 أو sRGB/Linear؛ أبقِ القيم الخام فقط حتى يثبت المرجع.
+- بعد ذلك قرر هل نحتاج Android GPU channel probe صغيراً يعرض قنوات R/G/B/A للـ21 texture للتحقق من Unity GLES، من دون ادعاء استعادة Shader48.
