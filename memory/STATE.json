@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-ssa-unknown-cfg-51",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-ssa-unknown-cfg-51.md",
-  "status": "GFX_MULTI_078_SUCCESS_632_TESTS_47_OF_47_SOURCE_SPV_CFG_BLOCK_DOMINATES_12_STORE_VALUE_TERMINAL_OTHER_SOURCE_VALUE_GPU_UNPROVEN",
+  "latest_session": "20261111-GFX-chat-spv-unknown-families-52",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-spv-unknown-families-52.md",
+  "status": "GFX_MULTI_079_SUCCESS_652_TESTS_12_OF_12_SPV_INTEGER_MATH_TERMINALS_47_OF_47_CFG_BLOCK_DOMINATES_ORIGINAL_DXBC_SSA_GPU_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-079: inspect 12 generic unknown Store value terminal SPV opcode categories using official/public opcode-only anonymous counting under SHA-pinned source runner. CFG block dominance of 47 does not prove reached memory value; GFX054 Material CB/member and Android shader original GPU parity remain BLOCKED.",
+  "next_experiment": "GFX-MULTI-080 inspect exact public integer opcode and safe anonymous OpIMul literal power-of-two shape for 12 source-authenticated SPV stored value terminals; guard signedness/type/width, no DXBC source SSA or GPU pixel parity claims; GFX054 CB-member mapping blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2210,5 +2210,22 @@
     "private_source_purge": true,
     "shader_original_restored": false,
     "source_temp_to_SPV_value_proven": false
+  },
+  "latest_gfx079": {
+    "experiment": "GFX-MULTI-079",
+    "status": "SUCCESS_TRANSLATED_SPV_CPU_PUBLIC_TERMINAL_CATEGORY_ONLY",
+    "run_id": 42903748363,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42903748363",
+    "run_sha": "41964eb0731d6ed19b6b38fa9408547da2a4e4ce",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 652,
+    "authentic_joint_pairs": 157,
+    "actual_authenticated_SPV_CB_index_loads": 427,
+    "unknown_local_Store_value_integer_math_terminals": 12,
+    "cross_window_prior_Store_CFG_block_dominates": 47,
+    "artifact_id": 13803772379,
+    "private_source_purged": true,
+    "originalShaderRestored": false,
+    "phase_closed": false
   }
 }
