@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-symbolic-binding-map-20",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-symbolic-binding-map-20.md",
-  "status": "GFX_MULTI_019_TRUE_T_S_SYMBOLIC_REGISTER_MAP_56_OF_56_CB_METADATA_AND_MATERIAL_LINK_OPEN",
+  "latest_session": "20261110-GFX-chat-original-material-texenv-21",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-original-material-texenv-21.md",
+  "status": "GFX_MULTI_020_ORIGINAL_SHADER_MATERIAL_TEXENV_METADATA_CI_PENDING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-020 inspect Unity original source Shader48 SerializedSubProgram m_TextureParams/m_Samplers/m_ConstantBufferBindings metadata, link source original property indices to DX11 t/s registers and original Material m_TexEnvs with strict source identity, then CB byte layouts. Do not assume Texture role names imply shader slots.",
+  "next_experiment": "Read GFX-MULTI-020 original Shader48 SerializedProgramParameters and m_NameIndices vs seven actual Material m_TexEnvs and DX11 SHDR t/s registers. Preserve unknowns, then CB offset layout and Android original shader GPU gate.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -487,5 +487,10 @@
     "source_cb_name_mapping_verified": false,
     "android_original_shader_restored": false,
     "original_shader_bytes_exported": false
+  },
+  "latest_shader_material_param_bridge": {
+    "experiment": "GFX-MULTI-020",
+    "status": "CI_PENDING",
+    "source_original_shader_restored": false
   }
 }

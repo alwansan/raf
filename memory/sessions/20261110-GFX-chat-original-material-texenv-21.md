@@ -1,0 +1,14 @@
+# GFX-LAB — 20261110-GFX-chat-original-material-texenv-21
+- session_id: 20261110-GFX-chat-original-material-texenv-21; origin: chat
+- resumed_from: 20261110-GFX-chat-symbolic-binding-map-20
+- base_sha: 3cdf399d4656dc05692fcc7f559069372e8f2977
+- issue_id: RENDER-002
+- experiment_key: GFX-MULTI-020-original-Unity2021-serialized-program-texture-metadata-to-Material-TexEnv
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- scope: six source-verified original Mesh models/seven Material slots and original Shader48 seven Passes. For one source exact VS+FS variant per Pass inspect private Unity 2021 m_Parameters.m_TextureParams m_NameIndex/m_Index/m_SamplerIndex and pass m_NameIndices, compare to original SHDR t/s and original m_SavedProperties.m_TexEnvs names and bound/nonbound entries. No material property names or private indices exported.
+- previous_run: [GFX-MULTI-019 CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) SUCCESS 98 tests: 29/29 original texture registers +27/27 sampler registers matched vkd3d SPIR-V symbolic descriptor names, all 56 renumbered. 66 CB program reflected names unrecognized. Material semantics OPEN.
+- external schema: AssetStudio SerializedSubProgram Unity>=2021.1.1 m_Parameters, TextureParameter m_NameIndex/m_Index/m_SamplerIndex; SerializedPass m_NameIndices. Name table references resolved privately. Do not equate shader property name/texture role with an actual GPU sample use site without proof.
+- controls: source typed original Shader48 exact identity; map passes by (subshader,pass) and only exact source program index/tier; require Material21 and TexEnv schema; missing name/index/role returns zero proven bridge not fabricated mapping; original shader flags false.
+- run: GFX-MULTI-020 auto-triggered by workflow commit CI_PENDING.
+- next_step: read actual CI and identify which original m_TextureParams t/s metadata are present and match original Material properties. Then independent CB metadata/byte offsets and shader GPU test.
+- required end-of-session: update live RESTORE_AR.md, memory/STATE.json, memory/MEMORY.md, current session, gfxlab/OPEN_WORK_AND_IDEAS_AR.md and verify commit.

@@ -109,3 +109,9 @@
 
 ## أحدث نجاح GFX-MULTI-019 — source t/s → SPIRV OpName
 [GFX-MULTI-019 CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) SUCCESS، 98 اختبارًا؛ شيدر Shader48 الأصلي، 7 Passes/14 Stage ممثلة: 29/29 Texture/Resource `t#` و27/27 Sampler `s#` تطابقت أسماء vkd3d المصدرية مع `set/binding` في SPIR-V، وجميعها أعاد المترجم ترقيمها. 66 Constant Buffer أسماء غير معروفة في grammar الحالية، رغم التطابق الرقمي السابق. عدد المجموعات المكتملة بالاسم 28/42 فقط (14 مجموعة Vertex فارغة +14 Fragment t/s حقيقية). لا Material TexEnv mapping، ولا original Android shader. آخر جلسة `memory/sessions/20261110-GFX-chat-symbolic-binding-map-20.md`؛ التالي GFX-MULTI-020 لاستكشاف `SerializedSubProgram.m_TextureParams / m_Samplers / m_ConstantBufferBindings` الأصلية وربطها بMaterial ومعاني الـRegisters.
+
+
+## GFX-MULTI-020 جارٍ — source Shader texture property / Material TexEnv
+- `session_id=20261110-GFX-chat-original-material-texenv-21` origin=chat، resumed_from=`20261110-GFX-chat-symbolic-binding-map-20`، base_sha=`3cdf399d4656dc05692fcc7f559069372e8f2977`.
+- للمرة الأولى نجرب من المصدر `SerializedPass.m_NameIndices` و`SerializedSubProgram.m_Parameters.m_TextureParams` (NameIndex/Index/SamplerIndex) بمقارنة DX11 SHDR t#/s# وسبع مواد أصلية `Material.m_SavedProperties.m_TexEnvs`. فقط أعداد exact source metadata bridges تُنشر، بدون أسماء أو أرقام.
+- workflow `gfxlab-multi-original-material-texenv.yml`. *حتى إن تطابقت الأسماء والإشارات* ما يزال originalShaderRestored=false وMaterial/CB/Adreno visual parity unproven. عند نهاية الدورة حدّث كل ملفات الاستعادة.

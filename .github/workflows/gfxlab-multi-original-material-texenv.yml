@@ -1,0 +1,72 @@
+name: GFX-MULTI-020 original Unity Shader48 material TexEnv register metadata source / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-original-material-texenv.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi020-source-unity-param
+  cancel-in-progress: false
+jobs:
+  original-material-texenv-bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Pure metadata parser and fail-closed tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_material_texenv_bridge.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Compare authentic Shader48 pass metadata to source Material TexEnv privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_material_texenv_bridge --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi020-private" --out gfxlab-multi020-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('gfxlab-multi020-safe-summary.json'))
+          assert d["source_shader_passes"]==7 and d["source_stages"]==14
+          assert d["model_count"]==6 and d["original_material_slot_count"]==7
+          assert len(d["per_pass"])==7
+          assert not d["all_shader_material_bindings_verified"]
+          assert not d["original_GLES_shader_executed_on_Adreno"]
+          assert not d["source_names_register_ids_textures_exported"] and not d["stage_closed"]
+          print("GFX_MULTI020_SOURCE_MATERIAL_PROPERTY_LINK_IS_NOT_GPU_FIDELITY")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi020-safe-source-material-texenv
+          path: gfxlab-multi020-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original source assets and shader parameters
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi020-private"
+          echo GFX_MULTI020_ALL_PRIVATE_TEXTURE_NAME_SOURCE_PURGED=true

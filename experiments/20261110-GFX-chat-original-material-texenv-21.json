@@ -1,0 +1,22 @@
+{
+  "session_id": "20261110-GFX-chat-original-material-texenv-21",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-020",
+  "question": "Does original Unity Shader48 SerializedSubProgram TextureParameter.NameIndex/Index/SamplerIndex resolve through pass NameIndices to actual Material TexEnv properties and authentic SHDR t/s register slots?",
+  "hypothesis": "Original Unity serialized metadata supplies an independent per-variant source texture name/register bridge, complementing GFX019 source t/s -> SPIRV descriptor mapping.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42739427552",
+    "https://github.com/Perfare/AssetStudio/blob/master/AssetStudio/Classes/Shader.cs"
+  ],
+  "control": "No original shader property names, GUID/PPtr or register slots exported; verify exact name index & true Material m_TexEnv, bound status, source DCL slot, source sampler; no Android shader or CB claims",
+  "planned_tests": [
+    "synthetic name table and ambiguity negative tests",
+    "14 original source programs SerializedProgramParameters",
+    "seven original Material21 TexEnv slot audit",
+    "genuine source t/s register parity and property overlap"
+  ],
+  "resource_key": "gfxlab-multi020-private-material-texenv-parameter",
+  "status": "CI_PENDING"
+}

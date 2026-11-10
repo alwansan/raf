@@ -77,3 +77,8 @@
 - [CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) SUCCESS 98 unit tests. 29/29 original source texture/resource `t#` and 27/27 original samplers `s#` accurately matched vkd3d-generated SPIR-V names and descriptor bindings, all 56 numerically remapped (not equal original slot). CB original 66 source names not matched to reflected names; numeric binding parity from GFX018 is not name parity. Do not claim original Shader48 on phone.
 - **P0 GFX-MULTI-020**: derive independent source property→shader register mapping from original `SerializedSubProgram.m_TextureParams` and `m_Samplers` metadata, original Shader48 parameter-name pool and 7 Material m_TexEnvs. Compare register slot identities to 56 proven generated t/s name mappings; report only counts, validate null TexEnv handling. Never infer via material property list ordering.
 - Afterwards cover CB original `m_ConstantBufferBindings` + `m_VectorParams/m_MatrixParams` byte offsets, normals/tangent DXT5nm, RenderStates and Android GPU.
+
+
+## GFX-MULTI-020 — ربط TextureParam الحقيقي بخاصية المادة (CI pending)
+- جلسة `20261110-GFX-chat-original-material-texenv-21`: مصدر Unity 2021.3 Shader48، `m_Parameters.m_TextureParams` لكل Stage، جدول `m_NameIndices` الأصلي لكل Pass، ومطابقة `m_Index` مع DX11 t# و`m_SamplerIndex` مع s# ثم اسم الخاصية مع Material موقّع بنفس source SHA والـTexEnv bound/nonbound.
+- أرقام أو أسماء مصدرية لا تُنشر، ولا نخلط source property metadata مع shader GPU sampling correctness؛ إن كانت بيانات m_Parameters ناقصة نصرح بوجود نقص ولا نخمن.
