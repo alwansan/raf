@@ -22,3 +22,6 @@ GfxMultiAndroidBuilder.cs يستعمل Shader.Find("Standard") وShader.Find("Un
 
 ## GFX-MULTI-005 نتيجة CI المثبتة
 [Run 42725841763](https://github.com/alwansan/raf/actions/runs/42725841763): SUCCESS، 48 tests PASS، بنية المصدر 2 SubShaders/7 Passes (4+3) مرتبطة بسبع materials/ستة Mesh، وبيانات Render State/Vertex/Fragment/Program Mask موجودة في **7 من 7 Passes**. هذه **حقول metadata فقط**، ولم نثبت ShaderLab GLES قابل للتنفيذ أو Keywords/CB/Sampler/Pass semantic parity أو صور PC. لا توجد APK جديدة؛ المصدر الخاص حُذف من Runner. Artifact safe summary 13721479793.
+
+## GFX-MULTI-006 (فحص نسخ برنامج الشيدر)
+التشغيل الأول 42726475369: source-only SUCCESS، وجد metadata لمنصة مترجمة واحدة وكتلة ضغط واحدة، لكن لم يرَ أي SubPrograms بالطريقة القديمة. **هذه ليست نتيجة فقدان shader**؛ Unity 2021.3 serializedVersion3 يمكن أن يستخدم m_PlayerSubPrograms بدل m_SubPrograms. عُدّل الفاحص لدعم الصيغتين وتشغيل اختبار جديد. لا يزال برنامج Android الأصلي غير مستعاد.

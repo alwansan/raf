@@ -68,3 +68,5 @@ jobs:
         run: |
           sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi006-private"
           echo GFX_MULTI006_PRIVATE_SOURCE_PURGED=true
+
+# v3 compatibility: also scan original Unity2021 m_PlayerSubPrograms tiered arrays.

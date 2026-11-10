@@ -16,3 +16,13 @@ class TestShaderVariants(unittest.TestCase):
     def test_invalid_subshader_rejected(self):
         with self.assertRaises(ValueError):
             inventory({"m_ParsedForm":{"m_SubShaders":[{"m_Passes":None}]}})
+
+    def test_unity2021_serialized_v3_player_subprogram_layout(self):
+        x=stage_inventory({"m_SubPrograms":[],"m_PlayerSubPrograms":[
+            {"m_SubPrograms":[{"m_BlobIndex":3,"m_GpuProgramType":16}]},
+            [{"m_BlobIndex":4,"m_Keywords":["SAFE_NON_PRIVATE_TEST"]}]]})
+        self.assertEqual(x["legacy_variant_count"],0)
+        self.assertEqual(x["player_variant_count"],2)
+        self.assertEqual(x["variant_count"],2)
+        self.assertTrue(x["player_metadata_field_present"])
+        self.assertEqual(x["blob_indices_present"],2)

@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Inspect GFX-MULTI-006 safe pass-wise stage variant/platform counters, then design one-pass GLSL semantic parity and Android device proof",
+  "next_experiment": "Analyze both Unity2021 m_SubPrograms and m_PlayerSubPrograms stage variant arrays; require verified runtime GLES semantic equivalence before original shader closure",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -296,8 +296,10 @@
   },
   "latest_shader_variant_feasibility": {
     "experiment": "GFX-MULTI-006",
-    "status": "CI_PENDING",
+    "first_run": 42726475369,
+    "first_run_result": "SUCCESS_PARSER_V2_NO_VARIANTS_COMPRESSION_METADATA_ONE",
+    "status": "RETRY_V3_PLAYER_SUBPROGRAMS_PENDING",
     "source_only": true,
-    "full_original_shader_restored": false
+    "original_shader_restored": false
   }
 }
