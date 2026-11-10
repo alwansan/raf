@@ -1,0 +1,86 @@
+name: GFX-MULTI-032 Shader48 unreferenced compiled table RDEF source-only census
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-unreferenced-rdef-source.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi032-unused-program-rdef
+  cancel-in-progress: false
+jobs:
+  source-unused-program-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Verify source-free fail-closed parser tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_unreferenced_reflection.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Audit unused authentic Shader48 compiled program entries in private runner
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_unreferenced_reflection \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi032-private" \
+            --out gfxlab-multi032-safe-unreferenced-source.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi032-safe-unreferenced-source.json"))
+          c=d["unreferenced_safe_counts"]
+          assert d["source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_shader_family_count"]==1
+          assert d["compiled_program_entries"]==1656
+          assert d["referenced_unique_entries"]==1275
+          assert d["unreferenced_program_entries"]==381 and c["unused_entries"]==381
+          assert c["unused_dxbc_rdef_present"]+c["unused_dxbc_rdef_absent"]==c["unused_dx11_with_one_valid_dxbc"]
+          assert (c["unused_empty_code"]+c["unused_non_dx11_type"]+
+                  c["unused_dx11_no_valid_dxbc"]+
+                  c["unused_dx11_with_one_valid_dxbc"]==381)
+          assert not d["unreferenced_candidate_proves_linked_source_property_register_mapping"]
+          assert not d["original_material_to_DX11_register_offsets_verified"]
+          assert not d["authentic_shader48_android_runtime_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["raw_shaders_names_ids_values_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI032_SAFE_SOURCE_ONLY_COUNTS "+json.dumps(c,sort_keys=True))
+          print("GFX_MULTI032_ORIGINAL_SHADER48_REMAINS_UNPROVEN=true")
+          PY
+      - name: Upload safe source count artifact, never original shader data
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi032-safe-unreferenced-compiled-rdef
+          path: gfxlab-multi032-safe-unreferenced-source.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge source SHA-pinned ZIP2 and all private stage data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi032-private"
+          echo GFX_MULTI032_PRIVATE_SOURCE_PURGED=true
