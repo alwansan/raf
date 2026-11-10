@@ -1,0 +1,102 @@
+name: GFX-MULTI-068 authentic Shader48 relative CB temp writer candidate source-only
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi068-relative-CB-temp-writer-probe.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_temp_writer068.py'
+      - 'gfxlab/tests/test_multi_shader_original_cb_temp_writer068.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi068-original-private-relative-temp-writer
+  cancel-in-progress: false
+jobs:
+  original-relative-temp-writer-source-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Synthetic fail-closed source-only regressions
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_temp_writer068.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX068_SYNTHETIC_TESTS_PASSED=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install original Unity 2021 source-private reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Genuine Shader48 427 relative CB source temp nearest-writer candidate census
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_temp_writer068 \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab068-private" \
+            --out gfxlab-multi068-original-relative-temp-writer-safe-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi068-original-relative-temp-writer-safe-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-068"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_exact_original_VS_FS_pairs_censused"]==524
+          assert d["source_unique_compiled_stages"]==936
+          assert d["original_source_pass_joint_representative_pairs"]==157
+          assert d["original_stage_instances"]==314
+          c=d["original_relative_CB_source_temporary_candidate_aggregates"]
+          assert c["original_CB_operand_occurrences_in_supported_opcodes"]==7990
+          assert c["supported_arithmetic_instruction_occurrences"]==19847
+          assert c["original_CB_true_relative_vec_index_occurrences"]==427
+          assert c["relative_source_temp_selected_component_syntax_valid"]==427
+          assert c.get("relative_source_temp_component_nearest_prior_writer_in_supported_ALU_run",0)+c.get(
+            "relative_source_temp_component_with_no_writer_in_same_supported_ALU_run",0)==427
+          assert d["source_relative_CB_operand_to_SPV_index_expression_parity_proven"]==0
+          for k in ("any_local_writer_candidate_proves_CFG_dominance",
+                    "any_local_writer_candidate_proves_DXBC_to_SPV_SSA_provenance",
+                    "all_427_original_relative_CB_runtime_semantics_proven",
+                    "authentic_Material_to_t_s_b_CB_byte_member_semantics_proven",
+                    "original_Shader48_Android_GPU_pixels_verified",
+                    "originalShaderRestored","phase_closed",
+                    "private_source_temp_registers_or_shader_bytecode_exported"):
+              assert d[k] is False,k
+          print("GFX068_SOURCE_ONLY_427_ORIGINAL_CB_TEMP_WRITER_CANDIDATES_NO_CFG_SSA_CLAIM=true")
+          PY
+      - name: Upload anonymous source-only counts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi068-safe-original-relative-CB-temporary-writer-counts
+          path: gfxlab-multi068-original-relative-temp-writer-safe-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private original ZIP2, DXBC and decoded streams
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab068-private"
+          echo GFX068_PRIVATE_ORIGINAL_SOURCE_PURGED=true
