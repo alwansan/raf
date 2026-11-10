@@ -27,7 +27,8 @@ def compare(original, exported):
     # A definite difference is actionable even when another field is unknown.
     # Never report an unknown-versus-known value as a proven mismatch.
     changed = sorted(k for k in FIELDS
-                     if k not in unknown and original[k] != exported[k])
+                     if k not in unknown and (type(original[k]) is not type(exported[k])
+                                              or original[k] != exported[k]))
     status = "MISMATCH" if changed else ("INCONCLUSIVE" if unknown else "MATCH")
     return {"status": status,
             "changed_fields": changed, "unknown_fields": unknown,
