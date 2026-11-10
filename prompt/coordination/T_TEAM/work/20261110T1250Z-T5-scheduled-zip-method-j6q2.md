@@ -11,5 +11,7 @@ coordination: T4 owns physical mouse; this run changes only standalone T5 pairin
 status: waiting_ci
 updated_at: 2026-11-10T12:50:00Z
 commits: a10faa5596e0d20f18f6fde057a3e0312cb22947, 4621e6ae8de9a133db35889e3e48c2c4d546332c
-ci: https://github.com/alwansan/raf/actions/runs/42818996633 (in_progress at checkpoint)
+ci: https://github.com/alwansan/raf/actions/runs/42819012779 (in_progress at checkpoint)
 next: verify full unittest result; no duplicate CI
+
+CI clarification: 42818996633 passed on code-only a10faa55; 42819012779 targets test commit 4621e6ae and is the required complete regression proof (in_progress at final check).
