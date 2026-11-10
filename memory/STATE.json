@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-cb-access-shape-25",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-cb-access-shape-25.md",
-  "status": "GFX_MULTI_051_SUCCESS_BOUNDED_DXBC_CB_ACCESS_208_OF_208_SOURCE_SUBSET_NUMERIC_SPV_LITERAL_CANDIDATES_CB_IDENTITY_BLOCKED",
+  "latest_session": "20261110-GFX-chat-ubo-global-symbol-provenance-26",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-ubo-global-symbol-provenance-26.md",
+  "status": "GFX_MULTI_052_SUCCESS_66_OF_66_AUTHENTIC_SOURCE_CB_B_REGISTER_SPV_REAL_GLOBAL_OPNAME_14_STAGES_MATERIAL_CB_MEMBER_OFFSETS_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-052: private-authenticated source dcl_constant_buffer b# versus actual SPIRV OpName on Uniform global variables + UBO Binding/Set, distinguish source register symbolic provenance from reflected block type name. Report counts only and fail closed on duplicates. If unavailable, original CB identity remains unverified; source Material property→register and CB member byte offsets still blocked.",
+  "next_experiment": "GFX-MULTI-053 private source original DXBC CB b#/vec4 index → vkd3d SPV original-name-authenticated actual Uniform global + explicitly reflected array stride/member offset and OpAccessChain byte-location candidate, 14 representative stages only; cannot infer Unity property/value from address or cover unsupported DXBC opcode families.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1481,6 +1481,29 @@
     "full_CB_member_byte_offset_layout_verified": false,
     "all_dxbc_opcode_families_covered": false,
     "all_524_variants_covered": false,
+    "originalShaderRestored": false,
+    "private_source_purged": true
+  },
+  "latest_gfx052_source_CB_global_opname": {
+    "run": 42847513772,
+    "status": "SUCCESS_SOURCE_CB_REGISTER_COMPILER_PROVENANCE",
+    "unit_tests": 356,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13778128531,
+    "artifact_expiry_utc": "2026-11-17T15:45:13Z",
+    "original_exact_variant_pair_representatives": 7,
+    "source_stages": 14,
+    "source_dxbc_cb_declaration_occurrences": 66,
+    "translated_spv_ubo_global_variables": 66,
+    "source_b_slot_matches_actual_spv_uniform_global_OpName": 66,
+    "source_b_slot_binding_and_byte_size_matches": 66,
+    "stages_with_full_source_register_name_provenance": 14,
+    "non_UBO_global_opnames_ignored": 357,
+    "duplicate_global_names_or_bindings": 0,
+    "material_property_to_DXBC_cb_register_verified": false,
+    "individual_original_CB_member_byte_offsets_verified": false,
+    "all_524_variants_covered": false,
+    "original_shader48_Adreno_GPU_runtime_verified": false,
     "originalShaderRestored": false,
     "private_source_purged": true
   }

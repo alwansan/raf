@@ -23,8 +23,29 @@
     "Vulkan1.1 SPIR-V compile, reflection and raw disassembly",
     "count-only artifact and purge"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42847387051",
+    "https://github.com/alwansan/raf/actions/runs/42847513772"
+  ],
+  "status": "SUCCESS_66_OF_66_ORIGINAL_SOURCE_CB_B_REGISTER_NAME_PROPAGATION_TO_ACTUAL_SPIRV_UBO_GLOBALS",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42847513772,
+    "tests": 356,
+    "stage_representatives": 14,
+    "source_cb_declaration_instances": 66,
+    "translated_spv_ubo_global_instances": 66,
+    "original_source_b_register_symbolic_global_names_matched": 66,
+    "source_b_binding_and_declared_byte_sizes_matched": 66,
+    "stages_with_complete_symbol_provenance": 14,
+    "non_ubo_opnames_excluded": 357,
+    "original_Material_property_identified": false,
+    "individual_original_CB_member_byte_offsets_proven": false,
+    "all_524_variant_pairs_examined": false,
+    "original_Android_Shader48_GPU_runtime": false,
+    "originalShaderRestored": false,
+    "private_source_purge": true,
+    "safe_artifact_id": 13778128531
+  }
 }
