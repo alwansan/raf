@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-spv-pointer-origin-48",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-pointer-origin-48.md",
-  "status": "GFX_MULTI_075_SUCCESS_561_TESTS_427_SPV_INDEX_FUNC_INBOUNDS_LITERAL_POINTERS_NO_SAME_POINTER_ID_STORE_GFX054_BLOCKED",
+  "latest_session": "20261110-GFX-chat-normalized-spv-address-stores-49",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-normalized-spv-address-stores-49.md",
+  "status": "GFX_MULTI_076_SUCCESS_586_TESTS_427_SPV_SOURCE_B_INDEX_OPLOADS_128_SAME_BLOCK_LITERAL_FUNCTION_PATH_STORES_47_OUTSIDE_WINDOW_252_UNOBSERVED_SOURCE_SSA_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-076 normalize source-private Function root + literal InBoundsAccessChain path for SPV index OpLoad and OpStore, anonymous same/cross-block predecessor syntactic counts. Do not equate with actual SSA value or CFG dominance; GFX054 Material CB bridge blocked and no Android shader parity.",
+  "next_experiment": "GFX-MULTI-077: source-private enumerate only 128 actual same-block equivalent-function-literal-path SPV OpStore candidate values: immediate value result opcodes, bounded SSA shift/arithmetic roots, without alias/CFG/source DXBC temp equivalence. Original GFX054 Material binding and Adreno PC pixel parity remain blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2146,6 +2146,26 @@
     "spv_prior_exact_pointer_SSA_ID_Store_candidate": 0,
     "private_source_purge": true,
     "artifact_id": 13802620347,
+    "original_shader_restored": false
+  },
+  "latest_gfx076": {
+    "experiment": "GFX-MULTI-076",
+    "status": "SUCCESS_SOURCE_TRANSLATED_SPV_CPU_SYNTAX_ONLY",
+    "run_id": 42899280014,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42899280014",
+    "run_sha": "53f3565f7b1c9f9d4d921b98aa2826066b8bd109",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "unit_tests": 586,
+    "source_pairs": 157,
+    "stages": 314,
+    "cb_stages": 311,
+    "index_loads": 427,
+    "same_block_prior_equivalent_function_literal_address_store_candidates": 128,
+    "prior_store_outside_window": 47,
+    "no_prior_matching_store_seen": 252,
+    "source_SPV_ids_never_published": true,
+    "private_purge_verified": true,
+    "safe_artifact_id": 13801278823,
     "original_shader_restored": false
   }
 }
