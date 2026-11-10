@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-auto-logs-export-04",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-auto-logs-export-04.md",
-  "status": "GFX_MULTI_031_AUTOMATIC_LOGGING_ZIP_MEDIASTORE_IMPLEMENTED_ANDROID_APK_RETRY_BUILD",
+  "status": "GFX_MULTI_031_SIGNED_APK_SUCCESS_AUTO_LOGS_OWNER_MEDIASTORE_EXPORT_TEST_PENDING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Complete GFX-MULTI-031 signed APK CI and verify Android Java MediaStore integration; owner tests EXPORTED ZIP destination and JSONL content once. Continue Shader48 original program/CB bindings and 7-pass states without false parity claims. Water/fire separately.",
+  "next_experiment": "Owner installs signed GFX-MULTI-031, exercises M00/M03 and RGB/Normal/Metallic/Linear/multiple sessions, taps EXPORT ZIP, confirms file physically exists in Download/Games/cl/test/g and uploads the one ZIP. Independently continue authentic Shader48 material-to-CB/7-pass dynamic render state and PC pixel proof, not Unity Standard equivalence.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -921,7 +921,7 @@
   "latest_gfx031_auto_logs": {
     "experiment": "GFX-MULTI-031",
     "apk_run": 42802005319,
-    "apk_run_status": "IN_PROGRESS_UNITY_BUILD",
+    "apk_run_status": "SUCCESS_SIGNED_UNITY2021_IL2CPP_ARM64_GLES3",
     "apk_workflow_head_sha": "e4498b71320f96d6df8a75ea090620ec88a9a8bd",
     "old_failed_runs": [
       42800909094,
@@ -948,6 +948,25 @@
     "signed_apk_verified": false,
     "original_shader_restored": false,
     "recovery_session_file": "memory/sessions/20261110-GFX-chat-auto-logs-export-04.md",
-    "owner_test_instructions": "gfxlab/ANDROID_AUTO_LOG_EXPORT_AR.md"
+    "owner_test_instructions": "gfxlab/ANDROID_AUTO_LOG_EXPORT_AR.md",
+    "head_sha": "e4498b71320f96d6df8a75ea090620ec88a9a8bd",
+    "source_free_unit_tests": 191,
+    "parser_run": 42801864098,
+    "parser_tests": 191,
+    "apk_name": "GfxLab-Multi-Six-AutoLogs.apk",
+    "apk_package": "com.alwansan.raft.graphicslab.autologs",
+    "apk_bytes": 66162049,
+    "apk_sha256": "a2466155b87d8c34ec22955a22bc6c7c741f691063e9a9f7f79a58ca9465c1f5",
+    "artifact_id": 13757546087,
+    "artifact_zip_bytes": 66166513,
+    "artifact_expires_utc": "2026-11-17T11:02:53Z",
+    "apk_signature_verified": true,
+    "android_package_name_verified": true,
+    "source_private_payload_purged": true,
+    "dex_bridge_audit_run": 42804520804,
+    "dex_bridge_audit_status": "IN_PROGRESS",
+    "requested_public_path": "/storage/emulated/0/Download/Games/cl/test/g/",
+    "original_shaderlab_parity_verified": false,
+    "owner_zip_analyzed": false
   }
 }
