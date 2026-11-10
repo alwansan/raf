@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "session_id": "20261110-GFX-chat-524-original-resource-profile-coverage-29",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-original-property-register-evidence-gate-28",
+  "base_sha": "7f20ad1e6ec84de2db986bd4a51f2684077f4014",
+  "experiment_key": "GFX-MULTI-055",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-Shader48-all-524-DXBC-b-t-s-CB-resource-layout-profile-coverage",
+  "question": "How many source DXBC b/t/s register identity and CB vec4 size declaration profiles exist over all 524 original Shader48 exact keyword-tier VS/FS pairs, and how many are not represented by the first pair of each Pass?",
+  "hypothesis": "Source-private exhaustive structural declaration profiles show whether 14-stage first representative CPU/SPIRV proof can cover the original 524 variant pair structural classes without guessing shader semantics",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "all 524 exact source variant pairs",
+    "source original register and CB vec4 size identity only",
+    "reject duplicate/invalid original source register sets",
+    "record whole pair and stage resource-family structural classes",
+    "private original program cache and pass-local first representative coverage",
+    "no exported source IDs/reg indices/CB sizes/signatures",
+    "no Material semantic inference or GPU/device claim",
+    "full source-free tests; unconditional private purge"
+  ],
+  "planned_tests": [
+    "full source-free unit test suite",
+    "SHA-pinned original 524 exact pair stage DXBC declaration extraction",
+    "safe anonymous class counts and variant gap metrics",
+    "CI private purge verified"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

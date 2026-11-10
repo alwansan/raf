@@ -1,0 +1,108 @@
+name: GFX-MULTI-055 original Shader48 all 524 VS/FS pair b-t-s CB layout profile coverage
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi055-all-524-declaration-coverage.yml'
+      - 'gfxlab/tools/multi_shader_original_decl_profile_coverage.py'
+      - 'gfxlab/tests/test_multi_shader_original_decl_profile_coverage.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi055-original-shader48-all-524-bts-CB-profiles
+  cancel-in-progress: false
+jobs:
+  original-private-full-variant-structural-coverage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Full source-free unittest regressions and strict original-profile privacy guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_decl_profile_coverage.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX055_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install source-only Unity asset metadata parser
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Privately census every real linked Shader48 exact pair resource and CB declaration identity class
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_decl_profile_coverage \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi055-private" \
+            --out gfxlab-multi055-safe-524-original-declaration-classes.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi055-safe-524-original-declaration-classes.json"))
+          assert d["experiment"]=="GFX-MULTI-055"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_Shader48_subshaders"]==2
+          assert d["original_Shader48_passes"]==7
+          assert d["original_exact_keyword_tier_VS_FS_pairs"]==524
+          assert d["original_exact_pair_stage_reference_instances"]==1048
+          assert len(d["per_pass"])==7
+          totals=d["safe_counts"]
+          assert totals["original_exact_keyword_tier_pairs_scanned"]==524
+          assert totals["authentic_DXBC_stage_reference_uses_scanned"]==1048
+          assert totals["pairs_matching_first_structural_profile_in_their_pass"]+totals["pairs_outside_first_structural_profile_in_their_pass"]==524
+          assert d["original_unique_stage_programs_cached_for_these_pairs"]<=1048
+          assert d["total_private_joint_VS_FS_b_t_s_CB_layout_profile_classes"]>=1
+          assert d["all_524_original_exact_pairs_declaration_profiles_parsed"] is True
+          for row in d["per_pass"]:
+            assert row["original_exact_keyword_tier_pairs"]>=1
+            assert row["pairs_same_full_structural_profile_as_first_pair"]+row["pairs_outside_first_structural_profile"]==row["original_exact_keyword_tier_pairs"]
+            assert row["private_CB_register_values_or_sizes_in_report"] is False
+            assert row["same_profile_implies_same_shader_instructions_or_pixel_output"] is False
+          for field in ("all_524_original_exact_pairs_translated_to_SPIRV",
+                "all_524_original_source_CB_load_addresses_compared",
+                "original_Material_property_to_DXBC_t_s_b_register_or_member_semantics_proven",
+                "original_Shader48_Android_GPU_execution_proven",
+                "original_PC_vs_Adreno_pixel_parity_proven",
+                "originalShaderRestored",
+                "private_shader_code_register_indices_CB_vec4_lengths_profile_signatures_or_keywords_exported",
+                "phase_closed"):
+            assert d[field] is False,field
+          print("GFX055_ALL_524_CPU_SOURCE_ONLY_DECLARATION_PROFILE_COVERAGE_NOT_GPU=true")
+          PY
+      - name: Publish only anonymous original source declaration-profile class statistics
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi055-safe-all-524-original-bts-CB-profile-classes
+          path: gfxlab-multi055-safe-524-original-declaration-classes.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Destroy source-private authentic DXBC and ZIP2 staged data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi055-private"
+          echo GFX055_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
