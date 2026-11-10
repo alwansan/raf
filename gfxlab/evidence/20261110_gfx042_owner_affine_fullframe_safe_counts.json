@@ -1,0 +1,67 @@
+{
+  "schema": "gfxlab-gfx042-owner-private-source-only-fullframe-safe-counts-v1",
+  "experiment": "GFX-MULTI-042",
+  "owner_zip_sha256": "0f79ffd0420e379c270aaf266b083458146c9de0dc20df36824b3ab625bae173",
+  "source_owner_zip_pngs_and_logs_private": true,
+  "zip_integrity": "CRC_PASS",
+  "owner_platform": "GLES3",
+  "gpu_device_class": "Adreno 730",
+  "source_session_count": 1,
+  "events": 28,
+  "snapshots": 14,
+  "unity_errors": 0,
+  "unity_warnings": 0,
+  "log_drops": 0,
+  "last_status": "DIAGNOSTIC_NATIVE_QUALIFIER_COLLAPSED_TO_SMOOTH",
+  "all_four_synthetic_gpu_readbacks_complete": true,
+  "all_four_original_free_shaders_supported": true,
+  "png_dimensions": [
+    256,
+    256
+  ],
+  "png_count": 4,
+  "linear_and_native_noperspective_byte_identical": true,
+  "flat_exact_blue_interior_pixels": 20212,
+  "total_strict_interior_analytic_pixels": 20212,
+  "analytic_triangle_ndc": [
+    [
+      -0.86,
+      -0.77
+    ],
+    [
+      0.86,
+      -0.77
+    ],
+    [
+      0,
+      0.86
+    ]
+  ],
+  "analytic_vertex_clip_w": [
+    0.55,
+    1,
+    2.7
+  ],
+  "interior_barycentric_margin": 0.02,
+  "coordinate_convention": "PNG top-down y corrected to OpenGL bottom-up pixel center",
+  "mean_abs_rgb_error_over_interior": {
+    "linear_gpu_vs_analytic_perspective": 0.000981208,
+    "affine_emulated_gpu_vs_analytic_affine": 0.000983381,
+    "affine_emulated_gpu_vs_wrong_analytic_perspective": 0.143924693
+  },
+  "p99_mean_abs_rgb_error_over_interior": {
+    "linear_gpu_vs_analytic_perspective": 0.00130719,
+    "affine_emulated_gpu_vs_analytic_affine": 0.00130719
+  },
+  "full_frame_affine_gpu_matches_cpu": true,
+  "full_frame_smooth_gpu_matches_cpu": true,
+  "native_hlsl_noperspective_preserved_on_test_path": false,
+  "reason": "GLES3 Unity HLSL native noperspective mode rendered bit-identically to smooth Linear; algebraic clipW emulation independently matches 20212 CPU-referenced interior pixels, not original shader identity",
+  "compiled_shader48_original_used": false,
+  "original_material_resource_register_cb_mapping_verified": false,
+  "original_pc_vs_adreno_pixel_parity_verified": false,
+  "original_shader48_restored": false,
+  "source_free_decoder_unit_test_ci": 42825803381,
+  "source_free_decoder_all_python_tests": 272,
+  "no_user_image_or_log_content_published": true
+}
