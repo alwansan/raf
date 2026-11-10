@@ -72,9 +72,15 @@ def parse_aggregate_json(raw):
     """Strict JSON parsing before the existing allowlist-based sanitizer."""
     if type(raw) is not bytes or len(raw) > MAX_BYTES:
         raise EvidenceError("invalid aggregate JSON size or type")
-    return sanitize(json.loads(raw.decode("utf-8"),
-                               object_pairs_hook=_unique_object_pairs,
-                               parse_constant=_reject_nonfinite))
+    try:
+        parsed = json.loads(raw.decode("utf-8"),
+                            object_pairs_hook=_unique_object_pairs,
+                            parse_constant=_reject_nonfinite)
+    except ValueError as exc:
+        # Python 3.11+ rejects enormous integer literals before sanitization.
+        # Do not leak interpreter-dependent parse errors to callers.
+        raise EvidenceError("invalid aggregate JSON value") from exc
+    return sanitize(parsed)
 
 
 def main():
