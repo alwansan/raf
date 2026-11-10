@@ -1,0 +1,40 @@
+{
+  "session_id": "20261110-GFX-chat-affine-rootcause-15",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-android-interpolation-probe-14",
+  "experiment_key": "GFX-MULTI-041",
+  "issue_id": "RENDER-002",
+  "base_sha": "a839a1d0b80c29bc0965ea60f069fc9c9e0ade8c",
+  "objective": "Resolve actual owner Adreno GLES3 synthetic GFX040 noperspective collapse via exact CPU projection math and an independently emulated perspective-independent interpolation shader; build isolated test APK, preserve real Shader48 false.",
+  "user_evidence": {
+    "uploaded_zip_sha256": "5de5522120ad41b51c07d1ffbaa59567a9240d0351687a980db792e9476b7aee",
+    "test_session_private": true,
+    "snapshots": 22,
+    "events": 44,
+    "unity_errors": 0,
+    "unity_warnings": 0,
+    "missed_events": 0,
+    "all_three_readbacks": true,
+    "flat_spread": 0,
+    "linear_spread": 0.1973856,
+    "native_noperspective_spread": 0.1973856,
+    "linear_vs_native_png_byte_equal": true,
+    "linear_vs_native_rgb_mean_error": 0,
+    "linear_vs_cpu_perspective_error_mean": 0.0010914,
+    "linear_vs_cpu_affine_error_mean": 0.1629662,
+    "analytic_perspective_affine_delta_mean": 0.1630194
+  },
+  "external_source_limits": [
+    "Khronos GLSL ES 3.20 core interpolation qualifiers smooth and flat; no noperspective core keyword",
+    "GL_NV_shader_noperspective_interpolation is extension only; do not assume device extension present or absent without querying device"
+  ],
+  "scope": "Implement fourth source-owned affine interpolation emulator (varying=color_i*clipW_i and varying=W_i, fragment ratio) validated against independent CPU barycentric reference; separate package and APK; exact diagnostic-only GPU readback, private ZIP export.",
+  "negative_controls": [
+    "Do not imply original Raft Shader48 restored or actual original GPU visual parity",
+    "Do not claim Adreno GPU lacks NV extension until query",
+    "No original source/mesh/texture/Shader48 binary in APK",
+    "Only write experiment/android-graphics-rootcause"
+  ],
+  "status": "IN_PROGRESS",
+  "ci_runs": []
+}
