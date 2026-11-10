@@ -4,12 +4,12 @@
   "role": "GFX-LAB",
   "experiment_key": "GFX-MULTI-075",
   "issue_id": "RENDER-002",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_427_OF_427_FUNCTION_INBOUNDSACCESSCHAIN_LITERAL_POINTER_ROOTS_0_EXACT_ID_STORE",
   "resumed_from": "20261110-GFX-chat-spv-index-memory-writer-47",
   "base_sha": "d58a4196d2cd9269baf2e195e14c1641eafcf2b6",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "run_id": 42897768619,
-  "run_url": "https://github.com/alwansan/raf/actions/runs/42897768619",
+  "run_id": 42898149143,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42898149143",
   "question": "Can the 427 real original-b-authenticated SPV dynamic CB index OpLoad memory pointer definition/storage class and same-block exact pointer-ID OpStore syntax be classified without asserting source DXBC SSA or runtime alias parity?",
   "hypothesis": "Some pointer roots are composite or storage-class-specific rather than direct Function OpVariable; anonymous actual SPV pointer categories may explain why the previous conservative direct-variable audit returned 427 unknown.",
   "resource_key": "gfxlab-multi075-private-spv-index-pointer-origin",
@@ -30,7 +30,15 @@
     "dynamic AccessChain",
     "duplicate SSA"
   ],
-  "evidence_level": "PENDING_ORIGINAL_SOURCE_CPU",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_ADDRESS_SHAPE_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "20cf4b53b6a257b2b21940957b332a59652f27c5",
+  "tests_passed": 561,
+  "spv_index_actual_loads": 427,
+  "spv_pointer_direct_InBoundsAccessChain": 427,
+  "spv_function_pointer_roots": 427,
+  "spv_pointer_literal_index_paths": 427,
+  "spv_same_block_prior_exact_pointer_id_stores": 0,
+  "private_purge_verified": true
 }
