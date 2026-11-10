@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-owner-autolog-matrix-05",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-owner-autolog-matrix-05.md",
-  "status": "GFX_OWNER_003_ZIP_PARSED_SIGNED_DEX_AUDIT_PASS_ORIGINAL_SHADER48_PHASE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-unreferenced-shader48-06",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-unreferenced-shader48-06.md",
+  "status": "GFX_MULTI_032_AUTHENTIC_UNREFERENCED_COMPILED_RDEF_SWEEP_IN_PROGRESS_ORIGINAL_SHADER_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-032 source-only unreferenced Shader48 compiled-program RDEF/material-binding census; no Shader48 APK until authenticity, 7-pass states, CB register semantics and PC-vs-Adreno pixel parity gates close",
+  "next_experiment": "Read GFX-MULTI-032 CI42807637443 terminal status and safe output, publish evidence and purge, then resolve missing original property-to-t#/s#/CB binding and PassState/PC pixels before any shader APK",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -984,5 +984,15 @@
     "apk_dex_ci": 42806407666,
     "sourcefree_parser_ci": 42806757535,
     "owner_path_attested_from_zip_alone": false
+  },
+  "latest_shader48_unreferenced_experiment": {
+    "id": "GFX-MULTI-032",
+    "run": 42807637443,
+    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "compiled_program_table_entries": 1656,
+    "previously_referenced_unique": 1275,
+    "unreferenced_to_audit": 381,
+    "ci_status": "IN_PROGRESS",
+    "authentic_android_shader_restored": false
   }
 }
