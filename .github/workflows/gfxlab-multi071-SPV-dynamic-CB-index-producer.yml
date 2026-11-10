@@ -65,7 +65,7 @@ jobs:
             --out gfxlab-multi071-safe-source-private-SPV-index-root-opcode-counts.json
           python3 - <<'PY'
           import json
-          d=json.load(open("gfxlab-multi071-safe-source-local-ISHL-and-SPV-shift-counts.json"))
+          d=json.load(open("gfxlab-multi071-safe-source-private-SPV-index-root-opcode-counts.json"))
           assert d["experiment"]=="GFX-MULTI-071"
           assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
           assert d["source_exact_original_VS_FS_pairs_censused"]==524
@@ -110,7 +110,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gfxlab-multi071-safe-original-authenticated-SPV-CB-index-producer-opcodes
-          path: gfxlab-multi071-safe-source-local-ISHL-and-SPV-shift-counts.json
+          path: gfxlab-multi071-safe-source-private-SPV-index-root-opcode-counts.json
           retention-days: 7
           if-no-files-found: error
       - name: Purge original Shader48 ZIP2, DXBC, translated SPIRV
