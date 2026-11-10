@@ -45,3 +45,7 @@
 
 ## أحدث GFX-MULTI-024 — 2026-11-10
 [CI42745536309](https://github.com/alwansan/raf/actions/runs/42745536309) SUCCESS / 139 tests; source-only. Six selected models use 7 material slots but 6 unique original Material21 objects; 21 texture links but 18 unique Texture2D. All 112 floats/14 colors match Shader48 property names. Seven white tints and seven nonidentity secondary color slots; original BaseColor DXT1×5 + DXT5×2, Normal and Metallic DXT5×7, Normal Linear×7, BaseColor+Metallic sRGB×7 each; 21/21 Repeat U/V/W and Bilinear. Unity 2021.3 official enum provenance is recorded. No Shader48 Android equivalence or GPU proof. Session `memory/sessions/20261110-GFX-chat-float-wrap-color-25.md`; GFX-MULTI-025 next.
+
+
+## أحدث حالة GFX-MULTI-025 — 10 نوفمبر 2026
+[CI42746455458](https://github.com/alwansan/raf/actions/runs/42746455458) SUCCESS, 146 tests: source six-model graph includes 7 Material slots/6 unique Material21 and 21 Texture links/18 unique Texture2D, no cross-role texture aliases. Seven white original base tints and seven original `_EmissionColor` named entries are RGB black/Alpha=1, not a lost tint. Source/private only; shader and Android parity remain unproven. Restore from `memory/sessions/20261110-GFX-chat-secondary-color-alias-26.md`. Next GFX-MULTI-026 for original seven-pass render-state and Material queue/keyword metadata.
