@@ -31,10 +31,27 @@
     "count-only 7 day artifact; private DXBC SPV ZIP2 purge"
   ],
   "resource_key": "gfxlab-multi086-source-private-spv-iadd-operand-OpLoad",
-  "status": "CI_RUNNING",
-  "run_id": 42910056168,
-  "run_url": "https://github.com/alwansan/raf/actions/runs/42910056168",
-  "evidence_level": "PENDING_SOURCE_SPV_CPU_TWO_OPLOAD_STORAGE_AND_PRIORSTORE_SYNTAX_ONLY",
+  "status": "SUCCESS_12_OF_12_SPV_OPIADD_LHS_INPUT_RHS_UNIFORM_SOURCE_CPU_ONLY",
+  "run_id": 42910330545,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42910330545",
+  "evidence_level": "ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_OPERAND_MEMORY_STORAGE_CLASS_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "ba68fb07e838e62457882eb7cfde80e37bfcbb31",
+  "failed_synthetic_preflight_runs": [
+    42910056168,
+    42910237994
+  ],
+  "source_free_tests_passed": 824,
+  "original_joint_pairs": 157,
+  "source_original_stages": 314,
+  "source_CB_stages": 311,
+  "authenticated_SPV_dynamic_CB_index_reads": 427,
+  "OpIAdd_left_actual_load_storage_Input_count": 12,
+  "OpIAdd_right_actual_load_storage_Uniform_count": 12,
+  "OpIAdd_left_readtime_local_Function_store_scope_untrusted": 12,
+  "OpIAdd_right_readtime_local_Function_store_scope_untrusted": 12,
+  "artifact_id": 13806478186,
+  "artifact_expires_utc": "2026-11-17T22:00:59Z",
+  "private_purge_verified": true
 }
