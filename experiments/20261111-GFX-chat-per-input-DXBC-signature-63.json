@@ -1,0 +1,40 @@
+{
+  "session_id": "20261111-GFX-chat-per-input-DXBC-signature-63",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-090",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-dxbc-input-signature-62",
+  "base_sha": "f1809f9f73e415cf979d718925a5eb36ecc5ea56",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "For the 12 actual original-source-authenticated translated SPV OpIAdd LHS Input OpLoad occurrences, which original same-stage dcl_input variant, ISGN/ISG1 signature system/semantic mask category, and DXBC pixel interpolation vs SPV decorations candidate applies per input?",
+  "hypothesis": "The 12 stage-wide constant/Flat appearances from GFX089 might correspond to the 12 actual OpIAdd LHS inputs, but must be independently verified per individual source-private SPV Load and original DXBC declaration and signature chunk.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42914832664",
+    "memory/sessions/20261111-GFX-chat-dxbc-input-signature-62.md"
+  ],
+  "control": [
+    "per actual 12 SPV OpIAdd input LHS private OpLoad IDs from trusted GFX088 source-authenticated chain",
+    "vertex dcl_input plain with no SPV interpol decor",
+    "PS dcl_input_ps constant with SPV Flat candidate",
+    "PS linear with Flat must be mismatch",
+    "wrong source v register fails closed",
+    "unavailable or corrupt signature fails closed",
+    "Input BuiltIn/Location conflict blocks candidate",
+    "no private semantic strings or raw numeric IDs",
+    "source and GPU parity flags false"
+  ],
+  "planned_tests": [
+    "full synthetic source-free unit tests including GFX090 per input/mismatch",
+    "authentic SHA-pinned original Shader48 157 VS+FS pairs,314 stage instances,311 CB source stages",
+    "427 real SPV source-b authenticated CB dynamic index reads,12 actual input per-source count partitions",
+    "safe CI artifact with only anonymous counts and mandatory private purge"
+  ],
+  "resource_key": "gfxlab-multi090-private-per-actual-input-dxbc-signature",
+  "status": "CI_RUNNING",
+  "run_id": 42915931750,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42915931750",
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_PER_12_INTERFACE_SHAPE_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
