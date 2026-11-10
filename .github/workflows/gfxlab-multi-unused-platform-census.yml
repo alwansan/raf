@@ -1,0 +1,91 @@
+name: GFX-MULTI-033 original Shader48 unlinked GPU platform and Pass linkage census
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-unused-platform-census.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi033-unlinked-platform-census
+  cancel-in-progress: false
+jobs:
+  shader48-unlinked-typed-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free strict index, header and pass link tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_unused_program_families.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Read original SHA-pinned Shader48 platform and alternate links privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_unused_program_families \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi033-private" \
+            --out gfxlab-multi033-safe-program-platforms.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi033-safe-program-platforms.json"))
+          c=d["unreferenced_programs"]
+          x=d["alternate_authentic_original_pass_links"]
+          assert d["original_zip2_source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_shader_count"]==1
+          assert d["original_shader48_subshaders"]==2 and d["original_shader48_passes"]==7
+          assert d["source_compiled_program_entries"]==1656
+          assert d["unique_original_vs_fs_program_indices"]==1275
+          assert c["unused_total"]==381
+          assert c["unused_empty_code"]==112 and c["unused_non_d3d11_code"]==269
+          assert sum(c["nonempty_platform_type_families"].values())==269
+          assert sum(c["nonempty_shader_stage_type_families"].values())==269
+          assert sum(c["nonempty_strict_leading_payload_signatures"].values())==269
+          assert x["other_original_pass_unique_previously_unused_indices"]<=269
+          assert not c["type_or_header_proves_original_android_pass_link"]
+          assert not d["unreferenced_source_program_can_be_assumed_android_gles"]
+          assert not d["material_property_to_register_or_cb_byte_offset_verified"]
+          assert not d["original_shader48_android_glsl_runtime_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["pc_vs_adreno_pixel_parity_verified"]
+          assert not d["raw_shaders_values_source_names_or_private_ids_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI033_ONLY_AGGREGATES_CONFIRMED=true")
+          print("GFX_MULTI033_NO_ORIGINAL_SHADER48_RUNTIME_CLAIM=true")
+          PY
+      - name: Publish only aggregate platform evidence
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi033-safe-shader48-program-platforms
+          path: gfxlab-multi033-safe-program-platforms.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original ZIP2 and private shader source data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi033-private"
+          echo GFX_MULTI033_PRIVATE_SHADER_SOURCE_PURGED=true
