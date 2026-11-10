@@ -26,17 +26,23 @@ def diagnose(lines):
     gates = []
     counts = {"requests": 0, "retries": 0, "relative_markers": 0,
               "action_callback_markers": 0}
+    epoch_counts = counts.copy()
     for number, line in enumerate(lines, 1):
         if MARKER in line:
             gates.append({"line": number, **{k: parse_bool(line, k) for k in FIELDS}})
+            epoch_counts = dict.fromkeys(counts, 0)
         if REQUEST in line:
             counts["requests"] += 1
+            epoch_counts["requests"] += 1
         if RETRY in line:
             counts["retries"] += 1
+            epoch_counts["retries"] += 1
         if RELATIVE in line:
             counts["relative_markers"] += 1
+            epoch_counts["relative_markers"] += 1
         if CALLBACK in line:
             counts["action_callback_markers"] += 1
+            epoch_counts["action_callback_markers"] += 1
     if not gates:
         status = "NO_ELIGIBILITY_TELEMETRY"
     else:
@@ -51,9 +57,9 @@ def diagnose(lines):
             status = "NO_INPUT_SYSTEM_PHYSICAL_MOUSE"
         elif not last["shouldCapture"]:
             status = "INCONSISTENT_GATE"
-        elif not counts["requests"] and not counts["retries"]:
+        elif not epoch_counts["requests"] and not epoch_counts["retries"]:
             status = "ELIGIBLE_NO_REQUEST_OBSERVED"
-        elif not counts["relative_markers"] and not counts["action_callback_markers"]:
+        elif not epoch_counts["relative_markers"] and not epoch_counts["action_callback_markers"]:
             status = "REQUEST_NO_CALLBACK_MARKER_OBSERVED"
         else:
             status = "CALLBACK_MARKER_PRESENT_UNVERIFIED_GAMEPLAY"
@@ -62,8 +68,9 @@ def diagnose(lines):
         "eligibility_transitions": len(gates),
         "last_eligibility": gates[-1] if gates else None,
         "observed_markers": counts,
+        "last_gate_epoch_markers": epoch_counts,
         "device_success_proven": False,
-        "limitations": ("Last gate and global marker counts are not a time-correlated capture "
+        "limitations": ("Last gate epoch starts at the latest eligibility transition, but is not a confirmed capture "
                         "epoch. Truncated logs, absent mouse activity and callback sampling "
                         "can mimic failure. No keyboard, click, wheel or gameplay success inferred.")
     }
