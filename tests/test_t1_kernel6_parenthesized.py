@@ -15,7 +15,7 @@ class Kernel6PunctuationTests(unittest.TestCase):
         ]
         with tempfile.TemporaryDirectory() as tmp:
             p = Path(tmp) / "synthetic.log"
-            p.write_text("\\n".join(lines) + "\\n", encoding="utf-8")
+            p.write_text("\n".join(lines) + "\n", encoding="utf-8")
             result = scan(p, "synthetic-k6-punctuation", before=0, after=0, errors_only=True)
         self.assertEqual(result["counts"]["kernel6_lines"], 3)
         self.assertEqual(result["counts"]["kernel6_error_lines"], 2)
