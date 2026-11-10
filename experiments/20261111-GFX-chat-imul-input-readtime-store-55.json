@@ -30,11 +30,23 @@
     "anonymous aggregate artifact, mandatory private source/SPV purge"
   ],
   "resource_key": "gfxlab-multi082-source-private-imul-input-readtime-store",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_12_OF_12_SPV_NONPOWER_IMUL_INPUT_OPLOAD_PRIOR_SAMEBLOCK_EQUIVALENT_FUNCTION_LITERAL_PATH_STORE_CANDIDATES",
   "run_id": 42906841182,
   "run_url": "https://github.com/alwansan/raf/actions/runs/42906841182",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "evidence_level": "PENDING_AUTHENTIC_SOURCE_AND_TRANSLATED_SPV_CPU_READ_TIME_SYNTAX_ONLY",
+  "evidence_level": "ORIGINAL_SOURCE_AUTHENTIC_TRANSLATED_SPV_CPU_READ_TIME_SAMEBLOCK_ADDRESS_PATH_STORE_SYNTAX_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_sha": "bd437a177c29a3945117fa52057450396ef515b3",
+  "source_free_tests_passed": 754,
+  "original_joint_source_pairs": 157,
+  "source_stage_instances": 314,
+  "source_CB_stages": 311,
+  "authenticated_CB_dynamic_SPV_index_loads": 427,
+  "nonpower_imul_input_OpLoad_prior_sameblock_store_path_candidates": 12,
+  "nonpower_imul_input_OpLoad_prior_crossblock_candidates": 0,
+  "nonpower_imul_input_OpLoad_no_prior_store_observed": 0,
+  "safe_artifact_id": 13804518589,
+  "artifact_expires_utc": "2026-11-17T21:38:15Z",
+  "private_purge_verified": true
 }
