@@ -17,7 +17,23 @@
     "all 7 original Shader48 pass coverage"
   ],
   "resource_key": "gfxlab-multi030s-shader48-pass-nameindices-private-source",
-  "status": "PREPARED_CI_PENDING",
+  "status": "SUCCESS_176_TESTS_7_PASS_NAMEINDICES_NO_DIRECT_DYNAMIC_STATE_BRIDGE",
   "originalShaderRestored": false,
-  "phaseClosed": false
+  "phaseClosed": false,
+  "run": 42753634633,
+  "unit_tests": 176,
+  "artifact_id": 13734278874,
+  "outcome": {
+    "source_passes": 7,
+    "nameindices_present_with_text": 7,
+    "culling_exact_matches": 0,
+    "zTest_exact_matches": 0,
+    "alphaToMask_exact_matches": 0,
+    "zWrite_nameindices_matches": 0,
+    "zWrite_shader_property_pass_matches": 2,
+    "zWrite_material_float_slot_value_matches": 14,
+    "pass_state_runtime_verified": false
+  },
+  "next_step": "Resolve through independently authentic source/PC references; never assume NameIndices labels or numeric fallback reveal effective GPU values.",
+  "private_original_shader_pixels_uploaded": false
 }
