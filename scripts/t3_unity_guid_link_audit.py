@@ -11,10 +11,10 @@ import re
 from collections import Counter
 from pathlib import Path
 
-GUID = re.compile(r"(?<![0-9a-fA-F])guid:\\s*([0-9a-fA-F]{32})(?![0-9a-fA-F])")
-REF_BLOCK = re.compile(r"\\{([^{}]*)\\}")
-REF_FILE_ID = re.compile(r"(?:^|,)\\s*fileID:\\s*(-?\\d+)\\s*(?=,|$)")
-REF_GUID = re.compile(r"(?:^|,)\\s*guid:\\s*([0-9a-fA-F]{32})\\s*(?=,|$)")
+GUID = re.compile(r"(?<![0-9a-fA-F])guid:\s*([0-9a-fA-F]{32})(?![0-9a-fA-F])")
+REF_BLOCK = re.compile(r"\{([^{}]*)\}")
+REF_FILE_ID = re.compile(r"(?:^|,)\s*fileID:\s*(-?\d+)\s*(?=,|$)")
+REF_GUID = re.compile(r"(?:^|,)\s*guid:\s*([0-9a-fA-F]{32})\s*(?=,|$)")
 EXTENSIONS = {".mat", ".prefab", ".unity", ".asset", ".controller", ".overridecontroller", ".playable", ".rendertexture"}
 MAX_BYTES = 32 * 1024 * 1024
 
