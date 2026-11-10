@@ -326,7 +326,7 @@ namespace RaftGraphicsLabEditor
             };
         }
 
-        public static void Build()
+        public static void PrepareModelScene()
         {
             if(!Directory.Exists("Assets/MultiModels"))
                 throw new InvalidOperationException("GFX_MULTI_MISSING_ALL_ORIGINAL_MODEL_DATA");
@@ -384,6 +384,11 @@ namespace RaftGraphicsLabEditor
             if(!EditorSceneManager.SaveScene(scene,"Assets/Scenes/GfxMulti.unity"))
                 throw new InvalidOperationException("GFX_MULTI_SCENE_NOT_SAVED");
 
+        }
+
+        public static void Build()
+        {
+            PrepareModelScene();
             PlayerSettings.companyName="alwansan";
             PlayerSettings.productName="Raft GFX Multi Model Laboratory";
             PlayerSettings.bundleVersion="0.5.0";

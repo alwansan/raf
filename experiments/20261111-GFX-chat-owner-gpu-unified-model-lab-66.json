@@ -1,0 +1,26 @@
+{
+  "session_id": "20261111-GFX-chat-owner-gpu-unified-model-lab-66",
+  "origin": "chat",
+  "resumed_from": "20261111-GFX-chat-phase-one-input-lanes-65",
+  "base_sha": "6a18eb47130d4e6dd20b4c578d132b21eeb1282b",
+  "experiment_key": "GFX-MULTI-097/098",
+  "scope": "Authenticate owner GFX094 ZIP, merge six-model viewer and user referenced GFX041 affine tests, add original saved-property Standard candidate and exact-version PC compilation witnesses",
+  "reference_refs": [
+    "owner GFX094 ZIP SHA7daa48905a425dbdc4b3ec64c95873a984440f58c2740b5fb5fb57909a4daa47",
+    "CI42822853848",
+    "GFX093/095/096 verified"
+  ],
+  "question": "Does actual driver proof plus original source parameter mapping support a more faithful and reusable model test harness?",
+  "hypothesis": "285 compiled stages and128 links are real GPU evidence;29 unavailable stages are CPU-only. Source saved values/keywords and aliasing can replace lab constants without claiming complete shader/pixel equivalence.",
+  "control": "old PBR approximation and synthetic affine reference retained as separate modes",
+  "planned_tests": [
+    "owner ZIP strict count/identity negative cases",
+    "source extraction metadata and alias assertions",
+    "Unity actual compile/build/signature audit",
+    "owner model+affine GPU test"
+  ],
+  "resource_key": "GFX-LAB-unified-six-model-materials098",
+  "status": "planned",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

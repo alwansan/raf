@@ -39,7 +39,7 @@ namespace RaftGraphicsLabEditor
             return mat;
         }
 
-        public static void Build()
+        public static void PrepareAffineScene()
         {
             Directory.CreateDirectory("Assets/GfxInterpolationGenerated");
             Directory.CreateDirectory("Assets/Scenes");
@@ -87,6 +87,11 @@ namespace RaftGraphicsLabEditor
                     "GFX041_SYNTHETIC_PROBE_SCENE_SAVE_FAILED");
             EditorSceneManager.MarkSceneDirty(scene);
 
+        }
+
+        public static void Build()
+        {
+            PrepareAffineScene();
             PlayerSettings.companyName="alwansan";
             PlayerSettings.productName="Raft GFX Affine Reference Diagnostic";
             PlayerSettings.bundleVersion="0.7.0";

@@ -388,7 +388,9 @@ namespace RaftGraphicsLab
 
         private void OnGUI()
         {
-            float scale=Mathf.Clamp(Screen.width/1400f,.7f,1.5f);
+            Rect viewport=GfxLabViewport.BeginContent();
+            float width=viewport.width,height=viewport.height;
+            float scale=Mathf.Clamp(width/1400f,.7f,1.5f);
             if(headline==null)
             {
                 headline=new GUIStyle(GUI.skin.label);
@@ -401,22 +403,22 @@ namespace RaftGraphicsLab
                 action.fontSize=Mathf.RoundToInt(19*scale);
             }
             var pad=16f*scale;
-            GUI.Box(new Rect(6,5,Screen.width-12,Screen.height-10),"");
-            GUI.Label(new Rect(pad,pad,Screen.width-2*pad,44*scale),
+            GUI.Box(new Rect(6,5,width-12,height-10),"");
+            GUI.Label(new Rect(pad,pad,width-2*pad,44*scale),
                 "GFX-MULTI-041  |  GLES affine reference — SYNTHETIC ONLY",headline);
-            GUI.Label(new Rect(pad,58*scale,Screen.width-2*pad,26*scale),
+            GUI.Label(new Rect(pad,58*scale,width-2*pad,26*scale),
                 "Device: "+SystemInfo.graphicsDeviceName+" / "+SystemInfo.graphicsDeviceType+
                 "   |  Original Raft Shader48: NOT RESTORED",caption);
-            GUI.Label(new Rect(pad,92*scale,Screen.width-2*pad,28*scale),
+            GUI.Label(new Rect(pad,92*scale,width-2*pad,28*scale),
                 "Status: "+status+"  |  Smooth CPU error="+linearCpuError.ToString("F4")+
                 "  |  Affine CPU error="+affineCpuError.ToString("F4"),caption);
             float y=139*scale;
-            float col=(Screen.width-5*pad)/4f;
+            float col=(width-5*pad)/4f;
             for(int i=0;i<Modes.Length;i++)
             {
                 float left=pad+i*(col+pad);
                 GUI.Label(new Rect(left,y,col,28*scale),Modes[i],headline);
-                float side=Mathf.Min(col,Mathf.Max(95f*scale,Screen.height-y-160*scale));
+                float side=Mathf.Min(col,Mathf.Max(95f*scale,height-y-160*scale));
                 if(previews[i]!=null)
                     GUI.DrawTexture(new Rect(left,y+30*scale,side,side),previews[i],ScaleMode.ScaleToFit,false);
                 else GUI.Box(new Rect(left,y+30*scale,side,side),"No GPU sample yet");
@@ -429,15 +431,16 @@ namespace RaftGraphicsLab
                         " / Spread "+row.largestBetweenSamplesColorDifference.ToString("F4"),caption);
                 }
             }
-            float buttonY=Screen.height-95*scale;
+            float buttonY=height-95*scale;
             if(GUI.Button(new Rect(pad,buttonY,260*scale,46*scale),
                 running?"RUNNING...":"RERUN GPU TEST",action) && !running)
                 StartCoroutine(RunAllCases());
             if(GUI.Button(new Rect(pad+278*scale,buttonY,290*scale,46*scale),
                 exporting?"EXPORTING...":"EXPORT ALL LOGS ZIP",action) && !exporting)
                 StartCoroutine(ExportZip());
-            GUI.Label(new Rect(pad,Screen.height-39*scale,Screen.width-2*pad,28*scale),
+            GUI.Label(new Rect(pad,height-39*scale,width-2*pad,28*scale),
                 "Logs + full stacks + four PNGs: "+GfxDownloadsZipExporter.ExpectedPublicDirectory,caption);
+            GUI.EndGroup();
         }
 
         private void OnApplicationPause(bool paused)

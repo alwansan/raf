@@ -15,6 +15,7 @@ namespace RaftGraphicsLab
             public Material[] whiteUnlit;
             public Material[] sourceAlbedo;
             public Material[] sourcePbr;
+            public Material[] sourceSavedStandard;
         }
 
         [Serializable] public sealed class DiagnosticSlot
@@ -52,6 +53,16 @@ namespace RaftGraphicsLab
         // Authored diagnostic-only material, never the original Shader48.
         public Material diagnosticChannelMaterial;
         public GfxSessionRecorder sessionRecorder;
+        public bool sourceSavedCandidateAvailable;
+        public bool automatedTestRunning;
+        public string experimentOverride="";
+        public string SnapshotJson { get { return Report(); } }
+        public void SelectAutomatedCase(int model,int mode)
+        {
+            materialMode=mode;spin=false;helpersVisible=false;
+            if(studioFloor!=null)studioFloor.SetActive(false);
+            ChangeModel(model);
+        }
 
         private int modelIndex;
         private int materialMode = 3;
@@ -183,6 +194,7 @@ namespace RaftGraphicsLab
                 case 0:return "WHITE_LIT";
                 case 1:return "WHITE_UNLIT";
                 case 2:return "SOURCE_ALBEDO_STANDARD";
+                case 4:return "SOURCE_SAVED_STANDARD_CANDIDATE";
                 default:return "SOURCE_PBR_STANDARD_APPROX";
             }
         }
@@ -194,7 +206,8 @@ namespace RaftGraphicsLab
                 if(slot==null || slot.renderer==null)continue;
                 Material[] materials = materialMode==0 ? slot.whiteLit :
                     materialMode==1 ? slot.whiteUnlit :
-                    materialMode==2 ? slot.sourceAlbedo : slot.sourcePbr;
+                    materialMode==2 ? slot.sourceAlbedo :
+                    materialMode==4 ? slot.sourceSavedStandard : slot.sourcePbr;
                 if(materials==null || materials.Length==0)
                     throw new InvalidOperationException("GFX_MULTI_MATERIAL_MODE_EMPTY");
                 slot.renderer.sharedMaterials=materials;
@@ -213,7 +226,7 @@ namespace RaftGraphicsLab
         }
         private void NextMaterial()
         {
-            materialMode=(materialMode+1)%4;
+            materialMode=(materialMode+1)%(sourceSavedCandidateAvailable?5:4);
             UpdateMaterials("material_mode_changed");
         }
         private void Update()
@@ -224,6 +237,8 @@ namespace RaftGraphicsLab
                 nextPeriodicSnapshot=Time.unscaledTime+15f;
                 WriteReport("periodic_15s_state");
             }
+            if(!automatedTestRunning)
+            {
             if(spin)yaw+=Time.deltaTime*16f;
             if(Input.touchCount==1)
             {
@@ -253,6 +268,7 @@ namespace RaftGraphicsLab
                     pitch=Mathf.Clamp(pitch-Input.GetAxis("Mouse Y")*3f,-65f,65f);
                 }
             }
+            }
             var look=new Vector3(0,1.0f,0);
             Quaternion angle=Quaternion.Euler(pitch,yaw,0);
             viewingCamera.transform.position=look+angle*new Vector3(0,0,-distance);
@@ -264,7 +280,7 @@ namespace RaftGraphicsLab
             var m=models[modelIndex];
             return JsonUtility.ToJson(new DeviceLog
             {
-                experiment=Experiment,modelId=m.id,category=m.category,
+                experiment=string.IsNullOrEmpty(experimentOverride)?Experiment:experimentOverride,modelId=m.id,category=m.category,
                 originalGeometryKind=m.geometryKind,materialMode=ModeName(),
                 deviceModel=SystemInfo.deviceModel,
                 gfxDevice=SystemInfo.graphicsDeviceName,
@@ -334,7 +350,10 @@ namespace RaftGraphicsLab
         private void OnGUI()
         {
             if(models==null || models.Length==0)return;
-            float scale=Mathf.Clamp(Screen.width/1750f,.65f,1.25f);
+            Rect viewport=GfxLabViewport.BeginContent();
+            float width=viewport.width,height=viewport.height;
+            GUI.enabled=!automatedTestRunning;
+            float scale=Mathf.Clamp(width/1750f,.65f,1.25f);
             float pad=12f*scale;
             float top=168f*scale;
             float panelWidth=285f*scale;
@@ -345,18 +364,18 @@ namespace RaftGraphicsLab
             small.fontSize=Mathf.RoundToInt(18f*scale);
             var button=new GUIStyle(GUI.skin.button);
             button.fontSize=Mathf.RoundToInt(21f*scale);
-            GUI.Box(new Rect(8,7,Screen.width-16,top),"");
-            GUI.Label(new Rect(20,10,Screen.width-36,37*scale),
+            GUI.Box(new Rect(8,7,width-16,top),"");
+            GUI.Label(new Rect(20,10,width-36,37*scale),
                 "RAFT GFX MULTI — six original meshes, source textures (Standard fallback)",label);
             var current=models[modelIndex];
-            GUI.Label(new Rect(20,46*scale,Screen.width-36,30*scale),
+            GUI.Label(new Rect(20,46*scale,width-36,30*scale),
                 "Model "+current.id+" • "+current.category+" • "+current.vertices+
                 " vertices • "+ModeName(),small);
-            GUI.Label(new Rect(20,76*scale,Screen.width-36,30*scale),
+            GUI.Label(new Rect(20,76*scale,width-36,30*scale),
                 "GPU "+SystemInfo.graphicsDeviceName+" / "+SystemInfo.graphicsDeviceType+
                 " | Original shader: NOT RESTORED",small);
             float buttonY=110f*scale;
-            float buttonWidth=(Screen.width-40f)/5f;
+            float buttonWidth=(width-40f)/5f;
             if(GUI.Button(new Rect(10,buttonY,buttonWidth,44*scale),"NEXT MATERIAL",button))NextMaterial();
             if(GUI.Button(new Rect(13+buttonWidth,buttonY,buttonWidth,44*scale),spin?"STOP SPIN":"SPIN",button))
             {spin=!spin;WriteReport("spin_toggled");}
@@ -372,7 +391,7 @@ namespace RaftGraphicsLab
                 exporting?"EXPORTING...":"EXPORT ZIP",button) && !exporting)
                 StartCoroutine(ExportAllLogs());
 
-            float rows=Screen.height-top-62*scale;
+            float rows=height-top-62*scale;
             GUI.Box(new Rect(8,top+10*scale,panelWidth,Mathf.Max(rows,260*scale)),"");
             GUI.Label(new Rect(18,top+14*scale,panelWidth-20,31*scale),"Original models (6)",small);
             float itemHeight=Mathf.Min(62*scale,Mathf.Max(42*scale,(rows-53*scale)/6f));
@@ -384,12 +403,12 @@ namespace RaftGraphicsLab
             }
             // Explicit GPU channel test of the original Texture2D samples.
             // This is a NEW inspector shader: never relabel it as Shader48 or claim PC parity.
-            float probeWidth=Mathf.Clamp(Screen.width*.28f,190f,560f);
-            float px=Screen.width-probeWidth-14*scale;
+            float probeWidth=Mathf.Clamp(width*.28f,190f,560f);
+            float px=width-probeWidth-14*scale;
             float py=top+13*scale;
             float pbH=43*scale;
             GUI.Box(new Rect(px-7*scale,py-6*scale,probeWidth+14*scale,
-                Mathf.Min(Screen.height-py-53*scale,probeWidth+170*scale)),"");
+                Mathf.Min(height-py-53*scale,probeWidth+170*scale)),"");
             GUI.Label(new Rect(px,py,probeWidth,29*scale),"SOURCE TEXTURE / GPU CHANNEL (diagnostic only)",small);
             if(GUI.Button(new Rect(px,py+30*scale,probeWidth*.48f,pbH),
                 DiagnosticRoleNames[diagnosticRole],button))StepDiagnosticRole();
@@ -407,7 +426,7 @@ namespace RaftGraphicsLab
             }
             var tex=ActiveDiagnosticTexture();
             float previewH=Mathf.Max(30f,Mathf.Min(probeWidth*.82f,
-                Screen.height-(py+166*scale)-61*scale));
+                height-(py+166*scale)-61*scale));
             var previewRect=new Rect(px+6*scale,py+132*scale,probeWidth-12*scale,previewH);
             if(tex!=null && diagnosticChannelMaterial!=null &&
                 diagnosticChannelMaterial.shader!=null && diagnosticChannelMaterial.shader.isSupported)
@@ -421,10 +440,12 @@ namespace RaftGraphicsLab
             else GUI.Label(previewRect,"NO SOURCE TEXTURE / PROBE UNSUPPORTED",small);
             GUI.Label(new Rect(px,py+139*scale+previewH,probeWidth,24*scale),
                 "Not original Shader48. Copy log + screenshot.",small);
-            GUI.Label(new Rect(panelWidth+20,Screen.height-63*scale,Screen.width-panelWidth-35,27*scale),
+            GUI.Label(new Rect(panelWidth+20,height-63*scale,width-panelWidth-35,27*scale),
                 exportStatus,small);
-            GUI.Label(new Rect(panelWidth+20,Screen.height-39*scale,Screen.width-panelWidth-40,30*scale),
+            GUI.Label(new Rect(panelWidth+20,height-39*scale,width-panelWidth-40,30*scale),
                 "AUTO LOG: every mode/channel/sampling/surface + full errors. EXPORT ZIP to Download/Games/cl/test/g/",small);
+            GUI.enabled=true;
+            GUI.EndGroup();
         }
     }
 }

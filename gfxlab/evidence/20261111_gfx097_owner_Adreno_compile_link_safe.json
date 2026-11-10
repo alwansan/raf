@@ -1,0 +1,20 @@
+{
+  "experiment": "GFX-MULTI-097",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "tested_build_sha": "66b2968673f410cbf58d5b255216c5e3c9c175ef",
+  "all_expected_pairs_accounted": true,
+  "actual_compiled_stages": 285,
+  "actual_linked_pairs": 128,
+  "CPU_BaseInstance_unavailable_pairs": 29,
+  "actual_device_compile_or_link_failures": 0,
+  "nonzero_GL_error_events": 0,
+  "nonempty_driver_log_events": 0,
+  "event_count": 472,
+  "Android_SDK": 35,
+  "owner_device_Adreno730": true,
+  "source_original_stage_programs_on_device": true,
+  "original_Material_payload_or_model_pixels_proven": false,
+  "originalShaderRestored": false,
+  "phase_closed": false,
+  "owner_zip_sha256": "7daa48905a425dbdc4b3ec64c95873a984440f58c2740b5fb5fb57909a4daa47"
+}

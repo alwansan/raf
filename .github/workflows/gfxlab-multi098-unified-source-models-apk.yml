@@ -1,0 +1,219 @@
+name: GFX-MULTI-098 unified six source models and affine GPU reference APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi098-unified-source-models-apk.yml'
+      - 'gfxlab/tools/unified_model_source098.py'
+      - 'gfxlab/tests/test_unified_model_source098.py'
+      - 'gfxlab/unity/Assets/Editor/*098.cs'
+      - 'gfxlab/unity/Assets/Scripts/*098.cs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi098-auto-logs-apk-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  six-models-real-android-apk:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 105
+    env:
+      PYTHONUNBUFFERED: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Checkout OUR isolated GFX-LAB only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Validate original-source extraction and Unity project inputs
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          test -f gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
+          test -f gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          test -f gfxlab/unity/Assets/Editor/GfxOriginalObjImporter.cs
+          test -f gfxlab/unity/Assets/Shaders/GfxLabChannelProbe.shader
+          test -f gfxlab/unity/Assets/Scripts/GfxSessionRecorder.cs
+          test -f gfxlab/unity/Assets/Scripts/GfxDownloadsZipExporter.cs
+          test -f gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          grep -Fq 'MediaStore.Downloads.EXTERNAL_CONTENT_URI' gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          grep -Fq 'Download/Games/cl/test/g/' gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          grep -Fq 'EXPORT ZIP' gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          grep -Fq 'Application.logMessageReceivedThreaded' gfxlab/unity/Assets/Scripts/GfxSessionRecorder.cs
+          grep -Fq 'DIAGNOSTIC_SHADER_NOT_SOURCE_SHADER48' gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          grep -Fq 'com.alwansan.raft.graphicslab.unified098' gfxlab/unity/Assets/Editor/GfxUnifiedAndroidBuilder098.cs
+          # This retry verifies the real-vertex bounds guard before Unity build.
+          grep -Fq 'GFX_MULTI_GEOMETRY_BOUNDS_FINITE' gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
+          grep -Fq 'GFX_MULTI_SOURCE_TRIANGLE_PARITY_FAIL_' gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
+          python3 -m py_compile gfxlab/tools/obj_normalize.py
+          echo GFX_MULTI098_SOURCEFREE_PASS=true
+      - name: Checkout only SHA-pinned original ZIP2 owner assets
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Derive six original model/texture identities and exact sparse stream checkout
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_model_transport plan \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi098-original" \
+            --private-plan "$RUNNER_TEMP/gfxlab-multi098-private.json" \
+            --paths "$RUNNER_TEMP/gfxlab-multi098-paths.txt"
+      - name: Authenticated source imagery and original geometry into temporary Unity project
+        run: |
+          set -euo pipefail
+          if [ -s "$RUNNER_TEMP/gfxlab-multi098-paths.txt" ]; then
+            git -C source-zip2 sparse-checkout set --no-cone --stdin < "$RUNNER_TEMP/gfxlab-multi098-paths.txt"
+          fi
+          python3 -m gfxlab.tools.multi_model_transport extract \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi098-original" \
+            --private-plan "$RUNNER_TEMP/gfxlab-multi098-private.json" \
+            --model-dir gfxlab/unity/Assets/MultiModels \
+            --safe-report "$RUNNER_TEMP/gfxlab-multi098-source-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gfxlab-multi098-source-safe.json').read_text())
+          assert d['source_sha_locked'] and d['model_count']==6
+          # Source-only CI42720399689 is PASS for the newly screened model set.
+          assert d['model_summaries'][3]['id']=='M03' and d['model_summaries'][3]['materials']==2
+          assert d['stream_chunks']<=24 and d['stream_selected_bytes']<=1100000000
+          assert d['materials']==7 and d['textures']==21
+          assert not d['original_shader_equivalence_verified'] and not d['skinned_animation_restored']
+          root=Path('gfxlab/unity/Assets/MultiModels')
+          for i in range(6):
+              m=root/f'M{i:02d}'
+              cfg=json.loads((m/'config.json').read_text())
+              assert cfg['id']==f'M{i:02d}' and cfg['materials']
+              assert all(mat['textures'] for mat in cfg['materials'])
+              assert (m/'model.obj').stat().st_size>1000
+              assert len(list(m.glob('*.png')))>=len(cfg['materials'])
+          print('GFX_MULTI098_AUTHENTIC_SIX_SOURCE_PACK_PASS=true')
+          PY
+      - name: Stage original saved materials, real alias identities, normal candidate and exact PC compile requests
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.unified_model_source098 \
+            --stage "$RUNNER_TEMP/gfxlab-multi098-original/Raft_Data" \
+            --models gfxlab/unity/Assets/MultiModels \
+            --requests gfxlab/unity/Assets/Gfx098Private/pc-compile-requests.json \
+            --safe "$RUNNER_TEMP/gfx098-source-material-safe.json"
+      - name: Validate Unity activation and sufficient disk headroom
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'GFX_MULTI098_UNITY_LICENSE_UNAVAILABLE'
+            exit 1
+          fi
+          sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/system-images /opt/hostedtoolcache/CodeQL || true
+          df -h /
+          test "$(df -Pk . | awk 'NR==2{print $4}')" -gt 9437184
+          echo 'GFX_MULTI098_UNITY_PREFLIGHT_READY'
+      - name: Real Unity2021.3.45f2 import all six geometry+21 textures and compile Android IL2CPP ARM64
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: gfxlab/unity
+          unityVersion: 2021.3.45f2
+          targetPlatform: Android
+          buildMethod: RaftGraphicsLabEditor.GfxUnifiedAndroidBuilder098.Build
+          buildName: GfxLab-Multi-Six-Original
+          buildsPath: gfxlab-builds
+          versioning: None
+          androidVersionCode: 98
+          androidExportType: androidPackage
+          customParameters: -job-worker-count 2
+      - name: Real signed APK audit and independent package name
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          from zipfile import ZipFile
+          found=list(Path('.').rglob('GFX098-Unified-Models-GPU-Lab.apk'))
+          assert len(found)==1,'Expected precisely one real six-model signed APK'
+          p=found[0]
+          assert p.stat().st_size>1024*1024
+          with ZipFile(p) as z:
+              names=set(z.namelist())
+              assert 'AndroidManifest.xml' in names and 'classes.dex' in names
+              assert 'lib/arm64-v8a/libunity.so' in names
+              assert z.testzip() is None
+          sha=hashlib.file_digest(p.open('rb'),'sha256').hexdigest()
+          d={'schema':1,'sha256':sha,'apk_bytes':p.stat().st_size,
+              'original_source_models':6,'original_source_texture_links':21,
+              'original_source_materials':7,'original_shader_exact':False,
+              'original_animation_restored':False,
+              'device_pixels_verified':False,'expected_package':'com.alwansan.raft.graphicslab.unified098',
+              'diagnostic_shader':'Hidden/GfxLab/ChannelProbe',
+              'gpu_sampled_channels':['RGB','R','G','B','A'],
+              'roles':['basecolor','normal','metallic'],
+              'six_models_plus_affine_reference':True,
+              'source_saved_material_candidate':True,
+              'material_aliases':6,'texture_aliases':18,
+              'auto_model_matrix_cases':12,
+              'normal_unpack_is_official_AG_candidate':True,
+              'source_original_mip_chain_preserved':False,
+              'source_vs_force_linear_controls':True,
+              'original_shader48_restored':False,
+              'auto_log_all_ui_transitions':True,'unity_messages_with_stacks':True,
+              'zip_all_sessions':True,
+              'target_android_relative_downloads':'Download/Games/cl/test/g/',
+              'android_mediastore_export_needs_owner_device_test':True}
+          Path(os.environ['RUNNER_TEMP'],'gfxlab-multi098-apk-safe.json').write_text(json.dumps(d,indent=2)+'\n')
+          print('GFX_MULTI098_SIGNED_APK_BYTES_AND_SHA '+json.dumps(d,sort_keys=True))
+          PY
+          sdk="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer="$(find "$sdk/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -1)"
+          aapt="$(find "$sdk/build-tools" -mindepth 2 -maxdepth 2 -name aapt -type f | sort -V | tail -1)"
+          apk="$(find . -type f -name 'GFX098-Unified-Models-GPU-Lab.apk' -print -quit)"
+          test -n "$signer" && test -x "$signer"
+          "$signer" verify --verbose "$apk" > "$RUNNER_TEMP/multi-signature-private.txt"
+          test -n "$aapt" && test -x "$aapt"
+          "$aapt" dump badging "$apk" | grep -F "name='com.alwansan.raft.graphicslab.unified098'" > "$RUNNER_TEMP/multi-package-private.txt"
+          echo 'GFX_MULTI098_APK_SIGNATURE_VERIFIED=true'
+      - name: Deliver signed six-model mini APK and public-safe source summary only
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi098-auto-logs-gles3-apk-${{ github.run_id }}
+          path: |
+            **/GFX098-Unified-Models-GPU-Lab.apk
+            ${{ runner.temp }}/gfxlab-multi098-source-safe.json
+            ${{ runner.temp }}/gfxlab-multi098-apk-safe.json
+            ${{ runner.temp }}/gfx098-source-material-safe.json
+            gfxlab/unity/gfx098-PC-compile-safe.json
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
+      - name: Remove all private material values, source geometry, decoded image payloads and stream
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi098-original" gfxlab/unity/Assets/MultiModels
+          sudo rm -rf gfxlab/unity/Assets/Gfx098Private gfxlab/unity/Assets/Gfx098Generated gfxlab/unity/Assets/GfxMultiGenerated
+          rm -f "$RUNNER_TEMP/gfxlab-multi098-private.json" "$RUNNER_TEMP/gfxlab-multi098-paths.txt"
+          echo GFX_MULTI098_SOURCE_TEMPORARY_ART_PURGED=true
