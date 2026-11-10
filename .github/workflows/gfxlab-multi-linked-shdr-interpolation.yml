@@ -1,0 +1,100 @@
+name: GFX-MULTI-039 all 1275 authentic Shader48 DX11 SHDR interpolation declarations source-only
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi-linked-shdr-interpolation.yml'
+      - 'gfxlab/tools/multi_shader_linked_shdr_interpolation.py'
+      - 'gfxlab/tests/test_multi_shader_linked_shdr_interpolation.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi039-original-shdr-interpolation
+  cancel-in-progress: false
+jobs:
+  original-all-linked-shdr:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free strict public D3D10 tokenized interpolation tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_linked_shdr_interpolation.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Audit SHA-pinned original Shader48 1275 linked SHDR programs privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_linked_shdr_interpolation \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi039-private" \
+            --out gfxlab-multi039-safe-shdr-interpolation.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi039-safe-shdr-interpolation.json"))
+          c=d["original_program_accounting"]
+          v=d["all_original_linked_program_declaration_totals"]
+          p=d["all_linked_pixel_input_interpolation_mode_totals"]
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader_compiler_platform"]=="kShaderCompPlatformD3D11"
+          assert c["original_stage_link_rows"]==1435
+          assert c["exact_variant_stage_pairs"]==524
+          assert c["unique_vertex_programs"]==620 and c["unique_fragment_programs"]==655
+          assert c["unique_original_stage_programs"]==1275
+          assert sum(x["exact_original_keyword_tier_pairs"] for x in d["original_pass_link_counts"])==524
+          assert len(d["original_pass_link_counts"])==7
+          assert sum(x["original_stage_link_rows"] for x in d["original_pass_link_counts"])==1435
+          assert v["Vertex"]["shader_token_dwords"]>0 and v["Pixel"]["shader_token_dwords"]>0
+          assert p["pixel_interpolation_declaration_total"]==sum(
+              p["interpolation_"+x] for x in
+              ("undefined","constant","linear","linear_centroid",
+               "linear_noperspective","linear_noperspective_centroid",
+               "linear_sample","linear_noperspective_sample"))
+          assert d["vertex_shdr_pixel_interpolation_declarations"]==0
+          assert d["original_stage_interpolation_categories_parsed_from_D3D10_opcode_token"]
+          assert not d["interpolation_runtime_and_GLES_reproduction_verified"]
+          assert not d["source_original_material_to_GPU_register_cb_binding_verified"]
+          assert not d["android_original_shader48_execution_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["pc_to_adreno_pixel_parity_verified"]
+          assert not d["private_original_DXBC_instruction_operands_keyword_names_and_registers_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI039_ALL_LINKED_SHDR_PARSE_PASS_ONLY=true")
+          print("GFX_MULTI039_INTERPOLATION_RUNTIME_AND_MATERIAL_CB_STILL_BLOCKED=true")
+          PY
+      - name: Export safe aggregate interpolation mode counters only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi039-safe-source-shdr-interpolation-counts
+          path: gfxlab-multi039-safe-shdr-interpolation.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Delete all original ZIP2, Shader48 and DXBC intermediates
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi039-private"
+          echo GFX_MULTI039_PRIVATE_SHDR_SOURCE_PURGED=true
