@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-managed-cil-argflow-19",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-managed-cil-argflow-19.md",
-  "status": "GFX_MULTI_045_SUCCESS_1_SOURCE_PROPERTY_DIRECT_IL_API_ARG_AUTHENTIC_GPU_REGISTER_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-sampled-image-register-pairs-20",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-sampled-image-register-pairs-20.md",
+  "status": "GFX_MULTI_046_SUCCESS_TRANSLATED_SPIRV_37_OF_37_SAMPLES_T_S_29_PASS_DISTINCT_SUM_ORIGINAL_MATERIAL_TO_DXBC_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-046 candidate: authentic original Shader48 Material property→DX11 t/s/b and CB byte offset bridge via source reflection or actual PC reference; strict GFX045 script first-argument flow is not GPU register proof. G7–G12 blocked, originalShaderRestored=false.",
+  "next_experiment": "GFX-MULTI-047 independently parse original DXBC SHDR sample/gather opcode texture/sampler operand pairs and privately compare to GFX046 translated SPIR-V 37/37 sample-use graph; fail closed for dynamic/extended instructions. Material property→t/s/CB byte offsets and original Android shader/PC pixels still blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1282,6 +1282,54 @@
     "PropertyToID_proven_original_paths": 0,
     "actual_source_property_to_GPU_register_mapping_verified": false,
     "private_source_purged": true,
+    "original_shader48_restored": false
+  },
+  "latest_gfx046_original_SPIRV_sample_use": {
+    "run": 42835954397,
+    "commit": "dffee016dd84d9e0b00be4e6a6a5b6e0c71f6b18",
+    "status": "SUCCESS",
+    "tests": 305,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13773567029,
+    "artifact_expiry_utc": "2026-11-17T14:38:22Z",
+    "original_selected_matched_keyword_tier_pairs": 7,
+    "source_stages": 14,
+    "translated_spirv_sample_or_gather_ops": 37,
+    "strict_source_anchored_pairs_for_sample_ops": 37,
+    "unresolved_sample_ops": 0,
+    "per_pass_sample_ops": [
+      [
+        10,
+        4,
+        2,
+        6
+      ],
+      [
+        10,
+        4,
+        1
+      ]
+    ],
+    "per_pass_distinct_pair_counts": [
+      [
+        7,
+        4,
+        2,
+        4
+      ],
+      [
+        7,
+        4,
+        1
+      ]
+    ],
+    "sum_distinct_pair_counts_per_pass": 29,
+    "globally_distinct_pair_count_known": false,
+    "original_DXBC_sample_opcode_pair_equivalence_verified": false,
+    "material_property_to_DXBC_resource_register_verified": false,
+    "original_CB_byte_offset_mapping_verified": false,
+    "android_original_shader_gpu_verified": false,
+    "source_private_purge": true,
     "original_shader48_restored": false
   }
 }

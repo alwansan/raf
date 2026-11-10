@@ -1,0 +1,51 @@
+{
+  "experiment": "GFX-MULTI-046",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATOR_SPIRV_CPU_ONLY",
+  "verified_run": 42835954397,
+  "authentic_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "unit_tests": 305,
+  "source_program_stages": 14,
+  "representative_exact_pairs": 7,
+  "translated_sample_gather_ops": 37,
+  "source_register_anchored_strict_sample_ops": 37,
+  "unresolved_sample_ops": 0,
+  "source_register_anchored_spirv_sampled_image_constructions": 37,
+  "per_subshader_pass_sample_ops": [
+    [
+      10,
+      4,
+      2,
+      6
+    ],
+    [
+      10,
+      4,
+      1
+    ]
+  ],
+  "per_subshader_pass_distinct_t_s_pair_counts": [
+    [
+      7,
+      4,
+      2,
+      4
+    ],
+    [
+      7,
+      4,
+      1
+    ]
+  ],
+  "distinct_pair_counts_sum_only": 29,
+  "globally_unique_pair_count_proven": false,
+  "all_524_variants_examined": false,
+  "source_DXBC_sample_opcode_t_s_pair_independently_checked": false,
+  "original_material_texenv_property_to_DX11_register_verified": false,
+  "original_constantbuffer_byte_offsets_verified": false,
+  "original_Shader48_Android_GPU_verified": false,
+  "originalShaderRestored": false,
+  "phase_closed": false,
+  "safe_artifact_id": 13773567029,
+  "source_private_purge_pass": true,
+  "original_source_bytes_IDs_or_pair_edges_published": false
+}

@@ -25,8 +25,37 @@
     "private files purge"
   ],
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "status": "CI_PENDING",
-  "run_urls": [],
+  "status": "SUCCESS_ORIGINAL_SOURCE_TRANSLATOR_SPIRV_SAMPLE_USE_ONLY",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42835402578",
+    "https://github.com/alwansan/raf/actions/runs/42835521326",
+    "https://github.com/alwansan/raf/actions/runs/42835954397"
+  ],
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "unit_tests": 305,
+    "source_private_purged": true,
+    "final_artifact_id": 13773567029,
+    "sample_ops": 37,
+    "verified_source_anchored_vkd3d_lowered_sample_ops": 37,
+    "unresolved": 0,
+    "per_pass_ops": [
+      [
+        10,
+        4,
+        2,
+        6
+      ],
+      [
+        10,
+        4,
+        1
+      ]
+    ],
+    "sum_per_pass_unique_source_t_s_pairs": 29,
+    "original_DXBC_independent_sample_opcode_equivalence": false,
+    "material_to_DX11_register_mapping": false,
+    "original_Shader48_restored": false
+  }
 }
