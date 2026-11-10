@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-spv-store-value-producer-50",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-store-value-producer-50.md",
-  "status": "GFX_MULTI_077_SUCCESS_618_TESTS_128_SPV_SAMEBLOCK_FUNCTION_ADDRESS_STORES_128_BITCAST_VALUE_116_VIA_SHIFT_12_UNKNOWN_GFX054_SOURCE_SSA_ADRENO_OPEN",
+  "latest_session": "20261111-GFX-chat-ssa-unknown-cfg-51",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-ssa-unknown-cfg-51.md",
+  "status": "GFX_MULTI_078_SUCCESS_632_TESTS_47_OF_47_SOURCE_SPV_CFG_BLOCK_DOMINATES_12_STORE_VALUE_TERMINAL_OTHER_SOURCE_VALUE_GPU_UNPROVEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-078: isolate the 12 unknown sameblock stored-value SSA ancestry and separately 47 cross-window equivalent Function-literal address Stores, verifying CFG dominance with loop/PHI/call/alias barriers before any source DXBC temp-to-SPV mapping. GFX054 Material property/CB member bytes, GPU Android and PC pixel parity remain BLOCKED.",
+  "next_experiment": "GFX-MULTI-079: inspect 12 generic unknown Store value terminal SPV opcode categories using official/public opcode-only anonymous counting under SHA-pinned source runner. CFG block dominance of 47 does not prove reached memory value; GFX054 Material CB/member and Android shader original GPU parity remain BLOCKED.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2191,5 +2191,24 @@
     "material_property_cb_offsets_proven": false,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx078": {
+    "experiment": "GFX-MULTI-078",
+    "status": "SUCCESS_ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_STRICT_BLOCK_DOMINANCE_ONLY",
+    "run_id": 42902805887,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42902805887",
+    "run_sha": "192f5d848051524ede70a04d1fae7020e8c71923",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests_passed": 632,
+    "original_joint_source_pairs": 157,
+    "original_stage_instances": 314,
+    "source_CB_stages": 311,
+    "authenticated_SPV_CB_index_loads": 427,
+    "strict_CFG_prior_store_block_dominates": 47,
+    "unproven_store_value_terminal_generic_other": 12,
+    "artifact_id": 13803881242,
+    "private_source_purge": true,
+    "shader_original_restored": false,
+    "source_temp_to_SPV_value_proven": false
   }
 }
