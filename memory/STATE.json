@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-spv-unknown-families-52",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-spv-unknown-families-52.md",
-  "status": "GFX_MULTI_079_SUCCESS_652_TESTS_12_OF_12_SPV_INTEGER_MATH_TERMINALS_47_OF_47_CFG_BLOCK_DOMINATES_ORIGINAL_DXBC_SSA_GPU_OPEN",
+  "latest_session": "20261111-GFX-chat-integer-literal-80-53",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-integer-literal-80-53.md",
+  "status": "GFX_MULTI_080_VERIFIED_SUCCESS_679_TESTS_12_SPV_OPIMUL_LITERAL_NONPOWER2_47_CFG_BLOCK_DOMINATES_SOURCE_DXBC_SSA_GPU_NOT_PROVEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-080 inspect exact public integer opcode and safe anonymous OpIMul literal power-of-two shape for 12 source-authenticated SPV stored value terminals; guard signedness/type/width, no DXBC source SSA or GPU pixel parity claims; GFX054 CB-member mapping blocked.",
+  "next_experiment": "GFX-MULTI-081: probe source-private 12 actual SPV OpIMul (nonpower2 literal) other operand SSA and original DXBC temp/component writer shape with branch/PHI/Select/alias barriers. Do not invent symbolic source-to-SSA or publish private numeric literals. GFX054 original Unity Material binding/CB byte semantics BLOCKED, shader GPU/PC Android visual parity OPEN.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2227,5 +2227,30 @@
     "private_source_purged": true,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx080": {
+    "experiment": "GFX-MULTI-080",
+    "status": "SUCCESS_SOURCE_AUTHENTICATED_SPV_CPU_ONLY",
+    "run_id": 42904933952,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42904933952",
+    "run_sha": "dc26e3228f22e0215e1286b3153250d41e3aef4d",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_free_tests": 679,
+    "original_joint_pair_count": 157,
+    "original_stage_count": 314,
+    "original_CB_stage_count": 311,
+    "actual_SPV_original_b_authenticated_CB_index_load_count": 427,
+    "unresolved_SPV_Store_value_op_OpIMul_count": 12,
+    "OpIMul_valid_one_literal_nonpower_two_count": 12,
+    "OpIMul_valid_one_literal_power_two_count": 0,
+    "strict_CFG_prior_store_block_dominates_count": 47,
+    "safe_artifact_id": 13803384787,
+    "artifact_expiry_utc": "2026-11-17T21:26:45Z",
+    "original_shader_SSA_equivalent": false,
+    "SPV_memory_Store_to_Load_value_proven": false,
+    "original_Shader48_Adreno_gpu_pixels_verified": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "private_source_and_SPV_purge_verified": true
   }
 }
