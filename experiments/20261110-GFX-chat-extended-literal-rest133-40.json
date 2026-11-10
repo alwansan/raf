@@ -21,7 +21,25 @@
     24,
     157
   ],
-  "status": "CI_PENDING",
+  "status": "SUCCESS_GFX066_SOURCE_PRIVATE_DISTINCT_RANGE_PRESENCE_CPU_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "CI": 42880727817,
+    "unit_tests": 472,
+    "original_source_pairs": 133,
+    "SPV_stages": 266,
+    "CB_stages": 265,
+    "CB_free_stages": 1,
+    "source_extended_literal_operand_occurrences": 682,
+    "distinct_stage_local_ranges_observed": 579,
+    "missing": 0,
+    "safe_artifact_id": 13793667632,
+    "artifact_expires_at_utc": "2026-11-17T19:00:33Z",
+    "private_original_source_purged": true,
+    "combined_original_source_class_representatives": 157,
+    "combined_stage_local_distinct_CB_ranges": 656,
+    "individual_instruction_numeric_parity": false,
+    "originalShaderRestored": false
+  }
 }

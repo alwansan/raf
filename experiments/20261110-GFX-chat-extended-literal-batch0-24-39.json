@@ -18,7 +18,22 @@
     "purge"
   ],
   "resource_key": "GFX065-first24",
-  "status": "CI_PENDING",
+  "status": "SUCCESS_GFX065_SOURCE_PRIVATE_DISTINCT_RANGE_PRESENCE_CPU_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "CI": 42879705849,
+    "unit_tests": 466,
+    "original_source_pairs": 24,
+    "SPV_stages": 48,
+    "CB_stages": 46,
+    "CB_free_stages": 2,
+    "source_extended_literal_operand_occurrences": 81,
+    "distinct_stage_local_ranges_observed": 77,
+    "missing": 0,
+    "safe_artifact_id": 13793796206,
+    "private_original_source_purged": true,
+    "individual_instruction_numeric_parity": false,
+    "originalShaderRestored": false
+  }
 }
