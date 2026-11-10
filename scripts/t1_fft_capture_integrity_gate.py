@@ -9,6 +9,7 @@ def verify_captures(metadata, paths, root):
         raise ValueError("capture path names mismatch")
     root = Path(root).resolve(strict=True)
     total = 0
+    seen_files = set()
     for item in metadata["passes"]:
         pair = paths[item["name"]]
         if not isinstance(pair, dict) or set(pair) != {"vulkan", "unity"}:
@@ -27,7 +28,12 @@ def verify_captures(metadata, paths, root):
             resolved = candidate.resolve(strict=True)
             if not resolved.is_relative_to(root) or not resolved.is_file():
                 raise ValueError("capture outside private root")
-            size = resolved.stat().st_size
+            stat = resolved.stat()
+            identity = (stat.st_dev, stat.st_ino)
+            if identity in seen_files:
+                raise ValueError("capture reused across backend or pass")
+            seen_files.add(identity)
+            size = stat.st_size
             if size != item[backend + "_bytes"]:
                 raise ValueError("capture length mismatch")
             total += size
