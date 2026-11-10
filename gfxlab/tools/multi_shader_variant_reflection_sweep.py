@@ -122,7 +122,23 @@ def audit(stage):
     if len(programs) != 1656:
         raise ValueError("ORIGINAL_COMPILED_PROGRAM_TABLE_DRIFT")
 
-    totals = Counter()
+    totals = Counter({
+        "variant_link_rows": 0,
+        "parameter_blocks_present": 0,
+        "null_parameter_blocks": 0,
+        "top_level_sampler_metadata_rows": 0,
+        "top_level_constant_buffer_metadata_rows": 0,
+        "texture_parameter_arrays_present": 0,
+        "texture_parameter_entries": 0,
+        "constant_buffer_binding_arrays_present": 0,
+        "constant_buffer_binding_entries": 0,
+        "unique_referenced_stage_programs": 0,
+        "dxbc_stage_programs_bounds_validated": 0,
+        "rdef_present_stage_programs": 0,
+        "rdef_absent_stage_programs": 0,
+        "rdef_constant_buffer_descriptors": 0,
+        "rdef_resource_binding_descriptors": 0,
+    })
     unique_programs = {}
     exact_pairs_total = 0
     per_pass_links = 0
