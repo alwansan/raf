@@ -1,0 +1,273 @@
+#!/usr/bin/env python3
+"""GFX077: bounded SPV value provenance for same-block equivalent literal Function Store/Load paths.
+
+Source-private SPV result IDs, original b-register IDs and dereferenced pointer
+names never leave CI. Same SSA pointer-id store-before-load is syntax only, not
+alias-free runtime dataflow or DXBC source-temp correspondence.
+"""
+from __future__ import annotations
+import re
+from collections import Counter
+from gfxlab.tools.multi_shader_spv_index_root_taxonomy071 import ASSIGN, MAX_SPV_TEXT_BYTES, MAX_LINES
+
+SAFE_STORAGES=frozenset({"Function","Private","Input","Output","Uniform",
+                         "StorageBuffer","Workgroup","PushConstant","UniformConstant"})
+BLOCK_BARRIERS=frozenset({"OpBranch","OpBranchConditional","OpSwitch","OpKill",
+    "OpReturn","OpReturnValue","OpUnreachable","OpFunctionCall",
+    "OpFunction","OpFunctionEnd","OpControlBarrier","OpMemoryBarrier",
+    "OpCopyMemory","OpCopyMemorySized","OpSelectionMerge","OpLoopMerge"})
+MAX_DEPTH=12
+
+def authenticated_spv_CB_index_local_store_value_producers(dis:bytes,authenticated:dict)->dict:
+    if not isinstance(dis,bytes) or not 0<len(dis)<=MAX_SPV_TEXT_BYTES or not isinstance(authenticated,dict):
+        raise ValueError("GFX077_INVALID_INPUT")
+    lines=dis.decode("utf8","strict").splitlines()
+    if len(lines)>MAX_LINES:raise ValueError("GFX077_TOO_MANY_LINES")
+    defs={};records=[];types=set()
+    for raw in lines:
+        raw=raw.split(";",1)[0].strip()
+        if not raw:continue
+        m=ASSIGN.fullmatch(raw)
+        if m:
+            ident,op,tail=m.groups()
+            if ident in defs:raise ValueError("GFX077_DUPLICATE_SSA_ID")
+            a=(tail or "").split()
+            defs[ident]=(op,a)
+            records.append((ident,op,a))
+            if op=="OpTypeInt" and a in (["32","0"],["32","1"]):types.add(ident)
+        else:
+            a=raw.split()
+            if not a or not re.fullmatch(r"Op[A-Za-z0-9_]+",a[0]):
+                raise ValueError("GFX077_INVALID_SPV_OPCODE_SYNTAX")
+            records.append((None,a[0],a[1:]))
+    constants={}
+    for ident,(op,a) in defs.items():
+        if op=="OpConstant" and len(a)==2 and a[0] in types:
+            try:constants[ident]=int(a[1],0)
+            except ValueError:
+                try:constants[ident]=int(a[1],10)
+                except ValueError:pass
+        if op=="OpConstantNull" and len(a)==1 and a[0] in types:
+            constants[ident]=0
+    def idx(t):
+        if t in constants:return ("literal",constants[t])
+        op,a=defs.get(t,(None,[]))
+        if op is not None and op not in {"OpConstant","OpConstantNull","OpUndef",
+              "OpSpecConstant","OpSpecConstantOp","OpSpecConstantComposite"} and a and a[0] in types:
+            return ("dynamic",None)
+        return ("unknown",None)
+    def source_index_load(t):
+        def from_bitcast(x):
+            op,a=defs.get(x,(None,[]))
+            if op!="OpBitcast" or len(a)!=2 or a[0] not in types:return None
+            root,ra=defs.get(a[1],(None,[]))
+            return a[1] if root=="OpLoad" and len(ra)>=2 else None
+        direct=from_bitcast(t)
+        if direct:return direct
+        op,a=defs.get(t,(None,[]))
+        if op=="OpIAdd" and len(a)==3 and a[0] in types:
+            for lit,other in ((a[1],a[2]),(a[2],a[1])):
+                if idx(lit)[0]=="literal":
+                    root=from_bitcast(other)
+                    if root:return root
+        return None
+    def pointer_origin(t):
+        """Safe anonymous shape only. No pointer ID or private original b emitted."""
+        seen=set();hops=0;chain=0;has_dynamic=False
+        direct=defs.get(t,(None,[]))[0]
+        while hops<MAX_DEPTH and t not in seen:
+            seen.add(t);hops+=1
+            op,a=defs.get(t,(None,[]))
+            if op=="OpVariable" and len(a)>=2:
+                storage=a[1] if a[1] in SAFE_STORAGES else "other"
+                return (direct or "missing",storage,"dynamic" if has_dynamic else "literal",chain)
+            if op in ("OpAccessChain","OpInBoundsAccessChain","OpPtrAccessChain") and len(a)>=3:
+                has_dynamic|=any(idx(x)[0]!="literal" for x in a[2:])
+                chain+=1;t=a[1];continue
+            if op=="OpCopyObject" and len(a)==2:
+                t=a[1];continue
+            break
+        return (direct or "missing","unresolved","unresolved",chain)
+    def function_literal_address_path(t):
+        """Source-private normalized Function root and constant access path.
+
+        The returned tuple embeds original SPV IDs and literal indices; NEVER
+        print/export it. Equivalent syntax is not CFG dominance or alias freedom.
+        """
+        seen=set();parts=[]
+        for _ in range(MAX_DEPTH):
+            if t in seen:return None
+            seen.add(t)
+            op,a=defs.get(t,(None,[]))
+            if op=="OpVariable" and len(a)>=2 and a[1]=="Function":
+                return (t,tuple(v for part in reversed(parts) for v in part))
+            if op in ("OpInBoundsAccessChain","OpAccessChain") and len(a)>=3:
+                indices=[idx(x) for x in a[2:]]
+                if any(k!="literal" or type(v)!=int for k,v in indices):return None
+                parts.append(tuple(v for _,v in indices))
+                t=a[1];continue
+            if op=="OpCopyObject" and len(a)==2:
+                t=a[1];continue
+            return None
+        return None
+    def store_value_provenance(t):
+        """Bounded SPV SSA-only syntax. Never original DXBC temp equivalence."""
+        op,a=defs.get(t,(None,[]))
+        allow={"OpShiftLeftLogical","OpIAdd","OpISub","OpBitcast",
+               "OpCopyObject","OpCompositeConstruct","OpCompositeExtract",
+               "OpLoad","OpConstant","OpConstantNull","OpPhi","OpSelect"}
+        producer=op if op in allow else "other"
+        unary={"OpBitcast","OpCopyObject","OpUConvert","OpSConvert"}
+        binary={"OpIAdd","OpISub","OpBitwiseAnd","OpBitwiseOr","OpBitwiseXor",
+                "OpShiftRightLogical","OpShiftRightArithmetic"}
+        def walk(x,seen,depth):
+            if depth>MAX_DEPTH or x in seen:return "unknown"
+            o,ar=defs.get(x,(None,[]))
+            if o=="OpShiftLeftLogical" and len(ar)==3:return "shift"
+            if o in ("OpConstant","OpConstantNull") and len(ar) in (1,2):return "no_shift"
+            if o in unary and len(ar)==2:
+                return walk(ar[1],seen|{x},depth+1)
+            if o in binary and len(ar)==3:
+                res=[walk(ar[1],seen|{x},depth+1),walk(ar[2],seen|{x},depth+1)]
+                if "shift" in res:return "shift"
+                return "unknown" if "unknown" in res else "no_shift"
+            return "unknown"
+        ancestry=walk(t,frozenset(),0)
+        if ancestry=="shift":
+            ancestry="direct_shift" if op=="OpShiftLeftLogical" else "via_shift"
+        return producer,ancestry
+    # Only address chains authenticated to original b Uniform globals with vec4-array member 0.
+    cbptr={};stored={};indexload={};c=Counter();block=None;window_store={};historical_store={}
+    for name,op,a in records:
+        if op=="OpLabel":
+            block=name;stored.clear();window_store.clear()
+            continue
+        if op in BLOCK_BARRIERS or op.startswith("OpAtomic"):
+            stored.clear();window_store.clear()
+            if op not in ("OpBranch","OpBranchConditional","OpSwitch",
+                          "OpSelectionMerge","OpLoopMerge"):
+                historical_store.clear()
+            if op in ("OpFunction","OpFunctionEnd"):block=None
+            continue
+        if op=="OpStore":
+            if len(a)==2 and block is not None:
+                stored[a[0]]=(block,a[1])
+                path=function_literal_address_path(a[0])
+                if path is not None:
+                    window_store[path]=(block,a[1])
+                    historical_store[path]=(block,a[1])
+                else:
+                    # An unknown write could alias any saved local candidate.
+                    window_store.clear();historical_store.clear()
+            else:
+                window_store.clear();historical_store.clear()
+            continue
+        if name and op=="OpLoad":
+            if len(a)<2:raise ValueError("GFX077_MALFORMED_LOAD")
+            ptr=a[1]
+            kind,storage,index_shape,depth=pointer_origin(ptr)
+            exact=(len(a)==2 and ptr in stored and stored[ptr][0]==block and block is not None and storage=="Function" and index_shape=="literal")
+            # Private Function root + all literal indices, independent of SSA pointer ID.
+            path=function_literal_address_path(ptr) if len(a)==2 else None
+            if path is None:category="unresolved"
+            elif path in window_store and window_store[path][0]==block and block is not None:
+                category="same_block_path_store_candidate"
+            elif path in historical_store:
+                category="prior_path_store_outside_trusted_window"
+            else:category="no_prior_matching_path_store"
+            # This value comes from a preceding same-block equivalent address-path
+            # syntactic candidate only. Pointer alias freedom and actual runtime
+            # Store->Load memory dependency are NOT proven.
+            val_producer=None;val_shift=None
+            if category=="same_block_path_store_candidate":
+                val_producer,val_shift=store_value_provenance(window_store[path][1])
+            indexload[name]=(kind,storage,index_shape,depth,exact,category,val_producer,val_shift)
+        if name and op in ("OpAccessChain","OpInBoundsAccessChain") and len(a)>=3:
+            parentid=a[1]
+            if parentid in authenticated:
+                info=authenticated[parentid]
+                if (not isinstance(info,tuple) or len(info)!=4 or
+                    any(type(v)!=int for v in info) or info[1]!=0 or
+                    info[2]!=16 or info[3]<=0):
+                    raise ValueError("GFX077_INVALID_AUTHENTICATED_ORIGINAL_B_UBO_LAYOUT")
+                parent=("root",info[3],None)
+            elif parentid in cbptr:parent=cbptr[parentid]
+            else:continue
+            shape,length,oldidx=parent
+            indices=a[2:]
+            if shape=="root":
+                if not indices or idx(indices[0])!=("literal",0):
+                    c["SPV_bad_UBO_struct_member"]+=1
+                    continue
+                indices=indices[1:]
+                if not indices:
+                    cbptr[name]=("array",length,None)
+                    continue
+            elif shape=="vector":
+                if len(indices)==1 and idx(indices[0])[0]=="literal":
+                    val=idx(indices[0])[1]
+                    if 0<=val<4:cbptr[name]=("scalar",length,oldidx)
+                continue
+            elif shape!="array":continue
+            if len(indices) not in (1,2):continue
+            if idx(indices[0])[0]!="dynamic":continue
+            if len(indices)==2:
+                ch=idx(indices[1])
+                if ch[0]!="literal" or not 0<=ch[1]<4:continue
+                cbptr[name]=("scalar",length,indices[0])
+            else:cbptr[name]=("vector",length,indices[0])
+        elif name and op=="OpCopyObject" and len(a)==2 and a[1] in cbptr:
+            cbptr[name]=cbptr[a[1]]
+        if op=="OpLoad" and len(a)>=2 and a[1] in cbptr:
+            shape,length,index=cbptr[a[1]]
+            if shape not in ("scalar","vector"):continue
+            c["SPV_original_b_authenticated_actual_dynamic_CB_OpLoads"]+=1
+            root=source_index_load(index) if index else None
+            if root not in indexload:
+                c["SPV_index_OpLoad_pointer_root_unclassified"]+=1;continue
+            kind,storage,index_shape,depth,exact,category,val_producer,val_shift=indexload[root]
+            if val_producer is not None:
+                c["SPV_sameblock_equivalent_path_Store_value_immediate_producer_"+val_producer]+=1
+                c["SPV_sameblock_equivalent_path_Store_value_bounded_shift_ancestry_"+val_shift]+=1
+            c["SPV_index_normalized_Function_literal_path_"+category]+=1
+            c["SPV_index_OpLoad_pointer_root_classified"]+=1
+            clean_kind=kind if kind in {"OpVariable","OpAccessChain","OpInBoundsAccessChain",
+                "OpPtrAccessChain","OpCopyObject","OpPhi","OpSelect","OpFunctionParameter"} else "other"
+            c["SPV_index_pointer_direct_definition_"+clean_kind]+=1
+            c["SPV_index_pointer_root_storage_"+storage]+=1
+            c["SPV_index_pointer_root_index_shape_"+index_shape]+=1
+            c["SPV_index_pointer_traversed_AccessChain_count_total"]+=depth
+            if exact:c["SPV_same_block_prior_OpStore_exact_pointer_ID_candidates"]+=1
+            else:c["SPV_no_same_block_prior_OpStore_exact_pointer_ID_proven"]+=1
+    if c["SPV_original_b_authenticated_actual_dynamic_CB_OpLoads"] != (
+        c["SPV_index_OpLoad_pointer_root_classified"]+
+        c["SPV_index_OpLoad_pointer_root_unclassified"]):
+        raise ValueError("GFX077_AUTHENTIC_DYNAMIC_INDEX_PARTITION_DRIFT")
+    n=c["SPV_index_OpLoad_pointer_root_classified"]
+    for prefix in ("SPV_index_pointer_direct_definition_",
+        "SPV_index_pointer_root_storage_","SPV_index_pointer_root_index_shape_"):
+        if sum(v for k,v in c.items() if k.startswith(prefix))!=n:
+            raise ValueError("GFX077_ANONYMOUS_POINTER_ORIGIN_PARTITION_DRIFT")
+    if c["SPV_same_block_prior_OpStore_exact_pointer_ID_candidates"]+c[
+            "SPV_no_same_block_prior_OpStore_exact_pointer_ID_proven"]!=n:
+        raise ValueError("GFX077_SOURCE_PTR_EXACT_STORE_ACCOUNTING_DRIFT")
+    if sum(v for k,v in c.items() if k.startswith(
+            "SPV_index_normalized_Function_literal_path_"))!=n:
+        raise ValueError("GFX077_NORMALIZED_FUNCTION_LITERAL_PATH_ACCOUNTING_DRIFT")
+    candidate=c["SPV_index_normalized_Function_literal_path_same_block_path_store_candidate"]
+    for prefix in ("SPV_sameblock_equivalent_path_Store_value_immediate_producer_",
+                   "SPV_sameblock_equivalent_path_Store_value_bounded_shift_ancestry_"):
+        if sum(v for k,v in c.items() if k.startswith(prefix))!=candidate:
+            raise ValueError("GFX077_LOCAL_STORE_VALUE_SOURCE_OPCODE_COUNT_PARTITION_DRIFT")
+    return {**dict(c),
+       "SPV_Store_value_SSA_shift_ancestry_proves_original_DXBC_ISHL":False,
+       "SPV_local_store_value_producer_proves_actual_runtime_index_value":False,
+       "SPV_equivalent_Function_literal_address_paths_prove_runtime_dataflow":False,
+       "SPV_equivalent_address_path_store_proves_CFG_dominance":False,
+       "SPV_equivalent_address_path_proves_DXBC_temp_to_SPV_SSA_mapping":False,
+       "SPV_exact_pointer_ID_prior_Store_means_aliased_memory_value_proven":False,
+       "SPV_pointer_origin_shape_proves_original_DXBC_temp_provenance":False,
+       "SPV_storage_class_means_full_CFG_dominance_or_runtime_bounds":False,
+       "original_Shader48_Material_CB_register_byte_semantics_proven":False,
+       "originalShaderRestored":False,
+       "phase_closed":False}
