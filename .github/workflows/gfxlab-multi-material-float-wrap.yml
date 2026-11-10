@@ -57,6 +57,8 @@ jobs:
           assert d["experiment"]=="GFX-MULTI-024"
           assert d["source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
           assert d["source_models"]==6 and d["material_slots"]==7
+          assert 1<=d["unique_original_material_objects"]<=7
+          assert d["material_slot_references_reused"]==7-d["unique_original_material_objects"]
           assert d["float_slots"]==112 and d["color_slots"]==14
           assert d["shader48_original_property_count"]==27
           assert d["texture_links"]==21
@@ -74,7 +76,7 @@ jobs:
           assert not d["android_gpu_pixels_verified"]
           assert not d["phase_closed"]
           print("GFX_MULTI024_SAFE_COUNTS "+json.dumps({
-              "floats":d["float_slots"],"colors":d["color_slots"],
+              "unique_materials":d["unique_original_material_objects"],"reused_material_slots":d["material_slot_references_reused"],"floats":d["float_slots"],"colors":d["color_slots"],
               "shader_matched_float_properties":d["material_to_shader_property_name_membership"]["float_slots_declared"],
               "shader_matched_color_properties":d["material_to_shader_property_name_membership"]["color_slots_declared"],
               "textures":d["texture_links"],
