@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "experiment": "GFX-OWNER-001",
+  "evidence_level": "OWNER_ANDROID_DIAGNOSTIC_APP_ONLY",
+  "source_apk_experiment": "GFX-MULTI-026",
+  "apk_ci_run": 42748792585,
+  "owner_archive_sha256": "adc08713ad67a987d0b30ac01b1b6e9004342b359aeb97ed1ee61866fecc4238",
+  "zip_integrity_crc": true,
+  "owner_screenshots_jpeg": 16,
+  "screenshot_resolution": "2400x1080",
+  "owner_copy_log_snapshots": 13,
+  "owner_app_last_report_count": 1,
+  "compiled_unity_shader_cache_files": 10,
+  "original_shader_cache_program_identity_verified": false,
+  "owner_device": {
+    "model": "Xiaomi 23013PC75G",
+    "gpu": "Adreno 730",
+    "api": "OpenGLES3 / ES 3.2",
+    "unity": "2021.3.45f2",
+    "color_space": "Linear"
+  },
+  "models_all_six_logged": true,
+  "models": [
+    "M00",
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05"
+  ],
+  "per_model_log_count": {
+    "M00": 3,
+    "M01": 2,
+    "M02": 2,
+    "M03": 2,
+    "M04": 2,
+    "M05": 2
+  },
+  "material_mode_count": {
+    "SOURCE_ALBEDO_STANDARD": 6,
+    "SOURCE_PBR_STANDARD_APPROX": 7
+  },
+  "original_skeleton_bones_per_selected": {
+    "M00": 3,
+    "M01": 100,
+    "M02": 8,
+    "M03": 0,
+    "M04": 100,
+    "M05": 2
+  },
+  "logged_probe_roles": {
+    "BASECOLOR": 13
+  },
+  "logged_probe_channels": {
+    "RGB": 13
+  },
+  "logged_sampling": {
+    "SOURCE_TEXTURE_COLORSPACE_IMPORT": 13
+  },
+  "logged_surfaces": {
+    "0": 13
+  },
+  "normal_metallic_preview_visible_in_screenshots": true,
+  "normal_metallic_channel_logs_paired_to_screenshots": false,
+  "force_linear_comparison_logs_present": false,
+  "m03_second_surface_log_present": false,
+  "app_errors_in_available_snapshots": 0,
+  "nonempty_first_error_values": 0,
+  "full_logcat_present": false,
+  "owner_pixels_automatically_verified": false,
+  "last_report_model": "M05",
+  "last_report_originalShaderRestored": false,
+  "last_report_originalAnimationRestored": false,
+  "last_report_probeShaderSupported": true,
+  "source_gpu_shader48_identical_to_pc": false,
+  "root_cause_remaining": {
+    "source_shader_program_original_gl3_compiled": false,
+    "original_shader48_source_script_available": false,
+    "shader48_property_to_dx11_registers_verified": false,
+    "pass_state_dynamic_names_resolved_all": false,
+    "unity_material_source_float_fidelity_verified": false,
+    "skinned_rig_import_and_animations_verified": false,
+    "original_pc_android_pixel_parity_verified": false,
+    "all_shader_family_item_restoration_gate_closed": false
+  },
+  "evidence_limits": "13 snapshots are not logcat; screenshots show rendered channel preview, not correct original Shader48. Static OBJ pose is not rig recovery.",
+  "private_screenshots_or_shader_cache_binary_uploaded_to_github": false,
+  "decision": "NOT_CLOSED",
+  "source_closure_document": "gfxlab/SHADER48_MODEL_PHASE_CLOSURE_AR.md"
+}
