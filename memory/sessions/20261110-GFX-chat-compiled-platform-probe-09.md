@@ -1,0 +1,11 @@
+# 20261110-GFX-chat-compiled-platform-probe-09
+- session_id: 20261110-GFX-chat-compiled-platform-probe-09; origin: chat
+- resumed_from: 20261110-GFX-chat-obj-duplicate-attribute-parity-08
+- base_sha: 6d5936d620a8257ada37d3481106dd6a7a6e504f
+- experiment_key: GFX-MULTI-009-private-compressed-original-platform
+- scope: inspect original class48 compiled Shader program platforms (UnityPy only inside runner), count GPU program kinds/versions/sizes without exporting code or shader private property values, no APK.
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- prior_runs: GFX-MULTI-005 42725841763 success; 006 42726999353 success (source program variants); 007 42727286357 success; 008 42727777657 success (all six float32 duplicates equal Unity).
+- planned_run: GFX-MULTI-009 workflow auto-trigger (source-only); status PENDING
+- strict control: original private program bytes not printed, never in Git, original runtime shader remains false
+- questions: does original platform carry DXBC, SPIRV, GLES3 shader program, or other format; how many subprograms and byte families can be parsed safely?

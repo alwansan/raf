@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-obj-duplicate-attribute-parity-08",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-obj-duplicate-attribute-parity-08.md",
+  "latest_session": "20261110-GFX-chat-compiled-platform-probe-09",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-compiled-platform-probe-09.md",
   "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-009: choose single original Shader48 pass and audit Shader source DXBC compression platform and field-safe register/CB/sampler semantics privately; then Android GLES pass fidelity pilot and PC visual comparison.",
+  "next_experiment": "Read GFX-MULTI-009 safe GPU compiled platform proof and then design exact per-pass program semantics transform, not global fallback.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -324,6 +324,12 @@
     "delta_m04": 374,
     "delta_m02": 4,
     "remapped_face_indices_identical_verified": false,
+    "original_shader_restored": false
+  },
+  "latest_compiled_shader_platform_probe": {
+    "experiment": "GFX-MULTI-009",
+    "status": "CI_PENDING",
+    "scope": "PRIVATE_SOURCE_ORIGINAL_COMPILED_PROGRAM_COUNTS_ONLY",
     "original_shader_restored": false
   }
 }

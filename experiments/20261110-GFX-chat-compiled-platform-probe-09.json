@@ -1,0 +1,17 @@
+{
+  "session_id": "20261110-GFX-chat-compiled-platform-probe-09",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-009",
+  "issue_id": "RENDER-002",
+  "question": "Which real compiled platform and shader program binary families are embedded in original Shader48 compressed blob?",
+  "hypothesis": "PC source may include only DX11 binary and require faithful translation to Android",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "private decompress only",
+    "safe aggregate counts",
+    "never publish shader bytecode or strings",
+    "Android shader flag false"
+  ],
+  "status": "CI_PENDING",
+  "scope": "SOURCE_ONLY"
+}
