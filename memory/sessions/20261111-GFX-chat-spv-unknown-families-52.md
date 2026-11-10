@@ -1,0 +1,11 @@
+# 20261111-GFX-chat-spv-unknown-families-52 — GFX-MULTI-079
+- role=GFX-LAB; origin=chat; write only experiment/android-graphics-rootcause.
+- resumed_from `20261111-GFX-chat-ssa-unknown-cfg-51`, GFX078 [CI42902805887](https://github.com/alwansan/raf/actions/runs/42902805887) completed success 632 tests, 47/47 external same-address Store blocks dominate corresponding Load block at CFG block granularity only; remaining 12 sameblock Store-value SSA unknown terminals classified generic other, original Shader48 not restored.
+- base_sha before GFX079 files: `f2351bee4f5385f70364f507f7698ad6886380ef`.
+- source_ref SHA-locked ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. All original shader/compiled binaries, source IDs, offsets and SPV IDs stay private in CI Runner.
+- Scope: 12 unknown original-b authenticated SPV dynamic CB index local Store-value ancestry terminals; classify *public SPIR-V instruction families only* for integer/float arithmetic, bitwise, conversions, vector/composite, control/merge, memory, extensions and unlisted without printing private code. Retain strict CFG block dominance and all earlier 427/128/47 count checks.
+- Code `gfxlab/tools/multi_shader_spv_unknown_family079.py`, `gfxlab/tools/multi_shader_original_cb_index_private_multiset079.py`; regression `gfxlab/tests/test_multi_shader_spv_unknown_family079.py`; workflow `.github/workflows/gfxlab-multi079-SPV-unknown-terminal-opcode-family.yml`.
+- Runs: pending until actual Actions run ID appears. Workflow trigger and source-free tests to verify; prior GFX078 is the latest verified pass at session creation.
+- Negative controls: new SPV opcode names only, unknown/vendor falls into generic other category; no proprietary content; no original DXBC temp→SPV SSA equivalence, no CFG memory reaching-def, no Adreno GPU test.
+- Evidence_level PENDING_CPU_SOURCE_ONLY. `originalShaderRestored=false`; `phase_closed=false`; GFX054 Original Material↔CB bytes mapping OPEN.
+- Next: verify latest CI result and safe artifact/purge; expand exact category only if it remains unclassified, and do not claim complete Shader48 functionality.
