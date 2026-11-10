@@ -16,6 +16,16 @@ namespace RaftGraphicsLab
             public Material[] sourcePbr;
         }
 
+        [Serializable] public sealed class DiagnosticSlot
+        {
+            public Texture2D basecolorSource;
+            public Texture2D basecolorLinear;
+            public Texture2D normalSource;
+            public Texture2D normalLinear;
+            public Texture2D metallicSource;
+            public Texture2D metallicLinear;
+        }
+
         [Serializable] public sealed class Model
         {
             public string id;
@@ -31,12 +41,15 @@ namespace RaftGraphicsLab
             public bool originalAnimationRestored;
             public GameObject root;
             public MaterialSlot[] slots;
+            public DiagnosticSlot[] diagnosticSlots;
         }
 
         public Camera viewingCamera;
         public Model[] models;
         public GameObject studioFloor;
         public bool defaultHideHelpers = true;
+        // Authored diagnostic-only material, never the original Shader48.
+        public Material diagnosticChannelMaterial;
 
         private int modelIndex;
         private int materialMode = 3;
@@ -48,7 +61,36 @@ namespace RaftGraphicsLab
         private bool helpersVisible;
         private int loggedErrors;
         private string firstError="";
-        private const string Experiment="GFX-MULTI-003";
+        private const string Experiment="GFX-MULTI-026";
+        private int diagnosticRole;   // BaseColor / Normal / Metallic
+        private int diagnosticChannel; // RGB / R / G / B / A
+        private int diagnosticSurface;
+        private bool diagnosticForceLinear;
+        private const string ProbeStatus="DIAGNOSTIC_SHADER_NOT_SOURCE_SHADER48";
+        private static readonly string[] DiagnosticRoleNames={"BASECOLOR","NORMAL","METALLIC"};
+        private static readonly string[] DiagnosticChannelNames={"RGB","R","G","B","A"};
+        private Texture2D ActiveDiagnosticTexture()
+        {
+            if(models==null || modelIndex<0 || modelIndex>=models.Length)return null;
+            var m=models[modelIndex];
+            if(m==null||m.diagnosticSlots==null||m.diagnosticSlots.Length==0)return null;
+            diagnosticSurface=Mathf.Clamp(diagnosticSurface,0,m.diagnosticSlots.Length-1);
+            var s=m.diagnosticSlots[diagnosticSurface];
+            if(s==null)return null;
+            if(diagnosticRole==0)return diagnosticForceLinear?s.basecolorLinear:s.basecolorSource;
+            if(diagnosticRole==1)return diagnosticForceLinear?s.normalLinear:s.normalSource;
+            return diagnosticForceLinear?s.metallicLinear:s.metallicSource;
+        }
+        private void StepDiagnosticRole()
+        {
+            diagnosticRole=(diagnosticRole+1)%3;
+            WriteReport();
+        }
+        private void StepDiagnosticChannel()
+        {
+            diagnosticChannel=(diagnosticChannel+1)%5;
+            WriteReport();
+        }
 
         [Serializable] private struct DeviceLog
         {
@@ -68,6 +110,14 @@ namespace RaftGraphicsLab
             public bool originalShaderRestored;
             public bool originalAnimationRestored;
             public bool coloredPixelsAutomaticallyVerified;
+            public string diagnosticProbeStatus;
+            public string diagnosticRole;
+            public string diagnosticChannel;
+            public string diagnosticSampling;
+            public bool diagnosticTextureAssigned;
+            public bool diagnosticShaderSupported;
+            public int diagnosticMaterialSurface;
+            public int diagnosticSurfaces;
             public int availableModels;
             public int sourceBones;
             public int vertices;
@@ -140,6 +190,7 @@ namespace RaftGraphicsLab
             modelIndex=(index+models.Length)%models.Length;
             for(int i=0;i<models.Length;i++)models[i].root.SetActive(i==modelIndex);
             yaw=-30f;pitch=15f;distance=3.5f;pinchPrevious=0;
+            diagnosticSurface=0;
             UpdateMaterials();
             Debug.Log("GFX_MULTI_SELECTED model="+models[modelIndex].id+" shader_exact=false");
         }
@@ -204,6 +255,15 @@ namespace RaftGraphicsLab
                 originalShaderRestored=m.exactShaderRestored,
                 originalAnimationRestored=m.originalAnimationRestored,
                 coloredPixelsAutomaticallyVerified=false,
+                diagnosticProbeStatus=ProbeStatus,
+                diagnosticRole=DiagnosticRoleNames[Mathf.Clamp(diagnosticRole,0,2)],
+                diagnosticChannel=DiagnosticChannelNames[Mathf.Clamp(diagnosticChannel,0,4)],
+                diagnosticSampling=diagnosticForceLinear?"FORCE_LINEAR_IMPORT":"SOURCE_TEXTURE_COLORSPACE_IMPORT",
+                diagnosticTextureAssigned=ActiveDiagnosticTexture()!=null,
+                diagnosticShaderSupported=diagnosticChannelMaterial!=null &&
+                    diagnosticChannelMaterial.shader!=null && diagnosticChannelMaterial.shader.isSupported,
+                diagnosticMaterialSurface=diagnosticSurface,
+                diagnosticSurfaces=m.diagnosticSlots==null?0:m.diagnosticSlots.Length,
                 availableModels=models.Length,sourceBones=m.sourceBones,
                 vertices=m.vertices,triangles=m.triangles,
                 sourceMaterials=m.sourceMaterials,sourceTextures=m.sourceTextures,
@@ -269,8 +329,47 @@ namespace RaftGraphicsLab
                 if(GUI.Button(new Rect(16,top+48*scale+i*itemHeight,panelWidth-17,itemHeight-3*scale),title,button))
                     ChangeModel(i);
             }
+            // Explicit GPU channel test of the original Texture2D samples.
+            // This is a NEW inspector shader: never relabel it as Shader48 or claim PC parity.
+            float probeWidth=Mathf.Clamp(Screen.width*.28f,190f,560f);
+            float px=Screen.width-probeWidth-14*scale;
+            float py=top+13*scale;
+            float pbH=43*scale;
+            GUI.Box(new Rect(px-7*scale,py-6*scale,probeWidth+14*scale,
+                Mathf.Min(Screen.height-py-53*scale,probeWidth+170*scale)),"");
+            GUI.Label(new Rect(px,py,probeWidth,29*scale),"SOURCE TEXTURE / GPU CHANNEL (diagnostic only)",small);
+            if(GUI.Button(new Rect(px,py+30*scale,probeWidth*.48f,pbH),
+                DiagnosticRoleNames[diagnosticRole],button))StepDiagnosticRole();
+            if(GUI.Button(new Rect(px+probeWidth*.5f,py+30*scale,probeWidth*.48f,pbH),
+                DiagnosticChannelNames[diagnosticChannel],button))StepDiagnosticChannel();
+            if(GUI.Button(new Rect(px,py+78*scale,probeWidth*.48f,pbH),
+                diagnosticForceLinear?"FORCE LINEAR":"SOURCE COLORSPACE",button))
+            {diagnosticForceLinear=!diagnosticForceLinear;WriteReport();}
+            var mm=models[modelIndex];
+            if(GUI.Button(new Rect(px+probeWidth*.5f,py+78*scale,probeWidth*.48f,pbH),
+                "SURFACE "+(diagnosticSurface+1)+"/"+(mm.diagnosticSlots==null?0:mm.diagnosticSlots.Length),button))
+            {
+                diagnosticSurface=(diagnosticSurface+1)%Mathf.Max(1,mm.diagnosticSlots==null?1:mm.diagnosticSlots.Length);
+                WriteReport();
+            }
+            var tex=ActiveDiagnosticTexture();
+            float previewH=Mathf.Max(30f,Mathf.Min(probeWidth*.82f,
+                Screen.height-(py+166*scale)-61*scale));
+            var previewRect=new Rect(px+6*scale,py+132*scale,probeWidth-12*scale,previewH);
+            if(tex!=null && diagnosticChannelMaterial!=null &&
+                diagnosticChannelMaterial.shader!=null && diagnosticChannelMaterial.shader.isSupported)
+            {
+                if(Event.current.type==EventType.Repaint)
+                {
+                    diagnosticChannelMaterial.SetFloat("_Channel",diagnosticChannel);
+                    Graphics.DrawTexture(previewRect,tex,diagnosticChannelMaterial);
+                }
+            }
+            else GUI.Label(previewRect,"NO SOURCE TEXTURE / PROBE UNSUPPORTED",small);
+            GUI.Label(new Rect(px,py+139*scale+previewH,probeWidth,24*scale),
+                "Not original Shader48. Copy log + screenshot.",small);
             GUI.Label(new Rect(panelWidth+20,Screen.height-39*scale,Screen.width-panelWidth-40,30*scale),
-                "Rotate: drag | Zoom: pinch | Materials: WHITE / UNLIT / ALBEDO / PBR | COPY LOG",small);
+                "Rotate: drag | Zoom: pinch | Standard modes + GPU channels | COPY LOG",small);
         }
     }
 }
