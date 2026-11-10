@@ -25,3 +25,7 @@ Choose exactly matched original stage variant pair within one Pass and same orig
 
 ## GFX-MULTI-016 SHA original SHDR declaration inventory
 [CI42736745984](https://github.com/alwansan/raf/actions/runs/42736745984) source-only SUCCESS, 85 tests. All 14 original DXBC stage token streams (one matched pair per 7 Passes) parsed with strict Microsoft token length validation. Source declarations total: 66 CB, 29 resources, 27 samplers; 0 raw/structured; Pass0 VS5 CB, FS7 CB/7 resource/6 sampler matches reflected SPIRV resource **counts only**. No source register ids/offsets, constant packing, sampler texture binding equivalence or original GPU proof. All private code purged.
+
+
+## GFX-MULTI-018 private source register-vs-SPIRV numerical parity
+[CI42738042943](https://github.com/alwansan/raf/actions/runs/42738042943) SUCCESS (93 tests): original genuine Shader48 7 passes/14 stages, 42/42 source resource declaration count groups equal SPIRV reflection, 122 total resources in each domain, 0 missing bindings or descriptor pair duplication. Source CB numeric register sets equal SPIRV bindings in all 14 stages; Fragment source t# texture registers equal SPIRV bindings in 0/7, and original s# sampler source registers equal SPIRV bindings in 0/7. 14 trivially empty vertex texture/sampler groups included in 28/42 numeric equal groups. Source numeric register values private; original Material-specific source-to-SPIRV semantic remapping NOT DONE. Prevent incorrect source t#/s# direct assumptions for translated ShaderLab/Android.

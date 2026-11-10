@@ -59,3 +59,10 @@
 ## GFX-MULTI-018 — قيد الفحص
 - `20261110-GFX-chat-source-vs-spirv-binding-19`: مقارنة private DX11 source CB/texture/sampler register slots بـSPIRV-Cross descriptor `set/binding` في 14 stage من المصدر؛ report safe numeric group parity/overlap/duplicates فقط، لا نشر البايتات أو الأرقام الخاصة. CI pending.
 - إذا mismatch: صمم mapping مثبت بدل إعادة ترقيم عشوائية؛ إذا numeric match: لا تعلن أن material/CB/sampler semantic equivalence مثبتة قبل اختبار المصدر وGPU.
+
+
+## GFX-MULTI-018 نتيجة حاسمة
+- [CI42738042943](https://github.com/alwansan/raf/actions/runs/42738042943) SUCCESS، 93 tests؛ مصدر 122 DCL declarations مقابل 122 reflected SPIRV resources، 42/42 مجموعات متساوية **بالعدد فقط** وبدون binding مجهول أو مكرر.
+- 14/14 CB group source register slot numerical sets تساوي SPIRV binding sets؛ **لكن Fragment Texture sets 0/7 تطابقًا رقميًا وSampler sets 0/7**. لا تنسَ أن 28/42 مجموعات تطابق رقمي تشمل 14 مجموعة فارغة في Vertex.
+- **P0 التالي GFX-MULTI-019:** استعادة خريطة DX11 `t#/s#`→SPIRV `set/binding` بشكل مثبت من سجلات المصدر/الترجمة، وربط الأصل `Material TexEnv` وSampler semantics. لا تربط الصور افتراضيًا بأرقام DX11 القديمة داخل GLSL؛ هذا خطر color/normal corruption.
+- بعدها تحقق CB bytes/offsets، DXT5nm AG/tangent، metallic/smoothness وUV/tint، قبل طلب اختبار GPU على Adreno. لا تعتبر مرحلة Shader كاملة.

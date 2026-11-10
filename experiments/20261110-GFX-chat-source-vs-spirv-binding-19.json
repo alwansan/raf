@@ -18,5 +18,24 @@
     "record missing binding/duplicate descriptor sets"
   ],
   "resource_key": "gfxlab-multi018-private-register-set-comparison",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_COUNT_PARITY_EXACT_BUT_TEXTURE_SAMPLER_BINDING_NUMBERS_REMAP",
+  "run": 42738042943,
+  "outcome": {
+    "unit_tests": 93,
+    "original_source_passes": 7,
+    "program_stages": 14,
+    "source_total_declared_resources": 122,
+    "spv_total_reflected_resources": 122,
+    "source_and_spv_counts_equal_groups": 42,
+    "groups_examined": 42,
+    "cb_numeric_binding_sets_equal": 14,
+    "fragment_texture_numeric_sets_equal": 0,
+    "fragment_sampler_numeric_sets_equal": 0,
+    "trivial_empty_vertex_resource_sampler_groups": 14,
+    "nontrivial_set_equal_groups": 14,
+    "spv_missing_bindings": 0,
+    "spv_duplicate_descriptor_pairs": 0,
+    "source_texture_sampler_semantic_map_verified": false,
+    "original_shader_restored": false
+  }
 }

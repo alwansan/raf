@@ -95,3 +95,7 @@
 
 ## GFX-MULTI-018 جارٍ — source DX11 ↔ SPIR-V binding
 جلسة `20261110-GFX-chat-source-vs-spirv-binding-19`، origin=chat، resumed_from=`20261110-GFX-chat-original-register-operands-18`، base_sha=`36fbf0fece5abb5f3e84792f09416cbb4e551e8f`. مقارنة سرية لسجلات b/t/s من SHDR الأصلي مع SPIRV-Cross `set/binding` لنفس البرامج الـ14، نشر أعداد توافق/اختلاف فقط. الفرق الرقمي قد يكون remap صادر عن المترجم، وحتى التطابق الرقمي لا يثبت Material/CB semantic mapping. اقرأ `gfxlab-multi-source-spv-bindings.yml` وحدث الجلسة وRESTORE/OPEN_WORK/MEMORY/STATE بعد CI. لا Android ShaderLab أو APK حاليا.
+
+
+## GFX-MULTI-018 — أحدث نجاح مثبت وسبب نقص الربط
+[CI42738042943](https://github.com/alwansan/raf/actions/runs/42738042943) SUCCESS 93 اختبارًا؛ 7 Passes /14 source Shader48 stages أصلية. المصدر وSPIRV يتساويان في **عدد** مجموعات الموارد 42/42 (122/122 عنصر)، بلا missing/duplicate descriptor. source CB register numbers تطابق SPIRV binding sets في 14/14، بينما **Texture وSampler في Fragment لا يتطابقان رقميًا في 0/7 لكل نوع**. لذا لا تستخدم source t#/s# مباشرة مع SPIR-V GLSL؛ يجب استعادة mapping. التطابق الرقمي لمجموعة CB لا يثبت CB byte offsets أو semantics. آخر جلسة `memory/sessions/20261110-GFX-chat-source-vs-spirv-binding-19.md`. الخطوة الموثقة `GFX-MULTI-019` في `gfxlab/OPEN_WORK_AND_IDEAS_AR.md`: mapping مصدر→SPIRV→Material TexEnv قبل أي Android APK. originalShaderRestored=false.

@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-source-vs-spirv-binding-19",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-source-vs-spirv-binding-19.md",
-  "status": "GFX_MULTI_018_ORIGINAL_REGISTER_VS_SPIRV_NUMERIC_COMPARISON_PENDING",
+  "status": "GFX_MULTI_018_TRUE_SHADER_SOURCE_RESOURCE_COUNTS_EQUAL_TEXTURE_SAMPLER_NUMERIC_REMAP_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-018 assess private original DX11 b/t/s source register index sets vs independently reflected SPIRV bindings for 7 Passes; next map resource semantics to original material TexEnv and CB offsets before Unity Android ShaderLab.",
+  "next_experiment": "GFX-MULTI-019: private evidence-backed map from original DX11 source t#/s# register slots to SPIRV descriptor set/binding and Unity Material TexEnv, validate original normal/metallic/CB shader binding; then isolated Android GPU test only if semantic mapping passes.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -458,8 +458,19 @@
   },
   "latest_source_spirv_register_compare": {
     "experiment": "GFX-MULTI-018",
-    "status": "CI_PENDING",
-    "original_shader_restored": false,
-    "source_register_indexes_public": false
+    "run": 42738042943,
+    "status": "SUCCESS_NUMERIC_REMAP_DETECTED",
+    "tests": 93,
+    "stage_count": 14,
+    "group_count": 42,
+    "total_source_and_spv_resources": 122,
+    "all_groups_resource_counts_equal": true,
+    "cb_numeric_slot_sets_equal_14of14": true,
+    "fragment_texture_numeric_sets_equal_0of7": true,
+    "fragment_sampler_numeric_sets_equal_0of7": true,
+    "spv_binding_entries_missing": 0,
+    "spv_set_binding_duplicates": 0,
+    "original_material_semantics_mapped": false,
+    "original_shader_restored": false
   }
 }
