@@ -31,8 +31,45 @@
     "safe aggregate artifact",
     "unconditional private purge"
   ],
-  "status": "CI_PENDING",
-  "run_urls": [],
+  "status": "SUCCESS_SECOND_DISJOINT_24_OF_157_ORIGINAL_JOINT_CLASSES_CPU_SPIRV",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42859433718",
+    "https://github.com/alwansan/raf/actions/runs/42859754233"
+  ],
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "final_verified_run": 42859754233,
+    "failed_postcheck_run": 42859433718,
+    "unit_tests": 401,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "exact_original_pairs_reclassified": 524,
+    "unique_source_stage_programs": 936,
+    "global_declaration_classes": 110,
+    "pass_declaration_classes": 132,
+    "global_source_sampling_classes": 58,
+    "pass_sampling_classes": 80,
+    "pass_scoped_joint_classes": 157,
+    "selected_batch_start_inclusive": 24,
+    "selected_batch_end_exclusive": 48,
+    "source_exact_pairs_CPU_validated_current": 24,
+    "source_stages_SPIRV_validated_current": 48,
+    "source_stages_sample_t_s_use_equal_current": 48,
+    "source_stages_with_original_CB_name_and_reflected_layout_current": 47,
+    "source_stages_with_no_CB_current": 1,
+    "original_source_supported_opcode_CB_vec4_ranges_SPV_loaded_current": 645,
+    "original_source_CB_dynamic_or_extended_operands_unresolved_current": 187,
+    "failed_strict_source_pair_checks_current": 0,
+    "previous_CI_source_class_representatives_passed": 24,
+    "cumulative_strict_CPU_class_representatives_validated": 48,
+    "remaining_joint_classes_without_CPU_SPV_validation": 109,
+    "source_private_purged": true,
+    "safe_artifact_id": 13783598658,
+    "safe_artifact_expires_at_utc": "2026-11-17T16:57:48Z",
+    "original_Material_property_to_source_DXBC_resource_register_semantics_proven": false,
+    "all_524_variants_individually_validated": false,
+    "original_Shader48_Android_GPU_runtime_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false
+  }
 }

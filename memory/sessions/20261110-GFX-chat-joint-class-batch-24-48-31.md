@@ -13,3 +13,12 @@
 ## Files
 - `gfxlab/tools/multi_shader_pass_joint_batch057.py`, `gfxlab/tests/test_multi_shader_pass_joint_batch057.py`, `.github/workflows/gfxlab-multi057-pass-joint-batch24-48.yml`.
 - CI not yet verified. After terminal run update session/RESTORE/STATE/MEMORY/OPEN_WORK and safe evidence; next batch planned [48,72).
+
+## Final verified CI, evidence, outcome, limitations
+- Final [CI42859754233](https://github.com/alwansan/raf/actions/runs/42859754233) **SUCCESS** with **401** Python tests. Original source SHA pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. Runner original assets and private SPV purged, no raw b/t/s registers, shader code, CB lengths, property/variant IDs or original binaries published.
+- Deterministic private selector compared all 524 original exact VS/FS pairs, 936 compiled program instances, 110 global/132 Pass declaration classes, 58 global/80 Pass sampling-use classes, and 157 combined Pass JOINT classes. Verified current [24,48) disjoint from GFX056 [0,24), not 24 repeated source classes; synthetic nonoverlap/rerun guards passed.
+- Current 24 original pairs: **24/24** both-stage Vulkan1.1 SPIRV validated, **48/48** original t/s instruction pair-use multiset equal, **47/47** stages with CB have authenticated original b# `OpName` + source-size/vec4 stride UBO layout; **1** source stage CB-free, **645/645** original supported arithmetic opcode CB vec4 loaded ranges matched. Strict pair reject=0; **187 dynamic/extended CB operand occurrences not resolved**.
+- Prior GFX056 24 strict checked + current GFX057 24 strict checked = **48/157 Pass-scoped JOINT class representatives**, **109 untested**. This does not prove all 524 individual source stages, full original ShaderLab property binding, Unity source export, device GPU or PC↔Android pixel parity. `originalShaderRestored=false`, `phase_closed=false`.
+- Prior CI42859433718 failed *after* completing source checks due stale safe assertion key and remaining count, purge PASS; corrected workflow only, final success CI42859754233 also passed anonymous artifact upload.
+- [Safe artifact13783598658](https://github.com/alwansan/raf/actions/runs/42859754233/artifacts/13783598658) expires 2026-11-17T16:57:48Z. Outcome `SUCCESS_DISJOINT_BATCH_24_48_24_OF_24_CPU_STRUCTURE_CHECKS`.
+- Next `GFX-MULTI-058` private positions [48,72), same SHA/guarded CI. No Android testing needed or T1–T5 writes.
