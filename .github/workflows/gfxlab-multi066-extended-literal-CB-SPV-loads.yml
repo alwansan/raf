@@ -1,0 +1,112 @@
+name: GFX-MULTI-066 remaining 133 original Shader48 class extended literal CB range SPIRV real OpLoad
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi066-extended-literal-CB-SPV-loads.yml'
+      - 'gfxlab/tools/multi_shader_original_extended_literal_cb_batch066.py'
+      - 'gfxlab/tests/test_multi_shader_original_extended_literal_cb_batch066.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi066-original-source-private-extended-literal-CB
+  cancel-in-progress: false
+jobs:
+  original-extended-literal-CB-remaining133-SPV:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free synthetic operand guards and whole regression suite
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_extended_literal_cb_batch066.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX066_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install source-private CPU disassembly dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Original 157 source class CB modifier-only census and remaining 133 class reps real SPV load ranges
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_extended_literal_cb_batch066 \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab064-private" \
+            --out gfxlab-multi066-original-extended-CB-safe-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi066-original-extended-CB-safe-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-066"
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_exact_VS_FS_source_pairs_censused"]==524
+          assert d["original_unique_compiled_source_stage_programs"]==936
+          assert d["original_Pass_joint_source_classes"]==157
+          assert d["original_source_class_representatives_scanned"]==157
+          assert d["original_source_representative_stage_instances_scanned"]==314
+          c=d["source_nine_supported_arithmetic_opcode_CB_safe_counts"]
+          assert c["original_CB_extended_literal_index_operand_occurrences"]==763
+          assert c["original_CB_true_dynamic_index_operand_occurrences"]==427
+          assert c["original_CB_nonextended_literal_operand_occurrences"]==6800
+          assert c["original_CB_source_operands_in_covered_opcodes"]==7990
+          p=d["original_remaining133_Pass_joint_extended_literal_pair_batch"]
+          assert p["selected_original_Pass_pair_instances"]==133
+          assert p["original_source_stage_instances_Vulkan11_SPV_valid"]==266
+          assert p["original_source_stage_instances_authenticated_b_and_UBO_layout"]+p["original_stage_instances_without_CB"]==266
+          assert p["extended_literal_source_distinct_ranges_with_SPV_OpLoad"] + p[
+            "extended_literal_source_distinct_ranges_without_SPV_OpLoad"] == p[
+            "extended_literal_source_distinct_CB_vec4_ranges"]
+          assert d["remaining133_all_source_extended_literal_distinct_ranges_matched"]
+          assert p["extended_literal_source_distinct_ranges_without_SPV_OpLoad"]==0
+          for k in ("all_763_extended_literal_source_operand_occurrences_individually_SPV_read_proven",
+                    "pilot_range_overlap_proves_individual_source_operand_to_SPV_instruction_mapping",
+                    "pilot_range_overlap_proves_extended_operand_value_modifier_semantics",
+                    "original_427_relative_CB_vector_indices_expression_parity_proven",
+                    "all_524_shader_variants_program_semantics_proven",
+                    "Material_property_to_source_t_s_b_and_CB_member_semantic_bridge_proven",
+                    "original_Adreno_GPU_pixel_parity_proven","originalShaderRestored",
+                    "phase_closed","private_original_shader_bytes_CB_register_indices_CB_lengths_SpV_or_shader_program_IDs_exported"):
+              assert d[k] is False,k
+          print("GFX066_REAL_SOURCE_763_EXTENDED_LITERAL_AND_427_DYNAMIC_PARTITION_CONFIRMED_CPU_ONLY=true")
+          PY
+      - name: Upload safe aggregate counters only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi066-safe-original-extended-literal-CB-SPV-OpLoad-remaining133
+          path: gfxlab-multi066-original-extended-CB-safe-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original Shader48 ZIP2, DXBC, translated SPIRV
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab064-private"
+          echo GFX066_ALL_PRIVATE_ORIGINAL_SOURCE_AND_SPV_PURGED=true
