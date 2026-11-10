@@ -17,9 +17,19 @@
     "source and SPV purge, count-only artifact"
   ],
   "workflow": "https://github.com/alwansan/raf/actions/runs/42886852291",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_157_AUTHENTIC_PAIRS_427_REAL_SPV_DYNAMIC_CB_OPLOADS_NO_PER_OPERAND_SSA_PROOF",
   "evidence_level": "ORIGINAL_SOURCE+CPU_TRANSLATED_SPV_STRUCTURE_ONLY",
   "source_to_SPV_SSA_correspondence_proven": 0,
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "actual_result": {
+    "run": 42886852291,
+    "tests": 509,
+    "artifact_id": 13796361822,
+    "artifact_expires_at_utc": "2026-11-17T19:36:40Z",
+    "verified_detail": "Original 157 representatives, 314 Vulkan SPV stages, 311 original b-authenticated real UBO and 3 CB-free. 427 actual dynamic UBO OpLoads, 427 original relative CB source uses, 0 original source→SPV SSA expression matches, 68 local ISHL source candidate writers with 359 unresolved. Purge verified.",
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "source_to_SPV_SSA_per_operation_proven": false
+  }
 }
