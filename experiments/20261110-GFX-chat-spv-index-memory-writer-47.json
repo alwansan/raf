@@ -22,9 +22,18 @@
     "count-only local writer taxonomy; private source purged"
   ],
   "resource_key": "gfxlab-multi074-private-cb-index-memory-writer",
-  "status": "CI_PENDING",
-  "evidence_level": "PLANNED_SOURCE_AND_TRANSLATED_SPV_CPU_ONLY",
+  "status": "SUCCESS_WITH_UNRESOLVED_SPV_MEMORY_VALUE_PROVENANCE_427_OF_427",
+  "evidence_level": "ORIGINAL_SOURCE_AND_TRANSLATED_SPV_CPU_STRUCTURAL_ONLY",
   "requires_GPU_or_owner_test": false,
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_id": 42896574210,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42896574210",
+  "success_commit_sha": "c1346441bfafe7d4a63f5254eb6bf28e884baf88",
+  "source_free_tests_passed": 545,
+  "authenticated_dynamic_index_reads": 427,
+  "original_b_literal_offset_shape_multiset_matched": 427,
+  "spv_index_memory_pointer_unknown": 427,
+  "local_same_block_store_candidate_proven": 0,
+  "source_purge_verified": true
 }
