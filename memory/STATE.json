@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261111-GFX-chat-phase-one-input-lanes-65",
   "latest_session_path": "memory/sessions/20261111-GFX-chat-phase-one-input-lanes-65.md",
-  "status": "GFX092_VERIFIED_GFX093_SEPARATE_PARAMETER_BLOB_COMMON_PARAMETERS_DISCOVERY_CI_PENDING",
+  "status": "GFX092_093_095_096_VERIFIED_GFX094_SIGNED_APK_DELIVERED_OWNER_ADRENO_COMPILER_TEST_PENDING_PHASE_ONE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX093 independently replay separate ParameterBlob + CommonParameters original property t/s/b member byte provenance; then Android original-stage compile/link probe, GPU material payload and original model rendering. Phase remains open.",
+  "next_experiment": "Read owner GFX094 ZIP (285 stages/128 pairs available;29 CPU BaseInstance unavailable), then exact official Standard recompile via ShaderData.Pass.CompileVariant and private DXBC/signature comparison; source material/texture/rig and matched PC-device pixels still required. See gfxlab/PHASE_ONE_CURRENT_PLAN_AR.md.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2502,6 +2502,52 @@
   "gfx054_absence_claim_superseded": {
     "reason": "omitted m_ParameterBlobIndices and m_CommonParameters",
     "local_parameter_blobs": 381,
-    "CI_verified": false
+    "CI_verified": true
+  },
+  "latest_gfx093": {
+    "run_id": 42922411580,
+    "status": "SUCCESS",
+    "tests": 893,
+    "unique_parameter_blobs": 381,
+    "actual_texture_declaration_witnesses": 3642,
+    "actual_CB_b_declaration_witnesses": 6562,
+    "artifact_id": 13811363304
+  },
+  "latest_gfx095": {
+    "run_id": 42923520045,
+    "status": "SUCCESS",
+    "tests": 905,
+    "float32_member_write_readback_occurrences": 23408,
+    "known_material_byte_occurrences": 167132,
+    "unknown_runtime_byte_occurrences": 10201380,
+    "uploaded_to_GPU": false,
+    "artifact_id": 13813286126
+  },
+  "latest_gfx096": {
+    "run_id": 42924121842,
+    "status": "SUCCESS",
+    "tests": 910,
+    "source_schema_matches_official_Standard_27_properties": true,
+    "original_DXBC_recompiled_matches": false,
+    "artifact_id": 13812393225
+  },
+  "latest_gfx094": {
+    "run_id": 42924333794,
+    "status": "SIGNED_SUCCESS_OWNER_DEVICE_TEST_PENDING",
+    "package": "com.alwansan.gfx094",
+    "source_pairs": 157,
+    "source_stages": 314,
+    "emitted_stages": 285,
+    "offline_linked_pairs": 128,
+    "offline_BaseInstance_unsupported_stages": 29,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "apk_bytes": 531851,
+    "apk_sha256": "da7ae7fe39ad155f51e83e30f2c051e0c8992194f202b211a9db2e7df1b76030",
+    "artifact_id": 13812833945,
+    "artifact_expiry_utc": "2026-11-17T23:35:49Z",
+    "build_source_sha": "66b2968673f410cbf58d5b255216c5e3c9c175ef",
+    "library_file_id": "libfile_22d8c2b2851c8191a78a42f8fc39f44b",
+    "independent_download_hash_CRC_and_shader_manifest_audit": true
   }
 }

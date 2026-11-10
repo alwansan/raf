@@ -1,0 +1,13 @@
+{
+  "experiment_key": "GFX-MULTI-096",
+  "session_id": "20261111-GFX-chat-phase-one-input-lanes-65",
+  "origin": "chat",
+  "scope": "Exact version official Unity Standard source schema compared to pinned original metadata; no compiled code equality claim",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "status": "VERIFIED_SUCCESS_SOURCE_ONLY",
+  "run_id": 42924121842,
+  "tests": 910,
+  "record_kind": "end_of_session_evidence_index",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

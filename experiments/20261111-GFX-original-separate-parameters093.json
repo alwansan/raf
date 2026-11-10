@@ -4,7 +4,7 @@
   "origin": "chat",
   "base_sha": "c56a4a86a85ea6b2ac28adfa04a69a46fb769562",
   "scope": "separate ParameterBlob + CommonParameters actual original DXBC binding witnesses",
-  "status": "local_pass_CI_pending",
+  "status": "SUCCESS_SOURCE_ONLY",
   "reference": "AssetRipper41d464112b99132f02df99e5f46e7f4eefa79c60",
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "planned_tests": [
@@ -13,5 +13,7 @@
     "actual SHDR t/s/b declaration comparison"
   ],
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_id": 42922411580,
+  "tests": 893
 }

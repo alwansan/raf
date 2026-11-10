@@ -17,6 +17,8 @@
     "private pinned original-source 157-pair audit"
   ],
   "resource_key": "gfxlab-original-input-lanes092",
-  "status": "planned",
-  "phase_closed": false
+  "status": "SUCCESS_SOURCE_ONLY",
+  "phase_closed": false,
+  "run_id": 42921521714,
+  "tests": 883
 }
