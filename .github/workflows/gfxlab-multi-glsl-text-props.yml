@@ -1,0 +1,90 @@
+name: GFX-MULTI-034 original unlinked GLES GLSL text to Shader48 property source-only evidence
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-glsl-text-props.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi034-private-glsl-text-evidence
+  cancel-in-progress: false
+jobs:
+  source-private-glsl-property:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free privacy contract, syntax and property token tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_glsl_text_property_evidence.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect authentic unlinked source GLES GLCore text and property tokens in private runner
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_glsl_text_property_evidence \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi034-private" \
+            --out gfxlab-multi034-safe-glsl-text.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi034-safe-glsl-text.json"))
+          a=d["gl_family_private_text_evidence"]
+          assert d["original_source_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_properties"]==27 and d["original_shader48_texture_properties"]==9
+          assert d["original_bound_texture_roles"]==21
+          assert a["GLES"]["candidate_entries"]==139 and a["GLCORE"]["candidate_entries"]==120
+          for family,n in (("GLES",139),("GLCORE",120)):
+              x=a[family]
+              assert x["strict_utf8_decoded"]+x["invalid_utf8_or_binary"]==n
+              assert x["unique_authored_property_tokens"]<=27
+              assert x["unique_texture_property_tokens"]<=9
+              assert x["unique_bound_material_property_tokens"]<=d["distinct_bound_shader_property_labels"]
+              assert x["unique_authored_uniform_property_tokens"]<=27
+              assert x["unique_bound_material_uniform_property_tokens"]<=d["distinct_bound_shader_property_labels"]
+          assert not d["candidate_text_has_exact_original_pass_variant_mapping"]
+          assert not d["candidate_original_glsl_on_adreno_compiled"]
+          assert not d["source_glsl_material_semantic_bridge_verified"]
+          assert not d["dx11_material_to_t_s_cb_register_bridge_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["owner_pc_pixel_parity_verified"]
+          assert not d["raw_private_glsl_or_shader_names_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI034_SAFE_UNLINKED_ORIGINAL_GLSL_EVIDENCE_ONLY=true")
+          PY
+      - name: Publish only safe aggregate count proof
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi034-safe-glsl-text-property-counts
+          path: gfxlab-multi034-safe-glsl-text.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Delete all original source and decoded shader payloads
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi034-private"
+          echo GFX_MULTI034_PRIVATE_SHADER_AND_SOURCE_PURGED=true
