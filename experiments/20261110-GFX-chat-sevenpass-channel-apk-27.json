@@ -7,8 +7,27 @@
   "issue_id": "RENDER-002",
   "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "scope": "First audit source Shader48 seven Pass render state and seven Material slots; then package the six original models with additional GLES3 texture-channel diagnostic. Keep Standard fallback and never claim original shader restored. No full game APK/OBB.",
-  "runs": [],
-  "status": "PREPARING",
+  "runs": [
+    {
+      "key": "GFX-MULTI-026S",
+      "id": 42749035585,
+      "conclusion": "FAIL_sparse_test_checkout",
+      "private_source_purged": true
+    },
+    {
+      "key": "GFX-MULTI-026S",
+      "id": 42749148702,
+      "conclusion": "SUCCESS",
+      "tests": 154,
+      "private_source_purged": true
+    },
+    {
+      "key": "GFX-MULTI-026_APK",
+      "id": 42748792585,
+      "status": "IN_PROGRESS_Unity"
+    }
+  ],
+  "status": "SOURCE_STATE_SUCCESS_APK_BUILD_IN_PROGRESS",
   "controls": [
     "No proprietary DXBC/GLSL/PNG/OBJ loose asset committed",
     "Original source payload only in Github runner",
@@ -16,5 +35,7 @@
     "APK must pass real Unity IL2CPP ARM64 build, signature, manifest check",
     "Owner device logs and GPU pixel parity remain pending"
   ],
-  "next_step": "Audit pass states, compile six model channel-viewer APK, run CI, verify artifact, update all restore/memory files."
+  "next_step": "Audit pass states, compile six model channel-viewer APK, run CI, verify artifact, update all restore/memory files.",
+  "originalShaderRestored": false,
+  "ownerAndroidPixelsVerified": false
 }

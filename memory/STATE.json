@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-secondary-color-alias-26",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-secondary-color-alias-26.md",
-  "status": "GFX_MULTI_025_SUCCESS_EMISSION_BLACK_AND_SOURCE_MATERIAL_TEXTURE_SHARING_PROVEN",
+  "latest_session": "20261110-GFX-chat-sevenpass-channel-apk-27",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-sevenpass-channel-apk-27.md",
+  "status": "GFX_MULTI_026S_SOURCE_PASS_STATE_SUCCESS_ANDROID_CHANNEL_APK_BUILD_IN_PROGRESS",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-026: audit all 7 original Shader48 Pass render-state declarations, original Material render queue/keywords/instancing, and explicit source-versus-missing metadata under private SHA-pinned ZIP2. No inferred Cull/Blend/CB semantics, no Android shader or APK.",
+  "next_experiment": "Complete and audit GFX-MULTI-026 signed six-model channel APK, obtain owner GPU channel screenshots/COPY LOG, then establish original Shader48 semantic and PC parity gates.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -766,5 +766,29 @@
     "original_shader_restored": false,
     "android_gpu_pixels_verified": false,
     "phase_closed": false
+  },
+  "latest_gfx026_source_state": {
+    "run": 42749148702,
+    "initial_failure_run": 42749035585,
+    "tests": 154,
+    "seven_state_blocks": 7,
+    "material_slots": 7,
+    "instancing_true": 7,
+    "default_queue_slots": 5,
+    "explicit_queue_slots": 2,
+    "direct_shader_keyword_field_missing": 7,
+    "original_shader_restored": false
+  },
+  "latest_gfx026_channel_apk": {
+    "run": 42748792585,
+    "head_sha": "818298ce8fcb71d7906f977c5d03cc8d619db57e",
+    "status": "IN_PROGRESS_UNITY_BUILD",
+    "package": "com.alwansan.raft.graphicslab.channels",
+    "shader": "Hidden/GfxLab/ChannelProbe",
+    "models": 6,
+    "source_texture_links": 21,
+    "signed_apk_verified": false,
+    "original_shader_restored": false,
+    "owner_device_tested": false
   }
 }
