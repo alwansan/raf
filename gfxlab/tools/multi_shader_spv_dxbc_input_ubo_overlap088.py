@@ -632,6 +632,12 @@ def authenticated_spv_CB_index_iadd_source_provenance088(dis:bytes,authenticated
         if (not isinstance(auth,(tuple,list)) or len(auth)!=4 or
             type(auth[0]) is not int or auth[0] not in source_cb):
             return ("malformed_or_missing_source_b_auth","unverified")
+        bindings=decorations.get((root,"Binding"),set())
+        if (len(bindings)!=1 or len(next(iter(bindings)))!=1 or
+            not next(iter(bindings))[0].isdigit()):
+            return ("missing_or_ambiguous_binding_vs_source_b","unverified")
+        if int(next(iter(bindings))[0])!=auth[0]:
+            return ("binding_conflicts_source_b_auth","unverified")
         source_class="source_b_global_symbolic_auth"
         p_op,p_args=defs.get(va[0],(None,[]))
         if p_op!="OpTypePointer" or len(p_args)!=2:
