@@ -1,0 +1,78 @@
+name: GFX-MULTI-093 separate original ParameterBlob and CommonParameters register provenance
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi093-separate-original-parameters.yml'
+      - 'gfxlab/tools/multi_shader_parameter_blob093.py'
+      - 'gfxlab/tests/test_multi_shader_parameter_blob093.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi093-original-separate-parameter-bridge
+  cancel-in-progress: false
+jobs:
+  original-source-binding-evidence-availability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: All source-free tests including cross-evidence proof rejection guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_parameter_blob093.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX054_SOURCE_FREE_TESTS_PASS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install bounded metadata reader
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Authenticate separate parameters plus common parameter tables against actual DXBC declarations
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_parameter_blob093 --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx093-private" --out gfx093-safe.json
+          python3 - <<'CHECK'
+          import json
+          d=json.load(open('gfx093-safe.json'));c=d['safe_counts']
+          assert d['original_code_entries']==1275 and d['original_parameter_entries']==381
+          assert c['linked_rows']==1435
+          assert c['merged_texture_bindings']==c['texture_binding_declaration_witness']==3642
+          assert c['merged_CB_bindings']==c['CB_group_binding_source_b_witness']==6562
+          assert c['property_to_source_t_sampler_witness']==1852
+          assert c['property_to_source_b_member_byte_witness']==3344
+          assert not d['originalShaderRestored'] and not d['phase_closed']
+          CHECK
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gfx093-safe-original-parameter-bridge
+          path: gfx093-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original source and private data
+        if: always()
+        run: sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx093-private"

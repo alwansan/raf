@@ -1,0 +1,17 @@
+{
+  "experiment_key": "GFX-MULTI-093",
+  "session_id": "20261111-GFX-chat-phase-one-input-lanes-65",
+  "origin": "chat",
+  "base_sha": "c56a4a86a85ea6b2ac28adfa04a69a46fb769562",
+  "scope": "separate ParameterBlob + CommonParameters actual original DXBC binding witnesses",
+  "status": "local_pass_CI_pending",
+  "reference": "AssetRipper41d464112b99132f02df99e5f46e7f4eefa79c60",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "planned_tests": [
+    "bounded negative parser tests",
+    "source SHA pinned independent runner replay",
+    "actual SHDR t/s/b declaration comparison"
+  ],
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

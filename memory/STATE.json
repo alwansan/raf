@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-signature-component-width-64",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-signature-component-width-64.md",
-  "status": "GFX_MULTI_091_VERIFIED_SUCCESS_871_TESTS_12_SOURCE_ISGN_ONE_COMPONENT_MASK_MATCH_SPV_SCALAR_WIDTH_ONE_NO_SPV_COMPONENT_DECORIGINAL_COMPONENT_LANE_DXBC_SSA_GFX054_GPU_OPEN",
+  "latest_session": "20261111-GFX-chat-phase-one-input-lanes-65",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-phase-one-input-lanes-65.md",
+  "status": "GFX092_VERIFIED_GFX093_SEPARATE_PARAMETER_BLOB_COMMON_PARAMETERS_DISCOVERY_CI_PENDING",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-092: private actual selected component lane of 12 original ISGN masks and source DXBC v# uses vs SPV input/swizzle SSA, avoiding inference from mask popcount or missing SPV Component; separately prioritize true GFX054 original Unity Material property->CB byte payload and Android/PC GPU pixel equality. Report only anonymous structural evidence; originalShaderRestored=false until actual proof.",
+  "next_experiment": "GFX093 independently replay separate ParameterBlob + CommonParameters original property t/s/b member byte provenance; then Android original-stage compile/link probe, GPU material payload and original model rendering. Phase remains open.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -2490,5 +2490,18 @@
     "runner_private_source_purged": true,
     "originalShaderRestored": false,
     "phase_closed": false
+  },
+  "latest_gfx092": {
+    "run_id": 42921521714,
+    "status": "SUCCESS",
+    "tests": 883,
+    "artifact_id": 13812810626,
+    "originalShaderRestored": false,
+    "phase_closed": false
+  },
+  "gfx054_absence_claim_superseded": {
+    "reason": "omitted m_ParameterBlobIndices and m_CommonParameters",
+    "local_parameter_blobs": 381,
+    "CI_verified": false
   }
 }
