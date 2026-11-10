@@ -82,3 +82,10 @@
 ## GFX-MULTI-020 — ربط TextureParam الحقيقي بخاصية المادة (CI pending)
 - جلسة `20261110-GFX-chat-original-material-texenv-21`: مصدر Unity 2021.3 Shader48، `m_Parameters.m_TextureParams` لكل Stage، جدول `m_NameIndices` الأصلي لكل Pass، ومطابقة `m_Index` مع DX11 t# و`m_SamplerIndex` مع s# ثم اسم الخاصية مع Material موقّع بنفس source SHA والـTexEnv bound/nonbound.
 - أرقام أو أسماء مصدرية لا تُنشر، ولا نخلط source property metadata مع shader GPU sampling correctness؛ إن كانت بيانات m_Parameters ناقصة نصرح بوجود نقص ولا نخمن.
+
+
+## GFX-MULTI-020 — ميتاداتا TextureParam غير موجودة، لا نخمن
+- [CI42740776655](https://github.com/alwansan/raf/actions/runs/42740776655) SUCCESS 103 tests. سبع مواد من ستة موديلات أصلية: **63 TexEnv slots، 21 bound، 42 null**. Shader48 الأصلي: 27 serialized properties و7 Passes مع m_NameIndices (29/17/6/10/23/15/9). لكن stage rows الـ14 كلها بلا `m_Parameters` و0 TextureParam metadata. وبالتالي 0 source Material name→t/s register link مثبت.
+- هذا يؤكد النقص السابق في GFX-MULTI-006. مهم: 21 Texture2D مرتبطة صحيح بالمادة؛ النقص بالـShader program parameter metadata فقط.
+- **P0 GFX-MULTI-021**: افحص إن كانت `m_Script` أو مصدر Shader غير مضغوط أو reflection/sidecar من same-export الأصلي يحوي تعريفات أسماء Texture/register، مع SHA مربوط وهوية Shader48 واضحة. إذا ما موجود، دوّن BLOCKED_SOURCE_NAME_TO_REGISTER_MAPPING ولا تخمّن ترتيب m_TexEnvs.
+- لا ترفع حالة shader restoration؛ خصائص shader runtime-setting ممكن تكون خارج m_SavedProperties وفق Unity، ويجب التمييز.

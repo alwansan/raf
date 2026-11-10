@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-original-material-texenv-21",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-original-material-texenv-21.md",
-  "status": "GFX_MULTI_020_ORIGINAL_SHADER_MATERIAL_TEXENV_METADATA_CI_PENDING",
+  "status": "GFX_MULTI_020_ORIGINAL_MATERIAL21_TEXENV_21_BOUND_SHADER_PARAM_METADATA_ABSENT_BINDING_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Read GFX-MULTI-020 original Shader48 SerializedProgramParameters and m_NameIndices vs seven actual Material m_TexEnvs and DX11 SHDR t/s registers. Preserve unknowns, then CB offset layout and Android original shader GPU gate.",
+  "next_experiment": "GFX-MULTI-021 assess whether original Shader48 has any auxiliary unstripped shader source or parameter binding evidence (m_Script/text or external authoritative shader program metadata) before attempting semantic mapping. If absent, preserve explicit unknown and test independent PC pixel/material-pair controls; never infer property order.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -490,7 +490,16 @@
   },
   "latest_shader_material_param_bridge": {
     "experiment": "GFX-MULTI-020",
-    "status": "CI_PENDING",
-    "source_original_shader_restored": false
+    "run": 42740776655,
+    "status": "SUCCESS_ORIGINAL_TEXENV_PRESENT_BUT_SERIALIZED_SUBPROGRAM_PARAMETERS_ABSENT",
+    "source_models": 6,
+    "material_slots": 7,
+    "material_texenv_slots": 63,
+    "bound_material_texenv_slots": 21,
+    "source_shader_properties": 27,
+    "source_stage_rows": 14,
+    "stages_with_parameters": 0,
+    "verified_name_to_t_register_mappings": 0,
+    "original_shader_restored": false
   }
 }

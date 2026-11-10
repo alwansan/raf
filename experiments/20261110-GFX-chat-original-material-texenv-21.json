@@ -18,5 +18,23 @@
     "genuine source t/s register parity and property overlap"
   ],
   "resource_key": "gfxlab-multi020-private-material-texenv-parameter",
-  "status": "CI_PENDING"
+  "status": "SUCCESS_ORIGINAL_MATERIAL_TEXENVS_PRESENT_BUT_SHADER_PROGRAM_PARAMETER_METADATA_ABSENT",
+  "verified_run": 42740776655,
+  "outcome": {
+    "unit_tests": 103,
+    "source_model_count": 6,
+    "original_materials": 7,
+    "original_material_texenv_slots": 63,
+    "original_bound_texture_env_slots": 21,
+    "original_unbound_texenv_slots": 42,
+    "shader_serialized_properties": 27,
+    "source_original_shader_passes": 7,
+    "original_stage_rows_examined": 14,
+    "stage_rows_with_m_Parameters": 0,
+    "texture_param_metadata_rows": 0,
+    "verified_material_property_t_register_bridges": 0,
+    "material_texture_source_missing": false,
+    "original_compiled_program_parameter_metadata_missing": true,
+    "android_original_shader_restored": false
+  }
 }

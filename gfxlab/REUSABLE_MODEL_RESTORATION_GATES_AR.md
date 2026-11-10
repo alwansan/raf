@@ -32,3 +32,7 @@
 
 ## 2026-11-10 — Binding reconstruction stage
 GFX-MULTI-019 [CI42739427552](https://github.com/alwansan/raf/actions/runs/42739427552) links original t/s registers (29 t,27 s) to compiler-generated SPIR-V names and actual descriptor bindings privately with complete 56/56 coverage; **all descriptor numbers differ from original source t/s numbers**. CB 66 names remain unrecognized; no material texture-role → t# register association. GFX-MULTI-020 must check original `SerializedSubProgram` m_TextureParams / name indices / sampler declarations ↔ original `Material.m_SavedProperties.m_TexEnvs`, and CB byte offsets before closing any item shader stage. This diagnostic is not original shader running on Android.
+
+
+## GFX-MULTI-020 decisive property-to-register blocker
+[CI42740776655](https://github.com/alwansan/raf/actions/runs/42740776655) proved original six-model/seven-material sample has 63 material TextureEnv entries and 21 authentically bound textures; source Shader48 27 serialized properties and per-Pass NameIndices, but **0/14 selected compiled source program rows have `m_Parameters`**. No m_TextureParams Index/SamplerIndex ↔ property-name table available to establish true Shader48 Material→DX11 t/s binding. This is source metadata missing, not lost model colors. Before agent handoff either find same-ShA original shader source/auxiliary compile metadata or define separate PC reference/pixel proof; no guessing based on order, no Android shader parity claim.
