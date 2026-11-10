@@ -8,4 +8,8 @@ experiment_key: T5-APK-OBB-UNSUPPORTED-ZIP-METHOD-68158118
 resource_key: none (CPU-only synthetic fixtures)
 hypothesis: currently a matching delivery SHA can mask unsupported BZIP2/LZMA members in an OBB; Android asset readers cannot be assumed to support these methods. Reject unsupported methods before claiming usable assets.
 coordination: T4 owns physical mouse; this run changes only standalone T5 pairing checker/tests, not Unity or shared mini APK. No Unity CI or native build.
-status: active
+status: waiting_ci
+updated_at: 2026-11-10T12:50:00Z
+commits: a10faa5596e0d20f18f6fde057a3e0312cb22947, 4621e6ae8de9a133db35889e3e48c2c4d546332c
+ci: https://github.com/alwansan/raf/actions/runs/42818996633 (in_progress at checkpoint)
+next: verify full unittest result; no duplicate CI
