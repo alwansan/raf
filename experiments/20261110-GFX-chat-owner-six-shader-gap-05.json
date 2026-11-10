@@ -1,0 +1,16 @@
+{
+  "session_id": "20261110-GFX-chat-owner-six-shader-gap-05",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-005",
+  "issue_id": "RENDER-002",
+  "question": "Are source Shader48 render-state and stage structures present for six device-viewed models?",
+  "hypothesis": "One typed 2-SubShader 7-Pass original shader serves 7 material slots but no original Android shader",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "no proprietary source code output",
+    "negative malformed pass tests",
+    "originalShaderRestored always false"
+  ],
+  "status": "CI_PENDING",
+  "scope": "SOURCE_ONLY"
+}

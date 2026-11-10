@@ -1,0 +1,14 @@
+# 20261110-GFX-chat-owner-six-shader-gap-05
+- session_id: 20261110-GFX-chat-owner-six-shader-gap-05; origin: chat
+- resumed_from: 20261110-GFX-chat-six-android-retry-04
+- base_sha: 0a35357ceedafc64c9ba7eeb5fa2f290be9d4267
+- experiment_key: GFX-MULTI-005-shader-readiness
+- scope: owner 14-phone-JPEG + 12 device JSON report audit; one pinned ZIP2 source-only Shader48 metadata check; no full game or team branch writes
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- runs: CI42720920391 SUCCESS (Standard fallback APK), CI42720400057 SUCCESS (source 2/7 Shader48), GFX-MULTI-005 triggered on workflow push (await evidence)
+- device: six models show images/colors; 12/12 logs errors=0, firstError empty, originalShaderRestored=false, originalAnimationRestored=false, coloredPixelsAutomaticallyVerified=false.
+- discrepancies: M01 source 5095 vertices vs Unity 4721; M04 source 2445 vs Unity 2071. Partial mesh M04 may be expected, not confirmed.
+- analysis: Standard/Unlit Shader.Find in builder; no original pass Android. Screenshots don't measure PC parity.
+- evidence_level: OWNER_DEVICE_STANDARD_FALLBACK observed; ORIGINAL_SHADER_SOURCE_TO_ANDROID NOT_READY
+- negative_controls: malformed/no pass fail; no proprietary shader code, GUID/PPtr, original loose images published
+- outcome: experiment queued, full shader phase OPEN; see gfxlab/PHASE_CLOSURE_GATES_AR.md

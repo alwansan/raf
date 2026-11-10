@@ -89,3 +89,6 @@
 - APK المستخرج من artifact verified ZIP CRC، ARM64 Unity/IL2CPP، الحجم **24098726** بايت، SHA256 **`ef2b86b9384144fc3dd13c93d9b3a4e98cc07bfba3493b6a5c59b52d8db13f6c`**؛ طابق كلًّا من GitHub CI وفحص مستقل. لا OBB ولا إصدار اللعبة الكاملة.
 - **Owner Android device six-model pixels=NOT_TESTED**. المطلوب اختبار M00–M05 عبر SOURCE_PBR_STANDARD_APPROX وتقديم 6 صور و6 COPY LOG، والتركيز على M01/M04 (Skinned source static) وM03 (مادتان). قبول المالك السابق يخص Shears v0.2 فقط.
 - المصدر الأصلي SHA-pinned فقط داخل GitHub runner، لا raw OBJ/PNG/GUID/PPtr على الفرع العام. تسليم أولي ليس RENDER-002/WATER-001 READY.
+
+## GFX-MULTI-005 — الهاتف وشروط إغلاق المرحلة (2026-11-10)
+المالك سلّم 14 صورة و12 سجل JSON للموديلات الستة على Adreno730 GLES3؛ جميعها errors=0 مع originalShaderRestored=false وoriginalAnimationRestored=false. كود الاختبار يستخدم Unity Standard fallback وليس Shader48 الأصلي. عدد رؤوس M01 وM04 في Unity أقل من المصدر ويلزم vertex-stream parity. تجربة GFX-MULTI-005 مصدرية لتعداد بيانات Pass الأصلية، ولا تغلق Shader/rig. سجل: memory/sessions/20261110-GFX-chat-owner-six-shader-gap-05.md، المعايير: gfxlab/PHASE_CLOSURE_GATES_AR.md.

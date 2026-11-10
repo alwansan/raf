@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-six-android-retry-04",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-six-android-retry-04.md",
-  "status": "GFX_MULTI_003_REAL_UNITY_6_MODEL_SIGNED_APK_SUCCESS_OWNER_DEVICE_PENDING",
+  "latest_session": "20261110-GFX-chat-owner-six-shader-gap-05",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-owner-six-shader-gap-05.md",
+  "status": "GFX_MULTI_005_SOURCE_SHADER_METADATA_AUDIT_PENDING_FULL_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -23,7 +23,7 @@
       "readiness": "NOT_READY_0/3"
     }
   ],
-  "last_evidence_review": "2026-11-09",
+  "last_evidence_review": "2026-11-10",
   "last_verified_native_run": 42058825739,
   "source_native_build_sha": "e9c358eda01785b65e4eb14f18723da426635628",
   "important_counts": {
@@ -35,9 +35,9 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Owner installs signed independent 6-model mini APK, tests M00–M05 SOURCE_PBR_STANDARD_APPROX with screenshots and COPY LOG JSON per model (especially M01/M04 static skinned poses and M03 two materials); only then compare exact original Shader48 and skinning. Original shader equivalence remains unproven.",
+  "next_experiment": "Inspect source metadata CI GFX-MULTI-005 then one original Shader48 pass semantic GLES3 test; no closed-phase claim from Standard fallback.",
   "build_requested": false,
-  "android_device_test_done_by_this_lab": false,
+  "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
     "docs/ROOT_CAUSE_REVIEW_AR.md",
@@ -190,7 +190,7 @@
     ],
     "original_shader_equivalence_verified": false,
     "original_animation_restored": false,
-    "new_device_pixels_verified": false,
+    "new_device_pixels_verified": true,
     "last_failed_run": 42718266273,
     "last_failure": "GFX_MULTI_DEGENERATE_SOURCE_VERTEX_BOUNDS_M02_AFTER_AUTHENTIC_1598_VERTEX_FALLBACK",
     "fix_scope": "Fail-closed float32 original OBJ vertex extent filtering for five candidates with 7-material/21-texture profile, no synthetic geometry",
@@ -266,5 +266,19 @@
     "artifact_url": "https://github.com/alwansan/raf/actions/runs/42702078254/artifacts/13711903486",
     "package_name": "com.alwansan.raft.graphicslab",
     "status": "signed_APK_source_original_one_skinned_part_owner_test_pending"
+  },
+  "latest_owner_six_model_test": {
+    "screenshots": 14,
+    "log_entries": 12,
+    "errors_reported": 0,
+    "shader_original_restored": false,
+    "original_animation_restored": false,
+    "pc_pixel_parity": false
+  },
+  "latest_shader_deep_audit": {
+    "experiment": "GFX-MULTI-005",
+    "status": "CI_PENDING",
+    "evidence": "ORIGINAL_SOURCE_METADATA_ONLY",
+    "original_shader_restored": false
   }
 }

@@ -1,0 +1,70 @@
+name: GFX-MULTI-005 genuine Shader48 source metadata readiness
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-shader-readiness.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi005-source
+  cancel-in-progress: false
+jobs:
+  source-metadata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Pure tests and guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_readiness.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Audit typed original Shader48 without exporting code
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_readiness --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi005-private" --out gfxlab-multi005-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('gfxlab-multi005-safe-summary.json'))
+          assert d['source_model_count']==6 and d['source_material_slots']==7
+          assert d['distinct_source_shader48']==1
+          assert (d['original_shader_metadata']['subshaders'],d['original_shader_metadata']['passes'])==(2,7)
+          assert not d['ready_to_close'] and not d['original_shader_restored']
+          print('GFX_MULTI005_SOURCE_STRUCTURE_ONLY_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi005-safe-summary
+          path: gfxlab-multi005-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original source
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi005-private"
+          echo GFX_MULTI005_SOURCE_PURGED=true
