@@ -84,10 +84,10 @@ class TestAutoLogZipAudit(unittest.TestCase):
                     state("M00","BASECOLOR","RGB","SOURCE_TEXTURE_COLORSPACE_IMPORT",1),
                     state("M03","NORMAL","R","FORCE_LINEAR_IMPORT",0)]
                 z.writestr("sessions/s0/snapshots.jsonl","".join(
-                    json.dumps({"kind":"state_snapshot","stateJson":json.dumps(x)})+"\\n"
+                    json.dumps({"kind":"state_snapshot","stateJson":json.dumps(x)})+"\n"
                     for x in data))
                 z.writestr("sessions/s0/events.jsonl",json.dumps(
-                    {"kind":"user_action","message":"PRIVATE"})+"\\n")
+                    {"kind":"user_action","message":"PRIVATE"})+"\n")
             d=analyze(path)
             self.assertFalse(d["m03_second_material_tested"])
             self.assertEqual(d["surface_counts"],{"1":1,"0":1})
@@ -100,8 +100,8 @@ class TestAutoLogZipAudit(unittest.TestCase):
                 z.writestr("sessions/a/summary.json",json.dumps(
                     {"schema":"gfxlab-session-v1"}))
                 z.writestr("sessions/b/snapshots.jsonl",json.dumps(
-                    {"kind":"state_snapshot","stateJson":json.dumps(state())})+"\\n")
+                    {"kind":"state_snapshot","stateJson":json.dumps(state())})+"\n")
                 z.writestr("sessions/c/events.jsonl",json.dumps(
-                    {"kind":"unity_Log","message":"PRIVATE"})+"\\n")
+                    {"kind":"unity_Log","message":"PRIVATE"})+"\n")
             with self.assertRaisesRegex(ValueError,"SESSION_FILE_SET_MISMATCH"):
                 analyze(path)
