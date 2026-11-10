@@ -4,6 +4,7 @@
 No source authenticity or Android visual correctness is established by this tool.
 """
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -43,6 +44,26 @@ def pair(original, exported):
     return result
 
 
+def verify_source_digest(record, source_path):
+    """Verify private source bytes locally; never serialize their contents."""
+    check_record(record)
+    h = hashlib.sha256()
+    with source_path.open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            h.update(block)
+    if h.hexdigest() != record['source_sha256']:
+        raise ValueError('source_digest_mismatch')
+
+
+def pair_verified(original, exported, original_source, exported_source):
+    """Reject either unverified source before making a state comparison."""
+    verify_source_digest(original, original_source)
+    verify_source_digest(exported, exported_source)
+    result = pair(original, exported)
+    result['source_digests_content_verified'] = True
+    return result
+
+
 def load(path):
     return json.loads(Path(path).read_text(encoding='utf-8'),
                       object_pairs_hook=_unique_object_pairs,
@@ -53,8 +74,15 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('original', type=Path)
     p.add_argument('exported', type=Path)
+    p.add_argument('--original-source', type=Path)
+    p.add_argument('--exported-source', type=Path)
     args = p.parse_args()
-    print(json.dumps(pair(load(args.original), load(args.exported)), sort_keys=True))
+    if (args.original_source is None) != (args.exported_source is None):
+        p.error('both private source paths are required for byte verification')
+    original, exported = load(args.original), load(args.exported)
+    result = (pair_verified(original, exported, args.original_source, args.exported_source)
+              if args.original_source is not None else pair(original, exported))
+    print(json.dumps(result, sort_keys=True))
 
 
 if __name__ == '__main__':
