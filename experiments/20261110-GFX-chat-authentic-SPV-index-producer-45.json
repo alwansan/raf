@@ -1,0 +1,27 @@
+{
+  "session_id": "20261110-GFX-chat-authentic-SPV-index-producer-45",
+  "origin": "chat",
+  "issue_id": "GFX-MULTI-071",
+  "base_sha": "5d08f083ce6830b39f6348ba9358f7b3a6ee129a",
+  "resumed_from": "GFX-MULTI-070 CI42886852291 SUCCESS: 509 tests, 157 original pairs, 427 real SPV dynamic CB OpLoads, all shift-expression ancestry unresolved, 68 original local ISHL candidates",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "scope": "ORIGINAL_SOURCE_PRIVATE_REAL_SPV_CPU_ONLY",
+  "question": "Which actual SPIR-V SSA opcode produces each real 427 dynamic authenticated original Uniform CB OpLoad vector indices, and is its value itself an OpLoad from a private pointer needing store tracking?",
+  "controls": [
+    "Count only actual UBO-rooted OpAccessChain+OpLoad with original source b register global name/layout authentication",
+    "Never equate count or source stage coincidence to original DXBC instruction",
+    "Record root opcodes and bounded unary wrapper chain opcode taxonomy only; no raw IDs, offsets, stages or source bytes",
+    "Phi/Select ambiguous aliases blocked"
+  ],
+  "planned_tests": [
+    "all GFX tests",
+    "157 authentic exact source representative pairs / 314 SPV stages",
+    "311 source-authenticated real CB globals and 3 no-CB source stages",
+    "427 source uses vs actual SPV reads accounting without equality claims",
+    "direct SSA index opcode/root producer histogram safe and source purge"
+  ],
+  "run": "https://github.com/alwansan/raf/actions/runs/42887526330",
+  "status": "CI_RUNNING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
