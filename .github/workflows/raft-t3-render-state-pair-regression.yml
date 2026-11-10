@@ -4,7 +4,10 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/t3_render_state_pair_diff.py
+      - scripts/t3_render_state_pair_identity.py
+      - scripts/test_t3_render_state_pair_identity.py
       - tests/test_t3_render_state_pair_diff.py
+      - tests/test_t3_render_state_source_bytes.py
       - .github/workflows/raft-t3-render-state-pair-regression.yml
   workflow_dispatch:
 permissions:
@@ -20,5 +23,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Run T3 render-state comparator regression tests
-        run: python3 -m unittest discover -s tests -p 'test_t3_render_state_pair_diff.py' -v
+      - name: Run T3 render-state comparator and source-byte regression tests
+        run: |
+          python3 -m unittest discover -s tests -p 'test_t3_render_state_pair_diff.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_render_state_source_bytes.py' -v
+          PYTHONPATH=scripts python3 -m unittest discover -s scripts -p 'test_t3_render_state_pair_identity.py' -v
