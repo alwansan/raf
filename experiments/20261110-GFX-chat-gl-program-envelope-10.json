@@ -1,0 +1,30 @@
+{
+  "session_id": "20261110-GFX-chat-gl-program-envelope-10",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-glsl-embedded-markers-09",
+  "base_sha": "f28fc520a7f1fc6a8f1673361005ee4481f7b583",
+  "experiment_key": "GFX-MULTI-036",
+  "issue_id": "RENDER-002",
+  "question": "Which compiler platform actually owns the original Shader48 compiled blob, and can unlinked GLES/GLCore entries be authenticated as framed code or linked stages rather than binary metadata?",
+  "source_sha": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "hypothesis": "The original compiled blob platform may remain D3D11 even though its unlinked table includes 259 GL-labelled entries. Text token matches are not enough; inspect source platform, bounded opaque-code shape, keyword-signature evidence and explicit framing.",
+  "evidence_reference": [
+    "https://github.com/alwansan/raf/actions/runs/42810629895",
+    "https://github.com/K0lb3/UnityPy/blob/master/UnityPy/export/ShaderConverter.py",
+    "https://github.com/Perfare/AssetStudio/blob/master/AssetStudioUtility/ShaderConverter.cs"
+  ],
+  "planned_tests": [
+    "Pin compiler.platforms exact typed enum; compare with unlinked program type family",
+    "Audit GL code length buckets and bounded known compression magic and self-length frame candidates without exporting original data",
+    "Compare only private nonempty shader keyword signatures against true linked DX11 stages; label as candidates, not exact Pass links",
+    "Run source-free fail-closed regression and SHA-pinned private original CI; purge private source"
+  ],
+  "negative_controls": [
+    "No original shader bytes/property names/numeric offsets/texture data publicly exported",
+    "No Unity Standard asserted equivalent to original Shader48",
+    "No actual Android Shader48 APK without authentic G7–G11 program/state/binding/GPU proofs",
+    "No writes outside experiment/android-graphics-rootcause"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
