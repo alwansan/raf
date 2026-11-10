@@ -174,3 +174,8 @@ Source-only, pinned ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, **154 uni
 ### Next after GFX-MULTI-026 APK
 - Once CI terminal success: user installs separate `com.alwansan.raft.graphicslab.channels`, test M00–M05 / PBR + channel GPU diagnostics for BaseColor/Normal/Metallic with SOURCE COLORSPACE vs FORCE LINEAR, record screenshot and COPY LOG of per-model/surface/role/channel.
 - Source-only state census needs decoded precise Cull/Blend/ZWrite/ZTest and mapping property→DX11 registers/CB semantics; these are not solved by the channel APK. Compare controlled PC/device pixel reference with original source shader separately. Do not ask T1–T5 for merged game or create an agent.
+
+
+## GFX-MULTI-028S — كشف قيم render state دون استنتاجات GPU (جارٍ)
+- `20261110-GFX-chat-renderstate-enum-28`: المصدر الأصلي في ZIP2 يؤكد وجود م_State لـ7 Passes من GFX026S؛ نفحص هل قيم Cull/ZWrite/ZTest ثوابت enum مسموحة رسميًا أو named override ديناميكي، ونقيس m_ValidKeywords/m_InvalidKeywords بدل اعتبار m_ShaderKeywords الغائب دليل انعدام Keywords. تقرير aggregate فئوي فقط، وليس نسخة ShaderLab جاهزة. CI pending.
+- لا نعدل GFX-MULTI-026 Android channel APK الجارية؛ عند نجاحها اختبر owner 6 meshes وتوابع texture channels وصور الهاتف وCOPY LOG قبل إغلاق أي GPU gate.

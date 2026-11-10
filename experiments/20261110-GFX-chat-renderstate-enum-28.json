@@ -1,0 +1,21 @@
+{
+  "session_id": "20261110-GFX-chat-renderstate-enum-28",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-028S",
+  "question": "Are original Shader48 7-pass serialized Cull/ZWrite/ZTest states direct known numeric Unity2021 shader enums, named overrides or unknown, and does Material21 use alternate valid/invalid keyword fields?",
+  "hypothesis": "7 original m_State blocks have readable state value structs; source-only safe buckets avoid guessing GPU states and may disclose dynamic override blockers.",
+  "reference_refs": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42749148702",
+    "https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs"
+  ],
+  "control": "Source pinned SHA, no raw names/state values, named override!=constant state, source-only, 7 passes/7 material slots, no Android/PC pixels or original shader flags.",
+  "planned_tests": [
+    "safe static enum parser and dynamic-override negative controls",
+    "original Shader48 7 m_State and Material seven keyword-presence census",
+    "safe CI aggregate histogram with no source state numbers"
+  ],
+  "resource_key": "gfxlab-multi028s-original-private-render-state-enums",
+  "status": "CI_PENDING"
+}

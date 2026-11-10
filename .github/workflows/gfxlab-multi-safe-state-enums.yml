@@ -1,0 +1,75 @@
+name: GFX-MULTI-028S original Shader48 safe enum state classifications no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-safe-state-enums.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi028s-source-state-enums
+  cancel-in-progress: false
+jobs:
+  original-private-pass-state-categories:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Shaders
+      - name: Source-free official enum and dynamic override negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_sevenpass_state_enum_semantics.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Classify real Shader48 Cull/ZWrite/ZTest states without exporting source values
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_sevenpass_state_enum_semantics --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi028s-private" --out gfxlab-multi028s-safe-report.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi028s-safe-report.json"))
+          assert d["original_shader_passes"]==7
+          assert d["original_material_slots"]==7
+          assert d["anonymized_state_enum_categories"]["shader_passes_examined"]==7
+          assert not d["raw_state_values_or_names_exported"]
+          assert not d["original_shader48_compiled_on_android"]
+          assert not d["android_gpu_pixel_parity_verified"] and not d["stage_closed"]
+          print("GFX_MULTI028S_SOURCE_ENUM_PRESENCE_NOT_GPU_OR_SHADERLAB_PARITY")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi028s-safe-renderstate-categories
+          path: gfxlab-multi028s-safe-report.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private original Shader and Material source
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi028s-private"
+          echo GFX_MULTI028S_PRIVATE_SOURCE_PURGED=true

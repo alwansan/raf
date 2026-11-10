@@ -1,0 +1,15 @@
+# GFX-LAB — 20261110-GFX-chat-renderstate-enum-28
+- session_id: 20261110-GFX-chat-renderstate-enum-28
+- origin: chat
+- resumed_from: 20261110-GFX-chat-sevenpass-channel-apk-27
+- base_sha: dfe32cd9ce38e7dad44560065aab67c8b771d8bc
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- experiment_key: GFX-MULTI-028S-original-Shader48-render-state-fixed-vs-dynamic-enum-categories
+- issue_id: RENDER-002
+- scope: independent source-only seven-Pass Shader48 Cull/ZWrite/ZTest/AlphaToMask and rtSeparateBlend shape, source 7 Material alternative valid/invalid keyword fields. Do not touch Android channel APK CI42748792585 or T-Team. No raw state values, names, shaders or IDs exported.
+- baseline: GFX-MULTI-026S [CI42749148702](https://github.com/alwansan/raf/actions/runs/42749148702) SUCCESS 154 tests. Seven m_State records, direct rtBlend/colorMask keys absent, five default queue/materials two explicit, instancing 7/7, m_ShaderKeywords direct field absent. Prior failed CI42749035585 was sparse checkout unit fixture only, rerun passed.
+- enum_source: UnityCsReference 2021.3 GraphicsEnums.cs CullMode (Off0/Front1/Back2) and CompareFunction (Disabled0/Never1/Less2/Equal3/LessEqual4/Greater5/NotEqual6/GreaterEqual7/Always8).
+- negative_controls: named overrides never interpreted as constant even if val is numeric; missing fields, nonintegral/nonfinite values, out-of-range explicit; no implied blend/color mask effective GPU state. Source values only reported as allowlisted aggregate categories.
+- planned_run: GFX-MULTI-028S workflow triggered by push. CI initially pending.
+- stage: ORIGINAL_SOURCE only; original Shader48 on Android, source property->register semantic map, PC GPU pixel parity, rig/animation, WATER-001 remain OPEN.
+- next_step: inspect CI safe results and update live RESTORE_AR.md, persistent backlog, STATE.json and MEMORY.md. Keep the channel APK workflow independent.

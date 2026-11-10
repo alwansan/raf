@@ -204,3 +204,9 @@ Source-only, pinned ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, **154 uni
 - **Negative evidence:** `originalShaderRestored=false`, `originalAnimationRestored=false`, `devicePixelsVerified=false`, `PCPixelParityVerified=false`. The new channel probe shader `Hidden/GfxLab/ChannelProbe` is independent diagnostic-only GLES3, **not Shader48**. WATER-001, RENDER-002 remain OPEN.
 
 GFX live session now `memory/sessions/20261110-GFX-chat-sevenpass-channel-apk-27.md`; owner APK test has NOT happened; next check run CI42748792585 and update all five persistent files after its terminal status.
+
+
+## GFX-MULTI-028S — تجربة قيم حالات الرسم الأصلية (2026-11-10)
+- `session_id=20261110-GFX-chat-renderstate-enum-28`, origin=chat، resumed_from=`20261110-GFX-chat-sevenpass-channel-apk-27`، baseline `dfe32cd9ce38e7dad44560065aab67c8b771d8bc`.
+- بعد نجاح GFX-MULTI-026S CI42749148702 (154 tests، 7 Passes م_State، 7 material instancing، 5 default queue/2 explicit)، نقرأ القيم المعلّمة `val/name` لـCull/ZWrite/ZTest/AlphaToMask مقابل Unity2021.3 enum ونفصل named_dynamic عن fixed enums ونفحص keywords البديلة. لا نخرج قيم shader الأصلية أو shader source؛ لا نعتبر نتائج CPU حالة GPU. Workflow `gfxlab-multi-safe-state-enums.yml`، CI pending.
+- تجربة Android GFX-MULTI-026 CI42748792585 مستقلة وفي مسار BuildPipeline، لا تعديل على ملفاتها أو T-team. حدّث سجل هذه الجلسة وSTATE/MEMORY/OPEN_WORK بعد نتيجة CI.
