@@ -17,8 +17,21 @@
   ],
   "resource_key": "original-Shader48-DXBC-source-temp-writer-probe",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42883869947",
-  "status": "CI_QUEUED",
+  "status": "SUCCESS_SOURCE_ONLY_NARROW_NINE_OPCODE_RUN_NO_WRITER_CANDIDATES",
   "evidence_gate": "ORIGINAL_SOURCE_CPU_ONLY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "actual": {
+    "CI": 42883869947,
+    "unit_tests": 491,
+    "original_relative_CB_index_operand_occurrences": 427,
+    "local_candidate_writers_found": 0,
+    "relative_uses_without_writer_in_nine_ALU_instruction_run": 427,
+    "unsupported_opcode_barriers": 11297,
+    "artifact_id": 13794328581,
+    "private_original_source_purged": true,
+    "CFG_dominance_proven": false,
+    "DXBC_to_SPV_SSA_proven": false,
+    "originalShaderRestored": false
+  }
 }
