@@ -91,7 +91,7 @@ jobs:
             --out gfx094-build/GFX094-Original-Shader48-Driver-Probe.apk gfx094-build/aligned.apk
           "$GFX_BUILD_TOOLS/apksigner" verify --verbose gfx094-build/GFX094-Original-Shader48-Driver-Probe.apk
           "$GFX_BUILD_TOOLS/aapt2" dump badging gfx094-build/GFX094-Original-Shader48-Driver-Probe.apk > gfx094-build/badging.txt
-          rg '^package:' gfx094-build/badging.txt
+          grep '^package:' gfx094-build/badging.txt
           python3 - <<'PY'
           import json,hashlib
           from pathlib import Path
