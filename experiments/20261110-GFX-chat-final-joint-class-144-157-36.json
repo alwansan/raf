@@ -31,8 +31,55 @@
     "13 real VS/FS source pairs →26 stage SPV validity and strict sampling/CB checks",
     "count-only artifact and privacy purge"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42870125986"
+  ],
+  "status": "SUCCESS_FINAL_13_OF_13_REPRESENTATIVES_ALL_157_SOURCE_PASS_JOINT_CLASS_CPU_SCOPE_COMPLETE",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42870125986,
+    "unit_tests": 432,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_exact_pairs_censused": 524,
+    "unique_original_stage_programs": 936,
+    "global_source_decl_classes": 110,
+    "Pass_source_decl_classes": 132,
+    "global_source_t_s_sample_classes": 58,
+    "Pass_source_t_s_sample_classes": 80,
+    "Pass_joint_classes": 157,
+    "final_start_inclusive": 144,
+    "final_end_exclusive": 157,
+    "final_original_pairs_SPV_validated": 13,
+    "final_stages_SPV_validated_and_original_t_s_use_equal": 26,
+    "final_CB_b_Ubo_global_and_vec4_layout_stages": 26,
+    "final_source_supported_CB_vec4_ranges_loaded_in_SPV": 476,
+    "final_source_supported_CB_vec4_ranges_missing": 0,
+    "final_dynamic_extended_CB_access_operand_occurrences_unresolved": 78,
+    "final_strict_pair_rejections": 0,
+    "seven_verified_run_ids": [
+      42857815446,
+      42859754233,
+      42861618032,
+      42863853554,
+      42865341763,
+      42866819484,
+      42870125986
+    ],
+    "cumulative_Pass_joint_class_representatives_bounded_CPU_checks": 157,
+    "remaining_Pass_joint_class_representatives_without_CPU_checks": 0,
+    "cumulative_stage_instances_SPV_valid_and_source_t_s_use_equal": 314,
+    "cumulative_source_stage_instances_CB_layout_proven": 311,
+    "cumulative_stage_instances_without_CB": 3,
+    "cumulative_source_supported_static_CB_vec4_range_uses_loaded": 4811,
+    "cumulative_source_dynamic_or_extended_CB_operand_occurrences_unresolved": 1190,
+    "all_524_original_variant_individual_shader_program_semantics_equivalent_proven": false,
+    "original_Shader48_Material_property_to_DXBC_t_s_b_CB_member_semantics_proven": false,
+    "original_Shader48_Android_GPU_execution_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "private_source_purged": true,
+    "safe_artifact_id": 13788687447,
+    "artifact_expires_at_utc": "2026-11-17T17:57:38Z"
+  }
 }
