@@ -1,0 +1,41 @@
+{
+  "session_id": "20261111-GFX-chat-imul-dynamic-operand-54",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-081",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-integer-literal-80-53",
+  "base_sha": "a6394af3cd3888ab9e0da8f9b6b75ed462ba2066",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "For the 12 original-source-authenticated SPV OpIMul non-power-of-two-literal Store-value SSA terminals, what is the other dynamic operand immediate SPV producer, bounded transparent-unary terminal and memory pointer class?",
+  "hypothesis": "The other dynamic operand may come from a Function local OpLoad or a composite/control operation, and source-level SSA or memory reaching-value equivalence remains unproven.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42904933952",
+    "memory/sessions/20261111-GFX-chat-integer-literal-80-53.md"
+  ],
+  "control": [
+    "direct Function OpLoad",
+    "OpBitcast wrapping Function OpLoad",
+    "OpSelect and OpPhi source unknown",
+    "volatile memory operands untrusted",
+    "dynamic Function address path unresolved",
+    "unknown producer opcode returns generic",
+    "power of two literal excluded",
+    "no source temp/GPU parity promotion"
+  ],
+  "planned_tests": [
+    "full source-free unit suite",
+    "SHA-pinned original 157 VS+FS pairs/314 stages/311 CB stages",
+    "427 real source-b authenticated translated SPV CB index loads",
+    "12 nonpower OpIMul literal SSA input anonymous classification partitions",
+    "runner private source and SPV purge",
+    "7-day safe artifact without raw shader values"
+  ],
+  "resource_key": "gfxlab-multi081-private-spv-imul-dynamic-input",
+  "status": "CI_RUNNING",
+  "run_id": 42906064603,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42906064603",
+  "evidence_level": "PENDING_ORIGINAL_SOURCE_TRANSLATED_SPV_CPU_SYNTAX_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
