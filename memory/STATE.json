@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-spv-index-memory-writer-47",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-spv-index-memory-writer-47.md",
-  "status": "GFX_MULTI_073_VERIFIED_SUCCESS_427_SOURCE_B_OFFSET_MULTISETS_MATCH_GFX_MULTI_074_SPV_LOCAL_STORE_CANDIDATES_CI_PENDING_GFX054_MATERIAL_REGISTER_BLOCKED",
+  "status": "GFX_MULTI_074_CODE_COMMITTED_NO_ACTIONS_RUN_VISIBLE_AS_OF_2026_11_10T20_27_12Z_GFX073_VERIFIED_SUCCESS_GFX054_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -2102,7 +2102,7 @@
   "latest_gfx074": {
     "experiment": "GFX-MULTI-074",
     "origin": "chat",
-    "status": "CI_PENDING",
+    "status": "NO_RUN_VISIBLE_AS_OF_2026-11-10T20:27:12Z",
     "resumed_from": "GFX073_CI42890357390_SUCCESS",
     "base_sha": "27522f41c7bd68e7b4c564969f418472177dc6cb",
     "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -2112,6 +2112,8 @@
     "shader_restored": false,
     "device_original_shader_pixels": false,
     "original_temp_to_spv_index_ssa_value_proven": false,
-    "original_material_cb_semantic_mapping": false
+    "original_material_cb_semantic_mapping": false,
+    "run_id": null,
+    "trigger_verified": false
   }
 }
