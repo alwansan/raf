@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-android-interpolation-probe-14",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-android-interpolation-probe-14.md",
-  "status": "GFX_MULTI_040_SUCCESS_SIGNED_DIAGNOSTIC_GLES_INTERPOLATION_APK_OWNER_DEVICE_RUNTIME_PENDING_ORIGINAL_SHADER48_BLOCKED",
+  "latest_session": "20261110-GFX-chat-affine-rootcause-15",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-affine-rootcause-15.md",
+  "status": "GFX_MULTI_041_OWNER_GPU_NATIVE_NOPERSPECTIVE_COLLAPSE_PROVEN_AFFINE_EMULATION_NEW_APK_IN_PROGRESS_ORIGINAL_SHADER48_NOT_RESTORED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-041 inspect user actual Adreno GFX040 ZIP exported to Download/Games/cl/test/g/ via safe auditor; if no ZIP, other stage-one source checks only, never claim original Shader48 restoration. Critical G8 original Material property-to-DX11 t/s/CB register mapping still blocked.",
+  "next_experiment": "Verify signed GFX041 affine-emulation Android APK from Actions 42822853848, then owner runs four modes and sends safe ZIP, confirm source-free affine vs native noperspective results. G8 original Material texture/CB binding still BLOCKED.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1170,5 +1170,25 @@
     "original_shader48_restored": false,
     "owner_gpu_pixels_verified": false,
     "owner_log_zip_received": false
+  },
+  "latest_affine_owner_rootcause": {
+    "experiment": "GFX-MULTI-041",
+    "owner_report_sha256": "5de5522120ad41b51c07d1ffbaa59567a9240d0351687a980db792e9476b7aee",
+    "owner_upload_only": true,
+    "events": 44,
+    "snapshots": 22,
+    "unity_errors": 0,
+    "unity_warnings": 0,
+    "linear_and_noperspective_images_identical": true,
+    "cpu_error_linear_perspective": 0.0010914,
+    "cpu_error_linear_affine": 0.1629662,
+    "true_expected_diff": 0.1630194,
+    "GLSL_ES32_core_noperspective": false,
+    "driver_extension_status": "NOT_PROVEN",
+    "new_affine_signed_apk_ci_run": 42822853848,
+    "new_signed_apk_status": "BUILDING",
+    "source_free_zip_audit_run": 42823375579,
+    "source_free_python_tests": 266,
+    "original_shader48_restored": false
   }
 }
