@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-affine-rootcause-15",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-affine-rootcause-15.md",
-  "status": "GFX_MULTI_041_OWNER_GPU_NATIVE_NOPERSPECTIVE_COLLAPSE_PROVEN_AFFINE_EMULATION_NEW_APK_IN_PROGRESS_ORIGINAL_SHADER48_NOT_RESTORED",
+  "status": "GFX_MULTI_041_SUCCESS_SIGNED_FOUR_MODE_AFFINE_ANDROID_PROBE_OWNER_ADRENO_TEST_PENDING_ORIGINAL_SHADER48_RESTORATION_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Verify signed GFX041 affine-emulation Android APK from Actions 42822853848, then owner runs four modes and sends safe ZIP, confirm source-free affine vs native noperspective results. G8 original Material texture/CB binding still BLOCKED.",
+  "next_experiment": "GFX-MULTI-042 analyze actual owner GFX041 GPU ZIP with gfxlab/tools/affine_reference_owner_zip_audit.py; if not uploaded, source-only independent original Material/CB binding evidence, and optional device GL extension query. No original Shader48 APK without G7–G12 proofs.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1186,9 +1186,18 @@
     "GLSL_ES32_core_noperspective": false,
     "driver_extension_status": "NOT_PROVEN",
     "new_affine_signed_apk_ci_run": 42822853848,
-    "new_signed_apk_status": "BUILDING",
+    "new_signed_apk_status": "SUCCESS",
     "source_free_zip_audit_run": 42823375579,
     "source_free_python_tests": 266,
-    "original_shader48_restored": false
+    "original_shader48_restored": false,
+    "apk_bytes": 8483832,
+    "apk_sha256": "79292f8b65ba641bd35a11b303ecac6d4eb88c7aec39841c839ab924d3c43811",
+    "apk_package": "com.alwansan.raft.graphicslab.affinereference",
+    "artifact_id": 13768320259,
+    "artifact_url": "https://github.com/alwansan/raf/actions/runs/42822853848/artifacts/13768320259",
+    "artifact_expires_utc": "2026-11-17T13:21:17Z",
+    "source_free_apk_tests": 260,
+    "source_free_zip_audit_tests": 266,
+    "owner_new_four_mode_zip_received": false
   }
 }
