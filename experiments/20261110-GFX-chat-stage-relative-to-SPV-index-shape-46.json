@@ -14,7 +14,17 @@
     "Offset value/sign kept anonymous, original DXBC/SPV purged"
   ],
   "run": "https://github.com/alwansan/raf/actions/runs/42888662350",
-  "status": "CI_RUNNING",
+  "status": "SUCCESS_311_CB_STAGE_RELATIVE_INDEX_CATEGORY_COUNT_SHAPES_EQUAL",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "actual_result": {
+    "run": 42888943112,
+    "unit_tests": 521,
+    "artifact_id": 13796113999,
+    "expires_at_utc": "2026-11-17T19:49:20Z",
+    "evidence": "311/311 original authentic CB stages match per-original-stage direct source relative 77 aggregate and SPV Bitcast(OpLoad) and original immediate32-plus-relative 350 aggregate and SPV IAdd(one positive literal,Bitcast(OpLoad)); zero mismatches. Initial CI42888662350 failed safe JSON filename mismatch only; repaired and reran.",
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "per_source_operand_SSA_numeric_value_parity_proven": false
+  }
 }
