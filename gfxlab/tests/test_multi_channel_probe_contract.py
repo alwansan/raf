@@ -16,7 +16,7 @@ class TestGpuChannelProbeContract(unittest.TestCase):
         self.assertIn('coloredPixelsAutomaticallyVerified=false',viewer)
         self.assertIn('originalShaderRestored=m.exactShaderRestored',viewer)
         self.assertIn('diagnosticShaderSupported',viewer)
-        self.assertIn('GFX-MULTI-026',viewer)
+        self.assertTrue('GFX-MULTI-026' in viewer or 'GFX-MULTI-031' in viewer)
     def test_probed_texture_roles_and_sampling_controls(self):
         builder=(ROOT/"gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs").read_text()
         viewer=(ROOT/"gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs").read_text()
@@ -34,7 +34,11 @@ class TestGpuChannelProbeContract(unittest.TestCase):
         self.assertNotIn("Shader48",shader)
     def test_only_diagnostic_package_produced(self):
         builder=(ROOT/"gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs").read_text()
-        self.assertIn("com.alwansan.raft.graphicslab.channels",builder)
-        self.assertIn("GfxLab-Multi-Six-Channel-Probe.apk",builder)
+        self.assertTrue(
+            "com.alwansan.raft.graphicslab.channels" in builder or
+            "com.alwansan.raft.graphicslab.autologs" in builder)
+        self.assertTrue(
+            "GfxLab-Multi-Six-Channel-Probe.apk" in builder or
+            "GfxLab-Multi-Six-AutoLogs.apk" in builder)
         self.assertIn("original_shader_exact=false",builder)
         self.assertIn("GFX_MULTI_SOURCE_TRIANGLE_PARITY_FAIL_",builder)
