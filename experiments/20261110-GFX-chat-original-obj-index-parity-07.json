@@ -1,0 +1,15 @@
+{
+  "session_id": "20261110-GFX-chat-original-obj-index-parity-07",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-007",
+  "issue_id": "RENDER-002",
+  "scope": "SOURCE_ONLY",
+  "question": "Are 374 vertices unused by OBJ triangles for M01 and M04, explaining both Unity import vertex deltas?",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "controls": [
+    "OBJ triangles strict",
+    "no raw geometry public",
+    "observed phone vertex counts distinct from original"
+  ],
+  "status": "CI_PENDING"
+}

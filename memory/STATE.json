@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-shader-variant-feasibility-06",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-variant-feasibility-06.md",
+  "latest_session": "20261110-GFX-chat-original-obj-index-parity-07",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-original-obj-index-parity-07.md",
   "status": "GFX_MULTI_005_SOURCE_METADATA_SUCCESS_OWNER_STANDARD_FALLBACK_ACCEPTED_FULL_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -300,6 +300,15 @@
     "first_run_result": "SUCCESS_PARSER_V2_NO_VARIANTS_COMPRESSION_METADATA_ONE",
     "status": "RETRY_V3_PLAYER_SUBPROGRAMS_PENDING",
     "source_only": true,
+    "original_shader_restored": false
+  },
+  "latest_obj_vertex_reference_audit": {
+    "key": "GFX-MULTI-007",
+    "status": "CI_PENDING",
+    "device_m01_v": 4721,
+    "source_m01_v": 5095,
+    "device_m04_v": 2071,
+    "source_m04_v": 2445,
     "original_shader_restored": false
   }
 }

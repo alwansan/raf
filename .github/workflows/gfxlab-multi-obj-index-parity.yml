@@ -1,0 +1,69 @@
+name: GFX-MULTI-007 original OBJ used vertex parity source-only
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-obj-index-parity.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi007-source-obj
+  cancel-in-progress: false
+jobs:
+  original-obj-reference-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Pure tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_vertex_reference_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Compare original OBJ declared vs used vertex counts privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_vertex_reference_audit --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi007-private" --out gfxlab-multi007-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('gfxlab-multi007-safe-summary.json'))
+          assert d['source_model_count']==6
+          assert [m['model'] for m in d['models']]==['M00','M01','M02','M03','M04','M05']
+          assert not d['vertex_stream_parity_verified']
+          print('GFX_MULTI007_ORIGINAL_OBJ_REFERENCES_DIAGNOSTIC_ONLY')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi007-safe-vertex-reference-counts
+          path: gfxlab-multi007-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge source
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi007-private"
+          echo GFX_MULTI007_ORIGINAL_SOURCE_PURGED=true
