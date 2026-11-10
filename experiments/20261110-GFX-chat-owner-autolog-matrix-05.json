@@ -1,0 +1,27 @@
+{
+  "session_id": "20261110-GFX-chat-owner-autolog-matrix-05",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-auto-logs-export-04",
+  "base_sha": "bcd9d09b42da1557f31794068cc9c7beba3bbb53",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-OWNER-003",
+  "scope": "Audit owner GFX-MULTI-031 exported ZIP, safe six-model coverage, repair signed-APK DEX audit nested artifact lookup; source-only; original Shader48 separately remains blocked.",
+  "question": "Did the automatic export capture device sessions and what original shader/PC parity gates remain untested?",
+  "hypothesis": "MediaStore export and Unity logging succeeded on owner Android, but diagnostic channel/surface coverage and original Shader48 identity remain incomplete.",
+  "reference_refs": [
+    "GFX-MULTI-031 run 42802005319",
+    "DEX audit failed run 42804520804",
+    "owner ZIP sha256 154f2367d12bf5be258d89c0517af8fecbf0c562b11feb5c03e33226161bb26d",
+    "owner private test model(2).zip"
+  ],
+  "control": "Do not upload owner raw ZIP, images, IL2CPP, cache, logs or shader binary; record aggregate counts only.",
+  "planned_tests": [
+    "CRC and bounded source-free auto-log ZIP matrix",
+    "Strict M03 Surface2-specific coverage, not global surface count",
+    "GitHub signed APK artifact exact SHA then compiled DEX bridge verification",
+    "Python unit test suite on CI"
+  ],
+  "resource_key": "gfxlab-owner-003-safe-aggregate",
+  "status": "IN_PROGRESS",
+  "runs": []
+}
