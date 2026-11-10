@@ -99,14 +99,14 @@ def authenticated_spv_CB_index_pointer_origins(dis:bytes,authenticated:dict)->di
             if op in ("OpFunction","OpFunctionEnd"):block=None
             continue
         if op=="OpStore":
-            if len(a)>=2 and block is not None:
+            if len(a)==2 and block is not None:
                 stored[a[0]]=(block,a[1])
             continue
         if name and op=="OpLoad":
             if len(a)<2:raise ValueError("GFX075_MALFORMED_LOAD")
             ptr=a[1]
             kind,storage,index_shape,depth=pointer_origin(ptr)
-            exact=(ptr in stored and stored[ptr][0]==block and block is not None)
+            exact=(len(a)==2 and ptr in stored and stored[ptr][0]==block and block is not None and storage=="Function" and index_shape=="literal")
             # Store prior in same block with identical SSA pointer id; alias freedom NOT proven.
             indexload[name]=(kind,storage,index_shape,depth,exact)
         if name and op in ("OpAccessChain","OpInBoundsAccessChain") and len(a)>=3:
