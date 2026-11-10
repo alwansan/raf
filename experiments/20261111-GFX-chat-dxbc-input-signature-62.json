@@ -1,0 +1,43 @@
+{
+  "session_id": "20261111-GFX-chat-dxbc-input-signature-62",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "experiment_key": "GFX-MULTI-089",
+  "issue_id": "RENDER-002",
+  "resumed_from": "20261111-GFX-chat-DXBC-input-UBO-provenance-61",
+  "base_sha": "efcde845853b580a71bed7ba8b8b6f5c65c637dc",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "What source-private DXBC dcl_input opcode variant/interpolation, source DXBC ISGN/ISG1 signature member mask/system semantic classes and translated SPV Input stage-wide decoration classes coexist in the 157 Shader48 original joint representative pairs?",
+  "hypothesis": "Signature chunks and input declarations may narrow source input semantic classes; exact register number coincidence does not prove source DXBC→SPV semantic interpolation, pixel parity or Unity Material binding.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42913114233",
+    "memory/sessions/20261111-GFX-chat-DXBC-input-UBO-provenance-61.md",
+    "https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/D3D12TokenizedProgramFormat.hpp"
+  ],
+  "control": [
+    "DCL_INPUT 95 / DCL_INPUT_PS 98 linear interpol enum",
+    "PS_SIV 100 extra NameToken",
+    "ISGN 24 byte / ISG1 32 byte signature",
+    "missing/duplicate/truncated signature fail closed",
+    "wrong source register mismatch",
+    "no raw DXBC/SPV ID/semantic name/count",
+    "old source-b 427 authenticated CB op load gate remains",
+    "no Shader48 originalShaderRestored flag"
+  ],
+  "planned_tests": [
+    "source-free 11 new signature/parser test cases and old regression",
+    "original pinned ZIP2 157 joint Shader48 VS/FS representative pairs /314 stages /311 CB source stages",
+    "source-private stage-wide SPV Input globals decorated Location vs original dcl and signature classes, no per-12 equivalence claims",
+    "private DXBC SPV ZIP2 purge and safe artifact"
+  ],
+  "resource_key": "gfxlab-multi089-stagewide-original-dxbc-signature",
+  "status": "CI_RUNNING",
+  "run_id": 42914832664,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42914832664",
+  "failed_preflight_runs": [
+    42914738794
+  ],
+  "evidence_level": "PENDING_STAGE_WIDE_ORIGINAL_DXBC_SIGNATURE_TRANSLATED_SPV_CPU_ONLY",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
