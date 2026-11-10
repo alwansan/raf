@@ -257,3 +257,26 @@ def shifted_source_spv_dynamic_UBO_reads(dis:bytes,authenticated:dict):
       "spv_iadd_literal_positive_sign_proves_original_DXBC_byte_offset_equivalence":False,
       "source_stage_shape_histogram_equality_means_operand_bijection":False,
     }
+
+
+def compare_private_stage_relative_source_to_spv_index_shapes(source_direct,source_add,spv):
+    """Count equality is per original exact source-stage, NOT operand identity."""
+    if (type(source_direct)!=int or type(source_add)!=int or
+        source_direct<0 or source_add<0 or not isinstance(spv,dict)):
+        raise ValueError("GFX072_SOURCE_STAGE_COUNT_SHAPE_INVALID")
+    loads=spv.get("SPV_authenticated_dynamic_vec_OpLoad_occurrences",0)
+    bit=spv.get("SPV_dynamic_vec_load_index_direct_def_opcode_OpBitcast",0)
+    add=spv.get("SPV_dynamic_vec_load_index_direct_def_opcode_OpIAdd",0)
+    if any(type(v)!=int or v<0 for v in (loads,bit,add)) or bit+add>loads:
+        raise ValueError("GFX072_SOURCE_STAGE_SPV_ROOT_COUNT_INCONSISTENT")
+    return {
+        "per_stage_source_vs_SPV_direct_and_add_count_equal":
+            source_direct==bit and source_add==add and source_direct+source_add==loads,
+        "per_stage_source_direct_relative_vs_SPV_bitcast_count_equal":source_direct==bit,
+        "per_stage_source_immediate32_plus_relative_vs_SPV_iadd_count_equal":source_add==add,
+        "per_stage_total_original_relative_uses_equal_real_SPV_dynamic_load_count":
+            source_direct+source_add==loads,
+        "source_to_SPV_per_instruction_correspondence_proven":False,
+        "original_temp_component_to_SPV_loaded_value_semantics_proven":False,
+        "GFX054_authentic_Material_property_CB_member_semantics_proven":False,
+    }
