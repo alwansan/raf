@@ -29,6 +29,7 @@ namespace RaftAndroid.Platform
         private int epoch, lastMotionEpoch, lastLoggedCount, captureLossCount, loggedLossCount, captureRequestAttempts;
         private int captureViewIdentity, mismatchedViewEpoch, loggedMismatchedViewEpoch;
         private float nextRequestTime, nextProbeTime;
+        private int lastCaptureEligibility = -1;
 
         private sealed class CapturedListener : AndroidJavaProxy
         {
@@ -388,8 +389,25 @@ namespace RaftAndroid.Platform
             if (Input.GetKeyDown(KeyCode.Escape) &&
                 Interlocked.Exchange(ref originalLockIntent, 0) != 0)
                 LogLockIntent("escape_release");
-            bool shouldCapture = !paused && focused &&
-                Volatile.Read(ref originalLockIntent) == 1 && PhysicalMousePresent();
+            bool authoredLocked = Volatile.Read(ref originalLockIntent) == 1;
+            bool physicalPresent = PhysicalMousePresent();
+            bool shouldCapture = !paused && focused && authoredLocked && physicalPresent;
+            // Report only changes to the eligibility gate. A missing InputSystem
+            // mouse must not be mistaken for Android denying pointer capture.
+            // No device names, keyboard data, or per-frame input are logged.
+            int eligibility = (paused ? 1 : 0) | (focused ? 2 : 0) |
+                (authoredLocked ? 4 : 0) | (physicalPresent ? 8 : 0);
+            if (eligibility != lastCaptureEligibility)
+            {
+                lastCaptureEligibility = eligibility;
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_eligibility",
+                    "paused=" + paused + "; focused=" + focused +
+                    "; authoredLock=" + authoredLocked +
+                    "; inputSystemPhysicalMouse=" + physicalPresent +
+                    "; shouldCapture=" + shouldCapture +
+                    "; androidCaptureGranted=unknown");
+            }
             if (!shouldCapture)
             {
                 if (requested || nativeHasMotion) ReleaseCapture();
