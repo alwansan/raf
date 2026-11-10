@@ -34,12 +34,28 @@ def compare(original, exported):
             "compared_fields": len(FIELDS) - len(unknown),
             "device_fix_proven": False, "source_authenticated_here": False}
 
+def _unique_object_pairs(pairs):
+    """Reject ambiguous JSON members rather than silently taking the last value."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate_json_field")
+        result[key] = value
+    return result
+
+
+def load_summary(path):
+    return json.loads(path.read_text(encoding="utf-8"),
+                      object_pairs_hook=_unique_object_pairs,
+                      parse_constant=lambda _: (_ for _ in ()).throw(ValueError("nonfinite_json_value")))
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("original", type=Path)
     p.add_argument("exported", type=Path)
     args = p.parse_args()
-    result = compare(json.loads(args.original.read_text()), json.loads(args.exported.read_text()))
+    result = compare(load_summary(args.original), load_summary(args.exported))
     print(json.dumps(result, sort_keys=True))
 
 if __name__ == "__main__":
