@@ -1,0 +1,26 @@
+{
+  "session_id": "20261110-GFX-chat-unreferenced-shader48-06",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-owner-autolog-matrix-05",
+  "base_sha": "cd77afba3d1378564cbc22bde285dd9534c8d59e",
+  "experiment_key": "GFX-MULTI-032",
+  "issue_id": "RENDER-002",
+  "question": "Can any of 381 compiled Shader48 table entries not referenced by 1435 linked rows yield independent bounds-validated RDEF resource reflection?",
+  "hypothesis": "Unreferenced shader programs might contain RDEF or another platform program; presence would be candidate evidence, but unreferenced data cannot prove a linked Shader48 Material binding.",
+  "source_ref": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "planned_tests": [
+    "Private SHA-pinned ZIP2 UnityPy Shader48 table select",
+    "Verify 1656 compiled entries and 1275 unique linked indices",
+    "Census remaining 381 compiled programs with bounded DXBC/RDEF checks",
+    "Publish aggregate counters, no code/identifiers/asset names",
+    "Source-free synthetic tests and robust runner purge"
+  ],
+  "negative_controls": [
+    "No ShaderLab assembled",
+    "No private DXBC/HLSL/GLSL/SPIRV images/IDs names exported",
+    "No Unity Android shader restored claimed",
+    "No gameplay APK or T-Team modifications"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
