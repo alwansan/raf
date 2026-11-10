@@ -23,8 +23,46 @@
     "24 original pairs × VS/FS CPU translation",
     "safe artifact and purge"
   ],
-  "run_urls": [],
-  "status": "CI_PENDING",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42861618032"
+  ],
+  "status": "SUCCESS_DISJOINT_BATCH_48_72_ALL_24_ORIGINAL_JOINT_CLASSES_CPU_PARITY",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "verified_run": 42861618032,
+    "unit_tests": 413,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_exact_pairs_censused": 524,
+    "distinct_compiled_source_stage_programs": 936,
+    "original_source_joint_classes_global_declaration": 110,
+    "original_source_joint_classes_pass_declaration": 132,
+    "source_global_t_s_sample_use_classes": 58,
+    "source_pass_sample_use_classes": 80,
+    "combined_pass_scoped_joint_classes": 157,
+    "batch_start_inclusive": 48,
+    "batch_end_exclusive": 72,
+    "current_batch_original_pairs_SPV_validator_pass": 24,
+    "current_batch_stage_instances_SPV_validator_pass": 48,
+    "current_batch_source_to_SPV_sample_use_pair_multiset_equal": 48,
+    "current_batch_stages_original_CB_name_and_vec4_layout_proven": 48,
+    "current_batch_stages_without_CB": 0,
+    "current_batch_supported_source_CB_ranges_have_actual_SPV_load": 645,
+    "current_batch_supported_source_CB_ranges_missing_SPV_load": 0,
+    "current_batch_original_dynamic_extended_CB_operand_uses_unresolved": 240,
+    "current_batch_strict_pair_failures": 0,
+    "previous_source_CI_batches_verified": [
+      42857815446,
+      42859754233
+    ],
+    "cumulative_pass_scoped_joint_classes_CPU_verified": 72,
+    "source_joint_classes_not_CPU_tested": 85,
+    "original_Material_property_to_DXBC_t_s_b_CB_member_semantic_bridge_verified": false,
+    "all_original_524_variants_program_semantics_proven": false,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "original_source_private_purged": true,
+    "safe_artifact_id": 13785685895,
+    "safe_artifact_expires_at_utc": "2026-11-17T17:08:14Z"
+  }
 }
