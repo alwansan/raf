@@ -6,7 +6,7 @@
   "experiment_key": "GFX-MULTI-047",
   "issue_id": "RENDER-002",
   "resource_key": "authentic-source-DXBC-tokenized-sampling",
-  "status": "CI_PENDING",
+  "status": "SUCCESS_INDEPENDENT_SOURCE_DXBC_VS_TRANSLATED_SPIRV_T_S_MULTISETS",
   "question": "Do exact original DXBC sample/gather texture/sampler register pairs match vkd3d-translated SPIR-V used sample operations for representative seven Shader48 passes?",
   "hypothesis": "Direct source tokenized program decode confirms or rejects translated sample pairs independently",
   "control": [
@@ -24,8 +24,39 @@
     "safe aggregate artifact",
     "always purge private source"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42838485544"
+  ],
   "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "tests": 314,
+    "matched_stages": 14,
+    "total_stages": 14,
+    "original_sample_gather_ops": 37,
+    "translated_sample_gather_ops": 37,
+    "source_unresolved": 0,
+    "translated_unresolved": 0,
+    "exact_source_to_translated_pair_multiset_equivalent": true,
+    "fragment_ops_by_subshader": [
+      [
+        10,
+        4,
+        2,
+        6
+      ],
+      [
+        10,
+        4,
+        1
+      ]
+    ],
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "safe_artifact_id": 13774542864,
+    "private_source_purged": true,
+    "all_524_variants_examined": false,
+    "original_Material_property_to_GPU_resource_register_proven": false,
+    "originalShaderRestored": false
+  }
 }

@@ -12,3 +12,11 @@
 - CI pending. Do not claim positive parity until full original source + translated stages and purge pass.
 ## Limitations
 - Even if source opcode t/s matches translated program t/s, original `Material property → t/s/b#` mapping and CB byte offsets remain blocked by stripped RDEF and absent reflection; no Android original Shader48 runtime, no real PC-Adreno pixels, no game APK. `originalShaderRestored=false`.
+
+## Verified final result
+- CI [42838485544](https://github.com/alwansan/raf/actions/runs/42838485544) SUCCESS; source-free tests **314 passed**; private source purge PASS.
+- 7 original Shader48 Passes, 14 authentic source stages, original DXBC direct opcode inspection vs translated SPIR-V internal pair multisets: **14/14 stage comparisons match**, **37/37 sample/gather operations exactly paired**, source unresolved 0, translated unresolved 0.
+- Per-public-Pass original source and SPV fragment counts: [10,4,2,6] and [10,4,1]; source vertex sample operations all 0.
+- [Safe count-only artifact 13774542864](https://github.com/alwansan/raf/actions/runs/42838485544/artifacts/13774542864), expires 2026-11-17T14:53:12Z. Private original source/registers/shader bytes not published.
+- Evidence level `ORIGINAL_SOURCE_WITH_INDEPENDENT_DXBC_INSTRUCTION_TO_TRANSLATED_SPIRV_CPU_PAIR`, not Android GPU. No Material property→DX11 t/s/CB or CB layout offsets.
+- Next suggested GFX048: source-private full 524-variant sampling coverage census/invariance check before GPU pipeline. Original Shader48 restoration FALSE, G7–G12 BLOCKED. No APK, no T-team modifications.

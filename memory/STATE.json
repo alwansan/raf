@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-sampled-image-register-pairs-20",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-sampled-image-register-pairs-20.md",
-  "status": "GFX_MULTI_046_SUCCESS_TRANSLATED_SPIRV_37_OF_37_SAMPLES_T_S_29_PASS_DISTINCT_SUM_ORIGINAL_MATERIAL_TO_DXBC_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-independent-dxbc-sample-pairs-21",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-independent-dxbc-sample-pairs-21.md",
+  "status": "GFX_MULTI_047_SUCCESS_INDEPENDENT_DXBC_T_S_TO_SPIRV_EXACT_37_OF_37_14_OF_14_NO_ANDROID_OR_MATERIAL_BRIDGE",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-047 independently parse original DXBC SHDR sample/gather opcode texture/sampler operand pairs and privately compare to GFX046 translated SPIR-V 37/37 sample-use graph; fail closed for dynamic/extended instructions. Material property→t/s/CB byte offsets and original Android shader/PC pixels still blocked.",
+  "next_experiment": "GFX-MULTI-048: source-private exhaustive 524 original Shader48 matched keyword/tier variant pairs DXBC sample/gather t/s instruction census, count variant sample signatures per pass, test missing/ambiguous/dynamic registers; bounded per source. No full Unity APK, original Material→DX11 t/s/CB remains blocked.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1331,5 +1331,40 @@
     "android_original_shader_gpu_verified": false,
     "source_private_purge": true,
     "original_shader48_restored": false
+  },
+  "latest_gfx047_independent_source_dxbc_samples": {
+    "run": 42838485544,
+    "status": "SUCCESS",
+    "unit_tests": 314,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "artifact_id": 13774542864,
+    "expires_at_utc": "2026-11-17T14:53:12Z",
+    "representative_exact_pairs": 7,
+    "original_shader48_passes": 7,
+    "source_stages": 14,
+    "direct_source_DXBC_t_s_sample_ops": 37,
+    "translated_SPIRV_sample_ops": 37,
+    "source_dynamic_unknown": 0,
+    "translated_unknown": 0,
+    "stages_with_exact_source_translated_sample_pair_multiset": 14,
+    "per_subshader_pass_sample_counts": [
+      [
+        10,
+        4,
+        2,
+        6
+      ],
+      [
+        10,
+        4,
+        1
+      ]
+    ],
+    "all_524_variants_covered": false,
+    "original_shader48_material_to_dx11_register_mapping": false,
+    "CB_byte_offsets_verified": false,
+    "android_original_shader_gpu_verified": false,
+    "source_privacy_purged": true,
+    "originalShaderRestored": false
   }
 }
