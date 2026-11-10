@@ -24,6 +24,10 @@ jobs:
           sparse-checkout: |
             gfxlab/tools
             gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
       - name: Test bounded synthetic export JSON/PNG/ZIP parser and no-private-output contracts
         run: |
           set -euo pipefail
