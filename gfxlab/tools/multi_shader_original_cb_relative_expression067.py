@@ -289,15 +289,17 @@ def audit(stage):
             ast=source_relative_CB_index_AST_census(original["shdr"],original["cb"])
             legacy=original_cb_source_dynamic_taxonomy(original["shdr"],original["cb"])
             _,other=scan_known_dxbc_cb_operands(original["shdr"],original["cb"])
-            if (ast["relative_original_CB_vec4_operand_occurrences"] !=
+            if (ast.get("relative_original_CB_vec4_operand_occurrences",0) !=
                     legacy["dynamic_vec_relative"]+
                     legacy["dynamic_vec_immediate32_plus_relative"]+
                     legacy["dynamic_vec_immediate64_plus_relative"]
-                or ast["static_CB_operand_occurrences"]!=
+                or ast.get("static_CB_operand_occurrences",0)!=
                     legacy["extended_modifier_but_literal_indices"]+
                     legacy["source_CB_static_unmodified_operand_occurrences"]
-                or ast["covered_CB_operand_occurrences"]!=other["source_CB_source_operand_occurrences_in_covered_arithmetic"]
-                    if "source_CB_source_operand_occurrences_in_covered_arithmetic" in other else False):
+                or ast.get("covered_CB_operand_occurrences",0)!=
+                    other["source_CB_operands_seen_in_covered_arithmetic"]
+                or ast.get("covered_CB_operand_occurrences",0)!=
+                    legacy["source_CB_operands_in_covered_arithmetic"]):
                 raise ValueError("GFX067_INDEPENDENT_SOURCE_CB_AST_TAXONOMY_DISAGREEMENT")
             for key,val in ast.items():total[key]+=val
             stage_count+=1
@@ -323,7 +325,7 @@ def audit(stage):
       "source_to_SPV_SSA_provenance":verdict,
       "original_relative_CB_operand_to_SPV_index_expression_parity_count_proven":0,
       "original_427_relative_CB_operand_numeric_runtime_semantics_proven":False,
-      "original_extended_literal_CB_range_656_of_656_previous_cpu_verified":True,
+      "original_extended_literal_CB_range_656_of_656_previous_CI_refs":[42879705849,42880727817],
       "all_524_original_shader_program_instructions_semantically_equivalent":False,
       "source_cb_arithmetic_opcode_subset_completeness_proven":False,
       "authentic_Material_property_to_b_t_s_CB_member_byte_mapping_proven":False,
