@@ -3,8 +3,8 @@
   "origin": "scheduled",
   "issue_id": "RENDER-002",
   "base_sha": "0fae32d690f54b2a438d25ab1b807e3e782bca42",
-  "status": "active",
-  "updated_at": "2026-11-10T06:33:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-10T06:40:00Z",
   "intended_files": [
     "scripts/t3_render_state_pair_diff.py",
     "tests/test_t3_render_state_pair_diff.py",
@@ -14,5 +14,10 @@
   "resource_key": null,
   "hypothesis": "A definite mismatch in a known render state must not be masked by an unrelated unknown state; unknown fields must not be reported as confirmed differences.",
   "taken_over_from": "T3 20261110T0527Z render-state comparator",
-  "constraints": "No original game assets, Unity/APK, or other team files."
+  "constraints": "No original game assets, Unity/APK, or other team files.",
+  "result": "Fixed definite mismatches masked by unrelated unknown states; three regression cases added. Five isolated logic smoke checks passed locally; full repository suite awaits CI.",
+  "commits": [
+    "6a0a064f27645195ae1bb06d8ddb56003dbbf594",
+    "e8bc2a21a962523052962ea7c2a380f8ddea85a3"
+  ]
 }
