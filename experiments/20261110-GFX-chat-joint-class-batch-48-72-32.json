@@ -1,0 +1,30 @@
+{
+  "session_id": "20261110-GFX-chat-joint-class-batch-48-72-32",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-joint-class-batch-24-48-31",
+  "base_sha": "42be23891740adde1c95327a73688aed08c9aa0e",
+  "experiment_key": "GFX-MULTI-058",
+  "issue_id": "RENDER-002",
+  "resource_key": "private-original-Shader48-joint-class-batch48-72",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Does third private disjoint class slice [48,72) have 24 source-representative DXBC→SPV validated pairs with strict actual source t/s and CB use provenance?",
+  "hypothesis": "Deterministic original Pass-scoped 157 joint class order and SHA-pin permit CPU validation [48,72) without replaying first 48 originals",
+  "controls": [
+    "524 original exact pair source census 157 classes",
+    "nonoverlap with GFX056 and GFX057 + strict [48,72)",
+    "48 compiled stage Vulkan1.1 SPV and original source-to-translated t/s sample pair-use equality",
+    "CB b name and source UBO array layout and bounded vec4 reads",
+    "fail unknown CB dynamic and unsupported accesses closed",
+    "no original shader data/register IDs leak and purge"
+  ],
+  "planned_tests": [
+    "full source-free tests",
+    "original exact source 524 source-pair scan",
+    "24 original pairs × VS/FS CPU translation",
+    "safe artifact and purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
