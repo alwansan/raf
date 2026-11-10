@@ -1,0 +1,29 @@
+{
+  "session_id": "20261110-GFX-chat-secondary-color-alias-26",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-float-wrap-color-25",
+  "base_sha": "0136bcfc67363329c3dd395510d09da6bd5e4170",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-025-original-secondary-color-and-material-texture-alias-census",
+  "scope": "ORIGINAL_SOURCE: selected six M00..M05 Renderer material slot graph; seven Material21 links and twenty-one Texture2D links; exactly 14 original saved Color slots and original Shader48 name membership. Aggregate only.",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Is the nonidentity second color per material an original known property (for example EmissionColor), and which source Material/Texture identities are genuinely shared across model slots?",
+  "hypothesis": "Source color values and public-known semantic names can distinguish black/off defaults from genuinely nonzero authored colors; anonymous alias groups avoid duplicating original resources when restoring Unity, but no source-register link follows.",
+  "control": "No original names/values/PPtrs/GUIDs or pictures serialized to Git. Build source pointer identity groups privately, then publish only total/group histograms and allowlisted color roles. No animation/shader/GPU claims.",
+  "reference_refs": [
+    "CI42745536309",
+    "CI42744204412",
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "planned_tests": [
+    "validate color vector shape and black-alpha-one vs white categories",
+    "classify only allowed publicly known color property roles",
+    "source Material and Texture alias-group size histogram without raw keys",
+    "shader48 original Color name membership and exact seven slot/21 texture chain guard"
+  ],
+  "resource_key": "gfxlab-multi025-original-source-color-alias-only",
+  "status": "PREPARED_CI_PENDING",
+  "workflow": ".github/workflows/gfxlab-multi-secondary-color-alias.yml",
+  "original_shader_restored": false,
+  "android_pixels_verified": false
+}
