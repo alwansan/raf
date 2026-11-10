@@ -1,0 +1,92 @@
+name: GFX-MULTI-035 original Shader48 GLES binary framed text marker census
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi-glsl-embedded-markers.yml'
+      - 'gfxlab/tools/multi_shader_glsl_embedded_markers.py'
+      - 'gfxlab/tests/test_multi_shader_glsl_embedded_markers.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi035-private-embedded-text
+  cancel-in-progress: false
+jobs:
+  shader-gls-binary-markers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Source-free bounded marker and no-source-leak regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_glsl_embedded_markers.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect original unlinked GL shader payload markers privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_glsl_embedded_markers \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi035-private" \
+            --out gfxlab-multi035-safe-byte-marker-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi035-safe-byte-marker-counts.json"))
+          c=d["candidate_source_binary_marker_census"]
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_property_names_count"]==27
+          assert d["original_texture_properties_count"]==9
+          assert c["GLES"]["source_programs"]==139
+          assert c["GLCORE"]["source_programs"]==120
+          for family,n in (("GLES",139),("GLCORE",120)):
+              x=c[family]
+              assert sum(x["glsl_version_offset_buckets"].values())==n
+              assert x["unique_original_property_tokens"]<=27
+              assert x["unique_original_texture_property_tokens"]<=9
+              assert x["unique_original_bound_property_tokens"]<=d["original_bound_material_property_names_count"]
+              assert x["unique_bound_uniform_line_property_tokens"]<=d["original_bound_material_property_names_count"]
+          assert not d["program_to_exact_original_pass_variant_verified"]
+          assert not d["material_property_to_actual_program_uniform_binding_verified"]
+          assert not d["original_shader48_android_gpu_compilation_verified"]
+          assert not d["original_shader48_restored"]
+          assert not d["pc_device_pixel_parity_verified"]
+          assert not d["raw_shaders_property_names_source_values_or_bytes_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI035_EMBEDDED_SOURCE_MARKERS_ONLY_NOT_SHADER_RESTORED=true")
+          PY
+      - name: Upload safe byte marker counts only
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi035-safe-embedded-GL-byte-markers
+          path: gfxlab-multi035-safe-byte-marker-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original ZIP2 and unpacked shader data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi035-private"
+          echo GFX_MULTI035_ALL_PRIVATE_SHADER_SOURCE_PURGED=true
