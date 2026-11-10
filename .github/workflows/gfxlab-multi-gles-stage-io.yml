@@ -1,0 +1,74 @@
+name: GFX-MULTI-012 genuine one-pass GLES310 offline and stage IO / no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-gles-stage-io.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi012-stage-io-source
+  cancel-in-progress: false
+jobs:
+  original-source-gles3-offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+      - name: Unit diagnostics tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_gles_stage_io.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install private shader CPU translation and validation stack
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Original DXBC to Vulkan SPIRV to GLSL ES stage IO and offline compile
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_gles_stage_io --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi012-private" --out gfxlab-multi012-safe-summary.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi012-safe-summary.json"))
+          assert d["source_original_dxbc_verified"] and d["vulkan11_spirv_both_stages_validated"]
+          assert not d["original_shaderlab_restored"] and not d["phase_closed"]
+          assert not d["original_shader_on_adreno_verified"]
+          print("GFX_MULTI012_OFFLINE_GLES_IS_NOT_ANDROID_GPU_PROOF")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi012-safe-stage-io-gles
+          path: gfxlab-multi012-safe-summary.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private compiled shader files
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi012-private"
+          echo GFX_MULTI012_PRIVATE_CODE_PURGED=true

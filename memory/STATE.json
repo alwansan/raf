@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-shader-pass-pair-spirv-11",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-pass-pair-spirv-11.md",
+  "latest_session": "20261110-GFX-chat-shader-gles-stage-io-12",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-shader-gles-stage-io-12.md",
   "status": "GFX_MULTI_008_ALL_SIX_FLOAT32_VERTEX_DEDUP_COUNTS_PASS_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Inspect GFX-MULTI-011 authentic one-pass paired DXBC to SPIRV Vulkan1.1 CPU report; then verify semantic IO and resource layout before Android GLES ShaderLab.",
+  "next_experiment": "Inspect GFX-MULTI-012 VS/FS SPIRV stage IO and GLSL ES310 offline compiler report; actual shader on Android and PC image parity still required.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -356,8 +356,16 @@
   },
   "latest_original_shader_translation_pilot": {
     "experiment": "GFX-MULTI-011",
-    "status": "CI_PENDING",
-    "scope": "CPU_ONLY_ONE_MATCHED_ORIGINAL_DXBC_PAIR",
+    "run": 42731898965,
+    "status": "SUCCESS_ONE_MATCHED_SOURCE_DXBC_PAIR_BOTH_STAGES_VULKAN11_SPIRV_VALID",
+    "all_7_passes_have_exact_variant_pair": true,
+    "matched_pairs_total": 524,
     "shader_restored": false
+  },
+  "latest_shader_gles_stage_probe": {
+    "experiment": "GFX-MULTI-012",
+    "status": "CI_PENDING",
+    "source_only": true,
+    "original_shader_restored": false
   }
 }

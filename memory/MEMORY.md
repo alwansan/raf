@@ -107,3 +107,7 @@ GFX-MULTI-008 [CI42727777657](https://github.com/alwansan/raf/actions/runs/42727
 
 ## GFX-MULTI-010 verified source DX11 links (2026-11-10)
 [CI42731206453](https://github.com/alwansan/raf/actions/runs/42731206453) completed SUCCESS with 62 tests. All 1435 original Shader48 source VS/FS variant links to compressed compiled table are valid and exact GPU type match (0 mismatches/invalid), all seven passes reference DX11 programs with embedded DXBC signature, not general table's orphan GLES family records. Compressed blob bytes 163501; decompressed LZ4 buffer 4338048; sum of bytes of all parsed program-code records 242218471. Presence/source structure NOT Android proof. GFX-MULTI-011 attempts a single exact paired VS/FS DXBC translation privately. See session 20261110-GFX-chat-shader-pass-pair-spirv-11.
+
+
+## GFX-MULTI-011 exact DXBC pair CPU translation (2026-11-10)
+[CI42731898965](https://github.com/alwansan/raf/actions/runs/42731898965) SUCCESS with 65 tests. One genuine original Shader48 Pass 0 VS+FS pair with identical original keyword and hardware bucket was privately extracted; both original DXBC containers translated by vkd3d-compiler to Vulkan1.1 SPIRV and passed spirv-val. All seven Passes have >=1 exact original source stage pair (total 524 pairs across passes). This is **CPU feasibility, not shader restoration on Unity Android or PC pixel equivalence**. GFX-MULTI-012 now tests SPIRV stage interface and GLSL ES offline conversion. Session 20261110-GFX-chat-shader-gles-stage-io-12.

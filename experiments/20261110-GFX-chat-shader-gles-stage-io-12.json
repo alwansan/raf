@@ -1,0 +1,21 @@
+{
+  "session_id": "20261110-GFX-chat-shader-gles-stage-io-12",
+  "origin": "chat",
+  "experiment_key": "GFX-MULTI-012",
+  "issue_id": "RENDER-002",
+  "source": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "previous_run": 42731898965,
+  "question": "Does one exact original DXBC Shader48 VS/FS pair yield compatible SPIRV stage IO and compile as GLSL ES310 offline?",
+  "tests": [
+    "spirv-cross safe reflection counters",
+    "stage IO same location and type",
+    "SPIRV to GLSL ES310",
+    "glslangValidator syntax"
+  ],
+  "controls": [
+    "no shader code in public artifact",
+    "no Android shader claim",
+    "no Stage variant inference beyond paired exact keyword tier"
+  ],
+  "status": "CI_PENDING"
+}
