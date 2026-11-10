@@ -1,0 +1,13 @@
+# GFX-LAB — 20261110-GFX-chat-passstate-material-binding-29
+- session_id: 20261110-GFX-chat-passstate-material-binding-29; origin: chat
+- resumed_from: 20261110-GFX-chat-renderstate-enum-28
+- base_sha: 2972cfce2736c0790db5fb317d201c313c69fdbf
+- source_ref: ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385
+- experiment_key: GFX-MULTI-029S-original-Shader48-StateNamedParams-to-MaterialSavedFloat
+- issue_id: RENDER-002
+- scope: original Shader48 seven Passes / 7 Material slots, match source m_State.culling/zWrite/zTest/alphaToMask.name to 27 shader property names and seven signed m_SavedProperties.m_Floats maps, count enum-valid categories; no original property names/values, shaders, textures or GUID/PPtr exported, no Android APK or T-Team changes.
+- evidence baseline: [GFX-MULTI-028S CI42749968983](https://github.com/alwansan/raf/actions/runs/42749968983) SUCCESS 159 tests, 7/7 named dynamic states for all four fields, source 7 m_ValidKeywords nonempty; [GFX026 CI42748792585](https://github.com/alwansan/raf/actions/runs/42748792585) standalone signed diagnostic Android channel APK, not original Shader48, owner device pictures/logs outstanding.
+- hypothesis: original dynamic shader pass state names can be linked directly to original Float properties in Material saved tables without guessing numeric fallback.
+- negative_controls: exact property name lookup only (allow explicit [_Property] ShaderLab bracket syntax), no array order mapping, invalid Float enum values flagged, missing property means source mapping unavailable. Full GPU Shader48 parity false.
+- run: GFX-MULTI-029S auto-trigger on workflow push; CI_PENDING at creation.
+- next_step: inspect CI source counts and update RESTORE_AR.md, session, STATE.json, MEMORY.md, OPEN_WORK_AND_IDEAS_AR.md; test device channel APK separately, original shader and PC GPU parity open.

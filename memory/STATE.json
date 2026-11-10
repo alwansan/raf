@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-renderstate-enum-28",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-renderstate-enum-28.md",
+  "latest_session": "20261110-GFX-chat-passstate-material-binding-29",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-passstate-material-binding-29.md",
   "status": "GFX_MULTI_028S_GENUINE_SHADER48_DYNAMIC_RENDER_STATES_PROVEN_CHANNEL_APK_SIGNED_DEVICE_GPU_OPEN",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-029S verify original Shader48 dynamic pass state named parameters against Shader48 serialized property names and seven Material saved Floats, fail closed on unresolved; in parallel owner test signed GFX-MULTI-026 channel APK screenshots and COPY LOG. Do not treat diagnostic shader as original Shader48.",
+  "next_experiment": "Read GFX-MULTI-029S original Shader48 dynamic state m_State.name and source 7 Material saved Float property exact name matches, preserve unknowns and no GPU claim. Channel APK 026 delivered and signed; phone COPY LOG/screenshots pending.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -818,5 +818,11 @@
     "original_shader_restored": false,
     "android_gpu_pixels_verified": false
   },
-  "gfx026_owner_device_test_protocol": "gfxlab/DEVICE_TEST_GFX_MULTI026_AR.md"
+  "gfx026_owner_device_test_protocol": "gfxlab/DEVICE_TEST_GFX_MULTI026_AR.md",
+  "latest_state_parameter_float_bridge": {
+    "experiment": "GFX-MULTI-029S",
+    "status": "CI_PENDING",
+    "original_shader_restored": false,
+    "source_only": true
+  }
 }

@@ -222,3 +222,9 @@ GFX live session now `memory/sessions/20261110-GFX-chat-sevenpass-channel-apk-27
 - Ground enum names: official [Unity 2021.3 GraphicsEnums.cs](https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs). Fail-closed unit tests cover numeric enum fallback, invalid/unrecognized value and named dynamic override. Original numeric state values, private property names and source Shader48 bytes never exported; runner purge verified.
 - OriginalShader48Restored=false; actual Android diagnostic channel APK (GFX026 [CI42748792585](https://github.com/alwansan/raf/actions/runs/42748792585)) is a separate shader `Hidden/GfxLab/ChannelProbe`, not original Shader48; owner GPU channel images/COPY LOG remain pending. Signed APK checksum documented by parallel delivery owner in RESTORE and `gfxlab/DEVICE_TEST_GFX_MULTI026_AR.md`.
 - Next **GFX-MULTI-029S**: verify each dynamic `m_State.{culling,zWrite,zTest,alphaToMask}.name` is a true Shader48 `m_PropInfo` property and occurs in original seven Material `m_SavedProperties.m_Floats`/typed property tables. Reject mismatched alias and unknown parameter; do not guess enum from numeric fallback or source property array order.
+
+
+## GFX-MULTI-029S — تجربة ربط أسماء حالات Shader48 الديناميكية بFloat الأصلية
+- `session_id=20261110-GFX-chat-passstate-material-binding-29`, origin=chat، resumed_from=`20261110-GFX-chat-renderstate-enum-28`، base_sha=`2972cfce2736c0790db5fb317d201c313c69fdbf`.
+- اختبار source-only جديد لاسم `m_State.{culling,zWrite,zTest,alphaToMask}.name` ضد Shader48 m_PropInfo original property name وضد سبع Material `m_SavedProperties.m_Floats` وEnum value category. لا نشر أسماء/قيم المصدر؛ عند غياب المطابقة لا تُخمن. Workflow `gfxlab-multi-state-material-floats.yml`. حتى لو 100% names match، هذا ليس original ShaderLab على GPU.
+- APK diagnostic GFX-MULTI-026 الموقّع متاح للاختبار على الهاتف، original Shader48 still FALSE. تحديث الجلسة والذاكرة بعد CI.

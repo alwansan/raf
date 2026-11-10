@@ -1,0 +1,75 @@
+name: GFX-MULTI-029S authentic Shader48 named render state Material Float bridge no APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: ['.github/workflows/gfxlab-multi-state-material-floats.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi029s-source-state-property-floats
+  cancel-in-progress: false
+jobs:
+  original-source-state-floats:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Shaders
+      - name: Pure state name and enum negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_state_material_float_link.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Validate private source shader dynamic state name to Material Float tables
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.multi_shader_state_material_float_link --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi029s-private" --out gfxlab-multi029s-safe-report.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi029s-safe-report.json"))
+          assert d["source_models"]==6 and d["material_slots"]==7
+          assert d["original_shader_passes"]==7
+          assert d["dynamic_named_state_material_float_match_aggregate"]["source_passes_checked"]==7
+          assert not d["original_shader48_restored"] and not d["phase_closed"]
+          assert not d["private_names_floats_original_shader_bytes_exported"]
+          assert not d["effective_render_state_parity_on_android_verified"]
+          print("GFX_MULTI029S_SOURCE_MATERIAL_FLOAT_METADATA_NOT_GPU_RENDER_STATE")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi029s-safe-dynamic-state-material-link
+          path: gfxlab-multi029s-safe-report.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original source private bytes
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi029s-private"
+          echo GFX_MULTI029S_PRIVATE_SOURCE_PURGED=true

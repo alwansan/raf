@@ -1,0 +1,21 @@
+{
+  "session_id": "20261110-GFX-chat-passstate-material-binding-29",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "experiment_key": "GFX-MULTI-029S",
+  "question": "Are original Shader48 per-Pass dynamic Cull/ZWrite/ZTest/AlphaToMask state names real serialized shader properties with corresponding values in 7 original Material saved Float maps?",
+  "hypothesis": "The seven shader Passes' named state parameters resolve to original shader property names and saved Material Float keys; only metadata semantics, not runtime behavior, can be confirmed.",
+  "reference_refs": [
+    "CI42749968983",
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "CI42748792585"
+  ],
+  "control": "Require exact name identity and bounded source float values; bracket syntax only; no raw strings or numeric floats exported, no rendering or shader parity claims",
+  "planned_tests": [
+    "pure exact/negative name matching tests",
+    "authentic seven Shader48 Pass dynamic fields and seven Material Float maps",
+    "report count-only source property overlap/enum category"
+  ],
+  "resource_key": "gfxlab-multi029s-dynamic-state-material-floats-private",
+  "status": "CI_PENDING"
+}
