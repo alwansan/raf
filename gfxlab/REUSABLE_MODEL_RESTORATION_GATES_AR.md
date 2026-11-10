@@ -84,3 +84,7 @@ Inspect Material float/color semantics and TextureSettings WrapU/WrapV/WrapW; ve
 - Audit original seven Material slot references' source `m_CustomRenderQueue`, shader keyword fields, instancing flags, and whether shared objects preserve state across slots.
 - Return only safe state availability/category counts, never raw proprietary original shader names, material IDs, vectors or code; compare against Unity 2021.3 official enum reference. Maintain `originalShaderRestored=false`, `android_gpu_pixels_verified=false`.
 - Later: controlled original-source→Unity→Adreno/PC comparison with genuine original Shader48 inputs and property→register/CB semantics, avoiding guesswork; do not modify T1–T5, main, zip2.
+
+
+## GFX-MULTI-026 signed APK released — verified CI 42748792585
+[Download six-model GPU channel APK Artifact 13733300521](https://github.com/alwansan/raf/actions/runs/42748792585/artifacts/13733300521) — in ZIP: `GfxLab-Multi-Six-Channel-Probe.apk`. APK exactly **65,963,109 bytes**, SHA256 `8fef68d82748cd214b1f5f5f9c0b3903a80f343513ccb15fc35e12649c02ad52`, package `com.alwansan.raft.graphicslab.channels`, expiry **2026-11-17T03:32:17Z UTC**. Real Unity2021.3.45f2 IL2CPP ARM64 GLES3 pipeline + signature + Android package checks successful and private ZIP2 source purge confirmed. Device owner has not yet tested. Diagnostic shader is NOT original Shader48; visual parity and game readiness remain OPEN.
