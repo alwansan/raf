@@ -11,7 +11,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
-GUID = re.compile(r"(?<![0-9a-fA-F])guid:\s*([0-9a-fA-F]{32})(?![0-9a-fA-F])")
+GUID = re.compile(r"^guid:[ \t]*([0-9a-fA-F]{32})[ \t]*(?:\r?$)", re.MULTILINE)
 REF_BLOCK = re.compile(r"\{([^{}]*)\}")
 REF_FILE_ID = re.compile(r"(?:^|,)\s*fileID:\s*(-?\d+)\s*(?=,|$)")
 REF_GUID = re.compile(r"(?:^|,)\s*guid:\s*([0-9a-fA-F]{32})\s*(?=,|$)")
