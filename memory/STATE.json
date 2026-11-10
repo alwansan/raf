@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-auto-logs-export-04",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-auto-logs-export-04.md",
-  "status": "GFX_MULTI_031_SIGNED_APK_SUCCESS_AUTO_LOGS_OWNER_MEDIASTORE_EXPORT_TEST_PENDING",
+  "latest_session": "20261110-GFX-chat-owner-autolog-matrix-05",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-owner-autolog-matrix-05.md",
+  "status": "GFX_OWNER_003_ZIP_PARSED_SIGNED_DEX_AUDIT_PASS_ORIGINAL_SHADER48_PHASE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Owner installs signed GFX-MULTI-031, exercises M00/M03 and RGB/Normal/Metallic/Linear/multiple sessions, taps EXPORT ZIP, confirms file physically exists in Download/Games/cl/test/g and uploads the one ZIP. Independently continue authentic Shader48 material-to-CB/7-pass dynamic render state and PC pixel proof, not Unity Standard equivalence.",
+  "next_experiment": "GFX-MULTI-032 source-only unreferenced Shader48 compiled-program RDEF/material-binding census; no Shader48 APK until authenticity, 7-pass states, CB register semantics and PC-vs-Adreno pixel parity gates close",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -968,5 +968,21 @@
     "requested_public_path": "/storage/emulated/0/Download/Games/cl/test/g/",
     "original_shaderlab_parity_verified": false,
     "owner_zip_analyzed": false
+  },
+  "latest_owner_auto_export": {
+    "source_experiment": "GFX-MULTI-031",
+    "safe_report": "gfxlab/evidence/20261110_gfx031_owner_safe_counts.json",
+    "archive_sha256": "154f2367d12bf5be258d89c0517af8fecbf0c562b11feb5c03e33226161bb26d",
+    "session_count": 1,
+    "event_count": 77,
+    "snapshot_count": 67,
+    "unity_errors": 0,
+    "dropped_messages": 0,
+    "all_six_models_with_four_diagnostic_modes": true,
+    "m03_second_material_tested": false,
+    "original_shader_restored": false,
+    "apk_dex_ci": 42806407666,
+    "sourcefree_parser_ci": 42806757535,
+    "owner_path_attested_from_zip_alone": false
   }
 }
