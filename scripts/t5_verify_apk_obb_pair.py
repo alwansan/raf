@@ -144,6 +144,10 @@ def _zip_structure(path: Path, apk: bool) -> int:
                     raise ValueError("ZIP member is a symbolic link")
                 if info.flag_bits & 0x1:
                     raise ValueError("Encrypted ZIP member is not a usable Unity asset")
+                # Python can parse BZIP2/LZMA ZIP entries, but Android APK/OBB
+                # asset readers must not be assumed to support these methods.
+                if info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
+                    raise ValueError("Unsupported APK/OBB ZIP compression method")
                 if not info.is_dir() and info.file_size > 0:
                     has_asset |= info.filename.startswith(
                         "assets/bin/Data/" if apk else "assets/")
