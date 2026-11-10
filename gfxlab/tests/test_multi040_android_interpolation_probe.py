@@ -42,7 +42,7 @@ class TestSyntheticAndroidInterpolationProbe(unittest.TestCase):
                       "flatConstantAcrossInteriorSamples",
                       "GfxSessionRecorder", "ExportAll(out publicPath,out error)",
                       'Path.Combine(recorder.RootDirectory,"sessions",recorder.SessionId)',
-                      "Download/Games/cl/test/g/",
+                      "GfxDownloadsZipExporter.ExpectedPublicDirectory",
                       "originalShaderRestored=false",
                       "originalPcPixelParityVerified=false",
                       "ORIGINAL", "INCONCLUSIVE_UNSUPPORTED_OR_NO_COLORED_PIXELS"):
