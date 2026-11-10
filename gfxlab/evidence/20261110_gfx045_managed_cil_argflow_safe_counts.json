@@ -1,0 +1,29 @@
+{
+  "experiment": "GFX-MULTI-045",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "evidence_level": "ORIGINAL_SOURCE_SCRIPT_ARGUMENT_ONLY",
+  "ci_run": 42833852638,
+  "commit": "0cd997b5618ed28b81259ca2660fa2c10ba21810",
+  "artifact_id": 13773055986,
+  "unit_tests": 295,
+  "original_CIL": {
+    "methods": 19118,
+    "instructions": 491490,
+    "parse_failures": 0,
+    "source_literal_methods": 17,
+    "accepted_straight_line_methods": 6,
+    "rejected_fail_closed_methods": 11,
+    "first_arg_Set_calls": 1,
+    "distinct_bound_texture_source_names_direct": 1,
+    "distinct_via_PropertyToID": 0
+  },
+  "prohibited_inference": {
+    "original_shader_property_to_GPU_register_mapping": false,
+    "constant_buffer_byte_offsets": false,
+    "original_shader48_android_runtime": false,
+    "pc_adreno_original_pixel_parity": false,
+    "phase_closed": false
+  },
+  "private_source_purged": true,
+  "source_names_method_names_IL_tokens_or_bytes_exported": false
+}

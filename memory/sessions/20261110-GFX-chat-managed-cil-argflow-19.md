@@ -14,3 +14,12 @@ A forward 12-instruction adjacency can be false. Parse authentic MemberRef metho
 - CI: pending after commit; actual success/failure and purge must be checked before declaring proof.
 ## Limits
 Even exact script-side Set* arguments do not map Shader48 properties to source DXBC t#/s#/b#/CB byte offsets, do not restore original GLES shader, and do not prove Windows/Adreno pixel parity. No proprietary IL strings, tokens or bytes in public report. `originalShaderRestored=false`, `phase_closed=false`.
+
+## Final verified evidence — replaces pending note above
+- CI [42833852638](https://github.com/alwansan/raf/actions/runs/42833852638) success; 295 Python tests, private source SHA pinned, private source purge PASS
+- Counts: MethodDefs 19118 / IL 491490 / parse failures 0; property literal methods 17; strict accepted 6 / fail-closed 11; **1 proven Set* first-argument call, 1 original bound texture property passed directly, 0 proven PropertyToID paths** in accepted subset
+- Artifact [13773055986](https://github.com/alwansan/raf/actions/runs/42833852638/artifacts/13773055986), expiry 2026-11-17T14:25:56Z
+- Positive evidence: source-level script API argument flow, not GPU register or runtime Shader48. Negative controls reject ambiguity. The rejected 11 methods are UNKNOWN, not negative matches.
+- outcome: SUCCESS_SOURCE_SCRIPT_ARGUMENT_ONE_ONLY; evidence_level: ORIGINAL_SOURCE_SCRIPT_ARGUMENT_ONLY
+- originalShaderRestored=false, real original Material-to-register/CB offset mapping=false, PC/GPU parity=false, G7–G12 blocked
+- Next: authoritative original Shader48 reflected resource registers and CB byte offsets / original Windows PC reference capture, preserving private source and branch boundary.

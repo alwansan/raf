@@ -15,9 +15,24 @@
     "only safe aggregates",
     "private source purge"
   ],
-  "status": "PENDING_CI",
-  "run_urls": [],
+  "status": "SUCCESS_ORIGINAL_SOURCE_SCRIPT_ARGUMENT_ONLY",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42833852638"
+  ],
   "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "unit_tests": 295,
+    "parsed_methods": 19118,
+    "il_instructions": 491490,
+    "property_methods": 17,
+    "accepted": 6,
+    "rejected_unknown": 11,
+    "exact_source_to_first_argument_Set_calls": 1,
+    "PropertyToID_paths": 0,
+    "original_gpu_register_bridge": false,
+    "source_purged": true,
+    "artifact_id": 13773055986
+  }
 }

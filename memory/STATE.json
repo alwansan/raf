@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-managed-cil-calls-18",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-managed-cil-calls-18.md",
-  "status": "GFX_MULTI_044_SUCCESS_ORIGINAL_CIL_PROPERTY_UNITY_API_COPRESENCE_14_METHODS_5_NEARBY_NAMES_ORIGINAL_SHADER_GPU_BINDING_BLOCKED",
+  "latest_session": "20261110-GFX-chat-managed-cil-argflow-19",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-managed-cil-argflow-19.md",
+  "status": "GFX_MULTI_045_SUCCESS_1_SOURCE_PROPERTY_DIRECT_IL_API_ARG_AUTHENTIC_GPU_REGISTER_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-045 private original CIL ldstr to UnityEngine Material/Shader.Set* argument stack-flow audit; treat nearby instruction proof only as candidate until stack dataflow and source-register bridge. Stage original Shader48 G8 Material→GPU t/s/b/CB byte layout remains blocked. G7–G12 not closed.",
+  "next_experiment": "GFX-MULTI-046 candidate: authentic original Shader48 Material property→DX11 t/s/b and CB byte offset bridge via source reflection or actual PC reference; strict GFX045 script first-argument flow is not GPU register proof. G7–G12 blocked, originalShaderRestored=false.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1260,6 +1260,27 @@
     "distinct_literal_names_followed_by_API_call_within_12_instructions": 5,
     "real_argument_stack_dataflow_verified": false,
     "original_shader_GPU_register_map_verified": false,
+    "private_source_purged": true,
+    "original_shader48_restored": false
+  },
+  "latest_gfx045_original_CIL_argflow": {
+    "run": 42833852638,
+    "commit": "0cd997b5618ed28b81259ca2660fa2c10ba21810",
+    "artifact_id": 13773055986,
+    "status": "SUCCESS",
+    "unit_tests": 295,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "parsed_methods": 19118,
+    "il_instructions": 491490,
+    "parse_failures": 0,
+    "methods_with_exact_property_literal": 17,
+    "straight_line_eligible_methods": 6,
+    "fail_closed_rejected_candidate_methods": 11,
+    "authentic_first_argument_Set_calls": 1,
+    "direct_original_shader48_property_names": 1,
+    "original_bound_texture_property_names": 1,
+    "PropertyToID_proven_original_paths": 0,
+    "actual_source_property_to_GPU_register_mapping_verified": false,
     "private_source_purged": true,
     "original_shader48_restored": false
   }
