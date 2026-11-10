@@ -76,10 +76,14 @@ def verify(managed: str, native: str, runtime_dir: Path) -> tuple[str, ...]:
     managed_names = managed_sources(managed)
     native_names = native_sources(native)
     if set(managed_names) != set(native_names):
+        managed_only = sorted(set(managed_names) - set(native_names))
+        native_only = sorted(set(native_names) - set(managed_names))
+        # These are Android-owned, validated basenames only; never expose
+        # proprietary Unity source bytes or asset contents in CI logs.
         raise ValueError(
             "Original-managed/native Unity runtime staging drift: "
-            + "managed_only=" + str(len(set(managed_names) - set(native_names)))
-            + " native_only=" + str(len(set(native_names) - set(managed_names)))
+            + "managed_only=" + repr(managed_only)
+            + " native_only=" + repr(native_only)
         )
     for name in native_names:
         path = runtime_dir / name
@@ -93,7 +97,7 @@ def verify_staged_runtime_bytes(
 ) -> tuple[str, ...]:
     """Check the FINAL Unity candidate's C# sources, not merely its copy list.
 
-    The 17 runtime .cs inputs, including the offline profile identity writer,
+    The declared runtime .cs inputs, including the offline profile identity writer,
     must have identical bytes to current repository source immediately before
     starting the native Unity Editor. Does not inspect original Raft resources.
     """
