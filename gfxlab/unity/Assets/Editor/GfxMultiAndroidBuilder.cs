@@ -72,6 +72,47 @@ namespace RaftGraphicsLabEditor
                 throw new InvalidOperationException("GFX_MULTI_TEXTURE_DID_NOT_IMPORT");
             return t;
         }
+        private static Texture2D ImportDiagnosticSourceChannel(string originalPath,string role,bool forceLinear)
+        {
+            // A separate copy retains the PNG RGBA decoder channels for GPU
+            // inspection; the Standard PBR normal import is a distinct asset.
+            // This source belongs only to the ephemeral Unity runner output.
+            string suffix=forceLinear?"_channel_linear.png":"_channel_source.png";
+            string path=Path.ChangeExtension(originalPath,null)+suffix;
+            if(!File.Exists(originalPath))
+                throw new InvalidOperationException("GFX_MULTI_CHANNEL_SOURCE_MISSING");
+            if(!File.Exists(path))File.Copy(originalPath,path);
+            AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);
+            var importer=AssetImporter.GetAtPath(path) as TextureImporter;
+            if(importer==null)
+                throw new InvalidOperationException("GFX_MULTI_CHANNEL_IMPORTER_MISSING");
+            importer.textureType=TextureImporterType.Default;
+            // Source serialized TextureColorSpace proven GFX024:
+            // BaseColor=sRGB, Metallic=sRGB, Normal=Linear.
+            // FORCE_LINEAR is a control, NOT an inferred fix to original Raft.
+            importer.sRGBTexture=!forceLinear && role!="normal";
+            importer.mipmapEnabled=true;
+            importer.filterMode=FilterMode.Bilinear;
+            importer.wrapMode=TextureWrapMode.Repeat;
+            importer.anisoLevel=1;
+            importer.maxTextureSize=4096;
+            importer.SaveAndReimport();
+            var t=AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if(t==null||t.width<1||t.height<1)
+                throw new InvalidOperationException("GFX_MULTI_CHANNEL_TEXTURE_IMPORT_FAILED");
+            return t;
+        }
+        private static void AssignDiagnosticRole(
+            GfxMultiViewer.DiagnosticSlot slot,string role,
+            Texture2D source,Texture2D linear)
+        {
+            if(slot==null||source==null||linear==null)
+                throw new InvalidOperationException("GFX_MULTI_CHANNEL_SOURCE_INVALID");
+            if(role=="basecolor"){slot.basecolorSource=source;slot.basecolorLinear=linear;}
+            else if(role=="normal"){slot.normalSource=source;slot.normalLinear=linear;}
+            else if(role=="metallic"){slot.metallicSource=source;slot.metallicLinear=linear;}
+            else throw new InvalidOperationException("GFX_MULTI_CHANNEL_ROLE_INVALID");
+        }
         private static void SetRole(Material material, string role, Texture2D t, TextureRole reference)
         {
             string property=role=="basecolor" ? "_MainTex" : role=="normal" ? "_BumpMap" :
@@ -200,6 +241,7 @@ namespace RaftGraphicsLabEditor
             var pbr=new Material[config.materials.Length];
             var whiteLit=new Material[config.materials.Length];
             var whiteUnlit=new Material[config.materials.Length];
+            var diagnostics=new GfxMultiViewer.DiagnosticSlot[config.materials.Length];
             int textures=0;
             for(int slot=0;slot<config.materials.Length;slot++)
             {
@@ -211,6 +253,7 @@ namespace RaftGraphicsLabEditor
                 originals[slot]=NewMaterial(id+"_S"+slot+"_Albedo",standard,SourceTint(source));
                 pbr[slot]=NewMaterial(id+"_S"+slot+"_PBRApprox",standard,SourceTint(source));
                 bool baseColorPresent=false;
+                diagnostics[slot]=new GfxMultiViewer.DiagnosticSlot();
                 foreach(TextureRole r in source.textures)
                 {
                     if(r==null||r.file==null||r.file.IndexOf("..",StringComparison.Ordinal)>=0
@@ -218,6 +261,9 @@ namespace RaftGraphicsLabEditor
                         throw new InvalidOperationException("GFX_MULTI_SOURCE_TEXTURE_PATH_INVALID");
                     string texturePath=folder+"/"+r.file;
                     Texture2D tex=ImportOriginalTexture(texturePath,r.role);
+                    Texture2D probeSource=ImportDiagnosticSourceChannel(texturePath,r.role,false);
+                    Texture2D probeLinear=ImportDiagnosticSourceChannel(texturePath,r.role,true);
+                    AssignDiagnosticRole(diagnostics[slot],r.role,probeSource,probeLinear);
                     textures++;
                     if(r.role=="basecolor")
                     {
@@ -276,7 +322,7 @@ namespace RaftGraphicsLabEditor
                 vertices=importedVertices,triangles=importedFaces,
                 sourceMaterials=config.materials.Length,sourceTextures=textures,
                 sourceVerified=true,exactShaderRestored=false,originalAnimationRestored=false,
-                root=root,slots=rendererSlots.ToArray()
+                root=root,slots=rendererSlots.ToArray(),diagnosticSlots=diagnostics
             };
         }
 
@@ -312,6 +358,16 @@ namespace RaftGraphicsLabEditor
             viewer.viewingCamera=camera;
             viewer.models=models;
             viewer.defaultHideHelpers=true;
+            // This shader only visualizes the source RGBA samples, and is never
+            // the seven-pass original Shader48.
+            Shader inspector=Shader.Find("Hidden/GfxLab/ChannelProbe");
+            if(inspector==null||!inspector.isSupported)
+                throw new InvalidOperationException("GFX_MULTI_CHANNEL_INSPECTOR_SHADER_UNAVAILABLE");
+            var diagnosticMaterial=new Material(inspector);
+            diagnosticMaterial.name="GfxLabChannelDiagnosticNotOriginalShader";
+            AssetDatabase.CreateAsset(diagnosticMaterial,
+                "Assets/GfxMultiGenerated/ChannelDiagnosticOnly.mat");
+            viewer.diagnosticChannelMaterial=diagnosticMaterial;
 
             // Only for optional studio helpers; no synthetic helper is a source model.
             var floor=GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -328,8 +384,8 @@ namespace RaftGraphicsLabEditor
 
             PlayerSettings.companyName="alwansan";
             PlayerSettings.productName="Raft GFX Multi Model Laboratory";
-            PlayerSettings.bundleVersion="0.3.0";
-            PlayerSettings.Android.bundleVersionCode=3;
+            PlayerSettings.bundleVersion="0.4.0";
+            PlayerSettings.Android.bundleVersionCode=4;
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android,
                 "com.alwansan.raft.graphicslab.multi");
             PlayerSettings.defaultInterfaceOrientation=UIOrientation.LandscapeLeft;
@@ -344,7 +400,7 @@ namespace RaftGraphicsLabEditor
             QualitySettings.shadowDistance=20f;
             AssetDatabase.SaveAssets();
 
-            string apk="builds/Android/GfxLab-Multi-Six-Original.apk";
+            string apk="builds/Android/GfxLab-Multi-Six-Channel-Probe.apk";
             Directory.CreateDirectory(Path.GetDirectoryName(apk));
             var report=BuildPipeline.BuildPlayer(
                 new[]{new EditorBuildSettingsScene("Assets/Scenes/GfxMulti.unity",true)},
@@ -352,7 +408,7 @@ namespace RaftGraphicsLabEditor
             if(report.summary.result!=UnityEditor.Build.Reporting.BuildResult.Succeeded ||
                 !File.Exists(apk) || new FileInfo(apk).Length<1024*1024)
                 throw new InvalidOperationException("GFX_MULTI_UNITY_ANDROID_BUILD_NOT_PROVEN");
-            Debug.Log("GFX_MULTI_UNITY_REAL_BUILD_PASS models=6 original_shader_exact=false"+
+            Debug.Log("GFX_MULTI_UNITY_REAL_BUILD_PASS models=6 channel_probe=true original_shader_exact=false"+
                 " source_materials=7 original_animation=false owner_device_pixels=false");
         }
     }
