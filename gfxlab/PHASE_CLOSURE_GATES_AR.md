@@ -19,3 +19,6 @@ GfxMultiAndroidBuilder.cs يستعمل Shader.Find("Standard") وShader.Find("Un
 7. بوابة التسليم: تماثل نموذج واحد end-to-end، ثم عينة متعددة المواد وأجزاء، ثم فقط تصميم عامل استعادة منفصل. الماء/FFT والنار/الدخان/Particles والإضاءة الخاصة مراحل منفصلة.
 
 القرار: سلسلة Mesh+Textures+Standard على الهاتف نجحت في هذه العينة، أما **استعادة Shader الأصلي والـRig ومطابقة صورة PC فلم تُغلق**. GFX-MULTI-005 يقيس وجود بيانات الـPass/Render State/Vertex/Fragment الأصلية من ZIP2 داخل runner، ويخرج COUNTS فقط؛ لا يعلن التكافؤ أو يبني APK.
+
+## GFX-MULTI-005 نتيجة CI المثبتة
+[Run 42725841763](https://github.com/alwansan/raf/actions/runs/42725841763): SUCCESS، 48 tests PASS، بنية المصدر 2 SubShaders/7 Passes (4+3) مرتبطة بسبع materials/ستة Mesh، وبيانات Render State/Vertex/Fragment/Program Mask موجودة في **7 من 7 Passes**. هذه **حقول metadata فقط**، ولم نثبت ShaderLab GLES قابل للتنفيذ أو Keywords/CB/Sampler/Pass semantic parity أو صور PC. لا توجد APK جديدة؛ المصدر الخاص حُذف من Runner. Artifact safe summary 13721479793.

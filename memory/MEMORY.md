@@ -92,3 +92,5 @@
 
 ## GFX-MULTI-005 — الهاتف وشروط إغلاق المرحلة (2026-11-10)
 المالك سلّم 14 صورة و12 سجل JSON للموديلات الستة على Adreno730 GLES3؛ جميعها errors=0 مع originalShaderRestored=false وoriginalAnimationRestored=false. كود الاختبار يستخدم Unity Standard fallback وليس Shader48 الأصلي. عدد رؤوس M01 وM04 في Unity أقل من المصدر ويلزم vertex-stream parity. تجربة GFX-MULTI-005 مصدرية لتعداد بيانات Pass الأصلية، ولا تغلق Shader/rig. سجل: memory/sessions/20261110-GFX-chat-owner-six-shader-gap-05.md، المعايير: gfxlab/PHASE_CLOSURE_GATES_AR.md.
+
+GFX-MULTI-005 CI42725841763 SUCCESS: 48 tests; original Shader48 source one linked object for 7 slots, 2 subshaders/7 passes, and all 7 have render-state, vertex, fragment and program-mask metadata. **This is SOURCE ONLY, not Android shader parity.** No full-stage closure. Next exact stage code/variant/CB/sampler audit.

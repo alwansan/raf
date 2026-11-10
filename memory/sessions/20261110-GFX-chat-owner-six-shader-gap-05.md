@@ -12,3 +12,10 @@
 - evidence_level: OWNER_DEVICE_STANDARD_FALLBACK observed; ORIGINAL_SHADER_SOURCE_TO_ANDROID NOT_READY
 - negative_controls: malformed/no pass fail; no proprietary shader code, GUID/PPtr, original loose images published
 - outcome: experiment queued, full shader phase OPEN; see gfxlab/PHASE_CLOSURE_GATES_AR.md
+
+## نتيجة مثبتة من CI
+- GFX-MULTI-005 run 42725841763 COMPLETED SUCCESS on commit d8c47730b5b1df918f6189bc4b2a8a684093c167; 48 source-unit tests passed.
+- SHA-pinned ZIP2 source proved one Shader48 across 7 material slots; 2 SubShaders, 7 Passes [4,3].
+- All 7 Passes have typed RenderState metadata, Vertex and Fragment metadata, and program masks. Field presence NOT stage code equivalence.
+- Compiled original Android program/variant/CB/sampler/render state parity remain FALSE; 0 actual original ShaderLab Android shaders restored; no APK built in this test.
+- Original private files deleted after CI; public artifact contains aggregate safe counts only. Artifact 13721479793 (expires 2026-11-17T00:08:10Z).

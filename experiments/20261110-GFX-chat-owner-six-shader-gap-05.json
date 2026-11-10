@@ -11,6 +11,18 @@
     "negative malformed pass tests",
     "originalShaderRestored always false"
   ],
-  "status": "CI_PENDING",
-  "scope": "SOURCE_ONLY"
+  "status": "SUCCESS_SOURCE_METADATA_ONLY",
+  "scope": "SOURCE_ONLY",
+  "run": 42725841763,
+  "result": {
+    "source_shader48": 1,
+    "subshaders": 2,
+    "passes": 7,
+    "state_metadata": 7,
+    "vertex_program_metadata": 7,
+    "fragment_program_metadata": 7,
+    "program_masks": 7,
+    "original_android_compiled_shader": false,
+    "phase_closed": false
+  }
 }

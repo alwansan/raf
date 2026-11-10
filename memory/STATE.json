@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261110-GFX-chat-owner-six-shader-gap-05",
   "latest_session_path": "memory/sessions/20261110-GFX-chat-owner-six-shader-gap-05.md",
-  "status": "GFX_MULTI_005_SOURCE_SHADER_METADATA_AUDIT_PENDING_FULL_ORIGINAL_SHADER_OPEN",
+  "status": "GFX_MULTI_005_SOURCE_METADATA_SUCCESS_OWNER_STANDARD_FALLBACK_ACCEPTED_FULL_ORIGINAL_SHADER_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Inspect source metadata CI GFX-MULTI-005 then one original Shader48 pass semantic GLES3 test; no closed-phase claim from Standard fallback.",
+  "next_experiment": "GFX-MULTI-006: original Shader48 compiled stage/keyword/CB/sampler feasibility, pass-wise semantic equivalence; one original shader pass Android mini lab and PC reference, not Standard fallback.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -75,7 +75,7 @@
     "independent_sha256_confirmed": true,
     "original_shader_restored": false,
     "original_animation_restored": false,
-    "device_six_model_tested": false,
+    "device_six_model_tested": true,
     "owner_acceptance": false
   },
   "owner_test": {
@@ -232,7 +232,7 @@
       "independent_sha256_confirmed": true,
       "original_shader_restored": false,
       "original_animation_restored": false,
-      "device_six_model_tested": false,
+      "device_six_model_tested": true,
       "owner_acceptance": false
     },
     "unity_imported_models": 6,
@@ -277,8 +277,21 @@
   },
   "latest_shader_deep_audit": {
     "experiment": "GFX-MULTI-005",
-    "status": "CI_PENDING",
-    "evidence": "ORIGINAL_SOURCE_METADATA_ONLY",
-    "original_shader_restored": false
+    "run": 42725841763,
+    "commit": "d8c47730b5b1df918f6189bc4b2a8a684093c167",
+    "status": "SUCCESS_SOURCE_METADATA_ONLY",
+    "source_shader48": 1,
+    "subshaders": 2,
+    "passes": 7,
+    "passes_per_subshader": [
+      4,
+      3
+    ],
+    "all_passes_have_state_metadata": true,
+    "all_passes_have_vertex_metadata": true,
+    "all_passes_have_fragment_metadata": true,
+    "all_passes_have_program_mask": true,
+    "original_shader_restored": false,
+    "compiled_android_program_verified": false
   }
 }
