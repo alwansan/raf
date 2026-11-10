@@ -63,11 +63,11 @@ class TestShader48GLBinaryEnvelope(unittest.TestCase):
         p=SimpleNamespace(m_Keywords=["SECRET_B","SECRET_A"])
         self.assertEqual(safe_keywords(p),("SECRET_A","SECRET_B"))
         p.m_Keywords=["SECRET_B","SECRET_B"]
-        with self.assertRaisesRegex(ValueError,"DUPLICATE_KEYWORDS"):
-            safe_keywords(p)
+        self.assertIsNone(safe_keywords(p))
         p.m_Keywords=[""]
-        with self.assertRaisesRegex(ValueError,"KEYWORD_INVALID"):
-            safe_keywords(p)
+        self.assertIsNone(safe_keywords(p))
+        p.m_Keywords=[b"NON_TEXT_PRIVATE_KEYWORD"]
+        self.assertIsNone(safe_keywords(p))
 
     def test_candidate_platform_consistency_and_private_keyword_matches(self):
         d=inspect_candidates(
@@ -102,3 +102,13 @@ class TestShader48GLBinaryEnvelope(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"TOO_LARGE"):
             inspect_candidates(data,set(range(EXPECTED_REFERENCED)),
                                "kShaderCompPlatformD3D11")
+
+    def test_source_keyword_metadata_without_comparable_signature_does_not_promote_link(self):
+        program=synthetic_table()
+        start=EXPECTED_REFERENCED+112
+        program[start].m_Keywords=[""]
+        result=inspect_candidates(program,set(range(EXPECTED_REFERENCED)),
+                                  "kShaderCompPlatformD3D11")
+        self.assertEqual(result["GLES"]["source_keyword_signature_uncomparable_entries"],1)
+        self.assertEqual(result["GLES"]["nonempty_keyword_signature_matches_linked_dx11"],138)
+        self.assertFalse(result["GLES"]["keyword_match_proves_original_pass_or_material_binding"])
