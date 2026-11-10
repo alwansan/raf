@@ -115,7 +115,7 @@ class TestRepresentativeProfileSelection(unittest.TestCase):
           OpName %31 "t3"
           %31 = OpVariable %pointer Function
           OpName %10 "t3"
-          %10 = OpVariable %pointer UniformConstant
+          %10 = OpVariable %123 UniformConstant
           %21 = OpLoad %img %10
           %44 = OpImageSampleImplicitLod %v %30 %uv
         """
