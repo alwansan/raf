@@ -1,0 +1,101 @@
+name: GFX-MULTI-044 private authentic Raft CIL Shader48 literal and Unity Material callsite evidence
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi044-original-managed-cil.yml'
+      - 'gfxlab/tools/multi_shader_managed_cil_calls.py'
+      - 'gfxlab/tests/test_multi_shader_managed_cil_calls.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi044-authentic-managed-cil
+  cancel-in-progress: false
+jobs:
+  private-original-script-usage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free CIL property/API callsite safety test
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_managed_cil_calls.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX_MULTI044_SOURCE_FREE_CIL_TESTS_SUCCESS=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Custom.dll
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Resolve real CLR MethodDef IL ldstr and UnityEngine API owner references privately
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0 dncil==1.0.2
+          python3 -m gfxlab.tools.multi_shader_managed_cil_calls \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab-multi044-private" \
+            --out gfxlab-multi044-safe-managed-cil-callsite-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi044-safe-managed-cil-callsite-counts.json"))
+          assert d["original_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["original_shader48_properties"]==27
+          assert d["original_shader48_texture_properties"]==9
+          assert d["original_bound_material_texture_names"]==3
+          s=d["original_CIL_method_level_count_only_evidence"]
+          assert s["eligible_method_definitions"]>0
+          assert s["successfully_parsed_CIL_methods"]>0
+          assert s["total_parsed_IL_instructions"]>0
+          assert s["property_ldstr_instructions"]>=s["methods_with_Shader48_property_ldstr"]
+          assert s["distinct_Shader48_exact_property_strings_in_CIL_ldstr"]<=27
+          assert s["distinct_Shader48_exact_property_strings_in_methods_with_Material_Shader_API"]<=27
+          assert s["distinct_Shader48_property_strings_followed_by_real_API_call_within_12_IL_instructions"]<=27
+          assert s["property_ldstr_with_following_12_instruction_API_call"]<=s["property_ldstr_instructions"]
+          assert not s["co_presence_or_nearby_instructions_prove_actual_material_argument_dataflow"]
+          assert not s["original_source_method_names_literal_names_IL_tokens_or_operands_exported"]
+          assert not d["original_material_property_to_t_s_b_register_bridge_proven"]
+          assert not d["original_CB_byte_offset_mapping_proven"]
+          assert not d["original_Shader48_Android_runtime_proven"]
+          assert not d["original_shader48_restored"]
+          assert not d["owner_original_PC_vs_Adreno_pixels_proven"]
+          assert not d["private_Managed_IL_literals_methods_or_assembly_bytes_exported"]
+          assert not d["phase_closed"]
+          print("GFX_MULTI044_ONLY_REAL_CIL_METHOD_AND_API_CANDIDATE_COUNTS=true")
+          PY
+      - name: Publish only safe CIL source-use candidate counters
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: gfxlab-multi044-safe-managed-cil-source-use-counts
+          path: gfxlab-multi044-safe-managed-cil-callsite-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge genuine original managed CLR and ZIP2 shader content
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab-multi044-private"
+          echo GFX_MULTI044_ALL_PRIVATE_ORIGINAL_SOURCE_PURGED=true
