@@ -1,0 +1,38 @@
+{
+  "session_id": "20261110-GFX-chat-final-joint-class-144-157-36",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-joint-class-batch-120-144-35",
+  "base_sha": "10c5c0035593833ccb79bbe648cdbd4059efa75c",
+  "experiment_key": "GFX-MULTI-062",
+  "issue_id": "RENDER-002",
+  "resource_key": "original-Shader48-final13-Pass-joint-class-source-private-CPU",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "question": "Can final 13 original Shader48 source Pass-scoped joint declaration plus sampling signature representative classes [144,157) pass CPU DXBC/SPV structural checks to complete 157 source class representative coverage without repeating 144 prior proofs?",
+  "hypothesis": "Immutable source SHA and private per-Pass deterministic source signature selection allow final 13 genuine source VS/FS pairs CPU resource/CB structural validation, without proving original Material register semantics or all 524 variant program logic.",
+  "reference_refs": [
+    "https://github.com/alwansan/raf/actions/runs/42857815446",
+    "https://github.com/alwansan/raf/actions/runs/42859754233",
+    "https://github.com/alwansan/raf/actions/runs/42861618032",
+    "https://github.com/alwansan/raf/actions/runs/42863853554",
+    "https://github.com/alwansan/raf/actions/runs/42865341763",
+    "https://github.com/alwansan/raf/actions/runs/42866819484"
+  ],
+  "control": [
+    "524 SHA pinned exact source pair census, 936 authentic source stages, 110 global 132 Pass bts CB structural, 58 global 80 Pass sample-use, exactly 157 Pass joint",
+    "synthetic 157 class seven disjoint batch slices, final 13 only and boundary start143",
+    "13 source VS FS pairs 26 original stage Vulkan1.1 SPV validation and original t/s sample-use exact comparison",
+    "original CB b source true SPV Uniform OpName and reflected single vec4 array and original supported static CB load range SPV observations",
+    "dynamic CB operands counted unresolved; all 524 original programs not inferred from representative classes",
+    "only count-safe publication and unconditional private ZIP2/DXBC/SPV purge"
+  ],
+  "planned_tests": [
+    "full Python source-free regression including final exact 157 seven-slice negative controls",
+    "original pinned ZIP2 524 exact pair class census",
+    "13 real VS/FS source pairs →26 stage SPV validity and strict sampling/CB checks",
+    "count-only artifact and privacy purge"
+  ],
+  "run_urls": [],
+  "status": "CI_PENDING",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
