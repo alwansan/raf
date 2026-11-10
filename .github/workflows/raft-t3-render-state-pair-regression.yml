@@ -1,0 +1,24 @@
+name: T3 render-state pair comparator regression
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_render_state_pair_diff.py
+      - tests/test_t3_render_state_pair_diff.py
+      - .github/workflows/raft-t3-render-state-pair-regression.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-render-state-pair-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run T3 render-state comparator regression tests
+        run: python3 -m unittest discover -s tests -p 'test_t3_render_state_pair_diff.py' -v
