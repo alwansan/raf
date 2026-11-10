@@ -9,3 +9,9 @@
 Even exact token or uniform name match in unlinked text is only candidate source semantic evidence, **NOT linked original shader runtime** or original DX11 t/s/CB offsets. Never disclose private GLSL, raw property names or source indexes.
 ## Runs / result
 Pending.
+
+## GFX-MULTI-034 implementation and CI checkpoint
+- Private inspector `gfxlab/tools/multi_shader_glsl_text_property_evidence.py` with 27 authored Shader48 property labels, nine texture properties, and 21 original bound Texture2D roles (source-only). Strict UTF-8, comment-stripped exact identifiers and bounded uniform-statement matching; no names/code in public report.
+- Source-free tests `gfxlab/tests/test_multi_shader_glsl_text_property_evidence.py`; pinned-ZIP2 workflow `.github/workflows/gfxlab-multi-glsl-text-props.yml` safely purges source.
+- Initial [CI42809825046](https://github.com/alwansan/raf/actions/runs/42809825046) failed **source-free synthetic test fixture only**: supplied an empty mock compiled table and asserted property guard instead of table-count guard; private source not checked and purge step passed.
+- Corrected test to supply valid 1656-slot fixture before checking wrong property set. [CI42809913702](https://github.com/alwansan/raf/actions/runs/42809913702) source-free test **SUCCESS**, original ZIP2 scan in progress at checkpoint. No claim yet of original GLSL text or GPU equivalence.
