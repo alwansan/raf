@@ -20,7 +20,8 @@ class FoamRhsOriginGuardTests(unittest.TestCase):
             [], ["newobj", "newobj"], ["ldloc", "call"],
             ["br.s", "newobj"], ["switch", "ldfld"],
             ["ldnull", "ret"], ["ldfld", "stfld"],
-            ["ldloc.0"], ["ldc.i4.0"], ["ldfld", "pop"],
+            ["ldloc.4"], ["ldarg.4"], ["ldloc.s"], ["ldarg.s"],
+            ["ldloca.s"], ["ldarga.s"], ["ldloc.00"], ["ldc.i4.0"], ["ldfld", "pop"],
             ["call", "throw"], ["newobj", "leave.s"],
             ["newobj", "beq.s"], ["newobj", "unknown"],
             ["dup", "newobj"], ["newobj", "dup"],
@@ -30,6 +31,13 @@ class FoamRhsOriginGuardTests(unittest.TestCase):
         ]:
             with self.subTest(ops=ops):
                 self.assertEqual(classify_rhs(ops), "UNKNOWN")
+
+    def test_exact_operand_free_cil_short_forms(self):
+        for prefix, expected in (("ldloc", "LOCAL_READ"), ("ldarg", "ARGUMENT_READ")):
+            for index in range(4):
+                with self.subTest(prefix=prefix, index=index):
+                    self.assertEqual(classify_rhs([f"{prefix}.{index}"]), expected)
+                    self.assertEqual(classify_rhs(["nop", f"{prefix}.{index}", "castclass"]), expected)
 
     def test_calls_require_original_nonvoid_signature(self):
         for opcode in ("call", "callvirt"):
