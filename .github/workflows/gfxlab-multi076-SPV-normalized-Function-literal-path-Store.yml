@@ -1,0 +1,175 @@
+name: GFX-MULTI-076 source-private Shader48 SPV normalized Function literal address-path Store candidates
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi076-SPV-normalized-Function-literal-path-Store.yml'
+      - 'gfxlab/tools/multi_shader_original_cb_index_private_multiset076.py'
+      - 'gfxlab/tools/multi_shader_original_cb_index_b_offset073.py'
+      - 'gfxlab/tests/test_multi_shader_original_cb_index_b_offset073.py'
+      - 'gfxlab/tools/multi_shader_spv_index_memory_writer074.py'
+      - 'gfxlab/tests/test_multi_shader_spv_index_memory_writer074.py'
+      - 'gfxlab/tools/multi_shader_spv_index_pointer_origin075.py'
+      - 'gfxlab/tests/test_multi_shader_spv_index_pointer_origin075.py'
+      - 'gfxlab/tools/multi_shader_spv_index_address_path_store076.py'
+      - 'gfxlab/tests/test_multi_shader_spv_index_address_path_store076.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi076-source-private-SPV-CB-index-literal-address-path
+  cancel-in-progress: false
+jobs:
+  original-SPV-CB-index-root-source-private:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 95
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            gfxlab/tools
+            gfxlab/tests
+            gfxlab/unity/Assets/Shaders
+            gfxlab/unity/Assets/Scripts
+            gfxlab/unity/Assets/Editor
+            gfxlab/unity/Assets/Plugins/Android
+      - name: Source-free GFX074 SPV CB index producer opcode negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/multi_shader_original_cb_index_private_multiset076.py gfxlab/tools/multi_shader_original_cb_index_b_offset073.py gfxlab/tools/multi_shader_spv_index_memory_writer074.py gfxlab/tools/multi_shader_spv_index_pointer_origin075.py gfxlab/tools/multi_shader_spv_index_address_path_store076.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          echo GFX076_SOURCE_FREE_TESTS_PASSED=true
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install source-private CPU disassembly dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Original 157 pairs and private SPV Function literal address-path Store index census
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.multi_shader_original_cb_index_private_multiset076 \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfxlab076-private" \
+            --out gfxlab-multi076-safe-private-SPV-Function-address-path-Store-counts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfxlab-multi076-safe-private-SPV-Function-address-path-Store-counts.json"))
+          assert d["experiment"]=="GFX-MULTI-076"
+          assert d["source_zip2_sha"]=="15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          assert d["source_exact_original_VS_FS_pairs_censused"]==524
+          assert d["source_unique_compiled_stages"]==936
+          assert d["original_source_pass_joint_representative_pairs"]==157
+          assert d["original_source_stage_instances"]==314
+          original=d["source_CB_relative_temp_local_candidates_safe_counts"]
+          spv=d["independent_translated_SPV_authentic_UBO_shifted_dynamic_loads_safe_counts"]
+          assert original["original_CB_true_relative_vec_index_occurrences"]==427
+          assert original["original_CB_operand_occurrences_in_supported_opcodes"]==7990
+          assert original["candidate_nearest_writer_original_opcode_41"]==68
+          assert original["relative_source_temp_component_with_no_writer_in_same_supported_ALU_run"]==359
+          assert spv["source_exact_VS_FS_pairs_translated"]==157
+          assert spv["source_original_stages_Vulkan11_SPV_validated"]==314
+          assert spv["authenticated_original_CB_source_stage_instances"]==311
+          assert spv["source_original_CB_free_stages"]==3
+          assert spv["original_local_ISHL_writer_candidate_occurrences_in_checked_stages"]==68
+          assert spv.get("SPV_authenticated_dynamic_vec_OpLoad_occurrences",0)==sum(
+            spv.get(k,0) for k in (
+              "SPV_dynamic_vec_OpLoad_index_direct_shift",
+              "SPV_dynamic_vec_OpLoad_index_via_shift_ancestor",
+              "SPV_dynamic_vec_OpLoad_index_with_no_proven_shift",
+              "SPV_dynamic_vec_OpLoad_index_unproven_expression"))
+          assert spv.get("source_stage_instances_with_original_local_ISHL_writer_candidates",0)==(
+            spv.get("original_local_ISHL_candidate_stages_with_independent_SPV_shifted_CB_loads",0)+
+            spv.get("original_local_ISHL_candidate_stages_without_observed_SPV_shifted_CB_loads",0))
+          assert sum(v for k,v in spv.items() if k.startswith("SPV_dynamic_vec_load_index_direct_def_opcode_"))==spv["SPV_authenticated_dynamic_vec_OpLoad_occurrences"]
+          assert sum(v for k,v in spv.items() if k.startswith("SPV_dynamic_vec_load_index_after_bounded_unary_wrappers_"))==spv["SPV_authenticated_dynamic_vec_OpLoad_occurrences"]
+          for key in (
+              "per_stage_source_vs_SPV_direct_and_add_count_equal",
+              "per_stage_source_direct_relative_vs_SPV_bitcast_count_equal",
+              "per_stage_source_immediate32_plus_relative_vs_SPV_iadd_count_equal",
+              "per_stage_total_original_relative_uses_equal_real_SPV_dynamic_load_count",
+          ):
+              assert spv.get(key+"_success",0)+spv.get(key+"_mismatch",0)==311, key
+          assert spv.get("SPV_dynamic_vec_load_index_direct_def_opcode_OpIAdd",0)+spv.get(
+            "SPV_dynamic_vec_load_index_direct_def_opcode_OpBitcast",0)==427
+          assert spv.get("SPV_index_IAdd_exactly_one_literal_i32_operand",0) <= spv.get(
+            "SPV_dynamic_vec_load_index_direct_def_opcode_OpIAdd",0)
+          assert d["source_stage_relative_index_root_shape_count_equality_means_same_individual_DXBC_operand"] is False
+          assert spv.get("source_stages_with_exact_private_original_b_and_literal_relative_offset_multiset_match",0)+spv.get(
+            "source_stages_with_private_original_b_or_literal_relative_offset_multiset_mismatch",0)==311
+          assert spv.get("private_source_b_offset_shape_multiset_occurrences_matched",0)+spv.get(
+            "private_source_b_offset_shape_occurrences_missing_in_SPV",0)==427
+          assert spv.get("private_source_b_offset_shape_multiset_occurrences_matched",0)+spv.get(
+            "private_translated_SPV_b_offset_shape_occurrences_without_source",0)+spv.get(
+            "SPV_original_source_b_dynamic_index_loads_unclassified",0)==427
+          assert d["private_source_b_and_literal_offset_multiset_count_equality_proves_temp_SSA_values"] is False
+          assert d["private_source_b_and_literal_offset_multiset_equality_proves_instruction_bijection"] is False
+          assert d["source_original_ISHL_to_SPV_OpShiftLeftLogical_SSA_roots_proven"]==0
+          for key in ("source_local_ISHL_stage_and_SPV_shifted_read_coexistence_establishes_same_operand_mapping",
+                      "original_427_relative_CB_source_uses_numeric_runtime_index_parity_proven",
+                      "all_524_original_variant_programs_semantically_equivalent",
+                      "original_Material_property_to_b_t_s_and_CB_member_byte_bridge_proven",
+                      "original_Shader48_Android_Adreno_GPU_pixels_verified",
+                      "originalShaderRestored","phase_closed",
+                      "original_shader_temp_ID_DXBC_SPV_or_PPtr_exported"):
+              assert d[key] is False,key
+          assert spv.get("GFX074_SPV_authenticated_actual_dynamic_CB_OpLoad_occurrences",0)==427
+          assert spv.get("GFX074_SPV_index_root_is_actual_OpLoad",0)==427
+          assert sum(spv.get("GFX074_"+k,0) for k in (
+            "SPV_same_block_local_store_with_shift_SSA_ancestor_candidates",
+            "SPV_same_block_local_store_without_proven_shift_candidates",
+            "SPV_index_memory_no_preceding_same_block_store",
+            "SPV_index_memory_without_function_block",
+            "SPV_index_memory_pointer_alias_or_volatile_unknown"))==427
+          assert d["SPV_local_store_to_original_temp_SSA_value_proven"] is False
+          assert spv.get("GFX075_SPV_original_b_authenticated_actual_dynamic_CB_OpLoads",0)==427
+          assert spv.get("GFX075_SPV_index_OpLoad_pointer_root_classified",0)==427
+          assert sum(v for k,v in spv.items() if k.startswith("GFX075_SPV_index_pointer_direct_definition_"))==427
+          assert sum(v for k,v in spv.items() if k.startswith("GFX075_SPV_index_pointer_root_storage_"))==427
+          assert sum(v for k,v in spv.items() if k.startswith("GFX075_SPV_index_pointer_root_index_shape_"))==427
+          assert spv.get("GFX075_SPV_same_block_prior_OpStore_exact_pointer_ID_candidates",0)+spv.get(
+            "GFX075_SPV_no_same_block_prior_OpStore_exact_pointer_ID_proven",0)==427
+          assert d["originalShaderRestored"] is False
+          assert d["phase_closed"] is False
+          assert spv.get("GFX076_SPV_original_b_authenticated_actual_dynamic_CB_OpLoads",0)==427
+          assert spv.get("GFX076_SPV_index_OpLoad_pointer_root_classified",0)==427
+          assert sum(v for k,v in spv.items() if k.startswith("GFX076_SPV_index_normalized_Function_literal_path_"))==427
+          assert spv.get("GFX076_SPV_index_normalized_Function_literal_path_same_block_path_store_candidate",0)+spv.get(
+            "GFX076_SPV_index_normalized_Function_literal_path_prior_path_store_outside_trusted_window",0)+spv.get(
+            "GFX076_SPV_index_normalized_Function_literal_path_no_prior_matching_path_store",0)+spv.get(
+            "GFX076_SPV_index_normalized_Function_literal_path_unresolved",0)==427
+          assert d["originalShaderRestored"] is False
+          assert d["phase_closed"] is False
+          assert d["GFX074_source_to_translated_same_instruction_and_index_value_proven"] is False
+          print("GFX076_ORIGINAL_CB_FUNCTION_LITERAL_PATH_STORES_NO_SSA_CLAIM=true")
+          PY
+      - name: Upload safe anonymous aggregate counters only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfxlab-multi076-safe-original-CB-SPV-Function-address-path-Store-counts
+          path: gfxlab-multi076-safe-private-SPV-Function-address-path-Store-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original Shader48 ZIP2, DXBC, translated SPIRV
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfxlab076-private"
+          echo GFX076_ALL_PRIVATE_ORIGINAL_DXBC_AND_SPV_PURGED=true
