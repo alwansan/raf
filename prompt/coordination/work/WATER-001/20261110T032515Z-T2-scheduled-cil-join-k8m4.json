@@ -1,0 +1,18 @@
+{
+  "session_id": "20261110T032515Z-T2-scheduled-cil-join-k8m4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-10T03:25:15Z",
+  "intended_files": [
+    "scripts/t2_cil_return_join_gate.py",
+    "tests/test_t2_cil_return_join_gate.py",
+    "prompt/coordination/clients/T2/sessions/20261110T032515Z-T2-scheduled-cil-join-k8m4.md",
+    "prompt/coordination/work/WATER-001/20261110T032515Z-T2-scheduled-cil-join-k8m4.json"
+  ],
+  "experiment_key": "T2-CIL-RETURN-JOIN-FAILCLOSED-v1:synthetic-instructions-no-proprietary-input",
+  "resource_key": null,
+  "hypothesis": "CIL return-value provenance must reject conflicting predecessor paths and unresolved stack/receiver, avoiding false Foam pass1 texture identity",
+  "baseline": "T2 authentic original Foam CIL CI42519122764; previous T2 typed-call result remains unresolved; owner phone 42058825739",
+  "boundaries": "standalone source-only proof; not original Unity shader or device validation"
+}
