@@ -117,6 +117,19 @@ def audit(records):
                         or fields.get("gpu_result") != "unverified"
                         or fields.get("water_rendering") != "unverified"):
                     raise ValueError("invalid original FFT synchronous thrown marker")
+        if native:
+            # A terminal record may repeat source-only markers. Never allow it
+            # to upgrade an unverified call into purported FindKernel/GPU proof.
+            # Positive proof requires a separate authenticated runtime capture.
+            unverified_markers = {
+                "original_findkernel_callsite_present": "false",
+                "original_runtime_mapping": "unverified",
+                "gpu_result": "unverified",
+                "water_rendering": "unverified",
+            }
+            for name, expected in unverified_markers.items():
+                if name in fields and fields[name] != expected:
+                    raise ValueError("contradictory original FFT evidence marker: " + name)
         seq = fields.get("sequence", "")
         if not seq.isascii() or not seq.isdecimal() or not 1 <= int(seq) <= 16 or str(int(seq)) != seq:
             raise ValueError("invalid bounded sequence")
