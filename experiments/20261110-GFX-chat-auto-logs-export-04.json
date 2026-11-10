@@ -1,0 +1,20 @@
+{
+  "session_id": "20261110-GFX-chat-auto-logs-export-04",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-material-delta-03",
+  "base_sha": "a134108fac5f59e503aab388969abbb9720b2e66",
+  "experiment_key": "GFX-MULTI-031-Automatic-GLES-device-tests-logs-ZIP-MediaStore-Downloads",
+  "source_ref": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "requested_path": "/storage/emulated/0/Download/Games/cl/test/g/",
+  "scope": "Auto log all test state changes, Unity errors and full stacks, snapshots, aggregate all sessions and export zipped to Android Downloads without manual COPY LOG",
+  "approach": "Unity2021 C# session recorder; Android API29+ MediaStore.Downloads RELATIVE_PATH=Download/Games/cl/test/g; retain private ZIP when external export fails",
+  "planned_tests": [
+    "source-free structural tests",
+    "Unity2021 signed ARM64 IL2CPP GLES3 build",
+    "APK signature and package verification",
+    "owner device confirms MediaStore path and ZIP contents"
+  ],
+  "status": "PREPARING",
+  "originalShaderRestored": false,
+  "phaseClosed": false
+}
