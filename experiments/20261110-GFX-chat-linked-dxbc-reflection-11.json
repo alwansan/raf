@@ -1,0 +1,31 @@
+{
+  "session_id": "20261110-GFX-chat-linked-dxbc-reflection-11",
+  "origin": "chat",
+  "resumed_from": "20261110-GFX-chat-gl-program-envelope-10",
+  "base_sha": "d3803ba469d9a8af246a593d7c6e5d780c5a9622",
+  "experiment_key": "GFX-MULTI-037",
+  "issue_id": "RENDER-002",
+  "source_sha": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "scope": "Source-only bounded alternate-reflection/debug chunk census across all 1,275 original Shader48 linked VS/FS DXBC containers; publish aggregate counts and only public DXBC FourCC classes.",
+  "question": "Do any authentic original Shader48 linked DXBC program containers have debug/reflection metadata beyond absent RDEF, such as SDBG/SPDB/ILDB/RDAT/SRCI, with source property name evidence?",
+  "hypothesis": "RDEF is absent in 1275/1275; alternative debug/reflection chunk presence may explain missing Material-to-register map, but container tags and name occurrences alone are not proof of binding.",
+  "evidence_reference": [
+    "https://github.com/alwansan/raf/actions/runs/42743017021",
+    "https://github.com/alwansan/raf/actions/runs/42812418402",
+    "https://github.com/microsoft/D3D12TranslationLayer/blob/master/DxbcParser/include/BlobContainer.h",
+    "https://github.com/baldurk/renderdoc/blob/v1.x/renderdoc/driver/shaders/dxbc/dxbc_container.cpp"
+  ],
+  "planned_tests": [
+    "Verify all 1,275 authentic linked DX11 original program indices and pass topology with original compiler-platform guard",
+    "Parse DXBC container header/chunk table with strict bounded offsets and preserve only known public FourCC categories",
+    "Inspect alternative debug chunk presence and private bounded exact original Shader48 property-token inclusion, no raw names",
+    "Synthetic fail-closed parser tests, SHA-pinned ZIP2 runner, safe aggregate artifact and mandatory source purge"
+  ],
+  "negative_controls": [
+    "No private DXBC shader bytes, HLSL, ID, register values, source property names or PPtrs committed",
+    "No inferred Material-to-register/CB offset from chunk presence or name token",
+    "No original Android Shader48 APK or claim of PC/Adreno pixels"
+  ],
+  "status": "IN_PROGRESS",
+  "runs": []
+}
