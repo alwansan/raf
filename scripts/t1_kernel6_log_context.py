@@ -7,9 +7,9 @@ import re
 from collections import deque
 from pathlib import Path
 
-KERNEL6 = re.compile(r"kernel(?:\\s+index)?\\s*[:=#]?\\s*6\\b", re.I)
+KERNEL6 = re.compile(r"kernel(?:\s+index)?\s*[:=#]?\s*6\b", re.I)
 CONTEXT = re.compile(r"FindKernel|Dispatch|ComputeShader|ultimate_water_invalid_pass|water_fft_invalid_compute_kernel", re.I)
-PASS = re.compile(r"\\b(?:Spectrum|Foam(?:\\s+Global)?|Subsurface\\s+Blur|Utility\\s+Noise)\\b", re.I)
+PASS = re.compile(r"\b(?:Spectrum|Foam(?:\s+Global)?|Subsurface\s+Blur|Utility\s+Noise)\b", re.I)
 
 def scan(path, session, before=8, after=8, max_hits=30):
     if not session or not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", session):
