@@ -24,8 +24,37 @@
     "t/s and CB structural use proof for supported stages",
     "safe artifact and purge"
   ],
-  "status": "CI_PENDING",
-  "run_urls": [],
+  "status": "SUCCESS_ORIGINAL_157_PASS_SCOPED_JOINT_SOURCE_CLASSES_FIRST_24_CPU_SPIRV_PARITY",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42857815446"
+  ],
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "result": {
+    "run": 42857815446,
+    "unit_tests": 391,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_exact_VS_FS_pairs_classified": 524,
+    "source_unique_DXBC_stage_programs_inspected": 936,
+    "global_b_t_s_CB_declaration_classes": 110,
+    "pass_scoped_b_t_s_CB_declaration_classes": 132,
+    "global_source_t_s_sample_opcode_use_classes": 58,
+    "pass_scoped_source_t_s_sample_opcode_use_classes": 80,
+    "pass_scoped_joint_declaration_plus_sample_use_classes": 157,
+    "initial_CPU_validation_pair_budget": 24,
+    "original_exact_pair_representatives_source_to_SPIRV_val_pass": 24,
+    "original_stage_sample_pair_use_equal": 48,
+    "original_CB_b_global_source_name_and_vec4_layout_stages": 46,
+    "original_stages_no_CB": 2,
+    "source_supported_opcode_CB_vec4_loaded_ranges_matched": 662,
+    "source_supported_opcode_CB_vec4_ranges_missing": 0,
+    "original_CB_dynamic_extended_operand_occurrences_unresolved": 81,
+    "first_batch_pairs_with_any_strict_audit_rejection": 0,
+    "pass_scoped_joint_classes_untranslated_for_CPU": 133,
+    "material_property_to_original_source_GPU_t_s_b_register_semantics_verified": false,
+    "all_524_variant_full_shader_semantics_proven": false,
+    "originalShaderRestored": false,
+    "private_source_purge": true,
+    "safe_artifact_id": 13783138068
+  }
 }

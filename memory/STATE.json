@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-524-original-resource-profile-coverage-29",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-524-original-resource-profile-coverage-29.md",
-  "status": "GFX_MULTI_055_SUCCESS_ALL_524_SOURCE_B_T_S_CB_PROFILE_CLASSES_110_GLOBAL_132_PASS_SCOPED_ONLY_30_FIRST_PAIR_EQUIVALENT_ORIGINAL_SHADER48_BRIDGE_BLOCKED",
+  "latest_session": "20261110-GFX-chat-pass-scoped-declaration-sampling-30",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-pass-scoped-declaration-sampling-30.md",
+  "status": "GFX_MULTI_056_SUCCESS_524_SOURCE_157_PASS_JOINT_CLASSES_INITIAL_24_OF_157_CPU_SPIRV_PASSED_133_UNTESTED_MATERIAL_SEMANTIC_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-056: source-private select one authentic exact keyword/tier VS/FS pair for each of 132 pass-scoped original CB b-slot+vec4 length and t/s declaration classes; compare sample-use signature class diversity from GFX048 and then budgeted/batched original DXBC→SPIRV structural use checks. GFX054 Material-property semantic register bridge remains BLOCKED; no inference from declaration profile identity, no Android APK.",
+  "next_experiment": "GFX-MULTI-057: extend private source original Shader48 joint class selector with deterministic start offset 24 / budget24 and negative controls preventing duplicated first pilot class reps, then CPU SPIRV validation of next 24 of 157 source Pass-scoped joint b/t/s CB + t/s sampling-use classes. Keep private batch ledger, GFX054 original Material property register identity blocked, originalShaderRestored=false.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1586,5 +1586,35 @@
     "original_Shader48_GPU_Android_verified": false,
     "originalShaderRestored": false,
     "private_source_purged": true
+  },
+  "latest_gfx056_pass_scoped_original_joint_source_classes": {
+    "run": 42857815446,
+    "status": "SUCCESS_SOURCE_524_JOINT_CLASS_CENSUS_AND_FIRST24_CPU_SPIRV_PROOF",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "unit_tests": 391,
+    "safe_artifact_id": 13783138068,
+    "safe_artifact_expiry_utc": "2026-11-17T16:46:34Z",
+    "source_original_exact_pair_rows_classified": 524,
+    "source_unique_compiled_stage_programs_inspected": 936,
+    "global_declaration_classes": 110,
+    "pass_scoped_declaration_classes": 132,
+    "global_sample_use_classes": 58,
+    "pass_scoped_sample_use_classes": 80,
+    "pass_scoped_joint_declaration_sample_use_classes": 157,
+    "first_24_CPU_Validation_exact_VS_FS_pair_passes": 24,
+    "first_batch_source_stages_val_pass": 48,
+    "first_batch_stages_with_equal_original_and_spv_t_s_pair_use": 48,
+    "first_batch_stages_with_CB_global_name_and_vec4_layout_proven": 46,
+    "first_batch_stages_with_no_CB": 2,
+    "source_static_CB_vec4_ranges_loaded": 662,
+    "source_static_CB_vec4_ranges_unmatched": 0,
+    "source_dynamic_CB_operands_unresolved": 81,
+    "first_batch_pairs_with_strict_failed_checks": 0,
+    "pass_scoped_joint_classes_not_yet_SPIRV_translated": 133,
+    "all_524_variants_program_parity_proven": false,
+    "original_Material_to_GPU_register_semantic_bridge_proven": false,
+    "original_Shader48_Android_GPU_runtime_verified": false,
+    "originalShaderRestored": false,
+    "private_original_source_purged": true
   }
 }
