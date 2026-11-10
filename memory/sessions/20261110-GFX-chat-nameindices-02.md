@@ -1,0 +1,11 @@
+# GFX-LAB — 20261110-GFX-chat-nameindices-02
+- session_id: `20261110-GFX-chat-nameindices-02`
+- origin: chat
+- resumed_from: `20261110-GFX-chat-owner-evidence-01`
+- base_sha: `3fe1f4a1b36f665cf64bc654f3af5260e1983fbf`
+- source_ref: `ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`
+- experiment_key: GFX-MULTI-030S exact Shader48 dynamic PassState ↔ same-pass NameIndices/ShaderProp/MaterialKeywords
+- evidence baseline: [GFX-MULTI-029S CI42750996280](https://github.com/alwansan/raf/actions/runs/42750996280) 164 tests, ZWrite 2/7 matches with Float slots; Cull/ZTest/AlphaToMask 0/7 direct property matches. [GFX-MULTI-013 CI42732808109](https://github.com/alwansan/raf/actions/runs/42732808109) 7/7 source pairs GLSL offline only. [Owner GFX026 review](../sessions/20261110-GFX-chat-owner-evidence-01.md) shows Shader48 NOT running on phone.
+- scope: source-only 7 Shader48 Passes, m_NameIndices and same-source metadata; compare original named state values without emitting strings/IDs/compiled shaders. Fail closed on unknown structures, no numeric fallback.
+- status: PREPARED_CI_PENDING
+- next: analyze CI, update memory and phase closure gates; do NOT claim original Android Shader48 until material/source→GL/PC pixels pass.
