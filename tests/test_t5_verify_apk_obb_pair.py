@@ -247,6 +247,24 @@ class PairTests(unittest.TestCase):
         self.write_manifest()
         self.assertGreater(self.check()["obb_zip_members"], 0)
 
+    def test_obb_bzip2_member_rejected_even_with_matching_sha(self):
+        with zipfile.ZipFile(self.obb, "w", compression=zipfile.ZIP_BZIP2) as archive:
+            archive.writestr("assets/bin/Data/resources.assets", b"synthetic-bzip2")
+        self.write_manifest()
+        self.rejected("Unsupported APK/OBB ZIP compression method")
+
+    def test_obb_lzma_member_rejected_even_with_matching_sha(self):
+        with zipfile.ZipFile(self.obb, "w", compression=zipfile.ZIP_LZMA) as archive:
+            archive.writestr("assets/bin/Data/resources.assets", b"synthetic-lzma")
+        self.write_manifest()
+        self.rejected("Unsupported APK/OBB ZIP compression method")
+
+    def test_obb_deflate_member_allowed(self):
+        with zipfile.ZipFile(self.obb, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr("assets/bin/Data/resources.assets", b"synthetic-deflate")
+        self.write_manifest()
+        self.assertGreater(self.check()["obb_zip_members"], 0)
+
     def test_empty_obb_data(self):
         self.make_obb([("not-assets", b"x")])
         self.write_manifest()
