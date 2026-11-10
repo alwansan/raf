@@ -1,0 +1,74 @@
+{
+  "experiment": "GFX-MULTI-055",
+  "verified_run": 42854556445,
+  "unit_tests": 385,
+  "evidence_level": "ORIGINAL_SOURCE_ALL_524_SHADER48_EXACT_PAIR_BTS_CB_DECLARATION_CLASS_CENSUS_CPU_ONLY",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_Shader48_passes": 7,
+  "source_exact_VS_FS_pairs_examined": 524,
+  "original_stage_reference_uses": 1048,
+  "distinct_original_source_programs_inspected": 936,
+  "private_full_VS_FS_joint_profile_classes_global": 110,
+  "private_joint_profile_classes_pass_scoped": 132,
+  "pairs_matching_first_pair_structural_profile_within_own_Pass": 30,
+  "pairs_outside_first_pair_structural_profile_within_own_Pass": 494,
+  "per_pass_original_source_counts": [
+    {
+      "subshader": 0,
+      "pass": 0,
+      "pairs": 80,
+      "classes": 32,
+      "outside_first": 78
+    },
+    {
+      "subshader": 0,
+      "pass": 1,
+      "pairs": 156,
+      "classes": 28,
+      "outside_first": 153
+    },
+    {
+      "subshader": 0,
+      "pass": 2,
+      "pairs": 32,
+      "classes": 10,
+      "outside_first": 28
+    },
+    {
+      "subshader": 0,
+      "pass": 3,
+      "pairs": 80,
+      "classes": 16,
+      "outside_first": 76
+    },
+    {
+      "subshader": 1,
+      "pass": 0,
+      "pairs": 40,
+      "classes": 16,
+      "outside_first": 38
+    },
+    {
+      "subshader": 1,
+      "pass": 1,
+      "pairs": 120,
+      "classes": 28,
+      "outside_first": 117
+    },
+    {
+      "subshader": 1,
+      "pass": 2,
+      "pairs": 16,
+      "classes": 2,
+      "outside_first": 4
+    }
+  ],
+  "all_524_translated_SPIRV_compiler_profiles": false,
+  "original_Material_property_to_DXBC_registers_or_CB_semantics_proven": false,
+  "originalShaderRestored": false,
+  "phase_closed": false,
+  "private_original_source_purged": true,
+  "private_original_shader_register_values_CB_sizes_variant_identities_or_shaders_exported": false,
+  "safe_artifact_id": 13782690861,
+  "artifact_expires_at_utc": "2026-11-17T16:27:19Z"
+}

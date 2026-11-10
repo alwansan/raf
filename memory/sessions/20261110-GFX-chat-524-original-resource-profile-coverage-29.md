@@ -15,3 +15,11 @@
 - `gfxlab/tests/test_multi_shader_original_decl_profile_coverage.py`
 - `.github/workflows/gfxlab-multi055-all-524-declaration-coverage.yml`
 - CI pending. `originalShaderRestored=false`, `phase_closed=false`.
+
+## Verified final CI / corrected scope conclusion
+- [CI42854556445](https://github.com/alwansan/raf/actions/runs/42854556445) **SUCCESS**, 385 source-free tests; authentic private pinned ZIP2 analyzed all 524 exact matched pairs /1048 stage reference uses and **936 unique source programs** in those matched pairs; purge verified, original private labels/registers/CB lengths and binaries never published.
+- **110 global** distinct b/t/s+CB size full paired declaration classes, **132 Pass-scoped** joint VS/FS classes (32,28,10,16,16,28,2). Only **30** pairs match first chosen pair in their Pass; **494** do not. This is not an error in source: earlier CPU proofs on first exact pair per Pass cannot be extrapolated to all original variants.
+- Source pass positions / original exact pairs / structural classes / first-pair mismatches: 0:0=80/32/78, 0:1=156/28/153, 0:2=32/10/28, 0:3=80/16/76, 1:0=40/16/38, 1:1=120/28/117, 1:2=16/2/4.
+- **466** vertex and **418** fragment references differ vs own Pass's first-pair **CB register+vec4-length** profile; stage-level counts, not unique variants. 12 reference uses have zero CB declarations; 536 source reference uses each contain no declared t resource and s sampler. No original ShaderLab/material-property semantic map obtained; GFX054 blocker remains.
+- Safe [artifact 13782690861](https://github.com/alwansan/raf/actions/runs/42854556445/artifacts/13782690861), expires 2026-11-17T16:27:19Z UTC. Outcome `SUCCESS_ALL_524_ORIGINAL_B_T_S_CB_DECLARATION_PROFILE_SCOPE_UNDERCOVERED_BY_7_FIRST_PAIRS`; originalShaderRestored=false, phase_closed=false.
+- Next GFX056 private source select pass-scoped classes (+ sampling-profile class diversity) then bounded compiler-SPV sample validation; not all 524 SPV translated and no Android GPU verified.

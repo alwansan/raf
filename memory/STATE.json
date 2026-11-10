@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261110-GFX-chat-original-property-register-evidence-gate-28",
-  "latest_session_path": "memory/sessions/20261110-GFX-chat-original-property-register-evidence-gate-28.md",
-  "status": "GFX_MULTI_054_SUCCESS_SOURCE_PROPERTY_REGISTER_BRIDGE_PROOF_GATE_BLOCKED_IN_PINNED_INPUTS_1275_NO_RDEF_NO_PARAMETERS_G8_BLOCKED",
+  "latest_session": "20261110-GFX-chat-524-original-resource-profile-coverage-29",
+  "latest_session_path": "memory/sessions/20261110-GFX-chat-524-original-resource-profile-coverage-29.md",
+  "status": "GFX_MULTI_055_SUCCESS_ALL_524_SOURCE_B_T_S_CB_PROFILE_CLASSES_110_GLOBAL_132_PASS_SCOPED_ONLY_30_FIRST_PAIR_EQUIVALENT_ORIGINAL_SHADER48_BRIDGE_BLOCKED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX-MULTI-055 only with NEW independently authenticated source property->original t/s/b binding or CB member byte-offset witness (same Shader48, pass, keyword/tier, original DXBC). If unavailable, preserve source semantic bridge BLOCKED and prioritize other testable shader pipeline gates without inventing mappings or building a game APK.",
+  "next_experiment": "GFX-MULTI-056: source-private select one authentic exact keyword/tier VS/FS pair for each of 132 pass-scoped original CB b-slot+vec4 length and t/s declaration classes; compare sample-use signature class diversity from GFX048 and then budgeted/batched original DXBC→SPIRV structural use checks. GFX054 Material-property semantic register bridge remains BLOCKED; no inference from declaration profile identity, no Android APK.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -1560,5 +1560,31 @@
     "future_new_external_PC_capture_or_authored_shader_possible": true,
     "originalShaderRestored": false,
     "source_private_purged": true
+  },
+  "latest_gfx055_all_524_original_shader_declaration_profile_coverage": {
+    "run": 42854556445,
+    "status": "SUCCESS_ORIGINAL_SOURCE_524_EXACT_PAIR_DECLARATION_PROFILE_CENSUS",
+    "unit_tests": 385,
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "safe_artifact_id": 13782690861,
+    "artifact_expiry_utc": "2026-11-17T16:27:19Z",
+    "exact_VS_FS_pairs_analyzed": 524,
+    "stage_reference_uses": 1048,
+    "distinct_compiled_stage_programs_inspected": 936,
+    "private_global_full_VS_FS_b_t_s_CB_length_profile_classes": 110,
+    "pass_scoped_VS_FS_declaration_classes": 132,
+    "pairs_equal_first_pair_in_own_Pass": 30,
+    "pairs_outside_first_pair_in_own_Pass": 494,
+    "vertex_source_refs_with_changed_b_slot_or_cb_vec4_length": 466,
+    "fragment_source_refs_with_changed_b_slot_or_cb_vec4_length": 418,
+    "source_stages_without_declared_CB": 12,
+    "source_stages_without_declared_texture": 536,
+    "source_stages_without_declared_sampler": 536,
+    "all_524_variants_ever_translated_to_SPIRV": false,
+    "same_declaration_class_implies_same_opaque_shader_semantics": false,
+    "original_Material_property_to_t_s_b_register_mapping_proven": false,
+    "original_Shader48_GPU_Android_verified": false,
+    "originalShaderRestored": false,
+    "private_source_purged": true
   }
 }
