@@ -121,7 +121,7 @@ def translated_spv_private_authenticated_b_relative_offset_multiset(dis,authenti
     def idx_kind(token):
         if token in constants:return "literal",constants[token]
         op,args=defs.get(token,(None,[]))
-        if op and op not in ("OpSpecConstant","OpSpecConstantOp",
+        if (op and op not in ("OpSpecConstant","OpSpecConstantOp",
             "OpSpecConstantComposite","OpConstantNull","OpConstant","OpUndef")
             and args and args[0] in types):
             return "dynamic",None
