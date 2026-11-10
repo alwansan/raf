@@ -238,5 +238,45 @@ class T2FoamResourceAbiTests(unittest.TestCase):
 
 
 
+    def test_forged_unity_device_readiness_flags_fail_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        root_flags = (
+            "shaderlab_or_unity_import_verified",
+            "original_name_register_join_verified",
+            "private_shader_symbols_published",
+            "device_pixels_verified",
+        )
+        stage_flags = (
+            "original_to_translated_texture_sampler_name_binding_verified",
+            "original_sampler_state_verified",
+            "unity_shaderlab_or_device_verified",
+        )
+        for flag in root_flags:
+            for value in (True, 1, None, "false"):
+                with self.subTest(level="root", flag=flag, value=value):
+                    report = combine(profile, resources)
+                    report[flag] = value
+                    with self.assertRaises(ValueError):
+                        verify_genuine_texture_sampler_pair_count(report)
+        for flag in stage_flags:
+            for value in (True, 1, None, "false"):
+                with self.subTest(level="stage", flag=flag, value=value):
+                    report = combine(profile, resources)
+                    report["rows"][1][flag] = value
+                    with self.assertRaises(ValueError):
+                        verify_genuine_texture_sampler_pair_count(report)
+
+    def test_missing_readiness_flags_fail_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        report = combine(profile, resources)
+        del report["device_pixels_verified"]
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(report)
+        report = combine(profile, resources)
+        del report["rows"][0]["original_sampler_state_verified"]
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(report)
+
+
 if __name__ == "__main__":
     unittest.main()
