@@ -60,7 +60,7 @@ jobs:
           assert d["unique_referenced_stage_programs"] > 0
           assert d["all_referenced_stage_programs_are_bounded_dxbc"]
           assert d["all_original_variant_links_and_types_valid"]
-          assert counts["rdef_present_stage_programs"] + counts["rdef_absent_stage_programs"] == d["unique_referenced_stage_programs"]
+          assert counts.get("rdef_present_stage_programs", 0) + counts.get("rdef_absent_stage_programs", 0) == d["unique_referenced_stage_programs"]
           assert not d["source_property_to_DX11_register_map_verified"]
           assert not d["original_android_shader_restored"]
           assert not d["actual_android_original_shader_pixels_verified"]
@@ -74,8 +74,8 @@ jobs:
               "parameter_blocks": counts.get("parameter_blocks_present", 0),
               "texture_parameter_entries": counts.get("texture_parameter_entries", 0),
               "cb_binding_entries": counts.get("constant_buffer_binding_entries", 0),
-              "rdef_present": counts["rdef_present_stage_programs"],
-              "rdef_absent": counts["rdef_absent_stage_programs"],
+              "rdef_present": counts.get("rdef_present_stage_programs", 0),
+              "rdef_absent": counts.get("rdef_absent_stage_programs", 0),
               "bridge_state": d["source_property_register_bridge_state"]
           }, sort_keys=True))
           PY
