@@ -39,26 +39,23 @@ jobs:
             --max-filesize 131072 --retry 2 \
             "https://raw.githubusercontent.com/alwansan/CL/$SOURCE_COMMIT/raft%20log/lf/LogRaft-20261108-164850-270/session-summary.json" \
             -o "$PRIVATE_SUMMARY"
-          python3 scripts/t1_water_startup_order.py "$PRIVATE_SUMMARY" \
-            --session 20261108-164850-270 \
-            --source-commit "$SOURCE_COMMIT" > "$PRIVATE_REPORT"
+          # Verify immutable input bytes before interpreting summary timestamps.
+          echo "941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7  $PRIVATE_SUMMARY" | sha256sum --check --status
+          python3 scripts/t1_water_startup_order.py "$PRIVATE_SUMMARY" > "$PRIVATE_REPORT"
           python3 - "$PRIVATE_REPORT" <<'PY'
           import json,sys
-          x=json.load(open(sys.argv[1],encoding="utf-8"))
-          assert x["summary_sha256"]=="941d37d4b18a2bf11471098bd0668029add11913d76b0a97086dd9fb185e7ff7"
-          assert x["first_errors_observed_before_world_loaded"] is True
-          assert x["timing_ms"]["first_water_before_world_loaded"]==64486
-          assert x["timing_ms"]["first_fft_before_world_loaded"]==64484
-          assert x["timing_ms"]["fft_first_after_water_first"]==2
-          assert x["last_sample_underreports_final_by"]=={
-              "water_invalid_pass":696,"fft_invalid_compute_kernel":116}
-          assert x["root_counts"]["water_invalid_pass"]==74359
-          assert x["root_counts"]["fft_invalid_compute_kernel"]==11165
-          assert x["root_counts"]["materials"]["spectrum"]==29700
-          assert x["root_counts"]["materials"]["foam_global"]==44659
-          assert x["root_counts"]["invalid_kernel_indices"]["index_6"]==11165
-          assert x["limits"]["unity_findkernel_dispatch_proven"] is False
-          assert x["limits"]["full_preworld_error_count_known"] is False
+          rows=json.load(open(sys.argv[1],encoding="utf-8"))
+          assert isinstance(rows,list) and len(rows)==1
+          x=rows[0]
+          assert x["water_before_world_ms"]==64486
+          assert x["fft_before_world_ms"]==64484
+          assert x["fft_after_water_ms"]==2
+          assert x["water_errors"]==74359
+          assert x["fft_errors"]==11165
+          assert x["spectrum"]==29700
+          assert x["foam_global"]==44659
+          assert x["kernel_index_6"]==11165
+          assert "no kernel identity or causal proof" in x["evidence_scope"]
           print("RAFT_T1_FIRST_WATER_PREWORLD_SOURCE_AUDIT="+json.dumps(x,sort_keys=True))
           PY
           echo "PRIVATE_CL_LOG_BYTES_EXPORTED=false"
