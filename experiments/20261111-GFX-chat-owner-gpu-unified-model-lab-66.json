@@ -20,7 +20,9 @@
     "owner model+affine GPU test"
   ],
   "resource_key": "GFX-LAB-unified-six-model-materials098",
-  "status": "planned",
+  "status": "OWNER_GFX094_VERIFIED_GFX098_UNITY_BUILD_IN_PROGRESS",
   "originalShaderRestored": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "run_id": 42927645102,
+  "source_free_tests": 922
 }
