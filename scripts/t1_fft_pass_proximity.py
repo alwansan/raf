@@ -22,6 +22,8 @@ def summarize(scan):
     events = scan.get("events")
     if not isinstance(events, list):
         raise ValueError("missing events")
+    # A sampled log line represents one error; duplicates inflate pass association counts.
+    seen_error_lines = set()
     histogram = Counter()
     matched = 0
     ambiguous = 0
@@ -35,6 +37,9 @@ def summarize(scan):
         center = event.get("line")
         if type(center) is not int or center < 1:
             raise ValueError("invalid error line")
+        if center in seen_error_lines:
+            raise ValueError("duplicate sampled error line")
+        seen_error_lines.add(center)
         candidates = []
         for token in event.get("pass_tokens", []):
             if not isinstance(token, str):
