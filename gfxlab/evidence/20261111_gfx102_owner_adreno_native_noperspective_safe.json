@@ -1,0 +1,74 @@
+{
+  "experiment": "GFX-MULTI-102",
+  "schema": "owner-GFX102-verified-safe-20261111-v1",
+  "origin": "chat",
+  "devices_tested": 1,
+  "device_renderer": "Adreno (TM) 730",
+  "device_gles": "OpenGL ES 3.2",
+  "device_glsl": "OpenGL ES GLSL ES 3.20",
+  "input_zips": [
+    {
+      "sha256": "82fa4235ec6e4a88e8d02fd89cb4077fa228dd8c617cb697503c3137dfa44ff5",
+      "size_bytes": 41000
+    },
+    {
+      "sha256": "858d6bd354b17fdfdf6f8f2c6f3930099bce015d36c206b2f990f20a37a58a29",
+      "size_bytes": 41000
+    }
+  ],
+  "archives_crc_valid": 2,
+  "all_png_decode_and_sha_valid": 10,
+  "events_per_archive": 25,
+  "exact_summary_events_duplicate_between_runs": true,
+  "independent_repeated_executions_proven": false,
+  "gl_extensions_count": 104,
+  "nv_noperspective_advertised": true,
+  "gpu_readbacks_per_archive": 5,
+  "original_synthetic_modes_compile_link_gpu": [
+    "Smooth",
+    "Flat",
+    "AffineEmulated"
+  ],
+  "modes": [
+    {
+      "name": "NativeNoPerspectiveES300",
+      "vertex_compile": false,
+      "fragment_compile": false,
+      "linked": false,
+      "gpu_readback": false,
+      "error_category": "noperspective_reserved_word"
+    },
+    {
+      "name": "NativeNoPerspectiveES310",
+      "vertex_compile": true,
+      "fragment_compile": true,
+      "linked": true,
+      "gpu_readback": true,
+      "mean_absolute_error_vs_affine_cpu": 0.001141990429516256
+    },
+    {
+      "name": "NativeNoPerspectiveES320",
+      "vertex_compile": true,
+      "fragment_compile": true,
+      "linked": true,
+      "gpu_readback": true,
+      "mean_absolute_error_vs_affine_cpu": 0.001141990429516256
+    }
+  ],
+  "cpu_mad_smooth_vs_perspective": 0.0010914190494416291,
+  "cpu_mad_affine_emulated_vs_affine": 0.001141990429516256,
+  "cpu_mad_native310_vs_smooth": 0.16301616768295013,
+  "cpu_mad_native320_vs_smooth": 0.16301616768295013,
+  "rgba_pixel_sha256": {
+    "Smooth": "5bf309adddd5a687df0d782f24ffb7b73315b08573657be6c9cb6e9802b348f5",
+    "AffineEmulated": "ee7ceeaf02c698f4c805caea6d8ffad23913a86c25aec794429fd0cf174456a3",
+    "NativeNoPerspectiveES310": "ee7ceeaf02c698f4c805caea6d8ffad23913a86c25aec794429fd0cf174456a3",
+    "NativeNoPerspectiveES320": "ee7ceeaf02c698f4c805caea6d8ffad23913a86c25aec794429fd0cf174456a3"
+  },
+  "synthetic_native_noperspective_proven": true,
+  "original_shader48_android_pipeline_proven": false,
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "phase_closed": false,
+  "limitations": "One triangle, one driver/version, one phone. Two exports have identical summary/events; no independent timing/driver diversity shown. Native success only for isolated generated GLSL native qualifier, not source Shader48 material/texture/animation or PC vs device pixel identity."
+}
