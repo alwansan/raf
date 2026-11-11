@@ -11,10 +11,10 @@ import re
 from collections import Counter
 from pathlib import Path
 
-HEADER = re.compile(r"^--- !u!(\\d+) &[^\\r\\n]*", re.MULTILINE)
-MATERIAL_LINE = re.compile(r"^\\s*-\\s*\\{([^{}]*)\\}\\s*$")
-GUID = re.compile(r"(?:^|,)\\s*guid:\\s*([0-9a-fA-F]{32})\\s*(?=,|$)")
-FILE_ID = re.compile(r"(?:^|,)\\s*fileID:\\s*(-?\\d+)\\s*(?=,|$)")
+HEADER = re.compile(r"^--- !u!(\d+) &[^\r\n]*", re.MULTILINE)
+MATERIAL_LINE = re.compile(r"^\s*-\s*\{([^{}]*)\}\s*$")
+GUID = re.compile(r"(?:^|,)\s*guid:\s*([0-9a-fA-F]{32})\s*(?=,|$)")
+FILE_ID = re.compile(r"(?:^|,)\s*fileID:\s*(-?\d+)\s*(?=,|$)")
 MAX_BYTES = 32 * 1024 * 1024
 
 
@@ -38,7 +38,7 @@ def census(root: Path, salt: str = ""):
                 continue
             counts["particle_renderers"] += 1
             doc = data[head.end():heads[index + 1].start() if index + 1 < len(heads) else len(data)]
-            match = re.search(r"(?m)^\\s*m_Materials:\\s*(?:\\r?\\n)", doc)
+            match = re.search(r"(?m)^\s*m_Materials:\s*(?:\r?\n)", doc)
             if not match:
                 counts["renderers_without_material_list"] += 1
                 continue
