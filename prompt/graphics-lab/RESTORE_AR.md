@@ -1,3 +1,8 @@
+### GFX137 VERIFIED CI addendum — 11 Nov 2026
+[GitHub Actions 43062691619](https://github.com/alwansan/raf/actions/runs/43062691619) COMPLETED SUCCESS at commit `91fce78d05da873e8cd2a596b77f1d773b48813f`. Inspected actual job log: all 13 source-free tests passed, including full GFX124 ZIP integration and forged-yet-self-consistent readback counter/hash rejection. No private source assets built/published. This verifies the new audit software, **not** an Adreno Deferred render or original Unity gameplay/G-buffer semantics. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX137 source-free Android Deferred acceptance hardening
 
 Session `20261111-GFX-chat-deferred-contract-95`, origin=chat. Write only `experiment/android-graphics-rootcause`. Base was GFX136 commit `12abc3bdc2a318cd710fb8ccb36267a4cdfbe13b`.

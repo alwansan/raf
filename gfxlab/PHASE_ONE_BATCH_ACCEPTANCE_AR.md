@@ -30,3 +30,7 @@
 ## GFX137 — فحص سلامة Deferred قبل اختبار الهاتف
 
 أضيف مدقّق مستقل لجميع لقطات Deferred الاثنتي عشرة قبل قبول نتائج الهاتف: تطابق غطاء RT0 مع المرجع بالبايت، ثبات الغطاء بين اختبارات الخامة، منع تغير مخازن MRT التي لا يفترض أن تتأثر، وإثبات تأثر RT2 بتسطيح النورمال وRT0/RT1 بإلغاء المعدنية. تُحسب فروق كل قناة مقارنة بمرجع Mesa، مع الحفاظ على حقيقة أن الاختلاف الطفيف بين التعريفات ممكن. العدد المخطط للحزمة أصبح **9 حالات و51 لقطة**. لم يُنتج هذا التطوير APK موقّعًا جديدًا، ولم يُشغّل على هاتف المالك بعد. إثبات Unity runtime والمرجع الأصلي للعبة لا يزال مفتوحًا.
+
+### GFX137 VERIFIED CI addendum — 11 Nov 2026
+[GitHub Actions 43062691619](https://github.com/alwansan/raf/actions/runs/43062691619) COMPLETED SUCCESS at commit `91fce78d05da873e8cd2a596b77f1d773b48813f`. Inspected actual job log: all 13 source-free tests passed, including full GFX124 ZIP integration and forged-yet-self-consistent readback counter/hash rejection. No private source assets built/published. This verifies the new audit software, **not** an Adreno Deferred render or original Unity gameplay/G-buffer semantics. `phase_closed=false`.
+
