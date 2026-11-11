@@ -1,0 +1,90 @@
+{
+  "schema": "gfxlab-GFX108-original-indexed-CPU-source-safe-v1",
+  "experiment": "GFX-MULTI-108",
+  "actual_run_id": 42953322197,
+  "conclusion": "success",
+  "job_id": 130302796001,
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "tests_passed": 18,
+  "safe_artifact_id": 13826002534,
+  "safe_artifact_expires_at": "2026-11-18T03:33:25Z",
+  "private_source_cleanup_verified": true,
+  "source_mesh_handler": "UnityPy==1.25.4 MeshHandler.process() decodes direct original m_VertexData indexed positions and original same-index m_BoneWeights/m_BoneIndices",
+  "original_six_models": 6,
+  "original_skinned_models": 5,
+  "original_static_models": 1,
+  "original_indexed_vertices_deformed_cpu": 14033,
+  "total_vertices_delta_more_than_1e_minus4_vs_first_bone_reference": 1374,
+  "accepted_original_influence_widths": {
+    "M00": 2,
+    "M01": 4,
+    "M02": 4,
+    "M04": 4,
+    "M05": 2
+  },
+  "per_model": [
+    {
+      "id": "M00",
+      "vertices": 375,
+      "cpu_computed": true,
+      "reference_delta_gt_1e_minus4": 0,
+      "max_reference_distance": 3e-7,
+      "mean_reference_distance": 1e-7
+    },
+    {
+      "id": "M01",
+      "vertices": 5095,
+      "cpu_computed": true,
+      "reference_delta_gt_1e_minus4": 695,
+      "max_reference_distance": 0.0228293,
+      "mean_reference_distance": 0.0005279
+    },
+    {
+      "id": "M02",
+      "vertices": 1666,
+      "cpu_computed": true,
+      "reference_delta_gt_1e_minus4": 0,
+      "max_reference_distance": 0.0000465,
+      "mean_reference_distance": 0.0000017
+    },
+    {
+      "id": "M03",
+      "static_mesh": true,
+      "skinning_not_applicable": true
+    },
+    {
+      "id": "M04",
+      "vertices": 2445,
+      "cpu_computed": true,
+      "reference_delta_gt_1e_minus4": 679,
+      "max_reference_distance": 0.0228293,
+      "mean_reference_distance": 0.0010926
+    },
+    {
+      "id": "M05",
+      "vertices": 4452,
+      "cpu_computed": true,
+      "reference_delta_gt_1e_minus4": 0,
+      "max_reference_distance": 0.000031,
+      "mean_reference_distance": 7e-7
+    }
+  ],
+  "strict_guards": [
+    "no OBJ welding or game importer reindex",
+    "only original source 2 or 4 influences",
+    "zero-pad missing inactive influences only",
+    "all weights finite/unit within tolerance and bone indices in range",
+    "source GameObject renderer link exact",
+    "source bone transform ancestry and original bindposes"
+  ],
+  "source_pose_belongs_to_serialized_snapshot_only": true,
+  "source_animated_clip_pose_parity_verified": false,
+  "android_gpu_indexed_skinning_verified": false,
+  "original_pc_phone_raster_parity": false,
+  "source_renderer_world_space_parity": false,
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "original_rig_restored": false,
+  "phase_closed": false,
+  "note": "CPU LBS outcomes are source snapshot calculations relative to first-bone reference, NOT pixel or animation correctness. GFX107 on M01/M04 showed 26/100 bone matrices disagree from first-bone product. No original raw vertex/matrix/skin metadata exported."
+}
