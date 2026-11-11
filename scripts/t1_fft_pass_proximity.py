@@ -8,10 +8,10 @@ from pathlib import Path
 ALLOWED = {"spectrum", "foam", "foam_global", "subsurface_blur", "utility_noise"}
 
 def summarize(scan):
-    if scan.get("sample_errors_only") is not True or scan.get("original_kernel_identity_proven") is not False:
-        raise ValueError("requires unproven-identity --errors-only scan")
     if not isinstance(scan, dict):
         raise ValueError("scan must be object")
+    if scan.get("sample_errors_only") is not True or scan.get("original_kernel_identity_proven") is not False:
+        raise ValueError("requires unproven-identity --errors-only scan")
     events = scan.get("events")
     if not isinstance(events, list):
         raise ValueError("missing events")
