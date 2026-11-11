@@ -13,10 +13,12 @@ def stage_draw(source, draw):
     return finalize_draw(draw)
 
 
-def finalize_draw(draw):
+def finalize_draw(draw, *, additive=False):
     engine = engine_values((draw/"mesh.bin").read_bytes(),direct3d=True)
     verified_textures = {"_MainTex":0,"_MetallicGlossMap":1,"_BumpMap":2,"_OcclusionMap":3,
                          "unity_SpecCube0":4,"unity_SpecCube1":5,"unity_ProbeVolumeSH":6}
+    if additive:
+        verified_textures = {"_MainTex":0,"_MetallicGlossMap":1,"_BumpMap":2,"unity_ProbeVolumeSH":3}
     for stage in ("vertex","fragment"):
         contract = json.loads((draw/(stage+".json")).read_text())
         groups = {g["name"]:g for g in contract["groups"]}
@@ -24,7 +26,12 @@ def finalize_draw(draw):
         if textures != (verified_textures if stage=="fragment" else {}):
             raise ValueError("Original texture register layout changed")
         slots = {r["index"]:r["name"] for r in contract["bindings"] if r["type"]==1}
-        if set(slots) != set(range(4)):
+        if additive and stage == "fragment":
+            samplers = {r["name"]:r["extra"] for r in contract["bindings"] if r["type"]==0}
+            if samplers != {"_MainTex":1,"_MetallicGlossMap":3,"_BumpMap":2,"unity_ProbeVolumeSH":0}:
+                raise ValueError("Original ForwardAdd sampler slots changed")
+        slot_count = (5 if stage == "vertex" else 3) if additive else 4
+        if set(slots) != set(range(slot_count)):
             raise ValueError("Original buffer slots changed")
         for slot, group in slots.items():
             source = (draw/f"{stage}-{slot}.bin").read_bytes()

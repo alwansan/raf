@@ -166,7 +166,7 @@ struct Draw {
         ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     }
 
-    void bind_textures(const Path& dir, const std::string& mode) {
+    void bind_textures(const Path& dir, const std::string& mode, bool additive=false) {
         Bytes black{0,0,0,255}, cube;
         for (int i=0; i<6; ++i) cube.insert(cube.end(),black.begin(),black.end());
         std::array<ComPtr<ID3D11ShaderResourceView>,7> textures;
@@ -185,9 +185,13 @@ struct Draw {
             else if (i==2 && mode=="flat") textures[i]=texture2d(Bytes{255,128,255,128},srgb!=0,false,1,1,1);
             else textures[i]=texture2d(read(dir/files[i]),srgb!=0,false,width,height,levels);
         }
-        textures[3] = texture2d(Bytes{255,255,255,255},false,false,1,1,1);
-        textures[4] = textures[5] = texture2d(cube,false,true,1,1,1);
-        textures[6] = volume();
+        if (additive) {
+            textures[3] = volume();
+        } else {
+            textures[3] = texture2d(Bytes{255,255,255,255},false,false,1,1,1);
+            textures[4] = textures[5] = texture2d(cube,false,true,1,1,1);
+            textures[6] = volume();
+        }
         std::array<ID3D11ShaderResourceView*,7> views{};
         for (size_t i=0; i<textures.size(); ++i) views[i]=textures[i].Get();
         ctx->PSSetShaderResources(0,static_cast<UINT>(views.size()),views.data());
@@ -197,7 +201,7 @@ struct Draw {
         for (UINT i=0; i<samplers.size(); ++i) {
             D3D11_SAMPLER_DESC desc{};
             desc.Filter=D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-            desc.AddressU=desc.AddressV=desc.AddressW=(i>=2 && i<=4)
+            desc.AddressU=desc.AddressV=desc.AddressW=(additive ? i>=1 && i<=3 : i>=2 && i<=4)
                 ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP;
             desc.MaxLOD=D3D11_FLOAT32_MAX;
             desc.MaxAnisotropy=1;
@@ -208,18 +212,45 @@ struct Draw {
         ctx->PSSetSamplers(0,static_cast<UINT>(handles.size()),handles.data());
     }
 
-    void render(const Path& dir, const std::string& mode, bool clear_target) {
+    void set_additive_state(bool enabled, bool reject=false) {
+        if (!enabled) {
+            ctx->OMSetBlendState(nullptr,nullptr,0xffffffff);
+            ctx->OMSetDepthStencilState(nullptr,0);
+            return;
+        }
+        D3D11_BLEND_DESC blend{};
+        auto& rt = blend.RenderTarget[0];
+        rt.BlendEnable = TRUE;
+        rt.SrcBlend = rt.DestBlend = D3D11_BLEND_ONE;
+        rt.SrcBlendAlpha = D3D11_BLEND_ZERO;
+        rt.DestBlendAlpha = D3D11_BLEND_ONE;
+        rt.BlendOp = rt.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        rt.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+        ComPtr<ID3D11BlendState> blend_state;
+        require(device->CreateBlendState(&blend,&blend_state),"Additive blend");
+        ctx->OMSetBlendState(blend_state.Get(),nullptr,0xffffffff);
+        D3D11_DEPTH_STENCIL_DESC depth_desc{};
+        depth_desc.DepthEnable = TRUE;
+        depth_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+        depth_desc.DepthFunc = reject ? D3D11_COMPARISON_NEVER : D3D11_COMPARISON_LESS_EQUAL;
+        ComPtr<ID3D11DepthStencilState> depth_state;
+        require(device->CreateDepthStencilState(&depth_desc,&depth_state),"Additive depth");
+        ctx->OMSetDepthStencilState(depth_state.Get(),0);
+    }
+
+    void render(const Path& dir, const std::string& mode, bool clear_target, bool additive=false) {
         std::string light = mode=="dark" ? "dark" : "light";
         std::array<ComPtr<ID3D11Buffer>,8> constants;
         std::array<ID3D11Buffer*,8> slots{};
+        const UINT vs_count = additive ? 5 : 4;
         for (UINT i=0; i<slots.size(); ++i) {
-            std::string stage = i<4 ? "vertex" : "fragment";
-            constants[i]=buffer(read(dir/(stage+"-"+light+"-"+std::to_string(i%4)+".bin")),
+            std::string stage = i<vs_count ? "vertex" : "fragment";
+            constants[i]=buffer(read(dir/(stage+"-"+light+"-"+std::to_string(i<vs_count ? i : i-vs_count)+".bin")),
                                 D3D11_BIND_CONSTANT_BUFFER);
             slots[i]=constants[i].Get();
         }
-        ctx->VSSetConstantBuffers(0,4,slots.data());
-        ctx->PSSetConstantBuffers(0,4,slots.data()+4);
+        ctx->VSSetConstantBuffers(0,vs_count,slots.data());
+        ctx->PSSetConstantBuffers(0,8-vs_count,slots.data()+vs_count);
         const float clear[]{0,0,0,0};
         if (clear_target) {
             ctx->ClearRenderTargetView(color.Get(),clear);
@@ -244,7 +275,7 @@ struct Draw {
 };
 
 int wmain(int argc,wchar_t** argv) {
-    if (argc!=4 && argc!=5) return 2;
+    if (argc!=4 && argc!=5 && (argc!=6 || std::wstring(argv[5])!=L"add")) return 2;
     try {
         Draw draw;
         draw.bind_geometry(argv[1]);
@@ -262,6 +293,26 @@ int wmain(int argc,wchar_t** argv) {
             draw.bind_textures(argv[4],"light");
             draw.render(argv[4],"light",false);
             draw.capture(argv[3],"combined");
+        }
+        if (argc==6) {
+            const Path base=argv[1], add=argv[4];
+            if (read(base/"mesh.bin")!=read(add/"mesh.bin") || read(base/"indices.bin")!=read(add/"indices.bin"))
+                throw std::runtime_error("Additive pass must use the same indexed mesh");
+            draw.bind_geometry(add);
+            draw.bind_textures(argv[2],"light",true);
+            draw.render(add,"light",true,true);
+            draw.capture(argv[3],"add_only");
+            for (const std::string mode:{"add_lit","add_off","add_reject"}) {
+                draw.set_additive_state(false);
+                draw.bind_geometry(base);
+                draw.bind_textures(argv[2],"light");
+                draw.render(base,"light",true);
+                draw.bind_geometry(add);
+                draw.bind_textures(argv[2],"light",true);
+                draw.set_additive_state(true,mode=="add_reject");
+                draw.render(add,mode=="add_off" ? "dark" : "light",false,true);
+                draw.capture(argv[3],mode);
+            }
         }
         return 0;
     } catch (const std::exception& error) {
