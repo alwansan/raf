@@ -1,0 +1,74 @@
+{
+  "schema": "gt_source_container_ledger_v1",
+  "as_of_utc": "2026-11-11T22:35:30Z",
+  "agent": "GT",
+  "origin": "chat",
+  "project": {
+    "repository": "alwansan/raf",
+    "write_branch": "feature/android-native-port",
+    "inventory_baseline_commit": "cd96edc1ce0059b5737c017b707a8f79cb4da29d",
+    "raft_tree_sha": "f1c69f63f0ca76d090733f25d4dfaa9d82fa0387"
+  },
+  "source": {
+    "immutable_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "root_raft_tree_sha": "8c4bd592e1b35b28f7d04584fd4152a51eded257",
+    "manifest_blob_sha": "4201fda426d80caba36c275ceaddb440b05c5b4e",
+    "manifest_original_file_count": 366,
+    "manifest_total_original_bytes": 7789295609,
+    "plain_records": 344,
+    "split_records": 22
+  },
+  "cross_branch": {
+    "matched_relative_paths": 366,
+    "missing_paths": 0,
+    "extra_paths": 0,
+    "plain_same_git_blob_sha": 344,
+    "split_lfs_pointers_verified_against_original_size_and_sha256": 18,
+    "split_files_same_stored_size_only_sha256_unverified": 4,
+    "unverified_full_split_sha256": [
+      "Raft_Data/level30",
+      "Raft_Data/level34",
+      "Raft_Data/sharedassets13.assets.resS",
+      "Raft_Data/sharedassets8.assets.resS"
+    ]
+  },
+  "container_counts": {
+    "scene_level_headers": 40,
+    "unity_assets": 42,
+    "streamed_resS": 48,
+    "audio_banks": 5,
+    "assemblies_dll": 168,
+    "notes": "File types count by original relative path suffix; types overlap other providers but all records total 366"
+  },
+  "structural_coverage": {
+    "file_names_percent": 100,
+    "plain_git_blob_identity_percent": 100,
+    "lfs_pointer_original_digest_and_size_match_percent": 100
+  },
+  "unresolved": {
+    "all_unique_meshes": null,
+    "all_renderer_material_slots": null,
+    "all_unique_materials": null,
+    "all_textures": null,
+    "all_shader_programs": null,
+    "all_shader_pass_variants": null,
+    "all_compute_kernels": null,
+    "exported_unity_meta_guid_links": null,
+    "android_device_acceptance": false
+  },
+  "test": {
+    "first_run": "https://github.com/alwansan/raf/actions/runs/43112757300",
+    "first_run_failure": "B03 original_scene_object_count_over_budget on large scene; GT source graph narrowed to renderer and local Material objects",
+    "fix_commit": "b5eec2c0dd4da113b864ca7b924c0253e391645c",
+    "next_run": "https://github.com/alwansan/raf/actions/runs/43113017547",
+    "verification_status": "pending_at_evidence_creation"
+  },
+  "reproduction": {
+    "data_sources": [
+      "https://api.github.com/repos/alwansan/raf/git/trees/f1c69f63f0ca76d090733f25d4dfaa9d82fa0387?recursive=1",
+      "https://api.github.com/repos/alwansan/raf/git/trees/8c4bd592e1b35b28f7d04584fd4152a51eded257?recursive=1",
+      "https://raw.githubusercontent.com/alwansan/raf/15964ea8f246b6e076ce26b60931ee2e1a9a2385/RAFT_FILE_MANIFEST.tsv"
+    ],
+    "mapping": "Compare original relative_path_under_Raft to target Raft/<path>; for kind=plain compare Git blob SHA; for split validate target Git-LFS pointer oid+size against manifest; for other split verify source/target size only; do not infer object-level restorations."
+  }
+}
