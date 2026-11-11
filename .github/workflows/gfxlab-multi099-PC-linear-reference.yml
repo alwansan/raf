@@ -1,0 +1,120 @@
+name: GFX-MULTI-099 exact original PC shader reference under pinned Linear color baseline
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi099-PC-linear-reference.yml'
+      - 'gfxlab/tools/pc_linear_reference099.py'
+      - 'gfxlab/unity/Assets/Editor/GfxPcLinearWitness099.cs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi099-PC-reference-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-PC-linear-compiler-reference:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 45
+    env:
+      PYTHONUNBUFFERED: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Checkout OUR isolated GFX-LAB only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Validate original-source extraction and Unity project inputs
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m py_compile gfxlab/tools/*.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_*.py' -v
+          test -f gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
+          test -f gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          test -f gfxlab/unity/Assets/Editor/GfxOriginalObjImporter.cs
+          test -f gfxlab/unity/Assets/Shaders/GfxLabChannelProbe.shader
+          test -f gfxlab/unity/Assets/Scripts/GfxSessionRecorder.cs
+          test -f gfxlab/unity/Assets/Scripts/GfxDownloadsZipExporter.cs
+          test -f gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          grep -Fq 'MediaStore.Downloads.EXTERNAL_CONTENT_URI' gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          grep -Fq 'Download/Games/cl/test/g/' gfxlab/unity/Assets/Plugins/Android/GfxDownloadsBridge.java
+          grep -Fq 'EXPORT ZIP' gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          grep -Fq 'Application.logMessageReceivedThreaded' gfxlab/unity/Assets/Scripts/GfxSessionRecorder.cs
+          grep -Fq 'DIAGNOSTIC_SHADER_NOT_SOURCE_SHADER48' gfxlab/unity/Assets/Scripts/GfxMultiViewer.cs
+          grep -Fq 'com.alwansan.raft.graphicslab.unified098' gfxlab/unity/Assets/Editor/GfxUnifiedAndroidBuilder098.cs
+          # This retry verifies the real-vertex bounds guard before Unity build.
+          grep -Fq 'GFX_MULTI_GEOMETRY_BOUNDS_FINITE' gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
+          grep -Fq 'GFX_MULTI_SOURCE_TRIANGLE_PARITY_FAIL_' gfxlab/unity/Assets/Editor/GfxMultiAndroidBuilder.cs
+          python3 -m py_compile gfxlab/tools/obj_normalize.py
+          echo GFX_MULTI098_SOURCEFREE_PASS=true
+      - name: Checkout only SHA-pinned original ZIP2 owner assets
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+            /Raft/Raft_Data/globalgamemanagers
+      - name: Generate private 14-stage requests and verify original PlayerSettings Linear
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m gfxlab.tools.pc_linear_reference099 --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx099-private" \
+            --out gfxlab/pcwitness099/Assets/Gfx098Private/pc-compile-requests.json \
+            --safe "$RUNNER_TEMP/gfx099-source-baseline-safe.json"
+          mkdir -p gfxlab/pcwitness099/Assets/Editor gfxlab/pcwitness099/ProjectSettings gfxlab/pcwitness099/Packages
+          cp gfxlab/unity/Assets/Editor/GfxOriginalStandardPcWitness098.cs gfxlab/pcwitness099/Assets/Editor/
+          cp gfxlab/unity/Assets/Editor/GfxPcLinearWitness099.cs gfxlab/pcwitness099/Assets/Editor/
+          cp gfxlab/unity/ProjectSettings/ProjectVersion.txt gfxlab/pcwitness099/ProjectSettings/
+          cp gfxlab/unity/Packages/manifest.json gfxlab/pcwitness099/Packages/
+      - name: Source-pinned PC D3D compiler witness only, no Android or game build
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: gfxlab/pcwitness099
+          unityVersion: 2021.3.45f2
+          targetPlatform: StandaloneLinux64
+          buildMethod: RaftGraphicsLabEditor.GfxPcLinearWitness099.Build
+          buildName: GFX099-PC-Shader-Witness
+          buildsPath: gfx099-builds
+          versioning: None
+          customParameters: -job-worker-count 2
+      - name: Validate safe source-PC witness report
+        run: |
+          set -euo pipefail
+          python3 - <<'CHECK'
+          import json
+          d=json.load(open('gfxlab/pcwitness099/gfx099-PC-linear-safe.json'))
+          r=d['originalStageCompile']
+          assert d['originalColorBaselinePinnedLinear'] and d['activePlayerSettingsColorSpace']=='Linear'
+          assert r['requestedStages']==14
+          assert r['candidateCompilesAttempted']<=42
+          assert not d['originalShaderRestored'] and not d['phase_closed']
+          print(json.dumps(d))
+          CHECK
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gfx099-safe-original-PC-linear-reference
+          path: |
+            gfxlab/pcwitness099/gfx099-PC-linear-safe.json
+            ${{ runner.temp }}/gfx099-source-baseline-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge all original shader and global settings data
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx099-private" gfxlab/pcwitness099/Assets/Gfx098Private

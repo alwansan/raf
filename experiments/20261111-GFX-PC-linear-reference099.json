@@ -1,0 +1,20 @@
+{
+  "experiment_key": "GFX-MULTI-099",
+  "session_id": "20261111-GFX-chat-owner-gpu-unified-model-lab-66",
+  "origin": "chat",
+  "scope": "PC-only original shader 14-stage recompilation under SHA-pinned original PlayerSettings Linear; no Android build",
+  "base_sha": "2c8fd7e136b19dd21ef83b50bb1d213905517be5",
+  "hypothesis": "GFX098 PC witness matched9/14 SHDR bodies with all signatures equal; explicitly matching original Linear precondition may resolve the remaining5 fragment stage differences",
+  "reference_refs": [
+    "CI42927645102 GFX098 PC compile safe report",
+    "gfxlab/evidence/20261111_original_PC_color_baseline_safe.json"
+  ],
+  "control": "Same builtin source, original keyword requests, three candidate tiers for unknown source hardware tier, with colour baseline explicitly fixed before compile",
+  "planned_tests": [
+    "original source manifest/PlayerSettings hash and value guards",
+    "actual Unity2021.3.45f2 native D3D compile and original SHDR/signature byte-hash comparisons"
+  ],
+  "status": "planned",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

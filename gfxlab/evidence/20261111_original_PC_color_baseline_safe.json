@@ -1,0 +1,12 @@
+{
+  "scope": "original PlayerSettings color baseline for phase-one PC reference",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "provider_sha256": "6d1288cd08b91d8c321ed2526503404b64b978819985b9b7fa5a9a146c29a8f5",
+  "provider_bytes": 1914356,
+  "provider_manifest_identity_verified": true,
+  "PlayerSettings_ActiveColorSpace_code": 1,
+  "Unity_ColorSpace_enum_interpretation": "Linear",
+  "engine_enum_note": "PlayerSettings ColorSpace is distinct from Texture2D TextureColorSpace codes",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
