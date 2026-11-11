@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+"""Read-only, aggregate-only comparison of Unity YAML material references.
+
+Pairs materials by identical relative path in two independently verified trees.
+A difference is evidence of a changed serialized reference, NOT missing asset,
+shader import failure, or Android visual correctness.
+"""
+import argparse
+import json
+import re
+from collections import Counter
+from pathlib import Path
+
+MAX_BYTES = 32 * 1024 * 1024
+SHADER = re.compile(r"(?m)^\s*m_Shader:\s*\{([^{}]*)\}")
+GUID = re.compile(r"\bguid:\s*([0-9a-fA-F]{32})\b")
+TEXENV = re.compile(r"^([ \t]*)m_TexEnvs:\s*$")
+NEXT_FIELD = re.compile(r"^([ \t]*)([A-Za-z_][\w]*):")
+TEXTURE = re.compile(r"\bm_Texture:\s*\{([^{}]*)\}")
+
+def snapshot(path):
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_BYTES:
+        return None
+    text = path.read_text(encoding="utf-8", errors="replace")
+    shader = SHADER.search(text)
+    shader_ref = shader.group(1).replace(" ", "") if shader else None
+    # Count only texture bindings inside m_TexEnvs, never unrelated GUID fields.
+    active = False
+    base_indent = -1
+    refs = []
+    for line in text.splitlines():
+        head = TEXENV.match(line)
+        if head:
+            active = True
+            base_indent = len(head.group(1).expandtabs(4))
+            continue
+        if not active:
+            continue
+        field = NEXT_FIELD.match(line)
+        if field and len(field.group(1).expandtabs(4)) <= base_indent:
+            active = False
+            continue
+        match = TEXTURE.search(line)
+        if match:
+            guid = GUID.search(match.group(1))
+            refs.append(guid.group(1).lower() if guid else "<no-guid>")
+    return shader_ref, Counter(refs)
+
+def inventory(root):
+    root = Path(root).resolve(strict=True)
+    if not root.is_dir():
+        raise ValueError("expected_directory")
+    result = {}
+    skipped = 0
+    for path in root.rglob("*.mat"):
+        item = snapshot(path)
+        if item is None:
+            skipped += 1
+        else:
+            result[path.relative_to(root).as_posix()] = item
+    return result, skipped
+
+def compare(original, exported):
+    a, skip_a = inventory(original)
+    b, skip_b = inventory(exported)
+    common = a.keys() & b.keys()
+    counts = Counter({
+        "original_materials": len(a),
+        "export_materials": len(b),
+        "paired_materials": len(common),
+        "original_only_materials": len(a.keys() - b.keys()),
+        "export_only_materials": len(b.keys() - a.keys()),
+        "skipped_original": skip_a,
+        "skipped_export": skip_b,
+    })
+    for name in common:
+        sa, ta = a[name]
+        sb, tb = b[name]
+        if sa != sb:
+            counts["changed_shader_reference_materials"] += 1
+        if ta != tb:
+            counts["changed_texture_reference_materials"] += 1
+        if sa == sb and ta == tb:
+            counts["unchanged_reference_materials"] += 1
+        if sa is None or sb is None:
+            counts["pair_missing_shader_field"] += 1
+    return {
+        "status": "STATIC_SERIALIZED_REFERENCE_COMPARISON_ONLY",
+        "counts": dict(sorted(counts.items())),
+        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names/order and material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
+    }
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("--original", required=True)
+    p.add_argument("--exported", required=True)
+    args = p.parse_args()
+    print(json.dumps(compare(args.original, args.exported), indent=2, sort_keys=True))
+
+if __name__ == "__main__":
+    main()
