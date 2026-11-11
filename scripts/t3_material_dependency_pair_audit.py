@@ -25,7 +25,14 @@ def snapshot(path):
         return None
     text = path.read_text(encoding="utf-8", errors="replace")
     shader = SHADER.search(text)
-    shader_ref = shader.group(1).replace(" ", "") if shader else None
+    # Mapping order/whitespace do not change Unity's PPtr target identity.
+    # Preserve missing fields explicitly instead of comparing serialized order.
+    if shader:
+        fields = {key: value.lower() if key == "guid" else value
+                  for key, value in REF_FIELD.findall(shader.group(1))}
+        shader_ref = tuple(fields.get(key, "<missing>") for key in ("fileID", "guid", "type"))
+    else:
+        shader_ref = None
     # Count only texture bindings inside m_TexEnvs, never unrelated GUID fields.
     active = False
     base_indent = -1
