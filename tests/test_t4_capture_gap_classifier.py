@@ -40,5 +40,33 @@ class GapClassifierTests(unittest.TestCase):
                          "no_new_growth_observed")
 
 
+    def test_negative_growth_rejected(self):
+        report = {"first_callback_counters": {"left": 0},
+                  "first_reader_counters": {"left": 0},
+                  "monotonic_callback_increases": {"left": -2}}
+        self.assertEqual(module.classify(report)["per_counter"]["left"]["state"],
+                         "invalid_counter_evidence")
+
+    def test_boolean_growth_rejected(self):
+        report = {"first_callback_counters": {"right": 0},
+                  "first_reader_counters": {"right": 0},
+                  "monotonic_callback_increases": {"right": True}}
+        self.assertEqual(module.classify(report)["per_counter"]["right"]["state"],
+                         "invalid_counter_evidence")
+
+    def test_string_growth_rejected_without_type_error(self):
+        report = {"first_callback_counters": {"middle": 0},
+                  "first_reader_counters": {"middle": 0},
+                  "monotonic_reader_increases": {"middle": "3"}}
+        self.assertEqual(module.classify(report)["per_counter"]["middle"]["state"],
+                         "invalid_counter_evidence")
+
+    def test_invalid_baseline_rejected(self):
+        report = {"first_callback_counters": {"scroll": -1},
+                  "first_reader_counters": {"scroll": 0},
+                  "monotonic_callback_increases": {"scroll": 3}}
+        self.assertEqual(module.classify(report)["per_counter"]["scroll"]["state"],
+                         "invalid_counter_evidence")
+
 if __name__ == "__main__":
     unittest.main()
