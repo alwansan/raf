@@ -1,3 +1,17 @@
+## 11 Nov 2026 — VERIFIED GFX107/108: all 14,033 original indexed Skinned Mesh vertices CPU-computed
+
+**Latest session** `memory/sessions/20261111-GFX-chat-gfx107-108-original-indexed-skinning-75.md`, origin=chat. **Only write branch** `experiment/android-graphics-rootcause`; exact ZIP2 source SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
+
+**Actual verified Actions & privacy:** GFX107 https://github.com/alwansan/raf/actions/runs/42951739739 **SUCCESS** (12 tests, artifact13825760281), GFX108 https://github.com/alwansan/raf/actions/runs/42953322197 **SUCCESS** (18 tests, artifact13826002534); both output source-safe aggregate only and original ZIP2 private purge succeeded.
+
+**GFX107 CPU source bone matrix witness:** 213/213 original bone.world × Mesh.bindpose products decoded and computed; 161/213 coherent ≤1e-4 relative to first bone. M00 3/3, M01 74/100 (max matrix disagreement 0.26967712), M02 8/8, M04 74/100 (same max 0.26967712), M05 2/2. This means M01/M04 source serialized snapshot matrix products disagree for 26 bones each, NOT proof lost/broken rig. Original saved Transform snapshot may differ from bind pose. Safe evidence `gfxlab/evidence/20261111_gfx107_original_bindpose_cpu_safe.json`.
+
+**GFX108 all original indexed vertices CPU LBS:** 5/5 skinned meshes and **14,033/14,033** original vertices computed with source `UnityPy.helpers.MeshHelper.MeshHandler.process()` original-array-order positions + bone weights/indices + original bone world matrices and bindposes. Do NOT use exported OBJ re-welding or change handedness without source-specific proof. Source M00/M05 weights are 2 influences per vertex, M01/M02/M04 4; only supported shape 2 or 4 with exact zero-padding for absent inactive influences (no invented bone effect). At >1e-4 delta vs first-bone reference: M00 0/375; M01 695/5095; M02 0/1666; M04 679/2445; M05 0/4452; combined 1374/14033. Max vertex distance M01/M04 0.0228293. **This is authentic source-input CPU computed snapshot, NOT source animation/GPU or original PC bind-pose proof.** Safe evidence `gfxlab/evidence/20261111_gfx108_original_indexed_cpu_skin_safe.json`; Arabic handoff `gfxlab/GFX107_GFX108_INDEXED_SKINNING_AR.md`.
+
+**Next GPU GFX109 gate:** select exact original M02 (8 bones) and M01/M04 (100 bones) and carry original source-indexed vertices/weights/bindposes/transform PPtrs into isolated Android GPU skinning test with CPU reference and PNG+logs; prove Android vertex results, not mere sample static OBJ. Continue Shader48 true material t/s/CB/normal and original PC↔Adreno matched-pixel work. `originalShaderRestored=false`, `originalAnimationRestored=false`, `original_rig_restored=false`, `phase_closed=false`. Do not merge to T1–T5 or game branch before phone proof.
+
+---
+
 ## 11 Nov 2026 — VERIFIED original GFX103–106, source semantics + bone hierarchy
 
 **Newest chat session:** memory/sessions/20261111-GFX-chat-verified-siv-rig-source-74.md; origin=chat; write branch only experiment/android-graphics-rootcause. Verified actual GitHub Actions job logs, final artifacts and private purge: GFX103 CI42945815709 SUCCESS (17 tests, artifact13822676727), GFX104 CI42946470013 SUCCESS (14, artifact13822842279), GFX105 CI42949456992 SUCCESS (18, artifact13824207690), GFX106 CI42950536938 SUCCESS (10, artifact13825061622).
