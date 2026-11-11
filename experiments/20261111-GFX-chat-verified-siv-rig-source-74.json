@@ -1,0 +1,68 @@
+{
+  "session_id": "20261111-GFX-chat-verified-siv-rig-source-74",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "resumed_from": "20261111-GFX-chat-source-siv-fragcoord-73",
+  "branch": "experiment/android-graphics-rootcause",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "actual_verified_ci": [
+    {
+      "experiment": "GFX-MULTI-103",
+      "run": 42945815709,
+      "result": "SUCCESS",
+      "tests": 17,
+      "artifact": 13822676727
+    },
+    {
+      "experiment": "GFX-MULTI-104",
+      "run": 42946470013,
+      "result": "SUCCESS",
+      "tests": 14,
+      "artifact": 13822842279
+    },
+    {
+      "experiment": "GFX-MULTI-105",
+      "run": 42949456992,
+      "result": "SUCCESS",
+      "tests": 18,
+      "artifact": 13824207690
+    },
+    {
+      "experiment": "GFX-MULTI-106",
+      "run": 42950536938,
+      "result": "SUCCESS",
+      "tests": 10,
+      "artifact": 13825061622
+    }
+  ],
+  "source_semantic": {
+    "ordinary_noperspective": 0,
+    "system_siv_noperspective": 16,
+    "system_name_position": 16,
+    "spirv_fragcoord": 16,
+    "glsl310_fragcoord": 16,
+    "source_candidate_identity": true,
+    "device_original_shader_pixel_parity": false
+  },
+  "rig_source": {
+    "source_original_skinned_models": 5,
+    "source_bone_transforms_resolved": 213,
+    "source_bone_total": 213,
+    "bindposes": 213,
+    "finite_transforms": 213,
+    "root_ancestor_complete": [
+      "M01",
+      "M02",
+      "M04"
+    ],
+    "partial_root_ancestor": [
+      "M00",
+      "M05"
+    ],
+    "original_pose_gpu_verified": false
+  },
+  "next": "GFX107 source indexed skinned mesh and CPU rest-pose derivation; afterward authentic source Shader48 Material CB and PC↔phone image parity",
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "phase_closed": false
+}
