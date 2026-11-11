@@ -18,6 +18,8 @@ def summarize(lines):
     counts = {CALLBACK: 0, READER: 0}
     last = {CALLBACK: {}, READER: {}}
     maxima = {CALLBACK: {}, READER: {}}
+    first = {CALLBACK: {}, READER: {}}
+    monotonic_increases = {CALLBACK: {}, READER: {}}
     resets = {CALLBACK: 0, READER: 0}
     for line in lines:
         for match in MARKER_BOUNDARY.finditer(line):
@@ -28,6 +30,10 @@ def summarize(lines):
             tail = line[match.end():next_marker.start() if next_marker else len(line)]
             snapshot = {k: int(v) for k, v in NUM.findall(tail)}
             for key, value in snapshot.items():
+                if key not in first[marker]:
+                    first[marker][key] = value
+                if key in last[marker] and value > last[marker][key]:
+                    monotonic_increases[marker][key] = monotonic_increases[marker].get(key, 0) + value - last[marker][key]
                 if key in last[marker] and value < last[marker][key]:
                     resets[marker] += 1
                 maxima[marker][key] = max(maxima[marker].get(key, 0), value)
@@ -46,13 +52,17 @@ def summarize(lines):
         "reader_reports": counts[READER],
         "last_callback_counters": last[CALLBACK],
         "last_reader_counters": last[READER],
+        "first_callback_counters": first[CALLBACK],
+        "first_reader_counters": first[READER],
+        "monotonic_callback_increases": monotonic_increases[CALLBACK],
+        "monotonic_reader_increases": monotonic_increases[READER],
         "max_callback_counters": maxima[CALLBACK],
         "max_reader_counters": maxima[READER],
         "callback_counter_decreases": resets[CALLBACK],
         "reader_counter_decreases": resets[READER],
         "diagnostic_state": verdict,
         "gameplay_success_proven": False,
-        "note": "Missing markers may reflect logging thresholds, absent instrumentation, or different app sessions. Compare only the same build/process.",
+        "note": "Monotonic increases exclude first observations and reset drops; they are not proof of causal delivery. Missing markers may reflect logging thresholds, absent instrumentation, or different app sessions. Compare only the same build/process.",
     }
 
 
