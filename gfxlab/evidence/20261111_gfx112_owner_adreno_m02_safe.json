@@ -1,0 +1,158 @@
+{
+  "experiment": "GFX112",
+  "models_checked": 15,
+  "vertices_checked": 24990,
+  "failing_vertices": 0,
+  "max_absolute_error": 0.0001220703125,
+  "gpu_source_position_match": true,
+  "phase_closed": false,
+  "evidence": "ANDROID_GPU_TRANSFORM_FEEDBACK",
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "apk_sha256": "fa50372778810dbe19baa8b667d0cb9366d0f444711432484a1aeac253bb16f6",
+  "archive_sha256": [
+    "8a8f0b0e5bb1206ddc6657fb19c787088836b3511335ca1f80d77d5dab0d4916",
+    "c25dccc29b0484c7b0e401b3059a2be4871271640e500baffe8ffb1a79d8e879"
+  ],
+  "distinct_summary_count": 1,
+  "source_payload_hashes_verified": 15,
+  "cases": [
+    {
+      "model": "C0P0",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C0P1",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C0P2",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C0P3",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C0P4",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C1P0",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C1P1",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C1P2",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C1P3",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C1P4",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C2P0",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C2P1",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C2P2",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "C2P3",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "model": "C2P4",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    }
+  ],
+  "original_animator_playback_verified": false,
+  "rendered_pixel_parity_verified": false
+}

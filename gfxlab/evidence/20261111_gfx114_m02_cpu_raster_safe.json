@@ -1,0 +1,73 @@
+{
+  "experiment": "GFX114",
+  "size": 256,
+  "triangles": 2388,
+  "unique_masks_by_clip": [
+    1,
+    5,
+    4
+  ],
+  "poses": {
+    "C0P0": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    },
+    "C0P1": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    },
+    "C0P2": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    },
+    "C0P3": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    },
+    "C0P4": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    },
+    "C1P0": {
+      "covered_pixels": 2218,
+      "sha256": "4a8762d6e060c14dd87e4176ae41468850698efdbfe4891945e1d928229b6921"
+    },
+    "C1P1": {
+      "covered_pixels": 2158,
+      "sha256": "b83e243aa1098f55e5a9fa7d18384b0b2f367fb67cde032463c91a0d3f4a9e21"
+    },
+    "C1P2": {
+      "covered_pixels": 2032,
+      "sha256": "66e66bcc490d4952396e1344f2a034ed67be8c3468953d69b3082ff1484d2282"
+    },
+    "C1P3": {
+      "covered_pixels": 1935,
+      "sha256": "a6e85f49c4ae26267377a9383e0fe88d9adb2eda6a43a37357ceb2db90181aec"
+    },
+    "C1P4": {
+      "covered_pixels": 1903,
+      "sha256": "a877492efc75b62a3b16583b6a99fe70a86d1a4e45cb3967dcb2adbe8a36a3b6"
+    },
+    "C2P0": {
+      "covered_pixels": 2311,
+      "sha256": "984e39a7613c78aedd3ab139a0d83d55dd9d1b6f603502fa626fef0f14de6efc"
+    },
+    "C2P1": {
+      "covered_pixels": 2207,
+      "sha256": "5e95482c3c762778623d1b007eb8b73f643bf4129a83883cbc580c91267c6e11"
+    },
+    "C2P2": {
+      "covered_pixels": 2224,
+      "sha256": "149919145aeace4f14b11cf47f51088bfd548c223fae195ec502b642047bae46"
+    },
+    "C2P3": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    },
+    "C2P4": {
+      "covered_pixels": 2220,
+      "sha256": "d32a3e0853ee59939cc0abcceda2cd8618b3ee4e0f60de6982e81148246a0ccf"
+    }
+  },
+  "phase_closed": false
+}

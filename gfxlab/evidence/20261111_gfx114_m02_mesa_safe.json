@@ -1,0 +1,112 @@
+{
+  "experiment": "GFX114",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "min_iou": 1.0,
+  "raster_cases": [
+    {
+      "pose": "C0P0",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P1",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P2",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P3",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P4",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P0",
+      "intersection": 2218,
+      "union": 2218,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P1",
+      "intersection": 2158,
+      "union": 2158,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P2",
+      "intersection": 2032,
+      "union": 2032,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P3",
+      "intersection": 1935,
+      "union": 1935,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P4",
+      "intersection": 1903,
+      "union": 1903,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P0",
+      "intersection": 2311,
+      "union": 2311,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P1",
+      "intersection": 2207,
+      "union": 2207,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P2",
+      "intersection": 2224,
+      "union": 2224,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P3",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P4",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    }
+  ]
+}

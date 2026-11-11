@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-m02-animated-adreno-79",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-animated-adreno-79.md",
-  "status": "GFX112_SIGNED_M02_POSE_APK_DELIVERED_ADRENO_PENDING_GFX113_UNITY_MATH_VERIFIED_PHASE_ONE_OPEN",
+  "latest_session": "20261111-GFX-chat-m02-indexed-raster-80",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-indexed-raster-80.md",
+  "status": "GFX112_ADRENO_24990_POSITIONS_VERIFIED_GFX114_SIGNED_RASTER_APK_PHONE_PENDING_PHASE_ONE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -2896,8 +2896,9 @@
     "artifact": 13829110354,
     "apk_sha256": "fa50372778810dbe19baa8b667d0cb9366d0f444711432484a1aeac253bb16f6",
     "positions": 24990,
-    "owner_gpu_pending": true,
-    "phase_closed": false
+    "owner_gpu_pending": false,
+    "phase_closed": false,
+    "owner_vertices_matched": 24990
   },
   "latest_gfx113": {
     "run": 42959821364,
@@ -2907,6 +2908,14 @@
     "failingVertices": 0,
     "maxAbsoluteError": 0.0001220703125,
     "originalClipPlaybackVerified": false,
+    "phase_closed": false
+  },
+  "latest_gfx114": {
+    "run": 43000131309,
+    "artifact": 13845353835,
+    "apk_sha256": "afa5bffad854e696d16c95426ead5bcfdc19d5eadd5a072de0b7313b7cf1a297",
+    "mesa_exact_masks": 15,
+    "owner_gpu_pending": true,
     "phase_closed": false
   }
 }

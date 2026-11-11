@@ -1,3 +1,15 @@
+## 11 Nov 2026 — GFX112 phone positions verified, GFX114 raster test delivered
+
+Session `20261111-GFX-chat-m02-indexed-raster-80`, origin=chat. Write only `experiment/android-graphics-rootcause`.
+
+Both GFX112 owner ZIPs passed CRC, counts and exact APK payload audit. The summaries are byte-identical, so one confirmed result. Adreno 730 GLES 3.2 V0615.95 returned all 24,990 original source-derived M02 positions over 15 poses with zero failed or nonfinite vertices. Largest absolute difference 0.0001220703125, within established combined tolerance. Verified report `gfxlab/evidence/20261111_gfx112_owner_adreno_m02_safe.json`.
+
+GFX114 uses M02's 2,388 original indexed triangles and GFX112's 15 verified input palettes, a fixed oblique orthographic camera, and flat binary raster output at 256×256. Independent CPU triangle pixel-center coverage produced 1/5/4 unique masks in the three clips. Actual Mesa GLES llvmpipe drew all 15 images, all matched CPU pixel for pixel (min IoU 1.0; max differing pixels 0). Safe evidence in `gfxlab/evidence/20261111_gfx114_m02_cpu_raster_safe.json` and `gfxlab/evidence/20261111_gfx114_m02_mesa_safe.json`. The probe checks coverage and does not enable depth testing, culling, original materials or Shader48. Camera chosen for consistent framing across poses. It samples poses rather than playing a serialized original Animator clip.
+
+[CI43000131309](https://github.com/alwansan/raf/actions/runs/43000131309) passed signing, packaging and private cleanup. Independently verified archive digest/CRCs, APK SHA256 `afa5bffad854e696d16c95426ead5bcfdc19d5eadd5a072de0b7313b7cf1a297` and all 31 packaged data files byte-for-byte against local extraction. APK `GFX114-M02-Indexed-Raster.apk` (493830 bytes, package com.alwansan.gfx114), artifact 13845353835, owner file `libfile_a789087707f08191af56353466034454`. Open, wait and send one automatic `GFX114-ALL-TEST-LOGS-*.zip` from `Download/Games/cl/test/g/` with summary and 15 PNGs. `gfxlab/tools/gfx114_owner_zip_audit.py` verifies payload hashes, images and independent pixel statistics. This phone raster result is pending. Next compare exported images, then extend from geometry coverage to depth/material/Shader48 and matched reference pixels. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX112 phone APK delivered; GFX113 Unity pose math verified
 
 Session `20261111-GFX-chat-m02-animated-adreno-79`, origin=chat. Only write branch `experiment/android-graphics-rootcause`.
