@@ -16,6 +16,12 @@ def _valid_growth(value):
     return type(value) is int and value >= 0
 
 
+def _safe_growth(section, key):
+    """Only expose validated telemetry even when counter epochs are unusable."""
+    value = section.get(key) if isinstance(section, dict) else None
+    return value if _valid_growth(value) else None
+
+
 def classify(summary):
     if not isinstance(summary, dict):
         return {
@@ -43,8 +49,8 @@ def classify(summary):
         }
     if cb_resets or rd_resets:
         return {
-            "per_counter": {key: {"callback_growth": callbacks.get(key) if isinstance(callbacks, dict) else None,
-                                  "reader_growth": readers.get(key) if isinstance(readers, dict) else None,
+            "per_counter": {key: {"callback_growth": _safe_growth(callbacks, key),
+                                  "reader_growth": _safe_growth(readers, key),
                                   "state": "counter_reset_requires_epoch_segmentation"} for key in KEYS},
             "gameplay_success_proven": False,
             "note": "One or more counters decreased; split by process/capture epoch before comparing growth.",
