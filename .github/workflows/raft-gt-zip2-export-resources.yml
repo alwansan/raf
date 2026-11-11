@@ -1,0 +1,152 @@
+name: GT restore real ZIP2 graphics into AssetRipper input (no LFS)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_zip2_export_resources.py
+      - tests/test_gt_zip2_export_resources.py
+      - .github/workflows/raft-gt-zip2-export-resources.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-zip2-actual-export-input-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate authentic file restoration and destructive-input controls
+        run: |
+          python3 -m py_compile scripts/gt_zip2_export_resources.py
+          python3 -m unittest discover -s tests -p test_gt_zip2_export_resources.py -v
+
+  real-resources-core:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Verify resources stage has sufficient disk space
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 3145728
+      - name: Checkout 5 authentic ZIP2 graphics resources without Git LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          filter: blob:none
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/globalgamemanagers.assets
+            /Raft/Raft_Data/resources.assets/
+            /Raft/Raft_Data/resources.assets.resS/
+            /Raft/Raft_Data/Resources/unity default resources
+            /Raft/Raft_Data/Resources/unity_builtin_extra
+      - name: Restore original serialized assets and actual 538 MB streamed textures to transient Unity input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --profile core \
+            --byte-budget 850000000 \
+            --report "$RUNNER_TEMP/gt-core-export-resources.json"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/resources.assets"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/resources.assets.resS"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/Resources/unity_builtin_extra"
+      - name: Verify restored real Texture2D descriptors can address original stream bytes
+        shell: bash
+        run: |
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          import UnityPy
+          base=Path(os.environ["RUNNER_TEMP"])/"gt-input/Raft_Data"
+          env=UnityPy.load(str(base/"resources.assets"))
+          textures=0
+          covered=0
+          stream_bytes=0
+          samples=0
+          invalid=0
+          providers=set()
+          for obj in env.file.objects.values():
+              if obj.type.name!="Texture2D":
+                  continue
+              textures+=1
+              tree=obj.read_typetree(check_read=False)
+              data=tree.get("m_StreamData")
+              if not isinstance(data,dict):
+                  continue
+              path,offset,size=data.get("path",""),data.get("offset",0),data.get("size",0)
+              if not path or not size:
+                  continue
+              if type(offset) is not int or type(size) is not int or offset<0 or size<=0:
+                  invalid+=1
+                  continue
+              name=path.replace("\\","/").rsplit("/",1)[-1]
+              provider=base/name
+              if name not in ("resources.assets.resS",) or not provider.is_file() or provider.is_symlink():
+                  invalid+=1
+                  continue
+              if offset+size>provider.stat().st_size:
+                  invalid+=1
+                  continue
+              with provider.open("rb") as f:
+                  f.seek(offset)
+                  sample=f.read(min(size,4096))
+              if len(sample)!=min(size,4096):
+                  invalid+=1
+                  continue
+              providers.add(name)
+              covered+=1
+              stream_bytes+=size
+              samples+=len(sample)
+          if invalid or not covered:
+              raise SystemExit("GT_CORE_TEXTURE_STREAM_BINDINGS_UNVERIFIED invalid="+str(invalid)+" covered="+str(covered))
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-core-export-resources.json").read_text())
+          if r["original_resources_verified"]!=5 or not r["original_payload_sha256_and_size_verified"] or r["git_lfs_used"]:
+              raise SystemExit("GT_ORIGINAL_CORE_RESOURCE_RECEIPT_INVALID")
+          summary={"original_resource_files_sha256_verified":5,"source_texture_objects":textures,
+                   "streamed_texture_extents_with_real_bytes":covered,
+                   "source_texture_stream_bytes_addressable":stream_bytes,
+                   "bounded_stream_samples_read":samples,"providers":len(providers),
+                   "git_lfs_used":False,"asset_ripper_executed":False,"android_render_verified":False}
+          target=Path(os.environ["RUNNER_TEMP"])/"gt-core-texture-stream-coverage.json"
+          target.write_text(json.dumps(summary,sort_keys=True,indent=2)+"\n")
+          print("GT_RESTORED_ORIGINAL_TEXTURE_PAYLOAD "+json.dumps(summary,sort_keys=True))
+          PY
+      - name: Save receipts only; never upload the restored original game files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-real-original-resources-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-core-export-resources.json
+            ${{ runner.temp }}/gt-core-texture-stream-coverage.json
+          if-no-files-found: ignore
+          retention-days: 14
