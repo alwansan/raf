@@ -30,7 +30,7 @@ jobs:
       - name: Source-free GFX101 regression and independent mathematical witnesses
         run: |
           set -euo pipefail
-          python3 -m unittest -v gfxlab.tests.test_gfx101_gles_capability gfxlab.tests.test_gfx101_owner_zip_audit
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx101*.py' -v
           test -f gfxlab/android-gles-qualifier-probe/AndroidManifest.xml
           test -s gfxlab/android-gles-qualifier-probe/src/com/alwansan/gfx101/MainActivity.java
           test ! -d source-zip2
