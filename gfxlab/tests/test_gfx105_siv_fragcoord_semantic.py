@@ -32,6 +32,13 @@ class GFX105SemanticTests(unittest.TestCase):
         d=dxbc_ps_siv_noperspective_semantic_counts(shdr(2))
         self.assertEqual(d["siv_noperspective_position_name"],0)
         self.assertEqual(d["siv_noperspective_other_system_name"],1)
+    def test_legal_single_dword_instruction_does_not_corrupt_siv_walk(self):
+        # RET-style one-DWORD opcode is valid and must not abort the scan.
+        words=[0x50,7,(1<<24)|62,
+               100|(4<<11)|(4<<24),0,0,1]
+        source=struct.pack("<7I",*words)
+        result=dxbc_ps_siv_noperspective_semantic_counts(source)
+        self.assertEqual(result["siv_noperspective_position_name"],1)
     def test_dxbc_siv_linear_does_not_need_native_np(self):
         d=dxbc_ps_siv_noperspective_semantic_counts(shdr(mode=2))
         self.assertEqual(d["siv_noperspective_declarations"],0)
