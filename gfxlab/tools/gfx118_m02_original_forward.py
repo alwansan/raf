@@ -148,6 +148,8 @@ def audit(stage, translate, private_consumer=None):
               "exact_source_pair_count":len(match),"stages":stages,"gles_offline_link_passed":False,
               "gpu_draw_completed":False,"original_shader_restored":False,"phase_closed":False}
     if not translate:
+        if private_consumer is not None:
+            private_consumer(None, private)
         return result
     with tempfile.TemporaryDirectory(prefix="gfx118-private-") as temp:
         folder = Path(temp)
