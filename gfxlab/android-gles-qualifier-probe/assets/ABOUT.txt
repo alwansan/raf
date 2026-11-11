@@ -1,0 +1,4 @@
+GFX101 original-free Android OpenGL ES interpolation capability and GPU readback probe.
+No Raft shader code, assets, game content, or PC-vs-phone pixel identity claims.
+The optional GL_NV_shader_noperspective_interpolation extension must be present and native test shaders must compile/link and match CPU affine reference before reporting native-qualifier success.
+Always export private logs into Download/Games/cl/test/g/.
