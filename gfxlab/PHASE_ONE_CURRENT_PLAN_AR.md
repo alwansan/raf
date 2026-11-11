@@ -1,3 +1,11 @@
+## تحديث فحص الهاتف GFX100 — 11 نوفمبر 2026
+
+استلمنا `g.zip` لتطبيق GFX098، ونجحت مراجعة الأرشيف (SHA256 `60b6cb3e13ea1da7808128311696e9a906655340ea6a2537ad9c9db8d50faa69`): 3 جلسات، 227 حدثًا و147 snapshot، بلا أخطاء Unity مسجلة؛ 4 جولات مكتملة × 12 لقطة استوديو، بصمات PNG متحققة 48/48، وتكرار 12 حالة متطابق البايتات. التجربة الاصطناعية GFX041 جرت مرتين، ولكن صور Linear وNoPerspective متطابقة SHA256؛ لا تعتبر الاستيفاء no-perspective مثبتًا أو عطل Adreno. `gfxlab/evidence/20261111_gfx100_gfx098_owner_safe_counts.json` و`memory/sessions/20261111-GFX-chat-owner-gfx098-archive-68.md` هما مرجع الدليل الجديد.
+
+**الأولوية الهندسية الآن:** اختبر مصدر GLSL ES3 أصليًا مؤكدًا بكلمة `noperspective` مع مرجع منظور مختلف W، وافحص الناتج فعليًا؛ لا تعِد استخدام ShaderLab diagnostic إذا حوّل المقاطع إلى `smooth`. بالتوازي استعد Mesh streams مع skinned weights/bindposes/hierarchy، وأكمل تصحيح sampling/normal/mips. ورغم GFX099 14/14 PC SHDR exact في إعداد Linear فإن المقارنة المرجعية PC ↔ Adreno وأصل Shader48 GPU ما زالت مفتوحة. لا نغلق المرحلة الأولى.
+
+---
+
 # المرحلة الأولى — القرار والخطوات التالية
 
 **GFX-LAB | 11 نوفمبر 2026، بغداد**
