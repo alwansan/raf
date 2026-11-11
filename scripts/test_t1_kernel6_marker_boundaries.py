@@ -23,7 +23,7 @@ class KernelMarkerBoundary(unittest.TestCase):
         ]
         with tempfile.TemporaryDirectory() as d:
             p = Path(d) / "device.log"
-            p.write_text("\\n".join(lines) + "\\n", encoding="utf-8")
+            p.write_text("\n".join(lines) + "\n", encoding="utf-8")
             result = mod.scan(p, "t1-boundary", before=2, after=0, errors_only=True)
         self.assertEqual(result["counts"]["kernel6_lines"], 1)
         self.assertEqual(result["counts"]["kernel6_error_lines"], 1)
