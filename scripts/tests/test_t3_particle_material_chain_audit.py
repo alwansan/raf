@@ -57,6 +57,23 @@ class ParticleMaterialAuditTests(unittest.TestCase):
         self.assertEqual(counts.get("null_material_slots"), 2)
         self.assertEqual(counts.get("unsupported_inline_material_lists", 0), 0)
 
+    def test_multiple_renderers_do_not_leak_across_documents(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "multi.prefab").write_text(
+                "--- !u!199 &1\nParticleSystemRenderer:\n"
+                "  m_Materials:\n  - {fileID: 0}\n"
+                "--- !u!1 &2\nGameObject:\n"
+                "  m_Materials:\n  - {fileID: 2100000, guid: " + GUID + ", type: 2}\n"
+                "--- !u!199 &3\nParticleSystemRenderer:\n"
+                "  m_Materials: [{fileID: 2100000, guid: " + GUID + ", type: 2}]\n",
+                encoding="utf-8",
+            )
+            counts = census(root, salt="test-salt")["counts"]
+        self.assertEqual(counts.get("particle_renderers"), 2)
+        self.assertEqual(counts.get("null_material_slots"), 1)
+        self.assertEqual(counts.get("external_material_slots"), 1)
+
     def test_block_array_still_supported(self):
         counts = self.audit("\n  - {fileID: 2100000, guid: " + GUID
                             + ", type: 2}")
