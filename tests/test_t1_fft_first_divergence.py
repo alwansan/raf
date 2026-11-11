@@ -1,6 +1,9 @@
 import struct
+import os
+import tempfile
+from pathlib import Path
 import unittest
-from scripts.t1_fft_first_divergence import compare_passes
+from scripts.t1_fft_first_divergence import compare_passes, reject_aliased_capture_pair
 
 def pixel(*values):
     return struct.pack("<4f", *values)
@@ -27,6 +30,29 @@ class FirstDivergenceTests(unittest.TestCase):
             compare_passes([("p", a, a), ("p", a, a)])
         with self.assertRaises(ValueError):
             compare_passes([("p", b"", b"")])
+    def test_reject_same_capture_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "fft.bin").write_bytes(pixel(1, 2, 3, 4))
+            with self.assertRaises(ValueError):
+                reject_aliased_capture_pair(root, "fft.bin", "fft.bin")
+
+    def test_reject_hardlink_alias(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "fft.bin").write_bytes(pixel(1, 2, 3, 4))
+            os.link(root / "fft.bin", root / "alias.bin")
+            with self.assertRaises(ValueError):
+                reject_aliased_capture_pair(root, "fft.bin", "alias.bin")
+
+    def test_independent_equal_captures_allowed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = pixel(1, 2, 3, 4)
+            (root / "ref.bin").write_bytes(data)
+            (root / "gpu.bin").write_bytes(data)
+            reject_aliased_capture_pair(root, "ref.bin", "gpu.bin")
+
     def test_invalid_tolerance_rejected(self):
         a = pixel(1, 2, 3, 4)
         with self.assertRaises(ValueError):
