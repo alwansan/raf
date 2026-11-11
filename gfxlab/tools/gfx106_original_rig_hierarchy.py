@@ -148,7 +148,7 @@ def audit(stage):
         if (row.get("owner"),row.get("mesh_pid"))!=(entry["owner"],entry["mesh_pid"]):
             raise ValueError("GFX106_SOURCE_RENDERER_SELECTION_IDENTITY_MISMATCH")
         go=row.get("game_object_pid")
-        if type(go)!=int or go<=0:
+        if type(go)!=int or go==0:
             raise ValueError("GFX106_SOURCE_GAME_OBJECT_ID_INVALID")
         entry["game_object_pid"]=go
     # All references are resolved only among pinned/loaded source owners.
