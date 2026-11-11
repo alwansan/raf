@@ -67,6 +67,24 @@ class GFX103SourceInterpolationGate(unittest.TestCase):
             enforce_native_gles_qualifier(
                 "#version 310 es\n"+("#extension "+NV+" : require\n")*2+VERT.split("\n",1)[1],
                 "vertex")
+    def test_comment_or_string_does_not_fake_native_qualifier(self):
+        for fake in ("// noperspective in vec3 bogus;\n",
+                     "/* noperspective out vec3 bogus; */\n",
+                     'const char* demo = "noperspective in";\n'):
+            text="#version 310 es\n"+fake+"in vec3 c;\n"
+            with self.assertRaisesRegex(ValueError,"GFX103_NATIVE_ORDINARY_INTERPOLATION_LOST"):
+                enforce_native_gles_qualifier(text,"fragment",
+                  {"ordinary_noperspective_declarations":1,
+                   "system_interpreted_noperspective_declarations":0})
+    def test_centroid_order_variants_are_detected(self):
+        for qualifier in ("noperspective centroid in","centroid noperspective in",
+                          "noperspective sample in","sample noperspective in"):
+            text="#version 320 es\n"+qualifier+" vec3 c;\n"
+            out,proof=enforce_native_gles_qualifier(text,"fragment",
+                 {"ordinary_noperspective_declarations":1,
+                  "system_interpreted_noperspective_declarations":0})
+            self.assertTrue(proof["native_qualifier_seen"])
+            self.assertIn("#extension "+NV+" : require",out)
     def test_truncated_shdr_fails(self):
         with self.assertRaisesRegex(ValueError,"GFX103_"):
             dxbc_fragment_input_classes(shdr((98,4))[:-4])
