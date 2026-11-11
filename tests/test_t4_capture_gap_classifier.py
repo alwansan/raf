@@ -94,5 +94,34 @@ class GapClassifierTests(unittest.TestCase):
         self.assertEqual(module.classify(report)["per_counter"]["scroll"]["state"],
                          "invalid_counter_evidence")
 
+    def test_counter_reset_blocks_false_paired_growth(self):
+        report = {"first_callback_counters": {"left": 0},
+                  "first_reader_counters": {"left": 0},
+                  "monotonic_callback_increases": {"left": 4},
+                  "monotonic_reader_increases": {"left": 2},
+                  "callback_counter_decreases": 1,
+                  "reader_counter_decreases": 0}
+        result = module.classify(report)
+        self.assertEqual(result["per_counter"]["left"]["state"],
+                         "counter_reset_requires_epoch_segmentation")
+        self.assertFalse(result["gameplay_success_proven"])
+
+    def test_reader_reset_also_blocks_comparison(self):
+        report = {"first_callback_counters": {"scroll": 0},
+                  "first_reader_counters": {"scroll": 0},
+                  "monotonic_callback_increases": {"scroll": 2},
+                  "monotonic_reader_increases": {"scroll": 1},
+                  "reader_counter_decreases": 1}
+        self.assertEqual(module.classify(report)["per_counter"]["scroll"]["state"],
+                         "counter_reset_requires_epoch_segmentation")
+
+    def test_malformed_reset_metadata_rejected(self):
+        for bad in (-1, True, "1", None, 1.5):
+            with self.subTest(bad=bad):
+                result = module.classify({"callback_counter_decreases": bad})
+                self.assertEqual(result["per_counter"]["left"]["state"],
+                                 "invalid_counter_evidence")
+
+
 if __name__ == "__main__":
     unittest.main()
