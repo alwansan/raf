@@ -88,10 +88,15 @@ def smoke(shell, tools, safe):
                      "-keypass", "synthetic-smoke-only", "-alias", "gfx140-synthetic",
                      "-keyalg", "RSA", "-keysize", "2048", "-validity", "2",
                      "-dname", "CN=Source-Free Test, O=GFX-LAB, C=XX"])
-            checked([tools / "apksigner", "sign", "--ks", store, "--ks-key-alias",
-                     "gfx140-synthetic", "--ks-pass", "pass:synthetic-smoke-only",
+            checked([tools / "apksigner", "sign",
+                     "--v2-signing-enabled", "true", "--v3-signing-enabled", "true",
+                     "--ks", store, "--ks-key-alias", "gfx140-synthetic",
+                     "--ks-pass", "pass:synthetic-smoke-only",
                      "--key-pass", "pass:synthetic-smoke-only", "--out", signed, aligned])
             signature = checked([tools / "apksigner", "verify", "--verbose", signed])
+            if ("Verified using v2 scheme (APK Signature Scheme v2): true" not in signature
+                    or "Verified using v3 scheme (APK Signature Scheme v3): true" not in signature):
+                print("GFX140 signature verification summary:", signature[-3000:])
             if "Verified using v2 scheme (APK Signature Scheme v2): true" not in signature:
                 raise ValueError("APK v2 signature missing")
             if "Verified using v3 scheme (APK Signature Scheme v3): true" not in signature:
