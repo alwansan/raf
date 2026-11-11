@@ -73,7 +73,7 @@ def transform_point(matrix,point):
     w=matrix[12]*x+matrix[13]*y+matrix[14]*z+matrix[15]
     if not math.isfinite(w) or abs(w)<1e-10:
         raise ValueError("GFX108_AFFINE_HOMOGENEOUS_W_INVALID")
-    return tuple((sum(matrix[4*r+c]*p for c,p in enumerate((x,y,z,1.))))/w)
+    return tuple(sum(matrix[4*r+c]*p for c,p in enumerate((x,y,z,1.)))/w
                  for r in range(3))
 
 def skin_positions_cpu(positions,weights,bone_world,bindpose_matrices):
