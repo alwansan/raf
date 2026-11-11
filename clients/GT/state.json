@@ -5,10 +5,11 @@
   "source": {
     "branch": "zip2",
     "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "acquisition_policy": "ZIP2 only; do not use git lfs pull/fetch/smudge for GT; reconstruct ordered part-00000.. and verify original bytes and sha256 against RAFT_FILE_MANIFEST.tsv; never fall back to LFS; use disposable verified stage",
+    "acquisition_policy": "ZIP2 immutable SHA only: reconstruct plain and part-00000.. files from git tracked zip2; verify original SHA256 and byte size before use; do not run git lfs pull/fetch or fallback to Git LFS",
     "provider_url": "https://github.com/alwansan/raf/tree/zip2",
     "git_lfs_acquisition_allowed": false,
-    "staging": "isolated temporary output, not tracked Android Raft data; sha256 and byte length required"
+    "staging": "isolated temporary output, not tracked Android Raft data; sha256 and byte length required",
+    "zip2_any_original_stager": "scripts/gt_zip2_payloads.py"
   },
   "calibration": {
     "closed": true,
@@ -16,7 +17,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ZIP2_ONLY_owner_policy_recorded_source_inventory_verified_export_comparison_next",
+  "status": "GT_ZIP2_ONLY_SOURCE_GRAPH_AND_SPLIT_STREAM_PROVEN_ANDROID_EXPORT_UNVERIFIED",
   "inventory": {
     "status": "authenticated_82_serialized_owner_headers",
     "source_structural": {
@@ -33,8 +34,16 @@
       "assets_owners": 42,
       "verified_bytes": 819595355,
       "split_reassembled": 5,
-      "latest_ci_run": 43114648901,
-      "artifact_id": 13897064222
+      "latest_ci_run": 43118214676,
+      "artifact_id": 13897064222,
+      "material_link_graph_artifact_id": 13899108653,
+      "zip2_stream_and_split_smoke": {
+        "files": 2,
+        "verified_original_bytes": 70566428,
+        "run": 43117743780,
+        "artifact_id": 13899122924,
+        "git_lfs_used": false
+      }
     },
     "totals": {
       "all_owned_objects": 1209137,
@@ -55,7 +64,12 @@
       "renderer_objects": 176189,
       "material_slots": 191845,
       "external_material_slots_unresolved": 191116,
-      "null_material_slots": 729
+      "null_material_slots": 729,
+      "all_source_82_owners_material_slots": 195174,
+      "all_source_82_owners_resolved_material_slots": 194293,
+      "all_source_82_owners_null_material_slots": 881,
+      "distinct_material_objects_referenced_by_renderer": 1351,
+      "original_link_graph_ci": 43118214676
     },
     "material_shader_reference_graph": {
       "referenced_targets": 77,
@@ -72,6 +86,6 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "4cd8d0228a9add43817b616bfede8892df8fd411"
   },
-  "latest_session": "sessions/20261112-GT-chat-inventory-01.md",
-  "next_action": "Use ZIP2 exclusively to reconstruct and SHA256 verify any required source/stream containers; build source Mesh/Renderer/Submesh/Material/Shader/Texture edge identity graph, then compare against exported Unity GUIDs without LFS. Continue source-based restoration in isolated GT CI."
+  "latest_session": "sessions/20261112-GT-zip2-only-material-links-chat-02.md",
+  "next_action": "Keep GT LFS-free: use pinned ZIP2 and gt_zip2_payloads.py to stage only required .resS/.resource files; compare 1351 original Renderer-used Material identities and 194293 non-null slots with actual AssetRipper ExportedProject GUID/.meta/material assignments, then apply first source-backed graphics corrections and verify with isolated CI. Do not attribute source completeness to Android integration."
 }
