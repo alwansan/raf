@@ -56,20 +56,24 @@ def census(root: Path, salt: str = ""):
                 # incorrectly accept malformed "[{...}{...}]" as two slots.
                 body = inline[1:-1].strip()
                 refs = []
+                malformed = False
                 while body:
                     item = re.match(r"^\{[^{}]*\}", body)
                     if item is None:
+                        malformed = True
                         break
                     refs.append(item.group())
                     body = body[item.end():].lstrip()
                     if not body:
                         break
                     if not body.startswith(","):
+                        malformed = True
                         break
                     body = body[1:].lstrip()
                     if not body:  # trailing comma is not a valid Unity YAML array
+                        malformed = True
                         break
-                if not refs or body:
+                if not refs or body or malformed:
                     counts["unsupported_inline_material_lists"] += 1
                     continue
                 entries = ["- " + ref for ref in refs]
