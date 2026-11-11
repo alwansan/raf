@@ -27,5 +27,23 @@ class TestOrder(unittest.TestCase):
         x=fixture();x["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"]["first_observed_unix_ms"]=600
         with self.assertRaises(ValueError):analyze(x)
 
+    def test_negative_balanced_material_counts(self):
+        x=fixture()
+        x["final_render_failure_breakdown"]["ultimate_water_invalid_pass_by_material"]={"spectrum":-1,"foam_global":4}
+        with self.assertRaises(ValueError):analyze(x)
+    def test_boolean_count(self):
+        x=fixture();x["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"]["count"]=True
+        with self.assertRaises(ValueError):analyze(x)
+    def test_fractional_balanced_counts(self):
+        x=fixture();x["final_error_category_breakdown"]["ultimate_water_invalid_pass"]["count"]=3.0
+        with self.assertRaises(ValueError):analyze(x)
+    def test_negative_kernel_count(self):
+        x=fixture();x["final_render_failure_breakdown"]["invalid_kernel_index_root_lines"]={"index_6":2,"other":-1}
+        with self.assertRaises(ValueError):analyze(x)
+    def test_zero_first_observed_count(self):
+        x=fixture();x["final_error_category_breakdown"]["water_fft_invalid_compute_kernel"]["count"]=0
+        x["final_render_failure_breakdown"]["invalid_kernel_index_root_lines"]["index_6"]=0
+        with self.assertRaises(ValueError):analyze(x)
+
 if __name__=="__main__":
     unittest.main()
