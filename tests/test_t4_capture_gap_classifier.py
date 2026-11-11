@@ -58,6 +58,14 @@ class GapClassifierTests(unittest.TestCase):
         self.assertEqual(module.classify(report)["per_counter"]["left"]["state"],
                          "invalid_counter_evidence")
 
+    def test_malformed_root_is_invalid_not_exception(self):
+        for root in (None, [], "corrupt", 42):
+            with self.subTest(root=root):
+                result = module.classify(root)
+                self.assertFalse(result["gameplay_success_proven"])
+                self.assertEqual(result["per_counter"]["left"]["state"],
+                                 "invalid_counter_evidence")
+
     def test_negative_growth_rejected(self):
         report = {"first_callback_counters": {"left": 0},
                   "first_reader_counters": {"left": 0},
