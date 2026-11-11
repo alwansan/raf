@@ -1,0 +1,88 @@
+name: GFX-MULTI-105 original Shader48 DXBC SIV POSITION SPIRV FragCoord GLES310 witness
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi105-source-siv-fragcoord.yml'
+      - 'gfxlab/tools/gfx105_siv_fragcoord_semantic.py'
+      - 'gfxlab/tools/gfx105_original_siv_fragcoord_census.py'
+      - 'gfxlab/tests/test_gfx105_siv_fragcoord_semantic.py'
+      - 'gfxlab/tests/test_gfx105_original_siv_fragcoord_census.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi105-original-source-private-siv-fragcoord
+  cancel-in-progress: false
+jobs:
+  original-source-siv-to-fragcoord:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout only GFX-LAB source-safe code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run all synthetic DXBC NameToken, SPIR-V builtin and GLSL tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/gfx105_siv_fragcoord_semantic.py gfxlab/tools/gfx105_original_siv_fragcoord_census.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx105_*.py' -v
+      - name: Checkout exact immutable historical ZIP2 Shader48 source privately
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install private source reader and SPIR-V translator
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Validate 524 exact DXBC source pairs and original system POSITION to FragCoord candidates
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from gfxlab.tools.original_model_probe import stage_originals
+          from gfxlab.tools.gfx105_original_siv_fragcoord_census import original_siv_fragcoord_census
+          source=stage_originals(Path('source-zip2'),Path('gfx105-original-stage-private'))
+          result=original_siv_fragcoord_census(source)
+          assert result['experiment']=='GFX-MULTI-105'
+          assert result['source_authentic_exact_shader48_pairs']==524
+          assert result['source_zip2_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          for flag in ('originalShaderRestored','original_pixel_value_semantics_verified',
+                       'original_shader_android_gpu_pixels_verified','phase_closed',
+                       'private_shader_data_exported'):
+              assert result[flag] is False, flag
+          Path('gfx105-source-siv-fragcoord-safe.json').write_text(
+              json.dumps(result,sort_keys=True,indent=2)+'\n')
+          print('GFX105_ORIGINAL_SOURCE_SAFE_AGGREGATE '+json.dumps(result,sort_keys=True))
+          PY
+      - name: Upload only source-safe anonymous semantic candidate aggregate
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX105-original-Shader48-SIV-FragCoord-safe-counts
+          path: gfx105-source-siv-fragcoord-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original private game assets after success or failure
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 gfx105-original-stage-private
+          echo GFX105_SOURCE_PRIVATE_PURGED=true
