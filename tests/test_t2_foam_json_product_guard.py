@@ -55,6 +55,30 @@ class FoamJSONProductGuard(unittest.TestCase):
                              for k, v in product.items()
                              if k != "original_numeric_field_presence_counts"))
 
+    def test_missing_numeric_field_cannot_claim_pair(self):
+        row = self._row("PrivateA", (3, 2))
+        row["_field_presence"]["m_Index"] = False
+        with self.assertRaises(ValueError):
+            compare_private_names([row], ["TranslatedA"])
+        row = self._row("PrivateA", (3, 2))
+        row["_field_presence"]["m_SamplerIndex"] = False
+        with self.assertRaises(ValueError):
+            compare_private_names([row], ["TranslatedA"])
+
+    def test_present_numeric_field_requires_bounded_integer(self):
+        for pair in ((None, 2), (3, None), (True, 2), (3, False),
+                     (-1, 2), (3, -2), (65536, 2), (3, 65536)):
+            with self.subTest(pair=pair), self.assertRaises(ValueError):
+                compare_private_names([self._row("PrivateA", pair)], ["TranslatedA"])
+
+    def test_absent_fields_with_none_are_not_fabricated_pairs(self):
+        row = self._row("PrivateA", (None, None))
+        row["_field_presence"]["m_Index"] = False
+        row["_field_presence"]["m_SamplerIndex"] = False
+        report = compare_private_names([row], ["TranslatedA"])
+        self.assertEqual(report["original_complete_numeric_pairs"], 0)
+        self.assertEqual(report["original_distinct_numeric_pairs"], 0)
+
     def test_empty_stage_is_safe_and_does_not_claim_binding(self):
         product = json.loads(json.dumps(compare_private_names([], [])))
         self.assertEqual(set(product), ALLOWED)

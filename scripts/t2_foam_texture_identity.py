@@ -115,9 +115,15 @@ def compare_private_names(original_rows, reflected_names):
                 or any(type(value) is not bool for value in presence.values())):
             raise ValueError("Malformed original texture field presence")
         pair = row["_private_numeric_pair"]
-        if (not isinstance(pair, tuple) or len(pair) != 2
-                or any(value is not None and type(value) is not int for value in pair)):
+        if (not isinstance(pair, tuple) or len(pair) != 2):
             raise ValueError("Malformed original texture numeric pair")
+        for key, value in zip(("m_Index", "m_SamplerIndex"), pair):
+            present = presence[key]
+            low = -1 if key == "m_SamplerIndex" else 0
+            if (present and (type(value) is not int or not low <= value <= MAX_NUMERIC)):
+                raise ValueError("Original texture numeric pair outside descriptor domain")
+            if not present and value is not None:
+                raise ValueError("Original texture numeric pair contradicts field presence")
     if any(not isinstance(name, str) or not 0 < len(name) <= MAX_NAME
            for name in reflected_names):
         raise ValueError("Malformed translated image identity")
