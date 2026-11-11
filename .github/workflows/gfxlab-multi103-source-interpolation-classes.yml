@@ -7,6 +7,7 @@ on:
       - 'gfxlab/tools/gfx103_source_interpolation_gate.py'
       - 'gfxlab/tools/gfx103_source_interpolation_census.py'
       - 'gfxlab/tests/test_gfx103_source_interpolation_gate.py'
+      - 'gfxlab/tests/test_gfx103_source_interpolation_census.py'
   workflow_dispatch:
 permissions:
   contents: read
