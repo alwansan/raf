@@ -1,8 +1,8 @@
-## 11 Nov 2026 — GFX139 full 9-case source-free Android batch audit
+## 11 Nov 2026 — GFX139 / GFX140 synthetic batch integration
 
-Session `20261111-GFX-chat-full-batch-replay-97`, origin=chat; write only `experiment/android-graphics-rootcause`.
+Session `20261111-GFX-chat-full-batch-replay-97`, origin=chat, only write `experiment/android-graphics-rootcause`.
 
-GFX138 [Windows 43064118522](https://github.com/alwansan/raf/actions/runs/43064118522) SUCCESS, 7/7 original Windows Forward/Deferred coverage masks exactly equal (2,008 pixels; zero location differences). The nine-case 51-readback Android batch still lacks a signed private owner APK and device execution.
+Verified [GFX139 CI 43068059010](https://github.com/alwansan/raf/actions/runs/43068059010) completed **SUCCESS** on commit `4e06f8f9e04e26f614f1050ab59c129b7e9f4a5e`. Reviewed actual job log: 7/7 source-free tests PASS, including production GFX124 pack→synthetic 9-case, 51-readback zip→owner ZIP audit (39 PNG + 12 raw RGBA), partial failure 8/9, and five negative payload/metadata mutations. This authenticates the ZIP packer and auditor integration, **not** original source or device GPU pixels.
 
-New GFX139 source-free production-integration test constructs synthetic assets with exact pack schemas, builds an unsigned ZIP shell using real GFX124 injection code and checks its own 9-test/51-capture report with production owner ZIP auditor. It exercises partial failure and tampering negatives. CI result pending at initial commit; no original shader binaries, textures, mesh or owner ZIP shipped. See `gfxlab/GFX139_FULL_BATCH_REPLAY_AR.md`. `phase_closed=false`.
+Added GFX140 source-free signed Android APK smoke: compile production GFX124 Java and manifest, inject synthetic 9-case fixture, zipalign, ephemeral test-key v2/v3 sign, compare every packaged asset hash and rerun production ZIP audit against the signed APK; CI workflow uploads only safe metadata, never a private APK. GFX140 CI still pending at initial commit. No original asset or raw shader/data published. `phase_closed=false`.
 

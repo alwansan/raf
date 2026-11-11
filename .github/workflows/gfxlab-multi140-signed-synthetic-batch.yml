@@ -1,0 +1,63 @@
+name: GFX140 signed synthetic 9-case Android APK integrity smoke
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi140-signed-synthetic-batch.yml'
+      - 'gfxlab/tools/gfx140_signed_batch_smoke.py'
+      - 'gfxlab/tests/test_gfx139_full_batch_replay.py'
+      - 'gfxlab/android-gles-forward124/**'
+      - 'gfxlab/tools/gfx124_batch_pack.py'
+      - 'gfxlab/tools/gfx124_batch_zip_audit.py'
+      - 'gfxlab/tools/gfx137_deferred_semantic_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx140-synthetic-signed-apk
+  cancel-in-progress: false
+jobs:
+  sign-and-audit-synthetic-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install source-free PNG diagnostic dependency
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Compile real Android runner shell and sign synthetic 9-case batch privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          jar="$(find "$ANDROID_HOME/platforms" -name android.jar | sort -V | tail -1)"
+          tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          mkdir -p out/classes out/dex
+          "$tools/aapt2" link -o out/GFX124-unsigned-shell.apk --manifest gfxlab/android-gles-forward124/AndroidManifest.xml -I "$jar"
+          javac -source 8 -target 8 -bootclasspath "$jar" -d out/classes gfxlab/android-gles-forward124/src/com/alwansan/gfx124/MainActivity.java
+          mapfile -t classes < <(find out/classes -type f -name '*.class')
+          "$tools/d8" --lib "$jar" --min-api 29 --output out/dex "${classes[@]}"
+          python - <<'PY'
+          from zipfile import ZipFile, ZIP_DEFLATED
+          path = 'out/GFX124-unsigned-shell.apk'
+          with ZipFile(path, 'a', compression=ZIP_DEFLATED) as z:
+              z.write('out/dex/classes.dex','classes.dex')
+              assert not any(name.startswith('assets/') for name in z.namelist())
+              assert {'classes.dex','AndroidManifest.xml'} <= set(z.namelist())
+          PY
+          python -m gfxlab.tools.gfx140_signed_batch_smoke --shell out/GFX124-unsigned-shell.apk --tools "$tools" --safe out/gfx140-safe.json
+      - name: Upload ONLY aggregate source-safe smoke report (never private APK)
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX140-synthetic-APK-signing-safe-report
+          path: out/gfx140-safe.json
+          if-no-files-found: error
+          retention-days: 7
