@@ -34,7 +34,7 @@ GATHER={"OpImageGather","OpImageDrefGather","OpImageSparseGather",
         "OpImageSparseDrefGather"}
 FETCH={"OpImageFetch","OpImageSparseFetch","OpImageRead","OpImageSparseRead"}
 
-def disassembled_opnames(dis):
+def disassembled_opnames(dis, wanted=None):
     """Obtain private SPIR-V raw variable IDs by exact OpName; no names serialized."""
     if not isinstance(dis,(bytes,bytearray)) or len(dis)>MAX_DISASSEMBLY_BYTES:
         raise ValueError("GFX046_DISASSEMBLY_NAME_INPUT_INVALID")
@@ -47,6 +47,8 @@ def disassembled_opnames(dis):
         match=re.fullmatch(r'\s*OpName\s+(%[0-9]+)\s+"([^"]{1,100})"\s*',line)
         if match:
             spvid,name=match.groups()
+            if wanted is not None and name not in wanted:
+                continue
             if name in labels or spvid in labels.values():
                 raise ValueError("GFX046_AMBIGUOUS_SPIRV_OPNAME")
             labels[name]=spvid
@@ -66,11 +68,14 @@ def resource_variable_ids(source_slots, reflection, family, disassembly=None):
         raise ValueError("GFX046_REFLECTION_LIST_UNBOUNDED")
     if any(type(s) is not int or not 0<=s<=65535 for s in source_slots):
         raise ValueError("GFX046_INVALID_SOURCE_SLOT")
-    private_names=(disassembled_opnames(disassembly) if disassembly is not None else {})
+    if any(not isinstance(record, dict) for record in reflection):
+        raise ValueError("GFX046_REFLECTION_ROW_MALFORMED")
+    # Debug names need not be unique across unrelated inputs, outputs or temps.
+    # Only the requested resource family must have unambiguous name-to-ID evidence.
+    wanted = {record["name"] for record in reflection if isinstance(record.get("name"), str)}
+    private_names = disassembled_opnames(disassembly, wanted) if disassembly is not None else {}
     selected={};seen_slots=set()
     for record in reflection:
-        if not isinstance(record,dict):
-            raise ValueError("GFX046_REFLECTION_ROW_MALFORMED")
         name=record.get("name")
         symbol=private_register_from_name(family,name)
         if symbol is None or symbol not in source_slots:

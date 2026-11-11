@@ -95,6 +95,8 @@ class TestSourceAuthenticatedPairs(unittest.TestCase):
         dis=b"""
         OpName %10 "t2"
         OpName %12 "s1"
+        OpName %50 "same_unrelated_debug_label"
+        OpName %51 "same_unrelated_debug_label"
         %10 = OpVariable %ptr UniformConstant
         %12 = OpVariable %ptr UniformConstant
         """

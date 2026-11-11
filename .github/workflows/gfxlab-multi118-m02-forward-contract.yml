@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/gfxlab-multi118-m02-forward-contract.yml'
       - 'gfxlab/tools/gfx118_m02_original_forward.py'
+      - 'gfxlab/tools/multi_shader_spirv_sample_use.py'
+      - 'gfxlab/tests/test_multi_shader_spirv_sample_use.py'
       - 'gfxlab/toolchains/debian13-shader-tools-amd64.sha256'
   workflow_dispatch:
 permissions:
