@@ -1,0 +1,114 @@
+{
+  "experiment": "GFX112",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "cases": [
+    {
+      "sample": "C0P0",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C0P1",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C0P2",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C0P3",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C0P4",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C1P0",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C1P1",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C1P2",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C1P3",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C1P4",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C2P0",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C2P1",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 0.0001220703125
+    },
+    {
+      "sample": "C2P2",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C2P3",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "sample": "C2P4",
+      "expected": 1666,
+      "gpu_written": 1666,
+      "failing_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    }
+  ],
+  "vertices_checked": 24990,
+  "android_gpu_pending": true,
+  "phase_closed": false
+}

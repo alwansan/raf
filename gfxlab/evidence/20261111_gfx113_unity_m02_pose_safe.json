@@ -1,0 +1,10 @@
+{
+  "run": 42959821364,
+  "experiment": "GFX113",
+  "poses": 15,
+  "positions": 24990,
+  "failingVertices": 0,
+  "maxAbsoluteError": 0.0001220703125,
+  "originalClipPlaybackVerified": false,
+  "phase_closed": false
+}

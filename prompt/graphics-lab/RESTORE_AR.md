@@ -1,3 +1,15 @@
+## 11 Nov 2026 — GFX112 phone APK delivered; GFX113 Unity pose math verified
+
+Session `20261111-GFX-chat-m02-animated-adreno-79`, origin=chat. Only write branch `experiment/android-graphics-rootcause`.
+
+GFX112 reuses GFX109 GLES3 transform feedback and packs all 15 M02 samples from the three original clips, 1,666 indexed positions per pose, 24,990 total. Constant clip's five payloads match; both varying clips have five distinct payloads each. Mesa llvmpipe read all 24,990, zero failures under the existing per-component absolute + relative tolerance; maximum absolute error 0.0001220703125. The APK tests fixed sampled poses and does not render an animation preview or load the original clip at runtime.
+
+First GFX112 build 42959538981 failed at javac due to the wrong shared source path. Corrected manifest/source paths and workflow trigger. [CI42959821173](https://github.com/alwansan/raf/actions/runs/42959821173) success including signing/package/hash validation and private cleanup. Artifact 13829110354, expiry 2026-11-18T04:33:38Z. Independently verified ZIP CRCs, digest, APK SHA256 `fa50372778810dbe19baa8b667d0cb9366d0f444711432484a1aeac253bb16f6`, bytes 480546, and exact matching 15 payloads from local pinned-source extraction. Delivered `GFX112-M02-Animated-GPU-Skinning.apk`, `libfile_134b36b228808191a269b07020f02620`, package com.alwansan.gfx112. Await one `GFX112-ALL-TEST-LOGS-*.zip` from `Download/Games/cl/test/g/`; audit via `gfxlab/tools/gfx112_owner_zip_audit.py` against delivered APK. Audit checks complete ordered poses and exact input SHA; tested valid fixture, missing pose rejection, and both original GFX109 owner archives for compatibility.
+
+GFX113 [CI42959821364](https://github.com/alwansan/raf/actions/runs/42959821364) success. Unity 2021.3.45f2 independently evaluated equivalent Hermite segments with AnimationCurve and rebuilt the pose with Unity Matrix4x4 TRS/hierarchy/skinning math. Independently prepared comparison payloads are byte-identical to GFX112's. 15 poses and 24,990 positions; zero failures, maximum absolute error 0.0001220703125. This establishes agreement of the sampled math. The Unity witness reconstructs curves from decoded source channels; it does not play the serialized original AnimationClip or validate Animator root motion or blending. Those and PC↔Adreno pixels remain open. No raw clip/input arrays or owner ZIP added to Git. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX111 M02 original clip CPU pose samples verified
 
 Session `20261111-GFX-chat-m02-original-clip-sampling-78`, origin=chat, base `72ea1d7e9f766ecbc561dc747e4d50dc72d387e4`. Write only to `experiment/android-graphics-rootcause`.
