@@ -1,0 +1,38 @@
+{
+  "session_id": "20261111-GFX-chat-gles-native-qualifier-69",
+  "origin": "chat",
+  "resumed_from": "20261111-GFX-chat-owner-gfx098-archive-68",
+  "branch": "experiment/android-graphics-rootcause",
+  "base_sha": "9ae855ee9d1dd238c32feafa7a2c171bf308e99b",
+  "experiment_key": "GFX-MULTI-101",
+  "issue_id": "GFX-MULTI-101-GL-QUALIFIER",
+  "hypothesis": "GFX041 Unity GLES3 native noperspective output matched smooth because GLSL ES3 core lacks noperspective; independently query actual Adreno GLES extensions and test vendor extension if present.",
+  "scope": [
+    "original-free separate Android Activity",
+    "actual GLES extension enumeration on render thread",
+    "smooth/flat/GLES-affine-emulated/native-optional shader compilation",
+    "GPU RGBA8 256x256 readbacks plus analytic CPU controls",
+    "MediaStore complete ZIP with PNG hashes and safe owner auditor"
+  ],
+  "controls": [
+    "GPU Smooth vs CPU perspective barycentrics",
+    "GPU AffineEmulated vs CPU affine screen barycentrics",
+    "Flat uniform color control",
+    "optional GL_NV_shader_noperspective_interpolation disabled without advertised extension",
+    "ZIP owner true/false negative proof gates"
+  ],
+  "planned_tests": [
+    "9 source/static analytic tests",
+    "6 safe ZIP synthetic negative/positive tests",
+    "system Android SDK javac/d8/aapt2/apksigner verified",
+    "owner Adreno GPU test when signed artifact exists"
+  ],
+  "workflow": ".github/workflows/gfxlab-multi101-gles-native-interpolation-apk.yml",
+  "workflow_url": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi101-gles-native-interpolation-apk.yml",
+  "source_free": true,
+  "private_assets_uploaded": false,
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "phase_closed": false,
+  "status": "SOURCE_IMPLEMENTED_AND_WORKFLOW_COMMITTED; CI_APK_UNVERIFIED; DEVICE_PENDING"
+}
