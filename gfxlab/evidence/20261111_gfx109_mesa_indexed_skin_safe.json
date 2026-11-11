@@ -1,0 +1,58 @@
+{
+  "experiment": "GFX109",
+  "archive_audit": {
+    "outer_crc_pass": true,
+    "source": "g(1).zip",
+    "distinct_summary_and_event_pairs": {
+      "GFX094": 1,
+      "GFX101": 1,
+      "GFX102": 1
+    },
+    "gfx098_model_captures": 48,
+    "gfx098_model_mode_combinations": 12,
+    "gfx098_each_combination_one_unique_png_hash": true
+  },
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "reference": "GFX108 original indexed CPU LBS of the serialized snapshot",
+  "local_renderer": "Mesa llvmpipe software GLES",
+  "cases": [
+    {
+      "model": "M00",
+      "vertices": 375,
+      "bones": 3,
+      "max_error": 0.00006103515625,
+      "failing_vertices": 0
+    },
+    {
+      "model": "M01",
+      "vertices": 5095,
+      "bones": 100,
+      "max_error": 2.384185791015625e-7,
+      "failing_vertices": 0
+    },
+    {
+      "model": "M02",
+      "vertices": 1666,
+      "bones": 8,
+      "max_error": 0.00006103515625,
+      "failing_vertices": 0
+    },
+    {
+      "model": "M04",
+      "vertices": 2445,
+      "bones": 100,
+      "max_error": 2.384185791015625e-7,
+      "failing_vertices": 0
+    },
+    {
+      "model": "M05",
+      "vertices": 4452,
+      "bones": 2,
+      "max_error": 0.00006103515625,
+      "failing_vertices": 0
+    }
+  ],
+  "readback_vertices": 14033,
+  "android_gpu_pending": true,
+  "phase_closed": false
+}

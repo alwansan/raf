@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-owner-gpu-unified-model-lab-66",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-owner-gpu-unified-model-lab-66.md",
-  "status": "GFX097_OWNER_VERIFIED_GFX098_DELIVERED_PHONE_PENDING_GFX099_PC_14_OF_14_BYTE_EXACT_PHASE_OPEN",
+  "latest_session": "20261111-GFX-chat-gfx109-indexed-gpu-skin-76",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-gfx109-indexed-gpu-skin-76.md",
+  "status": "GFX109_SIGNED_APK_DELIVERED_MESA_14033_VERTICES_MATCH_ADRENO_PENDING_PHASE_ONE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -23,7 +23,7 @@
       "readiness": "NOT_READY_0/3"
     }
   ],
-  "last_evidence_review": "2026-11-10",
+  "last_evidence_review": "2026-11-11",
   "last_verified_native_run": 42058825739,
   "source_native_build_sha": "e9c358eda01785b65e4eb14f18723da426635628",
   "important_counts": {
@@ -2864,6 +2864,15 @@
     "original_rig_restored": false,
     "android_source_gpu_skinning_verified": false,
     "pcAdrenoPixelParityVerified": false,
+    "phase_closed": false
+  },
+  "latest_gfx109": {
+    "run": 42957493835,
+    "artifact": 13827034748,
+    "source_commit": "63979c220a9c4b88beb18d75bbcd4f966a2a58bd",
+    "apk_sha256": "a149cff345973fb7e670429c382bf1e09610605beb9805f193fd1aef09d4e6a9",
+    "local_vertices_matched": 14033,
+    "owner_gpu_pending": true,
     "phase_closed": false
   }
 }

@@ -1,3 +1,19 @@
+## 11 Nov 2026 — GFX109 signed indexed GPU probe, Adreno result pending
+
+Session `20261111-GFX-chat-gfx109-indexed-gpu-skin-76`, origin=chat, resumed from GFX107/108 session 75. Write only to `experiment/android-graphics-rootcause`.
+
+Rechecked owner archive `g(1).zip`: outer CRC passed, each GFX094/101/102 pair of exports repeats one summary/events result. The 48 loose GFX098 model captures cover 12 model/mode combinations with one distinct PNG hash per combination. Independent GFX102 ZIP audit verifies five captures and native NoPerspective success at ES310/320 (ES300 failed). Original Shader48's 16 source SIV cases refer to position/FragCoord, so this synthetic extension result does not imply enabling an ordinary qualifier globally.
+
+GFX109 consumes the exact GFX108 indexed positions, influences, and source pose matrices for M00/M01/M02/M04/M05. A GLES3 vertex shader uses a 100-matrix std140 palette. Transform feedback checks both count and every XYZ component against GFX108 CPU results. Tolerance is 0.0001 + 0.000001 × |reference|, per component. Mesa llvmpipe returned all 14,033 positions, zero out-of-tolerance vertices, max absolute error 0.00006103515625. Safe counts are in `gfxlab/evidence/20261111_gfx109_mesa_indexed_skin_safe.json`. No originals or owner logs added to Git.
+
+First CI42957200890 failed javac LambdaMetafactory with Android bootclasspath. Replaced lambdas with explicit callbacks. [CI42957493835](https://github.com/alwansan/raf/actions/runs/42957493835) at `63979c220a9c4b88beb18d75bbcd4f966a2a58bd` passed build/signature/package/purge. [Artifact 13827034748](https://github.com/alwansan/raf/actions/runs/42957493835/artifacts/13827034748) expires 2026-11-18T04:11:49Z. Downloaded and verified both CRCs, digest, APK size 311995, SHA256 `a149cff345973fb7e670429c382bf1e09610605beb9805f193fd1aef09d4e6a9`, and all five packaged payloads byte-for-byte against independent local extraction. The CI delivery JSON retained the copied GFX102 experiment label; package com.alwansan.gfx109, runtime report experiment GFX109 and five matching payloads identify the build.
+
+Owner APK `GFX109-Indexed-GPU-Skinning.apk`, Library `libfile_c8f87abf86bc81918f9f4cfaa2762db1`. Open and send one automatic `GFX109-ALL-TEST-LOGS-*.zip` from `Download/Games/cl/test/g/` (Export ZIP retries). `gfxlab/tools/gfx109_owner_zip_audit.py` binds owner report payload hashes to exact delivered APK and checks ordered counts and failures; positive and missing-vertex fixtures checked locally.
+
+GFX109 isolates vertex coordinates with rasterizer discard. Actual Adreno run is pending. Original animated poses, matching PC/Adreno model pixels and original Shader48/material/normal/render state remain open. Phase one remains open.
+
+---
+
 ## 11 Nov 2026 — VERIFIED GFX107/108: all 14,033 original indexed Skinned Mesh vertices CPU-computed
 
 **Latest session** `memory/sessions/20261111-GFX-chat-gfx107-108-original-indexed-skinning-75.md`, origin=chat. **Only write branch** `experiment/android-graphics-rootcause`; exact ZIP2 source SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
