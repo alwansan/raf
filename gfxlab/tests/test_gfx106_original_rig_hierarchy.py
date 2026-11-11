@@ -54,6 +54,15 @@ class OriginalSourceRigSyntheticTests(unittest.TestCase):
         r=inspect_rig_source(e,objs,ext)["counts"]
         self.assertEqual(r["candidate_original_renderers"],2)
         self.assertEqual(r["source_renderer_identity_ambiguous_or_absent"],1)
+    def test_source_game_object_identity_resolves_shared_mesh_renderers(self):
+        e,objs,ext=fixtures(duplicate=True)
+        e["game_object_pid"]=300
+        objs[OWNER][200].read_typetree()["m_GameObject"]=ptr(300)
+        objs[OWNER][201].read_typetree()["m_GameObject"]=ptr(301)
+        r=inspect_rig_source(e,objs,ext)["counts"]
+        self.assertEqual(r["candidate_original_renderers"],1)
+        self.assertEqual(r["bone_pointer_resolved"],2)
+        self.assertEqual(r["source_rig_hierarchy_coverage_complete"],1)
     def test_bindpose_mismatch_blocks_coverage(self):
         e,objs,ext=fixtures(bindposes=1)
         r=inspect_rig_source(e,objs,ext)["counts"]
