@@ -1,0 +1,17 @@
+{
+  "session_id": "20261111T2246Z-T5-scheduled-apkobb-audit-k7m2",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "abda13b6939215c591558dd86e3e8317314f81e8",
+  "updated_at": "2026-11-11T22:46:00Z",
+  "intended_files": [
+    "scripts/t5_apk_obb_manifest_audit.py",
+    "prompt/coordination/clients/T5/sessions/20261111T2246Z-T5-scheduled-apkobb-audit-k7m2.md",
+    "prompt/coordination/work/INTEGRATION-001/20261111T2246Z-T5-scheduled-apkobb-audit-k7m2.json"
+  ],
+  "experiment_key": "t5-apk-obb-android-manifest-versioncode-v1-offline-stdlib",
+  "resource_key": null,
+  "hypothesis": "Existing device-feedback APK/OBB pairing cannot be authenticated by filename alone; independent local manifest/versionCode/OBB SHA audit can produce deterministic evidence without Unity or proprietary uploads.",
+  "scope_boundary": "Read-only local signed package audit. No changes to T4 mouse, Unity Settings, game assets, shared build request, or CI."
+}
