@@ -71,6 +71,26 @@ def decoded_skin_weights(typetree,vertex_count,bone_count):
     return out
 
 
+def handler_skin_safe_shapes(handler):
+    """Only lengths of channel tuples, never values, identifiers or raw skin data."""
+    result={}
+    for field,name in (("m_BoneWeights","weight"),
+                       ("m_BoneIndices","index")):
+        channel=getattr(handler,field,None)
+        result[name+"_array_length"]=len(channel) if isinstance(channel,(list,tuple)) else -1
+        histogram={}
+        if isinstance(channel,(list,tuple)):
+            for row in channel:
+                try:
+                    width=len(row)
+                except (TypeError,ValueError):
+                    width=-1
+                width=min(128,max(-1,width))
+                key=str(width)
+                histogram[key]=histogram.get(key,0)+1
+        result[name+"_row_width_histogram"]=histogram
+    return result
+
 def decoded_handler_skin(mesh_handler,vertex_count,bone_count):
     """Use MeshHandler.process() original same-index m_BoneWeights/Indices.
 
