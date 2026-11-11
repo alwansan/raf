@@ -1,0 +1,28 @@
+{
+  "session_id": "20261111-GFX-chat-owner-gfx098-archive-68",
+  "origin": "chat",
+  "issue_id": "GFX-OWNER-004",
+  "experiment_key": "GFX-MULTI-100",
+  "question": "Did owner GFX098 multi-mode captures and GFX041 GPU interpolation probes produce complete, hash-consistent, independently discriminating device evidence?",
+  "hypothesis": "Owner ZIP provides complete 12-case matrices and no Unity errors, but Unity native noperspective diagnostic collapses to smooth on device",
+  "source_owner_archive_sha256": "60b6cb3e13ea1da7808128311696e9a906655340ea6a2537ad9c9db8d50faa69",
+  "reference_refs": [
+    "gfxlab/PHASE_ONE_CURRENT_PLAN_AR.md",
+    "prompt/graphics-lab/RESTORE_AR.md",
+    "GFX098 CI42927645102",
+    "GFX099 CI42930674563"
+  ],
+  "control": "Independent CRC, metadata->PNG SHA, repeated capture determinism; synthetic corrupt SHA, false shader-restored flag and wrong session counts",
+  "planned_tests": [
+    "owner outer ZIP CRC and 5 nested exports",
+    "3 session summary/event/snapshot parity",
+    "48 model PNG/JSON hash matches",
+    "2 native NoPerspective readback repetitions compared with Linear",
+    "CI-only synthetic negative controls"
+  ],
+  "resource_key": "gfxlab-100-owner-gfx098",
+  "branch": "experiment/android-graphics-rootcause",
+  "status": "SOURCE_FREE_UNIT_CI_PENDING;OWNER_DEVICE_EVIDENCE_AUDITED",
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
