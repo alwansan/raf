@@ -26,7 +26,7 @@ def audit(root):
             continue
         m = GUID.search(path.read_text(encoding='utf-8', errors='replace'))
         if m:
-            owners[m.group(1).lower()].add((path.relative_to(root).as_posix(), path.name[:-5].lower().endswith('.shader')))
+            owners[m.group(1).lower()].add((path.relative_to(root).as_posix(), path.name[:-5].lower().endswith('.shader'), path.with_name(path.name[:-5]).is_file() and not path.with_name(path.name[:-5]).is_symlink()))
     for path in root.rglob('*.mat'):
         if path.is_symlink() or not path.is_file():
             continue
@@ -52,6 +52,8 @@ def audit(root):
             n = len(owner_types)
             if n == 0:
                 counts['shader_guid_not_in_supplied_tree'] += 1
+            elif n == 1 and next(iter(owner_types))[1] and not next(iter(owner_types))[2]:
+                counts['shader_guid_orphan_meta_without_asset'] += 1
             elif n == 1 and next(iter(owner_types))[1]:
                 counts['shader_guid_unique_in_supplied_tree'] += 1
             elif n == 1:
@@ -59,7 +61,7 @@ def audit(root):
             else:
                 counts['shader_guid_ambiguous_duplicate_meta'] += 1
     return {'status':'STATIC_PARTIAL_TREE_ONLY', 'counts':dict(sorted(counts.items())),
-            'limitations':'Absent GUID may be a package/builtin/unsupplied dependency; shader extension is a heuristic (ShaderGraph and generated shaders may differ); unique meta does not prove import, variant, visual correctness. No raw paths or GUIDs output.'}
+            'limitations':'Absent GUID may be a package/builtin/unsupplied dependency; shader extension is a heuristic (ShaderGraph and generated shaders may differ); orphan shader .meta is not proof of shader presence; unique meta does not prove import, variant, visual correctness. No raw paths or GUIDs output.'}
 
 def main():
     ap = argparse.ArgumentParser()
