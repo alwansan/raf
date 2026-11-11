@@ -1,0 +1,85 @@
+name: GFX-MULTI-106 original source skinned rig root and hierarchy readiness
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi106-original-rig-hierarchy.yml'
+      - 'gfxlab/tools/gfx106_original_rig_hierarchy.py'
+      - 'gfxlab/tests/test_gfx106_original_rig_hierarchy.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi106-original-private-rig-hierarchy
+  cancel-in-progress: false
+jobs:
+  source-pinned-bone-hierarchy-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout GFX-LAB only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run nine source-free exact bone hierarchy regression tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/gfx106_original_rig_hierarchy.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx106_*.py' -v
+      - name: Checkout immutable ZIP2 source into temporary private runner only
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install SHA-pinned source reader without Android build
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Audit only six exact source selected meshes and original bone transform pointers
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m gfxlab.tools.gfx106_original_rig_hierarchy \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx106-original-private" \
+            --safe gfx106-original-rig-safe.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('gfx106-original-rig-safe.json').read_text())
+          assert report['experiment']=='GFX-MULTI-106'
+          assert report['sample_model_count']==6
+          assert [r['model'] for r in report['anonymous_model_cases']]==[
+            'M00','M01','M02','M03','M04','M05']
+          assert report['source_zip2_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          for flag in ('original_rig_restored','originalShaderRestored',
+                       'source_original_animation_verified','skinned_mesh_original_gpu_pose_verified',
+                       'source_transform_names_or_ids_exported','source_bindpose_matrices_exported',
+                       'phase_closed'):
+              assert report[flag] is False
+          print('GFX106_SOURCE_PRIVATE_HIERARCHY_COUNTS_CHECKED')
+          PY
+      - name: Upload anonymous rig readiness aggregate only
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX106-original-six-mesh-rig-source-safe
+          path: gfx106-original-rig-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge source originals after success or failure
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx106-original-private"
+          echo GFX106_ORIGINAL_MESH_BONE_SOURCE_PURGED=true
