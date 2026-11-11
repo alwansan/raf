@@ -1,0 +1,59 @@
+{
+  "schema": "gfxlab-GFX107-original-source-private-bindpose-20261111",
+  "experiment": "GFX-MULTI-107",
+  "run": 42951739739,
+  "conclusion": "success",
+  "tests_passed": 12,
+  "artifact_id": 13825760281,
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_purge_verified": true,
+  "matrix_bones_computed": 213,
+  "skinned_models": 5,
+  "non_skinned_models": 1,
+  "coherent_bones_relative_first_at_1e_minus_4": 161,
+  "models_fully_coherent_at_1e_minus_4": 3,
+  "models": [
+    {
+      "id": "M00",
+      "bones": 3,
+      "coherent": 3,
+      "max_matrix_disagreement": 9.6e-7
+    },
+    {
+      "id": "M01",
+      "bones": 100,
+      "coherent": 74,
+      "max_matrix_disagreement": 0.26967712
+    },
+    {
+      "id": "M02",
+      "bones": 8,
+      "coherent": 8,
+      "max_matrix_disagreement": 0.00007878
+    },
+    {
+      "id": "M03",
+      "skinned": false
+    },
+    {
+      "id": "M04",
+      "bones": 100,
+      "coherent": 74,
+      "max_matrix_disagreement": 0.26967712
+    },
+    {
+      "id": "M05",
+      "bones": 2,
+      "coherent": 2,
+      "max_matrix_disagreement": 2e-8
+    }
+  ],
+  "interpretation": "Matrix products bone_world * bindpose compared to first bone; mismatch alone does not prove bad rig. Source snapshot could be non-bind animation pose. No original vertex skinning or GPU done.",
+  "source_snapshot_is_original_bind_pose_proven": false,
+  "original_vertex_indexed_cpu_skinning_verified": false,
+  "original_animation_restored": false,
+  "original_rig_restored": false,
+  "pc_adreno_source_pixel_parity": false,
+  "originalShaderRestored": false,
+  "phase_closed": false
+}
