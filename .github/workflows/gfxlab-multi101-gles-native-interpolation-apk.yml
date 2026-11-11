@@ -6,6 +6,8 @@ on:
       - '.github/workflows/gfxlab-multi101-gles-native-interpolation-apk.yml'
       - 'gfxlab/android-gles-qualifier-probe/**'
       - 'gfxlab/tests/test_gfx101_gles_capability.py'
+      - 'gfxlab/tests/test_gfx101_owner_zip_audit.py'
+      - 'gfxlab/tools/gfx101_owner_zip_audit.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,7 +30,7 @@ jobs:
       - name: Source-free GFX101 regression and independent mathematical witnesses
         run: |
           set -euo pipefail
-          python3 -m unittest -v gfxlab.tests.test_gfx101_gles_capability
+          python3 -m unittest -v gfxlab.tests.test_gfx101_gles_capability gfxlab.tests.test_gfx101_owner_zip_audit
           test -f gfxlab/android-gles-qualifier-probe/AndroidManifest.xml
           test -s gfxlab/android-gles-qualifier-probe/src/com/alwansan/gfx101/MainActivity.java
           test ! -d source-zip2
