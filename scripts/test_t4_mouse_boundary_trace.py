@@ -86,6 +86,26 @@ class MouseBoundaryTraceTests(unittest.TestCase):
         self.assertEqual(report["malformed_markers"], 1)
         self.assertEqual(report["frames_with_markers"], 0)
 
+    def test_partial_numeric_frame_is_rejected(self):
+        report = analyze([
+            "T4_MOUSE_STAGE frame=12.3 stage=android button=left",
+            "T4_MOUSE_STAGE frame=12 stage=android button=right",
+        ])
+        self.assertEqual(report["malformed_markers"], 1)
+        self.assertEqual(report["buttons"]["left"]["observed_frames"], 0)
+        self.assertEqual(report["buttons"]["right"]["observed_frames"], 1)
+
+    def test_partial_stage_and_button_values_are_rejected(self):
+        report = analyze([
+            "T4_MOUSE_STAGE frame=1 stage=android.extra button=left",
+            "T4_MOUSE_STAGE frame=2 stage=unity button=wheel.extra",
+            "T4_MOUSE_STAGE frame=3 stage=raft button=middle",
+        ])
+        self.assertEqual(report["malformed_markers"], 2)
+        self.assertEqual(report["buttons"]["left"]["observed_frames"], 0)
+        self.assertEqual(report["buttons"]["wheel"]["observed_frames"], 0)
+        self.assertEqual(report["buttons"]["middle"]["stage_frames"]["raft"], 1)
+
     def test_duplicate_fields_are_rejected_as_ambiguous(self):
         report = analyze([
             "T4_MOUSE_STAGE frame=12 frame=13 stage=android button=left",
