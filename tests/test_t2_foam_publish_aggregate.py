@@ -64,6 +64,27 @@ class PublishContract(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(json.loads(content), sample())
 
+    def test_symlink_input_rejected_without_reading_target(self):
+        with tempfile.TemporaryDirectory() as td:
+            target, link, output = (Path(td) / name for name in ("private", "input", "output"))
+            target.write_text(json.dumps(sample()))
+            link.symlink_to(target)
+            proc = subprocess.run([sys.executable, str(ADAPTER), "--input", str(link),
+                                   "--output", str(output)], cwd=ROOT, capture_output=True,
+                                  text=True, timeout=15)
+            self.assertEqual(proc.returncode, 2)
+            self.assertFalse(output.exists())
+            self.assertNotIn(str(target), proc.stderr)
+
+    def test_directory_input_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            output = Path(td) / "output"
+            proc = subprocess.run([sys.executable, str(ADAPTER), "--input", td,
+                                   "--output", str(output)], cwd=ROOT, capture_output=True,
+                                  text=True, timeout=15)
+            self.assertEqual(proc.returncode, 2)
+            self.assertFalse(output.exists())
+
     def test_symlink_output_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             source, target, link = (Path(td) / name for name in ("input", "protected", "link"))

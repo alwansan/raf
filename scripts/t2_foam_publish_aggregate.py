@@ -14,7 +14,8 @@ from t2_foam_evidence_gate_20261110 import MAX_BYTES, EvidenceError, parse_aggre
 
 def publish(source: Path, destination: Path):
     source, destination = Path(source).absolute(), Path(destination).absolute()
-    if source == destination or destination.is_symlink() or not destination.parent.is_dir():
+    if (source == destination or source.is_symlink() or not source.is_file()
+            or destination.is_symlink() or not destination.parent.is_dir()):
         raise EvidenceError("unsafe output destination")
     with source.open("rb") as stream:
         safe = parse_aggregate_json(stream.read(MAX_BYTES + 1))
