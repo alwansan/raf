@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import sys
+import zlib
 from pathlib import Path
 from zipfile import ZipFile, BadZipFile
 
@@ -24,6 +25,42 @@ STATUS={
     "NATIVE_GPU_UNEXPECTED_INTERPOLATION",
 }
 PNG_MAGIC=b"\x89PNG\r\n\x1a\n"
+
+
+def validate_png_rgba8_256(data):
+    """Check actual PNG chunk CRCs/structure, not only ZIP and self-reported SHA."""
+    if not isinstance(data,bytes) or len(data)<60 or not data.startswith(PNG_MAGIC):
+        raise ValueError("PNG_HEADER_INVALID")
+    pos=8
+    chunks=0
+    got_ihdr=False
+    got_idat=False
+    while pos+12<=len(data):
+        length=int.from_bytes(data[pos:pos+4],"big")
+        typ=data[pos+4:pos+8]
+        if length>12*1024*1024 or pos+12+length>len(data):
+            raise ValueError("PNG_CHUNK_BOUNDS_INVALID")
+        body=data[pos+8:pos+8+length]
+        expected=int.from_bytes(data[pos+8+length:pos+12+length],"big")
+        if zlib.crc32(typ+body)&0xffffffff!=expected:
+            raise ValueError("PNG_CHUNK_CRC_INVALID")
+        if chunks==0:
+            if typ!=b"IHDR" or len(body)!=13:
+                raise ValueError("PNG_FIRST_CHUNK_NOT_IHDR")
+            if (int.from_bytes(body[:4],"big"),int.from_bytes(body[4:8],"big"),
+                body[8],body[9],body[10],body[11],body[12])!=(256,256,8,6,0,0,0):
+                raise ValueError("PNG_FORMAT_NOT_RGBA8_256")
+            got_ihdr=True
+        if typ==b"IDAT": got_idat=True
+        pos+=12+length
+        chunks+=1
+        if typ==b"IEND":
+            if length!=0 or pos!=len(data) or not got_ihdr or not got_idat:
+                raise ValueError("PNG_BAD_IEND")
+            return True
+        if chunks>128:
+            raise ValueError("PNG_TOO_MANY_CHUNKS")
+    raise ValueError("PNG_IEND_MISSING")
 
 def audit(path):
     p=Path(path)
@@ -120,10 +157,7 @@ def audit(path):
             if key not in names:
                 raise ValueError("RESULT_PNG_MISSING")
             b=z.read(key)
-            if (len(b)<33 or not b.startswith(PNG_MAGIC) or b[12:16]!=b"IHDR"
-                 or int.from_bytes(b[16:20],"big")!=256
-                 or int.from_bytes(b[20:24],"big")!=256
-                 or hashlib.sha256(b).hexdigest()!=result.get("png_sha256")):
+            if not validate_png_rgba8_256(b) or hashlib.sha256(b).hexdigest()!=result.get("png_sha256"):
                 raise ValueError("RESULT_PNG_INTEGRITY_FAILURE")
             by_mode[mode]=result
         if not set(MODES[:3]) <= set(by_mode) and status!="CONTROL_FAILURE_OR_INCONCLUSIVE":
