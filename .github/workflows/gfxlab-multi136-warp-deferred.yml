@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/gfxlab-multi136-warp-deferred.yml'
       - 'gfxlab/tools/gfx136_warp_deferred_report.py'
+      - 'gfxlab/tools/gfx138_warp_cross_pass.py'
+      - 'gfxlab/tests/test_gfx138_warp_cross_pass.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -53,6 +55,8 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python -m gfxlab.tools.gfx116_bc3_sampling_pack --private "$p/bc3" --source "$p/texture-safe.json" --assets "$p/textures"
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest -v gfxlab.tests.test_gfx138_warp_cross_pass
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Compile and execute Windows WARP
         shell: cmd
         run: |
@@ -60,11 +64,16 @@ jobs:
           call "%VSROOT%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
           cl /nologo /std:c++17 /EHsc /W4 gfxlab\windows-forward121\warp_forward.cpp /Fe:"%RUNNER_TEMP%\gfx136-private\warp.exe" /link d3d11.lib || exit /b 1
           "%RUNNER_TEMP%\gfx136-private\warp.exe" "%RUNNER_TEMP%\gfx136-private\draw" "%RUNNER_TEMP%\gfx136-private\textures" "%RUNNER_TEMP%\gfx136-private\captures" "%RUNNER_TEMP%\gfx136-private\deferred" deferred || exit /b 1
-          python -m gfxlab.tools.gfx136_warp_deferred_report --captures "%RUNNER_TEMP%\gfx136-private\captures" --mesa gfxlab/evidence/20261111_gfx135_deferred_batch_mesa_safe.json --safe gfx136-safe.json
+          python -m gfxlab.tools.gfx136_warp_deferred_report --captures "%RUNNER_TEMP%\gfx136-private\captures" --mesa gfxlab/evidence/20261111_gfx135_deferred_batch_mesa_safe.json --safe gfx136-safe.json || exit /b 1
+          if not exist "%RUNNER_TEMP%\gfx136-private\forward-captures" mkdir "%RUNNER_TEMP%\gfx136-private\forward-captures"
+          "%RUNNER_TEMP%\gfx136-private\warp.exe" "%RUNNER_TEMP%\gfx136-private\draw" "%RUNNER_TEMP%\gfx136-private\textures" "%RUNNER_TEMP%\gfx136-private\forward-captures" || exit /b 1
+          python -m gfxlab.tools.gfx138_warp_cross_pass --forward "%RUNNER_TEMP%\gfx136-private\forward-captures" --deferred "%RUNNER_TEMP%\gfx136-private\captures" --source gfxlab/evidence/20261111_gfx121_windows_warp_safe.json --mesa gfxlab/evidence/20261111_gfx135_deferred_batch_mesa_safe.json --safe gfx138-safe.json || exit /b 1
       - uses: actions/upload-artifact@v4
         with:
           name: GFX136-Windows-WARP-deferred-safe-result
-          path: gfx136-safe.json
+          path: |
+            gfx136-safe.json
+            gfx138-safe.json
           if-no-files-found: error
           retention-days: 7
       - name: Purge original assets and Windows readback
