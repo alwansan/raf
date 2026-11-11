@@ -1,3 +1,12 @@
+## 11 Nov 2026 — GFX142 owner install error clarified (encrypted CMS, not corrupted APK)
+
+The owner supplied a ZArchiver screenshot of the GitHub encrypted artifact containing `GFX142-Original-Raft-Android-Test.apk.cms` and `gfx141-safe.json`, reporting Android "invalid package". The `.cms` is **CMS AES-GCM ciphertext**, not an installable APK; renaming the extension cannot fix it. Independently re-opened the recovered chat-local plaintext signed APK: SHA256 `3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773`, 23,082,040 bytes, valid APK ZIP CRC, Android binary manifest, DEX, 235 assets, 9 tests, 51 expected captures; APK v3 verified in prior successful CI 43081417585. Reissued to the owner in this conversation as **`GFX142-Install.apk`** and backup **`GFX142-Installable-APK.zip`** containing an actual plaintext APK (not CMS) and Arabic README. These are private chat-local sandbox links, not a public release, and **must not be fabricated in new sessions**.
+
+Owner device installation **not yet confirmed**. Next evidence is phone-produced `GFX124-ALL-TEST-LOGS-*.zip`; no Adreno nine-case acceptance, Unity pass or animation runtime parity claimed. See `gfxlab/delivery/OWNER_ANDROID_INSTALL_AR.md`. `phase_closed=false`.
+
+
+---
+
 ## 11 Nov 2026 — GFX142 VERIFIED: original Raft 9-case Android APK delivered privately
 
 Session `20261111-GFX-chat-encrypted-owner-delivery-99`, `origin=chat`. Worker GFX-LAB; exclusive write branch `experiment/android-graphics-rootcause`.

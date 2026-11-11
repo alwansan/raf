@@ -10,7 +10,7 @@
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "latest_session": "20261111-GFX-chat-encrypted-owner-delivery-99",
   "latest_session_path": "memory/sessions/20261111-GFX-chat-encrypted-owner-delivery-99.md",
-  "status": "GFX142_ORIGINAL_APK_V3_SIGNED_AES_GCM_DELIVERED_IN_CHAT_ADRENO_OWNER_ZIP_GATE_OPEN",
+  "status": "GFX142_PLAINTEXT_APK_REDELIVERED_DEVICE_INSTALLATION_AND_9_CASE_RESULTS_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Owner runs installed original GFX142/124 9-case APK, exports full ZIP in Download/Games/cl/test/g/, uploads complete ZIP, then audit against exact signed original APK and compare Adreno vs Mesa. Unity ShaderLab GBuffer, Animator and original PC scene still open.",
+  "next_experiment": "Owner installs GFX142-Install.apk (NOT encrypted .apk.cms) or extracts it from GFX142-Installable-APK.zip, then exports GFX124-ALL-TEST-LOGS-*.zip for source-original 9-case Adreno acceptance; installation has not yet been confirmed.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3128,7 +3128,10 @@
     "actual_Unity_ShaderLab_runtime_restored": false,
     "originalShaderRestored": false,
     "originalAnimationRestored": false,
-    "phase_closed": false
+    "phase_closed": false,
+    "owner_install_error_diagnosis": "Downloaded GFX142 encrypted GitHub .apk.cms instead of plaintext signed APK; corrected by issuing verified GFX142-Install.apk and a plaintext-APK ZIP backup inside chat",
+    "plaintext_apk_reissued_in_current_conversation": true,
+    "android_device_installation_verified": false
   },
   "latest_evidence_run": 43081417585
 }
