@@ -60,7 +60,7 @@ def audit(root):
         if not block:
             counts["materials_without_texenv_block"] += 1
             continue
-        indent = len(block.group(0)) - len(block.group(0).lstrip(" "))
+        indent = len(block.group(0).splitlines()[0]) - len(block.group(0).splitlines()[0].lstrip(" "))
         lines = content[block.end():].splitlines()
         slot = False
         for line in lines:
