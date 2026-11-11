@@ -15,6 +15,29 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def audit_capture(row, filename, image, reference):
+    if (row["image"] != filename or sha(image) != row["image_sha256"]
+            or sha(reference) != row["mesa_rgba_sha256"] or len(reference) != SIDE*SIDE*4):
+        raise ValueError("Capture or Mesa reference identity mismatch")
+    with Image.open(io.BytesIO(image)) as png:
+        if png.format != "PNG" or png.size != (SIDE,SIDE):
+            raise ValueError("Unexpected Forward PNG shape")
+        rgba = png.convert("RGBA").transpose(Image.Transpose.FLIP_TOP_BOTTOM).tobytes()
+    if sha(rgba) != row["raw_rgba_sha256"] or set(rgba[3::4]) != {0,255}:
+        raise ValueError("Unexpected decoded readback bytes")
+    coverage = rgba[3::4].count(255)
+    changes = sum(a!=b for a,b in zip(rgba[3::4],reference[3::4],strict=True))
+    errors = [abs(rgba[i+k]-reference[i+k])
+              for i in range(0,len(rgba),4) if rgba[i+3]==reference[i+3]==255
+              for k in range(3)]
+    computed = dict(covered_pixels=coverage,coverage_different_pixels=changes,
+                    rgb_channels=len(errors),rgb_absolute_error_sum=sum(errors),
+                    max_rgb_channel_error=max(errors,default=0))
+    if any(row[key]!=value for key,value in computed.items()) or not errors:
+        raise ValueError("Recomputed Forward counters disagree")
+    return rgba, {**computed,"mean_rgb_channel_error":sum(errors)/len(errors)}
+
+
 def audit(owner_zip, apk):
     with ZipFile(owner_zip) as logs, ZipFile(apk) as package:
         entries = logs.infolist()
@@ -40,27 +63,7 @@ def audit(owner_zip, apk):
             filename = name+".png"
             image = logs.read(filename)
             reference = package.read(f"assets/{name}.rgba")
-            if (row["image"] != filename or sha(image) != row["image_sha256"]
-                    or sha(reference) != row["mesa_rgba_sha256"] or len(reference) != SIDE*SIDE*4):
-                raise ValueError("Capture or Mesa reference identity mismatch")
-            with Image.open(io.BytesIO(image)) as png:
-                if png.format != "PNG" or png.size != (SIDE,SIDE):
-                    raise ValueError("Unexpected Forward PNG shape")
-                rgba = png.convert("RGBA").transpose(Image.Transpose.FLIP_TOP_BOTTOM).tobytes()
-            if sha(rgba) != row["raw_rgba_sha256"] or set(rgba[3::4]) != {0,255}:
-                raise ValueError("Unexpected decoded readback bytes")
-            captures[name] = rgba
-            coverage = rgba[3::4].count(255)
-            changes = sum(a!=b for a,b in zip(rgba[3::4],reference[3::4],strict=True))
-            errors = [abs(rgba[i+k]-reference[i+k])
-                      for i in range(0,len(rgba),4) if rgba[i+3]==reference[i+3]==255
-                      for k in range(3)]
-            computed = dict(covered_pixels=coverage,coverage_different_pixels=changes,
-                            rgb_channels=len(errors),rgb_absolute_error_sum=sum(errors),
-                            max_rgb_channel_error=max(errors,default=0))
-            if any(row[key]!=value for key,value in computed.items()) or not errors:
-                raise ValueError("Recomputed Forward counters disagree")
-            safe[name] = {**computed,"mean_rgb_channel_error":sum(errors)/len(errors)}
+            captures[name], safe[name] = audit_capture(row, filename, image, reference)
     baseline = captures["light"]
     controls = {name:sum(baseline[i:i+3]!=captures[name][i:i+3] for i in range(0,len(baseline),4))
                 for name in CASES[1:]}

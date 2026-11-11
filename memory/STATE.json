@@ -3010,5 +3010,16 @@
     "m02_regression_exact": true,
     "android_pending": true,
     "phase_closed": false
+  },
+  "latest_gfx124": {
+    "shell_run": 43052941770,
+    "shell_artifact": 13869298795,
+    "shell_build_success": true,
+    "forward_cases": 5,
+    "expected_captures": 17,
+    "audit_replay_complete": true,
+    "audit_replay_partial": true,
+    "android_verified": false,
+    "phase_closed": false
   }
 }
