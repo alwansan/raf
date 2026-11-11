@@ -17,6 +17,8 @@ def summarize(scan):
         raise ValueError("missing events")
     histogram = Counter()
     matched = 0
+    ambiguous = 0
+    ambiguous_bins = Counter()
     for event in events:
         if not isinstance(event, dict):
             raise ValueError("event must be object")
@@ -50,23 +52,36 @@ def summarize(scan):
                             raise ValueError("unknown pass marker")
                         candidates.append((abs(line - center), name, side))
         if candidates:
-            # Deterministic nearest marker, tie broken by pass and direction.
-            distance, name, direction = min(candidates)
-            histogram[(name, direction, distance)] += 1
-            matched += 1
+            distance = min(candidate[0] for candidate in candidates)
+            nearest = {(name, direction) for d, name, direction in candidates if d == distance}
+            # Equal-distance distinct passes or directions cannot be assigned arbitrarily.
+            if len(nearest) != 1:
+                ambiguous += 1
+                ambiguous_bins[(distance, tuple(sorted(nearest)))] += 1
+            else:
+                name, direction = next(iter(nearest))
+                histogram[(name, direction, distance)] += 1
+                matched += 1
     return {
         "session_id": scan["session_id"],
         "source_sha256": scan["source_sha256"],
         "sampled_errors": len(events),
         "errors_with_nearby_pass_marker": matched,
-        "unmatched_sampled_errors": len(events) - matched,
+        "ambiguous_nearest_pass_errors": ambiguous,
+        "unmatched_sampled_errors": len(events) - matched - ambiguous,
+        "ambiguous_nearest_bins": [
+            {"line_distance": distance, "candidates": [
+                {"pass": name, "direction": direction} for name, direction in candidates
+            ], "count": count}
+            for (distance, candidates), count in sorted(ambiguous_bins.items())
+        ],
         "nearest_pass_bins": [
             {"pass": name, "direction": direction, "line_distance": distance, "count": count}
             for (name, direction, distance), count in sorted(histogram.items())
         ],
         "kernel_identity": "unproven",
         "causality": "not_established",
-        "limits": "Only bounded sampled errors; marker proximity is not a program binding or GPU/FFT proof."
+        "limits": "Only bounded sampled errors; equal-distance ties are ambiguous, not arbitrarily assigned. Marker proximity is not a program binding or GPU/FFT proof."
     }
 
 def main():
