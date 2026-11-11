@@ -2818,5 +2818,52 @@
     "original_rig_restored": false,
     "pcAdrenoPixelParityVerified": false,
     "phase_closed": false
+  },
+  "latest_verified_gfx107_108_original_skin_cpu": {
+    "role": "GFX-LAB",
+    "origin": "chat",
+    "session_id": "20261111-GFX-chat-gfx107-108-original-indexed-skinning-75",
+    "branch": "experiment/android-graphics-rootcause",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "GFX107_run": 42951739739,
+    "GFX107_conclusion": "SUCCESS",
+    "GFX107_source_free_tests": 12,
+    "GFX107_artifact": 13825760281,
+    "GFX107_original_bone_matrices_computed": 213,
+    "GFX107_coherent_vs_first_bone": 161,
+    "GFX107_M01_bone_coherent": 74,
+    "GFX107_M04_bone_coherent": 74,
+    "GFX107_original_bind_pose_identity_proven": false,
+    "GFX108_run": 42953322197,
+    "GFX108_conclusion": "SUCCESS",
+    "GFX108_source_free_tests": 18,
+    "GFX108_artifact": 13826002534,
+    "GFX108_private_original_data_purged": true,
+    "GFX108_source_vertex_order": "UnityPy MeshHelper.MeshHandler.process() raw source original vertex/bone-weight/index arrays",
+    "GFX108_skinned_models_cpu_computed": 5,
+    "GFX108_original_skinned_vertices_cpu_computed": 14033,
+    "GFX108_original_skinned_vertex_population": 14033,
+    "source_influences_per_vertex": {
+      "M00": 2,
+      "M01": 4,
+      "M02": 4,
+      "M04": 4,
+      "M05": 2
+    },
+    "source_cpu_reference_different_vertices_gt_1e_minus4": 1374,
+    "source_m01_cpu_ref_displaced_vertices": 695,
+    "source_m04_cpu_ref_displaced_vertices": 679,
+    "safe_evidence": [
+      "gfxlab/evidence/20261111_gfx107_original_bindpose_cpu_safe.json",
+      "gfxlab/evidence/20261111_gfx108_original_indexed_cpu_skin_safe.json"
+    ],
+    "summary": "gfxlab/GFX107_GFX108_INDEXED_SKINNING_AR.md",
+    "next": "GFX109 source original-indexed Android GPU pose test + original Shader48 Material/CB/normal + PC device pixels",
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
+    "original_rig_restored": false,
+    "android_source_gpu_skinning_verified": false,
+    "pcAdrenoPixelParityVerified": false,
+    "phase_closed": false
   }
 }
