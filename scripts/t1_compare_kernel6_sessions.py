@@ -33,8 +33,10 @@ def validate(obj):
         if not isinstance(e.get("before"), list) or not isinstance(e.get("after"), list):
             raise ValueError("invalid marker context")
         lines.append(e["line"])
-    if lines != sorted(set(lines)) or obj.get("sampled_hits") != len(events):
+    if lines != sorted(set(lines)) or type(obj.get("sampled_hits")) is not int or obj["sampled_hits"] != len(events):
         raise ValueError("unordered/duplicate samples")
+    if len(events) > counts["kernel6_error_lines"]:
+        raise ValueError("sampled errors exceed total error count")
     return {"session_id": obj["session_id"], "source_sha256": obj["source_sha256"],
             "counts": {k: counts[k] for k in REQUIRED},
             "first_sampled_error_line": lines[0] if lines else None,
