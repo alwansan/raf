@@ -15,7 +15,7 @@ TEXTURE = re.compile(r"(?m)^\s*m_Texture:\s*\{([^{}]*)\}")
 FIELD = re.compile(r"(?:^|,)\s*(fileID|guid):\s*([^,}\s]+)")
 MAX_BYTES = 32 * 1024 * 1024
 TEXTURE_SUFFIXES = (".png", ".jpg", ".jpeg", ".tga", ".dds", ".psd",
-                    ".tif", ".tiff", ".exr", ".hdr", ".ktx", ".asset")
+                    ".tif", ".tiff", ".exr", ".hdr", ".ktx")
 
 def reference(body):
     fields = dict(FIELD.findall(body))
@@ -46,7 +46,7 @@ def audit(root):
         match = GUID.search(path.read_text(encoding="utf-8", errors="replace"))
         if match:
             suffix = Path(path.name[:-5]).suffix.lower()
-            owners[match.group(1).lower()].add((path.relative_to(root).as_posix(), suffix in TEXTURE_SUFFIXES))
+            owners[match.group(1).lower()].add((path.relative_to(root).as_posix(), "texture" if suffix in TEXTURE_SUFFIXES else "ambiguous_asset" if suffix == ".asset" else "nontexture"))
     for path in root.rglob("*.mat"):
         if path.is_symlink() or not path.is_file():
             continue
@@ -85,14 +85,16 @@ def audit(root):
                     counts["texture_guid_absent_from_supplied_tree"] += 1
                 elif len(matches) > 1:
                     counts["texture_guid_duplicate_meta"] += 1
-                elif next(iter(matches))[1]:
+                elif next(iter(matches))[1] == "texture":
                     counts["texture_guid_unique_texture_meta"] += 1
+                elif next(iter(matches))[1] == "ambiguous_asset":
+                    counts["texture_guid_ambiguous_asset_meta"] += 1
                 else:
                     counts["texture_guid_points_to_nontexture_meta"] += 1
         if slot:
             counts["texenv_slots_without_texture_line"] += 1
     return {"status": "STATIC_PARTIAL_TREE_ONLY", "counts": dict(sorted(counts.items())),
-            "limitations": "Missing GUID may be in packages or unsupplied files. File extensions are heuristics. Does not prove importer, sampler, alpha, shader variant, or device pixels."}
+            "limitations": "Missing GUID may be in packages or unsupplied files. File extensions are heuristics; .asset may contain textures or non-textures and is counted as ambiguous. Does not prove importer, sampler, alpha, shader variant, or device pixels."}
 
 def main():
     ap = argparse.ArgumentParser()
