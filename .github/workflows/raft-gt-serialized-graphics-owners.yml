@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/gt_stage_serialized_owners.py
       - tests/test_gt_stage_serialized_owners.py
+      - scripts/gt_serialized_graphics_counts.py
+      - tests/test_gt_serialized_graphics_counts.py
       - .github/workflows/raft-gt-serialized-graphics-owners.yml
   workflow_dispatch:
 
@@ -32,6 +34,7 @@ jobs:
         run: |
           python3 -m py_compile scripts/gt_stage_serialized_owners.py
           python3 -m unittest discover -s tests -p test_gt_stage_serialized_owners.py -v
+          python3 -m unittest discover -s tests -p test_gt_serialized_graphics_counts.py -v
 
   original-materials-shaders:
     needs: synthetic
@@ -149,6 +152,12 @@ jobs:
             --report "$RUNNER_TEMP/gt-original-source-proof.json"
       - name: Install original Unity serialized-object reader
         run: python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+      - name: Count all source-owned graphic objects and metadata by original identity
+        run: |
+          python3 -m scripts.gt_serialized_graphics_counts \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source "$RUNNER_TEMP/gt-serialized" \
+            --report "$RUNNER_TEMP/gt-all-graphics-owners.json"
       - name: Reuse W3 exact Material to Shader object topology audit
         run: |
           python3 -m scripts.probe_w3_full_material_shader_inventory \
@@ -186,6 +195,7 @@ jobs:
           name: gt-serialized-graphics-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/gt-original-source-proof.json
+            ${{ runner.temp }}/gt-all-graphics-owners.json
             ${{ runner.temp }}/gt-material-shader-graph.json
             ${{ runner.temp }}/gt-texture-colors-2owners.json
           retention-days: 14
