@@ -1,0 +1,87 @@
+name: GFX-MULTI-107 original skinned source TRS x bindpose CPU matrix witness
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi107-bindpose-restpose-cpu.yml'
+      - 'gfxlab/tools/gfx107_source_bindpose_math.py'
+      - 'gfxlab/tools/gfx107_original_bindpose_matrix_audit.py'
+      - 'gfxlab/tests/test_gfx107_bindpose_math.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi107-original-private-bindpose-CPU
+  cancel-in-progress: false
+jobs:
+  authentic-six-model-mesh-bindpose-cpu:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout GFX-LAB source-free scripts only
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Verify synthetic CPU math, quaternion, bone-parent and bindpose tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/gfx107_source_bindpose_math.py gfxlab/tools/gfx107_original_bindpose_matrix_audit.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx107_*.py' -v
+      - name: Fetch only SHA-pinned immutable ZIP2 original source in private runner
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install pinned Unity serialized source parser
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Compute safe original bone x bindpose CPU snapshot consistency without raw matrices
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m gfxlab.tools.gfx107_original_bindpose_matrix_audit \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx107-private" \
+            --safe gfx107-source-bindpose-safe.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('gfx107-source-bindpose-safe.json').read_text())
+          assert r['experiment']=='GFX-MULTI-107'
+          assert r['original_source_zip2_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          assert r['original_models']==6
+          assert [x['model'] for x in r['case_summary']]==['M00','M01','M02','M03','M04','M05']
+          for key in ('source_vertex_indexed_cpu_skinning_compared',
+                      'mesh_to_world_original_pose_equivalence_verified',
+                      'source_transform_is_bind_pose_proven',
+                      'source_animation_runtime_verified',
+                      'original_rig_restored','originalShaderRestored',
+                      'phase_closed','private_matrix_or_bone_identity_exported'):
+              assert r[key] is False, key
+          print('GFX107_SOURCE_PRIVATE_BINDPOSE_CPU_COUNTS_VERIFIED')
+          PY
+      - name: Upload only source-safe anonymous CPU transform consistency counts
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX107-source-bone-bindpose-CPU-safe-counts
+          path: gfx107-source-bindpose-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Remove all private original source and matrix working files even after failure
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx107-private"
+          echo GFX107_ORIGINAL_SOURCE_PURGED=true
