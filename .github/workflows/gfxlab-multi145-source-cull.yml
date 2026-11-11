@@ -1,0 +1,61 @@
+name: GFX145 original Shader48 Cull fallback and material override audit
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi145-source-cull.yml'
+      - 'gfxlab/tools/gfx145_original_cull_gate.py'
+      - 'gfxlab/tests/test_gfx145_original_cull_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx145-original-cull-preflight
+  cancel-in-progress: false
+jobs:
+  original-source-cull:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run synthetic source metadata and dynamic override fail-closed tests
+        run: python -m unittest -v gfxlab.tests.test_gfx145_original_cull_gate
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Inspect source-original Shader48 Cull fallback and saved material overrides privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = '15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          python -m pip install --disable-pip-version-check UnityPy==1.25.4
+          python -m gfxlab.tools.gfx145_original_cull_gate --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx145-private" --safe gfx145-safe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GFX145-source-original-cull-categories-NO-PRIVATE-ASSETS
+          path: gfx145-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge original Shader48 and materials
+        if: always()
+        shell: bash
+        run: rm -rf -- source-zip2 "$RUNNER_TEMP/gfx145-private"
