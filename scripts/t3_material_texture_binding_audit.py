@@ -46,7 +46,11 @@ def audit(root):
         match = GUID.search(path.read_text(encoding="utf-8", errors="replace"))
         if match:
             suffix = Path(path.name[:-5]).suffix.lower()
-            owners[match.group(1).lower()].add((path.relative_to(root).as_posix(), "texture" if suffix in TEXTURE_SUFFIXES else "ambiguous_asset" if suffix == ".asset" else "nontexture"))
+            owner_file = path.with_name(path.name[:-5])
+            kind = ("orphan_meta" if not owner_file.is_file() or owner_file.is_symlink()
+                    else "texture" if suffix in TEXTURE_SUFFIXES
+                    else "ambiguous_asset" if suffix == ".asset" else "nontexture")
+            owners[match.group(1).lower()].add((path.relative_to(root).as_posix(), kind))
     for path in root.rglob("*.mat"):
         if path.is_symlink() or not path.is_file():
             continue
@@ -85,6 +89,8 @@ def audit(root):
                     counts["texture_guid_absent_from_supplied_tree"] += 1
                 elif len(matches) > 1:
                     counts["texture_guid_duplicate_meta"] += 1
+                elif next(iter(matches))[1] == "orphan_meta":
+                    counts["texture_guid_orphan_meta_without_asset"] += 1
                 elif next(iter(matches))[1] == "texture":
                     counts["texture_guid_unique_texture_meta"] += 1
                 elif next(iter(matches))[1] == "ambiguous_asset":
@@ -94,7 +100,7 @@ def audit(root):
         if slot:
             counts["texenv_slots_without_texture_line"] += 1
     return {"status": "STATIC_PARTIAL_TREE_ONLY", "counts": dict(sorted(counts.items())),
-            "limitations": "Missing GUID may be in packages or unsupplied files. File extensions are heuristics; .asset may contain textures or non-textures and is counted as ambiguous. Does not prove importer, sampler, alpha, shader variant, or device pixels."}
+            "limitations": "Missing GUID may be in packages or unsupplied files. Orphan .meta without its asset is not proof of texture presence. File extensions are heuristics; .asset may contain textures or non-textures and is counted as ambiguous. Does not prove importer, sampler, alpha, shader variant, or device pixels."}
 
 def main():
     ap = argparse.ArgumentParser()
