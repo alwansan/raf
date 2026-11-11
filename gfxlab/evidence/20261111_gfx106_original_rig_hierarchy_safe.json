@@ -1,0 +1,77 @@
+{
+  "schema": "gfxlab-GFX106-original-skin-hierarchy-owner-private-safe-v1",
+  "experiment": "GFX-MULTI-106",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "final_run": 42950536938,
+  "status": "SUCCESS",
+  "commit": "2c358198352e6344f542d4b81cd2eca307fb010b",
+  "unit_tests_passed": 10,
+  "artifact_id": 13825061622,
+  "artifact_expiry": "2026-11-18T03:08:13Z",
+  "original_source_purge_verified": true,
+  "model_count": 6,
+  "skinned_models": 5,
+  "non_skinned_models": 1,
+  "source_bone_refs_total": 213,
+  "bone_transform_references_typed_and_resolved": 213,
+  "unique_bone_transform_targets": 213,
+  "finite_bone_local_transforms": 213,
+  "source_mesh_bindposes_total": 213,
+  "source_renderer_bone_counts_match_bindposes": true,
+  "skinned_source_rootbone_resolved": 5,
+  "models_with_all_bone_chains_reaching_rootbone": 3,
+  "models_with_partial_rootbone_chains": 2,
+  "source_bone_parent_cycles": 0,
+  "unavailable_bone_pointer_count": 0,
+  "model_cases": [
+    {
+      "id": "M00",
+      "bones": 3,
+      "resolved_transforms": 3,
+      "rootbone_ancestor_reaches": 1,
+      "source_hierarchy_coverage_complete": false
+    },
+    {
+      "id": "M01",
+      "bones": 100,
+      "resolved_transforms": 100,
+      "rootbone_ancestor_reaches": 100,
+      "source_hierarchy_coverage_complete": true
+    },
+    {
+      "id": "M02",
+      "bones": 8,
+      "resolved_transforms": 8,
+      "rootbone_ancestor_reaches": 8,
+      "source_hierarchy_coverage_complete": true
+    },
+    {
+      "id": "M03",
+      "bones": 0,
+      "skinned": false
+    },
+    {
+      "id": "M04",
+      "bones": 100,
+      "resolved_transforms": 100,
+      "rootbone_ancestor_reaches": 100,
+      "source_hierarchy_coverage_complete": true
+    },
+    {
+      "id": "M05",
+      "bones": 2,
+      "resolved_transforms": 2,
+      "rootbone_ancestor_reaches": 1,
+      "source_hierarchy_coverage_complete": false
+    }
+  ],
+  "original_mesh_vertex_weight_availability": "14033 weighted vertices in 5 skinned models (prior evidence); no runtime skinning checked here",
+  "source_hierarchy_restored_in_android": false,
+  "source_animation_clips_and_pose_verified": false,
+  "original_skinned_gpu_pixels_verified": false,
+  "originalShaderRestored": false,
+  "original_rig_restored": false,
+  "phase_closed": false,
+  "private_identifiers_or_transform_matrices_exported": false,
+  "note": "Source-level references and parent chains, not proof of actual animation/posed vertices; M00/M05 partial RootBone ancestry is not missing bones."
+}
