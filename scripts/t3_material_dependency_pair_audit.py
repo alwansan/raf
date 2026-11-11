@@ -17,6 +17,7 @@ GUID = re.compile(r"\bguid:\s*([0-9a-fA-F]{32})\b")
 TEXENV = re.compile(r"^([ \t]*)m_TexEnvs:\s*$")
 NEXT_FIELD = re.compile(r"^([ \t]*)([A-Za-z_][\w]*):")
 TEXTURE = re.compile(r"\bm_Texture:\s*\{([^{}]*)\}")
+SLOT = re.compile(r"^([ \t]*)(?:-\s*)?([A-Za-z_][\w]*):\s*(?:\{\s*\})?\s*$")
 
 def snapshot(path):
     if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_BYTES:
@@ -28,11 +29,15 @@ def snapshot(path):
     active = False
     base_indent = -1
     refs = []
+    current_slot = None
+    slot_indent = -1
     for line in text.splitlines():
         head = TEXENV.match(line)
         if head:
             active = True
             base_indent = len(head.group(1).expandtabs(4))
+            current_slot = None
+            slot_indent = -1
             continue
         if not active:
             continue
@@ -40,10 +45,16 @@ def snapshot(path):
         if field and len(field.group(1).expandtabs(4)) <= base_indent:
             active = False
             continue
+        slot = SLOT.match(line)
+        if slot:
+            indent = len(slot.group(1).expandtabs(4))
+            if indent > base_indent and (current_slot is None or indent <= slot_indent):
+                current_slot = slot.group(2)
+                slot_indent = indent
         match = TEXTURE.search(line)
         if match:
             guid = GUID.search(match.group(1))
-            refs.append(guid.group(1).lower() if guid else "<no-guid>")
+            refs.append((current_slot or "<unassigned-slot>", guid.group(1).lower() if guid else "<no-guid>"))
     return shader_ref, Counter(refs)
 
 def inventory(root):
@@ -87,7 +98,7 @@ def compare(original, exported):
     return {
         "status": "STATIC_SERIALIZED_REFERENCE_COMPARISON_ONLY",
         "counts": dict(sorted(counts.items())),
-        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names/order and material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
+        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names are compared when parseable; duplicate slot occurrences, ordering, material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
     }
 
 def main():
