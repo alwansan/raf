@@ -397,7 +397,7 @@ public final class MainActivity extends Activity {
         summary.put("results",outputs);
         record(j("event","final","status",verdict));
         display("GFX102: "+verdict+"\nGLES extension advertised: "+nativeExtension+
-            "\nControls correct: "+(smoothGood&&affineGood)+
+            "\nControls correct: "+(smoothGood&&affineGood&&flatGood)+
             "\nGPU readbacks: "+successfulReadbacks+
             "\nAuto-exporting ZIP. Shader48 restoration remains OPEN.");
     }
