@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "session_id": "20261111T2124Z-T2-scheduled-lifetime-terminal-a8m2",
+  "origin": "scheduled",
+  "worker": "T2",
+  "issue": "WATER-001",
+  "status": "in_progress",
+  "hypothesis": "Lifetime gate permits an unrelated allocated RenderTexture token to remain unreleased while reporting CAPTURE_ORDER_CONSISTENT; test should preserve legitimate multi-resource traces but expose incomplete state.",
+  "experiment_key": "T2-LIFETIME-TERMINAL-20261111",
+  "files": [
+    "scripts/t2_foam_rt_lifetime_gate.py",
+    "tests/test_t2_foam_rt_terminal_regression.py"
+  ],
+  "shared_resource": "none; source-only Python",
+  "base_evidence": "https://github.com/alwansan/raf/commit/11993aa6dc43bf6644ac6860eaa5c834eee86d89",
+  "owner_feedback": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+  "limits": "No Unity/Android provenance or pixel claim"
+}
