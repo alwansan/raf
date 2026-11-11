@@ -1,0 +1,86 @@
+name: GFX-MULTI-108 original indexed Mesh skinning CPU source witness
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi108-indexed-skin-cpu.yml'
+      - 'gfxlab/tools/gfx108_indexed_skinning_cpu.py'
+      - 'gfxlab/tools/gfx108_original_indexed_skin_cpu.py'
+      - 'gfxlab/tests/test_gfx108_indexed_skinning_cpu.py'
+      - 'gfxlab/tests/test_gfx108_original_indexed_skin_cpu.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi108-original-private-indexed-skin
+  cancel-in-progress: false
+jobs:
+  original-private-CPU-skin:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout GFX-LAB source-only code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run original-free indexed-vertex CPU LBS and duplicate vertex tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/gfx108_indexed_skinning_cpu.py gfxlab/tools/gfx108_original_indexed_skin_cpu.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx108_*.py' -v
+      - name: Checkout authentic pinned original ZIP2 only in ephemeral private runner
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install pinned private Unity mesh reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Attempt exact CPU indexed-vertex source skinning, fail closed on source shape
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m gfxlab.tools.gfx108_original_indexed_skin_cpu \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx108-private" \
+            --safe gfx108-original-indexed-skin-safe.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('gfx108-original-indexed-skin-safe.json').read_text())
+          assert r['experiment']=='GFX-MULTI-108'
+          assert r['source_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          assert r['original_six_models']==6
+          assert [c['model'] for c in r['original_mesh_indexed_cpu_skinning_cases']]==['M00','M01','M02','M03','M04','M05']
+          for f in ('source_original_animation_clip_restored','source_vertex_vs_original_game_gpu_pixels_verified',
+                    'source_renderer_mesh_to_world_parity_verified','android_gpu_skinning_verified',
+                    'original_rig_restored','originalShaderRestored','phase_closed',
+                    'private_original_vertex_or_skin_data_exported'):
+              assert r[f] is False, f
+          print('GFX108_SOURCE_PRIVATE_INDEXED_SKIN_SAFE_GATES_CHECKED')
+          PY
+      - name: Publish only privacy-safe counts, never skin vertices or transforms
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX108-original-indexed-CPU-skin-safe-counts
+          path: gfx108-original-indexed-skin-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge private source and all vertex arrays on success or failure
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx108-private"
+          echo GFX108_ORIGINAL_SOURCE_PURGED=true
