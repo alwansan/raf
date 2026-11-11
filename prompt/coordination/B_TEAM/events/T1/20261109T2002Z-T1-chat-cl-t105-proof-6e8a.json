@@ -7,5 +7,6 @@
   "ci_url": "https://github.com/alwansan/raf/actions/runs/42690809051",
   "result": "T1-05 fresh PASS; checked 1024 floats; max abs 2.3841858e-7; GL0; original shader=false",
   "ci": "success 13 unit tests and pinned device CL",
-  "scope": "synthetic GLES capability only, WATER-001 OPEN NOT_READY 0/3"
+  "scope": "synthetic GLES capability only, WATER-001 OPEN NOT_READY 0/3",
+  "event_id": "20261109T2002Z-T1-chat-cl-t105-proof-6e8a"
 }
