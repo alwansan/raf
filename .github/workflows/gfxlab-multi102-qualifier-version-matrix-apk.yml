@@ -5,8 +5,6 @@ on:
     paths:
       - '.github/workflows/gfxlab-multi102-qualifier-version-matrix-apk.yml'
       - 'gfxlab/android-gles-qualifier-probe-v102/**'
-      - 'gfxlab/tests/test_gfx102_gles_capability.py'
-      - 'gfxlab/tests/test_gfx102_owner_zip_audit.py'
       - 'gfxlab/tests/test_gfx102_glsl_version_matrix.py'
   workflow_dispatch:
 permissions:
