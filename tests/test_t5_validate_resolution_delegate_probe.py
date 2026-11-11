@@ -94,6 +94,21 @@ class T5DelegateGraphGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(x)
 
+    def test_direct_apply_requires_internal_call_edge(self):
+        for key in ("delegate_targets_direct_apply_calls",
+                    "option_methods_direct_apply_calls"):
+            x = baseline()
+            x["evidence"]["internal_direct_call_edges"] = 0
+            x["evidence"][key] = 1
+            if key == "delegate_targets_direct_apply_calls":
+                x["evidence"]["delegate_targets_reach_apply"] = 1
+            else:
+                x["evidence"]["option_methods_reach_apply"] = 1
+            with self.subTest(key=key), self.assertRaisesRegex(
+                ValueError, "Direct Apply calls exceed internal call edges"
+            ):
+                verify(x)
+
     def test_runtime_proof_unsupported(self):
         for top in ("event_registration_and_callback_dataflow_proven",
                     "android_render_scale_persistence_proven", "actual_android_device_tested"):
