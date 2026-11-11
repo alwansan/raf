@@ -12,6 +12,8 @@ on:
       - 'tests/test_t4_classify_mouse_capture_log.py'
       - 'tests/test_t4_mouse_retry_telemetry_contract.py'
       - 'tests/test_t4_capture_eligibility_contract.py'
+      - 'tests/test_t4_captured_action_contract.py'
+      - 'tests/test_t4_capture_callback_semantics.py'
       - 'android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs'
       - '.github/workflows/raft-t4-mouse-trace-classifier.yml'
 permissions:
@@ -38,16 +40,20 @@ jobs:
             /tests/test_t4_classify_mouse_capture_log.py
             /tests/test_t4_mouse_retry_telemetry_contract.py
             /tests/test_t4_capture_eligibility_contract.py
+            /tests/test_t4_captured_action_contract.py
+            /tests/test_t4_capture_callback_semantics.py
             /android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs
       - name: Verify source-only classifier regression suite
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t4_mouse_boundary_trace.py scripts/test_t4_mouse_boundary_trace.py scripts/t4_diagnose_mouse_eligibility.py scripts/test_t4_mouse_eligibility_epoch.py scripts/t4_classify_mouse_capture_log.py tests/test_t4_classify_mouse_capture_log.py tests/test_t4_mouse_retry_telemetry_contract.py tests/test_t4_capture_eligibility_contract.py
+          python3 -m py_compile scripts/t4_mouse_boundary_trace.py scripts/test_t4_mouse_boundary_trace.py scripts/t4_diagnose_mouse_eligibility.py scripts/test_t4_mouse_eligibility_epoch.py scripts/t4_classify_mouse_capture_log.py tests/test_t4_classify_mouse_capture_log.py tests/test_t4_mouse_retry_telemetry_contract.py tests/test_t4_capture_eligibility_contract.py tests/test_t4_captured_action_contract.py tests/test_t4_capture_callback_semantics.py
           python3 -m unittest discover -s tests -p 'test_t4_classify_mouse_capture_log.py' -v
           python3 -m unittest discover -s tests -p 'test_t4_mouse_retry_telemetry_contract.py' -v
           python3 -m unittest discover -s tests -p 'test_t4_capture_eligibility_contract.py' -v
           python3 -m unittest discover -s scripts -p 'test_t4_mouse_eligibility_epoch.py' -v
           python3 -m unittest discover -s scripts -p 'test_t4_mouse_boundary_trace.py' -v
+          python3 -m unittest discover -s tests -p 'test_t4_captured_action_contract.py' -v
+          python3 -m unittest discover -s tests -p 'test_t4_capture_callback_semantics.py' -v
           test ! -d Raft
           echo 'T4_MOUSE_CLASSIFIER_AND_RETRY_CONTRACT source_only=true device_verified=false'
