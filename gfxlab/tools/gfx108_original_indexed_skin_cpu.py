@@ -26,7 +26,7 @@ def direct_mesh_handler(mesh_reader):
     handler.process()
     return handler
 
-def inspect_exact_source_skin(entry,types,externals):
+def inspect_exact_source_skin(entry,types,externals,private_consumer=None):
     model=entry["id"]
     if not entry["source_bones"]:
         return {"model":model,"status":"NON_SKINNED","cpu_original_vertices_deformed":False}
@@ -91,13 +91,15 @@ def inspect_exact_source_skin(entry,types,externals):
         return {"model":model,"source_vertex_count":v,"status":reason,
                 "safe_influence_channel_shapes":safe_shape,
                 "cpu_original_vertices_deformed":False}
+    if private_consumer is not None:
+        private_consumer(model, indexed_positions, indexed_weights, world, matrices, deformed)
     return {"model":model,"status":"SOURCE_INDEXED_LBS_COMPUTED",
         "source_vertex_count":v,
         "original_indexed_vertex_weights_preserved":True,
         "cpu_original_vertices_deformed":True,
         **report}
 
-def audit(stage):
+def audit(stage, private_consumer=None):
     entries,types,_=all_model_entries(stage)
     if [e["id"] for e in entries]!=["M00","M01","M02","M03","M04","M05"]:
         raise ValueError("GFX108_SOURCE_MODEL_SELECTION_DRIFT")
@@ -112,7 +114,7 @@ def audit(stage):
     for owner in types:
         env=UnityPy.load(str(stage/owner))
         externals[owner]=[x.path for x in env.file.externals]
-    cases=[inspect_exact_source_skin(e,types,externals) for e in entries]
+    cases=[inspect_exact_source_skin(e,types,externals,private_consumer) for e in entries]
     totals=Counter()
     for c in cases:
         totals["status_"+c["status"]]+=1

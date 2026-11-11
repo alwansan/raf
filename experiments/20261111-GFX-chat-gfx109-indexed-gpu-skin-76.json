@@ -1,0 +1,9 @@
+{
+  "session_id": "20261111-GFX-chat-gfx109-indexed-gpu-skin-76",
+  "origin": "chat",
+  "base": "7012039",
+  "source_control": "GFX108 original-index CPU skinning",
+  "scope": "Compare all five original indexed skin cases to CPU snapshots using GLES transform feedback",
+  "tests": ["source identity and counts", "signed APK", "GPU primitives written and per-axis finite position comparisons"],
+  "phase_closed": false
+}
