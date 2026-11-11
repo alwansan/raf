@@ -30,7 +30,10 @@ def positions_from_parsed_mesh(parsed,vertex_count):
         raise ValueError("GFX108_DIRECT_VERTEX_COUNT_MISMATCH")
     out=[]
     for v in arr:
-        if isinstance(v,dict):
+        if isinstance(v,(list,tuple)):
+            if len(v)!=3:raise ValueError("GFX108_VERTEX_LAYOUT_UNRECOGNIZED")
+            out.append(tuple(scalar(v[k]) for k in range(3)))
+        elif isinstance(v,dict):
             keys=("x","y","z") if all(k in v for k in ("x","y","z")) else ("X","Y","Z")
             if not all(k in v for k in keys):raise ValueError("GFX108_VERTEX_LAYOUT_UNRECOGNIZED")
             out.append(tuple(scalar(v[k]) for k in keys))
@@ -66,6 +69,26 @@ def decoded_skin_weights(typetree,vertex_count,bone_count):
             raise ValueError("GFX108_BONE_WEIGHT_SUM_NOT_NORMALIZED")
         out.append(pairs)
     return out
+
+
+def decoded_handler_skin(mesh_handler,vertex_count,bone_count):
+    """Use MeshHandler.process() original same-index m_BoneWeights/Indices.
+
+    The handler extracts all three arrays from the SAME VertexData channel
+    layout. No OBJ coordinate conversion, no weld, no guessed reindexing.
+    """
+    weights=getattr(mesh_handler,"m_BoneWeights",None)
+    indices=getattr(mesh_handler,"m_BoneIndices",None)
+    if (not isinstance(weights,(tuple,list)) or
+        not isinstance(indices,(tuple,list)) or
+        len(weights)!=len(indices) or len(weights)!=vertex_count):
+        raise ValueError("GFX108_DIRECT_MESH_HANDLER_SKIN_CHANNELS_UNAVAILABLE")
+    raw=[]
+    for ws,ix in zip(weights,indices):
+        if not isinstance(ws,(list,tuple)) or not isinstance(ix,(list,tuple)):
+            raise ValueError("GFX108_DIRECT_HANDLER_BONE_WEIGHT_LAYOUT")
+        raw.append({"weight":list(ws),"boneIndex":list(ix)})
+    return decoded_skin_weights({"m_Skin":raw},vertex_count,bone_count)
 
 def transform_point(matrix,point):
     if len(matrix)!=16 or len(point)!=3:raise ValueError("GFX108_MATRIX_POINT_SHAPE")
