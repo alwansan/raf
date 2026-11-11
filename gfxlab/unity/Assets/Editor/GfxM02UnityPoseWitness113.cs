@@ -32,7 +32,7 @@ namespace RaftGraphicsLabEditor
             public string experiment = "GFX113";
             public int poses, positions, failingVertices;
             public float maxAbsoluteError;
-            public bool originalClipPlaybackVerified, phase_closed;
+            public bool originalClipPlaybackVerified, nativeBakeMeshInvoked, phase_closed;
         }
 
         public static void Build()
@@ -58,6 +58,118 @@ namespace RaftGraphicsLabEditor
             Debug.Log("GFX113_SAFE " + JsonUtility.ToJson(report));
         }
 
+        public static void BuildNativeBake()
+        {
+            string root = Path.Combine(Application.dataPath, "../private-inputs");
+            Inputs input = JsonUtility.FromJson<Inputs>(File.ReadAllText(Path.Combine(root, "clips.json")));
+            if (input.clips.Length != 3) throw new InvalidDataException("Expected three clips");
+            var triangles = new int[2388 * 3];
+            using (var indices = new BinaryReader(File.OpenRead(Path.Combine(root, "indices.bin"))))
+            {
+                for (int i = 0; i < triangles.Length; i++)
+                    triangles[i] = indices.ReadUInt16();
+                if (indices.BaseStream.Position != indices.BaseStream.Length)
+                    throw new InvalidDataException("Unexpected source index data");
+            }
+            var report = new Report {experiment="GFX150", nativeBakeMeshInvoked=true};
+            for (int c = 0; c < input.clips.Length; c++)
+                BakeClip(input.clips[c], c, root, triangles, report);
+            if (report.poses != 15 || report.positions != 24990)
+                throw new InvalidDataException("Native pose coverage changed");
+            File.WriteAllText(Path.Combine(Application.dataPath, "../gfx150-safe.json"), JsonUtility.ToJson(report,true));
+            Debug.Log("GFX150_SAFE " + JsonUtility.ToJson(report));
+        }
+
+        private static void BakeClip(Clip clip, int clipIndex, string root, int[] triangles, Report report)
+        {
+            var holder = new GameObject("GfxBakeRoot");
+            var mesh = new Mesh();
+            var baked = new Mesh();
+            try
+            {
+                var transforms = new Transform[clip.nodes.Length];
+                for (int i = 0; i < transforms.Length; i++)
+                {
+                    transforms[i] = new GameObject("Node").transform;
+                    int parent = clip.nodes[i].parent;
+                    transforms[i].SetParent(parent < 0 ? holder.transform : transforms[parent], false);
+                }
+                var bones = new Transform[clip.bones.Length];
+                var bindposes = new Matrix4x4[bones.Length];
+                for (int i = 0; i < bones.Length; i++)
+                {
+                    bones[i] = transforms[clip.bones[i]];
+                    for (int row = 0; row < 4; row++)
+                        for (int col = 0; col < 4; col++)
+                            bindposes[i][row, col] = clip.bindposes[i].values[4 * row + col];
+                }
+                var renderer = holder.AddComponent<SkinnedMeshRenderer>();
+                renderer.bones = bones;
+                renderer.quality = SkinQuality.Bone4;
+                renderer.updateWhenOffscreen = true;
+                for (int step = 0; step < 5; step++)
+                {
+                    string path = Path.Combine(root, $"C{clipIndex}P{step}.bin");
+                    var reference = new Vector3[1666];
+                    using (var reader = new BinaryReader(File.OpenRead(path)))
+                    {
+                        if (reader.ReadUInt32() != 0x39303147 || reader.ReadInt32() != reference.Length ||
+                            reader.ReadInt32() != bones.Length) throw new InvalidDataException("Wrong source pose");
+                        reader.BaseStream.Seek(bones.Length * 64, SeekOrigin.Current);
+                        var positions = new Vector3[reference.Length];
+                        var weights = new BoneWeight[reference.Length];
+                        for (int i = 0; i < positions.Length; i++)
+                        {
+                            positions[i] = ReadVector(reader);
+                            weights[i] = new BoneWeight {
+                                weight0=reader.ReadSingle(), weight1=reader.ReadSingle(),
+                                weight2=reader.ReadSingle(), weight3=reader.ReadSingle(),
+                                boneIndex0=reader.ReadInt32(), boneIndex1=reader.ReadInt32(),
+                                boneIndex2=reader.ReadInt32(), boneIndex3=reader.ReadInt32()
+                            };
+                            reference[i] = ReadVector(reader);
+                        }
+                        mesh.vertices = positions;
+                        mesh.triangles = triangles;
+                        mesh.bindposes = bindposes;
+                        mesh.boneWeights = weights;
+                    }
+                    renderer.sharedMesh = mesh;
+                    float time = (float)((double)clip.start + ((double)clip.stop - clip.start) * step / 4);
+                    Evaluate(clip, time, transforms);
+                    renderer.BakeMesh(baked);
+                    Vector3[] actual = baked.vertices;
+                    if (actual.Length != reference.Length) throw new InvalidDataException("Native vertex count differs");
+                    for (int i = 0; i < actual.Length; i++)
+                    {
+                        bool passed = true;
+                        for (int axis = 0; axis < 3; axis++)
+                        {
+                            float delta = Mathf.Abs(actual[i][axis] - reference[i][axis]);
+                            if (float.IsNaN(delta) || float.IsInfinity(delta))
+                                throw new InvalidDataException("Nonfinite native skin position");
+                            report.maxAbsoluteError = Mathf.Max(report.maxAbsoluteError, delta);
+                            passed &= delta <= 0.0001f + 0.000001f * Mathf.Abs(reference[i][axis]);
+                        }
+                        if (!passed) report.failingVertices++;
+                        report.positions++;
+                    }
+                    report.poses++;
+                }
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(holder);
+                UnityEngine.Object.DestroyImmediate(baked);
+                UnityEngine.Object.DestroyImmediate(mesh);
+            }
+        }
+
+        private static Vector3 ReadVector(BinaryReader reader)
+        {
+            return new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+        }
+
         private static float EvaluateCurve(Curve curve, float time)
         {
             Key[] keys = curve.keys;
@@ -76,7 +188,7 @@ namespace RaftGraphicsLabEditor
             return hermite.Evaluate(time - key.time);
         }
 
-        private static Matrix4x4[] Evaluate(Clip clip, float time)
+        private static Matrix4x4[] Evaluate(Clip clip, float time, Transform[] transforms = null)
         {
             var positions = new Vector3[clip.nodes.Length];
             var rotations = new Quaternion[clip.nodes.Length];
@@ -103,6 +215,12 @@ namespace RaftGraphicsLabEditor
             for (int i = 0; i < world.Length; i++)
             {
                 Matrix4x4 local = Matrix4x4.TRS(positions[i], rotations[i], scales[i]);
+                if (transforms != null)
+                {
+                    transforms[i].localPosition = positions[i];
+                    transforms[i].localRotation = rotations[i];
+                    transforms[i].localScale = scales[i];
+                }
                 int parent = clip.nodes[i].parent;
                 world[i] = parent < 0 ? local : world[parent] * local;
             }

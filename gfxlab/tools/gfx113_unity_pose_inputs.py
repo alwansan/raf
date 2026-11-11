@@ -1,6 +1,7 @@
 """Private Unity reference inputs using original GFX111 packed curves."""
 import argparse
 import json
+import struct
 from pathlib import Path
 
 from gfxlab.tools.gfx109_gpu_skin_payload import write_case
@@ -12,6 +13,7 @@ def main():
     parser = argparse.ArgumentParser()
     for key in ("zip2", "stage", "output"):
         parser.add_argument("--" + key, type=Path, required=True)
+    parser.add_argument("--native-bake", action="store_true")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     cases = []
@@ -44,7 +46,21 @@ def main():
                       "curves": [{"keys": [{"time": t, "coeff": c} for t, c in curve]}
                                  for curve in curves]})
 
-    run(stage_originals(args.zip2, args.stage), pose, clip)
+    stage = stage_originals(args.zip2, args.stage)
+    run(stage, pose, clip)
+    if args.native_bake:
+        from gfxlab.tools.gfx108_original_indexed_skin_cpu import direct_mesh_handler
+        from gfxlab.tools.multi_model_transport import all_model_entries
+
+        entries, types, _ = all_model_entries(stage)
+        model, = [entry for entry in entries if entry["id"] == "M02"]
+        mesh = direct_mesh_handler(types[model["owner"]][model["mesh_pid"]])
+        indices = [i + getattr(submesh, "baseVertex", 0)
+                   for submesh, triangles in zip(mesh.src.m_SubMeshes, mesh.get_triangles(), strict=True)
+                   for triangle in triangles for i in triangle]
+        if len(indices) != 2388 * 3 or min(indices) < 0 or max(indices) >= 1666:
+            raise ValueError("Unexpected M02 index range")
+        (args.output / "indices.bin").write_bytes(struct.pack(f"<{len(indices)}H", *indices))
     (args.output / "clips.json").write_text(json.dumps({"clips": cases}, allow_nan=False))
 
 
