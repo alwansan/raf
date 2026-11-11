@@ -107,7 +107,14 @@ def decoded_handler_skin(mesh_handler,vertex_count,bone_count):
     for ws,ix in zip(weights,indices):
         if not isinstance(ws,(list,tuple)) or not isinstance(ix,(list,tuple)):
             raise ValueError("GFX108_DIRECT_HANDLER_BONE_WEIGHT_LAYOUT")
-        raw.append({"weight":list(ws),"boneIndex":list(ix)})
+        # Authenticated owner GFX108: M00/M05 have TWO source bone
+        # influences per vertex, M01/M02/M04 have FOUR. Zero-padding
+        # is mathematically inert, not fabricated extra bone weight.
+        # Reject all unobserved widths until a separate source proof.
+        if len(ws)!=len(ix) or len(ws) not in (2,4):
+            raise ValueError("GFX108_ORIGINAL_INFLUENCE_WIDTH_NOT_2_OR_4")
+        raw.append({"weight":list(ws)+[0.]*(4-len(ws)),
+                    "boneIndex":list(ix)+[0]*(4-len(ix))})
     return decoded_skin_weights({"m_Skin":raw},vertex_count,bone_count)
 
 def transform_point(matrix,point):
