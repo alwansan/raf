@@ -1,0 +1,52 @@
+{
+  "schema": "gt_source_graph_resolution_v1",
+  "agent": "GT",
+  "origin": "chat",
+  "date": "2026-11-12",
+  "write_branch": "feature/android-native-port",
+  "source": {
+    "branch": "zip2",
+    "pinned_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "acquisition": "ZIP2_only_not_git_lfs",
+    "authenticated_original_owners": 82,
+    "authenticated_bytes": 819595355
+  },
+  "action": {
+    "url": "https://github.com/alwansan/raf/actions/runs/43118214676",
+    "result": "success",
+    "artifact_url": "https://github.com/alwansan/raf/actions/runs/43118214676/artifacts/13899108653"
+  },
+  "renderer_material_graph": {
+    "all_original_material_slots": 195174,
+    "material_identity_verified": 194293,
+    "null_material_slot": 881,
+    "external_material_slot": 191657,
+    "local_material_slot": 2636,
+    "distinct_referenced_material_objects": 1351,
+    "total_original_material_objects": 1556,
+    "total_renderer_objects": 178982,
+    "scene_material_slots": 191845,
+    "scene_external_material_slots": 191116,
+    "scene_null_material_slots": 729,
+    "scene_renderer_objects": 176189,
+    "all_nonnull_target_classes_verified": true,
+    "meaning": "All original non-null renderer material pointers within the 82 authenticated serialized owners resolve to an original Material instance; unused by this graph != unused by entire game"
+  },
+  "limitations": {
+    "source_graph_only": true,
+    "exported_project_guids_verified": false,
+    "mesh_submesh_placement_verified": false,
+    "texture_stream_payloads_verified": false,
+    "shader_pass_execution_verified": false,
+    "android_device_render_verified": false
+  },
+  "file_paths": [
+    "scripts/gt_original_material_link_graph.py",
+    "tests/test_gt_original_material_link_graph.py",
+    "scripts/gt_zip2_payloads.py",
+    "tests/test_gt_zip2_payloads.py",
+    ".github/workflows/raft-gt-serialized-graphics-owners.yml",
+    ".github/workflows/raft-gt-zip2-payloads.yml"
+  ],
+  "next": "Resolve texture per-material slots and mesh pointer assignments with source identities; compare identity graph against AssetRipper exported Unity assets/.meta, then restore visual families in isolated batches"
+}
