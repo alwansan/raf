@@ -1,3 +1,13 @@
+## GFX100 — Owner GFX098 Android evidence independently audited (11 Nov 2026)
+
+Owner uploaded `g.zip` SHA256 `60b6cb3e13ea1da7808128311696e9a906655340ea6a2537ad9c9db8d50faa69`. Source-safe `GFX-OWNER-004` evidence is at `gfxlab/evidence/20261111_gfx100_gfx098_owner_safe_counts.json`; session: `memory/sessions/20261111-GFX-chat-owner-gfx098-archive-68.md`. The private archive and 20 UnityShaderCache entries were NOT committed.
+
+**Verified locally on actual owner logs:** outer + 5 nested ZIP CRC PASS; 3 sessions, 227 events, 147 snapshots, 0 recorded Unity errors/warnings/drops. Four complete 12-case M00–M05 × mode3/4 camera matrices: all 48 PNG/JSON SHA256 pairs verified; each of 12 case images reproduced byte-identically. Two GFX041 interpolation runs yielded 8 GPU readbacks. Native NoPerspective and Linear spreads were both 0.19739 and their captured PNG SHA256 values are **identical**. Two statuses explicitly `DIAGNOSTIC_NATIVE_QUALIFIER_COLLAPSED_TO_SMOOTH`; Flat spread=0, synthetic AffineEmulated=0.14510. This is a **synthetic Unity diagnostic limitation, NOT a proven Adreno hardware fault**. Standard saved material mode remains a candidate, not original Shader48 runtime. `originalShaderRestored=false`, `originalAnimationRestored=false`, `phase_closed=false`.
+
+**Engineering added on this branch only:** `gfxlab/tools/unified098_owner_zip_audit.py` (bounded safe stdlib archive verifier), 4 synthetic tests and dedicated `gfxlab-100-owner-zip-safe-audit.yml` CI workflow. **CI terminal result not yet independently confirmed**; no claim of passing GitHub Actions or release APK. Next: independently discriminator-qualified real native GLES `noperspective` test (fail closed on qualifier removal), original indexed weighted mesh/rig and PC/Android original Shader48 pixel parity. Do not repeat the same 098 diagnostic as if it were proof, do not touch T1–T5 or full game.
+
+---
+
 ## Verified delivery checkpoint — GFX097/098/099, 11 Nov 2026
 
 Owner GFX094 evidence:285/285 actual Adreno compiles and128/128 links passed;0 GL errors.29 missing BaseInstance stages are CPU translation limits, not driver failures.
