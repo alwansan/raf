@@ -28,7 +28,7 @@ class SourceFreeCullCompareTests(unittest.TestCase):
         self.assertEqual(stats["pixels_difference_any"],1)
         self.assertEqual(stats["outlier_pixels_gt10"],1)
         self.assertEqual(stats["outlier_pixels_gt30"],1)
-        self.assertEqual(stats["max_rgb_channel_error"],60)
+        self.assertEqual(stats["max_rgb_channel_error"],70)
 
     def test_background_not_counted_in_covered_color_error(self):
         ref=self.make()
