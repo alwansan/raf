@@ -1,0 +1,62 @@
+{
+  "schema": "gt_82_owners_v1",
+  "agent": "GT",
+  "origin": "chat",
+  "as_of_utc": "2026-11-11T22:45:00Z",
+  "repository": "alwansan/raf",
+  "branch": "feature/android-native-port",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "serialized_owners": {
+    "level_headers": 40,
+    "unity_assets": 42,
+    "total": 82,
+    "reconstruction_and_sha256_authenticated": 82,
+    "total_original_bytes": 819595355,
+    "split_reconstructed": 5
+  },
+  "workflow": {
+    "run": "https://github.com/alwansan/raf/actions/runs/43114154912",
+    "result": "success",
+    "artifact": "https://github.com/alwansan/raf/actions/runs/43114154912/artifacts/13898081036",
+    "source_proof": true,
+    "unity_android_build": false
+  },
+  "original_shader_material_graph": {
+    "total_original_material_objects": 1556,
+    "total_original_shader_objects": 165,
+    "distinct_referenced_shader_targets": 77,
+    "distinct_named_referenced_shader_names": 75,
+    "engine_transport_total_references": 16,
+    "nameless_shader_references": 0,
+    "source_reader": "scripts/probe_w3_full_material_shader_inventory.py",
+    "note": "77 distinct referenced targets is not all original shaders, 75 names are source-side names not Android compiled passes."
+  },
+  "original_texture_headers_sample": {
+    "owners": [
+      "resources.assets",
+      "sharedassets0.assets"
+    ],
+    "texture2D_count_by_owner": {
+      "resources.assets": 408,
+      "sharedassets0.assets": 1123
+    },
+    "subtotal": 1531,
+    "total_original_game_textures": null,
+    "source_reader": "scripts/probe_w2_fullgame_texture_colors.py",
+    "metadata_only": true,
+    "pixel_payload_validation": false
+  },
+  "project_integration": {
+    "verified_exported_unity_guid_lineage": false,
+    "verified_mesh_data_and_submesh_buffers": false,
+    "verified_shader_pass_variants": false,
+    "verified_compute_kernel_execution": false,
+    "verified_android_scene_render": false
+  },
+  "code": [
+    "scripts/gt_stage_serialized_owners.py",
+    "tests/test_gt_stage_serialized_owners.py",
+    ".github/workflows/raft-gt-serialized-graphics-owners.yml"
+  ],
+  "next_work": "Run all-owner Mesh/Texture/Compute metadata census and compare original identities to real exported Unity project (GUID/.meta) before attributing any Android integration."
+}
