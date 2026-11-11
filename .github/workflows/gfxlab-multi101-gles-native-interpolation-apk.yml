@@ -1,0 +1,114 @@
+name: GFX-MULTI-101 GLES3 native NoPerspective extension and affine GPU probe APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi101-gles-native-interpolation-apk.yml'
+      - 'gfxlab/android-gles-qualifier-probe/**'
+      - 'gfxlab/tests/test_gfx101_gles_capability.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi101-original-free-android-probe
+  cancel-in-progress: false
+jobs:
+  signed-minimal-gles-qualifier-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Source-free GFX101 regression and independent mathematical witnesses
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v gfxlab.tests.test_gfx101_gles_capability
+          test -f gfxlab/android-gles-qualifier-probe/AndroidManifest.xml
+          test -s gfxlab/android-gles-qualifier-probe/src/com/alwansan/gfx101/MainActivity.java
+          test ! -d source-zip2
+      - name: Build, sign, verify minimal original-free Android GLES3 probe
+        run: |
+          set -euo pipefail
+          sdk="$ANDROID_HOME"
+          jar="$(find "$sdk/platforms" -name android.jar | sort -V | tail -1)"
+          buildtools="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          test -f "$jar" && test -x "$buildtools/aapt2" && test -x "$buildtools/apksigner"
+          mkdir -p gfx101-build/classes gfx101-build/dex gfx101-build/gen
+          "$buildtools/aapt2" link -o gfx101-build/resources.apk \
+            --manifest gfxlab/android-gles-qualifier-probe/AndroidManifest.xml \
+            -I "$jar" -A gfxlab/android-gles-qualifier-probe/assets \
+            --java gfx101-build/gen
+          javac -source 8 -target 8 -bootclasspath "$jar" \
+            -d gfx101-build/classes \
+            gfxlab/android-gles-qualifier-probe/src/com/alwansan/gfx101/MainActivity.java
+          mapfile -t classes < <(find gfx101-build/classes -type f -name '*.class')
+          test "${#classes[@]}" -gt 0
+          "$buildtools/d8" --lib "$jar" --min-api 29 --output gfx101-build/dex "${classes[@]}"
+          test -s gfx101-build/dex/classes.dex
+          cp gfx101-build/resources.apk gfx101-build/unsigned.apk
+          python3 - <<'PY'
+          from zipfile import ZipFile,ZIP_DEFLATED
+          with ZipFile('gfx101-build/unsigned.apk','a',compression=ZIP_DEFLATED) as z:
+              z.write('gfx101-build/dex/classes.dex','classes.dex')
+          PY
+          keytool -genkeypair \
+            -keystore "$RUNNER_TEMP/gfx101-debug.jks" -storepass android \
+            -keypass android -alias gfx101 -keyalg RSA -keysize 2048 -validity 5000 \
+            -dname "CN=GFX101 Source-Free OpenGL ES GPU Diagnostic" -noprompt
+          "$buildtools/zipalign" -f -p 4 gfx101-build/unsigned.apk gfx101-build/aligned.apk
+          "$buildtools/apksigner" sign --ks "$RUNNER_TEMP/gfx101-debug.jks" \
+            --ks-pass pass:android --key-pass pass:android \
+            --out gfx101-build/GFX101-GLES-Native-Qualifier-Probe.apk \
+            gfx101-build/aligned.apk
+          "$buildtools/apksigner" verify --verbose gfx101-build/GFX101-GLES-Native-Qualifier-Probe.apk
+          "$buildtools/aapt2" dump badging gfx101-build/GFX101-GLES-Native-Qualifier-Probe.apk \
+            | tee gfx101-build/badging.txt
+          grep -F "name='com.alwansan.gfx101'" gfx101-build/badging.txt
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from zipfile import ZipFile
+          apk=Path("gfx101-build/GFX101-GLES-Native-Qualifier-Probe.apk")
+          assert apk.stat().st_size>20000
+          with ZipFile(apk) as z:
+              assert z.testzip() is None
+              assert {'AndroidManifest.xml','classes.dex','assets/ABOUT.txt'} <= set(z.namelist())
+              assert 'Raft_Data' not in ''.join(z.namelist())
+              assert 'UnityShaderCache' not in ''.join(z.namelist())
+          safe={"experiment":"GFX-MULTI-101",
+                "apk_bytes":apk.stat().st_size,
+                "apk_sha256":hashlib.sha256(apk.read_bytes()).hexdigest(),
+                "package":"com.alwansan.gfx101",
+                "apksigner_verified":True,
+                "user_device_test_pending":True,
+                "synthetic_cases":["Smooth","Flat","AffineEmulated","NativeNoPerspective"],
+                "optional_extension":"GL_NV_shader_noperspective_interpolation",
+                "original_shader_restored":False,
+                "original_assets_embedded":False,
+                "pc_adreno_pixel_parity_verified":False,
+                "phase_closed":False,
+                "expected_export":"Download/Games/cl/test/g/"}
+          Path("gfx101-build/gfx101-safe-delivery.json").write_text(json.dumps(safe,indent=2)+'\n')
+          print(json.dumps(safe,sort_keys=True))
+          PY
+      - name: Upload signed standalone diagnostic APK and safe manifest only
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX101-GLES-Native-Qualifier-Probe-APK
+          path: |
+            gfx101-build/GFX101-GLES-Native-Qualifier-Probe.apk
+            gfx101-build/gfx101-safe-delivery.json
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
+      - name: Clear signing key and confirm original source was not fetched
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/gfx101-debug.jks"
+          test ! -d source-zip2
