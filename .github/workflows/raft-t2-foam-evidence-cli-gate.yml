@@ -10,6 +10,7 @@ on:
       - tests/test_t2_foam_evidence_gate_20261110.py
       - tests/test_t2_foam_json_product_guard.py
       - tests/test_t2_foam_publish_aggregate.py
+      - tests/test_t2_foam_parent_ancestor_symlink.py
       - .github/workflows/raft-t2-foam-evidence-cli-gate.yml
   workflow_dispatch:
 
@@ -48,7 +49,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t2_foam_publish_aggregate.py tests/test_t2_foam_publish_aggregate.py
+          python3 -m py_compile scripts/t2_foam_publish_aggregate.py tests/test_t2_foam_publish_aggregate.py tests/test_t2_foam_parent_ancestor_symlink.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_publish_aggregate.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_parent_ancestor_symlink.py' -v
       - name: Non-device evidence boundary
         run: echo 'SANITIZER_AND_PRODUCER_SCHEMA_REGRESSION_ONLY; legacy_publisher_integration=UNKNOWN; opt_in_adapter=TESTED_ONLY; original_foam=UNKNOWN; unity=UNKNOWN; android=UNKNOWN'
