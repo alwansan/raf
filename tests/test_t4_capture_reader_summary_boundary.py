@@ -2,6 +2,8 @@
 import importlib.util
 from pathlib import Path
 import unittest
+import tempfile
+import zipfile
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "t4_capture_reader_summary.py"
 spec = importlib.util.spec_from_file_location("t4_capture_reader_summary", SCRIPT)
@@ -10,6 +12,37 @@ spec.loader.exec_module(module)
 
 
 class CaptureReaderSummaryBoundaryTests(unittest.TestCase):
+    def test_zip_single_member_streams_counters(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "capture.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("logs/device.log", "physical_mouse_captured_action_callbacks left=2\\n")
+            with module.open_log(path) as lines:
+                result = module.summarize(lines)
+            self.assertEqual(result["last_callback_counters"]["left"], 2)
+
+    def test_zip_multiple_sessions_require_explicit_member(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "capture.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("session-a.log", "physical_mouse_captured_action_callbacks left=1\\n")
+                archive.writestr("session-b.log", "physical_mouse_captured_action_callbacks left=8\\n")
+            with self.assertRaisesRegex(ValueError, "exactly one"):
+                with module.open_log(path) as lines:
+                    list(lines)
+            with module.open_log(path, "session-b.log") as lines:
+                result = module.summarize(lines)
+            self.assertEqual(result["last_callback_counters"]["left"], 8)
+
+    def test_zip_rejects_oversized_member_before_decompression(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "capture.zip"
+            with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("huge.log", "x" * (64 * 1024 * 1024 + 1))
+            with self.assertRaisesRegex(ValueError, "64 MiB"):
+                with module.open_log(path) as lines:
+                    list(lines)
+
     def test_exact_marker_not_substring(self):
         result = module.summarize([
             "physical_mouse_captured_action_callbacks_extra left=99",
