@@ -1,0 +1,32 @@
+{
+  "session_id": "20261111T1712Z-T1-scheduled-preworld-order-93ac",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "source_summary_order_verified",
+  "experiment_key": "t1-cl-pinned-first-error-before-world-order-v1",
+  "baseline_sha": "a3e390bfb7a010818f25f041a58cf93142ae7da8",
+  "cl_sha": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+  "session_results": [
+    {
+      "id": "220911-559",
+      "fft_after_water_ms": 2,
+      "water_before_world_ms": 58038,
+      "fft_before_world_ms": 58036,
+      "water_errors": 23884,
+      "fft_errors": 3850
+    },
+    {
+      "id": "230108-327",
+      "fft_after_water_ms": 2,
+      "water_before_world_ms": 119653,
+      "fft_before_world_ms": 119651,
+      "water_errors": 39132,
+      "fft_errors": 6026
+    }
+  ],
+  "test_controls": 5,
+  "unity_gpu_test": false,
+  "original_kernel_identity_proven": false,
+  "device_new_test": false,
+  "ready": false
+}
