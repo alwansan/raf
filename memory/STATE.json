@@ -2550,5 +2550,36 @@
     "library_file_id": "libfile_22d8c2b2851c8191a78a42f8fc39f44b",
     "independent_download_hash_CRC_and_shader_manifest_audit": true
   },
-  "latest_checkpoint": "## Verified delivery checkpoint — GFX097/098/099, 11 Nov 2026\n\nOwner GFX094 evidence:285/285 actual Adreno compiles and128/128 links passed;0 GL errors.29 missing BaseInstance stages are CPU translation limits, not driver failures.\n\nGFX098 CI42927645102 SUCCESS at06ab8058e833146e78c81024d96980df2e3a39e1;922 source-free tests passed. Signed ARM64 GLES3 APK independently checked:111020747bytes, SHA256 b314699c74eac39d89b7efb668a17519803f6ecd424c4f368cf17d378d726be6. Artifact13816395740 expires2026-11-18T00:16:44Z. Delivered GFX098-Unified-Models-GPU-Lab.apk, Library libfile_0f250cae03308191a0c2640452a337d7. Package com.alwansan.raft.graphicslab.unified098. Six models, source-saved Standard candidate and old PBR control,12 automatic camera captures, merged four-mode GFX041 affine GPU scene, combined ZIP export. Owner GFX098 execution is pending.\n\nGFX099 CI42930674563 SUCCESS at19647a1f21832617fd9e9a83b4d0edc312885fed. Original PlayerSettings independently pinned Linear. Setting Linear BEFORE PC compilation produces14/14 representative original SHDR+ISGN+OSGN byte-exact requests,42/42 tier-candidate matches,0 exceptions/rejections. Source tier remains unknown; this does not validate every original variant or PC/Adreno pixels. Safe report gfxlab/evidence/20261111_gfx099_PC_linear_compile_safe.json. Supersedes GFX098 embedded PC witness9/14; Android098 already builds Linear and needs no rebuild for this CPU-only evidence update.\n\nSkin source availability verified:14033 weighted vertices,213 bindposes across five skinned models, plus one static model; finite normalized weights and valid positive-weight bone indices. Hierarchy, pose and original full vertex stream are not restored. See safe skin report. Next: owner opens098, waits12 captures, selects AFFINE-GPU for4 tests, EXPORT ALL and returns latest GFXLAB-ALL-TEST-LOGS ZIP from /storage/emulated/0/Download/Games/cl/test/g/.\n\nPhase one remains OPEN: original rig, original mip chain, exact GPU normal sampling and PC/device pixel comparison remain unproven. CPU normal XYZ conversion and regenerated mipmaps are candidates; CPU reconstruction before bilinear filtering is not equivalent to GPU AG unpack after filtering. Future rig work must preserve full vertex attributes/indices/weights/bindposes/hierarchy rather than attaching bones to merged OBJ vertices. No full-game build or other branch modified.\n"
+  "latest_checkpoint": "## Verified delivery checkpoint — GFX097/098/099, 11 Nov 2026\n\nOwner GFX094 evidence:285/285 actual Adreno compiles and128/128 links passed;0 GL errors.29 missing BaseInstance stages are CPU translation limits, not driver failures.\n\nGFX098 CI42927645102 SUCCESS at06ab8058e833146e78c81024d96980df2e3a39e1;922 source-free tests passed. Signed ARM64 GLES3 APK independently checked:111020747bytes, SHA256 b314699c74eac39d89b7efb668a17519803f6ecd424c4f368cf17d378d726be6. Artifact13816395740 expires2026-11-18T00:16:44Z. Delivered GFX098-Unified-Models-GPU-Lab.apk, Library libfile_0f250cae03308191a0c2640452a337d7. Package com.alwansan.raft.graphicslab.unified098. Six models, source-saved Standard candidate and old PBR control,12 automatic camera captures, merged four-mode GFX041 affine GPU scene, combined ZIP export. Owner GFX098 execution is pending.\n\nGFX099 CI42930674563 SUCCESS at19647a1f21832617fd9e9a83b4d0edc312885fed. Original PlayerSettings independently pinned Linear. Setting Linear BEFORE PC compilation produces14/14 representative original SHDR+ISGN+OSGN byte-exact requests,42/42 tier-candidate matches,0 exceptions/rejections. Source tier remains unknown; this does not validate every original variant or PC/Adreno pixels. Safe report gfxlab/evidence/20261111_gfx099_PC_linear_compile_safe.json. Supersedes GFX098 embedded PC witness9/14; Android098 already builds Linear and needs no rebuild for this CPU-only evidence update.\n\nSkin source availability verified:14033 weighted vertices,213 bindposes across five skinned models, plus one static model; finite normalized weights and valid positive-weight bone indices. Hierarchy, pose and original full vertex stream are not restored. See safe skin report. Next: owner opens098, waits12 captures, selects AFFINE-GPU for4 tests, EXPORT ALL and returns latest GFXLAB-ALL-TEST-LOGS ZIP from /storage/emulated/0/Download/Games/cl/test/g/.\n\nPhase one remains OPEN: original rig, original mip chain, exact GPU normal sampling and PC/device pixel comparison remain unproven. CPU normal XYZ conversion and regenerated mipmaps are candidates; CPU reconstruction before bilinear filtering is not equivalent to GPU AG unpack after filtering. Future rig work must preserve full vertex attributes/indices/weights/bindposes/hierarchy rather than attaching bones to merged OBJ vertices. No full-game build or other branch modified.\n",
+  "latest_owner_gfx098_audit": {
+    "experiment": "GFX-OWNER-004 / GFX-MULTI-100",
+    "session": "memory/sessions/20261111-GFX-chat-owner-gfx098-archive-68.md",
+    "branch": "experiment/android-graphics-rootcause",
+    "source_owner_zip_sha256": "60b6cb3e13ea1da7808128311696e9a906655340ea6a2537ad9c9db8d50faa69",
+    "owner_device": "Xiaomi 23013PC75G / Adreno730 GLES3.2",
+    "status": "OWNER_ARCHIVE_VERIFIED_LOCALLY; SOURCE_FREE_CI_RESULT_PENDING",
+    "sessions": 3,
+    "events": 227,
+    "snapshots": 147,
+    "recorded_errors": 0,
+    "recorded_warnings": 0,
+    "dropped": 0,
+    "six_model_12_case_runs": 4,
+    "verified_png_json_sha_links": 48,
+    "nested_zip_crc_pass": 5,
+    "gpu_interpolation_runs": 2,
+    "gpu_readbacks": 8,
+    "linear_noperspective_png_byte_identical": true,
+    "gles3_core_noperspective_supported": false,
+    "noperspective_extension_presence_on_device": "UNKNOWN",
+    "next_test": "Query device GLES extensions; use Vulkan SPIRV NoPerspective vs Smooth or explicitly labeled GLES3 affine emulation, never unconditional core GLES3 native qualifier.",
+    "safe_evidence": "gfxlab/evidence/20261111_gfx100_gfx098_owner_safe_counts.json",
+    "source_free_auditor": "gfxlab/tools/unified098_owner_zip_audit.py",
+    "tests": "gfxlab/tests/test_unified098_owner_zip_audit.py",
+    "workflow": ".github/workflows/gfxlab-100-owner-zip-safe-audit.yml",
+    "original_shader_restored": false,
+    "original_animation_restored": false,
+    "pc_adreno_pixel_parity": false,
+    "phase_closed": false
+  }
 }
