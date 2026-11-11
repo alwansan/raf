@@ -1,0 +1,120 @@
+{
+  "experiment": "GFX131",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_pair_count": 1,
+  "filtered_material_keywords": 1,
+  "stages": {
+    "vertex": {
+      "dxbc_sha256": "2802c6a2f46c38564974a35663eacefded4337e73272d679933a34ab6fd0ad2e",
+      "declared_cb_slots": 5,
+      "saved_float_writes": 0,
+      "saved_color_writes": 0,
+      "texenv_st_writes": 1,
+      "known_material_bytes": 16,
+      "total_declared_cb_bytes": 640,
+      "texture_contract": {
+        "distinct_sample_pairs": 0,
+        "sample_operations": 0
+      },
+      "spirv_validated": true,
+      "gles_source_emitted": true,
+      "translated_authenticated_cb_slots": 5,
+      "translated_literal_read_vec4_ranges_known_material_full": 1,
+      "translated_literal_read_vec4_ranges_known_material_partial": 0,
+      "translated_literal_read_vec4_ranges_without_material_bytes": 13,
+      "translated_dynamic_or_unsupported_cb_chains": 0,
+      "translated_texture_sample_contract": {
+        "source_sample_or_gather_operations": 0,
+        "source_original_immediate_t_s_pairs": 0,
+        "source_original_unresolved_dynamic_t_s": 0,
+        "source_distinct_pairs_within_stage": 0,
+        "original_sample_ops": 0,
+        "original_gather_ops": 0,
+        "source_instruction_count": 46,
+        "translated_sample_or_gather_operations": 0,
+        "translated_sample_or_gather_strict_pairs": 0,
+        "translated_unresolved_dynamic_pairs": 0,
+        "same_exact_private_original_DXBC_t_s_pair_multiset_as_translated_SPIRV": true,
+        "original_to_translated_pair_count_delta": 0,
+        "private_source_t_s_pair_edges_or_register_ids_exported": false,
+        "original_Material_TexEnv_property_register_binding_verified": false,
+        "original_constant_buffer_offsets_verified": false,
+        "original_shader48_Android_execution_verified": false
+      }
+    },
+    "fragment": {
+      "dxbc_sha256": "e9231a4684307472b35d8de3c9693307a42b82c819968c9fb93d2150b697a990",
+      "declared_cb_slots": 1,
+      "saved_float_writes": 1,
+      "saved_color_writes": 1,
+      "texenv_st_writes": 0,
+      "known_material_bytes": 20,
+      "total_declared_cb_bytes": 64,
+      "texture_contract": {
+        "verified_source_texture_pairs": 1,
+        "distinct_sample_pairs": 1,
+        "sample_operations": 1
+      },
+      "spirv_validated": true,
+      "gles_source_emitted": true,
+      "translated_authenticated_cb_slots": 1,
+      "translated_literal_read_vec4_ranges_known_material_full": 1,
+      "translated_literal_read_vec4_ranges_known_material_partial": 1,
+      "translated_literal_read_vec4_ranges_without_material_bytes": 0,
+      "translated_dynamic_or_unsupported_cb_chains": 0,
+      "translated_texture_sample_contract": {
+        "source_sample_or_gather_operations": 1,
+        "source_original_immediate_t_s_pairs": 1,
+        "source_original_unresolved_dynamic_t_s": 0,
+        "source_distinct_pairs_within_stage": 1,
+        "original_sample_ops": 1,
+        "original_gather_ops": 0,
+        "source_instruction_count": 12,
+        "translated_sample_or_gather_operations": 1,
+        "translated_sample_or_gather_strict_pairs": 1,
+        "translated_unresolved_dynamic_pairs": 0,
+        "same_exact_private_original_DXBC_t_s_pair_multiset_as_translated_SPIRV": true,
+        "original_to_translated_pair_count_delta": 0,
+        "private_source_t_s_pair_edges_or_register_ids_exported": false,
+        "original_Material_TexEnv_property_register_binding_verified": false,
+        "original_constant_buffer_offsets_verified": false,
+        "original_shader48_Android_execution_verified": false
+      }
+    }
+  },
+  "gles_offline_link_passed": true,
+  "additional_uniform_semantic_count": 1,
+  "additional_uniform_semantic_stage_counts": {
+    "vertex": 1,
+    "fragment": 0
+  },
+  "serialized_state_categories": {
+    "culling": "named_dynamic_override",
+    "zWrite": "named_dynamic_override",
+    "zTest": "named_dynamic_override",
+    "alphaToMask": "named_dynamic_override"
+  },
+  "unity_variant_selection_verified": false,
+  "draw_completed": true,
+  "phase_closed": false,
+  "world_to_object_rows_in_source_buffer": 3,
+  "mesa": {
+    "covered_pixels": 2008,
+    "opaque_control_covered_pixels": 2008,
+    "transparent_control_covered_pixels": 0,
+    "depth_write_off_covered_pixels": 0,
+    "coverage_difference_from_forward": 0,
+    "driver_verified_cb_blocks": 6,
+    "original_material_bytes_preserved": 36,
+    "bound_combined_samplers": 1,
+    "depth_readback_rgba_sha256": "02183129a446f4f4af6f3f1df89041dca3a1e56fe26cffa2fa2c97b07c19007e",
+    "reference_hashes": {
+      "native": "02183129a446f4f4af6f3f1df89041dca3a1e56fe26cffa2fa2c97b07c19007e",
+      "solid": "02183129a446f4f4af6f3f1df89041dca3a1e56fe26cffa2fa2c97b07c19007e",
+      "transparent": "deebf57fad866b38cb6a56e3a0d1d25cbed5daef5f68e46028ebef7371c89b29",
+      "depth-off": "deebf57fad866b38cb6a56e3a0d1d25cbed5daef5f68e46028ebef7371c89b29"
+    },
+    "zero_bias_controlled_state": true,
+    "unity_variant_selection_verified": false
+  }
+}

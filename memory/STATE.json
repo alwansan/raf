@@ -3069,6 +3069,22 @@
     "batch_captures": 35,
     "shell_run": 43056576757,
     "shell_artifact": 13870664397,
+    "windows_pending": false,
+    "android_pending": true,
+    "phase_closed": false
+  },
+  "latest_gfx130": {
+    "run": 43057213502,
+    "artifact": 13872540965,
+    "frames": 15,
+    "mesa_coverage_matches": 15,
+    "mesa_rgba_matches": 0,
+    "phase_closed": false
+  },
+  "latest_gfx131": {
+    "mesa_depth_coverage": 2008,
+    "transparent_depth_coverage": 0,
+    "depth_write_off_coverage": 0,
     "windows_pending": true,
     "android_pending": true,
     "phase_closed": false

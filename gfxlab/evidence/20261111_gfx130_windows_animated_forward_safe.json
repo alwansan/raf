@@ -1,0 +1,121 @@
+{
+  "experiment": "GFX130",
+  "renderer": "Windows D3D11 WARP",
+  "frames": {
+    "C0P0": {
+      "coverage_sha256": "470198205e88f9d9a6a99c4d11675172d3bfcdc16156c9d7049c3429b40be0d1",
+      "rgba_sha256": "3a0da889e0e31e53d0d1601db802bef8c345127e03397cde9349ef6b8c721cee",
+      "covered_pixels": 1779,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C0P1": {
+      "coverage_sha256": "470198205e88f9d9a6a99c4d11675172d3bfcdc16156c9d7049c3429b40be0d1",
+      "rgba_sha256": "3a0da889e0e31e53d0d1601db802bef8c345127e03397cde9349ef6b8c721cee",
+      "covered_pixels": 1779,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C0P2": {
+      "coverage_sha256": "470198205e88f9d9a6a99c4d11675172d3bfcdc16156c9d7049c3429b40be0d1",
+      "rgba_sha256": "3a0da889e0e31e53d0d1601db802bef8c345127e03397cde9349ef6b8c721cee",
+      "covered_pixels": 1779,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C0P3": {
+      "coverage_sha256": "470198205e88f9d9a6a99c4d11675172d3bfcdc16156c9d7049c3429b40be0d1",
+      "rgba_sha256": "3a0da889e0e31e53d0d1601db802bef8c345127e03397cde9349ef6b8c721cee",
+      "covered_pixels": 1779,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C0P4": {
+      "coverage_sha256": "470198205e88f9d9a6a99c4d11675172d3bfcdc16156c9d7049c3429b40be0d1",
+      "rgba_sha256": "3a0da889e0e31e53d0d1601db802bef8c345127e03397cde9349ef6b8c721cee",
+      "covered_pixels": 1779,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C1P0": {
+      "coverage_sha256": "efa3a68bdd7a114d9cd006a514de0788cc0b3933c3f68c296ffe35a62e4e70ab",
+      "rgba_sha256": "452307889e0715bd077892ef7af302ed980f806fa7b1649dbcba434bccc772d5",
+      "covered_pixels": 1776,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C1P1": {
+      "coverage_sha256": "86facc89738c4dd7f50411e241117fa79b32a9ee249d667c738dad5fd4a42950",
+      "rgba_sha256": "7abd090dcc1b6a47a5df4f56548f390065307f003fd3e3f2c3f5a7abd790b566",
+      "covered_pixels": 1719,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C1P2": {
+      "coverage_sha256": "d7e846b3cc05ab304d2770ce1dec39ba42cc1b364941e2e9c549f9b924924cba",
+      "rgba_sha256": "0286bfa6d38168a3ce306cd90941912e0a54a330f5a00de52d4dbc7c2ed8fa2d",
+      "covered_pixels": 1590,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C1P3": {
+      "coverage_sha256": "e81a9c8447e0725fd5dc0fcaa3fc74c1d901157f5db56924a75ff03dff93c598",
+      "rgba_sha256": "86ce58743bfba2f349a54a15ebb1e99674440d0a0b7ad54688e46b01d71540eb",
+      "covered_pixels": 1451,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C1P4": {
+      "coverage_sha256": "41bf411d49c9c48233b0ecfcdc00ef5ffcd7afe1f9277d3f0656453e8c4e8edd",
+      "rgba_sha256": "450e5b1b3b504528b8e205dd1a1a36dc53f94b55a51f11308e2d8624125cac3b",
+      "covered_pixels": 1382,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C2P0": {
+      "coverage_sha256": "7a04267a8a18c2b426c10c3ba83fe5a464e7014fa256f5c0e5b841e5b9221e65",
+      "rgba_sha256": "be1a0ca08a6198aa724a3d833fbc8d780faea6386e067393bc9bf52963a3b5d4",
+      "covered_pixels": 1892,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C2P1": {
+      "coverage_sha256": "8e0b90ef7800993971ec6ba47e63727e4a8ef50a3bbdc9b6d773656b2c50b757",
+      "rgba_sha256": "d1a6f79b80185bcc23e2d6d7a8b67b93dcb6cca4a936eab3d5d669abada7d7b4",
+      "covered_pixels": 1765,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C2P2": {
+      "coverage_sha256": "003a8f6614af601ed39c5f8f56ba59e5282a3b2134a369c1764b6408ed661abb",
+      "rgba_sha256": "2371252bacad4be5d80195c2ada08931a4bc2d45fb3a78a59fda6d7df9507120",
+      "covered_pixels": 1783,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C2P3": {
+      "coverage_sha256": "28bbaf5f22ebff0ca9d8f90e3db93d740ae59b4d916dfcb1f0c803d62e072b3e",
+      "rgba_sha256": "204d828bd0c70c1f20828b51566e6ebac5c2888c1b2810ea9494f4f9c2ce2c2a",
+      "covered_pixels": 1781,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    },
+    "C2P4": {
+      "coverage_sha256": "470198205e88f9d9a6a99c4d11675172d3bfcdc16156c9d7049c3429b40be0d1",
+      "rgba_sha256": "3a0da889e0e31e53d0d1601db802bef8c345127e03397cde9349ef6b8c721cee",
+      "covered_pixels": 1779,
+      "mesa_coverage_exact": true,
+      "mesa_rgba_exact": false
+    }
+  },
+  "distinct_per_clip": [
+    1,
+    5,
+    5
+  ],
+  "cross_renderer_rgb_error_measured": false,
+  "unity_clip_playback_verified": false,
+  "phase_closed": false,
+  "run": 43057213502,
+  "artifact": 13872540965
+}

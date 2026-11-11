@@ -113,7 +113,8 @@ def run_tool(args):
     return result.stdout
 
 
-def audit(stage, translate, private_consumer=None, *, model="M02", material_source=None, shader_source=None, pass_name="FORWARD"):
+def audit(stage, translate, private_consumer=None, *, model="M02", material_source=None, shader_source=None, pass_name="FORWARD",
+          engine_keywords=("DIRECTIONAL",), filter_absent_keys=False):
     material, owner, external, expected = material_source if material_source is not None else source_material(stage)
     tree, raw, programs = shader_source if shader_source is not None else load_original_shader_private(stage)
     parsed = tree["m_ParsedForm"]
@@ -121,11 +122,16 @@ def audit(stage, translate, private_consumer=None, *, model="M02", material_sour
     if material.get("m_InvalidKeywords"):
         raise ValueError("Expected valid material keywords")
     source_keys = set(material["m_ValidKeywords"])
-    controlled = source_keys | {"DIRECTIONAL"}
-    match = [(v,f) for v,f in exact_pairs(pp)
+    pairs = list(exact_pairs(pp))
+    selected_keys = source_keys
+    if filter_absent_keys:
+        observed_keys = set().union(*(keywords(programs, vertex) for vertex, _ in pairs))
+        selected_keys = source_keys & observed_keys
+    controlled = selected_keys | set(engine_keywords)
+    match = [(v,f) for v,f in pairs
              if keywords(programs,v) == keywords(programs,f) == controlled]
     if len(match) != 1:
-        raise ValueError("Original controlled directional pair not unique")
+        raise ValueError("Original controlled pair not unique")
     linked, _ = linked_parameters_private(tree,raw)
     properties = {x["m_Name"]:x["m_Type"] for x in parsed["m_PropInfo"]["m_Props"]}
     stages = {}
@@ -147,6 +153,10 @@ def audit(stage, translate, private_consumer=None, *, model="M02", material_sour
               "material_keyword_count":len(source_keys),"controlled_global_keyword":"DIRECTIONAL",
               "exact_source_pair_count":len(match),"stages":stages,"gles_offline_link_passed":False,
               "gpu_draw_completed":False,"original_shader_restored":False,"phase_closed":False}
+    if filter_absent_keys:
+        result.update(pass_name=pass_name, controlled_global_keyword=engine_keywords[0],
+                      pass_absent_material_keywords_filtered=len(source_keys-selected_keys),
+                      unity_variant_selection_verified=False)
     if not translate:
         if private_consumer is not None:
             private_consumer(None, private)

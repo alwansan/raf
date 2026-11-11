@@ -25,6 +25,8 @@ parser.add_argument("--forward-add", type=Path)
 parser.add_argument("--forward-add-portable", type=Path)
 parser.add_argument("--animation", type=Path)
 parser.add_argument("--animation-portable", type=Path)
+parser.add_argument("--shadow", type=Path)
+parser.add_argument("--shadow-portable", type=Path)
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -60,8 +62,7 @@ ctx = egl('eglCreateContext', P, P, P, P, P)(d, cfg, None, (I * 3)(12440, 3, 123
 surf = egl('eglCreatePbufferSurface', P, P, P, P)(d, cfg, (I * 5)(12375, 8, 12374, 8, 12344))
 assert egl('eglMakeCurrent', U, P, P, P, P)(d, surf, surf, ctx)
 renderer = gl('GetString', S, U)(7937).decode()
-def shader(name, kind):
-    src = (root / name).read_bytes()
+def compile_shader(src, kind):
     sh = gl('CreateShader', U, U)(kind)
     gl('ShaderSource', None, U, I, P, P)(sh, 1, (S * 1)(src), None)
     call('CompileShader', sh)
@@ -75,7 +76,7 @@ def shader(name, kind):
 def link_program():
     program = gl('CreateProgram', U)()
     for name, kind in [('probe.vert', 35633), ('probe.frag', 35632)]:
-        stage = shader(name, kind)
+        stage = compile_shader((root / name).read_bytes(), kind)
         call('AttachShader', program, stage)
         call('DeleteShader', stage)
     call('LinkProgram', program)
@@ -464,6 +465,96 @@ if args.animation:
     report["animation"] = {"samples": samples, "unique_images_per_clip": unique,
                            "fixed_camera_across_samples": True,
                            "unity_animation_player_verified": False}
+
+if args.shadow:
+    for name in ("mesh.bin", "indices.bin"):
+        if (args.private / name).read_bytes() != (args.shadow / name).read_bytes():
+            raise ValueError("ShadowCaster must use the same indexed mesh")
+    depth_texture = gen("Textures")
+    call("BindTexture", 0x0de1, depth_texture)
+    call("TexStorage2D", 0x0de1, 1, 33190, 256, 256)  # DEPTH_COMPONENT24
+    call("TexParameteri", 0x0de1, 0x2800, 0x2600)
+    call("TexParameteri", 0x0de1, 0x2801, 0x2600)
+    sampler = gl("CreateProgram", U)()
+    for source, kind in (
+        (b"#version 310 es\nvoid main(){vec2 p=vec2(float((gl_VertexID<<1)&2),float(gl_VertexID&2));"
+         b"gl_Position=vec4(p*2.0-1.0,0,1);}", 35633),
+        (b"#version 310 es\nprecision highp float;uniform highp sampler2D z;out vec4 rgba;"
+         b"void main(){float v=texelFetch(z,ivec2(gl_FragCoord.xy),0).r;"
+         b"rgba=vec4(vec3(v),float(v<1.0));}", 35632),
+    ):
+        stage = compile_shader(source, kind)
+        call("AttachShader", sampler, stage)
+        call("DeleteShader", stage)
+    call("LinkProgram", sampler)
+    linked = I()
+    gl("GetProgramiv", None, U, U, P)(sampler, 35714, c.byref(linked))
+    if not linked.value:
+        raise ValueError("Depth sampler did not link")
+    sampler_vao = gen("VertexArrays")
+
+    def shadow_coverage(replacements=None, *, depth_write=True):
+        samplers = select_slot(args.shadow, args.textures)
+        engine["unity_LightShadowBias"] = (0, 0, 0, 0)
+        engine["unity_WorldToObject"] = engine["unity_WorldToObject"][:12]
+        if replacements is not None:
+            bind_samplers(replacements)
+        call("FramebufferTexture2D", 36160, 36096, 3553, depth_texture, 0)
+        if gl("CheckFramebufferStatus", U, U)(36160) != 36053:
+            raise ValueError("Shadow framebuffer is incomplete")
+        blocks, material = bind_constant_buffers(True)
+        call("Enable", 0x0b71)
+        call("Clear", 0x0100)
+        gl("DepthMask", None, B)(int(depth_write))
+        gl("ColorMask", None, B, B, B, B)(0, 0, 0, 0)
+        gl("DrawElements", None, U, I, U, P)(4, len(indices)//2, 0x1403, None)
+        gl("ColorMask", None, B, B, B, B)(1, 1, 1, 1)
+        gl("DepthMask", None, B)(1)
+        call("FramebufferRenderbuffer", 36160, 36096, 36161, depth)
+        call("Disable", 0x0b71)
+        call("UseProgram", sampler)
+        call("BindVertexArray", sampler_vao)
+        call("ActiveTexture", 0x84c0)
+        call("BindTexture", 3553, depth_texture)
+        loc = gl("GetUniformLocation", I, U, S)(sampler, b"z")
+        if loc < 0:
+            raise ValueError("Depth sampler uniform not bound")
+        gl("Uniform1i", None, I, I)(loc, 0)
+        gl("DrawArrays", None, U, I, I)(4, 0, 3)
+        pixels = c.create_string_buffer(256*256*4)
+        gl("ReadPixels", None, I, I, I, I, U, U, P)(0, 0, 256, 256, 0x1908, 0x1401, pixels)
+        check("ShadowCaster and depth texture readback")
+        image = np.frombuffer(pixels.raw, dtype=np.uint8).reshape(256, 256, 4)
+        return image, blocks, material, len(samplers)
+
+    portable_buffers.clear()
+    native, blocks, material, samplers = shadow_coverage()
+    transparent, *_ = shadow_coverage({"basecolor": (255, 255, 255, 0)})
+    solid, *_ = shadow_coverage({"basecolor": (255, 255, 255, 255)})
+    disabled, *_ = shadow_coverage(depth_write=False)
+    mask = native[:, :, 3] != 0
+    full = solid[:, :, 3] != 0
+    if int(mask.sum()) < 100 or np.any(mask & ~full) or np.any(transparent[:, :, 3]) or np.any(disabled[:, :, 3]):
+        raise ValueError("ShadowCaster alpha or depth-write control failed")
+    if args.shadow_portable:
+        # ShadowCaster uses the same constants in all texture and depth controls.
+        portable_buffers[False] = portable_buffers[True]
+        write_portable(args.shadow_portable, select_slot(args.shadow, args.textures), include_textures=False)
+        for name, image in (("native", native), ("solid", solid), ("transparent", transparent),
+                            ("depth-off", disabled)):
+            (args.shadow_portable / (name + ".rgba")).write_bytes(image.tobytes())
+    report["shadow_caster"] = {
+        "covered_pixels": int(mask.sum()), "opaque_control_covered_pixels": int(full.sum()),
+        "transparent_control_covered_pixels": 0, "depth_write_off_covered_pixels": 0,
+        "coverage_difference_from_forward": int(np.count_nonzero(mask != alpha)),
+        "driver_verified_cb_blocks": blocks, "original_material_bytes_preserved": material,
+        "bound_combined_samplers": samplers,
+        "depth_readback_rgba_sha256": hashlib.sha256(native.tobytes()).hexdigest(),
+        "reference_hashes": {name: hashlib.sha256(image.tobytes()).hexdigest()
+                             for name, image in (("native", native), ("solid", solid),
+                                                 ("transparent", transparent), ("depth-off", disabled))},
+        "zero_bias_controlled_state": True, "unity_variant_selection_verified": False,
+    }
 
 args.safe.write_text(json.dumps(report,indent=2)+"\n")
 print(json.dumps(report))
