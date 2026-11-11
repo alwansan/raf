@@ -63,6 +63,14 @@ class ParticleMaterialAuditTests(unittest.TestCase):
         self.assertEqual(counts.get("external_material_slots"), 1)
 
 
+    def test_indentless_material_sequence_before_sibling_list(self):
+        # Unity YAML permits the dash at the mapping key's indentation.
+        counts = self.audit("\n  - {fileID: 2100000, guid: " + GUID
+                            + ", type: 2}\n  m_SubEmitters:\n  - {fileID: 0}")
+        self.assertEqual(counts.get("external_material_slots"), 1)
+        self.assertEqual(counts.get("null_material_slots", 0), 0)
+        self.assertEqual(counts.get("renderers_with_empty_material_list", 0), 0)
+
     def test_sibling_list_is_not_material(self):
         counts = self.audit("\n  m_UnrelatedList:\n  - {fileID: 2100000, guid: " + GUID
                             + ", type: 2}")
