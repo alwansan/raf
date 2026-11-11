@@ -1,0 +1,84 @@
+name: GFX-MULTI-103 source-authentic Shader48 interpolation input classes
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi103-source-interpolation-classes.yml'
+      - 'gfxlab/tools/gfx103_source_interpolation_gate.py'
+      - 'gfxlab/tools/gfx103_source_interpolation_census.py'
+      - 'gfxlab/tests/test_gfx103_source_interpolation_gate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi103-source-private-class-gate
+  cancel-in-progress: false
+jobs:
+  source-private-interpolation-census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout GFX-LAB source-only code
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run synthetic original-free interpolation preservation tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx103_*.py' -v
+          python3 -m py_compile gfxlab/tools/gfx103_source_interpolation_gate.py gfxlab/tools/gfx103_source_interpolation_census.py
+      - name: Fetch exact private original source pinned to historical ZIP2 commit
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install pinned source reader without linking original shader assets into APK
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Enumerate all 524 authenticated original exact pairs and separate ordinary/SIV DXBC inputs
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m gfxlab.tools.gfx103_source_interpolation_census \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx103-private" \
+            --safe gfx103-source-interpolation-safe.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          doc=json.loads(Path('gfx103-source-interpolation-safe.json').read_text())
+          assert doc['experiment']=='GFX-MULTI-103'
+          assert doc['source_zip2_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          assert doc['source_pass_count']==7
+          assert doc['original_exact_pair_count']==524
+          assert doc['originalShaderRestored'] is False and doc['phase_closed'] is False
+          assert doc['original_source_bytes_exported'] is False
+          assert doc['source_to_generated_spirv_semantics_verified'] is False
+          assert doc['original_material_cb_binding_verified'] is False
+          print('GFX103_SOURCE_INTERPOLATION_CLASSIFICATION_AGGREGATE_ONLY_PASS')
+          PY
+      - name: Upload only safe original DXBC interpolation aggregate
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX103-original-source-interpolation-safe-counts
+          path: gfx103-source-interpolation-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge private ZIP2 source and temporary binary stages even after failure
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx103-private"
+          echo GFX103_PRIVATE_SOURCE_PURGED=true
