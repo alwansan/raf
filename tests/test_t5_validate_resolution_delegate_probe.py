@@ -59,6 +59,21 @@ class T5DelegateGraphGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     verify(x)
 
+    def test_distinct_methods_cannot_exceed_compiled_graph(self):
+        for key in ("unique_delegate_target_methods", "methods_populating_options"):
+            x = baseline()
+            x["evidence"]["compiled_methods"] = 1
+            if key == "unique_delegate_target_methods":
+                x["evidence"]["unique_delegate_target_methods"] = 2
+            else:
+                x["evidence"]["unique_delegate_target_methods"] = 1
+                x["evidence"]["option_population_call_sites"] = 2
+                x["evidence"]["methods_populating_options"] = 2
+            with self.subTest(key=key), self.assertRaisesRegex(
+                ValueError, "Method population exceeds compiled"
+            ):
+                verify(x)
+
     def test_unknown_callsite_rejected_rather_than_false_no_path(self):
         x = baseline()
         x["evidence"]["unresolved_internal_call_sites"] = 1
