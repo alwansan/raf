@@ -3234,5 +3234,15 @@
     "GFX147_2_regression_ci_status_at_last_check": "QUEUED",
     "GFX148_targeted_Adreno_Cull_back_same_mode_comparison_pending": true
   },
-  "latest_evidence_run": 43093563974
+  "latest_evidence_run": 43093563974,
+  "latest_gfx148": {
+    "run": 43101773284,
+    "artifact": 13893040590,
+    "apk_sha256": "884c4a81ae216bb957dde1f08ad34659ea247dea2378f90333adc6fbdb3cca02",
+    "private_owner_file": "libfile_2042c475373c819181f3f3fa5b133d9f",
+    "mesa_three_references_exact": true,
+    "signed": true,
+    "owner_pending": true,
+    "phase_closed": false
+  }
 }

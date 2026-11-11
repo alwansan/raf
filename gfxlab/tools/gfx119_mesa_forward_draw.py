@@ -31,7 +31,10 @@ parser.add_argument("--deferred", type=Path)
 parser.add_argument("--deferred-portable", type=Path)
 parser.add_argument("--cull-diagnostic", action="store_true", help="M03-1 source-original safe Off/Back/Front GPU differential")
 parser.add_argument("--cull-private-raw-out", type=Path, help="Store raw Cull comparison ONLY inside private CI runner temp, encrypted before any upload")
+parser.add_argument("--portable-cull-replay", action="store_true")
 args = parser.parse_args()
+if args.portable_cull_replay and not args.cull_diagnostic:
+    parser.error("Portable replay requires --cull-diagnostic")
 if args.cull_private_raw_out and not args.cull_diagnostic:
     raise ValueError("Raw Cull export requires explicit cull diagnostic")
 root = args.private
@@ -136,6 +139,19 @@ portable_buffers = {}
 
 
 def bind_constant_buffers(light_on):
+    if args.portable_cull_replay:
+        for i, row in enumerate(portable_scene["blocks"]):
+            data = (root / row["light" if light_on else "dark"]).read_bytes()
+            index = gl("GetUniformBlockIndex", U, U, S)(p, row["name"].encode())
+            driver_size = I()
+            if index == 0xffffffff:
+                raise ValueError("Missing portable uniform block")
+            gl("GetActiveUniformBlockiv", None, U, U, U, P)(p, index, 0x8a40, c.byref(driver_size))
+            if len(data) != driver_size.value or len(data) != row["bytes"]:
+                raise ValueError("Portable uniform size differs")
+            call("UniformBlockBinding", p, index, i)
+            call("BindBufferBase", 0x8a11, i, buffer(0x8a11, data))
+        return len(portable_scene["blocks"]), None
     count = source_bytes = 0
     for stage, extension in (("vertex", "vert"), ("fragment", "frag")):
         contract = contracts[stage]
@@ -217,6 +233,15 @@ def upload_texture(unit, kind, role, constant=None):
 
 def bind_samplers(replacements=None):
     replacements = replacements or {}
+    if args.portable_cull_replay:
+        bindings = [(row["kind"], row["name"], row["role"] or None) for row in portable_scene["samplers"]]
+        for unit, (kind, name, role) in enumerate(bindings):
+            upload_texture(unit, kind, role, replacements.get(role))
+            location = gl("GetUniformLocation", I, U, S)(p, name.encode())
+            if location < 0:
+                raise ValueError("Missing portable sampler")
+            gl("Uniform1i", None, I, I)(location, unit)
+        return bindings
     shader = (root/"probe.frag").read_text()
     samplers = re.findall(r"uniform highp (sampler\w+) (\w+Combinedt(\d+)s(\d+));",shader)
     bindings = {b["index"]:b for b in contracts["fragment"]["bindings"] if b["type"] == 0}
@@ -240,14 +265,22 @@ def bind_samplers(replacements=None):
 
 
 def select_slot(folder, textures):
-    global root, texture_path, texture_layout, p, engine, contracts, indices, vertex_buffer
+    global root, texture_path, texture_layout, p, engine, contracts, indices, vertex_buffer, portable_scene
     root, texture_path = folder, textures
     layout_path = textures / "textures.json"
     texture_layout = json.loads(layout_path.read_text()) if layout_path.exists() else {}
     mesh = (root / "mesh.bin").read_bytes()
     engine = engine_values(mesh)
-    contracts = {stage: json.loads((root / (stage + ".json")).read_text())
-                 for stage in ("vertex", "fragment")}
+    if args.portable_cull_replay:
+        portable_scene = json.loads((root / "scene.json").read_text())
+        texture_layout = portable_scene["textures"]
+        contracts = {"vertex": {"inputs": [
+            ("POSITION", 0, 0, 0, 0, 15, 0), ("NORMAL", 0, 0, 0, 1, 7, 0),
+            ("TEXCOORD", 0, 0, 0, 2, 3, 0), ("TEXCOORD", 1, 0, 0, 3, 3, 0),
+            ("TANGENT", 0, 0, 0, 4, 15, 0)]}}
+    else:
+        contracts = {stage: json.loads((root / (stage + ".json")).read_text())
+                     for stage in ("vertex", "fragment")}
     p = link_program()
     call("BindVertexArray",gen("VertexArrays"))
     vertex_buffer = buffer(0x8892,mesh)

@@ -1,3 +1,11 @@
+## 12 Nov 2026 — GFX148 signed targeted Adreno Cull test ready
+
+Session `20261112-GFX-chat-owner-cull-107`, origin=chat, writable branch `experiment/android-graphics-rootcause` only. Both attached GFX124 archives passed the GFX143 auditor against the exact signed GFX142 source APK. Nine cases and 51 captures per archive, same coverage across all references, ten exact RGBA captures. Older GFX120 attachments match the previously verified archive hashes. Windows GFX136 Deferred run 43060483182 succeeded with 2,008 covered pixels and 4/12 exact RGBA targets against Mesa.
+
+GFX148 rebuilds only M03-1 using the exact GFX142 signed fixture. Local Mesa portable replay matched all three independently recorded GFX147 Cull hashes. Android shell build [43101773284](https://github.com/alwansan/raf/actions/runs/43101773284), artifact 13893040590, is source-free. Private signed installable APK `GFX148-M03-Cull-Test.apk`, package `com.alwansan.gfx148`, 3,176,752 bytes, SHA256 `884c4a81ae216bb957dde1f08ad34659ea247dea2378f90333adc6fbdb3cca02`, private owner file `libfile_2042c475373c819181f3f3fa5b133d9f`. APK Signature Scheme v3 verified; all unsigned APK entries byte-exact after signing. The 3-capture auditor passed a reference replay. Actual Adreno Cull Back/Front remains pending. Install, launch once and return one GFX148 ZIP from Download/Games/cl/test/g/. No original shader binaries, captures, owner archives or private APK committed. Unity effective Cull/pass selection, native Animator and original PC scene parity remain open. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX147.2 VERIFIED: private source-original Mesa Cull images compared against both owner Adreno ZIPs
 
 GFX-LAB session `20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106` (`origin=chat`), **write only** `experiment/android-graphics-rootcause`; no T-team game branch modifications.
