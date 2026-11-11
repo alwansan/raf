@@ -1,0 +1,91 @@
+{
+  "session_id": "20261111-GFX-chat-gfx107-108-original-indexed-skinning-75",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "resumed_from": "20261111-GFX-chat-verified-siv-rig-source-74",
+  "write_branch": "experiment/android-graphics-rootcause",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "verified_actions": [
+    {
+      "experiment": "GFX-MULTI-107",
+      "run": 42951739739,
+      "conclusion": "success",
+      "tests": 12,
+      "artifact": 13825760281
+    },
+    {
+      "experiment": "GFX-MULTI-108",
+      "run": 42953322197,
+      "conclusion": "success",
+      "tests": 18,
+      "artifact": 13826002534
+    }
+  ],
+  "gfx107": {
+    "bone_world_matrix_count": 213,
+    "bindpose_decoded_count": 213,
+    "coherent_bones_at_1e_minus4": 161,
+    "models_fully_coherent": 3,
+    "M01": {
+      "coherent": 74,
+      "bones": 100,
+      "max_matrix_delta": 0.26967712
+    },
+    "M04": {
+      "coherent": 74,
+      "bones": 100,
+      "max_matrix_delta": 0.26967712
+    }
+  },
+  "gfx108": {
+    "cpu_original_indexed_vertices_deformed": 14033,
+    "skinned_models": 5,
+    "source_influences_by_model": {
+      "M00": 2,
+      "M01": 4,
+      "M02": 4,
+      "M04": 4,
+      "M05": 2
+    },
+    "source_skin_reference_deltas_gt_1e_minus4": 1374,
+    "results": {
+      "M00": {
+        "vertices": 375,
+        "moved": 0
+      },
+      "M01": {
+        "vertices": 5095,
+        "moved": 695
+      },
+      "M02": {
+        "vertices": 1666,
+        "moved": 0
+      },
+      "M04": {
+        "vertices": 2445,
+        "moved": 679
+      },
+      "M05": {
+        "vertices": 4452,
+        "moved": 0
+      }
+    },
+    "source_cpu_skinning_verified": true,
+    "original_gpu_skinning_verified": false
+  },
+  "safe_evidence": [
+    "gfxlab/evidence/20261111_gfx107_original_bindpose_cpu_safe.json",
+    "gfxlab/evidence/20261111_gfx108_original_indexed_cpu_skin_safe.json"
+  ],
+  "arabic_summary": "gfxlab/GFX107_GFX108_INDEXED_SKINNING_AR.md",
+  "gates_open": [
+    "original Android GPU pose with exact source bone matrices",
+    "runtime source Shader48 and material CB sampler texture mapping",
+    "original animations",
+    "matched PC→Adreno source GPU screenshots"
+  ],
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "original_rig_restored": false,
+  "phase_closed": false
+}
