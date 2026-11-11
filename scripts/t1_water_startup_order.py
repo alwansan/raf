@@ -10,6 +10,13 @@ def _count(value, label):
         raise ValueError(f"{label} must be a non-negative integer")
     return value
 
+def _timestamp(event, label):
+    value = event.get("first_observed_unix_ms")
+    # Never coerce floats, booleans or strings into an apparent millisecond event.
+    if type(value) is not int or value <= 0:
+        raise ValueError(f"{label} first_observed_unix_ms must be a positive integer")
+    return value
+
 def analyze(s):
     cats=s["final_error_category_breakdown"]
     milestones=s["final_game_milestones"]
@@ -29,7 +36,8 @@ def analyze(s):
         raise ValueError("inconsistent material or kernel category partition")
     if _count(loaded["count"], "world-loaded count") < 1:
         raise ValueError("no world-loaded marker")
-    w,k,l=[int(x["first_observed_unix_ms"]) for x in (water,fft,loaded)]
+    w, k, l = (_timestamp(water, "water"), _timestamp(fft, "FFT"),
+               _timestamp(loaded, "world-loaded"))
     if not w <= k < l:
         raise ValueError("water/FFT-before-world ordering not observed")
     return dict(session=s["session"],first_water_ms=w,first_fft_ms=k,world_loaded_ms=l,
