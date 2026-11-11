@@ -48,7 +48,7 @@ def snapshot(path):
         slot = SLOT.match(line)
         if slot:
             indent = len(slot.group(1).expandtabs(4))
-            if indent > base_indent and (current_slot is None or indent <= slot_indent):
+            if indent >= base_indent and (current_slot is None or indent <= slot_indent):
                 current_slot = slot.group(2)
                 slot_indent = indent
         match = TEXTURE.search(line)
