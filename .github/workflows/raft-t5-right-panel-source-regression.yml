@@ -1,0 +1,45 @@
+name: T5 right diagnostic and safe panel source regression
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Runtime/Platform/AndroidTouchUiPanel.cs
+      - scripts/tests/test_t5_panel_safe_geometry.py
+      - scripts/tests/test_t5_right_buttons_safe_width.py
+      - tests/test_t5_right_safe_area_buttons.py
+      - tests/test_t5_right_diagnostic_safe_area.py
+      - .github/workflows/raft-t5-right-panel-source-regression.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-right-panel-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout bounded UI source and regression tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Runtime/Platform/AndroidTouchUiPanel.cs
+            /scripts/tests/test_t5_panel_safe_geometry.py
+            /scripts/tests/test_t5_right_buttons_safe_width.py
+            /tests/test_t5_right_safe_area_buttons.py
+            /tests/test_t5_right_diagnostic_safe_area.py
+      - name: Run independent source geometry contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s scripts/tests -p 'test_t5_panel_safe_geometry.py' -v
+          python3 -m unittest discover -s scripts/tests -p 'test_t5_right_buttons_safe_width.py' -v
+          python3 -m unittest discover -s tests -p 'test_t5_right_safe_area_buttons.py' -v
+          python3 -m unittest discover -s tests -p 'test_t5_right_diagnostic_safe_area.py' -v
+          test ! -e Raft
+          echo 'T5_UI source_regression=PASS unity_compile=NOT_TESTED device=NOT_TESTED' >> "$GITHUB_STEP_SUMMARY"
