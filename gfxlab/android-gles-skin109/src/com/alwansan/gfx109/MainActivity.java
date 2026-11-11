@@ -44,9 +44,13 @@ public final class MainActivity extends Activity {
         + "for (int i=0;i<4;++i) if (weight[i]>0.0) { vec4 q=matrices[bone[i]]*p;\n"
         + "skinned+=weight[i]*(q.xyz/q.w); } gl_Position=uRaster ? uCamera*vec4(skinned,1.0) : vec4(0.0,0.0,0.0,1.0); }\n";
     private static final String FRAGMENT = "#version 300 es\n"
-        + "precision mediump float; out vec4 color; void main(){color=vec4(1.0);}\n";
+        + "precision highp float; precision highp int; uniform bool uDepth; out vec4 color;\n"
+        + "void main(){ if(!uDepth){color=vec4(1.0); return;}\n"
+        + "uint d=uint(floor(gl_FragCoord.z*65534.0+0.5))+1u;\n"
+        + "color=vec4(float(d>>8u)/255.0,float(d&255u)/255.0,1.0,1.0);}\n";
 
     private String experiment() {
+        if ("com.alwansan.gfx115".equals(getPackageName())) return "GFX115";
         if ("com.alwansan.gfx114".equals(getPackageName())) return "GFX114";
         return "com.alwansan.gfx112".equals(getPackageName()) ? "GFX112" : "GFX109";
     }
@@ -223,7 +227,8 @@ public final class MainActivity extends Activity {
             JSONObject result = new JSONObject().put("model", model).put("vertices", vertices).put("bones", bones)
                 .put("gpu_vertices_written", written[0]).put("source_payload_sha256", sha256(bytes)).put("failing_vertices", failingVertices)
                 .put("nonfinite_vertices", nonfiniteVertices).put("max_absolute_error", maxError);
-            if ("GFX114".equals(experiment())) result.put("raster", raster(model, program));
+            if ("GFX114".equals(experiment()) || "GFX115".equals(experiment()))
+                result.put("raster", raster(model, program));
             return result;
         } finally {
             glBindVertexArray(0);
@@ -236,9 +241,11 @@ public final class MainActivity extends Activity {
     }
 
     private JSONObject raster(String model, int program) throws Exception {
-        byte[] mesh = asset("raster114.bin");
-        byte[] expected = asset(model + ".mask");
-        if (mesh.length <= 64 || (mesh.length - 64) % 6 != 0 || expected.length != SIDE * SIDE) {
+        boolean depthMode = "GFX115".equals(experiment());
+        byte[] mesh = asset(depthMode ? "raster115.bin" : "raster114.bin");
+        byte[] expected = asset(model + (depthMode ? ".depth" : ".mask"));
+        if (mesh.length <= 64 || (mesh.length - 64) % 6 != 0
+            || expected.length != SIDE * SIDE * (depthMode ? 2 : 1)) {
             throw new IllegalStateException("Wrong raster assets");
         }
         ByteBuffer packed = ByteBuffer.wrap(mesh).order(ByteOrder.LITTLE_ENDIAN);
@@ -246,47 +253,76 @@ public final class MainActivity extends Activity {
         for (int i = 0; i < camera.length; i++) camera[i] = packed.getFloat();
         ByteBuffer indices = ByteBuffer.allocateDirect(mesh.length - 64);
         indices.put(mesh, 64, mesh.length - 64).flip();
-        int[] fbo = new int[1], color = new int[1], ebo = new int[1];
+        int[] fbo = new int[1], color = new int[1], ebo = new int[1], depth = new int[1];
         glGenFramebuffers(1, fbo, 0);
         glGenTextures(1, color, 0);
         glGenBuffers(1, ebo, 0);
         int mode = glGetUniformLocation(program, "uRaster");
         int projection = glGetUniformLocation(program, "uCamera");
-        if (mode < 0 || projection < 0) throw new IllegalStateException("Raster uniforms missing");
+        int depthUniform = glGetUniformLocation(program, "uDepth");
+        if (mode < 0 || projection < 0 || depthUniform < 0) throw new IllegalStateException("Raster uniforms missing");
         try {
             glBindTexture(GL_TEXTURE_2D, color[0]);
             glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, SIDE, SIDE);
             glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color[0], 0);
+            if (depthMode) {
+                glGenRenderbuffers(1, depth, 0);
+                glBindRenderbuffer(GL_RENDERBUFFER, depth[0]);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, SIDE, SIDE);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth[0]);
+            }
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
                 throw new IllegalStateException("Raster framebuffer incomplete");
             glViewport(0, 0, SIDE, SIDE);
             glDisable(GL_DITHER);
             glDisable(GL_BLEND);
-            glDisable(GL_DEPTH_TEST);
+            if (depthMode) {
+                glEnable(GL_DEPTH_TEST);
+                glDepthFunc(GL_LESS);
+                glDepthMask(true);
+                glClearDepthf(1);
+            } else {
+                glDisable(GL_DEPTH_TEST);
+            }
             glDisable(GL_CULL_FACE);
             glClearColor(0, 0, 0, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | (depthMode ? GL_DEPTH_BUFFER_BIT : 0));
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.remaining(), indices, GL_STATIC_DRAW);
             glUniformMatrix4fv(projection, 1, false, camera, 0);
             glUniform1i(mode, 1);
+            glUniform1i(depthUniform, depthMode ? 1 : 0);
             glDrawElements(GL_TRIANGLES, (mesh.length - 64) / 2, GL_UNSIGNED_SHORT, 0);
             ByteBuffer pixels = ByteBuffer.allocateDirect(SIDE * SIDE * 4);
             glReadPixels(0, 0, SIDE, SIDE, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
             checkGl("indexed raster readback");
             int[] argb = new int[SIDE * SIDE];
             int intersection = 0, union = 0, differences = 0;
+            int maxDepthError = 0, depthOverEight = 0;
+            long absoluteDepthError = 0;
             for (int y = 0; y < SIDE; y++) {
                 for (int x = 0; x < SIDE; x++) {
                     int screen = y * SIDE + x;
                     int gl = ((SIDE - 1 - y) * SIDE + x) * 4;
                     int r = pixels.get(gl) & 255, g = pixels.get(gl + 1) & 255;
                     int b = pixels.get(gl + 2) & 255, a = pixels.get(gl + 3) & 255;
-                    if (a != 255 || r != g || r != b || (r != 0 && r != 255))
-                        throw new IllegalStateException("Nonbinary raster pixel");
-                    boolean actual = r == 255;
-                    boolean reference = expected[screen] != 0;
+                    boolean actual = b == 255;
+                    int code = (r << 8) | g;
+                    if (a != 255 || (b != 0 && b != 255)
+                        || (!depthMode && (r != b || g != b))
+                        || (depthMode && actual != (code != 0)))
+                        throw new IllegalStateException("Invalid raster pixel");
+                    int expectedCode = depthMode
+                        ? (expected[2 * screen] & 255) | ((expected[2 * screen + 1] & 255) << 8)
+                        : expected[screen];
+                    boolean reference = expectedCode != 0;
+                    if (depthMode && actual && reference) {
+                        int error = Math.abs(code - expectedCode);
+                        maxDepthError = Math.max(maxDepthError, error);
+                        absoluteDepthError += error;
+                        if (error > 8) depthOverEight++;
+                    }
                     if (actual && reference) intersection++;
                     if (actual || reference) union++;
                     if (actual != reference) differences++;
@@ -301,15 +337,21 @@ public final class MainActivity extends Activity {
             byte[] png = out.toByteArray();
             String filename = model + ".png";
             images.put(filename, png);
-            return new JSONObject().put("image", filename).put("image_sha256", sha256(png))
+            JSONObject evidence = new JSONObject().put("image", filename).put("image_sha256", sha256(png))
                 .put("reference_sha256", sha256(expected)).put("intersection", intersection)
                 .put("union", union).put("different_pixels", differences);
+            if (depthMode) evidence.put("depth_max_error_codes", maxDepthError)
+                .put("depth_sum_error_codes", absoluteDepthError).put("depth_error_over_eight", depthOverEight);
+            return evidence;
         } finally {
             glUniform1i(mode, 0);
+            glUniform1i(depthUniform, 0);
+            glDisable(GL_DEPTH_TEST);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glDeleteBuffers(1, ebo, 0);
             glDeleteTextures(1, color, 0);
             glDeleteFramebuffers(1, fbo, 0);
+            if (depthMode) glDeleteRenderbuffers(1, depth, 0);
         }
     }
 

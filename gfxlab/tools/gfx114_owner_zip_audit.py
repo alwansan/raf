@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import io
 import json
+import struct
 from zipfile import ZipFile
 
 from PIL import Image
@@ -12,7 +13,8 @@ from gfxlab.tools.gfx112_animated_payload import EXPECTED
 SIDE = 256
 
 
-def audit(owner_zip, apk):
+def audit(owner_zip, apk, *, experiment="GFX114"):
+    depth = experiment == "GFX115"
     expected_files = {"summary.json", *(name + ".png" for name in EXPECTED)}
     with ZipFile(owner_zip) as z, ZipFile(apk) as package:
         entries = z.infolist()
@@ -23,7 +25,7 @@ def audit(owner_zip, apk):
         summary_only = io.BytesIO()
         with ZipFile(summary_only, "w") as a:
             a.writestr("summary.json", data)
-        positions = audit_positions(summary_only, apk, experiment="GFX114",
+        positions = audit_positions(summary_only, apk, experiment=experiment,
                                     expected={name: (1666, 8) for name in EXPECTED})
         rows = []
         for c in json.loads(data)["cases"]:
@@ -31,26 +33,48 @@ def audit(owner_zip, apk):
             record = c["raster"]
             filename = name + ".png"
             raw = z.read(filename)
-            reference = package.read(f"assets/{name}.mask")
+            reference = package.read(f"assets/{name}." + ("depth" if depth else "mask"))
             if (record["image"] != filename or hashlib.sha256(raw).hexdigest() != record["image_sha256"]
                     or hashlib.sha256(reference).hexdigest() != record["reference_sha256"]):
                 raise ValueError("Raster hash mismatch")
-            if len(reference) != SIDE*SIDE or set(reference) != {0,1}:
-                raise ValueError("Invalid reference mask")
+            if len(reference) != SIDE*SIDE*(2 if depth else 1):
+                raise ValueError("Invalid reference dimensions")
+            if depth:
+                reference_codes = struct.unpack(f"<{SIDE*SIDE}H", reference)
+                coverage = [int(v != 0) for v in reference_codes]
+            else:
+                if set(reference) != {0,1}:
+                    raise ValueError("Invalid reference mask")
+                coverage = reference
             with Image.open(io.BytesIO(raw)) as image:
                 if image.format != "PNG" or image.size != (SIDE,SIDE):
                     raise ValueError("Wrong capture format")
-                rgba = image.convert("RGBA")
-                if set(rgba.getdata()) - {(0,0,0,255),(255,255,255,255)}:
-                    raise ValueError("Nonbinary capture")
-                actual = [int(r == 255) for r,_,_,_ in rgba.getdata()]
-            union = sum(x or y for x,y in zip(actual,reference,strict=True))
-            overlap = sum(x and y for x,y in zip(actual,reference,strict=True))
+                pixels = list(struct.iter_unpack("4B", image.convert("RGBA").tobytes()))
+                if depth:
+                    if any(a != 255 or b not in (0,255) or bool(r or g) != (b == 255)
+                           for r,g,b,a in pixels):
+                        raise ValueError("Invalid encoded depth capture")
+                    actual = [int(b == 255) for _,_,b,_ in pixels]
+                    errors = [abs(((r << 8) | g) - ref) for (r,g,b,_),ref in
+                              zip(pixels,reference_codes,strict=True) if b == 255 and ref]
+                    depth_stats = {"depth_max_error_codes":max(errors,default=0),
+                                   "depth_sum_error_codes":sum(errors),
+                                   "depth_error_over_eight":sum(e > 8 for e in errors)}
+                    if any(record[k] != v for k,v in depth_stats.items()):
+                        raise ValueError("Depth values disagree with reported statistics")
+                else:
+                    if set(pixels) - {(0,0,0,255),(255,255,255,255)}:
+                        raise ValueError("Nonbinary capture")
+                    actual = [int(r == 255) for r,_,_,_ in pixels]
+            union = sum(x or y for x,y in zip(actual,coverage,strict=True))
+            overlap = sum(x and y for x,y in zip(actual,coverage,strict=True))
             difference = union - overlap
             if (overlap, union, difference) != (record["intersection"],record["union"],record["different_pixels"]):
                 raise ValueError("Capture pixels disagree with reported statistics")
             rows.append({"pose":name,"intersection":overlap,"union":union,
-                         "different_pixels":difference,"iou":overlap/union})
+                         "different_pixels":difference,"iou":overlap/union if union else 0.0})
+            if depth:
+                rows[-1].update(depth_stats)
         if len(rows) != len(EXPECTED):
             raise ValueError("Incomplete capture results")
     return {**positions,"raster_cases":rows,"min_iou":min(r["iou"] for r in rows)}
