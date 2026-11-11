@@ -69,6 +69,8 @@ def audit(root):
                 if line_indent < indent or (line_indent == indent and not line.lstrip().startswith("- ")):
                     break
             if TEXENV.match(line) and "m_Texture" not in line:
+                if slot:
+                    counts["texenv_slots_without_texture_line"] += 1
                 slot = True
                 counts["texenv_slots_seen"] += 1
             m = TEXTURE.match(line)
