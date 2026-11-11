@@ -51,5 +51,21 @@ class TestPassProximity(unittest.TestCase):
         with self.assertRaises(ValueError):
             summarize({"sample_errors_only": False, "original_kernel_identity_proven": False, "events": []})
 
+    def test_reject_malformed_collections(self):
+        malformed = [
+            None,
+            {"line": 5, "pass_tokens": None},
+            {"line": 5, "before": "not-a-list"},
+            {"line": 5, "after": [None]},
+            {"line": 5, "pass_tokens": [None]},
+            {"line": 5, "before": [{"line": 4, "markers": None}]},
+            {"line": 5, "before": [{"line": 4, "markers": [None]}]},
+        ]
+        with self.assertRaises(ValueError):
+            summarize(None)
+        for event in malformed:
+            with self.subTest(event=repr(event)), self.assertRaises(ValueError):
+                summarize(sample([event]))
+
 if __name__ == "__main__":
     unittest.main()
