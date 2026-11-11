@@ -52,8 +52,9 @@ def source_transform_trs(obj):
     if not isinstance(obj,dict):raise ValueError("GFX107_TRANSFORM_SHAPE")
     def vec(key,axes):
         d=obj.get(key)
-        if not isinstance(d,dict):raise ValueError("GFX107_TRANSFORM_COMPONENT_MISSING")
-        return tuple(_num(d.get(k)) for k in axes)
+        if not isinstance(d,dict) or any(k not in d for k in axes):
+            raise ValueError("GFX107_TRANSFORM_COMPONENT_MISSING")
+        return tuple(_num(d[k]) for k in axes)
     (x,y,z)=vec("m_LocalPosition",("x","y","z"))
     (qx,qy,qz,qw)=vec("m_LocalRotation",("x","y","z","w"))
     sx,sy,sz=vec("m_LocalScale",("x","y","z"))
