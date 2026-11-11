@@ -1,0 +1,20 @@
+{
+  "experiment": "GFX119",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "triangles": 2388,
+  "covered_pixels": 2008,
+  "directional_light_changed_pixels": 1979,
+  "normal_control_changed_pixels": 1627,
+  "metallic_control_changed_pixels": 1960,
+  "baseline_repeat_exact": true,
+  "dark_control_nonblack_pixels": 0,
+  "driver_verified_cb_blocks": 8,
+  "original_material_bytes_preserved": 68,
+  "bound_combined_samplers": 7,
+  "rgba_sha256": "919be1dc468c32ec7a2c81d50c91542cac10b73c1ab5993d96cc3df72805593e",
+  "controlled_fixture": true,
+  "original_translated_forward_draw_completed": true,
+  "original_game_pixel_parity": false,
+  "android_device_verified": false,
+  "phase_closed": false
+}

@@ -113,7 +113,7 @@ def run_tool(args):
     return result.stdout
 
 
-def audit(stage, translate):
+def audit(stage, translate, private_consumer=None):
     material, owner, external, expected = source_material(stage)
     tree, raw, programs = load_original_shader_private(stage)
     parsed = tree["m_ParsedForm"]
@@ -142,7 +142,7 @@ def audit(stage, translate):
             "dxbc_sha256":hashlib.sha256(dxbc).hexdigest(), "declared_cb_slots":len(sizes), **coverage,
             "texture_contract":texture_contract(material,owner,external,expected,merged,shdr,slots),
         }
-        private[label] = (dxbc,sizes,payloads)
+        private[label] = (dxbc,sizes,payloads,merged)
     result = {"experiment":"GFX118","source_sha":ZIP2_SHA,"model":"M02",
               "material_keyword_count":len(source_keys),"controlled_global_keyword":"DIRECTIONAL",
               "exact_source_pair_count":len(match),"stages":stages,"gles_offline_link_passed":False,
@@ -158,7 +158,7 @@ def audit(stage, translate):
             spv = folder / (label+".spv")
             reflection = json.loads(run_tool(["spirv-cross",str(spv),"--reflect"]))
             dis = run_tool(["spirv-dis","--raw-id",str(spv)])
-            dxbc, sizes, payloads = private[label]
+            dxbc, sizes, payloads, _ = private[label]
             authenticated, _ = private_authenticated_ubo_layouts(dis,sizes,reflection)
             _, ranges, loads = spv_used_literal_byte_addresses(dis,authenticated)
             full = partial = unavailable = 0
@@ -180,6 +180,8 @@ def audit(stage, translate):
                 translated_texture_sample_contract=stage_compare(dxbc,spv,reflection,dis))
         run_tool(["glslangValidator","-l",str(folder/"probe.vert"),str(folder/"probe.frag")])
         result["gles_offline_link_passed"] = True
+        if private_consumer is not None:
+            private_consumer(folder, private)
     return result
 
 
