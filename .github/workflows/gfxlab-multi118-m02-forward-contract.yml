@@ -9,12 +9,12 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gfx118-m02-forward-contract
+  group: gfx118-m02-forward-contract-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   original-forward-contract:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 12
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
       PYTHONUNBUFFERED: '1'
@@ -41,8 +41,12 @@ jobs:
       - name: Install private translator and offline linker
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          packages=(vkd3d-compiler spirv-tools spirv-cross glslang-tools)
+          apt_options=(-o Acquire::Retries=0 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20)
+          if ! sudo timeout 90s apt-get "${apt_options[@]}" install -y -qq --no-install-recommends "${packages[@]}"; then
+            sudo timeout 90s apt-get "${apt_options[@]}" update -qq
+            sudo timeout 90s apt-get "${apt_options[@]}" install -y -qq --no-install-recommends "${packages[@]}"
+          fi
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
       - name: Validate actual M02 Forward DXBC, SPIR-V and GLES link
         run: |
