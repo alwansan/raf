@@ -59,6 +59,8 @@ def inspect(root):
             guid = guid_match.group(1).lower()
             if guid == "0" * 32:
                 refs["builtin_or_null"] += 1
+            elif duplicates[guid] > 1:
+                refs["ambiguous_duplicate_guid_in_supplied_tree"] += 1
             elif guid in known:
                 refs["resolved_in_supplied_tree"] += 1
             else:
@@ -75,13 +77,14 @@ def inspect(root):
         "oversized_yaml_files_skipped": skipped_oversized_yaml,
         "coverage_complete_for_size_limit": not (skipped_oversized_meta or skipped_oversized_yaml),
         "duplicate_guid_groups": sum(v > 1 for v in duplicates.values()),
+        "ambiguous_duplicate_guid_references": refs["ambiguous_duplicate_guid_in_supplied_tree"],
         "reference_counts": dict(sorted(refs.items())),
         "unresolved_by_source_extension": dict(sorted(unresolved_by_extension.items())),
         "unresolved_hashed_identity_by_source_extension": [
             {"source_extension": ext, "guid_sha256_prefix16": digest, "references": count}
             for (ext, digest), count in sorted(unresolved_identity_by_extension.items())
         ],
-        "limitations": "External packages, built-in resources, binary assets, symlinks and omitted source trees are not checked; skipped oversized files make size-limited coverage incomplete; no device or shader compilation proof."
+        "limitations": "Duplicate GUID references are ambiguous within the supplied tree, not proof of a runtime binding fault; external packages, built-in resources, binary assets, symlinks and omitted source trees are not checked; skipped oversized files make size-limited coverage incomplete; no device or shader compilation proof."
     }
 
 def main():
