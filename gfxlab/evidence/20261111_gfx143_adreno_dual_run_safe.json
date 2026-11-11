@@ -172,5 +172,15 @@
   "Unity_Animator_clip_player_proven": false,
   "original_game_scene_PC_Android_pixel_parity_proven": false,
   "phase_closed": false,
-  "privacy": "Only aggregate numeric data published. No original game assets, actual screenshots, raw device captures, signed private APK, or encryption keys."
+  "privacy": "Only aggregate numeric data published. No original game assets, actual screenshots, raw device captures, signed private APK, or encryption keys.",
+  "gfx143_auditor_ci_run": 43086640651,
+  "gfx143_source_free_regression_status": "SUCCESS_14_OF_14",
+  "m03_1_rgb_outlier_gt10_overlap": {
+    "light": 58,
+    "flat": 58,
+    "nonmetal": 57,
+    "light_flat_exact_same_pixels": 58,
+    "nonmetal_intersects_light": 57
+  },
+  "owner_original_game_files_in_public_ci": false
 }

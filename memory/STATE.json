@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-encrypted-owner-delivery-99",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-encrypted-owner-delivery-99.md",
-  "status": "GFX142_PLAINTEXT_APK_REDELIVERED_DEVICE_INSTALLATION_AND_9_CASE_RESULTS_OPEN",
+  "latest_session": "20261111-GFX-chat-dual-adreno-batch-100",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-dual-adreno-batch-100.md",
+  "status": "GFX143_ORIGINAL_ADRENO_OWNER_9_CASES_51_READBACKS_PASS_2_RUNS_BYTE_IDENTICAL_COLOR_HOTSPOT_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Owner installs GFX142-Install.apk (NOT encrypted .apk.cms) or extracts it from GFX142-Installable-APK.zip, then exports GFX124-ALL-TEST-LOGS-*.zip for source-original 9-case Adreno acceptance; installation has not yet been confirmed.",
+  "next_experiment": "GFX144: isolate 58 co-located M03-1 Adreno-vs-Mesa RGB>10 pixels (49/50 with error>30) with controlled texture/UV precision and sampling diagnostic before any shader modification; also verify Unity ShaderLab pass/state, native GBuffer and Animator runtime. No extra owner phone rerun required until a targeted differential APK is ready.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3112,26 +3112,60 @@
     "phase_closed": false
   },
   "gfxlab_phase_one_latest_checkpoint": {
-    "verified_source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "latest_verified_run": 43081417585,
-    "CI": "SUCCESS",
-    "crypto_regressions_passed": 5,
-    "original_source_signed_apk_v3_verified": true,
-    "encrypted_delivery_verified": true,
-    "original_source_signed_apk_size_bytes": 23082040,
-    "original_source_signed_apk_sha256": "3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773",
-    "original_source_asset_count": 235,
-    "owner_batch_expected_cases": 9,
-    "owner_batch_expected_captures": 51,
-    "signed_owner_apk_delivered_in_conversation": true,
-    "adreno_9_case_test_complete": false,
-    "actual_Unity_ShaderLab_runtime_restored": false,
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "reference_apk_sha256": "3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773",
+    "evidence_owner_zip_count": 2,
+    "owner_runs_all_52_entries_identical": true,
+    "owner_phone_gpu": "Adreno 730",
+    "owner_GLES": "3.2 V@0615.95",
+    "owner_9_case_test_complete": true,
+    "owner_51_readbacks_verified": true,
+    "actual_original_shader_controlled_draws_verified": true,
+    "original_geometric_masks_all_51_match_mesa": true,
+    "exact_total_rgba_reference_matches": 10,
+    "forward_add_off_and_reject_base_exact": true,
+    "forward_add_changed_pixels": 1979,
+    "animation_pose_unique_per_clip": [
+      1,
+      5,
+      5
+    ],
+    "shadow_caster_coverage": [
+      2008,
+      2008,
+      0,
+      0
+    ],
+    "deferred_flat_MRT_changed_pixels": [
+      0,
+      0,
+      2005,
+      0
+    ],
+    "deferred_nonmetal_MRT_changed_pixels": [
+      20,
+      2008,
+      0,
+      0
+    ],
+    "deferred_RT1_alpha_numeric_mismatch_pixels_native_flat": [
+      73,
+      73
+    ],
+    "m03_1_rgb_max_error": 59,
+    "m03_1_rgb_gt30_light_flat": [
+      49,
+      50
+    ],
+    "m03_1_rgb_gt10_coincident_light_flat": 58,
+    "gFX143_automated_audit_ci_run": 43086640651,
+    "gFX143_source_free_ci_tests": 14,
+    "phase_closed": false,
     "originalShaderRestored": false,
     "originalAnimationRestored": false,
-    "phase_closed": false,
-    "owner_install_error_diagnosis": "Downloaded GFX142 encrypted GitHub .apk.cms instead of plaintext signed APK; corrected by issuing verified GFX142-Install.apk and a plaintext-APK ZIP backup inside chat",
-    "plaintext_apk_reissued_in_current_conversation": true,
-    "android_device_installation_verified": false
+    "actual_Unity_ShaderLab_runtime_restored": false,
+    "actual_Unity_Animator_runtime_verified": false,
+    "original_PC_game_scene_pixel_parity_proven": false
   },
-  "latest_evidence_run": 43081417585
+  "latest_evidence_run": 43086640651
 }
