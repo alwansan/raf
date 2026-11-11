@@ -1,0 +1,37 @@
+name: T2 WATER-001 Foam runtime RT capture contract (source-only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_runtime_rt_pair_gate.py
+      - scripts/test_t2_foam_runtime_rt_pair_gate.py
+      - .github/workflows/raft-t2-foam-runtime-rt-contract.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-runtime-rt-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  runtime-capture-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout exact source without LFS payloads
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Validate parser and execute strict capture-contract regressions
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_runtime_rt_pair_gate.py scripts/test_t2_foam_runtime_rt_pair_gate.py
+          python3 -m unittest scripts.test_t2_foam_runtime_rt_pair_gate -v
+      - name: Evidence boundary
+        run: echo 'SOURCE_ONLY; no Unity runtime tokens captured; RT instance identity UNKNOWN; Android water pixels UNKNOWN'
