@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -56,7 +57,9 @@ public final class MainActivity extends Activity {
         layout.addView(status);
         Button export = new Button(this);
         export.setText("Export ZIP");
-        export.setOnClickListener(view -> { if (report != null) exportReport(); });
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { if (report != null) exportReport(); }
+        });
         layout.addView(export);
         surface = new GLSurfaceView(this);
         surface.setEGLContextClientVersion(3);
@@ -73,7 +76,11 @@ public final class MainActivity extends Activity {
     @Override protected void onPause() { surface.onPause(); super.onPause(); }
     @Override protected void onResume() { super.onResume(); surface.onResume(); }
 
-    private void display(String message) { runOnUiThread(() -> status.setText(message)); }
+    private void display(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() { status.setText(message); }
+        });
+    }
 
     private static int compile(int type, String source) {
         int shader = glCreateShader(type);
@@ -245,36 +252,40 @@ public final class MainActivity extends Activity {
     }
 
     private void exportReport() {
-        new Thread(() -> {
-            Uri uri = null;
-            String name = "GFX109-ALL-TEST-LOGS-" + System.currentTimeMillis() + ".zip";
-            try {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Downloads.DISPLAY_NAME, name);
-                values.put(MediaStore.Downloads.MIME_TYPE, "application/zip");
-                values.put(MediaStore.Downloads.RELATIVE_PATH, DIRECTORY);
-                values.put(MediaStore.Downloads.IS_PENDING, 1);
-                uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-                if (uri == null) throw new IllegalStateException("Cannot create download");
-                try (OutputStream out = getContentResolver().openOutputStream(uri)) {
-                    if (out == null) throw new IllegalStateException("Cannot open download");
-                    try (ZipOutputStream zip = new ZipOutputStream(out)) {
-                        zip.putNextEntry(new ZipEntry("summary.json"));
-                        zip.write(report);
-                        zip.closeEntry();
-                    }
-                }
-                values.clear();
-                values.put(MediaStore.Downloads.IS_PENDING, 0);
-                if (getContentResolver().update(uri, values, null, null) != 1) {
-                    throw new IllegalStateException("Cannot publish download");
-                }
-                display("GPU position match: " + new JSONObject(new String(report, StandardCharsets.UTF_8))
-                    .optBoolean("gpu_source_position_match") + "\nSaved " + DIRECTORY + name);
-            } catch (Exception ex) {
-                if (uri != null) getContentResolver().delete(uri, null, null);
-                display("Export failed. Tap Export ZIP to retry.\n" + ex);
-            }
+        new Thread(new Runnable() {
+            @Override public void run() { writeReport(); }
         }).start();
+    }
+
+    private void writeReport() {
+        Uri uri = null;
+        String name = "GFX109-ALL-TEST-LOGS-" + System.currentTimeMillis() + ".zip";
+        try {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Downloads.DISPLAY_NAME, name);
+            values.put(MediaStore.Downloads.MIME_TYPE, "application/zip");
+            values.put(MediaStore.Downloads.RELATIVE_PATH, DIRECTORY);
+            values.put(MediaStore.Downloads.IS_PENDING, 1);
+            uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+            if (uri == null) throw new IllegalStateException("Cannot create download");
+            try (OutputStream out = getContentResolver().openOutputStream(uri)) {
+                if (out == null) throw new IllegalStateException("Cannot open download");
+                try (ZipOutputStream zip = new ZipOutputStream(out)) {
+                    zip.putNextEntry(new ZipEntry("summary.json"));
+                    zip.write(report);
+                    zip.closeEntry();
+                }
+            }
+            values.clear();
+            values.put(MediaStore.Downloads.IS_PENDING, 0);
+            if (getContentResolver().update(uri, values, null, null) != 1) {
+                throw new IllegalStateException("Cannot publish download");
+            }
+            display("GPU position match: " + new JSONObject(new String(report, StandardCharsets.UTF_8))
+                .optBoolean("gpu_source_position_match") + "\nSaved " + DIRECTORY + name);
+        } catch (Exception ex) {
+            if (uri != null) getContentResolver().delete(uri, null, null);
+            display("Export failed. Tap Export ZIP to retry.\n" + ex);
+        }
     }
 }
