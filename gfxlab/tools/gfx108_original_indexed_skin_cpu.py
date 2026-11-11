@@ -16,7 +16,7 @@ from gfxlab.tools.shears_provenance_probe import resolve_pptr
 from gfxlab.tools.gfx107_source_bindpose_math import (
     source_world_matrix,source_matrix4,mul)
 from gfxlab.tools.gfx108_indexed_skinning_cpu import (
-    positions_from_parsed_mesh,decoded_handler_skin,skin_positions_cpu,
+    positions_from_parsed_mesh,decoded_handler_skin,handler_skin_safe_shapes,skin_positions_cpu,
     safe_displacement_stats)
 
 def direct_mesh_handler(mesh_reader):
@@ -82,7 +82,14 @@ def inspect_exact_source_skin(entry,types,externals):
         reason=str(e)
         if not reason.startswith(("GFX107_","GFX108_")):
             reason="GFX108_MESH_VERTEX_OR_SKIN_SHAPE_UNSUPPORTED"
+        safe_shape={}
+        if reason in ("GFX108_SKIN_INFLUENCES_SHAPE",
+                      "GFX108_DIRECT_MESH_HANDLER_SKIN_CHANNELS_UNAVAILABLE",
+                      "GFX108_DIRECT_HANDLER_BONE_WEIGHT_LAYOUT"):
+            if "handler" in locals():
+                safe_shape=handler_skin_safe_shapes(handler)
         return {"model":model,"source_vertex_count":v,"status":reason,
+                "safe_influence_channel_shapes":safe_shape,
                 "cpu_original_vertices_deformed":False}
     return {"model":model,"status":"SOURCE_INDEXED_LBS_COMPUTED",
         "source_vertex_count":v,
