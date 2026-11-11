@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-m02-depth-raster-81",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-depth-raster-81.md",
-  "status": "GFX114_ADRENO_15_EXACT_SILHOUETTES_GFX115_SIGNED_DEPTH_APK_PHONE_PENDING_PHASE_ONE_OPEN",
+  "latest_session": "20261111-GFX-chat-m02-bc3-mip-chains-82",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-bc3-mip-chains-82.md",
+  "status": "GFX115_ADRENO_DEPTH_VERIFIED_GFX116_33_ORIGINAL_MIPS_SIGNED_APK_PHONE_PENDING_PHASE_ONE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -2925,6 +2925,19 @@
     "apk_sha256": "d9d5a08618a5d95e18cd21b98155985fad8041aa43e0fe9373021dffc6d4a3c2",
     "mesa_exact_coverage": 15,
     "mesa_max_stable_depth_error_codes": 34,
+    "owner_gpu_pending": false,
+    "phase_closed": false,
+    "owner_exact_coverage": 15,
+    "owner_max_depth_error_codes": 42,
+    "owner_max_stable_depth_error_codes": 35
+  },
+  "latest_gfx116": {
+    "run": 43031638226,
+    "artifact": 13861420729,
+    "apk_sha256": "e6682cfbd4230698c4154ee79adafe1656a658e443f0f8f62f58088f3fb15e09",
+    "source_mips": 33,
+    "mesa_texels_per_path": 4194303,
+    "mesa_native_max_channel_error": 2,
     "owner_gpu_pending": true,
     "phase_closed": false
   }

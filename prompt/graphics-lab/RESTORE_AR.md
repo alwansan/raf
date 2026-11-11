@@ -1,3 +1,15 @@
+## 11 Nov 2026 — GFX115 Adreno depth verified; GFX116 original mip probe delivered
+
+Session `20261111-GFX-chat-m02-bc3-mip-chains-82`, origin=chat. Write only `experiment/android-graphics-rootcause`.
+
+GFX115: both owner archives passed CRC, exact signed APK payload hashes, and recomputed PNG coverage/depth statistics. Their contents are identical, representing one result. All 15 images have IoU 1 and zero coverage differences; all 24,990 positions pass tolerance. Maximum fragment-depth encoding error 42 codes; outside edge diagnostic max 35 and mean 1.0303 codes. Unlike Mesa's raw edge outlier, the largest owner difference is small. Evidence `gfxlab/evidence/20261111_gfx115_owner_adreno_depth_safe.json`. The verified diagnostic depth pass uses an oblique camera, GL_LESS and 24-bit buffer with 16-bit output, and does not use original Shader48.
+
+GFX116: exact M02 Material → Texture2D source links recovered three BC3/DXT5 1024² textures, 11 serialized mips each. Source spans verified against four pinned Git blobs and all mip payload hashes retained. Per-role original compressed chains are 1,398,128 bytes. Basecolor/metallic use source sRGB, normal uses linear. Pillow decodes each serialized level independently, without regenerating mips. Mesa sampled all 4,194,303 texels in each path with the APK shader. Decoded RGBA path exact; native BC3 worst absolute channel error 2 (basecolor), 1 (normal and metallic), and no channel exceeds 2. The sRGB sample path encodes linear shader output back to sRGB for comparison with CPU bytes; alpha remains linear. GFX116 uses texelFetch to isolate per-level sampling. Filtering, UV raster interpolation, normal-map unpacking, original Shader48, and material render parity are still open. Evidence `gfxlab/evidence/20261111_gfx116_original_m02_bc3_safe.json` and `gfxlab/evidence/20261111_gfx116_mesa_bc3_sampling_safe.json`.
+
+[CI43031638226](https://github.com/alwansan/raf/actions/runs/43031638226) passed. Verified signed APK com.alwansan.gfx116, 6226710 bytes, SHA256 `e6682cfbd4230698c4154ee79adafe1656a658e443f0f8f62f58088f3fb15e09`, archive CRC and digest, and all six compressed/decoded assets byte-for-byte against independent local extraction. Artifact 13861420729; delivered file `libfile_b43ca8c84ff081919bf573649b95e1e7`. Run and return one `GFX116-ALL-TEST-LOGS-*.zip` from `Download/Games/cl/test/g/`. Native upload rejection on a handset is a measured capability result, and decoded RGBA is always checked. `gfxlab/tools/gfx116_owner_zip_audit.py` verifies source asset hashes and all mip/channel counters; real Mesa counters and missing-mip rejection tested. No original assets or owner ZIPs committed. Phone texture sampling pending. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX114 Adreno raster verified; GFX115 depth test delivered
 
 Session `20261111-GFX-chat-m02-depth-raster-81`, origin=chat. Write only `experiment/android-graphics-rootcause`.
