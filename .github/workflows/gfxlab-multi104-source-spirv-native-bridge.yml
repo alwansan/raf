@@ -1,0 +1,86 @@
+name: GFX-MULTI-104 original Shader48 DXBC to SPIRV to GLES310 native interpolation bridge
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi104-source-spirv-native-bridge.yml'
+      - 'gfxlab/tools/gfx104_spirv_input_interpolation.py'
+      - 'gfxlab/tools/gfx104_source_shader_spirv_bridge.py'
+      - 'gfxlab/tests/test_gfx104_spirv_input_interpolation.py'
+      - 'gfxlab/tests/test_gfx104_source_shader_spirv_bridge.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-multi104-original-source-private-interpolation-bridge
+  cancel-in-progress: false
+jobs:
+  private-source-spirv-gles310-interpolation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Checkout only GFX-LAB branch scripts and tests
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run completely source-free synthetic SPIR-V decoration and stage tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile gfxlab/tools/gfx104_spirv_input_interpolation.py gfxlab/tools/gfx104_source_shader_spirv_bridge.py
+          python3 -m unittest discover -s gfxlab/tests -p 'test_gfx104_*.py' -v
+      - name: Load only pinned ZIP2 assets inside private runner
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install pinned parser and source-private SPIR-V compilers
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Check all 524 exact source pairs; privately translate only distinct affected PS stages
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from gfxlab.tools.original_model_probe import stage_originals
+          from gfxlab.tools.gfx104_source_shader_spirv_bridge import original_noperspective_translation_census
+          stage=stage_originals(Path('source-zip2'),Path('gfx104-source-private'))
+          result=original_noperspective_translation_census(stage)
+          assert result['source_shader48_original_exact_pairs']==524
+          assert result['counts'].get('original_pairs_seen')==524
+          assert result['originalShaderRestored'] is False
+          assert result['source_to_generated_gles_noperspective_identity_verified'] is False
+          assert result['phase_closed'] is False
+          assert result['private_shader_bytes_exported'] is False
+          Path('gfx104-safe-bridge-counts.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print('GFX104_SOURCE_PRIVATE_SAFE_AGGREGATE',json.dumps(result,sort_keys=True))
+          PY
+      - name: Publish safe counters only, never source shader/GLSL/registry names
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX104-original-SPIRV-GLES310-interpolation-safe-counts
+          path: gfx104-safe-bridge-counts.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Purge original ZIP2 source and all source-private staging even on failure
+        if: always()
+        run: |
+          sudo rm -rf source-zip2 gfx104-source-private
+          echo GFX104_PRIVATE_SOURCE_PURGED=true
