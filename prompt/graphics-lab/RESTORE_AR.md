@@ -1,3 +1,9 @@
+### GFX147.2 verified private-local replay / encrypted relay upload follow-up
+
+The source-original GFX147 Off/Back/Front frames were regenerated locally on a different llvmpipe version and all three raw SHA256 matched CI exact. Both actual owner Adreno archives yielded the same independent data: Off-vs-Off RGB>10 **58**, Off-vs-Back **135**, Off-vs-Front **2,569**. Back comparison removed 14 former outliers but introduced 91 new, so **do not call Cull Back a proven phone/game fix** without a *same-mode* Adreno Back GPU capture. The private local reference replay made the second encrypted artifact unnecessary; its GitHub [run 43094779535](https://github.com/alwansan/raf/actions/runs/43094779535) successfully finished original GPU source and AES-GCM encryption, but its artifact-upload step reported **failure** during completion; at last inspection overall job post-cleanup had not yet reached terminal status. Never infer an available .cms artifact or present an encrypted CMS as installable APK. The one-time local comparison private key and private raw frames were purged after analysis; the numerical source-safe report was retained. Source-free compare regressions [run 43096042732](https://github.com/alwansan/raf/actions/runs/43096042732) were queued at last inspection, **not** yet CI-verified. This does not affect GFX147 original Mesa GPU success run 43093563974. GFX148 targeted 3-readback on-device Cull differential remains the next acceptance gate; phase_closed=false.
+
+---
+
 ## 11 Nov 2026 — GFX147.2 VERIFIED: private source-original Mesa Cull images compared against both owner Adreno ZIPs
 
 GFX-LAB session `20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106` (`origin=chat`), **write only** `experiment/android-graphics-rootcause`; no T-team game branch modifications.

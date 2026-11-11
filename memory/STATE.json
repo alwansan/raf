@@ -3227,7 +3227,12 @@
     "GFX1472_prior_hotspots_removed_by_Mesa_Back": 14,
     "GFX1472_new_hotspots_from_Mesa_Back": 91,
     "GFX1472_actual_Adreno_CullBack_capture_available": false,
-    "GFX1472_hypothesis_causally_proven": false
+    "GFX1472_hypothesis_causally_proven": false,
+    "GFX147_encrypted_relay_upload_step_failed": true,
+    "GFX147_local_GLES_Mesa_replay_reproduced_three_ci_frame_hashes": true,
+    "GFX147_2_source_free_regression_ci_run": 43096042732,
+    "GFX147_2_regression_ci_status_at_last_check": "QUEUED",
+    "GFX148_targeted_Adreno_Cull_back_same_mode_comparison_pending": true
   },
   "latest_evidence_run": 43093563974
 }
