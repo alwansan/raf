@@ -39,13 +39,12 @@ CORE = (
     "Raft_Data/resources.assets.resS",
     *ENGINE_FILES,
 )
-GRAPHICS = tuple(sorted(
-    {"Raft_Data/" + name for name in OWNERS}
-    | {"Raft_Data/" + n + ".assets.resS" for n in ("resources",)}
-    | set(ENGINE_FILES)
-))
-# Full selection is derived from the authenticated manifest, not these fixed
-# filenames. The static base exists so a changed manifest can be crosschecked.
+RUNTIME_INPUT_FILES = (
+    "Raft_Data/globalgamemanagers",
+    "Raft_Data/boot.config",
+)
+# The full Unity export intake includes scene settings and boot configuration,
+# not just the 82 serialized asset owners, 48 streamed files and 2 built-ins.
 
 
 def choose(records: dict, profile: str, selected: list[str] | None = None) -> list[str]:
@@ -55,17 +54,17 @@ def choose(records: dict, profile: str, selected: list[str] | None = None) -> li
         owners = {"Raft_Data/" + n for n in OWNERS}
         streams = {n for n in records if n.startswith("Raft_Data/") and
                    n.endswith((".resS", ".resource"))}
-        names = sorted(owners | streams | set(ENGINE_FILES))
-        if len(owners) != 82 or len(streams) != 48 or len(names) != 132:
+        names = sorted(owners | streams | set(ENGINE_FILES) | set(RUNTIME_INPUT_FILES))
+        if len(owners) != 82 or len(streams) != 48 or len(names) != 134:
             raise SourceFailure("unexpected_full_graphics_source_coverage")
-        if not owners | streams | set(ENGINE_FILES) <= set(records):
+        if not (owners | streams | set(ENGINE_FILES) | set(RUNTIME_INPUT_FILES)) <= set(records):
             raise SourceFailure("missing_full_graphics_source")
     elif profile == "selected":
         if not selected or len(selected) != len(set(selected)):
             raise SourceFailure("empty_or_duplicate_selected_graphics")
         allow = ({"Raft_Data/" + n for n in OWNERS} |
                  {n for n in records if n.startswith("Raft_Data/") and
-                  n.endswith((".resS", ".resource"))} | set(ENGINE_FILES))
+                  n.endswith((".resS", ".resource"))} | set(ENGINE_FILES) | set(RUNTIME_INPUT_FILES))
         if not set(selected) <= allow:
             raise SourceFailure("selected_path_not_graphics")
         names = sorted(selected)
