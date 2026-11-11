@@ -130,7 +130,9 @@ namespace RaftAndroid.Platform
             float canvasScale = Screen.height / 720f; // CanvasScaler matches height.
             float safeHeight = safe.height / canvasScale;
             float safeWidth = safe.width / canvasScale;
-            float factor = Mathf.Clamp(Mathf.Min(safeHeight / 684f, safeWidth / 666f), 0.1f, 1f);
+            // A positive minimum scale can push panels beyond a very small safe area.
+            // Match the right-side actions: never force a size larger than fits.
+            float factor = Mathf.Clamp01(Mathf.Min(safeHeight / 684f, safeWidth / 666f));
             FitPanel(editorObject, factor);
             FitPanel(reportObject, factor);
         }
