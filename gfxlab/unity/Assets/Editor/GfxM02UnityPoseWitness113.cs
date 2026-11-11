@@ -32,7 +32,7 @@ namespace RaftGraphicsLabEditor
             public string experiment = "GFX113";
             public int poses, positions, failingVertices;
             public float maxAbsoluteError;
-            public bool originalClipPlaybackVerified, nativeBakeMeshInvoked, phase_closed;
+            public bool originalClipPlaybackVerified, nativeBakeMeshInvoked, reconstructedClipSampled, phase_closed;
         }
 
         public static void Build()
@@ -58,7 +58,11 @@ namespace RaftGraphicsLabEditor
             Debug.Log("GFX113_SAFE " + JsonUtility.ToJson(report));
         }
 
-        public static void BuildNativeBake()
+        public static void BuildNativeBake() { RunNativeBake(false); }
+
+        public static void BuildClipSample() { RunNativeBake(true); }
+
+        private static void RunNativeBake(bool sampleClip)
         {
             string root = Path.Combine(Application.dataPath, "../private-inputs");
             Inputs input = JsonUtility.FromJson<Inputs>(File.ReadAllText(Path.Combine(root, "clips.json")));
@@ -71,29 +75,32 @@ namespace RaftGraphicsLabEditor
                 if (indices.BaseStream.Position != indices.BaseStream.Length)
                     throw new InvalidDataException("Unexpected source index data");
             }
-            var report = new Report {experiment="GFX150", nativeBakeMeshInvoked=true};
+            var report = new Report {experiment=sampleClip ? "GFX151" : "GFX150",
+                nativeBakeMeshInvoked=true, reconstructedClipSampled=sampleClip};
             for (int c = 0; c < input.clips.Length; c++)
-                BakeClip(input.clips[c], c, root, triangles, report);
+                BakeClip(input.clips[c], c, root, triangles, report, sampleClip);
             if (report.poses != 15 || report.positions != 24990)
                 throw new InvalidDataException("Native pose coverage changed");
-            File.WriteAllText(Path.Combine(Application.dataPath, "../gfx150-safe.json"), JsonUtility.ToJson(report,true));
-            Debug.Log("GFX150_SAFE " + JsonUtility.ToJson(report));
+            File.WriteAllText(Path.Combine(Application.dataPath, "../"+report.experiment.ToLowerInvariant()+"-safe.json"), JsonUtility.ToJson(report,true));
+            Debug.Log(report.experiment+"_SAFE " + JsonUtility.ToJson(report));
         }
 
-        private static void BakeClip(Clip clip, int clipIndex, string root, int[] triangles, Report report)
+        private static void BakeClip(Clip clip, int clipIndex, string root, int[] triangles, Report report, bool sampleClip)
         {
             var holder = new GameObject("GfxBakeRoot");
             var mesh = new Mesh();
             var baked = new Mesh();
+            AnimationClip reconstructed = null;
             try
             {
                 var transforms = new Transform[clip.nodes.Length];
                 for (int i = 0; i < transforms.Length; i++)
                 {
-                    transforms[i] = new GameObject("Node").transform;
+                    transforms[i] = new GameObject("Node"+i).transform;
                     int parent = clip.nodes[i].parent;
                     transforms[i].SetParent(parent < 0 ? holder.transform : transforms[parent], false);
                 }
+                if (sampleClip) reconstructed = ReconstructSampleClip(clip, holder, transforms);
                 var bones = new Transform[clip.bones.Length];
                 var bindposes = new Matrix4x4[bones.Length];
                 for (int i = 0; i < bones.Length; i++)
@@ -136,7 +143,8 @@ namespace RaftGraphicsLabEditor
                     }
                     renderer.sharedMesh = mesh;
                     float time = (float)((double)clip.start + ((double)clip.stop - clip.start) * step / 4);
-                    Evaluate(clip, time, transforms);
+                    if (reconstructed == null) Evaluate(clip, time, transforms);
+                    else reconstructed.SampleAnimation(holder, step / 4f);
                     renderer.BakeMesh(baked);
                     Vector3[] actual = baked.vertices;
                     if (actual.Length != reference.Length) throw new InvalidDataException("Native vertex count differs");
@@ -159,10 +167,57 @@ namespace RaftGraphicsLabEditor
             }
             finally
             {
+                if (reconstructed != null) UnityEngine.Object.DestroyImmediate(reconstructed);
                 UnityEngine.Object.DestroyImmediate(holder);
                 UnityEngine.Object.DestroyImmediate(baked);
                 UnityEngine.Object.DestroyImmediate(mesh);
             }
+        }
+
+        // Sampled curves only. Normalized times preserve every reference pose and avoid
+        // making claims about the original compressed clip's interpolation or wrap mode.
+        private static AnimationClip ReconstructSampleClip(Clip source, GameObject holder, Transform[] nodes)
+        {
+            var clip = new AnimationClip { legacy = true, wrapMode = WrapMode.ClampForever };
+            var positions = new Vector3[5, nodes.Length];
+            var rotations = new Quaternion[5, nodes.Length];
+            var scales = new Vector3[5, nodes.Length];
+            for (int step = 0; step < 5; step++)
+            {
+                float time = (float)((double)source.start + ((double)source.stop - source.start) * step / 4);
+                Evaluate(source, time, nodes);
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    positions[step,i] = nodes[i].localPosition;
+                    rotations[step,i] = nodes[i].localRotation;
+                    scales[step,i] = nodes[i].localScale;
+                }
+            }
+            for (int node = 0; node < nodes.Length; node++)
+            {
+                string path = UnityEditor.AnimationUtility.CalculateTransformPath(nodes[node], holder.transform);
+                for (int axis = 0; axis < 4; axis++)
+                {
+                    var pos = new Keyframe[5];
+                    var rot = new Keyframe[5];
+                    var scl = new Keyframe[5];
+                    for (int step = 0; step < 5; step++)
+                    {
+                        float t = step / 4f;
+                        rot[step] = new Keyframe(t, rotations[step,node][axis]);
+                        if (axis == 3) continue;
+                        pos[step] = new Keyframe(t, positions[step,node][axis]);
+                        scl[step] = new Keyframe(t, scales[step,node][axis]);
+                    }
+                    string suffix = "." + "xyzw"[axis];
+                    clip.SetCurve(path, typeof(Transform), "localRotation"+suffix, new AnimationCurve(rot));
+                    if (axis == 3) continue;
+                    clip.SetCurve(path, typeof(Transform), "localPosition"+suffix, new AnimationCurve(pos));
+                    clip.SetCurve(path, typeof(Transform), "localScale"+suffix, new AnimationCurve(scl));
+                }
+            }
+            clip.EnsureQuaternionContinuity();
+            return clip;
         }
 
         private static Vector3 ReadVector(BinaryReader reader)
