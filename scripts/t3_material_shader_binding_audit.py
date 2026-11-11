@@ -26,7 +26,7 @@ def audit(root):
             continue
         m = GUID.search(path.read_text(encoding='utf-8', errors='replace'))
         if m:
-            owners[m.group(1).lower()].add(path.name[:-5].lower().endswith('.shader'))
+            owners[m.group(1).lower()].add((path.relative_to(root).as_posix(), path.name[:-5].lower().endswith('.shader')))
     for path in root.rglob('*.mat'):
         if path.is_symlink() or not path.is_file():
             continue
@@ -52,7 +52,7 @@ def audit(root):
             n = len(owner_types)
             if n == 0:
                 counts['shader_guid_not_in_supplied_tree'] += 1
-            elif n == 1 and True in owner_types:
+            elif n == 1 and next(iter(owner_types))[1]:
                 counts['shader_guid_unique_in_supplied_tree'] += 1
             elif n == 1:
                 counts['shader_guid_points_to_non_shader_meta'] += 1
