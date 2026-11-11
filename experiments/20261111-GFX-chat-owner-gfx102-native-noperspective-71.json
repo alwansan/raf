@@ -1,0 +1,38 @@
+{
+  "session_id": "20261111-GFX-chat-owner-gfx102-native-noperspective-71",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "branch": "experiment/android-graphics-rootcause",
+  "resumed_from": "20261111-GFX-chat-gfx101-owner-adreno-102-matrix-70",
+  "experiment": "GFX-MULTI-102_OWNER_VERIFIED_GFX103_SOURCE_STAGE_GATE",
+  "owner_zip_sha256": [
+    "82fa4235ec6e4a88e8d02fd89cb4077fa228dd8c617cb697503c3137dfa44ff5",
+    "858d6bd354b17fdfdf6f8f2c6f3930099bce015d36c206b2f990f20a37a58a29"
+  ],
+  "driver": "Adreno 730 / GLES 3.2 / GLSL ES 3.20",
+  "owner_two_exports_same_summary_events": true,
+  "verified_native_versions": [
+    310,
+    320
+  ],
+  "rejected_native_versions": [
+    300
+  ],
+  "native310_320_gpu_pixels_equal_affine_emulation": true,
+  "native310_320_gpu_raw_sha256": "ee7ceeaf02c698f4c805caea6d8ffad23913a86c25aec794429fd0cf174456a3",
+  "affine_cpu_mad": 0.001141990429516256,
+  "synthetic_native_gpu_qualifier_passed": true,
+  "original_shader48_stage_parity_passed": false,
+  "gfx103_implementation": [
+    "gfxlab/tools/gfx103_source_interpolation_gate.py",
+    "gfxlab/tools/gfx103_source_interpolation_census.py",
+    "gfxlab/tests/test_gfx103_source_interpolation_gate.py",
+    "gfxlab/tests/test_gfx103_source_interpolation_census.py",
+    ".github/workflows/gfxlab-multi103-source-interpolation-classes.yml"
+  ],
+  "gfx103_status": "SOURCE_CI_COMMITTED; real original safe census pending",
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "pcAdrenoPixelParityVerified": false,
+  "phase_closed": false
+}
