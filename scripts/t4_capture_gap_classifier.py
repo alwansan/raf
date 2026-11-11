@@ -5,9 +5,15 @@ Never treat telemetry correlation as proof of gameplay or event delivery.
 """
 import argparse
 import json
+import math
 from pathlib import Path
 
 KEYS = ("left", "right", "middle", "scroll")
+
+
+def _valid_growth(value):
+    # bool is an int in Python, but never a legitimate counter sample.
+    return type(value) is int and value >= 0
 
 
 def classify(summary):
@@ -19,7 +25,11 @@ def classify(summary):
     for key in KEYS:
         cb = callbacks.get(key, 0)
         rd = readers.get(key, 0)
-        if key not in cb_first or key not in rd_first:
+        if (not _valid_growth(cb) or not _valid_growth(rd)
+                or (key in cb_first and not _valid_growth(cb_first[key]))
+                or (key in rd_first and not _valid_growth(rd_first[key]))):
+            state = "invalid_counter_evidence"
+        elif key not in cb_first or key not in rd_first:
             state = "insufficient_paired_baseline"
         elif cb > 0 and rd == 0:
             state = "callback_growth_without_reader_growth"
