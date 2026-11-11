@@ -1,0 +1,30 @@
+{
+  "session_id": "20261111-GFX-chat-original-spirv-interpolation-72",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "resumed_from": "20261111-GFX-chat-owner-gfx102-native-noperspective-71",
+  "branch": "experiment/android-graphics-rootcause",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "device_witness": "GFX102 confirmed native NV NoPerspective GLES310+GLES320 on Adreno730 synthetic triangle; GLSL300 rejected",
+  "source_gfx039": "16 noperspective and 16 system-interpreted declarations among distinct PS; overlap UNKNOWN, not equal to pair counts",
+  "changes": [
+    "Hardened gfxlab/tools/gfx103_source_interpolation_gate.py to skip GLSL comments/strings and detect centroid/sample qualifier order",
+    "Added two source-free GFX103 regression methods for false qualification and ordering",
+    "Added gfxlab/tools/gfx104_spirv_input_interpolation.py to inspect SPIRV Input variables, direct/member NoPerspective, BuiltIn, Flat, grouped/unresolved structures",
+    "Fixed built-in member NoPerspective exclusion from ordinary varying candidate count",
+    "Added gfxlab/tools/gfx104_source_shader_spirv_bridge.py to translate only authenticated original NP-bearing PS from 524 exact pairs using private DXBC→SPIRV→GLSL ES310",
+    "Added 9 source-free decoration binary tests and 5 mocked original pair tests",
+    "Added .github/workflows/gfxlab-multi104-source-spirv-native-bridge.yml with immutable source pin, private purge and safe aggregate only",
+    "Ran six locally reconstructed isolated SPIR-V parser cases and six local GLSL lexer examples; both 6/6 passed, not equivalent to full GitHub CI"
+  ],
+  "source_private_ci_workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi104-source-spirv-native-bridge.yml",
+  "previous_ci_workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi103-source-interpolation-classes.yml",
+  "github_actions_conclusion": "UNVERIFIED",
+  "actual_source_524_pair_counts": "PENDING_IN_GFX103_WORKFLOW",
+  "actual_spirv_preservation_counts": "PENDING_IN_GFX104_WORKFLOW",
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "sourceMaterialRegisterBindingVerified": false,
+  "pcAdrenoPixelParityVerified": false,
+  "phase_closed": false
+}
