@@ -3,6 +3,7 @@ package com.alwansan.gfx109;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.net.Uri;
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +22,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -36,14 +39,15 @@ public final class MainActivity extends Activity {
         + "precision highp float; precision highp int;\n"
         + "layout(location=0) in vec3 position; layout(location=1) in vec4 weight;\n"
         + "layout(location=2) in uvec4 bone; layout(std140) uniform Palette { mat4 matrices[100]; };\n"
-        + "out vec3 skinned;\n"
+        + "out vec3 skinned; uniform bool uRaster; uniform mat4 uCamera;\n"
         + "void main() { vec4 p=vec4(position,1.0); skinned=vec3(0.0);\n"
         + "for (int i=0;i<4;++i) if (weight[i]>0.0) { vec4 q=matrices[bone[i]]*p;\n"
-        + "skinned+=weight[i]*(q.xyz/q.w); } gl_Position=vec4(0.0,0.0,0.0,1.0); }\n";
+        + "skinned+=weight[i]*(q.xyz/q.w); } gl_Position=uRaster ? uCamera*vec4(skinned,1.0) : vec4(0.0,0.0,0.0,1.0); }\n";
     private static final String FRAGMENT = "#version 300 es\n"
         + "precision mediump float; out vec4 color; void main(){color=vec4(1.0);}\n";
 
     private String experiment() {
+        if ("com.alwansan.gfx114".equals(getPackageName())) return "GFX114";
         return "com.alwansan.gfx112".equals(getPackageName()) ? "GFX112" : "GFX109";
     }
 
@@ -53,6 +57,9 @@ public final class MainActivity extends Activity {
         for (int i = 0; i < poses.length; i++) poses[i] = "C" + (i / 5) + "P" + (i % 5);
         return poses;
     }
+
+    private static final int SIDE = 256;
+    private final Map<String, byte[]> images = new LinkedHashMap<>();
 
     private TextView status;
     private GLSurfaceView surface;
@@ -122,14 +129,17 @@ public final class MainActivity extends Activity {
         return program;
     }
 
-    private JSONObject compare(String model, int program) throws Exception {
-        byte[] bytes;
-        try (InputStream in = getAssets().open(model + ".bin");
+    private byte[] asset(String name) throws Exception {
+        try (InputStream in = getAssets().open(name);
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[8192];
             for (int length; (length = in.read(buffer)) != -1;) out.write(buffer, 0, length);
-            bytes = out.toByteArray();
+            return out.toByteArray();
         }
+    }
+
+    private JSONObject compare(String model, int program) throws Exception {
+        byte[] bytes = asset(model + ".bin");
         ByteBuffer source = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
         int magic = source.getInt();
         int vertices = source.getInt();
@@ -210,9 +220,11 @@ public final class MainActivity extends Activity {
                 }
             }
             checkGl("readback");
-            return new JSONObject().put("model", model).put("vertices", vertices).put("bones", bones)
+            JSONObject result = new JSONObject().put("model", model).put("vertices", vertices).put("bones", bones)
                 .put("gpu_vertices_written", written[0]).put("source_payload_sha256", sha256(bytes)).put("failing_vertices", failingVertices)
                 .put("nonfinite_vertices", nonfiniteVertices).put("max_absolute_error", maxError);
+            if ("GFX114".equals(experiment())) result.put("raster", raster(model, program));
+            return result;
         } finally {
             glBindVertexArray(0);
             glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 0);
@@ -220,6 +232,84 @@ public final class MainActivity extends Activity {
             glDeleteQueries(1, query, 0);
             glDeleteVertexArrays(1, arrays, 0);
             glDeleteBuffers(3, buffers, 0);
+        }
+    }
+
+    private JSONObject raster(String model, int program) throws Exception {
+        byte[] mesh = asset("raster114.bin");
+        byte[] expected = asset(model + ".mask");
+        if (mesh.length <= 64 || (mesh.length - 64) % 6 != 0 || expected.length != SIDE * SIDE) {
+            throw new IllegalStateException("Wrong raster assets");
+        }
+        ByteBuffer packed = ByteBuffer.wrap(mesh).order(ByteOrder.LITTLE_ENDIAN);
+        float[] camera = new float[16];
+        for (int i = 0; i < camera.length; i++) camera[i] = packed.getFloat();
+        ByteBuffer indices = ByteBuffer.allocateDirect(mesh.length - 64);
+        indices.put(mesh, 64, mesh.length - 64).flip();
+        int[] fbo = new int[1], color = new int[1], ebo = new int[1];
+        glGenFramebuffers(1, fbo, 0);
+        glGenTextures(1, color, 0);
+        glGenBuffers(1, ebo, 0);
+        int mode = glGetUniformLocation(program, "uRaster");
+        int projection = glGetUniformLocation(program, "uCamera");
+        if (mode < 0 || projection < 0) throw new IllegalStateException("Raster uniforms missing");
+        try {
+            glBindTexture(GL_TEXTURE_2D, color[0]);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, SIDE, SIDE);
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color[0], 0);
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+                throw new IllegalStateException("Raster framebuffer incomplete");
+            glViewport(0, 0, SIDE, SIDE);
+            glDisable(GL_DITHER);
+            glDisable(GL_BLEND);
+            glDisable(GL_DEPTH_TEST);
+            glDisable(GL_CULL_FACE);
+            glClearColor(0, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.remaining(), indices, GL_STATIC_DRAW);
+            glUniformMatrix4fv(projection, 1, false, camera, 0);
+            glUniform1i(mode, 1);
+            glDrawElements(GL_TRIANGLES, (mesh.length - 64) / 2, GL_UNSIGNED_SHORT, 0);
+            ByteBuffer pixels = ByteBuffer.allocateDirect(SIDE * SIDE * 4);
+            glReadPixels(0, 0, SIDE, SIDE, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+            checkGl("indexed raster readback");
+            int[] argb = new int[SIDE * SIDE];
+            int intersection = 0, union = 0, differences = 0;
+            for (int y = 0; y < SIDE; y++) {
+                for (int x = 0; x < SIDE; x++) {
+                    int screen = y * SIDE + x;
+                    int gl = ((SIDE - 1 - y) * SIDE + x) * 4;
+                    int r = pixels.get(gl) & 255, g = pixels.get(gl + 1) & 255;
+                    int b = pixels.get(gl + 2) & 255, a = pixels.get(gl + 3) & 255;
+                    if (a != 255 || r != g || r != b || (r != 0 && r != 255))
+                        throw new IllegalStateException("Nonbinary raster pixel");
+                    boolean actual = r == 255;
+                    boolean reference = expected[screen] != 0;
+                    if (actual && reference) intersection++;
+                    if (actual || reference) union++;
+                    if (actual != reference) differences++;
+                    argb[screen] = 0xff000000 | (r << 16) | (g << 8) | b;
+                }
+            }
+            Bitmap image = Bitmap.createBitmap(argb, SIDE, SIDE, Bitmap.Config.ARGB_8888);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            boolean encoded = image.compress(Bitmap.CompressFormat.PNG, 100, out);
+            image.recycle();
+            if (!encoded) throw new IllegalStateException("PNG encoding failed");
+            byte[] png = out.toByteArray();
+            String filename = model + ".png";
+            images.put(filename, png);
+            return new JSONObject().put("image", filename).put("image_sha256", sha256(png))
+                .put("reference_sha256", sha256(expected)).put("intersection", intersection)
+                .put("union", union).put("different_pixels", differences);
+        } finally {
+            glUniform1i(mode, 0);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glDeleteBuffers(1, ebo, 0);
+            glDeleteTextures(1, color, 0);
+            glDeleteFramebuffers(1, fbo, 0);
         }
     }
 
@@ -285,6 +375,11 @@ public final class MainActivity extends Activity {
                     zip.putNextEntry(new ZipEntry("summary.json"));
                     zip.write(report);
                     zip.closeEntry();
+                    for (Map.Entry<String, byte[]> entry : images.entrySet()) {
+                        zip.putNextEntry(new ZipEntry(entry.getKey()));
+                        zip.write(entry.getValue());
+                        zip.closeEntry();
+                    }
                 }
             }
             values.clear();
