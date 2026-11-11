@@ -1,0 +1,30 @@
+name: GFX144 source-free opposing-coplanar-faces diagnostics
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi144-coplanar-overlap.yml'
+      - 'gfxlab/tools/gfx144_coplanar_face_audit.py'
+      - 'gfxlab/tests/test_gfx144_coplanar_face_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx144-opposite-face-geometry
+  cancel-in-progress: false
+jobs:
+  source-free-regressions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin source-free geometry analysis dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==11.3.0
+      - name: Run synthetic two-sided coplanar, depth, UV, normal and tamper regressions
+        run: python -m unittest -v gfxlab.tests.test_gfx144_coplanar_face_audit

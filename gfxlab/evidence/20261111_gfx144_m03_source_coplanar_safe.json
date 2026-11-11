@@ -1,0 +1,58 @@
+{
+  "experiment": "GFX144",
+  "session_id": "20261111-GFX-chat-m03-coplanar-rootcause-101",
+  "origin": "chat",
+  "source_project": "Raft PC 1.1.01",
+  "role": "GFX-LAB",
+  "branch": "experiment/android-graphics-rootcause",
+  "reference_original_signed_apk_sha256": "3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773",
+  "owner_zip_sha256": "d097f47fcd453eac6d6d82838b3ff2a370ef56794e1823b6311741d297de81d0",
+  "source_original_M03_1_mesh_vertices": 2163,
+  "source_original_M03_1_submesh_triangles": 2872,
+  "source_original_M03_1_covered_pixels": 3301,
+  "cpu_projected_source_nearest_coplanar_tie_pixels": 380,
+  "coplanar_tie_pixels_opposite_winding_normals_tangent_handedness_same_pos_and_UV": 380,
+  "non_coplanar_covered_pixels": 2921,
+  "material_controls": {
+    "light": {
+      "rgb_pixels_gt10": 58,
+      "rgb_pixels_gt30": 49,
+      "max_rgb_error": 59,
+      "rgb_gt10_at_double_faced_nearest_depth_ties": 58,
+      "rgb_gt10_outside_double_faces": 0
+    },
+    "dark": {
+      "rgb_pixels_gt10": 0,
+      "rgb_pixels_gt30": 0,
+      "max_rgb_error": 0,
+      "rgb_gt10_at_double_faced_nearest_depth_ties": 0,
+      "rgb_gt10_outside_double_faces": 0
+    },
+    "flat": {
+      "rgb_pixels_gt10": 58,
+      "rgb_pixels_gt30": 50,
+      "max_rgb_error": 59,
+      "rgb_gt10_at_double_faced_nearest_depth_ties": 58,
+      "rgb_gt10_outside_double_faces": 0
+    },
+    "nonmetal": {
+      "rgb_pixels_gt10": 57,
+      "rgb_pixels_gt30": 17,
+      "max_rgb_error": 34,
+      "rgb_gt10_at_double_faced_nearest_depth_ties": 57,
+      "rgb_gt10_outside_double_faces": 0
+    }
+  },
+  "source_gles_vertex_projection": "Original M03-1 vertex CB2 (10 vec4, offset 0..3) and CB3 (21 vec4, offsets 17..20) from exact signed APK, orthographic fixture camera",
+  "original_automated_phone_ZIP_audit": "GFX143 original signed APK 9/9 51/51 previously independently validated",
+  "raster_state_cull_in_lab": "disabled on Android GFX124 and Mesa GFX119 controlled fixtures",
+  "source_Forward_Cull_state_class": "named_dynamic_override; not resolved to actual Unity engine render state",
+  "likely_hypothesis": "Back-to-back coincident M03-1 source faces with opposite normals cause driver-dependent depth-tie winner and diffuse/specular shading drift; not source original shader texture corruption",
+  "hypothesis_causally_tested_by_cull_toggle": false,
+  "targeted_next_action": "Source-pinned controlled Cull Front/Back/Off comparative rendering, first Mesa then Adreno only if needed",
+  "no_private_assets_in_public_ci": true,
+  "original_Unity_runtime_pass_verified": false,
+  "original_Animator_runtime_verified": false,
+  "original_PC_game_scene_parity_verified": false,
+  "phase_closed": false
+}
