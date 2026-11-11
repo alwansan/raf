@@ -115,6 +115,7 @@ jobs:
               assert len(depth['poses']) == 15
               for name, row in depth['poses'].items():
                   assert hashlib.sha256(z.read('assets/'+name+'.depth')).hexdigest() == row['sha256']
+                  assert hashlib.sha256(z.read('assets/'+name+'.edge')).hexdigest() == row['edge_sha256']
               for name, row in source['sample_payloads'].items():
                   assert hashlib.sha256(z.read('assets/'+name+'.bin')).hexdigest() == row['sha256']
               assert 'Raft_Data' not in ''.join(z.namelist())

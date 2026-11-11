@@ -55,11 +55,16 @@ def audit(owner_zip, apk, *, experiment="GFX114"):
                            for r,g,b,a in pixels):
                         raise ValueError("Invalid encoded depth capture")
                     actual = [int(b == 255) for _,_,b,_ in pixels]
-                    errors = [abs(((r << 8) | g) - ref) for (r,g,b,_),ref in
-                              zip(pixels,reference_codes,strict=True) if b == 255 and ref]
-                    depth_stats = {"depth_max_error_codes":max(errors,default=0),
-                                   "depth_sum_error_codes":sum(errors),
-                                   "depth_error_over_eight":sum(e > 8 for e in errors)}
+                    edge = package.read(f"assets/{name}.edge")
+                    if len(edge) != SIDE*SIDE or set(edge) - {0,1}:
+                        raise ValueError("Invalid near-edge diagnostic mask")
+                    errors = [(abs(((r << 8) | g) - ref), mark) for (r,g,b,_),ref,mark in
+                              zip(pixels,reference_codes,edge,strict=True) if b == 255 and ref]
+                    stable = [e for e,mark in errors if not mark]
+                    all_errors = [e for e,_ in errors]
+                    depth_stats = {"depth_max_error_codes":max(all_errors,default=0),
+                                   "depth_sum_error_codes":sum(all_errors),
+                                   "depth_error_over_eight":sum(e > 8 for e in all_errors)}
                     if any(record[k] != v for k,v in depth_stats.items()):
                         raise ValueError("Depth values disagree with reported statistics")
                 else:
@@ -74,7 +79,9 @@ def audit(owner_zip, apk, *, experiment="GFX114"):
             rows.append({"pose":name,"intersection":overlap,"union":union,
                          "different_pixels":difference,"iou":overlap/union if union else 0.0})
             if depth:
-                rows[-1].update(depth_stats)
+                rows[-1].update(depth_stats, stable_depth_max_error_codes=max(stable,default=0),
+                                stable_depth_sum_error_codes=sum(stable), stable_pixels=len(stable),
+                                uncertain_pixels=sum(edge))
         if len(rows) != len(EXPECTED):
             raise ValueError("Incomplete capture results")
     return {**positions,"raster_cases":rows,"min_iou":min(r["iou"] for r in rows)}

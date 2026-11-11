@@ -31,6 +31,9 @@ def depth_image(points, triangles, matrix):
         raise ValueError("Geometry clipped by depth range")
     closest = np.full((SIZE, SIZE), np.inf)
     last = closest.copy()
+    possible = closest.copy()
+    definite = closest.copy()
+    edge_margin = 0.02  # Pixels, for the near-edge diagnostics only.
     for face in triangles.reshape(-1, 3):
         a, b, c = xy[face]
         za, zb, zc = z[face]
@@ -41,8 +44,8 @@ def depth_image(points, triangles, matrix):
             b, c = c, b
             zb, zc = zc, zb
             area = -area
-        low = np.maximum(0, np.ceil(np.minimum(np.minimum(a, b), c)-0.5).astype(int))
-        high = np.minimum(SIZE-1, np.floor(np.maximum(np.maximum(a, b), c)-0.5).astype(int))
+        low = np.maximum(0, np.ceil(np.minimum(np.minimum(a, b), c)-0.5-edge_margin).astype(int))
+        high = np.minimum(SIZE-1, np.floor(np.maximum(np.maximum(a, b), c)-0.5+edge_margin).astype(int))
         if np.any(low > high):
             continue
         x = np.arange(low[0], high[0]+1)[None, :] + 0.5
@@ -53,12 +56,21 @@ def depth_image(points, triangles, matrix):
         depth = (wa*za + wb*zb + wc*zc)/area
         closest[window] = np.where(inside, np.minimum(closest[window], depth), closest[window])
         last[window] = np.where(inside, depth, last[window])
+        distances = (wa / np.linalg.norm(c-b), wb / np.linalg.norm(a-c),
+                     wc / np.linalg.norm(b-a))
+        margin = np.minimum(np.minimum(distances[0], distances[1]), distances[2])
+        for target, eligible in ((possible, margin >= -edge_margin),
+                                 (definite, margin >= edge_margin)):
+            target[window] = np.where(eligible, np.minimum(target[window], depth), target[window])
     covered = np.isfinite(closest)
     nearest = np.zeros((SIZE, SIZE), dtype="<u2")
     nearest[covered] = np.floor(closest[covered]*65534 + 0.5).astype(np.uint16) + 1
     final_fragment = np.floor(last[covered]*65534 + 0.5).astype(np.uint16) + 1
     hidden = np.count_nonzero(nearest[covered] != final_fragment)
-    return nearest[::-1].copy(), int(hidden)
+    uncertain = np.isfinite(possible) & ~np.isfinite(definite)
+    both = np.isfinite(possible) & np.isfinite(definite)
+    uncertain[both] |= (definite[both] - possible[both])*65534 > 16
+    return nearest[::-1].copy(), int(hidden), uncertain[::-1].astype(np.uint8)
 
 
 def main():
@@ -74,13 +86,17 @@ def main():
     (args.assets / "raster115.bin").write_bytes(matrix.T.tobytes() + indices)
     rows = {}
     for name, points in zip(EXPECTED, poses, strict=True):
-        depths, hidden = depth_image(points, triangles, matrix)
+        depths, hidden, uncertain = depth_image(points, triangles, matrix)
         mask = (args.assets / (name + ".mask")).read_bytes()
         if (depths != 0).astype(np.uint8).tobytes() != mask or hidden == 0:
             raise ValueError("Depth oracle changed coverage or lacks occlusion")
         data = depths.tobytes()
         (args.assets / (name + ".depth")).write_bytes(data)
+        uncertainty = uncertain.tobytes()
+        (args.assets / (name + ".edge")).write_bytes(uncertainty)
         rows[name] = {"covered_pixels":int(np.count_nonzero(depths)),
+                      "edge_uncertain_pixels":int(uncertain.sum()),
+                      "edge_sha256":hashlib.sha256(uncertainty).hexdigest(),
                       "last_fragment_control_differs_pixels":hidden,
                       "sha256":hashlib.sha256(data).hexdigest()}
     args.safe.write_text(json.dumps({"experiment":"GFX115","size":SIZE,"poses":rows,
