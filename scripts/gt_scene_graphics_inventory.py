@@ -146,7 +146,15 @@ def scan(source_root: Path, manifest: Path, levels: tuple[int, ...], loader=None
                                      or str(obj.type.name) == "Material"]
                     material_graph = analyze_scene(graph_objects, len(external_paths),
                                                    external_paths, names)
-                    totals.update(material_graph["counts"])
+                    # B03 'distinct_*' counters are PER FILE. Summing them
+                    # across scenes does not produce globally distinct owners.
+                    # Keep that aggregation explicitly named to avoid false
+                    # unique-material or unique-provider coverage claims.
+                    local_counts = dict(material_graph["counts"])
+                    for key in ("distinct_referenced_external_table_indices",
+                                "distinct_manifest_declared_external_provider_names"):
+                        totals["sum_per_scene_" + key] += local_counts.pop(key, 0)
+                    totals.update(local_counts)
                 counts = {k: types[k] for k in KINDS if types[k]}
                 totals.update({"original_owned_" + k: v for k, v in counts.items()})
                 totals["original_scene_objects"] += len(objects)
