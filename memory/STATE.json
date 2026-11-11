@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-full-batch-replay-97",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-full-batch-replay-97.md",
-  "status": "GFX140_SIGNED_SYNTHETIC_9_CASE_51_CAPTURE_AUDIT_PASS_ORIGINAL_ADRENO_PRIVATE_BATCH_PENDING",
+  "latest_session": "20261111-GFX-chat-original-batch-98",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-original-batch-98.md",
+  "status": "GFX141_PRIVATE_ORIGINAL_9_CASE_51_CAPTURE_APK_SIGNED_VERIFIED_NOT_UPLOADED_DEVICE_GATE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Create privately signed real-assets owner APK for 9 GFX124 batch cases / 51 captures; require identity integrity, nonpublic handling, Adreno export ZIP audit, original Unity ShaderLab/GBUFFER and PC scene parity. No public APK with original copyrighted assets.",
+  "next_experiment": "Arrange owner-approved private APK delivery without accidentally publishing proprietary Raft assets; run 9-case/51-capture Adreno batch ZIP audit; then validate original Unity pass/G-buffer and gameplay; phase still OPEN.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3112,25 +3112,22 @@
     "phase_closed": false
   },
   "gfxlab_phase_one_latest_checkpoint": {
-    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "verified_gfx138_warp_run": 43064118522,
-    "verified_gfx139_synthetic_batch_run": 43068059010,
-    "verified_gfx140_signed_synthetic_batch_run": 43069997709,
-    "gfx139_source_free_tests_passed": 7,
-    "gfx140_actual_java_manifest_compiled": true,
-    "gfx140_signed_apk_synthetic_only": true,
-    "gfx140_signature_v3_verified": true,
-    "gfx140_signature_v2_reported_verified": false,
-    "gfx140_min_sdk": 29,
-    "gfx140_post_signing_asset_hashes_verified": 235,
-    "expected_owner_batch_tests": 9,
-    "expected_owner_batch_captures": 51,
-    "owner_private_9_case_signed_apk_delivered": false,
-    "owner_adreno_9_case_device_tested": false,
-    "unity_runtime_pass_state_verified": false,
-    "original_pc_gameplay_pixel_parity": false,
+    "verified_source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "ci_run": 43077708276,
+    "ci_status": "SUCCESS",
+    "original_source_pipeline_verified": true,
+    "source_original_signed_apk_constructed": true,
+    "apk_signature_v3_verified": true,
+    "source_original_fixture_files": 235,
+    "original_source_signed_apk_size_bytes": 23082040,
+    "original_source_signed_apk_sha256": "fcec3dc62bb00a893ebe5441fa46c402ff0ba190054459784b6c5c3d670a9e46",
+    "signed_owner_apk_delivered": false,
+    "adreno_9_case_test_complete": false,
+    "owner_batch_expected_cases": 9,
+    "owner_batch_expected_captures": 51,
     "originalShaderRestored": false,
     "originalAnimationRestored": false,
     "phase_closed": false
-  }
+  },
+  "latest_evidence_run": 43077708276
 }
