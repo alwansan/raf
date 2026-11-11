@@ -1,0 +1,149 @@
+{
+  "experiment": "GFX154-owner-acceptance",
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "phase_closed": true,
+  "completed_tests": 3,
+  "tests": [
+    {
+      "id": "M01-0",
+      "draw_completed": true,
+      "captures": {
+        "light": {
+          "covered_pixels": 9721,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 29163,
+          "rgb_absolute_error_sum": 3162,
+          "max_rgb_channel_error": 2,
+          "mean_rgb_channel_error": 0.10842505915029318
+        },
+        "dark": {
+          "covered_pixels": 9721,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 29163,
+          "rgb_absolute_error_sum": 0,
+          "max_rgb_channel_error": 0,
+          "mean_rgb_channel_error": 0.0
+        },
+        "flat": {
+          "covered_pixels": 9721,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 29163,
+          "rgb_absolute_error_sum": 2087,
+          "max_rgb_channel_error": 2,
+          "mean_rgb_channel_error": 0.07156328224119604
+        },
+        "nonmetal": {
+          "covered_pixels": 9721,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 29163,
+          "rgb_absolute_error_sum": 3006,
+          "max_rgb_channel_error": 28,
+          "mean_rgb_channel_error": 0.10307581524534513
+        }
+      },
+      "control_rgb_changed_pixels": {
+        "dark": 9143,
+        "flat": 7877,
+        "nonmetal": 9278
+      }
+    },
+    {
+      "id": "M04-0",
+      "draw_completed": true,
+      "captures": {
+        "light": {
+          "covered_pixels": 2981,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 8943,
+          "rgb_absolute_error_sum": 985,
+          "max_rgb_channel_error": 5,
+          "mean_rgb_channel_error": 0.1101420105110142
+        },
+        "dark": {
+          "covered_pixels": 2981,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 8943,
+          "rgb_absolute_error_sum": 0,
+          "max_rgb_channel_error": 0,
+          "mean_rgb_channel_error": 0.0
+        },
+        "flat": {
+          "covered_pixels": 2981,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 8943,
+          "rgb_absolute_error_sum": 651,
+          "max_rgb_channel_error": 2,
+          "mean_rgb_channel_error": 0.07279436430727944
+        },
+        "nonmetal": {
+          "covered_pixels": 2981,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 8943,
+          "rgb_absolute_error_sum": 830,
+          "max_rgb_channel_error": 11,
+          "mean_rgb_channel_error": 0.092810019009281
+        }
+      },
+      "control_rgb_changed_pixels": {
+        "dark": 2689,
+        "flat": 2275,
+        "nonmetal": 2687
+      }
+    },
+    {
+      "id": "M05-0",
+      "draw_completed": true,
+      "captures": {
+        "light": {
+          "covered_pixels": 2520,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 7560,
+          "rgb_absolute_error_sum": 773,
+          "max_rgb_channel_error": 19,
+          "mean_rgb_channel_error": 0.10224867724867726
+        },
+        "dark": {
+          "covered_pixels": 2520,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 7560,
+          "rgb_absolute_error_sum": 0,
+          "max_rgb_channel_error": 0,
+          "mean_rgb_channel_error": 0.0
+        },
+        "flat": {
+          "covered_pixels": 2520,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 7560,
+          "rgb_absolute_error_sum": 231,
+          "max_rgb_channel_error": 1,
+          "mean_rgb_channel_error": 0.030555555555555555
+        },
+        "nonmetal": {
+          "covered_pixels": 2520,
+          "coverage_different_pixels": 0,
+          "rgb_channels": 7560,
+          "rgb_absolute_error_sum": 352,
+          "max_rgb_channel_error": 10,
+          "mean_rgb_channel_error": 0.04656084656084656
+        }
+      },
+      "control_rgb_changed_pixels": {
+        "dark": 2401,
+        "flat": 982,
+        "nonmetal": 2370
+      }
+    }
+  ],
+  "exports_byte_identical": true,
+  "verified_exports": 3,
+  "captures_per_export": 12,
+  "apk_sha256": "50d75cbad01a4cf93f73b4ee2d6e8868839dc33246005c4f7fd4ae46134394b6",
+  "owner_zip_sha256": [
+    "dcfdc56a8fe414448719594e6d3f61023cf0435c4cd7617477693cdb67db0e9f",
+    "d380fb228f2bcf101b5e59213754cbd217688dc147eb598acf9d2552279c1070",
+    "8b1878a9dd89131afe45bf2677d3417efb2eaf31e77d355bc2e9cb19cf0720d5"
+  ],
+  "phase_scope": "calibrated_method_for_six_original_samples",
+  "mass_restoration_complete": false
+}

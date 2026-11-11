@@ -1,3 +1,11 @@
+## 12 Nov 2026 — Phase one closed for the calibrated restoration method
+
+Session `20261112-GFX-chat-method-acceptance-113`, origin=chat. Write only `experiment/android-graphics-rootcause`. The phase-one scope clarified by the owner is a reproducible original mesh/material/texture/color/Shader48/shadow method validated on M00–M05, before handing off bulk restoration.
+
+All three GFX154 owner ZIPs passed against the exact signed APK; file payloads are byte-identical. Adreno 730 drew M01, M04 and M05 with original source UV1 present and Shader48 translated programs; 12/12 coverage masks match Mesa. Dark images are byte-identical. Lit RGB MAE is 0.1084, 0.1101, 0.1022 /255 respectively. Largest channel error across all captures is 28/255 on the M01 nonmetal control; controls still respond in all slots. GFX142 previously verified the other four material slots on phone; GFX148 verified M03 same-mode Cull. Mesa replay covers all six models and seven slots. Shadow casting tested on Windows, Mesa and phone, and the original screen-space receiver responds on Mesa. Method approved for scoped handoff. Bulk restoration, out-of-scope shader variants, and full engine/game integration remain separate. No further phone retest for phase one. Worker not created. `phase_closed=true` for this calibrated method only.
+
+---
+
 ## 12 Nov 2026 — Phase-one scope corrected; six-model automated Shader48 calibration passed Mesa
 
 Session `20261112-GFX-chat-phase-one-method-six-samples-112`, origin=chat, write only `experiment/android-graphics-rootcause`. Owner clarified phase one is the method for original meshes, materials, colors, Shader48 and shadows across M00–M05. Animator and complete PC gameplay are separate. The later project-wide worker is deferred until method acceptance.

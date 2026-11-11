@@ -3299,8 +3299,17 @@
     "run": 43107712799,
     "artifact": 13893763841,
     "private_owner_file": "libfile_32329af2c5b88191ac29690325657341",
-    "owner_pending": true,
+    "owner_pending": false,
     "shadow_receiver_changed_pixels": 1979,
-    "phase_closed": false
+    "phase_closed": true
+  },
+  "phase_one_method_acceptance": {
+    "phase_closed": true,
+    "scope": "calibrated_six_sample_graphics_recovery_method",
+    "models": 6,
+    "slots": 7,
+    "owner_exports": 3,
+    "bulk_restoration_complete": false,
+    "worker_created": false
   }
 }
