@@ -1,6 +1,8 @@
+#define NOMINMAX
 #include <d3d11.h>
 #include <wrl/client.h>
 #include <array>
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -34,6 +36,8 @@ struct Draw {
     ComPtr<ID3D11Texture2D> target, staging;
     ComPtr<ID3D11RenderTargetView> color;
     ComPtr<ID3D11DepthStencilView> depth;
+
+    UINT index_count = 0;
 
     Draw() {
         D3D_FEATURE_LEVEL actual{};
@@ -85,9 +89,10 @@ struct Draw {
         return result;
     }
 
-    ComPtr<ID3D11ShaderResourceView> texture2d(const Bytes& data, bool srgb, bool cube, UINT size, UINT levels) {
+    ComPtr<ID3D11ShaderResourceView> texture2d(const Bytes& data, bool srgb, bool cube, UINT width, UINT height, UINT levels) {
         D3D11_TEXTURE2D_DESC desc{};
-        desc.Width = desc.Height = size;
+        desc.Width = width;
+        desc.Height = height;
         desc.MipLevels = levels;
         desc.ArraySize = cube ? 6 : 1;
         desc.Format = srgb ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -99,10 +104,10 @@ struct Draw {
         size_t offset = 0;
         for (UINT face=0; face<desc.ArraySize; ++face) {
             for (UINT mip=0; mip<levels; ++mip) {
-                UINT width = size >> mip;
-                size_t next = offset + size_t(width) * width * 4;
-                if (width == 0 || next > data.size()) throw std::runtime_error("Wrong texture extent");
-                uploads.push_back({data.data()+offset,width*4,0});
+                UINT w = std::max(1u, width >> mip), h = std::max(1u, height >> mip);
+                size_t next = offset + size_t(w) * h * 4;
+                if (next > data.size()) throw std::runtime_error("Wrong texture extent");
+                uploads.push_back({data.data()+offset,w*4,0});
                 offset=next;
             }
         }
@@ -149,9 +154,10 @@ struct Draw {
         require(device->CreateInputLayout(elements,5,vs.data(),vs.size(),&layout),"Source signature");
         ctx->IASetInputLayout(layout.Get());
         const auto mesh=read(dir/"mesh.bin"), indices=read(dir/"indices.bin");
-        if (mesh.size()!=1666*48 || indices.size()!=2388*6) throw std::runtime_error("Wrong mesh shape");
+        if (mesh.size()%48 || indices.size()%6) throw std::runtime_error("Wrong mesh shape");
+        index_count=static_cast<UINT>(indices.size()/2);
         auto vb=buffer(mesh,D3D11_BIND_VERTEX_BUFFER);
-        auto uv1=buffer(Bytes(1666*8,0),D3D11_BIND_VERTEX_BUFFER);
+        auto uv1=buffer(Bytes(mesh.size()/48*8,0),D3D11_BIND_VERTEX_BUFFER);
         auto ib=buffer(indices,D3D11_BIND_INDEX_BUFFER);
         ID3D11Buffer* streams[]{vb.Get(),uv1.Get()};
         UINT strides[]{48,8}, offsets[]{0,0};
@@ -164,13 +170,23 @@ struct Draw {
         Bytes black{0,0,0,255}, cube;
         for (int i=0; i<6; ++i) cube.insert(cube.end(),black.begin(),black.end());
         std::array<ComPtr<ID3D11ShaderResourceView>,7> textures;
-        textures[0] = texture2d(read(dir/"basecolor.rgba"),true,false,1024,11);
-        textures[1] = mode=="nonmetal" ? texture2d(black,true,false,1,1)
-            : texture2d(read(dir/"metallic.rgba"),true,false,1024,11);
-        textures[2] = mode=="flat" ? texture2d(Bytes{255,128,255,128},false,false,1,1)
-            : texture2d(read(dir/"normal.rgba"),false,false,1024,11);
-        textures[3] = texture2d(Bytes{255,255,255,255},false,false,1,1);
-        textures[4] = textures[5] = texture2d(cube,false,true,1,1);
+        std::array<std::array<UINT,4>,3> layout{{{1024,1024,11,1},{1024,1024,11,1},{1024,1024,11,0}}};
+        if (std::filesystem::exists(dir/"textures.bin")) {
+            const auto manifest=read(dir/"textures.bin");
+            if (manifest.size()!=sizeof(layout)) throw std::runtime_error("Wrong mip metadata size");
+            std::memcpy(layout.data(),manifest.data(),manifest.size());
+        }
+        const std::array<const char*,3> files{"basecolor.rgba","metallic.rgba","normal.rgba"};
+        for (size_t i=0; i<layout.size(); ++i) {
+            const auto [width,height,levels,srgb]=layout[i];
+            if (!width || !height || width>2048 || height>2048 || !levels || levels>12 || srgb>1)
+                throw std::runtime_error("Invalid mip metadata");
+            if (i==1 && mode=="nonmetal") textures[i]=texture2d(black,srgb!=0,false,1,1,1);
+            else if (i==2 && mode=="flat") textures[i]=texture2d(Bytes{255,128,255,128},srgb!=0,false,1,1,1);
+            else textures[i]=texture2d(read(dir/files[i]),srgb!=0,false,width,height,levels);
+        }
+        textures[3] = texture2d(Bytes{255,255,255,255},false,false,1,1,1);
+        textures[4] = textures[5] = texture2d(cube,false,true,1,1,1);
         textures[6] = volume();
         std::array<ID3D11ShaderResourceView*,7> views{};
         for (size_t i=0; i<textures.size(); ++i) views[i]=textures[i].Get();
@@ -192,7 +208,7 @@ struct Draw {
         ctx->PSSetSamplers(0,static_cast<UINT>(handles.size()),handles.data());
     }
 
-    void capture(const Path& dir, const Path& output, const std::string& mode) {
+    void render(const Path& dir, const std::string& mode, bool clear_target) {
         std::string light = mode=="dark" ? "dark" : "light";
         std::array<ComPtr<ID3D11Buffer>,8> constants;
         std::array<ID3D11Buffer*,8> slots{};
@@ -205,9 +221,14 @@ struct Draw {
         ctx->VSSetConstantBuffers(0,4,slots.data());
         ctx->PSSetConstantBuffers(0,4,slots.data()+4);
         const float clear[]{0,0,0,0};
-        ctx->ClearRenderTargetView(color.Get(),clear);
-        ctx->ClearDepthStencilView(depth.Get(),D3D11_CLEAR_DEPTH,1,0);
-        ctx->DrawIndexed(2388*3,0,0);
+        if (clear_target) {
+            ctx->ClearRenderTargetView(color.Get(),clear);
+            ctx->ClearDepthStencilView(depth.Get(),D3D11_CLEAR_DEPTH,1,0);
+        }
+        ctx->DrawIndexed(index_count,0,0);
+    }
+
+    void capture(const Path& output, const std::string& mode) {
         ctx->CopyResource(staging.Get(),target.Get());
         D3D11_MAPPED_SUBRESOURCE pixels{};
         require(ctx->Map(staging.Get(),0,D3D11_MAP_READ,0,&pixels),"Original DXBC readback");
@@ -223,13 +244,24 @@ struct Draw {
 };
 
 int wmain(int argc,wchar_t** argv) {
-    if (argc!=4) return 2;
+    if (argc!=4 && argc!=5) return 2;
     try {
         Draw draw;
         draw.bind_geometry(argv[1]);
         for (const auto& mode:{"light","dark","flat","nonmetal"}) {
             draw.bind_textures(argv[2],mode);
-            draw.capture(argv[1],argv[3],mode);
+            draw.render(argv[1],mode,true);
+            draw.capture(argv[3],mode);
+        }
+        if (argc==5) {
+            if (read(Path(argv[1])/"mesh.bin")!=read(Path(argv[4])/"mesh.bin"))
+                throw std::runtime_error("Combined slots require one source mesh");
+            draw.bind_textures(argv[2],"light");
+            draw.render(argv[1],"light",true);
+            draw.bind_geometry(argv[4]);
+            draw.bind_textures(argv[4],"light");
+            draw.render(argv[4],"light",false);
+            draw.capture(argv[3],"combined");
         }
         return 0;
     } catch (const std::exception& error) {

@@ -1,0 +1,73 @@
+name: GFX125 multi-material original Forward on Windows D3D11 WARP
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi125-batch-warp.yml'
+      - 'gfxlab/tools/gfx125_batch_warp_report.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx125-batch-original-warp
+  cancel-in-progress: false
+jobs:
+  windows-original-dxbc:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare private original DXBC and material fixture
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ((git -C source-zip2 rev-parse HEAD) -ne '15964ea8f246b6e076ce26b60931ee2e1a9a2385') { throw 'Source pin mismatch' }
+          python -m pip install --disable-pip-version-check UnityPy==1.25.4 Pillow==11.3.0 numpy==2.3.5
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $p = Join-Path $env:RUNNER_TEMP 'gfx125-private'
+          foreach ($slot in @('M00-0','M03-0','M03-1')) {
+            New-Item -ItemType Directory -Force "$p/captures/$slot" | Out-Null
+          }
+          python -m gfxlab.tools.gfx123_model_forward_prepare --zip2 source-zip2 --stage "$p/source" --private "$p/draw" --safe "$p/stage.json" --direct3d
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Compile and execute Windows WARP
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set "VSROOT=%%i"
+          call "%VSROOT%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          cl /nologo /std:c++17 /EHsc /W4 gfxlab\windows-forward121\warp_forward.cpp /Fe:"%RUNNER_TEMP%\gfx125-private\warp.exe" /link d3d11.lib || exit /b 1
+          set "P=%RUNNER_TEMP%\gfx125-private"
+          for %%s in (M00-0 M03-1) do (
+            "%P%\warp.exe" "%P%\draw\%%s" "%P%\draw\%%s" "%P%\captures\%%s" || exit /b 1
+          )
+          "%P%\warp.exe" "%P%\draw\M03-0" "%P%\draw\M03-0" "%P%\captures\M03-0" "%P%\draw\M03-1" || exit /b 1
+          python -m gfxlab.tools.gfx125_batch_warp_report --private "%P%" --reference gfxlab/evidence/20261111_gfx125_mesa_reference_hashes.json --safe gfx125-safe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GFX125-Windows-WARP-safe-result
+          path: gfx125-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge original assets and Windows readback
+        if: always()
+        shell: pwsh
+        run: Remove-Item -Force -Recurse -ErrorAction SilentlyContinue source-zip2, "$env:RUNNER_TEMP/gfx125-private"

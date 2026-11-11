@@ -1,0 +1,60 @@
+{
+  "M00-0": {
+    "light": {
+      "coverage_sha256": "4dd9712adab912226aa7a679951da9e4c0960e09859a5dd93019f98161cfb35f",
+      "rgba_sha256": "93687424822c80d9807a5673699cf2f7accca4a3928da2818199acbdd4c0e852"
+    },
+    "dark": {
+      "coverage_sha256": "4dd9712adab912226aa7a679951da9e4c0960e09859a5dd93019f98161cfb35f",
+      "rgba_sha256": "e1ea07ae956b1ae083d0acacd4eaed86e447df62bc3a505041659d3c043132a0"
+    },
+    "flat": {
+      "coverage_sha256": "4dd9712adab912226aa7a679951da9e4c0960e09859a5dd93019f98161cfb35f",
+      "rgba_sha256": "fa1cbb9b95310d4b177024a213adfe549339e9cbeb2ea73dc74b45782578185c"
+    },
+    "nonmetal": {
+      "coverage_sha256": "4dd9712adab912226aa7a679951da9e4c0960e09859a5dd93019f98161cfb35f",
+      "rgba_sha256": "66bd2536e028f5c8741834ab4de83ce736cb6c9da47e95b698b7a97b948478b5"
+    }
+  },
+  "M03-0": {
+    "light": {
+      "coverage_sha256": "856377330b53bd0e5604543edf324cbd7594211a2496816ff52d88ee54a21948",
+      "rgba_sha256": "6ac4589f74728559da0775d7137f5c1f97a74bed9d7a5b72d3c5f90c3964279a"
+    },
+    "dark": {
+      "coverage_sha256": "856377330b53bd0e5604543edf324cbd7594211a2496816ff52d88ee54a21948",
+      "rgba_sha256": "ac74e03da8f1709be6341e17a1780be7eb66c65ce9898611bac8b984e3fa2a36"
+    },
+    "flat": {
+      "coverage_sha256": "856377330b53bd0e5604543edf324cbd7594211a2496816ff52d88ee54a21948",
+      "rgba_sha256": "2a2569ed3f80efc750e25b44035eb6005fafb23bab60ebabebc338d454eab483"
+    },
+    "nonmetal": {
+      "coverage_sha256": "856377330b53bd0e5604543edf324cbd7594211a2496816ff52d88ee54a21948",
+      "rgba_sha256": "89cf230dc8c902f1532ca2557d8b2ebe24aca598334c4aee58b5babb6328c9c1"
+    }
+  },
+  "M03-1": {
+    "light": {
+      "coverage_sha256": "2339f5becaea6479792f0f68e717669ff89b52e81a4d47e2dcc94c2d6d8e2b76",
+      "rgba_sha256": "c6d786e908500674d64c3220bf4e26b98253302a88ba390a67b00b570877da78"
+    },
+    "dark": {
+      "coverage_sha256": "2339f5becaea6479792f0f68e717669ff89b52e81a4d47e2dcc94c2d6d8e2b76",
+      "rgba_sha256": "4b11817faf278b8c754ceafe98716228b7f9d771aa7d54169a360b6eb7f30d43"
+    },
+    "flat": {
+      "coverage_sha256": "2339f5becaea6479792f0f68e717669ff89b52e81a4d47e2dcc94c2d6d8e2b76",
+      "rgba_sha256": "e57f9c9630385a8ed51378e269d2468c56f72cde5b5a5475af012cae7805183c"
+    },
+    "nonmetal": {
+      "coverage_sha256": "2339f5becaea6479792f0f68e717669ff89b52e81a4d47e2dcc94c2d6d8e2b76",
+      "rgba_sha256": "0f31d258cf8182e3449d5673f53eeced3e6957ff9df897f3845b114e5e4de8c9"
+    }
+  },
+  "M03-combined": {
+    "coverage_sha256": "5267523153bea15cd47768ce17192d9207093abf47001c9748550cd677056882",
+    "rgba_sha256": "aa863f4b30ea4d8f5fc680dcadacc8c1c53b1d765de36c312dc820c6f8a64043"
+  }
+}

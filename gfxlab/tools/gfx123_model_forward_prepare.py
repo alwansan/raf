@@ -46,7 +46,7 @@ def prepare_texture(repo, ref, types, manifest, cache, out):
             "source_sha256": hashlib.sha256(data).hexdigest()}
 
 
-def prepare(repo, stage, out):
+def prepare(repo, stage, out, *, direct3d=False):
     if git(repo, "rev-parse", "HEAD").decode().strip() != ZIP2_SHA:
         raise ValueError("Wrong ZIP2 source revision")
     entries, types, _ = all_model_entries(stage)
@@ -73,7 +73,7 @@ def prepare(repo, stage, out):
             expected = {role: (ref["owner"], ref["pid"]) for role, ref in refs.items()}
             source_data = (source.read_typetree(check_read=False), key[0],
                            [external.path for external in source.assets_file.externals], expected)
-            report = audit(stage, True, fixture_consumer(folder), model=label,
+            report = audit(stage, not direct3d, fixture_consumer(folder, direct3d=direct3d), model=label,
                            material_source=source_data, shader_source=shader)
             (folder / "mesh.bin").write_bytes(packed)
             indices = [i + (submesh.baseVertex or 0) for face in triangles for i in face]
@@ -83,6 +83,12 @@ def prepare(repo, stage, out):
             textures = {role: prepare_texture(repo, ref, types, manifest, cache, folder / f"{role}.rgba")
                         for role, ref in refs.items()}
             (folder / "textures.json").write_text(json.dumps(textures, indent=2))
+            if direct3d:
+                from gfxlab.tools.gfx121_prepare_warp import finalize_draw
+                finalize_draw(folder)
+                (folder / "textures.bin").write_bytes(b"".join(
+                    struct.pack("<4I", row["width"], row["height"], row["levels"], row["source_color_space"])
+                    for row in (textures[role] for role in ("basecolor", "metallic", "normal"))))
             rows.append({"model": label, "slot": slot, "triangles": len(triangles),
                          "vertices": len(packed)//48, "gles_offline_link_passed": report["gles_offline_link_passed"],
                          "textures": textures, "stages": report["stages"]})
@@ -93,6 +99,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     for name in ("zip2", "stage", "private", "safe"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--direct3d", action="store_true")
     args = parser.parse_args()
-    result = prepare(args.zip2, args.stage, args.private)
+    result = prepare(args.zip2, args.stage, args.private, direct3d=args.direct3d)
     args.safe.write_text(json.dumps(result, indent=2) + "\n")

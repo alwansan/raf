@@ -10,6 +10,10 @@ from gfxlab.tools.original_model_probe import stage_originals
 
 def stage_draw(source, draw):
     prepare(source,draw,direct3d=True)
+    return finalize_draw(draw)
+
+
+def finalize_draw(draw):
     engine = engine_values((draw/"mesh.bin").read_bytes(),direct3d=True)
     verified_textures = {"_MainTex":0,"_MetallicGlossMap":1,"_BumpMap":2,"_OcclusionMap":3,
                          "unity_SpecCube0":4,"unity_SpecCube1":5,"unity_ProbeVolumeSH":6}
