@@ -16,8 +16,15 @@ from gfxlab.tools.shears_provenance_probe import resolve_pptr
 from gfxlab.tools.gfx107_source_bindpose_math import (
     source_world_matrix,source_matrix4,mul)
 from gfxlab.tools.gfx108_indexed_skinning_cpu import (
-    positions_from_parsed_mesh,decoded_skin_weights,skin_positions_cpu,
+    positions_from_parsed_mesh,decoded_handler_skin,skin_positions_cpu,
     safe_displacement_stats)
+
+def direct_mesh_handler(mesh_reader):
+    """UnityPy 1.25.4 MeshHandler unpacks original VertexData streams by index."""
+    from UnityPy.helpers.MeshHelper import MeshHandler
+    handler=MeshHandler(mesh_reader.parse_as_object())
+    handler.process()
+    return handler
 
 def inspect_exact_source_skin(entry,types,externals):
     model=entry["id"]
@@ -64,8 +71,9 @@ def inspect_exact_source_skin(entry,types,externals):
         return cache[key]
     def parent_of(key,d):return resolve(d.get("m_Father"),key[0])
     try:
-        indexed_positions=positions_from_parsed_mesh(mesh_obj.parse_as_object(),v)
-        indexed_weights=decoded_skin_weights(mesh,v,len(bones))
+        handler=direct_mesh_handler(mesh_obj)
+        indexed_positions=positions_from_parsed_mesh(handler,v)
+        indexed_weights=decoded_handler_skin(handler,v,len(bones))
         world=[source_world_matrix(resolve(p,owner),lookup,parent_of) for p in bones]
         matrices=[source_matrix4(m) for m in poses]
         deformed=skin_positions_cpu(indexed_positions,indexed_weights,world,matrices)
