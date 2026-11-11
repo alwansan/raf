@@ -1,0 +1,19 @@
+{
+  "session_id": "20261111T2111Z-T1-scheduled-fft-capture-alias-5c7e",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-11T21:11:00Z",
+  "intended_files": [
+    "scripts/t1_fft_first_divergence.py",
+    "tests/test_t1_fft_first_divergence.py"
+  ],
+  "experiment_key": "fft-private-rgba-capture-alias-guard-v1",
+  "resource_key": null,
+  "hypothesis": "The private paired-pass manifest currently accepts reference and observed pointing to the same file, so self-comparison can falsely certify GPU parity.",
+  "base_evidence": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "docs/T1_FFT_ORIGINAL_KERNEL6_SOURCE_CASE_2026-11-08.md"
+  ],
+  "constraints": "Source-only; no private captures, no native builds; do not alter T4/T5 scope."
+}
