@@ -17,7 +17,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ZIP2_ONLY_SOURCE_GRAPH_AND_SPLIT_STREAM_PROVEN_ANDROID_EXPORT_UNVERIFIED",
+  "status": "GT_SOURCE_MATERIAL_TEXTURE_MESH_REFERENCE_GRAPH_PROVEN_ANDROID_EXPORT_UNVERIFIED",
   "inventory": {
     "status": "authenticated_82_serialized_owner_headers",
     "source_structural": {
@@ -34,7 +34,7 @@
       "assets_owners": 42,
       "verified_bytes": 819595355,
       "split_reassembled": 5,
-      "latest_ci_run": 43118214676,
+      "latest_ci_run": 43120209212,
       "artifact_id": 13897064222,
       "material_link_graph_artifact_id": 13899108653,
       "zip2_stream_and_split_smoke": {
@@ -43,7 +43,8 @@
         "run": 43117743780,
         "artifact_id": 13899122924,
         "git_lfs_used": false
-      }
+      },
+      "mesh_texture_graph_artifact_id": 13900107915
     },
     "totals": {
       "all_owned_objects": 1209137,
@@ -69,7 +70,19 @@
       "all_source_82_owners_resolved_material_slots": 194293,
       "all_source_82_owners_null_material_slots": 881,
       "distinct_material_objects_referenced_by_renderer": 1351,
-      "original_link_graph_ci": 43118214676
+      "original_link_graph_ci": 43118214676,
+      "source_mesh_component_slots": 176708,
+      "source_mesh_nonnull": 176480,
+      "source_mesh_target_class_verified": 176006,
+      "source_mesh_builtin_transport_references": 474,
+      "source_mesh_null": 228,
+      "source_mesh_distinct_used": 4328,
+      "source_material_texture_property_slots": 10246,
+      "source_material_texture_nonnull_verified": 4583,
+      "source_material_texture_null": 5663,
+      "source_material_texture_distinct_used": 3373,
+      "source_material_texture_uv_transform_slots": 10246,
+      "original_mesh_texture_graph_ci": 43120209212
     },
     "material_shader_reference_graph": {
       "referenced_targets": 77,
@@ -84,8 +97,8 @@
     },
     "project_baseline_sha": "cd96edc1ce0059b5737c017b707a8f79cb4da29d",
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "last_verified_source_ci_sha": "4cd8d0228a9add43817b616bfede8892df8fd411"
+    "last_verified_source_ci_sha": "ea3c81bd60182a11719b7962a569865ce283bd62"
   },
-  "latest_session": "sessions/20261112-GT-zip2-only-material-links-chat-02.md",
-  "next_action": "Keep GT LFS-free: use pinned ZIP2 and gt_zip2_payloads.py to stage only required .resS/.resource files; compare 1351 original Renderer-used Material identities and 194293 non-null slots with actual AssetRipper ExportedProject GUID/.meta/material assignments, then apply first source-backed graphics corrections and verify with isolated CI. Do not attribute source completeness to Android integration."
+  "latest_session": "sessions/20261112-GT-original-mesh-texture-chat-03.md",
+  "next_action": "GT ZIP2-only: 4583/4583 original bound Material->Texture identities and 176006 original in-owner Mesh targets class-verified; preserve 5663 texture nulls, 228 mesh nulls and track 474 Unity built-in Mesh transports separately. Next obtain actual same-instance AssetRipper ExportedProject trace + .meta GUID mappings, distinguish exporter null/owner errors, then acquire only needed ZIP2 .resS using gt_zip2_payloads and fix selected visual sample. No LFS, no uncoordinated T5 native build."
 }
