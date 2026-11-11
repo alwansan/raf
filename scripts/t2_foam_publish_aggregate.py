@@ -6,6 +6,7 @@ Does not establish integration with any legacy report producer.
 import argparse
 import json
 import os
+import stat
 from pathlib import Path
 import sys
 import tempfile
@@ -14,10 +15,17 @@ from t2_foam_evidence_gate_20261110 import MAX_BYTES, EvidenceError, parse_aggre
 
 def publish(source: Path, destination: Path):
     source, destination = Path(source).absolute(), Path(destination).absolute()
-    if (source == destination or source.is_symlink() or not source.is_file()
-            or destination.is_symlink() or not destination.parent.is_dir()):
+    if (source == destination or destination.is_symlink()
+            or not destination.parent.is_dir()):
         raise EvidenceError("unsafe output destination")
-    with source.open("rb") as stream:
+    # Verify the opened object, not a path checked before opening (TOCTOU).
+    # Fail closed on platforms without atomic no-follow support.
+    if not hasattr(os, "O_NOFOLLOW"):
+        raise EvidenceError("atomic source no-follow unavailable")
+    fd = os.open(source, os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0))
+    with os.fdopen(fd, "rb") as stream:
+        if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+            raise EvidenceError("unsafe input type")
         safe = parse_aggregate_json(stream.read(MAX_BYTES + 1))
     encoded = (json.dumps(safe, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
     temporary = None

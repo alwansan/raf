@@ -1,5 +1,6 @@
 """Source-only subprocess regression of the opt-in aggregate publisher."""
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -75,6 +76,17 @@ class PublishContract(unittest.TestCase):
             self.assertEqual(proc.returncode, 2)
             self.assertFalse(output.exists())
             self.assertNotIn(str(target), proc.stderr)
+
+    @unittest.skipUnless(hasattr(os, "mkfifo"), "FIFO requires POSIX")
+    def test_fifo_input_rejected_without_blocking(self):
+        with tempfile.TemporaryDirectory() as td:
+            source, output = Path(td) / "pipe", Path(td) / "output"
+            os.mkfifo(source)
+            proc = subprocess.run([sys.executable, str(ADAPTER), "--input", str(source),
+                                   "--output", str(output)], cwd=ROOT, capture_output=True,
+                                  text=True, timeout=5)
+            self.assertEqual(proc.returncode, 2)
+            self.assertFalse(output.exists())
 
     def test_directory_input_rejected(self):
         with tempfile.TemporaryDirectory() as td:
