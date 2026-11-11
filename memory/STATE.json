@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-dual-adreno-batch-100",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-dual-adreno-batch-100.md",
-  "status": "GFX143_ORIGINAL_ADRENO_OWNER_9_CASES_51_READBACKS_PASS_2_RUNS_BYTE_IDENTICAL_COLOR_HOTSPOT_OPEN",
+  "latest_session": "20261111-GFX-chat-m03-coplanar-rootcause-101",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-m03-coplanar-rootcause-101.md",
+  "status": "GFX144_ADRENO_M03_1_RGB_HOTSPOT_EXCLUSIVELY_SOURCE_COPLANAR_OPPOSITE_FACE_PIXELS_CI_9_OF_9_SUCCESS_CULL_RUNTIME_UNRESOLVED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX144: isolate 58 co-located M03-1 Adreno-vs-Mesa RGB>10 pixels (49/50 with error>30) with controlled texture/UV precision and sampling diagnostic before any shader modification; also verify Unity ShaderLab pass/state, native GBuffer and Animator runtime. No extra owner phone rerun required until a targeted differential APK is ready.",
+  "next_experiment": "GFX145: source-pinned determine original Unity Cull dynamic override fallback/owner material settings and controlled source-original Mesa GL_CULL_FACE toggles for M03-1; do not change Shader48/Unity game until actual runtime pass/state verified. No owner rerun necessary yet.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3165,7 +3165,31 @@
     "originalAnimationRestored": false,
     "actual_Unity_ShaderLab_runtime_restored": false,
     "actual_Unity_Animator_runtime_verified": false,
-    "original_PC_game_scene_pixel_parity_proven": false
+    "original_PC_game_scene_pixel_parity_proven": false,
+    "gfx144_geometry_regression_ci_run": 43089752432,
+    "gfx144_source_free_tests_passed": 9,
+    "gfx144_M03_1_covered_pixels": 3301,
+    "gfx144_source_triangle_count": 2872,
+    "gfx144_original_vertex_count": 2163,
+    "gfx144_coplanar_depth_tie_pixels": 380,
+    "gfx144_opposite_normals_and_winding_same_uv_depth_pixels": 380,
+    "gfx144_untied_covered_pixels": 2921,
+    "gfx144_rgb_gt10_light_all_at_ties": [
+      58,
+      58
+    ],
+    "gfx144_rgb_gt10_flat_all_at_ties": [
+      58,
+      58
+    ],
+    "gfx144_rgb_gt10_nonmetal_all_at_ties": [
+      57,
+      57
+    ],
+    "gfx144_rgb_gt10_outside_depth_ties": 0,
+    "gfx144_hypothesis": "opposite-normal coplanar double faces cause GPU depth-tie winner drift",
+    "gfx144_causal_cull_differential_proven": false,
+    "original_Unity_Cull_override_runtime_proven": false
   },
-  "latest_evidence_run": 43086640651
+  "latest_evidence_run": 43089752432
 }

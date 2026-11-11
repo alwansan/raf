@@ -54,5 +54,8 @@
   "original_Unity_runtime_pass_verified": false,
   "original_Animator_runtime_verified": false,
   "original_PC_game_scene_parity_verified": false,
-  "phase_closed": false
+  "phase_closed": false,
+  "source_free_geometry_regression_CI_run": 43089752432,
+  "source_free_geometry_regression_CI_passed": "9_of_9",
+  "real_owner_geometry_input_kept_private": true
 }
