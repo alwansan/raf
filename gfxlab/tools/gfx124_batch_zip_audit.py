@@ -4,7 +4,7 @@ import json
 from zipfile import ZipFile
 
 from gfxlab.tools.gfx120_owner_zip_audit import audit_capture
-from gfxlab.tools.gfx124_batch_pack import CONTROLS, POSES
+from gfxlab.tools.gfx124_batch_pack import CONTROLS, POSES, SHADOW_CONTROLS
 
 
 def audit(owner_zip, apk):
@@ -32,7 +32,8 @@ def audit(owner_zip, apk):
             merged = "secondary" in test
             additive = "forward_add" in test
             animated = "animation" in test
-            controls = POSES if animated else ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
+            shadow = "shadow" in test
+            controls = SHADOW_CONTROLS if shadow else POSES if animated else ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
             completed = run["draw_completed"] is True
             captures = run["captures"]
             if len(captures) > len(controls) or (completed and len(captures) != len(controls)):
@@ -48,13 +49,15 @@ def audit(owner_zip, apk):
                 ref = control
                 if animated:
                     folder = test["animation"]
+                if shadow:
+                    folder = test["shadow"]
                 if additive:
                     folder = test["forward_add"] if control == "lit" else folder
                     ref = "combined" if control == "lit" else "light"
                 reference = package.read(f"assets/{folder}/{ref}.rgba")
-                pixels[control], metrics[control] = audit_capture(row, name, logs.read(name), reference)
+                pixels[control], metrics[control] = audit_capture(row, name, logs.read(name), reference, allow_empty=shadow)
             checked = {"id": run["id"], "draw_completed": completed, "captures": metrics}
-            if completed and not merged and not additive and not animated:
+            if completed and not merged and not additive and not animated and not shadow:
                 light = pixels["light"]
                 baselines[test["primary"]] = light
                 checked["control_rgb_changed_pixels"] = {
@@ -71,6 +74,13 @@ def audit(owner_zip, apk):
             if animated and completed:
                 checked["unique_images_per_clip"] = [
                     len({pixels[f"C{clip}P{pose}"] for pose in range(5)}) for clip in range(3)]
+            if shadow and completed:
+                checked["shadow_controls"] = {
+                    "native_has_depth": metrics["native"]["covered_pixels"] > 0,
+                    "solid_has_depth": metrics["solid"]["covered_pixels"] > 0,
+                    "transparent_has_no_depth": metrics["transparent"]["covered_pixels"] == 0,
+                    "depth_write_off_has_no_depth": metrics["depth-off"]["covered_pixels"] == 0,
+                }
             if not completed:
                 checked["error"] = run["error"]
             safe.append(checked)

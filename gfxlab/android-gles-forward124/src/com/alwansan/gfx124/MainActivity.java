@@ -112,9 +112,14 @@ public final class MainActivity extends Activity {
     }
 
     private int createProgram(String folder) throws Exception {
+        return createProgram(new String(asset(folder+"probe.vert"),StandardCharsets.UTF_8),
+                             new String(asset(folder+"probe.frag"),StandardCharsets.UTF_8));
+    }
+
+    private static int createProgram(String vertexSource, String fragmentSource) {
         int program = glCreateProgram();
-        int vertex = shader(GL_VERTEX_SHADER,new String(asset(folder+"probe.vert"),StandardCharsets.UTF_8));
-        int fragment = shader(GL_FRAGMENT_SHADER,new String(asset(folder+"probe.frag"),StandardCharsets.UTF_8));
+        int vertex = shader(GL_VERTEX_SHADER,vertexSource);
+        int fragment = shader(GL_FRAGMENT_SHADER,fragmentSource);
         glAttachShader(program,vertex);
         glAttachShader(program,fragment);
         glLinkProgram(program);
@@ -165,7 +170,8 @@ public final class MainActivity extends Activity {
             }
             boolean source=!role.isEmpty();
             boolean replaced=(control.equals("flat") && role.equals("normal"))
-                || (control.equals("nonmetal") && role.equals("metallic"));
+                || (control.equals("nonmetal") && role.equals("metallic"))
+                || ((control.equals("solid") || control.equals("transparent")) && role.equals("basecolor"));
             int[] ids=new int[1];
             glGenTextures(1,ids,0);
             slot.textures.add(ids[0]);
@@ -210,6 +216,8 @@ public final class MainActivity extends Activity {
             } else if (target==GL_TEXTURE_2D) {
                 byte[] rgba=!replaced ? new byte[]{-1,-1,-1,-1}
                     : role.equals("normal") ? new byte[]{-1,-128,-1,-128} : black;
+                if (role.equals("basecolor") && replaced)
+                    rgba=new byte[]{-1,-1,-1,(byte)(control.equals("solid") ? 255 : 0)};
                 glTexImage2D(target,0,format,1,1,0,GL_RGBA,GL_UNSIGNED_BYTE,direct(rgba,0,4));
             } else if (target==GL_TEXTURE_CUBE_MAP) {
                 for (int face=0; face<6; face++)
@@ -225,6 +233,10 @@ public final class MainActivity extends Activity {
     }
 
     private JSONObject capture(String name, String referencePath) throws Exception {
+        return capture(name,referencePath,false);
+    }
+
+    private JSONObject capture(String name, String referencePath, boolean allowEmpty) throws Exception {
         ByteBuffer pixels=ByteBuffer.allocateDirect(SIZE*SIZE*4);
         glReadPixels(0,0,SIZE,SIZE,GL_RGBA,GL_UNSIGNED_BYTE,pixels);
         check("Forward draw " + name);
@@ -253,7 +265,7 @@ public final class MainActivity extends Activity {
             }
             argb[(SIZE-1-y)*SIZE+x]=(a<<24)|(r<<16)|(g<<8)|b;
         }
-        if (coverage==0) throw new IllegalStateException("Empty original Forward draw");
+        if (coverage==0 && !allowEmpty) throw new IllegalStateException("Empty original Forward draw");
         Bitmap bitmap=Bitmap.createBitmap(argb,SIZE,SIZE,Bitmap.Config.ARGB_8888);
         ByteArrayOutputStream out=new ByteArrayOutputStream();
         boolean ok=bitmap.compress(Bitmap.CompressFormat.PNG,100,out);
@@ -280,14 +292,15 @@ public final class MainActivity extends Activity {
         Slot(String id) throws Exception { this(id,null); }
 
         Slot(String id, Slot textureSource) throws Exception {
-            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add|-anim)?")) throw new IllegalArgumentException("Invalid slot identifier");
+            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add|-anim|-shadow)?")) throw new IllegalArgumentException("Invalid slot identifier");
             folder=id+"/";
             textureFolder=textureSource==null ? folder : textureSource.textureFolder;
             JSONObject scene=new JSONObject(new String(asset(folder+"scene.json"),StandardCharsets.UTF_8));
             blocks=scene.getJSONArray("blocks");
             samplers=scene.getJSONArray("samplers");
             layouts=textureSource==null ? scene.optJSONObject("textures") : textureSource.layouts;
-            if (blocks.length()!=8 || samplers.length()!=(id.endsWith("-add") ? 4 : 7)) throw new IllegalStateException("Wrong fixture shape");
+            boolean shadow=id.endsWith("-shadow");
+            if (blocks.length()!=(shadow ? 6 : 8) || samplers.length()!=(shadow ? 1 : id.endsWith("-add") ? 4 : 7)) throw new IllegalStateException("Wrong fixture shape");
         }
 
         int addBuffer(int target, byte[] bytes) {
@@ -367,6 +380,56 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private void captureShadow(Slot slot, String id, int renderDepth, JSONArray captures) throws Exception {
+        int[] depthTexture=new int[1], samplerVao=new int[1];
+        int samplerProgram=0;
+        try {
+            glGenTextures(1,depthTexture,0);
+            glBindTexture(GL_TEXTURE_2D,depthTexture[0]);
+            glTexStorage2D(GL_TEXTURE_2D,1,GL_DEPTH_COMPONENT24,SIZE,SIZE);
+            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+            samplerProgram=createProgram(
+                "#version 310 es\nvoid main(){vec2 p=vec2(float((gl_VertexID<<1)&2),float(gl_VertexID&2));"
+                    +"gl_Position=vec4(p*2.0-1.0,0,1);}",
+                "#version 310 es\nprecision highp float;uniform highp sampler2D z;out vec4 rgba;"
+                    +"void main(){float v=texelFetch(z,ivec2(gl_FragCoord.xy),0).r;"
+                    +"rgba=v<1.0?vec4(vec3(v),1.0):vec4(0.0);}");
+            glGenVertexArrays(1,samplerVao,0);
+            for (String control:new String[]{"native","solid","transparent","depth-off"}) {
+                glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,depthTexture[0],0);
+                if (glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE)
+                    throw new IllegalStateException("Shadow framebuffer incomplete");
+                glEnable(GL_DEPTH_TEST);
+                glDepthMask(true);
+                glClear(GL_DEPTH_BUFFER_BIT);
+                glDepthMask(!control.equals("depth-off"));
+                glColorMask(false,false,false,false);
+                slot.draw(control);
+                glColorMask(true,true,true,true);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_RENDERBUFFER,renderDepth);
+                glDisable(GL_DEPTH_TEST);
+                glUseProgram(samplerProgram);
+                glBindVertexArray(samplerVao[0]);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D,depthTexture[0]);
+                glUniform1i(glGetUniformLocation(samplerProgram,"z"),0);
+                glDrawArrays(GL_TRIANGLES,0,3);
+                captures.put(capture(id+"-"+control,slot.folder+control+".rgba",true));
+            }
+        } finally {
+            glColorMask(true,true,true,true);
+            glDepthMask(true);
+            glEnable(GL_DEPTH_TEST);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_RENDERBUFFER,renderDepth);
+            glUseProgram(0);
+            glBindVertexArray(0);
+            if (samplerProgram!=0) glDeleteProgram(samplerProgram);
+            glDeleteVertexArrays(1,samplerVao,0);
+            glDeleteTextures(1,depthTexture,0);
+        }
+    }
+
     private void probe() {
         JSONObject summary=new JSONObject();
         int[] fbo=new int[1], color=new int[1], depth=new int[1];
@@ -402,14 +465,19 @@ public final class MainActivity extends Activity {
             for (int i=0;i<tests.length();i++) {
                 JSONObject test=tests.getJSONObject(i);
                 String id=test.getString("id"), primary=test.getString("primary");
-                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add|animation)")) throw new IllegalArgumentException("Invalid test identifier");
+                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add|animation|shadow)")) throw new IllegalArgumentException("Invalid test identifier");
                 JSONObject run=new JSONObject().put("id",id);
                 runs.put(run);
                 JSONArray captures=new JSONArray();
                 run.put("captures",captures);
                 try (Slot first=new Slot(primary)) {
-                    if (!test.has("animation")) first.setup();
-                    if (test.has("animation")) {
+                    if (!test.has("animation") && !test.has("shadow")) first.setup();
+                    if (test.has("shadow")) {
+                        try (Slot shadow=new Slot(test.getString("shadow"),first)) {
+                            shadow.setup();
+                            captureShadow(shadow,id,depth[0],captures);
+                        }
+                    } else if (test.has("animation")) {
                         try (Slot animated=new Slot(test.getString("animation"),first)) {
                             animated.setup();
                             bindBlocks(animated,true);

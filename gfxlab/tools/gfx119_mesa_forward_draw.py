@@ -481,7 +481,7 @@ if args.shadow:
          b"gl_Position=vec4(p*2.0-1.0,0,1);}", 35633),
         (b"#version 310 es\nprecision highp float;uniform highp sampler2D z;out vec4 rgba;"
          b"void main(){float v=texelFetch(z,ivec2(gl_FragCoord.xy),0).r;"
-         b"rgba=vec4(vec3(v),float(v<1.0));}", 35632),
+         b"rgba=v<1.0?vec4(vec3(v),1.0):vec4(0.0);}", 35632),
     ):
         stage = compile_shader(source, kind)
         call("AttachShader", sampler, stage)

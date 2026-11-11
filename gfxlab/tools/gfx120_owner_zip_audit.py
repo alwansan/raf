@@ -15,7 +15,7 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def audit_capture(row, filename, image, reference):
+def audit_capture(row, filename, image, reference, *, allow_empty=False):
     if (row["image"] != filename or sha(image) != row["image_sha256"]
             or sha(reference) != row["mesa_rgba_sha256"] or len(reference) != SIDE*SIDE*4):
         raise ValueError("Capture or Mesa reference identity mismatch")
@@ -23,7 +23,7 @@ def audit_capture(row, filename, image, reference):
         if png.format != "PNG" or png.size != (SIDE,SIDE):
             raise ValueError("Unexpected Forward PNG shape")
         rgba = png.convert("RGBA").transpose(Image.Transpose.FLIP_TOP_BOTTOM).tobytes()
-    if sha(rgba) != row["raw_rgba_sha256"] or set(rgba[3::4]) != {0,255}:
+    if sha(rgba) != row["raw_rgba_sha256"] or (not set(rgba[3::4]) <= {0,255} or (not allow_empty and set(rgba[3::4]) != {0,255})):
         raise ValueError("Unexpected decoded readback bytes")
     coverage = rgba[3::4].count(255)
     changes = sum(a!=b for a,b in zip(rgba[3::4],reference[3::4],strict=True))
@@ -33,9 +33,9 @@ def audit_capture(row, filename, image, reference):
     computed = dict(covered_pixels=coverage,coverage_different_pixels=changes,
                     rgb_channels=len(errors),rgb_absolute_error_sum=sum(errors),
                     max_rgb_channel_error=max(errors,default=0))
-    if any(row[key]!=value for key,value in computed.items()) or not errors:
+    if any(row[key]!=value for key,value in computed.items()) or (not allow_empty and not errors):
         raise ValueError("Recomputed Forward counters disagree")
-    return rgba, {**computed,"mean_rgb_channel_error":sum(errors)/len(errors)}
+    return rgba, {**computed,"mean_rgb_channel_error":sum(errors)/len(errors) if errors else None}
 
 
 def audit(owner_zip, apk):
