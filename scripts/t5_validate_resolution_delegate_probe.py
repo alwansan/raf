@@ -80,6 +80,16 @@ def verify(data):
         ev["unresolved_delegate_sites"] != 0 or
         not 1 <= ev["unique_delegate_target_methods"] <= 2):
         raise ValueError("Original delegate target cannot be authenticated")
+    # A per-method subset cannot exceed its parent population. These bounds
+    # prevent self-contradictory source reports from passing the provenance gate.
+    if ev["option_methods_with_delegate_sites"] > ev["delegate_instruction_sites"]:
+        raise ValueError("More option delegate methods than original delegate sites")
+    if ev["delegate_targets_with_int_parameter"] > ev["resolved_delegate_sites"]:
+        raise ValueError("More typed targets than resolved delegate sites")
+    if ev["option_methods_direct_apply_calls"] > ev["option_methods_reach_apply"]:
+        raise ValueError("Direct option apply call lacks reachability")
+    if ev["delegate_targets_direct_playerprefs_write"] > ev["unique_delegate_target_methods"]:
+        raise ValueError("PlayerPrefs targets exceed original target methods")
     if ev["unresolved_internal_call_sites"] != 0:
         raise ValueError("Incomplete same-type compiled call graph")
     if not 1 <= ev["methods_populating_options"] <= ev["option_population_call_sites"]:
