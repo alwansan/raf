@@ -50,6 +50,33 @@ class LifetimeTest(unittest.TestCase):
             with self.subTest(seq=seq), self.assertRaises(ValueError):
                 check(encoded(doc))
 
+    def test_unreleased_extra_resource_rejected(self):
+        doc = copy.deepcopy(BASE)
+        doc["events"].insert(1, {"seq": 2, "kind": "allocate", "token": "extra_0001"})
+        for i, event in enumerate(doc["events"]):
+            event["seq"] = i + 1
+        with self.assertRaisesRegex(ValueError, "unreleased_capture_resource"):
+            check(encoded(doc))
+
+    def test_released_extra_resource_accepted_without_authenticity(self):
+        doc = copy.deepcopy(BASE)
+        doc["events"].insert(1, {"seq": 2, "kind": "allocate", "token": "extra_0001"})
+        doc["events"].insert(2, {"seq": 3, "kind": "release", "token": "extra_0001"})
+        for i, event in enumerate(doc["events"]):
+            event["seq"] = i + 1
+        result = check(encoded(doc))
+        self.assertEqual(result["lifetime_order_evidence"], "CAPTURE_ORDER_CONSISTENT")
+        self.assertFalse(result["original_foam_runtime_provenance_verified"])
+
+    def test_completed_pair_with_second_unreleased_write_rejected(self):
+        doc = copy.deepcopy(BASE)
+        doc["events"].insert(1, {"seq": 2, "kind": "allocate", "token": "extra_0001"})
+        doc["events"].insert(2, {"seq": 3, "kind": "pass0_write", "token": "extra_0001"})
+        for i, event in enumerate(doc["events"]):
+            event["seq"] = i + 1
+        with self.assertRaisesRegex(ValueError, "unreleased_capture_resource"):
+            check(encoded(doc))
+
     def test_invalid_identity(self):
         for key, value in (("frame", True), ("frame", -1), ("source_commit", "A" * 40)):
             doc = copy.deepcopy(BASE)
