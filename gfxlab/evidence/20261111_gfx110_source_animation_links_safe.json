@@ -1,0 +1,89 @@
+{
+  "experiment": "GFX110",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "cases": [
+    {
+      "model": "M00",
+      "source_bones": 3,
+      "bones_without_animator_ancestor": 0,
+      "animator_candidates": [
+        {
+          "renderer_nearest": true,
+          "bones_nearest": 3,
+          "animator_enabled": true,
+          "avatar_resolved": true,
+          "controller_resolved": true,
+          "controller_clip_refs": 2,
+          "distinct_typed_clips": 2,
+          "unresolved_clip_refs": 0,
+          "clips_with_packed_muscle_data": 2,
+          "clips_with_transform_bindings": 2,
+          "matched_bone_binding_occurrences": 18,
+          "clips_with_verified_bone_bindings": 2,
+          "bones_with_verified_avatar_path": 3,
+          "bones_bound_across_clips": 3
+        }
+      ]
+    },
+    {
+      "model": "M01",
+      "source_bones": 100,
+      "bones_without_animator_ancestor": 100,
+      "animator_candidates": []
+    },
+    {
+      "model": "M02",
+      "source_bones": 8,
+      "bones_without_animator_ancestor": 0,
+      "animator_candidates": [
+        {
+          "renderer_nearest": true,
+          "bones_nearest": 8,
+          "animator_enabled": true,
+          "avatar_resolved": true,
+          "controller_resolved": true,
+          "controller_clip_refs": 3,
+          "distinct_typed_clips": 3,
+          "unresolved_clip_refs": 0,
+          "clips_with_packed_muscle_data": 3,
+          "clips_with_transform_bindings": 3,
+          "matched_bone_binding_occurrences": 72,
+          "clips_with_verified_bone_bindings": 3,
+          "bones_with_verified_avatar_path": 8,
+          "bones_bound_across_clips": 8
+        }
+      ]
+    },
+    {
+      "model": "M04",
+      "source_bones": 100,
+      "bones_without_animator_ancestor": 100,
+      "animator_candidates": []
+    },
+    {
+      "model": "M05",
+      "source_bones": 2,
+      "bones_without_animator_ancestor": 0,
+      "animator_candidates": [
+        {
+          "renderer_nearest": true,
+          "bones_nearest": 2,
+          "animator_enabled": true,
+          "avatar_resolved": true,
+          "controller_resolved": true,
+          "controller_clip_refs": 2,
+          "distinct_typed_clips": 2,
+          "unresolved_clip_refs": 0,
+          "clips_with_packed_muscle_data": 2,
+          "clips_with_transform_bindings": 2,
+          "matched_bone_binding_occurrences": 12,
+          "clips_with_verified_bone_bindings": 2,
+          "bones_with_verified_avatar_path": 2,
+          "bones_bound_across_clips": 2
+        }
+      ]
+    }
+  ],
+  "animation_sampled": false,
+  "phase_closed": false
+}

@@ -1,0 +1,68 @@
+{
+  "experiment": "GFX109",
+  "models_checked": 5,
+  "vertices_checked": 14033,
+  "failing_vertices": 0,
+  "max_absolute_error": 6.103515625e-05,
+  "gpu_source_position_match": true,
+  "phase_closed": false,
+  "evidence": "ANDROID_GPU_TRANSFORM_FEEDBACK",
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "apk_sha256": "a149cff345973fb7e670429c382bf1e09610605beb9805f193fd1aef09d4e6a9",
+  "archive_sha256": [
+    "6ba404b5b25550fc0eca0678ede4a39bb7f84fed644af8a49ae84f840895b67c",
+    "17ab245325d27ff2e097e3895c7a58ba6c7729c8396ea1ea24066f18b437e442"
+  ],
+  "distinct_summary_count": 1,
+  "source_payload_hashes_verified": 5,
+  "cases": [
+    {
+      "model": "M00",
+      "vertices": 375,
+      "bones": 3,
+      "gpu_vertices_written": 375,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "M01",
+      "vertices": 5095,
+      "bones": 100,
+      "gpu_vertices_written": 5095,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 2.384185791015625e-07
+    },
+    {
+      "model": "M02",
+      "vertices": 1666,
+      "bones": 8,
+      "gpu_vertices_written": 1666,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    },
+    {
+      "model": "M04",
+      "vertices": 2445,
+      "bones": 100,
+      "gpu_vertices_written": 2445,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 2.384185791015625e-07
+    },
+    {
+      "model": "M05",
+      "vertices": 4452,
+      "bones": 2,
+      "gpu_vertices_written": 4452,
+      "failing_vertices": 0,
+      "nonfinite_vertices": 0,
+      "max_absolute_error": 6.103515625e-05
+    }
+  ],
+  "animated_pose_verified": false,
+  "rendered_pixel_parity_verified": false
+}

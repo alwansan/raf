@@ -1,0 +1,9 @@
+{
+  "session_id": "20261111-GFX-chat-gfx109-owner-animation-links-77",
+  "origin": "chat",
+  "base": "96b6e66eadbbf49d188b76f69268411fe3a45e75",
+  "scope": "Authenticate GFX109 phone exports and resolve source Animator-to-clip links for the exact tested meshes",
+  "baseline": "Pinned ZIP2, source-indexed GFX108 CPU position reference, signed GFX109 APK",
+  "expected": "Safe aggregate for handset pose and exact typed clip links, including missing and ambiguous cases",
+  "phase_closed": false
+}

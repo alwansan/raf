@@ -872,3 +872,14 @@ First CI42957200890 failed javac LambdaMetafactory with Android bootclasspath. R
 Owner APK `GFX109-Indexed-GPU-Skinning.apk`, Library `libfile_c8f87abf86bc81918f9f4cfaa2762db1`. Open and send one automatic `GFX109-ALL-TEST-LOGS-*.zip` from `Download/Games/cl/test/g/` (Export ZIP retries). `gfxlab/tools/gfx109_owner_zip_audit.py` binds owner report payload hashes to exact delivered APK and checks ordered counts and failures; positive and missing-vertex fixtures checked locally.
 
 GFX109 isolates vertex coordinates with rasterizer discard. Actual Adreno run is pending. Original animated poses, matching PC/Adreno model pixels and original Shader48/material/normal/render state remain open. Phase one remains open.
+
+
+## 11 Nov 2026 — GFX109 Adreno positions verified and GFX110 source animation links resolved
+
+Session `20261111-GFX-chat-gfx109-owner-animation-links-77`, origin=chat, base `96b6e66eadbbf49d188b76f69268411fe3a45e75`. Only write branch `experiment/android-graphics-rootcause`.
+
+Both GFX109 exports pass the exact signed APK payload audit, ZIP integrity and count checks. The two summaries are byte-identical. Record one confirmed result on Adreno 730, GLES 3.2 V0615.95. All 14,033 source-indexed GPU output positions across five models met the existing tolerance; zero nonfinite or failing vertices. Maximum absolute component difference 0.00006103515625. This closes the isolated GFX109 source snapshot position check. Animated poses and model pixel parity remain open. Safe evidence `gfxlab/evidence/20261111_gfx109_owner_adreno_skin_safe.json`.
+
+GFX110 followed exact typed source Renderer/GameObject/Transform/Animator/Controller/Avatar/Clip references on SHA-pinned ZIP2. Verified local execution with UnityPy 1.25.4. The chosen M00 has 2 linked clips and all 3 bones bound across them, M02 has 3 clips and all 8 bones bound, M05 has 2 clips and both bones bound. Seven resolved clip references and seven clips with verified bindings across the model cases; 102 verified binding occurrences. Paths matched the exact Animator-relative Transform hierarchy and original Avatar path table, with CRC32 as an additional consistency check. The selected M01/M04 Renderer and bone ancestry exposes no Animator in staged assets. Their shared mesh identity is insufficient to transfer another Renderer's animation. Safe evidence `gfxlab/evidence/20261111_gfx110_source_animation_links_safe.json`.
+
+Next: sample original clip channels and build time-varying CPU reference for M02. Establish the source clip samples and transform order before a new phone APK. M01/M04 need separate exact Animator provenance. Original Shader48 material/sampling and PC↔Adreno pixels remain open. No new APK needed for this source audit. `phase_closed=false`.
