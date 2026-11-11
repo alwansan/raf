@@ -2971,15 +2971,36 @@
     "light_changed_pixels": 1979,
     "normal_changed_pixels": 1627,
     "metallic_changed_pixels": 1960,
-    "adreno_pending": true,
+    "adreno_pending": false,
     "phase_closed": false
   },
   "latest_gfx120": {
     "run": 43047217835,
     "public_shell_artifact": 13868191281,
     "apk_sha256": "ed35f665baac97d3ac796e6cf7edc000307ca0c8d7542af6e53b1a2019270479",
-    "owner_gpu_pending": true,
+    "owner_gpu_pending": false,
     "reference_cases": 4,
+    "phase_closed": false,
+    "owner_draw_cases": 4,
+    "owner_coverage_pixels": 2008,
+    "owner_coverage_differences": 0,
+    "owner_lit_rgb_mae": 0.10209163346613546
+  },
+  "latest_gfx121": {
+    "run": 43049070451,
+    "status": "success",
+    "artifact": 13868887305,
+    "cases": 4,
+    "adreno_coverage_matches": 4,
+    "adreno_rgba_exact_cases": [
+      "dark"
+    ],
+    "phase_closed": false
+  },
+  "latest_gfx122": {
+    "inventory_slots": 7,
+    "unique_forward_pairs": 2,
+    "device_draw_slots_verified": 1,
     "phase_closed": false
   }
 }

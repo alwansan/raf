@@ -1,0 +1,51 @@
+{
+  "experiment": "GFX121",
+  "renderer": "Windows Direct3D 11 WARP",
+  "source_dxbc_draw_completed": true,
+  "dxbc_sha256": {
+    "vertex": "eb8cb37c7db2eb7cc779aa22aa2808e63368fd48b33d311155b131cfc2f9e737",
+    "fragment": "e878b70bcd3a89c124179cb445ab876bbd7711b05d27c62900d7472da1491db2"
+  },
+  "captures": {
+    "light": {
+      "covered_pixels": 2008,
+      "rgba_sha256": "e08f1a66d4406824fdd91fcd7b7262d710b58cd14250535a9d933a2cf9f3ccc3",
+      "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91"
+    },
+    "dark": {
+      "covered_pixels": 2008,
+      "rgba_sha256": "dea9b6166a59d59864c7a5b1baf1b3d7f3d15400a6bde515d0d0bb5de26c3c4a",
+      "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91"
+    },
+    "flat": {
+      "covered_pixels": 2008,
+      "rgba_sha256": "23acd3c955c82ca83f8a57ecdfd53d8a50652d1ec649893eaef8864745a0386c",
+      "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91"
+    },
+    "nonmetal": {
+      "covered_pixels": 2008,
+      "rgba_sha256": "ac133b3cc6f5a7066e9e310de5aa3bd1e43b67cd208bf6e4ca3094433921edfa",
+      "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91"
+    }
+  },
+  "control_rgb_changed_pixels": {
+    "dark": 1979,
+    "flat": 1635,
+    "nonmetal": 1961
+  },
+  "game_scene_matched": false,
+  "full_adreno_pixel_comparison": false,
+  "phase_closed": false,
+  "adreno_comparison": {
+    "run": 43049070451,
+    "artifact": 13868887305,
+    "rgba_exact": {
+      "light": false,
+      "dark": true,
+      "flat": false,
+      "nonmetal": false
+    },
+    "coverage_exact_all_four": true,
+    "rgb_error_metrics_available": false
+  }
+}

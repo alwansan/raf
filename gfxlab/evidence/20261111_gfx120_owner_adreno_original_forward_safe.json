@@ -1,0 +1,60 @@
+{
+  "experiment": "GFX120",
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "draw_completed": true,
+  "captures": {
+    "light": {
+      "covered_pixels": 2008,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 6024,
+      "rgb_absolute_error_sum": 615,
+      "max_rgb_channel_error": 11,
+      "mean_rgb_channel_error": 0.10209163346613546
+    },
+    "dark": {
+      "covered_pixels": 2008,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 6024,
+      "rgb_absolute_error_sum": 0,
+      "max_rgb_channel_error": 0,
+      "mean_rgb_channel_error": 0.0
+    },
+    "flat": {
+      "covered_pixels": 2008,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 6024,
+      "rgb_absolute_error_sum": 483,
+      "max_rgb_channel_error": 9,
+      "mean_rgb_channel_error": 0.0801792828685259
+    },
+    "nonmetal": {
+      "covered_pixels": 2008,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 6024,
+      "rgb_absolute_error_sum": 797,
+      "max_rgb_channel_error": 13,
+      "mean_rgb_channel_error": 0.13230411686586985
+    }
+  },
+  "control_rgb_changed_pixels": {
+    "dark": 1979,
+    "flat": 1635,
+    "nonmetal": 1963
+  },
+  "controls_responded": true,
+  "original_game_pixel_parity": false,
+  "phase_closed": false,
+  "identical_exports": true,
+  "apk_sha256": "ed35f665baac97d3ac796e6cf7edc000307ca0c8d7542af6e53b1a2019270479",
+  "archive_sha256": [
+    "61a7d7b9d6d28134376a2fc5a0446d76a23a0f1bf986bf903181a080635719a6",
+    "b7229b605352992cd11557697ea41ef9672de16ee784ba61b0d200a5cc144325"
+  ],
+  "coverage_sha256": {
+    "light": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+    "dark": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+    "flat": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+    "nonmetal": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91"
+  }
+}

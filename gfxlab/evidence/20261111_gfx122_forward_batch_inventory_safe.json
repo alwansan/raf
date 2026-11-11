@@ -1,0 +1,51 @@
+{
+  "experiment": "GFX122",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "directional_forward_slots": [
+    {
+      "renderer_slot": "M00/0",
+      "material_keyword_count": 2,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    },
+    {
+      "renderer_slot": "M01/0",
+      "material_keyword_count": 2,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    },
+    {
+      "renderer_slot": "M02/0",
+      "material_keyword_count": 3,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    },
+    {
+      "renderer_slot": "M03/0",
+      "material_keyword_count": 2,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    },
+    {
+      "renderer_slot": "M03/1",
+      "material_keyword_count": 3,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    },
+    {
+      "renderer_slot": "M04/0",
+      "material_keyword_count": 2,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    },
+    {
+      "renderer_slot": "M05/0",
+      "material_keyword_count": 2,
+      "exact_directional_forward_pairs": 1,
+      "requires_explicit_variant_resolution": false
+    }
+  ],
+  "unique_selected_pairs": 2,
+  "device_draw_slots_already_verified": 1,
+  "phase_closed": false
+}
