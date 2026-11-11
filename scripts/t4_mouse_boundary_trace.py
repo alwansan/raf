@@ -15,16 +15,23 @@ from pathlib import Path
 
 STAGES = ("android", "unity", "raft")
 BUTTONS = ("left", "right", "middle", "wheel")
-TOKEN = re.compile(r"(?<!\w)(session|frame|stage|button)=([A-Za-z0-9_-]+)\b")
+TOKEN = re.compile(r"(?<!\\w)(session|frame|stage|button)=([A-Za-z0-9_-]+)\\b")
+MARKER = re.compile(r"(?<![A-Za-z0-9_])T4_MOUSE_STAGE(?=\\s|$)")
 
 
 def analyze(lines):
     frames = defaultdict(lambda: defaultdict(set))
     malformed = 0
     for line in lines:
-        if "T4_MOUSE_STAGE" not in line:
+        marker = MARKER.search(line)
+        if marker is None:
             continue
-        fields = dict(TOKEN.findall(line))
+        # Only parse fields after the actual marker, never logcat metadata before it.
+        pairs = TOKEN.findall(line[marker.end():])
+        fields = dict(pairs)
+        if len(fields) != len(pairs):
+            malformed += 1
+            continue
         frame = fields.get("frame", "")
         stage = fields.get("stage")
         button = fields.get("button")
