@@ -2674,5 +2674,55 @@
     "originalAnimationRestored": false,
     "pcAdrenoPixelParityVerified": false,
     "phase_closed": false
+  },
+  "latest_gfx102_owner_gpu_verified": {
+    "role": "GFX-LAB",
+    "session": "memory/sessions/20261111-GFX-chat-owner-gfx102-native-noperspective-71.md",
+    "experiment": "GFX-MULTI-102",
+    "device": "Adreno730 GLES3.2 GLSL_ES3.20",
+    "owner_zip_sha256": [
+      "82fa4235ec6e4a88e8d02fd89cb4077fa228dd8c617cb697503c3137dfa44ff5",
+      "858d6bd354b17fdfdf6f8f2c6f3930099bce015d36c206b2f990f20a37a58a29"
+    ],
+    "zip_crc_pass": true,
+    "full_png_decode_and_shas_verified": 10,
+    "events_per_export": 25,
+    "two_archives_same_gpu_session_content": true,
+    "advertised_nv_noperspective_extension": true,
+    "glsl_native_ES300": "VERTEX_AND_FRAGMENT_RESERVED_WORD_COMPILE_FAIL",
+    "glsl_native_ES310": "VS_FS_COMPILE_LINK_AND_GPU_NATIVE_AFFINE_PARITY_PASS",
+    "glsl_native_ES320": "VS_FS_COMPILE_LINK_AND_GPU_NATIVE_AFFINE_PARITY_PASS",
+    "gpu_sample_mad_vs_affine_cpu": 0.001141990429516256,
+    "gpu_sample_mad_vs_smooth_cpu": 0.16301616768295013,
+    "full_native310_native320_affine_emulated_raw_sha_identical": true,
+    "native_synthetic_test_verified": true,
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
+    "phase_closed": false,
+    "safe_evidence": "gfxlab/evidence/20261111_gfx102_owner_adreno_native_noperspective_safe.json"
+  },
+  "latest_gfx103_original_source_interp_gate": {
+    "role": "GFX-LAB",
+    "origin": "chat",
+    "session_id": "20261111-GFX-chat-owner-gfx102-native-noperspective-71",
+    "write_branch": "experiment/android-graphics-rootcause",
+    "experiment": "GFX-MULTI-103",
+    "workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi103-source-interpolation-classes.yml",
+    "source_guard": "gfxlab/tools/gfx103_source_interpolation_gate.py",
+    "private_source_census": "gfxlab/tools/gfx103_source_interpolation_census.py",
+    "test_files": [
+      "gfxlab/tests/test_gfx103_source_interpolation_gate.py",
+      "gfxlab/tests/test_gfx103_source_interpolation_census.py"
+    ],
+    "expected_real_exact_pairs": 524,
+    "prior_known_source_noperspective_declarations": 16,
+    "prior_known_siv_declarations": 16,
+    "ordinary_siv_overlap": "UNKNOWN_REQUIRES_GFX103_SOURCE_EXECUTION",
+    "tests": "15_SYNTHETIC_COMMITTED_CI_UNVERIFIED",
+    "source_ci": "UNVERIFIED",
+    "source_private_purge": "WORKFLOW_CONFIGURED_NOT_YET_CONFIRMED",
+    "originalShaderRestored": false,
+    "source_adreno_real_shader_parity": false,
+    "phase_closed": false
   }
 }
