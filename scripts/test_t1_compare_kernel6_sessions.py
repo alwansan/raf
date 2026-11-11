@@ -40,5 +40,17 @@ class CrossSessionTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare(a, sample("b", "b", 3))
 
+    def test_reject_more_samples_than_errors(self):
+        a = sample("a", "a", 1)
+        a["counts"]["kernel6_error_lines"] = 0
+        with self.assertRaisesRegex(ValueError, "sampled errors exceed"):
+            compare(a, sample("b", "b", 2))
+
+    def test_reject_boolean_sample_count(self):
+        a = sample("a", "a", 1)
+        a["sampled_hits"] = True
+        with self.assertRaises(ValueError):
+            compare(a, sample("b", "b", 2))
+
 if __name__ == "__main__":
     unittest.main()
