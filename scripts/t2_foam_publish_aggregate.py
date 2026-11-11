@@ -13,10 +13,15 @@ import tempfile
 from t2_foam_evidence_gate_20261110 import MAX_BYTES, EvidenceError, parse_aggregate_json
 
 
+def _has_symlink_ancestor(directory: Path) -> bool:
+    """Reject existing symlinks anywhere in the output directory chain."""
+    return any(part.is_symlink() for part in (directory, *directory.parents))
+
+
 def publish(source: Path, destination: Path):
     source, destination = Path(source).absolute(), Path(destination).absolute()
     if (source == destination or destination.is_symlink()
-            or destination.parent.is_symlink()
+            or _has_symlink_ancestor(destination.parent)
             or not destination.parent.is_dir()):
         raise EvidenceError("unsafe output destination")
     # Verify the opened object, not a path checked before opening (TOCTOU).
