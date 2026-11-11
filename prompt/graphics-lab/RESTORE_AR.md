@@ -1,3 +1,20 @@
+## 11 Nov 2026 — GFX147 SUCCESS: actual Mesa source-original M03-1 GPU Cull Off/Back/Front differential
+
+Session `20261111-GFX-chat-real-Mesa-cull-104` (`origin=chat`), worker GFX-LAB, writable branch only `experiment/android-graphics-rootcause`. Source pinned original `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
+
+**[GFX147 Actions run 43093563974](https://github.com/alwansan/raf/actions/runs/43093563974) COMPLETE SUCCESS:** code compiled/verified **8/8 source-free tests** for RGBA8 shape, stable GL cull state restoration/repeat, exact baseline source coverage and color hotspot measurement. Private runner reconstructed genuine original M03-1 mesh/material/BC texture mips/Shader48/constant-buffer values and successfully executed real Mesa GLES3.1 on `llvmpipe LLVM 20.1.2`, with GL_DEPTH_TEST LESS, CCW front-face and the **same source shader and fixtures in every draw**, changing **only GL_CULL_FACE state**. Explicit `Cull Off` before/after repeat identical; `Cull Back` repeats identical. Original Off 3,301 covered pixels and original Mesa SHA256 `c6d786e908500674d64c3220bf4e26b98253302a88ba390a67b00b570877da78` preserved from GFX142 signed reference.
+
+- **Cull Back** kept geometric alpha mask **pixel-exact 3,301/3,301**, changed RGB of **105** source-covered pixels vs Off (all 105 >10 levels in ≥1 RGB channel), max channel delta **76/255**, mean covered RGB absolute delta **1.197819/255**, changed bbox **x53..117,y128..140**. **89/105** changed pixels fall in prior *Adreno-vs-Mesa Off* error bounding rectangle **x61..117,y128..139**, 16 outside. This is direct source-original GPU evidence that Back culling selectively alters color at the coplanar mirrored-face hotspot, without changing geometric coverage.
+- **Cull Front** kept geometric coverage **3,301/3,301**, but changed **2,796** source-covered RGB pixels vs Off, 2,596 with RGB delta >10, max delta **172/255**, mean absolute covered RGB difference **51.368575/255**; 486 hot delta pixels within prior bbox and 2,110 outside. This corroborates GFX146 CPU projection predicting **2,921** changed nearest depths for front culling, but these are different measurements (GPU colors vs CPU depths) and should NOT be conflated.
+- GFX144 prior *real owner phone* source Adreno `Cull Off` vs Mesa `Cull Off` had exactly **58** pixels >10, all at 380 coplanar opposing source faces; 58≠105 and bbox overlap alone does **not** prove Cull Back will match Adreno. A focused **on-device Adreno Cull Back differential** is the remaining causal step, not another 9-case/51-capture batch.
+
+**Scope:** One original controlled Mesa GPU fixture, not actual Unity running the restored game. Source Shader48 Cull fallback Back in all seven passes (GFX145), but original dynamic state effective in runtime **unresolved**. Do not change feature/android-native-port, main, zip2, shaders, scenes, meshes, .meta GUIDs or previously accepted GFX142 51-capture baseline without stronger evidence. No original shaders, textures, raw captures, owner ZIP or signed APK published to public Actions; only safe numeric aggregates artifact [13890281322](https://github.com/alwansan/raf/actions/runs/43093563974/artifacts/13890281322).
+
+**Next:** GFX148 one focused Adreno M03-1 Cull Off/Back/Front owner test using exact original fixture, with each condition's source-safe color deltas and Mesa reference/capture per case, and total 3/3. Preserve GFX142 original version and owner existing accepted ZIP. Before delivering ensure signed APK can be downloaded, not an encrypted `.cms` mistakenly installed. Actual Unity ShaderLab and engine G-buffer/Animator/game-PC parity OPEN. `originalShaderRestored=false`, `originalAnimationRestored=false`, `phase_closed=false`.
+
+
+---
+
 ## 11 Nov 2026 — GFX145 + GFX146 VERIFIED: Shader48 source Cull Back fallback and M03-1 preserved geometric coverage
 
 Session `20261111-GFX-chat-original-cull-projection-103` (`origin=chat`), worker GFX-LAB, **only writable branch** `experiment/android-graphics-rootcause`.

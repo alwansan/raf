@@ -1,0 +1,71 @@
+{
+  "experiment": "GFX147",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "source_git_rev": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow_run": 43093563974,
+  "CI_status": "SUCCESS",
+  "source_free_regression_tests_passed": 8,
+  "GPU_renderer": "llvmpipe (LLVM 20.1.2, 256 bits)",
+  "shader_source": "source original Shader48 private ZIP2 pinned",
+  "source_material": "M03-1 original geometry/mips and original source material CB bindings",
+  "original_m03_1_source_triangles": 2872,
+  "original_covered_pixels": 3301,
+  "original_mesa_off_lit_SHA256": "c6d786e908500674d64c3220bf4e26b98253302a88ba390a67b00b570877da78",
+  "controlled_GL_front_face": "CCW",
+  "depth_test": "LESS",
+  "off_draw_repeat_exact": true,
+  "back_draw_repeat_exact": true,
+  "cull_back": {
+    "covered_pixels": 3301,
+    "coverage_mask_exact": true,
+    "rgba_exact_vs_off": false,
+    "covered_rgb_changed_pixels": 105,
+    "covered_rgb_mean_absolute_error": 1.197819,
+    "covered_rgb_max_channel_difference": 76,
+    "covered_rgb_difference_gt10_pixels": 105,
+    "changed_gt10_in_prior_Adreno_bbox": 89,
+    "changed_gt10_outside_prior_Adreno_bbox": 16,
+    "changed_bbox_xyxy": [
+      53,
+      128,
+      117,
+      140
+    ],
+    "original_color_sha256": "3664e3146c10a225dafd9bf490454ea29a94d9e3dbe6d7bb9a4171dfe7ccc4e6"
+  },
+  "cull_front": {
+    "covered_pixels": 3301,
+    "coverage_mask_exact": true,
+    "rgba_exact_vs_off": false,
+    "covered_rgb_changed_pixels": 2796,
+    "covered_rgb_mean_absolute_error": 51.368575,
+    "covered_rgb_max_channel_difference": 172,
+    "covered_rgb_difference_gt10_pixels": 2596,
+    "changed_gt10_in_prior_Adreno_bbox": 486,
+    "changed_gt10_outside_prior_Adreno_bbox": 2110,
+    "changed_bbox_xyxy": [
+      60,
+      127,
+      206,
+      152
+    ],
+    "original_color_sha256": "d28270e7ae29647374d3e5d52fa9eb0d4a1a3e2e55bad2feaf7d6537907bd0b5"
+  },
+  "prior_original_phone_GPU": "Adreno 730",
+  "prior_Adreno_Off_vs_Mesa_Off_gt10_pixels": 58,
+  "prior_Adreno_hotspot_bbox_xyxy": [
+    61,
+    128,
+    117,
+    139
+  ],
+  "prior_src_all_58_hot_pixels_on_380_opposite_coplanar_source_face_ties": true,
+  "device_CullBack_GPU_readback_verified": false,
+  "original_Unity_effective_Cull_mode_verified": false,
+  "original_Animator_runtime_verified": false,
+  "original_Unity_deferred_Gbuffer_format_verified": false,
+  "PC_game_scene_parity_verified": false,
+  "raw_images_or_game_assets_in_public_artifact": false,
+  "phase_closed": false
+}

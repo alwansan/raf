@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-original-cull-projection-103",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-original-cull-projection-103.md",
-  "status": "GFX146_SOURCE_ORIGINAL_SHADER48_BACK_CULL_FALLBACK_7_OF_7_GFX145_SUCCESS_M03_1_CPU_CCW_CULLBACK_COVERAGE_3301_DEPTH_DRIFT_0_GFX146_CI_7_OF_7_RUNTIME_UNVERIFIED",
+  "latest_session": "20261111-GFX-chat-real-Mesa-cull-104",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-real-Mesa-cull-104.md",
+  "status": "GFX147_REAL_ORIGINAL_M03_1_MESA_CULL_OFF_BACK_FRONT_SUCCESS_8_OF_8_BACK_LOCAL_COLOR_CHANGE_105_PX_COVERAGE_3301_PRESERVED_PHONE_CULL_GATE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX147: controlled original M03-1 GLES Mesa GPU Cull Off/Back/Front color comparison with source-pinned geometry and texture; only then build a small Adreno owner differential if needed. Avoid modifying Unity Shader48 or altering 9-case GFX142 baseline until Unity runtime cull dynamic override is proven.",
+  "next_experiment": "GFX148: source-pinned one-case M03-1 Adreno GLES Cull Off/Back/Front owner APK, collect 3 GPU readbacks and compare exact original Mesa outputs safely. Do not rerun the full 9-case/51-capture owner batch unnecessarily; preserve original Unity runtime state and game branch.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3204,7 +3204,20 @@
     "gfx146_CullBack_nearest_depth_changed_pixels": 0,
     "gfx146_CullFront_nearest_depth_changed_pixels": 2921,
     "gfx146_actual_GPU_CullBack_RGB_parity_verified": false,
-    "original_Unity_Cull_effective_runtime_verified": false
+    "original_Unity_Cull_effective_runtime_verified": false,
+    "GFX147_run": 43093563974,
+    "GFX147_ci_status": "SUCCESS",
+    "GFX147_source_free_unit_tests": 8,
+    "GFX147_Mesa_real_source_original_GPU_draw_verified": true,
+    "GFX147_M03_1_CullOff_covered": 3301,
+    "GFX147_M03_1_CullBack_covered": 3301,
+    "GFX147_M03_1_CullBack_coverage_mask_exact": true,
+    "GFX147_CullBack_RGB_changed_vs_off": 105,
+    "GFX147_CullBack_RGB_delta_gt10_in_prior_phone_bbox": 89,
+    "GFX147_CullBack_RGB_delta_gt10_outside_prior_phone_bbox": 16,
+    "GFX147_CullFront_RGB_changed_vs_off": 2796,
+    "GFX147_CPU_gpu_side_consistency": true,
+    "GFX147_Adreno_CullBack_pixel_parity_verified": false
   },
-  "latest_evidence_run": 43091988412
+  "latest_evidence_run": 43093563974
 }
