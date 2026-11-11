@@ -2724,5 +2724,37 @@
     "originalShaderRestored": false,
     "source_adreno_real_shader_parity": false,
     "phase_closed": false
+  },
+  "latest_gfx104_spirv_native_interpolation": {
+    "role": "GFX-LAB",
+    "origin": "chat",
+    "session_id": "20261111-GFX-chat-original-spirv-interpolation-72",
+    "session": "memory/sessions/20261111-GFX-chat-original-spirv-interpolation-72.md",
+    "branch": "experiment/android-graphics-rootcause",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_pair_population": 524,
+    "workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi104-source-spirv-native-bridge.yml",
+    "prior_gfx103_workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi103-source-interpolation-classes.yml",
+    "code": [
+      "gfxlab/tools/gfx104_spirv_input_interpolation.py",
+      "gfxlab/tools/gfx104_source_shader_spirv_bridge.py"
+    ],
+    "tests": [
+      "gfxlab/tests/test_gfx104_spirv_input_interpolation.py",
+      "gfxlab/tests/test_gfx104_source_shader_spirv_bridge.py"
+    ],
+    "gfx103_lexer_hardening": "GLES qualifier checks now strip GLSL comments and quoted strings; centroid/sample order supported",
+    "local_checks": "6/6 reconstructed SPIRV parser cases and 6/6 GLSL lexer examples passed; not full CI",
+    "new_committed_synthetic_tests": 14,
+    "actual_original_spirv_provenance": "PENDING_PRIVATE_CI",
+    "original_source_noperspective_ordinary_vs_siv_overlap": "UNKNOWN_NEEDS_103_AGGREGATE",
+    "actions_result": "UNVERIFIED",
+    "signed_apk": "NOT_REQUESTED_SOURCE_ONLY",
+    "native_gpu_synthetic_gfx102_verified": true,
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
+    "source_original_program_adreno_pixel_verified": false,
+    "pcAdrenoPixelParityVerified": false,
+    "phase_closed": false
   }
 }
