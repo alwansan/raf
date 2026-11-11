@@ -134,7 +134,7 @@ struct Draw {
         return view;
     }
 
-    void bind_geometry(const Path& dir) {
+    void bind_geometry(const Path& dir, const Path& pose = {}) {
         auto vs = read(dir/"vertex.dxbc");
         auto ps = read(dir/"fragment.dxbc");
         ComPtr<ID3D11VertexShader> vertex;
@@ -153,7 +153,7 @@ struct Draw {
         ComPtr<ID3D11InputLayout> layout;
         require(device->CreateInputLayout(elements,5,vs.data(),vs.size(),&layout),"Source signature");
         ctx->IASetInputLayout(layout.Get());
-        const auto mesh=read(dir/"mesh.bin"), indices=read(dir/"indices.bin");
+        const auto mesh=read(pose.empty() ? dir/"mesh.bin" : pose), indices=read(dir/"indices.bin");
         if (mesh.size()%48 || indices.size()%6) throw std::runtime_error("Wrong mesh shape");
         index_count=static_cast<UINT>(indices.size()/2);
         auto vb=buffer(mesh,D3D11_BIND_VERTEX_BUFFER);
@@ -275,9 +275,22 @@ struct Draw {
 };
 
 int wmain(int argc,wchar_t** argv) {
-    if (argc!=4 && argc!=5 && (argc!=6 || std::wstring(argv[5])!=L"add")) return 2;
+    const std::wstring mode_flag = argc==6 ? argv[5] : L"";
+    if (argc!=4 && argc!=5 && mode_flag!=L"add" && mode_flag!=L"animation") return 2;
     try {
         Draw draw;
+        if (mode_flag==L"animation") {
+            draw.bind_textures(argv[2],"light");
+            for (int clip=0; clip<3; ++clip) {
+                for (int pose=0; pose<5; ++pose) {
+                    const auto name="C"+std::to_string(clip)+"P"+std::to_string(pose);
+                    draw.bind_geometry(argv[1],Path(argv[4])/(name+".bin"));
+                    draw.render(argv[1],"light",true);
+                    draw.capture(argv[3],name);
+                }
+            }
+            return 0;
+        }
         draw.bind_geometry(argv[1]);
         for (const auto& mode:{"light","dark","flat","nonmetal"}) {
             draw.bind_textures(argv[2],mode);
