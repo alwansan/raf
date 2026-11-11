@@ -13,8 +13,8 @@ MODES={0:"undefined",1:"constant",2:"linear",3:"linear_centroid",
        6:"linear_sample",7:"linear_noperspective_sample"}
 # Drop comments/quoted strings before detecting qualifiers; a diagnostic comment
 # must never masquerade as an actual GLSL input/output declaration.
-COMMENT_OR_STRING=re.compile(r'/\\*[\\s\\S]*?\\*/|//[^\\n]*|"(?:\\\\.|[^"\\\\])*"')
-NATIVE=re.compile(r"\\b(?:noperspective\\s+(?:(?:centroid|sample)\\s+)?|(?:centroid|sample)\\s+noperspective\\s+)(?:in|out)\\b")
+COMMENT_OR_STRING=re.compile(r'/\*[\s\S]*?\*/|//[^\n]*|"(?:\\.|[^"\\])*"')
+NATIVE=re.compile(r"\b(?:noperspective\s+(?:(?:centroid|sample)\s+)?|(?:centroid|sample)\s+noperspective\s+)(?:in|out)\b")
 def has_native_interpolation(source):
     return bool(NATIVE.search(COMMENT_OR_STRING.sub("",source)))
 VERSION=re.compile(r"\A#version\s+(300|310|320)\s+es\s*\n")
