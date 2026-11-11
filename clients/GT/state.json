@@ -1,0 +1,22 @@
+{
+  "agent": "GT",
+  "repository": "alwansan/raf",
+  "write_branch": "feature/android-native-port",
+  "source": {
+    "branch": "zip2",
+    "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  },
+  "calibration": {
+    "closed": true,
+    "models": 6,
+    "material_slots": 7,
+    "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
+  },
+  "status": "ready_for_owner_start",
+  "inventory": {
+    "status": "not_started",
+    "totals": null
+  },
+  "latest_session": "sessions/20261112-GT-bootstrap.md",
+  "next_action": "Inventory original graphics and current Android project at pinned revisions; update DISCOVERY_AR.md and SUMMARY_AR.md."
+}
