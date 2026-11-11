@@ -36,6 +36,7 @@ namespace RaftAndroid.Platform
             safeRoot.anchorMax = new Vector2(safe.xMax / Screen.width, safe.yMax / Screen.height);
             safeRoot.offsetMin = safeRoot.offsetMax = Vector2.zero;
             FitPanelsToSafeArea(safe);
+            FitRightButtonsToSafeArea(safe);
             toggleText.text = gamepad.Visible ? "Hide Xbox" : "Show Xbox";
             editorObject.SetActive(gamepad.Visible && gamepad.Editing);
             reportObject.SetActive(reportOpen && !gamepad.Editing);
@@ -127,6 +128,26 @@ namespace RaftAndroid.Platform
             float factor = Mathf.Clamp(Mathf.Min(safeHeight / 684f, safeWidth / 666f), 0.1f, 1f);
             FitPanel(editorObject, factor);
             FitPanel(reportObject, factor);
+        }
+
+        // Keep all three diagnostic actions reachable on unusually short safe
+        // areas. Their original top offsets (78/126/174) and 42-unit height
+        // fit in 216 units; scaling the entire stack preserves spacing.
+        // Only these diagnostic buttons are scaled; gamepad controls are not.
+        private void FitRightButtonsToSafeArea(Rect safe)
+        {
+            if (Screen.height <= 0 || safeRoot == null) return;
+            float safeHeight = safe.height * 720f / Screen.height;
+            float factor = Mathf.Clamp(safeHeight / 224f, 0.1f, 1f);
+            string[] names = { "Show Xbox", "Xbox layout", "Test report" };
+            float[] offsets = { 78f, 126f, 174f };
+            for (int i = 0; i < names.Length; i++)
+            {
+                var child = safeRoot.Find(names[i]) as RectTransform;
+                if (child == null) continue;
+                child.localScale = new Vector3(factor, factor, 1f);
+                child.anchoredPosition = new Vector2(-8f * factor, -offsets[i] * factor);
+            }
         }
 
         private static void FitPanel(GameObject panel, float factor)
