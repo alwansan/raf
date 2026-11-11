@@ -66,7 +66,7 @@ def inspect_spirv_input_interpolation(binary):
         at+=count
     if at!=len(words):raise ValueError("GFX104_SPIRV_NOT_EXHAUSTED")
     direct_native=direct_builtin=direct_flat=0
-    member_native=member_builtin=0
+    member_native=member_builtin=member_noperspective_builtin=0
     undecorated_input=0
     unresolved_type=0
     for var_id,pointer_id in input_variables.items():
@@ -80,9 +80,16 @@ def inspect_spirv_input_interpolation(binary):
             unresolved_type+=1
             continue
         struct_id=ptr[1]
+        # Pair decorations by member index: NoPerspective + BuiltIn on
+        # the same member must NEVER become evidence for an ordinary varying.
+        members=defaultdict(set)
         for member_index,mode in member_decorations.get(struct_id,set()):
-            if mode==NO_PERSPECTIVE:member_native+=1
-            if mode==BUILTIN:member_builtin+=1
+            members[member_index].add(mode)
+        for modes in members.values():
+            if BUILTIN in modes:member_builtin+=1
+            if NO_PERSPECTIVE in modes:
+                if BUILTIN in modes:member_noperspective_builtin+=1
+                else:member_native+=1
         if not dec and not member_decorations.get(struct_id):
             undecorated_input+=1
     all_input_native_candidates=direct_native+member_native
@@ -94,6 +101,7 @@ def inspect_spirv_input_interpolation(binary):
         "input_direct_flat_nonbuiltin":direct_flat,
         "input_member_noperspective_decorations":member_native,
         "input_member_builtin_decorations":member_builtin,
+        "input_member_noperspective_builtin_excluded":member_noperspective_builtin,
         "input_no_perspective_candidate_count":all_input_native_candidates,
         "input_undecorated_variables":undecorated_input,
         "input_pointer_type_unresolved":unresolved_type,
