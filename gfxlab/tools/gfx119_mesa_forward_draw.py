@@ -30,7 +30,10 @@ parser.add_argument("--shadow-portable", type=Path)
 parser.add_argument("--deferred", type=Path)
 parser.add_argument("--deferred-portable", type=Path)
 parser.add_argument("--cull-diagnostic", action="store_true", help="M03-1 source-original safe Off/Back/Front GPU differential")
+parser.add_argument("--cull-private-raw-out", type=Path, help="Store raw Cull comparison ONLY inside private CI runner temp, encrypted before any upload")
 args = parser.parse_args()
+if args.cull_private_raw_out and not args.cull_diagnostic:
+    raise ValueError("Raw Cull export requires explicit cull diagnostic")
 root = args.private
 E = c.CDLL('libEGL.so.1')
 P = c.c_void_p
@@ -336,6 +339,13 @@ if args.cull_diagnostic:
     check("GFX147 Cull state restoration")
     report["cull_diagnostic"] = summarize(
         lit, cull_back, cull_front, repeat_off, repeat_back)
+    if args.cull_private_raw_out:
+        # Never point this directory at a public workspace or artifact path.
+        # The CI workflow encrypts these originals before upload, then purges.
+        folder = args.cull_private_raw_out
+        folder.mkdir(mode=0o700, parents=True, exist_ok=False)
+        for label, pixels in (("off", lit), ("back", cull_back), ("front", cull_front)):
+            (folder / (label + ".rgba")).write_bytes(pixels.tobytes())
 
 def write_portable(folder, sampler_bindings, *, include_textures):
     folder.mkdir(mode=0o700, parents=True, exist_ok=False)

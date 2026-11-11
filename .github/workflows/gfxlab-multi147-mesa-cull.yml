@@ -7,6 +7,7 @@ on:
       - 'gfxlab/tools/gfx119_mesa_forward_draw.py'
       - 'gfxlab/tools/gfx147_cull_gpu_report.py'
       - 'gfxlab/tests/test_gfx147_cull_gpu_report.py'
+      - 'gfxlab/delivery/gfx147-mesa-compare-public-cert.pem'
   workflow_dispatch:
 permissions:
   contents: read
@@ -94,7 +95,7 @@ jobs:
           root="$RUNNER_TEMP/gfx147-private/models/M03-1"
           python -m gfxlab.tools.gfx119_mesa_forward_draw \
             --private "$root" --textures "$root" --safe out/gfx147-mesa-source-safe.json \
-            --cull-diagnostic
+            --cull-diagnostic --cull-private-raw-out "$RUNNER_TEMP/gfx147-private/cull-raw"
           python - <<'PY'
           import json
           from pathlib import Path
@@ -117,11 +118,44 @@ jobs:
                             "front_RGB_changed_pixels":diag["front_vs_off"]["covered_rgb_changed_pixels"],
                             "phase_closed":False}))
           PY
+      - name: Encrypt original Mesa Cull RGBA readbacks to owner-only public key
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          from zipfile import ZipFile,ZIP_STORED
+          root=Path(os.environ["RUNNER_TEMP"])/"gfx147-private"
+          safe=json.loads(Path("out/gfx147-mesa-source-safe.json").read_text())["cull_diagnostic"]
+          raw=root/"cull-raw"
+          values={"off":safe["back_vs_off"].get("ignored"),
+                  "back":safe["back_vs_off"]["original_color_sha256"],
+                  "front":safe["front_vs_off"]["original_color_sha256"]}
+          archive=root/"cull-private-raw.zip"
+          with ZipFile(archive,"w",ZIP_STORED) as z:
+              for name in ("off","back","front"):
+                  original=raw/(name+".rgba")
+                  data=original.read_bytes()
+                  if len(data)!=256*256*4:raise ValueError("Private Mesa RGBA readback size drift")
+                  digest=hashlib.sha256(data).hexdigest()
+                  if name!="off" and digest!=values[name]:
+                      raise ValueError("Private original Cull framebuffer hash mismatch")
+                  z.writestr(name+".rgba",data)
+          if hashlib.sha256((raw/"off.rgba").read_bytes()).hexdigest()!="c6d786e908500674d64c3220bf4e26b98253302a88ba390a67b00b570877da78":
+              raise ValueError("Source Mesa Cull Off baseline changed")
+          print(json.dumps({"owner_private_Mesa_archive_authenticated":True,
+                            "original_RGBA_readbacks":3,"raw_bytes_uploaded":0}))
+          PY
+          openssl cms -encrypt -binary -aes-256-gcm             -in "$RUNNER_TEMP/gfx147-private/cull-private-raw.zip"             -out out/GFX147-private-original-Mesa-cull.zip.cms -outform DER             gfxlab/delivery/gfx147-mesa-compare-public-cert.pem
+          test -s out/GFX147-private-original-Mesa-cull.zip.cms
       - name: Upload only safe original Mesa colour delta aggregate (no raw or source assets)
         uses: actions/upload-artifact@v4
         with:
-          name: GFX147-M03-1-original-Mesa-Cull-safe-summary-NO-ASSETS
-          path: out/gfx147-mesa-source-safe.json
+          name: GFX147-original-Mesa-Cull-ENCRYPTED-capture-plus-safe
+          path: |
+            out/GFX147-private-original-Mesa-cull.zip.cms
+            out/gfx147-mesa-source-safe.json
           if-no-files-found: error
           retention-days: 7
       - name: Purge all original geometry, shaders, textures, colour captures, and toolchain
