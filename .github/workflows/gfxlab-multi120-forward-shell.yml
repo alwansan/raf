@@ -1,0 +1,54 @@
+name: GFX120 source-free Android Forward runner shell
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi120-forward-shell.yml'
+      - 'gfxlab/android-gles-forward120/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx120-source-free-shell
+  cancel-in-progress: false
+jobs:
+  compile-shell:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build executable shell without proprietary fixture
+        run: |
+          set -euo pipefail
+          jar="$(find "$ANDROID_HOME/platforms" -name android.jar | sort -V | tail -1)"
+          tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          mkdir -p out/classes out/dex
+          "$tools/aapt2" link -o out/GFX120-unsigned-shell.apk \
+            --manifest gfxlab/android-gles-forward120/AndroidManifest.xml -I "$jar"
+          javac -source 8 -target 8 -bootclasspath "$jar" -d out/classes \
+            gfxlab/android-gles-forward120/src/com/alwansan/gfx120/MainActivity.java
+          mapfile -t classes < <(find out/classes -type f -name '*.class')
+          "$tools/d8" --lib "$jar" --min-api 29 --output out/dex "${classes[@]}"
+          python3 - <<'PY'
+          from zipfile import ZipFile, ZIP_DEFLATED
+          with ZipFile('out/GFX120-unsigned-shell.apk','a',compression=ZIP_DEFLATED) as z:
+              z.write('out/dex/classes.dex','classes.dex')
+              assert not any(n.startswith('assets/') for n in z.namelist())
+              assert {'classes.dex','AndroidManifest.xml'} <= set(z.namelist())
+          PY
+          "$tools/aapt2" dump badging out/GFX120-unsigned-shell.apk > out/badging.txt
+          grep -F "name='com.alwansan.gfx120'" out/badging.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GFX120-source-free-shell
+          path: |
+            out/GFX120-unsigned-shell.apk
+            out/badging.txt
+          if-no-files-found: error
+          retention-days: 7

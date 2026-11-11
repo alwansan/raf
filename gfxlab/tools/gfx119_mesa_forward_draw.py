@@ -9,6 +9,7 @@ import hashlib
 import json
 import re
 import struct
+import shutil
 
 import numpy as np
 from pathlib import Path
@@ -18,6 +19,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--private", type=Path, required=True)
 parser.add_argument("--textures", type=Path, required=True)
 parser.add_argument("--safe", type=Path, required=True)
+parser.add_argument("--portable", type=Path)
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -151,6 +153,9 @@ contracts = {stage: json.loads((root / (stage + ".json")).read_text())
              for stage in ("vertex", "fragment")}
 
 
+portable_buffers = {}
+
+
 def bind_constant_buffers(light_on):
     count = source_bytes = 0
     for stage, extension in (("vertex", "vert"), ("fragment", "frag")):
@@ -204,6 +209,7 @@ def bind_constant_buffers(light_on):
                 raise ValueError("Driver uniform block size differs from original")
             call("UniformBlockBinding",p,index,count)
             call("BindBufferBase",0x8a11,count,buffer(0x8a11,bytes(data)))
+            portable_buffers.setdefault(light_on, {})[name] = bytes(data)
             source_bytes += sum(mask)
             count += 1
     return count, source_bytes
@@ -263,7 +269,7 @@ def bind_samplers(replacements=None):
         if location < 0:
             raise ValueError("Translated sampler missing from driver program")
         gl("Uniform1i",None,I,I)(location,unit)
-    return len(samplers)
+    return [(kind,name,roles.get(bindings[int(slot)]["name"])) for kind,name,slot,_ in samplers]
 
 
 call("BindVertexArray",gen("VertexArrays"))
@@ -285,7 +291,8 @@ for semantic,semantic_index,system,_,register,mask,_ in contracts["vertex"]["inp
     call("EnableVertexAttribArray",register)
 indices = (root/"indices.bin").read_bytes()
 buffer(0x8893,indices)
-bound_samplers = bind_samplers()
+sampler_bindings = bind_samplers()
+bound_samplers = len(sampler_bindings)
 check("resource setup")
 
 
@@ -330,5 +337,21 @@ report = dict(experiment="GFX119", renderer=renderer, triangles=len(indices)//6,
               bound_combined_samplers=bound_samplers, rgba_sha256=hashlib.sha256(lit.tobytes()).hexdigest(),
               controlled_fixture=True, original_translated_forward_draw_completed=True,
               original_game_pixel_parity=False, android_device_verified=False, phase_closed=False)
+if args.portable:
+    args.portable.mkdir(mode=0o700, parents=True, exist_ok=False)
+    for name in ("probe.vert", "probe.frag", "mesh.bin", "indices.bin"):
+        shutil.copyfile(root/name, args.portable/name)
+    for role in ("basecolor", "normal", "metallic"):
+        shutil.copyfile(args.textures/(role+".rgba"),args.portable/(role+".rgba"))
+    block_rows = []
+    for index,(name,data) in enumerate(portable_buffers[True].items()):
+        lit_name, unlit_name = f"light-{index}.bin", f"dark-{index}.bin"
+        (args.portable/lit_name).write_bytes(data)
+        (args.portable/unlit_name).write_bytes(portable_buffers[False][name])
+        block_rows.append(dict(name=name,light=lit_name,dark=unlit_name,bytes=len(data)))
+    (args.portable/"scene.json").write_text(json.dumps(dict(blocks=block_rows,
+        samplers=[dict(kind=kind,name=name,role=role or "") for kind,name,role in sampler_bindings])))
+    for name, pixels in (("light",lit),("dark",unlit),("flat",flat),("nonmetal",nonmetal)):
+        (args.portable/(name+".rgba")).write_bytes(pixels.tobytes())
 args.safe.write_text(json.dumps(report,indent=2)+"\n")
 print(json.dumps(report))
