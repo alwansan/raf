@@ -78,11 +78,16 @@ def census(root: Path, salt: str = ""):
                     continue
                 entries = ["- " + ref for ref in refs]
             else:
+                # Block sequence items must be nested beneath m_Materials.
+                # A later sibling YAML list (e.g. m_SubEmitters) is not a
+                # material slot, even if its entries also begin with "-".
+                material_indent = len(match.group(0).split("m_Materials:", 1)[0])
                 tail = doc[match.end():]
                 for line in tail.splitlines():
                     if not line.strip():
                         continue
-                    if not line.lstrip().startswith("-"):
+                    item_indent = len(line) - len(line.lstrip(" \t"))
+                    if item_indent <= material_indent or not line.lstrip().startswith("-"):
                         break
                     entries.append(line)
             if not entries:
