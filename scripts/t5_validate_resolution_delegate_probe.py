@@ -75,6 +75,12 @@ def verify(data):
         raise ValueError("Invalid or fabricated numeric evidence")
     if not 1 <= ev["compiled_methods"] <= 256:
         raise ValueError("Invalid compiled original method bound")
+    # Unique methods and distinct option-populating methods are both subsets
+    # of the compiled graph. A report with more methods than the graph itself
+    # cannot be treated as authenticated original topology.
+    if (ev["unique_delegate_target_methods"] > ev["compiled_methods"] or
+            ev["methods_populating_options"] > ev["compiled_methods"]):
+        raise ValueError("Method population exceeds compiled original graph")
     if (ev["delegate_instruction_sites"] != 2 or
         ev["resolved_delegate_sites"] != 2 or
         ev["unresolved_delegate_sites"] != 0 or
