@@ -64,8 +64,10 @@ def audit(root):
         lines = content[block.end():].splitlines()
         slot = False
         for line in lines:
-            if line.strip() and len(line) - len(line.lstrip(" ")) <= indent:
-                break
+            if line.strip():
+                line_indent = len(line) - len(line.lstrip(" "))
+                if line_indent < indent or (line_indent == indent and not line.lstrip().startswith("- ")):
+                    break
             if TEXENV.match(line) and "m_Texture" not in line:
                 slot = True
                 counts["texenv_slots_seen"] += 1
