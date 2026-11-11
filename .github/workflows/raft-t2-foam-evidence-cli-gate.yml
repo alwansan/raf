@@ -5,9 +5,11 @@ on:
     paths:
       - scripts/t2_foam_evidence_gate_20261110.py
       - scripts/t2_foam_texture_identity.py
+      - scripts/t2_foam_publish_aggregate.py
       - tests/test_t2_foam_evidence_cli_integration.py
       - tests/test_t2_foam_evidence_gate_20261110.py
       - tests/test_t2_foam_json_product_guard.py
+      - tests/test_t2_foam_publish_aggregate.py
       - .github/workflows/raft-t2-foam-evidence-cli-gate.yml
   workflow_dispatch:
 
@@ -42,5 +44,11 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t2_foam_texture_identity.py tests/test_t2_foam_json_product_guard.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_json_product_guard.py' -v
+      - name: Verify opt-in atomic publication adapter rejects unsafe inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_publish_aggregate.py tests/test_t2_foam_publish_aggregate.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_publish_aggregate.py' -v
       - name: Non-device evidence boundary
-        run: echo 'SANITIZER_AND_PRODUCER_SCHEMA_REGRESSION_ONLY; publisher_integration=UNKNOWN; original_foam=UNKNOWN; unity=UNKNOWN; android=UNKNOWN'
+        run: echo 'SANITIZER_AND_PRODUCER_SCHEMA_REGRESSION_ONLY; legacy_publisher_integration=UNKNOWN; opt_in_adapter=TESTED_ONLY; original_foam=UNKNOWN; unity=UNKNOWN; android=UNKNOWN'
