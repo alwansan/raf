@@ -31,8 +31,10 @@ def summarize(lines):
                 if key in last[marker] and value < last[marker][key]:
                     resets[marker] += 1
                 maxima[marker][key] = max(maxima[marker].get(key, 0), value)
+            # Reports may omit unchanged counters. Preserve their last observed
+            # values instead of treating omission as a reset or zero.
             # Snapshots are cumulative, never sum them across reports.
-            last[marker] = snapshot
+            last[marker].update(snapshot)
     if not counts[CALLBACK]:
         verdict = "no_callback_marker_observed"
     elif not counts[READER]:
