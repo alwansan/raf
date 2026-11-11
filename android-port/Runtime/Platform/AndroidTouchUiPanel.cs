@@ -35,6 +35,7 @@ namespace RaftAndroid.Platform
             safeRoot.anchorMin = new Vector2(safe.xMin / Screen.width, safe.yMin / Screen.height);
             safeRoot.anchorMax = new Vector2(safe.xMax / Screen.width, safe.yMax / Screen.height);
             safeRoot.offsetMin = safeRoot.offsetMax = Vector2.zero;
+            FitPanelsToSafeArea(safe);
             toggleText.text = gamepad.Visible ? "Hide Xbox" : "Show Xbox";
             editorObject.SetActive(gamepad.Visible && gamepad.Editing);
             reportObject.SetActive(reportOpen && !gamepad.Editing);
@@ -111,6 +112,29 @@ namespace RaftAndroid.Platform
             scroll.horizontal = false; scroll.viewport = viewport; scroll.content = content;
             scroll.movementType = ScrollRect.MovementType.Clamped;
             editorObject.SetActive(false); reportObject.SetActive(false);
+        }
+
+        // The original 720-unit panel layout ends at y=668. On shorter
+        // Android safe areas (letterbox/cutout/multi-window), fixed panels
+        // otherwise lose their bottom buttons. Scale the existing panels,
+        // not the three top-right diagnostic buttons or gameplay controls.
+        private void FitPanelsToSafeArea(Rect safe)
+        {
+            if (Screen.height <= 0 || Screen.width <= 0) return;
+            float canvasScale = Screen.height / 720f; // CanvasScaler matches height.
+            float safeHeight = safe.height / canvasScale;
+            float safeWidth = safe.width / canvasScale;
+            float factor = Mathf.Clamp(Mathf.Min(safeHeight / 684f, safeWidth / 666f), 0.1f, 1f);
+            FitPanel(editorObject, factor);
+            FitPanel(reportObject, factor);
+        }
+
+        private static void FitPanel(GameObject panel, float factor)
+        {
+            if (panel == null) return;
+            var rect = panel.GetComponent<RectTransform>();
+            rect.localScale = new Vector3(factor, factor, 1f);
+            rect.anchoredPosition = new Vector2(0f, -228f * factor);
         }
 
         private GameObject Panel(string name, float width, float height)
