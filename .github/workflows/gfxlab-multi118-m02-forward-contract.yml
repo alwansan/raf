@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/gfxlab-multi118-m02-forward-contract.yml'
       - 'gfxlab/tools/gfx118_m02_original_forward.py'
+      - 'gfxlab/toolchains/debian13-shader-tools-amd64.sha256'
   workflow_dispatch:
 permissions:
   contents: read
@@ -41,12 +42,17 @@ jobs:
       - name: Install private translator and offline linker
         run: |
           set -euo pipefail
-          packages=(vkd3d-compiler spirv-tools spirv-cross glslang-tools)
-          apt_options=(-o Acquire::Retries=0 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20)
-          if ! sudo timeout 90s apt-get "${apt_options[@]}" install -y -qq --no-install-recommends "${packages[@]}"; then
-            sudo timeout 90s apt-get "${apt_options[@]}" update -qq
-            sudo timeout 90s apt-get "${apt_options[@]}" install -y -qq --no-install-recommends "${packages[@]}"
-          fi
+          tool_root="$RUNNER_TEMP/gfx118-toolchain"
+          mkdir -p "$tool_root"
+          # Package hashes were verified against the signed Debian trixie archive index.
+          while read -r path sha; do
+            file="$tool_root/${path##*/}"
+            curl -fsSL --max-time 45 --retry 2 "https://deb.debian.org/debian/$path" -o "$file"
+            printf '%s  %s\n' "$sha" "$file" | sha256sum --check
+            dpkg-deb -x "$file" "$tool_root/root"
+          done < gfxlab/toolchains/debian13-shader-tools-amd64.sha256
+          printf '%s\n' "$tool_root/root/usr/bin" >> "$GITHUB_PATH"
+          printf 'LD_LIBRARY_PATH=%s\n' "$tool_root/root/usr/lib/x86_64-linux-gnu" >> "$GITHUB_ENV"
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
       - name: Validate actual M02 Forward DXBC, SPIR-V and GLES link
         run: |
@@ -70,4 +76,4 @@ jobs:
           retention-days: 7
       - name: Purge private source
         if: always()
-        run: rm -rf source-zip2 "$RUNNER_TEMP/gfx118-source"
+        run: rm -rf source-zip2 "$RUNNER_TEMP/gfx118-source" "$RUNNER_TEMP/gfx118-toolchain"
