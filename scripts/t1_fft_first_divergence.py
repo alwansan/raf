@@ -41,6 +41,17 @@ def read_private_capture(root: Path, relative: str) -> bytes:
     if len(data) != size:
         raise ValueError("capture changed during bounded read")
     return data
+def reject_aliased_capture_pair(root: Path, reference: str, observed: str) -> None:
+    """Never certify GPU parity by comparing a capture with itself.
+
+    Detect both alternate path spellings and hardlinks. This is an identity
+    check, not a demand that genuinely independent captures differ in bytes.
+    Call only after path confinement and regular-file validation.
+    """
+    if (root / reference).samefile(root / observed):
+        raise ValueError("reference and observed capture alias the same file")
+
+
 from scripts.t1_fft_rgba_error_signature import signature
 
 def compare_passes(pairs, *, atol=1e-5, rtol=1e-4):
@@ -121,6 +132,7 @@ def main():
                 total_bytes += size
                 if total_bytes > MAX_TOTAL_CAPTURE_BYTES:
                     raise ValueError("aggregate private capture budget exceeded")
+            reject_aliased_capture_pair(manifest_dir, entry["reference"], entry["observed"])
             planned.append(entry)
         pairs = [(entry["name"], read_private_capture(manifest_dir, entry["reference"]),
                   read_private_capture(manifest_dir, entry["observed"])) for entry in planned]
