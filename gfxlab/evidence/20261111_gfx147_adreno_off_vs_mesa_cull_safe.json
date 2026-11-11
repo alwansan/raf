@@ -1,0 +1,73 @@
+{
+  "experiment": "GFX147.2",
+  "session_id": "20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106",
+  "role": "GFX-LAB",
+  "origin": "chat",
+  "branch": "experiment/android-graphics-rootcause",
+  "signed_original_apk_sha256": "3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "owner_phone_renderer": "Adreno (TM) 730",
+  "owner_archives": [
+    {
+      "sha256": "d097f47fcd453eac6d6d82838b3ff2a370ef56794e1823b6311741d297de81d0"
+    },
+    {
+      "sha256": "fad309ffe894acdb4ab5789116330d651c78a5fcec4cef1bacf4516f52288946"
+    }
+  ],
+  "owner_captures_identical_and_metrics_reproduced_twice": true,
+  "Mesa_private_GPU_replay_renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "original_CI_GPU_renderer": "llvmpipe (LLVM 20.1.2, 256 bits)",
+  "original_CI_run": 43093563974,
+  "original_CI_result": "SUCCESS",
+  "source_original_Mesa_GPU_cull_SHA256": {
+    "off": "c6d786e908500674d64c3220bf4e26b98253302a88ba390a67b00b570877da78",
+    "back": "3664e3146c10a225dafd9bf490454ea29a94d9e3dbe6d7bb9a4171dfe7ccc4e6",
+    "front": "d28270e7ae29647374d3e5d52fa9eb0d4a1a3e2e55bad2feaf7d6537907bd0b5"
+  },
+  "all_three_source_original_GPU_frame_hashes_match_CI_and_signed_APK": true,
+  "covered_pixels": 3301,
+  "comparison": "same owner Adreno Cull OFF versus three Mesa Cull modes (NOT same-mode GPU parity for Back or Front)",
+  "reference_errors": {
+    "off": {
+      "gt10": 58,
+      "gt30": 49,
+      "max_channel": 59,
+      "covered_rgb_mean_absolute_error": 0.81753,
+      "total_covered_rgb_abs_error": 8096,
+      "differing_pixels_any": 1568
+    },
+    "back": {
+      "gt10": 135,
+      "gt30": 125,
+      "max_channel": 76,
+      "covered_rgb_mean_absolute_error": 1.73503,
+      "total_covered_rgb_abs_error": 17182,
+      "differing_pixels_any": 1636
+    },
+    "front": {
+      "gt10": 2569,
+      "gt30": 2367,
+      "max_channel": 173,
+      "covered_rgb_mean_absolute_error": 51.215894,
+      "total_covered_rgb_abs_error": 507191,
+      "differing_pixels_any": 2778
+    }
+  },
+  "prior_Off_gt10_errors_fixed_by_comparing_to_Mesa_Back": 14,
+  "new_gt10_errors_from_Mesa_Back_instead_of_Off": 91,
+  "remaining_previous_gt10_errors_against_Mesa_Back": 44,
+  "Mesa_CullBack_changed_source_covered_pixels": 105,
+  "Mesa_CullBack_changes_overlapping_owner_prior_58_hot_pixels": 14,
+  "original_source_private_rgba_images_published": false,
+  "raw_owner_captures_published": false,
+  "original_signed_apk_published": false,
+  "private_cert_secret_published": false,
+  "source_only_public_regressions_requested": true,
+  "actual_Adreno_GPU_CullBack_colors_tested": false,
+  "actual_Unity_ShaderLab_Cull_override_resolved": false,
+  "actual_Unity_GBuffer_runtime_verified": false,
+  "actual_Unity_Animator_runtime_verified": false,
+  "actual_Raft_PC_game_scene_pixel_parity_verified": false,
+  "phase_closed": false
+}

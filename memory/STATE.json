@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-real-Mesa-cull-104",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-real-Mesa-cull-104.md",
-  "status": "GFX147_REAL_ORIGINAL_M03_1_MESA_CULL_OFF_BACK_FRONT_SUCCESS_8_OF_8_BACK_LOCAL_COLOR_CHANGE_105_PX_COVERAGE_3301_PRESERVED_PHONE_CULL_GATE_OPEN",
+  "latest_session": "20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106.md",
+  "status": "GFX1472_OWNER_ADRENO_OFF_VS_VERIFIED_MESA_CULLBACK_DIFF_WORSE_58_TO_135_TARGETED_ADRENO_BACK_TEST_REQUIRED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX148: source-pinned one-case M03-1 Adreno GLES Cull Off/Back/Front owner APK, collect 3 GPU readbacks and compare exact original Mesa outputs safely. Do not rerun the full 9-case/51-capture owner batch unnecessarily; preserve original Unity runtime state and game branch.",
+  "next_experiment": "GFX148 single-target original Shader48 M03-1 Adreno Cull Off/Back/Front signed APK, 3 readbacks only, compare against verified exact source Mesa per-mode frames; do NOT silently change source game ShaderLab Cull or rerun 51 captures.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3217,7 +3217,17 @@
     "GFX147_CullBack_RGB_delta_gt10_outside_prior_phone_bbox": 16,
     "GFX147_CullFront_RGB_changed_vs_off": 2796,
     "GFX147_CPU_gpu_side_consistency": true,
-    "GFX147_Adreno_CullBack_pixel_parity_verified": false
+    "GFX147_Adreno_CullBack_pixel_parity_verified": false,
+    "GFX1472_local_original_source_Mesa_exact_replay_success": true,
+    "GFX1472_source_Mesa_Off_Back_Front_sha_matches_CI": true,
+    "GFX1472_reproduced_from_two_owner_ZIPs": true,
+    "GFX1472_Adreno_OFF_vs_Mesa_OFF_gt10": 58,
+    "GFX1472_Adreno_OFF_vs_Mesa_BACK_gt10": 135,
+    "GFX1472_Adreno_OFF_vs_Mesa_FRONT_gt10": 2569,
+    "GFX1472_prior_hotspots_removed_by_Mesa_Back": 14,
+    "GFX1472_new_hotspots_from_Mesa_Back": 91,
+    "GFX1472_actual_Adreno_CullBack_capture_available": false,
+    "GFX1472_hypothesis_causally_proven": false
   },
   "latest_evidence_run": 43093563974
 }

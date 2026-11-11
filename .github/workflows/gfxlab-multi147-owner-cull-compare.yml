@@ -1,0 +1,30 @@
+name: GFX147.2 source-free owner Adreno to Mesa Cull pixel comparison tests
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi147-owner-cull-compare.yml'
+      - 'gfxlab/tools/gfx147_owner_cull_compare.py'
+      - 'gfxlab/tests/test_gfx147_owner_cull_compare.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx1472-owner-mesa-sourcefree
+  cancel-in-progress: false
+jobs:
+  synthetic-verifier:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install source-free test dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==11.3.0
+      - name: Test pixel error counters, coverage masks, RGBA shape and exclusions
+        run: python -m unittest -v gfxlab.tests.test_gfx147_owner_cull_compare
