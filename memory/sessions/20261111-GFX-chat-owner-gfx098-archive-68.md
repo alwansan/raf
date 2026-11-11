@@ -1,3 +1,6 @@
+
+**Khronos specification correction (GFX100 P0):** GLSL **ES 3.20 core supports only `smooth` and `flat`** interpolation; it has **no core `noperspective`**. Official ES 3.20 §4.5: https://registry.khronos.org/OpenGL/specs/es/3.2/GLSL_ES_Specification_3.20.html . The optional vendor extension `GL_NV_shader_noperspective_interpolation` can expose it (not evidenced on this Adreno), see https://registry.khronos.org/OpenGL/extensions/NV/NV_shader_noperspective_interpolation.txt . Vulkan SPIR-V `NoPerspective` is defined and supported in Vulkan shader semantics: https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html . **Do not attempt unconditional native `noperspective` in GLES3**. First enumerate actual GLES extensions; if unavailable, use a genuine Vulkan SPIR-V NoPerspective vs Smooth GPU experiment, and/or explicit analytically checked GLES3 affine-emulation without claiming a native qualifier. GFX041 exact Linear/NoPerspective PNG equality is consistent with unsupported core qualifier translation; it does not imply a hardware error or successful original-source preservation.
+
 # 20261111-GFX-chat-owner-gfx098-archive-68 — GFX100 / GFX-OWNER-004
 - **origin:** chat
 - **role:** GFX-LAB
