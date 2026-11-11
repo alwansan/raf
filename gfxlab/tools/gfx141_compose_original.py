@@ -42,12 +42,14 @@ def compose(private, shell, tools, safe):
         "m02_regression_rgba_sha256": original["rgba_sha256"], "slots": scenes}))
     (work / "animation-evidence.json").write_text(json.dumps({
         "samples": poses["samples"], "mesa": {"animation": original["animation"]}}))
+    (work / "add-evidence.json").write_text(json.dumps({
+        "mesa": {"forward_add": original["forward_add"]}}))
     unsigned = work / "GFX141-original-unsigned.apk"
     aligned = work / "GFX141-original-aligned.apk"
     signed = work / "GFX141-original-signed.apk"
     result = inject(
         shell, work / "M02-0", work / "models", work / "models-evidence.json", unsigned,
-        forward_add=work / "M02-0-add", add_evidence=work / "m02-mesa.json",
+        forward_add=work / "M02-0-add", add_evidence=work / "add-evidence.json",
         animation=work / "M02-0-anim", animation_evidence=work / "animation-evidence.json",
         shadow=work / "M02-0-shadow", shadow_evidence=work / "m02-mesa.json",
         deferred=work / "M02-0-deferred", deferred_evidence=work / "m02-mesa.json",
