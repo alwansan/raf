@@ -135,7 +135,7 @@ def audit(path):
             "supported_optional_extension":ext,
             "native_qualifier_compile_link_success":native,
             "smooth_cpu_reference_pass":summary.get("control_smooth_matches_cpu") is True,
-            "affine_cpu_reference_pass":summary.get("control_affine_emulated_matches_cpu") is True,
+            "affine_cpu_reference_pass":summary.get("control_affine_emulated_matches_cpu") and summary.get("control_flat_stable") is True is True,
             "native_gpu_affine_parity":native_match,
             "diagnostic_status":diagnostic,
             "original_shader_restored":False,
