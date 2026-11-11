@@ -3046,6 +3046,29 @@
     "batch_captures": 20,
     "shell_build_run": 43055403000,
     "shell_artifact": 13870888047,
+    "windows_pending": false,
+    "android_pending": true,
+    "phase_closed": false
+  },
+  "latest_gfx128": {
+    "run": 43056032415,
+    "artifact": 13870883994,
+    "mesa_coverage_exact": true,
+    "negative_controls_bit_exact": true,
+    "additional_light_changed_pixels": 1979,
+    "phase_closed": false
+  },
+  "latest_gfx129": {
+    "mesa_frames": 15,
+    "distinct_per_clip": [
+      1,
+      5,
+      5
+    ],
+    "batch_cases": 7,
+    "batch_captures": 35,
+    "shell_run": 43056576757,
+    "shell_artifact": 13870664397,
     "windows_pending": true,
     "android_pending": true,
     "phase_closed": false

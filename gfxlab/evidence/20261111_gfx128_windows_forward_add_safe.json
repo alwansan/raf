@@ -1,0 +1,20 @@
+{
+  "experiment": "GFX128",
+  "renderer": "Windows D3D11 WARP",
+  "covered_pixels": 2008,
+  "additional_light_changed_pixels": 1979,
+  "max_rgb_delta_from_saturating_sum": 0,
+  "zero_light_preserved_base": true,
+  "depth_reject_preserved_base": true,
+  "alpha_and_coverage_exact": true,
+  "hashes": {
+    "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+    "rgba_sha256": "6d89110a9d32d2df07ef36a8370e0992006be3c49e3a7a11dbfa5b533ae2297c"
+  },
+  "mesa_coverage_exact": true,
+  "mesa_rgba_exact": false,
+  "runtime_unity_state_verified": false,
+  "phase_closed": false,
+  "run": 43056032415,
+  "artifact": 13870883994
+}
