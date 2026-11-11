@@ -1,0 +1,31 @@
+name: GFX146 source-free original Cull Back projection and depth gate
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi146-cull-projection.yml'
+      - 'gfxlab/tools/gfx146_cull_back_projection.py'
+      - 'gfxlab/tests/test_gfx146_cull_back_projection.py'
+      - 'gfxlab/tools/gfx144_coplanar_face_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx146-original-cull-depth
+  cancel-in-progress: false
+jobs:
+  source-free-cull-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned geometry and source-free image dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==11.3.0
+      - name: Validate Cull Back/Front/Off geometry, opposite faces, and source safety guards
+        run: python -m unittest -v gfxlab.tests.test_gfx146_cull_back_projection

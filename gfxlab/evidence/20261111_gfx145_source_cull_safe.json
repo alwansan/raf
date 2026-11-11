@@ -1,0 +1,22 @@
+{
+  "experiment": "GFX145",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_shader_passes": 7,
+  "material_slots": 7,
+  "source_cull_fallback_categories": {
+    "back": 7,
+    "off": 0,
+    "front": 0
+  },
+  "all_passes_named_dynamic_override": true,
+  "all_passes_matching_saved_material_float_override_slots": 0,
+  "named_overrides_declared_as_ShaderLab_property": false,
+  "source_Cull_metadata_only": true,
+  "original_Unity_effective_Cull_verified": false,
+  "source_private_inputs_published": false,
+  "source_ci_run": 43090837190,
+  "source_ci_success": true,
+  "source_free_unit_tests_passed": 9,
+  "artifact_id": 13888387432,
+  "phase_closed": false
+}
