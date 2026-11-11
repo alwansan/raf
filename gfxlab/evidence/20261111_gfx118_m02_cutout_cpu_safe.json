@@ -1,0 +1,88 @@
+{
+  "experiment": "GFX118-cutout-reference",
+  "cases": [
+    {
+      "pose": "C0P0",
+      "mip": 0,
+      "raster_covered_pixels": 2220,
+      "cutout_covered_pixels": 2220,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C1P0",
+      "mip": 0,
+      "raster_covered_pixels": 2218,
+      "cutout_covered_pixels": 2218,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C1P2",
+      "mip": 0,
+      "raster_covered_pixels": 2032,
+      "cutout_covered_pixels": 2032,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C2P0",
+      "mip": 0,
+      "raster_covered_pixels": 2311,
+      "cutout_covered_pixels": 2311,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C2P2",
+      "mip": 0,
+      "raster_covered_pixels": 2224,
+      "cutout_covered_pixels": 2224,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C0P0",
+      "mip": 4,
+      "raster_covered_pixels": 2220,
+      "cutout_covered_pixels": 2220,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C1P0",
+      "mip": 4,
+      "raster_covered_pixels": 2218,
+      "cutout_covered_pixels": 2218,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C1P2",
+      "mip": 4,
+      "raster_covered_pixels": 2032,
+      "cutout_covered_pixels": 2032,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C2P0",
+      "mip": 4,
+      "raster_covered_pixels": 2311,
+      "cutout_covered_pixels": 2311,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    },
+    {
+      "pose": "C2P2",
+      "mip": 4,
+      "raster_covered_pixels": 2224,
+      "cutout_covered_pixels": 2224,
+      "coverage_pixels_removed": 0,
+      "triangle_fragments_below_cutoff": 0
+    }
+  ],
+  "source_cutout_evaluated_on_cpu": true,
+  "original_shader_gpu_draw_verified": false,
+  "phase_closed": false
+}

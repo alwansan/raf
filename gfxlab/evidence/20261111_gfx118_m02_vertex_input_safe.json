@@ -1,0 +1,46 @@
+{
+  "experiment": "GFX118-input-contract",
+  "source_vertex_channels_present": 4,
+  "source_vertex_channels_missing": 1,
+  "source_vertex_channels": [
+    {
+      "semantic_class": "POSITION",
+      "semantic_index": 0,
+      "declared_components": 4,
+      "read_components": 4,
+      "source_values": 1666
+    },
+    {
+      "semantic_class": "NORMAL",
+      "semantic_index": 0,
+      "declared_components": 3,
+      "read_components": 3,
+      "source_values": 1666
+    },
+    {
+      "semantic_class": "TEXCOORD",
+      "semantic_index": 0,
+      "declared_components": 2,
+      "read_components": 2,
+      "source_values": 1666
+    },
+    {
+      "semantic_class": "TEXCOORD",
+      "semantic_index": 1,
+      "declared_components": 2,
+      "read_components": 2,
+      "source_values": 0
+    },
+    {
+      "semantic_class": "TANGENT",
+      "semantic_index": 0,
+      "declared_components": 4,
+      "read_components": 4,
+      "source_values": 1666
+    }
+  ],
+  "phase_closed": false,
+  "source_uvsec_selects_uv0": true,
+  "source_uv1_absent": true,
+  "runtime_missing_vertex_attribute_policy_verified": false
+}

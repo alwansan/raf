@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-m02-textured-raster-83",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-textured-raster-83.md",
-  "status": "GFX116_ADRENO_RGBA_FALLBACK_EXACT_GFX117_SIGNED_TEXTURED_APK_PENDING_PHASE_ONE_OPEN",
+  "latest_session": "20261111-GFX-chat-m02-original-forward-contract-84",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-original-forward-contract-84.md",
+  "status": "GFX117_ADRENO_TEXTURE_VIEWS_VERIFIED_GFX118_EXACT_FORWARD_GLES_LINKED_DRAW_PENDING_PHASE_ONE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -2950,7 +2950,19 @@
     "apk_sha256": "9fb6b82ad28bacd1c912a9bd119fd9fa7661b1f641a749a640851ce1a6dca95e",
     "mesa_views": 30,
     "mesa_coverage_exact": true,
-    "owner_gpu_pending": true,
+    "owner_gpu_pending": false,
+    "phase_closed": false,
+    "owner_views": 30,
+    "owner_coverage_different_pixels": 0,
+    "owner_mean_rgb_channel_error": 0.08002927962037457,
+    "owner_max_rgb_channel_error": 15
+  },
+  "latest_gfx118": {
+    "run": 43036912965,
+    "exact_pair": true,
+    "spirv_sample_pairs_preserved": 7,
+    "gles_offline_link_passed": true,
+    "gpu_draw_completed": false,
     "phase_closed": false
   }
 }

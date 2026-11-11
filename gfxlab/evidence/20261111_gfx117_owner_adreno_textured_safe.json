@@ -1,0 +1,265 @@
+{
+  "experiment": "GFX117",
+  "models_checked": 15,
+  "vertices_checked": 24990,
+  "failing_vertices": 0,
+  "max_absolute_error": 0.0001220703125,
+  "gpu_source_position_match": true,
+  "phase_closed": false,
+  "textured_views": [
+    {
+      "image": "C0P0-basecolor-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2220,
+      "max_rgb_channel_error": 5,
+      "mean_rgb_channel_error": 0.1313813813813814,
+      "rgb_channels_over_two": 7
+    },
+    {
+      "image": "C0P0-basecolor-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2220,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.1451951951951952,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C0P0-normal-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2220,
+      "max_rgb_channel_error": 4,
+      "mean_rgb_channel_error": 0.07672672672672673,
+      "rgb_channels_over_two": 2
+    },
+    {
+      "image": "C0P0-normal-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2220,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.058408408408408406,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C0P0-metallic-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2220,
+      "max_rgb_channel_error": 3,
+      "mean_rgb_channel_error": 0.02057057057057057,
+      "rgb_channels_over_two": 3
+    },
+    {
+      "image": "C0P0-metallic-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2220,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.01156156156156156,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C1P0-basecolor-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2218,
+      "max_rgb_channel_error": 5,
+      "mean_rgb_channel_error": 0.1496844003606853,
+      "rgb_channels_over_two": 16
+    },
+    {
+      "image": "C1P0-basecolor-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2218,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.14818154493537722,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C1P0-normal-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2218,
+      "max_rgb_channel_error": 4,
+      "mean_rgb_channel_error": 0.0793507664562669,
+      "rgb_channels_over_two": 3
+    },
+    {
+      "image": "C1P0-normal-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2218,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.057709648331830475,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C1P0-metallic-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2218,
+      "max_rgb_channel_error": 3,
+      "mean_rgb_channel_error": 0.0335136759843703,
+      "rgb_channels_over_two": 3
+    },
+    {
+      "image": "C1P0-metallic-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2218,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.012924556657649534,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C1P2-basecolor-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2032,
+      "max_rgb_channel_error": 15,
+      "mean_rgb_channel_error": 0.14419291338582677,
+      "rgb_channels_over_two": 11
+    },
+    {
+      "image": "C1P2-basecolor-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2032,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.14763779527559054,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C1P2-normal-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2032,
+      "max_rgb_channel_error": 4,
+      "mean_rgb_channel_error": 0.07874015748031496,
+      "rgb_channels_over_two": 1
+    },
+    {
+      "image": "C1P2-normal-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2032,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.057906824146981624,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C1P2-metallic-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2032,
+      "max_rgb_channel_error": 4,
+      "mean_rgb_channel_error": 0.029691601049868767,
+      "rgb_channels_over_two": 6
+    },
+    {
+      "image": "C1P2-metallic-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2032,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.012467191601049869,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C2P0-basecolor-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2311,
+      "max_rgb_channel_error": 5,
+      "mean_rgb_channel_error": 0.1576518101831819,
+      "rgb_channels_over_two": 28
+    },
+    {
+      "image": "C2P0-basecolor-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2311,
+      "max_rgb_channel_error": 9,
+      "mean_rgb_channel_error": 0.1502956872926583,
+      "rgb_channels_over_two": 6
+    },
+    {
+      "image": "C2P0-normal-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2311,
+      "max_rgb_channel_error": 9,
+      "mean_rgb_channel_error": 0.08481176979662484,
+      "rgb_channels_over_two": 5
+    },
+    {
+      "image": "C2P0-normal-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2311,
+      "max_rgb_channel_error": 3,
+      "mean_rgb_channel_error": 0.05913745853166018,
+      "rgb_channels_over_two": 1
+    },
+    {
+      "image": "C2P0-metallic-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2311,
+      "max_rgb_channel_error": 10,
+      "mean_rgb_channel_error": 0.03764604067503245,
+      "rgb_channels_over_two": 8
+    },
+    {
+      "image": "C2P0-metallic-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2311,
+      "max_rgb_channel_error": 3,
+      "mean_rgb_channel_error": 0.013414106447425357,
+      "rgb_channels_over_two": 1
+    },
+    {
+      "image": "C2P2-basecolor-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2224,
+      "max_rgb_channel_error": 14,
+      "mean_rgb_channel_error": 0.16411870503597123,
+      "rgb_channels_over_two": 21
+    },
+    {
+      "image": "C2P2-basecolor-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2224,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.1489808153477218,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C2P2-normal-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2224,
+      "max_rgb_channel_error": 4,
+      "mean_rgb_channel_error": 0.07793764988009592,
+      "rgb_channels_over_two": 1
+    },
+    {
+      "image": "C2P2-normal-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2224,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.05680455635491607,
+      "rgb_channels_over_two": 0
+    },
+    {
+      "image": "C2P2-metallic-L0.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2224,
+      "max_rgb_channel_error": 5,
+      "mean_rgb_channel_error": 0.03836930455635491,
+      "rgb_channels_over_two": 11
+    },
+    {
+      "image": "C2P2-metallic-L4.png",
+      "coverage_different_pixels": 0,
+      "overlapping_pixels": 2224,
+      "max_rgb_channel_error": 1,
+      "mean_rgb_channel_error": 0.01408872901678657,
+      "rgb_channels_over_two": 0
+    }
+  ],
+  "original_shader_restored": false,
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "unique_exports": 1,
+  "apk_sha256": "9fb6b82ad28bacd1c912a9bd119fd9fa7661b1f641a749a640851ce1a6dca95e",
+  "archive_sha256": [
+    "ac13fd091496329cae4a52005e5a1ed10718641dc10844f8339f55e6bcbefabc",
+    "7b5226586f1097704998fca996493c9f4802eb746bb04ea1dcd38fdb08ad2133"
+  ],
+  "coverage_different_pixels": 0,
+  "overlapping_pixels": 66030,
+  "max_rgb_channel_error": 15,
+  "rgb_channels_over_two": 134,
+  "weighted_mean_rgb_channel_error": 0.08002927962037457
+}

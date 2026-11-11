@@ -1,3 +1,17 @@
+## 11 Nov 2026 — GFX117 Adreno textured pixels verified; exact M02 Forward translated
+
+Session `20261111-GFX-chat-m02-original-forward-contract-84`, origin=chat. Write only `experiment/android-graphics-rootcause`.
+
+GFX117: both owner ZIPs passed CRC, APK payload/PNG hashes and independent image comparison with Mesa. Their contents are identical, one result. 30/30 images and all 24,990 position samples passed the structural audit; coverage pixel differences 0. Across 66,030 overlapping pixels / 198,090 RGB channels, weighted MAE 0.0800293, max 15, and 134 channels differ by more than 2. This confirms diagnostic texture/filter/render coverage on Adreno 730, with small but nonzero RGB differences. Safe evidence `gfxlab/evidence/20261111_gfx117_owner_adreno_textured_safe.json`.
+
+GFX118: exact first original Shader48 Forward pair selected by all three source M02 material keywords plus controlled DIRECTIONAL; unique exact VS/FS match. The material source contributes 36 VS bytes (one scalar plus two TexEnv ST vectors) and 32 FS bytes (four scalars and one color). FS seven actual sample pairs are three verified original texture bindings, one null material slot requiring the runtime default, three engine texture pairs. All seven survive exact DXBC→SPIR-V pair comparison; zero dynamic texture pairs. All eight UBO layouts authenticated. Literal read vec4 ranges without direct material bytes: 13 VS, 18 FS; another 1 VS and 3 FS have partial material bytes. These counts describe vector ranges, not unknown semantic scalar counts or a complete runtime payload. Zero unsupported/dynamic translated CB chains for this exact pair. Both stages pass SPIR-V validation and GLES310 offline link. Actual GPU draw remains open.
+
+Local result reproduced on [CI43036912965](https://github.com/alwansan/raf/actions/runs/43036912965). Earlier install retry timed out; replaced mirror-dependent apt step with five exact SHA-pinned packages verified against signed Debian trixie index. Corrected resource name audit to ignore duplicate unrelated SPIR-V debug labels while still rejecting ambiguity for reflected resources; 769 shader regression tests passed. Safe contract `gfxlab/evidence/20261111_gfx118_m02_original_forward_safe.json`. No raw bytecode/GLSL, material values, private images or owner ZIPs committed.
+
+Original M02 input signature expects position, normal, tangent, UV0 and UV1. All 1,666 vertices carry the first four channels. Mesh UV1 absent; saved _UVSec selects UV0 per pinned Unity source, but missing-attribute runtime handling remains untested. CPU cutout witness evaluated the original basecolor alpha, tint alpha, cutoff, UV/ST and bilinear repeat in all 10 selected pose/mip combinations. No fragments below cutoff in this particular view. GFX117 cannot independently validate the shader's discard behavior from these views alone. See safe input and cutout evidence. Next construct actual camera/object matrices and valid directional light, reflection/probe and fallback texture bindings for a controlled original Forward draw, then compare reference/Adreno pixels. No additional phone test requested this session. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX116 fallback exact on Adreno; GFX117 textured draw delivered
 
 Session `20261111-GFX-chat-m02-textured-raster-83`, origin=chat. Write only `experiment/android-graphics-rootcause`.
