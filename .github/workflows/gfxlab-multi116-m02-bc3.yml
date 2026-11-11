@@ -1,0 +1,147 @@
+name: GFX116 M02 original BC3 mip sampling probe
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi112-animated-gpu-skin.yml'
+      - 'gfxlab/android-gles-bc3116/**'
+      - 'gfxlab/tools/gfx116_m02_bc3_source.py'
+      - 'gfxlab/tools/gfx116_bc3_sampling_pack.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx116-indexed-gpu-skin
+  cancel-in-progress: false
+jobs:
+  signed-indexed-gpu-skin-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Verify indexed skinning and source extraction regressions
+        run: python3 -m unittest discover -s gfxlab/tests -p 'test_gfx108*.py'
+      - name: Checkout authentic pinned original ZIP2 only in ephemeral private runner
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install pinned private Unity mesh reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 Pillow==11.3.0
+      - name: Authenticate original M02 compressed mips and build CPU reference
+        run: |
+          set -euo pipefail
+          mkdir -p gfx116-build
+          python3 -m gfxlab.tools.gfx116_m02_bc3_source --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx116-source" --private "$RUNNER_TEMP/gfx116-private" \
+            --safe gfx116-build/gfx116-safe-source.json
+          python3 -m gfxlab.tools.gfx116_bc3_sampling_pack --private "$RUNNER_TEMP/gfx116-private" \
+            --source gfx116-build/gfx116-safe-source.json --assets "$RUNNER_TEMP/gfx116-assets"
+      - name: Build, sign, verify minimal Android GLES3 vertex probe
+        run: |
+          set -euo pipefail
+          sdk="$ANDROID_HOME"
+          jar="$(find "$sdk/platforms" -name android.jar | sort -V | tail -1)"
+          buildtools="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          test -f "$jar" && test -x "$buildtools/aapt2" && test -x "$buildtools/apksigner"
+          mkdir -p gfx116-build/classes gfx116-build/dex gfx116-build/gen
+          "$buildtools/aapt2" link -o gfx116-build/resources.apk \
+            --manifest gfxlab/android-gles-bc3116/AndroidManifest.xml \
+            -I "$jar" -A "$RUNNER_TEMP/gfx116-assets" \
+            --java gfx116-build/gen
+          javac -source 8 -target 8 -bootclasspath "$jar" \
+            -d gfx116-build/classes \
+            gfxlab/android-gles-bc3116/src/com/alwansan/gfx116/MainActivity.java
+          mapfile -t classes < <(find gfx116-build/classes -type f -name '*.class')
+          test "${#classes[@]}" -gt 0
+          "$buildtools/d8" --lib "$jar" --min-api 29 --output gfx116-build/dex "${classes[@]}"
+          test -s gfx116-build/dex/classes.dex
+          cp gfx116-build/resources.apk gfx116-build/unsigned.apk
+          python3 - <<'PY'
+          from zipfile import ZipFile,ZIP_DEFLATED
+          with ZipFile('gfx116-build/unsigned.apk','a',compression=ZIP_DEFLATED) as z:
+              z.write('gfx116-build/dex/classes.dex','classes.dex')
+          PY
+          keytool -genkeypair \
+            -keystore "$RUNNER_TEMP/gfx116-debug.jks" -storepass android \
+            -keypass android -alias gfx116 -keyalg RSA -keysize 2048 -validity 5000 \
+            -dname "CN=GFX116 OpenGL ES GPU Diagnostic" -noprompt
+          "$buildtools/zipalign" -f -p 4 gfx116-build/unsigned.apk gfx116-build/aligned.apk
+          "$buildtools/apksigner" sign --ks "$RUNNER_TEMP/gfx116-debug.jks" \
+            --ks-pass pass:android --key-pass pass:android \
+            --out gfx116-build/GFX116-M02-BC3-Mip-Sampling.apk \
+            gfx116-build/aligned.apk
+          "$buildtools/apksigner" verify --verbose gfx116-build/GFX116-M02-BC3-Mip-Sampling.apk
+          "$buildtools/aapt2" dump badging gfx116-build/GFX116-M02-BC3-Mip-Sampling.apk \
+            | tee gfx116-build/badging.txt
+          grep -F "name='com.alwansan.gfx116'" gfx116-build/badging.txt
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from zipfile import ZipFile
+          apk=Path("gfx116-build/GFX116-M02-BC3-Mip-Sampling.apk")
+          assert apk.stat().st_size>100000
+          with ZipFile(apk) as z:
+              assert z.testzip() is None
+              assert {'AndroidManifest.xml','classes.dex'} <= set(z.namelist())
+              source=json.loads(Path('gfx116-build/gfx116-safe-source.json').read_text())
+              for name, row in source['textures'].items():
+                  raw=z.read('assets/'+name+'.bc3')
+                  assert len(raw)==row['compressed_bytes']
+                  assert len(z.read('assets/'+name+'.rgba'))==5592404
+                  offset=0
+                  for level in row['mips']:
+                      size=level['bytes']
+                      assert hashlib.sha256(raw[offset:offset+size]).hexdigest()==level['sha256']
+                      offset+=size
+                  assert offset==len(raw)
+              assert 'Raft_Data' not in ''.join(z.namelist())
+              assert 'UnityShaderCache' not in ''.join(z.namelist())
+          safe={"experiment":"GFX116",
+                "apk_bytes":apk.stat().st_size,
+                "apk_sha256":hashlib.sha256(apk.read_bytes()).hexdigest(),
+                "package":"com.alwansan.gfx116",
+                "apksigner_verified":True,
+                "user_device_test_pending":True,
+                "expected_texels_per_path":4194303,
+                "original_shader_restored":False,
+                "original_indexed_test_inputs_embedded":True,
+                "pc_adreno_pixel_parity_verified":False,
+                "phase_closed":False,
+                "expected_export":"Download/Games/cl/test/g/"}
+          Path("gfx116-build/gfx116-safe-delivery.json").write_text(json.dumps(safe,indent=2)+'\n')
+          print(json.dumps(safe,sort_keys=True))
+          PY
+      - name: Upload signed standalone diagnostic APK and safe manifest only
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX116-M02-BC3-Mip-Sampling-APK
+          path: |
+            gfx116-build/GFX116-M02-BC3-Mip-Sampling.apk
+            gfx116-build/gfx116-safe-delivery.json
+            gfx116-build/gfx116-safe-source.json
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
+      - name: Remove extracted source, payload staging and intermediate packages
+        if: always()
+        run: rm -rf source-zip2 "$RUNNER_TEMP/gfx116-source" "$RUNNER_TEMP/gfx116-private" "$RUNNER_TEMP/gfx116-assets" "$RUNNER_TEMP/gfx116-debug.jks" gfx116-build
