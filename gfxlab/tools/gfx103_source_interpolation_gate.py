@@ -11,7 +11,12 @@ NV="GL_NV_shader_noperspective_interpolation"
 MODES={0:"undefined",1:"constant",2:"linear",3:"linear_centroid",
        4:"linear_noperspective",5:"linear_noperspective_centroid",
        6:"linear_sample",7:"linear_noperspective_sample"}
-NATIVE=re.compile(r"\bnoperspective\s+(?:in|out)\b")
+# Drop comments/quoted strings before detecting qualifiers; a diagnostic comment
+# must never masquerade as an actual GLSL input/output declaration.
+COMMENT_OR_STRING=re.compile(r'/\\*[\\s\\S]*?\\*/|//[^\\n]*|"(?:\\\\.|[^"\\\\])*"')
+NATIVE=re.compile(r"\\b(?:noperspective\\s+(?:(?:centroid|sample)\\s+)?|(?:centroid|sample)\\s+noperspective\\s+)(?:in|out)\\b")
+def has_native_interpolation(source):
+    return bool(NATIVE.search(COMMENT_OR_STRING.sub("",source)))
 VERSION=re.compile(r"\A#version\s+(300|310|320)\s+es\s*\n")
 DIRECTIVE=re.compile(r"(?m)^#extension\s+"+NV+r"\s*:\s*(require|enable|warn|disable)\s*$")
 
@@ -66,7 +71,7 @@ def enforce_native_gles_qualifier(glsl,stage,source_fragment_classes=None):
         raise ValueError("GFX103_STAGE_INVALID")
     m=VERSION.match(glsl)
     if not m:raise ValueError("GFX103_GLSL_VERSION_UNSUPPORTED")
-    version=int(m.group(1));native=bool(NATIVE.search(glsl))
+    version=int(m.group(1));native=has_native_interpolation(glsl)
     ordinary=0;siv=0
     if stage=="fragment":
         if not isinstance(source_fragment_classes,dict):
