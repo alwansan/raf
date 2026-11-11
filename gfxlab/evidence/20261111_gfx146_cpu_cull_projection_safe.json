@@ -23,5 +23,8 @@
   "original_Unity_runtime_effective_Cull_verified": false,
   "original_game_scene_pixel_parity_verified": false,
   "phase_closed": false,
-  "only_source_safe_aggregates_committed": true
+  "only_source_safe_aggregates_committed": true,
+  "source_free_ci_run": 43091988412,
+  "source_free_ci_pass": "7_of_7",
+  "source_original_assets_or_owner_raw_captures_in_public_ci": false
 }

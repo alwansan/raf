@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-m03-coplanar-rootcause-101",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-m03-coplanar-rootcause-101.md",
-  "status": "GFX144_ADRENO_M03_1_RGB_HOTSPOT_EXCLUSIVELY_SOURCE_COPLANAR_OPPOSITE_FACE_PIXELS_CI_9_OF_9_SUCCESS_CULL_RUNTIME_UNRESOLVED",
+  "latest_session": "20261111-GFX-chat-original-cull-projection-103",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-original-cull-projection-103.md",
+  "status": "GFX146_SOURCE_ORIGINAL_SHADER48_BACK_CULL_FALLBACK_7_OF_7_GFX145_SUCCESS_M03_1_CPU_CCW_CULLBACK_COVERAGE_3301_DEPTH_DRIFT_0_GFX146_CI_7_OF_7_RUNTIME_UNVERIFIED",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX145: source-pinned determine original Unity Cull dynamic override fallback/owner material settings and controlled source-original Mesa GL_CULL_FACE toggles for M03-1; do not change Shader48/Unity game until actual runtime pass/state verified. No owner rerun necessary yet.",
+  "next_experiment": "GFX147: controlled original M03-1 GLES Mesa GPU Cull Off/Back/Front color comparison with source-pinned geometry and texture; only then build a small Adreno owner differential if needed. Avoid modifying Unity Shader48 or altering 9-case GFX142 baseline until Unity runtime cull dynamic override is proven.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3189,7 +3189,22 @@
     "gfx144_rgb_gt10_outside_depth_ties": 0,
     "gfx144_hypothesis": "opposite-normal coplanar double faces cause GPU depth-tie winner drift",
     "gfx144_causal_cull_differential_proven": false,
-    "original_Unity_Cull_override_runtime_proven": false
+    "original_Unity_Cull_override_runtime_proven": false,
+    "gfx145_original_cull_ci_run": 43090837190,
+    "gfx145_original_source_cull_fallback_by_pass": {
+      "back": 7
+    },
+    "gfx145_matching_saved_cull_material_slots": 0,
+    "gfx145_source_free_unit_tests": 9,
+    "gfx146_source_free_ci_run": 43091988412,
+    "gfx146_source_free_ci_tests": 7,
+    "gfx146_original_M03_1_screen_front_triangle_count": 1427,
+    "gfx146_original_M03_1_screen_back_triangle_count": 1445,
+    "gfx146_CullBack_retained_coverage": 3301,
+    "gfx146_CullBack_nearest_depth_changed_pixels": 0,
+    "gfx146_CullFront_nearest_depth_changed_pixels": 2921,
+    "gfx146_actual_GPU_CullBack_RGB_parity_verified": false,
+    "original_Unity_Cull_effective_runtime_verified": false
   },
-  "latest_evidence_run": 43089752432
+  "latest_evidence_run": 43091988412
 }

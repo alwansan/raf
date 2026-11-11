@@ -18,5 +18,8 @@
   "source_ci_success": true,
   "source_free_unit_tests_passed": 9,
   "artifact_id": 13888387432,
-  "phase_closed": false
+  "phase_closed": false,
+  "source_free_ci_run": 43090837190,
+  "source_free_ci_pass": "9_of_9",
+  "source_original_assets_or_owner_raw_captures_in_public_ci": false
 }
