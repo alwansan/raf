@@ -113,13 +113,13 @@ def run_tool(args):
     return result.stdout
 
 
-def audit(stage, translate, private_consumer=None, *, model="M02", material_source=None, shader_source=None):
+def audit(stage, translate, private_consumer=None, *, model="M02", material_source=None, shader_source=None, pass_name="FORWARD"):
     material, owner, external, expected = material_source if material_source is not None else source_material(stage)
     tree, raw, programs = shader_source if shader_source is not None else load_original_shader_private(stage)
     parsed = tree["m_ParsedForm"]
-    pp = parsed["m_SubShaders"][0]["m_Passes"][0]
-    if pp["m_State"]["m_Name"] != "FORWARD" or material.get("m_InvalidKeywords"):
-        raise ValueError("Expected first original Forward pass and valid material keywords")
+    pp, = [row for row in parsed["m_SubShaders"][0]["m_Passes"] if row["m_State"]["m_Name"] == pass_name]
+    if material.get("m_InvalidKeywords"):
+        raise ValueError("Expected valid material keywords")
     source_keys = set(material["m_ValidKeywords"])
     controlled = source_keys | {"DIRECTIONAL"}
     match = [(v,f) for v,f in exact_pairs(pp)

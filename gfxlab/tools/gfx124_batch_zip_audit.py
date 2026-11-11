@@ -27,9 +27,11 @@ def audit(owner_zip, apk):
             raise ValueError("Batch case order or identity changed")
         safe = []
         images = set()
+        baselines = {}
         for test, run in zip(tests, runs, strict=True):
             merged = "secondary" in test
-            controls = ("combined",) if merged else CONTROLS
+            additive = "forward_add" in test
+            controls = ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
             completed = run["draw_completed"] is True
             captures = run["captures"]
             if len(captures) > len(controls) or (completed and len(captures) != len(controls)):
@@ -41,15 +43,28 @@ def audit(owner_zip, apk):
                     raise ValueError("Wrong Android capture identity")
                 name = capture + ".png"
                 images.add(name)
-                reference = package.read(f'assets/{test["primary"]}/{control}.rgba')
+                folder = test["primary"]
+                ref = control
+                if additive:
+                    folder = test["forward_add"] if control == "lit" else folder
+                    ref = "combined" if control == "lit" else "light"
+                reference = package.read(f"assets/{folder}/{ref}.rgba")
                 pixels[control], metrics[control] = audit_capture(row, name, logs.read(name), reference)
             checked = {"id": run["id"], "draw_completed": completed, "captures": metrics}
-            if completed and not merged:
+            if completed and not merged and not additive:
                 light = pixels["light"]
+                baselines[test["primary"]] = light
                 checked["control_rgb_changed_pixels"] = {
                     control: sum(light[i:i+3] != pixels[control][i:i+3] for i in range(0, len(light), 4))
                     for control in CONTROLS[1:]
                 }
+            if additive and completed and test["primary"] in baselines:
+                base = baselines[test["primary"]]
+                checked["controls_preserved_forward"] = {
+                    control: pixels[control] == base for control in ("off", "reject")
+                }
+                checked["additional_light_changed_pixels"] = sum(
+                    base[i:i+3] != pixels["lit"][i:i+3] for i in range(0, len(base), 4))
             if not completed:
                 checked["error"] = run["error"]
             safe.append(checked)

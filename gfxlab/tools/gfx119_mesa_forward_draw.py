@@ -21,6 +21,8 @@ parser.add_argument("--textures", type=Path, required=True)
 parser.add_argument("--safe", type=Path, required=True)
 parser.add_argument("--portable", type=Path)
 parser.add_argument("--second-slot", type=Path)
+parser.add_argument("--forward-add", type=Path)
+parser.add_argument("--forward-add-portable", type=Path)
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -211,7 +213,7 @@ def bind_samplers(replacements=None):
     bindings = {b["index"]:b for b in contracts["fragment"]["bindings"] if b["type"] == 0}
     roles = {"_MainTex":"basecolor","_BumpMap":"normal","_MetallicGlossMap":"metallic"}
     defaults = {"_OcclusionMap","unity_SpecCube0","unity_SpecCube1","unity_ProbeVolumeSH"}
-    if {int(slot) for _,_,slot,_ in samplers} != set(bindings) or len(samplers) != 7:
+    if {int(slot) for _,_,slot,_ in samplers} != set(bindings) or len(samplers) != len(bindings):
         raise ValueError("Exact source texture slot contract changed")
     for unit,(kind,name,slot,sampler) in enumerate(samplers):
         binding = bindings[int(slot)]
@@ -308,24 +310,29 @@ report = dict(experiment="GFX119", renderer=renderer, triangles=len(indices)//6,
               bound_combined_samplers=bound_samplers, rgba_sha256=hashlib.sha256(lit.tobytes()).hexdigest(),
               controlled_fixture=True, original_translated_forward_draw_completed=True,
               original_game_pixel_parity=False, android_device_verified=False, phase_closed=False)
-if args.portable:
-    args.portable.mkdir(mode=0o700, parents=True, exist_ok=False)
+def write_portable(folder, sampler_bindings, *, include_textures):
+    folder.mkdir(mode=0o700, parents=True, exist_ok=False)
     for name in ("probe.vert", "probe.frag", "mesh.bin", "indices.bin"):
-        shutil.copyfile(root/name, args.portable/name)
-    for role in ("basecolor", "normal", "metallic"):
-        shutil.copyfile(args.textures/(role+".rgba"),args.portable/(role+".rgba"))
+        shutil.copyfile(root/name, folder/name)
+    if include_textures:
+        for role in ("basecolor", "normal", "metallic"):
+            shutil.copyfile(texture_path/(role+".rgba"),folder/(role+".rgba"))
     block_rows = []
     for index,(name,data) in enumerate(portable_buffers[True].items()):
         lit_name, unlit_name = f"light-{index}.bin", f"dark-{index}.bin"
-        (args.portable/lit_name).write_bytes(data)
-        (args.portable/unlit_name).write_bytes(portable_buffers[False][name])
+        (folder/lit_name).write_bytes(data)
+        (folder/unlit_name).write_bytes(portable_buffers[False][name])
         block_rows.append(dict(name=name,light=lit_name,dark=unlit_name,bytes=len(data)))
     scene = dict(blocks=block_rows,
                  samplers=[dict(kind=kind, name=name, role=role or "") for kind,name,role in sampler_bindings])
     if texture_layout:
         scene["textures"] = {role: {key: row[key] for key in ("width", "height", "levels", "source_color_space")}
                              for role, row in texture_layout.items()}
-    (args.portable/"scene.json").write_text(json.dumps(scene))
+    (folder/"scene.json").write_text(json.dumps(scene))
+
+
+if args.portable:
+    write_portable(args.portable, sampler_bindings, include_textures=True)
     for name, pixels in (("light",lit),("dark",unlit),("flat",flat),("nonmetal",nonmetal)):
         (args.portable/(name+".rgba")).write_bytes(pixels.tobytes())
 if args.second_slot:
@@ -360,6 +367,65 @@ if args.second_slot:
     Image.fromarray(combined[::-1]).save(args.private / "combined.png")
     if args.portable:
         (args.portable / "combined.rgba").write_bytes(combined.tobytes())
+
+if args.forward_add:
+    for name in ("mesh.bin", "indices.bin"):
+        if (args.private / name).read_bytes() != (args.forward_add / name).read_bytes():
+            raise ValueError("Forward and ForwardAdd must use the same indexed mesh")
+    portable_buffers.clear()
+    add_samplers = select_slot(args.forward_add, args.textures)
+    added, add_blocks, add_material_bytes = draw(True)
+    zero, _, _ = draw(False)
+    if args.forward_add_portable:
+        write_portable(args.forward_add_portable, add_samplers, include_textures=False)
+    if np.any(zero[:, :, :3]):
+        raise ValueError("Unlit ForwardAdd shader output was not black")
+
+    def composite(light_on, depth_func):
+        select_slot(args.private, args.textures)
+        draw(True)
+        select_slot(args.forward_add, args.textures)
+        call("Enable", 0x0be2)  # GL_BLEND
+        call("BlendFuncSeparate", 1, 1, 0, 1)
+        call("DepthFunc", depth_func)
+        gl("DepthMask", None, B)(0)
+        try:
+            return draw(light_on, clear=False)[0]
+        finally:
+            gl("DepthMask", None, B)(1)
+            call("DepthFunc", 513)  # GL_LESS
+            call("Disable", 0x0be2)
+
+    blended = composite(True, 515)  # GL_LEQUAL
+    if not np.array_equal(composite(False, 515), lit):
+        raise ValueError("Zero additional light altered the Forward framebuffer")
+    if not np.array_equal(composite(True, 512), lit):  # GL_NEVER
+        raise ValueError("ForwardAdd depth rejection did not preserve Forward")
+    expected = np.minimum(lit[:, :, :3].astype(np.int16) + added[:, :, :3], 255)
+    delta = np.abs(blended[:, :, :3].astype(np.int16) - expected)
+    affected = int(np.any(blended[:, :, :3] != lit[:, :, :3], axis=2).sum())
+    if (not np.array_equal(blended[:, :, 3], lit[:, :, 3]) or
+            np.any(blended[~alpha]) or affected < 100 or delta.max() > 1):
+        raise ValueError(f"ForwardAdd composition mismatch: affected={affected}, max RGB delta={delta.max()}")
+    report["forward_add"] = {
+        "changed_pixels": affected,
+        "max_rgb_delta_from_saturating_sum": int(delta.max()),
+        "alpha_and_coverage_exact": True,
+        "zero_light_preserved_base": True,
+        "depth_reject_preserved_base": True,
+        "depth_test": "less_equal",
+        "depth_write": False,
+        "rgb_blend": "one_one",
+        "bound_combined_samplers": len(add_samplers),
+        "driver_verified_cb_blocks": add_blocks,
+        "original_material_bytes_preserved": add_material_bytes,
+        "composite_rgba_sha256": hashlib.sha256(blended.tobytes()).hexdigest(),
+        "runtime_unity_state_verified": False,
+    }
+    Image.fromarray(blended[::-1]).save(args.forward_add / "combined.png")
+    (args.forward_add / "combined.rgba").write_bytes(blended.tobytes())
+    if args.forward_add_portable:
+        (args.forward_add_portable / "combined.rgba").write_bytes(blended.tobytes())
 
 args.safe.write_text(json.dumps(report,indent=2)+"\n")
 print(json.dumps(report))

@@ -191,7 +191,7 @@ public final class MainActivity extends Activity {
                 int capacity=width*height*4;
                 if (mipUpload==null || mipUpload.capacity()<capacity)
                     mipUpload=ByteBuffer.allocateDirect(capacity);
-                try (InputStream input=getAssets().open(slot.folder+role+".rgba")) {
+                try (InputStream input=getAssets().open(slot.textureFolder+role+".rgba")) {
                     for (int mip=0; mip<levels; mip++) {
                         int w=Math.max(1,width>>mip), h=Math.max(1,height>>mip);
                         mipUpload.clear();
@@ -270,21 +270,24 @@ public final class MainActivity extends Activity {
     }
 
     private final class Slot implements AutoCloseable {
-        final String folder;
+        final String folder, textureFolder;
         final JSONArray blocks, samplers;
         final JSONObject layouts;
         final List<Integer> buffers=new ArrayList<>();
         final List<Integer> textures=new ArrayList<>();
         int program, vao, indexCount;
 
-        Slot(String id) throws Exception {
-            if (!id.matches("M[0-9]{2}-[0-9]+")) throw new IllegalArgumentException("Invalid slot identifier");
+        Slot(String id) throws Exception { this(id,null); }
+
+        Slot(String id, Slot textureSource) throws Exception {
+            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add)?")) throw new IllegalArgumentException("Invalid slot identifier");
             folder=id+"/";
+            textureFolder=textureSource==null ? folder : textureSource.textureFolder;
             JSONObject scene=new JSONObject(new String(asset(folder+"scene.json"),StandardCharsets.UTF_8));
             blocks=scene.getJSONArray("blocks");
             samplers=scene.getJSONArray("samplers");
-            layouts=scene.optJSONObject("textures");
-            if (blocks.length()!=8 || samplers.length()!=7) throw new IllegalStateException("Wrong fixture shape");
+            layouts=textureSource==null ? scene.optJSONObject("textures") : textureSource.layouts;
+            if (blocks.length()!=8 || samplers.length()!=(textureSource==null ? 7 : 4)) throw new IllegalStateException("Wrong fixture shape");
         }
 
         int addBuffer(int target, byte[] bytes) {
@@ -311,6 +314,20 @@ public final class MainActivity extends Activity {
             }
             glVertexAttrib2f(3,0,0);
             addBuffer(GL_ELEMENT_ARRAY_BUFFER,indices);
+        }
+
+        void drawAdd(String control) throws Exception {
+            glEnable(GL_BLEND);
+            glBlendFuncSeparate(GL_ONE,GL_ONE,GL_ZERO,GL_ONE);
+            glDepthMask(false);
+            glDepthFunc(control.equals("reject") ? GL_NEVER : GL_LEQUAL);
+            try {
+                draw(control.equals("off") ? "dark" : "light");
+            } finally {
+                glDepthFunc(GL_LESS);
+                glDepthMask(true);
+                glDisable(GL_BLEND);
+            }
         }
 
         void draw(String control) throws Exception {
@@ -376,14 +393,25 @@ public final class MainActivity extends Activity {
             for (int i=0;i<tests.length();i++) {
                 JSONObject test=tests.getJSONObject(i);
                 String id=test.getString("id"), primary=test.getString("primary");
-                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined)")) throw new IllegalArgumentException("Invalid test identifier");
+                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add)")) throw new IllegalArgumentException("Invalid test identifier");
                 JSONObject run=new JSONObject().put("id",id);
                 runs.put(run);
                 JSONArray captures=new JSONArray();
                 run.put("captures",captures);
                 try (Slot first=new Slot(primary)) {
                     first.setup();
-                    if (test.has("secondary")) {
+                    if (test.has("forward_add")) {
+                        try (Slot added=new Slot(test.getString("forward_add"),first)) {
+                            added.setup();
+                            for (String control:new String[]{"lit","off","reject"}) {
+                                glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+                                first.draw("light");
+                                added.drawAdd(control);
+                                String reference=control.equals("lit") ? added.folder+"combined.rgba" : first.folder+"light.rgba";
+                                captures.put(capture(id+"-"+control,reference));
+                            }
+                        }
+                    } else if (test.has("secondary")) {
                         try (Slot second=new Slot(test.getString("secondary"))) {
                             second.setup();
                             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
