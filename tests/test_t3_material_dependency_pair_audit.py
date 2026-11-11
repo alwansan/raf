@@ -70,6 +70,35 @@ class MaterialPairSlotTests(unittest.TestCase):
             result = audit.compare(original, exported)
             self.assertEqual(result["counts"]["unchanged_reference_materials"], 1)
 
+    def test_shader_mapping_reordered_is_unchanged(self):
+        with tempfile.TemporaryDirectory() as temp:
+            original, exported = Path(temp) / "original", Path(temp) / "exported"
+            original.mkdir()
+            exported.mkdir()
+            source = material()
+            (original / "test.mat").write_text(source, encoding="utf-8")
+            (exported / "test.mat").write_text(
+                source.replace("fileID: 4800000, guid: " + S + ", type: 3",
+                               "type: 3, guid: " + S + ", fileID: 4800000"),
+                encoding="utf-8")
+            result = audit.compare(original, exported)
+            self.assertEqual(result["counts"]["unchanged_reference_materials"], 1)
+            self.assertEqual(result["counts"].get("changed_shader_reference_materials", 0), 0)
+
+    def test_shader_fileid_change_is_detected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            original, exported = Path(temp) / "original", Path(temp) / "exported"
+            original.mkdir()
+            exported.mkdir()
+            source = material()
+            (original / "test.mat").write_text(source, encoding="utf-8")
+            (exported / "test.mat").write_text(
+                source.replace("fileID: 4800000, guid: " + S,
+                               "fileID: 4800001, guid: " + S),
+                encoding="utf-8")
+            result = audit.compare(original, exported)
+            self.assertEqual(result["counts"]["changed_shader_reference_materials"], 1)
+
     def test_same_slots_and_shader_remain_unchanged(self):
         with tempfile.TemporaryDirectory() as temp:
             original = Path(temp) / "original"
