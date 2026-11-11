@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-m02-forward-adreno-fixture-86",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-m02-forward-adreno-fixture-86.md",
-  "status": "GFX120_PRIVATE_ORIGINAL_FORWARD_APK_DELIVERED_ADRENO_DRAW_PENDING_PHASE_ONE_OPEN",
+  "latest_session": "20261111-GFX-chat-original-pass-mask-96",
+  "latest_session_path": "memory/sessions/20261111-GFX-chat-original-pass-mask-96.md",
+  "status": "GFX138_WINDOWS_ORIGINAL_FORWARD_DEFERRED_COVERAGE_7_OF_7_PASS_PHASE_ONE_OPEN",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Read owner GFX094 ZIP (285 stages/128 pairs available;29 CPU BaseInstance unavailable), then exact official Standard recompile via ShaderData.Pass.CompileVariant and private DXBC/signature comparison; source material/texture/rig and matched PC-device pixels still required. See gfxlab/PHASE_ONE_CURRENT_PLAN_AR.md.",
+  "next_experiment": "Complete private signed owner 9-case/51-readback Android batch, verify signature and embedded private fixture hashes before device testing; resolve actual Unity ShaderLab pass/render-state/GBUFFER, PC scene RGB/pixels and animation; phase one still OPEN.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3109,6 +3109,22 @@
     "coverage": 2008,
     "windows_pending": true,
     "android_pending": true,
+    "phase_closed": false
+  },
+  "gfxlab_phase_one_latest_checkpoint": {
+    "verified_source": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "ci_run": 43064118522,
+    "ci_status": "SUCCESS",
+    "ci_commit": "9653fb464cab03b6bcc688bbbb3926bb758fa066",
+    "cross_pass_masks_exact": 7,
+    "cross_pass_masks_different": 0,
+    "covered_pixels": 2008,
+    "source_free_unit_tests": 10,
+    "android_batch_planned_cases": 9,
+    "android_batch_planned_captures": 51,
+    "signed_owner_batch_delivered": false,
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
     "phase_closed": false
   }
 }

@@ -1,0 +1,54 @@
+{
+  "experiment": "GFX138",
+  "source_project": "Raft PC v1.1.01",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "ci_run": 43064118522,
+  "ci_conclusion": "success",
+  "commit": "9653fb464cab03b6bcc688bbbb3926bb758fa066",
+  "windows_original_dxbc_forward_and_deferred_executed": true,
+  "source_free_python_tests_passed": 10,
+  "coverage_cases_checked": [
+    "forward-light",
+    "forward-dark",
+    "forward-flat",
+    "forward-nonmetal",
+    "deferred-native-rt0",
+    "deferred-flat-rt0",
+    "deferred-nonmetal-rt0"
+  ],
+  "covered_pixels_each": 2008,
+  "pixel_location_mismatch_counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+  "forward_and_deferred_exact_mask": true,
+  "deferred_flat_effect_pixels_by_target": [
+    0,
+    0,
+    2007,
+    0
+  ],
+  "deferred_nonmetal_effect_pixels_by_target": [
+    20,
+    2008,
+    0,
+    0
+  ],
+  "unity_original_pass_selection_verified": false,
+  "unity_original_gbuffer_format_verified": false,
+  "original_pc_gameplay_pixel_parity": false,
+  "android_device_9_case_test_complete": false,
+  "expected_android_batch_tests": 9,
+  "expected_android_batch_captures": 51,
+  "private_sources_readbacks_published": false,
+  "source_private_purge_ci_step_success": true,
+  "artifact_id": 13876035541,
+  "phase_closed": false,
+  "full_windows_mesa_rgba_exact": false
+}
