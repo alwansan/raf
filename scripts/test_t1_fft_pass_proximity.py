@@ -30,6 +30,18 @@ class TestPassProximity(unittest.TestCase):
             summarize(sample([{"line": 5, "pass_tokens": [], "before":
                 [{"line": 6, "markers": ["pass:foam"]}], "after": []}]))
 
+    def test_reject_zero_context_line(self):
+        for side in ("before", "after"):
+            with self.subTest(side=side), self.assertRaises(ValueError):
+                summarize(sample([{"line": 5 if side == "before" else 1,
+                    "pass_tokens": [], "before": [{"line": 0, "markers": ["pass:foam"]}] if side == "before" else [],
+                    "after": [{"line": 0, "markers": ["pass:foam"]}] if side == "after" else []}]))
+
+    def test_reject_negative_context_line(self):
+        with self.assertRaises(ValueError):
+            summarize(sample([{"line": 10, "pass_tokens": [],
+                "before": [{"line": -3, "markers": ["pass:spectrum"]}], "after": []}]))
+
     def test_unknown_marker_rejected(self):
         with self.assertRaises(ValueError):
             summarize(sample([{"line": 5, "pass_tokens": [], "before":
