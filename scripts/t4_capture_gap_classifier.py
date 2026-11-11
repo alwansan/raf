@@ -17,6 +17,13 @@ def _valid_growth(value):
 
 
 def classify(summary):
+    if not isinstance(summary, dict):
+        return {
+            "per_counter": {key: {"callback_growth": None, "reader_growth": None,
+                                  "state": "invalid_counter_evidence"} for key in KEYS},
+            "gameplay_success_proven": False,
+            "note": "Malformed telemetry root; expected a JSON object.",
+        }
     callbacks = summary.get("monotonic_callback_increases", {})
     readers = summary.get("monotonic_reader_increases", {})
     cb_first = summary.get("first_callback_counters", {})
