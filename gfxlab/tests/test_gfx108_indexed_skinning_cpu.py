@@ -5,7 +5,7 @@ from types import SimpleNamespace
 from gfxlab.tools.gfx108_indexed_skinning_cpu import (
     positions_from_parsed_mesh,decoded_skin_weights,
     skin_positions_cpu,safe_displacement_stats,transform_point,
-    handler_skin_safe_shapes)
+    handler_skin_safe_shapes,decoded_handler_skin)
 from gfxlab.tools.gfx107_source_bindpose_math import identity,mul
 
 def translate(x):
@@ -47,6 +47,21 @@ class OriginalIndexedCPUSkin(unittest.TestCase):
         mesh={"m_Skin":[skin([float("nan"),0,0,0],[0,0,0,0])]}
         with self.assertRaisesRegex(ValueError,"GFX108_BAD_FINITE_SCALAR"):
             decoded_skin_weights(mesh,1,1)
+    def test_source_two_bone_influence_is_zero_padded_without_new_effect(self):
+        h=SimpleNamespace(m_BoneWeights=[(.25,.75),(.5,.5)],
+                          m_BoneIndices=[(0,1),(1,0)])
+        out=decoded_handler_skin(h,2,2)
+        self.assertEqual(out,[[(.25,0),(.75,1)],[(.5,1),(.5,0)]])
+    def test_unobserved_three_influence_width_rejected(self):
+        h=SimpleNamespace(m_BoneWeights=[(.4,.3,.3)],
+                          m_BoneIndices=[(0,1,2)])
+        with self.assertRaisesRegex(ValueError,"GFX108_ORIGINAL_INFLUENCE_WIDTH_NOT_2_OR_4"):
+            decoded_handler_skin(h,1,3)
+    def test_mismatched_source_weight_index_width_rejected(self):
+        h=SimpleNamespace(m_BoneWeights=[(.5,.5)],
+                          m_BoneIndices=[(0,1,2,3)])
+        with self.assertRaisesRegex(ValueError,"GFX108_ORIGINAL_INFLUENCE_WIDTH_NOT_2_OR_4"):
+            decoded_handler_skin(h,1,4)
     def test_two_bone_linear_blend_vertex_deformed(self):
         points=[(1.,0.,0.)]
         weights=[[(.25,0),(.75,1)]]
