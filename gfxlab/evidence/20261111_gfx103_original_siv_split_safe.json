@@ -1,0 +1,35 @@
+{
+  "experiment": "GFX-MULTI-103",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "github_action_run": 42945815709,
+  "action_conclusion": "success",
+  "job_id": 130278292135,
+  "source_free_unit_tests_passed": 17,
+  "artifact_id": 13822676727,
+  "private_source_purge_success": true,
+  "source_passes": 7,
+  "exact_pairs": 524,
+  "distinct_fragment_stages_in_exact_pairs": 472,
+  "pair_occurrence_ordinary_input_modes": {
+    "constant": 40,
+    "linear": 2780
+  },
+  "pair_occurrence_system_interpreted_modes": {
+    "linear_noperspective": 16
+  },
+  "unique_fragment_ordinary_input_modes": {
+    "constant": 40,
+    "linear": 2478
+  },
+  "unique_fragment_system_interpreted_modes": {
+    "linear_noperspective": 16
+  },
+  "pair_occurrences_with_ordinary_noperspective": 0,
+  "pair_occurrences_with_siv_noperspective": 16,
+  "ordinary_native_noperspective_varying_required": false,
+  "input_siv_system_name_mapping_verified": false,
+  "originalShaderRestored": false,
+  "pcAdrenoPixelParityVerified": false,
+  "phase_closed": false,
+  "privacy": "Only bounded anonymous CI aggregate, no original shader bytes or per-program identity"
+}
