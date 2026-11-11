@@ -17,10 +17,18 @@ class RightDiagnosticSafeAreaTests(unittest.TestCase):
     def test_only_diagnostic_buttons_scaled(self):
         source = SOURCE.read_text()
         self.assertIn("FitRightButtonsToSafeArea(safe);", source)
-        self.assertIn('"Show Xbox", "Xbox layout", "Test report"', source)
+        self.assertIn("private readonly RectTransform[] rightButtons = new RectTransform[3]", source)
+        self.assertIn("RightButtonOffsets = { 78f, 126f, 174f }", source)
         self.assertIn("safe.height * 720f / Screen.height", source)
         self.assertIn("child.localScale = new Vector3(factor, factor, 1f)", source)
-        self.assertIn("child.anchoredPosition = new Vector2(-8f * factor, -offsets[i] * factor)", source)
+        self.assertIn("child.anchoredPosition = new Vector2(-8f * factor, -RightButtonOffsets[i] * factor)", source)
+        self.assertIn("var child = rightButtons[i];", source)
+        self.assertEqual(source.count("safeRoot.Find("), 3)
+        update = source.split("private void Update()", 1)[1].split("private void Create()", 1)[0]
+        fit = source.split("private void FitRightButtonsToSafeArea(", 1)[1].split("private static void FitPanel(", 1)[0]
+        self.assertNotIn("new string[]", update + fit)
+        self.assertNotIn("new float[]", update + fit)
+        self.assertNotIn(".Find(", update + fit)
 
 
 if __name__ == "__main__":
