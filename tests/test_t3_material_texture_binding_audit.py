@@ -14,6 +14,21 @@ class TextureBindingTests(unittest.TestCase):
         self.assertEqual(reference("fileID: 2800000"), ("builtin_or_local", None))
         self.assertEqual(reference("guid: invalid, fileID: 2800000"), ("malformed", None))
 
+    def test_consecutive_slots_missing_texture_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "sample.mat").write_text(
+                "Material:\n  m_SavedProperties:\n    m_TexEnvs:\n"
+                "    - _Missing:\n        m_Scale: {x: 1, y: 1}\n"
+                "    - _Null:\n        m_Texture: {fileID: 0}\n"
+                "    - _LastMissing:\n        m_Offset: {x: 0, y: 0}\n"
+                "    m_Floats:\n"
+            )
+            counts = audit(root)["counts"]
+            self.assertEqual(counts["texenv_slots_seen"], 3)
+            self.assertEqual(counts["texenv_slots_without_texture_line"], 2)
+            self.assertEqual(counts["texture_null"], 1)
+
     def test_scoped_slots_and_owner_classification(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
