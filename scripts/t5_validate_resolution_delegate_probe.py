@@ -118,6 +118,13 @@ def verify(data):
         ev["delegate_targets_reach_screen_setresolution"] or
         ev["option_methods_direct_apply_calls"] > ev["option_methods_reach_apply"]):
         raise ValueError("Reachability contradicts direct call")
+    # Calls to the same-type Apply method must appear among internal direct
+    # call edges. Reachability alone cannot manufacture an absent direct edge.
+    if ev["internal_direct_call_edges"] < max(
+        ev["delegate_targets_direct_apply_calls"],
+        ev["option_methods_direct_apply_calls"],
+    ):
+        raise ValueError("Direct Apply calls exceed internal call edges")
     return {
         "original_compiled_delegate_sites_authenticated": 2,
         "unique_targets": unique,
