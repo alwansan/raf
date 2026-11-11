@@ -43,7 +43,7 @@ def inspect_exact_source_skin(entry,types,externals):
                 "cpu_original_vertices_deformed":False}
     r=renderers[0];bones=r.get("m_Bones");poses=mesh.get("m_BindPose")
     if not isinstance(bones,list) or not isinstance(poses,list) or (
-            len(bones)!=len(poses)!=False) or len(bones)!=entry["source_bones"]:
+            len(bones)!=len(poses)) or len(bones)!=entry["source_bones"]:
         return {"model":model,"status":"ORIGINAL_BONE_BINDPOSE_MISMATCH",
                 "cpu_original_vertices_deformed":False}
     cache={}
