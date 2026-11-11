@@ -48,14 +48,14 @@ def read_span(repo, name, offset, size, manifest, cached):
     return bytes(result)
 
 
-def mip_layout(width, height, count):
+def mip_layout(width, height, count, *, block_bytes=16):
     start = 0
     rows = []
     if width <= 0 or height <= 0 or count != max(width,height).bit_length():
         raise ValueError("Expected a complete mip chain")
     for level in range(count):
         w, h = max(1,width>>level), max(1,height>>level)
-        size = ((w+3)//4)*((h+3)//4)*16
+        size = ((w+3)//4)*((h+3)//4)*block_bytes
         rows.append((level,w,h,start,size))
         start += size
     return rows

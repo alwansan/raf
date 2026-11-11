@@ -10,10 +10,10 @@ from PIL import Image
 from gfxlab.tools.gfx116_m02_bc3_source import mip_layout
 
 
-def decode_mip(data, width, height):
+def decode_mip(data, width, height, *, fourcc=b"DXT5"):
     flags = 0x81007  # DDSD_CAPS, HEIGHT, WIDTH, PIXELFORMAT, LINEARSIZE
     header = [124, flags, height, width, len(data), 0, 0, *([0]*11),
-              32, 4, int.from_bytes(b"DXT5","little"), 0, 0, 0, 0, 0,
+              32, 4, int.from_bytes(fourcc,"little"), 0, 0, 0, 0, 0,
               0x1000, 0, 0, 0, 0]
     with Image.open(io.BytesIO(b"DDS " + struct.pack("<31I", *header) + data)) as image:
         if image.size != (width,height):

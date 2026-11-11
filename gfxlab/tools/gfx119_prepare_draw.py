@@ -11,7 +11,7 @@ from gfxlab.tools.multi_model_transport import all_model_entries
 from gfxlab.tools.multi_shader_dxbc_signature_pairs import signature_from_container
 
 
-def prepare(stage, out, *, direct3d=False):
+def fixture_consumer(out, *, direct3d=False):
     out.mkdir(parents=True, exist_ok=True)
 
     def consume(folder, stages):
@@ -29,7 +29,11 @@ def prepare(stage, out, *, direct3d=False):
                 contract["inputs"] = signature_from_container(dxbc, "ISGN")
             (out / f"{name}.json").write_text(json.dumps(contract, default=list))
 
-    audit(stage, not direct3d, consume)
+    return consume
+
+
+def prepare(stage, out, *, direct3d=False):
+    audit(stage, not direct3d, fixture_consumer(out, direct3d=direct3d))
     entries, types, _ = all_model_entries(stage)
     model, = [entry for entry in entries if entry["id"] == "M02"]
     mesh = direct_mesh_handler(types[model["owner"]][model["mesh_pid"]])

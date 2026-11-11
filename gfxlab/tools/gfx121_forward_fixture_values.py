@@ -5,11 +5,13 @@ import numpy as np
 
 def engine_values(mesh, *, direct3d=False):
     vertices = np.frombuffer(mesh, dtype="<f4").reshape(-1, 12)
-    if vertices.shape != (1666, 12) or not np.isfinite(vertices).all():
-        raise ValueError("Unexpected M02 source vertex layout")
+    if not len(vertices) or not np.isfinite(vertices).all():
+        raise ValueError("Unexpected source vertex layout")
     minimum, maximum = vertices[:, :3].min(axis=0), vertices[:, :3].max(axis=0)
     center = (minimum + maximum) / 2
     span = float(max(maximum - minimum))
+    if span <= 0:
+        raise ValueError("Source mesh has no spatial extent")
     scale = 1.6 / span
     projection = np.eye(4, dtype=np.float32)
     projection[0, 0] = projection[1, 1] = scale

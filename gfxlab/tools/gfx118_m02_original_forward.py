@@ -93,7 +93,7 @@ def texture_contract(material, owner, external, expected, merged, shdr, slots):
             raise ValueError("Texture parameter metadata conflicts with exact DXBC sample")
         if name in roles:
             if resolve_pptr(env[name]["m_Texture"],owner,external)[1] != expected[roles[name]]:
-                raise ValueError("M02 source texture identity changed")
+                raise ValueError("Source texture identity changed")
             categories["verified_source_texture_pairs"] += 1
         elif name in env:
             if resolve_pptr(env[name]["m_Texture"],owner,external)[0] != "null":
@@ -113,13 +113,13 @@ def run_tool(args):
     return result.stdout
 
 
-def audit(stage, translate, private_consumer=None):
-    material, owner, external, expected = source_material(stage)
-    tree, raw, programs = load_original_shader_private(stage)
+def audit(stage, translate, private_consumer=None, *, model="M02", material_source=None, shader_source=None):
+    material, owner, external, expected = material_source if material_source is not None else source_material(stage)
+    tree, raw, programs = shader_source if shader_source is not None else load_original_shader_private(stage)
     parsed = tree["m_ParsedForm"]
     pp = parsed["m_SubShaders"][0]["m_Passes"][0]
     if pp["m_State"]["m_Name"] != "FORWARD" or material.get("m_InvalidKeywords"):
-        raise ValueError("Expected first original Forward pass and valid M02 keywords")
+        raise ValueError("Expected first original Forward pass and valid material keywords")
     source_keys = set(material["m_ValidKeywords"])
     controlled = source_keys | {"DIRECTIONAL"}
     match = [(v,f) for v,f in exact_pairs(pp)
@@ -143,7 +143,7 @@ def audit(stage, translate, private_consumer=None):
             "texture_contract":texture_contract(material,owner,external,expected,merged,shdr,slots),
         }
         private[label] = (dxbc,sizes,payloads,merged)
-    result = {"experiment":"GFX118","source_sha":ZIP2_SHA,"model":"M02",
+    result = {"experiment":"GFX118","source_sha":ZIP2_SHA,"model":model,
               "material_keyword_count":len(source_keys),"controlled_global_keyword":"DIRECTIONAL",
               "exact_source_pair_count":len(match),"stages":stages,"gles_offline_link_passed":False,
               "gpu_draw_completed":False,"original_shader_restored":False,"phase_closed":False}

@@ -3002,5 +3002,13 @@
     "unique_forward_pairs": 2,
     "device_draw_slots_verified": 1,
     "phase_closed": false
+  },
+  "latest_gfx123": {
+    "mesa_material_slots": 3,
+    "combined_m03_covered_pixels": 7022,
+    "combined_m03_overlap_pixels": 735,
+    "m02_regression_exact": true,
+    "android_pending": true,
+    "phase_closed": false
   }
 }
