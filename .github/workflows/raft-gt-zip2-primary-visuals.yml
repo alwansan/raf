@@ -1,0 +1,129 @@
+name: GT restore primary sharedassets0 visuals from ZIP2 without LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-zip2-primary-visuals.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-zip2-primary-visuals-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  restore-primary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Check disk budget before source checkout
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 7340032
+      - name: Checkout original 1.9 GB primary visuals from immutable ZIP2 only
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/
+            /Raft/Raft_Data/sharedassets0.assets.resS/
+      - name: Restore 1.9 GB original Mesh Texture and Shader owners to AssetRipper input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --profile selected \
+            --path Raft_Data/sharedassets0.assets \
+            --path Raft_Data/sharedassets0.assets.resS \
+            --byte-budget 2100000000 \
+            --report "$RUNNER_TEMP/gt-primary-resource-recovery.json"
+      - name: Exercise restored original texture and Mesh stream references
+        shell: bash
+        run: |
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          import UnityPy
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-input/Raft_Data"
+          owner=root/"sharedassets0.assets"
+          provider=root/"sharedassets0.assets.resS"
+          env=UnityPy.load(str(owner))
+          types={"Mesh":0,"Texture2D":0,"Shader":0,"Material":0}
+          covered={"Mesh":0,"Texture2D":0}
+          stream_bytes={"Mesh":0,"Texture2D":0}
+          foreign={"Mesh":0,"Texture2D":0}
+          truncated=0
+          sampled=0
+          for obj in env.file.objects.values():
+              cls=obj.type.name
+              if cls not in types:
+                  continue
+              types[cls]+=1
+              if cls not in covered:
+                  continue
+              d=obj.read_typetree(check_read=False).get("m_StreamData",{})
+              if not isinstance(d,dict):
+                  continue
+              p,offset,size=d.get("path",""),d.get("offset",0),d.get("size",0)
+              if not p or not size:
+                  continue
+              name=p.replace("\\","/").rsplit("/",1)[-1]
+              if name!=provider.name:
+                  foreign[cls]+=1
+                  continue
+              if type(offset) is not int or type(size) is not int or offset<0 or size<=0 or offset+size>provider.stat().st_size:
+                  truncated+=1
+                  continue
+              with provider.open("rb") as stream:
+                  stream.seek(offset)
+                  blob=stream.read(min(size,2048))
+              if len(blob)!=min(size,2048):
+                  truncated+=1
+                  continue
+              sampled+=len(blob)
+              covered[cls]+=1
+              stream_bytes[cls]+=size
+          if not covered["Texture2D"] or truncated:
+              raise SystemExit("GT_PRIMARY_RESOURCE_STREAM_PROOF_FAILED covered="+str(covered)+" truncated="+str(truncated))
+          report={"original_owner":"sharedassets0.assets","source_file_sha256_verified":True,
+                  "original_resources_reconstructed":2,
+                  "original_object_class_counts":types,
+                  "stream_extents_verified_by_class":covered,
+                  "stream_bytes_addressable_by_class":stream_bytes,
+                  "foreign_stream_references_needing_other_batches":foreign,
+                  "bounded_original_stream_bytes_sampled":sampled,
+                  "git_lfs_used":False,
+                  "asset_ripper_executed":False,
+                  "android_gpu_verified":False}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-primary-stream-coverage.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+          print("GT_REAL_PRIMARY_VISUAL_RESTORATION "+json.dumps(report,sort_keys=True))
+          PY
+      - name: Save source recovery receipts, not original 1.9 GB game files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-primary-original-visuals-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-primary-resource-recovery.json
+            ${{ runner.temp }}/gt-primary-stream-coverage.json
+          retention-days: 14
+          if-no-files-found: ignore
