@@ -69,6 +69,8 @@ def check(raw):
             states[token] = "released"
     if len(joined) != 1 or states[joined[0]] != "released":
         raise ValueError("missing_unique_completed_pair")
+    if any(state != "released" for state in states.values()):
+        raise ValueError("unreleased_capture_resource")
     return {"schema": "t2-foam-rt-lifetime-result-v1",
             "capture_id": doc["capture_id"], "source_commit": sha,
             "frame": doc["frame"], "lifetime_order_evidence": "CAPTURE_ORDER_CONSISTENT",
