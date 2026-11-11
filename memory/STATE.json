@@ -3282,5 +3282,11 @@
     "nativeBakeMeshInvoked": true,
     "reconstructedClipSampled": true,
     "phase_closed": false
+  },
+  "latest_gfx152": {
+    "interior_scalar_samples": 924,
+    "max_error": 1.1102230246251565e-16,
+    "unity_animator_verified": false,
+    "phase_closed": false
   }
 }
