@@ -14,6 +14,8 @@ namespace RaftAndroid.Platform
     {
         private GameObject canvasObject, editorObject, reportObject;
         private RectTransform safeRoot;
+        private readonly RectTransform[] rightButtons = new RectTransform[3];
+        private static readonly float[] RightButtonOffsets = { 78f, 126f, 174f };
         private AndroidTouchGamepadOverlay gamepad;
         private AndroidTestDiagnostics diagnostics;
         private Text toggleText, selectionText, bindingText, reportText;
@@ -68,13 +70,16 @@ namespace RaftAndroid.Platform
             var bar = Node("HudTouchBlocker", safeRoot, 0, 0, 1920, 70);
             bar.gameObject.AddComponent<Image>().color = Color.clear;
             AddRightButton(safeRoot, "Show Xbox", 8, 78, 150, () => gamepad.SetVisible(!gamepad.Visible), out toggleText);
+            rightButtons[0] = safeRoot.Find("Show Xbox") as RectTransform;
             AddRightButton(safeRoot, "Xbox layout", 8, 126, 150, () =>
             {
                 if (!gamepad.Visible) gamepad.SetVisible(true);
                 gamepad.SetLayoutEditMode(!gamepad.Editing);
                 reportOpen = false;
             });
+            rightButtons[1] = safeRoot.Find("Xbox layout") as RectTransform;
             AddRightButton(safeRoot, "Test report", 8, 174, 150, () => { reportOpen = !reportOpen; gamepad.SetLayoutEditMode(false); });
+            rightButtons[2] = safeRoot.Find("Test report") as RectTransform;
             editorObject = Panel("Xbox layout editor", 500, 252);
             var edit = editorObject.GetComponent<RectTransform>();
             selectionText = Label(edit, "Select a controller button", 12, 10, 476, 30);
@@ -139,14 +144,12 @@ namespace RaftAndroid.Platform
             if (Screen.height <= 0 || safeRoot == null) return;
             float safeHeight = safe.height * 720f / Screen.height;
             float factor = Mathf.Clamp(safeHeight / 224f, 0.1f, 1f);
-            string[] names = { "Show Xbox", "Xbox layout", "Test report" };
-            float[] offsets = { 78f, 126f, 174f };
-            for (int i = 0; i < names.Length; i++)
+            for (int i = 0; i < rightButtons.Length; i++)
             {
-                var child = safeRoot.Find(names[i]) as RectTransform;
+                var child = rightButtons[i];
                 if (child == null) continue;
                 child.localScale = new Vector3(factor, factor, 1f);
-                child.anchoredPosition = new Vector2(-8f * factor, -offsets[i] * factor);
+                child.anchoredPosition = new Vector2(-8f * factor, -RightButtonOffsets[i] * factor);
             }
         }
 
