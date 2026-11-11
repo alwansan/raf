@@ -3037,5 +3037,17 @@
     "exact_stage_pairs": 524,
     "shadow_candidates_require_runtime_confirmation": true,
     "phase_closed": false
+  },
+  "latest_gfx127": {
+    "mesa_forward_add_changed_pixels": 1979,
+    "mesa_rgb_max_delta": 0,
+    "negative_controls_bit_exact": true,
+    "batch_cases": 6,
+    "batch_captures": 20,
+    "shell_build_run": 43055403000,
+    "shell_artifact": 13870888047,
+    "windows_pending": true,
+    "android_pending": true,
+    "phase_closed": false
   }
 }
