@@ -12,11 +12,62 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "ready_for_owner_start",
+  "status": "source_82_owner_metadata_inventory_verified_export_integration_unverified",
   "inventory": {
-    "status": "not_started",
-    "totals": null
+    "status": "authenticated_82_serialized_owner_headers",
+    "source_structural": {
+      "original_files": 366,
+      "total_bytes": 7789295609,
+      "matching_paths": 366,
+      "plain_same_blob": 344,
+      "lfs_pointer_sha256_and_size_verified": 18,
+      "split_size_only_unverified": 4
+    },
+    "source_authenticated": {
+      "owners": 82,
+      "scene_headers": 40,
+      "assets_owners": 42,
+      "verified_bytes": 819595355,
+      "split_reassembled": 5,
+      "latest_ci_run": 43114648901,
+      "artifact_id": 13897064222
+    },
+    "totals": {
+      "all_owned_objects": 1209137,
+      "Mesh": 4708,
+      "Material": 1556,
+      "Texture2D": 4050,
+      "Cubemap": 30,
+      "Texture2DArray": 9,
+      "Shader": 165,
+      "ComputeShader": 9,
+      "MeshRenderer": 176432,
+      "MeshFilter": 176345,
+      "SkinnedMeshRenderer": 363,
+      "ParticleSystemRenderer": 2141
+    },
+    "usage": {
+      "source_scenes": 40,
+      "renderer_objects": 176189,
+      "material_slots": 191845,
+      "external_material_slots_unresolved": 191116,
+      "null_material_slots": 729
+    },
+    "material_shader_reference_graph": {
+      "referenced_targets": 77,
+      "distinct_referenced_names": 75,
+      "engine_transport_references": 16
+    },
+    "limitations": {
+      "source_stream_payloads_verified": false,
+      "exported_unity_guid_and_material_links_verified": false,
+      "android_build_and_device_verified": false,
+      "shader_pass_variant_compute_kernel_totals_known": false
+    },
+    "project_baseline_sha": "cd96edc1ce0059b5737c017b707a8f79cb4da29d",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "last_verified_source_ci_sha": "4cd8d0228a9add43817b616bfede8892df8fd411"
   },
-  "latest_session": "sessions/20261112-GT-bootstrap.md",
-  "next_action": "Inventory original graphics and current Android project at pinned revisions; update DISCOVERY_AR.md and SUMMARY_AR.md."
+  "latest_session": "sessions/20261112-GT-chat-inventory-01.md",
+  "next_action": "Match source owner:pathID:type records and material/texture/shader usage graph to actual AssetRipper ExportedProject .meta/GUID and Unity import, then restore one high-impact source-backed graphics family and prove a real rendering or Android build gate without interfering with T1-T5."
 }
