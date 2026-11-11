@@ -69,3 +69,16 @@ Session `20261111-GFX-chat-original-pass-mask-96` (`origin=chat`). [Windows Acti
 
 `originalShaderRestored=false`، `originalAnimationRestored=false`، `phase_closed=false`.
 
+
+## 11 Nov 2026 — GFX142 VERIFIED: original Raft 9-case Android APK delivered privately
+
+Session `20261111-GFX-chat-encrypted-owner-delivery-99`, `origin=chat`. Worker GFX-LAB; exclusive write branch `experiment/android-graphics-rootcause`.
+
+**SUCCESS [Actions run 43081417585](https://github.com/alwansan/raf/actions/runs/43081417585):** 5/5 source-free AES-GCM round-trip, tamper and invalid-input tests passed. Then rebuilt source-pinned original Raft Shader48 material/geometry/mips and the 9-case 51-reference Mesa batch, signed the actual Android GFX124 runner via verified APK v3, and checked **235 original asset files** survived signing. The resulting signed APK length **23,082,040 bytes** and SHA-256 **`3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773`**.
+
+**Safe retrieval proven:** Public GitHub repo uploads ONLY an **AES-256-GCM CMS AuthEnvelopedData** envelope + safe JSON in encrypted artifact [13885815731](https://github.com/alwansan/raf/actions/runs/43081417585/artifacts/13885815731); the RSA-3072 public certificate is versioned, but its **private key never entered GitHub, Actions, commit history or an artifact**. Encrypted blob 23,082,683 bytes, SHA-256 `d3a4b059189384a99b79399d6899a8aa3903757ed01adca46cb9eec2c674954a`. This chat downloaded the encrypted artifact via the GitHub connector, authenticated AES-GCM decryption succeeded locally and the recovered Android APK SHA-256 matched the Actions safe report byte-for-byte. Independent ZIP checks: valid Android binary Manifest; unique entries, no CRC damage, **235** assets; exactly **9** planned test cases, **51** expected readbacks and all twelve Deferred target references. An installable **GFX142-Raft-Original-Graphics-9Tests.apk** was delivered to the owner in the **current conversation's private sandbox attachment**, NOT in a public GitHub artifact. Do not fabricate a permanent sandbox link in future sessions or claim a future build can use the private one-time key without it.
+
+**Owner instructions:** Install the GFX124 diagnostic APK (package `com.alwansan.gfx124`, separate from Raft game). If upgrading a differently-signed previous test APK is blocked, uninstall only that prior `com.alwansan.gfx124` package. On launch it runs the batch and exports `GFX124-ALL-TEST-LOGS-*.zip` into `/storage/emulated/0/Download/Games/cl/test/g/`. Ask owner to upload that complete ZIP for `gfxlab.tools.gfx124_batch_zip_audit` verification against the original signed APK. The private APK should be retained for reference comparisons; never upload proprietary original assets unencrypted to public GitHub.
+
+**Still OPEN:** No actual 9-case Adreno 730 phone results received or independently validated. Android appearance, Unity original ShaderLab pass-state choice/true G-buffer format, engine Animator clip playback, and full Raft PC scene pixel parity are NOT established. `originalShaderRestored=false`, `originalAnimationRestored=false`, `phase_closed=false`.
+
