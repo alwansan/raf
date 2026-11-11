@@ -74,7 +74,7 @@ class ParticleMaterialAuditTests(unittest.TestCase):
     def test_block_list_code_path_does_not_raise_unbound_local(self):
         # Regression: literal backslash-n embedded in a comment once swallowed
         # material_indent/tail assignments, breaking every block-list scan.
-        counts = self.audit("\\n  - {fileID: 0}")
+        counts = self.audit("\n  - {fileID: 0}")
         self.assertEqual(counts.get("null_material_slots"), 1)
         self.assertEqual(counts.get("renderers_with_empty_material_list", 0), 0)
 
