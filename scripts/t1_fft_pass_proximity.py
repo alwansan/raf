@@ -28,7 +28,7 @@ def summarize(scan):
         for side in ("before", "after"):
             for row in event.get(side, []):
                 line = row.get("line")
-                if type(line) is not int or (side == "before" and line >= center) or (side == "after" and line <= center):
+                if type(line) is not int or line < 1 or (side == "before" and line >= center) or (side == "after" and line <= center):
                     raise ValueError("invalid context position")
                 for marker in row.get("markers", []):
                     if marker.startswith("pass:"):
