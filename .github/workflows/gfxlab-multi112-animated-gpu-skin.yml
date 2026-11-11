@@ -3,8 +3,8 @@ on:
   push:
     branches: [experiment/android-graphics-rootcause]
     paths:
-      - '.github/workflows/gfxlab-multi109-indexed-gpu-skin.yml'
-      - 'gfxlab/android-gles-skin109/**'
+      - '.github/workflows/gfxlab-multi112-animated-gpu-skin.yml'
+      - 'gfxlab/android-gles-skin112/**'
       - 'gfxlab/tools/gfx112_animated_payload.py'
   workflow_dispatch:
 permissions:
@@ -63,12 +63,12 @@ jobs:
           test -f "$jar" && test -x "$buildtools/aapt2" && test -x "$buildtools/apksigner"
           mkdir -p gfx112-build/classes gfx112-build/dex gfx112-build/gen
           "$buildtools/aapt2" link -o gfx112-build/resources.apk \
-            --manifest gfxlab/android-gles-skin109/AndroidManifest.xml \
+            --manifest gfxlab/android-gles-skin112/AndroidManifest.xml \
             -I "$jar" -A "$RUNNER_TEMP/gfx112-assets" \
             --java gfx112-build/gen
           javac -source 8 -target 8 -bootclasspath "$jar" \
             -d gfx112-build/classes \
-            gfxlab/android-gles-skin109/src/com/alwansan/gfx112/MainActivity.java
+            gfxlab/android-gles-skin109/src/com/alwansan/gfx109/MainActivity.java
           mapfile -t classes < <(find gfx112-build/classes -type f -name '*.class')
           test "${#classes[@]}" -gt 0
           "$buildtools/d8" --lib "$jar" --min-api 29 --output gfx112-build/dex "${classes[@]}"

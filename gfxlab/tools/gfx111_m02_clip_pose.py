@@ -116,7 +116,7 @@ def snapshot(graph, bindings, values):
     return overrides
 
 
-def sample_m02(entry, graph, bones, animators, consume_pose=None):
+def sample_m02(entry, graph, bones, animators, consume_pose=None, consume_clip=None):
     if len(bones) != 8 or len(animators) != 1:
         raise ValueError("M02 exact source rig selection changed")
     animator = animators[0]
@@ -181,6 +181,8 @@ def sample_m02(entry, graph, bones, animators, consume_pose=None):
     cases = []
     for index, clip in enumerate(clips):
         curves, constants, bindings, start, stop = clip_channels(graph, clip, path_nodes)
+        if consume_clip is not None:
+            consume_clip(index, graph, bones, parent, curves, constants, bindings, start, stop)
         maximum = 0.0
         changed = 0
         baseline = None
@@ -210,13 +212,13 @@ def sample_m02(entry, graph, bones, animators, consume_pose=None):
     return cases
 
 
-def run(stage, consume_pose=None):
+def run(stage, consume_pose=None, consume_clip=None):
     cases = None
 
     def inspect(entry, graph, renderer, bones, animators):
         nonlocal cases
         if entry["id"] == "M02":
-            cases = sample_m02(entry, graph, bones, animators, consume_pose)
+            cases = sample_m02(entry, graph, bones, animators, consume_pose, consume_clip)
 
     audit(stage, inspect)
     if cases is None:

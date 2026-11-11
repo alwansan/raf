@@ -1,0 +1,75 @@
+name: GFX113 Unity M02 sampled pose arithmetic witness
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi113-unity-pose-witness.yml'
+      - 'gfxlab/tools/gfx113_unity_pose_inputs.py'
+      - 'gfxlab/unity/Assets/Editor/GfxM02UnityPoseWitness113.cs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx113-unity-pose-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  unity-m02-pose-reference:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 45
+    env:
+      PYTHONUNBUFFERED: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout only SHA-pinned original ZIP2 owner assets
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Stage private original curve and pose inputs
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          mkdir -p gfxlab/posewitness113/Assets/Editor gfxlab/posewitness113/ProjectSettings gfxlab/posewitness113/Packages
+          cp gfxlab/unity/Assets/Editor/GfxM02UnityPoseWitness113.cs gfxlab/posewitness113/Assets/Editor/
+          cp gfxlab/unity/ProjectSettings/ProjectVersion.txt gfxlab/posewitness113/ProjectSettings/
+          cp gfxlab/unity/Packages/manifest.json gfxlab/posewitness113/Packages/
+          python3 -m gfxlab.tools.gfx113_unity_pose_inputs --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx113-source" --output gfxlab/posewitness113/private-inputs
+      - name: Evaluate source-derived curves and matrices using Unity
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: gfxlab/posewitness113
+          unityVersion: 2021.3.45f2
+          targetPlatform: StandaloneLinux64
+          buildMethod: RaftGraphicsLabEditor.GfxM02UnityPoseWitness113.Build
+          buildName: GFX113-Unity-Pose-Witness
+          buildsPath: gfx113-builds
+          versioning: None
+          customParameters: -job-worker-count 2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GFX113-safe-unity-m02-pose-witness
+          path: gfxlab/posewitness113/gfx113-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge private source and decoded curve inputs
+        if: always()
+        run: sudo rm -rf source-zip2 "$RUNNER_TEMP/gfx113-source" gfxlab/posewitness113/private-inputs
