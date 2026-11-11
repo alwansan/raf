@@ -12,3 +12,5 @@ previous_ci: https://github.com/alwansan/raf/actions/runs/42933224573 success at
 validation: code and tests committed; new CI outcome not yet confirmed. No Android device run, no native input fix, no claim of click success.
 device_baseline: owner entered/saved/reopened local world with artifact 42058825739; preserve original .rgd, keyboard, audio, Settings. T5 owns Resolution and buttons placement.
 next: inspect fresh classifier CI; then instrument real MotionEvent/Unity/Raft stages under pointer capture with sanitized session/frame markers, and test physical LEFT/RIGHT/MIDDLE/wheel + Raft cursor on device. Do not duplicate running CI.
+
+CI verified: https://github.com/alwansan/raf/actions/runs/42940365685 completed success on test commit 037397c7. Source-only Python regression, not device proof.
