@@ -7,8 +7,8 @@ SOURCE = Path(__file__).resolve().parents[1] / "android-port/Runtime/Platform/An
 
 class RightDiagnosticSafeAreaTests(unittest.TestCase):
     def test_right_buttons_remain_safe_at_short_heights(self):
-        for safe_height in (720, 360, 224, 180, 120):
-            factor = max(.1, min(1., safe_height / 224.))
+        for safe_height, safe_width in ((720, 1920), (360, 640), (224, 166), (180, 100), (120, 60), (12, 8)):
+            factor = max(0., min(1., safe_height / 224., safe_width / 166.))
             # top of final button + its scaled height
             self.assertLessEqual((174 + 42) * factor, safe_height)
             self.assertGreaterEqual((126 - 78 - 42) * factor, 0)
@@ -19,7 +19,9 @@ class RightDiagnosticSafeAreaTests(unittest.TestCase):
         self.assertIn("FitRightButtonsToSafeArea(safe);", source)
         self.assertIn("private readonly RectTransform[] rightButtons = new RectTransform[3]", source)
         self.assertIn("RightButtonOffsets = { 78f, 126f, 174f }", source)
-        self.assertIn("safe.height * 720f / Screen.height", source)
+        self.assertIn("safeWidth / 166f", source)
+        self.assertIn("safeHeight / 224f", source)
+        self.assertIn("Mathf.Clamp01", source)
         self.assertIn("child.localScale = new Vector3(factor, factor, 1f)", source)
         self.assertIn("child.anchoredPosition = new Vector2(-8f * factor, -RightButtonOffsets[i] * factor)", source)
         self.assertIn("var child = rightButtons[i];", source)
