@@ -2581,5 +2581,41 @@
     "original_animation_restored": false,
     "pc_adreno_pixel_parity": false,
     "phase_closed": false
+  },
+  "latest_gfx101_native_gles_qualifier": {
+    "experiment": "GFX-MULTI-101",
+    "role": "GFX-LAB",
+    "session_id": "20261111-GFX-chat-gles-native-qualifier-69",
+    "session": "memory/sessions/20261111-GFX-chat-gles-native-qualifier-69.md",
+    "branch": "experiment/android-graphics-rootcause",
+    "scope": "Direct GLES3 native extension query, four synthetic interpolation GPU readbacks and Android MediaStore ZIP export",
+    "source_directory": "gfxlab/android-gles-qualifier-probe",
+    "owner_zip_safe_auditor": "gfxlab/tools/gfx101_owner_zip_audit.py",
+    "test_files": [
+      "gfxlab/tests/test_gfx101_gles_capability.py",
+      "gfxlab/tests/test_gfx101_owner_zip_audit.py"
+    ],
+    "synthetic_contracts_planned": 15,
+    "ci_workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi101-gles-native-interpolation-apk.yml",
+    "workflow_change_commit": "73f8ca3be73ceeac404ad09ea8f54a688d3c56f4",
+    "ci_status": "UNVERIFIED_NO_GENERAL_RUN_LISTING",
+    "signed_apk": "NOT_CONFIRMED",
+    "owner_device_zip": "NOT_RUN",
+    "glsl_es_core_noperspective": false,
+    "optional_vendor_extension": "GL_NV_shader_noperspective_interpolation",
+    "extension_present_on_owner_adreno": "UNKNOWN",
+    "controls": [
+      "Smooth",
+      "Flat",
+      "AffineEmulated"
+    ],
+    "optional_native_case": "NativeNoPerspective",
+    "output_folder": "/storage/emulated/0/Download/Games/cl/test/g/",
+    "first_phase_status": "OPEN",
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
+    "source_material_to_gpu_binding_verified": false,
+    "pc_device_pixel_parity": false,
+    "phase_closed": false
   }
 }
