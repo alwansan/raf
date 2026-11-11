@@ -1,4 +1,4 @@
-name: GFX141 original 9-case private Android APK build
+name: GFX142 encrypted original Raft Android diagnostic APK owner delivery
 on:
   push:
     branches: [experiment/android-graphics-rootcause]
@@ -7,6 +7,9 @@ on:
       - 'gfxlab/tools/gfx141_stage_original.py'
       - 'gfxlab/tools/gfx141_compose_original.py'
       - 'gfxlab/tools/gfx141_compile_shell.sh'
+      - 'gfxlab/tools/gfx142_owner_envelope.py'
+      - 'gfxlab/tests/test_gfx142_owner_envelope.py'
+      - 'gfxlab/delivery/gfx142-owner-public-cert.pem'
   workflow_dispatch:
 permissions:
   contents: read
@@ -65,20 +68,24 @@ jobs:
           printf 'LD_LIBRARY_PATH=%s\n' "$tool_root/root/usr/lib/x86_64-linux-gnu" >> "$GITHUB_ENV"
           python -m pip install --disable-pip-version-check UnityPy==1.25.4 Pillow==11.3.0 numpy==2.3.5
           test "$(git -C source-zip2 rev-parse HEAD)" = '15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+      - name: Test authenticated encryption and tamper rejection without source data
+        run: python -m unittest -v gfxlab.tests.test_gfx142_owner_envelope
       - name: Build the actual source-free Android runner shell
         run: bash gfxlab/tools/gfx141_compile_shell.sh
       - name: Reconstruct original Shader48 models textures and 51 Mesa references privately
         run: python -m gfxlab.tools.gfx141_stage_original --zip2 source-zip2 --private "$RUNNER_TEMP/gfx141-private"
-      - name: Sign original private APK and attest integrity (no public APK)
+      - name: Sign original private APK then encrypt for owner (never publish plaintext APK)
         shell: bash
         run: |
           set -euo pipefail
           tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
-          python -m gfxlab.tools.gfx141_compose_original --private "$RUNNER_TEMP/gfx141-private" --shell out/GFX124-unsigned-shell.apk --tools "$tools" --safe out/gfx141-safe.json
+          python -m gfxlab.tools.gfx141_compose_original --private "$RUNNER_TEMP/gfx141-private" --shell out/GFX124-unsigned-shell.apk --tools "$tools" --safe out/gfx141-safe.json --encryption-cert gfxlab/delivery/gfx142-owner-public-cert.pem --encrypted-output out/GFX142-Original-Raft-Android-Test.apk.cms
       - uses: actions/upload-artifact@v4
         with:
-          name: GFX141-private-original-safe-attestation-NO-APK
-          path: out/gfx141-safe.json
+          name: GFX142-ENCRYPTED-OWNER-DELIVERY-NO-PLAINTEXT
+          path: |
+            out/GFX142-Original-Raft-Android-Test.apk.cms
+            out/gfx141-safe.json
           if-no-files-found: error
           retention-days: 7
       - name: Purge original source and fixtures from runner

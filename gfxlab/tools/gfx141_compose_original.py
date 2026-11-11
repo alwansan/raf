@@ -18,7 +18,9 @@ def load(path):
     return json.loads(path.read_text())
 
 
-def compose(private, shell, tools, safe):
+def compose(private, shell, tools, safe, *, encryption_cert=None, encrypted_output=None):
+    if (encryption_cert is None) != (encrypted_output is None):
+        raise ValueError('Encryption certificate and encrypted output must be provided together')
     work = private
     original = load(work / "m02-mesa.json")
     models = load(work / "model-stage.json")
@@ -94,8 +96,14 @@ def compose(private, shell, tools, safe):
         "public_original_assets_uploaded": False, "signed_apk_uploaded": False,
         "android_device_verified": False, "phase_closed": False
     }
+    if encryption_cert is not None:
+        from gfxlab.tools.gfx142_owner_envelope import encrypt_private_apk
+        report.update(encrypt_private_apk(signed, encryption_cert, encrypted_output))
+        report['encrypted_apk_artifact_prepared'] = True
     safe.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     signed.unlink()
+    unsigned.unlink(missing_ok=True)
+    aligned.unlink(missing_ok=True)
     print(json.dumps(report, sort_keys=True))
     return report
 
@@ -104,5 +112,8 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     for key in ("private", "shell", "tools", "safe"):
         p.add_argument("--" + key, type=Path, required=True)
+    p.add_argument('--encryption-cert', type=Path)
+    p.add_argument('--encrypted-output', type=Path)
     args = p.parse_args()
-    compose(args.private, args.shell, args.tools, args.safe)
+    compose(args.private, args.shell, args.tools, args.safe,
+            encryption_cert=args.encryption_cert, encrypted_output=args.encrypted_output)

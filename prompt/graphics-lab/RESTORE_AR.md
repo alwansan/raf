@@ -1,3 +1,14 @@
+## GFX142 — 11 Nov 2026, source-original private APK encrypted delivery (CI PENDING)
+
+Session `20261111-GFX-chat-encrypted-owner-delivery-99`, `origin=chat`. Write ONLY `experiment/android-graphics-rootcause`; do not modify T-team branches, main, zip2.
+
+GFX141 already generated and v3-signed the original 9-case/51-reference APK in [verified Actions run 43077708276](https://github.com/alwansan/raf/actions/runs/43077708276), but its private APK was destroyed before owner delivery. Because alwansan/raf is **public**, GFX142 encrypts the private APK with **AES-256-GCM CMS AuthEnvelopedData** to a one-time RSA-3072 public X.509 certificate before uploading anything, and publishes only the encrypted `.apk.cms` envelope plus source-safe report. The RSA private key has never been committed, uploaded or provided to Actions. Tests verify synthetic authenticated-encryption round-trip, tamper rejection, bad inputs. This conversation's private working key can decrypt the returned artifact, enabling private user download of the exact signed APK after hash and ZIP verification. The CI job cannot decrypt it, and the default GFX141 plaintext APK path is removed before artifact upload.
+
+Current status **CI PENDING**; no new downloadable APK at the time of this session entry. Check Actions for new GFX142 workflow, download encrypted artifact, decrypt locally and match `apk_sha256`, verify 235 fixtures, signed package, 9 cases and 51 references before offering owner APK; if any failure, mark it OPEN. Device Adreno runtime, Unity pass selection, true G-buffer, source Animator and game PC pixels remain OPEN. `phase_closed=false`.
+
+
+---
+
 ## 11 نوفمبر 2026 — GFX141 VERIFIED: بناء APK أصلي موقّع دون نشر موارد Raft
 
 جلسة `20261111-GFX-chat-original-batch-98`، الهوية `GFX-LAB`، `origin=chat`، وفرع الكتابة الوحيد `experiment/android-graphics-rootcause`.
