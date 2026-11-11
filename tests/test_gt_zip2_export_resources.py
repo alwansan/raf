@@ -145,9 +145,9 @@ class RestoreIntoInputTests(unittest.TestCase):
                         for i in range(40)})
         records.update({"Raft_Data/sharedassets"+str(i)+".assets.resS":("plain",1,"0"*64)
                         for i in range(8)})
-        from scripts.gt_zip2_export_resources import ENGINE_FILES
-        records.update({name:("plain",1,"0"*64) for name in ENGINE_FILES})
-        self.assertEqual(len(choose(records,"full")),132)
+        from scripts.gt_zip2_export_resources import ENGINE_FILES, RUNTIME_INPUT_FILES
+        records.update({name:("plain",1,"0"*64) for name in ENGINE_FILES + RUNTIME_INPUT_FILES})
+        self.assertEqual(len(choose(records,"full")),134)
         del records["Raft_Data/level0.resS"]
         with self.assertRaisesRegex(SourceFailure,"unexpected_full_graphics"):
             choose(records,"full")
