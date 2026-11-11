@@ -1,0 +1,125 @@
+{
+  "experiment": "GFX114",
+  "models_checked": 15,
+  "vertices_checked": 24990,
+  "failing_vertices": 0,
+  "max_absolute_error": 0.0001220703125,
+  "gpu_source_position_match": true,
+  "phase_closed": false,
+  "raster_cases": [
+    {
+      "pose": "C0P0",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P1",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P2",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P3",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C0P4",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P0",
+      "intersection": 2218,
+      "union": 2218,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P1",
+      "intersection": 2158,
+      "union": 2158,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P2",
+      "intersection": 2032,
+      "union": 2032,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P3",
+      "intersection": 1935,
+      "union": 1935,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C1P4",
+      "intersection": 1903,
+      "union": 1903,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P0",
+      "intersection": 2311,
+      "union": 2311,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P1",
+      "intersection": 2207,
+      "union": 2207,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P2",
+      "intersection": 2224,
+      "union": 2224,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P3",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    },
+    {
+      "pose": "C2P4",
+      "intersection": 2220,
+      "union": 2220,
+      "different_pixels": 0,
+      "iou": 1.0
+    }
+  ],
+  "min_iou": 1.0,
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "unique_exports": 1,
+  "apk_sha256": "afa5bffad854e696d16c95426ead5bcfdc19d5eadd5a072de0b7313b7cf1a297",
+  "archive_sha256": [
+    "4f8662c35dd1640accc0aa272c3deb0ae83a07427c4cbe742915c9aa5afe43df",
+    "e67b5f4b5d87c084a4c2e03e09a342997c0eb9cbd5c9c034b5bb22516e3180fa"
+  ]
+}

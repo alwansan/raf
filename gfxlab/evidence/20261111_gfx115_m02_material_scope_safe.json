@@ -1,0 +1,49 @@
+{
+  "model": "M02",
+  "material_slots": 1,
+  "uv0_vertices": 1666,
+  "normals": 1666,
+  "tangents": 1666,
+  "texture_roles": {
+    "normal": {
+      "format": "DXT5",
+      "width": 1024,
+      "height": 1024,
+      "mips": 11,
+      "source_color_space_code": 0,
+      "source_texture_settings": {
+        "m_FilterMode": 1,
+        "m_Aniso": 1,
+        "m_WrapU": 0,
+        "m_WrapV": 0
+      }
+    },
+    "basecolor": {
+      "format": "DXT5",
+      "width": 1024,
+      "height": 1024,
+      "mips": 11,
+      "source_color_space_code": 1,
+      "source_texture_settings": {
+        "m_FilterMode": 1,
+        "m_Aniso": 1,
+        "m_WrapU": 0,
+        "m_WrapV": 0
+      }
+    },
+    "metallic": {
+      "format": "DXT5",
+      "width": 1024,
+      "height": 1024,
+      "mips": 11,
+      "source_color_space_code": 1,
+      "source_texture_settings": {
+        "m_FilterMode": 1,
+        "m_Aniso": 1,
+        "m_WrapU": 0,
+        "m_WrapV": 0
+      }
+    }
+  },
+  "phase_closed": false
+}
