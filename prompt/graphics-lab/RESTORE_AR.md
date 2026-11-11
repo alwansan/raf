@@ -1,3 +1,11 @@
+## 12 Nov 2026 — GFX149 same-mode Adreno/Mesa Cull comparison verified
+
+Session `20261112-GFX-chat-cull-owner-acceptance-108`, origin=chat. Write only `experiment/android-graphics-rootcause`. Both GFX148 owner exports audited against signed APK 884c4a81ae216bb957dde1f08ad34659ea247dea2378f90333adc6fbdb3cca02. All three PNG and summary payloads are identical between the two exports. Adreno 730 and Mesa matched all 3,301 coverage pixels in each same-mode comparison. Off/Back/Front RGB>10 outliers: 58/2/2. Mean absolute RGB channel errors: 0.817530/0.253459/0.085227. Max errors: 59/58/59. Off's 58 outliers all land on CPU nearest-depth ties. The Back and Front residuals land on zero nearest-depth ties in their respective winding subsets. Coverage and the bulk of the coplanar hotspot are resolved in this controlled case. Front selects a different set of faces and cannot be selected on its lower inter-driver MAE. Back matches the serialized fallback and is a validated controlled comparison, not established Unity runtime Cull. Residual cause is unresolved.
+
+Safe report `gfxlab/evidence/20261112_gfx149_owner_same_mode_cull_safe.json`. No repeat phone test or APK required for this differential. Remaining: prove actual Unity runtime states/pass selection, native Animator and matched original PC scene. Keep prior nine-case GFX142 baseline unchanged. `phase_closed=false`.
+
+---
+
 ## 12 Nov 2026 — GFX148 signed targeted Adreno Cull test ready
 
 Session `20261112-GFX-chat-owner-cull-107`, origin=chat, writable branch `experiment/android-graphics-rootcause` only. Both attached GFX124 archives passed the GFX143 auditor against the exact signed GFX142 source APK. Nine cases and 51 captures per archive, same coverage across all references, ten exact RGBA captures. Older GFX120 attachments match the previously verified archive hashes. Windows GFX136 Deferred run 43060483182 succeeded with 2,008 covered pixels and 4/12 exact RGBA targets against Mesa.

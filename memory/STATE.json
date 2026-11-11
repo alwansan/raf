@@ -3242,7 +3242,19 @@
     "private_owner_file": "libfile_2042c475373c819181f3f3fa5b133d9f",
     "mesa_three_references_exact": true,
     "signed": true,
-    "owner_pending": true,
+    "owner_pending": false,
+    "phase_closed": false
+  },
+  "latest_gfx149": {
+    "owner_exports_verified": 2,
+    "coverage_exact_all_modes": true,
+    "covered_pixels": 3301,
+    "gt10_off_back_front": [
+      58,
+      2,
+      2
+    ],
+    "unity_effective_cull_verified": false,
     "phase_closed": false
   }
 }

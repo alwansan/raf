@@ -1,0 +1,65 @@
+{
+  "experiment": "GFX149",
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "matching_cull_modes": {
+    "off": {
+      "covered_pixels": 3301,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 9903,
+      "rgb_absolute_error_sum": 8096,
+      "max_rgb_channel_error": 59,
+      "mean_rgb_channel_error": 0.8175300414015955,
+      "rgb_error_above10_pixels": 58
+    },
+    "back": {
+      "covered_pixels": 3301,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 9903,
+      "rgb_absolute_error_sum": 2510,
+      "max_rgb_channel_error": 58,
+      "mean_rgb_channel_error": 0.2534585479147733,
+      "rgb_error_above10_pixels": 2
+    },
+    "front": {
+      "covered_pixels": 3301,
+      "coverage_different_pixels": 0,
+      "rgb_channels": 9903,
+      "rgb_absolute_error_sum": 844,
+      "max_rgb_channel_error": 59,
+      "mean_rgb_channel_error": 0.08522669898010704,
+      "rgb_error_above10_pixels": 2
+    }
+  },
+  "unity_effective_cull_verified": false,
+  "phase_closed": false,
+  "exports_byte_identical": true,
+  "cpu_outlier_classification": {
+    "off": {
+      "pixels": 58,
+      "cpu_nearest_depth_ties": 58,
+      "cpu_single_hit": 0,
+      "cpu_no_hit": 0,
+      "cpu_nearest_edge_weight_below_0_001": 0
+    },
+    "back": {
+      "pixels": 2,
+      "cpu_nearest_depth_ties": 0,
+      "cpu_single_hit": 1,
+      "cpu_no_hit": 0,
+      "cpu_nearest_edge_weight_below_0_001": 0
+    },
+    "front": {
+      "pixels": 2,
+      "cpu_nearest_depth_ties": 0,
+      "cpu_single_hit": 1,
+      "cpu_no_hit": 0,
+      "cpu_nearest_edge_weight_below_0_001": 0
+    }
+  },
+  "apk_sha256": "884c4a81ae216bb957dde1f08ad34659ea247dea2378f90333adc6fbdb3cca02",
+  "owner_zip_sha256": [
+    "0f9b9db2d932afc2a26a5d7c2925e4ab0acde01ab82bc54b7b4a3dda9ab18ecd",
+    "36ad3e811482ed83981a77d23407d819c50d6128198c613fd4b633280bf574c5"
+  ]
+}
