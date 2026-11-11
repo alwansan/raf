@@ -1,3 +1,9 @@
+## نقطة الاستعادة الحالية — بعد إغلاق المعايرة
+
+ابدأ من [رسالة الاستعادة القصيرة](RESUME_AR.md) و[مسارات العمل التالية](NEXT_AR.md). سُلّم الجرد والدمج الواسع إلى [GT](https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/README.md). اختبار GFX148 على Adreno مكتمل، ومعايرة المرحلة الأولى مغلقة. السجل أدناه يحتفظ بالحالة التاريخية لكل تجربة.
+
+---
+
 ## 12 Nov 2026 — Phase one closed for the calibrated restoration method
 
 Session `20261112-GFX-chat-method-acceptance-113`, origin=chat. Write only `experiment/android-graphics-rootcause`. The phase-one scope clarified by the owner is a reproducible original mesh/material/texture/color/Shader48/shadow method validated on M00–M05, before handing off bulk restoration.

@@ -1,3 +1,9 @@
+## الحالة الحالية — بعد تسليم المعايرة إلى GT
+
+[الاستعادة المختصرة](../prompt/graphics-lab/RESUME_AR.md) · [العمل التالي](../prompt/graphics-lab/NEXT_AR.md) · [جلسة الاستعادة](../memory/sessions/20261112-GFX-chat-post-calibration-restore-114.md). الحالة السابقة في السجل تاريخية.
+
+---
+
 ## 12 Nov 2026 — Phase one closed for the calibrated restoration method
 
 Session `20261112-GFX-chat-method-acceptance-113`, origin=chat. Write only `experiment/android-graphics-rootcause`. The phase-one scope clarified by the owner is a reproducible original mesh/material/texture/color/Shader48/shadow method validated on M00–M05, before handing off bulk restoration.

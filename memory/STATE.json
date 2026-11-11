@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106",
-  "latest_session_path": "memory/sessions/20261111-GFX-chat-Mesa-Back-vs-owner-Adreno-106.md",
-  "status": "GFX1472_OWNER_ADRENO_OFF_VS_VERIFIED_MESA_CULLBACK_DIFF_WORSE_58_TO_135_TARGETED_ADRENO_BACK_TEST_REQUIRED",
+  "latest_session": "20261112-GFX-chat-post-calibration-restore-114",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-post-calibration-restore-114.md",
+  "status": "PHASE_ONE_CALIBRATION_CLOSED_POST_HANDOFF_LAB_READY",
   "issues": [
     {
       "id": "RENDER-002",
@@ -3311,5 +3311,13 @@
     "owner_exports": 3,
     "bulk_restoration_complete": false,
     "worker_created": false
+  },
+  "next_action": "Read live GT inventory and blockers. If none need an isolated experiment, validate effective Unity pass selection on a scoped sample.",
+  "resume_path": "prompt/graphics-lab/RESUME_AR.md",
+  "next_work_path": "prompt/graphics-lab/NEXT_AR.md",
+  "gt_handoff": {
+    "branch": "feature/android-native-port",
+    "path": "clients/GT/README.md",
+    "bootstrap_sha": "d53f044d8f80e139f9a3a27e10c14bd04e3c90cb"
   }
 }
