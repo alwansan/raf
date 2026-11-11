@@ -1,3 +1,9 @@
+## GFX100 owner GFX098 evidence checkpoint — 11 Nov 2026
+
+`g.zip` owner archive SHA256 `60b6cb3e13ea1da7808128311696e9a906655340ea6a2537ad9c9db8d50faa69` was privately audited with 5 nested ZIP CRCs, 3 sessions, 227 events,147 snapshots, 0 recorded errors/warnings/drops, four 12-image six-model matrices and 48/48 PNG-to-JSON SHA matches. No raw images/logs or ShaderCache entries uploaded. GFX041 original-free synthetic interpolation executed twice, but Linear and NoPerspective saved PNGs byte-identical, 2 status `DIAGNOSTIC_NATIVE_QUALIFIER_COLLAPSED_TO_SMOOTH`; not evidence Adreno faulty. Source-safe evidence `gfxlab/evidence/20261111_gfx100_gfx098_owner_safe_counts.json`, session `memory/sessions/20261111-GFX-chat-owner-gfx098-archive-68.md`, new bounded verifier + synthetic tests + workflow (CI result pending). GFX099 PC Standard recompilation was already verified, but original Shader48 GPU, rig and PC vs phone parity still **OPEN**. `originalShaderRestored=false`, `phase_closed=false`. Read `gfxlab/PHASE_ONE_CURRENT_PLAN_AR.md` first.
+
+---
+
 ## GFX094 delivered — actual APK verified, owner Adreno test pending
 
 [CI42924333794](https://github.com/alwansan/raf/actions/runs/42924333794) completed SUCCESS, including signing, APK ZIP/asset hashes and private-source purge. Immutable build SHA `66b2968673f410cbf58d5b255216c5e3c9c175ef`.
