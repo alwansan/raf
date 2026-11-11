@@ -14,6 +14,7 @@ from types import SimpleNamespace
 
 from gfxlab.tools.original_model_probe import ZIP2_SHA,ptr,stage_originals
 from gfxlab.tools.multi_model_transport import all_model_entries
+from gfxlab.tools.multi_source_select import selected_five
 from gfxlab.tools.shears_provenance_probe import resolve_pptr
 
 MAX_BONES=512
@@ -53,6 +54,11 @@ def inspect_rig_source(entry,types,externals):
         if obj.type.name!="SkinnedMeshRenderer":continue
         d=obj.read_typetree(check_read=False)
         if ptr(d.get("m_Mesh"))==(0,mesh_id):
+            # Original M01/M04 meshes are shared across multiple Renderers.
+            # Require the *source selected* GameObject PPtr to avoid guessing.
+            go_id=entry.get("game_object_pid")
+            if go_id is not None and ptr(d.get("m_GameObject"))!=(0,go_id):
+                continue
             candidates.append(d)
     counts=Counter()
     counts["source_bones_expected"]=entry["source_bones"]
@@ -132,6 +138,19 @@ def audit(stage):
     entries,types,_=all_model_entries(stage)
     if [e["id"] for e in entries]!=["M00","M01","M02","M03","M04","M05"]:
         raise ValueError("GFX106_SOURCE_MODEL_SELECTION_DRIFT")
+    # Recover the same typed source GameObject identity that selected_five
+    # authenticated earlier. Never infer from names, counts, or mesh reuse.
+    private,_=selected_five(stage)
+    selected=private.get("selected",[])
+    if len(selected)!=5:raise ValueError("GFX106_SOURCE_FIVE_SELECTION_DRIFT")
+    for i,row in enumerate(selected,1):
+        entry=entries[i]
+        if (row.get("owner"),row.get("mesh_pid"))!=(entry["owner"],entry["mesh_pid"]):
+            raise ValueError("GFX106_SOURCE_RENDERER_SELECTION_IDENTITY_MISMATCH")
+        go=row.get("game_object_pid")
+        if type(go)!=int or go<=0:
+            raise ValueError("GFX106_SOURCE_GAME_OBJECT_ID_INVALID")
+        entry["game_object_pid"]=go
     # All references are resolved only among pinned/loaded source owners.
     import UnityPy
     externals={}
