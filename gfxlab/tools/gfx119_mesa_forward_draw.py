@@ -29,6 +29,7 @@ parser.add_argument("--shadow", type=Path)
 parser.add_argument("--shadow-portable", type=Path)
 parser.add_argument("--deferred", type=Path)
 parser.add_argument("--deferred-portable", type=Path)
+parser.add_argument("--cull-diagnostic", action="store_true", help="M03-1 source-original safe Off/Back/Front GPU differential")
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -315,6 +316,27 @@ report = dict(experiment="GFX119", renderer=renderer, triangles=len(indices)//6,
               bound_combined_samplers=bound_samplers, rgba_sha256=hashlib.sha256(lit.tobytes()).hexdigest(),
               controlled_fixture=True, original_translated_forward_draw_completed=True,
               original_game_pixel_parity=False, android_device_verified=False, phase_closed=False)
+if args.cull_diagnostic:
+    # The baseline was drawn with GL_CULL_FACE disabled. The signed original
+    # M03-1 material/mesh/shaders are unchanged; compare only raster state.
+    # OpenGL ES front face: GL_CCW 0x0901; GL_CULL_BACK 0x0405,
+    # GL_CULL_FRONT 0x0404. The Unity runtime state is not inferred here.
+    from gfxlab.tools.gfx147_cull_gpu_report import summarize
+    call("FrontFace", 0x0901)
+    call("Enable", 0x0b44)
+    try:
+        call("CullFace", 0x0405)
+        cull_back, _, _ = draw(True)
+        repeat_back, _, _ = draw(True)
+        call("CullFace", 0x0404)
+        cull_front, _, _ = draw(True)
+    finally:
+        call("Disable", 0x0b44)
+    repeat_off, _, _ = draw(True)
+    check("GFX147 Cull state restoration")
+    report["cull_diagnostic"] = summarize(
+        lit, cull_back, cull_front, repeat_off, repeat_back)
+
 def write_portable(folder, sampler_bindings, *, include_textures):
     folder.mkdir(mode=0o700, parents=True, exist_ok=False)
     for name in ("probe.vert", "probe.frag", "mesh.bin", "indices.bin"):

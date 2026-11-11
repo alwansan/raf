@@ -1,0 +1,130 @@
+name: GFX147 original M03-1 Mesa GPU Cull Off Back Front comparison
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi147-mesa-cull.yml'
+      - 'gfxlab/tools/gfx119_mesa_forward_draw.py'
+      - 'gfxlab/tools/gfx147_cull_gpu_report.py'
+      - 'gfxlab/tests/test_gfx147_cull_gpu_report.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx147-original-m03-cull-gpu
+  cancel-in-progress: false
+jobs:
+  mesa-private-original:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      EGL_PLATFORM: surfaceless
+      LIBGL_ALWAYS_SOFTWARE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned source-free numpy and PIL
+        run: python -m pip install --disable-pip-version-check numpy==2.3.5 Pillow==11.3.0
+      - name: Run eight source-free Cull metrics and state restoration regressions
+        run: python -m unittest -v gfxlab.tests.test_gfx147_cull_gpu_report
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Verify source pin and install pinned original Shader48 SPIR-V tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = '15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libegl1 libgles2 libgl1-mesa-dri
+          tool_root="$RUNNER_TEMP/gfx147-tools"
+          mkdir -p "$tool_root"
+          while read -r path sha; do
+            file="$tool_root/$(basename "$path")"
+            curl -fsSL --max-time 60 --retry 2 "https://deb.debian.org/debian/$path" -o "$file"
+            printf '%s  %s\n' "$sha" "$file" | sha256sum --check
+            dpkg-deb -x "$file" "$tool_root/root"
+          done < gfxlab/toolchains/debian13-shader-tools-amd64.sha256
+          printf '%s\n' "$tool_root/root/usr/bin" >> "$GITHUB_PATH"
+          printf 'LD_LIBRARY_PATH=%s\n' "$tool_root/root/usr/lib/x86_64-linux-gnu" >> "$GITHUB_ENV"
+          python -m pip install --disable-pip-version-check UnityPy==1.25.4
+      - name: Prepare original M03-1 Shader48 geometry and texture mip chain privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from gfxlab.tools.original_model_probe import stage_originals,ZIP2_SHA
+          from gfxlab.tools.gfx123_model_forward_prepare import prepare
+          work=Path(os.environ["RUNNER_TEMP"])/"gfx147-private"
+          work.mkdir(mode=0o700)
+          source=Path("source-zip2")
+          stage=stage_originals(source,work/"source")
+          report=prepare(source,stage,work/"models")
+          slots={(s["model"],s["slot"]) for s in report["slots"]}
+          if report["source_sha"] != ZIP2_SHA or not {("M00",0),("M03",0),("M03",1)} <= slots:
+              raise ValueError("Original private M03-1 fixture/source identity drift")
+          print(json.dumps({"original_source_pinned":True,"models":{"M00":1,"M03":2},
+                            "all_private_geometry_and_mips_prepared":True}))
+          PY
+      - name: Execute original Shader48 M03-1 Mesa real GPU Cull Off Back Front
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/gfx147-private/models/M03-1"
+          python -m gfxlab.tools.gfx119_mesa_forward_draw \
+            --private "$root" --textures "$root" --safe out/gfx147-mesa-source-safe.json \
+            --cull-diagnostic
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("out/gfx147-mesa-source-safe.json")
+          report=json.loads(p.read_text())
+          diag=report["cull_diagnostic"]
+          if not report["original_translated_forward_draw_completed"] or diag["experiment"]!="GFX147":
+              raise ValueError("Original M03 shader did not render")
+          if diag["original_source_M03_1_coverage"]!=3301 or not diag["off_repeat_exact"] or not diag["back_repeat_exact"]:
+              raise ValueError("Original M03 Cull baseline is not stable")
+          if not diag["back_vs_off"]["coverage_mask_exact"]:
+              raise ValueError("Cull Back lost source original geometry")
+          if diag["actual_Adreno_CullBack_pixel_parity_verified"] is not False:
+              raise ValueError("Do not infer Adreno parity from Mesa-only run")
+          print(json.dumps({"experiment":"GFX147","original_GPU_Mesa_draw_completed":True,
+                            "off_covered_pixels":3301,
+                            "back_covered_pixels":diag["back_vs_off"]["coverage_pixels"],
+                            "front_covered_pixels":diag["front_vs_off"]["coverage_pixels"],
+                            "back_RGB_changed_pixels":diag["back_vs_off"]["covered_rgb_changed_pixels"],
+                            "front_RGB_changed_pixels":diag["front_vs_off"]["covered_rgb_changed_pixels"],
+                            "phase_closed":False}))
+          PY
+      - name: Upload only safe original Mesa colour delta aggregate (no raw or source assets)
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX147-M03-1-original-Mesa-Cull-safe-summary-NO-ASSETS
+          path: out/gfx147-mesa-source-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge all original geometry, shaders, textures, colour captures, and toolchain
+        if: always()
+        shell: bash
+        run: rm -rf -- source-zip2 "$RUNNER_TEMP/gfx147-private" "$RUNNER_TEMP/gfx147-tools"
