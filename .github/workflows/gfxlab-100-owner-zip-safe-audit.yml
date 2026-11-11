@@ -1,0 +1,32 @@
+name: gfxlab-100-owner-zip-safe-audit
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - "gfxlab/tools/unified098_owner_zip_audit.py"
+      - "gfxlab/tests/test_unified098_owner_zip_audit.py"
+      - ".github/workflows/gfxlab-100-owner-zip-safe-audit.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-100-owner-zip-safe-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-negative-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Source-free regression
+        run: python -m unittest -v gfxlab.tests.test_unified098_owner_zip_audit
+      - name: Assert no private owner archives are staged
+        shell: bash
+        run: |
+          if git ls-files | grep -E '(^|/)(GFXLAB-ALL-TEST-LOGS-.*\.zip|g\.zip|UnityShaderCache/|.*\.apk$)' ; then
+            echo "Unexpected private test archive or binary in tracked files" >&2
+            exit 1
+          fi
