@@ -285,6 +285,7 @@ public final class MainActivity extends Activity {
         final String folder, textureFolder;
         final JSONArray blocks, samplers;
         final JSONObject layouts;
+        final boolean sourceUv1;
         final List<Integer> buffers=new ArrayList<>();
         final List<Integer> textures=new ArrayList<>();
         int program, vao, indexCount, vertexBuffer, meshBytes;
@@ -296,6 +297,7 @@ public final class MainActivity extends Activity {
             folder=id+"/";
             textureFolder=textureSource==null ? folder : textureSource.textureFolder;
             JSONObject scene=new JSONObject(new String(asset(folder+"scene.json"),StandardCharsets.UTF_8));
+            sourceUv1=scene.optBoolean("source_uv1",false);
             blocks=scene.getJSONArray("blocks");
             samplers=scene.getJSONArray("samplers");
             layouts=textureSource==null ? scene.optJSONObject("textures") : textureSource.layouts;
@@ -327,7 +329,15 @@ public final class MainActivity extends Activity {
                 glVertexAttribPointer(row[0],row[1],GL_FLOAT,false,48,row[2]);
                 glEnableVertexAttribArray(row[0]);
             }
-            glVertexAttrib2f(3,0,0);
+            if (sourceUv1) {
+                byte[] uv1=asset(folder+"uv1.bin");
+                if (uv1.length!=mesh.length/48*8) throw new IllegalStateException("Wrong UV1 size");
+                addBuffer(GL_ARRAY_BUFFER,uv1);
+                glVertexAttribPointer(3,2,GL_FLOAT,false,8,0);
+                glEnableVertexAttribArray(3);
+            } else {
+                glVertexAttrib2f(3,0,0);
+            }
             addBuffer(GL_ELEMENT_ARRAY_BUFFER,indices);
         }
 

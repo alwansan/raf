@@ -176,7 +176,10 @@ struct Draw {
         if (mesh.size()%48 || indices.size()%6) throw std::runtime_error("Wrong mesh shape");
         index_count=static_cast<UINT>(indices.size()/2);
         auto vb=buffer(mesh,D3D11_BIND_VERTEX_BUFFER);
-        auto uv1=buffer(Bytes(mesh.size()/48*8,0),D3D11_BIND_VERTEX_BUFFER);
+        const auto uv=dir/"uv1.bin";
+        const auto uv_bytes=std::filesystem::exists(uv) ? read(uv) : Bytes(mesh.size()/48*8,0);
+        if (uv_bytes.size()!=mesh.size()/48*8) throw std::runtime_error("Invalid source UV1 stream");
+        auto uv1=buffer(uv_bytes,D3D11_BIND_VERTEX_BUFFER);
         auto ib=buffer(indices,D3D11_BIND_INDEX_BUFFER);
         ID3D11Buffer* streams[]{vb.Get(),uv1.Get()};
         UINT strides[]{48,8}, offsets[]{0,0};

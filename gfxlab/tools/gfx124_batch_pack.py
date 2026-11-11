@@ -26,6 +26,11 @@ def files_for_slot(folder, *, combined, add=False, animated=False, shadow=False,
     files = {"scene.json", "probe.vert", "probe.frag", "mesh.bin", "indices.bin"}
     if not (add or animated or shadow or deferred):
         files.update(f"{name}.rgba" for name in (*ROLES, *CONTROLS))
+    if scene.get("source_uv1", False):
+        uv_size = (folder / "uv1.bin").stat().st_size
+        if uv_size != (folder / "mesh.bin").stat().st_size // 48 * 8:
+            raise ValueError("Wrong UV1 asset size")
+        files.add("uv1.bin")
     for index, row in enumerate(scene["blocks"]):
         for mode in ("light", "dark"):
             name = f"{mode}-{index}.bin"

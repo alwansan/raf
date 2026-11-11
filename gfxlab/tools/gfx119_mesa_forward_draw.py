@@ -291,8 +291,17 @@ def select_slot(folder, textures):
         if system:
             raise ValueError("Unexpected source system vertex attribute")
         if key == ("TEXCOORD",1):
-            # This mesh has no UV1. Its original _UVSec selects UV0.
-            gl("VertexAttrib2f",None,U,F,F)(register,0,0)
+            uv_path = root / "uv1.bin"
+            if uv_path.exists():
+                uv1 = uv_path.read_bytes()
+                if len(uv1) != len(mesh)//48*8 or mask.bit_count() != 2:
+                    raise ValueError("Invalid original UV1 vertex stream")
+                buffer(0x8892, uv1)
+                gl("VertexAttribPointer",None,U,I,U,B,I,P)(register,2,0x1406,0,8,0)
+                call("EnableVertexAttribArray",register)
+                call("BindBuffer",0x8892,vertex_buffer)
+            else:
+                gl("VertexAttrib2f",None,U,F,F)(register,0,0)
             continue
         components, offset = attributes[key]
         if mask.bit_count() != components and key != ("POSITION",0):
@@ -393,8 +402,12 @@ def write_portable(folder, sampler_bindings, *, include_textures):
         (folder/lit_name).write_bytes(data)
         (folder/unlit_name).write_bytes(portable_buffers[False][name])
         block_rows.append(dict(name=name,light=lit_name,dark=unlit_name,bytes=len(data)))
+    if (root / "uv1.bin").exists():
+        shutil.copyfile(root / "uv1.bin",folder / "uv1.bin")
     scene = dict(blocks=block_rows,
                  samplers=[dict(kind=kind, name=name, role=role or "") for kind,name,role in sampler_bindings])
+    if (root / "uv1.bin").exists():
+        scene["source_uv1"] = True
     if texture_layout:
         scene["textures"] = {role: {key: row[key] for key in ("width", "height", "levels", "source_color_space")}
                              for role, row in texture_layout.items()}

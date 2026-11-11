@@ -1,4 +1,4 @@
-"""Prepare the private M00 and M03 controlled Forward fixtures."""
+"""Prepare private source-pinned Forward fixtures for the selected models."""
 import argparse
 import hashlib
 import json
@@ -18,12 +18,16 @@ from gfxlab.tools.shears_provenance_probe import resolve_pptr
 from gfxlab.tools.shears_texture_readiness import select_exact_renderer
 
 
+MODEL_IDS = tuple(f"M{i:02d}" for i in range(6))
+
+
 def source_keys(stage, selection):
     envs, _, owner, renderer = select_exact_renderer(stage)
     externals = [x.path for x in envs[owner].file.externals]
     simple = resolve_pptr(renderer["m_Materials"][0], owner, externals)[1]
-    multi = selection["selected"][2]
-    return {"M00": [simple], "M03": [(m["owner"], m["material_pid"]) for m in multi["materials"]]}
+    models = {label: [(m["owner"], m["material_pid"]) for m in model["materials"]]
+              for label, model in zip(MODEL_IDS[1:], selection["selected"], strict=True)}
+    return {"M00": [simple], **models}
 
 
 def prepare_texture(repo, ref, types, manifest, cache, out):
@@ -46,7 +50,7 @@ def prepare_texture(repo, ref, types, manifest, cache, out):
             "source_sha256": hashlib.sha256(data).hexdigest()}
 
 
-def prepare(repo, stage, out, *, direct3d=False):
+def prepare(repo, stage, out, *, direct3d=False, models=("M00", "M03")):
     if git(repo, "rev-parse", "HEAD").decode().strip() != ZIP2_SHA:
         raise ValueError("Wrong ZIP2 source revision")
     entries, types, _ = all_model_entries(stage)
@@ -57,14 +61,15 @@ def prepare(repo, stage, out, *, direct3d=False):
     rows = []
     for entry in entries:
         label = entry["id"]
-        if label not in keys:
+        if label not in models:
             continue
         mesh = direct_mesh_handler(types[entry["owner"]][entry["mesh_pid"]])
         packed = b"".join(struct.pack("<12f", *position, *normal, *tangent, *uv)
                           for position, normal, tangent, uv in zip(
                               mesh.m_Vertices, mesh.m_Normals, mesh.m_Tangents, mesh.m_UV0, strict=True))
-        if mesh.m_UV1:
-            raise ValueError("Fixture would discard an original UV1 stream")
+        uv1 = mesh.m_UV1
+        if uv1 and (len(uv1) != len(mesh.m_Vertices) or any(len(uv) != 2 for uv in uv1)):
+            raise ValueError("Unsupported original UV1 stream shape")
         for slot, (submesh, triangles, material, key) in enumerate(zip(
                 mesh.src.m_SubMeshes, mesh.get_triangles(), entry["materials"], keys[label], strict=True)):
             folder = out / f"{label}-{slot}"
@@ -76,6 +81,8 @@ def prepare(repo, stage, out, *, direct3d=False):
             report = audit(stage, not direct3d, fixture_consumer(folder, direct3d=direct3d), model=label,
                            material_source=source_data, shader_source=shader)
             (folder / "mesh.bin").write_bytes(packed)
+            if uv1:
+                (folder / "uv1.bin").write_bytes(b"".join(struct.pack("<2f", *uv) for uv in uv1))
             indices = [i + (submesh.baseVertex or 0) for face in triangles for i in face]
             if len(indices) != submesh.indexCount or not 0 <= min(indices) <= max(indices) < len(packed)//48:
                 raise ValueError("Invalid original triangle submesh")
@@ -90,8 +97,10 @@ def prepare(repo, stage, out, *, direct3d=False):
                     struct.pack("<4I", row["width"], row["height"], row["levels"], row["source_color_space"])
                     for row in (textures[role] for role in ("basecolor", "metallic", "normal"))))
             rows.append({"model": label, "slot": slot, "triangles": len(triangles),
-                         "vertices": len(packed)//48, "gles_offline_link_passed": report["gles_offline_link_passed"],
+                         "vertices": len(packed)//48, "source_uv1_vertices": len(uv1 or []), "gles_offline_link_passed": report["gles_offline_link_passed"],
                          "textures": textures, "stages": report["stages"]})
+    if {row["model"] for row in rows} != set(models):
+        raise ValueError("Requested models are missing from the source batch")
     return {"experiment": "GFX123", "source_sha": ZIP2_SHA, "slots": rows, "phase_closed": False}
 
 
@@ -100,6 +109,7 @@ if __name__ == "__main__":
     for name in ("zip2", "stage", "private", "safe"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--direct3d", action="store_true")
+    parser.add_argument("--models", nargs="+", choices=MODEL_IDS, default=("M00", "M03"))
     args = parser.parse_args()
-    result = prepare(args.zip2, args.stage, args.private, direct3d=args.direct3d)
+    result = prepare(args.zip2, args.stage, args.private, direct3d=args.direct3d, models=args.models)
     args.safe.write_text(json.dumps(result, indent=2) + "\n")
