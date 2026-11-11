@@ -21,7 +21,13 @@ EXPECTED_PACKAGE = "com.alwansan.gfx124"
 def checked(args):
     result = subprocess.run([str(x) for x in args], text=True,
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                            check=True)
+                            check=False)
+    if result.returncode:
+        # Only synthetic test paths and a throwaway key are used here.
+        # Expose the underlying SDK diagnostic, not the command arguments.
+        print("GFX140 SDK COMMAND FAILED; output follows (last 6000 characters):")
+        print(result.stdout[-6000:])
+        raise RuntimeError(f"Synthetic SDK tool exited {result.returncode}")
     return result.stdout
 
 
