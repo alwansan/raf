@@ -39,9 +39,10 @@ class CaptureBudgetTests(unittest.TestCase):
     def test_single_small_matching_pass(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            (root / "small.bin").write_bytes(bytes(16))
-            result = self.run_manifest([{"name": "fft", "reference": "small.bin",
-                                         "observed": "small.bin"}], root)
+            (root / "reference.bin").write_bytes(bytes(16))
+            (root / "observed.bin").write_bytes(bytes(16))
+            result = self.run_manifest([{"name": "fft", "reference": "reference.bin",
+                                         "observed": "observed.bin"}], root)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(json.loads(result.stdout)["all_match"])
 
@@ -97,10 +98,11 @@ class CaptureBudgetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
             (root / "nested").mkdir()
-            (root / "nested" / "capture.bin").write_bytes(bytes(16))
+            (root / "nested" / "reference.bin").write_bytes(bytes(16))
+            (root / "nested" / "observed.bin").write_bytes(bytes(16))
             result = self.run_manifest([{"name": "fft",
-                                         "reference": "nested/capture.bin",
-                                         "observed": "nested/capture.bin"}], root)
+                                         "reference": "nested/reference.bin",
+                                         "observed": "nested/observed.bin"}], root)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(json.loads(result.stdout)["all_match"])
 
