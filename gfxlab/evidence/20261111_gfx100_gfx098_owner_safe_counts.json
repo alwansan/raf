@@ -38,5 +38,35 @@
   "pcAdrenoPixelParityVerified": false,
   "phase_closed": false,
   "interpretation": "Original six-model diagnostics and archived logging verified on actual Adreno 730; native noperspective qualifier did not produce distinguishable synthetic capture. This does not establish GPU failure, original Shader48 runtime, skinned hierarchy, PC parity, or full-game renderer success.",
-  "privacy": "Only anonymous aggregate metrics; no private images, program binaries, ShaderCache files, original asset IDs, event streams, or source bytes uploaded."
+  "privacy": "Only anonymous aggregate metrics; no private images, program binaries, ShaderCache files, original asset IDs, event streams, or source bytes uploaded.",
+  "model_mode3_to_mode4_foreground_RGB_MAD_0_to_255_anonymous": {
+    "method": "Union model foreground: RGB distance from shared background [23,39,59] >8 in either screenshot; per-pixel mean channel absolute difference, averaged over foreground. Camera/readback fixed. This is mode difference, NOT proof of shader or PC parity.",
+    "M00": 30.14,
+    "M01": 42.02,
+    "M02": 36.94,
+    "M03": 64.61,
+    "M04": 47.84,
+    "M05": 33.43,
+    "foreground_fraction_percent": {
+      "M00": 1.6,
+      "M01": 4.97,
+      "M02": 1.08,
+      "M03": 5.44,
+      "M04": 1.45,
+      "M05": 4.31
+    }
+  },
+  "interpolation_specification_correction": {
+    "gles_320_core_noperspective_support": false,
+    "valid_core_interpolation_qualifiers": [
+      "smooth",
+      "flat"
+    ],
+    "vendor_extension_optional": "GL_NV_shader_noperspective_interpolation",
+    "vendor_extension_proven_on_owner_device": false,
+    "vulkan_spirv_no_perspective_defined": true,
+    "source_gles": "https://registry.khronos.org/OpenGL/specs/es/3.2/GLSL_ES_Specification_3.20.html",
+    "source_spirv": "https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html",
+    "next_verification": "Check actual GLES extensions and prefer Vulkan NoPerspective if native equivalence is required; alternatively label GLES emulation analytically."
+  }
 }
