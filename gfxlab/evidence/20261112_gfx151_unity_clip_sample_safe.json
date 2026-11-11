@@ -1,0 +1,13 @@
+{
+  "experiment": "GFX151",
+  "poses": 15,
+  "positions": 24990,
+  "failingVertices": 0,
+  "maxAbsoluteError": 0.0001220703125,
+  "originalClipPlaybackVerified": false,
+  "nativeBakeMeshInvoked": true,
+  "reconstructedClipSampled": true,
+  "phase_closed": false,
+  "run": 43104902312,
+  "artifact": 13894110820
+}

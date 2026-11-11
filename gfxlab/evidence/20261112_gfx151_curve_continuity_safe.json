@@ -1,0 +1,29 @@
+{
+  "experiment": "GFX151",
+  "junction_tolerance": 1e-05,
+  "clips": [
+    {
+      "clip_index": 0,
+      "streamed_curve_count": 0,
+      "checked_junctions": 0,
+      "above_tolerance": 0,
+      "max_absolute_junction_error": 0
+    },
+    {
+      "clip_index": 1,
+      "streamed_curve_count": 27,
+      "checked_junctions": 87,
+      "above_tolerance": 0,
+      "max_absolute_junction_error": 3.0971455206030285e-08
+    },
+    {
+      "clip_index": 2,
+      "streamed_curve_count": 27,
+      "checked_junctions": 198,
+      "above_tolerance": 0,
+      "max_absolute_junction_error": 1.8304195492646613e-08
+    }
+  ],
+  "continuous_unity_playback_verified": false,
+  "phase_closed": false
+}
