@@ -232,8 +232,10 @@ def verify_pair(delivery: Path, apk: Path, obb: Path, badging: str) -> dict:
         lookup[name] = entry
     if set(lookup) != {APK_NAME, obb_name, XAPK_NAME}:
         raise ValueError("Incorrect APK/OBB/XAPK logical output names")
-    match = BADGING.search(badging)
-    if match is None or match[1] != PACKAGE or match[2] != code:
+    # An ambiguous or repeated aapt package declaration cannot attest a single APK.
+    # Reject even duplicate identical lines rather than accepting the first match.
+    matches = BADGING.findall(badging)
+    if len(matches) != 1 or matches[0][0] != PACKAGE or matches[0][1] != code:
         raise ValueError("Actual aapt APK identity differs from delivery and OBB")
     for path in (apk, obb):
         size, digest = _sha(path)
