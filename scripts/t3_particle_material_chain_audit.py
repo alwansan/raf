@@ -38,18 +38,34 @@ def census(root: Path, salt: str = ""):
                 continue
             counts["particle_renderers"] += 1
             doc = data[head.end():heads[index + 1].start() if index + 1 < len(heads) else len(data)]
-            match = re.search(r"(?m)^\s*m_Materials:\s*(?:\r?\n)", doc)
+            match = re.search(r"(?m)^[ \t]*m_Materials:[ \t]*([^\r\n]*)(?:\r?\n|$)", doc)
             if not match:
                 counts["renderers_without_material_list"] += 1
                 continue
-            tail = doc[match.end():]
+            inline = match.group(1).strip()
             entries = []
-            for line in tail.splitlines():
-                if not line.strip():
+            if inline:
+                # Unity YAML supports flow-style material arrays as well as block lists.
+                if inline == "[]":
+                    counts["renderers_with_empty_material_list"] += 1
                     continue
-                if not line.lstrip().startswith("-"):
-                    break
-                entries.append(line)
+                if not (inline.startswith("[") and inline.endswith("]")):
+                    counts["unsupported_inline_material_lists"] += 1
+                    continue
+                refs = re.findall(r"\{[^{}]*\}", inline[1:-1])
+                residue = re.sub(r"\{[^{}]*\}", "", inline[1:-1])
+                if not refs or residue.strip(" ,\t"):
+                    counts["unsupported_inline_material_lists"] += 1
+                    continue
+                entries = ["- " + ref for ref in refs]
+            else:
+                tail = doc[match.end():]
+                for line in tail.splitlines():
+                    if not line.strip():
+                        continue
+                    if not line.lstrip().startswith("-"):
+                        break
+                    entries.append(line)
             if not entries:
                 counts["renderers_with_empty_material_list"] += 1
             for line in entries:
