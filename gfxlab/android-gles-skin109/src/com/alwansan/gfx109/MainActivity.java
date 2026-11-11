@@ -29,7 +29,7 @@ import javax.microedition.khronos.opengles.GL10;
 import static android.opengl.GLES30.*;
 
 public final class MainActivity extends Activity {
-    private static final String[] MODELS = {"M00", "M01", "M02", "M04", "M05"};
+    private static final String[] SNAPSHOTS = {"M00", "M01", "M02", "M04", "M05"};
     private static final String DIRECTORY = "Download/Games/cl/test/g/";
     private static final int STRIDE = 56;
     private static final String VERTEX = "#version 300 es\n"
@@ -43,6 +43,17 @@ public final class MainActivity extends Activity {
     private static final String FRAGMENT = "#version 300 es\n"
         + "precision mediump float; out vec4 color; void main(){color=vec4(1.0);}\n";
 
+    private String experiment() {
+        return "com.alwansan.gfx112".equals(getPackageName()) ? "GFX112" : "GFX109";
+    }
+
+    private String[] cases() {
+        if ("GFX109".equals(experiment())) return SNAPSHOTS;
+        String[] poses = new String[15];
+        for (int i = 0; i < poses.length; i++) poses[i] = "C" + (i / 5) + "P" + (i % 5);
+        return poses;
+    }
+
     private TextView status;
     private GLSurfaceView surface;
     private volatile byte[] report;
@@ -53,7 +64,7 @@ public final class MainActivity extends Activity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         status = new TextView(this);
-        status.setText("GFX109: comparing source vertices on the GPU…");
+        status.setText(experiment() + ": comparing source vertices on the GPU…");
         layout.addView(status);
         Button export = new Button(this);
         export.setText("Export ZIP");
@@ -230,12 +241,12 @@ public final class MainActivity extends Activity {
         JSONArray cases = new JSONArray();
         int program = 0;
         try {
-            result.put("experiment", "GFX109").put("renderer", glGetString(GL_RENDERER))
+            result.put("experiment", experiment()).put("renderer", glGetString(GL_RENDERER))
                 .put("gles", glGetString(GL_VERSION)).put("cases", cases).put("phase_closed", false)
                 .put("absolute_tolerance", 0.0001).put("relative_tolerance", 0.000001);
             program = program();
             boolean passed = true;
-            for (String model : MODELS) {
+            for (String model : cases()) {
                 JSONObject evidence = compare(model, program);
                 cases.put(evidence);
                 passed &= evidence.getInt("failing_vertices") == 0;
@@ -259,7 +270,7 @@ public final class MainActivity extends Activity {
 
     private void writeReport() {
         Uri uri = null;
-        String name = "GFX109-ALL-TEST-LOGS-" + System.currentTimeMillis() + ".zip";
+        String name = experiment() + "-ALL-TEST-LOGS-" + System.currentTimeMillis() + ".zip";
         try {
             ContentValues values = new ContentValues();
             values.put(MediaStore.Downloads.DISPLAY_NAME, name);

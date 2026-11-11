@@ -116,7 +116,7 @@ def snapshot(graph, bindings, values):
     return overrides
 
 
-def sample_m02(entry, graph, renderer, bones, animators):
+def sample_m02(entry, graph, bones, animators, consume_pose=None):
     if len(bones) != 8 or len(animators) != 1:
         raise ValueError("M02 exact source rig selection changed")
     animator = animators[0]
@@ -194,6 +194,8 @@ def sample_m02(entry, graph, renderer, bones, animators):
 
             world = [source_world_matrix(key, lookup, parent) for key in bones]
             current = skin_positions_cpu(positions, weights, world, bindposes)
+            if consume_pose is not None:
+                consume_pose(index, step, time, positions, weights, world, bindposes, current)
             if baseline is None:
                 baseline = current
             else:
@@ -208,13 +210,13 @@ def sample_m02(entry, graph, renderer, bones, animators):
     return cases
 
 
-def run(stage):
+def run(stage, consume_pose=None):
     cases = None
 
     def inspect(entry, graph, renderer, bones, animators):
         nonlocal cases
         if entry["id"] == "M02":
-            cases = sample_m02(entry, graph, renderer, bones, animators)
+            cases = sample_m02(entry, graph, bones, animators, consume_pose)
 
     audit(stage, inspect)
     if cases is None:
