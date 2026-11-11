@@ -71,6 +71,13 @@ class ParticleMaterialAuditTests(unittest.TestCase):
         self.assertEqual(counts.get("null_material_slots", 0), 0)
         self.assertEqual(counts.get("renderers_with_empty_material_list", 0), 0)
 
+    def test_block_list_code_path_does_not_raise_unbound_local(self):
+        # Regression: literal backslash-n embedded in a comment once swallowed
+        # material_indent/tail assignments, breaking every block-list scan.
+        counts = self.audit("\\n  - {fileID: 0}")
+        self.assertEqual(counts.get("null_material_slots"), 1)
+        self.assertEqual(counts.get("renderers_with_empty_material_list", 0), 0)
+
     def test_sibling_list_is_not_material(self):
         counts = self.audit("\n  m_UnrelatedList:\n  - {fileID: 2100000, guid: " + GUID
                             + ", type: 2}")
