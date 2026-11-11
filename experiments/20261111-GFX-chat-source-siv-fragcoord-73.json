@@ -1,0 +1,57 @@
+{
+  "session_id": "20261111-GFX-chat-source-siv-fragcoord-73",
+  "origin": "chat",
+  "role": "GFX-LAB",
+  "resumed_from": "20261111-GFX-chat-original-spirv-interpolation-72",
+  "write_branch": "experiment/android-graphics-rootcause",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "verified_runs": {
+    "gfx103": {
+      "run": 42945815709,
+      "conclusion": "success",
+      "tests": 17,
+      "artifact": 13822676727
+    },
+    "gfx104": {
+      "run": 42946470013,
+      "conclusion": "success",
+      "tests": 14,
+      "artifact": 13822842279
+    },
+    "gfx105": {
+      "run": 42949456992,
+      "conclusion": "success",
+      "tests": 18,
+      "artifact": 13824207690
+    }
+  },
+  "found": {
+    "original_exact_pairs": 524,
+    "ordinary_noperspective_declarations": 0,
+    "system_siv_noperspective_declarations": 16,
+    "system_name_position": 16,
+    "spirv_builtin_fragcoord": 16,
+    "glsl310_fragcoord": 16,
+    "source_shader48_runtime_pixels_verified": false
+  },
+  "implementation": {
+    "src": [
+      "gfxlab/tools/gfx105_siv_fragcoord_semantic.py",
+      "gfxlab/tools/gfx105_original_siv_fragcoord_census.py"
+    ],
+    "tests": [
+      "gfxlab/tests/test_gfx105_siv_fragcoord_semantic.py",
+      "gfxlab/tests/test_gfx105_original_siv_fragcoord_census.py"
+    ],
+    "workflow": ".github/workflows/gfxlab-multi105-source-siv-fragcoord.yml"
+  },
+  "blockers": [
+    "source pixel value semantics across DirectX vs GLES",
+    "Material→texture/sampler/CB mapping and Normal filtering",
+    "rig hierarchy and animated skinning",
+    "PC reference image pixel comparison and Android source shader runtime"
+  ],
+  "originalShaderRestored": false,
+  "originalAnimationRestored": false,
+  "phase_closed": false
+}
