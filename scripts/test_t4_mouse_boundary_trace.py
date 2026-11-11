@@ -70,5 +70,31 @@ class MouseBoundaryTraceTests(unittest.TestCase):
         self.assertEqual(report["malformed_markers"], 0)
 
 
+    def test_marker_must_be_exact_token(self):
+        report = analyze([
+            "PREFIX_T4_MOUSE_STAGE frame=4 stage=android button=left",
+            "T4_MOUSE_STAGE_SUFFIX frame=5 stage=android button=left",
+            "T4_MOUSE_STAGE frame=6 stage=android button=left",
+        ])
+        self.assertEqual(report["frames_with_markers"], 1)
+        self.assertEqual(report["buttons"]["left"]["stage_frames"]["android"], 1)
+
+    def test_log_prefix_fields_cannot_supply_missing_marker_fields(self):
+        report = analyze([
+            "frame=12 stage=android button=left T4_MOUSE_STAGE frame=12",
+        ])
+        self.assertEqual(report["malformed_markers"], 1)
+        self.assertEqual(report["frames_with_markers"], 0)
+
+    def test_duplicate_fields_are_rejected_as_ambiguous(self):
+        report = analyze([
+            "T4_MOUSE_STAGE frame=12 frame=13 stage=android button=left",
+            "T4_MOUSE_STAGE frame=14 stage=android button=right",
+        ])
+        self.assertEqual(report["malformed_markers"], 1)
+        self.assertEqual(report["buttons"]["left"]["observed_frames"], 0)
+        self.assertEqual(report["buttons"]["right"]["observed_frames"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
