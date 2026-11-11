@@ -5,6 +5,7 @@ from zipfile import ZipFile
 
 from gfxlab.tools.gfx120_owner_zip_audit import audit_capture, sha
 from gfxlab.tools.gfx124_batch_pack import CONTROLS, POSES, SHADOW_CONTROLS, DEFERRED_CAPTURES, REFERENCE_SIZE
+from gfxlab.tools.gfx137_deferred_semantic_audit import audit_deferred_mrt
 
 
 def audit(owner_zip, apk):
@@ -39,7 +40,7 @@ def audit(owner_zip, apk):
             captures = run["captures"]
             if len(captures) > len(controls) or (completed and len(captures) != len(controls)):
                 raise ValueError("Wrong capture count")
-            metrics, pixels = {}, {}
+            metrics, pixels, references = {}, {}, {}
             for control, row in zip(controls, captures):
                 capture = test["id"] if merged else f'{test["id"]}-{control}'
                 if row["name"] != capture:
@@ -49,6 +50,7 @@ def audit(owner_zip, apk):
                     images.add(name)
                     raw = logs.read(name)
                     reference = package.read(f'assets/{test["deferred"]}/{control}.rgba')
+                    references[control] = reference
                     if (len(raw) != REFERENCE_SIZE or len(reference) != REFERENCE_SIZE
                             or row["raw"] != name or row["raw_rgba_sha256"] != sha(raw)
                             or row["mesa_rgba_sha256"] != sha(reference)):
@@ -99,6 +101,7 @@ def audit(owner_zip, apk):
                     "depth_write_off_has_no_depth": metrics["depth-off"]["covered_pixels"] == 0,
                 }
             if deferred and completed:
+                checked["deferred_semantics"] = audit_deferred_mrt(pixels, references)
                 checked["target0_coverage"] = pixels["native-rt0"][3::4].count(255)
                 checked["material_control_changed_pixels"] = {
                     mode: [sum(pixels[f"native-rt{target}"][i:i+4] != pixels[f"{mode}-rt{target}"][i:i+4]
