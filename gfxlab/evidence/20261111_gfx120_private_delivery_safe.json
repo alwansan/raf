@@ -1,0 +1,13 @@
+{
+  "experiment": "GFX120",
+  "package": "com.alwansan.gfx120",
+  "apk_bytes": 4220864,
+  "apk_sha256": "ed35f665baac97d3ac796e6cf7edc000307ca0c8d7542af6e53b1a2019270479",
+  "private_assets": 28,
+  "apksigner_verified": true,
+  "owner_gpu_pending": true,
+  "phase_closed": false,
+  "source_free_shell_run": 43047217835,
+  "source_free_shell_artifact": 13868191281,
+  "mesa_reference_cases": 4
+}
