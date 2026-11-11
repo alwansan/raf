@@ -1,0 +1,176 @@
+{
+  "experiment": "GFX143",
+  "role": "GFX-LAB",
+  "session_id": "20261111-GFX-chat-dual-adreno-batch-100",
+  "origin": "chat",
+  "source_original_apk_sha256": "3a4c7fa7f3593325755b32c0f6c5ad941097936b53808666388a4743b5db3773",
+  "apk_packaged_original_assets": 235,
+  "apk_source_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "owner_zip_sha256": {
+    "1794424270273": "d097f47fcd453eac6d6d82838b3ff2a370ef56794e1823b6311741d297de81d0",
+    "1794424283292": "fad309ffe894acdb4ab5789116330d651c78a5fcec4cef1bacf4516f52288946"
+  },
+  "owner_capture_entries_identical": true,
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (Date:01/23/25)",
+  "completed_tests": 9,
+  "planned_tests": 9,
+  "validated_captures": 51,
+  "png_captures": 39,
+  "raw_deferred_captures": 12,
+  "missing_captures": 0,
+  "all_51_reference_capture_hashes_valid": true,
+  "all_51_geometric_coverage_masks_match_mesa": true,
+  "exact_total_rgba_captures": 10,
+  "forward_material_cases": {
+    "M00-0": {
+      "covered": 703,
+      "light_dark_changed": 506,
+      "flat_changed": 472,
+      "nonmetal_changed": 506
+    },
+    "M02-0": {
+      "covered": 2008,
+      "light_dark_changed": 1979,
+      "flat_changed": 1635,
+      "nonmetal_changed": 1963
+    },
+    "M03-0": {
+      "covered": 4456,
+      "light_dark_changed": 2045,
+      "flat_changed": 2116,
+      "nonmetal_changed": 2045
+    },
+    "M03-1": {
+      "covered": 3301,
+      "light_dark_changed": 2718,
+      "flat_changed": 2453,
+      "nonmetal_changed": 2703
+    }
+  },
+  "M03-combined": {
+    "covered": 7022,
+    "max_rgb_channel_error": 59,
+    "mean_rgb_abs_error": 0.331672,
+    "hot_pixels_gt30": 37,
+    "bbox_xyxy": [
+      61,
+      132,
+      106,
+      139
+    ]
+  },
+  "M03-1": {
+    "covered": 3301,
+    "light": {
+      "max_rgb_error": 59,
+      "mean_rgb_abs_error": 0.81753,
+      "hot_pixels_gt30": 49,
+      "bbox_xyxy": [
+        61,
+        128,
+        117,
+        139
+      ]
+    },
+    "flat": {
+      "max_rgb_error": 59,
+      "mean_rgb_abs_error": 0.783601,
+      "hot_pixels_gt30": 50,
+      "bbox_xyxy": [
+        61,
+        128,
+        117,
+        139
+      ]
+    },
+    "nonmetal": {
+      "max_rgb_error": 34,
+      "mean_rgb_abs_error": 0.522872,
+      "hot_pixels_gt30": 17,
+      "bbox_xyxy": [
+        83,
+        132,
+        98,
+        134
+      ]
+    }
+  },
+  "M02-forward-add": {
+    "covered": 2008,
+    "additional_light_changes_pixels": 1979,
+    "off_matches_forward_exact": true,
+    "depth_reject_matches_forward_exact": true,
+    "lit_rgb_mae": 0.204183
+  },
+  "M02-animation": {
+    "samples": 15,
+    "unique_images_per_clip": [
+      1,
+      5,
+      5
+    ],
+    "alpha_coverage_per_clip": [
+      [
+        1779,
+        1779,
+        1779,
+        1779,
+        1779
+      ],
+      [
+        1776,
+        1719,
+        1590,
+        1451,
+        1382
+      ],
+      [
+        1892,
+        1765,
+        1783,
+        1781,
+        1779
+      ]
+    ]
+  },
+  "M02-shadow": {
+    "covered": [
+      2008,
+      2008,
+      0,
+      0
+    ],
+    "controlled_depth_states_verified": true,
+    "max_rgb_channel_error": 1
+  },
+  "M02-deferred": {
+    "mrt_targets": 4,
+    "controls": 3,
+    "verified_raw_captures": 12,
+    "rt0_coverage": 2008,
+    "rt0_mask_same_across_native_flat_nonmetal": true,
+    "flat_material_effect_by_target": [
+      0,
+      0,
+      2005,
+      0
+    ],
+    "nonmetal_material_effect_by_target": [
+      20,
+      2008,
+      0,
+      0
+    ],
+    "rt3_device_and_mesa_byte_identical": true,
+    "rt1_alpha_numeric_drift_pixels_each_for_native_and_flat": 73,
+    "rt1_alpha_max_difference": 9
+  },
+  "anomaly_hypothesis": "localized M03-1 interior RGB 0-vs-color, likely texture sampling or interpolation difference; cause not yet proven",
+  "actual_9_case_adreno_batch_completed": true,
+  "original_Unity_ShaderLab_pass_selection_proven": false,
+  "Unity_Animator_clip_player_proven": false,
+  "original_game_scene_PC_Android_pixel_parity_proven": false,
+  "phase_closed": false,
+  "privacy": "Only aggregate numeric data published. No original game assets, actual screenshots, raw device captures, signed private APK, or encryption keys."
+}

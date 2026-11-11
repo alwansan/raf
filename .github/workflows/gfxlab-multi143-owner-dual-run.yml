@@ -1,0 +1,32 @@
+name: GFX143 source-free dual-run owner archive verification regression
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi143-owner-dual-run.yml'
+      - 'gfxlab/tools/gfx143_owner_dual_run_audit.py'
+      - 'gfxlab/tests/test_gfx143_owner_dual_run.py'
+      - 'gfxlab/tools/gfx124_batch_zip_audit.py'
+      - 'gfxlab/tools/gfx137_deferred_semantic_audit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx143-owner-two-run-audit
+  cancel-in-progress: false
+jobs:
+  replay-source-free:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin pure-Python PNG reader for source-free captures
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Two-run audit and negative regression tests (NO owner ZIPs or game assets)
+        run: python -m unittest -v gfxlab.tests.test_gfx143_owner_dual_run
