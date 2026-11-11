@@ -29,6 +29,26 @@ def classify(summary):
     cb_first = summary.get("first_callback_counters", {})
     rd_first = summary.get("first_reader_counters", {})
     result = {}
+    # Counter decreases mean the aggregate spans at least one reset/epoch.
+    # Positive deltas across that boundary cannot establish a clean paired
+    # callback-to-reader comparison. Older summaries may omit these fields.
+    cb_resets = summary.get("callback_counter_decreases", 0)
+    rd_resets = summary.get("reader_counter_decreases", 0)
+    if not _valid_growth(cb_resets) or not _valid_growth(rd_resets):
+        return {
+            "per_counter": {key: {"callback_growth": None, "reader_growth": None,
+                                  "state": "invalid_counter_evidence"} for key in KEYS},
+            "gameplay_success_proven": False,
+            "note": "Malformed counter-reset metadata.",
+        }
+    if cb_resets or rd_resets:
+        return {
+            "per_counter": {key: {"callback_growth": callbacks.get(key) if isinstance(callbacks, dict) else None,
+                                  "reader_growth": readers.get(key) if isinstance(readers, dict) else None,
+                                  "state": "counter_reset_requires_epoch_segmentation"} for key in KEYS},
+            "gameplay_success_proven": False,
+            "note": "One or more counters decreased; split by process/capture epoch before comparing growth.",
+        }
     if not all(isinstance(section, dict) for section in (callbacks, readers, cb_first, rd_first)):
         return {
             "per_counter": {key: {"callback_growth": None, "reader_growth": None,
