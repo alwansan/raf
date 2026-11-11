@@ -48,3 +48,11 @@ Session `20261111-GFX-chat-original-pass-mask-96` (`origin=chat`). [Windows Acti
 
 **Scope:** controlled Windows DXBC source-original pass coverage and material effects. Windows–Mesa RGB full-image equality is NOT proven, original Unity ShaderLab pass/state selection and actual G-buffer formats remain unverified, and no GFX135/GFX138 private combined signed owner APK or Adreno 9-case batch has been delivered. Batch plan: **9 tests / 51 captures**. Original game PC↔Android scene pixels and full animation playback remain OPEN; `originalShaderRestored=false`, `originalAnimationRestored=false`, `phase_closed=false`.
 
+
+## GFX139 وGFX140 — إثبات تجميع وتوقيع الحزمة الكاملة (11 نوفمبر 2026)
+
+نجحت [GFX139 CI43068059010](https://github.com/alwansan/raf/actions/runs/43068059010) في **7/7** اختبارات لتجميع 9 حالات و51 لقطة (39 PNG و12 RGBA) وتدقيق النتائج باستخدام نفس أداة التصدير/الفحص الفعلية. شملت الاختبارات رفض الملفات الناقصة والبصمات المعدلة وترتيب الحالات الخاطئ، وقبول الفشل الجزئي المعلن للحالة التاسعة.
+
+نجحت [GFX140 CI43069997709](https://github.com/alwansan/raf/actions/runs/43069997709) في بناء Java وAndroidManifest الحقيقيين لتطبيق GFX124، ودمج حالة اصطناعية كاملة، ومحاذاة وتوقيع APK بمفتاح مؤقت، والتحقق من توقيع **v3** المدعوم على Android API29+، ثم فحص التطابق الكامل لـ**235 ملفاً** بعد التوقيع وتشغيل مدقق **9 حالات و51 لقطة** على APK الموقّع. يعرض مدقق SDK `v2_verified=false` و`v3_verified=true`؛ لا ندعي نجاح v2. لا يحتوي المرفق العام على APK أو أي أصل لعبة، فقط JSON مجمّع آمن.
+
+**المتبقي:** استبدال القيم الاصطناعية بموارد المالك الأصلية داخل APK خاص موقّع، تشغيل جميع حالات الاختبار فعلياً على Adreno 730، ثم مقارنة اللقطات الخام بمراجع Windows/Mesa مع حسم حالات ShaderLab/Unity runtime وG-buffer ومشهد PC الأصلي. لا تعني الاختبارات الاصطناعية نجاح الرسم على الهاتف أو إغلاق المرحلة. `phase_closed=false`.
