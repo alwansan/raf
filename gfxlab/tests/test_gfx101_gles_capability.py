@@ -62,8 +62,8 @@ class Gfx101GlesCapabilityTests(unittest.TestCase):
             for x,y in SAMPLES]
         self.assertTrue(all(x>0.08 for x in differences),str(differences))
     def test_identity_and_sha_evidence_fail_closed(self):
-        for text in ("originalShaderRestored\",\"false","phase_closed\",\"false",
-                     "pcAdrenoPixelParityVerified\",\"false","sha256(out.raw)",
+        for text in ('"originalShaderRestored",false','"phase_closed",false',
+                     '"pcAdrenoPixelParityVerified",false',"sha256(out.raw)",
                      "cpu_affine_mad","cpu_smooth_mad"):
             self.assertIn(text,self.src)
     def test_scoped_export_android_15(self):
@@ -83,7 +83,7 @@ class Gfx101GlesCapabilityTests(unittest.TestCase):
         self.assertIn("apksigner",workflow)
         self.assertIn("aapt2",workflow)
         self.assertIn("original_shader_restored",workflow)
-        self.assertIn("original_shader_restored\":False",workflow)
+        self.assertIn('"original_shader_restored":False',workflow)
         self.assertIn("cancel-in-progress: false",workflow)
 
 if __name__=="__main__":
