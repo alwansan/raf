@@ -2,8 +2,8 @@
   "session_id": "20261111T1930Z-T3-scheduled-shader-orphan-g7q2",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-11T19:30:00Z",
+  "status": "completed_source_change_ci_unverified",
+  "updated_at": "2026-11-11T19:36:00Z",
   "intended_files": [
     "scripts/t3_material_shader_binding_audit.py",
     "prompt/coordination/clients/T3/sessions/20261111T1930Z-T3-scheduled-shader-orphan-g7q2.md"
@@ -15,5 +15,12 @@
     "https://github.com/alwansan/raf/actions/runs/41939404454",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "limitations": "Structural audit only; no device shader proof, no ZIP2 export."
+  "limitations": "Structural audit only; no device shader proof, no ZIP2 export.",
+  "commits": [
+    "0791230955bc94fe5e86cd8b44b99d01348470f2",
+    "4f747d124981b78de1b9dadc008c0ba219cf9460",
+    "97348fbc28cb85f33a8c077f3d13593dee936ee6",
+    "0e587ffa09a7f0ca6bdb646368bbaae5d41a0a06"
+  ],
+  "next_step": "Run source-free regression, then authenticated source/export shader owners; no phone claim."
 }
