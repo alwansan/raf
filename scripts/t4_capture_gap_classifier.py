@@ -22,14 +22,21 @@ def classify(summary):
     cb_first = summary.get("first_callback_counters", {})
     rd_first = summary.get("first_reader_counters", {})
     result = {}
+    if not all(isinstance(section, dict) for section in (callbacks, readers, cb_first, rd_first)):
+        return {
+            "per_counter": {key: {"callback_growth": None, "reader_growth": None,
+                                  "state": "invalid_counter_evidence"} for key in KEYS},
+            "gameplay_success_proven": False,
+            "note": "Malformed telemetry section; no per-button conclusion is possible.",
+        }
     for key in KEYS:
-        cb = callbacks.get(key, 0)
-        rd = readers.get(key, 0)
-        if (not _valid_growth(cb) or not _valid_growth(rd)
+        cb = callbacks.get(key)
+        rd = readers.get(key)
+        if (not _valid_growth(cb) and key in callbacks or not _valid_growth(rd) and key in readers
                 or (key in cb_first and not _valid_growth(cb_first[key]))
                 or (key in rd_first and not _valid_growth(rd_first[key]))):
             state = "invalid_counter_evidence"
-        elif key not in cb_first or key not in rd_first:
+        elif key not in cb_first or key not in rd_first or key not in callbacks or key not in readers:
             state = "insufficient_paired_baseline"
         elif cb > 0 and rd == 0:
             state = "callback_growth_without_reader_growth"
