@@ -2617,5 +2617,62 @@
     "source_material_to_gpu_binding_verified": false,
     "pc_device_pixel_parity": false,
     "phase_closed": false
+  },
+  "latest_gfx101_owner_gpu_evidence": {
+    "experiment": "GFX-MULTI-101",
+    "owner_zip_sha256": [
+      "8b788636517fc672416ccd76d5a32baea9da627fa8c7b2a261c04ba81556af6c",
+      "350a42d8494918c16e07e3c73dde1ef9622f8bc2cec813c930b9290115d512c4"
+    ],
+    "safe_evidence": "gfxlab/evidence/20261111_gfx101_owner_adreno_safe_counts.json",
+    "actual_device_gpu": "Adreno 730 / OpenGL ES3.2 / GLSL ES3.20",
+    "extension_count": 104,
+    "nv_noperspective_extension_advertised": true,
+    "real_gpu_controls_compile_link_and_readback": [
+      "Smooth",
+      "Flat",
+      "AffineEmulated"
+    ],
+    "controls_readback_count_each": 3,
+    "events_per_zip": 17,
+    "reported_gl_errors": 0,
+    "native_glsl_shader_version_tested": "300 es",
+    "native_vertex_compile_success": false,
+    "native_fragment_compile_success": false,
+    "native_error": "noperspective reserved token",
+    "source_shader_restored": false,
+    "rig_restored": false,
+    "phase_closed": false
+  },
+  "latest_gfx102_glsl_version_matrix": {
+    "experiment": "GFX-MULTI-102",
+    "role": "GFX-LAB",
+    "origin": "chat",
+    "session_id": "20261111-GFX-chat-gfx101-owner-adreno-102-matrix-70",
+    "branch": "experiment/android-graphics-rootcause",
+    "scope": "Separate original-free Adreno native GLSL ES 300/310/320 version matrix, CPU affine reference and Android private ZIP export",
+    "java_source": "gfxlab/android-gles-qualifier-probe-v102/src/com/alwansan/gfx102/MainActivity.java",
+    "apk_package": "com.alwansan.gfx102",
+    "workflow": "https://github.com/alwansan/raf/actions/workflows/gfxlab-multi102-qualifier-version-matrix-apk.yml",
+    "safe_auditor": "gfxlab/tools/gfx102_owner_zip_audit.py",
+    "tests": [
+      "gfxlab/tests/test_gfx102_glsl_version_matrix.py",
+      "gfxlab/tests/test_gfx102_owner_zip_audit.py"
+    ],
+    "owner_guide": "gfxlab/GFX102_OWNER_TEST_AR.md",
+    "eligible_versions": [
+      "300 es",
+      "310 es",
+      "320 es"
+    ],
+    "expected_native_extension": "GL_NV_shader_noperspective_interpolation",
+    "source_commit_checkpoint": "33bab8a522be7e26c26725b4ba5d1e4ab9f0cb4e",
+    "workflow_status": "UNVERIFIED",
+    "signed_apk_status": "NOT_CONFIRMED",
+    "owner_device_test": "PENDING",
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
+    "pcAdrenoPixelParityVerified": false,
+    "phase_closed": false
   }
 }
