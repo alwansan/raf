@@ -230,7 +230,10 @@ jobs:
           lfs: false
           persist-credentials: false
           sparse-checkout-cone-mode: false
-          sparse-checkout: ${{ steps.w1_zip2_needed.outputs.paths }}
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            ${{ steps.w1_zip2_needed.outputs.paths }}
+            /Raft/Raft_Data/**
       - name: Authenticate ZIP2 owners and stage three original scene dependencies
         shell: bash
         run: |
@@ -264,45 +267,54 @@ jobs:
               print('RAFT_NATIVE_ZIP2_SCENE_OWNER size='+str(expected[0])+' sha256Verified=true')
           PY
           df -h /
-      - name: Restore every original graphics payload before exporting textures and shaders
+      - name: GT restore every original mesh and texture stream into AssetRipper input from ZIP2 (no LFS)
         shell: bash
         run: |
           set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_zip2_export_resources.py -v
           python3 -m unittest discover -s tests -p test_texture_stream_coverage.py -v
-          python3 -m scripts.hydrate_render_payloads --apply --release-cache
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout zip2-original \
+            --input-root "$RUNNER_TEMP/input/Raft_Data" \
+            --profile full \
+            --byte-budget 10000000000 \
+            --report "$RUNNER_TEMP/gt-native-original-graphics-input.json"
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
-          python3 -m scripts.audit_texture_stream_coverage --root Raft/Raft_Data
+          python3 -m scripts.audit_texture_stream_coverage --root "$RUNNER_TEMP/input/Raft_Data"
+          df -h /
       - name: Audit original compute kernel containers before any shader reconstruction
         shell: bash
         run: |
           set -euo pipefail
           # Read only the nine original ComputeShader objects already hydrated
           # and SHA-checked above. Do not publish HLSL/DXBC/serialized bytes.
-          python3 -m scripts.audit_original_compute_metadata --source Raft/Raft_Data --expected-objects 9
+          python3 -m scripts.audit_original_compute_metadata --source "$RUNNER_TEMP/input/Raft_Data" --expected-objects 9
       - name: Audit original mesh stream requirements without downloading additional LFS
         shell: bash
         run: |
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0
-          python3 scripts/audit_mesh_stream_dependencies.py --root Raft/Raft_Data --max-per-file 50000 --out "$RUNNER_TEMP/mesh-stream-audit.json"
-      - name: Stage selected Unity game files only, never execute Windows binaries
+          python3 scripts/audit_mesh_stream_dependencies.py --root "$RUNNER_TEMP/input/Raft_Data" --max-per-file 50000 --out "$RUNNER_TEMP/mesh-stream-audit.json"
+      - name: GT freeze SHA-pinned original Unity input; preserve exact source owner and stream identities
         shell: bash
         run: |
           set -euo pipefail
           root="$RUNNER_TEMP/input/Raft_Data"
-          mkdir -p "$root/Managed"
-          test -f "$root/Managed/Assembly-CSharp.dll"
+          test -s "$root/Managed/Assembly-CSharp.dll"
           test ! -e "$root/Managed/PlayFab_o.dll"
-          cp Raft/Raft_Data/boot.config "$root/"
-          shopt -s nullglob
-          count=0
-          for src in Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets* Raft/Raft_Data/resources.assets* Raft/Raft_Data/sharedassets*.assets* Raft/Raft_Data/level*; do
-            [ -f "$src" ] || continue
-            if head -c 48 "$src" | grep -q '^version https://git-lfs.github.com/spec/v1'; then continue; fi
-            cp "$src" "$root/"
-            count=$((count+1))
-          done
-          echo "Source serialized files staged: $count"
-          test "$count" -gt 110
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout zip2-original \
+            --input-root "$root" \
+            --profile full \
+            --byte-budget 10000000000 \
+            --report "$RUNNER_TEMP/gt-native-original-graphics-freeze.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-native-original-graphics-freeze.json').read_text())
+          assert r['original_resources_verified']==134 and r['files_verified_and_reused']==134
+          assert r['git_lfs_used'] is False and r['original_payload_sha256_and_size_verified']
+          print("GT_NATIVE_ORIGINAL_GRAPHICS_FINAL owners_streams_builtins_settings=134 sha256=true lfs=false")
+          PY
           du -sh "$root"
       - name: Stage authenticated engine resources into the export input set
         shell: bash
@@ -326,15 +338,15 @@ jobs:
               shutil.copyfile(source, target_root/name)
               print('RAFT_ENGINE_RESOURCE_STAGED size=%d sha256Verified=true' % PINS[relative][0])
           PY
-      - name: Restore every pinned external Mesh buffer while retaining original serialized identities
+      - name: Restore pinned Mesh ranges from full local ZIP2-authenticated streams only
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
-        env:
-          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
+          # The full original streams exist in GT's verified transient input.
+          # No GH_TOKEN or Git LFS fallback is available to this restoration.
           python3 -m scripts.fetch_verified_mesh_ranges \
-            --manifest config/mesh-stream-ranges.json --source-root "$GITHUB_WORKSPACE/Raft/Raft_Data" \
+            --manifest config/mesh-stream-ranges.json --source-root "$RUNNER_TEMP/input/Raft_Data" \
             --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
           python3 -m scripts.inline_verified_mesh_ranges \
             --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json \
@@ -510,7 +522,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_w1_depth_install.py -v
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
-          timeout 600s python3 -m scripts.w1_build_depth_wrapper --source Raft/Raft_Data --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json" --private-shader "$RUNNER_TEMP/w1-private-depth.shader"
+          timeout 600s python3 -m scripts.w1_build_depth_wrapper --source "$RUNNER_TEMP/input/Raft_Data" --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json" --private-shader "$RUNNER_TEMP/w1-private-depth.shader"
           python3 -m scripts.w1_install_depth_copy --project "$RUNNER_TEMP/project/ExportedProject" --private-shader "$RUNNER_TEMP/w1-private-depth.shader" --backup "$RUNNER_TEMP/w1-original-depth" --out "$RUNNER_TEMP/w1-depth-install-summary.json"
       - name: Retain W1 aggregate staging evidence even when a later authenticity gate fails
         if: always()
