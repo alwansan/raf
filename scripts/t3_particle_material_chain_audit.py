@@ -52,9 +52,24 @@ def census(root: Path, salt: str = ""):
                 if not (inline.startswith("[") and inline.endswith("]")):
                     counts["unsupported_inline_material_lists"] += 1
                     continue
-                refs = re.findall(r"\{[^{}]*\}", inline[1:-1])
-                residue = re.sub(r"\{[^{}]*\}", "", inline[1:-1])
-                if not refs or residue.strip(" ,\t"):
+                # Require a comma between maps; stripping braces alone would
+                # incorrectly accept malformed "[{...}{...}]" as two slots.
+                body = inline[1:-1].strip()
+                refs = []
+                while body:
+                    item = re.match(r"^\{[^{}]*\}", body)
+                    if item is None:
+                        break
+                    refs.append(item.group())
+                    body = body[item.end():].lstrip()
+                    if not body:
+                        break
+                    if not body.startswith(","):
+                        break
+                    body = body[1:].lstrip()
+                    if not body:  # trailing comma is not a valid Unity YAML array
+                        break
+                if not refs or body:
                     counts["unsupported_inline_material_lists"] += 1
                     continue
                 entries = ["- " + ref for ref in refs]
