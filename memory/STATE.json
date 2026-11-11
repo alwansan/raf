@@ -3085,6 +3085,28 @@
     "mesa_depth_coverage": 2008,
     "transparent_depth_coverage": 0,
     "depth_write_off_coverage": 0,
+    "windows_pending": false,
+    "android_pending": true,
+    "phase_closed": false
+  },
+  "latest_gfx132": {
+    "batch_cases": 8,
+    "batch_captures": 39,
+    "shell_run": 43058814513,
+    "shell_artifact": 13872821704,
+    "android_pending": true,
+    "phase_closed": false
+  },
+  "latest_gfx133": {
+    "run": 43059086364,
+    "artifact": 13873895040,
+    "coverage_masks_exact": 4,
+    "native_pixels": 2008,
+    "phase_closed": false
+  },
+  "latest_gfx134": {
+    "mesa_mrt_targets": 4,
+    "coverage": 2008,
     "windows_pending": true,
     "android_pending": true,
     "phase_closed": false

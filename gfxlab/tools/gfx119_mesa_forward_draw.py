@@ -27,6 +27,7 @@ parser.add_argument("--animation", type=Path)
 parser.add_argument("--animation-portable", type=Path)
 parser.add_argument("--shadow", type=Path)
 parser.add_argument("--shadow-portable", type=Path)
+parser.add_argument("--deferred", type=Path)
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -555,6 +556,58 @@ if args.shadow:
                                                  ("transparent", transparent), ("depth-off", disabled))},
         "zero_bias_controlled_state": True, "unity_variant_selection_verified": False,
     }
+
+if args.deferred:
+    for name in ("mesh.bin", "indices.bin"):
+        if (args.private / name).read_bytes() != (args.deferred / name).read_bytes():
+            raise ValueError("Deferred must use the same indexed mesh")
+    targets = (U * 4)(*(36064 + index for index in range(4)))
+    for attachment in targets[1:]:
+        texture = gen("Textures")
+        call("BindTexture", 3553, texture)
+        call("TexStorage2D", 3553, 1, 32856, 256, 256)
+        call("FramebufferTexture2D", 36160, attachment, 3553, texture, 0)
+    gl("DrawBuffers", None, I, P)(4, targets)
+    if gl("CheckFramebufferStatus", U, U)(36160) != 36053:
+        raise ValueError("Deferred framebuffer incomplete")
+    samplers = select_slot(args.deferred, args.textures)
+    call("ReadBuffer", targets[0])
+    g0, blocks, material = draw(True)
+
+    def read_gbuffers(first):
+        buffers = [first]
+        for attachment in targets[1:]:
+            call("ReadBuffer", attachment)
+            pixels = c.create_string_buffer(256*256*4)
+            gl("ReadPixels", None, I, I, I, I, U, U, P)(0, 0, 256, 256, 0x1908, 0x1401, pixels)
+            buffers.append(np.frombuffer(pixels.raw, dtype=np.uint8).reshape(256, 256, 4))
+        call("ReadBuffer", targets[0])
+        check("Deferred MRT readback")
+        return buffers
+
+    gbuffer = read_gbuffers(g0)
+    bind_samplers({"normal": (255, 128, 255, 128)})
+    flat_gbuffer = read_gbuffers(draw(True)[0])
+    bind_samplers({"metallic": (0, 0, 0, 255)})
+    nonmetal_gbuffer = read_gbuffers(draw(True)[0])
+    bind_samplers()
+    if not all(np.array_equal(a, b) for a,b in zip(gbuffer, read_gbuffers(draw(True)[0]), strict=True)):
+        raise ValueError("Deferred repeat differs after restoring original inputs")
+    mask = gbuffer[0][:, :, 3] != 0
+    if not np.array_equal(mask, alpha):
+        raise ValueError("Deferred coverage differs from Forward")
+    changes = lambda control: [int(np.any(a != b, axis=2).sum())
+                               for a,b in zip(gbuffer, control, strict=True)]
+    normal, metallic = changes(flat_gbuffer), changes(nonmetal_gbuffer)
+    if normal[2] < 100 or metallic[0] == 0 or metallic[1] < 100 or normal[:2] != [0, 0] or metallic[2] != 0:
+        raise ValueError(f"Deferred MRT material controls did not respond: {normal=} {metallic=}")
+    report["deferred"] = {"covered_pixels": int(mask.sum()), "same_coverage_as_forward": True,
+                          "normal_control_changed_pixels_by_target": normal,
+                          "metallic_control_changed_pixels_by_target": metallic,
+                          "driver_verified_cb_blocks": blocks, "original_material_bytes_preserved": material,
+                          "bound_combined_samplers": len(samplers), "controlled_target_format": "RGBA8_UNORM",
+                          "target_hashes": [hashlib.sha256(a.tobytes()).hexdigest() for a in gbuffer],
+                          "unity_runtime_gbuffer_layout_verified": False}
 
 args.safe.write_text(json.dumps(report,indent=2)+"\n")
 print(json.dumps(report))

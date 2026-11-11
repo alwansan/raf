@@ -1,0 +1,30 @@
+{
+  "experiment": "GFX133",
+  "renderer": "Windows D3D11 WARP",
+  "controls": {
+    "native": {
+      "covered_pixels": 2008,
+      "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+      "mesa_coverage_exact": true
+    },
+    "solid": {
+      "covered_pixels": 2008,
+      "coverage_sha256": "539a7b7685e303394c783b9a9b88deeda9bc775cd3df041263f51e6a4f1b7f91",
+      "mesa_coverage_exact": true
+    },
+    "transparent": {
+      "covered_pixels": 0,
+      "coverage_sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "mesa_coverage_exact": true
+    },
+    "depth-off": {
+      "covered_pixels": 0,
+      "coverage_sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+      "mesa_coverage_exact": true
+    }
+  },
+  "unity_variant_selection_verified": false,
+  "phase_closed": false,
+  "run": 43059086364,
+  "artifact": 13873895040
+}

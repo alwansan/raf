@@ -1,0 +1,114 @@
+{
+  "experiment": "GFX134",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "exact_source_pair_count": 1,
+  "gles_offline_link_passed": true,
+  "stages": {
+    "vertex": {
+      "dxbc_sha256": "1917d00e1b627f5583cc81245bd126f8265c742b79ca554bf89edefaa4407d63",
+      "declared_cb_slots": 4,
+      "saved_float_writes": 1,
+      "saved_color_writes": 0,
+      "texenv_st_writes": 2,
+      "known_material_bytes": 36,
+      "total_declared_cb_bytes": 736,
+      "texture_contract": {
+        "distinct_sample_pairs": 0,
+        "sample_operations": 0
+      },
+      "spirv_validated": true,
+      "gles_source_emitted": true,
+      "translated_authenticated_cb_slots": 4,
+      "translated_literal_read_vec4_ranges_known_material_full": 2,
+      "translated_literal_read_vec4_ranges_known_material_partial": 1,
+      "translated_literal_read_vec4_ranges_without_material_bytes": 13,
+      "translated_dynamic_or_unsupported_cb_chains": 0,
+      "translated_texture_sample_contract": {
+        "source_sample_or_gather_operations": 0,
+        "source_original_immediate_t_s_pairs": 0,
+        "source_original_unresolved_dynamic_t_s": 0,
+        "source_distinct_pairs_within_stage": 0,
+        "original_sample_ops": 0,
+        "original_gather_ops": 0,
+        "source_instruction_count": 57,
+        "translated_sample_or_gather_operations": 0,
+        "translated_sample_or_gather_strict_pairs": 0,
+        "translated_unresolved_dynamic_pairs": 0,
+        "same_exact_private_original_DXBC_t_s_pair_multiset_as_translated_SPIRV": true,
+        "original_to_translated_pair_count_delta": 0,
+        "private_source_t_s_pair_edges_or_register_ids_exported": false,
+        "original_Material_TexEnv_property_register_binding_verified": false,
+        "original_constant_buffer_offsets_verified": false,
+        "original_shader48_Android_execution_verified": false
+      }
+    },
+    "fragment": {
+      "dxbc_sha256": "29c25a669ad3549f7329d2122e4b2ae511e131f334838fcdf5fe3bd4cdd436de",
+      "declared_cb_slots": 1,
+      "saved_float_writes": 4,
+      "saved_color_writes": 1,
+      "texenv_st_writes": 0,
+      "known_material_bytes": 32,
+      "total_declared_cb_bytes": 160,
+      "texture_contract": {
+        "verified_source_texture_pairs": 3,
+        "material_null_texture_pairs_requiring_runtime_default": 1,
+        "distinct_sample_pairs": 4,
+        "sample_operations": 4
+      },
+      "spirv_validated": true,
+      "gles_source_emitted": true,
+      "translated_authenticated_cb_slots": 1,
+      "translated_literal_read_vec4_ranges_known_material_full": 1,
+      "translated_literal_read_vec4_ranges_known_material_partial": 3,
+      "translated_literal_read_vec4_ranges_without_material_bytes": 0,
+      "translated_dynamic_or_unsupported_cb_chains": 0,
+      "translated_texture_sample_contract": {
+        "source_sample_or_gather_operations": 4,
+        "source_original_immediate_t_s_pairs": 4,
+        "source_original_unresolved_dynamic_t_s": 0,
+        "source_distinct_pairs_within_stage": 4,
+        "original_sample_ops": 4,
+        "original_gather_ops": 0,
+        "source_instruction_count": 50,
+        "translated_sample_or_gather_operations": 4,
+        "translated_sample_or_gather_strict_pairs": 4,
+        "translated_unresolved_dynamic_pairs": 0,
+        "same_exact_private_original_DXBC_t_s_pair_multiset_as_translated_SPIRV": true,
+        "original_to_translated_pair_count_delta": 0,
+        "private_source_t_s_pair_edges_or_register_ids_exported": false,
+        "original_Material_TexEnv_property_register_binding_verified": false,
+        "original_constant_buffer_offsets_verified": false,
+        "original_shader48_Android_execution_verified": false
+      }
+    }
+  },
+  "phase_closed": false,
+  "mesa": {
+    "covered_pixels": 2008,
+    "same_coverage_as_forward": true,
+    "normal_control_changed_pixels_by_target": [
+      0,
+      0,
+      2004,
+      0
+    ],
+    "metallic_control_changed_pixels_by_target": [
+      20,
+      2008,
+      0,
+      0
+    ],
+    "driver_verified_cb_blocks": 5,
+    "original_material_bytes_preserved": 68,
+    "bound_combined_samplers": 4,
+    "controlled_target_format": "RGBA8_UNORM",
+    "target_hashes": [
+      "7d1a60e86d0f0421d3ec1d4e6d8464ec06deff5572dca279a4925437b0acfd80",
+      "8c5c78c779beb62da1bbb1ab575a4903ba64c2923654bfc3f92319cb01f2f326",
+      "4b639855cdd9b0b7630cf0acb4f315998d3ce9a5ea14567331c3d723f9fe9f90",
+      "3f2f707704e4182d751b503291862a0e1b7013c77543da9170686f4e72796b35"
+    ],
+    "unity_runtime_gbuffer_layout_verified": false
+  }
+}
