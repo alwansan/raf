@@ -61,7 +61,7 @@ class RestoreIntoInputTests(unittest.TestCase):
             return restore(self.source,self.destination,
                 profile="selected",selected=list(self.data),
                 expected_commit=self.commit,expected_blob=self.blob,
-                min_free_reserve=0,**kw)
+                min_free_reserve=kw.pop("min_free_reserve",0),**kw)
 
     def test_real_stream_content_in_export_input(self):
         result=self.run_restore()
