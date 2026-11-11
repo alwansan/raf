@@ -29,6 +29,23 @@ class TextureBindingTests(unittest.TestCase):
             self.assertEqual(counts["texenv_slots_without_texture_line"], 2)
             self.assertEqual(counts["texture_null"], 1)
 
+    def test_orphan_texture_meta_not_proven_asset(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "missing.png.meta").write_text("guid: " + A + "\n")
+            (root / "sample.mat").write_text(
+                "Material:\n  m_SavedProperties:\n    m_TexEnvs:\n"
+                "    - _MainTex:\n        m_Texture: {fileID: 2800000, guid: " + A + ", type: 3}\n"
+                "    m_Floats:\n"
+            )
+            counts = audit(root)["counts"]
+            self.assertEqual(counts["texture_guid_orphan_meta_without_asset"], 1)
+            self.assertEqual(counts.get("texture_guid_unique_texture_meta", 0), 0)
+            (root / "missing.png").write_bytes(b"sample")
+            counts = audit(root)["counts"]
+            self.assertEqual(counts["texture_guid_unique_texture_meta"], 1)
+            self.assertEqual(counts.get("texture_guid_orphan_meta_without_asset", 0), 0)
+
     def test_asset_meta_is_ambiguous_not_proven_texture(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
