@@ -1,3 +1,11 @@
+## GFX100 / GFX-OWNER-004 — evidence and next gating tasks (11 Nov 2026)
+
+Actual owner GFX098 ZIP was audited offline; SHA256 `60b6cb3e13ea1da7808128311696e9a906655340ea6a2537ad9c9db8d50faa69`. 3 sessions /227 events/147 snapshots/0 logged Unity errors; 48/48 6-model matrix PNG hashes valid; repeated 12-case images byte-identical. 2× synthetic GPU Linear/Flat/NoPerspective/Affine readback, **NoPerspective exactly same PNG as Linear** with double status `DIAGNOSTIC_NATIVE_QUALIFIER_COLLAPSED_TO_SMOOTH`. Safe evidence `gfxlab/evidence/20261111_gfx100_gfx098_owner_safe_counts.json`, owner session `memory/sessions/20261111-GFX-chat-owner-gfx098-archive-68.md`. Bounded auditor and 4 synthetic tests committed, CI outcome pending independent verification.
+
+**P0 next:** 1) original-free native GLSL ES3 noperspective vs smooth+flat real GPU pixel discriminator with strict qualifier/active program logging; 2) source-authenticated rig/vertex stream (M01/M04 full weights, indices, submeshes, bindposes, hierarchy) preserving original identities; 3) original Shader48 GPU Material/CB/Sampler/Pass with proper Normal AG reconstruction after sampling and mip parity; 4) matched original PC vs phone reference and owner acceptance. Current GFX098 Standard snapshots **do not** prove original shader, animation or PC pixel equivalence. `originalShaderRestored=false`, `phase_closed=false`; no new full-game build or T branch change.
+
+---
+
 ## GFX094 delivered — actual APK verified, owner Adreno test pending
 
 [CI42924333794](https://github.com/alwansan/raf/actions/runs/42924333794) completed SUCCESS, including signing, APK ZIP/asset hashes and private-source purge. Immutable build SHA `66b2968673f410cbf58d5b255216c5e3c9c175ef`.
