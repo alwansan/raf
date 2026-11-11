@@ -36,3 +36,7 @@ Skia contains documented Qualcomm workaround refusing native `noperspective` und
 3. Then restore original indexed weighted skinned geometry/hierarchy and original Shader48 material, binding, dynamic pass states and PC↔Adreno pixel comparison. Original official Standard PC SHDR recompilation GFX099 already shown at representative stage CPU level, **not Android shader/pixel completion**.
 
 **Truth flags:** `originalShaderRestored=false`, `originalAnimationRestored=false`, `pcAdrenoPixelParityVerified=false`, `phase_closed=false`. T1–T5 and `main`, `feature/android-native-port`, `zip2` untouched.
+
+## Final current-turn source verification
+- Direct GitHub file reads after last write verified GFX102 manifest, Java, signing workflow, both source-free test modules and private-owner-ZIP auditor are present and consistent. 12/12 **static source invariants** checked in chat (package identifier, three GLSL version labels, required extension, real GPU readback, CPU error gates, Flat control, MediaStore path, PNG chunk CRC, signing workflow and no original assets). These are **static checks only, not claim of 18 terminal Python tests or signed APK**.
+- Exact branch HEAD after docs/STATE updates: `bbb8a00c96eb08fa5d24db55c2cc2b3326acbb05`. Workflow push-action status and downloadable Artifact remain unconfirmed; direct GitHub connector provides no push-workflow-run listing. Do not confuse `glGetError=0` with NativeNoPerspective shader compile success—actual GLSL compiler log has failures for VS and FS on #version 300 es.
