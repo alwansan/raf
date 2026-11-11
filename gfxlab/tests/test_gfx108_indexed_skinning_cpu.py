@@ -4,7 +4,8 @@ import unittest
 from types import SimpleNamespace
 from gfxlab.tools.gfx108_indexed_skinning_cpu import (
     positions_from_parsed_mesh,decoded_skin_weights,
-    skin_positions_cpu,safe_displacement_stats,transform_point)
+    skin_positions_cpu,safe_displacement_stats,transform_point,
+    handler_skin_safe_shapes)
 from gfxlab.tools.gfx107_source_bindpose_math import identity,mul
 
 def translate(x):
@@ -66,6 +67,14 @@ class OriginalIndexedCPUSkin(unittest.TestCase):
         matrix=list(identity());matrix[15]=0.
         with self.assertRaisesRegex(ValueError,"GFX108_AFFINE_HOMOGENEOUS_W_INVALID"):
             transform_point(tuple(matrix),(1.,2.,3.))
+    def test_only_shape_histograms_exported_for_unknown_mesh_skin(self):
+        m=SimpleNamespace(m_BoneWeights=[(.5,.5),(.2,.8,0.,0.)],
+                          m_BoneIndices=[(0,1),(0,1,0,0)])
+        report=handler_skin_safe_shapes(m)
+        self.assertEqual(report["weight_row_width_histogram"],{"2":1,"4":1})
+        self.assertEqual(report["index_row_width_histogram"],{"2":1,"4":1})
+        self.assertNotIn("weights",report)
+        self.assertNotIn("bone_indices",report)
     def test_repeated_identical_vertices_distinct_skinning(self):
         # Two duplicate positions must NOT be welded: weights and poses differ.
         result=skin_positions_cpu([(0.,0.,0.),(0.,0.,0.)],
