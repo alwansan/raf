@@ -22,7 +22,6 @@ def original_noperspective_translation_census(stage):
     if len(passes)!=7:raise ValueError("GFX104_ORIGINAL_PASS_COUNT_DRIFT")
     seen=set()
     counts=Counter()
-    affected_pairs=0
     errors=Counter()
     for passrow in passes:
         for vs,fs in passrow.get("pairs",[]):
@@ -91,7 +90,7 @@ def original_noperspective_translation_census(stage):
         "counts":dict(counts),
         "categories_of_nonrestored_stage":dict(errors),
         "source_exact_fragment_input_interpolation_identity_verified":False,
-        "source_to_spirv_noperspective_candidate_census_complete":True,
+        "source_to_spirv_noperspective_candidate_census_complete":(not bool(errors)),
         "source_to_generated_gles_noperspective_identity_verified":False,
         "siv_builtin_identity_verified":False,
         "originalShaderRestored":False,
