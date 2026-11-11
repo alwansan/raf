@@ -41,6 +41,35 @@ class MaterialPairSlotTests(unittest.TestCase):
             self.assertNotIn("test.mat", str(result))
             self.assertNotIn(A, str(result))
 
+    def test_same_guid_different_fileid_detected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            original, exported = Path(temp) / "original", Path(temp) / "exported"
+            original.mkdir()
+            exported.mkdir()
+            source = material()
+            (original / "test.mat").write_text(source, encoding="utf-8")
+            (exported / "test.mat").write_text(
+                source.replace("fileID: 2800000, guid: " + A,
+                               "fileID: 2800001, guid: " + A),
+                encoding="utf-8")
+            result = audit.compare(original, exported)
+            self.assertEqual(result["counts"]["changed_texture_reference_materials"], 1)
+            self.assertNotIn(A, str(result))
+
+    def test_same_pointer_reordered_fields_is_unchanged(self):
+        with tempfile.TemporaryDirectory() as temp:
+            original, exported = Path(temp) / "original", Path(temp) / "exported"
+            original.mkdir()
+            exported.mkdir()
+            source = material()
+            (original / "test.mat").write_text(source, encoding="utf-8")
+            (exported / "test.mat").write_text(
+                source.replace("fileID: 2800000, guid: " + A + ", type: 3",
+                               "type: 3, guid: " + A + ", fileID: 2800000"),
+                encoding="utf-8")
+            result = audit.compare(original, exported)
+            self.assertEqual(result["counts"]["unchanged_reference_materials"], 1)
+
     def test_same_slots_and_shader_remain_unchanged(self):
         with tempfile.TemporaryDirectory() as temp:
             original = Path(temp) / "original"
