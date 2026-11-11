@@ -23,3 +23,9 @@ Owner actual GFX098 ZIP SHA256 `60b6cb3e13ea1da7808128311696e9a906655340ea6a2537
 Expected result on user Adreno if vendor extension absent is `NATIVE_EXTENSION_NOT_ADVERTISED` (not driver-failure). If present and compiled, require GPU affine-vs-smooth actual evidence. A negative/unsupported outcome should move full source parity to a Vulkan SPIR-V NoPerspective probe or explicitly labeled GLES emulation, not claim repaired shader. Separate Shader48 original program and material/CB/skin/normal/PC pixel gates remain OPEN.
 
 **Flags:** `originalShaderRestored=false`, `originalAnimationRestored=false`, `sourceMaterialCbGpuVerified=false`, `pcAdrenoPixelParityVerified=false`, `phase_closed=false`.
+
+## Final source checkpoint for this chat cycle
+- Added required Flat GPU consistency guard: native success now requires Smooth vs CPU, Flat pixel stability and AffineEmulated vs CPU, plus actual vendor extension and native shader/link+GPU error thresholds. Source commit `0a439f4cdf6b570876da945753120fb820f3f630`.
+- Owner ZIP auditor's native success gate also checks `control_flat_stable`; regression fixture updated in `gfxlab/tests/test_gfx101_owner_zip_audit.py`. Source-free workflow uses unittest discovery (`test_gfx101*.py`), final workflow code commit `73f8ca3be73ceeac404ad09ea8f54a688d3c56f4`.
+- Arabic owner handoff added: `gfxlab/GFX101_OWNER_TEST_AR.md`, commit `6ef5d9b0a3a99f86105f2bddebeae06beb4a3348`. New independent app avoids Unity costs and original Raft assets.
+- CI result remains **UNKNOWN/UNVERIFIED**, not success; no exact current run ID or APK artifact has been obtained through the connected GitHub API. Don't claim real signed APK or device support until actual Actions result and owner's test ZIP.
