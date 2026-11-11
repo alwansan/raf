@@ -123,5 +123,35 @@ class GapClassifierTests(unittest.TestCase):
                                  "invalid_counter_evidence")
 
 
+    def test_reset_epoch_never_exposes_invalid_growth(self):
+        report = {
+            "callback_counter_decreases": 1,
+            "monotonic_callback_increases": {
+                "left": -3, "right": True, "middle": "7", "scroll": 4},
+            "monotonic_reader_increases": {
+                "left": 2, "right": False, "middle": None, "scroll": 0},
+        }
+        result = module.classify(report)
+        expected_callback = {"left": None, "right": None, "middle": None, "scroll": 4}
+        expected_reader = {"left": 2, "right": None, "middle": None, "scroll": 0}
+        for key in expected_callback:
+            with self.subTest(key=key):
+                self.assertEqual(result["per_counter"][key]["callback_growth"],
+                                 expected_callback[key])
+                self.assertEqual(result["per_counter"][key]["reader_growth"],
+                                 expected_reader[key])
+                self.assertEqual(result["per_counter"][key]["state"],
+                                 "counter_reset_requires_epoch_segmentation")
+        self.assertFalse(result["gameplay_success_proven"])
+
+    def test_reset_epoch_handles_malformed_sections(self):
+        report = {"reader_counter_decreases": 1,
+                  "monotonic_callback_increases": None,
+                  "monotonic_reader_increases": ["not", "counters"]}
+        result = module.classify(report)
+        self.assertIsNone(result["per_counter"]["left"]["callback_growth"])
+        self.assertIsNone(result["per_counter"]["left"]["reader_growth"])
+        self.assertFalse(result["gameplay_success_proven"])
+
 if __name__ == "__main__":
     unittest.main()
