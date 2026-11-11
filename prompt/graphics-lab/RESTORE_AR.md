@@ -1,3 +1,15 @@
+## 11 Nov 2026 — GFX111 M02 original clip CPU pose samples verified
+
+Session `20261111-GFX-chat-m02-original-clip-sampling-78`, origin=chat, base `72ea1d7e9f766ecbc561dc747e4d50dc72d387e4`. Write only to `experiment/android-graphics-rootcause`.
+
+Exact M02 Animator/controller/Avatar linked all 3 original clips. Each clip has 27 typed position/quaternion/scale bindings covering 9 authenticated hierarchy paths: eight renderer bones plus one additional ancestor. None of the source clip paths is zero. All nine were resolved by exact source Animator-relative paths corroborated by the Avatar table, rather than substituting the Animator root for the ninth path. No dense samples are present. First clip is 90 constant components, other two are 27 streamed + 63 constant. Stream frame and binding layout cross-checked against AssetStudio AnimationClip.cs and ModelConverter.cs.
+
+Local pinned ZIP2 run with UnityPy 1.25.4: five evenly spaced samples including endpoints per clip; evaluate packed scalar polynomials, normalize quaternions, propagate hierarchy and apply original bindposes/vertex influences to 1,666 positions per pose. All 15 samples produced 24,990 vertex positions. Clip 0 stays constant. Clips 1 and 2 change all four later samples from the first, with max XYZ component changes 0.3626031971 and 0.1050628657 respectively. Synthetic packed parser checks passed including cubic midpoint, exact terminal key and rejection of truncated frames. All 18 GFX108 regression tests pass. Safe counts `gfxlab/evidence/20261111_gfx111_m02_clip_cpu_pose_safe.json`. No raw clip, pose, or geometry added to Git.
+
+The quaternion normalization, packed scalar interpolation and source-world TRS are the current CPU reference implementation. A Unity runtime pose comparison, clip looping/root motion semantics, Android animation playback and PC↔Adreno rendered pixel proof remain open. Next: establish an independent Unity pose reference for these clip times, then use verified poses in an Android comparison. GFX109 owner snapshot evidence remains verified. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX109 Adreno positions verified and GFX110 source animation links resolved
 
 Session `20261111-GFX-chat-gfx109-owner-animation-links-77`, origin=chat, base `96b6e66eadbbf49d188b76f69268411fe3a45e75`. Only write branch `experiment/android-graphics-rootcause`.

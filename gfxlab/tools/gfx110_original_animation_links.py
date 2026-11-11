@@ -149,7 +149,7 @@ class SourceGraph:
                 "distinct_typed_clips": len(unique), "unresolved_clip_refs": unresolved, **counts}
 
 
-def audit(stage):
+def audit(stage, inspect_case=None):
     entries, types, _ = all_model_entries(stage)
     selection, _ = selected_five(stage)
     if len(selection["selected"]) != 5:
@@ -192,6 +192,8 @@ def audit(stage):
             counts.update(animators)
             without_animator += not animators
         keys = sorted(set(renderer_animators) | counts.keys())
+        if inspect_case is not None:
+            inspect_case(e, graph, renderer, bone_nodes, renderer_animators)
         result.append({"model": e["id"], "source_bones": len(bones),
                        "bones_without_animator_ancestor": without_animator,
                        "animator_candidates": [

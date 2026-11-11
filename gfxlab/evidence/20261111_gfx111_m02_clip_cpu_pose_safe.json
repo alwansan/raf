@@ -1,0 +1,36 @@
+{
+  "experiment": "GFX111",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "cases": [
+    {
+      "clip_index": 0,
+      "sampled_poses": 5,
+      "streamed_components": 0,
+      "constant_components": 90,
+      "positions_compared_per_pose": 1666,
+      "poses_changed_from_first": 0,
+      "max_position_component_change_from_first": 0.0
+    },
+    {
+      "clip_index": 1,
+      "sampled_poses": 5,
+      "streamed_components": 27,
+      "constant_components": 63,
+      "positions_compared_per_pose": 1666,
+      "poses_changed_from_first": 4,
+      "max_position_component_change_from_first": 0.3626031971068642
+    },
+    {
+      "clip_index": 2,
+      "sampled_poses": 5,
+      "streamed_components": 27,
+      "constant_components": 63,
+      "positions_compared_per_pose": 1666,
+      "poses_changed_from_first": 4,
+      "max_position_component_change_from_first": 0.10506286571853707
+    }
+  ],
+  "unity_runtime_pose_verified": false,
+  "adreno_animated_pose_verified": false,
+  "phase_closed": false
+}
