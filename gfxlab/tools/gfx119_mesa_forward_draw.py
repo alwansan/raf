@@ -26,6 +26,7 @@ parser.add_argument("--forward-add-portable", type=Path)
 parser.add_argument("--animation", type=Path)
 parser.add_argument("--animation-portable", type=Path)
 parser.add_argument("--shadow", type=Path)
+parser.add_argument("--shadow-receiver", type=Path)
 parser.add_argument("--shadow-portable", type=Path)
 parser.add_argument("--deferred", type=Path)
 parser.add_argument("--deferred-portable", type=Path)
@@ -247,6 +248,8 @@ def bind_samplers(replacements=None):
     bindings = {b["index"]:b for b in contracts["fragment"]["bindings"] if b["type"] == 0}
     roles = {"_MainTex":"basecolor","_BumpMap":"normal","_MetallicGlossMap":"metallic"}
     defaults = {"_OcclusionMap","unity_SpecCube0","unity_SpecCube1","unity_ProbeVolumeSH"}
+    if args.shadow_receiver and root == args.shadow_receiver:
+        defaults.add("_ShadowMapTexture")
     if {int(slot) for _,_,slot,_ in samplers} != set(bindings) or len(samplers) != len(bindings):
         raise ValueError("Exact source texture slot contract changed")
     for unit,(kind,name,slot,sampler) in enumerate(samplers):
@@ -256,7 +259,8 @@ def bind_samplers(replacements=None):
         if binding["name"] not in roles.keys() | defaults:
             raise ValueError("Texture lacks source or explicit fixture input")
         role = roles.get(binding["name"])
-        upload_texture(unit,kind,role,replacements.get(role))
+        replacement = replacements.get(binding["name"]) if role is None else replacements.get(role)
+        upload_texture(unit,kind,role,replacement)
         location = gl("GetUniformLocation",I,U,S)(p,name.encode())
         if location < 0:
             raise ValueError("Translated sampler missing from driver program")
@@ -545,6 +549,39 @@ if args.animation:
     report["animation"] = {"samples": samples, "unique_images_per_clip": unique,
                            "fixed_camera_across_samples": True,
                            "unity_animation_player_verified": False}
+
+if args.shadow_receiver:
+    for name in ("mesh.bin", "indices.bin"):
+        if (args.private / name).read_bytes() != (args.shadow_receiver / name).read_bytes():
+            raise ValueError("Shadow receiver must use the same indexed mesh")
+    shadow_bindings = select_slot(args.shadow_receiver, args.textures)
+    frame, = [g for g in contracts["fragment"]["groups"] if g["name"] == "UnityPerFrame"]
+    view, = [f for f in frame["parameters"].values() if f["name"] == "unity_MatrixV"]
+    slot, = [b["index"] for b in contracts["fragment"]["bindings"]
+             if b["name"] == "UnityPerFrame" and b["type"] == 1]
+    if (contracts["fragment"]["sizes"][str(slot)], view["index"], view["rows"], view["columns"]) != (12, 144, 4, 4):
+        raise ValueError("Shadow receiver view matrix layout changed")
+    view["rows"] = 3
+    engine.update(_ProjectionParams=(1, 0, 0, 0), _LightShadowData=(0, 0, 0, 0),
+                  unity_ShadowFadeCenterAndType=(0, 0, 0, 0),
+                  unity_MatrixV=engine["unity_ObjectToWorld"][:12])
+    receiver_lit, blocks, material = draw(True)
+    bind_samplers({"_ShadowMapTexture": (0, 0, 0, 255)})
+    receiver_blocked, _, _ = draw(True)
+    bind_samplers()
+    restored, _, _ = draw(True)
+    changes = int(np.any(receiver_lit[:, :, :3] != receiver_blocked[:, :, :3], axis=2).sum())
+    if (not np.array_equal(receiver_lit, restored) or changes < 100 or
+            not np.array_equal(receiver_lit[:, :, 3], receiver_blocked[:, :, 3]) or
+            np.any(receiver_blocked[:, :, :3] > receiver_lit[:, :, :3])):
+        raise ValueError(f"Screen shadow attenuation control failed: {changes=}")
+    report["shadow_receiver"] = {"changed_rgb_pixels": changes,
+                                 "coverage": int(np.count_nonzero(receiver_lit[:, :, 3])),
+                                 "covered_alpha_preserved": True, "restored_exact": True,
+                                 "bound_samplers": len(shadow_bindings), "driver_verified_cb_blocks": blocks,
+                                 "original_material_bytes_preserved": material,
+                                 "screen_shadow_texture_controlled": True,
+                                 "unity_shadow_pipeline_verified": False}
 
 if args.shadow:
     for name in ("mesh.bin", "indices.bin"):

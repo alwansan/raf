@@ -1,0 +1,127 @@
+{
+  "experiment": "GFX153/154",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "models": 6,
+  "gpu_slots": 7,
+  "slots": [
+    {
+      "model": "M00",
+      "slot": 0,
+      "vertices": 375,
+      "triangles": 420,
+      "source_uv1_vertices": 0,
+      "covered_pixels": 703,
+      "directional_light_changed_pixels": 507,
+      "normal_control_changed_pixels": 473,
+      "metallic_control_changed_pixels": 506,
+      "rgba_sha256": "93687424822c80d9807a5673699cf2f7accca4a3928da2818199acbdd4c0e852",
+      "baseline_repeat_exact": true
+    },
+    {
+      "model": "M01",
+      "slot": 0,
+      "vertices": 5095,
+      "triangles": 7432,
+      "source_uv1_vertices": 5095,
+      "covered_pixels": 9721,
+      "directional_light_changed_pixels": 9145,
+      "normal_control_changed_pixels": 7867,
+      "metallic_control_changed_pixels": 9282,
+      "rgba_sha256": "f28a81f4a53f5f9c25b58af65983f3204a7abcbfbfc8d284b3b060cfe8d1577f",
+      "baseline_repeat_exact": true
+    },
+    {
+      "model": "M02",
+      "slot": 0,
+      "vertices": 1666,
+      "triangles": 2388,
+      "source_uv1_vertices": 0,
+      "covered_pixels": 2008,
+      "directional_light_changed_pixels": 1979,
+      "normal_control_changed_pixels": 1627,
+      "metallic_control_changed_pixels": 1960,
+      "rgba_sha256": "919be1dc468c32ec7a2c81d50c91542cac10b73c1ab5993d96cc3df72805593e",
+      "baseline_repeat_exact": true
+    },
+    {
+      "model": "M03",
+      "slot": 0,
+      "vertices": 2163,
+      "triangles": 456,
+      "source_uv1_vertices": 0,
+      "covered_pixels": 4456,
+      "directional_light_changed_pixels": 2046,
+      "normal_control_changed_pixels": 2110,
+      "metallic_control_changed_pixels": 2046,
+      "rgba_sha256": "6ac4589f74728559da0775d7137f5c1f97a74bed9d7a5b72d3c5f90c3964279a",
+      "baseline_repeat_exact": true
+    },
+    {
+      "model": "M03",
+      "slot": 1,
+      "vertices": 2163,
+      "triangles": 2872,
+      "source_uv1_vertices": 0,
+      "covered_pixels": 3301,
+      "directional_light_changed_pixels": 2755,
+      "normal_control_changed_pixels": 2470,
+      "metallic_control_changed_pixels": 2743,
+      "rgba_sha256": "c6d786e908500674d64c3220bf4e26b98253302a88ba390a67b00b570877da78",
+      "baseline_repeat_exact": true
+    },
+    {
+      "model": "M04",
+      "slot": 0,
+      "vertices": 2445,
+      "triangles": 3492,
+      "source_uv1_vertices": 2445,
+      "covered_pixels": 2981,
+      "directional_light_changed_pixels": 2687,
+      "normal_control_changed_pixels": 2289,
+      "metallic_control_changed_pixels": 2686,
+      "rgba_sha256": "bb3bfb41e5a24856f55f892fbb825e284f1520d7cdd4c60c10fc6d1275f7407c",
+      "baseline_repeat_exact": true
+    },
+    {
+      "model": "M05",
+      "slot": 0,
+      "vertices": 4452,
+      "triangles": 5759,
+      "source_uv1_vertices": 4452,
+      "covered_pixels": 2520,
+      "directional_light_changed_pixels": 2401,
+      "normal_control_changed_pixels": 994,
+      "metallic_control_changed_pixels": 2368,
+      "rgba_sha256": "54305dcaf8cacc9a41d85397a8a4091b552d0644df9054f44f99375ec69e85f5",
+      "baseline_repeat_exact": true
+    }
+  ],
+  "m03_combined": {
+    "second_slot_triangles": 2872,
+    "second_slot_coverage": 3301,
+    "combined_coverage": 7022,
+    "overlap_pixels": 735,
+    "exclusive_pixels_by_slot": [
+      3721,
+      2566
+    ],
+    "rgba_sha256": "aa863f4b30ea4d8f5fc680dcadacc8c1c53b1d765de36c312dc820c6f8a64043"
+  },
+  "shadow_receiver": {
+    "changed_rgb_pixels": 1979,
+    "coverage": 2008,
+    "covered_alpha_preserved": true,
+    "restored_exact": true,
+    "bound_samplers": 8,
+    "driver_verified_cb_blocks": 11,
+    "original_material_bytes_preserved": 68,
+    "screen_shadow_texture_controlled": true,
+    "unity_shadow_pipeline_verified": false
+  },
+  "phone_pending": [
+    "M01",
+    "M04",
+    "M05"
+  ],
+  "phase_closed": false
+}

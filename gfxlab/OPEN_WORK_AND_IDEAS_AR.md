@@ -1,3 +1,13 @@
+## 12 Nov 2026 — Phase-one scope corrected; six-model automated Shader48 calibration passed Mesa
+
+Session `20261112-GFX-chat-phase-one-method-six-samples-112`, origin=chat, write only `experiment/android-graphics-rootcause`. Owner clarified phase one is the method for original meshes, materials, colors, Shader48 and shadows across M00–M05. Animator and complete PC gameplay are separate. The later project-wide worker is deferred until method acceptance.
+
+GFX153 local pinned ZIP2 replay translated and rendered all six original meshes and seven source material slots. All pass light, flat-normal, metallic and exact-repeat controls. M01/M04/M05 carry original UV1; preserved and bound on GLES. Original M03 two-slot draw passed. GFX154 exact M02 directional SHADOWS_SCREEN pair linked and rendered, controlled screen texture darkened 1,979 pixels while retaining all 2,008 covered pixels. Rebinding the lit texture restored exact output. This complements GFX133 depth ShadowCaster. It tests controlled original stages; no claim of automatic Unity game shadow selection.
+
+[Android shell 43107712799](https://github.com/alwansan/raf/actions/runs/43107712799) passed. Signed GFX154-Remaining-Original-Samples.apk package com.alwansan.gfx154, 32,303,464 bytes, SHA256 50d75cbad01a4cf93f73b4ee2d6e8868839dc33246005c4f7fd4ae46134394b6, private owner file `libfile_32329af2c5b88191ac29690325657341`. APK v3, unchanged assembled contents, and audit replay of 3 cases/12 captures verified. Tests M01, M04, M05 only. Send one new GFX124-ALL-TEST-LOGS ZIP from Download/Games/cl/test/g/. GFX142 and GFX148 remain valid and no rerun required. Method draft: `gfxlab/PHASE_ONE_METHOD_HANDOFF_AR.md`. After device review, reconcile remaining differences and finalize method. `phase_closed=false`.
+
+---
+
 ## 12 Nov 2026 — GFX152 continuous curve arithmetic reference
 
 Session `20261112-GFX-chat-phase-one-open-gates-111`, origin=chat. Write only `experiment/android-graphics-rootcause`. Evaluated 924 interior scalar samples across two streamed M02 clips using original cubic coefficients and equivalent Hermite endpoint values/slopes. Max absolute arithmetic difference 1.11e-16; this is a local reference, not Unity playback. Next pass continuous curves through Animator and compare off-key BakeMesh against source. Actual Unity shader pass selection and state, full scoped rig and source material/topology reuse, and matched original PC/device scene still require evidence. Existing GFX142 and GFX148 phone evidence retained; no repeat test requested. `phase_closed=false`.

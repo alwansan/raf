@@ -3288,5 +3288,19 @@
     "max_error": 1.1102230246251565e-16,
     "unity_animator_verified": false,
     "phase_closed": false
+  },
+  "latest_gfx153": {
+    "models": 6,
+    "slots": 7,
+    "mesa_all_passed": true,
+    "phase_closed": false
+  },
+  "latest_gfx154": {
+    "run": 43107712799,
+    "artifact": 13893763841,
+    "private_owner_file": "libfile_32329af2c5b88191ac29690325657341",
+    "owner_pending": true,
+    "shadow_receiver_changed_pixels": 1979,
+    "phase_closed": false
   }
 }
