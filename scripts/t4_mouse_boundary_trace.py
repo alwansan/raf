@@ -15,8 +15,8 @@ from pathlib import Path
 
 STAGES = ("android", "unity", "raft")
 BUTTONS = ("left", "right", "middle", "wheel")
-TOKEN = re.compile(r"(?<!\\w)(session|frame|stage|button)=([A-Za-z0-9_-]+)\\b")
-MARKER = re.compile(r"(?<![A-Za-z0-9_])T4_MOUSE_STAGE(?=\\s|$)")
+TOKEN = re.compile(r"(?<!\w)(session|frame|stage|button)=([A-Za-z0-9_-]+)\b")
+MARKER = re.compile(r"(?<![A-Za-z0-9_])T4_MOUSE_STAGE(?=\s|$)")
 
 
 def analyze(lines):
