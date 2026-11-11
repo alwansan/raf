@@ -4,7 +4,11 @@
   "write_branch": "feature/android-native-port",
   "source": {
     "branch": "zip2",
-    "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "acquisition_policy": "ZIP2 only; do not use git lfs pull/fetch/smudge for GT; reconstruct ordered part-00000.. and verify original bytes and sha256 against RAFT_FILE_MANIFEST.tsv; never fall back to LFS; use disposable verified stage",
+    "provider_url": "https://github.com/alwansan/raf/tree/zip2",
+    "git_lfs_acquisition_allowed": false,
+    "staging": "isolated temporary output, not tracked Android Raft data; sha256 and byte length required"
   },
   "calibration": {
     "closed": true,
@@ -12,7 +16,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "source_82_owner_metadata_inventory_verified_export_integration_unverified",
+  "status": "GT_ZIP2_ONLY_owner_policy_recorded_source_inventory_verified_export_comparison_next",
   "inventory": {
     "status": "authenticated_82_serialized_owner_headers",
     "source_structural": {
@@ -69,5 +73,5 @@
     "last_verified_source_ci_sha": "4cd8d0228a9add43817b616bfede8892df8fd411"
   },
   "latest_session": "sessions/20261112-GT-chat-inventory-01.md",
-  "next_action": "Match source owner:pathID:type records and material/texture/shader usage graph to actual AssetRipper ExportedProject .meta/GUID and Unity import, then restore one high-impact source-backed graphics family and prove a real rendering or Android build gate without interfering with T1-T5."
+  "next_action": "Use ZIP2 exclusively to reconstruct and SHA256 verify any required source/stream containers; build source Mesh/Renderer/Submesh/Material/Shader/Texture edge identity graph, then compare against exported Unity GUIDs without LFS. Continue source-based restoration in isolated GT CI."
 }
