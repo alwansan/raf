@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read-only particle renderer -> material GUID census for Unity YAML trees.
 
-Output is aggregate counts and salted-by-default SHA-256 prefixes, never raw
+Output is aggregate counts and optionally salted SHA-256 prefixes, never raw
 game asset contents. This is structural evidence, not a shader/runtime test.
 """
 import argparse
