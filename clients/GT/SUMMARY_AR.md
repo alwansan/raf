@@ -6,6 +6,8 @@
 
 **دفعة GT 3 — استعادة مزوّد الرسوميات ZIP2 بدون LFS:** نجحت [GitHub Actions 43117743780](https://github.com/alwansan/raf/actions/runs/43117743780) في إعادة تجميع ملف Stream ومشهد split من SHA ZIP2 المثبت، وإثبات تطابق SHA256 والحجم لمجموع **70,566,428 بايت** من ملفين. [Artifact إثبات المصدر 13899122924](https://github.com/alwansan/raf/actions/runs/43117743780/artifacts/13899122924). أداة اختيار واستعادة جميع الأنواع `scripts/gt_zip2_payloads.py` واختباراتها `tests/test_gt_zip2_payloads.py` جاهزة لاستعادة بقية .resS/.resource في المسار الخاص بـGT. نجاح استعادة الملف ليس نجاح Render/Android.
 
+**دفعة GT 4 — حل روابط الـRenderer→Material الأصلية بالكامل:** نجح [GitHub Actions 43118214676](https://github.com/alwansan/raf/actions/runs/43118214676) (الاختبارات الاصطناعية وفحص المصدر) في قراءة مراجع الـMaterial من جميع 82 حاوية أصلية موثقة، وربطها بهوية `(container, path_id, Material)` الدقيقة. ثُبّتت **195,174 خانة مادة**، منها **194,293 مرجعاً غير فارغ وصل إلى كائن Material صحيح** و**881 null أصلياً**؛ لا يوجد مرجع غير فارغ معلّق أو يشير إلى صنف خاطئ. **1,351 Material فريدة مشار إليها** من أصل **1,556 Material object**، ولا يعني الفرق أن باقي المواد غير مستخدمة بطرق أخرى. [دليل المطابقة 13899108653](https://github.com/alwansan/raf/actions/runs/43118214676/artifacts/13899108653) و[سجل GT](evidence/20261112_original_material_link_graph.json). **لم تُثبت بعد مطابقة الـGUID وMaterial pointer بين المصدر وExportedProject، ولا العرض على الهاتف.**
+
 ## نقطة التثبيت والأدلة
 
 - **مرجع ZIP2 الموثق:** `15964ea8f246b6e076ce26b60931ee2e1a9a2385`؛ البيان الأصلي 366 ملفاً وحجم 7,789,295,609 بايت.
