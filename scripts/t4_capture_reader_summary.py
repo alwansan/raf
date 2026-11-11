@@ -6,7 +6,10 @@ Does not infer gameplay success from telemetry. Use one build/process log only.
 import argparse
 import json
 import re
+import zipfile
+from contextlib import contextmanager
 from pathlib import Path
+import io
 
 CALLBACK = "physical_mouse_captured_action_callbacks"
 READER = "physical_mouse_legacy_reader_evidence"
@@ -66,11 +69,36 @@ def summarize(lines):
     }
 
 
+@contextmanager
+def open_log(path, member=None):
+    """Read one bounded text member, never combine sessions from an archive."""
+    if not zipfile.is_zipfile(path):
+        if member:
+            raise ValueError('--member requires a ZIP archive')
+        with path.open(encoding='utf-8', errors='replace') as handle:
+            yield handle
+        return
+    with zipfile.ZipFile(path) as archive:
+        candidates = [entry for entry in archive.infolist()
+                      if not entry.is_dir() and entry.filename.lower().endswith(('.log', '.txt'))]
+        if member:
+            candidates = [entry for entry in candidates if entry.filename == member]
+        if len(candidates) != 1:
+            raise ValueError('ZIP requires exactly one .log/.txt member; select with --member')
+        entry = candidates[0]
+        if entry.file_size > 64 * 1024 * 1024:
+            raise ValueError('ZIP log member exceeds 64 MiB safety limit')
+        with archive.open(entry) as raw:
+            with io.TextIOWrapper(raw, encoding='utf-8', errors='replace') as handle:
+                yield handle
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("log", type=Path)
+    parser.add_argument("--member", help="Exact .log/.txt member path inside ZIP")
     args = parser.parse_args()
-    with args.log.open(encoding="utf-8", errors="replace") as handle:
+    with open_log(args.log, args.member) as handle:
         print(json.dumps(summarize(handle), indent=2))
 
 
