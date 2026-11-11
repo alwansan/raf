@@ -10,6 +10,8 @@ on:
       - tests/test_gt_serialized_graphics_counts.py
       - scripts/gt_original_material_link_graph.py
       - tests/test_gt_original_material_link_graph.py
+      - scripts/gt_original_mesh_texture_graph.py
+      - tests/test_gt_original_mesh_texture_graph.py
       - .github/workflows/raft-gt-serialized-graphics-owners.yml
   workflow_dispatch:
 
@@ -38,6 +40,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_stage_serialized_owners.py -v
           python3 -m unittest discover -s tests -p test_gt_serialized_graphics_counts.py -v
           python3 -m unittest discover -s tests -p test_gt_original_material_link_graph.py -v
+          python3 -m unittest discover -s tests -p test_gt_original_mesh_texture_graph.py -v
 
   original-materials-shaders:
     needs: synthetic
@@ -167,6 +170,12 @@ jobs:
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --source "$RUNNER_TEMP/gt-serialized" \
             --report "$RUNNER_TEMP/gt-original-material-links.json"
+      - name: Authenticate original MeshFilter and Material Texture targets
+        run: |
+          python3 -m scripts.gt_original_mesh_texture_graph \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source "$RUNNER_TEMP/gt-serialized" \
+            --report "$RUNNER_TEMP/gt-original-mesh-texture-graph.json"
       - name: Reuse W3 exact Material to Shader object topology audit
         run: |
           python3 -m scripts.probe_w3_full_material_shader_inventory \
@@ -207,6 +216,7 @@ jobs:
             ${{ runner.temp }}/gt-all-graphics-owners.json
             ${{ runner.temp }}/gt-material-shader-graph.json
             ${{ runner.temp }}/gt-original-material-links.json
+            ${{ runner.temp }}/gt-original-mesh-texture-graph.json
             ${{ runner.temp }}/gt-texture-colors-2owners.json
           retention-days: 14
           if-no-files-found: ignore
