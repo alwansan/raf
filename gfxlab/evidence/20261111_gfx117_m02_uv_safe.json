@@ -1,0 +1,18 @@
+{
+  "experiment": "GFX117",
+  "uv_vertices": 1666,
+  "roles": [
+    "basecolor",
+    "normal",
+    "metallic"
+  ],
+  "uv_sha256": "c1c2f12bf64dad89048b352754cb00f97100b2e015c8b2725f1b2104141f687f",
+  "sample_mips": [
+    0,
+    4
+  ],
+  "texture_filter": "bilinear within explicit mip",
+  "wrap": "repeat",
+  "original_shader_restored": false,
+  "phase_closed": false
+}

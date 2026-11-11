@@ -1,0 +1,157 @@
+{
+  "experiment": "GFX117",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "captures": {
+    "C0P0-basecolor-L0.png": {
+      "rgba_sha256": "458e1106a6ec5fd454dea0c465d04d2f09915d8afdc86d12a50c610099c97132",
+      "covered_pixels": 2220,
+      "unique_covered_rgb": 1242
+    },
+    "C0P0-basecolor-L4.png": {
+      "rgba_sha256": "33a436d58e5c8c95b43dc9ab7381c04fbfda012ae082f794408e0d5ab8acf5c4",
+      "covered_pixels": 2220,
+      "unique_covered_rgb": 1408
+    },
+    "C0P0-normal-L0.png": {
+      "rgba_sha256": "1c22529659b968a08a0e08985e241d59925a04b19b23c1ea563acbb750e81412",
+      "covered_pixels": 2220,
+      "unique_covered_rgb": 1150
+    },
+    "C0P0-normal-L4.png": {
+      "rgba_sha256": "877de101da23c9b63035f04f5dd46c3bb95d0be46cde3fef14526f4f62a2b68a",
+      "covered_pixels": 2220,
+      "unique_covered_rgb": 829
+    },
+    "C0P0-metallic-L0.png": {
+      "rgba_sha256": "0a8a532dff76dda5c8e7282a7eb954d9cc29a65bb8ca613e349a6bc9391cf923",
+      "covered_pixels": 2220,
+      "unique_covered_rgb": 172
+    },
+    "C0P0-metallic-L4.png": {
+      "rgba_sha256": "6aaef4bca1136e7f5689775090ee6fac741d0594e1953055a46e51083de17745",
+      "covered_pixels": 2220,
+      "unique_covered_rgb": 182
+    },
+    "C1P0-basecolor-L0.png": {
+      "rgba_sha256": "92e90fc63ca0ea249b735a7c5836979878a714b95cf9bd3065052d06f2fa0aee",
+      "covered_pixels": 2218,
+      "unique_covered_rgb": 1247
+    },
+    "C1P0-basecolor-L4.png": {
+      "rgba_sha256": "272afc9a712de015763fd2e096de491eca1afc119e92e98c11baac9dcfb39735",
+      "covered_pixels": 2218,
+      "unique_covered_rgb": 1399
+    },
+    "C1P0-normal-L0.png": {
+      "rgba_sha256": "1edc585e146aef83b7317a545242205e4bdca3101cb5e4d4cd71596c13d875c9",
+      "covered_pixels": 2218,
+      "unique_covered_rgb": 1150
+    },
+    "C1P0-normal-L4.png": {
+      "rgba_sha256": "afe9a956f74193b280c015c3de19fe90681ed6bacfea5143f664e279b3165f94",
+      "covered_pixels": 2218,
+      "unique_covered_rgb": 825
+    },
+    "C1P0-metallic-L0.png": {
+      "rgba_sha256": "fc0b161592a7a0bda69ea53e0a7ec1e6d7a10bf49f80bf5d0be5c9dae7369fec",
+      "covered_pixels": 2218,
+      "unique_covered_rgb": 172
+    },
+    "C1P0-metallic-L4.png": {
+      "rgba_sha256": "202b9ce08daf9f4424c8b13d583e3859805a25b16eb5e0e954fd40fede865616",
+      "covered_pixels": 2218,
+      "unique_covered_rgb": 182
+    },
+    "C1P2-basecolor-L0.png": {
+      "rgba_sha256": "001a27fe08d9cea79cc40ed56e7463a00dd9d74ac0af81208cf96c2f1052b9b7",
+      "covered_pixels": 2032,
+      "unique_covered_rgb": 1130
+    },
+    "C1P2-basecolor-L4.png": {
+      "rgba_sha256": "e7121c0bfad8c5adc204a6ed86ca79848399c2185d855af459e3888911742194",
+      "covered_pixels": 2032,
+      "unique_covered_rgb": 1296
+    },
+    "C1P2-normal-L0.png": {
+      "rgba_sha256": "72a654380b173609fe4b99715e7fc2a777aa5419cf16348eca3817196f078f4d",
+      "covered_pixels": 2032,
+      "unique_covered_rgb": 1119
+    },
+    "C1P2-normal-L4.png": {
+      "rgba_sha256": "211005282409238f58fb2a9af454f82c1693428e81573d2940709c8ad09fa688",
+      "covered_pixels": 2032,
+      "unique_covered_rgb": 802
+    },
+    "C1P2-metallic-L0.png": {
+      "rgba_sha256": "d79307fb73c01a427f31f1174aa937f21012a6fcc883a25e21df51f626556230",
+      "covered_pixels": 2032,
+      "unique_covered_rgb": 171
+    },
+    "C1P2-metallic-L4.png": {
+      "rgba_sha256": "6cd3d5e6afcfbef4e917ff00cd74132fa160877fd9c5c3608f46afcd7406fd1a",
+      "covered_pixels": 2032,
+      "unique_covered_rgb": 182
+    },
+    "C2P0-basecolor-L0.png": {
+      "rgba_sha256": "97426ca75ab8bc3dd74b343060ff61155a3f6deb671f0d2c2ac19afbe50062a6",
+      "covered_pixels": 2311,
+      "unique_covered_rgb": 1260
+    },
+    "C2P0-basecolor-L4.png": {
+      "rgba_sha256": "9c3ae8666ed0af3c56cd14bd9d1f31052a621398675d25bffd5aad82103b00e1",
+      "covered_pixels": 2311,
+      "unique_covered_rgb": 1496
+    },
+    "C2P0-normal-L0.png": {
+      "rgba_sha256": "ad748e7b0ea31bde5318b10b1a6c8f0ba5d0bdd96a927efb92637f7298b7942f",
+      "covered_pixels": 2311,
+      "unique_covered_rgb": 1184
+    },
+    "C2P0-normal-L4.png": {
+      "rgba_sha256": "07e45f24a232b239d9b38c26d2825dde2be155fdaf8414ac56d9d2c16d103d23",
+      "covered_pixels": 2311,
+      "unique_covered_rgb": 822
+    },
+    "C2P0-metallic-L0.png": {
+      "rgba_sha256": "a645cc8466f7577afde8329d4c5160c810ba13429512e1d8fb60ab5a5d1f0440",
+      "covered_pixels": 2311,
+      "unique_covered_rgb": 173
+    },
+    "C2P0-metallic-L4.png": {
+      "rgba_sha256": "a35b6d84e7b650aca835a8b1ba6d84958defbe69857072dad24e5c3e40c1e2cc",
+      "covered_pixels": 2311,
+      "unique_covered_rgb": 182
+    },
+    "C2P2-basecolor-L0.png": {
+      "rgba_sha256": "39d8965e3f3a264081db227cf6b5f46cba96477a1900aa1ec6ce67b532f78081",
+      "covered_pixels": 2224,
+      "unique_covered_rgb": 1243
+    },
+    "C2P2-basecolor-L4.png": {
+      "rgba_sha256": "6be4701c3d320893daf06df980ee082dd10eb8dd70b61066358fb04597bff233",
+      "covered_pixels": 2224,
+      "unique_covered_rgb": 1420
+    },
+    "C2P2-normal-L0.png": {
+      "rgba_sha256": "8eee4af45e39318da9333db75e3deee0d0c2158cb59ea0398a16cf64a756ae60",
+      "covered_pixels": 2224,
+      "unique_covered_rgb": 1161
+    },
+    "C2P2-normal-L4.png": {
+      "rgba_sha256": "0e6348b5c1b4fa9cbf5687618420a7d1220d4b9f43a10a3c0a4a56a59370cb60",
+      "covered_pixels": 2224,
+      "unique_covered_rgb": 822
+    },
+    "C2P2-metallic-L0.png": {
+      "rgba_sha256": "4f8981f39e9c27b15cb5cf756d6f9a0cd3ff6e08500249f2a9d9c31da4c5934d",
+      "covered_pixels": 2224,
+      "unique_covered_rgb": 172
+    },
+    "C2P2-metallic-L4.png": {
+      "rgba_sha256": "1f1ba2c2ebab8ba84a6732a303b2869f8f761e6ddb75286e28dc86e6afbe572f",
+      "covered_pixels": 2224,
+      "unique_covered_rgb": 181
+    }
+  },
+  "phase_closed": false
+}

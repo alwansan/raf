@@ -1,0 +1,60 @@
+{
+  "experiment": "GFX116",
+  "renderer": "Adreno (TM) 730",
+  "gles": "OpenGL ES 3.2 V@0615.95 (GIT@c1fe339905, Id5fe42143e, 1737637074) (Date:01/23/25)",
+  "native_roles_sampled": 0,
+  "roles": {
+    "basecolor": {
+      "native": {
+        "status": "NATIVE_FORMAT_REJECTED",
+        "gl_error": 1280
+      },
+      "fallback": {
+        "status": "SAMPLED",
+        "mips": 11,
+        "texels": 1398101,
+        "max_channel_error": 0,
+        "channels_over_two": 0,
+        "channel_absolute_error_sum": 0
+      }
+    },
+    "normal": {
+      "native": {
+        "status": "NATIVE_FORMAT_REJECTED",
+        "gl_error": 1280
+      },
+      "fallback": {
+        "status": "SAMPLED",
+        "mips": 11,
+        "texels": 1398101,
+        "max_channel_error": 0,
+        "channels_over_two": 0,
+        "channel_absolute_error_sum": 0
+      }
+    },
+    "metallic": {
+      "native": {
+        "status": "NATIVE_FORMAT_REJECTED",
+        "gl_error": 1280
+      },
+      "fallback": {
+        "status": "SAMPLED",
+        "mips": 11,
+        "texels": 1398101,
+        "max_channel_error": 0,
+        "channels_over_two": 0,
+        "channel_absolute_error_sum": 0
+      }
+    }
+  },
+  "phase_closed": false,
+  "unique_exports": 1,
+  "apk_sha256": "e6682cfbd4230698c4154ee79adafe1656a658e443f0f8f62f58088f3fb15e09",
+  "archive_sha256": [
+    "f2fef76cf3e909aa85d0f2b16d7e132190d766d2e2b1f4f6b38d6c476cc8c382",
+    "7e91a7b49e896c8073d165a740b2a2ad830dedf0a76cccbbe7b30873a905e2fd"
+  ],
+  "s3tc_advertised": false,
+  "s3tc_srgb_advertised": false,
+  "fallback_total_texels": 4194303
+}
