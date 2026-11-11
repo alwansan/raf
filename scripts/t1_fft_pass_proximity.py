@@ -12,6 +12,13 @@ def summarize(scan):
         raise ValueError("scan must be object")
     if scan.get("sample_errors_only") is not True or scan.get("original_kernel_identity_proven") is not False:
         raise ValueError("requires unproven-identity --errors-only scan")
+    session_id = scan.get("session_id")
+    if not isinstance(session_id, str) or not session_id.strip() or len(session_id) > 160:
+        raise ValueError("invalid session_id")
+    source_sha256 = scan.get("source_sha256")
+    if (not isinstance(source_sha256, str) or len(source_sha256) != 64
+            or any(ch not in "0123456789abcdef" for ch in source_sha256)):
+        raise ValueError("invalid source_sha256 (expected lowercase hex digest)")
     events = scan.get("events")
     if not isinstance(events, list):
         raise ValueError("missing events")
