@@ -40,6 +40,23 @@ class ParticleMaterialAuditTests(unittest.TestCase):
         self.assertEqual(counts.get("unsupported_inline_material_lists"), 1)
         self.assertEqual(counts.get("local_or_builtin_material_slots", 0), 0)
 
+    def test_adjacent_flow_maps_without_comma_are_rejected(self):
+        counts = self.audit("[{fileID: 2100000, guid: " + GUID
+                            + ", type: 2}{fileID: 0}]")
+        self.assertEqual(counts.get("unsupported_inline_material_lists"), 1)
+        self.assertEqual(counts.get("external_material_slots", 0), 0)
+        self.assertEqual(counts.get("null_material_slots", 0), 0)
+
+    def test_trailing_comma_flow_list_is_rejected(self):
+        counts = self.audit("[{fileID: 0},]")
+        self.assertEqual(counts.get("unsupported_inline_material_lists"), 1)
+        self.assertEqual(counts.get("null_material_slots", 0), 0)
+
+    def test_valid_comma_separated_flow_list_is_accepted(self):
+        counts = self.audit("[{fileID: 0}, {fileID: 0}]")
+        self.assertEqual(counts.get("null_material_slots"), 2)
+        self.assertEqual(counts.get("unsupported_inline_material_lists", 0), 0)
+
     def test_block_array_still_supported(self):
         counts = self.audit("\n  - {fileID: 2100000, guid: " + GUID
                             + ", type: 2}")
