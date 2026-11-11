@@ -1,3 +1,13 @@
+## 12 Nov 2026 — GFX150 native Unity M02 BakeMesh passed
+
+Session `20261112-GFX-chat-native-unity-bake-109`, origin=chat. Write only `experiment/android-graphics-rootcause`.
+
+[Unity 2021.3.45f2 run 43104061232](https://github.com/alwansan/raf/actions/runs/43104061232) successfully reconstructed the source-derived hierarchy poses and called the native SkinnedMeshRenderer.BakeMesh path. Fifteen samples and 24,990 vertex positions, zero vertices outside tolerance 0.0001 + 0.000001 × abs(reference), maximum absolute error 0.0001220703125. Local private inputs verify exact original indices and source positions against signed GFX142 M02 across all samples. GFX113 regression 43104061164 and 18 local GFX108 tests passed. Safe aggregate artifact 13893870288. Only aggregate output, no clip or mesh data published.
+
+This verifies native Unity position deformation for sampled source-derived transforms. It does not establish original serialized AnimationClip or Animator playback, skin normals/tangents, actual Unity shader states or matched PC scene. No new Android APK or phone test required for this result. `phase_closed=false`.
+
+---
+
 ## 12 Nov 2026 — GFX149 same-mode Adreno/Mesa Cull comparison verified
 
 Session `20261112-GFX-chat-cull-owner-acceptance-108`, origin=chat. Write only `experiment/android-graphics-rootcause`. Both GFX148 owner exports audited against signed APK 884c4a81ae216bb957dde1f08ad34659ea247dea2378f90333adc6fbdb3cca02. All three PNG and summary payloads are identical between the two exports. Adreno 730 and Mesa matched all 3,301 coverage pixels in each same-mode comparison. Off/Back/Front RGB>10 outliers: 58/2/2. Mean absolute RGB channel errors: 0.817530/0.253459/0.085227. Max errors: 59/58/59. Off's 58 outliers all land on CPU nearest-depth ties. The Back and Front residuals land on zero nearest-depth ties in their respective winding subsets. Coverage and the bulk of the coplanar hotspot are resolved in this controlled case. Front selects a different set of faces and cannot be selected on its lower inter-driver MAE. Back matches the serialized fallback and is a validated controlled comparison, not established Unity runtime Cull. Residual cause is unresolved.
