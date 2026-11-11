@@ -97,6 +97,21 @@ class PublishContract(unittest.TestCase):
             self.assertEqual(proc.returncode, 2)
             self.assertFalse(output.exists())
 
+    @unittest.skipUnless(hasattr(os, "link"), "Hard links require filesystem support")
+    def test_hardlinked_output_does_not_overwrite_input(self):
+        with tempfile.TemporaryDirectory() as td:
+            source, output = Path(td) / "input", Path(td) / "output"
+            original = json.dumps(sample()).encode()
+            source.write_bytes(original)
+            os.link(source, output)
+            proc = subprocess.run([sys.executable, str(ADAPTER), "--input", str(source),
+                                   "--output", str(output)], cwd=ROOT, capture_output=True,
+                                  text=True, timeout=15)
+            self.assertEqual(proc.returncode, 2)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertEqual(output.read_bytes(), original)
+            self.assertEqual(list(Path(td).glob(".t2-aggregate-*")), [])
+
     def test_symlink_output_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             source, target, link = (Path(td) / name for name in ("input", "protected", "link"))

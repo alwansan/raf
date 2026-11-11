@@ -20,7 +20,8 @@ def _has_symlink_ancestor(directory: Path) -> bool:
 
 def publish(source: Path, destination: Path):
     source, destination = Path(source).absolute(), Path(destination).absolute()
-    if (source == destination or destination.is_symlink()
+    if (source == destination or (source.exists() and destination.exists()
+            and os.path.samefile(source, destination)) or destination.is_symlink()
             or _has_symlink_ancestor(destination.parent)
             or not destination.parent.is_dir()):
         raise EvidenceError("unsafe output destination")
