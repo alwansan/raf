@@ -41,7 +41,10 @@ struct Draw {
     UINT index_count = 0;
     ComPtr<ID3D11Texture2D> depth_source, depth_staging;
 
-    Draw(bool shadow=false) {
+    std::array<ComPtr<ID3D11Texture2D>,3> mrt;
+    std::array<ComPtr<ID3D11RenderTargetView>,3> mrt_views;
+
+    Draw(bool shadow=false, bool deferred=false) {
         D3D_FEATURE_LEVEL actual{};
         D3D_FEATURE_LEVEL requested = D3D_FEATURE_LEVEL_11_0;
         require(D3D11CreateDevice(nullptr,D3D_DRIVER_TYPE_WARP,nullptr,0,&requested,1,
@@ -54,6 +57,10 @@ struct Draw {
         desc.BindFlags = D3D11_BIND_RENDER_TARGET;
         require(device->CreateTexture2D(&desc,nullptr,&target),"Color texture");
         require(device->CreateRenderTargetView(target.Get(),nullptr,&color),"Color view");
+        if (deferred) for (size_t i=0; i<mrt.size(); ++i) {
+            require(device->CreateTexture2D(&desc,nullptr,&mrt[i]),"Deferred target");
+            require(device->CreateRenderTargetView(mrt[i].Get(),nullptr,&mrt_views[i]),"Deferred target view");
+        }
         desc.BindFlags = 0;
         desc.Usage = D3D11_USAGE_STAGING;
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
@@ -76,8 +83,8 @@ struct Draw {
             desc.CPUAccessFlags=D3D11_CPU_ACCESS_READ;
             require(device->CreateTexture2D(&desc,nullptr,&depth_staging),"Shadow staging texture");
         }
-        ID3D11RenderTargetView* rtv = color.Get();
-        ctx->OMSetRenderTargets(1,&rtv,depth.Get());
+        ID3D11RenderTargetView* rtvs[]{color.Get(),mrt_views[0].Get(),mrt_views[1].Get(),mrt_views[2].Get()};
+        ctx->OMSetRenderTargets(deferred ? 4 : 1,rtvs,depth.Get());
 
         D3D11_RASTERIZER_DESC raster{};
         raster.FillMode = D3D11_FILL_SOLID;
@@ -178,7 +185,7 @@ struct Draw {
         ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     }
 
-    void bind_textures(const Path& dir, const std::string& mode, bool additive=false) {
+    void bind_textures(const Path& dir, const std::string& mode, bool additive=false, bool deferred=false) {
         Bytes black{0,0,0,255}, cube;
         for (int i=0; i<6; ++i) cube.insert(cube.end(),black.begin(),black.end());
         std::array<ComPtr<ID3D11ShaderResourceView>,7> textures;
@@ -201,8 +208,10 @@ struct Draw {
             textures[3] = volume();
         } else {
             textures[3] = texture2d(Bytes{255,255,255,255},false,false,1,1,1);
-            textures[4] = textures[5] = texture2d(cube,false,true,1,1,1);
-            textures[6] = volume();
+            if (!deferred) {
+                textures[4] = textures[5] = texture2d(cube,false,true,1,1,1);
+                textures[6] = volume();
+            }
         }
         std::array<ID3D11ShaderResourceView*,7> views{};
         for (size_t i=0; i<textures.size(); ++i) views[i]=textures[i].Get();
@@ -213,7 +222,7 @@ struct Draw {
         for (UINT i=0; i<samplers.size(); ++i) {
             D3D11_SAMPLER_DESC desc{};
             desc.Filter=D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-            desc.AddressU=desc.AddressV=desc.AddressW=(additive ? i>=1 && i<=3 : i>=2 && i<=4)
+            desc.AddressU=desc.AddressV=desc.AddressW=(deferred ? i<=2 : additive ? i>=1 && i<=3 : i>=2 && i<=4)
                 ? D3D11_TEXTURE_ADDRESS_WRAP : D3D11_TEXTURE_ADDRESS_CLAMP;
             desc.MaxLOD=D3D11_FLOAT32_MAX;
             desc.MaxAnisotropy=1;
@@ -250,12 +259,12 @@ struct Draw {
         ctx->OMSetDepthStencilState(depth_state.Get(),0);
     }
 
-    void render(const Path& dir, const std::string& mode, bool clear_target, bool additive=false, bool shadow=false) {
+    void render(const Path& dir, const std::string& mode, bool clear_target, bool additive=false, bool shadow=false, bool deferred=false) {
         std::string light = mode=="dark" ? "dark" : "light";
         std::array<ComPtr<ID3D11Buffer>,8> constants;
         std::array<ID3D11Buffer*,8> slots{};
         const UINT vs_count = additive || shadow ? 5 : 4;
-        const UINT ps_count = shadow ? 1 : 8-vs_count;
+        const UINT ps_count = shadow || deferred ? 1 : 8-vs_count;
         for (UINT i=0; i<vs_count+ps_count; ++i) {
             std::string stage = i<vs_count ? "vertex" : "fragment";
             constants[i]=buffer(read(dir/(stage+"-"+light+"-"+std::to_string(i<vs_count ? i : i-vs_count)+".bin")),
@@ -267,6 +276,7 @@ struct Draw {
         const float clear[]{0,0,0,0};
         if (clear_target) {
             ctx->ClearRenderTargetView(color.Get(),clear);
+            if (deferred) for (auto& view:mrt_views) ctx->ClearRenderTargetView(view.Get(),clear);
             ctx->ClearDepthStencilView(depth.Get(),D3D11_CLEAR_DEPTH,1,0);
         }
         ctx->DrawIndexed(index_count,0,0);
@@ -316,8 +326,8 @@ struct Draw {
         if (!out) throw std::runtime_error("Shadow mask write failed");
     }
 
-    void capture(const Path& output, const std::string& mode) {
-        ctx->CopyResource(staging.Get(),target.Get());
+    void capture(const Path& output, const std::string& mode, UINT attachment=0) {
+        ctx->CopyResource(staging.Get(),attachment ? mrt.at(attachment-1).Get() : target.Get());
         D3D11_MAPPED_SUBRESOURCE pixels{};
         require(ctx->Map(staging.Get(),0,D3D11_MAP_READ,0,&pixels),"Original DXBC readback");
         // Output bottom-up to match the GLES reference byte order.
@@ -333,9 +343,18 @@ struct Draw {
 
 int wmain(int argc,wchar_t** argv) {
     const std::wstring mode_flag = argc==6 ? argv[5] : L"";
-    if (argc!=4 && argc!=5 && mode_flag!=L"add" && mode_flag!=L"animation" && mode_flag!=L"shadow") return 2;
+    if (argc!=4 && argc!=5 && mode_flag!=L"add" && mode_flag!=L"animation" && mode_flag!=L"shadow" && mode_flag!=L"deferred") return 2;
     try {
-        Draw draw(mode_flag==L"shadow");
+        Draw draw(mode_flag==L"shadow",mode_flag==L"deferred");
+        if (mode_flag==L"deferred") {
+            draw.bind_geometry(argv[4]);
+            for (const std::string mode:{"native","flat","nonmetal"}) {
+                draw.bind_textures(argv[2],mode,false,true);
+                draw.render(argv[4],"light",true,false,false,true);
+                for (UINT i=0; i<4; ++i) draw.capture(argv[3],mode+"-rt"+std::to_string(i),i);
+            }
+            return 0;
+        }
         if (mode_flag==L"shadow") {
             draw.bind_geometry(argv[4],{},true);
             for (const auto& mode:{"native","solid","transparent","depth-off"})

@@ -13,13 +13,15 @@ def stage_draw(source, draw):
     return finalize_draw(draw)
 
 
-def finalize_draw(draw, *, additive=False, camera_mesh=None):
+def finalize_draw(draw, *, additive=False, camera_mesh=None, deferred=False):
     mesh = (draw/"mesh.bin").read_bytes() if camera_mesh is None else camera_mesh
     engine = engine_values(mesh,direct3d=True)
     verified_textures = {"_MainTex":0,"_MetallicGlossMap":1,"_BumpMap":2,"_OcclusionMap":3,
                          "unity_SpecCube0":4,"unity_SpecCube1":5,"unity_ProbeVolumeSH":6}
     if additive:
         verified_textures = {"_MainTex":0,"_MetallicGlossMap":1,"_BumpMap":2,"unity_ProbeVolumeSH":3}
+    if deferred:
+        verified_textures = {"_MainTex":0,"_MetallicGlossMap":1,"_BumpMap":2,"_OcclusionMap":3}
     for stage in ("vertex","fragment"):
         contract = json.loads((draw/(stage+".json")).read_text())
         groups = {g["name"]:g for g in contract["groups"]}
@@ -27,11 +29,15 @@ def finalize_draw(draw, *, additive=False, camera_mesh=None):
         if textures != (verified_textures if stage=="fragment" else {}):
             raise ValueError("Original texture register layout changed")
         slots = {r["index"]:r["name"] for r in contract["bindings"] if r["type"]==1}
-        if additive and stage == "fragment":
+        if (additive or deferred) and stage == "fragment":
             samplers = {r["name"]:r["extra"] for r in contract["bindings"] if r["type"]==0}
-            if samplers != {"_MainTex":1,"_MetallicGlossMap":3,"_BumpMap":2,"unity_ProbeVolumeSH":0}:
-                raise ValueError("Original ForwardAdd sampler slots changed")
+            expected_samplers = ({"_MainTex":0,"_MetallicGlossMap":2,"_BumpMap":1,"_OcclusionMap":3}
+                                 if deferred else {"_MainTex":1,"_MetallicGlossMap":3,"_BumpMap":2,"unity_ProbeVolumeSH":0})
+            if samplers != expected_samplers:
+                raise ValueError("Original sampler slots changed")
         slot_count = (5 if stage == "vertex" else 3) if additive else 4
+        if deferred and stage == "fragment":
+            slot_count = 1
         if set(slots) != set(range(slot_count)):
             raise ValueError("Original buffer slots changed")
         for slot, group in slots.items():
