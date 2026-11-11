@@ -42,7 +42,9 @@ def dxbc_ps_siv_noperspective_semantic_counts(shdr):
             if cursor+1>=len(words):raise ValueError("GFX105_CUSTOM_LENGTH_MISSING")
             length=words[cursor+1]
         else:length=(token>>24)&127
-        if length<2 or cursor+length>len(words):
+        # A legal DXBC instruction can be one DWORD (for example RET).
+        # Only DCL_INPUT_PS_SIV requires the longer operand + NameToken.
+        if length<1 or cursor+length>len(words):
             raise ValueError("GFX105_BAD_INSTRUCTION_BOUNDARY")
         if opcode==DXBC_DCL_INPUT_PS_SIV and (token>>11)&7 in DXBC_NOPERSPECTIVE:
             # By official token format, last word of this declaration is the
