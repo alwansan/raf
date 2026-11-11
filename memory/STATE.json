@@ -2756,5 +2756,67 @@
     "source_original_program_adreno_pixel_verified": false,
     "pcAdrenoPixelParityVerified": false,
     "phase_closed": false
+  },
+  "latest_verified_gfx103_to_106": {
+    "role": "GFX-LAB",
+    "origin": "chat",
+    "session_id": "20261111-GFX-chat-verified-siv-rig-source-74",
+    "branch": "experiment/android-graphics-rootcause",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "verified_run_ids": {
+      "GFX103": 42945815709,
+      "GFX104": 42946470013,
+      "GFX105": 42949456992,
+      "GFX106": 42950536938
+    },
+    "verified_unit_tests": {
+      "GFX103": 17,
+      "GFX104": 14,
+      "GFX105": 18,
+      "GFX106": 10
+    },
+    "verified_artifact_ids": {
+      "GFX103": 13822676727,
+      "GFX104": 13822842279,
+      "GFX105": 13824207690,
+      "GFX106": 13825061622
+    },
+    "original_shader48_exact_pairs": 524,
+    "original_fragment_ordinary_noperspective": 0,
+    "original_fragment_system_siv_noperspective": 16,
+    "source_system_position_identity_verified_count": 16,
+    "translated_spirv_fragcoord_builtin_count": 16,
+    "generated_gles310_gl_fragcoord_stages": 16,
+    "source_system_semantic_candidate_identity_pass": true,
+    "original_dx_gl_pixel_value_parity": false,
+    "original_source_skinned_meshes": 5,
+    "source_bone_refs": 213,
+    "original_bone_typed_transform_resolved": 213,
+    "original_local_transform_finite": 213,
+    "original_mesh_bindposes": 213,
+    "complete_root_ancestry_models": [
+      "M01",
+      "M02",
+      "M04"
+    ],
+    "partial_selected_root_ancestry_models": [
+      "M00",
+      "M05"
+    ],
+    "static_non_skinned_model": "M03",
+    "original_source_gpu_skinning_verified": false,
+    "original_animation_restored": false,
+    "pending": "GFX107 original indexed weights/bindposes and exact CPU rest-pose, then Material/CB/Normal/Shader48 actual GPU and PC↔Adreno pixels",
+    "evidence": [
+      "gfxlab/evidence/20261111_gfx103_original_siv_split_safe.json",
+      "gfxlab/evidence/20261111_gfx104_original_spirv_siv_safe.json",
+      "gfxlab/evidence/20261111_gfx105_original_siv_fragcoord_safe.json",
+      "gfxlab/evidence/20261111_gfx106_original_rig_hierarchy_safe.json"
+    ],
+    "originalShaderRestored": false,
+    "originalAnimationRestored": false,
+    "original_rig_restored": false,
+    "pcAdrenoPixelParityVerified": false,
+    "phase_closed": false
   }
 }
