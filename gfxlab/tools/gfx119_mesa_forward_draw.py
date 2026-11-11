@@ -28,6 +28,7 @@ parser.add_argument("--animation-portable", type=Path)
 parser.add_argument("--shadow", type=Path)
 parser.add_argument("--shadow-portable", type=Path)
 parser.add_argument("--deferred", type=Path)
+parser.add_argument("--deferred-portable", type=Path)
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -570,6 +571,7 @@ if args.deferred:
     gl("DrawBuffers", None, I, P)(4, targets)
     if gl("CheckFramebufferStatus", U, U)(36160) != 36053:
         raise ValueError("Deferred framebuffer incomplete")
+    portable_buffers.clear()
     samplers = select_slot(args.deferred, args.textures)
     call("ReadBuffer", targets[0])
     g0, blocks, material = draw(True)
@@ -601,12 +603,21 @@ if args.deferred:
     normal, metallic = changes(flat_gbuffer), changes(nonmetal_gbuffer)
     if normal[2] < 100 or metallic[0] == 0 or metallic[1] < 100 or normal[:2] != [0, 0] or metallic[2] != 0:
         raise ValueError(f"Deferred MRT material controls did not respond: {normal=} {metallic=}")
+    refs = {f"{control}-rt{i}": image for control, outputs in
+            (("native", gbuffer), ("flat", flat_gbuffer), ("nonmetal", nonmetal_gbuffer))
+            for i, image in enumerate(outputs)}
+    if args.deferred_portable:
+        portable_buffers[False] = portable_buffers[True]
+        write_portable(args.deferred_portable, samplers, include_textures=False)
+        for name, image in refs.items():
+            (args.deferred_portable / (name + ".rgba")).write_bytes(image.tobytes())
     report["deferred"] = {"covered_pixels": int(mask.sum()), "same_coverage_as_forward": True,
                           "normal_control_changed_pixels_by_target": normal,
                           "metallic_control_changed_pixels_by_target": metallic,
                           "driver_verified_cb_blocks": blocks, "original_material_bytes_preserved": material,
                           "bound_combined_samplers": len(samplers), "controlled_target_format": "RGBA8_UNORM",
                           "target_hashes": [hashlib.sha256(a.tobytes()).hexdigest() for a in gbuffer],
+                          "reference_hashes": {name: hashlib.sha256(image.tobytes()).hexdigest() for name, image in refs.items()},
                           "unity_runtime_gbuffer_layout_verified": False}
 
 args.safe.write_text(json.dumps(report,indent=2)+"\n")

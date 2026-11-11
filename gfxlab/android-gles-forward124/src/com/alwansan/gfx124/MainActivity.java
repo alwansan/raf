@@ -292,7 +292,7 @@ public final class MainActivity extends Activity {
         Slot(String id) throws Exception { this(id,null); }
 
         Slot(String id, Slot textureSource) throws Exception {
-            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add|-anim|-shadow)?")) throw new IllegalArgumentException("Invalid slot identifier");
+            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add|-anim|-shadow|-deferred)?")) throw new IllegalArgumentException("Invalid slot identifier");
             folder=id+"/";
             textureFolder=textureSource==null ? folder : textureSource.textureFolder;
             JSONObject scene=new JSONObject(new String(asset(folder+"scene.json"),StandardCharsets.UTF_8));
@@ -300,7 +300,8 @@ public final class MainActivity extends Activity {
             samplers=scene.getJSONArray("samplers");
             layouts=textureSource==null ? scene.optJSONObject("textures") : textureSource.layouts;
             boolean shadow=id.endsWith("-shadow");
-            if (blocks.length()!=(shadow ? 6 : 8) || samplers.length()!=(shadow ? 1 : id.endsWith("-add") ? 4 : 7)) throw new IllegalStateException("Wrong fixture shape");
+            boolean deferred=id.endsWith("-deferred");
+            if (blocks.length()!=(shadow ? 6 : deferred ? 5 : 8) || samplers.length()!=(shadow ? 1 : deferred || id.endsWith("-add") ? 4 : 7)) throw new IllegalStateException("Wrong fixture shape");
         }
 
         int addBuffer(int target, byte[] bytes) {
@@ -430,6 +431,57 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private void captureDeferred(Slot slot, String id, JSONArray captures) throws Exception {
+        int[] textures=new int[3];
+        int[] targets={GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3};
+        try {
+            glGenTextures(3,textures,0);
+            for (int i=1;i<targets.length;i++) {
+                glBindTexture(GL_TEXTURE_2D,textures[i-1]);
+                glTexStorage2D(GL_TEXTURE_2D,1,GL_RGBA8,SIZE,SIZE);
+                glFramebufferTexture2D(GL_FRAMEBUFFER,targets[i],GL_TEXTURE_2D,textures[i-1],0);
+            }
+            glDrawBuffers(targets.length,targets,0);
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE)
+                throw new IllegalStateException("Deferred framebuffer incomplete");
+            ByteBuffer pixels=ByteBuffer.allocateDirect(SIZE*SIZE*4);
+            for (String control:new String[]{"native","flat","nonmetal"}) {
+                glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+                slot.draw(control);
+                for (int i=0;i<targets.length;i++) {
+                    glReadBuffer(targets[i]);
+                    pixels.clear();
+                    glReadPixels(0,0,SIZE,SIZE,GL_RGBA,GL_UNSIGNED_BYTE,pixels);
+                    check("Deferred draw "+control+" target "+i);
+                    byte[] raw=new byte[pixels.capacity()];
+                    pixels.position(0);
+                    pixels.get(raw);
+                    String reference=control+"-rt"+i+".rgba";
+                    byte[] expected=asset(slot.folder+reference);
+                    if (expected.length!=raw.length) throw new IllegalStateException("Wrong Deferred reference size");
+                    int sum=0,max=0;
+                    for (int j=0;j<raw.length;j++) {
+                        int delta=Math.abs((raw[j]&255)-(expected[j]&255));
+                        sum+=delta;
+                        max=Math.max(max,delta);
+                    }
+                    String filename=id+"-"+reference;
+                    JSONObject row=new JSONObject().put("name",id+"-"+control+"-rt"+i).put("raw",filename)
+                        .put("raw_rgba_sha256",sha256(raw)).put("mesa_rgba_sha256",sha256(expected))
+                        .put("rgba_absolute_error_sum",sum).put("max_rgba_channel_error",max);
+                    images.put(filename,raw);
+                    captures.put(row);
+                }
+            }
+        } finally {
+            glReadBuffer(GL_COLOR_ATTACHMENT0);
+            glDrawBuffers(1,targets,0);
+            for (int i=1;i<targets.length;i++)
+                glFramebufferTexture2D(GL_FRAMEBUFFER,targets[i],GL_TEXTURE_2D,0,0);
+            glDeleteTextures(3,textures,0);
+        }
+    }
+
     private void probe() {
         JSONObject summary=new JSONObject();
         int[] fbo=new int[1], color=new int[1], depth=new int[1];
@@ -465,14 +517,19 @@ public final class MainActivity extends Activity {
             for (int i=0;i<tests.length();i++) {
                 JSONObject test=tests.getJSONObject(i);
                 String id=test.getString("id"), primary=test.getString("primary");
-                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add|animation|shadow)")) throw new IllegalArgumentException("Invalid test identifier");
+                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add|animation|shadow|deferred)")) throw new IllegalArgumentException("Invalid test identifier");
                 JSONObject run=new JSONObject().put("id",id);
                 runs.put(run);
                 JSONArray captures=new JSONArray();
                 run.put("captures",captures);
                 try (Slot first=new Slot(primary)) {
-                    if (!test.has("animation") && !test.has("shadow")) first.setup();
-                    if (test.has("shadow")) {
+                    if (!test.has("animation") && !test.has("shadow") && !test.has("deferred")) first.setup();
+                    if (test.has("deferred")) {
+                        try (Slot deferred=new Slot(test.getString("deferred"),first)) {
+                            deferred.setup();
+                            captureDeferred(deferred,id,captures);
+                        }
+                    } else if (test.has("shadow")) {
                         try (Slot shadow=new Slot(test.getString("shadow"),first)) {
                             shadow.setup();
                             captureShadow(shadow,id,depth[0],captures);

@@ -1,0 +1,61 @@
+{
+  "experiment": "GFX119",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "triangles": 2388,
+  "covered_pixels": 2008,
+  "directional_light_changed_pixels": 1979,
+  "normal_control_changed_pixels": 1627,
+  "metallic_control_changed_pixels": 1960,
+  "baseline_repeat_exact": true,
+  "dark_control_nonblack_pixels": 0,
+  "driver_verified_cb_blocks": 8,
+  "original_material_bytes_preserved": 68,
+  "bound_combined_samplers": 7,
+  "rgba_sha256": "919be1dc468c32ec7a2c81d50c91542cac10b73c1ab5993d96cc3df72805593e",
+  "controlled_fixture": true,
+  "original_translated_forward_draw_completed": true,
+  "original_game_pixel_parity": false,
+  "android_device_verified": false,
+  "phase_closed": false,
+  "deferred": {
+    "covered_pixels": 2008,
+    "same_coverage_as_forward": true,
+    "normal_control_changed_pixels_by_target": [
+      0,
+      0,
+      2004,
+      0
+    ],
+    "metallic_control_changed_pixels_by_target": [
+      20,
+      2008,
+      0,
+      0
+    ],
+    "driver_verified_cb_blocks": 5,
+    "original_material_bytes_preserved": 68,
+    "bound_combined_samplers": 4,
+    "controlled_target_format": "RGBA8_UNORM",
+    "target_hashes": [
+      "7d1a60e86d0f0421d3ec1d4e6d8464ec06deff5572dca279a4925437b0acfd80",
+      "8c5c78c779beb62da1bbb1ab575a4903ba64c2923654bfc3f92319cb01f2f326",
+      "4b639855cdd9b0b7630cf0acb4f315998d3ce9a5ea14567331c3d723f9fe9f90",
+      "3f2f707704e4182d751b503291862a0e1b7013c77543da9170686f4e72796b35"
+    ],
+    "reference_hashes": {
+      "native-rt0": "7d1a60e86d0f0421d3ec1d4e6d8464ec06deff5572dca279a4925437b0acfd80",
+      "native-rt1": "8c5c78c779beb62da1bbb1ab575a4903ba64c2923654bfc3f92319cb01f2f326",
+      "native-rt2": "4b639855cdd9b0b7630cf0acb4f315998d3ce9a5ea14567331c3d723f9fe9f90",
+      "native-rt3": "3f2f707704e4182d751b503291862a0e1b7013c77543da9170686f4e72796b35",
+      "flat-rt0": "7d1a60e86d0f0421d3ec1d4e6d8464ec06deff5572dca279a4925437b0acfd80",
+      "flat-rt1": "8c5c78c779beb62da1bbb1ab575a4903ba64c2923654bfc3f92319cb01f2f326",
+      "flat-rt2": "802b94a590349be12eb434018a4233cefd5889b2326e78ef4073ebf682c762bc",
+      "flat-rt3": "3f2f707704e4182d751b503291862a0e1b7013c77543da9170686f4e72796b35",
+      "nonmetal-rt0": "06933d6c5b63eabbd7ca1626eeb1360b77cf4e9e6a8ed15c364c7823d1060882",
+      "nonmetal-rt1": "170cabd0bc00e63ca07719cd281fb0d401ae5ca111ee4b9ddf91a5231de1e19c",
+      "nonmetal-rt2": "4b639855cdd9b0b7630cf0acb4f315998d3ce9a5ea14567331c3d723f9fe9f90",
+      "nonmetal-rt3": "3f2f707704e4182d751b503291862a0e1b7013c77543da9170686f4e72796b35"
+    },
+    "unity_runtime_gbuffer_layout_verified": false
+  }
+}

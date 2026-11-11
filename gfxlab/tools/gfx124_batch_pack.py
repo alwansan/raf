@@ -11,6 +11,7 @@ CONTROLS = ("light", "dark", "flat", "nonmetal")
 ROLES = ("basecolor", "normal", "metallic")
 SLOTS = ("M00-0", "M02-0", "M03-0", "M03-1")
 SHADOW_CONTROLS = ("native", "solid", "transparent", "depth-off")
+DEFERRED_CAPTURES = tuple(f"{control}-rt{i}" for control in ("native", "flat", "nonmetal") for i in range(4))
 POSES = tuple(f"C{clip}P{pose}" for clip in range(3) for pose in range(5))
 REFERENCE_SIZE = 256 * 256 * 4
 
@@ -20,10 +21,10 @@ def check_digest(path, expected):
         raise ValueError(f"Reference identity mismatch: {path.parent.name}/{path.name}")
 
 
-def files_for_slot(folder, *, combined, add=False, animated=False, shadow=False):
+def files_for_slot(folder, *, combined, add=False, animated=False, shadow=False, deferred=False):
     scene = json.loads((folder / "scene.json").read_text())
     files = {"scene.json", "probe.vert", "probe.frag", "mesh.bin", "indices.bin"}
-    if not (add or animated or shadow):
+    if not (add or animated or shadow or deferred):
         files.update(f"{name}.rgba" for name in (*ROLES, *CONTROLS))
     for index, row in enumerate(scene["blocks"]):
         for mode in ("light", "dark"):
@@ -31,10 +32,12 @@ def files_for_slot(folder, *, combined, add=False, animated=False, shadow=False)
             if row[mode] != name or (folder / name).stat().st_size != row["bytes"]:
                 raise ValueError("Wrong uniform buffer layout")
             files.add(name)
-    if len(scene["blocks"]) != (6 if shadow else 8) or len(scene["samplers"]) != (1 if shadow else 4 if add else 7):
+    if len(scene["blocks"]) != (6 if shadow else 5 if deferred else 8) or len(scene["samplers"]) != (1 if shadow else 4 if add or deferred else 7):
         raise ValueError("Unexpected source binding count")
     if combined:
         files.add("combined.rgba")
+    if deferred:
+        files.update(f"{name}.rgba" for name in DEFERRED_CAPTURES)
     if shadow:
         files.update(f"{name}.rgba" for name in SHADOW_CONTROLS)
     if animated:
@@ -45,7 +48,7 @@ def files_for_slot(folder, *, combined, add=False, animated=False, shadow=False)
         path = folder / name
         if not path.is_file() or path.is_symlink():
             raise ValueError("Invalid private slot file")
-    for role in (() if add or animated or shadow else ROLES):
+    for role in (() if add or animated or shadow or deferred else ROLES):
         layout = scene.get("textures", {}).get(role, {"width": 1024, "height": 1024, "levels": 11})
         w, h, levels = layout["width"], layout["height"], layout["levels"]
         if not 1 <= min(w, h) <= max(w, h) <= 2048 or levels != max(w, h).bit_length():
@@ -53,14 +56,14 @@ def files_for_slot(folder, *, combined, add=False, animated=False, shadow=False)
         expected = sum(max(1, w >> i) * max(1, h >> i) * 4 for i in range(levels))
         if (folder / f"{role}.rgba").stat().st_size != expected:
             raise ValueError("Invalid mip payload size")
-    for ref in (*(() if add or animated or shadow else CONTROLS), *(("combined",) if combined else ()), *(POSES if animated else ()), *(SHADOW_CONTROLS if shadow else ())):
+    for ref in (*(() if add or animated or shadow or deferred else CONTROLS), *(("combined",) if combined else ()), *(POSES if animated else ()), *(SHADOW_CONTROLS if shadow else ()), *(DEFERRED_CAPTURES if deferred else ())):
         if (folder / f"{ref}.rgba").stat().st_size != REFERENCE_SIZE:
             raise ValueError("Invalid Mesa reference size")
     return [folder / name for name in sorted(files)]
 
 
 def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=None,
-           animation=None, animation_evidence=None, shadow=None, shadow_evidence=None):
+           animation=None, animation_evidence=None, shadow=None, shadow_evidence=None, deferred=None, deferred_evidence=None):
     report = json.loads(evidence.read_text())
     hashes = {"M02-0": report["m02_regression_rgba_sha256"]}
     for row in report["slots"]:
@@ -118,6 +121,18 @@ def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=
         entries.update({f"assets/M02-0-shadow/{path.name}": path
                         for path in files_for_slot(shadow, combined=False, shadow=True)})
         tests.append({"id": "M02-shadow", "primary": "M02-0", "shadow": "M02-0-shadow"})
+    if (deferred is None) != (deferred_evidence is None):
+        raise ValueError("Deferred assets and evidence must be supplied together")
+    if deferred:
+        report = json.loads(deferred_evidence.read_text())["deferred"]
+        for name in ("mesh.bin", "indices.bin"):
+            if (deferred / name).read_bytes() != (m02 / name).read_bytes():
+                raise ValueError("Deferred geometry differs from Forward")
+        for capture in DEFERRED_CAPTURES:
+            check_digest(deferred / (capture + ".rgba"), report["reference_hashes"][capture])
+        entries.update({f"assets/M02-0-deferred/{path.name}": path
+                        for path in files_for_slot(deferred, combined=False, deferred=True)})
+        tests.append({"id": "M02-deferred", "primary": "M02-0", "deferred": "M02-0-deferred"})
     with ZipFile(shell) as archive:
         names = archive.namelist()
         if (archive.testzip() or len(names) != len(set(names)) or
@@ -139,7 +154,7 @@ def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=
     except Exception:
         out.unlink(missing_ok=True)
         raise
-    return {"tests": len(tests), "expected_captures": len(SLOTS) * len(CONTROLS) + 1 + (3 if forward_add else 0) + (len(POSES) if animation else 0) + (len(SHADOW_CONTROLS) if shadow else 0),
+    return {"tests": len(tests), "expected_captures": len(SLOTS) * len(CONTROLS) + 1 + (3 if forward_add else 0) + (len(POSES) if animation else 0) + (len(SHADOW_CONTROLS) if shadow else 0) + (len(DEFERRED_CAPTURES) if deferred else 0),
             "fixture_entries": len(entries) + 1, "phase_closed": False}
 
 
@@ -153,8 +168,11 @@ if __name__ == "__main__":
     parser.add_argument("--animation-evidence", type=Path)
     parser.add_argument("--shadow", type=Path)
     parser.add_argument("--shadow-evidence", type=Path)
+    parser.add_argument("--deferred", type=Path)
+    parser.add_argument("--deferred-evidence", type=Path)
     args = parser.parse_args()
     print(json.dumps(inject(args.shell, args.m02, args.models, args.evidence, args.out,
                             forward_add=args.forward_add, add_evidence=args.add_evidence,
                             animation=args.animation, animation_evidence=args.animation_evidence,
-                            shadow=args.shadow, shadow_evidence=args.shadow_evidence)))
+                            shadow=args.shadow, shadow_evidence=args.shadow_evidence,
+                            deferred=args.deferred, deferred_evidence=args.deferred_evidence)))

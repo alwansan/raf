@@ -3,8 +3,8 @@ import argparse
 import json
 from zipfile import ZipFile
 
-from gfxlab.tools.gfx120_owner_zip_audit import audit_capture
-from gfxlab.tools.gfx124_batch_pack import CONTROLS, POSES, SHADOW_CONTROLS
+from gfxlab.tools.gfx120_owner_zip_audit import audit_capture, sha
+from gfxlab.tools.gfx124_batch_pack import CONTROLS, POSES, SHADOW_CONTROLS, DEFERRED_CAPTURES, REFERENCE_SIZE
 
 
 def audit(owner_zip, apk):
@@ -33,7 +33,8 @@ def audit(owner_zip, apk):
             additive = "forward_add" in test
             animated = "animation" in test
             shadow = "shadow" in test
-            controls = SHADOW_CONTROLS if shadow else POSES if animated else ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
+            deferred = "deferred" in test
+            controls = DEFERRED_CAPTURES if deferred else SHADOW_CONTROLS if shadow else POSES if animated else ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
             completed = run["draw_completed"] is True
             captures = run["captures"]
             if len(captures) > len(controls) or (completed and len(captures) != len(controls)):
@@ -43,6 +44,22 @@ def audit(owner_zip, apk):
                 capture = test["id"] if merged else f'{test["id"]}-{control}'
                 if row["name"] != capture:
                     raise ValueError("Wrong Android capture identity")
+                if deferred:
+                    name = capture + ".rgba"
+                    images.add(name)
+                    raw = logs.read(name)
+                    reference = package.read(f'assets/{test["deferred"]}/{control}.rgba')
+                    if (len(raw) != REFERENCE_SIZE or len(reference) != REFERENCE_SIZE
+                            or row["raw"] != name or row["raw_rgba_sha256"] != sha(raw)
+                            or row["mesa_rgba_sha256"] != sha(reference)):
+                        raise ValueError("Deferred capture identity mismatch")
+                    errors = [abs(a - b) for a,b in zip(raw, reference, strict=True)]
+                    total, maximum = sum(errors), max(errors)
+                    if row["rgba_absolute_error_sum"] != total or row["max_rgba_channel_error"] != maximum:
+                        raise ValueError("Deferred channel counters disagree")
+                    pixels[control] = raw
+                    metrics[control] = {"rgba_absolute_error_sum": total, "max_rgba_channel_error": maximum}
+                    continue
                 name = capture + ".png"
                 images.add(name)
                 folder = test["primary"]
@@ -57,7 +74,7 @@ def audit(owner_zip, apk):
                 reference = package.read(f"assets/{folder}/{ref}.rgba")
                 pixels[control], metrics[control] = audit_capture(row, name, logs.read(name), reference, allow_empty=shadow)
             checked = {"id": run["id"], "draw_completed": completed, "captures": metrics}
-            if completed and not merged and not additive and not animated and not shadow:
+            if completed and not merged and not additive and not animated and not shadow and not deferred:
                 light = pixels["light"]
                 baselines[test["primary"]] = light
                 checked["control_rgb_changed_pixels"] = {
@@ -80,6 +97,13 @@ def audit(owner_zip, apk):
                     "solid_has_depth": metrics["solid"]["covered_pixels"] > 0,
                     "transparent_has_no_depth": metrics["transparent"]["covered_pixels"] == 0,
                     "depth_write_off_has_no_depth": metrics["depth-off"]["covered_pixels"] == 0,
+                }
+            if deferred and completed:
+                checked["target0_coverage"] = pixels["native-rt0"][3::4].count(255)
+                checked["material_control_changed_pixels"] = {
+                    mode: [sum(pixels[f"native-rt{target}"][i:i+4] != pixels[f"{mode}-rt{target}"][i:i+4]
+                               for i in range(0, REFERENCE_SIZE, 4)) for target in range(4)]
+                    for mode in ("flat", "nonmetal")
                 }
             if not completed:
                 checked["error"] = run["error"]
