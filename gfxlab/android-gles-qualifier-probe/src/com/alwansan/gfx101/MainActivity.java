@@ -340,11 +340,19 @@ public final class MainActivity extends Activity {
         final double threshold=.035;
         boolean smoothGood=result[0]!=null&&result[0].smoothError<threshold;
         boolean affineGood=result[2]!=null&&result[2].affineError<threshold;
+        boolean flatGood=false;
+        if(result[1]!=null){
+            byte[] flat=result[1].raw;
+            double[] a=readColor(flat,POINTS[0][0],POINTS[0][1]);
+            double[] b=readColor(flat,POINTS[1][0],POINTS[1][1]);
+            double[] c=readColor(flat,POINTS[2][0],POINTS[2][1]);
+            flatGood=error(a,b)<.015&&error(a,c)<.015;
+        }
         boolean nativeGood=result[3]!=null&&result[3].affineError<threshold;
         boolean nativeCollapsed=result[3]!=null&&result[3].smoothError<threshold
             &&result[3].affineError>threshold;
         String verdict;
-        if(!smoothGood || !affineGood)
+        if(!smoothGood || !affineGood || !flatGood)
             verdict="CONTROL_FAILURE_OR_INCONCLUSIVE";
         else if(!nativeExtension)
             verdict="NATIVE_EXTENSION_NOT_ADVERTISED";
@@ -358,6 +366,7 @@ public final class MainActivity extends Activity {
         summary.put("gpu_readbacks",successfulReadbacks);
         summary.put("control_smooth_matches_cpu",smoothGood);
         summary.put("control_affine_emulated_matches_cpu",affineGood);
+        summary.put("control_flat_stable",flatGood);
         summary.put("native_extension_shader_compiled_and_linked",result[3]!=null);
         summary.put("native_gpu_matches_cpu_affine",nativeGood);
         summary.put("native_gpu_matches_cpu_smooth_only",nativeCollapsed);
