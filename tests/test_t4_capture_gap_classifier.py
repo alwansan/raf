@@ -19,7 +19,8 @@ class GapClassifierTests(unittest.TestCase):
     def test_callback_only_growth_is_diagnostic_not_proof(self):
         report = {"first_callback_counters": {"left": 0},
                   "first_reader_counters": {"left": 0},
-                  "monotonic_callback_increases": {"left": 2}}
+                  "monotonic_callback_increases": {"left": 2},
+                  "monotonic_reader_increases": {"left": 0}}
         result = module.classify(report)
         self.assertEqual(result["per_counter"]["left"]["state"],
                          "callback_growth_without_reader_growth")
@@ -35,10 +36,27 @@ class GapClassifierTests(unittest.TestCase):
 
     def test_zero_growth_is_not_misclassified_as_dropped(self):
         report = {"first_callback_counters": {"middle": 0},
-                  "first_reader_counters": {"middle": 0}}
+                  "first_reader_counters": {"middle": 0},
+                  "monotonic_callback_increases": {"middle": 0},
+                  "monotonic_reader_increases": {"middle": 0}}
         self.assertEqual(module.classify(report)["per_counter"]["middle"]["state"],
                          "no_new_growth_observed")
 
+
+    def test_missing_growth_is_unknown_not_measured_zero(self):
+        report = {"first_callback_counters": {"left": 0},
+                  "first_reader_counters": {"left": 0},
+                  "monotonic_callback_increases": {"left": 2}}
+        self.assertEqual(module.classify(report)["per_counter"]["left"]["state"],
+                         "insufficient_paired_baseline")
+
+    def test_malformed_telemetry_section_rejected_without_crash(self):
+        report = {"first_callback_counters": {"left": 0},
+                  "first_reader_counters": {"left": 0},
+                  "monotonic_callback_increases": None,
+                  "monotonic_reader_increases": {"left": 0}}
+        self.assertEqual(module.classify(report)["per_counter"]["left"]["state"],
+                         "invalid_counter_evidence")
 
     def test_negative_growth_rejected(self):
         report = {"first_callback_counters": {"left": 0},
