@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <cstdint>
 
 using Microsoft::WRL::ComPtr;
 using Path = std::filesystem::path;
@@ -38,8 +39,9 @@ struct Draw {
     ComPtr<ID3D11DepthStencilView> depth;
 
     UINT index_count = 0;
+    ComPtr<ID3D11Texture2D> depth_source, depth_staging;
 
-    Draw() {
+    Draw(bool shadow=false) {
         D3D_FEATURE_LEVEL actual{};
         D3D_FEATURE_LEVEL requested = D3D_FEATURE_LEVEL_11_0;
         require(D3D11CreateDevice(nullptr,D3D_DRIVER_TYPE_WARP,nullptr,0,&requested,1,
@@ -60,10 +62,20 @@ struct Draw {
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.CPUAccessFlags = 0;
         desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-        desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        desc.Format = shadow ? DXGI_FORMAT_R24G8_TYPELESS : DXGI_FORMAT_D24_UNORM_S8_UINT;
         ComPtr<ID3D11Texture2D> ds;
         require(device->CreateTexture2D(&desc,nullptr,&ds),"Depth texture");
-        require(device->CreateDepthStencilView(ds.Get(),nullptr,&depth),"Depth view");
+        D3D11_DEPTH_STENCIL_VIEW_DESC view{};
+        view.Format=DXGI_FORMAT_D24_UNORM_S8_UINT;
+        view.ViewDimension=D3D11_DSV_DIMENSION_TEXTURE2D;
+        require(device->CreateDepthStencilView(ds.Get(),shadow ? &view : nullptr,&depth),"Depth view");
+        if (shadow) {
+            depth_source=ds;
+            desc.BindFlags=0;
+            desc.Usage=D3D11_USAGE_STAGING;
+            desc.CPUAccessFlags=D3D11_CPU_ACCESS_READ;
+            require(device->CreateTexture2D(&desc,nullptr,&depth_staging),"Shadow staging texture");
+        }
         ID3D11RenderTargetView* rtv = color.Get();
         ctx->OMSetRenderTargets(1,&rtv,depth.Get());
 
@@ -134,7 +146,7 @@ struct Draw {
         return view;
     }
 
-    void bind_geometry(const Path& dir, const Path& pose = {}) {
+    void bind_geometry(const Path& dir, const Path& pose = {}, bool shadow=false) {
         auto vs = read(dir/"vertex.dxbc");
         auto ps = read(dir/"fragment.dxbc");
         ComPtr<ID3D11VertexShader> vertex;
@@ -151,7 +163,7 @@ struct Draw {
             {"TANGENT",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,24,D3D11_INPUT_PER_VERTEX_DATA,0}
         };
         ComPtr<ID3D11InputLayout> layout;
-        require(device->CreateInputLayout(elements,5,vs.data(),vs.size(),&layout),"Source signature");
+        require(device->CreateInputLayout(elements,shadow ? 3 : 5,vs.data(),vs.size(),&layout),"Source signature");
         ctx->IASetInputLayout(layout.Get());
         const auto mesh=read(pose.empty() ? dir/"mesh.bin" : pose), indices=read(dir/"indices.bin");
         if (mesh.size()%48 || indices.size()%6) throw std::runtime_error("Wrong mesh shape");
@@ -238,25 +250,70 @@ struct Draw {
         ctx->OMSetDepthStencilState(depth_state.Get(),0);
     }
 
-    void render(const Path& dir, const std::string& mode, bool clear_target, bool additive=false) {
+    void render(const Path& dir, const std::string& mode, bool clear_target, bool additive=false, bool shadow=false) {
         std::string light = mode=="dark" ? "dark" : "light";
         std::array<ComPtr<ID3D11Buffer>,8> constants;
         std::array<ID3D11Buffer*,8> slots{};
-        const UINT vs_count = additive ? 5 : 4;
-        for (UINT i=0; i<slots.size(); ++i) {
+        const UINT vs_count = additive || shadow ? 5 : 4;
+        const UINT ps_count = shadow ? 1 : 8-vs_count;
+        for (UINT i=0; i<vs_count+ps_count; ++i) {
             std::string stage = i<vs_count ? "vertex" : "fragment";
             constants[i]=buffer(read(dir/(stage+"-"+light+"-"+std::to_string(i<vs_count ? i : i-vs_count)+".bin")),
                                 D3D11_BIND_CONSTANT_BUFFER);
             slots[i]=constants[i].Get();
         }
         ctx->VSSetConstantBuffers(0,vs_count,slots.data());
-        ctx->PSSetConstantBuffers(0,8-vs_count,slots.data()+vs_count);
+        ctx->PSSetConstantBuffers(0,ps_count,slots.data()+vs_count);
         const float clear[]{0,0,0,0};
         if (clear_target) {
             ctx->ClearRenderTargetView(color.Get(),clear);
             ctx->ClearDepthStencilView(depth.Get(),D3D11_CLEAR_DEPTH,1,0);
         }
         ctx->DrawIndexed(index_count,0,0);
+    }
+
+    void shadow_case(const Path& draw, const Path& textures, const Path& output, const std::string& mode) {
+        Bytes material = mode=="transparent" ? Bytes{255,255,255,0} :
+            mode=="solid" ? Bytes{255,255,255,255} : read(textures/"basecolor.rgba");
+        const UINT extent=material.size()==4 ? 1 : 1024;
+        auto image=texture2d(material,true,false,extent,extent,extent==1 ? 1 : 11);
+        auto* resource=image.Get();
+        ctx->PSSetShaderResources(0,1,&resource);
+        D3D11_SAMPLER_DESC sampler{};
+        sampler.Filter=D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+        sampler.AddressU=sampler.AddressV=sampler.AddressW=D3D11_TEXTURE_ADDRESS_WRAP;
+        sampler.MaxLOD=D3D11_FLOAT32_MAX;
+        sampler.MaxAnisotropy=1;
+        sampler.ComparisonFunc=D3D11_COMPARISON_NEVER;
+        ComPtr<ID3D11SamplerState> sampler_state;
+        require(device->CreateSamplerState(&sampler,&sampler_state),"Shadow sampler");
+        auto* sampler_handle=sampler_state.Get();
+        ctx->PSSetSamplers(0,1,&sampler_handle);
+        D3D11_DEPTH_STENCIL_DESC desc{};
+        desc.DepthEnable=TRUE;
+        desc.DepthFunc=D3D11_COMPARISON_LESS;
+        desc.DepthWriteMask=mode=="depth-off" ? D3D11_DEPTH_WRITE_MASK_ZERO : D3D11_DEPTH_WRITE_MASK_ALL;
+        ComPtr<ID3D11DepthStencilState> state;
+        require(device->CreateDepthStencilState(&desc,&state),"Shadow depth state");
+        ctx->OMSetDepthStencilState(state.Get(),0);
+        render(draw,"light",true,false,true);
+        ctx->OMSetRenderTargets(0,nullptr,nullptr);
+        ctx->CopyResource(depth_staging.Get(),depth_source.Get());
+        D3D11_MAPPED_SUBRESOURCE pixels{};
+        require(ctx->Map(depth_staging.Get(),0,D3D11_MAP_READ,0,&pixels),"Shadow depth readback");
+        std::ofstream out(output/(mode+".mask"),std::ios::binary);
+        for (UINT y=0; y<Side; ++y) {
+            const auto* row=static_cast<const unsigned char*>(pixels.pData)+(Side-1-y)*pixels.RowPitch;
+            for (UINT x=0; x<Side; ++x) {
+                uint32_t packed;
+                std::memcpy(&packed,row+x*4,4);
+                out.put((packed & 0x00ffffffu)==0x00ffffffu ? '\0' : static_cast<char>(255));
+            }
+        }
+        ctx->Unmap(depth_staging.Get(),0);
+        auto* rtv=color.Get();
+        ctx->OMSetRenderTargets(1,&rtv,depth.Get());
+        if (!out) throw std::runtime_error("Shadow mask write failed");
     }
 
     void capture(const Path& output, const std::string& mode) {
@@ -276,9 +333,15 @@ struct Draw {
 
 int wmain(int argc,wchar_t** argv) {
     const std::wstring mode_flag = argc==6 ? argv[5] : L"";
-    if (argc!=4 && argc!=5 && mode_flag!=L"add" && mode_flag!=L"animation") return 2;
+    if (argc!=4 && argc!=5 && mode_flag!=L"add" && mode_flag!=L"animation" && mode_flag!=L"shadow") return 2;
     try {
-        Draw draw;
+        Draw draw(mode_flag==L"shadow");
+        if (mode_flag==L"shadow") {
+            draw.bind_geometry(argv[4],{},true);
+            for (const auto& mode:{"native","solid","transparent","depth-off"})
+                draw.shadow_case(argv[4],argv[2],argv[3],mode);
+            return 0;
+        }
         if (mode_flag==L"animation") {
             draw.bind_textures(argv[2],"light");
             for (int clip=0; clip<3; ++clip) {

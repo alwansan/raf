@@ -6,7 +6,7 @@ import shutil
 
 from gfxlab.tools.gfx118_m02_original_forward import audit
 from gfxlab.tools.gfx119_prepare_draw import fixture_consumer
-from gfxlab.tools.gfx121_forward_fixture_values import engine_values
+from gfxlab.tools.gfx121_forward_fixture_values import engine_values, pack_buffer
 from gfxlab.tools.multi_sevenpass_state_enum_semantics import STATE_FIELDS, classify_state_value
 from gfxlab.tools.multi_shader_parameter_blob093 import load_original_shader_private
 
@@ -24,14 +24,14 @@ def fit_shadow_world_to_object(out):
     path.write_text(json.dumps(contract))
 
 
-def prepare(stage, mesh, out):
+def prepare(stage, mesh, out, *, direct3d=False):
     shader = load_original_shader_private(stage)
     row, = [p for p in shader[0]["m_ParsedForm"]["m_SubShaders"][0]["m_Passes"]
             if p["m_State"]["m_Name"] == "ShadowCaster"]
-    report = audit(stage, True, fixture_consumer(out), shader_source=shader,
+    report = audit(stage, not direct3d, fixture_consumer(out, direct3d=direct3d), shader_source=shader,
                    pass_name="ShadowCaster", engine_keywords=("SHADOWS_DEPTH",), filter_absent_keys=True)
     fit_shadow_world_to_object(out)
-    engine = engine_values(mesh.read_bytes())
+    engine = engine_values(mesh.read_bytes(), direct3d=direct3d)
     shutil.copyfile(mesh, out / "mesh.bin")
     shutil.copyfile(mesh.with_name("indices.bin"), out / "indices.bin")
     missing = {}
@@ -46,6 +46,25 @@ def prepare(stage, mesh, out):
                 size = 4 * field["columns"] * field["rows"]
                 if not all(mask[start:start + size]) and field["name"] not in engine:
                     missing.setdefault(field["name"], set()).add(name)
+    if direct3d:
+        if set(missing) != {"unity_LightShadowBias"}:
+            raise ValueError("Unexpected source shadow semantics")
+        engine["unity_LightShadowBias"] = (0, 0, 0, 0)
+        engine["unity_WorldToObject"] = engine["unity_WorldToObject"][:12]
+        for name, count in (("vertex", 5), ("fragment", 1)):
+            contract = json.loads((out / (name + ".json")).read_text())
+            groups = {g["name"]: g for g in contract["groups"]}
+            slots = {b["index"]: b["name"] for b in contract["bindings"] if b["type"] == 1}
+            textures = [(b["name"], b["index"], b["extra"]) for b in contract["bindings"] if b["type"] == 0]
+            if set(slots) != set(range(count)) or textures != (
+                [("_MainTex", 0, 0)] if name == "fragment" else []
+            ):
+                raise ValueError("Unexpected ShadowCaster slots")
+            for slot, group in slots.items():
+                data, _ = pack_buffer((out / f"{name}-{slot}.bin").read_bytes(),
+                                      (out / f"{name}-{slot}.mask").read_bytes(),
+                                      groups[group], engine, True)
+                (out / f"{name}-light-{slot}.bin").write_bytes(data)
     return {"experiment": "GFX131", "source_sha": report["source_sha"],
             "source_pair_count": report["exact_source_pair_count"],
             "world_to_object_rows_in_source_buffer": 3,
@@ -64,6 +83,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     for name in ("stage", "mesh", "private", "safe"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--direct3d", action="store_true")
     args = parser.parse_args()
-    report = prepare(args.stage, args.mesh, args.private)
+    report = prepare(args.stage, args.mesh, args.private, direct3d=args.direct3d)
     args.safe.write_text(json.dumps(report, indent=2) + "\n")
