@@ -136,7 +136,15 @@ def scan(source_root: Path, manifest: Path, levels: tuple[int, ...], loader=None
                 material_graph = None
                 if renderers:
                     external_paths = [getattr(x, "path", None) for x in owner.externals]
-                    material_graph = analyze_scene(objects, len(external_paths),
+                    # B03 bounds renderer/material graphs to 100k nodes. Large
+                    # Unity scene owners may contain >100k unrelated MonoBehaviour
+                    # and GameObject nodes; they are not material graph vertices.
+                    # Keep all original renderer and local Material objects for
+                    # the PPtr identity validation, never dependency-expanded ones.
+                    graph_objects = [obj for obj in objects
+                                     if str(obj.type.name) in RENDERER_CLASSES
+                                     or str(obj.type.name) == "Material"]
+                    material_graph = analyze_scene(graph_objects, len(external_paths),
                                                    external_paths, names)
                     totals.update(material_graph["counts"])
                 counts = {k: types[k] for k in KINDS if types[k]}
