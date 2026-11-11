@@ -81,7 +81,10 @@ def census(root: Path, salt: str = ""):
                 # Block sequence items must be nested beneath m_Materials.
                 # A later sibling YAML list (e.g. m_SubEmitters) is not a
                 # material slot, even if its entries also begin with "-".
-                # Unity's indentless block sequences permit '-' at the same\n                # indentation as m_Materials; a sibling mapping key still\n                # terminates this sequence before its own list is read.\n                material_indent = len(match.group(0).split("m_Materials:", 1)[0])
+                # Unity's indentless block sequences permit '-' at the same
+                # indentation as m_Materials; a sibling mapping key still
+                # terminates this sequence before its own list is read.
+                material_indent = len(match.group(0).split("m_Materials:", 1)[0])
                 tail = doc[match.end():]
                 for line in tail.splitlines():
                     if not line.strip():
