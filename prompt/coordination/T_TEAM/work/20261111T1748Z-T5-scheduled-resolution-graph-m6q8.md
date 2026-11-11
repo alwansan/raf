@@ -8,5 +8,5 @@ files: scripts/t5_validate_resolution_delegate_probe.py; scripts/test_t5_validat
 experiment_key: T5-RES-DELEGATE-COUNT-INVARIANTS-20261111
 shared_resource: none; Python-only; no Unity, APK, T4 mouse files, or Settings changes.
 expected_sha_policy: branch head read before each change; GitHub contents API conditional blob SHA; no force.
-status: planned
-next: implement count invariants and unit regressions; keep runtime UI/persistence unverified.
+status: source_patch_and_regression_committed; CI_unverified
+result: scripts/t5_validate_resolution_delegate_probe.py now rejects option delegate method count exceeding two authenticated original delegate sites; added four source-only regression tests. Commits 4475971c6ab955f9cbe03c1a5cdf45b4c83566f9 and dc5e88697812f8879a0d4f18d8e0a6b4389fd902. No CI/device execution claimed.\nnext: run python -m unittest scripts.test_t5_validate_resolution_delegate_probe on CI or checked-out repo, then investigate original Settings runtime binding separately.
