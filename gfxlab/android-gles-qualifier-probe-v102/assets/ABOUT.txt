@@ -1,0 +1,6 @@
+GFX102 independent original-free GLES 3.0/3.1/3.2 version-matrix native noperspective probe.
+GFX101 owner real Adreno 730 shows GL_NV_shader_noperspective_interpolation advertised but GLSL ES #version 300 es rejected both stages ('noperspective' reserved word).
+Try #version 300 es, #version 310 es, and #version 320 es in separate explicit #extension : require programs, each with GPU readback and independent smooth/flat/affine controls.
+Expected APK package: com.alwansan.gfx102.
+No Raft game assets, original shader source, animation data, model payloads, or PC-vs-phone pixel parity.
+Auto-exports complete private logs to Download/Games/cl/test/g/.
