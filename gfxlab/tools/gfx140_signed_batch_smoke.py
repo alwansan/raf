@@ -13,6 +13,7 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 from gfxlab.tests.test_gfx139_full_batch_replay import FullBatchReplay
+from gfxlab.tools.gfx124_batch_pack import inject
 from gfxlab.tools.gfx124_batch_zip_audit import audit
 
 EXPECTED_PACKAGE = "com.alwansan.gfx124"
@@ -61,7 +62,23 @@ def smoke(shell, tools, safe):
             aligned = work / "synthetic-batch-aligned.apk"
             signed = work / "synthetic-batch-signed.apk"
             assert FullBatchReplay.pack_result["expected_captures"] == 51
-            aggregate = FullBatchReplay.assemble(unpacked)
+            # GFX139's class-based assembler intentionally uses a fake ZIP shell.
+            # GFX140 MUST inject into the actual aapt2-compiled Android APK.
+            with ZipFile(shell) as real_apk:
+                manifest = real_apk.read("AndroidManifest.xml")
+                if manifest[:4] != b"\x03\x00\x08\x00":
+                    raise ValueError("Real Android shell manifest is not compiled binary XML")
+            aggregate = inject(
+                shell, FullBatchReplay.m02, FullBatchReplay.models,
+                FullBatchReplay.evidence, unpacked,
+                forward_add=FullBatchReplay.additional,
+                add_evidence=FullBatchReplay.additional_evidence,
+                animation=FullBatchReplay.animation,
+                animation_evidence=FullBatchReplay.animation_evidence,
+                shadow=FullBatchReplay.shadow,
+                shadow_evidence=FullBatchReplay.shadow_evidence,
+                deferred=FullBatchReplay.deferred,
+                deferred_evidence=FullBatchReplay.deferred_evidence)
             if aggregate["tests"] != 9 or aggregate["expected_captures"] != 51:
                 raise ValueError("Full synthetic batch assembly failed")
             checked([tools / "zipalign", "-f", "4", unpacked, aligned])
