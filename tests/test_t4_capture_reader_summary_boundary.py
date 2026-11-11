@@ -51,6 +51,29 @@ class CaptureReaderSummaryBoundaryTests(unittest.TestCase):
         self.assertEqual(result["callback_counter_decreases"], 0)
         self.assertFalse(result["gameplay_success_proven"])
 
+    def test_first_observation_is_not_mistaken_for_new_action(self):
+        result = module.summarize([
+            "physical_mouse_captured_action_callbacks left=4; right=2",
+            "physical_mouse_legacy_reader_evidence left=10; right=5",
+            "physical_mouse_captured_action_callbacks left=5; right=2",
+            "physical_mouse_legacy_reader_evidence left=10; right=6",
+        ])
+        self.assertEqual(result["first_callback_counters"], {"left": 4, "right": 2})
+        self.assertEqual(result["first_reader_counters"], {"left": 10, "right": 5})
+        self.assertEqual(result["monotonic_callback_increases"], {"left": 1})
+        self.assertEqual(result["monotonic_reader_increases"], {"right": 1})
+        self.assertFalse(result["gameplay_success_proven"])
+
+    def test_reset_drop_not_counted_as_increase(self):
+        result = module.summarize([
+            "physical_mouse_legacy_reader_evidence left=9",
+            "physical_mouse_legacy_reader_evidence left=2",
+            "physical_mouse_legacy_reader_evidence left=4",
+        ])
+        self.assertEqual(result["monotonic_reader_increases"], {"left": 2})
+        self.assertEqual(result["reader_counter_decreases"], 1)
+        self.assertFalse(result["gameplay_success_proven"])
+
     def test_missing_reader_marker_is_not_success(self):
         result = module.summarize(["physical_mouse_captured_action_callbacks left=1"])
         self.assertEqual(result["diagnostic_state"], "callbacks_observed_readers_not_observed")
