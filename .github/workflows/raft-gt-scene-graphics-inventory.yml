@@ -1,0 +1,116 @@
+name: GT pinned original scene graphics inventory
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_scene_graphics_inventory.py
+      - tests/test_gt_scene_graphics_inventory.py
+      - .github/workflows/raft-gt-scene-graphics-inventory.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-original-scene-graphics-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate GT inventory without original data
+        run: |
+          python3 -m py_compile scripts/gt_scene_graphics_inventory.py
+          python3 -m unittest discover -s tests -p test_gt_scene_graphics_inventory.py -v
+
+  pinned-scenes:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Free-space check for original 40 scene headers only
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 2097152
+      - name: Checkout immutable ZIP2 scene owners, not full 7.79GB source
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+      - name: Install source reader
+        run: python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+      - name: Authenticate all 40 scenes and inventory owned graphics descriptors
+        run: |
+          python3 -m scripts.gt_scene_graphics_inventory \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --report "$RUNNER_TEMP/gt-scene-inventory.json"
+      - name: Publish aggregate source inventory only, not game assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-scene-inventory-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-scene-inventory.json
+          retention-days: 14
+          if-no-files-found: ignore
