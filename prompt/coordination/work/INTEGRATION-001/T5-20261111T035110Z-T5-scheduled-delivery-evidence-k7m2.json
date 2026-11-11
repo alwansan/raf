@@ -2,8 +2,8 @@
   "session_id": "20261111T035110Z-T5-scheduled-delivery-evidence-k7m2",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
-  "updated_at": "2026-11-11T03:51:10Z",
+  "status": "completed_evidence_only",
+  "updated_at": "2026-11-11T03:53:00Z",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/T5-20261111T035110Z-T5-scheduled-delivery-evidence-k7m2.json",
     "prompt/coordination/clients/T5/sessions/20261111T035110Z-T5-scheduled-delivery-evidence-k7m2.md"
@@ -15,5 +15,7 @@
     "docs/DEVICE_FEEDBACK_42058825739_AR.md",
     "apk-for-testing/SHARED_BUILD_READINESS.md"
   ],
-  "constraints": "No Unity dispatch, no game raw assets, no T4 mouse writes. Read-only provenance assessment; package full hash still pending."
+  "constraints": "No Unity dispatch, no game raw assets, no T4 mouse writes. Read-only provenance assessment; package full hash still pending.",
+  "result": "Confirmed R5 Mini APK17 is not original Raft APK89, and R5 OBB91 hash inventory cannot be treated as original OBB89. Documented explicit version/signature/SHA provenance gate. No game/UI change.",
+  "checkpoint": "prompt/coordination/clients/T5/sessions/20261111T035110Z-T5-scheduled-delivery-evidence-k7m2.md"
 }
