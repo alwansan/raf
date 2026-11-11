@@ -1,0 +1,29 @@
+name: T3 particle material YAML audit unit tests (source-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle-material-audit-unit.yml'
+      - 'scripts/t3_particle_material_chain_audit.py'
+      - 'scripts/tests/test_t3_particle_material_chain_audit.py'
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle-yaml-audit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  parser-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run real parser regression tests (no private assets)
+        run: |
+          python3 -m unittest discover -s scripts/tests -p 'test_t3_particle_material_chain_audit.py' -v
+      - name: Syntax-check parser and tests
+        run: |
+          python3 -m py_compile scripts/t3_particle_material_chain_audit.py scripts/tests/test_t3_particle_material_chain_audit.py
