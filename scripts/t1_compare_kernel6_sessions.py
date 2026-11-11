@@ -7,7 +7,7 @@ from pathlib import Path
 
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 SESSION = re.compile(r"[A-Za-z0-9_.-]{1,100}\Z")
-REQUIRED = ("kernel6_lines", "kernel6_error_lines", "water_pass_lines", "findkernel_lines", "dispatch_lines")
+REQUIRED = ("kernel6_lines", "kernel6_error_lines", "kernel6_nonerror_mentions", "water_pass_lines", "findkernel_lines", "dispatch_lines")
 
 def validate(obj):
     if not isinstance(obj, dict) or not SESSION.fullmatch(str(obj.get("session_id", ""))):
@@ -21,8 +21,8 @@ def validate(obj):
     counts = obj.get("counts")
     if not isinstance(counts, dict) or any(type(counts.get(k)) is not int or counts[k] < 0 for k in REQUIRED):
         raise ValueError("invalid counts")
-    if counts["kernel6_error_lines"] > counts["kernel6_lines"]:
-        raise ValueError("error count exceeds mentions")
+    if counts["kernel6_error_lines"] + counts["kernel6_nonerror_mentions"] != counts["kernel6_lines"]:
+        raise ValueError("kernel mention partition inconsistent")
     events = obj.get("events")
     if not isinstance(events, list) or len(events) > 1000:
         raise ValueError("invalid events")
