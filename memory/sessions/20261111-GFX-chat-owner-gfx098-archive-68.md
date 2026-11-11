@@ -27,3 +27,6 @@
 4. No full game/APK rebuild just for this already-successful GFX098 owner audit. No other branch changed.
 
 **Negative gates:** `originalShaderRestored=false`, `originalAnimationRestored=false`, `phase_closed=false`, no claim RENDER-002/WATER-001 READY.
+
+## Owner PNG visual review and quantitative control
+The 12 first-session private 960×540 studio readbacks were inspected locally as six paired model-mode captures; no private montage or PNG was committed. In all six, Mode4 saved-material candidate visibly has changed surface color/lighting relative to Mode3 Standard PBR approximation. All six model shapes appear in the images. M03's two-material tray is visible; M04 is an isolated two-arm static pose, **not evidence of correctly restored full character/skinned hierarchy**. Against the shared background RGB(23,39,59), an explicit approximate foreground mask (any-channel distance >8 in either mode) yields mean absolute RGB channel difference on foreground [M00..M05] **30.14,42.02,36.94,64.61,47.84,33.43** (0–255 scale); object union mask covers about 1.1–5.4% of full image. These are measured *differences*, not semantic or PC reference fidelity; 48/48 hash validation is separate from this pixel heuristic. The supplemental aggregate report has been updated with method and values.
