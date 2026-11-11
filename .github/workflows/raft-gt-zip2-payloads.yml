@@ -1,0 +1,87 @@
+name: GT ZIP2-only graphics payload smoke (never Git LFS)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/gt_zip2_payloads.py'
+      - 'tests/test_gt_zip2_payloads.py'
+      - '.github/workflows/raft-gt-zip2-payloads.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-zip2-original-payloads-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: No-LFS ZIP2 source integrity regressions
+        run: |
+          python3 -m py_compile scripts/gt_zip2_payloads.py
+          python3 -m unittest discover -s tests -p test_gt_zip2_payloads.py -v
+
+  original-smoke:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Original ZIP2 immutable checkout, no LFS and no game build
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0.resS
+            Raft/Raft_Data/level30
+      - name: Reassemble a plain graphics stream and an actual split scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_payloads \
+            --zip2-checkout .gt-zip2 \
+            --destination "$RUNNER_TEMP/gt-zip2-restored" \
+            --path Raft_Data/level0.resS \
+            --path Raft_Data/level30 \
+            --byte-budget 150000000 \
+            --report "$RUNNER_TEMP/gt-zip2-original-stream-proof.json"
+          test -f "$RUNNER_TEMP/gt-zip2-restored/Raft/Raft_Data/level0.resS"
+          test -f "$RUNNER_TEMP/gt-zip2-restored/Raft/Raft_Data/level30"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-zip2-original-stream-proof.json").read_text())
+          assert r["files_selected"]==2 and r["newly_staged"]==2
+          assert r["file_sha256_and_size_verified"] and not r["git_lfs_used"]
+          print("GT_ZIP2_STREAM_AND_SPLIT_PROVEN original_bytes="+str(r["original_bytes_verified"])+" source_sha256=true lfs=false android=false")
+          PY
+      - name: Save only non-proprietary checksums/byte counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-zip2-source-smoke-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-zip2-original-stream-proof.json
+          retention-days: 14
+          if-no-files-found: ignore
