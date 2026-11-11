@@ -1,0 +1,163 @@
+name: GFX117 M02 original texture raster views
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi112-animated-gpu-skin.yml'
+      - 'gfxlab/android-gles-skin117/**'
+      - 'gfxlab/tools/gfx117_m02_uv_inputs.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx117-indexed-gpu-skin
+  cancel-in-progress: false
+jobs:
+  signed-indexed-gpu-skin-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Verify indexed skinning and source extraction regressions
+        run: python3 -m unittest discover -s gfxlab/tests -p 'test_gfx108*.py'
+      - name: Checkout authentic pinned original ZIP2 only in ephemeral private runner
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install pinned private Unity mesh reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 numpy==2.3.5 Pillow==11.3.0
+      - name: Stage the 15 source-derived poses for the diagnostic APK
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          mkdir -p gfx117-build
+          python3 -m gfxlab.tools.gfx112_animated_payload \
+            --zip2 source-zip2 --stage "$RUNNER_TEMP/gfx117-source" \
+            --assets "$RUNNER_TEMP/gfx117-assets" --safe gfx117-build/gfx117-safe-source.json
+          python3 -m gfxlab.tools.gfx114_m02_raster_reference --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx117-source" --assets "$RUNNER_TEMP/gfx117-assets" \
+            --safe gfx117-build/gfx117-safe-raster.json
+          python3 -m gfxlab.tools.gfx115_m02_depth_reference --assets "$RUNNER_TEMP/gfx117-assets" \
+            --safe gfx117-build/gfx117-safe-depth.json
+          rm "$RUNNER_TEMP/gfx117-assets/raster114.bin" "$RUNNER_TEMP/gfx117-assets/"*.mask \
+            "$RUNNER_TEMP/gfx117-assets/"*.depth "$RUNNER_TEMP/gfx117-assets/"*.edge
+          python3 -m gfxlab.tools.gfx117_m02_uv_inputs --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx117-source" --assets "$RUNNER_TEMP/gfx117-assets" \
+            --safe gfx117-build/gfx117-safe-uv.json
+          python3 -m gfxlab.tools.gfx116_m02_bc3_source --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx117-source" --private "$RUNNER_TEMP/gfx117-private" \
+            --safe gfx117-build/gfx117-safe-textures.json
+          python3 -m gfxlab.tools.gfx116_bc3_sampling_pack --private "$RUNNER_TEMP/gfx117-private" \
+            --source gfx117-build/gfx117-safe-textures.json --assets "$RUNNER_TEMP/gfx117-sampled"
+          mv "$RUNNER_TEMP/gfx117-sampled/"*.rgba "$RUNNER_TEMP/gfx117-assets/"
+      - name: Build, sign, verify minimal Android GLES3 vertex probe
+        run: |
+          set -euo pipefail
+          sdk="$ANDROID_HOME"
+          jar="$(find "$sdk/platforms" -name android.jar | sort -V | tail -1)"
+          buildtools="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          test -f "$jar" && test -x "$buildtools/aapt2" && test -x "$buildtools/apksigner"
+          mkdir -p gfx117-build/classes gfx117-build/dex gfx117-build/gen
+          "$buildtools/aapt2" link -o gfx117-build/resources.apk \
+            --manifest gfxlab/android-gles-skin117/AndroidManifest.xml \
+            -I "$jar" -A "$RUNNER_TEMP/gfx117-assets" \
+            --java gfx117-build/gen
+          javac -source 8 -target 8 -bootclasspath "$jar" \
+            -d gfx117-build/classes \
+            gfxlab/android-gles-skin109/src/com/alwansan/gfx109/MainActivity.java
+          mapfile -t classes < <(find gfx117-build/classes -type f -name '*.class')
+          test "${#classes[@]}" -gt 0
+          "$buildtools/d8" --lib "$jar" --min-api 29 --output gfx117-build/dex "${classes[@]}"
+          test -s gfx117-build/dex/classes.dex
+          cp gfx117-build/resources.apk gfx117-build/unsigned.apk
+          python3 - <<'PY'
+          from zipfile import ZipFile,ZIP_DEFLATED
+          with ZipFile('gfx117-build/unsigned.apk','a',compression=ZIP_DEFLATED) as z:
+              z.write('gfx117-build/dex/classes.dex','classes.dex')
+          PY
+          keytool -genkeypair \
+            -keystore "$RUNNER_TEMP/gfx117-debug.jks" -storepass android \
+            -keypass android -alias gfx117 -keyalg RSA -keysize 2048 -validity 5000 \
+            -dname "CN=GFX117 OpenGL ES GPU Diagnostic" -noprompt
+          "$buildtools/zipalign" -f -p 4 gfx117-build/unsigned.apk gfx117-build/aligned.apk
+          "$buildtools/apksigner" sign --ks "$RUNNER_TEMP/gfx117-debug.jks" \
+            --ks-pass pass:android --key-pass pass:android \
+            --out gfx117-build/GFX117-M02-Textured-Views.apk \
+            gfx117-build/aligned.apk
+          "$buildtools/apksigner" verify --verbose gfx117-build/GFX117-M02-Textured-Views.apk
+          "$buildtools/aapt2" dump badging gfx117-build/GFX117-M02-Textured-Views.apk \
+            | tee gfx117-build/badging.txt
+          grep -F "name='com.alwansan.gfx117'" gfx117-build/badging.txt
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          from zipfile import ZipFile
+          apk=Path("gfx117-build/GFX117-M02-Textured-Views.apk")
+          assert apk.stat().st_size>100000
+          with ZipFile(apk) as z:
+              assert z.testzip() is None
+              assert {'AndroidManifest.xml','classes.dex'} <= set(z.namelist())
+              source=json.loads(Path('gfx117-build/gfx117-safe-source.json').read_text())
+              assert len(source['sample_payloads']) == 15
+              raster=json.loads(Path('gfx117-build/gfx117-safe-raster.json').read_text())
+              assert len(z.read('assets/raster115.bin')) == 64 + raster['triangles'] * 6
+              uv=json.loads(Path('gfx117-build/gfx117-safe-uv.json').read_text())
+              assert hashlib.sha256(z.read('assets/uv117.bin')).hexdigest()==uv['uv_sha256']
+              for role in ('basecolor','normal','metallic'):
+                  assert len(z.read('assets/'+role+'.rgba'))==5592404
+              for name, row in source['sample_payloads'].items():
+                  assert hashlib.sha256(z.read('assets/'+name+'.bin')).hexdigest() == row['sha256']
+              assert 'Raft_Data' not in ''.join(z.namelist())
+              assert 'UnityShaderCache' not in ''.join(z.namelist())
+          safe={"experiment":"GFX117",
+                "apk_bytes":apk.stat().st_size,
+                "apk_sha256":hashlib.sha256(apk.read_bytes()).hexdigest(),
+                "package":"com.alwansan.gfx117",
+                "apksigner_verified":True,
+                "user_device_test_pending":True,
+                "expected_gpu_positions":24990,
+                "original_shader_restored":False,
+                "original_indexed_test_inputs_embedded":True,
+                "pc_adreno_pixel_parity_verified":False,
+                "phase_closed":False,
+                "expected_export":"Download/Games/cl/test/g/"}
+          Path("gfx117-build/gfx117-safe-delivery.json").write_text(json.dumps(safe,indent=2)+'\n')
+          print(json.dumps(safe,sort_keys=True))
+          PY
+      - name: Upload signed standalone diagnostic APK and safe manifest only
+        uses: actions/upload-artifact@v4
+        with:
+          name: GFX117-M02-Textured-Views-APK
+          path: |
+            gfx117-build/GFX117-M02-Textured-Views.apk
+            gfx117-build/gfx117-safe-delivery.json
+            gfx117-build/gfx117-safe-source.json
+            gfx117-build/gfx117-safe-raster.json
+            gfx117-build/gfx117-safe-uv.json
+            gfx117-build/gfx117-safe-textures.json
+          retention-days: 7
+          compression-level: 0
+          if-no-files-found: error
+      - name: Remove extracted source, payload staging and intermediate packages
+        if: always()
+        run: rm -rf source-zip2 "$RUNNER_TEMP/gfx117-private" "$RUNNER_TEMP/gfx117-sampled" "$RUNNER_TEMP/gfx117-source" "$RUNNER_TEMP/gfx117-assets" "$RUNNER_TEMP/gfx117-debug.jks" gfx117-build

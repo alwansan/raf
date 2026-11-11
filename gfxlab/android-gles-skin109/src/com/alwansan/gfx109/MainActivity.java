@@ -39,17 +39,25 @@ public final class MainActivity extends Activity {
         + "precision highp float; precision highp int;\n"
         + "layout(location=0) in vec3 position; layout(location=1) in vec4 weight;\n"
         + "layout(location=2) in uvec4 bone; layout(std140) uniform Palette { mat4 matrices[100]; };\n"
+        + "layout(location=3) in vec2 uv; out vec2 uv0;\n"
         + "out vec3 skinned; uniform bool uRaster; uniform mat4 uCamera;\n"
-        + "void main() { vec4 p=vec4(position,1.0); skinned=vec3(0.0);\n"
+        + "void main() { vec4 p=vec4(position,1.0); skinned=vec3(0.0); uv0=uv;\n"
         + "for (int i=0;i<4;++i) if (weight[i]>0.0) { vec4 q=matrices[bone[i]]*p;\n"
         + "skinned+=weight[i]*(q.xyz/q.w); } gl_Position=uRaster ? uCamera*vec4(skinned,1.0) : vec4(0.0,0.0,0.0,1.0); }\n";
     private static final String FRAGMENT = "#version 300 es\n"
         + "precision highp float; precision highp int; uniform bool uDepth; out vec4 color;\n"
-        + "void main(){ if(!uDepth){color=vec4(1.0); return;}\n"
+        + "in vec2 uv0; uniform int uRole; uniform float uMip; uniform vec4 uST; uniform highp sampler2D uTexture;\n"
+        + "vec3 encodeSRGB(vec3 v){return mix(1.055*pow(v,vec3(1.0/2.4))-0.055,12.92*v,lessThanEqual(v,vec3(0.0031308)));}\n"
+        + "void main(){ if(uRole>0){vec4 t=textureLod(uTexture,uv0*uST.xy+uST.zw,uMip);\n"
+        + "if(uRole==1)color=vec4(encodeSRGB(t.rgb),1.0);\n"
+        + "else if(uRole==2)color=vec4(t.a,t.g,0.0,1.0);\n"
+        + "else color=vec4(encodeSRGB(t.rrr).r,t.a,0.0,1.0); return;}\n"
+        + "if(!uDepth){color=vec4(1.0); return;}\n"
         + "uint d=uint(floor(gl_FragCoord.z*65534.0+0.5))+1u;\n"
         + "color=vec4(float(d>>8u)/255.0,float(d&255u)/255.0,1.0,1.0);}\n";
 
     private String experiment() {
+        if ("com.alwansan.gfx117".equals(getPackageName())) return "GFX117";
         if ("com.alwansan.gfx115".equals(getPackageName())) return "GFX115";
         if ("com.alwansan.gfx114".equals(getPackageName())) return "GFX114";
         return "com.alwansan.gfx112".equals(getPackageName()) ? "GFX112" : "GFX109";
@@ -63,6 +71,9 @@ public final class MainActivity extends Activity {
     }
 
     private static final int SIDE = 256;
+    private static final String[] ROLES = {"basecolor", "normal", "metallic"};
+    private static final int[] LODS = {0, 4};
+    private static final String[] TEXTURE_POSES = {"C0P0", "C1P0", "C1P2", "C2P0", "C2P2"};
     private final Map<String, byte[]> images = new LinkedHashMap<>();
 
     private TextView status;
@@ -75,10 +86,11 @@ public final class MainActivity extends Activity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         status = new TextView(this);
-        status.setText(experiment() + ": comparing source vertices on the GPU…");
+        status.setText("GFX117".equals(experiment()) ? "جارٍ رسم المجسم بالخامات الأصلية…"
+            : experiment() + ": comparing source vertices on the GPU…");
         layout.addView(status);
         Button export = new Button(this);
-        export.setText("Export ZIP");
+        export.setText("GFX117".equals(experiment()) ? "إعادة تصدير السجل والصور" : "Export ZIP");
         export.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) { if (report != null) exportReport(); }
         });
@@ -229,6 +241,8 @@ public final class MainActivity extends Activity {
                 .put("nonfinite_vertices", nonfiniteVertices).put("max_absolute_error", maxError);
             if ("GFX114".equals(experiment()) || "GFX115".equals(experiment()))
                 result.put("raster", raster(model, program));
+            if ("GFX117".equals(experiment()) && java.util.Arrays.asList(TEXTURE_POSES).contains(model))
+                result.put("textured", textured(model, program));
             return result;
         } finally {
             glBindVertexArray(0);
@@ -355,6 +369,125 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private JSONArray textured(String model, int program) throws Exception {
+        byte[] mesh = asset("raster115.bin"), uv = asset("uv117.bin");
+        if (mesh.length <= 64 || (mesh.length - 64) % 6 != 0 || uv.length != 48 + 1666 * 8)
+            throw new IllegalStateException("Wrong source UV/index assets");
+        ByteBuffer packed = ByteBuffer.wrap(mesh).order(ByteOrder.LITTLE_ENDIAN);
+        float[] camera = new float[16];
+        for (int i = 0; i < 16; i++) camera[i] = packed.getFloat();
+        ByteBuffer transforms = ByteBuffer.wrap(uv).order(ByteOrder.LITTLE_ENDIAN);
+        ByteBuffer coordinates = ByteBuffer.allocateDirect(uv.length - 48);
+        coordinates.put(uv, 48, uv.length - 48).flip();
+        ByteBuffer indices = ByteBuffer.allocateDirect(mesh.length - 64);
+        indices.put(mesh, 64, mesh.length - 64).flip();
+
+        int[] fbo = new int[1], depth = new int[1], buffers = new int[2], textures = new int[2];
+        glGenFramebuffers(1, fbo, 0);
+        glGenRenderbuffers(1, depth, 0);
+        glGenBuffers(2, buffers, 0);
+        glGenTextures(2, textures, 0);
+        int raster = glGetUniformLocation(program, "uRaster");
+        int roleUniform = glGetUniformLocation(program, "uRole");
+        try {
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);
+            glBindRenderbuffer(GL_RENDERBUFFER, depth[0]);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, SIDE, SIDE);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth[0]);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, textures[0]);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, SIDE, SIDE);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+                throw new IllegalStateException("Textured framebuffer incomplete");
+
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+            glBufferData(GL_ARRAY_BUFFER, coordinates.remaining(), coordinates, GL_STATIC_DRAW);
+            glVertexAttribPointer(3, 2, GL_FLOAT, false, 8, 0);
+            glEnableVertexAttribArray(3);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[1]);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.remaining(), indices, GL_STATIC_DRAW);
+            glUniformMatrix4fv(glGetUniformLocation(program, "uCamera"), 1, false, camera, 0);
+            glUniform1i(raster, 1);
+            glUniform1i(glGetUniformLocation(program, "uTexture"), 0);
+            glViewport(0, 0, SIDE, SIDE);
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LESS);
+            glDepthMask(true);
+            glClearDepthf(1);
+            glDisable(GL_DITHER);
+            glDisable(GL_BLEND);
+            glDisable(GL_CULL_FACE);
+            glClearColor(0, 0, 0, 0);
+
+            JSONArray result = new JSONArray();
+            glBindTexture(GL_TEXTURE_2D, textures[1]);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 10);
+            ByteBuffer pixels = ByteBuffer.allocateDirect(SIDE * SIDE * 4);
+            for (int role = 0; role < ROLES.length; role++) {
+                byte[] bytes = asset(ROLES[role] + ".rgba");
+                int offset = 0;
+                for (int mip = 0; mip <= 10; mip++) {
+                    int size = 1024 >> mip, count = size * size * 4;
+                    ByteBuffer data = ByteBuffer.allocateDirect(count);
+                    data.put(bytes, offset, count).flip();
+                    glTexImage2D(GL_TEXTURE_2D, mip, role == 1 ? GL_RGBA8 : GL_SRGB8_ALPHA8,
+                                 size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                    offset += count;
+                }
+                if (offset != bytes.length) throw new IllegalStateException("RGBA mip chain size mismatch");
+                glUniform1i(roleUniform, role + 1);
+                glUniform4f(glGetUniformLocation(program, "uST"), transforms.getFloat(),
+                            transforms.getFloat(), transforms.getFloat(), transforms.getFloat());
+                for (int lod : LODS) {
+                    glUniform1f(glGetUniformLocation(program, "uMip"), lod);
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    glDrawElements(GL_TRIANGLES, (mesh.length - 64) / 2, GL_UNSIGNED_SHORT, 0);
+                    glReadPixels(0, 0, SIDE, SIDE, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+                    checkGl("textured indexed raster");
+                    int[] argb = new int[SIDE * SIDE];
+                    int covered = 0;
+                    for (int y = 0; y < SIDE; y++) {
+                        for (int x = 0; x < SIDE; x++) {
+                            int i = ((SIDE - 1 - y) * SIDE + x) * 4;
+                            int a = pixels.get(i + 3) & 255;
+                            if (a != 0 && a != 255) throw new IllegalStateException("Invalid capture alpha");
+                            if (a == 255) covered++;
+                            argb[y * SIDE + x] = (a << 24) | ((pixels.get(i) & 255) << 16)
+                                | ((pixels.get(i + 1) & 255) << 8) | (pixels.get(i + 2) & 255);
+                        }
+                    }
+                    if (covered == 0) throw new IllegalStateException("Empty textured capture");
+                    Bitmap image = Bitmap.createBitmap(argb, SIDE, SIDE, Bitmap.Config.ARGB_8888);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    boolean encoded = image.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    image.recycle();
+                    if (!encoded) throw new IllegalStateException("PNG encoding failed");
+                    byte[] png = out.toByteArray();
+                    String filename = model + "-" + ROLES[role] + "-L" + lod + ".png";
+                    images.put(filename, png);
+                    result.put(new JSONObject().put("image", filename).put("image_sha256", sha256(png))
+                        .put("role", ROLES[role]).put("mip", lod).put("covered_pixels", covered));
+                }
+            }
+            return result;
+        } finally {
+            glUniform1i(raster, 0);
+            glUniform1i(roleUniform, 0);
+            glDisableVertexAttribArray(3);
+            glDisable(GL_DEPTH_TEST);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glDeleteBuffers(2, buffers, 0);
+            glDeleteTextures(2, textures, 0);
+            glDeleteRenderbuffers(1, depth, 0);
+            glDeleteFramebuffers(1, fbo, 0);
+        }
+    }
+
     private static void checkGl(String operation) {
         int error = glGetError();
         if (error != GL_NO_ERROR) throw new IllegalStateException(operation + " GLES error " + error);
@@ -429,8 +562,11 @@ public final class MainActivity extends Activity {
             if (getContentResolver().update(uri, values, null, null) != 1) {
                 throw new IllegalStateException("Cannot publish download");
             }
-            display("GPU position match: " + new JSONObject(new String(report, StandardCharsets.UTF_8))
-                .optBoolean("gpu_source_position_match") + "\nSaved " + DIRECTORY + name);
+            boolean passed = new JSONObject(new String(report, StandardCharsets.UTF_8))
+                .optBoolean("gpu_source_position_match");
+            display("GFX117".equals(experiment())
+                ? ("صور المجسم المحفوظة: " + images.size() + "/30" + "\n" + DIRECTORY + name)
+                : ("GPU position match: " + passed + "\nSaved " + DIRECTORY + name));
         } catch (Exception ex) {
             if (uri != null) getContentResolver().delete(uri, null, null);
             display("Export failed. Tap Export ZIP to retry.\n" + ex);
