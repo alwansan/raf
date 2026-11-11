@@ -14,6 +14,7 @@ from pathlib import Path
 MAX_BYTES = 32 * 1024 * 1024
 SHADER = re.compile(r"(?m)^\s*m_Shader:\s*\{([^{}]*)\}")
 GUID = re.compile(r"\bguid:\s*([0-9a-fA-F]{32})\b")
+REF_FIELD = re.compile(r"\b(fileID|guid|type):\s*([^,}\s]+)")
 TEXENV = re.compile(r"^([ \t]*)m_TexEnvs:\s*$")
 NEXT_FIELD = re.compile(r"^([ \t]*)([A-Za-z_][\w]*):")
 TEXTURE = re.compile(r"\bm_Texture:\s*\{([^{}]*)\}")
@@ -53,8 +54,12 @@ def snapshot(path):
                 slot_indent = indent
         match = TEXTURE.search(line)
         if match:
-            guid = GUID.search(match.group(1))
-            refs.append((current_slot or "<unassigned-slot>", guid.group(1).lower() if guid else "<no-guid>"))
+            # Unity references may share a GUID but point to different subassets.
+            # Preserve fileID/type as well as GUID; canonicalize field order.
+            fields = {key: value.lower() if key == "guid" else value
+                      for key, value in REF_FIELD.findall(match.group(1))}
+            identity = tuple(fields.get(key, "<missing>") for key in ("fileID", "guid", "type"))
+            refs.append((current_slot or "<unassigned-slot>", identity))
     return shader_ref, Counter(refs)
 
 def inventory(root):
@@ -98,7 +103,7 @@ def compare(original, exported):
     return {
         "status": "STATIC_SERIALIZED_REFERENCE_COMPARISON_ONLY",
         "counts": dict(sorted(counts.items())),
-        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names are compared when parseable; duplicate slot occurrences, ordering, material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
+        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names and fileID/guid/type subasset identities are compared when parseable; duplicate slot occurrences, ordering, material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
     }
 
 def main():
