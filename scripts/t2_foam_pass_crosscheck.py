@@ -33,6 +33,8 @@ def reconcile(original_aggregate, per_pass_roles):
         "pass0": aggregate["pass0"],
         "pass1": aggregate["pass1"],
         "independent_summaries_agree": True,
+        # Static type parity does not establish a shared runtime texture object.
+        "crosspass_rendertexture_instance_identity": "UNKNOWN",
     }
 
 

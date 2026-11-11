@@ -42,6 +42,15 @@ class CrossEvidenceTests(unittest.TestCase):
                                 self.assertEqual(result["pass1"], {"source": s1, "destination": d1})
             self.assertEqual(original.call_count, 81)
 
+    def test_matching_roles_do_not_prove_runtime_texture_identity(self):
+        with patch("scripts.t2_foam_pass_crosscheck.validate_original"):
+            for source in S:
+                for destination in D:
+                    result = reconcile(aggregate(source, source, destination, destination),
+                                       sites(source, source, destination, destination))
+                    self.assertEqual(result["crosspass_rendertexture_instance_identity"], "UNKNOWN")
+                    self.assertTrue(result["classification_only"])
+
     def test_each_pass_each_role_disagreement_rejected(self):
         with patch("scripts.t2_foam_pass_crosscheck.validate_original"):
             base = aggregate("Texture", "unknown", "RenderTexture", "null")
