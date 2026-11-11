@@ -1,0 +1,297 @@
+{
+  "experiment": "GFX126",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "passes": [
+    {
+      "subshader": 0,
+      "pass": 0,
+      "name": "FORWARD",
+      "exact_linkable_pairs": 80,
+      "contexts": {
+        "directional": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        },
+        "directional_screen_shadow": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": true,
+          "matching_saved_float_slots": 7
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    },
+    {
+      "subshader": 0,
+      "pass": 1,
+      "name": "FORWARD_DELTA",
+      "exact_linkable_pairs": 156,
+      "contexts": {
+        "directional": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        },
+        "point": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    },
+    {
+      "subshader": 0,
+      "pass": 2,
+      "name": "ShadowCaster",
+      "exact_linkable_pairs": 32,
+      "contexts": {
+        "depth": {
+          "exact_single_slots": 0,
+          "no_exact_pair_slots": 7,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        },
+        "cube": {
+          "exact_single_slots": 0,
+          "no_exact_pair_slots": 7,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    },
+    {
+      "subshader": 0,
+      "pass": 3,
+      "name": "DEFERRED",
+      "exact_linkable_pairs": 80,
+      "contexts": {
+        "unlit_gbuffer": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    },
+    {
+      "subshader": 1,
+      "pass": 0,
+      "name": "FORWARD",
+      "exact_linkable_pairs": 40,
+      "contexts": {
+        "directional": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        },
+        "directional_screen_shadow": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": true,
+          "matching_saved_float_slots": 7
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    },
+    {
+      "subshader": 1,
+      "pass": 1,
+      "name": "FORWARD_DELTA",
+      "exact_linkable_pairs": 120,
+      "contexts": {
+        "directional": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        },
+        "point": {
+          "exact_single_slots": 7,
+          "no_exact_pair_slots": 0,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    },
+    {
+      "subshader": 1,
+      "pass": 2,
+      "name": "ShadowCaster",
+      "exact_linkable_pairs": 16,
+      "contexts": {
+        "depth": {
+          "exact_single_slots": 0,
+          "no_exact_pair_slots": 7,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        },
+        "cube": {
+          "exact_single_slots": 0,
+          "no_exact_pair_slots": 7,
+          "multiple_pair_slots": 0,
+          "candidate_single_slots_after_filtering_pass_absent_keywords": 7
+        }
+      },
+      "states": {
+        "culling": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zWrite": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "zTest": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        },
+        "alphaToMask": {
+          "serialized_kind": "named_dynamic_override",
+          "declared_property": false,
+          "matching_saved_float_slots": 0
+        }
+      }
+    }
+  ],
+  "filtered_matches_are_candidates_until_unity_runtime_selection_verified": true,
+  "runtime_state_verified": false,
+  "phase_closed": false
+}

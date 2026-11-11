@@ -1,3 +1,13 @@
+## 11 Nov 2026 — GFX125 Windows Forward reference and GFX126 pass inventory
+
+Session `20261111-GFX-chat-warp-multimaterial-pass-inventory-90`, origin=chat. Write only `experiment/android-graphics-rootcause`.
+
+GFX125 executed original DXBC for M00 and both M03 material slots using the same controlled geometry and authenticated decoded mip chains as GFX123. Windows run [43053965368](https://github.com/alwansan/raf/actions/runs/43053965368) succeeded after correcting the staged ZIP2 owner path in the workflow. The 12 individual captures plus the M03 composite had exact Mesa coverage hashes. The three dark images matched RGBA exactly. The other ten RGBA hashes differed, so those differences still need direct RGB error measurement. The M03 composite covered 7,022 pixels with 735 overlapping and both exclusive material regions preserved. M02 Windows regression run 43053678663 reproduced all four previous RGBA hashes. Artifact 13870052477 is aggregate only. No original captures or shader binaries are included.
+
+GFX126 inventoried 524 exact stage pairs across seven passes. Full material-keyword matches exist for all seven slots in controlled Forward and ForwardAdd contexts, and Deferred in the first subshader. ShadowCaster candidates for depth and cube are unique for each slot only after filtering keywords absent from that pass; actual Unity selection remains unverified. Named states still require runtime evidence; ZWrite is the only tested name resolved to saved material floats. The current batch does not exercise these additional passes, original animation or original gameplay parity. No APK sent. `phase_closed=false`.
+
+---
+
 ## 11 Nov 2026 — GFX124 Android batch shell built; export verified by replay
 
 Session `20261111-GFX-chat-forward-android-batch-89`, origin=chat. Write only `experiment/android-graphics-rootcause`.

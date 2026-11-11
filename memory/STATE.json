@@ -3021,5 +3021,21 @@
     "audit_replay_partial": true,
     "android_verified": false,
     "phase_closed": false
+  },
+  "latest_gfx125": {
+    "run": 43053965368,
+    "artifact": 13870052477,
+    "successful_captures": 13,
+    "mesa_coverage_exact": 13,
+    "mesa_rgba_exact": 3,
+    "rgb_mae_measured": false,
+    "android_pending": true,
+    "phase_closed": false
+  },
+  "latest_gfx126": {
+    "original_passes": 7,
+    "exact_stage_pairs": 524,
+    "shadow_candidates_require_runtime_confirmation": true,
+    "phase_closed": false
   }
 }
