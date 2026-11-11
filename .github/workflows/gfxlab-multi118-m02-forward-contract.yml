@@ -1,0 +1,69 @@
+name: GFX118 M02 original Forward variant and draw requirements
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-multi118-m02-forward-contract.yml'
+      - 'gfxlab/tools/gfx118_m02_original_forward.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfx118-m02-forward-contract
+  cancel-in-progress: false
+jobs:
+  original-forward-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Source-free regression tests
+        run: python3 -m unittest discover -s gfxlab/tests -p 'test_multi_shader*.py' -q
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/sharedassets6.assets
+      - name: Install private translator and offline linker
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Validate actual M02 Forward DXBC, SPIR-V and GLES link
+        run: |
+          set -euo pipefail
+          python3 -m gfxlab.tools.gfx118_m02_original_forward --zip2 source-zip2 \
+            --stage "$RUNNER_TEMP/gfx118-source" --safe gfx118-safe.json --translate
+          python3 - <<'PY'
+          import json
+          d=json.load(open("gfx118-safe.json"))
+          assert d["exact_source_pair_count"]==1 and d["gles_offline_link_passed"]
+          assert not d["gpu_draw_completed"] and not d["phase_closed"]
+          assert all(s["spirv_validated"] for s in d["stages"].values())
+          assert d["stages"]["fragment"]["texture_contract"]["verified_source_texture_pairs"]==3
+          print(json.dumps(d))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GFX118-safe-forward-contract
+          path: gfx118-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Purge private source
+        if: always()
+        run: rm -rf source-zip2 "$RUNNER_TEMP/gfx118-source"
