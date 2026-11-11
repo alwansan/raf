@@ -1,0 +1,19 @@
+{
+  "session_id": "20261111T035110Z-T5-scheduled-delivery-evidence-k7m2",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "updated_at": "2026-11-11T03:51:10Z",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261111T035110Z-T5-scheduled-delivery-evidence-k7m2.json",
+    "prompt/coordination/clients/T5/sessions/20261111T035110Z-T5-scheduled-delivery-evidence-k7m2.md"
+  ],
+  "experiment_key": "T5-APK89-OBB-original-metadata-vs-R5-mini-APK17-CL520c4cf-evidence-disambiguation",
+  "resource_key": null,
+  "hypothesis": "Existing R5 Mini APK17 offers APK/OBB91 SHA256 inventory but does not establish APK89/OBB of owner 42058825739; do not confuse packages.",
+  "taken_over_from": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "apk-for-testing/SHARED_BUILD_READINESS.md"
+  ],
+  "constraints": "No Unity dispatch, no game raw assets, no T4 mouse writes. Read-only provenance assessment; package full hash still pending."
+}
