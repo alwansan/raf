@@ -1,0 +1,28 @@
+{
+  "experiment": "GFX-MULTI-099",
+  "activePlayerSettingsColorSpace": "Linear",
+  "originalColorBaselinePinnedLinear": true,
+  "originalStageCompile": {
+    "experiment": "GFX-MULTI-098-PC-COMPILE",
+    "UnityVersion": "2021.3.45f2",
+    "requestedStages": 14,
+    "compileSuccess": 42,
+    "compiledDXBCFound": 42,
+    "SHDRByteExact": 42,
+    "ISGNByteExact": 42,
+    "OSGNByteExact": 42,
+    "compileRejected": 0,
+    "exceptionCount": 0,
+    "candidateCompilesAttempted": 42,
+    "sourceTierKnownRequests": 0,
+    "sourceTierUnknownRequests": 14,
+    "requestsWithSHDRByteExact": 14,
+    "requestsWithAllChunksByteExact": 14,
+    "allRequestedOriginalSHDRByteExact": true,
+    "originalShaderRestored": false,
+    "phase_closed": false,
+    "PC_Adreno_pixels_proven": false
+  },
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

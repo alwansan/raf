@@ -14,7 +14,7 @@
     "original source manifest/PlayerSettings hash and value guards",
     "actual Unity2021.3.45f2 native D3D compile and original SHDR/signature byte-hash comparisons"
   ],
-  "status": "planned",
+  "status": "VERIFIED_14_OF_14_REQUESTS_BYTE_EXACT_LINEAR",
   "originalShaderRestored": false,
   "phase_closed": false
 }

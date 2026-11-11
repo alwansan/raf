@@ -1,0 +1,76 @@
+{
+  "scope": "exploratory original skin data availability, not rig restoration",
+  "models": [
+    {
+      "id": "M00",
+      "vertices": 375,
+      "source_bone_refs": 3,
+      "bindposes": 3,
+      "weight_vertices": 375,
+      "index_vertices": 375,
+      "nonfinite_weight_vertices": 0,
+      "nonunit_weight_sum_vertices": 0,
+      "positive_weight_out_of_bindpose_range": 0
+    },
+    {
+      "id": "M01",
+      "vertices": 5095,
+      "source_bone_refs": 100,
+      "bindposes": 100,
+      "weight_vertices": 5095,
+      "index_vertices": 5095,
+      "nonfinite_weight_vertices": 0,
+      "nonunit_weight_sum_vertices": 0,
+      "positive_weight_out_of_bindpose_range": 0
+    },
+    {
+      "id": "M02",
+      "vertices": 1666,
+      "source_bone_refs": 8,
+      "bindposes": 8,
+      "weight_vertices": 1666,
+      "index_vertices": 1666,
+      "nonfinite_weight_vertices": 0,
+      "nonunit_weight_sum_vertices": 0,
+      "positive_weight_out_of_bindpose_range": 0
+    },
+    {
+      "id": "M03",
+      "vertices": 2163,
+      "source_bone_refs": 0,
+      "bindposes": 0,
+      "weight_vertices": 0,
+      "index_vertices": 0,
+      "nonfinite_weight_vertices": 0,
+      "nonunit_weight_sum_vertices": 0,
+      "positive_weight_out_of_bindpose_range": 0
+    },
+    {
+      "id": "M04",
+      "vertices": 2445,
+      "source_bone_refs": 100,
+      "bindposes": 100,
+      "weight_vertices": 2445,
+      "index_vertices": 2445,
+      "nonfinite_weight_vertices": 0,
+      "nonunit_weight_sum_vertices": 0,
+      "positive_weight_out_of_bindpose_range": 0
+    },
+    {
+      "id": "M05",
+      "vertices": 4452,
+      "source_bone_refs": 2,
+      "bindposes": 2,
+      "weight_vertices": 4452,
+      "index_vertices": 4452,
+      "nonfinite_weight_vertices": 0,
+      "nonunit_weight_sum_vertices": 0,
+      "positive_weight_out_of_bindpose_range": 0
+    }
+  ],
+  "rig_restored": false,
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "bone_hierarchy_or_skin_pose_parity_proven": false,
+  "originalShaderRestored": false,
+  "phase_closed": false
+}

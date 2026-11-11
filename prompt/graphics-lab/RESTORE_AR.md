@@ -1,3 +1,19 @@
+## Verified delivery checkpoint — GFX097/098/099, 11 Nov 2026
+
+Owner GFX094 evidence:285/285 actual Adreno compiles and128/128 links passed;0 GL errors.29 missing BaseInstance stages are CPU translation limits, not driver failures.
+
+GFX098 CI42927645102 SUCCESS at06ab8058e833146e78c81024d96980df2e3a39e1;922 source-free tests passed. Signed ARM64 GLES3 APK independently checked:111020747bytes, SHA256 b314699c74eac39d89b7efb668a17519803f6ecd424c4f368cf17d378d726be6. Artifact13816395740 expires2026-11-18T00:16:44Z. Delivered GFX098-Unified-Models-GPU-Lab.apk, Library libfile_0f250cae03308191a0c2640452a337d7. Package com.alwansan.raft.graphicslab.unified098. Six models, source-saved Standard candidate and old PBR control,12 automatic camera captures, merged four-mode GFX041 affine GPU scene, combined ZIP export. Owner GFX098 execution is pending.
+
+GFX099 CI42930674563 SUCCESS at19647a1f21832617fd9e9a83b4d0edc312885fed. Original PlayerSettings independently pinned Linear. Setting Linear BEFORE PC compilation produces14/14 representative original SHDR+ISGN+OSGN byte-exact requests,42/42 tier-candidate matches,0 exceptions/rejections. Source tier remains unknown; this does not validate every original variant or PC/Adreno pixels. Safe report gfxlab/evidence/20261111_gfx099_PC_linear_compile_safe.json. Supersedes GFX098 embedded PC witness9/14; Android098 already builds Linear and needs no rebuild for this CPU-only evidence update.
+
+Skin source availability verified:14033 weighted vertices,213 bindposes across five skinned models, plus one static model; finite normalized weights and valid positive-weight bone indices. Hierarchy, pose and original full vertex stream are not restored. See safe skin report. Next: owner opens098, waits12 captures, selects AFFINE-GPU for4 tests, EXPORT ALL and returns latest GFXLAB-ALL-TEST-LOGS ZIP from /storage/emulated/0/Download/Games/cl/test/g/.
+
+Phase one remains OPEN: original rig, original mip chain, exact GPU normal sampling and PC/device pixel comparison remain unproven. CPU normal XYZ conversion and regenerated mipmaps are candidates; CPU reconstruction before bilinear filtering is not equivalent to GPU AG unpack after filtering. Future rig work must preserve full vertex attributes/indices/weights/bindposes/hierarchy rather than attaching bones to merged OBJ vertices. No full-game build or other branch modified.
+
+
+---
+Historical checkpoints below.
+
 ## GFX094 delivered — actual APK verified, owner Adreno test pending
 
 [CI42924333794](https://github.com/alwansan/raf/actions/runs/42924333794) completed SUCCESS, including signing, APK ZIP/asset hashes and private-source purge. Immutable build SHA `66b2968673f410cbf58d5b255216c5e3c9c175ef`.

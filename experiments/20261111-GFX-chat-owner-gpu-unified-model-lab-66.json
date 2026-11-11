@@ -20,7 +20,7 @@
     "owner model+affine GPU test"
   ],
   "resource_key": "GFX-LAB-unified-six-model-materials098",
-  "status": "OWNER_GFX094_VERIFIED_GFX098_UNITY_BUILD_IN_PROGRESS",
+  "status": "VERIFIED_APK_DELIVERED_OWNER_MODEL_TEST_PENDING",
   "originalShaderRestored": false,
   "phase_closed": false,
   "run_id": 42927645102,

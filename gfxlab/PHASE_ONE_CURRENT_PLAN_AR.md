@@ -43,3 +43,15 @@ SHA256:
 
 حتى ذلك الحين: `originalShaderRestored=false` و`phase_closed=false`.
 اختبار GFX094 وحده لا يغلق هذه البوابات.
+
+
+## ملاحظات متابعة GFX098
+
+- أصبحت نتيجة هاتف GFX094 مثبتة: 285 compile و128 link ناجحة، دون أخطاء GL؛ الـ29 غير المتاحة تخص تحويل BaseInstance على CPU.
+- المختبر الموحد GFX098 يجمع عارض الموديلات الستة واختبارات GFX041 في مشهدين، ويضيف وضع قيم المواد المصدرية مع مشاركة هويات الأصول والتقاط 12 حالة تلقائيًا.
+- بيانات `m_PlayerSubPrograms` الأصلية لا تعطي hardware tier صريحًا لكل طلب مختار. لذلك يسجّل طلب PC القيمة -1 بوصفها UNKNOWN، ويجرب المترجم tiers الثلاثة كمرشحين؛ لا يستنتج source tier بلا تطابق مستقل.
+- يجب ضبط `PlayerSettings.colorSpace=Linear` قبل مقارنة compile لبرامج PC وتسجيله في تقرير الشاهد، لا الاكتفاء بإعداد Android اللاحق. عدم تطابق ناتج compile مع مرجع ذي إعدادات مختلفة لا يثبت أن المصدر الرسمي مختلف.
+- مرشح Normal الحالي يفك R*A وG وفق Unity الرسمي ويعيد تمثيل XYZ على CPU قبل TextureImporter. هذا لا يثبت تماثل الترشيح: bilinear ثم إعادة بناء Z في shader يختلف عمومًا عن ترشيح Z المعاد بناؤه مسبقًا. اختبر لاحقًا Raw RG/AG sampling مع فك Z على GPU، وحافظ على mip chain الأصلية أو علّم الفرق صراحة، قبل إغلاق بوابة Normal/pixels.
+
+- فحص بيانات Skin الأصلية متاح في `gfxlab/evidence/20261111_original_skin_availability_safe.json`: خمسة موديلات skinned تحتوي أوزانًا وفهارس لكل 14033 رأسًا و213 bind poses، دون أوزان غير منتهية أو مجاميع خارجة عن سماحية1e-3 أو فهارس موجبة الوزن خارج bind poses. لم تتحقق hierarchy أو مصفوفات الوضع بعد.
+- عند استعادة الـrig استخدم مسار VertexData كاملًا بدل افتراض كفاية OBJ: دمج رؤوس ذات position/UV/normal متطابقة قد يطمس اختلاف bone weights/indices أو tangents. انقل السمات والفهارس وsubmeshes والـbind matrices الأصلية مع تحقق إعادة skinning في وضع مرجعي.
