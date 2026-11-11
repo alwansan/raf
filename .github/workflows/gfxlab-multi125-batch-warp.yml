@@ -47,7 +47,9 @@ jobs:
           foreach ($slot in @('M00-0','M03-0','M03-1')) {
             New-Item -ItemType Directory -Force "$p/captures/$slot" | Out-Null
           }
-          python -m gfxlab.tools.gfx123_model_forward_prepare --zip2 source-zip2 --stage "$p/source" --private "$p/draw" --safe "$p/stage.json" --direct3d
+          python -c "from pathlib import Path; import sys; from gfxlab.tools.original_model_probe import stage_originals; stage_originals(Path(sys.argv[1]), Path(sys.argv[2]))" source-zip2 "$p/source"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m gfxlab.tools.gfx123_model_forward_prepare --zip2 source-zip2 --stage "$p/source/Raft_Data" --private "$p/draw" --safe "$p/stage.json" --direct3d
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Compile and execute Windows WARP
         shell: cmd
