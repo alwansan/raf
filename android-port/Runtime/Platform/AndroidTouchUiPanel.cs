@@ -141,9 +141,17 @@ namespace RaftAndroid.Platform
         // Only these diagnostic buttons are scaled; gamepad controls are not.
         private void FitRightButtonsToSafeArea(Rect safe)
         {
-            if (Screen.height <= 0 || safeRoot == null) return;
-            float safeHeight = safe.height * 720f / Screen.height;
-            float factor = Mathf.Clamp(safeHeight / 224f, 0.1f, 1f);
+            if (Screen.height <= 0 || Screen.width <= 0 || safeRoot == null) return;
+            // CanvasScaler matches height: both safe-area dimensions must be
+            // expressed in the same 720-reference units as the buttons.
+            float canvasScale = Screen.height / 720f;
+            float safeHeight = safe.height / canvasScale;
+            float safeWidth = safe.width / canvasScale;
+            // A height-only clamp clips the 150-unit buttons on narrow safe
+            // areas (multi-window, display cutouts or external displays).
+            // Include the 8-unit right inset and avoid a positive minimum
+            // scale that would force controls outside very small safe areas.
+            float factor = Mathf.Clamp01(Mathf.Min(safeHeight / 224f, safeWidth / 166f));
             for (int i = 0; i < rightButtons.Length; i++)
             {
                 var child = rightButtons[i];
