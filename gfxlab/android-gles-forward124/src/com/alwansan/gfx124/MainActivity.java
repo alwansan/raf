@@ -275,19 +275,19 @@ public final class MainActivity extends Activity {
         final JSONObject layouts;
         final List<Integer> buffers=new ArrayList<>();
         final List<Integer> textures=new ArrayList<>();
-        int program, vao, indexCount;
+        int program, vao, indexCount, vertexBuffer, meshBytes;
 
         Slot(String id) throws Exception { this(id,null); }
 
         Slot(String id, Slot textureSource) throws Exception {
-            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add)?")) throw new IllegalArgumentException("Invalid slot identifier");
+            if (!id.matches("M[0-9]{2}-[0-9]+(?:-add|-anim)?")) throw new IllegalArgumentException("Invalid slot identifier");
             folder=id+"/";
             textureFolder=textureSource==null ? folder : textureSource.textureFolder;
             JSONObject scene=new JSONObject(new String(asset(folder+"scene.json"),StandardCharsets.UTF_8));
             blocks=scene.getJSONArray("blocks");
             samplers=scene.getJSONArray("samplers");
             layouts=textureSource==null ? scene.optJSONObject("textures") : textureSource.layouts;
-            if (blocks.length()!=8 || samplers.length()!=(textureSource==null ? 7 : 4)) throw new IllegalStateException("Wrong fixture shape");
+            if (blocks.length()!=8 || samplers.length()!=(id.endsWith("-add") ? 4 : 7)) throw new IllegalStateException("Wrong fixture shape");
         }
 
         int addBuffer(int target, byte[] bytes) {
@@ -306,7 +306,8 @@ public final class MainActivity extends Activity {
             glGenVertexArrays(1,ids,0);
             vao=ids[0];
             glBindVertexArray(vao);
-            addBuffer(GL_ARRAY_BUFFER,mesh);
+            vertexBuffer=addBuffer(GL_ARRAY_BUFFER,mesh);
+            meshBytes=mesh.length;
             int[][] attributes={{0,3,0},{1,3,12},{2,2,40},{4,4,24}};
             for (int[] row:attributes) {
                 glVertexAttribPointer(row[0],row[1],GL_FLOAT,false,48,row[2]);
@@ -314,6 +315,14 @@ public final class MainActivity extends Activity {
             }
             glVertexAttrib2f(3,0,0);
             addBuffer(GL_ELEMENT_ARRAY_BUFFER,indices);
+        }
+
+        void loadPose(String name) throws Exception {
+            if (!name.matches("C[0-2]P[0-4]")) throw new IllegalArgumentException("Invalid animation sample");
+            byte[] mesh=asset(folder+name+".bin");
+            if (mesh.length!=meshBytes) throw new IllegalStateException("Wrong animated mesh size");
+            glBindBuffer(GL_ARRAY_BUFFER,vertexBuffer);
+            glBufferSubData(GL_ARRAY_BUFFER,0,mesh.length,direct(mesh,0,mesh.length));
         }
 
         void drawAdd(String control) throws Exception {
@@ -393,14 +402,29 @@ public final class MainActivity extends Activity {
             for (int i=0;i<tests.length();i++) {
                 JSONObject test=tests.getJSONObject(i);
                 String id=test.getString("id"), primary=test.getString("primary");
-                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add)")) throw new IllegalArgumentException("Invalid test identifier");
+                if (!id.matches("M[0-9]{2}-(?:[0-9]+|combined|forward-add|animation)")) throw new IllegalArgumentException("Invalid test identifier");
                 JSONObject run=new JSONObject().put("id",id);
                 runs.put(run);
                 JSONArray captures=new JSONArray();
                 run.put("captures",captures);
                 try (Slot first=new Slot(primary)) {
-                    first.setup();
-                    if (test.has("forward_add")) {
+                    if (!test.has("animation")) first.setup();
+                    if (test.has("animation")) {
+                        try (Slot animated=new Slot(test.getString("animation"),first)) {
+                            animated.setup();
+                            bindBlocks(animated,true);
+                            bindTextures(animated,"light");
+                            for (int clip=0;clip<3;clip++) {
+                                for (int pose=0;pose<5;pose++) {
+                                    String sample="C"+clip+"P"+pose;
+                                    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+                                    animated.loadPose(sample);
+                                    glDrawElements(GL_TRIANGLES,animated.indexCount,GL_UNSIGNED_SHORT,0);
+                                    captures.put(capture(id+"-"+sample,animated.folder+sample+".rgba"));
+                                }
+                            }
+                        }
+                    } else if (test.has("forward_add")) {
                         try (Slot added=new Slot(test.getString("forward_add"),first)) {
                             added.setup();
                             for (String control:new String[]{"lit","off","reject"}) {

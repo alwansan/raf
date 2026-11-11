@@ -23,6 +23,8 @@ parser.add_argument("--portable", type=Path)
 parser.add_argument("--second-slot", type=Path)
 parser.add_argument("--forward-add", type=Path)
 parser.add_argument("--forward-add-portable", type=Path)
+parser.add_argument("--animation", type=Path)
+parser.add_argument("--animation-portable", type=Path)
 args = parser.parse_args()
 root = args.private
 E = c.CDLL('libEGL.so.1')
@@ -231,7 +233,7 @@ def bind_samplers(replacements=None):
 
 
 def select_slot(folder, textures):
-    global root, texture_path, texture_layout, p, engine, contracts, indices
+    global root, texture_path, texture_layout, p, engine, contracts, indices, vertex_buffer
     root, texture_path = folder, textures
     layout_path = textures / "textures.json"
     texture_layout = json.loads(layout_path.read_text()) if layout_path.exists() else {}
@@ -241,7 +243,7 @@ def select_slot(folder, textures):
                  for stage in ("vertex", "fragment")}
     p = link_program()
     call("BindVertexArray",gen("VertexArrays"))
-    buffer(0x8892,mesh)
+    vertex_buffer = buffer(0x8892,mesh)
     attributes = {("POSITION",0):(3,0),("NORMAL",0):(3,12),
                   ("TEXCOORD",0):(2,40),("TANGENT",0):(4,24)}
     for semantic,semantic_index,system,_,register,mask,_ in contracts["vertex"]["inputs"]:
@@ -426,6 +428,42 @@ if args.forward_add:
     (args.forward_add / "combined.rgba").write_bytes(blended.tobytes())
     if args.forward_add_portable:
         (args.forward_add_portable / "combined.rgba").write_bytes(blended.tobytes())
+
+if args.animation:
+    portable_buffers.clear()
+    animation_samplers = select_slot(args.private, args.textures)
+    base = (args.private / "mesh.bin").read_bytes()
+    names = [f"C{clip}P{pose}" for clip in range(3) for pose in range(5)]
+    frames = [(args.animation / (name + ".bin")).read_bytes() for name in names]
+    if any(len(frame) != len(base) for frame in frames):
+        raise ValueError("Animated pose does not preserve source vertex layout")
+    engine = engine_values(b"".join(frames))
+    call("BindBuffer", 0x8892, vertex_buffer)
+    samples = []
+    for name, frame in zip(names, frames, strict=True):
+        gl("BufferSubData", None, U, Z, Z, P)(0x8892, 0, len(frame), frame)
+        image, _, _ = draw(True)
+        count = int(np.count_nonzero(image[:, :, 3]))
+        if count < 100 or not image[:, :, :3].any():
+            raise ValueError("Empty or black animated Forward render")
+        raw = image.tobytes()
+        (args.animation / (name + ".rgba")).write_bytes(raw)
+        samples.append({"sample": name, "covered_pixels": count,
+                        "rgba_sha256": hashlib.sha256(raw).hexdigest()})
+    unique = [len({row["rgba_sha256"] for row in samples[start:start+5]})
+              for start in range(0, len(samples), 5)]
+    if unique[0] != 1 or min(unique[1:]) < 2:
+        raise ValueError("Constant and animated clip image controls did not separate")
+    if args.animation_portable:
+        draw(False)
+        write_portable(args.animation_portable, animation_samplers, include_textures=False)
+        for name in names:
+            for ext in ("bin", "rgba"):
+                filename = f"{name}.{ext}"
+                shutil.copyfile(args.animation / filename, args.animation_portable / filename)
+    report["animation"] = {"samples": samples, "unique_images_per_clip": unique,
+                           "fixed_camera_across_samples": True,
+                           "unity_animation_player_verified": False}
 
 args.safe.write_text(json.dumps(report,indent=2)+"\n")
 print(json.dumps(report))

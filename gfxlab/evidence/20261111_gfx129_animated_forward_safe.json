@@ -1,0 +1,219 @@
+{
+  "experiment": "GFX129",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "samples": [
+    {
+      "sample": "C0P0",
+      "clip_index": 0,
+      "pose_index": 0,
+      "time_s": 0.0,
+      "vertex_sha256": "346f1a7659f763f32f6b58e8018e2d0922856d6de01afc7e2692cda626184e72"
+    },
+    {
+      "sample": "C0P1",
+      "clip_index": 0,
+      "pose_index": 1,
+      "time_s": 0.32500001788139343,
+      "vertex_sha256": "346f1a7659f763f32f6b58e8018e2d0922856d6de01afc7e2692cda626184e72"
+    },
+    {
+      "sample": "C0P2",
+      "clip_index": 0,
+      "pose_index": 2,
+      "time_s": 0.6500000357627869,
+      "vertex_sha256": "346f1a7659f763f32f6b58e8018e2d0922856d6de01afc7e2692cda626184e72"
+    },
+    {
+      "sample": "C0P3",
+      "clip_index": 0,
+      "pose_index": 3,
+      "time_s": 0.9750000536441803,
+      "vertex_sha256": "346f1a7659f763f32f6b58e8018e2d0922856d6de01afc7e2692cda626184e72"
+    },
+    {
+      "sample": "C0P4",
+      "clip_index": 0,
+      "pose_index": 4,
+      "time_s": 1.3000000715255737,
+      "vertex_sha256": "346f1a7659f763f32f6b58e8018e2d0922856d6de01afc7e2692cda626184e72"
+    },
+    {
+      "sample": "C1P0",
+      "clip_index": 1,
+      "pose_index": 0,
+      "time_s": 0.0,
+      "vertex_sha256": "52ba035cac5d5a0e4f4e340d60a710aac71dec29e0b32c553decb0e506f3a2f4"
+    },
+    {
+      "sample": "C1P1",
+      "clip_index": 1,
+      "pose_index": 1,
+      "time_s": 0.32500001788139343,
+      "vertex_sha256": "86234bf83033d20779ecc6f0fee0b4fb6c6db4ac8d4deb60ec3a455406490e1f"
+    },
+    {
+      "sample": "C1P2",
+      "clip_index": 1,
+      "pose_index": 2,
+      "time_s": 0.6500000357627869,
+      "vertex_sha256": "603769c35047a8fdfa76ebb676a04b5cd334fb73b8e711289a64e018d4fb69b7"
+    },
+    {
+      "sample": "C1P3",
+      "clip_index": 1,
+      "pose_index": 3,
+      "time_s": 0.9750000536441803,
+      "vertex_sha256": "b07c79a0ddc7f170205c4e4a40bc116e615d1de3095d1ba80215603ea30f7425"
+    },
+    {
+      "sample": "C1P4",
+      "clip_index": 1,
+      "pose_index": 4,
+      "time_s": 1.3000000715255737,
+      "vertex_sha256": "64e666d8ae646f93de878d329e0ae599ca1b683cc192bda24b51ee296ea6ecba"
+    },
+    {
+      "sample": "C2P0",
+      "clip_index": 2,
+      "pose_index": 0,
+      "time_s": 0.0,
+      "vertex_sha256": "4b21e224ebf4255c8d01db709cb128f95d474df09bb8a41b698bc0e5d7f8835d"
+    },
+    {
+      "sample": "C2P1",
+      "clip_index": 2,
+      "pose_index": 1,
+      "time_s": 0.24166665971279144,
+      "vertex_sha256": "596c8011df7eafce8a92e6b29db127816f754f50601d63f3c624d51afee4d494"
+    },
+    {
+      "sample": "C2P2",
+      "clip_index": 2,
+      "pose_index": 2,
+      "time_s": 0.4833333194255829,
+      "vertex_sha256": "427b4eb114ace4bcd7daa4e1b16bd505977e8d3e4f60b8842d73fdbb2ef48860"
+    },
+    {
+      "sample": "C2P3",
+      "clip_index": 2,
+      "pose_index": 3,
+      "time_s": 0.7249999791383743,
+      "vertex_sha256": "732146afc27d5275cd59b3dd9197a71031ecf08fbca9413091ae4f235014de4a"
+    },
+    {
+      "sample": "C2P4",
+      "clip_index": 2,
+      "pose_index": 4,
+      "time_s": 0.9666666388511658,
+      "vertex_sha256": "4ab18dcf573bb04cbe14a145015705b28d262148c608ae2e1fd0403c4e53641e"
+    }
+  ],
+  "original_unity_animation_player_verified": false,
+  "phase_closed": false,
+  "mesa": {
+    "experiment": "GFX119",
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "triangles": 2388,
+    "covered_pixels": 2008,
+    "directional_light_changed_pixels": 1979,
+    "normal_control_changed_pixels": 1627,
+    "metallic_control_changed_pixels": 1960,
+    "baseline_repeat_exact": true,
+    "dark_control_nonblack_pixels": 0,
+    "driver_verified_cb_blocks": 8,
+    "original_material_bytes_preserved": 68,
+    "bound_combined_samplers": 7,
+    "rgba_sha256": "919be1dc468c32ec7a2c81d50c91542cac10b73c1ab5993d96cc3df72805593e",
+    "controlled_fixture": true,
+    "original_translated_forward_draw_completed": true,
+    "original_game_pixel_parity": false,
+    "android_device_verified": false,
+    "phase_closed": false,
+    "animation": {
+      "samples": [
+        {
+          "sample": "C0P0",
+          "covered_pixels": 1779,
+          "rgba_sha256": "9574c79e7be673ed291016a204415d1bdd227997ecd60994f2fe99920ced3cd6"
+        },
+        {
+          "sample": "C0P1",
+          "covered_pixels": 1779,
+          "rgba_sha256": "9574c79e7be673ed291016a204415d1bdd227997ecd60994f2fe99920ced3cd6"
+        },
+        {
+          "sample": "C0P2",
+          "covered_pixels": 1779,
+          "rgba_sha256": "9574c79e7be673ed291016a204415d1bdd227997ecd60994f2fe99920ced3cd6"
+        },
+        {
+          "sample": "C0P3",
+          "covered_pixels": 1779,
+          "rgba_sha256": "9574c79e7be673ed291016a204415d1bdd227997ecd60994f2fe99920ced3cd6"
+        },
+        {
+          "sample": "C0P4",
+          "covered_pixels": 1779,
+          "rgba_sha256": "9574c79e7be673ed291016a204415d1bdd227997ecd60994f2fe99920ced3cd6"
+        },
+        {
+          "sample": "C1P0",
+          "covered_pixels": 1776,
+          "rgba_sha256": "3f7750c9efabae800ab29e67dbcbc9f338e6226e75fcf4c7f63b8c7b4b12a49b"
+        },
+        {
+          "sample": "C1P1",
+          "covered_pixels": 1719,
+          "rgba_sha256": "ca7bc9bb3e67e558ab119c2c9b067674d090aced99a044ec288c2f124e937c39"
+        },
+        {
+          "sample": "C1P2",
+          "covered_pixels": 1590,
+          "rgba_sha256": "2a3b8ee66dbd4535613c15faee4871b3eefcc80feb227467c7cfafbdbc59ac35"
+        },
+        {
+          "sample": "C1P3",
+          "covered_pixels": 1451,
+          "rgba_sha256": "668e5000111d05e61058ec1a1683ef870b4460e4a2a3f1d9ff020d876f3c0305"
+        },
+        {
+          "sample": "C1P4",
+          "covered_pixels": 1382,
+          "rgba_sha256": "56c96c4e315e95362d5e567b35292af5de3c307706c4265002255edc1b7cc8cc"
+        },
+        {
+          "sample": "C2P0",
+          "covered_pixels": 1892,
+          "rgba_sha256": "d36725d8db5410189d31af22dc4c31934531c5a0d4e9ca274b5afe8b2958dc4b"
+        },
+        {
+          "sample": "C2P1",
+          "covered_pixels": 1765,
+          "rgba_sha256": "6cec2de5a0eb2222008b11f72ba4418b48289bb2899900ea738dfbd336f98002"
+        },
+        {
+          "sample": "C2P2",
+          "covered_pixels": 1783,
+          "rgba_sha256": "2ef286dadaa91d7616aa38512b01104cc6e07798993b401b909ff130f512c687"
+        },
+        {
+          "sample": "C2P3",
+          "covered_pixels": 1781,
+          "rgba_sha256": "eb204bdb0cc70c2bad0e208ea4f4e4f229965205e8349293f878eaba576a370c"
+        },
+        {
+          "sample": "C2P4",
+          "covered_pixels": 1779,
+          "rgba_sha256": "9574c79e7be673ed291016a204415d1bdd227997ecd60994f2fe99920ced3cd6"
+        }
+      ],
+      "unique_images_per_clip": [
+        1,
+        5,
+        5
+      ],
+      "fixed_camera_across_samples": true,
+      "unity_animation_player_verified": false
+    }
+  }
+}

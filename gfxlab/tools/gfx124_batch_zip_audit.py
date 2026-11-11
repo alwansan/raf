@@ -4,7 +4,7 @@ import json
 from zipfile import ZipFile
 
 from gfxlab.tools.gfx120_owner_zip_audit import audit_capture
-from gfxlab.tools.gfx124_batch_pack import CONTROLS
+from gfxlab.tools.gfx124_batch_pack import CONTROLS, POSES
 
 
 def audit(owner_zip, apk):
@@ -31,7 +31,8 @@ def audit(owner_zip, apk):
         for test, run in zip(tests, runs, strict=True):
             merged = "secondary" in test
             additive = "forward_add" in test
-            controls = ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
+            animated = "animation" in test
+            controls = POSES if animated else ("lit", "off", "reject") if additive else ("combined",) if merged else CONTROLS
             completed = run["draw_completed"] is True
             captures = run["captures"]
             if len(captures) > len(controls) or (completed and len(captures) != len(controls)):
@@ -45,13 +46,15 @@ def audit(owner_zip, apk):
                 images.add(name)
                 folder = test["primary"]
                 ref = control
+                if animated:
+                    folder = test["animation"]
                 if additive:
                     folder = test["forward_add"] if control == "lit" else folder
                     ref = "combined" if control == "lit" else "light"
                 reference = package.read(f"assets/{folder}/{ref}.rgba")
                 pixels[control], metrics[control] = audit_capture(row, name, logs.read(name), reference)
             checked = {"id": run["id"], "draw_completed": completed, "captures": metrics}
-            if completed and not merged and not additive:
+            if completed and not merged and not additive and not animated:
                 light = pixels["light"]
                 baselines[test["primary"]] = light
                 checked["control_rgb_changed_pixels"] = {
@@ -65,6 +68,9 @@ def audit(owner_zip, apk):
                 }
                 checked["additional_light_changed_pixels"] = sum(
                     base[i:i+3] != pixels["lit"][i:i+3] for i in range(0, len(base), 4))
+            if animated and completed:
+                checked["unique_images_per_clip"] = [
+                    len({pixels[f"C{clip}P{pose}"] for pose in range(5)}) for clip in range(3)]
             if not completed:
                 checked["error"] = run["error"]
             safe.append(checked)

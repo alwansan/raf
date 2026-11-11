@@ -10,6 +10,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 CONTROLS = ("light", "dark", "flat", "nonmetal")
 ROLES = ("basecolor", "normal", "metallic")
 SLOTS = ("M00-0", "M02-0", "M03-0", "M03-1")
+POSES = tuple(f"C{clip}P{pose}" for clip in range(3) for pose in range(5))
 REFERENCE_SIZE = 256 * 256 * 4
 
 
@@ -18,10 +19,10 @@ def check_digest(path, expected):
         raise ValueError(f"Reference identity mismatch: {path.parent.name}/{path.name}")
 
 
-def files_for_slot(folder, *, combined, add=False):
+def files_for_slot(folder, *, combined, add=False, animated=False):
     scene = json.loads((folder / "scene.json").read_text())
     files = {"scene.json", "probe.vert", "probe.frag", "mesh.bin", "indices.bin"}
-    if not add:
+    if not (add or animated):
         files.update(f"{name}.rgba" for name in (*ROLES, *CONTROLS))
     for index, row in enumerate(scene["blocks"]):
         for mode in ("light", "dark"):
@@ -33,13 +34,15 @@ def files_for_slot(folder, *, combined, add=False):
         raise ValueError("Unexpected source binding count")
     if combined:
         files.add("combined.rgba")
+    if animated:
+        files.update(f"{pose}.{ext}" for pose in POSES for ext in ("bin", "rgba"))
     if {path.name for path in folder.iterdir()} != files:
         raise ValueError("Unexpected private slot payload")
     for name in files:
         path = folder / name
         if not path.is_file() or path.is_symlink():
             raise ValueError("Invalid private slot file")
-    for role in (() if add else ROLES):
+    for role in (() if add or animated else ROLES):
         layout = scene.get("textures", {}).get(role, {"width": 1024, "height": 1024, "levels": 11})
         w, h, levels = layout["width"], layout["height"], layout["levels"]
         if not 1 <= min(w, h) <= max(w, h) <= 2048 or levels != max(w, h).bit_length():
@@ -47,13 +50,14 @@ def files_for_slot(folder, *, combined, add=False):
         expected = sum(max(1, w >> i) * max(1, h >> i) * 4 for i in range(levels))
         if (folder / f"{role}.rgba").stat().st_size != expected:
             raise ValueError("Invalid mip payload size")
-    for ref in (*(() if add else CONTROLS), *(("combined",) if combined else ())):
+    for ref in (*(() if add or animated else CONTROLS), *(("combined",) if combined else ()), *(POSES if animated else ())):
         if (folder / f"{ref}.rgba").stat().st_size != REFERENCE_SIZE:
             raise ValueError("Invalid Mesa reference size")
     return [folder / name for name in sorted(files)]
 
 
-def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=None):
+def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=None,
+           animation=None, animation_evidence=None):
     report = json.loads(evidence.read_text())
     hashes = {"M02-0": report["m02_regression_rgba_sha256"]}
     for row in report["slots"]:
@@ -80,6 +84,25 @@ def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=
         entries.update({f"assets/M02-0-add/{path.name}": path
                         for path in files_for_slot(forward_add, combined=True, add=True)})
         tests.append({"id": "M02-forward-add", "primary": "M02-0", "forward_add": "M02-0-add"})
+    if (animation is None) != (animation_evidence is None):
+        raise ValueError("Animation assets and evidence must be supplied together")
+    if animation:
+        report = json.loads(animation_evidence.read_text())
+        samples = report["samples"]
+        captures = report["mesa"]["animation"]["samples"]
+        if (tuple(row["sample"] for row in samples) != POSES
+                or tuple(row["sample"] for row in captures) != POSES):
+            raise ValueError("Animation reference order changed")
+        for name in ("mesh.bin", "indices.bin"):
+            if (animation / name).read_bytes() != (m02 / name).read_bytes():
+                raise ValueError("Animated fixture must start from the same source topology")
+        for sample, capture in zip(samples, captures, strict=True):
+            pose = sample["sample"]
+            check_digest(animation / (pose + ".bin"), sample["vertex_sha256"])
+            check_digest(animation / (pose + ".rgba"), capture["rgba_sha256"])
+        entries.update({f"assets/M02-0-anim/{path.name}": path
+                        for path in files_for_slot(animation, combined=False, animated=True)})
+        tests.append({"id": "M02-animation", "primary": "M02-0", "animation": "M02-0-anim"})
     with ZipFile(shell) as archive:
         names = archive.namelist()
         if (archive.testzip() or len(names) != len(set(names)) or
@@ -101,7 +124,7 @@ def inject(shell, m02, models, evidence, out, *, forward_add=None, add_evidence=
     except Exception:
         out.unlink(missing_ok=True)
         raise
-    return {"tests": len(tests), "expected_captures": len(SLOTS) * len(CONTROLS) + 1 + (3 if forward_add else 0),
+    return {"tests": len(tests), "expected_captures": len(SLOTS) * len(CONTROLS) + 1 + (3 if forward_add else 0) + (len(POSES) if animation else 0),
             "fixture_entries": len(entries) + 1, "phase_closed": False}
 
 
@@ -111,6 +134,9 @@ if __name__ == "__main__":
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--forward-add", type=Path)
     parser.add_argument("--add-evidence", type=Path)
+    parser.add_argument("--animation", type=Path)
+    parser.add_argument("--animation-evidence", type=Path)
     args = parser.parse_args()
     print(json.dumps(inject(args.shell, args.m02, args.models, args.evidence, args.out,
-                            forward_add=args.forward_add, add_evidence=args.add_evidence)))
+                            forward_add=args.forward_add, add_evidence=args.add_evidence,
+                            animation=args.animation, animation_evidence=args.animation_evidence)))
