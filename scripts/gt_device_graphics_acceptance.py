@@ -32,6 +32,18 @@ def _require_mapping(value, label):
     return value
 
 
+def _final_counter(data, name):
+    """Device collector stores final counters under exit-info in some versions."""
+    exit_info = data.get("stop_time_android_process_exit_info", {})
+    if not isinstance(exit_info, dict):
+        raise ValueError("invalid_exit_info_receipt")
+    outer = data.get(name)
+    inner = exit_info.get(name)
+    if outer is not None and inner is not None and outer != inner:
+        raise ValueError("conflicting_device_final_counter_" + name)
+    return _natural(outer if outer is not None else inner, name)
+
+
 def analyze(data):
     data = _require_mapping(data, "session")
     if data.get("schema") != 1 or data.get("target_package") != PACKAGE:
@@ -45,10 +57,8 @@ def analyze(data):
         row = breakdown.get(key)
         receipts[key] = 0 if row is None else _natural(
             _require_mapping(row, key).get("count"), key)
-    total_pass = _natural(data.get("final_shader_pass_errors_total"),
-                          "final_shader_pass_errors")
-    total_kernel = _natural(data.get("final_compute_kernel_errors_total"),
-                            "final_compute_kernel_errors")
+    total_pass = _final_counter(data, "final_shader_pass_errors_total")
+    total_kernel = _final_counter(data, "final_compute_kernel_errors_total")
     if total_pass != receipts["ultimate_water_invalid_pass"]:
         raise ValueError("shader_pass_category_total_mismatch")
     if total_kernel != receipts["water_fft_invalid_compute_kernel"]:
@@ -56,8 +66,7 @@ def analyze(data):
     if _natural(data.get("final_game_log_lines"), "final_game_log_lines") < (
         total_pass + total_kernel):
         raise ValueError("invalid_log_count_lower_bound")
-    lost_local = _natural(data.get("final_remote_sink_failed_batches"),
-                          "sink_failed_batches")
+    lost_local = _final_counter(data, "final_remote_sink_failed_batches")
     stats = _require_mapping(data.get("performance_statistics"), "statistics")
     samples = _natural(stats.get("total_samples"), "sample_count")
     fps = _require_mapping(
