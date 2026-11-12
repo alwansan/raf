@@ -32,6 +32,48 @@ class ExportLineageTests(unittest.TestCase):
         self.assertTrue(result['original_exported_material_shader_assignments_verified'])
         self.assertFalse(result['shader_program_equivalence_verified'])
 
+    def test_private_texture_opt_in_keeps_strict_material_shader_proof(self):
+        trace, edges, shaders, actual = self.fixture()
+        supplemental=[
+            (28,2800000,'c'*32),(89,8900000,'d'*32),
+            (187,18700000,'e'*32),(84,8400000,'f'*32),
+            (117,11700000,'0'*31+'1')]
+        for i,(cls,fid,guid) in enumerate(supplemental):
+            trace['objects'].append({
+                'class_id':cls,
+                'source':{'owner':'texture-owner.assets','path_id':20+i},
+                'export':{'file_id':fid,'guid':guid,'type':3},
+                'collection_type':'private-source-authenticated-texture',
+                'exportable':True})
+        checked=check(trace,edges,shaders,actual)
+        self.assertTrue(checked['original_exported_material_shader_assignments_verified'])
+        self.assertEqual(checked['supplemental_texture_rows_structurally_checked_only'],5)
+        self.assertEqual(checked['source_shader_objects_traced'],2)
+        self.assertEqual(checked['source_material_edges_verified'],2)
+        self.assertFalse(checked['shader_program_equivalence_verified'])
+
+    def test_extra_unknown_trace_class_still_fails_closed(self):
+        trace, edges, shaders, actual = self.fixture()
+        trace['objects'].append({'class_id':999,
+            'source':{'owner':'texture-owner.assets','path_id':20},
+            'export':{'file_id':2800000,'guid':'c'*32,'type':3}})
+        with self.assertRaisesRegex(ValueError,'Unexpected trace class'):
+            check(trace,edges,shaders,actual)
+
+    def test_invalid_texture_pointer_or_untrusted_extra_fields_rejected(self):
+        trace, edges, shaders, actual = self.fixture()
+        record={'class_id':187,
+                'source':{'owner':'texture-owner.assets','path_id':20},
+                'export':{'file_id':18700000,'guid':'c'*32,'type':3}}
+        trace['objects'].append(record)
+        record['export']['file_id']=0
+        with self.assertRaisesRegex(ValueError,'trace export pointer'):
+            check(trace,edges,shaders,actual)
+        record['export']['file_id']=18700000
+        record['unknown_source_override']=True
+        with self.assertRaisesRegex(ValueError,'supplemental texture trace shape'):
+            check(trace,edges,shaders,actual)
+
     def test_changed_source_edge_rejected(self):
         trace, edges, shaders, actual = self.fixture()
         trace['objects'][0]['shader_source']['path_id'] = 2

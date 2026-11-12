@@ -13,6 +13,11 @@ from scripts.w1_audit_export_material_shaders import HEADER, SHADER, GUID, ENGIN
 from scripts.w1_probe_original_shader_links import resolve_pointer
 from scripts.w1_stage_zip2_owners import fingerprint, PINS
 
+# The optional same-instance GT export trace includes these exact native
+# Texture classes. They are verified by separate Texture/GUID guards, never
+# materialized as Shader48 or Material21 inputs to this ownership checker.
+EXTRA_TEXTURE_TRACE_CLASSES=frozenset((28,84,89,117,187))
+
 
 def identity(row):
     if not isinstance(row, dict) or set(row) != {'owner', 'path_id'}:
@@ -59,8 +64,25 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
     material_shader_pointers = []
     redirects = 0
     implicit_fonts = 0
+    supplemental_texture_rows = 0
     actual_materials = {document_key(key): value for key, value in actual.items()}
     for row in trace['objects']:
+        if not isinstance(row,dict):
+            raise ValueError('Invalid trace row')
+        if row.get('class_id') in EXTRA_TEXTURE_TRACE_CLASSES:
+            # Do not turn a genuine Texture2D/Array/Cubemap source row into
+            # an unexpected Material or Shader. Check trace structure and
+            # provenance, but let dedicated GT texture guards certify the
+            # Texture subobjects and exact Material->Texture pointers.
+            if (not {'class_id','source','export'} <= set(row)
+                or set(row) - {'class_id','source','export',
+                               'collection_type','exportable'}
+                or ('exportable' in row and type(row['exportable']) is not bool)):
+                raise ValueError('Invalid supplemental texture trace shape')
+            identity(row['source'])
+            pointer(row['export'])
+            supplemental_texture_rows += 1
+            continue
         key = identity(row['source'])
         if key in seen:
             raise ValueError('Source object appears in multiple export collections')
@@ -116,6 +138,7 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
             'source_shader_objects_traced': len(selected_shaders),
             'actual_material_documents_verified': len(actual),
             'predefined_material_redirects_observed': redirects,
+            'supplemental_texture_rows_structurally_checked_only': supplemental_texture_rows,
             'original_font_importer_materials_verified': implicit_fonts,
             'font_importer_runtime_shader_assignment_verified': False,
             'original_exported_material_shader_assignments_verified': True,
