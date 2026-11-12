@@ -169,6 +169,17 @@ jobs:
           python3 -m scripts.gt_diagnose_export_texture_targets \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --out "$RUNNER_TEMP/gt-export-all-texture-target-categories.json"
+      - name: GT correlate nonstandard imported image fileIDs with exact original Cubemap class and TextureImporter shape
+        id: gt_original_cubemap_export_lineage
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_diagnose_texture_export_lineage.py -v
+          python3 -m scripts.gt_diagnose_texture_export_lineage \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-cubemap-export-lineage.json"
       - name: Capture original Material-to-Texture export GUID guard results including exact failure code
         id: gt_export_links
         continue-on-error: true
@@ -299,6 +310,7 @@ jobs:
             ${{ runner.temp }}/gt-export-failure-safe.json
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
             ${{ runner.temp }}/gt-export-all-texture-target-categories.json
+            ${{ runner.temp }}/gt-real-cubemap-export-lineage.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
