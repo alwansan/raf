@@ -57,7 +57,7 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
 
     def test_mismatched_original_shader_properties_fail_closed(self):
         self.indices=[("_MainTex",0)]
-        with self.assertRaisesRegex(BridgeError,"SOURCE_TEXTURE_MAPPING_UNRESOLVED"):
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_TEXTURE_NAME_INDEX_MISSING"):
             rebind_stage(self.code,self.program,self.indices,0)
 
     def test_unreferenced_original_non_identifier_name_is_allowed(self):
@@ -85,7 +85,7 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
 
     def test_shared_original_sampler_with_distinct_textures_rejected(self):
         self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=0
-        with self.assertRaisesRegex(BridgeError,"SOURCE_TEXTURE_MAPPING_UNRESOLVED"):
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS"):
             rebind_stage(self.code,self.program,self.indices,0)
 
     def test_translator_lost_original_register_suffix_rejected(self):

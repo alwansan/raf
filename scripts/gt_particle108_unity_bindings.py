@@ -31,6 +31,8 @@ BUFFER=re.compile(r'\bcb\d+_\d+_m\d+\b')
 MAX_HLSL=1024*1024
 SAFE_FAILURE=frozenset((
     "SOURCE_ORIGINAL_MISMATCH", "SOURCE_TEXTURE_MAPPING_UNRESOLVED",
+    "ORIGINAL_TEXTURE_NAME_INDEX_MISSING", "ORIGINAL_TEXTURE_REGISTER_DUPLICATED",
+    "ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS", "TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS",
     "TRANSLATOR_RESOURCE_REGISTER_UNPROVEN", "TRANSLATOR_RESOURCE_COLLISION",
     "TRANSLATOR_SOURCE_READ_FAILED", "ORIGINAL_STAGE_LAYOUT_UNSUPPORTED",
     "ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING", "ORIGINAL_NAME_INDEX_TABLE_MISSING",
@@ -79,15 +81,17 @@ def original_names_and_registers(program,name_indices):
         if not isinstance(row,dict) or not {"m_Index","m_NameIndex","m_SamplerIndex"}<=set(row):
             raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID")
         t,n,s=row["m_Index"],row["m_NameIndex"],row["m_SamplerIndex"]
-        if type(t) is not int or t<0 or t in textures or n not in names:
-            raise BridgeError("SOURCE_TEXTURE_MAPPING_UNRESOLVED")
+        if type(t) is not int or t<0 or t in textures:
+            raise BridgeError("ORIGINAL_TEXTURE_REGISTER_DUPLICATED")
+        if n not in names:
+            raise BridgeError("ORIGINAL_TEXTURE_NAME_INDEX_MISSING")
         name=names[n]
         if not IDENT.fullmatch(name):
             raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_NAME_NOT_IDENTIFIER")
         textures[t]=name
         if type(s) is int and 0<=s<65535:
             if s in samplers and samplers[s]!="sampler"+name:
-                raise BridgeError("SOURCE_TEXTURE_MAPPING_UNRESOLVED")
+                raise BridgeError("ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS")
             samplers[s]="sampler"+name
     return textures,samplers
 
@@ -115,7 +119,7 @@ def rebind_stage(hlsl,program,name_indices,stage):
         mapping[variable]=table[num]
         used[cls].add(num)
     if not used["s"]:
-        raise BridgeError("SOURCE_TEXTURE_MAPPING_UNRESOLVED")
+        raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
     if len(set(mapping.values()))!=len(mapping):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     # HLSL macro names and register numbers are preserved. Uniform backing
