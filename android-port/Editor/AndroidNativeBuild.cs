@@ -19,6 +19,10 @@ namespace RaftAndroid.Editor
         {
             SdkScriptBindingResolver.Rebind(Path.Combine(Application.dataPath, "Editor/RaftAndroid/sdk-script-manifest.json"));
             MicroSplatPropertyTextureRecovery.Restore();
+            // Read-only Editor import acceptance after GT's SHA-pinned ZIP2
+            // + same-instance original source/Class187/material link gate.
+            // The private contract is staged only in the rebuilt project.
+            OriginalTextureArrayImportGuard.Validate();
             FmodAndroidValidation.Validate();
             ReportInputBindings();
             ValidatePostFxHistogram();
