@@ -781,17 +781,23 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" --apply
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Audio"
           cp android-port/Runtime/Audio/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Audio/"
-      - name: Restore original banks and StreamingAssets using tracked Git and pinned LFS identities
+      - name: GT restore original MasterBank from ZIP2 and stage authenticated FMOD StreamingAssets (no LFS)
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
         shell: bash
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v
-          git lfs fetch origin HEAD --include='Raft/Raft_Data/StreamingAssets/MasterBank.bank' --exclude=''
-          git lfs checkout Raft/Raft_Data/StreamingAssets/MasterBank.bank
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout zip2-original \
+            --input-root "$RUNNER_TEMP/gt-verified-audio/Raft_Data" \
+            --profile selected \
+            --path Raft_Data/StreamingAssets/MasterBank.bank \
+            --byte-budget 150000000 \
+            --report "$RUNNER_TEMP/gt-native-masterbank-zip2.json"
           python3 -m scripts.stage_original_streaming_assets \
             --repo "$GITHUB_WORKSPACE" \
             --project "$RUNNER_TEMP/project/ExportedProject" \
+            --verified-external-master-bank "$RUNNER_TEMP/gt-verified-audio/Raft_Data/StreamingAssets/MasterBank.bank" \
             --report "$RUNNER_TEMP/original-streaming-assets.json" --apply
       - name: Stage native ARM64 build entry point without changing original scenes
         shell: bash
