@@ -26,6 +26,9 @@ namespace RaftAndroid.Editor
             FmodAndroidValidation.Validate();
             ReportInputBindings();
             ValidatePostFxHistogram();
+            // Read-only diagnostics only. Original Source 7-pass Spectrum and
+            // 2-pass Foam are not proven restored by an editor pass count.
+            GTOriginalWaterPassImportProbe.Report();
             Debug.Log("RAFT_SDK_VALIDATION_COMPLETE noAndroidBuildRequested=true");
         }
 
