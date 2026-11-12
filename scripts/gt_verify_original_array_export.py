@@ -58,12 +58,29 @@ def source_arrays(source_root: Path, manifest: Path, loader=None) -> dict:
             depth=data.get("m_Depth")
             if any(type(v) is not int or v<=0 for v in (width,height,depth)):
                 raise InventoryError("original_Texture2DArray_dimension_missing")
+            stream=data.get("m_StreamData")
+            fmt=data.get("m_Format",data.get("m_TextureFormat"))
+            mips=data.get("m_MipCount")
+            stream_bytes=stream.get("size") if isinstance(stream,dict) else None
+            stream_offset=stream.get("offset") if isinstance(stream,dict) else None
+            if fmt is not None and (type(fmt) is not int or fmt<0):
+                raise InventoryError("original_Texture2DArray_format_invalid")
+            if mips is not None and (type(mips) is not int or mips<=0):
+                raise InventoryError("original_Texture2DArray_mipcount_invalid")
+            if stream_bytes is not None and (type(stream_bytes) is not int or stream_bytes<0):
+                raise InventoryError("original_Texture2DArray_stream_size_invalid")
+            if stream_offset is not None and (type(stream_offset) is not int or stream_offset<0):
+                raise InventoryError("original_Texture2DArray_stream_offset_invalid")
             found[key]={
                 "width":width,
                 "height":height,
                 "depth":depth,
-                "has_stream_record":isinstance(data.get("m_StreamData"),dict),
+                "has_stream_record":isinstance(stream,dict),
                 "has_image_data":"m_ImageData" in data,
+                "source_format_enum":fmt,
+                "source_mipmap_count":mips,
+                "original_stream_size":stream_bytes,
+                "original_stream_offset_present":stream_offset is not None,
             }
         del env
     if len(found)!=COUNT_EXPECTED:
