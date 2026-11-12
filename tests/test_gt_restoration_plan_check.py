@@ -88,6 +88,22 @@ class GTRestorationLedgerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "CL_invalid_kernel_index_6"):
             self.verify(evidence=evidence)
 
+    def test_source_original_seven_passes_not_confused_with_log_min_six(self):
+        plan = copy.deepcopy(self.plan)
+        row = plan["workstreams"][6]["scope"]
+        self.assertEqual(row["source_authenticated_spectrum_passes"], 7)
+        self.assertEqual(row["expected_min_spectrum_passes"], 6)
+        self.assertEqual(row["source_authenticated_spectrum_vs_fs_stage_variants"], 28)
+        self.assertEqual(row["source_authenticated_foam_passes"], 2)
+        row["source_authenticated_spectrum_passes"] = 6
+        with self.assertRaisesRegex(ValueError, "P06_source_authenticated_spectrum_passes"):
+            self.verify(plan=plan)
+        plan = copy.deepcopy(self.plan)
+        plan["workstreams"][6]["scope"][
+            "source_authenticated_spectrum_vs_fs_stage_variants"] = 24
+        with self.assertRaisesRegex(ValueError, "P06_source_authenticated_spectrum_vs_fs_stage_variants"):
+            self.verify(plan=plan)
+
     def test_stale_new_build_run_rejected(self):
         plan = copy.deepcopy(self.plan)
         plan["reference_runs"]["new_native_active_at_snapshot"] = 1
