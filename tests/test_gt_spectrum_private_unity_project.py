@@ -103,7 +103,7 @@ class PrivateSpectrumUnityProjectTests(unittest.TestCase):
             report=prepare(candidate1,manifest,editor,project,out,
                            diagnostic_stage_buffers=False,variant_index=1)
             self.assertEqual(report["provisional_isolated_keyword_variant_index"],1)
-            self.assertEqual((project/"GTPrivateSpectrumVariant.txt").read_text(),"1\\n")
+            self.assertEqual((project/"GTPrivateSpectrumVariant.txt").read_text(),"1\n")
             self.assertEqual(candidate1.read_bytes(),
                              (project/"Assets/GTPrivateSpectrum.shader").read_bytes())
             self.assertFalse(report["original_keyword_selection_or_Material_binding_proven"])
