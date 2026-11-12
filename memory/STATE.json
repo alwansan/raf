@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Verify GFX161 native delivery request and tracked full run; inspect water and packaging gates before asking for phone logs.",
+  "next_experiment": "Check full native run 43149622750 and strict water/trial package evidence; only test on phone once delivery exists.",
   "build_requested": true,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3394,8 +3394,13 @@
     },
     "native_trial": {
       "observed_head": "c2a1489f60a4839eca7a3a90a297e1e2ce12ec9d",
-      "status": "DISPATCH_WORKFLOW_PUSHED",
-      "original_water_verified": false
+      "status": "NATIVE_RECONSTRUCTION_QUEUED",
+      "original_water_verified": false,
+      "dispatch_run": 43149611169,
+      "run": 43149622750,
+      "actual_head": "565016cb107a681e2784df2437da1ccbd74f2809",
+      "request_gate_verified": true,
+      "license_preflight_verified": true
     }
   }
 }
