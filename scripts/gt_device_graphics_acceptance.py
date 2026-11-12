@@ -54,9 +54,12 @@ def analyze(data):
                                  "final_error_categories")
     receipts = {}
     for key in ALL:
-        row = breakdown.get(key)
-        receipts[key] = 0 if row is None else _natural(
-            _require_mapping(row, key).get("count"), key)
+        # LogRaft 0.6.89 reports every known category with an explicit
+        # zero count. A missing category is unobserved, NOT a clean pass.
+        if key not in breakdown:
+            raise ValueError("missing_required_error_category_" + key)
+        receipts[key] = _natural(
+            _require_mapping(breakdown[key], key).get("count"), key)
     total_pass = _final_counter(data, "final_shader_pass_errors_total")
     total_kernel = _final_counter(data, "final_compute_kernel_errors_total")
     if total_pass != receipts["ultimate_water_invalid_pass"]:
