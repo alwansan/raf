@@ -116,9 +116,16 @@ def inspect(root:Path,manifest:Path,export_project:Path,private_trace:Path,
     exported=(exported_parser or exported_texenvs)(export_project)
     if phase is not None:
         phase("source_export_pointer_join")
-    # Exact full export origin scope; no name-only matching.
-    result=compare(trace,source,exported,selected_owners=None)
+    # The same exporter instance also traces Unity built-in engine Material
+    # objects. Those source owners are outside the manifest's 82 original game
+    # serialized files, so they must be excluded *by exact owner identity*.
+    # Selected-owner B05 remains fail-closed for every one of the 82 owners
+    # while recording out-of-scope engine targets separately; never interpret
+    # an engine-owned Material as missing game source content.
+    result=compare(trace,source,exported,selected_owners=set(OWNERS))
     result.update({
+        "source_scope": "all_82_authenticated_original_game_owners",
+        "external_engine_materials_outside_source_scope": result["outside_scope_trace_materials"],
         "schema":"GT_FULL_82_ORIGINAL_TO_REAL_EXPORT_TEXENV_FIDELITY_V1",
         "original_owners_sha256_verified":82,
         "original_material_objects":len(source),
