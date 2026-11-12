@@ -1,0 +1,38 @@
+name: GT exported texture target classification controls
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_diagnose_export_texture_targets.py
+      - tests/test_gt_diagnose_export_texture_targets.py
+      - scripts/gt_full_original_export_texenvs.py
+      - tests/test_gt_full_original_export_texenvs.py
+      - .github/workflows/raft-gt-texture-target-diagnostics.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-exported-texture-target-synthetic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-fidelity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify safe aggregate target root causes and full original trace phase classification
+        run: |
+          python3 -m py_compile scripts/gt_diagnose_export_texture_targets.py scripts/gt_full_original_export_texenvs.py
+          python3 -m unittest discover -s tests -p test_gt_diagnose_export_texture_targets.py -v
+          python3 -m unittest discover -s tests -p test_gt_full_original_export_texenvs.py -v
+          python3 -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
