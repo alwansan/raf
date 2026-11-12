@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_PARTICLE108_UNBOUND_APPROX_ANDROID_VULKAN_ARM64_PHONE_APK_BUILT_0_SHADER_ERRORS_STRICT_ORIGINAL_SAMPLER_PARITY_BLOCKED",
+  "status": "GT_NATIVE_100_RECOVERED_SIGNED_APK_OBB_XAPK_GREEN_LATEST_NATIVE_FULL_RUN_43247161671_STARTED_SHADER_PARITY_OPEN",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-Particle108-Unity-bundle-approx-phone-chat-18.md",
-  "next_action": "GT standalone approximate Particle108 APK run 43242496576 SUCCESS, artifact 13954649808 (15767382B, SHA256 5793e2d5b56083f3d4c974be6bf537af6ad3c8a6e4bbb2e98ef53f567ff15fcb). Ask owner for four variant screenshots and COPY LOG JSON to verify Adreno pixels; no original parity claim. Source-only SAMPLE pairs CI 43243957499 10 samples all declared, each sampler one texture, but zero match to original m_TextureParams slots; next inspect Unity 2021 per-variant parameter blob mapping and original filter/wrap. Full native run 43205543533 remains in progress at prior check; do not duplicate. ZIP2 fixed SHA, no LFS.",
+  "latest_session": "clients/GT/sessions/20261112-GT-native100-signed-lossless-recovery-and-latest-build-chat-19.md",
+  "next_action": "Native100 original source c8680938 signed APK672892355 OBB2320414462 recovered as verified lossless APK+OBB+XAPK 3 files/7 transport parts in run43246196803 success artifact13957022329 (5,986,632,846 bytes); device unverified. New latest build 43247161671 started at 5b3ddd67 (requested_from_sha a1de8f53 with post-Unity Library cleanup). Inspect actual job and final signed output, do not duplicate active build. Original Particle108 Material sampler parity remains blocked by absent RDEF/serialized m_Samplers; 770 Dummy Materials still pending. ZIP2 pin and no LFS.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -523,5 +523,32 @@
     "source_original_sampled_texture_slots_matching_serialized": 0,
     "original_sampler_material_binding_proven": false,
     "original_Adreno_pixels_verified": false
+  },
+  "proofs_20261112_chat19": {
+    "origin": "chat",
+    "source_original_native_run": 43205543533,
+    "source_original_native_commit": "c86809380ab1e5b95ccf65e30074422a7e744c05",
+    "source_original_native_run_conclusion": "failure",
+    "cause": "Insufficient disk space for complete loose outputs and XAPK only",
+    "actual_unity_native_arm64_compilation_completed": true,
+    "native_apk_bytes": 672892355,
+    "native_obb_bytes": 2320414462,
+    "native_apk_sha256": "2d19627cc38831dec9d4f43463e514a9ad74f81473d7df493401babdc498dd58",
+    "native_apk_signature_verified": true,
+    "output_checkpoint_artifact": 13954722601,
+    "recovered_full_delivery_run": 43246196803,
+    "recovered_full_delivery_conclusion": "success",
+    "recovered_full_delivery_artifact": 13957022329,
+    "recovered_full_delivery_artifact_bytes": 5986632846,
+    "recovered_full_delivery_files": 3,
+    "recovered_full_delivery_transport_parts": 7,
+    "recovered_full_delivery_device_verified": false,
+    "native_package_cache_cleanup_commit": "a1de8f53a78470d952225feda2d16534b1ae861c",
+    "latest_native_build_request_commit": "5b3ddd674993888dc83bf75586c154e674e2d631",
+    "latest_native_full_run": 43247161671,
+    "latest_native_completed_or_signed_xapk_verified": false,
+    "source_original_shader_sampler_material_parity_proven": false,
+    "remaining_custom_Dummy_Materials": 770,
+    "session_path": "clients/GT/sessions/20261112-GT-native100-signed-lossless-recovery-and-latest-build-chat-19.md"
   }
 }
