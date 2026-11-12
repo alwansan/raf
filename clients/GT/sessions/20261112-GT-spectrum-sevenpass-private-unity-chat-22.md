@@ -39,3 +39,11 @@ Read `clients/GT/RESTORE_AR.md`, `RESTORATION_PLAN_AR.md` and JSON, `state.json`
 - If retry still fails, inspect first true Unity 2021 shader issue, likely resource/sampler binding. Do not invent original sampler register or keywords. Record exact status and safe numeric aggregate to P06, state, summary, memory, RESTORE before continuing.
 
 The [full game Native 43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) remains separate older SHA; no newer full Raft XAPK from these private tests.
+
+## Corrected synthetic test fixture and next actual Unity run
+
+- [43276622833](https://github.com/alwansan/raf/actions/runs/43276622833) failed **before real original source/Unity test**: synthetic test `test_private_diagnostic_cbuffer_rename_changes_only_project_copy` built ShaderLab source with literal backslash-n sequences rather than newlines, and therefore source-only pass_coverage rejected it. It was a test fixture error, NOT evidence that the target linker fix fails.
+- Corrected all fixture line separators in `tests/test_gt_spectrum_private_unity_project.py`, commit `8e46f03a57a9aea1d797480de0fef4144eb5ea4b`. Synthetic tests passed in newer CI before source staging.
+- [43277618651](https://github.com/alwansan/raf/actions/runs/43277618651) reached **actual Unity 2021 Android Vulkan private CBuffer stage-disjoint diagnostic** at latest check, with no confirmed outcome yet. A future GT session must inspect this exact run, read its sanitized `gt-spectrum-sevenpass-unity-safe.json` receipt and first compiler failure if any; do not assume a pass because BuildAssetBundles produces nonzero bytes.
+- Original Raft content still unchanged. Real phone Spectrum/foam errors and the 770 Dummy custom Material documents remain open.
+
