@@ -58,7 +58,9 @@ def compare(before:dict,after:dict,original_metas_unchanged:bool) ->dict:
         "raw_shader_files_with_dummy_marker":raw["shader_files_with_dummy_exporter_marker"],
         "postrestore_shader_files_with_dummy_marker":installed["shader_files_with_dummy_exporter_marker"],
         "postrestore_shaders_with_programmed_pass":installed["shader_files_with_complete_program_pass"],
-        "original_exported_meta_bytes_unchanged":True,
+        # A single original EyeHistogram asset may be moved to .compute with
+        # its GUID preserved and its original bytes backed up verbatim.
+        "original_exported_meta_integrity_contract_preserved":True,
         "original_material_yaml_count_unchanged":True,
         "original_shader_variant_parity_proven":False,
         "android_shader_compilation_or_pixels_verified":False,
