@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from scripts.gt_particle108_private_unity_project import prepare
+from scripts.gt_particle108_private_unity_project import prepare, isolate_stage_buffer_names
 
 class GTOriginalUnityStagingTests(unittest.TestCase):
     def setUp(self):
@@ -47,6 +47,50 @@ class GTOriginalUnityStagingTests(unittest.TestCase):
         self.assertTrue((self.project/"Assets/Editor/OriginalParticleShaderValidation.cs").is_file())
         self.assertIn("2021.3.45f2",(self.project/"ProjectSettings/ProjectVersion.txt").read_text())
         self.assertNotIn("LOCAL_ALPHA",self.report.read_text())
+    def test_diagnostic_cbuffer_isolation_preserves_original_private_hlsl_resources(self):
+        stage=(
+            "#if defined(SHADER_STAGE_VERTEX)\n"
+            "SamplerState samplers0 : register(s0);\n"
+            "float4 cb1_0_m0[5];\n"
+            "#elif defined(SHADER_STAGE_FRAGMENT)\n"
+            "SamplerState samplers0 : register(s0);\n"
+            "float4 cb1_0_m0[21];\n"
+            "#else\n#error Unsupported_stage\n#endif\n"
+        )
+        self.shader.write_text(
+            'Shader "Synthetic/Fixture" { SubShader { Pass {\n'
+            'HLSLPROGRAM\n#pragma vertex main\n#pragma fragment main\n'
+            '#pragma multi_compile __ LOCAL_ALPHA\n'
+            '#pragma multi_compile __ LOCAL_BETA\n'
+            +stage*4+"ENDHLSL\n} } }\n")
+        original=self.shader.read_text()
+        transformed,counts=isolate_stage_buffer_names(original)
+        self.assertEqual(counts,{"vertex":4,"fragment":4})
+        self.assertEqual(transformed.count("GT_UNBOUND_VS_cb1_0_m0[5]"),4)
+        self.assertEqual(transformed.count("GT_UNBOUND_PS_cb1_0_m0[21]"),4)
+        self.assertEqual(transformed.count("samplers0 : register(s0)"),8)
+        self.assertEqual(transformed.count("#pragma multi_compile"),2)
+        self.assertNotIn("GT_UNBOUND_",original)
+        data=prepare(self.shader,self.editor,self.project,self.report,self.routing,
+                     diagnostic_stage_buffers=True)
+        self.assertTrue(data["private_stage_local_buffer_name_isolation_only"])
+        self.assertFalse(data["private_original_sampler_binding_parity_proven"])
+        self.assertIn("GT_UNBOUND_VS_cb1_0_m0",
+                      (self.project/"Assets/GTPrivateOriginal.shader").read_text())
+        self.assertEqual(original,self.shader.read_text())
+        self.assertNotIn("samplers0",self.report.read_text())
+        self.assertNotIn("cb1_0_m0",self.report.read_text())
+
+    def test_diagnostic_cbuffer_isolation_rejects_wrong_stage_topology(self):
+        broken=("#if defined(SHADER_STAGE_VERTEX)\nfloat4 cb1_0_m0[5];\n"
+                "#elif defined(SHADER_STAGE_FRAGMENT)\nfloat4 cb1_0_m0[21];\n"
+                "#else\n#error Unsupported_stage\n#endif\n")
+        for wrong in (broken*3, broken*5,
+                      "broken ShaderLab without stage blocks"):
+            with self.subTest(bad_length=len(wrong)):
+                with self.assertRaisesRegex(ValueError,"four_stage_branches_required"):
+                    isolate_stage_buffer_names(wrong)
+
     def test_unity_2021_variant_collection_creation_uses_correct_api(self):
         # A real Unity 2021 import in run 43220728060 failed with CS0311:
         # ShaderVariantCollection is not a ScriptableObject subtype. This
