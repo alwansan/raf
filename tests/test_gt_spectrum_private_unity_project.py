@@ -109,6 +109,41 @@ class PrivateSpectrumUnityProjectTests(unittest.TestCase):
             self.assertFalse(report["original_keyword_selection_or_Material_binding_proven"])
             self.assertFalse(report["Adreno_pixels_verified"])
 
+    def test_variant1_private_stage_uniform_block_alias_isolated_and_registers_unchanged(self):
+        from scripts.w1_depth_shaderlab import stage_body
+        parts=['Shader "UltimateWater/Spectrum/Water Spectrum" {',
+               'Properties {}','SubShader {']
+        for i in range(7):
+            vert=("struct cb4_struct {float4 x;};\\n"
+                  "cbuffer cb4 : register(b4) {float4 y;};\\n"
+                  "float4 cb0_0_m0[4];\\n"
+                  "float4 main():SV_Position{return cb0_0_m0[0];}")
+            frag=("struct cb4_struct {float4 x;float4 z;};\\n"
+                  "cbuffer cb4 : register(b4) {float4 y;};\\n"
+                  "float4 cb0_0_m0[5];\\n"
+                  "float4 main():SV_Target{return cb0_0_m0[0];}")
+            parts.extend(["Pass {","HLSLPROGRAM","#pragma target 5.0",
+                          "#pragma vertex main","#pragma fragment main",
+                          stage_body(vert,frag),"ENDHLSL","}"])
+        parts.extend(["}","}"])
+        with tempfile.TemporaryDirectory() as tmp:
+            files=list(self._files(tmp,source="\\n".join(parts)+"\\n"))
+            variant1=files[0].with_name("original-spectrum-7pass-variant-1.shader")
+            variant1.write_bytes(files[0].read_bytes())
+            files[0]=variant1
+            report=prepare(*files,diagnostic_stage_buffers=True,
+                           diagnostic_uniform_blocks=True,variant_index=1)
+            self.assertTrue(report["private_stage_local_uniform_block_alias_diagnostic_only"])
+            self.assertGreater(report["private_vertex_uniform_block_identifier_count"],0)
+            self.assertGreater(report["private_fragment_uniform_block_identifier_count"],0)
+            compiled=(files[3]/"Assets/GTPrivateSpectrum.shader").read_text()
+            self.assertIn("struct GT_PRIVATE_VS_cb4_struct",compiled)
+            self.assertIn("struct GT_PRIVATE_PS_cb4_struct",compiled)
+            self.assertEqual(compiled.count("register(b4)"),
+                             variant1.read_text().count("register(b4)"))
+            self.assertIn("struct cb4_struct",variant1.read_text())
+            self.assertFalse(report["Unity_Editor_2021_compilation_proven"])
+
     def test_variant_selection_must_not_mismatch_candidate_identity(self):
         with tempfile.TemporaryDirectory() as tmp:
             candidate,manifest,editor,project,out=self._files(tmp)
