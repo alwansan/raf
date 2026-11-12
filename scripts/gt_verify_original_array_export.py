@@ -81,6 +81,10 @@ def source_arrays(source_root: Path, manifest: Path, loader=None) -> dict:
                 "source_mipmap_count":mips,
                 "original_stream_size":stream_bytes,
                 "original_stream_offset_present":stream_offset is not None,
+                # Kept strictly in runner-private memory. The aggregate
+                # report never includes original provider paths or byte offsets.
+                "private_stream_path":stream.get("path") if isinstance(stream,dict) else None,
+                "private_stream_offset":stream_offset,
             }
         del env
     if len(found)!=COUNT_EXPECTED:
