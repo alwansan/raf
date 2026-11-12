@@ -1,0 +1,101 @@
+name: Raft signed native checkpoint repackage without Unity rebuild
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-native-signed-checkpoint-repack.yml'
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+concurrency:
+  group: raft-signed-native-repack-43205543533
+  cancel-in-progress: false
+jobs:
+  recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            docs/ANDROID_INSTALL_AR.md
+      - name: Prove delivery packaging regression suite
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
+          python3 -m py_compile scripts/package_android_delivery.py scripts/t5_verify_xapk_cross_delivery.py
+      - name: Recover large runner disk without deleting Android build-tools
+        run: |
+          set -euo pipefail
+          df -h .
+          sudo rm -rf -- /usr/share/dotnet /usr/local/share/powershell /opt/hostedtoolcache/CodeQL || true
+          sudo rm -rf -- /usr/local/lib/android/sdk/ndk || true
+          df -h .
+      - uses: actions/download-artifact@v4
+        with:
+          name: raft-android-signed-output-checkpoint
+          run-id: 43205543533
+          github-token: ${{ github.token }}
+          repository: alwansan/raf
+          path: signed-checkpoint
+      - name: Authenticate original signed APK OBB and version 100
+        run: |
+          set -euo pipefail
+          mapfile -d '' apks < <(find signed-checkpoint -type f -name RaftAndroidExperimental.apk -print0)
+          mapfile -d '' obbs < <(find signed-checkpoint -type f -name RaftAndroidExperimental.main.obb -print0)
+          test "${#apks[@]}" -eq 1 && test "${#obbs[@]}" -eq 1
+          test ! -L "${apks[0]}" && test ! -L "${obbs[0]}"
+          test "$(stat -c%s "${apks[0]}")" = 672892355
+          test "$(stat -c%s "${obbs[0]}")" = 2320414462
+          test "$(sha256sum "${apks[0]}" | cut -d' ' -f1)" = 2d19627cc38831dec9d4f43463e514a9ad74f81473d7df493401babdc498dd58
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          aapt=$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name aapt -type f | sort -V | tail -n 1)
+          signer=$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -n 1)
+          test -x "$aapt" && test -x "$signer"
+          "$aapt" dump badging "${apks[0]}" > "$RUNNER_TEMP/native100-badging.txt"
+          "$signer" verify --verbose "${apks[0]}" > "$RUNNER_TEMP/native100-signature-private.txt"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.package_android_delivery import parse_badging
+          r=parse_badging((Path(os.environ['RUNNER_TEMP'])/'native100-badging.txt').read_text(),100)
+          assert r['package_name']=='com.alwansan.raft.androidtest'
+          print('RAFT_SIGNED_NATIVE100_SOURCE_APK_VERIFIED=true')
+          PY
+          printf '%s\n' "${apks[0]}" > "$RUNNER_TEMP/native100-apk-path"
+          printf '%s\n' "${obbs[0]}" > "$RUNNER_TEMP/native100-obb-path"
+          df -h .
+      - name: Package APK OBB XAPK on empty runner from original checkpoint
+        run: |
+          set -euo pipefail
+          python3 -m scripts.package_android_delivery \
+            --apk "$(cat "$RUNNER_TEMP/native100-apk-path")" \
+            --obb "$(cat "$RUNNER_TEMP/native100-obb-path")" \
+            --badging "$RUNNER_TEMP/native100-badging.txt" \
+            --version-code 100 --output "$RUNNER_TEMP/raft-native100-delivery"
+          cp docs/ANDROID_INSTALL_AR.md "$RUNNER_TEMP/raft-native100-delivery/INSTALL_AR.md"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'raft-native100-delivery/delivery.json').read_text())
+          assert d['package']=='com.alwansan.raft.androidtest'
+          assert d['version_code']=='100' and d['companion_required'] is True
+          assert d['device_install_verified'] is False and len(d['files'])==3
+          print('RAFT_NATIVE100_LOSSLESS_RECOVERY fullSignedAPKOBBXAPK=true sourceRun=43205543533 androidInstallVerified=false')
+          PY
+      - name: Publish complete lossless signed APK OBB XAPK as CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-native100-recovered-apk-obb-xapk
+          path: ${{ runner.temp }}/raft-native100-delivery/
+          compression-level: 0
+          retention-days: 3
+          if-no-files-found: error
