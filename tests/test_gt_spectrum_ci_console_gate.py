@@ -4,8 +4,9 @@ from scripts.gt_spectrum_ci_console_gate import verify_console, _SUCCESS_MARKERS
 
 
 def good():
-    return ("Setup\n" + "\n".join(_SUCCESS_MARKERS) +
-            "\nDone: completed success\n").encode()
+    return ("Setup\n" + "\n".join(
+        "2026-11-12T18:47:59.4994121Z " + marker for marker in _SUCCESS_MARKERS
+    ) + "\nDone: completed success\n").encode()
 
 
 class UnityConsoleCleanRequired(unittest.TestCase):
@@ -35,7 +36,15 @@ class UnityConsoleCleanRequired(unittest.TestCase):
 
     def test_variant1_marker_missing_is_inconclusive_not_clean(self):
         with self.assertRaisesRegex(ValueError,"marker_missing"):
-            verify_console(_SUCCESS_MARKERS[0].encode())
+            verify_console(("2026-11-12T18:47:28.8584174Z " +
+                            _SUCCESS_MARKERS[0]).encode())
+
+    def test_echoed_shell_script_print_string_is_not_success(self):
+        fake=("\n".join(
+            '2026-11-12T18:47:28.100Z print("'+marker+'")'
+            for marker in _SUCCESS_MARKERS)).encode()
+        with self.assertRaisesRegex(ValueError,"marker_missing"):
+            verify_console(fake)
 
     def test_malformed_binary_or_empty_log_is_rejected(self):
         for candidate in (b"",b"hello\x00world"):
