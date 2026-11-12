@@ -1,7 +1,7 @@
 {
-  "request_id": "buildfix-20261112-array-lineage-aggregate-diagnostic-01",
-  "reason": "Re-run native pipeline to diagnose exact count of original ClassID187 Texture2DArray objects missing from same-instance export without exposing source identities; retain all strict authenticity gates.",
-  "requested_from_sha": "3871ee0708aef0d601410fc4737f6ea7d0f15fc5",
+  "request_id": "owner-direct-20261112-GT-next-real-native-texture-and-shader-trace-fix",
+  "reason": "Owner stopped T1-T5 and directly authorized GT to continue full restoration and integration; rerun full original ZIP2 Unity ARM64 APK+OBB+XAPK with fixed mixed ClassID28/84/89/117/187 trace handling, original Texture2DArray 9/9 and 28 Material refs. Preserve all source authenticity and water/shader/package gates.",
+  "requested_from_sha": "57ce47df7765e03d07a5ec70a7f91821a81091a8",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -10,10 +10,10 @@
     "water_compute_source_candidate"
   ],
   "owner_direct_request": true,
-  "owner_instruction": "Owner directly requested the fix and full build on 2026-11-12. Include current native integrations and retain original-water and packaging gates.",
-  "previous_run_id": 43151970478,
-  "previous_build_source_sha": "565016cb107a681e2784df2437da1ccbd74f2809",
+  "owner_instruction": "Owner explicitly authorized GT to work independently of stopped T1-T5 agents and perform full restoration, integration and full Android build on 2026-11-12. Use pinned ZIP2 only, no Git LFS; preserve existing strict validation and retain build artifacts.",
+  "previous_run_id": 43153893985,
+  "previous_build_source_sha": "122c4b78fd0cf952132bf6e9ca6d3c64b4295024",
   "previous_failed_unity_run_id": 42281310905,
-  "fix_commit_sha": "3871ee0708aef0d601410fc4737f6ea7d0f15fc5",
-  "linked_session_id": "20261112-Raft-BuildFix-automation-01"
+  "fix_commit_sha": "57ce47df7765e03d07a5ec70a7f91821a81091a8",
+  "linked_session_id": "GT-20261112-CHAT-10-INDEPENDENT-RESTORE"
 }
