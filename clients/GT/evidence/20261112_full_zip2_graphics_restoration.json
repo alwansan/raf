@@ -1,0 +1,69 @@
+{
+  "schema": "GT_FULL_ZIP2_GRAPHICS_RESTORATION_AND_NATIVE_INTAKE_V1",
+  "date": "2026-11-12",
+  "agent": "GT",
+  "repository": "alwansan/raf",
+  "write_branch": "feature/android-native-port",
+  "immutable_original_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "full_source_graphics": {
+    "profile": "full",
+    "native_export_input_files": 134,
+    "original_bytes_sha256_authenticated": 7532909297,
+    "serialized_owners": 82,
+    "streams": 48,
+    "unity_builtin_resource_files": 2,
+    "settings_and_boot_files": 2,
+    "source_stream_texture_objects": 4050,
+    "source_texture_stream_extents_verified": 3948,
+    "source_texture_inline_or_empty": 102,
+    "verified_original_texture_external_bytes": 5932309293,
+    "source_shader_objects": 165,
+    "source_compute_shader_objects": 9,
+    "actual_local_files_materialized": true,
+    "source_mesh_stream_dependencies_inspected": true,
+    "git_lfs_used": false,
+    "verified_run": 43124662931,
+    "url": "https://github.com/alwansan/raf/actions/runs/43124662931",
+    "artifact": 13902706287
+  },
+  "calibration_batch": {
+    "original_files": 5,
+    "authentic_original_bytes": 656558804,
+    "real_streamed_texture_extents_covered": 398,
+    "verified_run": 43122665358
+  },
+  "primary_visual_batch": {
+    "original_files": 2,
+    "authentic_original_bytes": 1895109248,
+    "genuine_streamed_mesh_extents_verified": 557,
+    "genuine_streamed_texture_extents_verified": 1116,
+    "verified_run": 43123035437
+  },
+  "audio_source": {
+    "masterbank_sha256": "10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339",
+    "original_bytes": 101600960,
+    "source_sha256_verified": true,
+    "verified_run": 43125353255,
+    "artifact": 13902702669,
+    "audio_playback_verified": false
+  },
+  "production_pipeline": {
+    "native_input_staged_by": "scripts/gt_zip2_export_resources.py",
+    "full_native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "assetripper_export_invoked_by_production_only_on_native_request": true,
+    "original_mesh_range_staging_from_verified_local_streams": true,
+    "original_fmod_bank_from_zip2_without_lfs": true,
+    "no_full_native_apk_started_by_gt": true,
+    "independent_native_guard_run": 43125034578,
+    "exporter_smoke_run": 43125542125,
+    "exporter_smoke_result": "pending_at_creation"
+  },
+  "boundaries": {
+    "all_original_source_input_files_sha256_verified": true,
+    "all_original_source_texture_stream_extents_covered": true,
+    "full_production_assetripper_export_verified": false,
+    "source_to_export_guid_and_material_links_verified": false,
+    "shader_passes_and_compute_kernels_converted_for_android": false,
+    "native_apk_built_and_tested": false
+  }
+}
