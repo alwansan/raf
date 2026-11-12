@@ -230,7 +230,6 @@ jobs:
           lfs: false
           persist-credentials: false
           sparse-checkout-cone-mode: false
-          sparse-checkout-cone-mode: false
           sparse-checkout: |
             ${{ steps.w1_zip2_needed.outputs.paths }}
             /Raft/Raft_Data/**
