@@ -36,6 +36,43 @@ class ExternalTextureBindingsTests(unittest.TestCase):
         self.assertNotIn(self.guid,str(result))
         self.assertNotIn("sharedassets",str(result))
 
+    def test_font_material_is_not_falsely_treated_as_missing_yaml(self):
+        font_source=("sharedassets0.assets",42)
+        self.original[font_source]={"_MainTex":((1,22),None)}
+        font_row={
+            "class_id":21,
+            "source":{"owner":font_source[0],"path_id":font_source[1]},
+            "collection_type": "AssetRipper.Export.UnityProjects.Miscellaneous.FontAssetExportCollection",
+            "exportable":True,
+            "export":{"file_id":2100000,"guid":"d"*32,"type":3},
+            "font_source":{"owner":font_source[0],"path_id":43},
+            "font_export":{"file_id":12800000,"guid":"d"*32,"type":3},
+            "font_data_sha256":"e"*64,
+        }
+        self.trace["objects"].append(font_row)
+        result=compare(self.original,self.tables,self.types,self.trace,self.exported)
+        self.assertEqual(result["counts"]["source_material_without_normal_export"],1)
+        self.assertEqual(result["exact_cross_owner_source_export_texture_links"],1)
+        self.assertEqual(result["mismatched_source_to_export_external_links"],0)
+        del font_row["font_data_sha256"]
+        with self.assertRaisesRegex(InventoryError,"invalid_original_font_material_trace"):
+            compare(self.original,self.tables,self.types,self.trace,self.exported)
+
+    def test_untraced_ordinary_material_is_not_hidden_as_font(self):
+        self.trace["objects"][0]["export"]["guid"]="c"*32
+        with self.assertRaisesRegex(InventoryError,"original_exported_material_identity_missing"):
+            compare(self.original,self.tables,self.types,self.trace,self.exported)
+
+    def test_duplicate_font_material_and_normal_material_source_rejected(self):
+        duplicate=dict(self.trace["objects"][0])
+        duplicate["collection_type"]="AssetRipper.Export.UnityProjects.Miscellaneous.FontAssetExportCollection"
+        duplicate["font_source"]={"owner":self.material[0],"path_id":55}
+        duplicate["font_export"]={"file_id":12800000,"guid":"d"*32,"type":3}
+        duplicate["font_data_sha256"]="e"*64
+        self.trace["objects"].append(duplicate)
+        with self.assertRaisesRegex(InventoryError,"duplicate_original_material_source_trace"):
+            compare(self.original,self.tables,self.types,self.trace,self.exported)
+
     def test_unmatched_external_owner_never_guessed(self):
         self.tables["sharedassets0.assets"]=["archive:/CAB/unavailable.assets"]
         result=compare(self.original,self.tables,self.types,self.trace,self.exported)

@@ -14,7 +14,8 @@ import json
 from pathlib import Path
 
 from scripts.b05_verify_material_texenv_bindings import (
-    TEXTURE_TYPES, _slot, _trace_source, _trace_export, exported_texenvs,
+    TEXTURE_TYPES, ENGINE, FONT_COLLECTION, _slot, _trace_source,
+    _trace_export, exported_texenvs,
 )
 from scripts.gt_full_original_export_texenvs import original
 from scripts.gt_stage_serialized_owners import OWNERS, InventoryError, read_expected
@@ -44,6 +45,7 @@ def trace_targets(trace):
         raise InventoryError("invalid_private_same_instance_texture_trace")
     mats={}
     textures={}
+    traced_materials=set()
     for row in trace["objects"]:
         if not isinstance(row,dict):
             raise InventoryError("invalid_texture_trace_row")
@@ -54,14 +56,35 @@ def trace_targets(trace):
         if src[0] not in OWNERS:
             continue
         ptr=_trace_export(row)
-        dest=mats if cls==21 else textures
-        if src in dest:
-            raise InventoryError("duplicate_original_texture_or_material_trace")
         if cls==21:
+            if src in traced_materials:
+                raise InventoryError("duplicate_original_material_source_trace")
+            traced_materials.add(src)
+            # A source-authentic FontAssetExportCollection Material is
+            # embedded in its TrueType import, not in a .mat/.asset YAML
+            # document with the traced Material pointer. B05 and W1
+            # already prove the actual font payload/collection separately.
+            # Never silently treat ordinary missing Materials as fonts.
+            if row.get("collection_type")==FONT_COLLECTION:
+                digest=row.get("font_data_sha256")
+                if (not isinstance(digest,str) or len(digest)!=64 or
+                    any(c not in "0123456789abcdefABCDEF" for c in digest) or
+                    "font_source" not in row or "font_export" not in row):
+                    raise InventoryError("invalid_original_font_material_trace")
+                _trace_export({"export":row["font_export"]})
+                continue
+            # Unity internal engine Material references have a built-in
+            # non-YAML destination. Do not fabricate a loose Material.
+            if ptr[1] in ENGINE and ptr[2]==0 and row.get("exportable") is False:
+                continue
             if ptr[0]>0 and ptr[2] in (2,3):
-                dest[src]=ptr
+                mats[src]=ptr
+            else:
+                raise InventoryError("unsupported_original_material_export_pointer")
         else:
-            dest[src]=(cls,ptr)
+            if src in textures:
+                raise InventoryError("duplicate_original_texture_trace")
+            textures[src]=(cls,ptr)
     return mats,textures
 
 
