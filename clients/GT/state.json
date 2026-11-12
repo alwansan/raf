@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ALL_82_MATERIAL_TEXENV_MATCHED_9_ORIGINAL_TEXTURE2DARRAY_BC3_PAYLOAD_STAGE_SUBMITTED_ANDROID_IMPORT_PENDING",
+  "status": "GT_NINE_SOURCE_ARRAYS_50_ORIGINAL_BC3_LAYERS_BYTE_STAGED_AND_16_MATERIAL_SHADERS_RESTORED_REAL_CI",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -157,7 +157,9 @@
           "original_distinct_array_targets": 9,
           "exported_file_id": 18700000,
           "exported_importer_shape": 4,
-          "android_Texture2DArray_pixels_verified": false
+          "android_Texture2DArray_pixels_verified": false,
+          "flipbook_geometry_validation_run": 43139784841,
+          "flipbook_geometry_verified": false
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -166,10 +168,16 @@
           "expected_original_bytes": 69906400,
           "expected_original_payload_array_files": 8,
           "original_zero_pixel_array_objects": 1,
-          "real_run_completed": "unverified_when_saved",
+          "real_run_completed": true,
           "editor_import_verified": false,
           "shader_color_parity_verified": false,
-          "synthetic_CI": 43138283249
+          "synthetic_CI": 43138283249,
+          "passed_ci_run": 43138326757,
+          "artifact_id": 13909117405,
+          "actual_original_gpu_bytes": 69906400,
+          "actual_original_BC3_source_layer_count": 50,
+          "source_zero_BC3_layers_not_fabricated": 2,
+          "original_array_exact_same_instance_export_guid_count": 9
         },
         "vendor_shader_restore": {
           "real_four_restorers_executed": 43135341260,
@@ -178,8 +186,19 @@
           "removed_meta": 1,
           "vendor_new_meta": 3,
           "precise_histogram_GUId_relocation_patched": true,
-          "exact_current_real_result": "UNVERIFIED",
-          "editor_shader_compile_verified": false
+          "exact_current_real_result": "POST_RESTORE_SOURCE_QUALITY_COMPARED",
+          "editor_shader_compile_verified": false,
+          "passed_ci_run": 43138326757,
+          "original_meta_preservation_contract_pass": true,
+          "original_meta_removed": 1,
+          "verified_ComputeShader_GUID_relocations": 1,
+          "unapproved_meta_removals": 0,
+          "existing_meta_changed": 0,
+          "vendor_metas_added": 3,
+          "raw_dummy_material_docs": 786,
+          "post_vendor_restorers_dummy_material_docs": 770,
+          "non_dummy_custom_materials_gained": 16,
+          "android_GPU_shader_execution_verified": false
         }
       },
       "targeted_export_material_guid_guard_repeat_run": 43126735391
@@ -241,5 +260,5 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "sessions/20261112-GT-original-texture-array-staging-chat-06.md",
-  "next_action": "Finish isolated full ZIP2 AssetRipper CI 43138326757 and READ step-level outcome of gt_recover_original_array_layers 69,906,400 original BC3 bytes, 50 source-payload layers, 2 original zero-pixel source layers. Then verify authenticated EyeHistogram .asset→.compute GUID relocation with exact backup+meta and derive postrestorer remaining Dummy material docs vs 786 raw baseline. Next implement a real Unity Editor Texture2DArray import and BC3 mip/layer order validation without invented data or changing other GUIDs. Respect T5 native votes, never Git LFS."
+  "next_action": "GT full original 134-input AssetRipper and authentic BC3 arrays succeeded CI43138326757, 8 raw original 69,906,400 byte payloads staged privately, 2 original zero-pixel layers preserved, 9 source→export GUIDs exact; official TMP/PostFX histogram/Volumetric restorers repaired 16 of 786 raw dummy Material docs, 770 remain, all original .meta protected except byte-authenticated EyeHistogram GUID-preserving migration. Next read real flipbook grid/PNG geometry CI43139784841, decide if 28 class187 array references are valid as TextureImporterShape 4 or require actual import repair. No source array pixel parity nor Android GPU proven. Respect T5 votes, only ZIP2."
 }
