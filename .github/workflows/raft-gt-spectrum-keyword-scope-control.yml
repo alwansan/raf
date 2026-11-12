@@ -1,0 +1,131 @@
+name: GT synthetic Unity2021 serialized global/local keyword flag control
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_spectrum_keyword_flag_semantics_control.py
+      - tests/test_gt_spectrum_keyword_flag_semantics_control.py
+      - android-port/Experiments/GT/Editor/GTKeywordScopeControl.cs
+      - .github/workflows/raft-gt-spectrum-keyword-scope-control.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  private-synthetic-keyword-scope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    environment: UNITY_LICENSE
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: No-source keyword-scope script and ambiguous-flag negative tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_spectrum_keyword_flag_semantics_control.py tests/test_gt_spectrum_keyword_flag_semantics_control.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_keyword_flag_semantics_control.py -v
+      - name: Stage disposable synthetic Unity2021 project; no Raft original data
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_spectrum_keyword_flag_semantics_control prepare \
+            --editor android-port/Experiments/GT/Editor/GTKeywordScopeControl.cs \
+            --project "$GITHUB_WORKSPACE/gt-private-scope-control-unity"
+      - name: Unity 2021.3.45f2 real Android Vulkan synthetic keyword-scope bundle
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-private-scope-control-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.GTKeywordScopeControl.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Independently read serialized original-format keyword flag bytes from synthetic Android bundle
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          python3 -m scripts.gt_spectrum_keyword_flag_semantics_control inspect \
+            --bundle gt-private-scope-control-unity/ProbeResults/gt-scope-bundles/gt-scope-control \
+            --unity-safe gt-private-scope-control-unity/ProbeResults/gt-scope-unity-safe.json \
+            --source-index4-flag 0 \
+            --out "$RUNNER_TEMP/gt-synthetic-scope-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-synthetic-scope-safe.json'
+          j=json.loads(p.read_text())
+          assert j['status']=='SYNTHETIC_UNITY2021_FLAG_SCOPE_CONTROL_OBSERVED'
+          assert j['unity2021_keyword_isOverridable_control_verified'] is True
+          assert j['source_original_Spectrum_keyword_scope_proven'] is False
+          assert j['original_Material_keyword_selection_proven'] is False
+          assert j['Adreno_pixels_verified'] is False
+          print('GT_SYNTHETIC_SCOPE_SERIALIZED_RUNTIME_ACCEPTED localGlobalControls=true onlySynthetic=true originalParityUnproven=true')
+          PY
+      - name: Publish only synthetic numeric keyword flags and boolean result
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-synthetic-unity2021-scope-flags-safe
+          path: |
+            ${{ runner.temp }}/gt-synthetic-scope-safe.json
+            gt-private-scope-control-unity/ProbeResults/gt-scope-unity-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Remove disposable Unity project and bundles
+        if: always()
+        run: |
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-scope-control-unity"
+          rm -f -- "$RUNNER_TEMP/gt-synthetic-scope-safe.json"
+
+  strict-synthetic-scope-final-console:
+    name: Strict synthetic Unity2021 hidden GLSL/import compiler error scan
+    needs: [private-synthetic-keyword-scope]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Finalized Unity log must be clean, exact source-stage runtime marker required
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jobs="$(gh api -H 'Accept: application/vnd.github+json' "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100")"
+          job_id="$(printf '%s' "$jobs" | jq -r '.jobs[] | select(.name == "private-synthetic-keyword-scope") | .id' | head -n 1)"
+          if ! [[ "$job_id" =~ ^[0-9]+$ ]]; then echo "GT_SYNTHETIC_SCOPE_JOB_MISSING"; exit 2; fi
+          log="$RUNNER_TEMP/gt-synthetic-scope-final-console.log"
+          gh api --allow-escape-sequences -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/actions/jobs/$job_id/logs" > "$log"
+          python3 - "$log" <<'PY'
+          import re,sys
+          from pathlib import Path
+          from scripts.gt_spectrum_ci_console_gate import _ERROR_CLASSES, _LOG_TS, MAX_LOG_BYTES
+          f=Path(sys.argv[1])
+          if not f.is_file() or f.is_symlink() or not 0<f.stat().st_size<=MAX_LOG_BYTES:
+              raise SystemExit('GT_SYNTHETIC_SCOPE_FINAL_LOG_MISSING')
+          data=f.read_bytes()
+          if b'\\x00' in data: raise SystemExit('GT_SYNTHETIC_SCOPE_FINAL_LOG_INVALID')
+          text=data.decode('utf-8',errors='replace')
+          marker=bool(re.search(_LOG_TS+'GT_SYNTHETIC_SCOPE_SERIALIZED_RUNTIME_ACCEPTED ',text))
+          classes={name:len(pattern.findall(text)) for name,pattern in _ERROR_CLASSES.items()}
+          print('GT_SYNTHETIC_SCOPE_FINAL_LOG_SAFE marker=%s classes=%s' % (marker,classes))
+          if not marker or any(classes.values()):
+              raise SystemExit('GT_SYNTHETIC_SCOPE_FINAL_LOG_REJECTED')
+          PY
+          rm -f -- "$log"
