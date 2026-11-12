@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/gt_spectrum_original_pair_compile.py
       - tests/test_gt_spectrum_original_pair_compile.py
+      - scripts/gt_spectrum_original_pass_states.py
+      - tests/test_gt_spectrum_original_pass_states.py
       - .github/workflows/raft-gt-original-spectrum-seven-pass-paired-glslang.yml
 permissions:
   contents: read
@@ -29,7 +31,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_gt_spectrum_original_pair_compile.py -v
-          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_original_pass_states.py -v
+          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -84,6 +87,25 @@ jobs:
             --repo "$GITHUB_WORKSPACE" \
             --private "$RUNNER_TEMP/gt-spectrum-original-private" \
             --out "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json"
+      - name: Serialize exactly seven source original Spectrum Pass render states privately
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.gt_spectrum_original_pass_states \
+            --source "$RUNNER_TEMP/gt-spectrum-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/gt-spectrum-states-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-states-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          result = json.loads((Path(os.environ["RUNNER_TEMP"]) /
+              "gt-spectrum-states-safe.json").read_text())
+          assert result["status"] == "ORIGINAL_SPECTRUM_SEVEN_SOURCE_RENDER_STATES_PRIVATE"
+          assert result["original_passes"] == 7
+          assert result["state_hashes_privately_verified"] == 7
+          assert result["Unity_ShaderLab_installed"] is False
+          print("GT_SPECTRUM_ORIGINAL_RENDER_STATES_PRIVATE originalPasses=7 originalStates=7 UnityShaderLabInstalled=false")
+          PY
       - name: Compile privately paired original Spectrum stages for Vulkan 1.1
         run: |
           set -euo pipefail
@@ -112,4 +134,6 @@ jobs:
             "$RUNNER_TEMP/gt-spectrum-original-private" \
             "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json" \
             "$RUNNER_TEMP/gt-spectrum-pairs-safe.json" \
+            "$RUNNER_TEMP/gt-spectrum-states-private" \
+            "$RUNNER_TEMP/gt-spectrum-states-safe.json" \
             "$GITHUB_WORKSPACE/gt-spectrum-zip2"
