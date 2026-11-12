@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX155 verify signed Vulkan APK and owner readbacks; source-confirm water families and one original Spectrum/FFT/height query route from pinned ZIP2.",
-  "build_requested": true,
+  "next_experiment": "GFX155 owner Vulkan readback ZIP pending; GFX156 source metadata verified. Next match MonoScript PPtrs to source scenes/prefabs and pin one Spectrum/FFT/height query case.",
+  "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3326,7 +3326,7 @@
     "source_commit": "6aee6516a896c0868deac2020820890aaeb95f55",
     "native_read_sha": "467ae9fdda57275b70c3683514a25375f2a782c9",
     "workflow_run": 43144304221,
-    "apk_verified": false,
+    "apk_verified": true,
     "owner_device_verified": false,
     "original_water_restored": false,
     "roadmap": "gfxlab/WATER_PHASE_TWO_AR.md",
@@ -3337,6 +3337,19 @@
       "types_examined": 3033,
       "water_scope_types": 228,
       "scene_instances_verified": false
+    },
+    "apk": {
+      "run": 43144304221,
+      "artifact": 13911257611,
+      "package": "com.alwansan.gfx155.water",
+      "bytes": 8520384,
+      "sha256": "8803d75ba57453228b4d65c327172abfaecff2769cb858843c789db0018e2c62",
+      "signing_scheme": "v2",
+      "graphics_api": "Vulkan",
+      "architecture": "ARM64",
+      "scripting_backend": "IL2CPP",
+      "independent_apk_sha256_and_zip_crc": true,
+      "device_verified": false
     }
   }
 }

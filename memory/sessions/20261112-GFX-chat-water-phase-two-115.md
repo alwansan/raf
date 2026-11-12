@@ -11,3 +11,5 @@
 أول بناء GFX155 توقف عند غياب `JsonUtility` من المشروع المصغّر. أُضيفت وحدتا JSON وAndroid JNI في `6aee6516a896c0868deac2020820890aaeb95f55` وبدأ [بناء التصحيح 43144304221](https://github.com/alwansan/raf/actions/runs/43144304221).
 
 GFX156 [43144448074](https://github.com/alwansan/raf/actions/runs/43144448074) نجح على Assembly-CSharp الأصلي المثبت في ZIP2: 3033 نوعاً مفحوصاً و228 نوعاً ضمن المرشح اللفظي و4/4 مراسي معروفة. [التقرير المجمّع](../../gfxlab/evidence/20261112_gfx156_water_managed_census_safe.json). هذه نتائج ترشيح أسماء داخل metadata. تحتاج مطابقة PPtr بين MonoScript ومكوّن المشهد أو prefab لتحديد الأنواع التي تستخدمها اللعبة فعلاً.
+
+**البناء المصحح ناجح.** [APK داخل الأثر 13911257611](https://github.com/alwansan/raf/actions/runs/43144304221/artifacts/13911257611). Unity نجح والتوقيع v2 والحزمة ARM64 IL2CPP وCRC اجتازت الفحص. بعد التنزيل أُعيد التحقق من SHA256 وCRC محلياً. [دليل الحزمة](../../gfxlab/evidence/20261112_gfx155_water_apk_safe.json). ثبّت APK على POCO F5 Pro وافتحه مرة وأرسل ZIP من `/storage/emulated/0/Download/Games/cl/test/g/`. يظل قبول Adreno ونتيجة الماء الأصلي معلقين.
