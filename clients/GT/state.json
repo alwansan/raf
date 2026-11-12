@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_PARTICLE108_SHA_SOURCE_BINDING_FAIL_CLOSED_UNITY_CS0311_STATIC_GUARD_PASS_770_DUMMY_REMAIN",
+  "status": "GT_ORIGINAL_PARTICLE108_EIGHT_RDEF_ABSENT_REAL_UNBOUND_UNITY_GLSL_SAMPLER_AND_CBUFFER_ERRORS_STRICT_BINDING_FAIL_CLOSED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-original-particle108-Unity-CS0311-regression-chat-15.md",
-  "next_action": "Inspect newest GT Particle108 private workflow safe failure step; original sampler-resource binding still inconclusive after 43225350415, no Unity bundle success; preserve source guards and verify true shader register space. Unity C# CS0311 previously exposed by 43220728060; 5c41bf9 static regression passed in 43225350415. Full native 43205543533 remains active at real Unity Editor stage at observed 2026-11-12T13:15Z; do not duplicate/cancel. ZIP2 SHA15964ea8 only, no LFS, source parity 9/28/416/50 protected.",
+  "latest_session": "clients/GT/sessions/20261112-GT-Particle108-unbound-Unity-diagnostic-chat-16.md",
+  "next_action": "Inspect latest source-only private Unity test run 43233472806 after GT stage-specific cbuffer isolation and confirm whether GLSL linker mismatch disappears (no PASS assumed). Strict original m_TextureParams sampler slot matching remains unproven, latest 43232633015 confirmed TRANSLATOR_SOURCE_SAMPLER_SLOT_MISSING. Preserve 770 Dummy custom Material docs; full native 43205543533 active at original c8680938 snapshot. SHA ZIP2 15964ea8 only; no LFS and no original GUID/meta changes.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -436,5 +436,30 @@
     "native_apk_obb_xapk_verified": false,
     "remaining_post_vendor_custom_Dummy_materials": 770,
     "session_path": "clients/GT/sessions/20261112-GT-original-particle108-Unity-CS0311-regression-chat-15.md"
+  },
+  "proofs_20261112_chat16": {
+    "origin": "chat",
+    "source_original_SHA": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "eight_original_DXBC_stages_without_RDEF": 8,
+    "source_verified_RDEF_census_run": 43228860357,
+    "source_translated_hlsl_sampler_declarations": 10,
+    "source_samplers_unmapped_original_register_safe_failure": "TRANSLATOR_SOURCE_SAMPLER_SLOT_MISSING",
+    "source_sampler_missing_CI": 43232633015,
+    "unbound_real_unity_run": 43232000368,
+    "unbound_real_unity_shader_imported": true,
+    "unbound_real_unity_shader_error_count": 3,
+    "unbound_real_unity_sampler_names_unrecognized": true,
+    "unbound_real_unity_cbuffer_sizes_conflict": true,
+    "unbound_real_unity_private_bundle_bytes": 6231,
+    "unbound_real_unity_build_success": false,
+    "stage_buffer_compile_only_fix_commit": "f530538e56e9ac66d7e2cd7a660869bb9686798c",
+    "stage_buffer_synthetic_tests_commit": "40fe7746b59f07fcb25fbff61a7421863650af4e",
+    "stage_buffer_workflow_commit": "2aca1a16f48ebf851993b8243287af5064cf4cf2",
+    "stage_buffer_real_CI_in_progress_at_snapshot": 43233472806,
+    "original_Material_binding_or_Adreno_pixels_verified": false,
+    "original_custom_Materials_still_Dummy": 770,
+    "full_native_run": 43205543533,
+    "full_native_completed_or_signed_xapk_verified": false,
+    "session_path": "clients/GT/sessions/20261112-GT-Particle108-unbound-Unity-diagnostic-chat-16.md"
   }
 }
