@@ -106,12 +106,28 @@ def audit(original:dict,trace:dict,exported:dict)->dict:
             counts["wrong_importer_texture_shape"]+=1
             continue
         rows,cols=fields["flipbookRows"],fields["flipbookColumns"]
+        if rows<=0: counts["missing_or_nonpositive_flipbook_rows"]+=1
+        if cols<=0: counts["missing_or_nonpositive_flipbook_columns"]+=1
+        if rows>0 and cols>0 and rows*cols!=original[key]["depth"]:
+            counts["flipbook_cell_count_disagrees_with_original_depth"]+=1
+        width,height=png_dimensions(target)
+        source_width,source_height=original[key]["width"],original[key]["height"]
+        if width%source_width or height%source_height:
+            counts["export_PNG_not_aligned_to_original_1024_cell_size"]+=1
+        else:
+            inferred_cols,inferred_rows=width//source_width,height//source_height
+            if inferred_cols*inferred_rows==original[key]["depth"]:
+                counts["PNG_has_all_original_layers_in_cell_grid"]+=1
+                if rows!=inferred_rows or cols!=inferred_cols:
+                    counts["importer_grid_needs_source_verified_correction"]+=1
+            elif inferred_cols*inferred_rows==1:
+                counts["export_PNG_only_one_source_sized_cell"]+=1
+            else:
+                counts["export_PNG_cell_count_does_not_match_source"]+=1
         if rows<=0 or cols<=0 or rows*cols!=original[key]["depth"]:
             counts["invalid_original_array_flipbook_grid"]+=1
             continue
-        width,height=png_dimensions(target)
-        if (width!=cols*original[key]["width"] or
-            height!=rows*original[key]["height"]):
+        if (width!=cols*source_width or height!=rows*source_height):
             counts["incorrect_original_array_image_dimensions"]+=1
             continue
         counts["exact_array_class_GUID_flipbook_geometry_verified"]+=1
