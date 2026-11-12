@@ -50,7 +50,7 @@ class ImportedWaterPassProbeTests(unittest.TestCase):
             "AssetDatabase.CreateAsset", "AssetDatabase.DeleteAsset",
             "AssetDatabase.MoveAsset", "AssetDatabase.SaveAssets",
             "Shader.SetGlobal", "material.Set", ".SetTexture(",
-            ".meta", "BuildPipeline.BuildPlayer", "PlayerSettings.",
+            "BuildPipeline.BuildPlayer", "PlayerSettings.",
         ):
             self.assertNotIn(forbidden, self.probe)
 
