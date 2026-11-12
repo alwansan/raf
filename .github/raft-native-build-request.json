@@ -1,7 +1,7 @@
 {
-  "request_id": "owner-direct-20261112-gfx162-pristine-array-full",
-  "reason": "Build full Android APK, OBB and XAPK from current native HEAD with pristine ZIP2 Texture2DArray provenance separate from mesh-inlined export input.",
-  "requested_from_sha": "1ceb252cb8b81ed69417aa3bf7e822055ca7831e",
+  "request_id": "buildfix-20261112-array-lineage-aggregate-diagnostic-01",
+  "reason": "Re-run native pipeline to diagnose exact count of original ClassID187 Texture2DArray objects missing from same-instance export without exposing source identities; retain all strict authenticity gates.",
+  "requested_from_sha": "3871ee0708aef0d601410fc4737f6ea7d0f15fc5",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -11,9 +11,9 @@
   ],
   "owner_direct_request": true,
   "owner_instruction": "Owner directly requested the fix and full build on 2026-11-12. Include current native integrations and retain original-water and packaging gates.",
-  "previous_run_id": 43149622750,
+  "previous_run_id": 43151970478,
   "previous_build_source_sha": "565016cb107a681e2784df2437da1ccbd74f2809",
   "previous_failed_unity_run_id": 42281310905,
-  "fix_commit_sha": "8e0531afcc0cccda844cc6be10bc49ba882f0f5c",
-  "linked_session_id": "20261112-GFX-chat-native-pristine-array-source-122"
+  "fix_commit_sha": "3871ee0708aef0d601410fc4737f6ea7d0f15fc5",
+  "linked_session_id": "20261112-Raft-BuildFix-automation-01"
 }
