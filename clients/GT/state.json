@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_NATIVE_100_RECOVERED_SIGNED_APK_OBB_XAPK_GREEN_LATEST_NATIVE_FULL_RUN_43247161671_STARTED_SHADER_PARITY_OPEN",
+  "status": "GT_NATIVE100_SIGNED_XAPK_DELIVERED_OLD_SNAPSHOT_NEW_NATIVE_RUN_ACTIVE_DEVICE_GRAPHICS_ERRORS_REPRODUCED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -550,5 +550,38 @@
     "source_original_shader_sampler_material_parity_proven": false,
     "remaining_custom_Dummy_Materials": 770,
     "session_path": "clients/GT/sessions/20261112-GT-native100-signed-lossless-recovery-and-latest-build-chat-19.md"
+  },
+  "proofs_20261112_chat20": {
+    "origin": "chat",
+    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_CL_source_sha": "cffd3f7be2d0c47649da9b28eae17c36d031f0e8",
+    "owner_device_log_session": "20261112-183147-926",
+    "owner_phone_package": "com.alwansan.raft.androidtest",
+    "owner_phone_version_code": 1089,
+    "owner_phone_UltimateWater_invalid_pass_total": 42229,
+    "owner_phone_spectrum_invalid_pass": 19191,
+    "owner_phone_foam_global_invalid_pass": 23038,
+    "owner_phone_invalid_compute_kernel_index_6_total": 7263,
+    "invalid_kernel_index6_water_origin_proven": false,
+    "owner_phone_cursor_RGBA32_warning_total": 4668,
+    "owner_phone_OBB_GUID_load_failures": 2,
+    "owner_phone_missing_MonoScript_events": 1,
+    "owner_phone_graphics_log_critical_gate": "KNOWN_DEVICE_LOG_GATE_REJECTED",
+    "source_free_synthetic_and_real_CL_ci_run": 43263197989,
+    "source_free_ci_conclusion": "success_reproducing_failing_device_log",
+    "cross_owner_original_material_texture_refs_still_proven": 416,
+    "original_BC3_top_mip_pixel_layers_still_proven": 50,
+    "remaining_postvendor_dummy_material_documents": 770,
+    "original_game_material_shader_restoration_complete": false,
+    "phone_original_Adreno_pixel_parity_verified": false,
+    "original_source_or_meta_modified": false,
+    "new_signed_native_full_build_run": 43247161671,
+    "new_signed_native_full_build_status": "in_progress_Unity_Editor_2021_3_45f2_import_compile_at_last_check",
+    "recovery_complete_native100_older_source_run": 43246196803,
+    "recovery_complete_native100_older_source_artifact": 13957022329,
+    "source_free_gate_script": "scripts/gt_device_graphics_acceptance.py",
+    "source_free_gate_tests": "tests/test_gt_device_graphics_acceptance.py",
+    "real_device_snapshot_evidence": "clients/GT/evidence/20261112_cl_device_graphics_failure_receipt.json",
+    "session_path": "clients/GT/sessions/20261112-GT-CL-device-graphics-failure-chat-20.md"
   }
 }
