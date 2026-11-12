@@ -39,6 +39,7 @@ def snapshot(path):
     refs = []
     current_slot = None
     slot_indent = -1
+    slot_has_texture = False
     for line in text.splitlines():
         head = TEXENV.match(line)
         if head:
@@ -46,27 +47,36 @@ def snapshot(path):
             base_indent = len(head.group(1).expandtabs(4))
             current_slot = None
             slot_indent = -1
+            slot_has_texture = False
             continue
         if not active:
             continue
         field = NEXT_FIELD.match(line)
         if field and len(field.group(1).expandtabs(4)) <= base_indent:
+            if current_slot is not None and not slot_has_texture:
+                refs.append((current_slot, ("<missing-m_Texture>",)))
             active = False
             continue
         slot = SLOT.match(line)
         if slot:
             indent = len(slot.group(1).expandtabs(4))
             if indent >= base_indent and (current_slot is None or indent <= slot_indent):
+                if current_slot is not None and not slot_has_texture:
+                    refs.append((current_slot, ("<missing-m_Texture>",)))
                 current_slot = slot.group(2)
                 slot_indent = indent
+                slot_has_texture = False
         match = TEXTURE.search(line)
         if match:
+            slot_has_texture = True
             # Unity references may share a GUID but point to different subassets.
             # Preserve fileID/type as well as GUID; canonicalize field order.
             fields = {key: value.lower() if key == "guid" else value
                       for key, value in REF_FIELD.findall(match.group(1))}
             identity = tuple(fields.get(key, "<missing>") for key in ("fileID", "guid", "type"))
             refs.append((current_slot or "<unassigned-slot>", identity))
+    if active and current_slot is not None and not slot_has_texture:
+        refs.append((current_slot, ("<missing-m_Texture>",)))
     return shader_ref, Counter(refs)
 
 def inventory(root):
@@ -110,7 +120,7 @@ def compare(original, exported):
     return {
         "status": "STATIC_SERIALIZED_REFERENCE_COMPARISON_ONLY",
         "counts": dict(sorted(counts.items())),
-        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names and fileID/guid/type subasset identities are compared when parseable; duplicate slot occurrences, ordering, material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
+        "limitations": "Same-relative-path materials only; renamed materials are unpaired. References are compared as serialized, not resolved to assets. Texture slot names and fileID/guid/type subasset identities are compared when parseable; missing texture slot markers are counted; duplicate slot occurrences, ordering, material property values, alpha, blend, keywords, shader variants, Unity import, and GPU output are not validated. No game paths, GUIDs, or raw materials are emitted."
     }
 
 def main():
