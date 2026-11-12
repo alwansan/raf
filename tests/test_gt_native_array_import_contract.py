@@ -9,12 +9,16 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 WORKFLOW=ROOT/".github/workflows/raft-unity-editor-android-import.yml"
+EDITOR=ROOT/"android-port/Editor/AndroidNativeBuild.cs"
+GUARD=ROOT/"android-port/Editor/OriginalTextureArrayImportGuard.cs"
 
 
 class GTNativeArrayImportContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.workflow=WORKFLOW.read_text(encoding="utf-8")
+        cls.editor=EDITOR.read_text(encoding="utf-8")
+        cls.guard=GUARD.read_text(encoding="utf-8")
 
     def test_source_authentic_array_stage_in_actual_native_lane_before_all_material_checks(self):
         body=self.workflow
@@ -44,6 +48,22 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("meta_files_outside_the_exactly_verified_array_set_changed",stage)
         self.assertIn("source_images_or_binaries_edited",stage)
         self.assertNotIn("git lfs",stage.lower())
+
+    def test_Unity_Editor_really_checks_nine_native_array_assets_from_private_source_contract(self):
+        self.assertIn("OriginalTextureArrayImportGuard.Validate();",self.editor)
+        self.assertIn("OriginalTextureArrayImportGuard",self.guard)
+        self.assertIn("GTOriginalArrayImportContract.json",self.guard)
+        self.assertIn("TextureImporterShape.Texture2DArray",self.guard)
+        self.assertIn("AssetDatabase.GUIDToAssetPath",self.guard)
+        self.assertIn("AssetDatabase.LoadAssetAtPath<Texture2DArray>",self.guard)
+        self.assertIn("importedArray.mipmapCount != array.mipmap_count",self.guard)
+        self.assertIn("importedArray.depth != array.depth",self.guard)
+        self.assertIn("seen.Count != 9",self.guard)
+        self.assertIn("originalPixelLayers != 50",self.guard)
+        self.assertIn("throw new BuildFailedException",self.guard)
+        self.assertIn("Unity_Editor",self.workflow)
+        self.assertIn("scripts.gt_write_unity_array_import_contract",self.workflow)
+        self.assertIn("test -s \"$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json\"",self.workflow)
 
     def test_existing_T5_build_request_gates_and_shader_water_acceptance_unchanged(self):
         body=self.workflow
