@@ -68,6 +68,25 @@ class OriginalArrayFlipbookIdentityTests(unittest.TestCase):
         self.assertFalse(d["all_array_sources_importer_grid_and_png_geometry_match"])
         self.assertEqual(d["counts"]["invalid_original_array_flipbook_grid"],1)
 
+    def test_valid_full_png_atlas_with_wrong_importer_cells_reports_safe_repair_opportunity(self):
+        meta=self.root/"Assets/array-1.png.meta"
+        meta.write_text(meta.read_text().replace("flipbookColumns: 5","flipbookColumns: 2"))
+        d=audit(self.original,self.trace,index_exported_array_meta(self.root))
+        self.assertEqual(d["counts"]["PNG_has_all_original_layers_in_cell_grid"],9)
+        self.assertEqual(d["counts"]["importer_grid_needs_source_verified_correction"],1)
+        self.assertEqual(d["counts"]["flipbook_cell_count_disagrees_with_original_depth"],1)
+        self.assertFalse(d["all_array_sources_importer_grid_and_png_geometry_match"])
+
+    def test_single_cell_png_does_not_prove_complete_original_array_layers(self):
+        import struct
+        png=self.root/"Assets/array-1.png"
+        data=bytearray(png.read_bytes())
+        data[16:24]=struct.pack(">II",1024,1024)
+        png.write_bytes(bytes(data))
+        d=audit(self.original,self.trace,index_exported_array_meta(self.root))
+        self.assertEqual(d["counts"]["export_PNG_only_one_source_sized_cell"],1)
+        self.assertFalse(d["all_array_sources_importer_grid_and_png_geometry_match"])
+
     def test_wrong_array_target_native_fileID_is_rejected(self):
         self.trace["objects"][0]["export"]["file_id"]=2800000
         with self.assertRaisesRegex(InventoryError,"invalid_original_class187_export_pointer"):
