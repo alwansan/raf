@@ -99,6 +99,23 @@ class MaterialPairSlotTests(unittest.TestCase):
             result = audit.compare(original, exported)
             self.assertEqual(result["counts"]["changed_shader_reference_materials"], 1)
 
+    def test_missing_texture_slot_is_not_silently_discarded(self):
+        with tempfile.TemporaryDirectory() as temp:
+            original, exported = Path(temp) / "original", Path(temp) / "exported"
+            original.mkdir()
+            exported.mkdir()
+            source = material()
+            # A slot with no m_Texture must differ from an export that drops
+            # that slot entirely; both were previously counted as no binding.
+            missing = source.replace(
+                "        m_Texture: {fileID: 2800000, guid: " + A + ", type: 3}\\n", "")
+            removed = missing.replace(
+                "    - _MainTex:\\n        m_Scale: {x: 1, y: 1}\\n", "")
+            (original / "test.mat").write_text(missing, encoding="utf-8")
+            (exported / "test.mat").write_text(removed, encoding="utf-8")
+            counts = audit.compare(original, exported)["counts"]
+            self.assertEqual(counts.get("changed_texture_reference_materials"), 1)
+
     def test_same_slots_and_shader_remain_unchanged(self):
         with tempfile.TemporaryDirectory() as temp:
             original = Path(temp) / "original"
