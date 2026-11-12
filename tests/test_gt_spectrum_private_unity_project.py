@@ -73,14 +73,14 @@ class PrivateSpectrumUnityProjectTests(unittest.TestCase):
         original=['Shader "UltimateWater/Spectrum/Water Spectrum" {',
                   'Properties {}', 'SubShader {']
         for index in range(7):
-            vertex="float4 cb0_0_m0[4];\\nfloat4 main():SV_Position{return cb0_0_m0[0];}"
-            fragment=("float4 cb0_0_m0[%d];\\n"
+            vertex="float4 cb0_0_m0[4];\nfloat4 main():SV_Position{return cb0_0_m0[0];}"
+            fragment=("float4 cb0_0_m0[%d];\n"
                       "float4 main():SV_Target{return cb0_0_m0[0];}" % (5+index))
             original.extend(["Pass {","HLSLPROGRAM","#pragma vertex main",
                              "#pragma fragment main",stage_body(vertex,fragment),
                              "ENDHLSL","}"])
         original.extend(["}","}"])
-        raw="\\n".join(original)
+        raw="\n".join(original)
         with tempfile.TemporaryDirectory() as tmp:
             candidate,manifest,editor,project,out=self._files(tmp,source=raw)
             r=prepare(candidate,manifest,editor,project,out,
