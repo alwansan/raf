@@ -25,6 +25,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             scripts
+            config
             android-port/Experiments/ExportLineage
             Raft/Raft_Data/Managed
             tests
@@ -274,6 +275,19 @@ jobs:
           python3 -m scripts.t3_audit_exported_material_programs \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
+      - name: GT run official authenticated TMP PostFX and volumetric shader recovery in isolated exported Unity project
+        id: gt_vendor_shader_restoration
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_compare_shader_restore_quality.py -v
+          python3 -m unittest discover -s tests -p test_gt_test_vendor_shader_restoration.py -v
+          python3 -m scripts.gt_test_vendor_shader_restoration \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --raw-quality "$RUNNER_TEMP/gt-raw-export-program-quality.json" \
+            --backup-root "$RUNNER_TEMP/gt-shader-original-backup" \
+            --report "$RUNNER_TEMP/gt-actual-postrestore-shader-quality.json"
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
@@ -288,5 +302,6 @@ jobs:
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
+            ${{ runner.temp }}/gt-actual-postrestore-shader-quality.json
           retention-days: 14
           if-no-files-found: ignore
