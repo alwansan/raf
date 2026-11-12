@@ -22,31 +22,32 @@ def classify(namespace, name):
 
 def select_asset_owners(manifest):
     pattern = re.compile(r"Raft_Data/(?:sharedassets\d+|resources)\.assets")
-    rows = [row for row in manifest if pattern.fullmatch(row['path'])]
-    if len(rows) != 41 or len({row['path'] for row in rows}) != 41:
-        raise ValueError('Asset owner count mismatch')
-    if sum(row['bytes'] for row in rows) != 585598971:
-        raise ValueError('Asset owner byte budget mismatch')
+    rows = [row for row in manifest if pattern.fullmatch(row["path"])]
+    if len(rows) != 41 or len({row["path"] for row in rows}) != 41:
+        raise ValueError("Asset owner count mismatch")
+    if sum(row["bytes"] for row in rows) != 585598971:
+        raise ValueError("Asset owner byte budget mismatch")
     return rows
 
 
 def scan(zip2, scratch, asset_owners=False):
     import UnityPy
-    from scripts.t2_original_scene_foam_component_scan import select_original_levels, EXPECTED_BYTES
+    from scripts.t2_original_scene_foam_component_scan import select_original_levels
     from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
     from scripts.w1_stage_zip2_owners import ZIP2_SHA, fingerprint, stage
 
     sha = subprocess.check_output(["git", "-C", str(zip2), "rev-parse", "HEAD"], text=True).strip()
     if sha != ZIP2_SHA:
         raise ValueError("ZIP2 drift")
-    rows = select_original_levels(parse_original_manifest(zip2 / "RAFT_FILE_MANIFEST.tsv"))
+    manifest = parse_original_manifest(zip2 / "RAFT_FILE_MANIFEST.tsv")
+    rows = select_asset_owners(manifest) if asset_owners else select_original_levels(manifest)
     paths = ["/Raft/" + row["path"] + ("/*" if row["kind"] == "split" else "") for row in rows]
     subprocess.run(["git", "-C", str(zip2), "sparse-checkout", "set", "--no-cone",
                     "/RAFT_FILE_MANIFEST.tsv", "/Raft/" + OWNER, *paths], check=True, timeout=300)
     pins = {row["path"]: (row["bytes"], row["sha256"]) for row in rows}
     pins[OWNER] = OWNER_PIN
     result = stage(zip2, scratch, pins)
-    if result["verified_bytes"] != EXPECTED_BYTES + OWNER_PIN[0] or result["lfs_used"] is not False:
+    if result["verified_bytes"] != sum(size for size, _ in pins.values()) or result["lfs_used"] is not False:
         raise ValueError("Staged coverage mismatch")
 
     script_env = UnityPy.load(str(scratch / OWNER))
@@ -102,9 +103,10 @@ def scan(zip2, scratch, asset_owners=False):
         gc.collect()
     if not counts["resolved_catalog"]:
         raise ValueError("No scene scripts resolved")
-    return {"zip2_sha": sha, "scenes": len(rows), "catalog_scripts": len(catalog),
-            "water_candidate_scenes": water_scenes, "counts": dict(counts),
-            "families": {name: {"components": instances[name], "scenes": scenes_by_family[name]}
+    unit = "asset_owners" if asset_owners else "scenes"
+    return {"zip2_sha": sha, unit: len(rows), "catalog_scripts": len(catalog),
+            "water_candidate_" + unit: water_scenes, "counts": dict(counts),
+            "families": {name: {"components": instances[name], unit: scenes_by_family[name]}
                          for name in FAMILIES}, "runtime_verified": False}
 
 
@@ -112,6 +114,7 @@ if __name__ == "__main__":
     cli = argparse.ArgumentParser(description=__doc__)
     for name in ("zip2", "scratch", "output"):
         cli.add_argument(name, type=Path)
+    cli.add_argument("--asset-owners", action="store_true")
     args = cli.parse_args()
-    report = scan(args.zip2, args.scratch)
+    report = scan(args.zip2, args.scratch, args.asset_owners)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
