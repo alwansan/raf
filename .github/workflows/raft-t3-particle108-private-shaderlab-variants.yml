@@ -14,6 +14,8 @@ on:
       - 'tests/test_t3_particle108_original_keyword_names.py'
       - 'scripts/t3_particle108_private_keyword_routed_shaderlab.py'
       - 'tests/test_t3_particle108_private_keyword_routed_shaderlab.py'
+      - 'scripts/gt_particle108_unity_bindings.py'
+      - 'tests/test_gt_particle108_unity_bindings.py'
       - 'scripts/gt_particle108_private_unity_project.py'
       - 'tests/test_gt_particle108_private_unity_project.py'
       - 'android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs'
@@ -53,6 +55,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_names.py' -v
           python3 -m py_compile scripts/t3_particle108_private_keyword_routed_shaderlab.py tests/test_t3_particle108_private_keyword_routed_shaderlab.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_keyword_routed_shaderlab.py' -v
+          python3 -m py_compile scripts/gt_particle108_unity_bindings.py
+          python3 -m unittest discover -s tests -p test_gt_particle108_unity_bindings.py -v
           python3 -m py_compile scripts/gt_particle108_private_unity_project.py
           python3 -m unittest discover -s tests -p 'test_gt_particle108_private_unity_project.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -232,11 +236,37 @@ jobs:
               assert report[key] is False
           print("T3_PRIVATE_PROVISIONAL_ONE_SHADERLAB=4_pair_routes_8_glslang_vulkan11_valid; Unity_Material_Android_UNPROVEN")
           PY
+      - name: GT source-authenticate original Shader48 texture sampler symbols and stage-isolate cbuffer declarations
+        run: |
+          set -euo pipefail
+          # Never replace source by a guessed register or placeholder. Stage the
+          # original SHA-checker privately; only numeric aggregate leaves CI.
+          python3 -m scripts.gt_particle108_unity_bindings \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-source "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --private-dest "$RUNNER_TEMP/gt-particle108-source-bound-Unity" \
+            --report "$RUNNER_TEMP/gt-particle108-source-bound-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          path=Path(os.environ['RUNNER_TEMP'])/'gt-particle108-source-bound-safe.json'
+          report=json.loads(path.read_text())
+          assert report['status']=='SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8'
+          assert report['source_original_particle_shader_108_uses_SHA_verified'] is True
+          assert report['original_source_four_variant_pairs_recovered']==4
+          assert report['private_vulkan11_recompiled_stage_branches']==8
+          assert report['original_HLSL_register_annotations_preserved'] is True
+          assert report['private_source_mapped_original_sampler_parameter_links']>0
+          assert report['original_material_GUID_ShaderOrGameAsset_modified'] is False
+          assert report['Unity_Editor_compilation_proven'] is False
+          print('GT_PARTICLE108_PRIVATE_SOURCE_BINDING exactOriginalSamplerNames=true stageIsolatedUniformSymbols=true originalShadersUntouched=true editorGPUUnproven=true')
+          PY
       - name: GT stage authentic four-variant ShaderLab and CSharp Editor verifier in separate Unity project
         run: |
           set -euo pipefail
           python3 -m scripts.gt_particle108_private_unity_project \
-            --shader "$RUNNER_TEMP/t3-private-variant-shaderlab/keyword-routed-private.shader" \
+            --shader "$RUNNER_TEMP/gt-particle108-source-bound-Unity/keyword-routed-private.shader" \
             --routing "$RUNNER_TEMP/t3-private-provisional-routed-safe.json" \
             --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
             --project "$GITHUB_WORKSPACE/gt-private-particle-unity" \
@@ -302,6 +332,7 @@ jobs:
           name: gt-original-particle-private-unity-safe-${{ github.sha }}
           path: |
             ${{ runner.temp }}/gt-particle108-staging-safe.json
+            ${{ runner.temp }}/gt-particle108-source-bound-safe.json
             gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json
           if-no-files-found: ignore
           retention-days: 7
@@ -310,6 +341,7 @@ jobs:
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
+          rm -rf -- "$RUNNER_TEMP/gt-particle108-source-bound-Unity"
           # Unity game-ci writes some Library/Temp files as root inside
           # the Docker mount; remove the *literal* disposable project as
           # runner sudo, never the originals or a guessed path.
