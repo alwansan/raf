@@ -118,6 +118,11 @@ def rebind_stage(hlsl,program,name_indices,stage):
         or type(stage) is not int or stage not in (0,1)):
         raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
     textures,samplers=original_names_and_registers(program,name_indices)
+    # Reject a nonzero descriptor space even if ANOTHER sampler happens to
+    # have a valid source mapping. This is originally compiled D3D11, not a
+    # license to silently rewrite unsupported register spaceN.
+    if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
+        raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
     mapping={}
     used={"t":set(),"s":set()}
     for match in RESOURCE.finditer(hlsl):
@@ -141,6 +146,10 @@ def rebind_stage(hlsl,program,name_indices,stage):
         if SAMPLER_DECL.search(hlsl):
             raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
         raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
+    # Every emitted sampler declaration must be covered by an exact source
+    # register match. Partial proof can still give Unity "unrecognized sampler".
+    if len(SAMPLER_DECL.findall(hlsl)) != len(used["s"]):
+        raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
     if len(set(mapping.values()))!=len(mapping):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     # HLSL macro names and register numbers are preserved. Uniform backing
