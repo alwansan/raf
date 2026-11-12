@@ -441,6 +441,16 @@ jobs:
           assert refs['distinct_source_array_guids_referenced_by_materials']==9
           print('GT_NATIVE_ORIGINAL_ARRAY_IMPORT_GRIDS sourceOwners=82 arrays=9 gridVerified=9 exactMaterialRefs=28 guidPreserved=true sourcePixelsUntouched=true LFS=false editorImportNotYetVerified=true')
           PY
+          # Private GUID/depth/mip manifest is copied into unity-candidate and
+          # consumed by AndroidNativeBuild.ValidateSdkBindings in Unity Editor.
+          # This does not run Unity yet or publish a source file/GUID.
+          python3 -m scripts.gt_write_unity_array_import_contract \
+            --original-source "$RUNNER_TEMP/input/Raft_Data" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-native-unity-array-import-contract.json"
+          test -s "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json"
       - name: GT publish source-authentic array importer and Material link receipts only
         if: always()
         uses: actions/upload-artifact@v4
@@ -449,6 +459,7 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-native-original-array-importer-repair.json
             ${{ runner.temp }}/gt-native-original-array-material-links.json
+            ${{ runner.temp }}/gt-native-unity-array-import-contract.json
           if-no-files-found: ignore
           retention-days: 7
       - name: B04 restore original Linear color space in transient exported PlayerSettings
