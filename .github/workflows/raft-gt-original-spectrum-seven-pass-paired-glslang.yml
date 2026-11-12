@@ -8,6 +8,8 @@ on:
       - tests/test_gt_spectrum_original_pair_compile.py
       - scripts/gt_spectrum_original_pass_states.py
       - tests/test_gt_spectrum_original_pass_states.py
+      - scripts/gt_spectrum_original_private_seven_pass_shaderlab.py
+      - tests/test_gt_spectrum_original_private_seven_pass_shaderlab.py
       - .github/workflows/raft-gt-original-spectrum-seven-pass-paired-glslang.yml
 permissions:
   contents: read
@@ -32,7 +34,8 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_gt_spectrum_original_pair_compile.py -v
           python3 -m unittest discover -s tests -p test_gt_spectrum_original_pass_states.py -v
-          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_original_private_seven_pass_shaderlab.py -v
+          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py scripts/gt_spectrum_original_private_seven_pass_shaderlab.py
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -106,6 +109,34 @@ jobs:
           assert result["Unity_ShaderLab_installed"] is False
           print("GT_SPECTRUM_ORIGINAL_RENDER_STATES_PRIVATE originalPasses=7 originalStates=7 UnityShaderLabInstalled=false")
           PY
+      - name: Assemble two isolated original seven-pass Spectrum private ShaderLab envelopes (not game install)
+        run: |
+          set -euo pipefail
+          timeout 480s python3 -m scripts.gt_spectrum_original_private_seven_pass_shaderlab \
+            --source "$RUNNER_TEMP/gt-spectrum-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --packet "$RUNNER_TEMP/gt-spectrum-original-private" \
+            --manifest "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json" \
+            --states "$RUNNER_TEMP/gt-spectrum-states-private" \
+            --private-dest "$RUNNER_TEMP/gt-spectrum-seven-pass-shaderlab-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-private-shaderlab-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          result = json.loads((Path(os.environ["RUNNER_TEMP"]) /
+              "gt-spectrum-private-shaderlab-safe.json").read_text())
+          assert result["status"] == "PRIVATE_ORIGINAL_SPECTRUM_TWO_SEVEN_PASS_SHADERLAB_CANDIDATES"
+          assert result["original_exact_pass_count"] == 7
+          assert result["original_keyword_permutations"] == 2
+          assert result["private_seven_pass_ShaderLab_candidates"] == 2
+          assert result["private_shaderlab_structural_passes"] == 14
+          assert result["original_stage_variants_included"] == 28
+          assert result["original_authored_property_count"] == 6
+          assert result["original_authored_texture_property_count"] == 2
+          assert result["original_game_shader_installed"] is False
+          assert result["Unity2021_import_or_Adreno_pixels_proven"] is False
+          print("GT_SPECTRUM_SEVEN_PASS_PRIVATE_SHADERLAB_SAFE candidateShaders=2 exactPassesEach=7 sourceStages=28 originalProperties=6 originalTextures=2 originalGameInstalled=false")
+          PY
       - name: Compile privately paired original Spectrum stages for Vulkan 1.1
         run: |
           set -euo pipefail
@@ -136,4 +167,6 @@ jobs:
             "$RUNNER_TEMP/gt-spectrum-pairs-safe.json" \
             "$RUNNER_TEMP/gt-spectrum-states-private" \
             "$RUNNER_TEMP/gt-spectrum-states-safe.json" \
+            "$RUNNER_TEMP/gt-spectrum-seven-pass-shaderlab-private" \
+            "$RUNNER_TEMP/gt-spectrum-private-shaderlab-safe.json" \
             "$GITHUB_WORKSPACE/gt-spectrum-zip2"
