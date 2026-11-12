@@ -44,6 +44,23 @@ def original_meta_digests(assets: Path) -> dict:
     return rows
 
 
+def metadata_integrity(original: dict, current: dict) -> dict:
+    # Official vendor ShaderLab restorers may install new shader and .meta
+    # files. The contract is that *all previously exported originals* remain
+    # byte-identical. Never mistake a new authenticated vendor fallback meta
+    # for a mutation of an existing original Raft material/scene/shader GUID.
+    missing = set(original) - set(current)
+    changed = {name for name in original.keys() & current.keys()
+               if original[name] != current[name]}
+    added = set(current) - set(original)
+    return {
+        "original_exported_meta_bytes_unchanged": not (missing or changed),
+        "original_meta_removed": len(missing),
+        "original_meta_changed": len(changed),
+        "new_vendor_meta_documents_added": len(added),
+    }
+
+
 def run(project: Path, raw_quality: dict, backup_root: Path, *,
         runner=subprocess.run, quality=shader_audit, seconds: int=360) -> dict:
     project, backup_root = project.absolute(), backup_root.absolute()
@@ -89,14 +106,16 @@ def run(project: Path, raw_quality: dict, backup_root: Path, *,
             report["completed_original_vendor_restorer_steps"].append(step)
         if error is None:
             post=quality(project)
-            diff=compare(raw_quality,post,before==original_meta_digests(project/"Assets"))
+            diff=compare(raw_quality,post,metadata_integrity(
+                before,original_meta_digests(project/"Assets"))[
+                    "original_exported_meta_bytes_unchanged"])
             report["postrestore_material_quality"]=diff
             report["status"]="POST_RESTORE_SOURCE_QUALITY_COMPARED"
     except (ValueError, OSError) as exc:
         error = ("postrestore_metadata_or_quality",type(exc).__name__)
     finally:
-        report["original_exported_meta_bytes_unchanged"] = (
-            original_meta_digests(project/"Assets")==before)
+        report.update(metadata_integrity(
+            before, original_meta_digests(project/"Assets")))
     if error is not None:
         report["status"]="REJECTED"
         report["failure_stage"]=error[0]
