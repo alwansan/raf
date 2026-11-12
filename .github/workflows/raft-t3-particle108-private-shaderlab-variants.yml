@@ -309,6 +309,74 @@ jobs:
           assert r["original_names_register_numbers_HLSL_DXBC_Guids_published"] is False
           print("GT_PARTICLE108_DXBC_SOURCE_SAMPLING_ONLY "+json.dumps(r["counts"],sort_keys=True))
           PY
+      - name: GT privately census original Shader48 per-variant parameter blob and common bindings
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from collections import Counter
+          import os,json
+          import UnityPy
+          from scripts import t3_original_renderer_shader_impact as impact
+          from scripts import t3_original_particle108_dxbc_feasibility as identity
+          from scripts.w1_recover_depth_passes import stage_variants
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.w1_stage_zip2_owners import fingerprint
+          root=Path(os.environ['RUNNER_TEMP'])/'t3-private-variant-original'
+          selected={}
+          census=impact.load_original(root,Path('zip2-source/RAFT_FILE_MANIFEST.tsv'),
+                                     private_particle_slot_counts=selected)
+          owner,pid=identity.select(selected,census)
+          source=root/'Raft_Data'/owner
+          assert not source.is_symlink() and fingerprint(source)==SHADER_OWNERS[owner]
+          objects=[o for o in UnityPy.load(str(source)).file.objects.values()
+                   if o.type.name=='Shader' and o.path_id==pid]
+          assert len(objects)==1
+          tree=objects[0].read_typetree()
+          parsed=tree['m_ParsedForm']
+          programs=parsed['m_SubShaders'][0]['m_Passes'][0]
+          counts=Counter()
+          for key in ('m_ParameterBlob','m_ProgramBlob','m_SubProgramBlob','m_Script'):
+              if key in tree:
+                  counts['shader_top_'+key+'_present']+=1
+                  blob=tree[key]
+                  if isinstance(blob,(list,bytes,bytearray,str)):
+                      counts['shader_top_'+key+'_length']+=len(blob)
+          for field in ('progVertex','progFragment'):
+              prog=programs[field]
+              assert isinstance(prog,dict)
+              variants=stage_variants(prog)
+              assert len(variants)==4
+              counts['stage_original_variant_metadata_objects']+=len(variants)
+              common=prog.get('m_CommonParameters')
+              assert isinstance(common,dict)
+              for key in ('m_TextureParams','m_Samplers','m_ConstantBuffers',
+                          'm_VectorParams','m_MatrixParams','m_FloatParams'):
+                  val=common.get(key)
+                  if isinstance(val,list):
+                      counts['stage_common_'+key+'_rows']+=len(val)
+                      counts['stage_common_'+key+'_present']+=1
+              indexes=prog.get('m_ParameterBlobIndices')
+              if indexes is not None:
+                  counts['stage_ParameterBlobIndices_present']+=1
+                  if isinstance(indexes,list):
+                      counts['stage_ParameterBlobIndices_outer_lengths']+=len(indexes)
+                      for block in indexes:
+                          if isinstance(block,list):
+                              counts['stage_ParameterBlobIndices_nested_lengths']+=len(block)
+              for _,_,variant in variants:
+                  assert isinstance(variant,dict)
+                  for key in ('m_Parameters','m_ParameterBlobIndex','m_BlobIndex',
+                              'm_ProgramBlobIndex','m_LocalKeywordIndices',
+                              'm_GlobalKeywordIndices'):
+                      if key in variant:
+                          counts['stage_variant_'+key+'_present']+=1
+          print('GT_SOURCE_SHADER48_PARAMETER_HIERARCHY_SAFE '+json.dumps(
+              {'schema':1,'stage_objects':8,'counts':dict(sorted(counts.items())),
+               'original_texture_sampler_material_equivalence_proven':False,
+               'original_parameter_blob_values_names_indices_published':False},
+              sort_keys=True))
+          PY
       - name: GT source-authenticate original Shader48 texture sampler symbols and stage-isolate cbuffer declarations
         run: |
           set -euo pipefail
