@@ -111,6 +111,10 @@ def analyze(project:Path,trace:Path)->dict:
                     counter["conflicting_texture_class_export_trace"]+=1
                 else:
                     counter["class_"+TRACE_CLASSES[cls]]+=1
+                if fid in (2800000,8400000,8900000,11700000,18700000):
+                    counter["file_id_"+str(fid)]+=1
+                else:
+                    counter["file_id_unrecognized"]+=1
                 if fid==8900000:
                     counter["file_id_family_cubemap"]+=1
                 elif fid==8400000:
@@ -122,6 +126,13 @@ def analyze(project:Path,trace:Path)->dict:
                 data=read(meta)
                 hits=re.findall(r"(?m)^[ \t]*textureShape:[ \t]*(\d+)[ \t]*$",data)
                 shape=SHAPES.get(hits[0],"other") if len(hits)==1 else "unidentified"
+                # Safe enum summary without any original filenames, GUIDs,
+                # source IDs or game bytes. Explicitly distinguish Unity
+                # textureShape numeric values from guessed imported image types.
+                if len(hits)==1 and hits[0] in {str(i) for i in range(0,17)}:
+                    counter["importer_shape_enum_"+hits[0]]+=1
+                else:
+                    counter["importer_shape_enum_unrecognized"]+=1
                 counter["importer_shape_"+shape]+=1
                 if (cls==89 and fid==8900000 and shape=="cubemap" and
                     bool(re.search(r"(?m)^TextureImporter:[ \t]*$",data))):
