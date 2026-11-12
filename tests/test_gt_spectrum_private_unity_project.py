@@ -68,6 +68,33 @@ class PrivateSpectrumUnityProjectTests(unittest.TestCase):
             self.assertFalse(list(project.rglob("*.meta")))
             self.assertTrue((project/"Assets/Editor/OriginalSpectrumSevenPassValidation.cs").is_file())
 
+    def test_private_diagnostic_cbuffer_rename_changes_only_project_copy(self):
+        from scripts.w1_depth_shaderlab import stage_body
+        original=['Shader "UltimateWater/Spectrum/Water Spectrum" {',
+                  'Properties {}', 'SubShader {']
+        for index in range(7):
+            vertex="float4 cb0_0_m0[4];\\nfloat4 main():SV_Position{return cb0_0_m0[0];}"
+            fragment=("float4 cb0_0_m0[%d];\\n"
+                      "float4 main():SV_Target{return cb0_0_m0[0];}" % (5+index))
+            original.extend(["Pass {","HLSLPROGRAM","#pragma vertex main",
+                             "#pragma fragment main",stage_body(vertex,fragment),
+                             "ENDHLSL","}"])
+        original.extend(["}","}"])
+        raw="\\n".join(original)
+        with tempfile.TemporaryDirectory() as tmp:
+            candidate,manifest,editor,project,out=self._files(tmp,source=raw)
+            r=prepare(candidate,manifest,editor,project,out,
+                      diagnostic_stage_buffers=True)
+            self.assertTrue(r["private_stage_local_cbuffer_name_disambiguation_only"])
+            self.assertGreater(r["private_vertex_cbuffer_identifiers_disambiguated"],0)
+            self.assertGreater(r["private_fragment_cbuffer_identifiers_disambiguated"],0)
+            private=(project/"Assets/GTPrivateSpectrum.shader").read_text()
+            self.assertIn("GT_PRIVATE_VS_cb0_0_m0",private)
+            self.assertIn("GT_PRIVATE_PS_cb0_0_m0",private)
+            self.assertNotIn("GT_PRIVATE_VS_cb0_0_m0",candidate.read_text())
+            self.assertFalse(r["original_keyword_selection_or_Material_binding_proven"])
+            self.assertFalse(r["Unity_Editor_2021_compilation_proven"])
+
     def test_phone_floor_6_is_not_original_7(self):
         with tempfile.TemporaryDirectory() as tmp:
             candidate,manifest,editor,project,out=self._files(tmp,source=shader(6))
