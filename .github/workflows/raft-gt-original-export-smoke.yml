@@ -274,6 +274,11 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-original-array-real-flipbook-geometry.json"
+          # The original exporter may produce valid PNG previews but invalid
+          # 2D-array cell grids. Keep exit 2 for a failed import; the complete
+          # aggregate still records which source-authenticated repair applies.
+          # Do not bypass the original material texture-link safety checks.
+
       - name: GT extract original 50 BC3 Texture2DArray layer payloads from nine exact ZIP2 source objects into private Unity import bridge
         id: gt_real_original_bc3_array_streams
         continue-on-error: true
