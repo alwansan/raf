@@ -120,7 +120,7 @@ def is_texture(path,meta,fid):
             try:
                 with path.open("rb") as stream:
                     head=stream.read(24)
-                if (len(head)!=24 or head[:8]!=b"\\x89PNG\\r\\n\\x1a\\n"
+                if (len(head)!=24 or head[:8]!=b"\x89PNG\r\n\x1a\n"
                     or head[12:16]!=b"IHDR" or
                     int.from_bytes(head[8:12],"big")!=13):
                     return False
