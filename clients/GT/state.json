@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_PARTICLE108_APPROX_UNITY_ANDROID_VULKAN_BUNDLE_COMPILED_ORIGINAL_SAMPLER_MATERIAL_PARITY_BLOCKED_PHONE_APK_BUILDING",
+  "status": "GT_PARTICLE108_UNBOUND_APPROX_ANDROID_VULKAN_ARM64_PHONE_APK_BUILT_0_SHADER_ERRORS_STRICT_ORIGINAL_SAMPLER_PARITY_BLOCKED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261112-GT-Particle108-Unity-bundle-approx-phone-chat-18.md",
-  "next_action": "Check GT approximate offline phone APK CI 43241736207 (Unity ARM64 IL2CPP); if fails inspect earliest C# or build error and fix; if success verify APK size/build SHA and ask owner to test via phone/log. Do NOT claim original Shader48/GUID/Material parity: 10 DXBC dcl_sampler and 0 original serialized+inline sampler entries, 8/8 RDEF absent, source original gate 43237509847 failed. Full native 43205543533 still in progress, no duplicate. ZIP2 SHA15964ea8 no LFS.",
+  "next_action": "GT standalone approximate Particle108 APK run 43242496576 SUCCESS, artifact 13954649808 (15767382B, SHA256 5793e2d5b56083f3d4c974be6bf537af6ad3c8a6e4bbb2e98ef53f567ff15fcb). Ask owner for four variant screenshots and COPY LOG JSON to verify Adreno pixels; no original parity claim. Source-only SAMPLE pairs CI 43243957499 10 samples all declared, each sampler one texture, but zero match to original m_TextureParams slots; next inspect Unity 2021 per-variant parameter blob mapping and original filter/wrap. Full native run 43205543533 remains in progress at prior check; do not duplicate. ZIP2 fixed SHA, no LFS.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -500,8 +500,8 @@
     "original_sampler_filter_wrap_or_material_binding_proven": false,
     "original_material_or_shader_recovery_complete": false,
     "android_Adreno_pixels_verified": false,
-    "phone_diagnostic_workflow_run": 43241736207,
-    "phone_apk_build_verified": false,
+    "phone_diagnostic_workflow_run": 43242496576,
+    "phone_apk_build_verified": true,
     "phone_diagnostic_approx_sampler_only": true,
     "phone_runtime_commit": "66d5f4ecc8558e50160e35200007a65765e9c7c4",
     "phone_builder_commit": "dbd4964ddb9a83d7d31ce21b05fb0961302c6a16",
@@ -509,6 +509,19 @@
     "native_run": 43205543533,
     "native_apk_obb_xapk_verified": false,
     "remaining_custom_Dummy_Materials": 770,
-    "session_path": "clients/GT/sessions/20261112-GT-Particle108-Unity-bundle-approx-phone-chat-18.md"
+    "session_path": "clients/GT/sessions/20261112-GT-Particle108-Unity-bundle-approx-phone-chat-18.md",
+    "phone_diagnostic_workflow_conclusion": "success",
+    "phone_apk_size_bytes": 15767382,
+    "phone_apk_sha256": "5793e2d5b56083f3d4c974be6bf537af6ad3c8a6e4bbb2e98ef53f567ff15fcb",
+    "phone_apk_artifact_id": 13954649808,
+    "phone_apk_has_android_manifest_dex_arm64_il2cpp_unity_signed": true,
+    "original_sample_pair_CI": 43243957499,
+    "original_sample_pair_CI_overall_conclusion": "failure",
+    "original_sample_pair_step_passed": true,
+    "original_sample_family_instructions": 10,
+    "original_sample_instructions_with_valid_dcl_sampler": 10,
+    "source_original_sampled_texture_slots_matching_serialized": 0,
+    "original_sampler_material_binding_proven": false,
+    "original_Adreno_pixels_verified": false
   }
 }
