@@ -5,7 +5,7 @@
 - **agent / branch writable:** `GT` / `feature/android-native-port`
 - **immutable source:** `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`
 - **write policy:** جميع الموارد من ZIP2، لا `git lfs pull/fetch/checkout` ولا إعادة كتابة `zip2`، لا إلغاء أعمال T1–T5 ولا تشغيل APK كامل دون بواباتهم
-- **live HEAD at opening:** `6a8a2c5a5740d5771af87b71ed6a7bdc1fff0fd5`
+- **baseline from immediately preceding GT checkpoint:** `c9db87e742577461a315da9d5e0b5685c5fab969`; live branch advanced during this session, see actual run commit SHAs below
 - **scope:** تحويل الجرد المرجعي إلى إعادة بناء بايتات الرسوميات الأصلية كاملة داخل مدخل AssetRipper، ثم وصل المدخل بمسار native الحقيقي وتدقيقه
 - **evidence:** [20261112_full_zip2_graphics_restoration.json](../evidence/20261112_full_zip2_graphics_restoration.json)
 
