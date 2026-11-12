@@ -248,6 +248,19 @@ jobs:
           fi
           echo "GT_B05_EXACT_TEXENV_COMPARISON exit_code=$result_code status_report_saved=true"
           exit "$result_code"
+      - name: GT verify nine SHA-authentic original Texture2DArray objects against actual Unity image importer GUIDs and source layer metadata
+        id: gt_original_texture_array_export
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_verify_original_array_export.py -v
+          python3 -m scripts.gt_verify_original_array_export \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-9-original-texture-arrays.json"
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -323,6 +336,7 @@ jobs:
             ${{ runner.temp }}/gt-export-all-texture-target-categories.json
             ${{ runner.temp }}/gt-real-cubemap-export-lineage.json
             ${{ runner.temp }}/gt-real-array-shape-verified.json
+            ${{ runner.temp }}/gt-9-original-texture-arrays.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
