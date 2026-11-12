@@ -26,6 +26,7 @@ from scripts.b49_shaderlab_pass_contract import pass_coverage
 from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
 from scripts.w1_depth_shaderlab import quoted, tags, stage_body
 from scripts.w1_recover_graphics_programs import translate
+from scripts.gt_spectrum_original_sampler_source_bridge import source_bind_stage
 
 MAX_PRIVATE_SHADERLAB_BYTES = 16 * 1024 * 1024
 MAX_HLSL_BYTES = 1024 * 1024
@@ -132,7 +133,7 @@ def assemble(parsed, manifest, program_texts, state_texts):
 
 def recover(source: Path, repo: Path, packet: Path, manifest_path: Path,
             state_dir: Path, private_dest: Path, safe_out: Path,
-            *, translator=translate):
+            *, translator=translate, source_authentic_resource_names=False):
     source, repo, packet, manifest_path, state_dir, private_dest, safe_out = (
         Path(x).absolute() for x in (
             source, repo, packet, manifest_path, state_dir, private_dest, safe_out))
@@ -174,6 +175,10 @@ def recover(source: Path, repo: Path, packet: Path, manifest_path: Path,
             raise ValueError("Spectrum_original_private_state_not_source_equal")
         state_texts.append(raw)
     rows = _pairs(manifest)
+    if type(source_authentic_resource_names) is not bool:
+        raise ValueError("Spectrum_private_source_resource_mode_invalid")
+    original_passes = parsed["m_SubShaders"][0]["m_Passes"]
+    source_bind_stats = Counter()
     all_sources = {}
     with tempfile.TemporaryDirectory(prefix="gt-spectrum-shaderlab-input-", dir=private_dest.parent) as scratch:
         temp = Path(scratch)
@@ -204,7 +209,18 @@ def recover(source: Path, repo: Path, packet: Path, manifest_path: Path,
                     if not file.is_file() or file.is_symlink() or not 0 < file.stat().st_size <= MAX_HLSL_BYTES:
                         raise ValueError("Spectrum_original_private_HLSL_not_ready")
                     cache[key] = file.read_text(encoding="utf-8")
-                all_sources[(p, v, stage)] = cache[key]
+                source_program = original_passes[p][
+                    "progVertex" if stage==1 else "progFragment"]
+                if source_authentic_resource_names:
+                    authenticated, bind = source_bind_stage(
+                        cache[key], source_program, raw, stage,
+                        original_passes[p]["m_NameIndices"])
+                    all_sources[(p,v,stage)] = authenticated
+                    source_bind_stats["texture"] += bind["source_authenticated_texture_names"]
+                    source_bind_stats["sampler"] += bind["source_authenticated_sampler_names"]
+                    source_bind_stats["verified_stages"] += 1
+                else:
+                    all_sources[(p,v,stage)] = cache[key]
         candidates, counts = assemble(parsed, manifest, all_sources, state_texts)
         # Never upload source shader files, intermediate .hlsl, or full program
         # text. Move only two private isolated candidates to runner temp.
@@ -224,6 +240,11 @@ def recover(source: Path, repo: Path, packet: Path, manifest_path: Path,
                 "private_shaderlab_structural_passes":len(candidates)*PASSES,
                 "original_stage_variants_included":len(all_sources),
                 "distinct_source_stage_translations":len(cache),
+                "source_original_resource_name_rebinding_enabled":source_authentic_resource_names,
+                "source_original_resource_stages_bound":source_bind_stats["verified_stages"],
+                "source_original_texture_symbol_bindings":source_bind_stats["texture"],
+                "source_original_sampler_symbol_bindings":source_bind_stats["sampler"],
+                "original_sampler_filter_wrap_or_exported_Material_binding_proven":False,
                 **counts,
                 "original_per_pass_render_states_source_equal":True,
                 "original_all_keyword_variants_in_one_shader":False,
@@ -243,9 +264,11 @@ def main():
     a = argparse.ArgumentParser(description=__doc__)
     for key in ("source", "repo", "packet", "manifest", "states", "private-dest", "out"):
         a.add_argument("--"+key, type=Path, required=True)
+    a.add_argument("--source-authentic-resource-names",action="store_true")
     x=a.parse_args()
     try:
-        result=recover(x.source,x.repo,x.packet,x.manifest,x.states,x.private_dest,x.out)
+        result=recover(x.source,x.repo,x.packet,x.manifest,x.states,x.private_dest,x.out,
+                       source_authentic_resource_names=x.source_authentic_resource_names)
     except BaseException as exc:
         result={"status":"INCONCLUSIVE", "safe_error_type":type(exc).__name__,
                 "private_shaders_uploaded_or_published":False,
