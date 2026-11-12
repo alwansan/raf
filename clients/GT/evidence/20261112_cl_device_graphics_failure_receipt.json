@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "agent": "GT",
+  "date": "2026-11-12",
+  "cl_source_repository": "alwansan/CL",
+  "cl_source_commit": "cffd3f7be2d0c47649da9b28eae17c36d031f0e8",
+  "cl_summary_path": "raft log/lf/LogRaft-20261112-183147-926/session-summary.json",
+  "source_run_test_package": "com.alwansan.raft.androidtest",
+  "source_version_code": 1089,
+  "failing_known_device_log_gate": true,
+  "full_original_graphics_acceptance": false,
+  "error_counts": {
+    "water_invalid_pass": 42229,
+    "water_spectrum_invalid_pass": 19191,
+    "water_foam_global_invalid_pass": 23038,
+    "invalid_kernel_index_6": 7263,
+    "cursor_rgba32_required": 4668,
+    "obb_guid_load_failed": 2,
+    "missing_mono_script": 1
+  },
+  "capture": {
+    "total_game_log_lines": 1180876,
+    "local_sink_failed_batches": 0,
+    "performance_samples": 67,
+    "presented_fps_samples": 25
+  },
+  "evidence_bounds": {
+    "water_shader_name_and_pass_identity_proven": false,
+    "invalid_kernel6_water_origin_proven": false,
+    "phone_pixel_restoration_proven": false,
+    "water_failure_cause_resolved": false
+  },
+  "source_free_gate_script": "scripts/gt_device_graphics_acceptance.py",
+  "source_free_tests": "tests/test_gt_device_graphics_acceptance.py",
+  "CI_real_frozen_CL_snapshot_verified_run": 43263197989,
+  "CI_expected_result": "workflow SUCCESS only means the old known failure was reproduced; strict runtime gate rejects this session",
+  "target_current_full_native_run": 43247161671,
+  "next_actions": [
+    "recover real two water shader pass programs with same original GUID, test each exact pass index",
+    "prove compute kernel index 6 identity + runtime dispatch parity, no fake kernel",
+    "resolve 770 postvendor Dummy Materials using source-original shader property/pass bindings",
+    "fix RGBA32 cursor error at original callsite/Texture2D importer with evidence",
+    "repeat device test on later APK and run strict acceptance gate"
+  ]
+}
