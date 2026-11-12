@@ -1,7 +1,7 @@
 {
-  "request_id": "GT-20261112-current-head-full-native-after-disk-recovery-02",
-  "reason": "Owner-authorized complete current feature/android-native-port APK OBB XAPK build after signed recovery 43246196803; include strict 9/28/416/50 original graphics parity source gates, water restore status, offline controller/audio and post-Unity generated Library cleanup. Never claim all 770 Dummy shader Materials restored; test on real Adreno separately.",
-  "requested_from_sha": "a1de8f53a78470d952225feda2d16534b1ae861c",
+  "request_id": "Raft-BuildFix-20261112-2318-current-head-native-delivery",
+  "reason": "Owner-authorized new full Unity Android ARM64 APK+OBB+XAPK native delivery from latest HEAD after successful 43247161671, including subsequent graphics restoration commits. Preserve strict source-authenticity, water/shader, audio, packaging and SHA256 delivery gates.",
+  "requested_from_sha": "a6eda3ede44a516cf015a768b107baefd4445dc4",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -11,8 +11,8 @@
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43205543533,
-  "previous_build_source_sha": "c86809380ab1e5b95ccf65e30074422a7e744c05",
+  "previous_run_id": 43247161671,
+  "previous_build_source_sha": "5b3ddd674993888dc83bf75586c154e674e2d631",
   "previous_failed_unity_run_id": 42281310905,
   "fix_commit_sha": "393b2f5aaf2ed630f05e14e25ede2286151b14c3",
   "linked_session_id": "GT-20261112-CHAT-19-SIGNED-NATIVE-RECOVERY-AND-CURRENT-BUILD",
