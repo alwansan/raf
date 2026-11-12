@@ -162,281 +162,13 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
     for match in RESOURCE.finditer(hlsl):
         cls,translated_num,variable=match[3],int(match[4]),match[2]
         table=textures if cls=="t" else samplers
-        # Existing W1 depth rebinder established that vkd3d keeps original
-        # DXBC register identities in variable suffixes, while SPIRV-Cross
-        # can renumber the HLSL register() descriptor. Those are DIFFERENT
-        # namespaces. We keep the translated declaration annotation intact.
-        found=re.search(r'(?:^|_)'+cls+r'(\d+)    if not used["s"]:
-        if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
-            raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
-        if SAMPLER_DECL.search(hlsl):
-            raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
-        # A vertex-only stage genuinely may have no texture/sampler inputs.
-        # Permit that ONLY if the SHA-original program metadata also declares
-        # no texture/sampler registers and the translated stage does not
-        # advertise or sample a texture. Fragment source still needs a proved
-        # sampled resource; no fabricated dummy sampler or register mapping.
-        if not (stage == 1 and not textures and not samplers and
-                not used["t"] and
-                not re.search(r'\b(?:Texture\w*|sampler2D|Sample|SampleLevel|SampleBias)\b', hlsl)):
-            raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
-    # Every emitted sampler declaration must be covered by an exact source
-    # register match. Partial proof can still give Unity "unrecognized sampler".
-    if len(SAMPLER_DECL.findall(hlsl)) != len(used["s"]):
-        raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
-    if len(set(mapping.values()))!=len(mapping):
-        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
-    # HLSL macro names and register numbers are preserved. Uniform backing
-    # arrays in Vertex and Fragment can have DIFFERENT source dimensions:
-    # disjoint stage-local identifiers prevent Unity's glslang linker from
-    # incorrectly treating two different original stage layouts as one.
-    buffers=sorted(set(BUFFER.findall(hlsl)))
-    stage_prefix="GT_ORIGINAL_VS_" if stage==1 else "GT_ORIGINAL_PS_"
-    mapping.update({name:stage_prefix+name for name in buffers})
-    names=re.compile(r'\b(?:'+ '|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))+r')\b')
-    # Only variable identifiers are replaced; binding register(tN/sN) is not
-    # rewritten, as it is the compiled-program contract, not a variable.
-    fixed=names.sub(lambda m:mapping[m.group()],hlsl)
-    if len(fixed)>MAX_HLSL or fixed==hlsl:
-        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
-    return fixed,{"original_texture_registers_mapped":len(used["t"]),
-                  "original_sampler_registers_mapped":len(used["s"]),
-                  "source_to_translator_descriptor_register_drifts_authenticated":source_vs_translated_drift,
-                  "stage_local_original_cbuffer_symbols_disambiguated":len(buffers),
-                  "original_register_annotations_preserved":True}
-
-
-def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
-    if (not root.is_dir() or root.is_symlink() or
-        not private_source.is_dir() or private_source.is_symlink() or
-        private_dest.exists() or private_dest.is_symlink() or
-        not private_dest.parent.is_dir()):
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    selected={}
-    result=impact.load_original(root,manifest,private_particle_slot_counts=selected)
-    owner,pid=source_identity.select(selected,result)
-    path=root/"Raft_Data"/owner
-    if path.is_symlink() or fingerprint(path)!=SHADER_OWNERS[owner]:
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    import UnityPy
-    records_found=[o for o in UnityPy.load(str(path)).file.objects.values()
-                   if o.path_id==pid and o.type.name=="Shader"]
-    if len(records_found)!=1:raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    tree=records_found[0].read_typetree()
-    parsed=tree["m_ParsedForm"]
-    if (len(parsed["m_SubShaders"])!=1 or
-        len(parsed["m_SubShaders"][0]["m_Passes"])!=1):
-        raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
-    p=parsed["m_SubShaders"][0]["m_Passes"][0]
-    original_tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
-    if len(original_tables)!=1 or len(translation.exact_four_pairs(parsed,original_tables[0]))!=4:
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    if set(private_source.glob("keyword-*-private.shader"))==set():
-        raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
-    private_dest.mkdir()
-    counts=Counter()
-    try:
-        pairs=translation.exact_four_pairs(parsed,original_tables[0])
-        for n,(vs,fs) in enumerate(pairs):
-            pieces={}
-            for stage in (1,0):
-                path=private_source/("keyword-%d-stage-%d/private.hlsl"%(n,stage))
-                if path.is_symlink() or not path.is_file():
-                    raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
-                text=path.read_text(encoding="utf-8")
-                fixed,stats=rebind_stage(text,p["progVertex" if stage==1 else "progFragment"],
-                                         p["m_NameIndices"],stage,
-                                         original_dxbc=vs if stage==1 else fs)
-                pieces[stage]=fixed
-                counts.update(stats)
-            model=variants.source_models(vs,fs)
-            candidate,_=variants.assemble(parsed,pieces[1],pieces[0],model)
-            (private_dest/("keyword-%d-private.shader"%n)).write_text(candidate)
-        result=router.verify(private_dest,parsed)
-        if (result["status"]!=router.STATUS or
-            result["private_combination_stage_Vulkan11_SPIRV_valid"]!=8):
-            raise BridgeError("ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED")
-    except BaseException:
-        shutil.rmtree(private_dest)
-        raise
-    return {"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V1",
-            "status":"SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8",
-            "source_original_particle_shader_108_uses_SHA_verified":True,
-            "original_source_four_variant_pairs_recovered":4,
-            "private_original_programs_shipped_to_game":False,
-            "private_vulkan11_recompiled_stage_branches":8,
-            "private_source_mapped_original_texture_parameter_links":counts["original_texture_registers_mapped"],
-            "private_source_mapped_original_sampler_parameter_links":counts["original_sampler_registers_mapped"],
-            "private_stage_buffer_symbols_disambiguated":counts["stage_local_original_cbuffer_symbols_disambiguated"],
-            "original_program_DXBC_bytes_or_values_modified":False,
-            "original_HLSL_register_annotations_preserved":True,
-            "original_material_GUID_ShaderOrGameAsset_modified":False,
-            "Unity_Editor_compilation_proven":False,
-            "original_ShaderLab_keyword_runtime_or_Adreno_pixels_proven":False,
-            "original_names_HLSL_DXBC_SPV_Guids_or_private_values_published":False}
-
-
-def main():
-    p=argparse.ArgumentParser(description=__doc__)
-    for arg in ("original","manifest","private-source","private-dest","report"):
-        p.add_argument("--"+arg,type=Path,required=True)
-    a=p.parse_args()
-    if (a.report.exists() or a.report.is_symlink()
-        or a.report.resolve().is_relative_to(a.original.resolve())
-        or a.report.resolve().is_relative_to(a.private_dest.resolve())):
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    try:
-        report=recover(a.original,a.manifest,a.private_source,a.private_dest)
-    except Exception as e:
-        reason=e.reason if isinstance(e,BridgeError) else "UNCLASSIFIED_ORIGINAL_SOURCE"
-        report={"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V1",
-                "status":"INCONCLUSIVE","failure_code":reason,
-                "original_names_HLSL_DXBC_SPV_Guids_or_private_values_published":False,
-                "Unity_Editor_compilation_proven":False}
-    a.report.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
-    print("GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_SAFE "+json.dumps(report,sort_keys=True))
-    return 0 if report["status"]=="SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8" else 2
-
-if __name__=="__main__":
-    raise SystemExit(main())
-,variable)
+        # Original vkd3d resource symbols identify compiled DXBC source
+        # registers. SPIRV-Cross may renumber the emitted register(t/sN).
+        # Proven original RDEF is required before accepting that drift.
+        found=re.search(r'(?:^|_)'+cls+r'(\d+)$',variable)
         if found is None:
-            found=re.search(r'(?:texture|sampler)'+cls+r'(\d+)    if not used["s"]:
-        if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
-            raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
-        if SAMPLER_DECL.search(hlsl):
-            raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
-        # A vertex-only stage genuinely may have no texture/sampler inputs.
-        # Permit that ONLY if the SHA-original program metadata also declares
-        # no texture/sampler registers and the translated stage does not
-        # advertise or sample a texture. Fragment source still needs a proved
-        # sampled resource; no fabricated dummy sampler or register mapping.
-        if not (stage == 1 and not textures and not samplers and
-                not used["t"] and
-                not re.search(r'\b(?:Texture\w*|sampler2D|Sample|SampleLevel|SampleBias)\b', hlsl)):
-            raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
-    # Every emitted sampler declaration must be covered by an exact source
-    # register match. Partial proof can still give Unity "unrecognized sampler".
-    if len(SAMPLER_DECL.findall(hlsl)) != len(used["s"]):
-        raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
-    if len(set(mapping.values()))!=len(mapping):
-        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
-    # HLSL macro names and register numbers are preserved. Uniform backing
-    # arrays in Vertex and Fragment can have DIFFERENT source dimensions:
-    # disjoint stage-local identifiers prevent Unity's glslang linker from
-    # incorrectly treating two different original stage layouts as one.
-    buffers=sorted(set(BUFFER.findall(hlsl)))
-    stage_prefix="GT_ORIGINAL_VS_" if stage==1 else "GT_ORIGINAL_PS_"
-    mapping.update({name:stage_prefix+name for name in buffers})
-    names=re.compile(r'\b(?:'+ '|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))+r')\b')
-    # Only variable identifiers are replaced; binding register(tN/sN) is not
-    # rewritten, as it is the compiled-program contract, not a variable.
-    fixed=names.sub(lambda m:mapping[m.group()],hlsl)
-    if len(fixed)>MAX_HLSL or fixed==hlsl:
-        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
-    return fixed,{"original_texture_registers_mapped":len(used["t"]),
-                  "original_sampler_registers_mapped":len(used["s"]),
-                  "stage_local_original_cbuffer_symbols_disambiguated":len(buffers),
-                  "original_register_annotations_preserved":True}
-
-
-def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
-    if (not root.is_dir() or root.is_symlink() or
-        not private_source.is_dir() or private_source.is_symlink() or
-        private_dest.exists() or private_dest.is_symlink() or
-        not private_dest.parent.is_dir()):
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    selected={}
-    result=impact.load_original(root,manifest,private_particle_slot_counts=selected)
-    owner,pid=source_identity.select(selected,result)
-    path=root/"Raft_Data"/owner
-    if path.is_symlink() or fingerprint(path)!=SHADER_OWNERS[owner]:
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    import UnityPy
-    records_found=[o for o in UnityPy.load(str(path)).file.objects.values()
-                   if o.path_id==pid and o.type.name=="Shader"]
-    if len(records_found)!=1:raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    tree=records_found[0].read_typetree()
-    parsed=tree["m_ParsedForm"]
-    if (len(parsed["m_SubShaders"])!=1 or
-        len(parsed["m_SubShaders"][0]["m_Passes"])!=1):
-        raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
-    p=parsed["m_SubShaders"][0]["m_Passes"][0]
-    original_tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
-    if len(original_tables)!=1 or len(translation.exact_four_pairs(parsed,original_tables[0]))!=4:
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    if set(private_source.glob("keyword-*-private.shader"))==set():
-        raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
-    private_dest.mkdir()
-    counts=Counter()
-    try:
-        pairs=translation.exact_four_pairs(parsed,original_tables[0])
-        for n,(vs,fs) in enumerate(pairs):
-            pieces={}
-            for stage in (1,0):
-                path=private_source/("keyword-%d-stage-%d/private.hlsl"%(n,stage))
-                if path.is_symlink() or not path.is_file():
-                    raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
-                text=path.read_text(encoding="utf-8")
-                fixed,stats=rebind_stage(text,p["progVertex" if stage==1 else "progFragment"],
-                                         p["m_NameIndices"],stage,
-                                         original_dxbc=vs if stage==1 else fs)
-                pieces[stage]=fixed
-                counts.update(stats)
-            model=variants.source_models(vs,fs)
-            candidate,_=variants.assemble(parsed,pieces[1],pieces[0],model)
-            (private_dest/("keyword-%d-private.shader"%n)).write_text(candidate)
-        result=router.verify(private_dest,parsed)
-        if (result["status"]!=router.STATUS or
-            result["private_combination_stage_Vulkan11_SPIRV_valid"]!=8):
-            raise BridgeError("ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED")
-    except BaseException:
-        shutil.rmtree(private_dest)
-        raise
-    return {"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V1",
-            "status":"SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8",
-            "source_original_particle_shader_108_uses_SHA_verified":True,
-            "original_source_four_variant_pairs_recovered":4,
-            "private_original_programs_shipped_to_game":False,
-            "private_vulkan11_recompiled_stage_branches":8,
-            "private_source_mapped_original_texture_parameter_links":counts["original_texture_registers_mapped"],
-            "private_source_mapped_original_sampler_parameter_links":counts["original_sampler_registers_mapped"],
-            "private_stage_buffer_symbols_disambiguated":counts["stage_local_original_cbuffer_symbols_disambiguated"],
-            "original_program_DXBC_bytes_or_values_modified":False,
-            "original_HLSL_register_annotations_preserved":True,
-            "original_material_GUID_ShaderOrGameAsset_modified":False,
-            "Unity_Editor_compilation_proven":False,
-            "original_ShaderLab_keyword_runtime_or_Adreno_pixels_proven":False,
-            "original_names_HLSL_DXBC_SPV_Guids_or_private_values_published":False}
-
-
-def main():
-    p=argparse.ArgumentParser(description=__doc__)
-    for arg in ("original","manifest","private-source","private-dest","report"):
-        p.add_argument("--"+arg,type=Path,required=True)
-    a=p.parse_args()
-    if (a.report.exists() or a.report.is_symlink()
-        or a.report.resolve().is_relative_to(a.original.resolve())
-        or a.report.resolve().is_relative_to(a.private_dest.resolve())):
-        raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
-    try:
-        report=recover(a.original,a.manifest,a.private_source,a.private_dest)
-    except Exception as e:
-        reason=e.reason if isinstance(e,BridgeError) else "UNCLASSIFIED_ORIGINAL_SOURCE"
-        report={"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V1",
-                "status":"INCONCLUSIVE","failure_code":reason,
-                "original_names_HLSL_DXBC_SPV_Guids_or_private_values_published":False,
-                "Unity_Editor_compilation_proven":False}
-    a.report.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
-    print("GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_SAFE "+json.dumps(report,sort_keys=True))
-    return 0 if report["status"]=="SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8" else 2
-
-if __name__=="__main__":
-    raise SystemExit(main())
-,variable,re.I)
+            found=re.search(r'(?:texture|sampler)'+cls+r'(\d+)$',variable,re.I)
         if found is None:
-            # Anonymous fallback is narrow and only allowed when the original
-            # DXBC RDEF and serialized Shader table both attest the same slot.
             if authenticated_rdef is None:
                 raise BridgeError("TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING")
             source_num=translated_num
@@ -447,8 +179,6 @@ if __name__=="__main__":
         if authenticated_rdef is not None and source_num not in authenticated_rdef[cls]:
             raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
         if source_num!=translated_num:
-            # Without original compiled RDEF, a renamed descriptor must NOT
-            # be accepted on a suffix alone in this private shader probe.
             if authenticated_rdef is None:
                 raise BridgeError("TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT")
             source_vs_translated_drift+=1
@@ -458,6 +188,7 @@ if __name__=="__main__":
         mapping[variable]=table[source_num]
         used[cls].add(source_num)
         emitted[cls].add(translated_num)
+
     if not used["s"]:
         if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
             raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
@@ -493,6 +224,7 @@ if __name__=="__main__":
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     return fixed,{"original_texture_registers_mapped":len(used["t"]),
                   "original_sampler_registers_mapped":len(used["s"]),
+                  "source_to_translator_descriptor_register_drifts_authenticated":source_vs_translated_drift,
                   "stage_local_original_cbuffer_symbols_disambiguated":len(buffers),
                   "original_register_annotations_preserved":True}
 
