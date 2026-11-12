@@ -8,6 +8,8 @@ on:
       - tests/test_gt_diagnose_export_texture_targets.py
       - scripts/gt_full_original_export_texenvs.py
       - tests/test_gt_full_original_export_texenvs.py
+      - scripts/gt_compare_shader_restore_quality.py
+      - tests/test_gt_compare_shader_restore_quality.py
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -36,3 +38,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_diagnose_export_texture_targets.py -v
           python3 -m unittest discover -s tests -p test_gt_full_original_export_texenvs.py -v
           python3 -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
+          python3 -m unittest discover -s tests -p test_gt_compare_shader_restore_quality.py -v
