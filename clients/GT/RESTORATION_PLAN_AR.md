@@ -74,6 +74,14 @@
 
 **الخطوة القادمة:** افحص [تجربة Unity 43275506146](https://github.com/alwansan/raf/actions/runs/43275506146). إذا فشلت في استيراد shader أو بناء AssetBundle، استخرج فئة الخطأ الآمنة وصحّح ربط sampler/cbuffer من الأصل؛ لا تصنع سامبلر أو pass وهمياً. بعد نجاح Unity بشكل منفصل، أثبت variant1 ثم Keyword routing الحقيقي وربط GUID والمادة وRT الأصلي، ثم جرّب رسم الماء على الهاتف. لا تدمج المرشحين الاثنين في اللعبة بوصفهما شيدراً أصلياً مكتملًا.
 
+### نتيجة تجربة Unity 2021 الفعلية — عطل CBuffer في Spectrum (Chat-22)
+
+[43275506146 — FAILURE](https://github.com/alwansan/raf/actions/runs/43275506146): **استورد Unity فعلياً Shader Spectrum خاصاً بـ7 Passes** وبنى Android Vulkan AssetBundle حجمه **6,095 بايت**، لكن الفاحص سجّل **خطأَي Shader**، لذلك لا يجوز اعتبار الاختبار ناجحاً. كشف Unity GLSL linker اتحاد نفس اسم Uniform CBuffer بين Vertex وFragment بأحجام مختلفة (`vec4[4]` أمام `vec4[5]` أو `vec4[7]`)؛ ليست مشكلة نقص Passes في هذا المرشح، وليست دليلاً على أن البرنامج الأصلي معطوب.
+
+أضفت إصلاحاً تشخيصياً محدوداً هو `scripts/gt_spectrum_private_stage_buffer_isolation.py`: يفصل أسماء رموز CBuffer المؤقتة بحسب Stage على **نسخة ShaderLab الخاصة** فقط، مع إعادة مطابقة بايتية عكسية بعد إزالة البادئات والتأكد من عدم تغيير annotations من نوع `register(...)`. لا يغيّر مصدر ZIP2 أو Shader/.meta/GUID أو ربط Material الأصلي. [تجربة Unity المعادة 43276622833](https://github.com/alwansan/raf/actions/runs/43276622833) أُطلقت، و**لا نجاح مثبت لها عند تحديث هذه الفقرة**؛ يجب قراءة خطواتها وملف القبول الرقمي بعد اكتمالها.
+
+**الأولوية بعد الإصلاح:** التحقق من ترجمة برنامج Unity دون أخطاء؛ ثم اختبار variant1 وربط كِلا مسارَي Keyword الأصلية في شيدر واحد، ثم مصادر Sampler وCB0 وMaterial/RT/GUID، ثم XAPK حديث وتجربة هاتف. لا تخلط نجاح Bundle مع Pixel equivalence.
+
 ### فشل الهاتف الذي يحكم القبول
 
 السجل `CL@cffd3f7be2d0c47649da9b28eae17c36d031f0e8` بتاريخ 12 نوفمبر لجلسة `LogRaft-20261112-183147-926` أثبت:
