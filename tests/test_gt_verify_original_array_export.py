@@ -75,13 +75,13 @@ class OriginalTextureArrayExportTests(unittest.TestCase):
             stage=root/"staged"
             stage.mkdir()
             manifest=root/"manifest.tsv"
-            lines=["kind\\tbytes\\tsha256\\tmode\\trelative_path_under_Raft"]
+            lines=["kind\tbytes\tsha256\tmode\trelative_path_under_Raft"]
             for name in OWNERS:
                 raw=name.encode("utf-8")
                 (stage/name).write_bytes(raw)
                 digest=hashlib.sha256(raw).hexdigest()
-                lines.append(f"plain\\t{len(raw)}\\t{digest}\\t660\\tRaft_Data/{name}")
-            manifest.write_text("\\n".join(lines)+"\\n")
+                lines.append(f"plain\t{len(raw)}\t{digest}\t660\tRaft_Data/{name}")
+            manifest.write_text("\n".join(lines)+"\n")
             class Fake:
                 type=SimpleNamespace(name="Texture2DArray")
                 def __init__(self,idx):
@@ -106,12 +106,12 @@ class OriginalTextureArrayExportTests(unittest.TestCase):
             stage=root/"staged"
             stage.mkdir()
             manifest=root/"manifest.tsv"
-            rows=["kind\\tbytes\\tsha256\\tmode\\trelative_path_under_Raft"]
+            rows=["kind\tbytes\tsha256\tmode\trelative_path_under_Raft"]
             for name in OWNERS:
                 raw=name.encode("utf-8")
                 (stage/name).write_bytes(raw)
-                rows.append(f"plain\\t{len(raw)}\\t{hashlib.sha256(raw).hexdigest()}\\t660\\tRaft_Data/{name}")
-            manifest.write_text("\\n".join(rows)+"\\n")
+                rows.append(f"plain\t{len(raw)}\t{hashlib.sha256(raw).hexdigest()}\t660\tRaft_Data/{name}")
+            manifest.write_text("\n".join(rows)+"\n")
             class Broken:
                 type=SimpleNamespace(name="Texture2DArray")
                 path_id=1
