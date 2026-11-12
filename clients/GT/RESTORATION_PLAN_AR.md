@@ -82,6 +82,16 @@
 
 **الأولوية بعد الإصلاح:** التحقق من ترجمة برنامج Unity دون أخطاء؛ ثم اختبار variant1 وربط كِلا مسارَي Keyword الأصلية في شيدر واحد، ثم مصادر Sampler وCB0 وMaterial/RT/GUID، ثم XAPK حديث وتجربة هاتف. لا تخلط نجاح Bundle مع Pixel equivalence.
 
+### GT / Chat-23 — منع False Green من ShaderUtil في Spectrum Variant1
+
+حالة المصدر ما زالت **7 Passes أصلية، 14 VS/FS pairs، 28/28 مراحل Vulkan، 7 حالات رسم، 6 Properties**. [Unity2021 CI 43279249696](https://github.com/alwansan/raf/actions/runs/43279249696) أثبت استيراد وتجميع **Variant0 الخاص** (7Pass، 0 خطأ Shader، Bundle 12079 B). **لا GUID/Material/Adreno**.
+
+[43282759870](https://github.com/alwansan/raf/actions/runs/43282759870) أعاد `SUCCESS` لمرشح Variant1، ومع ذلك سجل Unity أظهر **12 GLSL link errors** و**12 internal variant creation failures** حول `cb4_struct` المتعارض بين VS وFragment، بينما `ShaderUtil.GetShaderMessages` أبلغ صفر خطأ. **هذا فشل مثبت ولا يجوز إدراجه كنجاح.** مُخرَج Bundle 12418B لا يُثبت سلامة البرامج.
+
+أضفت `scripts/gt_spectrum_private_stage_buffer_isolation.py` بإصلاح **اختياري قابل للعكس** لأسماء `cbN_struct`/`cbN` داخل ShaderLab الخاص فقط، دون تعديل `register(bN)` أو أصول Raft؛ وفحصاً جديداً `scripts/gt_spectrum_ci_console_gate.py` يرفض أي أخطاء Link أو Import أو إنشاء internal variant من سجل GitHub Actions النهائي. **[43285251243](https://github.com/alwansan/raf/actions/runs/43285251243)** هو التشغيل الجديد؛ **يجب اجتياز مهمتي `original-private-spectrum-pairs` و`strict-final-unity-console` معاً**. النجاح الظاهري للمهمة الأولى وحدها لم يعد كافياً، ولا يعني أصالة Material أو GPU Pixels.
+
+الخطوة القادمة: حل فشل `cb4_struct` إن بقي، ثم اختبار مصدر Keyword index4 في شيدر واحد، وربط مادة اللعبة/RT/CB0/GUID واختبار الهاتف. [جلسة Chat-23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md).
+
 ### فشل الهاتف الذي يحكم القبول
 
 السجل `CL@cffd3f7be2d0c47649da9b28eae17c36d031f0e8` بتاريخ 12 نوفمبر لجلسة `LogRaft-20261112-183147-926` أثبت:
