@@ -31,7 +31,7 @@ _SUCCESS_MARKERS = (
     "GT_SPECTRUM_UNITY_ANDROID_VULKAN_PRIVATE realUnity2021=true",
     "GT_SPECTRUM_VARIANT1_UNITY_PRIVATE_OK editor2021=true",
 )
-_LOG_TS = r"(?m)^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z[ \\t]+"
+_LOG_TS = r"(?m)^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z[ \t]+"
 
 MAX_LOG_BYTES = 64 * 1024 * 1024
 
@@ -44,7 +44,7 @@ def verify_console(content: bytes):
     counts = {key: len(pattern.findall(text))
               for key,pattern in _ERROR_CLASSES.items()}
     completed = {
-        k: re.search(_LOG_TS + re.escape(k) + r"(?:[ \\r\\n]|$)", text) is not None
+        k: re.search(_LOG_TS + re.escape(k) + r"(?:[ \r\n]|$)", text) is not None
         for k in _SUCCESS_MARKERS
     }
     if not all(completed.values()):
