@@ -23,16 +23,33 @@ from scripts import t3_particle108_private_shaderlab_variants as variants
 from scripts import t3_particle108_private_keyword_routed_shaderlab as router
 from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
 from scripts.w1_stage_zip2_owners import fingerprint
-from scripts.w1_rebind_depth_resources import RESOURCE, IDENT
+from scripts.w1_rebind_depth_resources import IDENT
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 
-TOKENS=re.compile(r'\b(?:register\s*\([^)]*\)|[A-Za-z_]\w*)\b')
+# SPIRV-Cross HLSL may emit register(sN, space0) while older
+# recovered code uses register(sN). Zero-space is explicit D3D11's
+# default descriptor register space; no reassignment or guessing.
+RESOURCE = re.compile(
+    r'\b(Texture\w*(?:\s*<[^;{}>]+>)?|SamplerState|SamplerComparisonState)'
+    r'\s+([A-Za-z_]\w*)\s*:\s*register\(\s*([ts])(\d+)'
+    r'\s*(?:,\s*space0\s*)?\)\s*;'
+)
+SAMPLER_DECL = re.compile(r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*\b')
+SAMPLER_SPACE0 = re.compile(
+    r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*'
+    r'\s*:\s*register\(\s*s\d+\s*,\s*space0\s*\)'
+)
+SAMPLER_UNSUPPORTED_SPACE = re.compile(
+    r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*'
+    r'\s*:\s*register\(\s*s\d+\s*,\s*space[1-9]\d*\s*\)'
+)
 BUFFER=re.compile(r'\bcb\d+_\d+_m\d+\b')
 MAX_HLSL=1024*1024
 SAFE_FAILURE=frozenset((
     "SOURCE_ORIGINAL_MISMATCH", "SOURCE_TEXTURE_MAPPING_UNRESOLVED",
     "ORIGINAL_TEXTURE_NAME_INDEX_MISSING", "ORIGINAL_TEXTURE_REGISTER_DUPLICATED",
     "ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS", "TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS",
+    "TRANSLATOR_SAMPLER_DECLARATION_UNBOUND", "TRANSLATOR_SAMPLER_SPACE_NOT_ZERO",
     "TRANSLATOR_RESOURCE_REGISTER_UNPROVEN", "TRANSLATOR_RESOURCE_COLLISION",
     "TRANSLATOR_SOURCE_READ_FAILED", "ORIGINAL_STAGE_LAYOUT_UNSUPPORTED",
     "ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING", "ORIGINAL_NAME_INDEX_TABLE_MISSING",
@@ -119,6 +136,10 @@ def rebind_stage(hlsl,program,name_indices,stage):
         mapping[variable]=table[num]
         used[cls].add(num)
     if not used["s"]:
+        if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
+            raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
+        if SAMPLER_DECL.search(hlsl):
+            raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
         raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
     if len(set(mapping.values()))!=len(mapping):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")

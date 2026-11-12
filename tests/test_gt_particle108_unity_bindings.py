@@ -22,6 +22,22 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
             "texture_t1.Sample(sampler_s1,float2(0,0))+cb1_0_m0[0];}\n"
         )
 
+    def test_explicit_spirv_cross_space_zero_preserved_for_samplers(self):
+        spaced=self.code.replace("register(s0)", "register(s0, space0)")
+        mapped,_=rebind_stage(spaced,self.program,self.indices,0)
+        self.assertIn("sampler_MainTex : register(s0, space0)",mapped)
+
+    def test_explicit_source_register_space_one_not_guessed_or_remapped(self):
+        spaced=self.code.replace("register(s0)", "register(s0, space1)")
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_RESOURCE_REGISTER_UNPROVEN|TRANSLATOR_SAMPLER_SPACE_NOT_ZERO"):
+            rebind_stage(spaced,self.program,self.indices,0)
+
+    def test_missing_translator_sampler_registration_not_replaced_by_fake_one(self):
+        bad=self.code.replace("samplers0 : register(s0);","samplers0;").replace(
+            "sampler_s1 : register(s1);","sampler_s1;")
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SAMPLER_DECLARATION_UNBOUND"):
+            rebind_stage(bad,self.program,self.indices,0)
+
     def test_original_source_registers_source_bound_exact(self):
         t,s=original_names_and_registers(self.program,self.indices)
         self.assertEqual(t,{0:"_MainTex",1:"_NoiseTex"})
