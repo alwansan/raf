@@ -27,7 +27,7 @@
 | **مواد Material** | المصدر **1,556**؛ ملفات Export **1,536** منها **750** تعتمد Builtin؛ نجحت restorers في تحويل **16 مستند Material** مخصصاً من Dummy إلى غير Dummy. | **770 مستند Material مخصصاً لا يزال يرتبط بشيدر Dummy**؛ هذا عدد مستندات مواد وليس 770 شيدراً مختلفاً |
 | **Unity Builtins/الـvendors** | أدوات دقيقة لأصول Unity 2021.3.45f2 (198 Shader من الأرشيف الرسمي) وTMP/PostFX/Volumetric وDepth Copy في pipeline، مع حراس للحفاظ على Meta/GUID. | تحقيق Pass/variant/مخرجات PostFX والظلال على هاتف Android، لا الاكتفاء بـsource restorer |
 | **Shader48 للجسيمات** | Shader أصلي ذو **108 مواضع ParticleSystemRenderer**؛ أربعة أزواج VS/FS وثمانية برامج مترجمة ونجاح ShaderBundle تجريبي داخل Unity Android Vulkan باستخدام Sampler تقريبي. | المطابقة الأصلية للـsampler والـkeywords والـMaterial/GUID واختبار البكسلات على الهاتف؛ **ليس مدمجاً كشيدر أصلي مكتمل** |
-| **الماء/Compute** | **165 Shader objects** و**9 ComputeShader objects** موثقة في المصدر؛ توجد أدوات للتحقق من Spectrum/Foam/FFT. | **42,229** أخطاء Pass و**7,263** خطأ kernel index 6 بسجل الهاتف، والهوية الحقيقية للـkernel6 لم تثبت |
+| **الماء/Compute** | **165 Shader objects** و**9 ComputeShader objects** موثقة في المصدر؛ توجد أدوات للتحقق من Spectrum/Foam/FFT. | أصل Spectrum مُثبت بـ**7 Passes** و**28 برنامج VS/FS حسب variants** (7×2×2)، وأصل Foam Global بـ**2 Passes**؛ على الهاتف **42,229** أخطاء Pass و**7,263** خطأ kernel index 6، وهوية هذا kernel لم تثبت |
 | **حزمة Android** | استرداد حزمة قديمة موقّعة: APK **672,892,355 B** + OBB **2,320,414,462 B** وXAPK من [43246196803](https://github.com/alwansan/raf/actions/runs/43246196803). | البناء الكامل الحديث [43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) لا يزال في Unity Editor عند آخر فحص؛ لم تُقبل الألوان/الماء/النار/الأداء على الهاتف |
 
 **أدلة مصدر مهمّة:** [الجرد الكامل](https://github.com/alwansan/raf/actions/runs/43114648901) · [AssetRipper الحقيقي](https://github.com/alwansan/raf/actions/runs/43125542125) · [بوابة المصدر 9/28/416/50](https://github.com/alwansan/raf/actions/runs/43207734641) · [Shader48 التقريبي في Unity](https://github.com/alwansan/raf/actions/runs/43236578305).
@@ -42,6 +42,13 @@
 | **M4** | P1 | **لم يكتمل** | رتّب الشيدرات الأصلية حسب عدد استعمالات Renderer في المشاهد، وأصلح على دفعات من ضمن **770 Material Dummy**؛ فحص Guid→Pass→Keyword→Sampler→Texture، ثم المقارنة على الهاتف (ألوان الطوف، النار، الظلال) |
 | **M5** | P2 | **قيد التشخيص** | عالج Cursor RGBA32 وOBB GUID وMissing MonoScript من مواقع الأصل، ثم أثبت استقرار frame time وسلامة الواجهة وعالم Offline |
 | **M0** | P0 | **مكتمل لهذا النطاق فقط** | توثيق جرد المصدر ونقطة baseline واستقبال CL وتجربة بوابة اللوق. لا يعني استكمال الاستعادة الرسومية |
+
+### تدقيق الفرق بين المصدر الأصلي ورسالة Pass من الهاتف
+
+- كائن `UltimateWater/Spectrum/Water Spectrum` الأصلي يحمل **7 Passes** تحت SubShader واحد، وبرنامجين (VS/FS) لكل نسختين من كل Pass = **28 مرجع stage**؛ وثقته [B09 الأصلي](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b09_spectrum_topology_contract.py) مع [CI 41920232173 SUCCESS](https://github.com/alwansan/raf/actions/runs/41920232173).
+- كائن `UltimateWater/Foam/Global` الأصلي يحمل **2 Passes** وأربعة برامج VS/FS أصلية؛ برامج Foam الحقيقية وCB0 والـSamplers تحتاج ربطاً وتجميع Unity Android قبل الدمج.
+- `verify_water_render_contract.py` يطلب `Spectrum >= 6` لأن السجل القديم طلب Pass #5. **هذا حد أدنى لتفسير log فقط**؛ استعادة شيدر Spectrum الصحيحة تحتاج **7 Passes مع Pass states والـkeywords الأصلية**، ولا يجوز ملء العدد بـPass فارغة.
+- [CI 43268872421 SUCCESS](https://github.com/alwansan/raf/actions/runs/43268872421) يختبر هذا الفرق في [بوابة الخطة](../../scripts/gt_restoration_plan_check.py)، ولا يثبت أن البرنامج الأصلي صار داخل APK.
 
 ### فشل الهاتف الذي يحكم القبول
 
