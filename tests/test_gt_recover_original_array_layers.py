@@ -10,6 +10,7 @@ import tempfile
 import unittest
 
 from scripts.gt_zip2_payloads import SourceFailure
+from scripts.gt_stage_serialized_owners import InventoryError
 from scripts.gt_recover_original_array_layers import (
     safe_stream_basename,exact_streams,recover,
 )
@@ -23,18 +24,19 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
         self.source=self.root/"Raft_Data"
         self.source.mkdir()
         self.provider=self.source/"sharedassets0.assets.resS"
-        self.provider.write_bytes(bytes(range(100)))
+        self.payload=bytes(range(256))*3
+        self.provider.write_bytes(self.payload)
         self.expected={"Raft_Data/"+self.provider.name:(
-            "plain",100,hashlib.sha256(bytes(range(100))).hexdigest())}
+            "plain",len(self.payload),hashlib.sha256(self.payload).hexdigest())}
         self.arrays={
             ("sharedassets0.assets",i+1):{
                 "private_stream_path":self.provider.name,
-                "private_stream_offset":i*10,
-                "original_stream_size":10,
-                "source_format_enum":12,
+                "private_stream_offset":i*64,
+                "original_stream_size":64,
+                "source_format_enum":100,
                 "source_mipmap_count":1,
                 "has_stream_record":True,"has_image_data":False,
-                "width":16,"height":16,"depth":4,
+                "width":4,"height":4,"depth":4,
             } for i in range(9)}
         self.trace={"schema_version":1,"export_instance":"f"*32,
             "objects":[{
@@ -51,7 +53,7 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
         result=recover(self.source,self.arrays,self.trace,
             self.destinations,self.expected,self.stage)
         self.assertEqual(result["sha256_authenticated_streamed_payloads_copied"],9)
-        self.assertEqual(result["original_source_streamed_bytes_restored_to_private_stage"],90)
+        self.assertEqual(result["original_source_streamed_bytes_restored_to_private_stage"],576)
         self.assertEqual(result["source_total_layer_count"],36)
         self.assertEqual(result["original_export_GUIDs_same_instance_matched"],9)
         self.assertFalse(result["Unity_Editor_Texture2DArray_assets_created"])
@@ -60,20 +62,20 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
         self.assertEqual(len(private["arrays"]),9)
         for i,row in enumerate(private["arrays"]):
             raw=(self.stage/row["relative_payload"]).read_bytes()
-            self.assertEqual(raw,bytes(range(i*10,i*10+10)))
+            self.assertEqual(raw,self.payload[i*64:i*64+64])
             self.assertEqual(row["sha256"],hashlib.sha256(raw).hexdigest())
         self.assertNotIn("guid",json.dumps(result).lower())
-        self.assertEqual(self.provider.read_bytes(),bytes(range(100)))
+        self.assertEqual(self.provider.read_bytes(),self.payload)
 
     def test_corrupted_original_stream_fails_before_creating_stage(self):
-        self.provider.write_bytes(b"!"*100)
+        self.provider.write_bytes(b"!"*len(self.payload))
         with self.assertRaisesRegex(SourceFailure,"sha256_mismatch"):
             recover(self.source,self.arrays,self.trace,
                     self.destinations,self.expected,self.stage)
         self.assertFalse(self.stage.exists())
 
     def test_out_of_bounds_refused_without_copy(self):
-        self.arrays[("sharedassets0.assets",9)]["private_stream_offset"]=99
+        self.arrays[("sharedassets0.assets",9)]["private_stream_offset"]=len(self.payload)-32
         with self.assertRaisesRegex(SourceFailure,"outside_authenticated_provider"):
             exact_streams(self.source,self.expected,self.arrays)
         self.assertFalse(self.stage.exists())
@@ -85,8 +87,24 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
 
     def test_missing_original_gpu_format_mip_metadata_is_not_accepted(self):
         self.arrays[("sharedassets0.assets",1)]["source_format_enum"]=None
-        with self.assertRaisesRegex(SourceFailure,"format_or_mips_missing"):
+        with self.assertRaisesRegex(InventoryError,"unsupported_original_array_GraphicsFormat"):
             exact_streams(self.source,self.expected,self.arrays)
+
+    def test_zero_original_pixel_array_preserved_without_fake_binary(self):
+        entry=self.arrays[("sharedassets0.assets",1)]
+        entry["original_stream_size"]=0
+        entry["private_stream_path"]=""
+        r=recover(self.source,self.arrays,self.trace,
+                  self.destinations,self.expected,self.stage)
+        self.assertEqual(r["sha256_authenticated_streamed_payloads_copied"],8)
+        self.assertEqual(r["source_array_layers_without_original_pixels"],4)
+        self.assertEqual(r["original_array_objects_with_zero_source_payload"],1)
+        self.assertEqual(r["original_source_streamed_bytes_restored_to_private_stage"],512)
+        private=json.loads((self.stage/"private-array-import-manifest.json").read_text())
+        self.assertEqual(private["arrays"][0]["original_payload_state"],
+                         "NO_ORIGINAL_STREAMED_OR_INLINE_PIXELS")
+        self.assertIsNone(private["arrays"][0]["relative_payload"])
+        self.assertEqual(len(list(self.stage.glob("*.original-gpu-bytes"))),8)
 
     def test_missing_array_trace_cannot_copy_original_bytes(self):
         self.trace["objects"].pop()
