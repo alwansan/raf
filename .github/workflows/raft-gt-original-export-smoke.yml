@@ -471,6 +471,20 @@ jobs:
                "source_slots_faithful_with_resolved_scope")},sort_keys=True))
           PY
           exit "$result_code"
+      - name: GT source-authenticate external Material Texture PPtrs across original ZIP2 owners and same-instance GUIDs
+        id: gt_external_original_texture_links
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_external_original_texture_links.py -v
+          python3 -m scripts.gt_external_original_texture_links \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-external-texture-links.json"
+          test -s "$RUNNER_TEMP/gt-real-external-texture-links.json"
       - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
         continue-on-error: true
         shell: bash
@@ -514,6 +528,7 @@ jobs:
             ${{ runner.temp }}/gt-real-original-array-private-Editor-gate-aggregate.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
+            ${{ runner.temp }}/gt-real-external-texture-links.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
             ${{ runner.temp }}/gt-actual-postrestore-shader-quality.json
           retention-days: 14
