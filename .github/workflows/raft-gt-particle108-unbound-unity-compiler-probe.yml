@@ -231,7 +231,20 @@ jobs:
             --routing "$RUNNER_TEMP/t3-private-provisional-routed-safe.json" \
             --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
             --project "$GITHUB_WORKSPACE/gt-private-particle-unity" \
-            --report "$RUNNER_TEMP/gt-particle108-staging-safe.json"
+            --report "$RUNNER_TEMP/gt-particle108-staging-safe.json" \
+            --diagnostic-stage-buffers
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-particle108-staging-safe.json").read_text())
+          assert r["private_stage_local_buffer_name_isolation_only"] is True
+          assert r["private_vertex_cbuffer_identifiers_disambiguated"]>0
+          assert r["private_fragment_cbuffer_identifiers_disambiguated"]>0
+          assert r["private_original_sampler_binding_parity_proven"] is False
+          assert r["original_Android_game_pixels_proven"] is False
+          assert r["game_source_or_GUID_modified"] is False
+          print("GT_PARTICLE108_UNBOUND_CBUFFER_ONLY vertex_fragment_disambiguated=true sampler_original_binding_unproven=true game_assets_untouched=true")
+          PY
       - name: GT test UNBOUND original-derived Particle108 ShaderLab in real Unity 2021.3.45f2 Android Vulkan
         id: gt_private_particle_unity
         uses: game-ci/unity-builder@v4
