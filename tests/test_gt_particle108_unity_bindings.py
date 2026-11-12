@@ -67,6 +67,40 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
                 rebind_stage(self.code,self.program,self.indices,0,
                              original_dxbc=b"DXBC"+b"0"*40)
 
+    def test_original_eight_dxbc_RDEF_absent_source_suffix_still_bound(self):
+        # Real original Particle108 has 8/8 DXBC stages without RDEF.
+        # Compiler-derived source suffix and same SHA-original Shader
+        # serialized m_TextureParams must both be present. The parser's
+        # precise ABSENT reason is distinct from malformed DXBC.
+        from unittest.mock import patch
+        changed=self.code.replace("texture_t0 : register(t0)","texture_t0 : register(t1)")
+        changed=changed.replace("texture_t1 : register(t1)","texture_t1 : register(t0)")
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   side_effect=ValueError("DXBC_ORIGINAL_RDEF_ABSENT")):
+            mapped,counts=rebind_stage(changed,self.program,self.indices,0,
+                                       original_dxbc=b"DXBC"+b"0"*40)
+        self.assertIn("_MainTex : register(t1)",mapped)
+        self.assertIn("_NoiseTex : register(t0)",mapped)
+        self.assertEqual(counts["source_DXBC_original_RDEF_verified_absent"],1)
+        self.assertEqual(counts["source_to_translator_descriptor_register_drifts_authenticated"],2)
+
+    def test_original_RDEF_absent_does_not_authorize_anonymous_translation(self):
+        from unittest.mock import patch
+        changed=self.code.replace("samplers0", "anonymousSampler")
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   side_effect=ValueError("DXBC_ORIGINAL_RDEF_ABSENT")):
+            with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING"):
+                rebind_stage(changed,self.program,self.indices,0,
+                             original_dxbc=b"DXBC"+b"0"*40)
+
+    def test_malformed_original_DXBC_not_reclassified_as_absent_RDEF(self):
+        from unittest.mock import patch
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   side_effect=ValueError("DXBC_SOURCE_CHUNK_TABLE_BOUNDS")):
+            with self.assertRaisesRegex(BridgeError,"ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN"):
+                rebind_stage(self.code,self.program,self.indices,0,
+                             original_dxbc=b"DXBC"+b"0"*40)
+
     def test_original_source_registers_source_bound_exact(self):
         t,s=original_names_and_registers(self.program,self.indices)
         self.assertEqual(t,{0:"_MainTex",1:"_NoiseTex"})
