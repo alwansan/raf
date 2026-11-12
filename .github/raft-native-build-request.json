@@ -1,7 +1,7 @@
 {
-  "request_id": "owner-direct-T5-20261109-latest-team-integrated-full-5f28",
-  "reason": "Owner requests one fresh full Unity2021 ARM64 APK+OBB+XAPK from latest feature branch with T1 FFT hook, T4 Android physical mouse fixes, T2/T3 verified recovery stages, T5 package checks. Prior full #42296450023 rebuilt OK but Release HTTP403; retain full Actions delivery artifact if publishing denied. No claims of water/pixels/gameplay readiness.",
-  "requested_from_sha": "f66277c0572065e6fde495a52468542851124281",
+  "request_id": "owner-direct-20261112-gfx162-pristine-array-full",
+  "reason": "Build full Android APK, OBB and XAPK from current native HEAD with pristine ZIP2 Texture2DArray provenance separate from mesh-inlined export input.",
+  "requested_from_sha": "1ceb252cb8b81ed69417aa3bf7e822055ca7831e",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -10,10 +10,10 @@
     "water_compute_source_candidate"
   ],
   "owner_direct_request": true,
-  "owner_instruction": "2026-11-09 latest owner direct request: inspect last full result, include all already merged T1-T5 fixes and original ZIP2 resource staging, build one full native APK+OBB+XAPK. Preserve 5/5 vote unchanged and authenticity gates; record release HTTP403 honestly. No other runs cancelled.",
-  "previous_run_id": 42296450023,
-  "previous_build_source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+  "owner_instruction": "Owner directly requested the fix and full build on 2026-11-12. Include current native integrations and retain original-water and packaging gates.",
+  "previous_run_id": 43149622750,
+  "previous_build_source_sha": "565016cb107a681e2784df2437da1ccbd74f2809",
   "previous_failed_unity_run_id": 42281310905,
-  "fix_commit_sha": "f554e8b6757e46aa037603ed592a04acc2bf7a61",
-  "linked_session_id": "20261109T2045Z-T5-chat-native-owner-rerun-5f28"
+  "fix_commit_sha": "8e0531afcc0cccda844cc6be10bc49ba882f0f5c",
+  "linked_session_id": "20261112-GFX-chat-native-pristine-array-source-122"
 }
