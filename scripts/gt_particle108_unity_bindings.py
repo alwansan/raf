@@ -33,6 +33,9 @@ SAFE_FAILURE=frozenset((
     "SOURCE_ORIGINAL_MISMATCH", "SOURCE_TEXTURE_MAPPING_UNRESOLVED",
     "TRANSLATOR_RESOURCE_REGISTER_UNPROVEN", "TRANSLATOR_RESOURCE_COLLISION",
     "TRANSLATOR_SOURCE_READ_FAILED", "ORIGINAL_STAGE_LAYOUT_UNSUPPORTED",
+    "ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING", "ORIGINAL_NAME_INDEX_TABLE_MISSING",
+    "ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED", "ORIGINAL_NAME_INDEX_INVALID",
+    "ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING", "ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID",
     "ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED",
 ))
 class BridgeError(ValueError):
@@ -44,22 +47,24 @@ class BridgeError(ValueError):
 
 def original_names_and_registers(program,name_indices):
     common=program.get("m_CommonParameters")
-    if not isinstance(common,dict) or not isinstance(name_indices,list):
-        raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
+    if not isinstance(common,dict):
+        raise BridgeError("ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING")
+    if not isinstance(name_indices,list):
+        raise BridgeError("ORIGINAL_NAME_INDEX_TABLE_MISSING")
     names={}
     for pair in name_indices:
         if not isinstance(pair,(tuple,list)) or len(pair)!=2:
-            raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
+            raise BridgeError("ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED")
         name,index=pair
         if type(index) is not int or type(name) is not str or index in names or not IDENT.fullmatch(name):
-            raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
+            raise BridgeError("ORIGINAL_NAME_INDEX_INVALID")
         names[index]=name
     raw=common.get("m_TextureParams")
-    if type(raw) is not list: raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
+    if type(raw) is not list: raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING")
     textures,samplers={},{}
     for row in raw:
         if not isinstance(row,dict) or not {"m_Index","m_NameIndex","m_SamplerIndex"}<=set(row):
-            raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
+            raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID")
         t,n,s=row["m_Index"],row["m_NameIndex"],row["m_SamplerIndex"]
         if type(t) is not int or t<0 or t in textures or n not in names:
             raise BridgeError("SOURCE_TEXTURE_MAPPING_UNRESOLVED")
