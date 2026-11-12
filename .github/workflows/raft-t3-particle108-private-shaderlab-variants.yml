@@ -310,5 +310,9 @@ jobs:
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
-          rm -rf -- "$GITHUB_WORKSPACE/gt-private-particle-unity"
+          # Unity game-ci writes some Library/Temp files as root inside
+          # the Docker mount; remove the *literal* disposable project as
+          # runner sudo, never the originals or a guessed path.
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-particle-unity"
           rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json" "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json" "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json" "$RUNNER_TEMP/t3-private-provisional-routed-safe.json"
