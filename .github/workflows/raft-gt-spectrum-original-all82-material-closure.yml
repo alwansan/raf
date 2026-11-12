@@ -1,0 +1,81 @@
+name: GT 82-owner original Spectrum Material to Shader PPtr closure
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_spectrum_all82_original_material_closure.py
+      - tests/test_gt_spectrum_all82_original_material_closure.py
+      - .github/workflows/raft-gt-spectrum-original-all82-material-closure.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-original-82-materials:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Verify 82 owner exact target classifier and 1556 Material synthetic negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_spectrum_all82_original_material_closure.py tests/test_gt_spectrum_all82_original_material_closure.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_all82_original_material_closure.py -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gt-spectrum-all82-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+      - name: Install pinned original owner reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Verify each original owner SHA and all original 1556 Material shader pointers
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_spectrum_all82_original_material_closure \
+            --zip2 "$GITHUB_WORKSPACE/gt-spectrum-all82-zip2" \
+            --scratch "$RUNNER_TEMP/gt-spectrum-82-owner-source" \
+            --out "$RUNNER_TEMP/gt-spectrum-82-material-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-82-material-safe.json'
+          r=json.loads(p.read_text())
+          assert r['status']=='SOURCE_AUTHENTIC_SPECTRUM_82_OWNER_MATERIAL_SHADER_PPTR_CLOSURE'
+          assert r['original_serialized_owners_SHA_verified']==82
+          assert r['original_serialized_owner_bytes_SHA_verified']==819595355
+          assert r['original_material_documents_inspected']==1556
+          assert r['original_source_flag_index4']==0
+          assert r['original_shader_pathID2432_in_sharedassets0_SHA_verified'] is True
+          assert r['exact_material_references_total']==r['exact_material_references_local']+r['exact_material_references_external']
+          assert r['runtime_materials_or_Shader_Find_scanned'] is False
+          assert r['exported_Unity_GUID_or_RT_CB0_sampler_verified'] is False
+          assert r['Unity_or_Adreno_water_pixels_verified'] is False
+          assert r['git_lfs_used'] is False
+          print('GT_SPECTRUM_82_OWNER_SHADER_PPTR_SOURCE_CLOSURE_ACCEPTED owners=82 materials=1556 sourceSHA=true dynamicShaderFindUnproven=true')
+          PY
+      - name: Retain only aggregate numeric source census receipt
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-spectrum-all82-material-census
+          path: ${{ runner.temp }}/gt-spectrum-82-material-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Cleanup staged 819 MB original data after guarded source scan
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-spectrum-82-owner-source" "$RUNNER_TEMP/gt-spectrum-82-material-safe.json"
+          rm -rf -- "$GITHUB_WORKSPACE/gt-spectrum-all82-zip2"
