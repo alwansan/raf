@@ -349,6 +349,30 @@ jobs:
           PY
           fi
           exit "$result_code"
+      - name: GT repair only source-proven full PNG array importer flipbook grids with private per-file GUID backups
+        id: gt_bounded_original_array_importers
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
+          python3 -m scripts.gt_repair_array_flipbook_importers \
+            --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --backup "$RUNNER_TEMP/gt-private-original-array-importer-backups" \
+            --report "$RUNNER_TEMP/gt-real-array-meta-only-repair.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-real-array-meta-only-repair.json").read_text())
+          assert d["original_exported_asset_guids_preserved"] is True
+          assert d["source_images_or_binaries_edited"] is False
+          assert d["meta_files_outside_the_exactly_verified_array_set_changed"]==0
+          assert d["original_importer_repair_candidates_applied"]<=9
+          print("GT_REAL_SAFE_TEXTURE2DARRAY_GRID_REPAIR "+json.dumps(d,sort_keys=True))
+          PY
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -428,6 +452,7 @@ jobs:
             ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
             ${{ runner.temp }}/gt-original-array-real-flipbook-geometry.json
             ${{ runner.temp }}/gt-original-array-exact-pixel-parity.json
+            ${{ runner.temp }}/gt-real-array-meta-only-repair.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
