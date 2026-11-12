@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_PARTICLE108_ORIGINAL_4_VARIANTS_GLSLANG_SHA_PROVEN_PRIVATE_UNITY_2021_ANDROID_COMPILING_770_DUMMY_REMAIN",
+  "status": "GT_PARTICLE108_SHA_SOURCE_BINDING_FAIL_CLOSED_UNITY_CS0311_STATIC_GUARD_PASS_770_DUMMY_REMAIN",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-original-Particle108-private-unity-chat-14.md",
-  "next_action": "First check isolated original Particle108 Android Vulkan Unity ShaderVariantCollection AssetBundle run 43220728060: synthetic test + real SHA-original VSFS 4 pairs/8 glslang passed; Unity Editor step in_progress. If Unity fails, inspect first failed step and private safe JSON, fix without publishing original HLSL/bytecode/private GUIDs. If it passes, progress to exact SAME-instance original Particle108 Shader48 GUID / Material binding install in disposable full export before marking any of 770 dummy restored. Current native full APK OBB XAPK 43205543533 in progress at real Unity Editor c868093 snapshot; don't cancel/start duplicate. Zip2 SHA 15964ea8 only no LFS; keep GTK 9/28/416/50 strict gate and all source authenticity.",
+  "latest_session": "clients/GT/sessions/20261112-GT-original-particle108-Unity-CS0311-regression-chat-15.md",
+  "next_action": "Inspect newest GT Particle108 private workflow safe failure step; original sampler-resource binding still inconclusive after 43225350415, no Unity bundle success; preserve source guards and verify true shader register space. Unity C# CS0311 previously exposed by 43220728060; 5c41bf9 static regression passed in 43225350415. Full native 43205543533 remains active at real Unity Editor stage at observed 2026-11-12T13:15Z; do not duplicate/cancel. ZIP2 SHA15964ea8 only, no LFS, source parity 9/28/416/50 protected.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -420,5 +420,21 @@
       "stage_path_fix1": "a77cfc3069058d86dbcc4200478a72659f6150a3",
       "stage_path_fix2": "067a640f844fc1b751f4431760c0e8ca1d74d126"
     }
+  },
+  "proofs_20261112_chat15": {
+    "origin": "chat",
+    "real_unity_cs0311_failure_run": 43220728060,
+    "real_failure": "CS0311 ScriptableObject.CreateInstance<ShaderVariantCollection> invalid in Unity 2021",
+    "unity_editor_code_currently_uses_correct_constructor": true,
+    "synthetic_unity_constructor_guard_commit": "5c41bf9411478bb3ecb30a60c4bd4585e052856b",
+    "synthetic_guard_step_success_run": 43225350415,
+    "synthetic_guard_whole_workflow_success": false,
+    "shader_original_four_pairs_and_eight_glslang_proven": true,
+    "shader_actual_Unity_2021_bundle_proven": false,
+    "original_material_links_for_particle108_proven": false,
+    "native_active_run_snapshot": 43205543533,
+    "native_apk_obb_xapk_verified": false,
+    "remaining_post_vendor_custom_Dummy_materials": 770,
+    "session_path": "clients/GT/sessions/20261112-GT-original-particle108-Unity-CS0311-regression-chat-15.md"
   }
 }
