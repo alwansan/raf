@@ -31,7 +31,9 @@
     "real_CL_owner_device_failure_reproduced": 43263197989,
     "original_spectrum_topology_source": 41920232173,
     "water_editor_import_probe_synthetic": 43269999662,
-    "original_spectrum_private_pair_real_ci": 43273276394
+    "original_spectrum_private_pair_real_ci": 43273276394,
+    "spectrum_source_states_and_private_shaderlab_ci": 43274729958,
+    "spectrum_variant0_private_Unity_2021_trial": 43275506146
   },
   "workstreams": [
     {
@@ -205,7 +207,23 @@
         "original_spectrum_paired_glslang_source_ci": 43273276394,
         "original_spectrum_original_shaderlab_complete": false,
         "original_spectrum_unity_import_proven": false,
-        "original_spectrum_Adreno_pixels_verified": false
+        "original_spectrum_Adreno_pixels_verified": false,
+        "original_spectrum_private_source_render_states": 7,
+        "original_spectrum_distinct_render_states": 7,
+        "original_spectrum_serialized_property_count": 6,
+        "original_spectrum_serialized_texture_property_count": 2,
+        "original_spectrum_source_original_property_types": {
+          "float": 3,
+          "vector": 1,
+          "texture": 2,
+          "color": 0,
+          "range": 0
+        },
+        "original_spectrum_structural_private_shaderlab_candidates": 2,
+        "original_spectrum_structural_private_shaderlab_passes": 14,
+        "original_spectrum_private_shaderlab_real_zip2_CI": 43274729958,
+        "original_spectrum_private_unity2021_trial_run": 43275506146,
+        "original_spectrum_private_unity2021_trial_status_at_last_check": "queued_no_Editor_compile_result_yet"
       },
       "source_verified": "two_original_pass_Foam_stage_packet_experimental",
       "export_verified": false,
@@ -213,14 +231,15 @@
       "packaged": false,
       "device_verified": false,
       "status": "blocked_water_render",
-      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.; implemented read-only Editor import probe for exact 7 Spectrum vs 2 Foam Pass counts, detects one-pass dummy and duplicate/traversing asset paths; synthetic CSharp tests passed.; Real authenticated ZIP2 original Spectrum paired-stage Vulkan1.1 CI 43273276394 SUCCESS: 7/7 passes, 14 source VS/FS pairs, 28/28 compiled stage variants, 13 distinct original stage translations, all scratch-private.",
-      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).; actual Unity Editor 2021.3.45f2 import probe has not run on a new native candidate; source and GUID/Material parity still unverified.; Original 7-pass ShaderLab render states, source-authentic property/keyword selection, sampler/CB0/Material original GUID binding, Unity2021 actual Shader import and Adreno pixels remain unproven.",
-      "next_action": "NEXT: reconstruct private source-faithful 7pass Spectrum ShaderLab with original 7 states + original Shader Property table + two keyword variant branches, compile with Unity2021, THEN same-instance exported Material/GUID/RT binder, then device test; also fix Foam 2passes. Refuse inferred sampler or renderer states.",
+      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.; implemented read-only Editor import probe for exact 7 Spectrum vs 2 Foam Pass counts, detects one-pass dummy and duplicate/traversing asset paths; synthetic CSharp tests passed.; Real authenticated ZIP2 original Spectrum paired-stage Vulkan1.1 CI 43273276394 SUCCESS: 7/7 passes, 14 source VS/FS pairs, 28/28 compiled stage variants, 13 distinct original stage translations, all scratch-private.; Authenticated 7 distinct original render states and 6 original Shader properties (2 texture/3 float/1 vector) via ZIP2; privately assembled 2 seven-pass ShaderLab STRUCTURAL source candidates (14 total pass envelopes) preserving 28 original stage references; real CI 43274729958 SUCCESS, no game asset install.",
+      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).; actual Unity Editor 2021.3.45f2 import probe has not run on a new native candidate; source and GUID/Material parity still unverified.; Original 7-pass ShaderLab render states, source-authentic property/keyword selection, sampler/CB0/Material original GUID binding, Unity2021 actual Shader import and Adreno pixels remain unproven.; Still two isolated compile-only candidates rather than one original runtime keyword-routed Shader; Unity2021 Android Vulkan private import running or queued, and actual Material/RT/CB/Sampler identity plus phone rendering remain unverified.",
+      "next_action": "Read real Unity private Spectrum variant0 build 43275506146, analyze first importer/compiled shader error; fix via original source-verified bindings, then test variant1 and exact one ShaderLab keyword route, Unity game original Material/GUID/RT integration, and device pixels. Do not treat two isolated candidates as runtime keyword selection.",
       "evidence": [
         43263197989,
         41920232173,
         43269999662,
-        43273276394
+        43273276394,
+        43274729958
       ]
     },
     {
@@ -357,13 +376,15 @@
     {
       "id": "M2",
       "status": "blocked",
-      "action_ar": "نجح Spectrum source-auth 7Pass/14 pairs/28 Vulkan stage compile في CI 43273276394، والمتبقي ShaderLab الأصلي، 7 حالات رسم، keyword/sampler/Material/GUID وأصل Foam 2pass داخل Unity ثم الهاتف",
+      "action_ar": "تم توثيق 7 حالات رسم أصلية، 6 خصائص (2 textures) وتركيب مرشحين منفصلين من ShaderLab (7 Pass لكل واحد) CI 43274729958. تجربة Unity Editor Android Vulkan للمرشح الأول بدأت 43275506146، وما زال الربط الأصلي والـkeywords على الهاتف غير مثبتين.",
       "gate": "Real Unity import of exactly original 7 Spectrum passes and 2 Foam passes, original Shader GUID and Material/RenderTexture bindings, no invalid pass calls on a new device session; no placeholders or guesswork; record Unity Editor GT_WATER_IMPORTED_PASS_DIAGNOSTIC from a new post-probe build, then verify original material and device pixels; 28 source Vulkan stage-pair compiles alone do NOT satisfy original ShaderLab/material or GPU acceptance",
       "evidence": [
         43263197989,
         41920232173,
         43269999662,
-        43273276394
+        43273276394,
+        43274729958,
+        43275506146
       ]
     },
     {
@@ -395,6 +416,7 @@
     }
   ],
   "next_session_sequence": [
+    "Inspect spectrum variant0 isolated real Unity Editor 2021 Android Vulkan trial 43275506146: the source-only success 43274729958 is NOT Unity success. If the trial fails, inspect safe job step and fix actual ShaderLab sampler/resource/CB source issue before game Material install.",
     "On next native full build examine GT_WATER_IMPORTED_PASS_DIAGNOSTIC family=spectrum/foam_global; synthetic source CSharp CI 43269999662 passed but no Unity Editor/Adreno execution verified yet.",
     "Read clients/GT/RESTORATION_PLAN_AR.md + RESTORATION_PLAN.json + RESTORE_AR.md + state.json + newest session; verify SHA HEAD and running GitHub Actions before writes.",
     "Do not trust old status fields whose run timestamps predate an observed SUCCESS/FAIL; update one workstream and matching evidence, then run validation.",
