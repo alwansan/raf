@@ -65,8 +65,8 @@ class ExactBC3FlipbookParityTests(unittest.TestCase):
                 image=assets/f"array-{i}.png"
                 Image.new("RGBA",(4,4),(255,0,0,255)).save(image)
                 (assets/f"array-{i}.png.meta").write_text(
-                    f"guid: {guid}\\nTextureImporter:\\n  textureShape: 4\\n"
-                    "  flipbookRows: 1\\n  flipbookColumns: 1\\n")
+                    f"guid: {guid}\nTextureImporter:\n  textureShape: 4\n"
+                    "  flipbookRows: 1\n  flipbookColumns: 1\n")
                 if i==8:
                     data_path=None
                     stream_size=0
