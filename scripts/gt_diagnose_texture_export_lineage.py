@@ -18,8 +18,11 @@ from scripts.verify_exported_material_texture_links import (
     BUILTIN, GUID, IMAGES, ZERO, GuardError, material_docs, pointer, read, texenv,
 )
 
-TRACE_CLASSES={28:"texture2d",84:"texture2darray",89:"cubemap",
-               117:"texture3d",187:"texture2darray"}
+# Only the Unity Texture2D/Cubemap ClassIDs are interpreted in this
+# diagnostic. Other AssetRipper native texture-like ClassIDs are deliberately
+# labeled numerically rather than guessed from incomplete type databases.
+TRACE_CLASSES={28:"texture2d",84:"class84",89:"cubemap",
+               117:"class117",187:"class187"}
 FID_CLASSES={2800000:"texture2d",8900000:"cubemap"}
 SHAPES={"1":"2d", "2":"cubemap", "3":"other"}
 TRACE_HEX=re.compile(r"[a-fA-F0-9]{32}\Z")
