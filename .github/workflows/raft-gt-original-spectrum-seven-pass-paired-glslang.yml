@@ -378,7 +378,10 @@ jobs:
             exit 2
           fi
           log="$RUNNER_TEMP/gt-spectrum-final-console.log"
-          gh api -H 'Accept: application/vnd.github+json' \
+          # GitHub Actions final job logs legitimately contain ANSI sequences.
+          # gh CLI blocks those by default; accept them into a PRIVATE file
+          # and let the strict parser inspect it without echoing original HLSL.
+          gh api --allow-escape-sequences -H 'Accept: application/vnd.github+json' \
             "repos/$GITHUB_REPOSITORY/actions/jobs/$job_id/logs" > "$log"
           python3 -m scripts.gt_spectrum_ci_console_gate --console "$log"
           rm -f -- "$log"
