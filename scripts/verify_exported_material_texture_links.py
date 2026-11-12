@@ -100,7 +100,12 @@ def is_texture(path,meta,fid):
         if not re.search(r"(?m)^TextureImporter:[ \t]*$",meta):
             return False
         if fid==2800000:
-            return True
+            # An imported array is never a plain Texture2D sub-object.
+            # Missing textureShape remains valid for legacy flat-2D
+            # AssetRipper imports, but an explicitly array-shaped importer
+            # must not accept a falsified fileID=2800000 reference.
+            shapes=re.findall(r"(?m)^[ \t]*textureShape:[ \t]*(\d+)[ \t]*$",meta)
+            return len(shapes)<=1 and (not shapes or int(shapes[0]) in (0,1))
         if fid==18700000 and path.suffix.lower()==".png":
             # The *separate* GT source-authoritative gate verifies the real
             # original 9 class187 identities, 28 Material refs and exact
