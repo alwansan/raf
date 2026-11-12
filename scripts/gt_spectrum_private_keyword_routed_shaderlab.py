@@ -143,7 +143,10 @@ def compose(parsed, packet, first, second, *, isolator=isolate,
     keyword, maps=selector(parsed,packet,variant_reader=variant_reader)
     isolated=[]
     for candidate in (first,second):
-        changed, proof=isolator(candidate)
+        # The original second permutation has a source-origin VS/FS cb4
+        # structure alias collision in Unity; apply only reversible PRIVATE
+        # symbol isolation, never modify source DXBC, register(bN) or Material.
+        changed, proof=isolator(candidate, stage_uniform_blocks=True)
         if (type(proof) is not dict
                 or proof.get("private_original_HLSL_register_annotations_identical") is not True
                 or proof.get("other_private_ShaderLab_text_bytewise_reversible") is not True):
@@ -188,6 +191,8 @@ def compose(parsed, packet, first, second, *, isolator=isolate,
         "source_original_keyword_index_name_authenticated":True,
         "source_original_VS_FS_pair_hashes_authenticated":True,
         "private_seven_program_keyword_pragmas":7,
+        "private_uniform_block_stage_aliases_compile_only":True,
+        "original_HLSL_register_bindings_unchanged":True,
         "original_shader_keyword_flags_pragma_scope_proven":False,
         "original_material_keyword_runtime_selection_parity_proven":False,
         "original_Material_sampler_CB0_RT_GUID_binding_proven":False,
