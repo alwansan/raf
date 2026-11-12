@@ -43,8 +43,8 @@ class ExportedTextureLinks(unittest.TestCase):
         def chunk(kind,data):
             return (struct.pack(">I",len(data))+kind+data+
                     struct.pack(">I",zlib.crc32(kind+data)&0xffffffff))
-        row=b"\\x00"+(b"\\xff\\x00\\x00\\xff"*width)
-        image=(b"\\x89PNG\\r\\n\\x1a\\n"+
+        row=b"\x00"+(b"\xff\x00\x00\xff"*width)
+        image=(b"\x89PNG\r\n\x1a\n"+
                chunk(b"IHDR",struct.pack(">IIBBBBB",width,height,8,6,0,0,0))+
                chunk(b"IDAT",zlib.compress(row*height))+
                chunk(b"IEND",b""))
@@ -54,9 +54,9 @@ class ExportedTextureLinks(unittest.TestCase):
         self.array_png()
         self.ptr("{fileID: 18700000, guid: "+B+", type: 3}")
         meta=self.assets/"t.png.meta"
-        meta.write_text("guid: "+B+"\\nTextureImporter:\\n"
-                        "  textureShape: 4\\n  flipbookRows: 1\\n"
-                        "  flipbookColumns: 2\\n")
+        meta.write_text("guid: "+B+"\nTextureImporter:\n"
+                        "  textureShape: 4\n  flipbookRows: 1\n"
+                        "  flipbookColumns: 2\n")
         self.assertEqual(mod.audit(self.root)["resolved_local_texture_refs"],1)
         # A 2D image target never validates the original class187 fileID.
         meta.write_text(meta.read_text().replace("textureShape: 4","textureShape: 1"))
@@ -72,9 +72,9 @@ class ExportedTextureLinks(unittest.TestCase):
         self.array_png(width=7)
         self.ptr("{fileID: 18700000, guid: "+B+", type: 3}")
         meta=self.assets/"t.png.meta"
-        meta.write_text("guid: "+B+"\\nTextureImporter:\\n"
-                        "  textureShape: 4\\n  flipbookRows: 1\\n"
-                        "  flipbookColumns: 2\\n")
+        meta.write_text("guid: "+B+"\nTextureImporter:\n"
+                        "  textureShape: 4\n  flipbookRows: 1\n"
+                        "  flipbookColumns: 2\n")
         self.reject("reference_target_not_verified_texture")
         self.array_png()
         self.ptr("{fileID: 18700001, guid: "+B+", type: 3}")
