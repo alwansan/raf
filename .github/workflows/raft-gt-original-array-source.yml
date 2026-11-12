@@ -164,6 +164,13 @@ jobs:
                       item["source_mipmap_count"] if item["source_mipmap_count"] is not None
                       else "missing" for item in src.values()).items())),
                   "original_stream_total_bytes":sum(v["original_stream_size"] or 0 for v in src.values()),
+                  "original_stream_sizes_by_depth":[
+                      {"depth":key[0],"source_bytes":key[1],"count":count}
+                      for key,count in sorted(Counter(
+                      (v["depth"],v["original_stream_size"]) for v in src.values()).items())],
+                  "original_array_objects_with_zero_stream_size":sum(v["original_stream_size"]==0 for v in src.values()),
+                  "original_layers_with_nonempty_stream_size":sum(v["depth"] for v in src.values() if v["original_stream_size"]),
+                  "original_layers_with_zero_stream_size":sum(v["depth"] for v in src.values() if v["original_stream_size"]==0),
                   "original_stream_size_fields_present":sum(v["original_stream_size"] is not None for v in src.values()),
                   "original_stream_offsets_present":sum(v["original_stream_offset_present"] for v in src.values()),
                   "original_stream_payload_SHA256_checked_in_this_job":False})
