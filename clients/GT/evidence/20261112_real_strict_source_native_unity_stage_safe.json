@@ -1,0 +1,28 @@
+{
+  "schema": "GT_CHAT13_REAL_SOURCE_AND_NATIVE_20261112_SAFE_V1",
+  "GT_role": "independent",
+  "write_branch": "feature/android-native-port",
+  "source_branch": "zip2",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "no_git_LFS": true,
+  "real_strict_source_run": 43207734641,
+  "real_strict_source_step_success": true,
+  "real_source": {
+    "arrays": 9,
+    "class187_material_links": 28,
+    "cross_owner_texture_links": 416,
+    "BC3_original_topmip_pixel_layers": 50,
+    "original_source_empty_layers": 2,
+    "source_modified": false
+  },
+  "native_composite_gate_commit": "d734b7c71327747b80808cc307bdc5c41154c432",
+  "native_source_only_guard_CI": 43217299422,
+  "active_full_native_run": 43205543533,
+  "active_native_sha": "c86809380ab1e5b95ccf65e30074422a7e744c05",
+  "active_native_current_step": "Unity Editor 2021.3.45f2 Android import and compile",
+  "unity_native_compile_pass": false,
+  "APK_OBB_XAPK_confirmed": false,
+  "android_GPU_proven": false,
+  "original_lower_BC3_mips_proven": false,
+  "custom_dummy_material_documents_remaining": 770
+}

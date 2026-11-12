@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_REAL_416_EXT_AND_50_BC3_PROVEN_NATIVE_STRICT_AND_SOURCE_FINAL_FAIL_CLOSED_GATES_MERGED",
+  "status": "GT_REAL_ZIP2_9_28_416_50_STRICT_FINAL_GATE_PASSED_NATIVE_UNITY_EDITOR_IMPORT_IN_PROGRESS",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-graphics-native-integrity-chat-12.md",
-  "next_action": "First check native 43205543533 (immutable c868093 snapshot, currently after source Array/Builtin shader and scene-owned stage) for W1 Depth Copy and subsequent Unity/OBB/XAPK earliest failing step. Strict latest native 416 external links +50 BC3 gates merged on e687c0c4 and source fail-closed 9+28+416+50 in 666ca2d7, CI synthetic 43207734504 PASS, full ZIP2 real strict 43207734641 in progress. Do not call real new strict pass until job step succeeds. Source-only 43206535542 and 43206535361 PASS. Do not launch second native while 43205543533 still active; no T1-T5 coordination; no LFS; no fake GPU/XAPK claim.",
+  "latest_session": "sessions/20261112-GT-real-strict-export-unity-native-chat-13.md",
+  "next_action": "New exact real ZIP2 same-instance strict receipt 9 arrays+28 refs+416 external+50 BC3 TOP MIP PASSED at 43207734641 (step success and GT_REAL_ORIGINAL_TEXTURE_INTEGRITY_FINAL marker); new native code d734b7c7 uses combined strict gate, source-only 43217299422 PASS. Current full native run 43205543533 at earlier c8680938 currently in real Unity Editor 2021.3.45f2 import & compile; do NOT cancel or start duplicate. Inspect first failure or APK OBB XAPK delivery; later owner-authorized full run must include f3ea4bea,e687c0c4,d734b7c7 new strict source gates. ZIP2 SHA pin 15964ea8, no Git LFS; source game files untouched; Android GPU/BC3 lower mips not proven. 770 dummy custom Material docs remain.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -387,8 +387,16 @@
     "source_critical_original_graphics_workflow_commit": "666ca2d7798c8ad97407aa88b4da50db2779d525",
     "source_critical_negative_unit_CI": 43207734504,
     "source_critical_real_zip2_trial_CI": 43207734641,
-    "source_critical_real_zip2_trial_verified": false,
+    "source_critical_real_zip2_trial_verified": true,
     "current_native_43205543533_running": true,
-    "native_50_BC3_and_416_external_gate_in_this_current_native_run": false
+    "native_50_BC3_and_416_external_gate_in_this_current_native_run": false,
+    "source_critical_real_zip2_final_step_success": true,
+    "source_critical_real_zip2_log_marker": "GT_REAL_ORIGINAL_TEXTURE_INTEGRITY_FINAL",
+    "native_combined_critical_gate_commit": "d734b7c71327747b80808cc307bdc5c41154c432",
+    "native_combined_critical_gate_CI_source_only": 43217299422,
+    "native_43205543533_real_Unity_Editor_stage_started": true,
+    "native_43205543533_real_Unity_Editor_stage_passed": false,
+    "native_43205543533_XAPK_produced": false,
+    "latest_native_strict_source_gates_in_current_43205543533": false
   }
 }
