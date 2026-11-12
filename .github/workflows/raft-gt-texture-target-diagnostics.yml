@@ -26,6 +26,8 @@ on:
       - tests/test_gt_compare_original_bc3_to_flipbook_pixels.py
       - scripts/gt_repair_array_flipbook_importers.py
       - tests/test_gt_repair_array_flipbook_importers.py
+      - scripts/gt_validate_bc3_array_slice_order.py
+      - tests/test_gt_validate_bc3_array_slice_order.py
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -64,3 +66,4 @@ jobs:
           python3 -m pip install --disable-pip-version-check Pillow==11.3.0
           python3 -m unittest discover -s tests -p test_gt_compare_original_bc3_to_flipbook_pixels.py -v
           python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
+          python3 -m unittest discover -s tests -p test_gt_validate_bc3_array_slice_order.py -v
