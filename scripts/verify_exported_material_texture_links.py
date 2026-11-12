@@ -9,8 +9,9 @@ import re
 
 HEADER=re.compile(r"(?m)^---[ \t]+!u!(\d+)[ \t]+&(-?\d+)(?:[ \t]+stripped)?[ \t]*$")
 GUID=re.compile(r"(?m)^guid:[ \t]*([a-fA-F0-9]{32})[ \t]*$")
-TEXENV=re.compile(r"(?m)^    m_TexEnvs:[ \t]*(\[\])?[ \t]*$")
+TEXENV=re.compile(r"(?m)^    m_TexEnvs:[ \t]*(\[\]|\{\})?[ \t]*$")
 SLOT=re.compile(r"(?m)^    - [^:\r\n]+:[ \t]*$")
+SLOT_MAPPING=re.compile(r"(?m)^      [^:\r\n{}]+:[ \t]*$")
 TEX=re.compile(r"(?m)^        m_Texture:[ \t]*(\{[^\r\n{}]*\})[ \t]*$")
 NEXT=re.compile(r"(?m)^    m_[A-Za-z][A-Za-z0-9_]*:")
 IMAGES={".png",".jpg",".jpeg",".tga",".psd",".tif",".tiff",".bmp",".exr",".hdr",".dds",".ktx",".pvr",".webp"}
@@ -69,10 +70,16 @@ def texenv(doc):
     region=doc[m.end():next_field.start() if next_field else len(doc)]
     # An explicit empty array cannot have nested slot data; accepting such
     # malformed YAML silently hides broken material-to-texture references.
-    if m[1]=="[]":
+    if m[1] in ("[]", "{}"):
         if region.strip(): fail("unexpected_texenv_content")
         return []
-    slots=list(SLOT.finditer(region))
+    sequence_slots=list(SLOT.finditer(region))
+    mapping_slots=list(SLOT_MAPPING.finditer(region))
+    # AssetRipper may preserve native Unity m_TexEnvs as a YAML mapping
+    # rather than Unity's sequence-of-single-key-maps. Both are genuine;
+    # reject mixed or malformed layouts instead of assuming absent textures.
+    if sequence_slots and mapping_slots: fail("mixed_texenv_slot_encodings")
+    slots=sequence_slots if sequence_slots else mapping_slots
     if not slots: fail("empty_or_unrecognized_texenv")
     if region[:slots[0].start()].strip(): fail("unrecognized_texenv_prefix")
     result=[]
