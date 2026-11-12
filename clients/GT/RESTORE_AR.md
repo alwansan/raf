@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-26 — Shader.Find Spectrum الأصلي داخل Managed IL ومسار المتغير المحلي
+
+[CI43300958608 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300958608): المصدر SHA الحقيقي `Assembly-CSharp.dll` (3,211,776B)، 19,118 method/491,490 IL و81 typed Shader.Find، **واحد فقط يقرأ اسم Spectrum الأصلي مباشرة**. [43301684794 SUCCESS](https://github.com/alwansan/raf/actions/runs/43301684794): النتيجة مخزنة في Shader local. [43302914466 SUCCESS](https://github.com/alwansan/raf/actions/runs/43302914466): تتبع CFG محافظ **35 instruction/3 branch/1 local load على مسار ممكن دون overwrite**، لكن الاستعمال التالي غير مصنّف، لا Material/CB0/RT أو Pixel proof. 82 owner / 1556 Material direct Spectrum PPtr=0 من Chat25. **أول متابعة:** اقرأ [جلسة Chat26](sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md)، أثبت consuming IL وMaterial/Graphics/RT بدليل source-typed دون أسماء أصلية؛ لا تنسب النجاح إلى تشغيل اللعبة. ZIP2 read-only بلا LFS.
+
+---
+
 ## GT / Chat-25 — Spectrum Global Keyword ثبت مختبرياً؛ 82/82 Materials بلا رابط مباشر
 
 [43297804472 SUCCESS](https://github.com/alwansan/raf/actions/runs/43297804472): Unity2021 Android Vulkan synthetic global=flag0/local=flag1. [43299461114 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299461114): original private Spectrum unified 7Pass/index4=global isOverridable، Material synthetic off→on→off، 2 variants، 14,484B، strict final GLSL=0. [43299180998 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299180998): 40 original sharedassets SHA، 1,392 Materials، **0** direct Spectrum PPtr. [43300053045 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300053045): **82/82 original owners SHA، جميع 1,556 Material، 0 direct Shader PathID2432 PPtrs**. هذا لا ينفي dynamic Material/Shader.Find بالruntime. **ابدأ من [جلسة Chat25](sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md) وخطة P06/M2؛ التالي original typed managed IL Shader.Find→Material→Renderer**، لا تختلق GUID أو تعلن نجاح ماء Adreno؛ ZIP2 للقراءة فقط، بلا LFS.

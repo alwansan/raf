@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-26 — original Spectrum managed Shader.Find typed IL lineage
+
+Verified real ZIP2 SHA Assembly-CSharp.dll 3,211,776B/Shader owner 115,978,112B: CI43300958608 compiled methods 19,118; IL instructions 491,490; typed UnityEngine.Shader.Find=81, exact direct source Spectrum literal→typed Shader.Find=1. CI43301684794 exact Find result immediately stored in typed Shader local, not direct Shader field/Material ctor. CI43302914466 branch-aware local CFG SUCCESS after initial C# naming failure 43302598498 fix 100a4ae5: 35 reachable instructions / 3 branch nodes / 1 original Shader local load on SOME path before overwrite, unclassified consumer, no typed direct Material ctor. Next prove typed consuming IL across operands and runtime Material/Graphics/RT/CB0/Sampler; game Shader.Find execution + Adreno pixels unproven. Original 82 owners/1556 Materials have 0 direct Spectrum PPtrs (CI43300053045). No source modifications or Git LFS.
+
+---
+
 ## GT Chat-25 — original Spectrum keyword/global + no serialized Material links
 
 Verified CI43297804472 real Unity2021 synthetic flag parity global=0/local=1, keywordSpace isOverridable true/false respectively, 6217B Android Vulkan bundle, zero final console errors. CI43299461114 original-index4-source-private single Spectrum 7pass/2 variants Unity2021: private Shader global keywordSpace overridable, synthetic Material off/on/off true, bundle14484B, Shader/GLSL final errors0. CI43299180998 SHA ZIP2 40 sharedassets/1392 original Materials -> Spectrum PathID2432 PPtrs=0. CI43300053045 SHA ZIP2 all 82 serialized owners/819595355B, ALL1556 Material docs -> Spectrum direct PPtrs=0. Thus no serialized Original Material GUID to guess. Dynamic managed Shader.Find/Material constructor/runtime shader selection remains unproven; source-authentic typed managed IL next (possibly reuse T2 Foam IL analysis). P06/M2 blocked, Adreno water pixels unproven; ZIP2 immutable SHA15964ea8, no LFS.

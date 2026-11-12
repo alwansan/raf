@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT25_SPECTRUM_ORIGINAL_GLOBAL_KEYWORD_PRIVATE_MATERIAL_TOGGLE_ACCEPTED_ALL82_MATERIAL_PTR_ZERO_DYNAMIC_MANAGED_BINDING_PENDING",
+  "status": "GT_CHAT26_SPECTRUM_SOURCE_MANAGED_SHADERFIND_EXACT_ONE_LOCAL_CFG_ONE_UNCLASSIFIED_RUNTIME_MATERIAL_GPU_BLOCKED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md",
-  "next_action": "GT Chat25: CI43297804472 synthetic Unity2021 global flag0/local1; CI43299461114 original private unified Spectrum 7Pass with global isOverridable + synthetic Material off/on/off, 14484B and 0 final GLSL; original SHA 40/1392 Materials CI43299180998 and full82/1556 Materials CI43300053045 have zero direct original Spectrum PathID2432 shader PPtrs. NEXT: source-authentic managed typed Shader.Find/Material constructor/Renderer and source-original CB/Sampler/RT; full-game Adreno water pending. Native CI43299084397 older snapshot in reconstruct last checked. No LFS, no source GUID edits.",
+  "latest_session": "clients/GT/sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md",
+  "next_action": "Read Chat26. CI43300958608 source managed SHA typed Spectrum Shader.Find literal exactly one; CI43301684794 immediate typed Shader local; CI43302914466 35 reachable IL/3 branch/1 source local load on some path, unclassified consumer. No 82 serialized Material references. NEXT one source local typed consuming IL/stack/interop path, then Material/RT/CB0/Sampler and Adreno pixels. Never invent original Material GUID, no LFS. Full native CI43299084397 on older snapshot was running.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -797,5 +797,30 @@
     "original_Adreno_water_pixels_verified": false,
     "LFS_used": false,
     "original_shader_material_meta_GUID_modified": false
+  },
+  "proofs_20261112_chat26": {
+    "session_path": "clients/GT/sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_assembly_original_bytes": 3211776,
+    "shader_original_owner_bytes": 115978112,
+    "real_typed_shaderfind_CI": 43300958608,
+    "managed_method_bodies_scanned": 19118,
+    "managed_IL_instructions_scanned": 491490,
+    "total_typed_UnityEngine_Shader_Find_calls": 81,
+    "original_Spectrum_name_exact_direct_typed_ShaderFind_calls": 1,
+    "original_result_immediate_Shader_local_CI": 43301684794,
+    "source_local_linear_CI": 43302209121,
+    "branch_aware_Cfg_failure_initial_CI": 43302598498,
+    "branch_aware_Cfg_fixed_commit": "100a4ae5c13cf94d5f501bb3e67a8a9c08e2f222",
+    "branch_aware_Cfg_real_CI": 43302914466,
+    "source_local_cfg_reachable_instructions": 35,
+    "source_local_cfg_branch_nodes": 3,
+    "source_local_cfg_load_before_overwrite_on_some_path": 1,
+    "source_local_cfg_unclassified_consumer_count": 1,
+    "original_Material_binding_proven": false,
+    "Adreno_water_pixels_verified": false,
+    "original_Shader_Find_executed_in_Unity": false,
+    "original_data_modified": false,
+    "LFS_used": false
   }
 }

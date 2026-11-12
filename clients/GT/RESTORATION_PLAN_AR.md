@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-26 — Spectrum Shader.Find Managed، دليل مصدر لا GPU
+
+[43300958608](https://github.com/alwansan/raf/actions/runs/43300958608): 19,118 compiled methods، 81 typed Shader.Find، أصل `Assembly-CSharp.dll` SHA، واستدعاء مباشر واحد باسم Spectrum الحقيقي. [43301684794](https://github.com/alwansan/raf/actions/runs/43301684794) أظهر Shader local بعد Find؛ [43302914466](https://github.com/alwansan/raf/actions/runs/43302914466) تابع 35 IL و3 branches مع load محلي واحد ممكن قبل overwrite، **consumer غير مصنف**. هذا يوجّه الاستعادة إلى managed runtime لا GUID Material ثابت؛ لم تُثبت Material ctor/RT/Sampler/CB0 أو Pixels. **P06/M2 لا يزالان blocked**. [جلسة Chat26](sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md).
+
+---
+
 ## GT Chat-25 — فحص Global Keyword وMaterial أصلي لجميع 82 owner
 
 Unity2021.3.45f2 Android Vulkan [43297804472 SUCCESS](https://github.com/alwansan/raf/actions/runs/43297804472): synthetic Global serialized flag **0** وLocal **1**؛ Spectrum ZIP2 original `m_KeywordFlags[4]=0`. [43299461114 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299461114) أكد private unified Spectrum 7Pass و2Variants وGlobal keywordSpace مع Material synthetic OFF→ON→OFF وBundle **14,484B** وصفر أخطاء Console نهائية. فحص [43299180998 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299180998) وجد 0 Spectrum PPtr بين 1,392 Material في 40 sharedassets؛ الفحص الأوسع [43300053045 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300053045) أثبت **82 original owners / 1,556 original Materials / 0 direct PPtrs إلى Spectrum**. معنى ذلك: لا مادة أصلية ثابتة مرتبطة به في serialized owners، **وليس** دليلاً بأن Shader.Find أو Material الديناميكي غير مستخدم. **P06/M2 ما زال blocked** حتى typed managed Shader.Find→Material→Renderer وCB0/Sampler/RT وPhone Adreno. [جلسة Chat25](sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md).

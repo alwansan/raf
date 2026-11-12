@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-26 — المسار البرمجي الأصلي للماء Spectrum
+
+[43300958608 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300958608): SHA-authentic source Spectrum m_Name مرتبط بـtyped UnityEngine.Shader.Find واحد في الأصل من أصل 81 استدعاء (19,118 method)، ليس مجرد تخمين بالاسم. [43301684794 SUCCESS](https://github.com/alwansan/raf/actions/runs/43301684794): Find يخزّن Shader local. [43302914466 SUCCESS](https://github.com/alwansan/raf/actions/runs/43302914466): source CIL CFG يبلغ 35 instruction/3 branches/1 load ممكن للمتغير المحلي قبل overwrite، الاستخدام التالي ما يزال **غير مصنف**؛ لا إثبات Material/Renderer أو ماء Adreno. جميع 1,556 original Material كانت 0 direct Spectrum refs في Chat25؛ لا تُنشئ GUID غير أصلي.
+
+---
+
 ## GT Chat-25 — Spectrum Global Keyword + أصل Material كامل (12 نوفمبر)
 
 [43297804472 SUCCESS](https://github.com/alwansan/raf/actions/runs/43297804472) طابق flag0 مع global من Unity2021 synthetic control؛ [43299461114 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299461114) أكد 7Pass/2 private variants، `keywordSpace.isOverridable=true` وتجربة Material OFF→ON→OFF، Bundle 14,484B، Final log 0 errors. [43299180998 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299180998): 1,392 مادة في 40 sharedassets، 0 links؛ [43300053045 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300053045): **1,556/1,556 Material بجميع 82 serialized owners و0 direct Spectrum Shader PPtrs**. لا يُفترض GUID لمادة مجهولة؛ قد يوجد إنشاء/اختيار ديناميكي داخل الشيفرة الأصلية، غير مثبت. الخطوة التالية typed managed Shader.Find/Material/Renderer (المصدر SHA) قبل دمج Shader الماء داخل لعبة Android؛ P06/M2 blocked.
