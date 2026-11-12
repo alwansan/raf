@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-25 — Spectrum Global Keyword + أصل Material كامل (12 نوفمبر)
+
+[43297804472 SUCCESS](https://github.com/alwansan/raf/actions/runs/43297804472) طابق flag0 مع global من Unity2021 synthetic control؛ [43299461114 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299461114) أكد 7Pass/2 private variants، `keywordSpace.isOverridable=true` وتجربة Material OFF→ON→OFF، Bundle 14,484B، Final log 0 errors. [43299180998 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299180998): 1,392 مادة في 40 sharedassets، 0 links؛ [43300053045 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300053045): **1,556/1,556 Material بجميع 82 serialized owners و0 direct Spectrum Shader PPtrs**. لا يُفترض GUID لمادة مجهولة؛ قد يوجد إنشاء/اختيار ديناميكي داخل الشيفرة الأصلية، غير مثبت. الخطوة التالية typed managed Shader.Find/Material/Renderer (المصدر SHA) قبل دمج Shader الماء داخل لعبة Android؛ P06/M2 blocked.
+
+---
+
 ## GT Chat-24 — تقدم محدد مُثبت على Spectrum (12 نوفمبر 2026)
 
 [43296468683 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): ميتاداتا source-authentic `m_KeywordFlags` أصلية من ZIP2؛ 5 بايت محاذية للـ5 أسماء، index4 قيمته **0**، خمس قيم متساوية؛ source SHA-owner verified و7Pass original. فاحص واختبارات وWorkflow جديدة على `feature/android-native-port`. هذه **ليست** استعادة Material أو ماء GPU: معنى Global/Local Flag byte ما زال يحتاج اختباراً مستقلاً، ولا تغيير للشيدر الأصلي أو GUID. المرحلة P06/M2 معلقة. [جلسة Chat24](sessions/20261112-GT-source-original-keyword-flags-chat-24.md).

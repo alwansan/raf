@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-25 — original Spectrum keyword/global + no serialized Material links
+
+Verified CI43297804472 real Unity2021 synthetic flag parity global=0/local=1, keywordSpace isOverridable true/false respectively, 6217B Android Vulkan bundle, zero final console errors. CI43299461114 original-index4-source-private single Spectrum 7pass/2 variants Unity2021: private Shader global keywordSpace overridable, synthetic Material off/on/off true, bundle14484B, Shader/GLSL final errors0. CI43299180998 SHA ZIP2 40 sharedassets/1392 original Materials -> Spectrum PathID2432 PPtrs=0. CI43300053045 SHA ZIP2 all 82 serialized owners/819595355B, ALL1556 Material docs -> Spectrum direct PPtrs=0. Thus no serialized Original Material GUID to guess. Dynamic managed Shader.Find/Material constructor/runtime shader selection remains unproven; source-authentic typed managed IL next (possibly reuse T2 Foam IL analysis). P06/M2 blocked, Adreno water pixels unproven; ZIP2 immutable SHA15964ea8, no LFS.
+
+---
+
 ## GT Chat-24 — Source-authenticated Spectrum Keyword Flags (2026-11-12)
 
 Confirmed GitHub [43296468683 SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): ZIP2@15964ea8 SHA-original sharedassets0.assets 115978112B, exact original Spectrum 7Pass/5 keyword names/5 uint8 flags, original m_KeywordFlags[4]=0, all five bytes identical, flag bytes SHA256 8855508aade16ec573d21e6a485dfd0a7624085c1a14b5ecdd6485de0c6839a4. Added source-only attestor + 9 synthetic tests + CI. Flag byte meaning for global/local Unity2021 remains UNPROVEN, same original Material keyword selection/Shader GUID/sampler/CB0/RT and Adreno pixels UNPROVEN. Continue Chat24 then independent Unity keyword-space flag semantics and source Material PPtrs. No Git LFS or source/game asset mutation.

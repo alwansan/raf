@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-25 — Spectrum Global Keyword ثبت مختبرياً؛ 82/82 Materials بلا رابط مباشر
+
+[43297804472 SUCCESS](https://github.com/alwansan/raf/actions/runs/43297804472): Unity2021 Android Vulkan synthetic global=flag0/local=flag1. [43299461114 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299461114): original private Spectrum unified 7Pass/index4=global isOverridable، Material synthetic off→on→off، 2 variants، 14,484B، strict final GLSL=0. [43299180998 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299180998): 40 original sharedassets SHA، 1,392 Materials، **0** direct Spectrum PPtr. [43300053045 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300053045): **82/82 original owners SHA، جميع 1,556 Material، 0 direct Shader PathID2432 PPtrs**. هذا لا ينفي dynamic Material/Shader.Find بالruntime. **ابدأ من [جلسة Chat25](sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md) وخطة P06/M2؛ التالي original typed managed IL Shader.Find→Material→Renderer**، لا تختلق GUID أو تعلن نجاح ماء Adreno؛ ZIP2 للقراءة فقط، بلا LFS.
+
+---
+
 > GT Chat24 scope-control follow-up: isolated synthetic Unity2021 Android Vulkan global vs local pragma control CI [43297804472](https://github.com/alwansan/raf/actions/runs/43297804472) launched at commit 682cbea730daf4af33c29f066639d84e14609839. It measures Shader.keywordSpace.isOverridable and serialized synthetic m_KeywordFlags, comparing to source-authentic Spectrum index4 byte 0. At this snapshot Unity compilation in progress; neither CI acceptance nor original game keyword scope established. If CI fails inspect real Unity and independent finalized console jobs; do not conflate bundle success with shader source or Adreno parity.
 
 ## GT / Chat-24 — 2026-11-12: original Spectrum index4 Flag Byte، مصدر حقيقي مثبت

@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT24_SPECTRUM_INDEX4_SOURCE_FLAG_BYTE_ZERO_AUTHENTICATED_SCOPE_MATERIAL_PIXEL_PENDING",
+  "status": "GT_CHAT25_SPECTRUM_ORIGINAL_GLOBAL_KEYWORD_PRIVATE_MATERIAL_TOGGLE_ACCEPTED_ALL82_MATERIAL_PTR_ZERO_DYNAMIC_MANAGED_BINDING_PENDING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-source-original-keyword-flags-chat-24.md",
-  "next_action": "GT Chat24: CI43296468683 real ZIP2 115978112B original owner read, exact m_KeywordNames=5 + m_KeywordFlags=5, original [4]=0, 5/5 equal, source SHA provenance. Next distinguish flag0 global/local semantics via version-matched Unity2021 controlled serialization/keywordSpace; then source owner Material->Shader PPtr, export GUID, sampler/CB0/RT, runtime branch and Adreno pixels. No production installs or LFS. Synthetic Unity2021 local/global flag correlation CI43297804472 was IN PROGRESS at snapshot; inspect result and finalized console first.",
+  "latest_session": "clients/GT/sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md",
+  "next_action": "GT Chat25: CI43297804472 synthetic Unity2021 global flag0/local1; CI43299461114 original private unified Spectrum 7Pass with global isOverridable + synthetic Material off/on/off, 14484B and 0 final GLSL; original SHA 40/1392 Materials CI43299180998 and full82/1556 Materials CI43300053045 have zero direct original Spectrum PathID2432 shader PPtrs. NEXT: source-authentic managed typed Shader.Find/Material constructor/Renderer and source-original CB/Sampler/RT; full-game Adreno water pending. Native CI43299084397 older snapshot in reconstruct last checked. No LFS, no source GUID edits.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -771,5 +771,31 @@
     "LFS_used": false,
     "synthetic_Unity2021_global_local_scope_CI_trial": 43297804472,
     "synthetic_Unity2021_global_local_scope_CI_success_unverified": true
+  },
+  "proofs_20261112_chat25": {
+    "session_path": "clients/GT/sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Unity2021_synthetic_scope_real_CI": 43297804472,
+    "synthetic_global_flag_byte": 0,
+    "synthetic_local_flag_byte": 1,
+    "synthetic_keyword_isOverridable_global": true,
+    "synthetic_keyword_isOverridable_local": false,
+    "Unity2021_original_private_unified_material_toggle_CI": 43299461114,
+    "private_spectrum_unified_passes": 7,
+    "private_ShaderVariantCollection_count": 2,
+    "private_material_keyword_global_overridable": true,
+    "private_material_off_on_off_verified": true,
+    "private_bundle_bytes": 14484,
+    "strict_final_console_errors": 0,
+    "original_40owner_material_CI": 43299180998,
+    "original_40owner_materials_scanned": 1392,
+    "original_40owner_Spectrum_shader_PPtrs": 0,
+    "original_all82_owner_material_CI": 43300053045,
+    "original_82owner_materials_scanned": 1556,
+    "original_all82_direct_Spectrum_shader_PPtrs": 0,
+    "original_runtime_ShaderFind_or_Material_link_proven": false,
+    "original_Adreno_water_pixels_verified": false,
+    "LFS_used": false,
+    "original_shader_material_meta_GUID_modified": false
   }
 }

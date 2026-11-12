@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-25 — فحص Global Keyword وMaterial أصلي لجميع 82 owner
+
+Unity2021.3.45f2 Android Vulkan [43297804472 SUCCESS](https://github.com/alwansan/raf/actions/runs/43297804472): synthetic Global serialized flag **0** وLocal **1**؛ Spectrum ZIP2 original `m_KeywordFlags[4]=0`. [43299461114 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299461114) أكد private unified Spectrum 7Pass و2Variants وGlobal keywordSpace مع Material synthetic OFF→ON→OFF وBundle **14,484B** وصفر أخطاء Console نهائية. فحص [43299180998 SUCCESS](https://github.com/alwansan/raf/actions/runs/43299180998) وجد 0 Spectrum PPtr بين 1,392 Material في 40 sharedassets؛ الفحص الأوسع [43300053045 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300053045) أثبت **82 original owners / 1,556 original Materials / 0 direct PPtrs إلى Spectrum**. معنى ذلك: لا مادة أصلية ثابتة مرتبطة به في serialized owners، **وليس** دليلاً بأن Shader.Find أو Material الديناميكي غير مستخدم. **P06/M2 ما زال blocked** حتى typed managed Shader.Find→Material→Renderer وCB0/Sampler/RT وPhone Adreno. [جلسة Chat25](sessions/20261112-GT-original-spectrum-material-82-owner-closure-chat-25.md).
+
+---
+
 > GT Chat24 scope-control follow-up: isolated synthetic Unity2021 Android Vulkan global vs local pragma control CI [43297804472](https://github.com/alwansan/raf/actions/runs/43297804472) launched at commit 682cbea730daf4af33c29f066639d84e14609839. It measures Shader.keywordSpace.isOverridable and serialized synthetic m_KeywordFlags, comparing to source-authentic Spectrum index4 byte 0. At this snapshot Unity compilation in progress; neither CI acceptance nor original game keyword scope established. If CI fails inspect real Unity and independent finalized console jobs; do not conflate bundle success with shader source or Adreno parity.
 
 ## تحديث GT Chat-24 — Original Spectrum Keyword Flags مثبتة من المصدر
