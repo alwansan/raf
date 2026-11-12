@@ -95,6 +95,31 @@ class PrivateSpectrumUnityProjectTests(unittest.TestCase):
             self.assertFalse(r["original_keyword_selection_or_Material_binding_proven"])
             self.assertFalse(r["Unity_Editor_2021_compilation_proven"])
 
+    def test_isolated_variant1_source_faithfully_selected_in_private_project(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            candidate,manifest,editor,project,out=self._files(tmp)
+            candidate1=candidate.with_name("original-spectrum-7pass-variant-1.shader")
+            candidate1.write_bytes(candidate.read_bytes())
+            report=prepare(candidate1,manifest,editor,project,out,
+                           diagnostic_stage_buffers=False,variant_index=1)
+            self.assertEqual(report["provisional_isolated_keyword_variant_index"],1)
+            self.assertEqual((project/"GTPrivateSpectrumVariant.txt").read_text(),"1\\n")
+            self.assertEqual(candidate1.read_bytes(),
+                             (project/"Assets/GTPrivateSpectrum.shader").read_bytes())
+            self.assertFalse(report["original_keyword_selection_or_Material_binding_proven"])
+            self.assertFalse(report["Adreno_pixels_verified"])
+
+    def test_variant_selection_must_not_mismatch_candidate_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            candidate,manifest,editor,project,out=self._files(tmp)
+            with self.assertRaisesRegex(ValueError, "candidate_does_not_match_variant"):
+                prepare(candidate,manifest,editor,project,out,variant_index=1)
+            self.assertFalse(project.exists())
+        with tempfile.TemporaryDirectory() as tmp:
+            candidate,manifest,editor,project,out=self._files(tmp)
+            with self.assertRaisesRegex(ValueError, "invalid_private_variant_selector"):
+                prepare(candidate,manifest,editor,project,out,variant_index=True)
+
     def test_phone_floor_6_is_not_original_7(self):
         with tempfile.TemporaryDirectory() as tmp:
             candidate,manifest,editor,project,out=self._files(tmp,source=shader(6))
