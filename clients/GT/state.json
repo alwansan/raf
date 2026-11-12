@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_AUTHENTIC_416_EXTERNAL_TEXTURE_AND_50_BC3_TOPMIPS_VERIFIED_NATIVE_STRICT_GATES_MERGED_NEW_NATIVE_BUILD_IN_PROGRESS",
+  "status": "GT_REAL_416_EXT_AND_50_BC3_PROVEN_NATIVE_STRICT_AND_SOURCE_FINAL_FAIL_CLOSED_GATES_MERGED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "sessions/20261112-GT-graphics-native-integrity-chat-12.md",
-  "next_action": "Check native 43205543533 (started at c8680938, immutable, no latest f3ea/e687 gates) after W1 Depth Copy ZIP2 source repair 3e8a3bff & regression 393b2f5a. If failure, inspect earliest failing step/log and fix; if delivery success, verify actual APK OBB XAPK artifacts and limits. New GT branch f3ea4bea strict source-authentic all 416 cross-owner external textures and e687c0c4 all 50 original BC3 top-mip pixels before Unity; synthetic source CI43206535542 and 43206535361 PASS; MUST validate in latest full native run before calling merged. No T1-T5 waits; ZIP2 SHA only no LFS; original GPU and lower mips not proven, 770 dummy material docs.",
+  "next_action": "First check native 43205543533 (immutable c868093 snapshot, currently after source Array/Builtin shader and scene-owned stage) for W1 Depth Copy and subsequent Unity/OBB/XAPK earliest failing step. Strict latest native 416 external links +50 BC3 gates merged on e687c0c4 and source fail-closed 9+28+416+50 in 666ca2d7, CI synthetic 43207734504 PASS, full ZIP2 real strict 43207734641 in progress. Do not call real new strict pass until job step succeeds. Source-only 43206535542 and 43206535361 PASS. Do not launch second native while 43205543533 still active; no T1-T5 coordination; no LFS; no fake GPU/XAPK claim.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -382,6 +382,13 @@
     "actual_native_XAPK_produced": false,
     "unity_2021_import_proven": false,
     "android_GPU_pixels_verified": false,
-    "original_lower_BC3_mip_equivalence_proven": false
+    "original_lower_BC3_mip_equivalence_proven": false,
+    "source_critical_original_graphics_code_commit": "7242726f3d857c61ce88ee4575d652a96430d01c",
+    "source_critical_original_graphics_workflow_commit": "666ca2d7798c8ad97407aa88b4da50db2779d525",
+    "source_critical_negative_unit_CI": 43207734504,
+    "source_critical_real_zip2_trial_CI": 43207734641,
+    "source_critical_real_zip2_trial_verified": false,
+    "current_native_43205543533_running": true,
+    "native_50_BC3_and_416_external_gate_in_this_current_native_run": false
   }
 }
