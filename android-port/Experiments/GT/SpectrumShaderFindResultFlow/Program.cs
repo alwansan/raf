@@ -174,6 +174,11 @@ internal static class Program
         int localLinearLoads=0,localLinearReturns=0,localLinearMaterialCtors=0;
         int localLinearShaderFieldStores=0,localLinearOneShaderCallArgs=0;
         int localLinearOtherConsumers=0,localLinearBoundaries=0,localOverwrites=0;
+        int localCfgReachedInstructionCount=0,localCfgBranchNodes=0;
+        int localCfgLoadsWithNoOverwriteOnSomePath=0;
+        int localCfgShaderReturnCandidates=0,localCfgMaterialCtorCandidates=0;
+        int localCfgFieldStoreCandidates=0,localCfgTypedShaderCallCandidates=0;
+        int localCfgUnclassifiedConsumers=0,localCfgOverwriteBoundaries=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -209,6 +214,72 @@ internal static class Program
                     localLinearOneShaderCallArgs++;
                 else localLinearOtherConsumers++;
             }
+            // A conservative intra-procedural graph traversal. Branches and
+            // loops are traversed, but local overwrites terminate that path.
+            // Source-local loads are CANDIDATES, never runtime truth: CFG
+            // path-existence is not proof of actual execution or SSA parity.
+            var instructionIndex=il.Select((instruction,index)=>(instruction,index))
+                .ToDictionary(x=>x.instruction,x=>x.index);
+            var pending=new Stack<int>();
+            var visited=new HashSet<int>();
+            var recordedLoads=new HashSet<int>();
+            pending.Push(store+1);
+            void Enqueue(Instruction? instruction)
+            {
+                if(instruction is null || !instructionIndex.TryGetValue(instruction,out int index))
+                    throw new InvalidOperationException("source_CIL_branch_target_unverified");
+                pending.Push(index);
+            }
+            while(pending.Count>0)
+            {
+                int i=pending.Pop();
+                if(i<0 || i>=il.Count || !visited.Add(i))continue;
+                if(visited.Count>16384)
+                    throw new InvalidOperationException("source_CIL_Cfg_probe_budget_exceeded");
+                var inst=il[i];
+                if(TypedShaderLocal(source.Method,inst,false)==source.Local)
+                {
+                    localCfgOverwriteBoundaries++;
+                    continue;
+                }
+                var localLoad=TypedShaderLocal(source.Method,inst,true)==source.Local;
+                if(localLoad && recordedLoads.Add(i))
+                {
+                    localCfgLoadsWithNoOverwriteOnSomePath++;
+                    int next=SkipNops(il,i+1);
+                    if(next>=il.Count)localCfgUnclassifiedConsumers++;
+                    else if(MaterialShaderCtor(il[next]))localCfgMaterialCtorCandidates++;
+                    else if(il[next].OpCode.Code==Code.Ret &&
+                            source.Method.ReturnType.FullName==ShaderType)
+                        localCfgShaderReturnCandidates++;
+                    else if(il[next].OpCode.Code is Code.Stfld or Code.Stsfld &&
+                            ResolvedShaderField(il[next],source.Method.Module) is not null)
+                        localCfgFieldStoreCandidates++;
+                    else if(TypedSingleShaderCall(il[next]))
+                        localCfgTypedShaderCallCandidates++;
+                    else localCfgUnclassifiedConsumers++;
+                }
+                var flow=inst.OpCode.FlowControl;
+                if(flow is FlowControl.Return or FlowControl.Throw)continue;
+                if(flow==FlowControl.Branch)
+                {
+                    localCfgBranchNodes++;
+                    Enqueue(inst.Operand as Instruction);
+                    continue;
+                }
+                if(flow==FlowControl.Cond_Branch)
+                {
+                    localCfgBranchNodes++;
+                    if(inst.Operand is Instruction target) Enqueue(target);
+                    else if(inst.Operand is Instruction[] targets)
+                    {
+                        foreach(var targetOfSwitch in targets)Enqueue(targetOfSwitch);
+                    }
+                    else throw new InvalidOperationException("source_conditional_branch_target_invalid");
+                }
+                if(i+1<il.Count)pending.Push(i+1);
+            }
+            localCfgReachedInstructionCount=visited.Count;
         }
         return new {
             status="SOURCE_AUTHENTIC_SPECTRUM_TYPED_SHADERFIND_RESULT_FLOW_CENSUS",
@@ -240,6 +311,16 @@ internal static class Program
             source_local_linear_control_flow_boundaries=localLinearBoundaries,
             source_local_linear_overwrites=localOverwrites,
             source_local_interprocedural_runtime_equivalence_proven=false,
+            source_local_cfg_reached_instructions=localCfgReachedInstructionCount,
+            source_local_cfg_branch_nodes=localCfgBranchNodes,
+            source_local_cfg_loads_before_overwrite_on_some_path=localCfgLoadsWithNoOverwriteOnSomePath,
+            source_local_cfg_shader_return_candidates=localCfgShaderReturnCandidates,
+            source_local_cfg_Material_ctor_candidates=localCfgMaterialCtorCandidates,
+            source_local_cfg_typed_Shader_field_store_candidates=localCfgFieldStoreCandidates,
+            source_local_cfg_typed_Shader_argument_call_candidates=localCfgTypedShaderCallCandidates,
+            source_local_cfg_unclassified_uses=localCfgUnclassifiedConsumers,
+            source_local_cfg_local_overwrite_boundaries=localCfgOverwriteBoundaries,
+            source_local_cfg_path_existence_only_not_runtime_proof=true,
             exact_original_Material_renderer_assignment_verified=false,
             original_CB0_sampler_RT_binding_verified=false,
             actual_Unity_Shader_Find_executed=false,
