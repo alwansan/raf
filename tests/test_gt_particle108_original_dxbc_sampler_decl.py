@@ -4,7 +4,7 @@ import unittest
 
 from scripts.gt_particle108_original_dxbc_sampler_decl import (
     dxbc_sampler_declarations, _original_serialized_sampler_set,
-    _hlsl_sampler_set, SourceError,
+    _hlsl_sampler_set, _original_inline_sampler_parameters, SourceError,
 )
 
 def shader_chunk(dwords,kind=b"SHDR"):
@@ -77,6 +77,34 @@ class OriginalDxbcSamplerTests(unittest.TestCase):
         self.assertEqual(_original_serialized_sampler_set(program),{2})
         with self.assertRaisesRegex(SourceError,"SOURCE_ORIGINAL_STAGE_METADATA_INVALID"):
             _original_serialized_sampler_set({"m_CommonParameters":{"m_TextureParams":[{"m_SamplerIndex":"2"}]}})
+
+    def test_real_unity_samplers_table_empty_distinct_from_absent(self):
+        absent={"m_CommonParameters":{"m_TextureParams":[]}}
+        present={"m_CommonParameters":{"m_Samplers":[]}}
+        self.assertIsNone(_original_inline_sampler_parameters(absent))
+        self.assertEqual(_original_inline_sampler_parameters(present),{})
+
+    def test_inline_sampler_uint_state_and_bindpoint_accepted_but_not_decoded(self):
+        source={"m_CommonParameters":{"m_Samplers":[
+            {"sampler":0,"bindPoint":0},{"sampler":4294967295,"bindPoint":17}]}}
+        self.assertEqual(_original_inline_sampler_parameters(source),
+                         {0:0,17:4294967295})
+
+    def test_reject_invalid_inline_sampler_slot_state_or_duplicates(self):
+        wrong=[
+            [{"sampler":0,"bindPoint":1},{"sampler":4,"bindPoint":1}],
+            [{"sampler":-1,"bindPoint":1}],
+            [{"sampler":0,"bindPoint":4096}],
+            [{"sampler":0,"bindPoint":True}],
+            [{"sampler":"0","bindPoint":0}],
+            [{"sampler":0}],
+            [0],
+        ]
+        for rows in wrong:
+            with self.subTest(rows=rows):
+                source={"m_CommonParameters":{"m_Samplers":rows}}
+                with self.assertRaisesRegex(SourceError,"SOURCE_ORIGINAL_STAGE_METADATA_INVALID"):
+                    _original_inline_sampler_parameters(source)
 
     def test_translated_sampler_census_refuses_unbound_or_duplicate(self):
         valid="SamplerState samples : register(s1); SamplerState samp : register(s2);"
