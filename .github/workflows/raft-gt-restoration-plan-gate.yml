@@ -1,0 +1,46 @@
+name: GT restoration plan source/device evidence consistency
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - clients/GT/RESTORATION_PLAN.json
+      - clients/GT/RESTORATION_PLAN_AR.md
+      - clients/GT/state.json
+      - clients/GT/RESTORE_AR.md
+      - clients/GT/MEMORY.md
+      - clients/GT/SUMMARY_AR.md
+      - clients/GT/evidence/20261112_cl_device_graphics_failure_receipt.json
+      - scripts/gt_restoration_plan_check.py
+      - tests/test_gt_restoration_plan_check.py
+      - .github/workflows/raft-gt-restoration-plan-gate.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-backed-plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Prevent incomplete or contradictory graphics restoration claims
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_restoration_plan_check.py' -v
+          python3 -m scripts.gt_restoration_plan_check
+      - name: Require next-session entrypoint and living plan links
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("clients/GT/RESTORE_AR.md").read_text(encoding="utf-8")
+          s=Path("clients/GT/SUMMARY_AR.md").read_text(encoding="utf-8")
+          m=Path("clients/GT/MEMORY.md").read_text(encoding="utf-8")
+          assert "RESTORATION_PLAN_AR.md" in p and "RESTORATION_PLAN.json" in p
+          assert "RESTORATION_PLAN_AR.md" in s
+          assert "RESTORATION_PLAN_AR.md" in m
+          print("GT_RESTORE_SESSION_ENTRYPOINT_LINKS_VALID=true")
+          PY
