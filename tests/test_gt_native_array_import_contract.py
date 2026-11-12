@@ -41,7 +41,14 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("scripts.gt_verify_original_array_material_refs",stage)
         self.assertIn("zip2-original/RAFT_FILE_MANIFEST.tsv",stage)
         self.assertIn("$RUNNER_TEMP/private-export-lineage.json",stage)
-        self.assertIn("$RUNNER_TEMP/input/Raft_Data",stage)
+        # Mesh inlining mutates the export input. Class187 provenance must come
+        # from immutable, SHA-verified ZIP2 serialized owners, never that input.
+        self.assertIn('scripts.gt_stage_serialized_owners',stage)
+        self.assertIn('--source zip2-original/Raft/Raft_Data',stage)
+        self.assertIn('original_owners="$RUNNER_TEMP/gt-native-pristine-serialized-owners"',stage)
+        self.assertEqual(stage.count('--original-source "$original_owners"'),3)
+        self.assertNotIn('--original-source "$RUNNER_TEMP/input/Raft_Data"',stage)
+        self.assertIn('rm -rf -- "$original_owners"',stage)
         self.assertIn("exact_original_class187_array_material_refs']==28",stage)
         self.assertIn("distinct_source_array_guids_referenced_by_materials']==9",stage)
         self.assertIn("original_exported_asset_guids_preserved",stage)
