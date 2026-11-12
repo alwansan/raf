@@ -16,6 +16,8 @@ on:
       - 'tests/test_t3_particle108_private_keyword_routed_shaderlab.py'
       - 'scripts/gt_particle108_unity_bindings.py'
       - 'tests/test_gt_particle108_unity_bindings.py'
+      - 'scripts/gt_particle108_original_dxbc_sampler_decl.py'
+      - 'tests/test_gt_particle108_original_dxbc_sampler_decl.py'
       - 'scripts/gt_particle108_private_unity_project.py'
       - 'tests/test_gt_particle108_private_unity_project.py'
       - 'android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs'
@@ -57,6 +59,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_keyword_routed_shaderlab.py' -v
           python3 -m py_compile scripts/gt_particle108_unity_bindings.py
           python3 -m unittest discover -s tests -p test_gt_particle108_unity_bindings.py -v
+          python3 -m py_compile scripts/gt_particle108_original_dxbc_sampler_decl.py tests/test_gt_particle108_original_dxbc_sampler_decl.py
+          python3 -m unittest discover -s tests -p test_gt_particle108_original_dxbc_sampler_decl.py -v
           python3 -m py_compile scripts/gt_particle108_private_unity_project.py
           python3 -m unittest discover -s tests -p 'test_gt_particle108_private_unity_project.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -259,6 +263,29 @@ jobs:
           print("GT_PARTICLE108_SOURCE_RDEF_ACCEPTED_PRESENCE_ONLY_IS_NOT_BINDING_PROOF="+
                 json.dumps({"status":report["status"],"counts":report["counts"]},sort_keys=True))
           PY
+      - name: GT compare original DXBC SHDR sampler declarations with Unity serial sampler rows (source-only)
+        run: |
+          set -euo pipefail
+          # Source compiler instructions, not missing RDEF, prove exact
+          # dcl_sampler slots. Read only; report counts, never original values.
+          python3 -m scripts.gt_particle108_original_dxbc_sampler_decl \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-source "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/gt-private-original-sampler-dcl-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,json
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-private-original-sampler-dcl-safe.json").read_text())
+          assert r["status"]=="GT_ORIGINAL_PARTICLE108_EIGHT_SOURCE_DXBC_SAMPLER_DECL_CENSUS"
+          assert r["source_original_RDEF_absent_stages"]==8
+          assert r["source_original_four_VSFS_keyword_pairs_SHA_authenticated"] is True
+          assert r["counts"]["source_original_DXBC_stages_examined"]==8
+          assert r["original_DXBC_resource_names_register_numbers_shader_values_or_GUIDs_published"] is False
+          assert r["sampler_to_original_Material_texture_binding_proven"] is False
+          print("GT_REAL_PARTICLE108_DXBC_SAMPLER_CENSUS "+
+                json.dumps({"counts":r["counts"],"original_material_binding_proven":False},sort_keys=True))
+          PY
       - name: GT source-authenticate original Shader48 texture sampler symbols and stage-isolate cbuffer declarations
         run: |
           set -euo pipefail
@@ -395,6 +422,7 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-particle108-staging-safe.json
             ${{ runner.temp }}/gt-particle108-source-bound-safe.json
+            ${{ runner.temp }}/gt-private-original-sampler-dcl-safe.json
             gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json
           if-no-files-found: ignore
           retention-days: 7
