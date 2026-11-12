@@ -23,12 +23,18 @@ STAGE_BRANCH = re.compile(
     r'(^[ \t]*#else[ \t]*\n[ \t]*#error[ \t]+Unsupported_stage[ \t]*\n[ \t]*#endif[ \t]*\n?)'
 )
 BUFFER = re.compile(r'\bcb\d+_\d+_m\d+\b')
-RESTORE = re.compile(r'\bGT_PRIVATE_(?:VS|PS)_(cb\d+_\d+_m\d+)\b')
+# The second original HLSL permutation can expose cb4_struct with different
+# VS/FS layouts. The optional compile-only alias guard renames both explicit
+# cbN_struct types and cbN names; numeric register(bN) remains untouched.
+UNIFORM_BLOCK = re.compile(r'\b(?:cb\d+_struct|cb\d+)\b')
+RESTORE = re.compile(r'\bGT_PRIVATE_(?:VS|PS)_(cb\d+_\d+_m\d+|cb\d+_struct|cb\d+)\b')
 ANNOTATION = re.compile(r'\bregister\s*\([^)]*\)')
 MAX_SOURCE = 16*1024*1024
 
 
-def isolate(raw: str):
+def isolate(raw: str, *, stage_uniform_blocks=False):
+    if type(stage_uniform_blocks) is not bool:
+        raise ValueError("private_spectrum_invalid_uniform_block_mode")
     if (type(raw) is not str or
             not 0 < len(raw.encode("utf-8")) <= MAX_SOURCE or
             "\x00" in raw or
@@ -41,13 +47,19 @@ def isolate(raw: str):
             coverage.get("subshader_pass_counts") != [PASSES] or
             coverage.get("passes_with_complete_program") != PASSES):
         raise ValueError("private_Spectrum_exact_seven_stage_branches_required")
-    counts={"vertex":0,"fragment":0}
+    counts={"vertex":0,"fragment":0,
+            "vertex_block":0,"fragment_block":0}
     def stage_split(m):
         vs, fs = m.group(2), m.group(4)
         counts["vertex"] += len(BUFFER.findall(vs))
         counts["fragment"] += len(BUFFER.findall(fs))
         a=BUFFER.sub(lambda x:"GT_PRIVATE_VS_"+x.group(),vs)
         b=BUFFER.sub(lambda x:"GT_PRIVATE_PS_"+x.group(),fs)
+        if stage_uniform_blocks:
+            counts["vertex_block"] += len(UNIFORM_BLOCK.findall(a))
+            counts["fragment_block"] += len(UNIFORM_BLOCK.findall(b))
+            a=UNIFORM_BLOCK.sub(lambda x:"GT_PRIVATE_VS_"+x.group(),a)
+            b=UNIFORM_BLOCK.sub(lambda x:"GT_PRIVATE_PS_"+x.group(),b)
         return m.group(1)+a+m.group(3)+b+m.group(5)
     candidate=STAGE_BRANCH.sub(stage_split,raw)
     undone=RESTORE.sub(lambda m:m.group(1),candidate)
@@ -60,6 +72,9 @@ def isolate(raw: str):
     return candidate, {
         "private_vertex_cbuffer_identifiers_disambiguated":counts["vertex"],
         "private_fragment_cbuffer_identifiers_disambiguated":counts["fragment"],
+        "private_uniform_block_stage_alias_mode":stage_uniform_blocks,
+        "private_vertex_uniform_block_identifiers_disambiguated":counts["vertex_block"],
+        "private_fragment_uniform_block_identifiers_disambiguated":counts["fragment_block"],
         "private_original_HLSL_register_annotations_identical":True,
         "other_private_ShaderLab_text_bytewise_reversible":True,
         "original_game_shader_or_Material_modified":False,
