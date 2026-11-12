@@ -158,6 +158,16 @@ jobs:
           (Path(os.environ["RUNNER_TEMP"])/"gt-real-export-aggregate.json").write_text(json.dumps(d,indent=2,sort_keys=True)+"\n")
           print("GT_REAL_FULL_ORIGINAL_EXPORT "+json.dumps(d,sort_keys=True))
           PY
+      - name: GT classify all actual exporter texture GUID targets without exposing original identities
+        id: gt_export_texture_target_classes
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_diagnose_export_texture_targets.py -v
+          python3 -m scripts.gt_diagnose_export_texture_targets \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-export-all-texture-target-categories.json"
       - name: Capture original Material-to-Texture export GUID guard results including exact failure code
         id: gt_export_links
         continue-on-error: true
@@ -274,6 +284,7 @@ jobs:
             ${{ runner.temp }}/gt-real-export-aggregate.json
             ${{ runner.temp }}/gt-export-failure-safe.json
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
+            ${{ runner.temp }}/gt-export-all-texture-target-categories.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
