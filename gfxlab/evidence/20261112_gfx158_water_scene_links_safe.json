@@ -1,0 +1,41 @@
+{
+  "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "scenes": 40,
+  "catalog_scripts": 3827,
+  "water_candidate_scenes": 13,
+  "counts": {
+    "components": 64772,
+    "resolved_catalog": 64771,
+    "water_name_candidates": 134,
+    "null_script_pointer": 1
+  },
+  "families": {
+    "surface_and_waves": {
+      "components": 0,
+      "scenes": 0
+    },
+    "ripple_and_wake": {
+      "components": 0,
+      "scenes": 0
+    },
+    "buoyancy_and_queries": {
+      "components": 2,
+      "scenes": 2
+    },
+    "foam_and_particles": {
+      "components": 0,
+      "scenes": 0
+    },
+    "shore_and_local_water": {
+      "components": 80,
+      "scenes": 4
+    },
+    "underwater_and_composite": {
+      "components": 6,
+      "scenes": 1
+    }
+  },
+  "runtime_verified": false,
+  "run": 43146220517,
+  "artifact": 13912145895
+}
