@@ -61,7 +61,7 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("seen.Count != 9",self.guard)
         self.assertIn("originalPixelLayers != 50",self.guard)
         self.assertIn("throw new BuildFailedException",self.guard)
-        self.assertIn("Unity_Editor",self.workflow)
+        self.assertIn("Unity Editor 2021.3.45f2 Android import and compile",self.workflow)
         self.assertIn("scripts.gt_write_unity_array_import_contract",self.workflow)
         self.assertIn("test -s \"$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json\"",self.workflow)
 
