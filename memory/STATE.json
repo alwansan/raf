@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-water-prefab-links-119",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-prefab-links-119.md",
+  "latest_session": "20261112-GFX-chat-water-fft-textures-120",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-fft-textures-120.md",
   "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Requires native owner build containing T1 FFT dispatch trace and Android capture; pair original calls then verify exact ComputeShader registration and GPU outputs.",
-  "build_requested": false,
+  "next_experiment": "Verify signed GFX160 Vulkan ARM64 APK and owner FFT storage-image readbacks; retain original native registration gap.",
+  "build_requested": true,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3380,6 +3380,13 @@
       "package_available": false,
       "failed_gate": "native runtime staging parity",
       "next_input": "new verified native package with T1 trace and phone raft-*.jsonl"
+    },
+    "fft_mini": {
+      "run": 43148270805,
+      "source_commit": "5b5cdab0589413d1992c866e54aa4be8f9d94d67",
+      "scope": "synthetic radix-2 inverse FFT over RGFloat",
+      "apk_verified": false,
+      "device_verified": false
     }
   }
 }

@@ -9,3 +9,5 @@
 أكمل من [نتيجة GFX158](../../memory/sessions/20261112-GFX-chat-water-scene-links-118.md) وجرد prefabs والتسجيل الفعلي على Android.
 
 نتيجة [GFX159](../../memory/sessions/20261112-GFX-chat-water-prefab-links-119.md) مكتملة للمصدر. المرحلة مفتوحة عند بناء Android اللعبة المتتبّع واختباره.
+
+استأنف من [جلسة GFX160](../../memory/sessions/20261112-GFX-chat-water-fft-textures-120.md) وتحقق من APK وسجل الهاتف.
