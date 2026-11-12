@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-24 — 2026-11-12: original Spectrum index4 Flag Byte، مصدر حقيقي مثبت
+
+[CI43296468683 SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): ZIP2 SHA original 115,978,112B owner، 5 original `m_KeywordFlags` مع 5 أسماء، `m_KeywordFlags[4]=0` وجميع القيم الخمس متساوية؛ 7 Spectrum Passes ثابتة؛ دون Git LFS. نفذت `scripts/gt_spectrum_original_keyword_flags.py` واختبارات الحالات السلبية. **فحص بيانات مصدر فقط**؛ لم يثبت ربط bit0 بمعنى global/local ولا اختيار Material/Shader GUID/CB0/RT ولا الماء على Adreno. **اقرأ [جلسة Chat24](sessions/20261112-GT-source-original-keyword-flags-chat-24.md)، [الخطة JSON](RESTORATION_PLAN.json)، [ملخص المالك](SUMMARY_AR.md) و[state](state.json).** الخطوة القادمة: معايرة معنى Flag0 في Unity2021 بأمثلة اصطناعية، ومطابقة Original Material→Shader PathID2432، ثم الـGPU. لا تعدل Raft .meta/GUID أو ZIP2 ولا تستخدم LFS.
+
+---
+
 ## GT / Chat-23 — إنجاز جديد مؤكد: Spectrum Keyword موحّد داخل Unity Android Vulkan
 
 [CI 43288288144 — SUCCESS في المهام الثلاث](https://github.com/alwansan/raf/actions/runs/43288288144): استُعيدت بنية Shader Spectrum الأصلية من ZIP2 المثبتة SHA؛ صار **ShaderLab واحداً تجريبياً من 7 Passes و2 فرعي VS/FS لكل Pass** باستخدام Keyword index4 المثبت من المصدر. استورد Unity **2021.3.45f2** المرشح الموحّد إلى مشروع خاص، وسجل **7 Passes و2 ShaderVariantCollection variants و0 Shader errors** وبنى Android Vulkan Bundle **14,492 بايت**؛ مهمة تدقيق *السجل الكامل النهائية المستقلة* أثبتت **0 GLSL link / 0 internal variant failure / 0 shader import / 0 shader compilation errors**. ليس APK ولا جزءاً مدمجاً في Raft؛ **لا إثبات** لـglobal/local Keyword Flags الأصلية أو اختيار Keyword بواسطة Material الأصلي أو GUID/Sampler/CB0/RT ولا Pixels على Adreno.

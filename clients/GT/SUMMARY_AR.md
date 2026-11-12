@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-24 — تقدم محدد مُثبت على Spectrum (12 نوفمبر 2026)
+
+[43296468683 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): ميتاداتا source-authentic `m_KeywordFlags` أصلية من ZIP2؛ 5 بايت محاذية للـ5 أسماء، index4 قيمته **0**، خمس قيم متساوية؛ source SHA-owner verified و7Pass original. فاحص واختبارات وWorkflow جديدة على `feature/android-native-port`. هذه **ليست** استعادة Material أو ماء GPU: معنى Global/Local Flag byte ما زال يحتاج اختباراً مستقلاً، ولا تغيير للشيدر الأصلي أو GUID. المرحلة P06/M2 معلقة. [جلسة Chat24](sessions/20261112-GT-source-original-keyword-flags-chat-24.md).
+
+---
+
 **متابعة التقدم من الآن:** [الخطة العربية (ما استعيد وما تبقى والخطوات)](RESTORATION_PLAN_AR.md) · [الخطة JSON ذات الأدلة التفصيلية](RESTORATION_PLAN.json) · [آخر جلسة](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md). يحتوي السجل على P00–P11 وM0–M5، ويفصل صراحةً **الأصل الموثّق** عن **Export** و**Unity** و**حزمة Android** و**العرض المقبول على الهاتف**. هو المرجع الأحدث عندما تختلف عنه فقرات الجرد التاريخية أدناه.
 
 **إنجاز جديد مثبت 12 نوفمبر — GT / Chat-23:** [43288288144 — نجاح جميع المهام الثلاث](https://github.com/alwansan/raf/actions/runs/43288288144): اختبارات أصل ZIP2، ثم Unity 2021 Android Vulkan **لشيدر Spectrum موحّد تجريبي ب7 Passes وفرعين من البرامج الأصلية لكل Pass**، ثم تدقيق مستقل للسجل النهائي. Unity سجل 2 ShaderVariants، 0 Shader errors، Bundle خاص **14,492 بايت**، والسجل النهائي **0 GLSL link / 0 internal shader variant / 0 import / 0 compilation failures**. واصل GT الخطة من [RESTORE_AR](RESTORE_AR.md) و[جلسة Chat23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md). **لا يزال Keyword global/local flags وMaterial GUID/Sampler/CB0/RT وتشغيل Adreno الأصلي غير مثبتين؛ لم يدمج الشيدر في اللعبة.**

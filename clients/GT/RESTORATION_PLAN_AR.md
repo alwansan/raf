@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## تحديث GT Chat-24 — Original Spectrum Keyword Flags مثبتة من المصدر
+
+[CI43296468683 SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): فحص `m_KeywordFlags` الأصلي المباشر من ZIP2 SHA (115,978,112B)، وُجدت **5 Flags أصلية** تطابق **5 Keywords** و**Flag index4=0** وكلها متساوية (distinct=1)، ونجحت الاختبارات السلبية. **دليل SOURCE ONLY** وليس mapping مؤكد لمعنى global/local/overridable، ولا proof Material أو GUID/RT/CB0 أو Pixel. P06/M2 يبقيان blocked، وتبقى تجربة Unity السابقة الخاصة ذات 7Pass/2Variants/14,492B منفصلة عن اللعبة. [جلسة Chat24](sessions/20261112-GT-source-original-keyword-flags-chat-24.md).
+
+---
+
 **تاريخ التحديث:** 12 نوفمبر 2026 — GT / Chat-21.  
 **فرع الكتابة الوحيد:** `feature/android-native-port`؛ **مصدر القراءة فقط:** `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`. **ممنوع Git LFS**.  
 **سجل البيانات المهيكلة المعتمد:** [RESTORATION_PLAN.json](RESTORATION_PLAN.json) — راجع وضع كل دفعة وأدلتها قبل تعديل الحالة.  

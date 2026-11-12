@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-24 — Source-authenticated Spectrum Keyword Flags (2026-11-12)
+
+Confirmed GitHub [43296468683 SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): ZIP2@15964ea8 SHA-original sharedassets0.assets 115978112B, exact original Spectrum 7Pass/5 keyword names/5 uint8 flags, original m_KeywordFlags[4]=0, all five bytes identical, flag bytes SHA256 8855508aade16ec573d21e6a485dfd0a7624085c1a14b5ecdd6485de0c6839a4. Added source-only attestor + 9 synthetic tests + CI. Flag byte meaning for global/local Unity2021 remains UNPROVEN, same original Material keyword selection/Shader GUID/sampler/CB0/RT and Adreno pixels UNPROVEN. Continue Chat24 then independent Unity keyword-space flag semantics and source Material PPtrs. No Git LFS or source/game asset mutation.
+
+---
+
 - **هوية العامل**: GT. **فرع الكتابة الوحيد**: `feature/android-native-port`. المشروع `alwansan/raf`. المصدر الأصلي للقراءة فقط ZIP2 عند `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. لا تغيّر `.meta` أو GUID بلا تحقق وT1–T5 متوقفون بتوجيه المالك؛ لـGT حق الدمج والبناء المستقل بعد بوابات الأصالة دون انتظارهم.
 - **قرار المالك الملزم — 12 نوفمبر 2026 / المصدر بلا LFS:** لا تستخدم GT `git lfs pull` أو `git lfs fetch` أو تنزيل LFS لأي مادة أصلية. **المصدر الوحيد للحمولات الأصلية هو** [`zip2`](https://github.com/alwansan/raf/tree/zip2)، والأفضل تثبيت checkout عند SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385` للثبات؛ استخدم `RAFT_FILE_MANIFEST.tsv` و`restore_raft.sh` أو `scripts/gt_stage_serialized_owners.py` لإعادة تجميع `part-00000` وما يلي بالترتيب، ثم طابق الحجم وSHA256 *لكل ملف* قبل التحليل/الاستيراد. خزّن الحمولات المستعادة في دليل مؤقت منعزل أو cache موثّق، ولا تنسخ الأشجار المقسمة كحاويات Unity، ولا تكتب في `zip2` أو تستبدل `Raft` في فرع Android بلا هجرة مدروسة. إعداد `lfs: false` في checkout مطلوب لمنع الجلب التلقائي، لكنه **لا يعني استعمال Git LFS**. إذا تعذر جلب ZIP2 لا تنتقل إلى LFS احتياطياً؛ سجّل العائق واستأنف دفعة أخرى. سياسة GT مستقلة عن استمرار بعض إجراءات الفريق القديمة باستعمال LFS؛ لا تعدّل نطاقات T1–T5 المشتركة بلا تنسيق.
 - **المعايرة السابقة**: GFX-LAB أغلق المرحلة الأولى بستة Mesh وسبعة Material Slots، commit `1ca06009684047ef8156a939d4d2931326ad2cc7`. نتائج المختبر لا تعني أن اللعبة الكاملة دُمجت على Android.
