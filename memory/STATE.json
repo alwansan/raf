@@ -3323,12 +3323,20 @@
   "water_phase_two": {
     "status": "OPEN",
     "experiment": "GFX155",
-    "source_commit": "fd89f9b82023d4b3f7ead31ed30656b145526ccf",
+    "source_commit": "6aee6516a896c0868deac2020820890aaeb95f55",
     "native_read_sha": "467ae9fdda57275b70c3683514a25375f2a782c9",
-    "workflow_run": 43143685531,
+    "workflow_run": 43144304221,
     "apk_verified": false,
     "owner_device_verified": false,
     "original_water_restored": false,
-    "roadmap": "gfxlab/WATER_PHASE_TWO_AR.md"
+    "roadmap": "gfxlab/WATER_PHASE_TWO_AR.md",
+    "failed_initial_run": 43143685531,
+    "managed_census": {
+      "run": 43144448074,
+      "artifact": 13909839962,
+      "types_examined": 3033,
+      "water_scope_types": 228,
+      "scene_instances_verified": false
+    }
   }
 }

@@ -1,0 +1,44 @@
+{
+  "evidence": "ORIGINAL_SOURCE_METADATA_LEXICAL_CANDIDATES",
+  "assembly_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "types_examined": 3033,
+  "water_scope_types": 228,
+  "confirmed_anchor_count": 4,
+  "families": {
+    "surface_and_waves": {
+      "type_name_matches": 12,
+      "method_name_matches": 18,
+      "method_owner_types": 10
+    },
+    "ripple_and_wake": {
+      "type_name_matches": 4,
+      "method_name_matches": 40,
+      "method_owner_types": 39
+    },
+    "buoyancy_and_queries": {
+      "type_name_matches": 8,
+      "method_name_matches": 71,
+      "method_owner_types": 23
+    },
+    "foam_and_particles": {
+      "type_name_matches": 6,
+      "method_name_matches": 59,
+      "method_owner_types": 15
+    },
+    "shore_and_local_water": {
+      "type_name_matches": 9,
+      "method_name_matches": 19,
+      "method_owner_types": 9
+    },
+    "underwater_and_composite": {
+      "type_name_matches": 4,
+      "method_name_matches": 27,
+      "method_owner_types": 6
+    }
+  },
+  "scene_instances_verified": false,
+  "original_water_runtime_verified": false,
+  "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "run": 43144448074,
+  "artifact": 13909839962
+}
