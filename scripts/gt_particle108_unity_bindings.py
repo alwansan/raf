@@ -56,6 +56,7 @@ SAFE_FAILURE=frozenset((
     "TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING",
     "TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT",
     "TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING",
+    "TRANSLATOR_SOURCE_TEXTURE_SLOT_MISSING", "TRANSLATOR_SOURCE_SAMPLER_SLOT_MISSING",
     "TRANSLATOR_SOURCE_READ_FAILED", "ORIGINAL_STAGE_LAYOUT_UNSUPPORTED",
     "ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING", "ORIGINAL_NAME_INDEX_TABLE_MISSING",
     "ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED", "ORIGINAL_NAME_INDEX_INVALID",
@@ -187,7 +188,10 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
         else:
             original_num=int(found[1])
         if original_num not in table:
-            raise BridgeError("TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING")
+            # Only the class is disclosed; source names/slots/keyword values
+            # remain private to the disposable CI runner.
+            raise BridgeError("TRANSLATOR_SOURCE_TEXTURE_SLOT_MISSING" if cls=="t"
+                              else "TRANSLATOR_SOURCE_SAMPLER_SLOT_MISSING")
         if (authenticated_rdef is not None and authenticated_rdef[cls] is not None
             and original_num not in authenticated_rdef[cls]):
             raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
