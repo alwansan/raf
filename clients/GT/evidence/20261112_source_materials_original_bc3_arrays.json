@@ -1,0 +1,96 @@
+{
+  "schema": "GT_20261112_RESTORED_SOURCE_MATERIAL_AND_NINE_BC3_ARRAYS_V1",
+  "agent": "GT",
+  "date": "2026-11-12",
+  "write_branch": "feature/android-native-port",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_policy": "ZIP2_SHA256_ONLY_NO_LFS",
+  "source_graphics": {
+    "files": 134,
+    "original_bytes": 7532909297,
+    "authenticated_run": 43124662931,
+    "original_materials": 1556,
+    "original_Texture2DArray": 9
+  },
+  "real_assetripper": {
+    "run": 43132978685,
+    "exported_scenes": 40,
+    "exported_material_files": 1536,
+    "original_materials_verified": 1556,
+    "source_texenv_slots": 10216,
+    "exported_texenv_slots": 10216,
+    "exact_internal_texture_matches": 4151,
+    "incorrect_internal_targets": 0,
+    "uv_transform_mismatches": 0,
+    "null_binding_drifts": 0,
+    "original_external_texture_targets_not_fully_resolved": 416,
+    "source_to_export_material_slot_equivalence": true,
+    "all_82_authentic_owners_pinned": true,
+    "android_unity_import_verified": false
+  },
+  "texture_array_reference_proof": {
+    "run": 43135341260,
+    "source_classID": 187,
+    "original_distinct_array_objects": 9,
+    "used_material_references": 28,
+    "exported_fileID": 18700000,
+    "exported_TextureImporter_shape_enum": 4,
+    "actual_array_pixels_restored": false
+  },
+  "texture_arrays_original": {
+    "run": 43136988092,
+    "source_array_objects": 9,
+    "width": 1024,
+    "height": 1024,
+    "mipmap_levels_each": 11,
+    "logical_layers": 52,
+    "populated_layers": 50,
+    "original_source_zero_pixel_layers": 2,
+    "original_zero_pixel_array_objects": 1,
+    "original_GPU_formats": {
+      "100": 5,
+      "101": 4
+    },
+    "BC3_original_streamed_bytes": 69906400,
+    "original_stream_descriptors": 9,
+    "pinned_source_SHA256": true,
+    "device_render_verified": false
+  },
+  "original_array_byte_stage": {
+    "workflow": ".github/workflows/raft-gt-original-export-smoke.yml",
+    "script": "scripts/gt_recover_original_array_layers.py",
+    "intake": "full_134_SHA256_validated_source_originals",
+    "stage": "runner_private_temporary_file_only",
+    "expected_original_BC3_bytes": 69906400,
+    "expected_private_payload_objects": 8,
+    "zero_source_payload_objects_not_fabricated": 1,
+    "run": 43138326757,
+    "actual_success": "UNVERIFIED_AT_RECORD_CREATION"
+  },
+  "vendor_shaders": {
+    "raw_dummy_material_documents": 786,
+    "original_shader_files_with_dummy_marker": 140,
+    "original_vendor_restorers": [
+      "tmp",
+      "postfx",
+      "histogram_compute",
+      "volumetric"
+    ],
+    "last_real_run": 43135341260,
+    "original_meta_count": 18368,
+    "removed_original_meta": 1,
+    "changed_original_meta": 0,
+    "new_vendor_meta_added": 3,
+    "removed_asset": "authenticated_EyeHistogram_asset_to_compute_migration",
+    "checked_migration_script": "scripts/gt_test_vendor_shader_restoration.py",
+    "postrestore_success": "UNVERIFIED_AT_RECORD_CREATION"
+  },
+  "limits": [
+    "No Unity Editor CPU array reconstruction or import yet",
+    "BC3 mip/layer byte ordering not independently confirmed",
+    "No native Android/GLES/Vulkan GPU proof",
+    "No XAPK",
+    "No arbitrary replacement GUID generation",
+    "No original asset blobs published in Actions artifacts"
+  ]
+}
