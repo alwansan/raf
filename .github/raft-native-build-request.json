@@ -1,7 +1,7 @@
 {
-  "request_id": "GT-20261112-1400-pristine-depth-copy-native-delivery-01",
-  "reason": "Owner authorized independent GT full source restoration: native rerun after W1 Depth Copy correct SHA-authentic pristine ZIP2 owner source fix 3e8a3bfff2 and regression guard 393b2f5aaf PASS 43205382836. Include original 50 BC3 source layers and exact 416 cross-owner Material→Texture source links, retain all water/Shaders/Unity/packaging gates.",
-  "requested_from_sha": "393b2f5aaf2ed630f05e14e25ede2286151b14c3",
+  "request_id": "GT-20261112-current-head-full-native-after-disk-recovery-02",
+  "reason": "Owner-authorized complete current feature/android-native-port APK OBB XAPK build after signed recovery 43246196803; include strict 9/28/416/50 original graphics parity source gates, water restore status, offline controller/audio and post-Unity generated Library cleanup. Never claim all 770 Dummy shader Materials restored; test on real Adreno separately.",
+  "requested_from_sha": "a1de8f53a78470d952225feda2d16534b1ae861c",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -11,9 +11,15 @@
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43155854860,
-  "previous_build_source_sha": "f89b58e52ac6093bf1fdf907d9e86d5a60be8796",
+  "previous_run_id": 43205543533,
+  "previous_build_source_sha": "c86809380ab1e5b95ccf65e30074422a7e744c05",
   "previous_failed_unity_run_id": 42281310905,
   "fix_commit_sha": "393b2f5aaf2ed630f05e14e25ede2286151b14c3",
-  "linked_session_id": "GT-20261112-CHAT-12-SOURCE-LINKS-AND-DEPTH-NATIVE"
+  "linked_session_id": "GT-20261112-CHAT-19-SIGNED-NATIVE-RECOVERY-AND-CURRENT-BUILD",
+  "preceding_signed_native_recovery_run_id": 43246196803,
+  "preceding_signed_native_recovery_artifact_id": 13957022329,
+  "native_packaging_cache_cleanup_commit": "a1de8f53a78470d952225feda2d16534b1ae861c",
+  "verified_approx_private_shader_bundle_run": 43236578305,
+  "verified_approx_phone_apk_run": 43242496576,
+  "original_material_sampler_mapping_unverified": true
 }
