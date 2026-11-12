@@ -90,7 +90,7 @@ def run(project: Path, raw_quality: dict, backup_root: Path, *,
         if error is None:
             post=quality(project)
             diff=compare(raw_quality,post,before==original_meta_digests(project/"Assets"))
-            report.update(diff)
+            report["postrestore_material_quality"]=diff
             report["status"]="POST_RESTORE_SOURCE_QUALITY_COMPARED"
     except (ValueError, OSError) as exc:
         error = ("postrestore_metadata_or_quality",type(exc).__name__)
