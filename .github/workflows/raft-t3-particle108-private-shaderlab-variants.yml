@@ -259,6 +259,23 @@ jobs:
                   shapes["explicit_d3d_sampler_register_annotations"]+=len(re.findall(r'\bregister\s*\(\s*s\d+',code))
                   shapes["spaced_d3d_sampler_register_annotations"]+=len(re.findall(r'\bregister\s*\(\s*s\d+\s*,\s*space',code))
                   shapes["sampler2D_typed_occurrences"]+=len(re.findall(r'\bsampler2D\b',code))
+                  shapes["direct_sampler_declaration_shape"]+=len(re.findall(
+                      r'\bSamplerState\s+[A-Za-z_]\w*\b',code))
+                  for m in re.finditer(r'\bSamplerState\b',code):
+                      suffix=code[m.end():m.end()+80]
+                      if re.match(r'\s+[A-Za-z_]\w*',suffix):
+                          key="sampler_type_followed_by_identifier"
+                      elif re.match(r'\s*\(',suffix):
+                          key="sampler_type_followed_by_call"
+                      elif re.match(r'\s*<',suffix):
+                          key="sampler_type_followed_by_generic"
+                      elif re.match(r'\s*\[',suffix):
+                          key="sampler_type_followed_by_array"
+                      elif re.match(r'\s*;',suffix):
+                          key="sampler_type_followed_by_terminator"
+                      else:
+                          key="sampler_type_other_syntax"
+                      shapes[key]+=1
           print('GT_PARTICLE108_HLSL_PRIVATE_SYNTAX_SHAPE '+json.dumps(dict(sorted(shapes.items())),sort_keys=True))
           PY
           # Never replace source by a guessed register or placeholder. Stage the
