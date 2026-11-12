@@ -131,6 +131,14 @@ class RestoreIntoInputTests(unittest.TestCase):
             with self.subTest(selected=selected),self.assertRaises(SourceFailure):
                 choose(records,"selected",selected)
 
+    def test_master_bank_is_validated_as_selected_zip2_audio_resource(self):
+        from scripts.gt_zip2_export_resources import ORIGINAL_AUDIO_BANK
+        records={ORIGINAL_AUDIO_BANK:("split",101600960,"0"*64)}
+        self.assertEqual(choose(records,"selected",[ORIGINAL_AUDIO_BANK]),[ORIGINAL_AUDIO_BANK])
+        self.assertNotIn(ORIGINAL_AUDIO_BANK,choose({
+            **{name:("plain",1,"0"*64) for name in CORE}
+        },"core"))
+
     def test_core_profile_needs_all_five_manifest_records(self):
         records={name:("plain",1,"0"*64) for name in CORE}
         self.assertEqual(choose(records,"core"),list(CORE))
