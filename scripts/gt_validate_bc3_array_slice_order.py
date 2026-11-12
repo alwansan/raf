@@ -48,6 +48,36 @@ def compare_frames(raw:bytes,frames:list,width:int,height:int,depth:int,mips:int
        for layout in LAYOUTS}
 
 
+def decoded_original_frames(obj,raw:bytes,source:dict):
+    """Decode exact SHA-pinned external bytes through UnityPy, in memory only.
+
+    Isolated serialized owners intentionally have no adjacent original .resS.
+    UnityPy's .images property otherwise sees empty inline image_data and can
+    raise 'Texture2D has no image data' despite the independently verified
+    streamed payload. Never alter the original serialized file on disk.
+    """
+    try:
+        native=obj.read()
+    except (AttributeError,NotImplementedError,ValueError,OSError) as err:
+        raise InventoryError("original_UnityPy_array_object_read_failed") from err
+    if (getattr(native,"m_Width",None)!=source["width"] or
+        getattr(native,"m_Height",None)!=source["height"] or
+        getattr(native,"m_Depth",None)!=source["depth"] or
+        getattr(native,"m_MipCount",None)!=source["source_mipmap_count"] or
+        getattr(native,"m_Format",None)!=source["source_format_enum"] or
+        getattr(native,"m_DataSize",None) not in (0,len(raw)) or
+        not hasattr(native,"image_data")):
+        raise InventoryError("original_UnityPy_array_native_metadata_mismatch")
+    # The source stream payload was SHA256 verified before reaching this
+    # helper. A zero inline m_DataSize is legitimate for external streams.
+    native.m_DataSize=len(raw)
+    native.image_data=raw
+    try:
+        return native.images
+    except (AttributeError,NotImplementedError,ValueError,OSError) as err:
+        raise InventoryError("original_UnityPy_Texture2DArray_decoder_failed") from err
+
+
 def inspect(source_root:Path,original:dict,private_stage:Path,loader=None)->dict:
     if len(original)!=9 or not source_root.is_dir() or source_root.is_symlink():
         raise InventoryError("invalid_SHA_authenticated_original_array_scope")
@@ -93,10 +123,7 @@ def inspect(source_root:Path,original:dict,private_stage:Path,loader=None)->dict
             raw=path.read_bytes()
             if hashlib.sha256(raw).hexdigest()!=row["sha256"]:
                 raise InventoryError("corrupt_original_array_BC3_private_stage")
-            try:
-                frames=obj.read().images
-            except (AttributeError,NotImplementedError,ValueError,OSError) as err:
-                raise InventoryError("original_UnityPy_Texture2DArray_decoder_failed") from err
+            frames=decoded_original_frames(obj,raw,source)
             per_array.append(compare_frames(raw,frames,source["width"],source["height"],
                                             source["depth"],source["source_mipmap_count"]))
             counters["source_array_objects_with_independently_decoded_pixels"]+=1

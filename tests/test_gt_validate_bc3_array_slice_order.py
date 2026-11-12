@@ -16,15 +16,35 @@ def solid(rgb565):
     return b"\xff\xff"+bytes(6)+struct.pack("<HHI",rgb565,rgb565,0)
 
 
-class ArrayPixelFrame:
-    type=SimpleNamespace(name="Texture2DArray")
-    def __init__(self,idx):
-        self.path_id=idx+1
-    def read(self):
-        return SimpleNamespace(images=[
+class FakeDecodedArray:
+    def __init__(self, expected, frames=None):
+        self.m_Width=4
+        self.m_Height=4
+        self.m_Depth=2
+        self.m_MipCount=2
+        self.m_Format=100
+        self.m_DataSize=0  # Real streamed originals can have zero inline data
+        self.image_data=b""
+        self.expected=expected
+        self.frames=frames
+
+    @property
+    def images(self):
+        if self.image_data!=self.expected or self.m_DataSize!=len(self.expected):
+            raise ValueError("Texture2D has no image data")
+        return self.frames if self.frames is not None else [
             Image.new("RGBA",(4,4),(255,0,0,255)),
             Image.new("RGBA",(4,4),(0,255,0,255))
-        ])
+        ]
+
+
+class ArrayPixelFrame:
+    type=SimpleNamespace(name="Texture2DArray")
+    def __init__(self,idx,raw):
+        self.path_id=idx+1
+        self.raw=raw
+    def read(self):
+        return FakeDecodedArray(self.raw)
 
 
 class OriginalArrayIndependentDecoderTests(unittest.TestCase):
@@ -55,7 +75,7 @@ class OriginalArrayIndependentDecoderTests(unittest.TestCase):
             "schema":"GT_PRIVATE_ORIGINAL_ARRAY_IMPORT_INPUT_V1","arrays":rows}))
         (self.source_root/"sharedassets0.assets").write_bytes(b"fake")
         self.loader=lambda path:SimpleNamespace(objects=[
-            ArrayPixelFrame(i) for i in range(9)])
+            ArrayPixelFrame(i,self.raw) for i in range(9)])
 
     def test_independent_UnityPy_layer_decodes_agree_with_full_original_slice_major_layout(self):
         r=inspect(self.source_root,self.original,self.stage,loader=self.loader)
@@ -67,15 +87,34 @@ class OriginalArrayIndependentDecoderTests(unittest.TestCase):
         self.assertFalse(r["Android_GPU_pixel_colors_verified"])
 
     def test_unsupported_original_array_image_is_rejected_not_painted(self):
+        self_raw=self.raw
         def wrong_frames(path):
             class Invalid:
                 type=SimpleNamespace(name="Texture2DArray")
                 path_id=1
                 def read(self):
-                    return SimpleNamespace(images=[])
+                    return FakeDecodedArray(self_raw,frames=[])
             return SimpleNamespace(objects=[Invalid()])
         with self.assertRaisesRegex(InventoryError,"layers_missing"):
             inspect(self.source_root,self.original,self.stage,loader=wrong_frames)
+
+    def test_native_UnityPy_array_shape_mismatch_rejected_before_decoding(self):
+        original_raw=self.raw
+        class WrongMetadata(ArrayPixelFrame):
+            def read(self):
+                result=super().read()
+                result.m_Format=99
+                return result
+        def invalid(path):
+            return SimpleNamespace(objects=[WrongMetadata(i,original_raw) for i in range(9)])
+        with self.assertRaisesRegex(InventoryError,"original_UnityPy_array_native_metadata_mismatch"):
+            inspect(self.source_root,self.original,self.stage,loader=invalid)
+
+    def test_real_stream_bytes_must_be_injected_to_decode(self):
+        # Fake .images refuses empty inline data even when source stream was
+        # successfully restored; the validator must provide authenticated raw.
+        result=inspect(self.source_root,self.original,self.stage,loader=self.loader)
+        self.assertEqual(result["counts"]["source_array_objects_with_independently_decoded_pixels"],8)
 
     def test_corrupted_original_private_BC3_data_sha256_rejected(self):
         (self.stage/"array-0.original-gpu-bytes").write_bytes(b"x"*len(self.raw))
