@@ -180,6 +180,17 @@ jobs:
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --report "$RUNNER_TEMP/gt-real-cubemap-export-lineage.json"
+      - name: GT record exact imported Texture2DArray image fileID and importer shape enum before any edits
+        id: gt_array_importer_shape
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_diagnose_texture_export_lineage.py -v
+          python3 -m scripts.gt_diagnose_texture_export_lineage \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-array-shape-verified.json"
       - name: Capture original Material-to-Texture export GUID guard results including exact failure code
         id: gt_export_links
         continue-on-error: true
@@ -311,6 +322,7 @@ jobs:
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
             ${{ runner.temp }}/gt-export-all-texture-target-categories.json
             ${{ runner.temp }}/gt-real-cubemap-export-lineage.json
+            ${{ runner.temp }}/gt-real-array-shape-verified.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
