@@ -157,38 +157,39 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
         raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
     mapping={}
     used={"t":set(),"s":set()}
-    emitted={"t":set(),"s":set()}
+    translated_used={"t":set(),"s":set()}
     source_vs_translated_drift=0
     for match in RESOURCE.finditer(hlsl):
         cls,translated_num,variable=match[3],int(match[4]),match[2]
         table=textures if cls=="t" else samplers
-        # Original vkd3d resource symbols identify compiled DXBC source
-        # registers. SPIRV-Cross may renumber the emitted register(t/sN).
-        # Proven original RDEF is required before accepting that drift.
+        # vkd3d retains ORIGINAL DXBC resource register identities in the
+        # recovered symbolic suffix. SPIRV-Cross HLSL register(tN/sN) may
+        # renumber emitted descriptors. Never conflate the two namespaces.
         found=re.search(r'(?:^|_)'+cls+r'(\d+)$',variable)
         if found is None:
             found=re.search(r'(?:texture|sampler)'+cls+r'(\d+)$',variable,re.I)
         if found is None:
+            # Anonymous translated symbol: only the source RDEF and same
+            # original serialized register permit using a translated slot.
             if authenticated_rdef is None:
                 raise BridgeError("TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING")
-            source_num=translated_num
+            original_num=translated_num
         else:
-            source_num=int(found[1])
-        if source_num not in table:
+            original_num=int(found[1])
+        if original_num not in table:
             raise BridgeError("TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING")
-        if authenticated_rdef is not None and source_num not in authenticated_rdef[cls]:
+        if authenticated_rdef is not None and original_num not in authenticated_rdef[cls]:
             raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
-        if source_num!=translated_num:
+        if original_num!=translated_num:
             if authenticated_rdef is None:
                 raise BridgeError("TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT")
             source_vs_translated_drift+=1
-        if (source_num in used[cls] or translated_num in emitted[cls] or
-            (variable in mapping and mapping[variable]!=table[source_num])):
+        if (original_num in used[cls] or translated_num in translated_used[cls]
+            or variable in mapping):
             raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
-        mapping[variable]=table[source_num]
-        used[cls].add(source_num)
-        emitted[cls].add(translated_num)
-
+        mapping[variable]=table[original_num]
+        used[cls].add(original_num)
+        translated_used[cls].add(translated_num)
     if not used["s"]:
         if SAMPLER_UNSUPPORTED_SPACE.search(hlsl):
             raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
@@ -220,6 +221,12 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
     # Only variable identifiers are replaced; binding register(tN/sN) is not
     # rewritten, as it is the compiled-program contract, not a variable.
     fixed=names.sub(lambda m:mapping[m.group()],hlsl)
+    # Do not touch the translated graphics API register annotations: the
+    # recovered source identity comes exclusively from original RDEF and
+    # original Unity Shader metadata.
+    register_pattern=re.compile(r'\bregister\s*\([^)]*\)')
+    if register_pattern.findall(fixed)!=register_pattern.findall(hlsl):
+        raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     if len(fixed)>MAX_HLSL or fixed==hlsl:
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     return fixed,{"original_texture_registers_mapped":len(used["t"]),
