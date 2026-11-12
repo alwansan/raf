@@ -22,12 +22,18 @@ internal static class RaftExportLineage
         json.WriteNumber("schema_version", 1);
         json.WriteString("export_instance", Guid.NewGuid().ToString("N"));
         json.WriteStartArray("objects");
+        // Leave the production Material/Shader-only lineage unchanged unless
+        // GT explicitly opts in for a temporary, private Texture matching run.
+        bool includeTextureObjects = Environment.GetEnvironmentVariable(
+            "RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE") == "1";
         foreach (IExportCollection collection in collections)
         {
             container.CurrentCollection = collection;
             foreach (IUnityObjectBase asset in collection.Assets)
             {
-                if (asset.ClassID is not (21 or 48))
+                if (asset.ClassID is not (21 or 48) &&
+                    !(includeTextureObjects &&
+                      asset.ClassID is (28 or 84 or 89 or 117 or 187)))
                     continue;
                 json.WriteStartObject();
                 json.WriteNumber("class_id", asset.ClassID);
