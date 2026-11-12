@@ -261,6 +261,37 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-9-original-texture-arrays.json"
+      - name: GT extract original 50 BC3 Texture2DArray layer payloads from nine exact ZIP2 source objects into private Unity import bridge
+        id: gt_real_original_bc3_array_streams
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_bc3_array_layout.py -v
+          python3 -m unittest discover -s tests -p test_gt_recover_original_array_layers.py -v
+          python3 -m scripts.gt_recover_original_array_layers \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --zip2-checkout .gt-zip2 \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --private-output "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
+            --report "$RUNNER_TEMP/gt-real-bc3-array-staging-summary.json"
+          test -s "$RUNNER_TEMP/gt-private-original-bc3-arrays/private-array-import-manifest.json"
+          # Raw original game bytes and private exporter GUIDs are NEVER uploaded.
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          result=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-real-bc3-array-staging-summary.json").read_text())
+          assert result["source_total_layer_count"]==52
+          assert result["source_array_layers_with_original_streamed_pixels"]==50
+          assert result["source_array_layers_without_original_pixels"]==2
+          assert result["sha256_authenticated_streamed_payloads_copied"]==8
+          assert result["original_source_streamed_bytes_restored_to_private_stage"]==69906400
+          assert result["original_array_objects_with_zero_source_payload"]==1
+          assert result["git_lfs_used"] is False
+          assert result["Unity_Editor_Texture2DArray_assets_created"] is False
+          print("GT_BC3_ARRAY_REAL_STREAM_STAGE authenticBC3Bytes=69906400 arraysWithPixels=8 originalZeroPixelArrays=1 layersWithPixels=50 stagedPrivate=true editedGUIDs=false LFS=false")
+          PY
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -337,6 +368,7 @@ jobs:
             ${{ runner.temp }}/gt-real-cubemap-export-lineage.json
             ${{ runner.temp }}/gt-real-array-shape-verified.json
             ${{ runner.temp }}/gt-9-original-texture-arrays.json
+            ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
