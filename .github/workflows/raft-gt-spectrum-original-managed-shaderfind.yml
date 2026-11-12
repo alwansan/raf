@@ -1,0 +1,125 @@
+name: GT SHA-original Spectrum typed managed Shader.Find IL census
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_spectrum_original_shaderfind_name.py
+      - tests/test_gt_spectrum_original_shaderfind_name.py
+      - android-port/Experiments/GT/SpectrumShaderFindOriginal/**
+      - .github/workflows/raft-gt-spectrum-original-managed-shaderfind.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-original-spectrum-managed-shaderfind:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Prove source name strictness without any original files
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_spectrum_original_shaderfind_name.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build typed Mono.Cecil scanner and pass negative source-free control
+        run: |
+          set -euo pipefail
+          dotnet publish android-port/Experiments/GT/SpectrumShaderFindOriginal/SpectrumShaderFindOriginal.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/gt-spectrum-cecil-private" \
+            > "$RUNNER_TEMP/gt-spectrum-cecil-build.log" 2>&1 || {
+              python3 - <<'PY'
+          import collections,os,re
+          from pathlib import Path
+          log=(Path(os.environ["RUNNER_TEMP"])/"gt-spectrum-cecil-build.log").read_text(errors="replace")
+          print("GT_SPECTRUM_CECIL_BUILD_SAFE",dict(collections.Counter(
+              re.findall(r"error\\s+((?:CS|NU|NETSDK)[0-9]+)",log))))
+          PY
+              exit 2
+            }
+          dotnet "$RUNNER_TEMP/gt-spectrum-cecil-private/SpectrumShaderFindOriginal.dll" --selftest
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gt-spectrum-managed-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: SHA-pin original Shader container and original managed Assembly-CSharp
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage,fingerprint
+          from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
+          repo=Path('gt-spectrum-managed-zip2')
+          assert subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          rows=parse_original_manifest(repo/'RAFT_FILE_MANIFEST.tsv')
+          dlls=[r for r in rows if r['path']=='Raft_Data/Managed/Assembly-CSharp.dll']
+          assert len(dlls)==1 and dlls[0]['bytes']==3211776 and dlls[0]['kind']=='plain'
+          dll=repo/'Raft'/dlls[0]['path']
+          assert fingerprint(dll)==(dlls[0]['bytes'],dlls[0]['sha256'])
+          dest=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-original-managed-source'
+          proof=stage(repo,dest,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert proof['verified_bytes']==115978112 and proof['lfs_used'] is False
+          (dest/'Raft_Data/sharedassets0.assets').rename(dest/'sharedassets0.assets')
+          print('GT_SPECTRUM_MANAGED_ORIGINAL_SHA_GATE shaderOwner=115978112B assembly=3211776B sourceOnly=true')
+          PY
+      - name: Read original Spectrum m_Name privately with SHA-authenticated B09 identity
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          python3 -m scripts.gt_spectrum_original_shaderfind_name \
+            --source "$RUNNER_TEMP/gt-spectrum-original-managed-source" \
+            --private-out "$RUNNER_TEMP/gt-spectrum-private-name.txt"
+      - name: Count actual typed UnityEngine.Shader.Find original Spectrum IL sites
+        run: |
+          set -euo pipefail
+          dotnet "$RUNNER_TEMP/gt-spectrum-cecil-private/SpectrumShaderFindOriginal.dll" \
+            "$GITHUB_WORKSPACE/gt-spectrum-managed-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            "$RUNNER_TEMP/gt-spectrum-private-name.txt" \
+            "$RUNNER_TEMP/gt-spectrum-managed-find-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-managed-find-safe.json').read_text())
+          assert r['status']=='source_original_spectrum_shader_name_managed_ShaderFind_scan'
+          assert r['original_Spectrum_Shader_mName_SHA_authenticated'] is True
+          assert r['original_Assembly_CSharp_DLL_SHA_authenticated'] is True
+          assert r['total_compiled_methods_with_body']>1000
+          assert r['total_compiled_IL_instructions']>10000
+          assert r['total_ldstr_instructions']>1000
+          assert r['exact_source_ldstr_direct_typed_Shader_Find_calls'] <= r['total_typed_UnityEngine_Shader_Find_calls']
+          assert r['actual_Unity_Shader_Find_execution_verified'] is False
+          assert r['original_Spectrum_Material_render_binding_verified'] is False
+          assert r['Android_water_pixels_verified'] is False
+          assert r['private_shader_class_method_name_or_literal_exported'] is False
+          print('GT_SPECTRUM_ORIGINAL_MANAGED_FIND_TYPED_IL_ACCEPTED sourceSHA=true exactTypedCallsCounted=true sourceOnly=true')
+          PY
+      - name: Publish counts only, not names/IL
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-spectrum-original-typed-ShaderFind-counts
+          path: ${{ runner.temp }}/gt-spectrum-managed-find-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Scrub original and private shader names
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-spectrum-original-managed-source" "$RUNNER_TEMP/gt-spectrum-private-name.txt"
+          rm -rf -- "$GITHUB_WORKSPACE/gt-spectrum-managed-zip2"
