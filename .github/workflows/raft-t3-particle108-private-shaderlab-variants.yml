@@ -236,6 +236,29 @@ jobs:
               assert report[key] is False
           print("T3_PRIVATE_PROVISIONAL_ONE_SHADERLAB=4_pair_routes_8_glslang_vulkan11_valid; Unity_Material_Android_UNPROVEN")
           PY
+      - name: GT classify eight source-original DXBC RDEF program stages (source only, sanitized)
+        run: |
+          set -euo pipefail
+          # Identical SHA-pinned original ZIP2 owners, original four VS/FS
+          # pairs, and a source-only DXBC RDEF parser. Presence-only is NOT
+          # sufficient shader binding proof; the strict binding step follows.
+          python3 -m scripts.t3_particle108_original_dxbc_rdef \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/gt-original-particle-rdef-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, os
+          report=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-original-particle-rdef-safe.json").read_text())
+          assert report["status"] in (
+              "T3_SHA_ORIGINAL_PARTICLE108_FOUR_PAIR_DXBC_RDEF_CLASSIFIED",
+              "T3_SHA_ORIGINAL_PARTICLE108_EIGHT_STAGE_RDEF_PRESENCE_ONLY")
+          assert report["source_original_keyword_pairs"]==4
+          assert report["original_DXBC_RDEF_register_numbers_names_types_or_bytecode_published"] is False
+          assert report["original_shader_program_Unity_compile_or_pixel_equivalence_proven"] is False
+          print("GT_PARTICLE108_SOURCE_RDEF_ACCEPTED_PRESENCE_ONLY_IS_NOT_BINDING_PROOF="+
+                json.dumps({"status":report["status"],"counts":report["counts"]},sort_keys=True))
+          PY
       - name: GT source-authenticate original Shader48 texture sampler symbols and stage-isolate cbuffer declarations
         run: |
           set -euo pipefail
