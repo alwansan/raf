@@ -26,6 +26,12 @@
 - لم ترفع الحمولات الأصلية إلى git commits أو artifacts. `zip2` و`main` untouched. لم يبدأ GT عملية XAPK native رسمية أو يصوت نيابة عن T1–T5.
 - ملفات Source managed `Raft_Data/Managed/*.dll` يجهزها مسار T5 الأصلي منفصلة؛ أصل `MasterBank.bank` والـAudio الأصلي كذلك منفصل. العدد 134 **لا يساوي كل 366 ملفاً لنسخة PC**.
 
+## نتيجة فعلية لاحقة: AssetRipper real export PASS (لا APK)
+
+اكتمل [43125542125](https://github.com/alwansan/raf/actions/runs/43125542125) بتشغيل AssetRipper الحقيقي على **134 ملفاً أصلياً** استعيدت من ZIP2 + 151 Managed providers أصلية محددة الهوية، وتم إثبات `RAFT_SCRIPT_IMPORT_FIDELITY`: `decompiled_script_export=true`, `export_completed=true`, `mono_structure_layout_mismatch_lines=0`, `unknown_backend_fallback=false`. الناتج الفعلي يحوي **40 مشهداً `.unity`، 1,536 ملف `.mat`، 4,003 صورة Texture، 8,372 ملف `.asset` و18,368 ملف `.meta`**. [Artifact 13902689523](https://github.com/alwansan/raf/actions/runs/43125542125/artifacts/13902689523) آمن، ولا يحوي بنية المشروع الأصلية أو private export trace.
+
+**قيد حاسم:** خطوة `verify_exported_material_texture_links` أعادت exit 2، لكن `continue-on-error` جعل نتيجة workflow الكلية `success`؛ **لا تعنِ النتيجة الخضراء أن كل Texture GUID صحيح**. تم تعديل workflow ليحفظ error_code الآمن في [إعادة التشغيل 43126735391](https://github.com/alwansan/raf/actions/runs/43126735391) قبل إرجاع exit، لنعرف أول عائق. وأُضيف خيار `RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE=1` إلى كود الـExporter الخاص بنا لتمكين private exact source Texture→Export GUID trace في اختبار GT المقبل، مع إبقاء إنتاج T5 المعتاد على Material/Shader فقط عند عدم تفعيل الخيار.
+
 ## ما يلي
 
 1. افحص Job/Artifact للـExporter المستقل `43125542125` وشخّص أصل الخطأ إن فشل، ثم أصلحه وكرر اختبار المسار المحدود. احفظ نتيجة وsha.
