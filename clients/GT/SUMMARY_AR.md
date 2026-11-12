@@ -174,3 +174,11 @@
 - **التنفيذ التالي:** M1 فحص البناء الحالي، M2 إثبات shader Pass الأصلية لـSpectrum/Foam+GUID/Material/RT، M3 ربط Kernel6 بأصل Compute الصحيح قبل FFT، M4 استعادة عائلات الشيدرات للمكونات ذات أعلى أثر ضمن 770 Dummy، M5 إصلاح Cursor/OBB والاختبار النهائي على الهاتف.
 
 [ملف الجلسة ودليل خطوات الإعادة](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md).
+
+## GT / Chat-21 / ملحق Spectrum وUnity Editor — خطوات موثقة لا تُعتبر إصلاح GPU
+
+**تصحيح مهم للعدد:** المصدر الأصلي [Spectrum B09](../../scripts/b09_spectrum_topology_contract.py) يتضمن **7 Passes** و**28 VS/FS variant-stage references** (7×2×2)، والأصل [Foam B24](../../scripts/b24_original_foam_stage_translation.py) يتضمن **2 Passes**. شرط device log السابق `Spectrum >=6` ليس إلا أقل عدد يفترضه طلب Pass #5، فلا يجب اعتباره استعادة أصلية. [CI المصدر 41920232173 PASS](https://github.com/alwansan/raf/actions/runs/41920232173) و[CI اتساق الخطة 43268872421 PASS](https://github.com/alwansan/raf/actions/runs/43268872421).
+
+**إضافة عملية إلى مسار Android:** [GTOriginalWaterPassImportProbe.cs](../../android-port/Editor/GTOriginalWaterPassImportProbe.cs) يفحص داخل Unity Editor عند `AndroidNativeBuild.ValidateSdkBindings()` عدد Passes المستوردة لـSpectrum/Foam ووجود Dummy والـduplicates. لا يمس ملفات لعبة أو GUID ولا ينشر الشيدر، ويطبع `GT_WATER_IMPORTED_PASS_DIAGNOSTIC`. [CI 43269999662 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43269999662) جمع كود C# الحقيقي مع واجهات Unity تجريبية ونجح باكتشاف Dummy Spectrum من Pass واحد و2pass Foam ورفض مسار خارج مشروع Unity. **لم يُجرَ بعد تشغيل هذا الفحص في Unity Editor الفعلي؛ لم تُستعد رسوميات الماء على الهاتف.** استكمال M2 يعتمد على مصدر شيدر 7Pass Spectrum و2Pass Foam مع original Shader/Material GUID + GPU.
+
+[الخطة المحدّثة](RESTORATION_PLAN_AR.md) · [مؤشر الجلسة Chat-21](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md).
