@@ -305,6 +305,45 @@ jobs:
           assert result["Unity_Editor_Texture2DArray_assets_created"] is False
           print("GT_BC3_ARRAY_REAL_STREAM_STAGE authenticBC3Bytes=69906400 arraysWithPixels=8 originalZeroPixelArrays=1 layersWithPixels=50 stagedPrivate=true editedGUIDs=false LFS=false")
           PY
+      - name: GT validate authentic original BC3 pixel slices against actual nine imported AssetRipper PNG array flipbooks without any game pixels in artifacts
+        id: gt_bc3_source_pixel_parity
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check Pillow==11.3.0
+          python3 -m unittest discover -s tests -p test_gt_compare_original_bc3_to_flipbook_pixels.py -v
+          if python3 -m scripts.gt_compare_original_bc3_to_flipbook_pixels \
+                --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
+                --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+                --report "$RUNNER_TEMP/gt-original-array-exact-pixel-parity.json" \
+                > "$RUNNER_TEMP/gt-private-original-array-pixel-parity.stdout" 2>&1; then
+            result_code=0
+          else
+            result_code=$?
+          fi
+          if test -s "$RUNNER_TEMP/gt-original-array-exact-pixel-parity.json"; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-original-array-exact-pixel-parity.json").read_text())
+          print("GT_REAL_ORIGINAL_BC3_EXACT_PNG_SLICES "+json.dumps(d,sort_keys=True))
+          PY
+          else
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          result={"schema":"GT_ORIGINAL_BC3_ARRAY_TO_ASSETRIPPER_FLIPBOOK_PIXEL_EQUIVALENCE_V1",
+                  "status":"INCONCLUSIVE_BEFORE_PIXEL_PARITY_RECEIPT",
+                  "original_or_exported_assets_modified":False,
+                  "original_image_data_disclosed":False,
+                  "Android_GPU_pixels_verified":False}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-original-array-exact-pixel-parity.json").write_text(
+              json.dumps(result,sort_keys=True,indent=2)+"\n")
+          print("GT_REAL_ORIGINAL_BC3_EXACT_PNG_SLICES "+json.dumps(result,sort_keys=True))
+          PY
+          fi
+          exit "$result_code"
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -383,6 +422,7 @@ jobs:
             ${{ runner.temp }}/gt-9-original-texture-arrays.json
             ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
             ${{ runner.temp }}/gt-original-array-real-flipbook-geometry.json
+            ${{ runner.temp }}/gt-original-array-exact-pixel-parity.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
