@@ -14,6 +14,8 @@ on:
       - tests/test_gt_spectrum_private_unity_project.py
       - scripts/gt_spectrum_private_stage_buffer_isolation.py
       - tests/test_gt_spectrum_private_stage_buffer_isolation.py
+      - scripts/gt_spectrum_original_sampler_source_bridge.py
+      - tests/test_gt_spectrum_original_sampler_source_bridge.py
       - android-port/Experiments/GT/Editor/OriginalSpectrumSevenPassValidation.cs
       - .github/workflows/raft-gt-original-spectrum-seven-pass-paired-glslang.yml
 permissions:
@@ -43,7 +45,8 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_spectrum_original_private_seven_pass_shaderlab.py -v
           python3 -m unittest discover -s tests -p test_gt_spectrum_private_unity_project.py -v
           python3 -m unittest discover -s tests -p test_gt_spectrum_private_stage_buffer_isolation.py -v
-          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py scripts/gt_spectrum_original_private_seven_pass_shaderlab.py scripts/gt_spectrum_private_unity_project.py scripts/gt_spectrum_private_stage_buffer_isolation.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_original_sampler_source_bridge.py -v
+          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py scripts/gt_spectrum_original_private_seven_pass_shaderlab.py scripts/gt_spectrum_private_unity_project.py scripts/gt_spectrum_private_stage_buffer_isolation.py scripts/gt_spectrum_original_sampler_source_bridge.py
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -127,7 +130,8 @@ jobs:
             --manifest "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json" \
             --states "$RUNNER_TEMP/gt-spectrum-states-private" \
             --private-dest "$RUNNER_TEMP/gt-spectrum-seven-pass-shaderlab-private" \
-            --out "$RUNNER_TEMP/gt-spectrum-private-shaderlab-safe.json"
+            --out "$RUNNER_TEMP/gt-spectrum-private-shaderlab-safe.json" \
+            --source-authentic-resource-names
           python3 - <<'PY'
           import json, os
           from pathlib import Path
@@ -141,6 +145,10 @@ jobs:
           assert result["original_stage_variants_included"] == 28
           assert result["original_authored_property_count"] == 6
           assert result["original_authored_texture_property_count"] == 2
+          assert result["source_original_resource_name_rebinding_enabled"] is True
+          assert result["source_original_resource_stages_bound"] == 28
+          assert result["source_original_sampler_symbol_bindings"] > 0
+          assert result["original_sampler_filter_wrap_or_exported_Material_binding_proven"] is False
           assert result["original_game_shader_installed"] is False
           assert result["Unity2021_import_or_Adreno_pixels_proven"] is False
           print("GT_SPECTRUM_SEVEN_PASS_PRIVATE_SHADERLAB_SAFE candidateShaders=2 exactPassesEach=7 sourceStages=28 originalProperties=6 originalTextures=2 originalGameInstalled=false")
