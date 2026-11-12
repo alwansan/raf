@@ -107,6 +107,37 @@ class ExportedTextureLinks(unittest.TestCase):
         p.write_text(s.replace("        m_Texture: ", "      m_Texture: ", 1))
         self.reject("missing_or_duplicate_texture_pointer")
 
+    def test_asset_ripper_mapping_style_texenv_restores_actual_texture_pointer(self):
+        # Real AssetRipper can serialize m_TexEnvs as a mapping rather than a
+        # sequence; fail closed on bad pointers in either representation.
+        p=self.assets/"m.mat"
+        p.write_text(p.read_text().replace("    - _MainTex:\n", "      _MainTex:\n"))
+        r=mod.audit(self.root,1)
+        self.assertEqual(r["texture_slots"],1)
+        self.assertEqual(r["resolved_local_texture_refs"],1)
+        self.assertTrue(r["export_texture_guid_target_integrity_verified"])
+        self.ptr("{fileID: 2800000, guid: "+C+", type: 3}")
+        p.write_text(p.read_text().replace("    - _MainTex:\n", "      _MainTex:\n"))
+        self.reject("missing_texture_guid")
+
+    def test_mapping_style_explicit_empty_mapping_and_malformed_child(self):
+        p=self.assets/"m.mat"
+        s=p.read_text()
+        p.write_text(s[:s.index("    m_TexEnvs:")]+"    m_TexEnvs: {}\n"
+            +s[s.index("    m_Ints: []"):])
+        self.assertEqual(mod.audit(self.root)["texture_slots"],0)
+        p.write_text(p.read_text().replace("    m_TexEnvs: {}\n",
+            "    m_TexEnvs: {}\n      _MainTex:\n        m_Texture: {fileID: 0}\n"))
+        self.reject("unexpected_texenv_content")
+
+    def test_texenv_mixed_mapping_and_sequence_refused(self):
+        p=self.assets/"m.mat"
+        p.write_text(p.read_text().replace(
+            "    - _MainTex:\n",
+            "    - _MainTex:\n"
+            "      _Extra:\n        m_Texture: {fileID: 0}\n"))
+        self.reject("mixed_texenv_slot_encodings")
+
     def test_implicit_empty_rejected(self):
         p=self.assets/"m.mat"; s=p.read_text()
         p.write_text(s[:s.index("    m_TexEnvs:")]+"    m_TexEnvs:\n"+s[s.index("    m_Ints: []"):])
