@@ -78,7 +78,7 @@ def evaluate(payload:bytes,atlas,depth:int,mips:int,width:int,height:int,cols:in
     return {"samples":len(samples),**dict(sorted(counts.items()))}
 
 
-def inspect(stage:Path,project:Path)->dict:
+def inspect(stage:Path,project:Path,*,all_original_layer_cells:bool=False)->dict:
     from PIL import Image
     stage=stage.absolute()
     manifest=stage/"private-array-import-manifest.json"
@@ -92,6 +92,7 @@ def inspect(stage:Path,project:Path)->dict:
     counts=Counter()
     disambiguated=0
     all_samples=0
+    expected_populated_source_layers=0
     for array in arrays:
         guid=array.get("target_export_guid")
         if not isinstance(guid,str) or guid.lower() not in targets:
@@ -129,6 +130,7 @@ def inspect(stage:Path,project:Path)->dict:
                 raise InventoryError("fabricated_empty_source_array_payload")
             counts["source_zero_pixel_arrays"]+=1
             continue
+        expected_populated_source_layers+=array["depth"]
         # An ordinary one-cell exporter preview is useful to check whether
         # original BC3 source pixels survive, but never authenticates the
         # other original layers or the slice/mip byte ordering.
@@ -146,7 +148,10 @@ def inspect(stage:Path,project:Path)->dict:
             atlas=opened.convert("RGBA")
         candidate={}
         visible_layers=(
-            [0] if displayed_cells==1 else sorted({0,1,array["depth"]-1})
+            [0] if displayed_cells==1 else (
+                list(range(array["depth"])) if all_original_layer_cells else
+                sorted({0,1,array["depth"]-1})
+            )
         )
         for layout in LAYOUTS:
             candidate[layout]=evaluate(raw,atlas,array["depth"],array["mipmap_count"],
@@ -174,6 +179,16 @@ def inspect(stage:Path,project:Path)->dict:
         "original_arrays_with_pixels":counts["real_source_array_payloads_compared"],
         "original_source_empty_pixel_arrays":counts["source_zero_pixel_arrays"],
         "sampled_original_source_layer0_mips_vs_PNG_cells":all_samples,
+        "original_source_populated_layers_expected":expected_populated_source_layers,
+        "full_original_top_mip_layer_pixel_comparison_requested":all_original_layer_cells,
+        "all_populated_original_BC3_top_mip_layers_match_exported_PNG":(
+            all_original_layer_cells and all_samples==expected_populated_source_layers
+            and counts["real_source_array_payloads_compared"]==8
+            and counts["source_zero_pixel_arrays"]==1
+            and counts["export_png_contains_all_source_layer_cells"]==9
+            and counts["slice_major_exact_samples"]==expected_populated_source_layers
+            and counts["no_exact_source_BC3_to_export_PNG_match"]==0
+            and counts["ambiguous_both_layouts_match_exactly"]==0),
         "original_BC3_layout_unambiguously_matched_array_count":disambiguated,
         "counts":dict(sorted(counts.items())),
         "all_original_BC3_source_array_PNG_pixels_proven":(
@@ -193,11 +208,14 @@ def main():
     p.add_argument("--private-original-array-stage",type=Path,required=True)
     p.add_argument("--project",type=Path,required=True)
     p.add_argument("--report",type=Path,required=True)
+    p.add_argument("--all-original-layer-cells",action="store_true",
+                   help="Compare every source-populated original array slice top mip, not sampled cells")
     a=p.parse_args()
     if (a.report.absolute().is_relative_to(a.project.absolute()) or
         a.report.absolute().is_relative_to(a.private_original_array_stage.absolute())):
         raise InventoryError("pixel_parity_aggregate_inside_private_game_data")
-    d=inspect(a.private_original_array_stage,a.project)
+    d=inspect(a.private_original_array_stage,a.project,
+              all_original_layer_cells=a.all_original_layer_cells)
     a.report.parent.mkdir(parents=True,exist_ok=True)
     a.report.write_text(json.dumps(d,sort_keys=True,indent=2)+"\n")
     print("GT_REAL_ORIGINAL_BC3_FLIPBOOK_PIXEL_PARITY "+json.dumps(d,sort_keys=True))

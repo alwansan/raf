@@ -378,6 +378,28 @@ jobs:
           PY
           fi
           exit "$result_code"
+      - name: GT compare every source-populated original BC3 array layer top-mip against actual AssetRipper PNG pixels
+        id: gt_all_original_bc3_top_mip_pixels
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_compare_original_bc3_to_flipbook_pixels.py -v
+          python3 -m scripts.gt_compare_original_bc3_to_flipbook_pixels \
+            --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --all-original-layer-cells \
+            --report "$RUNNER_TEMP/gt-all-original-bc3-layer-topmip-parity.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          result=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-all-original-bc3-layer-topmip-parity.json").read_text())
+          assert result["original_source_populated_layers_expected"]==50
+          assert result["sampled_original_source_layer0_mips_vs_PNG_cells"]==50
+          assert result["all_populated_original_BC3_top_mip_layers_match_exported_PNG"] is True
+          assert result["full_mip_chain_pixel_equivalence_proven"] is False
+          print("GT_REAL_50_SOURCE_BC3_ARRAY_LAYER_TOPMIPS originalLayers=50 sourceTopMipPixelsEqual=true lowerOriginalMipsNotYetCompared=true androidGPUUnverified=true")
+          PY
       - name: GT repair only source-proven full PNG array importer flipbook grids with private per-file GUID backups
         id: gt_bounded_original_array_importers
         continue-on-error: true
@@ -522,6 +544,7 @@ jobs:
             ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
             ${{ runner.temp }}/gt-original-array-real-flipbook-geometry.json
             ${{ runner.temp }}/gt-original-array-exact-pixel-parity.json
+            ${{ runner.temp }}/gt-all-original-bc3-layer-topmip-parity.json
             ${{ runner.temp }}/gt-original-array-slice-layout-independent.json
             ${{ runner.temp }}/gt-real-array-meta-only-repair.json
             ${{ runner.temp }}/gt-real-array-28-source-links.json

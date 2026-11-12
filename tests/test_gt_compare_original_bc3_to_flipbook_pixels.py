@@ -96,6 +96,48 @@ class ExactBC3FlipbookParityTests(unittest.TestCase):
             self.assertNotIn(guid,json.dumps(report))
             self.assertNotIn("array-0.png",json.dumps(report))
 
+    def test_all_source_populated_layers_are_compared_not_just_three_probes(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            stage=root/"private"
+            stage.mkdir()
+            project=root/"ExportedProject"
+            assets=project/"Assets"
+            assets.mkdir(parents=True)
+            raw=bc3_solid(0xF800)*2+bc3_solid(0x07E0)*2
+            rows=[]
+            for i in range(9):
+                guid=f"{i+200:032x}"
+                png=assets/f"array-{i}.png"
+                atlas=Image.new("RGBA",(8,4))
+                atlas.paste(Image.new("RGBA",(4,4),(255,0,0,255)),(0,0))
+                atlas.paste(Image.new("RGBA",(4,4),(0,255,0,255)),(4,0))
+                atlas.save(png)
+                (assets/(png.name+".meta")).write_text(
+                    f"guid: {guid}\nTextureImporter:\n  textureShape: 4\n"
+                    "  flipbookRows: 1\n  flipbookColumns: 2\n")
+                name=f"array-{i}.original-gpu-bytes" if i<8 else None
+                if name:(stage/name).write_bytes(raw)
+                rows.append({"target_export_guid":guid,
+                    "target_fileID":18700000,"target_export_type":3,
+                    "depth":2,"width":4,"height":4,"mipmap_count":2,
+                    "source_format_enum":100,"relative_payload":name,
+                    "sha256":hashlib.sha256(raw).hexdigest() if name else None,
+                    "payload_bytes":len(raw) if name else 0})
+            (stage/"private-array-import-manifest.json").write_text(json.dumps({
+                "schema":"GT_PRIVATE_ORIGINAL_ARRAY_IMPORT_INPUT_V1","arrays":rows}))
+            measured=inspect(stage,project,all_original_layer_cells=True)
+            self.assertEqual(measured["sampled_original_source_layer0_mips_vs_PNG_cells"],16)
+            self.assertEqual(measured["original_source_populated_layers_expected"],16)
+            self.assertTrue(measured["all_populated_original_BC3_top_mip_layers_match_exported_PNG"])
+            # No synthetic fixture or CPU decoder certifies the original
+            # lower mip chain or actual Unity/Android GPU sampling.
+            self.assertFalse(measured["full_mip_chain_pixel_equivalence_proven"])
+            Image.new("RGBA",(8,4),(0,0,255,255)).save(assets/"array-0.png")
+            damaged=inspect(stage,project,all_original_layer_cells=True)
+            self.assertFalse(damaged["all_populated_original_BC3_top_mip_layers_match_exported_PNG"])
+
     def test_mip_slice_range_formula_rejects_out_of_scope(self):
         self.assertEqual(mip_range(4,4,2,2,0,0,"slice_major"),(0,16))
         self.assertEqual(mip_range(4,4,2,2,1,0,"slice_major"),(32,16))
