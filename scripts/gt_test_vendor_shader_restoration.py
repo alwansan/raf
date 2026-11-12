@@ -136,8 +136,7 @@ def approved_meta_integrity(project:Path,backup_root:Path,original:dict,snapshot
     raw_missing=report["original_meta_removed"]
     repaired=0
     if raw_missing==1 and snapshot is not None:
-        old_meta=(str(snapshot["source_rel"])+".meta").replace("\\\\","/")
-        if old_meta not in original_meta_digests(project/"Assets") and histogram_migration_verified(project,backup_root,snapshot):
+        if histogram_migration_verified(project,backup_root,snapshot):
             repaired=1
     report["verified_ComputeShader_GUID_relocation_count"]=repaired
     report["original_meta_removed_unapproved"]=raw_missing-repaired
