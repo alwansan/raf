@@ -1,0 +1,17 @@
+{
+  "schema": "GT_CHAT14_SOURCE_PARTICLE108_PRIVATE_UNITY_PROBE_SAFE_V1",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "exact_original_particle_renderer_slot_uses": 108,
+  "original_compiled_DXBC_VS_FS_pairs": 4,
+  "original_Vulkan11_glslang_valid_stages": 8,
+  "actual_Unity_Editor_run": 43220728060,
+  "unit_and_original_reconstruction_prior_steps_passed": true,
+  "Unity_real_compilation_proven": false,
+  "actual_Material_Shader_GUID_binding_proven": false,
+  "actual_Android_Adreno_pixels_verified": false,
+  "original_Dummy_Material_documents_remaining": 770,
+  "no_original_file_or_GUID_edits": true,
+  "no_Git_LFS": true,
+  "full_native_run": 43205543533,
+  "full_native_XAPK_proven": false
+}

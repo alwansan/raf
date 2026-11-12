@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_REAL_ZIP2_9_28_416_50_STRICT_FINAL_GATE_PASSED_NATIVE_UNITY_EDITOR_IMPORT_IN_PROGRESS",
+  "status": "GT_PARTICLE108_ORIGINAL_4_VARIANTS_GLSLANG_SHA_PROVEN_PRIVATE_UNITY_2021_ANDROID_COMPILING_770_DUMMY_REMAIN",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-real-strict-export-unity-native-chat-13.md",
-  "next_action": "New exact real ZIP2 same-instance strict receipt 9 arrays+28 refs+416 external+50 BC3 TOP MIP PASSED at 43207734641 (step success and GT_REAL_ORIGINAL_TEXTURE_INTEGRITY_FINAL marker); new native code d734b7c7 uses combined strict gate, source-only 43217299422 PASS. Current full native run 43205543533 at earlier c8680938 currently in real Unity Editor 2021.3.45f2 import & compile; do NOT cancel or start duplicate. Inspect first failure or APK OBB XAPK delivery; later owner-authorized full run must include f3ea4bea,e687c0c4,d734b7c7 new strict source gates. ZIP2 SHA pin 15964ea8, no Git LFS; source game files untouched; Android GPU/BC3 lower mips not proven. 770 dummy custom Material docs remain.",
+  "latest_session": "sessions/20261112-GT-original-Particle108-private-unity-chat-14.md",
+  "next_action": "First check isolated original Particle108 Android Vulkan Unity ShaderVariantCollection AssetBundle run 43220728060: synthetic test + real SHA-original VSFS 4 pairs/8 glslang passed; Unity Editor step in_progress. If Unity fails, inspect first failed step and private safe JSON, fix without publishing original HLSL/bytecode/private GUIDs. If it passes, progress to exact SAME-instance original Particle108 Shader48 GUID / Material binding install in disposable full export before marking any of 770 dummy restored. Current native full APK OBB XAPK 43205543533 in progress at real Unity Editor c868093 snapshot; don't cancel/start duplicate. Zip2 SHA 15964ea8 only no LFS; keep GTK 9/28/416/50 strict gate and all source authenticity.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -398,5 +398,27 @@
     "native_43205543533_real_Unity_Editor_stage_passed": false,
     "native_43205543533_XAPK_produced": false,
     "latest_native_strict_source_gates_in_current_43205543533": false
+  },
+  "proofs_20261112_chat14": {
+    "source_original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_particle_renderer_slot_use": 108,
+    "source_exact_original_DXBC_VS_FS_keyword_pairs": 4,
+    "source_original_glslang_Vulkan11_stages_compiled": 8,
+    "source_only_synthetic_unit_tests_passed_at_run": 43220728060,
+    "original_isolated_Unity_2021_Android_probe_run": 43220728060,
+    "Unity_2021_android_shader_import_and_bundle_compilation_success_unproven": true,
+    "original_Material_Shader_GUID_or_Adreno_pixels_verified": false,
+    "original_Dummy_Material_documents_remaining": 770,
+    "original_assets_or_meta_changed": false,
+    "independent_native_run_in_progress": 43205543533,
+    "no_Git_LFS": true,
+    "commits": {
+      "source_stage": "c0530917162a8818fade7e7192b200ed2cd20c7e",
+      "tests": "676077a0e4e727a15f966e9efcdb5e9d83f63b08",
+      "Unity_Editor_probe": "696f5cc685b21f6b26b74f0d9a748d32f354991c",
+      "Unity_workflow": "74bc43981922d27ee6ed0dac9d831d08cea037cf",
+      "stage_path_fix1": "a77cfc3069058d86dbcc4200478a72659f6150a3",
+      "stage_path_fix2": "067a640f844fc1b751f4431760c0e8ca1d74d126"
+    }
   }
 }
