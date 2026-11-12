@@ -1,5 +1,7 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+> GT Chat24 scope-control follow-up: isolated synthetic Unity2021 Android Vulkan global vs local pragma control CI [43297804472](https://github.com/alwansan/raf/actions/runs/43297804472) launched at commit 682cbea730daf4af33c29f066639d84e14609839. It measures Shader.keywordSpace.isOverridable and serialized synthetic m_KeywordFlags, comparing to source-authentic Spectrum index4 byte 0. At this snapshot Unity compilation in progress; neither CI acceptance nor original game keyword scope established. If CI fails inspect real Unity and independent finalized console jobs; do not conflate bundle success with shader source or Adreno parity.
+
 ## تحديث GT Chat-24 — Original Spectrum Keyword Flags مثبتة من المصدر
 
 [CI43296468683 SUCCESS](https://github.com/alwansan/raf/actions/runs/43296468683): فحص `m_KeywordFlags` الأصلي المباشر من ZIP2 SHA (115,978,112B)، وُجدت **5 Flags أصلية** تطابق **5 Keywords** و**Flag index4=0** وكلها متساوية (distinct=1)، ونجحت الاختبارات السلبية. **دليل SOURCE ONLY** وليس mapping مؤكد لمعنى global/local/overridable، ولا proof Material أو GUID/RT/CB0 أو Pixel. P06/M2 يبقيان blocked، وتبقى تجربة Unity السابقة الخاصة ذات 7Pass/2Variants/14,492B منفصلة عن اللعبة. [جلسة Chat24](sessions/20261112-GT-source-original-keyword-flags-chat-24.md).

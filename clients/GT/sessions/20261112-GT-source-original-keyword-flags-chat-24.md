@@ -20,3 +20,7 @@
 ## Recovery
 
 Read `clients/GT/RESTORE_AR.md`, `RESTORATION_PLAN_AR.md` + JSON, `state.json`, `SUMMARY_AR.md`, `MEMORY.md`, and Chat23/Chat24 sessions. Do NOT confuse CI SUCCESS with in-game water pixel acceptance. Keep source ZIP2 read only and no Git LFS.
+
+## Synthetic Unity2021 flag-scope control trial (status pending)
+
+GT Chat24 scope-control follow-up: isolated synthetic Unity2021 Android Vulkan global vs local pragma control CI [43297804472](https://github.com/alwansan/raf/actions/runs/43297804472) launched at commit 682cbea730daf4af33c29f066639d84e14609839. It measures Shader.keywordSpace.isOverridable and serialized synthetic m_KeywordFlags, comparing to source-authentic Spectrum index4 byte 0. At this snapshot Unity compilation in progress; neither CI acceptance nor original game keyword scope established. If CI fails inspect real Unity and independent finalized console jobs; do not conflate bundle success with shader source or Adreno parity.

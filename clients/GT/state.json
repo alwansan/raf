@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261112-GT-source-original-keyword-flags-chat-24.md",
-  "next_action": "GT Chat24: CI43296468683 real ZIP2 115978112B original owner read, exact m_KeywordNames=5 + m_KeywordFlags=5, original [4]=0, 5/5 equal, source SHA provenance. Next distinguish flag0 global/local semantics via version-matched Unity2021 controlled serialization/keywordSpace; then source owner Material->Shader PPtr, export GUID, sampler/CB0/RT, runtime branch and Adreno pixels. No production installs or LFS.",
+  "next_action": "GT Chat24: CI43296468683 real ZIP2 115978112B original owner read, exact m_KeywordNames=5 + m_KeywordFlags=5, original [4]=0, 5/5 equal, source SHA provenance. Next distinguish flag0 global/local semantics via version-matched Unity2021 controlled serialization/keywordSpace; then source owner Material->Shader PPtr, export GUID, sampler/CB0/RT, runtime branch and Adreno pixels. No production installs or LFS. Synthetic Unity2021 local/global flag correlation CI43297804472 was IN PROGRESS at snapshot; inspect result and finalized console first.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -768,6 +768,8 @@
     "original_material_keyword_selection_proven": false,
     "original_game_assets_modified": false,
     "Adreno_pixels_verified": false,
-    "LFS_used": false
+    "LFS_used": false,
+    "synthetic_Unity2021_global_local_scope_CI_trial": 43297804472,
+    "synthetic_Unity2021_global_local_scope_CI_success_unverified": true
   }
 }
