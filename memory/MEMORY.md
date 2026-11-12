@@ -1,3 +1,7 @@
+## ماء Raft — تدقيق الهاتف والسجلات التاريخية
+
+[GFX157](sessions/20261112-GFX-chat-water-log-replay-117.md): GFX155 ناجح على Adreno 730 Vulkan في 4356 قيمة اصطناعية. سجلات CL تحتوي رفض Spectrum وFoam وBlur وDepth Copy، ورفض FFT للفهرسين 0 و6 مع حد 0. أصل الماء مفتوح، والخطوة التالية هوية الأصل وتسجيل kernels في Unity.
+
 ## المرحلة الثانية — استعادة الماء
 
 الدورة الحالية [GFX155](sessions/20261112-GFX-chat-water-phase-two-115.md)، الأصل chat. [مسار المرحلة الثانية](../gfxlab/WATER_PHASE_TWO_AR.md). `WATER-001 OPEN`. تجربة Unity Vulkan تقيس سطحاً اصطناعياً أولاً، ثم نربط الحالات بالـPC الأصلي المثبت ZIP2. GT مستقل.

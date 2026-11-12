@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-water-phase-two-115",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-phase-two-115.md",
+  "latest_session": "20261112-GFX-chat-water-log-replay-117",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-log-replay-117.md",
   "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX155 owner Vulkan readback ZIP pending; GFX156 source metadata verified. Next match MonoScript PPtrs to source scenes/prefabs and pin one Spectrum/FFT/height query case.",
+  "next_experiment": "Use historical Dx11FFT indices 0/6 with bound 0 to verify imported original candidate and backend kernel registration before map parity; resolve scene MonoScript PPtrs.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3327,7 +3327,7 @@
     "native_read_sha": "467ae9fdda57275b70c3683514a25375f2a782c9",
     "workflow_run": 43144304221,
     "apk_verified": true,
-    "owner_device_verified": false,
+    "owner_device_verified": true,
     "original_water_restored": false,
     "roadmap": "gfxlab/WATER_PHASE_TWO_AR.md",
     "failed_initial_run": 43143685531,
@@ -3349,7 +3349,14 @@
       "architecture": "ARM64",
       "scripting_backend": "IL2CPP",
       "independent_apk_sha256_and_zip_crc": true,
-      "device_verified": false
+      "device_verified": true
+    },
+    "owner_evidence": "gfxlab/evidence/20261112_gfx155_owner_vulkan_water_safe.json",
+    "historical_log_replay": {
+      "cl_commit": "b3286b326d73ee511cd2f68a43c92a1233c2f8d1",
+      "evidence": "gfxlab/evidence/20261112_gfx157_cl_water_log_replay_safe.json",
+      "text_excerpts": 7,
+      "readable_summaries": 15
     }
   }
 }

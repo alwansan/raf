@@ -4,4 +4,4 @@
 
 اقرأ [الحالة](../../memory/STATE.json)، [الذاكرة](../../memory/MEMORY.md)، [مسار المختبر بعد التسليم](NEXT_AR.md)، وملف الجلسة المشار إليه في الحالة. تحقّق من HEAD وأحدث Actions و[ملخص GT](https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/SUMMARY_AR.md). واصل أول سؤال تقني يحتاج تجربة معزولة، واحفظ دليلها وحدّث الحالة والجلسة وهذه الرسالة عند تغير نقطة الاستئناف.
 
-**المرحلة الثانية نشطة: استعادة الماء.** اقرأ [مسار الماء](../../gfxlab/WATER_PHASE_TWO_AR.md) و[جلسة GFX155](../../memory/sessions/20261112-GFX-chat-water-phase-two-115.md). تحقق من بناء GFX155 وبيانات هاتفه، ثم أكمل جرد حالات الماء الأصلية وتتبّع Spectrum/FFT والارتفاع والطفو.
+**المرحلة الثانية نشطة: استعادة الماء.** اقرأ [مسار الماء](../../gfxlab/WATER_PHASE_TWO_AR.md) و[جلسة GFX155](../../memory/sessions/20261112-GFX-chat-water-phase-two-115.md). نجح تدقيق هاتف GFX155. اقرأ [جلسة مراجعة CL](../../memory/sessions/20261112-GFX-chat-water-log-replay-117.md) ثم أكمل التحقق من تسجيل kernels لمرشح FFT الأصلي وجرد مكونات المشاهد.

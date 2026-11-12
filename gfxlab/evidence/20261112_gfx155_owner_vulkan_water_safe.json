@@ -1,0 +1,22 @@
+{
+  "experiment": "GFX155",
+  "evidence": "GPU_EXPERIMENT",
+  "scope": "synthetic_unity_height_buffer",
+  "apk_run": 43144304221,
+  "device": "Adreno 730",
+  "api": "Vulkan 1.1.0 [512.615.95]",
+  "os": "Android 15 / API 35",
+  "unity": "2021.3.45f2",
+  "archive_sha256": "4258bbceb422e5510b2c410c265778e7ab9925f76eb70c02d2eec28fddd891d9",
+  "samples": 4356,
+  "nonfinite": 0,
+  "tolerance": 0.00003,
+  "max_abs_error": 5.959863722537762e-7,
+  "cases": [
+    0,
+    4.2970310745737983e-7,
+    4.0735653822343565e-7,
+    5.959863722537762e-7
+  ],
+  "original_water_verified": false
+}

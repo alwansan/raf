@@ -1,0 +1,532 @@
+{
+  "cl_commit": "b3286b326d73ee511cd2f68a43c92a1233c2f8d1",
+  "text_excerpts": {
+    "log.txt": [
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 2,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 12,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "fft_stack",
+        "operation": "kernel_index",
+        "index": 6,
+        "reported_upper_bound": 0,
+        "root_lines": 1
+      },
+      {
+        "family": "foam_global",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 4
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 5,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "subsurface_blur",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      }
+    ],
+    "log2.txt": [
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 2,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 12,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "fft_stack",
+        "operation": "kernel_index",
+        "index": 6,
+        "reported_upper_bound": 0,
+        "root_lines": 1
+      },
+      {
+        "family": "foam_global",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 4
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 5,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "subsurface_blur",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      }
+    ],
+    "log3.txt": [],
+    "text4.txt": [
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 2,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 12,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "depth_copy",
+        "operation": "CommandBuffer.DrawMesh",
+        "index": 3,
+        "reported_upper_bound": null,
+        "root_lines": 2
+      },
+      {
+        "family": "depth_copy",
+        "operation": "CommandBuffer.DrawMesh",
+        "index": 4,
+        "reported_upper_bound": null,
+        "root_lines": 2
+      },
+      {
+        "family": "fft_stack",
+        "operation": "kernel_index",
+        "index": 6,
+        "reported_upper_bound": 0,
+        "root_lines": 2
+      },
+      {
+        "family": "foam_global",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 5,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      },
+      {
+        "family": "subsurface_blur",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 2
+      }
+    ],
+    "text5.txt": [
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 2,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 12,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "depth_copy",
+        "operation": "CommandBuffer.DrawMesh",
+        "index": 3,
+        "reported_upper_bound": null,
+        "root_lines": 1
+      },
+      {
+        "family": "depth_copy",
+        "operation": "CommandBuffer.DrawMesh",
+        "index": 4,
+        "reported_upper_bound": null,
+        "root_lines": 1
+      },
+      {
+        "family": "fft_stack",
+        "operation": "kernel_index",
+        "index": 6,
+        "reported_upper_bound": 0,
+        "root_lines": 1
+      },
+      {
+        "family": "foam_global",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 5,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "subsurface_blur",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      }
+    ],
+    "text6.txt": [
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 2,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "bilateral_blur",
+        "operation": "Graphics.Blit",
+        "index": 12,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "depth_copy",
+        "operation": "CommandBuffer.DrawMesh",
+        "index": 4,
+        "reported_upper_bound": null,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 4,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      }
+    ],
+    "text7.txt": [
+      {
+        "family": "fft_stack",
+        "operation": "kernel_index",
+        "index": 0,
+        "reported_upper_bound": 0,
+        "root_lines": 1
+      },
+      {
+        "family": "fft_stack",
+        "operation": "kernel_index",
+        "index": 6,
+        "reported_upper_bound": 0,
+        "root_lines": 1
+      },
+      {
+        "family": "foam_global",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 3,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 4,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "spectrum",
+        "operation": "Graphics.Blit",
+        "index": 5,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      },
+      {
+        "family": "subsurface_blur",
+        "operation": "Graphics.Blit",
+        "index": 1,
+        "reported_upper_bound": 1,
+        "root_lines": 1
+      }
+    ]
+  },
+  "session_summaries": [
+    {
+      "session": "LogRaft-20261102-201041-750",
+      "water": null,
+      "bilateral": null,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261102-201912-884",
+      "water": null,
+      "bilateral": null,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261102-205325-994",
+      "water": 28997,
+      "bilateral": 12426,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261102-205608-054",
+      "water": 44578,
+      "bilateral": 17824,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261104-173559-718",
+      "water": null,
+      "bilateral": null,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261104-175425-978",
+      "water": 3262,
+      "bilateral": null,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261104-210832-360",
+      "water": 121496,
+      "bilateral": null,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261104-220053-314",
+      "water": 79432,
+      "bilateral": null,
+      "fft": 12700,
+      "material": null,
+      "kernel": null
+    },
+    {
+      "session": "LogRaft-20261104-225757-156",
+      "water": 40327,
+      "bilateral": null,
+      "fft": 5555,
+      "material": {
+        "spectrum": 12557,
+        "foam_global": 22216,
+        "subsurface_blur": 5554,
+        "utility_noise": 0,
+        "other_ultimate_water": 0
+      },
+      "kernel": {
+        "index_6": 5555,
+        "other_index": 0
+      }
+    },
+    {
+      "session": "LogRaft-20261105-220101-932",
+      "water": 76592,
+      "bilateral": null,
+      "fft": 11627,
+      "material": {
+        "spectrum": 30075,
+        "foam_global": 46517,
+        "subsurface_blur": 0,
+        "utility_noise": 0,
+        "other_ultimate_water": 0
+      },
+      "kernel": {
+        "index_6": 11627,
+        "other_index": 0
+      }
+    },
+    {
+      "session": "LogRaft-20261105-220911-559",
+      "water": 23884,
+      "bilateral": null,
+      "fft": 3850,
+      "material": {
+        "spectrum": 8484,
+        "foam_global": 15400,
+        "subsurface_blur": 0,
+        "utility_noise": 0,
+        "other_ultimate_water": 0
+      },
+      "kernel": {
+        "index_6": 3850,
+        "other_index": 0
+      }
+    },
+    {
+      "session": "LogRaft-20261105-230108-327",
+      "water": 39132,
+      "bilateral": null,
+      "fft": 6026,
+      "material": {
+        "spectrum": 15028,
+        "foam_global": 24104,
+        "subsurface_blur": 0,
+        "utility_noise": 0,
+        "other_ultimate_water": 0
+      },
+      "kernel": {
+        "index_6": 6026,
+        "other_index": 0
+      }
+    },
+    {
+      "session": "LogRaft-20261107-035142-064",
+      "water": 45693,
+      "bilateral": null,
+      "fft": 6869,
+      "material": {
+        "spectrum": 18213,
+        "foam_global": 27480,
+        "subsurface_blur": 0,
+        "utility_noise": 0,
+        "other_ultimate_water": 0
+      },
+      "kernel": {
+        "index_6": 6869,
+        "other_index": 0
+      }
+    },
+    {
+      "session": "LogRaft-20261108-164850-270",
+      "water": 74359,
+      "bilateral": null,
+      "fft": 11165,
+      "material": {
+        "spectrum": 29700,
+        "foam_global": 44659,
+        "subsurface_blur": 0,
+        "utility_noise": 0,
+        "other_ultimate_water": 0
+      },
+      "kernel": {
+        "index_6": 11165,
+        "other_index": 0
+      }
+    },
+    {
+      "session": "LogRaft-20261102-200643-031",
+      "water": null,
+      "bilateral": null,
+      "fft": null,
+      "material": null,
+      "kernel": null
+    }
+  ],
+  "summaries_missing": 5,
+  "scope": "seven root text excerpts and fifteen readable summaries; do not combine across sources or treat missing fields as zero"
+}
