@@ -32,6 +32,8 @@ namespace RaftGT
             public long privateAndroidVulkanBundleBytes;
             public bool importedPrivateShader;
             public bool registeredBothKeywordVariants;
+            public bool privateKeywordGlobalOverridableConfirmed;
+            public bool privateMaterialKeywordOffOnOffAccepted;
             public bool privateAndroidVulkanBundleBuilt;
             public bool editorShaderImportAndCompilationProvisional;
             public bool exactOriginalKeywordScopeFlagsProven;
@@ -91,10 +93,24 @@ namespace RaftGT
                 if (shader == null)
                     throw new InvalidOperationException("PrivateUnifiedSpectrumShaderMissing");
                 result.importedPrivateShader = true;
+                var privateKeyword = shader.keywordSpace.keywords
+                    .Where(k => k.name == keyword).ToArray();
+                result.privateKeywordGlobalOverridableConfirmed =
+                    privateKeyword.Length == 1 && privateKeyword[0].isOverridable;
+                if (!result.privateKeywordGlobalOverridableConfirmed)
+                    throw new InvalidOperationException("PrivateSourceIndex4NotGlobalKeywordSpace");
                 Material material = new Material(shader);
                 try
                 {
                     result.importedPasses = material.passCount;
+                    material.DisableKeyword(keyword);
+                    bool initiallyOff = !material.IsKeywordEnabled(keyword);
+                    material.EnableKeyword(keyword);
+                    bool switchedOn = material.IsKeywordEnabled(keyword);
+                    material.DisableKeyword(keyword);
+                    bool switchedOff = !material.IsKeywordEnabled(keyword);
+                    result.privateMaterialKeywordOffOnOffAccepted =
+                        initiallyOff && switchedOn && switchedOff;
                 }
                 finally
                 {
@@ -102,6 +118,8 @@ namespace RaftGT
                 }
                 if (result.importedPasses != 7)
                     throw new InvalidOperationException("PrivateUnifiedShaderSevenPassMismatch");
+                if (!result.privateMaterialKeywordOffOnOffAccepted)
+                    throw new InvalidOperationException("PrivateSpectrumKeywordToggleNotAccepted");
                 var variants = new ShaderVariantCollection();
                 var normal = new ShaderVariantCollection.ShaderVariant(
                     shader, PassType.Normal, Array.Empty<string>());

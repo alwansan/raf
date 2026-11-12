@@ -187,6 +187,8 @@ jobs:
             "shaderErrorCount":0,
             "importedPrivateShader":True,
             "registeredBothKeywordVariants":True,
+            "privateKeywordGlobalOverridableConfirmed":True,
+            "privateMaterialKeywordOffOnOffAccepted":True,
             "privateAndroidVulkanBundleBuilt":True,
             "editorShaderImportAndCompilationProvisional":True,
             "exactOriginalKeywordScopeFlagsProven":False,
@@ -201,7 +203,7 @@ jobs:
                   raise SystemExit("GT_SPECTRUM_UNIFIED_UNITY_SAFE_GATE_"+key)
           if type(r.get("privateAndroidVulkanBundleBytes")) is not int or r["privateAndroidVulkanBundleBytes"]<=0:
               raise SystemExit("GT_SPECTRUM_UNIFIED_ANDROID_BUNDLE_EMPTY")
-          print("GT_SPECTRUM_UNIFIED_KEYWORD_PRIVATE_UNITY_PROVISIONAL sevenPasses=true keywordVariants=2 Unity2021=true originalKeywordScopeAndMaterialParity=false AdrenoPixels=false")
+          print("GT_SPECTRUM_UNIFIED_KEYWORD_PRIVATE_UNITY_PROVISIONAL sevenPasses=true keywordVariants=2 privateGlobalScope=true privateMaterialOffOnOff=true Unity2021=true originalMaterialParity=false AdrenoPixels=false")
           PY
       - name: Retain only provisional numeric Unity and source-stage reports, never original keyword or ShaderLab
         if: always()
