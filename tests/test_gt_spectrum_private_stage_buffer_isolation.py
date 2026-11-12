@@ -35,6 +35,30 @@ class SpectrumStageBuffers(unittest.TestCase):
         self.assertFalse(report["Unity_2021_Android_compilation_proven"])
         self.assertFalse(report["Adreno_pixels_proven"])
 
+    def test_optional_varying_uniform_block_names_is_stage_local_and_reversible(self):
+        original = candidate().replace(
+            "float4 cb0_0_m0[4];",
+            "struct cb4_struct { float4 x; };\n"
+            "cbuffer cb4 : register(b4) { float4 pos; };\n"
+            "float4 cb0_0_m0[4];")
+        transformed, report = isolate(original, stage_uniform_blocks=True)
+        self.assertTrue(report["private_uniform_block_stage_alias_mode"])
+        self.assertGreater(report["private_vertex_uniform_block_identifiers_disambiguated"],0)
+        self.assertGreater(report["private_fragment_uniform_block_identifiers_disambiguated"],0)
+        self.assertIn("struct GT_PRIVATE_VS_cb4_struct",transformed)
+        self.assertIn("cbuffer GT_PRIVATE_VS_cb4 : register(b4)",transformed)
+        self.assertEqual(original.count("register(b4)"),transformed.count("register(b4)"))
+        self.assertFalse(report["Unity_2021_Android_compilation_proven"])
+        self.assertFalse(report["sampler_binding_material_parity_proven"])
+
+    def test_default_stage_cbuffer_isolation_does_not_change_uniform_block_names(self):
+        raw=candidate().replace("float4 cb0_0_m0[4];",
+            "cbuffer cb4 : register(b4) { float4 pos; };\nfloat4 cb0_0_m0[4];")
+        transformed, report=isolate(raw)
+        self.assertIn("cbuffer cb4 : register(b4)",transformed)
+        self.assertFalse(report["private_uniform_block_stage_alias_mode"])
+        self.assertEqual(report["private_vertex_uniform_block_identifiers_disambiguated"],0)
+
     def test_only_original_seven_passes_accepted(self):
         for count in (0,1,6,8):
             with self.subTest(count=count), self.assertRaisesRegex(
