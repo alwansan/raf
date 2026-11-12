@@ -4,7 +4,7 @@ from collections import Counter, defaultdict
 import json
 from pathlib import Path
 
-PREFIX = "t1_original_fft_dispatch."
+PREFIXES = {"t1_original_fft_dispatch": "dispatch", "t1_original_fft_bind": "binding"}
 EVENTS = {"before", "returned", "threw"}
 
 
@@ -20,9 +20,12 @@ def audit(lines):
         if not isinstance(row, dict) or row.get("area") != "water":
             continue
         operation = row.get("operation")
-        if not isinstance(operation, str) or not operation.startswith(PREFIX):
+        if not isinstance(operation, str):
             continue
-        event = operation[len(PREFIX):]
+        prefix, _, event = operation.partition(".")
+        kind = PREFIXES.get(prefix)
+        if kind is None:
+            continue
         session, detail = row.get("session"), row.get("detail")
         if event not in EVENTS or not isinstance(session, str) or not session or not isinstance(detail, str):
             counts["malformed_trace_events"] += 1
@@ -35,11 +38,21 @@ def audit(lines):
             if event == "before":
                 if fields["source_sha_prefix"] != "8aa32937d423":
                     raise ValueError
-                argument = int(fields["numeric_kernel_argument"])
-                present = fields["shader_present"].lower()
-                if present not in ("true", "false"):
+                if kind == "binding":
+                    site, pass_index = int(fields["site"]), int(fields["pass"])
+                    if not 0 <= site < 6 or pass_index != site // 3:
+                        raise ValueError
+                    value = (site, pass_index)
+                else:
+                    argument = int(fields["numeric_kernel_argument"])
+                    present = fields["shader_present"].lower()
+                    if present not in ("true", "false"):
+                        raise ValueError
+                    value = (argument, present == "true")
+            elif kind == "binding":
+                if fields["gpu_result"] != "unverified":
                     raise ValueError
-                value = (argument, present == "true")
+                value = True
             else:
                 expected = "managed_dispatch_threw" if event == "threw" else "managed_dispatch_call_returned"
                 if fields[expected] != "true":
@@ -48,26 +61,32 @@ def audit(lines):
         except (KeyError, ValueError):
             counts["malformed_trace_events"] += 1
             continue
-        observed = calls[(session, sequence)]
+        observed = calls[(session, kind, sequence)]
         if event in observed:
             if observed[event] != value:
                 observed["conflict"] = True
             counts["duplicate_events"] += 1
         observed[event] = value
     by_argument = defaultdict(Counter)
-    for observed in calls.values():
+    by_binding_site = defaultdict(Counter)
+    for (_, kind, _), observed in calls.items():
         if "conflict" in observed or {"returned", "threw"} <= observed.keys():
             counts["conflicting_calls"] += 1
         elif "before" not in observed:
             counts["terminal_without_before"] += 1
         else:
-            argument, present = observed["before"]
             outcome = ("threw" if "threw" in observed else
                        "returned" if "returned" in observed else "no_terminal")
-            by_argument[argument][outcome] += 1
-            by_argument[argument]["shader_missing"] += not present
-    return {"trace_sessions": len({session for session, _ in calls}),
+            if kind == "binding":
+                site, _ = observed["before"]
+                by_binding_site[site][outcome] += 1
+            else:
+                argument, present = observed["before"]
+                by_argument[argument][outcome] += 1
+                by_argument[argument]["shader_missing"] += not present
+    return {"trace_sessions": len({session for session, _, _ in calls}),
             "trace_counts": dict(counts), "numeric_arguments": dict(by_argument),
+            "binding_sites": dict(by_binding_site),
             "gpu_result_verified": False, "runtime_kernel_registration_verified": False}
 
 
