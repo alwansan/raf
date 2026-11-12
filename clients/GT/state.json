@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT21_RESTORATION_LEDGER_AND_DEVICE_LOG_GUARD_UPDATED_NATIVE_NEW_RUNNING_WATER_SHADERS_UNRESOLVED",
+  "status": "GT_CHAT21_PLAN_VALID_SPECTRUM_ORIGINAL_7PASS_FOAM_2PASS_CSHARP_SYNTHETIC_VERIFIED_NATIVE_STILL_RUNNING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md",
-  "next_action": "READ clients/GT/RESTORE_AR.md then clients/GT/RESTORATION_PLAN_AR.md + RESTORATION_PLAN.json; run scripts.gt_restoration_plan_check. Current newer full native Actions 43247161671 remains Unity Editor import/compile at latest observation, do not duplicate while active. Old signed native100 recovery 43246196803 is old snapshot only. Critical visual blockers: 770 postvendor custom Material docs still Dummy; Spectrum 19,191 + FoamGlobal 23,038 invalid pass logs; kernel index6 7,263 with owner identity unproven; Raft white in CL images. Restore original shader pass/Material GUID provenance, prove kernel6 before FFT rewrite, and test pixels on Adreno. Continue from Chat21 session, preserve ZIP2 pin/no LFS and all GUIDs.",
+  "next_action": "READ RESTORE_AR + RESTORATION_PLAN_AR/JSON and newest Chat21. Source-authenticated original Spectrum 7 passes with 28 stage refs (B09 41920232173), Foam Global original 2 passes (B24). Nov12 device log Spectrum minimum6 is not full source parity. GTOriginalWaterPassImportProbe added to AndroidNativeBuild validation: synthetic CSharp run 43269999662 SUCCESS; true Unity import/android GPU not yet verified. Once a NEW full build starts after code integration collect GT_WATER_IMPORTED_PASS_DIAGNOSTIC, then fix source original pass/GUID/Material/CB0/Sampler/RT equivalence; do not classify cosmetic dummy count as restored. CURRENT run43247161671 older source still Unity Editor import, do not duplicate. 770 custom Material docs Dummy, kernel6 source identity unknown. ZIP2 SHA pin and NO LFS, no source/.meta/GUID mutations.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -599,7 +599,15 @@
     "new_full_native_run": 43247161671,
     "new_full_native_status_at_last_check": "in_progress_Unity_Editor",
     "last_completed_phone_log_gate": "KNOWN_DEVICE_LOG_GATE_REJECTED",
-    "continuation_protocol": "Update plan JSON + Arabic + state + MEMORY + SUMMARY + RESTORE + sessions after each proved batch; never claim device proof on CI alone"
+    "continuation_protocol": "Update plan JSON + Arabic + state + MEMORY + SUMMARY + RESTORE + sessions after each proved batch; never claim device proof on CI alone",
+    "original_spectrum_source_passes": 7,
+    "original_spectrum_variant_stage_refs": 28,
+    "original_foam_source_passes": 2,
+    "spectrum_device_log_required_floor": 6,
+    "water_editor_import_probe": "android-port/Editor/GTOriginalWaterPassImportProbe.cs",
+    "water_editor_import_probe_synthetic_ci_run": 43269999662,
+    "water_editor_import_probe_true_unity_editor_proven": false,
+    "water_editor_import_probe_android_gpu_proven": false
   },
   "proofs_20261112_chat21": {
     "origin": "chat",
@@ -624,6 +632,20 @@
     "new_shader_restoration_in_this_chat": false,
     "original_assets_GUID_or_meta_changed": false,
     "no_LFS": true,
-    "session_path": "clients/GT/sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md"
+    "session_path": "clients/GT/sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md",
+    "original_spectrum_source_7passes_B09_verified": true,
+    "original_spectrum_stage_refs": 28,
+    "original_spectrum_topology_source_CI": 41920232173,
+    "original_foam_source_2passes": true,
+    "water_log_only_spectrum_minimum": 6,
+    "water_spectrum_original7_not_faked_by_padding": true,
+    "plan_original_water_topology_gate_passed_run": 43268872421,
+    "read_only_Unity_water_import_probe_code_path": "android-port/Editor/GTOriginalWaterPassImportProbe.cs",
+    "read_only_Unity_water_import_probe_integrated_in_android_native_build": true,
+    "read_only_Unity_water_import_probe_CSharp_synthetic_CI": 43269999662,
+    "read_only_Unity_water_import_probe_CSharp_synthetic_CI_success": true,
+    "actual_Unity_Editor2021_imported_water_shader_passCount_proven": false,
+    "actual_Android_Adreno_water_shader_pass_gpu_pixels_verified": false,
+    "original_source_water_ShaderLab_restored_to_complete_game": false
   }
 }
