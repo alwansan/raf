@@ -57,7 +57,16 @@ jobs:
               "Raft_Data/sharedassets0.assets": PINS["Raft_Data/sharedassets0.assets"]})
           assert result["verified_bytes"] == 115978112
           assert result["lfs_used"] is False
-          print("GT_SPECTRUM_ORIGINAL_SHA_PIN_OK owners=1 bytes=115978112 LFS=false")
+          # B09's SHA-verified source contract reads a flat ./sharedassets0.assets,
+          # while the generic ZIP2 stager restores canonical Raft_Data/.. paths.
+          # Move ONLY the runner-private verified copy; ZIP2 is read-only.
+          original = destination / "Raft_Data" / "sharedassets0.assets"
+          flat = destination / "sharedassets0.assets"
+          assert original.is_file() and not original.is_symlink()
+          assert not flat.exists() and not flat.is_symlink()
+          original.rename(flat)
+          assert flat.is_file() and flat.stat().st_size == 115978112
+          print("GT_SPECTRUM_ORIGINAL_SHA_PIN_OK owners=1 bytes=115978112 LFS=false B09flat=true")
           PY
       - name: Load original reader and private shader translators
         env:
