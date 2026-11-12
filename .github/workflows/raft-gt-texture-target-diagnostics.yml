@@ -12,6 +12,8 @@ on:
       - tests/test_gt_compare_shader_restore_quality.py
       - scripts/gt_test_vendor_shader_restoration.py
       - tests/test_gt_test_vendor_shader_restoration.py
+      - scripts/gt_diagnose_texture_export_lineage.py
+      - tests/test_gt_diagnose_texture_export_lineage.py
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -42,3 +44,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
           python3 -m unittest discover -s tests -p test_gt_compare_shader_restore_quality.py -v
           python3 -m unittest discover -s tests -p test_gt_test_vendor_shader_restoration.py -v
+          python3 -m unittest discover -s tests -p test_gt_diagnose_texture_export_lineage.py -v
