@@ -47,6 +47,18 @@ class GTOriginalUnityStagingTests(unittest.TestCase):
         self.assertTrue((self.project/"Assets/Editor/OriginalParticleShaderValidation.cs").is_file())
         self.assertIn("2021.3.45f2",(self.project/"ProjectSettings/ProjectVersion.txt").read_text())
         self.assertNotIn("LOCAL_ALPHA",self.report.read_text())
+    def test_unity_2021_variant_collection_creation_uses_correct_api(self):
+        # A real Unity 2021 import in run 43220728060 failed with CS0311:
+        # ShaderVariantCollection is not a ScriptableObject subtype. This
+        # source-only regression prevents reintroducing that exact mistake;
+        # successful Unity compile is still required independently.
+        editor_source=(Path(__file__).resolve().parents[1]/
+                       "android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs")
+        source=editor_source.read_text(encoding="utf-8")
+        self.assertIn("new ShaderVariantCollection()",source)
+        self.assertNotIn("ScriptableObject.CreateInstance<ShaderVariantCollection>",source)
+        self.assertIn("BuildPipeline.BuildAssetBundles",source)
+
     def test_rejects_corrupt_glslang_variant_count(self):
         self.proof["private_combination_stage_Vulkan11_SPIRV_valid"]=7
         self.routing.write_text(json.dumps(self.proof))
