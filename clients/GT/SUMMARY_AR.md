@@ -121,3 +121,7 @@
 - [CI المشاهد](../../.github/workflows/raft-gt-scene-graphics-inventory.yml) · [CI الحاويات والمواد والشيدرات](../../.github/workflows/raft-gt-serialized-graphics-owners.yml)
 
 حافظ على نتائج المختبر الأصلية (6 Mesh و7 Material slots) كاختبار ارتداد، ولا تعتبر نجاحها تعميماً أو إثبات Vulkan/Android الفعلي.
+
+## **GT — Chat-15 / Unity CS0311 — فرق اختبار Unity الحقيقي من فحص المصدر
+
+فشل [43220728060](https://github.com/alwansan/raf/actions/runs/43220728060) **في تجميع C# داخل Unity Editor 2021.3.45f2** بـ`CS0311` لأن `ShaderVariantCollection` ليس `ScriptableObject`. جرى إصلاح تعبير الإنشاء في كود C# الحالي إلى `new ShaderVariantCollection()`، ثم أضفنا regression يمنع تكرار الخطأ في [5c41bf9](https://github.com/alwansan/raf/commit/5c41bf9411478bb3ecb30a60c4bd4585e052856b). مرحلة synthetic passed في [43225350415](https://github.com/alwansan/raf/actions/runs/43225350415) لكن Workflow **FAILED** لاحقاً عند source sampler mapping؛ هذا ليس Unity import/bundle pass. فشل [43225536504](https://github.com/alwansan/raf/actions/runs/43225536504) كشف اختباراً سلبياً ضرورياً لرفض `register(sN,space1)` دون تجاوز أصالة المصدر. المصدر المثبت: 4 Shader48 VS/FS pairs و8 glslang Vulkan branches؛ لم يثبت Android Vulkan Unity compile أو Pixel output، ولم تُستعد 770 مادة Dummy الباقية. Full native [43205543533](https://github.com/alwansan/raf/actions/runs/43205543533) قيد Unity Editor ولا APK/OBB/XAPK مؤكدة. [جلسة تفصيلية](sessions/20261112-GT-original-particle108-Unity-CS0311-regression-chat-15.md).
