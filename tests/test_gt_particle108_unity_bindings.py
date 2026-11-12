@@ -126,7 +126,7 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
 
     def test_unknown_original_suffix_rejected_even_when_translated_slot_is_valid(self):
         changed=self.code.replace("texture_t0 : register(t0)", "texture_t3 : register(t0)")
-        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING"):
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_TEXTURE_SLOT_MISSING"):
             rebind_stage(changed,self.program,self.indices,1)
 
     def test_compiled_original_RDEF_authorizes_descriptor_renumber_without_rewriting_register(self):
@@ -162,7 +162,7 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
 
     def test_missing_serialized_sampler_rejected(self):
         self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=65535
-        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING"):
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_SAMPLER_SLOT_MISSING"):
             rebind_stage(self.code,self.program,self.indices,0)
 
     def test_mismatched_original_shader_properties_fail_closed(self):
@@ -221,7 +221,7 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
 
     def test_source_register_slot_absent_even_if_symbol_matches_is_rejected(self):
         changed=self.code.replace("texture_t1 : register(t1)", "texture_t2 : register(t2)")
-        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING"):
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_TEXTURE_SLOT_MISSING"):
             rebind_stage(changed,self.program,self.indices,1)
 
     def test_invalid_or_empty_private_hlsl_fails_closed(self):
