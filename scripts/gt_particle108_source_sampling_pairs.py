@@ -23,6 +23,7 @@ from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
 from scripts.w1_stage_zip2_owners import fingerprint
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
 from scripts.gt_particle108_original_dxbc_sampler_decl import (
+    SourceError as OriginalDXBCError,
     dxbc_sampler_declarations,
 )
 
@@ -47,7 +48,11 @@ class SampleProofError(ValueError):
 def _words_from_original_dxbc(blob):
     """Container/chunk table and single SHDR/SHEX program, bounded and exact."""
     # Existing source parser checks length, offsets and instruction bounds.
-    dxbc_sampler_declarations(blob)
+    # Keep one public, privacy-safe fail-closed exception family.
+    try:
+        dxbc_sampler_declarations(blob)
+    except OriginalDXBCError:
+        raise SampleProofError("SOURCE_DXBC_MALFORMED") from None
     if type(blob) is not bytes or len(blob)<36 or blob[:4]!=b"DXBC":
         raise SampleProofError("SOURCE_DXBC_MALFORMED")
     chunks=struct.unpack_from("<I",blob,28)[0]
