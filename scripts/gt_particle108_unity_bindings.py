@@ -145,7 +145,15 @@ def rebind_stage(hlsl,program,name_indices,stage):
             raise BridgeError("TRANSLATOR_SAMPLER_SPACE_NOT_ZERO")
         if SAMPLER_DECL.search(hlsl):
             raise BridgeError("TRANSLATOR_SAMPLER_DECLARATION_UNBOUND")
-        raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
+        # A vertex-only stage genuinely may have no texture/sampler inputs.
+        # Permit that ONLY if the SHA-original program metadata also declares
+        # no texture/sampler registers and the translated stage does not
+        # advertise or sample a texture. Fragment source still needs a proved
+        # sampled resource; no fabricated dummy sampler or register mapping.
+        if not (stage == 1 and not textures and not samplers and
+                not used["t"] and
+                not re.search(r'\\b(?:Texture\\w*|sampler2D|Sample|SampleLevel|SampleBias)\\b', hlsl)):
+            raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
     # Every emitted sampler declaration must be covered by an exact source
     # register match. Partial proof can still give Unity "unrecognized sampler".
     if len(SAMPLER_DECL.findall(hlsl)) != len(used["s"]):
