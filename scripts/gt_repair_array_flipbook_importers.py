@@ -106,6 +106,17 @@ def plan(original:dict,trace:dict,exported:dict):
         if rows*columns!=entry["depth"]:
             counts["export_png_lacks_full_original_array_slices"]+=1
             continue
+        # A forged IHDR can advertise all source layers while having no
+        # real PNG pixels. Verify the complete compressed image and force
+        # decoding before considering any existing Unity importer mutation.
+        from PIL import Image
+        try:
+            with Image.open(file) as img:
+                if img.format!="PNG" or img.size!=(ix,iy):
+                    raise InventoryError("invalid_original_array_PNG_container")
+                img.load()
+        except (OSError,ValueError) as exc:
+            raise InventoryError("unreadable_original_array_exported_PNG_pixels") from exc
         counts["export_png_contains_complete_original_array_slices"]+=1
         changed,oldrows,oldcols=corrected_importer(meta,guid,rows,columns)
         if oldrows==rows and oldcols==columns:
