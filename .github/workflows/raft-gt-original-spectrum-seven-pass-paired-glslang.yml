@@ -16,6 +16,8 @@ on:
       - tests/test_gt_spectrum_private_stage_buffer_isolation.py
       - scripts/gt_spectrum_original_sampler_source_bridge.py
       - tests/test_gt_spectrum_original_sampler_source_bridge.py
+      - scripts/gt_spectrum_ci_console_gate.py
+      - tests/test_gt_spectrum_ci_console_gate.py
       - android-port/Experiments/GT/Editor/OriginalSpectrumSevenPassValidation.cs
       - .github/workflows/raft-gt-original-spectrum-seven-pass-paired-glslang.yml
 permissions:
@@ -46,7 +48,8 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_spectrum_private_unity_project.py -v
           python3 -m unittest discover -s tests -p test_gt_spectrum_private_stage_buffer_isolation.py -v
           python3 -m unittest discover -s tests -p test_gt_spectrum_original_sampler_source_bridge.py -v
-          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py scripts/gt_spectrum_original_private_seven_pass_shaderlab.py scripts/gt_spectrum_private_unity_project.py scripts/gt_spectrum_private_stage_buffer_isolation.py scripts/gt_spectrum_original_sampler_source_bridge.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_ci_console_gate.py -v
+          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py scripts/gt_spectrum_original_pass_states.py scripts/gt_spectrum_original_private_seven_pass_shaderlab.py scripts/gt_spectrum_private_unity_project.py scripts/gt_spectrum_private_stage_buffer_isolation.py scripts/gt_spectrum_original_sampler_source_bridge.py scripts/gt_spectrum_ci_console_gate.py
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -247,7 +250,20 @@ jobs:
             --project "$GITHUB_WORKSPACE/gt-private-spectrum-unity-variant1" \
             --out "$RUNNER_TEMP/gt-spectrum-private-unity-variant1-staging-safe.json" \
             --diagnostic-stage-buffers \
+            --diagnostic-uniform-blocks \
             --variant-index 1
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-spectrum-private-unity-variant1-staging-safe.json"
+          report=json.loads(p.read_text())
+          assert report["private_stage_local_uniform_block_alias_diagnostic_only"] is True
+          assert report["original_DXBC_register_annotations_unchanged"] is True
+          assert report["original_game_source_or_meta_modified"] is False
+          print("GT_SPECTRUM_VARIANT1_PRIVATE_BLOCK_ALIAS_STAGE vertexTokens=%d fragmentTokens=%d parityClaim=false" %
+                (report["private_vertex_uniform_block_identifier_count"],
+                 report["private_fragment_uniform_block_identifier_count"]))
+          PY
       - name: Unity 2021.3.45f2 real Android Vulkan original Spectrum variant1 isolated ShaderBundle
         id: gt_spectrum_variant1_real_unity
         uses: game-ci/unity-builder@v4
@@ -328,3 +344,42 @@ jobs:
           sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-spectrum-unity"
           sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-spectrum-unity-variant1"
           rm -f -- "$RUNNER_TEMP/gt-spectrum-private-unity-variant1-staging-safe.json"
+
+  # Unity 2021 ShaderUtil can return zero errors even when internal GLSL
+  # variant compilation prints linker failures. Read FINALIZED build job
+  # console via Actions REST from a SECOND job and reject hidden errors.
+  strict-final-unity-console:
+    name: Strict final Unity GLSL linker and variant log gate
+    needs: [original-private-spectrum-pairs]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Test secondary console gate against hidden original cb4_struct linker errors
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_spectrum_ci_console_gate.py -v
+      - name: Fetch final private Unity job log through GitHub Actions and reject false green
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jobs="$(gh api -H 'Accept: application/vnd.github+json' "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100")"
+          job_id="$(printf '%s' "$jobs" | jq -r '.jobs[] | select(.name == "original-private-spectrum-pairs") | .id' | head -n 1)"
+          if ! [[ "$job_id" =~ ^[0-9]+$ ]]; then
+            echo 'GT_PRIVATE_UNITY_JOB_MISSING_OR_AMBIGUOUS'
+            exit 2
+          fi
+          log="$RUNNER_TEMP/gt-spectrum-final-console.log"
+          gh api -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/actions/jobs/$job_id/logs" > "$log"
+          python3 -m scripts.gt_spectrum_ci_console_gate --console "$log"
+          rm -f -- "$log"
+
