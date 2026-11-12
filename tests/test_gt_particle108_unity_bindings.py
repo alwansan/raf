@@ -60,6 +60,29 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(BridgeError,"SOURCE_TEXTURE_MAPPING_UNRESOLVED"):
             rebind_stage(self.code,self.program,self.indices,0)
 
+    def test_unreferenced_original_non_identifier_name_is_allowed(self):
+        # Unity Shader m_NameIndices also contains symbolic engine/keyword
+        # metadata. We must reject only a non-HLSL *texture* source name.
+        self.indices.append(("Not an HLSL identifier",999))
+        text,report=rebind_stage(self.code,self.program,self.indices,0)
+        self.assertIn("sampler_MainTex",text)
+        self.assertEqual(report["original_sampler_registers_mapped"],2)
+
+    def test_non_identifier_original_texture_name_is_rejected(self):
+        self.indices[0]=("not a valid texture property",0)
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_TEXTURE_PARAMETER_NAME_NOT_IDENTIFIER"):
+            rebind_stage(self.code,self.program,self.indices,0)
+
+    def test_conflicting_source_name_index_collisions_refused(self):
+        self.indices.append(("_Other",0))
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_NAME_INDEX_COLLISION"):
+            rebind_stage(self.code,self.program,self.indices,0)
+
+    def test_identical_duplicate_source_name_index_is_no_op(self):
+        self.indices.append(("_MainTex",0))
+        code,_=rebind_stage(self.code,self.program,self.indices,0)
+        self.assertIn("Texture2D<float4> _MainTex",code)
+
     def test_shared_original_sampler_with_distinct_textures_rejected(self):
         self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=0
         with self.assertRaisesRegex(BridgeError,"SOURCE_TEXTURE_MAPPING_UNRESOLVED"):

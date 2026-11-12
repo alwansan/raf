@@ -37,6 +37,7 @@ SAFE_FAILURE=frozenset((
     "ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED", "ORIGINAL_NAME_INDEX_INVALID",
     "ORIGINAL_NAME_INDEX_VALUE_TYPE", "ORIGINAL_NAME_INDEX_KEY_TYPE",
     "ORIGINAL_NAME_INDEX_COLLISION", "ORIGINAL_NAME_INDEX_NONIDENTIFIER",
+    "ORIGINAL_TEXTURE_PARAMETER_NAME_NOT_IDENTIFIER",
     "ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING", "ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID",
     "ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED",
 ))
@@ -63,9 +64,13 @@ def original_names_and_registers(program,name_indices):
         if type(name) is not str:
             raise BridgeError("ORIGINAL_NAME_INDEX_KEY_TYPE")
         if index in names:
-            raise BridgeError("ORIGINAL_NAME_INDEX_COLLISION")
-        if not IDENT.fullmatch(name):
-            raise BridgeError("ORIGINAL_NAME_INDEX_NONIDENTIFIER")
+            if names[index]!=name:
+                raise BridgeError("ORIGINAL_NAME_INDEX_COLLISION")
+            # Identical repeated source table row retains original identity.
+            continue
+        # The complete Unity name-index table contains non-HLSL identifiers
+        # (keyword/engine/display metadata). Validate identifier syntax ONLY
+        # when this exact index is used as a serialized Texture m_NameIndex.
         names[index]=name
     raw=common.get("m_TextureParams")
     if type(raw) is not list: raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING")
@@ -77,6 +82,8 @@ def original_names_and_registers(program,name_indices):
         if type(t) is not int or t<0 or t in textures or n not in names:
             raise BridgeError("SOURCE_TEXTURE_MAPPING_UNRESOLVED")
         name=names[n]
+        if not IDENT.fullmatch(name):
+            raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_NAME_NOT_IDENTIFIER")
         textures[t]=name
         if type(s) is int and 0<=s<65535:
             if s in samplers and samplers[s]!="sampler"+name:
