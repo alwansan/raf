@@ -1,5 +1,15 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-23 — التحقق الأحدث (مصدر + Unity + Console Gate)
+
+**المثبت:** [CI43286126572 SUCCESS](https://github.com/alwansan/raf/actions/runs/43286126572) اجتاز مهمتي Unity Android Vulkan 2021 و**فحص سجل Unity النهائي المستقل**. مرشح Spectrum الأصلي المستقل Variant0 استُورد بـ7 Passes، 0 أخطاء، Bundle **12,080B**، وVariant1 استُورد بـ7 Passes، 0 أخطاء، Bundle **12,409B**؛ سجل Unity المكتمل **0 GLSL link error / 0 internal variant creation failure / 0 shader import/compile error**. لم يعد هذا نجاحاً زائفاً. ومع ذلك كل المرشحين داخل Unity خاص منفصل، **لم يُستعد ماء اللعبة ولا Material/GUID**.
+
+**Keyword:** [CI43286701677 SUCCESS](https://github.com/alwansan/raf/actions/runs/43286701677) أثبت من ZIP2 الأصلية أن `m_KeywordIndices=[4]` مع/بدون الكلمة الأصلية مرتبطة بالـ7 Passes وبأزواج VS/FS الـ14، وصنّع ShaderLab **موحداً تجريبياً** ذا 7Pass و2 فرعين لكل Pass. اختبار Unity الفعلي للشيدر الموحد [43288288144](https://github.com/alwansan/raf/actions/runs/43288288144) أُطلق، واختبار Python التمهيدي نجح؛ **نتيجة Unity والـConsole Gate غير مثبتة هنا**. أول تشغيل [43288132250](https://github.com/alwansan/raf/actions/runs/43288132250) فشل بسبب قوس Python في أداة تجهيز المشروع وصُحح `0795fa8`.
+
+**الاستكمال:** اقرأ [جلسة Chat-23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md) و[الخطة JSON](RESTORATION_PLAN.json)، وافحص الثلاث مهام في [43288288144](https://github.com/alwansan/raf/actions/runs/43288288144) قبل أي قبول. أصل Shader/Material GUID/Keyword scope/CB/RT/Adreno phone غير مثبت، Foam 2Pass وkernel6 و770 Dummy وثيقة ما زالت مفتوحة. لا LFS ولا تعديل أصول اللعبة.
+
+---
+
 ## GT / Chat-23 — آخر نتيجة مؤكدة لـSpectrum وشرط نجاح Unity الصارم
 
 اقرأ أولاً [جلسة Chat-23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md) مع [خطة الاستعادة العربية](RESTORATION_PLAN_AR.md) و[الخطة JSON](RESTORATION_PLAN.json) و[state.json](state.json). [43279249696](https://github.com/alwansan/raf/actions/runs/43279249696) أثبت **المرشح الأول Variant0**: Shader Spectrum أصلي المصدر بسبعة Passes، Android Vulkan Unity 2021.3.45f2، صفر أخطاء Shader ومخرجات Bundle خاصة 12,079B؛ لا Pixel/GUID.
