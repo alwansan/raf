@@ -33,6 +33,10 @@ on:
       - scripts/verify_exported_material_texture_links.py
       - tests/test_verify_exported_material_texture_links.py
       - tests/test_gt_native_array_import_contract.py
+      - scripts/gt_write_unity_array_import_contract.py
+      - tests/test_gt_write_unity_array_import_contract.py
+      - android-port/Editor/OriginalTextureArrayImportGuard.cs
+      - android-port/Editor/AndroidNativeBuild.cs
       - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
@@ -57,6 +61,7 @@ jobs:
             scripts
             tests
             .github/workflows
+            android-port/Editor
       - name: Verify safe aggregate target root causes and full original trace phase classification
         run: |
           python3 -m py_compile scripts/gt_diagnose_export_texture_targets.py scripts/gt_full_original_export_texenvs.py
@@ -76,3 +81,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_validate_bc3_array_slice_order.py -v
           python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
           python3 -m unittest discover -s tests -p test_gt_native_array_import_contract.py -v
+          python3 -m unittest discover -s tests -p test_gt_write_unity_array_import_contract.py -v
