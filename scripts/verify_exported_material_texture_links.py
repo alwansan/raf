@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import struct
 
 HEADER=re.compile(r"(?m)^---[ \t]+!u!(\d+)[ \t]+&(-?\d+)(?:[ \t]+stripped)?[ \t]*$")
 GUID=re.compile(r"(?m)^guid:[ \t]*([a-fA-F0-9]{32})[ \t]*$")
@@ -92,10 +93,44 @@ def texenv(doc):
     return result
 
 def is_texture(path,meta,fid):
-    # Imported Texture2D has an exact Unity fileID. A valid GUID paired with
-    # a non-existent sub-object is a dangling reference too.
+    # Real Unity importer subobjects have distinct native fileIDs.
+    # Original Texture2DArray (ClassID 187) can be an imported PNG flipbook,
+    # not only a serialized .asset. Never convert it to Texture2D/2800000.
     if path.suffix.lower() in IMAGES:
-        return fid==2800000 and bool(re.search(r"(?m)^TextureImporter:[ \t]*$",meta))
+        if not re.search(r"(?m)^TextureImporter:[ \t]*$",meta):
+            return False
+        if fid==2800000:
+            return True
+        if fid==18700000 and path.suffix.lower()==".png":
+            # The *separate* GT source-authoritative gate verifies the real
+            # original 9 class187 identities, 28 Material refs and exact
+            # per-array source depth. This generic B46 target guard can
+            # independently establish that Unity's actual imported PNG
+            # settings describe a complete positive flipbook grid.
+            values={}
+            for name in ("textureShape","flipbookRows","flipbookColumns"):
+                hits=re.findall(r"(?m)^[ \t]*"+name+r":[ \t]*(\d+)[ \t]*$",meta)
+                if len(hits)!=1:return False
+                values[name]=int(hits[0])
+            if values["textureShape"]!=4:
+                return False
+            rows,cols=values["flipbookRows"],values["flipbookColumns"]
+            if rows<1 or cols<1 or rows*cols>2048:
+                return False
+            try:
+                with path.open("rb") as stream:
+                    head=stream.read(24)
+                if (len(head)!=24 or head[:8]!=b"\\x89PNG\\r\\n\\x1a\\n"
+                    or head[12:16]!=b"IHDR" or
+                    int.from_bytes(head[8:12],"big")!=13):
+                    return False
+                width,height=struct.unpack(">II",head[16:24])
+            except OSError:
+                return False
+            return (0<width<=16384 and 0<height<=16384
+                    and width%cols==0 and height%rows==0
+                    and width//cols>0 and height//rows>0)
+        return False
     if path.suffix.lower() in {".asset",".cubemap",".rendertexture"}:
         return any(int(h[2])==fid and int(h[1]) in CLASSES
                    for h in HEADER.finditer(read(path)))
