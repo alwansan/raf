@@ -157,27 +157,32 @@ jobs:
           (Path(os.environ["RUNNER_TEMP"])/"gt-real-export-aggregate.json").write_text(json.dumps(d,indent=2,sort_keys=True)+"\n")
           print("GT_REAL_FULL_ORIGINAL_EXPORT "+json.dumps(d,sort_keys=True))
           PY
-      - name: Run independent Material-to-Texture exported GUID pointer guard
+      - name: Capture original Material-to-Texture export GUID guard results including exact failure code
         id: gt_export_links
         continue-on-error: true
         shell: bash
         run: |
-          python3 -m scripts.verify_exported_material_texture_links \
-            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
-            > "$RUNNER_TEMP/gt-export-texture-guard.private.txt"
+          if python3 -m scripts.verify_exported_material_texture_links \
+              --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+              > "$RUNNER_TEMP/gt-export-texture-guard.private.txt"; then
+            result_code=0
+          else
+            result_code=$?
+          fi
           python3 - <<'PY'
           import json,os
           from pathlib import Path
           s=(Path(os.environ["RUNNER_TEMP"])/"gt-export-texture-guard.private.txt").read_text()
-          # Guard emits only aggregate metadata: no source IDs, object names or payloads.
+          # B46 emits only an aggregate status and safe error code, never game values.
           lines=[x for x in s.splitlines() if x.startswith("RAFT_B46_TEXTURE_LINKS ")]
           if len(lines)!=1:
               raise SystemExit("Missing aggregate Material-to-Texture guard result")
           result=json.loads(lines[0].split(" ",1)[1])
           (Path(os.environ["RUNNER_TEMP"])/"gt-export-texture-guard-safe.json").write_text(
               json.dumps(result,sort_keys=True,indent=2)+"\n")
-          print("GT_EXPORTED_MATERIAL_TEXTURE_LINKS status="+result.get("status","UNKNOWN"))
+          print("GT_EXPORTED_MATERIAL_TEXTURE_LINKS "+json.dumps(result,sort_keys=True))
           PY
+          exit "$result_code"
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
