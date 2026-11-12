@@ -32,6 +32,36 @@ internal static class Program
         return idx;
     }
 
+
+    private static VariableDefinition? TypedShaderLocal(MethodDefinition method, Instruction ins, bool load)
+    {
+        if(!method.HasBody) return null;
+        int idx = ins.OpCode.Code switch
+        {
+            Code.Stloc_0 when !load => 0, Code.Stloc_1 when !load => 1,
+            Code.Stloc_2 when !load => 2, Code.Stloc_3 when !load => 3,
+            Code.Ldloc_0 when load => 0, Code.Ldloc_1 when load => 1,
+            Code.Ldloc_2 when load => 2, Code.Ldloc_3 when load => 3,
+            _ => -1
+        };
+        if(idx<0)
+        {
+            var code=ins.OpCode.Code;
+            if(load ? code is Code.Ldloc or Code.Ldloc_S
+                    : code is Code.Stloc or Code.Stloc_S)
+                idx=ins.Operand is VariableDefinition v ? v.Index : -1;
+        }
+        if(idx<0 || idx>=method.Body.Variables.Count)return null;
+        var local=method.Body.Variables[idx];
+        return local.VariableType.FullName==ShaderType ? local : null;
+    }
+
+    private static bool TypedSingleShaderCall(Instruction x) =>
+        x.OpCode.Code is Code.Call or Code.Callvirt &&
+        x.Operand is MethodReference m &&
+        m.Parameters.Count==1 &&
+        m.Parameters[0].ParameterType.FullName==ShaderType;
+
     private static bool Direct(IList<Instruction> il, int at, string name)
     {
         int p = at-1,n=0;
@@ -67,7 +97,7 @@ internal static class Program
         var methods=asm.Modules.SelectMany(m=>m.Types.SelectMany(Types))
             .SelectMany(t=>t.Methods).Where(m=>m.HasBody).ToArray();
         int sourceLiterals=0,totalTypedFind=0,directFind=0;
-        var sources=new List<(MethodDefinition Method,int At,FieldDefinition? Field,string Kind)>();
+        var sources=new List<(MethodDefinition Method,int At,FieldDefinition? Field,VariableDefinition? Local,string Kind)>();
         foreach(var m in methods)
         {
             var il=m.Body.Instructions;
@@ -81,6 +111,7 @@ internal static class Program
                 int n=SkipNops(il,i+1);
                 string kind="unresolved";
                 FieldDefinition? f=null;
+                VariableDefinition? local=null;
                 if(n<il.Count)
                 {
                     if(il[n].OpCode.Code is Code.Stfld or Code.Stsfld)
@@ -91,7 +122,10 @@ internal static class Program
                     }
                     else if(il[n].OpCode.Code is Code.Stloc or Code.Stloc_S or
                             Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
-                        kind="shader_local_unfollowed";
+                    {
+                        local=TypedShaderLocal(m,il[n],false);
+                        kind=local is null?"unresolved":"shader_local_unfollowed";
+                    }
                     else if(il[n].OpCode.Code==Code.Ret && m.ReturnType.FullName==ShaderType)
                         kind="shader_return";
                     else if(il[n].OpCode.Code==Code.Pop)
@@ -99,7 +133,7 @@ internal static class Program
                     else if(MaterialShaderCtor(il[n]))
                         kind="direct_material_constructor";
                 }
-                sources.Add((m,i,f,kind));
+                sources.Add((m,i,f,local,kind));
             }
         }
         // Fail closed if new source identity/permutation changed. This count is
@@ -133,6 +167,49 @@ internal static class Program
                 }
             }
         }
+        // Follow the exact typed source shader-local in its original method.
+        // Stop at the first control-flow boundary or local overwrite; linear
+        // candidates must never be promoted to interprocedural runtime proof.
+        int sourceLocalResolved=source.Local is null?0:1;
+        int localLinearLoads=0,localLinearReturns=0,localLinearMaterialCtors=0;
+        int localLinearShaderFieldStores=0,localLinearOneShaderCallArgs=0;
+        int localLinearOtherConsumers=0,localLinearBoundaries=0,localOverwrites=0;
+        if(source.Local is not null)
+        {
+            var il=source.Method.Body.Instructions;
+            int store=SkipNops(il,source.At+1);
+            for(int i=store+1;i<il.Count;i++)
+            {
+                if(il[i].OpCode.FlowControl is FlowControl.Branch
+                    or FlowControl.Cond_Branch or FlowControl.Return
+                    or FlowControl.Throw)
+                {
+                    localLinearBoundaries++;
+                    break;
+                }
+                if(TypedShaderLocal(source.Method,il[i],false)==source.Local)
+                {
+                    localOverwrites++;
+                    break;
+                }
+                if(TypedShaderLocal(source.Method,il[i],true)!=source.Local)
+                    continue;
+                localLinearLoads++;
+                int j=SkipNops(il,i+1);
+                if(j>=il.Count){localLinearOtherConsumers++;continue;}
+                Instruction next=il[j];
+                if(MaterialShaderCtor(next))localLinearMaterialCtors++;
+                else if(next.OpCode.Code==Code.Ret &&
+                        source.Method.ReturnType.FullName==ShaderType)
+                    localLinearReturns++;
+                else if(next.OpCode.Code is Code.Stfld or Code.Stsfld &&
+                        ResolvedShaderField(next,source.Method.Module) is not null)
+                    localLinearShaderFieldStores++;
+                else if(TypedSingleShaderCall(next))
+                    localLinearOneShaderCallArgs++;
+                else localLinearOtherConsumers++;
+            }
+        }
         return new {
             status="SOURCE_AUTHENTIC_SPECTRUM_TYPED_SHADERFIND_RESULT_FLOW_CENSUS",
             original_Spectrum_Shader_mName_SHA_authenticated=true,
@@ -153,6 +230,16 @@ internal static class Program
             original_Shader_field_reader_methods=fieldReadMethods,
             original_Shader_field_reader_methods_containing_Material_Shader_ctor=fieldReaderMethodsWithCtor,
             original_Shader_field_loads_directly_into_Material_ctor=fieldToMaterialCtor,
+            original_source_Shader_local_resolved=sourceLocalResolved,
+            source_local_linear_basic_block_loads=localLinearLoads,
+            source_local_linear_shader_returns=localLinearReturns,
+            source_local_linear_Material_Shader_ctor_candidates=localLinearMaterialCtors,
+            source_local_linear_typed_Shader_field_store_candidates=localLinearShaderFieldStores,
+            source_local_linear_typed_oneShader_argument_call_candidates=localLinearOneShaderCallArgs,
+            source_local_linear_unclassified_uses=localLinearOtherConsumers,
+            source_local_linear_control_flow_boundaries=localLinearBoundaries,
+            source_local_linear_overwrites=localOverwrites,
+            source_local_interprocedural_runtime_equivalence_proven=false,
             exact_original_Material_renderer_assignment_verified=false,
             original_CB0_sampler_RT_binding_verified=false,
             actual_Unity_Shader_Find_executed=false,
@@ -175,8 +262,17 @@ internal static class Program
             Instruction.Create(OpCodes.Nop),Instruction.Create(OpCodes.Call,find),
             Instruction.Create(OpCodes.Nop),Instruction.Create(OpCodes.Newobj,ctor)
         };
+        var demo=new MethodDefinition("SyntheticControl",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,shader);
+        demo.Body.Variables.Add(new VariableDefinition(shader));
         if(!TypedFind(il[2]) || !Direct(il,2,"SYNTHETIC_ONLY") ||
-           Direct(il,2,"MISMATCH") || SkipNops(il,3)!=4 || !MaterialShaderCtor(il[4]))
+           Direct(il,2,"MISMATCH") || SkipNops(il,3)!=4 || !MaterialShaderCtor(il[4]) ||
+           TypedShaderLocal(demo,Instruction.Create(OpCodes.Stloc_0),false) is null ||
+           TypedShaderLocal(demo,Instruction.Create(OpCodes.Ldloc_0),true) is null ||
+           TypedShaderLocal(demo,Instruction.Create(OpCodes.Ldloc_0),false) is not null ||
+           !TypedSingleShaderCall(Instruction.Create(OpCodes.Call,
+               new MethodReference("TakeShader",m.TypeSystem.Void,shader){HasThis=false,
+                   Parameters={new ParameterDefinition(shader)}})))
             throw new InvalidOperationException("synthetic_dataflow_guard_failed");
         Console.WriteLine("GT_SPECTRUM_TYPED_RESULTFLOW_SYNTHETIC_PASS");
     }
