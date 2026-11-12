@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT21_PLAN_VALID_SPECTRUM_ORIGINAL_7PASS_FOAM_2PASS_CSHARP_SYNTHETIC_VERIFIED_NATIVE_STILL_RUNNING",
+  "status": "GT_CHAT22_ORIGINAL_SPECTRUM_7PASS_28_VULKAN_AND_2_PRIVATE_SHADERLAB_CANDIDATES_SOURCE_VERIFIED_UNITY_TRIAL_ACTIVE",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md",
-  "next_action": "READ RESTORE_AR + RESTORATION_PLAN_AR/JSON and newest Chat21. Source-authenticated original Spectrum 7 passes with 28 stage refs (B09 41920232173), Foam Global original 2 passes (B24). Nov12 device log Spectrum minimum6 is not full source parity. GTOriginalWaterPassImportProbe added to AndroidNativeBuild validation: synthetic CSharp run 43269999662 SUCCESS; true Unity import/android GPU not yet verified. Once a NEW full build starts after code integration collect GT_WATER_IMPORTED_PASS_DIAGNOSTIC, then fix source original pass/GUID/Material/CB0/Sampler/RT equivalence; do not classify cosmetic dummy count as restored. CURRENT run43247161671 older source still Unity Editor import, do not duplicate. 770 custom Material docs Dummy, kernel6 source identity unknown. ZIP2 SHA pin and NO LFS, no source/.meta/GUID mutations.",
+  "latest_session": "clients/GT/sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md",
+  "next_action": "READ RESTORE_AR + RESTORATION_PLAN_AR/JSON + Chat22. Source-original Spectrum 7Pass/14 paired VSFS/28 glslang stages and 13 distinct translations confirmed CI43273276394; 7 authentic distinct render states / 6 props (2 textures 3 floats 1 vector) CI43273958426; two PRIVATE source-authentic 7Pass ShaderLab variants CI43274729958. Real Unity2021 Android Vulkan isolated variant0 trial RUN 43275506146 is in progress at last check; do not mark Unity import/Material parity or pixels true without safe receipt. Full old-snapshot native 43247161671 also in Unity Editor, do not duplicate. Next: inspect Unity failure, source-based pass/sampler fix, variant1, original keyword routing, original GUID Material/RT, phone test. Keep ZIP2 SHA pin and no LFS. 770 Dummy Materials remain.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -607,7 +607,13 @@
     "water_editor_import_probe": "android-port/Editor/GTOriginalWaterPassImportProbe.cs",
     "water_editor_import_probe_synthetic_ci_run": 43269999662,
     "water_editor_import_probe_true_unity_editor_proven": false,
-    "water_editor_import_probe_android_gpu_proven": false
+    "water_editor_import_probe_android_gpu_proven": false,
+    "source_original_spectrum_7pass_private_glslang_CI": 43273276394,
+    "source_original_spectrum_7_render_states_CI": 43273958426,
+    "source_original_spectrum_2_private_7pass_shaderlab_CI": 43274729958,
+    "source_original_spectrum_unity_2021_variant0_trial_run": 43275506146,
+    "source_original_spectrum_actual_Unity2021_bundle_compilation_proven": false,
+    "source_original_spectrum_original_Material_GUID_or_Adreno_verified": false
   },
   "proofs_20261112_chat21": {
     "origin": "chat",
@@ -647,5 +653,39 @@
     "actual_Unity_Editor2021_imported_water_shader_passCount_proven": false,
     "actual_Android_Adreno_water_shader_pass_gpu_pixels_verified": false,
     "original_source_water_ShaderLab_restored_to_complete_game": false
+  },
+  "proofs_20261112_chat22": {
+    "origin": "chat",
+    "session_path": "clients/GT/sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md",
+    "zip2_original_SHA": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_owner_bytes": 115978112,
+    "source_spectrum_exact_seven_passes": true,
+    "source_spectrum_original_VSFS_keyword_pairs": 14,
+    "source_spectrum_stage_variant_references": 28,
+    "source_spectrum_private_glslang_vulkan11_compiled_stages": 28,
+    "source_spectrum_distinct_original_stage_translations": 13,
+    "real_original_pair_CI": 43273276394,
+    "real_original_pair_CI_success": true,
+    "original_render_states_distinct": 7,
+    "original_serialized_property_count": 6,
+    "original_serialized_texture_properties": 2,
+    "original_serialized_float_properties": 3,
+    "original_serialized_vector_properties": 1,
+    "original_render_state_real_CI": 43273958426,
+    "original_render_state_real_CI_success": true,
+    "private_source_authentic_7pass_ShaderLab_candidates": 2,
+    "private_7pass_ShaderLab_total_structural_passes": 14,
+    "private_shaderlab_real_CI": 43274729958,
+    "private_shaderlab_real_CI_success": true,
+    "source_shaderlab_candidates_shipped_to_game": false,
+    "original_routed_keyword_7pass_ShaderLab_proven": false,
+    "original_Material_sampler_CB0_RT_GUID_parity_proven": false,
+    "real_Unity_2021_Android_Vulkan_private_variant0_trial_run": 43275506146,
+    "real_Unity_2021_Android_Vulkan_private_variant0_proven": false,
+    "Android_Adreno_pixel_proof": false,
+    "remaining_postvendor_custom_Dummy_material_docs": 770,
+    "full_native_existing_run": 43247161671,
+    "source_original_asset_or_GUID_modified": false,
+    "LFS_used": false
   }
 }
