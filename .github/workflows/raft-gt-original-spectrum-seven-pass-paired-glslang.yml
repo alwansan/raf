@@ -1,0 +1,106 @@
+name: GT SHA-original Spectrum 7pass paired Vulkan stage feasibility (NO APK)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_spectrum_original_pair_compile.py
+      - tests/test_gt_spectrum_original_pair_compile.py
+      - .github/workflows/raft-gt-original-spectrum-seven-pass-paired-glslang.yml
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-original-spectrum-7pass-private-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-private-spectrum-pairs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-free negative and ordered-pair controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_spectrum_original_pair_compile.py -v
+          python3 -m py_compile scripts/gt_spectrum_original_pair_compile.py
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gt-spectrum-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Reassemble only original SHA-pinned Spectrum owner without Git LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import os, subprocess
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA, PINS, stage
+          repo = Path("gt-spectrum-zip2")
+          assert subprocess.check_output(
+              ["git","-C",str(repo),"rev-parse","HEAD"], text=True).strip() == ZIP2_SHA
+          destination = Path(os.environ["RUNNER_TEMP"]) / "gt-spectrum-original"
+          result = stage(repo, destination, {
+              "Raft_Data/sharedassets0.assets": PINS["Raft_Data/sharedassets0.assets"]})
+          assert result["verified_bytes"] == 115978112
+          assert result["lfs_used"] is False
+          print("GT_SPECTRUM_ORIGINAL_SHA_PIN_OK owners=1 bytes=115978112 LFS=false")
+          PY
+      - name: Load original reader and private shader translators
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Stage exact original 7passes x2 variants x VS/FS into ephemeral scratch
+        run: |
+          set -euo pipefail
+          timeout 300s python3 -m scripts.b09_stage_original_spectrum \
+            --source "$RUNNER_TEMP/gt-spectrum-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/gt-spectrum-original-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json"
+      - name: Compile privately paired original Spectrum stages for Vulkan 1.1
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.gt_spectrum_original_pair_compile \
+            --packet "$RUNNER_TEMP/gt-spectrum-original-private" \
+            --stage-report "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json" \
+            --scratch "$RUNNER_TEMP" \
+            --out "$RUNNER_TEMP/gt-spectrum-pairs-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          result = json.loads((Path(os.environ["RUNNER_TEMP"]) /
+              "gt-spectrum-pairs-safe.json").read_text())
+          assert result["status"] == "PRIVATE_ORIGINAL_SPECTRUM_SEVEN_PASS_PAIR_GLSLANG_VALID"
+          assert result["original_SHA_verified_passes"] == 7
+          assert result["original_VS_FS_keyword_pairs"] == 14
+          assert result["original_combined_compiled_stage_variants"] == 28
+          assert result["Adreno_pixels_verified"] is False
+          assert result["original_shader_installed_into_Unity"] is False
+          print("GT_SPECTRUM_7PASS_PAIR_PRIVATE_SAFE exactOriginalPasses=7 pairedVariants=14 compiledStages=28 originalUnityInstalled=false AndroidPixels=false")
+          PY
+      - name: Remove SHA-original payloads and all translated private shader programs
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-spectrum-original" \
+            "$RUNNER_TEMP/gt-spectrum-original-private" \
+            "$RUNNER_TEMP/gt-spectrum-original-private-manifest.json" \
+            "$RUNNER_TEMP/gt-spectrum-pairs-safe.json" \
+            "$GITHUB_WORKSPACE/gt-spectrum-zip2"
