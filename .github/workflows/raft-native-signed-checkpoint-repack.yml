@@ -27,6 +27,7 @@ jobs:
             scripts
             tests
             docs/ANDROID_INSTALL_AR.md
+            .github/workflows/raft-unity-editor-android-import.yml
       - name: Prove delivery packaging regression suite
         run: |
           set -euo pipefail
