@@ -33,3 +33,11 @@
 - [source/BC3/shader evidence](../evidence/20261112_source_materials_original_bc3_arrays.json)
 
 No game byte payload/GUID leaked in workflow artifact or Git files, no LFS and no zip2/main write.
+
+## Real result: source importer restoration passed (not merely controls)
+
+- **[43144656957 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43144656957)** actual full 134-ZIP2-source AssetRipper; `GT_REAL_SAFE_TEXTURE2DARRAY_GRID_REPAIR` confirmed `original_importer_repair_candidates_applied=9`, `postrepair_exact_original_layer_grids_validated=9`, `all_nine_original_array_importers_accepted=true`, `original_exported_asset_guids_preserved=true`, `source_images_or_binaries_edited=false`, `meta_files_outside_the_exactly_verified_array_set_changed=0`; byte-identical private backups. All 9 PNG images were complete source-aligned 1024px layer atlases. This is a *real isolated Unity export metadata correction*.
+- Same run `GT_REAL_ORIGINAL_BC3_EXACT_PNG_SLICES`: source BC3 original byte recovery 69,906,400 verified; eight arrays with compressed pixels yielded **24 of 24 PNG/top-mip sample pixels byte-exact**, 8 of 8 independent source array layouts unambiguously `slice_major`; wrong `mip_major` candidate matched only 8 samples. Ninth original two-layer array still source zero pixel bytes and its runtime colors are NOT proven. No 11-mip parity or Android GPU.
+- [Safe artifact 13911856847](https://github.com/alwansan/raf/actions/runs/43144656957/artifacts/13911856847) includes aggregate reports, not game imagery.
+- [43145816256](https://github.com/alwansan/raf/actions/runs/43145816256): additional real test for original 28 Material ClassID187 links plus independent UnityPy decoded source images. Was still executing when evidence was first committed. Must inspect per-step before next completion claim.
+- [T5 handoff updated](../discussions/20261112-T5-native-ZIP2-handoff.md), `state.json`, `MEMORY.md`, `SUMMARY_AR.md`, `RESTORE_AR.md` all carry verified proof. Branch only feature; no native XAPK in GT.
