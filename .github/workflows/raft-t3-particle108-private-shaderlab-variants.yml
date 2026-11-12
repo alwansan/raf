@@ -15,6 +15,8 @@ on:
       - 'scripts/t3_particle108_private_keyword_routed_shaderlab.py'
       - 'tests/test_t3_particle108_private_keyword_routed_shaderlab.py'
       - 'scripts/gt_particle108_unity_bindings.py'
+      - 'scripts/gt_particle108_source_sampling_pairs.py'
+      - 'tests/test_gt_particle108_source_sampling_pairs.py'
       - 'tests/test_gt_particle108_unity_bindings.py'
       - 'scripts/gt_particle108_original_dxbc_sampler_decl.py'
       - 'tests/test_gt_particle108_original_dxbc_sampler_decl.py'
@@ -285,6 +287,27 @@ jobs:
           assert r["sampler_to_original_Material_texture_binding_proven"] is False
           print("GT_REAL_PARTICLE108_DXBC_SAMPLER_CENSUS "+
                 json.dumps({"counts":r["counts"],"original_material_binding_proven":False},sort_keys=True))
+          PY
+      - name: GT source-verify original DXBC SAMPLE texture to sampler operand pairs (no inferred bindings)
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_particle108_source_sampling_pairs.py tests/test_gt_particle108_source_sampling_pairs.py
+          python3 -m unittest discover -s tests -p 'test_gt_particle108_source_sampling_pairs.py' -v
+          python3 -m scripts.gt_particle108_source_sampling_pairs \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/gt-original-sample-pairs-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-original-sample-pairs-safe.json").read_text())
+          assert r["status"]=="SOURCE_ORIGINAL_PARTICLE108_DXBC_SAMPLE_PAIRS_CLASSIFIED"
+          assert r["source_original_shaders_SHA_authenticated"] is True
+          assert r["counts"]["DXBC_stages_examined"]==8
+          assert r["original_sampled_texture_to_sampler_pair_material_state_equivalence_proven"] is False
+          assert r["original_filter_wrap_or_Adreno_pixels_proven"] is False
+          assert r["original_names_register_numbers_HLSL_DXBC_Guids_published"] is False
+          print("GT_PARTICLE108_DXBC_SOURCE_SAMPLING_ONLY "+json.dumps(r["counts"],sort_keys=True))
           PY
       - name: GT source-authenticate original Shader48 texture sampler symbols and stage-isolate cbuffer declarations
         run: |
