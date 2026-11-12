@@ -7,3 +7,5 @@
 **المرحلة الثانية نشطة: استعادة الماء.** اقرأ [مسار الماء](../../gfxlab/WATER_PHASE_TWO_AR.md) و[جلسة GFX155](../../memory/sessions/20261112-GFX-chat-water-phase-two-115.md). نجح تدقيق هاتف GFX155. اقرأ [جلسة مراجعة CL](../../memory/sessions/20261112-GFX-chat-water-log-replay-117.md) ثم أكمل التحقق من تسجيل kernels لمرشح FFT الأصلي وجرد مكونات المشاهد.
 
 أكمل من [نتيجة GFX158](../../memory/sessions/20261112-GFX-chat-water-scene-links-118.md) وجرد prefabs والتسجيل الفعلي على Android.
+
+نتيجة [GFX159](../../memory/sessions/20261112-GFX-chat-water-prefab-links-119.md) مكتملة للمصدر. المرحلة مفتوحة عند بناء Android اللعبة المتتبّع واختباره.

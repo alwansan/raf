@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-water-scene-links-118",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-scene-links-118.md",
+  "latest_session": "20261112-GFX-chat-water-prefab-links-119",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-prefab-links-119.md",
   "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Trace runtime-created and prefab water components; use actual original candidate Android import and paired Dx11FFT events to verify registration and object identity.",
+  "next_experiment": "Requires native owner build containing T1 FFT dispatch trace and Android capture; pair original calls then verify exact ComputeShader registration and GPU outputs.",
   "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3365,6 +3365,21 @@
       "resolved": 64771,
       "water_candidates": 134,
       "runtime_verified": false
+    },
+    "asset_links": {
+      "run": 43146990506,
+      "artifact": 13911582658,
+      "asset_owners": 41,
+      "resolved": 11387,
+      "water_candidates": 82,
+      "runtime_verified": false
+    },
+    "runtime_capture_blocker": {
+      "run": 42696228231,
+      "trace_staging": "success",
+      "package_available": false,
+      "failed_gate": "native runtime staging parity",
+      "next_input": "new verified native package with T1 trace and phone raft-*.jsonl"
     }
   }
 }
