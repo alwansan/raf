@@ -380,6 +380,9 @@ jobs:
         env:
           DOTNET_PROCESSOR_COUNT: '2'
           RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/private-export-lineage.json
+          # GT needs exact ClassID187 source→export pointers from this SAME
+          # run. Private JSON stays on the runner, never in Actions artifacts.
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
         shell: bash
         run: |
           set -euo pipefail

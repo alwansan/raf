@@ -56,6 +56,16 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("source_images_or_binaries_edited",stage)
         self.assertNotIn("git lfs",stage.lower())
 
+    def test_actual_exporter_emits_private_texture_identity_trace_for_class187(self):
+        # Without this opt-in, the production CSharp exporter only emits
+        # Material and Shader objects. Nine ClassID187 entries are absent,
+        # even though the separate GT full AssetRipper smoke succeeds.
+        exporter=self.workflow.split("      - name: Export 40 scenes",1)[1].split(
+            "      - name: GT restore nine original Texture2DArray",1)[0]
+        self.assertIn("RAFT_PRIVATE_EXPORT_LINEAGE:",exporter)
+        self.assertIn("RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'",exporter)
+        self.assertNotIn("continue-on-error",exporter)
+
     def test_Unity_Editor_really_checks_nine_native_array_assets_from_private_source_contract(self):
         self.assertIn("OriginalTextureArrayImportGuard.Validate();",self.editor)
         self.assertIn("OriginalTextureArrayImportGuard",self.guard)
