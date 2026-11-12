@@ -137,6 +137,37 @@ def _original_serialized_sampler_set(program):
             result.add(idx)
     return result
 
+def _original_inline_sampler_parameters(program):
+    """Read Unity SerializedProgramParameters.m_Samplers if present.
+
+    AssetStudio's on-disk SamplerParameter holds an unsigned packed sampler
+    descriptor and signed bindPoint. Do NOT infer filter/wrap bit semantics
+    until this exact original source table has been authenticated. None means
+    ABSENT; it is not equivalent to a proven zero-length sampler table.
+    """
+    if not isinstance(program,dict):
+        raise SourceError("SOURCE_ORIGINAL_STAGE_METADATA_INVALID")
+    common=program.get("m_CommonParameters")
+    if not isinstance(common,dict):
+        raise SourceError("SOURCE_ORIGINAL_STAGE_METADATA_INVALID")
+    if "m_Samplers" not in common:
+        return None
+    rows=common["m_Samplers"]
+    if not isinstance(rows,list):
+        raise SourceError("SOURCE_ORIGINAL_STAGE_METADATA_INVALID")
+    result={}
+    for row in rows:
+        if not isinstance(row,dict):
+            raise SourceError("SOURCE_ORIGINAL_STAGE_METADATA_INVALID")
+        point=row.get("bindPoint",row.get("m_BindPoint"))
+        config=row.get("sampler",row.get("m_Sampler"))
+        if (type(point) is not int or not 0<=point<=4095
+            or type(config) is not int or not 0<=config<2**32
+            or point in result):
+            raise SourceError("SOURCE_ORIGINAL_STAGE_METADATA_INVALID")
+        result[point]=config
+    return result
+
 def _hlsl_sampler_set(hlsl):
     if type(hlsl) is not str or not 0<len(hlsl.encode())<=1024*1024:
         raise SourceError("TRANSLATOR_SAMPLER_STAGE_INVALID")
@@ -185,8 +216,9 @@ def probe(original:Path,manifest:Path,private_source:Path):
                 raise SourceError("SOURCE_ORIGINAL_RDEF_NOT_ABSENT")
             decl=dxbc_sampler_declarations(data)
             original_set={slot for slot,_ in decl}
-            serialized=_original_serialized_sampler_set(
-                p["progVertex" if stage_id==1 else "progFragment"])
+            stage_meta=p["progVertex" if stage_id==1 else "progFragment"]
+            serialized=_original_serialized_sampler_set(stage_meta)
+            inline_sampler_params=_original_inline_sampler_parameters(stage_meta)
             path=private_source/("keyword-%d-stage-%d/private.hlsl"%(variant,stage_id))
             if path.is_symlink() or not path.is_file():
                 raise SourceError("TRANSLATOR_SAMPLER_STAGE_INVALID")
@@ -194,6 +226,16 @@ def probe(original:Path,manifest:Path,private_source:Path):
             counts["source_original_DXBC_stages_examined"]+=1
             counts["source_original_DXBC_sampler_declarations"]+=len(decl)
             counts["source_original_serialized_sampler_slots"]+=len(serialized)
+            if inline_sampler_params is None:
+                counts["source_original_stage_inline_sampler_metadata_absent"]+=1
+            else:
+                counts["source_original_stage_inline_sampler_metadata_present"]+=1
+                declared_slots=set(inline_sampler_params)
+                counts["source_original_inline_sampler_parameter_rows"]+=len(declared_slots)
+                counts["source_original_inline_sampler_slots_matching_DXBC"]+=len(original_set&declared_slots)
+                counts["source_original_inline_sampler_slots_NOT_in_DXBC"]+=len(declared_slots-original_set)
+                counts["source_DXBC_sampler_slots_NOT_in_inline_metadata"]+=len(original_set-declared_slots)
+                counts["source_original_inline_sampler_distinct_packed_configs_per_stage"]+=len(set(inline_sampler_params.values()))
             counts["translated_HLSL_sampler_register_declarations"]+=len(translated)
             counts["source_original_declared_sampler_slots_matching_serialized"]+=len(original_set&serialized)
             counts["source_original_declared_sampler_slots_NOT_in_serialized"]+=len(original_set-serialized)
@@ -210,6 +252,7 @@ def probe(original:Path,manifest:Path,private_source:Path):
         "original_DXBC_resource_names_register_numbers_shader_values_or_GUIDs_published":False,
         "original_shader_Unity_import_or_Android_pixels_proven":False,
         "sampler_to_original_Material_texture_binding_proven":False,
+        "source_original_inline_sampler_packed_filter_wrap_semantics_decoded":False,
         "SPIRV_Cross_descriptor_register_equivalence_proven":False,
     }
 
