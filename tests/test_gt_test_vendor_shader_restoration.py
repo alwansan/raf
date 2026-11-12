@@ -92,10 +92,10 @@ class ActualVendorRestoreTests(unittest.TestCase):
     def prepare_original_histogram_source(self):
         source=self.assets/"SomeOriginal"/"EyeHistogram.asset"
         source.parent.mkdir()
-        source.write_text("--- !u!72 &7200000\\nComputeShader:\\n  m_Name: EyeHistogram\\n")
+        source.write_text("--- !u!72 &7200000\nComputeShader:\n  m_Name: EyeHistogram\n")
         meta=Path(str(source)+".meta")
-        meta.write_text("fileFormatVersion: 2\\nguid: "+"c"*32+
-                        "\\nNativeFormatImporter:\\n")
+        meta.write_text("fileFormatVersion: 2\nguid: "+"c"*32+
+                        "\nNativeFormatImporter:\n")
         return source,meta
 
     def migrate_histogram_during_verified_vendor_step(self,wrong_guid=False):
@@ -108,10 +108,10 @@ class ActualVendorRestoreTests(unittest.TestCase):
                 shutil.copy2(meta,Path(str(backup)+".meta"))
                 dest=self.assets/"RaftAndroid/Resources/Shaders/EyeHistogram.compute"
                 dest.parent.mkdir(parents=True,exist_ok=True)
-                dest.write_text("#pragma kernel KEyeHistogram\\n#pragma kernel KEyeHistogramClear\\n")
+                dest.write_text("#pragma kernel KEyeHistogram\n#pragma kernel KEyeHistogramClear\n")
                 Path(str(dest)+".meta").write_text(
-                    "fileFormatVersion: 2\\nguid: "+("d"*32 if wrong_guid else "c"*32)+
-                    "\\nComputeShaderImporter:\\n")
+                    "fileFormatVersion: 2\nguid: "+("d"*32 if wrong_guid else "c"*32)+
+                    "\nComputeShaderImporter:\n")
                 source.unlink()
                 meta.unlink()
             return SimpleNamespace(returncode=0)
