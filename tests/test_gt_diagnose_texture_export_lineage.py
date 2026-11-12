@@ -47,6 +47,8 @@ class TexturedCubeTests(unittest.TestCase):
     def test_exact_Cubemap_export_guid_and_importer_cubemap_shape(self):
         r=self.run_analyze()
         self.assertEqual(r["counts"]["class_cubemap"],1)
+        self.assertEqual(r["counts"]["file_id_8900000"],1)
+        self.assertEqual(r["counts"]["importer_shape_enum_2"],1)
         self.assertEqual(r["counts"]["same_instance_cubemap_pointer_and_importer_shape_coherent"],1)
         self.assertEqual(r["distinct_nonstandard_image_pointers"],1)
         self.assertFalse(r["all_nonstandard_targets_proven_importable"])
@@ -69,6 +71,17 @@ class TexturedCubeTests(unittest.TestCase):
         r=self.run_analyze()
         self.assertEqual(r["counts"]["class_texture2d"],1)
         self.assertEqual(r["counts"]["requires_unresolved_import_or_source_repair"],1)
+
+    def test_real_class_187_array_with_importer_shape_enum_is_not_silently_classified_as_2d(self):
+        self.meta.write_text("guid: "+B+"\nTextureImporter:\n  textureShape: 3\n")
+        (self.assets/"material.mat").write_text(material(18700000))
+        self.trace.write_text(json.dumps(original_trace(cls=187,fid=18700000)))
+        r=self.run_analyze()
+        self.assertEqual(r["counts"]["class_texture2darray"],1)
+        self.assertEqual(r["counts"]["file_id_18700000"],1)
+        self.assertEqual(r["counts"]["importer_shape_enum_3"],1)
+        self.assertEqual(r["counts"]["requires_unresolved_import_or_source_repair"],1)
+        self.assertFalse(r["all_nonstandard_targets_proven_importable"])
 
     def test_broken_trace_schema_fails_closed(self):
         self.trace.write_text(json.dumps({"schema_version":1,"objects":[]}))
