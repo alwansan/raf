@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT22_ORIGINAL_SPECTRUM_7PASS_28_VULKAN_AND_2_PRIVATE_SHADERLAB_CANDIDATES_SOURCE_VERIFIED_UNITY_TRIAL_ACTIVE",
+  "status": "GT_CHAT22_SPECTRUM_SOURCE_7PASS_PROVEN_REAL_UNITY_FIRST_IMPORT_GLSL_CBUFFER_LINKER_FAIL_STAGE_ISOLATED_RETRY_ACTIVE",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md",
-  "next_action": "READ RESTORE_AR + RESTORATION_PLAN_AR/JSON + Chat22. Source-original Spectrum 7Pass/14 paired VSFS/28 glslang stages and 13 distinct translations confirmed CI43273276394; 7 authentic distinct render states / 6 props (2 textures 3 floats 1 vector) CI43273958426; two PRIVATE source-authentic 7Pass ShaderLab variants CI43274729958. Real Unity2021 Android Vulkan isolated variant0 trial RUN 43275506146 is in progress at last check; do not mark Unity import/Material parity or pixels true without safe receipt. Full old-snapshot native 43247161671 also in Unity Editor, do not duplicate. Next: inspect Unity failure, source-based pass/sampler fix, variant1, original keyword routing, original GUID Material/RT, phone test. Keep ZIP2 SHA pin and no LFS. 770 Dummy Materials remain.",
+  "next_action": "Read Chat22+RESTORATION_PLAN.json and newest Actions. CI 43275506146 first Unity Spectrum 7Pass import PASS (passCount7/bundle6095) but overall failed shaderErrorCount2 GLSL VS/FS cb0_0_m0 array-size clash. Reversible stage-local private-only CBuffer names + negative tests integrated; source test fixture corrected commit 8e46f03a. NEW trial 43277618651 reached real Unity 2021 Android Vulkan at last check; GET ACTUAL CONCLUSION and sanitized JSON receipt before claiming anything. No original game shader or GUID changed. After Unity success, solve original sampler/CB0 Material RT keyword routing and variant1. Old full native 43247161671 still active at last observation. ZIP2 pin no Git LFS.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -613,7 +613,10 @@
     "source_original_spectrum_2_private_7pass_shaderlab_CI": 43274729958,
     "source_original_spectrum_unity_2021_variant0_trial_run": 43275506146,
     "source_original_spectrum_actual_Unity2021_bundle_compilation_proven": false,
-    "source_original_spectrum_original_Material_GUID_or_Adreno_verified": false
+    "source_original_spectrum_original_Material_GUID_or_Adreno_verified": false,
+    "private_Unity_stage_local_CBuffer_corrected_retry_run": 43277618651,
+    "private_Unity_stage_local_CBuffer_corrected_retry_status_at_last_check": "in_progress_Unity2021",
+    "private_Unity_stage_local_CBuffer_source_test_corrected_commit": "8e46f03a"
   },
   "proofs_20261112_chat21": {
     "origin": "chat",
@@ -686,6 +689,15 @@
     "remaining_postvendor_custom_Dummy_material_docs": 770,
     "full_native_existing_run": 43247161671,
     "source_original_asset_or_GUID_modified": false,
-    "LFS_used": false
+    "LFS_used": false,
+    "real_Unity_2021_Android_Vulkan_private_variant0_result": "failure_GLSL_cbuffer_stage_uniform_array_size_conflict",
+    "real_Unity_2021_Android_Vulkan_private_variant0_imported_pass_count": 7,
+    "real_Unity_2021_Android_Vulkan_private_variant0_bundle_bytes": 6095,
+    "real_Unity_2021_Android_Vulkan_private_variant0_shader_errors": 2,
+    "stage_local_reversible_cbuffer_code": "scripts/gt_spectrum_private_stage_buffer_isolation.py",
+    "stage_local_synthetic_fixture_fail_run": 43276622833,
+    "stage_local_synthetic_fixture_fix_commit": "8e46f03a57a9aea1d797480de0fef4144eb5ea4b",
+    "stage_local_Unity2021_private_retry_run": 43277618651,
+    "stage_local_Unity2021_private_retry_conclusion_at_last_check": "in_progress_Unity_Android_Vulkan_asset_bundle"
   }
 }
