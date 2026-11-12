@@ -1,0 +1,120 @@
+name: GT full authentic ZIP2 graphics resources for native exporter
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-zip2-full-resources.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-full-original-graphics-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  complete-original-graphics:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Synthetic original input guards
+        run: |
+          python3 -m unittest discover -s tests -p test_gt_zip2_export_resources.py -v
+      - name: Check for capacity to hold both pinned provider and full native export input
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 47185920
+      - name: Checkout all original Raft_Data graphics containers and streams from ZIP2
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/**
+      - name: Restore and SHA256-authenticate all 134 original native Unity graphics inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-full-AssetRipper-input/Raft_Data" \
+            --profile full \
+            --byte-budget 10000000000 \
+            --report "$RUNNER_TEMP/gt-full-source-restored.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-full-source-restored.json").read_text())
+          assert d["original_resources_verified"]==134
+          assert d["original_bytes_materialized_or_reused"]==7532909297
+          assert d["files_newly_materialized"]==134
+          assert d["original_placeholder_pointers_replaced"]==0
+          assert d["original_payload_sha256_and_size_verified"] and not d["git_lfs_used"]
+          print("GT_ALL_NATIVE_GRAPHICS_ORIGINALS_READY count=134 bytes=7532909297 sha256=true lfs=false export=false")
+          PY
+          df -h /
+      - name: Authenticate every Unity Texture2D streamed source descriptor and original Compute containers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.audit_texture_stream_coverage \
+            --root "$RUNNER_TEMP/gt-full-AssetRipper-input/Raft_Data" \
+            | tee "$RUNNER_TEMP/gt-full-texture-stream-stdout.txt"
+          python3 -m scripts.audit_original_compute_metadata \
+            --source "$RUNNER_TEMP/gt-full-AssetRipper-input/Raft_Data" \
+            --expected-objects 9 \
+            | tee "$RUNNER_TEMP/gt-full-compute-stdout.txt"
+      - name: Inspect original Mesh streaming requirements on fully reconstructed providers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/audit_mesh_stream_dependencies.py \
+            --root "$RUNNER_TEMP/gt-full-AssetRipper-input/Raft_Data" \
+            --max-per-file 50000 \
+            --out "$RUNNER_TEMP/gt-full-mesh-stream-coverage.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          base=Path(os.environ["RUNNER_TEMP"])
+          r=json.loads((base/"gt-full-source-restored.json").read_text())
+          # No game binary data, PPtrs, or raw original names in this receipt.
+          summary={"schema":"GT_FULL_ZIP2_REAL_GRAPHICS_RESOURCE_RECOVERY_V1",
+                   "original_owners_streams_builtins_settings":r["original_resources_verified"],
+                   "original_bytes_sha256_authenticated":r["original_bytes_materialized_or_reused"],
+                   "git_lfs_used":False,
+                   "assetripper_input_layout_materialized":True,
+                   "original_texture_stream_coverage_checked":True,
+                   "original_mesh_stream_requirements_checked":True,
+                   "source_compute_objects_checked":True,
+                   "assetripper_export_executed":False,
+                   "android_shader_gpu_verified":False}
+          (base/"gt-full-safe-graphics-receipt.json").write_text(json.dumps(summary,indent=2,sort_keys=True)+"\n")
+          print("GT_FULL_ZIP2_GRAPHICS_VALIDATED "+json.dumps(summary,sort_keys=True))
+          PY
+      - name: Publish only compact inspection summaries, never original Raft data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-all-134-original-graphics-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-full-source-restored.json
+            ${{ runner.temp }}/gt-full-safe-graphics-receipt.json
+            ${{ runner.temp }}/gt-full-mesh-stream-coverage.json
+          retention-days: 14
+          if-no-files-found: ignore
