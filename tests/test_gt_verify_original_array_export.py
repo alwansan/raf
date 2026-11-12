@@ -2,11 +2,12 @@
 import json
 from pathlib import Path
 from types import SimpleNamespace
+import hashlib
 import tempfile
 import unittest
 
-from scripts.gt_stage_serialized_owners import InventoryError
-from scripts.gt_verify_original_array_export import match, COUNT_EXPECTED
+from scripts.gt_stage_serialized_owners import InventoryError, OWNERS
+from scripts.gt_verify_original_array_export import match, source_arrays, COUNT_EXPECTED
 
 
 def source(count=COUNT_EXPECTED):
@@ -67,6 +68,58 @@ class OriginalTextureArrayExportTests(unittest.TestCase):
         self.assertEqual(d["counts"]["array_importer_shape_4"],9)
         self.assertFalse(d["original_or_exported_assets_modified"])
         self.assertFalse(d["original_texture_array_layers_or_pixels_restored_for_Android"])
+
+    def test_all_source_owner_metadata_fingerprints_and_nine_texture2darray_objects(self):
+        with tempfile.TemporaryDirectory() as dirname:
+            root=Path(dirname)
+            stage=root/"staged"
+            stage.mkdir()
+            manifest=root/"manifest.tsv"
+            lines=["kind\\tbytes\\tsha256\\tmode\\trelative_path_under_Raft"]
+            for name in OWNERS:
+                raw=name.encode("utf-8")
+                (stage/name).write_bytes(raw)
+                digest=hashlib.sha256(raw).hexdigest()
+                lines.append(f"plain\\t{len(raw)}\\t{digest}\\t660\\tRaft_Data/{name}")
+            manifest.write_text("\\n".join(lines)+"\\n")
+            class Fake:
+                type=SimpleNamespace(name="Texture2DArray")
+                def __init__(self,idx):
+                    self.path_id=idx+1
+                def read_typetree(self,check_read=False):
+                    return {"m_Width":16,"m_Height":16,"m_Depth":4,
+                            "m_StreamData":{},"m_ImageData":b""}
+            first=set(OWNERS[:9])
+            def loader(path):
+                return SimpleNamespace(objects=[Fake(0)] if path.name in first else [])
+            data=source_arrays(stage,manifest,loader=loader)
+            self.assertEqual(len(data),9)
+            self.assertTrue(all(x["depth"]==4 for x in data.values()))
+            self.assertTrue(all(x["has_stream_record"] for x in data.values()))
+            (stage/OWNERS[0]).write_text("corrupt")
+            with self.assertRaisesRegex(InventoryError,"fingerprint_mismatch"):
+                source_arrays(stage,manifest,loader=loader)
+
+    def test_source_arrays_rejects_missing_dimensions_without_claiming_integrity(self):
+        with tempfile.TemporaryDirectory() as dirname:
+            root=Path(dirname)
+            stage=root/"staged"
+            stage.mkdir()
+            manifest=root/"manifest.tsv"
+            rows=["kind\\tbytes\\tsha256\\tmode\\trelative_path_under_Raft"]
+            for name in OWNERS:
+                raw=name.encode("utf-8")
+                (stage/name).write_bytes(raw)
+                rows.append(f"plain\\t{len(raw)}\\t{hashlib.sha256(raw).hexdigest()}\\t660\\tRaft_Data/{name}")
+            manifest.write_text("\\n".join(rows)+"\\n")
+            class Broken:
+                type=SimpleNamespace(name="Texture2DArray")
+                path_id=1
+                def read_typetree(self,check_read=False):
+                    return {"m_Width":32,"m_Height":32}
+            with self.assertRaisesRegex(InventoryError,"dimension_missing"):
+                source_arrays(stage,manifest,loader=lambda path: SimpleNamespace(
+                    objects=[Broken()] if path.name==OWNERS[0] else []))
 
     def test_wrong_original_count_refused(self):
         with self.assertRaisesRegex(InventoryError,"unexpected_authenticated_array_count"):
