@@ -60,6 +60,20 @@ class GraphicsLogGateTests(unittest.TestCase):
         self.assertTrue(r["strict_known_log_gate_passed"])
         self.assertEqual(r["observed_warning_count"], 4668)
 
+    def test_exit_info_scoped_real_collector_counters(self):
+        d = fixture(passes=5, kernel=7, sink=0)
+        d["stop_time_android_process_exit_info"] = {
+            k: d.pop(k) for k in (
+                "final_shader_pass_errors_total",
+                "final_compute_kernel_errors_total",
+                "final_remote_sink_failed_batches")}
+        self.assertEqual(
+            analyze(d)["observed_critical_error_count"], 12)
+        # Duplicate inconsistent values are not silently reconciled.
+        d["final_shader_pass_errors_total"] = 6
+        with self.assertRaisesRegex(ValueError, "conflicting_device_final_counter"):
+            analyze(d)
+
     def test_silent_batch_loss_rejects_acceptance(self):
         self.assertFalse(analyze(fixture(sink=1))["strict_known_log_gate_passed"])
 
