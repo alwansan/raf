@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -61,6 +62,90 @@ def metadata_integrity(original: dict, current: dict) -> dict:
     }
 
 
+def histogram_source_snapshot(project: Path):
+    """Identify one original EyeHistogram ComputeShader using its native YAML."""
+    candidates=list((project/"Assets").rglob("EyeHistogram.asset"))
+    if not candidates:
+        return None  # synthetic no-histogram export only
+    if len(candidates)!=1:
+        raise ValueError("ambiguous_original_histogram_compute_identity")
+    source=candidates[0]
+    meta=Path(str(source)+".meta")
+    if (source.is_symlink() or meta.is_symlink() or not meta.is_file()):
+        raise ValueError("untrusted_original_histogram_compute_meta")
+    original=source.read_bytes()
+    if (b"--- !u!72 &7200000" not in original or
+        b"m_Name: EyeHistogram" not in original):
+        raise ValueError("unexpected_original_histogram_class_identity")
+    metadata=meta.read_bytes()
+    matches=re.findall(rb"(?m)^guid: ([a-f0-9]{32})$",metadata)
+    if len(matches)!=1:
+        raise ValueError("invalid_original_histogram_compute_GUID")
+    return {
+        "source_rel":source.relative_to(project),
+        "source_sha256":hashlib.sha256(original).hexdigest(),
+        "source_meta":metadata,
+        "original_guid":matches[0],
+    }
+
+
+def histogram_migration_verified(project:Path,backup_root:Path,snapshot)->bool:
+    """Validate the exact official source .asset → Resources .compute GUID move."""
+    if snapshot is None:
+        return False
+    previous=project/snapshot["source_rel"]
+    old_meta=Path(str(previous)+".meta")
+    if previous.exists() or old_meta.exists():
+        return False
+    archive=backup_root/"histogram_compute"/snapshot["source_rel"]
+    archive_meta=Path(str(archive)+".meta")
+    if any(p.is_symlink() for p in (archive,archive_meta)):
+        return False
+    if not archive.is_file() or not archive_meta.is_file():
+        return False
+    if (hashlib.sha256(archive.read_bytes()).hexdigest()!=snapshot["source_sha256"]
+        or archive_meta.read_bytes()!=snapshot["source_meta"]):
+        return False
+    target=project/"Assets/RaftAndroid/Resources/Shaders/EyeHistogram.compute"
+    target_meta=Path(str(target)+".meta")
+    if any(p.is_symlink() for p in (target,target_meta)):
+        return False
+    if not target.is_file() or not target_meta.is_file():
+        return False
+    payload=target.read_bytes()
+    meta=target_meta.read_bytes()
+    if (b"#pragma kernel KEyeHistogram" not in payload or
+        b"#pragma kernel KEyeHistogramClear" not in payload or
+        b"ComputeShaderImporter:" not in meta or
+        len(re.findall(rb"(?m)^guid: ([a-f0-9]{32})$",meta))!=1 or
+        re.findall(rb"(?m)^guid: ([a-f0-9]{32})$",meta)[0]!=snapshot["original_guid"]):
+        return False
+    # Fail closed on duplicate existing GUIDs; a valid Unity asset must have
+    # exactly one meta file with this identity after the documented move.
+    hits=0
+    for p in (project/"Assets").rglob("*.meta"):
+        if p.is_symlink() or not p.is_file():
+            return False
+        if snapshot["original_guid"] in re.findall(rb"(?m)^guid: ([a-f0-9]{32})$",p.read_bytes()):
+            hits+=1
+    return hits==1
+
+
+def approved_meta_integrity(project:Path,backup_root:Path,original:dict,snapshot)->dict:
+    report=metadata_integrity(original,original_meta_digests(project/"Assets"))
+    raw_missing=report["original_meta_removed"]
+    repaired=0
+    if raw_missing==1 and snapshot is not None:
+        old_meta=(str(snapshot["source_rel"])+".meta").replace("\\\\","/")
+        if old_meta not in original_meta_digests(project/"Assets") and histogram_migration_verified(project,backup_root,snapshot):
+            repaired=1
+    report["verified_ComputeShader_GUID_relocation_count"]=repaired
+    report["original_meta_removed_unapproved"]=raw_missing-repaired
+    report["original_meta_contract_preserved_with_verified_compute_relocation"]=(
+        report["original_meta_changed"]==0 and raw_missing==repaired)
+    return report
+
+
 def run(project: Path, raw_quality: dict, backup_root: Path, *,
         runner=subprocess.run, quality=shader_audit, seconds: int=360) -> dict:
     project, backup_root = project.absolute(), backup_root.absolute()
@@ -71,6 +156,7 @@ def run(project: Path, raw_quality: dict, backup_root: Path, *,
     if backup_root.exists():
         raise ValueError("backup_directory_must_not_exist")
     before = original_meta_digests(project/"Assets")
+    histogram=histogram_source_snapshot(project)
     report = {
         "schema": SCHEMA, "status":"RUNNING",
         "original_exported_meta_documents":len(before),
@@ -106,23 +192,22 @@ def run(project: Path, raw_quality: dict, backup_root: Path, *,
             report["completed_original_vendor_restorer_steps"].append(step)
         if error is None:
             post=quality(project)
-            diff=compare(raw_quality,post,metadata_integrity(
-                before,original_meta_digests(project/"Assets"))[
-                    "original_exported_meta_bytes_unchanged"])
+            diff=compare(raw_quality,post,approved_meta_integrity(
+                project,backup_root,before,histogram)[
+                    "original_meta_contract_preserved_with_verified_compute_relocation"])
             report["postrestore_material_quality"]=diff
             report["status"]="POST_RESTORE_SOURCE_QUALITY_COMPARED"
     except (ValueError, OSError) as exc:
         error = ("postrestore_metadata_or_quality",type(exc).__name__)
     finally:
-        report.update(metadata_integrity(
-            before, original_meta_digests(project/"Assets")))
+        report.update(approved_meta_integrity(project,backup_root,before,histogram))
     if error is not None:
         report["status"]="REJECTED"
         report["failure_stage"]=error[0]
         report["failure_category"]=error[1]
-    if not report["original_exported_meta_bytes_unchanged"]:
+    if not report["original_meta_contract_preserved_with_verified_compute_relocation"]:
         report["status"]="REJECTED"
-        report["failure_category"]="ORIGINAL_EXPORTED_META_MUTATED"
+        report["failure_category"]="UNAUTHORIZED_OR_UNPROVEN_ORIGINAL_EXPORTED_META_MUTATION"
     return report
 
 
