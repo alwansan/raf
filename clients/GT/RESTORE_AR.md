@@ -1,5 +1,13 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-23 — إنجاز جديد مؤكد: Spectrum Keyword موحّد داخل Unity Android Vulkan
+
+[CI 43288288144 — SUCCESS في المهام الثلاث](https://github.com/alwansan/raf/actions/runs/43288288144): استُعيدت بنية Shader Spectrum الأصلية من ZIP2 المثبتة SHA؛ صار **ShaderLab واحداً تجريبياً من 7 Passes و2 فرعي VS/FS لكل Pass** باستخدام Keyword index4 المثبت من المصدر. استورد Unity **2021.3.45f2** المرشح الموحّد إلى مشروع خاص، وسجل **7 Passes و2 ShaderVariantCollection variants و0 Shader errors** وبنى Android Vulkan Bundle **14,492 بايت**؛ مهمة تدقيق *السجل الكامل النهائية المستقلة* أثبتت **0 GLSL link / 0 internal variant failure / 0 shader import / 0 shader compilation errors**. ليس APK ولا جزءاً مدمجاً في Raft؛ **لا إثبات** لـglobal/local Keyword Flags الأصلية أو اختيار Keyword بواسطة Material الأصلي أو GUID/Sampler/CB0/RT ولا Pixels على Adreno.
+
+**العمل التالي العملي:** افحص `m_KeywordFlags[4]` الأصلي من `ZIP2@15964ea8...` دون نشر أسماء أو برامج المصدر، ثم طابق ملفات Material/Shader GUID وأوامر Keyword وشبكة RenderTexture/Sampler/CB0 من نفس المصدر. لا تغيّر مسارات اللعبة قبل دليل الربط الحقيقي؛ احتفظ بـP06/M2 محجوزين. Foam Global ذو 2 Pass وkernel6 و770 مستند Material Dummy غير مكتمل. اقرأ [جلسة Chat-23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md) و[الخطة JSON](RESTORATION_PLAN.json).
+
+---
+
 ## GT / Chat-23 — التحقق الأحدث (مصدر + Unity + Console Gate)
 
 **المثبت:** [CI43286126572 SUCCESS](https://github.com/alwansan/raf/actions/runs/43286126572) اجتاز مهمتي Unity Android Vulkan 2021 و**فحص سجل Unity النهائي المستقل**. مرشح Spectrum الأصلي المستقل Variant0 استُورد بـ7 Passes، 0 أخطاء، Bundle **12,080B**، وVariant1 استُورد بـ7 Passes، 0 أخطاء، Bundle **12,409B**؛ سجل Unity المكتمل **0 GLSL link error / 0 internal variant creation failure / 0 shader import/compile error**. لم يعد هذا نجاحاً زائفاً. ومع ذلك كل المرشحين داخل Unity خاص منفصل، **لم يُستعد ماء اللعبة ولا Material/GUID**.
