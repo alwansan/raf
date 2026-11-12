@@ -52,6 +52,8 @@ class AuthenticArrayMaterialRefsTests(unittest.TestCase):
         self.assertEqual(after["total_original_array_derived_material_refs"],28)
         self.assertEqual(after["distinct_source_array_guids_referenced_by_materials"],9)
         self.assertEqual(after["exact_original_class187_array_material_refs"],28)
+        self.assertEqual(after["source_zero_pixel_original_array_refs"],3)
+        self.assertFalse(after["source_zero_pixel_array_runtime_generated_content_verified"])
         self.assertFalse(after["Unity_Editor_texture_array_imported_asset_class_verified"])
 
     def test_array_ref_converted_to_texture2d_does_not_pass(self):
