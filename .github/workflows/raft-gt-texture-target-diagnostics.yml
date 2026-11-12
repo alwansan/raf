@@ -20,6 +20,8 @@ on:
       - tests/test_gt_recover_original_array_layers.py
       - scripts/gt_bc3_array_layout.py
       - tests/test_gt_bc3_array_layout.py
+      - scripts/gt_validate_texture2darray_flipbook.py
+      - tests/test_gt_validate_texture2darray_flipbook.py
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -54,3 +56,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_verify_original_array_export.py -v
           python3 -m unittest discover -s tests -p test_gt_recover_original_array_layers.py -v
           python3 -m unittest discover -s tests -p test_gt_bc3_array_layout.py -v
+          python3 -m unittest discover -s tests -p test_gt_validate_texture2darray_flipbook.py -v
