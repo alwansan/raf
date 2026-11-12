@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_FULL_ZIP2_134_SOURCE_RESTORED_REAL_ASSETRIPPER_EXPORT_PASSED_MATERIAL_TEXTURE_GUID_GUARD_REJECTED",
+  "status": "GT_ORIGINAL_134_RESTORED_REAL_ASSETRIPPER_EXPORT_PASSED_SELECTED_TEXENV_FIDELITY_PASSED_ALL_82_PENDING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -108,7 +108,23 @@
         "texture_lineage_private_opt_in": "RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE=1 (GT isolation only)",
         "full_source_texenv_audit": "scripts/gt_full_original_export_texenvs.py",
         "full_82_synthetic_ci_run": 43128570586,
-        "real_b46_mapping_fix_verified": false
+        "real_b46_mapping_fix_verified": false,
+        "b05_selected_owner_same_instance_run": 43127697656,
+        "b05_selected_owner_same_instance_pass": true,
+        "raw_dummy_program_audit": {
+          "run": 43127697656,
+          "raw_export_before_restorers": true,
+          "material_documents": 1536,
+          "dummy_custom_material_docs": 786,
+          "unity_builtin_material_docs": 750,
+          "shader_files": 140,
+          "shader_files_with_dummy_exporter_marker": 140,
+          "distinct_dummy_shader_targets_referenced": 64,
+          "android_shader_execution_verified": false
+        },
+        "b46_yaml_mapping_parser_synthetic_pass": true,
+        "full_82_synthetic_ci_success": true,
+        "full_real_texture_equivalence_run": 43128711194
       },
       "targeted_export_material_guid_guard_repeat_run": 43126735391
     },
@@ -168,5 +184,5 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "sessions/20261112-GT-full-original-graphics-chat-04.md",
-  "next_action": "Actual AssetRipper exports 134 authenticated ZIP2 originals to 40 scenes,1536 mat,4003 texture files (43125542125). B46 error from actual export is empty_or_unrecognized_texenv (43126735391), so fix map-vs-sequence TexEnvs syntax with synthetic PASS 43128041580; need real recapture after patch. Private opt-in Texture lineage run 43127697656 probes B05, and full 82 original materials exact TexEnv/UV compare queued run 43128711194; inspect failures and source-backed repair, then respect T5 native build vote. Never LFS."
+  "next_action": "Source ZIP2 134 original graphics files 7.533GB and actual AssetRipper 40 scene export verified. B05 selected sharedassets6 source→export GUID/UV verified CI 43127697656. Raw exporter has 786/1536 Material docs referring to 140 dummy-marked shader file set; these have to be checked AFTER original T3/W1 Shader restorers, not equated to Android output. B46 map-vs-sequence TexEnv parser fixed synthetic CI 43128041580; inspect real same-instance full 1556 materials source→export audit CI 43128711194 for B46 actual and B05 all-owner, then apply bounded real exported project fixes if proven. Never LFS. No unsanctioned native XAPK."
 }
