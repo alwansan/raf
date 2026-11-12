@@ -1,0 +1,35 @@
+{
+  "schema": "GT_REAL_SOURCE_416_EXTERNAL_50_BC3_AND_NATIVE_GATE_V1",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "no_git_lfs": true,
+  "real_source_runs": {
+    "cross_owner_external_texture": 43156857287,
+    "all_original_BC3_top_mip": 43155325887
+  },
+  "real_counts": {
+    "sha_original_unity_owners": 82,
+    "sha_original_graphics_files": 134,
+    "original_graphics_bytes": 7532909297,
+    "original_material_texenv_slots": 10216,
+    "internal_exact_texture_links": 4151,
+    "external_exact_texture_links": 416,
+    "external_unresolved_texture_links": 0,
+    "original_class187_arrays": 9,
+    "original_array_material_links": 28,
+    "original_pixel_bearing_BC3_layers_exact_top_mip": 50,
+    "original_pixel_zero_layers": 2,
+    "postvendor_custom_dummy_material_docs": 770,
+    "postvendor_custom_nondummy_material_docs": 16
+  },
+  "native_runs": {
+    "previous_failed_depth_copy": 43155854860,
+    "corrected_retry_in_progress": 43205543533,
+    "latest_native_code_gate_source_only": 43206535542
+  },
+  "source_integrity_commit": "e687c0c4c251cc49adf5b76ec968413ccab641f5",
+  "real_Unity_2021_editor_import_proven": false,
+  "original_all_mips_exact_pixel_parity_proven": false,
+  "android_adreno_gpu_equivalence_proven": false,
+  "APK_OBB_XAPK_produced": false,
+  "source_or_original_meta_modified": false
+}

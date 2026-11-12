@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_EXTERNAL_TEXTURE_SOURCE_FONT_MATERIAL_CLASSIFICATION_PATCHED_SYNTHETIC_PASS_REAL_PENDING_NATIVE_RUNNING",
+  "status": "GT_AUTHENTIC_416_EXTERNAL_TEXTURE_AND_50_BC3_TOPMIPS_VERIFIED_NATIVE_STRICT_GATES_MERGED_NEW_NATIVE_BUILD_IN_PROGRESS",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -237,16 +237,18 @@
           "full_original_50_BC3_topmip_checker": "scripts/gt_compare_original_bc3_to_flipbook_pixels.py --all-original-layer-cells",
           "full_original_50_BC3_topmip_synthetic_CI": 43155325923,
           "full_original_50_BC3_topmip_real_CI": 43155325887,
-          "original_full_topmip_pixel_parity_verified": false,
+          "original_full_topmip_pixel_parity_verified": true,
           "external_actual_pre_fix_run": 43154972647,
           "external_actual_pre_fix_workflow_conclusion": "success_with_nonfatal_failed_external_step",
           "external_actual_pre_fix_error_code": "original_exported_material_identity_missing",
-          "external_actual_proven_links": 0,
+          "external_actual_proven_links": 416,
           "external_font_trace_fix_commit": "4d4ea2144f7a583cf548f331f1262982f4f351db",
           "external_safe_error_receipt_fix_commit": "6faee64ea00e955e77e4462891982e83794c7d06",
           "external_safe_diagnostic_synthetic_CI": 43156857328,
           "external_real_new_trial_CI": 43156857287,
-          "external_real_new_trial_verified": false
+          "external_real_new_trial_verified": true,
+          "original_full_mip_chain_parity_verified": false,
+          "android_Adreno_pixel_parity_verified": false
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -346,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-original-external-texture-source-chat-11.md",
-  "next_action": "Inspect step-level true result of new full source 43156857287 external 416 Material→Texture cross-owner original owner tables after FontAssetExportCollection fix 4d4ea214 and safe diagnostic 6faee64e (synthetic 43156857328 PASS). Workflow 43154972647 was overall SUCCESS but external step failed original_exported_material_identity_missing; do not count links without exact source parity. Also inspect full 50 BC3 original topmip 43155325887 and new native APK+OBB+XAPK 43155854860; fix native code errors, GT authorized no T1-T5 waiting. ZIP2 no LFS.",
+  "latest_session": "sessions/20261112-GT-graphics-native-integrity-chat-12.md",
+  "next_action": "Check native 43205543533 (started at c8680938, immutable, no latest f3ea/e687 gates) after W1 Depth Copy ZIP2 source repair 3e8a3bff & regression 393b2f5a. If failure, inspect earliest failing step/log and fix; if delivery success, verify actual APK OBB XAPK artifacts and limits. New GT branch f3ea4bea strict source-authentic all 416 cross-owner external textures and e687c0c4 all 50 original BC3 top-mip pixels before Unity; synthetic source CI43206535542 and 43206535361 PASS; MUST validate in latest full native run before calling merged. No T1-T5 waits; ZIP2 SHA only no LFS; original GPU and lower mips not proven, 770 dummy material docs.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -355,5 +357,31 @@
     "no_lfs": true,
     "original_sha_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "preserve_authenticity_guards": true
+  },
+  "proofs_20261112_chat12": {
+    "original_82_owners_verified": true,
+    "original_416_external_material_texture_refs_source_export_exact": 416,
+    "external_links_remaining_unproven": 0,
+    "real_external_CI": 43156857287,
+    "original_bc3_pixel_populated_layers_exact_topmip": 50,
+    "original_bc3_empty_source_pixel_layers": 2,
+    "source_arrays": 9,
+    "real_50_BC3_CI": 43155325887,
+    "native_previous_depth_failure_run": 43155854860,
+    "native_depth_pristine_source_fix_commit": "3e8a3bfff2d320fc33706664cd4cf92978e77c27",
+    "source_only_regression_fix": "393b2f5aaf2ed630f05e14e25ede2286151b14c3",
+    "regression_CI": 43205382836,
+    "native_retry_run": 43205543533,
+    "native_retry_source_commit": "c86809380ab1e5b95ccf65e30074422a7e744c05",
+    "native_strict_external_416_commit": "f3ea4bea5f2be80c307e91ac5b4761082daacc97",
+    "native_separate_original_bc3_stream_root_commit": "10563bf43ebc2efa611c26e5d7fd76ebca1299da",
+    "native_strict_BC3_all50_commit": "e687c0c4c251cc49adf5b76ec968413ccab641f5",
+    "native_source_only_guard_CI": 43206535542,
+    "native_source_only_Editor_guard_CI": 43206535361,
+    "original_postvendor_dummy_material_documents": 770,
+    "actual_native_XAPK_produced": false,
+    "unity_2021_import_proven": false,
+    "android_GPU_pixels_verified": false,
+    "original_lower_BC3_mip_equivalence_proven": false
   }
 }
