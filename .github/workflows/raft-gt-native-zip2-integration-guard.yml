@@ -1,0 +1,82 @@
+name: GT production native ZIP2 graphics input guard (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_zip2_export_resources.py
+      - tests/test_gt_zip2_export_resources.py
+      - tests/test_gt_native_zip2_integration.py
+      - .github/workflows/raft-unity-editor-android-import.yml
+      - .github/workflows/raft-gt-native-zip2-integration-guard.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-native-original-resource-guard-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  guarded-export-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            .github/workflows/raft-unity-editor-android-import.yml
+      - name: Run original resource materialization tests and production workflow safeguards
+        run: |
+          python3 -m py_compile scripts/gt_zip2_export_resources.py
+          python3 -m unittest discover -s tests -p test_gt_zip2_export_resources.py -v
+          python3 -m unittest discover -s tests -p test_gt_native_zip2_integration.py -v
+      - name: Checkout only pinned ZIP2 manifest; do not fetch game assets or LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2-plan
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+      - name: Validate exact 134-file full Unity graphics source coverage and 7.53GB byte budget
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.gt_zip2_payloads import manifest
+          from scripts.gt_zip2_export_resources import choose
+          original=manifest(Path('.gt-zip2-plan'))
+          full=choose(original,'full')
+          core=choose(original,'core')
+          total=sum(original[path][1] for path in full)
+          core_bytes=sum(original[path][1] for path in core)
+          if len(full)!=134 or total!=7532909297 or len(core)!=5 or core_bytes!=656558804:
+              raise SystemExit('GT_NATIVE_GRAPHICS_SOURCE_SIZE_OR_MANIFEST_CHANGED')
+          result={'profile':'full','source_commit':'15964ea8f246b6e076ce26b60931ee2e1a9a2385',
+                  'original_files_required':len(full),'original_total_bytes':total,
+                  'baseline_resource_files_proven':len(core),'baseline_original_bytes':core_bytes,
+                  'source_manifest_pinned':True,'git_lfs_used':False,
+                  'full_source_payloads_acquired_in_this_guard':False,
+                  'full_asset_ripper_import_proven':False,
+                  'android_gpu_verified':False}
+          (Path(os.environ['RUNNER_TEMP'])/'gt-native-resource-plan.json').write_text(
+              json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print('GT_NATIVE_ZIP2_ORIGINAL_GRAPHICS_PLAN '+json.dumps(result,sort_keys=True))
+          PY
+      - name: Publish only resource counts/verification boundary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-resource-manifest-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-native-resource-plan.json
+          if-no-files-found: ignore
+          retention-days: 14
