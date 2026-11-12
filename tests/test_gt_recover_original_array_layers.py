@@ -33,6 +33,7 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
                 "original_stream_size":10,
                 "source_format_enum":12,
                 "source_mipmap_count":1,
+                "has_stream_record":True,"has_image_data":False,
                 "width":16,"height":16,"depth":4,
             } for i in range(9)}
         self.trace={"schema_version":1,"export_instance":"f"*32,
