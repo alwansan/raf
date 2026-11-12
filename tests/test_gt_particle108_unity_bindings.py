@@ -99,6 +99,22 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
         code,_=rebind_stage(self.code,self.program,self.indices,0)
         self.assertIn("Texture2D<float4> _MainTex",code)
 
+    def test_source_proven_textureless_vertex_stage_does_not_invent_sampler(self):
+        # A genuinely sampler-free vertex stage must be compiled as-is:
+        # no register may be synthesized from a fragment program.
+        bare={"m_CommonParameters":{"m_TextureParams":[]}}
+        vertex="float4 cb1_0_m0[5]; float4 main():SV_POSITION {return cb1_0_m0[0];}"
+        fixed,proof=rebind_stage(vertex,bare,self.indices,1)
+        self.assertIn("GT_ORIGINAL_VS_cb1_0_m0",fixed)
+        self.assertEqual(proof["original_sampler_registers_mapped"],0)
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS"):
+            rebind_stage(vertex,bare,self.indices,0)
+
+    def test_vertex_with_source_sampler_metadata_but_no_declaration_fails(self):
+        vertex="float4 cb1_0_m0[5]; float4 main():SV_POSITION {return cb1_0_m0[0];}"
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS"):
+            rebind_stage(vertex,self.program,self.indices,1)
+
     def test_shared_original_sampler_with_distinct_textures_rejected(self):
         self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=0
         with self.assertRaisesRegex(BridgeError,"ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS"):
