@@ -261,6 +261,19 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-9-original-texture-arrays.json"
+      - name: GT prove actual source Texture2DArray importer flipbook rows and 1024 pixel cells preserve each of nine original class187 identities
+        id: gt_original_array_flipbook_geometry
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_validate_texture2darray_flipbook.py -v
+          python3 -m scripts.gt_validate_texture2darray_flipbook \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-original-array-real-flipbook-geometry.json"
       - name: GT extract original 50 BC3 Texture2DArray layer payloads from nine exact ZIP2 source objects into private Unity import bridge
         id: gt_real_original_bc3_array_streams
         continue-on-error: true
@@ -369,6 +382,7 @@ jobs:
             ${{ runner.temp }}/gt-real-array-shape-verified.json
             ${{ runner.temp }}/gt-9-original-texture-arrays.json
             ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
+            ${{ runner.temp }}/gt-original-array-real-flipbook-geometry.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
