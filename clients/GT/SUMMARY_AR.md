@@ -2,7 +2,7 @@
 
 **متابعة التقدم من الآن:** [الخطة العربية (ما استعيد وما تبقى والخطوات)](RESTORATION_PLAN_AR.md) · [الخطة JSON ذات الأدلة التفصيلية](RESTORATION_PLAN.json) · [آخر جلسة](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md). يحتوي السجل على P00–P11 وM0–M5، ويفصل صراحةً **الأصل الموثّق** عن **Export** و**Unity** و**حزمة Android** و**العرض المقبول على الهاتف**. هو المرجع الأحدث عندما تختلف عنه فقرات الجرد التاريخية أدناه.
 
-**آخر تحديث: 12 نوفمبر 2026 — GT / Chat-22 / Spectrum الأصلي 7 Passes، 28 مرحلة Vulkan ناجحة، وحالات الرسم ومُرشّحا ShaderLab خاصان؛ تجربة Unity Android جارية.** تمت قراءة 82/82 حاوية Unity أصلية مطلوبة للجرد (40 `level` + 42 `.assets`) والتحقق من SHA256 لكل منها ثم استخراج هويات الأصول الرسومية. **هذه نتائج المصدر الأصلي، وليست بعد نسبة دمج داخل مشروع Unity Android أو إثبات عرض على الهاتف.**
+**آخر تحديث: 12 نوفمبر 2026 — GT / Chat-22 / مصدر Spectrum الكامل 7Pass نجح، لكن Unity أثبت تصادم CBuffer بين المراحل وتجربة إصلاح خاصة قيد التشغيل.** تمت قراءة 82/82 حاوية Unity أصلية مطلوبة للجرد (40 `level` + 42 `.assets`) والتحقق من SHA256 لكل منها ثم استخراج هويات الأصول الرسومية. **هذه نتائج المصدر الأصلي، وليست بعد نسبة دمج داخل مشروع Unity Android أو إثبات عرض على الهاتف.**
 
 > **قرار المالك 12 نوفمبر 2026 — ZIP2 فقط، من دون Git LFS:** يستعيد GT جميع الحمولات من [فرع `zip2`](https://github.com/alwansan/raf/tree/zip2) بعد تثبيت commit، وإعادة تجميع الأجزاء `part-00000`...، والتحقق من SHA256 والحجم الكامل قبل استخدامها. لا تستخدم أدوات جلب LFS ولا fallback عليها. المخرجات المؤقتة مفصولة عن شجرة المصدر وملفات .meta/GUID. هذا القرار محفوظ في [MEMORY.md](MEMORY.md)، و[RESTORE_AR.md](RESTORE_AR.md)، و[state.json](state.json).
 
@@ -194,3 +194,9 @@
 - **المتبقي P06/M2:** ربط Samplers وCB0 وKeywords وRenderTexture وGUID الأصلي إلى Material/Unity؛ اختبار variant الثاني؛ إصلاح Foam Global ذات 2 Pass؛ تحديد Compute kernel6 قبل تعديل FFT؛ أخيراً تجارب الهاتف والـLogRaft وصور الماء. ما زالت **770 وثيقة Material Dummy** بعد restorers، ولم يُستعد لون الطوف أو النار على الهاتف.
 
 **تحديث قابل للاستئناف:** [خطة GT العربية](RESTORATION_PLAN_AR.md) · [الخطة JSON](RESTORATION_PLAN.json) · [آخر جلسة GT Chat-22](sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md). يبقى بناء Native الكامل القديم [43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) قيد Unity، فلا إعادة بناء مكررة له.
+
+### GT / Chat-22 / عطل Unity الأصلي ومسار الإصلاح التشخيصي
+
+انتهى [43275506146](https://github.com/alwansan/raf/actions/runs/43275506146) بالفشل رغم `importedPrivateShader=true`، و`shaderPassCount=7` و`privateAndroidVulkanBundleBuilt=true` مع حزمة **6,095 بايت**؛ كانت `shaderErrorCount=2`، والـGLSL linker يذكر مصفوفة CBuffer بالاسم نفسه على مرحلتي VS/FS مع أطوال مختلفة (`vec4[4]` مقابل `vec4[5]` و`vec4[7]`). هذا **ليس دليلاً على فساد DXBC الأصلي** بل عائق موحّد الأسماء في HLSL المترجم. أضفت `scripts/gt_spectrum_private_stage_buffer_isolation.py` لاختبار فصل أسماء CBuffer في **ShaderLab الخاص فقط** بطريقة قابلة للعكس مع المحافظة على `register(...)` بلا تغيير وعلى جميع القيم الأصلية؛ لا يمس أي Material أو GUID أو مسارات اللعبة. [إعادة تجربة Unity 43276622833](https://github.com/alwansan/raf/actions/runs/43276622833) لم يثبت انتهاؤها عند هذا التحديث.
+
+**الأثر على خطة الاستعادة:** لا تزال M2/P06 معطّلة وغير مقبولة على الهاتف، ولم يُدمج Shader Spectrum الأصلي في مشروع اللعبة. النجاح حتى الآن: 7Pass source / 28 glslang stages / 7 states / 6 original properties / 2 private ShaderLab candidate envelopes فقط. المرجع: [خطة الاستعادة](RESTORATION_PLAN_AR.md) و[Chat-22](sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md).
