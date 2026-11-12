@@ -63,7 +63,21 @@ def exact_targets(original:dict,trace:dict,output:dict):
             raise InventoryError("original_array_not_exported_as_png")
         found[key]=(file,meta,guid)
     if set(found)!=set(original):
-        raise InventoryError("not_all_nine_original_array_targets_found")
+        # This diagnostic contains only aggregate counts. The private trace
+        # may include source identities and GUIDs, which must not reach logs.
+        matched_source_rows=sum(
+            1 for row in trace["objects"]
+            if isinstance(row,dict) and row.get("class_id")==187
+            and isinstance(row.get("source"),dict)
+            and (Path(str(row["source"].get("owner","")).replace("\\\\","/")).name,
+                 row["source"].get("path_id")) in original
+        )
+        raise InventoryError(
+            "not_all_nine_original_array_targets_found "
+            f"source=9 trace_matching_rows={matched_source_rows} "
+            f"exported_png_meta_matches={len(found)} "
+            f"missing_source_targets={len(set(original)-set(found))}"
+        )
     if len({row[2] for row in found.values()})!=9:
         raise InventoryError("original_array_export_GUID_collision")
     return found
