@@ -98,7 +98,7 @@ class SourceArrayImporterRepairTests(unittest.TestCase):
 
     def test_forged_png_IHDR_without_valid_source_pixels_refused(self):
         import struct
-        fake=(b"\\x89PNG\\r\\n\\x1a\\n"+struct.pack(">I",13)+b"IHDR"+
+        fake=(b"\x89PNG\r\n\x1a\n"+struct.pack(">I",13)+b"IHDR"+
               struct.pack(">II",8,4))
         (self.assets/"array-0.png").write_bytes(fake)
         with self.assertRaisesRegex(InventoryError,"unreadable_original_array_exported_PNG_pixels"):
