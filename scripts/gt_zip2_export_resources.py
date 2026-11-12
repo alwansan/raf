@@ -43,6 +43,9 @@ RUNTIME_INPUT_FILES = (
     "Raft_Data/globalgamemanagers",
     "Raft_Data/boot.config",
 )
+ORIGINAL_AUDIO_BANK = "Raft_Data/StreamingAssets/MasterBank.bank"
+# This additional ZIP2 original is selectively materialized for the native
+# StreamingAssets gate. The 134-file graphics full profile remains unchanged.
 # The full Unity export intake includes scene settings and boot configuration,
 # not just the 82 serialized asset owners, 48 streamed files and 2 built-ins.
 
@@ -64,7 +67,8 @@ def choose(records: dict, profile: str, selected: list[str] | None = None) -> li
             raise SourceFailure("empty_or_duplicate_selected_graphics")
         allow = ({"Raft_Data/" + n for n in OWNERS} |
                  {n for n in records if n.startswith("Raft_Data/") and
-                  n.endswith((".resS", ".resource"))} | set(ENGINE_FILES) | set(RUNTIME_INPUT_FILES))
+                  n.endswith((".resS", ".resource"))} | set(ENGINE_FILES) | set(RUNTIME_INPUT_FILES) |
+                 {ORIGINAL_AUDIO_BANK})
         if not set(selected) <= allow:
             raise SourceFailure("selected_path_not_graphics")
         names = sorted(selected)
