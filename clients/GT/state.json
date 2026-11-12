@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ORIGINAL_PARTICLE108_EIGHT_RDEF_ABSENT_REAL_UNBOUND_UNITY_GLSL_SAMPLER_AND_CBUFFER_ERRORS_STRICT_BINDING_FAIL_CLOSED",
+  "status": "GT_PARTICLE108_PRIVATE_CBUFFER_CONFLICT_REMOVED_IN_REAL_UNITY_SAMPLER_3_ERRORS_REMAIN_SHDR_ORIGINAL_SAMPLER_DECL_CENSUS_CI_QUEUED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-Particle108-unbound-Unity-diagnostic-chat-16.md",
-  "next_action": "Inspect latest source-only private Unity test run 43233472806 after GT stage-specific cbuffer isolation and confirm whether GLSL linker mismatch disappears (no PASS assumed). Strict original m_TextureParams sampler slot matching remains unproven, latest 43232633015 confirmed TRANSLATOR_SOURCE_SAMPLER_SLOT_MISSING. Preserve 770 Dummy custom Material docs; full native 43205543533 active at original c8680938 snapshot. SHA ZIP2 15964ea8 only; no LFS and no original GUID/meta changes.",
+  "latest_session": "clients/GT/sessions/20261112-GT-Particle108-original-SHDR-sampler-declarations-chat-17.md",
+  "next_action": "Inspect run 43235259784: synthetic DXBC parser tests and real source SHDR/SHEX sampler declarations versus Unity serialized m_TextureParams; 8/8 original stages lack RDEF. Fix only evidenced parser/runtime source error. Unity isolated 43233472806 showed cbuffer GLSL size mismatch gone, but still three Unity sampler errors; do NOT restore original Shader48 Material GUID or mark 770 dummy custom materials fixed. Full native 43205543533 still in progress; avoid duplicate. ZIP2 SHA15964ea8 no LFS.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -461,5 +461,27 @@
     "full_native_run": 43205543533,
     "full_native_completed_or_signed_xapk_verified": false,
     "session_path": "clients/GT/sessions/20261112-GT-Particle108-unbound-Unity-diagnostic-chat-16.md"
+  },
+  "proofs_20261112_chat17": {
+    "origin": "chat",
+    "verified_real_unbound_Unity_run": 43233472806,
+    "verified_real_unbound_Unity_overall_conclusion": "failure",
+    "verified_cb1_0_m0_cross_stage_GLSL_link_error_recurred": false,
+    "verified_unity_imported_original_derived_private_shader": true,
+    "verified_unity_Vulkan_asset_bundle_bytes": 6225,
+    "verified_unity_2021_shader_error_count": 3,
+    "remaining_unity_sampler_binding_errors": 3,
+    "original_DXBC_SHDR_sampler_parser_commit": "0ef59a684c27c558ea72c0aeb7f50813e0758ebb",
+    "strict_synthetic_parser_tests_commit": "f59f23f500e5bb3b8b810ffe958f0356bcf54e81",
+    "strict_real_original_DXBC_sampler_census_workflow_commit": "79f365236185f5e62fdd37ef52c61a41fb03b8cd",
+    "real_source_sampler_census_CI_run": 43235259784,
+    "real_source_sampler_census_CI_proven": false,
+    "source_original_DXBC_stages_no_RDEF": 8,
+    "source_original_to_translator_sampler_Material_binding_proven": false,
+    "original_Material_UID_Adreno_pixels_proven": false,
+    "remaining_original_custom_Materials_Dummy": 770,
+    "full_native_active_run": 43205543533,
+    "full_native_produced_verified_XAPK": false,
+    "session_path": "clients/GT/sessions/20261112-GT-Particle108-original-SHDR-sampler-declarations-chat-17.md"
   }
 }
