@@ -310,6 +310,19 @@ jobs:
           assert result["Unity_Editor_Texture2DArray_assets_created"] is False
           print("GT_BC3_ARRAY_REAL_STREAM_STAGE authenticBC3Bytes=69906400 arraysWithPixels=8 originalZeroPixelArrays=1 layersWithPixels=50 stagedPrivate=true editedGUIDs=false LFS=false")
           PY
+      - name: GT independently verify actual ZIP2 texture-array layer order with UnityPy and Pillow BC3 decoders
+        id: gt_source_array_order_probe
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check Pillow==11.3.0 UnityPy==1.23.0
+          python3 -m unittest discover -s tests -p test_gt_validate_bc3_array_slice_order.py -v
+          python3 -m scripts.gt_validate_bc3_array_slice_order \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --source-manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
+            --report "$RUNNER_TEMP/gt-original-array-slice-layout-independent.json"
       - name: GT validate authentic original BC3 pixel slices against actual nine imported AssetRipper PNG array flipbooks without any game pixels in artifacts
         id: gt_bc3_source_pixel_parity
         continue-on-error: true
@@ -452,6 +465,7 @@ jobs:
             ${{ runner.temp }}/gt-real-bc3-array-staging-summary.json
             ${{ runner.temp }}/gt-original-array-real-flipbook-geometry.json
             ${{ runner.temp }}/gt-original-array-exact-pixel-parity.json
+            ${{ runner.temp }}/gt-original-array-slice-layout-independent.json
             ${{ runner.temp }}/gt-real-array-meta-only-repair.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
