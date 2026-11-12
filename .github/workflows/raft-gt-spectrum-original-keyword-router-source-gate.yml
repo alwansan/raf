@@ -27,3 +27,119 @@ jobs:
           python3 -m py_compile scripts/gt_spectrum_private_keyword_routed_shaderlab.py tests/test_gt_spectrum_private_keyword_routed_shaderlab.py
           python3 -m unittest discover -s tests -p test_gt_spectrum_private_keyword_routed_shaderlab.py -v
           echo 'GT_SPECTRUM_SOURCE_INDEX4_ROUTER_TESTED syntheticOnly=true originalUnityKeywordScope=false UnityAndroid=false PhonePixels=false'
+
+  private-real-original-keyword-table:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    needs: [source-only-keyword-router]
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gt-spectrum-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Restore SHA-original 115978112-byte Shader owner to private flat B09 input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage
+          repo=Path('gt-spectrum-zip2')
+          assert subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          dest=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-real-original'
+          proof=stage(repo,dest,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert proof['verified_bytes']==115978112 and proof['lfs_used'] is False
+          (dest/'Raft_Data/sharedassets0.assets').rename(dest/'sharedassets0.assets')
+          print('GT_SPECTRUM_KEYWORD_SHA_ORIGINAL_SOURCE size=115978112 LFS=false')
+          PY
+      - name: Install original-only shader reader and translation tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Stage 7pass original Spectrum pairs and render states in private temp
+        run: |
+          set -euo pipefail
+          timeout 300s python3 -m scripts.b09_stage_original_spectrum \
+            --source "$RUNNER_TEMP/gt-spectrum-real-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/gt-spectrum-original-packet-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-packet-private-manifest.json"
+          timeout 180s python3 -m scripts.gt_spectrum_original_pass_states \
+            --source "$RUNNER_TEMP/gt-spectrum-real-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/gt-spectrum-original-states-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-states-safe.json"
+      - name: Recover both source-authentic seven-pass source ShaderLab envelopes privately
+        run: |
+          set -euo pipefail
+          timeout 480s python3 -m scripts.gt_spectrum_original_private_seven_pass_shaderlab \
+            --source "$RUNNER_TEMP/gt-spectrum-real-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --packet "$RUNNER_TEMP/gt-spectrum-original-packet-private" \
+            --manifest "$RUNNER_TEMP/gt-spectrum-packet-private-manifest.json" \
+            --states "$RUNNER_TEMP/gt-spectrum-original-states-private" \
+            --private-dest "$RUNNER_TEMP/gt-spectrum-two-variants-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-two-variants-safe.json" \
+            --source-authentic-resource-names
+      - name: Authenticate real original Keyword index4 and all seven source VSFS pair hashes; assemble private single-shader router
+        run: |
+          set -euo pipefail
+          timeout 300s python3 -m scripts.gt_spectrum_private_keyword_routed_shaderlab \
+            --source "$RUNNER_TEMP/gt-spectrum-real-original" \
+            --packet-dir "$RUNNER_TEMP/gt-spectrum-original-packet-private" \
+            --packet-report "$RUNNER_TEMP/gt-spectrum-packet-private-manifest.json" \
+            --private-dir "$RUNNER_TEMP/gt-spectrum-two-variants-private" \
+            --out "$RUNNER_TEMP/gt-spectrum-provisional-router-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-provisional-router-safe.json'
+          result=json.loads(p.read_text())
+          assert result['status']=='PRIVATE_SPECTRUM_ORIGINAL_KEYWORD_INDEX4_SEVEN_PASS_ROUTED_SHADERLAB_CANDIDATE'
+          assert result['source_original_keyword_index']==4
+          assert result['source_original_pass_count']==7
+          assert result['source_original_keyword_variants_per_pass']==2
+          assert result['source_program_variant_stage_references']==28
+          assert result['source_original_VS_FS_pair_hashes_authenticated'] is True
+          assert result['private_seven_program_keyword_pragmas']==7
+          for k in ('original_shader_keyword_flags_pragma_scope_proven',
+                    'original_material_keyword_runtime_selection_parity_proven',
+                    'original_Material_sampler_CB0_RT_GUID_binding_proven',
+                    'original_game_ShaderLab_modified',
+                    'Unity_Android_2021_import_or_GPU_proven',
+                    'original_Adreno_pixel_parity_proven',
+                    'original_keyword_names_or_ShaderLab_published'):
+              assert result[k] is False
+          print('GT_SPECTRUM_PRIVATE_SOURCE_KEYWORD_INDEX4 sevenOriginalPasses=true twoVSFSProgramBranchesPerPass=true originalNameHashAuthenticated=true UnityAndroid=false MaterialGuid=false PhonePixels=false')
+          PY
+      - name: Remove all original and private shader staging, zero source/artifact output
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-spectrum-real-original" \
+            "$RUNNER_TEMP/gt-spectrum-original-packet-private" \
+            "$RUNNER_TEMP/gt-spectrum-packet-private-manifest.json" \
+            "$RUNNER_TEMP/gt-spectrum-original-states-private" \
+            "$RUNNER_TEMP/gt-spectrum-states-safe.json" \
+            "$RUNNER_TEMP/gt-spectrum-two-variants-private" \
+            "$RUNNER_TEMP/gt-spectrum-two-variants-safe.json" \
+            "$RUNNER_TEMP/gt-spectrum-provisional-router-safe.json" \
+            "$GITHUB_WORKSPACE/gt-spectrum-zip2"
