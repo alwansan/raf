@@ -5,6 +5,17 @@
 **سجل البيانات المهيكلة المعتمد:** [RESTORATION_PLAN.json](RESTORATION_PLAN.json) — راجع وضع كل دفعة وأدلتها قبل تعديل الحالة.  
 **رسالة استكمال الجلسات:** [RESTORE_AR.md](RESTORE_AR.md)؛ **حالة GT:** [state.json](state.json)؛ **الذاكرة:** [MEMORY.md](MEMORY.md).  
 
+## تحديث مثبت — Spectrum الأصلي داخل مختبر Unity (GT / Chat-23)
+
+| الجزء | المكتمل بالدليل | ما يزال مطلوباً |
+|---|---|---|
+| الأصل | 7 Passes، 14 أزواج VS/FS، 28/28 Vulkan stages، 7 حالات رسم، 6 خصائص، Keyword index4 من ZIP2 | تفسير `m_KeywordFlags` الأصلي |
+| Unity Android Vulkan | [43286126572](https://github.com/alwansan/raf/actions/runs/43286126572): المرشحان المنفصلان 7Pass لكل واحد وصفر أخطاء نهائية. [43288288144](https://github.com/alwansan/raf/actions/runs/43288288144): **شيدر واحد خاص، 7 Passes و2 ShaderVariants، Bundle 14,492B، صفر أخطاء Shader وأخطاء GLSL في فحص مستقل للسجل النهائي** | إثبات نطاق Keyword وإدارة Material الأصلية واختيار الفرع أثناء التشغيل |
+| رسوميات Raft على الهاتف | **غير مثبتة**؛ لم يُدمج الـShader الموحد في اللعبة | ربط Shader/Material GUID وTexture/Sampler/CB0/RT؛ ثم APK وتجربة Adreno والسجلات والصور |
+| بقية الرسوميات | موارد أصلية وأدلة مصدر متنوعة محفوظة في P00–P11 | Foam Global 2Pass، هوية compute kernel6، 770 مادة Dummy وبقية المؤثرات والألوان |
+
+**لا تُحوّل نجاح مختبر ShaderBundle إلى نسبة استعادة للعبة.** مراحل القبول P06/M2 ما زالت معلقة. الاختبار 43288288144 أنتج مرشحاً خاصاً لم يُضمّن في APK أو XAPK، و`originalMaterialRuntimeKeywordSelectionProven=false`. الجلسة المرجعية [Chat-23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md).
+
 ## ما المقصود بـ«مستعاد»؟
 
 المراحل لا تتساوى ولا تُجمَع في نسبة واحدة:
