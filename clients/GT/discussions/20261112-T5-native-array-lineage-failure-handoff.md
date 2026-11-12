@@ -1,0 +1,10 @@
+# GT → T5: native production ClassID187 trace failure and fix
+
+**Source** ZIP2 SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; no Git LFS. All changes on `feature/android-native-port`.
+
+- **Real failed full native:** [43151970478](https://github.com/alwansan/raf/actions/runs/43151970478) — 134/134 original ZIP2 source authenticated, 82/82 pristine owners authenticated; real AssetRipper completed. GT repair step failed `not_all_nine_original_array_targets_found`; Unity import never ran. This is a **good fail-close**, do not suppress it.
+- **Root cause confirmed:** `RaftExportLineage.Capture` requires `RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE=1` to emit ClassID187 source→export pointers. The standalone real GT exporter [43150158897 PASS](https://github.com/alwansan/raf/actions/runs/43150158897) enabled this, the full native exporter did not.
+- **Patch:** [5f4da8ff](https://github.com/alwansan/raf/commit/5f4da8ffb94659c6c33cfd59fd24d43f25496f91) enables texture capture privately only on exact `Export 40 scenes` step. Source-only CI [43153342026 PASS](https://github.com/alwansan/raf/actions/runs/43153342026), production retry not verified. `scripts.gt_stage_serialized_owners` continues to use pristine originals after Mesh inlining, now guarded by [47b4f3f](https://github.com/alwansan/raf/commit/47b4f3f502189f7b18cd19a8e7cc178fd6dbb13f).
+- **Independent proof:** [272ab8c1](https://github.com/alwansan/raf/commit/272ab8c1cc9ec8001cc5ca69200daca294978e2f) fixes isolated UnityPy external BC3 data decoding without source modification. Real [43153126679](https://github.com/alwansan/raf/actions/runs/43153126679) pending at handoff.
+
+**T5 acceptance on next authorized native run:** nine exact source array GUIDs from same export, repaired importer grids, 28 original Material ClassID187 refs, then Unity-native import type/depth/11mips and downstream existing strict water/shader/packaging gates. Do not mark complete from synthetic checks or record as finished APK. GT did not trigger full build, cancel others, change votes, publish private trace or modify original source assets.

@@ -1,0 +1,48 @@
+{
+  "schema": "GT_NATIVE_CLASS187_TRACE_ROOT_CAUSE_SAFE_V1",
+  "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "isolated_source_export": {
+    "run": 43150158897,
+    "success": true,
+    "private_original_arrays": 9,
+    "original_material_refs": 28,
+    "native_editor_verified": false
+  },
+  "native_full": {
+    "run": 43151970478,
+    "result": "failure",
+    "source_original_resources_authenticated": 134,
+    "serialized_owners_authenticated": 82,
+    "failed_step": "GT restore nine original Texture2DArray importer grids",
+    "safe_code": "not_all_nine_original_array_targets_found",
+    "editor_not_started": true,
+    "xapk_not_created": true
+  },
+  "root_cause": {
+    "missing_export_environment_setting": "RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE",
+    "private_trace_class_id_187_is_opt_in": true
+  },
+  "fixes": [
+    {
+      "commit": "47b4f3f502189f7b18cd19a8e7cc178fd6dbb13f",
+      "source_only_ci": 43152621218
+    },
+    {
+      "commit": "272ab8c1cc9ec8001cc5ca69200daca294978e2f",
+      "source_only_ci": 43153004857
+    },
+    {
+      "commit": "85316d5123d593865fbbf4411414bd929b9a6874",
+      "isolated_real_ci_pending": 43153126679
+    },
+    {
+      "commit": "5f4da8ffb94659c6c33cfd59fd24d43f25496f91",
+      "native_export_private_class187_toggle": true,
+      "source_only_ci": 43153342026
+    }
+  ],
+  "native_retest_verified": false,
+  "android_gpu_verified": false,
+  "private_original_guids_not_disclosed": true,
+  "git_lfs_used": false
+}

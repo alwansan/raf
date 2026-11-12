@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ACTUAL_NINE_ARRAY_PNG_IMPORT_REPAIRED_28_OF_28_MATERIAL_LINKS_VERIFIED_NATIVE_UNITY2021_EDITOR_IMPORT_GATE_INTEGRATED_SOURCE_ONLY_TESTED",
+  "status": "GT_NATIVE_CLASS187_PRIVATE_LINEAGE_ROOT_CAUSE_FIXED_SYNTHETIC_PASS_REAL_NATIVE_RERUN_PENDING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -214,7 +214,18 @@
           "native_editor_import_guard_CSharp_source_only_CI": 43150348740,
           "native_editor_Actual_2021_3_import_verified": false,
           "native_Android_gpu_render_verified": false,
-          "latest_real_isolated_unity_manifest_contract_run": 43150158897
+          "latest_real_isolated_unity_manifest_contract_run": 43150158897,
+          "last_native_failed_run": 43151970478,
+          "last_native_failed_step": "GT restore nine original Texture2DArray importer grids",
+          "last_native_failure_code": "not_all_nine_original_array_targets_found",
+          "last_native_failure_root_cause": "RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE missing; CSharp class187 capture is opt-in",
+          "native_class187_private_trace_toggle_fix_commit": "5f4da8ffb94659c6c33cfd59fd24d43f25496f91",
+          "native_class187_toggle_source_only_CI": 43153342026,
+          "native_class187_real_native_rerun_verified": false,
+          "independent_unitypy_original_stream_injection_commit": "272ab8c1cc9ec8001cc5ca69200daca294978e2f",
+          "independent_unitypy_source_only_CI": 43153004857,
+          "independent_unitypy_latest_real_run": 43153126679,
+          "independent_unitypy_latest_real_verified": false
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -314,6 +325,6 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-native-original-array-import-gate-chat-08.md",
-  "next_action": "GT real 9/9 authentic PNG importer fix + 24/24 BC3 source topmip pixels (CI43144656957) and exact 28/28 Material Class187 refs (CI43145816256) PASS. Native workflow now runs same SHA-pinned ZIP2 original source→AssetRipper GUID-preserving 9 array meta repair, 28 strict material refs, and stages private Unity Editor manifest. B46 now correctly accepts imported class187 PNG flipbooks but rejects flattened 2800000. AndroidNativeBuild.ValidateSdkBindings calls OriginalTextureArrayImportGuard.Validate, which requires actual UnityEditor Texture2DArray GUID/size/depth/mip (9 arrays, 52 logical layers, 50 source populated), throwing fail-close. SOURCE-FREE CSharp compile+source contract synthetic CI43150348740 PASS, but REAL Unity Editor import/Android GPU not run yet. Check isolated full CI43150158897 for private Editor manifest. Do not initiate full native request or interfere with T5 votes; ZIP2 no LFS."
+  "latest_session": "sessions/20261112-GT-native-array-lineage-fix-chat-09.md",
+  "next_action": "T5 full native run 43151970478 failed before Unity because RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE was absent from production AssetRipper step; 5f4da8ff now enables same-instance ClassID187 trace strictly inside runner, source-only 43153342026 PASS; full native validation NOT rerun. Real GT isolate 43150158897 PASS 9 array private Editor manifest and 28 material refs. Independent streamed BC3 UnityPy in-memory decoder patched in 272ab8c1 source-only CI43153004857 PASS; check real isolated 43153126679. Preserve ZIP2 SHA, no LFS and do not GT-trigger T5 full XAPK without team gates."
 }
