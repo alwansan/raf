@@ -5,11 +5,12 @@
   "source": {
     "branch": "zip2",
     "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "acquisition_policy": "ZIP2 immutable SHA only: reconstruct plain and part-00000.. files from git tracked zip2; verify original SHA256 and byte size before use; do not run git lfs pull/fetch or fallback to Git LFS",
+    "acquisition_policy": "ZIP2 SHA pinned and 134 original full native graphics inputs restored from immutable ZIP2 with manifest SHA256 and size; original MasterBank selected separately; NO Git LFS acquisition or fallback",
     "provider_url": "https://github.com/alwansan/raf/tree/zip2",
     "git_lfs_acquisition_allowed": false,
-    "staging": "isolated temporary output, not tracked Android Raft data; sha256 and byte length required",
-    "zip2_any_original_stager": "scripts/gt_zip2_payloads.py"
+    "staging": "scripts/gt_zip2_export_resources.py stages verified original 134 graphics inputs to private AssetRipper/Raft_Data, no tracked Raft or .meta writes",
+    "zip2_any_original_stager": "scripts/gt_zip2_payloads.py",
+    "zip2_full_export_input_stager": "scripts/gt_zip2_export_resources.py"
   },
   "calibration": {
     "closed": true,
@@ -17,9 +18,9 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_SOURCE_MATERIAL_TEXTURE_MESH_REFERENCE_GRAPH_PROVEN_ANDROID_EXPORT_UNVERIFIED",
+  "status": "GT_ALL_134_REAL_ZIP2_GRAPHICS_SOURCE_FILES_RESTORED_NATIVE_PIPELINE_INSTALLED_EXPORT_SMOKE_RUNNING",
   "inventory": {
-    "status": "authenticated_82_serialized_owner_headers",
+    "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
       "original_files": 366,
       "total_bytes": 7789295609,
@@ -44,7 +45,46 @@
         "artifact_id": 13899122924,
         "git_lfs_used": false
       },
-      "mesh_texture_graph_artifact_id": 13900107915
+      "mesh_texture_graph_artifact_id": 13900107915,
+      "full_native_graphics": {
+        "run": 43124662931,
+        "artifact": 13902706287,
+        "original_file_count": 134,
+        "original_bytes": 7532909297,
+        "serialized_owners": 82,
+        "streams": 48,
+        "engine_builtin_resources": 2,
+        "settings_and_boot": 2,
+        "texture_2d": 4050,
+        "external_texture_streams_verified": 3948,
+        "inline_or_empty_texture_2d": 102,
+        "original_texture_stream_bytes_addressable": 5932309293,
+        "original_mesh_stream_audit": true,
+        "compute_shader_count": 9,
+        "git_lfs_used": false
+      },
+      "core_source_proven": {
+        "run": 43122665358,
+        "resources": 5,
+        "bytes": 656558804,
+        "streamed_texture_extents": 398
+      },
+      "primary_visuals_proven": {
+        "run": 43123035437,
+        "original_files": 2,
+        "bytes": 1895109248,
+        "mesh_stream_extents": 557,
+        "texture_stream_extents": 1116
+      },
+      "fmod_master_bank": {
+        "run": 43125353255,
+        "source_bytes": 101600960,
+        "sha256": "10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339",
+        "git_lfs_used": false,
+        "device_audio_verified": false
+      },
+      "native_input_guard_run": 43125034578,
+      "actual_assetripper_export_smoke_run": 43125542125
     },
     "totals": {
       "all_owned_objects": 1209137,
@@ -90,15 +130,16 @@
       "engine_transport_references": 16
     },
     "limitations": {
-      "source_stream_payloads_verified": false,
+      "source_stream_payloads_verified": true,
       "exported_unity_guid_and_material_links_verified": false,
       "android_build_and_device_verified": false,
-      "shader_pass_variant_compute_kernel_totals_known": false
+      "shader_pass_variant_compute_kernel_totals_known": false,
+      "source_stream_payloads_scope": "source listed original 48 streams, all 134 original graphics files SHA256; external Texture2D extents checked; native output GPU still unverified"
     },
     "project_baseline_sha": "cd96edc1ce0059b5737c017b707a8f79cb4da29d",
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-    "last_verified_source_ci_sha": "ea3c81bd60182a11719b7962a569865ce283bd62"
+    "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-original-mesh-texture-chat-03.md",
-  "next_action": "GT ZIP2-only: 4583/4583 original bound Material->Texture identities and 176006 original in-owner Mesh targets class-verified; preserve 5663 texture nulls, 228 mesh nulls and track 474 Unity built-in Mesh transports separately. Next obtain actual same-instance AssetRipper ExportedProject trace + .meta GUID mappings, distinguish exporter null/owner errors, then acquire only needed ZIP2 .resS using gt_zip2_payloads and fix selected visual sample. No LFS, no uncoordinated T5 native build."
+  "latest_session": "sessions/20261112-GT-full-original-graphics-chat-04.md",
+  "next_action": "GT real full original source restoration 134/134, 7,532,909,297 bytes proven CI 43124662931 and native importer input YAML installed; inspect isolated actual full AssetRipper exporter job 43125542125, fix export errors if present, prove same-instance .meta/GUID + material/texture and Mesh links from export, then restore targeted Shader/Pass and evaluate full Android build only via T team gates. Original audio MasterBank 101600960 bytes independently proven from ZIP2 CI 43125353255. Never use Git LFS acquisition."
 }
