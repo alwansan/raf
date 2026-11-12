@@ -50,6 +50,12 @@
 - `verify_water_render_contract.py` يطلب `Spectrum >= 6` لأن السجل القديم طلب Pass #5. **هذا حد أدنى لتفسير log فقط**؛ استعادة شيدر Spectrum الصحيحة تحتاج **7 Passes مع Pass states والـkeywords الأصلية**، ولا يجوز ملء العدد بـPass فارغة.
 - [CI 43268872421 SUCCESS](https://github.com/alwansan/raf/actions/runs/43268872421) يختبر هذا الفرق في [بوابة الخطة](../../scripts/gt_restoration_plan_check.py)، ولا يثبت أن البرنامج الأصلي صار داخل APK.
 
+### تجربة GT الجديدة داخل Unity Editor (اختبار قراءة فقط)
+
+أُضيف [GTOriginalWaterPassImportProbe.cs](../../android-port/Editor/GTOriginalWaterPassImportProbe.cs) ويُستدعى من `AndroidNativeBuild.ValidateSdkBindings` قبل بناء Android التالي. يفحص كائني Spectrum وFoam المسمّيين في Assets، ويُبلغ عن عدد الـPasses المستوردة وعن وجود `//DummyShaderTextExporter` وتكرار اسم shader وأخطاء المسار. يحفظ الفرق بين **Spectrum الأصلي 7** والحد الأدنى المسجّل **6**، وFoam الأصلي **2**. لا يطبع GUID أو HLSL أو مسارات الأصل، **ولا يعدّل أي ملف shader أو .meta أو Material**. أدلة Unity على الهاتف ما زالت غير متاحة؛ الفحص التشخيصي وحده لا يُصلح الشيدر ولا يضمن أصالة محتواه.
+
+**[43269999662 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43269999662):** 5 اختبارات مصدرية + تجميع وتشغيل C# بواسطة .NET مع محاكيات Unity API، والتحقق من Shader Spectrum ناقص بPass واحد وFoam بPassين ومنع path traversal. **هذا ليس تشغيل Unity Editor الأصلي ولا اختبار Adreno.** في البناء الحديث التالي، ابحث في سجل Unity عن `GT_WATER_IMPORTED_PASS_DIAGNOSTIC` ثم اربط الناتج بالـGUID والـMaterial وبرنامج المصدر قبل تعديل حالة `unity_verified`.
+
 ### فشل الهاتف الذي يحكم القبول
 
 السجل `CL@cffd3f7be2d0c47649da9b28eae17c36d031f0e8` بتاريخ 12 نوفمبر لجلسة `LogRaft-20261112-183147-926` أثبت:
