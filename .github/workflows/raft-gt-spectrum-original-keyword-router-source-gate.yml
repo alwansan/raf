@@ -5,6 +5,11 @@ on:
     paths:
       - scripts/gt_spectrum_private_keyword_routed_shaderlab.py
       - tests/test_gt_spectrum_private_keyword_routed_shaderlab.py
+      - scripts/gt_spectrum_keyword_private_unity_project.py
+      - tests/test_gt_spectrum_keyword_private_unity_project.py
+      - android-port/Experiments/GT/Editor/OriginalSpectrumKeywordRouterValidation.cs
+      - scripts/gt_spectrum_unified_ci_console_gate.py
+      - tests/test_gt_spectrum_unified_ci_console_gate.py
       - .github/workflows/raft-gt-spectrum-original-keyword-router-source-gate.yml
   workflow_dispatch:
 permissions:
@@ -26,11 +31,15 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/gt_spectrum_private_keyword_routed_shaderlab.py tests/test_gt_spectrum_private_keyword_routed_shaderlab.py
           python3 -m unittest discover -s tests -p test_gt_spectrum_private_keyword_routed_shaderlab.py -v
+          python3 -m unittest discover -s tests -p test_gt_spectrum_keyword_private_unity_project.py -v
+          python3 -m unittest discover -s tests -p test_gt_spectrum_unified_ci_console_gate.py -v
+          python3 -m py_compile scripts/gt_spectrum_keyword_private_unity_project.py scripts/gt_spectrum_unified_ci_console_gate.py
           echo 'GT_SPECTRUM_SOURCE_INDEX4_ROUTER_TESTED syntheticOnly=true originalUnityKeywordScope=false UnityAndroid=false PhonePixels=false'
 
   private-real-original-keyword-table:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 80
+    environment: UNITY_LICENSE
     needs: [source-only-keyword-router]
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
@@ -131,6 +140,79 @@ jobs:
               assert result[k] is False
           print('GT_SPECTRUM_PRIVATE_SOURCE_KEYWORD_INDEX4 sevenOriginalPasses=true twoVSFSProgramBranchesPerPass=true originalNameHashAuthenticated=true UnityAndroid=false MaterialGuid=false PhonePixels=false')
           PY
+      - name: Stage private Unity 2021 project from the one source-authentic index4 Spectrum ShaderLab
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_spectrum_keyword_private_unity_project \
+            --shader "$RUNNER_TEMP/gt-spectrum-two-variants-private/spectrum-keyword-index4-router-private.shader" \
+            --source-proof "$RUNNER_TEMP/gt-spectrum-provisional-router-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalSpectrumKeywordRouterValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-private-spectrum-unified-keyword-unity" \
+            --safe-report "$RUNNER_TEMP/gt-spectrum-unified-unity-staged-safe.json"
+      - name: Unity 2021.3.45f2 actual Android Vulkan one Spectrum 7pass two-variant ShaderBundle diagnostic
+        id: gt_spectrum_unified_original_index4_unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-private-spectrum-unified-keyword-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalSpectrumKeywordRouterValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Strictly require provisional unified 7pass two keyword ShaderVariant bundle (not original parity)
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("gt-private-spectrum-unified-keyword-unity/ProbeResults/gt-spectrum-unified-keyword-unity-safe.json")
+          if not p.is_file() or not 0<p.stat().st_size<65536:
+              raise SystemExit("GT_SPECTRUM_UNIFIED_UNITY_SAFE_REPORT_MISSING")
+          r=json.loads(p.read_text())
+          expected={
+            "status":"PRIVATE_SPECTRUM_UNIFIED_ORIGINAL_INDEX4_KEYWORD_SEVEN_PASS_PROVISIONAL_UNITY_BUNDLE",
+            "unityVersion":"2021.3.45f2",
+            "sourceOriginalPasses":7,
+            "sourceOriginalKeywordIndex":4,
+            "keywordPragmas":7,
+            "importedPasses":7,
+            "ShaderVariantCollectionCount":2,
+            "shaderErrorCount":0,
+            "importedPrivateShader":True,
+            "registeredBothKeywordVariants":True,
+            "privateAndroidVulkanBundleBuilt":True,
+            "editorShaderImportAndCompilationProvisional":True,
+            "exactOriginalKeywordScopeFlagsProven":False,
+            "originalMaterialRuntimeKeywordSelectionProven":False,
+            "originalMaterialGUIDSamplerCB0RenderTargetBindingProven":False,
+            "originalGameShaderOrAssetsModified":False,
+            "phoneAdrenoPixelsVerified":False,
+            "originalShaderSourceOrKeywordPublished":False,
+          }
+          for key,value in expected.items():
+              if type(r.get(key)) is not type(value) or r[key]!=value:
+                  raise SystemExit("GT_SPECTRUM_UNIFIED_UNITY_SAFE_GATE_"+key)
+          if type(r.get("privateAndroidVulkanBundleBytes")) is not int or r["privateAndroidVulkanBundleBytes"]<=0:
+              raise SystemExit("GT_SPECTRUM_UNIFIED_ANDROID_BUNDLE_EMPTY")
+          print("GT_SPECTRUM_UNIFIED_KEYWORD_PRIVATE_UNITY_PROVISIONAL sevenPasses=true keywordVariants=2 Unity2021=true originalKeywordScopeAndMaterialParity=false AdrenoPixels=false")
+          PY
+      - name: Retain only provisional numeric Unity and source-stage reports, never original keyword or ShaderLab
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-spectrum-unified-original-keyword-source-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-spectrum-unified-unity-staged-safe.json
+            gt-private-spectrum-unified-keyword-unity/ProbeResults/gt-spectrum-unified-keyword-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Remove all original and private shader staging, zero source/artifact output
         if: always()
         run: |
@@ -142,4 +224,42 @@ jobs:
             "$RUNNER_TEMP/gt-spectrum-two-variants-private" \
             "$RUNNER_TEMP/gt-spectrum-two-variants-safe.json" \
             "$RUNNER_TEMP/gt-spectrum-provisional-router-safe.json" \
+            "$RUNNER_TEMP/gt-spectrum-unified-unity-staged-safe.json" \
             "$GITHUB_WORKSPACE/gt-spectrum-zip2"
+          test "$PWD" = "$GITHUB_WORKSPACE"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-spectrum-unified-keyword-unity"
+
+  strict-unified-Unity-final-console:
+    name: Strict final hidden GLSL/Unity variant errors for the one source-original index4 ShaderLab
+    needs: [private-real-original-keyword-table]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Re-test no ShaderUtil false green and no echoed code accepted
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_spectrum_unified_ci_console_gate.py -v
+      - name: Fetch FINALIZED original unified private Unity job log and reject hidden linker failures
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jobs="$(gh api -H 'Accept: application/vnd.github+json' "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100")"
+          job_id="$(printf '%s' "$jobs" | jq -r '.jobs[] | select(.name == "private-real-original-keyword-table") | .id' | head -n 1)"
+          if ! [[ "$job_id" =~ ^[0-9]+$ ]]; then
+            echo 'GT_SPECTRUM_UNIFIED_PRIVATE_UNITY_LOG_JOB_MISSING'
+            exit 2
+          fi
+          log="$RUNNER_TEMP/gt-spectrum-unified-original-private-final-console.log"
+          gh api --allow-escape-sequences -H 'Accept: application/vnd.github+json' \
+            "repos/$GITHUB_REPOSITORY/actions/jobs/$job_id/logs" > "$log"
+          python3 -m scripts.gt_spectrum_unified_ci_console_gate --console "$log"
+          rm -f -- "$log"
