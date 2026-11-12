@@ -37,6 +37,8 @@ on:
       - tests/test_gt_write_unity_array_import_contract.py
       - android-port/Editor/OriginalTextureArrayImportGuard.cs
       - android-port/Editor/AndroidNativeBuild.cs
+      - android-port/Tests/OriginalArrayImportGuard/OriginalArrayImportGuard.csproj
+      - android-port/Tests/OriginalArrayImportGuard/UnityEditorSourceFreeContractStubs.cs
       - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
@@ -62,6 +64,13 @@ jobs:
             tests
             .github/workflows
             android-port/Editor
+            android-port/Tests/OriginalArrayImportGuard
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile exact new CSharp Unity Editor array gate with explicit source-free API stubs
+        run: |
+          dotnet build android-port/Tests/OriginalArrayImportGuard/OriginalArrayImportGuard.csproj -c Release -v quiet --nologo
       - name: Verify safe aggregate target root causes and full original trace phase classification
         run: |
           python3 -m py_compile scripts/gt_diagnose_export_texture_targets.py scripts/gt_full_original_export_texenvs.py
