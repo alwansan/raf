@@ -81,6 +81,22 @@ class SourceArrayImporterRepairTests(unittest.TestCase):
         self.assertEqual(result["postrepair_exact_original_layer_grids_validated"],9)
         self.assertFalse(self.backup.exists())
 
+    def test_missing_trace_source_is_aggregated_without_leaking_private_identity(self):
+        # Real exports may omit an original ClassID187 source from the
+        # collection trace; preserve fail-closed behavior and safe counts.
+        private_guid=self.trace["objects"][0]["export"]["guid"]
+        private_path=self.trace["objects"][0]["source"]["path_id"]
+        self.trace["objects"].pop(0)
+        with self.assertRaises(InventoryError) as caught:
+            execute(self.project,self.backup,self.source,self.trace)
+        message=str(caught.exception)
+        self.assertIn("trace_matching_rows=8",message)
+        self.assertIn("exported_png_meta_matches=8",message)
+        self.assertIn("missing_source_targets=1",message)
+        self.assertNotIn(private_guid,message)
+        self.assertNotIn("path_id",message)
+        self.assertFalse(self.backup.exists())
+
     def test_extra_meta_GUID_swap_is_rejected_before_mutations(self):
         (self.assets/"array-0.png.meta").write_text(
             (self.assets/"array-0.png.meta").read_text().replace(
