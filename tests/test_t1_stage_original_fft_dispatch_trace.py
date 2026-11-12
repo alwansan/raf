@@ -48,6 +48,13 @@ class OriginalFftAndroidHookTests(unittest.TestCase):
         self.assertIn("shader.Dispatch(k, 1, target.height, 1);", out)
         self.assertIn("shader.Dispatch(k + 1, 1, target.height, 1);", out)
         self.assertEqual(out.count("shader.SetTexture("), 6)
+        self.assertEqual(out.count("BeforeBinding("), 6)
+        self.assertEqual(out.count("BindingResult("), 12)
+
+    def test_wrong_settexture_pass_is_rejected(self):
+        bad = ORIGINAL.replace('shader.SetTexture(k + 1, "A", a);', 'shader.SetTexture(k, "A", a);')
+        with self.assertRaisesRegex(ValueError, "SetTexture pass"):
+            run_synthetic(original=bad)
 
     def test_source_exponent_read_directly_from_inherited_field(self):
         out = run_synthetic()
@@ -126,8 +133,8 @@ class OriginalFftAndroidHookTests(unittest.TestCase):
         source = run_synthetic()
         self.assertEqual(source.count("DispatchThrew("), 2)
         self.assertEqual(source.count("catch (System.Exception __raftT1FftDispatchException"), 2)
-        self.assertEqual(source.count("    throw;"), 2)
-        self.assertEqual(source.count("try\n"), 2)
+        self.assertEqual(source.count("    throw;"), 8)
+        self.assertEqual(source.count("try\n"), 8)
         self.assertEqual(source.count("shader.Dispatch("), 2)
         for passnum in (0, 1):
             key = "__raftT1FftBeforeDispatch" + str(passnum)

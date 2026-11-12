@@ -11,7 +11,35 @@ namespace RaftAndroid.Diagnostics
     {
         private const int MaxCalls = 16;
         private static int nextCall;
+        private static int nextBinding;
         private const string OriginalDerivedShaPrefix = "8aa32937d423";
+        public static int BeforeBinding(int site)
+        {
+            int sequence = Interlocked.Increment(ref nextBinding);
+            if (sequence <= 0 || sequence > MaxCalls) return 0;
+            try
+            {
+                AndroidRuntimeLog.Initialize();
+                AndroidRuntimeLog.Write("water", "t1_original_fft_bind.before",
+                    "sequence=" + sequence + "; site=" + site + "; pass=" + (site / 3)
+                    + "; frame=" + Time.frameCount + "; source_sha_prefix=" + OriginalDerivedShaPrefix, true);
+            }
+            catch (Exception) { }
+            return sequence;
+        }
+
+        public static void BindingResult(int sequence, bool threw)
+        {
+            if (sequence <= 0 || sequence > MaxCalls) return;
+            try
+            {
+                AndroidRuntimeLog.Write("water",
+                    threw ? "t1_original_fft_bind.threw" : "t1_original_fft_bind.returned",
+                    "sequence=" + sequence + "; gpu_result=unverified", true);
+            }
+            catch (Exception) { }
+        }
+
         public static int BeforeDispatch(ComputeShader shader, int kernelArg,
             int groupX, int groupY, int groupZ, int originalExponent, int passOffset)
         {
