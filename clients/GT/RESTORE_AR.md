@@ -1,5 +1,17 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-22 — نقطة الاستعادة الأحدث للماء Spectrum (12 نوفمبر 2026)
+
+**ابدأ من هذه النقطة:** [خطة الاستعادة العربية](RESTORATION_PLAN_AR.md) · [JSON التغطية والأدلة](RESTORATION_PLAN.json) · [حالة GT](state.json) · [ملخص المالك](SUMMARY_AR.md) · [آخر جلسة مفصّلة Chat-22](sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md) · [الذاكرة](MEMORY.md). فرع الكتابة الوحيد `feature/android-native-port`؛ المصدر `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385` للقراءة فقط، **لا Git LFS ولا تغيير المصدر/GUID/.meta**.
+
+**ما استعيد بدليل المصدر الحقيقي:** [43273276394 SUCCESS](https://github.com/alwansan/raf/actions/runs/43273276394) أثبت **7 Spectrum Passes** أصلية و**14 زوج VS/FS** و**28/28** ترجمة stage في Vulkan1.1 و**13** برنامجاً مختلفاً؛ [43273958426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43273958426) أثبت **7/7 حالات رسم مختلفة** و**6 خصائص أصلية** (2 Texture،3 Float،1 Vector)؛ [43274729958 SUCCESS](https://github.com/alwansan/raf/actions/runs/43274729958) جمع **مرشحين خاصين** 7Pass ShaderLab لكل واحد، 14 Pass بنيوياً و28 stage references، **دون** ربط Keyword الأصلي في شيدر واحد أو GUID/Material. هذه مشاريع اختبار خاصة لا تستبدل ملفات Raft.
+
+**نتيجة Unity الفعلية:** [43275506146 FAILURE](https://github.com/alwansan/raf/actions/runs/43275506146): Unity 2021.3.45f2 Android Vulkan استورد شيدر Spectrum الخاص بـ**7 Passes** وبنى bundle **6095 بايت**، لكن **shaderErrorCount=2** بسبب GLSL link CBuffer Uniform بالاسم نفسه بين VS/FS وأطوال `vec4[4]` أمام 5/7. عالجت ذلك تشخيصياً بواسطة `scripts/gt_spectrum_private_stage_buffer_isolation.py` مع tests: فقط أسماء CBuffer المؤقتة الخاصة بالـStage تتغير على مرشح Unity المعزول، و`register(...)` وأصل DXBC/Material/GUID لا تتغير؛ الشيفرة قابلة للعكس. **أحدث تجربة تحقق [43276622833](https://github.com/alwansan/raf/actions/runs/43276622833) بدأت ولم يؤكد نجاحها عند كتابة هذا الملف؛ ابدأ بفحص خطواتها وSafeResult**، ولا تنسب نجاح glslang إلى Unity أو Adreno.
+
+**العمل التالي:** إذا فشلت تجربة Unity الجديدة، حلّل أول `shaderError` الحقيقي وأصلحه بالربط المستمد من الأصل، دون Samplers/CB fake. بعد قبول Variant0 افحص Variant1 وKeyword flags وعائلة `UltimateWater/Foam/Global` ذات 2Pass، وأثبت Material/GUID/RT وسجلات Android. لا يزال **770 مستند Material Dummy**، ولا إثبات لألوان الطوف والنار والماء على الهاتف. بناء Native الأقدم [43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) مستقل وجارٍ في Unity عند آخر فحص، **لا تكرر بناءه**. بعد كل دفعة حدّث RESTORATION_PLAN_AR.md وJSON وstate وSUMMARY وMEMORY وهذا الملف وsession بالأدلة الصحيحة.
+
+---
+
 ## GT / Chat-21 — نقطة الاستئناف الحيّة (12 نوفمبر 2026)
 
 **ابدأ من هنا، قبل الملخص التاريخي أدناه:** افتح [الخطة العربية المستعادة/المتبقية](RESTORATION_PLAN_AR.md) و[الخطة JSON المصدر الحقيقي](RESTORATION_PLAN.json)، ثم [state.json](state.json)، [MEMORY.md](MEMORY.md)، [ملخص المالك](SUMMARY_AR.md)، و[آخر جلسة GT Chat-21](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md). الخطة تحتوي **12 مساراً P00–P11** و**6 مراحل M0–M5**؛ لكل مسار source/export/Unity/package/device أدلة منفصلة وعائق وخطوة لاحقة. **ملفات المصدر ليست تلقائياً مستعادة على GPU**، و**770 مستند Material Dummy** باقية بعد Vendor Restorers، لا تعني 770 Shader فريداً.
@@ -14,7 +26,7 @@
 
 ---
 
-اقرأ [الواجهة](README.md) و[الحالة الحية](state.json) و[الذاكرة](MEMORY.md) و[أحدث جلسة GT](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md) و[ملخص المالك](SUMMARY_AR.md) و[مرجع المعايرة](METHOD_AR.md). افحص أحدث HEAD وإصلاحات T1–T5 السابقة (أوقفهم المالك فلا تنتظرهم) وActions قبل أي تعديل أو تشغيل.
+اقرأ [الواجهة](README.md) و[الحالة الحية](state.json) و[الذاكرة](MEMORY.md) و[أحدث جلسة GT](sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md) و[ملخص المالك](SUMMARY_AR.md) و[مرجع المعايرة](METHOD_AR.md). افحص أحدث HEAD وإصلاحات T1–T5 السابقة (أوقفهم المالك فلا تنتظرهم) وActions قبل أي تعديل أو تشغيل.
 
 **توجيه المالك الأحدث (12 نوفمبر 2026): ZIP2 فقط — بلا Git LFS.** احصل على جميع الأصول الأصلية مباشرة من [فرع `zip2`](https://github.com/alwansan/raf/tree/zip2) (ثبّت SHA المصدر في العمل المتكرر)، وأعد تركيب ملفات `part-00000` المتعددة بترتيبها مع التحقق من حجم وSHA256 الملف النهائي بحسب `RAFT_FILE_MANIFEST.tsv` قبل استخدامه. استخدم checkout مع `lfs: false` لمنع تنزيل LFS التلقائي، **ولا تشغّل `git lfs pull` أو `fetch` ولا ترجع إلى LFS عندما يتعذر المصدر**. استخدم مساراً مؤقتاً منفصلاً واحتفظ بفرع `zip2` للقراءة فقط و`feature/android-native-port` للكتابة فقط. هذا القرار محفوظ في [ذاكرة GT](MEMORY.md) و[state.json](state.json).
 
