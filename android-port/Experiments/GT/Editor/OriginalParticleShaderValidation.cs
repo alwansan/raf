@@ -97,7 +97,9 @@ namespace RaftGT
                 if (result.materialPassCount != 1)
                     throw new InvalidOperationException("OriginalParticleOnePassNotImported");
 
-                var collection = ScriptableObject.CreateInstance<ShaderVariantCollection>();
+                // Unity 2021 ShaderVariantCollection derives from UnityEngine.Object,
+                // not ScriptableObject; construct with its public constructor.
+                var collection = new ShaderVariantCollection();
                 var names = new HashSet<string>();
                 for (int bits = 0; bits < 4; ++bits)
                 {
