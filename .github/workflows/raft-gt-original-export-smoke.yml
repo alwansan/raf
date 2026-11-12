@@ -530,6 +530,18 @@ jobs:
             --raw-quality "$RUNNER_TEMP/gt-raw-export-program-quality.json" \
             --backup-root "$RUNNER_TEMP/gt-shader-original-backup" \
             --report "$RUNNER_TEMP/gt-actual-postrestore-shader-quality.json"
+      - name: GT fail-closed accepted original source graphics parity (9 Class187, 416 cross-owner textures, 50 BC3 top mips)
+        id: gt_original_graphics_critical_gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_original_graphics_critical_gate.py -v
+          python3 -m scripts.gt_original_graphics_critical_gate \
+            --arrays "$RUNNER_TEMP/gt-real-array-28-source-links.json" \
+            --external "$RUNNER_TEMP/gt-real-external-texture-links.json" \
+            --bc3 "$RUNNER_TEMP/gt-all-original-bc3-layer-topmip-parity.json" \
+            --report "$RUNNER_TEMP/gt-original-graphics-9-416-50-strict-evidence.json"
+          test -s "$RUNNER_TEMP/gt-original-graphics-9-416-50-strict-evidence.json"
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
@@ -555,6 +567,7 @@ jobs:
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-real-external-texture-links.json
+            ${{ runner.temp }}/gt-original-graphics-9-416-50-strict-evidence.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
             ${{ runner.temp }}/gt-actual-postrestore-shader-quality.json
           retention-days: 14
