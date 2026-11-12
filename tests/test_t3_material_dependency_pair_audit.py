@@ -108,9 +108,9 @@ class MaterialPairSlotTests(unittest.TestCase):
             # A slot with no m_Texture must differ from an export that drops
             # that slot entirely; both were previously counted as no binding.
             missing = source.replace(
-                "        m_Texture: {fileID: 2800000, guid: " + A + ", type: 3}\\n", "")
+                "        m_Texture: {fileID: 2800000, guid: " + A + ", type: 3}\n", "")
             removed = missing.replace(
-                "    - _MainTex:\\n        m_Scale: {x: 1, y: 1}\\n", "")
+                "    - _MainTex:\n        m_Scale: {x: 1, y: 1}\n", "")
             (original / "test.mat").write_text(missing, encoding="utf-8")
             (exported / "test.mat").write_text(removed, encoding="utf-8")
             counts = audit.compare(original, exported)["counts"]
