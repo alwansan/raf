@@ -462,6 +462,31 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-native-unity-array-import-contract.json"
           test -s "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json"
+          # Original m_FileID > 0 targets an authenticated foreign serialized
+          # owner's FileIdentifier index. Same-export trace and actual Material
+          # texenv must preserve the full cross-owner class/pathID/GUID identity.
+          # Authenticated 82 owners are still staged, BEFORE private cleanup.
+          # This prevents a harmless-looking missing-colour/texture fallback
+          # from shipping with 416 silently unresolved original external refs.
+          python3 -m scripts.gt_external_original_texture_links \
+            --source "$original_owners" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-native-original-external-texture-links.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-native-original-external-texture-links.json').read_text())
+          assert d['status']=='EXTERNAL_TEXTURE_SOURCE_EXPORT_LINKS_CLASSIFIED', 'original_external_source_join_not_classified'
+          assert d['authenticated_owner_tables']==82, 'original_external_owner_tables_missing'
+          assert d['original_external_texture_slots']==416, 'original_external_texture_slot_drift'
+          assert d['exact_cross_owner_source_export_texture_links']==416, 'original_external_texture_source_export_mismatch'
+          assert d['external_links_not_yet_proven']==0 and d['mismatched_source_to_export_external_links']==0
+          assert d['all_external_links_verified'] is True
+          assert d['source_or_exported_assets_modified'] is False
+          print('GT_NATIVE_ORIGINAL_EXTERNAL_TEXTURE_PPTRS sourceOwners=82 originalExternalSlots=416 exactSourceToExport=416 mismatches=0 sourceChanged=false gpuUnverified=true')
+          PY
           rm -rf -- "$original_owners"
       - name: GT publish source-authentic array importer and Material link receipts only
         if: always()
@@ -471,6 +496,7 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-native-original-array-importer-repair.json
             ${{ runner.temp }}/gt-native-original-array-material-links.json
+            ${{ runner.temp }}/gt-native-original-external-texture-links.json
             ${{ runner.temp }}/gt-native-unity-array-import-contract.json
           if-no-files-found: ignore
           retention-days: 7

@@ -56,6 +56,27 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("source_images_or_binaries_edited",stage)
         self.assertNotIn("git lfs",stage.lower())
 
+    def test_all_416_source_external_texture_references_must_match_same_export_before_android(self):
+        body=self.workflow
+        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
+              "      - name: GT publish source-authentic array importer",1)[0]
+        self.assertIn('python3 -m scripts.gt_external_original_texture_links',stage)
+        self.assertIn('--source "$original_owners"',stage)
+        self.assertIn('--manifest zip2-original/RAFT_FILE_MANIFEST.tsv',stage)
+        self.assertIn('--trace "$RUNNER_TEMP/private-export-lineage.json"',stage)
+        self.assertIn("d['authenticated_owner_tables']==82",stage)
+        self.assertIn("d['original_external_texture_slots']==416",stage)
+        self.assertIn("d['exact_cross_owner_source_export_texture_links']==416",stage)
+        self.assertIn("d['external_links_not_yet_proven']==0",stage)
+        self.assertIn("d['all_external_links_verified'] is True",stage)
+        self.assertLess(stage.index('scripts.gt_external_original_texture_links'),
+                        stage.index('rm -rf -- "$original_owners"'))
+        self.assertNotIn("continue-on-error",stage)
+        self.assertIn('gt-native-original-external-texture-links.json',body)
+        # The source trace must not be rewritten to a guessed flat Texture2D.
+        self.assertNotIn('sed -i',stage)
+        self.assertNotIn('git lfs',stage.lower())
+
     def test_actual_exporter_emits_private_texture_identity_trace_for_class187(self):
         # Without this opt-in, the production CSharp exporter only emits
         # Material and Shader objects. Nine ClassID187 entries are absent,
