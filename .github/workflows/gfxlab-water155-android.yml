@@ -1,0 +1,70 @@
+name: GFX155 Unity water surface Android APK
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-water155-android.yml'
+      - 'gfxlab/water155/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-water155-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  android:
+    if: github.ref == 'refs/heads/experiment/android-graphics-rootcause'
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Build Vulkan ARM64 IL2CPP mini lab
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: gfxlab/water155
+          unityVersion: 2021.3.45f2
+          targetPlatform: Android
+          buildMethod: BuildWater155.Build
+          versioning: None
+          androidVersionCode: 1
+          androidExportType: androidPackage
+          customParameters: -job-worker-count 2
+      - name: Verify APK signature, package, native binaries and CRC
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t packages < <(find . -type f -name GFX155-Water-Lab.apk)
+          test "${#packages[@]}" -eq 1
+          sdk="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer="$(find "$sdk/build-tools" -maxdepth 2 -type f -name apksigner | sort -V | tail -1)"
+          aapt="$(find "$sdk/build-tools" -maxdepth 2 -type f -name aapt | sort -V | tail -1)"
+          mkdir -p delivery-water155
+          cp "${packages[0]}" delivery-water155/
+          cd delivery-water155
+          apk=GFX155-Water-Lab.apk
+          "$signer" verify --verbose "$apk"
+          "$aapt" dump badging "$apk" > package.txt
+          grep -F "package: name='com.alwansan.gfx155.water'" package.txt
+          python3 - <<'PY'
+          from zipfile import ZipFile
+          with ZipFile("GFX155-Water-Lab.apk") as archive:
+              assert archive.testzip() is None
+              assert {"lib/arm64-v8a/libunity.so", "lib/arm64-v8a/libil2cpp.so",
+                      "AndroidManifest.xml", "classes.dex"} <= set(archive.namelist())
+          PY
+          sha256sum "$apk" | tee SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GFX155-Water-Lab
+          path: delivery-water155/
+          compression-level: 0
+          if-no-files-found: error

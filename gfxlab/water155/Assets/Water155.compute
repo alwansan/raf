@@ -1,0 +1,20 @@
+#pragma kernel Height
+
+RWStructuredBuffer<float> Heights;
+int Side;
+float SampleTime;
+float WaveScale;
+
+[numthreads(64, 1, 1)]
+void Height(uint3 id : SV_DispatchThreadID)
+{
+    uint side = (uint)Side;
+    if (id.x >= side * side)
+        return;
+
+    float x = (float)(id.x % side) * 0.25 - 4.0;
+    float z = (float)(id.x / side) * 0.25 - 4.0;
+    Heights[id.x] = WaveScale * (
+        0.43 * sin(1.7 * x + 0.6 * z - 1.9 * SampleTime) +
+        0.21 * sin(-0.4 * x + 2.2 * z - 2.7 * SampleTime));
+}
