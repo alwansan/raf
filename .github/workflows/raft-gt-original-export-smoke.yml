@@ -109,6 +109,7 @@ jobs:
       - name: Run genuine exporter on fully restored Raft scene/texture/mesh streams
         env:
           RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-private-export-lineage.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
           DOTNET_PROCESSOR_COUNT: '2'
         shell: bash
         run: |
@@ -183,6 +184,44 @@ jobs:
           print("GT_EXPORTED_MATERIAL_TEXTURE_LINKS "+json.dumps(result,sort_keys=True))
           PY
           exit "$result_code"
+      - name: GT inspect exact original-to-export Material texture GUID/UV lineage in one authenticated visible provider
+        id: gt_exact_material_texenv
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.2
+          python3 -m unittest discover -s tests -p test_b05_verify_material_texenv_bindings.py -v
+          if python3 -m scripts.b05_verify_material_texenv_bindings \
+               --original "$RUNNER_TEMP/gt-input" \
+               --owner sharedassets6.assets \
+               --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+               --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+               --out "$RUNNER_TEMP/gt-b05-actual-original-to-export-texenv.json" \
+               > "$RUNNER_TEMP/gt-b05-private.stdout.txt" 2>&1; then
+            result_code=0
+          else
+            result_code=$?
+          fi
+          if test ! -s "$RUNNER_TEMP/gt-b05-actual-original-to-export-texenv.json"; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-b05-actual-original-to-export-texenv.json"
+          p.write_text(json.dumps({"source_export_guid_lineage_verified":False,
+             "status":"INCONCLUSIVE_BEFORE_AGGREGATE_REPORT",
+             "original_data_modified":False,"device_render_verified":False},sort_keys=True,indent=2)+"\n")
+          PY
+          fi
+          echo "GT_B05_EXACT_TEXENV_COMPARISON exit_code=$result_code status_report_saved=true"
+          exit "$result_code"
+      - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-raw-export-program-quality.json"
       - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
         if: always()
         uses: actions/upload-artifact@v4
@@ -193,5 +232,7 @@ jobs:
             ${{ runner.temp }}/gt-real-export-aggregate.json
             ${{ runner.temp }}/gt-export-failure-safe.json
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
+            ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
+            ${{ runner.temp }}/gt-raw-export-program-quality.json
           retention-days: 14
           if-no-files-found: ignore
