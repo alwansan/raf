@@ -51,8 +51,8 @@ internal static class Program
             return def is not null && def.Module==module && def.FieldType.FullName==ShaderType
                 ? def : null;
         }
-        catch(ResolutionException) { return null; }
         catch(AssemblyResolutionException) { return null; }
+        catch(ResolutionException) { return null; }
     }
 
     private static IEnumerable<TypeDefinition> Types(TypeDefinition t)
