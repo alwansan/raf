@@ -55,6 +55,19 @@ class GraphicsLogGateTests(unittest.TestCase):
         self.assertEqual(r["water_invalid_pass_by_family"]["foam_global"], 23038)
         self.assertEqual(r["compute_invalid_kernel_index"]["six"], 7263)
 
+    def test_missing_known_error_category_is_not_a_false_green(self):
+        # The collector writes explicit zeroes for all known buckets.
+        for category in ("ultimate_water_invalid_pass",
+                         "water_fft_invalid_compute_kernel",
+                         "obb_guid_load_failed",
+                         "unity_cursor_rgba32_required",
+                         "unity_missing_mono_script"):
+            d = fixture()
+            del d["final_error_category_breakdown"][category]
+            with self.subTest(category=category), self.assertRaisesRegex(
+                ValueError, "missing_required_error_category"):
+                analyze(d)
+
     def test_cursor_warning_not_original_water_program_failure(self):
         r = analyze(fixture(cursor=4668))
         self.assertTrue(r["strict_known_log_gate_passed"])
