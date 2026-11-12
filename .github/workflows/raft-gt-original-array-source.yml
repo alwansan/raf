@@ -1,0 +1,175 @@
+name: GT original nine Texture2DArray source shape and exact data bounds (no LFS)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-array-source.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-original-array-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-array-shape:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Read immutable ZIP2 serialized owner files only
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/level6
+            Raft/Raft_Data/level7
+            Raft/Raft_Data/level8
+            Raft/Raft_Data/level9
+            Raft/Raft_Data/level10
+            Raft/Raft_Data/level11
+            Raft/Raft_Data/level12
+            Raft/Raft_Data/level13
+            Raft/Raft_Data/level14
+            Raft/Raft_Data/level15
+            Raft/Raft_Data/level16
+            Raft/Raft_Data/level17
+            Raft/Raft_Data/level18
+            Raft/Raft_Data/level19
+            Raft/Raft_Data/level20
+            Raft/Raft_Data/level21
+            Raft/Raft_Data/level22
+            Raft/Raft_Data/level23
+            Raft/Raft_Data/level24
+            Raft/Raft_Data/level25
+            Raft/Raft_Data/level26
+            Raft/Raft_Data/level27
+            Raft/Raft_Data/level28
+            Raft/Raft_Data/level29
+            Raft/Raft_Data/level30
+            Raft/Raft_Data/level31
+            Raft/Raft_Data/level32
+            Raft/Raft_Data/level33
+            Raft/Raft_Data/level34
+            Raft/Raft_Data/level35
+            Raft/Raft_Data/level36
+            Raft/Raft_Data/level37
+            Raft/Raft_Data/level38
+            Raft/Raft_Data/level39
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets2.assets
+            Raft/Raft_Data/sharedassets3.assets
+            Raft/Raft_Data/sharedassets4.assets
+            Raft/Raft_Data/sharedassets5.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets7.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+            Raft/Raft_Data/sharedassets10.assets
+            Raft/Raft_Data/sharedassets11.assets
+            Raft/Raft_Data/sharedassets12.assets
+            Raft/Raft_Data/sharedassets13.assets
+            Raft/Raft_Data/sharedassets14.assets
+            Raft/Raft_Data/sharedassets15.assets
+            Raft/Raft_Data/sharedassets16.assets
+            Raft/Raft_Data/sharedassets17.assets
+            Raft/Raft_Data/sharedassets18.assets
+            Raft/Raft_Data/sharedassets19.assets
+            Raft/Raft_Data/sharedassets20.assets
+            Raft/Raft_Data/sharedassets21.assets
+            Raft/Raft_Data/sharedassets22.assets
+            Raft/Raft_Data/sharedassets23.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets26.assets
+            Raft/Raft_Data/sharedassets27.assets
+            Raft/Raft_Data/sharedassets28.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets31.assets
+            Raft/Raft_Data/sharedassets32.assets
+            Raft/Raft_Data/sharedassets33.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets37.assets
+            Raft/Raft_Data/sharedassets38.assets
+            Raft/Raft_Data/sharedassets39.assets
+      - name: Reassemble original 82 ZIP2-only serialized owners in a private scratch directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_stage_serialized_owners \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --source .gt-zip2/Raft/Raft_Data \
+            --destination "$RUNNER_TEMP/gt-serialized" \
+            --report "$RUNNER_TEMP/gt-array-original-owner-stage.json"
+      - name: Read actual nine original Texture2DArray width-height-depth without extracting pixels
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.23.0
+          python3 -m unittest discover -s tests -p test_gt_verify_original_array_export.py -v
+          python3 - <<'PY'
+          import json,os
+          from collections import Counter
+          from pathlib import Path
+          from scripts.gt_verify_original_array_export import source_arrays
+          from scripts.gt_stage_serialized_owners import InventoryError
+          root=Path(os.environ["RUNNER_TEMP"])
+          report={"schema":"GT_REAL_NINE_SOURCE_ARRAYS_METADATA_V1",
+                  "git_lfs_used":False,"original_game_pixels_exported":False,
+                  "source_original_files_modified":False,
+                  "Unity_Android_Texture2DArray_import_verified":False}
+          try:
+              src=source_arrays(root/"gt-serialized",
+                   Path(".gt-zip2/RAFT_FILE_MANIFEST.tsv"))
+              dims=Counter((v["width"],v["height"],v["depth"]) for v in src.values())
+              report.update({"status":"PASS",
+                  "SHA256_authenticated_original_array_count":len(src),
+                  "source_total_original_array_layers":sum(v["depth"] for v in src.values()),
+                  "original_array_shapes":[{"width":k[0],"height":k[1],
+                    "depth":k[2],"count":count} for k,count in sorted(dims.items())],
+                  "original_stream_descriptors_count":sum(v["has_stream_record"] for v in src.values()),
+                  "original_inline_image_data_fields_count":sum(v["has_image_data"] for v in src.values())})
+          except InventoryError as e:
+              report.update({"status":"REJECTED","reason_code":str(e)})
+          (root/"gt-original-array-metadata-safe.json").write_text(
+              json.dumps(report,sort_keys=True,indent=2)+"\n")
+          print("GT_ORIGINAL_TEXTURE2D_ARRAY_METADATA "+json.dumps(report,sort_keys=True))
+          if report["status"]!="PASS":
+              raise SystemExit(2)
+          PY
+      - name: Publish safe source shape and SHA aggregate only, never original array images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-array-source-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-array-original-owner-stage.json
+            ${{ runner.temp }}/gt-original-array-metadata-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
