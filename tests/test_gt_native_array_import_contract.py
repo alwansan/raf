@@ -97,6 +97,20 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertNotIn('continue-on-error',stage)
         self.assertIn('gt-native-original-50-topmip-parity.json',body)
 
+    def test_real_native_final_same_instance_array_external_and_pixel_parity_is_fail_closed(self):
+        body=self.workflow
+        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
+              "      - name: GT publish source-authentic array importer",1)[0]
+        self.assertIn('scripts.gt_original_graphics_critical_gate',stage)
+        self.assertIn('--arrays "$RUNNER_TEMP/gt-native-original-array-material-links.json"',stage)
+        self.assertIn('--external "$RUNNER_TEMP/gt-native-original-external-texture-links.json"',stage)
+        self.assertIn('--bc3 "$RUNNER_TEMP/gt-native-original-50-topmip-parity.json"',stage)
+        self.assertIn('gt-native-original-9-28-416-50-final.json',body)
+        self.assertLess(stage.index('scripts.gt_original_graphics_critical_gate'),
+                        stage.index('rm -rf -- "$original_owners"'))
+        self.assertNotIn("continue-on-error",stage)
+        self.assertNotIn("|| true",stage)
+
     def test_actual_exporter_emits_private_texture_identity_trace_for_class187(self):
         # Without this opt-in, the production CSharp exporter only emits
         # Material and Shader objects. Nine ClassID187 entries are absent,

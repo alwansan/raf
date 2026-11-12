@@ -523,6 +523,15 @@ jobs:
           assert parity['Unity_Android_GPU_pixels_verified'] is False
           print('GT_NATIVE_SOURCE_BC3_TOPMIPS originalLayers=52 sourcePixelLayers=50 exactSourceToPNG=50 originalStreamSHA=true lowerMipsNotCompared=true androidGPUNotProven=true')
           PY
+          # A single strict final gate combines exact source identities from
+          # this SAME AssetRipper export. It does not accept reports merely
+          # because some optional/synthetic diagnostic job appears green.
+          python3 -m scripts.gt_original_graphics_critical_gate \
+            --arrays "$RUNNER_TEMP/gt-native-original-array-material-links.json" \
+            --external "$RUNNER_TEMP/gt-native-original-external-texture-links.json" \
+            --bc3 "$RUNNER_TEMP/gt-native-original-50-topmip-parity.json" \
+            --report "$RUNNER_TEMP/gt-native-original-9-28-416-50-final.json"
+          test -s "$RUNNER_TEMP/gt-native-original-9-28-416-50-final.json"
           rm -rf -- "$RUNNER_TEMP/gt-native-original-bc3-private"
           rm -rf -- "$original_owners"
       - name: GT publish source-authentic array importer and Material link receipts only
@@ -536,6 +545,7 @@ jobs:
             ${{ runner.temp }}/gt-native-original-external-texture-links.json
             ${{ runner.temp }}/gt-native-original-bc3-staging.json
             ${{ runner.temp }}/gt-native-original-50-topmip-parity.json
+            ${{ runner.temp }}/gt-native-original-9-28-416-50-final.json
             ${{ runner.temp }}/gt-native-unity-array-import-contract.json
           if-no-files-found: ignore
           retention-days: 7
