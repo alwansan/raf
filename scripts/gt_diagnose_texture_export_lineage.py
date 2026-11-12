@@ -2,7 +2,7 @@
 """GT: classify nonstandard imported Texture PPtrs using the SAME AssetRipper instance.
 
 Read-only. Cross-checks unusual image fileIDs with the exporter-generated source
-Texture class (Texture2D/Cubemap/Texture2DArray) and the actual TextureImporter
+Texture class (Texture2D/RenderTexture/Cubemap/Texture2DArray) and the actual TextureImporter
 shape. Never logs original names, source pathIDs, GUIDs, or raw game bytes.
 A matching pointer alone is not proof that Unity will import/play it on Android.
 """
@@ -18,13 +18,13 @@ from scripts.verify_exported_material_texture_links import (
     BUILTIN, GUID, IMAGES, ZERO, GuardError, material_docs, pointer, read, texenv,
 )
 
-# Only the Unity Texture2D/Cubemap ClassIDs are interpreted in this
-# diagnostic. Other AssetRipper native texture-like ClassIDs are deliberately
-# labeled numerically rather than guessed from incomplete type databases.
-TRACE_CLASSES={28:"texture2d",84:"class84",89:"cubemap",
-               117:"class117",187:"class187"}
+# Unity ClassID (84=RenderTexture, 187=Texture2DArray); neither can
+# automatically become a Texture2D image with fileID 2800000.
+# This is a diagnostic, not permission to rewrite any Unity asset or GUID.
+TRACE_CLASSES={28:"texture2d",84:"rendertexture",89:"cubemap",
+               117:"texture3d",187:"texture2darray"}
 FID_CLASSES={2800000:"texture2d",8900000:"cubemap"}
-SHAPES={"1":"2d", "2":"cubemap", "3":"other"}
+SHAPES={"1":"2d", "2":"cubemap", "4":"2darray", "8":"3d"}
 TRACE_HEX=re.compile(r"[a-fA-F0-9]{32}\Z")
 MAX_ITEMS=250_000
 
@@ -113,6 +113,10 @@ def analyze(project:Path,trace:Path)->dict:
                     counter["class_"+TRACE_CLASSES[cls]]+=1
                 if fid==8900000:
                     counter["file_id_family_cubemap"]+=1
+                elif fid==8400000:
+                    counter["file_id_family_rendertexture"]+=1
+                elif fid==18700000:
+                    counter["file_id_family_texture2darray"]+=1
                 else:
                     counter["file_id_family_other_nonstandard"]+=1
                 data=read(meta)
@@ -123,6 +127,11 @@ def analyze(project:Path,trace:Path)->dict:
                     bool(re.search(r"(?m)^TextureImporter:[ \t]*$",data))):
                     counter["same_instance_cubemap_pointer_and_importer_shape_coherent"]+=1
                 else:
+                    # A RenderTexture cannot be assumed to be represented by a
+                    # PNG TextureImporter even if both GUID and native class 84
+                    # fileID match the source. Keep the contract fail-closed.
+                    if cls==84:
+                        counter["rendertexture_exported_as_imported_image"]+=1
                     counter["requires_unresolved_import_or_source_repair"]+=1
     return {
         "schema":"GT_REAL_EXPORTED_NONSTANDARD_TEXTURE_LINEAGE_V1",
