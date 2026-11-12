@@ -1,0 +1,35 @@
+name: GT all-82 original to export Texture GUID fidelity synthetic controls
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_full_original_export_texenvs.py
+      - tests/test_gt_full_original_export_texenvs.py
+      - .github/workflows/raft-gt-full-export-texenv-synthetic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-all-material-export-fidelity-unit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-to-export-identity-synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Test all-owner exact source Texture identity and original UV controls
+        run: |
+          python3 -m py_compile scripts/gt_full_original_export_texenvs.py
+          python3 -m unittest discover -s tests -p test_gt_full_original_export_texenvs.py -v
+          python3 -m unittest discover -s tests -p test_b05_verify_material_texenv_bindings.py -v
