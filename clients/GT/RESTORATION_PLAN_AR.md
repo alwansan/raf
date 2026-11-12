@@ -56,6 +56,24 @@
 
 **[43269999662 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43269999662):** 5 اختبارات مصدرية + تجميع وتشغيل C# بواسطة .NET مع محاكيات Unity API، والتحقق من Shader Spectrum ناقص بPass واحد وFoam بPassين ومنع path traversal. **هذا ليس تشغيل Unity Editor الأصلي ولا اختبار Adreno.** في البناء الحديث التالي، ابحث في سجل Unity عن `GT_WATER_IMPORTED_PASS_DIAGNOSTIC` ثم اربط الناتج بالـGUID والـMaterial وبرنامج المصدر قبل تعديل حالة `unity_verified`.
 
+## دفعة GT الجديدة — Spectrum الأصلي: مصدر → حالات الرسم → ShaderLab خاص (Chat-22)
+
+استخدمت المصدر الأصلي `ZIP2@15964ea8` من دون LFS، وأصلحت تعارض مكان ملف `sharedassets0.assets` بين موفّر ZIP2 وأداة B09، بعد التحقق من **115,978,112 بايت وSHA الأصلي**. **المصدر الأصلي لم يتغير**.
+
+| التحقق | مثبت | حدّ الإثبات |
+|---|---|---|
+| Spectrum Shader topology | **7 Passes أصلية** و**14 زوج VS/FS** | استعادة هويات المصدر، لا استيراد Android |
+| Vulkan 1.1 | **28/28 stage variants** تم تجميعها فعلياً، و**13** برنامجاً مميزاً أُعيدت ترجمته | نجاح glslang/spirv-val فقط |
+| حالات الرسم | **7/7** حالات Render State مختلفة، ببيانات أصلية | SHA-verified private source state، لا Pixels |
+| خصائص Spectrum | **6**: خامتان Texture و3 Float وVector واحد | القيم/الأسماء باقية في scratch الخاص، ليست منشورة |
+| ShaderLab | **مرشحان خاصّان، كل واحد 7 Passes**؛ المجموع 14 Pass structural envelopes | **ليسا شيدراً واحداً ذا Keyword routing أصلي**؛ لا GUID/Material parity |
+| أداة Unity 2021 | تجربة **isolated variant0** على Android Vulkan أُطلقت في [43275506146](https://github.com/alwansan/raf/actions/runs/43275506146) | لا تعتبر Unity نجاحاً قبل انتهاء التجربة وفحص `ProbeResults` |
+| اللعبة الأصلية على الهاتف | **غير مكتمل** | ألوان الماء والـSamplers والـCB0 والـRT والـShader/Material GUID لم تُثبت |
+
+الاختبارات المثبتة: [43273276394 — ترجمة البرامج 28/28](https://github.com/alwansan/raf/actions/runs/43273276394) · [43273958426 — حالات الرسم الأصلية](https://github.com/alwansan/raf/actions/runs/43273958426) · [43274729958 — مرشحا ShaderLab الخاصان](https://github.com/alwansan/raf/actions/runs/43274729958). كلها **SUCCESS في نطاقها فقط**.
+
+**الخطوة القادمة:** افحص [تجربة Unity 43275506146](https://github.com/alwansan/raf/actions/runs/43275506146). إذا فشلت في استيراد shader أو بناء AssetBundle، استخرج فئة الخطأ الآمنة وصحّح ربط sampler/cbuffer من الأصل؛ لا تصنع سامبلر أو pass وهمياً. بعد نجاح Unity بشكل منفصل، أثبت variant1 ثم Keyword routing الحقيقي وربط GUID والمادة وRT الأصلي، ثم جرّب رسم الماء على الهاتف. لا تدمج المرشحين الاثنين في اللعبة بوصفهما شيدراً أصلياً مكتملًا.
+
 ### فشل الهاتف الذي يحكم القبول
 
 السجل `CL@cffd3f7be2d0c47649da9b28eae17c36d031f0e8` بتاريخ 12 نوفمبر لجلسة `LogRaft-20261112-183147-926` أثبت:
