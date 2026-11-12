@@ -20,7 +20,8 @@ MAX_SHADER = 16 * 1024 * 1024
 
 
 def prepare(candidate: Path, manifest: Path, editor: Path,
-            project: Path, out: Path, *, diagnostic_stage_buffers=False):
+            project: Path, out: Path, *, diagnostic_stage_buffers=False,
+            variant_index=0):
     candidate,manifest,editor,project,out=(
         Path(p).absolute() for p in (candidate,manifest,editor,project,out))
     if (not candidate.is_file() or candidate.is_symlink() or
@@ -64,6 +65,10 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         covers.get("passes_with_complete_program")!=7 or
         covers.get("all_subshaders_programmed") is not True):
         raise ValueError("private_spectrum_seven_pass_ShaderLab_not_complete")
+    if type(variant_index) is not int or variant_index not in (0, 1):
+        raise ValueError("invalid_private_variant_selector")
+    if candidate.name != "original-spectrum-7pass-variant-%d.shader" % variant_index:
+        raise ValueError("private_candidate_does_not_match_variant")
     if type(diagnostic_stage_buffers) is not bool:
         raise ValueError("invalid_private_diagnostic_mode")
     isolated = None
@@ -83,6 +88,10 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         (project/"Packages/manifest.json").write_text('{"dependencies":{}}\n', encoding="utf-8")
         (project/"ProjectSettings/ProjectVersion.txt").write_text(
             "m_EditorVersion: 2021.3.45f2\n", encoding="utf-8")
+        # Private numeric selector; the actual shader program and Unity C#
+        # verifier remain otherwise identical for variant0 and variant1.
+        (project/"GTPrivateSpectrumVariant.txt").write_text(
+            str(variant_index) + "\n", encoding="utf-8")
         if (project/"Assets/GTPrivateSpectrum.shader").read_text(
                 encoding="utf-8") != private_project_source:
             raise ValueError("private_spectrum_shader_copy_changed")
@@ -93,7 +102,7 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         "status":"PRIVATE_ORIGINAL_SPECTRUM_ISOLATED_UNITY_2021_PROJECT_STAGED",
         "source_original_seven_passes":True,
         "source_original_render_states":7,
-        "provisional_isolated_keyword_variant_index":0,
+        "provisional_isolated_keyword_variant_index":variant_index,
         "source_original_variant_stage_programs_in_shader":14,
         "private_stage_local_cbuffer_name_disambiguation_only":diagnostic_stage_buffers,
         "private_vertex_cbuffer_identifiers_disambiguated":(
@@ -121,9 +130,11 @@ def main():
     for name in ("candidate","manifest","editor","project","out"):
         p.add_argument("--"+name,type=Path,required=True)
     p.add_argument("--diagnostic-stage-buffers",action="store_true")
+    p.add_argument("--variant-index", type=int, choices=(0, 1), default=0)
     a=p.parse_args()
     prepare(a.candidate,a.manifest,a.editor,a.project,a.out,
-            diagnostic_stage_buffers=a.diagnostic_stage_buffers)
+            diagnostic_stage_buffers=a.diagnostic_stage_buffers,
+            variant_index=a.variant_index)
 
 
 if __name__=="__main__":
