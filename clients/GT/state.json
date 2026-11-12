@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_NINE_SOURCE_ARRAYS_50_ORIGINAL_BC3_LAYERS_BYTE_STAGED_AND_16_MATERIAL_SHADERS_RESTORED_REAL_CI",
+  "status": "GT_AUTHENTIC_50_LAYER_BC3_RESTORED_16_VENDOR_MATERIALS_REPAIRED_NINE_ASSETRIPPER_ARRAY_FLIPBOOK_GRIDS_INVALID",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -159,7 +159,12 @@
           "exported_importer_shape": 4,
           "android_Texture2DArray_pixels_verified": false,
           "flipbook_geometry_validation_run": 43139784841,
-          "flipbook_geometry_verified": false
+          "flipbook_geometry_verified": false,
+          "flipbook_invalid_source_layer_grid_count": 9,
+          "original_array_png_targets_present": 9,
+          "imported_shape4_and_original_fileID18700000": true,
+          "array_flipbook_import_needs_authentic_repair": true,
+          "new_safe_grid_atlas_rootcause_test_run": 43141107035
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -260,5 +265,5 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "sessions/20261112-GT-original-texture-array-staging-chat-06.md",
-  "next_action": "GT full original 134-input AssetRipper and authentic BC3 arrays succeeded CI43138326757, 8 raw original 69,906,400 byte payloads staged privately, 2 original zero-pixel layers preserved, 9 source→export GUIDs exact; official TMP/PostFX histogram/Volumetric restorers repaired 16 of 786 raw dummy Material docs, 770 remain, all original .meta protected except byte-authenticated EyeHistogram GUID-preserving migration. Next read real flipbook grid/PNG geometry CI43139784841, decide if 28 class187 array references are valid as TextureImporterShape 4 or require actual import repair. No source array pixel parity nor Android GPU proven. Respect T5 votes, only ZIP2."
+  "next_action": "Actual CI43138326757: 8 original BC3 arrays 50 layers 69906400 bytes restored private, 16 materials no longer Dummy (786->770), protected EyeHistogram GUID move verified. Actual CI43139784841 revealed ALL 9 original class187 Texture2DArray imported PNG shape4 with invalid flipbookRows*Columns vs original source depth; do not merely whitelist 28 refs. Run GT new diagnosis (counts of existing PNG actual grid capability) in fresh full CI after script gt_validate_texture2darray_flipbook.py patch to determine if source tile pixels exist and importer metadata alone fixable, else reconstruct PNG flipbooks from original BC3 bytes after proving mip/slice order. Pixel parity probe queued CI43141107035. No Adreno/Unity Editor acceptance, no LFS."
 }
