@@ -47,7 +47,16 @@ class NativeSourceIntegrityTests(unittest.TestCase):
         self.assertIn('scripts.audit_texture_stream_coverage --root "$RUNNER_TEMP/input/Raft_Data"',text)
         self.assertIn('scripts.audit_original_compute_metadata --source "$RUNNER_TEMP/input/Raft_Data"',text)
         self.assertIn('scripts/audit_mesh_stream_dependencies.py --root "$RUNNER_TEMP/input/Raft_Data"',text)
-        self.assertIn('scripts.w1_build_depth_wrapper --source "$RUNNER_TEMP/input/Raft_Data"',text)
+        # The importer may modify serialized Mesh owners; W1's exact
+        # original Shader/DXBC identity gate MUST read the untouched,
+        # independently SHA-verified ZIP2 owners, not AssetRipper input.
+        depth_line=next(line.strip() for line in text.splitlines()
+                        if "python3 -m scripts.w1_build_depth_wrapper" in line)
+        self.assertIn('--source "$RUNNER_TEMP/w1-original/Raft_Data"',depth_line)
+        self.assertNotIn('--source "$RUNNER_TEMP/input/Raft_Data"',depth_line)
+        self.assertLess(
+            text.index('python3 -m scripts.w1_full_engine_sources --zip2-checkout'),
+            text.index('python3 -m scripts.w1_build_depth_wrapper'))
         mesh=text.split("- name: Restore pinned Mesh ranges from full local ZIP2-authenticated streams only",1)[1].split(
             "\n      - uses: ",1)[0]
         self.assertIn('--source-root "$RUNNER_TEMP/input/Raft_Data"',mesh)
