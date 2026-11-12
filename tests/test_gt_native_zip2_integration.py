@@ -56,6 +56,16 @@ class NativeSourceIntegrityTests(unittest.TestCase):
         self.assertIn("scripts.inline_verified_mesh_ranges",mesh)
         self.assertIn("scripts.audit_original_mesh_positions",mesh)
 
+    def test_native_original_masterbank_comes_from_zip2_not_git_lfs(self):
+        text=self.text
+        self.assertNotIn("git lfs fetch",text)
+        self.assertNotIn("git lfs checkout",text)
+        bank=text.split("- name: GT restore original MasterBank from ZIP2",1)[1].split("\n      - name: ",1)[0]
+        self.assertIn("--path Raft_Data/StreamingAssets/MasterBank.bank",bank)
+        self.assertIn("--profile selected",bank)
+        self.assertIn("--verified-external-master-bank",bank)
+        self.assertIn("scripts.stage_original_streaming_assets",bank)
+
     def test_native_resource_request_gate_unchanged(self):
         text=self.text
         self.assertIn("native-request-gate:",text)
