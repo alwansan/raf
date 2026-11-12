@@ -215,6 +215,48 @@ jobs:
           fi
           echo "GT_B05_EXACT_TEXENV_COMPARISON exit_code=$result_code status_report_saved=true"
           exit "$result_code"
+      - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
+        id: gt_all_original_texenvs
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_full_original_export_texenvs.py -v
+          if python3 -m scripts.gt_full_original_export_texenvs \
+               --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+               --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+               --export-project "$RUNNER_TEMP/gt-project/ExportedProject" \
+               --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+               --report "$RUNNER_TEMP/gt-full-real-82-owner-texenv.json" \
+               > "$RUNNER_TEMP/gt-full-texenv-private.stdout.txt" 2>&1; then
+            result_code=0
+          else
+            result_code=$?
+          fi
+          if test ! -s "$RUNNER_TEMP/gt-full-real-82-owner-texenv.json"; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-full-real-82-owner-texenv.json"
+          p.write_text(json.dumps({"source_export_guid_lineage_verified":False,
+             "status":"INCONCLUSIVE_BEFORE_AGGREGATE_REPORT",
+             "source_original_materials_modified":False,"device_render_verified":False},
+             sort_keys=True,indent=2)+"\n")
+          PY
+          fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-full-real-82-owner-texenv.json").read_text())
+          print("GT_REAL_ALL_82_TEXENV_FIDELITY "+json.dumps({
+             k:d.get(k) for k in ("status","original_material_objects",
+               "materials_compared","source_texture_slots","slots_compared",
+               "exact_internal_targets_compared","wrong_internal_targets",
+               "unresolved_internal_targets","external_targets_not_proven",
+               "null_to_bound","bound_to_null","uv_transform_value_mismatches",
+               "source_slots_faithful_with_resolved_scope")},sort_keys=True))
+          PY
+          exit "$result_code"
       - name: Measure unmodified AssetRipper Material to ShaderLab dummy and pass completeness for T3
         continue-on-error: true
         shell: bash
@@ -233,6 +275,7 @@ jobs:
             ${{ runner.temp }}/gt-export-failure-safe.json
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
+            ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
           retention-days: 14
           if-no-files-found: ignore
