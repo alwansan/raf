@@ -23,7 +23,7 @@ class QualityTest(unittest.TestCase):
     def test_vendor_material_restore_reports_actual_delta_not_device_success(self):
         r=compare(sample(),sample(dummy=12,custom=11,files=27),True)
         self.assertEqual(r["dummy_material_documents_decreased_by"],8)
-        self.assertTrue(r["original_exported_meta_bytes_unchanged"])
+        self.assertTrue(r["original_exported_meta_integrity_contract_preserved"])
         self.assertFalse(r["original_shader_variant_parity_proven"])
         self.assertFalse(r["android_shader_compilation_or_pixels_verified"])
 
