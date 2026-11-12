@@ -276,6 +276,23 @@ jobs:
           cp android-port/Experiments/GT/Runtime/GTParticlePhoneRuntime.cs gt-private-particle-unity/Assets/GTParticlePhoneRuntime.cs
           test -s gt-private-particle-unity/Assets/Editor/GTParticlePhoneBuild.cs
           test -s gt-private-particle-unity/Assets/GTParticlePhoneRuntime.cs
+          # The project stager defaults to an empty package manifest.
+          # This PHONE UI explicitly needs Unity 2021's built-in IMGUI and
+          # JsonUtility modules. Without them C# gives CS0103/CS1069.
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("gt-private-particle-unity/Packages/manifest.json")
+          data=json.loads(p.read_text(encoding="utf-8"))
+          assert data=={"dependencies":{}}
+          data["dependencies"].update({
+              "com.unity.modules.imgui":"1.0.0",
+              "com.unity.modules.jsonserialize":"1.0.0",
+          })
+          p.write_text(json.dumps(data,sort_keys=True)+"\n",encoding="utf-8")
+          assert len(data["dependencies"])==2
+          print("GT_PHONE_UNITY_2021_MODULES=imgui,jsonserialize")
+          PY
       - name: GT build offline original-derived APPROX phone APK using Unity Android Vulkan ARM64
         id: gt_private_particle_unity
         uses: game-ci/unity-builder@v4
