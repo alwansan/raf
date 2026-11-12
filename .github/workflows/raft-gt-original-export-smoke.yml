@@ -323,6 +323,22 @@ jobs:
             --source-manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --private-original-array-stage "$RUNNER_TEMP/gt-private-original-bc3-arrays" \
             --report "$RUNNER_TEMP/gt-original-array-slice-layout-independent.json"
+          # Independent UnityPy decode consumes SHA-verified original BC3
+          # streamed payload bytes in memory: do not require adjacent .resS,
+          # alter source owners or replace empty original arrays with pixels.
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          result=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-original-array-slice-layout-independent.json").read_text())
+          assert result["authenticated_original_array_objects"]==9
+          assert result["source_arrays_with_decoded_BC3_pixels"]==8
+          assert result["original_zero_pixel_source_array_objects"]==1
+          assert result["layout_selected_from_independent_UnityPy_source_decoder"]=="slice_major"
+          assert result["source_array_layout_unambiguous"] is True
+          assert result["counts"]["original_source_array_slice_major_full_match"]==8
+          assert result["original_or_exported_Unity_objects_modified"] is False
+          print("GT_REAL_UNITYPY_INDEPENDENT_BC3_LAYER_ORDER originalArrays=9 genuineDecoded=8 originalZeroPixels=1 sliceMajorExact=8 originalModified=false")
+          PY
       - name: GT validate authentic original BC3 pixel slices against actual nine imported AssetRipper PNG array flipbooks without any game pixels in artifacts
         id: gt_bc3_source_pixel_parity
         continue-on-error: true
