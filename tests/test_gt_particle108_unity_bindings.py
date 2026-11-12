@@ -1,0 +1,85 @@
+"""GT private only: do not infer Particle108 texture/sampler or cbuffer bindings."""
+import unittest
+
+from scripts.gt_particle108_unity_bindings import (
+    BridgeError, original_names_and_registers, rebind_stage,
+)
+
+class OriginalParticleUnityBindingTests(unittest.TestCase):
+    def setUp(self):
+        self.indices=[("_MainTex",0),("_NoiseTex",1)]
+        self.program={"m_CommonParameters":{"m_TextureParams":[
+            {"m_Index":0,"m_NameIndex":0,"m_SamplerIndex":0},
+            {"m_Index":1,"m_NameIndex":1,"m_SamplerIndex":1},
+        ]}}
+        self.code=(
+            "Texture2D<float4> texture_t0 : register(t0);\n"
+            "Texture2D<float4> texture_t1 : register(t1);\n"
+            "SamplerState samplers0 : register(s0);\n"
+            "SamplerState sampler_s1 : register(s1);\n"
+            "float4 cb1_0_m0[5];\n"
+            "float4 main() : SV_Target {return texture_t0.Sample(samplers0,float2(0,0))+"
+            "texture_t1.Sample(sampler_s1,float2(0,0))+cb1_0_m0[0];}\n"
+        )
+
+    def test_original_source_registers_source_bound_exact(self):
+        t,s=original_names_and_registers(self.program,self.indices)
+        self.assertEqual(t,{0:"_MainTex",1:"_NoiseTex"})
+        self.assertEqual(s,{0:"sampler_MainTex",1:"sampler_NoiseTex"})
+
+    def test_fragment_binding_preserves_registers_and_source_stage_isolation(self):
+        code,report=rebind_stage(self.code,self.program,self.indices,0)
+        self.assertIn("Texture2D<float4> _MainTex : register(t0);",code)
+        self.assertIn("Texture2D<float4> _NoiseTex : register(t1);",code)
+        self.assertIn("SamplerState sampler_MainTex : register(s0);",code)
+        self.assertIn("SamplerState sampler_NoiseTex : register(s1);",code)
+        self.assertIn("float4 GT_ORIGINAL_PS_cb1_0_m0[5]",code)
+        self.assertEqual(report["original_sampler_registers_mapped"],2)
+        self.assertTrue(report["original_register_annotations_preserved"])
+        self.assertNotIn("samplers0",code)
+
+    def test_vertex_buffer_stage_named_distinct(self):
+        vs,_=rebind_stage(self.code,self.program,self.indices,1)
+        fs,_=rebind_stage(self.code,self.program,self.indices,0)
+        self.assertIn("GT_ORIGINAL_VS_cb1_0_m0",vs)
+        self.assertIn("GT_ORIGINAL_PS_cb1_0_m0",fs)
+        self.assertNotIn("GT_ORIGINAL_VS_cb1_0_m0",fs)
+
+    def test_register_drift_rejected_not_guessed(self):
+        changed=self.code.replace("texture_t0 : register(t0)", "texture_t3 : register(t0)")
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_RESOURCE_REGISTER_UNPROVEN"):
+            rebind_stage(changed,self.program,self.indices,1)
+
+    def test_missing_serialized_sampler_rejected(self):
+        self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=65535
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_RESOURCE_REGISTER_UNPROVEN"):
+            rebind_stage(self.code,self.program,self.indices,0)
+
+    def test_mismatched_original_shader_properties_fail_closed(self):
+        self.indices=[("_MainTex",0)]
+        with self.assertRaisesRegex(BridgeError,"SOURCE_TEXTURE_MAPPING_UNRESOLVED"):
+            rebind_stage(self.code,self.program,self.indices,0)
+
+    def test_shared_original_sampler_with_distinct_textures_rejected(self):
+        self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=0
+        with self.assertRaisesRegex(BridgeError,"SOURCE_TEXTURE_MAPPING_UNRESOLVED"):
+            rebind_stage(self.code,self.program,self.indices,0)
+
+    def test_translator_lost_original_register_suffix_rejected(self):
+        changed=self.code.replace("samplers0", "unknownSampler")
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_RESOURCE_REGISTER_UNPROVEN"):
+            rebind_stage(changed,self.program,self.indices,1)
+
+    def test_invalid_or_empty_private_hlsl_fails_closed(self):
+        for wrong in ("",123,None):
+            with self.subTest(wrong=wrong):
+                with self.assertRaises(BridgeError):
+                    rebind_stage(wrong,self.program,self.indices,0)
+
+    def test_original_provenance_does_not_fabricate_texture_param(self):
+        self.program["m_CommonParameters"]["m_TextureParams"]=[]
+        with self.assertRaises(BridgeError):
+            rebind_stage(self.code,self.program,self.indices,0)
+
+if __name__=="__main__":
+    unittest.main()
