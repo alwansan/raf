@@ -20,8 +20,7 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path):
         or shader.stat().st_size>16*1024*1024 or editor.stat().st_size>131072
         or routing.stat().st_size>65536):
         raise ValueError("unsafe_private_original_shader_project_or_input")
-    if (project.is_relative_to(shader.parent) or project.is_relative_to(editor.parent)
-        or report.is_relative_to(project)):
+    if (project.is_relative_to(shader.parent) or report.is_relative_to(project)):
         raise ValueError("overlapping_original_private_shader_paths")
     proof=json.loads(routing.read_text(encoding="utf-8"))
     required={"status":"T3_PRIVATE_SHADER48_PROVISIONAL_TWO_KEYWORD_SINGLE_SHADERLAB_VALID",
