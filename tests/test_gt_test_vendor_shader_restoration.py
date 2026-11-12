@@ -55,6 +55,20 @@ class ActualVendorRestoreTests(unittest.TestCase):
         self.assertEqual(self.meta.read_text(),"guid: "+"b"*32+"\n")
         self.assertNotIn("b"*32,json.dumps(d))
 
+    def test_new_vendor_fallback_meta_is_allowed_but_original_meta_stays_byte_exact(self):
+        def add_vendor_asset(command,**kwargs):
+            new = self.assets/"authenticated_vendor_fallback.shader.meta"
+            new.write_text("guid: "+"d"*32+"\\n")
+            return SimpleNamespace(returncode=0)
+        d=run(self.project,sample(),self.backup,runner=add_vendor_asset,
+              quality=lambda project:sample(dummy=1,non_dummy=1))
+        self.assertEqual(d["status"],"POST_RESTORE_SOURCE_QUALITY_COMPARED")
+        self.assertEqual(d["original_meta_removed"],0)
+        self.assertEqual(d["original_meta_changed"],0)
+        self.assertEqual(d["new_vendor_meta_documents_added"],1)
+        self.assertTrue(d["original_exported_meta_bytes_unchanged"])
+        self.assertEqual(self.meta.read_text(),"guid: "+"b"*32+"\\n")
+
     def test_vendor_failure_does_not_advance_following_restorers(self):
         d=run(self.project,sample(),self.backup,
               runner=lambda cmd,**kwargs:SimpleNamespace(returncode=2),
