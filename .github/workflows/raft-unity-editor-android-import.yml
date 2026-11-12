@@ -487,6 +487,43 @@ jobs:
           assert d['source_or_exported_assets_modified'] is False
           print('GT_NATIVE_ORIGINAL_EXTERNAL_TEXTURE_PPTRS sourceOwners=82 originalExternalSlots=416 exactSourceToExport=416 mismatches=0 sourceChanged=false gpuUnverified=true')
           PY
+          # Verify every source-populated top mip (50 original BC3 slices)
+          # from two independently checked ZIP2 populations: unmodified
+          # serialized owner objects and original streamed GPU bytes. Do not
+          # publish private source arrays, image pixels or exporter GUIDs.
+          python3 -m scripts.gt_recover_original_array_layers \
+            --source "$original_owners" \
+            --stream-source "$RUNNER_TEMP/input/Raft_Data" \
+            --zip2-checkout zip2-original \
+            --trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --private-output "$RUNNER_TEMP/gt-native-original-bc3-private" \
+            --report "$RUNNER_TEMP/gt-native-original-bc3-staging.json"
+          python3 -m scripts.gt_compare_original_bc3_to_flipbook_pixels \
+            --private-original-array-stage "$RUNNER_TEMP/gt-native-original-bc3-private" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --all-original-layer-cells \
+            --report "$RUNNER_TEMP/gt-native-original-50-topmip-parity.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])
+          source=json.loads((root/'gt-native-original-bc3-staging.json').read_text())
+          parity=json.loads((root/'gt-native-original-50-topmip-parity.json').read_text())
+          assert source['source_total_layer_count']==52
+          assert source['source_array_layers_with_original_streamed_pixels']==50
+          assert source['source_array_layers_without_original_pixels']==2
+          assert source['original_source_streamed_bytes_restored_to_private_stage']==69906400
+          assert source['separate_original_stream_provider_root_authenticated'] is True
+          assert source['git_lfs_used'] is False
+          assert parity['original_source_populated_layers_expected']==50
+          assert parity['sampled_original_source_layer0_mips_vs_PNG_cells']==50
+          assert parity['all_populated_original_BC3_top_mip_layers_match_exported_PNG'] is True
+          assert parity['full_mip_chain_pixel_equivalence_proven'] is False
+          assert parity['Unity_Android_GPU_pixels_verified'] is False
+          print('GT_NATIVE_SOURCE_BC3_TOPMIPS originalLayers=52 sourcePixelLayers=50 exactSourceToPNG=50 originalStreamSHA=true lowerMipsNotCompared=true androidGPUNotProven=true')
+          PY
+          rm -rf -- "$RUNNER_TEMP/gt-native-original-bc3-private"
           rm -rf -- "$original_owners"
       - name: GT publish source-authentic array importer and Material link receipts only
         if: always()
@@ -497,6 +534,8 @@ jobs:
             ${{ runner.temp }}/gt-native-original-array-importer-repair.json
             ${{ runner.temp }}/gt-native-original-array-material-links.json
             ${{ runner.temp }}/gt-native-original-external-texture-links.json
+            ${{ runner.temp }}/gt-native-original-bc3-staging.json
+            ${{ runner.temp }}/gt-native-original-50-topmip-parity.json
             ${{ runner.temp }}/gt-native-unity-array-import-contract.json
           if-no-files-found: ignore
           retention-days: 7

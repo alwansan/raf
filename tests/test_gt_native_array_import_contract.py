@@ -77,6 +77,26 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertNotIn('sed -i',stage)
         self.assertNotIn('git lfs',stage.lower())
 
+    def test_all_50_SHA_original_BC3_layer_topmips_are_required_before_native_Unity(self):
+        body=self.workflow
+        stage=body.split("      - name: GT restore nine original Texture2DArray importer grids",1)[1].split(
+              "      - name: GT publish source-authentic array importer",1)[0]
+        self.assertIn("scripts.gt_recover_original_array_layers",stage)
+        self.assertIn('scripts.gt_compare_original_bc3_to_flipbook_pixels',stage)
+        self.assertIn('--source "$original_owners"',stage)
+        self.assertIn('--stream-source "$RUNNER_TEMP/input/Raft_Data"',stage)
+        self.assertIn("--all-original-layer-cells",stage)
+        self.assertIn("original_source_streamed_bytes_restored_to_private_stage']==69906400",stage)
+        self.assertIn("parity['original_source_populated_layers_expected']==50",stage)
+        self.assertIn("parity['sampled_original_source_layer0_mips_vs_PNG_cells']==50",stage)
+        self.assertIn("parity['all_populated_original_BC3_top_mip_layers_match_exported_PNG'] is True",stage)
+        self.assertIn("source['separate_original_stream_provider_root_authenticated'] is True",stage)
+        self.assertIn("parity['Unity_Android_GPU_pixels_verified'] is False",stage)
+        self.assertLess(stage.index('scripts.gt_compare_original_bc3_to_flipbook_pixels'),
+                        stage.index('rm -rf -- "$original_owners"'))
+        self.assertNotIn('continue-on-error',stage)
+        self.assertIn('gt-native-original-50-topmip-parity.json',body)
+
     def test_actual_exporter_emits_private_texture_identity_trace_for_class187(self):
         # Without this opt-in, the production CSharp exporter only emits
         # Material and Shader objects. Nine ClassID187 entries are absent,
