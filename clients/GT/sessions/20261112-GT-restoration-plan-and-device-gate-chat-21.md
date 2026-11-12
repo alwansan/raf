@@ -42,3 +42,13 @@ python3 -m scripts.gt_device_graphics_acceptance --session-summary session-summa
 ```
 
 **تنبيه مهم:** Chat-21 وثّق التغطية وسدّ ثغرة الفحص، **ولم يصلح برنامج ماء/مادة Dummy داخل اللعبة بعد**. تعود الأولوية إلى Shader Material runtime وwater-pass authentic reconstruction فور توفر دليل الاستيراد المعتمد.
+
+## ملحق: تدقيق Spectrum/Unity Editor — بعد بوابة الخطة (نفس الجلسة)
+
+- تأكدت من أصل [B09 original Spectrum topology](../../scripts/b09_spectrum_topology_contract.py): Shader من `sharedassets0.assets`، SHA-authenticated، **7 Passes** و**28 برنامج stage (7×2 VS/FS×2 variants)**، وبوابة المصدر القديمة [41920232173 SUCCESS](https://github.com/alwansan/raf/actions/runs/41920232173). هذه أصالة المصدر، **لا** ShaderLab/Unity Runtime. أصل [B24 Foam Global](../../scripts/b24_original_foam_stage_translation.py) يثبت Passين و4 VS/FS stage programs.
+- لذلك أصلحت خطة GT: لا تعتبر شرط `Spectrum >= 6` من invalid-pass-index جهاز قديم بديلاً عن **7 Passes أصلية**. [بوابة خطة GT 43268872421 SUCCESS](https://github.com/alwansan/raf/actions/runs/43268872421) تختبر الفرق وتمنع تبديل 7 إلى 6 أو 28 إلى 24 دون دليل.
+- أضفت `android-port/Editor/GTOriginalWaterPassImportProbe.cs`، استدعاء قراءة فقط في `AndroidNativeBuild.ValidateSdkBindings()`. خلال Unity build لاحق سيكتب `GT_WATER_IMPORTED_PASS_DIAGNOSTIC` للـSpectrum وFoam: `exactNamedExportedShaders`، `editorPassesMin/Max`، `importerDummyMarkerCount`، `logRequiredMinimum`، `originalSourcePasses`، `sourceStructureCandidateOnly`. لا يطبع GUID أو كود shader، ولا يعدّل Materials/.meta/Assets؛ لا يقول إن Adreno pixels verified.
+- أصلحت probe ليحسب absolute path من `Application.dataPath` بدل directory العمل واحترم حدود `Assets/` ومنع path traversal.
+- أضفت synthetic CSharp harness تحت `tests/fixtures/gt_water_probe` وخمسة source tests وworkflow `raft-gt-original-water-pass-import-probe.yml`؛ [CI 43269999662 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43269999662) **جمع ونفّذ C# actual probe مقابل stubs**، كشف one-pass Dummy Spectrum، وتعرف على 2pass Foam ورفض مسار خارجي. هذه اختبارات مصدرية فقط ولا تعني أن Unity Editor الفعلي اجتاز الاختبار.
+- أحدث native [43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) ما زال snapshot أقدم ويعمل في Unity، فلا يتضمن هذه التجربة ولن نظهر نتائجها حتى يجري بناء حديث آخر.
+- تحديثات `RESTORATION_PLAN.json` و`RESTORATION_PLAN_AR.md` تؤكد أن `P06.unity_verified=false` و`P06.device_verified=false`. الخطوة التالية: انتظار نتيجة Unity import/compiled Shader من build لاحق، وتشغيل الدفعات الأصلية Spectrum/Foam/GUID والمقارنة الحقيقية.
