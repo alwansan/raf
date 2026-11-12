@@ -70,14 +70,28 @@ namespace RaftAndroid.Editor
                     // A shader without Dummy marker still needs program/GUID proof.
                     try
                     {
-                        FileInfo file = new FileInfo(path);
+                        // Unity may be launched from a directory different from
+                        // its -projectPath. Never resolve Assets relative to cwd.
+                        string assetRoot = Path.GetFullPath(Application.dataPath);
+                        string absolute = Path.GetFullPath(Path.Combine(
+                            assetRoot,
+                            path.Substring("Assets/".Length).Replace(
+                                '/', Path.DirectorySeparatorChar)));
+                        if (!absolute.StartsWith(
+                                assetRoot + Path.DirectorySeparatorChar,
+                                StringComparison.Ordinal))
+                        {
+                            invalidPaths++;
+                            continue;
+                        }
+                        FileInfo file = new FileInfo(absolute);
                         if (!file.Exists || file.Length > 8 * 1024 * 1024 ||
                             file.Length < 1)
                         {
                             invalidPaths++;
                             continue;
                         }
-                        if (File.ReadAllText(path).Contains("//DummyShaderTextExporter"))
+                        if (File.ReadAllText(absolute).Contains("//DummyShaderTextExporter"))
                             placeholders++;
                     }
                     catch (IOException)
