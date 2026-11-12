@@ -1,0 +1,71 @@
+name: GT original Raft MasterBank ZIP2 restoration without LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-zip2-audio-bank.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-original-masterbank-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-fmod-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          lfs: false
+          filter: blob:none
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/StreamingAssets/MasterBank.bank/
+      - name: Restore authentic original FMOD MasterBank for production StreamingAssets bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-authentic-audio/Raft_Data" \
+            --profile selected \
+            --path Raft_Data/StreamingAssets/MasterBank.bank \
+            --byte-budget 150000000 \
+            --report "$RUNNER_TEMP/gt-authentic-masterbank-receipt.json"
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          base=Path(os.environ["RUNNER_TEMP"])
+          report=json.loads((base/"gt-authentic-masterbank-receipt.json").read_text())
+          file=base/"gt-authentic-audio/Raft_Data/StreamingAssets/MasterBank.bank"
+          with file.open("rb") as source:
+              sha=hashlib.file_digest(source,"sha256").hexdigest()
+          assert file.stat().st_size==101600960
+          assert sha=="10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339"
+          assert report["original_resources_verified"]==1 and not report["git_lfs_used"]
+          print("GT_ORIGINAL_MASTERBANK_ZIP2_REAL sourceBytes=101600960 sha256=true gitLfs=false unityAudioVerified=false")
+          PY
+      - name: Upload only checksum/size proof; never publish original game bank
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-masterbank-proof-${{ github.run_id }}
+          path: ${{ runner.temp }}/gt-authentic-masterbank-receipt.json
+          if-no-files-found: ignore
+          retention-days: 14
