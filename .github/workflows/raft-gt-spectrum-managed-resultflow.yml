@@ -1,0 +1,114 @@
+name: GT original Spectrum typed Shader.Find result flow
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Experiments/GT/SpectrumShaderFindResultFlow/**
+      - .github/workflows/raft-gt-spectrum-managed-resultflow.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-spectrum-resultflow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile independent typed source result consumer with synthetic tests
+        run: |
+          set -euo pipefail
+          dotnet publish android-port/Experiments/GT/SpectrumShaderFindResultFlow/SpectrumShaderFindResultFlow.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/gt-spectrum-resultflow" \
+            > "$RUNNER_TEMP/gt-spectrum-resultflow-build.log" 2>&1 || {
+              python3 - <<'PY'
+          import os,re,collections
+          from pathlib import Path
+          txt=(Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-resultflow-build.log').read_text(errors='replace')
+          print('GT_SPECTRUM_TYPED_RESULTFLOW_BUILD_CODES_SAFE',dict(collections.Counter(
+             re.findall(r'error\\s+(CS[0-9]+|NU[0-9]+|NETSDK[0-9]+)',txt))))
+          PY
+              exit 2
+            }
+          dotnet "$RUNNER_TEMP/gt-spectrum-resultflow/SpectrumShaderFindResultFlow.dll" --selftest
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gt-spectrum-flow-zip2
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Verify original SHA source and stage private target name
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage,fingerprint
+          from scripts.t2_foam_original_manifest_pptr import parse_original_manifest
+          repo=Path('gt-spectrum-flow-zip2')
+          assert subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          dlls=[r for r in parse_original_manifest(repo/'RAFT_FILE_MANIFEST.tsv')
+                if r['path']=='Raft_Data/Managed/Assembly-CSharp.dll']
+          assert len(dlls)==1 and dlls[0]['kind']=='plain' and dlls[0]['bytes']==3211776
+          assert fingerprint(repo/'Raft'/dlls[0]['path'])==(dlls[0]['bytes'],dlls[0]['sha256'])
+          dest=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-flow-original'
+          result=stage(repo,dest,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert result['verified_bytes']==115978112 and result['lfs_used'] is False
+          (dest/'Raft_Data/sharedassets0.assets').rename(dest/'sharedassets0.assets')
+          print('GT_SPECTRUM_FLOW_SHA_SOURCE_AUTHENTICATED shaderOwner=115978112B managed=3211776B')
+          PY
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          python3 -m scripts.gt_spectrum_original_shaderfind_name \
+            --source "$RUNNER_TEMP/gt-spectrum-flow-original" \
+            --private-out "$RUNNER_TEMP/gt-spectrum-flow-private-name.txt"
+      - name: Read actual typed next consumer and same-field Material constructor candidates
+        run: |
+          set -euo pipefail
+          dotnet "$RUNNER_TEMP/gt-spectrum-resultflow/SpectrumShaderFindResultFlow.dll" \
+            "$GITHUB_WORKSPACE/gt-spectrum-flow-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            "$RUNNER_TEMP/gt-spectrum-flow-private-name.txt" \
+            "$RUNNER_TEMP/gt-spectrum-flow-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-flow-safe.json'
+          d=json.loads(p.read_text())
+          assert d['status']=='SOURCE_AUTHENTIC_SPECTRUM_TYPED_SHADERFIND_RESULT_FLOW_CENSUS'
+          assert d['original_Assembly_CSharp_DLL_SHA_authenticated'] is True
+          assert d['original_Spectrum_Shader_mName_SHA_authenticated'] is True
+          assert d['exact_original_name_direct_typed_Shader_Find_calls']==1
+          assert d['exact_original_name_literal_sites']==1
+          assert sum(d[k] for k in d if k.startswith('source_return_immediate_'))==1
+          assert d['actual_Unity_Shader_Find_executed'] is False
+          assert d['Adreno_water_pixels_verified'] is False
+          assert d['original_identifier_and_IL_exported'] is False
+          print('GT_SPECTRUM_TYPED_RESULTFLOW_AUTHENTIC exactOriginalFind=1 sourceConsumerKindMeasured=true runtimeWater=false')
+          PY
+      - name: Upload only safe counts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-spectrum-original-typed-resultflow-safe
+          path: ${{ runner.temp }}/gt-spectrum-flow-safe.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Delete source originals and private name
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-spectrum-flow-original" "$RUNNER_TEMP/gt-spectrum-flow-private-name.txt"
+          rm -rf -- "$GITHUB_WORKSPACE/gt-spectrum-flow-zip2"
