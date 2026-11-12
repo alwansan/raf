@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_REAL_ALL_NINE_ORIGINAL_ARRAY_IMPORTER_GRIDS_REPAIRED_SOURCE_GUID_PRESERVED_24_OF_24_BC3_PIXEL_SAMPLES_MATCH",
+  "status": "GT_ACTUAL_NINE_ARRAY_PNG_IMPORT_REPAIRED_28_OF_28_MATERIAL_LINKS_VERIFIED_NATIVE_UNITY2021_EDITOR_IMPORT_GATE_INTEGRATED_SOURCE_ONLY_TESTED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -190,10 +190,31 @@
           "real_BC3_top_mip_source_png_samples_compared": 24,
           "real_BC3_array_slice_order_unambiguous_count": 8,
           "real_BC3_array_mip_major_samples_exact": 8,
-          "actual_28_material_refs_after_importer_repair_verified": false,
+          "actual_28_material_refs_after_importer_repair_verified": true,
           "actual_full_mip_chain_pixel_parity_verified": false,
           "actual_Unity_Editor_array_reimport_verified": false,
-          "actual_Android_GPU_array_render_verified": false
+          "actual_Android_GPU_array_render_verified": false,
+          "actual_28_material_refs_CI": 43145816256,
+          "real_exact_class187_material_link_refs": 28,
+          "real_distinct_class187_array_targets": 9,
+          "real_postrepair_importer_original_depth_matches": 9,
+          "native_pipeline_bounded_GT_stage": true,
+          "native_pipeline_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+          "native_pipeline_expected_9_original_importers": true,
+          "native_pipeline_original_28_material_ref_gate": true,
+          "native_B46_guard_accepts_verified_class187_imported_flipbook": true,
+          "private_editor_import_contract_script": "scripts/gt_write_unity_array_import_contract.py",
+          "private_editor_import_CSharp_guard": "android-port/Editor/OriginalTextureArrayImportGuard.cs",
+          "private_editor_import_expected_mipmap_count": 11,
+          "private_editor_import_expected_layer_counts": {
+            "logical": 52,
+            "populated_original": 50,
+            "unpopulated_original": 2
+          },
+          "native_editor_import_guard_CSharp_source_only_CI": 43150348740,
+          "native_editor_Actual_2021_3_import_verified": false,
+          "native_Android_gpu_render_verified": false,
+          "latest_real_isolated_unity_manifest_contract_run": 43150158897
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -293,6 +314,6 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-original-array-importer-repair-chat-07.md",
-  "next_action": "Actual #43144656957 PASS in isolated GT full 134-file ZIP2 real AssetRipper: all 9 original class187 Texture2DArray PNG full flipbook arrays were metadata repaired (9/9). SHA256 original ZIP2 pinned, all original exported GUIDs unchanged, no PNG pixel or other .meta changes, backups. Real 8/8 nonempty source arrays yielded 24/24 exact original BC3 top-mip exported PNG pixel samples and slice-major storage (mip-major 8/24). The ninth original two-layer array has no original source pixel bytes and must not be fabricated. Next read #43145816256 for independent UnityPy source decoder and 28/28 real original Material m_TexEnvs array refs postrepair. Only after real verified hand off bounded importer stage to T5; no full native XAPK yet. No LFS."
+  "latest_session": "sessions/20261112-GT-native-original-array-import-gate-chat-08.md",
+  "next_action": "GT real 9/9 authentic PNG importer fix + 24/24 BC3 source topmip pixels (CI43144656957) and exact 28/28 Material Class187 refs (CI43145816256) PASS. Native workflow now runs same SHA-pinned ZIP2 original source→AssetRipper GUID-preserving 9 array meta repair, 28 strict material refs, and stages private Unity Editor manifest. B46 now correctly accepts imported class187 PNG flipbooks but rejects flattened 2800000. AndroidNativeBuild.ValidateSdkBindings calls OriginalTextureArrayImportGuard.Validate, which requires actual UnityEditor Texture2DArray GUID/size/depth/mip (9 arrays, 52 logical layers, 50 source populated), throwing fail-close. SOURCE-FREE CSharp compile+source contract synthetic CI43150348740 PASS, but REAL Unity Editor import/Android GPU not run yet. Check isolated full CI43150158897 for private Editor manifest. Do not initiate full native request or interfere with T5 votes; ZIP2 no LFS."
 }
