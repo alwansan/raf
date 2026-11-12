@@ -56,7 +56,10 @@ def inline_trial(source:str):
                 # Compiler-only approximation, not original source filter/wrap.
                 # The name contains the required Unity filter/wrap convention.
                 candidate="GT_Unbound_"+stage+"_"+name+"_Linear_Repeat"
-                if candidate in used or len(candidate)>180:
+                # Keyword branches are mutually exclusive; the same
+                # stage resource alias can recur across four variants.
+                if (len(candidate)>180 or
+                    (candidate in inverses and inverses[candidate]!=name)):
                     raise ValueError("private_sampler_trial_name_collision")
                 used.add(candidate)
                 aliases[name]=candidate
