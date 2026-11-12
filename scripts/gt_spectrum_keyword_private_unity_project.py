@@ -81,8 +81,8 @@ def prepare(shader:Path, source_proof:Path, editor:Path,
             "m_EditorVersion: 2021.3.45f2\n",encoding="utf-8")
         (project/"GTPrivateOriginalKeyword.txt").write_text(
             keyword+"\n",encoding="utf-8")
-        if (project/"Assets/GTPrivateSpectrumKeyword.shader").read_bytes()
-                !=shader.read_bytes()):
+        if ((project/"Assets/GTPrivateSpectrumKeyword.shader").read_bytes()
+                != shader.read_bytes()):
             raise ValueError("private_original_keyword_shader_transfer_drift")
     except BaseException:
         shutil.rmtree(project,ignore_errors=True)
