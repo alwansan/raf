@@ -52,7 +52,7 @@ class GTNativeArrayImportContractTests(unittest.TestCase):
         self.assertIn("Authentic water gate (strict)",body)
         self.assertIn("Raft full native APK OBB XAPK build and delivery",body)
         self.assertIn("lfs: false",body)
-        self.assertIn("exported_unity",body.lower() if "exported_unity" in body.lower() else "exported_unity")
+        self.assertIn("Stage private Unity project candidate inside runner workspace",body)
 
 
 if __name__=="__main__":
