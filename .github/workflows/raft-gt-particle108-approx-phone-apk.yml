@@ -1,0 +1,364 @@
+name: GT Particle108 original-derived APPROX Android Vulkan phone test APK
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-particle108-approx-phone-apk.yml'
+      - 'android-port/Experiments/GT/Editor/GTParticlePhoneBuild.cs'
+      - 'android-port/Experiments/GT/Runtime/GTParticlePhoneRuntime.cs'
+      - 'tests/test_gt_particle108_phone_probe_contract.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gt-particle108-approx-phone-apk-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  private-shaderlab-structural-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    environment: UNITY_LICENSE
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/GT/Editor
+            android-port/Experiments/GT/Runtime
+      - name: Verify all synthetic negative controls before touching original
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_private_shaderlab_variants.py tests/test_t3_particle108_private_shaderlab_variants.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_private_shaderlab_variants.py' -v
+          python3 -m py_compile scripts/t3_particle108_private_stagewrapper_compile.py tests/test_t3_particle108_private_stagewrapper_compile.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_private_stagewrapper_compile.py' -v
+          python3 -m py_compile scripts/t3_particle108_original_keyword_lattice.py tests/test_t3_particle108_original_keyword_lattice.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_lattice.py' -v
+          python3 -m py_compile scripts/t3_particle108_original_keyword_names.py tests/test_t3_particle108_original_keyword_names.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_names.py' -v
+          python3 -m py_compile scripts/t3_particle108_private_keyword_routed_shaderlab.py tests/test_t3_particle108_private_keyword_routed_shaderlab.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_private_keyword_routed_shaderlab.py' -v
+          python3 -m py_compile scripts/gt_particle108_unity_bindings.py
+          python3 -m unittest discover -s tests -p test_gt_particle108_unity_bindings.py -v
+          python3 -m py_compile scripts/gt_particle108_private_unity_project.py
+          python3 -m unittest discover -s tests -p 'test_gt_particle108_private_unity_project.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_particle108_phone_probe_contract.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Authenticate original source without staging all PC data
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-private-variant-original'
+          pins={'Raft_Data/'+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          checked=stage(source,out,pins)
+          assert len(checked['owners'])==4
+          assert checked['verified_bytes']==269007288 and not checked['lfs_used']
+          for scene,pin in PIN.items():
+              p=source/'Raft/Raft_Data'/scene
+              verify_source(p,pin)
+              target=out/'Raft_Data'/scene
+              if target.exists() or target.is_symlink():
+                  raise ValueError('unsafe_original_scene_target')
+              with p.open('rb') as reader,target.open('xb') as writer:
+                  while data:=reader.read(1024*1024):
+                      writer.write(data)
+              verify_source(target,pin)
+          print('T3_PRIVATE_VARIANTS_ORIGINAL_AUTHENTICATED=4_owners_6_scenes')
+          PY
+      - name: Install pinned original-only shader analysis tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 -q
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Privately construct four source-authentic HLSL ShaderLab variants; never publish source
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_private_shaderlab_variants \
+            --source "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/t3-particle108-private-variant-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          report=json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-particle108-private-variant-safe.json').read_text())
+          assert report['status']=='T3_ORIGINAL_PARTICLE108_FOUR_PRIVATE_SHADERLAB_STRUCTURAL_VARIANTS'
+          assert report['source_authenticated_keyword_pairs']==4
+          assert report['original_authored_property_count']==13
+          assert report['original_authored_texture_property_count']==2
+          assert report['counts']['genuine_original_DXBC_stages_translated']==8
+          assert report['counts']['private_complete_one_pass_ShaderLab_candidates']==4
+          assert report['counts']['private_property_default_parity_passes']==4
+          for field in ('four_keywords_selectable_in_one_runtime_shader',
+                        'source_keyword_routing_or_original_descriptors_preserved',
+                        'Unity_ShaderLab_import_or_GPU_compile_proven',
+                        'original_Material_texture_resource_bindings_equivalent',
+                        'original_Android_pixels_or_emitter_verified',
+                        'original_name_program_HLSL_DXBC_SPV_GUID_or_private_values_published'):
+              assert report[field] is False
+          print('T3_PRIVATE_VARIANT_PROOF_SAFE='+json.dumps(report,sort_keys=True))
+          PY
+      - name: Compile both macro branches of all four private ShaderLab HLSLPROGRAM blocks with Vulkan 1.1 glslang
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.t3_particle108_private_stagewrapper_compile \
+            --private-dir "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t3-particle108-stage-wrapper-safe.json'
+          report=json.loads(p.read_text(encoding='utf-8'))
+          assert report['status']=='T3_PRIVATE_SHADER48_BOTH_SHADERLAB_BRANCHES_GLSLANG_VULKAN11_VALID'
+          assert report['original_private_candidate_files_examined']==4
+          assert report['HLSLPROGRAM_macro_selected_stage_compiles_attempted']==8
+          assert report['HLSLPROGRAM_macro_selected_stage_spirv_validations_passed']==8
+          assert report['Unity_Editor_ShaderLab_import_proven'] is False
+          assert report['original_keyword_routing_or_material_binding_proven'] is False
+          assert report['original_pixels_on_Android_verified'] is False
+          print('T3_PRIVATE_SHADERLAB_BOTH_BRANCHES_SAFE=8_of_8_Vulkan11_glslang_only')
+          PY
+      - name: Determine original Shader48 four VSFS serialized keyword index lattice (no original names)
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t3_particle108_original_keyword_lattice \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          data=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle108-original-keyword-lattice-safe.json").read_text())
+          assert data["status"]=="T3_SOURCE_AUTHENTIC_PARTICLE108_FOUR_KEYWORD_SERIALIZED_STRUCTURE"
+          assert data["source_original_VSFS_serialized_variant_keys_exact"] is True
+          assert data["source_original_D3D11_keyword_pairs_linked"]==4
+          assert data["source_original_six_scenes_SHA_authenticated"] is True
+          assert data["source_original_four_shader_owners_SHA_authenticated"] is True
+          assert data["original_keyword_index_to_authored_name_mapping_proven"] is False
+          assert data["all_four_variants_selectable_in_one_Unity_ShaderLab_proven"] is False
+          assert data["Unity_Editor_compilation_or_phone_pixels_verified"] is False
+          print("T3_ORIGINAL_KEYWORD_METADATA_COHORT_VERIFIED=4_PAIRS; runtime_authoring_unproven=true")
+          PY
+      - name: Diagnose exact original Shader48 keyword-name and flags table provenance privately
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t3_particle108_original_keyword_names \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          data=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-original-keyword-name-table-safe.json").read_text())
+          assert data["status"]=="T3_SOURCE_ORIGINAL_PARTICLE108_KEYWORD_AUTHOR_TABLE_CLASSIFIED"
+          assert data["original_source_four_VSFS_pairs_joined"] is True
+          assert data["source_sha_verified_six_scenes"] is True
+          assert data["source_sha_verified_four_shader_owners"] is True
+          assert data["original_four_D3D11_program_pairs_linked"]==4
+          assert data["original_index_name_to_unity_directive_or_global_scope_proven"] is False
+          assert data["original_material_keyword_variant_runtime_binding_proven"] is False
+          assert data["Unity_Editor_compile_or_Android_GPU_pixels_proven"] is False
+          assert data["source_keyword_names_indices_flags_shader_text_or_paths_published"] is False
+          print("T3_PRIVATE_KEYWORD_NAME_TABLE_CLASSIFIED="+data["table_category"])
+          PY
+      - name: Test one PROVISIONAL four-keyword-variant ShaderLab; 8 original glslang Vulkan1.1 stage branches
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_private_keyword_routed_shaderlab \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/t3-private-provisional-routed-safe.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,json
+          report=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-private-provisional-routed-safe.json").read_text())
+          assert report["status"]=="T3_PRIVATE_SHADER48_PROVISIONAL_TWO_KEYWORD_SINGLE_SHADERLAB_VALID"
+          assert report["source_original_keyword_name_indices_mapped"] is True
+          assert report["original_keyword_pair_routes"]==4
+          assert report["provisional_one_ShaderLab_four_pairs"] is True
+          assert report["private_combination_stage_compiles_attempted"]==8
+          assert report["private_combination_stage_Vulkan11_SPIRV_valid"]==8
+          for key in ("original_keyword_flags_pragma_scope_proven",
+                      "Unity_ShaderLab_import_or_actual_variant_selection_proven",
+                      "original_Material_binding_proven","Android_pixels_proven",
+                      "original_keyword_names_indices_shader_code_or_errors_published"):
+              assert report[key] is False
+          print("T3_PRIVATE_PROVISIONAL_ONE_SHADERLAB=4_pair_routes_8_glslang_vulkan11_valid; Unity_Material_Android_UNPROVEN")
+          PY
+      - name: GT generate private compiler-only APPROX inline samplers, never claim original filtering or Material parity
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_particle108_unbound_inline_samplers.py tests/test_gt_particle108_unbound_inline_samplers.py
+          python3 -m unittest discover -s tests -p test_gt_particle108_unbound_inline_samplers.py -v
+          python3 -m scripts.gt_particle108_unbound_inline_samplers \
+            --input "$RUNNER_TEMP/t3-private-variant-shaderlab/keyword-routed-private.shader" \
+            --output "$RUNNER_TEMP/gt-private-unbound-inline-samplers.shader" \
+            --report "$RUNNER_TEMP/gt-private-unbound-inline-samplers-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-private-unbound-inline-samplers-safe.json"
+          r=json.loads(p.read_text())
+          assert r["status"]=="GT_UNBOUND_SHADER48_INLINE_SAMPLER_APPROXIMATION_COMPILE_ONLY"
+          assert r["approximate_linear_repeat_filter_wrap_used_for_private_compiler_probe"] is True
+          assert r["source_original_sampler_filter_wrap_equivalence_proven"] is False
+          assert r["source_original_Material_sampler_binding_proven"] is False
+          assert r["original_game_Shader_GUID_Materials_modified"] is False
+          print("GT_PRIVATE_SAMPLER_APPROX pure_compile_experiment=true source_original_filter_wrap_unproven=true Material_binding_unproven=true")
+          PY
+      - name: GT stage original-derived UNBOUND shader with DIAGNOSTIC approximate inline samplers and isolated cbuffer names
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$RUNNER_TEMP/gt-private-unbound-inline-samplers.shader" \
+            --routing "$RUNNER_TEMP/t3-private-provisional-routed-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-private-particle-unity" \
+            --report "$RUNNER_TEMP/gt-particle108-staging-safe.json" \
+            --diagnostic-stage-buffers
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-particle108-staging-safe.json").read_text())
+          assert r["private_stage_local_buffer_name_isolation_only"] is True
+          assert r["private_vertex_cbuffer_identifiers_disambiguated"]>0
+          assert r["private_fragment_cbuffer_identifiers_disambiguated"]>0
+          assert r["private_original_sampler_binding_parity_proven"] is False
+          assert r["original_Android_game_pixels_proven"] is False
+          assert r["game_source_or_GUID_modified"] is False
+          print("GT_PARTICLE108_UNBOUND_CBUFFER_ONLY vertex_fragment_disambiguated=true sampler_original_binding_unproven=true game_assets_untouched=true")
+          PY
+      - name: Install isolated offline phone diagnostic builder and runtime only
+        run: |
+          set -euo pipefail
+          cp android-port/Experiments/GT/Editor/GTParticlePhoneBuild.cs gt-private-particle-unity/Assets/Editor/GTParticlePhoneBuild.cs
+          cp android-port/Experiments/GT/Runtime/GTParticlePhoneRuntime.cs gt-private-particle-unity/Assets/GTParticlePhoneRuntime.cs
+          test -s gt-private-particle-unity/Assets/Editor/GTParticlePhoneBuild.cs
+          test -s gt-private-particle-unity/Assets/GTParticlePhoneRuntime.cs
+      - name: GT build offline original-derived APPROX phone APK using Unity Android Vulkan ARM64
+        id: gt_private_particle_unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-private-particle-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.GTParticlePhoneBuild.Build
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: GT require a valid standalone APPROX Android Vulkan ARM64 APK, never original restoration claim
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('gt-private-particle-unity')
+          path=root/'ProbeResults/gt-particle108-phone-build-safe.json'
+          apk=root/'Build/GT-Particle108-Approx-Vulkan-ARM64.apk'
+          if not path.is_file() or path.stat().st_size>65536:
+              raise SystemExit('GT_PARTICLE_PHONE_BUILD_REPORT_MISSING')
+          report=json.loads(path.read_text())
+          required={
+              'status':'GT_PARTICLE108_APPROX_ANDROID_VULKAN_PHONE_APK_BUILT',
+              'unityVersion':'2021.3.45f2',
+              'privateVariants':4,
+              'shaderErrors':0,
+              'androidVulkanOnly':True,
+              'arm64':True,
+              'offline':True,
+              'approximateSamplerStates':True,
+              'originalMaterialBindingProven':False,
+              'originalShaderRestored':False,
+              'actualDevicePixelsVerified':False,
+              'originalGameAssetsChanged':False}
+          for key,value in required.items():
+              if type(report.get(key)) is not type(value) or report.get(key)!=value:
+                  raise SystemExit('GT_PARTICLE_PHONE_NOT_ACCEPTED_'+key)
+          if not apk.is_file() or apk.stat().st_size<1024 or report['apkBytes']!=apk.stat().st_size:
+              raise SystemExit('GT_PARTICLE_PHONE_APK_MISSING_OR_SIZE_MISMATCH')
+          if apk.open('rb').read(2)!=b'PK':
+              raise SystemExit('GT_PARTICLE_PHONE_APK_NOT_ZIP')
+          print('GT_PARTICLE_PHONE_APK_SAFE built=true VulkanARM64=true approxSampler=true originalMaterialBindingProven=false')
+          PY
+      - name: Upload GT APPROX phone APK and sanitized report only
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle108-approx-phone-apk-${{ github.sha }}
+          path: |
+            gt-private-particle-unity/Build/GT-Particle108-Approx-Vulkan-ARM64.apk
+            gt-private-particle-unity/ProbeResults/gt-particle108-phone-build-safe.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain GT aggregate APPROX phone shader stage evidence without ShaderLab source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-particle108-approx-phone-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-particle108-staging-safe.json
+            ${{ runner.temp }}/gt-private-unbound-inline-samplers-safe.json
+            ${{ runner.temp }}/gt-particle108-source-bound-safe.json
+            gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Erase private staged sources and candidates from runner
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
+          rm -rf -- "$RUNNER_TEMP/gt-particle108-source-bound-Unity"
+          rm -f -- "$RUNNER_TEMP/gt-private-unbound-inline-samplers.shader" "$RUNNER_TEMP/gt-private-unbound-inline-samplers-safe.json"
+          # Unity game-ci writes some Library/Temp files as root inside
+          # the Docker mount; remove the *literal* disposable project as
+          # runner sudo, never the originals or a guessed path.
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-particle-unity"
+          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json" "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json" "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json" "$RUNNER_TEMP/t3-private-provisional-routed-safe.json"
