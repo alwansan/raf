@@ -1,5 +1,15 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-23 — آخر نتيجة مؤكدة لـSpectrum وشرط نجاح Unity الصارم
+
+اقرأ أولاً [جلسة Chat-23](sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md) مع [خطة الاستعادة العربية](RESTORATION_PLAN_AR.md) و[الخطة JSON](RESTORATION_PLAN.json) و[state.json](state.json). [43279249696](https://github.com/alwansan/raf/actions/runs/43279249696) أثبت **المرشح الأول Variant0**: Shader Spectrum أصلي المصدر بسبعة Passes، Android Vulkan Unity 2021.3.45f2، صفر أخطاء Shader ومخرجات Bundle خاصة 12,079B؛ لا Pixel/GUID.
+
+**تحذير إلزامي: [43282759870](https://github.com/alwansan/raf/actions/runs/43282759870) موسوم SUCCESS لكنه ليس نجاح المرشح الثاني:** سجل Unity الحقيقي سجل **12 GLSL link errors** و**12 فشل إنشاء internal shader variant** للرمز `cb4_struct`، رغم أن `ShaderUtil` أعاد صفر أخطاء وخرج Bundle خاص 12,418B. لا تعتبره مستعاداً ولا تدمجه. أضفت عزل أسماء Uniform Block بين VS/FS داخل الخاص فقط، واختبار [43285251243](https://github.com/alwansan/raf/actions/runs/43285251243) بتشغيلين: Unity ثم **strict-final-unity-console** الذي يراجع سجل Unity الكامل بعد اكتماله، ويرفض أي فشل GLSL. **نتيجته لم تثبت بعد عند كتابة هذه النقطة**؛ افحص المهمتين، لا تعتمد تقرير Unity وحده.
+
+المتبقي: قبول المرشح الثاني بدون أخطاء مرئية أو مخفية؛ إثبات Single ShaderLab original index4 keyword route (النموذج في `scripts/gt_spectrum_private_keyword_routed_shaderlab.py` ما زال مصدر فقط وغير مختبر)؛ Material/GUID/CB0/Sampler/RT ثم الهاتف. **770 مستند Material Dummy**، Foam Global 2Pass وkernel6 ونتائج الماء على Adreno ما زالت مفتوحة. المصدر `zip2@15964ea8` للقراءة فقط؛ **لا Git LFS، لا تغيير GUID/.meta**.
+
+---
+
 ## GT / Chat-22 — نقطة الاستعادة الأحدث للماء Spectrum (12 نوفمبر 2026)
 
 **ابدأ من هذه النقطة:** [خطة الاستعادة العربية](RESTORATION_PLAN_AR.md) · [JSON التغطية والأدلة](RESTORATION_PLAN.json) · [حالة GT](state.json) · [ملخص المالك](SUMMARY_AR.md) · [آخر جلسة مفصّلة Chat-22](sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md) · [الذاكرة](MEMORY.md). فرع الكتابة الوحيد `feature/android-native-port`؛ المصدر `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385` للقراءة فقط، **لا Git LFS ولا تغيير المصدر/GUID/.meta**.
