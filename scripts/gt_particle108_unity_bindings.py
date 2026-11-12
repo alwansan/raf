@@ -128,7 +128,17 @@ def authenticated_original_dxbc_registers(original_dxbc):
         raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
     try:
         rows=source_rdef(original_dxbc)
-    except (ValueError,TypeError):
+    except ValueError as exc:
+        # All eight SHA-original Particle108 stages in CI 43228860357 have
+        # NO RDEF chunk. The independent source_rdef() parser authenticates
+        # the DXBC container first. An absent ORIGINAL chunk is not corrupt
+        # input, and is not a license to fabricate register identities.
+        # A special sentinel requires real vkd3d source-register suffixes
+        # plus original Unity serialized m_TextureParams for any mapping.
+        if str(exc)=="DXBC_ORIGINAL_RDEF_ABSENT":
+            return {"s":None,"t":None}
+        raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN") from None
+    except TypeError:
         raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN") from None
     slots={"s":set(),"t":set()}
     for kind,index,length in rows:
@@ -171,14 +181,15 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
         if found is None:
             # Anonymous translated symbol: only the source RDEF and same
             # original serialized register permit using a translated slot.
-            if authenticated_rdef is None:
+            if authenticated_rdef is None or authenticated_rdef[cls] is None:
                 raise BridgeError("TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING")
             original_num=translated_num
         else:
             original_num=int(found[1])
         if original_num not in table:
             raise BridgeError("TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING")
-        if authenticated_rdef is not None and original_num not in authenticated_rdef[cls]:
+        if (authenticated_rdef is not None and authenticated_rdef[cls] is not None
+            and original_num not in authenticated_rdef[cls]):
             raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
         if original_num!=translated_num:
             if authenticated_rdef is None:
@@ -232,6 +243,7 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
     return fixed,{"original_texture_registers_mapped":len(used["t"]),
                   "original_sampler_registers_mapped":len(used["s"]),
                   "source_to_translator_descriptor_register_drifts_authenticated":source_vs_translated_drift,
+                  "source_DXBC_original_RDEF_verified_absent":int(authenticated_rdef is not None and authenticated_rdef["s"] is None),
                   "stage_local_original_cbuffer_symbols_disambiguated":len(buffers),
                   "original_register_annotations_preserved":True}
 
@@ -298,6 +310,7 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
             "private_source_mapped_original_texture_parameter_links":counts["original_texture_registers_mapped"],
             "private_source_mapped_original_sampler_parameter_links":counts["original_sampler_registers_mapped"],
             "private_stage_buffer_symbols_disambiguated":counts["stage_local_original_cbuffer_symbols_disambiguated"],
+            "source_DXBC_original_RDEF_absent_stages":counts["source_DXBC_original_RDEF_verified_absent"],
             "original_program_DXBC_bytes_or_values_modified":False,
             "original_HLSL_register_annotations_preserved":True,
             "original_material_GUID_ShaderOrGameAsset_modified":False,
