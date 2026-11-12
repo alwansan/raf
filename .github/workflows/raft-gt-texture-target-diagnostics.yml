@@ -16,6 +16,8 @@ on:
       - tests/test_gt_diagnose_texture_export_lineage.py
       - scripts/gt_verify_original_array_export.py
       - tests/test_gt_verify_original_array_export.py
+      - scripts/gt_recover_original_array_layers.py
+      - tests/test_gt_recover_original_array_layers.py
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -48,3 +50,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_test_vendor_shader_restoration.py -v
           python3 -m unittest discover -s tests -p test_gt_diagnose_texture_export_lineage.py -v
           python3 -m unittest discover -s tests -p test_gt_verify_original_array_export.py -v
+          python3 -m unittest discover -s tests -p test_gt_recover_original_array_layers.py -v
