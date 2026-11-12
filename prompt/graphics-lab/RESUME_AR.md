@@ -11,3 +11,5 @@
 نتيجة [GFX159](../../memory/sessions/20261112-GFX-chat-water-prefab-links-119.md) مكتملة للمصدر. المرحلة مفتوحة عند بناء Android اللعبة المتتبّع واختباره.
 
 استأنف من [جلسة GFX160](../../memory/sessions/20261112-GFX-chat-water-fft-textures-120.md) وتحقق من APK وسجل الهاتف.
+
+نجح GFX160 على الهاتف. تابع [بناء تجربة اللعبة GFX161](../../memory/sessions/20261112-GFX-chat-water-native-handoff-121.md).

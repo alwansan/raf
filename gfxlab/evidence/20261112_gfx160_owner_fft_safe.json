@@ -1,0 +1,49 @@
+{
+  "experiment": "GFX160",
+  "evidence": "GPU_EXPERIMENT",
+  "scope": "synthetic_inverse_fft_RGFloat",
+  "device": "Adreno 730",
+  "backend": "Vulkan 1.1.0 [512.615.95]",
+  "kernel_ids": [
+    0,
+    1,
+    2
+  ],
+  "workgroup_sizes_x": [
+    32,
+    32,
+    64
+  ],
+  "intermediate_format": "R32G32_SFloat",
+  "samples": 4096,
+  "max_abs_error": 2.393371212328077e-7,
+  "reported_max_imaginary": 3.2782554626464844e-7,
+  "cases": [
+    {
+      "time": 0,
+      "scale": 0,
+      "maximum_error": 0,
+      "maximum_delta": 0
+    },
+    {
+      "time": 0,
+      "scale": 1,
+      "maximum_error": 1.6878280073573393e-7,
+      "maximum_delta": 0.6399999856948853
+    },
+    {
+      "time": 0.75,
+      "scale": 1,
+      "maximum_error": 1.667403497496167e-7,
+      "maximum_delta": 0.916770726442337
+    },
+    {
+      "time": 1.5,
+      "scale": 1,
+      "maximum_error": 2.393371212328077e-7,
+      "maximum_delta": 0.9167771637439728
+    }
+  ],
+  "archive_sha256": "fec3dd4aec429b364e8d6da86b3533f79d467d24a668917704b7cd9546e6fb51",
+  "original_water_verified": false
+}

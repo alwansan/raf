@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-water-fft-textures-120",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-fft-textures-120.md",
+  "latest_session": "20261112-GFX-chat-water-native-handoff-121",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-native-handoff-121.md",
   "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Owner install GFX160 and return ZIP on Adreno 730; then compare native shader identity/registration and isolate original water pass gaps.",
-  "build_requested": false,
+  "next_experiment": "Verify GFX161 native delivery request and tracked full run; inspect water and packaging gates before asking for phone logs.",
+  "build_requested": true,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3386,10 +3386,16 @@
       "source_commit": "5b5cdab0589413d1992c866e54aa4be8f9d94d67",
       "scope": "synthetic radix-2 inverse FFT over RGFloat",
       "apk_verified": true,
-      "device_verified": false,
+      "device_verified": true,
       "artifact": 13912318730,
       "sha256": "c758b6e08a5249ae94e154f76ab347cdf6587927ac517a77388f6d3f97bcc404",
-      "bytes": 8530104
+      "bytes": 8530104,
+      "owner_evidence": "gfxlab/evidence/20261112_gfx160_owner_fft_safe.json"
+    },
+    "native_trial": {
+      "observed_head": "c2a1489f60a4839eca7a3a90a297e1e2ce12ec9d",
+      "status": "DISPATCH_WORKFLOW_PUSHED",
+      "original_water_verified": false
     }
   }
 }

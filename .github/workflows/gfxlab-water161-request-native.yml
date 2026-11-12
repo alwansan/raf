@@ -1,0 +1,34 @@
+name: GFX161 request full Raft Android water trial
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths: [.github/workflows/gfxlab-water161-request-native.yml]
+permissions: {}
+concurrency:
+  group: gfxlab-gfx161-native-request
+  cancel-in-progress: false
+jobs:
+  request:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Request native delivery with existing water gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          workflow=raft-unity-editor-android-import.yml
+          branch=feature/android-native-port
+          head="$(gh api "repos/$GH_REPO/git/ref/heads/$branch" --jq '.object.sha')"
+          echo "Native branch head at request: $head"
+          active="$(gh run list --workflow "$workflow" --branch "$branch" --limit 20 --json databaseId,headSha,status,event --jq ".[] | select(.headSha == \"$head\" and .status != \"completed\" and .event == \"workflow_dispatch\") | .databaseId")"
+          if [[ -n "$active" ]]; then
+            echo "Existing native request on this revision: $active"
+          else
+            gh workflow run "$workflow" --ref "$branch" -f build_mode=native -f publish_early_test=true
+          fi
