@@ -141,5 +141,39 @@
     "unity_editor_actual_import_verified": false,
     "android_gpu_verified": false,
     "git_lfs_used": false
+  },
+  "real_28_material_array_source_closure": {
+    "run": 43145816256,
+    "pass": true,
+    "original_Material_texenv_class187_reference_slots": 28,
+    "exact_original_class187_reference_slots": 28,
+    "distinct_original_array_targets": 9,
+    "postrepair_source_importer_grid_valid": true,
+    "wrong_array_fileID_or_GUID": 0,
+    "Unity_Editor_imported_class187_verified": false,
+    "Android_GPU_pixels_verified": false
+  },
+  "native_production_pipeline_integration": {
+    "feature_branch": "feature/android-native-port",
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "actual_native_build_requested": false,
+    "full_native_build_triggered": false,
+    "ZIP2_original_SHA_manifest_verified_precondition": true,
+    "source_instance_trace_export_precondition": true,
+    "bounded_original_array_png_importer_repair_script": "scripts/gt_repair_array_flipbook_importers.py",
+    "original_array_PNG_meta_only_changes_expected": 9,
+    "source_material_link_verifier": "scripts/gt_verify_original_array_material_refs.py",
+    "B46_guard_supports_native_18700000_Texture2DArray_only_if_positive_PNG_flipbook": true,
+    "private_unity_editor_array_manifest_script": "scripts/gt_write_unity_array_import_contract.py",
+    "private_unity_editor_import_validator": "android-port/Editor/OriginalTextureArrayImportGuard.cs",
+    "unity_Editor_2021_actual_import_executed": false,
+    "CSharp_source_only_compile_ci": 43150348740,
+    "synthetic_native_pipeline_guard_ci": 43150348740,
+    "source_zero_2_layers_intentionally_not_fabricated": true
+  },
+  "next_real_isolated_test": {
+    "run": 43150158897,
+    "scope": "authenticated full ZIP2 AssetRipper→9 array repair→28 links→private Unity Editor manifest",
+    "completion": "not yet confirmed"
   }
 }
