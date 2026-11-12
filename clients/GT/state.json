@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ORIGINAL_134_RESTORED_REAL_ASSETRIPPER_EXPORT_PASSED_SELECTED_TEXENV_FIDELITY_PASSED_ALL_82_PENDING",
+  "status": "GT_ALL_82_MATERIAL_TEXENV_MATCHED_9_ORIGINAL_TEXTURE2DARRAY_BC3_PAYLOAD_STAGE_SUBMITTED_ANDROID_IMPORT_PENDING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -124,7 +124,63 @@
         },
         "b46_yaml_mapping_parser_synthetic_pass": true,
         "full_82_synthetic_ci_success": true,
-        "full_real_texture_equivalence_run": 43128711194
+        "full_real_texture_equivalence_run": 43128711194,
+        "full_82_original_to_export_texenv_verified": {
+          "run": 43132978685,
+          "original_materials": 1556,
+          "compared_exported_materials": 1536,
+          "matched_source_export_texenv_slots": 10216,
+          "exact_internal_texture_target_matches": 4151,
+          "wrong_internal_targets": 0,
+          "unresolved_internal_targets": 0,
+          "uv_transform_mismatches": 0,
+          "null_binding_drift": 0,
+          "external_texture_targets_unresolved_identity": 416,
+          "source_slots_faithful_with_resolved_scope": true
+        },
+        "original_texture_arrays": {
+          "original_source_metadata_run": 43136988092,
+          "source_array_count": 9,
+          "logical_layers": 52,
+          "BC3_layers_with_source_bytes": 50,
+          "original_empty_pixel_layers": 2,
+          "original_format_counts": {
+            "100": 5,
+            "101": 4
+          },
+          "mipmap_levels": 11,
+          "original_gpu_streamed_bytes": 69906400,
+          "source_SHA256_authenticated": true,
+          "same_instance_array_trace_run": 43135341260,
+          "source_class_id": 187,
+          "material_refs_class187": 28,
+          "original_distinct_array_targets": 9,
+          "exported_file_id": 18700000,
+          "exported_importer_shape": 4,
+          "android_Texture2DArray_pixels_verified": false
+        },
+        "original_BC3_array_byte_stage": {
+          "script": "scripts/gt_recover_original_array_layers.py",
+          "real_workflow": "raft-gt-original-export-smoke.yml",
+          "latest_triggered_real_run": 43138326757,
+          "expected_original_bytes": 69906400,
+          "expected_original_payload_array_files": 8,
+          "original_zero_pixel_array_objects": 1,
+          "real_run_completed": "unverified_when_saved",
+          "editor_import_verified": false,
+          "shader_color_parity_verified": false,
+          "synthetic_CI": 43138283249
+        },
+        "vendor_shader_restore": {
+          "real_four_restorers_executed": 43135341260,
+          "original_meta": 18368,
+          "changed_meta": 0,
+          "removed_meta": 1,
+          "vendor_new_meta": 3,
+          "precise_histogram_GUId_relocation_patched": true,
+          "exact_current_real_result": "UNVERIFIED",
+          "editor_shader_compile_verified": false
+        }
       },
       "targeted_export_material_guid_guard_repeat_run": 43126735391
     },
@@ -173,16 +229,17 @@
     },
     "limitations": {
       "source_stream_payloads_verified": true,
-      "exported_unity_guid_and_material_links_verified": false,
+      "exported_unity_guid_and_material_links_verified": true,
       "android_build_and_device_verified": false,
       "shader_pass_variant_compute_kernel_totals_known": false,
       "source_stream_payloads_scope": "source listed original 48 streams, all 134 original graphics files SHA256; external Texture2D extents checked; native output GPU still unverified",
-      "actual_assetripper_export_completed": true
+      "actual_assetripper_export_completed": true,
+      "exported_unity_guid_and_material_links_scope": "Original 82-owner Material TexEnv properties 10,216 and 4,151 same-owner Texture identities with no drift; 416 external targets not yet resolved; 9 Texture2DArray importer targets remain unverified as Android native Unity import."
     },
     "project_baseline_sha": "cd96edc1ce0059b5737c017b707a8f79cb4da29d",
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-full-original-graphics-chat-04.md",
-  "next_action": "Source ZIP2 134 original graphics files 7.533GB and actual AssetRipper 40 scene export verified. B05 selected sharedassets6 source→export GUID/UV verified CI 43127697656. Raw exporter has 786/1536 Material docs referring to 140 dummy-marked shader file set; these have to be checked AFTER original T3/W1 Shader restorers, not equated to Android output. B46 map-vs-sequence TexEnv parser fixed synthetic CI 43128041580; inspect real same-instance full 1556 materials source→export audit CI 43128711194 for B46 actual and B05 all-owner, then apply bounded real exported project fixes if proven. Never LFS. No unsanctioned native XAPK."
+  "latest_session": "sessions/20261112-GT-original-texture-array-staging-chat-06.md",
+  "next_action": "Finish isolated full ZIP2 AssetRipper CI 43138326757 and READ step-level outcome of gt_recover_original_array_layers 69,906,400 original BC3 bytes, 50 source-payload layers, 2 original zero-pixel source layers. Then verify authenticated EyeHistogram .asset→.compute GUID relocation with exact backup+meta and derive postrestorer remaining Dummy material docs vs 786 raw baseline. Next implement a real Unity Editor Texture2DArray import and BC3 mip/layer order validation without invented data or changing other GUIDs. Respect T5 native votes, never Git LFS."
 }
