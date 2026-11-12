@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT22_SPECTRUM_SOURCE_7PASS_PROVEN_REAL_UNITY_FIRST_IMPORT_GLSL_CBUFFER_LINKER_FAIL_STAGE_ISOLATED_RETRY_ACTIVE",
+  "status": "GT_CHAT23_TWO_ISOLATED_SPECTRUM_7PASS_UNITY_VARIANTS_STRICT_ZERO_GLSL_CONFIRMED_SOURCE_INDEX4_UNIFIED_CANDIDATE_PROVEN_UNITY_TRIAL_RUNNING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-spectrum-sevenpass-private-unity-chat-22.md",
-  "next_action": "Read Chat22+RESTORATION_PLAN.json and newest Actions. CI 43275506146 first Unity Spectrum 7Pass import PASS (passCount7/bundle6095) but overall failed shaderErrorCount2 GLSL VS/FS cb0_0_m0 array-size clash. Reversible stage-local private-only CBuffer names + negative tests integrated; source test fixture corrected commit 8e46f03a. NEW trial 43277618651 reached real Unity 2021 Android Vulkan at last check; GET ACTUAL CONCLUSION and sanitized JSON receipt before claiming anything. No original game shader or GUID changed. After Unity success, solve original sampler/CB0 Material RT keyword routing and variant1. Old full native 43247161671 still active at last observation. ZIP2 pin no Git LFS.",
+  "latest_session": "clients/GT/sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md",
+  "next_action": "READ RESTORE_AR + Chat23 + RESTORATION_PLAN_AR/JSON. CONFIRMED real Spectrum original 7Pass 14 pairs 28 stage SPV, 7 source render states, 6 props. CI43286126572 BOTH original-private-spectrum-pairs and strict-final-unity-console SUCCESS: private original-derived variant0/1 source shader import 7Pass each, bundles12080/12409B, final job log scanner 0 GLSL/0 internal variant/0 shader import/compile errors. CI43286701677 SUCCESS original ZIP2 keyword table index4 plus all 7Pass 28 stage hash routes, generated single PRIVATE provisional ShaderLab; not Unity/game parity. Latest CI43288288144 single index4 7Pass original candidate entering Unity2021 Android Vulkan after Python syntax correction commit0795fa8; inspect all jobs and strict unified console. Do NOT install into Raft until keyword flag scope, same-instance Material GUID, sampler CB RT and real Adreno pixels verified. 770 Dummy Material docs, Foam 2Pass and kernel6 still open. No LFS, ZIP2 immutable.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -616,7 +616,13 @@
     "source_original_spectrum_original_Material_GUID_or_Adreno_verified": false,
     "private_Unity_stage_local_CBuffer_corrected_retry_run": 43277618651,
     "private_Unity_stage_local_CBuffer_corrected_retry_status_at_last_check": "in_progress_Unity2021",
-    "private_Unity_stage_local_CBuffer_source_test_corrected_commit": "8e46f03a"
+    "private_Unity_stage_local_CBuffer_source_test_corrected_commit": "8e46f03a",
+    "original_spectrum_both_isolated_Private_Unity_success_run": 43286126572,
+    "original_spectrum_both_private_final_console_clean": true,
+    "original_spectrum_single_keyword_route_real_source_success": 43286701677,
+    "original_spectrum_single_unity_provisional_trial": 43288288144,
+    "original_spectrum_single_unity_provisional_verified": false,
+    "original_spectrum_keyword_scope_and_runtime_material_verified": false
   },
   "proofs_20261112_chat21": {
     "origin": "chat",
@@ -699,5 +705,37 @@
     "stage_local_synthetic_fixture_fix_commit": "8e46f03a57a9aea1d797480de0fef4144eb5ea4b",
     "stage_local_Unity2021_private_retry_run": 43277618651,
     "stage_local_Unity2021_private_retry_conclusion_at_last_check": "in_progress_Unity_Android_Vulkan_asset_bundle"
+  },
+  "proofs_20261112_chat23": {
+    "origin": "chat",
+    "session_path": "clients/GT/sessions/20261112-GT-spectrum-variant1-console-gate-chat-23.md",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "spectrum_original_source_passes": 7,
+    "spectrum_source_VS_FS_keyword_pairs": 14,
+    "spectrum_source_Vulkan_compiled_stages": 28,
+    "spectrum_original_render_states": 7,
+    "spectrum_original_properties": 6,
+    "original_private_Unity2021_both_variant_CI": 43286126572,
+    "original_private_Unity2021_both_variant_CI_success": true,
+    "original_private_V0_private_bundle_bytes": 12080,
+    "original_private_V1_private_bundle_bytes": 12409,
+    "original_private_both_7pass_imported": true,
+    "final_console_GL_link_errors": 0,
+    "final_console_internal_shader_variant_creation_failures": 0,
+    "final_console_shader_import_errors": 0,
+    "final_console_shader_compile_errors": 0,
+    "hidden_errors_verified_by_separate_GitHub_Actions_final_log_job": true,
+    "original_source_keyword_index4_proven": true,
+    "original_source_keyword_index4_real_CI": 43286701677,
+    "original_source_keyword_index4_real_CI_success": true,
+    "original_source_keyword_index4_seven_original_passes_two_variants_each_proven": true,
+    "single_private_provisional_original_keyword_shaderlab_generated": true,
+    "single_private_provisional_original_keyword_shaderlab_Unity2021_trial": 43288288144,
+    "single_private_provisional_original_keyword_shaderlab_Unity2021_accepted": false,
+    "original_global_local_keyword_flag_scope_proven": false,
+    "original_game_Material_GUID_sampler_CB0_RT_runtime_parity_proven": false,
+    "Android_phone_pixel_parity_proven": false,
+    "original_asset_meta_GUID_modified": false,
+    "LFS_used": false
   }
 }
