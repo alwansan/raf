@@ -96,6 +96,15 @@ class SourceArrayImporterRepairTests(unittest.TestCase):
             execute(self.project,self.backup,self.source,self.trace)
         self.assertFalse(self.backup.exists())
 
+    def test_forged_png_IHDR_without_valid_source_pixels_refused(self):
+        import struct
+        fake=(b"\\x89PNG\\r\\n\\x1a\\n"+struct.pack(">I",13)+b"IHDR"+
+              struct.pack(">II",8,4))
+        (self.assets/"array-0.png").write_bytes(fake)
+        with self.assertRaisesRegex(InventoryError,"unreadable_original_array_exported_PNG_pixels"):
+            execute(self.project,self.backup,self.source,self.trace)
+        self.assertFalse(self.backup.exists())
+
     def test_preexisting_backup_refused(self):
         self.backup.mkdir()
         with self.assertRaisesRegex(InventoryError,"unsafe_disposable_Unity_array_repair_project_or_backup"):
