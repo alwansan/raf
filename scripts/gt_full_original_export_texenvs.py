@@ -19,6 +19,47 @@ from scripts.b05_verify_material_texenv_bindings import (
     compare, exported_texenvs, normalize_texenvs,
 )
 
+# Only these pre-audited generic error labels can appear in public CI receipts.
+# Raw exception messages may include private names and therefore never leave CI.
+PUBLIC_ERRORS = {
+    "unsafe_original_source_directory",
+    "invalid_original_material_owner_selection",
+    "missing_original_unity_objects",
+    "duplicate_original_material_identity",
+    "original_texenv_unparseable",
+    "no_original_materials_authenticated",
+    "untrusted_same_instance_export_trace",
+    "Original/export Material identities do not match same-instance trace",
+    "Duplicated original object in trace",
+    "Unusable duplicate Texture object trace",
+    "Unverified traced original Material",
+    "Unusable Material export pointer",
+    "Two original Materials map to same exported object",
+    "Original Material export pointer collides with out-of-scope Material",
+    "Missing same-instance export trace",
+    "Texture environment slots must be an array",
+    "Malformed or duplicate Material texture slot",
+    "Material texture data absent in export",
+    "Missing or linked Material metadata",
+    "Duplicated exported Material pointer",
+    "No exported Material texture documents",
+}
+
+
+def public_failure(error, stage: str):
+    code = str(error)
+    if code not in PUBLIC_ERRORS:
+        code = "unclassified_" + type(error).__name__
+    return {
+        "schema": "GT_FULL_82_ORIGINAL_TO_REAL_EXPORT_TEXENV_FIDELITY_V1",
+        "status": "INCONCLUSIVE",
+        "failed_phase": stage,
+        "reason_code": code,
+        "original_sources_modified": False,
+        "exported_assets_or_meta_modified": False,
+        "device_gpu_pixels_verified": False,
+    }
+
 
 def original(root: Path, manifest: Path, selected=None, loader=None) -> dict:
     if root.is_symlink() or not root.is_dir():
@@ -59,14 +100,22 @@ def original(root: Path, manifest: Path, selected=None, loader=None) -> dict:
 
 
 def inspect(root:Path,manifest:Path,export_project:Path,private_trace:Path,
-            *, loader=None, exported_parser=None):
+            *, loader=None, exported_parser=None, phase=None):
+    if phase is not None:
+        phase("original_authentication")
     source=original(root,manifest,loader=loader)
+    if phase is not None:
+        phase("private_same_instance_trace")
     if (not private_trace.is_file() or private_trace.is_symlink() or
             private_trace.stat().st_size>20*1024*1024 or
             private_trace.resolve().is_relative_to(export_project.resolve())):
         raise InventoryError("untrusted_same_instance_export_trace")
     trace=json.loads(private_trace.read_text(encoding="utf-8"))
+    if phase is not None:
+        phase("exported_material_yaml")
     exported=(exported_parser or exported_texenvs)(export_project)
+    if phase is not None:
+        phase("source_export_pointer_join")
     # Exact full export origin scope; no name-only matching.
     result=compare(trace,source,exported,selected_owners=None)
     result.update({
@@ -97,13 +146,21 @@ def main():
     if (report.is_relative_to(args.source.resolve()) or
         report.is_relative_to(args.export_project.resolve())):
         raise InventoryError("report_inside_untrusted_original_or_export")
-    result=inspect(args.source,args.manifest,args.export_project,args.trace)
+    phase = ["before_original"]
+    def mark(name):
+        phase[0] = name
+    try:
+        result=inspect(args.source,args.manifest,args.export_project,args.trace,
+                       phase=mark)
+        result["status"] = ("SOURCE_EXPORT_COMPARISON_COMPLETE"
+                            if result["source_slots_faithful_with_resolved_scope"]
+                            else "SOURCE_EXPORT_COMPARISON_REJECTED")
+    except (ValueError, OSError, KeyError, TypeError, AttributeError) as error:
+        result=public_failure(error, phase[0])
     args.report.parent.mkdir(parents=True,exist_ok=True)
     args.report.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
     print("GT_ALL_ORIGINAL_MATERIAL_TEXENV_EXPORT "+json.dumps(result,sort_keys=True))
-    if not result["source_slots_faithful_with_resolved_scope"]:
-        return 2
-    return 0
+    return 0 if result.get("status") == "SOURCE_EXPORT_COMPARISON_COMPLETE" else 2
 
 
 if __name__=="__main__":
