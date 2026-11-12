@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "agent": "GT",
+  "repository": "alwansan/raf",
+  "write_branch": "feature/android-native-port",
+  "updated_date": "2026-11-12",
+  "original_source": {
+    "ref": "zip2",
+    "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "git_lfs_allowed": false,
+    "original_meta_or_scene_guid_modification_allowed_without_proof": false
+  },
+  "definitions": {
+    "source_verified": "Source container and required extent SHA/identity confirmed, not a Unity GPU claim",
+    "export_verified": "AssetRipper same-instance output or an exact source-to-export link is checked, not a device claim",
+    "unity_verified": "Explicit Unity Editor 2021.3.45f2 proof for stated scope, not necessarily source-equivalent shader",
+    "packaged": "A signed complete Android package was validated at a particular commit, not every pixel",
+    "device_verified": "Phone output/diagnostics specifically validate stated resource scope",
+    "blocked": "A required authentic identity, sampler, kernel or original program is missing",
+    "pending": "Work not yet evidenced; cannot count as restored"
+  },
+  "no_false_equivalence_policy": "Do not derive total percent of restored graphics from 82/82 owner inventory, 134 original files staged, 16 vendor non-dummy Material docs, Unity Build success, or XAPK CRC; preserve separate proof stages.",
+  "reference_runs": {
+    "source_export": 43125542125,
+    "original_graphics_9_28_416_50": 43207734641,
+    "source_full_native_older": 43205543533,
+    "old_signed_xapk_recovery": 43246196803,
+    "new_native_active_at_snapshot": 43247161671,
+    "source_particle108_unity_approx": 43236578305,
+    "source_particle108_phone_apk_approx": 43242496576,
+    "real_CL_owner_device_failure_reproduced": 43263197989
+  },
+  "workstreams": [
+    {
+      "id": "P00",
+      "name_ar": "مصدر ZIP2 وتجميع الأصول",
+      "scope": {
+        "original_files": 134,
+        "original_bytes": 7532909297,
+        "stream_files": 48,
+        "serialised_owners": 82,
+        "unity_scenes": 40
+      },
+      "source_verified": true,
+      "export_verified": true,
+      "unity_verified": "partial_old_native_snapshots",
+      "packaged": "old_native_snapshot_only",
+      "device_verified": false,
+      "status": "source_and_export_verified_not_device",
+      "restored_now": "Authenticated 134 source graphics inputs with SHA; exact original 82 serialized owners and full original streams staged in CI without LFS",
+      "missing": "Asset-by-asset native renderer/GPU parity",
+      "next_action": "Retain 134 SHA pins and rerun native staged asset receipt for any new source changes",
+      "evidence": [
+        43124662931,
+        43125542125,
+        43205543533
+      ]
+    },
+    {
+      "id": "P01",
+      "name_ar": "المشاهد والمجسمات وربط Renderer",
+      "scope": {
+        "scenes": 40,
+        "meshes": 4708,
+        "mesh_component_slots": 176708,
+        "nonnull_mesh_refs": 176480,
+        "mesh_type_verified_refs": 176006
+      },
+      "source_verified": true,
+      "export_verified": "40_scene_files_and_mesh_streams_only",
+      "unity_verified": "old_native_40_scene_build",
+      "packaged": "old_native_snapshot_only",
+      "device_verified": false,
+      "status": "partially_integrated_no_full_render_proof",
+      "restored_now": "40 scenes exported and compiled into prior native package; original Mesh descriptions and streamed data SHA-verified",
+      "missing": "No global draw-by-draw submesh/UV/normal/tangent/rigging/render fidelity acceptance on phone",
+      "next_action": "Pin one representative white scene Renderer→Material→Shader path and compare same-instance on device",
+      "evidence": [
+        43113418656,
+        43120209212,
+        43205543533
+      ]
+    },
+    {
+      "id": "P02",
+      "name_ar": "Texture2D وخرائط الألوان",
+      "scope": {
+        "source_texture2d": 4050,
+        "external_texture_streams": 3948,
+        "inline_or_empty_texture2d": 102,
+        "source_texenv_slots_verified": 10216
+      },
+      "source_verified": true,
+      "export_verified": "4151_internal_links_exact_and_416_external_links_exact",
+      "unity_verified": "not_every_texture",
+      "packaged": "old_native_snapshot_only",
+      "device_verified": false,
+      "status": "source_links_verified_visual_colour_fail",
+      "restored_now": "Original source streams and original material-to-texture links authenticated; 416/416 cross-owner links",
+      "missing": "Colour output on raft still white; mips, shader sampling and displayed pixels not verified globally",
+      "next_action": "Prioritize white objects by original Renderer→Material shader binding; do not resize/recompress source for evidence",
+      "evidence": [
+        43132978685,
+        43207734641
+      ]
+    },
+    {
+      "id": "P03",
+      "name_ar": "Texture2DArray وخامات BC3",
+      "scope": {
+        "arrays": 9,
+        "logical_layers": 52,
+        "original_nonempty_bc3_layers": 50,
+        "original_empty_layers": 2,
+        "material_references": 28,
+        "original_gpu_bytes": 69906400
+      },
+      "source_verified": true,
+      "export_verified": "nine_original_importers_repaired_in_ephemeral_export_and_all_28_references_checked",
+      "unity_verified": "source_and_build_contract_only",
+      "packaged": "old_native_snapshot_only",
+      "device_verified": false,
+      "status": "top_mip_source_parity_only",
+      "restored_now": "9 original array importer grids repaired while retaining original GUIDs; 50/50 top-mip BC3 source↔export exact pixel match; 28 material links verified",
+      "missing": "Remaining mip chain, Android array sampling, in-game materials and pixel parity",
+      "next_action": "Run Unity Editor imported arrays contract and Adreno sample test for all nine original array identities",
+      "evidence": [
+        43144656957,
+        43145816256,
+        43155325887,
+        43207734641
+      ]
+    },
+    {
+      "id": "P04",
+      "name_ar": "Material وربط الشيدرات",
+      "scope": {
+        "source_materials": 1556,
+        "exported_material_docs": 1536,
+        "unity_builtin_material_docs": 750,
+        "custom_dummy_after_vendor_restorers": 770,
+        "postvendor_custom_non_dummy_docs": 16
+      },
+      "source_verified": true,
+      "export_verified": "source_to_export_texture_links_only",
+      "unity_verified": false,
+      "packaged": "old_native_incomplete_shaders",
+      "device_verified": false,
+      "status": "blocked_major_visible_white_materials",
+      "restored_now": "1,536 material YAML documents exported; 750 builtin shader linked, 16 vendor-restored custom Material documents no longer Dummy",
+      "missing": "770 CUSTOM MATERIAL DOCUMENTS STILL REFERENCE DUMMY SHADERS; 20 source Material objects are not direct exported Material YAML, not necessarily missing",
+      "next_action": "Prioritize high-impact dummy shaders with original renderer slot counts, restore authentic ShaderLab Pass/Property/keyword/sampler and retain same GUID",
+      "evidence": [
+        43127697656,
+        43138326757,
+        43207734641
+      ]
+    },
+    {
+      "id": "P05",
+      "name_ar": "الشيدرات الرسومية الأصلية والـvariants",
+      "scope": {
+        "source_shader_objects": 165,
+        "referenced_shader_targets": 77,
+        "source_particle108_uses": 108,
+        "source_particle108_VS_FS_keyword_pairs": 4,
+        "source_particle108_stage_branches": 8
+      },
+      "source_verified": true,
+      "export_verified": "original_Shader48_to_dummy_export_known",
+      "unity_verified": "isolated_approximate_shaderlab_only",
+      "packaged": "separate_approx_apk_only",
+      "device_verified": false,
+      "status": "authentic_shader_material_binding_blocked",
+      "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors",
+      "missing": "Original Sampler/Texture register mapping and same-instance exported Material/GUID parity; sampler Linear/Repeat currently APPROX in isolated probe, not restored",
+      "next_action": "Prove original per-stage sampler ↔ texture namespace without guessed RDEF or address maps; integrate only if strict shader pass/keyword/material proof passes",
+      "evidence": [
+        43236578305,
+        43237509847,
+        43242496576,
+        43243957499
+      ]
+    },
+    {
+      "id": "P06",
+      "name_ar": "ماء UltimateWater Shader Passes",
+      "scope": {
+        "device_invalid_pass_count": 42229,
+        "device_spectrum_errors": 19191,
+        "device_foam_global_errors": 23038,
+        "expected_min_spectrum_passes": 6,
+        "expected_min_foam_global_passes": 2
+      },
+      "source_verified": "two_original_pass_Foam_stage_packet_experimental",
+      "export_verified": false,
+      "unity_verified": false,
+      "packaged": false,
+      "device_verified": false,
+      "status": "blocked_water_render",
+      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts",
+      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored",
+      "next_action": "First identify which original Shader/Mesh/Material paths produce Spectrum and Foam/Global errors, then test exact required passes on Android Vulkan without placeholder bypass",
+      "evidence": [
+        43263197989
+      ]
+    },
+    {
+      "id": "P07",
+      "name_ar": "ComputeShader/FFT الماء",
+      "scope": {
+        "source_compute_shaders": 9,
+        "device_invalid_kernel_index6": 7263
+      },
+      "source_verified": true,
+      "export_verified": "metadata_and_source_only",
+      "unity_verified": false,
+      "packaged": false,
+      "device_verified": false,
+      "status": "blocked_kernel_identity",
+      "restored_now": "Nine original ComputeShader source objects inventoried and authenticated; prior FFT Vulkan/Unity provenance investigations saved",
+      "missing": "Kernel6 owner identity, exact original kernel order/dispatch semantics, Unity Android compute program, GPU parity",
+      "next_action": "Trace actual Unity log kernel-index 6 to a SHA-authenticated ComputeShader and site before any algorithm rewrite",
+      "evidence": [
+        43114648901,
+        43263197989
+      ]
+    },
+    {
+      "id": "P08",
+      "name_ar": "Unity builtins وTMP/PostFX/Volumetric/Depth Copy",
+      "scope": {
+        "exact_version_unity_builtin_shader_sources": 198,
+        "custom_material_docs_changed_from_dummy": 16
+      },
+      "source_verified": "official_unity_and_vendor_source",
+      "export_verified": "original_export_GUID_preservation_guard",
+      "unity_verified": "partial_old_native_build_only",
+      "packaged": "old_native_snapshot_only",
+      "device_verified": false,
+      "status": "partial_vendor_restoration",
+      "restored_now": "Exact Unity 2021.3.45f2 builtins and TMP/PostFX/Volumetric/Depth Copy restorers incorporated in native workflow with metadata guards",
+      "missing": "Shader parameter Pass/variant parity and all on-device postprocessing, fire, blur and shadows",
+      "next_action": "Validate original per-pass names/indices against runtime errors, restore unsupported families in small verified batches",
+      "evidence": [
+        43138326757,
+        43205543533
+      ]
+    },
+    {
+      "id": "P09",
+      "name_ar": "النار والجسيمات والظلال",
+      "scope": {
+        "source_particle_system_renderer_components": 2141,
+        "particle108_material_slot_uses": 108,
+        "source_lights": 228,
+        "source_reflection_probes": 4
+      },
+      "source_verified": true,
+      "export_verified": "component_graph_only",
+      "unity_verified": false,
+      "packaged": "incomplete_old_native",
+      "device_verified": false,
+      "status": "incomplete_visuals",
+      "restored_now": "Source renderer+particle+light inventories verified; small six-model GFX lab baseline had acceptable colour/shadow samples",
+      "missing": "Fire/particles and actual game shadows original shader passes, blend/cull/depth states and Adreno pixel acceptance",
+      "next_action": "Test original Particle108 small pass on real scene then expand to fire and representative ShadowCaster/deferred",
+      "evidence": [
+        43114648901,
+        43242496576
+      ]
+    },
+    {
+      "id": "P10",
+      "name_ar": "أخطاء Cursor والأصول والتخزين",
+      "scope": {
+        "cursor_rgba32_log_count": 4668,
+        "obb_guid_load_failures": 2,
+        "missing_monoscript_events": 1
+      },
+      "source_verified": "real_owner_LogRaft_only",
+      "export_verified": false,
+      "unity_verified": false,
+      "packaged": "old_native_artifact_only",
+      "device_verified": false,
+      "status": "device_regression_open",
+      "restored_now": "2026-11-12 session symptoms counted and no-lost-local-batch evidence preserved",
+      "missing": "Find original Cursor.SetCursor Texture2D importer; verify OBB GUID load and missing MonoScript cause",
+      "next_action": "Trace original typed source and protect ABI, run targeted Unity tests and owner phone log gate",
+      "evidence": [
+        43263197989
+      ]
+    },
+    {
+      "id": "P11",
+      "name_ar": "الحزم الكاملة والبناء على GitHub",
+      "scope": {
+        "old_signed_apk_bytes": 672892355,
+        "old_obb_bytes": 2320414462,
+        "old_recovery_artifact": 13957022329,
+        "new_full_native_run": 43247161671
+      },
+      "source_verified": "native_old_signed_bytes_verified",
+      "export_verified": "old_full_export",
+      "unity_verified": "old_native_40_scenes_IL2CPP_ARM64",
+      "packaged": "old_snapshot_APK_OBB_XAPK_only",
+      "device_verified": false,
+      "status": "old_signed_xapk_complete_new_native_in_progress",
+      "restored_now": "Recovered previous full signed APK+OBB+XAPK after old disk-full packaging failure; postbuild scratch cleanup fix committed",
+      "missing": "New latest full build finished and actual phone graphics/controls/audio/world acceptance",
+      "next_action": "Watch existing 43247161671, inspect earliest failure if any and fix without duplicate build; if success validate 3 logical payloads and publish",
+      "evidence": [
+        43205543533,
+        43246196803,
+        43247161671
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M0",
+      "status": "complete",
+      "action_ar": "جمع جرد SHA الأصول ونتائج ZIP2 ورسوميات الهاتف الحالية وحفظها بخطة قابلة للفحص",
+      "gate": "Owner CL exact-summary reproduced and plan counts source-backed",
+      "evidence": [
+        43207734641,
+        43263197989
+      ]
+    },
+    {
+      "id": "M1",
+      "status": "active",
+      "action_ar": "استكمال البناء الحديث 43247161671 أو إصلاح فشله دون تكرار البناء الجاري",
+      "gate": "Signed APK+OBB+XAPK from latest commit with consistent SHA/CRC and delivery manifest",
+      "evidence": [
+        43247161671
+      ]
+    },
+    {
+      "id": "M2",
+      "status": "blocked",
+      "action_ar": "استعادة Spectrum وFoam Global Pass الأصلية مع GUID ومعلومات Material/RenderTexture",
+      "gate": "Real Unity import and original material references; each logged index legal; no water invalid-pass spam on new device session",
+      "evidence": [
+        43263197989
+      ]
+    },
+    {
+      "id": "M3",
+      "status": "blocked",
+      "action_ar": "إثبات Compute kernel6 ثم استعادة FFT Vulkan/Adreno",
+      "gate": "Original owner/kernel index and dispatch parity proven; zero known index6 errors on matching real test",
+      "evidence": [
+        43263197989
+      ]
+    },
+    {
+      "id": "M4",
+      "status": "pending",
+      "action_ar": "تفكيك واستعادة عائلات Shader ذات أثر أعلى على 770 Material Dummy",
+      "gate": "Dummy count decreases in same-source export without GUID changes, original Pass/Keyword/sampler and phone colour/shadow/particle checks pass",
+      "evidence": [
+        43242496576
+      ]
+    },
+    {
+      "id": "M5",
+      "status": "pending",
+      "action_ar": "إصلاح Cursor RGBA32 وOBB GUID والفحص الكامل بعد الأجهزة",
+      "gate": "No known critical log errors, representative phone pixels correct, verified offline world and frame/latency stability",
+      "evidence": [
+        43263197989
+      ]
+    }
+  ],
+  "next_session_sequence": [
+    "Read clients/GT/RESTORATION_PLAN_AR.md + RESTORATION_PLAN.json + RESTORE_AR.md + state.json + newest session; verify SHA HEAD and running GitHub Actions before writes.",
+    "Do not trust old status fields whose run timestamps predate an observed SUCCESS/FAIL; update one workstream and matching evidence, then run validation.",
+    "Use immutable ZIP2 SHA and private scratch, no Git LFS; do not change original .meta/GUID or restore a shader by guessing a program.",
+    "Choose next actionable unblocked milestone: latest native status, source-authentic Foam/Spectrum pass, kernel6 identity, then Material Dummy classes.",
+    "Run targeted synthetic plus real source CI where feasible, collect result and limits, update the plan/state/summary/memory/restore in the same cycle.",
+    "New phone results are required for device_verified; a successful GitHub Action is not by itself a gameplay pixel pass."
+  ]
+}
