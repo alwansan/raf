@@ -38,6 +38,35 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SAMPLER_DECLARATION_UNBOUND"):
             rebind_stage(bad,self.program,self.indices,0)
 
+    def test_anonymous_sampler_name_needs_compiled_original_RDEF_source(self):
+        from unittest.mock import patch
+        code=self.code.replace("samplers0", "anonymousSampler")
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING"):
+            rebind_stage(code,self.program,self.indices,0)
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   return_value=((3,0,1),(3,1,1),(2,0,1),(2,1,1))):
+            rebound,counts=rebind_stage(code,self.program,self.indices,0,
+                                        original_dxbc=b"DXBC"+b"0"*40)
+        self.assertIn("sampler_MainTex : register(s0)",rebound)
+        self.assertEqual(counts["original_sampler_registers_mapped"],2)
+
+    def test_different_original_RDEF_sampler_slot_can_never_authorize_fallback(self):
+        from unittest.mock import patch
+        code=self.code.replace("samplers0", "anonymousSampler")
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   return_value=((3,2,1),(3,1,1),(2,0,1),(2,1,1))):
+            with self.assertRaisesRegex(BridgeError,"ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN"):
+                rebind_stage(code,self.program,self.indices,0,
+                             original_dxbc=b"DXBC"+b"0"*40)
+
+    def test_duplicate_original_RDEF_registers_refused(self):
+        from unittest.mock import patch
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   return_value=((3,0,1),(3,0,1),(2,0,1))):
+            with self.assertRaisesRegex(BridgeError,"ORIGINAL_DXBC_RDEF_AMBIGUOUS"):
+                rebind_stage(self.code,self.program,self.indices,0,
+                             original_dxbc=b"DXBC"+b"0"*40)
+
     def test_original_source_registers_source_bound_exact(self):
         t,s=original_names_and_registers(self.program,self.indices)
         self.assertEqual(t,{0:"_MainTex",1:"_NoiseTex"})

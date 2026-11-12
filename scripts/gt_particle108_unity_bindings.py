@@ -25,6 +25,7 @@ from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
 from scripts.w1_stage_zip2_owners import fingerprint
 from scripts.w1_rebind_depth_resources import IDENT
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
+from scripts.t3_particle108_original_dxbc_rdef import source_rdef, BIND_FAMILIES
 
 # SPIRV-Cross HLSL may emit register(sN, space0) while older
 # recovered code uses register(sN). Zero-space is explicit D3D11's
@@ -51,6 +52,7 @@ SAFE_FAILURE=frozenset((
     "ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS", "TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS",
     "TRANSLATOR_SAMPLER_DECLARATION_UNBOUND", "TRANSLATOR_SAMPLER_SPACE_NOT_ZERO",
     "TRANSLATOR_RESOURCE_REGISTER_UNPROVEN", "TRANSLATOR_RESOURCE_COLLISION",
+    "ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN", "ORIGINAL_DXBC_RDEF_AMBIGUOUS",
     "TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING",
     "TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT",
     "TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING",
@@ -116,11 +118,38 @@ def original_names_and_registers(program,name_indices):
     return textures,samplers
 
 
-def rebind_stage(hlsl,program,name_indices,stage):
+def authenticated_original_dxbc_registers(original_dxbc):
+    """Prove original compiled D3D11 sampler/SRV register classes and slots.
+
+    RDEF is parsed from SHA-authenticated original VS/FS source. No vendor
+    descriptor/array order and no inferred sampler policy may replace it.
+    """
+    if type(original_dxbc) is not bytes or len(original_dxbc)<36:
+        raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
+    try:
+        rows=source_rdef(original_dxbc)
+    except (ValueError,TypeError):
+        raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN") from None
+    slots={"s":set(),"t":set()}
+    for kind,index,length in rows:
+        family=BIND_FAMILIES[kind]
+        category="s" if family=="sampler" else ("t" if family=="srv" else None)
+        if category is None:
+            continue
+        for slot in range(index,index+length):
+            if slot in slots[category]:
+                raise BridgeError("ORIGINAL_DXBC_RDEF_AMBIGUOUS")
+            slots[category].add(slot)
+    return slots
+
+
+def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
     if (type(hlsl) is not str or not 0<len(hlsl.encode())<=MAX_HLSL
         or type(stage) is not int or stage not in (0,1)):
         raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
     textures,samplers=original_names_and_registers(program,name_indices)
+    authenticated_rdef=(None if original_dxbc is None else
+                        authenticated_original_dxbc_registers(original_dxbc))
     # Reject a nonzero descriptor space even if ANOTHER sampler happens to
     # have a valid source mapping. This is originally compiled D3D11, not a
     # license to silently rewrite unsupported register spaceN.
@@ -137,12 +166,18 @@ def rebind_stage(hlsl,program,name_indices,stage):
         found=re.search(r'(?:^|_)'+cls+r'(\d+)$',variable)
         if found is None:
             found=re.search(r'(?:texture|sampler)'+cls+r'(\d+)$',variable,re.I)
-        if found is None:
-            raise BridgeError("TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING")
-        if int(found[1])!=num:
-            raise BridgeError("TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT")
         if num not in table:
             raise BridgeError("TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING")
+        if authenticated_rdef is not None and num not in authenticated_rdef[cls]:
+            raise BridgeError("ORIGINAL_DXBC_RDEF_SLOT_UNPROVEN")
+        if found is None:
+            # The translator may anonymize its descriptor variable name.
+            # Accept ONLY the explicit register(class,N) annotation joined
+            # to BOTH original Shader m_TextureParams and original DXBC RDEF.
+            if authenticated_rdef is None:
+                raise BridgeError("TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING")
+        elif int(found[1])!=num:
+            raise BridgeError("TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT")
         if num in used[cls] or (variable in mapping and mapping[variable]!=table[num]):
             raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
         mapping[variable]=table[num]
@@ -225,7 +260,8 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
                     raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
                 text=path.read_text(encoding="utf-8")
                 fixed,stats=rebind_stage(text,p["progVertex" if stage==1 else "progFragment"],
-                                         p["m_NameIndices"],stage)
+                                         p["m_NameIndices"],stage,
+                                         original_dxbc=vs if stage==1 else fs)
                 pieces[stage]=fixed
                 counts.update(stats)
             model=variants.source_models(vs,fs)
