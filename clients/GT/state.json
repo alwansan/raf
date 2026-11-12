@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_NATIVE100_SIGNED_XAPK_DELIVERED_OLD_SNAPSHOT_NEW_NATIVE_RUN_ACTIVE_DEVICE_GRAPHICS_ERRORS_REPRODUCED",
+  "status": "GT_CHAT21_RESTORATION_LEDGER_AND_DEVICE_LOG_GUARD_UPDATED_NATIVE_NEW_RUNNING_WATER_SHADERS_UNRESOLVED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-native100-signed-lossless-recovery-and-latest-build-chat-19.md",
-  "next_action": "Native100 original source c8680938 signed APK672892355 OBB2320414462 recovered as verified lossless APK+OBB+XAPK 3 files/7 transport parts in run43246196803 success artifact13957022329 (5,986,632,846 bytes); device unverified. New latest build 43247161671 started at 5b3ddd67 (requested_from_sha a1de8f53 with post-Unity Library cleanup). Inspect actual job and final signed output, do not duplicate active build. Original Particle108 Material sampler parity remains blocked by absent RDEF/serialized m_Samplers; 770 Dummy Materials still pending. ZIP2 pin and no LFS.",
+  "latest_session": "clients/GT/sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md",
+  "next_action": "READ clients/GT/RESTORE_AR.md then clients/GT/RESTORATION_PLAN_AR.md + RESTORATION_PLAN.json; run scripts.gt_restoration_plan_check. Current newer full native Actions 43247161671 remains Unity Editor import/compile at latest observation, do not duplicate while active. Old signed native100 recovery 43246196803 is old snapshot only. Critical visual blockers: 770 postvendor custom Material docs still Dummy; Spectrum 19,191 + FoamGlobal 23,038 invalid pass logs; kernel index6 7,263 with owner identity unproven; Raft white in CL images. Restore original shader pass/Material GUID provenance, prove kernel6 before FFT rewrite, and test pixels on Adreno. Continue from Chat21 session, preserve ZIP2 pin/no LFS and all GUIDs.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -583,5 +583,47 @@
     "source_free_gate_tests": "tests/test_gt_device_graphics_acceptance.py",
     "real_device_snapshot_evidence": "clients/GT/evidence/20261112_cl_device_graphics_failure_receipt.json",
     "session_path": "clients/GT/sessions/20261112-GT-CL-device-graphics-failure-chat-20.md"
+  },
+  "restoration_plan": {
+    "schema": 1,
+    "human_path": "clients/GT/RESTORATION_PLAN_AR.md",
+    "machine_path": "clients/GT/RESTORATION_PLAN.json",
+    "source_verifier": "scripts/gt_restoration_plan_check.py",
+    "source_verifier_tests": "tests/test_gt_restoration_plan_check.py",
+    "ci_workflow": ".github/workflows/raft-gt-restoration-plan-gate.yml",
+    "workstream_count": 12,
+    "milestone_count": 6,
+    "source_authentication_completed": true,
+    "whole_game_device_pixel_acceptance_completed": false,
+    "custom_material_docs_remaining_dummy": 770,
+    "new_full_native_run": 43247161671,
+    "new_full_native_status_at_last_check": "in_progress_Unity_Editor",
+    "last_completed_phone_log_gate": "KNOWN_DEVICE_LOG_GATE_REJECTED",
+    "continuation_protocol": "Update plan JSON + Arabic + state + MEMORY + SUMMARY + RESTORE + sessions after each proved batch; never claim device proof on CI alone"
+  },
+  "proofs_20261112_chat21": {
+    "origin": "chat",
+    "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_owners_authenticated": 82,
+    "source_graphics_files_authenticated": 134,
+    "restoration_plan_workstreams": 12,
+    "restoration_plan_milestones": 6,
+    "restoration_plan_machine_path": "clients/GT/RESTORATION_PLAN.json",
+    "restoration_plan_human_path": "clients/GT/RESTORATION_PLAN_AR.md",
+    "source_only_plan_validation_workflow_added": true,
+    "source_only_plan_CI_result": "check_GitHub_Actions_after_final_commit",
+    "device_log_missing_category_false_success_fix_commit": "33a9beac4e858d98dcbf84f0223f143f9949b6cc",
+    "device_log_missing_category_regression_test_commit": "c712a9a93fa9aff154f590cfd416b222bd13b170",
+    "device_log_regression_real_CL_run": 43266159804,
+    "device_log_regression_real_CL_conclusion": "success",
+    "source_sample_device_water_failing": true,
+    "native_latest_run": 43247161671,
+    "native_latest_run_in_progress": true,
+    "still_dummy_custom_material_documents": 770,
+    "original_Adreno_full_pixels_verified": false,
+    "new_shader_restoration_in_this_chat": false,
+    "original_assets_GUID_or_meta_changed": false,
+    "no_LFS": true,
+    "session_path": "clients/GT/sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md"
   }
 }
