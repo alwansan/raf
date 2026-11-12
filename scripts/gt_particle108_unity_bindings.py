@@ -35,6 +35,8 @@ SAFE_FAILURE=frozenset((
     "TRANSLATOR_SOURCE_READ_FAILED", "ORIGINAL_STAGE_LAYOUT_UNSUPPORTED",
     "ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING", "ORIGINAL_NAME_INDEX_TABLE_MISSING",
     "ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED", "ORIGINAL_NAME_INDEX_INVALID",
+    "ORIGINAL_NAME_INDEX_VALUE_TYPE", "ORIGINAL_NAME_INDEX_KEY_TYPE",
+    "ORIGINAL_NAME_INDEX_COLLISION", "ORIGINAL_NAME_INDEX_NONIDENTIFIER",
     "ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING", "ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID",
     "ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED",
 ))
@@ -56,8 +58,14 @@ def original_names_and_registers(program,name_indices):
         if not isinstance(pair,(tuple,list)) or len(pair)!=2:
             raise BridgeError("ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED")
         name,index=pair
-        if type(index) is not int or type(name) is not str or index in names or not IDENT.fullmatch(name):
-            raise BridgeError("ORIGINAL_NAME_INDEX_INVALID")
+        if type(index) is not int:
+            raise BridgeError("ORIGINAL_NAME_INDEX_VALUE_TYPE")
+        if type(name) is not str:
+            raise BridgeError("ORIGINAL_NAME_INDEX_KEY_TYPE")
+        if index in names:
+            raise BridgeError("ORIGINAL_NAME_INDEX_COLLISION")
+        if not IDENT.fullmatch(name):
+            raise BridgeError("ORIGINAL_NAME_INDEX_NONIDENTIFIER")
         names[index]=name
     raw=common.get("m_TextureParams")
     if type(raw) is not list: raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING")
