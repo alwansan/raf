@@ -61,6 +61,13 @@ namespace RaftGT
             {
                 if (Application.unityVersion != "2021.3.45f2")
                     throw new InvalidOperationException("UnsupportedUnityEditorVersion");
+                // A runner-private numeric variant selector. No source keywords,
+                // original Material GUID or shader bytecode are embedded here.
+                string variant = File.ReadAllText(Path.Combine(
+                    root, "GTPrivateSpectrumVariant.txt")).Trim();
+                if (variant != "0" && variant != "1")
+                    throw new InvalidOperationException("InvalidPrivateVariantSelector");
+                result.isolatedVariantIndex = variant == "1" ? 1 : 0;
                 PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android, false);
                 PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,
                     new[] { GraphicsDeviceType.Vulkan });
@@ -89,15 +96,17 @@ namespace RaftGT
                     throw new InvalidOperationException("OriginalSevenPassTopologyNotImported");
                 string target = Path.Combine(safeDir, "original-private-spectrum-bundle");
                 Directory.CreateDirectory(target);
+                string bundleName = "gt-private-spectrum-source-variant" +
+                    result.isolatedVariantIndex;
                 var manifest = BuildPipeline.BuildAssetBundles(target,
                     new[] { new AssetBundleBuild {
-                        assetBundleName = "gt-private-spectrum-source-variant0",
+                        assetBundleName = bundleName,
                         assetNames = new[] { asset }
                     }},
                     BuildAssetBundleOptions.ForceRebuildAssetBundle |
                     BuildAssetBundleOptions.StrictMode,
                     BuildTarget.Android);
-                var bundle = Path.Combine(target, "gt-private-spectrum-source-variant0");
+                var bundle = Path.Combine(target, bundleName);
                 result.privateAndroidVulkanBundleBuilt =
                     manifest != null && File.Exists(bundle);
                 result.privateAndroidVulkanShaderBundleBytes = File.Exists(bundle)
@@ -113,7 +122,9 @@ namespace RaftGT
                     !ShaderUtil.ShaderHasError(shader);
                 if (result.editorShaderImportAndCompilationProven)
                 {
-                    result.status = "PRIVATE_ORIGINAL_SPECTRUM_VARIANT0_SEVEN_PASS_UNITY_ANDROID_VULKAN_BUNDLE_COMPILED";
+                    result.status = "PRIVATE_ORIGINAL_SPECTRUM_VARIANT" +
+                        result.isolatedVariantIndex +
+                        "_SEVEN_PASS_UNITY_ANDROID_VULKAN_BUNDLE_COMPILED";
                     exit = 0;
                 }
             }
