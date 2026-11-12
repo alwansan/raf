@@ -31,6 +31,10 @@ def check(project:Path,original:dict,trace:dict)->dict:
     source=exact_targets(original,trace,metas)
     geometry=audit_arrays(original,trace,metas)
     target_guids={entry[2] for entry in source.values()}
+    zero_source_pixel_guids={entry[2] for key,entry in source.items()
+                             if original[key].get("original_stream_size")==0}
+    if len(zero_source_pixel_guids)!=1:
+        raise InventoryError("original_zero_source_Texture2DArray_count_changed")
     counter=Counter()
     used=set()
     for file in (project/"Assets").rglob("*.mat"):
@@ -42,6 +46,8 @@ def check(project:Path,original:dict,trace:dict)->dict:
                 if guid not in target_guids:
                     continue
                 counter["array_material_ref_slots_seen"]+=1
+                if guid in zero_source_pixel_guids:
+                    counter["references_to_source_zero_pixel_array"]+=1
                 if fid!=18700000 or kind not in (2,3):
                     counter["wrong_original_class187_importer_pointer"]+=1
                 else:
@@ -63,6 +69,9 @@ def check(project:Path,original:dict,trace:dict)->dict:
         "total_original_array_derived_material_refs":counter["array_material_ref_slots_seen"],
         "exact_original_class187_array_material_refs":counter["exact_original_class187_material_refs"],
         "distinct_source_array_guids_referenced_by_materials":len(used),
+        "source_zero_pixel_original_array_refs":
+            counter["references_to_source_zero_pixel_array"],
+        "source_zero_pixel_array_runtime_generated_content_verified":False,
         "array_png_importer_source_grid_fidelity_passed":
             geometry["all_array_sources_importer_grid_and_png_geometry_match"],
         "counts":dict(sorted(counter.items())),
