@@ -1,0 +1,29 @@
+{
+  "schema": "GT_REAL_EXTERNAL_FONT_MATERIAL_DIAGNOSTIC_SAFE_V1",
+  "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "external_first_real_attempt": {
+    "run": 43154972647,
+    "workflow_conclusion": "success",
+    "optional_external_step_conclusion": "failure",
+    "error_code": "original_exported_material_identity_missing",
+    "new_accepted_external_bindings": 0
+  },
+  "patches": [
+    {
+      "commit": "4d4ea2144f7a583cf548f331f1262982f4f351db",
+      "synthetic_ci_run": 43156702219
+    },
+    {
+      "commit": "6faee64ea00e955e77e4462891982e83794c7d06",
+      "synthetic_ci_run": 43156857328
+    }
+  ],
+  "pending_real_external_run": 43156857287,
+  "pending_real_original_50_BC3_layer_run": 43155325887,
+  "pending_native_APK_OBB_XAPK_run": 43155854860,
+  "unproven_original_external_slots_prior": 416,
+  "all_external_links_proven": false,
+  "device_GPU_colors_proven": false,
+  "source_changed": false,
+  "git_lfs_used": false
+}
