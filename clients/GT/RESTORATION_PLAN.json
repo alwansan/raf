@@ -190,7 +190,10 @@
         "device_spectrum_errors": 19191,
         "device_foam_global_errors": 23038,
         "expected_min_spectrum_passes": 6,
-        "expected_min_foam_global_passes": 2
+        "expected_min_foam_global_passes": 2,
+        "source_authenticated_spectrum_passes": 7,
+        "source_authenticated_spectrum_vs_fs_stage_variants": 28,
+        "source_authenticated_foam_passes": 2
       },
       "source_verified": "two_original_pass_Foam_stage_packet_experimental",
       "export_verified": false,
@@ -198,11 +201,12 @@
       "packaged": false,
       "device_verified": false,
       "status": "blocked_water_render",
-      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts",
-      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored",
-      "next_action": "First identify which original Shader/Mesh/Material paths produce Spectrum and Foam/Global errors, then test exact required passes on Android Vulkan without placeholder bypass",
+      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.",
+      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).",
+      "next_action": "Reconstruct original 7-pass Spectrum topology (28 genuine stage variants), original 2-pass Foam and verify same original GUID/Material/Sampler/RT mappings in Unity Android; do not treat log-only minimum 6 as full Spectrum parity.",
       "evidence": [
-        43263197989
+        43263197989,
+        41920232173
       ]
     },
     {
@@ -339,10 +343,11 @@
     {
       "id": "M2",
       "status": "blocked",
-      "action_ar": "استعادة Spectrum وFoam Global Pass الأصلية مع GUID ومعلومات Material/RenderTexture",
-      "gate": "Real Unity import and original material references; each logged index legal; no water invalid-pass spam on new device session",
+      "action_ar": "استعادة Spectrum الأصلية ذات 7 Passes/28 variant stages وFoam Global ذات 2 Pass، مع بقاء الحد الأدنى المرصود على الهاتف Spectrum>=6/Foam>=2 شرطاً منفصلاً غير كافٍ",
+      "gate": "Real Unity import of exactly original 7 Spectrum passes and 2 Foam passes, original Shader GUID and Material/RenderTexture bindings, no invalid pass calls on a new device session; no placeholders or guesswork",
       "evidence": [
-        43263197989
+        43263197989,
+        41920232173
       ]
     },
     {
