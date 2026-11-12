@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_ALL_134_REAL_ZIP2_GRAPHICS_SOURCE_FILES_RESTORED_NATIVE_PIPELINE_INSTALLED_EXPORT_SMOKE_RUNNING",
+  "status": "GT_FULL_ZIP2_134_SOURCE_RESTORED_REAL_ASSETRIPPER_EXPORT_PASSED_MATERIAL_TEXTURE_GUID_GUARD_REJECTED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -84,7 +84,24 @@
         "device_audio_verified": false
       },
       "native_input_guard_run": 43125034578,
-      "actual_assetripper_export_smoke_run": 43125542125
+      "actual_assetripper_export_smoke_run": 43125542125,
+      "real_assetripper_export": {
+        "run": 43125542125,
+        "artifact_id": 13902689523,
+        "successful": true,
+        "source_zip2_original_files": 134,
+        "original_managed_providers": 151,
+        "original_managed_layout_mismatch_lines": 0,
+        "original_managed_unknown_backend": false,
+        "unity_scene_files": 40,
+        "material_yaml_files": 1536,
+        "texture_image_files": 4003,
+        "asset_files": 8372,
+        "meta_files": 18368,
+        "material_to_texture_export_guid_guard": "rejected",
+        "material_to_texture_export_guid_failure_code": "pending_targeted_recapture_run_43126735391"
+      },
+      "targeted_export_material_guid_guard_repeat_run": 43126735391
     },
     "totals": {
       "all_owned_objects": 1209137,
@@ -134,12 +151,13 @@
       "exported_unity_guid_and_material_links_verified": false,
       "android_build_and_device_verified": false,
       "shader_pass_variant_compute_kernel_totals_known": false,
-      "source_stream_payloads_scope": "source listed original 48 streams, all 134 original graphics files SHA256; external Texture2D extents checked; native output GPU still unverified"
+      "source_stream_payloads_scope": "source listed original 48 streams, all 134 original graphics files SHA256; external Texture2D extents checked; native output GPU still unverified",
+      "actual_assetripper_export_completed": true
     },
     "project_baseline_sha": "cd96edc1ce0059b5737c017b707a8f79cb4da29d",
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "sessions/20261112-GT-full-original-graphics-chat-04.md",
-  "next_action": "GT real full original source restoration 134/134, 7,532,909,297 bytes proven CI 43124662931 and native importer input YAML installed; inspect isolated actual full AssetRipper exporter job 43125542125, fix export errors if present, prove same-instance .meta/GUID + material/texture and Mesh links from export, then restore targeted Shader/Pass and evaluate full Android build only via T team gates. Original audio MasterBank 101600960 bytes independently proven from ZIP2 CI 43125353255. Never use Git LFS acquisition."
+  "next_action": "Full 134 source files restored and actual AssetRipper EXPORT has succeeded CI 43125542125: 40 scenes,1536 .mat,4003 textures,8372 .asset,18368 .meta,151 managed; BUT B46 export Material→Texture GUID guard exited 2. Diagnose exact safe failure code in rerun 43126735391, then repair actual exported graph while preserving same-instance original tracing and .meta GUIDs. No Android or Vulkan/GLES proof or native XAPK. Use ZIP2 only."
 }
