@@ -30,6 +30,10 @@ on:
       - tests/test_gt_validate_bc3_array_slice_order.py
       - scripts/gt_verify_original_array_material_refs.py
       - tests/test_gt_verify_original_array_material_refs.py
+      - scripts/verify_exported_material_texture_links.py
+      - tests/test_verify_exported_material_texture_links.py
+      - tests/test_gt_native_array_import_contract.py
+      - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -70,3 +74,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
           python3 -m unittest discover -s tests -p test_gt_validate_bc3_array_slice_order.py -v
           python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
+          python3 -m unittest discover -s tests -p test_gt_native_array_import_contract.py -v
