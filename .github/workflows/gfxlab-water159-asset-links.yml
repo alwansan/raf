@@ -2,7 +2,9 @@ name: GFX159 ZIP2 original water asset owner links
 on:
   push:
     branches: [experiment/android-graphics-rootcause]
-    paths: [.github/workflows/gfxlab-water159-asset-links.yml]
+    paths:
+      - .github/workflows/gfxlab-water159-asset-links.yml
+      - gfxlab/tools/water_scene_links.py
 permissions:
   contents: read
 concurrency:
