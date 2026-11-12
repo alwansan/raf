@@ -1,0 +1,192 @@
+name: GT full ZIP2 original Raft AssetRipper exporter integration (no APK)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-gt-original-export-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gt-original-zip2-real-export-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  real-original-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            android-port/Experiments/ExportLineage
+            Raft/Raft_Data/Managed
+            tests
+      - name: Check disk for full 7.53GB Raft source and actual AssetRipper export
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 47185920
+      - name: Immutable full Raft graphics ZIP2 checkout, never Git LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .gt-zip2
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/**
+      - name: Stage exact original managed providers for full AssetRipper import
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.stage_export_managed_providers \
+            --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --destination "$RUNNER_TEMP/gt-input/Raft_Data/Managed"
+          test -s "$RUNNER_TEMP/gt-input/Raft_Data/Managed/Assembly-CSharp.dll"
+          test ! -e "$RUNNER_TEMP/gt-input/Raft_Data/Managed/PlayFab_o.dll"
+      - name: Restore complete 134 SHA-authentic original graphics and scenes to real exporter input
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_zip2_export_resources \
+            --zip2-checkout .gt-zip2 \
+            --input-root "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --profile full \
+            --byte-budget 10000000000 \
+            --report "$RUNNER_TEMP/gt-export-original-restore.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-export-original-restore.json"
+          result=json.loads(p.read_text())
+          assert result["original_resources_verified"]==134
+          assert result["original_bytes_materialized_or_reused"]==7532909297
+          assert result["git_lfs_used"] is False
+          assert result["original_payload_sha256_and_size_verified"]
+          print("GT_REAL_EXPORT_INPUT_READY originalFiles=134 originalBytes=7532909297 managed=true LFS=false")
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: Source
+      - name: Instrument and publish exact native-pipeline AssetRipper for same-instance lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/gt-ar" \
+            > "$RUNNER_TEMP/gt-public-tool-build.log" 2>&1 || {
+              tail -30 "$RUNNER_TEMP/gt-public-tool-build.log"
+              exit 1
+            }
+          dotnet "$RUNNER_TEMP/gt-ar/ExportLineage.dll" --probe-tool \
+            > "$RUNNER_TEMP/gt-tool-smoke.log" 2>&1 || {
+              tail -30 "$RUNNER_TEMP/gt-tool-smoke.log"
+              exit 1
+            }
+      - name: Run genuine exporter on fully restored Raft scene/texture/mesh streams
+        env:
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-private-export-lineage.json
+          DOTNET_PROCESSOR_COUNT: '2'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s dotnet "$RUNNER_TEMP/gt-ar/ExportLineage.dll" \
+            "$RUNNER_TEMP/gt-input" "$RUNNER_TEMP/gt-project" --full-install \
+            > "$RUNNER_TEMP/gt-export-log.private.txt" 2>&1 || {
+              python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-export-log.private.txt"
+          s=p.read_text(errors="replace")
+          d={"export_completed":False,
+             "has_missing_assembly":"Could not load file or assembly" in s,
+             "loading_started":"Processing loaded assets" in s,
+             "export_started":"Starting export" in s,
+             "managed_assembly_initialization_failure":"Could not initialize assembly manager" in s,
+             "known_exception_types":len(set(re.findall(r'(?:System|AssetRipper)\.[a-zA-Z.]+Exception',s))),
+             "log_bytes":len(s.encode())}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-export-failure-safe.json").write_text(json.dumps(d,sort_keys=True,indent=2)+"\n")
+          print("GT_EXPORTER_FAILED_AGGREGATE "+json.dumps(d,sort_keys=True))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/gt-private-export-lineage.json"
+          test -d "$RUNNER_TEMP/gt-project/ExportedProject/Assets"
+          test -d "$RUNNER_TEMP/gt-project/ExportedProject/ProjectSettings"
+          python3 -m scripts.verify_assetripper_script_import \
+            --log "$RUNNER_TEMP/gt-export-log.private.txt"
+      - name: Measure real exported Unity files and source link integrity without game identifiers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import collections,json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"gt-project/ExportedProject/Assets"
+          c=collections.Counter(p.suffix.lower() for p in root.rglob('*') if p.is_file())
+          d={"schema":"GT_FULL_ORIGINAL_ASSERIPPER_EXPORT_REAL_V1",
+             "exporter_completed":True,
+             "scene_yaml_files":c[".unity"],"material_yaml_files":c[".mat"],
+             "texture_image_files":sum(c[x] for x in (".png",".tga",".dds",".jpg",".jpeg",".exr",".hdr")),
+             "mesh_asset_files":c[".asset"],"unity_meta_files":c[".meta"],
+             "managed_originals_present":True,
+             "no_git_lfs":True,"android_gpu_render_verified":False}
+          (Path(os.environ["RUNNER_TEMP"])/"gt-real-export-aggregate.json").write_text(json.dumps(d,indent=2,sort_keys=True)+"\n")
+          print("GT_REAL_FULL_ORIGINAL_EXPORT "+json.dumps(d,sort_keys=True))
+          PY
+      - name: Run independent Material-to-Texture exported GUID pointer guard
+        id: gt_export_links
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m scripts.verify_exported_material_texture_links \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            > "$RUNNER_TEMP/gt-export-texture-guard.private.txt"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          s=(Path(os.environ["RUNNER_TEMP"])/"gt-export-texture-guard.private.txt").read_text()
+          # Guard emits only aggregate metadata: no source IDs, object names or payloads.
+          lines=[x for x in s.splitlines() if x.startswith("RAFT_B46_TEXTURE_LINKS ")]
+          if len(lines)!=1:
+              raise SystemExit("Missing aggregate Material-to-Texture guard result")
+          result=json.loads(lines[0].split(" ",1)[1])
+          (Path(os.environ["RUNNER_TEMP"])/"gt-export-texture-guard-safe.json").write_text(
+              json.dumps(result,sort_keys=True,indent=2)+"\n")
+          print("GT_EXPORTED_MATERIAL_TEXTURE_LINKS status="+result.get("status","UNKNOWN"))
+          PY
+      - name: Publish aggregate evidence only, never original scenes/meshes/export/trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-real-original-export-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/gt-export-original-restore.json
+            ${{ runner.temp }}/gt-real-export-aggregate.json
+            ${{ runner.temp }}/gt-export-failure-safe.json
+            ${{ runner.temp }}/gt-export-texture-guard-safe.json
+          retention-days: 14
+          if-no-files-found: ignore
