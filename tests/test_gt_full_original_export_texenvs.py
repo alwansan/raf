@@ -103,6 +103,28 @@ class GTFullSourceExportTests(unittest.TestCase):
             inspect(self.source,self.manifest,self.project,self.trace,
                 loader=fake_loader,exported_parser=lambda project:self.exported)
 
+    def test_full_ci_safe_failure_receipt_contains_phase_not_original_identity(self):
+        from scripts.gt_full_original_export_texenvs import public_failure
+        result=public_failure(
+            ValueError("Original/export Material identities do not match same-instance trace"),
+            "source_export_pointer_join")
+        self.assertEqual(result["status"],"INCONCLUSIVE")
+        self.assertEqual(result["failed_phase"],"source_export_pointer_join")
+        self.assertFalse(result["exported_assets_or_meta_modified"])
+        secret=public_failure(ValueError("private_raft_material_or_guid=abcdef"),
+                              "exported_material_yaml")
+        self.assertEqual(secret["reason_code"],"unclassified_ValueError")
+        self.assertNotIn("abcdef",json.dumps(secret))
+
+    def test_full_ci_phase_marker_tracks_actual_source_and_export_pipeline(self):
+        phases=[]
+        inspect(self.source,self.manifest,self.project,self.trace,
+            loader=fake_loader,exported_parser=lambda project:self.exported,
+            phase=phases.append)
+        self.assertEqual(phases,["original_authentication",
+            "private_same_instance_trace","exported_material_yaml",
+            "source_export_pointer_join"])
+
     def test_source_selection_rejects_duplicates(self):
         with self.assertRaises(InventoryError):
             original(self.source,self.manifest,selected=[OWNERS[0],OWNERS[0]],
