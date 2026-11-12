@@ -28,7 +28,7 @@ concurrency:
 jobs:
   original-private-spectrum-pairs:
     runs-on: ubuntu-24.04
-    timeout-minutes: 80
+    timeout-minutes: 110
     environment: UNITY_LICENSE
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
@@ -183,7 +183,8 @@ jobs:
             --editor android-port/Experiments/GT/Editor/OriginalSpectrumSevenPassValidation.cs \
             --project "$GITHUB_WORKSPACE/gt-private-spectrum-unity" \
             --out "$RUNNER_TEMP/gt-spectrum-private-unity-staging-safe.json" \
-            --diagnostic-stage-buffers
+            --diagnostic-stage-buffers \
+            --variant-index 0
       - name: Unity 2021.3.45f2 private stage-disjoint CBuffer diagnosis for authentic 7pass Spectrum Android Vulkan
         id: gt_spectrum_real_unity
         uses: game-ci/unity-builder@v4
@@ -236,6 +237,68 @@ jobs:
               raise SystemExit("GT_SPECTRUM_UNITY_PRIVATE_BUNDLE_EMPTY")
           print("GT_SPECTRUM_UNITY_ANDROID_VULKAN_PRIVATE realUnity2021=true originalSevenPasses=true bundleBuilt=true originalGameModified=false originalKeywordAndMaterialParity=false phonePixels=false")
           PY
+      - name: Stage independently authenticated original Spectrum variant1 in second disposable Unity project
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_spectrum_private_unity_project \
+            --candidate "$RUNNER_TEMP/gt-spectrum-seven-pass-shaderlab-private/original-spectrum-7pass-variant-1.shader" \
+            --manifest "$RUNNER_TEMP/gt-spectrum-private-shaderlab-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalSpectrumSevenPassValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-private-spectrum-unity-variant1" \
+            --out "$RUNNER_TEMP/gt-spectrum-private-unity-variant1-staging-safe.json" \
+            --diagnostic-stage-buffers \
+            --variant-index 1
+      - name: Unity 2021.3.45f2 real Android Vulkan original Spectrum variant1 isolated ShaderBundle
+        id: gt_spectrum_variant1_real_unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-private-spectrum-unity-variant1
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalSpectrumSevenPassValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Fail closed on Unity Android Spectrum variant1 shader warnings/errors
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("gt-private-spectrum-unity-variant1/ProbeResults/gt-spectrum-sevenpass-unity-safe.json")
+          if not p.is_file() or not 0 < p.stat().st_size < 65536:
+              raise SystemExit("GT_SPECTRUM_VARIANT1_REAL_UNITY_REPORT_MISSING")
+          r=json.loads(p.read_text())
+          expected={
+              "status":"PRIVATE_ORIGINAL_SPECTRUM_VARIANT1_SEVEN_PASS_UNITY_ANDROID_VULKAN_BUNDLE_COMPILED",
+              "unityVersion":"2021.3.45f2",
+              "originalSourcePasses":7,
+              "isolatedVariantIndex":1,
+              "shaderPassCount":7,
+              "shaderErrorCount":0,
+              "importedPrivateShader":True,
+              "privateAndroidVulkanBundleBuilt":True,
+              "editorShaderImportAndCompilationProven":True,
+              "sourceOriginalKeywordRoutingProven":False,
+              "originalMaterialGuidOrSamplerBindingProven":False,
+              "originalAndroidGameModified":False,
+              "gamePlayerBuilt":False,
+              "AdrenoPixelsVerified":False,
+              "originalShaderBytecodeOrNamesPublished":False
+          }
+          for key,value in expected.items():
+              if type(r.get(key)) is not type(value) or r[key]!=value:
+                  raise SystemExit("GT_SPECTRUM_VARIANT1_UNITY_GATE_"+key)
+          if type(r.get("privateAndroidVulkanShaderBundleBytes")) is not int or r["privateAndroidVulkanShaderBundleBytes"] <= 0:
+              raise SystemExit("GT_SPECTRUM_VARIANT1_ANDROID_BUNDLE_MISSING")
+          print("GT_SPECTRUM_VARIANT1_UNITY_PRIVATE_OK editor2021=true originalPasses=7 shaderErrors=0 originalRuntimeKeywordParity=false MaterialGuidBinding=false AndroidPhonePixels=false")
+          PY
       - name: Keep only sanitized shader-source and real Unity numeric result; never candidate or bundle
         if: always()
         uses: actions/upload-artifact@v4
@@ -244,6 +307,8 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-spectrum-private-unity-staging-safe.json
             gt-private-spectrum-unity/ProbeResults/gt-spectrum-sevenpass-unity-safe.json
+            ${{ runner.temp }}/gt-spectrum-private-unity-variant1-staging-safe.json
+            gt-private-spectrum-unity-variant1/ProbeResults/gt-spectrum-sevenpass-unity-safe.json
           if-no-files-found: ignore
           retention-days: 7
       - name: Remove SHA-original payloads and all translated private shader programs
@@ -261,3 +326,5 @@ jobs:
             "$GITHUB_WORKSPACE/gt-spectrum-zip2"
           test "$GITHUB_WORKSPACE" = "$PWD"
           sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-spectrum-unity"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-private-spectrum-unity-variant1"
+          rm -f -- "$RUNNER_TEMP/gt-spectrum-private-unity-variant1-staging-safe.json"
