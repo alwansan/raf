@@ -39,7 +39,9 @@
     "original_spectrum_unity_unrecognized_sampler_failure": 43277618651,
     "original_spectrum_source_authenticated_sampler_unity_trial": 43279249696,
     "original_spectrum_private_variant0_actual_Unity_2021_android_vulkan_success": 43279249696,
-    "original_spectrum_private_variant1_Unity_2021_trial": 43282759870
+    "original_spectrum_private_variant1_Unity_2021_trial": 43282759870,
+    "original_spectrum_private_variant1_false_green_unity": 43282759870,
+    "original_spectrum_private_variant1_uniform_block_diag_and_hard_console_gate": 43285251243
   },
   "workstreams": [
     {
@@ -257,7 +259,23 @@
         "original_spectrum_variant1_compilation_proven": false,
         "original_spectrum_original_runtime_keyword_routing_proven": false,
         "original_spectrum_original_game_material_guid_binding_proven": false,
-        "original_spectrum_original_phone_pixel_parity_proven": false
+        "original_spectrum_original_phone_pixel_parity_proven": false,
+        "original_spectrum_variant1_first_unity_actions_run": 43282759870,
+        "original_spectrum_variant1_first_unity_actions_overall_conclusion": "success_but_false_green_hidden_glsl_link",
+        "original_spectrum_variant1_first_unity_shader_util_error_count": 0,
+        "original_spectrum_variant1_first_unity_imported_passes": 7,
+        "original_spectrum_variant1_first_unity_bundle_bytes": 12418,
+        "original_spectrum_variant1_first_unity_console_glsl_link_errors": 12,
+        "original_spectrum_variant1_first_unity_console_internal_variant_failures": 12,
+        "original_spectrum_variant1_first_unity_acceptance": false,
+        "original_spectrum_variant1_hidden_link_error_symbol": "cb4_struct",
+        "original_spectrum_variant1_CB4_private_stage_rename_CI": 43285251243,
+        "original_spectrum_variant1_CB4_private_stage_rename_unity_true_result_at_last_check": "in_progress_Unity2021",
+        "original_spectrum_secondary_final_console_gate_implemented": true,
+        "original_spectrum_secondary_final_console_gate_real_CI": 43285251243,
+        "original_spectrum_secondary_final_console_gate_validated_end_to_end": false,
+        "original_spectrum_original_game_shader_restored": false,
+        "original_spectrum_original_phone_pixels_restored": false
       },
       "source_verified": "two_original_pass_Foam_stage_packet_experimental",
       "export_verified": false,
@@ -265,9 +283,9 @@
       "packaged": false,
       "device_verified": false,
       "status": "blocked_water_render",
-      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.; implemented read-only Editor import probe for exact 7 Spectrum vs 2 Foam Pass counts, detects one-pass dummy and duplicate/traversing asset paths; synthetic CSharp tests passed.; Real authenticated ZIP2 original Spectrum paired-stage Vulkan1.1 CI 43273276394 SUCCESS: 7/7 passes, 14 source VS/FS pairs, 28/28 compiled stage variants, 13 distinct original stage translations, all scratch-private.; Authenticated 7 distinct original render states and 6 original Shader properties (2 texture/3 float/1 vector) via ZIP2; privately assembled 2 seven-pass ShaderLab STRUCTURAL source candidates (14 total pass envelopes) preserving 28 original stage references; real CI 43274729958 SUCCESS, no game asset install.; Unity Editor 2021 imported 7/7 private Spectrum passes and emitted 6,095-byte Android Vulkan bundle on CI43275506146, but two shader errors forced failure.; Source-original DXBC+Unity numeric sampler/texture stage name mapping was accepted by source gate in 43279249696; original filter/wrap and game Material binding still unverified.; CI43279249696 SUCCESS: source-authentic 26 Texture and 26 Sampler HLSL symbolic registrations over 28 stages, private original Spectrum variant0 imported seven passes in Unity2021.3.45f2 Android Vulkan, 0 shader errors, compiled 12,079-byte private ShaderBundle. This is exact isolated variant0, not original runtime/game pixel.",
-      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).; actual Unity Editor 2021.3.45f2 import probe has not run on a new native candidate; source and GUID/Material parity still unverified.; Original 7-pass ShaderLab render states, source-authentic property/keyword selection, sampler/CB0/Material original GUID binding, Unity2021 actual Shader import and Adreno pixels remain unproven.; Still two isolated compile-only candidates rather than one original runtime keyword-routed Shader; Unity2021 Android Vulkan private import running or queued, and actual Material/RT/CB/Sampler identity plus phone rendering remain unverified.; Actual Unity source-derived variant0 fails cross-stage uniform cbuffer alias vec4[4] vs vec4[5]/[7]. Private-only reversible stage-disjoint symbol repair launched in CI43276622833, no production fix claimed.; Private stage-buffer-isolated Unity 43277618651 failed 2 Shader errors: samplers0 and samplers1 unrecognized (7Pass imported/bundle6092). New strict source names retry 43279249696 reached Unity, unverified result.; independent private original variant1 Unity compile pending CI43282759870 (not proven); unified original runtime keyword selection plus original Material/GUID/CB0/RT and phone pixel parity still NOT proven.",
-      "next_action": "Verify CI43282759870 is SUCCESS and includes sanitized second original variant1 7-pass safe report with shaderErrorCount=0; if not, inspect first error and repair only source-authentic issues. Then build one private Spectrum original index4 keyword-routed seven-pass ShaderLab; verify Unity Android Vulkan two variants and source metadata, then original Material/GUID and phone pixels. Old full native remains separate.",
+      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.; implemented read-only Editor import probe for exact 7 Spectrum vs 2 Foam Pass counts, detects one-pass dummy and duplicate/traversing asset paths; synthetic CSharp tests passed.; Real authenticated ZIP2 original Spectrum paired-stage Vulkan1.1 CI 43273276394 SUCCESS: 7/7 passes, 14 source VS/FS pairs, 28/28 compiled stage variants, 13 distinct original stage translations, all scratch-private.; Authenticated 7 distinct original render states and 6 original Shader properties (2 texture/3 float/1 vector) via ZIP2; privately assembled 2 seven-pass ShaderLab STRUCTURAL source candidates (14 total pass envelopes) preserving 28 original stage references; real CI 43274729958 SUCCESS, no game asset install.; Unity Editor 2021 imported 7/7 private Spectrum passes and emitted 6,095-byte Android Vulkan bundle on CI43275506146, but two shader errors forced failure.; Source-original DXBC+Unity numeric sampler/texture stage name mapping was accepted by source gate in 43279249696; original filter/wrap and game Material binding still unverified.; CI43279249696 SUCCESS: source-authentic 26 Texture and 26 Sampler HLSL symbolic registrations over 28 stages, private original Spectrum variant0 imported seven passes in Unity2021.3.45f2 Android Vulkan, 0 shader errors, compiled 12,079-byte private ShaderBundle. This is exact isolated variant0, not original runtime/game pixel.; Source-authentic isolated variant1 Unity import7Pass and provisional private bundle12418B in CI43282759870, BUT hidden 12 GLSL link errors cb4_struct despite ShaderUtil.GetShaderMessages=0: not accepted. Added final-job source/private GLSL console scanner and stage-local uniform block symbol isolation; real retry CI43285251243 underway.",
+      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).; actual Unity Editor 2021.3.45f2 import probe has not run on a new native candidate; source and GUID/Material parity still unverified.; Original 7-pass ShaderLab render states, source-authentic property/keyword selection, sampler/CB0/Material original GUID binding, Unity2021 actual Shader import and Adreno pixels remain unproven.; Still two isolated compile-only candidates rather than one original runtime keyword-routed Shader; Unity2021 Android Vulkan private import running or queued, and actual Material/RT/CB/Sampler identity plus phone rendering remain unverified.; Actual Unity source-derived variant0 fails cross-stage uniform cbuffer alias vec4[4] vs vec4[5]/[7]. Private-only reversible stage-disjoint symbol repair launched in CI43276622833, no production fix claimed.; Private stage-buffer-isolated Unity 43277618651 failed 2 Shader errors: samplers0 and samplers1 unrecognized (7Pass imported/bundle6092). New strict source names retry 43279249696 reached Unity, unverified result.; independent private original variant1 Unity compile pending CI43282759870 (not proven); unified original runtime keyword selection plus original Material/GUID/CB0/RT and phone pixel parity still NOT proven.; New variant1 Unity needs absolutely zero job-console GLSL/internal variant failures, not merely numeric ShaderUtil/Bundle success. Source-original runtime keyword routing, Material/GUID/CB0/RT and Adreno pixels remain missing.",
+      "next_action": "Inspect CI 43285251243 BOTH jobs: main original-private-spectrum-pairs and SECOND strict-final-unity-console must pass; if scanner blocks, inspect sanitized stdout class/cb4_struct and correct only private source-isolated aliases. Avoid marking variant1 or source game water restored from ShaderUtil zero alone. Then single-original-index4 keyword router candidate and real Unity variant selection.",
       "evidence": [
         43263197989,
         41920232173,
@@ -278,7 +296,8 @@
         43276622833,
         43277618651,
         43279249696,
-        43282759870
+        43282759870,
+        43285251243
       ]
     },
     {
@@ -415,7 +434,7 @@
     {
       "id": "M2",
       "status": "blocked",
-      "action_ar": "نجح المرشح Spectrum الأصل المستقل Variant0 في Unity2021 Android Vulkan [43279249696]: 7Pass، 0 shader errors، bundle12079B، و26 Texture+26 Sampler symbolic binding من المصدر. Variant1 [43282759870] قيد الاختبار، ولا يزال Keyword routing الأصلي، Material GUID/CB0/RT وAdreno pixels غير مثبتين.",
+      "action_ar": "نجح Variant0 Spectrum بUnity2021 Android Vulkan صفر errors حقيقية؛ أما Variant1 فCI43282759870 أعاد SUCCESS وShaderUtil=0 رغم 12 GLSL linker error cb4_struct بسجل Unity، لذا مرفوض. التصحيح: عزل Uniform Block داخل الخاص وChecker مستقل للسجلات النهائية بCI43285251243؛ لا Keyword runtime/Material/GUID/Adreno بعد.",
       "gate": "Real Unity import of exactly original 7 Spectrum passes and 2 Foam passes, original Shader GUID and Material/RenderTexture bindings, no invalid pass calls on a new device session; no placeholders or guesswork; record Unity Editor GT_WATER_IMPORTED_PASS_DIAGNOSTIC from a new post-probe build, then verify original material and device pixels; 28 source Vulkan stage-pair compiles alone do NOT satisfy original ShaderLab/material or GPU acceptance",
       "evidence": [
         43263197989,
@@ -427,7 +446,8 @@
         43276622833,
         43277618651,
         43279249696,
-        43282759870
+        43282759870,
+        43285251243
       ]
     },
     {
@@ -459,6 +479,7 @@
     }
   ],
   "next_session_sequence": [
+    "IMPORTANT FALSE GREEN: Spectrum variant1 CI43282759870 marked GitHub SUCCESS and ShaderUtil 0, but full console contains 12 GLSL link errors and 12 internal variant failures for cb4_struct. DO NOT COUNT VARIANT1 RESTORED. Check new two-job strict 43285251243: source stage uniform block isolation plus finalized Unity console scanner. Need both main and strict-final-unity-console jobs to pass.",
     "Latest proof: first Spectrum private variant0 actually Unity2021 Android Vulkan PASS 43279249696 (7Pass, 0 Shader errors, private 12,079 B bundle, 26+26 source resource bindings). Next check private variant1 run 43282759870 (first failure was synthetic newline fixture, fixed commit 9220038); no keyword routing or phone parity yet.",
     "Check original Spectrum DXBC+serialized Unity strict texture/sampler rebind CI 43279249696. Earlier CBuffer-isolated Unity 43277618651 failed shaderErrorCount=2 'Unrecognized sampler samplers0/samplers1' with passCount7 and private bundle6092. No original filter/wrap or material GUID proof.",
     "First Unity import run 43275506146 is FAIL: passCount7, bundle6095 B, shaderErrorCount2 from cb0_0_m0 VS/FS array-size GLSL link mismatch. Check new private reversible CBuffer alias fix retry 43276622833; do not claim success until exact workflow AND safe receipt pass.",
