@@ -493,6 +493,9 @@ jobs:
                "source_slots_faithful_with_resolved_scope")},sort_keys=True))
           PY
           exit "$result_code"
+      # Serialized fonts are authenticated but do not export as ordinary
+      # loose Material YAML. Safe aggregate receipts reveal true remaining
+      # external refs, without dumping private fileID/pathID/GUID on failure.
       - name: GT source-authenticate external Material Texture PPtrs across original ZIP2 owners and same-instance GUIDs
         id: gt_external_original_texture_links
         continue-on-error: true

@@ -193,6 +193,40 @@ def load_tables(source_root,manifest,loader=None):
     return tables,types
 
 
+ALLOWED_FAILURE_CODES=frozenset({
+    "invalid_private_same_instance_texture_trace",
+    "invalid_texture_trace_row",
+    "duplicate_original_material_source_trace",
+    "invalid_original_font_material_trace",
+    "unsupported_original_material_export_pointer",
+    "duplicate_original_texture_trace",
+    "untrusted_material_source_owner",
+    "missing_SHA_original_external_table",
+    "original_exported_material_identity_missing",
+    "invalid_original_owner_table_root",
+    "source_serialized_external_table_missing",
+    "invalid_source_external_table_size",
+    "invalid_source_external_table_entry",
+    "duplicate_source_texture_identity",
+})
+
+
+def safe_failure(error, phase):
+    """No original source/path/GUIDs leak in Actions, even on real failures."""
+    code=str(error)
+    if code not in ALLOWED_FAILURE_CODES:
+        code="unclassified_"+type(error).__name__
+    return {
+        "schema":"GT_REAL_ORIGINAL_EXTERNAL_TEXTURE_POINTERS_V1",
+        "status":"INCONCLUSIVE",
+        "failed_phase":phase,
+        "reason_code":code,
+        "source_or_exported_assets_modified":False,
+        "private_original_names_guids_ids_disclosed":False,
+        "Unity_Editor_or_Android_GPU_pixels_verified":False,
+    }
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ("source","manifest","project","trace","report"):
@@ -201,10 +235,16 @@ def main():
     if any(a.report.resolve().is_relative_to(x.resolve())
            for x in (a.source,a.project)):
         raise InventoryError("external_link_report_inside_original_game")
-    inputs=original(a.source,a.manifest)
-    tables,types=load_tables(a.source,a.manifest)
-    output=compare(inputs,tables,types,json.loads(a.trace.read_text()),
-                   exported_texenvs(a.project))
+    phase="original_material_properties"
+    try:
+        inputs=original(a.source,a.manifest)
+        phase="authenticated_external_owner_tables"
+        tables,types=load_tables(a.source,a.manifest)
+        phase="private_same_instance_export_join"
+        output=compare(inputs,tables,types,json.loads(a.trace.read_text()),
+                       exported_texenvs(a.project))
+    except (InventoryError,ValueError,KeyError,TypeError,AttributeError,OSError) as err:
+        output=safe_failure(err,phase)
     a.report.parent.mkdir(parents=True,exist_ok=True)
     a.report.write_text(json.dumps(output,sort_keys=True,indent=2)+"\n")
     print("GT_ALL_REAL_ORIGINAL_EXTERNAL_TEXTURE_LINKS "+json.dumps(output,sort_keys=True))

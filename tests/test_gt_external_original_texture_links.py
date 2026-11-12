@@ -93,6 +93,17 @@ class ExternalTextureBindingsTests(unittest.TestCase):
         result=compare(self.original,self.tables,self.types,self.trace,self.exported)
         self.assertEqual(result["counts"]["wrong_original_external_texture_class"],1)
 
+    def test_safe_public_diagnostic_never_discloses_source_identity(self):
+        from scripts.gt_external_original_texture_links import safe_failure
+        err=InventoryError("private-original-Material-GUID-abcdef")
+        result=safe_failure(err,"private_same_instance_export_join")
+        self.assertEqual(result["status"],"INCONCLUSIVE")
+        self.assertEqual(result["reason_code"],"unclassified_InventoryError")
+        self.assertNotIn("abcdef",str(result))
+        known=safe_failure(InventoryError("original_exported_material_identity_missing"),
+                          "private_same_instance_export_join")
+        self.assertEqual(known["reason_code"],"original_exported_material_identity_missing")
+
     def test_invalid_untrusted_trace_is_rejected(self):
         self.trace["export_instance"]="not-a-guid"
         with self.assertRaisesRegex(InventoryError,"invalid_private_same_instance"):
