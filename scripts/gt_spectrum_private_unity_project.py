@@ -21,7 +21,7 @@ MAX_SHADER = 16 * 1024 * 1024
 
 def prepare(candidate: Path, manifest: Path, editor: Path,
             project: Path, out: Path, *, diagnostic_stage_buffers=False,
-            variant_index=0):
+            diagnostic_uniform_blocks=False, variant_index=0):
     candidate,manifest,editor,project,out=(
         Path(p).absolute() for p in (candidate,manifest,editor,project,out))
     if (not candidate.is_file() or candidate.is_symlink() or
@@ -69,14 +69,17 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         raise ValueError("invalid_private_variant_selector")
     if candidate.name != "original-spectrum-7pass-variant-%d.shader" % variant_index:
         raise ValueError("private_candidate_does_not_match_variant")
-    if type(diagnostic_stage_buffers) is not bool:
+    if type(diagnostic_stage_buffers) is not bool or type(diagnostic_uniform_blocks) is not bool:
         raise ValueError("invalid_private_diagnostic_mode")
+    if diagnostic_uniform_blocks and not diagnostic_stage_buffers:
+        raise ValueError("private_uniform_block_alias_requires_stage_guard")
     isolated = None
     private_project_source = text
     if diagnostic_stage_buffers:
         # This compile-only transform is intentionally NOT applied to
         # original DXBC, serialized Material/GUID, or real game shader.
-        private_project_source, isolated = isolate(text)
+        private_project_source, isolated = isolate(
+            text,stage_uniform_blocks=diagnostic_uniform_blocks)
     project.mkdir()
     try:
         (project/"Assets/Editor").mkdir(parents=True)
@@ -105,6 +108,13 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         "provisional_isolated_keyword_variant_index":variant_index,
         "source_original_variant_stage_programs_in_shader":14,
         "private_stage_local_cbuffer_name_disambiguation_only":diagnostic_stage_buffers,
+        "private_stage_local_uniform_block_alias_diagnostic_only":diagnostic_uniform_blocks,
+        "private_vertex_uniform_block_identifier_count":(
+            0 if isolated is None else
+            isolated["private_vertex_uniform_block_identifiers_disambiguated"]),
+        "private_fragment_uniform_block_identifier_count":(
+            0 if isolated is None else
+            isolated["private_fragment_uniform_block_identifiers_disambiguated"]),
         "private_vertex_cbuffer_identifiers_disambiguated":(
             0 if isolated is None else
             isolated["private_vertex_cbuffer_identifiers_disambiguated"]),
@@ -130,10 +140,12 @@ def main():
     for name in ("candidate","manifest","editor","project","out"):
         p.add_argument("--"+name,type=Path,required=True)
     p.add_argument("--diagnostic-stage-buffers",action="store_true")
+    p.add_argument("--diagnostic-uniform-blocks",action="store_true")
     p.add_argument("--variant-index", type=int, choices=(0, 1), default=0)
     a=p.parse_args()
     prepare(a.candidate,a.manifest,a.editor,a.project,a.out,
             diagnostic_stage_buffers=a.diagnostic_stage_buffers,
+            diagnostic_uniform_blocks=a.diagnostic_uniform_blocks,
             variant_index=a.variant_index)
 
 
