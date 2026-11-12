@@ -399,6 +399,20 @@ jobs:
             --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --project "$RUNNER_TEMP/gt-project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-real-array-28-source-links.json"
+      - name: GT stage private Unity Editor class187 native importer verification manifest from original nine arrays
+        id: gt_real_private_Unity_Editor_array_contract
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_write_unity_array_import_contract.py -v
+          python3 -m scripts.gt_write_unity_array_import_contract \
+            --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-real-original-array-private-Editor-gate-aggregate.json"
+          test -s "$RUNNER_TEMP/gt-project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json"
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -481,6 +495,7 @@ jobs:
             ${{ runner.temp }}/gt-original-array-slice-layout-independent.json
             ${{ runner.temp }}/gt-real-array-meta-only-repair.json
             ${{ runner.temp }}/gt-real-array-28-source-links.json
+            ${{ runner.temp }}/gt-real-original-array-private-Editor-gate-aggregate.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
