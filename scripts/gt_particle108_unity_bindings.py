@@ -152,7 +152,7 @@ def rebind_stage(hlsl,program,name_indices,stage):
         # sampled resource; no fabricated dummy sampler or register mapping.
         if not (stage == 1 and not textures and not samplers and
                 not used["t"] and
-                not re.search(r'\\b(?:Texture\\w*|sampler2D|Sample|SampleLevel|SampleBias)\\b', hlsl)):
+                not re.search(r'\b(?:Texture\w*|sampler2D|Sample|SampleLevel|SampleBias)\b', hlsl)):
             raise BridgeError("TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS")
     # Every emitted sampler declaration must be covered by an exact source
     # register match. Partial proof can still give Unity "unrecognized sampler".
