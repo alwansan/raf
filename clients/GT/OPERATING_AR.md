@@ -6,6 +6,12 @@
 
 يشمل العمل Mesh/Submesh/Renderer، القنوات وUV والـNormals/Tangents وبيانات الربط اللازمة لعرض الميش، Material/Texture والألوان والقنوات وmips، Shader/Pass/variants والحالات والمخازن والـsamplers، والظلال والماء والمؤثرات وCompute حيث تعتمد الرسوميات عليها. استفد من أعمال العملاء المتوقفين ولا تنتظر تنسيقهم، وافحص HEAD والتشغيلات الجارية لمنع تعارض Git أو تكرار builds لا حاجة لها. حافظ على GUID وملفات `.meta` وروابط المشاهد وPrefabs. تغييرات Animator والأنظمة غير الرسومية ليست هدفًا مستقلًا لهذا العامل، وتُسجّل الاعتماديات التي تؤثر في العرض.
 
+## سجل الاستعادة الإجباري لكل دفعة
+
+**مصدر الحقيقة الحي:** [RESTORATION_PLAN_AR.md](RESTORATION_PLAN_AR.md) و[RESTORATION_PLAN.json](RESTORATION_PLAN.json). كل دفعة تُسجل ما ثبت من source/export/Unity/packaged/device، عدد الأصول ومعنى العدد (Asset مختلف أم Material document أم Renderer slot)، العائق الحالي، Run ID، ونتيجة الاختبار والمرحلة التالية. لا ترقي `device_verified` إلا بعد أدلة الهاتف والصور وفحص السجل، ولا تدّعِ أن 770 Material Dummy هي 770 shader مميزاً.
+
+عقب أي تعديل للخطة شغّل `python3 -m scripts.gt_restoration_plan_check` واختبارات `test_gt_restoration_plan_check.py`؛ بوابة [raft-gt-restoration-plan-gate.yml](../../.github/workflows/raft-gt-restoration-plan-gate.yml) تتحقق آلياً من الأعداد والروابط. حدّث `RESTORE_AR.md` و`state.json` و`SUMMARY_AR.md` و`MEMORY.md` وملف `sessions/` في الدورة نفسها، ثم ثبّت رابط آخر session في رسالة الاستعادة.
+
 ## دورة التنفيذ
 
 1. اقرأ الملفات الحية وراجع HEAD والتغييرات وActions المتداخلة. سجّل نطاق الدورة في `sessions/` وقرار التعارض في `discussions/` عند الحاجة. استخدم worktree معزولًا عندما يلزم.
