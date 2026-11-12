@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Verify signed GFX160 Vulkan ARM64 APK and owner FFT storage-image readbacks; retain original native registration gap.",
-  "build_requested": true,
+  "next_experiment": "Owner install GFX160 and return ZIP on Adreno 730; then compare native shader identity/registration and isolate original water pass gaps.",
+  "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3385,8 +3385,11 @@
       "run": 43148270805,
       "source_commit": "5b5cdab0589413d1992c866e54aa4be8f9d94d67",
       "scope": "synthetic radix-2 inverse FFT over RGFloat",
-      "apk_verified": false,
-      "device_verified": false
+      "apk_verified": true,
+      "device_verified": false,
+      "artifact": 13912318730,
+      "sha256": "c758b6e08a5249ae94e154f76ab347cdf6587927ac517a77388f6d3f97bcc404",
+      "bytes": 8530104
     }
   }
 }
