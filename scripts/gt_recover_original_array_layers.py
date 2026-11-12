@@ -103,18 +103,26 @@ def exact_streams(source_root:Path, files:dict, arrays:dict,
 
 
 def recover(source_root:Path,original:dict,trace:dict,meta:dict,
-            expected_files:dict,private_output:Path) ->dict:
+            expected_files:dict,private_output:Path,*,stream_source:Path|None=None) ->dict:
     """Actually copy exact original compressed array payloads to private stage."""
     source_root,private_output=source_root.absolute(),private_output.absolute()
+    stream_source=source_root if stream_source is None else stream_source.absolute()
     safe(source_root)
+    safe(stream_source)
     safe(private_output)
     if (private_output.exists() or private_output.is_relative_to(source_root)
-        or source_root.is_relative_to(private_output)):
+        or source_root.is_relative_to(private_output)
+        or private_output.is_relative_to(stream_source)
+        or stream_source.is_relative_to(private_output)):
         raise SourceFailure("private_array_output_overlaps_source_or_exists")
     # Verify every original Array object has an exact same-instance exported
     # Unity pointer; do not fix/collapse unknown exported object identities.
     provenance=match(original,trace,meta)
-    planned=exact_streams(source_root,expected_files,original)
+    # The exporter may mutate serialized Mesh owners during inlining.
+    # Decode arrays from pristine SHA-pinned serialized owners, and recover
+    # pixel bytes from the separately SHA-verified original .resS providers.
+    # Never copy 5+ GB of streams just to co-locate two input populations.
+    planned=exact_streams(stream_source,expected_files,original)
     identities={}
     for row in trace["objects"]:
         if row.get("class_id")!=187:
@@ -194,6 +202,7 @@ def recover(source_root:Path,original:dict,trace:dict,meta:dict,
         "original_game_bytes_or_exporter_GUIDs_published":False,
         "Unity_Editor_Texture2DArray_assets_created":False,
         "Unity_Android_texture_array_import_or_GPU_render_verified":False,
+        "separate_original_stream_provider_root_authenticated":stream_source!=source_root,
         "git_lfs_used":False,
     }
 
@@ -201,6 +210,8 @@ def recover(source_root:Path,original:dict,trace:dict,meta:dict,
 def main()->int:
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--source",type=Path,required=True)
+    ap.add_argument("--stream-source",type=Path,
+                    help="Independent SHA-authenticated original resS root; source remains pristine serialized owners")
     ap.add_argument("--zip2-checkout",type=Path,required=True)
     ap.add_argument("--trace",type=Path,required=True)
     ap.add_argument("--project",type=Path,required=True)
@@ -217,7 +228,7 @@ def main()->int:
     checked_manifest=manifest(args.zip2_checkout)
     trace=json.loads(args.trace.read_text(encoding="utf-8"))
     report=recover(args.source,arrays,trace,exported_meta(args.project),
-                  checked_manifest,args.private_output)
+                  checked_manifest,args.private_output,stream_source=args.stream_source)
     args.report.parent.mkdir(parents=True,exist_ok=True)
     args.report.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n")
     print("GT_REAL_SOURCE_ARRAY_STREAM_PAYLOAD_RECOVERY "+json.dumps(report,sort_keys=True))

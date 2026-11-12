@@ -68,6 +68,39 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
             self.assertNotIn(f"{i+100:032x}",json.dumps(result))
         self.assertEqual(self.provider.read_bytes(),self.payload)
 
+    def test_source_owners_and_streams_can_be_separately_SHA_authenticated(self):
+        stream_root=self.root/"original-streams"
+        stream_root.mkdir()
+        provider=stream_root/self.provider.name
+        provider.write_bytes(self.payload)
+        # Pristine source tree no longer has a local resS file. This is
+        # how native Unity keeps serialized .assets SHA authentic after its
+        # separate AssetRipper input Mesh owner was modified by inlining.
+        self.provider.unlink()
+        result=recover(self.source,self.arrays,self.trace,
+                       self.destinations,self.expected,self.stage,
+                       stream_source=stream_root)
+        self.assertEqual(result["original_source_streamed_bytes_restored_to_private_stage"],576)
+        self.assertTrue(result["separate_original_stream_provider_root_authenticated"])
+        self.assertFalse(self.provider.exists())
+        self.assertEqual(provider.read_bytes(),self.payload)
+
+    def test_changed_separate_stream_is_never_promoted_as_original(self):
+        stream_root=self.root/"original-streams"
+        stream_root.mkdir()
+        (stream_root/self.provider.name).write_bytes(b"!"*len(self.payload))
+        with self.assertRaisesRegex(SourceFailure,"sha256_mismatch"):
+            recover(self.source,self.arrays,self.trace,
+                    self.destinations,self.expected,self.stage,
+                    stream_source=stream_root)
+        self.assertFalse(self.stage.exists())
+
+    def test_private_payload_destination_overlapping_stream_root_rejected(self):
+        with self.assertRaisesRegex(SourceFailure,"private_array_output_overlaps"):
+            recover(self.source,self.arrays,self.trace,
+                    self.destinations,self.expected,
+                    self.source/"new-payload",stream_source=self.source)
+
     def test_corrupted_original_stream_fails_before_creating_stage(self):
         self.provider.write_bytes(b"!"*len(self.payload))
         with self.assertRaisesRegex(SourceFailure,"sha256_mismatch"):
