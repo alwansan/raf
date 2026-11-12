@@ -80,6 +80,23 @@ class GTFullSourceExportTests(unittest.TestCase):
         self.assertNotIn("sharedassets0",json.dumps(r))
         self.assertNotIn("_MainTex",json.dumps(r))
 
+    def test_extra_engine_owned_material_is_explicitly_excluded_not_trusted_as_original_game(self):
+        fixture=json.loads(self.trace.read_text())
+        fixture["objects"].append({
+            "class_id":21,
+            "source":{"owner":"unity_builtin_extra","path_id":999},
+            "export":{"file_id":10303,
+                      "guid":"0000000000000000f000000000000000","type":0},
+            "exportable":False})
+        self.trace.write_text(json.dumps(fixture))
+        result=inspect(self.source,self.manifest,self.project,self.trace,
+            loader=fake_loader,exported_parser=lambda project:self.exported)
+        self.assertEqual(result["external_engine_materials_outside_source_scope"],1)
+        self.assertEqual(result["original_material_objects"],len(OWNERS))
+        self.assertEqual(result["materials_compared"],len(OWNERS))
+        self.assertTrue(result["source_slots_faithful_with_resolved_scope"])
+        self.assertFalse(result["full_game_source_coverage_verified"])
+
     def test_wrong_exported_texture_guid_produces_detectable_mismatch(self):
         actual=dict(self.exported)
         first=next(iter(actual))
