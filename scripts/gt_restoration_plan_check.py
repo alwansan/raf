@@ -11,6 +11,16 @@ import json
 from pathlib import Path
 import re
 
+from scripts.b09_spectrum_topology_contract import (
+    TARGET as ORIGINAL_SPECTRUM_NAME,
+    PASSES as ORIGINAL_SPECTRUM_PASSES,
+    BLOB_SEQUENCES as ORIGINAL_SPECTRUM_BLOBS,
+)
+from scripts.b24_original_foam_stage_translation import TARGET as ORIGINAL_FOAM_NAME
+from scripts.verify_water_render_contract import REQUIRED_PASS_COUNT
+
+ORIGINAL_FOAM_PASSES = 2  # SHA-original B24 source, two 2-stage DXBC passes
+
 PIN = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 EXPECTED_WORKSTREAMS = tuple(f"P{i:02d}" for i in range(12))
 EXPECTED_MILESTONES = tuple(f"M{i}" for i in range(6))
@@ -145,6 +155,22 @@ def check(plan: dict, state: dict, device: dict) -> dict:
         _same(rows["P03"]["scope"].get(key), value, "P03_"+key)
     real = _object(state.get("proofs_20261112_chat20"), "chat20")
     r6 = rows["P06"]["scope"]
+    # The device's maximum observed pass index gives only a lower bound.
+    # Source-authentic shader topology is stricter: Spectrum has 7 complete
+    # original passes with 28 referenced VS/FS variant programs, Foam 2 passes.
+    if (ORIGINAL_SPECTRUM_PASSES != 7 or ORIGINAL_FOAM_PASSES != 2
+            or len(ORIGINAL_SPECTRUM_BLOBS) != 2
+            or sum(len(x) for x in ORIGINAL_SPECTRUM_BLOBS.values()) != 28
+            or REQUIRED_PASS_COUNT.get(ORIGINAL_SPECTRUM_NAME) != 6
+            or REQUIRED_PASS_COUNT.get(ORIGINAL_FOAM_NAME) != 2):
+        raise ValueError("original_water_source_vs_device_baseline_contract_changed")
+    for key, value in [
+        ("source_authenticated_spectrum_passes", ORIGINAL_SPECTRUM_PASSES),
+        ("source_authenticated_spectrum_vs_fs_stage_variants", 28),
+        ("source_authenticated_foam_passes", ORIGINAL_FOAM_PASSES),
+        ("expected_min_spectrum_passes", 6),
+        ("expected_min_foam_global_passes", 2)]:
+        _same(r6.get(key), value, "P06_"+key)
     r7 = rows["P07"]["scope"]
     r10 = rows["P10"]["scope"]
     for key, val in [
