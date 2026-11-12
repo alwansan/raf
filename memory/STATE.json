@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GT/T5 apply lab patch to native workflow and dispatch a fresh run; verify all 3 provenance consumers before Unity.",
-  "build_requested": false,
+  "next_experiment": "Monitor native build 43151970478 at e17060335e8a088ddb08f78b5089234b1c064c1c; verify ClassID187 stage, Unity and XAPK delivery.",
+  "build_requested": true,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3394,7 +3394,7 @@
     },
     "native_trial": {
       "observed_head": "c2a1489f60a4839eca7a3a90a297e1e2ce12ec9d",
-      "status": "FAILED_PRE_UNITY",
+      "status": "FIX_MERGED_NATIVE_REBUILD_QUEUED",
       "original_water_verified": false,
       "dispatch_run": 43149611169,
       "run": 43149622750,
@@ -3403,7 +3403,9 @@
       "license_preflight_verified": true,
       "failed_step": "GT original Texture2DArray provenance",
       "failure": "staged_owner_fingerprint_mismatch",
-      "candidate_patch": "gfxlab/patches/gfx162-pristine-array-source.patch"
+      "candidate_patch": "gfxlab/patches/gfx162-pristine-array-source.patch",
+      "retry_run": 43151970478,
+      "retry_source_commit": "e17060335e8a088ddb08f78b5089234b1c064c1c"
     }
   }
 }
