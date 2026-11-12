@@ -8,9 +8,9 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-post-calibration-restore-114",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-post-calibration-restore-114.md",
-  "status": "PHASE_ONE_CALIBRATION_CLOSED_POST_HANDOFF_LAB_READY",
+  "latest_session": "20261112-GFX-chat-water-phase-two-115",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-phase-two-115.md",
+  "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
       "id": "RENDER-002",
@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "GFX148 single-target original Shader48 M03-1 Adreno Cull Off/Back/Front signed APK, 3 readbacks only, compare against verified exact source Mesa per-mode frames; do NOT silently change source game ShaderLab Cull or rerun 51 captures.",
-  "build_requested": false,
+  "next_experiment": "GFX155 verify signed Vulkan APK and owner readbacks; source-confirm water families and one original Spectrum/FFT/height query route from pinned ZIP2.",
+  "build_requested": true,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3319,5 +3319,16 @@
     "branch": "feature/android-native-port",
     "path": "clients/GT/README.md",
     "bootstrap_sha": "d53f044d8f80e139f9a3a27e10c14bd04e3c90cb"
+  },
+  "water_phase_two": {
+    "status": "OPEN",
+    "experiment": "GFX155",
+    "source_commit": "fd89f9b82023d4b3f7ead31ed30656b145526ccf",
+    "native_read_sha": "467ae9fdda57275b70c3683514a25375f2a782c9",
+    "workflow_run": 43143685531,
+    "apk_verified": false,
+    "owner_device_verified": false,
+    "original_water_restored": false,
+    "roadmap": "gfxlab/WATER_PHASE_TWO_AR.md"
   }
 }

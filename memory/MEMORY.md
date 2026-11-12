@@ -1,3 +1,7 @@
+## المرحلة الثانية — استعادة الماء
+
+الدورة الحالية [GFX155](sessions/20261112-GFX-chat-water-phase-two-115.md)، الأصل chat. [مسار المرحلة الثانية](../gfxlab/WATER_PHASE_TWO_AR.md). `WATER-001 OPEN`. تجربة Unity Vulkan تقيس سطحاً اصطناعياً أولاً، ثم نربط الحالات بالـPC الأصلي المثبت ZIP2. GT مستقل.
+
 ## الحالة الحالية — بعد تسليم المعايرة إلى GT
 
 [الاستعادة المختصرة](../prompt/graphics-lab/RESUME_AR.md) · [العمل التالي](../prompt/graphics-lab/NEXT_AR.md) · [جلسة الاستعادة](../memory/sessions/20261112-GFX-chat-post-calibration-restore-114.md). الحالة السابقة في السجل تاريخية.
