@@ -1,0 +1,55 @@
+name: GT device graphics log acceptance (source-free)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_device_graphics_acceptance.py
+      - tests/test_gt_device_graphics_acceptance.py
+      - .github/workflows/raft-gt-device-graphics-acceptance.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gt-device-known-failure-reproduction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run offline synthetic and malformed owner-summary negative controls
+        run: python3 -m unittest discover -s tests -p 'test_gt_device_graphics_acceptance.py' -v
+      - name: Fetch exact pinned owner CL summary only (no LFS or raw logs)
+        env:
+          OWNER_LOG_SNAPSHOT: cffd3f7be2d0c47649da9b28eae17c36d031f0e8
+        run: |
+          curl --fail --location --silent --show-error --retry 2 \
+            "https://raw.githubusercontent.com/alwansan/CL/${OWNER_LOG_SNAPSHOT}/raft%20log/lf/LogRaft-20261112-183147-926/session-summary.json" \
+            --output "$RUNNER_TEMP/gt-owner-session-summary.json"
+      - name: Reproduce owner-device water and cursor errors without source or screenshots
+        run: |
+          python3 -m scripts.gt_device_graphics_acceptance \
+            --session-summary "$RUNNER_TEMP/gt-owner-session-summary.json" \
+            --out "$RUNNER_TEMP/gt-owner-safe-render-receipt.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"gt-owner-safe-render-receipt.json"
+          data=json.loads(p.read_text())
+          assert data["status"]=="KNOWN_DEVICE_LOG_GATE_REJECTED"
+          assert data["error_counts"]["ultimate_water_invalid_pass"]==42229
+          assert data["error_counts"]["water_fft_invalid_compute_kernel"]==7263
+          assert data["water_invalid_pass_by_family"]["spectrum"]==19191
+          assert data["water_invalid_pass_by_family"]["foam_global"]==23038
+          assert data["compute_invalid_kernel_index"]["six"]==7263
+          assert data["error_counts"]["unity_cursor_rgba32_required"]==4668
+          assert data["error_counts"]["obb_guid_load_failed"]==2
+          assert data["strict_known_log_gate_passed"] is False
+          print("GT_REAL_CL_DEVICE_REPRODUCED waterPass=42229 kernel6=7263 cursorRGBA32=4668 guidLoad=2 pixelProof=false")
+          PY
+      - name: Remove private owner summary; do not publish raw logs or source
+        if: always()
+        run: rm -f "$RUNNER_TEMP/gt-owner-session-summary.json" "$RUNNER_TEMP/gt-owner-safe-render-receipt.json"
