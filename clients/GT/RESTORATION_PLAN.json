@@ -28,7 +28,9 @@
     "new_native_active_at_snapshot": 43247161671,
     "source_particle108_unity_approx": 43236578305,
     "source_particle108_phone_apk_approx": 43242496576,
-    "real_CL_owner_device_failure_reproduced": 43263197989
+    "real_CL_owner_device_failure_reproduced": 43263197989,
+    "original_spectrum_topology_source": 41920232173,
+    "water_editor_import_probe_synthetic": 43269999662
   },
   "workstreams": [
     {
@@ -193,7 +195,9 @@
         "expected_min_foam_global_passes": 2,
         "source_authenticated_spectrum_passes": 7,
         "source_authenticated_spectrum_vs_fs_stage_variants": 28,
-        "source_authenticated_foam_passes": 2
+        "source_authenticated_foam_passes": 2,
+        "editor_import_probe_synthetic_run": 43269999662,
+        "actual_unity_import_pass_count_verified": false
       },
       "source_verified": "two_original_pass_Foam_stage_packet_experimental",
       "export_verified": false,
@@ -201,12 +205,13 @@
       "packaged": false,
       "device_verified": false,
       "status": "blocked_water_render",
-      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.",
-      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).",
-      "next_action": "Reconstruct original 7-pass Spectrum topology (28 genuine stage variants), original 2-pass Foam and verify same original GUID/Material/Sampler/RT mappings in Unity Android; do not treat log-only minimum 6 as full Spectrum parity.",
+      "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.; implemented read-only Editor import probe for exact 7 Spectrum vs 2 Foam Pass counts, detects one-pass dummy and duplicate/traversing asset paths; synthetic CSharp tests passed.",
+      "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).; actual Unity Editor 2021.3.45f2 import probe has not run on a new native candidate; source and GUID/Material parity still unverified.",
+      "next_action": "Reconstruct original 7-pass Spectrum topology (28 genuine stage variants), original 2-pass Foam and verify same original GUID/Material/Sampler/RT mappings in Unity Android; do not treat log-only minimum 6 as full Spectrum parity. Next native build after running workflow should collect GT_WATER_IMPORTED_PASS_DIAGNOSTIC and identify actual Unity editor shader counts, without assuming Android pixels.",
       "evidence": [
         43263197989,
-        41920232173
+        41920232173,
+        43269999662
       ]
     },
     {
@@ -344,10 +349,11 @@
       "id": "M2",
       "status": "blocked",
       "action_ar": "استعادة Spectrum الأصلية ذات 7 Passes/28 variant stages وFoam Global ذات 2 Pass، مع بقاء الحد الأدنى المرصود على الهاتف Spectrum>=6/Foam>=2 شرطاً منفصلاً غير كافٍ",
-      "gate": "Real Unity import of exactly original 7 Spectrum passes and 2 Foam passes, original Shader GUID and Material/RenderTexture bindings, no invalid pass calls on a new device session; no placeholders or guesswork",
+      "gate": "Real Unity import of exactly original 7 Spectrum passes and 2 Foam passes, original Shader GUID and Material/RenderTexture bindings, no invalid pass calls on a new device session; no placeholders or guesswork; record Unity Editor GT_WATER_IMPORTED_PASS_DIAGNOSTIC from a new post-probe build, then verify original material and device pixels",
       "evidence": [
         43263197989,
-        41920232173
+        41920232173,
+        43269999662
       ]
     },
     {
@@ -379,6 +385,7 @@
     }
   ],
   "next_session_sequence": [
+    "On next native full build examine GT_WATER_IMPORTED_PASS_DIAGNOSTIC family=spectrum/foam_global; synthetic source CSharp CI 43269999662 passed but no Unity Editor/Adreno execution verified yet.",
     "Read clients/GT/RESTORATION_PLAN_AR.md + RESTORATION_PLAN.json + RESTORE_AR.md + state.json + newest session; verify SHA HEAD and running GitHub Actions before writes.",
     "Do not trust old status fields whose run timestamps predate an observed SUCCESS/FAIL; update one workstream and matching evidence, then run validation.",
     "Use immutable ZIP2 SHA and private scratch, no Git LFS; do not change original .meta/GUID or restore a shader by guessing a program.",
