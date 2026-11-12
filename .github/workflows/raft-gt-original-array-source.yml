@@ -154,7 +154,19 @@ jobs:
                   "original_array_shapes":[{"width":k[0],"height":k[1],
                     "depth":k[2],"count":count} for k,count in sorted(dims.items())],
                   "original_stream_descriptors_count":sum(v["has_stream_record"] for v in src.values()),
-                  "original_inline_image_data_fields_count":sum(v["has_image_data"] for v in src.values())})
+                  "original_inline_image_data_fields_count":sum(v["has_image_data"] for v in src.values()),
+                  "original_texture_format_enum_count":dict(sorted(
+                      (str(k),v) for k,v in Counter(
+                      item["source_format_enum"] if item["source_format_enum"] is not None
+                      else "missing" for item in src.values()).items())),
+                  "original_mipmap_count_distribution":dict(sorted(
+                      (str(k),v) for k,v in Counter(
+                      item["source_mipmap_count"] if item["source_mipmap_count"] is not None
+                      else "missing" for item in src.values()).items())),
+                  "original_stream_total_bytes":sum(v["original_stream_size"] or 0 for v in src.values()),
+                  "original_stream_size_fields_present":sum(v["original_stream_size"] is not None for v in src.values()),
+                  "original_stream_offsets_present":sum(v["original_stream_offset_present"] for v in src.values()),
+                  "original_stream_payload_SHA256_checked_in_this_job":False})
           except InventoryError as e:
               report.update({"status":"REJECTED","reason_code":str(e)})
           (root/"gt-original-array-metadata-safe.json").write_text(
