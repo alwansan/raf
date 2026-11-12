@@ -112,5 +112,34 @@
     "No XAPK",
     "No arbitrary replacement GUID generation",
     "No original asset blobs published in Actions artifacts"
-  ]
+  ],
+  "original_array_BC3_pixel_parity_real": {
+    "run": 43144656957,
+    "source_original_array_payloads_compared": 8,
+    "source_logical_array_objects": 9,
+    "source_zero_pixel_array_objects": 1,
+    "sampled_original_layers_compared": 24,
+    "slice_major_exact_source_PNG_samples": 24,
+    "mip_major_exact_source_PNG_samples": 8,
+    "original_slice_layout_unambiguous_in_eight_arrays": true,
+    "full_11_mipchain_pixel_equivalence_proven": false,
+    "source_png_original_layer0_sample_pixel_parity_pass": true,
+    "android_gpu_verified": false
+  },
+  "real_9_array_importer_grid_repair": {
+    "run": 43144656957,
+    "artifact_id": 13911856847,
+    "all_original_array_class187_GUID_targets": 9,
+    "original_full_PNG_atlases": 9,
+    "original_importer_meta_documents_corrected": 9,
+    "source_original_material_links_after_repair_test": "PENDING_REAL_28_LINK_CI",
+    "all_importer_grid_shapes_valid": 9,
+    "original_GUIDs_modified": 0,
+    "png_pixels_modified": 0,
+    "meta_documents_outside_source_exact_9_modified": 0,
+    "original_private_meta_backups_verified": 9,
+    "unity_editor_actual_import_verified": false,
+    "android_gpu_verified": false,
+    "git_lfs_used": false
+  }
 }
