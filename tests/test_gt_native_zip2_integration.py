@@ -29,7 +29,7 @@ class NativeSourceIntegrityTests(unittest.TestCase):
 
     def test_full_graphics_are_materialized_into_exporter_input_twice_checked(self):
         text=self.text
-        self.assertEqual(len(re.findall(r"python3 -m scripts\.gt_zip2_export_resources",text)),2)
+        self.assertEqual(len(re.findall(r"python3 -m scripts\.gt_zip2_export_resources",text)),3)
         for start in (
             "GT restore every original mesh and texture stream into AssetRipper input from ZIP2",
             "GT freeze SHA-pinned original Unity input",
