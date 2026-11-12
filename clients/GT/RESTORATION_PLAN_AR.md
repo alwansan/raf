@@ -82,6 +82,12 @@
 
 **الأولوية بعد الإصلاح:** التحقق من ترجمة برنامج Unity دون أخطاء؛ ثم اختبار variant1 وربط كِلا مسارَي Keyword الأصلية في شيدر واحد، ثم مصادر Sampler وCB0 وMaterial/RT/GUID، ثم XAPK حديث وتجربة هاتف. لا تخلط نجاح Bundle مع Pixel equivalence.
 
+### GT / Chat-23 — نجاح Shader Spectrum منفصلين وفحص التوحيد
+
+بعد معالجة `cb4_struct` داخل نسخة اختبار خاصة، [43286126572 SUCCESS](https://github.com/alwansan/raf/actions/runs/43286126572) اجتاز **كلا العملين**: Unity 2021 Android Vulkan والتدقيق المستقل النهائي للسجل. لكل مرشح 7 Passes مستوردة؛ Variant0 Bundle **12080B** وVariant1 **12409B**؛ مجموع أخطاء GLSL linker وInternal Variant وShader import/compile **صفر**. هذه **نجاحات فعليّة لتجميع البرامج الخاصة المعزولة فقط**، لا نسخة Raft الأصلية.
+
+[43286701677 SUCCESS](https://github.com/alwansan/raf/actions/runs/43286701677) أثبت من نفس ZIP2 الأصلية توافق Keyword **index4** والـ14 زوجاً/28 stages في 7 Passes، وركّب ShaderLab خاصاً واحداً يحتوي 7 برنامج Pass و2 فرع مصدر أصلي لكل واحد (مع عزل Uniform Blocks القابل للعكس). **لا يثبت Scope flags ولا Runtime اختيار Material**. [43288288144](https://github.com/alwansan/raf/actions/runs/43288288144) يختبر المشروع الموحد في Unity 2021 Android Vulkan مع تسجيل 2 ShaderVariantCollection candidates، وبعدها فحص Console نهائي مستقل. يلزم نجاح الثلاث مهام قبل اعتباره "Provisional Unity Compilation"، ويبقى Material/GUID/RT/CB0/Adreno غير مثبت.
+
 ### GT / Chat-23 — منع False Green من ShaderUtil في Spectrum Variant1
 
 حالة المصدر ما زالت **7 Passes أصلية، 14 VS/FS pairs، 28/28 مراحل Vulkan، 7 حالات رسم، 6 Properties**. [Unity2021 CI 43279249696](https://github.com/alwansan/raf/actions/runs/43279249696) أثبت استيراد وتجميع **Variant0 الخاص** (7Pass، 0 خطأ Shader، Bundle 12079 B). **لا GUID/Material/Adreno**.
