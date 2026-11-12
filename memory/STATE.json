@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-water-native-handoff-121",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-water-native-handoff-121.md",
+  "latest_session": "20261112-GFX-chat-native-pristine-array-source-122",
+  "latest_session_path": "memory/sessions/20261112-GFX-chat-native-pristine-array-source-122.md",
   "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
@@ -35,8 +35,8 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Check full native run 43149622750 and strict water/trial package evidence; only test on phone once delivery exists.",
-  "build_requested": true,
+  "next_experiment": "GT/T5 apply lab patch to native workflow and dispatch a fresh run; verify all 3 provenance consumers before Unity.",
+  "build_requested": false,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
   "documentation": [
@@ -3394,13 +3394,16 @@
     },
     "native_trial": {
       "observed_head": "c2a1489f60a4839eca7a3a90a297e1e2ce12ec9d",
-      "status": "NATIVE_RECONSTRUCTION_QUEUED",
+      "status": "FAILED_PRE_UNITY",
       "original_water_verified": false,
       "dispatch_run": 43149611169,
       "run": 43149622750,
       "actual_head": "565016cb107a681e2784df2437da1ccbd74f2809",
       "request_gate_verified": true,
-      "license_preflight_verified": true
+      "license_preflight_verified": true,
+      "failed_step": "GT original Texture2DArray provenance",
+      "failure": "staged_owner_fingerprint_mismatch",
+      "candidate_patch": "gfxlab/patches/gfx162-pristine-array-source.patch"
     }
   }
 }

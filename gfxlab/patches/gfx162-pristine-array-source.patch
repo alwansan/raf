@@ -1,0 +1,44 @@
+--- a/.github/workflows/raft-unity-editor-android-import.yml
++++ b/.github/workflows/raft-unity-editor-android-import.yml
+@@ -411,8 +411,16 @@
+           # Same-instance original ClassID187 source→AssetRipper GUID provenance,
+           # exact 1024px source layer atlas grid and full PNG decode. No fake
+           # Texture2D fileID, imported pixels, source .meta or original GUIDs.
++          # Mesh inlining rewrites serialized owners in the export input.
++          # Authenticate ClassID187 against the pristine ZIP2 owners.
++          original_owners="$RUNNER_TEMP/gt-native-pristine-serialized-owners"
++          python3 -m scripts.gt_stage_serialized_owners \
++            --source zip2-original/Raft/Raft_Data \
++            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
++            --destination "$original_owners" \
++            --report "$RUNNER_TEMP/gt-native-pristine-serialized-owners.json"
+           python3 -m scripts.gt_repair_array_flipbook_importers \
+-            --original-source "$RUNNER_TEMP/input/Raft_Data" \
++            --original-source "$original_owners" \
+             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+             --trace "$RUNNER_TEMP/private-export-lineage.json" \
+             --project "$RUNNER_TEMP/project/ExportedProject" \
+@@ -420,7 +428,7 @@
+             --report "$RUNNER_TEMP/gt-native-original-array-importer-repair.json"
+           # Reject any output except nine source-proven repaired array grids.
+           python3 -m scripts.gt_verify_original_array_material_refs \
+-            --original-source "$RUNNER_TEMP/input/Raft_Data" \
++            --original-source "$original_owners" \
+             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+             --trace "$RUNNER_TEMP/private-export-lineage.json" \
+             --project "$RUNNER_TEMP/project/ExportedProject" \
+@@ -445,12 +453,13 @@
+           # consumed by AndroidNativeBuild.ValidateSdkBindings in Unity Editor.
+           # This does not run Unity yet or publish a source file/GUID.
+           python3 -m scripts.gt_write_unity_array_import_contract \
+-            --original-source "$RUNNER_TEMP/input/Raft_Data" \
++            --original-source "$original_owners" \
+             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+             --trace "$RUNNER_TEMP/private-export-lineage.json" \
+             --project "$RUNNER_TEMP/project/ExportedProject" \
+             --report "$RUNNER_TEMP/gt-native-unity-array-import-contract.json"
+           test -s "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json"
++          rm -rf -- "$original_owners"
+       - name: GT publish source-authentic array importer and Material link receipts only
+         if: always()
+         uses: actions/upload-artifact@v4

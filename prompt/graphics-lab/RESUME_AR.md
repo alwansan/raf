@@ -13,3 +13,5 @@
 استأنف من [جلسة GFX160](../../memory/sessions/20261112-GFX-chat-water-fft-textures-120.md) وتحقق من APK وسجل الهاتف.
 
 نجح GFX160 على الهاتف. تابع [بناء تجربة اللعبة GFX161](../../memory/sessions/20261112-GFX-chat-water-native-handoff-121.md).
+
+بناء GFX161 توقف قبل Unity. اقرأ [تشخيص GFX162 والتصحيح](../../memory/sessions/20261112-GFX-chat-native-pristine-array-source-122.md).
