@@ -34,7 +34,7 @@ jobs:
           from pathlib import Path
           txt=(Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-resultflow-build.log').read_text(errors='replace')
           print('GT_SPECTRUM_TYPED_RESULTFLOW_BUILD_CODES_SAFE',dict(collections.Counter(
-             re.findall(r'error\\s+(CS[0-9]+|NU[0-9]+|NETSDK[0-9]+)',txt))))
+             re.findall(r'error\s+(CS[0-9]+|NU[0-9]+|NETSDK[0-9]+|MSB[0-9]+)',txt))))
           PY
               exit 2
             }

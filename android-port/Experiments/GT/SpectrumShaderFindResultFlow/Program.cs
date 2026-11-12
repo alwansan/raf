@@ -270,7 +270,7 @@ internal static class Program
                 if(flow==FlowControl.Cond_Branch)
                 {
                     localCfgBranchNodes++;
-                    if(inst.Operand is Instruction target) Enqueue(target);
+                    if(inst.Operand is Instruction branchTarget) Enqueue(branchTarget);
                     else if(inst.Operand is Instruction[] targets)
                     {
                         foreach(var targetOfSwitch in targets)Enqueue(targetOfSwitch);
