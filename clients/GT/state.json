@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_NATIVE_CLASS187_PRIVATE_LINEAGE_ROOT_CAUSE_FIXED_SYNTHETIC_PASS_REAL_NATIVE_RERUN_PENDING",
+  "status": "GT_OWNER_INDEPENDENT_NATIVE_BUILDFIX_SHADER_TEXTURE_PRIVATE_LINEAGE_NEW_NATIVE_RUN_STARTED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -225,7 +225,19 @@
           "independent_unitypy_original_stream_injection_commit": "272ab8c1cc9ec8001cc5ca69200daca294978e2f",
           "independent_unitypy_source_only_CI": 43153004857,
           "independent_unitypy_latest_real_run": 43153126679,
-          "independent_unitypy_latest_real_verified": false
+          "independent_unitypy_latest_real_verified": true,
+          "native_array_gate_actual_success_run": 43153893985,
+          "native_postarray_builtin_shader_failure_run": 43153893985,
+          "native_postarray_shader_error": "Unexpected trace class in verify_export_lineage.check",
+          "builtin_shader_mixed_private_texture_trace_fix_commit": "57ce47df7765e03d07a5ec70a7f91821a81091a8",
+          "latest_full_native_retry_run": 43155854860,
+          "cross_owner_external_texture_validator": "scripts/gt_external_original_texture_links.py",
+          "cross_owner_external_texture_synthetic_CI": 43154841456,
+          "cross_owner_external_texture_real_CI": 43154972647,
+          "full_original_50_BC3_topmip_checker": "scripts/gt_compare_original_bc3_to_flipbook_pixels.py --all-original-layer-cells",
+          "full_original_50_BC3_topmip_synthetic_CI": 43155325923,
+          "full_original_50_BC3_topmip_real_CI": 43155325887,
+          "original_full_topmip_pixel_parity_verified": false
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -325,6 +337,14 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-native-array-lineage-fix-chat-09.md",
-  "next_action": "T5 full native run 43151970478 failed before Unity because RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE was absent from production AssetRipper step; 5f4da8ff now enables same-instance ClassID187 trace strictly inside runner, source-only 43153342026 PASS; full native validation NOT rerun. Real GT isolate 43150158897 PASS 9 array private Editor manifest and 28 material refs. Independent streamed BC3 UnityPy in-memory decoder patched in 272ab8c1 source-only CI43153004857 PASS; check real isolated 43153126679. Preserve ZIP2 SHA, no LFS and do not GT-trigger T5 full XAPK without team gates."
+  "latest_session": "sessions/20261112-GT-independent-full-graphics-chat-10.md",
+  "next_action": "GT independent: full native 43155854860 triggered via owner-approved f89b58e after fix 57ce47df for mixed class28/84/89/117/187 private texture trace in built-in Shader ownership. Check actual shader/water and Unity/OBB/XAPK outputs, fix failures without waiting stopped T1-T5. Real source GT43153126679 PASS 9/9 arrays, 28/28 original refs, independent UnityPy 8/8 BC3 arrays. Real 416 external owner texture link run 43154972647; 50/50 top mip source PNG parity run 43155325887 pending. No LFS, preserve GUID.",
+  "owner_directive_20261112": {
+    "t1_to_t5_stopped": true,
+    "gt_can_integrate_over_prior_agents": true,
+    "gt_can_trigger_native_build": true,
+    "no_lfs": true,
+    "original_sha_pin": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "preserve_authenticity_guards": true
+  }
 }

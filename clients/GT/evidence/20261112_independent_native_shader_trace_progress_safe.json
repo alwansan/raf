@@ -1,0 +1,29 @@
+{
+  "schema": "GT_OWNER_INDEPENDENT_FULL_GRAPHICS_PROGRESS_V1",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "owner_independent_build_authorized": true,
+  "old_agents_stopped": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5"
+  ],
+  "isolated_source_success_run": 43153126679,
+  "original_bc3_arrays_independent_source_decoded": 8,
+  "original_zero_pixel_arrays": 1,
+  "nine_importers_repaired": 9,
+  "original_class187_material_links": 28,
+  "internal_material_texture_export_links_exact": 4151,
+  "external_texture_refs_unproven": 416,
+  "native_postarray_builtin_shader_failed_run": 43153893985,
+  "native_failure_code": "Unexpected trace class",
+  "mixed_trace_fix_commit": "57ce47df7765e03d07a5ec70a7f91821a81091a8",
+  "new_full_native_run": 43155854860,
+  "external_texture_probe_run": 43154972647,
+  "all_50_original_BC3_topmip_probe_run": 43155325887,
+  "shader_dummy_materials_remaining_last_verified": 770,
+  "unity_editor_and_adreno_pixels_proven": false,
+  "new_full_native_XAPK_proven": false,
+  "git_lfs_used": false
+}
