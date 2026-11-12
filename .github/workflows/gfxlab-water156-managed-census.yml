@@ -1,0 +1,54 @@
+name: GFX156 ZIP2 original water managed census
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - '.github/workflows/gfxlab-water156-managed-census.yml'
+      - 'gfxlab/tools/water_managed_census.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: gfxlab-water156-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source:
+    if: github.ref == 'refs/heads/experiment/android-graphics-rootcause'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify and scan pinned managed source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python -m pip install dnfile==0.17.0
+          python gfxlab/tools/water_managed_census.py \
+            source-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            "$RUNNER_TEMP/gfx156-water-census.json"
+          cat "$RUNNER_TEMP/gfx156-water-census.json"
+      - name: Remove source files
+        if: always()
+        run: rm -rf source-zip2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gfx156-water-managed-safe
+          path: ${{ runner.temp }}/gfx156-water-census.json
+          if-no-files-found: error
