@@ -1,0 +1,29 @@
+name: GT Spectrum source-authenticated original index4 keyword seven-pass private router (source only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_spectrum_private_keyword_routed_shaderlab.py
+      - tests/test_gt_spectrum_private_keyword_routed_shaderlab.py
+      - .github/workflows/raft-gt-spectrum-original-keyword-router-source-gate.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-only-keyword-router:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Test original numerical keyword index4 selector, 7-pass two-stage routing and all negative cases
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_spectrum_private_keyword_routed_shaderlab.py tests/test_gt_spectrum_private_keyword_routed_shaderlab.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_private_keyword_routed_shaderlab.py -v
+          echo 'GT_SPECTRUM_SOURCE_INDEX4_ROUTER_TESTED syntheticOnly=true originalUnityKeywordScope=false UnityAndroid=false PhonePixels=false'
