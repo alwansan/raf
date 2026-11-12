@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_AUTHENTIC_50_LAYER_BC3_RESTORED_16_VENDOR_MATERIALS_REPAIRED_NINE_ASSETRIPPER_ARRAY_FLIPBOOK_GRIDS_INVALID",
+  "status": "GT_82_SOURCE_MATERIALS_MATCH_NINE_SOURCE_ARRAY_PNG_ATLASES_COMPLETE_ZERO_FLIPBOOK_FIELDS_SAFE_REPAIR_IMPL_TESTED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -164,7 +164,21 @@
           "original_array_png_targets_present": 9,
           "imported_shape4_and_original_fileID18700000": true,
           "array_flipbook_import_needs_authentic_repair": true,
-          "new_safe_grid_atlas_rootcause_test_run": 43141107035
+          "new_safe_grid_atlas_rootcause_test_run": 43141107035,
+          "real_full_png_grid_evidence_run": 43143899920,
+          "original_array_complete_png_cell_grids": 9,
+          "original_array_export_importer_flipbook_nonpositive_rows": 9,
+          "original_array_export_importer_flipbook_nonpositive_columns": 9,
+          "actual_original_png_meta_only_repair_is_possible_within_AssetRipper_export": true,
+          "synthetic_PNG_GUID_meta_repair_tests_pass": 43146010385,
+          "bounded_importer_repair_script": "scripts/gt_repair_array_flipbook_importers.py",
+          "all_28_real_material_refs_gate_script": "scripts/gt_verify_original_array_material_refs.py",
+          "synthetic_28_refs_gate_CI": 43145778708,
+          "original_BC3_source_slice_decoder_script": "scripts/gt_validate_bc3_array_slice_order.py",
+          "independent_decoder_synthetic_ci": 43145331681,
+          "actual_meta_only_repair_CI": 43144656957,
+          "actual_full_28_refs_repair_CI": 43145816256,
+          "actual_Editor_import_GPU_verified": false
         },
         "original_BC3_array_byte_stage": {
           "script": "scripts/gt_recover_original_array_layers.py",
@@ -264,6 +278,6 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "sessions/20261112-GT-original-texture-array-staging-chat-06.md",
-  "next_action": "Actual CI43138326757: 8 original BC3 arrays 50 layers 69906400 bytes restored private, 16 materials no longer Dummy (786->770), protected EyeHistogram GUID move verified. Actual CI43139784841 revealed ALL 9 original class187 Texture2DArray imported PNG shape4 with invalid flipbookRows*Columns vs original source depth; do not merely whitelist 28 refs. Run GT new diagnosis (counts of existing PNG actual grid capability) in fresh full CI after script gt_validate_texture2darray_flipbook.py patch to determine if source tile pixels exist and importer metadata alone fixable, else reconstruct PNG flipbooks from original BC3 bytes after proving mip/slice order. Pixel parity probe queued CI43141107035. No Adreno/Unity Editor acceptance, no LFS."
+  "latest_session": "sessions/20261112-GT-original-array-importer-repair-chat-07.md",
+  "next_action": "Real AssetRipper #43143899920 proves nine original ClassID187 PNG images already have full 1024px slice grids (9/9) but all nine flipbookRows/Columns are nonpositive and unimportable. GT implemented fail-closed actual PNG pixel decode + SHA source class187 GUID importer meta-only repair preserving all original meta and image bytes (script gt_repair_array_flipbook_importers.py). Synthetic CI43146010385 PASS. GT independently verifies original slice/mip layout via UnityPy and Pillow (CI43145331681 controls), and 28 actual Material class187 array PPtrs via gt_verify_original_array_material_refs (CI43145778708 controls). READ REAL CI #43144656957 and #43145816256 for bounded 9/9 restoration, 28/28 link closure and actual pixel parity. Do not claim Unity Editor/Android GPU, do not change T5 workflow, ZIP2 SHA only no LFS."
 }
