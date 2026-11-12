@@ -99,7 +99,16 @@
         "asset_files": 8372,
         "meta_files": 18368,
         "material_to_texture_export_guid_guard": "rejected",
-        "material_to_texture_export_guid_failure_code": "pending_targeted_recapture_run_43126735391"
+        "material_to_texture_export_guid_failure_code": "empty_or_unrecognized_texenv",
+        "material_to_texture_export_guid_failure_code_verified_run": 43126735391,
+        "b46_yaml_mapping_parser_fix_commit": "fb38ad1edcdc255bf6343a7535cdf77b41f14cae",
+        "b46_synthetic_guard_run": 43128041580,
+        "private_texture_lineage_probe_run": 43127697656,
+        "full_82_source_export_fidelity_run": 43128711194,
+        "texture_lineage_private_opt_in": "RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE=1 (GT isolation only)",
+        "full_source_texenv_audit": "scripts/gt_full_original_export_texenvs.py",
+        "full_82_synthetic_ci_run": 43128570586,
+        "real_b46_mapping_fix_verified": false
       },
       "targeted_export_material_guid_guard_repeat_run": 43126735391
     },
@@ -159,5 +168,5 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "sessions/20261112-GT-full-original-graphics-chat-04.md",
-  "next_action": "Full 134 source files restored and actual AssetRipper EXPORT has succeeded CI 43125542125: 40 scenes,1536 .mat,4003 textures,8372 .asset,18368 .meta,151 managed; BUT B46 export Material→Texture GUID guard exited 2. Diagnose exact safe failure code in rerun 43126735391, then repair actual exported graph while preserving same-instance original tracing and .meta GUIDs. No Android or Vulkan/GLES proof or native XAPK. Use ZIP2 only."
+  "next_action": "Actual AssetRipper exports 134 authenticated ZIP2 originals to 40 scenes,1536 mat,4003 texture files (43125542125). B46 error from actual export is empty_or_unrecognized_texenv (43126735391), so fix map-vs-sequence TexEnvs syntax with synthetic PASS 43128041580; need real recapture after patch. Private opt-in Texture lineage run 43127697656 probes B05, and full 82 original materials exact TexEnv/UV compare queued run 43128711194; inspect failures and source-backed repair, then respect T5 native build vote. Never LFS."
 }
