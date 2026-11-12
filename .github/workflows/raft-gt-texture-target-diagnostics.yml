@@ -28,6 +28,8 @@ on:
       - tests/test_gt_repair_array_flipbook_importers.py
       - scripts/gt_validate_bc3_array_slice_order.py
       - tests/test_gt_validate_bc3_array_slice_order.py
+      - scripts/gt_verify_original_array_material_refs.py
+      - tests/test_gt_verify_original_array_material_refs.py
       - .github/workflows/raft-gt-texture-target-diagnostics.yml
   workflow_dispatch:
 
@@ -67,3 +69,4 @@ jobs:
           python3 -m unittest discover -s tests -p test_gt_compare_original_bc3_to_flipbook_pixels.py -v
           python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
           python3 -m unittest discover -s tests -p test_gt_validate_bc3_array_slice_order.py -v
+          python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
