@@ -138,6 +138,10 @@ jobs:
           # T3 source-free controls: valid Material GUID can still target a
           # default-Dummy ShaderLab program after partial restoration.
           python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v
+          python3 -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
+          python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_t1_stage_original_fft_dispatch_trace.py -v
           python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
@@ -399,6 +403,54 @@ jobs:
           test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
           test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
           df -h /
+      - name: GT restore nine original Texture2DArray importer grids before every native Material/Shader link gate
+        id: gt_native_original_texture_arrays
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Same-instance original ClassID187 source→AssetRipper GUID provenance,
+          # exact 1024px source layer atlas grid and full PNG decode. No fake
+          # Texture2D fileID, imported pixels, source .meta or original GUIDs.
+          python3 -m scripts.gt_repair_array_flipbook_importers \
+            --original-source "$RUNNER_TEMP/input/Raft_Data" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/gt-native-original-array-meta-backup" \
+            --report "$RUNNER_TEMP/gt-native-original-array-importer-repair.json"
+          # Reject any output except nine source-proven repaired array grids.
+          python3 -m scripts.gt_verify_original_array_material_refs \
+            --original-source "$RUNNER_TEMP/input/Raft_Data" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-native-original-array-material-links.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])
+          fix=json.loads((root/'gt-native-original-array-importer-repair.json').read_text())
+          refs=json.loads((root/'gt-native-original-array-material-links.json').read_text())
+          assert fix['status']=='ALL_NINE_ARRAY_IMPORTERS_VALID', 'original_array_importers_not_source_verified'
+          assert fix['all_nine_original_array_importers_accepted'] is True
+          assert fix['original_exported_asset_guids_preserved'] is True
+          assert fix['source_images_or_binaries_edited'] is False
+          assert fix['meta_files_outside_the_exactly_verified_array_set_changed']==0
+          assert refs['full_array_material_importer_links_verified'] is True
+          assert refs['exact_original_class187_array_material_refs']==28
+          assert refs['distinct_source_array_guids_referenced_by_materials']==9
+          print('GT_NATIVE_ORIGINAL_ARRAY_IMPORT_GRIDS sourceOwners=82 arrays=9 gridVerified=9 exactMaterialRefs=28 guidPreserved=true sourcePixelsUntouched=true LFS=false editorImportNotYetVerified=true')
+          PY
+      - name: GT publish source-authentic array importer and Material link receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-original-array-import-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-native-original-array-importer-repair.json
+            ${{ runner.temp }}/gt-native-original-array-material-links.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: B04 restore original Linear color space in transient exported PlayerSettings
         shell: bash
         run: |
