@@ -51,6 +51,9 @@ SAFE_FAILURE=frozenset((
     "ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS", "TRANSLATOR_NO_SOURCE_SAMPLER_DECLARATIONS",
     "TRANSLATOR_SAMPLER_DECLARATION_UNBOUND", "TRANSLATOR_SAMPLER_SPACE_NOT_ZERO",
     "TRANSLATOR_RESOURCE_REGISTER_UNPROVEN", "TRANSLATOR_RESOURCE_COLLISION",
+    "TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING",
+    "TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT",
+    "TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING",
     "TRANSLATOR_SOURCE_READ_FAILED", "ORIGINAL_STAGE_LAYOUT_UNSUPPORTED",
     "ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING", "ORIGINAL_NAME_INDEX_TABLE_MISSING",
     "ORIGINAL_NAME_INDEX_ENTRY_UNSUPPORTED", "ORIGINAL_NAME_INDEX_INVALID",
@@ -134,8 +137,12 @@ def rebind_stage(hlsl,program,name_indices,stage):
         found=re.search(r'(?:^|_)'+cls+r'(\d+)$',variable)
         if found is None:
             found=re.search(r'(?:texture|sampler)'+cls+r'(\d+)$',variable,re.I)
-        if found is None or int(found[1])!=num or num not in table:
-            raise BridgeError("TRANSLATOR_RESOURCE_REGISTER_UNPROVEN")
+        if found is None:
+            raise BridgeError("TRANSLATOR_SYMBOL_SOURCE_REGISTER_ID_MISSING")
+        if int(found[1])!=num:
+            raise BridgeError("TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT")
+        if num not in table:
+            raise BridgeError("TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING")
         if num in used[cls] or (variable in mapping and mapping[variable]!=table[num]):
             raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
         mapping[variable]=table[num]
