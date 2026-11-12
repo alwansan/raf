@@ -74,7 +74,11 @@ class GTFullSourceExportTests(unittest.TestCase):
         self.assertEqual(r["exact_internal_targets_compared"],len(OWNERS))
         self.assertEqual(r["wrong_internal_targets"],0)
         self.assertEqual(r["uv_transform_slots_compared"],len(OWNERS))
-        self.assertTrue(r["all_texture_targets_proven"])
+        # All 82 serialized original owners are verified, while built-in Unity
+        # engine owners remain outside the authenticated game-owner scope.
+        self.assertTrue(r["selected_texture_targets_proven"])
+        self.assertFalse(r["all_texture_targets_proven"])
+        self.assertEqual(r["source_scope"],"all_82_authenticated_original_game_owners")
         self.assertFalse(r["android_gpu_verified"])
         self.assertFalse(r["exported_materials_modified"])
         self.assertNotIn("sharedassets0",json.dumps(r))
