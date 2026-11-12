@@ -21,6 +21,7 @@ from scripts.gt_verify_original_array_export import (
     COUNT_EXPECTED, exported_meta, match, source_arrays,
 )
 from scripts.gt_zip2_payloads import fingerprint, manifest, safe, SourceFailure
+from scripts.gt_bc3_array_layout import original_layout_report
 
 CHUNK=1024*1024
 MAX_ARRAY_STREAM_BYTES=512*1024*1024
@@ -52,9 +53,30 @@ def exact_streams(source_root:Path, files:dict, arrays:dict,
     planned=[]
     verified=set()
     total=0
+    # Source has 52 logical layers, but the authentic original has one
+    # zero-stream two-layer array: refuse to invent two color/image layers.
+    original_layout_report(arrays)
     for identity,meta in sorted(arrays.items()):
         if not isinstance(meta,dict):
             raise SourceFailure("malformed_original_array_metadata")
+        size=meta.get("original_stream_size")
+        offset=meta.get("private_stream_offset")
+        fmt=meta.get("source_format_enum")
+        mips=meta.get("source_mipmap_count")
+        if (type(size) is not int or size<0 or
+            type(fmt) is not int or fmt not in (100,101) or
+            type(mips) is not int or mips<=0):
+            raise SourceFailure("array_source_format_or_mips_missing")
+        if size==0:
+            if meta.get("has_image_data") or not meta.get("has_stream_record"):
+                raise SourceFailure("zero_stream_array_has_unverified_inline_payload")
+            planned.append(dict(identity=identity,provider=None,offset=None,
+                            source_format_enum=fmt,mip_count=mips,
+                            width=meta["width"],height=meta["height"],
+                            depth=meta["depth"],byte_length=0))
+            continue
+        if type(offset) is not int or offset<0:
+            raise SourceFailure("invalid_original_array_stream_extent")
         path=safe_stream_basename(meta.get("private_stream_path"))
         key="Raft_Data/"+path
         if key not in files or files[key][0] not in ("plain","split"):
@@ -63,11 +85,6 @@ def exact_streams(source_root:Path, files:dict, arrays:dict,
         safe(target)
         if not target.is_file():
             raise SourceFailure("missing_original_array_stream_provider")
-        size=meta.get("original_stream_size")
-        offset=meta.get("private_stream_offset")
-        if (type(size) is not int or size<=0 or
-            type(offset) is not int or offset<0):
-            raise SourceFailure("invalid_original_array_stream_extent")
         expected_size,expected_sha=files[key][1:]
         if offset+size>expected_size:
             raise SourceFailure("array_stream_extent_outside_authenticated_provider")
@@ -75,11 +92,6 @@ def exact_streams(source_root:Path, files:dict, arrays:dict,
             if fingerprint(target)!=(expected_size,expected_sha):
                 raise SourceFailure("original_array_stream_sha256_mismatch")
             verified.add(key)
-        fmt=meta.get("source_format_enum")
-        mips=meta.get("source_mipmap_count")
-        if (type(fmt) is not int or fmt<0 or
-            type(mips) is not int or mips<=0):
-            raise SourceFailure("array_source_format_or_mips_missing")
         total+=size
         if total>budget:
             raise SourceFailure("original_array_copy_budget_exceeded")
@@ -121,26 +133,33 @@ def recover(source_root:Path,original:dict,trace:dict,meta:dict,
     total=0
     try:
         for i,row in enumerate(planned):
-            name=f"array-{i:02d}.original-gpu-bytes"
-            output=private_output/name
-            checksum=hashlib.sha256()
-            remaining=row["byte_length"]
-            with row["provider"].open("rb") as src,output.open("xb") as dst:
-                src.seek(row["offset"])
-                while remaining:
-                    block=src.read(min(CHUNK,remaining))
-                    if not block:
-                        raise SourceFailure("original_array_stream_truncated_during_copy")
-                    checksum.update(block)
-                    dst.write(block)
-                    remaining-=len(block)
-            if output.stat().st_size!=row["byte_length"]:
-                raise SourceFailure("original_array_stream_length_mismatch")
-            total+=row["byte_length"]
+            source_has_pixels=row["byte_length"]>0
+            name=f"array-{i:02d}.original-gpu-bytes" if source_has_pixels else None
+            checksum=None
+            if source_has_pixels:
+                output=private_output/name
+                sha=hashlib.sha256()
+                remaining=row["byte_length"]
+                with row["provider"].open("rb") as src,output.open("xb") as dst:
+                    src.seek(row["offset"])
+                    while remaining:
+                        chunk=src.read(min(CHUNK,remaining))
+                        if not chunk:
+                            raise SourceFailure("original_array_stream_truncated_during_copy")
+                        sha.update(chunk)
+                        dst.write(chunk)
+                        remaining-=len(chunk)
+                if output.stat().st_size!=row["byte_length"]:
+                    raise SourceFailure("original_array_stream_length_mismatch")
+                checksum=sha.hexdigest()
+                total+=row["byte_length"]
             export=identities[row["identity"]]
             stage.append({
-                "relative_payload":name,"sha256":checksum.hexdigest(),
+                "relative_payload":name,"sha256":checksum,
                 "payload_bytes":row["byte_length"],
+                "original_payload_state":(
+                    "ORIGINAL_COMPRESSED_BC3_STREAM" if source_has_pixels
+                    else "NO_ORIGINAL_STREAMED_OR_INLINE_PIXELS"),
                 "target_export_guid":export["guid"],
                 "target_fileID":export["file_id"],
                 "target_export_type":export["type"],
@@ -158,12 +177,16 @@ def recover(source_root:Path,original:dict,trace:dict,meta:dict,
         shutil.rmtree(private_output)
         raise
     counts=Counter(row["source_format_enum"] for row in planned)
+    layout=original_layout_report(original)
     return {
         "schema":"GT_REAL_NINE_ORIGINAL_ARRAY_PAYLOAD_RECOVERY_V1",
         "status":"ORIGINAL_COMPRESSED_ARRAY_PAYLOADS_STAGED_FOR_REENCODE",
         "original_source_array_objects_verified":COUNT_EXPECTED,
         "source_total_layer_count":sum(row["depth"] for row in planned),
-        "sha256_authenticated_streamed_payloads_copied":len(stage),
+        "source_array_layers_with_original_streamed_pixels":layout["source_layers_with_original_stream_bytes"],
+        "source_array_layers_without_original_pixels":layout["source_layers_without_original_stream_bytes"],
+        "sha256_authenticated_streamed_payloads_copied":sum(row["byte_length"]>0 for row in planned),
+        "original_array_objects_with_zero_source_payload":sum(row["byte_length"]==0 for row in planned),
         "original_source_streamed_bytes_restored_to_private_stage":total,
         "original_array_format_enum_histogram":dict(sorted(
             (str(k),v) for k,v in counts.items())),
