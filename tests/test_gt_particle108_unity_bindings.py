@@ -90,10 +90,41 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
         self.assertIn("GT_ORIGINAL_PS_cb1_0_m0",fs)
         self.assertNotIn("GT_ORIGINAL_VS_cb1_0_m0",fs)
 
-    def test_register_drift_rejected_not_guessed(self):
+    def test_unknown_original_suffix_rejected_even_when_translated_slot_is_valid(self):
         changed=self.code.replace("texture_t0 : register(t0)", "texture_t3 : register(t0)")
-        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT"):
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SOURCE_REGISTER_SLOT_MISSING"):
             rebind_stage(changed,self.program,self.indices,1)
+
+    def test_compiled_original_RDEF_authorizes_descriptor_renumber_without_rewriting_register(self):
+        # SPIRV-Cross HLSL register() slots are NOT the original vkd3d
+        # resource identity. Require source symbol suffix + original RDEF,
+        # and preserve the emitted compiler binding annotations byte-for-byte.
+        from unittest.mock import patch
+        changed=self.code
+        changed=changed.replace("texture_t0 : register(t0)","texture_t0 : register(t1)")
+        changed=changed.replace("texture_t1 : register(t1)","texture_t1 : register(t0)")
+        changed=changed.replace("samplers0 : register(s0)","samplers0 : register(s1)")
+        changed=changed.replace("sampler_s1 : register(s1)","sampler_s1 : register(s0)")
+        with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SYMBOL_REGISTER_ID_DRIFT"):
+            rebind_stage(changed,self.program,self.indices,0)
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   return_value=((3,0,1),(3,1,1),(2,0,1),(2,1,1))):
+            mapped,proof=rebind_stage(changed,self.program,self.indices,0,
+                                      original_dxbc=b"DXBC"+b"0"*40)
+        self.assertIn("_MainTex : register(t1)",mapped)
+        self.assertIn("_NoiseTex : register(t0)",mapped)
+        self.assertIn("sampler_MainTex : register(s1)",mapped)
+        self.assertIn("sampler_NoiseTex : register(s0)",mapped)
+        self.assertEqual(proof["source_to_translator_descriptor_register_drifts_authenticated"],4)
+
+    def test_duplicate_source_suffix_cannot_hide_behind_distinct_translated_registers(self):
+        from unittest.mock import patch
+        changed=self.code.replace("texture_t1 : register(t1)","texture_t0 : register(t1)")
+        with patch("scripts.gt_particle108_unity_bindings.source_rdef",
+                   return_value=((3,0,1),(3,1,1),(2,0,1),(2,1,1))):
+            with self.assertRaisesRegex(BridgeError,"TRANSLATOR_RESOURCE_COLLISION"):
+                rebind_stage(changed,self.program,self.indices,0,
+                             original_dxbc=b"DXBC"+b"0"*40)
 
     def test_missing_serialized_sampler_rejected(self):
         self.program["m_CommonParameters"]["m_TextureParams"][1]["m_SamplerIndex"]=65535
