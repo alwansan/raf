@@ -1,6 +1,8 @@
 # ملخص تقدم GT للمالك
 
-**آخر تحديث: 12 نوفمبر 2026 — GT / Chat-20 / دليل هاتف CL الحقيقي، نجاح فحص إعادة إنتاج الأعطال، والبناء الكامل الحديث قيد Unity.** تمت قراءة 82/82 حاوية Unity أصلية مطلوبة للجرد (40 `level` + 42 `.assets`) والتحقق من SHA256 لكل منها ثم استخراج هويات الأصول الرسومية. **هذه نتائج المصدر الأصلي، وليست بعد نسبة دمج داخل مشروع Unity Android أو إثبات عرض على الهاتف.**
+**متابعة التقدم من الآن:** [الخطة العربية (ما استعيد وما تبقى والخطوات)](RESTORATION_PLAN_AR.md) · [الخطة JSON ذات الأدلة التفصيلية](RESTORATION_PLAN.json) · [آخر جلسة](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md). يحتوي السجل على P00–P11 وM0–M5، ويفصل صراحةً **الأصل الموثّق** عن **Export** و**Unity** و**حزمة Android** و**العرض المقبول على الهاتف**. هو المرجع الأحدث عندما تختلف عنه فقرات الجرد التاريخية أدناه.
+
+**آخر تحديث: 12 نوفمبر 2026 — GT / Chat-21 / خطة الاستعادة الحيّة وCI لمنع false green، والبناء الحديث قيد Unity.** تمت قراءة 82/82 حاوية Unity أصلية مطلوبة للجرد (40 `level` + 42 `.assets`) والتحقق من SHA256 لكل منها ثم استخراج هويات الأصول الرسومية. **هذه نتائج المصدر الأصلي، وليست بعد نسبة دمج داخل مشروع Unity Android أو إثبات عرض على الهاتف.**
 
 > **قرار المالك 12 نوفمبر 2026 — ZIP2 فقط، من دون Git LFS:** يستعيد GT جميع الحمولات من [فرع `zip2`](https://github.com/alwansan/raf/tree/zip2) بعد تثبيت commit، وإعادة تجميع الأجزاء `part-00000`...، والتحقق من SHA256 والحجم الكامل قبل استخدامها. لا تستخدم أدوات جلب LFS ولا fallback عليها. المخرجات المؤقتة مفصولة عن شجرة المصدر وملفات .meta/GUID. هذا القرار محفوظ في [MEMORY.md](MEMORY.md)، و[RESTORE_AR.md](RESTORE_AR.md)، و[state.json](state.json).
 
@@ -161,3 +163,14 @@
 بقيت **770 مستند Material بشيدر Dummy** بعد استعادة المزودين، وتظل خريطة Sampler/Texture الأصلية لكل Shader عائقاً؛ لا يحق اعتماد كل الألوان/النار حتى اكتمال ShaderLab الأصلي/المواد واختبار Adreno. بناء [43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) بقي عند Unity Editor import/compile في آخر فحص؛ نسخة APK+OBB+XAPK المؤكدة [43246196803](https://github.com/alwansan/raf/actions/runs/43246196803) تمثل snapshot أقدم. هذا التحديث لا يمس ZIP2 أو LFS أو GUID/Meta أو البناء الجاري.
 
 **الأولوية المبرهنة:** إصلاح shader passes للأصل Spectrum وFoam/Global بربط original GUID وMaterial؛ تحديد هوية kernel6 الحقيقية قبل العبث بالـFFT؛ استعادة 770 برنامج Dummy بدفعات source→export→Unity→phone؛ إصلاح صيغة المؤشر عند original Cursor.SetCursor؛ ثم اختبار الهاتف مع بوابة `--strict`. لا يُعتبر توليد XAPK دليلاً على نجاح الرسوميات.
+
+## GT / Chat-21 — ما أُنجز في دورة الخطة ومعيار متابعة استعادة الموارد
+
+- أُنشئت [الخطة الحيّة](RESTORATION_PLAN_AR.md) و[سجلها المهيكل](RESTORATION_PLAN.json) لتسجيل 12 مجالات بحالة source/export/Unity/packaged/device، وست مراحل M0–M5 مع الـblockers وRun IDs؛ لا نسبة مزعومة لاستعادة كل رسوميات اللعبة.
+- أُصلح فحص لوق الهاتف: غياب أي فئة خطأ معروفة **لم يعد يُعتبر صفراً**، بل يجعل جلسة الفحص ناقصة وغير مؤهلة للاعتماد. نجح اختبار [43266159804 — SUCCESS](https://github.com/alwansan/raf/actions/runs/43266159804) على السلبيات وملف CL الحقيقي، مع بقاء النتيجة الصحيحة `KNOWN_DEVICE_LOG_GATE_REJECTED` (العيب موجود على الجهاز).
+- أُضيف `scripts/gt_restoration_plan_check.py` و`tests/test_gt_restoration_plan_check.py` وworkflow `raft-gt-restoration-plan-gate.yml` لرفض نسب التغطية المتضاربة أو احتساب **770** مستند مادة Dummy كأنها صفر أو اعتبار بناء موقّع قبولاً لونياً. يشترط أيضاً روابط الاستئناف والخطة في رسالة GT وذاكرته. يُراجع **حكم CI النهائي** قبل القول إن بوابة الخطة نجحت.
+- **تظل الأعمال الرسومية الفعلية ناقصة:** الطوف أبيض في صور CL، الماء يعاني 42,229 Shader pass invalid و7,263 invalid kernel6 (هوية الأخير لا تُخمن)، و770 مستند Material Dummy بعد vendor restorers، ومطابقة ألوان/نار/ظلال Adreno غير مثبتة. مصدر ZIP2 محفوظ وCI source original 9/28/416/50 ثابت.
+- **بناء كامل حديث:** [43247161671](https://github.com/alwansan/raf/actions/runs/43247161671) بقي في Unity Editor import/compile عند الفحص؛ لا تلغه أو تطلق نسخة مكررة. [43246196803](https://github.com/alwansan/raf/actions/runs/43246196803) نجح في إنتاج نسخة أقدم signed APK/OBB/XAPK فقط.
+- **التنفيذ التالي:** M1 فحص البناء الحالي، M2 إثبات shader Pass الأصلية لـSpectrum/Foam+GUID/Material/RT، M3 ربط Kernel6 بأصل Compute الصحيح قبل FFT، M4 استعادة عائلات الشيدرات للمكونات ذات أعلى أثر ضمن 770 Dummy، M5 إصلاح Cursor/OBB والاختبار النهائي على الهاتف.
+
+[ملف الجلسة ودليل خطوات الإعادة](sessions/20261112-GT-restoration-plan-and-device-gate-chat-21.md).
