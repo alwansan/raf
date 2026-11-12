@@ -1,0 +1,39 @@
+name: GT original water imported Shader passCount synthetic CSharp gate
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Editor/GTOriginalWaterPassImportProbe.cs
+      - android-port/Editor/AndroidNativeBuild.cs
+      - tests/fixtures/gt_water_probe/GTWaterProbeHarness.csproj
+      - tests/fixtures/gt_water_probe/Program.cs
+      - tests/test_gt_water_unity_editor_probe.py
+      - .github/workflows/raft-gt-original-water-pass-import-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-only-synthetic-import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Assert source topology and read-only import properties
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_water_unity_editor_probe.py' -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile the actual CSharp Unity probe against synthetic API stubs and execute controls
+        run: |
+          set -euo pipefail
+          dotnet run --project tests/fixtures/gt_water_probe/GTWaterProbeHarness.csproj --configuration Release
+      - name: State strict evidence scope
+        run: |
+          echo 'GT_WATER_IMPORTED_PASS_PROBE_CSHARP syntheticCompilation=true actualUnityEditor2021=false AndroidGPU=false originalShaderPixelRestoration=false'
