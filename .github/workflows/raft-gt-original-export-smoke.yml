@@ -386,6 +386,19 @@ jobs:
           assert d["original_importer_repair_candidates_applied"]<=9
           print("GT_REAL_SAFE_TEXTURE2DARRAY_GRID_REPAIR "+json.dumps(d,sort_keys=True))
           PY
+      - name: GT validate all 28 original Class187 Material refs to nine exact source arrays after bounded importer repair
+        id: gt_original_array_material_ref_integrity
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
+          python3 -m scripts.gt_verify_original_array_material_refs \
+            --original-source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --report "$RUNNER_TEMP/gt-real-array-28-source-links.json"
       - name: GT compare all 1556 original Material texture properties and GUIDs with actual same-instance exported Unity project
         id: gt_all_original_texenvs
         continue-on-error: true
@@ -467,6 +480,7 @@ jobs:
             ${{ runner.temp }}/gt-original-array-exact-pixel-parity.json
             ${{ runner.temp }}/gt-original-array-slice-layout-independent.json
             ${{ runner.temp }}/gt-real-array-meta-only-repair.json
+            ${{ runner.temp }}/gt-real-array-28-source-links.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json
