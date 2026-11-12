@@ -1,5 +1,6 @@
 """GT no-network controls for genuine shader restorers' guarded isolated execution."""
 import json
+import shutil
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -86,7 +87,59 @@ class ActualVendorRestoreTests(unittest.TestCase):
               quality=lambda project:sample())
         self.assertEqual(d["status"],"REJECTED")
         self.assertFalse(d["original_exported_meta_bytes_unchanged"])
-        self.assertEqual(d["failure_category"],"ORIGINAL_EXPORTED_META_MUTATED")
+        self.assertEqual(d["failure_category"],"UNAUTHORIZED_OR_UNPROVEN_ORIGINAL_EXPORTED_META_MUTATION")
+
+    def prepare_original_histogram_source(self):
+        source=self.assets/"SomeOriginal"/"EyeHistogram.asset"
+        source.parent.mkdir()
+        source.write_text("--- !u!72 &7200000\\nComputeShader:\\n  m_Name: EyeHistogram\\n")
+        meta=Path(str(source)+".meta")
+        meta.write_text("fileFormatVersion: 2\\nguid: "+"c"*32+
+                        "\\nNativeFormatImporter:\\n")
+        return source,meta
+
+    def migrate_histogram_during_verified_vendor_step(self,wrong_guid=False):
+        source,meta=self.histogram_source,self.histogram_meta
+        def runner(command, **kwargs):
+            if "scripts.restore_postfx_compute" in command:
+                backup=self.backup/"histogram_compute"/source.relative_to(self.project)
+                backup.parent.mkdir(parents=True)
+                shutil.copy2(source,backup)
+                shutil.copy2(meta,Path(str(backup)+".meta"))
+                dest=self.assets/"RaftAndroid/Resources/Shaders/EyeHistogram.compute"
+                dest.parent.mkdir(parents=True,exist_ok=True)
+                dest.write_text("#pragma kernel KEyeHistogram\\n#pragma kernel KEyeHistogramClear\\n")
+                Path(str(dest)+".meta").write_text(
+                    "fileFormatVersion: 2\\nguid: "+("d"*32 if wrong_guid else "c"*32)+
+                    "\\nComputeShaderImporter:\\n")
+                source.unlink()
+                meta.unlink()
+            return SimpleNamespace(returncode=0)
+        return runner
+
+    def test_exact_original_compute_source_backup_and_same_guid_relocation_permitted(self):
+        self.histogram_source,self.histogram_meta=self.prepare_original_histogram_source()
+        d=run(self.project,sample(),self.backup,
+              runner=self.migrate_histogram_during_verified_vendor_step(),
+              quality=lambda project:sample(dummy=1,non_dummy=1))
+        self.assertEqual(d["status"],"POST_RESTORE_SOURCE_QUALITY_COMPARED")
+        self.assertEqual(d["verified_ComputeShader_GUID_relocation_count"],1)
+        self.assertEqual(d["original_meta_removed"],1)
+        self.assertEqual(d["original_meta_removed_unapproved"],0)
+        self.assertEqual(d["original_meta_changed"],0)
+        self.assertFalse(d["original_exported_meta_bytes_unchanged"])
+        self.assertTrue(d["original_meta_contract_preserved_with_verified_compute_relocation"])
+        self.assertTrue(d["postrestore_material_quality"]["original_exported_meta_integrity_contract_preserved"])
+
+    def test_wrong_histogram_guid_migration_rejected_even_if_original_backed_up(self):
+        self.histogram_source,self.histogram_meta=self.prepare_original_histogram_source()
+        d=run(self.project,sample(),self.backup,
+              runner=self.migrate_histogram_during_verified_vendor_step(wrong_guid=True),
+              quality=lambda project:sample())
+        self.assertEqual(d["status"],"REJECTED")
+        self.assertEqual(d["verified_ComputeShader_GUID_relocation_count"],0)
+        self.assertEqual(d["original_meta_removed_unapproved"],1)
+        self.assertEqual(d["failure_category"],"UNAUTHORIZED_OR_UNPROVEN_ORIGINAL_EXPORTED_META_MUTATION")
 
     def test_backup_root_inside_original_export_rejected(self):
         with self.assertRaisesRegex(ValueError,"backup_directory_overlaps"):
