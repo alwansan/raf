@@ -58,6 +58,11 @@ class ExportedTextureLinks(unittest.TestCase):
                         "  textureShape: 4\n  flipbookRows: 1\n"
                         "  flipbookColumns: 2\n")
         self.assertEqual(mod.audit(self.root)["resolved_local_texture_refs"],1)
+        # Even a valid source-original Texture2DArray GUID cannot be used
+        # to disguise a flattened Texture2D imported fileID.
+        self.ptr("{fileID: 2800000, guid: "+B+", type: 3}")
+        self.reject("reference_target_not_verified_texture")
+        self.ptr("{fileID: 18700000, guid: "+B+", type: 3}")
         # A 2D image target never validates the original class187 fileID.
         meta.write_text(meta.read_text().replace("textureShape: 4","textureShape: 1"))
         self.reject("reference_target_not_verified_texture")
