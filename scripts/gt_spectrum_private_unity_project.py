@@ -13,13 +13,14 @@ from pathlib import Path
 import shutil
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
+from scripts.gt_spectrum_private_stage_buffer_isolation import isolate
 
 MAX_SAFE_REPORT = 65536
 MAX_SHADER = 16 * 1024 * 1024
 
 
 def prepare(candidate: Path, manifest: Path, editor: Path,
-            project: Path, out: Path):
+            project: Path, out: Path, *, diagnostic_stage_buffers=False):
     candidate,manifest,editor,project,out=(
         Path(p).absolute() for p in (candidate,manifest,editor,project,out))
     if (not candidate.is_file() or candidate.is_symlink() or
@@ -63,17 +64,27 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         covers.get("passes_with_complete_program")!=7 or
         covers.get("all_subshaders_programmed") is not True):
         raise ValueError("private_spectrum_seven_pass_ShaderLab_not_complete")
+    if type(diagnostic_stage_buffers) is not bool:
+        raise ValueError("invalid_private_diagnostic_mode")
+    isolated = None
+    private_project_source = text
+    if diagnostic_stage_buffers:
+        # This compile-only transform is intentionally NOT applied to
+        # original DXBC, serialized Material/GUID, or real game shader.
+        private_project_source, isolated = isolate(text)
     project.mkdir()
     try:
         (project/"Assets/Editor").mkdir(parents=True)
         (project/"Packages").mkdir()
         (project/"ProjectSettings").mkdir()
-        shutil.copyfile(candidate, project/"Assets/GTPrivateSpectrum.shader")
+        (project/"Assets/GTPrivateSpectrum.shader").write_text(
+            private_project_source, encoding="utf-8")
         shutil.copyfile(editor, project/"Assets/Editor/OriginalSpectrumSevenPassValidation.cs")
         (project/"Packages/manifest.json").write_text('{"dependencies":{}}\n', encoding="utf-8")
         (project/"ProjectSettings/ProjectVersion.txt").write_text(
             "m_EditorVersion: 2021.3.45f2\n", encoding="utf-8")
-        if (project/"Assets/GTPrivateSpectrum.shader").read_bytes()!=candidate.read_bytes():
+        if (project/"Assets/GTPrivateSpectrum.shader").read_text(
+                encoding="utf-8") != private_project_source:
             raise ValueError("private_spectrum_shader_copy_changed")
     except BaseException:
         shutil.rmtree(project)
@@ -84,6 +95,16 @@ def prepare(candidate: Path, manifest: Path, editor: Path,
         "source_original_render_states":7,
         "provisional_isolated_keyword_variant_index":0,
         "source_original_variant_stage_programs_in_shader":14,
+        "private_stage_local_cbuffer_name_disambiguation_only":diagnostic_stage_buffers,
+        "private_vertex_cbuffer_identifiers_disambiguated":(
+            0 if isolated is None else
+            isolated["private_vertex_cbuffer_identifiers_disambiguated"]),
+        "private_fragment_cbuffer_identifiers_disambiguated":(
+            0 if isolated is None else
+            isolated["private_fragment_cbuffer_identifiers_disambiguated"]),
+        "original_DXBC_register_annotations_unchanged":(
+            True if isolated is None else
+            isolated["private_original_HLSL_register_annotations_identical"]),
         "original_keyword_selection_or_Material_binding_proven":False,
         "original_game_source_or_meta_modified":False,
         "Unity_Editor_2021_compilation_proven":False,
@@ -99,8 +120,10 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ("candidate","manifest","editor","project","out"):
         p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--diagnostic-stage-buffers",action="store_true")
     a=p.parse_args()
-    prepare(a.candidate,a.manifest,a.editor,a.project,a.out)
+    prepare(a.candidate,a.manifest,a.editor,a.project,a.out,
+            diagnostic_stage_buffers=a.diagnostic_stage_buffers)
 
 
 if __name__=="__main__":
