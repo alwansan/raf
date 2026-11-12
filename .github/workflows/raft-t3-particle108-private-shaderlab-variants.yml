@@ -239,6 +239,28 @@ jobs:
       - name: GT source-authenticate original Shader48 texture sampler symbols and stage-isolate cbuffer declarations
         run: |
           set -euo pipefail
+          # Diagnostic is SOURCE-PRIVATE in the runner; it prints only
+          # aggregate language shapes (never names, registers, HLSL or GUIDs).
+          python3 - <<'PY'
+          from pathlib import Path
+          from collections import Counter
+          import os,re,json
+          root=Path(os.environ["RUNNER_TEMP"])/"t3-private-variant-shaderlab"
+          shapes=Counter()
+          for v in range(4):
+              for stage in (0,1):
+                  p=root/("keyword-%d-stage-%d"%(v,stage))/"private.hlsl"
+                  assert p.is_file() and not p.is_symlink() and p.stat().st_size<1024*1024
+                  code=p.read_text()
+                  shapes["translated_hlsl_stages_seen"]+=1
+                  shapes["typed_samplerstate_token_occurrences"]+=len(re.findall(r'\bSamplerState\b',code))
+                  shapes["typed_samplercomparison_token_occurrences"]+=len(re.findall(r'\bSamplerComparisonState\b',code))
+                  shapes["original_translator_samplers_numbered_tokens"]+=len(re.findall(r'\bsamplers\d+\b',code))
+                  shapes["explicit_d3d_sampler_register_annotations"]+=len(re.findall(r'\bregister\s*\(\s*s\d+',code))
+                  shapes["spaced_d3d_sampler_register_annotations"]+=len(re.findall(r'\bregister\s*\(\s*s\d+\s*,\s*space',code))
+                  shapes["sampler2D_typed_occurrences"]+=len(re.findall(r'\bsampler2D\b',code))
+          print('GT_PARTICLE108_HLSL_PRIVATE_SYNTAX_SHAPE '+json.dumps(dict(sorted(shapes.items())),sort_keys=True))
+          PY
           # Never replace source by a guessed register or placeholder. Stage the
           # original SHA-checker privately; only numeric aggregate leaves CI.
           python3 -m scripts.gt_particle108_unity_bindings \
