@@ -64,7 +64,8 @@ class RealOriginalArrayStreamRecoveryTests(unittest.TestCase):
             raw=(self.stage/row["relative_payload"]).read_bytes()
             self.assertEqual(raw,self.payload[i*64:i*64+64])
             self.assertEqual(row["sha256"],hashlib.sha256(raw).hexdigest())
-        self.assertNotIn("guid",json.dumps(result).lower())
+        for i in range(9):
+            self.assertNotIn(f"{i+100:032x}",json.dumps(result))
         self.assertEqual(self.provider.read_bytes(),self.payload)
 
     def test_corrupted_original_stream_fails_before_creating_stage(self):
