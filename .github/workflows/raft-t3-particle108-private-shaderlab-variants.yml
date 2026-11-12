@@ -1,4 +1,4 @@
-name: T3 RENDER-002 SHA-original Particle108 four private ShaderLab compile-only variants
+name: GT original Particle108 source-authentic private Unity Android shader compile probe
 on:
   push:
     branches: [feature/android-native-port]
@@ -14,6 +14,9 @@ on:
       - 'tests/test_t3_particle108_original_keyword_names.py'
       - 'scripts/t3_particle108_private_keyword_routed_shaderlab.py'
       - 'tests/test_t3_particle108_private_keyword_routed_shaderlab.py'
+      - 'scripts/gt_particle108_private_unity_project.py'
+      - 'tests/test_gt_particle108_private_unity_project.py'
+      - 'android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs'
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,7 +26,8 @@ concurrency:
 jobs:
   private-shaderlab-structural-only:
     runs-on: ubuntu-24.04
-    timeout-minutes: 26
+    timeout-minutes: 65
+    environment: UNITY_LICENSE
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
       PYTHONDONTWRITEBYTECODE: '1'
@@ -35,6 +39,7 @@ jobs:
           sparse-checkout: |
             scripts
             tests
+            android-port/Experiments/GT/Editor
       - name: Verify all synthetic negative controls before touching original
         run: |
           set -euo pipefail
@@ -48,6 +53,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_particle108_original_keyword_names.py' -v
           python3 -m py_compile scripts/t3_particle108_private_keyword_routed_shaderlab.py tests/test_t3_particle108_private_keyword_routed_shaderlab.py
           python3 -m unittest discover -s tests -p 'test_t3_particle108_private_keyword_routed_shaderlab.py' -v
+          python3 -m py_compile scripts/gt_particle108_private_unity_project.py
+          python3 -m unittest discover -s tests -p 'test_gt_particle108_private_unity_project.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
@@ -225,9 +232,83 @@ jobs:
               assert report[key] is False
           print("T3_PRIVATE_PROVISIONAL_ONE_SHADERLAB=4_pair_routes_8_glslang_vulkan11_valid; Unity_Material_Android_UNPROVEN")
           PY
+      - name: GT stage authentic four-variant ShaderLab and CSharp Editor verifier in separate Unity project
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$RUNNER_TEMP/t3-private-variant-shaderlab/keyword-routed-private.shader" \
+            --routing "$RUNNER_TEMP/t3-private-provisional-routed-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-private-particle-unity" \
+            --report "$RUNNER_TEMP/gt-particle108-staging-safe.json"
+      - name: GT validate original Particle108 shader on real Unity 2021.3.45f2 Android Vulkan asset bundle
+        id: gt_private_particle_unity
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-private-particle-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: GT require real Unity Android Vulkan private original four-variant ShaderBundle or fail
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json')
+          if not p.is_file() or p.stat().st_size > 65536:
+              raise SystemExit('GT_PRIVATE_SHADER_UNITY_SAFE_REPORT_MISSING')
+          r=json.loads(p.read_text())
+          expected={
+              'status':'ORIGINAL_PRIVATE_PARTICLE108_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED',
+              'unityVersion':'2021.3.45f2',
+              'sourceKeywordDimensions':2,
+              'sourceKeywordCombinations':4,
+              'registeredKeywordVariants':4,
+              'materialPassCount':1,
+              'shaderErrorCount':0,
+              'importedPrivateOriginalShader':True,
+              'androidVulkanOnly':True,
+              'privateAndroidShaderBundleBuilt':True,
+              'unityEditorShaderImportAndCompilationProven':True,
+              'originalMaterialBindingProven':False,
+              'originalRuntimeKeywordSelectionParityProven':False,
+              'originalAndroidAdrenoPixelsProven':False,
+              'originalGameShadersOrGUIDsChanged':False,
+              'gamePlayerBuilt':False,
+              'originalShaderNamesOrBytecodePublished':False,
+          }
+          for key,value in expected.items():
+              if type(r.get(key)) is not type(value) or r[key]!=value:
+                  raise SystemExit('GT_ORIGINAL_PRIVATE_UNITY_FAIL_'+key)
+          if type(r.get('privateBundleBytes')) is not int or r['privateBundleBytes']<=0:
+              raise SystemExit('GT_ORIGINAL_PARTICLE_ANDROID_SHADER_BUNDLE_EMPTY')
+          print('GT_ORIGINAL_PARTICLE108_UNITY realImported=true originalKeywordPairs=4 UnityAndroidVulkanBundle=true shaderErrors=0 originalGameAssetsUnchanged=true deviceGPUUnverified=true')
+          PY
+      - name: Retain GT aggregate private Unity shader compile evidence ONLY, never private HLSL, ShaderLab, original GUIDs or bundles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-particle-private-unity-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-particle108-staging-safe.json
+            gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Erase private staged sources and candidates from runner
         if: always()
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
+          rm -rf -- "$GITHUB_WORKSPACE/gt-private-particle-unity"
           rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json" "$RUNNER_TEMP/t3-particle108-stage-wrapper-safe.json" "$RUNNER_TEMP/t3-particle108-original-keyword-lattice-safe.json" "$RUNNER_TEMP/t3-original-keyword-name-table-safe.json" "$RUNNER_TEMP/t3-private-provisional-routed-safe.json"
