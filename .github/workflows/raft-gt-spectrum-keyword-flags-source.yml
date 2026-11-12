@@ -1,0 +1,95 @@
+name: GT original Spectrum keyword flag-byte source attestation (no game integration)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_spectrum_original_keyword_flags.py
+      - tests/test_gt_spectrum_original_keyword_flags.py
+      - .github/workflows/raft-gt-spectrum-keyword-flags-source.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-index4-flags-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Negative controls for original flag byte schema and no inferred keyword scope
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_spectrum_original_keyword_flags.py tests/test_gt_spectrum_original_keyword_flags.py
+          python3 -m unittest discover -s tests -p test_gt_spectrum_original_keyword_flags.py -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: gt-spectrum-flags-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Restore SHA-authentic original owner from ZIP2 without LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA, PINS, stage
+          src = Path('gt-spectrum-flags-zip2')
+          assert subprocess.check_output(['git','-C',str(src),'rev-parse','HEAD'], text=True).strip() == ZIP2_SHA
+          dest = Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-original-flags-input'
+          proof = stage(src, dest, {'Raft_Data/sharedassets0.assets': PINS['Raft_Data/sharedassets0.assets']})
+          assert proof['verified_bytes'] == 115978112 and proof['lfs_used'] is False
+          (dest/'Raft_Data/sharedassets0.assets').rename(dest/'sharedassets0.assets')
+          print('GT_SPECTRUM_FLAGS_SHA_SOURCE size=115978112 gitLFS=false')
+          PY
+      - name: Install original serialized owner reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Read original indexed keyword flag bytes with source SHA and pathID proof
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_spectrum_original_keyword_flags \
+            --source "$RUNNER_TEMP/gt-spectrum-original-flags-input" \
+            --repo "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/gt-spectrum-original-flags-safe.json"
+          python3 - <<'PY'
+          import os, json
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-spectrum-original-flags-safe.json'
+          obj=json.loads(p.read_text(encoding='utf-8'))
+          assert obj['status']=='SOURCE_AUTHENTIC_SPECTRUM_INDEX4_FLAG_BYTES_OBSERVED'
+          assert obj['original_keyword_names_count']==5
+          assert obj['original_keyword_flags_count']==5
+          assert obj['original_passes']==7
+          assert type(obj['original_keyword_index4_flag_byte']) is int
+          assert obj['original_flag_byte_to_global_local_semantics_proven'] is False
+          assert obj['original_material_keyword_selection_proven'] is False
+          assert obj['original_game_modified'] is False
+          assert obj['unity_or_adreno_pixels_verified'] is False
+          print('GT_SPECTRUM_FLAG_BYTE_SOURCE_GATE_CONFIRMED index4NumericObserved=true keywordScopeUnproven=true sourceOnly=true')
+          PY
+      - name: Publish only bounded numeric source receipt
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-spectrum-original-index4-flags-safe
+          path: ${{ runner.temp }}/gt-spectrum-original-flags-safe.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Cleanup original payload and temporary checkout
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-spectrum-original-flags-input" "$RUNNER_TEMP/gt-spectrum-original-flags-safe.json"
+          rm -rf -- "$GITHUB_WORKSPACE/gt-spectrum-flags-zip2"
