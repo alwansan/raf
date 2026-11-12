@@ -1,0 +1,58 @@
+#pragma kernel Horizontal
+#pragma kernel Vertical
+#pragma kernel Readback
+
+StructuredBuffer<float2> Spectrum;
+RWTexture2D<float2> Intermediate;
+RWTexture2D<float2> OutputMap;
+RWStructuredBuffer<float2> Heights;
+groupshared float2 Line[32];
+
+uint Reverse5(uint value)
+{
+    return ((value & 1u) << 4u) | ((value & 2u) << 2u) | (value & 4u)
+         | ((value & 8u) >> 2u) | ((value & 16u) >> 4u);
+}
+
+float2 InverseLine(uint index, float2 sampleValue)
+{
+    Line[index] = sampleValue;
+    GroupMemoryBarrierWithGroupSync();
+    [unroll]
+    for (uint width = 2u; width <= 32u; width *= 2u)
+    {
+        uint halfWidth = width / 2u;
+        uint j = index % halfWidth;
+        uint baseIndex = (index / width) * width + j;
+        float2 a = Line[baseIndex];
+        float2 b = Line[baseIndex + halfWidth];
+        float angle = 6.28318530718 * float(j) / float(width);
+        float2 w = float2(cos(angle), sin(angle));
+        float2 t = float2(b.x * w.x - b.y * w.y, b.x * w.y + b.y * w.x);
+        float2 value = ((index & halfWidth) == 0u) ? a + t : a - t;
+        GroupMemoryBarrierWithGroupSync();
+        Line[index] = value;
+        GroupMemoryBarrierWithGroupSync();
+    }
+    return Line[index] / 32.0;
+}
+
+[numthreads(32, 1, 1)]
+void Horizontal(uint3 group : SV_GroupID, uint index : SV_GroupIndex)
+{
+    float2 value = InverseLine(index, Spectrum[group.x * 32u + Reverse5(index)]);
+    Intermediate[uint2(index, group.x)] = value;
+}
+
+[numthreads(32, 1, 1)]
+void Vertical(uint3 group : SV_GroupID, uint index : SV_GroupIndex)
+{
+    float2 value = InverseLine(index, Intermediate[uint2(group.x, Reverse5(index))]);
+    OutputMap[uint2(group.x, index)] = value;
+}
+
+[numthreads(64, 1, 1)]
+void Readback(uint3 id : SV_DispatchThreadID)
+{
+    Heights[id.x] = OutputMap[uint2(id.x % 32u, id.x / 32u)];
+}
