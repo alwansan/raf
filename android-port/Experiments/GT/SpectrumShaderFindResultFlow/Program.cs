@@ -258,6 +258,10 @@ internal static class Program
         int localCfgConstructor=0,localCfgDuplicate=0,localCfgComparison=0;
         int localCfgRuntimeTypeCheck=0,localCfgBoxing=0,localCfgUnconditionalBranch=0;
         int localCfgOtherMethodCall=0,localCfgMultiArgShaderCall=0;
+        int localCfgCtorExactMaterial=0,localCfgCtorLastExactShader=0;
+        int localCfgCtorHasExactShader=0,localCfgCtorGameOwned=0;
+        int localCfgCtorUnityEngineOther=0,localCfgCtorOther=0;
+        int localCfgCtorParameterCount=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -337,6 +341,28 @@ internal static class Program
                     if(shape=="field_read_candidate")localCfgFieldRead++;
                     if(shape=="field_store_candidate")localCfgFieldStore++;
                     if(shape=="constructor_candidate")localCfgConstructor++;
+                    if(shape=="constructor_candidate")
+                    {
+                        int ctorAt=SkipNops(il,i+1);
+                        if(il[ctorAt].Operand is not MethodReference constructor ||
+                           constructor.Name!=".ctor")
+                            throw new InvalidOperationException("source_CIL_ctor_operand_invalid");
+                        localCfgCtorParameterCount+=constructor.Parameters.Count;
+                        if(constructor.DeclaringType.FullName=="UnityEngine.Material")
+                            localCfgCtorExactMaterial++;
+                        else if(constructor.DeclaringType.Namespace.StartsWith("UnityEngine",
+                                 StringComparison.Ordinal))
+                            localCfgCtorUnityEngineOther++;
+                        else if(constructor.DeclaringType.Scope is ModuleDefinition)
+                            localCfgCtorGameOwned++;
+                        else
+                            localCfgCtorOther++;
+                        if(constructor.Parameters.Any(p=>p.ParameterType.FullName==ShaderType))
+                            localCfgCtorHasExactShader++;
+                        if(constructor.Parameters.Count>0 &&
+                           constructor.Parameters[^1].ParameterType.FullName==ShaderType)
+                            localCfgCtorLastExactShader++;
+                    }
                     if(shape=="duplicate_stack_reference")localCfgDuplicate++;
                     if(shape=="comparison_consumer")localCfgComparison++;
                     if(shape=="runtime_reference_type_check")localCfgRuntimeTypeCheck++;
@@ -428,6 +454,13 @@ internal static class Program
             source_local_cfg_actual_next_field_read_candidate=localCfgFieldRead,
             source_local_cfg_actual_next_field_store_candidate=localCfgFieldStore,
             source_local_cfg_actual_next_constructor_candidate=localCfgConstructor,
+            source_local_cfg_next_ctor_declaring_type_is_UnityEngine_Material=localCfgCtorExactMaterial,
+            source_local_cfg_next_ctor_declaring_type_is_other_UnityEngine=localCfgCtorUnityEngineOther,
+            source_local_cfg_next_ctor_declaring_type_is_own_managed_module=localCfgCtorGameOwned,
+            source_local_cfg_next_ctor_declaring_type_other=localCfgCtorOther,
+            source_local_cfg_next_ctor_parameter_count_sum=localCfgCtorParameterCount,
+            source_local_cfg_next_ctor_has_exact_UnityEngine_Shader_parameter=localCfgCtorHasExactShader,
+            source_local_cfg_next_ctor_last_parameter_exact_Shader=localCfgCtorLastExactShader,
             source_local_cfg_actual_next_duplicate_stack_reference=localCfgDuplicate,
             source_local_cfg_actual_next_comparison_consumer=localCfgComparison,
             source_local_cfg_actual_next_runtime_reference_type_check=localCfgRuntimeTypeCheck,
@@ -486,6 +519,14 @@ internal static class Program
             Instruction.Create(OpCodes.Ldloc_0),Instruction.Create(OpCodes.Call,implicitCall)};
         var nonShader=new List<Instruction>{
             Instruction.Create(OpCodes.Ldloc_0),Instruction.Create(OpCodes.Ldc_I4_1)};
+        var syntheticExtraCtor=new MethodReference(".ctor",m.TypeSystem.Void,
+            new TypeReference("Synthetic","NotMaterial",m,m.TypeSystem.CoreLibrary)){
+            HasThis=true};
+        syntheticExtraCtor.Parameters.Add(new ParameterDefinition(shader));
+        if(SafeShaderLocalConsumer(new List<Instruction>{
+            Instruction.Create(OpCodes.Ldloc_0),
+            Instruction.Create(OpCodes.Newobj,syntheticExtraCtor)},0)!="constructor_candidate")
+            throw new InvalidOperationException("synthetic_ctor_consumer_classification_failed");
         if(SafeShaderLocalConsumer(new List<Instruction>{
                 Instruction.Create(OpCodes.Ldloc_0),boolBranch},0)!="reference_branch_guard" ||
            SafeShaderLocalConsumer(nullEq,0)!="null_equality_check" ||
