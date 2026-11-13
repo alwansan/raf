@@ -99,6 +99,49 @@ class DocumentedWaterLimitationTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 check(project, bad, root / 'limitation.json')
 
+    def test_source_authentic_seven_spectrum_two_foam_depth_6_3_requires_exact_three_trial_limits(self):
+        # Source-only reproduction of the first native build's real 6+3 Depth
+        # subshaders, with newly restored seven-pass Spectrum and two-pass Foam.
+        # This is an *experimental* build acceptance, not an FFT fix.
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            project=root/"Unity"
+            assets=project/"Assets"
+            assets.mkdir(parents=True)
+            for name,minimum in REQUIRED_PASS_COUNT.items():
+                count=7 if name=="UltimateWater/Spectrum/Water Spectrum" else minimum
+                path=write_shader(assets,name,count)
+                if name=="UltimateWater/Depth/Depth Copy":
+                    def subshader(n):
+                        return "SubShader {\n" + "".join(
+                            "Pass { CGPROGRAM\nvoid main() {}\nENDCG\n}\n"
+                            for _ in range(n)) + "}\n"
+                    path.write_text('Shader "'+name+'" {\n'+subshader(6)+subshader(3)+'}\n')
+            from scripts.verify_water_render_contract import inspect
+            report=inspect(project)
+            self.assertTrue(report['shader_contracts'][
+                'UltimateWater/Spectrum/Water Spectrum']['contract_satisfied'])
+            self.assertTrue(report['shader_contracts'][
+                'UltimateWater/Foam/Global']['contract_satisfied'])
+            self.assertFalse(report['shader_contracts'][
+                'UltimateWater/Depth/Depth Copy']['contract_satisfied'])
+            conditions=unmet_conditions(report)
+            expected=[
+                "authentic_water_kernel_identity",
+                "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+                "water_compute_source_candidate",
+            ]
+            self.assertEqual(conditions,expected)
+            request=request_with(root,expected)
+            record=check(project,request,root/"accepted-limits.json")
+            self.assertEqual(record['unmet_conditions'],expected)
+            self.assertTrue(record['experimental'])
+            self.assertFalse(record['authentic_water_kernel_identity_verified'])
+            request_with(root,expected+[
+                'shader_pass_contract:UltimateWater/Spectrum/Water Spectrum'])
+            with self.assertRaisesRegex(ValueError,'do not exactly match'):
+                check(project,root/'request.json',root/'stale-spectrum.json')
+
     def test_all_pass_counts_and_compute_still_require_kernel_identity(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
