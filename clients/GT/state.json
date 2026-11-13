@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md",
-  "next_action": "GT Chat28 original source chain now source verified: Spectrum name→Shader.Find local→own 3arg ctor Shader last→new Material(original Shader)→dup→property setter→own UnityEngine.Material field. CI43339407339 and CI43339688082 prove exact field identity + 24 ldfld sites across 8 original methods, 7 reader methods containing UnityEngine.Graphics calls, 2 containing RenderTexture calls (co-occurrence only). NEXT typed intra-method stack/CFG value tracking from those 24 field loads into actual Graphics/RT call arguments, then source authentic ShaderLab exact name/7Pass integration + Foam2Pass/compute kernel6; need owner phone acceptance. Current new CL phone still fails, no release due HTTP403; ZIP2 read-only/no LFS.",
+  "latest_session": "clients/GT/sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md",
+  "next_action": "GT Chat29: CI43343971412 and strict CI43344199792 prove 7 exact typed original Spectrum Material field values passed to Graphics.Blit (source-only), original SHA ZIP2. CL latest 3c26bb5 session 20261113-040212-998: water invalid28592 spectrum11512 foam17080, kernel6 4576, OBB GUID4, cursor2895 and matched Android ActivityManager LOW_MEMORY exit reason3 PID18885 at ~04:04:43. CI43343638117 device regression SUCCESS, images white raft. NEXT inspect exact generated Unity shader dummy path/meta and stage original SHA-authenticated unified 7Pass/2Keyword Spectrum without duplicate names or altering original GUIDs, compile and phone test. Runtime Graphics execution, CB0/samplers, Foam/kernel6, 770 Dummy, and Adreno pixels unproven. No LFS.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -890,5 +890,35 @@
     "source_original_field_reader_methods_containing_Renderer": 0,
     "source_original_field_reader_cooccurrence_not_value_argument_proof": true,
     "source_original_Material_actual_Graphics_parameter_proven": false
+  },
+  "proofs_20261113_chat29": {
+    "session_path": "clients/GT/sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md",
+    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dynamic_material_field_reads": 24,
+    "original_dynamic_material_field_reader_methods": 8,
+    "exact_typed_material_Graphics_Blit_argument_source_sites": 7,
+    "straight_line_CIL_argument_tracer_CI": 43343971412,
+    "strict_CI_source_7Blit_gate": 43344199792,
+    "dynamic_original_shader_to_Blit_CIL_proven": true,
+    "original_actual_gameplay_Blit_execution_proven": false,
+    "original_GPU_material_sampler_CB0_RT_verified": false,
+    "owner_CL_sha": "3c26bb5d0f4de2cbffd42197dae9ae1372721659",
+    "owner_session": "20261113-040212-998",
+    "owner_screen_count": 3,
+    "owner_invalid_water_total": 28592,
+    "owner_Spectrum_invalid_passes": 11512,
+    "owner_Foam_Global_invalid_passes": 17080,
+    "owner_invalid_compute_kernel_index6": 4576,
+    "original_kernel6_identity_proven": false,
+    "owner_cursor_RGBA32": 2895,
+    "owner_OBB_GUID_failures": 4,
+    "owner_Android_Low_Memory_pid": 18885,
+    "owner_Android_low_memory_exit_reason_code": 3,
+    "original_water_causation_of_low_memory_unproven": true,
+    "owner_device_regression_CI": 43343638117,
+    "evidence_path": "clients/GT/evidence/20261113_cl_0402_phone_and_material_blit_receipt.json",
+    "no_Git_LFS": true,
+    "no_original_GUID_mutation": true,
+    "original_Spectrum_game_gpu_restoration_complete": false
   }
 }
