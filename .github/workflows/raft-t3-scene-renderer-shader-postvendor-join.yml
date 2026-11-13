@@ -13,6 +13,9 @@ on:
     paths:
       - .github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml
       - scripts/gt_restore_first_shader_priority.py
+      - scripts/b02_stage_texture_lineage.py
+      - scripts/b21_stage_light_lineage.py
+      - tests/test_gt_restore_first_shader_priority.py
 permissions:
   contents: read
 concurrency:
@@ -45,6 +48,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_source_renderer_shader_to_postvendor_export.py' -v
           python3 -m unittest discover -s tests -p 'test_gt_restore_first_shader_priority.py' -v
+          python3 -m unittest discover -s tests -p 'test_b02_stage_texture_lineage.py' -v
+          python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v
           python3 -m unittest discover -s tests -p 'test_restore_tmp_shaders.py' -v
           python3 -m unittest discover -s tests -p 'test_restore_postfx_shaders.py' -v
