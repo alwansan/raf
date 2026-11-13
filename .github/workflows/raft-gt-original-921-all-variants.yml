@@ -9,6 +9,7 @@ on:
       - scripts/gt_original_921_all_variants.py
       - scripts/gt_original_921_keyword_routes.py
       - scripts/gt_original_921_cb_layout.py
+      - scripts/gt_original_921_cb_hlsl.py
       - scripts/gt_original_921_resource_rebind.py
       - tests/test_gt_original_921_all_variants.py
       - .github/workflows/raft-gt-original-921-all-variants.yml
@@ -131,6 +132,7 @@ jobs:
           assert r['source_variant_parameter_records']['translated_constant_buffer_declarations_mapped'] == 467
           assert r['source_variant_parameter_records']['resource_rebound_stages_verified_spirv_identical_excluding_debug'] == 74
           assert r['source_variant_parameter_records']['constant_buffer_named_32bit_lanes'] == 9615
+          assert r['source_variant_parameter_records']['named_constant_buffer_candidate_stages_vulkan11_valid'] == 74
           assert routes['validated_exact_routed_stage_compilations'] == 66
           assert len(routes['source_exact_keyword_routes_by_pass']) == 4
           assert sum(routes['source_exact_keyword_routes_by_pass']) == 33

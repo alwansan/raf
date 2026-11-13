@@ -216,6 +216,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     """Preserve the per-stage override blobs separately from shared stage bytecode."""
     from scripts.a12_shader_parameter_decode import parse_parameter_blob
     from scripts.b25_foam_cb_namebridge import original_name_registry
+    from scripts.gt_original_921_cb_hlsl import verify_named_constant_buffers
     from scripts.gt_original_921_cb_layout import bind_constant_buffers, constant_buffer_lanes
     from scripts.gt_original_921_resource_rebind import verify_rebound_resources
     from scripts.w1_rebind_depth_resources import RESOURCE
@@ -259,12 +260,14 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
                 raise ValueError("original_texture_or_sampler_binding_ambiguous")
             bindings.append({"kind": kind, "slot": slot, "source_texture_name": candidates[0]})
             texture_counts[kind] += 1
-        verify_rebound_resources(program_dir, stage, bindings, private / f"bound-stage-{len(records):03d}")
+        bound_stage = private / f"bound-stage-{len(records):03d}"
+        verify_rebound_resources(program_dir, stage, bindings, bound_stage)
         buffers = bind_constant_buffers(source, common, names, layouts[index])
         for buffer in buffers:
             lanes = constant_buffer_lanes(buffer)
             buffer["original_named_lanes"] = lanes
             cb_counts["named_lanes"] += sum(lane is not None for lane in lanes)
+        verify_named_constant_buffers(bound_stage, stage, buffers)
         cb_counts["mapped"] += len(buffers)
         cb_counts["variant"] += sum(buffer["binding_from_variant"] for buffer in buffers)
         cb_counts["shared_layout"] += sum(buffer["shared_layout_present"] for buffer in buffers)
@@ -288,6 +291,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
         "original_variant_stages_with_parameter_records": len(records),
         "distinct_original_parameter_blobs": len(decoded),
         "resource_rebound_stages_verified_spirv_identical_excluding_debug": len(records),
+        "named_constant_buffer_candidate_stages_vulkan11_valid": len(records),
         "translated_constant_buffer_declarations_mapped": cb_counts["mapped"],
         "constant_buffer_bindings_from_variant": cb_counts["variant"],
         "constant_buffer_layouts_with_shared_members_table": cb_counts["shared_layout"],
