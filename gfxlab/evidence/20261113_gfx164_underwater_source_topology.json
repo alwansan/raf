@@ -1,0 +1,33 @@
+{
+  "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "serialized_owners": 82,
+  "shader_objects": 165,
+  "original_topology": {
+    "subshader_pass_counts": [
+      4,
+      4
+    ],
+    "pass_types": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "device_indices": [
+      1,
+      3
+    ],
+    "subshaders_with_both_indices": 2
+  },
+  "unity_runtime_verified": false,
+  "run_id": 43359045036,
+  "artifact_id": 14006634940
+}
