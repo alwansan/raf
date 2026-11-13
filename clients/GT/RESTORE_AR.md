@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT Chat-32 — أول قائمة استعادة أصلية حقيقية نجحت، بدون XAPK
+
+اقرأ [قرار المالك](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md) أولاً. [CI43354787983 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354787983): شغّلنا جرداً حقيقياً من ZIP2 SHA لستة مشاهد واصل 21 Shader48 بموارد AssetRipper نفسها؛ **17 شيدراً Dummy مقابل 1373/1633 Renderer Material slots**، الشيدر الأصلي الأعلى **921 خانة**. أُنتجت قائمة خاصة قابلة للعمل بمطابقة source PathID→Export GUID/path محفوظة فقط في temp، وحُذفت؛ التقرير الآمن لا ينشر معرّفات اللعبة. أدوات W1/B02/B21 خضعت لمراجعة البصمات الحقيقية [CI43354701952 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354701952). **التالي استعادة الشيدر الأعلى استعمالاً فعلياً بكل الممرات الـ4 و33 زوج VS/FS متطابقاً و8 Vertex Variants غير مقترنة في الجرد، والـSampler/CB/Keywords، ثم باقي 770 مستند Material Dummy ثم الـ165 Shader وباقي الموارد**. لم يُستعد الشيدر الأعلى بعد؛ جرده فقط مكتمل. لا تشغّل XAPK حتى G0–G6. [جلسة Chat32](sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md).
+
+---
+
 ## قرار المالك الأحدث — الاستعادة الكاملة أولاً، XAPK بعد الانتهاء
 
 **هذه التعليمات تلغي أولوية بناء XAPK أو الاختبارات الهاتفية الآن.** ابدأ دائماً بقراءة [`OWNER_DIRECTIVE_RESTORE_FIRST_AR.md`](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md). القرار: استعادة ودمج **كل** مجسمات/ألوان/خامات/مواد/شيدرات/Variants/ماء/Compute/FFT/ظلال/نار/جسيمات/PostFX/TMP والملفات المرافقة من ZIP2 إلى مشروع Android أولاً، ثم **بعد اكتمال الاستعادة والدمج (G0–G6)** نطلب **أول XAPK تجريبي شامل للتوافق**. لا تطلب GT أي بناء XAPK جديد خلال الاستعادة. فحوص source-only وUnity Shader منفصلة مسموحة للتأكد من الاستعادة، وليست بداية مرحلة اختبارات التوافق. طلبا GitHub القديمان `43349181838` و`43350559665` وُجها قبل هذا القرار؛ نتائجهما تاريخية فقط، لا تبنِ غيرهما الآن ولا تنتظر أن ينتهيا قبل متابعة الاستعادة. الأولوية المباشرة **P04/P05: 770 Material YAML تعتمد على Dummy، 165 Shader أصلي، والـ921 Renderer source-slot shader عالي الأثر**، ثم P07/P06 FFT/Depth/Foam ثم جميع بقية الأصول. تحديث كل ملفات الذاكرة والخطة بعد كل دفعة. لا LFS ولا تعديل GUID/Meta. **لا تعلن انتهاء الاستعادة لمجرد نجاح CI أو XAPK**.
