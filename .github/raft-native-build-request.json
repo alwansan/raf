@@ -1,18 +1,16 @@
 {
-  "request_id": "GT-20261113-Spectrum7-Foam2-strict-Unity-Android-delivery",
-  "reason": "User-authorized newest complete Unity Android ARM64 APK+OBB+XAPK including SHA-pinned original 7-pass two-keyword Spectrum and original 2-pass Foam Global shader staged into preexisting unique AssetRipper original Shader GUIDs, strict ShaderUtil compiler/pass gates, latest controls/textures/audio and safe evidence. Preserve fail-closed checks.",
-  "requested_from_sha": "c9e51e92785746a44847be7af75a5234bcfeb902",
+  "request_id": "GT-20261113-WaterLiveLimitExact-Spectrum7-Foam2-native",
+  "reason": "Owner-authorized full Unity Android ARM64 APK OBB XAPK after real Spectrum7 source GUID install proof from failed run43346405263 and original Foam2 stage in queued run43349181838. Preserve strict water gate and exact documented experimental limitations: original Depth alternative subshader [6,3], missing water compute source, unknown original kernel identity. Never claim complete original water graphics.",
+  "requested_from_sha": "301f499f3c602c5c115fc471121825737ae441f2",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
-    "shader_pass_contract:UltimateWater/Foam/Global",
-    "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
     "shader_pass_contract:UltimateWater/Depth/Depth Copy",
     "water_compute_source_candidate"
   ],
   "owner_direct_request": true,
   "owner_instruction": "GT independently owns restoration and native delivery after stopping T1-T5; read ZIP2 SHA15964ea8 exclusively without Git LFS; use verified W1 original owners for original Depth Copy, include ALL source-authentic graphics and strict final no-fake-pass gates. Requested 2026-11-12.",
-  "previous_run_id": 43346405263,
-  "previous_build_source_sha": "4b74f6bdec8781e64d6aae182797d06b83109c35",
+  "previous_run_id": 43349181838,
+  "previous_build_source_sha": "c3c71731525465cb2f6297f6bcbdb37c60ae4058",
   "previous_failed_unity_run_id": 42281310905,
   "fix_commit_sha": "20b92a965a5c5b080f24f8fb448fdcc9f21b0306",
   "linked_session_id": "GT-20261112-CHAT-19-SIGNED-NATIVE-RECOVERY-AND-CURRENT-BUILD",
@@ -37,5 +35,20 @@
   "production_ShaderUtil_pass_and_error_gate": true,
   "original_Foam_CB0_sampler_upload_proven": false,
   "original_Spectrum_CB0_sampler_RT_upload_proven": false,
-  "original_Adreno_pixel_parity_verified": false
+  "original_Adreno_pixel_parity_verified": false,
+  "previous_failed_native_run_id": 43346405263,
+  "previous_failed_water_contract_step": "Authentic water gate (strict) or exact documented trial limitation",
+  "previous_real_spectrum_source_exported_guid_install_success": true,
+  "previous_real_spectrum_source_report_artifact_id": 14002987883,
+  "previous_real_spectrum_restored_shader_passes": 7,
+  "expected_original_foam_two_pass_next_build_not_yet_verified": true,
+  "original_depth_subshader_pass_counts_from_real_run": [
+    6,
+    3
+  ],
+  "authentic_water_kernel_identity_proven": false,
+  "water_compute_source_candidate_present_in_previous_real_run": false,
+  "experiment_acknowledges_live_unmet_expected_exactly": true,
+  "source_only_drift_regression_CI": 43350378817,
+  "fully_restored_water_claimed": false
 }
