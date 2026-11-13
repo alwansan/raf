@@ -860,6 +860,86 @@ jobs:
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-native-foam-private"
+      - name: Recover original Particle108 ShaderLab from ZIP2 for the native export
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_gt_install_original_particle108.py' -v
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.b21_scene_lightmap_links import PIN
+          from scripts.w1_stage_zip2_owners import stage
+          stage(Path("zip2-original"), Path(os.environ["RUNNER_TEMP"]) / "w1-original",
+                {"Raft_Data/" + name: pin for name, pin in PIN.items()})
+          PY
+          work="$RUNNER_TEMP/gt-native-particle108"
+          mkdir -m 700 "$work"
+          timeout 720s python3 -m scripts.t3_particle108_private_shaderlab_variants \
+            --source "$RUNNER_TEMP/w1-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$work/raw" --out "$work/variants-safe.json"
+          timeout 300s python3 -m scripts.gt_particle108_unity_bindings \
+            --original "$RUNNER_TEMP/w1-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private-source "$work/raw" --private-dest "$work/bound" \
+            --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/keyword-routed-private.shader" \
+            --routing "$work/bound/routing-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-native-particle108-unity" \
+            --report "$work/staging-safe.json"
+      - name: Compile only original Particle108 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-native-particle108-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Particle108 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-native-particle108"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/w1-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/private-export-lineage.json" \
+            --candidate "$work/bound/keyword-routed-private.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-native-particle108-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-native-particle108-original-export" --apply \
+            --out "$RUNNER_TEMP/gt-native-particle108-install-safe.json"
+      - name: Retain only the aggregate original Particle108 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-particle108-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-native-particle108-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Particle108 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-native-particle108"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-native-particle108-unity"
       - name: Inventory actual exported Material Shader references without modifying assets
         id: w1_material_inventory
         # A diagnostic failure stays visible in the JSON. Existing strict builtin

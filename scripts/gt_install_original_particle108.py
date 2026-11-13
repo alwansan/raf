@@ -181,11 +181,20 @@ def main():
                  "source-report", "unity-report", "backup"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--out", type=Path)
     args = parser.parse_args()
+    output = args.out
+    del args.out
+    if output is not None:
+        output = check_safe_ancestors(output)
+        if output.exists() or output.is_relative_to(check_safe_ancestors(args.project)):
+            raise ValueError("unsafe_particle108_install_receipt_destination")
     try:
         result = stage(**vars(args))
     except (OSError, TypeError, ValueError, KeyError):
         result = {"status": "INCONCLUSIVE_PARTICLE108_EXPORT_INSTALL"}
+    if output is not None:
+        output.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_PARTICLE108_EXPORT_INSTALL " + json.dumps(result, sort_keys=True))
     return 2 if result["status"] == "INCONCLUSIVE_PARTICLE108_EXPORT_INSTALL" else 0
 
