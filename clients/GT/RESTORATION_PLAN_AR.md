@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## ملحق Chat-33 — بيانات Keywords/Properties المصدرية مكتملة الجرد لا الربط
+
+[CI43358489426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358489426): 74 original VS/FS variant records، 27 Keyword names/flags، 14 فهرس Keyword مستخدم ومتحقق ضمن نطاق الأسماء، 35 Shader Properties، player bucket واحد، مع بقاء ترجمة 58/58 صحيحة. أصل بيانات ParsedForm والـPass States محفوظ مؤقتاً فقط وملف المشروع لم يتغير. **ما زال P05 مفتوحاً** حتى يثبت Original ShaderLab الكامل وربط التهيئة/الـCB0/الـSampler والـGUID. **P04 770 Dummy ما زال مفتوحاً**، ثم الموارد الباقية إلى G0–G6 قبل XAPK.
+
+---
+
 ## GT Chat-33 — 58/58 Shader48 برامج أصلية مستعادة إلى مرحلة HLSL/Vulkan المصدرية
 
 نجاح فعلي [CI43357332292](https://github.com/alwansan/raf/actions/runs/43357332292): المصدر SHA ZIP2، 6 مشاهد، 4 Shader owner، **4 Pass/33 paired VS-FS variants/8 unmatched VS/58 distinct DXBC**؛ 58/58 أصلية صالحة Vulkan1.1، و58/58 HLSL recovered، و58/58 round-trip Vulkan1.1. كتبنا أدوات إعادة الاستعادة الآمنة وأُجري الاختبار الحقيقي؛ **المرحلة المصدرية مكتملة لهذه العائلة فقط**. لم يُنجز Full Original ShaderLab/Keyword/CB0/Sampler/Renderer GUID restore ولم يُقلَّص تعداد 770 Material Dummy الإنتاجي بعد، ولا يوجد Unity Editor/Android pixel proof. **التالي P05→P04:** تجميع ShaderLab بأربع Passes وجميع variants، تثبيت original-same-export GUID دون لمس .meta، توثيق خصائص Keyword/Sampler/CB0 ثم إعادة الفحص لمستندات الـ770، بعدها معالجة بقية الـ165 Shader والماء وFFT والموارد وصولاً إلى G0–G6. **XAPK مؤجل حتى اكتمال الاستعادة والدمج**. [جلسة Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md).
