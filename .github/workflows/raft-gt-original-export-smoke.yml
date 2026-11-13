@@ -7,6 +7,7 @@ on:
       - .github/workflows/raft-gt-original-export-smoke.yml
       - scripts/gt_verify_original_mesh_export.py
       - tests/test_gt_verify_original_mesh_export.py
+      - scripts/b44_verify_material_colors.py
   workflow_dispatch:
 
 permissions:
@@ -156,6 +157,18 @@ jobs:
             --mesh-trace "$RUNNER_TEMP/gt-private-mesh-export-lineage.json" \
             --export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
             --report "$RUNNER_TEMP/gt-real-mesh-export-geometry.json"
+      - name: Compare original Material tint RGBA across all 82 owners
+        if: success() || failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b44_verify_material_colors.py -v
+          python3 -m scripts.b44_verify_material_colors \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --zip2-manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
+            --private-export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --out "$RUNNER_TEMP/gt-full-material-colors.json"
       - name: Measure real exported Unity files and source link integrity without game identifiers
         shell: bash
         run: |
@@ -583,6 +596,7 @@ jobs:
             ${{ runner.temp }}/gt-real-original-array-private-Editor-gate-aggregate.json
             ${{ runner.temp }}/gt-b05-actual-original-to-export-texenv.json
             ${{ runner.temp }}/gt-full-real-82-owner-texenv.json
+            ${{ runner.temp }}/gt-full-material-colors.json
             ${{ runner.temp }}/gt-real-external-texture-links.json
             ${{ runner.temp }}/gt-original-graphics-9-416-50-strict-evidence.json
             ${{ runner.temp }}/gt-raw-export-program-quality.json

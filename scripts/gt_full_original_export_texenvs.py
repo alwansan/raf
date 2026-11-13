@@ -61,7 +61,8 @@ def public_failure(error, stage: str):
     }
 
 
-def original(root: Path, manifest: Path, selected=None, loader=None) -> dict:
+def original(root: Path, manifest: Path, selected=None, loader=None, *,
+             property_name="m_TexEnvs", normalize=normalize_texenvs) -> dict:
     if root.is_symlink() or not root.is_dir():
         raise InventoryError("unsafe_original_source_directory")
     expected=read_expected(manifest)
@@ -88,8 +89,8 @@ def original(root: Path, manifest: Path, selected=None, loader=None) -> dict:
                 raise InventoryError("duplicate_original_material_identity")
             try:
                 props=obj.read_typetree(check_read=False).get("m_SavedProperties")
-                entries=props.get("m_TexEnvs") if isinstance(props,dict) else None
-                out[ident]=normalize_texenvs(entries,exported=False)
+                entries=props.get(property_name) if isinstance(props,dict) else None
+                out[ident]=normalize(entries,exported=False)
             except Exception as error:
                 raise InventoryError("original_texenv_unparseable") from error
         del env

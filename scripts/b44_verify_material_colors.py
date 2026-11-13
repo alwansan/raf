@@ -275,11 +275,17 @@ def main(argv=None):
     ap.add_argument('--source', type=Path, required=True)
     ap.add_argument('--private-export-trace', type=Path, required=True)
     ap.add_argument('--project', type=Path, required=True)
+    ap.add_argument('--zip2-manifest', type=Path)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args(argv)
     if args.out.resolve().is_relative_to(args.project.resolve()):
         raise ValueError('Report destination is inside original project')
-    source = original_colors(args.source)
+    if args.zip2_manifest is None:
+        source = original_colors(args.source)
+    else:
+        from scripts.gt_full_original_export_texenvs import original
+        source = original(args.source, args.zip2_manifest, property_name='m_Colors',
+                          normalize=normalize_colors)
     actual = exported_colors(args.project)
     report = compare(json.loads(args.private_export_trace.read_text(encoding='utf-8')), source, actual)
     args.out.write_text(json.dumps(report, indent=2, sort_keys=True) + '\n', encoding='utf-8')
