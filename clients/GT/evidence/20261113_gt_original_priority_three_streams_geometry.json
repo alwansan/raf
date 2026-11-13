@@ -1,0 +1,22 @@
+{
+  "schema": "GT_ORIGINAL_PRIORITY_THREE_STREAMS_GEOMETRY_V1",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_owner_count_sha256_verified": 82,
+  "stream_source_size_and_sha256_verified": {
+    "level29.resS": 97397152,
+    "level30.resS": 218100736,
+    "level34.resS": 176287888
+  },
+  "stream_bytes_materialized": 491785776,
+  "git_lfs_used": false,
+  "distinct_large_meshes_added_by_three_streams": 325,
+  "scope": "Source MeshHandler payload decode including original inline geometry and the three SHA-verified scene streams",
+  "counts": {
+    "at_least_10000_vertices": {"finite_positions": 374, "finite_normals": 374, "finite_tangents": 371, "finite_uv0": 374, "streamed_pending": 49},
+    "character_name": {"finite_positions": 10, "finite_normals": 10, "finite_tangents": 10, "finite_uv0": 10, "streamed_pending": 3},
+    "island_name": {"finite_positions": 306, "finite_normals": 306, "finite_tangents": 303, "finite_uv0": 301, "streamed_pending": 70},
+    "wood_name": {"finite_positions": 56, "finite_normals": 56, "finite_tangents": 56, "finite_uv0": 56, "streamed_pending": 52}
+  },
+  "name_hint_cohorts_can_overlap": true,
+  "project_export_or_rig_parity_verified": false
+}

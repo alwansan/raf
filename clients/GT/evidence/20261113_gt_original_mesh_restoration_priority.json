@@ -39,6 +39,37 @@
     }
   },
   "name_hint_cohorts_can_overlap": true,
+  "priority_inline_geometry_checks": {
+    "at_least_10000_vertices": {
+      "finite": 49,
+      "normals_finite": 49,
+      "streamed_pending": 374,
+      "tangents_finite": 49,
+      "uv0_finite": 49
+    },
+    "character_name": {
+      "finite": 10,
+      "normals_finite": 10,
+      "streamed_pending": 3,
+      "tangents_finite": 10,
+      "uv0_finite": 10
+    },
+    "island_name": {
+      "finite": 125,
+      "normals_finite": 125,
+      "streamed_pending": 251,
+      "tangents_finite": 125,
+      "uv0_absent": 5,
+      "uv0_finite": 120
+    },
+    "wood_name": {
+      "finite": 46,
+      "normals_finite": 46,
+      "streamed_pending": 62,
+      "tangents_finite": 46,
+      "uv0_finite": 46
+    }
+  },
   "project_export_or_rig_parity_verified": false,
   "schema": "GT_ORIGINAL_MESH_RESTORATION_PRIORITY_V1",
   "source_owner_count": 82

@@ -3,9 +3,11 @@ import argparse
 from collections import Counter
 import gc
 import json
+import math
 from pathlib import Path
 import re
 
+from scripts.audit_original_mesh_positions import position_metrics
 from scripts.gt_serialized_graphics_counts import verify
 from scripts.gt_stage_serialized_owners import OWNERS, read_expected
 
@@ -46,7 +48,24 @@ def mesh_metrics(tree):
     return vertices, indices, bones, stream_size, tags
 
 
-def audit(root, manifest, selected, private_queue=None):
+def inspect_inline_geometry(obj, expected):
+    from UnityPy.helpers.MeshHelper import MeshHandler
+
+    handler = MeshHandler(obj.read())
+    handler.process()
+    checks = Counter({position_metrics(handler.m_Vertices, expected): 1})
+    for name, values in (("normals", handler.m_Normals), ("tangents", handler.m_Tangents),
+                         ("uv0", handler.m_UV0)):
+        if not values:
+            checks[name + "_absent"] += 1
+        elif len(values) != expected or not all(math.isfinite(x) for row in values for x in row):
+            checks[name + "_invalid"] += 1
+        else:
+            checks[name + "_finite"] += 1
+    return checks
+
+
+def audit(root, manifest, selected, private_queue=None, *, decode_inline=False):
     import UnityPy
 
     known = read_expected(manifest)
@@ -55,6 +74,7 @@ def audit(root, manifest, selected, private_queue=None):
         raise ValueError("invalid_owner_selection")
     counts, cohorts = Counter(), {name: Counter() for name in CATEGORIES}
     queue = []
+    geometry = {name: Counter() for name in (*CATEGORIES, "at_least_10000_vertices")}
     for owner in owners:
         _, size, digest = known[owner]
         source = root / owner
@@ -71,7 +91,12 @@ def audit(root, manifest, selected, private_queue=None):
                                      "streamed": int(stream_size > 0),
                                      "with_bind_pose": int(bones > 0),
                                      "at_least_10000_vertices": int(vertices >= 10000)})
-            if tags:
+            if decode_inline and (geometry_tags := set(tags) & geometry.keys()):
+                checks = (Counter({"streamed_pending": 1}) if stream_size
+                          else inspect_inline_geometry(obj, vertices))
+                for tag in geometry_tags:
+                    geometry[tag].update(checks)
+            if private_queue is not None:
                 queue.append({"owner": owner, "path_id": obj.path_id, "tags": tags,
                               "vertices": vertices, "indices": indices, "bind_pose_count": bones})
         del environment
@@ -85,6 +110,7 @@ def audit(root, manifest, selected, private_queue=None):
             "source_owner_count": len(owners), "full_owner_scope": set(owners) == set(OWNERS),
             "counts": dict(counts), "name_hint_cohorts": cohorts,
             "name_hint_cohorts_can_overlap": True,
+            "priority_inline_geometry_checks": geometry if decode_inline else None,
             "project_export_or_rig_parity_verified": False}
 
 
@@ -95,11 +121,13 @@ def main():
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--owner", action="append")
     parser.add_argument("--private-queue", type=Path)
+    parser.add_argument("--decode-inline", action="store_true")
     args = parser.parse_args()
     if any(path.resolve().is_relative_to(args.source.resolve())
            for path in (args.report, args.private_queue) if path is not None):
         raise ValueError("output_inside_source")
-    result = audit(args.source, args.manifest, args.owner, args.private_queue)
+    result = audit(args.source, args.manifest, args.owner, args.private_queue,
+                   decode_inline=args.decode_inline)
     args.report.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("GT_ORIGINAL_MESH_RESTORATION_PRIORITY " + json.dumps(result, sort_keys=True))
 

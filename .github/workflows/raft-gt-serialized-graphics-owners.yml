@@ -182,7 +182,7 @@ jobs:
           python3 -m scripts.gt_mesh_restoration_priority \
             --manifest .gt-zip2/RAFT_FILE_MANIFEST.tsv \
             --source "$RUNNER_TEMP/gt-serialized" \
-            --report "$RUNNER_TEMP/gt-mesh-priority.json"
+            --report "$RUNNER_TEMP/gt-mesh-priority.json" --decode-inline
       - name: Reuse W3 exact Material to Shader object topology audit
         run: |
           python3 -m scripts.probe_w3_full_material_shader_inventory \

@@ -1,5 +1,12 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## هندسة المجسمات الكبيرة من ZIP2
+
+فُكّت هندسة 374 من 423 مجسماً كبيراً (88.42%) من بيانات المصدر، منها 325 باستخدام ملفات level29/30/34.resS الأصلية الموثقة. بلغت تغطية فك المصدر 306/376 للجزر والتضاريس و56/108 للخشب و10/13 للشخصيات حسب الأسماء. [دليل فك الهندسة](evidence/20261113_gt_original_priority_three_streams_geometry.json). التالي تغطية ملفات البث المتبقية ومطابقة التصدير والـrig والأنيميشن.
+
+فحوص المصدر [للشيدر](https://github.com/alwansan/raf/actions/runs/43441031830) و[Depth](https://github.com/alwansan/raf/actions/runs/43441130463) و[FFT](https://github.com/alwansan/raf/actions/runs/43441130482) نجحت. [فحص FFT في Unity](https://github.com/alwansan/raf/actions/runs/43441130568) توقف عند تفعيل Unity قبل قراءة الأصول.
+
+
 ## دفعة متوازية — الشيدر والماء والمجسمات
 
 - شيدر 921: تحقق محلي من 2029 إزاحة في 467 Constant Buffer عبر 74 مرحلة. [CI](https://github.com/alwansan/raf/actions/runs/43441031830).
