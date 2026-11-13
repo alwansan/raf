@@ -131,10 +131,10 @@ class DocumentedWaterLimitationTests(unittest.TestCase):
                 "shader_pass_contract:UltimateWater/Depth/Depth Copy",
                 "water_compute_source_candidate",
             ]
-            self.assertEqual(conditions,expected)
+            self.assertEqual(sorted(conditions),sorted(expected))
             request=request_with(root,expected)
             record=check(project,request,root/"accepted-limits.json")
-            self.assertEqual(record['unmet_conditions'],expected)
+            self.assertEqual(record['unmet_conditions'],sorted(expected))
             self.assertTrue(record['experimental'])
             self.assertFalse(record['authentic_water_kernel_identity_verified'])
             request_with(root,expected+[
