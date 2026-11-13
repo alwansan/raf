@@ -438,15 +438,15 @@ internal static class Program
                                               parameter.ParameterType.FullName==ShaderType));
                                         if(provenLastOriginalShader)
                                             localCfgOwnCtorMaterialDirectLastShaderArgument++;
-                                        int next=SkipNops(ctorIl,j+1);
-                                        if(next<ctorIl.Count &&
-                                           ctorIl[next].OpCode.Code==Code.Stfld &&
-                                           ctorIl[next].Operand is FieldReference matField &&
+                                        int postNewMaterialIndex=SkipNops(ctorIl,j+1);
+                                        if(postNewMaterialIndex<ctorIl.Count &&
+                                           ctorIl[postNewMaterialIndex].OpCode.Code==Code.Stfld &&
+                                           ctorIl[postNewMaterialIndex].Operand is FieldReference matField &&
                                            matField.FieldType.FullName=="UnityEngine.Material" &&
                                            matField.DeclaringType.FullName==originalCtor.DeclaringType.FullName)
                                             localCfgOwnCtorMaterialDirectFieldStore++;
-                                        if(next<ctorIl.Count &&
-                                           ctorIl[next].OpCode.Code is Code.Stloc or Code.Stloc_S or
+                                        if(postNewMaterialIndex<ctorIl.Count &&
+                                           ctorIl[postNewMaterialIndex].OpCode.Code is Code.Stloc or Code.Stloc_S or
                                               Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
                                             localCfgOwnCtorMaterialLocalStore++;
                                     }
