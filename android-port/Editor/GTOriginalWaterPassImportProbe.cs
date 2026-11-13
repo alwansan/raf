@@ -110,6 +110,73 @@ namespace RaftAndroid.Editor
                     "GT_Native_Spectrum_original_seven_pass_import_or_compile_not_verified");
         }
 
+        public static void RequireOriginalFoamTwoPasses()
+        {
+            const string originalName = "UltimateWater/Foam/Global";
+            string[] shaderIds = AssetDatabase.FindAssets("t:Shader", new[] { "Assets" });
+            int matching = 0;
+            int wrongPasses = 0;
+            int compilerErrors = 0;
+            int invalidFiles = 0;
+            int dummy = 0;
+            foreach (string id in shaderIds)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(id);
+                if (string.IsNullOrEmpty(path) ||
+                    !path.StartsWith("Assets/", StringComparison.Ordinal) ||
+                    !path.EndsWith(".shader", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(path);
+                if (shader == null ||
+                    !string.Equals(shader.name, originalName, StringComparison.Ordinal))
+                    continue;
+                matching++;
+                if (shader.passCount != 2) wrongPasses++;
+                if (ShaderUtil.ShaderHasError(shader)) compilerErrors++;
+                try
+                {
+                    string assets = Path.GetFullPath(Application.dataPath);
+                    string absolute = Path.GetFullPath(Path.Combine(
+                        assets, path.Substring("Assets/".Length).Replace(
+                            '/', Path.DirectorySeparatorChar)));
+                    if (!absolute.StartsWith(
+                        assets + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+                    {
+                        invalidFiles++;
+                        continue;
+                    }
+                    FileInfo file = new FileInfo(absolute);
+                    if (!file.Exists || file.Length < 1 ||
+                        file.Length > 16 * 1024 * 1024)
+                    {
+                        invalidFiles++;
+                        continue;
+                    }
+                    string content = File.ReadAllText(absolute);
+                    if (content.Contains("//DummyShaderTextExporter") ||
+                        content.Contains("// No subprograms found"))
+                        dummy++;
+                }
+                catch (IOException) { invalidFiles++; }
+                catch (UnauthorizedAccessException) { invalidFiles++; }
+            }
+            bool valid = matching == 1 && wrongPasses == 0 &&
+                         compilerErrors == 0 && invalidFiles == 0 && dummy == 0;
+            Debug.Log("GT_NATIVE_FOAM_UNITY_IMPORT_GATE oneOriginalShader=" +
+                      (matching == 1) + " twoImportedPasses=" +
+                      (matching == 1 && wrongPasses == 0) +
+                      " shaderUtilCompilerErrors=" + compilerErrors +
+                      " invalidSourceFiles=" + invalidFiles +
+                      " originalDummyMarkers=" + dummy +
+                      " accepted=" + valid +
+                      " originalGUIDSourceVerifiedInPriorStage=true" +
+                      " runtimeKeywordMaterialCB0SamplerParityVerified=false" +
+                      " AdrenoPixelsVerified=false");
+            if (!valid)
+                throw new InvalidOperationException(
+                    "GT_Native_Foam_original_two_pass_import_or_compile_not_verified");
+        }
+
         public static void Report()
         {
             // Search only local exported project shader assets. No names, GUIDs,
