@@ -8,8 +8,8 @@
   "created_from_sha": "9b89f62772c2c61f6269fd2249f8560af1522892",
   "source_project_branch": "feature/android-native-port",
   "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-  "latest_session": "20261112-GFX-chat-native-pristine-array-source-122",
-  "latest_session_path": "memory/sessions/20261112-GFX-chat-native-pristine-array-source-122.md",
+  "latest_session": "20261113-GFX-chat-water-native-v101-123",
+  "latest_session_path": "memory/sessions/20261113-GFX-chat-water-native-v101-123.md",
   "status": "PHASE_TWO_WATER_LAB_ACTIVE",
   "issues": [
     {
@@ -35,7 +35,7 @@
     "original_shaders": 165,
     "original_texture2d": 4050
   },
-  "next_experiment": "Monitor native build 43151970478 at e17060335e8a088ddb08f78b5089234b1c064c1c; verify ClassID187 stage, Unity and XAPK delivery.",
+  "next_experiment": "Acquire delivery that contains c2666612 binding trace; audit sites and retain Underwater Base IME independently.",
   "build_requested": true,
   "android_device_test_done_by_this_lab": true,
   "write_policy": "only this branch; all T branches and CL read-only",
@@ -3406,6 +3406,12 @@
       "candidate_patch": "gfxlab/patches/gfx162-pristine-array-source.patch",
       "retry_run": 43151970478,
       "retry_source_commit": "e17060335e8a088ddb08f78b5089234b1c064c1c"
+    },
+    "native_v101": {
+      "evidence": "gfxlab/evidence/20261113_water_native_v101_safe.json",
+      "run": 43247161671,
+      "device_test": true,
+      "original_water_verified": false
     }
   }
 }

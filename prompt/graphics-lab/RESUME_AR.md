@@ -15,3 +15,5 @@
 نجح GFX160 على الهاتف. تابع [بناء تجربة اللعبة GFX161](../../memory/sessions/20261112-GFX-chat-water-native-handoff-121.md).
 
 بناء GFX161 توقف قبل Unity. اقرأ [تشخيص GFX162 والتصحيح](../../memory/sessions/20261112-GFX-chat-native-pristine-array-source-122.md).
+
+نتيجة الهاتف للنسخة 101 في [الجلسة](../../memory/sessions/20261113-GFX-chat-water-native-v101-123.md).

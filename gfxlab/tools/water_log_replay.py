@@ -15,6 +15,7 @@ MATERIALS = {
     "UltimateWater/Foam/Global": "foam_global",
     "UltimateWater/Utilities/Blur (Subsurface Scattering)": "subsurface_blur",
     "UltimateWater/Depth/Depth Copy": "depth_copy",
+    "UltimateWater/Underwater/Base IME": "underwater_base_ime",
     "Hidden/BilateralBlur": "bilateral_blur",
 }
 
@@ -55,6 +56,21 @@ def scan(lines):
     ]
 
 
+def unity_events(lines):
+    """Convert JSONL root events to replay records, excluding repeat summaries."""
+    for line in lines:
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if row.get("area") != "unity" or row.get("operation") not in ("Error", "Exception"):
+            continue
+        timestamp = row["utc"]
+        if not HEADER.match(timestamp + " "):
+            raise ValueError("Invalid Unity log timestamp")
+        for i, detail in enumerate(row["detail"].splitlines()):
+            yield timestamp + " " + detail if i == 0 else detail
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("logs", type=Path, nargs="+")
@@ -64,7 +80,7 @@ def main():
         if path.name in result:
             parser.error(f"Duplicate log basename: {path.name}")
         with path.open(encoding="utf-8-sig", errors="strict") as log:
-            result[path.name] = scan(log)
+            result[path.name] = scan(unity_events(log) if path.suffix == '.jsonl' else log)
     print(json.dumps(result, indent=2))
 
 

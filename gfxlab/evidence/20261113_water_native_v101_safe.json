@@ -1,0 +1,66 @@
+{
+  "cl_sha": "a320d5e23962568b62bffec95399cf3e0cb1f579",
+  "installed_version_code": 101,
+  "installed_obb_bytes": 2320398403,
+  "matching_delivery_run": 43247161671,
+  "package_sha_verified_on_phone": false,
+  "observed_unity_roots": [
+    {
+      "family": "fft_stack",
+      "operation": "kernel_index",
+      "index": 6,
+      "reported_upper_bound": 0,
+      "root_lines": 1
+    },
+    {
+      "family": "foam_global",
+      "operation": "Graphics.Blit",
+      "index": 1,
+      "reported_upper_bound": 1,
+      "root_lines": 1
+    },
+    {
+      "family": "spectrum",
+      "operation": "Graphics.Blit",
+      "index": 3,
+      "reported_upper_bound": 1,
+      "root_lines": 1
+    },
+    {
+      "family": "spectrum",
+      "operation": "Graphics.Blit",
+      "index": 4,
+      "reported_upper_bound": 1,
+      "root_lines": 1
+    },
+    {
+      "family": "spectrum",
+      "operation": "Graphics.Blit",
+      "index": 5,
+      "reported_upper_bound": 1,
+      "root_lines": 1
+    },
+    {
+      "family": "underwater_base_ime",
+      "operation": "CommandBuffer.DrawMesh",
+      "index": 1,
+      "reported_upper_bound": null,
+      "root_lines": 1
+    },
+    {
+      "family": "underwater_base_ime",
+      "operation": "CommandBuffer.DrawMesh",
+      "index": 3,
+      "reported_upper_bound": null,
+      "root_lines": 1
+    }
+  ],
+  "logcat_counts": {
+    "spectrum": 15054,
+    "foam_global": 21774,
+    "fft_index6": 6106,
+    "subsurface_blur": 0
+  },
+  "t1_binding_events": 0,
+  "original_water_verified": false
+}
