@@ -83,6 +83,40 @@ jobs:
           assert d['all_pixels_correct_verified'] is False
           print('GT_REAL_CL_NIGHT_DEVICE_REPRODUCED water=36828 spectrum=15054 foam=21774 kernel6=6106 cursor=2844 captureWriter=3390/3390 pixelProof=false')
           PY
+      - name: Fetch pinned 04:02 CL phone session with Android memory exit evidence
+        env:
+          OWNER_LOG_LATEST_SNAPSHOT: 3c26bb5d0f
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 2 \
+            "https://raw.githubusercontent.com/alwansan/CL/${OWNER_LOG_LATEST_SNAPSHOT}/raft%20log/lf/LogRaft-20261113-040212-998/session-summary.json" \
+            --output "$RUNNER_TEMP/gt-owner-0402-session-summary.json"
+      - name: Verify new water failure, collector fidelity and system LOW_MEMORY exit separately
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_device_graphics_acceptance \
+            --session-summary "$RUNNER_TEMP/gt-owner-0402-session-summary.json" \
+            --out "$RUNNER_TEMP/gt-owner-0402-safe-receipt.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-owner-0402-safe-receipt.json').read_text())
+          assert d['status']=='KNOWN_DEVICE_LOG_GATE_REJECTED'
+          assert d['strict_known_log_gate_passed'] is False
+          assert d['error_counts']['ultimate_water_invalid_pass']==28592
+          assert d['water_invalid_pass_by_family']['spectrum']==11512
+          assert d['water_invalid_pass_by_family']['foam_global']==17080
+          assert d['error_counts']['water_fft_invalid_compute_kernel']==4576
+          assert d['compute_invalid_kernel_index']['six']==4576
+          assert d['error_counts']['unity_cursor_rgba32_required']==2895
+          assert d['error_counts']['obb_guid_load_failed']==4
+          assert d['collector_writer_accounting_verified'] is True
+          assert d['collector_writer_failed_batches']==0
+          assert d['collector_writer_pending_bytes_at_stop']==0
+          assert d['android_matched_low_memory_exit_observed'] is True
+          assert d['android_process_exit_cause_other_than_reported_reason_proven'] is False
+          print('GT_REAL_CL_0402_DEVICE_REPRODUCED water=28592 spectrum=11512 foam=17080 kernel6=4576 cursor=2895 guid=4 LOW_MEMORY=true GPUcause=unverified')
+          PY
       - name: Remove private owner summary; do not publish raw logs or source
         if: always()
-        run: rm -f "$RUNNER_TEMP/gt-owner-session-summary.json" "$RUNNER_TEMP/gt-owner-safe-render-receipt.json" "$RUNNER_TEMP/gt-owner-night-session-summary.json" "$RUNNER_TEMP/gt-owner-night-safe-receipt.json"
+        run: rm -f "$RUNNER_TEMP/gt-owner-session-summary.json" "$RUNNER_TEMP/gt-owner-safe-render-receipt.json" "$RUNNER_TEMP/gt-owner-night-session-summary.json" "$RUNNER_TEMP/gt-owner-night-safe-receipt.json" "$RUNNER_TEMP/gt-owner-0402-session-summary.json" "$RUNNER_TEMP/gt-owner-0402-safe-receipt.json"
