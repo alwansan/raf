@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "agent": "GT",
+  "scope": "Owner CL LogRaft final-summary and four screenshot visual inspection; independent earlier full-native GitHub CI result",
+  "date_local": "2026-11-13",
+  "source_repo": "alwansan/CL",
+  "source_snapshot": "a320d5e23962568b62bffec95399cf3e0cb1f579",
+  "source_session_path": "raft log/lf/LogRaft-20261112-235351-196/session-summary.json",
+  "source_summary_git_blob_sha": "f37371aa232bfd5220b2d0604fcf25c2117de549",
+  "session": "20261112-235351-196",
+  "target_package": "com.alwansan.raft.androidtest",
+  "collector_version": "0.6.89",
+  "collection": {
+    "raw_log_segments": 4,
+    "raw_recorded_bytes": 103361406,
+    "writer_received_batches": 3390,
+    "writer_written_batches": 3390,
+    "writer_failed_batches": 0,
+    "writer_pending_bytes_at_stop": 0,
+    "final_game_log_lines": 1022470,
+    "logcat_ring_losses_unknown": true
+  },
+  "final_game_milestones": {
+    "world_loaded_message_observed": 1,
+    "unity_scene_callback_log_observed": 3,
+    "player_add_callback_log_observed": 1,
+    "no_game_death_event_observed": true,
+    "gameplay_fully_verified": false
+  },
+  "final_root_errors": {
+    "ultimate_water_invalid_pass": 36828,
+    "spectrum": 15054,
+    "foam_global": 21774,
+    "invalid_compute_kernel_index6": 6106,
+    "kernel_identity_not_proven": true,
+    "cursor_rgba32_required": 2844,
+    "obb_guid_load_failed": 2,
+    "missing_mono_script": 1,
+    "duplicate_event_system": 1,
+    "convex_mesh_polygon_limit": 4
+  },
+  "device_performance": {
+    "surfaceflinger_fps_mean": 30.91,
+    "fps_readable_samples": 21,
+    "fps_total_samples": 78,
+    "gpu_busy_percent_mean": 54.4,
+    "gpu_busy_systemwide_not_app": true
+  },
+  "image_evidence": {
+    "repository_folder": "raft log/img",
+    "new_images": 4,
+    "observations": [
+      "Menu raft and 3D scene extremely washed-out white; some colored assets (e.g. radio) intact",
+      "In-game sea dark blue with simple horizon and white patches; hand white, tool and HUD colored",
+      "Underwater scene solid bright cyan and shark visible, suspicious incorrect water/post-process treatment",
+      "Menu raft predominantly white with conspicuous grey noise/checker texture region"
+    ],
+    "qualifier": "Visual classification of four source screenshots only; material attribution is not proven"
+  },
+  "graphics_acceptance": {
+    "known_log_gate_passed": false,
+    "original_spectrum_pixel_proof": false,
+    "original_foam_pixel_proof": false,
+    "original_shader_runtime_material_binding_proof": false,
+    "all_770_postvendor_dummy_materials_restored": false
+  },
+  "native_build": {
+    "run_id": 43299084397,
+    "head_sha": "2666622cbc93a4fde0dae22371cd3b157dc15ab7",
+    "reconstruct": "success",
+    "publish_early_test": "failure",
+    "error": "HTTP 403 Resource not accessible by integration on GitHub Release creation",
+    "checkpoint_artifact_id": 13997201215,
+    "delivery_artifact_id": 13996908213,
+    "delivery_artifacts_expire": "2026-11-16",
+    "source_is_older_than_latest_gt_spectrum_work": true,
+    "release_published": false
+  },
+  "next_actions": [
+    "Follow source-authentic typed Shader.Find local consuming IL to original dynamic Material/Graphics/RT binding; do not synthesize GUID",
+    "Identify original compute kernel6 and correct Spectrum/Foam pass mapping in main Unity",
+    "Address 770 post-vendor dummy Shader Material documents and white raft appearance with source-linked restorations",
+    "Request administrator to allow GitHub Actions release creation or provide a RAFT_RELEASE_TOKEN with contents write; preserve fail-red release gate",
+    "Test fresh APK on phone with picture+LogRaft paired after source-authentic fixes"
+  ]
+}
