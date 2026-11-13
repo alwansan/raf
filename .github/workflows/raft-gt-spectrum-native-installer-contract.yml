@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/gt_install_original_spectrum.py
       - tests/test_gt_install_original_spectrum.py
+      - tests/test_gt_native_spectrum_workflow_contract.py
+      - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-gt-spectrum-native-installer-contract.yml
   workflow_dispatch:
 permissions:
@@ -26,4 +28,5 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/gt_install_original_spectrum.py tests/test_gt_install_original_spectrum.py
           python3 -m unittest discover -s tests -p test_gt_install_original_spectrum.py -v
+          python3 -m unittest discover -s tests -p test_gt_native_spectrum_workflow_contract.py -v
           echo 'GT_SPECTRUM_NATIVE_GUID_TRANSACTION_TEST_PASS sourceOnly=true SHAOriginalPrivateCandidateNotIncluded=true Unity2021=false AdrenoPixels=false'
