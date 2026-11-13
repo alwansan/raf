@@ -48,22 +48,24 @@ class Reader:
         if self.pos + length > len(self.raw):
             raise ValueError("Truncated original shader parameter string")
         # Do not print or retain the original source name/identifier anywhere.
-        self.raw[self.pos:self.pos + length].decode("utf-8")
+        value = self.raw[self.pos:self.pos + length].decode("utf-8")
         self.pos += length
         end = (self.pos + 3) & ~3
         if end > len(self.raw) or any(self.raw[self.pos:end]):
             raise ValueError("Original parameter string padding drift")
         self.pos = end
+        return value
 
     def finish(self):
         if self.pos != len(self.raw):
             raise ValueError("Original Shader parameter record has trailing bytes")
 
 
-def parse_parameter_blob(raw):
+def parse_parameter_blob(raw, *, private_layout=None):
     """Parse byte-for-byte format of ShaderSubProgram.ReadParameters for 2021.3.
 
-    Result is aggregate-only and keeps no original names or values.
+    The result is aggregate-only. An optional caller-owned private layout retains
+    named source records after the full blob has validated.
     It does *not* claim original HLSL binding equivalence or edit source.
     """
     reader = Reader(raw)
@@ -72,8 +74,9 @@ def parse_parameter_blob(raw):
     groups = reader.number(MAX_GROUPS)
     counts = Counter()
     kinds = Counter()
+    layout = {"groups": [], "resources": []}
     for group in range(groups):
-        reader.string()
+        group_name = reader.string()
         used_size = reader.number(MAX_RECORD_BYTES)
         counts["all_group_used_bytes"] += used_size
         if group:
@@ -87,8 +90,10 @@ def parse_parameter_blob(raw):
         if group:
             counts["constant_buffers"] += 1
         counts["numeric_parameter_records"] += count
+        group_layout = {"name": group_name, "used_size": used_size, "members": [], "structs": []}
+        layout["groups"].append(group_layout)
         for _ in range(count):
-            reader.string()
+            name = reader.string()
             param_type = reader.int()
             rows = reader.int()
             columns = reader.int()
@@ -99,13 +104,17 @@ def parse_parameter_blob(raw):
                 or matrix_flag not in (0, 1) or not 0 <= array_size <= MAX_ELEMENTS
                 or parameter_index < 0):
                 raise ValueError("Original numeric parameter schema inconsistent")
+            group_layout["members"].append({
+                "name": name, "type": param_type, "rows": rows, "columns": columns,
+                "matrix": bool(matrix_flag), "array_size": array_size, "index": parameter_index,
+            })
             counts["matrix_parameters" if matrix_flag else "vector_parameters"] += 1
             kinds["numeric_type_" + str(param_type)] += 1
         # Original 2021.3 always writes structCount, even when zero.
         structs = reader.number()
         counts["structs"] += structs
         for _ in range(structs):
-            reader.string()
+            name = reader.string()
             index = reader.int()
             array_size = reader.int()
             struct_size = reader.int()
@@ -113,8 +122,11 @@ def parse_parameter_blob(raw):
                 raise ValueError("Original struct parameter geometry invalid")
             inner_count = reader.number()
             counts["struct_numeric_members"] += inner_count
+            struct_layout = {"name": name, "index": index, "array_size": array_size,
+                             "size": struct_size, "members": []}
+            group_layout["structs"].append(struct_layout)
             for _ in range(inner_count):
-                reader.string()
+                member_name = reader.string()
                 param_type = reader.int()
                 rows = reader.int()
                 columns = reader.int()
@@ -125,19 +137,26 @@ def parse_parameter_blob(raw):
                     or matrix_flag not in (0, 1) or not 0 <= array_len <= MAX_ELEMENTS
                     or parameter_index < 0):
                     raise ValueError("Original struct member schema invalid")
+                struct_layout["members"].append({
+                    "name": member_name, "type": param_type, "rows": rows, "columns": columns,
+                    "matrix": bool(matrix_flag), "array_size": array_len, "index": parameter_index,
+                })
                 counts["struct_matrix_members" if matrix_flag else "struct_vector_members"] += 1
     resources = reader.number()
     counts["resource_parameter_records"] = resources
     for _ in range(resources):
-        reader.string()
+        name = reader.string()
         kind = reader.int()
         index = reader.int()
         extra_value = reader.int()
         if kind not in (0, 1, 2, 3, 4) or index < 0:
             raise ValueError("Unrecognized original Shader resource binding type")
         kinds["resource_kind_" + str(kind)] += 1
+        resource = {"name": name, "kind": kind, "index": index, "extra_value": extra_value}
+        layout["resources"].append(resource)
         if kind == 0:
             texture_flags = reader.uint()  # Includes dimensionality/multisampling.
+            resource["texture_flags"] = texture_flags
             counts["texture_records"] += 1
             if texture_flags >> 1 > 255:
                 raise ValueError("Original texture dimension metadata invalid")
@@ -150,6 +169,8 @@ def parse_parameter_blob(raw):
         else:
             counts["explicit_sampler_bindings"] += 1
     reader.finish()
+    if private_layout is not None:
+        private_layout.update(layout)
     return {
         "serializer_version": VERSION_2021,
         "bytes_consumed": len(raw),

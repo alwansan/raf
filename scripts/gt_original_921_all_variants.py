@@ -212,15 +212,19 @@ def source_keyword_profile(pairs,orphans,parsed):
         "original_sampler_register_CB0_bindings_proven":False,
     }
 
-def stage_parameter_records(pairs, orphans, passes, table, private):
+def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs):
     """Preserve the per-stage override blobs separately from shared stage bytecode."""
     from scripts.a12_shader_parameter_decode import parse_parameter_blob
+    from scripts.b25_foam_cb_namebridge import original_name_registry
+    from scripts.w1_rebind_depth_resources import RESOURCE
+    import re
 
     by_pass = {(row["subshader"], row["pass"]): row for row in passes}
     rows = [(pair, stage, pair[field]) for pair in pairs
             for stage, field in ((1, "vs"), (0, "fs"))]
     rows.extend((orphan, orphan["stage"], orphan["variant"]) for orphan in orphans)
-    records, decoded = [], {}
+    records, decoded, layouts = [], {}, {}
+    texture_counts = Counter()
     for location, stage, row in rows:
         shader_pass = by_pass[location["subshader"], location["pass"]]
         program = shader_pass["original_vertex_program" if stage == 1 else "original_fragment_program"]
@@ -229,14 +233,37 @@ def stage_parameter_records(pairs, orphans, passes, table, private):
             raise ValueError("invalid_original_parameter_blob_index")
         raw = table[index][1]
         if index not in decoded:
-            decoded[index] = parse_parameter_blob(raw)
+            layouts[index] = {}
+            decoded[index] = parse_parameter_blob(raw, private_layout=layouts[index])
+        common = program["m_CommonParameters"]
+        names = original_name_registry(shader_pass["original_name_indices"])
+        textures = {item["m_Index"]: (names[item["m_NameIndex"]], item["m_SamplerIndex"])
+                    for item in common["m_TextureParams"]}
+        textures.update({item["index"]: (item["name"], item["extra_value"])
+                         for item in layouts[index]["resources"] if item["kind"] == 0})
+        source = (private / program_dirs[row["program_ref"]] / "private.hlsl").read_text()
+        bindings = []
+        for resource in RESOURCE.finditer(source):
+            variable, kind = resource[2], resource[3]
+            slot_match = re.fullmatch(kind + r"(\d+)", variable)
+            if not slot_match:
+                raise ValueError("original_texture_or_sampler_slot_missing")
+            slot = int(slot_match[1])
+            candidates = ([textures[slot][0]] if slot in textures else []) if kind == "t" else [
+                name for name, sampler in textures.values() if sampler == slot]
+            if len(candidates) != 1:
+                raise ValueError("original_texture_or_sampler_binding_ambiguous")
+            bindings.append({"kind": kind, "slot": slot, "source_texture_name": candidates[0]})
+            texture_counts[kind] += 1
         records.append({
             "subshader": location["subshader"], "pass": location["pass"],
             "stage": stage, "player_bucket": row["player_bucket"], "ordinal": row["bucket_ordinal"],
             "original_parameter_blob_index": index,
+            "source_texture_sampler_bindings": bindings,
         })
     packet = {
         "stage_records": records,
+        "decoded_original_named_layouts": layouts,
         "blobs_base64": {index: base64.b64encode(table[index][1]).decode("ascii") for index in decoded},
     }
     (private / "original-private-parameter-records.json").write_text(
@@ -244,6 +271,12 @@ def stage_parameter_records(pairs, orphans, passes, table, private):
     return {
         "original_variant_stages_with_parameter_records": len(records),
         "distinct_original_parameter_blobs": len(decoded),
+        "translated_texture_declarations_mapped_to_source_name": texture_counts["t"],
+        "translated_sampler_declarations_mapped_to_source_texture": texture_counts["s"],
+        "named_original_numeric_members_in_distinct_parameter_blobs": sum(
+            item["numeric_parameter_count"] + item["struct_numeric_member_count"] for item in decoded.values()),
+        "named_original_resource_entries_in_distinct_parameter_blobs": sum(
+            item["resource_parameter_count"] for item in decoded.values()),
         "original_variant_stages_with_textures": sum(
             decoded[row["original_parameter_blob_index"]]["texture_count"] > 0 for row in records),
         "original_variant_stages_with_cb_bindings": sum(
@@ -306,7 +339,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     safe["source_keyword_route_coverage"] = route_summary
     safe['source_original_keyword_coverage']=source_keyword_profile(pairs,orphans,tree['m_ParsedForm'])
     safe["source_variant_parameter_records"] = stage_parameter_records(
-        pairs, orphans, passes, tables[0], private)
+        pairs, orphans, passes, tables[0], private, program_dirs)
     with out.open("x",encoding="utf-8") as target:
         json.dump(safe,target,sort_keys=True,indent=2)
         target.write("\n")

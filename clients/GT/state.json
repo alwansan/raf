@@ -18,7 +18,8 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT33_921_ALL_SOURCE_DXBC_58_OF_58_RECOVERED_PRIVATE_GUID_AND_SAMPLER_PENDING",
+  "status": "GT_921_SOURCE_ROUTES_LAYOUT_AND_TEXTURE_SAMPLER_NAMES_VERIFIED_UNITY_BINDING_PENDING",
+  "latest_921_source_receipt": "clients/GT/evidence/20261113_original_921_routes_layout_parameters.json",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {

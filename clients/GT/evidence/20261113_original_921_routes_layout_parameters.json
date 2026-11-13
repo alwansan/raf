@@ -70,9 +70,13 @@
   },
   "source_variant_parameter_records": {
     "distinct_original_parameter_blobs": 46,
+    "named_original_numeric_members_in_distinct_parameter_blobs": 711,
+    "named_original_resource_entries_in_distinct_parameter_blobs": 341,
     "original_variant_stages_with_cb_bindings": 57,
     "original_variant_stages_with_parameter_records": 74,
-    "original_variant_stages_with_textures": 29
+    "original_variant_stages_with_textures": 29,
+    "translated_sampler_declarations_mapped_to_source_texture": 198,
+    "translated_texture_declarations_mapped_to_source_name": 206
   },
   "status": "GT_ORIGINAL_921_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY",
   "unmatched_original_fragment_variants": 0,
