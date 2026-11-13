@@ -57,7 +57,8 @@
     "original_spectrum_local_cfg_initial_compiler_failure": 43302598498,
     "original_spectrum_local_cfg_branch_aware_verified": 43302914466,
     "last_full_native_reconstruct_success_release_denied": 43299084397,
-    "gt_921_all_original_58_program_source_translations": 43357332292
+    "gt_921_all_original_58_program_source_translations": 43357332292,
+    "gt_921_original_keyword_property_topology": 43358489426
   },
   "workstreams": [
     {
@@ -209,16 +210,17 @@
       "packaged": "separate_approx_apk_only",
       "device_verified": false,
       "status": "authentic_shader_material_binding_blocked",
-      "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors; [CI43357332292 SUCCESS] authenticated original 921-slot Shader48 full 4 Pass, 33 paired VS/FS, eight unmatched VS, 58/58 distinct DXBC translated to HLSL and roundtrip Vulkan1.1 in ephemeral source-only CI; SHA-original source owned, no real shader installation yet",
+      "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors; [CI43357332292 SUCCESS] authenticated original 921-slot Shader48 full 4 Pass, 33 paired VS/FS, eight unmatched VS, 58/58 distinct DXBC translated to HLSL and roundtrip Vulkan1.1 in ephemeral source-only CI; SHA-original source owned, no real shader installation yet; CI43358489426 confirms complete original ParsedForm kept runner-private: 27 source keyword names/flags, 14 genuinely used keyword indices (all in-range), 35 authored Shader Properties and 74 original VS/FS metadata records, 1 player bucket. No original keyword pragma scope/CB0/sampler restoration claimed.",
       "missing": "All 58 stages recovered and translated privately, but 4-Pass original-authentic ShaderLab construction, keyword routing, source-sampler/CB0/register/resource mapping, source-export original GUID replacement, full postvendor Dummy recensus, and 164 other Shader objects remain incomplete; Unity/Adreno pixels not proven.",
-      "next_action": "Convert private 58 translated stages / 33 original matched pairs and 8 orphan VS into full original-authentic 4-Pass ShaderLab, preserve original render-state+Properties+Sampler+CB0+Keyword combinations, install only into same original export GUID, then repeat full 770 Dummy Material census and scale to all original 165 Shader objects. No XAPK yet.",
+      "next_action": "From original full 4Pass ParsedForm and 58 translated programs, reconstruct each of 33 authentic paired variant routes for 14 source-referenced keyword indices within 27-name/flag source table and 35 Properties; prove original shader source keywords/flags, sampler CB0, pass render states, and exact existing source-export Shader GUID. Then recensus 770 postvendor Dummy Materials and repeat for all 165 shaders. No XAPK.",
       "evidence": [
         43236578305,
         43237509847,
         43242496576,
         43243957499,
         42052605123,
-        43357332292
+        43357332292,
+        43358489426
       ]
     },
     {
