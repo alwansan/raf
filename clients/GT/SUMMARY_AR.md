@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## قرار المالك: نكمل الاستعادة الأصلية بالكامل أولاً ثم XAPK التجريبي
+
+قرار جديد مؤرّخ 2026-11-13 ومحفوظ في [OWNER_DIRECTIVE_RESTORE_FIRST_AR.md](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md): GT مطالب باستعادة ودمج كل الموارد الأصلية ـ المجسمات/المشاهد/الألوان/الخامات/المواد والشيدرات الـ165 وVariants/Keywords/Texture Samplers، الماء وFFT/Compute، الظلال/النار/الجسيمات والمؤثرات ـ قبل طلب أول XAPK شامل لاختبار التوافق. لا تتوقف الأعمال الأساسية بانتظار الحزم. **770 Material YAML ما زالت تعتمد على Dummy حسب جرد ما بعد Vendor؛ ليست 770 Shader مختلفة**. جرد 6 مشاهد أصلي سابق CI42044249541 بيّن **1373/1633 خانات Renderer إلى Dummy وShader واحد 921 خانة ما زال Dummy**؛ هذه عيّنة source→export لا إثبات pixels. الأولوية الاستعادة عالية الأثر مع فحص الفرق بعد كل دفعة. العمليات السابقة قيد التنفيذ تعد تاريخاً سابقاً لهذا القرار، ولا يطلب بناء GT جديد قبل G0–G6.
+
+---
+
 ## GT Chat-31 — إنجاز الاستبدال الحقيقي Spectrum7 وفشل Gate الطلب القديم
 
 اكتمل **أول تثبيت إنتاجي موثّق لشيدر Spectrum الأصلي 7Pass داخل مشروع AssetRipper الحقيقي مع GUID الأصلي** في [43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) وArtifact `14002987883`. انتهى run بالفشل في Water Gate لأن قائمة التجربة تحمل نقص Spectrum أصبح غير صحيح؛ تقرير المصدر بعد التثبيت يثبت Spectrum `[7]`، Foam القديم `[1]`، Depth `[6,3]`، Blur `[2]`، Volumetric `[5]`، وCompute/Kernel غير مثبتين. البناء الثاني [43349181838](https://github.com/alwansan/raf/actions/runs/43349181838) فيه Foam2 مع Spectrum7 وشروط ShaderUtil، ما زال جارياً. والبناء الثالث [43350559665](https://github.com/alwansan/raf/actions/runs/43350559665) دخل قائمة الانتظار بشرط مطابقة **3 نواقص حقيقية متوقعة**: Depth alternative، Water Compute، Kernel identity؛ [CI43350378817 SUCCESS](https://github.com/alwansan/raf/actions/runs/43350378817) اختبر الحساب دون بيانات أصلية. لا توجد حزمة ناجحة جديدة أو تجارب هاتف تثبت الماء بعد. [Chat31](sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md).
