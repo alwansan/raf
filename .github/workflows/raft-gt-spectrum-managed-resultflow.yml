@@ -94,6 +94,17 @@ jobs:
           assert d['exact_original_name_direct_typed_Shader_Find_calls']==1
           assert d['exact_original_name_literal_sites']==1
           assert sum(d[k] for k in d if k.startswith('source_return_immediate_'))==1
+          # Original source-owned Material dataflow: not merely Graphics
+          # co-occurrence in a method. Single-basic-block typed IL value
+          # stack tracing must reproduce all source-authentic Blit arguments.
+          assert d['original_dynamic_Spectrum_Material_owned_field_identity_resolved'] is True
+          assert d['original_dynamic_Spectrum_Material_owned_field_read_sites']==24
+          assert d['original_dynamic_Spectrum_Material_owned_field_reader_methods']==8
+          assert d['original_dynamic_Spectrum_Material_intra_block_exact_typed_Graphics_material_args']==7
+          assert d['original_dynamic_Spectrum_Material_intra_block_exact_typed_Graphics_Blit_material_args']==7
+          assert d['original_dynamic_Spectrum_Material_intra_block_exact_typed_Graphics_other_material_args']==0
+          assert d['original_dynamic_Spectrum_Material_intra_block_trace_unsupported']==0
+          assert d['original_dynamic_Spectrum_Material_intra_block_typed_argument_not_runtime_or_GPU_proof'] is True
           assert d['actual_Unity_Shader_Find_executed'] is False
           assert d['Adreno_water_pixels_verified'] is False
           assert d['original_identifier_and_IL_exported'] is False
