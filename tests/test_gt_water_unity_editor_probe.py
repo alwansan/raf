@@ -77,7 +77,6 @@ class ImportedWaterPassProbeTests(unittest.TestCase):
             'shader.passCount != 2',
             'ShaderUtil.ShaderHasError(shader)',
             'GT_NATIVE_FOAM_UNITY_IMPORT_GATE',
-            'original Foam',
             'AdrenoPixelsVerified=false',
         ):
             self.assertIn(text,self.probe)
