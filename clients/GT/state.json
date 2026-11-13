@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md",
-  "next_action": "GT Chat29: CI43343971412 and strict CI43344199792 prove 7 exact typed original Spectrum Material field values passed to Graphics.Blit (source-only), original SHA ZIP2. CL latest 3c26bb5 session 20261113-040212-998: water invalid28592 spectrum11512 foam17080, kernel6 4576, OBB GUID4, cursor2895 and matched Android ActivityManager LOW_MEMORY exit reason3 PID18885 at ~04:04:43. CI43343638117 device regression SUCCESS, images white raft. NEXT inspect exact generated Unity shader dummy path/meta and stage original SHA-authenticated unified 7Pass/2Keyword Spectrum without duplicate names or altering original GUIDs, compile and phone test. Runtime Graphics execution, CB0/samplers, Foam/kernel6, 770 Dummy, and Adreno pixels unproven. No LFS.",
+  "latest_session": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md",
+  "next_action": "GT Chat30: Source-free native AssetRipper original Spectrum installer with verified single exact Shader name, original unchanged GUID/meta, 7 source-authenticated passes/2 keyword variants, transactional external backup and rollback integrated after B45 Blur; installer contract CI43346292249 SUCCESS, new full native run43346405263 requested at 4b74f6bd, request-gate & Unity license preflight SUCCESS, reconstruct running (not yet installed/compiled/gameplay-verified). NEXT inspect job safe source stage, restore Unity/Shader if failure, then Foam2Pass/compute index6/770 custom dummy resources, phone low memory and Adreno pixels. Don't claim APK/Graphics success before results; no LFS or synthesized GUID.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -920,5 +920,37 @@
     "no_Git_LFS": true,
     "no_original_GUID_mutation": true,
     "original_Spectrum_game_gpu_restoration_complete": false
+  },
+  "proofs_20261113_chat30": {
+    "session_path": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md",
+    "original_source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_chain_7_exact_typed_Graphics_Blit_CI": 43344199792,
+    "production_installer_path": "scripts/gt_install_original_spectrum.py",
+    "production_installer_tests_path": "tests/test_gt_install_original_spectrum.py",
+    "production_workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
+    "production_install_after_original_depth_and_blur": true,
+    "production_unique_exported_original_Shader_name_required": true,
+    "production_existing_unique_exported_GUID_required": true,
+    "production_exported_meta_changed": false,
+    "synthetic_installer_contract_pass_CI": 43346292249,
+    "synthetic_installer_contract_success": true,
+    "production_source_original_seven_passes_stage_configured": true,
+    "production_unified_private_keyword_branch_count": 2,
+    "actual_complete_export_Spectrum_restoration_CI_result": "pending_native_run",
+    "actual_unity_game_shader_import_compiled": false,
+    "actual_original_Spectrum_GPU_pixel_parity_verified": false,
+    "native_full_run_id": 43346405263,
+    "native_requested_commit": "4b74f6bdec8781e64d6aae182797d06b83109c35",
+    "native_request_gate_success": true,
+    "native_unity_license_preflight_success": true,
+    "native_reconstruct_result_at_snapshot": "in_progress_no_completed_build_yet",
+    "signed_native_XAPK_ready": false,
+    "original_Foam_Global_2pass_restored_to_game": false,
+    "original_kernel6_identity_proven": false,
+    "original_770_dummy_Material_sources_restored": false,
+    "no_LFS": true,
+    "owner_latest_phone_LogRaft": "20261113-040212-998",
+    "owner_phone_android_matched_low_memory_exit": true,
+    "no_android_device_acceptance_yet": true
   }
 }
