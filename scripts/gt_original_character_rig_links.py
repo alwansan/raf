@@ -15,7 +15,7 @@ def audit(root, manifest):
     import UnityPy
 
     known = read_expected(manifest)
-    kinds, externals, meshes, renderers = {}, {}, {}, []
+    kinds, externals, meshes, renderers, parents = {}, {}, {}, [], {}
     for owner, (_, size, digest) in known.items():
         source = root / owner
         verify(source, size, digest)
@@ -37,6 +37,30 @@ def audit(root, manifest):
 
     counts = Counter()
     used = set()
+    # Decode Transform parent pointers only for owners reachable from candidate rigs.
+    def parent(identity):
+        owner, path_id = identity
+        if owner not in parents:
+            sf = UnityPy.load(str(root / owner)).file
+            parents[owner] = {
+                obj.path_id: obj.read_typetree(check_read=False)["m_Father"]
+                for obj in sf.objects.values()
+                if obj.type.name in ("Transform", "RectTransform")
+            }
+        value = parents[owner].get(path_id)
+        return target(owner, value) if value is not None else (None, 0)
+
+    def ancestry(bone, root_bone):
+        seen = set()
+        while bone[0] is not None and bone[1]:
+            if bone == root_bone:
+                return "under_root"
+            if bone in seen:
+                return "parent_cycle"
+            seen.add(bone)
+            bone = parent(bone)
+        return "outside_root"
+
     for owner, tree in renderers:
         identity = target(owner, tree["m_Mesh"])
         if identity not in meshes:
@@ -45,6 +69,8 @@ def audit(root, manifest):
         bones = tree["m_Bones"]
         counts["character_skinned_renderers"] += 1
         counts["renderer_bone_counts_match_bind_poses"] += len(bones) == meshes[identity]
+        root_bone = target(owner, tree["m_RootBone"])
+        rig_ancestry = Counter()
         for bone in bones:
             dest, path_id = target(owner, bone)
             counts["renderer_bone_slots"] += 1
@@ -52,9 +78,12 @@ def audit(root, manifest):
                 counts["null_bone_slots"] += 1
             elif kinds.get(dest, {}).get(path_id) in ("Transform", "RectTransform"):
                 counts["verified_transform_bone_slots"] += 1
+                rig_ancestry[ancestry((dest, path_id), root_bone)] += 1
             else:
                 counts["unresolved_bone_slots"] += 1
-        dest, path_id = target(owner, tree["m_RootBone"])
+        counts.update({"bone_slots_" + key: value for key, value in rig_ancestry.items()})
+        counts["renderers_with_all_bones_under_root"] += bool(bones) and rig_ancestry["under_root"] == len(bones)
+        dest, path_id = root_bone
         if path_id == 0:
             counts["null_root_bones"] += 1
         elif kinds.get(dest, {}).get(path_id) in ("Transform", "RectTransform"):
