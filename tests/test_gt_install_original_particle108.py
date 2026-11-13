@@ -77,3 +77,26 @@ class Particle108InstallerTests(unittest.TestCase):
             self.assertEqual((self.backup / "original.shader").read_bytes(), self.original)
             again = install.stage(*args, apply=True)
             self.assertTrue(again["status"].endswith("ALREADY_INSTALLED"))
+
+
+    def test_smoke34_requires_its_own_compile_proof_and_original_identity(self):
+        args = (Path("Original"), Path("Manifest"), self.assets.parent, self.trace_file,
+                self.candidate, self.source, self.unity, self.backup)
+        with self.assertRaisesRegex(ValueError, "incomplete_particle108_source_or_Unity_proof"):
+            install.stage(*args, smoke34=True)
+        self.candidate.write_text(self.candidate.read_text().replace(
+            "#pragma multi_compile __ KEY_B\n", ""))
+        digest = hashlib.sha256(self.candidate.read_bytes()).hexdigest()
+        self.source.write_text(json.dumps(dict(install.SMOKE_SOURCE_PROOF,
+                                               candidate_shader_sha256=digest)))
+        self.unity.write_text(json.dumps(dict(install.SMOKE_UNITY_PROOF,
+                                              candidateShaderSha256=digest, privateBundleBytes=128)))
+        with (patch.object(install, "original_private_smoke_target",
+                           return_value=(self.source_key, {})) as source,
+              patch.object(install, "select") as particle108):
+            result = install.stage(*args, smoke34=True, apply=True)
+            source.assert_called_once_with(args[0], args[1])
+            particle108.assert_not_called()
+            self.assertEqual(result["status"], "ORIGINAL_SMOKE34_SOURCE_BOUND_SHADER_INSTALLED")
+            self.assertEqual(result["source_original_particle_renderer_material_slots"], 34)
+            self.assertEqual(self.meta.read_bytes(), self.metadata)

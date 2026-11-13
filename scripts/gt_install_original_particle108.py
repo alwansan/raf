@@ -18,6 +18,7 @@ from scripts.gt_particle108_private_unity_project import KEYWORD
 from scripts.restore_builtin_shaders import exported_shader_identity
 from scripts.t3_original_particle108_dxbc_feasibility import select
 from scripts.t3_original_renderer_shader_impact import load_original
+from scripts.t3_smoke34_sameexport_shaderlab import original_private_smoke_target
 from scripts.verify_export_lineage import identity, pointer
 from scripts.w1_audit_export_material_shaders import ENGINE, GUID
 
@@ -45,6 +46,18 @@ UNITY_PROOF = {
     "unityEditorShaderImportAndCompilationProven": True,
     "gamePlayerBuilt": False,
 }
+SMOKE_SOURCE_PROOF = {
+    "status": "SOURCE_NAMED_SMOKE34_TWO_ROUTES_VULKAN_COMPILED",
+    "source_original_smoke_named_particle_renderer_slots": 34,
+    "source_original_keyword_variants": 2,
+    "private_named_Vulkan_stages_compiled": 4,
+    "private_original_DXBC_sample_pairs_verified": 5,
+    "private_original_named_constant_buffers": 9,
+    "private_original_named_constant_buffer_reflected_offsets": 32,
+}
+SMOKE_UNITY_PROOF = dict(UNITY_PROOF,
+    status="ORIGINAL_PRIVATE_SMOKE34_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED",
+    sourceKeywordDimensions=1, sourceKeywordCombinations=2, registeredKeywordVariants=2)
 MAX_SHADER = 16 * 1024 * 1024
 
 
@@ -63,12 +76,13 @@ def require_proof(report, expected):
         raise ValueError("incomplete_particle108_source_or_Unity_proof")
 
 
-def candidate_bytes(candidate, source_report, unity_report):
+def candidate_bytes(candidate, source_report, unity_report, *, smoke34=False):
     data = read_bounded(candidate, MAX_SHADER)
     source = json.loads(read_bounded(source_report, 65536))
     unity = json.loads(read_bounded(unity_report, 65536))
-    require_proof(source, SOURCE_PROOF)
-    require_proof(unity, UNITY_PROOF)
+    require_proof(source, SMOKE_SOURCE_PROOF if smoke34 else SOURCE_PROOF)
+    require_proof(unity, SMOKE_UNITY_PROOF if smoke34 else UNITY_PROOF)
+    dimensions = 1 if smoke34 else 2
     digest = hashlib.sha256(data).hexdigest()
     if source.get("candidate_shader_sha256") != digest or unity.get("candidateShaderSha256") != digest:
         raise ValueError("particle108_candidate_proof_digest_mismatch")
@@ -82,7 +96,7 @@ def candidate_bytes(candidate, source_report, unity_report):
             or coverage["subshader_pass_counts"] != [1]
             or coverage["passes_with_complete_program"] != 1
             or coverage["pass_braces_balanced"] is not True
-            or len(keywords) != 2 or len(set(keywords)) != 2):
+            or len(keywords) != dimensions or len(set(keywords)) != dimensions):
         raise ValueError("invalid_particle108_source_bound_shader_candidate")
     return data
 
@@ -121,28 +135,33 @@ def traced_shader(assets, trace, source_key):
 
 
 def stage(original, manifest, project, trace_file, candidate, source_report,
-          unity_report, backup, *, apply=False):
+          unity_report, backup, *, apply=False, smoke34=False):
     project = check_safe_ancestors(project)
     backup = check_safe_ancestors(backup)
     if any(check_safe_ancestors(path).is_relative_to(project)
            for path in (candidate, source_report, unity_report, trace_file, backup)):
         raise ValueError("private_particle108_input_or_backup_inside_export")
-    data = candidate_bytes(candidate, source_report, unity_report)
+    data = candidate_bytes(candidate, source_report, unity_report, smoke34=smoke34)
     trace = json.loads(read_bounded(trace_file, 40_000_000))
-    private = {}
-    report = load_original(original, manifest, private_particle_slot_counts=private)
-    target, meta = traced_shader(project / "Assets", trace, select(private, report))
+    if smoke34:
+        source_key, _ = original_private_smoke_target(original, manifest)
+    else:
+        private = {}
+        report = load_original(original, manifest, private_particle_slot_counts=private)
+        source_key = select(private, report)
+    target, meta = traced_shader(project / "Assets", trace, source_key)
+    status_prefix = "ORIGINAL_SMOKE34" if smoke34 else "ORIGINAL_PARTICLE108"
     previous = read_bounded(target, MAX_SHADER)
     metadata = read_bounded(meta, 65536)
     old_shader = previous.decode("utf-8-sig")
     if exported_shader_identity(old_shader) != exported_shader_identity(data.decode("utf-8")):
         raise ValueError("source_particle108_shader_name_differs_from_traced_export")
     if previous == data:
-        status = "ORIGINAL_PARTICLE108_SOURCE_BOUND_SHADER_ALREADY_INSTALLED"
+        status = status_prefix + "_SOURCE_BOUND_SHADER_ALREADY_INSTALLED"
     elif "DummyShaderTextExporter" not in old_shader:
         raise ValueError("unexpected_non_dummy_particle108_exported_program")
     else:
-        status = "ORIGINAL_PARTICLE108_SOURCE_BOUND_SHADER_INSTALL_PREFLIGHT"
+        status = status_prefix + "_SOURCE_BOUND_SHADER_INSTALL_PREFLIGHT"
         if apply:
             backup.mkdir(mode=0o700)
             try:
@@ -163,10 +182,10 @@ def stage(original, manifest, project, trace_file, candidate, source_report,
             except (OSError, ValueError):
                 _atomic_replace_bytes(target, previous, ".gt-particle108-rollback-")
                 raise
-            status = "ORIGINAL_PARTICLE108_SOURCE_BOUND_SHADER_INSTALLED"
+            status = status_prefix + "_SOURCE_BOUND_SHADER_INSTALLED"
     return {
         "status": status,
-        "source_original_particle_renderer_material_slots": 108,
+        "source_original_particle_renderer_material_slots": 34 if smoke34 else 108,
         "source_to_export_unique_Shader48_GUID_verified": True,
         "exported_shader_meta_preserved": True,
         "isolated_Unity_Android_Vulkan_candidate_digest_verified": True,
@@ -181,6 +200,7 @@ def main():
                  "source-report", "unity-report", "backup"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--smoke34", action="store_true")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
     output = args.out

@@ -952,6 +952,69 @@ jobs:
           rm -rf -- "$RUNNER_TEMP/gt-native-particle108"
           test "$GITHUB_WORKSPACE" = "$PWD"
           sudo rm -rf -- "$GITHUB_WORKSPACE/gt-native-particle108-unity"
+      - name: Recover original Smoke34 ShaderLab from ZIP2 for the native export
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-native-smoke34"
+          mkdir -m 700 "$work"
+          timeout 420s python3 -m scripts.gt_smoke34_source_bound_shader \
+            --original "$RUNNER_TEMP/w1-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private "$work/bound" --report "$work/bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$work/bound/smoke34-original.shader" \
+            --routing "$work/bindings-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-native-smoke34-unity" \
+            --report "$work/staging-safe.json" --smoke34
+      - name: Compile only original Smoke34 ShaderLab in isolated Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-native-smoke34-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Install compiled Smoke34 into its original native exported Shader48 GUID
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/gt-native-smoke34"
+          timeout 240s python3 -m scripts.gt_install_original_particle108 \
+            --original "$RUNNER_TEMP/w1-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --trace-file "$RUNNER_TEMP/private-export-lineage.json" \
+            --candidate "$work/bound/smoke34-original.shader" \
+            --source-report "$work/bindings-safe.json" \
+            --unity-report "$GITHUB_WORKSPACE/gt-native-smoke34-unity/ProbeResults/gt-particle108-private-unity-safe.json" \
+            --backup "$RUNNER_TEMP/gt-native-smoke34-original-export" --apply --smoke34 \
+            --out "$RUNNER_TEMP/gt-native-smoke34-install-safe.json"
+      - name: Retain only the aggregate original Smoke34 native install receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-smoke34-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-native-smoke34-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private Smoke34 source and isolated Unity bundle
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf -- "$RUNNER_TEMP/gt-native-smoke34"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-native-smoke34-unity"
       - name: Inventory actual exported Material Shader references without modifying assets
         id: w1_material_inventory
         # A diagnostic failure stays visible in the JSON. Existing strict builtin
