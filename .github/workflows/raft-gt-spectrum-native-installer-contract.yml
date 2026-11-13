@@ -6,6 +6,7 @@ on:
       - scripts/gt_install_original_spectrum.py
       - tests/test_gt_install_original_spectrum.py
       - tests/test_gt_native_spectrum_workflow_contract.py
+      - tests/test_gt_native_foam_workflow_contract.py
       - .github/workflows/raft-unity-editor-android-import.yml
       - .github/workflows/raft-gt-spectrum-native-installer-contract.yml
   workflow_dispatch:
@@ -29,4 +30,7 @@ jobs:
           python3 -m py_compile scripts/gt_install_original_spectrum.py tests/test_gt_install_original_spectrum.py
           python3 -m unittest discover -s tests -p test_gt_install_original_spectrum.py -v
           python3 -m unittest discover -s tests -p test_gt_native_spectrum_workflow_contract.py -v
+          python3 -m unittest discover -s tests -p test_gt_native_foam_workflow_contract.py -v
+          python3 -m unittest discover -s tests -p test_t2_foam_private_installer.py -v
+          python3 -m unittest discover -s tests -p test_t2_foam_private_shaderlab_candidate.py -v
           echo 'GT_SPECTRUM_NATIVE_GUID_TRANSACTION_TEST_PASS sourceOnly=true SHAOriginalPrivateCandidateNotIncluded=true Unity2021=false AdrenoPixels=false'
