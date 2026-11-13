@@ -65,6 +65,23 @@ class MeshExportTests(unittest.TestCase):
             path.write_text(YAML.replace("dimension: 3", "dimension: 4"))
             self.assertNotEqual(export_geometry(path, FID)["vertex_channels"], expected["vertex_channels"])
 
+    def test_bind_pose_preserves_negative_zero_without_rounding_nonzero_values(self):
+        matrix = {f"e{row}{column}": 1.0 for row in range(4) for column in range(4)}
+        matrix.update(e00=-0.0, e01=0.0, e02=0.125)
+        lines = [f"    {field}: {value}" for field, value in matrix.items()]
+        lines[0] = "  - e00: -0"
+        lines[1] = "    e01: 0"
+        mesh_yaml = YAML.replace("  m_BindPose: []", "  m_BindPose:\n" + "\n".join(lines))
+        expected = geometry(dict(TREE, m_BindPose=[matrix]), bytes.fromhex("0000803f" * 3), b"\0\0")
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "mesh.asset"
+            path.write_text(mesh_yaml)
+            self.assertEqual(export_geometry(path, FID), expected)
+            path.write_text(mesh_yaml.replace("e00: -0", "e00: 0"))
+            self.assertNotEqual(export_geometry(path, FID)["bind_pose_matrices"], expected["bind_pose_matrices"])
+            path.write_text(mesh_yaml.replace("e02: 0.125", "e02: 0.25"))
+            self.assertNotEqual(export_geometry(path, FID)["bind_pose_matrices"], expected["bind_pose_matrices"])
+
     def test_wrong_file_id_or_unresolved_external_stream_fails(self):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "mesh.asset"

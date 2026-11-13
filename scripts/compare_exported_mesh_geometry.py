@@ -12,11 +12,17 @@ import struct
 
 def load_mesh_yaml(text):
     import yaml
+    matrix_fields = {f"e{row}{column}" for row in range(4) for column in range(4)}
+
     class MeshLoader(getattr(yaml, "CSafeLoader", yaml.SafeLoader)):
         def construct_mapping(self, node, deep=False):
             for key, value in node.value:
                 if key.value in ('_typelessdata', 'm_IndexBuffer', 'm_Data', 'm_BoneNameHashes') and isinstance(value, yaml.ScalarNode):
                     value.tag = 'tag:yaml.org,2002:str'
+                elif key.value in matrix_fields and isinstance(value, yaml.ScalarNode) and value.value == "-0":
+                    # Unity emits float32 negative zero as "-0". PyYAML treats
+                    # that spelling as an integer and would discard its sign.
+                    value.tag = 'tag:yaml.org,2002:float'
             return super().construct_mapping(node, deep=deep)
     text = re.sub(r'(?m)^%[^\n]*\n', '', text)
     text = re.sub(r'(?m)^--- !u!43 &[^\n]*', '---', text)

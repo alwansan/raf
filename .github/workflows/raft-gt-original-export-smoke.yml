@@ -5,6 +5,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - .github/workflows/raft-gt-original-export-smoke.yml
+      - scripts/gt_verify_original_mesh_export.py
+      - tests/test_gt_verify_original_mesh_export.py
   workflow_dispatch:
 
 permissions:

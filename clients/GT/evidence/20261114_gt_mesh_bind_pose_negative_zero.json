@@ -1,0 +1,17 @@
+{
+  "schema": "GT_MESH_BIND_POSE_SIGNED_ZERO_V1",
+  "original_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_export_run": 43454538800,
+  "full_export_meshes_compared": 4708,
+  "full_export_meshes_previously_matching": 4666,
+  "full_export_bind_pose_only_mismatches": 42,
+  "local_reproduction_source_owner_sha256_verified": true,
+  "local_reproduction_meshes_with_bind_poses": 52,
+  "local_reproduction_pre_fix_mismatched_meshes": 2,
+  "local_reproduction_pre_fix_signed_zero_mismatches": 62,
+  "local_reproduction_pre_fix_nonzero_mismatches": 0,
+  "exported_yaml_negative_zero_spelling": "-0",
+  "change": "Parse negative zero as a float in mesh matrix fields; leave bit-exact comparison and exported data unchanged.",
+  "full_export_rerun_verified": false,
+  "unity_import_or_device_render_verified": false
+}
