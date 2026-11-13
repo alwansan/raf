@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-27 — جلسة جهاز جديدة مستقلة وفشل نشر البناء
+
+CL@a320d5e جلسة `LogRaft-20261112-235351-196` ذات **4 صور**: **36,828** أخطاء Shader ماء (Spectrum **15,054**، Foam Global **21,774**) و**6,106 kernel6** غير محدد المصدر و**2,844 Cursor** و**2 OBB GUID**. الصور تثبت البياض الشديد للطوف والقائمة وماء سماوي/داكن غير صحيح رغم تشغيل العالم. هذا دليل جديد مستقل ولا يستبدل عينة Chat20 القديمة في عقود P06/P07/P10؛ كلاهما **فشل قبول GPU**. أُضيف فحص Final LogRaft FIFO writer consistency واختبار CI pinned؛ افحص CI الحقيقي. تشغيل Native [43299084397](https://github.com/alwansan/raf/actions/runs/43299084397) انتهى reconstruct SUCCESS وArtifacts لكن Publish Release HTTP403، لذلك M1/M2 غير مقبولين كـRelease أو رسوميات كاملة. الخطوة التالية Shader.Find consuming IL الأصلية (Chat26)→Material/RT ثم Foam/FFT shader pass و770 Dummy؛ لا LFS أو GUID مصنوع. [جلسة Chat27](sessions/20261113-GT-new-owner-night-phone-session-chat-27.md) · [دليل](evidence/20261113_cl_night_device_graphics_and_build_receipt.json).
+
+---
+
 ## GT Chat-26 — Spectrum Shader.Find Managed، دليل مصدر لا GPU
 
 [43300958608](https://github.com/alwansan/raf/actions/runs/43300958608): 19,118 compiled methods، 81 typed Shader.Find، أصل `Assembly-CSharp.dll` SHA، واستدعاء مباشر واحد باسم Spectrum الحقيقي. [43301684794](https://github.com/alwansan/raf/actions/runs/43301684794) أظهر Shader local بعد Find؛ [43302914466](https://github.com/alwansan/raf/actions/runs/43302914466) تابع 35 IL و3 branches مع load محلي واحد ممكن قبل overwrite، **consumer غير مصنف**. هذا يوجّه الاستعادة إلى managed runtime لا GUID Material ثابت؛ لم تُثبت Material ctor/RT/Sampler/CB0 أو Pixels. **P06/M2 لا يزالان blocked**. [جلسة Chat26](sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md).
