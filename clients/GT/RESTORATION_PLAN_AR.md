@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-30 — مسار إنتاج Spectrum 7Pass الأصلي الآن داخل Native Unity
+
+P06 انتقل من إثبات `Material→Graphics.Blit` الأصلي إلى **تنفيذ إعادة التركيب الخاص من ZIP2 داخل خط الإنتاج**: B09 original packet→original seven render states→source HLSL 2 variants/7 passes→single original keyword index4 route→ملف ShaderLab واحد بموضع AssetRipper الفعلي وGUID الموجود كما هو، مع backup خارجي ورفض duplicate shader/meta أو missing original name. كُتب [installer](../../scripts/gt_install_original_spectrum.py) و[CI43346292249 SUCCESS](https://github.com/alwansan/raf/actions/runs/43346292249) للاختبارات السلبية. [Full CI43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) طلب بناء APK+OBB+XAPK أحدث، request/license preflight ناجح و`reconstruct` ما زال قيد التشغيل في هذه اللقطة. **P06/M2 device_verified=false** حتى اكتمال التصدير، ترجمة Unity الكاملة، وفحص الماء الحقيقي على الهاتف، ولا تزال Foam/FFT و770 Dummy وLOW_MEMORY مفتوحة. اقرأ [Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md).
+
+---
+
 ## GT Chat-29 — Source-original Spectrum Material إلى Graphics.Blit وLOW_MEMORY
 
 سلسلة P06 المصدرية الآن تؤكد **الـMaterial الأصلي نفسه يصل إلى معامل `Graphics.Blit` في سبعة استدعاءات**، لا مجرد وجود Graphics مع ldfld في الدالة ([43343971412](https://github.com/alwansan/raf/actions/runs/43343971412)، [43344199792](https://github.com/alwansan/raf/actions/runs/43344199792) SUCCESS). 24 original Material field reads، 8 reader methods؛ stack/locals IL bounded single-block مغطى بالاختبارات السلبية. هذا **لا** يثبت Original ShaderLab 7Pass runtime أو RT/Sampler/CB0/Pixel على Adreno. جلسة CL `20261113-040212-998` و3 صور أدت إلى **28,592** ماء invalid (Spectrum11512/Foam17080) و4,576 kernel6 مع Android LOW_MEMORY PID18885؛ أضيفت كدليل مستقل، وليس تراجع أعداد الأخطاء دليلاً تلقائياً على تحسن. [جلسة Chat29](sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md). **التالي:** مسار exported Shader + meta الحقيقي من AssetRipper، استبدال dummy المؤقت بالمصدر الأصلي 7pass + global keyword وبقاء GUID، اختبار Unity Android Vulkan ثم اختبار الهاتف، Foam/kernel6، و770 Dummy؛ لا تنسب سبب نفاد الذاكرة للماء دون قياس مباشر.
