@@ -1,0 +1,166 @@
+name: GT original Smoke34 isolated Unity Android shader compiler
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-gt-smoke34-source-bound-unity.yml'
+      - 'scripts/gt_smoke34_source_bound_shader.py'
+permissions:
+  contents: read
+concurrency:
+  group: gt-smoke34-source-bound-unity-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  isolated-smoke-shader:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    environment: UNITY_LICENSE
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/GT/Editor
+      - name: Verify stage pairing, bindings and Unity staging controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_original_smoke34_spirv_translation.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_particle108_unity_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_particle108_private_unity_project.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Authenticate original source without staging all PC data
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'gt-smoke34-original'
+          pins={'Raft_Data/'+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          checked=stage(source,out,pins)
+          assert len(checked['owners'])==4
+          assert checked['verified_bytes']==269007288 and not checked['lfs_used']
+          for scene,pin in PIN.items():
+              p=source/'Raft/Raft_Data'/scene
+              verify_source(p,pin)
+              target=out/'Raft_Data'/scene
+              if target.exists() or target.is_symlink():
+                  raise ValueError('unsafe_original_scene_target')
+              with p.open('rb') as reader,target.open('xb') as writer:
+                  while data:=reader.read(1024*1024):
+                      writer.write(data)
+              verify_source(target,pin)
+          print('GT_SMOKE34_ORIGINAL_AUTHENTICATED=4_owners_6_scenes')
+          PY
+      - name: Install pinned original-only shader analysis tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 -q
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Compile both original Smoke34 routes with exact source parameters
+        run: |
+          set -euo pipefail
+          timeout 420s python3 -m scripts.gt_smoke34_source_bound_shader \
+            --original "$RUNNER_TEMP/gt-smoke34-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private "$RUNNER_TEMP/gt-smoke34-bound" \
+            --report "$RUNNER_TEMP/gt-smoke34-bindings-safe.json"
+          python3 -m scripts.gt_particle108_private_unity_project \
+            --shader "$RUNNER_TEMP/gt-smoke34-bound/smoke34-original.shader" \
+            --routing "$RUNNER_TEMP/gt-smoke34-bindings-safe.json" \
+            --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
+            --project "$GITHUB_WORKSPACE/gt-smoke34-unity" \
+            --report "$RUNNER_TEMP/gt-smoke34-staging-safe.json" --smoke34
+      - name: Build isolated Smoke34 shader bundle in Unity Android Vulkan
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: gt-smoke34-unity
+          targetPlatform: Android
+          buildMethod: RaftGT.OriginalParticleShaderValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Verify both Smoke34 variants and exact Unity candidate digest
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          source = json.loads((Path(os.environ['RUNNER_TEMP']) /
+                               'gt-smoke34-bindings-safe.json').read_text())
+          proof = json.loads(Path(
+              'gt-smoke34-unity/ProbeResults/gt-particle108-private-unity-safe.json').read_text())
+          assert proof['status'] == 'ORIGINAL_PRIVATE_SMOKE34_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED'
+          assert proof['unityVersion'] == '2021.3.45f2'
+          assert proof['candidateShaderSha256'] == source['candidate_shader_sha256']
+          assert proof['sourceKeywordDimensions'] == 1
+          assert proof['registeredKeywordVariants'] == 2
+          assert proof['materialPassCount'] == 1
+          assert proof['shaderErrorCount'] == 0
+          assert proof['androidVulkanOnly'] is True
+          assert proof['privateBundleBytes'] > 0
+          assert proof['unityEditorShaderImportAndCompilationProven'] is True
+          assert proof['gamePlayerBuilt'] is False
+          PY
+      - name: Upload aggregate smoke source and shader compilation receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-smoke34-source-bound-compiler-safe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/gt-smoke34-bindings-safe.json
+            ${{ runner.temp }}/gt-smoke34-staging-safe.json
+            gt-smoke34-unity/ProbeResults/gt-particle108-private-unity-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Clear private Smoke34 sources and bundle
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-smoke34-original" "$RUNNER_TEMP/gt-smoke34-bound"
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-smoke34-unity"

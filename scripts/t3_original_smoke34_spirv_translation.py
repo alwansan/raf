@@ -68,7 +68,7 @@ SAFE_FALSE = {
 }
 
 
-def exact_two_pairs(parsed, table, *, linker=linked_program):
+def exact_two_stage_links(parsed, table, *, linker=linked_program):
     """Reject unequal, absent, duplicate, or ambiguous original VS/FS variants."""
     if (type(parsed) is not dict or
         type(parsed.get("m_SubShaders")) is not list or
@@ -103,22 +103,28 @@ def exact_two_pairs(parsed, table, *, linker=linked_program):
             key = (bucket, variant_key(meta))
             if key in indexed:
                 raise ValueError("smoke34_duplicate_original_keyword_bucket")
-            indexed[key] = meta
+            indexed[key] = (ordinal, meta)
         stages[kind] = indexed
     if set(stages[1]) != set(stages[0]):
         raise ValueError("smoke34_original_keyword_bucket_pair_mismatch")
     pairs = []
-    for key, vert_meta in stages[1].items():
+    for key, (vert_ordinal, vert_meta) in stages[1].items():
+        fragment_ordinal, fragment_meta = stages[0][key]
         vs, _ = linker(vert_meta, table, 1)
-        fs, _ = linker(stages[0][key], table, 0)
+        fs, _ = linker(fragment_meta, table, 0)
         if (type(vs) is not bytes or type(fs) is not bytes or
             not vs or not fs or
             max(len(vs), len(fs)) > MAX_STAGE_BYTES):
             raise ValueError("smoke34_untrusted_original_dxbc_program")
-        pairs.append((vs, fs))
+        pairs.append(((vs, key[0], vert_ordinal), (fs, key[0], fragment_ordinal)))
     if len(pairs) != PAIRS:
         raise ValueError("smoke34_incomplete_source_keyword_pairs")
     return pairs
+
+
+def exact_two_pairs(parsed, table, *, linker=linked_program):
+    """Return original bytecode only for the existing CPU probe."""
+    return [(vs[0], fs[0]) for vs, fs in exact_two_stage_links(parsed, table, linker=linker)]
 
 
 def evaluate(pairs, temporary, *, translator=translate,

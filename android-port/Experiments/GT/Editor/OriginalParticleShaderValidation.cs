@@ -11,7 +11,7 @@ using UnityEngine.Rendering;
 namespace RaftGT
 {
     /// <summary>
-    /// Compiles *only* original-derived private Particle108 candidates in Unity.
+    /// Compiles original-derived private particle shader candidates in Unity.
     /// Never updates Raft Materials, original scene data or original Shader GUIDs.
     /// Neither original HLSL nor private keyword names leave the runner as a report.
     /// </summary>
@@ -43,12 +43,12 @@ namespace RaftGT
             public bool originalShaderNamesOrBytecodePublished;
         }
 
-        private static string[] KeywordNames(string source)
+        private static string[] KeywordNames(string source, int dimensions)
         {
             var names = Regex.Matches(source,
                 @"(?m)^[ \t]*#pragma multi_compile __ ([A-Za-z_][A-Za-z_0-9]*)[ \t]*$")
                 .Cast<Match>().Select(m => m.Groups[1].Value).ToArray();
-            if (names.Length != 2 || names.Distinct().Count() != 2)
+            if (names.Length != dimensions || names.Distinct().Count() != dimensions)
                 throw new InvalidOperationException("PrivateSourceKeywordDimensionChanged");
             return names;
         }
@@ -68,6 +68,7 @@ namespace RaftGT
             string root = Directory.GetParent(Application.dataPath).FullName;
             string evidence = Path.Combine(root, "ProbeResults");
             Directory.CreateDirectory(evidence);
+            bool smoke34 = File.Exists(Path.Combine(evidence, "smoke34"));
             int exitCode = 1;
             try
             {
@@ -75,7 +76,7 @@ namespace RaftGT
                     throw new InvalidOperationException("UnpinnedUnityVersion");
                 const string shaderAsset = "Assets/GTPrivateOriginal.shader";
                 string shaderPath = Path.Combine(root, shaderAsset);
-                var keywords = KeywordNames(File.ReadAllText(shaderPath));
+                var keywords = KeywordNames(File.ReadAllText(shaderPath), smoke34 ? 1 : 2);
                 using (var sha256 = SHA256.Create())
                 using (var stream = File.OpenRead(shaderPath))
                 {
@@ -110,7 +111,7 @@ namespace RaftGT
                 // not ScriptableObject; construct with its public constructor.
                 var collection = new ShaderVariantCollection();
                 var names = new HashSet<string>();
-                for (int bits = 0; bits < 4; ++bits)
+                for (int bits = 0; bits < result.sourceKeywordCombinations; ++bits)
                 {
                     var enabled = keywords.Where((value, i) =>
                         (bits & (1 << i)) != 0).ToArray();
@@ -122,7 +123,7 @@ namespace RaftGT
                         throw new InvalidOperationException("OriginalPrivateVariantNotRegistered");
                     result.registeredKeywordVariants++;
                 }
-                if (result.registeredKeywordVariants != 4)
+                if (result.registeredKeywordVariants != result.sourceKeywordCombinations)
                     throw new InvalidOperationException("IncompleteOriginalKeywordMatrix");
                 const string variantsAsset = "Assets/GTPrivateOriginal.shadervariants";
                 AssetDatabase.CreateAsset(collection, variantsAsset);
@@ -155,7 +156,8 @@ namespace RaftGT
                     result.shaderErrorCount == 0 &&
                     !ShaderUtil.ShaderHasError(shader);
                 result.status = result.unityEditorShaderImportAndCompilationProven
-                    ? "ORIGINAL_PRIVATE_PARTICLE108_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED"
+                    ? (smoke34 ? "ORIGINAL_PRIVATE_SMOKE34_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED"
+                               : "ORIGINAL_PRIVATE_PARTICLE108_ANDROID_VULKAN_SHADER_BUNDLE_COMPILED")
                     : "INCONCLUSIVE";
                 if (result.unityEditorShaderImportAndCompilationProven)
                     exitCode = 0;

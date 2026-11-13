@@ -50,6 +50,7 @@ SAMPLER_UNSUPPORTED_SPACE = re.compile(
     r'\b(?:SamplerState|SamplerComparisonState)\s+[A-Za-z_]\w*'
     r'\s*:\s*register\(\s*s\d+\s*,\s*space[1-9]\d*\s*\)'
 )
+REGISTER_ANNOTATION=re.compile(r'\bregister\s*\([^)]*\)')
 BUFFER=re.compile(r'\bcb\d+_\d+_m\d+\b')
 MAX_HLSL=1024*1024
 SAFE_FAILURE=frozenset((
@@ -283,15 +284,12 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_re
     buffers=sorted(set(BUFFER.findall(hlsl)))
     stage_prefix="GT_ORIGINAL_VS_" if stage==1 else "GT_ORIGINAL_PS_"
     mapping.update({name:stage_prefix+name for name in buffers})
-    names=re.compile(r'\b(?:'+ '|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))+r')\b') if mapping else None
-    # Only variable identifiers are replaced; binding register(tN/sN) is not
-    # rewritten, as it is the compiled-program contract, not a variable.
-    fixed=names.sub(lambda m:mapping[m.group()],hlsl) if names is not None else hlsl
-    # Do not touch the translated graphics API register annotations: the
-    # recovered source identity comes exclusively from original RDEF and
-    # original Unity Shader metadata.
-    register_pattern=re.compile(r'\bregister\s*\([^)]*\)')
-    if register_pattern.findall(fixed)!=register_pattern.findall(hlsl):
+    fixed=hlsl
+    if mapping:
+        symbols='|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))
+        tokens=re.compile(REGISTER_ANNOTATION.pattern+r'|\b(?:'+symbols+r')\b')
+        fixed=tokens.sub(lambda m:mapping.get(m[0],m[0]),hlsl)
+    if REGISTER_ANNOTATION.findall(fixed)!=REGISTER_ANNOTATION.findall(hlsl):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     if len(fixed)>MAX_HLSL or (fixed==hlsl and variant_resources is None):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
@@ -302,6 +300,23 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_re
                   "source_DXBC_original_RDEF_verified_absent":int(authenticated_rdef is not None and authenticated_rdef["s"] is None),
                   "stage_local_original_cbuffer_symbols_disambiguated":len(buffers),
                   "original_register_annotations_preserved":True}
+
+
+def bind_stage_parameters(text,dxbc,stage,program,name_indices,names,layout,scratch):
+    """Restore names from source layouts before binding translated resources."""
+    try:
+        buffers=bind_constant_buffers(text,program["m_CommonParameters"],names,layout)
+        for buffer in buffers:
+            buffer["original_named_lanes"]=constant_buffer_lanes(buffer)
+        scratch.mkdir(mode=0o700)
+        (scratch/"resource-bound.hlsl").write_text(text,encoding="utf-8")
+        offsets=verify_named_constant_buffers(scratch,stage,buffers)
+        named=(scratch/"named-constant-buffers.hlsl").read_text(encoding="utf-8")
+    except (KeyError,ValueError):
+        raise BridgeError("ORIGINAL_CONSTANT_BUFFER_LAYOUT_UNPROVEN") from None
+    fixed,stats=rebind_stage(named,program,name_indices,stage,original_dxbc=dxbc,
+                             variant_resources=layout["resources"])
+    return fixed,offsets,len(buffers),stats
 
 
 def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
@@ -346,23 +361,12 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
                 text=path.read_text(encoding="utf-8")
                 program=p["progVertex" if stage==1 else "progFragment"]
                 layout=variant_parameter_layout(program,table,bucket,ordinal)
-                # Name the uniform fields first so the legacy compile-only
-                # backing array disambiguation does not replace original CBs.
-                try:
-                    buffers=bind_constant_buffers(text,program["m_CommonParameters"],names,layout)
-                    for buffer in buffers:
-                        buffer["original_named_lanes"]=constant_buffer_lanes(buffer)
-                    scratch=private_dest/f"constant-buffers-{n}-{stage}"
-                    scratch.mkdir(mode=0o700)
-                    (scratch/"resource-bound.hlsl").write_text(text,encoding="utf-8")
-                    counts["named_constant_buffer_offsets"]+=verify_named_constant_buffers(scratch,stage,buffers)
-                    named=(scratch/"named-constant-buffers.hlsl").read_text(encoding="utf-8")
-                except (KeyError,ValueError):
-                    raise BridgeError("ORIGINAL_CONSTANT_BUFFER_LAYOUT_UNPROVEN") from None
-                fixed,stats=rebind_stage(named,program,p["m_NameIndices"],stage,
-                                         original_dxbc=dxbc,variant_resources=layout["resources"])
+                fixed,offsets,buffer_count,stats=bind_stage_parameters(
+                    text,dxbc,stage,program,p["m_NameIndices"],names,layout,
+                    private_dest/f"constant-buffers-{n}-{stage}")
+                counts["named_constant_buffer_offsets"]+=offsets
                 pieces[stage]=fixed
-                counts["named_constant_buffer_layouts"]+=len(buffers)
+                counts["named_constant_buffer_layouts"]+=buffer_count
                 counts.update(stats)
             model=variants.source_models(vs[0],fs[0])
             candidate,_=variants.assemble(parsed,pieces[1],pieces[0],model)

@@ -64,6 +64,12 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
         mapped,_=rebind_stage(spaced,self.program,self.indices,0)
         self.assertIn("sampler_MainTex : register(s0, space0)",mapped)
 
+    def test_resource_identifier_that_matches_a_descriptor_annotation_stays_separate(self):
+        code=self.code.replace("samplers0","s0")
+        fixed,_=rebind_stage(code,self.program,self.indices,0)
+        self.assertIn("SamplerState sampler_MainTex : register(s0);",fixed)
+        self.assertIn("_MainTex.Sample(sampler_MainTex,",fixed)
+
     def test_explicit_source_register_space_one_not_guessed_or_remapped(self):
         spaced=self.code.replace("register(s0)", "register(s0, space1)")
         with self.assertRaisesRegex(BridgeError,"TRANSLATOR_SAMPLER_SPACE_NOT_ZERO"):

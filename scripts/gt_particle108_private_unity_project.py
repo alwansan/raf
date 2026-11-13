@@ -4,6 +4,7 @@
 Shader source stays runner-private; no original game Material, GUID or scene edit.
 """
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -54,7 +55,7 @@ def isolate_stage_buffer_names(raw):
         raise ValueError("unsafe_private_stage_buffer_disambiguation")
     return changed,counts
 
-def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, diagnostic_stage_buffers=False):
+def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, diagnostic_stage_buffers=False, smoke34=False):
     shader,editor,project,report,routing=(p.absolute() for p in (shader,editor,project,report,routing))
     if (project.exists() or project.is_symlink() or not project.parent.is_dir()
         or any(p.is_symlink() or not p.is_file() for p in (shader,editor,routing))
@@ -72,12 +73,24 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
               "original_keyword_flags_pragma_scope_proven":False,
               "Unity_ShaderLab_import_or_actual_variant_selection_proven":False,
               "original_Material_binding_proven":False,"Android_pixels_proven":False}
+    dimensions=1 if smoke34 else 2
+    combinations=1 << dimensions
+    if smoke34:
+        required={"status":"SOURCE_NAMED_SMOKE34_TWO_ROUTES_VULKAN_COMPILED",
+                  "source_original_smoke_named_particle_renderer_slots":34,
+                  "source_original_keyword_variants":combinations,
+                  "private_named_Vulkan_stages_compiled":2*combinations,
+                  "private_original_DXBC_sample_pairs_verified":5,
+                  "private_original_named_constant_buffers":9,
+                  "private_original_named_constant_buffer_reflected_offsets":32}
+        if diagnostic_stage_buffers or proof.get("candidate_shader_sha256")!=hashlib.sha256(shader.read_bytes()).hexdigest():
+            raise ValueError("untrusted_private_smoke34_shader_bytes")
     if any(type(proof.get(k)) is not type(v) or proof.get(k)!=v for k,v in required.items()):
         raise ValueError("original_four_variant_authentication_unproven")
     raw=shader.read_text(encoding="utf-8")
     names=KEYWORD.findall(raw)
     coverage=pass_coverage(raw)
-    if (len(names)!=2 or len(set(names))!=2 or raw.count("HLSLPROGRAM")!=1
+    if (len(names)!=dimensions or len(set(names))!=dimensions or raw.count("HLSLPROGRAM")!=1
         or raw.count("ENDHLSL")!=1 or "//DummyShaderTextExporter" in raw
         or coverage.get("pass_count")!=1 or
         coverage.get("passes_with_complete_program")!=1 or
@@ -95,6 +108,9 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
     project.mkdir()
     try:
         (project/"Assets/Editor").mkdir(parents=True)
+        if smoke34:
+            (project/"ProbeResults").mkdir()
+            (project/"ProbeResults/smoke34").touch()
         (project/"Packages").mkdir()
         (project/"ProjectSettings").mkdir()
         if diagnostic_stage_buffers:
@@ -110,10 +126,11 @@ def prepare(shader:Path,editor:Path,project:Path,report:Path,routing:Path, *, di
         shutil.rmtree(project)
         raise
     result={"schema":"GT_PRIVATE_ORIGINAL_PARTICLE108_UNITY_PROBE_V1",
-            "status":"SHA_ORIGINAL_FOUR_VARIANT_SHADERLAB_STAGED_UNITY_NOT_YET_COMPILED",
-            "source_authenticated_original_keyword_dimensions":2,
-            "source_original_variant_combinations":4,
-            "original_DXBC_to_SPIRV_glslang_stage_branches_valid":8,
+            "status":("SHA_ORIGINAL_TWO_VARIANT_SMOKE34_SHADERLAB_STAGED" if smoke34 else
+                      "SHA_ORIGINAL_FOUR_VARIANT_SHADERLAB_STAGED_UNITY_NOT_YET_COMPILED"),
+            "source_authenticated_original_keyword_dimensions":dimensions,
+            "source_original_variant_combinations":combinations,
+            "original_DXBC_to_SPIRV_glslang_stage_branches_valid":2*combinations,
             "original_one_ShaderLab_pass_complete":True,
             "private_stage_local_buffer_name_isolation_only":diagnostic_stage_buffers,
             "private_vertex_cbuffer_identifiers_disambiguated":0 if isolated is None else isolated["vertex"],
@@ -132,9 +149,10 @@ def main():
     for field in ("shader","editor","project","report","routing"):
         p.add_argument("--"+field,type=Path,required=True)
     p.add_argument("--diagnostic-stage-buffers",action="store_true")
+    p.add_argument("--smoke34",action="store_true")
     a=p.parse_args()
     prepare(a.shader,a.editor,a.project,a.report,a.routing,
-            diagnostic_stage_buffers=a.diagnostic_stage_buffers)
+            diagnostic_stage_buffers=a.diagnostic_stage_buffers,smoke34=a.smoke34)
 
 if __name__=="__main__":
     main()
