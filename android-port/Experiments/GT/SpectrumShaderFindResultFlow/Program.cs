@@ -69,6 +69,52 @@ internal static class Program
         return p>=0 && Literal(il[p],name);
     }
 
+    // Only classify the immediate, typed consumer shape of a source-local
+    // load. No method/field/IL identifiers leave this tool. A predicate is
+    // not a Material/Graphics binding and an alias still needs more tracing.
+    private static string SafeShaderLocalConsumer(IList<Instruction> il, int load)
+    {
+        int idx = SkipNops(il, load+1);
+        if(idx>=il.Count)return "unclassified";
+        var inst=il[idx];
+        if(inst.OpCode.Code is Code.Brtrue or Code.Brtrue_S or
+            Code.Brfalse or Code.Brfalse_S)return "reference_branch_guard";
+        if(inst.OpCode.Code==Code.Pop)return "discard";
+        if(inst.OpCode.Code is Code.Stloc or Code.Stloc_S or
+            Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
+            return "local_alias_candidate";
+        if(inst.OpCode.Code==Code.Ldnull)
+        {
+            int pair=SkipNops(il,idx+1);
+            if(pair<il.Count)
+            {
+                var c=il[pair];
+                if(c.OpCode.Code==Code.Ceq)return "null_equality_check";
+                if(c.OpCode.Code is Code.Call or Code.Callvirt &&
+                    c.Operand is MethodReference comparison &&
+                    comparison.DeclaringType.FullName=="UnityEngine.Object" &&
+                    comparison.Name is "op_Equality" or "op_Inequality" &&
+                    comparison.Parameters.Count==2 &&
+                    comparison.Parameters.All(p=>p.ParameterType.FullName=="UnityEngine.Object"))
+                    return "unity_object_null_comparison";
+            }
+        }
+        if(inst.OpCode.Code is Code.Call or Code.Callvirt &&
+            inst.Operand is MethodReference method)
+        {
+            if(method.DeclaringType.FullName=="UnityEngine.Object" &&
+                method.Name=="op_Implicit" &&
+                method.ReturnType.FullName=="System.Boolean" &&
+                method.Parameters.Count==1 &&
+                method.Parameters[0].ParameterType.FullName=="UnityEngine.Object")
+                return "unity_object_truthiness";
+            if(method.HasThis && (method.DeclaringType.FullName==ShaderType ||
+                method.DeclaringType.FullName=="UnityEngine.Object"))
+                return "shader_instance_receiver";
+        }
+        return "unclassified";
+    }
+
     private static FieldDefinition? ResolvedShaderField(Instruction x, ModuleDefinition module)
     {
         if(x.OpCode.Code is not (Code.Stfld or Code.Stsfld or Code.Ldfld or Code.Ldsfld))
@@ -179,6 +225,9 @@ internal static class Program
         int localCfgShaderReturnCandidates=0,localCfgMaterialCtorCandidates=0;
         int localCfgFieldStoreCandidates=0,localCfgTypedShaderCallCandidates=0;
         int localCfgUnclassifiedConsumers=0,localCfgOverwriteBoundaries=0;
+        int localCfgBranchGuardConsumers=0,localCfgUnityObjectTruthiness=0;
+        int localCfgNullEqualityConsumers=0,localCfgUnityObjectNullComparison=0;
+        int localCfgShaderInstanceReceivers=0,localCfgAliases=0,localCfgDiscards=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -246,6 +295,14 @@ internal static class Program
                 if(localLoad && recordedLoads.Add(i))
                 {
                     localCfgLoadsWithNoOverwriteOnSomePath++;
+                    string shape=SafeShaderLocalConsumer(il,i);
+                    if(shape=="reference_branch_guard")localCfgBranchGuardConsumers++;
+                    if(shape=="unity_object_truthiness")localCfgUnityObjectTruthiness++;
+                    if(shape=="null_equality_check")localCfgNullEqualityConsumers++;
+                    if(shape=="unity_object_null_comparison")localCfgUnityObjectNullComparison++;
+                    if(shape=="shader_instance_receiver")localCfgShaderInstanceReceivers++;
+                    if(shape=="local_alias_candidate")localCfgAliases++;
+                    if(shape=="discard")localCfgDiscards++;
                     int next=SkipNops(il,i+1);
                     if(next>=il.Count)localCfgUnclassifiedConsumers++;
                     else if(MaterialShaderCtor(il[next]))localCfgMaterialCtorCandidates++;
@@ -319,6 +376,14 @@ internal static class Program
             source_local_cfg_typed_Shader_field_store_candidates=localCfgFieldStoreCandidates,
             source_local_cfg_typed_Shader_argument_call_candidates=localCfgTypedShaderCallCandidates,
             source_local_cfg_unclassified_uses=localCfgUnclassifiedConsumers,
+            source_local_cfg_actual_next_reference_branch_guard=localCfgBranchGuardConsumers,
+            source_local_cfg_actual_next_Unity_Object_truthiness=localCfgUnityObjectTruthiness,
+            source_local_cfg_actual_next_null_equality_check=localCfgNullEqualityConsumers,
+            source_local_cfg_actual_next_Unity_Object_null_comparison=localCfgUnityObjectNullComparison,
+            source_local_cfg_actual_next_Shader_instance_receiver=localCfgShaderInstanceReceivers,
+            source_local_cfg_actual_next_local_alias_candidate=localCfgAliases,
+            source_local_cfg_actual_next_discarded=localCfgDiscards,
+            source_local_cfg_typed_consumer_only_not_Material_or_pixel_proof=true,
             source_local_cfg_local_overwrite_boundaries=localCfgOverwriteBoundaries,
             source_local_cfg_path_existence_only_not_runtime_proof=true,
             exact_original_Material_renderer_assignment_verified=false,
@@ -355,6 +420,26 @@ internal static class Program
                new MethodReference("TakeShader",m.TypeSystem.Void,shader){HasThis=false,
                    Parameters={new ParameterDefinition(shader)}})))
             throw new InvalidOperationException("synthetic_dataflow_guard_failed");
+        // Synthetic positive and negative source-local consumer controls:
+        // same Source Shader local, no original symbol/Shader source output.
+        var boolBranch=Instruction.Create(OpCodes.Brtrue_S,Instruction.Create(OpCodes.Ret));
+        var nullEq=new List<Instruction>{
+            Instruction.Create(OpCodes.Ldloc_0),Instruction.Create(OpCodes.Ldnull),
+            Instruction.Create(OpCodes.Ceq)};
+        var implicitObject=new TypeReference("UnityEngine","Object",m,m.TypeSystem.CoreLibrary);
+        var implicitCall=new MethodReference("op_Implicit",m.TypeSystem.Boolean,implicitObject){
+            HasThis=false};
+        implicitCall.Parameters.Add(new ParameterDefinition(implicitObject));
+        var truthy=new List<Instruction>{
+            Instruction.Create(OpCodes.Ldloc_0),Instruction.Create(OpCodes.Call,implicitCall)};
+        var nonShader=new List<Instruction>{
+            Instruction.Create(OpCodes.Ldloc_0),Instruction.Create(OpCodes.Ldc_I4_1)};
+        if(SafeShaderLocalConsumer(new List<Instruction>{
+                Instruction.Create(OpCodes.Ldloc_0),boolBranch},0)!="reference_branch_guard" ||
+           SafeShaderLocalConsumer(nullEq,0)!="null_equality_check" ||
+           SafeShaderLocalConsumer(truthy,0)!="unity_object_truthiness" ||
+           SafeShaderLocalConsumer(nonShader,0)!="unclassified")
+            throw new InvalidOperationException("synthetic_source_shader_consumer_guard_failed");
         Console.WriteLine("GT_SPECTRUM_TYPED_RESULTFLOW_SYNTHETIC_PASS");
     }
 
