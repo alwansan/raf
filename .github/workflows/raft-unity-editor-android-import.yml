@@ -135,6 +135,7 @@ jobs:
       - name: Run synthetic code-overlay tests before touching original data
         run: |
           python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
+          python3 -m unittest discover -s tests -p test_gt_install_original_spectrum.py -v
           # T3 source-free controls: valid Material GUID can still target a
           # default-Dummy ShaderLab program after partial restoration.
           python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v
@@ -720,6 +721,76 @@ jobs:
             ${{ runner.temp }}/b45/install.json
           if-no-files-found: ignore
           retention-days: 7
+      - name: GT recover original SHA-backed 7Pass Spectrum with two keyword variants and replace only its unique original exported GUID
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          # The SHA-pinned owner was already authenticated/staged above from
+          # ZIP2 without Git LFS. Never synthesize a new .meta or GUID.
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          work="$RUNNER_TEMP/gt-native-spectrum-private"
+          mkdir "$work"
+          original="$RUNNER_TEMP/w1-original/Raft_Data"
+          test -s "$original/sharedassets0.assets"
+          # vkd3d-compiler, spirv-tools, spirv-cross, glslang-tools were
+          # installed by W1 Depth Copy on this same ubuntu-24.04 runner.
+          command -v vkd3d-compiler && command -v spirv-cross && command -v glslangValidator
+          timeout 360s python3 -m scripts.b09_stage_original_spectrum \
+            --source "$original" --repo "$GITHUB_WORKSPACE" \
+            --private "$work/packet" --out "$work/packet.json"
+          timeout 180s python3 -m scripts.gt_spectrum_original_pass_states \
+            --source "$original" --repo "$GITHUB_WORKSPACE" \
+            --private "$work/states" --out "$work/states.json"
+          timeout 540s python3 -m scripts.gt_spectrum_original_private_seven_pass_shaderlab \
+            --source "$original" --repo "$GITHUB_WORKSPACE" \
+            --packet "$work/packet" --manifest "$work/packet.json" \
+            --states "$work/states" --private-dest "$work/variants" \
+            --out "$work/variants.json" --source-authentic-resource-names
+          timeout 360s python3 -m scripts.gt_spectrum_private_keyword_routed_shaderlab \
+            --source "$original" --packet-dir "$work/packet" \
+            --packet-report "$work/packet.json" \
+            --private-dir "$work/variants" --out "$work/router.json"
+          # Safety gate: exact ShaderLab name must exist ONE time in this
+          # AssetRipper export with one unique GUID, preserved byte-for-byte.
+          # No duplicate shader name, invented Material/scene identity,
+          # fallback ShaderLab, or silent skipped restoration is permitted.
+          timeout 180s python3 -m scripts.gt_install_original_spectrum \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --private-shader "$work/variants/spectrum-keyword-index4-router-private.shader" \
+            --source-proof "$work/router.json" \
+            --backup "$RUNNER_TEMP/gt-original-spectrum-export-backup" \
+            --out "$RUNNER_TEMP/gt-native-spectrum-install-safe.json" --apply
+          python3 - <<'PY_GT_NATIVE_SPECTRUM'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-native-spectrum-install-safe.json'
+          r=json.loads(p.read_text())
+          assert r['status']=='SOURCE_AUTHENTIC_SPECTRUM_EXPORTED_GUID_REPLACEMENT_STAGED'
+          assert r['exported_exact_identity_matches']==1
+          assert r['exported_target_unique_GUID'] is True
+          assert r['exported_original_meta_preserved'] is True
+          assert r['original_export_backup_external_verified'] is True
+          assert r['source_original_seven_passes'] is True
+          assert r['source_keyword_two_variants_per_pass'] is True
+          assert r['Adreno_water_pixels_proven'] is False
+          assert r['original_runtime_material_texture_or_buffer_bindings_proven'] is False
+          print('GT_NATIVE_SPECTRUM_RESTORED_SEVEN_SOURCE_PASSES originalExportGuidPreserved=true uniqueIdentity=true UnityGPUParity=false')
+          PY_GT_NATIVE_SPECTRUM
+      - name: Retain only safe GT Spectrum production staging receipts, never original shader text
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-spectrum-sevenpass-original-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-native-spectrum-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Destroy private original Spectrum DXBC and HLSL after GUID-safe install
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-native-spectrum-private"
       - name: Inventory actual exported Material Shader references without modifying assets
         id: w1_material_inventory
         # A diagnostic failure stays visible in the JSON. Existing strict builtin
