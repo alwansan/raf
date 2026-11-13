@@ -50,6 +50,39 @@ jobs:
           assert data["strict_known_log_gate_passed"] is False
           print("GT_REAL_CL_DEVICE_REPRODUCED waterPass=42229 kernel6=7263 cursorRGBA32=4668 guidLoad=2 pixelProof=false")
           PY
+      - name: Fetch exact pinned 23:53 owner CL summary (four screenshot session)
+        env:
+          OWNER_LOG_NIGHT_SNAPSHOT: a320d5e23962568b62bffec95399cf3e0cb1f579
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 2 \
+            "https://raw.githubusercontent.com/alwansan/CL/${OWNER_LOG_NIGHT_SNAPSHOT}/raft%20log/lf/LogRaft-20261112-235351-196/session-summary.json" \
+            --output "$RUNNER_TEMP/gt-owner-night-session-summary.json"
+      - name: Verify night session source counts and reject missing original water
+        run: |
+          set -euo pipefail
+          python3 -m scripts.gt_device_graphics_acceptance \
+            --session-summary "$RUNNER_TEMP/gt-owner-night-session-summary.json" \
+            --out "$RUNNER_TEMP/gt-owner-night-safe-receipt.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'gt-owner-night-safe-receipt.json').read_text())
+          assert d['status']=='KNOWN_DEVICE_LOG_GATE_REJECTED'
+          assert d['strict_known_log_gate_passed'] is False
+          assert d['error_counts']['ultimate_water_invalid_pass']==36828
+          assert d['water_invalid_pass_by_family']['spectrum']==15054
+          assert d['water_invalid_pass_by_family']['foam_global']==21774
+          assert d['error_counts']['water_fft_invalid_compute_kernel']==6106
+          assert d['compute_invalid_kernel_index']['six']==6106
+          assert d['error_counts']['unity_cursor_rgba32_required']==2844
+          assert d['error_counts']['obb_guid_load_failed']==2
+          assert d['collector_writer_accounting_verified'] is True
+          assert d['collector_writer_failed_batches']==0
+          assert d['collector_writer_pending_bytes_at_stop']==0
+          assert d['all_pixels_correct_verified'] is False
+          print('GT_REAL_CL_NIGHT_DEVICE_REPRODUCED water=36828 spectrum=15054 foam=21774 kernel6=6106 cursor=2844 captureWriter=3390/3390 pixelProof=false')
+          PY
       - name: Remove private owner summary; do not publish raw logs or source
         if: always()
-        run: rm -f "$RUNNER_TEMP/gt-owner-session-summary.json" "$RUNNER_TEMP/gt-owner-safe-render-receipt.json"
+        run: rm -f "$RUNNER_TEMP/gt-owner-session-summary.json" "$RUNNER_TEMP/gt-owner-safe-render-receipt.json" "$RUNNER_TEMP/gt-owner-night-session-summary.json" "$RUNNER_TEMP/gt-owner-night-safe-receipt.json"
