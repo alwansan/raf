@@ -141,6 +141,55 @@ internal static class Program
         return "unclassified";
     }
 
+    // Recovered Material object leaves the newobj instruction on the stack.
+    // Classify its *next* source instruction only; a game-method handoff is
+    // not renderer usage until the callee and object identity are traced.
+    private static string SafeMaterialNewobjResultNext(IList<Instruction> il, int at)
+    {
+        int index=SkipNops(il,at+1);
+        if(index>=il.Count)return "unclassified";
+        var ins=il[index];
+        if(ins.OpCode.Code is Code.Call or Code.Callvirt &&
+           ins.Operand is MethodReference call)
+        {
+            if(call.DeclaringType.FullName=="UnityEngine.Renderer" &&
+               call.Name is "set_material" or "set_sharedMaterial" &&
+               call.Parameters.Count==1 &&
+               call.Parameters[0].ParameterType.FullName=="UnityEngine.Material")
+                return "Unity_Renderer_material_assignment_candidate";
+            if(call.DeclaringType.FullName=="UnityEngine.Graphics")
+                return "Unity_Graphics_direct_call_candidate";
+            if(call.DeclaringType.FullName=="UnityEngine.Material")
+                return "Unity_Material_method_call_candidate";
+            if(call.DeclaringType.FullName.StartsWith(
+                   "System.Collections.Generic.List" + "`1<",StringComparison.Ordinal) &&
+               call.Name=="Add" &&
+               call.Parameters.Count==1 &&
+               call.Parameters[0].ParameterType.FullName=="UnityEngine.Material")
+                return "typed_Material_collection_add_candidate";
+            if(call.DeclaringType.Scope is ModuleDefinition)
+                return "own_game_method_handoff_candidate";
+            return "other_method_handoff_candidate";
+        }
+        if(ins.OpCode.Code is Code.Stfld or Code.Stsfld)
+            return "field_store_candidate";
+        if(ins.OpCode.Code is Code.Stloc or Code.Stloc_S or
+            Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
+            return "local_store_candidate";
+        if(ins.OpCode.Code==Code.Stelem_Ref)
+            return "array_element_store_candidate";
+        if(ins.OpCode.Code==Code.Dup)
+            return "stack_duplication";
+        if(ins.OpCode.Code==Code.Pop)
+            return "discard";
+        if(ins.OpCode.Code is Code.Ldarg or Code.Ldarg_S or Code.Ldarg_0 or
+            Code.Ldarg_1 or Code.Ldarg_2 or Code.Ldarg_3 or
+            Code.Ldloc or Code.Ldloc_S or Code.Ldloc_0 or Code.Ldloc_1 or
+            Code.Ldloc_2 or Code.Ldloc_3 or Code.Ldnull)
+            return "additional_stack_load_pending";
+        return "unclassified";
+    }
+
     private static bool ImmediateCtorOwnShaderFieldStore(
         IList<Instruction> il, int storeAt, MethodDefinition ctor)
     {
@@ -297,6 +346,13 @@ internal static class Program
         int localCfgOwnCtorMaterialDirectLastShaderArgument=0;
         int localCfgOwnCtorMaterialDirectFieldStore=0;
         int localCfgOwnCtorMaterialLocalStore=0;
+        int localCfgOwnCtorMatNextRenderer=0,localCfgOwnCtorMatNextGraphics=0;
+        int localCfgOwnCtorMatNextMaterialMethod=0,localCfgOwnCtorMatNextCollection=0;
+        int localCfgOwnCtorMatNextOwnMethod=0,localCfgOwnCtorMatNextOtherMethod=0;
+        int localCfgOwnCtorMatNextField=0,localCfgOwnCtorMatNextLocal=0;
+        int localCfgOwnCtorMatNextArray=0,localCfgOwnCtorMatNextDup=0;
+        int localCfgOwnCtorMatNextPop=0,localCfgOwnCtorMatNextExtraLoad=0;
+        int localCfgOwnCtorMatNextUnknown=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -449,6 +505,20 @@ internal static class Program
                                            ctorIl[postNewMaterialIndex].OpCode.Code is Code.Stloc or Code.Stloc_S or
                                               Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
                                             localCfgOwnCtorMaterialLocalStore++;
+                                        string materialNext=SafeMaterialNewobjResultNext(ctorIl,j);
+                                        if(materialNext=="Unity_Renderer_material_assignment_candidate")localCfgOwnCtorMatNextRenderer++;
+                                        else if(materialNext=="Unity_Graphics_direct_call_candidate")localCfgOwnCtorMatNextGraphics++;
+                                        else if(materialNext=="Unity_Material_method_call_candidate")localCfgOwnCtorMatNextMaterialMethod++;
+                                        else if(materialNext=="typed_Material_collection_add_candidate")localCfgOwnCtorMatNextCollection++;
+                                        else if(materialNext=="own_game_method_handoff_candidate")localCfgOwnCtorMatNextOwnMethod++;
+                                        else if(materialNext=="other_method_handoff_candidate")localCfgOwnCtorMatNextOtherMethod++;
+                                        else if(materialNext=="field_store_candidate")localCfgOwnCtorMatNextField++;
+                                        else if(materialNext=="local_store_candidate")localCfgOwnCtorMatNextLocal++;
+                                        else if(materialNext=="array_element_store_candidate")localCfgOwnCtorMatNextArray++;
+                                        else if(materialNext=="stack_duplication")localCfgOwnCtorMatNextDup++;
+                                        else if(materialNext=="discard")localCfgOwnCtorMatNextPop++;
+                                        else if(materialNext=="additional_stack_load_pending")localCfgOwnCtorMatNextExtraLoad++;
+                                        else localCfgOwnCtorMatNextUnknown++;
                                     }
                                     if(ci.OpCode.Code is Code.Call or Code.Callvirt &&
                                        ci.Operand is MethodReference call)
@@ -573,6 +643,19 @@ internal static class Program
             source_local_cfg_next_own_ctor_Unity_Material_immediate_original_last_Shader_argument=localCfgOwnCtorMaterialDirectLastShaderArgument,
             source_local_cfg_next_own_ctor_Unity_Material_direct_own_field_store=localCfgOwnCtorMaterialDirectFieldStore,
             source_local_cfg_next_own_ctor_Unity_Material_direct_local_store=localCfgOwnCtorMaterialLocalStore,
+            source_local_cfg_own_ctor_Material_result_next_Renderer_candidate=localCfgOwnCtorMatNextRenderer,
+            source_local_cfg_own_ctor_Material_result_next_Graphics_candidate=localCfgOwnCtorMatNextGraphics,
+            source_local_cfg_own_ctor_Material_result_next_Material_method_candidate=localCfgOwnCtorMatNextMaterialMethod,
+            source_local_cfg_own_ctor_Material_result_next_typed_collection_add_candidate=localCfgOwnCtorMatNextCollection,
+            source_local_cfg_own_ctor_Material_result_next_own_game_method_handoff_candidate=localCfgOwnCtorMatNextOwnMethod,
+            source_local_cfg_own_ctor_Material_result_next_other_method_handoff_candidate=localCfgOwnCtorMatNextOtherMethod,
+            source_local_cfg_own_ctor_Material_result_next_field_store_candidate=localCfgOwnCtorMatNextField,
+            source_local_cfg_own_ctor_Material_result_next_local_store_candidate=localCfgOwnCtorMatNextLocal,
+            source_local_cfg_own_ctor_Material_result_next_array_element_store_candidate=localCfgOwnCtorMatNextArray,
+            source_local_cfg_own_ctor_Material_result_next_stack_duplication=localCfgOwnCtorMatNextDup,
+            source_local_cfg_own_ctor_Material_result_next_discarded=localCfgOwnCtorMatNextPop,
+            source_local_cfg_own_ctor_Material_result_next_extra_stack_operand=localCfgOwnCtorMatNextExtraLoad,
+            source_local_cfg_own_ctor_Material_result_next_unclassified=localCfgOwnCtorMatNextUnknown,
             source_local_cfg_original_Shader_material_constructor_direct_arg_source_identity_proven=localCfgOwnCtorMaterialDirectLastShaderArgument>0,
             source_local_cfg_next_own_ctor_Unity_Material_set_shader_calls=localCfgOwnCtorUnityMaterialShaderSetterCalls,
             source_local_cfg_next_own_ctor_Unity_Graphics_calls=localCfgOwnCtorGraphicsCalls,
