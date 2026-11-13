@@ -21,3 +21,5 @@
 ## قرار الاستعادة أولاً — 13 نوفمبر 2026
 
 استعادة الموارد ودمجها تسبق أي XAPK توافق جديد. راجع [قرار المالك](https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md). في المختبر ابدأ بتدقيق Underwater/Base IME عبر GFX164 ثم إعداد الاستعادة المصدرية. FFT في 102 يفشل عند أول SetTexture. احفظ أدلة الأصل والدمج وفحص Unity والجهاز كلٌ في نطاقه.
+
+GFX164 نجح بعد تصحيح إعداد checkout ومدخل أداة الفحص. [دليل الأصل](../../gfxlab/evidence/20261113_gfx164_underwater_source_topology.json): Underwater/Base IME يحتوي 2 SubShaders × 4 Passes. التالي استخراج برامج الممرات الثمانية وحالاتها ومطابقة الممرات 1 و3 ومسار DrawMesh. فحص المصدر لا يغلق الاستعادة.
