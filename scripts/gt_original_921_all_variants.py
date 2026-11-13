@@ -219,6 +219,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     from scripts.gt_original_921_cb_hlsl import verify_named_constant_buffers
     from scripts.gt_original_921_cb_layout import bind_constant_buffers, constant_buffer_lanes
     from scripts.gt_original_921_resource_rebind import verify_rebound_resources
+    from scripts.gt_original_921_semantics import verify_varyings, verify_vertex_inputs
     from scripts.w1_rebind_depth_resources import RESOURCE
     import re
 
@@ -229,6 +230,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     records, decoded, layouts = [], {}, {}
     texture_counts = Counter()
     cb_counts = Counter()
+    mesh_inputs = 0
     for location, stage, row in rows:
         shader_pass = by_pass[location["subshader"], location["pass"]]
         program = shader_pass["original_vertex_program" if stage == 1 else "original_fragment_program"]
@@ -268,6 +270,8 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
             buffer["original_named_lanes"] = lanes
             cb_counts["named_lanes"] += sum(lane is not None for lane in lanes)
         cb_counts["reflected_offsets"] += verify_named_constant_buffers(bound_stage, stage, buffers)
+        if stage == 1:
+            mesh_inputs += verify_vertex_inputs(bound_stage, program_dir)
         cb_counts["mapped"] += len(buffers)
         cb_counts["variant"] += sum(buffer["binding_from_variant"] for buffer in buffers)
         cb_counts["shared_layout"] += sum(buffer["shared_layout_present"] for buffer in buffers)
@@ -280,6 +284,10 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
             "source_texture_sampler_bindings": bindings,
             "source_constant_buffer_layouts": buffers,
         })
+    varying_records = sum(verify_varyings(
+        (private / program_dirs[pair["vs"]["program_ref"]] / "source.dxbc").read_bytes(),
+        (private / program_dirs[pair["fs"]["program_ref"]] / "source.dxbc").read_bytes(),
+    ) for pair in pairs)
     packet = {
         "stage_records": records,
         "decoded_original_named_layouts": layouts,
@@ -289,6 +297,9 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
         json.dumps(packet, indent=2) + "\n", encoding="utf-8")
     return {
         "original_variant_stages_with_parameter_records": len(records),
+        "vertex_variants_with_verified_mesh_inputs": sum(stage == 1 for _, stage, _ in rows),
+        "original_vertex_input_semantics_restored": mesh_inputs,
+        "original_vertex_fragment_varying_records_matched": varying_records,
         "distinct_original_parameter_blobs": len(decoded),
         "resource_rebound_stages_verified_spirv_identical_excluding_debug": len(records),
         "named_constant_buffer_candidate_stages_vulkan11_valid": len(records),

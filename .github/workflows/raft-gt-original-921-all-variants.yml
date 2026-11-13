@@ -11,6 +11,8 @@ on:
       - scripts/gt_original_921_cb_layout.py
       - scripts/gt_original_921_cb_hlsl.py
       - scripts/gt_original_921_resource_rebind.py
+      - scripts/gt_original_921_semantics.py
+      - scripts/t3_original_921_dxbc_semantic_join.py
       - tests/test_gt_original_921_all_variants.py
       - .github/workflows/raft-gt-original-921-all-variants.yml
 
@@ -134,6 +136,9 @@ jobs:
           assert r['source_variant_parameter_records']['constant_buffer_named_32bit_lanes'] == 9615
           assert r['source_variant_parameter_records']['named_constant_buffer_candidate_stages_vulkan11_valid'] == 74
           assert r['source_variant_parameter_records']['named_constant_buffer_reflected_offsets_verified'] == 2029
+          assert r['source_variant_parameter_records']['vertex_variants_with_verified_mesh_inputs'] == 41
+          assert r['source_variant_parameter_records']['original_vertex_input_semantics_restored'] == 205
+          assert r['source_variant_parameter_records']['original_vertex_fragment_varying_records_matched'] == 211
           assert routes['validated_exact_routed_stage_compilations'] == 66
           assert len(routes['source_exact_keyword_routes_by_pass']) == 4
           assert sum(routes['source_exact_keyword_routes_by_pass']) == 33
