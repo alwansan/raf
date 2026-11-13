@@ -68,3 +68,61 @@ def verify_vertex_inputs(bound_stage, program_dir):
     if not command(["spirv-val", "--target-env", "vulkan1.1", str(binary)]):
         raise ValueError("original_921_mesh_input_candidate_spirv_invalid")
     return restored
+
+
+def pin_varying_locations(source, stage):
+    """Keep the same Vulkan location when a fragment omits earlier varyings."""
+    name = "SPIRV_Cross_Output" if stage == 1 else "SPIRV_Cross_Input"
+    struct = re.search(r"\bstruct\s+" + name + r"\s*\{([^{}]*)\}", source)
+    if struct is None:
+        raise ValueError("original_921_missing_translated_varying_interface")
+    fields = re.compile(r"(?m)^( +)((?:nointerpolation )?\w+ )([ov])([0-9]+)"
+                        r"\s*:\s*TEXCOORD([0-9]+);$")
+    locations = set()
+
+    def replace(match):
+        if match[4] != match[5] or match[3] != ("o" if stage == 1 else "v"):
+            raise ValueError("original_921_ambiguous_varying_register")
+        location = int(match[5])
+        if location in locations:
+            raise ValueError("original_921_duplicate_varying_location")
+        locations.add(location)
+        declaration = match[2]
+        if declaration == "uint ":
+            declaration = "nointerpolation uint "
+        return (f"{match[1]}[[vk::location({location})]] {declaration}"
+                f"{match[3]}{location} : TEXCOORD{location};")
+
+    body = fields.sub(replace, struct[1])
+    if re.search(r":\s*TEXCOORD[0-9]+\b", fields.sub("", struct[1])):
+        raise ValueError("original_921_unmapped_varying_location")
+    return source[:struct.start(1)] + body + source[struct.end(1):]
+
+
+def verify_vulkan_varying_pair(vertex, fragment):
+    from scripts.t3_spirv_interface_name_drift import read_reflection
+    from scripts.w1_recover_graphics_programs import command
+
+    interfaces = []
+    for stage, (directory, name, suffix, side) in enumerate((
+        (fragment, "named-constant-buffers.hlsl", "frag", "inputs"),
+        (vertex, "mesh-input-bound.hlsl", "vert", "outputs"),
+    )):
+        candidate = directory / "varying-bound.hlsl"
+        binary = candidate.with_suffix(".spv")
+        source = (directory / name).read_text(encoding="utf-8")
+        candidate.write_text(pin_varying_locations(source, stage), encoding="utf-8")
+        if not command(["glslangValidator", "-V", "-D", "-S", suffix, "-e", "main",
+                        "-o", str(binary), str(candidate)]):
+            raise ValueError("original_921_varying_candidate_compile_failed")
+        if not command(["spirv-val", "--target-env", "vulkan1.1", str(binary)]):
+            raise ValueError("original_921_varying_candidate_spirv_invalid")
+        entries = read_reflection(binary).get(side, [])
+        interface = {item["location"]: item["type"] for item in entries}
+        if len(interface) != len(entries):
+            raise ValueError("original_921_duplicate_reflected_varying")
+        interfaces.append(interface)
+    inputs, outputs = interfaces
+    if any(outputs.get(location) != kind for location, kind in inputs.items()):
+        raise ValueError("original_921_vulkan_varying_type_or_location_mismatch")
+    return len(inputs)

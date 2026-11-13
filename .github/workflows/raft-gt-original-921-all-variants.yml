@@ -139,6 +139,7 @@ jobs:
           assert r['source_variant_parameter_records']['vertex_variants_with_verified_mesh_inputs'] == 41
           assert r['source_variant_parameter_records']['original_vertex_input_semantics_restored'] == 205
           assert r['source_variant_parameter_records']['original_vertex_fragment_varying_records_matched'] == 211
+          assert r['source_variant_parameter_records']['vulkan_vertex_fragment_locations_matched'] == 155
           assert routes['validated_exact_routed_stage_compilations'] == 66
           assert len(routes['source_exact_keyword_routes_by_pass']) == 4
           assert sum(routes['source_exact_keyword_routes_by_pass']) == 33

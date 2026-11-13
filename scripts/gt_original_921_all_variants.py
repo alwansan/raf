@@ -219,7 +219,9 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     from scripts.gt_original_921_cb_hlsl import verify_named_constant_buffers
     from scripts.gt_original_921_cb_layout import bind_constant_buffers, constant_buffer_lanes
     from scripts.gt_original_921_resource_rebind import verify_rebound_resources
-    from scripts.gt_original_921_semantics import verify_varyings, verify_vertex_inputs
+    from scripts.gt_original_921_semantics import (
+        verify_varyings, verify_vertex_inputs, verify_vulkan_varying_pair,
+    )
     from scripts.w1_rebind_depth_resources import RESOURCE
     import re
 
@@ -288,6 +290,10 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
         (private / program_dirs[pair["vs"]["program_ref"]] / "source.dxbc").read_bytes(),
         (private / program_dirs[pair["fs"]["program_ref"]] / "source.dxbc").read_bytes(),
     ) for pair in pairs)
+    vulkan_varyings = sum(verify_vulkan_varying_pair(
+        private / f"bound-stage-{index * 2:03d}",
+        private / f"bound-stage-{index * 2 + 1:03d}",
+    ) for index in range(len(pairs)))
     packet = {
         "stage_records": records,
         "decoded_original_named_layouts": layouts,
@@ -300,6 +306,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
         "vertex_variants_with_verified_mesh_inputs": sum(stage == 1 for _, stage, _ in rows),
         "original_vertex_input_semantics_restored": mesh_inputs,
         "original_vertex_fragment_varying_records_matched": varying_records,
+        "vulkan_vertex_fragment_locations_matched": vulkan_varyings,
         "distinct_original_parameter_blobs": len(decoded),
         "resource_rebound_stages_verified_spirv_identical_excluding_debug": len(records),
         "named_constant_buffer_candidate_stages_vulkan11_valid": len(records),
