@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-27 — تجربة صور الهاتف 23:53 وبناء كامل مُنجز دون Release
+
+CL@[`a320d5e`](https://github.com/alwansan/CL/commit/a320d5e23962568b62bffec95399cf3e0cb1f579) أضاف **4 صور** وجلسة LogRaft `20261112-235351-196`. فيها **36,828 خطأ Water Shader Pass** = **15,054 Spectrum + 21,774 Foam Global**، و**6,106 kernel index6** (لم يثبت أنه FFT من الاسم وحده)، **2,844 Cursor RGBA32**، **2 OBB GUID**، **1 missing Mono script**، **1 duplicate EventSystem**، **4 convex polygon warnings**. عالم اللعبة سجّل أنه حُمّل، لكن الصور تُظهر Raft والقائمة بيضاء بشدة والماء غير صحيح. نُفِّذت إضافات للتحقق من سلامة writer FIFO في [device gate](../../scripts/gt_device_graphics_acceptance.py) واختباران سلبيان وreal CI مثبت المصدر؛ لا تعتبر CI ناجحاً إلا بعد التحقق. [Native 43299084397](https://github.com/alwansan/raf/actions/runs/43299084397) نجح **reconstruct** وأنتج ملفات موقعة، لكن `publish-early-test` رُفض HTTP403 رغم `contents:write` في YAML؛ Artifacts `13997201215` و`13996908213` موجودة مؤقتاً. الحل الإداري هو صلاحية GitHub Actions Release أو `RAFT_RELEASE_TOKEN` مناسب، دون تزييف SUCCESS. الماء/770 Dummy/Material→GPU ما زال مفتوحاً. [جلسة Chat27](sessions/20261113-GT-new-owner-night-phone-session-chat-27.md) و[الدليل الآمن](evidence/20261113_cl_night_device_graphics_and_build_receipt.json).
+
+---
+
 ## GT Chat-26 — المسار البرمجي الأصلي للماء Spectrum
 
 [43300958608 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300958608): SHA-authentic source Spectrum m_Name مرتبط بـtyped UnityEngine.Shader.Find واحد في الأصل من أصل 81 استدعاء (19,118 method)، ليس مجرد تخمين بالاسم. [43301684794 SUCCESS](https://github.com/alwansan/raf/actions/runs/43301684794): Find يخزّن Shader local. [43302914466 SUCCESS](https://github.com/alwansan/raf/actions/runs/43302914466): source CIL CFG يبلغ 35 instruction/3 branches/1 load ممكن للمتغير المحلي قبل overwrite، الاستخدام التالي ما يزال **غير مصنف**؛ لا إثبات Material/Renderer أو ماء Adreno. جميع 1,556 original Material كانت 0 direct Spectrum refs في Chat25؛ لا تُنشئ GUID غير أصلي.
