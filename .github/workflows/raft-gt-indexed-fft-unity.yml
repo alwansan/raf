@@ -71,4 +71,8 @@ jobs:
       - name: Delete temporary original assets and private compute source
         if: always()
         shell: bash
-        run: rm -rf -- "$GITHUB_WORKSPACE/gt-indexed-fft" "$GITHUB_WORKSPACE/zip2-fft" "$RUNNER_TEMP/fft"
+        run: |
+          set -euo pipefail
+          test "$GITHUB_WORKSPACE" = "$PWD"
+          sudo rm -rf -- "$GITHUB_WORKSPACE/gt-indexed-fft"
+          rm -rf -- "$GITHUB_WORKSPACE/zip2-fft" "$RUNNER_TEMP/fft"
