@@ -631,5 +631,30 @@
       "evidence": "clients/GT/evidence/20261113_cl_night_device_graphics_and_build_receipt.json"
     }
   ],
-  "new_full_native_delivery_blocker": "GitHub Release POST HTTP403 with contents:write requested; signed APK+OBB checkpoint and full delivery Artifacts exist, release absent"
+  "new_full_native_delivery_blocker": "GitHub Release POST HTTP403 with contents:write requested; signed APK+OBB checkpoint and full delivery Artifacts exist, release absent",
+  "proofs_20261113_original_spectrum_managed_material": {
+    "source_only": true,
+    "original_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "exact_Spectrum_Shader_Find_count": 1,
+    "source_local_cfg_reachable_instructions": 35,
+    "source_local_cfg_possible_loads_before_overwrite": 1,
+    "next_constructor_own_original_module": true,
+    "next_constructor_arguments": 3,
+    "next_constructor_last_argument_exact_Shader": true,
+    "own_constructor_body_IL_count": 44,
+    "own_constructor_new_UnityEngine_Material_Shader_count": 1,
+    "own_constructor_Material_newobj_preceded_by_original_third_Shader_argument_count": 1,
+    "source_dynamic_Material_construction_path_proven": true,
+    "source_dynamic_Material_runtime_executed": false,
+    "source_dynamic_Material_result_consumer_proven": false,
+    "original_Shader_runtime_render_bindings_proven": false,
+    "spectrum_Adreno_pixels_correct": false,
+    "evidenced_runs": [
+      43337606930,
+      43337840022,
+      43338106531,
+      43338485431
+    ],
+    "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md"
+  }
 }
