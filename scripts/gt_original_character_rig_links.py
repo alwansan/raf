@@ -20,6 +20,7 @@ def audit(root, manifest):
     transforms = {}
     game_objects_by_transform = {}
     animator_assets = {}
+    selected_controllers = set()
     for owner, (_, size, digest) in known.items():
         source = root / owner
         verify(source, size, digest)
@@ -37,7 +38,7 @@ def audit(root, manifest):
                 file_id, path_id = pointer(tree["m_GameObject"])
                 if file_id == 0 and path_id:
                     animators.setdefault((owner, path_id), []).append(tree)
-            elif obj.type.name in ("Avatar", "AnimatorController", "AnimatorOverrideController"):
+            elif obj.type.name in ("Avatar", "AnimatorController", "AnimatorOverrideController", "AnimationClip"):
                 animator_assets[owner, obj.path_id] = obj.type.name
             elif obj.type.name == "SkinnedMeshRenderer":
                 renderers.append((owner, obj.read_typetree(check_read=False)))
@@ -109,6 +110,8 @@ def audit(root, manifest):
                 result = ("null" if asset[1] == 0 else "verified"
                           if animator_assets.get(asset) in allowed else "unresolved")
                 counts["ancestor_animator_" + key[2:].lower() + "_" + result] += 1
+                if key == "m_Controller" and result == "verified":
+                    selected_controllers.add(asset)
         elif candidates:
             counts["renderers_with_ambiguous_ancestor_animator"] += 1
         else:
@@ -137,6 +140,40 @@ def audit(root, manifest):
             counts["verified_root_bone_transforms"] += 1
         else:
             counts["unresolved_root_bones"] += 1
+    pending = set(selected_controllers)
+    visited, clips = set(), set()
+    while pending:
+        identity = pending.pop()
+        if identity in visited:
+            continue
+        visited.add(identity)
+        owner, path_id = identity
+        obj = UnityPy.load(str(root / owner)).file.objects[path_id]
+        tree = obj.read_typetree(check_read=False)
+        if obj.type.name == "AnimatorController":
+            references = tree["m_AnimationClips"]
+        else:
+            base = target(owner, tree["m_Controller"])
+            if animator_assets.get(base) in ("AnimatorController", "AnimatorOverrideController"):
+                pending.add(base)
+            else:
+                counts["override_unresolved_base_controller"] += 1
+            references = [value for pair in tree["m_Clips"]
+                          for value in (pair["m_OriginalClip"], pair["m_OverrideClip"])]
+        for reference in references:
+            clip = target(owner, reference)
+            counts["controller_clip_slots"] += 1
+            if animator_assets.get(clip) == "AnimationClip":
+                clips.add(clip)
+                counts["controller_clip_slots_verified"] += 1
+            elif clip[1] == 0:
+                counts["controller_clip_slots_null"] += 1
+            else:
+                counts["controller_clip_slots_unresolved"] += 1
+    counts["unique_selected_controller_assets"] = len(selected_controllers)
+    counts["unique_controllers_checked_including_bases"] = len(visited)
+    counts["unique_verified_animation_clips"] = len(clips)
+
     return {"verified_source_owners": len(known), "character_mesh_name_matches": len(meshes),
             "character_meshes_with_bind_poses": sum(bool(n) for n in meshes.values()),
             "distinct_character_meshes_linked_by_skinned_renderers": len(used),

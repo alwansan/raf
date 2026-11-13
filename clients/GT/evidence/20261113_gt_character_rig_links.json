@@ -7,6 +7,8 @@
   "character_mesh_name_matches": 13,
   "character_meshes_with_bind_poses": 9,
   "character_skinned_renderers": 26,
+  "controller_clip_slots": 40,
+  "controller_clip_slots_verified": 40,
   "distinct_character_meshes_linked_by_skinned_renderers": 9,
   "export_or_animation_verified": false,
   "renderer_bone_counts_match_bind_poses": 26,
@@ -14,6 +16,9 @@
   "renderers_with_all_bones_under_root": 23,
   "renderers_with_unique_ancestor_animator": 21,
   "renderers_without_ancestor_animator": 5,
+  "unique_controllers_checked_including_bases": 7,
+  "unique_selected_controller_assets": 6,
+  "unique_verified_animation_clips": 31,
   "verified_root_bone_transforms": 26,
   "verified_source_owners": 82,
   "verified_transform_bone_slots": 2400
