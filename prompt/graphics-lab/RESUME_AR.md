@@ -17,3 +17,7 @@
 بناء GFX161 توقف قبل Unity. اقرأ [تشخيص GFX162 والتصحيح](../../memory/sessions/20261112-GFX-chat-native-pristine-array-source-122.md).
 
 نتيجة الهاتف للنسخة 101 في [الجلسة](../../memory/sessions/20261113-GFX-chat-water-native-v101-123.md).
+
+## قرار الاستعادة أولاً — 13 نوفمبر 2026
+
+استعادة الموارد ودمجها تسبق أي XAPK توافق جديد. راجع [قرار المالك](https://github.com/alwansan/raf/blob/feature/android-native-port/clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md). في المختبر ابدأ بتدقيق Underwater/Base IME عبر GFX164 ثم إعداد الاستعادة المصدرية. FFT في 102 يفشل عند أول SetTexture. احفظ أدلة الأصل والدمج وفحص Unity والجهاز كلٌ في نطاقه.

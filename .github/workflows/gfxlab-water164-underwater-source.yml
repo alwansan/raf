@@ -1,0 +1,57 @@
+name: GFX164 ZIP2 original Underwater Base IME pass topology
+on:
+  push:
+    branches: [experiment/android-graphics-rootcause]
+    paths:
+      - .github/workflows/gfxlab-water164-underwater-source.yml
+      - gfxlab/tools/underwater_source_topology.py
+permissions:
+  contents: read
+concurrency:
+  group: gfx164-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  census:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/native-tools
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: f59d70969cd55f3d0ed249e0d0b470010889ae6d
+          path: native-tools
+          persist-credentials: false
+          sparse-checkout: scripts
+      - uses: actions/checkout@v4
+        with:
+          ref: 16464ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: source-zip2
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: /RAFT_FILE_MANIFEST.tsv
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit original typed links privately
+        run: |
+          set -euo pipefail
+          python -m pip install UnityPy==1.25.4
+          if ! python -m gfxlab.tools.water_scene_links source-zip2 "$RUNNER_TEMP/gfx164-source" "$RUNNER_TEMP/gfx164.json" > "$RUNNER_TEMP/gfx164-private.log" 2>&1; then
+            echo 'GFX164 underwater source census failed before an aggregate was produced'
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/gfx164.json"
+      - name: Remove private staged source
+        if: always()
+        run: rm -rf source-zip2 "$RUNNER_TEMP/gfx164-source" "$RUNNER_TEMP/gfx164-private.log"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gfx164-underwater-source
+          path: ${{ runner.temp }}/gfx164.json
+          if-no-files-found: error
