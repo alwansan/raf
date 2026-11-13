@@ -216,7 +216,8 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     """Preserve the per-stage override blobs separately from shared stage bytecode."""
     from scripts.a12_shader_parameter_decode import parse_parameter_blob
     from scripts.b25_foam_cb_namebridge import original_name_registry
-    from scripts.gt_original_921_cb_layout import bind_constant_buffers
+    from scripts.gt_original_921_cb_layout import bind_constant_buffers, constant_buffer_lanes
+    from scripts.gt_original_921_resource_rebind import verify_rebound_resources
     from scripts.w1_rebind_depth_resources import RESOURCE
     import re
 
@@ -243,7 +244,8 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
                     for item in common["m_TextureParams"]}
         textures.update({item["index"]: (item["name"], item["extra_value"])
                          for item in layouts[index]["resources"] if item["kind"] == 0})
-        source = (private / program_dirs[row["program_ref"]] / "private.hlsl").read_text()
+        program_dir = private / program_dirs[row["program_ref"]]
+        source = (program_dir / "private.hlsl").read_text()
         bindings = []
         for resource in RESOURCE.finditer(source):
             variable, kind = resource[2], resource[3]
@@ -257,7 +259,12 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
                 raise ValueError("original_texture_or_sampler_binding_ambiguous")
             bindings.append({"kind": kind, "slot": slot, "source_texture_name": candidates[0]})
             texture_counts[kind] += 1
+        verify_rebound_resources(program_dir, stage, bindings, private / f"bound-stage-{len(records):03d}")
         buffers = bind_constant_buffers(source, common, names, layouts[index])
+        for buffer in buffers:
+            lanes = constant_buffer_lanes(buffer)
+            buffer["original_named_lanes"] = lanes
+            cb_counts["named_lanes"] += sum(lane is not None for lane in lanes)
         cb_counts["mapped"] += len(buffers)
         cb_counts["variant"] += sum(buffer["binding_from_variant"] for buffer in buffers)
         cb_counts["shared_layout"] += sum(buffer["shared_layout_present"] for buffer in buffers)
@@ -280,9 +287,11 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     return {
         "original_variant_stages_with_parameter_records": len(records),
         "distinct_original_parameter_blobs": len(decoded),
+        "resource_rebound_stages_verified_spirv_identical_excluding_debug": len(records),
         "translated_constant_buffer_declarations_mapped": cb_counts["mapped"],
         "constant_buffer_bindings_from_variant": cb_counts["variant"],
         "constant_buffer_layouts_with_shared_members_table": cb_counts["shared_layout"],
+        "constant_buffer_named_32bit_lanes": cb_counts["named_lanes"],
         "constant_buffer_named_member_occurrences": cb_counts["members"],
         "constant_buffer_named_struct_occurrences": cb_counts["structs"],
         "translated_texture_declarations_mapped_to_source_name": texture_counts["t"],
@@ -307,7 +316,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     from scripts.w1_recover_graphics_programs import decoded_platforms,records,translate
     from scripts.w1_recover_depth_passes import linked_program,stage_variants,variant_key
     if translator is None:translator=translate
-    for binary in ("vkd3d-compiler","spirv-val","spirv-cross","glslangValidator"):
+    for binary in ("vkd3d-compiler","spirv-val","spirv-opt","spirv-cross","glslangValidator"):
         if not shutil.which(binary):
             raise ValueError("missing_required_original_DXBC_translation_tool")
     use={}

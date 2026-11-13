@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.gt_original_921_cb_layout import bind_constant_buffers
+from scripts.gt_original_921_cb_layout import bind_constant_buffers, constant_buffer_lanes
 
 
 class ConstantBufferLayoutTests(unittest.TestCase):
@@ -32,3 +32,17 @@ cbuffer SPIRV_Cross_VertexInfo
         layout["resources"].append({"kind": 1, "index": 7, "name": "Conflicting"})
         with self.assertRaisesRegex(ValueError, "conflicting_original"):
             bind_constant_buffers(source, common, {0: "Original"}, layout)
+
+    def test_struct_array_offsets_and_unassigned_lanes(self):
+        member = {"name": "gain", "type": 0, "rows": 1, "columns": 1,
+                  "matrix": False, "index": 4, "array_size": 0}
+        struct = {"name": "lights", "index": 16, "size": 16,
+                  "array_size": 2, "members": [member]}
+        buffer = {"variant_size_bytes": 48, "members": [], "structs": [struct]}
+        lanes = constant_buffer_lanes(buffer)
+        self.assertIsNone(lanes[4])
+        self.assertEqual(lanes[5]["path"], ["lights", 0, "gain"])
+        self.assertEqual(lanes[9]["path"], ["lights", 1, "gain"])
+        struct["members"].append({**member, "name": "overlapping"})
+        with self.assertRaisesRegex(ValueError, "lane_conflict"):
+            constant_buffer_lanes(buffer)

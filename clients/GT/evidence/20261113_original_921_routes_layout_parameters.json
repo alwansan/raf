@@ -71,6 +71,7 @@
   "source_variant_parameter_records": {
     "constant_buffer_bindings_from_variant": 247,
     "constant_buffer_layouts_with_shared_members_table": 297,
+    "constant_buffer_named_32bit_lanes": 9615,
     "constant_buffer_named_member_occurrences": 1487,
     "constant_buffer_named_struct_occurrences": 54,
     "distinct_original_parameter_blobs": 46,
@@ -79,6 +80,7 @@
     "original_variant_stages_with_cb_bindings": 57,
     "original_variant_stages_with_parameter_records": 74,
     "original_variant_stages_with_textures": 29,
+    "resource_rebound_stages_verified_spirv_identical_excluding_debug": 74,
     "translated_constant_buffer_declarations_mapped": 467,
     "translated_sampler_declarations_mapped_to_source_texture": 198,
     "translated_texture_declarations_mapped_to_source_name": 206

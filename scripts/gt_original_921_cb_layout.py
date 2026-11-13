@@ -75,3 +75,45 @@ def bind_constant_buffers(source, common, names, layout):
     if len(result) != len(re.findall(r"\bcbuffer\b", VERTEX_INFO.sub("", source))):
         raise ValueError("unsupported_translated_constant_buffer_declaration")
     return result
+
+
+def constant_buffer_lanes(buffer):
+    """Map original byte offsets to named member components, preserving holes."""
+    lanes = [None] * (buffer["variant_size_bytes"] // 4)
+
+    def add(member, base, path, limit):
+        rows, columns = member["rows"], member["columns"]
+        matrix = member["matrix"]
+        if (member["type"] not in (0, 1) or not 1 <= columns <= 4
+                or (matrix and (rows != 4 or columns != 4))
+                or (not matrix and rows != 1)):
+            raise ValueError("unsupported_original_constant_buffer_member_shape")
+        offset = base + member["index"]
+        count = member["array_size"]
+        if offset % (16 if matrix or count else 4):
+            raise ValueError("misaligned_original_constant_buffer_member")
+        stride = 16 * columns if matrix else 16
+        for element in range(max(1, count)):
+            start = offset + element * stride
+            if not matrix and start % 16 + 4 * columns > 16:
+                raise ValueError("original_constant_buffer_vector_crosses_register")
+            name = path + ([element] if count else [])
+            for column in range(columns if matrix else 1):
+                for row in range(rows if matrix else columns):
+                    at = start + column * 16 + row * 4
+                    if not 0 <= at < limit or lanes[at // 4] is not None:
+                        raise ValueError("original_constant_buffer_lane_conflict")
+                    lanes[at // 4] = {
+                        "path": name, "row": row, "column": column,
+                        "type": member["type"], "matrix": matrix,
+                    }
+
+    for member in buffer["members"]:
+        add(member, 0, [member["name"]], buffer["variant_size_bytes"])
+    for struct in buffer["structs"]:
+        for element in range(max(1, struct["array_size"])):
+            start = struct["index"] + element * struct["size"]
+            parent = [struct["name"]] + ([element] if struct["array_size"] else [])
+            for member in struct["members"]:
+                add(member, start, [*parent, member["name"]], start + struct["size"])
+    return lanes
