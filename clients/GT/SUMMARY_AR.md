@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-28 — إثبات التخزين و24 مرجع قراءة فعلي لـMaterial Spectrum
+
+أغلق GT جزءاً جديداً من سلسلة المصدر الحقيقي: original Shader.Find→own 3arg ctor→new Material(original Shader)→`dup`→property setter→**stfld original `UnityEngine.Material`**. [43339062121](https://github.com/alwansan/raf/actions/runs/43339062121)، [43339407339](https://github.com/alwansan/raf/actions/runs/43339407339)، [43339688082](https://github.com/alwansan/raf/actions/runs/43339688082) جميعها SUCCESS. الـMaterial field له **24 `ldfld` source-authentic** في 8 methods، 7 منها تتضمن Graphics، و2 تتضمن RenderTexture، بلا دليل بعد على وصول المرجع إلى وسيط دالة الرسم المعينة. لم يتغير الماء على الهاتف، ولا أُصلح index6 أو 770 Dummy، ولا نُشر الإصدار القديم بسبب 403. [Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md).
+
+---
+
 ## GT Chat-28 — استعادة دليل المصدر الديناميكي لشيدر Spectrum حتى Material
 
 تحققنا من **رابط Managed IL أصلي ومحدد**: [CI43337606930](https://github.com/alwansan/raf/actions/runs/43337606930) كشف أن استخدام Shader local التالي هو `newobj`؛ [43337840022](https://github.com/alwansan/raf/actions/runs/43337840022) أثبت original own constructor بثلاثة arguments وآخرها Shader؛ [43338106531](https://github.com/alwansan/raf/actions/runs/43338106531) كشف 44 تعليمة داخل Constructor و`new UnityEngine.Material(Shader)` واحد؛ [43338485431](https://github.com/alwansan/raf/actions/runs/43338485431) أثبت **الـShader الثالث الأصلي هو نفس المعامل المحمّل مباشرة لإنشاء Material(Shader)**. هذا **يثبت وجود مسار إنشاء مادة ديناميكي بالمصدر الحقيقي** رغم `0/1556` Material PPtrs ثابتة إلى Spectrum؛ لم يثبت بعد استعمال الناتج في Renderer/Blit/RT ولا صلاحية Pixels أو اكتمال 770 Dummy. [جلسة Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md). صور وتجربة CL الجديدة ذات 36,828 خطأ ماء ما تزال **فشل قبول**، والبناء الأقدم 43299084397 نجح reconstruct وفشل نشر Release بسبب HTTP403. لا GUID مصنوع ولا LFS.
