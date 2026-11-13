@@ -698,7 +698,12 @@
     "tracer_source_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/OriginalMaterialCallFlow.cs",
     "tracer_integration_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/Program.cs",
     "real_source_7_blit_CI": 43343971412,
-    "strict_source_7_blit_CI": 43344199792
+    "strict_source_7_blit_CI": 43344199792,
+    "actual_full_native_AssetRipper_Spectrum_exported_shader_source_install_proven": true,
+    "actual_full_native_source_install_run": 43346405263,
+    "actual_full_native_source_install_safe_artifact_id": 14002987883,
+    "actual_Unity_Android_game_Shader_compile_confirmed": false,
+    "actual_Adreno_water_pixels_verified": false
   },
   "proofs_20261113_spectrum_production_source_guid_install": {
     "source_only_installer_contract_CI": 43346292249,
@@ -729,6 +734,26 @@
       "LOW_MEMORY_actual_resource_cause",
       "successful_release_permissions"
     ],
-    "session": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md"
+    "session": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md",
+    "real_source_authenticated_Spectrum_7pass_same_run_exported_GUID_install_success": true,
+    "real_source_install_run_id": 43346405263,
+    "real_source_install_artifact_id": 14002987883,
+    "real_material_shader_audit_started": true,
+    "Unity_2021_whole_game_compile_and_signed_delivery_confirmed": false
+  },
+  "proofs_20261113_foam_source_guid_install_next_build": {
+    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "production_pipeline_configured": true,
+    "original_two_pass_source_authentication_required": true,
+    "original_guid_and_meta_preserved_strictly": true,
+    "source_free_synthetic_CI_success": 43348620794,
+    "source_free_CSharp_Unity_import_probe_success": 43349010740,
+    "original_Unity_Editor_two_pass_compile_gate_required": true,
+    "queued_full_native_build_run": 43349181838,
+    "queued_full_native_source_sha": "c3c71731525465cb2f6297f6bcbdb37c60ae4058",
+    "real_source_exported_Foam_install_verified": false,
+    "original_Material_CB0_sampler_RT_binding_verified": false,
+    "actual_Android_Foam_pixels_verified": false,
+    "session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md"
   }
 }
