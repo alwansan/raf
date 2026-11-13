@@ -5,6 +5,7 @@ on:
   push:
     branches: [feature/android-native-port]
     paths:
+      - scripts/stage_zip2_fft_owner.py
       - scripts/t1_stage_original_fft_compute_candidates.py
       - tests/test_t1_stage_original_fft_compute_candidates.py
       - .github/workflows/raft-t1-fft-original-compute-candidates.yml
@@ -51,7 +52,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/t1zip"
           git -C "$RUNNER_TEMP/t1zip" init -q
           git -C "$RUNNER_TEMP/t1zip" remote add origin https://github.com/alwansan/raf.git
-          git -C "$RUNNER_TEMP/t1zip" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          git -C "$RUNNER_TEMP/t1zip" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin "$ZIP2_SHA"
           test "$(git -C "$RUNNER_TEMP/t1zip" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
           git -C "$RUNNER_TEMP/t1zip" sparse-checkout init --no-cone
           printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |

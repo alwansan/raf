@@ -1,0 +1,17 @@
+{
+  "depth_all_wrapped_stages_valid": true,
+  "depth_original_subshader_pass_counts": [
+    6,
+    3
+  ],
+  "depth_shaderlab_source_recovered": true,
+  "depth_stage_count": 18,
+  "depth_targeted_tests_passed": 23,
+  "fft_original_compiled_programs_reconstructed": 20,
+  "fft_runtime_kernel_index6_mapping_proven": false,
+  "fft_targeted_tests_passed": 7,
+  "guid_or_meta_changed": false,
+  "provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "unity_isolated_import_proven_by_this_run": false,
+  "xapk_built": false
+}
