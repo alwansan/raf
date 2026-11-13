@@ -1,0 +1,79 @@
+{
+  "counts": {
+    "at_least_10000_vertices": 423,
+    "bind_pose_present": 170,
+    "character_name": 13,
+    "island_name": 376,
+    "source_indices": 71171412,
+    "source_meshes": 4708,
+    "source_vertices": 23119536,
+    "streamed": 2496,
+    "wood_name": 108,
+    "zero_original_vertex_count": 1
+  },
+  "full_owner_scope": true,
+  "name_hint_cohorts": {
+    "character_name": {
+      "at_least_10000_vertices": 2,
+      "indices": 267303,
+      "meshes": 13,
+      "streamed": 3,
+      "vertices": 60718,
+      "with_bind_pose": 9
+    },
+    "island_name": {
+      "at_least_10000_vertices": 91,
+      "indices": 11938431,
+      "meshes": 376,
+      "streamed": 251,
+      "vertices": 4464198,
+      "with_bind_pose": 1
+    },
+    "wood_name": {
+      "at_least_10000_vertices": 6,
+      "indices": 738144,
+      "meshes": 108,
+      "streamed": 62,
+      "vertices": 332354,
+      "with_bind_pose": 0
+    }
+  },
+  "name_hint_cohorts_can_overlap": true,
+  "priority_geometry_checks": {
+    "at_least_10000_vertices": {
+      "finite": 423,
+      "normals_absent": 1,
+      "normals_finite": 422,
+      "tangents_absent": 4,
+      "tangents_finite": 419,
+      "uv0_absent": 1,
+      "uv0_finite": 422
+    },
+    "character_name": {
+      "finite": 13,
+      "normals_finite": 13,
+      "tangents_finite": 13,
+      "uv0_finite": 13
+    },
+    "island_name": {
+      "finite": 376,
+      "normals_finite": 376,
+      "tangents_absent": 3,
+      "tangents_finite": 373,
+      "uv0_absent": 6,
+      "uv0_finite": 370
+    },
+    "wood_name": {
+      "finite": 108,
+      "normals_finite": 108,
+      "tangents_finite": 108,
+      "uv0_finite": 108
+    }
+  },
+  "priority_inline_geometry_checks": null,
+  "project_export_or_rig_parity_verified": false,
+  "schema": "GT_ORIGINAL_MESH_RESTORATION_PRIORITY_V1",
+  "source_owner_count": 82,
+  "verified_stream_bytes": 6187829328,
+  "verified_stream_count": 15
+}
