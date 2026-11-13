@@ -157,6 +157,42 @@ public static class Program
             Require(blocked, "shader compiler failures incorrectly accepted");
             spectrumShader.syntheticCompileError=false;
 
+            var foamShader=UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Shader>(
+                "Assets/Water/Foam.shader");
+            RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();
+            Require(UnityEngine.Debug.Lines.Any(x => x.StartsWith(
+                "GT_NATIVE_FOAM_UNITY_IMPORT_GATE oneOriginalShader=True") &&
+                x.Contains("twoImportedPasses=True") && x.Contains("accepted=True") &&
+                x.Contains("AdrenoPixelsVerified=false")),
+                "original Foam synthetic source gate positive two-pass case failed");
+            foamShader.passCount=1;
+            bool foamBlocked=false;
+            try
+            {
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();
+            }
+            catch (InvalidOperationException) { foamBlocked=true; }
+            Require(foamBlocked, "native accepted original Foam one pass instead of two");
+            foamShader.passCount=2;
+            foamShader.syntheticCompileError=true;
+            foamBlocked=false;
+            try
+            {
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();
+            }
+            catch (InvalidOperationException) { foamBlocked=true; }
+            Require(foamBlocked, "native accepted original Foam compiler errors");
+            foamShader.syntheticCompileError=false;
+            File.WriteAllText(foam, "//DummyShaderTextExporter\\nShader \\"synthetic\\" {}");
+            foamBlocked=false;
+            try
+            {
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();
+            }
+            catch (InvalidOperationException) { foamBlocked=true; }
+            Require(foamBlocked, "native accepted original Foam dummy ShaderLab");
+            File.WriteAllText(foam,"Shader \\"synthetic\\" { SubShader { Pass {} Pass {} } }");
+
             // A malicious/redirected asset path must never be read as a
             // local project .shader, even if it resolves to a real outer file.
             UnityEditor.AssetDatabase.Register(
