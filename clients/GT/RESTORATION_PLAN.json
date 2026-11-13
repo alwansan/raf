@@ -177,7 +177,7 @@
       "status": "blocked_major_visible_white_materials",
       "restored_now": "1,536 material YAML documents exported; 750 builtin shader linked, 16 vendor-restored custom Material documents no longer Dummy",
       "missing": "770 CUSTOM MATERIAL DOCUMENTS STILL REFERENCE DUMMY SHADERS; 20 source Material objects are not direct exported Material YAML, not necessarily missing",
-      "next_action": "Prioritize high-impact dummy shaders with original renderer slot counts, restore authentic ShaderLab Pass/Property/keyword/sampler and retain same GUID",
+      "next_action": "HIGHEST PRIORITY: verify actual same-export 770 Dummy Material documents vs DISTINCT shader GUID count, rank original Renderer use and restore top source-authentic Shader programs with original GUID one batch at time; no XAPK until zero.",
       "evidence": [
         43127697656,
         43138326757,
@@ -202,7 +202,7 @@
       "status": "authentic_shader_material_binding_blocked",
       "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors",
       "missing": "Original Sampler/Texture register mapping and same-instance exported Material/GUID parity; sampler Linear/Repeat currently APPROX in isolated probe, not restored",
-      "next_action": "Prove original per-stage sampler ↔ texture namespace without guessed RDEF or address maps; integrate only if strict shader pass/keyword/material proof passes",
+      "next_action": "RESTORE ALL 165 source Shader identities and variants by original priority; prove correct pass/keyword/sampler/cbuffer/property, unify source→actual Export GUID, remove dummy programs without approximate substitutes.",
       "evidence": [
         43236578305,
         43237509847,
@@ -376,7 +376,7 @@
       "status": "blocked_water_render",
       "restored_now": "Private source-authentic Foam 2-pass translation, render-state and ShaderLab candidate preparations exist; source-only gates for required pass counts; B09 original Spectrum 7 passes / 28 stage variants authenticated, distinct from the observed-device 6-pass lower bound; B24 original Foam 2 passes authenticated.; implemented read-only Editor import probe for exact 7 Spectrum vs 2 Foam Pass counts, detects one-pass dummy and duplicate/traversing asset paths; synthetic CSharp tests passed.; Real authenticated ZIP2 original Spectrum paired-stage Vulkan1.1 CI 43273276394 SUCCESS: 7/7 passes, 14 source VS/FS pairs, 28/28 compiled stage variants, 13 distinct original stage translations, all scratch-private.; Authenticated 7 distinct original render states and 6 original Shader properties (2 texture/3 float/1 vector) via ZIP2; privately assembled 2 seven-pass ShaderLab STRUCTURAL source candidates (14 total pass envelopes) preserving 28 original stage references; real CI 43274729958 SUCCESS, no game asset install.; Unity Editor 2021 imported 7/7 private Spectrum passes and emitted 6,095-byte Android Vulkan bundle on CI43275506146, but two shader errors forced failure.; Source-original DXBC+Unity numeric sampler/texture stage name mapping was accepted by source gate in 43279249696; original filter/wrap and game Material binding still unverified.; CI43279249696 SUCCESS: source-authentic 26 Texture and 26 Sampler HLSL symbolic registrations over 28 stages, private original Spectrum variant0 imported seven passes in Unity2021.3.45f2 Android Vulkan, 0 shader errors, compiled 12,079-byte private ShaderBundle. This is exact isolated variant0, not original runtime/game pixel.; Source-authentic isolated variant1 Unity import7Pass and provisional private bundle12418B in CI43282759870, BUT hidden 12 GLSL link errors cb4_struct despite ShaderUtil.GetShaderMessages=0: not accepted. Added final-job source/private GLSL console scanner and stage-local uniform block symbol isolation; real retry CI43285251243 underway.; CI43286126572 BOTH jobs SUCCESS: private source-derived Spectrum variants 0 and 1 import 7 passes each on Unity2021 Android Vulkan, ShaderUtil errors=0, private bundles 12,080B/12,409B, AND independent final job log scan confirms exactly 0 GLSL linker/import/internal-variant/compiler errors. Original CBuffer stage-local symbol collision fixed only in private candidate, unchanged game data. CI43286701677 source-auth original ZIP2 original authored keyword index4 + 7Pass VSFS pair hashes, privately generated unified provisional 7pass keyword-routed shader, NOT Unity compiled.; CI43288288144 ALL THREE JOBS SUCCESS: source-authentic ZIP2 original Spectrum keyword index4 produced one PRIVATE seven-pass ShaderLab with two original VS/FS stage branches per Pass; actual Unity2021.3.45f2 Android Vulkan imports 7/7 passes, registers 2 ShaderVariantCollection variants, builds 14,492B bundle, shader errors=0; second job finalized console audit confirms exactly 0 GLSL linker/internal variant/import/compiler errors. Does NOT prove original authored keyword pragma global/local scope or actual original Material runtime selection/phone water pixels.; CI43296468683 SOURCE ONLY actual ZIP2 SHA: five m_KeywordFlags uint8 values observed, original index4=0 and all equal; original flag-byte SHA256 authenticated; no runtime global/local scope mapping yet.; GT Chat25 source+private: Unity2021 synthetic keyword flags global=0/local=1 CI43297804472; private unified original-index4 Spectrum Shader.keywordSpace global + private synthetic Material off/on/off, 7pass, 2variants, 14484B, final GLSL errors0 CI43299461114. SHA-verified source 40 owners/1392 Materials 0 direct Spectrum links CI43299180998; all82 owners/1556 Materials 0 direct PPtrs CI43300053045. Runtime Material not proven.; GT Chat26 original managed SHA-only typed Cecil: CI43300958608 1 exact source Spectrum name literal direct typed Shader.Find among 81 total calls/19118 methods. CI43301684794 result immediately stored in typed Shader local. CI43302914466 branch-aware CFG from local store reaches 35 instructions/3 branches/1 local load on some path; consumer remains unclassified. No runtime GPU/Material proof.",
       "missing": "Source-authentic Pass and GUID binding in game + Unity real import/passCount + device results; Spectrum 6-pass still not restored; restore EXACT seven original Spectrum passes (not merely six synthetic placeholders).; actual Unity Editor 2021.3.45f2 import probe has not run on a new native candidate; source and GUID/Material parity still unverified.; Original 7-pass ShaderLab render states, source-authentic property/keyword selection, sampler/CB0/Material original GUID binding, Unity2021 actual Shader import and Adreno pixels remain unproven.; Still two isolated compile-only candidates rather than one original runtime keyword-routed Shader; Unity2021 Android Vulkan private import running or queued, and actual Material/RT/CB/Sampler identity plus phone rendering remain unverified.; Actual Unity source-derived variant0 fails cross-stage uniform cbuffer alias vec4[4] vs vec4[5]/[7]. Private-only reversible stage-disjoint symbol repair launched in CI43276622833, no production fix claimed.; Private stage-buffer-isolated Unity 43277618651 failed 2 Shader errors: samplers0 and samplers1 unrecognized (7Pass imported/bundle6092). New strict source names retry 43279249696 reached Unity, unverified result.; independent private original variant1 Unity compile pending CI43282759870 (not proven); unified original runtime keyword selection plus original Material/GUID/CB0/RT and phone pixel parity still NOT proven.; New variant1 Unity needs absolutely zero job-console GLSL/internal variant failures, not merely numeric ShaderUtil/Bundle success. Source-original runtime keyword routing, Material/GUID/CB0/RT and Adreno pixels remain missing.; Source-original keyword scope flags and real runtime on/off branch selection of one unified seven-pass ShaderLab not yet proven; game Material GUID/source sampling/CB/RT and Android phone pixels still missing. No original real game assets changed.; Source-authoritative original global/local keyword flags and scope not classified yet; original Materials/Shader GUID, sampler filter+wrap, CB upload, RT lifetime, and Adreno water visuals remain unverified, so do NOT merge into full game as equivalent.; There is NO serialized Material.m_Shader PPtr to Spectrum in the 82 original owners; original runtime Shader.Find/Material(new Shader)/Renderer assignment still needs source-typed IL evidence before actual water Shader parity can be claimed.; Original source managed Shader.Find->local destination has 1 reachable use, but its typed consumer/interprocedural binding and actual Material/RT upload are still NOT proven. Original 82 Material PPtrs zero.",
-      "next_action": "P06 next: classify original single reachable typed Spectrum Shader local's consuming IL/typed method signatures and multi-operand stack path; then prove Material/Graphics/RT/CB0/Sampler/keyword runtime relation. No static Material source PPtr exists in 82 owners. CI43302914466 is source-only, not phone pixels.",
+      "next_action": "Finish source-integrated Spectrum/Foam original, Depth all SubShader pass candidates, RT/CB0/Samplers and original FFT before compatibility XAPK.",
       "evidence": [
         43263197989,
         41920232173,
@@ -418,7 +418,7 @@
       "status": "blocked_kernel_identity",
       "restored_now": "Nine original ComputeShader source objects inventoried and authenticated; prior FFT Vulkan/Unity provenance investigations saved",
       "missing": "Kernel6 owner identity, exact original kernel order/dispatch semantics, Unity Android compute program, GPU parity",
-      "next_action": "Trace actual Unity log kernel-index 6 to a SHA-authenticated ComputeShader and site before any algorithm rewrite",
+      "next_action": "RESTORE ALL original compute resources, map true original FFT index6 identity and group/dispatch semantics. Only source and isolated tests now.",
       "evidence": [
         43114648901,
         43263197989
@@ -503,10 +503,10 @@
       "unity_verified": "old_native_40_scenes_IL2CPP_ARM64",
       "packaged": "old_snapshot_APK_OBB_XAPK_only",
       "device_verified": false,
-      "status": "old_signed_xapk_complete_new_native_in_progress",
+      "status": "deferred_test_phase_after_complete_restoration",
       "restored_now": "Recovered previous full signed APK+OBB+XAPK after old disk-full packaging failure; postbuild scratch cleanup fix committed",
-      "missing": "New latest full build finished and actual phone graphics/controls/audio/world acceptance",
-      "next_action": "Watch existing 43247161671, inspect earliest failure if any and fix without duplicate build; if success validate 3 logical payloads and publish",
+      "missing": "All-source resource recovery still open; compatibility build intentionally postponed by owner's 2026-11-13 directive.",
+      "next_action": "No new GT XAPK build requests until original resources P00–P09 restoration gates G0–G6 are complete. Previously queued Actions are historical evidence only; do not use their status to block source restoration.",
       "evidence": [
         43205543533,
         43246196803,
@@ -527,18 +527,16 @@
     },
     {
       "id": "M1",
-      "status": "active",
-      "action_ar": "استكمال البناء الحديث 43247161671 أو إصلاح فشله دون تكرار البناء الجاري",
-      "gate": "Signed APK+OBB+XAPK from latest commit with consistent SHA/CRC and delivery manifest",
-      "evidence": [
-        43247161671
-      ]
+      "status": "deferred_restore_first",
+      "action_ar": "تأجيل XAPK التجريبي الشامل إلى ما بعد انتهاء جميع استعادة الموارد الأصلية ودمجها",
+      "gate": "G0–G6 restored-source/export/Unity scope complete then owner-compatible XAPK test; current runs are historical evidence only",
+      "evidence": []
     },
     {
       "id": "M2",
-      "status": "blocked",
-      "action_ar": "Chat26: SHA managed Assembly-CSharp direct typed Shader.Find لSpectrum واحد ثابت CI43300958608، نتيجة Shader local ثم 35 IL/3 فروع/1 load مرشح CI43302914466، لكن Material/Graphics/RT/CB0 وجهاز Adreno غير مثبتة؛ M2 blocked.",
-      "gate": "Real Unity import of exactly original 7 Spectrum passes and 2 Foam passes, original Shader GUID and Material/RenderTexture bindings, no invalid pass calls on a new device session; no placeholders or guesswork; record Unity Editor GT_WATER_IMPORTED_PASS_DIAGNOSTIC from a new post-probe build, then verify original material and device pixels; 28 source Vulkan stage-pair compiles alone do NOT satisfy original ShaderLab/material or GPU acceptance",
+      "status": "active_source_recovery_not_device",
+      "action_ar": "استعادة كل ShaderLab للماء بالمصدر الأصلي والـGUID بما فيها Foam وDepth والـCB0/RT ثم لاحقاً توافق Android",
+      "gate": "Original program, passes, keywords, Material, sampler, CB0 and RT linked in source and same export; no runtime phone gate until restoration phase ends",
       "evidence": [
         43263197989,
         41920232173,
@@ -566,34 +564,36 @@
     },
     {
       "id": "M3",
-      "status": "blocked",
-      "action_ar": "إثبات Compute kernel6 ثم استعادة FFT Vulkan/Adreno",
-      "gate": "Original owner/kernel index and dispatch parity proven; zero known index6 errors on matching real test",
+      "status": "active_source_recovery_kernel_identity_open",
+      "action_ar": "استعادة المصادر الأصلية لجميع ComputeShader وهوية FFT Kernel6 وتركيب Dispatch مع معرّفات المصدر",
+      "gate": "All 9 original ComputeShader resources and kernel mapping ownership SHA/references proven in project, no invented indices",
       "evidence": [
         43263197989
       ]
     },
     {
       "id": "M4",
-      "status": "pending",
-      "action_ar": "تفكيك واستعادة عائلات Shader ذات أثر أعلى على 770 Material Dummy",
-      "gate": "Dummy count decreases in same-source export without GUID changes, original Pass/Keyword/sampler and phone colour/shadow/particle checks pass",
+      "status": "highest_priority_active",
+      "action_ar": "اكتشاف وإصلاح شيدرات Material Custom التي ما زالت Dummy (770 مستنداً)، بالترتيب الأصلي لعدد Renderer/Material المتأثرة",
+      "gate": "0 known custom Material documents dependent on dummy Shader after real same-export audit; source Shader and program/keyword/texture/sampler evidence for each distinct shader",
       "evidence": [
         43242496576
       ]
     },
     {
       "id": "M5",
-      "status": "pending",
-      "action_ar": "إصلاح Cursor RGBA32 وOBB GUID والفحص الكامل بعد الأجهزة",
-      "gate": "No known critical log errors, representative phone pixels correct, verified offline world and frame/latency stability",
+      "status": "deferred_compatibility_phase",
+      "action_ar": "بعد G0–G6 فقط: أول XAPK واختبارات هاتف Adreno 730 والتوافق وإصلاح ذاكرة/OBB/Input إن بقيت",
+      "gate": "Restoration completeness accepted, then first comprehensive signed XAPK+phone visual/log/compatibility acceptance",
       "evidence": [
         43263197989
       ]
     }
   ],
   "next_session_sequence": [
-    "GT Chat26: SHA managed Assembly-CSharp.dll 3211776B / 19118 methods has exactly one source literal+typed Shader.Find Spectrum CI43300958608; immediate result stored typed Shader local CI43301684794; exact method CFG CI43302914466 = 35 reachable instructions, 3 branches, one local load before overwrite on SOME path and unclassified consumer. Next typed consumer/stack dataflow and runtime Material/Graphics/RT proof. 82 serialized Material direct Spectrum PPtrs=0; no source game edits or LFS.",
+    "OWNER DIRECTIVE OVERRIDES OLDER XAPK/BUILD-FIRST ORDER: READ clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST. Restore ALL original resources and merge to feature/android-native-port before FIRST comprehensive Android XAPK compatibility test; no new full native/XAPK requests now.",
+    "NEXT ACTUAL ENGINEERING PRIORITY: P04/P05 770 post-vendor Dummy Material YAML and original Renderer fanout, all original 165 Shader resource classes and program variants. Find highest-impact original shader and restore source-authentic .shader under original GUID, then re-audit count. Follow P07 original 9 compute FFT Kernel6 and P06 Depth [6,3].",
+    "Previously triggered runs 43349181838 and 43350559665 may still finish and can be read as historical export evidence; no new XAPK test runs until all source restoration G0–G6 complete.",
     "GT Chat25 verified: Unity synthetic scope global flag0/local flag1 CI43297804472 SUCCESS; original private 7Pass index4 Shader.keywordSpace.isOverridable + synthetic Material off/on/off, 14484B, strict final console0 CI43299461114 SUCCESS. Original 40 sharedassets 1392 Materials 0 Spectrum PPtr CI43299180998; entire 82 owner 1556 Materials 0 direct Spectrum PPtr CI43300053045 SUCCESS. NEXT SHA-original typed managed Shader.Find/Material ctor/renderer evidence; no original Material GUID can be guessed; P06/M2 still blocked.",
     "GT Chat24: synthetic global/local Unity2021 scope control launched CI43297804472; last seen in Unity compilation, status unknown. Check both actual Unity and independent finalized console job; no production shader install until source runtime flag scope and Material parity proven.",
     "GT Chat24 43296468683 SUCCESS: SHA-original 5 m_KeywordFlags bytes read, index4=0 and five identical, strict original B09 SHA and 7Pass. This DOES NOT prove global/local semantics, original material keyword runtime, GUID or Adreno pixel. Read Chat24; next Unity2021 flag semantic control and same-instance owner->Material/Shader PPtr.",
@@ -604,7 +604,6 @@
     "Check original Spectrum DXBC+serialized Unity strict texture/sampler rebind CI 43279249696. Earlier CBuffer-isolated Unity 43277618651 failed shaderErrorCount=2 'Unrecognized sampler samplers0/samplers1' with passCount7 and private bundle6092. No original filter/wrap or material GUID proof.",
     "First Unity import run 43275506146 is FAIL: passCount7, bundle6095 B, shaderErrorCount2 from cb0_0_m0 VS/FS array-size GLSL link mismatch. Check new private reversible CBuffer alias fix retry 43276622833; do not claim success until exact workflow AND safe receipt pass.",
     "Inspect spectrum variant0 isolated real Unity Editor 2021 Android Vulkan trial 43275506146: the source-only success 43274729958 is NOT Unity success. If the trial fails, inspect safe job step and fix actual ShaderLab sampler/resource/CB source issue before game Material install.",
-    "On next native full build examine GT_WATER_IMPORTED_PASS_DIAGNOSTIC family=spectrum/foam_global; synthetic source CSharp CI 43269999662 passed but no Unity Editor/Adreno execution verified yet.",
     "Read clients/GT/RESTORATION_PLAN_AR.md + RESTORATION_PLAN.json + RESTORE_AR.md + state.json + newest session; verify SHA HEAD and running GitHub Actions before writes.",
     "Do not trust old status fields whose run timestamps predate an observed SUCCESS/FAIL; update one workstream and matching evidence, then run validation.",
     "Use immutable ZIP2 SHA and private scratch, no Git LFS; do not change original .meta/GUID or restore a shader by guessing a program.",
@@ -813,5 +812,40 @@
     "exact_source_only_replay_CI": 43350378817,
     "three_limitation_request_build_run": 43350559665,
     "all_water_pixels_verified": false
+  },
+  "owner_directive_20261113": {
+    "name": "RESTORE_ALL_FIRST_THEN_FIRST_COMPREHENSIVE_XAPK",
+    "source": "clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md",
+    "phase": "SOURCE_ASSET_RESTORATION_AND_PROJECT_INTEGRATION",
+    "priority_order": [
+      "P04_Material_and_770_Dummy_documents",
+      "P05_All_165_original_shader_programs_and_keyword_pass_sampler_parity",
+      "P07_Nine_compute_original_resources_FFT_kernel6",
+      "P06_Original_Spectrum7_Foam2_Depth_alternative_and_water_RT_CB0",
+      "P01_Scenes_Models_Rigs_Renderer",
+      "P02_P03_Textures_Colors_Mips_Arrays",
+      "P08_P09_Fire_Particles_Shadows_PostFX_TMP"
+    ],
+    "compatibility_XAPK_phase": "DEFERRED",
+    "first_comprehensive_compatibility_XAPK_started": false,
+    "GT_must_not_queue_new_full_native_XAPK": true,
+    "preexisting_queued_runs_are_historical": [
+      43349181838,
+      43350559665
+    ],
+    "source_only_CI_and_isolated_Shader_Unity_import_tests_allowed": true,
+    "completion_gates": {
+      "G0": "Every original ZIP2 resource identified with source-authenticated hashes/counts and missing-in-export inventory",
+      "G1": "All 40 original scenes, meshes, skinned rigging/animation and Renderer Material links structurally restored in Android project",
+      "G2": "All authentic original Texture2D/Texture2DArray and mips/color spaces/Material TexEnv/Properties/keywords restored with source-to-export identity",
+      "G3": "All 165 original Shader identities/pass/variant/sampler and all material shader dependencies resolved; no known dummy/placeholder Custom Shader left, including 770 affected Material YAML census",
+      "G4": "Water Spectrum7, Foam2, Depth all selected SubShader candidates, nine original compute identities and FFT kernel/dispatch/CB0/sampler/RenderTexture restored with real ownership evidence",
+      "G5": "Particles, fire, shadows, lighting, PostFX, TMP and interface graphics source assets integrated; no disguised approximate passes counted fully restored",
+      "G6": "Same-source/export/Unity scoped tests for completed restorations pass; no unresolved original resource gap OR owner explicitly accepts evidence-backed impossibilities"
+    },
+    "current_gates_complete": false,
+    "unrestorable_resources_require_owner_consent": true,
+    "source_vs_export_vs_Unity_vs_device_evidence_must_be_separate": true,
+    "next_priority": "Continue P04/P05 same original renderer→material→shader impact census and restore highest fanout original shaders, P07 FFT, not XAPK packaging."
   }
 }
