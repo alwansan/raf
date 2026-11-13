@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md",
-  "next_action": "GT Chat31: REAL native first run43346405263 on 4b74f6bd has SUCCESS original ZIP2 Spectrum 7Pass private shader reconstruction and GUID-preserving same-run AssetRipper exported Shader installation, safe artifact14002987883. As of latest check it is at actual Material→Shader audit; Unity Editor Android compile, APK and device not yet proven. Next full build43349181838 c3c717315 is PENDING and includes additional original Foam Global 2Pass source+GUID install and strict Unity ShaderUtil two-shader gates. CI43348620794 synthetic source/guid install contract SUCCESS, CI43349010740 CSharp probe SUCCESS. Track first run real results and ensure second build eventually passes; do not invent source GUID or assert water pixels. Remaining kernel6, 770 Dummy, LOW_MEMORY.",
+  "next_action": "GT Chat31 first full native43346405263 real Spectrum7 GUID-safe install succeeded, but reconstruct FAILED at strict/or documented water limitation because previous request listed stale Spectrum failure. Actual post-Spectrum water gate: Spectrum7 pass, Blur2 pass, Volumetric5 pass, Foam1 FAIL (old snapshot), Depth Copy SubShaders[6,3] FAIL second candidate, water compute candidate absent, authentic kernel identity unproven. Second run43349181838 original Spectrum7+Foam2 & strict ShaderUtil guard still running with stale request. Third owner native request43350559665 commit8bf83afc8 contains corrected EXACT three anticipated conditions (Depth,water_compute_source_candidate,authentic_water_kernel_identity), pending. CI43350378817 source-only exact 3-condition replay success. Monitor second Foam source stage and third native result; no fake pass/FFT or GPU claims. Resume Chat31 then update artifacts, memory and release.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -989,6 +989,55 @@
     "original_kernel6_identity_proven": false,
     "owner_latest_CL_source_sha": "3c26bb5d0f4de2cbffd42197dae9ae1372721659",
     "latest_owner_total_invalid_water_passes": 28592,
-    "latest_owner_android_low_memory_exit": true
+    "latest_owner_android_low_memory_exit": true,
+    "first_run_id": 43346405263,
+    "first_native_reconstruct_conclusion": "failure",
+    "first_native_failed_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "first_real_spectrum_7pass_exported_guid_replacement_success": true,
+    "first_actual_Shader_pass_counts": {
+      "Spectrum": [
+        7
+      ],
+      "FoamGlobal": [
+        1
+      ],
+      "DepthCopy": [
+        6,
+        3
+      ],
+      "Blur": [
+        2
+      ],
+      "Volumetric": [
+        5
+      ]
+    },
+    "first_actual_water_compute_candidate_present": false,
+    "first_actual_kernel_identity_proven": false,
+    "first_unmet_water_conditions": [
+      "authentic_water_kernel_identity",
+      "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+      "shader_pass_contract:UltimateWater/Foam/Global",
+      "water_compute_source_candidate"
+    ],
+    "first_recorded_request_stale_extra_Spectrum_limitation": true,
+    "first_Unity_Editor_build_not_started": true,
+    "second_run_id": 43349181838,
+    "second_reconstruct_status_snapshot": "in_progress",
+    "second_foam2_actual_install_success_not_yet_observed": true,
+    "third_run_id": 43350559665,
+    "third_source_sha": "8bf83afc8a97ef4ceda8154e31eec0c420556265",
+    "third_status_snapshot": "pending",
+    "third_expected_documented_live_unmet_three_conditions": [
+      "authentic_water_kernel_identity",
+      "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+      "water_compute_source_candidate"
+    ],
+    "third_live_exact_three_condition_gate_not_yet_verified": true,
+    "source_free_exact_limitation_fixture_CI_success": 43350378817,
+    "evidence_path": "clients/GT/evidence/20261113_native_spectrum_sevenpass_actual_export_and_water_gate.json",
+    "signed_new_native_XAPK_verified": false,
+    "original_FFT_compute_kernel6_identity_verified": false,
+    "actual_Adreno_water_pixels_verified": false
   }
 }
