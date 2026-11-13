@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-30 — إضافة منع نجاح Unity الوهمي للمراحل السبع
+
+بالإضافة إلى مثبّت Spectrum 7Pass الأصلي المندمج في Run43346405263، أضاف GT بوابة Native Editor ترفض نجاح Build عند عدم ظهور Shader واحد أصلي بسبعة Passes أو عند أخطاء `ShaderUtil`, وتتحقق من عدم وجود Dummy/مسارات غير موثوقة. [CI43347458130 SUCCESS](https://github.com/alwansan/raf/actions/runs/43347458130) اختبر الكود ببيئة C# صناعية، **لم يثبت** Unity/Adreno GPU. إضافة الحارس جاءت بعد Commit `4b74f6bd` المشغّل، فلا تظهر إلا في بناء أحدث. [Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md).
+
+---
+
 ## GT Chat-30 — بدأ الإنتاج الكامل لشيدر Spectrum الأصلي بعد نجاح عقد GUID
 
 الخطوة الجديدة ليست فحص Shader.Find فقط: أُدرجت إعادة بناء **Spectrum 7Pass + original Keyword index4** من ZIP2 SHA أصلي داخل Workflow البناء الكامل، بعد استعادة Depth/Blur وقبل جرد المواد. [CI43346292249 SUCCESS](https://github.com/alwansan/raf/actions/runs/43346292249) أثبت اختبارات فريدة الاسم/الـGUID والنسخ والـrollback بالمحاكاة؛ لكن لا يثبت تصدير AssetRipper الحقيقي. [Full native 43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) بدأ على `4b74f6bd`، اجتاز request/Unity preflight ودخل reconstruct، وحزمة APK/OBB/XAPK والمرئيات غير مثبتة حتى النهاية. العائق السابق 28,592 أخطاء ماء وLOW_MEMORY من هاتف المالك باقٍ حتى تجربة أحدث. [جلسة Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md). لا LFS أو GUID مصنوع أو مصدر شيدر خاص منشور.
