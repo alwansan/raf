@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT Chat-30 — بوابة Unity ShaderUtil الصارمة للنسخة التالية
+
+أُضيف بعد تشغيل البناء 43346405263 فحص إنتاجي `GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses()` داخل `AndroidNativeBuild.Build()`؛ يرفض الشيدر المكرر/الوهمي أو Shader.passCount غير 7 أو `ShaderUtil.ShaderHasError(shader)`. تحقق اختبار C# الصناعي الحقيقي [CI43347458130 SUCCESS](https://github.com/alwansan/raf/actions/runs/43347458130) من حالات النجاح وفشل Dummy والـCompiler والهوية المكررة. **هذا الفحص الجديد لم يكن ضمن snapshot البناء الجاري `4b74f6bd`، لكنه سيكون ضمن طلب البناء القادم**. [CI43347652933 SUCCESS](https://github.com/alwansan/raf/actions/runs/43347652933) أثبت اتساق state بعد التحديث. تابع [Run43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) ولا تنسب نجاح Unity/Adreno إليه قبل اكتماله.
+
+---
+
 ## GT / Chat-30 — Spectrum 7Pass الأصلي داخل مسار البناء الكامل مع GUID محفوظ
 
 أُضيف [مثبّت Spectrum الأصلي](../../scripts/gt_install_original_spectrum.py) إلى بناء Unity الكامل: يعيد البناء مؤقتاً من `zip2@15964ea8` (7Pass و2 Keyword variants)، ويتحقق من اسم الشيدر الوحيد في AssetRipper ومن GUID الأصلي الوحيد، ويحتفظ بـ`.meta` حرفياً ونسخة احتياطية خارج المشروع دون LFS أو شيدر مكرر. اختبارات المثبّت والـWorkflow نجحت [CI43346292249](https://github.com/alwansan/raf/actions/runs/43346292249). **شُغّل [البناء الكامل 43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) على `4b74f6bd`، نجح request gate وUnity license preflight، و`reconstruct` كان جارياً عند التوثيق**. لا تقل إن شيدر اللعبة تم تثبيته/ترجمته أو خرج APK/XAPK ناجح قبل نتيجة التشغيل. التجربة السابقة CL فيها 28,592 خطأ ماء وLOW_MEMORY. اقرأ [Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md)، ثم افحص خطوة `GT recover original SHA-backed 7Pass Spectrum` والـArtifact الآمن، وأصلح أي فشل بالمصدر دون GUID مخترع. Foam2Pass وCompute kernel6 و770 Dummy وقبول الهاتف باقية.
