@@ -1,0 +1,33 @@
+name: GT restore-first original Renderer Shader priority (source only, no XAPK)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/gt_restore_first_shader_priority.py
+      - tests/test_gt_restore_first_shader_priority.py
+      - .github/workflows/raft-gt-restore-first-shader-priority.yml
+permissions:
+  contents: read
+concurrency:
+  group: gt-restore-first-shader-priority-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-slot-shader-priority-unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Test original exact 921-slot shader ranking and private-only target selection
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_restore_first_shader_priority.py tests/test_gt_restore_first_shader_priority.py
+          python3 -m unittest discover -s tests -p test_gt_restore_first_shader_priority.py -v
+          echo 'GT_RESTORE_FIRST_SHADER_SOURCE_ONLY_PASS noXAPK=true originalShaderBytesExported=false runtimeGPU=false'
