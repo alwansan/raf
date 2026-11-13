@@ -155,6 +155,62 @@ def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source
         "original_source_IDs_GUIDs_shader_names_or_program_bytes_published":False,
     }
 
+
+def source_keyword_profile(pairs,orphans,parsed):
+    """Sanitized exact source index census, not guessed Unity #pragma scope.
+
+    Recover unmodified keyword indices from original paired and unmatched
+    stage metadata. Keep exact values and 27 source names ONLY in private
+    ParsedForm/variant packet. Public receipt contains counts, not indices.
+    """
+    if (type(parsed) is not dict or type(parsed.get("m_KeywordNames")) is not list or
+        type(parsed.get("m_PropInfo")) is not dict or
+        type(parsed["m_PropInfo"].get("m_Props")) is not list):
+        raise ValueError("missing_source_original_shader_keyword_or_properties")
+    names=parsed["m_KeywordNames"]
+    props=parsed["m_PropInfo"]["m_Props"]
+    if len(names)>256 or len(props)>256 or any(type(n) is not str for n in names):
+        raise ValueError("unsupported_original_shader_keyword_property_scope")
+    fields=("m_KeywordIndices","m_GlobalKeywordIndices","m_LocalKeywordIndices")
+    used={key:set() for key in fields}
+    tiers=set()
+    buckets=set()
+    rows=[pair[stage] for pair in pairs for stage in ("vs","fs")]
+    rows.extend(orphan["variant"] for orphan in orphans)
+    for row in rows:
+        info=row["original_variant_metadata"]
+        buckets.add(row["player_bucket"])
+        tier=info.get("m_ShaderHardwareTier")
+        if tier is not None:
+            if type(tier) is not int or tier<0:raise ValueError("bad_original_hardware_tier")
+            tiers.add(tier)
+        for field in fields:
+            if field not in info:
+                continue
+            values=info[field]
+            if type(values) is not list or any(type(k) is not int or k<0 or k>65535 for k in values):
+                raise ValueError("unsupported_original_keyword_index_data")
+            used[field].update(values)
+    all_indices=set().union(*used.values())
+    flags=parsed.get("m_KeywordFlags")
+    if flags is not None and type(flags) is not list:
+        raise ValueError("malformed_original_keyword_flags")
+    return {
+        "original_keyword_names":len(names),
+        "original_property_definitions":len(props),
+        "original_keyword_flags":len(flags) if flags is not None else None,
+        "all_source_variant_metadata_stages_censused":len(rows),
+        "source_original_unique_used_keyword_indices":len(all_indices),
+        "original_legacy_keyword_indices_used":len(used["m_KeywordIndices"]),
+        "original_global_keyword_indices_used":len(used["m_GlobalKeywordIndices"]),
+        "original_local_keyword_indices_used":len(used["m_LocalKeywordIndices"]),
+        "original_distinct_hardware_tiers_in_variants":len(tiers),
+        "original_distinct_player_buckets_in_variants":len(buckets),
+        "original_keyword_indices_within_name_table":all(k<len(names) for k in all_indices),
+        "original_global_local_pragma_flags_and_compilation_selection_proven":False,
+        "original_sampler_register_CB0_bindings_proven":False,
+    }
+
 def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     from scripts import t3_original_renderer_shader_impact as scenes
     from scripts import t3_original_top_shader_dxbc_feasibility as top
@@ -193,6 +249,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     private=_private_destination(private,original,out)
     out=_private_destination(out,original,private)
     safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'])
+    safe['source_original_keyword_coverage']=source_keyword_profile(pairs,orphans,tree['m_ParsedForm'])
     with out.open("x",encoding="utf-8") as target:
         json.dump(safe,target,sort_keys=True,indent=2)
         target.write("\n")
