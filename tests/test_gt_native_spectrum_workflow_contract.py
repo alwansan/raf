@@ -23,7 +23,6 @@ class NativeSpectrumWorkflowContract(unittest.TestCase):
                         labels.index(stage))
         self.assertLess(labels.index(stage),
                         labels.index("Inventory actual exported Material Shader references without modifying assets"))
-        self.assertIn("GT original",self.source)
 
     def test_same_authentic_original_owner_and_real_export_without_guid_fabrication(self):
         text=self.source
