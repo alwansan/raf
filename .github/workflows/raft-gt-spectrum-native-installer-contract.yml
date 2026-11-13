@@ -1,0 +1,29 @@
+name: GT original Spectrum seven-pass production export identity and GUID contract
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/gt_install_original_spectrum.py
+      - tests/test_gt_install_original_spectrum.py
+      - .github/workflows/raft-gt-spectrum-native-installer-contract.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export-identity-and-guid-rollback-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: No original asset required - validate exact ShaderLab, duplicate identities, GUID, rollback and all negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_install_original_spectrum.py tests/test_gt_install_original_spectrum.py
+          python3 -m unittest discover -s tests -p test_gt_install_original_spectrum.py -v
+          echo 'GT_SPECTRUM_NATIVE_GUID_TRANSACTION_TEST_PASS sourceOnly=true SHAOriginalPrivateCandidateNotIncluded=true Unity2021=false AdrenoPixels=false'
