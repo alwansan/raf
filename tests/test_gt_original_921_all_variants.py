@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from scripts.gt_original_921_all_variants import (
-    enumerate_all, stage_private, _private_destination, PAIRED_COUNT,
+    enumerate_all, stage_private, source_keyword_profile, _private_destination, PAIRED_COUNT,
     ORPHAN_VERTEX_COUNT, DISTINCT_DXBC_COUNT,
 )
 
@@ -47,6 +47,30 @@ class Original921VariantTests(unittest.TestCase):
         self.assertEqual([p["matched_pairs"] for p in passes],[9,9,8,7])
         self.assertEqual([p["unmatched_vertex"] for p in passes],[2,2,2,2])
         self.assertTrue(all(o["stage"]==1 for o in orphans))
+
+    def test_original_keyword_index_census_is_safe_not_premature_pragma_proof(self):
+        paired,orphans,passes,unique=self.collect()
+        original=fixture()
+        original["m_KeywordNames"]=["INTERNAL_0","INTERNAL_1"]
+        original["m_KeywordFlags"]=[0,1]
+        original["m_PropInfo"]={"m_Props":[{"m_Name":"PRIVATE_PROP"}]}
+        paired[0]["vs"]["original_variant_metadata"]["m_KeywordIndices"]=[0]
+        paired[0]["fs"]["original_variant_metadata"]["m_KeywordIndices"]=[0]
+        result=source_keyword_profile(paired,orphans,original)
+        self.assertEqual(result["original_keyword_names"],2)
+        self.assertEqual(result["original_property_definitions"],1)
+        self.assertEqual(result["all_source_variant_metadata_stages_censused"],74)
+        self.assertEqual(result["source_original_unique_used_keyword_indices"],1)
+        self.assertTrue(result["original_keyword_indices_within_name_table"])
+        self.assertFalse(result["original_global_local_pragma_flags_and_compilation_selection_proven"])
+        self.assertNotIn("INTERNAL_0",str(result))
+        self.assertNotIn("PRIVATE_PROP",str(result))
+        paired[0]["vs"]["original_variant_metadata"]["m_GlobalKeywordIndices"]=[50]
+        self.assertFalse(source_keyword_profile(paired,orphans,original)["original_keyword_indices_within_name_table"])
+        paired[0]["vs"]["original_variant_metadata"]["m_KeywordIndices"]=[-1]
+        with self.assertRaisesRegex(ValueError,"unsupported_original_keyword"):
+            source_keyword_profile(paired,orphans,original)
+
 
     def test_original_private_stage_all_programs_and_no_public_id_leak(self):
         paired,orphans,passes,unique=self.collect()
