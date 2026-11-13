@@ -1,0 +1,40 @@
+name: GT restore-first review W1 B02 source blob and readonly exporter lineage
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b02_stage_texture_lineage.py
+      - tests/test_b02_stage_texture_lineage.py
+      - .github/workflows/raft-gt-review-w1-b02-lineage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review-reviewed-w1-opt-in-array-exporter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Test reviewed W1 source pin and exact optional B02 capture contract
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b02_stage_texture_lineage.py -v
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from scripts import b02_stage_texture_lineage as b02
+          base=Path('android-port/Experiments/ExportLineage/RaftExportLineage.cs').read_bytes()
+          assert b02.git_blob_sha1(base)==b02.HELPER_BLOB_SHA1
+          rendered=b02.render(base)
+          assert rendered.count(b'CaptureTextureObjects(')==2
+          assert rendered.count(b'FileMode.CreateNew')==2
+          assert b'RAFt_DO_NOT_PRINT_SOURCE' not in rendered
+          print('GT_AUTHENTIC_REVIEWED_W1_BLOB_SHA1='+b02.HELPER_BLOB_SHA1)
+          print('GT_B02_REVIEWED_COMPOSED_SHA256='+hashlib.sha256(rendered).hexdigest())
+          print('GT_B02_COMPOSITION_SOURCE_ONLY_PASS privateGameIDsPublished=false XAPK=false')
+          PY
