@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "agent": "GT",
+  "scope": "New owner CL device evidence plus independent SHA-original managed IL argument proof; neither alone establishes real Android water pixel parity",
+  "owner_source": {
+    "repo": "alwansan/CL",
+    "commit": "3c26bb5d0f4de2cbffd42197dae9ae1372721659",
+    "session": "20261113-040212-998",
+    "source_summary_path": "raft log/lf/LogRaft-20261113-040212-998/session-summary.json",
+    "source_summary_blob_sha": "124f95ce4e5d8db72afd0387775b2a8229f5f538",
+    "screenshots_new": 3,
+    "collector": "LogRaft 0.6.89",
+    "target_package": "com.alwansan.raft.androidtest"
+  },
+  "device_errors": {
+    "ultimate_water_invalid_pass": 28592,
+    "spectrum": 11512,
+    "foam_global": 17080,
+    "invalid_kernel_index6": 4576,
+    "kernel_identity_verified": false,
+    "cursor_RGBA32_required": 2895,
+    "obb_GUID_load_failed": 4,
+    "missing_Mono_scripts": 2,
+    "duplicate_EventSystems": 2,
+    "convex_mesh_polygon_limit": 8
+  },
+  "device_metrics": {
+    "readable_surfaceflinger_fps_samples": 62,
+    "mean_estimated_surfaceflinger_fps": 26.16,
+    "mean_gpu_busy_percent_systemwide": 42.58,
+    "mean_game_pss_kb": 1766881.38,
+    "pss_cannot_be_compared_to_RSS_without_allocation_breakdown": true
+  },
+  "device_collector": {
+    "received_batches": 2725,
+    "written_batches": 2725,
+    "failed_batches": 0,
+    "pending_bytes_at_stop": 0,
+    "final_game_log_lines": 797287,
+    "raw_recorded_bytes": 80567053,
+    "logcat_ring_loss_unknown": true
+  },
+  "device_milestones": {
+    "world_loaded_log_observations": 2,
+    "original_gameplay_fully_verified": false
+  },
+  "device_process_exit": {
+    "matched_pid": 18885,
+    "android_exit_reason_code": 3,
+    "android_exit_reason_label": "LOW_MEMORY",
+    "reason_reported_by": "Android ActivityManager exit-info",
+    "first_process_exit_observed": true,
+    "last_game_exit_evidence_state": "game_not_running",
+    "memory_pressure_caused_by_water_shader_proven": false
+  },
+  "visual_classification": [
+    "Main menu is still mostly blown-out white; stereo/UI retain some colors",
+    "In-game raft planks bright white, surrounding sea dark, selected tool colored",
+    "Main menu close-up player/raft and geometry still mostly white"
+  ],
+  "image_observations_are_not_shader_program_proof": true,
+  "source_original_material_proof": {
+    "source_repo": "alwansan/raf",
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_original_Assembly_CSharp_DLL_bytes": 3211776,
+    "one_original_spectrum_Shader_Find_name": true,
+    "three_arg_own_constructor_last_arg_Shader": true,
+    "own_constructor_forwards_original_Shader_to_Material_newobj": true,
+    "material_result_dup_set_then_own_field": true,
+    "material_field_source_read_sites": 24,
+    "material_field_source_reader_methods": 8,
+    "exact_typed_material_to_Graphics_Blit_calls_same_straight_line_CIL": 7,
+    "actual_phone_Graphics_Blit_execution_proven": false,
+    "shader_pass_runtime_binding_proven": false,
+    "source_intra_block_argument_scan_CI": 43343971412,
+    "strict_source_gate_CI": 43344199792,
+    "possible_false_positive_scope": "Source path exists only, no actual C# game runtime execution or original GPU shader parity"
+  },
+  "device_regression_CI": 43343638117,
+  "next_actions": [
+    "Preserve source exact seven Graphics.Blit typed argument proof as a CI contract",
+    "Identify source/authenticated shader name dynamic registration and stage exact seven-pass Spectrum shader without altering source GUIDs",
+    "Restore original Foam two-pass and determine compute kernel index6 exact owner",
+    "Investigate Android system LOW_MEMORY exit independently from shader errors, no asserted causal chain",
+    "Run newer full signed XAPK and compare paired owner phone screenshot/log test, not old package"
+  ],
+  "release_note": "Older native full 43299084397 reconstructed and produced signed artifacts, but publishing GitHub Release failed HTTP403; no new full water-fixed XAPK from current GT source-only work."
+}
