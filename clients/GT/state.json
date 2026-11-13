@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md",
-  "next_action": "GT Chat30: Source-free native AssetRipper original Spectrum installer with verified single exact Shader name, original unchanged GUID/meta, 7 source-authenticated passes/2 keyword variants, transactional external backup and rollback integrated after B45 Blur; installer contract CI43346292249 SUCCESS, new full native run43346405263 requested at 4b74f6bd, request-gate & Unity license preflight SUCCESS, reconstruct running (not yet installed/compiled/gameplay-verified). NEXT inspect job safe source stage, restore Unity/Shader if failure, then Foam2Pass/compute index6/770 custom dummy resources, phone low memory and Adreno pixels. Don't claim APK/Graphics success before results; no LFS or synthesized GUID.",
+  "next_action": "Chat30: full native CI43346405263 from immutable 4b74f6bd is exporting 40 Unity scenes, not yet at GT Spectrum real GUID installation or Unity compilation. Check CI result first, fix real failure without inventing GUID; new source-only CSharp hard gate RequireOriginalSpectrumSevenPasses and Build() hook validated CI43347458130 (not included in in-progress 4b74 run); include on next native build. Foam2Pass/kernel6/770 Dummy/Adreno pixels pending.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -951,6 +951,16 @@
     "no_LFS": true,
     "owner_latest_phone_LogRaft": "20261113-040212-998",
     "owner_phone_android_matched_low_memory_exit": true,
-    "no_android_device_acceptance_yet": true
+    "no_android_device_acceptance_yet": true,
+    "next_native_editor_sevenpass_compile_gate_path": "android-port/Editor/GTOriginalWaterPassImportProbe.cs",
+    "next_native_editor_sevenpass_compile_gate_invoked_by": "android-port/Editor/AndroidNativeBuild.cs",
+    "next_native_editor_gate_requires_exact_imported_shader_count": 1,
+    "next_native_editor_gate_requires_seven_passes": true,
+    "next_native_editor_gate_requires_zero_dummy_markers": true,
+    "next_native_editor_gate_uses_Unity_ShaderUtil_ShaderHasError": true,
+    "next_native_editor_synthetic_CSharp_compilation_passed_ci": 43347458130,
+    "next_native_editor_gate_in_running_43346405263": false,
+    "next_native_editor_gate_proven_with_actual_Unity2021": false,
+    "new_full_native_run_reconstruct_stage_at_recent_check": "in_progress_exporting_40_unity_scenes"
   }
 }
