@@ -136,6 +136,8 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
           python3 -m unittest discover -s tests -p test_gt_install_original_spectrum.py -v
+          python3 -m unittest discover -s tests -p test_t2_foam_private_installer.py -v
+          python3 -m unittest discover -s tests -p test_t2_foam_private_shaderlab_candidate.py -v
           # T3 source-free controls: valid Material GUID can still target a
           # default-Dummy ShaderLab program after partial restoration.
           python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v
@@ -791,6 +793,72 @@ jobs:
         shell: bash
         run: |
           rm -rf -- "$RUNNER_TEMP/gt-native-spectrum-private"
+      - name: GT restore original Foam Global two-pass source shader into unique exported GUID
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          # Earlier W1 staging already authenticated SHA-pinned
+          # zip2@15964ea8 source sharedassets0.assets. No Git LFS.
+          foam="$RUNNER_TEMP/gt-native-foam-private"
+          mkdir "$foam"
+          original="$RUNNER_TEMP/w1-original/Raft_Data"
+          test -s "$original/sharedassets0.assets"
+          timeout 540s python3 -m scripts.b20_private_foam_packet \
+            --source "$original" --repo "$GITHUB_WORKSPACE" \
+            --private "$foam/packet" --out "$foam/packet.json"
+          timeout 300s python3 -m scripts.t2_foam_private_shaderlab_candidate \
+            --source "$original" --packet "$foam/packet" \
+            --manifest "$foam/packet.json" \
+            --private-dest "$foam/original-foam-2pass.shader" \
+            --out "$foam/candidate-safe.json"
+          # The private original content SHA is obtained from the same
+          # source-attested runner staging, not an untrusted external string.
+          original_foam_sha="$(python3 - <<'PY_GT_FOAM_SHA'
+          import hashlib,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-native-foam-private/original-foam-2pass.shader'
+          assert p.is_file() and not p.is_symlink()
+          print(hashlib.sha256(p.read_bytes()).hexdigest())
+          PY_GT_FOAM_SHA
+          )"
+          test "${#original_foam_sha}" -eq 64
+          timeout 240s python3 -m scripts.t2_foam_private_installer \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --candidate "$foam/original-foam-2pass.shader" \
+            --backup "$RUNNER_TEMP/gt-original-foam-export-backup" \
+            --source-stage-report "$foam/candidate-safe.json" \
+            --expected-candidate-sha256 "$original_foam_sha" \
+            --out "$RUNNER_TEMP/gt-native-original-foam-install-safe.json"
+          python3 - <<'PY_GT_FOAM_STRICT'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'gt-native-original-foam-install-safe.json'
+          r=json.loads(p.read_text())
+          assert r['unique_original_foam_exported_target_installed']==1
+          assert r['private_source_attestation_and_stage_SHA_checked'] is True
+          assert r['original_export_meta_bytes_unchanged'] is True
+          assert r['external_recovery_backup_complete'] is True
+          assert r['private_shaderlab_published'] is False
+          assert r['Unity_2021_import_verified'] is False
+          assert r['original_Material_CB0_runtime_binding_verified'] is False
+          assert r['Android_water_pixels_verified'] is False
+          print('GT_NATIVE_ORIGINAL_FOAM_STAGED genuineSourcePasses=2 existingExportGUIDPreserved=true UnityRuntimeAndAdrenoUnverified=true')
+          PY_GT_FOAM_STRICT
+      - name: Retain only safe Foam original production staging receipt, never private shader source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-native-original-foam-two-pass-guid-safe-${{ github.sha }}
+          path: ${{ runner.temp }}/gt-native-original-foam-install-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove private original Foam packet, HLSL and candidate on every exit
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-native-foam-private"
       - name: Inventory actual exported Material Shader references without modifying assets
         id: w1_material_inventory
         # A diagnostic failure stays visible in the JSON. Existing strict builtin
