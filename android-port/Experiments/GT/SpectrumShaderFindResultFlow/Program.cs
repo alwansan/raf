@@ -111,7 +111,33 @@ internal static class Program
             if(method.HasThis && (method.DeclaringType.FullName==ShaderType ||
                 method.DeclaringType.FullName=="UnityEngine.Object"))
                 return "shader_instance_receiver";
+            if(method.Parameters.Any(p=>p.ParameterType.FullName==ShaderType))
+                return "multi_parameter_shader_call_candidate";
+            return "other_method_call_unproven_stack_binding";
         }
+        if(inst.OpCode.Code is Code.Ldarg or Code.Ldarg_S or
+            Code.Ldarg_0 or Code.Ldarg_1 or Code.Ldarg_2 or Code.Ldarg_3 or
+            Code.Ldloc or Code.Ldloc_S or Code.Ldloc_0 or Code.Ldloc_1 or
+            Code.Ldloc_2 or Code.Ldloc_3 or Code.Ldnull or Code.Ldstr or
+            Code.Ldc_I4 or Code.Ldc_I4_S or Code.Ldc_I4_0 or Code.Ldc_I4_1 or
+            Code.Ldc_I4_2 or Code.Ldc_I4_3 or Code.Ldc_I4_4 or Code.Ldc_I4_5 or
+            Code.Ldc_I4_6 or Code.Ldc_I4_7 or Code.Ldc_I4_8 or
+            Code.Ldc_I4_M1 or Code.Ldc_I8 or Code.Ldc_R4 or Code.Ldc_R8)
+            return "additional_stack_operand_pending";
+        if(inst.OpCode.Code is Code.Ldfld or Code.Ldsfld)
+            return "field_read_candidate";
+        if(inst.OpCode.Code is Code.Stfld or Code.Stsfld)
+            return "field_store_candidate";
+        if(inst.OpCode.Code is Code.Newobj) return "constructor_candidate";
+        if(inst.OpCode.Code is Code.Dup) return "duplicate_stack_reference";
+        if(inst.OpCode.Code is Code.Ceq or Code.Cgt or Code.Clt)
+            return "comparison_consumer";
+        if(inst.OpCode.Code is Code.Castclass or Code.Isinst)
+            return "runtime_reference_type_check";
+        if(inst.OpCode.Code is Code.Box or Code.Unbox_Any)
+            return "boxing_or_unboxing_candidate";
+        if(inst.OpCode.Code is Code.Br or Code.Br_S or Code.Leave or Code.Leave_S)
+            return "unconditional_branch_after_load";
         return "unclassified";
     }
 
@@ -228,6 +254,10 @@ internal static class Program
         int localCfgBranchGuardConsumers=0,localCfgUnityObjectTruthiness=0;
         int localCfgNullEqualityConsumers=0,localCfgUnityObjectNullComparison=0;
         int localCfgShaderInstanceReceivers=0,localCfgAliases=0,localCfgDiscards=0;
+        int localCfgExtraStackOperand=0,localCfgFieldRead=0,localCfgFieldStore=0;
+        int localCfgConstructor=0,localCfgDuplicate=0,localCfgComparison=0;
+        int localCfgRuntimeTypeCheck=0,localCfgBoxing=0,localCfgUnconditionalBranch=0;
+        int localCfgOtherMethodCall=0,localCfgMultiArgShaderCall=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -303,6 +333,17 @@ internal static class Program
                     if(shape=="shader_instance_receiver")localCfgShaderInstanceReceivers++;
                     if(shape=="local_alias_candidate")localCfgAliases++;
                     if(shape=="discard")localCfgDiscards++;
+                    if(shape=="additional_stack_operand_pending")localCfgExtraStackOperand++;
+                    if(shape=="field_read_candidate")localCfgFieldRead++;
+                    if(shape=="field_store_candidate")localCfgFieldStore++;
+                    if(shape=="constructor_candidate")localCfgConstructor++;
+                    if(shape=="duplicate_stack_reference")localCfgDuplicate++;
+                    if(shape=="comparison_consumer")localCfgComparison++;
+                    if(shape=="runtime_reference_type_check")localCfgRuntimeTypeCheck++;
+                    if(shape=="boxing_or_unboxing_candidate")localCfgBoxing++;
+                    if(shape=="unconditional_branch_after_load")localCfgUnconditionalBranch++;
+                    if(shape=="other_method_call_unproven_stack_binding")localCfgOtherMethodCall++;
+                    if(shape=="multi_parameter_shader_call_candidate")localCfgMultiArgShaderCall++;
                     int next=SkipNops(il,i+1);
                     if(next>=il.Count)localCfgUnclassifiedConsumers++;
                     else if(MaterialShaderCtor(il[next]))localCfgMaterialCtorCandidates++;
@@ -383,6 +424,17 @@ internal static class Program
             source_local_cfg_actual_next_Shader_instance_receiver=localCfgShaderInstanceReceivers,
             source_local_cfg_actual_next_local_alias_candidate=localCfgAliases,
             source_local_cfg_actual_next_discarded=localCfgDiscards,
+            source_local_cfg_actual_next_additional_stack_operand_pending=localCfgExtraStackOperand,
+            source_local_cfg_actual_next_field_read_candidate=localCfgFieldRead,
+            source_local_cfg_actual_next_field_store_candidate=localCfgFieldStore,
+            source_local_cfg_actual_next_constructor_candidate=localCfgConstructor,
+            source_local_cfg_actual_next_duplicate_stack_reference=localCfgDuplicate,
+            source_local_cfg_actual_next_comparison_consumer=localCfgComparison,
+            source_local_cfg_actual_next_runtime_reference_type_check=localCfgRuntimeTypeCheck,
+            source_local_cfg_actual_next_boxing_or_unboxing=localCfgBoxing,
+            source_local_cfg_actual_next_unconditional_branch=localCfgUnconditionalBranch,
+            source_local_cfg_actual_next_other_method_call=localCfgOtherMethodCall,
+            source_local_cfg_actual_next_multi_parameter_Shader_call=localCfgMultiArgShaderCall,
             source_local_cfg_typed_consumer_only_not_Material_or_pixel_proof=true,
             source_local_cfg_local_overwrite_boundaries=localCfgOverwriteBoundaries,
             source_local_cfg_path_existence_only_not_runtime_proof=true,
@@ -438,7 +490,7 @@ internal static class Program
                 Instruction.Create(OpCodes.Ldloc_0),boolBranch},0)!="reference_branch_guard" ||
            SafeShaderLocalConsumer(nullEq,0)!="null_equality_check" ||
            SafeShaderLocalConsumer(truthy,0)!="unity_object_truthiness" ||
-           SafeShaderLocalConsumer(nonShader,0)!="unclassified")
+           SafeShaderLocalConsumer(nonShader,0)!="additional_stack_operand_pending")
             throw new InvalidOperationException("synthetic_source_shader_consumer_guard_failed");
         Console.WriteLine("GT_SPECTRUM_TYPED_RESULTFLOW_SYNTHETIC_PASS");
     }
