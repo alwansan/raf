@@ -190,6 +190,48 @@ internal static class Program
         return "unclassified";
     }
 
+    private static string SourceMaterialDupeFollowUp(
+        IList<Instruction> il, int materialAt, string constructorOwnerType)
+    {
+        int dupAt=SkipNops(il,materialAt+1);
+        if(dupAt>=il.Count || il[dupAt].OpCode.Code!=Code.Dup)
+            return "no_immediate_dupe";
+        int argAt=SkipNops(il,dupAt+1);
+        if(argAt>=il.Count)return "unclassified_after_dupe";
+        var arg=il[argAt];
+        bool inlineInt=arg.OpCode.Code is Code.Ldc_I4 or Code.Ldc_I4_S or
+            Code.Ldc_I4_0 or Code.Ldc_I4_1 or Code.Ldc_I4_2 or
+            Code.Ldc_I4_3 or Code.Ldc_I4_4 or Code.Ldc_I4_5 or
+            Code.Ldc_I4_6 or Code.Ldc_I4_7 or Code.Ldc_I4_8 or Code.Ldc_I4_M1;
+        bool inlineValue=inlineInt || arg.OpCode.Code is Code.Ldstr or Code.Ldnull;
+        if(!inlineValue)
+            return arg.OpCode.Code is Code.Call or Code.Callvirt
+                ? "immediate_method_after_dupe" : "other_after_dupe";
+        int methodAt=SkipNops(il,argAt+1);
+        if(methodAt>=il.Count ||
+           il[methodAt].OpCode.Code is not (Code.Call or Code.Callvirt) ||
+           il[methodAt].Operand is not MethodReference method)
+            return inlineInt?"integer_argument_without_immediate_call":
+                "literal_argument_without_immediate_call";
+        bool materialOrObjectSetter=(method.DeclaringType.FullName=="UnityEngine.Material" ||
+             method.DeclaringType.FullName=="UnityEngine.Object") &&
+             method.HasThis && method.Parameters.Count==1 &&
+             method.ReturnType.FullName=="System.Void" &&
+             method.Name.StartsWith("set_",StringComparison.Ordinal);
+        if(!materialOrObjectSetter)return "post_dupe_other_method_call";
+        int afterSetter=SkipNops(il,methodAt+1);
+        if(afterSetter<il.Count &&
+           il[afterSetter].OpCode.Code==Code.Stfld &&
+           il[afterSetter].Operand is FieldReference fr &&
+           fr.FieldType.FullName=="UnityEngine.Material" &&
+           fr.DeclaringType.FullName==constructorOwnerType)
+            return "setter_then_own_Material_field_store";
+        if(afterSetter<il.Count && il[afterSetter].OpCode.Code is Code.Stloc or
+           Code.Stloc_S or Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
+            return "setter_then_local_store";
+        return "setter_then_other_consumer";
+    }
+
     private static bool ImmediateCtorOwnShaderFieldStore(
         IList<Instruction> il, int storeAt, MethodDefinition ctor)
     {
@@ -353,6 +395,10 @@ internal static class Program
         int localCfgOwnCtorMatNextArray=0,localCfgOwnCtorMatNextDup=0;
         int localCfgOwnCtorMatNextPop=0,localCfgOwnCtorMatNextExtraLoad=0;
         int localCfgOwnCtorMatNextUnknown=0;
+        int localCfgMatDupeSetterOwnField=0,localCfgMatDupeSetterLocal=0;
+        int localCfgMatDupeSetterOther=0,localCfgMatDupePostCallOther=0;
+        int localCfgMatDupeIntNoCall=0,localCfgMatDupeLiteralNoCall=0;
+        int localCfgMatDupeImmediateCall=0,localCfgMatDupeOther=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -506,6 +552,16 @@ internal static class Program
                                               Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
                                             localCfgOwnCtorMaterialLocalStore++;
                                         string materialNext=SafeMaterialNewobjResultNext(ctorIl,j);
+                                        string postDupe=SourceMaterialDupeFollowUp(ctorIl,j,
+                                            originalCtor.DeclaringType.FullName);
+                                        if(postDupe=="setter_then_own_Material_field_store")localCfgMatDupeSetterOwnField++;
+                                        else if(postDupe=="setter_then_local_store")localCfgMatDupeSetterLocal++;
+                                        else if(postDupe=="setter_then_other_consumer")localCfgMatDupeSetterOther++;
+                                        else if(postDupe=="post_dupe_other_method_call")localCfgMatDupePostCallOther++;
+                                        else if(postDupe=="integer_argument_without_immediate_call")localCfgMatDupeIntNoCall++;
+                                        else if(postDupe=="literal_argument_without_immediate_call")localCfgMatDupeLiteralNoCall++;
+                                        else if(postDupe=="immediate_method_after_dupe")localCfgMatDupeImmediateCall++;
+                                        else if(postDupe=="other_after_dupe")localCfgMatDupeOther++;
                                         if(materialNext=="Unity_Renderer_material_assignment_candidate")localCfgOwnCtorMatNextRenderer++;
                                         else if(materialNext=="Unity_Graphics_direct_call_candidate")localCfgOwnCtorMatNextGraphics++;
                                         else if(materialNext=="Unity_Material_method_call_candidate")localCfgOwnCtorMatNextMaterialMethod++;
@@ -656,6 +712,14 @@ internal static class Program
             source_local_cfg_own_ctor_Material_result_next_discarded=localCfgOwnCtorMatNextPop,
             source_local_cfg_own_ctor_Material_result_next_extra_stack_operand=localCfgOwnCtorMatNextExtraLoad,
             source_local_cfg_own_ctor_Material_result_next_unclassified=localCfgOwnCtorMatNextUnknown,
+            source_local_cfg_own_ctor_Material_dupe_then_setter_then_own_Material_field=localCfgMatDupeSetterOwnField,
+            source_local_cfg_own_ctor_Material_dupe_then_setter_then_local=localCfgMatDupeSetterLocal,
+            source_local_cfg_own_ctor_Material_dupe_then_setter_other=localCfgMatDupeSetterOther,
+            source_local_cfg_own_ctor_Material_dupe_then_other_method=localCfgMatDupePostCallOther,
+            source_local_cfg_own_ctor_Material_dupe_then_integer_without_call=localCfgMatDupeIntNoCall,
+            source_local_cfg_own_ctor_Material_dupe_then_literal_without_call=localCfgMatDupeLiteralNoCall,
+            source_local_cfg_own_ctor_Material_dupe_then_immediate_call=localCfgMatDupeImmediateCall,
+            source_local_cfg_own_ctor_Material_dupe_then_other=localCfgMatDupeOther,
             source_local_cfg_original_Shader_material_constructor_direct_arg_source_identity_proven=localCfgOwnCtorMaterialDirectLastShaderArgument>0,
             source_local_cfg_next_own_ctor_Unity_Material_set_shader_calls=localCfgOwnCtorUnityMaterialShaderSetterCalls,
             source_local_cfg_next_own_ctor_Unity_Graphics_calls=localCfgOwnCtorGraphicsCalls,
