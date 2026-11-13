@@ -2,6 +2,7 @@
 import argparse
 from collections import Counter
 import json
+import math
 from pathlib import Path
 
 from scripts.gt_mesh_restoration_priority import CATEGORIES
@@ -173,6 +174,45 @@ def audit(root, manifest):
     counts["unique_selected_controller_assets"] = len(selected_controllers)
     counts["unique_controllers_checked_including_bases"] = len(visited)
     counts["unique_verified_animation_clips"] = len(clips)
+    clip_payloads = Counter()
+    durations = []
+    for owner in sorted({owner for owner, _ in clips}):
+        sf = UnityPy.load(str(root / owner)).file
+        for clip_owner, pid in sorted(clips):
+            if clip_owner != owner:
+                continue
+            clip = sf.objects[pid].read_typetree(check_read=False)
+            muscle = clip["m_MuscleClip"]
+            start, stop = muscle["m_StartTime"], muscle["m_StopTime"]
+            sample_rate = clip["m_SampleRate"]
+            if not all(math.isfinite(v) for v in (start, stop, sample_rate)) or stop < start or sample_rate <= 0:
+                raise ValueError("invalid_original_animation_clip_timing")
+            durations.append(stop - start)
+            data = muscle["m_Clip"]["data"]
+            dense = data["m_DenseClip"]
+            samples = dense["m_SampleArray"]
+            if (dense["m_FrameCount"] < 0 or dense["m_CurveCount"] < 0 or
+                    len(samples) != dense["m_FrameCount"] * dense["m_CurveCount"] or
+                    not all(math.isfinite(v) for v in samples)):
+                raise ValueError("invalid_original_animation_dense_samples")
+            constant = data["m_ConstantClip"]["data"]
+            if not all(math.isfinite(v) for v in constant):
+                raise ValueError("invalid_original_animation_constant_samples")
+            streamed = data["m_StreamedClip"]["data"]
+            clip_payloads.update({
+                "clips_with_valid_timing": 1,
+                "looping_clips": int(bool(muscle["m_LoopTime"])),
+                "dense_samples": len(samples),
+                "streamed_words": len(streamed),
+                "constant_samples": len(constant),
+                "generic_bindings": len(clip["m_ClipBindingConstant"]["genericBindings"]),
+            })
+    counts["source_clip_payloads"] = {
+        **clip_payloads,
+        "minimum_duration_seconds": min(durations, default=None),
+        "maximum_duration_seconds": max(durations, default=None),
+    }
+
 
     return {"verified_source_owners": len(known), "character_mesh_name_matches": len(meshes),
             "character_meshes_with_bind_poses": sum(bool(n) for n in meshes.values()),

@@ -16,6 +16,16 @@
   "renderers_with_all_bones_under_root": 23,
   "renderers_with_unique_ancestor_animator": 21,
   "renderers_without_ancestor_animator": 5,
+  "source_clip_payloads": {
+    "clips_with_valid_timing": 31,
+    "constant_samples": 3681,
+    "dense_samples": 148084,
+    "generic_bindings": 4919,
+    "looping_clips": 22,
+    "maximum_duration_seconds": 6.6666669845581055,
+    "minimum_duration_seconds": 0.03333333507180214,
+    "streamed_words": 155579
+  },
   "unique_controllers_checked_including_bases": 7,
   "unique_selected_controller_assets": 6,
   "unique_verified_animation_clips": 31,
