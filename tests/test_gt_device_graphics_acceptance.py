@@ -105,6 +105,46 @@ class GraphicsLogGateTests(unittest.TestCase):
         self.assertFalse(r["strict_known_log_gate_passed"])
         self.assertFalse(r["all_pixels_correct_verified"])
 
+    def test_new_owner_20261113_0402_original_water_and_low_memory_exit(self):
+        # Original CL@3c26bb5, session 20261113-040212-998; counts only.
+        d = fixture(passes=28592, kernel=4576, cursor=2895, guid=4)
+        d["final_render_failure_breakdown"][
+            "ultimate_water_invalid_pass_by_material"].update(
+                spectrum=11512, foam_global=17080)
+        d.update(writer_received_batches=2725, writer_written_batches=2725,
+                 writer_failed_batches=0, writer_pending_bytes_at_stop=0)
+        d["stop_time_android_process_exit_info"] = {
+            "status": "matched_pid_in_android_exit_history",
+            "android_exit_reason_code": 3,
+            "android_exit_reason_label": "LOW_MEMORY",
+        }
+        r = analyze(d)
+        self.assertEqual(r["status"], "KNOWN_DEVICE_LOG_GATE_REJECTED")
+        self.assertEqual(r["observed_critical_error_count"], 33172)
+        self.assertEqual(r["water_invalid_pass_by_family"]["spectrum"], 11512)
+        self.assertEqual(r["water_invalid_pass_by_family"]["foam_global"], 17080)
+        self.assertTrue(r["android_matched_low_memory_exit_observed"])
+        self.assertFalse(r["android_process_exit_cause_other_than_reported_reason_proven"])
+        self.assertFalse(r["strict_known_log_gate_passed"])
+
+    def test_exit_reason_unsupported_or_mismatched_is_not_a_low_memory_proof(self):
+        d = fixture()
+        self.assertFalse(analyze(d)["android_matched_low_memory_exit_observed"])
+        d["stop_time_android_process_exit_info"] = {
+            "status": "no_game_death_event_observed"}
+        self.assertFalse(analyze(d)["android_matched_low_memory_exit_observed"])
+        d["stop_time_android_process_exit_info"] = {
+            "status": "matched_pid_in_android_exit_history",
+            "android_exit_reason_code": 1,
+            "android_exit_reason_label": "CRASH"}
+        self.assertFalse(analyze(d)["android_matched_low_memory_exit_observed"])
+        d["stop_time_android_process_exit_info"][
+            "android_exit_reason_code"] = 3
+        self.assertFalse(analyze(d)["android_matched_low_memory_exit_observed"])
+        del d["stop_time_android_process_exit_info"]["android_exit_reason_label"]
+        with self.assertRaisesRegex(ValueError, "malformed_android_exit_reason_label"):
+            analyze(d)
+
     def test_modern_writer_accounting_cannot_false_green(self):
         clean = fixture()
         clean.update(writer_received_batches=30, writer_written_batches=30,
