@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md",
-  "next_action": "GT Chat28 verified original managed Shader.Find→Shader local→3arg own ctor(last Shader)→new UnityEngine.Material(Shader) immediate original last-arg load. CI 43338485431 SUCCESS; same-authentic own constructor 44 IL, direct Material result field/local stores 0, need classify post-newobj consumer and exact Renderer/Graphics/RT. New CL night device graphics fails 36828 water pass/6106 kernel6. ZIP2 read-only no LFS. Native 43299084397 reconstruct success, release HTTP403 needs Contents+Workflows write token; package is older snapshot. Preserve source vs Android device proof.",
+  "next_action": "GT Chat28 original source chain now source verified: Spectrum name→Shader.Find local→own 3arg ctor Shader last→new Material(original Shader)→dup→property setter→own UnityEngine.Material field. CI43339407339 and CI43339688082 prove exact field identity + 24 ldfld sites across 8 original methods, 7 reader methods containing UnityEngine.Graphics calls, 2 containing RenderTexture calls (co-occurrence only). NEXT typed intra-method stack/CFG value tracking from those 24 field loads into actual Graphics/RT call arguments, then source authentic ShaderLab exact name/7Pass integration + Foam2Pass/compute kernel6; need owner phone acceptance. Current new CL phone still fails, no release due HTTP403; ZIP2 read-only/no LFS.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -878,6 +878,17 @@
     "original_770_dummy_materials_restored": false,
     "source_only_lineage_tool_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/Program.cs",
     "source_original_program_or_Guids_modified": false,
-    "git_lfs_used": false
+    "git_lfs_used": false,
+    "source_original_material_dup_CI": 43339062121,
+    "source_original_material_dup_property_set_own_field_CI": 43339407339,
+    "source_original_material_own_field_identity_resolved": true,
+    "source_original_material_own_field_24_loads_CI": 43339688082,
+    "source_original_material_own_field_loads": 24,
+    "source_original_material_own_field_reader_methods": 8,
+    "source_original_field_reader_methods_containing_Graphics": 7,
+    "source_original_field_reader_methods_containing_RenderTexture": 2,
+    "source_original_field_reader_methods_containing_Renderer": 0,
+    "source_original_field_reader_cooccurrence_not_value_argument_proof": true,
+    "source_original_Material_actual_Graphics_parameter_proven": false
   }
 }
