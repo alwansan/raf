@@ -95,8 +95,32 @@ def analyze(data):
     k_other = _natural(kernel.get("other_index"), "other_kernel_count")
     if k6 + k_other != total_kernel:
         raise ValueError("kernel_index_sum_mismatch")
+    # Modern LogRaft records the FIFO writer counts independently of the
+    # remote-sink exit totals. Reject a false green if final batches were
+    # never committed, even when all known rendering-error buckets are zero.
+    writer_fields = ("writer_received_batches", "writer_written_batches",
+                     "writer_failed_batches", "writer_pending_bytes_at_stop")
+    writer_present = any(key in data for key in writer_fields)
+    writer_failed = None
+    writer_pending = None
+    if writer_present:
+        if not all(key in data for key in writer_fields):
+            raise ValueError("partial_collector_writer_accounting")
+        received = _natural(data["writer_received_batches"], "writer_received_batches")
+        written = _natural(data["writer_written_batches"], "writer_written_batches")
+        writer_failed = _natural(data["writer_failed_batches"], "writer_failed_batches")
+        writer_pending = _natural(data["writer_pending_bytes_at_stop"],
+                                  "writer_pending_bytes_at_stop")
+        if written + writer_failed > received:
+            raise ValueError("impossible_collector_writer_batch_totals")
+        if writer_failed != lost_local:
+            raise ValueError("collector_writer_sink_failure_count_mismatch")
+        if writer_pending == 0 and written + writer_failed != received:
+            raise ValueError("unaccounted_collector_writer_batches")
     critical_ok = all(receipts[x] == 0 for x in CRITICAL)
-    capture_ok = lost_local == 0
+    capture_ok = (lost_local == 0 and
+                  (not writer_present or
+                   (writer_failed == 0 and writer_pending == 0)))
     # The owner must still check screenshots and an actual device render even
     # if the known log errors disappear from a new session.
     return {
@@ -110,6 +134,9 @@ def analyze(data):
             "spectrum": spectrum, "foam_global": foam, "other": other},
         "compute_invalid_kernel_index": {"six": k6, "other": k_other},
         "log_capture_local_batches_failed": lost_local,
+        "collector_writer_accounting_verified": writer_present,
+        "collector_writer_failed_batches": writer_failed,
+        "collector_writer_pending_bytes_at_stop": writer_pending,
         "samples": samples,
         "presented_fps_samples": fps_readable,
         "device_runtime_render_equivalence_verified": False,
