@@ -167,7 +167,13 @@
         "exported_material_docs": 1536,
         "unity_builtin_material_docs": 750,
         "custom_dummy_after_vendor_restorers": 770,
-        "postvendor_custom_non_dummy_docs": 16
+        "postvendor_custom_non_dummy_docs": 16,
+        "six_original_scene_authenticated_Shader48_identities": 21,
+        "six_original_scene_authenticated_Dummy_Shader48_targets": 17,
+        "six_original_scene_source_Renderer_Material_slots": 1633,
+        "six_original_scene_Dummy_Renderer_Material_slots": 1373,
+        "highest_priority_original_Shader48_Dummy_Renderer_Material_slots": 921,
+        "six_scene_scope_is_not_full_770_Material_population": true
       },
       "source_verified": true,
       "export_verified": "source_to_export_texture_links_only",
@@ -177,11 +183,12 @@
       "status": "blocked_major_visible_white_materials",
       "restored_now": "1,536 material YAML documents exported; 750 builtin shader linked, 16 vendor-restored custom Material documents no longer Dummy",
       "missing": "770 CUSTOM MATERIAL DOCUMENTS STILL REFERENCE DUMMY SHADERS; 20 source Material objects are not direct exported Material YAML, not necessarily missing",
-      "next_action": "HIGHEST PRIORITY: verify actual same-export 770 Dummy Material documents vs DISTINCT shader GUID count, rank original Renderer use and restore top source-authentic Shader programs with original GUID one batch at time; no XAPK until zero.",
+      "next_action": "FIRST RESTORATION: source-authentic six-scene CI43354787983 SUCCESS shows top original Shader48 used by 921 Renderer Material slots still Dummy; 17 distinct missing source Shader48 used by 1373/1633 slots. Restore full authentic highest-use four-pass/33 exact paired variants and 8 unmatched original vertex variants, preserve original exported GUID. Then all 770 full-export Dummy Material docs per distinct shader and ALL 165 Shader objects, no XAPK during source recovery.",
       "evidence": [
         43127697656,
         43138326757,
-        43207734641
+        43207734641,
+        43354787983
       ]
     },
     {
@@ -202,12 +209,13 @@
       "status": "authentic_shader_material_binding_blocked",
       "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors",
       "missing": "Original Sampler/Texture register mapping and same-instance exported Material/GUID parity; sampler Linear/Repeat currently APPROX in isolated probe, not restored",
-      "next_action": "RESTORE ALL 165 source Shader identities and variants by original priority; prove correct pass/keyword/sampler/cbuffer/property, unify source→actual Export GUID, remove dummy programs without approximate substitutes.",
+      "next_action": "Authentic original high-use source Shader48: 4 original Passes, 33 VS/FS paired permutations, 8 unmatched vertex permutations and 58 distinct DXBC source programs (CI42052605123). Translate/restore all source permutations and original ShaderLab render states/Properties/Keywords/sampler/CB into same exported original GUID. Partial 8-stage sample is not full Shader restoration; repeat across every source Shader identity.",
       "evidence": [
         43236578305,
         43237509847,
         43242496576,
-        43243957499
+        43243957499,
+        42052605123
       ]
     },
     {
@@ -580,7 +588,8 @@
       "action_ar": "اكتشاف وإصلاح شيدرات Material Custom التي ما زالت Dummy (770 مستنداً)، بالترتيب الأصلي لعدد Renderer/Material المتأثرة",
       "gate": "0 known custom Material documents dependent on dummy Shader after real same-export audit; source Shader and program/keyword/texture/sampler evidence for each distinct shader",
       "evidence": [
-        43242496576
+        43242496576,
+        43354787983
       ]
     },
     {
@@ -850,6 +859,25 @@
     "current_gates_complete": false,
     "unrestorable_resources_require_owner_consent": true,
     "source_vs_export_vs_Unity_vs_device_evidence_must_be_separate": true,
-    "next_priority": "Continue P04/P05 same original renderer→material→shader impact census and restore highest fanout original shaders, P07 FFT, not XAPK packaging."
+    "next_priority": "CI43354787983 SUCCESS original 21 exact source Shader48 identity→same-export private target queue. Next restore complete original 921-slot Shader48 4 Passes/33 matched variant pairs/8 unpaired source vertices and recover all 770 full-export Dummy Material docs; do not request XAPK.",
+    "real_original_source_priority_CI": 43354787983,
+    "highest_priority_source_shader_renderer_material_slots": 921,
+    "original_sha_six_scene_Dummy_target_count": 17,
+    "original_sha_six_scene_Dummy_renderer_slots": 1373
+  },
+  "restoration_priority_first_authenticated_queue": {
+    "source_original_six_scenes_SHA_pinned": true,
+    "same_export_W1_B02_shader48_trace": true,
+    "real_source_CI": 43354787983,
+    "original_1633_renderer_material_slots": true,
+    "original_Dummy_1373_renderer_material_slots": true,
+    "original_17_Dummy_shader_targets": true,
+    "original_highest_921_renderer_material_slots": true,
+    "safe_aggregate_only": true,
+    "private_queue_with_original_owner_pathid_and_export_GUID": true,
+    "private_queue_committed_or_published": false,
+    "source_all_original_4pass_33variant_highest_shader_fully_restored": false,
+    "original_shader_restoration_complete": false,
+    "compatibility_XAPK_approved": false
   }
 }
