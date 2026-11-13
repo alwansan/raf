@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_RESTORE_FIRST_OWNER_MANDATE_ACTIVE_P04_P05_P07_RESOURCE_GAPS_OPEN_XAPK_DEFERRED",
+  "status": "GT_CHAT32_RESTORE_EVERY_ORIGINAL_RESOURCE_PRIORITY_921_SLOT_SHADER_AND_770_DUMMY_MATERIAL_DOCUMENTS",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md",
-  "next_action": "OWNER CURRENT DIRECTIVE 2026-11-13 RESTORE FIRST: Read clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST. Continue actual source-authentic restoration of every original model, color, Material, texture, Shader variant/pass/keyword/sampler, water Foam/Depth/FFT/compute, shadows/fire/particles/PostFX into feature/android-native-port before first comprehensive compatibility XAPK. PRIORITY P04 770 custom Dummy Material docs / source shader impact + P05 165 Shader originals, P07 FFT kernel identity, P06 Depth6+3 and Foam2, P01-P03 meshes and texture sampling. Do NOT schedule more full XAPK native builds while restoration incomplete; existing 43349181838/43350559665 were launched before mandate and may finish independently; log evidence but do not pause restoration or issue replacements. Source-only CI/isolated Unity shader tests are appropriate. Update restoration plan/memory/session before future turns.",
+  "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
+  "next_action": "OWNER PRIORITY: READ clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST and Chat32. Restore all original game resources and integrate before first comprehensive XAPK compatibility; don't trigger a new full native/XAPK CI. Highest priority six SHA-original scenes: 17/21 original Shader48 identities still dummy, 1373/1633 renderer Material slots to dummy, one source Shader48 used by 921 slots. New private actionable queue source scripts/gt_restore_first_shader_priority.py tests CI43353780918 SUCCESS. Reviewed current W1 helper pin 4b84a325 and B02 composition SHA d98345c1, B02+B21 CI43354701952 SUCCESS. Real source-only SHA original six-scene AssetRipper workflow 43354787983 source tests passed and compiling last checked; inspect actual result, then source-restore 4 Pass/33 paired variant highest-use Shader48 fully and all other 165 source shaders/770 dummy material docs, no partial falsely green; keep Meta GUIDs and ZIP2 immutable. Next P07 FFT Kernel6 and P06 Depth/Foam and all assets. Historical native runs prior owner decision do not set current priority.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1069,5 +1069,44 @@
     "no_LFS": true,
     "preserve_original_meta_and_GUIDs": true,
     "continue_reads_owner_directive_first": true
+  },
+  "proofs_20261113_chat32": {
+    "owner_directive_path": "clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md",
+    "owner_restoration_before_first_comprehensive_XAPK": true,
+    "first_comprehensive_compatibility_XAPK_started_after_owner_decision": false,
+    "new_GT_full_XAPK_requested_this_cycle": false,
+    "restoration_completion_gates": [
+      "G0",
+      "G1",
+      "G2",
+      "G3",
+      "G4",
+      "G5",
+      "G6"
+    ],
+    "original_ZIP2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_six_scene_shader_source_CI": 42044249541,
+    "original_six_scene_typed_Shader48_targets": 21,
+    "original_six_scene_total_Renderer_Material_Shader48_slots": 1633,
+    "original_six_scene_dummy_Shader48_targets": 17,
+    "original_six_scene_dummy_Renderer_material_slots": 1373,
+    "original_top_still_dummy_shader_renderer_slots": 921,
+    "full_export_Dummy_Material_YAML_documents_last_known": 770,
+    "Dummy_Material_document_count_not_distinct_Shader_objects": true,
+    "source_shader_objects": 165,
+    "safe_ranker_path": "scripts/gt_restore_first_shader_priority.py",
+    "safe_ranker_test_path": "tests/test_gt_restore_first_shader_priority.py",
+    "safe_ranker_synthetic_success_CI": 43353780918,
+    "safe_ranker_private_ids_not_published": true,
+    "reviewed_W1_helper_blob_sha1": "4b84a325bb1766583adb4ba6cfd9a23225f23bb9",
+    "reviewed_B02_source_composed_sha256": "d98345c1f0ade0c54704c0e49936d67b6cc8187d4a41e34980b4939fb54fe9aa",
+    "reviewed_W1_B02_B21_lineage_CI": 43354701952,
+    "real_source_only_priority_run_id": 43354787983,
+    "real_source_only_priority_final_success_proven": false,
+    "source_ranker_actual_game_shader_restoration_proven": false,
+    "owner_evidence_json": "clients/GT/evidence/20261113_owner_restore_all_first_and_shader_priority.json",
+    "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
+    "no_original_GUID_or_meta_modification": true,
+    "source_assets_read_only_no_LFS": true
   }
 }
