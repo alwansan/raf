@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-31 — إنجاز الاستبدال الحقيقي Spectrum7 وفشل Gate الطلب القديم
+
+اكتمل **أول تثبيت إنتاجي موثّق لشيدر Spectrum الأصلي 7Pass داخل مشروع AssetRipper الحقيقي مع GUID الأصلي** في [43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) وArtifact `14002987883`. انتهى run بالفشل في Water Gate لأن قائمة التجربة تحمل نقص Spectrum أصبح غير صحيح؛ تقرير المصدر بعد التثبيت يثبت Spectrum `[7]`، Foam القديم `[1]`، Depth `[6,3]`، Blur `[2]`، Volumetric `[5]`، وCompute/Kernel غير مثبتين. البناء الثاني [43349181838](https://github.com/alwansan/raf/actions/runs/43349181838) فيه Foam2 مع Spectrum7 وشروط ShaderUtil، ما زال جارياً. والبناء الثالث [43350559665](https://github.com/alwansan/raf/actions/runs/43350559665) دخل قائمة الانتظار بشرط مطابقة **3 نواقص حقيقية متوقعة**: Depth alternative، Water Compute، Kernel identity؛ [CI43350378817 SUCCESS](https://github.com/alwansan/raf/actions/runs/43350378817) اختبر الحساب دون بيانات أصلية. لا توجد حزمة ناجحة جديدة أو تجارب هاتف تثبت الماء بعد. [Chat31](sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md).
+
+---
+
 ## GT Chat-30 — إضافة منع نجاح Unity الوهمي للمراحل السبع
 
 بالإضافة إلى مثبّت Spectrum 7Pass الأصلي المندمج في Run43346405263، أضاف GT بوابة Native Editor ترفض نجاح Build عند عدم ظهور Shader واحد أصلي بسبعة Passes أو عند أخطاء `ShaderUtil`, وتتحقق من عدم وجود Dummy/مسارات غير موثوقة. [CI43347458130 SUCCESS](https://github.com/alwansan/raf/actions/runs/43347458130) اختبر الكود ببيئة C# صناعية، **لم يثبت** Unity/Adreno GPU. إضافة الحارس جاءت بعد Commit `4b74f6bd` المشغّل، فلا تظهر إلا في بناء أحدث. [Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md).
