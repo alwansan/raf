@@ -143,9 +143,10 @@ jobs:
           # default-Dummy ShaderLab program after partial restoration.
           python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v
           python3 -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
-          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0 PyYAML==6.0.2
           python3 -m unittest discover -s tests -p test_gt_repair_array_flipbook_importers.py -v
           python3 -m unittest discover -s tests -p test_gt_verify_original_array_material_refs.py -v
+          python3 -m unittest discover -s tests -p test_gt_verify_original_mesh_export.py -v
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_t1_stage_original_fft_dispatch_trace.py -v
           python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
@@ -373,7 +374,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage
           # Publish the CLI and its matching transitive assemblies together;
           # replacing one DLL cannot instrument an AOT or bundled executable.
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
@@ -384,6 +385,7 @@ jobs:
         env:
           DOTNET_PROCESSOR_COUNT: '2'
           RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/private-export-lineage.json
+          RAFT_PRIVATE_EXPORT_MESH_LINEAGE: ${{ runner.temp }}/private-mesh-export-lineage.json
           # GT needs exact ClassID187 source→export pointers from this SAME
           # run. Private JSON stays on the runner, never in Actions artifacts.
           RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
@@ -466,6 +468,15 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --report "$RUNNER_TEMP/gt-native-unity-array-import-contract.json"
           test -s "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/GTOriginalArrayImportContract.json"
+          # Compare all original Mesh buffers and layout with the same export.
+          python3 -m scripts.gt_verify_original_mesh_export \
+            --source "$original_owners" \
+            --stream-source "$RUNNER_TEMP/input/Raft_Data" \
+            --zip2-checkout zip2-original \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --mesh-trace "$RUNNER_TEMP/private-mesh-export-lineage.json" \
+            --export-trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-native-mesh-export-geometry.json"
           # Original m_FileID > 0 targets an authenticated foreign serialized
           # owner's FileIdentifier index. Same-export trace and actual Material
           # texenv must preserve the full cross-owner class/pathID/GUID identity.
@@ -545,6 +556,7 @@ jobs:
           name: gt-native-original-array-import-${{ github.sha }}
           path: |
             ${{ runner.temp }}/gt-native-original-array-importer-repair.json
+            ${{ runner.temp }}/gt-native-mesh-export-geometry.json
             ${{ runner.temp }}/gt-native-original-array-material-links.json
             ${{ runner.temp }}/gt-native-original-external-texture-links.json
             ${{ runner.temp }}/gt-native-original-bc3-staging.json

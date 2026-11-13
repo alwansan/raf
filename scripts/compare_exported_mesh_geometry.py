@@ -12,10 +12,10 @@ import struct
 
 def load_mesh_yaml(text):
     import yaml
-    class MeshLoader(yaml.SafeLoader):
+    class MeshLoader(getattr(yaml, "CSafeLoader", yaml.SafeLoader)):
         def construct_mapping(self, node, deep=False):
             for key, value in node.value:
-                if key.value in ('_typelessdata', 'm_IndexBuffer') and isinstance(value, yaml.ScalarNode):
+                if key.value in ('_typelessdata', 'm_IndexBuffer', 'm_Data', 'm_BoneNameHashes') and isinstance(value, yaml.ScalarNode):
                     value.tag = 'tag:yaml.org,2002:str'
             return super().construct_mapping(node, deep=deep)
     text = re.sub(r'(?m)^%[^\n]*\n', '', text)

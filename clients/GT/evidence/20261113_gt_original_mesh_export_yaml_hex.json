@@ -1,0 +1,27 @@
+{
+  "schema": "GT_ORIGINAL_MESH_EXPORT_YAML_HEX_REGRESSION_V1",
+  "original_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "exporter_source_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "scope": "Local isolated AssetRipper export, one SHA256-verified original serialized owner and its original stream",
+  "source_meshes": 99,
+  "source_streamed_meshes": 25,
+  "source_skinned_meshes": 2,
+  "source_bone_name_hashes": 180,
+  "matched_mesh_geometry_before_patch": 97,
+  "exported_meshes_with_invalid_hex_before_patch": 2,
+  "matched_mesh_geometry_after_patch": 99,
+  "exported_meshes_with_invalid_hex_after_patch": 0,
+  "compared": [
+    "vertex channel descriptors and payload bytes",
+    "index format and payload bytes",
+    "submesh index and vertex ranges",
+    "compressed attribute descriptors and payload bytes",
+    "bind pose matrices",
+    "bone name hashes and variable bone weight metadata"
+  ],
+  "source_to_export_join": "source owner and path ID to same-instance Unity Mesh file ID and meta GUID",
+  "original_assets_or_meta_rewritten": false,
+  "full_export_or_renderer_bindings_verified": false,
+  "unity_import_or_device_render_verified": false,
+  "xapk_requested": false
+}

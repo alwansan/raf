@@ -93,7 +93,7 @@ jobs:
           set -euo pipefail
           python3 -m scripts.patch_export_lineage \
             --tool-source ar-host \
-            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
+            --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --mesh-lineage
           dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
             -c Release -p:PublishAot=false -p:PublishTrimmed=false \
             -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
@@ -110,6 +110,7 @@ jobs:
       - name: Run genuine exporter on fully restored Raft scene/texture/mesh streams
         env:
           RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/gt-private-export-lineage.json
+          RAFT_PRIVATE_EXPORT_MESH_LINEAGE: ${{ runner.temp }}/gt-private-mesh-export-lineage.json
           RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: '1'
           DOTNET_PROCESSOR_COUNT: '2'
         shell: bash
@@ -140,6 +141,19 @@ jobs:
           test -d "$RUNNER_TEMP/gt-project/ExportedProject/ProjectSettings"
           python3 -m scripts.verify_assetripper_script_import \
             --log "$RUNNER_TEMP/gt-export-log.private.txt"
+      - name: Compare authenticated original Mesh geometry to the same export
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.2
+          python3 -m unittest discover -s tests -p test_gt_verify_original_mesh_export.py -v
+          python3 -m scripts.gt_verify_original_mesh_export \
+            --source "$RUNNER_TEMP/gt-input/Raft_Data" \
+            --zip2-checkout .gt-zip2 \
+            --project "$RUNNER_TEMP/gt-project/ExportedProject" \
+            --mesh-trace "$RUNNER_TEMP/gt-private-mesh-export-lineage.json" \
+            --export-trace "$RUNNER_TEMP/gt-private-export-lineage.json" \
+            --report "$RUNNER_TEMP/gt-real-mesh-export-geometry.json"
       - name: Measure real exported Unity files and source link integrity without game identifiers
         shell: bash
         run: |
@@ -550,6 +564,7 @@ jobs:
           path: |
             ${{ runner.temp }}/gt-export-original-restore.json
             ${{ runner.temp }}/gt-real-export-aggregate.json
+            ${{ runner.temp }}/gt-real-mesh-export-geometry.json
             ${{ runner.temp }}/gt-export-failure-safe.json
             ${{ runner.temp }}/gt-export-texture-guard-safe.json
             ${{ runner.temp }}/gt-export-all-texture-target-categories.json
