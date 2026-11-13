@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-33 — 58/58 Shader48 برامج أصلية مستعادة إلى مرحلة HLSL/Vulkan المصدرية
+
+نجاح فعلي [CI43357332292](https://github.com/alwansan/raf/actions/runs/43357332292): المصدر SHA ZIP2، 6 مشاهد، 4 Shader owner، **4 Pass/33 paired VS-FS variants/8 unmatched VS/58 distinct DXBC**؛ 58/58 أصلية صالحة Vulkan1.1، و58/58 HLSL recovered، و58/58 round-trip Vulkan1.1. كتبنا أدوات إعادة الاستعادة الآمنة وأُجري الاختبار الحقيقي؛ **المرحلة المصدرية مكتملة لهذه العائلة فقط**. لم يُنجز Full Original ShaderLab/Keyword/CB0/Sampler/Renderer GUID restore ولم يُقلَّص تعداد 770 Material Dummy الإنتاجي بعد، ولا يوجد Unity Editor/Android pixel proof. **التالي P05→P04:** تجميع ShaderLab بأربع Passes وجميع variants، تثبيت original-same-export GUID دون لمس .meta، توثيق خصائص Keyword/Sampler/CB0 ثم إعادة الفحص لمستندات الـ770، بعدها معالجة بقية الـ165 Shader والماء وFFT والموارد وصولاً إلى G0–G6. **XAPK مؤجل حتى اكتمال الاستعادة والدمج**. [جلسة Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md).
+
+---
+
 ## GT Chat-32 — جرد ZIP2 الأعلى أثراً والمهمة التالية استعادة Shader48 كاملاً
 
 اتفاق المالك: **جميع الموارد تستعاد وتُدمج قبل أي XAPK تجريبي شامل**. نُفذ [CI43354787983 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354787983) لتحديد أولويات P04/P05 من source SHA فعلي: 17 Shader48 Dummy من أصل 21 Shader48 في 6 مشاهد، تؤثر في 1373 من أصل 1633 Renderer Material slot؛ **الأعلى يستخدم 921 خانة**. هذا لا يمثل 770 مستند مادة (جرد أكبر) ولا 770 شيدراً مختلفاً ولا draw calls. أصلحت GT أدوات الربط SHA W1/B02/B21 [CI43354701952 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354701952) وأنشأت قائمة خاصة تتضمن Source→Export GUID لا تخرج من runner. **الهدف الفعلي التالي:** استعادة الشيدر الأعلى بكل بياناته الأصلية (4 Passes و33 زوج Variant متطابقاً و8 Vertex variants غير مقترنة) وترجمة كاملة بقبول المصدر والـShaderLab والـMeta ثم اعمل جرد Dummy جديد وكرر على بقية عائلات الـ165 Shader. **ممنوع اعتبار فحص الجرد استعادة ناجحة للبرامج ذاتها**. [Chat32](sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md).
