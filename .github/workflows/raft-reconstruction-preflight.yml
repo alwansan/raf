@@ -42,6 +42,7 @@ on:
       - 'scripts/restore_postfx_compute.py'
       - 'scripts/verify_water_render_contract.py'
       - 'tests/test_verify_water_render_contract.py'
+      - 'tests/test_record_documented_water_limitation.py'
       - 'scripts/audit_original_compute_metadata.py'
       - 'scripts/probe_original_water_quality_values.py'
       - 'tests/test_probe_original_water_quality_values.py'
@@ -98,6 +99,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
           python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v
+          python3 -m unittest discover -s tests -p test_record_documented_water_limitation.py -v
           python3 -m unittest discover -s tests -p test_audit_original_compute_metadata.py -v
           python3 -m unittest discover -s tests -p test_probe_original_water_quality_values.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
