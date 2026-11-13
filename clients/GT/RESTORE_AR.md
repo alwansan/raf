@@ -1,5 +1,10 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT — شيدر 921: مسارات الكلمات المفتاحية وحالات الرسم وكتل المعاملات
+
+من ZIP2 الحقيقي استعدنا 35 Property وأربع حالات رسم إلى ShaderLab مرحلي، وربطنا 33 زوج VS/FS عبر الممرات `[8, 13, 8, 4]`. نجحت 66/66 ترجمة موجهة مطابقة بالبايت لناتج SPIR-V للمرحلة المختارة. حفظنا 46 ParameterBlob من 74 سجل مرحلة؛ الحالات الثماني Vertex فقط في الممر الأول. التالي دمج معاملات كل Variant مع الجدول المشترك وربط CB والسامبلر/الخامات بالـregister والـoffset، ثم إثبات Unity المعزول والتثبيت على GUID الأصلي وفحص المواد Dummy. [نقطة الاستعادة](sessions/20261113-GT-original-921-routes-layout-parameters.md).
+
+
 ## GT Chat-33 ملحق — Keyword/Property source topology
 
 [CI43358489426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358489426): كل **74 سجل Stage-Variant** للشيدر الأعلى فُحصت من ZIP2، 27 اسم Keyword و27 Flag و14 فهرساً مستعملاً أصلياً جميعها في جدول الأسماء، و35 Property أصلية، player bucket واحد؛ 58/58 HLSL/SPIR-V استمرت ناجحة. الجداول الأصلية محفوظة حصراً في runner temp أثناء CI وحُذفت؛ لم نثبت معنى global/local pragma أو Sampler/CB0/ShaderLab أو GUID إنتاجي. [Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md). لا XAPK.

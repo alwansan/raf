@@ -6,6 +6,7 @@ on:
       - feature/android-native-port
     paths:
       - scripts/gt_original_921_all_variants.py
+      - scripts/gt_original_921_keyword_routes.py
       - tests/test_gt_original_921_all_variants.py
       - .github/workflows/raft-gt-original-921-all-variants.yml
 
@@ -119,6 +120,14 @@ jobs:
           assert r['unmatched_original_vertex_variants_retained']==8
           assert r['original_unique_D3D11_stage_programs']==58
           assert r['all_distinct_original_D3D11_programs_translated']
+          routes = r['source_keyword_route_coverage']
+          assert r['source_shaderlab_layout']['original_render_states_serialized'] == 4
+          assert r['source_shaderlab_layout']['original_authored_property_count'] == 35
+          assert r['source_variant_parameter_records']['original_variant_stages_with_parameter_records'] == 74
+          assert routes['validated_exact_routed_stage_compilations'] == 66
+          assert len(routes['source_exact_keyword_routes_by_pass']) == 4
+          assert sum(routes['source_exact_keyword_routes_by_pass']) == 33
+          assert sum(routes['source_unmatched_vertex_keyword_sets_by_pass']) == 8
           assert not r['original_project_Shader_GUID_replaced']
           print('GT_SOURCE_ONLY_921_ALL_VARIANTS_GATE_PASSED originalPairs=33 orphanVS=8 sourcePrograms=58 noXAPK=true')
           PY

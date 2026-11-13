@@ -1,0 +1,80 @@
+{
+  "Unity_Editor_Android_or_device_pixels_verified": false,
+  "all_distinct_original_D3D11_programs_translated": true,
+  "all_original_921_shader_variant_population_extracted_to_private_stage": true,
+  "exact_original_source_VS_FS_permutation_pairs": 33,
+  "original_authored_ShaderLab_or_Sampler_CB0_render_parity_verified": false,
+  "original_game_assets_or_meta_modified": false,
+  "original_keyword_name_count": 27,
+  "original_passes": 4,
+  "original_project_Shader_GUID_replaced": false,
+  "original_property_count": 35,
+  "original_source_IDs_GUIDs_shader_names_or_program_bytes_published": false,
+  "original_unique_D3D11_stage_programs": 58,
+  "private_HLSL_recovered_stages": 58,
+  "private_HLSL_roundtrip_vulkan11_valid_stages": 58,
+  "private_stage_translation_attempts": 58,
+  "private_vulkan11_valid_stages": 58,
+  "schema_version": 1,
+  "scope": "six_SHA_original_scenes_selected_921_renderer_material_slots",
+  "source_keyword_route_coverage": {
+    "source_exact_keyword_routes_by_pass": [
+      8,
+      13,
+      8,
+      4
+    ],
+    "source_keyword_universe_size_by_pass": [
+      5,
+      9,
+      3,
+      4
+    ],
+    "source_unmatched_vertex_keyword_sets_by_pass": [
+      8,
+      0,
+      0,
+      0
+    ],
+    "source_used_flag_byte_population_across_passes": {
+      "0": 21
+    },
+    "validated_exact_routed_stage_compilations": 66
+  },
+  "source_original_Shader_ParsedForm_pass_states_keyword_property_tables_preserved_privately": true,
+  "source_original_keyword_coverage": {
+    "all_source_variant_metadata_stages_censused": 74,
+    "original_distinct_hardware_tiers_in_variants": 0,
+    "original_distinct_player_buckets_in_variants": 1,
+    "original_global_keyword_indices_used": 0,
+    "original_global_local_pragma_flags_and_compilation_selection_proven": false,
+    "original_keyword_flags": 27,
+    "original_keyword_indices_within_name_table": true,
+    "original_keyword_names": 27,
+    "original_legacy_keyword_indices_used": 14,
+    "original_local_keyword_indices_used": 0,
+    "original_property_definitions": 35,
+    "original_sampler_register_CB0_bindings_proven": false,
+    "source_original_unique_used_keyword_indices": 14
+  },
+  "source_shaderlab_layout": {
+    "original_authored_color_property_count": 5,
+    "original_authored_float_property_count": 6,
+    "original_authored_property_count": 35,
+    "original_authored_range_property_count": 18,
+    "original_authored_texture_property_count": 6,
+    "original_authored_vector_property_count": 0,
+    "original_property_hide_in_inspector_count": 2,
+    "original_property_toggle_count": 2,
+    "original_render_states_serialized": 4
+  },
+  "source_variant_parameter_records": {
+    "distinct_original_parameter_blobs": 46,
+    "original_variant_stages_with_cb_bindings": 57,
+    "original_variant_stages_with_parameter_records": 74,
+    "original_variant_stages_with_textures": 29
+  },
+  "status": "GT_ORIGINAL_921_ALL_SOURCE_PERMUTATIONS_PRIVATE_STAGE_RECOVERY",
+  "unmatched_original_fragment_variants": 0,
+  "unmatched_original_vertex_variants_retained": 8
+}

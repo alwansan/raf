@@ -43,7 +43,7 @@ def require(test, category):
     if not test:
         raise PrivateContractError(category)
 
-def serialize_properties(parsed):
+def serialize_properties(parsed, *, allow_hidden_and_toggle=False):
     """Return only private text + public-safe type counts; never log source values."""
     info = parsed.get("m_PropInfo") if type(parsed) is dict else None
     require(type(info) is dict and type(info.get("m_Props")) is list,
@@ -64,8 +64,11 @@ def serialize_properties(parsed):
         require(type(description) is str and len(description)<=1024
                 and not any(c in description for c in "\r\n\0"),
                 "PROPERTY_DESCRIPTION")
-        require(type(prop["m_Flags"]) is int and prop["m_Flags"]==0
-                and type(prop["m_Attributes"]) is list and not prop["m_Attributes"],
+        flags = prop["m_Flags"]
+        attributes = prop["m_Attributes"]
+        require(type(flags) is int and type(attributes) is list and
+                ((flags == 0 and not attributes) or
+                 (allow_hidden_and_toggle and flags in (0, 1) and attributes in ([], ["Toggle"]))),
                 "PROPERTY_FLAGS_OR_ATTRIBUTES")
         typ=prop["m_Type"]
         require(type(typ) is int and typ in (0,1,2,3,4),
@@ -106,7 +109,9 @@ def serialize_properties(parsed):
                 line=(label+"Range("+number(values[1])+","+
                       number(values[2])+")) = "+number(values[0]))
                 family["ranges"]+=1
-        lines.append(line)
+        require(not attributes or typ == 2, "PROPERTY_FLAGS_OR_ATTRIBUTES")
+        prefix = ("[HideInInspector] " if flags == 1 else "") + ("[Toggle] " if attributes else "")
+        lines.append(prefix + line)
     lines.append("}")
     return "\n".join(lines), {
         "original_authored_property_count":len(props),

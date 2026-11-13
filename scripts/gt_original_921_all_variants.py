@@ -6,6 +6,7 @@ does not claim authored ShaderLab parity, Unity import, Android, or pixels.
 """
 from __future__ import annotations
 import argparse
+import base64
 from collections import Counter
 import hashlib
 import json
@@ -211,6 +212,46 @@ def source_keyword_profile(pairs,orphans,parsed):
         "original_sampler_register_CB0_bindings_proven":False,
     }
 
+def stage_parameter_records(pairs, orphans, passes, table, private):
+    """Preserve the per-stage override blobs separately from shared stage bytecode."""
+    from scripts.a12_shader_parameter_decode import parse_parameter_blob
+
+    by_pass = {(row["subshader"], row["pass"]): row for row in passes}
+    rows = [(pair, stage, pair[field]) for pair in pairs
+            for stage, field in ((1, "vs"), (0, "fs"))]
+    rows.extend((orphan, orphan["stage"], orphan["variant"]) for orphan in orphans)
+    records, decoded = [], {}
+    for location, stage, row in rows:
+        shader_pass = by_pass[location["subshader"], location["pass"]]
+        program = shader_pass["original_vertex_program" if stage == 1 else "original_fragment_program"]
+        index = program["m_ParameterBlobIndices"][row["player_bucket"]][row["bucket_ordinal"]]
+        if type(index) is not int or not 0 <= index < len(table):
+            raise ValueError("invalid_original_parameter_blob_index")
+        raw = table[index][1]
+        if index not in decoded:
+            decoded[index] = parse_parameter_blob(raw)
+        records.append({
+            "subshader": location["subshader"], "pass": location["pass"],
+            "stage": stage, "player_bucket": row["player_bucket"], "ordinal": row["bucket_ordinal"],
+            "original_parameter_blob_index": index,
+        })
+    packet = {
+        "stage_records": records,
+        "blobs_base64": {index: base64.b64encode(table[index][1]).decode("ascii") for index in decoded},
+    }
+    (private / "original-private-parameter-records.json").write_text(
+        json.dumps(packet, indent=2) + "\n", encoding="utf-8")
+    return {
+        "original_variant_stages_with_parameter_records": len(records),
+        "distinct_original_parameter_blobs": len(decoded),
+        "original_variant_stages_with_textures": sum(
+            decoded[row["original_parameter_blob_index"]]["texture_count"] > 0 for row in records),
+        "original_variant_stages_with_cb_bindings": sum(
+            decoded[row["original_parameter_blob_index"]]["constant_buffer_binding_count"] > 0
+            for row in records),
+    }
+
+
 def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     from scripts import t3_original_renderer_shader_impact as scenes
     from scripts import t3_original_top_shader_dxbc_feasibility as top
@@ -249,7 +290,23 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
     private=_private_destination(private,original,out)
     out=_private_destination(out,original,private)
     safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'])
+    from scripts.gt_original_921_keyword_routes import compile_routed_stages, keyword_routes, shaderlab_layout
+    route_packet, route_summary = keyword_routes(tree["m_ParsedForm"], pairs, orphans, passes)
+    # Resolve the tuple of stage and bytecode digest to the packet's program directories.
+    program_dirs = {ident: f"program-{index:03d}" for index, ident in enumerate(unique)}
+    for row in route_packet:
+        for route in row["routes"]:
+            for stage in ("vs", "fs"):
+                route[stage] = program_dirs[route[stage]]
+    (private / "original-private-keyword-routes.json").write_text(
+        json.dumps(route_packet, indent=2) + "\n", encoding="utf-8")
+    layout, safe["source_shaderlab_layout"] = shaderlab_layout(tree["m_ParsedForm"], passes)
+    (private / "original-private-layout.txt").write_text(layout, encoding="utf-8")
+    route_summary["validated_exact_routed_stage_compilations"] = compile_routed_stages(route_packet, private)
+    safe["source_keyword_route_coverage"] = route_summary
     safe['source_original_keyword_coverage']=source_keyword_profile(pairs,orphans,tree['m_ParsedForm'])
+    safe["source_variant_parameter_records"] = stage_parameter_records(
+        pairs, orphans, passes, tables[0], private)
     with out.open("x",encoding="utf-8") as target:
         json.dump(safe,target,sort_keys=True,indent=2)
         target.write("\n")
