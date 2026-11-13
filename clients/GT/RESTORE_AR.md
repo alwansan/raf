@@ -1,5 +1,10 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## ربط هياكل الشخصيات بالمصدر
+
+طابقت 26 SkinnedMeshRenderer مع تسعة مجسمات ذات bind poses. تطابق عدد العظام في المكونات الـ26 وتحقق 2400 مرجع عظم و26 جذر Transform عبر 82 حاوية ZIP2. التالي مطابقة هذه الروابط بعد تصدير Unity والتحقق من الأنيميشن. [الدليل](evidence/20261113_gt_character_rig_links.json).
+
+
 ## تدقيق أوزان عظام الشخصيات
 
 ضمن 13 مجسماً مرشحاً للشخصيات، تسعة فيها bind poses. تحققت 840 مصفوفة و58167 رأساً بأوزان صريحة ومجموع يساوي واحداً ضمن هامش 0.001. المجسم التاسع فيه 985 رأساً لكل منها فهرس عظم صحيح، وقناة الوزن غائبة من المصدر. يلزم إثبات ربط SkinnedMeshRenderer والأنيميشن داخل Unity. [الدليل](evidence/20261113_gt_character_skin_source.json).
