@@ -96,10 +96,15 @@ def _private_destination(path:Path,source:Path,other:Path):
         raise ValueError("unsafe_private_original_shader_stage_destination")
     return path
 
-def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator):
+def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator,source_parsed=None):
     if (len(pairs)!=PAIRED_COUNT or len(orphans)!=ORPHAN_VERTEX_COUNT or
         len(passes)!=PASS_COUNT or len(distinct)!=DISTINCT_DXBC_COUNT):
         raise ValueError("non_original_921_stage_inventory")
+    if type(source_parsed) is not dict or type(source_parsed.get('m_SubShaders')) is not list:
+        raise ValueError('original_full_Shader_ParsedForm_missing')
+    original_header=json.dumps(source_parsed,sort_keys=True)
+    if not 0<len(original_header.encode('utf-8'))<=16*1024*1024:
+        raise ValueError('original_Shader_ParsedForm_private_limit_exceeded')
     private.mkdir(mode=0o700)
     refs={}
     counts=Counter()
@@ -118,6 +123,7 @@ def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator):
         return {k:(refs[v] if k=="program_ref" else v) for k,v in row.items()}
     packet={
         "schema":1,"original_passes":passes,
+        "original_shader_ParsedForm_full_private":source_parsed,
         "paired":[{"subshader":p["subshader"],"pass":p["pass"],
                    "vs":materialize(p["vs"]),"fs":materialize(p["fs"])} for p in pairs],
         "unpaired":[{"subshader":o["subshader"],"pass":o["pass"],"stage":o["stage"],
@@ -139,6 +145,9 @@ def stage_private(pairs,orphans,passes,distinct,private:Path,*,translator):
         "private_HLSL_roundtrip_vulkan11_valid_stages":counts["roundtrip_vulkan11_valid"],
         "all_distinct_original_D3D11_programs_translated":counts["roundtrip_vulkan11_valid"]==len(distinct),
         "all_original_921_shader_variant_population_extracted_to_private_stage":True,
+        "source_original_Shader_ParsedForm_pass_states_keyword_property_tables_preserved_privately":True,
+        "original_keyword_name_count":len(source_parsed.get('m_KeywordNames',[])) if type(source_parsed.get('m_KeywordNames')) is list else None,
+        "original_property_count":len(source_parsed.get('m_PropInfo',{}).get('m_Props',[])) if type(source_parsed.get('m_PropInfo')) is dict and type(source_parsed.get('m_PropInfo',{}).get('m_Props')) is list else None,
         "original_authored_ShaderLab_or_Sampler_CB0_render_parity_verified":False,
         "original_project_Shader_GUID_replaced":False,
         "original_game_assets_or_meta_modified":False,
@@ -183,7 +192,7 @@ def run(original:Path,manifest:Path,private:Path,out:Path,*,translator=None):
         permutation=variant_key,linker=linked_program)
     private=_private_destination(private,original,out)
     out=_private_destination(out,original,private)
-    safe=stage_private(pairs,orphans,passes,unique,private,translator=translator)
+    safe=stage_private(pairs,orphans,passes,unique,private,translator=translator,source_parsed=tree['m_ParsedForm'])
     with out.open("x",encoding="utf-8") as target:
         json.dump(safe,target,sort_keys=True,indent=2)
         target.write("\n")
