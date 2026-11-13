@@ -1,6 +1,7 @@
 """Assemble the recovered four-pass shader for a private Unity compiler check."""
 import argparse
 import json
+import re
 from pathlib import Path
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
@@ -9,6 +10,23 @@ from scripts.w1_depth_shaderlab import stage_body
 
 PASS_MODES = ("ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster")
 EXPECTED_ROUTES = (8, 13, 8, 4)
+VULKAN_LOCATION = re.compile(
+    r"(?m)^( +)\[\[vk::location\(([0-9]+)\)\]\] ([^\n]+ : TEXCOORD([0-9]+);)$"
+)
+
+
+def unity_varying_semantics(source):
+    # Unity 2021's graphics shader compiler rejects DXC's Vulkan attribute.
+    # The same register is already encoded in the matching HLSL semantic.
+    def use_semantic(match):
+        if match[2] != match[4]:
+            raise ValueError("original_921_varying_semantic_location_mismatch")
+        return match[1] + match[3]
+
+    source = VULKAN_LOCATION.sub(use_semantic, source)
+    if "[[vk::location" in source:
+        raise ValueError("original_921_unmapped_vulkan_location")
+    return source
 
 
 def compose(private):
@@ -23,8 +41,8 @@ def compose(private):
             row = pair[stage]
             key = (pair["subshader"], pair["pass"], stage, row["program_ref"],
                    tuple(sorted(row["original_variant_metadata"]["m_KeywordIndices"])))
-            stage_sources[key] = (private / f"bound-stage-{index * 2 + offset:03d}"
-                                  / "varying-bound.hlsl").read_text(encoding="utf-8")
+            candidate = private / f"bound-stage-{index * 2 + offset:03d}" / "varying-bound.hlsl"
+            stage_sources[key] = unity_varying_semantics(candidate.read_text(encoding="utf-8"))
     original_names = manifest["original_shader_ParsedForm_full_private"]["m_KeywordNames"]
     indices = {name: index for index, name in enumerate(original_names)}
     anchor = "// Original stage programs attach here"
