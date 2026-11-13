@@ -54,6 +54,22 @@ class ImportedWaterPassProbeTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, self.probe)
 
+    def test_real_native_build_requires_compiled_seven_original_spectrum_passes(self):
+        self.assertIn("public static void RequireOriginalSpectrumSevenPasses()",self.probe)
+        for t in (
+            "matching == 1", "shader.passCount != 7",
+            "ShaderUtil.ShaderHasError(shader)",
+            'content.Contains("//DummyShaderTextExporter")',
+            "throw new InvalidOperationException(",
+            "AdrenoPixelsVerified=false"
+        ):
+            self.assertIn(t,self.probe)
+        self.assertEqual(self.native.count(
+            "GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();"),1)
+        before=self.native.index("GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();")
+        after=self.native.index("FmodAndroidValidation.RequireOriginalBanks();")
+        self.assertLess(before,after)
+
     def test_next_native_build_will_call_diagnostic_exactly_once(self):
         self.assertEqual(
             len(re.findall(r'\bGTOriginalWaterPassImportProbe\.Report\(\);',
