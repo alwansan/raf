@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-30 — بدأ الإنتاج الكامل لشيدر Spectrum الأصلي بعد نجاح عقد GUID
+
+الخطوة الجديدة ليست فحص Shader.Find فقط: أُدرجت إعادة بناء **Spectrum 7Pass + original Keyword index4** من ZIP2 SHA أصلي داخل Workflow البناء الكامل، بعد استعادة Depth/Blur وقبل جرد المواد. [CI43346292249 SUCCESS](https://github.com/alwansan/raf/actions/runs/43346292249) أثبت اختبارات فريدة الاسم/الـGUID والنسخ والـrollback بالمحاكاة؛ لكن لا يثبت تصدير AssetRipper الحقيقي. [Full native 43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) بدأ على `4b74f6bd`، اجتاز request/Unity preflight ودخل reconstruct، وحزمة APK/OBB/XAPK والمرئيات غير مثبتة حتى النهاية. العائق السابق 28,592 أخطاء ماء وLOW_MEMORY من هاتف المالك باقٍ حتى تجربة أحدث. [جلسة Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md). لا LFS أو GUID مصنوع أو مصدر شيدر خاص منشور.
+
+---
+
 ## GT Chat-29 — دليل 7 Graphics.Blit أصلي وإخفاق الهاتف بسبب الرسوميات والذاكرة
 
 [CI43343971412 SUCCESS](https://github.com/alwansan/raf/actions/runs/43343971412) أثبت في DLL أصلية SHA **7 تمريرات فعلية للـMaterial نفسه عبر typed IL كمعامل في `UnityEngine.Graphics.Blit`**، بعد مسار Shader.Find→new Material(Shader)→حقل original Material→24 قراءة في 8 دوال. فحص CIL محافظ وينهي المسار عند branch أو unsupported ويحتوي حالات إيجابية وسلبية؛ [CI43344199792 SUCCESS](https://github.com/alwansan/raf/actions/runs/43344199792) ثبّت العدد لمنع Regression. **هذا ليس نجاح Pixel GPU**. أحدث [CL@3c26bb5](https://github.com/alwansan/CL/commit/3c26bb5d0f4de2cbffd42197dae9ae1372721659) فيه 3 صور لموارد اللعبة البيضاء، 28,592 water invalid passes، 4,576 kernel6، 2,895 cursor، 4 OBB GUID، مع خروج Android PID18885 بوسم **LOW_MEMORY**؛ لا برهان أن الماء وحده سبب نقص الذاكرة. بوابة الهاتف [CI43343638117 SUCCESS](https://github.com/alwansan/raf/actions/runs/43343638117) أعادت إنتاج الإخفاق. الخطوة المقبلة إدراج ShaderLab أصلي 7Pass/Keyword في Unity transient بعد التحقق من اسم المصدر والـmeta، ثم Foam/Compute وXAPK وهاتف Adreno. [Chat29](sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md).
