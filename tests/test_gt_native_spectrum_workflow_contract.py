@@ -50,7 +50,7 @@ class NativeSpectrumWorkflowContract(unittest.TestCase):
 
     def test_private_program_bytes_not_uploaded_and_are_scrubbed(self):
         start=self.source.index("      - name: GT recover original SHA-backed 7Pass")
-        end=self.source.index("      - name: Inventory actual exported Material Shader references")
+        end=self.source.index("      - name: GT restore original Foam Global two-pass source shader")
         block=self.source[start:end]
         self.assertEqual(block.count("actions/upload-artifact@v4"),1)
         self.assertIn("gt-native-spectrum-install-safe.json",block)
