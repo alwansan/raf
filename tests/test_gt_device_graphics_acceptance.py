@@ -87,6 +87,54 @@ class GraphicsLogGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "conflicting_device_final_counter"):
             analyze(d)
 
+    def test_new_owner_20261112_night_water_session_rejected(self):
+        # Source-count only fixture: CL@a320d5e, session 20261112-235351-196.
+        d = fixture(passes=36828, kernel=6106, cursor=2844, guid=2)
+        d["final_render_failure_breakdown"][
+            "ultimate_water_invalid_pass_by_material"].update(
+                spectrum=15054, foam_global=21774)
+        d.update(writer_received_batches=3390, writer_written_batches=3390,
+                 writer_failed_batches=0, writer_pending_bytes_at_stop=0)
+        r = analyze(d)
+        self.assertEqual(r["status"], "KNOWN_DEVICE_LOG_GATE_REJECTED")
+        self.assertEqual(r["observed_critical_error_count"], 42936)
+        self.assertEqual(r["water_invalid_pass_by_family"]["foam_global"], 21774)
+        self.assertEqual(r["compute_invalid_kernel_index"]["six"], 6106)
+        self.assertTrue(r["collector_writer_accounting_verified"])
+        self.assertEqual(r["collector_writer_failed_batches"], 0)
+        self.assertFalse(r["strict_known_log_gate_passed"])
+        self.assertFalse(r["all_pixels_correct_verified"])
+
+    def test_modern_writer_accounting_cannot_false_green(self):
+        clean = fixture()
+        clean.update(writer_received_batches=30, writer_written_batches=30,
+                     writer_failed_batches=0, writer_pending_bytes_at_stop=0)
+        self.assertTrue(analyze(clean)["strict_known_log_gate_passed"])
+        missing = copy.deepcopy(clean)
+        del missing["writer_failed_batches"]
+        with self.assertRaisesRegex(ValueError, "partial_collector_writer_accounting"):
+            analyze(missing)
+        unaccounted = copy.deepcopy(clean)
+        unaccounted["writer_written_batches"] = 29
+        with self.assertRaisesRegex(ValueError, "unaccounted_collector_writer_batches"):
+            analyze(unaccounted)
+        impossible = copy.deepcopy(clean)
+        impossible["writer_written_batches"] = 31
+        with self.assertRaisesRegex(ValueError, "impossible_collector_writer_batch_totals"):
+            analyze(impossible)
+        pending = copy.deepcopy(clean)
+        pending["writer_pending_bytes_at_stop"] = 42
+        self.assertFalse(analyze(pending)["strict_known_log_gate_passed"])
+        failed = copy.deepcopy(clean)
+        failed["writer_written_batches"] = 29
+        failed["writer_failed_batches"] = 1
+        failed["final_remote_sink_failed_batches"] = 1
+        self.assertFalse(analyze(failed)["strict_known_log_gate_passed"])
+        mismatch = copy.deepcopy(failed)
+        mismatch["final_remote_sink_failed_batches"] = 0
+        with self.assertRaisesRegex(ValueError, "collector_writer_sink_failure_count_mismatch"):
+            analyze(mismatch)
+
     def test_silent_batch_loss_rejects_acceptance(self):
         self.assertFalse(analyze(fixture(sink=1))["strict_known_log_gate_passed"])
 
