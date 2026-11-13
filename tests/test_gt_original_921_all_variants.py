@@ -56,9 +56,11 @@ class Original921VariantTests(unittest.TestCase):
                 (target/"private.hlsl").write_text("private-921-stage")
                 return {"vulkan11_valid":True,"hlsl_recovered":True,
                         "roundtrip_vulkan11_valid":True}
-            safe=stage_private(paired,orphans,passes,unique,root,translator=translator)
+            safe=stage_private(paired,orphans,passes,unique,root,translator=translator,source_parsed=fixture())
             packet=json.loads((root/"original-private-variant-manifest.json").read_text())
             self.assertEqual(len(packet["paired"]),33)
+            self.assertEqual(len(packet["original_shader_ParsedForm_full_private"]["m_SubShaders"][0]["m_Passes"]),4)
+            self.assertTrue(safe["source_original_Shader_ParsedForm_pass_states_keyword_property_tables_preserved_privately"])
             self.assertEqual(len(packet["unpaired"]),8)
             self.assertEqual(len(list(root.glob("program-*"))),58)
             self.assertEqual(safe["private_HLSL_roundtrip_vulkan11_valid_stages"],58)
@@ -74,7 +76,7 @@ class Original921VariantTests(unittest.TestCase):
                 ok=code!=b"vs-0"
                 return {"vulkan11_valid":ok,"hlsl_recovered":ok,
                         "roundtrip_vulkan11_valid":ok}
-            safe=stage_private(p,o,s,u,Path(d)/"private",translator=translator)
+            safe=stage_private(p,o,s,u,Path(d)/"private",translator=translator,source_parsed=fixture())
             self.assertFalse(safe["all_distinct_original_D3D11_programs_translated"])
             self.assertLess(safe["private_HLSL_roundtrip_vulkan11_valid_stages"],58)
 
