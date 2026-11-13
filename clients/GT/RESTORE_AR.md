@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-28 (الاستكمال) — Spectrum Material Field Readers أصلية
+
+[CI43339062121 SUCCESS](https://github.com/alwansan/raf/actions/runs/43339062121): بعد `new Material(Shader)` يحصل `dup`. [43339407339 SUCCESS](https://github.com/alwansan/raf/actions/runs/43339407339): Property setter ثم `stfld UnityEngine.Material` من نفس الـclass الأصلية، تم إثبات حقل مادة ديناميكي. [43339688082 SUCCESS](https://github.com/alwansan/raf/actions/runs/43339688082): تطابقت هوية الحقل الأصلي، **24 قراءة (ldfld) في 8 دوال أصلية؛ 7 دوال تحوي Graphics calls ودالتان RenderTexture calls**. هذا تزامن على مستوى الدالة ولا يثبت أن المادة دخلت argument الفعلي لـGraphics/RT؛ الخطوة الأولى القادمة هي typed stack/CFG trace من `ldfld` إلى `Graphics.Blit/Draw` وRenderTexture. راجع [Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md). لا تغيّر GUID، ZIP2-only دون LFS. لا تزال صور هاتف المالك والماء غير مقبولة.
+
+---
+
 ## GT / Chat-28 — إثبات Spectrum Shader.Find → Material(Shader) الأصلي من Managed IL
 
 [CI43337606930 SUCCESS](https://github.com/alwansan/raf/actions/runs/43337606930) صنّف `Shader` local المستمد من `Shader.Find` الأصلي إلى `newobj` واحد على CFG ممكن. [43337840022 SUCCESS](https://github.com/alwansan/raf/actions/runs/43337840022): المُنشئ من **Assembly-CSharp.dll الأصلية** لا من UnityEngine، **3 معاملات وآخرها Shader**. [43338106531 SUCCESS](https://github.com/alwansan/raf/actions/runs/43338106531): جسمه 44 IL يحوي `new Material(Shader)` واحداً. بعد إصلاح CS0136 أثناء فحص الوسيط، [43338485431 SUCCESS](https://github.com/alwansan/raf/actions/runs/43338485431) **أثبت أن المعامل الثالث Shader الأصلي يُحمَّل مباشرة قبيل `new Material(Shader)`**. لأول مرة المسار الديناميكي `Shader.Find→own ctor→Material(Shader)` ثابت بالمصدر الحقيقي، **لكن** مكان حفظ Material واستهلاكه في Renderer/Graphics/RT غير مثبت، ولا تنفيذ runtime أو ماء Adreno. تحقق من [Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md) و[Chat27](sessions/20261113-GT-new-owner-night-phone-session-chat-27.md). أكمل IL بعد `newobj Material` لتصل إلى Renderer/RT مع مراعاة 770 Dummy وFoam/FFT؛ ZIP2 read-only، لا LFS، لا GUID مصنوع.
