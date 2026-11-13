@@ -13,6 +13,7 @@ namespace UnityEngine
         public string name;
         public int passCount;
         public bool isSupported;
+        public bool syntheticCompileError;
     }
     public static class Application
     {
@@ -30,6 +31,13 @@ namespace UnityEngine
 
 namespace UnityEditor
 {
+    public static class ShaderUtil
+    {
+        public static bool ShaderHasError(UnityEngine.Shader shader)
+        {
+            return shader.syntheticCompileError;
+        }
+    }
     public static class AssetDatabase
     {
         private static readonly Dictionary<string, string> Paths =
@@ -118,6 +126,37 @@ public static class Program
             Require(Row("foam_global").Contains("AndroidGpuAndPhonePixelsVerified=false"),
                 "false phone pixel acceptance");
 
+            // Production hard gate must reject dummy one-pass even when
+            // synthetic AssetDatabase reports that it isSupported.
+            bool blocked = false;
+            try
+            {
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();
+            }
+            catch (InvalidOperationException) { blocked = true; }
+            Require(blocked, "native sevenpass guard accepted dummy source");
+
+            var spectrumShader=UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Shader>(
+                "Assets/Water/Spectrum.shader");
+            spectrumShader.passCount=7;
+            File.WriteAllText(spectrum, "Shader \"synthetic\" { SubShader { Pass {} } }");
+            RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();
+            Require(UnityEngine.Debug.Lines.Any(x => x.StartsWith(
+                "GT_NATIVE_SPECTRUM_UNITY_IMPORT_GATE oneOriginalShader=True")
+                && x.Contains("accepted=True") &&
+                x.Contains("AdrenoPixelsVerified=false")),
+                "production original source gate positive structural control failed");
+
+            spectrumShader.syntheticCompileError=true;
+            blocked=false;
+            try
+            {
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();
+            }
+            catch (InvalidOperationException) { blocked=true; }
+            Require(blocked, "shader compiler failures incorrectly accepted");
+            spectrumShader.syntheticCompileError=false;
+
             // A malicious/redirected asset path must never be read as a
             // local project .shader, even if it resolves to a real outer file.
             UnityEditor.AssetDatabase.Register(
@@ -135,6 +174,13 @@ public static class Program
                 "duplicate target candidates were not detected");
             Require(Row("spectrum").Contains("sourceStructureCandidateOnly=False "),
                 "duplicate or untrusted source should not pass");
+            blocked=false;
+            try
+            {
+                RaftAndroid.Editor.GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();
+            }
+            catch (InvalidOperationException) { blocked=true; }
+            Require(blocked, "duplicate or escaped shader identity accepted for production");
 
             Console.WriteLine(
                 "GT_WATER_SYNTHETIC_IMPORT_PROBE_VALID dummyDetected=true " +
