@@ -6,6 +6,13 @@ name: T3 RENDER-002 genuine original scene Shader48 to postvendor GUID Dummy pri
 # question. Keep repeat of the expensive 12-owner export explicit/manual only.
 on:
   workflow_dispatch:
+  # Owner 2026-11-13 restore-first: run one source/authentic six-scene
+  # Renderer priority recovery census; NEVER produce an XAPK in this job.
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml
+      - scripts/gt_restore_first_shader_priority.py
 permissions:
   contents: read
 concurrency:
@@ -37,6 +44,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_material_shader_same_export.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_source_renderer_shader_to_postvendor_export.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_restore_first_shader_priority.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v
           python3 -m unittest discover -s tests -p 'test_restore_tmp_shaders.py' -v
           python3 -m unittest discover -s tests -p 'test_restore_postfx_shaders.py' -v
@@ -333,6 +341,43 @@ jobs:
             --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
             --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
             --out "$RUNNER_TEMP/t3-scene-Shader48-postvendor-aggregate.json"
+      - name: GT restoration FIRST - authenticate and privately rank the original high-impact Dummy Shader sources
+        run: |
+          set -euo pipefail
+          # SHA-pinned six source scenes plus all selected original Material
+          # and Shader48 owners have already been verified in this exact
+          # AssetRipper/W1/B02 export, NOT name-matched from public strings.
+          timeout 240s python3 -m scripts.gt_restore_first_shader_priority \
+            --original "$RUNNER_TEMP/b21-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --private-queue "$RUNNER_TEMP/gt-921-original-shader-priority-PROPRIETARY.json" \
+            --out "$RUNNER_TEMP/gt-restore-first-921-shader-priority-SAFE.json"
+          python3 - <<'PY_GT_RESTORE_FIRST_QUEUE'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          safe=json.loads((root/"gt-restore-first-921-shader-priority-SAFE.json").read_text())
+          queue=json.loads((root/"gt-921-original-shader-priority-PROPRIETARY.json").read_text())
+          assert safe["status"]=="GT_RESTORE_FIRST_AUTHENTIC_SOURCE_RENDERER_SHADER_QUEUE"
+          assert safe["same_instance_original_source_count"]==21
+          assert safe["original_typed_renderer_material_slots"]==1633
+          assert safe["same_instance_original_Shader48_export_trace_verified"] is True
+          assert safe["source_original_6_scene_sha_authenticated"] is True
+          assert len(queue["priority"])==21
+          assert safe["private_source_ids_guids_or_asset_paths_published"] is False
+          assert safe["source_original_DXBC_to_complete_ShaderLab_restored_by_queue"] is False
+          assert safe["Unity_Editor_Android_or_Adreno_pixels_verified"] is False
+          assert safe["highest_priority_dummy_original_renderer_slots"]<=921
+          assert safe["full_770_dummy_Material_YAML_docs_not_equated_to_distinct_shaders"] is True
+          print("GT_RESTORE_FIRST_REAL_SOURCE_QUEUE_PASSED source6scenes=true originalShader48=21 slots=1633 topDummySlots="+str(safe["highest_priority_dummy_original_renderer_slots"])+" noXAPK=true privateOriginalGUIDsPublished=false")
+          PY_GT_RESTORE_FIRST_QUEUE
+      - name: Remove private original Shader priority IDs/GUIDs after source census
+        if: always()
+        run: |
+          rm -f -- "$RUNNER_TEMP/gt-921-original-shader-priority-PROPRIETARY.json"
       - name: Verify same original Particle108 Shader48 after all three vendor restorers
         run: |
           set -euo pipefail
@@ -368,6 +413,7 @@ jobs:
             ${{ runner.temp }}/t3-bounded-after-safe.json
             ${{ runner.temp }}/t3-bounded-delta-safe.json
             ${{ runner.temp }}/t3-scene-Shader48-postvendor-aggregate.json
+            ${{ runner.temp }}/gt-restore-first-921-shader-priority-SAFE.json
             ${{ runner.temp }}/t3-particle108-prevendor-safe.json
             ${{ runner.temp }}/t3-particle108-postvendor-safe.json
             ${{ runner.temp }}/t3-particle108-vendor-delta-safe.json
