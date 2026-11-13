@@ -1,5 +1,9 @@
 # ذاكرة GT — الحالة الحية
 
+## دفعات دمج البصريات في Android
+
+استعادة مدخلات المجسمات ومواقع Vulkan لشيدر 921، وتجهيز ShaderLab للفحص المعزول. دمجنا إصلاح معرّفات عظام المجسمات، ومثبّتي Particle108 وDepth Copy مع حفظ GUID. تحقق Unity المعزول للجسيمات وDepth نجح. [جلسة الأدلة والخطوات الباقية](sessions/20261113-GT-visual-restoration-native-batches.md). لا XAPK.
+
 ## GT Chat-33 addendum — exact SHA-original keyword and Property table proof
 
 [CI43358489426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358489426): The 921-slot source Shader48 includes **27 authentic Keyword Names / 27 Flags, 14 original keyword indices actually used across 74 source vertex/fragment variant metadata records**, all indices in the source 27-name table, and **35 original Properties**, one player bucket. The new `source_keyword_profile` in `scripts/gt_original_921_all_variants.py` records numeric-only facts while all original names, indices, program HLSL and the full Shader ParsedForm remain runner-private, purged after CI. Full 58/58 source stage Vulkan11 HLSL roundtrip remains PASS. Important: **index coverage ≠ proven Unity global/local keyword flag scope, Sampler/CB0 or ShaderLab original parity; original exported GUID and 770 Dummy Material docs have NOT been modified**. Continue P05 original four-pass complete variant router/Source Properties, P04 native same GUID install and material recensus. No XAPK until G0–G6.

@@ -1,4 +1,19 @@
 {
+  "latest_visual_integration": {
+    "session": "sessions/20261113-GT-visual-restoration-native-batches.md",
+    "mesh_sample_exported_matching": 99,
+    "mesh_export_full_check_run": 43454538800,
+    "mesh_export_full_matched": 4666,
+    "mesh_export_full_bind_pose_mismatches": 42,
+    "particle108_unity_exact_digest_pass": 43453934285,
+    "depth_unity_production_import_gate_pass": 43453622542,
+    "shader921_varying_source_pass": 43454104283,
+    "shader921_isolated_shaderlab_failed_import_run": 43454922060,
+    "shader921_isolated_shaderlab_run": 43509053958,
+    "smoke34_isolated_shaderlab_run": 43508991176,
+    "production_full_reconstruction_verified": false,
+    "new_XAPK_started": false
+  },
   "schema_version": 1,
   "agent": "GT",
   "repository": "alwansan/raf",
