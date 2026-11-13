@@ -97,7 +97,8 @@ def render(base: bytes) -> bytes:
     if (source.count("CaptureTextureObjects(") != 2
             or source.count('json.WriteString("export_instance", exportInstance);') != 2
             or source.count(REVIEWED_SHADER_FILTER) != 1
-            or source.count('Environment.GetEnvironmentVariable("RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE") == "1"') != 1):
+            or source.count('bool includeTextureObjects = Environment.GetEnvironmentVariable(') != 1
+            or source.count('"RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE") == "1";') != 1):
         raise ValueError("unsafe W1+Texture2D capture composition")
     return source.encode("utf-8")
 
