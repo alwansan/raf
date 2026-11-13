@@ -40,7 +40,29 @@
     "source_to_export_original_pointer_and_guid_same_export_join_verified": true,
     "real_sha_source_export_CI": 42044249541,
     "original_shader_programs_fully_restored_by_this_evidence": false,
-    "actual_Android_GPU_pixels_verified": false
+    "actual_Android_GPU_pixels_verified": false,
+    "actual_real_recovery_priority_CI": 43354787983,
+    "safe_real_sorted_dummy_slot_weights": [
+      921,
+      121,
+      108,
+      70,
+      34,
+      30,
+      20,
+      16,
+      16,
+      15,
+      7,
+      6,
+      5,
+      1,
+      1,
+      1,
+      1
+    ],
+    "real_authenticated_private_queue_contains_21_source_to_export_targets": true,
+    "private_priority_queue_files_not_published": true
   },
   "new_restoration_tools": {
     "source_private_ranker": "scripts/gt_restore_first_shader_priority.py",
@@ -50,7 +72,7 @@
     "safe_output_contains_aggregate_counts_only": true,
     "real_source_workflow": ".github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml",
     "real_source_workflow_run": 43354787983,
-    "real_source_run_confirmed_final_success_at_checkpoint": false,
+    "real_source_run_confirmed_final_success_at_checkpoint": true,
     "helper_revision": {
       "reviewed_W1_git_blob_sha1": "4b84a325bb1766583adb4ba6cfd9a23225f23bb9",
       "reviewed_B02_composed_SHA256": "d98345c1f0ade0c54704c0e49936d67b6cc8187d4a41e34980b4939fb54fe9aa",
@@ -58,7 +80,8 @@
       "B02_B21_reviewed_exact_hash_CI_success": 43354701952,
       "no_original_exporter_source_changed_by_GT": true,
       "no_authenticity_pin_bypassed": true
-    }
+    },
+    "real_source_run_conclusion": "success"
   },
   "restoration_completion_gates": [
     "G0",
@@ -71,5 +94,6 @@
   ],
   "actual_G0_G6_complete": false,
   "first_comprehensive_XAPK_compatibility_test_requested_after_directive": false,
-  "next_action": "After real runner source queue receipt, restore top original high-fanout 921-slot Shader48 complete Pass/Variant/CB/Sampler/Texture into unique original exported GUID, validate original bindings; then all remaining dummy families, FFT/Depth, models/textures/effects. No XAPK until restoration G0-G6 complete."
+  "next_action": "After real runner source queue receipt, restore top original high-fanout 921-slot Shader48 complete Pass/Variant/CB/Sampler/Texture into unique original exported GUID, validate original bindings; then all remaining dummy families, FFT/Depth, models/textures/effects. No XAPK until restoration G0-G6 complete.",
+  "source_only_no_XAPK_recovery_status": "AUTHENTIC_SIX_SCENE_PRIORITY_REPRODUCED_AND_PRIVATE_QUEUE_GENERATED"
 }
