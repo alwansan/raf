@@ -3,7 +3,7 @@
   "agent": "GT",
   "repository": "alwansan/raf",
   "write_branch": "feature/android-native-port",
-  "updated_date": "2026-11-12",
+  "updated_date": "2026-11-13",
   "original_source": {
     "ref": "zip2",
     "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -55,7 +55,8 @@
     "original_spectrum_ShaderFind_immediate_local_CI": 43301684794,
     "original_spectrum_local_linear_IL_CI": 43302209121,
     "original_spectrum_local_cfg_initial_compiler_failure": 43302598498,
-    "original_spectrum_local_cfg_branch_aware_verified": 43302914466
+    "original_spectrum_local_cfg_branch_aware_verified": 43302914466,
+    "last_full_native_reconstruct_success_release_denied": 43299084397
   },
   "workstreams": [
     {
@@ -610,5 +611,25 @@
     "Choose next actionable unblocked milestone: latest native status, source-authentic Foam/Spectrum pass, kernel6 identity, then Material Dummy classes.",
     "Run targeted synthetic plus real source CI where feasible, collect result and limits, update the plan/state/summary/memory/restore in the same cycle.",
     "New phone results are required for device_verified; a successful GitHub Action is not by itself a gameplay pixel pass."
-  ]
+  ],
+  "additional_device_regression_sessions": [
+    {
+      "session": "20261112-235351-196",
+      "local_date": "2026-11-12",
+      "owner_CL_commit": "a320d5e23962568b62bffec95399cf3e0cb1f579",
+      "source_summary": "raft log/lf/LogRaft-20261112-235351-196/session-summary.json",
+      "visual_screenshots": 4,
+      "gate": "KNOWN_DEVICE_LOG_GATE_REJECTED",
+      "original_UltimateWater_pass_failures": 36828,
+      "spectrum_failures": 15054,
+      "foam_global_failures": 21774,
+      "invalid_compute_kernel_index6": 6106,
+      "cursor_RGBA32": 2844,
+      "OBB_GUID_failures": 2,
+      "newer_binary_after_water_fix_verified": false,
+      "exact_Shader_Material_Runtime_or_GPU_proof": false,
+      "evidence": "clients/GT/evidence/20261113_cl_night_device_graphics_and_build_receipt.json"
+    }
+  ],
+  "new_full_native_delivery_blocker": "GitHub Release POST HTTP403 with contents:write requested; signed APK+OBB checkpoint and full delivery Artifacts exist, release absent"
 }
