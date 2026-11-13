@@ -699,5 +699,36 @@
     "tracer_integration_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/Program.cs",
     "real_source_7_blit_CI": 43343971412,
     "strict_source_7_blit_CI": 43344199792
+  },
+  "proofs_20261113_spectrum_production_source_guid_install": {
+    "source_only_installer_contract_CI": 43346292249,
+    "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "private_source_original_passes": 7,
+    "private_source_index4_keyword_variants": 2,
+    "production_import_staging_configured": true,
+    "production_private_original_Spectrum_DXBC_HLSL_published": false,
+    "source_original_Shader_export_identity_require_exactly_one": true,
+    "source_original_shader_GUID_required_unique_existing": true,
+    "preserves_exported_shader_meta_bytewise": true,
+    "creates_original_shaders_or_meta_new": false,
+    "private_rollback_backup_external": true,
+    "source_free_installer_synthetic_tests_pass": true,
+    "native_new_build_request_run": 43346405263,
+    "native_new_build_source_sha": "4b74f6bdec8781e64d6aae182797d06b83109c35",
+    "native_request_gate_success": true,
+    "native_Unity_activation_preflight_success": true,
+    "native_main_full_build_completed": false,
+    "original_production_shader_install_status": "PENDING_FULL_NATIVE_SHA_ORIGINAL_EXPORT_PROOF",
+    "original_Unity_Android_Vulkan_whole_game_compile_verified": false,
+    "original_Adreno_water_pixels_verified": false,
+    "important_remaining": [
+      "actual_full_game_shader_import_and_pixel_validation",
+      "Foam_Global_original_two_pass",
+      "index6_exact_compute_owner",
+      "770_postvendor_dummy_material_docs",
+      "LOW_MEMORY_actual_resource_cause",
+      "successful_release_permissions"
+    ],
+    "session": "clients/GT/sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md"
   }
 }
