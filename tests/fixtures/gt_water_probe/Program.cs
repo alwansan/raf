@@ -183,7 +183,7 @@ public static class Program
             catch (InvalidOperationException) { foamBlocked=true; }
             Require(foamBlocked, "native accepted original Foam compiler errors");
             foamShader.syntheticCompileError=false;
-            File.WriteAllText(foam, "//DummyShaderTextExporter\\nShader \\"synthetic\\" {}");
+            File.WriteAllText(foam, "//DummyShaderTextExporter\nShader \"synthetic\" {}");
             foamBlocked=false;
             try
             {
@@ -191,7 +191,7 @@ public static class Program
             }
             catch (InvalidOperationException) { foamBlocked=true; }
             Require(foamBlocked, "native accepted original Foam dummy ShaderLab");
-            File.WriteAllText(foam,"Shader \\"synthetic\\" { SubShader { Pass {} Pass {} } }");
+            File.WriteAllText(foam, "Shader \"synthetic\" { SubShader { Pass {} Pass {} } }");
 
             // A malicious/redirected asset path must never be read as a
             // local project .shader, even if it resolves to a real outer file.
