@@ -117,6 +117,22 @@ def analyze(data):
             raise ValueError("collector_writer_sink_failure_count_mismatch")
         if writer_pending == 0 and written + writer_failed != received:
             raise ValueError("unaccounted_collector_writer_batches")
+    # Android ActivityManager's matched PID reason is separate from render
+    # errors. Expose a specific LOW_MEMORY observation; never infer the
+    # originating GPU/asset allocation or the exact killer without evidence.
+    exit_info = data.get("stop_time_android_process_exit_info", {})
+    if not isinstance(exit_info, dict):
+        raise ValueError("invalid_exit_info_receipt")
+    matched_exit = exit_info.get("status") == "matched_pid_in_android_exit_history"
+    if matched_exit:
+        reason_code = _natural(exit_info.get("android_exit_reason_code"),
+                               "android_exit_reason_code")
+        reason_label = exit_info.get("android_exit_reason_label")
+        if not isinstance(reason_label, str) or not 1 <= len(reason_label) <= 64:
+            raise ValueError("malformed_android_exit_reason_label")
+        low_memory_exit = reason_code == 3 and reason_label == "LOW_MEMORY"
+    else:
+        low_memory_exit = False
     critical_ok = all(receipts[x] == 0 for x in CRITICAL)
     capture_ok = (lost_local == 0 and
                   (not writer_present or
@@ -133,6 +149,8 @@ def analyze(data):
         "water_invalid_pass_by_family": {
             "spectrum": spectrum, "foam_global": foam, "other": other},
         "compute_invalid_kernel_index": {"six": k6, "other": k_other},
+        "android_matched_low_memory_exit_observed": low_memory_exit,
+        "android_process_exit_cause_other_than_reported_reason_proven": False,
         "log_capture_local_batches_failed": lost_local,
         "collector_writer_accounting_verified": writer_present,
         "collector_writer_failed_batches": writer_failed,
