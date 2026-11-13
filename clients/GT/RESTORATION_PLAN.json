@@ -527,14 +527,17 @@
     },
     {
       "id": "M1",
-      "status": "deferred_restore_first",
+      "status": "pending",
       "action_ar": "تأجيل XAPK التجريبي الشامل إلى ما بعد انتهاء جميع استعادة الموارد الأصلية ودمجها",
       "gate": "G0–G6 restored-source/export/Unity scope complete then owner-compatible XAPK test; current runs are historical evidence only",
-      "evidence": []
+      "evidence": [
+        43247161671
+      ],
+      "phase_deferred_due_owner_20261113": true
     },
     {
       "id": "M2",
-      "status": "active_source_recovery_not_device",
+      "status": "active",
       "action_ar": "استعادة كل ShaderLab للماء بالمصدر الأصلي والـGUID بما فيها Foam وDepth والـCB0/RT ثم لاحقاً توافق Android",
       "gate": "Original program, passes, keywords, Material, sampler, CB0 and RT linked in source and same export; no runtime phone gate until restoration phase ends",
       "evidence": [
@@ -564,7 +567,7 @@
     },
     {
       "id": "M3",
-      "status": "active_source_recovery_kernel_identity_open",
+      "status": "active",
       "action_ar": "استعادة المصادر الأصلية لجميع ComputeShader وهوية FFT Kernel6 وتركيب Dispatch مع معرّفات المصدر",
       "gate": "All 9 original ComputeShader resources and kernel mapping ownership SHA/references proven in project, no invented indices",
       "evidence": [
@@ -573,7 +576,7 @@
     },
     {
       "id": "M4",
-      "status": "highest_priority_active",
+      "status": "active",
       "action_ar": "اكتشاف وإصلاح شيدرات Material Custom التي ما زالت Dummy (770 مستنداً)، بالترتيب الأصلي لعدد Renderer/Material المتأثرة",
       "gate": "0 known custom Material documents dependent on dummy Shader after real same-export audit; source Shader and program/keyword/texture/sampler evidence for each distinct shader",
       "evidence": [
@@ -582,12 +585,13 @@
     },
     {
       "id": "M5",
-      "status": "deferred_compatibility_phase",
+      "status": "pending",
       "action_ar": "بعد G0–G6 فقط: أول XAPK واختبارات هاتف Adreno 730 والتوافق وإصلاح ذاكرة/OBB/Input إن بقيت",
       "gate": "Restoration completeness accepted, then first comprehensive signed XAPK+phone visual/log/compatibility acceptance",
       "evidence": [
         43263197989
-      ]
+      ],
+      "phase_deferred_due_owner_20261113": true
     }
   ],
   "next_session_sequence": [
