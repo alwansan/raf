@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md",
-  "next_action": "Read Chat26. CI43300958608 source managed SHA typed Spectrum Shader.Find literal exactly one; CI43301684794 immediate typed Shader local; CI43302914466 35 reachable IL/3 branch/1 source local load on some path, unclassified consumer. No 82 serialized Material references. NEXT one source local typed consuming IL/stack/interop path, then Material/RT/CB0/Sampler and Adreno pixels. Never invent original Material GUID, no LFS. Full native CI43299084397 on older snapshot was running.",
+  "latest_session": "clients/GT/sessions/20261113-GT-new-owner-night-phone-session-chat-27.md",
+  "next_action": "GT Chat27: CL@a320d5e original owner 23:53 LogRaft session 20261112-235351-196 shows 36828 water invalid passes (Spectrum15054+Foam21774), kernel6 6106 unproven exact owner, cursor2844, OBB GUID2, 4 images with white raft/solid cyan water; old complete native run 43299084397 reconstruct success but Release POST HTTP403. Device graphics acceptance rejected. Validate updated independent original CL CI, then return to Chat26 exact typed Shader.Find local consuming stack/Material/Graphics/RT proof. No LFS, no GUID inventions; release publishing requires owner-authorized Contents-write token or settings.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -822,5 +822,37 @@
     "original_Shader_Find_executed_in_Unity": false,
     "original_data_modified": false,
     "LFS_used": false
+  },
+  "proofs_20261113_chat27": {
+    "session_path": "clients/GT/sessions/20261113-GT-new-owner-night-phone-session-chat-27.md",
+    "source_cl_commit": "a320d5e23962568b62bffec95399cf3e0cb1f579",
+    "owner_log_session": "20261112-235351-196",
+    "original_ultimate_water_invalid_pass": 36828,
+    "original_spectrum_invalid_pass": 15054,
+    "original_foam_global_invalid_pass": 21774,
+    "invalid_compute_kernel_index6": 6106,
+    "kernel_source_identity_proven": false,
+    "cursor_RGBA32_count": 2844,
+    "obb_guid_load_errors": 2,
+    "world_loaded_message_seen": true,
+    "android_gameplay_fully_verified": false,
+    "main_menu_white_raft_screenshot_observed": true,
+    "underwater_bright_cyan_screenshot_observed": true,
+    "new_screenshots": 4,
+    "log_collector_received_written_batches": 3390,
+    "log_collector_failed_batches": 0,
+    "reported_game_log_lines": 1022470,
+    "original_device_water_pixels_verified": false,
+    "exact_original_dynamic_spectrum_material_binding_verified": false,
+    "latest_completed_native_build_run": 43299084397,
+    "native_reconstruction_success": true,
+    "native_release_post_failed_http403": true,
+    "native_snapshot_older_than_current_head": true,
+    "release_artifact_delivery_available": true,
+    "release_published": false,
+    "evidence_path": "clients/GT/evidence/20261113_cl_night_device_graphics_and_build_receipt.json",
+    "device_gate_source": "scripts/gt_device_graphics_acceptance.py",
+    "device_gate_workflow": ".github/workflows/raft-gt-device-graphics-acceptance.yml",
+    "real_new_phone_gate_CI_result": "pending_postcommit_verification"
   }
 }
