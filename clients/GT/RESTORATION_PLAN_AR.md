@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-28 — إغلاق مسار حفظ مادة Spectrum بالمصدر، لا قبول GPU
+
+تم إثبات مواد Spectrum الديناميكية حتى **حقل Material أصلي**: [43338485431](https://github.com/alwansan/raf/actions/runs/43338485431) `Shader.Find→own ctor→Material(Shader)`، [43339062121](https://github.com/alwansan/raf/actions/runs/43339062121) `dup`، [43339407339](https://github.com/alwansan/raf/actions/runs/43339407339) `set_` property→`stfld Material`، [43339688082](https://github.com/alwansan/raf/actions/runs/43339688082) **24 قراءات للحقل موزعة على 8 methods، منها 7 مع Graphics calls ودالتان RenderTexture calls**. هذا دليل source topology على مسار صنع المادة وحفظها وقراءتها، **وليس** برهان GPU ولا أن هذه المادة وسيط Graphics محدد. المطلوب P06: typed IL stack argument lineage لكل 24 ldfld، ثم أصالة ShaderLab 7Pass/Global Keyword وCB0/Sampler/RT، Foam2Pass، Compute kernel6، فحص هاتف Adreno وتغيير 770 Dummy الأصيلة. لا LFS أو GUID وهمي.
+
+---
+
 ## GT Chat-28 — مسار Spectrum الديناميكي الأصلي يصل إلى Material(Shader)
 
 P06/M2 تقدّم من مجرد Shader.Find إلى **سلسلة مصدر مثبتة** عبر [43337606930](https://github.com/alwansan/raf/actions/runs/43337606930)، [43337840022](https://github.com/alwansan/raf/actions/runs/43337840022)، [43338106531](https://github.com/alwansan/raf/actions/runs/43338106531)، و[43338485431](https://github.com/alwansan/raf/actions/runs/43338485431): Spectrum original name → typed Shader.Find → Shader local → new original 3-argument constructor, Shader last → **original third Shader argument immediately passed to `new UnityEngine.Material(Shader)`**. الـconstructor 44 IL وMaterial.newobj واحد. **Source evidence only**؛ Material result→Renderer/Graphics/RT غير مثبت، لا Original shader GPU/Android pixel ولا Foam/FFT index6 أو OBB GUID، ولا 770 Dummy أصيلة. P06/M2 يبقيان blocked لقبول الهاتف حتى الربط الحقيقي. التالي: تعقّب الـMaterial الجديد بعد newobj، ثم Runtime/RT/Sampler/CB0 وتضمين shader الأصلي واختبار Android على جهاز المالك. [جلسة Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md).
