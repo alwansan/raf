@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-31 — فصل إنجاز Spectrum عن أخطاء Depth/Compute وطلب التجربة
+
+P06 تحقق فعلياً في [Native43346405263](https://github.com/alwansan/raf/actions/runs/43346405263): **Spectrum الأصل 7Pass أُدخل في مشروع AssetRipper مع `.meta`/GUID محفوظين**؛ لم يصل إلى Unity Editor GPU لأنه توقف عند `Authentic water gate`. السبب: `record_documented_water_limitation` رفض شرط Spectrum القديم الموثق مع أنه أصبح PASS. تقرير المشاريع الحقيقية يثبت Spectrum `[7]`، Foam القديم `[1]`، Depth `[6,3]` (الثاني أقل من 4)، Blur `[2]`، Volumetric `[5]`، Water Compute مرشح غير موجود وهوية Kernel غير مثبتة. شرط الفشل موثَّق بدقة وليس Shader compile failure. تم إنشاء fixture الاختبار مع Foam2/Depth6+3/لا Compute في [CI43350378817 SUCCESS](https://github.com/alwansan/raf/actions/runs/43350378817). تم إرسال بناء [43350559665](https://github.com/alwansan/raf/actions/runs/43350559665) جديد بثلاث قيود تجريبية مطابقة للأدلة المتوقعة دون تمرير ادعاء original water كاملة. البناء [43349181838](https://github.com/alwansan/raf/actions/runs/43349181838) ما زال يعيد المشروع مع Spectrum/Foam ومراقب. تحقق من CI قبل قبول أي APK؛ الأصل والـCB0 والسامبلر وFFT و770 Dummy والهاتف ما زالت مفتوحة. [Chat31](sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md).
+
+---
+
 ## GT Chat-30 — اشتراط ShaderUtil و7 Passes قبل تغليف Android
 
 لمنع `Unity Build succeeded` الوهمي، أضيف في كود Native Builder الحالي شرط `GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses()` داخل Unity Editor. يرفض 0/2 shaders بنفس اسم Spectrum، أي passCount≠7، Dummy source، ملف غير آمن أو `ShaderUtil.ShaderHasError` true. [CI43347458130 SUCCESS](https://github.com/alwansan/raf/actions/runs/43347458130) اختبار C# صناعي وليس Compilation لملفات اللعبة. **لم يدخل Run43346405263 لأنه بدأ قبل هذا التعديل**. يجب أن يدخل طلب Native لاحقاً ثم تُفحص حزمة Android/Adreno نفسها؛ بقاء عدم إثبات P06/M2 كما هو.
