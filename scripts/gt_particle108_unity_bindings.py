@@ -2,7 +2,7 @@
 """GT Particle108: source-bound Unity HLSL naming experiment (private only).
 
 Moves translated HLSL *symbol names* to the exact serialized original Shader48
-m_TextureParams name/index contract. Original DXBC bytecode, input texture
+common and variant parameter records. Original DXBC bytecode, input texture
 payloads, Material/GUID bindings, values and register annotations are untouched.
 Source metadata mismatch is a hard error, never guessed or auto-filled.
 The candidate is NOT evidence of Android pixels, original keyword routing or
@@ -22,6 +22,11 @@ from scripts import t3_original_particle108_spirv_translation as translation
 from scripts import t3_particle108_private_shaderlab_variants as variants
 from scripts import t3_particle108_private_keyword_routed_shaderlab as router
 from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+from scripts.a12_shader_parameter_decode import parse_parameter_blob
+from scripts.b25_foam_cb_namebridge import original_name_registry
+from scripts.gt_original_921_cb_hlsl import verify_named_constant_buffers
+from scripts.gt_original_921_cb_layout import bind_constant_buffers, constant_buffer_lanes
+from scripts.gt_particle108_source_sampling_pairs import sample_operand_pairs
 from scripts.w1_stage_zip2_owners import fingerprint
 from scripts.w1_rebind_depth_resources import IDENT
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
@@ -65,6 +70,8 @@ SAFE_FAILURE=frozenset((
     "ORIGINAL_TEXTURE_PARAMETER_NAME_NOT_IDENTIFIER",
     "ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING", "ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID",
     "ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED",
+    "ORIGINAL_VARIANT_PARAMETER_BLOB_INVALID", "ORIGINAL_VARIANT_TEXTURE_SLOT_DUPLICATED",
+    "ORIGINAL_DXBC_SAMPLE_BINDING_MISMATCH", "ORIGINAL_CONSTANT_BUFFER_LAYOUT_UNPROVEN",
 ))
 class BridgeError(ValueError):
     def __init__(self,reason):
@@ -73,7 +80,7 @@ class BridgeError(ValueError):
         super().__init__(reason)
 
 
-def original_names_and_registers(program,name_indices):
+def original_names_and_registers(program,name_indices,variant_resources=()):
     common=program.get("m_CommonParameters")
     if not isinstance(common,dict):
         raise BridgeError("ORIGINAL_STAGE_COMMON_PARAMETERS_MISSING")
@@ -99,16 +106,27 @@ def original_names_and_registers(program,name_indices):
         names[index]=name
     raw=common.get("m_TextureParams")
     if type(raw) is not list: raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_TABLE_MISSING")
-    textures,samplers={},{}
+    texture_slots={}
     for row in raw:
         if not isinstance(row,dict) or not {"m_Index","m_NameIndex","m_SamplerIndex"}<=set(row):
             raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_ENTRY_INVALID")
         t,n,s=row["m_Index"],row["m_NameIndex"],row["m_SamplerIndex"]
-        if type(t) is not int or t<0 or t in textures:
+        if type(t) is not int or t<0 or t in texture_slots:
             raise BridgeError("ORIGINAL_TEXTURE_REGISTER_DUPLICATED")
         if n not in names:
             raise BridgeError("ORIGINAL_TEXTURE_NAME_INDEX_MISSING")
-        name=names[n]
+        texture_slots[t]=(names[n],s)
+    variant_slots=set()
+    for row in variant_resources:
+        if row["kind"] != 0:
+            continue
+        slot=row["index"]
+        if type(slot) is not int or slot<0 or slot in variant_slots:
+            raise BridgeError("ORIGINAL_VARIANT_TEXTURE_SLOT_DUPLICATED")
+        variant_slots.add(slot)
+        texture_slots[slot]=(row["name"],row["extra_value"])
+    textures,samplers={},{}
+    for t,(name,s) in texture_slots.items():
         if not IDENT.fullmatch(name):
             raise BridgeError("ORIGINAL_TEXTURE_PARAMETER_NAME_NOT_IDENTIFIER")
         textures[t]=name
@@ -117,6 +135,35 @@ def original_names_and_registers(program,name_indices):
                 raise BridgeError("ORIGINAL_SAMPLER_REGISTER_AMBIGUOUS")
             samplers[s]="sampler"+name
     return textures,samplers
+
+
+def variant_parameter_layout(program,table,bucket,ordinal):
+    indices=program.get("m_ParameterBlobIndices")
+    if type(indices) is not list or type(bucket) is not int or not 0<=bucket<len(indices):
+        raise BridgeError("ORIGINAL_VARIANT_PARAMETER_BLOB_INVALID")
+    rows=indices[bucket]
+    if type(rows) is not list or type(ordinal) is not int or not 0<=ordinal<len(rows):
+        raise BridgeError("ORIGINAL_VARIANT_PARAMETER_BLOB_INVALID")
+    index=rows[ordinal]
+    if type(index) is not int or not 0<=index<len(table):
+        raise BridgeError("ORIGINAL_VARIANT_PARAMETER_BLOB_INVALID")
+    layout={}
+    try:
+        parse_parameter_blob(table[index][1],private_layout=layout)
+    except (IndexError,TypeError,ValueError):
+        raise BridgeError("ORIGINAL_VARIANT_PARAMETER_BLOB_INVALID") from None
+    return layout
+
+
+def verify_sample_bindings(original_dxbc,textures,samplers):
+    try:
+        samples=sample_operand_pairs(original_dxbc)
+    except ValueError:
+        raise BridgeError("ORIGINAL_DXBC_SAMPLE_BINDING_MISMATCH") from None
+    for texture,sampler,_ in samples:
+        if texture not in textures or samplers.get(sampler)!="sampler"+textures[texture]:
+            raise BridgeError("ORIGINAL_DXBC_SAMPLE_BINDING_MISMATCH")
+    return len(samples)
 
 
 def authenticated_original_dxbc_registers(original_dxbc):
@@ -154,11 +201,14 @@ def authenticated_original_dxbc_registers(original_dxbc):
     return slots
 
 
-def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
+def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None,variant_resources=None):
     if (type(hlsl) is not str or not 0<len(hlsl.encode())<=MAX_HLSL
         or type(stage) is not int or stage not in (0,1)):
         raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
-    textures,samplers=original_names_and_registers(program,name_indices)
+    textures,samplers=original_names_and_registers(program,name_indices,variant_resources or ())
+    sample_count=0
+    if variant_resources is not None:
+        sample_count=verify_sample_bindings(original_dxbc,textures,samplers)
     authenticated_rdef=(None if original_dxbc is None else
                         authenticated_original_dxbc_registers(original_dxbc))
     # Reject a nonzero descriptor space even if ANOTHER sampler happens to
@@ -232,20 +282,21 @@ def rebind_stage(hlsl,program,name_indices,stage,*,original_dxbc=None):
     buffers=sorted(set(BUFFER.findall(hlsl)))
     stage_prefix="GT_ORIGINAL_VS_" if stage==1 else "GT_ORIGINAL_PS_"
     mapping.update({name:stage_prefix+name for name in buffers})
-    names=re.compile(r'\b(?:'+ '|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))+r')\b')
+    names=re.compile(r'\b(?:'+ '|'.join(re.escape(k) for k in sorted(mapping,key=len,reverse=True))+r')\b') if mapping else None
     # Only variable identifiers are replaced; binding register(tN/sN) is not
     # rewritten, as it is the compiled-program contract, not a variable.
-    fixed=names.sub(lambda m:mapping[m.group()],hlsl)
+    fixed=names.sub(lambda m:mapping[m.group()],hlsl) if names is not None else hlsl
     # Do not touch the translated graphics API register annotations: the
     # recovered source identity comes exclusively from original RDEF and
     # original Unity Shader metadata.
     register_pattern=re.compile(r'\bregister\s*\([^)]*\)')
     if register_pattern.findall(fixed)!=register_pattern.findall(hlsl):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
-    if len(fixed)>MAX_HLSL or fixed==hlsl:
+    if len(fixed)>MAX_HLSL or (fixed==hlsl and variant_resources is None):
         raise BridgeError("TRANSLATOR_RESOURCE_COLLISION")
     return fixed,{"original_texture_registers_mapped":len(used["t"]),
                   "original_sampler_registers_mapped":len(used["s"]),
+                  "original_DXBC_sample_operand_pairs_verified":sample_count,
                   "source_to_translator_descriptor_register_drifts_authenticated":source_vs_translated_drift,
                   "source_DXBC_original_RDEF_verified_absent":int(authenticated_rdef is not None and authenticated_rdef["s"] is None),
                   "stage_local_original_cbuffer_symbols_disambiguated":len(buffers),
@@ -275,37 +326,55 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
         raise BridgeError("ORIGINAL_STAGE_LAYOUT_UNSUPPORTED")
     p=parsed["m_SubShaders"][0]["m_Passes"][0]
     original_tables=[records(parts) for platform,parts in decoded_platforms(tree) if platform==4]
-    if len(original_tables)!=1 or len(translation.exact_four_pairs(parsed,original_tables[0]))!=4:
+    if len(original_tables)!=1:
         raise BridgeError("SOURCE_ORIGINAL_MISMATCH")
     if set(private_source.glob("keyword-*-private.shader"))==set():
         raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
-    private_dest.mkdir()
+    private_dest.mkdir(mode=0o700)
     counts=Counter()
     try:
-        pairs=translation.exact_four_pairs(parsed,original_tables[0])
+        table=original_tables[0]
+        names=original_name_registry(p["m_NameIndices"])
+        pairs=translation.exact_four_stage_links(parsed,table)
         for n,(vs,fs) in enumerate(pairs):
             pieces={}
-            for stage in (1,0):
+            for stage,(dxbc,bucket,ordinal) in ((1,vs),(0,fs)):
                 path=private_source/("keyword-%d-stage-%d/private.hlsl"%(n,stage))
                 if path.is_symlink() or not path.is_file():
                     raise BridgeError("TRANSLATOR_SOURCE_READ_FAILED")
                 text=path.read_text(encoding="utf-8")
-                fixed,stats=rebind_stage(text,p["progVertex" if stage==1 else "progFragment"],
-                                         p["m_NameIndices"],stage,
-                                         original_dxbc=vs if stage==1 else fs)
+                program=p["progVertex" if stage==1 else "progFragment"]
+                layout=variant_parameter_layout(program,table,bucket,ordinal)
+                # Name the uniform fields first so the legacy compile-only
+                # backing array disambiguation does not replace original CBs.
+                try:
+                    buffers=bind_constant_buffers(text,program["m_CommonParameters"],names,layout)
+                    for buffer in buffers:
+                        buffer["original_named_lanes"]=constant_buffer_lanes(buffer)
+                    scratch=private_dest/f"constant-buffers-{n}-{stage}"
+                    scratch.mkdir(mode=0o700)
+                    (scratch/"resource-bound.hlsl").write_text(text,encoding="utf-8")
+                    counts["named_constant_buffer_offsets"]+=verify_named_constant_buffers(scratch,stage,buffers)
+                    named=(scratch/"named-constant-buffers.hlsl").read_text(encoding="utf-8")
+                except (KeyError,ValueError):
+                    raise BridgeError("ORIGINAL_CONSTANT_BUFFER_LAYOUT_UNPROVEN") from None
+                fixed,stats=rebind_stage(named,program,p["m_NameIndices"],stage,
+                                         original_dxbc=dxbc,variant_resources=layout["resources"])
                 pieces[stage]=fixed
+                counts["named_constant_buffer_layouts"]+=len(buffers)
                 counts.update(stats)
-            model=variants.source_models(vs,fs)
+            model=variants.source_models(vs[0],fs[0])
             candidate,_=variants.assemble(parsed,pieces[1],pieces[0],model)
             (private_dest/("keyword-%d-private.shader"%n)).write_text(candidate)
         result=router.verify(private_dest,parsed)
+        (private_dest/"routing-safe.json").write_text(json.dumps(result),encoding="utf-8")
         if (result["status"]!=router.STATUS or
             result["private_combination_stage_Vulkan11_SPIRV_valid"]!=8):
             raise BridgeError("ORIGINAL_VULKAN_STAGE_REVALIDATION_FAILED")
     except BaseException:
         shutil.rmtree(private_dest)
         raise
-    return {"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V1",
+    return {"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V2",
             "status":"SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8",
             "source_original_particle_shader_108_uses_SHA_verified":True,
             "original_source_four_variant_pairs_recovered":4,
@@ -313,7 +382,9 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
             "private_vulkan11_recompiled_stage_branches":8,
             "private_source_mapped_original_texture_parameter_links":counts["original_texture_registers_mapped"],
             "private_source_mapped_original_sampler_parameter_links":counts["original_sampler_registers_mapped"],
-            "private_stage_buffer_symbols_disambiguated":counts["stage_local_original_cbuffer_symbols_disambiguated"],
+            "private_original_DXBC_sample_operand_pairs_verified":counts["original_DXBC_sample_operand_pairs_verified"],
+            "private_original_named_constant_buffer_layouts":counts["named_constant_buffer_layouts"],
+            "private_original_named_constant_buffer_reflected_offsets":counts["named_constant_buffer_offsets"],
             "source_DXBC_original_RDEF_absent_stages":counts["source_DXBC_original_RDEF_verified_absent"],
             "original_program_DXBC_bytes_or_values_modified":False,
             "original_HLSL_register_annotations_preserved":True,
@@ -336,7 +407,7 @@ def main():
         report=recover(a.original,a.manifest,a.private_source,a.private_dest)
     except Exception as e:
         reason=e.reason if isinstance(e,BridgeError) else "UNCLASSIFIED_ORIGINAL_SOURCE"
-        report={"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V1",
+        report={"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V2",
                 "status":"INCONCLUSIVE","failure_code":reason,
                 "original_names_HLSL_DXBC_SPV_Guids_or_private_values_published":False,
                 "Unity_Editor_compilation_proven":False}

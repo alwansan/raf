@@ -39,8 +39,8 @@ IO_KEYS = ("identical","original_slots","roundtrip_slots","removed_locations",
 IO_BOOLEAN = frozenset(("identical","type_multiset_equal","location_only_remap_candidate"))
 
 
-def exact_four_pairs(parsed:dict, table:list, *, linker=linked_program):
-    """Return ONLY private paired original DXBC buffers; no guessed keywords."""
+def exact_four_stage_links(parsed:dict, table:list, *, linker=linked_program):
+    """Return paired DXBC and the exact serialized bucket and ordinal of each stage."""
     if (type(parsed) is not dict or
         type(parsed.get("m_SubShaders")) is not list or
         len(parsed["m_SubShaders"])!=1 or
@@ -71,22 +71,27 @@ def exact_four_pairs(parsed:dict, table:list, *, linker=linked_program):
             key=(bucket,variant_key(meta))
             if key in indexed:
                 raise ValueError("duplicate_original_shader_keyword_player_bucket")
-            indexed[key]=meta
+            indexed[key]=(ordinal,meta)
         stages[kind]=indexed
     if len(stages[1].keys() & stages[0].keys())!=PAIRS:
         raise ValueError("original_particle108_stage_keyword_bucket_mismatch")
     pairs=[]
-    for key,vert_meta in stages[1].items():
-        fragment_meta=stages[0][key]
+    for key,(vert_ordinal,vert_meta) in stages[1].items():
+        fragment_ordinal,fragment_meta=stages[0][key]
         vs,_=linker(vert_meta,table,1)
         fs,_=linker(fragment_meta,table,0)
         if (type(vs) is not bytes or type(fs) is not bytes or
             not vs or not fs or max(len(vs),len(fs))>MAX_PRIVATE_STAGE_BYTES):
             raise ValueError("invalid_original_particle108_linked_DXBC_bytes")
-        pairs.append((vs,fs))
+        pairs.append(((vs,key[0],vert_ordinal),(fs,key[0],fragment_ordinal)))
     if len(pairs)!=PAIRS:
         raise ValueError("incomplete_original_particle108_compiled_pairs")
     return pairs
+
+
+def exact_four_pairs(parsed:dict, table:list, *, linker=linked_program):
+    """Return ONLY private paired original DXBC buffers; no guessed keywords."""
+    return [(vs[0],fs[0]) for vs,fs in exact_four_stage_links(parsed,table,linker=linker)]
 
 
 def _validate_reflection(data:dict):

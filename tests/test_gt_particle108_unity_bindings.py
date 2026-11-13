@@ -1,8 +1,10 @@
 """GT private only: do not infer Particle108 texture/sampler or cbuffer bindings."""
 import unittest
+from unittest.mock import patch
 
 from scripts.gt_particle108_unity_bindings import (
     BridgeError, original_names_and_registers, rebind_stage,
+    variant_parameter_layout, verify_sample_bindings,
 )
 
 class OriginalParticleUnityBindingTests(unittest.TestCase):
@@ -21,6 +23,41 @@ class OriginalParticleUnityBindingTests(unittest.TestCase):
             "float4 main() : SV_Target {return texture_t0.Sample(samplers0,float2(0,0))+"
             "texture_t1.Sample(sampler_s1,float2(0,0))+cb1_0_m0[0];}\n"
         )
+
+    def test_variant_texture_replaces_common_slot_and_sampler_together(self):
+        overrides=[{"kind":0,"index":0,"name":"_StageTexture","extra_value":5},
+                   {"kind":1,"index":0,"name":"UnityPerDraw","extra_value":0}]
+        textures,samplers=original_names_and_registers(self.program,self.indices,overrides)
+        self.assertEqual(textures,{0:"_StageTexture",1:"_NoiseTex"})
+        self.assertEqual(samplers,{5:"sampler_StageTexture",1:"sampler_NoiseTex"})
+
+    def test_duplicate_variant_texture_slot_refused(self):
+        duplicate={"kind":0,"index":0,"name":"_StageTexture","extra_value":5}
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_VARIANT_TEXTURE_SLOT_DUPLICATED"):
+            original_names_and_registers(self.program,self.indices,[duplicate,duplicate])
+
+    def test_variant_parameter_blob_resolves_stage_bucket_and_ordinal(self):
+        program={"m_ParameterBlobIndices":[[2,0],[1,2]]}
+        table=[(0,b"first"),(1,b"second"),(2,b"third")]
+        resource={"kind":0,"index":7,"name":"_StageTexture","extra_value":5}
+
+        def decode(raw, *, private_layout):
+            self.assertEqual(raw,b"second")
+            private_layout["resources"]=[resource]
+
+        with patch("scripts.gt_particle108_unity_bindings.parse_parameter_blob",side_effect=decode):
+            self.assertEqual(variant_parameter_layout(program,table,1,0),{"resources":[resource]})
+        with self.assertRaisesRegex(BridgeError,"ORIGINAL_VARIANT_PARAMETER_BLOB_INVALID"):
+            variant_parameter_layout(program,table,0,2)
+
+    def test_source_sample_verifies_texture_and_sampler_as_a_pair(self):
+        textures={0:"_MainTex",1:"_NoiseTex"}
+        samplers={0:"sampler_MainTex",1:"sampler_NoiseTex"}
+        with patch("scripts.gt_particle108_unity_bindings.sample_operand_pairs",return_value=[(0,0,69)]):
+            self.assertEqual(verify_sample_bindings(b"",textures,samplers),1)
+        with patch("scripts.gt_particle108_unity_bindings.sample_operand_pairs",return_value=[(0,1,69)]):
+            with self.assertRaisesRegex(BridgeError,"ORIGINAL_DXBC_SAMPLE_BINDING_MISMATCH"):
+                verify_sample_bindings(b"",textures,samplers)
 
     def test_explicit_spirv_cross_space_zero_preserved_for_samplers(self):
         spaced=self.code.replace("register(s0)", "register(s0, space0)")

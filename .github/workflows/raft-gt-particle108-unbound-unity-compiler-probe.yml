@@ -1,4 +1,4 @@
-name: GT Particle108 original-derived UNBOUND private Unity Android compiler-only probe
+name: GT Particle108 source-bound private Unity Android compiler probe
 on:
   push:
     branches: [feature/android-native-port]
@@ -6,11 +6,13 @@ on:
       - '.github/workflows/raft-gt-particle108-unbound-unity-compiler-probe.yml'
       - 'android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs'
       - 'scripts/gt_particle108_private_unity_project.py'
+      - 'scripts/gt_particle108_unity_bindings.py'
+      - 'tests/test_gt_particle108_unity_bindings.py'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: gt-particle108-unbound-unity-compiler-only-${{ github.ref }}
+  group: gt-particle108-source-bound-unity-compiler-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   private-shaderlab-structural-only:
@@ -223,50 +225,37 @@ jobs:
               assert report[key] is False
           print("T3_PRIVATE_PROVISIONAL_ONE_SHADERLAB=4_pair_routes_8_glslang_vulkan11_valid; Unity_Material_Android_UNPROVEN")
           PY
-      - name: GT generate private compiler-only APPROX inline samplers, never claim original filtering or Material parity
+      - name: Recover original Texture Sampler and named constant buffer bindings
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/gt_particle108_unbound_inline_samplers.py tests/test_gt_particle108_unbound_inline_samplers.py
-          python3 -m unittest discover -s tests -p test_gt_particle108_unbound_inline_samplers.py -v
-          python3 -m scripts.gt_particle108_unbound_inline_samplers \
-            --input "$RUNNER_TEMP/t3-private-variant-shaderlab/keyword-routed-private.shader" \
-            --output "$RUNNER_TEMP/gt-private-unbound-inline-samplers.shader" \
-            --report "$RUNNER_TEMP/gt-private-unbound-inline-samplers-safe.json"
+          timeout 300s python3 -m scripts.gt_particle108_unity_bindings \
+            --original "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-source "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --private-dest "$RUNNER_TEMP/gt-particle108-source-bound-Unity" \
+            --report "$RUNNER_TEMP/gt-particle108-source-bound-safe.json"
           python3 - <<'PY'
           import json,os
           from pathlib import Path
-          p=Path(os.environ["RUNNER_TEMP"])/"gt-private-unbound-inline-samplers-safe.json"
-          r=json.loads(p.read_text())
-          assert r["status"]=="GT_UNBOUND_SHADER48_INLINE_SAMPLER_APPROXIMATION_COMPILE_ONLY"
-          assert r["approximate_linear_repeat_filter_wrap_used_for_private_compiler_probe"] is True
-          assert r["source_original_sampler_filter_wrap_equivalence_proven"] is False
-          assert r["source_original_Material_sampler_binding_proven"] is False
-          assert r["original_game_Shader_GUID_Materials_modified"] is False
-          print("GT_PRIVATE_SAMPLER_APPROX pure_compile_experiment=true source_original_filter_wrap_unproven=true Material_binding_unproven=true")
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-particle108-source-bound-safe.json").read_text())
+          assert r["status"]=="SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8"
+          assert r["private_source_mapped_original_texture_parameter_links"]==10
+          assert r["private_source_mapped_original_sampler_parameter_links"]==10
+          assert r["private_original_DXBC_sample_operand_pairs_verified"]==10
+          assert r["private_original_named_constant_buffer_layouts"]==24
+          assert r["private_original_named_constant_buffer_reflected_offsets"]==68
+          assert r["private_vulkan11_recompiled_stage_branches"]==8
           PY
-      - name: GT stage original-derived UNBOUND shader with DIAGNOSTIC approximate inline samplers and isolated cbuffer names
+      - name: Stage source-bound four-variant ShaderLab in isolated Unity project
         run: |
           set -euo pipefail
           python3 -m scripts.gt_particle108_private_unity_project \
-            --shader "$RUNNER_TEMP/gt-private-unbound-inline-samplers.shader" \
-            --routing "$RUNNER_TEMP/t3-private-provisional-routed-safe.json" \
+            --shader "$RUNNER_TEMP/gt-particle108-source-bound-Unity/keyword-routed-private.shader" \
+            --routing "$RUNNER_TEMP/gt-particle108-source-bound-Unity/routing-safe.json" \
             --editor android-port/Experiments/GT/Editor/OriginalParticleShaderValidation.cs \
             --project "$GITHUB_WORKSPACE/gt-private-particle-unity" \
-            --report "$RUNNER_TEMP/gt-particle108-staging-safe.json" \
-            --diagnostic-stage-buffers
-          python3 - <<'PY'
-          import os,json
-          from pathlib import Path
-          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"gt-particle108-staging-safe.json").read_text())
-          assert r["private_stage_local_buffer_name_isolation_only"] is True
-          assert r["private_vertex_cbuffer_identifiers_disambiguated"]>0
-          assert r["private_fragment_cbuffer_identifiers_disambiguated"]>0
-          assert r["private_original_sampler_binding_parity_proven"] is False
-          assert r["original_Android_game_pixels_proven"] is False
-          assert r["game_source_or_GUID_modified"] is False
-          print("GT_PARTICLE108_UNBOUND_CBUFFER_ONLY vertex_fragment_disambiguated=true sampler_original_binding_unproven=true game_assets_untouched=true")
-          PY
-      - name: GT test UNBOUND original-derived Particle108 ShaderLab in real Unity 2021.3.45f2 Android Vulkan
+            --report "$RUNNER_TEMP/gt-particle108-staging-safe.json"
+      - name: Compile the source-bound Particle108 ShaderLab in Unity 2021.3.45f2 Android Vulkan
         id: gt_private_particle_unity
         uses: game-ci/unity-builder@v4
         env:
@@ -283,7 +272,7 @@ jobs:
           allowDirtyBuild: true
           dockerMemoryLimit: 12g
           customParameters: -job-worker-count 2
-      - name: GT require original-derived UNBOUND private shader Unity compile (NOT original Material binding)
+      - name: GT require isolated source-bound Particle108 shader Unity compilation
         shell: bash
         run: |
           set -euo pipefail
@@ -318,16 +307,15 @@ jobs:
                   raise SystemExit('GT_ORIGINAL_PRIVATE_UNITY_FAIL_'+key)
           if type(r.get('privateBundleBytes')) is not int or r['privateBundleBytes']<=0:
               raise SystemExit('GT_ORIGINAL_PARTICLE_ANDROID_SHADER_BUNDLE_EMPTY')
-          print('GT_UNBOUND_COMPILER_ONLY originalDerived=true privateSamplerFilterWrap=approximateLinearRepeat originalSamplerParityProven=false fourProvisionalVariants=true realUnityAndroidBundle=true originalGameAssetsUntouched=true deviceGPUUnverified=true')
+          print('GT_SOURCE_BOUND_COMPILER originalResourceSlots=true originalNamedConstantBuffers=true fourProvisionalVariants=true realUnityAndroidBundle=true originalGameAssetsUntouched=true deviceGPUUnverified=true')
           PY
-      - name: Retain GT unbound compiler-only aggregate evidence; never private ShaderLab HLSL source or bundles
+      - name: Retain GT source-bound compiler aggregate evidence; never private ShaderLab HLSL source or bundles
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gt-particle108-unbound-compiler-only-safe-${{ github.sha }}
+          name: gt-particle108-source-bound-compiler-safe-${{ github.sha }}
           path: |
             ${{ runner.temp }}/gt-particle108-staging-safe.json
-            ${{ runner.temp }}/gt-private-unbound-inline-samplers-safe.json
             ${{ runner.temp }}/gt-particle108-source-bound-safe.json
             gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json
           if-no-files-found: ignore
@@ -338,7 +326,6 @@ jobs:
         run: |
           rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
           rm -rf -- "$RUNNER_TEMP/gt-particle108-source-bound-Unity"
-          rm -f -- "$RUNNER_TEMP/gt-private-unbound-inline-samplers.shader" "$RUNNER_TEMP/gt-private-unbound-inline-samplers-safe.json"
           # Unity game-ci writes some Library/Temp files as root inside
           # the Docker mount; remove the *literal* disposable project as
           # runner sudo, never the originals or a guessed path.
