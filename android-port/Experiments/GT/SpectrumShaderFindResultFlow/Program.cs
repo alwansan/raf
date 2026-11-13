@@ -294,6 +294,9 @@ internal static class Program
         int localCfgOwnCtorNewUnityMaterialShader=0;
         int localCfgOwnCtorUnityMaterialShaderSetterCalls=0;
         int localCfgOwnCtorGraphicsCalls=0,localCfgOwnCtorRenderTextureCalls=0;
+        int localCfgOwnCtorMaterialDirectLastShaderArgument=0;
+        int localCfgOwnCtorMaterialDirectFieldStore=0;
+        int localCfgOwnCtorMaterialLocalStore=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -422,7 +425,31 @@ internal static class Program
                                             localCfgOwnCtorDirectLastShaderArgFieldStores++;
                                     }
                                     if(MaterialShaderCtor(ci))
+                                    {
                                         localCfgOwnCtorNewUnityMaterialShader++;
+                                        int prev=j-1;
+                                        for(int n=0;prev>=0 && ctorIl[prev].OpCode.Code==Code.Nop && n<4;n++)
+                                            prev--;
+                                        bool provenLastOriginalShader=prev>=0 &&
+                                            (ctorIl[prev].OpCode.Code==Code.Ldarg_3 ||
+                                             (ctorIl[prev].OpCode.Code is Code.Ldarg or Code.Ldarg_S &&
+                                              ctorIl[prev].Operand is ParameterDefinition parameter &&
+                                              parameter.Index==2 &&
+                                              parameter.ParameterType.FullName==ShaderType));
+                                        if(provenLastOriginalShader)
+                                            localCfgOwnCtorMaterialDirectLastShaderArgument++;
+                                        int next=SkipNops(ctorIl,j+1);
+                                        if(next<ctorIl.Count &&
+                                           ctorIl[next].OpCode.Code==Code.Stfld &&
+                                           ctorIl[next].Operand is FieldReference matField &&
+                                           matField.FieldType.FullName=="UnityEngine.Material" &&
+                                           matField.DeclaringType.FullName==originalCtor.DeclaringType.FullName)
+                                            localCfgOwnCtorMaterialDirectFieldStore++;
+                                        if(next<ctorIl.Count &&
+                                           ctorIl[next].OpCode.Code is Code.Stloc or Code.Stloc_S or
+                                              Code.Stloc_0 or Code.Stloc_1 or Code.Stloc_2 or Code.Stloc_3)
+                                            localCfgOwnCtorMaterialLocalStore++;
+                                    }
                                     if(ci.OpCode.Code is Code.Call or Code.Callvirt &&
                                        ci.Operand is MethodReference call)
                                     {
@@ -543,6 +570,10 @@ internal static class Program
             source_local_cfg_next_own_ctor_shader_field_stores=localCfgOwnCtorShaderFieldStoreCandidates,
             source_local_cfg_next_own_ctor_direct_last_shader_arg_field_stores=localCfgOwnCtorDirectLastShaderArgFieldStores,
             source_local_cfg_next_own_ctor_Unity_Material_Shader_newobj=localCfgOwnCtorNewUnityMaterialShader,
+            source_local_cfg_next_own_ctor_Unity_Material_immediate_original_last_Shader_argument=localCfgOwnCtorMaterialDirectLastShaderArgument,
+            source_local_cfg_next_own_ctor_Unity_Material_direct_own_field_store=localCfgOwnCtorMaterialDirectFieldStore,
+            source_local_cfg_next_own_ctor_Unity_Material_direct_local_store=localCfgOwnCtorMaterialLocalStore,
+            source_local_cfg_original_Shader_material_constructor_direct_arg_source_identity_proven=localCfgOwnCtorMaterialDirectLastShaderArgument>0,
             source_local_cfg_next_own_ctor_Unity_Material_set_shader_calls=localCfgOwnCtorUnityMaterialShaderSetterCalls,
             source_local_cfg_next_own_ctor_Unity_Graphics_calls=localCfgOwnCtorGraphicsCalls,
             source_local_cfg_next_own_ctor_Unity_RenderTexture_calls=localCfgOwnCtorRenderTextureCalls,
