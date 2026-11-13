@@ -653,8 +653,21 @@
       43337606930,
       43337840022,
       43338106531,
-      43338485431
+      43338485431,
+      43339062121,
+      43339407339,
+      43339688082
     ],
-    "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md"
+    "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md",
+    "own_constructor_material_newobj_duplicated": true,
+    "own_constructor_Material_property_set_then_own_Material_field": true,
+    "material_own_field_definition_source_verified": true,
+    "original_field_reader_sites": 24,
+    "original_field_reader_methods": 8,
+    "material_field_reader_methods_contain_Graphics_calls": 7,
+    "material_field_reader_methods_contain_RenderTexture_calls": 2,
+    "material_field_reader_methods_contain_Renderer_calls": 0,
+    "Material_field_value_is_accepted_Graphics_argument_proven": false,
+    "original_Material_field_reader_CI": 43339688082
   }
 }
