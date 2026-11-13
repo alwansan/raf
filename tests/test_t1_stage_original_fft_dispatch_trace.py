@@ -49,6 +49,8 @@ class OriginalFftAndroidHookTests(unittest.TestCase):
         self.assertIn("shader.Dispatch(k + 1, 1, target.height, 1);", out)
         self.assertEqual(out.count("shader.SetTexture("), 6)
         self.assertEqual(out.count("BeforeBinding("), 6)
+        for site in range(6):
+            self.assertIn(f"BeforeBinding({site}, shader);", out)
         self.assertEqual(out.count("BindingResult("), 12)
 
     def test_wrong_settexture_pass_is_rejected(self):

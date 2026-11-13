@@ -7,6 +7,7 @@ namespace UnityEngine
 {
     public sealed class ComputeShader
     {
+        public string name = "abc";
         public int GetInstanceID() { return 1234; }
     }
     public static class SystemInfo
@@ -111,6 +112,12 @@ internal static class T1TraceCompileSmoke
             T1FftDirectDispatchTrace.AfterDispatch(sequence);
         }
         Need(AndroidRuntimeLog.Entries.Count == 30);
+        int binding = T1FftDirectDispatchTrace.BeforeBinding(0, shader);
+        T1FftDirectDispatchTrace.BindingResult(binding, true);
+        Need(AndroidRuntimeLog.Entries[30].Contains("shader_instance_session_local=1234"));
+        Need(AndroidRuntimeLog.Entries[30].Contains(
+            "shader_name_sha256=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"));
+        Need(AndroidRuntimeLog.Entries[31].Contains("t1_original_fft_bind.threw"));
         Console.WriteLine("T1_ORIGINAL_FFT_ANDROID_HELPER compile_csharp9=true bounded_16=true preserves_dispatch=true gpu_executed=false");
     }
 }

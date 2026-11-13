@@ -3,6 +3,8 @@
 using System;
 using System.Globalization;
 using System.Threading;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine;
 
 namespace RaftAndroid.Diagnostics
@@ -13,15 +15,26 @@ namespace RaftAndroid.Diagnostics
         private static int nextCall;
         private static int nextBinding;
         private const string OriginalDerivedShaPrefix = "8aa32937d423";
-        public static int BeforeBinding(int site)
+        public static int BeforeBinding(int site, ComputeShader shader)
         {
             int sequence = Interlocked.Increment(ref nextBinding);
             if (sequence <= 0 || sequence > MaxCalls) return 0;
             try
             {
                 AndroidRuntimeLog.Initialize();
+                bool present = shader != null;
+                string name = present ? shader.name : null;
+                string digest = "unavailable";
+                if (!string.IsNullOrEmpty(name) && name.Length <= 256)
+                {
+                    using (var hasher = SHA256.Create())
+                        digest = BitConverter.ToString(hasher.ComputeHash(Encoding.UTF8.GetBytes(name)))
+                            .Replace("-", "").ToLowerInvariant();
+                }
                 AndroidRuntimeLog.Write("water", "t1_original_fft_bind.before",
                     "sequence=" + sequence + "; site=" + site + "; pass=" + (site / 3)
+                    + "; shader_present=" + present + "; shader_name_sha256=" + digest
+                    + "; shader_instance_session_local=" + (present ? shader.GetInstanceID() : 0)
                     + "; frame=" + Time.frameCount + "; source_sha_prefix=" + OriginalDerivedShaPrefix, true);
             }
             catch (Exception) { }

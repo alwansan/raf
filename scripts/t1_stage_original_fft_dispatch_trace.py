@@ -117,7 +117,7 @@ def rewrite(original, adapted, base):
         binding_edits.append((match.start(), match.end(), (
             indent + "#if UNITY_ANDROID && !UNITY_EDITOR\n"
             + indent + "int " + token + " = " + MARKER + ".BeforeBinding("
-            + str(site) + ");\n"
+            + str(site) + ", " + match.group("receiver") + ");\n"
             + indent + "try\n" + indent + "{\n" + indent + "#endif\n"
             + adapted[match.start():match.end()] + "\n"
             + indent + "#if UNITY_ANDROID && !UNITY_EDITOR\n"
