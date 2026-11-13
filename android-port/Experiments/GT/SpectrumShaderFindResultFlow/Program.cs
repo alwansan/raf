@@ -232,6 +232,40 @@ internal static class Program
         return "setter_then_other_consumer";
     }
 
+    private static FieldDefinition? SourceMaterialDupeOwnField(
+        IList<Instruction> il, int materialAt, MethodDefinition ctor)
+    {
+        int dupIndex=SkipNops(il,materialAt+1);
+        if(dupIndex>=il.Count || il[dupIndex].OpCode.Code!=Code.Dup)
+            return null;
+        int valueIndex=SkipNops(il,dupIndex+1);
+        if(valueIndex>=il.Count)return null;
+        int setterIndex=SkipNops(il,valueIndex+1);
+        if(setterIndex>=il.Count ||
+           il[setterIndex].OpCode.Code is not (Code.Call or Code.Callvirt) ||
+           il[setterIndex].Operand is not MethodReference m ||
+           !m.HasThis || m.Parameters.Count!=1 ||
+           m.ReturnType.FullName!="System.Void" ||
+           !m.Name.StartsWith("set_",StringComparison.Ordinal) ||
+           m.DeclaringType.FullName is not ("UnityEngine.Material" or "UnityEngine.Object"))
+            return null;
+        int storeIndex=SkipNops(il,setterIndex+1);
+        if(storeIndex>=il.Count ||
+           il[storeIndex].OpCode.Code!=Code.Stfld ||
+           il[storeIndex].Operand is not FieldReference fr ||
+           fr.FieldType.FullName!="UnityEngine.Material" ||
+           fr.DeclaringType.FullName!=ctor.DeclaringType.FullName)
+            return null;
+        try
+        {
+            var def=fr.Resolve();
+            return def?.Module==ctor.Module && def.FieldType.FullName=="UnityEngine.Material"
+                ? def : null;
+        }
+        catch(AssemblyResolutionException){return null;}
+        catch(ResolutionException){return null;}
+    }
+
     private static bool ImmediateCtorOwnShaderFieldStore(
         IList<Instruction> il, int storeAt, MethodDefinition ctor)
     {
@@ -399,6 +433,12 @@ internal static class Program
         int localCfgMatDupeSetterOther=0,localCfgMatDupePostCallOther=0;
         int localCfgMatDupeIntNoCall=0,localCfgMatDupeLiteralNoCall=0;
         int localCfgMatDupeImmediateCall=0,localCfgMatDupeOther=0;
+        FieldDefinition? sourceDynamicSpectrumMaterialField=null;
+        int sourceMaterialFieldReaderSites=0,sourceMaterialFieldReaderMethods=0;
+        int sourceMaterialFieldImmediateMaterialInstanceCalls=0;
+        int sourceMaterialFieldReaderMethodsWithGraphics=0;
+        int sourceMaterialFieldReaderMethodsWithRenderer=0;
+        int sourceMaterialFieldReaderMethodsWithRenderTexture=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -554,7 +594,18 @@ internal static class Program
                                         string materialNext=SafeMaterialNewobjResultNext(ctorIl,j);
                                         string postDupe=SourceMaterialDupeFollowUp(ctorIl,j,
                                             originalCtor.DeclaringType.FullName);
-                                        if(postDupe=="setter_then_own_Material_field_store")localCfgMatDupeSetterOwnField++;
+                                        if(postDupe=="setter_then_own_Material_field_store")
+                                        {
+                                            localCfgMatDupeSetterOwnField++;
+                                            var resolvedMaterial=SourceMaterialDupeOwnField(
+                                                ctorIl,j,originalCtor);
+                                            if(resolvedMaterial is null)
+                                                throw new InvalidOperationException("source_dynamic_Material_field_identity_missing");
+                                            if(sourceDynamicSpectrumMaterialField is not null &&
+                                               sourceDynamicSpectrumMaterialField!=resolvedMaterial)
+                                                throw new InvalidOperationException("multiple_source_dynamic_Material_field_identities");
+                                            sourceDynamicSpectrumMaterialField=resolvedMaterial;
+                                        }
                                         else if(postDupe=="setter_then_local_store")localCfgMatDupeSetterLocal++;
                                         else if(postDupe=="setter_then_other_consumer")localCfgMatDupeSetterOther++;
                                         else if(postDupe=="post_dupe_other_method_call")localCfgMatDupePostCallOther++;
@@ -634,6 +685,53 @@ internal static class Program
                 if(i+1<il.Count)pending.Push(i+1);
             }
             localCfgReachedInstructionCount=visited.Count;
+        }
+        // Search only the exact resolved, source-owned Material field. This
+        // confirms the object survives construction; method-level renderer
+        // calls are candidates until the same object reaches that call.
+        if(sourceDynamicSpectrumMaterialField is not null)
+        {
+            foreach(var method in methods)
+            {
+                bool seenInMethod=false;
+                var bodyIl=method.Body.Instructions;
+                for(int j=0;j<bodyIl.Count;j++)
+                {
+                    var ins=bodyIl[j];
+                    if(ins.OpCode.Code is not (Code.Ldfld or Code.Ldsfld) ||
+                       ins.Operand is not FieldReference fr ||
+                       fr.FieldType.FullName!="UnityEngine.Material")
+                        continue;
+                    FieldDefinition? resolved;
+                    try {resolved=fr.Resolve();}
+                    catch(AssemblyResolutionException){resolved=null;}
+                    catch(ResolutionException){resolved=null;}
+                    if(resolved!=sourceDynamicSpectrumMaterialField)continue;
+                    sourceMaterialFieldReaderSites++;
+                    seenInMethod=true;
+                    int next=SkipNops(bodyIl,j+1);
+                    if(next<bodyIl.Count &&
+                       bodyIl[next].OpCode.Code is Code.Call or Code.Callvirt &&
+                       bodyIl[next].Operand is MethodReference invoked &&
+                       invoked.HasThis &&
+                       invoked.DeclaringType.FullName=="UnityEngine.Material")
+                        sourceMaterialFieldImmediateMaterialInstanceCalls++;
+                }
+                if(!seenInMethod)continue;
+                sourceMaterialFieldReaderMethods++;
+                if(bodyIl.Any(x=>x.OpCode.Code is Code.Call or Code.Callvirt &&
+                    x.Operand is MethodReference m &&
+                    m.DeclaringType.FullName=="UnityEngine.Graphics"))
+                    sourceMaterialFieldReaderMethodsWithGraphics++;
+                if(bodyIl.Any(x=>x.OpCode.Code is Code.Call or Code.Callvirt &&
+                    x.Operand is MethodReference m &&
+                    m.DeclaringType.FullName=="UnityEngine.Renderer"))
+                    sourceMaterialFieldReaderMethodsWithRenderer++;
+                if(bodyIl.Any(x=>x.OpCode.Code is Code.Call or Code.Callvirt &&
+                    x.Operand is MethodReference m &&
+                    m.DeclaringType.FullName=="UnityEngine.RenderTexture"))
+                    sourceMaterialFieldReaderMethodsWithRenderTexture++;
+            }
         }
         return new {
             status="SOURCE_AUTHENTIC_SPECTRUM_TYPED_SHADERFIND_RESULT_FLOW_CENSUS",
@@ -720,6 +818,14 @@ internal static class Program
             source_local_cfg_own_ctor_Material_dupe_then_literal_without_call=localCfgMatDupeLiteralNoCall,
             source_local_cfg_own_ctor_Material_dupe_then_immediate_call=localCfgMatDupeImmediateCall,
             source_local_cfg_own_ctor_Material_dupe_then_other=localCfgMatDupeOther,
+            original_dynamic_Spectrum_Material_owned_field_identity_resolved=sourceDynamicSpectrumMaterialField is not null,
+            original_dynamic_Spectrum_Material_owned_field_read_sites=sourceMaterialFieldReaderSites,
+            original_dynamic_Spectrum_Material_owned_field_reader_methods=sourceMaterialFieldReaderMethods,
+            original_dynamic_Spectrum_Material_field_read_immediate_Material_instance_calls=sourceMaterialFieldImmediateMaterialInstanceCalls,
+            original_dynamic_Spectrum_Material_field_reader_methods_containing_Graphics_calls=sourceMaterialFieldReaderMethodsWithGraphics,
+            original_dynamic_Spectrum_Material_field_reader_methods_containing_Renderer_calls=sourceMaterialFieldReaderMethodsWithRenderer,
+            original_dynamic_Spectrum_Material_field_reader_methods_containing_RenderTexture_calls=sourceMaterialFieldReaderMethodsWithRenderTexture,
+            original_dynamic_Spectrum_Material_field_reader_calls_not_auto_render_proof=true,
             source_local_cfg_original_Shader_material_constructor_direct_arg_source_identity_proven=localCfgOwnCtorMaterialDirectLastShaderArgument>0,
             source_local_cfg_next_own_ctor_Unity_Material_set_shader_calls=localCfgOwnCtorUnityMaterialShaderSetterCalls,
             source_local_cfg_next_own_ctor_Unity_Graphics_calls=localCfgOwnCtorGraphicsCalls,
