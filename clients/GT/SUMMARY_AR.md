@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## GT Chat-32 — أُنجز أول جرد ترميم حقيقي عالي الأثر وأُجّلت XAPK
+
+بعد توجيه المالك بأن الاستعادة الكاملة تسبق XAPK، اجتاز [CI43354787983 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354787983) جرداً أصلياً لـ6 مشاهد: 21 Shader48 مثبتة بربط source/export، **17 منها Dummy وترتبط بـ1373 من 1633 خانة Renderer**، وأكبر شيدر ناقص يرتبط بـ**921 خانة**. رتبت GT أولوياتها [921، 121، 108، 70، 34، ...] في قائمة خاصة مؤقتة مع Source Shader→Export GUID، ولم تنشر GUIDs أو تستبدل برامج وهمية. [CI43353780918 SUCCESS](https://github.com/alwansan/raf/actions/runs/43353780918) اختبر ترتيب المصدر، [CI43354701952 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354701952) راجع بصمات أدوات التصدير. **الخطوة التالية استعادة Source Shader الأعلى أصلياً (4 Pass، 33 pairs، 8 vertex غير مقترنة) ثم بقية الشيدرات والخامات**، لا طلب XAPK. [Chat32](sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md).
+
+---
+
 ## قرار المالك: نكمل الاستعادة الأصلية بالكامل أولاً ثم XAPK التجريبي
 
 قرار جديد مؤرّخ 2026-11-13 ومحفوظ في [OWNER_DIRECTIVE_RESTORE_FIRST_AR.md](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md): GT مطالب باستعادة ودمج كل الموارد الأصلية ـ المجسمات/المشاهد/الألوان/الخامات/المواد والشيدرات الـ165 وVariants/Keywords/Texture Samplers، الماء وFFT/Compute، الظلال/النار/الجسيمات والمؤثرات ـ قبل طلب أول XAPK شامل لاختبار التوافق. لا تتوقف الأعمال الأساسية بانتظار الحزم. **770 Material YAML ما زالت تعتمد على Dummy حسب جرد ما بعد Vendor؛ ليست 770 Shader مختلفة**. جرد 6 مشاهد أصلي سابق CI42044249541 بيّن **1373/1633 خانات Renderer إلى Dummy وShader واحد 921 خانة ما زال Dummy**؛ هذه عيّنة source→export لا إثبات pixels. الأولوية الاستعادة عالية الأثر مع فحص الفرق بعد كل دفعة. العمليات السابقة قيد التنفيذ تعد تاريخاً سابقاً لهذا القرار، ولا يطلب بناء GT جديد قبل G0–G6.
