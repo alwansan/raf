@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-30 — post-request actual Native Editor source-level fail-red gate
+
+After full native 43346405263 immutable request commit 4b74f6bd, `GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses()` was added to `AndroidNativeBuild.Build()`: must find one actual AssetDatabase Spectrum Shader .shader with passCount=7, no Dummy marker, safe file path and `ShaderUtil.ShaderHasError==false`; no false GPU proof. Expanded synthetic CSharp API facsimile and negative tests; CI43347458130 SUCCESS. This guard is **NOT in the currently active immutable 43346405263 source snapshot**; include in next new full request after inspecting real job. State/plan CI43347652933 SUCCESS. Never claim Unity Shader compiled on actual game before it happens.
+
+---
+
 ## GT Chat-30 — production 7Pass source-authentic Spectrum original export GUID stage and new full native run
 
 NEW: `scripts/gt_install_original_spectrum.py` transactional exact exported AssetRipper shader identity/unique original .meta GUID replacement of private source-authenticated Spectrum 7Pass/2 index4 keyword branches, external backup/atomic rollback, no original .meta mutation, no duplicate Shader, synthetic negatives. Source-only installer contract [CI43346292249 SUCCESS](https://github.com/alwansan/raf/actions/runs/43346292249). Production `.github/workflows/raft-unity-editor-android-import.yml` now reconstructs B09 packet/states/two 7Pass candidates/private unified shader from existing ZIP2 SHA original `w1-original/Raft_Data` then installs before material audit, keeps safe JSON receipts and deletes private DXBC/HLSL. Full build requested via `.github/raft-native-build-request.json`, commit `4b74f6bdec...` and [run 43346405263](https://github.com/alwansan/raf/actions/runs/43346405263), request/Unity-license gate passed, reconstruct running at snapshot. NO full Unity Shader compile, APK, source Material binding parity, or Adreno phone pixels proven until real run evidence. Continue Chat30, monitor source step, exact GUID, 770 custom Dummy, Foam2Pass/index6, Android LOW_MEMORY, release HTTP403.
