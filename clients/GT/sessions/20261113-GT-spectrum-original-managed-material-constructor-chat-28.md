@@ -17,6 +17,12 @@
 
 This confirms why the original 82-owner/1,556-Material serialized PPtr census yielded zero direct Spectrum refs: a **dynamic source Material creation path exists**. It does not prove that no other path exists, or that this path executes on phone.
 
+## Added source field-retention proof after original Material construction
+
+- [CI43339062121 SUCCESS](https://github.com/alwansan/raf/actions/runs/43339062121): exact original `new Material(original Shader)` result is immediately **duplicated via CIL `dup`**, not immediately stored in a field or local. This explains why direct-next-`stfld` counted zero.
+- [CI43339407339 SUCCESS](https://github.com/alwansan/raf/actions/runs/43339407339): source managed IL after that `dup` contains an in-line property setter on the new Material/Unity Object, **then a `stfld UnityEngine.Material` inside the original managed class**. This is an exact, source-authentic, typed, in-constructor chain; it proves the Material object is retained, not that renderer uses it.
+- Pending real field-reader test [43339688082](https://github.com/alwansan/raf/actions/runs/43339688082) follows that exact original Material field to compiled field loads, source Material API usage and per-method Renderer/Graphics candidates. **Do not report field readers as confirmed until test finishes; a method containing Graphics is not necessarily proof that the field supplied the drawing call.**
+
 ## Device and delivery — independent from source path
 
 - [CL owner night session](https://github.com/alwansan/CL/commit/a320d5e23962568b62bffec95399cf3e0cb1f579) `LogRaft-20261112-235351-196`: 4 white/blue/cyan phone images and 36,828 invalid water shader passes (Spectrum 15,054 + Foam Global 21,774), 6,106 kernel index6, 2,844 cursor RGBA32, 2 OBB GUID failures; `World has been loaded` observed but actual device graphics is rejected. New dual-session [CI43336564346 SUCCESS](https://github.com/alwansan/raf/actions/runs/43336564346) proves safe known-bad log classification, not a water fix.
