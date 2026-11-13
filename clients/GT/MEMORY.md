@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-31 — actual source Spectrum7 production success, strict water request drift failed build
+
+Full native [43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) FAILED before real Unity/Android compile at `Authentic water gate (strict) or exact documented trial limitation`, BUT original SHA-backed 7Pass Spectrum was *actually installed* into the same 40-scene AssetRipper export retaining unique original .meta/GUID, safe artifact 14002987883. Real source inspect: Spectrum[7] PASS, Blur[2] PASS, Volumetric[5] PASS, Foam[1] FAIL (pre-Foam build), DepthCopy[6,3] FAIL due alternate subshader 3<required4, no water compute structural source, no original FFT kernel identity. Failure due old request including stale Spectrum unmet condition. Preserve strict gate, don't forge source/FFT. `tests/test_record_documented_water_limitation.py` new fixture Spectrum7/Foam2/Depth6+3/noCompute passes CI43350378817 SUCCESS and rejects stale condition. Second native43349181838 c3c71731 original Foam2+Spectrum7/ShaderUtil in progress, old acknowledgement may fail. Third full native43350559665 SHA8bf83afc requested with exactly expected three documented unmet conditions Depth,compute source,kernel identity, pending; no signed output yet. Update progress in Chat31; source!=Unity!=device. No LFS/no original GUID mutation.
+
+---
+
 ## GT Chat-30 — post-request actual Native Editor source-level fail-red gate
 
 After full native 43346405263 immutable request commit 4b74f6bd, `GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses()` was added to `AndroidNativeBuild.Build()`: must find one actual AssetDatabase Spectrum Shader .shader with passCount=7, no Dummy marker, safe file path and `ShaderUtil.ShaderHasError==false`; no false GPU proof. Expanded synthetic CSharp API facsimile and negative tests; CI43347458130 SUCCESS. This guard is **NOT in the currently active immutable 43346405263 source snapshot**; include in next new full request after inspecting real job. State/plan CI43347652933 SUCCESS. Never claim Unity Shader compiled on actual game before it happens.
