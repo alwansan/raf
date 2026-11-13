@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "agent": "GT",
+  "record_date": "2026-11-13",
+  "native_run_id": 43346405263,
+  "native_source_sha": "4b74f6bdec8781e64d6aae182797d06b83109c35",
+  "confirmed": {
+    "original_40_scenes_AssetRipper_export_completed": true,
+    "original_zip2_source_LFS_used": false,
+    "spectrum_private_seven_pass_authored_shader_installed_into_same_export": true,
+    "spectrum_unique_original_exported_Shader_identity_required": true,
+    "spectrum_export_meta_original_GUID_unchanged": true,
+    "spectrum_original_pass_count": 7,
+    "spectrum_shader_programmed_passes": 7,
+    "spectrum_source_install_safe_artifact_id": 14002987883,
+    "original_foam_shader_pass_count_at_this_build": 1,
+    "original_depth_subshader_pass_counts": [
+      6,
+      3
+    ],
+    "original_blur_pass_count": 2,
+    "original_volumetric_light_pass_count": 5,
+    "original_water_compute_source_candidate_present": false,
+    "original_authentic_compute_kernel_identity_verified": false,
+    "native_reconstruct_result": "failure",
+    "native_failure_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "native_Unity_Editor_import_compilation_started": false,
+    "native_signed_APK_or_XAPK_ready": false,
+    "Android_original_Spectrum_device_water_pixels_verified": false
+  },
+  "strict_gate_unmet_current_old_snapshot": [
+    "authentic_water_kernel_identity",
+    "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+    "shader_pass_contract:UltimateWater/Foam/Global",
+    "water_compute_source_candidate"
+  ],
+  "documented_old_request_stale_extra_condition": "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+  "next_build_with_source_verified_foam_two_pass_expected_unmet_conditions": [
+    "authentic_water_kernel_identity",
+    "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+    "water_compute_source_candidate"
+  ],
+  "expected_foam_next_build_result_not_yet_verified": true,
+  "keep_strict_original_water_gate": true,
+  "limitations_must_exactly_match_live_export": true,
+  "no_dummy_passes_or_kernel_created": true,
+  "disclaimer": "The first build's source-gated Spectrum export success proves neither real Unity compiled program nor Android device water pixel correctness. Exact new request limitation list is a forecast conditioned on next build's original Foam two-pass source install, and must still pass the live gate."
+}
