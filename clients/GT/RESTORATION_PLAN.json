@@ -56,7 +56,8 @@
     "original_spectrum_local_linear_IL_CI": 43302209121,
     "original_spectrum_local_cfg_initial_compiler_failure": 43302598498,
     "original_spectrum_local_cfg_branch_aware_verified": 43302914466,
-    "last_full_native_reconstruct_success_release_denied": 43299084397
+    "last_full_native_reconstruct_success_release_denied": 43299084397,
+    "gt_921_all_original_58_program_source_translations": 43357332292
   },
   "workstreams": [
     {
@@ -181,14 +182,15 @@
       "packaged": "old_native_incomplete_shaders",
       "device_verified": false,
       "status": "blocked_major_visible_white_materials",
-      "restored_now": "1,536 material YAML documents exported; 750 builtin shader linked, 16 vendor-restored custom Material documents no longer Dummy",
+      "restored_now": "1,536 material YAML documents exported; 750 builtin shader linked, 16 vendor-restored custom Material documents no longer Dummy; GT Chat33 recovered 58/58 authentic original 921-slot Shader D3D11 programs to private HLSL/Vulkan stage, NOT installed; 770 Dummy Material docs remain unmodified",
       "missing": "770 CUSTOM MATERIAL DOCUMENTS STILL REFERENCE DUMMY SHADERS; 20 source Material objects are not direct exported Material YAML, not necessarily missing",
-      "next_action": "FIRST RESTORATION: source-authentic six-scene CI43354787983 SUCCESS shows top original Shader48 used by 921 Renderer Material slots still Dummy; 17 distinct missing source Shader48 used by 1373/1633 slots. Restore full authentic highest-use four-pass/33 exact paired variants and 8 unmatched original vertex variants, preserve original exported GUID. Then all 770 full-export Dummy Material docs per distinct shader and ALL 165 Shader objects, no XAPK during source recovery.",
+      "next_action": "Rebuild source-authentic 4-Pass original ShaderLab with all 33 paired + 8 unmatched vertex variants, source render states, keywords, samplers and CB0. Install into EXISTING source-linked exported Shader GUID then remeasure full 770 Dummy Material documents. No XAPK until G0-G6.",
       "evidence": [
         43127697656,
         43138326757,
         43207734641,
-        43354787983
+        43354787983,
+        43357332292
       ]
     },
     {
@@ -207,15 +209,16 @@
       "packaged": "separate_approx_apk_only",
       "device_verified": false,
       "status": "authentic_shader_material_binding_blocked",
-      "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors",
-      "missing": "Original Sampler/Texture register mapping and same-instance exported Material/GUID parity; sampler Linear/Repeat currently APPROX in isolated probe, not restored",
-      "next_action": "Authentic original high-use source Shader48: 4 original Passes, 33 VS/FS paired permutations, 8 unmatched vertex permutations and 58 distinct DXBC source programs (CI42052605123). Translate/restore all source permutations and original ShaderLab render states/Properties/Keywords/sampler/CB into same exported original GUID. Partial 8-stage sample is not full Shader restoration; repeat across every source Shader identity.",
+      "restored_now": "Original Particle108 Shader48 4 VS/FS pairs recovered, 8 source-derived Vulkan stage translations and private Unity Android Vulkan approximate shader bundle with zero errors; [CI43357332292 SUCCESS] authenticated original 921-slot Shader48 full 4 Pass, 33 paired VS/FS, eight unmatched VS, 58/58 distinct DXBC translated to HLSL and roundtrip Vulkan1.1 in ephemeral source-only CI; SHA-original source owned, no real shader installation yet",
+      "missing": "All 58 stages recovered and translated privately, but 4-Pass original-authentic ShaderLab construction, keyword routing, source-sampler/CB0/register/resource mapping, source-export original GUID replacement, full postvendor Dummy recensus, and 164 other Shader objects remain incomplete; Unity/Adreno pixels not proven.",
+      "next_action": "Convert private 58 translated stages / 33 original matched pairs and 8 orphan VS into full original-authentic 4-Pass ShaderLab, preserve original render-state+Properties+Sampler+CB0+Keyword combinations, install only into same original export GUID, then repeat full 770 Dummy Material census and scale to all original 165 Shader objects. No XAPK yet.",
       "evidence": [
         43236578305,
         43237509847,
         43242496576,
         43243957499,
-        42052605123
+        42052605123,
+        43357332292
       ]
     },
     {
