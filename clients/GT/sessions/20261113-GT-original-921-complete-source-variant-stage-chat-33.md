@@ -18,3 +18,9 @@
 4. **Never request first comprehensive Android XAPK until restoration and integration done**, per owner directive. Source-only/isolated Shader tests are allowed.
 
 **Persistent records:** `clients/GT/state.json` proof Chat33; `RESTORATION_PLAN.json` P04/P05 evidence; `RESTORATION_PLAN_AR.md`, `SUMMARY_AR.md`, `MEMORY.md`, `RESTORE_AR.md`. No original program bytes or protected game identifiers in public logs.
+
+## Source keyword/property lineage follow-up (same Chat33)
+
+- [CI43358097452 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358097452): extended runner-private packet to preserve **entire source ParsedForm**, all original source Shader properties, keyword names and flags; numeric receipt reported 27 names and 35 Properties, 58/58 HLSL/Vulkan11 unchanged. Temporary synthetic CI43358094762 failed because tests had not yet received new required input; next commit corrected tests; that red run did not reach original source, and is not a genuine Shader fault.
+- [CI43358489426 SUCCESS](https://github.com/alwansan/raf/actions/runs/43358489426): eight synthetic positive/negative tests plus real ZIP2 stage. Verified 27 original Keyword Names, 27 Flags, **14 distinct used source keyword indices** across 74 original program metadata records, all in source name-table bounds, one source player bucket, 35 original source Property definitions; 58/58 genuinely round-trip Vulkan1.1. Source/global/local pragma flags and Sampler/CB0 remain UNKNOWN. Current restoration-stage proof is **not** same-export original ShaderLab or Android game integration.
+- Script follow-up commits `04cb3590`, `947f0297`, `d5c2ccef`, `d8af7ad8`; source-only CI does NOT produce any XAPK. Latest next action: build source-original keyword state router for all four Passes; prove original register/sampler/permutation topology, compile isolated ShaderLab; install only in existing source-export GUID, then re-run full 770 Dummy Material census.
