@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT32_RESTORE_EVERY_ORIGINAL_RESOURCE_PRIORITY_921_SLOT_SHADER_AND_770_DUMMY_MATERIAL_DOCUMENTS",
+  "status": "GT_CHAT33_921_ALL_SOURCE_DXBC_58_OF_58_RECOVERED_PRIVATE_GUID_AND_SAMPLER_PENDING",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -1136,5 +1136,31 @@
     "original_source_to_export_private_actionable_targets_generated": 21,
     "original_shader_programs_restored_by_priority_scan": false,
     "real_source_workflow_artifact_keeps_only_safe_aggregates": true
+  },
+  "proofs_20261113_chat33": {
+    "source_only_workflow_run": 43357332292,
+    "workflow_success": true,
+    "source_zip2_pinned_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_six_scenes_sha_verified": true,
+    "source_four_shader_owners_sha_verified": true,
+    "source_shader_renderer_material_slots": 921,
+    "original_shader_passes": 4,
+    "original_exact_vf_permutation_pairs": 33,
+    "original_unpaired_vertex_variants": 8,
+    "original_unique_D3D11_programs": 58,
+    "original_source_DXBC_to_SPIRV11_valid": 58,
+    "source_recovered_HLSL_stages": 58,
+    "HLSL_roundtrip_SPIRV11_valid": 58,
+    "private_stage_files_purged_after_ci": true,
+    "source_DXBC_or_shader_names_publicly_published": false,
+    "original_exported_shader_GUID_replaced": false,
+    "original_shaded_material_dummy_docs_remaining_prior_full_export": 770,
+    "original_authored_shaderlab_sampler_CB0_keyword_render_parity_verified": false,
+    "actual_Unity_or_Adreno_pixel_acceptance": false,
+    "game_integrated_full_restoration_completed": false,
+    "no_new_XAPK_run_requested": true,
+    "workflow_path": ".github/workflows/raft-gt-original-921-all-variants.yml",
+    "script": "scripts/gt_original_921_all_variants.py",
+    "next": "Generate full original 4-Pass 33-pair ShaderLab with authentic source render-state, keyword routing, CB0 and Sampler descriptors; replace only same-export original Shader GUID, then recensus 770 Dummy Material docs. No XAPK."
   }
 }
