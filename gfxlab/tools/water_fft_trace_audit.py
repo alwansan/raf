@@ -2,10 +2,30 @@
 import argparse
 from collections import Counter, defaultdict
 import json
+import re
 from pathlib import Path
 
 PREFIXES = {"t1_original_fft_dispatch": "dispatch", "t1_original_fft_bind": "binding"}
 EVENTS = {"before", "returned", "threw"}
+ORIGINAL_FFT_NAME_SHA256 = "60c1b5ee2352bd6e303aa5fc68c88f61031cf21234f524d54ec02334a8e142d1"
+RECEIVER_FIELDS = {"shader_present", "shader_name_sha256", "shader_instance_session_local"}
+
+
+def binding_receiver(fields):
+    if not RECEIVER_FIELDS.intersection(fields):
+        return None
+    present = fields["shader_present"].lower()
+    digest = fields["shader_name_sha256"]
+    instance = int(fields["shader_instance_session_local"])
+    if present == "false" and digest == "unavailable" and instance == 0:
+        return ("missing", instance)
+    if present != "true" or instance == 0:
+        raise ValueError("Invalid binding receiver")
+    if digest == "unavailable":
+        return ("name_unavailable", instance)
+    if not re.fullmatch(r"[a-f0-9]{64}", digest):
+        raise ValueError("Invalid binding receiver name digest")
+    return ("original_name_match" if digest == ORIGINAL_FFT_NAME_SHA256 else "other_name", instance)
 
 
 def audit(lines):
@@ -42,7 +62,7 @@ def audit(lines):
                     site, pass_index = int(fields["site"]), int(fields["pass"])
                     if not 0 <= site < 6 or pass_index != site // 3:
                         raise ValueError
-                    value = (site, pass_index)
+                    value = (site, binding_receiver(fields))
                 else:
                     argument = int(fields["numeric_kernel_argument"])
                     present = fields["shader_present"].lower()
@@ -69,7 +89,9 @@ def audit(lines):
         observed[event] = value
     by_argument = defaultdict(Counter)
     by_binding_site = defaultdict(Counter)
-    for (_, kind, _), observed in calls.items():
+    receiver_outcomes = defaultdict(Counter)
+    receiver_instances = defaultdict(set)
+    for (session, kind, _), observed in calls.items():
         if "conflict" in observed or {"returned", "threw"} <= observed.keys():
             counts["conflicting_calls"] += 1
         elif "before" not in observed:
@@ -78,8 +100,13 @@ def audit(lines):
             outcome = ("threw" if "threw" in observed else
                        "returned" if "returned" in observed else "no_terminal")
             if kind == "binding":
-                site, _ = observed["before"]
+                site, receiver = observed["before"]
                 by_binding_site[site][outcome] += 1
+                if receiver is not None:
+                    identity, instance = receiver
+                    receiver_outcomes[identity][outcome] += 1
+                    if instance:
+                        receiver_instances[identity].add((session, instance))
             else:
                 argument, present = observed["before"]
                 by_argument[argument][outcome] += 1
@@ -87,6 +114,8 @@ def audit(lines):
     return {"trace_sessions": len({session for session, _, _ in calls}),
             "trace_counts": dict(counts), "numeric_arguments": dict(by_argument),
             "binding_sites": dict(by_binding_site),
+            "binding_receiver_outcomes": dict(receiver_outcomes),
+            "binding_receiver_session_instances": {k: len(v) for k, v in receiver_instances.items()},
             "gpu_result_verified": False, "runtime_kernel_registration_verified": False}
 
 
