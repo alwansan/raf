@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT / Chat-27 — صور وتجربة CL جديدة وفشل نشر Release (13 نوفمبر 2026)
+
+مصدر CL المثبت [a320d5e](https://github.com/alwansan/CL/commit/a320d5e23962568b62bffec95399cf3e0cb1f579): الجلسة `LogRaft-20261112-235351-196` + **4 صور**. المجموع النهائي **36,828 UltimateWater invalid passes** (Spectrum 15,054 / Foam Global 21,774)، **6,106 kernel index6** (هويته الأصلية غير مثبتة)، **2,844 Cursor RGBA32**، **2 OBB GUID**. دخل العالم ووُثّق ظهوره باللوق لكن الطوف/القائمة بيضاء والماء سماوي/داكن غير أصلي. لا نجاح رسوميات Adreno. [Full native 43299084397](https://github.com/alwansan/raf/actions/runs/43299084397) على commit قديم `2666622c`: reconstruct **SUCCESS**، حزم موقعة Artifacts `13997201215`/`13996908213`، لكن Release **FAILED HTTP403** (صلاحية GitHub Token)، ولم ينشر Release. أصلحت بوابة فحص LogRaft لفشل writer FIFO وأضفت اختبار المصدر الحقيقي الجديد على CI؛ تحقق من نتيجته. **ابدأ من [جلسة Chat27](sessions/20261113-GT-new-owner-night-phone-session-chat-27.md)، [الدليل](evidence/20261113_cl_night_device_graphics_and_build_receipt.json)، والخطة**؛ تابع Chat26 typed consuming IL→Material/RT، Foam/FFT و770 Dummy، ثم فحص الهاتف. ZIP2 read-only بلا LFS، لا تغير أصل GUID أو تزعم GPU pixels.
+
+---
+
 ## GT / Chat-26 — Shader.Find Spectrum الأصلي داخل Managed IL ومسار المتغير المحلي
 
 [CI43300958608 SUCCESS](https://github.com/alwansan/raf/actions/runs/43300958608): المصدر SHA الحقيقي `Assembly-CSharp.dll` (3,211,776B)، 19,118 method/491,490 IL و81 typed Shader.Find، **واحد فقط يقرأ اسم Spectrum الأصلي مباشرة**. [43301684794 SUCCESS](https://github.com/alwansan/raf/actions/runs/43301684794): النتيجة مخزنة في Shader local. [43302914466 SUCCESS](https://github.com/alwansan/raf/actions/runs/43302914466): تتبع CFG محافظ **35 instruction/3 branch/1 local load على مسار ممكن دون overwrite**، لكن الاستعمال التالي غير مصنّف، لا Material/CB0/RT أو Pixel proof. 82 owner / 1556 Material direct Spectrum PPtr=0 من Chat25. **أول متابعة:** اقرأ [جلسة Chat26](sessions/20261112-GT-spectrum-managed-shaderfind-resultflow-chat-26.md)، أثبت consuming IL وMaterial/Graphics/RT بدليل source-typed دون أسماء أصلية؛ لا تنسب النجاح إلى تشغيل اللعبة. ZIP2 read-only بلا LFS.
