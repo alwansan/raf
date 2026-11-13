@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-28 — final original Material field source readers snapshot
+
+CI43339062121 SUCCESS: original `new Material(Shader)` immediate result duplicated. CI43339407339 SUCCESS: same original managed ctor performs property setter on duplicated material and stores original `UnityEngine.Material` to own field. CI43339688082 SUCCESS: source-owned field resolved; 24 exact ldfld sites across 8 compiled source methods, 7 reader methods contain UnityEngine.Graphics calls, 2 contain RenderTexture calls, 0 contain Renderer calls. **Co-presence in method is NOT source-value→Graphics argument proof**. Need SSA/stack CIL value flow for 24 reads to actual Graphics.Blits/Draw/RT before exact native ShaderLab integration. P06/M2 blocked and new owner CL 36828 water errors persists. ZIP2-only pinned SHA, no GUID change. Chat28 session updated. Old full native 43299084397 reconstruct success / release 403, artifacts expire 2026-11-16.
+
+---
+
 ## GT Chat-28 — exact SHA-original Spectrum Shader.Find → new Material(Shader)
 
 Verified original managed lineage without original symbols leakage: CI43337606930 source Shader.Find stored local used as 1 reachable next newobj; CI43337840022 original own-Assembly constructor 3 params last exact UnityEngine.Shader; CI43338106531 own ctor body 44 IL has 1 new UnityEngine.Material(Shader). First stricter argument proof CI43338326341 FAILED CS0136 test only, fixed 34234ee; **CI43338485431 SUCCESS** confirms immediate original third Shader parameter load feeding original `new Material(Shader)` in same 44-IL ctor. This is the first source-authentic dynamic Spectrum→Unity Material constructor path; source execution/game renderer/RT/gpu not proven, and no same-owner direct Material field/local store immediately after newobj was observed. Next trace newobj Material result consumption (collection/property method or field) to actual Renderer/Graphics/RT; then integrate exact-source shader with 7pass/keyword and rerun phone pixel gate. Phone CL night 36828 water-pass and 6106 kernel6 invalid persists. Preserve read-only ZIP2 SHA15964ea8, no LFS, no GUID modifications. See `sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md` and current RESTORE_AR.
