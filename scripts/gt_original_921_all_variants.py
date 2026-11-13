@@ -216,6 +216,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     """Preserve the per-stage override blobs separately from shared stage bytecode."""
     from scripts.a12_shader_parameter_decode import parse_parameter_blob
     from scripts.b25_foam_cb_namebridge import original_name_registry
+    from scripts.gt_original_921_cb_layout import bind_constant_buffers
     from scripts.w1_rebind_depth_resources import RESOURCE
     import re
 
@@ -225,6 +226,7 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     rows.extend((orphan, orphan["stage"], orphan["variant"]) for orphan in orphans)
     records, decoded, layouts = [], {}, {}
     texture_counts = Counter()
+    cb_counts = Counter()
     for location, stage, row in rows:
         shader_pass = by_pass[location["subshader"], location["pass"]]
         program = shader_pass["original_vertex_program" if stage == 1 else "original_fragment_program"]
@@ -255,11 +257,18 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
                 raise ValueError("original_texture_or_sampler_binding_ambiguous")
             bindings.append({"kind": kind, "slot": slot, "source_texture_name": candidates[0]})
             texture_counts[kind] += 1
+        buffers = bind_constant_buffers(source, common, names, layouts[index])
+        cb_counts["mapped"] += len(buffers)
+        cb_counts["variant"] += sum(buffer["binding_from_variant"] for buffer in buffers)
+        cb_counts["shared_layout"] += sum(buffer["shared_layout_present"] for buffer in buffers)
+        cb_counts["members"] += sum(len(buffer["members"]) for buffer in buffers)
+        cb_counts["structs"] += sum(len(buffer["structs"]) for buffer in buffers)
         records.append({
             "subshader": location["subshader"], "pass": location["pass"],
             "stage": stage, "player_bucket": row["player_bucket"], "ordinal": row["bucket_ordinal"],
             "original_parameter_blob_index": index,
             "source_texture_sampler_bindings": bindings,
+            "source_constant_buffer_layouts": buffers,
         })
     packet = {
         "stage_records": records,
@@ -271,6 +280,11 @@ def stage_parameter_records(pairs, orphans, passes, table, private, program_dirs
     return {
         "original_variant_stages_with_parameter_records": len(records),
         "distinct_original_parameter_blobs": len(decoded),
+        "translated_constant_buffer_declarations_mapped": cb_counts["mapped"],
+        "constant_buffer_bindings_from_variant": cb_counts["variant"],
+        "constant_buffer_layouts_with_shared_members_table": cb_counts["shared_layout"],
+        "constant_buffer_named_member_occurrences": cb_counts["members"],
+        "constant_buffer_named_struct_occurrences": cb_counts["structs"],
         "translated_texture_declarations_mapped_to_source_name": texture_counts["t"],
         "translated_sampler_declarations_mapped_to_source_texture": texture_counts["s"],
         "named_original_numeric_members_in_distinct_parameter_blobs": sum(

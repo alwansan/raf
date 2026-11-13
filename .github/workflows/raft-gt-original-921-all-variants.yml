@@ -5,8 +5,10 @@ on:
     branches:
       - feature/android-native-port
     paths:
+      - tests/test_gt_original_921_cb_layout.py
       - scripts/gt_original_921_all_variants.py
       - scripts/gt_original_921_keyword_routes.py
+      - scripts/gt_original_921_cb_layout.py
       - tests/test_gt_original_921_all_variants.py
       - .github/workflows/raft-gt-original-921-all-variants.yml
 
@@ -32,6 +34,7 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/gt_original_921_all_variants.py
           python3 -m unittest discover -s tests -p 'test_gt_original_921_all_variants.py' -v
+          python3 -m unittest discover -s tests -p 'test_gt_original_921_cb_layout.py' -v
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -124,6 +127,7 @@ jobs:
           assert r['source_shaderlab_layout']['original_render_states_serialized'] == 4
           assert r['source_shaderlab_layout']['original_authored_property_count'] == 35
           assert r['source_variant_parameter_records']['original_variant_stages_with_parameter_records'] == 74
+          assert r['source_variant_parameter_records']['translated_constant_buffer_declarations_mapped'] == 467
           assert routes['validated_exact_routed_stage_compilations'] == 66
           assert len(routes['source_exact_keyword_routes_by_pass']) == 4
           assert sum(routes['source_exact_keyword_routes_by_pass']) == 33
