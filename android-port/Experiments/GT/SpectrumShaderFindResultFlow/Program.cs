@@ -439,6 +439,16 @@ internal static class Program
         int sourceMaterialFieldReaderMethodsWithGraphics=0;
         int sourceMaterialFieldReaderMethodsWithRenderer=0;
         int sourceMaterialFieldReaderMethodsWithRenderTexture=0;
+        int sourceMaterialSourceToGraphicsTypedArgs=0;
+        int sourceMaterialSourceToGraphicsBlitTypedArgs=0;
+        int sourceMaterialSourceToGraphicsOtherTypedArgs=0;
+        int sourceMaterialSourceToRenderTextureTypedArgs=0;
+        int sourceMaterialSourceToOtherMethodTypedArgs=0;
+        int sourceMaterialSourceToMaterialReceiverCalls=0;
+        int sourceMaterialIntraBlockFieldStores=0;
+        int sourceMaterialIntraBlockLocalStores=0;
+        int sourceMaterialSourceTracesReachedBranch=0;
+        int sourceMaterialSourceTracesStoppedUnsupported=0;
         if(source.Local is not null)
         {
             var il=source.Method.Body.Instructions;
@@ -709,6 +719,20 @@ internal static class Program
                     if(resolved!=sourceDynamicSpectrumMaterialField)continue;
                     sourceMaterialFieldReaderSites++;
                     seenInMethod=true;
+                    // Independently trace exact operand provenance in the
+                    // same straight-line CIL region; method co-presence alone
+                    // must NOT turn into a purported Graphics argument.
+                    var flow = OriginalMaterialCallFlow.Trace(method,j);
+                    sourceMaterialSourceToGraphicsTypedArgs += flow.GraphicsMaterialArguments;
+                    sourceMaterialSourceToGraphicsBlitTypedArgs += flow.GraphicsBlitMaterialArguments;
+                    sourceMaterialSourceToGraphicsOtherTypedArgs += flow.GraphicsOtherMaterialArguments;
+                    sourceMaterialSourceToRenderTextureTypedArgs += flow.RenderTextureMaterialArguments;
+                    sourceMaterialSourceToOtherMethodTypedArgs += flow.OtherMethodMaterialArguments;
+                    sourceMaterialSourceToMaterialReceiverCalls += flow.MaterialReceiverCalls;
+                    sourceMaterialIntraBlockFieldStores += flow.MaterialFieldStores;
+                    sourceMaterialIntraBlockLocalStores += flow.MaterialLocalStores;
+                    if(flow.ReachedBranchBoundary)sourceMaterialSourceTracesReachedBranch++;
+                    if(flow.UnsupportedInstruction)sourceMaterialSourceTracesStoppedUnsupported++;
                     int next=SkipNops(bodyIl,j+1);
                     if(next<bodyIl.Count &&
                        bodyIl[next].OpCode.Code is Code.Call or Code.Callvirt &&
@@ -825,6 +849,17 @@ internal static class Program
             original_dynamic_Spectrum_Material_field_reader_methods_containing_Graphics_calls=sourceMaterialFieldReaderMethodsWithGraphics,
             original_dynamic_Spectrum_Material_field_reader_methods_containing_Renderer_calls=sourceMaterialFieldReaderMethodsWithRenderer,
             original_dynamic_Spectrum_Material_field_reader_methods_containing_RenderTexture_calls=sourceMaterialFieldReaderMethodsWithRenderTexture,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_Graphics_material_args=sourceMaterialSourceToGraphicsTypedArgs,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_Graphics_Blit_material_args=sourceMaterialSourceToGraphicsBlitTypedArgs,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_Graphics_other_material_args=sourceMaterialSourceToGraphicsOtherTypedArgs,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_RenderTexture_material_args=sourceMaterialSourceToRenderTextureTypedArgs,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_other_methods_material_args=sourceMaterialSourceToOtherMethodTypedArgs,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_Material_receiver_calls=sourceMaterialSourceToMaterialReceiverCalls,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_field_stores=sourceMaterialIntraBlockFieldStores,
+            original_dynamic_Spectrum_Material_intra_block_exact_typed_local_stores=sourceMaterialIntraBlockLocalStores,
+            original_dynamic_Spectrum_Material_intra_block_trace_branch_boundaries=sourceMaterialSourceTracesReachedBranch,
+            original_dynamic_Spectrum_Material_intra_block_trace_unsupported=sourceMaterialSourceTracesStoppedUnsupported,
+            original_dynamic_Spectrum_Material_intra_block_typed_argument_not_runtime_or_GPU_proof=true,
             original_dynamic_Spectrum_Material_field_reader_calls_not_auto_render_proof=true,
             source_local_cfg_original_Shader_material_constructor_direct_arg_source_identity_proven=localCfgOwnCtorMaterialDirectLastShaderArgument>0,
             source_local_cfg_next_own_ctor_Unity_Material_set_shader_calls=localCfgOwnCtorUnityMaterialShaderSetterCalls,
@@ -902,6 +937,7 @@ internal static class Program
            SafeShaderLocalConsumer(truthy,0)!="unity_object_truthiness" ||
            SafeShaderLocalConsumer(nonShader,0)!="additional_stack_operand_pending")
             throw new InvalidOperationException("synthetic_source_shader_consumer_guard_failed");
+        OriginalMaterialCallFlow.SelfTest();
         Console.WriteLine("GT_SPECTRUM_TYPED_RESULTFLOW_SYNTHETIC_PASS");
     }
 
