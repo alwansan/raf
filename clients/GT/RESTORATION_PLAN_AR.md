@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-28 — مسار Spectrum الديناميكي الأصلي يصل إلى Material(Shader)
+
+P06/M2 تقدّم من مجرد Shader.Find إلى **سلسلة مصدر مثبتة** عبر [43337606930](https://github.com/alwansan/raf/actions/runs/43337606930)، [43337840022](https://github.com/alwansan/raf/actions/runs/43337840022)، [43338106531](https://github.com/alwansan/raf/actions/runs/43338106531)، و[43338485431](https://github.com/alwansan/raf/actions/runs/43338485431): Spectrum original name → typed Shader.Find → Shader local → new original 3-argument constructor, Shader last → **original third Shader argument immediately passed to `new UnityEngine.Material(Shader)`**. الـconstructor 44 IL وMaterial.newobj واحد. **Source evidence only**؛ Material result→Renderer/Graphics/RT غير مثبت، لا Original shader GPU/Android pixel ولا Foam/FFT index6 أو OBB GUID، ولا 770 Dummy أصيلة. P06/M2 يبقيان blocked لقبول الهاتف حتى الربط الحقيقي. التالي: تعقّب الـMaterial الجديد بعد newobj، ثم Runtime/RT/Sampler/CB0 وتضمين shader الأصلي واختبار Android على جهاز المالك. [جلسة Chat28](sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md).
+
+---
+
 ## GT Chat-27 — جلسة جهاز جديدة مستقلة وفشل نشر البناء
 
 CL@a320d5e جلسة `LogRaft-20261112-235351-196` ذات **4 صور**: **36,828** أخطاء Shader ماء (Spectrum **15,054**، Foam Global **21,774**) و**6,106 kernel6** غير محدد المصدر و**2,844 Cursor** و**2 OBB GUID**. الصور تثبت البياض الشديد للطوف والقائمة وماء سماوي/داكن غير صحيح رغم تشغيل العالم. هذا دليل جديد مستقل ولا يستبدل عينة Chat20 القديمة في عقود P06/P07/P10؛ كلاهما **فشل قبول GPU**. أُضيف فحص Final LogRaft FIFO writer consistency واختبار CI pinned؛ افحص CI الحقيقي. تشغيل Native [43299084397](https://github.com/alwansan/raf/actions/runs/43299084397) انتهى reconstruct SUCCESS وArtifacts لكن Publish Release HTTP403، لذلك M1/M2 غير مقبولين كـRelease أو رسوميات كاملة. الخطوة التالية Shader.Find consuming IL الأصلية (Chat26)→Material/RT ثم Foam/FFT shader pass و770 Dummy؛ لا LFS أو GUID مصنوع. [جلسة Chat27](sessions/20261113-GT-new-owner-night-phone-session-chat-27.md) · [دليل](evidence/20261113_cl_night_device_graphics_and_build_receipt.json).
