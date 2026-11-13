@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "agent": "GT",
+  "owner_decision_date": "2026-11-13",
+  "owner_decision": "SOURCE_AUTHENTIC_RESTORATION_AND_PROJECT_INTEGRATION_ALL_RESOURCES_BEFORE_FIRST_COMPREHENSIVE_XAPK_COMPATIBILITY_TEST",
+  "owner_directive_path": "clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md",
+  "priority": "P04_P05_Dummy_Shader_Original_Renderer_Fanout_then_P07_Compute_then_P06_Water_then_All_Other_Assets",
+  "no_new_GT_XAPK_requested_this_session": true,
+  "prior_native_runs_already_requested_before_priority_change": [
+    43349181838,
+    43350559665
+  ],
+  "prior_native_runs_cancelled_or_completed_by_this_action": false,
+  "source": {
+    "repository": "alwansan/raf",
+    "original_branch": "zip2",
+    "original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "git_LFS_used": false
+  },
+  "restoration_scope": {
+    "source_Shader_objects": 165,
+    "source_Material_objects": 1556,
+    "last_exported_Material_documents": 1536,
+    "last_full_export_custom_Dummy_Material_documents": 770,
+    "last_full_export_custom_Dummy_material_docs_are_distinct_shader_count": false,
+    "original_Scenes": 40,
+    "source_Texture2D": 4050,
+    "source_Texture2DArray": 9,
+    "source_original_ComputeShader_objects": 9,
+    "full_source_export_census_and_921_scene_scope_not_identical": true
+  },
+  "proven_original_scene_priority": {
+    "original_scenes_in_sample": 6,
+    "genuine_original_Renderer_Material_Shader48_slots": 1633,
+    "original_Shader48_identities_in_scope": 21,
+    "slots_to_dummy_postvendor": 1373,
+    "source_Shader48_identities_still_dummy_postvendor": 17,
+    "top_dummy_source_Shader48_use_slots": 921,
+    "top_dummy_use_counts_represents_renderer_material_slots_not_gpu_draw_calls": true,
+    "source_to_export_original_pointer_and_guid_same_export_join_verified": true,
+    "real_sha_source_export_CI": 42044249541,
+    "original_shader_programs_fully_restored_by_this_evidence": false,
+    "actual_Android_GPU_pixels_verified": false
+  },
+  "new_restoration_tools": {
+    "source_private_ranker": "scripts/gt_restore_first_shader_priority.py",
+    "synthetic_unit_tests": "tests/test_gt_restore_first_shader_priority.py",
+    "synthetic_CI_success": 43353780918,
+    "private_output_protects_original_Shader_ID_Guid_and_export_path": true,
+    "safe_output_contains_aggregate_counts_only": true,
+    "real_source_workflow": ".github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml",
+    "real_source_workflow_run": 43354787983,
+    "real_source_run_confirmed_final_success_at_checkpoint": false,
+    "helper_revision": {
+      "reviewed_W1_git_blob_sha1": "4b84a325bb1766583adb4ba6cfd9a23225f23bb9",
+      "reviewed_B02_composed_SHA256": "d98345c1f0ade0c54704c0e49936d67b6cc8187d4a41e34980b4939fb54fe9aa",
+      "new_W1_source_delta": "Optional original Texture2DArray capture class IDs 28,84,89,117,187 under explicit opt-in only, preexisting Material/Shader only path retained",
+      "B02_B21_reviewed_exact_hash_CI_success": 43354701952,
+      "no_original_exporter_source_changed_by_GT": true,
+      "no_authenticity_pin_bypassed": true
+    }
+  },
+  "restoration_completion_gates": [
+    "G0",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6"
+  ],
+  "actual_G0_G6_complete": false,
+  "first_comprehensive_XAPK_compatibility_test_requested_after_directive": false,
+  "next_action": "After real runner source queue receipt, restore top original high-fanout 921-slot Shader48 complete Pass/Variant/CB/Sampler/Texture into unique original exported GUID, validate original bindings; then all remaining dummy families, FFT/Depth, models/textures/effects. No XAPK until restoration G0-G6 complete."
+}
