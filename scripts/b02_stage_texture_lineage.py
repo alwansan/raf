@@ -12,11 +12,19 @@ import argparse
 import hashlib
 from pathlib import Path
 
-HELPER_BLOB_SHA1 = "8e64093f5d1cd283f34163e2527c414b3f86b7a7"
+HELPER_BLOB_SHA1 = "4b84a325bb1766583adb4ba6cfd9a23225f23bb9"
 PATH_ANCHOR = '        string? path = Environment.GetEnvironmentVariable("RAFT_PRIVATE_EXPORT_LINEAGE");'
 RETURN_ANCHOR = "        if (string.IsNullOrEmpty(path))\n            return;"
 GUID_ANCHOR = '        json.WriteString("export_instance", Guid.NewGuid().ToString("N"));'
 METHOD_ANCHOR = "    private static void Identity(Utf8JsonWriter json, string key, IUnityObjectBase asset)"
+# Reviewed W1 source revision adds optional Texture2DArray/tiled image
+# source capture only under its explicit "1" opt-in; B02 uses a private path
+# value rather than "1", preserving original 21/48 capture and adding its
+# own read-only 28-only second trace. This filter is verified with blob SHA.
+REVIEWED_SHADER_FILTER = """                if (asset.ClassID is not (21 or 48) &&
+                    !(includeTextureObjects &&
+                      asset.ClassID is (28 or 84 or 89 or 117 or 187)))"""
+
 
 OPTIONAL_TRACE = """    private static void CaptureTextureObjects(
         ProjectAssetContainer container,
@@ -88,7 +96,8 @@ def render(base: bytes) -> bytes:
     source = source.replace(METHOD_ANCHOR, OPTIONAL_TRACE + METHOD_ANCHOR)
     if (source.count("CaptureTextureObjects(") != 2
             or source.count('json.WriteString("export_instance", exportInstance);') != 2
-            or source.count("if (asset.ClassID is not (21 or 48))") != 1):
+            or source.count(REVIEWED_SHADER_FILTER) != 1
+            or source.count('Environment.GetEnvironmentVariable("RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE") == "1"') != 1):
         raise ValueError("unsafe W1+Texture2D capture composition")
     return source.encode("utf-8")
 
