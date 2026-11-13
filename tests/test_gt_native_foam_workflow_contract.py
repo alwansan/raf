@@ -46,7 +46,7 @@ class OriginalFoamNativeIntegrationContract(unittest.TestCase):
 
     def test_cleanup_and_only_numeric_safe_receipt_uploaded(self):
         start=self.flow.index("      - name: GT restore original Foam Global")
-        end=self.flow.index("      - name: Inventory actual exported Material")
+        end=self.flow.index("      - name: Recover original Particle108 ShaderLab")
         block=self.flow[start:end]
         self.assertEqual(block.count("actions/upload-artifact@v4"),1)
         self.assertIn('rm -rf -- "$RUNNER_TEMP/gt-native-foam-private"',block)
