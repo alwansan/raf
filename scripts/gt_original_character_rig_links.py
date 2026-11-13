@@ -16,6 +16,10 @@ def audit(root, manifest):
 
     known = read_expected(manifest)
     kinds, externals, meshes, renderers, parents = {}, {}, {}, [], {}
+    animators = {}
+    transforms = {}
+    game_objects_by_transform = {}
+    animator_assets = {}
     for owner, (_, size, digest) in known.items():
         source = root / owner
         verify(source, size, digest)
@@ -28,6 +32,13 @@ def audit(root, manifest):
                 tree = obj.read_typetree(check_read=False)
                 if CATEGORIES["character_name"].search(tree["m_Name"]):
                     meshes[owner, obj.path_id] = len(tree["m_BindPose"])
+            elif obj.type.name == "Animator":
+                tree = obj.read_typetree(check_read=False)
+                file_id, path_id = pointer(tree["m_GameObject"])
+                if file_id == 0 and path_id:
+                    animators.setdefault((owner, path_id), []).append(tree)
+            elif obj.type.name in ("Avatar", "AnimatorController", "AnimatorOverrideController"):
+                animator_assets[owner, obj.path_id] = obj.type.name
             elif obj.type.name == "SkinnedMeshRenderer":
                 renderers.append((owner, obj.read_typetree(check_read=False)))
 
@@ -42,11 +53,17 @@ def audit(root, manifest):
         owner, path_id = identity
         if owner not in parents:
             sf = UnityPy.load(str(root / owner)).file
-            parents[owner] = {
-                obj.path_id: obj.read_typetree(check_read=False)["m_Father"]
+            records = {
+                obj.path_id: obj.read_typetree(check_read=False)
                 for obj in sf.objects.values()
                 if obj.type.name in ("Transform", "RectTransform")
             }
+            parents[owner] = {pid: tree["m_Father"] for pid, tree in records.items()}
+            for pid, tree in records.items():
+                game_object = target(owner, tree["m_GameObject"])
+                if game_object[0] is not None and game_object[1]:
+                    transforms[game_object] = (owner, pid)
+                    game_objects_by_transform[owner, pid] = game_object
         value = parents[owner].get(path_id)
         return target(owner, value) if value is not None else (None, 0)
 
@@ -61,11 +78,41 @@ def audit(root, manifest):
             bone = parent(bone)
         return "outside_root"
 
+    def animator_candidates(owner, start):
+        parent((owner, 0))  # Populate the GameObject to Transform index for this owner.
+        transform = transforms.get(start, (None, 0))
+        seen = set()
+        while transform[0] is not None and transform[1] and transform not in seen:
+            seen.add(transform)
+            if start in animators:
+                return start[0], animators[start]
+            transform = parent(transform)
+            if transform[0] is not None and transform[1]:
+                parent(transform)
+            start = game_objects_by_transform.get(transform, (None, 0))
+        return None, []
+
     for owner, tree in renderers:
         identity = target(owner, tree["m_Mesh"])
         if identity not in meshes:
             continue
         used.add(identity)
+        animator_owner, candidates = animator_candidates(owner, target(owner, tree["m_GameObject"]))
+        if len(candidates) == 1:
+            counts["renderers_with_unique_ancestor_animator"] += 1
+            animator = candidates[0]
+            for key, allowed in (
+                ("m_Avatar", ("Avatar",)),
+                ("m_Controller", ("AnimatorController", "AnimatorOverrideController")),
+            ):
+                asset = target(animator_owner, animator[key])
+                result = ("null" if asset[1] == 0 else "verified"
+                          if animator_assets.get(asset) in allowed else "unresolved")
+                counts["ancestor_animator_" + key[2:].lower() + "_" + result] += 1
+        elif candidates:
+            counts["renderers_with_ambiguous_ancestor_animator"] += 1
+        else:
+            counts["renderers_without_ancestor_animator"] += 1
         bones = tree["m_Bones"]
         counts["character_skinned_renderers"] += 1
         counts["renderer_bone_counts_match_bind_poses"] += len(bones) == meshes[identity]

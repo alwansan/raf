@@ -1,5 +1,7 @@
 {
   "all_source_skinned_renderers": 363,
+  "ancestor_animator_avatar_verified": 21,
+  "ancestor_animator_controller_verified": 21,
   "bone_slots_outside_root": 246,
   "bone_slots_under_root": 2154,
   "character_mesh_name_matches": 13,
@@ -10,6 +12,8 @@
   "renderer_bone_counts_match_bind_poses": 26,
   "renderer_bone_slots": 2400,
   "renderers_with_all_bones_under_root": 23,
+  "renderers_with_unique_ancestor_animator": 21,
+  "renderers_without_ancestor_animator": 5,
   "verified_root_bone_transforms": 26,
   "verified_source_owners": 82,
   "verified_transform_bone_slots": 2400
