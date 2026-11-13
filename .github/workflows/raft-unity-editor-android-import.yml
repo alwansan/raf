@@ -136,6 +136,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
           python3 -m unittest discover -s tests -p test_gt_install_original_spectrum.py -v
+          python3 -m unittest discover -s tests -p test_record_documented_water_limitation.py -v
           python3 -m unittest discover -s tests -p test_t2_foam_private_installer.py -v
           python3 -m unittest discover -s tests -p test_t2_foam_private_shaderlab_candidate.py -v
           # T3 source-free controls: valid Material GUID can still target a
