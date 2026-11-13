@@ -1,5 +1,11 @@
 استعد هوية العامل **GT** في [Raft Android](https://github.com/alwansan/raf/tree/feature/android-native-port). فرع الكتابة الوحيد `feature/android-native-port`.
 
+## GT Chat-33 — استعادة كل Variants للشيدر الأصلي الأعلى (مصدر فقط، بلا XAPK)
+
+[CI43357332292 SUCCESS](https://github.com/alwansan/raf/actions/runs/43357332292): من ZIP2 SHA الحقيقي، استخرجنا وترجمنا **58/58 برنامج DXBC أصلي مختلف** للشيدر الذي يشغل 921 خانة Renderer ضمن 6 مشاهد. **4 Passes أصلية، 33 زوج VS/FS متطابقاً، 8 Vertex Variants غير مقترنة** محفوظة بملف خاص، و58/58 نجحت HLSL وVulkan1.1 roundtrip؛ تم حذف كل الملفات الأصلية المؤقتة بعد الاختبار، ونُشر تقرير أعداد فقط. الأداة `scripts/gt_original_921_all_variants.py` واختباراتها ومسار CI الجديد داخل الفرع. **لم** ينشأ ShaderLab إنتاجي أصلي شامل بعد، ولم تتبدل Material/.meta/GUID، **770 مستند Material Dummy** لا تزال الحالة المرجعية، و165 Shader لم تُستعد بالكامل. التالي: استعادة Keywords/CB0/Samplers/render states وتجميع 4-Pass ShaderLab بكل 33 pair، ثم إدماجه في GUID الأصلي وفحص Dummy؛ بعده بقية الشيدرات/الماء/FFT/المؤثرات. **ممنوع XAPK الآن** حتى G0–G6. [جلسة Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md).
+
+---
+
 ## GT Chat-32 — أول قائمة استعادة أصلية حقيقية نجحت، بدون XAPK
 
 اقرأ [قرار المالك](OWNER_DIRECTIVE_RESTORE_FIRST_AR.md) أولاً. [CI43354787983 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354787983): شغّلنا جرداً حقيقياً من ZIP2 SHA لستة مشاهد واصل 21 Shader48 بموارد AssetRipper نفسها؛ **17 شيدراً Dummy مقابل 1373/1633 Renderer Material slots**، الشيدر الأصلي الأعلى **921 خانة**. أُنتجت قائمة خاصة قابلة للعمل بمطابقة source PathID→Export GUID/path محفوظة فقط في temp، وحُذفت؛ التقرير الآمن لا ينشر معرّفات اللعبة. أدوات W1/B02/B21 خضعت لمراجعة البصمات الحقيقية [CI43354701952 SUCCESS](https://github.com/alwansan/raf/actions/runs/43354701952). **التالي استعادة الشيدر الأعلى استعمالاً فعلياً بكل الممرات الـ4 و33 زوج VS/FS متطابقاً و8 Vertex Variants غير مقترنة في الجرد، والـSampler/CB/Keywords، ثم باقي 770 مستند Material Dummy ثم الـ165 Shader وباقي الموارد**. لم يُستعد الشيدر الأعلى بعد؛ جرده فقط مكتمل. لا تشغّل XAPK حتى G0–G6. [جلسة Chat32](sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md).
