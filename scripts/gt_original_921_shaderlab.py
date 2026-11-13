@@ -29,6 +29,17 @@ def unity_varying_semantics(source):
     return source
 
 
+def unity_resource_bindings(source, stage):
+    # The translated descriptor ordinals share one Vulkan namespace, whereas
+    # Unity's graphics compiler has separate, smaller HLSL sampler slots.
+    # Bind textures and samplers by their recovered Unity property names.
+    source = re.sub(r" : register\([ts][0-9]+\)(?=;)", "", source)
+    # These names are generated for padding, with no original Unity binding.
+    # They must not alias a different stage's unrelated padding or globals.
+    return re.sub(r"\braft921_cb[0-9]+_(?:pad[0-9]+|Globals|type[0-9]+)\b",
+                  lambda match: f"gt_{stage}_{match[0]}", source)
+
+
 def compose(private):
     layout = (private / "original-private-layout.txt").read_text(encoding="utf-8")
     routes = json.loads((private / "original-private-keyword-routes.json").read_text())
@@ -42,7 +53,8 @@ def compose(private):
             key = (pair["subshader"], pair["pass"], stage, row["program_ref"],
                    tuple(sorted(row["original_variant_metadata"]["m_KeywordIndices"])))
             candidate = private / f"bound-stage-{index * 2 + offset:03d}" / "varying-bound.hlsl"
-            stage_sources[key] = unity_varying_semantics(candidate.read_text(encoding="utf-8"))
+            source = unity_varying_semantics(candidate.read_text(encoding="utf-8"))
+            stage_sources[key] = unity_resource_bindings(source, stage)
     original_names = manifest["original_shader_ParsedForm_full_private"]["m_KeywordNames"]
     indices = {name: index for index, name in enumerate(original_names)}
     anchor = "// Original stage programs attach here"
