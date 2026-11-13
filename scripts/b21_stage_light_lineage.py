@@ -15,7 +15,7 @@ from scripts import b02_stage_texture_lineage as texture_stage
 
 # SHA256 of b02_stage_texture_lineage.render(exact_W1_helper), independently
 # recorded after successful B02 CI41927712988. New B02 edits require review.
-B02_RENDER_SHA256 = "c99c6e163ee20d9ff72e2180ed72ce94b5c608e20dc1095c3c81d3e678532c1e"
+B02_RENDER_SHA256 = "d98345c1f0ade0c54704c0e49936d67b6cc8187d4a41e34980b4939fb54fe9aa"
 TEXTURE_PATH = '        string? texturePath = Environment.GetEnvironmentVariable("RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE");'
 EARLY_RETURN = '        if (string.IsNullOrEmpty(path) && string.IsNullOrEmpty(texturePath))'
 EXPORT_INSTANCE = '        string exportInstance = Guid.NewGuid().ToString("N");'
@@ -85,7 +85,8 @@ def render(base: bytes) -> bytes:
                         + '\n        if (!string.IsNullOrEmpty(lightPath))'
                         + '\n            CaptureLightObjects(container, collections, lightPath, exportInstance);')
     text = text.replace(METHOD_ANCHOR, LIGHT_CAPTURE + METHOD_ANCHOR)
-    if (text.count('if (asset.ClassID is not (21 or 48))') != 1
+    if (text.count(texture_stage.REVIEWED_SHADER_FILTER) != 1
+        or text.count('asset.ClassID is (28 or 84 or 89 or 117 or 187)') != 1
         or text.count('if (asset.ClassID != 28)') != 1
         or text.count('if (asset.ClassID is not (1 or 108))') != 1
         or text.count('CaptureLightObjects(') != 2
