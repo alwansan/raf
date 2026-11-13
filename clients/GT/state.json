@@ -348,8 +348,8 @@
     "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
-  "latest_session": "clients/GT/sessions/20261113-GT-new-owner-night-phone-session-chat-27.md",
-  "next_action": "GT Chat27: CL@a320d5e original owner 23:53 LogRaft session 20261112-235351-196 shows 36828 water invalid passes (Spectrum15054+Foam21774), kernel6 6106 unproven exact owner, cursor2844, OBB GUID2, 4 images with white raft/solid cyan water; old complete native run 43299084397 reconstruct success but Release POST HTTP403. Device graphics acceptance rejected. Validate updated independent original CL CI, then return to Chat26 exact typed Shader.Find local consuming stack/Material/Graphics/RT proof. No LFS, no GUID inventions; release publishing requires owner-authorized Contents-write token or settings.",
+  "latest_session": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md",
+  "next_action": "GT Chat28 verified original managed Shader.Find→Shader local→3arg own ctor(last Shader)→new UnityEngine.Material(Shader) immediate original last-arg load. CI 43338485431 SUCCESS; same-authentic own constructor 44 IL, direct Material result field/local stores 0, need classify post-newobj consumer and exact Renderer/Graphics/RT. New CL night device graphics fails 36828 water pass/6106 kernel6. ZIP2 read-only no LFS. Native 43299084397 reconstruct success, release HTTP403 needs Contents+Workflows write token; package is older snapshot. Preserve source vs Android device proof.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -853,6 +853,31 @@
     "evidence_path": "clients/GT/evidence/20261113_cl_night_device_graphics_and_build_receipt.json",
     "device_gate_source": "scripts/gt_device_graphics_acceptance.py",
     "device_gate_workflow": ".github/workflows/raft-gt-device-graphics-acceptance.yml",
-    "real_new_phone_gate_CI_result": "pending_postcommit_verification"
+    "real_new_phone_gate_CI_result": "SUCCESS:43336564346",
+    "release_diagnostic_workflow_commit": "24a0291266ab572233301630c40e239d5154d9d0"
+  },
+  "proofs_20261113_chat28": {
+    "session_path": "clients/GT/sessions/20261113-GT-spectrum-original-managed-material-constructor-chat-28.md",
+    "source_original_ZIP2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_original_managed_assembly_bytes": 3211776,
+    "source_original_one_spectrum_Shader_Find": true,
+    "source_original_local_cfg_reachable_IL": 35,
+    "source_original_local_cfg_branches": 3,
+    "source_original_shader_local_newobj_CI": 43337606930,
+    "source_original_own_threearg_shader_last_CI": 43337840022,
+    "source_original_own_ctor_44IL_material_shader_CI": 43338106531,
+    "source_original_own_ctor_csharp_CS0136_trial_failed": 43338326341,
+    "source_original_own_ctor_csharp_fix_commit": "34234ee24a32743acf25d989148cfccb8311b998",
+    "source_original_direct_last_shader_to_Material_ctor_success_CI": 43338485431,
+    "exact_source_Shader_Find_to_Material_Shader_argument_path": true,
+    "actual_runtime_execution_verified": false,
+    "resulting_Material_assignment_verified": false,
+    "original_gpu_shader_bindings_verified": false,
+    "all_water_pixels_verified": false,
+    "original_unity_game_material_guid_assumed": false,
+    "original_770_dummy_materials_restored": false,
+    "source_only_lineage_tool_path": "android-port/Experiments/GT/SpectrumShaderFindResultFlow/Program.cs",
+    "source_original_program_or_Guids_modified": false,
+    "git_lfs_used": false
   }
 }
