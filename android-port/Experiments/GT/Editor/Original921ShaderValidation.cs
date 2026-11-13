@@ -19,6 +19,7 @@ namespace RaftGT
         {
             public string unityVersion;
             public string failureType;
+            public string checkpoint;
             public int passCount;
             public int registeredRoutes;
             public int errors;
@@ -42,6 +43,7 @@ namespace RaftGT
                     .SequenceEqual(new[] { GraphicsDeviceType.Vulkan });
                 const string shaderPath = "Assets/GTOriginal921.shader";
                 const string collectionPath = "Assets/GTOriginal921.shadervariants";
+                result.checkpoint = "import";
                 AssetDatabase.ImportAsset(shaderPath,
                     ImportAssetOptions.ForceSynchronousImport | ImportAssetOptions.ForceUpdate);
                 var shader = AssetDatabase.LoadAssetAtPath<Shader>(shaderPath);
@@ -51,6 +53,7 @@ namespace RaftGT
                 if (result.passCount != Counts.Length)
                     throw new InvalidOperationException("Original921ShaderPassCountMismatch");
 
+                result.checkpoint = "register";
                 var collection = new ShaderVariantCollection();
                 for (int pass = 0; pass < Passes.Length; ++pass)
                 {
@@ -72,9 +75,11 @@ namespace RaftGT
                 var bundle = new AssetBundleBuild {
                     assetBundleName = bundleName, assetNames = new[] { shaderPath, collectionPath }
                 };
+                result.checkpoint = "compile";
                 var manifest = BuildPipeline.BuildAssetBundles(bundleDirectory, new[] { bundle },
                     BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode,
                     BuildTarget.Android);
+                result.checkpoint = "compiler_results";
                 result.errors = ShaderUtil.GetShaderMessages(shader)
                     .Count(message => message.severity.ToString() == "Error");
                 var artifact = new FileInfo(Path.Combine(bundleDirectory, bundleName));
@@ -88,6 +93,7 @@ namespace RaftGT
             }
             File.WriteAllText(Path.Combine(output, "gt-original-921-unity-safe.json"),
                 JsonUtility.ToJson(result, true));
+            Debug.Log("GT_ORIGINAL_921_UNITY_SAFE " + JsonUtility.ToJson(result));
             EditorApplication.Exit(exitCode);
         }
     }

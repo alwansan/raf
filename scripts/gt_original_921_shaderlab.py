@@ -49,7 +49,7 @@ def compose(private):
                                 "program": number})
             stages[stage] = routed_stage(clauses, names, programs)
         pragmas = ["#pragma multi_compile __ " + " ".join(names)]
-        program = ["HLSLPROGRAM", "#pragma target 5.0", "#pragma only_renderers vulkan",
+        program = ["HLSLPROGRAM", "#pragma target 5.0",
                    "#pragma vertex main", "#pragma fragment main", *pragmas,
                    stage_body(stages["vs"], stages["fs"]), "ENDHLSL"]
         remainder = blocks[index + 1]
