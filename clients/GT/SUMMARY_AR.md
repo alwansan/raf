@@ -1,5 +1,11 @@
 # ملخص تقدم GT للمالك
 
+## ملحق GT Chat-33 — تغطية الأسماء والخصائص الأصلية
+
+نجح [CI43358489426](https://github.com/alwansan/raf/actions/runs/43358489426): **27 اسم Keyword و27 Flag و14 فهرس مستخدم من الأصل (كلها ضمن الجدول) و35 خاصية Shader و74 سجل Variant**، مع استمرار ترجمة البرامج الأصلية **58/58** بنجاح. هذا فحص أصيل من ZIP2 دون تعديل موارد Android أو .meta؛ لم تتحول 770 Material Dummy إلى موارد سليمة بعد. خطوة GT اللاحقة: بناء original 4-Pass ShaderLab وربط Keywords/Samplers/CB0 بنفس GUID قبل مرحلة التوافق.
+
+---
+
 ## GT Chat-33 — تعافٍ مثبت لكل 58 برنامج شيدر أصلي عالي الأثر
 
 نجح [CI43357332292](https://github.com/alwansan/raf/actions/runs/43357332292) بإثبات **58/58** مرحلة DXBC أصلية تُترجم إلى HLSL وتُعاد إلى SPIR-V Vulkan1.1، مسترجعاً جميع **33/33 زوج VS/FS** و**8 Vertex Variants أصلية غير مقترنة** لشيدر بأربعة Passes مربوط بـ**921 خانة Renderer** من العينة الأصلية. استُخدمت 6 مشاهد و4 حاويات SHA ZIP2 بلا LFS؛ كل ملفات الشيدر الأصلية بقيت خاصة وحُذفت بعد التشغيل. GitHub Artifact الآمن `14006268247` يحتوي أعداداً لا شيفرات. هذه **استعادة برامج مصدرية قابلة لإعادة الإنتاج**، لا استبدال ShaderLab أو ربط GUID أو ألوان الهاتف؛ 770 Material Dummy وP04/P05/G0–G6 لم تُغلق. الخطوة التالية: بناء ShaderLab الكامل وترميم Sampler/CB0/Keywords ثم دمجه مع GUID الأصلي، بعد ذلك إعادة جرد Material Dummy. [Chat33](sessions/20261113-GT-original-921-complete-source-variant-stage-chat-33.md). **لا XAPK الآن**.
