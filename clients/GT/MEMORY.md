@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-29 — source-exact Spectrum Material reaches seven typed Graphics.Blit arguments
+
+CI43343971412 SUCCESS source-authentic Mono.Cecil exact material ldfld→typed Graphics.Blit argument proof **7** occurrences. 24 original owned-field loads/8 source methods; 17 Material instance receiver calls, 7 Graphics.Blit typed Material args, 0 unsupported same-block scans; code `android-port/Experiments/GT/SpectrumShaderFindResultFlow/OriginalMaterialCallFlow.cs`. CI43344199792 SUCCESS enforces 7 original Blit args plus 24/8. Source-only, no actual runtime/Adreno GPU pixel, CB0/RT/Sampler or shader pass parity claim. CL@3c26bb5 log session 20261113-040212-998 includes 3 white raft screenshots, 28592 water shader invalid passes (Spectrum 11512 Foam17080), 4576 kernel index6 unverified owner, cursor2895 OBB GUID4, Android ActivityManager matched PID18885 exit reason LOW_MEMORY code3 around 04:04:43 local. No proof of root cause for memory pressure. Device gate CI43343638117 SUCCESS reproduces failing source. Chat29 session, evidence JSON, state and machine plan updated. Next identify exported project dummy Spectrum shader and original Meta; only then stage source-authenticated unified 7Pass keyword ShaderLab with no duplicate/GUID tamper, compile, package, real phone test. Retain ZIP2 read-only/no LFS.
+
+---
+
 ## GT Chat-28 — final original Material field source readers snapshot
 
 CI43339062121 SUCCESS: original `new Material(Shader)` immediate result duplicated. CI43339407339 SUCCESS: same original managed ctor performs property setter on duplicated material and stores original `UnityEngine.Material` to own field. CI43339688082 SUCCESS: source-owned field resolved; 24 exact ldfld sites across 8 compiled source methods, 7 reader methods contain UnityEngine.Graphics calls, 2 contain RenderTexture calls, 0 contain Renderer calls. **Co-presence in method is NOT source-value→Graphics argument proof**. Need SSA/stack CIL value flow for 24 reads to actual Graphics.Blits/Draw/RT before exact native ShaderLab integration. P06/M2 blocked and new owner CL 36828 water errors persists. ZIP2-only pinned SHA, no GUID change. Chat28 session updated. Old full native 43299084397 reconstruct success / release 403, artifacts expire 2026-11-16.
