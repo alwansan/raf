@@ -739,7 +739,34 @@
     "real_source_install_run_id": 43346405263,
     "real_source_install_artifact_id": 14002987883,
     "real_material_shader_audit_started": true,
-    "Unity_2021_whole_game_compile_and_signed_delivery_confirmed": false
+    "Unity_2021_whole_game_compile_and_signed_delivery_confirmed": false,
+    "real_spectrum_source_install_run": 43346405263,
+    "real_spectrum_source_install_artifact": 14002987883,
+    "real_spectrum_7pass_source_installer_success": true,
+    "real_source_water_contract_passes": {
+      "Spectrum": [
+        7
+      ],
+      "Foam": [
+        1
+      ],
+      "DepthCopy": [
+        6,
+        3
+      ],
+      "Blur": [
+        2
+      ],
+      "VolumetricLight": [
+        5
+      ]
+    },
+    "first_native_run_reconstruct_completed": false,
+    "first_native_run_conclusion": "failure",
+    "failed_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "first_shader_source_pass_spectrum": true,
+    "first_water_gate_strict_ready": false,
+    "original_full_native_Unity_Editor_compile_verified": false
   },
   "proofs_20261113_foam_source_guid_install_next_build": {
     "source_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -754,6 +781,37 @@
     "real_source_exported_Foam_install_verified": false,
     "original_Material_CB0_sampler_RT_binding_verified": false,
     "actual_Android_Foam_pixels_verified": false,
-    "session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md"
+    "session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md",
+    "second_native_run_id": 43349181838,
+    "second_native_source_sha": "c3c71731525465cb2f6297f6bcbdb37c60ae4058",
+    "second_live_source_foam2_install_success": false,
+    "second_status_at_snapshot": "in_progress",
+    "third_native_run_id": 43350559665,
+    "third_native_source_sha": "8bf83afc8a97ef4ceda8154e31eec0c420556265",
+    "third_experimental_acknowledges_exact_expected_unmet_conditions": [
+      "authentic_water_kernel_identity",
+      "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+      "water_compute_source_candidate"
+    ],
+    "third_actual_Foam_two_pass_and_Unity_compile_verified": false,
+    "strict_authentic_water_gate_not_weakened": true,
+    "exact_water_documentation_fixture_CI": 43350378817,
+    "original_android_compute_kernel6_identity_proven": false
+  },
+  "proofs_20261113_native_actual_water_gate": {
+    "run": 43346405263,
+    "real_original_spectrum_exported_original_guid_7pass_success": true,
+    "real_original_depth_copy_subshader_passes": [
+      6,
+      3
+    ],
+    "real_foam_global_old_shader_passes": 1,
+    "real_unsupported_water_compute_candidate": true,
+    "first_reconstruct_failed_because_stale_limitations": true,
+    "stale_limit": "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+    "evidence": "clients/GT/evidence/20261113_native_spectrum_sevenpass_actual_export_and_water_gate.json",
+    "exact_source_only_replay_CI": 43350378817,
+    "three_limitation_request_build_run": 43350559665,
+    "all_water_pixels_verified": false
   }
 }
