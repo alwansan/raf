@@ -1,0 +1,140 @@
+name: GT original 921-slot shader all compiled variants (source only, NO XAPK)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/gt_original_921_all_variants.py
+      - tests/test_gt_original_921_all_variants.py
+      - .github/workflows/raft-gt-original-921-all-variants.yml
+
+permissions:
+  contents: read
+concurrency:
+  group: gt-original-921-variants-source-only
+  cancel-in-progress: false
+jobs:
+  original-921-full-stage-recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Verify source-only full-variant and privacy negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/gt_original_921_all_variants.py
+          python3 -m unittest discover -s tests -p 'test_gt_original_921_all_variants.py' -v
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Select four original Shader48 owners without LFS
+        run: |
+          set -euo pipefail
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+
+      - name: SHA-authenticate six actual scenes and four original Shader48 owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          root=Path('zip2-original')
+          output=Path(os.environ['RUNNER_TEMP'])/'gt-921-original'
+          pins={'Raft_Data/'+owner:SHADER_OWNERS[owner] for owner in SHADER_OWNERS_SELECTED}
+          result=stage(root,output,pins)
+          assert len(result['owners'])==4 and result['verified_bytes']==269007288
+          assert result['lfs_used'] is False
+          for name,pin in PIN.items():
+              original=root/'Raft/Raft_Data'/name
+              verify_source(original,pin)
+              target=output/'Raft_Data'/name
+              if target.exists() or target.is_symlink():
+                  raise ValueError('original_scene_collision')
+              with original.open('rb') as src, target.open('xb') as dst:
+                  while block:=src.read(1024*1024):
+                      dst.write(block)
+              verify_source(target,pin)
+          print('GT_921_REAL_SOURCE_SHA_VERIFIED scenes=6 owners=4 original_owner_bytes=269007288')
+          PY
+
+      - name: Install original Unity reader and source DXBC to SPIR-V HLSL tooling
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check 'UnityPy==1.23.0'
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends \
+            vkd3d-compiler spirv-tools spirv-cross glslang-tools
+
+      - name: Recover all 33 genuine paired permutations and eight unmatched VS variants privately
+        run: |
+          set -euo pipefail
+          timeout 1800s python3 -m scripts.gt_original_921_all_variants \
+            --original "$RUNNER_TEMP/gt-921-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --private "$RUNNER_TEMP/gt-921-private-recovered" \
+            --out gt-921-source-aggregate-safe.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('gt-921-source-aggregate-safe.json')
+          r=json.loads(p.read_text())
+          assert r['original_passes']==4
+          assert r['exact_original_source_VS_FS_permutation_pairs']==33
+          assert r['unmatched_original_vertex_variants_retained']==8
+          assert r['original_unique_D3D11_stage_programs']==58
+          assert r['all_distinct_original_D3D11_programs_translated']
+          assert not r['original_project_Shader_GUID_replaced']
+          print('GT_SOURCE_ONLY_921_ALL_VARIANTS_GATE_PASSED originalPairs=33 orphanVS=8 sourcePrograms=58 noXAPK=true')
+          PY
+
+      - name: Delete all ZIP2 original files and recovered private HLSL and DXBC
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/gt-921-original" \
+                   "$RUNNER_TEMP/gt-921-private-recovered" \
+                   zip2-original
+
+      - name: Publish numeric-only proof without shader source or private metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-original-921-safe-source-aggregate
+          path: gt-921-source-aggregate-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
