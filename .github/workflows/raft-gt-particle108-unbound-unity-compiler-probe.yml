@@ -277,7 +277,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json
+          import json,os
           from pathlib import Path
           p=Path('gt-private-particle-unity/ProbeResults/gt-particle108-private-unity-safe.json')
           if not p.is_file() or p.stat().st_size > 65536:
@@ -305,6 +305,10 @@ jobs:
           for key,value in expected.items():
               if type(r.get(key)) is not type(value) or r[key]!=value:
                   raise SystemExit('GT_ORIGINAL_PRIVATE_UNITY_FAIL_'+key)
+          source = json.loads((Path(os.environ['RUNNER_TEMP']) /
+                               'gt-particle108-source-bound-safe.json').read_text())
+          if r.get('candidateShaderSha256') != source['candidate_shader_sha256']:
+              raise SystemExit('GT_SOURCE_BOUND_UNITY_CANDIDATE_SHA_MISMATCH')
           if type(r.get('privateBundleBytes')) is not int or r['privateBundleBytes']<=0:
               raise SystemExit('GT_ORIGINAL_PARTICLE_ANDROID_SHADER_BUNDLE_EMPTY')
           print('GT_SOURCE_BOUND_COMPILER originalResourceSlots=true originalNamedConstantBuffers=true fourProvisionalVariants=true realUnityAndroidBundle=true originalGameAssetsUntouched=true deviceGPUUnverified=true')

@@ -11,6 +11,7 @@ shader numerical equivalence until real Unity/Adreno tests succeed.
 from __future__ import annotations
 import argparse
 from collections import Counter
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -367,6 +368,8 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
             candidate,_=variants.assemble(parsed,pieces[1],pieces[0],model)
             (private_dest/("keyword-%d-private.shader"%n)).write_text(candidate)
         result=router.verify(private_dest,parsed)
+        routed=private_dest/"keyword-routed-private.shader"
+        digest=hashlib.sha256(routed.read_bytes()).hexdigest()
         (private_dest/"routing-safe.json").write_text(json.dumps(result),encoding="utf-8")
         if (result["status"]!=router.STATUS or
             result["private_combination_stage_Vulkan11_SPIRV_valid"]!=8):
@@ -377,6 +380,7 @@ def recover(root:Path,manifest:Path,private_source:Path,private_dest:Path):
     return {"schema":"GT_ORIGINAL_PARTICLE108_UNITY_RESOURCE_BRIDGE_V2",
             "status":"SOURCE_NAMED_STAGE_LOCAL_PRIVATE_HLSL_RECOMPILED_8_OF_8",
             "source_original_particle_shader_108_uses_SHA_verified":True,
+            "candidate_shader_sha256":digest,
             "original_source_four_variant_pairs_recovered":4,
             "private_original_programs_shipped_to_game":False,
             "private_vulkan11_recompiled_stage_branches":8,

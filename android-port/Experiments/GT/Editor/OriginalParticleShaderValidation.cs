@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -21,6 +22,7 @@ namespace RaftGT
         {
             public string status;
             public string unityVersion;
+            public string candidateShaderSha256;
             public string failureType;
             public int sourceKeywordDimensions;
             public int sourceKeywordCombinations;
@@ -72,7 +74,14 @@ namespace RaftGT
                 if (Application.unityVersion != "2021.3.45f2")
                     throw new InvalidOperationException("UnpinnedUnityVersion");
                 const string shaderAsset = "Assets/GTPrivateOriginal.shader";
-                var keywords = KeywordNames(File.ReadAllText(Path.Combine(root, shaderAsset)));
+                string shaderPath = Path.Combine(root, shaderAsset);
+                var keywords = KeywordNames(File.ReadAllText(shaderPath));
+                using (var sha256 = SHA256.Create())
+                using (var stream = File.OpenRead(shaderPath))
+                {
+                    result.candidateShaderSha256 = BitConverter.ToString(sha256.ComputeHash(stream))
+                        .Replace("-", "").ToLowerInvariant();
+                }
                 result.sourceKeywordDimensions = keywords.Length;
                 result.sourceKeywordCombinations = 1 << keywords.Length;
 
