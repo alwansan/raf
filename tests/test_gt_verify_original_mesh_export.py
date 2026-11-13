@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from scripts.gt_verify_original_mesh_export import export_geometry, geometry, trace_meshes
+from scripts.gt_verify_original_mesh_export import compare_geometry, export_geometry, geometry, trace_meshes
 from scripts import patch_export_lineage
 
 INSTANCE = "a" * 32
@@ -78,9 +78,11 @@ class MeshExportTests(unittest.TestCase):
             path.write_text(mesh_yaml)
             self.assertEqual(export_geometry(path, FID), expected)
             path.write_text(mesh_yaml.replace("e00: -0", "e00: 0"))
-            self.assertNotEqual(export_geometry(path, FID)["bind_pose_matrices"], expected["bind_pose_matrices"])
+            zero_sign_diff = export_geometry(path, FID)
+            self.assertNotEqual(zero_sign_diff["bind_pose_matrices"], expected["bind_pose_matrices"])
+            self.assertEqual(compare_geometry(expected, zero_sign_diff), ([], 1))
             path.write_text(mesh_yaml.replace("e02: 0.125", "e02: 0.25"))
-            self.assertNotEqual(export_geometry(path, FID)["bind_pose_matrices"], expected["bind_pose_matrices"])
+            self.assertEqual(compare_geometry(expected, export_geometry(path, FID)), (["bind_pose_matrices"], 0))
 
     def test_wrong_file_id_or_unresolved_external_stream_fails(self):
         with tempfile.TemporaryDirectory() as temporary:

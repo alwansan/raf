@@ -11,7 +11,7 @@
   "local_reproduction_pre_fix_signed_zero_mismatches": 62,
   "local_reproduction_pre_fix_nonzero_mismatches": 0,
   "exported_yaml_negative_zero_spelling": "-0",
-  "change": "Parse negative zero as a float in mesh matrix fields; leave bit-exact comparison and exported data unchanged.",
+  "change": "Parse negative zero as float in mesh matrix fields. Record any remaining opposite zero signs without treating equal numerical matrix entries as geometric drift.",
   "full_export_rerun_verified": false,
   "unity_import_or_device_render_verified": false
 }

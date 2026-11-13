@@ -84,6 +84,28 @@ def float32(value):
     return struct.pack("<f", value) if value is not None else None
 
 
+FLOAT32_ZERO = frozenset((float32(-0.0), float32(0.0)))
+
+
+def compare_geometry(expected, actual):
+    differences = [field for field in expected if expected[field] != actual[field]]
+    if "bind_pose_matrices" not in differences:
+        return differences, 0
+    source, exported = expected["bind_pose_matrices"], actual["bind_pose_matrices"]
+    if len(source) != len(exported):
+        return differences, 0
+    zeros = 0
+    for source_matrix, exported_matrix in zip(source, exported):
+        for a, b in zip(source_matrix, exported_matrix, strict=True):
+            if a == b:
+                continue
+            if a not in FLOAT32_ZERO or b not in FLOAT32_ZERO:
+                return differences, 0
+            zeros += 1
+    differences.remove("bind_pose_matrices")
+    return differences, zeros
+
+
 def digest(payload):
     return len(payload), hashlib.sha256(bytes(payload)).hexdigest()
 
@@ -203,7 +225,10 @@ def inspect(source, records, project, trace, same_instance, owners=OWNERS, *, st
             except (ValueError, KeyError, TypeError, OSError, YAMLError, struct.error):
                 counts["source_or_export_decode_error"] += 1
                 continue
-            differences = [field for field in expected if expected[field] != actual[field]]
+            differences, signed_zeros = compare_geometry(expected, actual)
+            if signed_zeros:
+                counts["meshes_with_bind_pose_zero_sign_difference"] += 1
+                counts["bind_pose_zero_sign_differences"] += signed_zeros
             if differences:
                 counts["mesh_with_geometry_drift"] += 1
                 drift.update(differences)
