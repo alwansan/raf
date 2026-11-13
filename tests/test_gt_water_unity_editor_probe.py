@@ -70,6 +70,27 @@ class ImportedWaterPassProbeTests(unittest.TestCase):
         after=self.native.index("FmodAndroidValidation.RequireOriginalBanks();")
         self.assertLess(before,after)
 
+    def test_production_foam_original_two_passes_and_compiler_gate(self):
+        self.assertIn("public static void RequireOriginalFoamTwoPasses()",self.probe)
+        for text in (
+            'UltimateWater/Foam/Global',
+            'shader.passCount != 2',
+            'ShaderUtil.ShaderHasError(shader)',
+            'GT_NATIVE_FOAM_UNITY_IMPORT_GATE',
+            'original Foam',
+            'AdrenoPixelsVerified=false',
+        ):
+            self.assertIn(text,self.probe)
+        self.assertEqual(self.native.count(
+            'GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();'),1)
+        spectrum_pos=self.native.index(
+            'GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses();')
+        foam_pos=self.native.index(
+            'GTOriginalWaterPassImportProbe.RequireOriginalFoamTwoPasses();')
+        packaging_pos=self.native.index('FmodAndroidValidation.RequireOriginalBanks();')
+        self.assertLess(spectrum_pos,foam_pos)
+        self.assertLess(foam_pos,packaging_pos)
+
     def test_next_native_build_will_call_diagnostic_exactly_once(self):
         self.assertEqual(
             len(re.findall(r'\bGTOriginalWaterPassImportProbe\.Report\(\);',
