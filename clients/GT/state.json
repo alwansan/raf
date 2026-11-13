@@ -1161,6 +1161,23 @@
     "no_new_XAPK_run_requested": true,
     "workflow_path": ".github/workflows/raft-gt-original-921-all-variants.yml",
     "script": "scripts/gt_original_921_all_variants.py",
-    "next": "Generate full original 4-Pass 33-pair ShaderLab with authentic source render-state, keyword routing, CB0 and Sampler descriptors; replace only same-export original Shader GUID, then recensus 770 Dummy Material docs. No XAPK."
+    "next": "Generate full original 4-Pass 33-pair ShaderLab with authentic source render-state, keyword routing, CB0 and Sampler descriptors; replace only same-export original Shader GUID, then recensus 770 Dummy Material docs. No XAPK.",
+    "full_parsedform_private_preservation_ci_run": 43358097452,
+    "original_keyword_topology_strict_ci_run": 43358489426,
+    "original_keyword_coverage": {
+      "source_keyword_names": 27,
+      "source_keyword_flags": 27,
+      "distinct_source_keyword_indices_referenced": 14,
+      "all_14_indices_in_original_27_name_table": true,
+      "source_properties": 35,
+      "source_stage_variant_metadata_rows": 74,
+      "source_player_variant_buckets": 1,
+      "source_global_keyword_list_count": 0,
+      "source_local_keyword_list_count": 0,
+      "original_keyword_index_to_Unity_pragma_scope_proven": false,
+      "original_sampler_and_cb0_registers_proven": false
+    },
+    "source_full_parsedform_and_pass_states_preserved_runner_private": true,
+    "latest_source_only_ci_success": true
   }
 }
