@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
-  "next_action": "OWNER PRIORITY: READ clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST and Chat32. Restore all original game resources and integrate before first comprehensive XAPK compatibility; don't trigger a new full native/XAPK CI. Highest priority six SHA-original scenes: 17/21 original Shader48 identities still dummy, 1373/1633 renderer Material slots to dummy, one source Shader48 used by 921 slots. New private actionable queue source scripts/gt_restore_first_shader_priority.py tests CI43353780918 SUCCESS. Reviewed current W1 helper pin 4b84a325 and B02 composition SHA d98345c1, B02+B21 CI43354701952 SUCCESS. Real source-only SHA original six-scene AssetRipper workflow 43354787983 source tests passed and compiling last checked; inspect actual result, then source-restore 4 Pass/33 paired variant highest-use Shader48 fully and all other 165 source shaders/770 dummy material docs, no partial falsely green; keep Meta GUIDs and ZIP2 immutable. Next P07 FFT Kernel6 and P06 Depth/Foam and all assets. Historical native runs prior owner decision do not set current priority.",
+  "next_action": "OWNER RESTORE-EVERYTHING BEFORE FIRST XAPK; READ clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST. Real SHA-pinned original six-scene source→export 921-slot Shader48 priority scan CI43354787983 SUCCESS: 21 typed source Shader48 identities, 1633 Renderer Material slots, 17 original Dummy Shader48 targets/1373 slots, top 921 slots and exact private original owner→export GUID actionable queue. Source SHA W1/B02/B21 composition authenticated CI43354701952. NEXT implement source-authentic complete all-variant original 921-slot Shader48 ShaderLab (4 original Passes, 33 matched VS/FS variant pairs, 8 currently unpaired vertex variants, 58 distinct DX11 programs); preserve original meta/GUID and repair all 770 Dummy Material documents by distinct Shader family; then all 165 source shaders, FFT/Depth/particles/models/textures. No more XAPK until completion G0-G6. Current step ranking is NOT shader restoration. Existing runs from prior owner request are historical only.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1107,6 +1107,34 @@
     "owner_evidence_json": "clients/GT/evidence/20261113_owner_restore_all_first_and_shader_priority.json",
     "latest_session": "clients/GT/sessions/20261113-GT-owner-restore-everything-before-XAPK-chat-32.md",
     "no_original_GUID_or_meta_modification": true,
-    "source_assets_read_only_no_LFS": true
+    "source_assets_read_only_no_LFS": true,
+    "real_source_only_priority_final_success": true,
+    "real_source_only_priority_conclusion": "success",
+    "real_source_only_priority_real_job_completed": true,
+    "real_source_only_priority_dummy_shader48_targets": 17,
+    "real_source_only_priority_original_dummy_renderer_slots": 1373,
+    "real_source_only_priority_top_one": 921,
+    "real_source_only_priority_slot_weights": [
+      921,
+      121,
+      108,
+      70,
+      34,
+      30,
+      20,
+      16,
+      16,
+      15,
+      7,
+      6,
+      5,
+      1,
+      1,
+      1,
+      1
+    ],
+    "original_source_to_export_private_actionable_targets_generated": 21,
+    "original_shader_programs_restored_by_priority_scan": false,
+    "real_source_workflow_artifact_keeps_only_safe_aggregates": true
   }
 }
