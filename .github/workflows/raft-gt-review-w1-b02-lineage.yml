@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/b02_stage_texture_lineage.py
       - tests/test_b02_stage_texture_lineage.py
+      - scripts/b21_stage_light_lineage.py
+      - tests/test_b21_stage_light_lineage.py
       - .github/workflows/raft-gt-review-w1-b02-lineage.yml
   workflow_dispatch:
 permissions:
@@ -24,6 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_b02_stage_texture_lineage.py -v
+          python3 -m unittest discover -s tests -p test_b21_stage_light_lineage.py -v
           python3 - <<'PY'
           import hashlib
           from pathlib import Path
