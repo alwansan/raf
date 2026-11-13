@@ -29,7 +29,7 @@ jobs:
           sparse-checkout: scripts
       - uses: actions/checkout@v4
         with:
-          ref: 16464ea8f246b6e076ce26b60931ee2e1a9a2385
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
           path: source-zip2
           persist-credentials: false
           filter: blob:none
