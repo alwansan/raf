@@ -1,5 +1,11 @@
 # ذاكرة GT — الحالة الحية
 
+## GT Chat-27 — new owner CL night phone images, graphics failure, Release HTTP403
+
+Owner CL@a320d5e / `LogRaft-20261112-235351-196` has FOUR new phone screenshots. Final original water shader passes 36828 = Spectrum15054/Foam21774; invalid kernel6 6106 (identity not proven), Cursor RGBA32 2844, OBB GUID2, missing Mono script1, duplicate EventSystem1, 4 convex polygon; 3,390/3,390 FIFO writer batches, no sink failures, OS Logcat gaps still possible. Original raft/menu almost entirely white; cyan underwater; dark blue smooth surface; tool/HUD/radio colored. World loaded log observed, no process death, NOT normal graphics. Full native CI43299084397 (older snapshot 2666622c) `reconstruct=success`, signed artifacts 13997201215 and delivery13996908213, `publish-early-test=failed` HTTP403 GitHub release create despite contents:write job. Do NOT claim Release or include new Spectrum fixes in old package. Added real pinned new CL CI regression and conservative writer accounting gate; inspect actual runs. Evidence `clients/GT/evidence/20261113_cl_night_device_graphics_and_build_receipt.json`, session Chat27. Continue original typed Shader.Find consuming IL→Material/Graphics/RT/CB0 and original Foam/compute kernel owner; 770 postvendor Dummy materials still need source-linked shaders; no GUID fiction/LFS.
+
+---
+
 ## GT Chat-26 — original Spectrum managed Shader.Find typed IL lineage
 
 Verified real ZIP2 SHA Assembly-CSharp.dll 3,211,776B/Shader owner 115,978,112B: CI43300958608 compiled methods 19,118; IL instructions 491,490; typed UnityEngine.Shader.Find=81, exact direct source Spectrum literal→typed Shader.Find=1. CI43301684794 exact Find result immediately stored in typed Shader local, not direct Shader field/Material ctor. CI43302914466 branch-aware local CFG SUCCESS after initial C# naming failure 43302598498 fix 100a4ae5: 35 reachable instructions / 3 branch nodes / 1 original Shader local load on SOME path before overwrite, unclassified consumer, no typed direct Material ctor. Next prove typed consuming IL across operands and runtime Material/Graphics/RT/CB0/Sampler; game Shader.Find execution + Adreno pixels unproven. Original 82 owners/1556 Materials have 0 direct Spectrum PPtrs (CI43300053045). No source modifications or Git LFS.
