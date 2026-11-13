@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-29 — Source-original Spectrum Material إلى Graphics.Blit وLOW_MEMORY
+
+سلسلة P06 المصدرية الآن تؤكد **الـMaterial الأصلي نفسه يصل إلى معامل `Graphics.Blit` في سبعة استدعاءات**، لا مجرد وجود Graphics مع ldfld في الدالة ([43343971412](https://github.com/alwansan/raf/actions/runs/43343971412)، [43344199792](https://github.com/alwansan/raf/actions/runs/43344199792) SUCCESS). 24 original Material field reads، 8 reader methods؛ stack/locals IL bounded single-block مغطى بالاختبارات السلبية. هذا **لا** يثبت Original ShaderLab 7Pass runtime أو RT/Sampler/CB0/Pixel على Adreno. جلسة CL `20261113-040212-998` و3 صور أدت إلى **28,592** ماء invalid (Spectrum11512/Foam17080) و4,576 kernel6 مع Android LOW_MEMORY PID18885؛ أضيفت كدليل مستقل، وليس تراجع أعداد الأخطاء دليلاً تلقائياً على تحسن. [جلسة Chat29](sessions/20261113-GT-spectrum-material-blit-and-phone-low-memory-chat-29.md). **التالي:** مسار exported Shader + meta الحقيقي من AssetRipper، استبدال dummy المؤقت بالمصدر الأصلي 7pass + global keyword وبقاء GUID، اختبار Unity Android Vulkan ثم اختبار الهاتف، Foam/kernel6، و770 Dummy؛ لا تنسب سبب نفاد الذاكرة للماء دون قياس مباشر.
+
+---
+
 ## GT Chat-28 — إغلاق مسار حفظ مادة Spectrum بالمصدر، لا قبول GPU
 
 تم إثبات مواد Spectrum الديناميكية حتى **حقل Material أصلي**: [43338485431](https://github.com/alwansan/raf/actions/runs/43338485431) `Shader.Find→own ctor→Material(Shader)`، [43339062121](https://github.com/alwansan/raf/actions/runs/43339062121) `dup`، [43339407339](https://github.com/alwansan/raf/actions/runs/43339407339) `set_` property→`stfld Material`، [43339688082](https://github.com/alwansan/raf/actions/runs/43339688082) **24 قراءات للحقل موزعة على 8 methods، منها 7 مع Graphics calls ودالتان RenderTexture calls**. هذا دليل source topology على مسار صنع المادة وحفظها وقراءتها، **وليس** برهان GPU ولا أن هذه المادة وسيط Graphics محدد. المطلوب P06: typed IL stack argument lineage لكل 24 ldfld، ثم أصالة ShaderLab 7Pass/Global Keyword وCB0/Sampler/RT، Foam2Pass، Compute kernel6، فحص هاتف Adreno وتغيير 770 Dummy الأصيلة. لا LFS أو GUID وهمي.
