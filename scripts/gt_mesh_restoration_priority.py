@@ -51,7 +51,7 @@ def mesh_metrics(tree):
     return vertices, indices, bones, stream_size, tags
 
 
-def inspect_geometry(obj, expected):
+def inspect_geometry(obj, expected, *, bind_poses=None):
     from UnityPy.helpers.MeshHelper import MeshHandler
 
     handler = MeshHandler(obj.read())
@@ -65,6 +65,29 @@ def inspect_geometry(obj, expected):
             checks[name + "_invalid"] += 1
         else:
             checks[name + "_finite"] += 1
+    if bind_poses:
+        checks["source_bind_pose_matrices"] = len(bind_poses)
+        checks["finite_bind_pose_matrices"] = sum(
+            len(matrix) == 16 and all(math.isfinite(value) for value in matrix.values())
+            for matrix in bind_poses
+        )
+        weights, indices = handler.m_BoneWeights, handler.m_BoneIndices
+        if indices and not weights and len(indices) == expected and all(len(row) == 1 for row in indices):
+            checks["vertices_with_single_index_and_no_weight_channel"] = expected
+            checks["vertices_with_valid_single_bone_index"] = sum(
+                0 <= row[0] < len(bind_poses) for row in indices
+            )
+        elif weights and indices and len(weights) == len(indices) == expected:
+            checks["vertices_with_explicit_skin_weights"] = expected
+            checks["vertices_with_valid_normalized_skin_weights"] = sum(
+                len(ws) == len(ids) and abs(sum(ws) - 1) < 0.001
+                and all(math.isfinite(w) and w >= 0 and
+                        (w == 0 or int(i) == i and 0 <= i < len(bind_poses))
+                        for w, i in zip(ws, ids))
+                for ws, ids in zip(weights, indices)
+            )
+        else:
+            checks["mesh_with_unresolved_skin_layout"] = 1
     return checks
 
 
@@ -124,7 +147,8 @@ def audit(root, manifest, selected, private_queue=None, *, decode_inline=False, 
                         environment.register_cab(stream, EndianBinaryReader(str(root / stream)))
                         loaded_streams.add(stream)
                 checks = (Counter({"streamed_pending": 1}) if stream and stream not in verified_streams
-                          else inspect_geometry(obj, vertices))
+                          else inspect_geometry(obj, vertices, bind_poses=tree["m_BindPose"]
+                                                if "character_name" in tags else None))
                 for tag in geometry_tags:
                     geometry[tag].update(checks)
             if private_queue is not None:

@@ -1,0 +1,87 @@
+{
+  "counts": {
+    "at_least_10000_vertices": 81,
+    "bind_pose_present": 56,
+    "character_name": 13,
+    "island_name": 156,
+    "source_indices": 24461529,
+    "source_meshes": 2618,
+    "source_vertices": 6687056,
+    "streamed": 1348,
+    "wood_name": 76
+  },
+  "full_owner_scope": false,
+  "name_hint_cohorts": {
+    "character_name": {
+      "at_least_10000_vertices": 2,
+      "indices": 267303,
+      "meshes": 13,
+      "streamed": 3,
+      "vertices": 60718,
+      "with_bind_pose": 9
+    },
+    "island_name": {
+      "at_least_10000_vertices": 4,
+      "indices": 888660,
+      "meshes": 156,
+      "streamed": 59,
+      "vertices": 259850,
+      "with_bind_pose": 1
+    },
+    "wood_name": {
+      "at_least_10000_vertices": 0,
+      "indices": 114084,
+      "meshes": 76,
+      "streamed": 42,
+      "vertices": 41658,
+      "with_bind_pose": 0
+    }
+  },
+  "name_hint_cohorts_can_overlap": true,
+  "priority_geometry_checks": {
+    "at_least_10000_vertices": {
+      "finite": 81,
+      "finite_bind_pose_matrices": 180,
+      "normals_absent": 1,
+      "normals_finite": 80,
+      "source_bind_pose_matrices": 180,
+      "tangents_absent": 1,
+      "tangents_finite": 80,
+      "uv0_absent": 1,
+      "uv0_finite": 80,
+      "vertices_with_explicit_skin_weights": 22161,
+      "vertices_with_valid_normalized_skin_weights": 22161
+    },
+    "character_name": {
+      "finite": 13,
+      "finite_bind_pose_matrices": 840,
+      "normals_finite": 13,
+      "source_bind_pose_matrices": 840,
+      "tangents_finite": 13,
+      "uv0_finite": 13,
+      "vertices_with_explicit_skin_weights": 58167,
+      "vertices_with_single_index_and_no_weight_channel": 985,
+      "vertices_with_valid_normalized_skin_weights": 58167,
+      "vertices_with_valid_single_bone_index": 985
+    },
+    "island_name": {
+      "finite": 156,
+      "normals_finite": 156,
+      "tangents_finite": 156,
+      "uv0_absent": 6,
+      "uv0_finite": 150
+    },
+    "wood_name": {
+      "finite": 76,
+      "normals_finite": 76,
+      "tangents_finite": 76,
+      "uv0_finite": 76
+    }
+  },
+  "priority_inline_geometry_checks": null,
+  "project_export_or_rig_parity_verified": false,
+  "schema": "GT_ORIGINAL_MESH_RESTORATION_PRIORITY_V1",
+  "source_owner_count": 5,
+  "verified_stream_bytes": 6187829328,
+  "verified_stream_count": 15
+}
