@@ -1,5 +1,11 @@
 # GT — الخطة الحيّة لاستعادة رسوميات Raft Android
 
+## GT Chat-30 — اشتراط ShaderUtil و7 Passes قبل تغليف Android
+
+لمنع `Unity Build succeeded` الوهمي، أضيف في كود Native Builder الحالي شرط `GTOriginalWaterPassImportProbe.RequireOriginalSpectrumSevenPasses()` داخل Unity Editor. يرفض 0/2 shaders بنفس اسم Spectrum، أي passCount≠7، Dummy source، ملف غير آمن أو `ShaderUtil.ShaderHasError` true. [CI43347458130 SUCCESS](https://github.com/alwansan/raf/actions/runs/43347458130) اختبار C# صناعي وليس Compilation لملفات اللعبة. **لم يدخل Run43346405263 لأنه بدأ قبل هذا التعديل**. يجب أن يدخل طلب Native لاحقاً ثم تُفحص حزمة Android/Adreno نفسها؛ بقاء عدم إثبات P06/M2 كما هو.
+
+---
+
 ## GT Chat-30 — مسار إنتاج Spectrum 7Pass الأصلي الآن داخل Native Unity
 
 P06 انتقل من إثبات `Material→Graphics.Blit` الأصلي إلى **تنفيذ إعادة التركيب الخاص من ZIP2 داخل خط الإنتاج**: B09 original packet→original seven render states→source HLSL 2 variants/7 passes→single original keyword index4 route→ملف ShaderLab واحد بموضع AssetRipper الفعلي وGUID الموجود كما هو، مع backup خارجي ورفض duplicate shader/meta أو missing original name. كُتب [installer](../../scripts/gt_install_original_spectrum.py) و[CI43346292249 SUCCESS](https://github.com/alwansan/raf/actions/runs/43346292249) للاختبارات السلبية. [Full CI43346405263](https://github.com/alwansan/raf/actions/runs/43346405263) طلب بناء APK+OBB+XAPK أحدث، request/license preflight ناجح و`reconstruct` ما زال قيد التشغيل في هذه اللقطة. **P06/M2 device_verified=false** حتى اكتمال التصدير، ترجمة Unity الكاملة، وفحص الماء الحقيقي على الهاتف، ولا تزال Foam/FFT و770 Dummy وLOW_MEMORY مفتوحة. اقرأ [Chat30](sessions/20261113-GT-spectrum-production-original-guid-sevenpass-native-build-chat-30.md).
