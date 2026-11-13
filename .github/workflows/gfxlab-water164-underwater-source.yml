@@ -42,10 +42,11 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install UnityPy==1.25.4
-          if ! python -m gfxlab.tools.water_scene_links source-zip2 "$RUNNER_TEMP/gfx164-source" "$RUNNER_TEMP/gfx164.json" > "$RUNNER_TEMP/gfx164-private.log" 2>&1; then
+          if ! python -m gfxlab.tools.underwater_source_topology source-zip2 "$RUNNER_TEMP/gfx164-source" "$RUNNER_TEMP/gfx164.json" > "$RUNNER_TEMP/gfx164-private.log" 2>&1; then
             echo 'GFX164 underwater source census failed before an aggregate was produced'
             exit 1
           fi
+          python -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["serialized_owners"] == 82 and d["original_topology"]["device_indices"] == [1, 3]' "$RUNNER_TEMP/gfx164.json"
           cat "$RUNNER_TEMP/gfx164.json"
       - name: Remove private staged source
         if: always()
