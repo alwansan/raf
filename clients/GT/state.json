@@ -18,7 +18,7 @@
     "material_slots": 7,
     "commit": "1ca06009684047ef8156a939d4d2931326ad2cc7"
   },
-  "status": "GT_CHAT26_SPECTRUM_SOURCE_MANAGED_SHADERFIND_EXACT_ONE_LOCAL_CFG_ONE_UNCLASSIFIED_RUNTIME_MATERIAL_GPU_BLOCKED",
+  "status": "GT_RESTORE_FIRST_OWNER_MANDATE_ACTIVE_P04_P05_P07_RESOURCE_GAPS_OPEN_XAPK_DEFERRED",
   "inventory": {
     "status": "full_134_source_graphics_input_sha256_authenticated_real_streams_covered",
     "source_structural": {
@@ -349,7 +349,7 @@
     "last_verified_source_ci_sha": "d087f5c8c14e2b10e35c68678e96c46949668d37"
   },
   "latest_session": "clients/GT/sessions/20261113-GT-original-spectrum-foam-native-build-chat-31.md",
-  "next_action": "GT Chat31 first full native43346405263 real Spectrum7 GUID-safe install succeeded, but reconstruct FAILED at strict/or documented water limitation because previous request listed stale Spectrum failure. Actual post-Spectrum water gate: Spectrum7 pass, Blur2 pass, Volumetric5 pass, Foam1 FAIL (old snapshot), Depth Copy SubShaders[6,3] FAIL second candidate, water compute candidate absent, authentic kernel identity unproven. Second run43349181838 original Spectrum7+Foam2 & strict ShaderUtil guard still running with stale request. Third owner native request43350559665 commit8bf83afc8 contains corrected EXACT three anticipated conditions (Depth,water_compute_source_candidate,authentic_water_kernel_identity), pending. CI43350378817 source-only exact 3-condition replay success. Monitor second Foam source stage and third native result; no fake pass/FFT or GPU claims. Resume Chat31 then update artifacts, memory and release.",
+  "next_action": "OWNER CURRENT DIRECTIVE 2026-11-13 RESTORE FIRST: Read clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md FIRST. Continue actual source-authentic restoration of every original model, color, Material, texture, Shader variant/pass/keyword/sampler, water Foam/Depth/FFT/compute, shadows/fire/particles/PostFX into feature/android-native-port before first comprehensive compatibility XAPK. PRIORITY P04 770 custom Dummy Material docs / source shader impact + P05 165 Shader originals, P07 FFT kernel identity, P06 Depth6+3 and Foam2, P01-P03 meshes and texture sampling. Do NOT schedule more full XAPK native builds while restoration incomplete; existing 43349181838/43350559665 were launched before mandate and may finish independently; log evidence but do not pause restoration or issue replacements. Source-only CI/isolated Unity shader tests are appropriate. Update restoration plan/memory/session before future turns.",
   "owner_directive_20261112": {
     "t1_to_t5_stopped": true,
     "gt_can_integrate_over_prior_agents": true,
@@ -1039,5 +1039,35 @@
     "signed_new_native_XAPK_verified": false,
     "original_FFT_compute_kernel6_identity_verified": false,
     "actual_Adreno_water_pixels_verified": false
+  },
+  "owner_directive_20261113_restore_first": {
+    "decision": "RESTORE_ALL_ORIGINAL_GRAPHICS_AND_ASSETS_THEN_START_FIRST_COMPREHENSIVE_XAPK_COMPATIBILITY_TEST",
+    "directive_path": "clients/GT/OWNER_DIRECTIVE_RESTORE_FIRST_AR.md",
+    "priority": "P01-P09_original_resource_recovery_and_main_branch_integration",
+    "require_source_export_unity_recovery_scope_for_all_original_assets": true,
+    "focus": [
+      "scenes",
+      "models_meshes_skinned_animation",
+      "colors_and_materials",
+      "Texture2D_Texture2DArray_mips",
+      "165_original_shaders_Pass_keywords_samplers",
+      "770_postvendor_dummy_material_documents",
+      "water_spectrum_foam_depth_fft_compute",
+      "shadows_fire_particles_postfx_and_ui"
+    ],
+    "stop_new_GT_full_XAPK_requests_until_restoration_gates_complete": true,
+    "source_only_CI_and_isolated_nonXAPK_Shader_unity_tests_allowed": true,
+    "already_running_or_queued_builds": [
+      43349181838,
+      43350559665
+    ],
+    "already_submitted_runs_are_not_new_user_compatibility_phase": true,
+    "cannot_claim_preexisting_runs_cancelled": true,
+    "requires_explicit_owner_acknowledgement_of_any_unrestorable_original_asset": true,
+    "first_compatibility_XAPK_ready": false,
+    "device_compatibility_phase_started": false,
+    "no_LFS": true,
+    "preserve_original_meta_and_GUIDs": true,
+    "continue_reads_owner_directive_first": true
   }
 }
